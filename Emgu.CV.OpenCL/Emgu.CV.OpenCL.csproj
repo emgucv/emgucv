@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Emgu.CV.OpenCL</RootNamespace>
     <AssemblyName>Emgu.CV.OpenCL</AssemblyName>
-	    <SignAssembly>true</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -70,8 +70,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OclDeviceInfo.cs" />
+    <Compile Include="VectorOfOclDeviceInfo.cs" />
     <Compile Include="OclBruteForceMatcher.cs" />
-    <Compile Include="OclInfo.cs" />
+    <Compile Include="OclPlatformInfo.cs" />
     <Compile Include="OclOpticalFlowDual_TVL1.cs" />
     <Compile Include="OclStereoBM.cs" />
     <Compile Include="OclStereoConstantSpaceBP.cs" />
@@ -86,7 +88,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="VectorOfOclInfo.cs" />
+    <Compile Include="VectorOfOclPlatformInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">

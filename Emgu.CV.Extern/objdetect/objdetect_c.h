@@ -97,7 +97,7 @@ CVAPI(cv::ERFilter*) CvERFilterNM2Create(const char* classifier, float minProbab
 CVAPI(void) CvERFilterRelease(cv::ERFilter** filter);
 CVAPI(void) CvERFilterRun(cv::ERFilter* filter, CvArr* image, std::vector<cv::ERStat>* regions);
 
-CVAPI(void) CvERGrouping(IplImage** channels, std::vector<cv::ERStat>** regions, int count, std::vector<cv::Rect>* groups);
+CVAPI(void) CvERGrouping(IplImage** channels, std::vector<cv::ERStat>** regions, int count, const char* fileName, float minProbability, std::vector<cv::Rect>* groups);
 
 //----------------------------------------------------------------------------
 //

@@ -6,20 +6,26 @@
 
 #include "ocl_c.h"
 
-int oclGetDevice(std::vector<cv::ocl::Info>* oclInfoVec, int deviceType)
+
+int oclGetPlatforms(std::vector<const cv::ocl::PlatformInfo*>* oclInfoVec)
 {
-   if (oclInfoVec)
-      return cv::ocl::getDevice(*oclInfoVec, deviceType);
+   return cv::ocl::getOpenCLPlatforms(*oclInfoVec);
+}
+
+int oclGetDevices(std::vector<const cv::ocl::DeviceInfo*>* oclDevices, int deviceType, const cv::ocl::PlatformInfo* platform)
+{
+   if (oclDevices)
+      return cv::ocl::getOpenCLDevices(*oclDevices, deviceType, platform);
    else
    {
-      std::vector<cv::ocl::Info> oclInfo;
-      return cv::ocl::getDevice(oclInfo, deviceType);
+      std::vector<const cv::ocl::DeviceInfo*> infos;
+      return cv::ocl::getOpenCLDevices(infos, deviceType, platform);
    }
 }
 
-void oclSetDevice(cv::ocl::Info* oclInfo, int deviceNum)
+void oclSetDevice(const cv::ocl::DeviceInfo* oclInfo)
 {
-   cv::ocl::setDevice(*oclInfo, deviceNum);
+   cv::ocl::setDevice(oclInfo);
 }
 
 void oclFinish()
@@ -854,59 +860,168 @@ void oclBruteForceMatcherKnnMatchSingle(
 
 //----------------------------------------------------------------------------
 //
-//  Vector of VectorOfOclInfo
+//  Vector of VectorOfOclPlatformInfo
 //
 //----------------------------------------------------------------------------
-std::vector<cv::ocl::Info>* VectorOfOclInfoCreate()
+std::vector<const cv::ocl::PlatformInfo*>* VectorOfOclPlatformInfoCreate()
 {
-   return new std::vector<cv::ocl::Info>();
+   return new std::vector<const cv::ocl::PlatformInfo*>();
 }
 
-std::vector<cv::ocl::Info>* VectorOfOclInfoCreateSize(int size)
+std::vector<const cv::ocl::PlatformInfo*>* VectorOfOclPlatformInfoCreateSize(int size)
 {
-   return new std::vector<cv::ocl::Info>();
+   return new std::vector<const cv::ocl::PlatformInfo*>();
 }
 
-int VectorOfOclInfoGetSize(std::vector<cv::ocl::Info>* v)
+int VectorOfOclPlatformInfoGetSize(std::vector<const cv::ocl::PlatformInfo*>* v)
 {
    return v->size();
 }
 
-void VectorOfOclInfoClear(std::vector<cv::ocl::Info>* v)
+void VectorOfOclPlatformInfoClear(std::vector<const cv::ocl::PlatformInfo*>* v)
 {
    v->clear();
 }
 
-void VectorOfOclInfoRelease(std::vector<cv::ocl::Info>* v)
+void VectorOfOclPlatformInfoRelease(std::vector<const cv::ocl::PlatformInfo*>* v)
 {
    delete v;
 }
 
-cv::ocl::Info* VectorOfOclInfoGetStartAddress(std::vector<cv::ocl::Info>* v)
+const cv::ocl::PlatformInfo* VectorOfOclPlatformInfoGetStartAddress(std::vector<const cv::ocl::PlatformInfo*>* v)
 {
-   return v->empty() ? NULL : &(*v)[0];
+   return v->empty() ? NULL : (*v)[0];
 }
 
-cv::ocl::Info* VectorOfOclInfoGetItem(std::vector<cv::ocl::Info>* v, int index)
+const cv::ocl::PlatformInfo* VectorOfOclPlatformInfoGetItem(std::vector<const cv::ocl::PlatformInfo*>* v, int index)
 {
-   return &(*v)[index];
+   return (*v)[index];
 }
 
 //----------------------------------------------------------------------------
 //
-//  OclInfo
+//  Vector of VectorOfOclDeviceInfo
 //
 //----------------------------------------------------------------------------
-const char* oclInfoGetPlatformName(cv::ocl::Info* oclInfo)
+std::vector<const cv::ocl::DeviceInfo*>* VectorOfOclDeviceInfoCreate()
 {
-   return oclInfo->PlatformName.c_str();
+   return new std::vector<const cv::ocl::DeviceInfo*>();
 }
 
-int oclInfoGetDeviceCount(cv::ocl::Info* oclInfo)
+std::vector<const cv::ocl::DeviceInfo*>* VectorOfOclDeviceInfoCreateSize(int size)
 {
-   return oclInfo->DeviceName.size();
+   return new std::vector<const cv::ocl::DeviceInfo*>();
 }
-const char* oclInfoGetDeviceName(cv::ocl::Info* oclInfo, int index)
+
+int VectorOfOclDeviceInfoGetSize(std::vector<const cv::ocl::DeviceInfo*>* v)
 {
-   return oclInfo->DeviceName[index].c_str();
+   return v->size();
 }
+
+void VectorOfOclDeviceInfoClear(std::vector<const cv::ocl::DeviceInfo*>* v)
+{
+   v->clear();
+}
+
+void VectorOfOclDeviceInfoRelease(std::vector<const cv::ocl::DeviceInfo*>* v)
+{
+   delete v;
+}
+
+const cv::ocl::DeviceInfo* VectorOfOclDeviceInfoGetStartAddress(std::vector<const cv::ocl::DeviceInfo*>* v)
+{
+   return v->empty() ? NULL : (*v)[0];
+}
+
+const cv::ocl::DeviceInfo* VectorOfOclDeviceInfoGetItem(std::vector<const cv::ocl::DeviceInfo*>* v, int index)
+{
+   return (*v)[index];
+}
+
+//----------------------------------------------------------------------------
+//
+//  OclPlatformInfo
+//
+//----------------------------------------------------------------------------
+
+void oclPlatformInfoGetProperties(
+   cv::ocl::PlatformInfo* oclPlatformInfo,
+   const char** platformProfile,
+   const char** platformVersion,
+   const char** platformName,
+   const char** platformVendor,
+   const char** platformExtensions,
+
+   int* platformVersionMajor,
+   int* platformVersionMinor
+   )
+{
+   *platformProfile = oclPlatformInfo->platformProfile.c_str();
+   *platformVersion = oclPlatformInfo->platformVersion.c_str();
+   *platformName = oclPlatformInfo->platformName.c_str();
+   *platformVendor = oclPlatformInfo->platformVendor.c_str();
+   *platformExtensions = oclPlatformInfo->platformExtensons.c_str();
+
+   *platformVersionMajor = oclPlatformInfo->platformVersionMajor;
+   *platformVersionMinor = oclPlatformInfo->platformVersionMinor;
+
+}
+
+std::vector<const cv::ocl::DeviceInfo*>* oclPlatformInfoGetDevices(cv::ocl::PlatformInfo* oclPlatformInfo)
+{
+   return &(oclPlatformInfo->devices);
+}
+
+//----------------------------------------------------------------------------
+//
+//  OclDeviceInfo
+//
+//----------------------------------------------------------------------------
+void oclDeviceInfoGetProperty(cv::ocl::DeviceInfo* oclDeviceInfo, 
+   int* type, 
+   const char** profile, 
+   const char** version,
+   const char** name, 
+   const char** vendor, 
+   int* vendorId,
+   const char** driverVersion, 
+   const char** extensions,
+   
+   int* maxWorkGroupSize,
+   int* maxComputeUnits,
+   int* localMemorySize,
+   int* maxMemAllocSize,
+   int* deviceVersionMajor,
+   int* deviceVersionMinor,
+   int* haveDoubleSupport,
+   int* isUnifiedMemory,
+   const char** compilationExtraOptions
+   )
+{
+   *type = oclDeviceInfo->deviceType;
+   *profile = oclDeviceInfo->deviceProfile.c_str();
+   *version = oclDeviceInfo->deviceVersion.c_str();
+   *name = oclDeviceInfo->deviceName.c_str();
+   *vendor = oclDeviceInfo->deviceVendor.c_str();
+   *vendorId = oclDeviceInfo->deviceVendorId;
+   *driverVersion = oclDeviceInfo->deviceDriverVersion.c_str();
+   *extensions = oclDeviceInfo->deviceExtensions.c_str();
+
+   *maxWorkGroupSize = static_cast<int>( oclDeviceInfo->maxWorkGroupSize );
+   *maxComputeUnits = static_cast<int>( oclDeviceInfo->maxComputeUnits );
+   *localMemorySize = static_cast<int> (oclDeviceInfo->localMemorySize );
+   *maxMemAllocSize = static_cast<int> (oclDeviceInfo->maxMemAllocSize );
+   *deviceVersionMajor = oclDeviceInfo->deviceVersionMajor;
+   *deviceVersionMinor = oclDeviceInfo->deviceVersionMinor;
+   *haveDoubleSupport = oclDeviceInfo->haveDoubleSupport ? 1 : 0;
+   *isUnifiedMemory = oclDeviceInfo->isUnifiedMemory ? 1: 0;
+
+   *compilationExtraOptions = oclDeviceInfo->compilationExtraOptions.c_str();
+}
+
+const cv::ocl::PlatformInfo* oclDeviceInfoGetPlatform(cv::ocl::DeviceInfo* oclDeviceInfo)
+{
+   return oclDeviceInfo->platform;
+}
+
+

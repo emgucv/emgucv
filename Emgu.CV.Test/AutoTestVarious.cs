@@ -2472,7 +2472,7 @@ namespace Emgu.CV.Test
       {
          CvInvoke.SanityCheck();
          bool checkInvert = false;
-         using (Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("scenetext.jpg"))
+         using (Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("scenetext01.jpg"))
          using (ERFilterNM1 er1 = new ERFilterNM1(EmguAssert.GetFile("trained_classifierNM1.xml"), 8, 0.00025f, 0.13f, 0.4f, true, 0.1f))
          using (ERFilterNM2 er2 = new ERFilterNM2(EmguAssert.GetFile("trained_classifierNM2.xml"), 0.3f))
          {
@@ -2504,11 +2504,11 @@ namespace Emgu.CV.Test
                   er1.Run(channels[i], regionVecs[i]);
                   er2.Run(channels[i], regionVecs[i]);
                }
-               Rectangle[] regions = ERFilter.ERGrouping(channels, regionVecs);
+               Rectangle[] regions = ERFilter.ERGrouping(channels, regionVecs, "trained_classifier_erGrouping.xml", 0.5f);
 
                foreach (Rectangle rect in regions)
                   image.Draw(rect, new Gray(0), 2);
-               Emgu.CV.UI.ImageViewer.Show(image);
+               //Emgu.CV.UI.ImageViewer.Show(image);
 
                /*
                MCvERStat[] regions = regionVec.ToArray();

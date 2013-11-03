@@ -241,7 +241,7 @@ namespace Emgu.CV
          CvInvoke.CvERFilterRun(_ptr, image, regions);
       }
 
-      public static System.Drawing.Rectangle[] ERGrouping(Image<Gray, Byte>[] channels, VectorOfERStat[] erstats)
+      public static System.Drawing.Rectangle[] ERGrouping(Image<Gray, Byte>[] channels, VectorOfERStat[] erstats, String groupingTrainedFileName, float minProbability)
       {
          Debug.Assert(channels.Length == erstats.Length, "Length of channels do not match length of erstats");
          IntPtr[] channelPtrs = new IntPtr[channels.Length];
@@ -257,7 +257,7 @@ namespace Emgu.CV
          GCHandle erstatsHandle = GCHandle.Alloc(erstatPtrs, GCHandleType.Pinned);
          using (VectorOfRect regions = new VectorOfRect())
          {
-            CvInvoke.CvERGrouping(channelsHandle.AddrOfPinnedObject(), erstatsHandle.AddrOfPinnedObject(), channelPtrs.Length, regions);
+            CvInvoke.CvERGrouping(channelsHandle.AddrOfPinnedObject(), erstatsHandle.AddrOfPinnedObject(), channelPtrs.Length, groupingTrainedFileName, minProbability, regions);
             channelsHandle.Free();
             erstatsHandle.Free();
             return regions.ToArray();
@@ -313,7 +313,11 @@ namespace Emgu.CV
       internal static extern void CvERFilterRun(IntPtr filter, IntPtr image, IntPtr regions);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvERGrouping(IntPtr channels, IntPtr regions, int count, IntPtr groups);
+      internal static extern void CvERGrouping(
+         IntPtr channels, IntPtr regions, int count, 
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String groupingTrainedFileName, 
+         float minProbability, IntPtr groups);
 
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

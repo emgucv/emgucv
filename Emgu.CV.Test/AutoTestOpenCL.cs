@@ -24,21 +24,29 @@ namespace Emgu.CV.Test
       [Test]
       public void TestOclInfo()
       {
-         using (VectorOfOclInfo oclInfoVec = OclInvoke.GetDevice(OclDeviceType.All))
+         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatforms())
          {
-            if (oclInfoVec.Size > 0)
+            if (oclPlatformInfos.Size > 0)
             {
-               for (int i = 0; i < oclInfoVec.Size; i++)
+               for (int i = 0; i < oclPlatformInfos.Size; i++)
                {
-                  OclInfo info = oclInfoVec[i];
-                  String platformName = info.PlatformName;
+                  OclPlatformInfo platformInfo = oclPlatformInfos[i];
+                  String platformName = platformInfo.Name;
                   Trace.WriteLine(String.Format("Platform {0}: {1}", i, platformName));
+
+                  VectorOfOclDeviceInfo devices = platformInfo.Devices;
+                  for (int j = 0; j < devices.Size; j++)
+                  {
+                     OclDeviceInfo device = devices[j];
+                     Trace.WriteLine(String.Format("   Device {0}: {1}", j, device.Name));
+                  }
                }
             }
-            Trace.WriteLine("count = " + oclInfoVec.Size);
+            Trace.WriteLine("count = " + oclPlatformInfos.Size);
          }
       }
 
+      
       [Test]
       public void TestOclMatAdd()
       {
@@ -60,15 +68,16 @@ namespace Emgu.CV.Test
 
             Stopwatch watch2 = new Stopwatch();
 
-            using (VectorOfOclInfo oclInfoVec = OclInvoke.GetDevice(OclDeviceType.All))
+            using (VectorOfOclPlatformInfo oclInfoVec = OclInvoke.GetPlatforms())
             {
                for (int j = 0; j < oclInfoVec.Size; j++)
                {
-                  OclInfo device = oclInfoVec[j];
-
-                  for (int k = 0; k < device.DeviceNames.Length; k++)
+                  OclPlatformInfo platform = oclInfoVec[j];
+                  VectorOfOclDeviceInfo devices = platform.Devices;
+                  for (int k = 0; k < devices.Size; k++)
                   {
-                     OclInvoke.SetDevice(device, k);
+                     OclDeviceInfo device = devices[k];
+                     OclInvoke.SetDevice(device);
 
                      OclImage<Gray, Byte> gpuImg1 = new OclImage<Gray, byte>(img1);
                      OclImage<Gray, Byte> gpuImg2 = new OclImage<Gray, byte>(img2);
@@ -83,7 +92,7 @@ namespace Emgu.CV.Test
                         OclInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, IntPtr.Zero);
                      }
                      watch2.Stop();
-                     Trace.WriteLine(String.Format("OpenCL platform: {0}; device: {1}; processing time: {2}ms", device.PlatformName, device.DeviceNames[k], (double)watch2.ElapsedMilliseconds / repeat));
+                     Trace.WriteLine(String.Format("OpenCL platform: {0}; device: {1}; processing time: {2}ms", platform.Name, device.Name, (double)watch2.ElapsedMilliseconds / repeat));
 
                      Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
                      Assert.IsTrue(cpuImgSum.Equals(cpuImgSumFromGpu));

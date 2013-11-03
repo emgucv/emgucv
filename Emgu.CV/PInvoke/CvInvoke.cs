@@ -248,8 +248,15 @@ namespace Emgu.CV
          {
             //IntPtr handle = Emgu.Util.Toolbox.LoadLibrary(module);
             //Debug.WriteLine(string.Format(handle == IntPtr.Zero ? "Failed to load {0}." : "Loaded {0}.", module));
-            Java.Lang.JavaSystem.LoadLibrary(module);
-            Debug.WriteLine(string.Format("Loaded {0}.", module));
+            try
+            {
+               Java.Lang.JavaSystem.LoadLibrary(module);
+               Debug.WriteLine(string.Format("Loaded {0}.", module));
+            }
+            catch (Exception e)
+            {
+               Debug.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
+            }
          }
 #elif IOS 
 #else

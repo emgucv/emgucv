@@ -5,13 +5,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</ProjectGuid>
+    <ProjectGuid>{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.Cuda</RootNamespace>
-    <AssemblyName>Emgu.CV.Cuda.Android</AssemblyName>
+    <RootNamespace>Emgu.CV.Nonfree.Android</RootNamespace>
+    <AssemblyName>Emgu.CV.Nonfree.Android</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -19,19 +20,17 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;ANDROID</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;ANDROID</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -42,47 +41,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CudaSURFDetector.cs" />
+    <Compile Include="OclSURFDetector.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Bgsegm\CudaBackgroundSubtractorFGD.cs" />
-    <Compile Include="Bgsegm\CudaBackgroundSubtractorGMG.cs" />
-    <Compile Include="Bgsegm\CudaBackgroundSubtractorMOG.cs" />
-    <Compile Include="Filters\CudaBoxMaxFilter.cs" />
-    <Compile Include="Filters\CudaBoxMinFilter.cs" />
-    <Compile Include="Filters\CudaGaussianFilter.cs" />
-    <Compile Include="Filters\CudaLaplacianFilter.cs" />
-    <Compile Include="Filters\CudaLinearFilter.cs" />
-    <Compile Include="Filters\CudaSobelFilter.cs" />
-    <Compile Include="Imgproc\CudaCornernessCriteria.cs" />
-    <Compile Include="Imgproc\CudaHarrisCorner.cs" />
-    <Compile Include="Optflow\CudaBroxOpticalFlow.cs" />
-    <Compile Include="Features2d\CudaBruteForceMatcher.cs" />
-    <Compile Include="Imgproc\CudaCannyEdgeDetector.cs" />
-    <Compile Include="CudaCascadeClassifier.cs" />
-    <Compile Include="CudaDeviceInfo.cs" />
-    <Compile Include="Stereo\CudaDisparityBilateralFilter.cs" />
-    <Compile Include="Optflow\CudaFarnebackOpticalFlow.cs" />
-    <Compile Include="Features2d\CudaFASTDetector.cs" />
-    <Compile Include="Filters\CudaFilter.cs" />
-    <Compile Include="Imgproc\CudaGoodFeaturesToTrackDetector.cs" />
-    <Compile Include="CudaHOGDescriptor.cs" />
-    <Compile Include="CudaImage.cs" />
-    <Compile Include="CudaInvoke.cs" />
-    <Compile Include="CudaLookUpTable.cs" />
-    <Compile Include="GpuMat.cs" />
-    <Compile Include="Imgproc\CudaTemplateMatching.cs" />
-    <Compile Include="Bgsegm\CudaBackgroundSubtractorMOG2.cs" />
-    <Compile Include="Features2d\CudaORBDetector.cs" />
-    <Compile Include="Optflow\CudaPyrLKOpticalFlow.cs" />
-    <Compile Include="Stereo\CudaStereoBM.cs" />
-    <Compile Include="Stereo\CudaStereoConstantSpaceBP.cs" />
-    <Compile Include="Features2d\CudaVibe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stream.cs" />
-    <Compile Include="TargetArchs.cs" />
+    <Compile Include="SIFTDetector.cs" />
+    <Compile Include="SURFDetector.cs" />
+    <Compile Include="SURFFeature.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\AboutResources.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj">
+      <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
+      <Name>Emgu.CV.Cuda.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.Android.csproj">
+      <Project>{67EAC0E9-E834-416F-A9D0-B6014C10724A}</Project>
+      <Name>Emgu.CV.OpenCL.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.Android.csproj">
       <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
       <Name>Emgu.CV.Android</Name>
@@ -92,7 +75,7 @@
       <Name>Emgu.Util.Android</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

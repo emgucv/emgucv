@@ -182,13 +182,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Android.csproj">
-      <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
-      <Name>Emgu.CV.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj">
       <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
-      <Name>Emgu.CV.GPU.Android</Name>
+      <Name>Emgu.CV.Cuda.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.Android.csproj">
+      <Project>{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}</Project>
+      <Name>Emgu.CV.Nonfree.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.Android.csproj">
       <Project>{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}</Project>
@@ -198,9 +198,17 @@
       <Project>{17B67F34-D591-4BAD-ABB8-4D4199B20833}</Project>
       <Name>Emgu.CV.OCR.Android</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.Android.csproj">
+      <Project>{67eac0e9-e834-416f-a9d0-b6014c10724a}</Project>
+      <Name>Emgu.CV.OpenCL.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Android.csproj">
       <Project>{89BCA3BE-823B-4702-9498-025C6B21462F}</Project>
       <Name>Emgu.CV.Stitching.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Android.csproj">
+      <Project>{7dd21a10-96aa-4594-bdb9-c5cebacc212f}</Project>
+      <Name>Emgu.CV.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.Android.csproj">
       <Project>{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}</Project>

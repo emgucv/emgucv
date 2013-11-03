@@ -6,7 +6,7 @@ SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows\bin\make.exe
 
 :: variables required for android-opencv build ::
 SET ANDROID_SDK=C:\Program Files (x86)\Android\android-sdk
-SET ANT_DIR=C:\apache-ant-1.8.3
+SET ANT_DIR=C:\apache-ant-1.9.2
 SET JAVA_HOME=C:\Program Files (x86)\Java\jdk1.6.0_27
 
 :: configuration options ::

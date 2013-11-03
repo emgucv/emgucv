@@ -121,8 +121,8 @@
       <Link>logo_in_clutter.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\cpp\scenetext.jpg">
-      <Link>scenetext.jpg</Link>
+    <Content Include="..\opencv\samples\cpp\scenetext01.jpg">
+      <Link>scenetext01.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\opencv\samples\cpp\trained_classifierNM1.xml">
@@ -131,6 +131,10 @@
     </Content>
     <Content Include="..\opencv\samples\cpp\trained_classifierNM2.xml">
       <Link>trained_classifierNM2.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\opencv\samples\cpp\trained_classifier_erGrouping.xml">
+      <Link>trained_classifier_erGrouping.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\opencv\samples\c\airplane.jpg">

@@ -15,23 +15,31 @@ namespace Emgu.CV.OpenCL
    /// <summary>
    /// Wraped class of the C++ standard vector of OclInfo.
    /// </summary>
-   public class VectorOfOclInfo : Emgu.Util.UnmanagedObject
+   public class VectorOfOclDeviceInfo : Emgu.Util.UnmanagedObject
    {
+      private bool _requiresDispose;
+
+      internal VectorOfOclDeviceInfo(IntPtr ptr, bool requiresDispose)
+      {
+         _ptr = ptr;
+         _requiresDispose = requiresDispose;
+      }
+
       /// <summary>
       /// Create an empty standard vector of OclInfo
       /// </summary>
-      public VectorOfOclInfo()
+      public VectorOfOclDeviceInfo()
+         :this (OclInvoke.VectorOfOclDeviceInfoCreate(), true)
       {
-         _ptr = OclInvoke.VectorOfOclInfoCreate();
       }
 
       /// <summary>
       /// Create an standard vector of OclInfo of the specific size
       /// </summary>
       /// <param name="size">The size of the vector</param>
-      public VectorOfOclInfo(int size)
+      public VectorOfOclDeviceInfo(int size)
+         : this (OclInvoke.VectorOfOclDeviceInfoCreateSize(size), true)
       {
-         _ptr = OclInvoke.VectorOfOclInfoCreateSize(size);
       }
 
       /// <summary>
@@ -41,7 +49,7 @@ namespace Emgu.CV.OpenCL
       {
          get
          {
-            return OclInvoke.VectorOfOclInfoGetSize(_ptr);
+            return OclInvoke.VectorOfOclDeviceInfoGetSize(_ptr);
          }
       }
 
@@ -50,7 +58,7 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       public void Clear()
       {
-         OclInvoke.VectorOfOclInfoClear(_ptr);
+         OclInvoke.VectorOfOclDeviceInfoClear(_ptr);
       }
 
       /// <summary>
@@ -60,7 +68,7 @@ namespace Emgu.CV.OpenCL
       {
          get
          {
-            return OclInvoke.VectorOfOclInfoGetStartAddress(_ptr);
+            return OclInvoke.VectorOfOclDeviceInfoGetStartAddress(_ptr);
          }
       }
 
@@ -86,11 +94,11 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="index">The index</param>
       /// <returns>The item in the specific index</returns>
-      public OclInfo this[int index]
+      public OclDeviceInfo this[int index]
       {
          get
          {
-            return new OclInfo( OclInvoke.VectorOfOclInfoGetItem(_ptr, index) );
+            return new OclDeviceInfo( OclInvoke.VectorOfOclDeviceInfoGetItem(_ptr, index) );
          }
       }
 
@@ -99,7 +107,10 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       protected override void DisposeObject()
       {
-         OclInvoke.VectorOfOclInfoRelease(_ptr);
+         if (_ptr != IntPtr.Zero && _requiresDispose)
+         {
+            OclInvoke.VectorOfOclDeviceInfoRelease(_ptr);
+         }
       }
 
    }
@@ -108,24 +119,24 @@ namespace Emgu.CV.OpenCL
    public static partial class OclInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr VectorOfOclInfoCreate();
+      internal static extern IntPtr VectorOfOclDeviceInfoCreate();
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr VectorOfOclInfoCreateSize(int size);
+      internal static extern IntPtr VectorOfOclDeviceInfoCreateSize(int size);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void VectorOfOclInfoRelease(IntPtr v);
+      internal static extern void VectorOfOclDeviceInfoRelease(IntPtr v);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern int VectorOfOclInfoGetSize(IntPtr v);
+      internal static extern int VectorOfOclDeviceInfoGetSize(IntPtr v);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr VectorOfOclInfoGetStartAddress(IntPtr v);
+      internal static extern IntPtr VectorOfOclDeviceInfoGetStartAddress(IntPtr v);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void VectorOfOclInfoClear(IntPtr v);
+      internal static extern void VectorOfOclDeviceInfoClear(IntPtr v);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr VectorOfOclInfoGetItem(IntPtr oclInfoVec, int index);
+      internal static extern IntPtr VectorOfOclDeviceInfoGetItem(IntPtr oclInfoVec, int index);
    }
 }

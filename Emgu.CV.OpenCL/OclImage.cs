@@ -9,6 +9,9 @@ using System.Drawing;
 using Emgu.CV.Structure;
 using Emgu.CV;
 using Emgu.CV.Util;
+#if ANDROID
+using Bitmap = Android.Graphics.Bitmap;
+#endif
 
 namespace Emgu.CV.OpenCL
 {

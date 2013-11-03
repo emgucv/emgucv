@@ -13,9 +13,9 @@
 #include "opencv2/core/core_c.h"
 #include "emgu_c.h"
 
-CVAPI(int) oclGetDevice(std::vector<cv::ocl::Info>* oclInfoVec, int devicetype);
-
-CVAPI(void) oclSetDevice(cv::ocl::Info* oclInfo, int deviceNum);
+CVAPI(int) oclGetPlatforms(std::vector<const cv::ocl::PlatformInfo*>* oclPlatforms);
+CVAPI(int) oclGetDevices(std::vector<const cv::ocl::DeviceInfo*>* oclDevices, int deviceType, const cv::ocl::PlatformInfo* platform);
+CVAPI(void) oclSetDevice(const cv::ocl::DeviceInfo* oclInfo);
 
 CVAPI(void) oclFinish();
 
@@ -320,32 +320,88 @@ CVAPI(void) oclBruteForceMatcherKnnMatchSingle(
 
 //----------------------------------------------------------------------------
 //
-//  Vector of VectorOfOclInfo
+//  Vector of VectorOfOclPlatformInfo
 //
 //----------------------------------------------------------------------------
-CVAPI(std::vector<cv::ocl::Info>*) VectorOfOclInfoCreate();
+CVAPI(std::vector<const cv::ocl::PlatformInfo*>*) VectorOfOclPlatformInfoCreate();
 
-CVAPI(std::vector<cv::ocl::Info>*) VectorOfOclInfoCreateSize(int size);
+CVAPI(std::vector<const cv::ocl::PlatformInfo*>*) VectorOfOclPlatformInfoCreateSize(int size);
 
-CVAPI(int) VectorOfOclInfoGetSize(std::vector<cv::ocl::Info>* v);
+CVAPI(int) VectorOfOclPlatformInfoGetSize(std::vector<const cv::ocl::PlatformInfo*>* v);
 
-CVAPI(void) VectorOfOclInfoClear(std::vector<cv::ocl::Info>* v);
+CVAPI(void) VectorOfOclPlatformInfoClear(std::vector<const cv::ocl::PlatformInfo*>* v);
 
-CVAPI(void) VectorOfOclInfoRelease(std::vector<cv::ocl::Info>* v);
+CVAPI(void) VectorOfOclPlatformInfoRelease(std::vector<const cv::ocl::PlatformInfo*>* v);
 
-CVAPI(cv::ocl::Info*) VectorOfOclInfoGetStartAddress(std::vector<cv::ocl::Info>* v);
+CVAPI(const cv::ocl::PlatformInfo*) VectorOfOclPlatformInfoGetStartAddress(std::vector<const cv::ocl::PlatformInfo*>* v);
 
-CVAPI(cv::ocl::Info*) VectorOfOclInfoGetItem(std::vector<cv::ocl::Info>* v, int index);
+CVAPI(const cv::ocl::PlatformInfo*) VectorOfOclPlatformInfoGetItem(std::vector<const cv::ocl::PlatformInfo*>* v, int index);
 
 //----------------------------------------------------------------------------
 //
-//  OclInfo
+//  Vector of VectorOfOclDeviceInfo
 //
 //----------------------------------------------------------------------------
-CVAPI(const char*) oclInfoGetPlatformName(cv::ocl::Info* oclInfo);
+CVAPI(std::vector<const cv::ocl::DeviceInfo*>*) VectorOfOclDeviceInfoCreate();
 
-CVAPI(int) oclInfoGetDeviceCount(cv::ocl::Info* oclInfo);
+CVAPI(std::vector<const cv::ocl::DeviceInfo*>*) VectorOfOclDeviceInfoCreateSize(int size);
 
-CVAPI(const char*) oclInfoGetDeviceName(cv::ocl::Info* oclInfo, int index);
+CVAPI(int) VectorOfOclDeviceInfoGetSize(std::vector<const cv::ocl::DeviceInfo*>* v);
 
+CVAPI(void) VectorOfOclDeviceInfoClear(std::vector<const cv::ocl::DeviceInfo*>* v);
+
+CVAPI(void) VectorOfOclDeviceInfoRelease(std::vector<const cv::ocl::DeviceInfo*>* v);
+
+CVAPI(const cv::ocl::DeviceInfo*) VectorOfOclDeviceInfoGetStartAddress(std::vector<const cv::ocl::DeviceInfo*>* v);
+
+CVAPI(const cv::ocl::DeviceInfo*) VectorOfOclDeviceInfoGetItem(std::vector<const cv::ocl::DeviceInfo*>* v, int index);
+
+//----------------------------------------------------------------------------
+//
+//  OclPlatformInfo
+//
+//----------------------------------------------------------------------------
+CVAPI(void) oclPlatformInfoGetProperties(
+   cv::ocl::PlatformInfo* oclPlatformInfo,
+   const char** platformProfile,
+   const char** platformVersion,
+   const char** platformName,
+   const char** platformVendor,
+   const char** platformExtensions,
+
+   int* platformVersionMajor,
+   int* platformVersionMinor
+   );
+
+CVAPI(std::vector<const cv::ocl::DeviceInfo*>* ) oclPlatformInfoGetDevices(cv::ocl::PlatformInfo* oclPlatformInfo);
+
+//----------------------------------------------------------------------------
+//
+//  OclDeviceInfo
+//
+//----------------------------------------------------------------------------
+
+
+CVAPI(void) oclDeviceInfoGetProperty(cv::ocl::DeviceInfo* oclDeviceInfo, 
+   int* type, 
+   const char** profile, 
+   const char** version,
+   const char** name, 
+   const char** vendor, 
+   int* vendorId,
+   const char** driverVersion, 
+   const char** extensions,
+   
+   int* maxWorkGroupSize,
+   int* maxComputeUnits,
+   int* localMemorySize,
+   int* maxMemAllocSize,
+   int* deviceVersionMajor,
+   int* deviceVersionMinor,
+   int* haveDoubleSupport,
+   int* isUnifiedMemory,
+   const char** compilationExtraOptions
+   );
+
+CVAPI(const cv::ocl::PlatformInfo*) oclDeviceInfoGetPlatform(cv::ocl::DeviceInfo* oclDeviceInfo);
 #endif

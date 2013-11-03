@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PInvoke\Android\BitmapArgb8888Image.cs" />
+    <Compile Include="PInvoke\Android\ImageAndroid.cs" />
     <Compile Include="AdaptiveSkinDetector.cs" />
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="CameraCalibration\Quaternions.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgb565.cs" />
     <Compile Include="Color\Rgba.cs" />
+    <Compile Include="ERFilter.cs" />
     <Compile Include="FaceRecognizer.cs" />
     <Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
     <Compile Include="Features2D\BOWKMeansTrainer.cs" />
@@ -63,17 +66,17 @@
     <Compile Include="Features2D\DenseFeatureDetector.cs" />
     <Compile Include="Features2D\DescriptorMatcher.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
-    <Compile Include="Features2D\Feature2DBase.cs" />
-    <Compile Include="Features2D\Features2DExtensions.cs" />
+    <Compile Include="Features2D\Feature2D.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
     <Compile Include="Features2D\Freak.cs" />
     <Compile Include="Features2D\GFTTDetector.cs" />
     <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />
     <Compile Include="Features2D\IDescriptorExtractor.cs" />
-    <Compile Include="Features2D\IKeyPointDetector.cs" />
+    <Compile Include="Features2D\IFeatureDetector.cs" />
+    <Compile Include="Features2D\Features2DExtensions.cs" />
     <Compile Include="Features2D\OpponentColorDescriptorExtractor.cs" />
     <Compile Include="Features2D\ORBDetector.cs" />
-    <Compile Include="Features2D\SIFTDetector.cs" />
+    <Compile Include="Features2D\SimpleBlobDetector.cs" />
     <Compile Include="Flann\CenterInitType.cs" />
     <Compile Include="Flann\Index.cs" />
     <Compile Include="Flann\Index3D.cs" />
@@ -82,17 +85,16 @@
     <Compile Include="Features2D\LDetector.cs" />
     <Compile Include="LatentSvmDetector.cs" />
     <Compile Include="LevMarqSparse.cs" />
+    <Compile Include="Util\Mat.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
-    <Compile Include="PInvoke\Android\BitmapArgb8888Image.cs" />
-    <Compile Include="PInvoke\Android\CvInvokeEntryPoints.cs" />
-    <Compile Include="PInvoke\Android\ImageAndroid.cs" />
     <Compile Include="PInvoke\CvInvokeCalib3d.cs" />
     <Compile Include="PInvoke\CvInvokeFFMPEG.cs" />
     <Compile Include="PInvoke\CvInvokeImgproc.cs" />
     <Compile Include="PInvoke\CvInvokeCvextern.cs" />
     <Compile Include="PInvoke\CvInvokeCore.cs" />
+    <Compile Include="PInvoke\CvInvokeEntryPoints.cs" />
     <Compile Include="PInvoke\CvInvokeFeatures2d.cs" />
     <Compile Include="PInvoke\CvInvokeHighGUI.cs" />
     <Compile Include="PInvoke\CvInvokeLegacy.cs" />
@@ -100,17 +102,16 @@
     <Compile Include="PInvoke\CvInvokePhoto.cs" />
     <Compile Include="PInvoke\CvInvokeVideo.cs" />
     <Compile Include="PInvoke\CvType\Cuboid.cs" />
-    <Compile Include="PInvoke\CvType\CvStructSizes.cs" />
     <Compile Include="PInvoke\CvType\MCvBGCodeBookModel.cs" />
     <Compile Include="PInvoke\CvType\MCvConDensation.cs" />
     <Compile Include="PInvoke\CvType\MCvGaussBGStatModelParams.cs" />
-    <Compile Include="Features2D\SURFDetector.cs" />
     <Compile Include="Features2D\PlanarObjectDetector.cs" />
     <Compile Include="Features2D\RTreeClassifier.cs" />
     <Compile Include="Features2D\SelfSimDescriptor.cs" />
     <Compile Include="PInvoke\CvType\MCvMSERParams.cs" />
     <Compile Include="PInvoke\CvType\MCvObjectDetection.cs" />
     <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
+    <Compile Include="PInvoke\CvType\CvStructSizes.cs" />
     <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PInvoke\CvType\MDMatch.cs" />
     <Compile Include="Retina.cs" />
@@ -134,7 +135,6 @@
     <Compile Include="Util\CvException.cs" />
     <Compile Include="Util\CvToolbox.cs" />
     <Compile Include="Util\DataLogger.cs" />
-    <Compile Include="Util\Mat.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
     <Compile Include="Util\VectorOfByte.cs" />
@@ -143,7 +143,9 @@
     <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="Util\VectorOfKeyPoint.cs" />
     <Compile Include="Util\VectorOfMat.cs" />
+    <Compile Include="Util\VectorOfRect.cs" />
     <Compile Include="Util\VectorOfPoint.cs" />
+    <Compile Include="Util\VectorOfPointF.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
@@ -225,7 +227,6 @@
     <Compile Include="Shape\Triangle3DF.cs" />
     <Compile Include="StereoBM.cs" />
     <Compile Include="StructuringElementEx.cs" />
-    <Compile Include="Features2D\SURFFeature.cs" />
     <Compile Include="MemStorage.cs" />
     <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />
@@ -267,6 +268,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Emgu.CV.snk" />
+    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_bioinspired.so">
+      <Link>lib\armeabi\libopencv_bioinspired.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_optim.so">
+      <Link>lib\armeabi\libopencv_optim.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_shape.so">
+      <Link>lib\armeabi\libopencv_shape.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_bioinspired.so">
+      <Link>lib\armeabi-v7a\libopencv_bioinspired.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_optim.so">
+      <Link>lib\armeabi-v7a\libopencv_optim.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedResource Include="..\libs\armeabi-v7a\libopencv_shape.so">
+      <Link>lib\armeabi-v7a\libopencv_shape.so</Link>
+    </EmbeddedResource>
+    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_bioinspired.so">
+      <Link>lib\x86\libopencv_bioinspired.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_optim.so">
+      <Link>lib\x86\libopencv_optim.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_shape.so">
+      <Link>lib\x86\libopencv_shape.so</Link>
+    </EmbeddedNativeLibrary>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libcvextern.so">

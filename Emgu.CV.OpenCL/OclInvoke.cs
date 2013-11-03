@@ -23,8 +23,12 @@ namespace Emgu.CV.OpenCL
       {
          //Dummy code to make sure the static constructor of CvInvoke has been called and the error handler has been registered.
          CvInvoke.CV_MAKETYPE(0, 0);
-         
-         _hasOpenCL = oclGetDevice(IntPtr.Zero, OclDeviceType.All) > 0;
+
+#if IOS || ANDROID
+         _hasOpenCL = false;
+#else
+         _hasOpenCL = oclGetDevices(IntPtr.Zero, OclDeviceType.All, IntPtr.Zero) > 0;
+#endif
       }
 
       private static bool _hasOpenCL;
@@ -40,22 +44,32 @@ namespace Emgu.CV.OpenCL
          }
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclGetDevice")]
-      internal static extern int oclGetDevice(IntPtr oclInfoVector, OclDeviceType deviceType);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int oclGetPlatforms(IntPtr oclPlatformInfoVector);
 
-      public static VectorOfOclInfo GetDevice(OclDeviceType deviceType)
+      public static VectorOfOclPlatformInfo GetPlatforms()
       {
-         VectorOfOclInfo vec = new VectorOfOclInfo();
-         oclGetDevice(vec, deviceType);
+         VectorOfOclPlatformInfo vec = new VectorOfOclPlatformInfo();
+         oclGetPlatforms(vec);
+         return vec;
+      }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int oclGetDevices(IntPtr oclDevices, OclDeviceType deviceType, IntPtr platform);
+
+      public static VectorOfOclPlatformInfo GetPlatforms(OclDeviceType deviceType, OclPlatformInfo platform)
+      {
+         VectorOfOclPlatformInfo vec = new VectorOfOclPlatformInfo();
+         oclGetDevices(vec, deviceType, platform);
          return vec;
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSetDevice")]
-      private static extern void oclSetDevice(IntPtr oclInfo, int deviceNum);
+      private static extern void oclSetDevice(IntPtr oclInfo);
 
-      public static void SetDevice(OclInfo oclInfo, int deviceNum)
+      public static void SetDevice(OclDeviceInfo oclInfo)
       {
-         oclSetDevice(oclInfo.Ptr, deviceNum);
+         oclSetDevice(oclInfo);
       }
 
       /// <summary>
@@ -64,8 +78,6 @@ namespace Emgu.CV.OpenCL
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclFinish")]
       public static extern void Finish();
       
-      
-
       /// <summary>
       /// Create an empty OclMat 
       /// </summary>
