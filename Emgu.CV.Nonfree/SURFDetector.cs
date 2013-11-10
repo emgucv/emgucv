@@ -90,6 +90,9 @@ namespace Emgu.CV.Nonfree
       }
    }
 
+   /// <summary>
+   /// This class wraps the functional calls to the opencv_nonfree module
+   /// </summary>
    public static partial class NonfreeInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -131,7 +131,11 @@ namespace Emgu.CV
          }
 #else
          if ( 
+#if ANDROID
+            extension.Equals(".png")
+#else
             (typeof(TColor) == typeof(Bgra) && typeof(TColor) == typeof(Byte) && extension.Equals(".png"))
+#endif
             || extension.Equals(".tiff") 
             || extension.Equals(".tif"))
          {

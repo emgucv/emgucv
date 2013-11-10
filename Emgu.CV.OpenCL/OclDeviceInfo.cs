@@ -248,6 +248,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// Get the ocl device type
+      /// </summary>
       public OclDeviceType Type
       {
          get
@@ -278,6 +281,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// The maximum work group size
+      /// </summary>
       public int MaxWorkGroupSize
       {
          get
@@ -308,6 +314,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// The max compute unit
+      /// </summary>
       public int MaxComputeUnits
       {
          get
@@ -338,6 +347,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// The local memory size
+      /// </summary>
       public int LocalMemorySize
       {
          get
@@ -368,6 +380,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// The maximum memory allocation size
+      /// </summary>
       public int MaxMemAllocSize
       {
          get
@@ -398,6 +413,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// The device major version number
+      /// </summary>
       public int DeviceVersionMajor
       {
          get
@@ -428,6 +446,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// The Device minor version number
+      /// </summary>
       public int DeviceVersionMinor
       {
          get
@@ -458,6 +479,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// True if the device has double support
+      /// </summary>
       public bool HaveDoubleSupport
       {
          get
@@ -488,6 +512,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// True if the device use unified memory
+      /// </summary>
       public bool IsUnifiedMemory
       {
          get
@@ -518,6 +545,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// Get the Compilation extra options
+      /// </summary>
       public String CompilationExtraOptions
       {
          get
@@ -548,6 +578,9 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /// <summary>
+      /// Get the OpenCL platform info
+      /// </summary>
       public OclPlatformInfo Platform
       {
          get

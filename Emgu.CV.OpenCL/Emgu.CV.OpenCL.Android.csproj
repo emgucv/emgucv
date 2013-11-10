@@ -62,12 +62,6 @@
     <Compile Include="VectorOfOclPlatformInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AboutResources.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Values\Strings.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.Android.csproj">
       <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
       <Name>Emgu.CV.Android</Name>

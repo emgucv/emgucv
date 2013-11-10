@@ -47,6 +47,10 @@ namespace Emgu.CV.OpenCL
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int oclGetPlatforms(IntPtr oclPlatformInfoVector);
 
+      /// <summary>
+      /// Get all the OclPlatforms available 
+      /// </summary>
+      /// <returns>The available OclPlatforms</returns>
       public static VectorOfOclPlatformInfo GetPlatforms()
       {
          VectorOfOclPlatformInfo vec = new VectorOfOclPlatformInfo();
@@ -57,9 +61,15 @@ namespace Emgu.CV.OpenCL
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int oclGetDevices(IntPtr oclDevices, OclDeviceType deviceType, IntPtr platform);
 
-      public static VectorOfOclPlatformInfo GetPlatforms(OclDeviceType deviceType, OclPlatformInfo platform)
+      /// <summary>
+      /// Get the OclDevices of the specific device type, from the specific platform
+      /// </summary>
+      /// <param name="deviceType">The device type</param>
+      /// <param name="platform">The platform</param>
+      /// <returns>The OclDevices</returns>
+      public static VectorOfOclDeviceInfo GetDevices(OclDeviceType deviceType, OclPlatformInfo platform)
       {
-         VectorOfOclPlatformInfo vec = new VectorOfOclPlatformInfo();
+         VectorOfOclDeviceInfo vec = new VectorOfOclDeviceInfo();
          oclGetDevices(vec, deviceType, platform);
          return vec;
       }
@@ -67,9 +77,13 @@ namespace Emgu.CV.OpenCL
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSetDevice")]
       private static extern void oclSetDevice(IntPtr oclInfo);
 
-      public static void SetDevice(OclDeviceInfo oclInfo)
+      /// <summary>
+      /// Set the device to be used for OpenCL computation
+      /// </summary>
+      /// <param name="oclDeviceInfo">The ocl device to be used</param>
+      public static void SetDevice(OclDeviceInfo oclDeviceInfo)
       {
-         oclSetDevice(oclInfo);
+         oclSetDevice(oclDeviceInfo);
       }
 
       /// <summary>
@@ -183,7 +197,7 @@ namespace Emgu.CV.OpenCL
       public static extern IntPtr GetSubRect(IntPtr mat, ref Rectangle rect);
 
       /// <summary>
-      /// Create a OclMat from the specific region of <paramref name="gpuMat"/>. The data is shared between the two GpuMat.
+      /// Create a OclMat from the specific region of <paramref name="oclMat"/>. The data is shared between the two GpuMat.
       /// </summary>
       /// <param name="oclMat">The gpuMat to extract regions from.</param>
       /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
@@ -737,6 +751,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dy">Order of the derivative y</param>
       /// <param name="ksize">Size of the extended Sobel kernel</param>
       /// <param name="scale">Optional scale, use 1 for default.</param>
+      /// <param name="buffer">The optional buffer used for sobel operation, use IntPtr.Zero for default. </param>
       /// <param name="borderType">The border type.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSobel")]
       public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, IntPtr buffer, int ksize, double scale, CvEnum.BORDER_TYPE borderType);
@@ -961,7 +976,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
-      /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
+      /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDilate")]
       private static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);

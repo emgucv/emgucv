@@ -433,7 +433,7 @@ namespace Emgu.CV
       /// <summary> 
       /// Capture a Bgr image frame
       /// </summary>
-      /// <returns> A Bgr image frame</returns>
+      /// <returns> A Bgr image frame. If no more frames are available, null will be returned.</returns>
       public virtual Image<Bgr, Byte> QueryFrame()
       {
          return Grab() ? RetrieveBgrFrame(0) : null;
