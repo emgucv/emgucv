@@ -36,7 +36,7 @@ FOREACH(FILE ${SRC_CV_TEST_DATA})
 	ADD_CS_FILE_TO_DEPLOY(${FILE})
 ENDFOREACH()
 
-ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.ML.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.OCR.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.OpenCL.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.Cuda.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.Stitching.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.Nonfree.dll;System.Drawing.dll;${LIBRARY_OUTPUT_PATH}/Emgu.UI.dll;System.Windows.Forms.dll;System.Core.dll;${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll")
+ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.ML.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.OCR.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.OpenCL.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.Cuda.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.Stitching.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.Nonfree.dll;System.Drawing.dll;${LIBRARY_OUTPUT_PATH}/Emgu.UI.dll;System.Windows.Forms.dll;System.Core.dll;System.Xml.Linq.dll;${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll")
 
 COMPILE_CS(${PROJECT_NAME} "library" "${SRC_CV_TEST}")
 
