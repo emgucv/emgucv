@@ -1,19 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util.MonoTouch", "..\..\Emgu.Util\Emgu.Util.MonoTouch.csproj", "{317AF9CE-1B65-47A2-B142-BE556A312C72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util.iOS", "..\..\Emgu.Util\Emgu.Util.iOS.csproj", "{317AF9CE-1B65-47A2-B142-BE556A312C72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.MonoTouch", "..\..\Emgu.CV\Emgu.CV.MonoTouch.csproj", "{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.iOS", "..\..\Emgu.CV\Emgu.CV.iOS.csproj", "{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.MonoTouch", "..\..\Emgu.CV.ML\Emgu.CV.ML.MonoTouch.csproj", "{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.iOS", "..\..\Emgu.CV.ML\Emgu.CV.ML.iOS.csproj", "{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.MonoTouch", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.MonoTouch.csproj", "{2B9B1965-3A6D-4D06-9427-43335D4C668F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.iOS", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.iOS.csproj", "{2B9B1965-3A6D-4D06-9427-43335D4C668F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR.MonoTouch", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.MonoTouch.csproj", "{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR.iOS", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.iOS.csproj", "{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.MonoTouch", "..\..\Emgu.CV.GPU\Emgu.CV.GPU.MonoTouch.csproj", "{765DB687-906C-47C0-B0BD-531A1A4E51CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Cuda.iOS", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.iOS.csproj", "{765DB687-906C-47C0-B0BD-531A1A4E51CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Example.MonoTouch", "..\..\Emgu.CV.Example\MonoTouch\Emgu.CV.Example.MonoTouch.csproj", "{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Test.iOS", "..\..\Emgu.CV.Test\Emgu.CV.Test.iOS\Emgu.CV.Test.iOS.csproj", "{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.VideoStab.iOS", "..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.iOS.csproj", "{0F4522BD-7526-4052-BAC2-7CB674F94412}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Nonfree.iOS", "..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.iOS.csproj", "{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OpenCL.iOS", "..\..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.iOS.csproj", "{3C97223F-9855-4F61-83AA-D842E2A8A7DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +27,16 @@ Global
 		Release|iPhoneSimulator = Release|iPhoneSimulator
 		Debug|iPhone = Debug|iPhone
 		Release|iPhone = Release|iPhone
-		Ad-Hoc|iPhone = Ad-Hoc|iPhone
-		AppStore|iPhone = AppStore|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Release|iPhone.Build.0 = Release|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{0F4522BD-7526-4052-BAC2-7CB674F94412}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{2B9B1965-3A6D-4D06-9427-43335D4C668F}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
@@ -41,6 +53,14 @@ Global
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Release|iPhone.Build.0 = Release|Any CPU
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Release|iPhone.Build.0 = Release|Any CPU
+		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
@@ -65,18 +85,22 @@ Global
 		{765DB687-906C-47C0-B0BD-531A1A4E51CA}.Release|iPhone.Build.0 = Release|Any CPU
 		{765DB687-906C-47C0-B0BD-531A1A4E51CA}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{765DB687-906C-47C0-B0BD-531A1A4E51CA}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.AppStore|iPhone.Build.0 = AppStore|iPhone
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhone.Build.0 = Debug|iPhone
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhone.ActiveCfg = Release|iPhone
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhone.Build.0 = Release|iPhone
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}.Release|iPhone.Build.0 = Release|Any CPU
+		{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}.Debug|iPhone.Build.0 = Debug|iPhone
+		{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}.Release|iPhone.ActiveCfg = Release|iPhone
+		{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}.Release|iPhone.Build.0 = Release|iPhone
+		{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
@@ -87,35 +111,6 @@ Global
 		{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ..\..\Emgu.CV.Example\MonoTouch\Emgu.CV.Example.MonoTouch.csproj
-		Policies = $0
-		$0.DotNetNamingPolicy = $1
-		$1.DirectoryNamespaceAssociation = None
-		$1.ResourceNamePolicy = FileFormatDefault
-		$0.TextStylePolicy = $2
-		$2.TabWidth = 3
-		$2.IndentWidth = 3
-		$2.inheritsSet = VisualStudio
-		$2.inheritsScope = text/plain
-		$2.scope = text/x-csharp
-		$0.CSharpFormattingPolicy = $3
-		$3.IndentSwitchBody = True
-		$3.AnonymousMethodBraceStyle = NextLine
-		$3.PropertyBraceStyle = NextLine
-		$3.PropertyGetBraceStyle = NextLine
-		$3.PropertySetBraceStyle = NextLine
-		$3.EventBraceStyle = NextLine
-		$3.EventAddBraceStyle = NextLine
-		$3.EventRemoveBraceStyle = NextLine
-		$3.StatementBraceStyle = NextLine
-		$3.ArrayInitializerBraceStyle = NextLine
-		$3.BeforeMethodDeclarationParentheses = False
-		$3.BeforeMethodCallParentheses = False
-		$3.BeforeConstructorDeclarationParentheses = False
-		$3.BeforeDelegateDeclarationParentheses = False
-		$3.NewParentheses = False
-		$3.inheritsSet = Mono
-		$3.inheritsScope = text/x-csharp
-		$3.scope = text/x-csharp
+		StartupItem = ..\..\Emgu.CV.Test\Emgu.CV.Test.iOS\Emgu.CV.Test.iOS.csproj
 	EndGlobalSection
 EndGlobal

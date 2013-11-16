@@ -9,7 +9,6 @@
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>Emgu.CV.Test</RootNamespace>
-    <AssemblyName>EmguCVTestMonoTouch</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,9 +21,11 @@
     <ConsolePause>false</ConsolePause>
     <MtouchDebug>true</MtouchDebug>
     <MtouchLink>None</MtouchLink>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
+    <AssemblyName>Emgu_CV_Test_iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -35,9 +36,11 @@
     <ConsolePause>false</ConsolePause>
     <MtouchLink>None</MtouchLink>
     <DefineConstants>IOS</DefineConstants>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
+    <AssemblyName>Emgu_CV_Test_iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,10 +54,13 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <MtouchLink>None</MtouchLink>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
-    <IpaPackageName />
+    <IpaPackageName>
+    </IpaPackageName>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
+    <AssemblyName>Emgu.CV.Test.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -66,11 +72,14 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <DefineConstants>IOS</DefineConstants>
     <MtouchLink>None</MtouchLink>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchUseLlvm>true</MtouchUseLlvm>
     <MtouchArch>ARMv7</MtouchArch>
-    <IpaPackageName />
+    <IpaPackageName>
+    </IpaPackageName>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
+    <AssemblyName>Emgu.CV.Test.iOS</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -124,6 +133,7 @@
     </Content>
     <Content Include="..\pedestrian.png">
       <Link>pedestrian.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\qrcode.png">
       <Link>qrcode.png</Link>
@@ -184,12 +194,28 @@
       <Link>license-plate.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\circlesGrid.bmp">
+      <Link>circlesGrid.bmp</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\chessBoard.jpg">
+      <Link>chessBoard.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\cpp\logo.png">
+      <Link>logo.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\cpp\logo_in_clutter.png">
+      <Link>logo_in_clutter.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\cpp\scenetext01.jpg">
+      <Link>scenetext01.jpg</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="..\chessBoard.jpg">
-      <Link>chessBoard.jpg</Link>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -224,29 +250,37 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.GPU\Emgu.CV.GPU.MonoTouch.csproj">
-      <Project>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</Project>
-      <Name>Emgu.CV.GPU.MonoTouch</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.iOS.csproj">
       <Project>{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}</Project>
-      <Name>Emgu.CV.ML.MonoTouch</Name>
+      <Name>Emgu.CV.ML.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.iOS.csproj">
       <Project>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</Project>
-      <Name>Emgu.CV.MonoTouch</Name>
+      <Name>Emgu.CV.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.iOS.csproj">
       <Project>{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}</Project>
-      <Name>Emgu.CV.OCR.MonoTouch</Name>
+      <Name>Emgu.CV.OCR.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.iOS.csproj">
       <Project>{2B9B1965-3A6D-4D06-9427-43335D4C668F}</Project>
-      <Name>Emgu.CV.Stitching.MonoTouch</Name>
+      <Name>Emgu.CV.Stitching.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.iOS.csproj">
       <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
-      <Name>Emgu.Util.MonoTouch</Name>
+      <Name>Emgu.Util.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.iOS.csproj">
+      <Project>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</Project>
+      <Name>Emgu.CV.Cuda.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.iOS.csproj">
+      <Project>{3C97223F-9855-4F61-83AA-D842E2A8A7DD}</Project>
+      <Name>Emgu.CV.OpenCL.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.iOS.csproj">
+      <Project>{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}</Project>
+      <Name>Emgu.CV.Nonfree.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
