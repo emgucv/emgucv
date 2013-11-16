@@ -14,6 +14,7 @@ using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
 using Emgu.CV.Nonfree;
+using Emgu.CV.Softcascade;
 using NUnit.Framework;
 
 namespace Emgu.CV.Test
@@ -359,10 +360,14 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
             CudaImage<Gray, Byte> cudaImage = new CudaImage<Gray, byte>(image);
             CudaImage<Gray, Byte> cudaResult = new CudaImage<Gray, byte>(cudaImage.Size);
-            Image<Gray, Byte> result = new Image<Gray, byte>(cudaResult.Size);
-            CudaInvoke.CLAHE(cudaImage, cudaResult, 4, new Size(8, 8), null);
-            cudaResult.Download(result);
-            Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+
+            using (CudaClahe clahe = new CudaClahe(40.0, new Size(8, 8)))
+            {
+               Image<Gray, Byte> result = new Image<Gray, byte>(cudaResult.Size);
+               clahe.Apply(cudaImage, cudaResult, null);
+               cudaResult.Download(result);
+               //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+            }
          }
       }
 
@@ -719,6 +724,38 @@ namespace Emgu.CV.Test
             CudaInvoke.BilateralFilter(CudaImage, gpuBilaterial, 7, 5, 5, CvEnum.BORDER_TYPE.DEFAULT, IntPtr.Zero);
 
             //Emgu.CV.UI.ImageViewer.Show(gray.ConcateHorizontal(gpuBilaterial.ToImage()));
+         }
+      }
+
+      [Test]
+      public void TestSoftcascadeCuda()
+      {
+         if (CudaInvoke.HasCuda)
+         {
+            using (CudaDeviceInfo cdi = new CudaDeviceInfo())
+            {
+           
+               using (CudaSoftCascadeDetector detector = new CudaSoftCascadeDetector(EmguAssert.GetFile("inria_caltech-17.01.2013.xml"), 0.4, 5.0, 55, SoftCascadeDetector.RejectionCriteria.Default))
+               using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png"))
+               using (Cuda.CudaImage<Bgr, Byte> gImage = new CudaImage<Bgr, byte>(image))
+               using (Matrix<int> rois = new Matrix<int>(1, 4))
+               {
+                  Stopwatch watch = Stopwatch.StartNew();
+
+                  Size s = gImage.Size;
+                  rois.Data[0, 2] = s.Width;
+                  rois.Data[0, 3] = s.Height;
+                  using (GpuMat<int> gRois = new GpuMat<int>(rois))
+                  {
+                     Emgu.CV.Cuda.GpuMat result = detector.Detect(gImage, gRois, null);
+                  }
+                  watch.Stop();
+                  //foreach (SoftCascadeDetector.Detection detection in detections)
+                  //   image.Draw(detection.BoundingBox, new Bgr(Color.Red), 1);
+
+                  //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+               }
+            }
          }
       }
 

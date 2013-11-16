@@ -28,6 +28,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Superres", "..\..\E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Nonfree", "..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.csproj", "{910D133F-1B44-4151-80A5-F3B25741747D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Shape", "..\..\Emgu.CV.Shape\Emgu.CV.Shape.csproj", "{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Softcascade", "..\..\Emgu.CV.Softcascade\Emgu.CV.Softcascade.csproj", "{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,6 +146,22 @@ Global
 		{910D133F-1B44-4151-80A5-F3B25741747D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{910D133F-1B44-4151-80A5-F3B25741747D}.Release|x64.ActiveCfg = Release|Any CPU
 		{910D133F-1B44-4151-80A5-F3B25741747D}.Release|x86.ActiveCfg = Release|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Release|x64.ActiveCfg = Release|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Release|x86.ActiveCfg = Release|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|x64.ActiveCfg = Release|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

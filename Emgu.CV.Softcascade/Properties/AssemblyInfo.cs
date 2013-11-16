@@ -1,16 +1,12 @@
-//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
-//----------------------------------------------------------------------------
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Emgu.CV")]
-[assembly: AssemblyDescription("A wrapper for the OpenCV library")]
+[assembly: AssemblyTitle("Emgu.CV.Softcascade")]
+[assembly: AssemblyDescription("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -18,4 +14,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c5865c89-5ef4-452b-bf34-b76386e49a30")]
+[assembly: Guid("dfbf8ed0-50e6-499f-a5b2-8a261e6da503")]
+

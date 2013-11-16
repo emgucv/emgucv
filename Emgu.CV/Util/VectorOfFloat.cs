@@ -95,7 +95,8 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.VectorOfFloatRelease(_ptr);
+         if (_ptr != IntPtr.Zero)
+            CvInvoke.VectorOfFloatRelease(_ptr);
       }
    }
 }

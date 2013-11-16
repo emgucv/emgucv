@@ -63,6 +63,18 @@ void CvFaceRecognizerTrain(cv::FaceRecognizer* recognizer, IplImage** images, in
    recognizer->train(imageVec, labelVec);
 }
 
+void CvFaceRecognizerUpdate(cv::FaceRecognizer* recognizer, IplImage** images, int* labels, int count)
+{
+   std::vector<cv::Mat> imageVec(count);
+   std::vector<int> labelVec(count);
+   for (int i = 0; i < count; ++i)
+   {
+      imageVec[i] = cv::cvarrToMat(images[i]);
+      labelVec[i] = labels[i];
+   }
+   recognizer->update(imageVec, labelVec);
+}
+
 void CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, const char* fileName)
 {
    std::string file(fileName);

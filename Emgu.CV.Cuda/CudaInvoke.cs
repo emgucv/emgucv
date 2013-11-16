@@ -1138,6 +1138,15 @@ namespace Emgu.CV.Cuda
          CreateOpticalFlowNeedleMap(u, v, vertex, colors);
       }
 
+      /// <summary>
+      /// Performs linear blending of two images.
+      /// </summary>
+      /// <param name="img1">First image. Supports only CV_8U and CV_32F depth.</param>
+      /// <param name="img2">Second image. Must have the same size and the same type as img1 .</param>
+      /// <param name="weights1">Weights for first image. Must have tha same size as img1. Supports only CV_32F type.</param>
+      /// <param name="weights2">Weights for second image. Must have tha same size as img2. Supports only CV_32F type.</param>
+      /// <param name="result">Destination image.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaBlendLinear")]
       public static extern void BlendLinear(IntPtr img1, IntPtr img2, IntPtr weights1, IntPtr weights2, IntPtr result, IntPtr stream);
 
@@ -1145,7 +1154,7 @@ namespace Emgu.CV.Cuda
       /// Applies bilateral filter to the image.
       /// </summary>
       /// <param name="src">The source image</param>
-      /// <param name="dst">The destination image; will have the same size and the same type as src</param>
+      /// <param name="dst">The destination image; should have the same size and the same type as src</param>
       /// <param name="kernelSize">The diameter of each pixel neighborhood, that is used during filtering.</param>
       /// <param name="sigmaColor">Filter sigma in the color space. Larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting in larger areas of semi-equal color</param>
       /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
@@ -1155,12 +1164,6 @@ namespace Emgu.CV.Cuda
       public static extern void BilateralFilter(IntPtr src, IntPtr dst, int kernelSize, float sigmaColor, float sigmaSpace, CvEnum.BORDER_TYPE borderType, IntPtr stream);
 
 
-      public static void CLAHE(GpuMat<Byte> src, GpuMat<Byte> dst, double clipLimit, Size tileGridSize, Stream stream)
-      {
-         cudaCLAHE(src, dst, clipLimit, ref tileGridSize, stream);
-      }
-
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaCLAHE(IntPtr src, IntPtr dst, double clipLimit, ref Size tileGridSize, IntPtr stream);
+ 
    }
 }

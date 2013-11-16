@@ -19,3 +19,8 @@ void cvFastNlMeansDenoisingColored(CvArr* src, CvArr* dst, float h, float hColor
    cv::Mat dstMat = cv::cvarrToMat(dst);
    cv::fastNlMeansDenoisingColored(srcMat, dstMat, h, hColor, templateWindowSize, searchWindowSize);
 }
+
+void cudaNonLocalMeans(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, float h, int searchWindow, int blockSize, int borderMode, cv::cuda::Stream* stream)
+{
+   cv::cuda::nonLocalMeans(*src, *dst, h, searchWindow, blockSize, borderMode, stream ? *stream : cv::cuda::Stream::Null());
+}

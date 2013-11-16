@@ -44,7 +44,14 @@ CVAPI(void) cudaCornernessCriteriaRelease(cv::cuda::CornernessCriteria** detecto
 
 CVAPI(void) cudaBilateralFilter(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaCLAHE(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, double clipLimit, emgu::size* tileGridSize, cv::cuda::Stream* stream);
+//----------------------------------------------------------------------------
+//
+//  CudaCLAHE
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::cuda::CLAHE*) cudaCLAHECreate(double clipLimit, emgu::size* tileGridSize);
+CVAPI(void) cudaCLAHEApply(cv::cuda::CLAHE* clahe, cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  cv::cuda::Stream* stream);
+CVAPI(void) cudaCLAHERelease(cv::cuda::CLAHE** clahe);
 
 //----------------------------------------------------------------------------
 //
@@ -59,7 +66,7 @@ CVAPI(void) cudaCannyEdgeDetectorRelease(cv::cuda::CannyEdgeDetector** detector)
 
 //----------------------------------------------------------------------------
 //
-//  GpuGoodFeaturesToTrackDetector
+//  CudaGoodFeaturesToTrackDetector
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::CornersDetector*) cudaGoodFeaturesToTrackDetectorCreate(int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK);

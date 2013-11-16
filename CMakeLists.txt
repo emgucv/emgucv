@@ -258,7 +258,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   cudastereo cudabgsegm cudafeatures2d 
   ocl
   photo bioinspired superres nonfree stitching 
-  videostab  optim softcascade
+  videostab  optim softcascade shape
   cudev  cudacodec 
   )
   
@@ -267,9 +267,6 @@ IF(TARGET opencv_${OPENCV_MODULE_NAME})
   LIST(APPEND OPENCV_MODULE_NAMES ${OPENCV_MODULE_NAME})
 ENDIF() 
 ENDFOREACH()
-#core imgproc highgui ml calib3d features2d objdetect legacy calib3d video flann cudev  bioinspired
-#contrib stitching photo nonfree videostab ocl superres softcascade optim
-#gpu gpuarithm gpufeatures2d gpufilters gpuimgproc gpuoptflow gpulegacy gpustereo gpubgsegm gpucodec gpuwarping)
 
 IF (TARGET_ARCH_64)
   SET(EMGU_ENABLE_SSE OFF CACHE BOOL "ENABLE SSE for Emgu CV")
@@ -405,11 +402,13 @@ ADD_SUBDIRECTORY(Emgu.CV.VideoStab)
 ADD_SUBDIRECTORY(Emgu.CV.OpenCL)
 ADD_SUBDIRECTORY(Emgu.CV.Nonfree)
 ADD_SUBDIRECTORY(Emgu.CV.Superres)
+ADD_SUBDIRECTORY(Emgu.CV.Shape)
+ADD_SUBDIRECTORY(Emgu.CV.Softcascade)
 ENDIF()
 
 IF (ANDROID)
   SET(CPACK_GENERATOR ZIP)
-  SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.ML Emgu.CV.OCR Emgu.CV.GPU Emgu.CV.Stitching Emgu.CV.VideoStab)
+  SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.ML Emgu.CV.OCR Emgu.CV.Cuda Emgu.CV.Stitching Emgu.CV.VideoStab Emgu.CV.OpenCL Emgu.CV.Nonfree Emgu.CV.Superres Emgu.CV.Shape Emgu.CV.Softcascade)
   FOREACH(ANDROID_SOURCE_FOLDER ${ANDROID_SOURCE_FOLDERS})
   INSTALL(
   DIRECTORY
@@ -545,7 +544,7 @@ ELSEIF (WIN32)
     ELSEIF(MSVC90)
       SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc9_redist")
     ENDIF()
-  
+
     SET(VCRT_REDIST_NAME "vcredist_x86.exe")
     IF(MSVC_REDIST_FOLDER AND (DEFINED UNIVERSAL_BUILD OR (NOT DEFINED TARGET_ARCH_64)))    
 	  MESSAGE(STATUS "Including ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME} in package")
@@ -690,9 +689,6 @@ uninstallDebuggerVisualizer4${vs_version}Done:
 ")
   ENDMACRO()
 
-  #  INSTALL_DEBUGER_VISUALIZER("VS2005" "Visual Studio 2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
-  #  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
-
   INSTALL_DEBUGER_VISUALIZER("VS2008" "Visual Studio 2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
 
@@ -704,9 +700,6 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   
   INSTALL_DEBUGER_VISUALIZER("VS2013" "Visual Studio 2013" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\12.0")
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
-
-  #  UNINSTALL_DEBUGER_VISUALIZER("VS2005" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\8.0")
-  #  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
 
   UNINSTALL_DEBUGER_VISUALIZER("VS2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
@@ -881,7 +874,7 @@ ELSE()
     PATTERN "Debug" EXCLUDE
     PATTERN "*.dir" EXCLUDE
     PATTERN "Android" EXCLUDE
-    PATTERN "MonoTouch" EXCLUDE
+    PATTERN "iOS" EXCLUDE
     PATTERN "WindowsStore" EXCLUDE
   )
 ENDIF()
@@ -942,13 +935,11 @@ LIST(APPEND CPACK_NSIS_MENU_LINKS "http://www.emgu.com/bugs/buglist.cgi?query_fo
 # ----------------------------------------------------------------------------
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\" ")
 
-SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2005 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\VS2005_MonoDevelop\\\\Emgu.CV.Example.sln\\\" ")	
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2008 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\VS2008\\\\Emgu.CV.Example.sln\\\" ")	
-SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2010 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\VS2010\\\\Emgu.CV.Example.sln\\\" ")	
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2010 2012 2013 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\VS2010_2012_2013\\\\Emgu.CV.Example.sln\\\" ")	
 
-SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2005 Examples.lnk\\\" ")
 SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2008 Examples.lnk\\\" ")
-SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2010 Examples.lnk\\\" ")
+SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2010 2012 2013 Examples.lnk\\\" ")
 
 SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\nRMDir  \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\" ")
 
@@ -1078,7 +1069,7 @@ INSTALL(
   PATTERN "Debug" EXCLUDE
   PATTERN "*.dir" EXCLUDE
   PATTERN "Android" EXCLUDE
-  PATTERN "MonoTouch" EXCLUDE
+  PATTERN "iOS" EXCLUDE
   )
 INSTALL(
   DIRECTORY
@@ -1123,7 +1114,7 @@ INSTALL(
 ELSE() #LINUX
   SET(MONO_GACUTIL_EXEC "gacutil")
   SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
-  SET(EMGUCV_MANAGED_DLLS "Emgu.Util" "Emgu.CV" "Emgu.CV.ML" "Emgu.CV.Cuda" "Emgu.CV.OpenCL" "Emgu.CV.UI" "Emgu.CV.Stitching" "Emgu.CV.VideoStab" "Emgu.CV.Superres" "Emgu.CV.Nonfree" "ZedGraph")
+  SET(EMGUCV_MANAGED_DLLS "Emgu.Util" "Emgu.CV" "Emgu.CV.ML" "Emgu.CV.Cuda" "Emgu.CV.OpenCL" "Emgu.CV.UI" "Emgu.CV.Stitching" "Emgu.CV.VideoStab" "Emgu.CV.Superres" "Emgu.CV.Nonfree" "Emgu.CV.Shape" "Emgu.CV.Softcascade" "ZedGraph")
   IF(EMGU_CV_WITH_TESSERACT)
     LIST(APPEND EMGUCV_MANAGED_DLLS "Emgu.CV.OCR")
   ENDIF()

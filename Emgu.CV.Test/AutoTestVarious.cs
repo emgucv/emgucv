@@ -22,6 +22,7 @@ using Emgu.CV.Tiff;
 using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.CV.Nonfree;
+using Emgu.CV.Softcascade;
 using Emgu.Util;
 using NUnit.Framework;
 
@@ -1632,6 +1633,22 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestSoftcascade()
+      {
+         using (SoftCascadeDetector detector = new SoftCascadeDetector(EmguAssert.GetFile("inria_caltech-17.01.2013.xml"), 0.4, 5.0, 55, SoftCascadeDetector.RejectionCriteria.Default))
+         using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png"))
+         {
+            Stopwatch watch = Stopwatch.StartNew();
+            SoftCascadeDetector.Detection[] detections = detector.Detect(image, null);
+            watch.Stop();
+            foreach (SoftCascadeDetector.Detection detection in detections)
+               image.Draw(detection.BoundingBox, new Bgr(Color.Red), 1);
+
+            Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+         }
+      }
+
+      [Test]
       public void TestHOG1()
       {
          using (HOGDescriptor hog = new HOGDescriptor())
@@ -2504,7 +2521,7 @@ namespace Emgu.CV.Test
                   er1.Run(channels[i], regionVecs[i]);
                   er2.Run(channels[i], regionVecs[i]);
                }
-               Rectangle[] regions = ERFilter.ERGrouping(channels, regionVecs, "trained_classifier_erGrouping.xml", 0.5f);
+               Rectangle[] regions = ERFilter.ERGrouping(channels, regionVecs, EmguAssert.GetFile("trained_classifier_erGrouping.xml"), 0.5f);
 
                foreach (Rectangle rect in regions)
                   image.Draw(rect, new Gray(0), 2);

@@ -57,7 +57,8 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.VectorOfDataMatrixCodeRelease(_ptr);
+         if (_ptr != IntPtr.Zero)
+            CvInvoke.VectorOfDataMatrixCodeRelease(_ptr);
       }
    }
 }

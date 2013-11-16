@@ -150,6 +150,35 @@ namespace Emgu.CV
       {
          _ptr = CvInvoke.CvLBPHFaceRecognizerCreate(radius, neighbors, gridX, gridY, threshold);
       }
+
+      /// <summary>
+      /// Update the face recognizer with the specific images and labels
+      /// </summary>
+      /// <param name="images">The images used for updating the face recognizer</param>
+      /// <param name="labels">The labels of the images</param>
+      public void Update(IImage[] images, int[] labels)
+      {
+         Debug.Assert(images.Length == labels.Length, "The number of labels must equals the number of images");
+
+         IntPtr[] ptrs = new IntPtr[images.Length];
+         for (int i = 0; i < images.Length; i++)
+         {
+            ptrs[i] = images[i].Ptr;
+         }
+
+         GCHandle imagesHandle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
+         GCHandle labelsHandle = GCHandle.Alloc(labels, GCHandleType.Pinned);
+
+         try
+         {
+            CvInvoke.CvFaceRecognizerUpdate(_ptr, imagesHandle.AddrOfPinnedObject(), labelsHandle.AddrOfPinnedObject(), images.Length);
+         }
+         finally
+         {
+            imagesHandle.Free();
+            labelsHandle.Free();
+         }
+      }
    }
 
    public static partial class CvInvoke
@@ -164,6 +193,9 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFaceRecognizerTrain(IntPtr recognizer, IntPtr images, IntPtr labels, int count);
 
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvFaceRecognizerUpdate(IntPtr recognizer, IntPtr images, IntPtr labels, int count);
+      
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFaceRecognizerPredict(IntPtr recognizer, IntPtr image, ref int label, ref double distance);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

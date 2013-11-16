@@ -160,7 +160,8 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.VectorOfKeyPointRelease(_ptr);
+         if (_ptr != IntPtr.Zero)
+            CvInvoke.VectorOfKeyPointRelease(_ptr);
       }
 
 #if !NETFX_CORE

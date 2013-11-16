@@ -192,50 +192,6 @@ namespace Emgu.CV
       /// </summary>
       static CvInvoke()
       {
-         /*
-         List<string> modules = new List<String> 
-         {
-            CvInvoke.OPENCV_FFMPEG_LIBRARY, 
-
-            CvInvoke.OPENCV_CORE_LIBRARY,
-            CvInvoke.OPENCV_IMGPROC_LIBRARY,
-
-            CvInvoke.OPENCV_VIDEO_LIBRARY,
-            CvInvoke.OPENCV_FLANN_LIBRARY,
-            CvInvoke.OPENCV_ML_LIBRARY,
-
-            CvInvoke.OPENCV_HIGHGUI_LIBRARY,
-            CvInvoke.OPENCV_OBJDETECT_LIBRARY,
-            CvInvoke.OPENCV_FEATURES2D_LIBRARY,
-            CvInvoke.OPENCV_CALIB3D_LIBRARY,
-
-            CvInvoke.OPENCV_LEGACY_LIBRARY,
-
-            CvInvoke.OPENCV_CONTRIB_LIBRARY,
-
-            CvInvoke.OPENCV_GPULEGACY_LIBRARY,
-            CvInvoke.OPENCV_GPUARITHM_LIBRARY,
-            CvInvoke.OPENCV_GPUWARPING_LIBRARY,
-            CvInvoke.OPENCV_GPU_LIBRARY, 
-            CvInvoke.OPENCV_GPUFILTERS_LIBRARY,
-            CvInvoke.OPENCV_GPUIMGPROC_LIBRARY,
-            CvInvoke.OPENCV_GPUOPTFLOW_LIBRARY,
-            CvInvoke.OPENCV_GPUSTEREO_LIBRARY,
-            CvInvoke.OPENCV_GPUWARPING_LIBRARY,
-
-            CvInvoke.OPENCV_OCL_LIBRARY,
-
-            CvInvoke.OPENCV_PHOTO_LIBRARY,
-            CvInvoke.OPENCV_BIOINSPIRED_LIBRARY,
-            CvInvoke.OPENCV_VIDEOSTAB_LIBRARY,
-            CvInvoke.OPENCV_SUPERRES_LIBRARY,
-            CvInvoke.OPENCV_NONFREE_LIBRARY,
-            CvInvoke.OPENCV_STITCHING_LIBRARY,
-
-            //CvInvoke.EXTERN_GPU_LIBRARY,
-            CvInvoke.EXTERN_LIBRARY
-
-         };*/
          List<String> modules = CvInvoke.OpenCVModuleList;
          modules.RemoveAll(String.IsNullOrEmpty);
 

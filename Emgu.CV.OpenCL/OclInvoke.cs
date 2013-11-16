@@ -93,6 +93,29 @@ namespace Emgu.CV.OpenCL
       public static extern void Finish();
       
       /// <summary>
+      /// Enable or disable OpenCL program binary caching onto local disk
+         /// After a program (*.cl files in opencl/ folder) is built at runtime, we allow the
+         /// compiled OpenCL program to be cached to the path automatically as "path/*.clb"
+         /// binary file, which will be reused when the OpenCV executable is started again.
+      /// </summary>
+      /// <param name="mode">The binary cache mode</param>
+      /// <param name="path">The ocl binary cache directory</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSetBinaryDiskCache")]
+      public static extern void SetBinaryDiskCache(
+         BinaryCacheMode mode, 
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String path);
+
+      /// <summary>
+      /// Set where binary cache to be saved to
+      /// </summary>
+      /// <param name="path">The ocl binary cache directory</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSetBinaryPath")]
+      public static extern void SetBinaryPath(
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String path);
+
+      /// <summary>
       /// Create an empty OclMat 
       /// </summary>
       /// <returns>Pointer to an empty OclMat</returns>
@@ -238,7 +261,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="b">The second matrix to be added.</param>
       /// <param name="c">The sum of the two matrix</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatAdd")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAdd")]
       public static extern void Add(IntPtr a, IntPtr b, IntPtr c, IntPtr mask);
 
       /// <summary>
@@ -248,7 +271,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="scalar">The scalar to be added.</param>
       /// <param name="c">The sum of the matrix and the scalar</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatAddS")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAddS")]
       public static extern void Add(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr mask);
 
       /// <summary>
@@ -258,7 +281,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="b">The matrix to be substracted</param>
       /// <param name="c">The result of a - b</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSubtract")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSubtract")]
       public static extern void Subtract(IntPtr a, IntPtr b, IntPtr c, IntPtr mask);
 
       /// <summary>
@@ -268,7 +291,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="scalar">The scalar to be substracted</param>
       /// <param name="c">The matrix substraced by the scalar</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSubtractS")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSubtractS")]
       public static extern void Subtract(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr mask);
 
       /// <summary>
@@ -278,7 +301,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="b">The second OclMat to be element-wise multiplied.</param>
       /// <param name="c">The element-wise multiplication of the two OclMat</param>
       /// <param name="scale">The scale</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMultiply")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMultiply")]
       public static extern void Multiply(IntPtr a, IntPtr b, IntPtr c, double scale);
 
       /// <summary>
@@ -287,7 +310,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="a">The first OclMat to be element-wise multiplied.</param>
       /// <param name="scalar">The scalar to be multiplied</param>
       /// <param name="c">The result of the OclMat mutiplied by the scalar</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMultiplyS")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMultiplyS")]
       public static extern void Multiply(IntPtr a, double scalar, IntPtr c);
 
       /// <summary>
@@ -297,7 +320,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="b">The second OclMat</param>
       /// <param name="c">The element-wise quotient of the two OclMat</param>
       /// <param name="scale">The scale</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDivide")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclDivide")]
       public static extern void Divide(IntPtr a, IntPtr b, IntPtr c, double scale);
 
       /// <summary>
@@ -306,7 +329,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="b">The second OclMat to be element-wise divided.</param>
       /// <param name="scalar">The first scalar to be divided</param>
       /// <param name="c">The result of the scalar dividing the OclMat</param>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDivideSL")]
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclDivideSL")]
       public static extern void Divide(double scalar, IntPtr b, IntPtr c);
 
       /// <summary>
@@ -318,7 +341,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="beta">The weight for <paramref name="src2"/></param>
       /// <param name="gamma">The constant to be added</param>
       /// <param name="dst">The result</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatAddWeighted")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAddWeighted")]
       public static extern void AddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst);
 
       /// <summary>
@@ -327,7 +350,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="a">The first OclMat</param>
       /// <param name="b">The second OclMat</param>
       /// <param name="c">The result of the element-wise absolute difference.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatAbsdiff")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAbsdiff")]
       public static extern void Absdiff(IntPtr a, IntPtr b, IntPtr c);
 
       /// <summary>
@@ -336,7 +359,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="a">An OclMat</param>
       /// <param name="scalar">A scalar</param>
       /// <param name="c">The result of the element-wise absolute difference.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatAbsdiffS")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAbsdiffS")]
       public static extern void Absdiff(IntPtr a, MCvScalar scalar, IntPtr c);
 
       /// <summary>
@@ -354,7 +377,7 @@ namespace Emgu.CV.OpenCL
       /// flip_mode &lt; 0 (e.g. -1) means flipping around both axises. 
       ///</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void oclMatFlip(IntPtr src, IntPtr dst, int flipMode);
+      private static extern void oclFlip(IntPtr src, IntPtr dst, int flipMode);
 
       /// <summary>
       /// Flips the OclMat in one of different 3 ways (row and column indices are 0-based). 
@@ -371,7 +394,7 @@ namespace Emgu.CV.OpenCL
             flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
             //0 indicates vertical flip only
             0;
-         oclMatFlip(src, dst, flipMode);
+         oclFlip(src, dst, flipMode);
       }
 
       /// <summary>
@@ -382,7 +405,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="b">The second OclMat</param>
       /// <param name="c">The result of the comparison.</param>
       /// <param name="cmpop">The type of comparison</param>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCompare")]
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCompare")]
       public static extern void Compare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CMP_TYPE cmpop);
 
       /// <summary>
@@ -391,7 +414,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src">The source oclMat</param>
       /// <param name="dst">The destination oclMat</param>
       /// <param name="code">The color conversion code</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCvtColor")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCvtColor")]
       public static extern void CvtColor(IntPtr src, IntPtr dst, CvEnum.COLOR_CONVERSION code);
 
       /// <summary>
@@ -425,7 +448,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="minLoc">Pointer to returned minimum location</param>
       /// <param name="maxLoc">Pointer to returned maximum location</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMinMaxLoc")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMinMaxLoc")]
       public static extern void MinMaxLoc(IntPtr oclMat,
          ref double minVal, ref double maxVal,
          ref Point minLoc, ref Point maxLoc,
@@ -439,7 +462,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
       /// <param name="oclMatchTemplateBuf">Pointer to OclMatchTemplateBuf</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMatchTemplate")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatchTemplate")]
       public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method, IntPtr oclMatchTemplateBuf);
 
       /// <summary>
@@ -447,7 +470,7 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="src">The source CudaImage.</param>
       /// <param name="dst">The destination CudaImage, should have 2x smaller width and height than the source.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPyrDown")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclPyrDown")]
       public static extern void PyrDown(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -455,7 +478,7 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="src">The source CudaImage.</param>
       /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPyrUp")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclPyrUp")]
       public static extern void PyrUp(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -464,7 +487,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="mtx">The OclMat. Supports only CV_8UC1 type</param>
       /// <param name="mean">The mean value</param>
       /// <param name="stddev">The standard deviation</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanStdDev")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMeanStdDev")]
       public static extern void MeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
 
       /// <summary>
@@ -474,7 +497,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src2">If IntPtr.Zero, norm operation is apply to <paramref name="src1"/> only. Otherwise, this is the OclMat of type CV_8UC1</param>
       /// <param name="normType">The norm type. Supports NORM_INF, NORM_L1, NORM_L2.</param>
       /// <returns>The norm of the <paramref name="src1"/> if <paramref name="src2"/> is IntPtr.Zero. Otherwise the norm of the difference between two OclMats.</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatNorm")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclNorm")]
       public static extern double Norm(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NORM_TYPE normType);
 
       /// <summary>
@@ -485,7 +508,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src">The source OclMat</param>
       /// <param name="lut">The OclMat that contains the look up table</param>
       /// <param name="dst">The destination OclMat</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatLUT")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclLUT")]
       public static extern void LUT(IntPtr src, IntPtr lut, IntPtr dst);
 
       /// <summary>
@@ -499,7 +522,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="right">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
       /// <param name="borderType">Border Type</param>
       /// <param name="value">Border value.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCopyMakeBorder")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCopyMakeBorder")]
       public static extern void CopyMakeBorder(IntPtr src, IntPtr dst, int top, int bottom, int left, int right, CvEnum.BORDER_TYPE borderType, MCvScalar value);
 
       /// <summary>
@@ -508,7 +531,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src">Source OCL image, should be either 1 or 4 channel, the image depth should be CV 8U or CV 32F.</param>
       /// <param name="dst">The result image, should be the same type and size as the source image</param>
       /// <param name="m">The kernel size, should be either 3 or 5</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMedianFilter")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMedianFilter")]
       public static extern void MedianFilter(IntPtr src, IntPtr dst, int m);
 
       /// <summary>
@@ -517,7 +540,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src">The source OclMat, supports only CV_8UC1 source type</param>
       /// <param name="sum">The sum OclMat, supports only CV_32S source type, but will contain unsigned int values.</param>
       /// <param name="sqrSum">The sqsum OclMat, supports only CV32F source type. Use IntPtr.Zero if you don't want the sqrSum to be computed.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatIntegral")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclIntegral")]
       public static extern void Integral(IntPtr src, IntPtr sum, IntPtr sqrSum);
 
       /// <summary>
@@ -531,7 +554,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="kSize"></param>
       /// <param name="k">Harris detector free parameter.</param>
       /// <param name="borderType">Boreder type, use REFLECT101 for default</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCornerHarris")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCornerHarris")]
       public static extern void CornerHarris(IntPtr image, IntPtr harrisResponce, int blockSize, int kSize, double k, CvEnum.BORDER_TYPE borderType);
 
 
@@ -539,20 +562,34 @@ namespace Emgu.CV.OpenCL
       /// Applies bilateral filter to the image. Supports 8UC1 8UC4 data types.
       /// </summary>
       /// <param name="src">The source image</param>
-      /// <param name="dst">The destination image; will have the same size and the same type as src</param>
+      /// <param name="dst">The destination image; should have the same size and the same type as src</param>
       /// <param name="d">The diameter of each pixel neighborhood, that is used during filtering. If it is non-positive, it’s computed from sigmaSpace</param>
       /// <param name="sigmaColor">Filter sigma in the color space. Larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting in larger areas of semi-equal color</param>
       /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
       /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBilateralFilter")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBilateralFilter")]
       public static extern void BilateralFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpace, CvEnum.BORDER_TYPE borderType);
+
+      /// <summary>
+      /// Applies an adaptive bilateral filter to the input image. This is not truly a bilateral filter. Instead of using user provided fixed parameters, 
+      /// the function calculates a constant at each window based on local standard deviation,
+      /// and use this constant to do filtering.
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="dst">The destination image; should have the same size and the same type as src</param>
+      /// <param name="ksize">The size of the kernel</param>
+      /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
+      /// <param name="anchor">The anchor, use (-1, -1) for default</param>
+      /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAdaptiveBilateralFilter")]
+      public static extern void AdaptiveBilateralFilter(IntPtr src, IntPtr dst, ref Size ksize, double sigmaSpace, ref Point anchor, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
       /// Computes exponent of each matrix element (b = exp(a))
       /// </summary>
       /// <param name="src">The source OclMat. Supports single channel float type.</param>
       /// <param name="dst">The resulting OclMat</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatExp")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclExp")]
       public static extern void Exp(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -560,7 +597,7 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="src">The source OclMat. Supports single channel float type.</param>
       /// <param name="dst">The resulting OclMat</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatLog")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclLog")]
       public static extern void Log(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -569,7 +606,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src">The source OclMat</param>
       /// <param name="power">The power</param>
       /// <param name="dst">The resulting OclMat, should be the same type as the source</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPow")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclPow")]
       public static extern void Pow(IntPtr src, double power, IntPtr dst);
 
       /// <summary>
@@ -580,7 +617,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="magnitude">The destination array of magnitudes of the same size and same type as x</param>
       /// <param name="angle">The destination array of angles of the same size and same type as x. The angles are measured in radians (0 to 2pi ) or in degrees (0 to 360 degrees).</param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians, which is default mode, or in degrees</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCartToPolar")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCartToPolar")]
       public static extern void CartToPolar(
          IntPtr x, IntPtr y, IntPtr magnitude, IntPtr angle,
          [MarshalAs(CvInvoke.BoolMarshalType)]
@@ -594,7 +631,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="x">The destination array of x-coordinates of 2D vectors; will have the same size and the same type as angle</param>
       /// <param name="y">The destination array of y-coordinates of 2D vectors; will have the same size and the same type as angle</param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians, which is default mode, or in degrees</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatPolarToCart")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclPolarToCart")]
       public static extern void PolarToCart(
          IntPtr magnitude, IntPtr angle, IntPtr x, IntPtr y,
          [MarshalAs(CvInvoke.BoolMarshalType)] 
@@ -605,7 +642,7 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="src">Source historgram array. Supports only 8UC1 data type.</param>
       /// <param name="hist">The output histogram, only 256 bins is supported now</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCalcHist")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCalcHist")]
       public static extern void CalcHist(IntPtr src, IntPtr hist);
 
       /// <summary>
@@ -613,7 +650,7 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="src">The source OclMat. only 8UC1 is supported now</param>
       /// <param name="dst">The destination OclMat, only 256 bins is supported now</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatEqualizeHist")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclEqualizeHist")]
       public static extern void EqualizeHist(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -621,7 +658,7 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="src">The multi-channel OclMat</param>
       /// <param name="dstArray">Pointer to an array of single channel OclMat pointers</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSplit")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSplit")]
       public static extern void Split(IntPtr src, IntPtr dstArray);
 
       /// <summary>
@@ -629,7 +666,7 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="srcArr">Pointer to an array of single channel OclMat pointers</param>
       /// <param name="dst">The multi-channel oclMat</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMerge")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMerge")]
       public static extern void Merge(IntPtr srcArr, IntPtr dst);
 
       /// <summary>
@@ -643,7 +680,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">Destination OclMat</param>
       /// <param name="scale">Scale factor</param>
       /// <param name="shift">Value added to the scaled source OclMat elements</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatConvertTo")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclConvertTo")]
       public static extern void ConvertTo(IntPtr src, IntPtr dst, double scale, double shift);
 
       #region Logical operators
@@ -656,7 +693,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src2">The second source OclMat</param>
       /// <param name="dst">The destination OclMat</param>
       /// <param name="mask">Mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Use IntPtr.Zero if not needed.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBitwiseXor")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseXor")]
       public static extern void BitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -668,7 +705,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="scalar">The scalar</param>
       /// <param name="dst">The destination OclMat</param>
       /// <param name="mask">Mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Use IntPtr.Zero if not needed.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBitwiseXorS")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseXorS")]
       public static extern void BitwiseXor(IntPtr src1, MCvScalar scalar, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -680,7 +717,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src2">The second source OclMat</param>
       /// <param name="dst">The destination OclMat</param>
       /// <param name="mask">Mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Use IntPtr.Zero if not needed.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBitwiseOr")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseOr")]
       public static extern void BitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -692,7 +729,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="scalar">The scalar</param>
       /// <param name="dst">The destination OclMat</param>
       /// <param name="mask">Mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Use IntPtr.Zero if not needed.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBitwiseOrS")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseOrS")]
       public static extern void BitwiseOr(IntPtr src1, MCvScalar scalar, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -704,7 +741,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="src2">The second source OclMat</param>
       /// <param name="dst">The destination OclMat</param>
       /// <param name="mask">Mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Use IntPtr.Zero if not needed.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBitwiseAnd")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseAnd")]
       public static extern void BitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -716,7 +753,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="scalar">The scalar</param>
       /// <param name="dst">The destination OclMat</param>
       /// <param name="mask">Mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Use IntPtr.Zero if not needed.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBitwiseAndS")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseAndS")]
       public static extern void BitwiseAnd(IntPtr src1, MCvScalar scalar, IntPtr dst, IntPtr mask);
 
       /// <summary>
@@ -726,7 +763,7 @@ namespace Emgu.CV.OpenCL
       /// </summary>
       /// <param name="src">The source OclMat</param>
       /// <param name="dst">The destination OclMat</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatBitwiseNot")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseNot")]
       public static extern void BitwiseNot(IntPtr src, IntPtr dst);
       #endregion
 
@@ -739,7 +776,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="kernel">Convolution kernel, single-channel floating point matrix (e.g. Emgu.CV.Matrix). If you want to apply different kernels to different channels, split the ocl image into separate color planes and process them individually</param>
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="borderType">Border type. Use REFLECT101 for default.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatFilter2D")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclFilter2D")]
       public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
@@ -753,7 +790,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="scale">Optional scale, use 1 for default.</param>
       /// <param name="buffer">The optional buffer used for sobel operation, use IntPtr.Zero for default. </param>
       /// <param name="borderType">The border type.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSobel")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSobel")]
       public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, IntPtr buffer, int ksize, double scale, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
@@ -766,7 +803,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="scale">Optional scale, use 1 for default.</param>
       /// <param name="delta">Optional delta value, use 0 for default</param>
       /// <param name="borderType">The border type.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatScharr")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclScharr")]
       public static extern void Scharr(IntPtr src, IntPtr dst, int dx, int dy, double scale, double delta, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
@@ -776,7 +813,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The resulting OclMat</param>
       /// <param name="ksize">Either 1 or 3</param>
       /// <param name="scale">Optional scale. Use 1.0 for default</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatLaplacian")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclLaplacian")]
       public static extern void Laplacian(IntPtr src, IntPtr dst, int ksize, double scale);
 
       /// <summary>
@@ -790,7 +827,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="beta">The scalar</param>
       /// <param name="dst">The destination array.</param>
       /// <param name="tABC">The gemm operation type</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatGemm")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclGemm")]
       public static extern void Gemm(
          IntPtr src1,
          IntPtr src2,
@@ -807,7 +844,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
       /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatWarpAffine")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclWarpAffine")]
       public static extern void WarpAffine(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
 
       /// <summary>
@@ -817,7 +854,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
       /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatWarpPerspective")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclWarpPerspective")]
       public static extern void WarpPerspective(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
 
       /// <summary>
@@ -829,7 +866,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="sigma1">This parameter may specify Gaussian sigma (standard deviation). If it is zero, it is calculated from the kernel size.</param>
       /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
       /// <param name="borderType">The border type.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatGaussianBlur")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclGaussianBlur")]
       public static extern void GaussianBlur(IntPtr src, IntPtr dst, Size ksize, double sigma1, double sigma2, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
@@ -841,7 +878,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="highThreshold">The second threshold</param>
       /// <param name="apertureSize">Aperture parameter for Sobel operator, use 3 for default</param>
       /// <param name="L2gradient">Use false for default</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatCanny")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCanny")]
       public static extern void Canny(
          IntPtr image,
          IntPtr edges,
@@ -859,7 +896,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The resulting OclMat, as input it should be an empty OclMat.</param>
       /// <param name="cn">The new number of channels</param>
       /// <param name="rows">The new number of rows</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatReshape")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclReshape")]
       public static extern void OclMatReshape(IntPtr src, IntPtr dst, int cn, int rows);
 
       /// <summary>
@@ -875,7 +912,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="minRadius">Minimum circle radius.</param>
       /// <param name="maxRadius">Maximum circle radius.</param>
       /// <param name="maxCircles">Maximum number of output circles.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatHoughCircles")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclHoughCircles")]
       public static extern void HoughCircles(IntPtr src, IntPtr circles, CvEnum.HOUGH_TYPE method, float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles);
 
       /// <summary>
@@ -950,7 +987,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="iterations">The number of iterations morphology is applied</param>
       /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatErode")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclErode")]
       private static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
 
       /// <summary>
@@ -978,7 +1015,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="iterations">The number of iterations morphology is applied</param>
       /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatDilate")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclDilate")]
       private static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
 
       /// <summary>
@@ -1008,7 +1045,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="iterations">The number of iterations morphology is applied</param>
       /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMorphologyEx")]
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMorphologyEx")]
       public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
       #endregion
 
@@ -1025,7 +1062,7 @@ namespace Emgu.CV.OpenCL
       public static void MeanShiftFiltering(OclImage<Bgra, Byte> src, OclImage<Bgra, Byte> dst, int sp, int sr, MCvTermCriteria criteria)
       {
          Debug.Assert(src.Size.Equals(dst.Size));
-         oclMatMeanShiftFiltering(src, dst, sp, sr, ref criteria);
+         oclMeanShiftFiltering(src, dst, sp, sr, ref criteria);
       }
 
       /// <summary>
@@ -1037,8 +1074,8 @@ namespace Emgu.CV.OpenCL
       /// <param name="sp">Spatial window radius.</param>
       /// <param name="sr">Color window radius.</param>
       /// <param name="criteria">Termination criteria.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanShiftFiltering")]
-      private static extern void oclMatMeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, ref MCvTermCriteria criteria);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void oclMeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, ref MCvTermCriteria criteria);
 
       /// <summary>
       /// Performs mean-shift procedure and stores information about processed points (i.e. their colors
@@ -1053,7 +1090,7 @@ namespace Emgu.CV.OpenCL
       public static void MeanShiftProc(OclImage<Bgra, Byte> src, OclImage<Bgra, Byte> dstr, OclMat<Int16> dstsp, int sp, int sr, MCvTermCriteria criteria)
       {
          Debug.Assert(src.Size.Equals(dstr.Size) && dstr.Size.Equals(dstsp.Size) && dstsp.NumberOfChannels == 2);
-         oclMatMeanShiftProc(src, dstr, dstsp, sp, sr, ref criteria);
+         oclMeanShiftProc(src, dstr, dstsp, sp, sr, ref criteria);
       }
 
       /// <summary>
@@ -1066,8 +1103,8 @@ namespace Emgu.CV.OpenCL
       /// <param name="sp">Spatial window radius.</param>
       /// <param name="sr">Color window radius.</param>
       /// <param name="criteria">Termination criteria.</param>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanShiftProc")]
-      private static extern void oclMatMeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, ref MCvTermCriteria criteria);
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void oclMeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, ref MCvTermCriteria criteria);
 
       /// <summary>
       /// Performs mean-shift segmentation of the source image and eleminates small segments.
@@ -1081,7 +1118,7 @@ namespace Emgu.CV.OpenCL
       public static void MeanShiftSegmentation(OclImage<Bgra, Byte> src, Image<Bgra, Byte> dst, int sp, int sr, int minsize, MCvTermCriteria criteria)
       {
          Debug.Assert(src.Size.Equals(dst.Size), "size of Image does not match that of OclImage");
-         oclMatMeanShiftSegmentation(src, dst, sp, sr, minsize, ref criteria);
+         oclMeanShiftSegmentation(src, dst, sp, sr, minsize, ref criteria);
          CvInvoke.cvOrS(dst, new MCvScalar(0, 0, 0, 255), dst, IntPtr.Zero);
       }
 
@@ -1094,11 +1131,18 @@ namespace Emgu.CV.OpenCL
       /// <param name="sr">Color window radius.</param>
       /// <param name="minsize">Minimum segment size. Smaller segements will be merged.</param>
       /// <param name="criteria">Termination criteria.</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatMeanShiftSegmentation")]
-      private static extern void oclMatMeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, ref MCvTermCriteria criteria);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void oclMeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, ref MCvTermCriteria criteria);
       #endregion
 
-      public static void CLAHE(OclMat<Byte> src, OclMat<Byte> dst, double clipLimit, Size tileGridSize)
+      /// <summary>
+      ///  Contrast Limited Adaptive Histogram Equalization
+      /// </summary>
+      /// <param name="src">Source image</param>
+      /// <param name="dst">Destination image</param>
+      /// <param name="clipLimit">Threshold for contrast limiting. Use 40.0 for default</param>
+      /// <param name="tileGridSize">Size of grid for histogram equalization. Input image will be divided into equally sized rectangular tiles. This parameter defines the number of tiles in row and column. Use (8, 8) for default</param>
+      public static void CLAHE(OclImage<Gray, Byte> src, OclImage<Gray, Byte> dst, double clipLimit, Size tileGridSize)
       {
          oclCLAHE(src, dst, clipLimit, ref tileGridSize);
       }
@@ -1106,5 +1150,30 @@ namespace Emgu.CV.OpenCL
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void oclCLAHE(IntPtr src, IntPtr dst, double clipLimit, ref Size tileGridSize);
 
+   }
+
+   /// <summary>
+   /// The ocl binary cache mode
+   /// </summary>
+   [Flags]
+   public enum BinaryCacheMode
+   {
+      /// <summary>
+      /// Do not cache OpenCL binary
+      /// </summary>
+      None = 0,
+
+      /// <summary>
+      /// Cache OpenCL binary when built in debug mode
+      /// </summary>
+      Debug = 0x1 << 0,
+      /// <summary>
+      /// Default behavior, only cache when built in release mode
+      /// </summary>
+      Release = 0x1<<1,
+      /// <summary>
+      /// Cache opencl binary
+      /// </summary>
+      All = Debug | Release
    }
 }

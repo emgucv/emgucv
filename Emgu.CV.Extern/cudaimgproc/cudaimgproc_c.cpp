@@ -70,11 +70,26 @@ void cudaBilateralFilter(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int kerne
    cv::cuda::bilateralFilter(*src, *dst, kernelSize, sigmaColor, sigmaSpatial, borderMode, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaCLAHE(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, double clipLimit, emgu::size* tileGridSize, cv::cuda::Stream* stream)
+//----------------------------------------------------------------------------
+//
+//  CudaCLAHE
+//
+//----------------------------------------------------------------------------
+cv::cuda::CLAHE* cudaCLAHECreate(double clipLimit, emgu::size* tileGridSize)
 {
    cv::Size s(tileGridSize->width, tileGridSize->height);
-   cv::Ptr<cv::cuda::CLAHE> clahe = cv::cuda::createCLAHE(clipLimit, s);
+   cv::Ptr<cv::cuda::CLAHE> ptr = cv::cuda::createCLAHE(clipLimit, s);
+   ptr.addref();
+   return ptr.get();
+}
+void cudaCLAHEApply(cv::cuda::CLAHE* clahe, cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  cv::cuda::Stream* stream)
+{
    clahe->apply(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
+}
+void cudaCLAHERelease(cv::cuda::CLAHE** clahe)
+{
+   delete *clahe;
+   *clahe = 0;
 }
 
 //----------------------------------------------------------------------------

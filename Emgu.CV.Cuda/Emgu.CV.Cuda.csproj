@@ -58,6 +58,7 @@
     <Compile Include="Bgsegm\CudaBackgroundSubtractorFGD.cs" />
     <Compile Include="Bgsegm\CudaBackgroundSubtractorGMG.cs" />
     <Compile Include="Bgsegm\CudaBackgroundSubtractorMOG.cs" />
+    <Compile Include="CudaClahe.cs" />
     <Compile Include="Filters\CudaBoxMaxFilter.cs" />
     <Compile Include="Filters\CudaBoxMinFilter.cs" />
     <Compile Include="Filters\CudaGaussianFilter.cs" />

@@ -13,18 +13,20 @@ using System.Diagnostics;
 namespace Emgu.CV.Structure
 {
    /// <summary>
-   /// Managed cv::ERStat structure
+   /// The ERStat structure represents a class-specific Extremal Region (ER).
+   /// An ER is a 4-connected set of pixels with all its grey-level values smaller than the values in its outer boundary. 
+   /// A class-specific ER is selected (using a classifier) from all the ER’s in the component tree of the image.
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
    public struct MCvERStat
    {
       /// <summary>
-      /// Pixel
+      /// Seed point
       /// </summary>
       public int Pixel;
 
       /// <summary>
-      /// Level
+      /// Threshold (max grey-level value)
       /// </summary>
       public int Level;
 
@@ -41,7 +43,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       public int Euler;
       /// <summary>
-      /// Rectangle
+      /// Bounding box
       /// </summary>
       public System.Drawing.Rectangle Rect;
 
@@ -93,12 +95,10 @@ namespace Emgu.CV.Structure
       /// </summary>
       public IntPtr Pixels;
 
-
       /// <summary>
-      /// probability that the ER belongs to the class we are looking for
+      /// Probability that the ER belongs to the class we are looking for
       /// </summary>
       public double probability;
-
 
       /// <summary>
       /// Pointer to the parent ERStat
@@ -117,13 +117,11 @@ namespace Emgu.CV.Structure
       /// </summary>
       public IntPtr PrevPtr;
 
-
       /// <summary>
       /// If or not the regions is a local maxima of the probability
       /// </summary>
       //[MarshalAs(UnmanagedType.U1)]
       public Byte LocalMaxima;
-
 
       /// <summary>
       /// Pointer to the ERStat that is the max probability ancestor
@@ -228,19 +226,38 @@ namespace Emgu.CV.Util
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// Base class for 1st and 2nd stages of Neumann and Matas scene text detection algorithm
+   /// </summary>
    public abstract class ERFilter : Emgu.Util.UnmanagedObject
    {
+      /// <summary>
+      /// Release all the unmanaged memory associate with this ERFilter
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
             CvInvoke.CvERFilterRelease(ref _ptr);
       }
 
+      /// <summary>
+      /// Takes image on input and returns the selected regions in a vector of ERStat only distinctive ERs which correspond to characters are selected by a sequential classifier
+      /// </summary>
+      /// <param name="image">Sinle channel image CV_8UC1</param>
+      /// <param name="regions">Output for the 1st stage and Input/Output for the 2nd. The selected Extremal Regions are stored here.</param>
       public void Run(Image<Gray, Byte> image, VectorOfERStat regions)
       {
          CvInvoke.CvERFilterRun(_ptr, image, regions);
       }
 
+      /// <summary>
+      /// Find groups of Extremal Regions that are organized as text blocks.
+      /// </summary>
+      /// <param name="channels">Array of sinle channel images from wich the regions were extracted</param>
+      /// <param name="erstats">Vector of ER’s retreived from the ERFilter algorithm from each channel</param>
+      /// <param name="groupingTrainedFileName">The XML or YAML file with the classifier model (e.g. trained_classifier_erGrouping.xml)</param>
+      /// <param name="minProbability">The minimum probability for accepting a group. Use 0.5 for default.</param>
+      /// <returns>The output of the algorithm that indicates the text regions</returns>
       public static System.Drawing.Rectangle[] ERGrouping(Image<Gray, Byte>[] channels, VectorOfERStat[] erstats, String groupingTrainedFileName, float minProbability)
       {
          Debug.Assert(channels.Length == erstats.Length, "Length of channels do not match length of erstats");
@@ -266,8 +283,21 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// Extremal Region Filter for the 1st stage classifier of N&amp;M algorithm
+   /// </summary>
    public class ERFilterNM1 : ERFilter
    {
+      /// <summary>
+      /// Create an Extremal Region Filter for the 1st stage classifier of N&amp;M algorithm
+      /// </summary>
+      /// <param name="classifierFileName">The file name of the classifier</param>
+      /// <param name="thresholdDelta">Threshold step in subsequent thresholds when extracting the component tree. Use 1 for default.</param>
+      /// <param name="minArea">The minimum area (% of image size) allowed for retreived ER’s. Use 0.00025 for default.</param>
+      /// <param name="maxArea">The maximum area (% of image size) allowed for retreived ER’s. Use 0.13 for default.</param>
+      /// <param name="minProbability">The minimum probability P(er|character) allowed for retreived ER’s. Use 0.4 for default</param>
+      /// <param name="nonMaxSuppression">Whenever non-maximum suppression is done over the branch probabilities. User true for default.</param>
+      /// <param name="minProbabilityDiff">The minimum probability difference between local maxima and local minima ERs. Use 0.1 for default.</param>
       public ERFilterNM1(
          String classifierFileName,
          int thresholdDelta,
@@ -281,8 +311,16 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// Extremal Region Filter for the 2nd stage classifier of N&amp;M algorithm
+   /// </summary>
    public class ERFilterNM2 : ERFilter
    {
+      /// <summary>
+      /// Create an Extremal Region Filter for the 2nd stage classifier of N&amp;M algorithm
+      /// </summary>
+      /// <param name="classifierFileName">The file name of the classifier</param>
+      /// <param name="minProbability">The minimum probability P(er|character) allowed for retreived ER’s. Use 0.3 for default.</param>
       public ERFilterNM2(String classifierFileName, float minProbability)
       {
          _ptr = CvInvoke.CvERFilterNM2Create(classifierFileName, minProbability);

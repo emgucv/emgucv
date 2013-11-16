@@ -33,6 +33,16 @@ void oclFinish()
    cv::ocl::finish();
 }
 
+void oclSetBinaryDiskCache(int mode, const char* path)
+{
+   cv::ocl::setBinaryDiskCache(mode, path);
+}
+
+void oclSetBinaryPath(const char *path)
+{
+   cv::ocl::setBinaryPath(path);
+}
+
 cv::ocl::oclMat* oclMatCreateDefault()
 {
    return new cv::ocl::oclMat();
@@ -132,7 +142,7 @@ int oclCountNonZero(cv::ocl::oclMat* oclMat)
    return cv::ocl::countNonZero(*oclMat);
 }
 
-void oclMatAdd(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask)
+void oclAdd(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask)
 {
    if (mask)
    {
@@ -144,12 +154,12 @@ void oclMatAdd(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclM
    }
 }
 
-void oclMatAddS(const cv::ocl::oclMat* a, const CvScalar scale, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask)
+void oclAddS(const cv::ocl::oclMat* a, const CvScalar scale, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask)
 {
    cv::ocl::add(*a, scale, *c, mask? *mask : cv::ocl::oclMat());
 }
 
-void oclMatSubtract(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask)
+void oclSubtract(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask)
 {
    if (mask)
    {
@@ -160,22 +170,22 @@ void oclMatSubtract(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl:
    }
 }
 
-void oclMatSubtractS(const cv::ocl::oclMat* a, const CvScalar scale, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask)
+void oclSubtractS(const cv::ocl::oclMat* a, const CvScalar scale, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask)
 {
    cv::ocl::subtract(*a, scale, *c, mask ? *mask : cv::ocl::oclMat());
 }
 
-void oclMatMultiply(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, double scale)
+void oclMultiply(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, double scale)
 {
    cv::ocl::multiply(*a, b ? *b : cv::ocl::oclMat(), *c, scale);
 }
 
-void oclMatMultiplyS(const cv::ocl::oclMat* a, const double s, cv::ocl::oclMat* c)
+void oclMultiplyS(const cv::ocl::oclMat* a, const double s, cv::ocl::oclMat* c)
 {
    cv::ocl::multiply(s, *a, *c);
 }
 
-void oclMatDivide(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, double scale)
+void oclDivide(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, double scale)
 {
    cv::ocl::divide(*a, b ? *b : cv::ocl::oclMat(), *c, scale);
 }
@@ -185,62 +195,62 @@ void oclMatDivideSR(const cv::ocl::oclMat* a, const CvScalar s, cv::ocl::oclMat*
    cv::ocl::divide(*a, s, *c, 1, c->depth());
 }*/
 
-void oclMatDivideSL(const double s, const cv::ocl::oclMat* b, cv::ocl::oclMat* c)
+void oclDivideSL(const double s, const cv::ocl::oclMat* b, cv::ocl::oclMat* c)
 {
    cv::ocl::divide(s, *b, *c);
 }
 
-void oclMatAddWeighted(const cv::ocl::oclMat* src1, double alpha, const cv::ocl::oclMat* src2, double beta, double gamma, cv::ocl::oclMat* dst)
+void oclAddWeighted(const cv::ocl::oclMat* src1, double alpha, const cv::ocl::oclMat* src2, double beta, double gamma, cv::ocl::oclMat* dst)
 {
    cv::ocl::addWeighted(*src1, alpha, *src2, beta, gamma, *dst);
 }
 
-void oclMatAbsdiff(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c)
+void oclAbsdiff(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c)
 {
    cv::ocl::absdiff(*a, *b, *c);
 }
 
-void oclMatAbsdiffS(const cv::ocl::oclMat* a, const CvScalar s, cv::ocl::oclMat* c)
+void oclAbsdiffS(const cv::ocl::oclMat* a, const CvScalar s, cv::ocl::oclMat* c)
 {
    cv::ocl::absdiff(*a, s, *c);
 }
 
-void oclMatFlip(const cv::ocl::oclMat* a, cv::ocl::oclMat* b, int flipCode)
+void oclFlip(const cv::ocl::oclMat* a, cv::ocl::oclMat* b, int flipCode)
 {
    cv::ocl::flip(*a, *b, flipCode);
 }
 
-void oclMatBitwiseNot(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst)
+void oclBitwiseNot(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst)
 {
    cv::ocl::bitwise_not(*src, *dst);
 }
 
-void oclMatBitwiseAnd(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
+void oclBitwiseAnd(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
 {
    cv::ocl::bitwise_and(*src1, *src2, *dst, mask ? *mask : cv::ocl::oclMat());
 }
 
-void oclMatBitwiseAndS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
+void oclBitwiseAndS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
 {
    cv::ocl::bitwise_and(*src1, sc, *dst,  mask ? *mask : cv::ocl::oclMat());
 }
 
-void oclMatBitwiseOr(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
+void oclBitwiseOr(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
 {
    cv::ocl::bitwise_or(*src1, *src2, *dst, mask? *mask : cv::ocl::oclMat());
 }
 
-void oclMatBitwiseOrS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
+void oclBitwiseOrS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
 {
    cv::ocl::bitwise_or(*src1, sc, *dst, mask? *mask : cv::ocl::oclMat());
 }
 
-void oclMatBitwiseXor(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
+void oclBitwiseXor(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
 {
    cv::ocl::bitwise_xor(*src1, *src2, *dst, mask? *mask : cv::ocl::oclMat());
 }
 
-void oclMatBitwiseXorS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
+void oclBitwiseXorS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask)
 {
    cv::ocl::bitwise_xor(*src1, sc, *dst, mask? *mask : cv::ocl::oclMat());
 }
@@ -288,7 +298,7 @@ void oclMatGetKernel(cv::Mat& kernelMat, cv::Point* anchor, int* iterations)
    }
 }
 
-void oclMatErode( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
+void oclErode( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
 {
 
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
@@ -300,7 +310,7 @@ void oclMatErode( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr*
    cv::ocl::erode(*src, *dst, kernelMat, an, iterations, borderType, borderValue);
 }
 
-void oclMatDilate( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel,  CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
+void oclDilate( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel,  CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
    cv::Point an = anchor;
@@ -308,7 +318,7 @@ void oclMatDilate( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr
    cv::ocl::dilate(*src, *dst, kernelMat, an, iterations, borderType, borderValue);
 }
 
-void oclMatMorphologyEx( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int op, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
+void oclMorphologyEx( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int op, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue)
 {
    cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
    cv::Point an = anchor;
@@ -316,12 +326,12 @@ void oclMatMorphologyEx( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int o
    cv::ocl::morphologyEx( *src, *dst, op, kernelMat, an, iterations, borderType, borderValue);
 }
 
-void oclMatCompare(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, int cmpop)
+void oclCompare(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, int cmpop)
 {
    cv::ocl::compare(*a, *b, *c, cmpop);
 }
 
-void oclMatCvtColor(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int code)
+void oclCvtColor(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int code)
 {
    cv::ocl::cvtColor(*src, *dst, code);
 }
@@ -341,7 +351,7 @@ void oclMatResize(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, double fx, d
 }
 
 //only support single channel oclMat
-void oclMatMinMaxLoc(const cv::ocl::oclMat* src, 
+void oclMinMaxLoc(const cv::ocl::oclMat* src, 
    double* minVal, double* maxVal, 
    CvPoint* minLoc, CvPoint* maxLoc, 
    const cv::ocl::oclMat* mask)
@@ -353,7 +363,7 @@ void oclMatMinMaxLoc(const cv::ocl::oclMat* src,
    minLoc->x = minimunLoc.x; minLoc->y = minimunLoc.y;
 }
 
-void oclMatMatchTemplate(const cv::ocl::oclMat* image, const cv::ocl::oclMat* templ, cv::ocl::oclMat* result, int method, cv::ocl::MatchTemplateBuf* buffer)
+void oclMatchTemplate(const cv::ocl::oclMat* image, const cv::ocl::oclMat* templ, cv::ocl::oclMat* result, int method, cv::ocl::MatchTemplateBuf* buffer)
 {
    if (buffer)
       cv::ocl::matchTemplate(*image, *templ, *result, method, *buffer);
@@ -363,17 +373,17 @@ void oclMatMatchTemplate(const cv::ocl::oclMat* image, const cv::ocl::oclMat* te
    }
 }
 
-void oclMatPyrDown(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst)
+void oclPyrDown(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst)
 {
    cv::ocl::pyrDown(*src, *dst);
 }
 
-void oclMatPyrUp(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst)
+void oclPyrUp(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst)
 {
    cv::ocl::pyrUp(*src, *dst);
 }
 
-void oclMatSplit(const cv::ocl::oclMat* src, cv::ocl::oclMat** dst)
+void oclSplit(const cv::ocl::oclMat* src, cv::ocl::oclMat** dst)
 {
    int channels = src->channels();
    std::vector<cv::ocl::oclMat> dstArr(channels);
@@ -384,7 +394,7 @@ void oclMatSplit(const cv::ocl::oclMat* src, cv::ocl::oclMat** dst)
    //delete[] dstArr;
 }
 
-void oclMatMerge(const cv::ocl::oclMat** src, cv::ocl::oclMat* dst)
+void oclMerge(const cv::ocl::oclMat** src, cv::ocl::oclMat* dst)
 {
    int channels = dst->channels();
    cv::ocl::oclMat* srcArr = new cv::ocl::oclMat[channels];
@@ -394,56 +404,56 @@ void oclMatMerge(const cv::ocl::oclMat** src, cv::ocl::oclMat* dst)
    delete[] srcArr;
 }
 
-void oclMatConvertTo(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, double alpha, double beta)
+void oclConvertTo(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, double alpha, double beta)
 {
    src->convertTo(*dst, dst->type(), alpha, beta);
 }
 
-void oclMatFilter2D(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int borderType)
+void oclFilter2D(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int borderType)
 {
    cv::Mat kMat = cv::cvarrToMat(kernel);
    cv::ocl::filter2D(*src, *dst, src->depth(), kMat, anchor, borderType);
 }
 
-void oclMatReshape(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int cn, int rows)
+void oclReshape(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int cn, int rows)
 {
    cv::ocl::oclMat tmp = src->reshape(cn, rows);
    dst->swap(tmp);
 }
 
-void oclMatSobel(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, int dy, int ksize, double scale, int borderType)
+void oclSobel(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, int dy, int ksize, double scale, int borderType)
 {
    cv::ocl::Sobel(*src, *dst, dst->depth(), dx, dy, ksize, scale, borderType); 
 }
 
-void oclMatScharr(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, int dy, double scale, double delta, int borderType)
+void oclScharr(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, int dy, double scale, double delta, int borderType)
 {
    cv::ocl::Scharr(*src, *dst, dst->depth(), dx, dy, scale, delta, borderType);
 }
 
-void oclMatGaussianBlur(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, CvSize ksize, double sigma1, double sigma2, int borderType)
+void oclGaussianBlur(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, CvSize ksize, double sigma1, double sigma2, int borderType)
 {
    cv::ocl::GaussianBlur(*src, *dst, ksize, sigma1, sigma2, borderType);
 }
 
-void oclMatLaplacian(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int ksize, double scale)
+void oclLaplacian(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int ksize, double scale)
 {
    cv::ocl::Laplacian(*src, *dst, src->depth(), ksize, scale);
 }
 
-void oclMatGemm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, double alpha, 
+void oclGemm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, double alpha, 
                 const cv::ocl::oclMat* src3, double beta, cv::ocl::oclMat* dst, int flags)
 {
    cv::ocl::oclMat src3Mat = src3 ? *src3 : cv::ocl::oclMat();
    cv::ocl::gemm(*src1, *src2, alpha, src3Mat, beta, *dst, flags);
 }
 
-void oclMatCanny(const cv::ocl::oclMat* image, cv::ocl::oclMat* edges, double lowThreshold, double highThreshold, int apertureSize, bool L2gradient)
+void oclCanny(const cv::ocl::oclMat* image, cv::ocl::oclMat* edges, double lowThreshold, double highThreshold, int apertureSize, bool L2gradient)
 {
    cv::ocl::Canny(*image, *edges, lowThreshold, highThreshold, apertureSize, L2gradient);
 }
 
-void oclMatMeanStdDev(const cv::ocl::oclMat* mtx, CvScalar* mean, CvScalar* stddev)
+void oclMeanStdDev(const cv::ocl::oclMat* mtx, CvScalar* mean, CvScalar* stddev)
 {
    cv::Scalar meanVal, stdDevVal;
    cv::ocl::meanStdDev(*mtx, meanVal, stdDevVal);
@@ -452,7 +462,7 @@ void oclMatMeanStdDev(const cv::ocl::oclMat* mtx, CvScalar* mean, CvScalar* stdd
    memcpy(stddev->val, stdDevVal.val, sizeof(double) * 4);
 }
 
-double oclMatNorm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, int normType)
+double oclNorm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, int normType)
 {
    if (src2)
       return cv::ocl::norm(*src1, *src2, normType);
@@ -460,22 +470,22 @@ double oclMatNorm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, int 
       return cv::ocl::norm(*src1, normType);
 }
 
-void oclMatLUT(const cv::ocl::oclMat* src, const cv::ocl::oclMat* lut, cv::ocl::oclMat* dst)
+void oclLUT(const cv::ocl::oclMat* src, const cv::ocl::oclMat* lut, cv::ocl::oclMat* dst)
 {
    cv::ocl::LUT(*src, *lut, *dst);
 }
 
-void oclMatCopyMakeBorder(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int top, int bottom, int left, int right, int borderType, const CvScalar value)
+void oclCopyMakeBorder(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int top, int bottom, int left, int right, int borderType, const CvScalar value)
 {
    cv::ocl::copyMakeBorder(*src, *dst, top, bottom, left, right, borderType, value);
 }
 
-void oclMatMedianFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int m)
+void oclMedianFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int m)
 {
    cv::ocl::medianFilter(*src, *dst, m);
 }
 
-void oclMatIntegral(const cv::ocl::oclMat* src, cv::ocl::oclMat* sum, cv::ocl::oclMat* sqrSum)
+void oclIntegral(const cv::ocl::oclMat* src, cv::ocl::oclMat* sum, cv::ocl::oclMat* sqrSum)
 {
    if (sqrSum)
    {
@@ -499,88 +509,95 @@ void oclMatIntegral(const cv::ocl::oclMat* src, cv::ocl::oclMat* sum, cv::ocl::o
    }
 }
 
-void oclMatCornerHarris(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int blockSize, int ksize, double k, int borderType)
+void oclCornerHarris(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int blockSize, int ksize, double k, int borderType)
 {
    cv::ocl::cornerHarris(*src, *dst, blockSize, ksize, k, borderType);
 }
 
-void oclMatBilateralFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int d, double sigmaColor, double sigmaSpave, int borderType)
+void oclBilateralFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int d, double sigmaColor, double sigmaSpave, int borderType)
 {
    cv::ocl::bilateralFilter(*src, *dst, d, sigmaColor, sigmaSpave, borderType);
 }
 
-void oclMatPow(const cv::ocl::oclMat* x, double p, cv::ocl::oclMat *y)
+void oclAdaptiveBilateralFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, CvSize* ksize, double sigmaSpace, CvPoint* anchor, int borderType)
+{
+   cv::Size ks(ksize->width, ksize->height);
+   cv::Point ap(anchor->x, anchor->y);
+   cv::ocl::adaptiveBilateralFilter(*src, *dst, ks, sigmaSpace, ap, borderType);
+}
+
+void oclPow(const cv::ocl::oclMat* x, double p, cv::ocl::oclMat *y)
 {
    cv::ocl::pow(*x, p, *y);
 }
 
-void oclMatExp(const cv::ocl::oclMat* a, cv::ocl::oclMat* b)
+void oclExp(const cv::ocl::oclMat* a, cv::ocl::oclMat* b)
 {
    cv::ocl::exp(*a, *b);
 }
 
-void oclMatLog(const cv::ocl::oclMat* a, cv::ocl::oclMat* b)
+void oclLog(const cv::ocl::oclMat* a, cv::ocl::oclMat* b)
 {
    cv::ocl::exp(*a, *b);
 }
 
-void oclMatCartToPolar(const cv::ocl::oclMat* x, const cv::ocl::oclMat* y, cv::ocl::oclMat* magnitude, cv::ocl::oclMat* angle, bool angleInDegrees)
+void oclCartToPolar(const cv::ocl::oclMat* x, const cv::ocl::oclMat* y, cv::ocl::oclMat* magnitude, cv::ocl::oclMat* angle, bool angleInDegrees)
 {
    cv::ocl::cartToPolar(*x, *y, *magnitude, *angle, angleInDegrees);
 }
 
-void oclMatPolarToCart(const cv::ocl::oclMat* magnitude, const cv::ocl::oclMat* angle, cv::ocl::oclMat* x, cv::ocl::oclMat* y, bool angleInDegrees)
+void oclPolarToCart(const cv::ocl::oclMat* magnitude, const cv::ocl::oclMat* angle, cv::ocl::oclMat* x, cv::ocl::oclMat* y, bool angleInDegrees)
 {
    cv::ocl::polarToCart(*magnitude, *angle, *x, *y, angleInDegrees);
 }
 
-void oclMatCalcHist(const cv::ocl::oclMat* mat_src, cv::ocl::oclMat* mat_hist)
+void oclCalcHist(const cv::ocl::oclMat* mat_src, cv::ocl::oclMat* mat_hist)
 {
    cv::ocl::calcHist(*mat_src, *mat_hist);
 }
 
-void oclMatEqualizeHist(const cv::ocl::oclMat* mat_src, cv::ocl::oclMat* mat_dst)
+void oclEqualizeHist(const cv::ocl::oclMat* mat_src, cv::ocl::oclMat* mat_dst)
 {
    cv::ocl::equalizeHist(*mat_src, *mat_dst);
 }
 
-void oclMatHoughCircles(const cv::ocl::oclMat* src, cv::ocl::oclMat* circles, int method, float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles)
+void oclHoughCircles(const cv::ocl::oclMat* src, cv::ocl::oclMat* circles, int method, float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles)
 {
    cv::ocl::HoughCircles(*src, *circles, method, dp,  minDist, cannyThreshold, votesThreshold, minRadius, maxRadius, maxCircles);
 }
 
-void oclMatHoughCirclesDownload(const cv::ocl::oclMat* d_circles, cv::Mat* h_circles)
+void oclHoughCirclesDownload(const cv::ocl::oclMat* d_circles, cv::Mat* h_circles)
 {
    cv::ocl::HoughCirclesDownload(*d_circles, *h_circles);
 }
 
-void oclMatMeanShiftFiltering(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int sp, int sr,
+void oclMeanShiftFiltering(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int sp, int sr,
                               CvTermCriteria* criteria)
 {
    cv::ocl::meanShiftFiltering(*src, *dst, sp, sr, *criteria);
 }
 
-void oclMatMeanShiftProc(const cv::ocl::oclMat* src, cv::ocl::oclMat* dstr, cv::ocl::oclMat* dstsp, int sp, int sr,
+void oclMeanShiftProc(const cv::ocl::oclMat* src, cv::ocl::oclMat* dstr, cv::ocl::oclMat* dstsp, int sp, int sr,
                          CvTermCriteria* criteria)
 {
    cv::ocl::meanShiftProc(*src, *dstr, *dstsp, sp, sr, *criteria);
 }
 
-void oclMatMeanShiftSegmentation(const cv::ocl::oclMat* src, IplImage* dst, int sp, int sr, int minsize,
+void oclMeanShiftSegmentation(const cv::ocl::oclMat* src, IplImage* dst, int sp, int sr, int minsize,
                                  CvTermCriteria* criteria)
 {
    cv::Mat dstMat = cv::cvarrToMat(dst);
    cv::ocl::meanShiftSegmentation(*src, dstMat, sp, sr, minsize, *criteria);
 }
 
-void oclMatWarpAffine(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags)
+void oclWarpAffine(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags)
 {
    cv::Mat mat = cv::cvarrToMat(M);
    //cv::Size size(dsize->width, dsize->height);
    cv::ocl::warpAffine(*src, *dst, mat, dst->size(), flags);
 }
 
-void oclMatWarpPerspective(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags)
+void oclWarpPerspective(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvMat* M, int flags)
 {
    cv::Mat mat = cv::cvarrToMat(M);
    //cv::Size size(dsize->width, dsize->height);

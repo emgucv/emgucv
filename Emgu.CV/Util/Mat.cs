@@ -92,7 +92,7 @@ namespace Emgu.CV.Util
       /// </summary>
       protected override void DisposeObject()
       {
-         if (_needDispose)
+         if (_needDispose && _ptr != IntPtr.Zero)
             CvInvoke.cvMatRelease(ref _ptr);
       }
    }

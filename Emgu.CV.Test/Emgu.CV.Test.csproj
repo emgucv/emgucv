@@ -105,6 +105,14 @@
       <Link>haarcascade_frontalface_alt2.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\opencv\data\softcascade\inria_caltech-17.01.2013.xml">
+      <Link>inria_caltech-17.01.2013.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\opencv\data\softcascade\soft-cascade-17.12.2012.xml">
+      <Link>soft-cascade-17.12.2012.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\opencv\samples\cpp\board.jpg">
       <Link>board.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -223,6 +231,14 @@
     <ProjectReference Include="..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.csproj">
       <Project>{bdec3f55-bbd2-4ed8-9d14-3f0196a944c5}</Project>
       <Name>Emgu.CV.OpenCL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.Shape\Emgu.CV.Shape.csproj">
+      <Project>{61b5a667-1bf5-4580-ad09-07d6d7ad7e3d}</Project>
+      <Name>Emgu.CV.Shape</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.Softcascade\Emgu.CV.Softcascade.csproj">
+      <Project>{787d75d2-fe4d-4739-b9a5-2fb2617a42cc}</Project>
+      <Name>Emgu.CV.Softcascade</Name>
     </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.Stitching\Emgu.CV.Stitching.csproj">
       <Project>{D9C9B824-2B7A-48C0-A7D3-484410288CD2}</Project>

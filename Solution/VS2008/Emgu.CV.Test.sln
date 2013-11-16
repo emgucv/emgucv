@@ -26,6 +26,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Nonfree", "..\..\Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.VideoStab", "..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.csproj", "{91A08B78-2FA0-4887-8975-486CE5FC74B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Shape", "..\..\Emgu.CV.Shape\Emgu.CV.Shape.csproj", "{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Softcascade", "..\..\Emgu.CV.Softcascade\Emgu.CV.Softcascade.csproj", "{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +88,14 @@ Global
 		{91A08B78-2FA0-4887-8975-486CE5FC74B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91A08B78-2FA0-4887-8975-486CE5FC74B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91A08B78-2FA0-4887-8975-486CE5FC74B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
