@@ -8,8 +8,8 @@
     <ProjectGuid>{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Emgu.CV.Example.MonoTouch</RootNamespace>
-    <AssemblyName>EmguCVExampleMonoTouch</AssemblyName>
+    <RootNamespace>Emgu.CV.Example</RootNamespace>
+    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>True</DebugSymbols>
@@ -141,29 +141,29 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.GPU\Emgu.CV.GPU.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.iOS.csproj">
       <Project>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</Project>
-      <Name>Emgu.CV.GPU.MonoTouch</Name>
+      <Name>Emgu.CV.Cuda.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.iOS.csproj">
       <Project>{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}</Project>
-      <Name>Emgu.CV.ML.MonoTouch</Name>
+      <Name>Emgu.CV.ML.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.iOS.csproj">
       <Project>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</Project>
-      <Name>Emgu.CV.MonoTouch</Name>
+      <Name>Emgu.CV.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.iOS.csproj">
       <Project>{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}</Project>
-      <Name>Emgu.CV.OCR.MonoTouch</Name>
+      <Name>Emgu.CV.OCR.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.iOS.csproj">
       <Project>{2B9B1965-3A6D-4D06-9427-43335D4C668F}</Project>
-      <Name>Emgu.CV.Stitching.MonoTouch</Name>
+      <Name>Emgu.CV.Stitching.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.MonoTouch.csproj">
+    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.iOS.csproj">
       <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
-      <Name>Emgu.Util.MonoTouch</Name>
+      <Name>Emgu.Util.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

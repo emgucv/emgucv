@@ -293,7 +293,12 @@ namespace Emgu.CV.OpenCL
          return result;
       }
 
-#if !NETFX_CORE
+#if IOS
+      public MonoTouch.UIKit.UIImage ToUIImage()
+      {
+         throw new NotImplementedException();
+      }
+#elif !NETFX_CORE
       /// <summary>
       /// Get the Bitmap representation of this IclImage
       /// </summary>

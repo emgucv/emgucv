@@ -7,17 +7,19 @@ rm -rf ios-package
 mkdir ios-package
 cp -r ../../tmp/Emgu.CV ios-package/Emgu.CV
 rm -rf ios-package/Emgu.CV/Android
-cp -rf ../../Emgu.CV/PInvoke/MonoTouch/libemgucv.a ios-package/Emgu.CV/PInvoke/MonoTouch
+cp -rf ../../Emgu.CV/PInvoke/iOS/libemgucv.a ios-package/Emgu.CV/PInvoke/iOS
 cp ../../Emgu.CV/PInvoke/CvInvokeEntryPoints.cs ios-package/Emgu.CV/PInvoke
 
 cp -r ../../tmp/Emgu.CV.ML ios-package/Emgu.CV.ML
 cp -r ../../tmp/Emgu.CV.OCR ios-package/Emgu.CV.OCR
 cp -r ../../tmp/Emgu.CV.Stitching ios-package/Emgu.CV.Stitching
 cp -r ../../tmp/Emgu.Util ios-package/Emgu.Util
-cp -r ../../tmp/Emgu.CV.GPU ios-package/Emgu.CV.GPU
+cp -r ../../tmp/Emgu.CV.Cuda ios-package/Emgu.CV.Cuda
+cp -r ../../tmp/Emgu.CV.OpenCL ios-package/Emgu.CV.OpenCL
+cp -r ../../tmp/Emgu.CV.Nonfree ios-package/Emgu.CV.Nonfree
 
-mkdir -p ios-package/Solution/MonoTouch
-cp ../../tmp/Solution/MonoTouch/Emgu.CV.MonoTouch.sln ios-package/Solution/MonoTouch/Emgu.CV.MonoTouch.sln
+mkdir -p ios-package/Solution/iOS
+cp ../../tmp/Solution/iOS/Emgu.CV.iOS.sln ios-package/Solution/iOS/Emgu.CV.iOS.sln
 
 mkdir -p ios-package/Emgu.CV.Example/SURFFeature
 mkdir -p ios-package/Emgu.CV.Example/PlanarSubdivision
@@ -26,7 +28,7 @@ mkdir -p ios-package/Emgu.CV.Example/PedestrianDetection
 mkdir -p ios-package/Emgu.CV.Example/TrafficSignRecognition
 mkdir -p ios-package/Emgu.CV.Example/FaceDetection
 mkdir -p ios-package/opencv/data/haarcascades
-cp -r ../../tmp/Emgu.CV.Example/MonoTouch ios-package/Emgu.CV.Example/MonoTouch
+cp -r ../../tmp/Emgu.CV.Example/iOS ios-package/Emgu.CV.Example/iOS
 cp ../../tmp/Emgu.CV.Example/SURFFeature/box.png ios-package/Emgu.CV.Example/SURFFeature/box.png
 cp ../../tmp/Emgu.CV.Example/SURFFeature/box_in_scene.png ios-package/Emgu.CV.Example/SURFFeature/box_in_scene.png
 cp ../../tmp/Emgu.CV.Example/SURFFeature/DrawMatches.cs ios-package/Emgu.CV.Example/SURFFeature/DrawMatches.cs
@@ -47,7 +49,7 @@ find ./ios-package -type f -name CMakeList* -exec rm '{}' \;
 find ./ios-package -type f -name *Android* -exec rm '{}' \;
 find ./ios-package -type f -name *Windows.Store* -exec rm '{}' \;
 cd ios-package
-rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.GPU/Emgu.CV.GPU.csproj Emgu.CV.OCR/Emgu.CV.OCR.csproj Emgu.Util/Emgu.Util.csproj Emgu.CV.Stitching/Emgu.CV.Stitching.csproj
+rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.Cuda/Emgu.CV.Cuda.csproj Emgu.CV.OCR/Emgu.CV.OCR.csproj Emgu.Util/Emgu.Util.csproj Emgu.CV.Stitching/Emgu.CV.Stitching.csproj Emgu.CV.Nonfree/Emgu.CV.Nonfree.csproj Emgu.CV.OpenCL/Emgu.CV.OpenCL.csproj
 cd ..
 
 gitversion=$(git log --oneline | wc -l | tr -d " ")

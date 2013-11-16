@@ -5,30 +5,30 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2B9B1965-3A6D-4D06-9427-43335D4C668F}</ProjectGuid>
+    <ProjectGuid>{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Emgu.CV.Stitching</RootNamespace>
-    <AssemblyName>Emgu.CV.Stitching.MonoTouch</AssemblyName>
+    <RootNamespace>Emgu.CV.Nonfree</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AssemblyName>Emgu.CV.Nonfree.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;IOS</DefineConstants>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DefineConstants>IOS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -37,25 +37,33 @@
     <Reference Include="monotouch" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CudaSURFDetector.cs" />
+    <Compile Include="OclSURFDetector.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stitcher.cs" />
+    <Compile Include="SIFTDetector.cs" />
+    <Compile Include="SURFDetector.cs" />
+    <Compile Include="SURFFeature.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV\Emgu.CV.MonoTouch.csproj">
-      <Project>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</Project>
-      <Name>Emgu.CV.MonoTouch</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.Util\Emgu.Util.MonoTouch.csproj">
-      <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
-      <Name>Emgu.Util.MonoTouch</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.MonoTouch.csproj">
+    <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.iOS.csproj">
       <Project>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</Project>
-      <Name>Emgu.CV.GPU.MonoTouch</Name>
+      <Name>Emgu.CV.Cuda.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV\Emgu.CV.iOS.csproj">
+      <Project>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</Project>
+      <Name>Emgu.CV.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.iOS.csproj">
+      <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
+      <Name>Emgu.Util.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.iOS.csproj">
+      <Project>{3C97223F-9855-4F61-83AA-D842E2A8A7DD}</Project>
+      <Name>Emgu.CV.OpenCL.iOS</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

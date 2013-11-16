@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</ProjectGuid>
+    <ProjectGuid>{2B9B1965-3A6D-4D06-9427-43335D4C668F}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Emgu.CV.Cuda</RootNamespace>
-    <AssemblyName>Emgu.CV.Cuda.MonoTouch</AssemblyName>
+    <RootNamespace>Emgu.CV.Stitching</RootNamespace>
+    <AssemblyName>Emgu.CV.Stitching.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,42 +40,22 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="GpuBroxOpticalFlow.cs" />
-    <Compile Include="GpuBruteForceMatcher.cs" />
-    <Compile Include="GpuCascadeClassifier.cs" />
-    <Compile Include="GpuDeviceInfo.cs" />
-    <Compile Include="GpuDisparityBilateralFilter.cs" />
-    <Compile Include="GpuFarnebackOpticalFlow.cs" />
-    <Compile Include="GpuFASTDetector.cs" />
-    <Compile Include="GpuGoodFeaturesToTrackDetector.cs" />
-    <Compile Include="GpuHOGDescriptor.cs" />
-    <Compile Include="GpuImage.cs" />
-    <Compile Include="GpuInvoke.cs" />
-    <Compile Include="GpuMat.cs" />
-    <Compile Include="GpuORBDetector.cs" />
-    <Compile Include="GpuPyrLKOpticalFlow.cs" />
-    <Compile Include="GpuStereoBM.cs" />
-    <Compile Include="GpuStereoConstantSpaceBP.cs" />
-    <Compile Include="GpuSURFDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stream.cs" />
-    <Compile Include="TargetArchs.cs" />
-    <Compile Include="GpuMOG2.cs" />
-    <Compile Include="GpuVibe.cs" />
-    <Compile Include="GpuCannyEdgeDetector.cs" />
-    <Compile Include="GpuFilter.cs" />
-    <Compile Include="GpuLut.cs" />
-    <Compile Include="GpuTemplateMatching.cs" />
+    <Compile Include="Stitcher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV\Emgu.CV.MonoTouch.csproj">
+    <ProjectReference Include="..\Emgu.CV\Emgu.CV.iOS.csproj">
       <Project>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</Project>
-      <Name>Emgu.CV.MonoTouch</Name>
+      <Name>Emgu.CV.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Emgu.Util\Emgu.Util.MonoTouch.csproj">
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.iOS.csproj">
       <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
-      <Name>Emgu.Util.MonoTouch</Name>
+      <Name>Emgu.Util.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.iOS.csproj">
+      <Project>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</Project>
+      <Name>Emgu.CV.Cuda.iOS</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
