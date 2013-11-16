@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR.Android", "..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.Android", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Android.csproj", "{89BCA3BE-823B-4702-9498-025C6B21462F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.GPU.Android", "..\..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj", "{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Cuda.Android", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj", "{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidExamples", "..\..\Emgu.CV.Example\Android\AndroidExamples.csproj", "{543E1066-E02A-4078-AFA4-AD00B7168780}"
 EndProject
