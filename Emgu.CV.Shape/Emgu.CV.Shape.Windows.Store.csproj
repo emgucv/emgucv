@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6E1EE7FA-B1E7-4BBF-AD6A-470C5FBF0F56}</ProjectGuid>
+    <ProjectGuid>{4E99B79C-61E5-4244-8017-0C45B59DA98D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.OpenCL</RootNamespace>
-    <AssemblyName>Emgu.CV.OpenCL.Windows.Store</AssemblyName>
+    <RootNamespace>Emgu.CV.Shape</RootNamespace>
+    <AssemblyName>Emgu.CV.Shape.Windows.Store</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -109,26 +109,14 @@
       <Name>Emgu.Util.Windows.Store</Name>
     </ProjectReference>
   </ItemGroup>
-   <ItemGroup>
-    <Compile Include="OclDeviceInfo.cs" />
-    <Compile Include="VectorOfOclDeviceInfo.cs" />
-    <Compile Include="OclBruteForceMatcher.cs" />
-    <Compile Include="OclPlatformInfo.cs" />
-    <Compile Include="OclOpticalFlowDual_TVL1.cs" />
-    <Compile Include="OclStereoBM.cs" />
-    <Compile Include="OclStereoConstantSpaceBP.cs" />
-    <Compile Include="OclPyrLKOpticalFlow.cs" />
-    <Compile Include="OclCascadeClassifier.cs" />
-    <Compile Include="OclMatchTemplateBuf.cs" />
-    <Compile Include="OclHOGDescriptor.cs" />
-    <Compile Include="OclImage.cs" />
-    <Compile Include="OclInvoke.cs" />
-    <Compile Include="OclMat.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+  <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="VectorOfOclPlatformInfo.cs" />
+    <Compile Include="HistogramCostExtractor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShapeDistanceExtractor.cs" />
+    <Compile Include="ShapeTransformer.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
