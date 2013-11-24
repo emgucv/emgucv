@@ -3533,4 +3533,39 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       Multi = 1
    }
+
+   /// <summary>
+   /// Morphology operation type
+   /// </summary>
+   public enum MorphOp
+   {
+      /// <summary>
+      /// Erode
+      /// </summary>
+      Erode = 0,
+      /// <summary>
+      /// Dilate
+      /// </summary>
+      Dilate = 1,
+      /// <summary>
+      /// Open
+      /// </summary>
+      Open = 2,
+      /// <summary>
+      /// Close
+      /// </summary>
+      Close = 3,
+      /// <summary>
+      /// Gradient
+      /// </summary>
+      Gradient = 4,
+      /// <summary>
+      /// Tophat
+      /// </summary>
+      Tophat = 5,
+      /// <summary>
+      /// Blackhat
+      /// </summary>
+      Blackhat = 6
+   }
 }

@@ -96,7 +96,7 @@ namespace Emgu.CV.Test
 
                      Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
                      Assert.IsTrue(cpuImgSum.Equals(cpuImgSumFromGpu));
-                     OclInvoke.Finish();
+                     //OclInvoke.Finish();
                   }
                }
             }
@@ -251,7 +251,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> result = new Image<Gray, byte>(oclResult.Size);
             OclInvoke.CLAHE(oclImage, oclResult, 4, new Size(8, 8));
             oclResult.Download(result);
-            Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+            //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
          }
       }
 
@@ -297,17 +297,17 @@ namespace Emgu.CV.Test
       {
          if (OclInvoke.HasOpenCL)
          {
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
-            OclImage<Bgr, Byte> gpuMat = new OclImage<Bgr, byte>(img);
+            Image<Gray, Byte> img = new Image<Gray, byte>(300, 400);
+            OclImage<Gray, Byte> gpuMat = new OclImage<Gray, byte>(img);
             Assert.IsTrue(OclInvoke.CountNonZero(gpuMat) == 0);
             OclInvoke.BitwiseNot(gpuMat, gpuMat);
             //int nonZero = OclInvoke.CountNonZero(gpuMat);
             //Assert.IsTrue(nonZero == gpuMat.Size.Width * gpuMat.Size.Height);
-            Image<Bgr, Byte> imgNot = new Image<Bgr, byte>(img.Size);
+            Image<Gray, Byte> imgNot = new Image<Gray, byte>(img.Size);
             gpuMat.Download(imgNot);
 
 
-            Assert.IsTrue(gpuMat.Equals(new OclImage<Bgr, Byte>(img.Not())));
+            Assert.IsTrue(gpuMat.Equals(new OclImage<Gray, Byte>(img.Not())));
          }
       }
 
@@ -403,8 +403,9 @@ namespace Emgu.CV.Test
          using (OclImage<Gray, Byte> CudaImage = new OclImage<Gray, byte>(image))
          using (OclImage<Gray, Byte> gpuTemp = new OclImage<Gray, byte>(CudaImage.Size))
          {
-            OclInvoke.Erode(CudaImage, gpuTemp, IntPtr.Zero, new Point(-1, -1), morphIter);
-            OclInvoke.Dilate(gpuTemp, CudaImage, IntPtr.Zero, new Point(-1, -1), morphIter);
+            Point defaultAnchor = new Point(-1, -1);
+            OclInvoke.Erode(CudaImage, gpuTemp, IntPtr.Zero, ref defaultAnchor, morphIter);
+            OclInvoke.Dilate(gpuTemp, CudaImage, IntPtr.Zero, ref defaultAnchor, morphIter);
 
             using (Image<Gray, Byte> temp = new Image<Gray, byte>(image.Size))
             {

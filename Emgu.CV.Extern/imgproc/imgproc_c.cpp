@@ -61,3 +61,11 @@ void cvCLAHE(const CvArr* srcArr, double clipLimit, emgu::size tileGridSize, CvA
    cv::Mat dstMat = cv::cvarrToMat(dstArr);
    clahe->apply(srcMat, dstMat);
 }
+
+void cvAdaptiveBilateralFilter(IplImage* src, IplImage* dst, emgu::size* ksize, double sigmaSpace, double maxSigmaColor, CvPoint* anchor, int borderType)
+{
+   cv::Mat srcMat = cv::cvarrToMat(src);
+   cv::Mat dstMat = cv::cvarrToMat(dst);
+   cv::Size s(ksize->width, ksize->height);
+   cv::adaptiveBilateralFilter(srcMat, dstMat, s, sigmaSpace, maxSigmaColor, *anchor, borderType);
+}

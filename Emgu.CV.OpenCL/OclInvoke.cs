@@ -148,7 +148,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="value">Fill value</param>
       /// <param name="mask">Operation mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Can be IntPtr.Zero if not used</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatSetTo")]
-      public static extern void OclMatSetTo(IntPtr mat, MCvScalar value, IntPtr mask);
+      public static extern void OclMatSetTo(IntPtr mat, ref MCvScalar value, IntPtr mask);
 
       /// <summary>
       /// Check if the OclMat is empty
@@ -272,7 +272,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="c">The sum of the matrix and the scalar</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAddS")]
-      public static extern void Add(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr mask);
+      public static extern void Add(IntPtr a, ref MCvScalar scalar, IntPtr c, IntPtr mask);
 
       /// <summary>
       /// Subtracts one matrix from another (c = a - b).
@@ -292,7 +292,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="c">The matrix substraced by the scalar</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use IntPtr.Zero if not needed</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSubtractS")]
-      public static extern void Subtract(IntPtr a, MCvScalar scalar, IntPtr c, IntPtr mask);
+      public static extern void Subtract(IntPtr a, ref MCvScalar scalar, IntPtr c, IntPtr mask);
 
       /// <summary>
       /// Computes element-wise product of the two OclMat: c = scale * a * b.
@@ -360,7 +360,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="scalar">A scalar</param>
       /// <param name="c">The result of the element-wise absolute difference.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAbsdiffS")]
-      public static extern void Absdiff(IntPtr a, MCvScalar scalar, IntPtr c);
+      public static extern void Absdiff(IntPtr a, ref MCvScalar scalar, IntPtr c);
 
       /// <summary>
       /// Flips the OclMat in one of different 3 ways (row and column indices are 0-based):
@@ -523,7 +523,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="borderType">Border Type</param>
       /// <param name="value">Border value.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCopyMakeBorder")]
-      public static extern void CopyMakeBorder(IntPtr src, IntPtr dst, int top, int bottom, int left, int right, CvEnum.BORDER_TYPE borderType, MCvScalar value);
+      public static extern void CopyMakeBorder(IntPtr src, IntPtr dst, int top, int bottom, int left, int right, CvEnum.BORDER_TYPE borderType, ref MCvScalar value);
 
       /// <summary>
       /// Smoothes image using median filter
@@ -579,10 +579,11 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination image; should have the same size and the same type as src</param>
       /// <param name="ksize">The size of the kernel</param>
       /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
+      /// <param name="maxSigmaColor">Maximum allowed sigma color (will clamp the value calculated in the ksize neighborhood. Larger value of the parameter means that more dissimilar pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
       /// <param name="anchor">The anchor, use (-1, -1) for default</param>
       /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAdaptiveBilateralFilter")]
-      public static extern void AdaptiveBilateralFilter(IntPtr src, IntPtr dst, ref Size ksize, double sigmaSpace, ref Point anchor, CvEnum.BORDER_TYPE borderType);
+      public static extern void AdaptiveBilateralFilter(IntPtr src, IntPtr dst, ref Size ksize, double sigmaSpace, double maxSigmaColor, ref Point anchor, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
       /// Computes exponent of each matrix element (b = exp(a))
@@ -706,7 +707,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination OclMat</param>
       /// <param name="mask">Mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Use IntPtr.Zero if not needed.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseXorS")]
-      public static extern void BitwiseXor(IntPtr src1, MCvScalar scalar, IntPtr dst, IntPtr mask);
+      public static extern void BitwiseXor(IntPtr src1, ref MCvScalar scalar, IntPtr dst, IntPtr mask);
 
       /// <summary>
       /// Calculates per-element bit-wise logical or of two OclMats:
@@ -730,7 +731,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination OclMat</param>
       /// <param name="mask">Mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Use IntPtr.Zero if not needed.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseOrS")]
-      public static extern void BitwiseOr(IntPtr src1, MCvScalar scalar, IntPtr dst, IntPtr mask);
+      public static extern void BitwiseOr(IntPtr src1, ref MCvScalar scalar, IntPtr dst, IntPtr mask);
 
       /// <summary>
       /// Calculates per-element bit-wise logical and of two OclMats:
@@ -754,7 +755,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination OclMat</param>
       /// <param name="mask">Mask, 8-bit single channel OclMat; specifies elements of destination OclMat to be changed. Use IntPtr.Zero if not needed.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBitwiseAndS")]
-      public static extern void BitwiseAnd(IntPtr src1, MCvScalar scalar, IntPtr dst, IntPtr mask);
+      public static extern void BitwiseAnd(IntPtr src1, ref MCvScalar scalar, IntPtr dst, IntPtr mask);
 
       /// <summary>
       /// Calculates per-element bit-wise logical not
@@ -777,7 +778,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="borderType">Border type. Use REFLECT101 for default.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclFilter2D")]
-      public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, CvEnum.BORDER_TYPE borderType);
+      public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
       /// Applies generalized Sobel operator to the image
@@ -867,7 +868,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
       /// <param name="borderType">The border type.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclGaussianBlur")]
-      public static extern void GaussianBlur(IntPtr src, IntPtr dst, Size ksize, double sigma1, double sigma2, CvEnum.BORDER_TYPE borderType);
+      public static extern void GaussianBlur(IntPtr src, IntPtr dst, ref Size ksize, double sigma1, double sigma2, CvEnum.BORDER_TYPE borderType);
 
       /// <summary>
       /// Finds the edges on the input <paramref name="image"/> and marks them in the output image edges using the Canny algorithm. The smallest of threshold1 and threshold2 is used for edge linking, the largest - to find initial segments of strong edges.
@@ -971,9 +972,10 @@ namespace Emgu.CV.OpenCL
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
-      public static void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations)
+      public static void Erode(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations)
       {
-         Erode(src, dst, kernel, anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue));
+         MCvScalar borderValue = new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue);
+         Erode(src, dst, kernel, ref anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, ref borderValue);
       }
 
       /// <summary>
@@ -988,7 +990,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclErode")]
-      private static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, ref MCvScalar borderValue);
 
       /// <summary>
       /// Dilate the image (applies the local maximum operator).
@@ -999,9 +1001,10 @@ namespace Emgu.CV.OpenCL
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. If it is IntPtr.Zero, a 3x3 rectangular structuring element is used.</param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
-      public static void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations)
+      public static void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations)
       {
-         Dilate(src, dst, kernel, anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue));
+         MCvScalar borderValue = new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue);
+         Dilate(src, dst, kernel, ref anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, ref borderValue);
       }
 
       /// <summary>
@@ -1016,7 +1019,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclDilate")]
-      private static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+      private static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, ref MCvScalar borderValue);
 
       /// <summary>
       /// Applies an advanced morphological operation to the image
@@ -1028,9 +1031,10 @@ namespace Emgu.CV.OpenCL
       /// <param name="kernel">The morphology kernel, pointer to an CvArr. </param>
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="iterations">The number of iterations morphology is applied</param>
-      public static void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations)
+      public static void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.MorphOp op, IntPtr kernel, ref Point anchor, int iterations)
       {
-         MorphologyEx(src, dst, op, kernel, anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue));
+         MCvScalar borderValue = new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue);
+         MorphologyEx(src, dst, op, kernel, ref anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, ref borderValue);
       }
 
       /// <summary>
@@ -1046,7 +1050,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMorphologyEx")]
-      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.CV_MORPH_OP op, IntPtr kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue);
+      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.MorphOp op, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, ref MCvScalar borderValue);
       #endregion
 
       #region meanshift

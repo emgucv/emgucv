@@ -36,7 +36,7 @@ CVAPI(float) CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int 
                                    float** neighbors, CvMat* neighbor_responses, CvMat* dist );
 
 //EM
-CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const cv::TermCriteria termcrit);
+CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const cv::TermCriteria* termcrit);
 CVAPI(void) CvEMRelease(cv::EM** model);
 CVAPI(bool) CvEMTrain(cv::EM* model, CvMat* samples, CvMat* labels, CvMat* probs, CvMat* logLikelihoods );
 CVAPI(double) CvEMPredict(cv::EM* model, CvMat* sample, CvMat* probs, double* likelihood);
@@ -85,7 +85,7 @@ CVAPI(bool) CvDTreeTrain(CvDTree* model, CvMat* _train_data, int _tflag,
                          CvMat* _responses, CvMat* _var_idx,
                          CvMat* _sample_idx, CvMat* _var_type,
                          CvMat* _missing_mask,
-                         CvDTreeParams params );
+                         CvDTreeParams* params );
 CVAPI(CvDTreeNode*) CvDTreePredict(CvDTree* model, CvMat* _sample, CvMat* _missing_data_mask, bool raw_mode );
 
 //Random Tree
@@ -98,7 +98,7 @@ CVAPI(bool) CvRTreesTrain( CvRTrees* model, CvMat* _train_data, int _tflag,
                           CvMat* _responses, CvMat* _var_idx,
                           CvMat* _sample_idx, CvMat* _var_type,
                           CvMat* _missing_mask,
-                          CvRTParams params );
+                          CvRTParams* params );
 /*
 CVAPI(bool) CvRTreesTrain( CvRTrees* model, CvMat* _train_data, int _tflag,
                           CvMat* _responses, CvMat* _var_idx=0,
@@ -129,7 +129,7 @@ CVAPI(bool) CvBoostTrain(CvBoost* model, CvMat* _train_data, int _tflag,
                          bool update );
 
 CVAPI(float) CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing,
-                            CvMat* weak_responses, CvSlice slice,
+                            CvMat* weak_responses, CvSlice* slice,
                             bool raw_mode);
 
 //CvGBTrees
@@ -143,6 +143,6 @@ CVAPI(bool) CvGBTreesTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
              CvGBTreesParams* params,
              bool update);
 CVAPI(float) CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
-                            CvMat* weak_responses, CvSlice slice,
+                            CvMat* weak_responses, CvSlice* slice,
                             bool raw_mode);
 #endif

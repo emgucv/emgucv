@@ -205,7 +205,7 @@ namespace Emgu.CV.ML
       /// <param name="termcrit">The termination criteria of the EM algorithm. The EM algorithm can be terminated by the number of iterations termCrit.maxCount (number of M-steps) or when relative change of likelihood logarithm is less than termCrit.epsilon. Default maximum number of iterations is 100</param>
       /// <returns>Pointer to the EM model</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvEMDefaultCreate(int nclusters, MlEnum.EM_COVARIAN_MATRIX_TYPE covMatType, MCvTermCriteria termcrit);
+      public static extern IntPtr CvEMDefaultCreate(int nclusters, MlEnum.EM_COVARIAN_MATRIX_TYPE covMatType, ref MCvTermCriteria termcrit);
 
       /// <summary>
       /// Release the EM model
@@ -276,7 +276,7 @@ namespace Emgu.CV.ML
          IntPtr model,
          IntPtr samples,
          IntPtr sampleIdx,
-         MCvEMParams parameters,
+         ref MCvEMParams parameters,
          IntPtr labels);
 
       /// <summary>
@@ -572,7 +572,7 @@ namespace Emgu.CV.ML
          IntPtr sampleIdx,
          IntPtr varType,
          IntPtr missingMask,
-         MCvDTreeParams param);
+         ref MCvDTreeParams param);
 
       /// <summary>
       /// The method takes the feature vector and the optional missing measurement mask on input, traverses the decision tree and returns the reached leaf node on output. The prediction result, either the class label or the estimated function value, may be retrieved as value field of the CvDTreeNode structure
@@ -652,7 +652,7 @@ namespace Emgu.CV.ML
          IntPtr sampleIdx,
          IntPtr varType,
          IntPtr missingMask,
-         MCvRTParams param);
+         ref MCvRTParams param);
 
       /// <summary>
       /// The method takes the feature vector and the optional missing measurement mask on input, traverses the random tree and returns the cumulative result from all the trees in the forest (the class that receives the majority of voices, or the mean of the regression function estimates)
@@ -752,7 +752,7 @@ namespace Emgu.CV.ML
          IntPtr sample,
          IntPtr missing,
          IntPtr weakResponses,
-         Emgu.CV.Structure.MCvSlice slice,
+         ref Emgu.CV.Structure.MCvSlice slice,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool rawMode);
 
@@ -817,7 +817,7 @@ namespace Emgu.CV.ML
          IntPtr sample,
          IntPtr missing,
          IntPtr weakResponses,
-         Emgu.CV.Structure.MCvSlice slice,
+         ref Emgu.CV.Structure.MCvSlice slice,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool rawMode);
 

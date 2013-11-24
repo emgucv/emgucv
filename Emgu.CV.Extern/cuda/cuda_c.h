@@ -80,7 +80,7 @@ CVAPI(cv::cuda::GpuMat*) gpuMatCreateContinuous(int rows, int cols, int type);
 
 CVAPI(bool) gpuMatIsContinuous(cv::cuda::GpuMat* gpuMat);
 
-CVAPI(cv::cuda::GpuMat*) gpuMatGetRegion(cv::cuda::GpuMat* other, CvSlice rowRange, CvSlice colRange);
+CVAPI(cv::cuda::GpuMat*) gpuMatGetRegion(cv::cuda::GpuMat* other, CvSlice* rowRange, CvSlice* colRange);
 
 CVAPI(void) gpuMatRelease(cv::cuda::GpuMat** mat);
 
@@ -102,13 +102,11 @@ CVAPI(void) gpuMatConvertTo(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, 
 
 CVAPI(void) gpuMatCopy(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
-CVAPI(void) gpuMatSetTo(cv::cuda::GpuMat* mat, const CvScalar s, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
-
+CVAPI(void) gpuMatSetTo(cv::cuda::GpuMat* mat, const CvScalar* s, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
 CVAPI(void) gpuMatReshape(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int cn, int rows);
 
-
-CVAPI(cv::cuda::GpuMat*) gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect rect);
+CVAPI(cv::cuda::GpuMat*) gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* rect);
 
 
 //----------------------------------------------------------------------------
@@ -134,10 +132,10 @@ CVAPI(void) cudaHOGDescriptorGetPeopleDetector48x96(std::vector<float>* vector);
 CVAPI(cv::cuda::HOGDescriptor*) cudaHOGDescriptorCreateDefault();
 
 CVAPI(cv::cuda::HOGDescriptor*) cudaHOGDescriptorCreate(
-   cv::Size* _winSize, 
-   cv::Size* _blockSize, 
-   cv::Size* _blockStride,
-   cv::Size* _cellSize, 
+   emgu::size* _winSize, 
+   emgu::size* _blockSize, 
+   emgu::size* _blockStride,
+   emgu::size* _cellSize, 
    int _nbins, 
    double _winSigma,
    double _L2HysThreshold, 
@@ -153,8 +151,8 @@ CVAPI(void) cudaHOGDescriptorDetectMultiScale(
    cv::cuda::GpuMat* img, 
    CvSeq* foundLocations,
    double hitThreshold, 
-   CvSize winStride,
-   CvSize padding, 
+   emgu::size* winStride,
+   emgu::size* padding, 
    double scale,
    int groupThreshold);
 

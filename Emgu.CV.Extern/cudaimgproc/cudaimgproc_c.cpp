@@ -157,3 +157,72 @@ void cudaTemplateMatchingRelease(cv::cuda::TemplateMatching** tm)
    delete *tm;
    *tm = 0;
 }
+
+//----------------------------------------------------------------------------
+//
+//  CudaHoughLinesDetector
+//
+//----------------------------------------------------------------------------
+cv::cuda::HoughLinesDetector* cudaHoughLinesDetectorCreate(float rho, float theta, int threshold, bool doSort, int maxLines)
+{
+   cv::Ptr<cv::cuda::HoughLinesDetector> ptr = cv::cuda::createHoughLinesDetector(rho, theta, threshold, doSort, maxLines);
+   ptr.addref();
+   return ptr.get();
+}
+void cudaHoughLinesDetectorDetect(cv::cuda::HoughLinesDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* lines)
+{
+   detector->detect(*src, *lines);
+}
+void cudaHoughLinesDetectorRelease(cv::cuda::HoughLinesDetector** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
+
+//----------------------------------------------------------------------------
+//
+//  CudaHoughSegmentDetector
+//
+//----------------------------------------------------------------------------
+cv::cuda::HoughSegmentDetector* cudaHoughSegmentDetectorCreate(float rho, float theta, int minLineLength, int maxLineGap, int maxLines)
+{
+   cv::Ptr<cv::cuda::HoughSegmentDetector> ptr = cv::cuda::createHoughSegmentDetector(rho, theta, minLineLength, maxLineGap, maxLines);
+   ptr.addref();
+   return ptr.get();
+}
+void cudaHoughSegmentDetectorDetect(cv::cuda::HoughSegmentDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* lines)
+{
+   detector->detect(*src, *lines);
+}
+void cudaHoughSegmentDetectorRelease(cv::cuda::HoughSegmentDetector** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
+
+//----------------------------------------------------------------------------
+//
+//  CudaHoughCirclesDetector
+//
+//----------------------------------------------------------------------------
+cv::cuda::HoughCirclesDetector* cudaHoughCirclesDetectorCreate(float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles)
+{
+   cv::Ptr<cv::cuda::HoughCirclesDetector> ptr = cv::cuda::createHoughCirclesDetector(dp, minDist, cannyThreshold, votesThreshold, minRadius, maxRadius, maxCircles);
+   ptr.addref();
+   return ptr.get();
+
+}
+void cudaHoughCirclesDetectorDetect(cv::cuda::HoughCirclesDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* circles)
+{
+   detector->detect(*src, *circles);
+}
+void cudaHoughCirclesDetectorRelease(cv::cuda::HoughCirclesDetector** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
+
+void cudaGammaCorrection(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, bool forward, cv::cuda::Stream* stream)
+{
+   cv::cuda::gammaCorrection(*src, *dst, forward, stream ? *stream : cv::cuda::Stream::Null());
+}

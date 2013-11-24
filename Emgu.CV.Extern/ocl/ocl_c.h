@@ -60,11 +60,11 @@ CVAPI(int) oclCountNonZero(cv::ocl::oclMat* oclMat);
 
 CVAPI(void) oclAdd(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask);
 
-CVAPI(void) oclAddS(const cv::ocl::oclMat* a, const CvScalar scale, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask);
+CVAPI(void) oclAddS(const cv::ocl::oclMat* a, const CvScalar* scale, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask);
 
 CVAPI(void) oclSubtract(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask);
 
-CVAPI(void) oclSubtractS(const cv::ocl::oclMat* a, const CvScalar scale, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask);
+CVAPI(void) oclSubtractS(const cv::ocl::oclMat* a, const CvScalar* scale, cv::ocl::oclMat* c, const cv::ocl::oclMat* mask);
 
 CVAPI(void) oclMultiply(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, double scale);
 
@@ -80,7 +80,7 @@ CVAPI(void) oclAddWeighted(const cv::ocl::oclMat* src1, double alpha, const cv::
 
 CVAPI(void) oclAbsdiff(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c);
 
-CVAPI(void) oclAbsdiffS(const cv::ocl::oclMat* a, const CvScalar s, cv::ocl::oclMat* c);
+CVAPI(void) oclAbsdiffS(const cv::ocl::oclMat* a, const CvScalar* s, cv::ocl::oclMat* c);
 
 CVAPI(void) oclFlip(const cv::ocl::oclMat* a, cv::ocl::oclMat* b, int flipCode);
 
@@ -88,21 +88,21 @@ CVAPI(void) oclBitwiseNot(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst);
 
 CVAPI(void) oclBitwiseAnd(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
 
-CVAPI(void) oclBitwiseAndS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
+CVAPI(void) oclBitwiseAndS(const cv::ocl::oclMat* src1, const CvScalar* sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
 
 CVAPI(void) oclBitwiseOr(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
 
-CVAPI(void) oclBitwiseOrS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
+CVAPI(void) oclBitwiseOrS(const cv::ocl::oclMat* src1, const CvScalar* sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
 
 CVAPI(void) oclBitwiseXor(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
 
-CVAPI(void) oclBitwiseXorS(const cv::ocl::oclMat* src1, const cv::Scalar sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
+CVAPI(void) oclBitwiseXorS(const cv::ocl::oclMat* src1, const CvScalar* sc, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
 
-CVAPI(void) oclErode( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue);
+CVAPI(void) oclErode( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue);
 
-CVAPI(void) oclDilate( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue);
+CVAPI(void) oclDilate( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue);
 
-CVAPI(void) oclMorphologyEx( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int op, const CvArr* kernel, CvPoint anchor, int iterations, int borderType, CvScalar borderValue);
+CVAPI(void) oclMorphologyEx( const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int op, const CvArr* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue);
 
 CVAPI(void) oclCompare(const cv::ocl::oclMat* a, const cv::ocl::oclMat* b, cv::ocl::oclMat* c, int cmpop);
 
@@ -110,7 +110,7 @@ CVAPI(void) oclCvtColor(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int co
 
 CVAPI(void) oclMatCopy(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const cv::ocl::oclMat* mask);
 
-CVAPI(void) oclMatSetTo(cv::ocl::oclMat* mat, const CvScalar s, const cv::ocl::oclMat* mask);
+CVAPI(void) oclMatSetTo(cv::ocl::oclMat* mat, const CvScalar* s, const cv::ocl::oclMat* mask);
 
 CVAPI(void) oclMatResize(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, double fx, double fy, int interpolation);
 
@@ -132,7 +132,7 @@ CVAPI(void) oclMerge(const cv::ocl::oclMat** src, cv::ocl::oclMat* dst);
 
 CVAPI(void) oclConvertTo(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, double alpha, double beta);
 
-CVAPI(void) oclFilter2D(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint anchor, int borderType);
+CVAPI(void) oclFilter2D(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, const CvArr* kernel, CvPoint* anchor, int borderType);
 
 CVAPI(void) oclReshape(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int cn, int rows);
 
@@ -140,7 +140,7 @@ CVAPI(void) oclSobel(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, i
 
 CVAPI(void) oclScharr(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int dx, int dy, double scale, double delta, int borderType);
 
-CVAPI(void) oclGaussianBlur(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, CvSize ksize, double sigma1, double sigma2, int borderType);
+CVAPI(void) oclGaussianBlur(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, emgu::size* ksize, double sigma1, double sigma2, int borderType);
 
 CVAPI(void) oclLaplacian(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int ksize, double scale);
 
@@ -155,7 +155,7 @@ CVAPI(double) oclNorm(const cv::ocl::oclMat* src1, const cv::ocl::oclMat* src2, 
 
 CVAPI(void) oclLUT(const cv::ocl::oclMat* src, const cv::ocl::oclMat* lut, cv::ocl::oclMat* dst);
 
-CVAPI(void) oclCopyMakeBorder(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int top, int bottom, int left, int right, int borderType, const CvScalar value);
+CVAPI(void) oclCopyMakeBorder(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int top, int bottom, int left, int right, int borderType, const CvScalar* value);
 
 CVAPI(void) oclMedianFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int m);
 
@@ -165,7 +165,7 @@ CVAPI(void) oclCornerHarris(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, in
 
 CVAPI(void) oclBilateralFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, int d, double sigmaColor, double sigmaSpave, int borderType);
 
-CVAPI(void) oclAdaptiveBilateralFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, CvSize* ksize, double sigmaSpace, CvPoint* anchor, int borderType);
+CVAPI(void) oclAdaptiveBilateralFilter(const cv::ocl::oclMat* src, cv::ocl::oclMat* dst, emgu::size* ksize, double sigmaSpace, double maxSigmaColor, CvPoint* anchor, int borderType);
 
 CVAPI(void) oclPow(const cv::ocl::oclMat* x, double p, cv::ocl::oclMat *y);
 
@@ -216,10 +216,10 @@ CVAPI(void) oclHOGDescriptorGetPeopleDetector48x96(std::vector<float>* vector);
 CVAPI(cv::ocl::HOGDescriptor*) oclHOGDescriptorCreateDefault();
 
 CVAPI(cv::ocl::HOGDescriptor*) oclHOGDescriptorCreate(
-   cv::Size* _winSize, 
-   cv::Size* _blockSize, 
-   cv::Size* _blockStride,
-   cv::Size* _cellSize, 
+   emgu::size* _winSize, 
+   emgu::size* _blockSize, 
+   emgu::size* _blockStride,
+   emgu::size* _cellSize, 
    int _nbins, 
    double _winSigma,
    double _L2HysThreshold, 
@@ -235,8 +235,8 @@ CVAPI(void) oclHOGDescriptorDetectMultiScale(
    cv::ocl::oclMat* img, 
    CvSeq* foundLocations,
    double hitThreshold, 
-   CvSize winStride,
-   CvSize padding, 
+   emgu::size* winStride,
+   emgu::size* padding, 
    double scale,
    int groupThreshold);
 

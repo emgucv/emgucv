@@ -76,7 +76,7 @@ CVAPI(void) CvBlobTrackPostProcRelease(CvBlobTrackPostProc** postProc);
 CVAPI(CvEM*) CvEMLegacyDefaultCreate();
 CVAPI(void) CvEMLegacyRelease(CvEM** model);
 CVAPI(bool) CvEMLegacyTrain(CvEM* model, CvMat* samples, CvMat* sample_idx,
-                      CvEMParams params, CvMat* labels );
+                      CvEMParams* params, CvMat* labels );
 CVAPI(float) CvEMLegacyPredict(CvEM* model, CvMat* sample, CvMat* probs );
 CVAPI(int) CvEMLegacyGetNclusters(CvEM* model);
 CVAPI(CvMat*) CvEMLegacyGetMeans(CvEM* model);

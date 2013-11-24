@@ -50,15 +50,15 @@ CVAPI(void) cudaBitwiseNot(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, c
 
 CVAPI(void) cudaBitwiseAnd(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaBitwiseAndS(const cv::cuda::GpuMat* src1, const cv::Scalar sc, cv::cuda::GpuMat* dst,  const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
+CVAPI(void) cudaBitwiseAndS(const cv::cuda::GpuMat* src1, const CvScalar* sc, cv::cuda::GpuMat* dst,  const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaBitwiseOr(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaBitwiseOrS(const cv::cuda::GpuMat* src1, const cv::Scalar sc, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
+CVAPI(void) cudaBitwiseOrS(const cv::cuda::GpuMat* src1, const CvScalar* sc, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaBitwiseXor(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaBitwiseXorS(const cv::cuda::GpuMat* src1, const cv::Scalar sc, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
+CVAPI(void) cudaBitwiseXorS(const cv::cuda::GpuMat* src1, const CvScalar* sc, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaMin(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream);
 
@@ -72,25 +72,25 @@ CVAPI(void) cudaGemm(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2,
    const cv::cuda::GpuMat* src3, double beta, cv::cuda::GpuMat* dst, int flags, cv::cuda::Stream* stream);
 
 
-CVAPI(void) cudaLShift(const cv::cuda::GpuMat* a, CvScalar scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream);
+CVAPI(void) cudaLShift(const cv::cuda::GpuMat* a, CvScalar* scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaRShift(const cv::cuda::GpuMat* a, CvScalar scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream);
+CVAPI(void) cudaRShift(const cv::cuda::GpuMat* a, CvScalar* scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaAdd(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaAddS(const cv::cuda::GpuMat* a, const CvScalar scale, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
+CVAPI(void) cudaAddS(const cv::cuda::GpuMat* a, const CvScalar* scale, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaSubtract(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaSubtractS(const cv::cuda::GpuMat* a, const CvScalar scale, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
+CVAPI(void) cudaSubtractS(const cv::cuda::GpuMat* a, const CvScalar* scale, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaMultiply(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv::cuda::GpuMat* c, double scale, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaMultiplyS(const cv::cuda::GpuMat* a, const CvScalar s, cv::cuda::GpuMat* c, cv::cuda::Stream* stream);
+CVAPI(void) cudaMultiplyS(const cv::cuda::GpuMat* a, const CvScalar* s, cv::cuda::GpuMat* c, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaDivide(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv::cuda::GpuMat* c, double scale, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaDivideSR(const cv::cuda::GpuMat* a, const CvScalar s, cv::cuda::GpuMat* c, cv::cuda::Stream* stream);
+CVAPI(void) cudaDivideSR(const cv::cuda::GpuMat* a, const CvScalar* s, cv::cuda::GpuMat* c, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaDivideSL(const double s, const cv::cuda::GpuMat* b, cv::cuda::GpuMat* c, cv::cuda::Stream* stream);
 
@@ -110,7 +110,7 @@ CVAPI(void) cudaCompare(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv
 
 CVAPI(double) cudaThreshold(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, double thresh, double maxval, int type, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaCopyMakeBorder(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int top, int bottom, int left, int right, int gpuBorderType, const CvScalar value, cv::cuda::Stream* stream);
+CVAPI(void) cudaCopyMakeBorder(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int top, int bottom, int left, int right, int gpuBorderType, const CvScalar* value, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaIntegral(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* sum, cv::cuda::GpuMat* buffer, cv::cuda::Stream* stream);
 

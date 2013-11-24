@@ -10,9 +10,10 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/bioinspired/retina.hpp"
+#include "emgu_c.h"
 
 //Retina
-CVAPI(cv::bioinspired::Retina*) CvRetinaCreate(CvSize inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength);
+CVAPI(cv::bioinspired::Retina*) CvRetinaCreate(emgu::size* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength);
 CVAPI(void) CvRetinaRelease(cv::bioinspired::Retina** retina);
 CVAPI(void) CvRetinaRun(cv::bioinspired::Retina* retina, IplImage* image);
 CVAPI(void) CvRetinaGetParvo(cv::bioinspired::Retina* retina, IplImage* parvo);

@@ -343,12 +343,21 @@ namespace Emgu.CV
          Size patternSize,
          PointF[] corners)
       {
-         CvInvoke.cvDrawChessboardCorners(
-            image.Ptr,
-            patternSize,
-            corners,
-            corners.Length,
-            corners != null ? 1 : 0);
+         if (corners == null || corners.Length == 0)
+         {
+            CvInvoke.cvDrawChessboardCorners(image, patternSize, IntPtr.Zero, 0, 0);
+         }
+         else
+         {
+            GCHandle handle = GCHandle.Alloc(corners, GCHandleType.Pinned);
+            CvInvoke.cvDrawChessboardCorners(
+               image.Ptr,
+               patternSize,
+               handle.AddrOfPinnedObject(),
+               corners.Length,
+               1);
+            handle.Free();
+         }
       }
 
       /// <summary>

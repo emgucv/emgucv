@@ -16,21 +16,21 @@ void cudaPyrUp(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, cv::cuda::Str
    cv::cuda::pyrUp(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaWarpAffine( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  const CvArr* M, int flags, int borderMode, CvScalar borderValue, cv::cuda::Stream* stream)
+void cudaWarpAffine( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
 {
    cv::Mat Mat = cv::cvarrToMat(M);
-   cv::cuda::warpAffine(*src, *dst, Mat, dst->size(), flags, borderMode, borderValue, stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::warpAffine(*src, *dst, Mat, dst->size(), flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaWarpPerspective( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  const CvArr* M, int flags,  int borderMode, CvScalar borderValue, cv::cuda::Stream* stream)
+void cudaWarpPerspective( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  const CvArr* M, int flags,  int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
 {
    cv::Mat Mat = cv::cvarrToMat(M);
-   cv::cuda::warpPerspective(*src, *dst, Mat, dst->size(), flags, borderMode, borderValue, stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::warpPerspective(*src, *dst, Mat, dst->size(), flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaRemap(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* xmap, const cv::cuda::GpuMat* ymap, int interpolation, int borderMode, CvScalar borderValue, cv::cuda::Stream* stream)
+void cudaRemap(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* xmap, const cv::cuda::GpuMat* ymap, int interpolation, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
 {
-	cv::cuda::remap(*src, *dst, *xmap, *ymap, interpolation, borderMode, borderValue, stream ? *stream : cv::cuda::Stream::Null());
+	cv::cuda::remap(*src, *dst, *xmap, *ymap, interpolation, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaResize(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int interpolation, cv::cuda::Stream* stream)

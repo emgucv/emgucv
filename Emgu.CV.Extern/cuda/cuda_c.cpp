@@ -158,9 +158,9 @@ bool gpuMatIsContinuous(cv::cuda::GpuMat* gpuMat)
    return gpuMat->isContinuous();
 }
 
-cv::cuda::GpuMat* gpuMatGetRegion(cv::cuda::GpuMat* other, CvSlice rowRange, CvSlice colRange)
+cv::cuda::GpuMat* gpuMatGetRegion(cv::cuda::GpuMat* other, CvSlice* rowRange, CvSlice* colRange)
 {
-   return new cv::cuda::GpuMat(*other, cv::Range(rowRange), cv::Range(colRange));
+   return new cv::cuda::GpuMat(*other, cv::Range(*rowRange), cv::Range(*colRange));
 }
 
 void gpuMatRelease(cv::cuda::GpuMat** mat)
@@ -225,9 +225,9 @@ void gpuMatCopy(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cu
       src->copyTo(*dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void gpuMatSetTo(cv::cuda::GpuMat* mat, const CvScalar s, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
+void gpuMatSetTo(cv::cuda::GpuMat* mat, const CvScalar* s, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
 {
-      (*mat).setTo(s, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
+      (*mat).setTo(*s, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 CVAPI(void) gpuMatReshape(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int cn, int rows)
@@ -236,9 +236,9 @@ CVAPI(void) gpuMatReshape(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, in
    dst->swap(tmp);
 }
 
-cv::cuda::GpuMat* gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect rect) 
+cv::cuda::GpuMat* gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* rect) 
 { 
-   return new cv::cuda::GpuMat(*arr, rect);
+   return new cv::cuda::GpuMat(*arr, *rect);
 }
 
 

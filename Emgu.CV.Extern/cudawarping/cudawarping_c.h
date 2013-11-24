@@ -21,11 +21,11 @@ CVAPI(void) cudaPyrDown(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, cv::
 
 CVAPI(void) cudaPyrUp(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaWarpAffine( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const CvArr* M, int flags, int borderMode, CvScalar borderValue, cv::cuda::Stream* stream);
+CVAPI(void) cudaWarpAffine( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaWarpPerspective( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  const CvArr* M, int flags, int borderMode, CvScalar borderValue, cv::cuda::Stream* stream);
+CVAPI(void) cudaWarpPerspective( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaRemap(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* xmap, const cv::cuda::GpuMat* ymap, int interpolation, int borderMode, CvScalar borderValue, cv::cuda::Stream* stream);
+CVAPI(void) cudaRemap(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* xmap, const cv::cuda::GpuMat* ymap, int interpolation, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaResize(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int interpolation, cv::cuda::Stream* stream);
 

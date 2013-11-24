@@ -37,9 +37,9 @@ float CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int k, CvMa
 { return classifier->find_nearest(_samples, k, results, (const float**) neighbors, neighbor_responses, dist); }
 
 //EM
-CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const cv::TermCriteria termcrit)
+CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const cv::TermCriteria* termcrit)
 { 
-   return new cv::EM(nclusters, covMatType, termcrit); 
+   return new cv::EM(nclusters, covMatType, *termcrit); 
 }
 void CvEMRelease(cv::EM** model) 
 { 
@@ -138,8 +138,8 @@ bool CvDTreeTrain(CvDTree* model, CvMat* _train_data, int _tflag,
    CvMat* _responses, CvMat* _var_idx,
    CvMat* _sample_idx, CvMat* _var_type,
    CvMat* _missing_mask,
-   CvDTreeParams params )
-{ return model->train(_train_data, _tflag, _responses, _var_idx, _sample_idx, _var_type, _missing_mask, params); }
+   CvDTreeParams* params )
+{ return model->train(_train_data, _tflag, _responses, _var_idx, _sample_idx, _var_type, _missing_mask, *params); }
 CvDTreeNode* CvDTreePredict(CvDTree* model, CvMat* _sample, CvMat* _missing_data_mask, bool raw_mode )
 { return model->predict(_sample, _missing_data_mask, raw_mode); }
 
@@ -153,8 +153,8 @@ bool CvRTreesTrain( CvRTrees* model, CvMat* _train_data, int _tflag,
    CvMat* _responses, CvMat* _var_idx,
    CvMat* _sample_idx, CvMat* _var_type,
    CvMat* _missing_mask,
-   CvRTParams params )
-{ return model->train(_train_data, _tflag, _responses, _var_idx, _sample_idx, _var_type, _missing_mask, params); }
+   CvRTParams* params )
+{ return model->train(_train_data, _tflag, _responses, _var_idx, _sample_idx, _var_type, _missing_mask, *params); }
 /*
 bool CvRTreesTrain( CvRTrees* model, CvMat* _train_data, int _tflag,
 CvMat* _responses, CvMat* _var_idx=0,
@@ -188,9 +188,9 @@ bool CvBoostTrain(CvBoost* model, CvMat* _train_data, int _tflag,
 _sample_idx, _var_type, _missing_mask, *params, update); }
 
 float CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing,
-   CvMat* weak_responses, CvSlice slice,
+   CvMat* weak_responses, CvSlice* slice,
    bool raw_mode)
-{ return model->predict(_sample, _missing, weak_responses, slice, raw_mode); }
+{ return model->predict(_sample, _missing, weak_responses, *slice, raw_mode); }
 
 
 //CvGBTrees
@@ -218,8 +218,8 @@ bool CvGBTreesTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
    return model->train(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, *params, update);
 }
 float CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
-   CvMat* weak_responses, CvSlice slice,
+   CvMat* weak_responses, CvSlice* slice,
    bool raw_mode)
 {
-   return model->predict(_sample, _missing, weak_responses, slice, raw_mode);
+   return model->predict(_sample, _missing, weak_responses, *slice, raw_mode);
 }

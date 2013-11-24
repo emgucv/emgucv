@@ -19,7 +19,7 @@ void oclSURFDetectorRelease(cv::ocl::SURF_OCL** detector)
 
 void oclSURFDetectorDetectKeyPoints(cv::ocl::SURF_OCL* detector, const cv::ocl::oclMat* img, const cv::ocl::oclMat* mask, cv::ocl::oclMat* keypoints)
 {
-   (*detector)(*img, mask ? *mask : cv::ocl::oclMat() , *keypoints);
+   (*detector)(*img, mask ? *mask : cv::ocl::oclMat(), *keypoints);
 }
 
 void oclSURFDownloadKeypoints(cv::ocl::SURF_OCL* detector, const cv::ocl::oclMat* keypointsOcl, std::vector<cv::KeyPoint>* keypoints)

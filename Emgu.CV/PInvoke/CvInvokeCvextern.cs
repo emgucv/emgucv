@@ -176,8 +176,18 @@ namespace Emgu.CV
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="delta">The optional value added to the filtered pixels before storing them in dst</param>
       /// <param name="borderType">The pixel extrapolation method</param>
+#if ANDROID
+      public static void cvFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, double delta, Emgu.CV.CvEnum.BORDER_TYPE borderType)
+      {
+         cvFilter2D(src, dst, kernel, anchor.X, anchor.Y, delta, borderType);
+      }
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="CvFilter2D")]
+      private static extern void cvFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, int anchorX, int anchorY, double delta, Emgu.CV.CvEnum.BORDER_TYPE borderType);
+#else
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="CvFilter2D")]
       public static extern void cvFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, Point anchor, double delta, Emgu.CV.CvEnum.BORDER_TYPE borderType);
+#endif
 
       /// <summary>
       /// Contrast Limited Adaptative Histogram Equalization (CLAHE)
@@ -186,9 +196,18 @@ namespace Emgu.CV
       /// <param name="clipLimit">Clip Limit, use 40 for default</param>
       /// <param name="tileGridSize">Tile grid size, use (8, 8) for default</param>
       /// <param name="dstArr">The destination image</param>
+#if ANDROID
+      public static void cvCLAHE(IntPtr srcArr, double clipLimit, Size tileGridSize, IntPtr dstArr)
+      {
+         cvCLAHE(srcArr, clipLimit, tileGridSize.Width, tileGridSize.Height, dstArr);
+      }
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvCLAHE(IntPtr srcArr, double clipLimit, int tileGridSizeWidth, int tileGridSizeHeight, IntPtr dstArr);
+#else
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCLAHE(IntPtr srcArr, double clipLimit, Size tileGridSize, IntPtr dstArr);
-
+#endif
       /// <summary>
       /// Perform image denoising using Non-local Means Denoising algorithm: 
       /// http://www.ipol.im/pub/algo/bcm_non_local_means_denoising/ 
@@ -304,5 +323,8 @@ namespace Emgu.CV
       /// <returns>The return codes</returns>
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvSolveLP")]
       private static extern CvEnum.SolveLPResult SolveLP(IntPtr functionMatrix, IntPtr constraintMatrix, IntPtr zMatrix);
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cvAdaptiveBilateralFilter(IntPtr src, IntPtr dst, ref Size ksize, double sigmaSpace, double maxSigmaColor, ref Point anchor, int borderType);
    }
 }

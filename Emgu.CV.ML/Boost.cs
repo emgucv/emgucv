@@ -152,7 +152,7 @@ namespace Emgu.CV.ML
             sample.Ptr, 
             missingDataMask == null ? IntPtr.Zero : missingDataMask.Ptr,
             weakResponses == null? IntPtr.Zero : weakResponses.Ptr,
-            slice,
+            ref slice,
             rawMode);
       }
 

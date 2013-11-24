@@ -24,4 +24,6 @@ CVAPI(void) cvArrSqrt(CvArr* src, CvArr* dst);
 CVAPI(void) CvFilter2D( const CvArr* srcarr, CvArr* dstarr, const CvMat* _kernel, CvPoint anchor, double delta, int borderType );
 
 CVAPI(void) cvCLAHE(const CvArr* srcArr, double clipLimit, emgu::size tileGridSize, CvArr* dstArr);
+
+CVAPI(void) cvAdaptiveBilateralFilter(IplImage* src, IplImage* dst, emgu::size* ksize, double sigmaSpace, double maxSigmaColor, CvPoint* anchor, int borderType);
 #endif

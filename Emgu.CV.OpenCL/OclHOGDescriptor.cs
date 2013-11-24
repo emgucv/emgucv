@@ -120,7 +120,7 @@ namespace Emgu.CV.OpenCL
          using (MemStorage storage = new MemStorage())
          {
             Seq<Rectangle> rectSeq = new Seq<Rectangle>(storage);
-            OclInvoke.oclHOGDescriptorDetectMultiScale(_ptr, image, rectSeq, hitThreshold, winStride, padding, scale, groupThreshold);
+            OclInvoke.oclHOGDescriptorDetectMultiScale(_ptr, image, rectSeq, hitThreshold, ref winStride, ref padding, scale, groupThreshold);
             return rectSeq.ToArray();
          }
       }
@@ -232,8 +232,8 @@ namespace Emgu.CV.OpenCL
          IntPtr img,
          IntPtr foundLocations,
          double hitThreshold,
-         Size winStride,
-         Size padding,
+         ref Size winStride,
+         ref Size padding,
          double scale,
          int groupThreshold);
    }

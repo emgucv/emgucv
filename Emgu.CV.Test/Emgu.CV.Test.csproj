@@ -248,6 +248,10 @@
       <Project>{806ec1b0-95d0-402b-a9f3-2d3de78dc807}</Project>
       <Name>Emgu.CV.Superres</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.UI.GL\Emgu.CV.UI.GL.csproj">
+      <Project>{d9bae1f0-2bc8-4697-ae26-88f7a74d1aaa}</Project>
+      <Name>Emgu.CV.UI.GL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.UI\Emgu.CV.UI.csproj">
       <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>
       <Name>Emgu.CV.UI</Name>

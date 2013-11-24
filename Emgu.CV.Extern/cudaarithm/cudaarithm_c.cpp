@@ -69,9 +69,6 @@ void cudaMinMaxLoc(const cv::cuda::GpuMat* src,
    minLoc->x = minimunLoc.x; minLoc->y = minimunLoc.y;
 }
 
-
-
-
 void cudaMeanStdDev(const cv::cuda::GpuMat* mtx, CvScalar* mean, CvScalar* stddev, cv::cuda::GpuMat* buffer)
 {
    cv::Scalar meanVal, stdDevVal;
@@ -102,8 +99,6 @@ void cudaReduce(const cv::cuda::GpuMat* mtx, cv::cuda::GpuMat* vec, int dim, int
    cv::cuda::reduce(*mtx, *vec, dim, reduceOp, vec->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-
-
 void cudaBitwiseNot(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
 {
    cv::cuda::bitwise_not(*src, *dst, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
@@ -114,9 +109,10 @@ void cudaBitwiseAnd(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, 
    cv::cuda::bitwise_and(*src1, *src2, *dst, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaBitwiseAndS(const cv::cuda::GpuMat* src1, const cv::Scalar sc, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
+void cudaBitwiseAndS(const cv::cuda::GpuMat* src1, const CvScalar* sc, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
 {
-   cv::cuda::bitwise_and(*src1, sc, *dst, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::Scalar s = *sc;
+   cv::cuda::bitwise_and(*src1, s, *dst, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseOr(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
@@ -124,9 +120,10 @@ void cudaBitwiseOr(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, c
    cv::cuda::bitwise_or(*src1, *src2, *dst, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaBitwiseOrS(const cv::cuda::GpuMat* src1, const cv::Scalar sc, cv::cuda::GpuMat* dst,  const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
+void cudaBitwiseOrS(const cv::cuda::GpuMat* src1, const CvScalar* sc, cv::cuda::GpuMat* dst,  const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
 {
-   cv::cuda::bitwise_or(*src1, sc, *dst, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::Scalar s = *sc;
+   cv::cuda::bitwise_or(*src1, s, *dst, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseXor(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
@@ -134,9 +131,10 @@ void cudaBitwiseXor(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, 
    cv::cuda::bitwise_xor(*src1, *src2, *dst, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaBitwiseXorS(const cv::cuda::GpuMat* src1, const cv::Scalar sc, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
+void cudaBitwiseXorS(const cv::cuda::GpuMat* src1, const CvScalar* sc, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
 {
-   cv::cuda::bitwise_xor(*src1, sc, *dst,  mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::Scalar s = *sc;
+   cv::cuda::bitwise_xor(*src1, s, *dst,  mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaMin(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream)
@@ -159,8 +157,6 @@ void cudaMaxS(const cv::cuda::GpuMat* src1, double src2, cv::cuda::GpuMat* dst, 
    cv::cuda::max(*src1, src2, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-
-
 void cudaGemm(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, double alpha, 
                 const cv::cuda::GpuMat* src3, double beta, cv::cuda::GpuMat* dst, int flags, cv::cuda::Stream* stream)
 {
@@ -168,14 +164,14 @@ void cudaGemm(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, double
    cv::cuda::gemm(*src1, *src2, alpha, src3Mat, beta, *dst, flags, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaLShift(const cv::cuda::GpuMat* a, CvScalar scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
+void cudaLShift(const cv::cuda::GpuMat* a, CvScalar* scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
 {
-	cv::cuda::lshift(*a, scale, *c, stream ? *stream : cv::cuda::Stream::Null());
+	cv::cuda::lshift(*a, *scale, *c, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaRShift(const cv::cuda::GpuMat* a, CvScalar scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
+void cudaRShift(const cv::cuda::GpuMat* a, CvScalar* scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
 {
-	cv::cuda::rshift(*a, scale, *c, stream ? *stream : cv::cuda::Stream::Null());
+	cv::cuda::rshift(*a, *scale, *c, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaAdd(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
@@ -183,9 +179,9 @@ void cudaAdd(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv::cuda::Gpu
    cv::cuda::add(*a, *b, *c, mask ? *mask : cv::cuda::GpuMat(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaAddS(const cv::cuda::GpuMat* a, const CvScalar scale, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
+void cudaAddS(const cv::cuda::GpuMat* a, const CvScalar* scale, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
 {
-   cv::Scalar s = scale;
+   cv::Scalar s = *scale;
    cv::cuda::add(*a, s, *c, mask ? *mask : cv::cuda::GpuMat(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
@@ -194,9 +190,9 @@ void cudaSubtract(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv::cuda
    cv::cuda::subtract(*a, *b, *c, mask ? *mask : cv::cuda::GpuMat(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaSubtractS(const cv::cuda::GpuMat* a, const CvScalar scale, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
+void cudaSubtractS(const cv::cuda::GpuMat* a, const CvScalar* scale, cv::cuda::GpuMat* c, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
 {
-   cv::Scalar s = scale;
+   cv::Scalar s = *scale;
    cv::cuda::subtract(*a, s, *c, mask ? *mask : cv::cuda::GpuMat(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
@@ -205,9 +201,9 @@ void cudaMultiply(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv::cuda
    cv::cuda::multiply(*a, *b, *c, scale, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaMultiplyS(const cv::cuda::GpuMat* a, const CvScalar s, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
+void cudaMultiplyS(const cv::cuda::GpuMat* a, const CvScalar* s, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
 {
-   cv::Scalar scalar = s;
+   cv::Scalar scalar = *s;
    cv::cuda::multiply(*a, scalar, *c, 1, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
@@ -216,9 +212,9 @@ void cudaDivide(const cv::cuda::GpuMat* a, const cv::cuda::GpuMat* b, cv::cuda::
    cv::cuda::divide(*a, *b, *c, scale, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaDivideSR(const cv::cuda::GpuMat* a, const CvScalar s, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
+void cudaDivideSR(const cv::cuda::GpuMat* a, const CvScalar* s, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
 {
-   cv::Scalar scalar = s;
+   cv::Scalar scalar = *s;
    cv::cuda::divide(*a, scalar, *c, 1, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
@@ -268,9 +264,9 @@ double cudaThreshold(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, double 
    return cv::cuda::threshold(*src, *dst, thresh, maxval, type, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaCopyMakeBorder(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int top, int bottom, int left, int right, int gpuBorderType, const CvScalar value, cv::cuda::Stream* stream)
+void cudaCopyMakeBorder(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int top, int bottom, int left, int right, int gpuBorderType, const CvScalar* value, cv::cuda::Stream* stream)
 {
-   cv::cuda::copyMakeBorder(*src, *dst, top, bottom, left, right, gpuBorderType, value, stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::copyMakeBorder(*src, *dst, top, bottom, left, right, gpuBorderType, *value, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaIntegral(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* sum, cv::cuda::GpuMat* sqrSum, cv::cuda::Stream* stream)
@@ -307,7 +303,6 @@ void cudaSplit(const cv::cuda::GpuMat* src, cv::cuda::GpuMat** dst, cv::cuda::St
    cv::cuda::split(*src, dstArr, stream? *stream : cv::cuda::Stream::Null());
    delete[] dstArr;
 }
-
 
 cv::cuda::LookUpTable* cudaLookUpTableCreate( const CvArr* lut )
 {

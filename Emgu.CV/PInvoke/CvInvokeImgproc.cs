@@ -21,8 +21,17 @@ namespace Emgu.CV
       /// <param name="buffer">Buffer to store the line points; must have enough size to store max( |pt2.x-pt1.x|+1, |pt2.y-pt1.y|+1 ) points in case of 8-connected line and |pt2.x-pt1.x|+|pt2.y-pt1.y|+1 in case of 4-connected line</param>
       /// <param name="connectivity">The line connectivity, 4 or 8</param>
       /// <returns></returns>
+#if ANDROID
+      public static int cvSampleLine(IntPtr image, Point pt1, Point pt2, IntPtr buffer, CvEnum.CONNECTIVITY connectivity)
+      {
+         return cvSampleLine(image, pt1.X, pt1.Y, pt2.X, pt2.Y, buffer, connectivity);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cvSampleLine(IntPtr image, int pt1X, int pt1Y, int pt2X, int pt2Y, IntPtr buffer, CvEnum.CONNECTIVITY connectivity);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvSampleLine(IntPtr image, Point pt1, Point pt2, IntPtr buffer, CvEnum.CONNECTIVITY connectivity);
+#endif
 
       /// <summary>
       /// Extracts pixels from src:
@@ -32,8 +41,17 @@ namespace Emgu.CV
       /// <param name="src">Source image</param>
       /// <param name="dst">Extracted rectangle</param>
       /// <param name="center">Floating point coordinates of the extracted rectangle center within the source image. The center must be inside the image.</param>
+#if ANDROID
+      public static void cvGetRectSubPix(IntPtr src, IntPtr dst, PointF center)
+      {
+         cvGetRectSubPix(src, dst, center.X, center.Y);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvGetRectSubPix(IntPtr src, IntPtr dst, float centerX, float centerY);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvGetRectSubPix(IntPtr src, IntPtr dst, PointF center);
+#endif
 
       /// <summary>
       /// Extracts pixels from src at sub-pixel accuracy and stores them to dst as follows:
@@ -263,6 +281,25 @@ namespace Emgu.CV
       /// <param name="center">The transformation center, where the output precision is maximal</param>
       /// <param name="M">Magnitude scale parameter</param>
       /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
+#if ANDROID
+      public static void cvLogPolar(
+         IntPtr src,
+         IntPtr dst,
+         PointF center,
+         double M,
+         int flags)
+      {
+         cvLogPolar(src, dst, center.X, center.Y, M, flags);
+      }
+
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvLogPolar(
+         IntPtr src,
+         IntPtr dst,
+         float centerX, float centerY,
+         double M,
+         int flags);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvLogPolar(
          IntPtr src,
@@ -270,6 +307,7 @@ namespace Emgu.CV
          PointF center,
          double M,
          int flags);
+#endif
 
       /// <summary>
       /// The function emulates the human "foveal" vision and can be used for fast scale and rotation-invariant template matching, for object tracking etc.
@@ -279,6 +317,24 @@ namespace Emgu.CV
       /// <param name="center">The transformation center, where the output precision is maximal</param>
       /// <param name="maxRadius">Maximum radius</param>
       /// <param name="flags">A combination of interpolation method and the optional flag CV_WARP_FILL_OUTLIERS and/or CV_WARP_INVERSE_MAP</param>
+#if ANDROID
+      public static void cvLinearPolar(
+         IntPtr src,
+         IntPtr dst,
+         PointF center,
+         double maxRadius,
+         int flags)
+      {
+         cvLinearPolar(src, dst, center.X, center.Y, maxRadius, flags);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvLinearPolar(
+         IntPtr src,
+         IntPtr dst,
+         float centerX, float centerY,
+         double maxRadius,
+         int flags);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvLinearPolar(
          IntPtr src,
@@ -286,6 +342,7 @@ namespace Emgu.CV
          PointF center,
          double maxRadius,
          int flags);
+#endif
       #endregion
 
       /// <summary>
@@ -343,6 +400,7 @@ namespace Emgu.CV
           double aeps,
           [Out] float[] line);
 
+      /*
       /// <summary>
       /// Calculates vertices of the input 2d box.
       /// </summary>
@@ -352,18 +410,34 @@ namespace Emgu.CV
       public static extern void cvBoxPoints(
          MCvBox2D box,
          [Out]
-         float[] pt);
+         float[] pt);*/
 
       /// <summary>
       /// Calculates vertices of the input 2d box.
       /// </summary>
       /// <param name="box">The box</param>
       /// <param name="pt">An array of size 4 points</param>
+#if ANDROID
+      public static void cvBoxPoints(
+         MCvBox2D box,
+         PointF[] pt)
+      {
+         cvBoxPoints(box.center.X, box.center.Y, box.size.Width, box.size.Height, box.angle, pt);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvBoxPoints(
+         float centerX, float centerY, 
+         float width, float height,
+         float angle,
+         [Out]
+         PointF[] pt);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvBoxPoints(
          MCvBox2D box,
          [Out]
          PointF[] pt);
+#endif
 
       /// <summary>
       /// Calculates ellipse that fits best (in least-squares sense) to a set of 2D points. The meaning of the returned structure fields is similar to those in cvEllipse except that size stores the full lengths of the ellipse axises, not half-lengths
@@ -521,11 +595,26 @@ namespace Emgu.CV
       /// When measureDist = 0, the return value is &gt;0 (inside), &lt;0 (outside) and =0 (on edge), respectively. 
       /// When measureDist != 0, it is a signed distance between the point and the nearest contour edge
       /// </returns>
+#if ANDROID
+      public static double cvPointPolygonTest(
+          IntPtr contour,
+          PointF pt,
+          int measureDist)
+      {
+         return cvPointPolygonTest(contour, pt.X, pt.Y, measureDist);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern double cvPointPolygonTest(
+          IntPtr contour,
+          float ptX, float ptY,
+          int measureDist);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvPointPolygonTest(
           IntPtr contour,
           PointF pt,
           int measureDist);
+#endif
 
       /// <summary>
       /// Finds all convexity defects of the input contour and returns a sequence of the CvConvexityDefect structures. 
@@ -639,8 +728,17 @@ namespace Emgu.CV
       /// <param name="slice">Starting and ending points of the contour section of interest, by default area of the whole contour is calculated</param>
       /// <param name="oriented">If zero, the absolute area will be returned. Otherwise the returned value mighted be negative</param>
       /// <returns>The area of the whole contour or contour section</returns>
+#if ANDROID
+      public static double cvContourArea(IntPtr contour, MCvSlice slice, int oriented)
+      {
+         return cvContourArea(contour, slice.start_index, slice.end_index, oriented);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern double cvContourArea(IntPtr contour, int startIndex, int endIndex, int oriented);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvContourArea(IntPtr contour, MCvSlice slice, int oriented);
+#endif
 
       /// <summary>
       /// Calculates length or curve as sum of lengths of segments between subsequent points
@@ -654,8 +752,17 @@ namespace Emgu.CV
       /// isClosed&lt;0 - if curve is sequence, the flag CV_SEQ_FLAG_CLOSED of ((CvSeq*)curve)-&gt;flags is checked to determine if the curve is closed or not, otherwise (curve is represented by array (CvMat*) of points) it is assumed to be unclosed. 
       /// </param>
       /// <returns></returns>
+#if ANDROID
+      public static double cvArcLength(IntPtr curve, MCvSlice slice, int isClosed)
+      {
+         return cvArcLength(curve, slice.start_index, slice.end_index, isClosed);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern double cvArcLength(IntPtr curve, int startIndex, int endIndex, int isClosed);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvArcLength(IntPtr curve, MCvSlice slice, int isClosed);
+#endif
 
       /// <summary>
       /// Find the perimeter of the contour
@@ -687,11 +794,28 @@ namespace Emgu.CV
       /// <param name="storage">Container for the reconstructed contour</param>
       /// <param name="criteria">Criteria, where to stop reconstruction</param>
       /// <returns>The contour represented by this contour tree</returns>
+#if ANDROID
+      public static IntPtr cvContourFromContourTree(
+         IntPtr tree,
+         IntPtr storage,
+         MCvTermCriteria criteria)
+      {
+         return cvContourFromContourTree(tree, storage, criteria.type, criteria.max_iter, criteria.epsilon);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern IntPtr cvContourFromContourTree(
+         IntPtr tree,
+         IntPtr storage,
+          CvEnum.TERMCRIT type,
+         int maxIter,
+         double epsilon);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvContourFromContourTree(
          IntPtr tree,
          IntPtr storage,
          MCvTermCriteria criteria);
+#endif
 
       /// <summary>
       /// Calculates the value of the matching measure for two contour trees. The similarity measure is calculated level by level from the binary tree roots. If at the certain level difference between contours becomes less than threshold, the reconstruction process is interrupted and the current difference is returned
@@ -797,6 +921,28 @@ namespace Emgu.CV
       /// <param name="method">Approximation method (for all the modes, except CV_RETR_RUNS, which uses built-in approximation). </param>
       /// <param name="offset">Offset, by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context</param>
       /// <returns>The number of countours</returns>
+#if ANDROID
+      public static int cvFindContours(
+         IntPtr image,
+         IntPtr storage,
+         ref IntPtr firstContour,
+         int headerSize,
+         CvEnum.RETR_TYPE mode,
+         CvEnum.CHAIN_APPROX_METHOD method,
+         Point offset)
+      {
+         return cvFindContours(image, storage, ref firstContour, headerSize, mode, method, offset.X, offset.Y);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cvFindContours(
+         IntPtr image,
+         IntPtr storage,
+         ref IntPtr firstContour,
+         int headerSize,
+         CvEnum.RETR_TYPE mode,
+         CvEnum.CHAIN_APPROX_METHOD method,
+         int offsetX, int offsetY);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvFindContours(
          IntPtr image,
@@ -806,6 +952,7 @@ namespace Emgu.CV
          CvEnum.RETR_TYPE mode,
          CvEnum.CHAIN_APPROX_METHOD method,
          Point offset);
+#endif
 
       /// <summary>
       /// Initializes and returns a pointer to the contour scanner. The scanner is used in
@@ -818,6 +965,26 @@ namespace Emgu.CV
       /// <param name="method">Approximation method (for all the modes, except CV_RETR_RUNS, which uses built-in approximation). </param>
       /// <param name="offset">Offset, by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context</param>
       /// <returns>Pointer to the contour scaner</returns>
+#if ANDROID
+      public static IntPtr cvStartFindContours(
+         IntPtr image,
+         IntPtr storage,
+         int headerSize,
+         CvEnum.RETR_TYPE mode,
+         CvEnum.CHAIN_APPROX_METHOD method,
+         Point offset)
+      {
+         return cvStartFindContours(image, storage, headerSize, mode, method, offset.X, offset.Y);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cvStartFindContours(
+         IntPtr image,
+         IntPtr storage,
+         int headerSize,
+         CvEnum.RETR_TYPE mode,
+         CvEnum.CHAIN_APPROX_METHOD method,
+         int offsetX, int offsetY);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvStartFindContours(
          IntPtr image,
@@ -826,6 +993,7 @@ namespace Emgu.CV
          CvEnum.RETR_TYPE mode,
          CvEnum.CHAIN_APPROX_METHOD method,
          Point offset);
+#endif
 
       /// <summary>
       /// Finds the next contour in the image
@@ -964,42 +1132,6 @@ namespace Emgu.CV
           int blockSize,
           int useHarris,
           double k);
-
-      /*
-      /// <summary>
-      /// Finds corners with big eigenvalues in the image. 
-      /// </summary>
-      /// <remarks>
-      /// The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. 
-      /// Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). 
-      /// The next step is rejecting the corners with the minimal eigenvalue less than quality_level*max(eigImage(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features.
-      /// </remarks>
-      /// <param name="image">The source 8-bit or floating-point 32-bit, single-channel image</param>
-      /// <param name="eigImage">Temporary floating-point 32-bit image of the same size as image</param>
-      /// <param name="tempImage">Another temporary image of the same size and same format as eig_image</param>
-      /// <param name="corners">Output parameter. Detected corners</param>
-      /// <param name="cornerCount">Output parameter. Number of detected corners</param>
-      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
-      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used</param>
-      /// <param name="mask">Region of interest. The function selects points either in the specified region or in the whole image if the mask is IntPtr.Zero</param>
-      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
-      /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal.</param>
-      /// <param name="k">Free parameter of Harris detector; used only if <paramref name="useHarris"/> != 0</param>
-      [DllImport(CV_LIBRARY, CallingConvention=CvInvoke.CvCallingConvention)]
-      public static extern void cvGoodFeaturesToTrack(
-         IntPtr image,
-         IntPtr eigImage,
-         IntPtr tempImage,
-         [Out]
-         PointF[] corners,
-         ref int cornerCount,
-         double qualityLevel,
-         double minDistance,
-         IntPtr mask,
-         int blockSize,
-         int useHarris,
-         double k);
-      */
 
       /// <summary>
       /// This function is similiar to cvCalcBackProjectPatch. It slids through image, compares overlapped patches of size wxh with templ using the specified method and stores the comparison results to result
@@ -1490,6 +1622,26 @@ namespace Emgu.CV
       /// <param name="win">Half sizes of the search window. For example, if win=(5,5) then 5*2+1 x 5*2+1 = 11 x 11 search window is used</param>
       /// <param name="zeroZone">Half size of the dead region in the middle of the search zone over which the summation in formulae below is not done. It is used sometimes to avoid possible singularities of the autocorrelation matrix. The value of (-1,-1) indicates that there is no such size</param>
       /// <param name="criteria">Criteria for termination of the iterative process of corner refinement. That is, the process of corner position refinement stops either after certain number of iteration or when a required accuracy is achieved. The criteria may specify either of or both the maximum number of iteration and the required accuracy</param>
+#if ANDROID
+      public static void cvFindCornerSubPix(
+         IntPtr image,
+         IntPtr corners,
+         int count,
+         Size win,
+         Size zeroZone,
+         MCvTermCriteria criteria)
+      {
+         cvFindCornerSubPix(image, corners, count, win.Width, win.Height, zeroZone.Width, zeroZone.Height, criteria.type, criteria.max_iter, criteria.epsilon);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvFindCornerSubPix(
+         IntPtr image,
+         IntPtr corners,
+         int count,
+         int winWidth, int winHeight,
+         int zeroZoneWidth, int zeroZoneHeight,
+         CvEnum.TERMCRIT type, int maxIter, double epsilon);
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindCornerSubPix(
          IntPtr image,
@@ -1498,7 +1650,9 @@ namespace Emgu.CV
          Size win,
          Size zeroZone,
          MCvTermCriteria criteria);
+#endif
 
+      /*
       /// <summary>
       /// Iterates to find the sub-pixel accurate location of corners, or radial saddle points
       /// </summary>
@@ -1516,7 +1670,7 @@ namespace Emgu.CV
          int count,
          Size win,
          Size zeroZone,
-         MCvTermCriteria criteria);
+         MCvTermCriteria criteria);*/
 
       /// <summary>
       /// Calculates one or more integral images for the source image 
@@ -1673,13 +1827,28 @@ namespace Emgu.CV
       /// <param name="dst">Result image</param>
       /// <param name="sp">The spatial window radius.</param>
       /// <param name="sr">The color window radius.</param>
-      /// <param name="max_level">Maximum level of the pyramid for the segmentation. Use 1 as default value</param>
+      /// <param name="maxLevel">Maximum level of the pyramid for the segmentation. Use 1 as default value</param>
       /// <param name="termcrit">Termination criteria: when to stop meanshift iterations. Use new MCvTermCriteria(5, 1) as default value</param>
+#if ANDROID
+      public static void cvPyrMeanShiftFiltering(
+         IntPtr src, IntPtr dst,
+         double sp, double sr, int maxLevel,
+         MCvTermCriteria termcrit)
+      {
+         cvPyrMeanShiftFiltering(src, dst, sp, sr, maxLevel, termcrit.type, termcrit.max_iter, termcrit.epsilon);
+      }
+      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvPyrMeanShiftFiltering(
+         IntPtr src, IntPtr dst,
+         double sp, double sr, int maxLevel,
+         CvEnum.TERMCRIT type, int maxIter, double epsilon)
+#else
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPyrMeanShiftFiltering(
          IntPtr src, IntPtr dst,
-         double sp, double sr, int max_level,
+         double sp, double sr, int maxLevel,
          MCvTermCriteria termcrit);
+#endif
 
       #region image undistortion
       /// <summary>

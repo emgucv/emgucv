@@ -363,7 +363,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="mask">Operation mask, 8-bit single channel OclMat; specifies elements of destination array to be changed. Can be null if not used.</param>
       public void SetTo(MCvScalar value, OclMat<Byte> mask)
       {
-         OclInvoke.OclMatSetTo(_ptr, value, mask);
+         OclInvoke.OclMatSetTo(_ptr, ref value, mask);
       }
 
       /// <summary>

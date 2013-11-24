@@ -53,7 +53,7 @@ namespace Emgu.CV.ML
             sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
             varType == null ? IntPtr.Zero : varType.Ptr,
             missingMask == null ? IntPtr.Zero : missingMask.Ptr,
-            param);
+            ref param);
       }
 
       /// <summary>
@@ -87,7 +87,7 @@ namespace Emgu.CV.ML
             sampleMask == null ? IntPtr.Zero : sampleMask.Ptr,
             varType == null ? IntPtr.Zero : varType.Ptr,
             missingMask == null ? IntPtr.Zero : missingMask.Ptr,
-            param);
+            ref param);
       }
 
       /// <summary>
@@ -117,7 +117,7 @@ namespace Emgu.CV.ML
             IntPtr.Zero,
             varType == null ? IntPtr.Zero : varType.Ptr,
             missingMask == null ? IntPtr.Zero : missingMask.Ptr,
-            param);
+            ref param);
       }
 
       /// <summary>

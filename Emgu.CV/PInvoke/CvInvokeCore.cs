@@ -386,15 +386,15 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="arr">Input array</param>
       /// <param name="header">Output header to be filled</param>
-      /// <param name="new_cn">New number of channels. new_cn = 0 means that number of channels remains unchanged</param>
-      /// <param name="new_rows">New number of rows. new_rows = 0 means that number of rows remains unchanged unless it needs to be changed according to new_cn value. destination array to be changed</param>
+      /// <param name="newCn">New number of channels. new_cn = 0 means that number of channels remains unchanged</param>
+      /// <param name="newRows">New number of rows. new_rows = 0 means that number of rows remains unchanged unless it needs to be changed according to new_cn value. destination array to be changed</param>
       /// <returns></returns>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvReshape(
          IntPtr arr,
          IntPtr header,
-         int new_cn,
-         int new_rows);
+         int newCn,
+         int newRows);
 
       /// <summary>
       /// Fills the destination array with source array tiled:
@@ -1046,8 +1046,17 @@ namespace Emgu.CV
       /// <param name="pt1">First ending point of the line segment. It is modified by the function</param>
       /// <param name="pt2">Second ending point of the line segment. It is modified by the function.</param>
       /// <returns>It returns 0 if the line segment is completely outside the image and 1 otherwise.</returns>
+#if ANDROID
+      public static int cvClipLine(Size imgSize, ref Point pt1, ref Point pt2)
+      {
+         return cvClipLine(imgSize.Width, imgSize.Height, ref pt1, ref pt2);
+      }
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cvClipLine(int imgSizeWidth, int imgSizeHeight, ref Point pt1, ref Point pt2);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvClipLine(Size imgSize, ref Point pt1, ref Point pt2);
+#endif
 
       /// <summary>
       /// Calculates absolute difference between two arrays.
@@ -1177,11 +1186,27 @@ namespace Emgu.CV
       /// b0 g0 r0 b1 g1 r1 ...
       /// </param>
       /// <returns>A pointer to IplImage </returns>
+#if ANDROID
+      public static IntPtr cvCreateImage(
+         Size size,
+         CvEnum.IPL_DEPTH depth,
+         int channels)
+      {
+         return cvCreateImage(size.Width, size.Height, depth, channels);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cvCreateImage(
+         int width, int height,
+         CvEnum.IPL_DEPTH depth,
+         int channels);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateImage(
          Size size,
          CvEnum.IPL_DEPTH depth,
          int channels);
+#endif
 
       /// <summary>
       /// Allocates, initializes, and returns the structure IplImage.
@@ -1193,11 +1218,26 @@ namespace Emgu.CV
       /// b0 g0 r0 b1 g1 r1 ...
       /// </param>
       /// <returns> The structure IplImage</returns>
+#if ANDROID
+      public static IntPtr cvCreateImageHeader(
+         Size size,
+         CvEnum.IPL_DEPTH depth,
+         int channels)
+      {
+         return cvCreateImageHeader(size.Width, size.Height, depth, channels);
+      }
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cvCreateImageHeader(
+         int width, int height,
+         CvEnum.IPL_DEPTH depth,
+         int channels);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateImageHeader(
          Size size,
          CvEnum.IPL_DEPTH depth,
          int channels);
+#endif
 
       /// <summary>
       /// Initializes the image header structure, pointer to which is passed by the user, and returns the pointer.
@@ -1209,6 +1249,26 @@ namespace Emgu.CV
       /// <param name="origin">IPL_ORIGIN_TL or IPL_ORIGIN_BL.</param>
       /// <param name="align">Alignment for image rows, typically 4 or 8 bytes.</param>
       /// <returns></returns>
+#if ANDROID
+      public static IntPtr cvInitImageHeader(
+         IntPtr image,
+         Size size,
+         CvEnum.IPL_DEPTH depth,
+         int channels,
+         int origin,
+         int align)
+      {
+         return cvInitImageHeader(image, size.Width, size.Height, depth, channels, origin, align);
+      }
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cvInitImageHeader(
+         IntPtr image,
+         int width, int height,
+         CvEnum.IPL_DEPTH depth,
+         int channels,
+         int origin,
+         int align);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvInitImageHeader(
          IntPtr image,
@@ -1217,6 +1277,7 @@ namespace Emgu.CV
          int channels,
          int origin,
          int align);
+#endif
 
       /// <summary>
       /// Assigns user data to the array header.
@@ -1300,8 +1361,18 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Image header.</param>
       /// <param name="rect">ROI rectangle.</param>
+#if ANDROID
+      public static void cvSetImageROI(IntPtr image, Rectangle rect)
+      {
+         cvSetImageROI(image, rect.X, rect.Y, rect.Width, rect.Height);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvSetImageROI(IntPtr image, int rectX, int rectY, int rectWidth, int rectHeight);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSetImageROI(IntPtr image, Rectangle rect);
+#endif
 
       /// <summary>
       /// Returns channel of interest of the image (it returns 0 if all the channels are selected).
@@ -1457,12 +1528,30 @@ namespace Emgu.CV
       /// <param name="storage">The destination storage to keep the new sequence header and the copied data if any. If it is IntPtr.Zero, the function uses the storage containing the input sequence.</param>
       /// <param name="copyData">The flag that indicates whether to copy the elements of the extracted slice (copy_data!=0) or not (copy_data=0)</param>
       /// <returns>A pointer to CvSeq</returns>
+#if ANDROID
+      public static IntPtr cvSeqSlice(
+         IntPtr seq,
+         MCvSlice slice,
+         IntPtr storage,
+         int copyData)
+      {
+         return cvSeqSlice(seq, slice.start_index, slice.end_index, storage, copyData);
+      }
+      
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cvSeqSlice(
+         IntPtr seq,
+         int startIndex, int endIndex,
+         IntPtr storage,
+         int copyData);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvSeqSlice(
          IntPtr seq,
          MCvSlice slice,
          IntPtr storage,
          int copyData);
+#endif
 
       /// <summary>
       /// Creates a sequence that represents the specified slice of the input sequence. The new sequence either shares the elements with the original sequence or has own copy of the elements. So if one needs to process a part of sequence but the processing function does not have a slice parameter, the required sub-sequence may be extracted using this function.
@@ -1807,8 +1896,18 @@ namespace Emgu.CV
       /// <param name="submat">Pointer to the resultant sub-array header.</param>
       /// <param name="rect">Zero-based coordinates of the rectangle of interest.</param>
       /// <returns>the resultant sub-array header</returns>
+#if ANDROID
+      public static IntPtr cvGetSubRect(IntPtr arr, IntPtr submat, Rectangle rect)
+      {
+         return cvGetSubRect(arr, submat, rect.X, rect.Y, rect.Width, rect.Height);
+      }
+      
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cvGetSubRect(IntPtr arr, IntPtr submat, int rectX, int rectY, int rectWidth, int rectHeight);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvGetSubRect(IntPtr arr, IntPtr submat, Rectangle rect);
+#endif
 
       /// <summary>
       /// Return the header, corresponding to a specified row span of the input array
@@ -2330,8 +2429,18 @@ namespace Emgu.CV
       /// <param name="elements">Pointer to the destination array that must be large enough. It should be a pointer to data, not a matrix header</param>
       /// <param name="slice">The sequence part to copy to the array</param>
       /// <returns>the pointer to the buffer</returns>
+#if ANDROID
+      public static IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, MCvSlice slice)
+      {
+         return cvCvtSeqToArray(seq, elements, slice.start_index, slice.end_index);
+      }
+      
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, int startIndex, int endIndex);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, MCvSlice slice);
+#endif
 
       /// <summary>
       /// Initializes sequence header for array. The sequence header as well as the sequence block are allocated by the user (for example, on stack). No data is copied by the function. The resultant sequence will consists of a single block and have IntPtr.Zero storage pointer, thus, it is possible to read its elements, but the attempts to add elements to the sequence will raise an error in most cases
@@ -2940,6 +3049,35 @@ namespace Emgu.CV
       /// <param name="flags">Flags, use 0 if not sure</param>
       /// <param name="centers">Pointer to array of centers, use IntPtr.Zero if not sure</param>
       /// <param name="compactness">Pointer to array of doubles, use IntPtr.Zero if not sure</param>
+#if ANDROID
+      public static int cvKMeans2(
+         IntPtr samples,
+         int clusterCount,
+         IntPtr labels,
+         MCvTermCriteria termcrit,
+         int attempts,
+         IntPtr rng,
+         CvEnum.KMeansInitType flags,
+         IntPtr centers,
+         IntPtr compactness)
+      {
+         return cvKMeans2(samples, clusterCount, labels, termcrit.type, termcrit.max_iter, termcrit.epsilon, attempts, rng, flags, centers, compactness);
+      }
+
+      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cvKMeans2(
+         IntPtr samples,
+         int clusterCount,
+         IntPtr labels,
+         CvEnum.TERMCRIT type,
+         int max_iter,
+         double epsilon,
+         int attempts,
+         IntPtr rng,
+         CvEnum.KMeansInitType flags,
+         IntPtr centers,
+         IntPtr compactness);
+#else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvKMeans2(
          IntPtr samples,
@@ -2951,6 +3089,7 @@ namespace Emgu.CV
          CvEnum.KMeansInitType flags,
          IntPtr centers,
          IntPtr compactness);
+#endif
       #endregion
    }
 }

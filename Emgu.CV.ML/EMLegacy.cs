@@ -74,7 +74,7 @@ namespace Emgu.CV.ML
             _ptr,
             samples.Ptr,
             IntPtr.Zero,
-            param,
+            ref param,
             labels == null ? IntPtr.Zero : labels.Ptr);
 
          if (covsPtrHandle.HasValue)

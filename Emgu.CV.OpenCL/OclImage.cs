@@ -246,7 +246,8 @@ namespace Emgu.CV.OpenCL
       public OclImage<TColor, Byte> Convolution(ConvolutionKernelF kernel)
       {
          OclImage<TColor, Byte> result = new OclImage<TColor, Byte>(Size);
-         OclInvoke.Filter2D(_ptr, result, kernel, kernel.Center, CvEnum.BORDER_TYPE.REFLECT101);
+         Point anchor = kernel.Center;
+         OclInvoke.Filter2D(_ptr, result, kernel, ref anchor, CvEnum.BORDER_TYPE.REFLECT101);
          return result;
       }
 

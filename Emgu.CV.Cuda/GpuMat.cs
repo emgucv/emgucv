@@ -160,7 +160,7 @@ namespace Emgu.CV.Cuda
       /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       public GpuMat(GpuMat<TDepth> mat, MCvSlice rowRange, MCvSlice colRange)
-         : base(CudaInvoke.GetRegion(mat, rowRange, colRange))
+         : base(CudaInvoke.GetRegion(mat, ref rowRange, ref colRange))
       {
       }
 
@@ -393,7 +393,7 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void SetTo(MCvScalar value, GpuMat<Byte> mask, Stream stream)
       {
-         CudaInvoke.GpuMatSetTo(_ptr, value, mask, stream);
+         CudaInvoke.GpuMatSetTo(_ptr, ref value, mask, stream);
       }
 
       /// <summary>
@@ -404,7 +404,7 @@ namespace Emgu.CV.Cuda
       /// <remarks>The parent GpuMat should never be released before the returned GpuMat the represent the subregion</remarks>
       public GpuMat<TDepth> GetSubRect(Rectangle region)
       {
-         return new GpuMat<TDepth>(CudaInvoke.GetSubRect(this, region));
+         return new GpuMat<TDepth>(CudaInvoke.GetSubRect(this, ref region));
       }
 
       /// <summary>

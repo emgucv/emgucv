@@ -763,8 +763,6 @@ namespace Emgu.CV.Test
          VoronoiFacet[] facets = subdiv.GetVoronoiFacets();
       }
 
-
-
       #region Test code from Bug 36, thanks to Bart
 
       [Test]
@@ -2482,6 +2480,13 @@ namespace Emgu.CV.Test
          }
          capture1.Dispose();
          capture2.Dispose();
+      }
+
+      [Test]
+      public void TestGLImageView()
+      {
+         Emgu.CV.UI.GLView.GLImageViewer viewer = new UI.GLView.GLImageViewer();
+         viewer.ShowDialog();
       }
 
       [Test]

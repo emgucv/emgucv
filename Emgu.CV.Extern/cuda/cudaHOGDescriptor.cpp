@@ -21,17 +21,21 @@ void cudaHOGDescriptorGetPeopleDetector48x96(std::vector<float>* vector)
 cv::cuda::HOGDescriptor* cudaHOGDescriptorCreateDefault() { return new cv::cuda::HOGDescriptor; }
 
 cv::cuda::HOGDescriptor* cudaHOGDescriptorCreate(
-   cv::Size* _winSize, 
-   cv::Size* _blockSize, 
-   cv::Size* _blockStride,
-   cv::Size* _cellSize, 
+   emgu::size* _winSize, 
+   emgu::size* _blockSize, 
+   emgu::size* _blockStride,
+   emgu::size* _cellSize, 
    int _nbins, 
    double _winSigma,
    double _L2HysThreshold, 
    bool _gammaCorrection, 
    int _nlevels)
 {
-   return new cv::cuda::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _winSigma, _L2HysThreshold, _gammaCorrection, _nlevels);
+   cv::Size winSize(_winSize->width, _winSize->height);
+   cv::Size blockSize(_blockSize->width, _blockSize->height);
+   cv::Size blockStride(_blockStride->width, _blockStride->height);
+   cv::Size cellSize(_cellSize->width, _cellSize->height);
+   return new cv::cuda::HOGDescriptor(winSize, blockSize, blockStride, cellSize, _nbins, _winSigma, _L2HysThreshold, _gammaCorrection, _nlevels);
 }
 
 void cudaHOGSetSVMDetector(cv::cuda::HOGDescriptor* descriptor, std::vector<float>* vector) 
@@ -50,8 +54,8 @@ void cudaHOGDescriptorDetectMultiScale(
    cv::cuda::GpuMat* img, 
    CvSeq* foundLocations,
    double hitThreshold, 
-   CvSize winStride,
-   CvSize padding, 
+   emgu::size* winStride,
+   emgu::size* padding, 
    double scale,
    int groupThreshold)
 {
@@ -59,7 +63,10 @@ void cudaHOGDescriptorDetectMultiScale(
 
    std::vector<cv::Rect> rects;
 
-   descriptor->detectMultiScale(*img, rects, hitThreshold, winStride, padding, scale, groupThreshold);
+   cv::Size ws(winStride->width, winStride->height);
+   cv::Size ps(padding->width, padding->height);
+
+   descriptor->detectMultiScale(*img, rects, hitThreshold, ws, ps, scale, groupThreshold);
    if (!rects.empty())
       cvSeqPushMulti(foundLocations, &rects[0], static_cast<int>(rects.size()));
 }

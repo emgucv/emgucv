@@ -71,7 +71,7 @@ namespace Emgu.CV.ML
             sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
             varType == null ? IntPtr.Zero : varType.Ptr,
             missingMask == null ? IntPtr.Zero : missingMask.Ptr,
-            param);
+            ref param);
       }
 
       /// <summary>

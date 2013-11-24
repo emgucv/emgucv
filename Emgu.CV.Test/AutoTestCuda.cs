@@ -669,7 +669,8 @@ namespace Emgu.CV.Test
          using (CudaImage<Gray, float> yCudaImage = new CudaImage<Gray, float>(ymap))
          using (CudaImage<Gray, Byte> remapedImage = new CudaImage<Gray,byte>(CudaImage.Size))
          {
-            CudaInvoke.Remap(CudaImage, remapedImage, xCudaImage, yCudaImage, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar(), IntPtr.Zero);
+            MCvScalar borderValue = new MCvScalar();
+            CudaInvoke.Remap(CudaImage, remapedImage, xCudaImage, yCudaImage, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, ref borderValue, IntPtr.Zero);
          }
       }
 
@@ -687,7 +688,8 @@ namespace Emgu.CV.Test
          using (CudaImage<Gray, byte> CudaImage = new CudaImage<Gray,byte>(image))
          using (CudaImage<Gray, Byte> resultCudaImage = new CudaImage<Gray, byte>(CudaImage.Size))
          {
-            CudaInvoke.WarpPerspective(CudaImage, resultCudaImage, transformation, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar(), IntPtr.Zero);
+            MCvScalar borderValue = new MCvScalar();
+            CudaInvoke.WarpPerspective(CudaImage, resultCudaImage, transformation, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, ref borderValue, IntPtr.Zero);
          }
       }
 

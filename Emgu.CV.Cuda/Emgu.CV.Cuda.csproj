@@ -64,9 +64,13 @@
     <Compile Include="Filters\CudaGaussianFilter.cs" />
     <Compile Include="Filters\CudaLaplacianFilter.cs" />
     <Compile Include="Filters\CudaLinearFilter.cs" />
+    <Compile Include="Filters\CudaMorphologyFilter.cs" />
     <Compile Include="Filters\CudaSobelFilter.cs" />
     <Compile Include="Imgproc\CudaCornernessCriteria.cs" />
     <Compile Include="Imgproc\CudaHarrisCorner.cs" />
+    <Compile Include="Imgproc\CudaHoughCirclesDetector.cs" />
+    <Compile Include="Imgproc\CudaHoughLinesDetector.cs" />
+    <Compile Include="Imgproc\CudaHoughSegmentDetector.cs" />
     <Compile Include="Optflow\CudaBroxOpticalFlow.cs" />
     <Compile Include="Features2d\CudaBruteForceMatcher.cs" />
     <Compile Include="Imgproc\CudaCannyEdgeDetector.cs" />

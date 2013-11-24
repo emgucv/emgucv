@@ -58,7 +58,7 @@ namespace Emgu.CV
       public Retina(Size inputSize, bool colorMode, ColorSamplingMethod colorSamplingMethod, bool useRetinaLogSampling, double reductionFactor, double samplingStrength)
       {
          _inputSize = inputSize;
-         _ptr = CvInvoke.CvRetinaCreate(inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+         _ptr = CvInvoke.CvRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
       }
 
       /// <summary>
@@ -264,7 +264,7 @@ namespace Emgu.CV
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvRetinaCreate(
-         Size inputSize,
+         ref Size inputSize,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool colorMode,
          Retina.ColorSamplingMethod colorSamplingMethod,

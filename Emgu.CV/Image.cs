@@ -1545,13 +1545,15 @@ namespace Emgu.CV
          ForEachDuplicateChannel(delegate(IImage img, int channel)
              {
                 PointF[] ptsForCurrentChannel = corners[channel];
+                GCHandle handle = GCHandle.Alloc(ptsForCurrentChannel, GCHandleType.Pinned);
                 CvInvoke.cvFindCornerSubPix(
                    img.Ptr,
-                   ptsForCurrentChannel,
+                   handle.AddrOfPinnedObject(),
                    ptsForCurrentChannel.Length,
                    win,
                    zeroZone,
                    criteria);
+                handle.Free();
              });
       }
 

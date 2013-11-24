@@ -76,12 +76,39 @@ CVAPI(void) cudaCornersDetectorRelease(cv::cuda::CornersDetector** detector);
 
 //----------------------------------------------------------------------------
 //
-//  GpuTemplateMatching
+//  CudaTemplateMatching
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::TemplateMatching*) cudaTemplateMatchingCreate(int srcType, int method, emgu::size* blockSize);
 CVAPI(void) cudaTemplateMatchingRelease(cv::cuda::TemplateMatching** tm);
-CVAPI(void) cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, const cv::cuda::GpuMat* image, const cv::cuda::GpuMat* templ, cv::cuda::GpuMat* result,  cv::cuda::Stream* stream);
+CVAPI(void) cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, const cv::cuda::GpuMat* image, const cv::cuda::GpuMat* templ, cv::cuda::GpuMat* result, cv::cuda::Stream* stream);
 
+//----------------------------------------------------------------------------
+//
+//  CudaHoughLinesDetector
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::cuda::HoughLinesDetector*) cudaHoughLinesDetectorCreate(float rho, float theta, int threshold, bool doSort, int maxLines);
+CVAPI(void) cudaHoughLinesDetectorDetect(cv::cuda::HoughLinesDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* lines);
+CVAPI(void) cudaHoughLinesDetectorRelease(cv::cuda::HoughLinesDetector** detector);
 
+//----------------------------------------------------------------------------
+//
+//  CudaHoughSegmentDetector
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::cuda::HoughSegmentDetector*) cudaHoughSegmentDetectorCreate(float rho, float theta, int minLineLength, int maxLineGap, int maxLines);
+CVAPI(void) cudaHoughSegmentDetectorDetect(cv::cuda::HoughSegmentDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* lines);
+CVAPI(void) cudaHoughSegmentDetectorRelease(cv::cuda::HoughSegmentDetector** detector);
+
+//----------------------------------------------------------------------------
+//
+//  CudaHoughCircleDetector
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::cuda::HoughCirclesDetector*) cudaHoughCirclesDetectorCreate(float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles);
+CVAPI(void) cudaHoughCirclesDetectorDetect(cv::cuda::HoughCirclesDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* circles);
+CVAPI(void) cudaHoughCirclesDetectorRelease(cv::cuda::HoughCirclesDetector** detector);
+
+CVAPI(void) cudaGammaCorrection(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, bool forward, cv::cuda::Stream* stream);
 #endif

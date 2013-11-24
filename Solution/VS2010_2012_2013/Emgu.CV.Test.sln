@@ -1,7 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util", "..\..\Emgu.Util\Emgu.Util.csproj", "{7C2C5325-8235-4A24-9C67-6BD79A4679E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.UI", "..\..\Emgu.UI\Emgu.UI.csproj", "{48D846E6-61A2-4B9C-83B1-DB73F977A626}"
@@ -31,6 +29,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Shape", "..\..\Emgu.CV.Shape\Emgu.CV.Shape.csproj", "{61B5A667-1BF5-4580-AD09-07D6D7AD7E3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Softcascade", "..\..\Emgu.CV.Softcascade\Emgu.CV.Softcascade.csproj", "{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI.GL", "..\..\Emgu.CV.UI.GL\Emgu.CV.UI.GL.csproj", "{D9BAE1F0-2BC8-4697-AE26-88F7A74D1AAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -162,6 +162,14 @@ Global
 		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|x64.ActiveCfg = Release|Any CPU
 		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{D9BAE1F0-2BC8-4697-AE26-88F7A74D1AAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9BAE1F0-2BC8-4697-AE26-88F7A74D1AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9BAE1F0-2BC8-4697-AE26-88F7A74D1AAA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D9BAE1F0-2BC8-4697-AE26-88F7A74D1AAA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D9BAE1F0-2BC8-4697-AE26-88F7A74D1AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9BAE1F0-2BC8-4697-AE26-88F7A74D1AAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9BAE1F0-2BC8-4697-AE26-88F7A74D1AAA}.Release|x64.ActiveCfg = Release|Any CPU
+		{D9BAE1F0-2BC8-4697-AE26-88F7A74D1AAA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

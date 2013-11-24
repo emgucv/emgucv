@@ -24,7 +24,7 @@ namespace Emgu.CV.ML
       /// <param name="termcrit">The termination criteria of the EM algorithm. The EM algorithm can be terminated by the number of iterations termCrit.maxCount (number of M-steps) or when relative change of likelihood logarithm is less than termCrit.epsilon. Default maximum number of iterations is 100</param>
       public EM(int nclusters, MlEnum.EM_COVARIAN_MATRIX_TYPE covMatType, MCvTermCriteria termcrit)
       {
-         _ptr = MlInvoke.CvEMDefaultCreate(nclusters, covMatType, termcrit);
+         _ptr = MlInvoke.CvEMDefaultCreate(nclusters, covMatType, ref termcrit);
       }
 
       /// <summary>

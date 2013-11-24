@@ -7,9 +7,10 @@
 #include "bioinspired_c.h"
 
 //Retina
-cv::bioinspired::Retina* CvRetinaCreate(CvSize inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength)
+cv::bioinspired::Retina* CvRetinaCreate(emgu::size* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength)
 {
-   cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::createRetina(inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+   cv::Size sz(inputSize->width, inputSize->height);
+   cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::createRetina(sz, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
    ptr.addref();
    return ptr.get();
 }
