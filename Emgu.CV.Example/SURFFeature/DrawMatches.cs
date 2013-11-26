@@ -56,7 +56,8 @@ namespace SURFFeatureExample
                   using (GpuMat<float> col0 = gpuMatchDist.Col(0))
                   using (GpuMat<float> col1 = gpuMatchDist.Col(1))
                   {
-                     CudaInvoke.Multiply(col1, new MCvScalar(uniquenessThreshold), col1, stream);
+                     MCvScalar scalar = new MCvScalar(uniquenessThreshold);
+                     CudaInvoke.Multiply(col1, ref scalar, col1, stream);
                      CudaInvoke.Compare(col0, col1, gpuMask, CMP_TYPE.CV_CMP_LE, stream);
                   }
 
