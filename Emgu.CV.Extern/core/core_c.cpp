@@ -10,6 +10,15 @@ cv::Mat* cvMatCreate()
 {
    return new cv::Mat();
 }
+cv::Mat* cvMatCreateWithType(int rows, int cols, int type)
+{
+   return new cv::Mat(rows, cols, type);
+}
+cv::Mat* cvMatCreateWithData(int rows, int cols, int type, void* data, size_t step)
+{
+   return new cv::Mat(rows, cols, type, data, step);
+}
+
 void cvMatRelease(cv::Mat** mat)
 {
    delete *mat;
@@ -35,6 +44,19 @@ void cvMatFromCvArr(cv::Mat* mat, CvArr* cvArray)
 int cvMatGetElementSize(cv::Mat* mat)
 {
    return static_cast<int>( mat->elemSize());
+}
+
+int cvMatGetChannels(cv::Mat* mat)
+{
+   return mat->channels();
+}
+uchar* cvMatGetDataPointer(cv::Mat* mat)
+{
+   return mat->ptr(0);
+}
+size_t cvMatGetStep(cv::Mat* mat)
+{
+   return mat->step;
 }
 
 bool cvMatIsEmpty(cv::Mat* mat)
