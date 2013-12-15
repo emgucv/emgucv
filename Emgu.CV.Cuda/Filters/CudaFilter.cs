@@ -56,7 +56,7 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void Apply(CudaImage<TColor, TDepth> image, CudaImage<TColor, TDepth> dst, Stream stream)
       {
-         CudaInvoke.cudaFilterApply(_ptr, image, dst, stream);
+         CudaInvoke.cudaFilterApply(_ptr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
    }
 

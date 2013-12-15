@@ -86,7 +86,8 @@ namespace Emgu.CV.Features2D
             if (keyPoints.Size == 0)
                return null;
             Matrix<TDescriptor> result = new Matrix<TDescriptor>(descriptors.Size);
-            CvInvoke.cvMatCopyToCvArr(descriptors, result);
+            descriptors.CopyTo(result, null);
+            
             return result;
          }
       }

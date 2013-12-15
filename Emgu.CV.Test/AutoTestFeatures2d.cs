@@ -243,7 +243,7 @@ namespace Emgu.CV.Test
                mask.SetValue(255);
                Features2DToolbox.VoteForUniqueness(dist, 0.8, mask);
 
-               int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+               int nonZeroCount = CvInvoke.CountNonZero(mask);
                if (nonZeroCount >= 4)
                {
                   nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, indices, mask, 1.5, 20);

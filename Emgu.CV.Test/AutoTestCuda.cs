@@ -116,7 +116,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> cpuImgSum = new Image<Gray, byte>(img1.Size);
             Stopwatch watch = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               CvInvoke.cvAdd(img1, img2, cpuImgSum, IntPtr.Zero);
+               CvInvoke.Add(img1, img2, cpuImgSum, null, Mat.Depth.Cv8U);
             watch.Stop();
             Trace.WriteLine(String.Format("CPU processing time: {0}ms", (double)watch.ElapsedMilliseconds / repeat));
 
@@ -126,7 +126,7 @@ namespace Emgu.CV.Test
             CudaImage<Gray, Byte> gpuImgSum = new CudaImage<Gray, byte>(gpuImg1.Size);
             Stopwatch watch2 = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               CudaInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, IntPtr.Zero, IntPtr.Zero);
+               CudaInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, null, null);
             watch2.Stop();
             Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
             watch.Stop();
@@ -249,7 +249,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> small = img.Resize(100, 200, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
             CudaImage<Gray, Byte> gpuImg = new CudaImage<Gray, byte>(img);
             CudaImage<Gray, byte> smallGpuImg = new CudaImage<Gray, byte>(small.Size);
-            CudaInvoke.Resize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, IntPtr.Zero);
+            CudaInvoke.Resize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, null);
             Image<Gray, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
             //ImageViewer.Show(smallGpuImg.ToImage());
             //ImageViewer.Show(small);
@@ -301,7 +301,7 @@ namespace Emgu.CV.Test
          {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
             CudaImage<Bgr, Byte> gpuMat = new CudaImage<Bgr, byte>(img);
-            CudaInvoke.BitwiseNot(gpuMat, gpuMat, IntPtr.Zero, IntPtr.Zero);
+            CudaInvoke.BitwiseNot(gpuMat, gpuMat, null, null);
             Assert.IsTrue(gpuMat.Equals(new CudaImage<Bgr, Byte>(img.Not())));
          }
       }
@@ -320,7 +320,7 @@ namespace Emgu.CV.Test
             CudaImage<Bgr, Byte> cudaImg = new CudaImage<Bgr, byte>(img);
             CudaImage<Bgr, byte> smallCudaImg = new CudaImage<Bgr, byte>(size);
 
-            CudaInvoke.Resize(cudaImg, smallCudaImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, IntPtr.Zero);
+            CudaInvoke.Resize(cudaImg, smallCudaImg, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, null);
             Image<Bgr, Byte> smallCpuImg = img.Resize(size.Width, size.Height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
 
 
@@ -349,6 +349,19 @@ namespace Emgu.CV.Test
                //ImageViewer.Show(canny);
             }
          }
+      }
+
+      [Test]
+      public void TestCountNonZero()
+      {
+         if (!CudaInvoke.HasCuda)
+            return;
+
+         //Mat m = new Mat(100, 200, Mat.Depth.Cv8U, 1);
+         CudaImage<Gray, Byte> m = new CudaImage<Gray, Byte>(100, 200);
+         m.SetTo(new MCvScalar(), null, null);
+         EmguAssert.IsTrue(0 == CudaInvoke.CountNonZero(m));
+         //Trace.WriteLine(String.Format("non zero count: {0}", ));
       }
 
 
@@ -450,7 +463,7 @@ namespace Emgu.CV.Test
             using (CudaImage<Bgr, byte> CudaImage = new CudaImage<Bgr, byte>(img))
             using (GpuMat<byte> reduced = new GpuMat<byte>(1, CudaImage.Size.Width, CudaImage.NumberOfChannels, true))
             {
-               CudaInvoke.Reduce(CudaImage, reduced, CvEnum.REDUCE_DIMENSION.SINGLE_ROW, CvEnum.REDUCE_TYPE.CV_REDUCE_AVG, IntPtr.Zero);
+               CudaInvoke.Reduce(CudaImage, reduced, CvEnum.REDUCE_DIMENSION.SINGLE_ROW, CvEnum.REDUCE_TYPE.CV_REDUCE_AVG, null);
             }
          }
       }
@@ -480,8 +493,8 @@ namespace Emgu.CV.Test
             //run the CPU version in parallel to the gpu version.
             using (Image<Gray, Byte> temp = new Image<Gray, byte>(image.Size))
             {
-               CvInvoke.cvErode(image, temp, IntPtr.Zero, morphIter);
-               CvInvoke.cvDilate(temp, image, IntPtr.Zero, morphIter);
+               CvInvoke.Erode(image, temp, null, new Point(-1, -1), morphIter, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
+               CvInvoke.Dilate(temp, image, null, new Point(-1, -1), morphIter, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
             }
 
             //syncrhonize with the GPU version
@@ -569,13 +582,13 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> up = down.PyrUp();
 
          CudaImage<Gray, Byte> gImg = new CudaImage<Gray, byte>(img);
-         CudaImage<Gray, Byte> gDown = new CudaImage<Gray, byte>(gImg.Size.Width >> 1, gImg.Size.Height >> 1);
+         CudaImage<Gray, Byte> gDown = new CudaImage<Gray, byte>(img.Size.Width >> 1, img.Size.Height >> 1);
          CudaImage<Gray, Byte> gUp = new CudaImage<Gray, byte>(img.Size);
-         CudaInvoke.PyrDown(gImg, gDown, IntPtr.Zero);
-         CudaInvoke.PyrUp(gDown, gUp, IntPtr.Zero);
+         CudaInvoke.PyrDown(gImg, gDown, null);
+         CudaInvoke.PyrUp(gDown, gUp, null);
 
-         CvInvoke.cvAbsDiff(down, gDown.ToImage(), down);
-         CvInvoke.cvAbsDiff(up, gUp.ToImage(), up);
+         CvInvoke.AbsDiff(down, gDown.ToImage(), down);
+         CvInvoke.AbsDiff(up, gUp.ToImage(), up);
          double[] minVals, maxVals;
          Point[] minLocs, maxLocs;
          down.MinMax(out minVals, out maxVals, out minLocs, out maxLocs);
@@ -639,7 +652,7 @@ namespace Emgu.CV.Test
             buffer.Match(CudaImage, gpuRandomObj, gpuMatch, stream);
             //GpuInvoke.MatchTemplate(CudaImage, gpuRandomObj, gpuMatch, CvEnum.TM_TYPE.CV_TM_SQDIFF, buffer, stream);
             stream.WaitForCompletion();
-            CudaInvoke.MinMaxLoc(gpuMatch, ref gpuMinVal, ref gpuMaxVal, ref gpuMinLoc, ref gpuMaxLoc, IntPtr.Zero);
+            CudaInvoke.MinMaxLoc(gpuMatch, ref gpuMinVal, ref gpuMaxVal, ref gpuMinLoc, ref gpuMaxLoc, null);
          }
 
          EmguAssert.AreEqual(minLoc[0].X, templCenter.X - templWidth / 2);
@@ -669,8 +682,7 @@ namespace Emgu.CV.Test
          using (CudaImage<Gray, float> yCudaImage = new CudaImage<Gray, float>(ymap))
          using (CudaImage<Gray, Byte> remapedImage = new CudaImage<Gray,byte>(CudaImage.Size))
          {
-            MCvScalar borderValue = new MCvScalar();
-            CudaInvoke.Remap(CudaImage, remapedImage, xCudaImage, yCudaImage, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, ref borderValue, IntPtr.Zero);
+            CudaInvoke.Remap(CudaImage, remapedImage, xCudaImage, yCudaImage, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar(), null);
          }
       }
 
@@ -688,28 +700,30 @@ namespace Emgu.CV.Test
          using (CudaImage<Gray, byte> CudaImage = new CudaImage<Gray,byte>(image))
          using (CudaImage<Gray, Byte> resultCudaImage = new CudaImage<Gray, byte>(CudaImage.Size))
          {
-            MCvScalar borderValue = new MCvScalar();
-            CudaInvoke.WarpPerspective(CudaImage, resultCudaImage, transformation, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, ref borderValue, IntPtr.Zero);
+            CudaInvoke.WarpPerspective(CudaImage, resultCudaImage, transformation, CvEnum.INTER.CV_INTER_CUBIC, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar(), null);
          }
       }
 
       [Test]
       public void TestCudaPyrLKOpticalFlow()
       {
+         if (!CudaInvoke.HasCuda)
+            return;
          Image<Gray, Byte> prevImg, currImg;
          AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
          Image<Gray, Single> flowx = new Image<Gray, float>(prevImg.Size);
          Image<Gray, Single> flowy = new Image<Gray, float>(prevImg.Size);
          CudaPyrLKOpticalFlow flow = new CudaPyrLKOpticalFlow(new Size(21, 21), 3, 30, false);
-         using(CudaImage<Gray, Byte> prevGpu = new CudaImage<Gray,byte>(prevImg))
+         using (CudaImage<Gray, Byte> prevGpu = new CudaImage<Gray, byte>(prevImg))
          using (CudaImage<Gray, byte> currGpu = new CudaImage<Gray, byte>(currImg))
-         using (CudaImage<Gray, float> flowxGpu = new CudaImage<Gray,float>(prevGpu.Size))
-         using (CudaImage<Gray, float> flowyGpu = new CudaImage<Gray,float>(prevGpu.Size))
+         using (CudaImage<Gray, float> flowxGpu = new CudaImage<Gray, float>(prevGpu.Size))
+         using (CudaImage<Gray, float> flowyGpu = new CudaImage<Gray, float>(prevGpu.Size))
          {
             flow.Dense(prevGpu, currGpu, flowxGpu, flowyGpu);
             flowxGpu.Download(flowx);
             flowyGpu.Download(flowy);
-         }  
+         }
+         
       }
 
       [Test]
@@ -723,7 +737,7 @@ namespace Emgu.CV.Test
             CudaImage<Gray, Byte> CudaImage = new CudaImage<Gray, byte>(gray);
             
             CudaImage<Gray, Byte> gpuBilaterial = new CudaImage<Gray, byte>(CudaImage.Size);
-            CudaInvoke.BilateralFilter(CudaImage, gpuBilaterial, 7, 5, 5, CvEnum.BORDER_TYPE.DEFAULT, IntPtr.Zero);
+            CudaInvoke.BilateralFilter(CudaImage, gpuBilaterial, 7, 5, 5, CvEnum.BORDER_TYPE.DEFAULT, null);
 
             //Emgu.CV.UI.ImageViewer.Show(gray.ConcateHorizontal(gpuBilaterial.ToImage()));
          }
@@ -815,13 +829,13 @@ namespace Emgu.CV.Test
                mask.SetValue(255);
                Features2DToolbox.VoteForUniqueness(distance, 0.8, mask);
 
-               int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+               int nonZeroCount = CvInvoke.CountNonZero(mask);
                if (nonZeroCount >= 4)
                {
                   nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, trainIdx, mask, 1.5, 20);
                   if (nonZeroCount >= 4)
                      homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask, 2);
-                  nonZeroCount = CvInvoke.cvCountNonZero(mask);
+                  nonZeroCount = CvInvoke.CountNonZero(mask);
                }
 
                stopwatch.Stop();

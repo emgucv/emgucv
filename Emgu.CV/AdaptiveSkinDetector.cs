@@ -24,19 +24,19 @@ namespace Emgu.CV
          /// <summary>
          /// None
          /// </summary>
-         NONE = 0,
+         None = 0,
          /// <summary>
          /// Erode
          /// </summary>
-         ERODE = 1,
+         Erode = 1,
          /// <summary>
          /// Double Erode 
          /// </summary>
-         ERODE_ERODE = 2,
+         ErodeErode = 2,
          /// <summary>
          /// Erode dilate
          /// </summary>
-         ERODE_DILATE = 3
+         ErodeDilate = 3
       }
 
       /// <summary>
@@ -46,7 +46,7 @@ namespace Emgu.CV
       /// <param name="morphingMethod">The morphine method for the skin detector</param>
       public AdaptiveSkinDetector(int samplingDivider, MorphingMethod morphingMethod)
       {
-         _ptr = CvInvoke.CvAdaptiveSkinDetectorCreate(samplingDivider, morphingMethod);
+         _ptr = CvAdaptiveSkinDetectorCreate(samplingDivider, morphingMethod);
       }
 
       /// <summary>
@@ -56,7 +56,7 @@ namespace Emgu.CV
       /// <param name="hueMask">The resulting mask</param>
       public void Process(Image<Bgr, Byte> image, Image<Gray, Byte> hueMask)
       {
-         CvInvoke.CvAdaptiveSkinDetectorProcess(_ptr, image.Ptr, hueMask.Ptr);
+         CvAdaptiveSkinDetectorProcess(_ptr, image.Ptr, hueMask.Ptr);
       }
 
       /// <summary>
@@ -64,12 +64,9 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvAdaptiveSkinDetectorRelease(_ptr);
+         CvAdaptiveSkinDetectorRelease(_ptr);
       }
-   }
 
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvAdaptiveSkinDetectorCreate(int samplingDivider, AdaptiveSkinDetector.MorphingMethod morphingMethod);
 

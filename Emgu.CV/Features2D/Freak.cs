@@ -35,7 +35,7 @@ namespace Emgu.CV.Features2D
       /// <param name="nOctaves">Number of octaves covered by the detected keypoints, use 4 for default.</param>
       public Freak(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves)
       {
-         _ptr = CvInvoke.CvFreakCreate(orientationNormalized, scaleNormalized, patternScale, nOctaves);
+         _ptr = CvFreakCreate(orientationNormalized, scaleNormalized, patternScale, nOctaves);
       }
 
       /// <summary>
@@ -43,20 +43,14 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvFreakRelease(ref _ptr);
+         CvFreakRelease(ref _ptr);
       }
 
       IntPtr IDescriptorExtractor<Gray, Byte>.DescriptorExtratorPtr
       {
          get { return _ptr; }
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvFreakCreate(
          [MarshalAs(CvInvoke.BoolMarshalType)]
@@ -70,3 +64,4 @@ namespace Emgu.CV
       internal extern static void CvFreakRelease(ref IntPtr extractor);
    }
 }
+

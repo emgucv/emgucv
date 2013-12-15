@@ -115,6 +115,9 @@
     <Compile Include="Features2D\LDetector.cs" />
     <Compile Include="LatentSvmDetector.cs" />
     <Compile Include="LevMarqSparse.cs" />
+    <Compile Include="Util\IInputArray.cs" />
+    <Compile Include="Util\IInputOutputArray.cs" />
+    <Compile Include="Util\IOutputArray.cs" />
     <Compile Include="Util\Mat.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
@@ -256,7 +259,6 @@
     <Compile Include="Shape\Triangle2DF.cs" />
     <Compile Include="Shape\Triangle3DF.cs" />
     <Compile Include="StereoBM.cs" />
-    <Compile Include="StructuringElementEx.cs" />
     <Compile Include="MemStorage.cs" />
     <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />
@@ -280,7 +282,6 @@
     <Compile Include="PInvoke\CvEnum.cs" />
     <Compile Include="PInvoke\CvInvoke.cs" />
     <Compile Include="Shape\Ellipse.cs" />
-    <Compile Include="HaarCascade.cs" />
     <Compile Include="DenseHistogram.cs" />
     <Compile Include="Capture\ICapture.cs" />
     <Compile Include="Capture\IDuplexCapture.cs" />

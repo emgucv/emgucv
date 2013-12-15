@@ -43,7 +43,7 @@ namespace Emgu.CV.Features2D
       {
          _threshold = threshold;
          _nonmaxSupression = nonmaxSupression;
-         _ptr = CvInvoke.CvFASTGetFeatureDetector(Threshold, NonmaxSupression);
+         _ptr = CvFASTGetFeatureDetector(Threshold, NonmaxSupression);
       }
 
       #region IFeatureDetector Members
@@ -65,15 +65,9 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvFASTFeatureDetectorRelease(ref _ptr);
+         CvFASTFeatureDetectorRelease(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvFASTGetFeatureDetector(
          int threshold,

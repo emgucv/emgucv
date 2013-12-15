@@ -36,13 +36,16 @@ CVAPI(void) cudaMeanShiftSegmentation(const cv::cuda::GpuMat* src, cv::Mat* dst,
 
 CVAPI(void) cudaHistEven(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* hist, cv::cuda::GpuMat* buffer, int histSize, int lowerLevel, int upperLevel, cv::cuda::Stream* stream);
 
+CVAPI(void) cudaBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream);
+
+//----------------------------------------------------------------------------
+//
+//  CudaCornernessCriteria
+//
+//----------------------------------------------------------------------------
 CVAPI(cv::cuda::CornernessCriteria*) cudaCreateHarrisCorner(int srcType, int blockSize, int ksize, double k, int borderType);
-
-CVAPI(void) cudaCornernessCriteriaCompute(cv::cuda::CornernessCriteria* detector, const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream);
-
+CVAPI(void) cudaCornernessCriteriaCompute(cv::cuda::CornernessCriteria* detector, cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* stream);
 CVAPI(void) cudaCornernessCriteriaRelease(cv::cuda::CornernessCriteria** detector);
-
-CVAPI(void) cudaBilateralFilter(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream);
 
 //----------------------------------------------------------------------------
 //

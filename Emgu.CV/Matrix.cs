@@ -234,7 +234,7 @@ namespace Emgu.CV
       {
          get
          {
-            return CvInvoke.cvDet(Ptr);
+            return CvInvoke.Determinant(this);
          }
       }
 
@@ -246,7 +246,7 @@ namespace Emgu.CV
       {
          get
          {
-            return CvInvoke.cvSum(Ptr).v0;
+            return CvInvoke.Sum(this).v0;
          }
       }
       #endregion
@@ -306,7 +306,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Transpose()
       {
          Matrix<TDepth> res = new Matrix<TDepth>(Cols, Rows);
-         CvInvoke.cvTranspose(_ptr, res._ptr);
+         CvInvoke.Transpose(this, res);
          return res;
       }
 
@@ -506,12 +506,12 @@ namespace Emgu.CV
       /// <summary>
       /// Returns the min / max locations and values for the matrix
       /// </summary>
-      public void MinMax(out double minValue, out double maxValue, out Point minLocation, out Point maxLocation)
+      public void MinMax(out double minValue, out double maxValue, out Point minLocation, out Point maxLocation, IInputArray mask)
       {
          //minValue = 0; maxValue = 0;
          minLocation = new Point(); maxLocation = new Point();
          int[] minArr = new int[2], maxArr = new int[2];
-         CvInvoke.CvMinMaxIdx(Ptr, out minValue, out maxValue, minArr, maxArr, IntPtr.Zero);
+         CvInvoke.MinMaxIdx(this, out minValue, out maxValue, minArr, maxArr, mask);
          minLocation.X = minArr[1]; minLocation.Y = minArr[0];
          maxLocation.X = maxArr[1]; maxLocation.Y = maxArr[0];
          //CvInvoke.cvMinMaxLoc(Ptr, ref minValue, ref maxValue, ref minLocation, ref maxLocation, IntPtr.Zero);
@@ -524,7 +524,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Add(Matrix<TDepth> mat2)
       {
          Matrix<TDepth> res = CopyBlank();
-         CvInvoke.cvAdd(Ptr, mat2.Ptr, res.Ptr, IntPtr.Zero);
+         CvInvoke.Add(this, mat2, res, null, Mat.GetDepth(typeof(TDepth)));
          return res;
       }
 
@@ -534,7 +534,10 @@ namespace Emgu.CV
       public Matrix<TDepth> Add(TDepth val)
       {
          Matrix<TDepth> res = CopyBlank();
-         CvInvoke.cvAddS(Ptr, new MCvScalar(System.Convert.ToDouble(val)), res.Ptr, IntPtr.Zero);
+         using (InputArray ia = new InputArray(System.Convert.ToDouble(val)))
+         {
+            CvInvoke.Add(this, ia, res, null, Mat.GetDepth(typeof(TDepth)));
+         }
          return res;
       }
       #endregion
@@ -546,7 +549,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Sub(Matrix<TDepth> mat2)
       {
          Matrix<TDepth> res = CopyBlank();
-         CvInvoke.cvSub(Ptr, mat2.Ptr, res.Ptr, IntPtr.Zero);
+         CvInvoke.Subtract(this, mat2, res, null, Mat.GetDepth(typeof(TDepth)));
          return res;
       }
 
@@ -556,7 +559,10 @@ namespace Emgu.CV
       public Matrix<TDepth> Sub(TDepth val)
       {
          Matrix<TDepth> res = CopyBlank();
-         CvInvoke.cvSubS(Ptr, new MCvScalar(System.Convert.ToDouble(val)), res.Ptr, IntPtr.Zero);
+         using (InputArray ia = new InputArray(System.Convert.ToDouble(val)))
+         {
+            CvInvoke.Subtract(this, ia, res, null, Mat.GetDepth(typeof(TDepth)));
+         }
          return res;
       }
 
@@ -568,7 +574,10 @@ namespace Emgu.CV
       public Matrix<TDepth> SubR(TDepth val)
       {
          Matrix<TDepth> res = CopyBlank();
-         CvInvoke.cvSubRS(Ptr, new MCvScalar(System.Convert.ToDouble(val)), res.Ptr, IntPtr.Zero);
+         using (InputArray ia = new InputArray(System.Convert.ToDouble(val)))
+         {
+            CvInvoke.Subtract(ia, this, res, null, Mat.GetDepth(typeof(TDepth)));
+         }
          return res;
       }
       #endregion
@@ -590,7 +599,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Mul(Matrix<TDepth> mat2)
       {
          Matrix<TDepth> res = new Matrix<TDepth>(Rows, mat2.Cols);
-         CvInvoke.cvGEMM(Ptr, mat2.Ptr, 1.0, IntPtr.Zero, 0.0, res.Ptr, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_DEFAULT);
+         CvInvoke.Gemm(this, mat2, 1.0, null, 0.0, res, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_DEFAULT);
          return res;
       }
       #endregion
@@ -749,7 +758,7 @@ namespace Emgu.CV
       public Matrix<Byte> Cmp(Matrix<TDepth> mat2, Emgu.CV.CvEnum.CMP_TYPE type)
       {
          Matrix<Byte> res = new Matrix<Byte>(Rows, Cols);
-         CvInvoke.cvCmp(Ptr, mat2.Ptr, res.Ptr, type);
+         CvInvoke.Compare(this, mat2, res, type);
          return res;
       }
 
@@ -760,17 +769,17 @@ namespace Emgu.CV
       public Matrix<TDepth>[] Split()
       {
          int channelCount = NumberOfChannels;
+
          Matrix<TDepth>[] channels = new Matrix<TDepth>[channelCount];
-         for (int i = 0; i < channelCount; i++)
+         using (VectorOfMat vm = new VectorOfMat())
          {
-            channels[i] = new Matrix<TDepth>(Rows, Cols);
+            for (int i = 0; i < channelCount; i++)
+            {
+               channels[i] = new Matrix<TDepth>(Rows, Cols);
+               vm.Push(channels[i].CvMat);
+            }
+            CvInvoke.Split(this, vm);
          }
-         CvInvoke.cvSplit(
-            Ptr,
-            channels[0].Ptr,
-            channelCount >= 2 ? channels[1].Ptr : IntPtr.Zero,
-            channelCount >= 3 ? channels[2].Ptr : IntPtr.Zero,
-            channelCount >= 4 ? channels[3].Ptr : IntPtr.Zero);
          return channels;
       }
 
@@ -787,11 +796,11 @@ namespace Emgu.CV
 
          using (Matrix<TDepth> xor = new Matrix<TDepth>(Rows, Cols, numberOfChannels))
          {
-            CvInvoke.cvXor(_ptr, mat2._ptr, xor.Ptr, IntPtr.Zero);
+            CvInvoke.BitwiseXor(this, mat2, xor, null);
 
             if (numberOfChannels == 1)
             {
-               return CvInvoke.cvCountNonZero(xor.Ptr) == 0;
+               return CvInvoke.CountNonZero(xor) == 0;
             }
             else
             {  //comapre channel by channel
@@ -799,7 +808,7 @@ namespace Emgu.CV
                try
                {
                   for (int i = 0; i < numberOfChannels; i++)
-                     if (CvInvoke.cvCountNonZero(channels[i].Ptr) != 0)
+                     if (CvInvoke.CountNonZero(channels[i]) != 0)
                         return false;
 
                   return true;

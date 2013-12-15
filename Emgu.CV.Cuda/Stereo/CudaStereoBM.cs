@@ -49,7 +49,7 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void FindStereoCorrespondence(CudaImage<Gray, Byte> left, CudaImage<Gray, Byte> right, CudaImage<Gray, Byte> disparity, Stream stream)
       {
-         CudaInvoke.cudaStereoBMFindStereoCorrespondence(_ptr, left, right, disparity, stream);
+         CudaInvoke.cudaStereoBMFindStereoCorrespondence(_ptr, left.InputArrayPtr, right.InputArrayPtr, disparity.OutputArrayPtr, stream);
       }
 
       /// <summary>

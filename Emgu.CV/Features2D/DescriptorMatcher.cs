@@ -27,7 +27,7 @@ namespace Emgu.CV.Features2D
       /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
       public void KnnMatch(Matrix<T> queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, Matrix<Byte> mask)
       {
-         CvInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor, trainIdx, distance, k, mask);
+         DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor, trainIdx, distance, k, mask);
       }
 
       /// <summary>
@@ -36,14 +36,11 @@ namespace Emgu.CV.Features2D
       /// <param name="modelDescriptors">The model discriptors</param>
       public void Add(Matrix<T> modelDescriptors)
       {
-         CvInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors);
+         DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors);
       }
    }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
+   internal static partial class DescriptorMatcherInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);

@@ -79,15 +79,9 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the two CvTrack are equal; otherwise false.</returns>
       public bool Equals(CvTrack other)
       {
-         return CvInvoke.cvbCvTrackEquals(ref this, ref other);
+         return cvbCvTrackEquals(ref this, ref other);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal extern static bool cvbCvTrackEquals(ref Cvb.CvTrack track1, ref Cvb.CvTrack track2);

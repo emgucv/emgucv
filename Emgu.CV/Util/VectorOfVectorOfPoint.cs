@@ -21,7 +21,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public VectorOfVectorOfPoint()
       {
-         _ptr = CvInvoke.VectorOfVectorOfPointCreate();
+         _ptr = VectorOfVectorOfPointCreate();
       }
 
       /// <summary>
@@ -31,7 +31,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfVectorOfPointGetSize(_ptr);
+            return VectorOfVectorOfPointGetSize(_ptr);
          }
       }
 
@@ -40,7 +40,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         CvInvoke.VectorOfVectorOfPointClear(_ptr);
+         VectorOfVectorOfPointClear(_ptr);
       }
 
       /// <summary>
@@ -52,7 +52,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return new VectorOfPoint(CvInvoke.VectorOfVectorOfPointGetItem(_ptr, index), false);  
+            return new VectorOfPoint(VectorOfVectorOfPointGetItem(_ptr, index), false);  
          }
       }
 
@@ -78,15 +78,9 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.VectorOfVectorOfPointRelease(_ptr);
+            VectorOfVectorOfPointRelease(_ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfVectorOfPointCreate();
 

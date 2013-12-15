@@ -37,7 +37,7 @@ namespace Emgu.CV
 
          try
          {
-            CvInvoke.CvFaceRecognizerTrain(_ptr, imagesHandle.AddrOfPinnedObject(), labelsHandle.AddrOfPinnedObject(), images.Length);
+            CvFaceRecognizerTrain(_ptr, imagesHandle.AddrOfPinnedObject(), labelsHandle.AddrOfPinnedObject(), images.Length);
          }
          finally
          {
@@ -55,7 +55,7 @@ namespace Emgu.CV
       {
          int label = -1;
          double distance = -1;
-         CvInvoke.CvFaceRecognizerPredict(_ptr, image.Ptr, ref label, ref distance);
+         CvFaceRecognizerPredict(_ptr, image.Ptr, ref label, ref distance);
          return new PredictionResult() { Label = label, Distance = distance };
       }
 
@@ -80,7 +80,7 @@ namespace Emgu.CV
       /// <param name="fileName">The file name to be saved to</param>
       public void Save(String fileName)
       {
-         CvInvoke.CvFaceRecognizerSave(_ptr, fileName);
+         CvFaceRecognizerSave(_ptr, fileName);
       }
 
       /// <summary>
@@ -89,7 +89,7 @@ namespace Emgu.CV
       /// <param name="fileName">The file where the FaceRecognizer will be loaded from</param>
       public void Load(String fileName)
       {
-         CvInvoke.CvFaceRecognizerLoad(_ptr, fileName);
+         CvFaceRecognizerLoad(_ptr, fileName);
       }
 
       /// <summary>
@@ -97,8 +97,27 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvFaceRecognizerRelease(ref _ptr);
+         CvFaceRecognizerRelease(ref _ptr);
       }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvFaceRecognizerTrain(IntPtr recognizer, IntPtr images, IntPtr labels, int count);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvFaceRecognizerPredict(IntPtr recognizer, IntPtr image, ref int label, ref double distance);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvFaceRecognizerSave(
+         IntPtr recognizer,
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String fileName);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvFaceRecognizerLoad(
+         IntPtr recognizer,
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String fileName);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvFaceRecognizerRelease(ref IntPtr recognizer);
    }
 
    /// <summary>
@@ -113,8 +132,11 @@ namespace Emgu.CV
       /// <param name="threshold">The distance threshold</param>
       public EigenFaceRecognizer(int numComponents, double threshold)
       {
-         _ptr = CvInvoke.CvEigenFaceRecognizerCreate(numComponents, threshold);
+         _ptr = CvEigenFaceRecognizerCreate(numComponents, threshold);
       }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvEigenFaceRecognizerCreate(int numComponents, double threshold);
    }
 
    /// <summary>
@@ -129,8 +151,11 @@ namespace Emgu.CV
       /// <param name="threshold">The distance threshold</param>
       public FisherFaceRecognizer(int numComponents, double threshold)
       {
-         _ptr = CvInvoke.CvFisherFaceRecognizerCreate(numComponents, threshold);
+         _ptr = CvFisherFaceRecognizerCreate(numComponents, threshold);
       }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvFisherFaceRecognizerCreate(int numComponents, double threshold);
    }
 
    /// <summary>
@@ -148,7 +173,7 @@ namespace Emgu.CV
       /// <param name="threshold">The distance threshold</param>
       public LBPHFaceRecognizer(int radius, int neighbors, int gridX, int gridY, double threshold)
       {
-         _ptr = CvInvoke.CvLBPHFaceRecognizerCreate(radius, neighbors, gridX, gridY, threshold);
+         _ptr = CvLBPHFaceRecognizerCreate(radius, neighbors, gridX, gridY, threshold);
       }
 
       /// <summary>
@@ -171,7 +196,7 @@ namespace Emgu.CV
 
          try
          {
-            CvInvoke.CvFaceRecognizerUpdate(_ptr, imagesHandle.AddrOfPinnedObject(), labelsHandle.AddrOfPinnedObject(), images.Length);
+            CvFaceRecognizerUpdate(_ptr, imagesHandle.AddrOfPinnedObject(), labelsHandle.AddrOfPinnedObject(), images.Length);
          }
          finally
          {
@@ -179,37 +204,12 @@ namespace Emgu.CV
             labelsHandle.Free();
          }
       }
-   }
 
-   public static partial class CvInvoke
-   {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvEigenFaceRecognizerCreate(int numComponents, double threshold);
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvFisherFaceRecognizerCreate(int numComponents, double threshold);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFaceRecognizerTrain(IntPtr recognizer, IntPtr images, IntPtr labels, int count);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFaceRecognizerUpdate(IntPtr recognizer, IntPtr images, IntPtr labels, int count);
-      
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFaceRecognizerPredict(IntPtr recognizer, IntPtr image, ref int label, ref double distance);
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFaceRecognizerSave(
-         IntPtr recognizer,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String fileName);
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFaceRecognizerLoad(
-         IntPtr recognizer,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String fileName);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFaceRecognizerRelease(ref IntPtr recognizer);
    }
+
 }

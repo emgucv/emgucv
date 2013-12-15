@@ -28,7 +28,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="shadowDetection">If true, perform shadow detection.</param>
       public BackgroundSubtractorMOG2(int history, float varThreshold, bool shadowDetection)
       {
-         _ptr = CvInvoke.CvBackgroundSubtractorMOG2Create(history, varThreshold, shadowDetection);
+         _ptr = CvBackgroundSubtractorMOG2Create(history, varThreshold, shadowDetection);
       }
 
       /// <summary>
@@ -36,15 +36,9 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBackgroundSubtractorMOG2Release(ref _ptr);
+         CvBackgroundSubtractorMOG2Release(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvBackgroundSubtractorMOG2Create(
          int history,

@@ -11,14 +11,17 @@ namespace Emgu.CV.Util
    /// <summary>
    /// Wraped class of the C++ standard vector of Byte.
    /// </summary>
-   public class VectorOfByte : Emgu.Util.UnmanagedObject
+   public class VectorOfByte : Emgu.Util.UnmanagedObject, IInputArray, IOutputArray
    {
+      private IntPtr _inputArrayPtr;
+      private IntPtr _outputArrayPtr;
+
       /// <summary>
       /// Create an empty standard vector of Byte
       /// </summary>
       public VectorOfByte()
       {
-         _ptr = CvInvoke.VectorOfByteCreate();
+         _ptr = VectorOfByteCreate();
       }
 
       /// <summary>
@@ -27,7 +30,7 @@ namespace Emgu.CV.Util
       /// <param name="size">The size of the vector</param>
       public VectorOfByte(int size)
       {
-         _ptr = CvInvoke.VectorOfByteCreateSize(size);
+         _ptr = VectorOfByteCreateSize(size);
       }
 
       /// <summary>
@@ -39,7 +42,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            CvInvoke.VectorOfBytePushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            VectorOfBytePushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -51,7 +54,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfByteGetSize(_ptr);
+            return VectorOfByteGetSize(_ptr);
          }
       }
 
@@ -60,7 +63,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         CvInvoke.VectorOfByteClear(_ptr);
+         VectorOfByteClear(_ptr);
       }
 
       /// <summary>
@@ -70,7 +73,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfByteGetStartAddress(_ptr);
+            return VectorOfByteGetStartAddress(_ptr);
          }
       }
 
@@ -84,7 +87,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            CvInvoke.VectorOfByteCopyData(_ptr, handle.AddrOfPinnedObject());
+            VectorOfByteCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -96,15 +99,35 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.VectorOfByteRelease(_ptr);
-      }
-   }
-}
+            VectorOfByteRelease(_ptr);
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
+         if (_inputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvInputArrayRelease(ref _inputArrayPtr);
+
+         if (_outputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvOutputArrayRelease(ref _outputArrayPtr);
+      }
+
+      public IntPtr InputArrayPtr
+      {
+         get
+         {
+            if (_inputArrayPtr == IntPtr.Zero)
+               _inputArrayPtr = cvInputArrayFromVectorOfByte(_ptr);
+            return _inputArrayPtr;
+         }
+      }
+
+      public IntPtr OutputArrayPtr
+      {
+         get
+         {
+            if (_outputArrayPtr == IntPtr.Zero)
+               _outputArrayPtr = cvOutputArrayFromVectorOfByte(_ptr);
+            return _outputArrayPtr;
+         }
+      }
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfByteCreate();
 
@@ -128,5 +151,11 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void VectorOfByteClear(IntPtr v);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cvInputArrayFromVectorOfByte(IntPtr vec);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cvOutputArrayFromVectorOfByte(IntPtr vec);
    }
 }

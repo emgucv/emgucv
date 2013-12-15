@@ -26,7 +26,8 @@ namespace Emgu.CV
 #if NETFX_CORE
    public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable where TDepth : new()
 #else
-   public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable where TDepth : new()
+   public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable, IInputArray, IOutputArray, IInputOutputArray
+      where TDepth : new()
 #endif
    {
       /// <summary>
@@ -246,7 +247,7 @@ namespace Emgu.CV
       {
          get
          {
-            return CvInvoke.cvTrace(Ptr);
+            return CvInvoke.Trace(this);
          }
       }
 
@@ -287,7 +288,7 @@ namespace Emgu.CV
       /// <returns>True if all values are in range</returns>
       public bool CheckRange(double min, double max, ref System.Drawing.Point position)
       {
-         return CvInvoke.cvCheckRange(_ptr, true, ref position, min, max);
+         return CvInvoke.CheckRange(this, true, ref position, min, max);
       }
 
       #region statistic
@@ -306,7 +307,7 @@ namespace Emgu.CV
       public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.REDUCE_DIMENSION dim, CvEnum.REDUCE_TYPE type)
          where TOtherDepth : new ()
       {
-         CvInvoke.cvReduce(Ptr, array1D.Ptr, dim, type);
+         CvInvoke.Reduce(this, array1D, dim, type, Mat.GetDepth(typeof(TDepth)));
       }
       #endregion
 
@@ -410,7 +411,7 @@ namespace Emgu.CV
       /// <param name="value">The value on the diagonal</param>
       public void SetIdentity(MCvScalar value)
       {
-         CvInvoke.cvSetIdentity(Ptr, value);
+         CvInvoke.SetIdentity(this, value);
       }
 
       /// <summary>
@@ -447,7 +448,7 @@ namespace Emgu.CV
       /// <param name="src2">The other array to be elementwise multiplied with</param>
       public void _Mul(CvArray<TDepth> src2)
       {
-         CvInvoke.cvMul(Ptr, src2.Ptr, Ptr, 1.0);
+         CvInvoke.Multiply(this, src2, this, 1.0, Mat.GetDepth(typeof(TDepth)));
       }
       #endregion
 
@@ -459,6 +460,11 @@ namespace Emgu.CV
       {
          if (_dataHandle.IsAllocated)
             _dataHandle.Free();
+
+         if (_cvMat != null)
+         {
+            _cvMat.Dispose();
+         }
       }
       #endregion
 
@@ -470,7 +476,10 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Logic")]
       public void _Min(double value)
       {
-         CvInvoke.cvMinS(Ptr, value, Ptr);
+         using (InputArray ia = new InputArray(value))
+         {
+            CvInvoke.Min(this, ia, this);
+         }
       }
 
       /// <summary>
@@ -479,7 +488,7 @@ namespace Emgu.CV
       /// <param name="other">The other array to be elementwise minimized with this array</param>
       public void _Min(CvArray<TDepth> other)
       {
-         CvInvoke.cvMin(Ptr, other.Ptr, Ptr);
+         CvInvoke.Min(this, other, this);
       }
 
       /// <summary>
@@ -489,7 +498,8 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Logic")]
       public void _Max(double value)
       {
-         CvInvoke.cvMaxS(Ptr, value, Ptr);
+         using (InputArray ia = new InputArray(value))
+            CvInvoke.Max(this, ia, this);
       }
 
       /// <summary>
@@ -498,7 +508,7 @@ namespace Emgu.CV
       /// <param name="other">The other array to be elementwise maximized with this array</param>
       public void _Max(CvArray<TDepth> other)
       {
-         CvInvoke.cvMax(Ptr, other.Ptr, Ptr);
+         CvInvoke.Max(this, other, this);
       }
       #endregion
 
@@ -509,7 +519,7 @@ namespace Emgu.CV
       /// <param name="otherArray">The other array to perform AND operation</param>
       public void _And(CvArray<TDepth> otherArray)
       {
-         CvInvoke.cvAnd(Ptr, otherArray.Ptr, Ptr, IntPtr.Zero);
+         CvInvoke.BitwiseAnd(this, otherArray, this, null);
       }
 
       /// <summary>
@@ -518,7 +528,7 @@ namespace Emgu.CV
       /// <param name="otherArray">The other array to perform OR operation</param>
       public void _Or(CvArray<TDepth> otherArray)
       {
-         CvInvoke.cvOr(Ptr, otherArray.Ptr, Ptr, IntPtr.Zero);
+         CvInvoke.BitwiseOr(this, otherArray, this, null);
       }
 
       ///<summary> 
@@ -527,7 +537,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Logic")]
       public void _Not()
       {
-         CvInvoke.cvNot(Ptr, Ptr);
+         CvInvoke.BitwiseNot(this, this, null);
       }
 
       #endregion
@@ -643,5 +653,47 @@ namespace Emgu.CV
       }
       #endregion
 #endif
+
+      #region Input Output array
+      private Mat _cvMat;
+
+      public Mat CvMat
+      {
+         get
+         {
+            if (_cvMat == null 
+               || _cvMat.Ptr == IntPtr.Zero // _cvMat has been disposed
+               )
+            {
+               _cvMat = CvInvoke.CvArrToMat(Ptr);
+            } 
+            return _cvMat;
+         }
+      }
+
+      public IntPtr InputArrayPtr
+      {
+         get
+         {
+            return CvMat.InputArrayPtr;
+         }
+      }
+
+      public IntPtr OutputArrayPtr
+      {
+         get
+         {
+            return CvMat.OutputArrayPtr;
+         }
+      }
+      #endregion
+
+      public IntPtr InputOutputArrayPtr
+      {
+         get 
+         {
+            return CvMat.InputOutputArrayPtr;
+         }
+      }
    }
 }

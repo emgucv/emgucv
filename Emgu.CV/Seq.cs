@@ -566,16 +566,15 @@ namespace Emgu.CV
          return CvInvoke.cvPointPolygonTest(Ptr, point, 1);
       }
 
+      /*
       /// <summary>
       /// Get the moments for this point sequence
       /// </summary>
       /// <returns>the moments for this point sequence</returns>
       public MCvMoments GetMoments()
       {
-         MCvMoments moment = new MCvMoments();
-         CvInvoke.cvMoments(Ptr, ref moment, 0);
-         return moment;
-      }
+         return CvInvoke.Moments(Ptr, false);  
+      }*/
 
       /// <summary>
       /// Compare the shape of the current contour with <paramref name="objectToMatch"/> 

@@ -19,7 +19,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public VectorOfDMatch()
       {
-         _ptr = CvInvoke.VectorOfDMatchCreate();
+         _ptr = VectorOfDMatchCreate();
       }
 
       /// <summary>
@@ -28,7 +28,7 @@ namespace Emgu.CV.Util
       /// <param name="size">The size of the vector</param>
       public VectorOfDMatch(int size)
       {
-         _ptr = CvInvoke.VectorOfDMatchCreateSize(size);
+         _ptr = VectorOfDMatchCreateSize(size);
       }
 
       /// <summary>
@@ -40,7 +40,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            CvInvoke.VectorOfDMatchPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            VectorOfDMatchPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -52,7 +52,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfDMatchGetSize(_ptr);
+            return VectorOfDMatchGetSize(_ptr);
          }
       }
 
@@ -61,7 +61,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         CvInvoke.VectorOfDMatchClear(_ptr);
+         VectorOfDMatchClear(_ptr);
       }
 
       /// <summary>
@@ -71,7 +71,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfDMatchGetStartAddress(_ptr);
+            return VectorOfDMatchGetStartAddress(_ptr);
          }
       }
 
@@ -85,7 +85,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            CvInvoke.VectorOfDMatchCopyData(_ptr, handle.AddrOfPinnedObject());
+            VectorOfDMatchCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -97,15 +97,9 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.VectorOfDMatchRelease(_ptr);
+            VectorOfDMatchRelease(_ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfDMatchCreate();
 

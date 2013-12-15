@@ -60,7 +60,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> cpuImgSum = new Image<Gray, byte>(img1.Size);
             Stopwatch watch = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               CvInvoke.cvAdd(img1, img2, cpuImgSum, IntPtr.Zero);
+               CvInvoke.Add(img1, img2, cpuImgSum, null, Mat.Depth.Cv8U);
             watch.Stop();
             Trace.WriteLine(String.Format("CPU processing time: {0}ms", (double)watch.ElapsedMilliseconds / repeat));
 
@@ -409,8 +409,8 @@ namespace Emgu.CV.Test
 
             using (Image<Gray, Byte> temp = new Image<Gray, byte>(image.Size))
             {
-               CvInvoke.cvErode(image, temp, IntPtr.Zero, morphIter);
-               CvInvoke.cvDilate(temp, image, IntPtr.Zero, morphIter);
+               CvInvoke.Erode(image, temp, null, new Point(-1, -1), morphIter, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
+               CvInvoke.Dilate(temp, image, null, new Point(-1, -1), morphIter, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
             }
 
             Assert.IsTrue(CudaImage.ToImage().Equals(image));
@@ -454,8 +454,8 @@ namespace Emgu.CV.Test
          OclInvoke.PyrDown(gImg, gDown);
          OclInvoke.PyrUp(gDown, gUp);
 
-         CvInvoke.cvAbsDiff(down, gDown.ToImage(), down);
-         CvInvoke.cvAbsDiff(up, gUp.ToImage(), up);
+         CvInvoke.AbsDiff(down, gDown.ToImage(), down);
+         CvInvoke.AbsDiff(up, gUp.ToImage(), up);
          double[] minVals, maxVals;
          Point[] minLocs, maxLocs;
          down.MinMax(out minVals, out maxVals, out minLocs, out maxLocs);
@@ -679,13 +679,13 @@ namespace Emgu.CV.Test
             mask.SetValue(255);
             Features2DToolbox.VoteForUniqueness(distance, 0.8, mask);
 
-            int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+            int nonZeroCount = CvInvoke.CountNonZero(mask);
             if (nonZeroCount >= 4)
             {
                nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, trainIdx, mask, 1.5, 20);
                if (nonZeroCount >= 4)
                   homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, trainIdx, mask, 2);
-               nonZeroCount = CvInvoke.cvCountNonZero(mask);
+               nonZeroCount = CvInvoke.CountNonZero(mask);
             }
 
             stopwatch.Stop();

@@ -52,9 +52,9 @@ namespace Emgu.CV.Test
 
             Matrix<double> rMat = new Matrix<double>(3, 3);
             q.GetRotationMatrix(rMat);
-            CvInvoke.cvGEMM(rMat, point, 1.0, IntPtr.Zero, 0.0, pt2, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_DEFAULT);
+            CvInvoke.Gemm(rMat, point, 1.0, null, 0.0, pt2, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_DEFAULT);
 
-            CvInvoke.cvAbsDiff(pt1, pt2, pt3);
+            CvInvoke.AbsDiff(pt1, pt2, pt3);
 
             EmguAssert.IsTrue(
                pt3[0, 0] < epsilon &&
@@ -146,7 +146,7 @@ namespace Emgu.CV.Test
          Matrix<double> m2 = new Matrix<double>(3, 3);
          q1.GetRotationMatrix(m2);
          Matrix<double> diff = new Matrix<double>(3, 3);
-         CvInvoke.cvAbsDiff(m1, m2, diff);
+         CvInvoke.AbsDiff(m1, m2, diff);
          double norm = CvInvoke.cvNorm(diff, IntPtr.Zero, Emgu.CV.CvEnum.NORM_TYPE.CV_C, IntPtr.Zero);
          EmguAssert.IsTrue(norm < epsilon);
 

@@ -33,7 +33,7 @@ namespace Emgu.CV.Features2D
       /// <param name="descriptorSize">The size of descriptor. It can be equal 16, 32 or 64 bytes. Use 32 for default.</param>
       public BriefDescriptorExtractor(int descriptorSize)
       {
-         _ptr = CvInvoke.CvBriefDescriptorExtractorCreate(descriptorSize);
+         _ptr = CvBriefDescriptorExtractorCreate(descriptorSize);
       }
 
       /*
@@ -97,31 +97,18 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBriefDescriptorExtractorRelease(ref _ptr);
+         CvBriefDescriptorExtractorRelease(ref _ptr);
       }
 
       IntPtr IDescriptorExtractor<Gray, Byte>.DescriptorExtratorPtr
       {
          get { return _ptr; }
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBriefDescriptorExtractorCreate(int descriptorSize);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBriefDescriptorExtractorRelease(ref IntPtr extractor);
-
-      /*
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int CvBriefDescriptorExtractorGetDescriptorSize(IntPtr extractor);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvBriefDescriptorComputeDescriptors(IntPtr extractor, IntPtr image, IntPtr keypoints, IntPtr descriptors);*/
    }
 }

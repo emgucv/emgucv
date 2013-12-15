@@ -33,7 +33,7 @@ namespace Emgu.CV
             throw new FileNotFoundException(Properties.StringTable.FileNotFound, file.FullName);
 #endif
 
-         _ptr = CvInvoke.CvCascadeClassifierCreate(fileName);
+         _ptr = CvCascadeClassifierCreate(fileName);
 
          if (_ptr == IntPtr.Zero)
          {
@@ -63,7 +63,7 @@ namespace Emgu.CV
          {
             Seq<Rectangle> rectangles = new Seq<Rectangle>(stor);
 
-            CvInvoke.CvCascadeClassifierDetectMultiScale(_ptr, image, rectangles, scaleFactor, minNeighbors, 0, minSize, maxSize);
+            CvCascadeClassifierDetectMultiScale(_ptr, image, rectangles, scaleFactor, minNeighbors, 0, minSize, maxSize);
             return rectangles.ToArray();
          }
       }
@@ -73,12 +73,9 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvCascadeClassifierRelease(ref _ptr);
+         CvCascadeClassifierRelease(ref _ptr);
       }
-   }
 
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvCascadeClassifierCreate([MarshalAs(CvInvoke.StringMarshalType)] String fileName);
 
@@ -95,4 +92,5 @@ namespace Emgu.CV
          Size minSize,
          Size maxSize);
    }
+
 }

@@ -812,8 +812,11 @@ namespace Emgu.CV.Test
             Matrix<float> row = points.GetRows(i * (sampleCount / clustersCount), (i + 1) * (sampleCount / clustersCount), 1);
             row.SetRandNormal(new MCvScalar(r.Next() % imageSize, r.Next() % imageSize), new MCvScalar((r.Next() % imageSize) / 6, (r.Next() % imageSize) / 6));
          }
-         CvInvoke.cvAbsDiffS(points, points, new MCvScalar());
-         CvInvoke.cvRandShuffle(points, IntPtr.Zero, 1.0);
+         using (InputArray ia = new InputArray(new MCvScalar()))
+         {
+            CvInvoke.AbsDiff(points, ia, points);
+         }
+         CvInvoke.RandShuffle(points, 1.0, 0);
          #endregion
 
          CvInvoke.cvKMeans2(

@@ -195,7 +195,12 @@ namespace Emgu.CV
             return null;
 
          if (FlipType != Emgu.CV.CvEnum.FLIP.NONE)
-            CvInvoke.cvFlip(img, img, FlipType);
+         {
+            using (Mat m = CvInvoke.CvArrToMat(img))
+            {
+               CvInvoke.Flip(m, m, FlipType);
+            }
+         }
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 

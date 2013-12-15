@@ -51,7 +51,7 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void Apply(CudaImage<Gray, Byte> image, CudaImage<Gray, Byte> dst, Stream stream)
       {
-         CudaInvoke.cudaCornernessCriteriaCompute(_ptr, image, dst, stream);
+         CudaInvoke.cudaCornernessCriteriaCompute(_ptr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
    }
 

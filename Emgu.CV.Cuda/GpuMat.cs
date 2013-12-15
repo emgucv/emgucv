@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.CV;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -17,8 +18,12 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// A GpuMat, use the generic version if possible. The non generic version is good for use as buffer in stream calls.
    /// </summary>
-   public class GpuMat : UnmanagedObject
+   public class GpuMat : UnmanagedObject, IInputArray, IOutputArray
    {
+      private IntPtr _inputArrayPtr;
+      private IntPtr _outputArrayPtr;
+      private IntPtr _inputOutputArrayPtr;
+
       /// <summary>
       /// Create an empty GpuMat
       /// </summary>
@@ -41,7 +46,17 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.GpuMatRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CudaInvoke.GpuMatRelease(ref _ptr);
+
+         if (_inputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvInputArrayRelease(ref _inputArrayPtr);
+
+         if (_outputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvOutputArrayRelease(ref _outputArrayPtr);
+
+         if (_inputOutputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvInputOutputArrayRelease(ref _inputOutputArrayPtr);
       }
 
       /// <summary>
@@ -90,6 +105,48 @@ namespace Emgu.CV.Cuda
       {
          get { return CudaInvoke.GpuMatGetType(_ptr); }
       }
+
+      public IntPtr InputArrayPtr
+      {
+         get 
+         {
+            if (_inputArrayPtr == IntPtr.Zero)
+               _inputArrayPtr = CudaInvoke.cvInputArrayFromGpuMat(_ptr);
+            return _inputArrayPtr; 
+         }
+      }
+
+      public IntPtr OutputArrayPtr
+      {
+         get
+         {
+            if (_outputArrayPtr == IntPtr.Zero)
+               _outputArrayPtr = CudaInvoke.cvOutputArrayFromGpuMat(_ptr);
+            return _outputArrayPtr;
+         }
+      }
+
+      public IntPtr InputOutputArrayPtr
+      {
+         get
+         {
+            if (_inputOutputArrayPtr == IntPtr.Zero)
+               _inputOutputArrayPtr = CudaInvoke.cvInputOutputArrayFromGpuMat(_ptr);
+            return _inputOutputArrayPtr;
+         }
+      }
+   }
+
+   public static partial class CudaInvoke
+   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvInputArrayFromGpuMat(IntPtr mat);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvOutputArrayFromGpuMat(IntPtr mat);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvInputOutputArrayFromGpuMat(IntPtr mat);
    }
 
    /// <summary>
@@ -309,7 +366,7 @@ namespace Emgu.CV.Cuda
          Point minLoc = new Point(), maxLoc = new Point();
          if (NumberOfChannels == 1)
          {
-            CudaInvoke.MinMaxLoc(Ptr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, IntPtr.Zero);
+            CudaInvoke.MinMaxLoc(this, ref minVal, ref maxVal, ref minLoc, ref maxLoc, null);
             minValues[0] = minVal; maxValues[0] = maxVal;
             minLocations[0] = minLoc; maxLocations[0] = maxLoc;
          }
@@ -320,7 +377,7 @@ namespace Emgu.CV.Cuda
             {
                for (int i = 0; i < NumberOfChannels; i++)
                {
-                  CudaInvoke.MinMaxLoc(channels[i], ref minVal, ref maxVal, ref minLoc, ref maxLoc, IntPtr.Zero);
+                  CudaInvoke.MinMaxLoc(channels[i], ref minVal, ref maxVal, ref minLoc, ref maxLoc, null);
                   minValues[i] = minVal; maxValues[i] = maxVal;
                   minLocations[i] = minLoc; maxLocations[i] = maxLoc;
                }
@@ -343,7 +400,7 @@ namespace Emgu.CV.Cuda
 
          using (GpuMat<TDepth> xor = new GpuMat<TDepth>(Size, NumberOfChannels))
          {
-            CudaInvoke.BitwiseXor(_ptr, other, xor, IntPtr.Zero, IntPtr.Zero);
+            CudaInvoke.BitwiseXor(this, other, xor, null, null);
 
             if (xor.NumberOfChannels == 1)
                return CudaInvoke.CountNonZero(xor) == 0;
@@ -393,7 +450,7 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void SetTo(MCvScalar value, GpuMat<Byte> mask, Stream stream)
       {
-         CudaInvoke.GpuMatSetTo(_ptr, ref value, mask, stream);
+         CudaInvoke.GpuMatSetTo(this, value, mask, stream);
       }
 
       /// <summary>

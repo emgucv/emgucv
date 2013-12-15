@@ -42,7 +42,7 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void Apply(CudaImage<Gray, Byte> disparity, CudaImage<Gray, Byte> image, CudaImage<Gray, byte> dst, Stream stream)
       {
-         CudaInvoke.cudaDisparityBilateralFilterApply(_ptr, disparity, image, dst, stream);
+         CudaInvoke.cudaDisparityBilateralFilterApply(this, disparity.InputArrayPtr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
 
       /// <summary>

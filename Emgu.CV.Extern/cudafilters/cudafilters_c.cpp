@@ -65,7 +65,7 @@ cv::cuda::Filter* cudaCreateMorphologyFilter( int op, int srcType, const CvArr* 
 //  CudaFilter
 //
 //----------------------------------------------------------------------------
-void cudaFilterApply(cv::cuda::Filter* filter, cv::cuda::GpuMat* image, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream)
+void cudaFilterApply(cv::cuda::Filter* filter, cv::_InputArray* image, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
    filter->apply(*image, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }

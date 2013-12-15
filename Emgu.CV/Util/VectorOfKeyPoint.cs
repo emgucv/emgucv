@@ -40,7 +40,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public VectorOfKeyPoint()
       {
-         _ptr = CvInvoke.VectorOfKeyPointCreate();
+         _ptr = VectorOfKeyPointCreate();
       }
 
       /// <summary>
@@ -49,7 +49,7 @@ namespace Emgu.CV.Util
       /// <param name="size">The size of the vector</param>
       public VectorOfKeyPoint(int size)
       {
-         _ptr = CvInvoke.VectorOfKeyPointCreateSize(size);
+         _ptr = VectorOfKeyPointCreateSize(size);
       }
 
       /// <summary>
@@ -61,7 +61,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            CvInvoke.VectorOfKeyPointPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            VectorOfKeyPointPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -73,7 +73,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfKeyPointGetSize(_ptr);
+            return VectorOfKeyPointGetSize(_ptr);
          }
       }
 
@@ -82,7 +82,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         CvInvoke.VectorOfKeyPointClear(_ptr);
+         VectorOfKeyPointClear(_ptr);
       }
 
       /// <summary>
@@ -92,7 +92,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfKeyPointGetStartAddress(_ptr);
+            return VectorOfKeyPointGetStartAddress(_ptr);
          }
       }
 
@@ -106,7 +106,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            CvInvoke.VectorOfKeyPointCopyData(_ptr, handle.AddrOfPinnedObject());
+            VectorOfKeyPointCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -118,7 +118,7 @@ namespace Emgu.CV.Util
       /// <param name="borderSize">Border size in pixel</param>
       public void FilterByImageBorder(Size imageSize, int borderSize)
       {
-         CvInvoke.VectorOfKeyPointFilterByImageBorder(Ptr, imageSize, borderSize);
+         VectorOfKeyPointFilterByImageBorder(Ptr, imageSize, borderSize);
       }
 
       /// <summary>
@@ -128,7 +128,7 @@ namespace Emgu.CV.Util
       /// <param name="maxSize">Maximum size</param>
       public void FilterByKeypointSize(float minSize, float maxSize)
       {
-         CvInvoke.VectorOfKeyPointFilterByKeypointSize(Ptr, minSize, maxSize);
+         VectorOfKeyPointFilterByKeypointSize(Ptr, minSize, maxSize);
       }
 
       /// <summary>
@@ -137,7 +137,7 @@ namespace Emgu.CV.Util
       /// <param name="mask">The mask</param>
       public void FilterByPixelsMask(Image<Gray, Byte> mask)
       {
-         CvInvoke.VectorOfKeyPointFilterByPixelsMask(Ptr, mask);
+         VectorOfKeyPointFilterByPixelsMask(Ptr, mask);
       }
 
       /// <summary>
@@ -150,7 +150,7 @@ namespace Emgu.CV.Util
          get
          {
             MKeyPoint result = new MKeyPoint();
-            CvInvoke.VectorOfKeyPointGetItem(_ptr, index, ref result);
+            VectorOfKeyPointGetItem(_ptr, index, ref result);
             return result;
          }
       }
@@ -161,7 +161,7 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.VectorOfKeyPointRelease(_ptr);
+            VectorOfKeyPointRelease(_ptr);
       }
 
 #if !NETFX_CORE
@@ -175,13 +175,7 @@ namespace Emgu.CV.Util
          info.AddValue("KeyPoints", ToArray());
       }
 #endif
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfKeyPointCreate();
 
@@ -217,5 +211,13 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void VectorOfKeyPointGetItem(IntPtr keypoints, int index, ref MKeyPoint keypoint);
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
+
    }
 }

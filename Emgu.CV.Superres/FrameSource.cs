@@ -18,7 +18,7 @@ namespace Emgu.CV.Superres
    /// </summary>
    public class FrameSource : UnmanagedObject
    {
-      private Util.Mat _frame = new Util.Mat();
+      private Mat _frame = new Mat();
       private Image<Bgr, Byte> _image;
 
       protected IntPtr _frameSourcePtr;
@@ -75,7 +75,7 @@ namespace Emgu.CV.Superres
          if (_image == null || _image.Ptr == IntPtr.Zero)
             _image = new Image<Bgr, byte>(_frame.Size);
 
-         _frame.CopyTo(_image);
+         _frame.CopyTo(_image, null);
 
          return _image;
       }

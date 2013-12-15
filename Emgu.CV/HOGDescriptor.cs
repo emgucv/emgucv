@@ -23,7 +23,7 @@ namespace Emgu.CV
       /// </summary>
       public HOGDescriptor()
       {
-         _ptr = CvInvoke.CvHOGDescriptorCreateDefault();
+         _ptr = CvHOGDescriptorCreateDefault();
       }
 
       /// <summary>
@@ -49,7 +49,7 @@ namespace Emgu.CV
          double L2HysThreshold,
          bool gammaCorrection)
       {
-         _ptr = CvInvoke.CvHOGDescriptorCreate(
+         _ptr = CvHOGDescriptorCreate(
             ref winSize,
             ref blockSize,
             ref blockStride,
@@ -113,7 +113,7 @@ namespace Emgu.CV
          using (MemStorage stor = new MemStorage())
          {
             Seq<float> desc = new Seq<float>(stor);
-            CvInvoke.CvHOGDescriptorPeopleDetectorCreate(desc);
+            CvHOGDescriptorPeopleDetectorCreate(desc);
             return desc.ToArray();
          }
       }
@@ -127,7 +127,7 @@ namespace Emgu.CV
          using (VectorOfFloat vec = new VectorOfFloat())
          {
             vec.Push(detector);
-            CvInvoke.CvHOGSetSVMDetector(_ptr, vec);
+            CvHOGSetSVMDetector(_ptr, vec);
          }
       }
 
@@ -158,7 +158,7 @@ namespace Emgu.CV
          using (MemStorage stor = new MemStorage())
          {
             Seq<MCvObjectDetection> seq = new Seq<MCvObjectDetection>(stor);
-            CvInvoke.CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping);
+            CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping);
             return
 #if NETFX_CORE
                Extensions.
@@ -192,13 +192,13 @@ namespace Emgu.CV
          using (VectorOfFloat desc = new VectorOfFloat())
          {
             if (locations == null)
-               CvInvoke.CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, IntPtr.Zero);
+               CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, IntPtr.Zero);
             else
             {
                using (MemStorage stor = new MemStorage())
                {
                   Seq<Point> locationSeq = new Seq<Point>(stor);
-                  CvInvoke.CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, locationSeq);
+                  CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, locationSeq);
                }
             }
             return desc.ToArray();
@@ -210,7 +210,7 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvHOGDescriptorRelease(_ptr);
+         CvHOGDescriptorRelease(_ptr);
       }
 
       /// <summary>
@@ -220,13 +220,10 @@ namespace Emgu.CV
       {
          get
          {
-            return CvInvoke.CvHOGDescriptorGetDescriptorSize(_ptr);
+            return CvHOGDescriptorGetDescriptorSize(_ptr);
          }
       }
-   }
 
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvHOGDescriptorPeopleDetectorCreate(IntPtr seq);
 
@@ -278,4 +275,5 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static uint CvHOGDescriptorGetDescriptorSize(IntPtr descriptor);
    }
+
 }

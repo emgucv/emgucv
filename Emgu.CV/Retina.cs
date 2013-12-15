@@ -58,7 +58,7 @@ namespace Emgu.CV
       public Retina(Size inputSize, bool colorMode, ColorSamplingMethod colorSamplingMethod, bool useRetinaLogSampling, double reductionFactor, double samplingStrength)
       {
          _inputSize = inputSize;
-         _ptr = CvInvoke.CvRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+         _ptr = CvRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
       }
 
       /// <summary>
@@ -69,12 +69,12 @@ namespace Emgu.CV
          get
          {
             RetinaParameters p = new RetinaParameters();
-            CvInvoke.CvRetinaGetParameters(_ptr, ref p);
+            CvRetinaGetParameters(_ptr, ref p);
             return p;
          }
          set
          {
-            CvInvoke.CvRetinaSetParameters(_ptr, ref value);
+            CvRetinaSetParameters(_ptr, ref value);
          }
       }
 
@@ -84,7 +84,7 @@ namespace Emgu.CV
       /// <param name="image">The input image to be processed</param>
       public void Run(Image<Bgr, byte> image)
       {
-         CvInvoke.CvRetinaRun(_ptr, image);
+         CvRetinaRun(_ptr, image);
       }
 
       /// <summary>
@@ -97,7 +97,7 @@ namespace Emgu.CV
             return null;
 
          Image<Bgr, byte> parvo = new Image<Bgr, byte>(_inputSize);
-         CvInvoke.CvRetinaGetParvo(_ptr, parvo);
+         CvRetinaGetParvo(_ptr, parvo);
          return parvo;
       }
 
@@ -111,7 +111,7 @@ namespace Emgu.CV
             return null;
 
          Image<Gray, Byte> magno = new Image<Gray, byte>(_inputSize);
-         CvInvoke.CvRetinaGetMagno(_ptr, magno);
+         CvRetinaGetMagno(_ptr, magno);
          return magno;
       }
 
@@ -120,7 +120,7 @@ namespace Emgu.CV
       /// </summary>
       public void ClearBuffers()
       {
-         CvInvoke.CvRetinaClearBuffers(_ptr);
+         CvRetinaClearBuffers(_ptr);
       }
 
       /// <summary>
@@ -128,7 +128,7 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvRetinaRelease(ref _ptr);
+         CvRetinaRelease(ref _ptr);
       }
 
       /// <summary>
@@ -258,10 +258,7 @@ namespace Emgu.CV
          /// </summary>
          public IplMagnoParameters IplMagno;
       }
-   }
 
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvRetinaCreate(
          ref Size inputSize,
@@ -294,4 +291,5 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvRetinaSetParameters(IntPtr retina, ref Retina.RetinaParameters parameters);
    }
+
 }

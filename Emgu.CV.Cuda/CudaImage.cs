@@ -263,7 +263,7 @@ namespace Emgu.CV.Cuda
       public CudaImage<TColor, TDepth> Resize(Size size, CvEnum.INTER interpolationType, Stream stream)
       {
          CudaImage<TColor, TDepth> result = new CudaImage<TColor, TDepth>(size);
-         CudaInvoke.Resize(_ptr, result, interpolationType, stream);
+         CudaInvoke.Resize(this, result, interpolationType, stream);
          return result;
       }
 

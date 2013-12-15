@@ -21,7 +21,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public SimpleBlobDetector()
       {
-         _ptr = CvInvoke.CvSimpleBlobDetectorCreate();
+         _ptr = CvSimpleBlobDetectorCreate();
       }
 
       #region IFeatureDetector Members
@@ -44,15 +44,9 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.CvSimpleBlobDetectorRelease(ref _ptr);
+            CvSimpleBlobDetectorRelease(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvSimpleBlobDetectorCreate();
 

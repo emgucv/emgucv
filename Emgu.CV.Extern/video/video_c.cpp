@@ -53,3 +53,8 @@ CVAPI(void)  cvCalcOpticalFlowDualTVL1(CvArr* i0, CvArr* i1, CvArr* flow)
    cv::Ptr<cv::DenseOpticalFlow> dof = cv::createOptFlow_DualTVL1();
    dof->calc(i0Mat, i1Mat, flowMat);
 }
+
+void cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags)
+{
+   cv::calcOpticalFlowFarneback(*prev, *next, *flow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+}

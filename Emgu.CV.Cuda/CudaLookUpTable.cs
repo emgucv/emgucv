@@ -37,7 +37,7 @@ namespace Emgu.CV.Cuda
       public void Transform<TColor>(CudaImage<TColor, byte> image, CudaImage<TColor, byte> dst, Stream stream)
          where TColor : struct, IColor
       {
-         CudaInvoke.cudaLookUpTableTransform(_ptr, image, dst, stream);
+         CudaInvoke.cudaLookUpTableTransform(_ptr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
 
       /// <summary>

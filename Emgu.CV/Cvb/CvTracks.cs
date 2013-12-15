@@ -26,7 +26,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public CvTracks()
       {
-         _ptr = CvInvoke.cvbCvTracksCreate();
+         _ptr = cvbCvTracksCreate();
       }
 
       /// <summary>
@@ -34,7 +34,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.cvbCvTracksRelease(ref _ptr);
+         cvbCvTracksRelease(ref _ptr);
       }
 
       /// <summary>
@@ -46,7 +46,7 @@ namespace Emgu.CV.Cvb
       /// <param name="thActive">Active If a track becomes inactive but it has been active less than thActive frames, the track will be deleted.</param>
       public void Update(CvBlobs blobs, double thDistance, uint thInactive, uint thActive)
       {
-         CvInvoke.cvbCvUpdateTracks(blobs, _ptr, thDistance, thInactive, thActive);
+         cvbCvUpdateTracks(blobs, _ptr, thDistance, thInactive, thActive);
       }
 
       #region IDictionary<uint,CvBlob> Members
@@ -57,7 +57,7 @@ namespace Emgu.CV.Cvb
       /// <param name="track">The track</param>
       public void Add(uint id, CvTrack track)
       {
-         bool success = CvInvoke.cvbCvTracksAdd(_ptr, id, ref track);
+         bool success = cvbCvTracksAdd(_ptr, id, ref track);
          if (!success) throw new ArgumentException(String.Format("The item with id {0} already exist in the Tracks.", id));
       }
 
@@ -68,7 +68,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the CvTracks contains an element with the specific id</returns>
       public bool ContainsKey(uint id)
       {
-         return IntPtr.Zero != CvInvoke.cvbCvTracksFind(_ptr, id);
+         return IntPtr.Zero != cvbCvTracksFind(_ptr, id);
       }
 
       /// <summary>
@@ -92,7 +92,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the element is successfully found and removed; otherwise, false.</returns>
       public bool Remove(uint id)
       {
-         return CvInvoke.cvbCvTracksRemove(_ptr, id);
+         return cvbCvTracksRemove(_ptr, id);
       }
 
       /// <summary>
@@ -103,7 +103,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the tracks contains a track with the specific id; otherwise, false</returns>
       public bool TryGetValue(uint id, out CvTrack track)
       {
-         IntPtr trackPtr = CvInvoke.cvbCvTracksFind(_ptr, id);
+         IntPtr trackPtr = cvbCvTracksFind(_ptr, id);
          if (IntPtr.Zero == trackPtr)
          {
             track = new CvTrack();
@@ -124,7 +124,7 @@ namespace Emgu.CV.Cvb
 
          GCHandle idsHandle = GCHandle.Alloc(ids, GCHandleType.Pinned);
          GCHandle tracksHandle = GCHandle.Alloc(tracks, GCHandleType.Pinned);
-         CvInvoke.cvbCvTracksGetTracks(_ptr, idsHandle.AddrOfPinnedObject(), tracksHandle.AddrOfPinnedObject());
+         cvbCvTracksGetTracks(_ptr, idsHandle.AddrOfPinnedObject(), tracksHandle.AddrOfPinnedObject());
          idsHandle.Free();
          tracksHandle.Free();
       }
@@ -159,7 +159,7 @@ namespace Emgu.CV.Cvb
          }
          set
          {
-            CvInvoke.cvbCvTracksSetTrack(Ptr, id, ref value);
+            cvbCvTracksSetTrack(Ptr, id, ref value);
          }
       }
 
@@ -180,7 +180,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public void Clear()
       {
-         CvInvoke.cvbCvTracksClear(_ptr);
+         cvbCvTracksClear(_ptr);
       }
 
       /// <summary>
@@ -212,7 +212,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public int Count
       {
-         get { return CvInvoke.cvbCvTracksGetSize(_ptr); }
+         get { return cvbCvTracksGetSize(_ptr); }
       }
 
       /// <summary>
@@ -266,13 +266,7 @@ namespace Emgu.CV.Cvb
       }
 
       #endregion
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       /// <summary>
       /// Returns a pointer to CvBlobs
       /// </summary>

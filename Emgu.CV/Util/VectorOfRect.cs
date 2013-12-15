@@ -39,7 +39,7 @@ namespace Emgu.CV.Util
       /// Create an empty standard vector of Rectangles
       /// </summary>
       public VectorOfRect()
-         : this(CvInvoke.VectorOfRectCreate(), true)
+         : this(VectorOfRectCreate(), true)
       {
       }
 
@@ -56,7 +56,7 @@ namespace Emgu.CV.Util
       /// </summary>
       /// <param name="size">The size of the vector</param>
       public VectorOfRect(int size)
-         : this( CvInvoke.VectorOfRectCreateSize(size), true)
+         : this( VectorOfRectCreateSize(size), true)
       {
       }
 
@@ -69,7 +69,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            CvInvoke.VectorOfRectPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            VectorOfRectPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -81,7 +81,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfRectGetSize(_ptr);
+            return VectorOfRectGetSize(_ptr);
          }
       }
 
@@ -90,7 +90,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         CvInvoke.VectorOfRectClear(_ptr);
+         VectorOfRectClear(_ptr);
       }
 
       /// <summary>
@@ -100,7 +100,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfRectGetStartAddress(_ptr);
+            return VectorOfRectGetStartAddress(_ptr);
          }
       }
 
@@ -114,7 +114,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            CvInvoke.VectorOfRectCopyData(_ptr, handle.AddrOfPinnedObject());
+            VectorOfRectCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -130,7 +130,7 @@ namespace Emgu.CV.Util
          get
          {
             Rectangle result = new Rectangle();
-            CvInvoke.VectorOfRectGetItem(_ptr, index, ref result);
+            VectorOfRectGetItem(_ptr, index, ref result);
             return result;
          }
       }
@@ -141,7 +141,7 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_needDispose && _ptr != IntPtr.Zero)
-            CvInvoke.VectorOfRectRelease(_ptr);
+            VectorOfRectRelease(_ptr);
       }
 
 #if !NETFX_CORE
@@ -155,13 +155,7 @@ namespace Emgu.CV.Util
          info.AddValue("Rectangles", ToArray());
       }
 #endif
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfRectCreate();
 

@@ -18,7 +18,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public VectorOfFloat()
       {
-         _ptr = CvInvoke.VectorOfFloatCreate();
+         _ptr = VectorOfFloatCreate();
       }
 
       /// <summary>
@@ -27,7 +27,7 @@ namespace Emgu.CV.Util
       /// <param name="size">The size of the vector</param>
       public VectorOfFloat(int size)
       {
-         _ptr = CvInvoke.VectorOfFloatCreateSize(size);
+         _ptr = VectorOfFloatCreateSize(size);
       }
 
       /// <summary>
@@ -39,7 +39,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            CvInvoke.VectorOfFloatPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            VectorOfFloatPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -51,7 +51,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfFloatGetSize(_ptr);
+            return VectorOfFloatGetSize(_ptr);
          }
       }
 
@@ -60,7 +60,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         CvInvoke.VectorOfFloatClear(_ptr);
+         VectorOfFloatClear(_ptr);
       }
 
       /// <summary>
@@ -70,7 +70,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfFloatGetStartAddress(_ptr);
+            return VectorOfFloatGetStartAddress(_ptr);
          }
       }
 
@@ -84,7 +84,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            CvInvoke.VectorOfFloatCopyData(_ptr, handle.AddrOfPinnedObject());
+            VectorOfFloatCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -96,15 +96,9 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.VectorOfFloatRelease(_ptr);
+            VectorOfFloatRelease(_ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfFloatCreate();
 

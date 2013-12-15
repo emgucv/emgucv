@@ -225,9 +225,12 @@ void gpuMatCopy(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cu
       src->copyTo(*dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void gpuMatSetTo(cv::cuda::GpuMat* mat, const CvScalar* s, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
+void gpuMatSetTo(cv::cuda::GpuMat* mat, const CvScalar* s, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-      (*mat).setTo(*s, mask ? *mask : cv::cuda::GpuMat(), stream ? *stream : cv::cuda::Stream::Null());
+   if (mask)
+      mat->setTo(*s, *mask, stream ? *stream : cv::cuda::Stream::Null());
+   else
+      mat->setTo(*s, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 CVAPI(void) gpuMatReshape(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int cn, int rows)

@@ -16,7 +16,7 @@ namespace Emgu.CV
    /// <summary>
    /// IImage interface
    /// </summary>
-   public interface IImage : IDisposable, ICloneable
+   public interface IImage : IDisposable, ICloneable, IInputArray, IOutputArray, IInputOutputArray
    {
 #if NETFX_CORE
 #elif IOS 

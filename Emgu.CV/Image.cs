@@ -363,13 +363,14 @@ namespace Emgu.CV
             CvInvoke.cvCopy(channels [0].Ptr, Ptr, IntPtr.Zero);
          } else
          {
-            int channelsCount = channels.Length;
-            CvInvoke.cvMerge(
-               channelsCount > 0 ? channels [0].Ptr : IntPtr.Zero,
-               channelsCount > 1 ? channels [1].Ptr : IntPtr.Zero,
-               channelsCount > 2 ? channels [2].Ptr : IntPtr.Zero,
-               channelsCount > 3 ? channels [3].Ptr : IntPtr.Zero,
-               Ptr);
+            using (VectorOfMat mv = new VectorOfMat())
+            {
+               for (int i = 0; i < channels.Length; i++)
+               {
+                  mv.Push(channels[i].CvMat);
+               }
+               CvInvoke.Merge(mv, this);
+            }
          }
       }
       #endregion
@@ -533,7 +534,7 @@ namespace Emgu.CV
       public TColor GetAverage(Image<Gray, Byte> mask)
       {
          TColor res = new TColor();
-         res.MCvScalar = CvInvoke.cvAvg(Ptr, mask == null ? IntPtr.Zero : mask.Ptr);
+         res.MCvScalar = CvInvoke.Mean(this, mask);
          return res;
       }
 
@@ -542,7 +543,7 @@ namespace Emgu.CV
       public TColor GetSum()
       {
          TColor res = new TColor();
-         res.MCvScalar = CvInvoke.cvSum(Ptr);
+         res.MCvScalar = CvInvoke.Sum(this);
          return res;
       }
       #endregion
@@ -959,59 +960,6 @@ namespace Emgu.CV
         }
       #endregion
 
-      #region Object Detection
-      #region Haar detection
-        /// <summary>
-        /// Detect HaarCascade object in the current image, using predefined parameters
-        /// </summary>
-        /// <param name="haarObj">The object to be detected</param>
-        /// <returns>The objects detected, one array per channel</returns>
-        [Obsolete("Use HaarCascade.Detect function instead. This function will be removed in the next release")]
-        public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj)
-        {
-            return DetectHaarCascade(haarObj, 1.1, 3, CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(0, 0));
-        }
-
-        /// <summary>
-        /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles. The function scans the image several times at different scales (see cvSetImagesForHaarClassifierCascade). Each time it considers overlapping regions in the image and applies the classifiers to the regions using cvRunHaarClassifierCascade. It may also apply some heuristics to reduce number of analyzed regions, such as Canny prunning. After it has proceeded and collected the candidate rectangles (regions that passed the classifier cascade), it groups them and returns a sequence of average rectangles for each large enough group. The default parameters (scale_factor=1.1, min_neighbors=3, flags=0) are tuned for accurate yet slow object detection. For a faster operation on real video images the settings are: scale_factor=1.2, min_neighbors=2, flags=CV_HAAR_DO_CANNY_PRUNING, min_size=&lt;minimum possible face size&gt; (for example, ~1/4 to 1/16 of the image area in case of video conferencing).
-        /// </summary>
-        /// <param name="haarObj">Haar classifier cascade in internal representation</param>
-        /// <param name="scaleFactor">The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%</param>
-        /// <param name="minNeighbors">Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure</param>
-        /// <param name="flag">Mode of operation. Currently the only flag that may be specified is CV_HAAR_DO_CANNY_PRUNING. If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing.</param>
-        /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
-        /// <returns>The objects detected, one array per channel</returns>
-        [Obsolete("Use HaarCascade.Detect function instead. This function will be removed in the next release")]
-        public MCvAvgComp[][] DetectHaarCascade(HaarCascade haarObj, double scaleFactor, int minNeighbors, CvEnum.HAAR_DETECTION_TYPE flag, Size minSize)
-        {
-            using (MemStorage stor = new MemStorage())
-            {
-                Func<IImage, int, MCvAvgComp[]> detector =
-                delegate(IImage img, int channel)
-                {
-                    IntPtr objects = CvInvoke.cvHaarDetectObjects(
-                       img.Ptr,
-                       haarObj.Ptr,
-                       stor.Ptr,
-                       scaleFactor,
-                       minNeighbors,
-                       flag,
-                       minSize, 
-                       Size.Empty);
-
-                    if (objects == IntPtr.Zero)
-                        return new MCvAvgComp[0];
-
-                    Seq<MCvAvgComp> rects = new Seq<MCvAvgComp>(objects, stor);
-                    return rects.ToArray();
-                };
-
-                MCvAvgComp[][] res = ForEachDuplicateChannel(detector);
-                return res;
-            }
-        }
-      #endregion
-
       #region Hough line and circles
         ///<summary>
         ///Apply Probabilistic Hough transform to find line segments.
@@ -1173,7 +1121,6 @@ namespace Emgu.CV
                 return (seq == IntPtr.Zero) ? null : new Contour<Point>(seq, stor);
             }
         }
-      #endregion
       #endregion
 
       #region Indexer
@@ -1399,7 +1346,7 @@ namespace Emgu.CV
         public Image<TColor, Single> Sobel(int xorder, int yorder, int apertureSize)
         {
             Image<TColor, Single> res = new Image<TColor, float>(Size);
-            CvInvoke.cvSobel(Ptr, res.Ptr, xorder, yorder, apertureSize);
+            CvInvoke.Sobel(this, res, xorder, yorder, apertureSize, 1.0, 0.0, CvEnum.BORDER_TYPE.DEFAULT);
             return res;
         }
 
@@ -1417,7 +1364,7 @@ namespace Emgu.CV
         public Image<TColor, Single> Laplace(int apertureSize)
         {
             Image<TColor, Single> res = new Image<TColor, float>(Size);
-            CvInvoke.cvLaplace(Ptr, res.Ptr, apertureSize);
+            CvInvoke.Laplacian(this, res, apertureSize, 1.0, 0.0, CvEnum.BORDER_TYPE.DEFAULT);
             return res;
         }
 
@@ -1428,18 +1375,19 @@ namespace Emgu.CV
         [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
         public Image<Gray, Byte> Canny(double thresh, double threshLinking)
         {
-            return Canny(thresh, threshLinking, 3);
+            return Canny(thresh, threshLinking, 3, false);
         }
 
         ///<summary> Find the edges on this image and marked them in the returned image.</summary>
         ///<param name="thresh"> The threshhold to find initial segments of strong edges</param>
         ///<param name="threshLinking"> The threshold used for edge Linking</param>
         ///<param name="apertureSize">The aperture size, use 3 for default</param>
+        ///<param name="l2Gradient">a flag, indicating whether a more accurate norm should be used to calculate the image gradient magnitude ( L2gradient=true ), or whether the default norm is enough ( L2gradient=false ).</param>
         ///<returns> The edges found by the Canny edge detector</returns>
-        public Image<Gray, Byte> Canny(double thresh, double threshLinking, int apertureSize)
+        public Image<Gray, Byte> Canny(double thresh, double threshLinking, int apertureSize, bool l2Gradient)
         {
             Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
-            CvInvoke.cvCanny(this, res, thresh, threshLinking, apertureSize);
+            CvInvoke.Canny(this, res, thresh, threshLinking, apertureSize, l2Gradient);
             return res;
         }
 
@@ -1647,7 +1595,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> And(Image<TColor, TDepth> img2)
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
-         CvInvoke.cvAnd(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
+         CvInvoke.BitwiseAnd(this, img2, res, null);
          return res;
       }
 
@@ -1660,7 +1608,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> And(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
-         CvInvoke.cvAnd(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
+         CvInvoke.BitwiseAnd(this, img2, res, mask);
          return res;
       }
 
@@ -1669,9 +1617,7 @@ namespace Emgu.CV
       ///<returns> The result of the AND operation</returns>
       public Image<TColor, TDepth> And(TColor val)
       {
-         Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
-         CvInvoke.cvAndS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
-         return res;
+         return And(val, null);
       }
 
       ///<summary> Perform an binary AND operation with some color using a mask</summary>
@@ -1681,7 +1627,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> And(TColor val, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
-         CvInvoke.cvAndS(Ptr, val.MCvScalar, res.Ptr, mask.Ptr);
+         using (InputArray ia = new InputArray(val.MCvScalar))
+         {
+            CvInvoke.BitwiseAnd(this, ia, res, mask);
+         }
          return res;
       }
       #endregion
@@ -1692,9 +1641,7 @@ namespace Emgu.CV
       ///<returns> The result of the OR operation</returns>
       public Image<TColor, TDepth> Or(Image<TColor, TDepth> img2)
       {
-         Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvOr(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
-         return res;
+         return Or(img2, null);
       }
       ///<summary> Perform an elementwise OR operation with another image, using a mask, and return the result</summary>
       ///<param name="img2">The second image for the OR operation</param>
@@ -1703,7 +1650,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Or(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvOr(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
+         CvInvoke.BitwiseOr(this, img2, res, mask);
          return res;
       }
 
@@ -1713,9 +1660,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Logic")]
       public Image<TColor, TDepth> Or(TColor val)
       {
-         Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvOrS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
-         return res;
+         return Or(val, null);
       }
       ///<summary> Perform an elementwise OR operation with some color using a mask</summary>
       ///<param name="val">The color for the OR operation</param>
@@ -1724,7 +1669,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Or(TColor val, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvOrS(Ptr, val.MCvScalar, res.Ptr, mask.Ptr);
+         using (InputArray ia = new InputArray(val.MCvScalar))
+         {
+            CvInvoke.BitwiseOr(this, ia, res, mask);
+         }
          return res;
       }
       #endregion
@@ -1747,7 +1695,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Xor(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvXor(Ptr, img2.Ptr, res.Ptr, mask);
+         CvInvoke.BitwiseXor(this, img2, res, mask);
          return res;
       }
 
@@ -1771,7 +1719,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Xor(TColor val, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvXorS(Ptr, val.MCvScalar, res.Ptr, mask);
+         using (InputArray ia = new InputArray(val.MCvScalar))
+         {
+            CvInvoke.BitwiseXor(this, ia, res, mask);
+         }
          return res;
       }
       #endregion
@@ -1783,7 +1734,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Not()
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvNot(Ptr, res.Ptr);
+         CvInvoke.BitwiseNot(this, res, null);
          return res;
       }
       #endregion
@@ -1795,7 +1746,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Max(Image<TColor, TDepth> img2)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvMax(Ptr, img2.Ptr, res.Ptr);
+         CvInvoke.Max(this, img2, res);
          return res;
       }
 
@@ -1805,7 +1756,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Max(double value)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvMaxS(Ptr, value, res.Ptr);
+         using (InputArray ia = new InputArray(value))
+         {
+            CvInvoke.Max(this, ia, res);
+         }
          return res;
       }
 
@@ -1815,7 +1769,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Min(Image<TColor, TDepth> img2)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvMin(Ptr, img2.Ptr, res.Ptr);
+         CvInvoke.Min(this, img2, res);
          return res;
       }
 
@@ -1825,7 +1779,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Min(double value)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvMinS(Ptr, value, res.Ptr);
+         using (InputArray ia = new InputArray(value))
+         {
+            CvInvoke.Min(this, ia, res);
+         }
          return res;
       }
 
@@ -1837,7 +1794,9 @@ namespace Emgu.CV
       public Image<Gray, Byte> InRange(TColor lower, TColor higher)
       {
          Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
-         CvInvoke.cvInRangeS(Ptr, lower.MCvScalar, higher.MCvScalar, res.Ptr);
+         using (InputArray ialower = new InputArray(lower.MCvScalar))
+         using (InputArray iaupper = new InputArray(higher.MCvScalar))
+            CvInvoke.InRange(this, ialower, iaupper, res);
          return res;
       }
 
@@ -1848,7 +1807,7 @@ namespace Emgu.CV
       public Image<Gray, Byte> InRange(Image<TColor, TDepth> lower, Image<TColor, TDepth> higher)
       {
          Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
-         CvInvoke.cvInRange(Ptr, lower, higher, res);
+         CvInvoke.InRange(this, lower, higher, res);
          return res;
       }
 
@@ -1865,7 +1824,7 @@ namespace Emgu.CV
 
          if (NumberOfChannels == 1)
          {
-            CvInvoke.cvCmp(Ptr, img2.Ptr, res.Ptr, cmpType);
+            CvInvoke.Compare(this, img2, res, cmpType);
          }
          else
          {
@@ -1879,7 +1838,7 @@ namespace Emgu.CV
                   CvInvoke.cvCopy(Ptr, src1.Ptr, IntPtr.Zero);
                   CvInvoke.cvCopy(img2.Ptr, src2.Ptr, IntPtr.Zero);
 
-                  CvInvoke.cvCmp(src1.Ptr, src2.Ptr, dest.Ptr, cmpType);
+                  CvInvoke.Compare(src1, src2, dest, cmpType);
 
                   CvInvoke.cvSetImageCOI(res.Ptr, i + 1);
                   CvInvoke.cvCopy(dest.Ptr, res.Ptr, IntPtr.Zero);
@@ -1904,18 +1863,25 @@ namespace Emgu.CV
          Size size = Size;
          Image<TColor, Byte> res = new Image<TColor, byte>(size);
 
-         if (NumberOfChannels == 1)
+         using (InputArray ia = new InputArray(value))
          {
-            CvInvoke.cvCmpS(Ptr, value, res.Ptr, comparisonType);
-         }
-         else
-         {
-            ForEachDuplicateChannel<Byte>(
-               delegate(IntPtr img1, IntPtr img2, int channel)
-               {
-                  CvInvoke.cvCmpS(img1, value, img2, comparisonType);
-               },
-               res);
+            if (NumberOfChannels == 1)
+            {
+               CvInvoke.Compare(this, ia, res, comparisonType);
+            }
+            else
+            {
+               ForEachDuplicateChannel<Byte>(
+                  delegate(IntPtr img1, IntPtr img2, int channel)
+                  {
+                     using (Mat m1 = CvInvoke.CvArrToMat(img1))
+                     using (Mat m2 = CvInvoke.CvArrToMat(img2))
+                     {
+                        CvInvoke.Compare(m1, ia, m2, comparisonType);
+                     }
+                  },
+                  res);
+            }
          }
 
          return res;
@@ -1936,16 +1902,19 @@ namespace Emgu.CV
 
          using (Image<TColor, TDepth> neqMask = new Image<TColor, TDepth>(Size))
          {
-            CvInvoke.cvXor(_ptr, img2.Ptr, neqMask.Ptr, IntPtr.Zero);
+            CvInvoke.BitwiseXor(this, img2, neqMask, null);
             if (NumberOfChannels == 1)
-               return CvInvoke.cvCountNonZero(neqMask) == 0;
+               return CvInvoke.CountNonZero(neqMask) == 0;
             else
             {
                IntPtr singleChannel = Marshal.AllocHGlobal(StructSize.MCvMat);
                try
                {
                   CvInvoke.cvReshape(neqMask, singleChannel, 1, 0);
-                  return CvInvoke.cvCountNonZero(singleChannel) == 0;
+                  using (Mat m = CvInvoke.CvArrToMat(singleChannel))
+                  {
+                     return CvInvoke.CountNonZero(m) == 0;
+                  }
                }
                finally
                {
@@ -2009,8 +1978,8 @@ namespace Emgu.CV
          using (Matrix<double> bgdModel = new Matrix<double>(1, 13 * 5))
          using (Matrix<double> fgdModel = new Matrix<double>(1, 13 * 5))
          {
-            CvInvoke.CvGrabCut(Ptr, mask.Ptr, ref rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
-            CvInvoke.CvGrabCut(Ptr, mask.Ptr, ref rect, bgdModel, fgdModel, iteration, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
+            CvInvoke.GrabCut(this, mask, rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
+            CvInvoke.GrabCut(this, mask, rect, bgdModel, fgdModel, iteration, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
          }
          return mask;
       }
@@ -2024,7 +1993,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Sub(Image<TColor, TDepth> img2)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSub(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
+         CvInvoke.Subtract(this, img2, res, null, Mat.GetDepth(typeof(TDepth)));
          return res;
       }
 
@@ -2035,7 +2004,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Sub(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSub(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
+         CvInvoke.Subtract(this, img2, res, mask, Mat.GetDepth(typeof(TDepth)));
          return res;
       }
 
@@ -2046,7 +2015,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Sub(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSubS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
+         using (InputArray ia = new InputArray(val.MCvScalar))
+         {
+            CvInvoke.Subtract(this, ia, res, null, Mat.GetDepth(typeof(TDepth)));
+         }
          return res;
       }
 
@@ -2058,9 +2030,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Math")]
       public Image<TColor, TDepth> SubR(TColor val)
       {
-         Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSubRS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
-         return res;
+         return SubR(val, null);
       }
 
       /// <summary>
@@ -2072,7 +2042,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> SubR(TColor val, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSubRS(Ptr, val.MCvScalar, res.Ptr, mask.Ptr);
+         using (InputArray ia = new InputArray(val.MCvScalar))
+         {
+            CvInvoke.Subtract(ia, this, res, mask, Mat.GetDepth(typeof(TDepth)));
+         }
          return res;
       }
       #endregion
@@ -2083,9 +2056,7 @@ namespace Emgu.CV
       ///<returns> The result of elementwise adding img2 to the current image</returns>
       public Image<TColor, TDepth> Add(Image<TColor, TDepth> img2)
       {
-         Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvAdd(Ptr, img2.Ptr, res.Ptr, IntPtr.Zero);
-         return res;
+         return Add(img2, null);
       }
       ///<summary> Elementwise add <paramref name="img2"/> with the current image, using a mask</summary>
       ///<param name="img2">The image to be added to the current image</param>
@@ -2094,7 +2065,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Add(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvAdd(Ptr, img2.Ptr, res.Ptr, mask.Ptr);
+         CvInvoke.Add(this, img2, res, mask, Mat.GetDepth(typeof(TDepth)));
          return res;
       }
       ///<summary> Elementwise add a color <paramref name="val"/> to the current image</summary>
@@ -2104,7 +2075,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Add(TColor val)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvAddS(Ptr, val.MCvScalar, res.Ptr, IntPtr.Zero);
+         using (InputArray ia = new InputArray(val.MCvScalar))
+         {
+            CvInvoke.Add(this, ia, res, null, Mat.GetDepth(typeof(TDepth)));
+         }
          return res;
       }
       #endregion
@@ -2117,7 +2091,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Mul(Image<TColor, TDepth> img2, double scale)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvMul(Ptr, img2.Ptr, res.Ptr, scale);
+         CvInvoke.Multiply(this, img2, res, scale, Mat.GetDepth(typeof(TDepth)));
          return res;
       }
 
@@ -2171,7 +2145,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> AddWeighted(Image<TColor, TDepth> img2, double alpha, double beta, double gamma)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvAddWeighted(Ptr, alpha, img2.Ptr, beta, gamma, res.Ptr);
+         CvInvoke.AddWeighted(this, alpha, img2, beta, gamma, res, Mat.GetDepth(typeof(TDepth)));
          return res;
       }
 
@@ -2204,7 +2178,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> AbsDiff(Image<TColor, TDepth> img2)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvAbsDiff(Ptr, img2.Ptr, res.Ptr);
+         CvInvoke.AbsDiff(this, img2, res);
          return res;
       }
 
@@ -2217,7 +2191,10 @@ namespace Emgu.CV
       public Image<TColor, TDepth> AbsDiff(TColor color)
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
-         CvInvoke.cvAbsDiffS(Ptr, res.Ptr, color.MCvScalar);
+         using (InputArray ia = new InputArray(color.MCvScalar))
+         {
+            CvInvoke.AbsDiff(this, ia, res);
+         }
          return res;
       }
       #endregion
@@ -2234,7 +2211,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Pow(double power)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvPow(Ptr, res.Ptr, power);
+         CvInvoke.Pow(this, power, res);
          return res;
       }
 
@@ -2248,7 +2225,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Exp()
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvExp(Ptr, res.Ptr);
+         CvInvoke.Exp(this, res);
          return res;
       }
 
@@ -2260,7 +2237,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Log()
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvLog(Ptr, res.Ptr);
+         CvInvoke.Log(this, res);
          return res;
       }
       #endregion
@@ -2552,11 +2529,11 @@ namespace Emgu.CV
                         shift = (scale == 0) ? min : -min * scale;
                      }
 
-                     CvInvoke.cvConvertScaleAbs(srcImage.Ptr, Ptr, scale, shift);
+                     CvInvoke.ConvertScaleAbs(srcImage, this, scale, shift);
                   }
                   else
                   {
-                     CvInvoke.cvConvertScale(srcImage.Ptr, Ptr, 1.0, 0.0);
+                     CvInvoke.cvConvertScale(srcImage, this, 1.0, 0.0);
                   }
                }
             }
@@ -2567,23 +2544,23 @@ namespace Emgu.CV
             #region different color
             if (typeof(TDepth) == typeof(TSrcDepth))
             {   //same depth
-               ConvertColor(srcImage.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size);
+               ConvertColor(srcImage, this, typeof(TSrcColor), typeof(TColor), Size);
             }
             else
             {   //different depth
                using (Image<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
-                  ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size);
+                  ConvertColor(tmp, this, typeof(TSrcColor), typeof(TColor), Size);
             }
             #endregion
          }
       }
 
-      private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, Size size)
+      private static void ConvertColor(IInputArray src, IOutputArray dest, Type srcColor, Type destColor, Size size)
       {
          try
          {
             // if the direct conversion exist, apply the conversion
-            CvInvoke.cvCvtColor(src, dest, CvToolbox.GetColorCvtCode(srcColor, destColor));
+            CvInvoke.CvtColor(src, dest, CvToolbox.GetColorCvtCode(srcColor, destColor));
          }
          catch
          {
@@ -2592,8 +2569,8 @@ namespace Emgu.CV
                //if a direct conversion doesn't exist, apply a two step conversion
                using (Image<Bgr, TDepth> tmp = new Image<Bgr, TDepth>(size))
                {
-                  CvInvoke.cvCvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)));
-                  CvInvoke.cvCvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor));
+                  CvInvoke.CvtColor(src, tmp, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)));
+                  CvInvoke.CvtColor(tmp, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor));
                }
             }
             catch
@@ -2619,9 +2596,9 @@ namespace Emgu.CV
          Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Width, Height);
 
          if (typeof(TOtherDepth) == typeof(Byte))
-            CvInvoke.cvConvertScaleAbs(Ptr, res.Ptr, scale, shift);
+            CvInvoke.ConvertScaleAbs(this, res, scale, shift);
          else
-            CvInvoke.cvConvertScale(Ptr, res.Ptr, scale, shift);
+            CvInvoke.cvConvertScale(this, res, scale, shift);
 
          return res;
       }
@@ -2814,11 +2791,14 @@ namespace Emgu.CV
                         using (Image<Gray, Byte> r = indexValue.CopyBlank())
                         using (Image<Gray, Byte> a = indexValue.CopyBlank())
                         {
-                           CvInvoke.cvLUT(indexValue.Ptr, b.Ptr, bTable.Ptr);
-                           CvInvoke.cvLUT(indexValue.Ptr, g.Ptr, gTable.Ptr);
-                           CvInvoke.cvLUT(indexValue.Ptr, r.Ptr, rTable.Ptr);
-                           CvInvoke.cvLUT(indexValue.Ptr, a.Ptr, aTable.Ptr);
-                           CvInvoke.cvMerge(b.Ptr, g.Ptr, r.Ptr, a.Ptr, Ptr);
+                           CvInvoke.LUT(indexValue, bTable, b);
+                           CvInvoke.LUT(indexValue, gTable, g);
+                           CvInvoke.LUT(indexValue, rTable, r);
+                           CvInvoke.LUT(indexValue, aTable, a);
+                           using (VectorOfMat mv = new VectorOfMat(new Mat[] { b.CvMat, g.CvMat, r.CvMat, a.CvMat }))
+                           {
+                              CvInvoke.Merge(mv, this);
+                           }
                         }
                      }
                      value.UnlockBits(data);
@@ -3018,7 +2998,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> PyrDown()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width >> 1, Height >> 1);
-         CvInvoke.cvPyrDown(Ptr, res.Ptr, CvEnum.FILTER_TYPE.CV_GAUSSIAN_5x5);
+         CvInvoke.PyrDown(this, res, CvEnum.BORDER_TYPE.DEFAULT);
          return res;
       }
 
@@ -3033,7 +3013,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> PyrUp()
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(Width << 1, Height << 1);
-         CvInvoke.cvPyrUp(Ptr, res.Ptr, CvEnum.FILTER_TYPE.CV_GAUSSIAN_5x5);
+         CvInvoke.PyrUp(this, res, CvEnum.BORDER_TYPE.DEFAULT);
          return res;
       }
 
@@ -3063,7 +3043,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> InPaint(Image<Gray, Byte> mask, double radius)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvInpaint(Ptr, mask.Ptr, res.Ptr, radius, CvEnum.INPAINT_TYPE.CV_INPAINT_TELEA);
+         CvInvoke.Inpaint(this, mask, res, radius, CvEnum.INPAINT_TYPE.CV_INPAINT_TELEA);
          return res;
       }
       #endregion
@@ -3076,26 +3056,13 @@ namespace Emgu.CV
       /// <param name="operation">Type of morphological operation</param>
       /// <param name="iterations">Number of times erosion and dilation are applied</param>
       /// <returns>The result of the morphological operation</returns>
-      public Image<TColor, TDepth> MorphologyEx(StructuringElementEx element, CvEnum.CV_MORPH_OP operation, int iterations)
+      public Image<TColor, TDepth> MorphologyEx(  CvEnum.CV_MORPH_OP operation, IInputArray kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue)
       {
          Image<TColor, TDepth> res = CopyBlank();
 
-         //For MOP_GRADIENT, a temperary buffer is required
-         Image<TColor, TDepth> buffer =
-            (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT)
-            ? new Image<TColor, TDepth>(Size)
-            : null;
-
-         CvInvoke.cvMorphologyEx(
-            Ptr, res.Ptr,
-            buffer == null ? IntPtr.Zero : buffer.Ptr,
-            element == null ? IntPtr.Zero : element.Ptr,
-            operation,
-            iterations);
-
-         //release the temporary buffer if it is created
-         if (buffer != null) buffer.Dispose();
-
+         CvInvoke.MorphologyEx(
+            this, res, operation,
+            kernel, anchor, iterations, borderType, borderValue);
          return res;
       }
 
@@ -3105,24 +3072,11 @@ namespace Emgu.CV
       /// <param name="element">Structuring element</param>
       /// <param name="operation">Type of morphological operation</param>
       /// <param name="iterations">Number of times erosion and dilation are applied</param>
-      public void _MorphologyEx(StructuringElementEx element, CvEnum.CV_MORPH_OP operation, int iterations)
+      public void _MorphologyEx(CvEnum.CV_MORPH_OP operation, IInputArray kernel, Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue)
       {
-         Image<TColor, TDepth> temp =
-            (operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT
-            || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_TOPHAT
-            || operation == Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT) ?
-            CopyBlank()
-            : null;
-
-         CvInvoke.cvMorphologyEx(
-            Ptr,
-            Ptr,
-            temp == null ? IntPtr.Zero : temp.Ptr,
-            element == null ? IntPtr.Zero : element.Ptr,
-            operation,
-            iterations);
-
-         if (temp != null) temp.Dispose();
+         CvInvoke.MorphologyEx(
+            this, this, operation, 
+            kernel, anchor, iterations, borderType, borderValue);
       }
 
       /// <summary>
@@ -3134,7 +3088,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Erode(int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvErode(Ptr, res.Ptr, IntPtr.Zero, iterations);
+         CvInvoke.Erode(this, res, null, new Point(-1, -1), iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
          return res;
       }
 
@@ -3147,7 +3101,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Dilate(int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvDilate(Ptr, res.Ptr, IntPtr.Zero, iterations);
+         CvInvoke.Dilate(this, res, null, new Point(-1, -1), iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
          return res;
       }
 
@@ -3159,7 +3113,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Morphology")]
       public void _Erode(int iterations)
       {
-         CvInvoke.cvErode(Ptr, Ptr, IntPtr.Zero, iterations);
+         CvInvoke.Erode(this, this, null, new Point(-1, -1), iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
       }
 
       /// <summary>
@@ -3170,7 +3124,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Morphology")]
       public void _Dilate(int iterations)
       {
-         CvInvoke.cvDilate(Ptr, Ptr, IntPtr.Zero, iterations);
+         CvInvoke.Dilate(this, this, null, new Point(-1, -1), iterations, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
       }
       #endregion
 
@@ -3774,7 +3728,10 @@ namespace Emgu.CV
       public static Image<TColor, TDepth> operator /(double scale, Image<TColor, TDepth> image)
       {
          Image<TColor, TDepth> res = image.CopyBlank();
-         CvInvoke.cvDiv(IntPtr.Zero, image.Ptr, res.Ptr, scale);
+         using (InputArray ia = new InputArray(scale))
+         {
+            CvInvoke.Divide(ia, image, res, 1.0, Mat.GetDepth(typeof(TDepth)));
+         }
          return res;
       }
 
@@ -3892,12 +3849,18 @@ namespace Emgu.CV
          ForEachDuplicateChannel(
             delegate(IntPtr srcFloat, IntPtr dest, int channel)
             {
-               //perform the convolution operation
-               CvInvoke.cvFilter2D(
-                   srcFloat,
-                   dest,
-                   kernel.Ptr,
-                   kernel.Center);
+               using (Mat srcMat = CvInvoke.CvArrToMat(srcFloat))
+               using (Mat dstMat = CvInvoke.CvArrToMat(dest))
+               {
+                  //perform the convolution operation
+                  CvInvoke.Filter2D(
+                      srcMat,
+                      dstMat,
+                      kernel,
+                      kernel.Center,
+                      0,
+                      CvEnum.BORDER_TYPE.REPLICATE);
+               }
             },
             res);
 
@@ -3914,7 +3877,7 @@ namespace Emgu.CV
       public Image<TColor, double> Integral()
       {
          Image<TColor, double> sum = new Image<TColor, double>(Width + 1, Height + 1);
-         CvInvoke.cvIntegral(Ptr, sum.Ptr, IntPtr.Zero, IntPtr.Zero);
+         CvInvoke.Integral(this, sum, null, null, Mat.Depth.Cv64F);
          return sum;
       }
 
@@ -3928,7 +3891,7 @@ namespace Emgu.CV
       {
          sum = new Image<TColor, double>(Width + 1, Height + 1);
          squareSum = new Image<TColor, double>(Width + 1, Height + 1);
-         CvInvoke.cvIntegral(Ptr, sum.Ptr, squareSum.Ptr, IntPtr.Zero);
+         CvInvoke.Integral(this, sum, squareSum, null, Mat.Depth.Cv64F);
       }
 
       /// <summary>
@@ -3942,7 +3905,7 @@ namespace Emgu.CV
          sum = new Image<TColor, double>(Width + 1, Height + 1);
          squareSum = new Image<TColor, double>(Width + 1, Height + 1);
          titledSum = new Image<TColor, double>(Width + 1, Height + 1);
-         CvInvoke.cvIntegral(Ptr, sum.Ptr, squareSum.Ptr, titledSum.Ptr);
+         CvInvoke.Integral(this, sum, squareSum, titledSum, Mat.Depth.Cv64F);
       }
       #endregion
 
@@ -3974,7 +3937,11 @@ namespace Emgu.CV
          ForEachDuplicateChannel<TDepth>(
             delegate(IntPtr src, IntPtr dst, int channel)
             {
-               CvInvoke.cvAdaptiveThreshold(src, dst, max[channel], adaptiveType, thresholdType, blockSize, p1[channel]);
+               using (Mat m1 = CvInvoke.CvArrToMat(src))
+               using (Mat m2 = CvInvoke.CvArrToMat(dst))
+               {
+                  CvInvoke.AdaptiveThreshold(m1, m2, max[channel], adaptiveType, thresholdType, blockSize, p1[channel]);
+               }
             },
             result);
          return result;
@@ -3990,7 +3957,11 @@ namespace Emgu.CV
          ForEachDuplicateChannel<TDepth>(
             delegate(IntPtr src, IntPtr dst, int channel)
             {
-               CvInvoke.cvThreshold(src, dst, t[channel], m[channel], threshType);
+               using (Mat m1 = CvInvoke.CvArrToMat(src))
+               using (Mat m2 = CvInvoke.CvArrToMat(dst))
+               {
+                  CvInvoke.Threshold(m1, m2, t[channel], m[channel], threshType);
+               }
             },
             dest);
       }
@@ -4131,7 +4102,10 @@ namespace Emgu.CV
          return
              ForEachChannel<int>(delegate(IntPtr channel, int channelNumber)
              {
-                return CvInvoke.cvCountNonZero(channel);
+                using (Mat m = CvInvoke.CvArrToMat(channel))
+                {
+                   return CvInvoke.CountNonZero(m);
+                }
              });
       }
 
@@ -4154,7 +4128,7 @@ namespace Emgu.CV
          //int[] minIdx = new int[2], maxIdx = new int[2];
          if (NumberOfChannels == 1)
          {
-            CvInvoke.cvMinMaxLoc(Ptr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, IntPtr.Zero);
+            CvInvoke.MinMaxLoc(this, ref minVal, ref maxVal, ref minLoc, ref maxLoc, null);
             //CvInvoke.CvMinMaxIdx(Ptr, out minVal, out maxVal, minIdx, maxIdx, IntPtr.Zero);
             minValues[0] = minVal; maxValues[0] = maxVal;
             //minLoc.X = minIdx[1]; minLoc.Y = minIdx[0];
@@ -4164,17 +4138,21 @@ namespace Emgu.CV
          }
          else
          {
-            for (int i = 0; i < NumberOfChannels; i++)
+            Image<Gray, TDepth>[] channels = this.Split();
+            try
             {
-               CvInvoke.cvSetImageCOI(Ptr, i + 1);
-               CvInvoke.cvMinMaxLoc(Ptr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, IntPtr.Zero);
-               //CvInvoke.CvMinMaxIdx(Ptr, out minVal, out maxVal, minIdx, maxIdx, IntPtr.Zero);
-               minValues[i] = minVal; maxValues[i] = maxVal;
-               //minLoc.X = minIdx[1]; minLoc.Y = minIdx[0];
-               //maxLoc.X = maxIdx[1]; maxLoc.Y = maxIdx[0];
-               minLocations[i] = minLoc; maxLocations[i] = maxLoc;
+               for (int i = 0; i < channels.Length; i++)
+               {
+                  CvInvoke.MinMaxLoc(channels[i], ref minVal, ref maxVal, ref minLoc, ref maxLoc, null);
+                  minValues[i] = minVal; maxValues[i] = maxVal;
+                  minLocations[i] = minLoc; maxLocations[i] = maxLoc;
+               }
             }
-            CvInvoke.cvSetImageCOI(Ptr, 0);
+            finally
+            {
+               for (int i = 0; i < channels.Length; i++)
+                  channels[i].Dispose();
+            }
          }
       }
       #endregion
@@ -4189,7 +4167,7 @@ namespace Emgu.CV
          if (flipType == Emgu.CV.CvEnum.FLIP.NONE) return Copy();
 
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvFlip(Ptr, res.Ptr, flipType);
+         CvInvoke.Flip(this, res, flipType);
          return res;
       }
 
@@ -4201,9 +4179,9 @@ namespace Emgu.CV
       {
          if (flipType != Emgu.CV.CvEnum.FLIP.NONE)
          {
-            CvInvoke.cvFlip(
-               Ptr,
-               IntPtr.Zero,
+            CvInvoke.Flip(
+               this,
+               this,
                flipType);
          }
       }
@@ -4254,9 +4232,7 @@ namespace Emgu.CV
       /// <returns>spatial and central moments up to the third order</returns>
       public MCvMoments GetMoments(bool binary)
       {
-         MCvMoments m = new MCvMoments();
-         CvInvoke.cvMoments(Ptr, ref m, binary ? 1 : 0);
-         return m;
+         return CvInvoke.Moments(this, binary);  
       }
 
       /// <summary>
@@ -4282,16 +4258,23 @@ namespace Emgu.CV
             else
             {
                lookupTable = new Matrix<byte>(lut.Rows, lut.Cols, NumberOfChannels);
-
+               using (VectorOfMat mv = new VectorOfMat())
+               {
+                  for (int i = 0; i < NumberOfChannels; i++)
+                     mv.Push(lut.CvMat);
+                  CvInvoke.Merge(mv, lookupTable);
+               }
+               /*
                CvInvoke.cvMerge(
                   lut.Ptr,
                   NumberOfChannels > 1 ? lut.Ptr : IntPtr.Zero,
                   NumberOfChannels > 2 ? lut.Ptr : IntPtr.Zero,
                   NumberOfChannels > 3 ? lut.Ptr : IntPtr.Zero,
                   lookupTable.Ptr);
+                */
             }
 
-            CvInvoke.cvLUT(Ptr, Ptr, lookupTable.Ptr);
+            CvInvoke.LUT(this, lookupTable, this);
 
             if (!object.ReferenceEquals(lut, lookupTable))
                lookupTable.Dispose();
@@ -4313,16 +4296,17 @@ namespace Emgu.CV
 
          //handle multiple channels
          Image<Gray, TDepth>[] res = new Image<Gray, TDepth>[NumberOfChannels];
-         IntPtr[] a = new IntPtr[4];
-         Size size = Size;
-         for (int i = 0; i < NumberOfChannels; i++)
+         using (Util.VectorOfMat vm = new VectorOfMat())
          {
-            res[i] = new Image<Gray, TDepth>(size);
-            a[i] = res[i].Ptr;
+            Size size = Size;
+            for (int i = 0; i < NumberOfChannels; i++)
+            {
+               res[i] = new Image<Gray, TDepth>(size);
+               vm.Push(res[i].CvMat);
+            }
+
+            CvInvoke.Split(this, vm);
          }
-
-         CvInvoke.cvSplit(Ptr, a[0], a[1], a[2], a[3]);
-
          return res;
       }
 
@@ -4403,7 +4387,7 @@ namespace Emgu.CV
       {
          if (NumberOfChannels == 1) //Gray scale image
          {
-            CvInvoke.cvEqualizeHist(Ptr, Ptr);
+            CvInvoke.EqualizeHist(this, this);
          }
          else //Color image
          {
@@ -4413,11 +4397,13 @@ namespace Emgu.CV
             //equalize the V (value) channel
             using (Image<Gray, TDepth> v = new Image<Gray, TDepth>(Size))
             {
-               CvInvoke.cvSetImageCOI(hsv.Ptr, 3);
-               CvInvoke.cvCopy(hsv.Ptr, v.Ptr, IntPtr.Zero);
+               CvInvoke.MixChannels(hsv, v, new int[] { 1, 0 });
+               //CvInvoke.cvSetImageCOI(hsv.Ptr, 3);
+               //CvInvoke.cvCopy(hsv.Ptr, v.Ptr, IntPtr.Zero);
                v._EqualizeHist();
-               CvInvoke.cvCopy(v.Ptr, hsv.Ptr, IntPtr.Zero);
-               CvInvoke.cvSetImageCOI(hsv.Ptr, 0);
+               CvInvoke.MixChannels(v, hsv, new int[] { 0, 1 });
+               //CvInvoke.cvCopy(v.Ptr, hsv.Ptr, IntPtr.Zero);
+               //CvInvoke.cvSetImageCOI(hsv.Ptr, 0);
             }
 
             if (!Object.ReferenceEquals(this, hsv))

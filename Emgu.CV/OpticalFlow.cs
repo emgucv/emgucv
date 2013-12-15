@@ -189,22 +189,17 @@ namespace Emgu.CV
          double polySigma,
          CvEnum.OPTICALFLOW_FARNEBACK_FLAG flags)
       {
+            using (Mat flow0 = new Mat(prev0.Height, prev0.Width, Mat.Depth.Cv32F, 2))
+            using (Util.VectorOfMat vm = new Util.VectorOfMat(new Mat[] {flowX.CvMat, flowY.CvMat}))
+            {
+               if ((int)(flags & Emgu.CV.CvEnum.OPTICALFLOW_FARNEBACK_FLAG.USE_INITIAL_FLOW) != 0)
+               {  //use initial flow
+                  CvInvoke.Merge(vm, flow0);
+               }
 
-         IntPtr flow0 = CvInvoke.cvCreateImage(prev0.Size, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 2);
-         try
-         {
-            if ((int) (flags  & Emgu.CV.CvEnum.OPTICALFLOW_FARNEBACK_FLAG.USE_INITIAL_FLOW) != 0)
-            {  //use initial flow
-               CvInvoke.cvMerge(flowX.Ptr, flowY.Ptr, IntPtr.Zero, IntPtr.Zero, flow0);
+               CvInvoke.CalcOpticalFlowFarneback(prev0, next0, flow0, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+               CvInvoke.Split(flow0, vm);
             }
-
-            CvInvoke.cvCalcOpticalFlowFarneback(prev0, next0, flow0, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
-            CvInvoke.cvSplit(flow0, flowX.Ptr, flowY.Ptr, IntPtr.Zero, IntPtr.Zero);
-         }
-         finally
-         {
-            CvInvoke.cvReleaseImage(ref flow0);
-         }
       }
 
       /// <summary>
@@ -223,7 +218,10 @@ namespace Emgu.CV
          using (Matrix<Single> tmp = new Matrix<float>(prev.Rows, prev.Cols, 2))
          {
             CvInvoke.cvCalcOpticalFlowDualTVL1(prev, curr, tmp);
-            CvInvoke.cvSplit(tmp, velx, vely, IntPtr.Zero, IntPtr.Zero);
+            using (Util.VectorOfMat vm = new Util.VectorOfMat(new Mat[] { velx.CvMat, vely.CvMat}))
+            {
+               CvInvoke.Split(tmp, vm);
+            }
          }
       }
    }

@@ -84,7 +84,7 @@ namespace Emgu.CV.Features2D
          }
 
          _distanceType = distanceType;
-         _ptr = CvInvoke.CvBruteForceMatcherCreate(_distanceType, crossCheck);
+         _ptr = BruteForceMatcherInvoke.CvBruteForceMatcherCreate(_distanceType, crossCheck);
       }
 
       /// <summary>
@@ -92,14 +92,11 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBruteForceMatcherRelease(ref _ptr);
+         BruteForceMatcherInvoke.CvBruteForceMatcherRelease(ref _ptr);
       }
    }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
+   internal static partial class BruteForceMatcherInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBruteForceMatcherCreate(

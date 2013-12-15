@@ -11,16 +11,21 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Util
+namespace Emgu.CV
 {
    /// <summary>
    /// The equavailent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
-   public class Mat : UnmanagedObject
+   public class Mat : UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
    {
+      private IntPtr _inputArrayPtr;
+      private IntPtr _outputArrayPtr;
+      private IntPtr _inputOutputArrayPtr;
+
       public enum Depth
       {
+         Default = -1,
          Cv8U = 0,
          Cv8S = 1,
          Cv16U = 2,
@@ -28,6 +33,35 @@ namespace Emgu.CV.Util
          Cv32S = 4,
          Cv32F = 5,
          Cv64F = 6
+      }
+
+      public static Depth GetDepth(Type t)
+      {
+         if (t == typeof(byte))
+         {
+            return Depth.Cv8U;
+         } else if (t == typeof(SByte))
+         {
+            return Depth.Cv8S;
+         } else if (t == typeof(UInt16))
+         {
+            return Depth.Cv16U;
+         } else if (t == typeof(Int16))
+         {
+            return Depth.Cv16S;
+         } else if (t == typeof(Int32))
+         {
+            return Depth.Cv32S;
+         } else if (t == typeof(float))
+         {
+            return Depth.Cv32F;
+         } else if (t == typeof(double))
+         {
+            return Depth.Cv64F;
+         } else
+         {
+            throw new ArgumentException(String.Format("Unable to convert type {0} to depth type", t.ToString()));
+         }
       }
 
       public static int MakeType(Depth type, int channels)
@@ -48,17 +82,17 @@ namespace Emgu.CV.Util
       /// Create an empty cv::Mat
       /// </summary>
       public Mat()
-         : this(CvInvoke.cvMatCreate(), true)
+         : this(cvMatCreate(), true)
       {
       }
 
       public Mat(int rows, int cols, Depth type, int channels)
-         : this(CvInvoke.cvMatCreateWithType(rows, cols, MakeType( type, channels)), true)
+         : this(cvMatCreateWithType(rows, cols, MakeType( type, channels)), true)
       {
       }
 
       public Mat(int rows, int cols, Depth type, int channels, IntPtr data, int step)
-         : this(CvInvoke.cvMatCreateWithData(rows, cols, MakeType(type, channels), data, new IntPtr(step)), true)
+         : this(cvMatCreateWithData(rows, cols, MakeType(type, channels), data, new IntPtr(step)), true)
       {
       }
 
@@ -69,7 +103,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.cvMatGetSize(_ptr);
+            return cvMatGetSize(_ptr);
          }
       }
 
@@ -77,7 +111,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.cvMatGetDataPointer(_ptr);
+            return cvMatGetDataPointer(_ptr);
          }
       }
 
@@ -85,7 +119,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return (int) CvInvoke.cvMatGetStep(_ptr);
+            return (int) cvMatGetStep(_ptr);
          }
       }
 
@@ -93,11 +127,9 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return (int)CvInvoke.cvMatGetChannels(_ptr);
+            return (int)cvMatGetChannels(_ptr);
          }
       }
-
-   
 
       /// <summary>
       /// The size of the elements in this matrix
@@ -106,26 +138,17 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.cvMatGetElementSize(_ptr);
+            return cvMatGetElementSize(_ptr);
          }
       }
 
       /// <summary>
       /// Copy the data in this cv::Mat to a CvArray
       /// </summary>
-      /// <param name="cvArray">The CvArray to copy to</param>
-      public void CopyTo(IntPtr cvArray)
+      /// <param name="m">The input array to copy to</param>
+      public void CopyTo(IOutputArray m, IInputArray mask)
       {
-         CvInvoke.cvMatCopyToCvArr(_ptr, cvArray);
-      }
-
-      /// <summary>
-      /// Make this to represent the cvArray without data copy
-      /// </summary>
-      /// <param name="cvArray">The cvArray to make header from</param>
-      public void From(IntPtr cvArray)
-      {
-         CvInvoke.cvMatFromCvArr(_ptr, cvArray);
+         cvMatCopyTo(this, m.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
 
       /// <summary>
@@ -135,7 +158,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.cvMatIsEmpty(_ptr);
+            return cvMatIsEmpty(_ptr);
          }
       }
 
@@ -145,15 +168,57 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_needDispose && _ptr != IntPtr.Zero)
-            CvInvoke.cvMatRelease(ref _ptr);
-      }
-   }
-}
+            cvMatRelease(ref _ptr);
 
-namespace Emgu.CV
-{
-   public partial class CvInvoke
-   {
+         if (_inputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvInputArrayRelease(ref _inputArrayPtr);
+
+         if (_outputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvOutputArrayRelease(ref _outputArrayPtr);
+
+         if (_inputOutputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvInputOutputArrayRelease(ref _inputOutputArrayPtr);
+      }
+
+      public IntPtr InputArrayPtr
+      {
+         get 
+         { 
+            if (_inputArrayPtr == IntPtr.Zero)
+               _inputArrayPtr = cvInputArrayFromMat(_ptr);
+            return _inputArrayPtr; 
+         }
+      }
+
+      public IntPtr OutputArrayPtr
+      {
+         get
+         {
+            if (_outputArrayPtr == IntPtr.Zero)
+               _outputArrayPtr = cvOutputArrayFromMat(_ptr);
+            return _outputArrayPtr;
+         }
+      }
+
+      public IntPtr InputOutputArrayPtr
+      {
+         get 
+         {
+            if (_inputOutputArrayPtr == IntPtr.Zero)
+               _inputOutputArrayPtr = cvInputOutputArrayFromMat(_ptr);
+            return _inputOutputArrayPtr;
+         }
+      }
+
+      #region PInvoke
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvInputArrayFromMat(IntPtr mat);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvOutputArrayFromMat(IntPtr mat);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvInputOutputArrayFromMat(IntPtr mat);
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreate();
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -162,10 +227,7 @@ namespace Emgu.CV
       internal extern static Size cvMatGetSize(IntPtr mat);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatCopyToCvArr(IntPtr mat, IntPtr cvArray);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatFromCvArr(IntPtr mat, IntPtr cvArray);
+      internal extern static void cvMatCopyTo(IntPtr mat, IntPtr m, IntPtr mask);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cvMatGetElementSize(IntPtr mat);
@@ -186,5 +248,7 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreateWithData(int rows, int cols, int type, IntPtr data, IntPtr step);
+      #endregion
    }
 }
+

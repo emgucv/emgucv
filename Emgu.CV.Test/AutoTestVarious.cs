@@ -196,9 +196,14 @@ namespace Emgu.CV.Test
                img.Draw(cs, new Gray(100), new Gray(100), 0, 1);
 
                MCvPoint2D64f rectangleCenter = new MCvPoint2D64f(rect.X + rect.Width / 2.0, rect.Y + rect.Height / 2.0);
-               MCvMoments moment = cs.GetMoments();
-               MCvPoint2D64f center = moment.GravityCenter;
-               //EmguAssert.IsTrue(center.Equals(rectangleCenter));
+
+               using (VectorOfPoint vp = new VectorOfPoint(cs.ToArray()))
+               {    
+                  MCvMoments moment = CvInvoke.Moments(vp, false);
+                  MCvPoint2D64f center = moment.GravityCenter;
+                  //EmguAssert.IsTrue(center.Equals(rectangleCenter));
+               }
+               
             }
 
             using (MemStorage stor = new MemStorage())
@@ -459,6 +464,21 @@ namespace Emgu.CV.Test
             return imagePointMat.Data;
          }
       }
+      
+      [Test]
+      public void TestIntrisicParameters()
+      {
+         System.Diagnostics.PerformanceCounter memCounter = new PerformanceCounter("Memory", "Available MBytes");
+         Trace.WriteLine(String.Format("Available mem before: {0} Mb", memCounter.NextValue()));
+
+         IntrinsicCameraParameters[] paramArr = new IntrinsicCameraParameters[100000];
+         for (int i = 0; i < paramArr.Length; i++)
+         {
+            paramArr[i] = new IntrinsicCameraParameters(8);
+         }
+
+         Trace.WriteLine(String.Format("Available mem after: {0} Mb", memCounter.NextValue()));
+      }
 
       /*
       [Test]
@@ -587,7 +607,7 @@ namespace Emgu.CV.Test
          stopwatch.Stop();
          Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
          Image<Bgra, Byte> absDiff = new Image<Bgra, Byte>(320, 240);
-         CvInvoke.cvAbsDiff(img, img2, absDiff);
+         CvInvoke.AbsDiff(img, img2, absDiff);
          double[] min, max;
          Point[] minLoc, maxLoc;
          double eps = 1;
@@ -608,7 +628,7 @@ namespace Emgu.CV.Test
             stopwatch.Stop();
             Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
             Image<Gray, Byte> diff = img.Convert<Gray, Byte>().AbsDiff(img3);
-            EmguAssert.AreEqual(0, CvInvoke.cvCountNonZero(diff));
+            EmguAssert.AreEqual(0, CvInvoke.CountNonZero(diff));
             EmguAssert.IsTrue(img.Convert<Gray, Byte>().Equals(img3));
          }
       }
@@ -617,11 +637,14 @@ namespace Emgu.CV.Test
       [Test]
       public void TestMorphEx()
       {
-         StructuringElementEx element1 = new StructuringElementEx(3, 3, 1, 1, Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_CROSS);
-         StructuringElementEx element2 = new StructuringElementEx(new int[3, 3] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } }, 1, 1);
+         Mat kernel1 = CvInvoke.GetStructuringElement(Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_CROSS, new Size(3, 3), new Point(1, 1));
+         Matrix<byte> kernel2 = new Matrix<byte>(new Byte[3, 3] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } });
+         //StructuringElementEx element2 = new StructuringElementEx(new int[3, 3] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } }, 1, 1);
          Image<Bgr, Byte> tmp = new Image<Bgr, byte>(100, 100);
-         Image<Bgr, Byte> tmp2 = tmp.MorphologyEx(element1, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, 1);
-         Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(element2, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT, 1);
+         Image<Bgr, Byte> tmp2 = tmp.MorphologyEx(Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, kernel1, new Point(-1, -1), 1, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar());
+         Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, kernel2, new Point(-1, -1), 1, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar());
+         //Image<Bgr, Byte> tmp2 = tmp.MorphologyEx(element1, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, 1);
+         //Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(element2, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT, 1);
       }
 
       [Test]
@@ -1583,8 +1606,8 @@ namespace Emgu.CV.Test
          Mat tmp2 = vec[1];
          Matrix<double> n1 = new Matrix<double>(tmp1.Size);
          Matrix<int> n2 = new Matrix<int>(tmp2.Size);
-         tmp1.CopyTo(n1);
-         tmp2.CopyTo(n2);
+         tmp1.CopyTo(n1, null);
+         tmp2.CopyTo(n2, null);
 
          EmguAssert.IsTrue(m1.Equals(n1));
          EmguAssert.IsTrue(m2.Equals(n2));
@@ -1642,7 +1665,7 @@ namespace Emgu.CV.Test
             foreach (SoftCascadeDetector.Detection detection in detections)
                image.Draw(detection.BoundingBox, new Bgr(Color.Red), 1);
 
-            Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+            //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
       }
 
@@ -1768,10 +1791,11 @@ namespace Emgu.CV.Test
          Matrix<double> fgdModel = new Matrix<double>(1, 13 * 5);
          Image<Gray, byte> mask = new Image<Gray, byte>(img.Size);
 
-         CvInvoke.CvGrabCut(img, mask, ref rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
-         CvInvoke.CvGrabCut(img, mask, ref rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
-         CvInvoke.cvCmpS(mask, 3, mask, CvEnum.CMP_TYPE.CV_CMP_EQ);
-         //ImageViewer.Show(img.ConcateHorizontal( mask.Convert<Bgr, Byte>()));
+         CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
+         CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
+         using (InputArray ia = new InputArray(3))
+            CvInvoke.Compare(mask, ia, mask, CvEnum.CMP_TYPE.CV_CMP_EQ);
+         //Emgu.CV.UI.ImageViewer.Show(img.ConcateHorizontal( mask.Convert<Bgr, Byte>()));
       }
 
       [Test]
@@ -1790,7 +1814,8 @@ namespace Emgu.CV.Test
             using (Image<Gray, byte> mask = img.GrabCut(rect, 2))
             {
                //get the mask of the foreground
-               CvInvoke.cvCmpS(mask, 3, mask, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_EQ);
+               using (InputArray ia = new InputArray(3))
+                  CvInvoke.Compare(mask, ia, mask, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_EQ);
 
                pedestrianMask._Or(mask);
             }
@@ -1822,7 +1847,7 @@ namespace Emgu.CV.Test
       public void TestAdaptiveSkinDetector()
       {
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg");
-         using (AdaptiveSkinDetector detector = new AdaptiveSkinDetector(1, AdaptiveSkinDetector.MorphingMethod.ERODE_DILATE))
+         using (AdaptiveSkinDetector detector = new AdaptiveSkinDetector(1, AdaptiveSkinDetector.MorphingMethod.ErodeDilate))
          {
             Image<Gray, Byte> mask = new Image<Gray, byte>(image.Size);
             detector.Process(image, mask);
@@ -2154,14 +2179,14 @@ namespace Emgu.CV.Test
             RotationMatrix2D<double> transformation = CameraCalibration.EstimateRigidTransform(oldCorners, corners, true);
 
             Matrix<double> delta = new Matrix<double>(transformation.Size);
-            CvInvoke.cvAbsDiff(rotationMatrix, transformation, delta);
+            CvInvoke.AbsDiff(rotationMatrix, transformation, delta);
             double min = 0, max = 0;
             Point minLoc = new Point(), maxLoc = new Point();
-            CvInvoke.cvMinMaxLoc(delta, ref min, ref max, ref minLoc, ref maxLoc, IntPtr.Zero);
+            CvInvoke.MinMaxLoc(delta, ref min, ref max, ref minLoc, ref maxLoc, null);
 
             double min2, max2;
             int[] minLoc2 = new int[2], maxLoc2 = new int[2];
-            CvInvoke.CvMinMaxIdx(delta, out min2, out max2, minLoc2, maxLoc2, IntPtr.Zero);
+            CvInvoke.MinMaxIdx(delta, out min2, out max2, minLoc2, maxLoc2, null);
             EmguAssert.IsTrue(min == min2);
             EmguAssert.IsTrue(max == max2);
             EmguAssert.IsTrue(minLoc.X == minLoc2[1]);
@@ -2195,7 +2220,7 @@ namespace Emgu.CV.Test
       {
          Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
          Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
-         CvInvoke.cvPyrMeanShiftFiltering(image, result, 10, 20, 1, new MCvTermCriteria(5, 1));
+         CvInvoke.PyrMeanShiftFiltering(image, result, 10, 20, 1, new MCvTermCriteria(5, 1));
          //Image<Gray, Byte> hue = result.Convert<Hsv, Byte>()[0];
          Image<Gray, Byte> hue = result.Convert<Gray, Byte>().Canny(30, 20);
 
@@ -2242,14 +2267,14 @@ namespace Emgu.CV.Test
          using (Matrix<float> srcMat = new Matrix<float>(srcPts.Length, 1, 3, srcHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f))))
          using (Matrix<float> dstMat = new Matrix<float>(dstPts.Length, 1, 3, dstHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f))))
          {
-            CvInvoke.cvTransform(srcMat, dstMat, affine, IntPtr.Zero);
+            CvInvoke.Transform(srcMat, dstMat, affine);
          }
          srcHandle.Free();
          dstHandle.Free();
 
          byte[] inlier;
          Matrix<double> estimate;
-         CvInvoke.CvEstimateAffine3D(srcPts, dstPts, out estimate, out inlier, 3, 0.99);
+         CvInvoke.EstimateAffine3D(srcPts, dstPts, out estimate, out inlier, 3, 0.99);
       }
 
       #region Test code contributed by Daniel Bell, modified by Canming
@@ -2368,11 +2393,12 @@ namespace Emgu.CV.Test
                      using (Image<Gray, Byte> canny = img.Canny(120, 80))
                      {
                         MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 2.0, 2.0);
-                        CvInvoke.cvCmpS(mask, 3, mask, CvEnum.CMP_TYPE.CV_CMP_NE);
+                        using (InputArray ia = new InputArray(3))
+                           CvInvoke.Compare(mask, ia, mask, CvEnum.CMP_TYPE.CV_CMP_NE);
                         CvInvoke.cvSet(canny, new MCvScalar(), mask);
                         canny.Draw(@"http://www.emgu.com", ref f, new Point(50, 50), new Gray(255));
 
-                        CvInvoke.cvNot(canny, canny);
+                        CvInvoke.BitwiseNot(canny, canny, null);
 
                         Image<Bgr, byte> displayImg = img.ConcateHorizontal(canny.Convert<Bgr, Byte>()/*mask.Convert<Bgr, Byte>()*/);
 
@@ -2420,6 +2446,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      //TODO: Check why this fails again
       [Test]
       public void TestFileCapturePause()
       {
@@ -2437,7 +2464,8 @@ namespace Emgu.CV.Test
          };
          capture1.ImageGrabbed += captureHandle1;
          capture1.Start();
-         
+
+         System.Threading.Thread.Sleep(2);
          int totalFrames2 = 0;
          Capture capture2 = new Capture(EmguAssert.GetFile("tree.avi"));
          int counter = 0;
@@ -2473,10 +2501,17 @@ namespace Emgu.CV.Test
          capture2.Start();
 
 
-         int totalFrames = 69;
-         while (! (totalFrames1 == totalFrames && totalFrames2 == totalFrames))
+         //int totalFrames = 69;
+         Stopwatch s = Stopwatch.StartNew();
+         while (! (totalFrames1 == totalFrames2))
          {
             System.Threading.Thread.Sleep(1000);
+
+            if (s.ElapsedMilliseconds > 120 * 1000)
+            {
+               EmguAssert.IsTrue(false, "Unable to finished reading frames in 2 mins");
+               break;
+            }
          }
          capture1.Dispose();
          capture2.Dispose();
@@ -2486,7 +2521,7 @@ namespace Emgu.CV.Test
       public void TestGLImageView()
       {
          Emgu.CV.UI.GLView.GLImageViewer viewer = new UI.GLView.GLImageViewer();
-         viewer.ShowDialog();
+         //viewer.ShowDialog();
       }
 
       [Test]

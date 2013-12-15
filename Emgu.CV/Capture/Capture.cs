@@ -368,7 +368,10 @@ namespace Emgu.CV
          if (iplImage.nChannels == 3)
          {  //if the image captured is Bgr, convert it to Grayscale
             res = new Image<Gray, Byte>(iplImage.width, iplImage.height);
-            CvInvoke.cvCvtColor(img, res.Ptr, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2GRAY);
+            using (Mat m = CvInvoke.CvArrToMat(img))
+            {
+               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2GRAY);
+            }
          }
          else
          {
@@ -407,7 +410,10 @@ namespace Emgu.CV
          if (iplImage.nChannels == 1)
          {  //if the image captured is Grayscale, convert it to BGR
             res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
-            CvInvoke.cvCvtColor(img, res.Ptr, Emgu.CV.CvEnum.COLOR_CONVERSION.GRAY2BGR);
+            using (Mat m = CvInvoke.CvArrToMat(img))
+            {
+               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.COLOR_CONVERSION.GRAY2BGR);
+            }
          }
          else
          {

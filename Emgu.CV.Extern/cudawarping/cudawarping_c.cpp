@@ -6,39 +6,40 @@
 
 #include "cudawarping_c.h"
 
-void cudaPyrDown(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream)
+void cudaPyrDown(cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* stream)
 {
    cv::cuda::pyrDown(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaPyrUp(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream)
+void cudaPyrUp(cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* stream)
 {
    cv::cuda::pyrUp(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaWarpAffine( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
+void cudaWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst,  const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
 {
    cv::Mat Mat = cv::cvarrToMat(M);
    cv::cuda::warpAffine(*src, *dst, Mat, dst->size(), flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaWarpPerspective( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  const CvArr* M, int flags,  int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
+void cudaWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst,  const CvArr* M, int flags,  int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
 {
    cv::Mat Mat = cv::cvarrToMat(M);
    cv::cuda::warpPerspective(*src, *dst, Mat, dst->size(), flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaRemap(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* xmap, const cv::cuda::GpuMat* ymap, int interpolation, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
+void cudaRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* xmap, cv::_InputArray* ymap, int interpolation, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
 {
 	cv::cuda::remap(*src, *dst, *xmap, *ymap, interpolation, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaResize(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int interpolation, cv::cuda::Stream* stream)
+void cudaResize(cv::_InputArray* src, cv::_OutputArray* dst, int interpolation, cv::cuda::Stream* stream)
 {  
-   if ( !stream && !(src->channels() == 1 || src->channels() == 4) )
+   /*
+   if ( !stream && !(src->channels() == 1 || src->channels() == 4 || src->channels() == 3) )
    {
       //in synchronous version
-      //added support for gpuMat with number of channels other than 1 or 4.
+      //added support for gpuMat with number of channels other than 1, 3 or 4.
       cv::cuda::Stream ts;
       std::vector<cv::cuda::GpuMat> channels(src->channels());
       std::vector<cv::cuda::GpuMat> resizedChannels(src->channels());
@@ -52,13 +53,13 @@ void cudaResize(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int interpol
 
       cv::cuda::merge(resizedChannels, *dst, ts);
       ts.waitForCompletion();
-   } else
+   } else*/
    {  
       cv::cuda::resize(*src, *dst, dst->size(), 0, 0, interpolation, stream ? *stream : cv::cuda::Stream::Null());
    }
 }
 
-void cudaRotate(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, double angle, double xShift, double yShift, int interpolation, cv::cuda::Stream* s)
+void cudaRotate(cv::_InputArray* src, cv::_OutputArray* dst, double angle, double xShift, double yShift, int interpolation, cv::cuda::Stream* s)
 {
 	cv::cuda::rotate(*src, *dst, dst->size(), angle, xShift, yShift, interpolation, s ? *s : cv::cuda::Stream::Null());
 }

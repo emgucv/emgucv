@@ -52,6 +52,16 @@ unsigned char* VectorOfByteGetStartAddress(std::vector<unsigned char>* v)
    return v->empty() ? NULL : &(*v)[0];
 }
 
+cv::_InputArray* cvInputArrayFromVectorOfByte(std::vector<unsigned char>* vec)
+{
+   return new cv::_InputArray(*vec);
+}
+
+cv::_OutputArray* cvOutputArrayFromVectorOfByte(std::vector<unsigned char>* vec)
+{
+   return new cv::_OutputArray(*vec);
+}
+
 //----------------------------------------------------------------------------
 //
 //  Vector of Float
@@ -351,6 +361,16 @@ cv::Mat* VectorOfMatGetItem(std::vector<cv::Mat>* v, int index)
    return &(*v)[index];
 }
 
+cv::_InputArray* cvInputArrayFromVectorOfMat(std::vector<cv::Mat>* vec)
+{
+   return new cv::_InputArray(*vec);
+}
+
+cv::_OutputArray* cvOutputArrayFromVectorOfMat(std::vector<cv::Mat>* vec)
+{
+   return new cv::_OutputArray(*vec);
+}
+
 //----------------------------------------------------------------------------
 //
 //  Vector of Point
@@ -401,6 +421,11 @@ cv::Point* VectorOfPointGetStartAddress(std::vector<cv::Point>* v)
 void VectorOfPointGetItem(std::vector<cv::Point>* points, int index, cv::Point* point)
 {
    *point = points->at(index);
+}
+
+cv::_InputArray* cvInputArrayFromVectorOfPoint(std::vector<cv::Point>* vec)
+{
+   return new cv::_InputArray(*vec);
 }
 
 //----------------------------------------------------------------------------

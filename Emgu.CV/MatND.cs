@@ -231,7 +231,7 @@ namespace Emgu.CV
 
          using (MatND<TDepth> diff = new MatND<TDepth>(dim1))
          {
-            CvInvoke.cvXor(_ptr, other.Ptr, diff.Ptr, IntPtr.Zero);
+            CvInvoke.BitwiseXor(this, other, diff, null);
             return Array.TrueForAll(diff.Bytes, delegate(Byte b) { return b == 0; });
          }
       }

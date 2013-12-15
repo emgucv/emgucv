@@ -39,7 +39,7 @@ namespace Emgu.CV.Features2D
          bool varyXyStepWithScale,
          bool varyImgBoundWithScale)
       {
-         _ptr = CvInvoke.CvDenseFeatureDetectorCreate(initFeatureScale, featureScaleLevels, featureScaleMul, initXyStep, initImgBound, varyXyStepWithScale, varyImgBoundWithScale);
+         _ptr = CvDenseFeatureDetectorCreate(initFeatureScale, featureScaleLevels, featureScaleMul, initXyStep, initImgBound, varyXyStepWithScale, varyImgBoundWithScale);
       }
 
       #region IFeatureDetector Members
@@ -61,15 +61,9 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvDenseFeatureDetectorRelease(ref _ptr);
+         CvDenseFeatureDetectorRelease(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvDenseFeatureDetectorCreate(
          float initFeatureScale,

@@ -1123,7 +1123,10 @@ namespace Emgu.CV.OpenCL
       {
          Debug.Assert(src.Size.Equals(dst.Size), "size of Image does not match that of OclImage");
          oclMeanShiftSegmentation(src, dst, sp, sr, minsize, ref criteria);
-         CvInvoke.cvOrS(dst, new MCvScalar(0, 0, 0, 255), dst, IntPtr.Zero);
+         using (InputArray ia = new InputArray(new MCvScalar(0, 0, 0, 255)))
+         {
+            CvInvoke.BitwiseOr(dst, ia, dst, null);
+         }
       }
 
       /// <summary>

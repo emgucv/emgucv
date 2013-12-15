@@ -61,7 +61,7 @@ namespace Emgu.CV.VideoSurveillance
                   return null;
                _bgMask = new Image<Gray, byte>(_fgMask.Size);
             }
-            CvInvoke.cvNot(_fgMask, _bgMask);
+            CvInvoke.BitwiseNot(_fgMask, _bgMask, null);
             return _bgMask;
          }
       }

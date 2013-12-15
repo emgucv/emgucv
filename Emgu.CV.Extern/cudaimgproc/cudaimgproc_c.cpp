@@ -47,6 +47,17 @@ void cudaHistEven(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* hist, cv::cuda:
    cv::cuda::GpuMat bufferMat = buffer ? *buffer : cv::cuda::GpuMat();
    cv::cuda::histEven(*src, *hist, bufferMat, histSize, lowerLevel, upperLevel, stream ? *stream : cv::cuda::Stream::Null());
 }
+
+void cudaBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream)
+{
+   cv::cuda::bilateralFilter(*src, *dst, kernelSize, sigmaColor, sigmaSpatial, borderMode, stream ? *stream : cv::cuda::Stream::Null());
+}
+
+//----------------------------------------------------------------------------
+//
+//  CudaCornernessCriteria
+//
+//----------------------------------------------------------------------------
 cv::cuda::CornernessCriteria* cudaCreateHarrisCorner(int srcType, int blockSize, int ksize, double k, int borderType)
 {
    cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createHarrisCorner(srcType, blockSize, ksize, k, borderType);
@@ -54,20 +65,15 @@ cv::cuda::CornernessCriteria* cudaCreateHarrisCorner(int srcType, int blockSize,
    return ptr.get();
 }
 
-void cudaCornernessCriteriaCompute(cv::cuda::CornernessCriteria* detector, const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream)
+void cudaCornernessCriteriaCompute(cv::cuda::CornernessCriteria* detector, cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
-   detector->compute(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
+   detector->compute( *src, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaCornernessCriteriaRelease(cv::cuda::CornernessCriteria** detector)
 {
    delete *detector;
    *detector = 0;
-}
-
-void cudaBilateralFilter(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream)
-{
-   cv::cuda::bilateralFilter(*src, *dst, kernelSize, sigmaColor, sigmaSpatial, borderMode, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 //----------------------------------------------------------------------------

@@ -21,38 +21,34 @@ namespace Emgu.CV.Shape
       {
          if (_ptr != IntPtr.Zero)
          {
-            ShapeInvoke.cvShapeTransformerRelease(ref _ptr);
+            cvShapeTransformerRelease(ref _ptr);
          }
       }
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvShapeTransformerRelease(ref IntPtr transformer);
    }
 
    public class ThinPlateSplineShapeTransformer : ShapeTransformer
    {
       public ThinPlateSplineShapeTransformer(double regularizationParameter)
       {
-         _ptr = ShapeInvoke.cvThinPlateSplineShapeTransformerCreate(regularizationParameter);
+         _ptr = cvThinPlateSplineShapeTransformerCreate(regularizationParameter);
       }
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvThinPlateSplineShapeTransformerCreate(double regularizationParameter);
    }
 
    public class AffineTransformer : ShapeTransformer
    {
       public AffineTransformer(bool fullAffine)
       {
-         _ptr = ShapeInvoke.cvAffineTransformerCreate(fullAffine);
+         _ptr = cvAffineTransformerCreate(fullAffine);
       }
-   }
-
-   public static partial class ShapeInvoke
-   {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvThinPlateSplineShapeTransformerCreate(double regularizationParameter);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvAffineTransformerCreate(
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool fullAffine);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvShapeTransformerRelease(ref IntPtr transformer);
    }
+
 }

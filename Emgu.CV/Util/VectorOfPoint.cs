@@ -16,11 +16,12 @@ namespace Emgu.CV.Util
    /// </summary>
 #if !NETFX_CORE
    [Serializable]
-   public class VectorOfPoint : Emgu.Util.UnmanagedObject, ISerializable
+   public class VectorOfPoint : Emgu.Util.UnmanagedObject, ISerializable, IInputArray
 #else
-   public class VectorOfPoint : Emgu.Util.UnmanagedObject
+   public class VectorOfPoint : Emgu.Util.UnmanagedObject, IInputArray
 #endif
    {
+      private IntPtr _inputArrayPtr;
 
 #if !NETFX_CORE
       /// <summary>
@@ -39,8 +40,14 @@ namespace Emgu.CV.Util
       /// Create an empty standard vector of Point
       /// </summary>
       public VectorOfPoint()
-         : this(CvInvoke.VectorOfPointCreate(), true)
+         : this(VectorOfPointCreate(), true)
       {
+      }
+
+      public VectorOfPoint(Point[] points)
+         :this()
+      {
+         Push(points);
       }
 
       private bool _needDispose;
@@ -56,7 +63,7 @@ namespace Emgu.CV.Util
       /// </summary>
       /// <param name="size">The size of the vector</param>
       public VectorOfPoint(int size)
-         : this( CvInvoke.VectorOfPointCreateSize(size), true)
+         : this( VectorOfPointCreateSize(size), true)
       {
       }
 
@@ -69,7 +76,7 @@ namespace Emgu.CV.Util
          if (value.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            CvInvoke.VectorOfPointPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            VectorOfPointPushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
             handle.Free();
          }
       }
@@ -81,7 +88,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfPointGetSize(_ptr);
+            return VectorOfPointGetSize(_ptr);
          }
       }
 
@@ -90,7 +97,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         CvInvoke.VectorOfPointClear(_ptr);
+         VectorOfPointClear(_ptr);
       }
 
       /// <summary>
@@ -100,7 +107,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfPointGetStartAddress(_ptr);
+            return VectorOfPointGetStartAddress(_ptr);
          }
       }
 
@@ -114,7 +121,7 @@ namespace Emgu.CV.Util
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            CvInvoke.VectorOfPointCopyData(_ptr, handle.AddrOfPinnedObject());
+            VectorOfPointCopyData(_ptr, handle.AddrOfPinnedObject());
             handle.Free();
          }
          return res;
@@ -130,7 +137,7 @@ namespace Emgu.CV.Util
          get
          {
             Point result = new Point();
-            CvInvoke.VectorOfPointGetItem(_ptr, index, ref result);
+            VectorOfPointGetItem(_ptr, index, ref result);
             return result;
          }
       }
@@ -141,7 +148,10 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_needDispose && _ptr != IntPtr.Zero)
-            CvInvoke.VectorOfPointRelease(_ptr);
+            VectorOfPointRelease(_ptr);
+
+         if (_inputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvInputArrayRelease(ref _inputArrayPtr);
       }
 
 #if !NETFX_CORE
@@ -155,13 +165,20 @@ namespace Emgu.CV.Util
          info.AddValue("Points", ToArray());
       }
 #endif
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
+      public IntPtr InputArrayPtr
+      {
+         get 
+         {
+            if (_inputArrayPtr == IntPtr.Zero)
+               _inputArrayPtr = cvInputArrayFromVectorOfPoint(_ptr);
+            return _inputArrayPtr; 
+         }
+      }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cvInputArrayFromVectorOfPoint(IntPtr ptr);
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfPointCreate();
 

@@ -69,17 +69,15 @@ namespace Emgu.CV
                 termCriteria);
 
             extrinsicParams = new ExtrinsicCameraParameters[imageCount];
-            IntPtr matPtr = Marshal.AllocHGlobal(StructSize.MCvMat);
             for (int i = 0; i < imageCount; i++)
             {
                ExtrinsicCameraParameters p = new ExtrinsicCameraParameters();
-               CvInvoke.cvGetRow(rotationVectors.Ptr, matPtr, i);
-               CvInvoke.cvTranspose(matPtr, p.RotationVector.Ptr);
-               CvInvoke.cvGetRow(translationVectors.Ptr, matPtr, i);
-               CvInvoke.cvTranspose(matPtr, p.TranslationVector.Ptr);
+               using (Matrix<double> matR = rotationVectors.GetRow(i))
+                  CvInvoke.Transpose(matR, p.RotationVector);
+               using (Matrix<double> matT = translationVectors.GetRow(i))
+                  CvInvoke.Transpose(matT, p.TranslationVector);
                extrinsicParams[i] = p;
             }
-            Marshal.FreeHGlobal(matPtr);
          }
          return reprojectionError;
       }

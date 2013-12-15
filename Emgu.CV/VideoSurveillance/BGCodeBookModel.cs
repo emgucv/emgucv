@@ -93,7 +93,7 @@ namespace Emgu.CV.VideoSurveillance
          {
             if (_foregroundMask == null) return null;
             if (_backgroundMask == null) _backgroundMask = new Image<Gray, byte>(_foregroundMask.Size);
-            CvInvoke.cvNot(_foregroundMask, _backgroundMask);
+            CvInvoke.BitwiseNot(_foregroundMask, _backgroundMask, null);
             return _backgroundMask;
          }
       }

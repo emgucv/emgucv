@@ -11,14 +11,17 @@ namespace Emgu.CV.Util
    /// <summary>
    /// Wraped class of the C++ standard vector of cv::Mat
    /// </summary>
-   public class VectorOfMat : Emgu.Util.UnmanagedObject
+   public class VectorOfMat : Emgu.Util.UnmanagedObject, IInputArray, IOutputArray
    {
+      private IntPtr _inputArrayPtr;
+      private IntPtr _outputArrayPtr;
+
       /// <summary>
       /// Create an empty standard vector of Mat
       /// </summary>
       public VectorOfMat()
       {
-         _ptr = CvInvoke.VectorOfMatCreate();
+         _ptr = VectorOfMatCreate();
       }
 
       /// <summary>
@@ -37,7 +40,7 @@ namespace Emgu.CV.Util
       /// <param name="value">The value to be pushed to the vector</param>
       public void Push(Mat value)
       {
-         CvInvoke.VectorOfMatPush(_ptr, value.Ptr);
+         VectorOfMatPush(_ptr, value.Ptr);
       }
 
       /// <summary>
@@ -57,9 +60,8 @@ namespace Emgu.CV.Util
       /// <param name="cvArray">The cvArray to be pushed into the vector</param>
       public void Push<TDepth>(CvArray<TDepth> cvArray) where TDepth : new()
       {
-         using (Mat m = new Mat())
+         using (Mat m = CvInvoke.CvArrToMat(cvArray))
          {
-            m.From(cvArray);
             Push(m);
          }
       }
@@ -82,7 +84,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfMatGetSize(_ptr);
+            return VectorOfMatGetSize(_ptr);
          }
       }
 
@@ -95,7 +97,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return new Mat(CvInvoke.VectorOfMatGetItem(_ptr, index), false);
+            return new Mat(VectorOfMatGetItem(_ptr, index), false);
          }
       }
 
@@ -104,7 +106,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public void Clear()
       {
-         CvInvoke.VectorOfMatClear(_ptr);
+         VectorOfMatClear(_ptr);
       }
 
       /// <summary>
@@ -113,15 +115,35 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.VectorOfMatRelease(_ptr);
-      }
-   }
-}
+            VectorOfMatRelease(_ptr);
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
+         if (_inputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvInputArrayRelease(ref _inputArrayPtr);
+
+         if (_outputArrayPtr != IntPtr.Zero)
+            CvInvoke.cvOutputArrayRelease(ref _outputArrayPtr);
+      }
+
+      public IntPtr InputArrayPtr
+      {
+         get
+         {
+            if (_inputArrayPtr == IntPtr.Zero)
+               _inputArrayPtr = cvInputArrayFromVectorOfMat(_ptr);
+            return _inputArrayPtr;
+         }
+      }
+
+      public IntPtr OutputArrayPtr
+      {
+         get
+         {
+            if (_outputArrayPtr == IntPtr.Zero)
+               _outputArrayPtr = cvOutputArrayFromVectorOfMat(_ptr);
+            return _outputArrayPtr;
+         }
+      }
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfMatCreate();
 
@@ -142,5 +164,11 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfMatGetItem(IntPtr v, int index);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cvInputArrayFromVectorOfMat(IntPtr vec);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cvOutputArrayFromVectorOfMat(IntPtr vec);
    }
 }

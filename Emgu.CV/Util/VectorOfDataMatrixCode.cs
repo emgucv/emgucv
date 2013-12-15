@@ -19,7 +19,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public VectorOfDataMatrixCode()
       {
-         _ptr = CvInvoke.VectorOfDataMatrixCodeCreate();
+         _ptr = VectorOfDataMatrixCodeCreate();
       }
 
       /// <summary>
@@ -29,7 +29,7 @@ namespace Emgu.CV.Util
       {
          get
          {
-            return CvInvoke.VectorOfDataMatrixCodeGetSize(_ptr);
+            return VectorOfDataMatrixCodeGetSize(_ptr);
          }
       }
 
@@ -58,15 +58,9 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.VectorOfDataMatrixCodeRelease(_ptr);
+            VectorOfDataMatrixCodeRelease(_ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfDataMatrixCodeCreate();
 

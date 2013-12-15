@@ -445,9 +445,8 @@ void CvBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bow
    cv::Mat voc = cv::cvarrToMat(vocabulary);
    bowImgDescriptorExtractor->setVocabulary(voc);
 }
-void CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, const IplImage* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor)
+void CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, const cv::Mat* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor)
 {
-   cv::Mat img = cv::cvarrToMat(image);
-   bowImgDescriptorExtractor->compute(img, *keypoints, *imgDescriptor);
+   bowImgDescriptorExtractor->compute(*image, *keypoints, *imgDescriptor);
 }
 

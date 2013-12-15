@@ -19,7 +19,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public CvBlobs()
       {
-         _ptr = CvInvoke.cvbCvBlobsCreate();
+         _ptr = cvbCvBlobsCreate();
       }
 
       /// <summary>
@@ -27,7 +27,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.cvbCvBlobsRelease(ref _ptr);
+         cvbCvBlobsRelease(ref _ptr);
       }
 
       /// <summary>
@@ -37,7 +37,7 @@ namespace Emgu.CV.Cvb
       /// <param name="maxArea">Maximun area</param>
       public void FilterByArea(int minArea, int maxArea)
       {
-         CvInvoke.cvbCvFilterByArea(_ptr, (uint)minArea, (uint)maxArea);
+         cvbCvFilterByArea(_ptr, (uint)minArea, (uint)maxArea);
       }
 
       #region IDictionary<uint,CvBlob> Members
@@ -48,7 +48,7 @@ namespace Emgu.CV.Cvb
       /// <param name="blob">The blob</param>
       public void Add(uint label, CvBlob blob)
       {
-         bool success = CvInvoke.cvbCvBlobsAdd(_ptr, label, blob);
+         bool success = cvbCvBlobsAdd(_ptr, label, blob);
          if (!success) throw new ArgumentException(String.Format("The item with label {0} already exist in the Blobs.", label));
       }
 
@@ -59,7 +59,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the CvBlobs contains an element with the specific label</returns>
       public bool ContainsKey(uint label)
       {
-         return IntPtr.Zero != CvInvoke.cvbCvBlobsFind(_ptr, label);
+         return IntPtr.Zero != cvbCvBlobsFind(_ptr, label);
       }
 
       /// <summary>
@@ -83,7 +83,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the element is successfully found and removed; otherwise, false.</returns>
       public bool Remove(uint label)
       {
-         return CvInvoke.cvbCvBlobsRemove(_ptr, label);
+         return cvbCvBlobsRemove(_ptr, label);
       }
 
       /// <summary>
@@ -94,7 +94,7 @@ namespace Emgu.CV.Cvb
       /// <returns>True if the blobs contains a blob with the specific label; otherwise, false</returns>
       public bool TryGetValue(uint label, out CvBlob blob)
       {
-         IntPtr blobPtr = CvInvoke.cvbCvBlobsFind(_ptr, label);
+         IntPtr blobPtr = cvbCvBlobsFind(_ptr, label);
          if (IntPtr.Zero == blobPtr)
          {
             blob = null;
@@ -116,7 +116,7 @@ namespace Emgu.CV.Cvb
          IntPtr[] ptrs = new IntPtr[count];
          GCHandle labelsHandle = GCHandle.Alloc(labels, GCHandleType.Pinned);
          GCHandle ptrsHandle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         CvInvoke.cvbCvBlobsGetBlobs(_ptr, labelsHandle.AddrOfPinnedObject(), ptrsHandle.AddrOfPinnedObject());
+         cvbCvBlobsGetBlobs(_ptr, labelsHandle.AddrOfPinnedObject(), ptrsHandle.AddrOfPinnedObject());
          labelsHandle.Free();
          ptrsHandle.Free();
          for (int i = 0; i < blobs.Length; i++)
@@ -176,7 +176,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public void Clear()
       {
-         CvInvoke.cvbCvBlobsClear(_ptr);
+         cvbCvBlobsClear(_ptr);
       }
 
       /// <summary>
@@ -208,7 +208,7 @@ namespace Emgu.CV.Cvb
       /// </summary>
       public int Count
       {
-         get { return CvInvoke.cvbCvBlobsGetSize(_ptr); }
+         get { return cvbCvBlobsGetSize(_ptr); }
       }
 
       /// <summary>
@@ -260,13 +260,7 @@ namespace Emgu.CV.Cvb
       }
 
       #endregion
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       /// <summary>
       /// Returns a pointer to CvBlobs
       /// </summary>
@@ -302,3 +296,4 @@ namespace Emgu.CV
       internal extern static bool cvbCvBlobsRemove(IntPtr blobs, uint label);
    }
 }
+

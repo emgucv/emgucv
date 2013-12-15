@@ -21,7 +21,7 @@ namespace Emgu.CV.OpenCL
    /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz, Ycc, Rgb or Rbga)</typeparam>
    /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
    public class OclImage<TColor, TDepth>
-      : OclMat<TDepth>, IImage
+      : OclMat<TDepth>
       where TColor : struct, IColor
       where TDepth : new()
    {
@@ -330,6 +330,7 @@ namespace Emgu.CV.OpenCL
       }
 #endif
 
+      /*
       /// <summary>
       /// Split up the image channels.
       /// </summary>
@@ -337,7 +338,7 @@ namespace Emgu.CV.OpenCL
       IImage[] IImage.Split()
       {
          return Split();
-      }
+      }*/
 
       /// <summary>
       /// Save the OclImage to file
@@ -351,6 +352,7 @@ namespace Emgu.CV.OpenCL
          }
       }
 
+      /*
       /// <summary>
       /// Create a clone of the current OclImage
       /// </summary>
@@ -358,6 +360,6 @@ namespace Emgu.CV.OpenCL
       object ICloneable.Clone()
       {
          return Clone();
-      }
+      }*/
    }
 }

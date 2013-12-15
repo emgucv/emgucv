@@ -34,7 +34,7 @@ CVAPI(cv::cuda::Filter*) cudaCreateMorphologyFilter( int op, int srcType, const 
 //  CudaFilter
 //
 //----------------------------------------------------------------------------
-CVAPI(void) cudaFilterApply(cv::cuda::Filter* filter, cv::cuda::GpuMat* image, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream);
+CVAPI(void) cudaFilterApply(cv::cuda::Filter* filter, cv::_InputArray* image, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 CVAPI(void) cudaFilterRelease(cv::cuda::Filter** filter);
 
 #endif

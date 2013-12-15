@@ -24,28 +24,25 @@ namespace Emgu.CV.Shape
          {
             c1.Push(contour1);
             c2.Push(contour2);
-            return ShapeInvoke.cvShapeDistanceExtractorComputeDistance(_ptr, c1, c2);
+            return cvShapeDistanceExtractorComputeDistance(_ptr, c1, c2);
          }
       }
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static float cvShapeDistanceExtractorComputeDistance(IntPtr extractor, IntPtr contour1, IntPtr contour2);
    }
 
    public class ShapeContextDistanceExtractor : ShapeDistanceExtractor
    {
       public ShapeContextDistanceExtractor(int nAngularBins, int nRadialBins, float innerRadius, float outerRadius, int iterations, HistogramCostExtractor comparer, ShapeTransformer transformer)
       {
-         _ptr = ShapeInvoke.cvShapeContextDistanceExtractorCreate(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparer, transformer);
+         _ptr = cvShapeContextDistanceExtractorCreate(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparer, transformer);
       }
 
       protected override void DisposeObject()
       {
-         ShapeInvoke.cvShapeContextDistanceExtractorRelease(ref _ptr);
+         cvShapeContextDistanceExtractorRelease(ref _ptr);
       }
-   }
-
-   public static partial class ShapeInvoke
-   {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static float cvShapeDistanceExtractorComputeDistance(IntPtr extractor, IntPtr contour1, IntPtr contour2);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvShapeContextDistanceExtractorCreate(
@@ -54,7 +51,10 @@ namespace Emgu.CV.Shape
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvShapeContextDistanceExtractorRelease(ref IntPtr extractor);
+   }
 
+   public static partial class ShapeInvoke
+   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp);
 

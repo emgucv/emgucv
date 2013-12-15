@@ -23,4 +23,6 @@ CVAPI(cv::BackgroundSubtractorMOG*) CvBackgroundSubtractorMOGCreate(int history,
 CVAPI(void) CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubstractor);
 
 CVAPI(void) cvCalcOpticalFlowDualTVL1(CvArr* i0, CvArr* i1, CvArr* flow);
+
+CVAPI(void) cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags);
 #endif

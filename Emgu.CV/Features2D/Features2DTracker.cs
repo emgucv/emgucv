@@ -51,7 +51,7 @@ namespace Emgu.CV.Features2D
             Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
             //Trace.WriteLine(w1.ElapsedMilliseconds);
 
-            int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+            int nonZeroCount = CvInvoke.CountNonZero(mask);
             if (nonZeroCount < 4)
                return null;
 
@@ -115,7 +115,7 @@ namespace Emgu.CV.Features2D
                   startRegion.Intersect(matchMask.ROI);
             }
 
-            CvInvoke.cvMul(matchMask.Ptr, priorMask.Ptr, matchMask.Ptr, 1.0);
+            CvInvoke.Multiply(matchMask, priorMask, matchMask, 1.0, Mat.GetDepth(typeof(float)));
 
             MCvConnectedComp comp;
             MCvBox2D currentRegion;
@@ -338,7 +338,7 @@ namespace Emgu.CV.Features2D
                   h.Threshold(maxVal * 0.5);
 
                   CvInvoke.cvCalcBackProject(new IntPtr[] { rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
-                  count = CvInvoke.cvCountNonZero(flagsMat);
+                  count = CvInvoke.CountNonZero(flagsMat);
                }
                rotationHandle.Free();
                flagsHandle.Free();
@@ -374,7 +374,7 @@ namespace Emgu.CV.Features2D
                   h.Threshold(maxVal * 0.5);
 
                   CvInvoke.cvCalcBackProject(new IntPtr[] { scalesMat.Ptr, rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
-                  count = CvInvoke.cvCountNonZero(flagsMat);
+                  count = CvInvoke.CountNonZero(flagsMat);
                }
                scaleHandle.Free();
                rotationHandle.Free();
@@ -457,7 +457,7 @@ namespace Emgu.CV.Features2D
          MKeyPoint[] modelKeyPoints = modelKeyPointVec.ToArray();
          MKeyPoint[] observedKeyPoints = observedKeyPointVec.ToArray();
 
-         int resultLength = (mask == null) ? observedKeyPoints.Length : CvInvoke.cvCountNonZero(mask);
+         int resultLength = (mask == null) ? observedKeyPoints.Length : CvInvoke.CountNonZero(mask);
 
          MatchedImageFeature[] result = new MatchedImageFeature[resultLength];
 
@@ -690,9 +690,10 @@ namespace Emgu.CV.Features2D
          using (Matrix<float> tmp = new Matrix<float>(firstCol.Size))
          using (Matrix<Byte> maskBuffer = new Matrix<byte>(firstCol.Size))
          {
-            CvInvoke.cvDiv(firstCol, secCol, tmp, 1.0);
-            CvInvoke.cvCmpS(tmp, uniquenessThreshold, maskBuffer, CvEnum.CMP_TYPE.CV_CMP_LE);
-            CvInvoke.cvAnd(maskBuffer, mask, mask, IntPtr.Zero);
+            CvInvoke.Divide(firstCol, secCol, tmp, 1.0, Mat.GetDepth(typeof(float)));
+            using (InputArray ia = new InputArray(uniquenessThreshold))
+               CvInvoke.Compare(tmp, ia, maskBuffer, CvEnum.CMP_TYPE.CV_CMP_LE);
+            CvInvoke.BitwiseAnd(maskBuffer, mask, mask, null);
          }
       }
 

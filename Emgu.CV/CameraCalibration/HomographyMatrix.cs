@@ -49,7 +49,7 @@ namespace Emgu.CV
 
          if (thresholdForDeterminant < 1.0) thresholdForDeterminant = 1.0 / thresholdForDeterminant;
 
-         double det = CvInvoke.cvDet(Ptr);
+         double det = CvInvoke.Determinant(this);
          if (det > thresholdForDeterminant | det < (1.0 / thresholdForDeterminant))
          {
             return false;
@@ -68,7 +68,7 @@ namespace Emgu.CV
          using (Matrix<float> pointMat = new Matrix<float>(points.Length, 1, 2, handle.AddrOfPinnedObject(), 0))
          using (Matrix<float> homographyMat = Convert<float>())
          {
-            CvInvoke.cvPerspectiveTransform(pointMat, pointMat, homographyMat);
+            CvInvoke.PerspectiveTransform(pointMat, pointMat, homographyMat);
          }
 
          handle.Free();

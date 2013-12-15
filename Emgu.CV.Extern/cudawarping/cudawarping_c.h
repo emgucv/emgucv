@@ -17,18 +17,18 @@
 #include "emgu_c.h"
 
 
-CVAPI(void) cudaPyrDown(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream);
+CVAPI(void) cudaPyrDown(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaPyrUp(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream);
+CVAPI(void) cudaPyrUp(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaWarpAffine( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
+CVAPI(void) cudaWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst, const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaWarpPerspective( const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
+CVAPI(void) cudaWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst,  const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaRemap(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* xmap, const cv::cuda::GpuMat* ymap, int interpolation, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
+CVAPI(void) cudaRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* xmap, cv::_InputArray* ymap, int interpolation, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaResize(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int interpolation, cv::cuda::Stream* stream);
+CVAPI(void) cudaResize(cv::_InputArray* src, cv::_OutputArray* dst, int interpolation, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaRotate(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, double angle, double xShift, double yShift, int interpolation, cv::cuda::Stream* s);
+CVAPI(void) cudaRotate(cv::_InputArray* src, cv::_OutputArray* dst, double angle, double xShift, double yShift, int interpolation, cv::cuda::Stream* s);
 
 #endif

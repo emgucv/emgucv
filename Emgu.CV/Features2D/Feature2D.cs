@@ -75,11 +75,11 @@ namespace Emgu.CV.Features2D
       {
          using (Mat descriptorMat = new Mat())
          {
-            CvInvoke.CvFeature2DDetectAndCompute(_ptr, image, mask, keyPoints, descriptorMat, useProvidedKeyPoints);
+            Feature2DInvoke.CvFeature2DDetectAndCompute(_ptr, image, mask, keyPoints, descriptorMat, useProvidedKeyPoints);
             if (keyPoints.Size == 0)
                return null;
             Matrix<TDescriptor> result = new Matrix<TDescriptor>(descriptorMat.Size);
-            CvInvoke.cvMatCopyToCvArr(descriptorMat, result);
+            descriptorMat.CopyTo(result, null);
             return result;
          }
       }
@@ -117,20 +117,18 @@ namespace Emgu.CV.Features2D
          _descriptorExtractorPtr = IntPtr.Zero;
       }
    }
-}
 
-namespace Emgu.CV
-{
-   public partial class CvInvoke
+   internal partial class Feature2DInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFeature2DDetectAndCompute(
-         IntPtr feature2D, 
-         IntPtr image, 
-         IntPtr mask, 
-         IntPtr keypoints, 
-         IntPtr descriptors, 
+         IntPtr feature2D,
+         IntPtr image,
+         IntPtr mask,
+         IntPtr keypoints,
+         IntPtr descriptors,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useProvidedKeyPoints);
    }
+
 }

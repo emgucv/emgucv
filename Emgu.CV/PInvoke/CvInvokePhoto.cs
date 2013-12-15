@@ -18,8 +18,12 @@ namespace Emgu.CV
       /// <param name="dst">The output image of the same format and the same size as input</param>
       /// <param name="flags">The inpainting method</param>
       /// <param name="inpaintRadius">The radius of circlular neighborhood of each point inpainted that is considered by the algorithm</param>
-      [DllImport(OPENCV_PHOTO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvInpaint(IntPtr src, IntPtr mask, IntPtr dst, double inpaintRadius, CvEnum.INPAINT_TYPE flags);
+      public static void Inpaint(IInputArray src, IInputArray mask, IOutputArray dst, double inpaintRadius, CvEnum.INPAINT_TYPE flags)
+      {
+         cveInpaint(src.InputArrayPtr, mask.InputArrayPtr, dst.OutputArrayPtr, inpaintRadius, flags);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveInpaint(IntPtr src, IntPtr mask, IntPtr dst, double inpaintRadius, CvEnum.INPAINT_TYPE flags);
 
    }
 }

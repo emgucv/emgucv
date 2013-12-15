@@ -11,9 +11,10 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/calib3d/calib3d.hpp"
 
-CVAPI(int)  CvEstimateAffine3D(CvMat* src, CvMat* dst,
-                               cv::Mat* out, std::vector<unsigned char>* inliers,
-                             double ransacThreshold, double confidence);
+CVAPI(int)  cveEstimateAffine3D(
+   cv::_InputArray* src, cv::_InputArray* dst,
+   cv::_OutputArray* out, cv::_OutputArray* inliers,
+   double ransacThreshold, double confidence);
 
 //StereoSGBM
 CVAPI(cv::StereoSGBM*) CvStereoSGBMCreate(

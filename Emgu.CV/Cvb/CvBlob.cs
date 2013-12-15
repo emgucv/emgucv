@@ -96,7 +96,7 @@ namespace Emgu.CV.Cvb
       public Contour<Point> GetContour(MemStorage storage)
       {
          Contour<Point> contour = new Contour<Point>(storage);
-         CvInvoke.cvbCvBlobGetContour(_ptr, contour);
+         cvbCvBlobGetContour(_ptr, contour);
          return contour;
       }
 
@@ -107,7 +107,7 @@ namespace Emgu.CV.Cvb
       {
          get
          {
-            return CvInvoke.cvbCvBlobGetLabel(_ptr);
+            return cvbCvBlobGetLabel(_ptr);
          }
       }
 
@@ -119,7 +119,7 @@ namespace Emgu.CV.Cvb
          get
          {
             Rectangle rect = new Rectangle();
-            CvInvoke.cvbCvBlobGetRect(_ptr, ref rect);
+            cvbCvBlobGetRect(_ptr, ref rect);
             return rect;
          }
       }
@@ -132,7 +132,7 @@ namespace Emgu.CV.Cvb
          get
          {
             Moments m = new Moments();
-            CvInvoke.cvbCvBlobGetMoment(_ptr, ref m);
+            cvbCvBlobGetMoment(_ptr, ref m);
             return m;
          }
       }
@@ -180,13 +180,7 @@ namespace Emgu.CV.Cvb
       {
          return obj == null ? IntPtr.Zero : obj._ptr;
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static uint cvbCvBlobGetLabel(IntPtr blob);
 

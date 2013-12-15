@@ -54,6 +54,10 @@ CVAPI(void) VectorOfByteCopyData(std::vector<unsigned char>* v, unsigned char* d
 
 CVAPI(unsigned char*) VectorOfByteGetStartAddress(std::vector<unsigned char>* v);
 
+CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfByte(std::vector<unsigned char>* vec);
+
+CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOfByte(std::vector<unsigned char>* vec);
+
 //----------------------------------------------------------------------------
 //
 //  Vector of Float
@@ -172,6 +176,10 @@ CVAPI(void) VectorOfMatRelease(std::vector<cv::Mat>* v);
 
 CVAPI(cv::Mat*) VectorOfMatGetItem(std::vector<cv::Mat>* v, int index);
 
+CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfMat(std::vector<cv::Mat>* vec);
+
+CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOfMat(std::vector<cv::Mat>* vec);
+
 //----------------------------------------------------------------------------
 //
 //  Vector of Point
@@ -194,6 +202,8 @@ CVAPI(void) VectorOfPointCopyData(std::vector<cv::Point>* v, cv::Point* data);
 CVAPI(cv::Point*) VectorOfPointGetStartAddress(std::vector<cv::Point>* v);
 
 CVAPI(void) VectorOfPointGetItem(std::vector<cv::Point>* points, int index, cv::Point* point);
+
+CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfPoint(std::vector<cv::Point>* vec);
 
 //----------------------------------------------------------------------------
 //

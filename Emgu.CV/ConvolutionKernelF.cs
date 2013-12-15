@@ -74,23 +74,8 @@ namespace Emgu.CV
       ///<returns> The flipped copy of <i>this</i> image </returns>
       public ConvolutionKernelF Flip(CvEnum.FLIP flipType)
       {
-         int code;
-         switch (flipType)
-         {
-            case (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL):
-               code = -1;
-               break;
-            case Emgu.CV.CvEnum.FLIP.HORIZONTAL:
-               code = 1;
-               break;
-            case Emgu.CV.CvEnum.FLIP.VERTICAL:
-            default:
-               code = 0;
-               break;
-         }
-
          ConvolutionKernelF res = new ConvolutionKernelF(Height, Width);
-         CvInvoke.cvFlip(Ptr, res.Ptr, code);
+         CvInvoke.Flip(this, res, flipType);
 
          res.Center = new System.Drawing.Point(
           (Center.X == -1 ? -1 : ((flipType & Emgu.CV.CvEnum.FLIP.HORIZONTAL) == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? Width - Center.X - 1 : Center.X)),
