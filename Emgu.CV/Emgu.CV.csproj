@@ -115,10 +115,11 @@
     <Compile Include="Features2D\LDetector.cs" />
     <Compile Include="LatentSvmDetector.cs" />
     <Compile Include="LevMarqSparse.cs" />
+    <Compile Include="UMat.cs" />
     <Compile Include="Util\IInputArray.cs" />
     <Compile Include="Util\IInputOutputArray.cs" />
     <Compile Include="Util\IOutputArray.cs" />
-    <Compile Include="Util\Mat.cs" />
+    <Compile Include="Mat.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
