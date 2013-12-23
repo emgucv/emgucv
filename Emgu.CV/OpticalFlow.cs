@@ -190,7 +190,7 @@ namespace Emgu.CV
          CvEnum.OPTICALFLOW_FARNEBACK_FLAG flags)
       {
             using (Mat flow0 = new Mat(prev0.Height, prev0.Width, Mat.Depth.Cv32F, 2))
-            using (Util.VectorOfMat vm = new Util.VectorOfMat(new Mat[] {flowX.CvMat, flowY.CvMat}))
+            using (Util.VectorOfMat vm = new Util.VectorOfMat(new Mat[] {flowX.Mat, flowY.Mat}))
             {
                if ((int)(flags & Emgu.CV.CvEnum.OPTICALFLOW_FARNEBACK_FLAG.USE_INITIAL_FLOW) != 0)
                {  //use initial flow
@@ -218,7 +218,7 @@ namespace Emgu.CV
          using (Matrix<Single> tmp = new Matrix<float>(prev.Rows, prev.Cols, 2))
          {
             CvInvoke.cvCalcOpticalFlowDualTVL1(prev, curr, tmp);
-            using (Util.VectorOfMat vm = new Util.VectorOfMat(new Mat[] { velx.CvMat, vely.CvMat}))
+            using (Util.VectorOfMat vm = new Util.VectorOfMat(new Mat[] { velx.Mat, vely.Mat}))
             {
                CvInvoke.Split(tmp, vm);
             }

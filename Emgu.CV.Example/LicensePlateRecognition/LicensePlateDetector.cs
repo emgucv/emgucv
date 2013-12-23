@@ -58,7 +58,7 @@ namespace LicensePlateRecognition
                //channels[2] is the mask for bright pixels
                channels[2]._ThresholdBinary(new Gray(200), new Gray(255));
 
-               CvInvoke.cvAnd(channels[1], channels[2], channels[0], IntPtr.Zero);
+               CvInvoke.BitwiseAnd(channels[1], channels[2], channels[0], null);
             }
             finally
             {
@@ -89,7 +89,7 @@ namespace LicensePlateRecognition
          using (Image<Gray, Byte> canny = new Image<Gray, byte>(gray.Size))
          using (MemStorage stor = new MemStorage())
          {
-            CvInvoke.cvCanny(gray, canny, 100, 50, 3);
+            CvInvoke.Canny(gray, canny, 100, 50, 3, false);
             
             Contour<Point> contours = canny.FindContours(
                  Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,

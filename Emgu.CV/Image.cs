@@ -367,7 +367,7 @@ namespace Emgu.CV
             {
                for (int i = 0; i < channels.Length; i++)
                {
-                  mv.Push(channels[i].CvMat);
+                  mv.Push(channels[i].Mat);
                }
                CvInvoke.Merge(mv, this);
             }
@@ -2795,7 +2795,7 @@ namespace Emgu.CV
                            CvInvoke.LUT(indexValue, gTable, g);
                            CvInvoke.LUT(indexValue, rTable, r);
                            CvInvoke.LUT(indexValue, aTable, a);
-                           using (VectorOfMat mv = new VectorOfMat(new Mat[] { b.CvMat, g.CvMat, r.CvMat, a.CvMat }))
+                           using (VectorOfMat mv = new VectorOfMat(new Mat[] { b.Mat, g.Mat, r.Mat, a.Mat }))
                            {
                               CvInvoke.Merge(mv, this);
                            }
@@ -4261,7 +4261,7 @@ namespace Emgu.CV
                using (VectorOfMat mv = new VectorOfMat())
                {
                   for (int i = 0; i < NumberOfChannels; i++)
-                     mv.Push(lut.CvMat);
+                     mv.Push(lut.Mat);
                   CvInvoke.Merge(mv, lookupTable);
                }
                /*
@@ -4302,7 +4302,7 @@ namespace Emgu.CV
             for (int i = 0; i < NumberOfChannels; i++)
             {
                res[i] = new Image<Gray, TDepth>(size);
-               vm.Push(res[i].CvMat);
+               vm.Push(res[i].Mat);
             }
 
             CvInvoke.Split(this, vm);

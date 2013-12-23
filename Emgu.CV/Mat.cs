@@ -35,6 +35,8 @@ namespace Emgu.CV
          Cv64F = 6
       }
 
+
+
       public static Depth GetDepth(Type t)
       {
          if (t == typeof(byte))
@@ -94,6 +96,16 @@ namespace Emgu.CV
       public Mat(int rows, int cols, Depth type, int channels, IntPtr data, int step)
          : this(cvMatCreateWithData(rows, cols, MakeType(type, channels), data, new IntPtr(step)), true)
       {
+      }
+
+      public Mat(String fileName, CvEnum.LOAD_IMAGE_TYPE loadType)
+         : this(cvMatCreateFromFile(fileName, loadType), true)
+      {  
+      }
+
+      public UMat GetUMat(CvEnum.AccessType access)
+      {
+         return new UMat(cvMatGetUMat(Ptr, access), true);
       }
 
       /// <summary>
@@ -248,6 +260,16 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreateWithData(int rows, int cols, int type, IntPtr data, IntPtr step);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvMatCreateFromFile(
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String fileName,
+         CvEnum.LOAD_IMAGE_TYPE flag
+         );
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvMatGetUMat(IntPtr mat, CvEnum.AccessType access);
       #endregion
    }
 }

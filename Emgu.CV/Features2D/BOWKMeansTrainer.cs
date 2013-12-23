@@ -59,7 +59,7 @@ namespace Emgu.CV.Features2D
          {
             CvInvoke.CvBOWKMeansTrainerCluster(_ptr, m);
             Matrix<float> result = new Matrix<float>(m.Size);
-            m.CopyTo(result.CvMat, null);
+            m.CopyTo(result.Mat, null);
             return result;
          }
       }

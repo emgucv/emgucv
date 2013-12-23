@@ -17,17 +17,12 @@ void CvCascadeClassifierRelease(cv::CascadeClassifier** classifier)
 }
 void CvCascadeClassifierDetectMultiScale( 
    cv::CascadeClassifier* classifier,
-   const IplImage* image,
-   CvSeq* objects,
+   cv::_InputArray* image,
+   std::vector<cv::Rect>* objects,
    double scaleFactor,
    int minNeighbors, int flags,
-   CvSize minSize,
-   CvSize maxSize)
+   CvSize* minSize,
+   CvSize* maxSize)
 {
-   std::vector<cv::Rect> rectangles;
-   cv::Mat mat = cv::cvarrToMat(image);
-   classifier->detectMultiScale(mat, rectangles, scaleFactor, minNeighbors, flags, minSize, maxSize);
-   cvClearSeq(objects);
-   if (rectangles.size() > 0)
-      cvSeqPushMulti(objects, &rectangles[0], static_cast<int>(rectangles.size()), 1);
+   classifier->detectMultiScale(*image, *objects, scaleFactor, minNeighbors, flags, *minSize, *maxSize);
 }

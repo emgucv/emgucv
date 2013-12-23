@@ -776,7 +776,7 @@ namespace Emgu.CV
             for (int i = 0; i < channelCount; i++)
             {
                channels[i] = new Matrix<TDepth>(Rows, Cols);
-               vm.Push(channels[i].CvMat);
+               vm.Push(channels[i].Mat);
             }
             CvInvoke.Split(this, vm);
          }

@@ -53,7 +53,7 @@ namespace Emgu.CV.Features2D
       {
          using (Mat m = new Mat())
          {
-            CvInvoke.CvBOWImgDescriptorExtractorCompute(_ptr, image.CvMat, keypoints, m);
+            CvInvoke.CvBOWImgDescriptorExtractorCompute(_ptr, image.Mat, keypoints, m);
             Matrix<float> result = new Matrix<float>(m.Size);
             m.CopyTo(result, null);
             return result;

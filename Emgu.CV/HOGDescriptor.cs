@@ -146,7 +146,7 @@ namespace Emgu.CV
       /// <param name="finalThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping. Should be an integer if not using meanshift grouping. Use 2.0 for default</param>
       /// <param name="useMeanshiftGrouping">If true, it will use meanshift grouping.</param>
       /// <returns>The regions where positives are found</returns>
-      public Rectangle[] DetectMultiScale(
+      public MCvObjectDetection[] DetectMultiScale(
          Image<Bgr, Byte> image,
          double hitThreshold,
          Size winStride,
@@ -158,14 +158,8 @@ namespace Emgu.CV
          using (MemStorage stor = new MemStorage())
          {
             Seq<MCvObjectDetection> seq = new Seq<MCvObjectDetection>(stor);
-            CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping);
-            return
-#if NETFX_CORE
-               Extensions.
-#else
-               Array.
-#endif
-               ConvertAll(seq.ToArray(), delegate(MCvObjectDetection obj) { return obj.Rect; });
+            CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, ref winStride, ref padding, scale, finalThreshold, useMeanshiftGrouping);
+            return seq.ToArray();
          }
       }
 
@@ -174,7 +168,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">The image to search in</param>
       /// <returns>The regions where positives are found.</returns>
-      public Rectangle[] DetectMultiScale(Image<Bgr, Byte> image)
+      public MCvObjectDetection[] DetectMultiScale(Image<Bgr, Byte> image)
       {
          return DetectMultiScale(image, 0, new Size(8, 8), new Size(32, 32), 1.05, 2, false);
       }
@@ -192,13 +186,13 @@ namespace Emgu.CV
          using (VectorOfFloat desc = new VectorOfFloat())
          {
             if (locations == null)
-               CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, IntPtr.Zero);
+               CvHOGDescriptorCompute(_ptr, image, desc, ref winStride, ref padding, IntPtr.Zero);
             else
             {
                using (MemStorage stor = new MemStorage())
                {
                   Seq<Point> locationSeq = new Seq<Point>(stor);
-                  CvHOGDescriptorCompute(_ptr, image, desc, winStride, padding, locationSeq);
+                  CvHOGDescriptorCompute(_ptr, image, desc, ref winStride, ref padding, locationSeq);
                }
             }
             return desc.ToArray();
@@ -256,8 +250,8 @@ namespace Emgu.CV
          IntPtr img,
          IntPtr foundLocations,
          double hitThreshold,
-         Size winStride,
-         Size padding,
+         ref Size winStride,
+         ref Size padding,
          double scale,
          double finalThreshold,
          [MarshalAs(CvInvoke.BoolMarshalType)]
@@ -268,8 +262,8 @@ namespace Emgu.CV
          IntPtr descriptor,
          IntPtr img,
          IntPtr descriptors,
-         Size winStride,
-         Size padding,
+         ref Size winStride,
+         ref Size padding,
          IntPtr locations);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

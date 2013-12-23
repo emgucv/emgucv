@@ -117,6 +117,14 @@ void cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask)
    mat->setTo(*value, mask ? *mask : cv::noArray());
 }
 
+cv::UMat* cvMatGetUMat(cv::Mat* mat, int access)
+{
+   cv::UMat* result = new cv::UMat();
+   cv::UMat tmp = mat->getUMat(access);
+   cv::swap(*result, tmp);
+   return result;
+}
+
 cv::_InputArray* cvInputArrayFromDouble(double* scalar)
 {
    return new cv::_InputArray(*scalar);
@@ -132,6 +140,11 @@ cv::_InputArray* cvInputArrayFromMat(cv::Mat* mat)
 }
 
 cv::_InputArray* cvInputArrayFromGpuMat(cv::cuda::GpuMat* mat)
+{
+   return new cv::_InputArray(*mat);
+}
+
+cv::_InputArray* cvInputArrayFromUMat(cv::UMat* mat)
 {
    return new cv::_InputArray(*mat);
 }
@@ -152,6 +165,11 @@ cv::_OutputArray* cvOutputArrayFromGpuMat(cv::cuda::GpuMat* mat)
    return new cv::_OutputArray(*mat);
 }
 
+cv::_OutputArray* cvOutputArrayFromUMat(cv::UMat* mat)
+{
+   return new cv::_OutputArray(*mat);
+}
+
 void cvOutputArrayRelease(cv::_OutputArray** arr)
 {
    delete *arr;
@@ -159,6 +177,10 @@ void cvOutputArrayRelease(cv::_OutputArray** arr)
 }
 
 cv::_InputOutputArray* cvInputOutputArrayFromMat(cv::Mat* mat)
+{
+   return new cv::_InputOutputArray(*mat);
+}
+cv::_InputOutputArray* cvInputOutputArrayFromUMat(cv::UMat* mat)
 {
    return new cv::_InputOutputArray(*mat);
 }

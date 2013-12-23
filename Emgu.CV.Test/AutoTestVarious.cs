@@ -1679,16 +1679,16 @@ namespace Emgu.CV.Test
             hog.SetSVMDetector(pedestrianDescriptor);
 
             Stopwatch watch = Stopwatch.StartNew();
-            Rectangle[] rects = hog.DetectMultiScale(image);
+            MCvObjectDetection[] rects = hog.DetectMultiScale(image);
             watch.Stop();
 
             EmguAssert.AreEqual(1, rects.Length);
 
-            foreach (Rectangle rect in rects)
-               image.Draw(rect, new Bgr(Color.Red), 1);
+            foreach (MCvObjectDetection rect in rects)
+               image.Draw(rect.Rect, new Bgr(Color.Red), 1);
             EmguAssert.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
-            //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+            //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
       }
 
@@ -1702,12 +1702,12 @@ namespace Emgu.CV.Test
             hog.SetSVMDetector(pedestrianDescriptor);
 
             Stopwatch watch = Stopwatch.StartNew();
-            Rectangle[] rects = hog.DetectMultiScale(image);
+            MCvObjectDetection[] rects = hog.DetectMultiScale(image);
             watch.Stop();
 
             EmguAssert.AreEqual(0, rects.Length);
-            foreach (Rectangle rect in rects)
-               image.Draw(rect, new Bgr(Color.Red), 1);
+            foreach (MCvObjectDetection rect in rects)
+               image.Draw(rect.Rect, new Bgr(Color.Red), 1);
             EmguAssert.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
@@ -1722,10 +1722,10 @@ namespace Emgu.CV.Test
          using (HOGDescriptor hog = new HOGDescriptor(resize))
          {
             Stopwatch watch = Stopwatch.StartNew();
-            Rectangle[] rects = hog.DetectMultiScale(image);
+            MCvObjectDetection[] rects = hog.DetectMultiScale(image);
             watch.Stop();
-            foreach (Rectangle rect in rects)
-               image.Draw(rect, new Bgr(Color.Red), 1);
+            foreach (MCvObjectDetection rect in rects)
+               image.Draw(rect.Rect, new Bgr(Color.Red), 1);
 
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
@@ -1739,10 +1739,10 @@ namespace Emgu.CV.Test
          {
 
             Stopwatch watch = Stopwatch.StartNew();
-            Rectangle[] rects = hog.DetectMultiScale(image);
+            MCvObjectDetection[] rects = hog.DetectMultiScale(image);
             watch.Stop();
-            foreach (Rectangle rect in rects)
-               image.Draw(rect, new Bgr(Color.Red), 1);
+            foreach (MCvObjectDetection rect in rects)
+               image.Draw(rect.Rect, new Bgr(Color.Red), 1);
 
             EmguAssert.WriteLine(String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
@@ -1805,13 +1805,13 @@ namespace Emgu.CV.Test
          HOGDescriptor desc = new HOGDescriptor();
          desc.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
 
-         Rectangle[] humanRegions = desc.DetectMultiScale(img);
+         MCvObjectDetection[] humanRegions = desc.DetectMultiScale(img);
 
          Image<Gray, byte> pedestrianMask = new Image<Gray, byte>(img.Size);
-         foreach (Rectangle rect in humanRegions)
+         foreach (MCvObjectDetection rect in humanRegions)
          {
             //generate the mask where 3 indicates foreground and 2 indicates background 
-            using (Image<Gray, byte> mask = img.GrabCut(rect, 2))
+            using (Image<Gray, byte> mask = img.GrabCut(rect.Rect, 2))
             {
                //get the mask of the foreground
                using (InputArray ia = new InputArray(3))

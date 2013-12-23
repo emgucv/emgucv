@@ -14,6 +14,8 @@
 
 CVAPI(cv::UMat*) cvUMatCreate();
 CVAPI(cv::UMat*) cvUMatCreateWithType(int row, int cols, int type);
+CVAPI(void) cvUMatRelease(cv::UMat** mat);
+CVAPI(emgu::size) cvUMatGetSize(cv::UMat* mat);
 CVAPI(void) cvUMatCopyTo(cv::UMat* mat, cv::_OutputArray* m);
 CVAPI(int) cvUMatGetElementSize(cv::UMat* mat);
 CVAPI(int) cvUMatGetChannels(cv::UMat* mat);
@@ -34,18 +36,22 @@ CVAPI(uchar*) cvMatGetDataPointer(cv::Mat* mat);
 CVAPI(size_t) cvMatGetStep(cv::Mat* mat);
 CVAPI(bool) cvMatIsEmpty(cv::Mat* mat);
 CVAPI(void) cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask);
+CVAPI(cv::UMat*) cvMatGetUMat(cv::Mat* mat, int access);
 
 CVAPI(cv::_InputArray*) cvInputArrayFromDouble(double* scalar);
 CVAPI(cv::_InputArray*) cvInputArrayFromScalar(cv::Scalar* scalar);
 CVAPI(cv::_InputArray*) cvInputArrayFromMat(cv::Mat* mat);
 CVAPI(cv::_InputArray*) cvInputArrayFromGpuMat(cv::cuda::GpuMat* mat);
+CVAPI(cv::_InputArray*) cvInputArrayFromUMat(cv::UMat* mat);
 CVAPI(void) cvInputArrayRelease(cv::_InputArray** arr);
 
 CVAPI(cv::_OutputArray*) cvOutputArrayFromMat(cv::Mat* mat);
 CVAPI(cv::_OutputArray*) cvOutputArrayFromGpuMat(cv::cuda::GpuMat* mat);
+CVAPI(cv::_OutputArray*) cvOutputArrayFromUMat(cv::UMat* mat);
 CVAPI(void) cvOutputArrayRelease(cv::_OutputArray** arr);
 
 CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromMat(cv::Mat* mat);
+CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromUMat(cv::UMat* mat);
 CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromGpuMat(cv::Mat* mat);
 CVAPI(void) cvInputOutputArrayRelease(cv::_InputOutputArray** arr);
 

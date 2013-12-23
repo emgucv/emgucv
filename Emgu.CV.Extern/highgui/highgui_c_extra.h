@@ -9,7 +9,7 @@
 #define EMGU_HIGHGUI_C_H
 
 #include "opencv2/highgui/highgui_c.h"
-//#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/highgui/highgui.hpp"
 
 struct ColorPoint
 {
@@ -25,4 +25,5 @@ CVAPI(void) OpenniGetColorPoints(
                                  IplImage* mask // CV_8UC1
                                  );
 
+CVAPI(cv::Mat*) cvMatCreateFromFile(char* fileName, int flags);
 #endif

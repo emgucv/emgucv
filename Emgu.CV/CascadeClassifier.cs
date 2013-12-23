@@ -57,13 +57,11 @@ namespace Emgu.CV
       /// <param name="minSize">Minimum window size. Use Size.Empty for default, where it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
       /// <param name="maxSize">Maxumum window size. Use Size.Empty for default, where the parameter will be ignored.</param>
       /// <returns>The objects detected, one array per channel</returns>
-      public Rectangle[] DetectMultiScale(Image<Gray, Byte> image, double scaleFactor, int minNeighbors, Size minSize, Size maxSize)
+      public Rectangle[] DetectMultiScale(IInputArray image, double scaleFactor, int minNeighbors, Size minSize, Size maxSize)
       {
-         using (MemStorage stor = new MemStorage())
+         using (Util.VectorOfRect rectangles = new Util.VectorOfRect())
          {
-            Seq<Rectangle> rectangles = new Seq<Rectangle>(stor);
-
-            CvCascadeClassifierDetectMultiScale(_ptr, image, rectangles, scaleFactor, minNeighbors, 0, minSize, maxSize);
+            CvCascadeClassifierDetectMultiScale(_ptr, image.InputArrayPtr, rectangles, scaleFactor, minNeighbors, 0, ref minSize, ref maxSize);
             return rectangles.ToArray();
          }
       }
@@ -89,8 +87,8 @@ namespace Emgu.CV
          IntPtr objects,
          double scaleFactor,
          int minNeighbors, int flags,
-         Size minSize,
-         Size maxSize);
+         ref Size minSize,
+         ref Size maxSize);
    }
 
 }

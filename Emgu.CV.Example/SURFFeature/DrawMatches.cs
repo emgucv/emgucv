@@ -56,8 +56,7 @@ namespace SURFFeatureExample
                   using (GpuMat<float> col0 = gpuMatchDist.Col(0))
                   using (GpuMat<float> col1 = gpuMatchDist.Col(1))
                   {
-                     MCvScalar scalar = new MCvScalar(uniquenessThreshold);
-                     CudaInvoke.Multiply(col1, ref scalar, col1, stream);
+                     CudaInvoke.Multiply(col1, new MCvScalar(uniquenessThreshold), col1, stream);
                      CudaInvoke.Compare(col0, col1, gpuMask, CMP_TYPE.CV_CMP_LE, stream);
                   }
 
@@ -105,7 +104,7 @@ namespace SURFFeatureExample
                Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
             }
 
-            int nonZeroCount = CvInvoke.cvCountNonZero(mask);
+            int nonZeroCount = CvInvoke.CountNonZero(mask);
             if (nonZeroCount >= 4)
             {
                nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);

@@ -39,7 +39,7 @@ namespace Emgu.CV
       {
       }
 
-      public UMat(int rows, int cols, Depth type, int channels)
+      public UMat(int rows, int cols, Mat.Depth type, int channels)
          : this(cvUMatCreateWithType(rows, cols, Mat.MakeType(type, channels)), true)
       {
       }
@@ -75,7 +75,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Copy the data in this cv::Mat to a CvArray
+      /// Copy the data in this mat to the other mat
       /// </summary>
       /// <param name="m">The input array to copy to</param>
       public void CopyTo(IOutputArray m, IInputArray mask)

@@ -15,10 +15,10 @@ void CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq)
 cv::HOGDescriptor* CvHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
 
 cv::HOGDescriptor* CvHOGDescriptorCreate(
-   cv::Size* _winSize, 
-   cv::Size* _blockSize, 
-   cv::Size* _blockStride,
-   cv::Size* _cellSize, 
+   CvSize* _winSize, 
+   CvSize* _blockSize, 
+   CvSize* _blockStride,
+   CvSize* _cellSize, 
    int _nbins, 
    int _derivAperture, 
    double _winSigma,
@@ -42,8 +42,8 @@ void CvHOGDescriptorDetectMultiScale(
    CvArr* img, 
    CvSeq* foundLocations,
    double hitThreshold, 
-   CvSize winStride,
-   CvSize padding, 
+   CvSize* winStride,
+   CvSize* padding, 
    double scale,
    double finalThreshold, 
    bool useMeanshiftGrouping)
@@ -53,7 +53,7 @@ void CvHOGDescriptorDetectMultiScale(
    std::vector<cv::Rect> rects;
    std::vector<double> weights;
    cv::Mat mat = cv::cvarrToMat(img);
-   descriptor->detectMultiScale(mat, rects, weights, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping );
+   descriptor->detectMultiScale(mat, rects, weights, hitThreshold, *winStride, *padding, scale, finalThreshold, useMeanshiftGrouping );
    //CV_Assert(rects.size() == weights.size());
 
    //char message[2000];
@@ -75,8 +75,8 @@ void CvHOGDescriptorCompute(
     cv::HOGDescriptor *descriptor,
     CvArr *img, 
     std::vector<float> *descriptors,
-    CvSize winStride,
-    CvSize padding,
+    CvSize* winStride,
+    CvSize* padding,
     CvSeq* locationSeq) 
 {
     cv::Mat mat = cv::cvarrToMat(img);
@@ -90,8 +90,8 @@ void CvHOGDescriptorCompute(
     descriptor->compute(
        mat, 
        *descriptors,
-       winStride,
-       padding,
+       *winStride,
+       *padding,
        location); 
 }
 

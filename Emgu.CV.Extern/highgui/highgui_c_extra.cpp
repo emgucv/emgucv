@@ -37,3 +37,11 @@ void OpenniGetColorPoints(CvCapture* capture, CvSeq* points, IplImage* maskImg)
       }
    }
 }
+
+cv::Mat* cvMatCreateFromFile(char* fileName, int flags)
+{
+   cv::Mat* m = new cv::Mat();
+   cv::Mat tmp = cv::imread(fileName, flags);
+   cv::swap(*m, tmp);
+   return m;
+}

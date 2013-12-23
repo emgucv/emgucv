@@ -18,10 +18,10 @@ CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq);
 CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreateDefault();
 
 CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreate(
-   cv::Size* _winSize, 
-   cv::Size* _blockSize, 
-   cv::Size* _blockStride,
-   cv::Size* _cellSize, 
+   CvSize* _winSize, 
+   CvSize* _blockSize, 
+   CvSize* _blockStride,
+   CvSize* _cellSize, 
    int _nbins, 
    int _derivAperture, 
    double _winSigma,
@@ -38,8 +38,8 @@ CVAPI(void) CvHOGDescriptorDetectMultiScale(
    CvArr* img, 
    CvSeq* foundLocations,
    double hitThreshold, 
-   CvSize winStride,
-   CvSize padding, 
+   CvSize* winStride,
+   CvSize* padding, 
    double scale,
    double finalThreshold, 
    bool useMeanshiftGrouping);
@@ -48,8 +48,8 @@ CVAPI(void) CvHOGDescriptorCompute(
     cv::HOGDescriptor *descriptor,
     CvArr *img, 
     std::vector<float> *descriptors,
-    CvSize winStride,
-    CvSize padding,
+    CvSize* winStride,
+    CvSize* padding,
     CvSeq* locationSeq);
 
 
@@ -77,12 +77,12 @@ CVAPI(cv::CascadeClassifier*) CvCascadeClassifierCreate(char* fileName);
 CVAPI(void) CvCascadeClassifierRelease(cv::CascadeClassifier** classifier);
 CVAPI(void) CvCascadeClassifierDetectMultiScale( 
    cv::CascadeClassifier* classifier,
-   const IplImage* image,
-   CvSeq* objects,
+   cv::_InputArray* image,
+   std::vector<cv::Rect>* objects,
    double scaleFactor,
    int minNeighbors, int flags,
-   CvSize minSize,
-   CvSize maxSize); 
+   CvSize* minSize,
+   CvSize* maxSize); 
 
 //ERFilter
 CVAPI(cv::ERFilter*) CvERFilterNM1Create(

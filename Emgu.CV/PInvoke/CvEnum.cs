@@ -3568,4 +3568,13 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       Blackhat = 6
    }
+
+   public enum AccessType
+   {
+      Read = 1 << 24,
+      Write = 1 << 25,
+      ReadWrite = 3 << 24,
+      Mask = ReadWrite,
+      Fast = 1 << 26
+   }
 }

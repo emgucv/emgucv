@@ -61,13 +61,15 @@ namespace TrafficSignRecognition
             try
             {
                //channels[0] is the mask for hue less than 20 or larger than 160
-               CvInvoke.cvInRangeS(channels[0], new MCvScalar(20), new MCvScalar(160), channels[0]);
+               using (InputArray lower = new InputArray(20))
+               using (InputArray upper = new InputArray(160))
+                  CvInvoke.InRange(channels[0], lower, upper, channels[0]);
                channels[0]._Not();
 
                //channels[1] is the mask for satuation of at least 10, this is mainly used to filter out white pixels
                channels[1]._ThresholdBinary(new Gray(10), new Gray(255.0));
 
-               CvInvoke.cvAnd(channels[0], channels[1], channels[0], IntPtr.Zero);
+               CvInvoke.BitwiseAnd(channels[0], channels[1], channels[0], null);
             }
             finally
             {
@@ -106,7 +108,7 @@ namespace TrafficSignRecognition
                {
                   mask.Draw(contours, new Gray(255), new Gray(255), 0, -1, new Point(-box.X, -box.Y));
 
-                  double mean = CvInvoke.cvAvg(candidate, mask).v0;
+                  double mean = CvInvoke.Mean(candidate, mask).v0;
                   candidate._ThresholdBinary(new Gray(mean), new Gray(255.0));
                   candidate._Not();
                   mask._Not();

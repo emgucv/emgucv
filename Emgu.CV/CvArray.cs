@@ -657,7 +657,7 @@ namespace Emgu.CV
       #region Input Output array
       private Mat _cvMat;
 
-      public Mat CvMat
+      public Mat Mat
       {
          get
          {
@@ -675,7 +675,7 @@ namespace Emgu.CV
       {
          get
          {
-            return CvMat.InputArrayPtr;
+            return Mat.InputArrayPtr;
          }
       }
 
@@ -683,7 +683,7 @@ namespace Emgu.CV
       {
          get
          {
-            return CvMat.OutputArrayPtr;
+            return Mat.OutputArrayPtr;
          }
       }
       #endregion
@@ -692,8 +692,16 @@ namespace Emgu.CV
       {
          get 
          {
-            return CvMat.InputOutputArrayPtr;
+            return Mat.InputOutputArrayPtr;
          }
+      }
+
+      
+      public UMat GetUMat()
+      {
+         UMat m = new UMat();
+         Mat.CopyTo(m, null);
+         return m;
       }
    }
 }

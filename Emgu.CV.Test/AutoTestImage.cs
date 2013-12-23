@@ -479,12 +479,14 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");
          //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
          using (CascadeClassifier cascade = new CascadeClassifier( EmguAssert.GetFile( "haarcascade_eye.xml" )))
+         using (UMat um = image.GetUMat())
          //using (HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml"))
          {
-            Rectangle[] objects = cascade.DetectMultiScale(image, 1.05, 10, new Size(10, 10), Size.Empty);
+            Rectangle[] objects = cascade.DetectMultiScale(um, 1.05, 10, new Size(10, 10), Size.Empty);
             foreach (Rectangle obj in objects)
                image.Draw(obj, new Gray(0.0), 1);
          }
+         //Emgu.CV.UI.ImageViewer.Show(image);
       }
 
 #if !(IOS || ANDROID)
@@ -827,7 +829,7 @@ namespace Emgu.CV.Test
          CvInvoke.CopyMakeBorder(matB, matBDft, 0, matBDft.Height - matB.Height, 0, matBDft.Width - matB.Width, Emgu.CV.CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
          Matrix<float> dftIn = new Matrix<float>(matBDft.Rows, matBDft.Cols, 2);
          Matrix<float> matBDftBlank = matBDft.CopyBlank();
-         using (Util.VectorOfMat mv = new Util.VectorOfMat(new Mat[] { matBDft.CvMat, matBDftBlank.CvMat}))
+         using (Util.VectorOfMat mv = new Util.VectorOfMat(new Mat[] { matBDft.Mat, matBDftBlank.Mat}))
             CvInvoke.Merge(mv, dftIn);
 
          Matrix<float> dftOut = new Matrix<float>(dftIn.Rows, dftIn.Cols, 2);
@@ -840,8 +842,8 @@ namespace Emgu.CV.Test
          Matrix<float> outIm = new Matrix<float>(matBDft.Size);
          using (Util.VectorOfMat vm = new Util.VectorOfMat())
          {
-            vm.Push(outReal.CvMat);
-            vm.Push(outIm.CvMat);
+            vm.Push(outReal.Mat);
+            vm.Push(outIm.Mat);
             CvInvoke.Split(dftOut, vm);
          }
       }
