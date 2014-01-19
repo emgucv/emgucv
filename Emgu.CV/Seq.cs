@@ -286,7 +286,7 @@ namespace Emgu.CV
       /// <param name="orientation">The orientation of the convex hull</param>
       /// <param name="stor">The storage for the resulting sequence</param>
       /// <returns>The result convex hull</returns>
-      public Seq<T> GetConvexHull(CvEnum.ORIENTATION orientation, MemStorage stor)
+      public Seq<T> GetConvexHull(CvEnum.Orientation orientation, MemStorage stor)
       {
          IntPtr hull = CvInvoke.cvConvexHull2(Ptr, stor, orientation, 1);
          return new Seq<T>(hull, stor);
@@ -297,7 +297,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="orientation">The orientation of the convex hull</param>
       /// <returns>The result convex hull</returns>
-      public Seq<T> GetConvexHull(CvEnum.ORIENTATION orientation)
+      public Seq<T> GetConvexHull(CvEnum.Orientation orientation)
       {
          return GetConvexHull(orientation, _stor);
       }
@@ -593,7 +593,7 @@ namespace Emgu.CV
       /// <param name="storage">Container for output sequence of convexity defects. If it is NULL, contour or hull (in that order) storage is used.</param>
       /// <param name="orientation">Orientation where the convexity Defacts is returned.</param>
       /// <returns>The sequence of the CvConvexityDefect structures.</returns>
-      public Seq<MCvConvexityDefect> GetConvexityDefacts(MemStorage storage, Emgu.CV.CvEnum.ORIENTATION orientation)
+      public Seq<MCvConvexityDefect> GetConvexityDefacts(MemStorage storage, Emgu.CV.CvEnum.Orientation orientation)
       {
          MemStorage stor = storage ?? Storage;
          IntPtr convexHull = CvInvoke.cvConvexHull2(Ptr, stor, orientation, 0);

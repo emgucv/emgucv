@@ -16,6 +16,12 @@ namespace Emgu.CV
    /// </summary>
    public static partial class CvInvoke
    {
+      private static bool _libraryLoaded;
+      public static bool CheckLibraryLoaded()
+      {
+            return _libraryLoaded;
+      }
+
       /// <summary>
       /// string marshaling type
       /// </summary>
@@ -195,6 +201,7 @@ namespace Emgu.CV
          List<String> modules = CvInvoke.OpenCVModuleList;
          modules.RemoveAll(String.IsNullOrEmpty);
 
+         _libraryLoaded = true;    
 #if ANDROID
          System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
          FileInfo file = new FileInfo(asm.Location);
@@ -211,10 +218,11 @@ namespace Emgu.CV
             }
             catch (Exception e)
             {
+               _libraryLoaded = false; 
                Debug.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
             }
          }
-#elif IOS 
+#elif IOS
 #else
          if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {
@@ -222,7 +230,7 @@ namespace Emgu.CV
             for (int i = 0; i < modules.Count; ++i)
                modules[i] = String.Format(formatString, modules[i]);
 
-            LoadUnmanagedModules(null, modules.ToArray());
+            _libraryLoaded &= LoadUnmanagedModules(null, modules.ToArray());
          }
 #endif
          //Use the custom error handler

@@ -16,6 +16,11 @@ namespace Emgu.CV.Util
    /// </summary>
    public class VectorOfVectorOfPoint : Emgu.Util.UnmanagedObject
    {
+      static VectorOfVectorOfPoint()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create an empty standard vector of standard of Point
       /// </summary>
@@ -78,14 +83,14 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            VectorOfVectorOfPointRelease(_ptr);
+            VectorOfVectorOfPointRelease(ref _ptr);
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOfVectorOfPointCreate();
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void VectorOfVectorOfPointRelease(IntPtr v);
+      internal static extern void VectorOfVectorOfPointRelease(ref IntPtr v);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int VectorOfVectorOfPointGetSize(IntPtr v);

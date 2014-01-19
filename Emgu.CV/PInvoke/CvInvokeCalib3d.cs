@@ -91,6 +91,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvConvertPointsHomogeneous(IntPtr src, IntPtr dst);
 
+      /*
       /// <summary>
       /// Creates the stereo correspondence structure and initializes it. It is possible to override any of the parameters at any time between the calls to cvFindStereoCorrespondenceBM
       /// </summary>
@@ -123,7 +124,6 @@ namespace Emgu.CV
          IntPtr disparity,
          IntPtr state);
 
-      /*
       /// <summary>
       /// Computes disparity map for the input rectified stereo pair.
       /// </summary>
@@ -218,6 +218,7 @@ namespace Emgu.CV
       /// <param name="flags">Different flags</param>
       /// <param name="termCriteria">The termination criteria</param>
       /// <returns>The final reprojection error</returns>
+      
 #if ANDROID
       public static double cvCalibrateCamera2(
          IntPtr objectPoints,

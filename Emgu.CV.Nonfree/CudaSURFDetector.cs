@@ -20,14 +20,6 @@ namespace Emgu.CV.Nonfree
    public class CudaSURFDetector : UnmanagedObject
    {
       /// <summary>
-      /// Create a Cuda SURF detector using the default parameters
-      /// </summary>
-      public CudaSURFDetector()
-         : this(100.0f, 4, 2, true, 0.01f, false)
-      {
-      }
-
-      /// <summary>
       /// Create a Cuda SURF detector using the specific parameters
       /// </summary>
       /// <param name="detector">The surf detector where the parameters will be borrow from</param>
@@ -43,18 +35,18 @@ namespace Emgu.CV.Nonfree
       /// <param name="hessianThreshold">The interest operator threshold. Use 100 for default</param>
       /// <param name="nOctaves">The number of octaves to process. Use 4 for default</param>
       /// <param name="nIntervals">The number of intervals in each octave. Use 4 for default</param>
-      /// <param name="extended">True, if generate 128-len descriptors, false - 64-len descriptors. Use true for default.</param>
-      /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
-      /// <param name="upright">Use false for default. If set to true, the orientation is not computed for the keypoints</param>
+      /// <param name="extended">True, if generate 128-len descriptors, false - 64-len descriptors.</param>
+      /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea().</param>
+      /// <param name="upright">If set to true, the orientation is not computed for the keypoints</param>
       public CudaSURFDetector(
-         float hessianThreshold,
-         int nOctaves,
-         int nIntervals,
-         bool extended,
-         float featuresRatio,
-         bool upright)
+         float hessianThreshold = 100.0f,
+         int nOctaves = 4,
+         int nOctaveLayers = 2, 
+         bool extended = true,
+         float featuresRatio = 0.01f,
+         bool upright = false)
       {
-         _ptr = NonfreeInvoke.cudaSURFDetectorCreate(hessianThreshold, nOctaves, nIntervals, extended, featuresRatio, upright);
+         _ptr = NonfreeInvoke.cudaSURFDetectorCreate(hessianThreshold, nOctaves, nOctaveLayers, extended, featuresRatio, upright);
       }
 
       /// <summary>

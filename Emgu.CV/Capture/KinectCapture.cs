@@ -194,7 +194,7 @@ namespace Emgu.CV
          if (img == IntPtr.Zero)
             return null;
 
-         if (FlipType != Emgu.CV.CvEnum.FLIP.NONE)
+         if (FlipType != Emgu.CV.CvEnum.FlipType.None)
          {
             using (Mat m = CvInvoke.CvArrToMat(img))
             {

@@ -30,7 +30,7 @@ namespace Emgu.CV.Cuda
       /// <param name="scale">Optional scale, use 1 for default.</param>
       /// <param name="rowBorderType">The row border type.</param>
       /// <param name="columnBorderType">The column border type.</param>
-      public CudaSobelFilter(int dx, int dy, int ksize, double scale, CvEnum.BORDER_TYPE rowBorderType, CvEnum.BORDER_TYPE columnBorderType)
+      public CudaSobelFilter(int dx, int dy, int ksize, double scale, CvEnum.BorderType rowBorderType, CvEnum.BorderType columnBorderType)
       {
          _ptr = CudaInvoke.cudaCreateSobelFilter(_matType, _matType, dx, dy, ksize, scale, (int)rowBorderType, (int)columnBorderType);
       }

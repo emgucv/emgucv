@@ -29,7 +29,7 @@ namespace Emgu.CV.Cuda
       /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
       /// <param name="rowBorderType">The row border type.</param>
       /// <param name="columnBorderType">The column border type.</param>
-      public CudaGaussianFilter(Size ksize, double sigma1, double sigma2, CvEnum.BORDER_TYPE rowBorderType, CvEnum.BORDER_TYPE columnBorderType)
+      public CudaGaussianFilter(Size ksize, double sigma1, double sigma2, CvEnum.BorderType rowBorderType, CvEnum.BorderType columnBorderType)
       {
          _ptr = CudaInvoke.cudaCreateGaussianFilter(_matType, _matType, ref ksize, sigma1, sigma2, (int)rowBorderType, (int)columnBorderType);
       }

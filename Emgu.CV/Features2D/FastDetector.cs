@@ -19,6 +19,10 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class FastDetector : UnmanagedObject, IFeatureDetector
    {
+      static FastDetector()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
       private int _threshold;
       private bool _nonmaxSupression;
 
@@ -65,7 +69,8 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvFASTFeatureDetectorRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CvFASTFeatureDetectorRelease(ref _ptr);
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

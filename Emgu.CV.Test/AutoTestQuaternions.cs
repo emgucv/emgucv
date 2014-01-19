@@ -147,7 +147,7 @@ namespace Emgu.CV.Test
          q1.GetRotationMatrix(m2);
          Matrix<double> diff = new Matrix<double>(3, 3);
          CvInvoke.AbsDiff(m1, m2, diff);
-         double norm = CvInvoke.cvNorm(diff, IntPtr.Zero, Emgu.CV.CvEnum.NORM_TYPE.CV_C, IntPtr.Zero);
+         double norm = CvInvoke.Norm(diff, Emgu.CV.CvEnum.NormType.C);
          EmguAssert.IsTrue(norm < epsilon);
 
          Quaternions q4 = q1 * Quaternions.Empty;

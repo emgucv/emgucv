@@ -76,7 +76,7 @@ namespace Emgu.CV.UI.GLView
       /// Individual texture rotations
       /// </summary>
       private float[] _textureRotations;
-      private Emgu.CV.CvEnum.FLIP[] _textureFlipMode;
+      private Emgu.CV.CvEnum.FlipType[] _textureFlipMode;
       private bool[] _textureRequiresReset;
 
       private ImageBufferFactory<Image<Bgr, Byte>> _bgrBuffers;
@@ -508,7 +508,7 @@ namespace Emgu.CV.UI.GLView
          _textureRotation[textureIdx] = rotation;
       }*/
 
-      public Emgu.CV.CvEnum.FLIP[] TextureFlipMode
+      public Emgu.CV.CvEnum.FlipType[] TextureFlipMode
       {
          get
          {
@@ -605,10 +605,10 @@ namespace Emgu.CV.UI.GLView
          _textureEnabled = new bool[2];
          _textureRotations = new float[2];
 
-         _textureFlipMode = new Emgu.CV.CvEnum.FLIP[2];
+         _textureFlipMode = new Emgu.CV.CvEnum.FlipType[2];
          for (int i = 0; i < _textureFlipMode.Length; i++)
          {
-            _textureFlipMode[i] = Emgu.CV.CvEnum.FLIP.NONE;
+            _textureFlipMode[i] = Emgu.CV.CvEnum.FlipType.None;
          }
 
          _textureRequiresReset = new bool[2];
@@ -1521,11 +1521,11 @@ namespace Emgu.CV.UI.GLView
                   // Set color for drawing the triangle
                   //GL.Uniform4(colorHandle, 1, color);
 
-                  if (_textureFlipMode[i] == Emgu.CV.CvEnum.FLIP.NONE)
+                  if (_textureFlipMode[i] == Emgu.CV.CvEnum.FlipType.None)
                   {
                      GL.VertexAttribPointer(textureCoordHandle, 2, VertexAttribPointerType.Float, false, 0, squareTextureCoords);
                   }
-                  else if (_textureFlipMode[i] == Emgu.CV.CvEnum.FLIP.HORIZONTAL)
+                  else if (_textureFlipMode[i] == Emgu.CV.CvEnum.FlipType.Horizontal)
                   {
                      GL.VertexAttribPointer(textureCoordHandle, 2, VertexAttribPointerType.Float, false, 0, squareTextureCoordsFlipHorizontal);
                   }
@@ -1806,16 +1806,16 @@ namespace Emgu.CV.UI.GLView
                {
                   if (tmp.Size == textureSize)
                   {
-                     CvInvoke.CvtColor(tmp, tmp, Emgu.CV.CvEnum.COLOR_CONVERSION.BGRA2RGBA);
+                     CvInvoke.CvtColor(tmp, tmp, Emgu.CV.CvEnum.ColorConversion.BGRA2RGBA);
                      LoadTexture(tmp.Size, tmp.MIplImage.imageData, GLImageView.TextureColor.RGBA, 1);
                   }
                   else
                      using (
                         Image<Bgra, Byte> resize = tmp.Resize(_glTextureDimension,
                                                               _glTextureDimension,
-                                                              Emgu.CV.CvEnum.INTER.CV_INTER_NN))
+                                                              Emgu.CV.CvEnum.Inter.Nearest))
                      {
-                        CvInvoke.CvtColor(resize, resize, Emgu.CV.CvEnum.COLOR_CONVERSION.BGRA2RGBA);
+                        CvInvoke.CvtColor(resize, resize, Emgu.CV.CvEnum.ColorConversion.BGRA2RGBA);
                         LoadTexture(resize.Size, resize.MIplImage.imageData, GLImageView.TextureColor.RGBA, 1);
                      }
                }
@@ -1865,8 +1865,8 @@ namespace Emgu.CV.UI.GLView
             {
                Image<Bgr, Byte> resized = _bgrBuffers.GetBuffer(new Size(_glTextureDimension, _glTextureDimension), 0);
 
-               CvInvoke.cvResize(image, resized, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
-               CvInvoke.CvtColor(resized, resized, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2RGB);
+               CvInvoke.Resize(image, resized, resized.Size, 0, 0, Emgu.CV.CvEnum.Inter.Nearest);
+               CvInvoke.CvtColor(resized, resized, Emgu.CV.CvEnum.ColorConversion.BGR2RGB);
                LoadTexture(resized.Size, resized.MIplImage.imageData, TextureColor.RGB, 0);
             }
             else

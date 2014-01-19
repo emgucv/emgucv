@@ -21,11 +21,12 @@ LIST(REMOVE_ITEM SRC_CV ${SRC_CV_EXCLUDES})
 
 GENERATE_DOCUMENT(${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME})
 SIGN_ASSEMBLY(${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.snk)
-IF(NETFX_CORE)
-  ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll")
-ELSE()
-  ADD_CS_REFERENCES("System.Xml.dll;System.Drawing.dll;System.Data.dll;System.ServiceModel.dll;System.Core.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll")
-ENDIF()
+SET_CS_TARGET_FRAMEWORK(${CSC_TARGET_FRAMEWORK})
+#IF(NETFX_CORE)
+ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll")
+#ELSE()
+#  ADD_CS_REFERENCES("System.Xml.dll;System.Drawing.dll;System.Data.dll;System.ServiceModel.dll;System.Core.dll;${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll")
+#ENDIF()
 
 ADD_CS_RESOURCES(${CMAKE_CURRENT_SOURCE_DIR}/Properties/StringTable.resx ${PROJECT_NAME}.Properties.StringTable.resources)
 

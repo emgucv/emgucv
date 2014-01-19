@@ -40,5 +40,6 @@ namespace Emgu.CV.Features2D
       /// Get the size of the descriptor.
       /// </summary>
       int DescriptorSize { get; }*/
+
    }
 }

@@ -98,6 +98,11 @@ namespace Emgu.CV.Features2D
 
    internal static partial class BruteForceMatcherInvoke
    {
+      static BruteForceMatcherInvoke()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBruteForceMatcherCreate(
          Features2D.DistanceType distanceType,

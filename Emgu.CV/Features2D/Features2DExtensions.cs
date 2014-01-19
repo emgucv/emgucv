@@ -16,6 +16,11 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public static class Features2DExtensions
    {
+      static Features2DExtensions()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Detect the features in the image
       /// </summary>
@@ -26,7 +31,7 @@ namespace Emgu.CV.Features2D
       public static VectorOfKeyPoint DetectRaw(this IFeatureDetector detector, Image<Gray, Byte> image, Image<Gray, Byte> mask)
       {
          VectorOfKeyPoint kpts = new VectorOfKeyPoint();
-         CvInvoke.CvFeatureDetectorDetectKeyPoints(detector.FeatureDetectorPtr, image, mask, kpts);
+         CvFeatureDetectorDetectKeyPoints(detector.FeatureDetectorPtr, image, mask, kpts);
          return kpts;
       }
 
@@ -53,7 +58,7 @@ namespace Emgu.CV.Features2D
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
       /// <returns>The descriptors founded on the keypoint location</returns>
-      public static ImageFeature<TDescriptor>[] Compute<TColor, TDescriptor>(this IDescriptorExtractor<TColor, TDescriptor> extractor, Image<TColor, Byte> image, Image<Gray, byte> mask, MKeyPoint[] keyPoints)
+      public static ImageFeature<TDescriptor>[] Compute<TColor, TDescriptor>(this IDescriptorExtractor<TColor, TDescriptor> extractor, Image<TColor, Byte> image, MKeyPoint[] keyPoints)
          where TColor : struct, IColor
          where TDescriptor : struct
       {
@@ -61,7 +66,7 @@ namespace Emgu.CV.Features2D
          using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
             kpts.Push(keyPoints);
-            using (Matrix<TDescriptor> descriptor = extractor.Compute(image, mask, kpts))
+            using (Matrix<TDescriptor> descriptor = extractor.Compute(image, kpts))
             {
                return ImageFeature<TDescriptor>.ConvertFromRaw(kpts, descriptor);
             }
@@ -76,17 +81,17 @@ namespace Emgu.CV.Features2D
       /// <param name="keyPoints">The keypoints where the descriptor computation is perfromed</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>The descriptors from the given keypoints</returns>
-      public static Matrix<TDescriptor> Compute<TColor, TDescriptor>(this IDescriptorExtractor<TColor, TDescriptor> extractor, Image<TColor, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints)
+      public static Matrix<TDescriptor> Compute<TColor, TDescriptor>(this IDescriptorExtractor<TColor, TDescriptor> extractor, Image<TColor, Byte> image, VectorOfKeyPoint keyPoints)
          where TColor : struct, IColor
          where TDescriptor : struct
       {
          using (Mat descriptors = new Mat())
          {
-            CvInvoke.CvDescriptorExtractorCompute(extractor.DescriptorExtratorPtr, image, keyPoints, descriptors);
+            CvDescriptorExtractorCompute(extractor.DescriptorExtratorPtr, image, keyPoints, descriptors.Ptr);
             if (keyPoints.Size == 0)
                return null;
             Matrix<TDescriptor> result = new Matrix<TDescriptor>(descriptors.Size);
-            descriptors.CopyTo(result, null);
+            descriptors.CopyTo(result);
             
             return result;
          }
@@ -103,15 +108,16 @@ namespace Emgu.CV.Features2D
          where TColor : struct, IColor
          where TDescriptor : struct
       {
-         return CvInvoke.CvDescriptorExtractorGetDescriptorSize(extractor.DescriptorExtratorPtr);
+         return CvDescriptorExtractorGetDescriptorSize(extractor.DescriptorExtratorPtr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public partial class CvInvoke
-   {
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvFeatureDetectorDetectKeyPoints(
+         IntPtr detector,
+         IntPtr image,
+         IntPtr mask,
+         IntPtr keypoints);
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvDescriptorExtractorCompute(IntPtr extractor, IntPtr image, IntPtr keypoints, IntPtr descriptors);
 

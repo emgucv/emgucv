@@ -46,19 +46,6 @@ namespace Emgu.CV.Features2D
          get { return _descriptorExtractorPtr; }
       }
 
-      /*
-      /// <summary>
-      /// Compute the descriptors on the image from the given keypoint locations.
-      /// </summary>
-      /// <param name="image">The image to compute descriptors from</param>
-      /// <param name="keyPoints">The keypoints where the descriptor computation is perfromed</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>The descriptors from the given keypoints</returns>
-      public Matrix<TDescriptor> ComputeDescriptorsRaw(Image<Gray, byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
-      {
-         return DetectAndComputeHelper(image, mask, keyPoints, true);
-      }*/
-
       /// <summary>
       /// Compute the descriptors on the image from the given keypoint locations.
       /// </summary>
@@ -68,20 +55,21 @@ namespace Emgu.CV.Features2D
       /// <returns>The descriptors from the given keypoints</returns>
       public Matrix<TDescriptor> DetectAndCompute(Image<Gray, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints)
       {
-         return DetectAndComputeHelper(image, mask, keyPoints, false);
+         using (Mat descriptor = new Mat())
+         {
+            DetectAndCompute(image, mask, keyPoints, descriptor, false);
+            if (descriptor.IsEmpty)
+               return null;
+            
+            Matrix<TDescriptor> res = new Matrix<TDescriptor>(descriptor.Size);
+            descriptor.CopyTo(res);
+            return res;
+         }
       }
 
-      private Matrix<TDescriptor> DetectAndComputeHelper(Image<Gray, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints, bool useProvidedKeyPoints)
+      public void DetectAndCompute(IInputArray image, IInputArray mask, VectorOfKeyPoint keyPoints, IOutputArray descriptors, bool useProvidedKeyPoints)
       {
-         using (Mat descriptorMat = new Mat())
-         {
-            Feature2DInvoke.CvFeature2DDetectAndCompute(_ptr, image, mask, keyPoints, descriptorMat, useProvidedKeyPoints);
-            if (keyPoints.Size == 0)
-               return null;
-            Matrix<TDescriptor> result = new Matrix<TDescriptor>(descriptorMat.Size);
-            descriptorMat.CopyTo(result, null);
-            return result;
-         }
+         Feature2DInvoke.CvFeature2DDetectAndCompute(_ptr, image.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, keyPoints, descriptors.OutputArrayPtr, useProvidedKeyPoints);
       }
 
       /// <summary>

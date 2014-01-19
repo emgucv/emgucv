@@ -10,86 +10,86 @@ namespace Emgu.CV.CvEnum
    /// Type for cvNorm
    /// </summary>
    [Flags]
-   public enum NORM_TYPE
+   public enum NormType
    {
       /// <summary>
       /// if arr2 is NULL, norm = ||arr1||_C = max_I abs(arr1(I));
       /// if arr2 is not NULL, norm = ||arr1-arr2||_C = max_I abs(arr1(I)-arr2(I))
       /// </summary>
-      CV_C = 1,
+      C = 1,
       /// <summary>
       /// if arr2 is NULL, norm = ||arr1||_L1 = sum_I abs(arr1(I));
       /// if arr2 is not NULL, norm = ||arr1-arr2||_L1 = sum_I abs(arr1(I)-arr2(I))
       /// </summary>
-      CV_L1 = 2,
+      L1 = 2,
       /// <summary>
       /// if arr2 is NULL, norm = ||arr1||_L2 = sqrt( sum_I arr1(I)^2);
       /// if arr2 is not NULL, norm = ||arr1-arr2||_L2 = sqrt( sum_I (arr1(I)-arr2(I))^2 )
       /// </summary>
-      CV_L2 = 4,
+      L2 = 4,
       /// <summary>
       /// 
       /// </summary>
-      CV_NORM_MASK = 7,
+      NormMask = 7,
       /// <summary>
       /// It is used in combination with either CV_C, CV_L1 or CV_L2
       /// </summary>
-      CV_RELATIVE = 8,
+      Relative = 8,
       /// <summary>
       /// It is used in combination with either CV_C, CV_L1 or CV_L2
       /// </summary>
-      CV_DIFF = 16,
+      Diff = 16,
       /// <summary>
       /// 
       /// </summary>
-      CV_MINMAX = 32,
+      MinMax = 32,
       /// <summary>
       /// 
       /// </summary>
-      CV_DIFF_C = (CV_DIFF | CV_C),
+      DiffC = (Diff | C),
       /// <summary>
       /// 
       /// </summary>
-      CV_DIFF_L1 = (CV_DIFF | CV_L1),
+      DiffL1 = (Diff | L1),
       /// <summary>
       /// 
       /// </summary>
-      CV_DIFF_L2 = (CV_DIFF | CV_L2),
+      DiffL2 = (Diff | L2),
       /// <summary>
       /// norm = ||arr1-arr2||_C/||arr2||_C
       /// </summary>
-      CV_RELATIVE_C = (CV_RELATIVE | CV_C),
+      RelativeC = (Relative | C),
       /// <summary>
       /// norm = ||arr1-arr2||_L1/||arr2||_L1
       /// </summary>
-      CV_RELATIVE_L1 = (CV_RELATIVE | CV_L1),
+      RelativeL1 = (Relative | L1),
       /// <summary>
       /// norm = ||arr1-arr2||_L2/||arr2||_L2
       /// </summary>
-      CV_RELATIVE_L2 = (CV_RELATIVE | CV_L2)
+      RelativeL2 = (Relative | L2)
    }
 
    /// <summary>
    /// Type used for cvReduce function
    /// </summary>
-   public enum REDUCE_TYPE
+   public enum ReduceType
    {
       /// <summary>
       /// The output is the sum of all the matrix rows/columns
       /// </summary>
-      CV_REDUCE_SUM = 0,
+      ReduceSum = 0,
       /// <summary>
       /// The output is the mean vector of all the matrix rows/columns
       /// </summary>
-      CV_REDUCE_AVG = 1,
+      ReduceAvg = 1,
       /// <summary>
       /// The output is the maximum (column/row-wise) of all the matrix rows/columns
       /// </summary>
-      CV_REDUCE_MAX = 2,
+      ReduceMax = 2,
       /// <summary>
       /// The output is the minimum (column/row-wise) of all the matrix rows/columns
       /// </summary>
-      CV_REDUCE_MIN = 3
+      ReduceMin = 3
    }
 
    /// <summary>
@@ -114,32 +114,32 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Type used for cvCmp function
    /// </summary>
-   public enum CMP_TYPE
+   public enum CmpType
    {
       /// <summary>
       /// src1(I) "equal to" src2(I)
       /// </summary>
-      CV_CMP_EQ = 0,
+      Equal = 0,
       /// <summary>
       /// src1(I) "greater than" src2(I)
       /// </summary>
-      CV_CMP_GT = 1,
+      GreaterThan = 1,
       /// <summary>
       /// src1(I) "greater or equal" src2(I)
       /// </summary>
-      CV_CMP_GE = 2,
+      GreaterEqual = 2,
       /// <summary>
       /// src1(I) "less than" src2(I)
       /// </summary>
-      CV_CMP_LT = 3,
+      LessThan = 3,
       /// <summary>
       /// src1(I) "less or equal" src2(I)
       /// </summary>
-      CV_CMP_LE = 4,
+      LessEqual = 4,
       /// <summary>
       /// src1(I) "not equal to" src2(I)
       /// </summary>
-      CV_CMP_NE = 5
+      NotEqual = 5
    }
 
    /// <summary>
@@ -639,7 +639,7 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Color Conversion code
    /// </summary>
-   public enum COLOR_CONVERSION
+   public enum ColorConversion
    {
       ///<summary>
       ///Convert BGR color to BGRA color
@@ -1525,8 +1525,9 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Hough detection type
    /// </summary>
-   public enum HOUGH_TYPE
+   public enum HoughType
    {
+      /*
       /// <summary>
       /// Classical or standard Hough transform. Every line is represented by two floating-point numbers (rho, theta), where rho is a distance between (0,0) point and the line, and theta is the angle between x-axis and the normal to the line. Thus, the matrix must be (the created sequence will be) of CV_32FC2 type
       /// </summary>
@@ -1538,11 +1539,11 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Multi-scale variant of classical Hough transform. The lines are encoded the same way as in CV_HOUGH_STANDARD
       /// </summary>
-      CV_HOUGH_MULTI_SCALE = 2,
+      CV_HOUGH_MULTI_SCALE = 2,*/
       /// <summary>
       /// 
       /// </summary>
-      CV_HOUGH_GRADIENT = 3
+      Gradient = 3
    }
 
    /// <summary>
@@ -1563,28 +1564,28 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Interpolation types
    /// </summary>
-   public enum INTER
+   public enum Inter
    {
       /// <summary>
       /// Nearest-neighbor interpolation
       /// </summary>
-      CV_INTER_NN = 0,
+      Nearest = 0,
       /// <summary>
       /// Bilinear interpolation
       /// </summary>
-      CV_INTER_LINEAR = 1,
+      Linear = 1,
       /// <summary>
       /// Resampling using pixel area relation. It is the preferred method for image decimation that gives moire-free results. In case of zooming it is similar to CV_INTER_NN method
       /// </summary>
-      CV_INTER_CUBIC = 2,
+      Cubic = 2,
       /// <summary>
       /// Bicubic interpolation
       /// </summary>
-      CV_INTER_AREA = 3,
+      Area = 3,
       /// <summary>
       /// LANCZOS 4
       /// </summary>
-      CV_INTER_LANCZOS4 = 4
+      Lanczos4 = 4
    }
 
    /// <summary>
@@ -1875,86 +1876,86 @@ namespace Emgu.CV.CvEnum
    /// CV_TERMCRIT
    /// </summary>
    [Flags]
-   public enum TERMCRIT
+   public enum TermCritType
    {
       /// <summary>
       /// Iteration
       /// </summary>
-      CV_TERMCRIT_ITER = 1,
+      Iter = 1,
       /// <summary>
       /// Epsilon
       /// </summary>
-      CV_TERMCRIT_EPS = 2
+      Eps = 2
    }
 
    /// <summary>
    /// Types of thresholding 
    /// </summary>
-   public enum THRESH
+   public enum ThresholdType
    {
       ///<summary>
       ///value = value > threshold ? max_value : 0
       ///</summary>
-      CV_THRESH_BINARY = 0,
+      Binary = 0,
       ///<summary>
       /// value = value > threshold ? 0 : max_value       
       ///</summary>
-      CV_THRESH_BINARY_INV = 1,
+      BinaryInv = 1,
       ///<summary>
       /// value = value > threshold ? threshold : value   
       ///</summary>
-      CV_THRESH_TRUNC = 2,
+      Trunc = 2,
       ///<summary>
       /// value = value > threshold ? value : 0           
       ///</summary>
-      CV_THRESH_TOZERO = 3,
+      ToZero = 3,
       ///<summary>
       /// value = value > threshold ? 0 : value           
       ///</summary>
-      CV_THRESH_TOZERO_INV = 4,
+      ToZeroInv = 4,
       /// <summary>
       /// 
       /// </summary>
-      CV_THRESH_MASK = 7,
+      Mask = 7,
       ///<summary>
       /// use Otsu algorithm to choose the optimal threshold value;
       /// combine the flag with one of the above CV_THRESH_* values 
       ///</summary>
-      CV_THRESH_OTSU = 8
+      Otsu = 8
 
    }
 
    /// <summary>
    /// Methods for comparing two array
    /// </summary>
-   public enum TM_TYPE
+   public enum TemplateMatchingType
    {
       /// <summary>
       /// R(x,y)=sumx',y'[T(x',y')-I(x+x',y+y')]2
       /// </summary>
-      CV_TM_SQDIFF = 0,
+      Sqdiff = 0,
       /// <summary>
       /// R(x,y)=sumx',y'[T(x',y')-I(x+x',y+y')]2/sqrt[sumx',y'T(x',y')2 sumx',y'I(x+x',y+y')2]
       /// </summary>
-      CV_TM_SQDIFF_NORMED = 1,
+      SqdiffNormed = 1,
       /// <summary>
       /// R(x,y)=sumx',y'[T(x',y') I(x+x',y+y')]
       /// </summary>
-      CV_TM_CCORR = 2,
+      Ccorr = 2,
       /// <summary>
       /// R(x,y)=sumx',y'[T(x',y') I(x+x',y+y')]/sqrt[sumx',y'T(x',y')2 sumx',y'I(x+x',y+y')2]
       /// </summary>
-      CV_TM_CCORR_NORMED = 3,
+      CcorrNormed = 3,
       /// <summary>
       /// R(x,y)=sumx',y'[T'(x',y') I'(x+x',y+y')],
       /// where T'(x',y')=T(x',y') - 1/(wxh) sumx",y"T(x",y")
       ///    I'(x+x',y+y')=I(x+x',y+y') - 1/(wxh) sumx",y"I(x+x",y+y")
       /// </summary>
-      CV_TM_CCOEFF = 4,
+      Ccoeff = 4,
       /// <summary>
       /// R(x,y)=sumx',y'[T'(x',y') I'(x+x',y+y')]/sqrt[sumx',y'T'(x',y')2 sumx',y'I'(x+x',y+y')2]
       /// </summary>
-      CV_TM_CCOEFF_NORMED = 5
+      CcoeffNormed = 5
    }
 
    /// <summary>
@@ -2004,40 +2005,40 @@ namespace Emgu.CV.CvEnum
    /// Enumeration used by cvFlip
    /// </summary>
    [Flags]
-   public enum FLIP
+   public enum FlipType
    {
       /// <summary>
       /// No flipping
       /// </summary>
-      NONE = 0,
+      None = 0,
       /// <summary>
       /// Flip horizontally
       /// </summary>
-      HORIZONTAL = 1,
+      Horizontal = 1,
       /// <summary>
       /// Flip vertically
       /// </summary>
-      VERTICAL = 2
+      Vertical = 2
    }
 
    /// <summary>
    /// Enumeration used by cvCheckArr
    /// </summary>
    [Flags]
-   public enum CHECK_TYPE
+   public enum CheckType
    {
       /// <summary>
       /// Checks that every element is neigther NaN nor Infinity
       /// </summary>
-      CHECK_NAN_INFINITY = 0,
+      NanInfinity = 0,
       /// <summary>
       /// If set, the function checks that every value of array is within [minVal,maxVal) range, otherwise it just checks that every element is neigther NaN nor Infinity
       /// </summary>
-      CHECK_RANGE = 1,
+      Range = 1,
       /// <summary>
       /// If set, the function does not raises an error if an element is invalid or out of range
       /// </summary>
-      CHECK_QUIET = 2
+      Quite = 2
    }
 
    /// <summary>
@@ -2099,61 +2100,61 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Defines for Distance Transform
    /// </summary>
-   public enum DIST_TYPE
+   public enum DistType
    {
       ///<summary>
       ///  User defined distance 
       ///</summary>
-      CV_DIST_USER = -1,
+      User = -1,
 
       ///<summary>
       ///  distance = |x1-x2| + |y1-y2| 
       ///</summary>
-      CV_DIST_L1 = 1,
+      L1 = 1,
       ///<summary>
       ///  Simple euclidean distance 
       ///</summary>
-      CV_DIST_L2 = 2,
+      L2 = 2,
       ///<summary>
       ///  distance = max(|x1-x2|,|y1-y2|) 
       ///</summary>
-      CV_DIST_C = 3,
+      C = 3,
       ///<summary>
       ///  L1-L2 metric: distance = 2(sqrt(1+x*x/2) - 1)) 
       ///</summary>
-      CV_DIST_L12 = 4,
+      L12 = 4,
       ///<summary>
       ///  distance = c^2(|x|/c-log(1+|x|/c)), c = 1.3998 
       ///</summary>
-      CV_DIST_FAIR = 5,
+      Fair = 5,
       ///<summary>
       ///  distance = c^2/2(1-exp(-(x/c)^2)), c = 2.9846 
       ///</summary>
-      CV_DIST_WELSCH = 6,
+      Welsch = 6,
       ///<summary>
       ///  distance = |x|&lt;c ? x^2/2 : c(|x|-c/2), c=1.345 
       ///</summary>
-      CV_DIST_HUBER = 7,
+      Huber = 7,
    }
 
    /// <summary>
    /// The types for cvMulSpectrums
    /// </summary>
    [Flags]
-   public enum MUL_SPECTRUMS_TYPE
+   public enum MulSpectrumsType
    {
       /// <summary>
       /// The default type
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// Do forward or inverse transform of every individual row of the input matrix. This flag allows user to transform multiple vectors simultaneously and can be used to decrease the overhead (which is sometimes several times larger than the processing itself), to do 3D and higher-dimensional transforms etc
       /// </summary>
-      CV_DXT_ROWS = 4,
+      DxtRows = 4,
       /// <summary>
       /// Conjugate the second argument of cvMulSpectrums
       /// </summary>
-      CV_DXT_MUL_CONJ = 8
+      DxtMulConj = 8
    }
 
    /// <summary>
@@ -2257,226 +2258,226 @@ namespace Emgu.CV.CvEnum
    ///<summary>
    /// Error codes
    /// </summary>
-   public enum ERROR_CODES
+   public enum ErrorCodes
    {
       /// <summary>
       /// 
       /// </summary>
-      CV_STSOK = 0,
+      STSOK = 0,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSBACKTRACE = -1,
+      STSBACKTRACE = -1,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSERROR = -2,
+      STSERROR = -2,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSINTERNAL = -3,
+      STSINTERNAL = -3,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSNOMEM = -4,
+      STSNOMEM = -4,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSBADARG = -5,
+      STSBADARG = -5,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSBADFUNC = -6,
+      STSBADFUNC = -6,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSNOCONV = -7,
+      STSNOCONV = -7,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSAUTOTRACE = -8,
+      STSAUTOTRACE = -8,
       /// <summary>
       /// 
       /// </summary>
-      CV_HEADERISNULL = -9,
+      HEADERISNULL = -9,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADIMAGESIZE = -10,
+      BADIMAGESIZE = -10,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADOFFSET = -11,
+      BADOFFSET = -11,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADDATAPTR = -12,
+      BADDATAPTR = -12,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADSTEP = -13,
+      BADSTEP = -13,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADMODELORCHSEQ = -14,
+      BADMODELORCHSEQ = -14,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADNUMCHANNELS = -15,
+      BADNUMCHANNELS = -15,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADNUMCHANNEL1U = -16,
+      BADNUMCHANNEL1U = -16,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADDEPTH = -17,
+      BADDEPTH = -17,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADALPHACHANNEL = -18,
+      BADALPHACHANNEL = -18,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADORDER = -19,
+      BADORDER = -19,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADORIGIN = -20,
+      BADORIGIN = -20,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADALIGN = -21,
+      BADALIGN = -21,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADCALLBACK = -22,
+      BADCALLBACK = -22,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADTILESIZE = -23,
+      BADTILESIZE = -23,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADCOI = -24,
+      BADCOI = -24,
       /// <summary>
       /// 
       /// </summary>
-      CV_BADROISIZE = -25,
+      BADROISIZE = -25,
       /// <summary>
       /// 
       /// </summary>
-      CV_MASKISTILED = -26,
+      MASKISTILED = -26,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSNULLPTR = -27,
+      STSNULLPTR = -27,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSVECLENGTHERR = -28,
+      STSVECLENGTHERR = -28,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSFILTERSTRUCTCONTENTERR = -29,
+      STSFILTERSTRUCTCONTENTERR = -29,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSKERNELSTRUCTCONTENTERR = -30,
+      STSKERNELSTRUCTCONTENTERR = -30,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSFILTEROFFSETERR = -31,
+      STSFILTEROFFSETERR = -31,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSBADSIZE = -201,
+      STSBADSIZE = -201,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSDIVBYZERO = -202,
+      STSDIVBYZERO = -202,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSINPLACENOTSUPPORTED = -203,
+      STSINPLACENOTSUPPORTED = -203,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSOBJECTNOTFOUND = -204,
+      STSOBJECTNOTFOUND = -204,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSUNMATCHEDFORMATS = -205,
+      STSUNMATCHEDFORMATS = -205,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSBADFLAG = -206,
+      STSBADFLAG = -206,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSBADPOINT = -207,
+      STSBADPOINT = -207,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSBADMASK = -208,
+      STSBADMASK = -208,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSUNMATCHEDSIZES = -209,
+      STSUNMATCHEDSIZES = -209,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSUNSUPPORTEDFORMAT = -210,
+      STSUNSUPPORTEDFORMAT = -210,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSOUTOFRANGE = -211,
+      STSOUTOFRANGE = -211,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSPARSEERROR = -212,
+      STSPARSEERROR = -212,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSNOTIMPLEMENTED = -213,
+      STSNOTIMPLEMENTED = -213,
       /// <summary>
       /// 
       /// </summary>
-      CV_STSBADMEMBLOCK = -214
+      STSBADMEMBLOCK = -214
    }
 
    /// <summary>
-   /// Types for CvWarpAffine
+   /// Types for WarpAffine
    /// </summary>
-   public enum WARP
+   public enum Warp
    {
       /// <summary>
       /// Neither FILL_OUTLIERS nor CV_WRAP_INVERSE_MAP
       /// </summary>
-      CV_WARP_DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// Fill all the destination image pixels. If some of them correspond to outliers in the source image, they are set to fillval.
       /// </summary>
-      CV_WARP_FILL_OUTLIERS = 8,
+      FillOutliers = 8,
       /// <summary>
       /// Indicates that matrix is inverse transform from destination image to source and, thus, can be used directly for pixel interpolation. Otherwise, the function finds the inverse transform from map_matrix.
       /// </summary>
-      CV_WARP_INVERSE_MAP = 16
+      InverseMap = 16
    }
 
    /// <summary>
    /// Types of Adaptive Threshold
    /// </summary>
-   public enum ADAPTIVE_THRESHOLD_TYPE
+   public enum AdaptiveThresholdType
    {
       /// <summary>
       /// indicates that "Mean minus C" should be used for adaptive threshold.
       /// </summary>
-      CV_ADAPTIVE_THRESH_MEAN_C = 0,
+      MeanC = 0,
       /// <summary>
       /// indicates that "Gaussian minus C" should be used for adaptive threshold.
       /// </summary>
-      CV_ADAPTIVE_THRESH_GAUSSIAN_C = 1
+      GaussianC = 1
    }
 
    /// <summary>
@@ -2523,33 +2524,6 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
-   /// Type of Morphological Operation
-   /// </summary>
-   public enum CV_MORPH_OP
-   {
-      /// <summary>
-      /// Opening.
-      /// </summary>
-      CV_MOP_OPEN = 2,
-      /// <summary>
-      /// Closing.
-      /// </summary>
-      CV_MOP_CLOSE = 3,
-      /// <summary>
-      /// Morphological Gradient.
-      /// </summary>
-      CV_MOP_GRADIENT = 4,
-      /// <summary>
-      /// "Top Hat".
-      /// </summary>
-      CV_MOP_TOPHAT = 5,
-      /// <summary>
-      /// "Black Hat".
-      /// </summary>
-      CV_MOP_BLACKHAT = 6
-   }
-
-   /// <summary>
    /// The type of histogram
    /// </summary>
    public enum HIST_TYPE
@@ -2564,64 +2538,68 @@ namespace Emgu.CV.CvEnum
       CV_HIST_SPARSE = 1
    }
 
+   
    /// <summary>
    /// cvInvert method
    /// </summary>
-   public enum SOLVE_METHOD
+   public enum DecompMethod
    {
       /// <summary>
       /// Gaussian elimination with optimal pivot element chose
       /// In case of LU method the function returns src1 determinant (src1 must be square). If it is 0, the matrix is not inverted and src2 is filled with zeros.
       /// </summary>
-      CV_LU = 0,
+      LU = 0,
       /// <summary>
       /// Singular value decomposition (SVD) method
       /// In case of SVD methods the function returns the inversed condition number of src1 (ratio of the smallest singular value to the largest singular value) and 0 if src1 is all zeros. The SVD methods calculate a pseudo-inverse matrix if src1 is singular
       /// </summary>
-      CV_SVD = 1,
+      Svd = 1,
+      Eig = 2,
       /// <summary>
       /// method for a symmetric positively-defined matrix
       /// </summary>
-      CV_SVD_SYM = 2
+      Cholesky = 3,
+      QR = 4,
+      Normal = 16
    }
 
    /// <summary>
    /// cvCalcCovarMatrix method types
    /// </summary>
    [Flags]
-   public enum COVAR_METHOD
+   public enum CovarMethod
    {
       /// <summary>
       /// Calculates covariation matrix for a set of vectors 
       /// transpose([v1-avg, v2-avg,...]) * [v1-avg,v2-avg,...] 
       /// </summary>
-      CV_COVAR_SCRAMBLED = 0,
+      Scrambled = 0,
 
       /// <summary>
       /// [v1-avg, v2-avg,...] * transpose([v1-avg,v2-avg,...])
       /// </summary>
-      CV_COVAR_NORMAL = 1,
+      Normal = 1,
 
       /// <summary>
       /// Do not calc average (i.e. mean vector) - use the input vector instead
       /// (useful for calculating covariance matrix by parts)
       /// </summary>
-      CV_COVAR_USE_AVG = 2,
+      UseAvg = 2,
 
       /// <summary>
       /// Scale the covariance matrix coefficients by number of the vectors
       /// </summary>
-      CV_COVAR_SCALE = 4,
+      Scale = 4,
 
       /// <summary>
       /// All the input vectors are stored in a single matrix, as its rows 
       /// </summary>
-      CV_COVAR_ROWS = 8,
+      Rows = 8,
 
       /// <summary>
       /// All the input vectors are stored in a single matrix, as its columns
       /// </summary>
-      CV_COVAR_COLS = 16,
+      Cols = 16,
 
    }
 
@@ -2652,24 +2630,20 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Type for cvCalcOpticalFlowPyrLK
    /// </summary>
-   public enum LKFLOW_TYPE
+   public enum LKFlowFlag
    {
       /// <summary>
       /// The default type
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
-      /// Pyramid for the first frame is precalculated before the call
+      /// Uses initial estimations, stored in nextPts; if the flag is not set, then prevPts is copied to nextPts and is considered the initial estimate.
       /// </summary>
-      CV_LKFLOW_PYR_A_READY = 1,
+      UserInitialFlow = 4,
       /// <summary>
-      /// Pyramid for the second frame is precalculated before the call
+      /// use minimum eigen values as an error measure (see minEigThreshold description); if the flag is not set, then L1 distance between patches around the original and a moved point, divided by number of pixels in a window, is used as a error measure.
       /// </summary>
-      CV_LKFLOW_PYR_B_READY = 2,
-      /// <summary>
-      /// Array B contains initial coordinates of features before the function call.
-      /// </summary>
-      CV_LKFLOW_INITIAL_GUESSES = 4
+      LKGetMinEigenvals = 8,
    }
 
    /// <summary>
@@ -2848,18 +2822,19 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// orientation
    /// </summary>
-   public enum ORIENTATION
+   public enum Orientation
    {
       /// <summary>
       /// clockwise
       /// </summary>
-      CV_CLOCKWISE = 1,
+      Clockwise = 1,
       /// <summary>
       /// counter clockwise
       /// </summary>
-      CV_COUNTER_CLOCKWISE = 2
+      CounterClockwise = 2
    }
 
+   /*
    /// <summary>
    /// Stereo Block Matching type
    /// </summary>
@@ -2877,7 +2852,7 @@ namespace Emgu.CV.CvEnum
       /// Narrow
       /// </summary>
       NARROW = 2
-   }
+   }*/
 
    /// <summary>
    /// Stereo Block Matching Prefilter type
@@ -2977,41 +2952,41 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// The type for CopyMakeBorder function
    /// </summary>
-   public enum BORDER_TYPE
+   public enum BorderType
    {
       /// <summary>
       /// Border is filled with the fixed value, passed as last parameter of the function
       /// </summary>
-      CONSTANT = 0,
+      Constant = 0,
       /// <summary>
       /// The pixels from the top and bottom rows, the left-most and right-most columns are replicated to fill the border
       /// </summary>
-      REPLICATE = 1,
+      Replicate = 1,
       /// <summary>
       /// Reflect
       /// </summary>
-      REFLECT = 2,
+      Reflect = 2,
       /// <summary>
       /// Wrap
       /// </summary>
-      WRAP = 3,
+      Wrap = 3,
       /// <summary>
       /// Reflect 101
       /// </summary>
-      REFLECT101 = 4,
+      Reflect101 = 4,
       /// <summary>
       /// Transparent
       /// </summary>
-      TRANSPARENT = 5,
+      Transparent = 5,
 
       /// <summary>
       /// The default border interpolation type.
       /// </summary>
-      DEFAULT = REFLECT101,
+      Default = Reflect101,
       /// <summary>
       /// do not look outside of ROI
       /// </summary>
-      ISOLATED = 16
+      Isolated = 16
    }
 
    /// <summary>
@@ -3228,23 +3203,23 @@ namespace Emgu.CV.CvEnum
    /// The available flags for farneback optical flow computation
    /// </summary>
    [Flags]
-   public enum OPTICALFLOW_FARNEBACK_FLAG
+   public enum OpticalflowFarnebackFlag
    {
       /// <summary>
       /// Default
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// Use the input flow as the initial flow approximation
       /// </summary>
-      USE_INITIAL_FLOW = 4,
+      UseInitialFlow = 4,
       /// <summary>
       /// Use a Gaussian winsize x winsizefilter instead of box
       /// filter of the same size for optical flow estimation. Usually, this option gives more accurate
       /// flow than with a box filter, at the cost of lower speed (and normally winsize for a
       /// Gaussian window should be set to a larger value to achieve the same level of robustness)
       /// </summary>
-      FARNEBACK_GAUSSIAN = 256
+      FarnebackGaussian = 256
    }
 
    /*
@@ -3568,6 +3543,34 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       Blackhat = 6
    }
+
+   /*
+   /// <summary>
+   /// Type of Morphological Operation
+   /// </summary>
+   public enum CV_MORPH_OP
+   {
+      /// <summary>
+      /// Opening.
+      /// </summary>
+      CV_MOP_OPEN = 2,
+      /// <summary>
+      /// Closing.
+      /// </summary>
+      CV_MOP_CLOSE = 3,
+      /// <summary>
+      /// Morphological Gradient.
+      /// </summary>
+      CV_MOP_GRADIENT = 4,
+      /// <summary>
+      /// "Top Hat".
+      /// </summary>
+      CV_MOP_TOPHAT = 5,
+      /// <summary>
+      /// "Black Hat".
+      /// </summary>
+      CV_MOP_BLACKHAT = 6
+   }*/
 
    public enum AccessType
    {

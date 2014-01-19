@@ -277,6 +277,25 @@ namespace Emgu.CV
       #endregion
 
       #region optical flow
+
+      /// <summary>
+      /// Computes flow for every pixel of the first input image using Lucas &amp; Kanade algorithm
+      /// </summary>
+      /// <param name="prev">First image</param>
+      /// <param name="curr">Second image</param>
+      /// <param name="winSize">Size of the averaging window used for grouping pixels</param>
+      /// <param name="velx">Horizontal component of the optical flow of the same size as input images</param>
+      /// <param name="vely">Vertical component of the optical flow of the same size as input images</param>
+      public static void cvCalcOpticalFlowLK(
+         Image<Gray, Byte> prev,
+         Image<Gray, Byte> curr,
+         Size winSize,
+         Image<Gray, Single> velx,
+         Image<Gray, Single> vely)
+      {
+         CvInvoke.cvCalcOpticalFlowLK(prev.Ptr, curr.Ptr, winSize, velx, vely);
+      }
+
       /// <summary>
       /// Computes flow for every pixel of the first input image using Lucas &amp; Kanade algorithm
       /// </summary>
@@ -303,6 +322,28 @@ namespace Emgu.CV
       /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel</param>
       /// <param name="lambda">Lagrangian multiplier</param>
       /// <param name="criteria">Criteria of termination of velocity computing</param>
+      public static void cvCalcOpticalFlowHS(
+         Image<Gray, Byte> prev,
+         Image<Gray, Byte> curr,
+         bool usePrevious,
+         Image<Gray, Single> velx,
+         Image<Gray, Single> vely,
+         double lambda,
+         MCvTermCriteria criteria)
+      {
+         CvInvoke.cvCalcOpticalFlowHS(prev.Ptr, curr.Ptr, usePrevious, velx.Ptr, vely.Ptr, lambda, criteria);
+      }
+
+      /// <summary>
+      /// Computes flow for every pixel of the first input image using Horn &amp; Schunck algorithm 
+      /// </summary>
+      /// <param name="prev">First image, 8-bit, single-channel</param>
+      /// <param name="curr">Second image, 8-bit, single-channel</param>
+      /// <param name="usePrevious">Uses previous (input) velocity field</param>
+      /// <param name="velx">Horizontal component of the optical flow of the same size as input images, 32-bit floating-point, single-channel</param>
+      /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel</param>
+      /// <param name="lambda">Lagrangian multiplier</param>
+      /// <param name="criteria">Criteria of termination of velocity computing</param>
       [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowHS(
               IntPtr prev,
@@ -312,6 +353,31 @@ namespace Emgu.CV
               IntPtr vely,
               double lambda,
               MCvTermCriteria criteria);
+
+      /// <summary>
+      /// Calculates optical flow for overlapped blocks block_size.width * block_size.height pixels each, thus the velocity fields are smaller than the original images. 
+      /// For every block in prev the functions tries to find a similar block in curr in some neighborhood of the original block or shifted by (velx(x0,y0),vely(x0,y0)) block as has been calculated by previous function call (if use_previous)
+      /// </summary>
+      /// <param name="prev">First image</param>
+      /// <param name="curr">Second image</param>
+      /// <param name="blockSize">Size of basic blocks that are compared.</param>
+      /// <param name="shiftSize">Block coordinate increments. </param>
+      /// <param name="maxRange">Size of the scanned neighborhood in pixels around block.</param>
+      /// <param name="usePrevious">Uses previous (input) velocity field. </param>
+      /// <param name="velx">Horizontal component of the optical flow of floor((prev->width - block_size.width)/shiftSize.width) x floor((prev->height - block_size.height)/shiftSize.height) size. </param>
+      /// <param name="vely">Vertical component of the optical flow of the same size velx.</param>
+      public static void cvCalcOpticalFlowBM(
+         Image<Gray, Byte> prev,
+         Image<Gray, Byte> curr,
+         Size blockSize,
+         Size shiftSize,
+         Size maxRange,
+         bool usePrevious,
+         Image<Gray, Single> velx,
+         Image<Gray, Single> vely)
+      {
+         cvCalcOpticalFlowBM(prev, curr, blockSize, shiftSize, maxRange, usePrevious, velx, vely);
+      }
 
       /// <summary>
       /// Calculates optical flow for overlapped blocks block_size.width * block_size.height pixels each, thus the velocity fields are smaller than the original images. For every block in prev the functions tries to find a similar block in curr in some neighborhood of the original block or shifted by (velx(x0,y0),vely(x0,y0)) block as has been calculated by previous function call (if use_previous=1)

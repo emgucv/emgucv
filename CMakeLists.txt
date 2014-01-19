@@ -15,21 +15,26 @@ SET(OPENCV_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 IF (NOT ANDROID)
-  IF(NETFX_CORE) 
-    #SET CSC 4.5 (in the .Net framework 4.0 folder) as the prefered compiler for EMGU CV
-    SET(CSC_PREFERRED_VERSION "4.0")
-  ELSE()
+  SET(CSC_PREFERRED_VERSION "4.0")
+  IF((NOT NETFX_CORE) AND MSVC) 
     #SET CSC 3.5 as the prefered compiler for EMGU CV
-    SET(CSC_PREFERRED_VERSION "3.5")
+	SET(CSC_TARGET_FRAMEWORK "3.5" CACHE STRING "C#  target framework")
+  ELSE()
+    #SET CSC 4.5 (in the .Net framework 4.0 folder) as the prefered compiler for EMGU CV
+	SET(CSC_TARGET_FRAMEWORK "" CACHE STRING "C# target framework")
   ENDIF()
   
   FIND_PACKAGE(CSharp REQUIRED)
   INCLUDE (CSharpMacros)
 ENDIF()
+
+
 INCLUDE (CheckTargetArch)
 INCLUDE (OpenCVVersion)
 
 SET(LIBRARY_3RDPARTY_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/3rdParty)
+
+
 
 # ----------------------------------------------------------------------------
 #  Autodetect if we are in a GIT repository
@@ -404,6 +409,7 @@ ADD_SUBDIRECTORY(Emgu.CV.Nonfree)
 ADD_SUBDIRECTORY(Emgu.CV.Superres)
 ADD_SUBDIRECTORY(Emgu.CV.Shape)
 ADD_SUBDIRECTORY(Emgu.CV.Softcascade)
+ADD_SUBDIRECTORY(Emgu.CV.UI.GL)
 ENDIF()
 
 IF (ANDROID)

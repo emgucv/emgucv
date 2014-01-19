@@ -15,6 +15,11 @@ namespace Emgu.CV
    /// </summary>
    public class Octree : UnmanagedObject
    {
+      static Octree()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       private MemStorage _storage;
       private Seq<MCvPoint3D32f> _pointSeq;
 
@@ -23,7 +28,7 @@ namespace Emgu.CV
       /// </summary>
       public Octree()
       {
-         _ptr = CvInvoke.CvOctreeCreate();
+         _ptr = CvOctreeCreate();
          _storage = new MemStorage();
          _pointSeq = new Seq<MCvPoint3D32f>(_storage);
       }
@@ -49,7 +54,7 @@ namespace Emgu.CV
       public void BuildTree(MCvPoint3D32f[] points, int maxLevels, int minPoints)
       {
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         CvInvoke.CvOctreeBuildTree(_ptr, handle.AddrOfPinnedObject(), points.Length, maxLevels, minPoints);
+         CvOctreeBuildTree(_ptr, handle.AddrOfPinnedObject(), points.Length, maxLevels, minPoints);
          handle.Free();
       }
 
@@ -61,7 +66,7 @@ namespace Emgu.CV
       /// <returns>The points withing the specific sphere</returns>
       public MCvPoint3D32f[] GetPointsWithinSphere(MCvPoint3D32f center, float radius)
       {
-         CvInvoke.CvOctreeGetPointsWithinSphere(_ptr, ref center, radius, _pointSeq);
+         CvOctreeGetPointsWithinSphere(_ptr, ref center, radius, _pointSeq);
          return _pointSeq.ToArray();
       }
 
@@ -79,12 +84,9 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvOctreeRelease(_ptr);
+         CvOctreeRelease(_ptr);
       }
-   }
 
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvOctreeCreate();
 
@@ -97,4 +99,5 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvOctreeGetPointsWithinSphere(IntPtr tree, ref MCvPoint3D32f center, float radius, IntPtr pointSeq);
    }
+
 }

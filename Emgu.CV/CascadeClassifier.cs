@@ -16,6 +16,11 @@ namespace Emgu.CV
    /// </summary>
    public class CascadeClassifier : UnmanagedObject
    {
+      static CascadeClassifier()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// A dummy constructor that mainly aimed for those who would like to inherite this class
       /// </summary>
@@ -57,7 +62,7 @@ namespace Emgu.CV
       /// <param name="minSize">Minimum window size. Use Size.Empty for default, where it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
       /// <param name="maxSize">Maxumum window size. Use Size.Empty for default, where the parameter will be ignored.</param>
       /// <returns>The objects detected, one array per channel</returns>
-      public Rectangle[] DetectMultiScale(IInputArray image, double scaleFactor, int minNeighbors, Size minSize, Size maxSize)
+      public Rectangle[] DetectMultiScale(IInputArray image, double scaleFactor = 1.1, int minNeighbors = 3, Size minSize = new Size(), Size maxSize = new Size())
       {
          using (Util.VectorOfRect rectangles = new Util.VectorOfRect())
          {

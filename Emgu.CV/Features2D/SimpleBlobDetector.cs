@@ -16,6 +16,11 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class SimpleBlobDetector : UnmanagedObject, IFeatureDetector
    {
+      static SimpleBlobDetector()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a simple blob detector
       /// </summary>

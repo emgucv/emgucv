@@ -9,6 +9,35 @@ project(cvextern)
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
 
+MACRO(CREATE_VECTOR_CS vname velement velement_cs element_is_structure)
+
+SET(VECTOR_NAME ${vname})
+SET(VECTOR_ELEMENT ${velement})
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
+
+SET(VECTOR_ELEMENT_CS ${velement_cs})
+if (${element_is_structure})
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfStruct.cs.in ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/VectorOf${VECTOR_NAME}.cs)
+ELSE()
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/VectorOf${VECTOR_NAME}.cs)
+ENDIF()
+
+
+ENDMACRO()
+
+CREATE_VECTOR_CS("Byte" "unsigned char" "byte" TRUE)
+CREATE_VECTOR_CS("Int" "int" "int" TRUE)
+CREATE_VECTOR_CS("Float" "float" "float" TRUE)
+CREATE_VECTOR_CS("Point" "cv::Point" "Point" TRUE)
+CREATE_VECTOR_CS("PointF" "cv::Point2f" "PointF" TRUE)
+CREATE_VECTOR_CS("Rect" "cv::Rect" "Rectangle" TRUE)
+CREATE_VECTOR_CS("KeyPoint" "cv::KeyPoint" "MKeyPoint" TRUE)
+CREATE_VECTOR_CS("ERStat" "cv::ERStat" "MCvERStat" TRUE)
+CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" FALSE)
+CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" FALSE)
+
+
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")

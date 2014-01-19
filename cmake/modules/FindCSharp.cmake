@@ -27,6 +27,11 @@ $ENV{windir}/Microsoft.NET/Framework64/v3.5/
 $ENV{windir}/Microsoft.NET/Framework/v3.5/
 "C:/Windows/Microsoft.NET/Framework/v3.5"
 )
+#MESSAGE( "$ENV{programfiles}/Reference Assemblies/Microsoft/Framework/.NETFramework/v3.5/Profile/Client/" )
+FIND_FILE (CSC_MSCORLIB_35 mscorlib.dll
+"$ENV{programfiles}/Reference Assemblies/Microsoft/Framework/.NETFramework/v3.5/Profile/Client/"
+"C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v3.5/Profile/Client/"
+)
 IF(CSC_EXECUTABLE_35)
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_35})
 ENDIF()

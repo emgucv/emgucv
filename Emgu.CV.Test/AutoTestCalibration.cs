@@ -75,7 +75,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> circlesGridImage = EmguAssert.LoadImage<Gray, byte>("circlesGrid.bmp");
          using (SimpleBlobDetector detector = new SimpleBlobDetector())
          {
-            PointF[] centers = CameraCalibration.FindCirclesGrid(circlesGridImage, patternSize, CvEnum.CalibCgType.SymmetricGrid | CvEnum.CalibCgType.Clustering, detector);
+            PointF[] centers = CvInvoke.FindCirclesGrid(circlesGridImage, patternSize, CvEnum.CalibCgType.SymmetricGrid | CvEnum.CalibCgType.Clustering, detector);
             CameraCalibration.DrawChessboardCorners(circlesGridImage, patternSize, centers);
             //UI.ImageViewer.Show(circlesGridImage);
          }

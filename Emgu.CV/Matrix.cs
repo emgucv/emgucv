@@ -524,7 +524,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Add(Matrix<TDepth> mat2)
       {
          Matrix<TDepth> res = CopyBlank();
-         CvInvoke.Add(this, mat2, res, null, Mat.GetDepth(typeof(TDepth)));
+         CvInvoke.Add(this, mat2, res, null, Mat.GetDepthType(typeof(TDepth)));
          return res;
       }
 
@@ -536,7 +536,7 @@ namespace Emgu.CV
          Matrix<TDepth> res = CopyBlank();
          using (InputArray ia = new InputArray(System.Convert.ToDouble(val)))
          {
-            CvInvoke.Add(this, ia, res, null, Mat.GetDepth(typeof(TDepth)));
+            CvInvoke.Add(this, ia, res, null, Mat.GetDepthType(typeof(TDepth)));
          }
          return res;
       }
@@ -549,7 +549,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Sub(Matrix<TDepth> mat2)
       {
          Matrix<TDepth> res = CopyBlank();
-         CvInvoke.Subtract(this, mat2, res, null, Mat.GetDepth(typeof(TDepth)));
+         CvInvoke.Subtract(this, mat2, res, null, Mat.GetDepthType(typeof(TDepth)));
          return res;
       }
 
@@ -561,7 +561,7 @@ namespace Emgu.CV
          Matrix<TDepth> res = CopyBlank();
          using (InputArray ia = new InputArray(System.Convert.ToDouble(val)))
          {
-            CvInvoke.Subtract(this, ia, res, null, Mat.GetDepth(typeof(TDepth)));
+            CvInvoke.Subtract(this, ia, res, null, Mat.GetDepthType(typeof(TDepth)));
          }
          return res;
       }
@@ -576,7 +576,7 @@ namespace Emgu.CV
          Matrix<TDepth> res = CopyBlank();
          using (InputArray ia = new InputArray(System.Convert.ToDouble(val)))
          {
-            CvInvoke.Subtract(ia, this, res, null, Mat.GetDepth(typeof(TDepth)));
+            CvInvoke.Subtract(ia, this, res, null, Mat.GetDepthType(typeof(TDepth)));
          }
          return res;
       }
@@ -755,7 +755,7 @@ namespace Emgu.CV
       /// <param name="mat2">The other matrix to compare with</param>
       /// <param name="type">Comparison type</param>
       /// <returns>The comparison mask</returns>
-      public Matrix<Byte> Cmp(Matrix<TDepth> mat2, Emgu.CV.CvEnum.CMP_TYPE type)
+      public Matrix<Byte> Cmp(Matrix<TDepth> mat2, Emgu.CV.CvEnum.CmpType type)
       {
          Matrix<Byte> res = new Matrix<Byte>(Rows, Cols);
          CvInvoke.Compare(this, mat2, res, type);

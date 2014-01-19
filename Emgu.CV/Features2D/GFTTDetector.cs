@@ -17,6 +17,11 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class GFTTDetector : UnmanagedObject, IFeatureDetector
    {
+      static GFTTDetector()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a Good Feature to Track detector
       /// </summary>
@@ -29,7 +34,7 @@ namespace Emgu.CV.Features2D
       /// <param name="k">K, use 0.04 for default</param>
       public GFTTDetector(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k)
       {
-         _ptr = CvInvoke.CvGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
+         _ptr = CvGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
       }
 
       #region IFeatureDetector Members
@@ -51,15 +56,10 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvGFTTDetectorRelease(ref _ptr);
+         if(_ptr != IntPtr.Zero)
+            CvGFTTDetectorRelease(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvGFTTDetectorCreate(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k);
 

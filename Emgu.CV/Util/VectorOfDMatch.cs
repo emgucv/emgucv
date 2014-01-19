@@ -14,6 +14,11 @@ namespace Emgu.CV.Util
    /// </summary>
    public class VectorOfDMatch : Emgu.Util.UnmanagedObject
    {
+      static VectorOfDMatch()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create an empty standard vector of DMatch
       /// </summary>
@@ -97,7 +102,7 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            VectorOfDMatchRelease(_ptr);
+            VectorOfDMatchRelease(ref _ptr);
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -107,7 +112,7 @@ namespace Emgu.CV.Util
       internal static extern IntPtr VectorOfDMatchCreateSize(int size);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void VectorOfDMatchRelease(IntPtr v);
+      internal static extern void VectorOfDMatchRelease(ref IntPtr v);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int VectorOfDMatchGetSize(IntPtr v);

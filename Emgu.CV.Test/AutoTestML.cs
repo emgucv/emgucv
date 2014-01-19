@@ -593,7 +593,7 @@ namespace Emgu.CV.Test
          param.calcVarImportance = true;
          param.nactiveVars = 4;
          param.termCrit = new MCvTermCriteria(100, 0.01f);
-         param.termCrit.type = Emgu.CV.CvEnum.TERMCRIT.CV_TERMCRIT_ITER;
+         param.termCrit.type = Emgu.CV.CvEnum.TermCritType.Iter;
 
          using (RTrees forest = new RTrees())
          {
@@ -668,7 +668,7 @@ namespace Emgu.CV.Test
          param.calcVarImportance = true;
          param.nactiveVars = 4;
          param.termCrit = new MCvTermCriteria(100, 0.01f);
-         param.termCrit.type = Emgu.CV.CvEnum.TERMCRIT.CV_TERMCRIT_ITER;
+         param.termCrit.type = Emgu.CV.CvEnum.TermCritType.Iter;
 
          using (ERTrees forest = new ERTrees())
          {
@@ -819,16 +819,13 @@ namespace Emgu.CV.Test
          CvInvoke.RandShuffle(points, 1.0, 0);
          #endregion
 
-         CvInvoke.cvKMeans2(
+         CvInvoke.Kmeans(
             points, 
-            clustersCount, 
+            2,
             clusters, 
             new MCvTermCriteria(10, 1.0), 
-            2, 
-            IntPtr.Zero, 
-            0, 
-            IntPtr.Zero, 
-            IntPtr.Zero);
+            5, 
+            CvEnum.KMeansInitType.PPCenters);
 
          for (int i = 0; i < sampleCount; i++)
          {

@@ -7,10 +7,11 @@
 #include "objdetect_c.h"
 
 //#include "stdio.h"
-void CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq) 
+void CvHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq) 
 {   
    std::vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();  
-   cvSeqPushMulti(seq, &v.front(), v.size()); 
+   seq->resize(v.size());
+   memcpy(&(*seq)[0], &v[0], sizeof(float)* seq->size());
 }
 cv::HOGDescriptor* CvHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
 

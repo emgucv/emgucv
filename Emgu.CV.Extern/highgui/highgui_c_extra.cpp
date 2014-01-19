@@ -45,3 +45,8 @@ cv::Mat* cvMatCreateFromFile(char* fileName, int flags)
    cv::swap(*m, tmp);
    return m;
 }
+
+bool cveImwrite(const char* filename, cv::_InputArray* img, const std::vector<int>* params)
+{
+   return cv::imwrite(filename, *img, params ? *params : std::vector<int>());
+}

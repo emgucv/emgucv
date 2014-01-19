@@ -115,7 +115,7 @@ namespace Emgu.CV.Features2D
                   startRegion.Intersect(matchMask.ROI);
             }
 
-            CvInvoke.Multiply(matchMask, priorMask, matchMask, 1.0, Mat.GetDepth(typeof(float)));
+            CvInvoke.Multiply(matchMask, priorMask, matchMask, 1.0, Mat.GetDepthType(typeof(float)));
 
             MCvConnectedComp comp;
             MCvBox2D currentRegion;
@@ -579,7 +579,8 @@ namespace Emgu.CV.Features2D
          where TColor : struct, IColor
       {
          Image<Bgr, Byte> result = new Image<Bgr, Byte>(image.Size);
-         CvInvoke.drawKeypoints(image, keypoints, result, color.MCvScalar, type);
+         MCvScalar c = color.MCvScalar;
+         CvInvoke.drawKeypoints(image, keypoints, result, ref c, type);
          return result;
       }
 
@@ -601,11 +602,13 @@ namespace Emgu.CV.Features2D
          Image<TColor, Byte> modelImage, VectorOfKeyPoint modelKeypoints,
          Image<TColor, Byte> observerdImage, VectorOfKeyPoint observedKeyPoints,
          Matrix<int> matchIndices, Bgr matchColor, Bgr singlePointColor,
-         Matrix<Byte> matchesMask, KeypointDrawType flags)
+         Matrix<Byte> matchesMask, KeypointDrawType flags = KeypointDrawType.Default)
          where TColor : struct, IColor
       {
          Image<Bgr, Byte> result = new Image<Bgr, byte>(modelImage.Cols + observerdImage.Cols, Math.Max(modelImage.Rows, observerdImage.Rows));
-         CvInvoke.drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndices, result, matchColor.MCvScalar, singlePointColor.MCvScalar, matchesMask, flags);
+         MCvScalar mc = matchColor.MCvScalar;
+         MCvScalar spc = singlePointColor.MCvScalar;
+         CvInvoke.drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndices, result, ref mc, ref spc, matchesMask, flags);
          return result;
       }
 
@@ -619,16 +622,16 @@ namespace Emgu.CV.Features2D
          /// For each keypoint only the center point will be drawn (without
          /// the circle around keypoint with keypoint size and orientation).
          /// </summary>
-         DEFAULT = 0,
+         Default = 0,
          /// <summary>
          /// Single keypoints will not be drawn.
          /// </summary>
-         NOT_DRAW_SINGLE_POINTS = 2,
+         NotDrawSinglePoints = 2,
          /// <summary>
          /// For each keypoint the circle around keypoint with keypoint size and
          /// orientation will be drawn.
          /// </summary>
-         DRAW_RICH_KEYPOINTS = 4
+         DrawRichKeypoints = 4
       };
 
       /// <summary>
@@ -690,35 +693,13 @@ namespace Emgu.CV.Features2D
          using (Matrix<float> tmp = new Matrix<float>(firstCol.Size))
          using (Matrix<Byte> maskBuffer = new Matrix<byte>(firstCol.Size))
          {
-            CvInvoke.Divide(firstCol, secCol, tmp, 1.0, Mat.GetDepth(typeof(float)));
+            CvInvoke.Divide(firstCol, secCol, tmp, 1.0, Mat.GetDepthType(typeof(float)));
             using (InputArray ia = new InputArray(uniquenessThreshold))
-               CvInvoke.Compare(tmp, ia, maskBuffer, CvEnum.CMP_TYPE.CV_CMP_LE);
+               CvInvoke.Compare(tmp, ia, maskBuffer, CvEnum.CmpType.LessEqual);
             CvInvoke.BitwiseAnd(maskBuffer, mask, mask, null);
          }
       }
 
-      /*
-      /// <summary>
-      /// Match the Image feature from the observed image to the features from the model image using brute force matching
-      /// </summary>
-      /// <param name="modelDescriptors">The descriptors from the model image</param>
-      /// <param name="observedDescriptors">The descriptors from the observed image</param>
-      /// <param name="k">The number of neighbors to find</param>
-      /// <param name="indices">The match indices matrix. <paramref name="indices"/>[i, k] = j, indicates the j-th model descriptor is the k-th closest match to the i-th observed descriptor</param>
-      /// <param name="dist">The distance matrix. <paramref name="dist"/>[i,k] = d, indicates the distance bewtween the corresponding match is d</param>
-      public static void DescriptorMatchKnn<TDescriptor>(Matrix<TDescriptor> modelDescriptors, Matrix<TDescriptor> observedDescriptors, int k,  Matrix<int> indices,  Matrix<float> dist)
-         where TDescriptor : struct 
-      {
-         indices = new Matrix<int>(observedDescriptors.Rows, k);
-         dist = new Matrix<float>(observedDescriptors.Rows, k);
-
-         BruteForceMatcher<TDescriptor>.DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? BruteForceMatcher<TDescriptor>.DistanceType.Hamming : BruteForceMatcher<TDescriptor>.DistanceType.L2F32;
-         using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))
-         {
-            matcher.Add(modelDescriptors);
-            matcher.KnnMatch(observedDescriptors, indices, dist, 2, null);
-         }
-      }*/
    }
 }
 
@@ -733,60 +714,13 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int voteForSizeAndOrientation(IntPtr modelKeyPoints, IntPtr observedKeyPoints, IntPtr indices, IntPtr mask, double scaleIncrement, int rotationBins);
 
-#if ANDROID
-      internal static void drawMatchedFeatures(
-         IntPtr img1, IntPtr keypoints1,
-         IntPtr img2, IntPtr keypoints2,
-         IntPtr matchIndices,
-         IntPtr outImg,
-         MCvScalar matchColor, MCvScalar singlePointColor,
-         IntPtr matchesMask,
-         Features2D.Features2DToolbox.KeypointDrawType flags)
-      {
-         drawMatchedFeatures(
-            img1, keypoints1, img2, keypoints2, matchIndices, outImg,
-            matchColor.v0, matchColor.v1, matchColor.v2, matchColor.v3,
-            singlePointColor.v0, singlePointColor.v1, singlePointColor.v2, singlePointColor.v3,
-            matchesMask, flags);
-      }
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void drawMatchedFeatures(
-         IntPtr img1, IntPtr keypoints1,
-         IntPtr img2, IntPtr keypoints2,
-         IntPtr matchIndices,
-         IntPtr outImg,
-         double mc0, double mc1, double mc2, double mc3,
-         double spc0, double spc1, double spc2, double spc3,
-         IntPtr matchesMask,
-         Features2D.Features2DToolbox.KeypointDrawType flags);
-
-      internal static void drawKeypoints(
-                          IntPtr image,
-                          IntPtr vectorOfKeypoints,
-                          IntPtr outImage,
-                          MCvScalar color,
-                          Features2D.Features2DToolbox.KeypointDrawType flags)
-      {
-         drawKeypoints(image, vectorOfKeypoints, outImage, color.v0, color.v1, color.v2, color.v3, flags);
-      }
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void drawKeypoints(
-                          IntPtr image,
-                          IntPtr vectorOfKeypoints,
-                          IntPtr outImage,
-                          double v0, double v1, double v2, double v3,
-                          Features2D.Features2DToolbox.KeypointDrawType flags);
-
-#else
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void drawMatchedFeatures(
          IntPtr img1, IntPtr keypoints1,
          IntPtr img2, IntPtr keypoints2,
          IntPtr matchIndices,
          IntPtr outImg,
-         MCvScalar matchColor, MCvScalar singlePointColor,
+         ref MCvScalar matchColor, ref MCvScalar singlePointColor,
          IntPtr matchesMask,
          Features2D.Features2DToolbox.KeypointDrawType flags);
 
@@ -795,9 +729,8 @@ namespace Emgu.CV
                           IntPtr image,
                           IntPtr vectorOfKeypoints,
                           IntPtr outImage,
-                          MCvScalar color,
+                          ref MCvScalar color,
                           Features2D.Features2DToolbox.KeypointDrawType flags);
-#endif
 
 
    }

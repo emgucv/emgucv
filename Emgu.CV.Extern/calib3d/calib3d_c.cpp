@@ -14,19 +14,37 @@ cv::StereoSGBM* CvStereoSGBMCreate(
   int P1, int P2, int disp12MaxDiff,
   int preFilterCap, int uniquenessRatio,
   int speckleWindowSize, int speckleRange,
-  int mode)
+  int mode, cv::StereoMatcher** stereoMatcher)
 {
    cv::Ptr<cv::StereoSGBM> ptr =  cv::createStereoSGBM(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode);
    ptr.addref();
+   cv::StereoSGBM* result = ptr.get();
+   *stereoMatcher = (cv::StereoMatcher*) result;
+   return result;
+}
+void CvStereoSGBMRelease(cv::StereoSGBM** obj) 
+{ 
+   delete *obj;
+   *obj = 0;
+}
+
+//StereoBM
+cv::StereoMatcher* CvStereoBMCreate(int numberOfDisparities, int blockSize)
+{
+   cv::Ptr<cv::StereoMatcher> ptr = cv::createStereoBM(numberOfDisparities, blockSize);
+   ptr.addref();
    return ptr.get();
 }
-void CvStereoSGBMRelease(cv::StereoSGBM* obj) { delete obj;}
-void CvStereoSGBMFindCorrespondence(cv::StereoSGBM* disparitySolver, IplImage* left, IplImage* right, IplImage* disparity)
+
+//StereoMatcher
+void CvStereoMatcherCompute(cv::StereoMatcher*  disparitySolver, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity)
 {
-   cv::Mat leftMat = cv::cvarrToMat(left);
-   cv::Mat rightMat = cv::cvarrToMat(right);
-   cv::Mat dispMat = cv::cvarrToMat(disparity);
-   disparitySolver->compute(leftMat, rightMat, dispMat);
+   disparitySolver->compute(*left, *right, *disparity);
+}
+void CvStereoMatcherRelease(cv::StereoMatcher** matcher)
+{
+   delete *matcher;
+   *matcher = 0;
 }
 
 //2D tracker
@@ -72,11 +90,9 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
 
 }
 
-bool cvFindCirclesGrid(IplImage* image, CvSize* patternSize, std::vector<cv::Point2f>* centers, int flags, cv::FeatureDetector* blobDetector)
+bool cveFindCirclesGrid(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* centers, int flags, cv::FeatureDetector* blobDetector)
 {
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Size size(patternSize->width, patternSize->height);
    cv::Ptr<cv::FeatureDetector> ptr(blobDetector);
    ptr.addref();
-   return cv::findCirclesGrid(mat, size, *centers, flags, ptr);
+   return cv::findCirclesGrid(*image, *patternSize, *centers, flags, ptr);
 }

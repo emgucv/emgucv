@@ -47,7 +47,10 @@ namespace PedestrianDetection
                des.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
 
                watch = Stopwatch.StartNew();
-               regions = des.DetectMultiScale(image);
+               MCvObjectDetection[] results = des.DetectMultiScale(image);
+               regions = new Rectangle[results.Length];
+               for (int i = 0; i < results.Length; i++)
+                  regions[i] = results[i].Rect;
             }
          }
          watch.Stop();

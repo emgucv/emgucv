@@ -11,11 +11,11 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/softcascade.hpp"
 
-CVAPI(cv::softcascade::Detector*) cvSoftCascadeDetectorCreate(const char* fileName, double minScale, double maxScale, int scales, int rejCriteria);
+CVAPI(cv::softcascade::Detector*) cveSoftCascadeDetectorCreate(const char* fileName, double minScale, double maxScale, int scales, int rejCriteria);
 
-CVAPI(void) cvSoftCascadeDetectorDetect(cv::softcascade::Detector* detector, CvArr* image, std::vector<cv::Rect>* rois, std::vector<cv::Rect>* rects, std::vector<float>* confidents);
+CVAPI(void) cveSoftCascadeDetectorDetect(cv::softcascade::Detector* detector, cv::_InputArray* image, std::vector<cv::Rect>* rois, std::vector<cv::Rect>* rects, std::vector<float>* confidents);
 
-CVAPI(void) cvSoftCascadeDetectorRelease(cv::softcascade::Detector** detector);
+CVAPI(void) cveSoftCascadeDetectorRelease(cv::softcascade::Detector** detector);
 
 CVAPI(cv::softcascade::SCascade*) cudaSoftCascadeDetectorCreate(const char* fileName, const double minScale, const double maxScale, const int scales, const int flags);
 

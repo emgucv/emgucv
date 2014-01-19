@@ -28,7 +28,7 @@ namespace Emgu.CV.Cuda
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="borderType">Border type. Use REFLECT101 as default.</param>
       /// <param name="borderValue">The border value</param>
-      public CudaLinearFilter(Matrix<float> kernel, System.Drawing.Point anchor, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue)
+      public CudaLinearFilter(Matrix<float> kernel, System.Drawing.Point anchor, CvEnum.BorderType borderType, MCvScalar borderValue)
       {
          _ptr = CudaInvoke.cudaCreateLinearFilter(_matType, _matType, kernel, ref anchor, borderType, ref borderValue);
       }
@@ -37,6 +37,6 @@ namespace Emgu.CV.Cuda
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateLinearFilter(int srcType, int dstType, IntPtr kernel, ref Point anchor, CvEnum.BORDER_TYPE borderMode, ref MCvScalar borderValue);
+      internal static extern IntPtr cudaCreateLinearFilter(int srcType, int dstType, IntPtr kernel, ref Point anchor, CvEnum.BorderType borderMode, ref MCvScalar borderValue);
    }
 }

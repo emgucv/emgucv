@@ -30,7 +30,7 @@ namespace Emgu.CV.Test
 
          m.SetIdentity();
 
-         CvInvoke.Invert(m, mInvert, Emgu.CV.CvEnum.SOLVE_METHOD.CV_LU);
+         CvInvoke.Invert(m, mInvert, Emgu.CV.CvEnum.DecompMethod.LU);
 
          EmguAssert.IsTrue(m.Equals(mInvert));
       }
@@ -61,7 +61,7 @@ namespace Emgu.CV.Test
          lhs.SetIdentity();
          Matrix<Single> rhs = new Matrix<Single>(new float[,] { { 0.1f }, { 0.2f }, { 0.5f } });
          Matrix<Single> result = new Matrix<float>(3, 1);
-         CvInvoke.Solve(lhs, rhs, result, CvEnum.SOLVE_METHOD.CV_LU);
+         CvInvoke.Solve(lhs, rhs, result, CvEnum.DecompMethod.LU);
 
          EmguAssert.AreEqual(rhs[0, 0], result[0, 0]);
          EmguAssert.AreEqual(rhs[1, 0], result[1, 0]);
@@ -378,7 +378,7 @@ namespace Emgu.CV.Test
          Matrix<float> tmp = new Matrix<float>(size, size);
          tmp.SetRandNormal(new MCvScalar(0), new MCvScalar(1));
          Matrix<float> symMat = new Matrix<float>(tmp.Size);
-         CvInvoke.MulTransposed(tmp, symMat, false, null, 1.0, Mat.Depth.Cv32S);
+         CvInvoke.MulTransposed(tmp, symMat, false, null, 1.0, Mat.DepthType.Cv32S);
          Matrix<float> clone = symMat.Clone();
 
          Matrix<float> evects = new Matrix<float>(symMat.Size);

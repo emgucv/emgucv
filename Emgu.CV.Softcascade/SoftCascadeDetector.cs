@@ -53,16 +53,16 @@ namespace Emgu.CV.Softcascade
       /// Create a soft (stageless) cascaded detector.
       /// </summary>
       /// <param name="trainedCascadeFileName">File name of the trained soft cascade detector</param>
-      /// <param name="minScale">A minimum scale relative to the original size of the image on which cascade will be applied. Use 0.4 for default.</param>
-      /// <param name="maxScale">A maximum scale relative to the original size of the image on which cascade will be applied. Use 5.0 for default</param>
-      /// <param name="scales">Number of scales from minScale to maxScale. Use 55 for default</param>
+      /// <param name="minScale">A minimum scale relative to the original size of the image on which cascade will be applied.</param>
+      /// <param name="maxScale">A maximum scale relative to the original size of the image on which cascade will be applied.</param>
+      /// <param name="scales">Number of scales from minScale to maxScale.</param>
       /// <param name="rejCriteria">Algorithm used for non maximum suppression.</param>
-      public SoftCascadeDetector(String trainedCascadeFileName, double minScale, double maxScale, int scales, RejectionCriteria rejCriteria)
+      public SoftCascadeDetector(String trainedCascadeFileName, double minScale = 0.4, double maxScale = 5.0, int scales = 55, RejectionCriteria rejCriteria = RejectionCriteria.NoReject)
       {
          _ptr = SoftCascadeInvoke.cvSoftCascadeDetectorCreate(trainedCascadeFileName, minScale, maxScale, scales, rejCriteria);
       }
 
-      public Detection[] Detect(Image<Bgr, Byte> image, Rectangle[] rois)
+      public Detection[] Detect(IInputArray image, Rectangle[] rois = null)
       {
          using (VectorOfRect roiRects = new VectorOfRect())
          using (VectorOfRect regions = new VectorOfRect())
@@ -78,7 +78,7 @@ namespace Emgu.CV.Softcascade
                roiRects.Push(rois);
                roisPtr = roiRects.Ptr;
             }
-            SoftCascadeInvoke.cvSoftCascadeDetectorDetect(_ptr, image, roisPtr, regions, confidents);
+            SoftCascadeInvoke.cvSoftCascadeDetectorDetect(_ptr, image.InputArrayPtr, roisPtr, regions, confidents);
 
             if (regions.Size == 0)
                return new Detection[0];

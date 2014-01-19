@@ -18,6 +18,11 @@ namespace Emgu.CV
    /// </summary>
    public class HOGDescriptor : UnmanagedObject
    {
+      static HOGDescriptor()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a new HOGDescriptor
       /// </summary>
@@ -110,9 +115,8 @@ namespace Emgu.CV
       /// <returns>The default people detector</returns>
       public static float[] GetDefaultPeopleDetector()
       {
-         using (MemStorage stor = new MemStorage())
+         using (Util.VectorOfFloat desc = new VectorOfFloat())
          {
-            Seq<float> desc = new Seq<float>(stor);
             CvHOGDescriptorPeopleDetectorCreate(desc);
             return desc.ToArray();
          }

@@ -21,6 +21,11 @@ namespace Emgu.CV.Cvb
    ///</remarks>
    public class CvTracks : UnmanagedObject, IDictionary<uint, CvTrack>
    {
+      static CvTracks()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a new CvTracks
       /// </summary>
@@ -267,6 +272,7 @@ namespace Emgu.CV.Cvb
 
       #endregion
 
+      #region PInvoke
       /// <summary>
       /// Returns a pointer to CvBlobs
       /// </summary>
@@ -303,5 +309,6 @@ namespace Emgu.CV.Cvb
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal extern static bool cvbCvTracksRemove(IntPtr tracks, uint id);
+      #endregion
    }
 }

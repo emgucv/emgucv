@@ -55,8 +55,12 @@ namespace Emgu.CV
       /// <param name="mhi">Motion history image, that is updated by the function (single-channel, 32-bit floating-point) </param>
       /// <param name="timestamp">Current time in milliseconds or other units. </param>
       /// <param name="duration">Maximal duration of motion track in the same units as timestamp. </param>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvUpdateMotionHistory(
+      public static void UpdateMotionHistory(IInputArray silhouette, IInputOutputArray mhi, double timestamp,  double duration)
+      {
+         cveUpdateMotionHistory(silhouette.InputArrayPtr, mhi.InputOutputArrayPtr, timestamp, duration);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveUpdateMotionHistory(
           IntPtr silhouette,
           IntPtr mhi,
           double timestamp,
@@ -73,8 +77,18 @@ namespace Emgu.CV
       /// <param name="delta1">The function finds minimum (m(x,y)) and maximum (M(x,y)) mhi values over each pixel (x,y) neihborhood and assumes the gradient is valid only if min(delta1,delta2) &lt;= M(x,y)-m(x,y) &lt;= max(delta1,delta2). </param>
       /// <param name="delta2">The function finds minimum (m(x,y)) and maximum (M(x,y)) mhi values over each pixel (x,y) neihborhood and assumes the gradient is valid only if min(delta1,delta2) &lt;= M(x,y)-m(x,y) &lt;= max(delta1,delta2).</param>
       /// <param name="apertureSize">Aperture size of derivative operators used by the function: CV_SCHARR, 1, 3, 5 or 7 (see cvSobel). </param>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvCalcMotionGradient(
+      public static void CalcMotionGradient(
+         IInputArray mhi,
+         IOutputArray mask,
+         IOutputArray orientation,
+         double delta1,
+         double delta2,
+         int apertureSize = 3)
+      {
+         cveCalcMotionGradient(mhi.InputArrayPtr, mask.OutputArrayPtr, orientation.OutputArrayPtr, delta1, delta2, apertureSize);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveCalcMotionGradient(
           IntPtr mhi,
           IntPtr mask,
           IntPtr orientation,
@@ -108,13 +122,17 @@ namespace Emgu.CV
       /// <param name="timestamp">Current time in milliseconds or other units, it is better to store time passed to cvUpdateMotionHistory before and reuse it here, because running cvUpdateMotionHistory and cvCalcMotionGradient on large images may take some time.</param>
       /// <param name="duration">Maximal duration of motion track in milliseconds, the same as in cvUpdateMotionHistory</param>
       /// <returns>The angle</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern double cvCalcGlobalOrientation(
-                  IntPtr orientation,
-                  IntPtr mask,
-                  IntPtr mhi,
-                  double timestamp,
-                  double duration);
+      public static double CalcGlobalOrientation(
+         IInputArray orientation,
+         IInputArray mask,
+         IInputArray mhi,
+         double timestamp,
+         double duration)
+      {
+         return cveCalcGlobalOrientation(orientation.InputArrayPtr, mask.InputArrayPtr, mhi.InputArrayPtr, timestamp, duration);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern double cveCalcGlobalOrientation(IntPtr orientation, IntPtr mask, IntPtr mhi, double timestamp, double duration);
       #endregion
 
       #region Kalman Filter
@@ -177,81 +195,149 @@ namespace Emgu.CV
       #endregion
 
       #region optical flow
-      
       /// <summary>
-      /// Implements sparse iterative version of Lucas-Kanade optical flow in pyramids ([Bouguet00]). It calculates coordinates of the feature points on the current video frame given their coordinates on the previous frame. The function finds the coordinates with sub-pixel accuracy. 
+      /// Calculates optical flow for a sparse feature set using iterative Lucas-Kanade method in pyramids
       /// </summary>
-      /// <remarks>Both parameters prev_pyr and curr_pyr comply with the following rules: if the image pointer is 0, the function allocates the buffer internally, calculates the pyramid, and releases the buffer after processing. Otherwise, the function calculates the pyramid and stores it in the buffer unless the flag CV_LKFLOW_PYR_A[B]_READY is set. The image should be large enough to fit the Gaussian pyramid data. After the function call both pyramids are calculated and the readiness flag for the corresponding image can be set in the next call (i.e., typically, for all the image pairs except the very first one CV_LKFLOW_PYR_A_READY is set). </remarks>
-      /// <param name="prev">First frame, at time t. </param>
-      /// <param name="curr">Second frame, at time t + dt .</param>
-      /// <param name="prevPyr">Buffer for the pyramid for the first frame. If the pointer is not NULL , the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient. </param>
-      /// <param name="currPyr">Similar to prev_pyr, used for the second frame. </param>
-      /// <param name="prevFeatures">Array of points for which the flow needs to be found. </param>
-      /// <param name="currFeatures">Array of 2D points containing calculated new positions of input </param>
-      /// <param name="count">Number of feature points.</param>
-      /// <param name="winSize">Size of the search window of each pyramid level.</param>
-      /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc. </param>
-      /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise.</param>
-      /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
-      /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
-      /// <param name="flags">Miscellaneous flags</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvCalcOpticalFlowPyrLK(
-          IntPtr prev,
-          IntPtr curr,
-          IntPtr prevPyr,
-          IntPtr currPyr,
-          float[,] prevFeatures,
-          float[,] currFeatures,
-          int count,
-          Size winSize,
-          int level,
-          Byte[] status,
-          float[] trackError,
-          MCvTermCriteria criteria,
-          CvEnum.LKFLOW_TYPE flags);
-
-      /// <summary>
-      /// Implements sparse iterative version of Lucas-Kanade optical flow in pyramids ([Bouguet00]). It calculates coordinates of the feature points on the current video frame given their coordinates on the previous frame. The function finds the coordinates with sub-pixel accuracy. 
-      /// </summary>
-      /// <remarks>Both parameters prev_pyr and curr_pyr comply with the following rules: if the image pointer is 0, the function allocates the buffer internally, calculates the pyramid, and releases the buffer after processing. Otherwise, the function calculates the pyramid and stores it in the buffer unless the flag CV_LKFLOW_PYR_A[B]_READY is set. The image should be large enough to fit the Gaussian pyramid data. After the function call both pyramids are calculated and the readiness flag for the corresponding image can be set in the next call (i.e., typically, for all the image pairs except the very first one CV_LKFLOW_PYR_A_READY is set). </remarks>
-      /// <param name="prev">First frame, at time t. </param>
-      /// <param name="curr">Second frame, at time t + dt .</param>
-      /// <param name="prevPyr">Buffer for the pyramid for the first frame. If the pointer is not NULL , the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient. </param>
-      /// <param name="currPyr">Similar to prev_pyr, used for the second frame. </param>
-      /// <param name="prevFeatures">Array of points for which the flow needs to be found. </param>
-      /// <param name="currFeatures">Array of 2D points containing calculated new positions of input </param>
-      /// <param name="count">Number of feature points.</param>
-      /// <param name="winSize">Size of the search window of each pyramid level.</param>
-      /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc. </param>
-      /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise.</param>
-      /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
-      /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
-      /// <param name="flags">Miscellaneous flags</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvCalcOpticalFlowPyrLK(
-         IntPtr prev,
-         IntPtr curr,
-         IntPtr prevPyr,
-         IntPtr currPyr,
-         [In]
+      /// <param name="prev">First frame, at time t</param>
+      /// <param name="curr">Second frame, at time t + dt </param>
+      /// <param name="prevPyrBuffer">Buffer for the pyramid for the first frame. If it is not NULL, the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient</param>
+      /// <param name="currPyrBuffer">Similar to prev_pyr, used for the second frame</param>
+      /// <param name="prevFeatures">Array of points for which the flow needs to be found</param>
+      /// <param name="winSize">Size of the search window of each pyramid level</param>
+      /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc</param>
+      /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped</param>
+      /// <param name="flags">Flags</param>
+      /// <param name="currFeatures">Array of 2D points containing calculated new positions of input features in the second image</param>
+      /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise</param>
+      /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points</param>
+      public static void CalcOpticalFlowPyrLK(
+         IInputArray prev,
+         IInputArray curr,
          PointF[] prevFeatures,
-         [Out]
-         PointF[] currFeatures,
-         int count,
          Size winSize,
          int level,
-         Byte[] status,
-         float[] trackError,
          MCvTermCriteria criteria,
-         CvEnum.LKFLOW_TYPE flags);
-      
+         out PointF[] currFeatures,
+         out Byte[] status,
+         out float[] trackError,
+         Emgu.CV.CvEnum.LKFlowFlag flags = CvEnum.LKFlowFlag.Default,
+         double minEigThreshold = 1.0e-4)
+      {
+         using (Util.VectorOfPointF prevPts = new Util.VectorOfPointF())
+         using (Util.VectorOfPointF nextPts = new Util.VectorOfPointF())
+         using (Util.VectorOfByte statusVec = new Util.VectorOfByte())
+         using (Util.VectorOfFloat errorVec = new Util.VectorOfFloat())
+         {
+            prevPts.Push(prevFeatures);
+
+            CalcOpticalFlowPyrLK(
+               prev,
+               curr,
+               prevPts,
+               nextPts,
+               statusVec,
+               errorVec,
+               winSize,
+               level,
+               criteria,
+               flags,
+               minEigThreshold);
+            status = statusVec.ToArray();
+            trackError = errorVec.ToArray();
+            currFeatures = nextPts.ToArray();
+         }
+      }
+      /// <summary>
+      /// Implements sparse iterative version of Lucas-Kanade optical flow in pyramids ([Bouguet00]). It calculates coordinates of the feature points on the current video frame given their coordinates on the previous frame. The function finds the coordinates with sub-pixel accuracy. 
+      /// </summary>
+      /// <remarks>Both parameters prev_pyr and curr_pyr comply with the following rules: if the image pointer is 0, the function allocates the buffer internally, calculates the pyramid, and releases the buffer after processing. Otherwise, the function calculates the pyramid and stores it in the buffer unless the flag CV_LKFLOW_PYR_A[B]_READY is set. The image should be large enough to fit the Gaussian pyramid data. After the function call both pyramids are calculated and the readiness flag for the corresponding image can be set in the next call (i.e., typically, for all the image pairs except the very first one CV_LKFLOW_PYR_A_READY is set). </remarks>
+      /// <param name="prevImg">First frame, at time t. </param>
+      /// <param name="nextImg">Second frame, at time t + dt .</param>
+      /// <param name="prevFeatures">Array of points for which the flow needs to be found. </param>
+      /// <param name="currFeatures">Array of 2D points containing calculated new positions of input </param>
+      /// <param name="count">Number of feature points.</param>
+      /// <param name="winSize">Size of the search window of each pyramid level.</param>
+      /// <param name="maxLevel">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc. </param>
+      /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise.</param>
+      /// <param name="err">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
+      /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
+      /// <param name="flags">Miscellaneous flags</param>
+      public static void CalcOpticalFlowPyrLK(
+         IInputArray prevImg,
+         IInputArray nextImg,
+         IInputArray prevPts,
+         IInputOutputArray nextPts,
+         IOutputArray status,
+         IOutputArray err,
+         Size winSize,
+         int maxLevel,
+         MCvTermCriteria criteria,
+         CvEnum.LKFlowFlag flags = CvEnum.LKFlowFlag.Default,
+         double minEigThreshold = 1.0e-4)
+      {
+         cveCalcOpticalFlowPyrLK(prevImg.InputArrayPtr, nextImg.InputArrayPtr, prevPts.InputArrayPtr, nextPts.InputOutputArrayPtr, status.OutputArrayPtr, err.OutputArrayPtr, ref winSize, maxLevel, ref criteria, flags, minEigThreshold);
+      }
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveCalcOpticalFlowPyrLK(
+         IntPtr prevImg, 
+         IntPtr nextImg, 
+         IntPtr prevPts, 
+         IntPtr nextPts, 
+         IntPtr status, 
+         IntPtr err, 
+         ref Size winSize, 
+         int maxLevel,
+         ref MCvTermCriteria criteria, 
+         CvEnum.LKFlowFlag flags, 
+         double minEigenThreshold);
+
       /// <summary>
       /// Computes dense optical flow using Gunnar Farneback's algorithm
       /// </summary>
       /// <param name="prev0">The first 8-bit single-channel input image</param>
       /// <param name="next0">The second input image of the same size and the same type as prevImg</param>
-      /// <param name="flow0">The computed flow image; will have the same size as prevImg and type CV 32FC2</param>
+      /// <param name="flowX">The computed flow image for x-velocity; will have the same size as prevImg</param>
+      /// <param name="flowY">The computed flow image for y-velocity; will have the same size as prevImg</param>
+      /// <param name="pyrScale">Specifies the image scale (!1) to build the pyramids for each image. pyrScale=0.5 means the classical pyramid, where each next layer is twice smaller than the previous</param>
+      /// <param name="levels">The number of pyramid layers, including the initial image. levels=1 means that no extra layers are created and only the original images are used</param>
+      /// <param name="winSize">The averaging window size; The larger values increase the algorithm robustness to image noise and give more chances for fast motion detection, but yield more blurred motion field</param>
+      /// <param name="iterations">The number of iterations the algorithm does at each pyramid level</param>
+      /// <param name="polyN">Size of the pixel neighborhood used to find polynomial expansion in each pixel. The larger values mean that the image will be approximated with smoother surfaces, yielding more robust algorithm and more blurred motion field. Typically, poly n=5 or 7</param>
+      /// <param name="polySigma">Standard deviation of the Gaussian that is used to smooth derivatives that are used as a basis for the polynomial expansion. For poly n=5 you can set poly sigma=1.1, for poly n=7 a good value would be poly sigma=1.5</param>
+      /// <param name="flags">The operation flags</param>
+      public static void CalcOpticalFlowFarneback(
+         Image<Gray, Byte> prev0,
+         Image<Gray, Byte> next0,
+         Image<Gray, Single> flowX,
+         Image<Gray, Single> flowY,
+         double pyrScale,
+         int levels,
+         int winSize,
+         int iterations,
+         int polyN,
+         double polySigma,
+         CvEnum.OpticalflowFarnebackFlag flags)
+      {
+         using (Mat flow0 = new Mat(prev0.Height, prev0.Width, Mat.DepthType.Cv32F, 2))
+         using (Util.VectorOfMat vm = new Util.VectorOfMat(new Mat[] { flowX.Mat, flowY.Mat }))
+         {
+            if ((int)(flags & Emgu.CV.CvEnum.OpticalflowFarnebackFlag.UseInitialFlow) != 0)
+            {  //use initial flow
+               CvInvoke.Merge(vm, flow0);
+            }
+
+            CvInvoke.CalcOpticalFlowFarneback(prev0, next0, flow0, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+            CvInvoke.Split(flow0, vm);
+         }
+      }
+
+      /// <summary>
+      /// Computes dense optical flow using Gunnar Farneback's algorithm
+      /// </summary>
+      /// <param name="prev0">The first 8-bit single-channel input image</param>
+      /// <param name="next0">The second input image of the same size and the same type as prevImg</param>
+      /// <param name="flow">The computed flow image; will have the same size as prevImg and type CV 32FC2</param>
       /// <param name="pyrScale">Specifies the image scale (!1) to build the pyramids for each image. pyrScale=0.5 means the classical pyramid, where each next layer is twice smaller than the previous</param>
       /// <param name="levels">The number of pyramid layers, including the initial image. levels=1 means that no extra layers are created and only the original images are used</param>
       /// <param name="winSize">The averaging window size; The larger values increase the algorithm robustness to image noise and give more chances for fast motion detection, but yield more blurred motion field</param>
@@ -262,16 +348,16 @@ namespace Emgu.CV
       public static void CalcOpticalFlowFarneback(
          IInputArray prev0,
          IInputArray next0,
-         IInputOutputArray flow0,
+         IInputOutputArray flow,
          double pyrScale,
          int levels,
          int winSize,
          int iterations,
          int polyN,
          double polySigma,
-         CvEnum.OPTICALFLOW_FARNEBACK_FLAG flags)
+         CvEnum.OpticalflowFarnebackFlag flags)
       {
-         cveCalcOpticalFlowFarneback(prev0.InputArrayPtr, next0.InputArrayPtr, flow0.InputOutputArrayPtr, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+         cveCalcOpticalFlowFarneback(prev0.InputArrayPtr, next0.InputArrayPtr, flow.InputOutputArrayPtr, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveCalcOpticalFlowFarneback(
@@ -284,7 +370,8 @@ namespace Emgu.CV
          int iterations,
          int polyN,
          double polySigma,
-         CvEnum.OPTICALFLOW_FARNEBACK_FLAG flags);
+         CvEnum.OpticalflowFarnebackFlag flags);
+
       #endregion
 
       /// <summary>

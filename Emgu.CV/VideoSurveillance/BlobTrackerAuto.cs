@@ -25,7 +25,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          _param = param;
          MCvBlobTrackerAutoParam1 p = _param.MCvBlobTrackerAutoParam1;
-         _ptr = CvInvoke.CvCreateBlobTrackerAuto1(ref p);
+         _ptr = BlobTrackerAutoInvoke.CvCreateBlobTrackerAuto1(ref p);
       }
 
       /// <summary>
@@ -37,7 +37,7 @@ namespace Emgu.CV.VideoSurveillance
          param.FGDetector = new FGDetector<TColor>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          _param = param;
          MCvBlobTrackerAutoParam1 p = _param.MCvBlobTrackerAutoParam1;
-         _ptr = CvInvoke.CvCreateBlobTrackerAuto1(ref p);
+         _ptr = BlobTrackerAutoInvoke.CvCreateBlobTrackerAuto1(ref p);
       }
 
       /// <summary>
@@ -56,7 +56,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="foregroundMask">the foreground mask to be used</param>
       public void Process(Image<TColor, Byte> currentFrame, Image<Gray, Byte> foregroundMask)
       {
-         CvInvoke.CvBlobTrackerAutoProcess(_ptr, currentFrame.Ptr, foregroundMask == null ? IntPtr.Zero : foregroundMask.Ptr);
+         BlobTrackerAutoInvoke.CvBlobTrackerAutoProcess(_ptr, currentFrame.Ptr, foregroundMask == null ? IntPtr.Zero : foregroundMask.Ptr);
       }
 
       /// <summary>
@@ -67,7 +67,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            IntPtr foreground = CvInvoke.CvBlobTrackerAutoGetFGMask(_ptr);
+            IntPtr foreground = BlobTrackerAutoInvoke.CvBlobTrackerAutoGetFGMask(_ptr);
             if (foreground == IntPtr.Zero) return null;
             MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(foreground, typeof(MIplImage));
             return new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
@@ -99,7 +99,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            return (MCvBlob)Marshal.PtrToStructure(CvInvoke.CvBlobTrackerAutoGetBlob(_ptr, i), typeof(MCvBlob));
+            return (MCvBlob)Marshal.PtrToStructure(BlobTrackerAutoInvoke.CvBlobTrackerAutoGetBlob(_ptr, i), typeof(MCvBlob));
          }
       }
 
@@ -110,7 +110,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <returns>The blob of the specific id, if it doesn't exist, MCvBlob.Empty is returned</returns>
       public override MCvBlob GetBlobByID(int blobID)
       {
-         IntPtr blobPtr = CvInvoke.CvBlobTrackerAutoGetBlobByID(_ptr, blobID);
+         IntPtr blobPtr = BlobTrackerAutoInvoke.CvBlobTrackerAutoGetBlobByID(_ptr, blobID);
          if (blobPtr == IntPtr.Zero) return MCvBlob.Empty;
          return (MCvBlob)Marshal.PtrToStructure(blobPtr, typeof(MCvBlob));
       }
@@ -120,7 +120,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBlobTrackerAutoRelease(ref _ptr);
+         BlobTrackerAutoInvoke.CvBlobTrackerAutoRelease(ref _ptr);
       }
 
       /// <summary>
@@ -130,17 +130,19 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            return CvInvoke.CvBlobTrackerAutoGetBlobNum(_ptr);
+            return BlobTrackerAutoInvoke.CvBlobTrackerAutoGetBlobNum(_ptr);
          }
       }
       #endregion
    }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
+   internal static class BlobTrackerAutoInvoke
    {
+      static BlobTrackerAutoInvoke()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create blob tracker auto ver1
       /// </summary>
@@ -199,4 +201,5 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBlobTrackerAutoGetFGMask(IntPtr tracker);
    }
+
 }

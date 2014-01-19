@@ -239,13 +239,13 @@ namespace Emgu.CV.Util
       #endregion
       */
       #region color conversion
-      private static Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>> _lookupTable
-         = new Dictionary<Type, Dictionary<Type, CvEnum.COLOR_CONVERSION>>();
+      private static Dictionary<Type, Dictionary<Type, CvEnum.ColorConversion>> _lookupTable
+         = new Dictionary<Type, Dictionary<Type, CvEnum.ColorConversion>>();
 
-      private static CvEnum.COLOR_CONVERSION GetCode(Type srcType, Type destType)
+      private static CvEnum.ColorConversion GetCode(Type srcType, Type destType)
       {
          String key = String.Format("{0}2{1}", GetConversionCodenameFromType(srcType), GetConversionCodenameFromType(destType));
-         return (CvEnum.COLOR_CONVERSION)Enum.Parse(typeof(CvEnum.COLOR_CONVERSION), key, true);
+         return (CvEnum.ColorConversion)Enum.Parse(typeof(CvEnum.ColorConversion), key, true);
       }
 
       private static String GetConversionCodenameFromType(Type colorType)
@@ -289,13 +289,13 @@ namespace Emgu.CV.Util
       /// <param name="srcColorType">The source color type. Must be a type inherited from IColor</param>
       /// <param name="destColorType">The dest color type. Must be a type inherited from IColor</param>
       /// <returns>The color conversion code for CvInvoke.cvCvtColor function</returns>
-      public static CvEnum.COLOR_CONVERSION GetColorCvtCode(Type srcColorType, Type destColorType)
+      public static CvEnum.ColorConversion GetColorCvtCode(Type srcColorType, Type destColorType)
       {
-         CvEnum.COLOR_CONVERSION conversion;
+         CvEnum.ColorConversion conversion;
          lock (_lookupTable)
          {
-            Dictionary<Type, CvEnum.COLOR_CONVERSION> table = _lookupTable.ContainsKey(srcColorType) ?
-               _lookupTable[srcColorType] : (_lookupTable[srcColorType] = new Dictionary<Type, Emgu.CV.CvEnum.COLOR_CONVERSION>());
+            Dictionary<Type, CvEnum.ColorConversion> table = _lookupTable.ContainsKey(srcColorType) ?
+               _lookupTable[srcColorType] : (_lookupTable[srcColorType] = new Dictionary<Type, Emgu.CV.CvEnum.ColorConversion>());
             conversion = table.ContainsKey(destColorType) ?
                           table[destColorType] : (table[destColorType] = GetCode(srcColorType, destColorType));
             ;

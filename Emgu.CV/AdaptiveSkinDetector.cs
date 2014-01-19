@@ -16,6 +16,11 @@ namespace Emgu.CV
    /// </summary>
    public class AdaptiveSkinDetector : UnmanagedObject
    {
+      static AdaptiveSkinDetector()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Morphing method
       /// </summary>

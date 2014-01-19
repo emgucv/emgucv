@@ -259,7 +259,7 @@ namespace Emgu.CV
       {
          get
          {
-            return CvInvoke.cvNorm(Ptr, IntPtr.Zero, CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
+            return CvInvoke.Norm(this);
          }
       }
       #endregion
@@ -304,10 +304,10 @@ namespace Emgu.CV
       /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="type">The reduction operation type</param>
       /// <typeparam name="TOtherDepth">The type of depth of the reduced array</typeparam>
-      public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.REDUCE_DIMENSION dim, CvEnum.REDUCE_TYPE type)
+      public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType type)
          where TOtherDepth : new ()
       {
-         CvInvoke.Reduce(this, array1D, dim, type, Mat.GetDepth(typeof(TDepth)));
+         CvInvoke.Reduce(this, array1D, dim, type, Mat.GetDepthType(typeof(TDepth)));
       }
       #endregion
 
@@ -448,7 +448,7 @@ namespace Emgu.CV
       /// <param name="src2">The other array to be elementwise multiplied with</param>
       public void _Mul(CvArray<TDepth> src2)
       {
-         CvInvoke.Multiply(this, src2, this, 1.0, Mat.GetDepth(typeof(TDepth)));
+         CvInvoke.Multiply(this, src2, this, 1.0, Mat.GetDepthType(typeof(TDepth)));
       }
       #endregion
 
@@ -542,6 +542,7 @@ namespace Emgu.CV
 
       #endregion
 
+      
       #region File IO
       /// <summary>
       /// Save the CvArray as image
@@ -549,11 +550,12 @@ namespace Emgu.CV
       /// <param name="fileName">The name of the image to save</param>
       public virtual void Save(String fileName)
       {
+         CvInvoke.Imwrite(fileName, this);
          //FileInfo fi = new FileInfo(fileName);
-         CvInvoke.cvSaveImage(fileName, Ptr, IntPtr.Zero);
+         //CvInvoke.cvSaveImage(fileName, Ptr, IntPtr.Zero);
       }
       #endregion
-
+      
       #region IXmlSerializable Members
 
       /// <summary>
@@ -655,8 +657,11 @@ namespace Emgu.CV
 #endif
 
       #region Input Output array
-      private Mat _cvMat;
-
+      protected Mat _cvMat;
+      
+      /// <summary>
+      /// Get the Mat header that represent this CvArr
+      /// </summary>
       public Mat Mat
       {
          get
@@ -686,7 +691,6 @@ namespace Emgu.CV
             return Mat.OutputArrayPtr;
          }
       }
-      #endregion
 
       public IntPtr InputOutputArrayPtr
       {
@@ -696,11 +700,16 @@ namespace Emgu.CV
          }
       }
 
-      
-      public UMat GetUMat()
+      #endregion
+
+      /// <summary>
+      /// Get the umat representation of this mat
+      /// </summary>
+      /// <returns>The UMat</returns>
+      public UMat ToUMat()
       {
          UMat m = new UMat();
-         Mat.CopyTo(m, null);
+         Mat.CopyTo(m);
          return m;
       }
    }

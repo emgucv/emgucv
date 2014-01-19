@@ -79,7 +79,7 @@ namespace Emgu.CV
       {
          mapx = new Matrix<float>(height, width);
          mapy = new Matrix<float>(height, width);
-         CvInvoke.cvInitUndistortMap(IntrinsicMatrix.Ptr, DistortionCoeffs.Ptr, mapx, mapy);
+         CvInvoke.InitUndistortRectifyMap(IntrinsicMatrix, DistortionCoeffs, null, IntrinsicMatrix, new Size(width, height), Mat.DepthType.Cv32F, mapx, mapy);
       }
 
       /// <summary>
@@ -121,7 +121,7 @@ namespace Emgu.CV
       /// <param name="src">The observed point coordinates</param>
       /// <param name="R">Optional rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If null, the identity matrix is used.</param>
       /// <param name="P">Optional new camera matrix (3x3) or the new projection matrix (3x4). P1 or P2, computed by cvStereoRectify can be passed here. If null, the identity matrix is used.</param>
-      public PointF[] Undistort(PointF[] src, Matrix<double> R, Matrix<double> P)
+      public PointF[] Undistort(PointF[] src, Matrix<double> R = null, Matrix<double> P = null)
       {
          PointF[] dst = new PointF[src.Length]; 
          GCHandle srcHandle = GCHandle.Alloc(src, GCHandleType.Pinned);
@@ -129,10 +129,10 @@ namespace Emgu.CV
          using (Matrix<float> srcPointMatrix = new Matrix<float>(src.Length, 1, 2, srcHandle.AddrOfPinnedObject(), 2 * sizeof(float)))
          using (Matrix<float> dstPointMatrix = new Matrix<float>(dst.Length, 1, 2, dstHandle.AddrOfPinnedObject(), 2 * sizeof(float)))
          {
-            CvInvoke.cvUndistortPoints(
+            CvInvoke.UndistortPoints(
                 srcPointMatrix, dstPointMatrix,
-                _intrinsicMatrix.Ptr,
-                _distortionCoeffs.Ptr,
+                _intrinsicMatrix,
+                _distortionCoeffs,
                 R,
                 P);
          }
@@ -154,12 +154,11 @@ namespace Emgu.CV
          where TDepth : new()
       {
          Image<TColor, TDepth> res = src.CopyBlank();
-         CvInvoke.cvUndistort2(
-            src.Ptr, 
-            res.Ptr, 
-            _intrinsicMatrix.Ptr, 
-            _distortionCoeffs.Ptr, 
-            IntPtr.Zero);
+         CvInvoke.Undistort(
+            src, 
+            res, 
+            _intrinsicMatrix, 
+            _distortionCoeffs);
          return res;
       }
 

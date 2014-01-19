@@ -111,7 +111,7 @@ namespace Emgu.CV
 
          using (Matrix<TDepth> tmp = new Matrix<TDepth>(points.Rows, 3))
          {
-            CvInvoke.CopyMakeBorder(points, tmp, 0, 0, 0, 1, Emgu.CV.CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar(1.0));
+            CvInvoke.CopyMakeBorder(points, tmp, 0, 0, 0, 1, Emgu.CV.CvEnum.BorderType.Constant, new MCvScalar(1.0));
 
             Matrix<TDepth> rotationMatrix = this as Matrix<TDepth> ?? Convert<TDepth>();
 

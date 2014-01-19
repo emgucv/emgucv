@@ -13,6 +13,11 @@ namespace Emgu.CV.VideoSurveillance
    /// </summary>
    public class BlobTrackPostProc : UnmanagedObject
    {
+      static BlobTrackPostProc()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a blob tracking post process module of the specific type
       /// </summary>
@@ -22,13 +27,13 @@ namespace Emgu.CV.VideoSurveillance
          switch (type)
          {
             case Emgu.CV.CvEnum.BLOB_POST_PROCESS_TYPE.Kalman:
-               _ptr = CvInvoke.CvCreateModuleBlobTrackPostProcKalman();
+               _ptr = CvCreateModuleBlobTrackPostProcKalman();
                break;
             case Emgu.CV.CvEnum.BLOB_POST_PROCESS_TYPE.TimeAverExp:
-               _ptr = CvInvoke.CvCreateModuleBlobTrackPostProcTimeAverExp();
+               _ptr = CvCreateModuleBlobTrackPostProcTimeAverExp();
                break;
             case Emgu.CV.CvEnum.BLOB_POST_PROCESS_TYPE.TimeAverRect:
-               _ptr = CvInvoke.CvCreateModuleBlobTrackPostProcTimeAverRect();
+               _ptr = CvCreateModuleBlobTrackPostProcTimeAverRect();
                break;
          }
       }
@@ -38,15 +43,10 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBlobTrackPostProcRelease(ref _ptr);
+         CvBlobTrackPostProcRelease(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
+      #region PInvoke
       /// <summary>
       /// Returns a Kalman blob tracking post process module
       /// </summary>
@@ -74,5 +74,6 @@ namespace Emgu.CV
       /// <param name="postProc">The post process module to be released</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBlobTrackPostProcRelease(ref IntPtr postProc);
+      #endregion
    }
 }

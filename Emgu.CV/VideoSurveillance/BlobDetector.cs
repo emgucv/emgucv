@@ -14,6 +14,11 @@ namespace Emgu.CV.VideoSurveillance
    /// </summary>
    public class BlobDetector : UnmanagedObject
    {
+      static BlobDetector()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a blob detector of specific type
       /// </summary>
@@ -23,10 +28,10 @@ namespace Emgu.CV.VideoSurveillance
          switch (type)
          {
             case Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.Simple:
-               _ptr = CvInvoke.CvCreateBlobDetectorSimple();
+               _ptr = CvCreateBlobDetectorSimple();
                break;
             case Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC:
-               _ptr = CvInvoke.CvCreateBlobDetectorCC();
+               _ptr = CvCreateBlobDetectorCC();
                break;
          }
       }
@@ -40,7 +45,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <returns>True if new blob is detected</returns>
       public bool DetectNewBlob(Image<Gray, Byte> imageForeground, BlobSeq newBlob, BlobSeq oldBlob)
       {
-         return CvInvoke.CvBlobDetectorDetectNewBlob(_ptr, IntPtr.Zero, imageForeground.Ptr, newBlob.Ptr, oldBlob);
+         return CvBlobDetectorDetectNewBlob(_ptr, IntPtr.Zero, imageForeground.Ptr, newBlob.Ptr, oldBlob);
       }
 
       /// <summary>
@@ -48,15 +53,9 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBlobDetectorRelease(ref _ptr);
+         CvBlobDetectorRelease(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       /// <summary>
       /// Release the blob detector
       /// </summary>

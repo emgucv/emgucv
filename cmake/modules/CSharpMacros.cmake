@@ -95,7 +95,33 @@ MACRO(ADD_CS_REFERENCES references)
   FOREACH(ref ${references})
     LIST(APPEND CS_FLAGS -r:\"${ref}\")
   ENDFOREACH(ref)
-ENDMACRO(ADD_CS_REFERENCES references)
+ENDMACRO(ADD_CS_REFERENCES)
+
+MACRO(ADD_CS_FRAMEWORK_REFERENCES ver refs)
+  #MESSAGE("FRAMEWORK refs: ${refs}")	
+  SET(CSC_MSCORLIB_FOLDER "")
+  IF(${ver} STREQUAL "3.5")
+    GET_FILENAME_COMPONENT(CSC_MSCORLIB_FOLDER ${CSC_MSCORLIB_35} DIRECTORY)
+	SET(CSC_MSCORLIB_FOLDER "${CSC_MSCORLIB_FOLDER}/")
+  ENDIF() 
+  
+  FOREACH(ref ${refs})
+    #MESSAGE("Adding ${ref} from ${refs}")
+    LIST(APPEND CS_FLAGS -r:\"${CSC_MSCORLIB_FOLDER}${ref}\")
+  ENDFOREACH()
+ENDMACRO()
+
+MACRO(SET_CS_TARGET_FRAMEWORK version)
+  
+  IF(${version} STREQUAL "3.5")
+	LIST(APPEND CS_COMMANDLINE_FLAGS -noconfig )
+	LIST(APPEND CS_FLAGS -nostdlib)
+	LIST(APPEND FRAMEWORK_REFERENCES mscorlib.dll System.dll ${FRAMEWORK_REFERENCES})
+  ENDIF()
+  LIST(APPEND FRAMEWORK_REFERENCES  System.Core.dll System.Xml.dll System.Drawing.dll System.Data.dll System.ServiceModel.dll System.Xml.Linq.dll)
+  #MESSAGE("FRAMEWORK reference: ${FRAMEWORK_REFERENCES}")
+  ADD_CS_FRAMEWORK_REFERENCES(${version} "${FRAMEWORK_REFERENCES}")
+ENDMACRO(SET_CS_TARGET_FRAMEWORK)
 
 MACRO(COMPILE_CS target target_type source)
 IF(${target_type} STREQUAL "library")
@@ -228,11 +254,10 @@ ENDIF(${target_type} STREQUAL "library")
 	ENDFOREACH()
 	FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/${target}_SourceList.rsp  ${TMP})
 	
-    	
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       ${CS_PREBUILD_COMMAND}	   
-      COMMAND ${CSC_EXECUTABLE} ${NETFX_EXTRA_FLAGS} @${target}_SourceList.rsp
+      COMMAND ${CSC_EXECUTABLE} ${CS_COMMANDLINE_FLAGS} ${NETFX_EXTRA_FLAGS} @${target}_SourceList.rsp
 	  ${CS_POSTBUILD_COMMAND}
       DEPENDS ${source}
       COMMENT "Building ${relative_path}")
@@ -240,6 +265,7 @@ ENDIF(${target_type} STREQUAL "library")
     SET(relative_path "")
     SET(proper_file_list "")
     SET(CS_FLAGS "")
+	SET(CS_COMMANDLINE_FLAGS "")
     SET(CS_PREBUILD_COMMAND "")
 	SET(CS_POSTBUILD_COMMAND "")
 ENDMACRO(COMPILE_CS)

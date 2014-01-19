@@ -17,6 +17,11 @@ namespace Emgu.CV.Cvb
    /// <remarks>Algorithm based on paper "A linear-time component-labeling algorithm using contour tracing technique" of Fu Chang, Chun-Jen Chen and Chi-Jen Lu.</remarks>
    public class CvBlobDetector : UnmanagedObject
    {
+      static CvBlobDetector()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       private uint[,] _data;
       private GCHandle _dataHandle;
 

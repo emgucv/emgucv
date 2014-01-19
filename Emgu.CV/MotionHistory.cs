@@ -104,11 +104,11 @@ namespace Emgu.CV
          if (_mask == null) _mask = foregroundMask.CopyBlank();
          if (_orientation == null) _orientation = new Image<Gray, float>(foregroundMask.Size);
 
-         CvInvoke.cvUpdateMotionHistory(foregroundMask.Ptr, _mhi, ts.TotalSeconds, _mhiDuration);
+         CvInvoke.UpdateMotionHistory(foregroundMask, _mhi, ts.TotalSeconds, _mhiDuration);
          double scale = 255.0 / _mhiDuration;
          CvInvoke.cvConvertScale(_mhi.Ptr, _mask.Ptr, scale, (_mhiDuration - ts.TotalSeconds) * scale);
 
-         CvInvoke.cvCalcMotionGradient(_mhi.Ptr, _mask.Ptr, _orientation.Ptr, _maxTimeDelta, _minTimeDelta, 3);
+         CvInvoke.CalcMotionGradient(_mhi, _mask, _orientation, _maxTimeDelta, _minTimeDelta);
       }
 
       /// <summary>
@@ -141,11 +141,11 @@ namespace Emgu.CV
          CvInvoke.cvSetImageROI(_mask, motionRectangle);
 
          // calculate orientation
-         angle = CvInvoke.cvCalcGlobalOrientation(_orientation.Ptr, _mask.Ptr, _mhi.Ptr, ts.TotalSeconds, _mhiDuration);
+         angle = CvInvoke.CalcGlobalOrientation(_orientation, _mask, _mhi, ts.TotalSeconds, _mhiDuration);
          angle = 360.0 - angle; // adjust for images with top-left origin
 
          // caculate number of points within silhoute ROI
-         motionPixelCount = CvInvoke.cvNorm(_foregroundMask.Ptr, IntPtr.Zero, CvEnum.NORM_TYPE.CV_L1, IntPtr.Zero); // calculate number of points within silhouette ROI
+         motionPixelCount = CvInvoke.Norm(_foregroundMask, null, CvEnum.NormType.L1); // calculate number of points within silhouette ROI
 
          // reset the ROI
          CvInvoke.cvResetImageROI(_mhi);

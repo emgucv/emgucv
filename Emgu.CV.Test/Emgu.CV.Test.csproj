@@ -79,6 +79,7 @@
     <Compile Include="AutoTestCalibration.cs" />
     <Compile Include="AutoTestCuda.cs" />
     <Compile Include="AutoTestFeatures2d.cs" />
+    <Compile Include="AutoTestMat.cs" />
     <Compile Include="AutoTestMatrix.cs" />
     <Compile Include="AutoTestOcr.cs" />
     <Compile Include="AutoTestOpenCL.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AutoTestImage.cs" />
     <Compile Include="AutoTestML.cs" />
+    <Compile Include="AutoTestUMat.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Emgu.CV.Example\LicensePlateRecognition\license-plate.jpg">

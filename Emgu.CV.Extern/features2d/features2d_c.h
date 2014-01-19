@@ -35,7 +35,7 @@ CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int
 CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
 
 //Freak
-CVAPI(cv::FREAK*) CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves);
+CVAPI(cv::FREAK*) CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::DescriptorExtractor** descriptorExtractor);
 CVAPI(void) CvFreakRelease(cv::FREAK** detector);
 
 //Brisk
@@ -71,7 +71,7 @@ CVAPI(void) drawKeypoints(
                           const IplImage* image, 
                           const std::vector<cv::KeyPoint>* keypoints, 
                           IplImage* outImage,
-                          const CvScalar color, 
+                          const CvScalar* color, 
                           int flags);
 
 // Draws matches of keypints from two images on output image.
@@ -80,7 +80,7 @@ CVAPI(void) drawMatchedFeatures(
                                 const IplImage* img2, const std::vector<cv::KeyPoint>* keypoints2,
                                 const CvMat* matchIndicies, 
                                 IplImage* outImg,
-                                const CvScalar matchColor, const CvScalar singlePointColor,
+                                const CvScalar* matchColor, const CvScalar* singlePointColor,
                                 const CvMat* matchesMask, 
                                 int flags);
 
@@ -107,7 +107,7 @@ CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher);
 CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins);
 
 //Feature2D
-CVAPI(void) CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors, bool useProvidedKeyPoints);
+CVAPI(void) CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* image, cv::_InputArray* mask, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors, bool useProvidedKeyPoints);
 
 //OpponentColorDescriptorExtractor
 CVAPI(cv::OpponentColorDescriptorExtractor*) CvOpponentColorDescriptorExtractorCreate(cv::DescriptorExtractor* extractor);

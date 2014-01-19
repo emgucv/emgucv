@@ -26,16 +26,23 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class Freak : UnmanagedObject, IDescriptorExtractor<Gray, Byte>
    {
+      static Freak()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
+      private IntPtr _descriptorExtractorPtr;
+
       /// <summary>
       /// Create a Freak descriptor extractor.
       /// </summary>
-      /// <param name="orientationNormalized">Enable orientation normalization, use true for default.</param>
-      /// <param name="scaleNormalized">Enable scale normalization, use true for default.</param>
-      /// <param name="patternScale">Scaling of the description pattern, use 22.0f for default.</param>
-      /// <param name="nOctaves">Number of octaves covered by the detected keypoints, use 4 for default.</param>
-      public Freak(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves)
+      /// <param name="orientationNormalized">Enable orientation normalization</param>
+      /// <param name="scaleNormalized">Enable scale normalization</param>
+      /// <param name="patternScale">Scaling of the description pattern</param>
+      /// <param name="nOctaves">Number of octaves covered by the detected keypoints.</param>
+      public Freak(bool orientationNormalized = true, bool scaleNormalized = true, float patternScale = 22.0f, int nOctaves = 4)
       {
-         _ptr = CvFreakCreate(orientationNormalized, scaleNormalized, patternScale, nOctaves);
+         _ptr = CvFreakCreate(orientationNormalized, scaleNormalized, patternScale, nOctaves, ref _descriptorExtractorPtr);
       }
 
       /// <summary>
@@ -43,12 +50,13 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvFreakRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CvFreakRelease(ref _ptr);
       }
 
       IntPtr IDescriptorExtractor<Gray, Byte>.DescriptorExtratorPtr
       {
-         get { return _ptr; }
+         get { return _descriptorExtractorPtr; }
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -58,7 +66,8 @@ namespace Emgu.CV.Features2D
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool scaleNormalized,
          float patternScale,
-         int nOctaves);
+         int nOctaves, 
+         ref IntPtr descriptorExtractorPtr);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFreakRelease(ref IntPtr extractor);

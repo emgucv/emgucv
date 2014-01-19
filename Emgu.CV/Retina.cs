@@ -35,6 +35,11 @@ namespace Emgu.CV
    /// </summary>
    public class Retina : UnmanagedObject
    {
+      static Retina()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       private Size _inputSize;
 
       /// <summary>
@@ -82,37 +87,29 @@ namespace Emgu.CV
       /// Method which allows retina to be applied on an input image, after run, encapsulated retina module is ready to deliver its outputs using dedicated acccessors. <seealso cref="GetParvo()"/> and <seealso cref="GetMagno()"/>
       /// </summary>
       /// <param name="image">The input image to be processed</param>
-      public void Run(Image<Bgr, byte> image)
+      public void Run(IInputArray image)
       {
-         CvRetinaRun(_ptr, image);
+         CvRetinaRun(_ptr, image.InputArrayPtr);
       }
 
       /// <summary>
       /// Accessor of the details channel of the retina (models foveal vision)
       /// </summary>
       /// <returns>The details channel of the retina.</returns>
-      public Image<Bgr, Byte> GetParvo()
+      public void GetParvo(IOutputArray parvo)
       {
-         if (_ptr == IntPtr.Zero)
-            return null;
-
-         Image<Bgr, byte> parvo = new Image<Bgr, byte>(_inputSize);
-         CvRetinaGetParvo(_ptr, parvo);
-         return parvo;
+         if (_ptr != IntPtr.Zero)
+            CvRetinaGetParvo(_ptr, parvo.OutputArrayPtr);
       }
 
       /// <summary>
       /// Accessor of the motion channel of the retina (models peripheral vision)
       /// </summary>
       /// <returns>The motion channel of the retina.</returns>
-      public Image<Gray, byte> GetMagno()
+      public void GetMagno(IOutputArray magno)
       {
-         if (_ptr == IntPtr.Zero)
-            return null;
-
-         Image<Gray, Byte> magno = new Image<Gray, byte>(_inputSize);
-         CvRetinaGetMagno(_ptr, magno);
-         return magno;
+         if (_ptr != IntPtr.Zero)
+            CvRetinaGetMagno(_ptr, magno.OutputArrayPtr);
       }
 
       /// <summary>

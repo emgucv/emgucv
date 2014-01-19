@@ -20,26 +20,78 @@ using NUnit.Framework;
 
 namespace Emgu.CV.Test
 {
+
    [TestFixture]
    public class AutoTestImage
    {
       [Test]
-      public void TestRunningAvg()
+      public void TestOpenCLSetGet()
       {
+         CvInvoke.UseOpenCL = false;
+         EmguAssert.IsTrue(CvInvoke.UseOpenCL == false);
+      }
+
+      public static void TestOpenCL(Action test)
+      {
+         Trace.WriteLine("Testing without OpenCL");
+
+         CvInvoke.UseOpenCL = false;
+         test();
+         if (CvInvoke.HaveOpenCL)
+         {
+            CvInvoke.UseOpenCL = true;
+            Trace.WriteLine("Testing with OpenCL");
+            test();
+         }
+      }
+
+      [Test]
+      public void TestAccumulateWeighted()
+      {
+         int startValue = 50;
          Image<Gray, Single> img1 = new Image<Gray, float>(100, 40, new Gray(100));
-         Image<Gray, Single> acc = new Image<Gray, float>(100, 40, new Gray(50));
+         Image<Gray, Single> acc = new Image<Gray, float>(100, 40, new Gray(startValue));
          //IImage img = img2;
-         img1.RunningAvg(acc, 0.5);
-         CvInvoke.cvRunningAvg(img1, acc, 0.3, IntPtr.Zero); 
+         //img1.AccumulateWeighted(acc, 0.5);
+         CvInvoke.AccumulateWeighted(img1, acc, 0.3, null);
+         TestOpenCL(delegate
+                  {
+                     UMat src = img1.ToUMat();
+                     UMat result = new UMat(img1.Rows, img1.Cols, Mat.DepthType.Cv32F, 1);
+                     
+                     result.SetTo(new MCvScalar(startValue), null);
+                     //IImage img = img2;
+                     //img1.AccumulateWeighted(result, 0.5);
+                     CvInvoke.AccumulateWeighted(src, result, 0.3, null);
+                     Image<Gray, Single> tmp = new Image<Gray, float>(img1.Size);
+                     result.CopyTo(tmp, null);
+                     CvInvoke.AbsDiff(acc, result, result);
+                     int nonZeroCount = CvInvoke.CountNonZero(result);
+                     EmguAssert.IsTrue(nonZeroCount == 0);
+                  });
       }
 
       [Test]
       public void TestSobelScharr()
       {
          Image<Gray, byte> img = EmguAssert.LoadImage<Gray, Byte>("lena.jpg");
-         Image<Gray, Byte> result = new Image<Gray,byte>(img.Size);
-         CvInvoke.Sobel(img, result, 1, 0, -1, 1.0, 0.0, CvEnum.BORDER_TYPE.DEFAULT);
+         Image<Gray, Byte> result = new Image<Gray, byte>(img.Size);
+         CvInvoke.Sobel(img, result, Mat.DepthType.Cv8U, 1, 0, -1, 1.0);
+         TestOpenCL(delegate
+                  {
 
+                     UMat uresult = new UMat();
+
+                     using (UMat um = img.ToUMat())
+                     {
+                        Stopwatch watch = Stopwatch.StartNew();
+                        CvInvoke.Sobel(img, uresult, Mat.DepthType.Cv8U, 1, 0, -1, 1.0, 0.0, CvEnum.BorderType.Default);
+                        watch.Stop();
+                        Trace.WriteLine(String.Format("Sobel completed in {0} milliseconds. (OpenCL: {1})", watch.ElapsedMilliseconds, CvInvoke.UseOpenCL));
+                        uresult.CopyTo(result, null);
+                     }
+                     //Emgu.CV.UI.ImageViewer.Show(result);
+                  });
       }
 
       [Test]
@@ -414,7 +466,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(img.Equals(img3));
 
          XDocument doc3 = XDocument.Parse(str);
-        
+
          Image<Bgr, Byte> img4 = Toolbox.XmlDeserialize<Image<Bgr, Byte>>(doc3);
          EmguAssert.IsTrue(img.Equals(img4));
 
@@ -435,7 +487,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestHaarCascadeFaceDetect()
+      public void TestCascadeClassifierFaceDetect()
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");
          //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
@@ -445,7 +497,7 @@ namespace Emgu.CV.Test
             Rectangle[] objects = cascade.DetectMultiScale(image, 1.05, 0, new Size(10, 10), Size.Empty);
             foreach (Rectangle obj in objects)
                image.Draw(obj, new Gray(0.0), 1);
-           
+
             /*
             using (MemStorage stor = new MemStorage())
             {
@@ -471,8 +523,25 @@ namespace Emgu.CV.Test
                }
             }*/
          }
+         TestOpenCL(delegate
+                  {
+                     //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
+                     using (UMat um = image.ToUMat())
+                     using (CascadeClassifier cascade = new CascadeClassifier(EmguAssert.GetFile("haarcascade_eye.xml")))
+                     //using (HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml"))
+                     {
+                        Stopwatch watch = Stopwatch.StartNew();
+                        Rectangle[] objects = cascade.DetectMultiScale(um, 1.05, 0, new Size(10, 10), Size.Empty);
+                        watch.Stop();
+                        Trace.WriteLine(String.Format("Objects detected in {0} milliseconds (UseOpenCL: {1})", watch.ElapsedMilliseconds, CvInvoke.UseOpenCL));
+                        foreach (Rectangle obj in objects)
+                           image.Draw(obj, new Gray(0.0), 1);
+
+                     }
+                  });
       }
 
+      /*
       [Test]
       public void TestCascadeClassifierFaceDetect()
       {
@@ -487,7 +556,7 @@ namespace Emgu.CV.Test
                image.Draw(obj, new Gray(0.0), 1);
          }
          //Emgu.CV.UI.ImageViewer.Show(image);
-      }
+      }*/
 
 #if !(IOS || ANDROID)
       [Test]
@@ -547,8 +616,8 @@ namespace Emgu.CV.Test
          ConvolutionKernelF kernel = new ConvolutionKernelF(k);
 
          Image<Gray, float> convoluted = image * kernel;
-         
-         Image<Gray, float> absDiff = new Image<Gray,float>(convoluted.Size);
+
+         Image<Gray, float> absDiff = new Image<Gray, float>(convoluted.Size);
          CvInvoke.AbsDiff(laplace, convoluted, absDiff);
          //Emgu.CV.UI.ImageViewer.Show(absDiff.Convert<Gray, byte>());
          //EmguAssert.IsTrue(laplace.Equals(convoluted));
@@ -632,10 +701,12 @@ namespace Emgu.CV.Test
                   }*/
                }
             }
-         } catch (Exception e)
+         }
+         catch (Exception e)
          {
             throw e;
-         } finally
+         }
+         finally
          {
             File.Delete(fileName);
          }
@@ -659,7 +730,7 @@ namespace Emgu.CV.Test
             Assert.IsTrue(image0.Equals(imageCmp0));
          }
 
-      #region test byte images
+         #region test byte images
          Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
          image1.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
          Assert.IsTrue(image1.Equals(new Image<Bgr, byte>(image1.ToBitmap())));
@@ -674,22 +745,22 @@ namespace Emgu.CV.Test
          image5.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0, 255.0));
          Assert.IsTrue(image5.Equals(new Image<Bgra, byte>(image5.ToBitmap())));
          Assert.IsTrue(image5.Equals(new Image<Bgra, byte>(image5.Bitmap)));
-      #endregion
+         #endregion
 
-      #region test single images
+         #region test single images
          Image<Bgr, Single> image7 = new Image<Bgr, Single>(201, 401);
          image7.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
          Bitmap bmp = image7.ToBitmap();
-      #endregion
+         #endregion
       }
 
       [Test]
       public void TestBitmapSharedDataWithImage()
       {
-         Image<Bgr, Byte> img = new Image<Bgr,byte>(480, 320);
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 320);
          Bitmap bmp = img.Bitmap;
          bmp.SetPixel(0, 0, Color.Red);
-         Image<Bgr, Byte> img2 = new Image<Bgr,byte>(bmp);
+         Image<Bgr, Byte> img2 = new Image<Bgr, byte>(bmp);
          Assert.IsTrue(img.Equals(img2));
       }
 #endif
@@ -705,7 +776,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestAcc()
+      public void TestAccumulate()
       {
          Image<Gray, Single> img1 = new Image<Gray, Single>(300, 200);
          img1.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
@@ -713,7 +784,7 @@ namespace Emgu.CV.Test
          img2.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
 
          Image<Gray, Single> img3 = img1.Copy();
-         img3.Acc(img2);
+         img3.Accumulate(img2);
 
          EmguAssert.IsTrue(img3.Equals(img1 + img2));
       }
@@ -736,7 +807,7 @@ namespace Emgu.CV.Test
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
 
          Image<Bgr, byte> imageOld = image.Copy();
-         image._Flip(Emgu.CV.CvEnum.FLIP.VERTICAL);
+         image._Flip(Emgu.CV.CvEnum.FlipType.Vertical);
 
          for (int i = 0; i < image.Rows; i++)
             for (int j = 0; j < image.Cols; j++)
@@ -753,7 +824,7 @@ namespace Emgu.CV.Test
          Image<Bgr, byte> image = new Image<Bgr, byte>(2048, 1024);
          image.SetRandNormal(new MCvScalar(), new MCvScalar(255, 255, 255));
          Stopwatch watch = Stopwatch.StartNew();
-         image._Flip(Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL);
+         image._Flip(Emgu.CV.CvEnum.FlipType.Horizontal | Emgu.CV.CvEnum.FlipType.Vertical);
          watch.Stop();
          EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
@@ -808,7 +879,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> mask = new Image<Gray, byte>(image.Size);
          CvInvoke.Watershed(image, marker);
          using (InputArray ia = new InputArray(0.5))
-            CvInvoke.Compare(marker, ia, mask, CvEnum.CMP_TYPE.CV_CMP_GT);
+            CvInvoke.Compare(marker, ia, mask, CvEnum.CmpType.GreaterThan);
 
          //ImageViewer.Show(result.ConcateHorizontal(mask.Convert<Bgr, Byte>()));
       }
@@ -824,12 +895,12 @@ namespace Emgu.CV.Test
             {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f}});
 
          Matrix<float> matBDft = new Matrix<float>(
-            CvInvoke.cvGetOptimalDFTSize(matB.Rows),
-            CvInvoke.cvGetOptimalDFTSize(matB.Cols));
-         CvInvoke.CopyMakeBorder(matB, matBDft, 0, matBDft.Height - matB.Height, 0, matBDft.Width - matB.Width, Emgu.CV.CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
+            CvInvoke.GetOptimalDFTSize(matB.Rows),
+            CvInvoke.GetOptimalDFTSize(matB.Cols));
+         CvInvoke.CopyMakeBorder(matB, matBDft, 0, matBDft.Height - matB.Height, 0, matBDft.Width - matB.Width, Emgu.CV.CvEnum.BorderType.Constant, new MCvScalar());
          Matrix<float> dftIn = new Matrix<float>(matBDft.Rows, matBDft.Cols, 2);
          Matrix<float> matBDftBlank = matBDft.CopyBlank();
-         using (Util.VectorOfMat mv = new Util.VectorOfMat(new Mat[] { matBDft.Mat, matBDftBlank.Mat}))
+         using (Util.VectorOfMat mv = new Util.VectorOfMat(new Mat[] { matBDft.Mat, matBDftBlank.Mat }))
             CvInvoke.Merge(mv, dftIn);
 
          Matrix<float> dftOut = new Matrix<float>(dftIn.Rows, dftIn.Cols, 2);
@@ -863,8 +934,8 @@ namespace Emgu.CV.Test
          Image<Gray, float> convolvedImage = new Image<Gray, float>(matA.Size + matB.Size - new Size(1, 1));
 
          Matrix<float> dftA = new Matrix<float>(
-            CvInvoke.cvGetOptimalDFTSize(convolvedImage.Rows),
-            CvInvoke.cvGetOptimalDFTSize(convolvedImage.Cols));
+            CvInvoke.GetOptimalDFTSize(convolvedImage.Rows),
+            CvInvoke.GetOptimalDFTSize(convolvedImage.Cols));
          matA.CopyTo(dftA.GetSubRect(matA.ROI));
 
          CvInvoke.Dft(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matA.Rows);
@@ -873,7 +944,7 @@ namespace Emgu.CV.Test
          matB.CopyTo(dftB.GetSubRect(new Rectangle(Point.Empty, matB.Size)));
          CvInvoke.Dft(dftB, dftB, Emgu.CV.CvEnum.CV_DXT.CV_DXT_FORWARD, matB.Rows);
 
-         CvInvoke.MulSpectrums(dftA, dftB, dftA, Emgu.CV.CvEnum.MUL_SPECTRUMS_TYPE.DEFAULT, false);
+         CvInvoke.MulSpectrums(dftA, dftB, dftA, Emgu.CV.CvEnum.MulSpectrumsType.Default, false);
          CvInvoke.Dft(dftA, dftA, Emgu.CV.CvEnum.CV_DXT.CV_DXT_INVERSE, convolvedImage.Rows);
          dftA.GetSubRect(new Rectangle(Point.Empty, convolvedImage.Size)).CopyTo(convolvedImage);
       }
@@ -907,7 +978,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = new Image<Gray, byte>(123, 321);
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
-         image.Resize(512, 512, CvEnum.INTER.CV_INTER_CUBIC);
+         image.Resize(512, 512, CvEnum.Inter.Cubic);
       }
 
       [Test]
@@ -1022,7 +1093,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> image = new Image<Gray, byte>(200, 200);
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
          Image<Bgr, Byte> img = new Image<Bgr, byte>(image.Size);
-         CvInvoke.CvtColor(image, img, Emgu.CV.CvEnum.COLOR_CONVERSION.BayerBG2BGR);
+         CvInvoke.CvtColor(image, img, Emgu.CV.CvEnum.ColorConversion.BayerBG2BGR);
       }
 
       [Test]
@@ -1125,7 +1196,7 @@ namespace Emgu.CV.Test
       public void TestImageLoader()
       {
          using (Image<Bgr, Single> img = EmguAssert.LoadImage<Bgr, Single>("stuff.jpg"))
-         using (Image<Bgr, Single> img2 = img.Resize(100, 100, CvEnum.INTER.CV_INTER_AREA, true))
+         using (Image<Bgr, Single> img2 = img.Resize(100, 100, CvEnum.Inter.Area, true))
          {
             Rectangle r = img2.ROI;
             r.Width >>= 1;
@@ -1164,8 +1235,8 @@ namespace Emgu.CV.Test
          {
             Image<Gray, Byte> thresh1 = new Image<Gray, byte>(image.Size);
             Image<Gray, Byte> thresh2 = new Image<Gray, byte>(image.Size);
-            CvInvoke.Threshold(image, thresh1, 0, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_OTSU | Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
-            CvInvoke.Threshold(image, thresh2, 255, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_OTSU | Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
+            CvInvoke.Threshold(image, thresh1, 0, 255, Emgu.CV.CvEnum.ThresholdType.Otsu | Emgu.CV.CvEnum.ThresholdType.Binary);
+            CvInvoke.Threshold(image, thresh2, 255, 255, Emgu.CV.CvEnum.ThresholdType.Otsu | Emgu.CV.CvEnum.ThresholdType.Binary);
 
             EmguAssert.IsTrue(thresh1.Equals(thresh2));
          }
@@ -1207,7 +1278,7 @@ namespace Emgu.CV.Test
 
                      CircleF[][] circles = img.HoughCircles(
                          new Bgr(200.0, 200.0, 200.0), new Bgr(100.0, 100.0, 100.0),
-                         4.0, 1.0, 0, 0);
+                         4.0, 1.0);
 
                      for (int i = 0; i < lines[0].Length; i++)
                      {
@@ -1265,7 +1336,7 @@ namespace Emgu.CV.Test
       {
          try
          {
-            Image<Bgr, double> img1 = EmguAssert.LoadImage<Bgr, double>( "box.png");
+            Image<Bgr, double> img1 = EmguAssert.LoadImage<Bgr, double>("box.png");
             Image<Gray, double> img2 = img1.Convert<Gray, double>();
          }
          catch (NotSupportedException)
@@ -1322,7 +1393,7 @@ namespace Emgu.CV.Test
          DateTime t1 = DateTime.Now;
          for (int i = 0; i < 10; i++)
          {
-            Image<Gray, Byte> img = EmguAssert.LoadImage<Gray, byte>( "stuff.jpg");
+            Image<Gray, Byte> img = EmguAssert.LoadImage<Gray, byte>("stuff.jpg");
             img.Save(fileName);
          }
          EmguAssert.WriteLine(String.Format("Time needed to save the image {0}", DateTime.Now.Subtract(t1).TotalMilliseconds / 10));
@@ -1466,6 +1537,16 @@ namespace Emgu.CV.Test
 #endif
 
       [Test]
+      public void TestPhaseCorrelate()
+      {
+         Image<Gray, float> image1 = EmguAssert.LoadImage<Gray, float>("pedestrian.png");
+         Image<Gray, float> image2Source = EmguAssert.LoadImage<Gray, float>("lena.jpg");
+         Image<Gray, float> image2 = image2Source.Resize(image1.Width, image1.Height, CvEnum.Inter.Nearest);
+         double response;
+         MCvPoint2D64f pt = CvInvoke.PhaseCorrelate(image1, image2, null, out response);
+      }
+
+      [Test]
       public void TestColorMap()
       {
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
@@ -1479,7 +1560,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
          Image<Gray, Byte> result = new Image<Gray, byte>(image.Size);
-         CvInvoke.CLAHE(image, 4, new Size(8,8), result);
+         CvInvoke.CLAHE(image, 4, new Size(8, 8), result);
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
@@ -1519,7 +1600,7 @@ namespace Emgu.CV.Test
          p.InitUndistortMap(image.Width, image.Height, out mapx, out mapy);
 
          Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
-         CvInvoke.cvRemap(image, result, mapx, mapy, (int)Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
+         CvInvoke.Remap(image, result, mapx, mapy, Emgu.CV.CvEnum.Inter.Cubic);
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
@@ -1531,7 +1612,7 @@ namespace Emgu.CV.Test
          Matrix<float> f2 = new Matrix<float>(f1.Size);
          f2.SetValue(1.0);
          Matrix<byte> mask1 = new Matrix<byte>(f1.Size);
-         CvInvoke.Compare(f1, f2, mask1, CvEnum.CMP_TYPE.CV_CMP_LE);
+         CvInvoke.Compare(f1, f2, mask1, CvEnum.CmpType.LessEqual);
          int total1 = CvInvoke.CountNonZero(mask1);
 
          EmguAssert.IsTrue(total1 == f1.Width * f1.Height);
@@ -1539,7 +1620,7 @@ namespace Emgu.CV.Test
          Matrix<Byte> mask2 = new Matrix<byte>(f1.Size);
          using (InputArray ia = new InputArray(1.0))
          {
-            CvInvoke.Compare(f1, ia, mask2, CvEnum.CMP_TYPE.CV_CMP_LE);
+            CvInvoke.Compare(f1, ia, mask2, CvEnum.CmpType.LessEqual);
             int total2 = CvInvoke.CountNonZero(mask2);
             EmguAssert.IsTrue(total1 == total2);
          }
@@ -1579,11 +1660,11 @@ namespace Emgu.CV.Test
          //http://en.wikipedia.org/wiki/Mathematical_morphology
          using (Matrix<byte> kernel = new Matrix<byte>(kernelMat))
          {
-            return img.MorphologyEx(CvEnum.CV_MORPH_OP.CV_MOP_CLOSE, kernel, new Point(-1, -1), 1, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar());
+            return img.MorphologyEx(CvEnum.MorphOp.Close, kernel, new Point(-1, -1), 1, CvEnum.BorderType.Default, new MCvScalar());
          }
          //using (StructuringElementEx e = new StructuringElementEx(kernelMat, radius, radius))
          //{
-            //return img.MorphologyEx(e, CvEnum.CV_MORPH_OP.CV_MOP_CLOSE, 1);
+         //return img.MorphologyEx(e, CvEnum.CV_MORPH_OP.CV_MOP_CLOSE, 1);
          //}
       }
    }

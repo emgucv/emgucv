@@ -28,21 +28,6 @@ namespace Emgu.CV.Features2D
          }
       }
       #endregion
-      /*
-      /// <summary>
-      /// Get the Star detector parameters
-      /// </summary>
-      /// <returns></returns>
-      public MCvStarDetectorParams GetStarDetectorParameters()
-      {
-         MCvStarDetectorParams p = new MCvStarDetectorParams();
-         p.MaxSize = MaxSize;
-         p.ResponseThreshold = ResponseThreshold;
-         p.LineThresholdProjected = LineThresholdProjected;
-         p.LineThresholdBinarized = LineThresholdBinarized;
-         p.SuppressNonmaxSize = SuppressNonmaxSize;
-         return p;
-      }*/
 
       private int _maxSize;
       private int _responseThreshold;
@@ -80,36 +65,28 @@ namespace Emgu.CV.Features2D
       public int SuppressNonmaxSize { get { return _suppressNonmaxSize; } }
 
       /// <summary>
-      /// Construct default star detector
-      /// </summary>
-      public StarDetector()
-         : this(45, 30, 10, 8, 5)
-      {
-      }
-
-      /// <summary>
       /// Create a star detector with the specific parameters
       /// </summary>
       /// <param name="maxSize">
-      /// Use 45 as default. Maximum size of the features. The following
+      /// Maximum size of the features. The following
       /// values of the parameter are supported:
       /// 4, 6, 8, 11, 12, 16, 22, 23, 32, 45, 46, 64, 90, 128</param>
       /// <param name="responseThreshold">
-      /// Use 30 as default. Threshold for the approximated laplacian,
+      /// Threshold for the approximated laplacian,
       /// used to eliminate weak features. The larger it is,
       /// the less features will be retrieved
       /// </param>
       /// <param name="lineThresholdProjected">
-      /// Use 10 as default. Another threshold for the laplacian to eliminate edges.
+      /// Another threshold for the laplacian to eliminate edges.
       /// The larger the threshold, the more points you get.
       /// </param>
       /// <param name="lineThresholdBinarized">
-      /// Use 8 as default. Another threshold for the feature size to eliminate edges. 
+      /// Another threshold for the feature size to eliminate edges. 
       /// The larger the threshold, the more points you get.</param>
       /// <param name="suppressNonmaxSize">
-      /// Use 5 as default.
+      ///
       /// </param>
-      public StarDetector(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize)
+      public StarDetector(int maxSize = 45, int responseThreshold = 30, int lineThresholdProjected = 10, int lineThresholdBinarized = 8, int suppressNonmaxSize = 5)
       {
          _maxSize = maxSize;
          _responseThreshold = responseThreshold;

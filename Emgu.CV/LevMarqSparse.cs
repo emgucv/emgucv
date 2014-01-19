@@ -20,6 +20,11 @@ namespace Emgu.CV
    //public class LevMarqSparse : UnmanagedObject
    public static class LevMarqSparse
    {
+      static LevMarqSparse()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /*
       /// <summary>
       /// Create a LevMarqSparse solver
@@ -59,7 +64,7 @@ namespace Emgu.CV
 
             GCHandle handlePoints = GCHandle.Alloc(points, GCHandleType.Pinned);
 
-            CvInvoke.CvLevMarqSparseAdjustBundle(
+            CvLevMarqSparseAdjustBundle(
                cameraMatrix.Length,
                points.Length, handlePoints.AddrOfPinnedObject(),
                imagePointsMat, visibilityMat, cameraMatVec, rMatVec, tMatVec, distorMatVec, ref termCrit);
@@ -77,14 +82,6 @@ namespace Emgu.CV
       {
          CvInvoke.CvReleaseLevMarqSparse(ref _ptr);
       }*/
-   }
-
-   public static partial class CvInvoke
-   {
-      /*
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvCreateLevMarqSparse();
-      */
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvLevMarqSparseAdjustBundle(
@@ -101,8 +98,12 @@ namespace Emgu.CV
 
       /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr CvCreateLevMarqSparse();
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvReleaseLevMarqSparse(ref IntPtr levMarq);
       */
    }
+
 }
 

@@ -385,13 +385,13 @@ namespace Emgu.CV.OpenCL
       /// <param name="src">The source OclMat. Supports all types</param>
       /// <param name="dst">Destination OclMat. The same source and type as <paramref name="src"/></param>
       /// <param name="flipType">Specifies how to flip the OclMat.</param>
-      public static void Flip(IntPtr src, IntPtr dst, CvEnum.FLIP flipType)
+      public static void Flip(IntPtr src, IntPtr dst, CvEnum.FlipType flipType)
       {
          int flipMode =
             //-1 indicates vertical and horizontal flip
-            flipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL) ? -1 :
+            flipType == (Emgu.CV.CvEnum.FlipType.Horizontal | Emgu.CV.CvEnum.FlipType.Vertical) ? -1 :
             //1 indicates horizontal flip only
-            flipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL ? 1 :
+            flipType == Emgu.CV.CvEnum.FlipType.Horizontal ? 1 :
             //0 indicates vertical flip only
             0;
          oclFlip(src, dst, flipMode);
@@ -406,7 +406,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="c">The result of the comparison.</param>
       /// <param name="cmpop">The type of comparison</param>
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCompare")]
-      public static extern void Compare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CMP_TYPE cmpop);
+      public static extern void Compare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CmpType cmpop);
 
       /// <summary>
       /// Converts image from one color space to another
@@ -415,7 +415,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="dst">The destination oclMat</param>
       /// <param name="code">The color conversion code</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCvtColor")]
-      public static extern void CvtColor(IntPtr src, IntPtr dst, CvEnum.COLOR_CONVERSION code);
+      public static extern void CvtColor(IntPtr src, IntPtr dst, CvEnum.ColorConversion code);
 
       /// <summary>
       /// Copy the source OclMat to destination OclMat, using an optional mask.
@@ -436,7 +436,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="fx">Use 0 for default</param>
       /// <param name="fy">Use 0 for default</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatResize")]
-      public static extern void Resize(IntPtr src, IntPtr dst, double fx, double fy, CvEnum.INTER interpolation);
+      public static extern void Resize(IntPtr src, IntPtr dst, double fx, double fy, CvEnum.Inter interpolation);
 
 
       /// <summary>
@@ -463,7 +463,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
       /// <param name="oclMatchTemplateBuf">Pointer to OclMatchTemplateBuf</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMatchTemplate")]
-      public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TM_TYPE method, IntPtr oclMatchTemplateBuf);
+      public static extern void MatchTemplate(IntPtr image, IntPtr templ, IntPtr result, CvEnum.TemplateMatchingType method, IntPtr oclMatchTemplateBuf);
 
       /// <summary>
       /// Performs downsampling step of Gaussian pyramid decomposition. 
@@ -498,7 +498,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="normType">The norm type. Supports NORM_INF, NORM_L1, NORM_L2.</param>
       /// <returns>The norm of the <paramref name="src1"/> if <paramref name="src2"/> is IntPtr.Zero. Otherwise the norm of the difference between two OclMats.</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclNorm")]
-      public static extern double Norm(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NORM_TYPE normType);
+      public static extern double Norm(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NormType normType);
 
       /// <summary>
       /// Transforms 8-bit unsigned integers using lookup table: dst(i)=lut(src(i)).
@@ -523,7 +523,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="borderType">Border Type</param>
       /// <param name="value">Border value.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCopyMakeBorder")]
-      public static extern void CopyMakeBorder(IntPtr src, IntPtr dst, int top, int bottom, int left, int right, CvEnum.BORDER_TYPE borderType, ref MCvScalar value);
+      public static extern void CopyMakeBorder(IntPtr src, IntPtr dst, int top, int bottom, int left, int right, CvEnum.BorderType borderType, ref MCvScalar value);
 
       /// <summary>
       /// Smoothes image using median filter
@@ -555,7 +555,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="k">Harris detector free parameter.</param>
       /// <param name="borderType">Boreder type, use REFLECT101 for default</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclCornerHarris")]
-      public static extern void CornerHarris(IntPtr image, IntPtr harrisResponce, int blockSize, int kSize, double k, CvEnum.BORDER_TYPE borderType);
+      public static extern void CornerHarris(IntPtr image, IntPtr harrisResponce, int blockSize, int kSize, double k, CvEnum.BorderType borderType);
 
 
       /// <summary>
@@ -568,7 +568,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
       /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclBilateralFilter")]
-      public static extern void BilateralFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpace, CvEnum.BORDER_TYPE borderType);
+      public static extern void BilateralFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpace, CvEnum.BorderType borderType);
 
       /// <summary>
       /// Applies an adaptive bilateral filter to the input image. This is not truly a bilateral filter. Instead of using user provided fixed parameters, 
@@ -583,7 +583,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="anchor">The anchor, use (-1, -1) for default</param>
       /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclAdaptiveBilateralFilter")]
-      public static extern void AdaptiveBilateralFilter(IntPtr src, IntPtr dst, ref Size ksize, double sigmaSpace, double maxSigmaColor, ref Point anchor, CvEnum.BORDER_TYPE borderType);
+      public static extern void AdaptiveBilateralFilter(IntPtr src, IntPtr dst, ref Size ksize, double sigmaSpace, double maxSigmaColor, ref Point anchor, CvEnum.BorderType borderType);
 
       /// <summary>
       /// Computes exponent of each matrix element (b = exp(a))
@@ -778,7 +778,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="borderType">Border type. Use REFLECT101 for default.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclFilter2D")]
-      public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, CvEnum.BORDER_TYPE borderType);
+      public static extern void Filter2D(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, CvEnum.BorderType borderType);
 
       /// <summary>
       /// Applies generalized Sobel operator to the image
@@ -792,7 +792,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="buffer">The optional buffer used for sobel operation, use IntPtr.Zero for default. </param>
       /// <param name="borderType">The border type.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclSobel")]
-      public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, IntPtr buffer, int ksize, double scale, CvEnum.BORDER_TYPE borderType);
+      public static extern void Sobel(IntPtr src, IntPtr dst, int dx, int dy, IntPtr buffer, int ksize, double scale, CvEnum.BorderType borderType);
 
       /// <summary>
       /// Applies the vertical or horizontal Scharr operator to the image
@@ -805,7 +805,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="delta">Optional delta value, use 0 for default</param>
       /// <param name="borderType">The border type.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclScharr")]
-      public static extern void Scharr(IntPtr src, IntPtr dst, int dx, int dy, double scale, double delta, CvEnum.BORDER_TYPE borderType);
+      public static extern void Scharr(IntPtr src, IntPtr dst, int dx, int dy, double scale, double delta, CvEnum.BorderType borderType);
 
       /// <summary>
       /// Applies Laplacian operator to the OclMat
@@ -846,7 +846,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
       /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclWarpAffine")]
-      public static extern void WarpAffine(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
+      public static extern void WarpAffine(IntPtr src, IntPtr dst, IntPtr M, CvEnum.Inter flags);
 
       /// <summary>
       /// Warps the image using perspective transformation
@@ -856,7 +856,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="M">The 2x3 transformation matrix (pointer to CvArr)</param>
       /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclWarpPerspective")]
-      public static extern void WarpPerspective(IntPtr src, IntPtr dst, IntPtr M, CvEnum.INTER flags);
+      public static extern void WarpPerspective(IntPtr src, IntPtr dst, IntPtr M, CvEnum.Inter flags);
 
       /// <summary>
       /// Smooths the OclMat using Gaussian filter.
@@ -868,7 +868,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
       /// <param name="borderType">The border type.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclGaussianBlur")]
-      public static extern void GaussianBlur(IntPtr src, IntPtr dst, ref Size ksize, double sigma1, double sigma2, CvEnum.BORDER_TYPE borderType);
+      public static extern void GaussianBlur(IntPtr src, IntPtr dst, ref Size ksize, double sigma1, double sigma2, CvEnum.BorderType borderType);
 
       /// <summary>
       /// Finds the edges on the input <paramref name="image"/> and marks them in the output image edges using the Canny algorithm. The smallest of threshold1 and threshold2 is used for edge linking, the largest - to find initial segments of strong edges.
@@ -914,7 +914,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="maxRadius">Maximum circle radius.</param>
       /// <param name="maxCircles">Maximum number of output circles.</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclHoughCircles")]
-      public static extern void HoughCircles(IntPtr src, IntPtr circles, CvEnum.HOUGH_TYPE method, float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles);
+      public static extern void HoughCircles(IntPtr src, IntPtr circles, CvEnum.HoughType method, float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles);
 
       /// <summary>
       /// Finds circles in a grayscale image using the Hough transform.
@@ -931,7 +931,7 @@ namespace Emgu.CV.OpenCL
       {
          OclMat<float> oclCircles = new OclMat<float>();
 
-         OclInvoke.HoughCircles(src, oclCircles, CvEnum.HOUGH_TYPE.CV_HOUGH_GRADIENT, 1, 10, 100, 50, 1, 30, 1000);
+         OclInvoke.HoughCircles(src, oclCircles, CvEnum.HoughType.Gradient, 1, 10, 100, 50, 1, 30, 1000);
 
          if (oclCircles.IsEmpty || oclCircles.Size.Width == 0)
          {
@@ -975,7 +975,7 @@ namespace Emgu.CV.OpenCL
       public static void Erode(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations)
       {
          MCvScalar borderValue = new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue);
-         Erode(src, dst, kernel, ref anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, ref borderValue);
+         Erode(src, dst, kernel, ref anchor, iterations, CvEnum.BorderType.Constant, ref borderValue);
       }
 
       /// <summary>
@@ -990,7 +990,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclErode")]
-      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, ref MCvScalar borderValue);
+      public static extern void Erode(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BorderType borderType, ref MCvScalar borderValue);
 
       /// <summary>
       /// Dilate the image (applies the local maximum operator).
@@ -1004,7 +1004,7 @@ namespace Emgu.CV.OpenCL
       public static void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations)
       {
          MCvScalar borderValue = new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue);
-         Dilate(src, dst, kernel, ref anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, ref borderValue);
+         Dilate(src, dst, kernel, ref anchor, iterations, CvEnum.BorderType.Constant, ref borderValue);
       }
 
       /// <summary>
@@ -1019,7 +1019,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclDilate")]
-      private static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, ref MCvScalar borderValue);
+      private static extern void Dilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BorderType borderType, ref MCvScalar borderValue);
 
       /// <summary>
       /// Applies an advanced morphological operation to the image
@@ -1034,7 +1034,7 @@ namespace Emgu.CV.OpenCL
       public static void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.MorphOp op, IntPtr kernel, ref Point anchor, int iterations)
       {
          MCvScalar borderValue = new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue);
-         MorphologyEx(src, dst, op, kernel, ref anchor, iterations, CvEnum.BORDER_TYPE.CONSTANT, ref borderValue);
+         MorphologyEx(src, dst, op, kernel, ref anchor, iterations, CvEnum.BorderType.Constant, ref borderValue);
       }
 
       /// <summary>
@@ -1050,7 +1050,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="borderType">Type of the border to create around the copied source image rectangle</param>
       /// <param name="borderValue">Value of the border pixels if bordertype=CONSTANT</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "oclMorphologyEx")]
-      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.MorphOp op, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BORDER_TYPE borderType, ref MCvScalar borderValue);
+      public static extern void MorphologyEx(IntPtr src, IntPtr dst, CvEnum.MorphOp op, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BorderType borderType, ref MCvScalar borderValue);
       #endregion
 
       #region meanshift

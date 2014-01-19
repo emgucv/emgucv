@@ -13,7 +13,7 @@
 #include "opencv2/objdetect/objdetect_c.h"
 #include "vectors_c.h"
 
-CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(CvSeq* seq);
+CVAPI(void) CvHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq);
 
 CVAPI(cv::HOGDescriptor*) CvHOGDescriptorCreateDefault();
 
@@ -95,29 +95,8 @@ CVAPI(cv::ERFilter*) CvERFilterNM1Create(
    float minProbabilityDiff);
 CVAPI(cv::ERFilter*) CvERFilterNM2Create(const char* classifier, float minProbability);
 CVAPI(void) CvERFilterRelease(cv::ERFilter** filter);
-CVAPI(void) CvERFilterRun(cv::ERFilter* filter, CvArr* image, std::vector<cv::ERStat>* regions);
+CVAPI(void) CvERFilterRun(cv::ERFilter* filter, cv::_InputArray* image, std::vector<cv::ERStat>* regions);
 
 CVAPI(void) CvERGrouping(IplImage** channels, std::vector<cv::ERStat>** regions, int count, const char* fileName, float minProbability, std::vector<cv::Rect>* groups);
-
-//----------------------------------------------------------------------------
-//
-//  Vector of ERStat
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<cv::ERStat>*) VectorOfERStatCreate();
-
-CVAPI(std::vector<cv::ERStat>*) VectorOfERStatCreateSize(int size);
-
-CVAPI(int) VectorOfERStatGetSize(std::vector<cv::ERStat>* v);
-
-CVAPI(void) VectorOfERStatClear(std::vector<cv::ERStat>* v);
-
-CVAPI(void) VectorOfERStatRelease(std::vector<cv::ERStat>* v);
-
-CVAPI(void) VectorOfERStatCopyData(std::vector<cv::ERStat>* v, cv::ERStat* data);
-
-CVAPI(cv::ERStat*) VectorOfERStatGetStartAddress(std::vector<cv::ERStat>* v);
-
-
 
 #endif

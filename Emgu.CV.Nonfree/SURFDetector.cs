@@ -30,23 +30,6 @@ namespace Emgu.CV.Nonfree
       }
 
       /// <summary>
-      /// Create a MCvSURFParams using the specific values
-      /// </summary>
-      /// <param name="hessianThresh">      
-      /// Only features with keypoint.hessian larger than that are extracted.
-      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
-      /// user can further filter out some features based on their hessian values and other characteristics
-      /// </param>
-      /// <param name="extendedFlag">      
-      /// false means basic descriptors (64 elements each),
-      /// true means extended descriptors (128 elements each)
-      /// </param>
-      public SURFDetector(double hessianThresh, bool extendedFlag)
-         : this(new MCvSURFParams(hessianThresh, extendedFlag))
-      {
-      }
-
-      /// <summary>
       /// Create a SURF detector with the specific surfParameters
       /// </summary>
       /// <param name="surfParams">The surf parameters</param>
@@ -70,12 +53,12 @@ namespace Emgu.CV.Nonfree
       /// </param>
       /// <param name="nOctaves">
       /// The number of octaves to be used for extraction.
-      /// With each next octave the feature size is doubled (3 by default)
+      /// With each next octave the feature size is doubled
       /// </param>
       /// <param name="nOctaveLayers">
-      /// The number of layers within each octave (4 by default)
+      /// The number of layers within each octave
       /// </param>
-      public SURFDetector(double hessianThresh, bool extendedFlag, int nOctaves, int nOctaveLayers)
+      public SURFDetector(double hessianThresh, bool extendedFlag, int nOctaves = 3, int nOctaveLayers = 4)
          : this(new MCvSURFParams(hessianThresh, extendedFlag, nOctaves, nOctaveLayers))
       {
       }
@@ -85,7 +68,8 @@ namespace Emgu.CV.Nonfree
       /// </summary>
       protected override void DisposeObject()
       {
-         NonfreeInvoke.CvSURFDetectorRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            NonfreeInvoke.CvSURFDetectorRelease(ref _ptr);
          base.DisposeObject();
       }
    }
@@ -95,6 +79,11 @@ namespace Emgu.CV.Nonfree
    /// </summary>
    public static partial class NonfreeInvoke
    {
+      static NonfreeInvoke()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvSURFDetectorCreate(ref MCvSURFParams detector, ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
 

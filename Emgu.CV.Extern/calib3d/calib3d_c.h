@@ -22,14 +22,19 @@ CVAPI(cv::StereoSGBM*) CvStereoSGBMCreate(
   int P1, int P2, int disp12MaxDiff,
   int preFilterCap, int uniquenessRatio,
   int speckleWindowSize, int speckleRange,
-  int mode);
+  int mode, cv::StereoMatcher** stereoMatcher);
+CVAPI(void) CvStereoSGBMRelease(cv::StereoSGBM** obj);
 
-CVAPI(void) CvStereoSGBMRelease(cv::StereoSGBM* obj);
-CVAPI(void) CvStereoSGBMFindCorrespondence(cv::StereoSGBM* disparitySolver, IplImage* left, IplImage* right, IplImage* disparity);
+//StereoBM
+CVAPI(cv::StereoMatcher*) CvStereoBMCreate(int mode, int numberOfDisparities); 
+
+//StereoMatcher
+CVAPI(void) CvStereoMatcherCompute(cv::StereoMatcher*  disparitySolver, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity);
+CVAPI(void) CvStereoMatcherRelease(cv::StereoMatcher** matcher);
 
 //2D Tracker
 CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, CvArr* indices, CvArr* mask, double randsacThreshold, CvMat* homography);
 
 //Find circles grid
-CVAPI(bool) cvFindCirclesGrid(IplImage* image, CvSize* patternSize, std::vector<cv::Point2f>* centers, int flags, cv::FeatureDetector* blobDetector);
+CVAPI(bool) cveFindCirclesGrid(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* centers, int flags, cv::FeatureDetector* blobDetector);
 #endif

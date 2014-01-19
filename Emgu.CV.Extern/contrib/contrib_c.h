@@ -30,15 +30,15 @@ CVAPI(void) CvAdaptiveSkinDetectorProcess(CvAdaptiveSkinDetector* detector, IplI
 CVAPI(cv::FaceRecognizer*) CvEigenFaceRecognizerCreate(int numComponents, double threshold);   
 CVAPI(cv::FaceRecognizer*) CvFisherFaceRecognizerCreate(int numComponents, double threshold);
 CVAPI(cv::FaceRecognizer*) CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold);
-CVAPI(void) CvFaceRecognizerTrain(cv::FaceRecognizer* recognizer, IplImage** images, int* labels, int count);
-CVAPI(void) CvFaceRecognizerUpdate(cv::FaceRecognizer* recognizer, IplImage** images, int* labels, int count);
-CVAPI(void) CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, IplImage* image, int* label, double* distance);
+CVAPI(void) CvFaceRecognizerTrain(cv::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
+CVAPI(void) CvFaceRecognizerUpdate(cv::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
+CVAPI(void) CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* distance);
 CVAPI(void) CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, const char* fileName);
 CVAPI(void) CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, const char* fileName);
 CVAPI(void) CvFaceRecognizerRelease(cv::FaceRecognizer** recognizer);
 
 //color map
-CVAPI(void) CvApplyColorMap(IplImage* src, IplImage* dst, int colorMap);
+CVAPI(void) cveApplyColorMap(cv::_InputArray* src, cv::_OutputArray* dst, int colorMap);
 
 //LevMarqSparse
 CVAPI(cv::LevMarqSparse*) CvCreateLevMarqSparse();

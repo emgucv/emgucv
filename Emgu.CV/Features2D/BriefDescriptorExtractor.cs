@@ -19,85 +19,27 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class BriefDescriptorExtractor : UnmanagedObject, IDescriptorExtractor<Gray, Byte>
    {
-      /// <summary>
-      /// Create a BRIEF descriptor extractor using descriptor size of 32.
-      /// </summary>
-      public BriefDescriptorExtractor()
-         : this(32)
+      static BriefDescriptorExtractor()
       {
+         CvInvoke.CheckLibraryLoaded();
       }
 
       /// <summary>
       /// Create a BRIEF descriptor extractor.
       /// </summary>
-      /// <param name="descriptorSize">The size of descriptor. It can be equal 16, 32 or 64 bytes. Use 32 for default.</param>
-      public BriefDescriptorExtractor(int descriptorSize)
+      /// <param name="descriptorSize">The size of descriptor. It can be equal 16, 32 or 64 bytes.</param>
+      public BriefDescriptorExtractor(int descriptorSize = 32)
       {
          _ptr = CvBriefDescriptorExtractorCreate(descriptorSize);
       }
-
-      /*
-      /// <summary>
-      /// Get the size of the descriptor
-      /// </summary>
-      public int DescriptorSize
-      {
-         get
-         {
-            return CvInvoke.CvBriefDescriptorExtractorGetDescriptorSize(_ptr);
-         }
-      }
-
-      /// <summary>
-      /// Compute the descriptor given the image and the point location
-      /// </summary>
-      /// <param name="image">The image where the descriptor will be computed from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
-      /// <returns>The descriptors founded on the keypoint location</returns>
-      private Matrix<Byte> ComputeDescriptorsRawHelper(CvArray<Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
-      {
-         using (Mat descriptors = new Mat())
-         {
-            CvInvoke.CvBriefDescriptorComputeDescriptors(_ptr, image, keyPoints, descriptors);
-            if (keyPoints.Size == 0)
-               return null;
-            Matrix<Byte> result = new Matrix<byte>(descriptors.Size);
-            CvInvoke.cvMatCopyToCvArr(descriptors, result);
-            return result;
-         }
-      }
-
-      /// <summary>
-      /// Compute the descriptor given the image and the point location
-      /// </summary>
-      /// <param name="image">The image where the descriptor will be computed from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
-      /// <returns>The descriptors founded on the keypoint location</returns>
-      public Matrix<Byte> ComputeDescriptorsRaw(Image<Gray, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
-      {
-         return ComputeDescriptorsRawHelper(image, mask, keyPoints);
-      }
-
-      /// <summary>
-      /// Compute the descriptor given the image and the point location, using oppponent color (CGIV 2008 "Color Descriptors for Object Category Recognition").
-      /// </summary>
-      /// <param name="image">The image where the descriptor will be computed from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">The keypoint where the descriptor will be computed from. Keypoints for which a descriptor cannot be computed are removed.</param>
-      /// <returns>The descriptors founded on the keypoint location</returns>
-      public Matrix<Byte> ComputeDescriptorsRaw(Image<Bgr, Byte> image, Image<Gray, byte> mask, VectorOfKeyPoint keyPoints)
-      {
-         return ComputeDescriptorsRawHelper(image, mask, keyPoints);
-      }*/
 
       /// <summary>
       /// Release all the unmanaged resource associated with BRIEF
       /// </summary>
       protected override void DisposeObject()
       {
-         CvBriefDescriptorExtractorRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CvBriefDescriptorExtractorRelease(ref _ptr);
       }
 
       IntPtr IDescriptorExtractor<Gray, Byte>.DescriptorExtratorPtr

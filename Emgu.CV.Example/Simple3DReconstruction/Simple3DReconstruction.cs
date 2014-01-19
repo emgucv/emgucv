@@ -58,10 +58,12 @@ namespace Simlpe3DReconstruction
          Size size = left.Size;
 
          disparityMap = new Image<Gray, short>(size);
-         //using (StereoSGBM stereoSolver = new StereoSGBM(5, 64, 0, 0, 0, 0, 0, 0, 0, 0, false))
-         using (StereoBM stereoSolver = new StereoBM(Emgu.CV.CvEnum.STEREO_BM_TYPE.BASIC, 0))
+         
+         //using (StereoSGBM stereoSolver = new StereoSGBM(5, 64, 0))
+         using (StereoBM stereoSolver = new StereoBM())
+         //using (Mat dm = new Mat())
          {
-            stereoSolver.FindStereoCorrespondence(left, right, disparityMap);
+            stereoSolver.Compute(left, right, disparityMap);
 
             float scale = Math.Max(size.Width, size.Height);
 
@@ -124,8 +126,8 @@ namespace Simlpe3DReconstruction
             squareImg.ROI = roi;
             CvInvoke.cvCopy(_left, squareImg, IntPtr.Zero);
             squareImg.ROI = Rectangle.Empty;
-            _texture = squareImg.Resize(256, 256, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true);
-               _texture._Flip(Emgu.CV.CvEnum.FLIP.VERTICAL);
+            _texture = squareImg.Resize(256, 256, Emgu.CV.CvEnum.Inter.Cubic, true);
+               _texture._Flip(Emgu.CV.CvEnum.FlipType.Vertical);
                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb8, _texture.Width, _texture.Height, 0, PixelFormat.Bgr, PixelType.UnsignedByte, _texture.MIplImage.imageData);
          }
          #endregion

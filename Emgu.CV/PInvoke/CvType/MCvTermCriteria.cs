@@ -16,7 +16,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// CV_TERMCRIT value
       /// </summary>
-      public CvEnum.TERMCRIT type;
+      public CvEnum.TermCritType type;
 
       /// <summary>
       /// Maximum iteration
@@ -36,7 +36,7 @@ namespace Emgu.CV.Structure
       {
          max_iter = maxIteration;
          epsilon = 0.0;
-         type = CvEnum.TERMCRIT.CV_TERMCRIT_ITER;
+         type = CvEnum.TermCritType.Iter;
       }
 
       ///<summary>
@@ -47,7 +47,7 @@ namespace Emgu.CV.Structure
       {
          max_iter = 0;
          epsilon = eps;
-         type = CvEnum.TERMCRIT.CV_TERMCRIT_EPS;
+         type = CvEnum.TermCritType.Eps;
       }
 
       /// <summary>
@@ -59,7 +59,7 @@ namespace Emgu.CV.Structure
       {
          max_iter = maxIteration;
          epsilon = eps;
-         type = CvEnum.TERMCRIT.CV_TERMCRIT_EPS | CvEnum.TERMCRIT.CV_TERMCRIT_ITER;
+         type = CvEnum.TermCritType.Eps | CvEnum.TermCritType.Iter;
       }
    }
 }

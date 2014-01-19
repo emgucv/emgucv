@@ -30,7 +30,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="noiseSigma">Use 0 for default.</param>
       public BackgroundSubtractorMOG(int history, int nMixtures, double backgroundRatio, double noiseSigma)
       {
-         _ptr = CvInvoke.CvBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma);
+         _ptr = CvBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma);
       }
 
       /// <summary>
@@ -38,15 +38,9 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBackgroundSubtractorMOGRelease(ref _ptr);
+         CvBackgroundSubtractorMOGRelease(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma);
 

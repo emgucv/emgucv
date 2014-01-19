@@ -10,52 +10,19 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Use Block Matching algorithm to find stereo correspondence
+   /// Class for computing stereo correspondence using the block matching algorithm, introduced and contributed to OpenCV by K. Konolige.
    /// </summary>
-   public class StereoBM : DisposableObject
+   public class StereoBM : UnmanagedObject, IStereoMatcher
    {
-      private IntPtr _ptr;
-
-      /*
-      /// <summary>
-      /// The state structure
-      /// </summary>
-      public MCvStereoBMState State;
-      */
 
       /// <summary>
-      /// Create a stereoBMState
+      /// Create a stereoBM object
       /// </summary>
-      /// <param name="type">ID of one of the pre-defined parameter sets. Any of the parameters can be overridden after creating the structure.</param>
-      /// <param name="numberOfDisparities">The number of disparities. If the parameter is 0, it is taken from the preset, otherwise the supplied value overrides the one from preset. </param>
-      public StereoBM(CvEnum.STEREO_BM_TYPE type, int numberOfDisparities)
+      /// <param name="blockSize">the linear size of the blocks compared by the algorithm. The size should be odd (as the block is centered at the current pixel). Larger block size implies smoother, though less accurate disparity map. Smaller block size gives more detailed disparity map, but there is higher chance for algorithm to find a wrong correspondence.</param>
+      /// <param name="numberOfDisparities">the disparity search range. For each pixel algorithm will find the best disparity from 0 (default minimum disparity) to <paramref name="numberOfDisparities"/>. The search range can then be shifted by changing the minimum disparity.</param>
+      public StereoBM(int numberOfDisparities = 0, int blockSize = 21)
       {
-         _ptr = CvInvoke.cvCreateStereoBMState(type, numberOfDisparities);
-         //State = (MCvStereoBMState) Marshal.PtrToStructure(_ptr, typeof(MCvStereoBMState));
-      }
-
-      /// <summary>
-      /// Computes disparity map for the input rectified stereo pair.
-      /// </summary>
-      /// <param name="left">The left single-channel, 8-bit image</param>
-      /// <param name="right">The right image of the same size and the same type</param>
-      /// <param name="disparity">The output single-channel 16-bit signed disparity map of the same size as input images. Its elements will be the computed disparities, multiplied by 16 and rounded to integer's</param>
-      /// <remarks>Invalid pixels (for which disparity can not be computed) are set to (state-&gt;minDisparity-1)*16</remarks>
-      public void FindStereoCorrespondence(Image<Gray, Byte> left, Image<Gray, Byte> right, Image<Gray, Int16> disparity)
-      {
-         CvInvoke.cvFindStereoCorrespondenceBM(left, right, disparity, _ptr);
-      }
-
-      /// <summary>
-      /// Computes disparity map for the input rectified stereo pair.
-      /// </summary>
-      /// <param name="left">The left single-channel, 8-bit image</param>
-      /// <param name="right">The right image of the same size and the same type</param>
-      /// <param name="disparity">The output single-channel 16-bit signed disparity map of the same size as input images. Its elements will be the computed disparities, multiplied by 16 and rounded to integer's</param>
-      /// <remarks>Invalid pixels (for which disparity can not be computed) are set to state-&gt;minDisparity - 1 </remarks>
-      public void FindStereoCorrespondence(Image<Gray, Byte> left, Image<Gray, Byte> right, Image<Gray, float> disparity)
-      {
-         CvInvoke.cvFindStereoCorrespondenceBM(left, right, disparity, _ptr);
+         _ptr = StereoMatcherExtensions.CvStereoBMCreate(numberOfDisparities, blockSize);
       }
 
       /// <summary>
@@ -63,8 +30,13 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         //Marshal.StructureToPtr(State, _ptr, false);
-         CvInvoke.cvReleaseStereoBMState(ref _ptr);
+         if(_ptr != IntPtr.Zero)
+            StereoMatcherExtensions.CvStereoMatcherRelease(ref _ptr);
+      }
+
+      public IntPtr StereoMatcherPtr
+      {
+         get { return _ptr; }
       }
    }
 }

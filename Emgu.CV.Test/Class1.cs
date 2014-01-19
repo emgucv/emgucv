@@ -23,7 +23,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
-using Emgu.UI;
+//using Emgu.UI;
 using Emgu.Util;
 using Emgu.CV.VideoStab;
 using NUnit.Framework;
@@ -388,7 +388,7 @@ namespace Emgu.CV.Test
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {
                Image<Bgr, Byte> img = capture.RetrieveBgrFrame(0);
-               img = img.Resize(0.8, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+               img = img.Resize(0.8, Emgu.CV.CvEnum.Inter.Linear);
                Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
                gray._EqualizeHist();
                viewer.Image = gray;
@@ -1061,7 +1061,7 @@ namespace Emgu.CV.Test
             PointF[] shiftedFeatures;
             Byte[] status;
             float[] trackErrors;
-            OpticalFlow.PyrLK(oldImage, currentImage, features, new Size(9, 9), 3, new MCvTermCriteria(20, 0.05),
+            CvInvoke.CalcOpticalFlowPyrLK(oldImage, currentImage, features, new Size(9, 9), 3, new MCvTermCriteria(20, 0.05),
                out shiftedFeatures, out status, out trackErrors);
 
             Image<Gray, Byte> displayImage = currentImage.Clone();
@@ -1195,6 +1195,8 @@ namespace Emgu.CV.Test
          viewer.ShowDialog();
       }
 
+      //TODO: Fix this
+      /*
       public void VideoRetina()
       {
          ImageViewer v = new ImageViewer();
@@ -1224,7 +1226,7 @@ namespace Emgu.CV.Test
             v.ShowDialog();
 
          }
-      }
+      }*/
 
       public void TestStereo()
       {

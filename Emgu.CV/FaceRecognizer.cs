@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV
@@ -17,32 +18,35 @@ namespace Emgu.CV
    /// </summary>
    public abstract class FaceRecognizer : UnmanagedObject
    {
+      static FaceRecognizer()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Train the face recognizer with the specific images and labels
       /// </summary>
-      /// <param name="images">The images used in the training</param>
-      /// <param name="labels">The labels of the images</param>
-      public void Train(IImage[] images, int[] labels)
+      /// <param name="images">The images used in the training. This can be a VectorOfMat</param>
+      /// <param name="labels">The labels of the images. This can be a VectorOfInt</param>
+      public void Train(IInputArray images, IInputArray labels)
       {
-         Debug.Assert(images.Length == labels.Length, "The number of labels must equals the number of images");
+         CvFaceRecognizerTrain(_ptr, images.InputArrayPtr, labels.InputArrayPtr);
+      }
 
-         IntPtr[] ptrs = new IntPtr[images.Length];
-         for (int i = 0; i < images.Length; i++)
+      /// <summary>
+      /// Train the face recognizer with the specific images and labels
+      /// </summary>
+      /// <param name="images">The images used in the training. This can be a VectorOfMat</param>
+      /// <param name="labels">The labels of the images. This can be a VectorOfInt</param>
+      public void Train<TColor, TDepth>(Image<TColor, TDepth>[] images, int[] labels)
+         where TColor : struct, IColor
+         where TDepth : new()
+      {
+         using (VectorOfMat imgVec = new VectorOfMat())
+         using (VectorOfInt labelVec = new VectorOfInt(labels))
          {
-            ptrs[i] = images[i].Ptr;
-         }
-
-         GCHandle imagesHandle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         GCHandle labelsHandle = GCHandle.Alloc(labels, GCHandleType.Pinned);
-
-         try
-         {
-            CvFaceRecognizerTrain(_ptr, imagesHandle.AddrOfPinnedObject(), labelsHandle.AddrOfPinnedObject(), images.Length);
-         }
-         finally
-         {
-            imagesHandle.Free();
-            labelsHandle.Free();
+            imgVec.Push<TDepth>(images);
+            Train(imgVec, labelVec);
          }
       }
 
@@ -51,11 +55,11 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">The image where prediction will be based on</param>
       /// <returns>The prediction label</returns>
-      public PredictionResult Predict(IImage image)
+      public PredictionResult Predict(IInputArray image)
       {
          int label = -1;
          double distance = -1;
-         CvFaceRecognizerPredict(_ptr, image.Ptr, ref label, ref distance);
+         CvFaceRecognizerPredict(_ptr, image.InputArrayPtr, ref label, ref distance);
          return new PredictionResult() { Label = label, Distance = distance };
       }
 
@@ -101,7 +105,7 @@ namespace Emgu.CV
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFaceRecognizerTrain(IntPtr recognizer, IntPtr images, IntPtr labels, int count);
+      internal extern static void CvFaceRecognizerTrain(IntPtr recognizer, IntPtr images, IntPtr labels);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFaceRecognizerPredict(IntPtr recognizer, IntPtr image, ref int label, ref double distance);
@@ -128,9 +132,9 @@ namespace Emgu.CV
       /// <summary>
       /// Create an EigenFaceRecognizer
       /// </summary>
-      /// <param name="numComponents">The number of components, use 0 for default</param>
+      /// <param name="numComponents">The number of components</param>
       /// <param name="threshold">The distance threshold</param>
-      public EigenFaceRecognizer(int numComponents, double threshold)
+      public EigenFaceRecognizer(int numComponents = 0, double threshold = double.MaxValue)
       {
          _ptr = CvEigenFaceRecognizerCreate(numComponents, threshold);
       }
@@ -147,9 +151,9 @@ namespace Emgu.CV
       /// <summary>
       /// Create a FisherFaceRecognizer
       /// </summary>
-      /// <param name="numComponents">The number of components, use 0 for default</param>
+      /// <param name="numComponents">The number of components</param>
       /// <param name="threshold">The distance threshold</param>
-      public FisherFaceRecognizer(int numComponents, double threshold)
+      public FisherFaceRecognizer(int numComponents = 0, double threshold = double.MaxValue)
       {
          _ptr = CvFisherFaceRecognizerCreate(numComponents, threshold);
       }
@@ -166,14 +170,19 @@ namespace Emgu.CV
       /// <summary>
       /// Create a LBPH face recognizer
       /// </summary>
-      /// <param name="radius">Radius, use 1 for default</param>
-      /// <param name="neighbors">Neighbors, use 8 for default</param>
-      /// <param name="gridX">Grid X, use 8 for default</param>
-      /// <param name="gridY">Grid Y, use 9 for default</param>
+      /// <param name="radius">Radius</param>
+      /// <param name="neighbors">Neighbors</param>
+      /// <param name="gridX">Grid X</param>
+      /// <param name="gridY">Grid Y</param>
       /// <param name="threshold">The distance threshold</param>
-      public LBPHFaceRecognizer(int radius, int neighbors, int gridX, int gridY, double threshold)
+      public LBPHFaceRecognizer(int radius = 1, int neighbors = 8, int gridX = 8, int gridY = 8, double threshold = Double.MaxValue)
       {
          _ptr = CvLBPHFaceRecognizerCreate(radius, neighbors, gridX, gridY, threshold);
+      }
+
+      public void Update(IInputArray images, IInputArray labels)
+      {
+         CvFaceRecognizerUpdate(_ptr, images.InputArrayPtr, labels.InputArrayPtr);
       }
 
       /// <summary>
@@ -181,27 +190,16 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="images">The images used for updating the face recognizer</param>
       /// <param name="labels">The labels of the images</param>
-      public void Update(IImage[] images, int[] labels)
+      public void Update<TColor, TDepth>(Image<TColor, TDepth>[] images, int[] labels)
+         where TColor : struct, IColor
+         where TDepth : new()
       {
          Debug.Assert(images.Length == labels.Length, "The number of labels must equals the number of images");
-
-         IntPtr[] ptrs = new IntPtr[images.Length];
-         for (int i = 0; i < images.Length; i++)
+         using (VectorOfMat imgVec = new VectorOfMat())
+         using (VectorOfInt labelVec = new VectorOfInt(labels))
          {
-            ptrs[i] = images[i].Ptr;
-         }
-
-         GCHandle imagesHandle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         GCHandle labelsHandle = GCHandle.Alloc(labels, GCHandleType.Pinned);
-
-         try
-         {
-            CvFaceRecognizerUpdate(_ptr, imagesHandle.AddrOfPinnedObject(), labelsHandle.AddrOfPinnedObject(), images.Length);
-         }
-         finally
-         {
-            imagesHandle.Free();
-            labelsHandle.Free();
+            imgVec.Push(images);
+            Update(imgVec, labelVec);
          }
       }
 
@@ -209,7 +207,7 @@ namespace Emgu.CV
       internal extern static IntPtr CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFaceRecognizerUpdate(IntPtr recognizer, IntPtr images, IntPtr labels, int count);
+      internal extern static void CvFaceRecognizerUpdate(IntPtr recognizer, IntPtr images, IntPtr labels);
    }
 
 }

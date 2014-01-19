@@ -24,6 +24,10 @@ namespace Emgu.CV.Tiff
       where TColor : struct, IColor
       where TDepth : new()
    {
+      static TiffWriter()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
 
       /// <summary>
       /// Create a tiff writer to save an image
@@ -31,8 +35,8 @@ namespace Emgu.CV.Tiff
       /// <param name="fileName">The file name to be saved</param>
       public TiffWriter(String fileName)
       {
-         _ptr = CvInvoke.tiffWriterOpen(fileName);
-         CvInvoke.tiffWriteImageInfo(_ptr, Image<TColor, TDepth>.SizeOfElement * 8, new TColor().Dimension);
+         _ptr = tiffWriterOpen(fileName);
+         tiffWriteImageInfo(_ptr, Image<TColor, TDepth>.SizeOfElement * 8, new TColor().Dimension);
       }
 
       /// <summary>
@@ -45,14 +49,14 @@ namespace Emgu.CV.Tiff
             || (typeof(TColor) == typeof(Rgb) && typeof(TDepth) == typeof(Byte))
             || (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(Byte)))
          {
-            CvInvoke.tiffWriteImage(_ptr, image);
+            tiffWriteImage(_ptr, image);
          }
          else if ((typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte)))
          {
             //swap the B and R channel since geotiff assume RGBA for 4 channels image of depth Byte
             using (Image<Rgba, Byte> rgba = (image as Image<Bgra, Byte>).Convert<Rgba, Byte>())
             {
-               CvInvoke.tiffWriteImage(_ptr, rgba);
+               tiffWriteImage(_ptr, rgba);
             }
          }
          else if ((typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte)))
@@ -60,7 +64,7 @@ namespace Emgu.CV.Tiff
             //swap the B and R channel since geotiff assume RGB for 3 channels image of depth Byte
             using (Image<Rgb, Byte> rgb = (image as Image<Bgr, Byte>).Convert<Rgb, Byte>())
             {
-               CvInvoke.tiffWriteImage(_ptr, rgb);
+               tiffWriteImage(_ptr, rgb);
             }
          }
          else
@@ -82,7 +86,7 @@ namespace Emgu.CV.Tiff
          GCHandle tiepointHandle = GCHandle.Alloc(modelTiepoint, GCHandleType.Pinned);
          GCHandle pixelScaleHandle = GCHandle.Alloc(modelPixelScale, GCHandleType.Pinned);
 
-         CvInvoke.tiffWriteGeoTag(_ptr, tiepointHandle.AddrOfPinnedObject(), pixelScaleHandle.AddrOfPinnedObject());
+         tiffWriteGeoTag(_ptr, tiepointHandle.AddrOfPinnedObject(), pixelScaleHandle.AddrOfPinnedObject());
 
          tiepointHandle.Free();
          pixelScaleHandle.Free();
@@ -93,15 +97,9 @@ namespace Emgu.CV.Tiff
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.tiffWriterClose(ref _ptr);
+         tiffWriterClose(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr tiffWriterOpen(
          [MarshalAs(CvInvoke.StringMarshalType)]

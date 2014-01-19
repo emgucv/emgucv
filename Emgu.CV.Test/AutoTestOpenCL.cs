@@ -60,7 +60,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> cpuImgSum = new Image<Gray, byte>(img1.Size);
             Stopwatch watch = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               CvInvoke.Add(img1, img2, cpuImgSum, null, Mat.Depth.Cv8U);
+               CvInvoke.Add(img1, img2, cpuImgSum, null, Mat.DepthType.Cv8U);
             watch.Stop();
             Trace.WriteLine(String.Format("CPU processing time: {0}ms", (double)watch.ElapsedMilliseconds / repeat));
 
@@ -152,11 +152,11 @@ namespace Emgu.CV.Test
             using (Image<Bgr, Byte> img1 = new Image<Bgr, byte>(1200, 640))
             {
                img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
-               using (Image<Bgr, Byte> img1Flip = img1.Flip(CvEnum.FLIP.HORIZONTAL | CvEnum.FLIP.VERTICAL))
+               using (Image<Bgr, Byte> img1Flip = img1.Flip(CvEnum.FlipType.Horizontal | CvEnum.FlipType.Vertical))
                using (OclImage<Bgr, Byte> gpuImg1 = new OclImage<Bgr, byte>(img1))
                using (OclImage<Bgr, Byte> gpuFlip = new OclImage<Bgr, byte>(img1.Size))
                {
-                  OclInvoke.Flip(gpuImg1, gpuFlip, CvEnum.FLIP.HORIZONTAL | CvEnum.FLIP.VERTICAL);
+                  OclInvoke.Flip(gpuImg1, gpuFlip, CvEnum.FlipType.Horizontal | CvEnum.FlipType.Vertical);
                   gpuFlip.Download(img1);
                   Assert.IsTrue(img1.Equals(img1Flip));
                }
@@ -234,7 +234,7 @@ namespace Emgu.CV.Test
             OclImage<Gray, Byte> oclImage = new OclImage<Gray, byte>(gray);
             //oclImage.SetTo(new MCvScalar(255, 255, 255, 255), null);
             OclImage<Gray, Byte> oclBilaterial = new OclImage<Gray, byte>(oclImage.Size);
-            OclInvoke.BilateralFilter(oclImage, oclBilaterial, 5, 5, 5, CvEnum.BORDER_TYPE.DEFAULT);
+            OclInvoke.BilateralFilter(oclImage, oclBilaterial, 5, 5, 5, CvEnum.BorderType.Default);
 
             //Emgu.CV.UI.ImageViewer.Show(gray.ConcateHorizontal(oclBilaterial.ToImage()));
          }
@@ -324,8 +324,8 @@ namespace Emgu.CV.Test
             OclImage<Bgr, Byte> gpuImg = new OclImage<Bgr, byte>(img);
             OclImage<Bgr, byte> smallGpuImg = new OclImage<Bgr, byte>(size);
 
-            OclInvoke.Resize(gpuImg, smallGpuImg, 0, 0, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
-            Image<Bgr, Byte> smallCpuImg = img.Resize(size.Width, size.Height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            OclInvoke.Resize(gpuImg, smallGpuImg, 0, 0, Emgu.CV.CvEnum.Inter.Linear);
+            Image<Bgr, Byte> smallCpuImg = img.Resize(size.Width, size.Height, Emgu.CV.CvEnum.Inter.Linear);
 
 
             Image<Bgr, Byte> diff = smallGpuImg.ToImage().AbsDiff(smallCpuImg);
@@ -409,8 +409,8 @@ namespace Emgu.CV.Test
 
             using (Image<Gray, Byte> temp = new Image<Gray, byte>(image.Size))
             {
-               CvInvoke.Erode(image, temp, null, new Point(-1, -1), morphIter, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
-               CvInvoke.Dilate(temp, image, null, new Point(-1, -1), morphIter, CvEnum.BORDER_TYPE.CONSTANT, new MCvScalar());
+               CvInvoke.Erode(image, temp, null, new Point(-1, -1), morphIter, CvEnum.BorderType.Constant, new MCvScalar());
+               CvInvoke.Dilate(temp, image, null, new Point(-1, -1), morphIter, CvEnum.BorderType.Constant, new MCvScalar());
             }
 
             Assert.IsTrue(CudaImage.ToImage().Equals(image));
@@ -502,7 +502,7 @@ namespace Emgu.CV.Test
          img.ROI = Rectangle.Empty;
          #endregion
 
-         Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TM_TYPE.CV_TM_SQDIFF);
+         Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TemplateMatchingType.Sqdiff);
          double[] minVal, maxVal;
          Point[] minLoc, maxLoc;
          match.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
@@ -514,7 +514,7 @@ namespace Emgu.CV.Test
          OclImage<Gray, Single> gpuMatch = new OclImage<Gray, float>(match.Size);
          using (OclMatchTemplateBuf buffer = new OclMatchTemplateBuf())
          {
-            OclInvoke.MatchTemplate(CudaImage, gpuRandomObj, gpuMatch, CvEnum.TM_TYPE.CV_TM_SQDIFF, buffer);
+            OclInvoke.MatchTemplate(CudaImage, gpuRandomObj, gpuMatch, CvEnum.TemplateMatchingType.Sqdiff, buffer);
             OclInvoke.MinMaxLoc(gpuMatch, ref gpuMinVal, ref gpuMaxVal, ref gpuMinLoc, ref gpuMaxLoc, IntPtr.Zero);
          }
 
@@ -616,7 +616,7 @@ namespace Emgu.CV.Test
          using (OclImage<Gray, byte> oclImage = new OclImage<Gray, byte>(image))
          using (OclImage<Gray, Byte> resultOclImage = new OclImage<Gray, byte>(oclImage.Size))
          {
-            OclInvoke.WarpPerspective(oclImage, resultOclImage, transformation, CvEnum.INTER.CV_INTER_CUBIC);
+            OclInvoke.WarpPerspective(oclImage, resultOclImage, transformation, CvEnum.Inter.Cubic);
          }
       }
 
@@ -632,7 +632,7 @@ namespace Emgu.CV.Test
          #region extract features from the object image
          Stopwatch stopwatch = Stopwatch.StartNew();
          VectorOfKeyPoint modelKeypoints = fast.DetectRaw(box, null);
-         Matrix<Byte> modelDescriptors = brief.Compute(box, null, modelKeypoints);
+         Matrix<Byte> modelDescriptors = brief.Compute(box, modelKeypoints);
          stopwatch.Stop();
          Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
          #endregion
@@ -642,7 +642,7 @@ namespace Emgu.CV.Test
          #region extract features from the observed image
          stopwatch.Reset(); stopwatch.Start();
          VectorOfKeyPoint observedKeypoints = fast.DetectRaw(observedImage, null);
-         Matrix<Byte> observedDescriptors = brief.Compute(observedImage, null, observedKeypoints);
+         Matrix<Byte> observedDescriptors = brief.Compute(observedImage, observedKeypoints);
          stopwatch.Stop();
          Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
          #endregion

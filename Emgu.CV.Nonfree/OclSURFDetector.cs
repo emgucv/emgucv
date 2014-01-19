@@ -22,14 +22,6 @@ namespace Emgu.CV.Nonfree
       /// <summary>
       /// Create an OpenCL SURF detector using the default parameters
       /// </summary>
-      public OclSURFDetector()
-         : this(100.0f, 4, 2, true, 0.01f, false)
-      {
-      }
-
-      /// <summary>
-      /// Create an OpenCL SURF detector using the default parameters
-      /// </summary>
       /// <param name="detector">The surf detector where the parameters will be borrow from</param>
       /// <param name="FeaturesRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
       public OclSURFDetector(MCvSURFParams detector, float FeaturesRatio)
@@ -44,15 +36,15 @@ namespace Emgu.CV.Nonfree
       /// <param name="nOctaves">The number of octaves to process. Use 4 for default</param>
       /// <param name="nIntervals">The number of intervals in each octave. Use 4 for default</param>
       /// <param name="extended">True, if generate 128-len descriptors, false - 64-len descriptors. Use true for default.</param>
-      /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
-      /// <param name="upright">Use false for default. If set to true, the orientation is not computed for the keypoints</param>
+      /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea().</param>
+      /// <param name="upright">If set to true, the orientation is not computed for the keypoints</param>
       public OclSURFDetector(
-         float hessianThreshold,
-         int nOctaves,
-         int nIntervals,
-         bool extended,
-         float featuresRatio,
-         bool upright)
+         float hessianThreshold = 100,
+         int nOctaves = 4,
+         int nIntervals = 4,
+         bool extended = true,
+         float featuresRatio = 0.01f,
+         bool upright = false)
       {
          _ptr = NonfreeInvoke.oclSURFDetectorCreate(hessianThreshold, nOctaves, nIntervals, extended, featuresRatio, upright);
       }

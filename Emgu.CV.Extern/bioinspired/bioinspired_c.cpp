@@ -19,20 +19,17 @@ void CvRetinaRelease(cv::bioinspired::Retina** retina)
    delete *retina;
    *retina = 0;
 }
-void CvRetinaRun(cv::bioinspired::Retina* retina, IplImage* image)
+void CvRetinaRun(cv::bioinspired::Retina* retina, cv::_InputArray* image)
 {
-   cv::Mat m = cv::cvarrToMat(image);
-   retina->run(m);
+   retina->run(*image);
 }
-void CvRetinaGetParvo(cv::bioinspired::Retina* retina, IplImage* parvo)
+void CvRetinaGetParvo(cv::bioinspired::Retina* retina, cv::_OutputArray* parvo)
 {
-   cv::Mat m = cv::cvarrToMat(parvo);
-   retina->getParvo(m);
+   retina->getParvo(*parvo);
 }
-void CvRetinaGetMagno(cv::bioinspired::Retina* retina, IplImage* magno)
+void CvRetinaGetMagno(cv::bioinspired::Retina* retina, cv::_OutputArray* magno)
 {
-   cv::Mat m = cv::cvarrToMat(magno);
-   retina->getMagno(m);
+   retina->getMagno(*magno);
 }
 void CvRetinaClearBuffers(cv::bioinspired::Retina* retina)
 {

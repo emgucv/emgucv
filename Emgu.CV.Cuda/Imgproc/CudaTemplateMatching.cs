@@ -21,7 +21,7 @@ namespace Emgu.CV.Cuda
       where TColor : struct, IColor
       where TDepth : new()
    {
-      private CvEnum.TM_TYPE _method;
+      private CvEnum.TemplateMatchingType _method;
       private Size _blockSize;
 
       /// <summary>
@@ -29,7 +29,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
       /// <param name="blockSize">The block size</param>
-      public CudaTemplateMatching(CvEnum.TM_TYPE method, Size blockSize)
+      public CudaTemplateMatching(CvEnum.TemplateMatchingType method, Size blockSize)
       {
          _method = method;
          _blockSize = blockSize;
@@ -65,7 +65,7 @@ namespace Emgu.CV.Cuda
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaTemplateMatchingCreate(int srcType, CvEnum.TM_TYPE method, ref Size blockSize);
+      internal static extern IntPtr cudaTemplateMatchingCreate(int srcType, CvEnum.TemplateMatchingType method, ref Size blockSize);
 
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaTemplateMatchingRelease(ref IntPtr buf);

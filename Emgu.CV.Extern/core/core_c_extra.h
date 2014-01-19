@@ -9,54 +9,29 @@
 #define EMGU_CORE_C_H
 
 #include "opencv2/core/core_c.h"
+#include "opencv2/core/ocl.hpp"
 //#include "opencv2/imgproc/imgproc.hpp"
 #include "emgu_c.h"
 
-CVAPI(cv::UMat*) cvUMatCreate();
-CVAPI(cv::UMat*) cvUMatCreateWithType(int row, int cols, int type);
-CVAPI(void) cvUMatRelease(cv::UMat** mat);
-CVAPI(emgu::size) cvUMatGetSize(cv::UMat* mat);
-CVAPI(void) cvUMatCopyTo(cv::UMat* mat, cv::_OutputArray* m);
-CVAPI(int) cvUMatGetElementSize(cv::UMat* mat);
-CVAPI(int) cvUMatGetChannels(cv::UMat* mat);
-CVAPI(bool) cvUMatIsEmpty(cv::UMat* mat);
-CVAPI(void) cvUMatSetTo(cv::UMat* mat, cv::_InputArray* value, cv::_InputArray* mask);
+CVAPI(cv::_InputArray*) cveInputArrayFromDouble(double* scalar);
+CVAPI(cv::_InputArray*) cveInputArrayFromScalar(cv::Scalar* scalar);
+CVAPI(cv::_InputArray*) cveInputArrayFromMat(cv::Mat* mat);
+CVAPI(cv::_InputArray*) cveInputArrayFromGpuMat(cv::cuda::GpuMat* mat);
+CVAPI(cv::_InputArray*) cveInputArrayFromUMat(cv::UMat* mat);
+CVAPI(void) cveInputArrayRelease(cv::_InputArray** arr);
 
-CVAPI(cv::Mat*) cvMatCreate();
-CVAPI(cv::Mat*) cvMatCreateWithType(int row, int cols, int type);
-CVAPI(cv::Mat*) cvMatCreateWithData(int rows, int cols, int type, void* data, size_t step);
+CVAPI(cv::_OutputArray*) cveOutputArrayFromMat(cv::Mat* mat);
+CVAPI(cv::_OutputArray*) cveOutputArrayFromGpuMat(cv::cuda::GpuMat* mat);
+CVAPI(cv::_OutputArray*) cveOutputArrayFromUMat(cv::UMat* mat);
+CVAPI(void) cveOutputArrayRelease(cv::_OutputArray** arr);
 
-CVAPI(void) cvMatRelease(cv::Mat** mat);
-CVAPI(emgu::size) cvMatGetSize(cv::Mat* mat);
-CVAPI(void) cvMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask);
-CVAPI(void) cveArrToMat(CvArr* cvArray, cv::Mat* mat);
-CVAPI(int) cvMatGetElementSize(cv::Mat* mat);
-CVAPI(int) cvMatGetChannels(cv::Mat* mat);
-CVAPI(uchar*) cvMatGetDataPointer(cv::Mat* mat);
-CVAPI(size_t) cvMatGetStep(cv::Mat* mat);
-CVAPI(bool) cvMatIsEmpty(cv::Mat* mat);
-CVAPI(void) cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask);
-CVAPI(cv::UMat*) cvMatGetUMat(cv::Mat* mat, int access);
+CVAPI(cv::_InputOutputArray*) cveInputOutputArrayFromMat(cv::Mat* mat);
+CVAPI(cv::_InputOutputArray*) cveInputOutputArrayFromUMat(cv::UMat* mat);
+CVAPI(cv::_InputOutputArray*) cveInputOutputArrayFromGpuMat(cv::cuda::GpuMat* mat);
+CVAPI(void) cveInputOutputArrayRelease(cv::_InputOutputArray** arr);
 
-CVAPI(cv::_InputArray*) cvInputArrayFromDouble(double* scalar);
-CVAPI(cv::_InputArray*) cvInputArrayFromScalar(cv::Scalar* scalar);
-CVAPI(cv::_InputArray*) cvInputArrayFromMat(cv::Mat* mat);
-CVAPI(cv::_InputArray*) cvInputArrayFromGpuMat(cv::cuda::GpuMat* mat);
-CVAPI(cv::_InputArray*) cvInputArrayFromUMat(cv::UMat* mat);
-CVAPI(void) cvInputArrayRelease(cv::_InputArray** arr);
-
-CVAPI(cv::_OutputArray*) cvOutputArrayFromMat(cv::Mat* mat);
-CVAPI(cv::_OutputArray*) cvOutputArrayFromGpuMat(cv::cuda::GpuMat* mat);
-CVAPI(cv::_OutputArray*) cvOutputArrayFromUMat(cv::UMat* mat);
-CVAPI(void) cvOutputArrayRelease(cv::_OutputArray** arr);
-
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromMat(cv::Mat* mat);
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromUMat(cv::UMat* mat);
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromGpuMat(cv::Mat* mat);
-CVAPI(void) cvInputOutputArrayRelease(cv::_InputOutputArray** arr);
-
-CVAPI(cv::Scalar*) cvScalarCreate(CvScalar* scalar);
-CVAPI(void) cvScalarRelease(cv::Scalar** scalar);
+CVAPI(cv::Scalar*) cveScalarCreate(CvScalar* scalar);
+CVAPI(void) cveScalarRelease(cv::Scalar** scalar);
 
 CVAPI(void) cveMinMaxIdx(cv::_InputArray* src, double* minVal, double* maxVal, int* minIdx, int* maxIdx, cv::_InputArray* mask);
 CVAPI(void) cveMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint* minLoc, CvPoint* macLoc, cv::_InputArray *mask);
@@ -88,6 +63,7 @@ CVAPI(void) cveSum(cv::_InputArray* src, CvScalar* result);
 CVAPI(void) cveMean(cv::_InputArray* src, cv::_InputArray* mask, CvScalar* result);
 CVAPI(void) cveTrace(cv::_InputArray* mtx, CvScalar* result);
 CVAPI(double) cveDeterminant(cv::_InputArray* mtx);
+CVAPI(double) cveNorm(cv::_InputArray* src1, cv::_InputArray* src2, int normType, cv::_InputArray* mask);
 
 CVAPI(bool) cveCheckRange(cv::_InputArray* arr, bool quiet, CvPoint* index, double minVal, double maxVal);
 CVAPI(void) cveGemm(cv::_InputArray* src1, cv::_InputArray* src2, double alpha, cv::_InputArray* src3, double beta, cv::_OutputArray* dst, int flags);
@@ -103,6 +79,8 @@ CVAPI(void) cveCartToPolar(cv::_InputArray* x, cv::_InputArray* y, cv::_OutputAr
 CVAPI(void) cvePolarToCart(cv::_InputArray* magnitude, cv::_InputArray* angle, cv::_OutputArray* x, cv::_OutputArray* y, bool angleInDegrees);
 
 CVAPI(void) cveSetIdentity(cv::_InputOutputArray* mtx, CvScalar* scalar);
+CVAPI(int) cveSolveCubic(cv::_InputArray* coeffs, cv::_OutputArray* roots);
+CVAPI(double) cveSolvePoly(cv::_InputArray* coeffs, cv::_OutputArray* roots, int maxIters);
 CVAPI(void) cveSolve(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags);
 CVAPI(void) cveInvert(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
 
@@ -113,7 +91,7 @@ CVAPI(void) cveMulSpectrums(cv::_InputArray *a, cv::_InputArray* b, cv::_OutputA
 CVAPI(void) cveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m);
 
 CVAPI(void) cveMahalanobis(cv::_InputArray* v1, cv::_InputArray* v2, cv::_InputArray* icovar);
-
+CVAPI(void) cveCalcCovarMatrix(cv::_InputArray* samples, cv::_OutputArray* covar, cv::_InputOutputArray* mean, int flags, int ctype);
 CVAPI(void) cveNormalize(cv::_InputArray* src, cv::_OutputArray* dst, double alpha, double beta, int normType, int dType, cv::_InputArray* mask);
 
 CVAPI(void) cvePerspectiveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m);
@@ -123,4 +101,11 @@ CVAPI(void) cveMulTransposed(cv::_InputArray* src, cv::_OutputArray* dst, bool a
 CVAPI(void) cveSplit(cv::_InputArray* src, cv::_OutputArray* mv);
 CVAPI(void) cveMerge(cv::_InputArray* mv, cv::_OutputArray* dst);
 CVAPI(void) cveMixChannels(cv::_InputArray* src, cv::_InputOutputArray* dst, const int* fromTo, int npairs);
+
+CVAPI(double) cveKmeans(cv::_InputArray* data, int k, cv::_InputOutputArray* bestLabels, CvTermCriteria* criteria, int attempts, int flags, cv::_OutputArray* centers);
+
+CVAPI(bool) cveHaveOpenCL();
+CVAPI(bool) cveUseOpenCL();
+CVAPI(void) cveSetUseOpenCL(bool flag);
+CVAPI(void) cveOclFinish2();
 #endif

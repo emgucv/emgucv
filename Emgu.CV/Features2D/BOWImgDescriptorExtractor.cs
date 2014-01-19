@@ -24,6 +24,7 @@ namespace Emgu.CV.Features2D
    public class BOWImgDescriptorExtractor<T> : UnmanagedObject
       where T: struct
    {
+
       /// <summary>
       /// 
       /// </summary>
@@ -31,7 +32,7 @@ namespace Emgu.CV.Features2D
       /// <param name="descriptorMatcher">Descriptor matcher that is used to find the nearest word of the trained vocabulary for each keypoint descriptor of the image.</param>
       public BOWImgDescriptorExtractor(IDescriptorExtractor<Gray, T> descriptorExtractor, DescriptorMatcher<T> descriptorMatcher)
       {
-         _ptr = CvInvoke.CvBOWImgDescriptorExtractorCreate(descriptorExtractor.DescriptorExtratorPtr, descriptorMatcher);
+         _ptr = BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorCreate(descriptorExtractor.DescriptorExtratorPtr, descriptorMatcher);
       }
 
       /// <summary>
@@ -40,7 +41,7 @@ namespace Emgu.CV.Features2D
       /// <param name="vocabulary">The vocabulary</param>
       public void SetVocabulary(Matrix<T> vocabulary)
       {
-         CvInvoke.CvBOWImgDescriptorExtractorSetVocabulary(_ptr, vocabulary);
+         BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorSetVocabulary(_ptr, vocabulary);
       }
 
       /// <summary>
@@ -53,7 +54,7 @@ namespace Emgu.CV.Features2D
       {
          using (Mat m = new Mat())
          {
-            CvInvoke.CvBOWImgDescriptorExtractorCompute(_ptr, image.Mat, keypoints, m);
+            BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorCompute(_ptr, image.Mat, keypoints, m);
             Matrix<float> result = new Matrix<float>(m.Size);
             m.CopyTo(result, null);
             return result;
@@ -65,15 +66,17 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBOWImgDescriptorExtractorRelease(ref _ptr);
+         BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorRelease(ref _ptr);
       }
    }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
+   internal static class BOWImgDescriptorExtractorInvoke
    {
+      static BOWImgDescriptorExtractorInvoke()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBOWImgDescriptorExtractorCreate(IntPtr descriptorExtractor, IntPtr descriptorMatcher);
 
@@ -85,6 +88,5 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBOWImgDescriptorExtractorSetVocabulary(IntPtr bowImgDescriptorExtractor, IntPtr vocabulary);
-
    }
 }

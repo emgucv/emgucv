@@ -14,6 +14,11 @@ namespace Emgu.CV.Util
    /// </summary>
    public class VectorOfDataMatrixCode : Emgu.Util.UnmanagedObject
    {
+      static VectorOfDataMatrixCode()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create an empty vector of DataMatrixCode
       /// </summary>
@@ -58,7 +63,7 @@ namespace Emgu.CV.Util
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            VectorOfDataMatrixCodeRelease(_ptr);
+            VectorOfDataMatrixCodeRelease(ref _ptr);
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -68,7 +73,7 @@ namespace Emgu.CV.Util
       internal static extern IntPtr VectorOfDataMatrixCodeCreateSize(int size);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void VectorOfDataMatrixCodeRelease(IntPtr v);
+      internal static extern void VectorOfDataMatrixCodeRelease(ref IntPtr v);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int VectorOfDataMatrixCodeGetSize(IntPtr v);

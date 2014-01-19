@@ -6,6 +6,7 @@
 
 #include "vectors_c.h"
 
+/*
 //----------------------------------------------------------------------------
 //
 //  Vector of Byte
@@ -37,9 +38,10 @@ void VectorOfByteClear(std::vector<unsigned char>* v)
    v->clear();
 }
 
-void VectorOfByteRelease(std::vector<unsigned char>* v)
+void VectorOfByteRelease(std::vector<unsigned char>** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 void VectorOfByteCopyData(std::vector<unsigned char>* v, unsigned char* data)
@@ -60,6 +62,72 @@ cv::_InputArray* cvInputArrayFromVectorOfByte(std::vector<unsigned char>* vec)
 cv::_OutputArray* cvOutputArrayFromVectorOfByte(std::vector<unsigned char>* vec)
 {
    return new cv::_OutputArray(*vec);
+}
+
+cv::_InputOutputArray* cvInputOutputArrayFromVectorOfByte(std::vector<unsigned char>* vec)
+{
+   return new cv::_InputOutputArray(*vec);
+}
+
+//----------------------------------------------------------------------------
+//
+//  Vector of Int
+//
+//----------------------------------------------------------------------------
+std::vector<int>* VectorOfIntCreate()
+{
+   return new std::vector<int>();
+}
+
+std::vector<int>* VectorOfIntCreateSize(int size)
+{
+   return new std::vector<int>(size);
+}
+
+int VectorOfIntGetSize(std::vector<int>* v)
+{
+   return v->size();
+}
+
+void VectorOfIntPushMulti(std::vector<int>* v, int* values, int count)
+{
+   VectorPushMulti<int>(v, values, count);
+}
+
+void VectorOfIntClear(std::vector<int>* v)
+{
+   v->clear();
+}
+
+void VectorOfIntRelease(std::vector<int>** v)
+{
+   delete *v;
+   *v = 0;
+}
+
+void VectorOfIntCopyData(std::vector<int>* v, int* data)
+{
+   VectorCopyData<int>(v, data);
+}
+
+int* VectorOfIntGetStartAddress(std::vector<int>* v)
+{
+   return v->empty() ? NULL : &(*v)[0];
+}
+
+cv::_InputArray* cvInputArrayFromVectorOfInt(std::vector<int>* vec)
+{
+   return new cv::_InputArray(*vec);
+}
+
+cv::_OutputArray* cvOutputArrayFromVectorOfInt(std::vector<int>* vec)
+{
+   return new cv::_OutputArray(*vec);
+}
+
+cv::_InputOutputArray* cvInputOutputArrayFromVectorOfInt(std::vector<int>* vec)
+{
+   return new cv::_InputOutputArray(*vec);
 }
 
 //----------------------------------------------------------------------------
@@ -92,9 +160,10 @@ void VectorOfFloatClear(std::vector<float>* v)
    v->clear();
 }
 
-void VectorOfFloatRelease(std::vector<float>* v)
+void VectorOfFloatRelease(std::vector<float>** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 void VectorOfFloatCopyData(std::vector<float>* v, float* data)
@@ -107,6 +176,21 @@ float* VectorOfFloatGetStartAddress(std::vector<float>* v)
    return v->empty() ? NULL : &(*v)[0];
 }
 
+cv::_InputArray* cvInputArrayFromVectorOfFloat(std::vector<float>* vec)
+{
+   return new cv::_InputArray(*vec);
+}
+
+cv::_OutputArray* cvOutputArrayFromVectorOfFloat(std::vector<float>* vec)
+{
+   return new cv::_OutputArray(*vec);
+}
+
+cv::_InputOutputArray* cvInputOutputArrayFromVectorOfFloat(std::vector<float>* vec)
+{
+   return new cv::_InputOutputArray(*vec);
+}
+*/
 //----------------------------------------------------------------------------
 //
 //  Vector of DMatch
@@ -163,9 +247,10 @@ void VectorOfDMatchClear(std::vector<cv::DMatch>* v)
    v->clear();
 }
 
-void VectorOfDMatchRelease(std::vector<cv::DMatch>* v)
+void VectorOfDMatchRelease(std::vector<cv::DMatch>** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 void VectorOfDMatchCopyData(std::vector<cv::DMatch>* v, cv::DMatch* data)
@@ -210,6 +295,7 @@ void VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches, CvMat*
 //  Vector of KeyPoint
 //
 //----------------------------------------------------------------------------
+/*
 std::vector<cv::KeyPoint>* VectorOfKeyPointCreate() 
 { 
    return new std::vector<cv::KeyPoint>(); 
@@ -235,9 +321,10 @@ void VectorOfKeyPointClear(std::vector<cv::KeyPoint>* v)
    v->clear();
 }
 
-void VectorOfKeyPointRelease(std::vector<cv::KeyPoint>* v)
+void VectorOfKeyPointRelease(std::vector<cv::KeyPoint>** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 void VectorOfKeyPointCopyData(std::vector<cv::KeyPoint>* v, cv::KeyPoint* data)
@@ -248,7 +335,7 @@ void VectorOfKeyPointCopyData(std::vector<cv::KeyPoint>* v, cv::KeyPoint* data)
 cv::KeyPoint* VectorOfKeyPointGetStartAddress(std::vector<cv::KeyPoint>* v)
 {
    return v->empty() ? NULL : &(*v)[0];
-}
+}*/
 
 void VectorOfKeyPointFilterByImageBorder( std::vector<cv::KeyPoint>* keypoints, CvSize imageSize, int borderSize )
 {
@@ -266,10 +353,11 @@ void VectorOfKeyPointFilterByPixelsMask( std::vector<cv::KeyPoint>* keypoints, C
    cv::KeyPointsFilter::runByPixelsMask(*keypoints, m);
 }
 
+/*
 void VectorOfKeyPointGetItem(std::vector<cv::KeyPoint>* keypoints, int index, cv::KeyPoint* keypoint)
 {
    *keypoint = keypoints->at(index);
-}
+}*/
 
 
 //----------------------------------------------------------------------------
@@ -297,9 +385,10 @@ void VectorOfDataMatrixCodeClear(std::vector<CvDataMatrixCode>* v)
    v->clear();
 }
 
-void VectorOfDataMatrixCodeRelease(std::vector<CvDataMatrixCode>* v)
+void VectorOfDataMatrixCodeRelease(std::vector<CvDataMatrixCode>** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 CvDataMatrixCode* VectorOfDataMatrixCodeGetStartAddress(std::vector<CvDataMatrixCode>* v)
@@ -326,6 +415,7 @@ void VectorOfDataMatrixCodeDraw(std::vector<CvDataMatrixCode>* v, IplImage* imag
    cv::drawDataMatrixCodes(*v, m);
 }*/
 
+/*
 //----------------------------------------------------------------------------
 //
 //  Vector of Mat
@@ -351,9 +441,10 @@ void VectorOfMatClear(std::vector<cv::Mat>* v)
    v->clear();
 }
 
-void VectorOfMatRelease(std::vector<cv::Mat>* v)
+void VectorOfMatRelease(std::vector<cv::Mat>** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 cv::Mat* VectorOfMatGetItem(std::vector<cv::Mat>* v, int index)
@@ -370,6 +461,63 @@ cv::_OutputArray* cvOutputArrayFromVectorOfMat(std::vector<cv::Mat>* vec)
 {
    return new cv::_OutputArray(*vec);
 }
+
+cv::_InputOutputArray* cvInputOutputArrayFromVectorOfMat(std::vector<cv::Mat>* vec)
+{
+   return new cv::_InputOutputArray(*vec);
+}
+
+//----------------------------------------------------------------------------
+//
+//  Vector of UMat
+//
+//----------------------------------------------------------------------------
+std::vector<cv::UMat>* VectorOfUMatCreate()
+{
+   return new std::vector<cv::UMat>();
+}
+
+int VectorOfUMatGetSize(std::vector<cv::UMat>* v)
+{
+   return v->size();
+}
+
+void VectorOfUMatPush(std::vector<cv::UMat>* v, cv::UMat* value)
+{
+   v->push_back(*value);
+}
+
+void VectorOfUMatClear(std::vector<cv::UMat>* v)
+{
+   v->clear();
+}
+
+void VectorOfUMatRelease(std::vector<cv::UMat>** v)
+{
+   delete *v;
+   *v = 0;
+}
+
+cv::UMat* VectorOfUMatGetItem(std::vector<cv::UMat>* v, int index)
+{
+   return &(*v)[index];
+}
+
+cv::_InputArray* cvInputArrayFromVectorOfUMat(std::vector<cv::UMat>* vec)
+{
+   return new cv::_InputArray(*vec);
+}
+
+cv::_OutputArray* cvOutputArrayFromVectorOfUMat(std::vector<cv::UMat>* vec)
+{
+   return new cv::_OutputArray(*vec);
+}
+
+cv::_InputOutputArray* cvInputOutputArrayFromVectorOfUMat(std::vector<cv::UMat>* vec)
+{
+   return new cv::_InputOutputArray(*vec);
+}
+
 
 //----------------------------------------------------------------------------
 //
@@ -403,9 +551,10 @@ void VectorOfPointClear(std::vector<cv::Point>* v)
    v->clear();
 }
 
-void VectorOfPointRelease(std::vector<cv::Point>* v)
+void VectorOfPointRelease(std::vector<cv::Point>** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 void VectorOfPointCopyData(std::vector<cv::Point>* v, cv::Point* data)
@@ -428,9 +577,19 @@ cv::_InputArray* cvInputArrayFromVectorOfPoint(std::vector<cv::Point>* vec)
    return new cv::_InputArray(*vec);
 }
 
+cv::_OutputArray* cvOutputArrayFromVectorOfPoint(std::vector<cv::Point>* vec)
+{
+   return new cv::_OutputArray(*vec);
+}
+
+cv::_InputOutputArray* cvInputOutputArrayFromVectorOfPoint(std::vector<cv::Point>* vec)
+{
+   return new cv::_InputOutputArray(*vec);
+}
+
 //----------------------------------------------------------------------------
 //
-//  Vector of Point
+//  Vector of PointF
 //
 //----------------------------------------------------------------------------
 std::vector<cv::Point2f>* VectorOfPointFCreate() 
@@ -460,9 +619,10 @@ void VectorOfPointFClear(std::vector<cv::Point2f>* v)
    v->clear();
 }
 
-void VectorOfPointFRelease(std::vector<cv::Point2f>* v)
+void VectorOfPointFRelease(std::vector<cv::Point2f>** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 void VectorOfPointFCopyData(std::vector<cv::Point2f>* v, cv::Point2f* data)
@@ -479,6 +639,21 @@ void VectorOfPointFGetItem(std::vector<cv::Point2f>* points, int index, cv::Poin
 {
    *point = points->at(index);
 }
+
+cv::_InputArray* cvInputArrayFromVectorOfPointF(std::vector<cv::Point2f>* vec)
+{
+   return new cv::_InputArray(*vec);
+}
+
+cv::_OutputArray* cvOutputArrayFromVectorOfPointF(std::vector<cv::Point2f>* vec)
+{
+   return new cv::_OutputArray(*vec);
+}
+
+cv::_InputOutputArray* cvInputOutputArrayFromVectorOfPointF(std::vector<cv::Point2f>* vec)
+{
+   return new cv::_InputOutputArray(*vec);
+}*/
 
 //----------------------------------------------------------------------------
 //
@@ -501,9 +676,10 @@ void VectorOfVectorOfPointClear(std::vector< std::vector<cv::Point> >* v)
    v->clear();
 }
 
-void VectorOfVectorOfPointRelease(std::vector< std::vector<cv::Point> >* v)
+void VectorOfVectorOfPointRelease(std::vector< std::vector<cv::Point> >** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 std::vector<cv::Point>* VectorOfVectorOfPointGetItem(std::vector< std::vector<cv::Point> >* points, int index)
@@ -511,6 +687,7 @@ std::vector<cv::Point>* VectorOfVectorOfPointGetItem(std::vector< std::vector<cv
    return &(*points)[index];
 }
 
+/*
 //----------------------------------------------------------------------------
 //
 //  Vector of CvRect
@@ -543,9 +720,10 @@ void VectorOfRectClear(std::vector<cv::Rect>* v)
    v->clear();
 }
 
-void VectorOfRectRelease(std::vector<cv::Rect>* v)
+void VectorOfRectRelease(std::vector<cv::Rect>** v)
 {
-   delete v;
+   delete *v;
+   *v = 0;
 }
 
 void VectorOfRectCopyData(std::vector<cv::Rect>* v, cv::Rect* data)
@@ -561,4 +739,4 @@ cv::Rect* VectorOfRectGetStartAddress(std::vector<cv::Rect>* v)
 void VectorOfRectGetItem(std::vector<cv::Rect>* points, int index, cv::Rect* point)
 {
    *point = points->at(index);
-}
+}*/

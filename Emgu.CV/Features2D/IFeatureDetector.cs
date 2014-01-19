@@ -20,5 +20,6 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <returns>The feature detector</returns>
       IntPtr FeatureDetectorPtr { get; }
+
    }
 }

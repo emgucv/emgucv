@@ -14,6 +14,11 @@ namespace Emgu.CV.Cvb
    /// </summary>
    public struct CvTrack : IEquatable<CvTrack>
    {
+      static CvTrack()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Track identification number
       /// </summary>

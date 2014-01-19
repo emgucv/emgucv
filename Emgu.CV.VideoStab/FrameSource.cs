@@ -57,7 +57,7 @@ namespace Emgu.CV.VideoStab
             res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
             using (Mat m = CvInvoke.CvArrToMat(_frameBuffer))
             {
-               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.COLOR_CONVERSION.GRAY2BGR);
+               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.GRAY2BGR);
             }
          }
          else

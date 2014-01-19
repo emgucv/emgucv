@@ -33,7 +33,7 @@ namespace ShapeDetection
             //Load the image from file and resize it for display
             Image<Bgr, Byte> img = 
                new Image<Bgr, byte>(fileNameTextBox.Text)
-               .Resize(400, 400, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, true);
+               .Resize(400, 400, Emgu.CV.CvEnum.Inter.Linear, true);
 
             //Convert the image to grayscale and filter out the noise
             Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
@@ -47,6 +47,8 @@ namespace ShapeDetection
                 new Gray(circleAccumulatorThreshold),
                 2.0, //Resolution of the accumulator used to detect centers of the circles
                 20.0, //min distance 
+                100, 
+                100,
                 5, //min radius
                 0 //max radius
                 )[0]; //Get the circles from the first channel

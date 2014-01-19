@@ -18,6 +18,11 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class GridAdaptedFeatureDetector : UnmanagedObject, IFeatureDetector
    {
+      static GridAdaptedFeatureDetector()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       private IFeatureDetector _baseDetector;
 
       /// <summary>
@@ -48,7 +53,7 @@ namespace Emgu.CV.Features2D
          MaxTotalKeyPoints = maxTotalKeyPoints;
          GridRows = gridRows;
          GridCols = gridCols;
-         _ptr = CvInvoke.GridAdaptedFeatureDetectorCreate(detector.FeatureDetectorPtr, maxTotalKeyPoints, gridRows, gridCols);
+         _ptr = GridAdaptedFeatureDetectorCreate(detector.FeatureDetectorPtr, maxTotalKeyPoints, gridRows, gridCols);
       }
 
       /// <summary>
@@ -56,7 +61,8 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.GridAdaptedFeatureDetectorRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            GridAdaptedFeatureDetectorRelease(ref _ptr);
       }
 
       #region IFeatureDetector Members
@@ -68,13 +74,7 @@ namespace Emgu.CV.Features2D
          }
       }
       #endregion
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr GridAdaptedFeatureDetectorCreate(
          IntPtr detector,
@@ -89,5 +89,6 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void GridAdaptedFeatureDetectorRelease(ref IntPtr detector);
+
    }
 }

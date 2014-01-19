@@ -306,29 +306,7 @@ namespace Emgu.CV
          return patternFound ? corners : null;
       }
 
-      /// <summary>
-      /// Attempts to determine whether the input image is a view of the circle grid pattern and locate circle centers
-      /// </summary>
-      /// <param name="image">Source chessboard view</param>
-      /// <param name="patternSize">The number of inner circle per chessboard row and column</param>
-      /// <param name="flags">Various operation flags</param>
-      /// <param name="featureDetector">The feature detector. Use a SimpleBlobDetector for default</param>
-      /// <returns>The center of circles detected if the chess board pattern is found, otherwise null is returned</returns>
-      public static PointF[] FindCirclesGrid(Image<Gray, Byte> image, Size patternSize, CvEnum.CalibCgType flags, Features2D.IFeatureDetector featureDetector)
-      {
-         using (VectorOfPointF vec = new VectorOfPointF())
-         {
-            bool patternFound =
-               CvInvoke.cvFindCirclesGrid(
-                  image.Ptr,
-                  ref patternSize,
-                  vec, 
-                  flags,
-                  featureDetector.FeatureDetectorPtr
-                  ) ;
-            return patternFound? vec.ToArray() : null;
-         }
-      }
+
 
       /// <summary>
       /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (patternWasFound== false) or the colored corners connected with lines when the board was found (patternWasFound == true). 

@@ -17,8 +17,10 @@ namespace Emgu.CV
    /// The equavailent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
-   public class UMat : UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
+   public class UMat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray
    {
+      private IntPtr _oclMatAllocator;
+
       private IntPtr _inputArrayPtr;
       private IntPtr _outputArrayPtr;
       private IntPtr _inputOutputArrayPtr;
@@ -29,19 +31,31 @@ namespace Emgu.CV
       {
          _ptr = ptr;
          _needDispose = needDispose;
+         //UMatInvoke.cvUMatUseCustomAllocator(_ptr, AllocateCallback, DeallocateCallback, ref _memoryAllocator, ref _oclMatAllocator);
       }
 
       /// <summary>
       /// Create an empty cv::UMat
       /// </summary>
       public UMat()
-         : this(cvUMatCreate(), true)
+         : this(UMatInvoke.cvUMatCreate(), true)
       {
       }
 
-      public UMat(int rows, int cols, Mat.Depth type, int channels)
-         : this(cvUMatCreateWithType(rows, cols, Mat.MakeType(type, channels)), true)
+      public UMat(int rows, int cols, Mat.DepthType type, int channels)
+         : this()
       {
+         Create(rows, cols, type, channels);
+      }
+
+      public UMat(UMat parent, Rectangle roi)
+        : this(UMatInvoke.cvUMatCreateFromROI(parent.Ptr, ref roi), true)
+      {
+      }
+
+      public void Create(int rows, int cols, Mat.DepthType type, int channels)
+      {
+         UMatInvoke.cvUMatCreateData(_ptr, rows, cols, Mat.MakeType(type, channels));
       }
 
       /// <summary>
@@ -51,7 +65,7 @@ namespace Emgu.CV
       {
          get
          {
-            return cvUMatGetSize(_ptr);
+            return UMatInvoke.cvUMatGetSize(_ptr);
          }
       }
 
@@ -59,7 +73,7 @@ namespace Emgu.CV
       {
          get
          {
-            return (int)cvUMatGetChannels(_ptr);
+            return (int)UMatInvoke.cvUMatGetChannels(_ptr);
          }
       }
 
@@ -70,7 +84,7 @@ namespace Emgu.CV
       {
          get
          {
-            return cvUMatGetElementSize(_ptr);
+            return UMatInvoke.cvUMatGetElementSize(_ptr);
          }
       }
 
@@ -78,9 +92,22 @@ namespace Emgu.CV
       /// Copy the data in this mat to the other mat
       /// </summary>
       /// <param name="m">The input array to copy to</param>
-      public void CopyTo(IOutputArray m, IInputArray mask)
+      public void CopyTo(IOutputArray m, IInputArray mask = null)
       {
-         cvUMatCopyTo(this, m.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         UMatInvoke.cvUMatCopyTo(this, m.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+      }
+
+      public void SetTo(IInputArray value, IInputArray mask = null)
+      {
+         UMatInvoke.cvUMatSetTo(Ptr, value.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+      }
+
+      public void SetTo(MCvScalar value, IInputArray mask = null)
+      {
+         using (InputArray ia = new InputArray(value))
+         {
+            SetTo(ia, mask);
+         }
       }
 
       /// <summary>
@@ -90,7 +117,7 @@ namespace Emgu.CV
       {
          get
          {
-            return cvUMatIsEmpty(_ptr);
+            return UMatInvoke.cvUMatIsEmpty(_ptr);
          }
       }
 
@@ -100,16 +127,22 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if (_needDispose && _ptr != IntPtr.Zero)
-            cvUMatRelease(ref _ptr);
+            UMatInvoke.cvUMatRelease(ref _ptr);
 
          if (_inputArrayPtr != IntPtr.Zero)
-            CvInvoke.cvInputArrayRelease(ref _inputArrayPtr);
+            CvInvoke.cveInputArrayRelease(ref _inputArrayPtr);
 
          if (_outputArrayPtr != IntPtr.Zero)
-            CvInvoke.cvOutputArrayRelease(ref _outputArrayPtr);
+            CvInvoke.cveOutputArrayRelease(ref _outputArrayPtr);
 
          if (_inputOutputArrayPtr != IntPtr.Zero)
-            CvInvoke.cvInputOutputArrayRelease(ref _inputOutputArrayPtr);
+            CvInvoke.cveInputOutputArrayRelease(ref _inputOutputArrayPtr);
+
+         if (_oclMatAllocator != IntPtr.Zero)
+            MatDataAllocatorInvoke.cvMatAllocatorRelease(ref _oclMatAllocator);
+
+         base.DisposeObject();
+
       }
 
       public IntPtr InputArrayPtr
@@ -117,7 +150,7 @@ namespace Emgu.CV
          get
          {
             if (_inputArrayPtr == IntPtr.Zero)
-               _inputArrayPtr = cvInputArrayFromUMat(_ptr);
+               _inputArrayPtr = UMatInvoke.cveInputArrayFromUMat(_ptr);
             return _inputArrayPtr;
          }
       }
@@ -127,7 +160,7 @@ namespace Emgu.CV
          get
          {
             if (_outputArrayPtr == IntPtr.Zero)
-               _outputArrayPtr = cvOutputArrayFromUMat(_ptr);
+               _outputArrayPtr = UMatInvoke.cveOutputArrayFromUMat(_ptr);
             return _outputArrayPtr;
          }
       }
@@ -137,19 +170,25 @@ namespace Emgu.CV
          get
          {
             if (_inputOutputArrayPtr == IntPtr.Zero)
-               _inputOutputArrayPtr = cvInputOutputArrayFromUMat(_ptr);
+               _inputOutputArrayPtr = UMatInvoke.cveInputOutputArrayFromUMat(_ptr);
             return _inputOutputArrayPtr;
          }
       }
+   }
 
-      #region PInvoke
+   internal static class UMatInvoke
+   {
+      static UMatInvoke()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvInputArrayFromUMat(IntPtr mat);
+      internal extern static IntPtr cveInputArrayFromUMat(IntPtr mat);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvOutputArrayFromUMat(IntPtr mat);
+      internal extern static IntPtr cveOutputArrayFromUMat(IntPtr mat);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvInputOutputArrayFromUMat(IntPtr mat);
+      internal extern static IntPtr cveInputOutputArrayFromUMat(IntPtr mat);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvUMatCreate();
@@ -166,15 +205,22 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cvUMatGetChannels(IntPtr mat);
-     
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal extern static bool cvUMatIsEmpty(IntPtr mat);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvUMatCreateWithType(int row, int cols, int type);
+      internal extern static void cvUMatCreateData(IntPtr mat, int row, int cols, int type);
 
-      #endregion
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvUMatCreateFromROI(IntPtr mat, ref Rectangle roi);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvUMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvUMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, ref IntPtr matAllocator, ref IntPtr oclAllocator);
    }
 }
 

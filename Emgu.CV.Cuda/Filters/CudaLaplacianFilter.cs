@@ -28,7 +28,7 @@ namespace Emgu.CV.Cuda
       /// <param name="scale">Optional scale. Use 1.0 for default</param>
       /// <param name="borderType">The border type.</param>
       /// <param name="borderValue">The border value.</param>
-      public CudaLaplacianFilter(int ksize, double scale, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue)
+      public CudaLaplacianFilter(int ksize, double scale, CvEnum.BorderType borderType, MCvScalar borderValue)
       {
          _ptr = CudaInvoke.cudaCreateLaplacianFilter(_matType, _matType, ksize, scale, (int)borderType, ref borderValue);
       }

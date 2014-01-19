@@ -33,7 +33,7 @@ namespace Stitching
             {
                sourceImages[i] = new Image<Bgr, byte>(dlg.FileNames[i]);
 
-               using (Image<Bgr, byte> thumbnail = sourceImages[i].Resize(200, 200, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
+               using (Image<Bgr, byte> thumbnail = sourceImages[i].Resize(200, 200, Emgu.CV.CvEnum.Inter.Cubic, true))
                {
                   DataGridViewRow row = sourceImageDataGridView.Rows[sourceImageDataGridView.Rows.Add()];
                   row.Cells["FileNameColumn"].Value = dlg.FileNames[i];

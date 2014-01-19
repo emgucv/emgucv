@@ -6,7 +6,7 @@
 
 #include "softcascade_c.h"
 
-cv::softcascade::Detector* cvSoftCascadeDetectorCreate(const char* fileName, double minScale, double maxScale, int scales, int rejCriteria)
+cv::softcascade::Detector* cveSoftCascadeDetectorCreate(const char* fileName, double minScale, double maxScale, int scales, int rejCriteria)
 {
    cv::FileStorage fs(fileName, cv::FileStorage::READ);
    char errMsg[512];
@@ -27,11 +27,10 @@ cv::softcascade::Detector* cvSoftCascadeDetectorCreate(const char* fileName, dou
    return cascade;
 }
 
-void cvSoftCascadeDetectorDetect(cv::softcascade::Detector* detector, CvArr* image, std::vector<cv::Rect>* rois, std::vector<cv::Rect>* rects, std::vector<float>* confidents)
+void cveSoftCascadeDetectorDetect(cv::softcascade::Detector* detector, cv::_InputArray* image, std::vector<cv::Rect>* rois, std::vector<cv::Rect>* rects, std::vector<float>* confidents)
 {
    std::vector<cv::softcascade::Detection> detections;
-   cv::Mat imgMat = cv::cvarrToMat(image);
-   detector->detect(imgMat, rois? *rois : cv::noArray(), detections);
+   detector->detect(*image, rois? *rois : cv::noArray(), detections);
 
    rects->resize(detections.size());
    confidents->resize(detections.size());
@@ -43,7 +42,7 @@ void cvSoftCascadeDetectorDetect(cv::softcascade::Detector* detector, CvArr* ima
    }
 }
 
-void cvSoftCascadeDetectorRelease(cv::softcascade::Detector** detector)
+void cveSoftCascadeDetectorRelease(cv::softcascade::Detector** detector)
 {
    delete *detector;
    *detector = 0;

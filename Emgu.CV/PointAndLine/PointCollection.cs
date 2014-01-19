@@ -78,7 +78,7 @@ namespace Emgu.CV
       /// <param name="type">The type of the fitting</param>
       /// <param name="normalizedDirection">The normalized direction of the fitted line</param>
       /// <param name="aPointOnLine">A point on the fitted line</param>
-      public static void Line2DFitting(PointF[] points, CvEnum.DIST_TYPE type, out PointF normalizedDirection, out PointF aPointOnLine)
+      public static void Line2DFitting(PointF[] points, CvEnum.DistType type, out PointF normalizedDirection, out PointF aPointOnLine)
       {
          float[] data = new float[6];
          IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvSeq);
@@ -204,7 +204,7 @@ namespace Emgu.CV
       /// <param name="storage">the storage used by the resulting sequence</param>
       /// <param name="orientation">The orientation of the convex hull</param>
       /// <returns>The convex hull of the points</returns>
-      public static Seq<PointF> ConvexHull(PointF[] points, MemStorage storage, CvEnum.ORIENTATION orientation)
+      public static Seq<PointF> ConvexHull(PointF[] points, MemStorage storage, CvEnum.Orientation orientation)
       {
          IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvSeq);
          IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);

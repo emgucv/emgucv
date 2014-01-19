@@ -17,13 +17,18 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class Brisk : Feature2D<byte>
    {
+      static Brisk()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a BRISK keypoint detector and descriptor extractor.
       /// </summary>
-      /// <param name="thresh">Feature parameters, use 30 for default.</param>
-      /// <param name="octaves">The number of octave layers. Use 3 for default</param>
-      /// <param name="patternScale">Pattern scale, use 1.0f for default</param>
-      public Brisk(int thresh, int octaves, float patternScale)
+      /// <param name="thresh">Feature parameters.</param>
+      /// <param name="octaves">The number of octave layers.</param>
+      /// <param name="patternScale">Pattern scale</param>
+      public Brisk(int thresh = 30, int octaves = 3, float patternScale = 1.0f)
       {
          _ptr = CvBriskCreate(thresh, octaves, patternScale, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
       }

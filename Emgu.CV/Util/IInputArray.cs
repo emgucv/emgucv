@@ -13,32 +13,54 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// This is the proxy class for passing read-only input arrays into OpenCV functions.
+   /// </summary>
    public interface IInputArray
    {
+      /// <summary>
+      /// The unmanaged pointer to the input array.
+      /// </summary>
       IntPtr InputArrayPtr { get; }
    }
 
    public partial class CvInvoke
    {
+      /// <summary>
+      /// Release the InputArray
+      /// </summary>
+      /// <param name="arr">Pointer to the input array</param>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static IntPtr cvInputArrayRelease(ref IntPtr arr);
+      public extern static void cveInputArrayRelease(ref IntPtr arr);
    }
 
    public class InputArray : UnmanagedObject, IInputArray
    {
-      private IntPtr _cvScalarPtr;
-      private IntPtr _doublePtr;
+      static InputArray()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
+      private enum DataType
+      {
+         Scalar, 
+         Double
+      }
+      private IntPtr _dataPtr;
+      private DataType _dataType;
       
       public InputArray(MCvScalar scalar)
       {
-         _cvScalarPtr = cvScalarCreate(ref scalar);
-         _ptr = cvInputArrayFromScalar(_cvScalarPtr);
+         _dataPtr = cveScalarCreate(ref scalar);
+         _dataType = DataType.Scalar;
+         _ptr = cveInputArrayFromScalar(_dataPtr);
       }
       public InputArray(double scalar)
       {
-         _doublePtr = Marshal.AllocHGlobal(sizeof(double));
-         Marshal.Copy(new double[] { scalar }, 0, _doublePtr, 1);
-         _ptr = cvInputArrayFromDouble(_doublePtr);
+         _dataPtr = Marshal.AllocHGlobal(sizeof(double));
+         _dataType = DataType.Double;
+         Marshal.Copy(new double[] { scalar }, 0, _dataPtr, 1);
+         _ptr = cveInputArrayFromDouble(_dataPtr);
       }
 
       public static explicit operator InputArray(double scalar)
@@ -54,17 +76,19 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.cvInputArrayRelease(ref _ptr);
+            CvInvoke.cveInputArrayRelease(ref _ptr);
 
-         if (_cvScalarPtr != IntPtr.Zero)
+         if (_dataPtr != IntPtr.Zero)
          {
-            cvScalarRelease(ref _cvScalarPtr);
-         }
+            if (_dataType == DataType.Scalar)
+               cveScalarRelease(ref _dataPtr);
+            else if (_dataType == DataType.Double)
+            {
+               Marshal.FreeHGlobal(_dataPtr);
+               _dataPtr = IntPtr.Zero;
+            }
 
-         if (_doublePtr != IntPtr.Zero)
-         {
-            Marshal.FreeHGlobal(_doublePtr);
-            _doublePtr = IntPtr.Zero;
+            Debug.Assert(_dataPtr == IntPtr.Zero);
          }
       }
 
@@ -74,14 +98,16 @@ namespace Emgu.CV
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvScalarCreate(ref MCvScalar scalar);
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvScalarRelease(ref IntPtr scalar);
+      internal extern static IntPtr cveScalarCreate(ref MCvScalar scalar);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvInputArrayFromScalar(IntPtr scalar);
+      internal extern static void cveScalarRelease(ref IntPtr scalar);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvInputArrayFromDouble(IntPtr scalar);
+      internal extern static IntPtr cveInputArrayFromScalar(IntPtr scalar);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cveInputArrayFromDouble(IntPtr scalar);
+
    }
 }

@@ -38,7 +38,7 @@ namespace Emgu.CV
       /// <summary>
       /// the type of flipping
       /// </summary>
-      private CvEnum.FLIP _flipType = Emgu.CV.CvEnum.FLIP.NONE;
+      private CvEnum.FlipType _flipType = Emgu.CV.CvEnum.FlipType.None;
 
       /// <summary>
       /// The type of capture source
@@ -77,7 +77,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get and set the flip type
       /// </summary>
-      public CvEnum.FLIP FlipType
+      public CvEnum.FlipType FlipType
       {
          get
          {
@@ -96,12 +96,12 @@ namespace Emgu.CV
       {
          get
          {
-            return (_flipType & Emgu.CV.CvEnum.FLIP.HORIZONTAL) == Emgu.CV.CvEnum.FLIP.HORIZONTAL;
+            return (_flipType & Emgu.CV.CvEnum.FlipType.Horizontal) == Emgu.CV.CvEnum.FlipType.Horizontal;
          }
          set
          {
             if (value != FlipHorizontal)
-               _flipType ^= Emgu.CV.CvEnum.FLIP.HORIZONTAL;
+               _flipType ^= Emgu.CV.CvEnum.FlipType.Horizontal;
          }
       }
 
@@ -112,12 +112,12 @@ namespace Emgu.CV
       {
          get
          {
-            return (_flipType & Emgu.CV.CvEnum.FLIP.VERTICAL) == Emgu.CV.CvEnum.FLIP.VERTICAL;
+            return (_flipType & Emgu.CV.CvEnum.FlipType.Vertical) == Emgu.CV.CvEnum.FlipType.Vertical;
          }
          set
          {
             if (value != FlipVertical)
-               _flipType ^= Emgu.CV.CvEnum.FLIP.VERTICAL;
+               _flipType ^= Emgu.CV.CvEnum.FlipType.Vertical;
          }
       }
 
@@ -370,7 +370,7 @@ namespace Emgu.CV
             res = new Image<Gray, Byte>(iplImage.width, iplImage.height);
             using (Mat m = CvInvoke.CvArrToMat(img))
             {
-               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2GRAY);
+               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.BGR2GRAY);
             }
          }
          else
@@ -412,7 +412,7 @@ namespace Emgu.CV
             res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
             using (Mat m = CvInvoke.CvArrToMat(img))
             {
-               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.COLOR_CONVERSION.GRAY2BGR);
+               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.GRAY2BGR);
             }
          }
          else

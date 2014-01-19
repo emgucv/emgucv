@@ -14,6 +14,11 @@ namespace Emgu.CV.Cvb
    /// </summary>
    public class CvBlobs : UnmanagedObject, IDictionary<uint, CvBlob>
    {
+      static CvBlobs()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a new CvBlobs
       /// </summary>

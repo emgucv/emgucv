@@ -113,7 +113,7 @@ namespace Emgu.CV.Test
          pts.Add(new PointF(4.0f, 4.0f));
 
          PointF direction, pointOnLine;
-         PointCollection.Line2DFitting(pts.ToArray(), Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2, out direction, out pointOnLine);
+         PointCollection.Line2DFitting(pts.ToArray(), Emgu.CV.CvEnum.DistType.L2, out direction, out pointOnLine);
 
          //check if the line is 45 degree from +x axis
          EmguAssert.AreEqual(45.0, Math.Atan2(direction.Y, direction.X) * 180.0 / Math.PI);
@@ -239,7 +239,7 @@ namespace Emgu.CV.Test
             Seq<MCvConvexityDefect> defactSeq =
                contour.GetConvexityDefacts(
                   stor,
-                  Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE);
+                  Emgu.CV.CvEnum.Orientation.Clockwise);
             MCvConvexityDefect[] defacts = defactSeq.ToArray();
             EmguAssert.IsTrue(1 == defacts.Length);
             EmguAssert.IsTrue(new Point(100, 100).Equals(defacts [0].DepthPoint));
@@ -401,7 +401,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte>[] imgs = Array.ConvertAll<String, Image<Gray, Byte>>(fileNames,
              delegate(String file)
          {
-            return EmguAssert.LoadImage<Gray, Byte>(file).Resize(width, height, CvEnum.INTER.CV_INTER_LINEAR);
+            return EmguAssert.LoadImage<Gray, Byte>(file).Resize(width, height, CvEnum.Inter.Linear);
          });
 
          EigenObjectRecognizer imgRecognizer1 = new EigenObjectRecognizer(imgs, ref termCrit);
@@ -641,8 +641,8 @@ namespace Emgu.CV.Test
          Matrix<byte> kernel2 = new Matrix<byte>(new Byte[3, 3] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } });
          //StructuringElementEx element2 = new StructuringElementEx(new int[3, 3] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } }, 1, 1);
          Image<Bgr, Byte> tmp = new Image<Bgr, byte>(100, 100);
-         Image<Bgr, Byte> tmp2 = tmp.MorphologyEx(Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, kernel1, new Point(-1, -1), 1, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar());
-         Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, kernel2, new Point(-1, -1), 1, CvEnum.BORDER_TYPE.DEFAULT, new MCvScalar());
+         Image<Bgr, Byte> tmp2 = tmp.MorphologyEx(Emgu.CV.CvEnum.MorphOp.Gradient, kernel1, new Point(-1, -1), 1, CvEnum.BorderType.Default, new MCvScalar());
+         Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(Emgu.CV.CvEnum.MorphOp.Gradient, kernel2, new Point(-1, -1), 1, CvEnum.BorderType.Default, new MCvScalar());
          //Image<Bgr, Byte> tmp2 = tmp.MorphologyEx(element1, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_GRADIENT, 1);
          //Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(element2, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT, 1);
       }
@@ -896,7 +896,7 @@ namespace Emgu.CV.Test
          img.ROI = Rectangle.Empty;
          #endregion
 
-         Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TM_TYPE.CV_TM_SQDIFF);
+         Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TemplateMatchingType.Sqdiff);
          double[] minVal, maxVal;
          Point[] minLoc, maxLoc;
          match.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
@@ -938,7 +938,7 @@ namespace Emgu.CV.Test
          OpticalFlowImage(out prevImg, out currImg);
          Image<Gray, Single> flowx = new Image<Gray, float>(prevImg.Size);
          Image<Gray, Single> flowy = new Image<Gray, float>(prevImg.Size);
-         OpticalFlow.Farneback(prevImg, currImg, flowx, flowy, 0.5, 3, 5, 20, 7, 1.5, Emgu.CV.CvEnum.OPTICALFLOW_FARNEBACK_FLAG.DEFAULT);
+         CvInvoke.CalcOpticalFlowFarneback(prevImg, currImg, flowx, flowy, 0.5, 3, 5, 20, 7, 1.5, Emgu.CV.CvEnum.OpticalflowFarnebackFlag.Default);
       }
 
       [Test]
@@ -957,7 +957,7 @@ namespace Emgu.CV.Test
 
          Stopwatch watch = Stopwatch.StartNew();
 
-         OpticalFlow.BM(prevImg, currImg, blockSize, shiftSize, maxRange, false, velx, vely);
+         CvInvoke.cvCalcOpticalFlowBM(prevImg, currImg, blockSize, shiftSize, maxRange, false, velx, vely);
 
          watch.Stop();
 
@@ -981,7 +981,7 @@ namespace Emgu.CV.Test
 
          Stopwatch watch = Stopwatch.StartNew();
 
-         OpticalFlow.PyrLK(
+         CvInvoke.CalcOpticalFlowPyrLK(
             prevImg, currImg, prevFeature, new Size(10, 10), 3, new MCvTermCriteria(10, 0.01),
             out currFeature, out status, out trackError);
          watch.Stop();
@@ -998,12 +998,11 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Byte> prevImg, currImg;
          OpticalFlowImage(out prevImg, out currImg);
-         Image<Gray, float> velx = new Image<Gray, float>(prevImg.Size);
-         Image<Gray, float> vely = new Image<Gray, float>(prevImg.Size);
+         Mat result = new Mat();
 
          Stopwatch watch = Stopwatch.StartNew();
-
-         OpticalFlow.DualTVL1(prevImg, currImg, velx, vely);
+         OpticalFlowDualTVL1 flow = new OpticalFlowDualTVL1();
+         flow.Calc(prevImg, currImg, result);
 
          watch.Stop();
          EmguAssert.WriteLine(String.Format(
@@ -1139,7 +1138,9 @@ namespace Emgu.CV.Test
          }
 
          EigenFaceRecognizer eigen = new EigenFaceRecognizer(0, double.MaxValue);
+
          eigen.Train(images, labels);
+         
          for (int i = 0; i < images.Length; i++)
          {
             EmguAssert.IsTrue(eigen.Predict(images[i]).Label == i);
@@ -1258,7 +1259,7 @@ namespace Emgu.CV.Test
          using (MemStorage storage = new MemStorage())
          {
             Stopwatch watch = Stopwatch.StartNew();
-            PointF[] hull = PointCollection.ConvexHull(pts, storage, Emgu.CV.CvEnum.ORIENTATION.CV_CLOCKWISE).ToArray();
+            PointF[] hull = PointCollection.ConvexHull(pts, storage, Emgu.CV.CvEnum.Orientation.Clockwise).ToArray();
             watch.Stop();
             img.DrawPolyline(
                 Array.ConvertAll<PointF, Point>(hull, Point.Round),
@@ -1344,7 +1345,7 @@ namespace Emgu.CV.Test
 
          StereoSGBM bm = new StereoSGBM(10, 64, 0, 0, 0, 0, 0, 0, 0, 0, StereoSGBM.Mode.SGBM);
          Stopwatch watch = Stopwatch.StartNew();
-         bm.FindStereoCorrespondence(left, right, disparity);
+         bm.Compute(left, right, disparity);
          watch.Stop();
 
          EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
@@ -1598,9 +1599,7 @@ namespace Emgu.CV.Test
          Matrix<int> m2 = new Matrix<int>(4, 4);
          m2.SetRandNormal(new MCvScalar(2), new MCvScalar(2));
 
-         VectorOfMat vec = new VectorOfMat();
-         vec.Push(m1);
-         vec.Push(m2);
+         VectorOfMat vec = new VectorOfMat(m1.Mat, m2.Mat);
 
          Mat tmp1 = vec[0];
          Mat tmp2 = vec[1];
@@ -1718,7 +1717,7 @@ namespace Emgu.CV.Test
       public void TestHOGTrain64x128()
       {
          using (Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg"))
-         using (Image<Bgr, Byte> resize = image.Resize(64, 128, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC))
+         using (Image<Bgr, Byte> resize = image.Resize(64, 128, Emgu.CV.CvEnum.Inter.Cubic))
          using (HOGDescriptor hog = new HOGDescriptor(resize))
          {
             Stopwatch watch = Stopwatch.StartNew();
@@ -1794,7 +1793,7 @@ namespace Emgu.CV.Test
          CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
          CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
          using (InputArray ia = new InputArray(3))
-            CvInvoke.Compare(mask, ia, mask, CvEnum.CMP_TYPE.CV_CMP_EQ);
+            CvInvoke.Compare(mask, ia, mask, CvEnum.CmpType.Equal);
          //Emgu.CV.UI.ImageViewer.Show(img.ConcateHorizontal( mask.Convert<Bgr, Byte>()));
       }
 
@@ -1815,7 +1814,7 @@ namespace Emgu.CV.Test
             {
                //get the mask of the foreground
                using (InputArray ia = new InputArray(3))
-                  CvInvoke.Compare(mask, ia, mask, Emgu.CV.CvEnum.CMP_TYPE.CV_CMP_EQ);
+                  CvInvoke.Compare(mask, ia, mask, Emgu.CV.CvEnum.CmpType.Equal);
 
                pedestrianMask._Or(mask);
             }
@@ -1827,7 +1826,7 @@ namespace Emgu.CV.Test
       {
          Image<Gray, Single> img = new Image<Gray, float>(320, 480);
          img.SetRandUniform(new MCvScalar(), new MCvScalar(255));
-         Image<Gray, Byte> mask = img.Cmp(100, CvEnum.CMP_TYPE.CV_CMP_GE);
+         Image<Gray, Byte> mask = img.Cmp(100, CvEnum.CmpType.GreaterEqual);
          int[] count = mask.CountNonzero();
          int c = count[0];
       }
@@ -1840,7 +1839,7 @@ namespace Emgu.CV.Test
          img._Not();
          Image<Gray, Single> dst = new Image<Gray, Single>(img.Size);
 
-         CvInvoke.cvDistTransform(img, dst, Emgu.CV.CvEnum.DIST_TYPE.CV_DIST_L2, 3, null, IntPtr.Zero);
+         CvInvoke.cvDistTransform(img, dst, Emgu.CV.CvEnum.DistType.L2, 3, null, IntPtr.Zero);
       }
 
       [Test]
@@ -2394,7 +2393,7 @@ namespace Emgu.CV.Test
                      {
                         MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 2.0, 2.0);
                         using (InputArray ia = new InputArray(3))
-                           CvInvoke.Compare(mask, ia, mask, CvEnum.CMP_TYPE.CV_CMP_NE);
+                           CvInvoke.Compare(mask, ia, mask, CvEnum.CmpType.NotEqual);
                         CvInvoke.cvSet(canny, new MCvScalar(), mask);
                         canny.Draw(@"http://www.emgu.com", ref f, new Point(50, 50), new Gray(255));
 

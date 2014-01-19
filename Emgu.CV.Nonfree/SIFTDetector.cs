@@ -28,19 +28,11 @@ namespace Emgu.CV.Nonfree
       /// <param name="edgeThreshold">Detector parameter. Use 10.0 as default</param>
       /// <param name="sigma">Use 1.6 as default</param>
       public SIFTDetector(
-         int nFeatures, int nOctaveLayers,
-         double contrastThreshold, double edgeThreshold,
-         double sigma)
+         int nFeatures = 0, int nOctaveLayers = 3,
+         double contrastThreshold = 0.04, double edgeThreshold = 10.0,
+         double sigma = 1.6)
       {
          _ptr = NonfreeInvoke.CvSIFTDetectorCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
-      }
-
-      /// <summary>
-      /// Create a SIFT detector with the default parameters
-      /// </summary>
-      public SIFTDetector()
-         : this(0, 3, 0.04, 10, 1.6)
-      {
       }
 
       /// <summary>

@@ -267,7 +267,7 @@ namespace Emgu.CV
                ConvertAll<Matrix<float>, float>(_eigenValues,
                delegate(Matrix<float> eigenValueI)
                {
-                  return (float)CvInvoke.cvNorm(eigenValue.Ptr, eigenValueI.Ptr, Emgu.CV.CvEnum.NORM_TYPE.CV_L2, IntPtr.Zero);
+                  return (float)CvInvoke.Norm(eigenValue, eigenValueI, Emgu.CV.CvEnum.NormType.L2);
                });
       }
 

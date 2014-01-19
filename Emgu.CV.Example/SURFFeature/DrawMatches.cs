@@ -57,7 +57,7 @@ namespace SURFFeatureExample
                   using (GpuMat<float> col1 = gpuMatchDist.Col(1))
                   {
                      CudaInvoke.Multiply(col1, new MCvScalar(uniquenessThreshold), col1, stream);
-                     CudaInvoke.Compare(col0, col1, gpuMask, CMP_TYPE.CV_CMP_LE, stream);
+                     CudaInvoke.Compare(col0, col1, gpuMask, CmpType.LessEqual, stream);
                   }
 
                   observedKeyPoints = new VectorOfKeyPoint();
@@ -136,7 +136,7 @@ namespace SURFFeatureExample
 
          //Draw the matched keypoints
          Image<Bgr, Byte> result = Features2DToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
-            indices, new Bgr(255, 255, 255), new Bgr(255, 255, 255), mask, Features2DToolbox.KeypointDrawType.DEFAULT);
+            indices, new Bgr(255, 255, 255), new Bgr(255, 255, 255), mask);
 
          #region draw the projected region on the image
          if (homography != null)

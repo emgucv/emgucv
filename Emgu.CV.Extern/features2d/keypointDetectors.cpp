@@ -60,9 +60,11 @@ void CvOrbDetectorRelease(cv::ORB** detector)
 }
 
 //FREAK
-cv::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves)
+cv::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::DescriptorExtractor** descriptorExtractor)
 {
-   return new cv::FREAK(orientationNormalized, scaleNormalized, patternScale, nOctaves);
+   cv::FREAK* freak = new cv::FREAK(orientationNormalized, scaleNormalized, patternScale, nOctaves);
+   *descriptorExtractor = (cv::DescriptorExtractor*) freak;
+   return freak;
 }
 
 void CvFreakRelease(cv::FREAK** detector)
@@ -208,12 +210,12 @@ void drawKeypoints(
                           const IplImage* image, 
                           const std::vector<cv::KeyPoint>* keypoints, 
                           IplImage* outImage,
-                          const CvScalar color, 
+                          const CvScalar* color, 
                           int flags)
 {
    cv::Mat mat = cv::cvarrToMat(image);
    cv::Mat outMat = cv::cvarrToMat(outImage);
-   cv::drawKeypoints(mat, *keypoints, outMat, color, flags);
+   cv::drawKeypoints(mat, *keypoints, outMat, *color, flags);
 }
 
 // Draws matches of keypints from two images on output image.
@@ -222,7 +224,7 @@ void drawMatchedFeatures(
                                 const IplImage* img2, const std::vector<cv::KeyPoint>* keypoints2,
                                 const CvMat* matchIndices, 
                                 IplImage* outImg,
-                                const CvScalar matchColor, const CvScalar singlePointColor,
+                                const CvScalar* matchColor, const CvScalar* singlePointColor,
                                 const CvMat* matchesMask, 
                                 int flags)
 {
@@ -234,7 +236,7 @@ void drawMatchedFeatures(
 
    cv::Mat outMat = cv::cvarrToMat(outImg);
    cv::drawMatches(mat1, *keypoints1, mat2, *keypoints2, matches, outMat, 
-      matchColor, singlePointColor, std::vector<char>(), flags);
+      *matchColor, *singlePointColor, std::vector<char>(), flags);
 }
 
 //DescriptorMatcher
@@ -347,11 +349,9 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
    return nonZeroCount;
 }
 
-void CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors, bool useProvidedKeyPoints)
+void CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* image, cv::_InputArray* mask, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors, bool useProvidedKeyPoints)
 {
-   cv::Mat imageMat = cv::cvarrToMat(image);
-   cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
-   (*feature2D)(imageMat, maskMat, *keypoints, *descriptors, useProvidedKeyPoints);
+   (*feature2D)(*image, mask ? *mask : (cv::InputArray) cv::noArray(), *keypoints, *descriptors, useProvidedKeyPoints);
 }
 
 //OpponentColorDescriptorExtractor
@@ -413,7 +413,7 @@ void CvBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer)
 }
 int CvBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer)
 {
-   return trainer->descripotorsCount();
+   return trainer->descriptorsCount();
 }
 void CvBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, CvMat* descriptors)
 {

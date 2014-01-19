@@ -17,13 +17,14 @@ namespace Emgu.CV
    /// The equavailent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
-   public class Mat : UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
+   public class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray
    {
-      private IntPtr _inputArrayPtr;
-      private IntPtr _outputArrayPtr;
-      private IntPtr _inputOutputArrayPtr;
 
-      public enum Depth
+      internal IntPtr _inputArrayPtr;
+      internal IntPtr _outputArrayPtr;
+      internal IntPtr _inputOutputArrayPtr;
+
+      public enum DepthType
       {
          Default = -1,
          Cv8U = 0,
@@ -35,77 +36,82 @@ namespace Emgu.CV
          Cv64F = 6
       }
 
-
-
-      public static Depth GetDepth(Type t)
+      public static DepthType GetDepthType(Type t)
       {
          if (t == typeof(byte))
          {
-            return Depth.Cv8U;
+            return DepthType.Cv8U;
          } else if (t == typeof(SByte))
          {
-            return Depth.Cv8S;
+            return DepthType.Cv8S;
          } else if (t == typeof(UInt16))
          {
-            return Depth.Cv16U;
+            return DepthType.Cv16U;
          } else if (t == typeof(Int16))
          {
-            return Depth.Cv16S;
+            return DepthType.Cv16S;
          } else if (t == typeof(Int32))
          {
-            return Depth.Cv32S;
+            return DepthType.Cv32S;
          } else if (t == typeof(float))
          {
-            return Depth.Cv32F;
+            return DepthType.Cv32F;
          } else if (t == typeof(double))
          {
-            return Depth.Cv64F;
+            return DepthType.Cv64F;
          } else
          {
             throw new ArgumentException(String.Format("Unable to convert type {0} to depth type", t.ToString()));
          }
       }
 
-      public static int MakeType(Depth type, int channels)
+      public static int MakeType(DepthType type, int channels)
       {
          int shift = 3;
          return (((int)type) & ( (1 << shift) - 1)) + (((channels) - 1) << shift);
       }
 
-      private bool _needDispose;
+      internal bool _needDispose;
 
       internal Mat(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
          _needDispose = needDispose;
+         _memoryAllocator = MatInvoke.cvMatUseCustomAllocator(_ptr, AllocateCallback, DeallocateCallback);
       }
 
       /// <summary>
       /// Create an empty cv::Mat
       /// </summary>
       public Mat()
-         : this(cvMatCreate(), true)
-      {
+         : this(MatInvoke.cvMatCreate(), true)
+      {  
       }
 
-      public Mat(int rows, int cols, Depth type, int channels)
-         : this(cvMatCreateWithType(rows, cols, MakeType( type, channels)), true)
+      public Mat(int rows, int cols, DepthType type, int channels)
+         : this()
       {
+         Create(rows, cols, type, channels);
       }
 
-      public Mat(int rows, int cols, Depth type, int channels, IntPtr data, int step)
-         : this(cvMatCreateWithData(rows, cols, MakeType(type, channels), data, new IntPtr(step)), true)
+      public Mat(int rows, int cols, DepthType type, int channels, IntPtr data, int step)
+         : this(MatInvoke.cvMatCreateWithData(rows, cols, MakeType(type, channels), data, new IntPtr(step)), true)
       {
       }
 
       public Mat(String fileName, CvEnum.LOAD_IMAGE_TYPE loadType)
-         : this(cvMatCreateFromFile(fileName, loadType), true)
-      {  
+         : this(MatInvoke.cvMatCreateFromFile(fileName, loadType), true)
+      {
       }
 
       public UMat GetUMat(CvEnum.AccessType access)
       {
-         return new UMat(cvMatGetUMat(Ptr, access), true);
+         return new UMat(MatInvoke.cvMatGetUMat(Ptr, access), true);
+      }
+
+      public void Create(int rows, int cols, DepthType type, int channels)
+      {
+         MatInvoke.cvMatCreateData(_ptr, rows, cols, MakeType(type, channels));
       }
 
       /// <summary>
@@ -115,7 +121,7 @@ namespace Emgu.CV
       {
          get
          {
-            return cvMatGetSize(_ptr);
+            return MatInvoke.cvMatGetSize(_ptr);
          }
       }
 
@@ -123,7 +129,7 @@ namespace Emgu.CV
       {
          get
          {
-            return cvMatGetDataPointer(_ptr);
+            return MatInvoke.cvMatGetDataPointer(_ptr);
          }
       }
 
@@ -131,7 +137,7 @@ namespace Emgu.CV
       {
          get
          {
-            return (int) cvMatGetStep(_ptr);
+            return (int)MatInvoke.cvMatGetStep(_ptr);
          }
       }
 
@@ -139,7 +145,15 @@ namespace Emgu.CV
       {
          get
          {
-            return (int)cvMatGetChannels(_ptr);
+            return (int)MatInvoke.cvMatGetChannels(_ptr);
+         }
+      }
+
+      public DepthType Depth
+      {
+         get
+         {
+            return (DepthType)MatInvoke.cvMatGetDepth(_ptr);
          }
       }
 
@@ -150,7 +164,7 @@ namespace Emgu.CV
       {
          get
          {
-            return cvMatGetElementSize(_ptr);
+            return MatInvoke.cvMatGetElementSize(_ptr);
          }
       }
 
@@ -158,9 +172,9 @@ namespace Emgu.CV
       /// Copy the data in this cv::Mat to a CvArray
       /// </summary>
       /// <param name="m">The input array to copy to</param>
-      public void CopyTo(IOutputArray m, IInputArray mask)
+      public void CopyTo(IOutputArray m, IInputArray mask = null)
       {
-         cvMatCopyTo(this, m.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         MatInvoke.cvMatCopyTo(Ptr, m.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
 
       /// <summary>
@@ -170,7 +184,7 @@ namespace Emgu.CV
       {
          get
          {
-            return cvMatIsEmpty(_ptr);
+            return MatInvoke.cvMatIsEmpty(_ptr);
          }
       }
 
@@ -180,16 +194,19 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if (_needDispose && _ptr != IntPtr.Zero)
-            cvMatRelease(ref _ptr);
+            MatInvoke.cvMatRelease(ref _ptr);
 
          if (_inputArrayPtr != IntPtr.Zero)
-            CvInvoke.cvInputArrayRelease(ref _inputArrayPtr);
+            CvInvoke.cveInputArrayRelease(ref _inputArrayPtr);
 
          if (_outputArrayPtr != IntPtr.Zero)
-            CvInvoke.cvOutputArrayRelease(ref _outputArrayPtr);
+            CvInvoke.cveOutputArrayRelease(ref _outputArrayPtr);
 
          if (_inputOutputArrayPtr != IntPtr.Zero)
-            CvInvoke.cvInputOutputArrayRelease(ref _inputOutputArrayPtr);
+            CvInvoke.cveInputOutputArrayRelease(ref _inputOutputArrayPtr);
+
+         base.DisposeObject();
+
       }
 
       public IntPtr InputArrayPtr
@@ -197,7 +214,7 @@ namespace Emgu.CV
          get 
          { 
             if (_inputArrayPtr == IntPtr.Zero)
-               _inputArrayPtr = cvInputArrayFromMat(_ptr);
+               _inputArrayPtr = MatInvoke.cveInputArrayFromMat(_ptr);
             return _inputArrayPtr; 
          }
       }
@@ -207,7 +224,7 @@ namespace Emgu.CV
          get
          {
             if (_outputArrayPtr == IntPtr.Zero)
-               _outputArrayPtr = cvOutputArrayFromMat(_ptr);
+               _outputArrayPtr = MatInvoke.cveOutputArrayFromMat(_ptr);
             return _outputArrayPtr;
          }
       }
@@ -217,19 +234,27 @@ namespace Emgu.CV
          get 
          {
             if (_inputOutputArrayPtr == IntPtr.Zero)
-               _inputOutputArrayPtr = cvInputOutputArrayFromMat(_ptr);
+               _inputOutputArrayPtr = MatInvoke.cveInputOutputArrayFromMat(_ptr);
             return _inputOutputArrayPtr;
          }
       }
 
-      #region PInvoke
+
+   }
+
+   internal static class MatInvoke
+   {
+      static MatInvoke()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvInputArrayFromMat(IntPtr mat);
+      internal extern static IntPtr cveInputArrayFromMat(IntPtr mat);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvOutputArrayFromMat(IntPtr mat);
+      internal extern static IntPtr cveOutputArrayFromMat(IntPtr mat);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvInputOutputArrayFromMat(IntPtr mat);
+      internal extern static IntPtr cveInputOutputArrayFromMat(IntPtr mat);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreate();
@@ -247,6 +272,8 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cvMatGetChannels(IntPtr mat);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static int cvMatGetDepth(IntPtr mat);
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatGetDataPointer(IntPtr mat);
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatGetStep(IntPtr mat);
@@ -256,7 +283,7 @@ namespace Emgu.CV
       internal extern static bool cvMatIsEmpty(IntPtr mat);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvMatCreateWithType(int row, int cols, int type);
+      internal extern static void cvMatCreateData(IntPtr mat, int row, int cols, int type);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreateWithData(int rows, int cols, int type, IntPtr data, IntPtr step);
@@ -270,7 +297,10 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatGetUMat(IntPtr mat, CvEnum.AccessType access);
-      #endregion
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator);
+
    }
 }
 

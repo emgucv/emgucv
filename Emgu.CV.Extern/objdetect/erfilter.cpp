@@ -32,10 +32,9 @@ void CvERFilterRelease(cv::ERFilter** filter)
    delete *filter;
    *filter = 0;
 }
-void CvERFilterRun(cv::ERFilter* filter, CvArr* image, std::vector<cv::ERStat>* regions)
+void CvERFilterRun(cv::ERFilter* filter, cv::_InputArray* image, std::vector<cv::ERStat>* regions)
 {
-   cv::Mat mat = cv::cvarrToMat(image);
-   filter->run(mat, *regions);
+   filter->run(*image, *regions);
 }
 
 void CvERGrouping(IplImage** channels, std::vector<cv::ERStat>** regions, int count, const char* fileName, float minProbability, std::vector<cv::Rect>* groups)
@@ -50,44 +49,4 @@ void CvERGrouping(IplImage** channels, std::vector<cv::ERStat>** regions, int co
    std::string s(fileName);
    cv::erGrouping(channelMat, statVecs, s, minProbability, *groups);
 
-}
-
-//----------------------------------------------------------------------------
-//
-//  Vector of ERStat
-//
-//----------------------------------------------------------------------------
-std::vector<cv::ERStat>* VectorOfERStatCreate()
-{
-   return new std::vector<cv::ERStat>();
-}
-
-std::vector<cv::ERStat>* VectorOfERStatCreateSize(int size)
-{
-   return new std::vector<cv::ERStat>(size);
-}
-
-int VectorOfERStatGetSize(std::vector<cv::ERStat>* v)
-{
-   return v->size();
-}
-
-void VectorOfERStatClear(std::vector<cv::ERStat>* v)
-{
-   v->clear();
-}
-
-void VectorOfERStatRelease(std::vector<cv::ERStat>* v)
-{
-   delete v;
-}
-
-void VectorOfERStatCopyData(std::vector<cv::ERStat>* v, cv::ERStat* data)
-{
-   VectorCopyData<cv::ERStat>(v, data);
-}
-
-cv::ERStat* VectorOfERStatGetStartAddress(std::vector<cv::ERStat>* v)
-{
-   return v->empty() ? NULL : &(*v)[0];
 }

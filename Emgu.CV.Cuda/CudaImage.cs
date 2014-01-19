@@ -131,7 +131,7 @@ namespace Emgu.CV.Cuda
       {
          if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image
-            using (CudaImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Size, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, null))
+            using (CudaImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Size, Emgu.CV.CvEnum.Inter.Linear, null))
             {
                ConvertFrom(tmp);
                return;
@@ -260,7 +260,7 @@ namespace Emgu.CV.Cuda
       /// <param name="interpolationType">The interpolation type</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       /// <returns>A CudaImage of the new size</returns>
-      public CudaImage<TColor, TDepth> Resize(Size size, CvEnum.INTER interpolationType, Stream stream)
+      public CudaImage<TColor, TDepth> Resize(Size size, CvEnum.Inter interpolationType, Stream stream)
       {
          CudaImage<TColor, TDepth> result = new CudaImage<TColor, TDepth>(size);
          CudaInvoke.Resize(this, result, interpolationType, stream);
@@ -276,7 +276,7 @@ namespace Emgu.CV.Cuda
       public CudaImage<TColor, TDepth> Convolution(ConvolutionKernelF kernel, Stream stream)
       {
          CudaImage<TColor, TDepth> result = new CudaImage<TColor, TDepth>(Size);
-         using (CudaLinearFilter<TColor, TDepth> linearFilter = new CudaLinearFilter<TColor, TDepth>(kernel, kernel.Center, CvEnum.BORDER_TYPE.REFLECT101, new MCvScalar()))
+         using (CudaLinearFilter<TColor, TDepth> linearFilter = new CudaLinearFilter<TColor, TDepth>(kernel, kernel.Center, CvEnum.BorderType.Reflect101, new MCvScalar()))
          {
             linearFilter.Apply(this, result, stream);
          }

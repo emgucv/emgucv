@@ -3,7 +3,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;

@@ -44,17 +44,41 @@ void CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubstracto
    *bgSubstractor = 0;
 }
 
-CVAPI(void)  cvCalcOpticalFlowDualTVL1(CvArr* i0, CvArr* i1, CvArr* flow)
+cv::DenseOpticalFlow* cveDenseOpticalFlowCreateDualTVL1()
 {
-   cv::Mat i0Mat = cv::cvarrToMat(i0);
-   cv::Mat i1Mat = cv::cvarrToMat(i1);
-   cv::Mat flowMat = cv::cvarrToMat(flow);
-
    cv::Ptr<cv::DenseOpticalFlow> dof = cv::createOptFlow_DualTVL1();
-   dof->calc(i0Mat, i1Mat, flowMat);
+   dof.addref();
+   return dof.get();
+}
+void cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow)
+{
+   delete *flow;
+   *flow = 0;
+}
+void cveDenseOpticalFlowCalc(cv::DenseOpticalFlow* dof, cv::_InputArray* i0, cv::_InputArray* i1, cv::_InputOutputArray* flow)
+{
+   dof->calc(*i0, *i1, *flow);
 }
 
 void cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags)
 {
    cv::calcOpticalFlowFarneback(*prev, *next, *flow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+}
+
+void cveCalcOpticalFlowPyrLK(cv::_InputArray* prevImg, cv::_InputArray* nextImg, cv::_InputArray* prevPts, cv::_InputOutputArray* nextPts, cv::_OutputArray* status, cv::_OutputArray* err, CvSize* winSize, int maxLevel, CvTermCriteria* criteria, int flags, double minEigenThreshold)
+{
+   cv::calcOpticalFlowPyrLK(*prevImg, *nextImg, *prevPts, *nextPts, *status, *err, *winSize, maxLevel, *criteria, flags, minEigenThreshold);
+}
+
+void cveUpdateMotionHistory(cv::_InputArray* silhouette, cv::_InputOutputArray* mhi, double timestamp, double duration)
+{
+   cv::updateMotionHistory(*silhouette, *mhi, timestamp, duration);
+}
+void cveCalcMotionGradient(cv::_InputArray* mhi, cv::_OutputArray* mask, cv::_OutputArray* orientation, double delta1, double delta2, int apertureSize)
+{
+   cv::calcMotionGradient(*mhi, *mask, *orientation, delta1, delta2, apertureSize);
+}
+void cveCalcGlobalOrientation(cv::_InputArray* orientation, cv::_InputArray* mask, cv::_InputArray* mhi, double timestamp, double duration)
+{
+   cv::calcGlobalOrientation(*orientation, *mask, *mhi, timestamp, duration);
 }

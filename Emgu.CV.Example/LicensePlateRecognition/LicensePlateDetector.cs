@@ -163,7 +163,7 @@ namespace LicensePlateRecognition
 
                using (Image<Gray, Byte> tmp1 = gray.Copy(box))
                //resize the license plate such that the front is ~ 10-12. This size of front results in better accuracy from tesseract
-               using (Image<Gray, Byte> tmp2 = tmp1.Resize(240, 180, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
+               using (Image<Gray, Byte> tmp2 = tmp1.Resize(240, 180, Emgu.CV.CvEnum.Inter.Cubic, true))
                {
                   //removes some pixels from the edge
                   int edgePixelSize = 2;

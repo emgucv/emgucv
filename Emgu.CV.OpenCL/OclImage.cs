@@ -102,7 +102,7 @@ namespace Emgu.CV.OpenCL
       /// <param name="size">The new size</param>
       /// <param name="interpolationType">The interpolation type</param>
       /// <returns>An OclImage of the new size</returns>
-      public OclImage<TColor, TDepth> Resize(Size size, CvEnum.INTER interpolationType)
+      public OclImage<TColor, TDepth> Resize(Size size, CvEnum.Inter interpolationType)
       {
          OclImage<TColor, TDepth> result = new OclImage<TColor, TDepth>(size);
          OclInvoke.Resize(_ptr, result, 0, 0, interpolationType);
@@ -166,7 +166,7 @@ namespace Emgu.CV.OpenCL
       {
          if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image
-            using (OclImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Size, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR))
+            using (OclImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Size, Emgu.CV.CvEnum.Inter.Linear))
             {
                ConvertFrom(tmp);
                return;
@@ -247,7 +247,7 @@ namespace Emgu.CV.OpenCL
       {
          OclImage<TColor, Byte> result = new OclImage<TColor, Byte>(Size);
          Point anchor = kernel.Center;
-         OclInvoke.Filter2D(_ptr, result, kernel, ref anchor, CvEnum.BORDER_TYPE.REFLECT101);
+         OclInvoke.Filter2D(_ptr, result, kernel, ref anchor, CvEnum.BorderType.Reflect101);
          return result;
       }
 

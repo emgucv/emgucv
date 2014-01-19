@@ -27,7 +27,7 @@ namespace Emgu.CV.Cuda
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="borderType">The border type.</param>
       /// <param name="borderValue">The border value.</param>
-      public CudaBoxMaxFilter(Size ksize, Point anchor, CvEnum.BORDER_TYPE borderType, MCvScalar borderValue)
+      public CudaBoxMaxFilter(Size ksize, Point anchor, CvEnum.BorderType borderType, MCvScalar borderValue)
       {
          _ptr = CudaInvoke.cudaCreateBoxMaxFilter(_matType, ref ksize, ref anchor, (int)borderType, ref borderValue);
       }

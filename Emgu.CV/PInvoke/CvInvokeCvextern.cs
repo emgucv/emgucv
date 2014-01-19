@@ -79,8 +79,12 @@ namespace Emgu.CV
       /// will be returned.</param>
       /// <param name="dst">The destination image</param>
       /// <param name="colorMapType">The type of color map</param>
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "CvApplyColorMap")]
-      public extern static void ApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
+      public static void ApplyColorMap(IInputArray src, IOutputArray dst, CvEnum.ColorMapType colorMapType)
+      {
+         cveApplyColorMap(src.InputArrayPtr, dst.OutputArrayPtr, colorMapType);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void cveApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
 
       
       /// <summary>
@@ -114,14 +118,6 @@ namespace Emgu.CV
          ref Point pos,
          double minVal,
          double maxVal);
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFeatureDetectorDetectKeyPoints(
-         IntPtr detector,
-         IntPtr image,
-         IntPtr mask,
-         IntPtr keypoints);
-
       
       /// <summary>
       /// Computes an optimal affine transformation between two 3D point sets.
@@ -192,13 +188,13 @@ namespace Emgu.CV
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="delta">The optional value added to the filtered pixels before storing them in dst. Use 0 for default</param>
       /// <param name="borderType">The pixel extrapolation method, user replicate for default</param>
-      public static void Filter2D(IInputArray src, IOutputArray dst, IInputArray kernel, Point anchor, double delta, Emgu.CV.CvEnum.BORDER_TYPE borderType)
+      public static void Filter2D(IInputArray src, IOutputArray dst, IInputArray kernel, Point anchor, double delta, Emgu.CV.CvEnum.BorderType borderType)
       {
          cveFilter2D(src.InputArrayPtr, dst.OutputArrayPtr, kernel.InputArrayPtr, ref anchor, delta, borderType);
       }
 
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, double delta, Emgu.CV.CvEnum.BORDER_TYPE borderType);
+      private static extern void cveFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, double delta, Emgu.CV.CvEnum.BorderType borderType);
 
 
       /// <summary>
@@ -215,50 +211,6 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCLAHE(IntPtr srcArr, double clipLimit, ref Size tileGridSize, IntPtr dstArr);
 
-      /// <summary>
-      /// Perform image denoising using Non-local Means Denoising algorithm: 
-      /// http://www.ipol.im/pub/algo/bcm_non_local_means_denoising/ 
-      /// with several computational optimizations. Noise expected to be a gaussian white noise.
-      /// </summary>
-      /// <param name="src">Input 8-bit 1-channel, 2-channel or 3-channel image.</param>
-      /// <param name="dst">Output image with the same size and type as src.</param>
-      /// <param name="h">Parameter regulating filter strength. Big h value perfectly removes noise but also removes image details, smaller h value preserves details but also preserves some noise. Recommended value 3</param>
-      /// <param name="templateWindowSize">Size in pixels of the template patch that is used to compute weights. Should be odd. Recommended value 7 pixels</param>
-      /// <param name="searchWindowSize">Size in pixels of the window that is used to compute weighted average for given pixel. Should be odd. Affect performance linearly: greater searchWindowsSize - greater denoising time. Recommended value 21 pixels</param>
-      public static void FastNlMeansDenoising(IInputArray src, IOutputArray dst, float h, int templateWindowSize, int searchWindowSize)
-      {
-         cveFastNlMeansDenoising(src.InputArrayPtr, dst.OutputArrayPtr, h, templateWindowSize, searchWindowSize);
-      }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveFastNlMeansDenoising(IntPtr src, IntPtr dst, float h, int templateWindowSize, int searchWindowSize);
-
-      /// <summary>
-      /// Perform image denoising using Non-local Means Denoising algorithm (modified for color image): 
-      /// http://www.ipol.im/pub/algo/bcm_non_local_means_denoising/ 
-      /// with several computational optimizations. Noise expected to be a gaussian white noise.
-      /// The function converts image to CIELAB colorspace and then separately denoise L and AB components with given h parameters using fastNlMeansDenoising function.
-      /// </summary>
-      /// <param name="src">Input 8-bit 1-channel, 2-channel or 3-channel image.</param>
-      /// <param name="dst">Output image with the same size and type as src.</param>
-      /// <param name="h">Parameter regulating filter strength. Big h value perfectly removes noise but also removes image details, smaller h value preserves details but also preserves some noise. Recommended value 3</param>
-      /// <param name="hColor">The same as h but for color components. For most images value equals 10 will be enought to remove colored noise and do not distort colors.</param>
-      /// <param name="templateWindowSize">Size in pixels of the template patch that is used to compute weights. Should be odd. Recommended value 7 pixels</param>
-      /// <param name="searchWindowSize">Size in pixels of the window that is used to compute weighted average for given pixel. Should be odd. Affect performance linearly: greater searchWindowsSize - greater denoising time. Recommended value 21 pixels</param>
-      public static void FastNlMeansDenoisingColored(IInputArray src, IOutputArray dst, float h, float hColor, int templateWindowSize, int searchWindowSize)
-      {
-         cveFastNlMeansDenoisingColored(src.InputArrayPtr, dst.OutputArrayPtr, h, hColor, templateWindowSize, searchWindowSize);
-      }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveFastNlMeansDenoisingColored(IntPtr src, IntPtr dst, float h, float hColor, int templateWindowSize, int searchWindowSize);
-
-      /// <summary>
-      /// The class implements the “Dual TV L1” optical flow algorithm.
-      /// </summary>
-      /// <param name="prev">The first 8-bit single-channel input image.</param>
-      /// <param name="next">The second input image of the same size and the same type as prev.</param>
-      /// <param name="flow">The computed flow image that has the same size as prev and type CV_32FC2 .</param>
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvCalcOpticalFlowDualTVL1(IntPtr prev, IntPtr next, IntPtr flow);
 
       /// <summary>
       /// This function retrive the Open CV structure sizes in unmanaged code
@@ -323,10 +275,37 @@ namespace Emgu.CV
          int padY, int scales, double minScale, double maxScale,
          double orientationWeight, double truncate);
 
+      /// <summary>
+      /// Attempts to determine whether the input image is a view of the circle grid pattern and locate circle centers
+      /// </summary>
+      /// <param name="image">Source chessboard view</param>
+      /// <param name="patternSize">The number of inner circle per chessboard row and column</param>
+      /// <param name="flags">Various operation flags</param>
+      /// <param name="featureDetector">The feature detector. Use a SimpleBlobDetector for default</param>
+      /// <returns>The center of circles detected if the chess board pattern is found, otherwise null is returned</returns>
+      public static PointF[] FindCirclesGrid(Image<Gray, Byte> image, Size patternSize, CvEnum.CalibCgType flags, Features2D.IFeatureDetector featureDetector)
+      {
+         using (Util.VectorOfPointF vec = new Util.VectorOfPointF())
+         {
+            bool patternFound =
+               FindCirclesGrid(
+                  image,
+                  patternSize,
+                  vec, 
+                  flags,
+                  featureDetector
+                  ) ;
+            return patternFound? vec.ToArray() : null;
+         }
+      }
+      public static bool FindCirclesGrid(IInputArray image, Size patternSize, IOutputArray centers, CvEnum.CalibCgType flags, Features2D.IFeatureDetector featureDetector)
+      {
+         return cveFindCirclesGrid(image.InputArrayPtr, ref patternSize, centers.OutputArrayPtr, flags, featureDetector.FeatureDetectorPtr);
+      }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal static extern bool cvFindCirclesGrid(IntPtr image, ref Size patternSize, IntPtr centers, CvEnum.CalibCgType flags, IntPtr blobDetector);
-
+      private static extern bool cveFindCirclesGrid(IntPtr image, ref Size patternSize, IntPtr centers, CvEnum.CalibCgType flags, IntPtr blobDetector);
+      
       /// <summary>
       /// Solve given (non-integer) linear programming problem using the Simplex Algorithm (Simplex Method). 
       /// What we mean here by “linear programming problem” (or LP problem, for short) can be formulated as:

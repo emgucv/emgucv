@@ -17,27 +17,32 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class DenseFeatureDetector : UnmanagedObject, IFeatureDetector
    {
+      static DenseFeatureDetector()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a dense feature detector.
       /// </summary>
-      /// <param name="initFeatureScale">Initial feature scale. Use 1.0 for default.</param>
-      /// <param name="featureScaleLevels">The number of scale levels. Use 1 for default</param>
+      /// <param name="initFeatureScale">Initial feature scale.</param>
+      /// <param name="featureScaleLevels">The number of scale levels.</param>
       /// <param name="featureScaleMul">
       /// The level parameters (a feature scale, a node size, a size of boundary) are multiplied by <paramref name="featureScaleMul"/> with level index
-      /// growing depending on input flags. Use 0.1f for default.
+      /// growing depending on input flags.
       /// </param>
-      /// <param name="initXyStep">Initial X Y steps. Use 6 for default.</param>
-      /// <param name="initImgBound">Initial image boundary. Use 0 for default.</param>
-      /// <param name="varyXyStepWithScale">The grid node size is multiplied if varyXyStepWithScale is true. Use true for default.</param>
-      /// <param name="varyImgBoundWithScale">Size of image boundary is multiplied if varyImgBoundWithScale is true. Use false for default.</param>
+      /// <param name="initXyStep">Initial X Y steps.</param>
+      /// <param name="initImgBound">Initial image boundary.</param>
+      /// <param name="varyXyStepWithScale">The grid node size is multiplied if varyXyStepWithScale is true.</param>
+      /// <param name="varyImgBoundWithScale">Size of image boundary is multiplied if varyImgBoundWithScale is true.</param>
       public DenseFeatureDetector(
-         float initFeatureScale,
-         int featureScaleLevels,
-         float featureScaleMul,
-         int initXyStep,
-         int initImgBound,
-         bool varyXyStepWithScale,
-         bool varyImgBoundWithScale)
+         float initFeatureScale = 1.0f,
+         int featureScaleLevels = 1,
+         float featureScaleMul = 0.1f,
+         int initXyStep = 6,
+         int initImgBound = 0,
+         bool varyXyStepWithScale = true,
+         bool varyImgBoundWithScale = false)
       {
          _ptr = CvDenseFeatureDetectorCreate(initFeatureScale, featureScaleLevels, featureScaleMul, initXyStep, initImgBound, varyXyStepWithScale, varyImgBoundWithScale);
       }
@@ -61,7 +66,8 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvDenseFeatureDetectorRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CvDenseFeatureDetectorRelease(ref _ptr);
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

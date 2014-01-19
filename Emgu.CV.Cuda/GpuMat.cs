@@ -50,13 +50,13 @@ namespace Emgu.CV.Cuda
             CudaInvoke.GpuMatRelease(ref _ptr);
 
          if (_inputArrayPtr != IntPtr.Zero)
-            CvInvoke.cvInputArrayRelease(ref _inputArrayPtr);
+            CvInvoke.cveInputArrayRelease(ref _inputArrayPtr);
 
          if (_outputArrayPtr != IntPtr.Zero)
-            CvInvoke.cvOutputArrayRelease(ref _outputArrayPtr);
+            CvInvoke.cveOutputArrayRelease(ref _outputArrayPtr);
 
          if (_inputOutputArrayPtr != IntPtr.Zero)
-            CvInvoke.cvInputOutputArrayRelease(ref _inputOutputArrayPtr);
+            CvInvoke.cveInputOutputArrayRelease(ref _inputOutputArrayPtr);
       }
 
       /// <summary>
@@ -111,7 +111,7 @@ namespace Emgu.CV.Cuda
          get 
          {
             if (_inputArrayPtr == IntPtr.Zero)
-               _inputArrayPtr = CudaInvoke.cvInputArrayFromGpuMat(_ptr);
+               _inputArrayPtr = CudaInvoke.cveInputArrayFromGpuMat(_ptr);
             return _inputArrayPtr; 
          }
       }
@@ -121,7 +121,7 @@ namespace Emgu.CV.Cuda
          get
          {
             if (_outputArrayPtr == IntPtr.Zero)
-               _outputArrayPtr = CudaInvoke.cvOutputArrayFromGpuMat(_ptr);
+               _outputArrayPtr = CudaInvoke.cveOutputArrayFromGpuMat(_ptr);
             return _outputArrayPtr;
          }
       }
@@ -131,7 +131,7 @@ namespace Emgu.CV.Cuda
          get
          {
             if (_inputOutputArrayPtr == IntPtr.Zero)
-               _inputOutputArrayPtr = CudaInvoke.cvInputOutputArrayFromGpuMat(_ptr);
+               _inputOutputArrayPtr = CudaInvoke.cveInputOutputArrayFromGpuMat(_ptr);
             return _inputOutputArrayPtr;
          }
       }
@@ -140,13 +140,13 @@ namespace Emgu.CV.Cuda
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvInputArrayFromGpuMat(IntPtr mat);
+      internal extern static IntPtr cveInputArrayFromGpuMat(IntPtr mat);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvOutputArrayFromGpuMat(IntPtr mat);
+      internal extern static IntPtr cveOutputArrayFromGpuMat(IntPtr mat);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvInputOutputArrayFromGpuMat(IntPtr mat);
+      internal extern static IntPtr cveInputOutputArrayFromGpuMat(IntPtr mat);
    }
 
    /// <summary>

@@ -15,9 +15,9 @@
 //Retina
 CVAPI(cv::bioinspired::Retina*) CvRetinaCreate(emgu::size* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength);
 CVAPI(void) CvRetinaRelease(cv::bioinspired::Retina** retina);
-CVAPI(void) CvRetinaRun(cv::bioinspired::Retina* retina, IplImage* image);
-CVAPI(void) CvRetinaGetParvo(cv::bioinspired::Retina* retina, IplImage* parvo);
-CVAPI(void) CvRetinaGetMagno(cv::bioinspired::Retina* retina, IplImage* magno);
+CVAPI(void) CvRetinaRun(cv::bioinspired::Retina* retina, cv::_InputArray* image);
+CVAPI(void) CvRetinaGetParvo(cv::bioinspired::Retina* retina, cv::_OutputArray* parvo);
+CVAPI(void) CvRetinaGetMagno(cv::bioinspired::Retina* retina, cv::_OutputArray* magno);
 CVAPI(void) CvRetinaClearBuffers(cv::bioinspired::Retina* retina);
 CVAPI(void) CvRetinaGetParameters(cv::bioinspired::Retina* retina, cv::bioinspired::Retina::RetinaParameters* p);
 CVAPI(void) CvRetinaSetParameters(cv::bioinspired::Retina* retina, cv::bioinspired::Retina::RetinaParameters* p);

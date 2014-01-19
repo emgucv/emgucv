@@ -30,23 +30,23 @@ namespace Emgu.CV.Shape
 
    public class NormHistogramCostExtractor : HistogramCostExtractor
    {
-      public NormHistogramCostExtractor(CvEnum.DIST_TYPE flag, int nDummies, float defaultCost)
+      public NormHistogramCostExtractor(CvEnum.DistType flag, int nDummies, float defaultCost)
       {
          _ptr = cvNormHistogramCostExtractorCreate(flag, nDummies, defaultCost);
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvNormHistogramCostExtractorCreate(CvEnum.DIST_TYPE flag, int nDummies, float defaultCost);
+      internal extern static IntPtr cvNormHistogramCostExtractorCreate(CvEnum.DistType flag, int nDummies, float defaultCost);
    }
 
    public class EMDHistogramCostExtractor : HistogramCostExtractor
    {
-      public EMDHistogramCostExtractor(CvEnum.DIST_TYPE flag, int nDummies, float defaultCost)
+      public EMDHistogramCostExtractor(CvEnum.DistType flag, int nDummies, float defaultCost)
       {
          _ptr = cvEMDHistogramCostExtractorCreate(flag, nDummies, defaultCost);
       }
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvEMDHistogramCostExtractorCreate(CvEnum.DIST_TYPE flag, int nDummies, float defaultCost);
+      internal extern static IntPtr cvEMDHistogramCostExtractorCreate(CvEnum.DistType flag, int nDummies, float defaultCost);
    }
 
    

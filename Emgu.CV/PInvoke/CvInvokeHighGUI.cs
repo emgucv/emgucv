@@ -115,8 +115,19 @@ namespace Emgu.CV
       /// <param name="image">The image to be saved</param>
       /// <param name="parameters">The parameters</param>
       /// <returns></returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern bool cvSaveImage([MarshalAs(StringMarshalType)] String filename, IntPtr image, IntPtr parameters);
+      public static bool Imwrite(String filename, IInputArray image, params int[] parameters)
+      {
+         using (Util.VectorOfInt vec = new Util.VectorOfInt())
+         {
+            if (parameters.Length > 0)
+               vec.Push(parameters);
+
+            return cveImwrite(filename, image.InputArrayPtr, vec);
+         }
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      private static extern bool cveImwrite([MarshalAs(StringMarshalType)] String filename, IntPtr image, IntPtr parameters);
 
       /// <summary>
       /// Decode image stored in the buffer

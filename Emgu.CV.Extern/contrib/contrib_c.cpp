@@ -51,28 +51,14 @@ cv::FaceRecognizer* CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gr
    return ptr.get();
 }
 
-void CvFaceRecognizerTrain(cv::FaceRecognizer* recognizer, IplImage** images, int* labels, int count)
+void CvFaceRecognizerTrain(cv::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels)
 {
-   std::vector<cv::Mat> imageVec(count);
-   std::vector<int> labelVec(count);
-   for (int i = 0; i < count; ++i)
-   {
-      imageVec[i] = cv::cvarrToMat(images[i]);
-      labelVec[i] = labels[i];
-   }
-   recognizer->train(imageVec, labelVec);
+   recognizer->train(*images, *labels);
 }
 
-void CvFaceRecognizerUpdate(cv::FaceRecognizer* recognizer, IplImage** images, int* labels, int count)
+void CvFaceRecognizerUpdate(cv::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels)
 {
-   std::vector<cv::Mat> imageVec(count);
-   std::vector<int> labelVec(count);
-   for (int i = 0; i < count; ++i)
-   {
-      imageVec[i] = cv::cvarrToMat(images[i]);
-      labelVec[i] = labels[i];
-   }
-   recognizer->update(imageVec, labelVec);
+   recognizer->update(*images, *labels);
 }
 
 void CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, const char* fileName)
@@ -87,12 +73,11 @@ void CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, const char* fileName)
    recognizer->load(file);
 }
 
-void CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, IplImage* image, int* label, double* dist)
+void CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* dist)
 {
-   cv::Mat mat = cv::cvarrToMat(image);
    int l = -1;
    double d = -1;
-   recognizer->predict(mat, l, d);
+   recognizer->predict(*image, l, d);
    *label = l;
    *dist = d;
 }
@@ -103,11 +88,9 @@ void CvFaceRecognizerRelease(cv::FaceRecognizer** recognizer)
    *recognizer = 0;
 }
 
-void CvApplyColorMap(IplImage* src, IplImage* dst, int colorMap)
+void cveApplyColorMap(cv::_InputArray* src, cv::_OutputArray* dst, int colorMap)
 {
-   cv::Mat srcMat = cv::cvarrToMat(src);
-   cv::Mat dstMat = cv::cvarrToMat(dst);
-   cv::applyColorMap(srcMat, dstMat, colorMap);
+   cv::applyColorMap(*src, *dst, colorMap);
 }
 
 //LevMarqSparse

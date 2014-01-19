@@ -13,6 +13,11 @@ namespace Emgu.CV.VideoSurveillance
    /// </summary>
    public class BlobTracker : BlobSeqBase
    {
+      static BlobTracker()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// Create a blob trakcer of the specific type
       /// </summary>
@@ -22,22 +27,22 @@ namespace Emgu.CV.VideoSurveillance
          switch (type)
          {
             case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CC:
-               _ptr = CvInvoke.CvCreateBlobTrackerCC();
+               _ptr = CvCreateBlobTrackerCC();
                break;
             case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CCMSPF:
-               _ptr = CvInvoke.CvCreateBlobTrackerCCMSPF();
+               _ptr = CvCreateBlobTrackerCCMSPF();
                break;
             case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MS:
-               _ptr = CvInvoke.CvCreateBlobTrackerMS();
+               _ptr = CvCreateBlobTrackerMS();
                break;
             case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFG:
-               _ptr = CvInvoke.CvCreateBlobTrackerMSFG();
+               _ptr = CvCreateBlobTrackerMSFG();
                break;
             case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS:
-               _ptr = CvInvoke.CvCreateBlobTrackerMSFGS();
+               _ptr = CvCreateBlobTrackerMSFGS();
                break;
             case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSPF:
-               _ptr = CvInvoke.CvCreateBlobTrackerMSPF();
+               _ptr = CvCreateBlobTrackerMSPF();
                break;
          }
       }
@@ -51,7 +56,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <returns>Newly added blob</returns>
       public MCvBlob Add(MCvBlob blob, IImage currentImage, Image<Gray, Byte> currentForegroundMask)
       {
-         IntPtr bobPtr = CvInvoke.CvBlobTrackerAddBlob(
+         IntPtr bobPtr = CvBlobTrackerAddBlob(
             _ptr,
             ref blob,
             currentImage == null ? IntPtr.Zero : currentImage.Ptr,
@@ -65,7 +70,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="blobIndex">The index of the blob</param>
       public void RemoveAt(int blobIndex)
       {
-         CvInvoke.CvBlobTrackerDelBlob(_ptr, blobIndex);
+         CvBlobTrackerDelBlob(_ptr, blobIndex);
       }
 
       #region BolbSeqBase Members
@@ -78,7 +83,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            return (MCvBlob)Marshal.PtrToStructure(CvInvoke.CvBlobTrackerGetBlob(_ptr, i), typeof(MCvBlob));
+            return (MCvBlob)Marshal.PtrToStructure(CvBlobTrackerGetBlob(_ptr, i), typeof(MCvBlob));
          }
       }
 
@@ -89,7 +94,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <returns>The blob of the specific id, if it doesn't exist, MCvBlob.Empty is returned</returns>
       public override MCvBlob GetBlobByID(int blobID)
       {
-         IntPtr blobPtr = CvInvoke.CvBlobTrackerGetBlobByID(_ptr, blobID);
+         IntPtr blobPtr = CvBlobTrackerGetBlobByID(_ptr, blobID);
          if (blobPtr == IntPtr.Zero) return MCvBlob.Empty;
          return (MCvBlob)Marshal.PtrToStructure(blobPtr, typeof(MCvBlob));
       }
@@ -101,7 +106,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            return CvInvoke.CvBlobTrackerGetBlobNum(_ptr);
+            return CvBlobTrackerGetBlobNum(_ptr);
          }
       }
 
@@ -110,17 +115,10 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvBlobTrackerRealease(ref _ptr);
+         CvBlobTrackerRealease(ref _ptr);
       }
       #endregion
 
-   }
-}
-
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       /// <summary>
       /// Simple blob tracker based on connected component tracking
       /// </summary>

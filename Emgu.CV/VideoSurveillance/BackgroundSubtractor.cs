@@ -16,6 +16,11 @@ namespace Emgu.CV.VideoSurveillance
    /// </summary>
    public abstract class BackgroundSubtractor : UnmanagedObject, IBGFGDetector<Bgr>
    {
+      static BackgroundSubtractor()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       private Image<Gray, Byte> _fgMask;
       private Image<Gray, Byte> _bgMask;
 

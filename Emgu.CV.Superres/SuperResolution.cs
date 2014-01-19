@@ -50,26 +50,6 @@ namespace Emgu.CV.Superres
          _ptr = SuperresInvoke.cvSuperResolutionCreate(type, frameSource, ref _frameSourcePtr);
       }
 
-      /*
-      /// <summary>
-      /// Get the next frame
-      /// </summary>
-      /// <returns>The next frame, this image should not be release by the user. I will be reused over frames. If there are no more frames available, null will be returned</returns>
-      public Image<Gray, Byte> NextFrame()
-      {
-         SuperresInvoke.cvSuperResolutionNextFrame(_ptr, _frame);
-
-         if (_frame.IsEmpty)
-            return null;
-
-         if (_image == null || _image.Ptr == IntPtr.Zero)
-            _image = new Image<Gray, byte>(_frame.Size);
-
-         _frame.CopyTo(_image);
-
-         return _image;
-      }*/
-
       /// <summary>
       /// Release all the unmanaged memory associated to this object
       /// </summary>

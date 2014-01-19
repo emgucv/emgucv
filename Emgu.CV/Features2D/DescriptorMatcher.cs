@@ -42,6 +42,11 @@ namespace Emgu.CV.Features2D
 
    internal static partial class DescriptorMatcherInvoke
    {
+      static DescriptorMatcherInvoke()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);
 
