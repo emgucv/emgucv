@@ -95,9 +95,9 @@ namespace Emgu.CV.Test
       [Test]
       public void TestCvInvoke()
       {
-         IntPtr mat = CvInvoke.cvCreateMat(10, 10, Emgu.CV.CvEnum.MAT_DEPTH.CV_32F);
+         IntPtr mat = CvInvoke.cvCreateMat(10, 10, Emgu.CV.CvEnum.DepthType.Cv32F);
          CvInvoke.cvReleaseMat(ref mat);
-         mat = CvInvoke.cvCreateMat(10, 10, Emgu.CV.CvEnum.MAT_DEPTH.CV_32S);
+         mat = CvInvoke.cvCreateMat(10, 10, Emgu.CV.CvEnum.DepthType.Cv32S);
          CvInvoke.cvReleaseMat(ref mat);
       }
 
@@ -334,6 +334,26 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestMinMax2()
+      {
+         Matrix<Single> matrix = new Matrix<Single> (10, 10);
+         matrix.SetValue (5);
+         matrix [5, 5] = 10;
+         matrix [3, 3] = 0;
+
+         double minVal = 5;
+         double maxVal = 5;
+         Point minLoc = new Point();
+         Point maxLoc = new Point();
+
+         matrix.MinMax (out minVal, out maxVal, out minLoc, out maxLoc);
+         EmguAssert.IsTrue(minVal == 0);
+         EmguAssert.IsTrue(maxVal == 10);
+         EmguAssert.IsTrue(minLoc.Equals(new Point(3, 3)));
+         EmguAssert.IsTrue(maxLoc.Equals(new Point(5, 5)));
+      }
+
+      [Test]
       public void TestConcate()
       {
          Matrix<float> mat = new Matrix<float>(30, 40);
@@ -378,7 +398,7 @@ namespace Emgu.CV.Test
          Matrix<float> tmp = new Matrix<float>(size, size);
          tmp.SetRandNormal(new MCvScalar(0), new MCvScalar(1));
          Matrix<float> symMat = new Matrix<float>(tmp.Size);
-         CvInvoke.MulTransposed(tmp, symMat, false, null, 1.0, Mat.DepthType.Cv32S);
+         CvInvoke.MulTransposed(tmp, symMat, false, null, 1.0, CvEnum.DepthType.Cv32S);
          Matrix<float> clone = symMat.Clone();
 
          Matrix<float> evects = new Matrix<float>(symMat.Size);

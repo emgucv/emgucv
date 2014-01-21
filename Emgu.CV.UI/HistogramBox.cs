@@ -79,9 +79,9 @@ namespace Emgu.CV.UI
       /// <param name="name">The name of the histogram</param>
       /// <param name="color">The drawing color</param>
       /// <param name="histogram">The 1D histogram to be drawn</param>
-      public void AddHistogram(String name, Color color, DenseHistogram histogram)
+      public void AddHistogram(String name, Color color, Mat histogram, int binSize, float[] ranges)
       {
-         Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported);
+         //Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported);
 
          GraphPane pane = new GraphPane();
          // Set the Title
@@ -90,8 +90,8 @@ namespace Emgu.CV.UI
          pane.YAxis.Title.Text = Properties.StringTable.Count;
 
          #region draw the histogram
-         RangeF range = histogram.Ranges[0];
-         int binSize = histogram.BinDimension[0].Size;
+         RangeF range = new RangeF(ranges[0], ranges[1]);
+         
          float step = (range.Max - range.Min) / binSize;
          float start = range.Min;
          double[] bin = new double[binSize];
@@ -103,7 +103,7 @@ namespace Emgu.CV.UI
 
          PointPairList pointList = new PointPairList(
             bin,
-            Array.ConvertAll<float, double>( (float[]) histogram.MatND.ManagedArray, System.Convert.ToDouble));
+            Array.ConvertAll<float, double>( (float[]) histogram.Data, System.Convert.ToDouble));
 
          pane.AddCurve(name, pointList, color);
          #endregion
@@ -119,29 +119,69 @@ namespace Emgu.CV.UI
       /// <param name="numberOfBins">The number of bins for each histogram</param>
       public void GenerateHistograms(IImage image, int numberOfBins)
       {
-         IImage[] channels;
+         Mat[] channels = new Mat[image.NumberOfChannels];
          Type imageType; 
-         if ((imageType = Toolbox.GetBaseType(image.GetType(), "Image`2")) != null)
+         if ((imageType = Toolbox.GetBaseType(image.GetType(), "Image`2")) != null 
+            || (imageType = Toolbox.GetBaseType(image.GetType(), "Mat")) != null)
          {
-            channels = image.Split();
+            for (int i = 0; i < image.NumberOfChannels; i++)
+            {
+               Mat channel = new Mat();
+               CvInvoke.ExtractChannel(image, channel, i);
+               channels[i] = channel;
+            }
+             
          }
          else if ((imageType = Toolbox.GetBaseType(image.GetType(), "CudaImage`2")) != null)
          {
             IImage img = imageType.GetMethod("ToImage").Invoke(image, null) as IImage;
-            channels = img.Split();
+            for (int i = 0; i < img.NumberOfChannels; i++)
+            {
+               Mat channel = new Mat();
+               CvInvoke.ExtractChannel(img, channel, i);
+               channels[i] = channel;
+            }
          }
          else
          {
-            throw new ArgumentException("The input image type of {0} is not supported", image.GetType().ToString());
+            throw new ArgumentException(String.Format("The input image type of {0} is not supported", image.GetType().ToString()));
          }
 
-         IColor typeOfColor = Activator.CreateInstance(imageType.GetGenericArguments()[0]) as IColor;
-         String[] channelNames = Reflection.ReflectColorType.GetNamesOfChannels(typeOfColor);
-         Color[] colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);
+         Type[] genericArguments = imageType.GetGenericArguments();
+         String[] channelNames;
+         Color[] colors;
+         Type typeOfDepth;
+         if (genericArguments.Length > 0)
+         {
+            IColor typeOfColor = Activator.CreateInstance(genericArguments[0]) as IColor;
+            channelNames = Reflection.ReflectColorType.GetNamesOfChannels(typeOfColor);
+            colors = Reflection.ReflectColorType.GetDisplayColorOfChannels(typeOfColor);
+            typeOfDepth = imageType.GetGenericArguments()[1];
+         }
+         else
+         {
+            channelNames = new String[image.NumberOfChannels];
+            colors = new Color[image.NumberOfChannels];
+            for (int i = 0; i < image.NumberOfChannels; i++)
+            {
+               channelNames[i] = String.Format("Channel {0}", i);
+               colors[i] = Color.Red;
+            }
 
+            if (image is Mat)
+            {
+               typeOfDepth = CvInvoke.GetDepthType(((Mat)image).Depth);
+            }
+            else
+            {
+               throw new ArgumentException(String.Format("Unable to get the type of depth from image of type {0}", image.GetType().ToString()));
+            }
+            
+         }
+         
          float minVal, maxVal;
          #region Get the maximum and minimum color intensity values
-         Type typeOfDepth = imageType.GetGenericArguments()[1];
+         
          if (typeOfDepth == typeof(Byte))
          {
             minVal = 0.0f;
@@ -168,11 +208,20 @@ namespace Emgu.CV.UI
          #endregion
 
          for (int i = 0; i < channels.Length; i++)
-            using (DenseHistogram hist = new DenseHistogram(numberOfBins, new RangeF(minVal, maxVal)))
+         {
+            
+            //using (DenseHistogram hist = new DenseHistogram(numberOfBins, new RangeF(minVal, maxVal)))
+            using (Mat hist = new Mat())
+            using (Util.VectorOfMat vm = new Util.VectorOfMat())
             {
-               hist.Calculate(new IImage[1] { channels[i] }, true, null);
-               AddHistogram(channelNames[i], colors[i], hist);
+               vm.Push(channels[i]);
+
+               float[] ranges = new float[] { minVal, maxVal };
+               CvInvoke.CalcHist(vm, new int[] { 0 }, null, hist, new int[] { numberOfBins }, ranges, false);
+               //hist.Calculate(new IImage[1] { channels[i] }, true, null);
+               AddHistogram(channelNames[i], colors[i], hist, numberOfBins, ranges );
             }
+         }
       }
 
       /// <summary>

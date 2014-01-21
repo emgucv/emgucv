@@ -106,7 +106,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvLoadImage(
          [MarshalAs(StringMarshalType)] String filename,
-         CvEnum.LOAD_IMAGE_TYPE loadType);
+         CvEnum.LoadImageType loadType);
 
       /// <summary>
       /// Saves the image to the specified file. The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format
@@ -136,7 +136,7 @@ namespace Emgu.CV
       /// <param name="loadType">The image loading type</param>
       /// <returns>A pointer to the Image decoded.</returns>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvDecodeImage(IntPtr bufMat, CvEnum.LOAD_IMAGE_TYPE loadType);
+      public static extern IntPtr cvDecodeImage(IntPtr bufMat, CvEnum.LoadImageType loadType);
 
       /// <summary>
       /// encode image and store the result as a byte vector.
@@ -154,7 +154,7 @@ namespace Emgu.CV
       /// <param name="bufMat">The buffer</param>
       /// <param name="loadType">The image loading type</param>
       /// <returns>A pointer to the Image decoded.</returns>
-      public static IntPtr cvDecodeImage(byte[] bufMat, CvEnum.LOAD_IMAGE_TYPE loadType)
+      public static IntPtr cvDecodeImage(byte[] bufMat, CvEnum.LoadImageType loadType)
       {
          GCHandle handle = GCHandle.Alloc(bufMat, GCHandleType.Pinned);
          try

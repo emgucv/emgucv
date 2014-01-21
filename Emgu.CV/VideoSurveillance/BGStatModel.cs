@@ -20,9 +20,9 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="image">The image used for initiating the statistic model</param>
       /// <param name="type">The type of the statistics model</param>
-      public BGStatModel(Image<TColor, Byte> image, Emgu.CV.CvEnum.BG_STAT_TYPE type)
+      public BGStatModel(Image<TColor, Byte> image, Emgu.CV.CvEnum.BgStatType type)
       {
-         _ptr = (type == Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL) ?
+         _ptr = (type == Emgu.CV.CvEnum.BgStatType.FgdStatModel) ?
             CvInvoke.cvCreateFGDStatModel(image, IntPtr.Zero)
             : CvInvoke.cvCreateGaussianBGModel(image, IntPtr.Zero);
       }

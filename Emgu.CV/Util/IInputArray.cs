@@ -34,9 +34,12 @@ namespace Emgu.CV
       public extern static void cveInputArrayRelease(ref IntPtr arr);
    }
 
-   public class InputArray : UnmanagedObject, IInputArray
+   /// <summary>
+   /// An implementation of IInputArray intented to convert data to IInputArray
+   /// </summary>
+   public class ScalarArray : UnmanagedObject, IInputArray
    {
-      static InputArray()
+      static ScalarArray()
       {
          CvInvoke.CheckLibraryLoaded();
       }
@@ -49,13 +52,22 @@ namespace Emgu.CV
       private IntPtr _dataPtr;
       private DataType _dataType;
       
-      public InputArray(MCvScalar scalar)
+      /// <summary>
+      /// Create an InputArray from MCvScalar
+      /// </summary>
+      /// <param name="scalar">The MCvScalar to be converted to InputArray</param>
+      public ScalarArray(MCvScalar scalar)
       {
          _dataPtr = cveScalarCreate(ref scalar);
          _dataType = DataType.Scalar;
          _ptr = cveInputArrayFromScalar(_dataPtr);
       }
-      public InputArray(double scalar)
+
+      /// <summary>
+      /// Create an InputArray from a double value
+      /// </summary>
+      /// <param name="scalar">The double value to be converted to InputArray</param>
+      public ScalarArray(double scalar)
       {
          _dataPtr = Marshal.AllocHGlobal(sizeof(double));
          _dataType = DataType.Double;
@@ -63,16 +75,29 @@ namespace Emgu.CV
          _ptr = cveInputArrayFromDouble(_dataPtr);
       }
 
-      public static explicit operator InputArray(double scalar)
+      /// <summary>
+      /// Convert double scalar to InputArray
+      /// </summary>
+      /// <param name="scalar">The double scalar</param>
+      /// <returns>The InputArray</returns>
+      public static explicit operator ScalarArray(double scalar)
       {
-         return new InputArray(scalar);
+         return new ScalarArray(scalar);
       }
 
-      public static explicit operator InputArray(MCvScalar scalar)
+      /// <summary>
+      /// Convert MCvSalar to InputArray
+      /// </summary>
+      /// <param name="scalar">The MCvScalar</param>
+      /// <returns>The InputArray</returns>
+      public static explicit operator ScalarArray(MCvScalar scalar)
       {
-         return new InputArray(scalar);
+         return new ScalarArray(scalar);
       }
 
+      /// <summary>
+      /// Release all the unmanaged memory associated with this InputArray
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
@@ -92,6 +117,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// The pointer to the input array
+      /// </summary>
       public IntPtr InputArrayPtr
       {
          get { return _ptr; }

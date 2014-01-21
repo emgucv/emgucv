@@ -19,7 +19,7 @@ namespace Emgu.CV.ML
       static MlInvoke()
       {
          //dummy code that is used to involve the static constructor of CvInvoke, if it has not already been called.
-         CvInvoke.CV_MAKETYPE(0, 0);
+         CvInvoke.MakeType(0, 0);
       }
 
       #region CvStatModel

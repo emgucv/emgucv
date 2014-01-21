@@ -68,7 +68,7 @@ namespace Emgu.CV
       /// <param name="eltype">The type of the sequence</param>
       /// <param name="flag">The flag of the sequence</param>
       /// <param name="stor">The storage</param>
-      public Seq(CvEnum.SEQ_ELTYPE eltype, CvEnum.SEQ_KIND kind, CvEnum.SEQ_FLAG flag, MemStorage stor)
+      public Seq(CvEnum.SeqEltype eltype, CvEnum.SeqKind kind, CvEnum.SEQ_FLAG flag, MemStorage stor)
          : this(((int)kind | (int)eltype | (int)flag), stor)
       {
       }
@@ -95,15 +95,15 @@ namespace Emgu.CV
 
          if (elementType == typeof(PointF))
          {
-            elementTypeID = CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2);
+            elementTypeID = CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2);
          }
          else if (elementType == typeof(Point))
          {
-            elementTypeID = CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32S, 2);
+            elementTypeID = CvInvoke.MakeType(CvEnum.DepthType.Cv32S, 2);
          }
          else if (elementType == typeof(MCvPoint2D64f))
          {
-            elementTypeID = CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_64F, 2);
+            elementTypeID = CvInvoke.MakeType(CvEnum.DepthType.Cv64F, 2);
          }
          else
          {  // if no match found simply return the original value
@@ -174,7 +174,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="data">The data to push to the sequence</param>
       /// <param name="backOrFront">Specify if pushing to the back or front</param>
-      public void PushMulti(T[] data, CvEnum.BACK_OR_FRONT backOrFront)
+      public void PushMulti(T[] data, CvEnum.BackOrFront backOrFront)
       {
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          CvInvoke.cvSeqPushMulti(Ptr, handle.AddrOfPinnedObject(), data.Length, backOrFront);
@@ -215,7 +215,7 @@ namespace Emgu.CV
       /// <param name="count">The number of elements to be poped</param>
       /// <param name="backOrFront">The location the pop operation is started</param>
       /// <returns>The elements poped from the sequence</returns>
-      public T[] PopMulti(int count, CvEnum.BACK_OR_FRONT backOrFront)
+      public T[] PopMulti(int count, CvEnum.BackOrFront backOrFront)
       {
          count = Math.Min(count, Total);
          T[] res = new T[count];
@@ -582,7 +582,7 @@ namespace Emgu.CV
       /// <param name="objectToMatch">The object to match</param>
       /// <param name="method">contour matching method</param>
       /// <returns>The degree of the similarity</returns>
-      public double MatchShapes(Seq<T> objectToMatch, CvEnum.CONTOURS_MATCH_TYPE method)
+      public double MatchShapes(Seq<T> objectToMatch, CvEnum.ContoursMatchType method)
       {
          return CvInvoke.cvMatchShapes(Ptr, objectToMatch.Ptr, method, 0.0);
       }

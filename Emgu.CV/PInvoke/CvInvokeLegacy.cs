@@ -528,7 +528,7 @@ namespace Emgu.CV
       /// <returns></returns>
       public static IntPtr cvCreateSubdivDelaunay2D(Rectangle rect, IntPtr storage)
       {
-         IntPtr subdiv = cvCreateSubdiv2D((int)CvEnum.SEQ_KIND.CV_SEQ_KIND_SUBDIV2D,
+         IntPtr subdiv = cvCreateSubdiv2D((int)CvEnum.SeqKind.CV_SEQ_KIND_SUBDIV2D,
                  Marshal.SizeOf(typeof(MCvSubdiv2D)),
                  Marshal.SizeOf(typeof(MCvSubdiv2DPoint)),
                  Marshal.SizeOf(typeof(MCvQuadEdge2D)),
@@ -821,6 +821,7 @@ namespace Emgu.CV
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool icvSubdiv2DCheck(IntPtr subdiv);
 
+      /*
       /// <summary>
       /// Finds robust features in the image. For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
       /// </summary>
@@ -864,7 +865,7 @@ namespace Emgu.CV
          int useProvidedKeyPoints);
 #endif
 
-      /*
+      
       /// <summary>
       /// Extracts the contours of Maximally Stable Extremal Regions
       /// </summary>

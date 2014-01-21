@@ -33,53 +33,46 @@ namespace Emgu.CV
          PointF[][] imagePoints,
          Size imageSize,
          IntrinsicCameraParameters intrinsicParam,
-         CvEnum.CALIB_TYPE calibrationType,
+         CvEnum.CalibType calibrationType,
          MCvTermCriteria termCriteria,
          out ExtrinsicCameraParameters[] extrinsicParams)
       {
          Debug.Assert(objectPoints.Length == imagePoints.Length, "The number of images for objects points should be equal to the number of images for image points");
          int imageCount = objectPoints.Length;
 
-         #region get the array that represent the point counts
-         int[] pointCounts = new int[objectPoints.Length];
-         for (int i = 0; i < objectPoints.Length; i++)
+         using (VectorOfVectorOfPoint3D32F vvObjPts = new VectorOfVectorOfPoint3D32F(objectPoints))
+         using (VectorOfVectorOfPointF vvImgPts = new VectorOfVectorOfPointF(imagePoints))
          {
-            Debug.Assert(objectPoints[i].Length == imagePoints[i].Length, String.Format("Number of 3D points and image points should be equal in the {0}th image", i));
-            pointCounts[i] = objectPoints[i].Length;
-         }
-         #endregion
-
-         double reprojectionError = -1;
-         using (Matrix<float> objectPointMatrix = ToMatrix(objectPoints))
-         using (Matrix<float> imagePointMatrix = ToMatrix(imagePoints))
-         using (Matrix<int> pointCountsMatrix = new Matrix<int>(pointCounts))
-         using (Matrix<double> rotationVectors = new Matrix<double>(imageCount, 3))
-         using (Matrix<double> translationVectors = new Matrix<double>(imageCount, 3))
-         {
-            reprojectionError = CvInvoke.cvCalibrateCamera2(
-                objectPointMatrix.Ptr,
-                imagePointMatrix.Ptr,
-                pointCountsMatrix.Ptr,
-                imageSize,
-                intrinsicParam.IntrinsicMatrix,
-                intrinsicParam.DistortionCoeffs,
-                rotationVectors,
-                translationVectors,
-                calibrationType, 
-                termCriteria);
-
-            extrinsicParams = new ExtrinsicCameraParameters[imageCount];
-            for (int i = 0; i < imageCount; i++)
+            double reprojectionError = -1;
+            using (Matrix<double> rotationVectors = new Matrix<double>(imageCount, 3))
+            using (Matrix<double> translationVectors = new Matrix<double>(imageCount, 3))
             {
-               ExtrinsicCameraParameters p = new ExtrinsicCameraParameters();
-               using (Matrix<double> matR = rotationVectors.GetRow(i))
-                  CvInvoke.Transpose(matR, p.RotationVector);
-               using (Matrix<double> matT = translationVectors.GetRow(i))
-                  CvInvoke.Transpose(matT, p.TranslationVector);
-               extrinsicParams[i] = p;
+               Mat cameraMat = new Mat();
+               Mat distorCoeff = new Mat();
+               reprojectionError = CvInvoke.CalibrateCamera(
+                   vvObjPts,
+                   vvImgPts,
+                   imageSize,
+                   intrinsicParam.IntrinsicMatrix,
+                   intrinsicParam.DistortionCoeffs,
+                   rotationVectors,
+                   translationVectors,
+                   calibrationType,
+                   termCriteria);
+
+               extrinsicParams = new ExtrinsicCameraParameters[imageCount];
+               for (int i = 0; i < imageCount; i++)
+               {
+                  ExtrinsicCameraParameters p = new ExtrinsicCameraParameters();
+                  using (Matrix<double> matR = rotationVectors.GetRow(i))
+                     CvInvoke.Transpose(matR, p.RotationVector);
+                  using (Matrix<double> matT = translationVectors.GetRow(i))
+                     CvInvoke.Transpose(matT, p.TranslationVector);
+                  extrinsicParams[i] = p;
+               }
             }
+            return reprojectionError;
          }
-         return reprojectionError;
       }
 
       /// <summary>
@@ -107,7 +100,7 @@ namespace Emgu.CV
          IntrinsicCameraParameters intrinsicParam1,
          IntrinsicCameraParameters intrinsicParam2,
          Size imageSize,
-         CvEnum.CALIB_TYPE flags,
+         CvEnum.CalibType flags,
          MCvTermCriteria termCrit,
          out ExtrinsicCameraParameters extrinsicParams,
          out Matrix<double> foundamentalMatrix,
@@ -115,29 +108,19 @@ namespace Emgu.CV
       {
          Debug.Assert(objectPoints.Length == imagePoints1.Length && objectPoints.Length == imagePoints2.Length, "The number of images for objects points should be equal to the number of images for image points");
 
-         #region get the matrix that represent the point counts
-         int[,] pointCounts = new int[objectPoints.Length, 1];
-         for (int i = 0; i < objectPoints.Length; i++)
-         {
-            Debug.Assert(objectPoints[i].Length == imagePoints1[i].Length && objectPoints[i].Length == imagePoints2[i].Length, String.Format("Number of 3D points and image points should be equal in the {0}th image", i));
-            pointCounts[i, 0] = objectPoints[i].Length;
-         }
-         #endregion
-
-         using (Matrix<float> objectPointMatrix = ToMatrix(objectPoints))
-         using (Matrix<float> imagePointMatrix1 = ToMatrix(imagePoints1))
-         using (Matrix<float> imagePointMatrix2 = ToMatrix(imagePoints2))
-         using (Matrix<int> pointCountsMatrix = new Matrix<int>(pointCounts))
+         using (VectorOfVectorOfPoint3D32F objectPointVec = new VectorOfVectorOfPoint3D32F(objectPoints))
+         using (VectorOfVectorOfPointF imagePoints1Vec = new VectorOfVectorOfPointF(imagePoints1))
+         using (VectorOfVectorOfPointF imagePoints2Vec = new VectorOfVectorOfPointF(imagePoints2))
          {
             extrinsicParams = new ExtrinsicCameraParameters();
             essentialMatrix = new Matrix<double>(3, 3);
             foundamentalMatrix = new Matrix<double>(3, 3);
 
-            CvInvoke.cvStereoCalibrate(
-               objectPointMatrix.Ptr,
-               imagePointMatrix1.Ptr,
-               imagePointMatrix2.Ptr,
-               pointCountsMatrix.Ptr,
+            CvInvoke.StereoCalibrate(
+               objectPointVec,
+               imagePoints1Vec,
+               imagePoints2Vec,
+               
                intrinsicParam1.IntrinsicMatrix,
                intrinsicParam1.DistortionCoeffs,
                intrinsicParam2.IntrinsicMatrix,
@@ -145,10 +128,10 @@ namespace Emgu.CV
                imageSize,
                extrinsicParams.RotationVector,
                extrinsicParams.TranslationVector,
-               essentialMatrix.Ptr,
-               foundamentalMatrix.Ptr,
-               termCrit,
-               flags);
+               essentialMatrix,
+               foundamentalMatrix,
+               flags,
+               termCrit);
          }
       }
 
@@ -202,24 +185,19 @@ namespace Emgu.CV
          GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
          using (Matrix<float> pointMatrix = new Matrix<float>(objectPoints.Length, 1, 3, handle1.AddrOfPinnedObject(), 3 * sizeof(float)))
          using (Matrix<float> imagePointMatrix = new Matrix<float>(imagePoints.Length, 1, 2, handle2.AddrOfPinnedObject(), 2 * sizeof(float)))
-            CvInvoke.cvProjectPoints2(
+            CvInvoke.ProjectPoints(
                   pointMatrix,
-                  extrin.RotationVector.Ptr,
-                  extrin.TranslationVector.Ptr,
-                  intrin.IntrinsicMatrix.Ptr,
-                  intrin.DistortionCoeffs.Ptr,
-                  imagePointMatrix,
-                  matsLength > 0 ? mats[0] : IntPtr.Zero,
-                  matsLength > 1 ? mats[1] : IntPtr.Zero,
-                  matsLength > 2 ? mats[2] : IntPtr.Zero,
-                  matsLength > 3 ? mats[3] : IntPtr.Zero,
-                  matsLength > 4 ? mats[4] : IntPtr.Zero, 
-                  0.0);
+                  extrin.RotationVector,
+                  extrin.TranslationVector,
+                  intrin.IntrinsicMatrix,
+                  intrin.DistortionCoeffs,
+                  imagePointMatrix);
          handle1.Free();
          handle2.Free();
          return imagePoints;
       }
 
+      /*
       /// <summary>
       /// Use the specific method to find perspective transformation H=||h_ij|| between the source and the destination planes 
       /// </summary>
@@ -231,17 +209,19 @@ namespace Emgu.CV
       public static HomographyMatrix FindHomography(
          Matrix<float> srcPoints,
          Matrix<float> dstPoints,
-         CvEnum.HOMOGRAPHY_METHOD method,
-         double ransacReprojThreshold)
+         CvEnum.HomographyMethod method,
+         double ransacReprojThreshold = 3,
+         )
       {
          HomographyMatrix homography = new HomographyMatrix();
-         if (!CvInvoke.cvFindHomography(srcPoints.Ptr, dstPoints.Ptr, homography.Ptr, method, ransacReprojThreshold, IntPtr.Zero))
+         Mat h = CvInvoke.FindHomography(srcPoints.Ptr, dstPoints.Ptr, method, ransacReprojThreshold);
+         if ( !)
          {
             homography.Dispose();
             return null;
          }
          return homography;
-      }
+      }*/
 
       /// <summary>
       /// Finds perspective transformation H=||h_ij|| between the source and the destination planes
@@ -258,8 +238,9 @@ namespace Emgu.CV
       public static HomographyMatrix FindHomography(
          PointF[] srcPoints,
          PointF[] dstPoints,
-         CvEnum.HOMOGRAPHY_METHOD method,
-         double ransacReprojThreshold)
+         CvEnum.HomographyMethod method,
+         double ransacReprojThreshold = 3, 
+         IOutputArray mask = null)
       {
          HomographyMatrix homography;
 
@@ -267,74 +248,24 @@ namespace Emgu.CV
          GCHandle dstHandle = GCHandle.Alloc(dstPoints, GCHandleType.Pinned);
          using (Matrix<float> srcPointMatrix = new Matrix<float>(srcPoints.Length, 2, srcHandle.AddrOfPinnedObject()))
          using (Matrix<float> dstPointMatrix = new Matrix<float>(dstPoints.Length, 2, dstHandle.AddrOfPinnedObject()))
-            homography = FindHomography(srcPointMatrix, dstPointMatrix, method, ransacReprojThreshold);
+         using (Mat h = new Mat())
+         {
+            CvInvoke.FindHomography(srcPointMatrix, dstPointMatrix, h, method, ransacReprojThreshold, mask);
+            if (h.IsEmpty)
+            {
+               homography = null;
+            }
+            else
+            {
+               homography = new HomographyMatrix();
+               h.CopyTo(homography);
+            }
+         }
          srcHandle.Free();
          dstHandle.Free();
          return homography;
       }
 
-      /// <summary>
-      /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
-      /// </summary>
-      /// <param name="image">Source chessboard view</param>
-      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
-      /// <param name="flags">Various operation flags</param>
-      /// <returns>The corners detected if the chess board pattern is found, otherwise null is returned</returns>
-      public static PointF[] FindChessboardCorners(
-         Image<Gray, Byte> image,
-         Size patternSize,
-         CvEnum.CALIB_CB_TYPE flags)
-      {
-         int cornerCount = 0;
-
-         PointF[] corners = new PointF[patternSize.Width * patternSize.Height];
-         GCHandle handle = GCHandle.Alloc(corners, GCHandleType.Pinned);
-
-         bool patternFound =
-            CvInvoke.cvFindChessboardCorners(
-               image.Ptr,
-               patternSize,
-               handle.AddrOfPinnedObject(),
-               ref cornerCount,
-               flags) != 0;
-
-         handle.Free();
-
-         if (cornerCount != corners.Length)
-            Array.Resize(ref corners, cornerCount);
-
-         return patternFound ? corners : null;
-      }
-
-
-
-      /// <summary>
-      /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (patternWasFound== false) or the colored corners connected with lines when the board was found (patternWasFound == true). 
-      /// </summary>
-      /// <param name="image">The destination image</param>
-      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
-      /// <param name="corners">The array of corners detected. Can be null if no corners were found</param>
-      public static void DrawChessboardCorners(
-         Image<Gray, Byte> image,
-         Size patternSize,
-         PointF[] corners)
-      {
-         if (corners == null || corners.Length == 0)
-         {
-            CvInvoke.cvDrawChessboardCorners(image, patternSize, IntPtr.Zero, 0, 0);
-         }
-         else
-         {
-            GCHandle handle = GCHandle.Alloc(corners, GCHandleType.Pinned);
-            CvInvoke.cvDrawChessboardCorners(
-               image.Ptr,
-               patternSize,
-               handle.AddrOfPinnedObject(),
-               corners.Length,
-               1);
-            handle.Free();
-         }
-      }
 
       /// <summary>
       /// Calculates the matrix of an affine transform such that:

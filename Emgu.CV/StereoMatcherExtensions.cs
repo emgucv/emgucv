@@ -11,6 +11,9 @@ using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// Extension methods for StereoMather
+   /// </summary>
    public static class StereoMatcherExtensions
    {
       static StereoMatcherExtensions()
@@ -18,6 +21,13 @@ namespace Emgu.CV
          CvInvoke.CheckLibraryLoaded();
       }
 
+      /// <summary>
+      /// Computes disparity map for the specified stereo pair
+      /// </summary>
+      /// <param name="matcher">The stereo matcher</param>
+      /// <param name="left">Left 8-bit single-channel image.</param>
+      /// <param name="right">Right image of the same size and the same type as the left one.</param>
+      /// <param name="disparity">Output disparity map. It has the same size as the input images. Some algorithms, like StereoBM or StereoSGBM compute 16-bit fixed-point disparity map (where each disparity value has 4 fractional bits), whereas other algorithms output 32-bit floating-point disparity map</param>
       public static void Compute(this IStereoMatcher matcher, IInputArray left, IInputArray right, IOutputArray disparity)
       {
          CvStereoMatcherCompute(matcher.StereoMatcherPtr, left.InputArrayPtr, right.InputArrayPtr, disparity.OutputArrayPtr);

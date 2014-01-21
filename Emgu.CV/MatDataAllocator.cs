@@ -13,12 +13,29 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// Matrix data allocator. Base class for Mat that handles the matrix data allocation and deallocation
+   /// </summary>
    public abstract class MatDataAllocator : UnmanagedObject
    {
-      protected IntPtr _memoryAllocator;
+      internal IntPtr _memoryAllocator;
       private GCHandle _dataHandle;
+      internal IntPtr _allocateDataActionPtr;
+      internal IntPtr _freeDataActionPtr;
 
       private Array _data;
+
+      internal void InitActionPtr()
+      {
+         GCHandle allocateDataActionHandle = GCHandle.Alloc((AllocateDataAction) AllocateData);
+         _allocateDataActionPtr = GCHandle.ToIntPtr(allocateDataActionHandle);
+         GCHandle freeDataActionHandle = GCHandle.Alloc((FreeDataAction)FreeData);
+         _freeDataActionPtr = GCHandle.ToIntPtr(freeDataActionHandle);
+      }
+
+      /// <summary>
+      /// Get the managed data used by the Mat
+      /// </summary>
       public Array Data
       {
          get
@@ -27,34 +44,34 @@ namespace Emgu.CV
          }
       }
 
-#if IOS
-      [MonoTouch.MonoPInvokeCallback(typeof(MatAllocateCallback))]
-#endif
-      internal IntPtr AllocateCallback(Mat.DepthType type, int channels, int totalInBytes)
+      private delegate IntPtr AllocateDataAction(CvEnum.DepthType type, int channels, int totalInBytes);
+      private delegate void FreeDataAction();
+
+      private IntPtr AllocateData(CvEnum.DepthType type, int channels, int totalInBytes)
       {
          FreeData();
-         
+
          switch (type)
          {
-            //case Mat.DepthType.Cv8U:
+            //case CvEnum.DepthType.Cv8U:
             //   _data = new byte[totalInBytes];
             //   break;
-            case Mat.DepthType.Cv8S:
+            case CvEnum.DepthType.Cv8S:
                _data = new SByte[totalInBytes];
                break;
-            case Mat.DepthType.Cv16U:
+            case CvEnum.DepthType.Cv16U:
                _data = new UInt16[totalInBytes >> 1];
                break;
-            case Mat.DepthType.Cv16S:
+            case CvEnum.DepthType.Cv16S:
                _data = new Int16[totalInBytes >> 1];
                break;
-            case Mat.DepthType.Cv32S:
+            case CvEnum.DepthType.Cv32S:
                _data = new Int32[totalInBytes >> 2];
                break;
-            case Mat.DepthType.Cv32F:
+            case CvEnum.DepthType.Cv32F:
                _data = new float[totalInBytes >> 2];
                break;
-            case Mat.DepthType.Cv64F:
+            case CvEnum.DepthType.Cv64F:
                _data = new double[totalInBytes >> 3];
                break;
             default:
@@ -67,11 +84,23 @@ namespace Emgu.CV
       }
 
 #if IOS
-      [MonoTouch.MonoPInvokeCallback(typeof(MatDeallocateCallback))]
+      [MonoTouch.MonoPInvokeCallback(typeof(MatDataAllocatorInvoke.MatAllocateCallback))]
 #endif
-      internal void DeallocateCallback(IntPtr data)
+      static internal IntPtr AllocateCallback(CvEnum.DepthType type, int channels, int totalInBytes, IntPtr allocateDataActionPtr)
       {
-         FreeData();
+         GCHandle handle = GCHandle.FromIntPtr(allocateDataActionPtr);
+         AllocateDataAction allocateDataAction = (AllocateDataAction)handle.Target;
+         return allocateDataAction(type, channels, totalInBytes);
+      }
+
+#if IOS
+      [MonoTouch.MonoPInvokeCallback(typeof(MatDataAllocatorInvoke.MatDeallocateCallback))]
+#endif
+      static internal void DeallocateCallback(IntPtr freeDataActionPtr)
+      {
+         GCHandle handle = GCHandle.FromIntPtr(freeDataActionPtr);
+         FreeDataAction freeDataAction = (FreeDataAction)handle.Target;
+         freeDataAction();
       }
 
       private void FreeData()
@@ -82,10 +111,24 @@ namespace Emgu.CV
             _data = null;
       }
 
+      /// <summary>
+      /// Release resource associated with this object
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_memoryAllocator != IntPtr.Zero)
             MatDataAllocatorInvoke.cvMatAllocatorRelease(ref _memoryAllocator);
+
+         if (_allocateDataActionPtr != IntPtr.Zero)
+         {
+            GCHandle.FromIntPtr(_allocateDataActionPtr).Free();
+            _allocateDataActionPtr = IntPtr.Zero;
+         }
+         if (_freeDataActionPtr != IntPtr.Zero)
+         {
+            GCHandle.FromIntPtr(_freeDataActionPtr).Free();
+            _freeDataActionPtr = IntPtr.Zero;
+         }
 
          FreeData();
       }
@@ -99,7 +142,7 @@ namespace Emgu.CV
       }
 
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
-      internal delegate IntPtr MatAllocateCallback(Mat.DepthType type, int channels, int totalInBytes);
+      internal delegate IntPtr MatAllocateCallback(CvEnum.DepthType type, int channels, int totalInBytes, IntPtr allocateDataActionPtr);
 
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       internal delegate void MatDeallocateCallback(IntPtr data);

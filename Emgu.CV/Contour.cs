@@ -49,7 +49,7 @@ namespace Emgu.CV
       /// <param name="eltype">The type of the sequence</param>
       /// <param name="flag">The flag of the sequence</param>
       /// <param name="stor">The storage</param>
-      public Contour(CvEnum.SEQ_ELTYPE eltype, CvEnum.SEQ_KIND kind, CvEnum.SEQ_FLAG flag, MemStorage stor)
+      public Contour(CvEnum.SeqEltype eltype, CvEnum.SeqKind kind, CvEnum.SEQ_FLAG flag, MemStorage stor)
          : this(((int)kind | (int)eltype | (int)flag), stor)
       {
       }

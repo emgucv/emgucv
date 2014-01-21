@@ -12,6 +12,9 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+#if !NETFX_CORE
+using System.Runtime.Serialization;
+#endif
 
 namespace Emgu.CV.Util
 {
@@ -19,6 +22,9 @@ namespace Emgu.CV.Util
    /// Wraped class of the C++ standard vector of ${VECTOR_NAME}.
    /// </summary>
    public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
+#if !NETFX_CORE
+   , ISerializable
+#endif
    {
       private bool _needDispose;
    
@@ -30,6 +36,29 @@ namespace Emgu.CV.Util
       private IntPtr _inputArrayPtr;
       private IntPtr _outputArrayPtr;
       private IntPtr _inputOutputArrayPtr;
+
+#if !NETFX_CORE
+      /// <summary>
+      /// Constructor used to deserialize runtime serialized object
+      /// </summary>
+      /// <param name="info">The serialization info</param>
+      /// <param name="context">The streaming context</param>
+      public VectorOf${VECTOR_NAME}(SerializationInfo info, StreamingContext context)
+         : this()
+      {
+         Push((${VECTOR_ELEMENT_CS}[])info.GetValue("${VECTOR_NAME}Array", typeof(${VECTOR_ELEMENT_CS}[])));
+      }
+	  
+	  /// <summary>
+      /// A function used for runtime serialization of the object
+      /// </summary>
+      /// <param name="info">Serialization info</param>
+      /// <param name="context">Streaming context</param>
+      public void GetObjectData(SerializationInfo info, StreamingContext context)
+      {
+         info.AddValue("${VECTOR_NAME}Array", ToArray());
+      }
+#endif
 
       /// <summary>
       /// Create an empty standard vector of ${VECTOR_NAME}
@@ -53,9 +82,11 @@ namespace Emgu.CV.Util
          : this( VectorOf${VECTOR_NAME}CreateSize(size), true)
       {
       }
-
-	  ${COMMENT_IN_SYMBOL}
 	  
+	  /// <summary>
+      /// Create an standard vector of ${VECTOR_NAME} with the initial values
+      /// </summary>
+      /// <param name="values">The initial values</param>
 	  public VectorOf${VECTOR_NAME}(${VECTOR_ELEMENT_CS}[] values)
          :this()
       {
@@ -91,7 +122,6 @@ namespace Emgu.CV.Util
          }
          return res;
       }
-	  ${COMMENT_OUT_SYMBOL}
 
       /// <summary>
       /// Get the size of the vector
@@ -156,6 +186,9 @@ namespace Emgu.CV.Util
             CvInvoke.cveInputOutputArrayRelease(ref _inputOutputArrayPtr);
       }
 
+	  /// <summary>
+      /// Get the pointer to cv::_InputArray
+      /// </summary>
       public IntPtr InputArrayPtr
       {
          get
@@ -165,7 +198,10 @@ namespace Emgu.CV.Util
             return _inputArrayPtr;
          }
       }
-
+	  
+	  /// <summary>
+      /// Get the pointer to cv::_OutputArray
+      /// </summary>
       public IntPtr OutputArrayPtr
       {
          get
@@ -176,6 +212,9 @@ namespace Emgu.CV.Util
          }
       }
 
+	  /// <summary>
+      /// Get the pointer to cv::_InputOutputArray
+      /// </summary>
       public IntPtr InputOutputArrayPtr
       {
          get

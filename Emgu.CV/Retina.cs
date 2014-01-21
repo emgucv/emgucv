@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿/*
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -84,7 +85,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Method which allows retina to be applied on an input image, after run, encapsulated retina module is ready to deliver its outputs using dedicated acccessors. <seealso cref="GetParvo()"/> and <seealso cref="GetMagno()"/>
+      /// Method which allows retina to be applied on an input image, after run, encapsulated retina module is ready to deliver its outputs using dedicated acccessors. <seealso cref="GetParvo"/> and <seealso cref="GetMagno"/>
       /// </summary>
       /// <param name="image">The input image to be processed</param>
       public void Run(IInputArray image)
@@ -290,3 +291,4 @@ namespace Emgu.CV
    }
 
 }
+*/

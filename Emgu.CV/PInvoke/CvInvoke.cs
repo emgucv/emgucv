@@ -17,6 +17,11 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       private static bool _libraryLoaded;
+
+      /// <summary>
+      /// Check to make sure all the unmanaged libraries are loaded
+      /// </summary>
+      /// <returns>True if library loaded</returns>
       public static bool CheckLibraryLoaded()
       {
             return _libraryLoaded;
@@ -254,20 +259,114 @@ namespace Emgu.CV
       }*/
 
       #region CV MACROS
-
+      /*
       /// <summary>
-      /// This function performs the same as CV_MAKETYPE macro
+      /// This function performs the same as MakeType macro
       /// </summary>
       /// <param name="depth">The type of depth</param>
       /// <param name="cn">The number of channels</param>
       /// <returns></returns>
-      public static int CV_MAKETYPE(int depth, int cn)
+      public static int MakeType(int depth, int cn)
       {
          return ((depth) + (((cn) - 1) << 3));
+      }*/
+
+      /// <summary>
+      /// Get the corresponding depth type
+      /// </summary>
+      /// <param name="t">The opencv depth type</param>
+      /// <returns>The equivalent depth type</returns>
+      public static Type GetDepthType(CvEnum.DepthType t)
+      {
+         if (t == CvEnum.DepthType.Cv8U)
+         {
+            return typeof(byte);
+         }
+         else if (t == CvEnum.DepthType.Cv8S)
+         {
+            return typeof(SByte);
+         }
+         else if (t == CvEnum.DepthType.Cv16U)
+         {
+            return typeof(UInt16);
+         }
+         else if (t == CvEnum.DepthType.Cv16S)
+         {
+            return typeof(Int16);
+         }
+         else if (t == CvEnum.DepthType.Cv32S)
+         {
+            return typeof(Int32);
+         }
+         else if (t == CvEnum.DepthType.Cv32F)
+         {
+            return typeof(float);
+         }
+         else if (t == CvEnum.DepthType.Cv64F)
+         {
+            return typeof(double);
+         }
+         else
+         {
+            throw new ArgumentException(String.Format("Unable to convert type {0} to depth type", t.ToString()));
+         }
+      }
+
+      /// <summary>
+      /// Get the corresponding opencv depth type
+      /// </summary>
+      /// <param name="t">The element type</param>
+      /// <returns>The equivalent opencv depth type</returns>
+      public static CvEnum.DepthType GetDepthType(Type t)
+      {
+         if (t == typeof(byte))
+         {
+            return CvEnum.DepthType.Cv8U;
+         }
+         else if (t == typeof(SByte))
+         {
+            return CvEnum.DepthType.Cv8S;
+         }
+         else if (t == typeof(UInt16))
+         {
+            return CvEnum.DepthType.Cv16U;
+         }
+         else if (t == typeof(Int16))
+         {
+            return CvEnum.DepthType.Cv16S;
+         }
+         else if (t == typeof(Int32))
+         {
+            return CvEnum.DepthType.Cv32S;
+         }
+         else if (t == typeof(float))
+         {
+            return CvEnum.DepthType.Cv32F;
+         }
+         else if (t == typeof(double))
+         {
+            return CvEnum.DepthType.Cv64F;
+         }
+         else
+         {
+            throw new ArgumentException(String.Format("Unable to convert type {0} to depth type", t.ToString()));
+         }
+      }
+
+      /// <summary>
+      /// This function performs the same as MakeType macro
+      /// </summary>
+      /// <param name="depth">The type of depth</param>
+      /// <param name="channels">The number of channels</param>
+      /// <returns>An interger tha represent a mat type</returns>
+      public static int MakeType(CvEnum.DepthType depth, int channels)
+      {
+         int shift = 3;
+         return (((int)depth) & ((1 << shift) - 1)) + (((channels) - 1) << shift);
       }
 
       /*
-      private static int _CV_MAT_DEPTH(int flag)
+      private static int _CV_DepthType(int flag)
       {
          return flag & ((1 << 3) - 1);
       }
@@ -282,7 +381,7 @@ namespace Emgu.CV
       }
       private static int _CV_ELEM_SIZE(int type)
       {
-         return (_CV_MAT_CN(type) << ((((4 / 4 + 1) * 16384 | 0x3a50) >> _CV_MAT_DEPTH(type) * 2) & 3));
+         return (_CV_MAT_CN(type) << ((((4 / 4 + 1) * 16384 | 0x3a50) >> _CV_DepthType(type) * 2) & 3));
       }*/
 
       /// <summary>

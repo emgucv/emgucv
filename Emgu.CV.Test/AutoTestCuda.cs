@@ -116,7 +116,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> cpuImgSum = new Image<Gray, byte>(img1.Size);
             Stopwatch watch = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               CvInvoke.Add(img1, img2, cpuImgSum, null, Mat.DepthType.Cv8U);
+               CvInvoke.Add(img1, img2, cpuImgSum, null, CvEnum.DepthType.Cv8U);
             watch.Stop();
             Trace.WriteLine(String.Format("CPU processing time: {0}ms", (double)watch.ElapsedMilliseconds / repeat));
 

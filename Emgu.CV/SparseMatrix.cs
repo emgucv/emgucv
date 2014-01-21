@@ -31,7 +31,7 @@ namespace Emgu.CV
          _dimension = new int[dimension.Length];
          Array.Copy(dimension, _dimension, dimension.Length);
          GCHandle handle =  GCHandle.Alloc(_dimension, GCHandleType.Pinned);
-         _ptr = CvInvoke.cvCreateSparseMat(_dimension.Length, handle.AddrOfPinnedObject(), CvToolbox.GetMatrixDepth(typeof(TDepth)));
+         _ptr = CvInvoke.cvCreateSparseMat(_dimension.Length, handle.AddrOfPinnedObject(), CvInvoke.GetDepthType(typeof(TDepth)));
          handle.Free();
       }
 

@@ -34,7 +34,7 @@ namespace ImageDatabase
          ISession session = ImageDatabase.GetCurrentSession();
          ITransaction tx = session.BeginTransaction();
 
-         MCvFont f = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
+         MCvFont f = new MCvFont(Emgu.CV.CvEnum.FontType.HersheySimplex, 1.0, 1.0);
          long tick = DateTime.Now.Ticks;
          for (int i = 0; i < count; i++, tick++)
          {

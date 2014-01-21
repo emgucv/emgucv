@@ -56,7 +56,7 @@ namespace Emgu.CV.Softcascade
       }
    }
 
-   public static partial class SoftCascadeInvoke
+   internal static partial class SoftCascadeInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cudaSoftCascadeDetectorCreate(

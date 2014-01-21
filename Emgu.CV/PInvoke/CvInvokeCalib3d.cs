@@ -16,20 +16,22 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogeneous coordinates), where N is the number of points. </param>
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogeneous coordinates) </param>
-      /// <param name="homography">Output 3x3 homography matrix. Homography matrix is determined up to a scale, thus it is normalized to make h33=1</param>
       /// <param name="method">The type of the method</param>
       /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <param name="mask">The optional output mask set by a robust method (RANSAC or LMEDS). </param>
-      /// <returns>True if the homography matrix is found, false otherwise.</returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
-      public static extern bool cvFindHomography(
-         IntPtr srcPoints,
-         IntPtr dstPoints,
-         IntPtr homography,
-         CvEnum.HOMOGRAPHY_METHOD method,
-         double ransacReprojThreshold,
-         IntPtr mask);
+      /// <param name="homography">Output 3x3 homography matrix. Homography matrix is determined up to a scale, thus it is normalized to make h33=1</param>
+      public static void FindHomography(
+         IInputArray srcPoints,
+         IInputArray dstPoints,
+         IOutputArray homography,
+         CvEnum.HomographyMethod method= CvEnum.HomographyMethod.Default,
+         double ransacReprojThreshold = 3,
+         IOutputArray mask = null)
+      {
+         cveFindHomography(srcPoints.InputArrayPtr, dstPoints.InputArrayPtr, homography.OutputArrayPtr, method, ransacReprojThreshold, mask == null ? IntPtr.Zero : mask.OutputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveFindHomography(IntPtr srcPoints, IntPtr dstPoints, IntPtr homography, CvEnum.HomographyMethod method, double ransacReprojThreshold, IntPtr mask);
 
       /// <summary>
       /// Converts a rotation vector to rotation matrix or vice versa. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis. 
@@ -37,11 +39,12 @@ namespace Emgu.CV
       /// <param name="src">The input rotation vector (3x1 or 1x3) or rotation matrix (3x3). </param>
       /// <param name="dst">The output rotation matrix (3x3) or rotation vector (3x1 or 1x3), respectively</param>
       /// <param name="jacobian">Optional output Jacobian matrix, 3x9 or 9x3 - partial derivatives of the output array components w.r.t the input array components</param>
-      /// <returns>True if the conversion is sucessful, false otherwise</returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
-      public static extern bool cvRodrigues2(IntPtr src, IntPtr dst, IntPtr jacobian);
-
+      public static void Rodrigues(IInputArray src, IOutputArray dst, IOutputArray jacobian = null)
+      {
+         cveRodrigues(src.InputArrayPtr, dst.OutputArrayPtr, jacobian == null ? IntPtr.Zero : jacobian.OutputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveRodrigues(IntPtr src, IntPtr dst, IntPtr jacobian);
 
       #region Epipolar Geometry, Stereo Correspondence
       /// <summary>
@@ -49,20 +52,18 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points1">Array of the first image points of 2xN, Nx2, 3xN or Nx3 size (where N is number of points). Multi-channel 1xN or Nx1 array is also acceptable. The point coordinates should be floating-point (single or double precision) </param>
       /// <param name="points2">Array of the second image points of the same size and format as points1</param>
-      /// <param name="fundamentalMatrix">The output fundamental matrix or matrices. The size should be 3x3 or 9x3 (7-point method may return up to 3 matrices).</param>
       /// <param name="method">Method for computing the fundamental matrix </param>
-      /// <param name="param1">Use 3.0 for default. The parameter is used for RANSAC method only. It is the maximum distance from point to epipolar line in pixels, beyond which the point is considered an outlier and is not used for computing the final fundamental matrix. Usually it is set somewhere from 1 to 3. </param>
-      /// <param name="param2">Use 0.99 for default. The parameter is used for RANSAC or LMedS methods only. It denotes the desirable level of confidence of the fundamental matrix estimate. </param>
-      /// <param name="status">The optional pointer to output array of N elements, every element of which is set to 0 for outliers and to 1 for the "inliers", i.e. points that comply well with the estimated epipolar geometry. The array is computed only in RANSAC and LMedS methods. For other methods it is set to all 1.</param>
-      /// <returns>The number of fundamental matrices found (1 or 3) and 0, if no matrix is found. </returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvFindFundamentalMat(IntPtr points1,
-         IntPtr points2,
-         IntPtr fundamentalMatrix,
-         CvEnum.CV_FM method,
-         double param1,
-         double param2,
-         IntPtr status);
+      /// <param name="param1">The parameter is used for RANSAC method only. It is the maximum distance from point to epipolar line in pixels, beyond which the point is considered an outlier and is not used for computing the final fundamental matrix. Usually it is set somewhere from 1 to 3. </param>
+      /// <param name="param2">The parameter is used for RANSAC or LMedS methods only. It denotes the desirable level of confidence of the fundamental matrix estimate. </param>
+      /// <param name="mask">The optional pointer to output array of N elements, every element of which is set to 0 for outliers and to 1 for the "inliers", i.e. points that comply well with the estimated epipolar geometry. The array is computed only in RANSAC and LMedS methods. For other methods it is set to all 1.</param>
+      /// <param name="mask">The output fundamental matrix or matrices.</param>
+      public static void FindFundamentalMat(IInputArray points1, IInputArray points2, IOutputArray f, CvEnum.FmType method = CvEnum.FmType.Ransac, double param1 = 3, double param2 = 0.99, IOutputArray mask = null)
+      {
+         cveFindFundamentalMat(points1.InputArrayPtr, points2.InputArrayPtr, f.OutputArrayPtr, method, param1, param2, mask == null ? IntPtr.Zero : mask.OutputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveFindFundamentalMat(IntPtr points1, IntPtr points2, IntPtr dst, CvEnum.FmType method, double param1, double param2, IntPtr mask);
+
 
       /// <summary>
       /// For every point in one of the two images of stereo-pair the function cvComputeCorrespondEpilines finds equation of a line that contains the corresponding point (i.e. projection of the same 3D point) in the other image. Each line is encoded by a vector of 3 elements l=[a,b,c]^T, so that: 
@@ -76,79 +77,55 @@ namespace Emgu.CV
       /// <param name="whichImage">Index of the image (1 or 2) that contains the points</param>
       /// <param name="fundamentalMatrix">Fundamental matrix </param>
       /// <param name="correspondentLines">Computed epilines, 3xN or Nx3 array </param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvComputeCorrespondEpilines(
+      public static void ComputeCorrespondEpilines(IInputArray points, int whichImage, IInputArray fundamentalMatrix, IOutputArray correspondentLines)
+      {
+         cveComputeCorrespondEpilines(points.InputArrayPtr, whichImage, fundamentalMatrix.InputArrayPtr, correspondentLines.OutputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveComputeCorrespondEpilines(
          IntPtr points,
          int whichImage,
          IntPtr fundamentalMatrix,
          IntPtr correspondentLines);
 
       /// <summary>
-      /// Converts 2D or 3D points from/to homogeneous coordinates, or simply copies or transposes the array. In case if the input array dimensionality is larger than the output, each point coordinates are divided by the last coordinate
+      /// Converts points from Euclidean to homogeneous space.
       /// </summary>
-      /// <param name="src">The input point array, 2xN, Nx2, 3xN, Nx3, 4xN or Nx4 (where N is the number of points). Multi-channel 1xN or Nx1 array is also acceptable</param>
-      /// <param name="dst">The output point array, must contain the same number of points as the input; The dimensionality must be the same, 1 less or 1 more than the input, and also within 2..4.</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvConvertPointsHomogeneous(IntPtr src, IntPtr dst);
+      /// <param name="src">Input vector of N-dimensional points.</param>
+      /// <param name="dst">Output vector of N+1-dimensional points.</param>
+      public static void ConvertPointsToHomogeneous(IInputArray src, IOutputArray dst)
+      {
+         cveConvertPointsToHomogeneous(src.InputArrayPtr, dst.OutputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveConvertPointsToHomogeneous(IntPtr src, IntPtr dst);
 
-      /*
-      /// <summary>
-      /// Creates the stereo correspondence structure and initializes it. It is possible to override any of the parameters at any time between the calls to cvFindStereoCorrespondenceBM
-      /// </summary>
-      /// <param name="type">ID of one of the pre-defined parameter sets. Any of the parameters can be overridden after creating the structure.</param>
-      /// <param name="numberOfDisparities">The number of disparities. If the parameter is 0, it is taken from the preset, otherwise the supplied value overrides the one from preset. </param>
-      /// <returns>Pointer to the stereo correspondece structure</returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvCreateStereoBMState(
-         CvEnum.STEREO_BM_TYPE type,
-         int numberOfDisparities);
 
-      /// <summary>
-      /// Releases the stereo correspondence structure and all the associated internal buffers
-      /// </summary>
-      /// <param name="state">The state to be released</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvReleaseStereoBMState(ref IntPtr state);
-
-      /// <summary>
-      /// Computes disparity map for the input rectified stereo pair.
-      /// </summary>
-      /// <param name="left">The left single-channel, 8-bit image</param>
-      /// <param name="right">The right image of the same size and the same type</param>
-      /// <param name="disparity">The output single-channel 16-bit signed disparity map of the same size as input images. Its elements will be the computed disparities, multiplied by 16 and rounded to integer's</param>
-      /// <param name="state">Stereo correspondence structure</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvFindStereoCorrespondenceBM(
-         IntPtr left,
-         IntPtr right,
-         IntPtr disparity,
-         IntPtr state);
-
-      /// <summary>
-      /// Computes disparity map for the input rectified stereo pair.
-      /// </summary>
-      /// <param name="left">The left single-channel, 8-bit image</param>
-      /// <param name="right">The right image of the same size and the same type</param>
-      /// <param name="disparity">The output single-channel 16-bit signed disparity map of the same size as input images. Its elements will be the computed disparities, multiplied by 16 and rounded to integer's</param>
-      /// <param name="state">Stereo correspondence structure</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvFindStereoCorrespondenceBM(
-         IntPtr left,
-         IntPtr right,
-         IntPtr disparity,
-         ref MCvStereoBMState state);*/
+      public static void ConvertPointsFromHomogeneous(IInputArray src, IOutputArray dst)
+      {
+         cveConvertPointsFromHomogeneous(src.InputArrayPtr, dst.OutputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveConvertPointsFromHomogeneous(IntPtr src, IntPtr dst);
 
       /// <summary>
       /// Transforms 1-channel disparity map to 3-channel image, a 3D surface.
       /// </summary>
       /// <param name="disparity">Disparity map</param>
       /// <param name="image3D">3-channel, 16-bit integer or 32-bit floating-point image - the output map of 3D points</param>
-      /// <param name="Q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvReprojectImageTo3D(
+      /// <param name="q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
+      public static void ReprojectImageTo3D(IInputArray disparity, IOutputArray image3D, IInputArray q, bool handleMissingValues = false, CvEnum.DepthType ddepth = CvEnum.DepthType.Default)
+      {
+         cveReprojectImageTo3D(disparity.InputArrayPtr, image3D.OutputArrayPtr, q.InputArrayPtr, handleMissingValues, ddepth);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveReprojectImageTo3D(
          IntPtr disparity,
          IntPtr image3D,
-         IntPtr Q);
+         IntPtr q,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool handleMissingValues,
+         CvEnum.DepthType ddepth);
       #endregion
 
       /// <summary>
@@ -189,20 +166,12 @@ namespace Emgu.CV
       /// <param name="dpdc">Optional Nx2 matrix of derivatives of image points w.r.t. cx and cy</param>
       /// <param name="dpddist">Optional Nx4 matrix of derivatives of image points w.r.t. distortion coefficients</param>
       /// <param name="aspectRatio">Aspect ratio</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvProjectPoints2(
-         IntPtr objectPoints,
-         IntPtr rotationVector,
-         IntPtr translationVector,
-         IntPtr intrinsicMatrix,
-         IntPtr distortionCoeffs,
-         IntPtr imagePoints,
-         IntPtr dpdrot,
-         IntPtr dpdt,
-         IntPtr dpdf,
-         IntPtr dpdc,
-         IntPtr dpddist,
-         double aspectRatio);
+      public static void ProjectPoints(IInputArray objectPoints, IInputArray rvec, IInputArray tvec, IInputArray cameraMatrix, IInputArray distCoeffs, IOutputArray imagePoints, IOutputArray jacobian = null, double aspectRatio = 0)
+      {
+         cveProjectPoints(objectPoints.InputArrayPtr, rvec.InputArrayPtr, tvec.InputArrayPtr, cameraMatrix.InputArrayPtr, distCoeffs == null ? IntPtr.Zero : distCoeffs.InputArrayPtr, imagePoints.OutputArrayPtr, jacobian == null ? IntPtr.Zero : jacobian.OutputArrayPtr, aspectRatio);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveProjectPoints(IntPtr objPoints, IntPtr rvec, IntPtr tvec, IntPtr cameraMatrix, IntPtr distCoeffs, IntPtr imagePoints, IntPtr jacobian, double aspectRatio);
 
       /// <summary>
       /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
@@ -218,59 +187,45 @@ namespace Emgu.CV
       /// <param name="flags">Different flags</param>
       /// <param name="termCriteria">The termination criteria</param>
       /// <returns>The final reprojection error</returns>
-      
-#if ANDROID
-      public static double cvCalibrateCamera2(
-         IntPtr objectPoints,
-         IntPtr imagePoints,
-         IntPtr pointCounts,
+      public static double CalibrateCamera(
+         IInputArray objectPoints,
+         IInputArray imagePoints,
          Size imageSize,
-         IntPtr intrinsicMatrix,
-         IntPtr distortionCoeffs,
-         IntPtr rotationVectors,
-         IntPtr translationVectors,
-         CvEnum.CALIB_TYPE flags,
+         IInputOutputArray cameraMatrix,
+         IInputOutputArray distortionCoeffs,
+         IOutputArray rotationVectors,
+         IOutputArray translationVectors,
+         CvEnum.CalibType flags,
          MCvTermCriteria termCriteria)
       {
-         return cvCalibrateCamera2(objectPoints, imagePoints, pointCounts, imageSize.Width, imageSize.Height,
-            intrinsicMatrix, distortionCoeffs, rotationVectors, translationVectors, flags, termCriteria.type, termCriteria.max_iter, termCriteria.epsilon);
+         return cveCalibrateCamera(
+            objectPoints.InputArrayPtr,
+            imagePoints.InputArrayPtr,
+            ref imageSize,
+            cameraMatrix.InputOutputArrayPtr,
+            distortionCoeffs.InputOutputArrayPtr,
+            rotationVectors.OutputArrayPtr,
+            translationVectors.OutputArrayPtr,
+            flags,
+            ref termCriteria);
       }
-
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern double cvCalibrateCamera2(
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern double cveCalibrateCamera(
          IntPtr objectPoints,
          IntPtr imagePoints,
-         IntPtr pointCounts,
-         int imageSizeWidth, int imageSizeHeight,
-         IntPtr intrinsicMatrix,
+         ref Size imageSize,
+         IntPtr cameraMatrix,
          IntPtr distortionCoeffs,
          IntPtr rotationVectors,
          IntPtr translationVectors,
-         CvEnum.CALIB_TYPE flags,
-         CvEnum.TERMCRIT type,
-         int maxIter,
-         double epsilon);
-#else
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern double cvCalibrateCamera2(
-         IntPtr objectPoints,
-         IntPtr imagePoints,
-         IntPtr pointCounts,
-         Size imageSize,
-         IntPtr intrinsicMatrix,
-         IntPtr distortionCoeffs,
-         IntPtr rotationVectors,
-         IntPtr translationVectors,
-         CvEnum.CALIB_TYPE flags,
-         MCvTermCriteria termCriteria);
-#endif
+         CvEnum.CalibType flags,
+         ref MCvTermCriteria termCriteria);
 
       /// <summary>
       /// Computes various useful camera (sensor/lens) characteristics using the computed camera calibration matrix, image frame resolution in pixels and the physical aperture size
       /// </summary>
       /// <param name="calibMatr">The matrix of intrinsic parameters</param>
-      /// <param name="imgWidth">Image width in pixels</param>
-      /// <param name="imgHeight">Image height in pixels</param>
+      /// <param name="imageSize">Image size in pixels</param>
       /// <param name="apertureWidth">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
       /// <param name="apertureHeight">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
       /// <param name="fovx">Field of view angle in x direction in degrees</param>
@@ -278,18 +233,17 @@ namespace Emgu.CV
       /// <param name="focalLength">Focal length in realworld units </param>
       /// <param name="principalPoint">The principal point in realworld units </param>
       /// <param name="pixelAspectRatio">The pixel aspect ratio ~ fy/f</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvCalibrationMatrixValues(
-         IntPtr calibMatr,
-         int imgWidth,
-         int imgHeight,
-         double apertureWidth,
-         double apertureHeight,
-         ref double fovx,
-         ref double fovy,
-         ref double focalLength,
-         ref MCvPoint2D64f principalPoint,
-         ref double pixelAspectRatio);
+      public static void CalibrationMatrixValues(
+         IInputArray cameraMatrix, Size imageSize, double apertureWidth, double apertureHeight,
+         ref double fovx, ref double fovy, ref double focalLength, ref MCvPoint2D64f principalPoint, ref double aspectRatio)
+      {
+         cveCalibrationMatrixValues(
+            cameraMatrix.InputArrayPtr, ref imageSize, apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref aspectRatio);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveCalibrationMatrixValues(
+         IntPtr cameraMatrix, ref Size imageSize, double apertureWidth, double apertureHeight,
+         ref double fovx, ref double fovy, ref double focalLength, ref MCvPoint2D64f principalPoint, ref double aspectRatio);
 
       /// <summary>
       /// Estimates extrinsic camera parameters using known intrinsic parameters and extrinsic parameters for each view. The coordinates of 3D object points and their correspondent 2D projections must be specified. This function also minimizes back-projection error
@@ -325,73 +279,53 @@ namespace Emgu.CV
       /// <param name="cameraMatrix2">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
       /// <param name="distCoeffs2">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
       /// <param name="imageSize">Size of the image, used only to initialize intrinsic camera matrix</param>
-      /// <param name="R">The rotation matrix between the 1st and the 2nd cameras' coordinate systems </param>
-      /// <param name="T">The translation vector between the cameras' coordinate systems</param>
-      /// <param name="E">The optional output essential matrix</param>
-      /// <param name="F">The optional output fundamental matrix </param>
+      /// <param name="r">The rotation matrix between the 1st and the 2nd cameras' coordinate systems </param>
+      /// <param name="t">The translation vector between the cameras' coordinate systems</param>
+      /// <param name="e">The optional output essential matrix</param>
+      /// <param name="f">The optional output fundamental matrix </param>
       /// <param name="termCrit">Termination criteria for the iterative optimiziation algorithm</param>
       /// <param name="flags">The calibration flags</param>
       /// <returns></returns>
-#if ANDROID
-      public static double cvStereoCalibrate(
-         IntPtr objectPoints,
-         IntPtr imagePoints1,
-         IntPtr imagePoints2,
-         IntPtr pointCounts,
-         IntPtr cameraMatrix1,
-         IntPtr distCoeffs1,
-         IntPtr cameraMatrix2,
-         IntPtr distCoeffs2,
+      public static double StereoCalibrate(
+         IInputArray objectPoints,
+         IInputArray imagePoints1,
+         IInputArray imagePoints2,  
+         IInputOutputArray cameraMatrix1,
+         IInputOutputArray distCoeffs1,
+         IInputOutputArray cameraMatrix2,
+         IInputOutputArray distCoeffs2,
          Size imageSize,
-         IntPtr R,
-         IntPtr T,
-         IntPtr E,
-         IntPtr F,
-         MCvTermCriteria termCrit,
-         CvEnum.CALIB_TYPE flags)
+         IOutputArray r,
+         IOutputArray t,
+         IOutputArray e,
+         IOutputArray f,
+         CvEnum.CalibType flags,
+         MCvTermCriteria termCrit)
       {
-         return cvStereoCalibrate(objectPoints, imagePoints1, imagePoints2, pointCounts, cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2,
-            imageSize.Width, imageSize.Height, R, T, E, F, termCrit.type, termCrit.max_iter, termCrit.epsilon, flags);
+         return cveStereoCalibrate(
+            objectPoints.InputArrayPtr, imagePoints1.InputArrayPtr, imagePoints2.InputArrayPtr,
+            cameraMatrix1.InputOutputArrayPtr, distCoeffs1.InputOutputArrayPtr,
+            cameraMatrix2.InputOutputArrayPtr, distCoeffs2.InputOutputArrayPtr,
+            ref imageSize,
+            r.OutputArrayPtr, t.OutputArrayPtr, e.OutputArrayPtr, f.OutputArrayPtr,
+            flags, ref termCrit);
       }
-
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern double cvStereoCalibrate(
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern double cveStereoCalibrate(
          IntPtr objectPoints,
          IntPtr imagePoints1,
          IntPtr imagePoints2,
-         IntPtr pointCounts,
          IntPtr cameraMatrix1,
          IntPtr distCoeffs1,
          IntPtr cameraMatrix2,
          IntPtr distCoeffs2,
-         int imageSizeWidth, int imageSizeHeight,
-         IntPtr R,
-         IntPtr T,
-         IntPtr E,
-         IntPtr F,
-         CvEnum.TERMCRIT type,
-         int maxIter,
-         double epsilon,
-         CvEnum.CALIB_TYPE flags);
-#else
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern double cvStereoCalibrate(
-         IntPtr objectPoints,
-         IntPtr imagePoints1,
-         IntPtr imagePoints2,
-         IntPtr pointCounts,
-         IntPtr cameraMatrix1,
-         IntPtr distCoeffs1,
-         IntPtr cameraMatrix2,
-         IntPtr distCoeffs2,
-         Size imageSize,
-         IntPtr R,
-         IntPtr T,
-         IntPtr E,
-         IntPtr F,
-         MCvTermCriteria termCrit,
-         CvEnum.CALIB_TYPE flags);
-#endif
+         ref Size imageSize,
+         IntPtr r,
+         IntPtr t,
+         IntPtr e,
+         IntPtr f,
+         CvEnum.CalibType flags,
+         ref MCvTermCriteria termCrit);
 
       /// <summary>
       /// computes the rectification transformations without knowing intrinsic parameters of the cameras and their relative position in space, hence the suffix "Uncalibrated". Another related difference from cvStereoRectify is that the function outputs not the rectification transformations in the object (3D) space, but the planar perspective transformations, encoded by the homography matrices H1 and H2. The function implements the following algorithm [Hartley99]. 
@@ -407,39 +341,14 @@ namespace Emgu.CV
       /// <param name="H2">The rectification homography matrices for the second images</param>
       /// <param name="threshold">If the parameter is greater than zero, then all the point pairs that do not comply the epipolar geometry well enough (that is, the points for which fabs(points2[i]T*F*points1[i])>threshold) are rejected prior to computing the homographies</param>
       /// <returns></returns>
-#if ANDROID
-      public static int cvStereoRectifyUncalibrated(
-         IntPtr points1,
-         IntPtr points2,
-         IntPtr F,
-         Size imageSize,
-         IntPtr H1,
-         IntPtr H2,
-         double threshold)
+      public static bool StereoRectifyUncalibrated(IInputArray points1, IInputArray points2, IInputArray f, Size imgSize, IOutputArray h1, IOutputArray h2, double threshold = 5)
       {
-         return cvStereoRectifyUncalibrated(points1, points2, F, imageSize.Width, imageSize.Height, H1, H2, threshold);
+         return cveStereoRectifyUncalibrated(points1.InputArrayPtr, points2.InputArrayPtr, f.InputArrayPtr, ref imgSize, h1.OutputArrayPtr, h2.OutputArrayPtr, threshold);
       }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      private static extern bool cveStereoRectifyUncalibrated(IntPtr points1, IntPtr points2, IntPtr f, ref Size imgSize, IntPtr h1, IntPtr h2, double threshold);
 
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int cvStereoRectifyUncalibrated(
-         IntPtr points1,
-         IntPtr points2,
-         IntPtr F,
-         int imageSizeWidth, int imageSizeHeight,
-         IntPtr H1,
-         IntPtr H2,
-         double threshold);
-#else
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvStereoRectifyUncalibrated(
-         IntPtr points1,
-         IntPtr points2,
-         IntPtr F,
-         Size imageSize,
-         IntPtr H1,
-         IntPtr H2,
-         double threshold);
-#endif
 
       /// <summary>
       /// computes the rotation matrices for each camera that (virtually) make both camera image planes the same plane. Consequently, that makes all the epipolar lines parallel and thus simplifies the dense stereo correspondence problem. On input the function takes the matrices computed by cvStereoCalibrate and on output it gives 2 rotation matrices and also 2 projection matrices in the new coordinates. The function is normally called after cvStereoCalibrate that computes both camera matrices, the distortion coefficients, R and T
@@ -449,86 +358,58 @@ namespace Emgu.CV
       /// <param name="distCoeffs1">The vectors of distortion coefficients for first camera, 4x1, 1x4, 5x1 or 1x5</param>
       /// <param name="distCoeffs2">The vectors of distortion coefficients for second camera, 4x1, 1x4, 5x1 or 1x5</param>
       /// <param name="imageSize">Size of the image used for stereo calibration</param>
-      /// <param name="R">The rotation matrix between the 1st and the 2nd cameras' coordinate systems</param>
-      /// <param name="T">The translation vector between the cameras' coordinate systems</param>
-      /// <param name="R1">3x3 Rectification transforms (rotation matrices) for the first camera</param>
-      /// <param name="R2">3x3 Rectification transforms (rotation matrices) for the second camera</param>
-      /// <param name="P1">3x4 Projection matrices in the new (rectified) coordinate systems</param>
-      /// <param name="P2">3x4 Projection matrices in the new (rectified) coordinate systems</param>
-      /// <param name="Q">The optional output disparity-to-depth mapping matrix, 4x4, see cvReprojectImageTo3D. </param>
+      /// <param name="r">The rotation matrix between the 1st and the 2nd cameras' coordinate systems</param>
+      /// <param name="t">The translation vector between the cameras' coordinate systems</param>
+      /// <param name="r1">3x3 Rectification transforms (rotation matrices) for the first camera</param>
+      /// <param name="r2">3x3 Rectification transforms (rotation matrices) for the second camera</param>
+      /// <param name="p1">3x4 Projection matrices in the new (rectified) coordinate systems</param>
+      /// <param name="p2">3x4 Projection matrices in the new (rectified) coordinate systems</param>
+      /// <param name="1">The optional output disparity-to-depth mapping matrix, 4x4, see cvReprojectImageTo3D. </param>
       /// <param name="flags">The operation flags, use CALIB_ZERO_DISPARITY for default</param>
       /// <param name="alpha">Use -1 for default</param>
       /// <param name="newImageSize">Use Size.Empty for default</param>
       /// <param name="validPixROI1">The valid pixel ROI for image1</param>
       /// <param name="validPixROI2">The valid pixel ROI for image2</param>
-#if ANDROID
-      public static void cvStereoRectify(
-         IntPtr cameraMatrix1,
-         IntPtr cameraMatrix2,
-         IntPtr distCoeffs1,
-         IntPtr distCoeffs2,
-         Size imageSize,
-         IntPtr R,
-         IntPtr T,
-         IntPtr R1,
-         IntPtr R2,
-         IntPtr P1,
-         IntPtr P2,
-         IntPtr Q,
-         CvEnum.STEREO_RECTIFY_TYPE flags,
-         double alpha,
-         Size newImageSize,
-         ref Rectangle validPixROI1,
-         ref Rectangle validPixROI2
-         )
+      public static void StereoRectify(
+         IInputArray cameraMatrix1, IInputArray distCoeffs1,
+         IInputArray cameraMatrix2, IInputArray distCoeffs2,
+         Size imageSize, IInputArray r, IInputArray t,
+         IOutputArray r1, IOutputArray r2,
+         IOutputArray p1, IOutputArray p2,
+         IOutputArray q, CvEnum.StereoRectifyType flags,
+         double alpha, Size newImageSize,
+         ref Rectangle validPixROI1, ref Rectangle validPixROI2)
       {
-         cvStereoRectify(cameraMatrix1, cameraMatrix2, distCoeffs1, distCoeffs2, imageSize.Width, imageSize.Height,
-            R, T, R1, R2, P1, P2, Q, flags, alpha, newImageSize.Width, newImageSize.Height, ref validPixROI1, ref validPixROI2);
+         cveStereoRectify(
+            cameraMatrix1.InputArrayPtr, distCoeffs1.InputArrayPtr,
+            cameraMatrix2.InputArrayPtr, distCoeffs2.InputArrayPtr,
+            ref imageSize, r.InputArrayPtr, t.InputArrayPtr,
+            r1.OutputArrayPtr, r2.OutputArrayPtr,
+            p1.OutputArrayPtr, p2.OutputArrayPtr,
+            q.OutputArrayPtr, flags,
+            alpha, ref newImageSize, ref validPixROI1, ref validPixROI2);
       }
-
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvStereoRectify(
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveStereoRectify(
          IntPtr cameraMatrix1,
-         IntPtr cameraMatrix2,
          IntPtr distCoeffs1,
+         IntPtr cameraMatrix2,
          IntPtr distCoeffs2,
-         int imageSizeWidth, int imageSizeHeight,
-         IntPtr R,
-         IntPtr T,
-         IntPtr R1,
-         IntPtr R2,
-         IntPtr P1,
-         IntPtr P2,
-         IntPtr Q,
-         CvEnum.STEREO_RECTIFY_TYPE flags,
+         ref Size imageSize,
+         IntPtr r,
+         IntPtr t,
+         IntPtr r1,
+         IntPtr r2,
+         IntPtr p1,
+         IntPtr p2,
+         IntPtr q,
+         CvEnum.StereoRectifyType flags,
          double alpha,
-         int newImageSizeWidth, int newImageSizeHeight,
+         ref Size newImageSize,
          ref Rectangle validPixROI1,
          ref Rectangle validPixROI2
          );
 
-#else
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvStereoRectify(
-         IntPtr cameraMatrix1,
-         IntPtr cameraMatrix2,
-         IntPtr distCoeffs1,
-         IntPtr distCoeffs2,
-         Size imageSize,
-         IntPtr R,
-         IntPtr T,
-         IntPtr R1,
-         IntPtr R2,
-         IntPtr P1,
-         IntPtr P2,
-         IntPtr Q,
-         CvEnum.STEREO_RECTIFY_TYPE flags,
-         double alpha,
-         Size newImageSize,
-         ref Rectangle validPixROI1,
-         ref Rectangle validPixROI2
-         );
-#endif
 
       /// <summary>
       /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
@@ -536,37 +417,16 @@ namespace Emgu.CV
       /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>
       /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
       /// <param name="corners">Pointer to the output array of corners(PointF) detected</param>
-      /// <param name="cornerCount">The output corner counter. If it is not IntPtr.Zero, the function stores there the number of corners found</param>
       /// <param name="flags">Various operation flags</param>
-      /// <returns>Non-zero value if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
+      /// <returns>True if all the corners have been found and they have been placed in a certain order (row by row, left to right in every row), otherwise, if the function fails to find all the corners or reorder them, it returns 0</returns>
       /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
-#if ANDROID
-      public static int cvFindChessboardCorners(
-         IntPtr image,
-         Size patternSize,
-         IntPtr corners,
-         ref int cornerCount,
-         CvEnum.CALIB_CB_TYPE flags)
+      public static bool FindChessboardCorners(IInputArray image, Size patternSize, IOutputArray corners, CvEnum.CalibCbType flags = CvEnum.CalibCbType.AdaptiveThresh | CvEnum.CalibCbType.NormalizeImage)
       {
-         return cvFindChessboardCorners(image, patternSize.Width, patternSize.Height, corners, ref cornerCount, flags);
+         return cveFindChessboardCorners(image.InputArrayPtr, ref patternSize, corners.OutputArrayPtr, flags);
       }
-      
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int cvFindChessboardCorners(
-         IntPtr image,
-         int patternSizeWidth, int patternSizeHeight,
-         IntPtr corners,
-         ref int cornerCount,
-         CvEnum.CALIB_CB_TYPE flags);
-#else
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvFindChessboardCorners(
-         IntPtr image,
-         Size patternSize,
-         IntPtr corners,
-         ref int cornerCount,
-         CvEnum.CALIB_CB_TYPE flags);
-#endif
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern bool cveFindChessboardCorners(IntPtr image, ref Size patternSize, IntPtr corners, CvEnum.CalibCbType flags);
+
 
       /// <summary>
       /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (pattern_was_found=0) or the colored corners connected with lines when the board was found (pattern_was_found != 0). 
@@ -574,54 +434,13 @@ namespace Emgu.CV
       /// <param name="image">The destination image; it must be 8-bit color image</param>
       /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
       /// <param name="corners">The array of corners detected</param>
-      /// <param name="count">The number of corners</param>
       /// <param name="patternWasFound">Indicates whether the complete board was found (!=0) or not (=0). One may just pass the return value cvFindChessboardCorners here. </param>
-#if ANDROID
-      public static void cvDrawChessboardCorners(
-         IntPtr image,
-         Size patternSize,
-         IntPtr corners,
-         int count,
-         int patternWasFound)
+      public static void DrawChessboardCorners(IInputOutputArray image, Size patternSize, IInputArray corners, bool patternWasFound)
       {
-         cvDrawChessboardCorners(image, patternSize.Width, patternSize.Height, corners, count, patternWasFound);
+         cveDrawChessboardCorners(image.InputOutputArrayPtr, ref patternSize, corners.InputArrayPtr, patternWasFound);
       }
-
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvDrawChessboardCorners(
-         IntPtr image,
-         int patternSizeWidth, int patternSizeHeight,
-         IntPtr corners,
-         int count,
-         int patternWasFound);
-#else
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvDrawChessboardCorners(
-         IntPtr image,
-         Size patternSize,
-         IntPtr corners,
-         int count,
-         int patternWasFound);
-#endif
-
-      /*
-      /// <summary>
-      /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (pattern_was_found=0) or the colored corners connected with lines when the board was found (pattern_was_found != 0). 
-      /// </summary>
-      /// <param name="image">The destination image; it must be 8-bit color image</param>
-      /// <param name="patternSize">The number of inner corners per chessboard row and column</param>
-      /// <param name="corners">The array of corners detected</param>
-      /// <param name="count">The number of corners</param>
-      /// <param name="patternWasFound">Indicates whether the complete board was found (!=0) or not (=0). One may just pass the return value cvFindChessboardCorners here. </param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvDrawChessboardCorners(
-         IntPtr image,
-         Size patternSize,
-         [In]
-         PointF[] corners,
-         int count,
-         int patternWasFound);
-      */
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveDrawChessboardCorners(IntPtr image, ref Size patternSize, IntPtr corners, [MarshalAs(CvInvoke.BoolMarshalType)] bool patternWasFound);
       #endregion
 
       #region Pose Estimation
@@ -677,7 +496,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvPOSIT(
          IntPtr positObject, IntPtr imagePoints, double focalLength,
-         CvEnum.TERMCRIT type,
+         CvEnum.TermCritType type,
          int maxIter,
          double epsilon,
          IntPtr rotationMatrix, IntPtr translationVector);
@@ -696,5 +515,23 @@ namespace Emgu.CV
       [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleasePOSITObject(ref IntPtr positObject);
       #endregion
+
+
+      public static void TriangulatePoints(IInputArray projMat1, IInputArray projMat2, IInputArray projPoints1, IInputArray projPoints2, IOutputArray points4D)
+      {
+         cveTriangulatePoints(projMat1.InputArrayPtr, projMat2.InputArrayPtr, projPoints1.InputArrayPtr, projPoints2.InputArrayPtr, points4D.OutputArrayPtr);
+      }
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void cveTriangulatePoints(IntPtr projMat1, IntPtr projMat2, IntPtr projPoints1, IntPtr projPoints2, IntPtr points4D);
+
+      public static void CorrectMatches(IInputArray f, IInputArray points1, IInputArray points2, IOutputArray newPoints1, IOutputArray newPoints2)
+      {
+         cveCorrectMatches(f.InputArrayPtr, points1.InputArrayPtr, points2.InputArrayPtr, newPoints1.OutputArrayPtr, newPoints2.OutputArrayPtr);
+      }
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1, IntPtr newPoints2);
+
    }
 }

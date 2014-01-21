@@ -31,7 +31,8 @@ namespace Emgu.CV
       {
          _ptr = ptr;
          _needDispose = needDispose;
-         //UMatInvoke.cvUMatUseCustomAllocator(_ptr, AllocateCallback, DeallocateCallback, ref _memoryAllocator, ref _oclMatAllocator);
+         //InitActionPtr();
+         //UMatInvoke.cvUMatUseCustomAllocator(_ptr, AllocateCallback, DeallocateCallback, _allocateDataActionPtr, _freeDataActionPtr, ref _memoryAllocator, ref _oclMatAllocator);
       }
 
       /// <summary>
@@ -42,20 +43,39 @@ namespace Emgu.CV
       {
       }
 
-      public UMat(int rows, int cols, Mat.DepthType type, int channels)
+      /// <summary>
+      /// Create a umat of the specific type.
+      /// </summary>
+      /// <param name="rows">Number of rows in a 2D array.</param>
+      /// <param name="cols">Number of columns in a 2D array.</param>
+      /// <param name="type">Mat element type</param>
+      /// <param name="channels">Number of channels</param>
+      public UMat(int rows, int cols, CvEnum.DepthType type, int channels)
          : this()
       {
          Create(rows, cols, type, channels);
       }
 
+      /// <summary>
+      /// Get the Umat header for the specific roi of the parent
+      /// </summary>
+      /// <param name="parent">The parent Umat</param>
+      /// <param name="roi">The region of interest</param>
       public UMat(UMat parent, Rectangle roi)
         : this(UMatInvoke.cvUMatCreateFromROI(parent.Ptr, ref roi), true)
       {
       }
 
-      public void Create(int rows, int cols, Mat.DepthType type, int channels)
+      /// <summary>
+      /// Allocates new array data if needed.
+      /// </summary>
+      /// <param name="rows">New number of rows.</param>
+      /// <param name="cols">New number of columns.</param>
+      /// <param name="type">New matrix element depth type.</param>
+      /// <param name="channels">New matrix number of channels</param>
+      public void Create(int rows, int cols, CvEnum.DepthType type, int channels)
       {
-         UMatInvoke.cvUMatCreateData(_ptr, rows, cols, Mat.MakeType(type, channels));
+         UMatInvoke.cvUMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels));
       }
 
       /// <summary>
@@ -69,6 +89,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get the number of channels
+      /// </summary>
       public int NumberOfChannels
       {
          get
@@ -91,27 +114,38 @@ namespace Emgu.CV
       /// <summary>
       /// Copy the data in this mat to the other mat
       /// </summary>
+      /// <param name="mask">Operation mask. Its non-zero elements indicate which matrix elements need to be copied.</param>
       /// <param name="m">The input array to copy to</param>
       public void CopyTo(IOutputArray m, IInputArray mask = null)
       {
          UMatInvoke.cvUMatCopyTo(this, m.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
 
+      /// <summary>
+      /// Sets all or some of the array elements to the specified value.
+      /// </summary>
+      /// <param name="value">Assigned scalar converted to the actual array type.</param>
+      /// <param name="mask">Operation mask of the same size as the umat.</param>
       public void SetTo(IInputArray value, IInputArray mask = null)
       {
          UMatInvoke.cvUMatSetTo(Ptr, value.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
 
+      /// <summary>
+      /// Sets all or some of the array elements to the specified value.
+      /// </summary>
+      /// <param name="value">Assigned scalar value.</param>
+      /// <param name="mask">Operation mask of the same size as the umat.</param>
       public void SetTo(MCvScalar value, IInputArray mask = null)
       {
-         using (InputArray ia = new InputArray(value))
+         using (ScalarArray ia = new ScalarArray(value))
          {
             SetTo(ia, mask);
          }
       }
 
       /// <summary>
-      /// Indicates if this cv::Mat is empty
+      /// Indicates if this cv::UMat is empty
       /// </summary>
       public bool IsEmpty
       {
@@ -145,6 +179,9 @@ namespace Emgu.CV
 
       }
 
+      /// <summary>
+      /// Pointer to the InputArray
+      /// </summary>
       public IntPtr InputArrayPtr
       {
          get
@@ -155,6 +192,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Pointer to the OutputArray
+      /// </summary>
       public IntPtr OutputArrayPtr
       {
          get
@@ -165,6 +205,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Pointer to the InputOutputArray
+      /// </summary>
       public IntPtr InputOutputArrayPtr
       {
          get
@@ -220,7 +263,7 @@ namespace Emgu.CV
       internal extern static void cvUMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvUMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, ref IntPtr matAllocator, ref IntPtr oclAllocator);
+      internal extern static void cvUMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr, ref IntPtr matAllocator, ref IntPtr oclAllocator);
    }
 }
 

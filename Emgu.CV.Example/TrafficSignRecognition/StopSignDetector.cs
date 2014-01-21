@@ -24,7 +24,7 @@ namespace TrafficSignRecognition
 
       public StopSignDetector(Image<Bgr, Byte> stopSignModel)
       {
-         _detector = new SURFDetector(500, false);
+         _detector = new SURFDetector(500);
          using (Image<Gray, Byte> redMask = GetRedPixelMask(stopSignModel))
          {
             ImageFeature<float>[] features = _detector.DetectAndCompute(redMask, null);
@@ -43,7 +43,7 @@ namespace TrafficSignRecognition
             new Point(1, 3),
             new Point(0, 2),
             new Point(0, 1)},
-            Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
+            Emgu.CV.CvEnum.BackOrFront.Front);
       }
 
       /// <summary>
@@ -61,8 +61,8 @@ namespace TrafficSignRecognition
             try
             {
                //channels[0] is the mask for hue less than 20 or larger than 160
-               using (InputArray lower = new InputArray(20))
-               using (InputArray upper = new InputArray(160))
+               using (ScalarArray lower = new ScalarArray(20))
+               using (ScalarArray upper = new ScalarArray(160))
                   CvInvoke.InRange(channels[0], lower, upper, channels[0]);
                channels[0]._Not();
 
@@ -87,7 +87,7 @@ namespace TrafficSignRecognition
             contours.ApproxPoly(contours.Perimeter * 0.02, 0, contours.Storage);
             if (contours.Area > 200)
             {
-               double ratio = CvInvoke.cvMatchShapes(_octagon, contours, Emgu.CV.CvEnum.CONTOURS_MATCH_TYPE.CV_CONTOURS_MATCH_I3, 0);
+               double ratio = CvInvoke.cvMatchShapes(_octagon, contours, Emgu.CV.CvEnum.ContoursMatchType.I3, 0);
 
                if (ratio > 0.1) //not a good match of contour shape
                {

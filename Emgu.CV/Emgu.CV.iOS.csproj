@@ -80,7 +80,6 @@
     <Compile Include="Features2D\LDetector.cs" />
     <Compile Include="LatentSvmDetector.cs" />
     <Compile Include="LevMarqSparse.cs" />
-    <Compile Include="Util\Mat.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
@@ -196,7 +195,6 @@
     <Compile Include="IImage.cs" />
     <Compile Include="Kalman.cs" />
     <Compile Include="MotionHistory.cs" />
-    <Compile Include="OpticalFlow.cs" />
     <Compile Include="PInvoke\CvType\MCvBGStatModel.cs" />
     <Compile Include="PInvoke\CvType\MCvChain.cs" />
     <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
@@ -221,7 +219,6 @@
     <Compile Include="Shape\Triangle2DF.cs" />
     <Compile Include="Shape\Triangle3DF.cs" />
     <Compile Include="StereoBM.cs" />
-    <Compile Include="StructuringElementEx.cs" />
     <Compile Include="MemStorage.cs" />
     <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />
@@ -245,7 +242,6 @@
     <Compile Include="PInvoke\CvEnum.cs" />
     <Compile Include="PInvoke\CvInvoke.cs" />
     <Compile Include="Shape\Ellipse.cs" />
-    <Compile Include="HaarCascade.cs" />
     <Compile Include="DenseHistogram.cs" />
     <Compile Include="Capture\ICapture.cs" />
     <Compile Include="Capture\IDuplexCapture.cs" />
@@ -264,6 +260,20 @@
       <DependentUpon>libemgucv.a</DependentUpon>
     </Compile>
     <Compile Include="PInvoke\iOS\ImageiOS.cs" />
+    <Compile Include="Util\VectorOfUMat.cs" />
+    <Compile Include="Util\VectorOfERStat.cs" />
+    <Compile Include="Util\IInputArray.cs" />
+    <Compile Include="Util\IInputOutputArray.cs" />
+    <Compile Include="Util\IOutputArray.cs" />
+    <Compile Include="Util\VectorOfKeyPointExtra.cs" />
+    <Compile Include="Util\VectorOfMatExtra.cs" />
+    <Compile Include="IStereoMatcher.cs" />
+    <Compile Include="Mat.cs" />
+    <Compile Include="StereoMatcherExtensions.cs" />
+    <Compile Include="UMat.cs" />
+    <Compile Include="MatDataAllocator.cs" />
+    <Compile Include="Util\VectorOfInt.cs" />
+    <Compile Include="DenseOpticalFlow.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\StringTable.resx">

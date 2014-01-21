@@ -240,15 +240,12 @@ void drawMatchedFeatures(
 }
 
 //DescriptorMatcher
-void CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, CvMat* trainDescriptor)
+void CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* trainDescriptors)
 {
-   cv::Mat trainMat = cv::cvarrToMat(trainDescriptor);
-   std::vector<cv::Mat> trainVector;
-   trainVector.push_back(trainMat);
-   matcher->add(trainVector);   
+   matcher->add(*trainDescriptors);   
 }
 
-void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const CvMat* queryDescriptors, 
+void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
                    CvMat* trainIdx, CvMat* distance, int k,
                    const CvMat* mask) 
 {
@@ -257,13 +254,12 @@ void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, const CvMat* qu
    //only implemented for a single trained image for now
    CV_Assert( matcher->getTrainDescriptors().size() == 1);
 
-   cv::Mat queryMat = cv::cvarrToMat(queryDescriptors);
    cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
    std::vector<cv::Mat> masks;
    if (!maskMat.empty()) 
       masks.push_back(maskMat);
 
-   matcher->knnMatch(queryMat, matches, k, masks, false);
+   matcher->knnMatch(*queryDescriptors, matches, k, masks, false);
    
    VectorOfDMatchToMat(&matches, trainIdx, distance);
 }
@@ -402,9 +398,9 @@ void CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector)
 }
 
 //BowKMeansTrainer
-cv::BOWKMeansTrainer* CvBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria termcrit, int attempts, int flags)
+cv::BOWKMeansTrainer* CvBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria* termcrit, int attempts, int flags)
 {
-   return new cv::BOWKMeansTrainer(clusterCount, termcrit, attempts, flags);
+   return new cv::BOWKMeansTrainer(clusterCount, *termcrit, attempts, flags);
 }
 void CvBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer)
 {
@@ -415,23 +411,22 @@ int CvBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer)
 {
    return trainer->descriptorsCount();
 }
-void CvBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, CvMat* descriptors)
+void CvBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors)
 {
-   cv::Mat m = cv::cvarrToMat(descriptors);
-   trainer->add(m);
+   trainer->add(*descriptors);
 }
-void CvBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors)
+void CvBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster)
 {
    cv::Mat m = trainer->cluster();
-   cv::swap(m, *descriptors);
+   m.copyTo(*cluster);
 }
 
 //BOWImgDescriptorExtractor
 cv::BOWImgDescriptorExtractor* CvBOWImgDescriptorExtractorCreate(cv::DescriptorExtractor* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher)
 {
-      cv::Ptr<cv::DescriptorExtractor> extractorPtr(descriptorExtractor);
+   cv::Ptr<cv::DescriptorExtractor> extractorPtr(descriptorExtractor);
    extractorPtr.addref();
-         cv::Ptr<cv::DescriptorMatcher> matcherPtr(descriptorMatcher);
+   cv::Ptr<cv::DescriptorMatcher> matcherPtr(descriptorMatcher);
    matcherPtr.addref();
    return new cv::BOWImgDescriptorExtractor(extractorPtr, matcherPtr);
 }
@@ -440,10 +435,9 @@ void CvBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descript
    delete *descriptorExtractor;
    *descriptorExtractor = 0;
 }
-void CvBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, CvMat* vocabulary)
+void CvBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary)
 {
-   cv::Mat voc = cv::cvarrToMat(vocabulary);
-   bowImgDescriptorExtractor->setVocabulary(voc);
+   bowImgDescriptorExtractor->setVocabulary(*vocabulary);
 }
 void CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, const cv::Mat* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor)
 {

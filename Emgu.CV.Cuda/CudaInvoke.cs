@@ -375,7 +375,7 @@ namespace Emgu.CV.Cuda
          cudaSubtractS(a.InputArrayPtr, ref scalar, c.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, stream);
       }
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cudaSubtractS(IntPtr a, ref MCvScalar scalar, IntPtr c, IntPtr mask, IntPtr stream);
+      private static extern void cudaSubtractS(IntPtr a, ref MCvScalar scalar, IntPtr c, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Computes element-wise product of the two GpuMat: c = scale * a * b.
@@ -948,7 +948,7 @@ namespace Emgu.CV.Cuda
          cudaBitwiseAnd(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, stream);
       }
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cudaBitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
+      private static extern void cudaBitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical and of a GpuMat and a scalar:
@@ -1075,7 +1075,7 @@ namespace Emgu.CV.Cuda
          IntPtr src3,
          double beta,
          IntPtr dst,
-         CvEnum.GEMM_TYPE tABC,
+         CvEnum.GemmType tABC,
          IntPtr stream);
 
       /// <summary>
@@ -1179,12 +1179,12 @@ namespace Emgu.CV.Cuda
       /// <param name="yShift">Shift along the verticle axis</param>
       /// <param name="interpolation">Interpolation method. Only INTER_NEAREST, INTER_LINEAR, and INTER_CUBIC are supported.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Rotate(IInputArray src, IOutputArray dst, double angle, double xShift, double yShift, CvEnum.INPAINT_TYPE interpolation, Stream stream)
+      public static void Rotate(IInputArray src, IOutputArray dst, double angle, double xShift, double yShift, CvEnum.InpaintType interpolation, Stream stream)
       {
          cudaRotate(src.InputArrayPtr, dst.OutputArrayPtr, angle, xShift, yShift, interpolation, stream);
       }
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaRotate(IntPtr src, IntPtr dst, double angle, double xShift, double yShift, CvEnum.INPAINT_TYPE interpolation, IntPtr stream);
+      private static extern void cudaRotate(IntPtr src, IntPtr dst, double angle, double xShift, double yShift, CvEnum.InpaintType interpolation, IntPtr stream);
 
       /// <summary>
       /// Copies a 2D array to a larger destination array and pads borders with the given constant.
@@ -1260,12 +1260,12 @@ namespace Emgu.CV.Cuda
       /// <param name="dst">The resulting GpuMat of the DST, must be pre-allocated and continious. If single channel, the result is real. If double channel, the result is complex</param>
       /// <param name="flags">DFT flags</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
-      public static void Dft(IInputArray src, IOutputArray dst, CvEnum.CV_DXT flags, Stream stream)
+      public static void Dft(IInputArray src, IOutputArray dst, CvEnum.DxtType flags, Stream stream)
       {
          cudaDft(src.InputArrayPtr, dst.OutputArrayPtr, flags, stream);
       }
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaDft(IntPtr src, IntPtr dst, CvEnum.CV_DXT flags, IntPtr stream);
+      private static extern void cudaDft(IntPtr src, IntPtr dst, CvEnum.DxtType flags, IntPtr stream);
 
       /// <summary>
       /// Calculates histogram with evenly distributed bins for signle channel source.
@@ -1341,8 +1341,20 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaBilateralFilter(IntPtr src, IntPtr dst, int kernelSize, float sigmaColor, float sigmaSpace, CvEnum.BorderType borderType, IntPtr stream);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaGammaCorrection")]
-      public static extern void GammaCorrection(
+
+      /// <summary>
+      /// Routines for correcting image color gamma
+      /// </summary>
+      /// <param name="src">Source image (3- or 4-channel 8 bit).</param>
+      /// <param name="dst">Destination image.</param>
+      /// <param name="forward">True for forward gamma correction or false for inverse gamma correction.</param>
+      /// <param name="stream">Stream for the asynchronous version.</param>
+      public static void GammaCorrection(IInputArray src, IOutputArray dst, bool forward = true, Stream stream = null)
+      {
+         cudaGammaCorrection(src.InputArrayPtr, dst.OutputArrayPtr, forward, stream);
+      }
+      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaGammaCorrection(
          IntPtr src, 
          IntPtr dst, 
          [MarshalAs(CvInvoke.BoolMarshalType)]

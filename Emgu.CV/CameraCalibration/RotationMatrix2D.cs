@@ -122,7 +122,7 @@ namespace Emgu.CV
                null,
                0.0,
                points,
-               Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_B_T);
+               Emgu.CV.CvEnum.GemmType.Src2Transpose);
             
             if (!Object.ReferenceEquals(rotationMatrix, this)) rotationMatrix.Dispose();
          }

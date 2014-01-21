@@ -118,6 +118,9 @@
     <Compile Include="LatentSvmDetector.cs" />
     <Compile Include="LevMarqSparse.cs" />
     <Compile Include="MatDataAllocator.cs" />
+    <Compile Include="OclDevice.cs" />
+    <Compile Include="OclPlatformInfo.cs" />
+    <Compile Include="PInvoke\VectorOfDouble.cs" />
     <Compile Include="StereoMatcherExtensions.cs" />
     <Compile Include="UMat.cs" />
     <Compile Include="Util\IInputArray.cs" />
@@ -185,11 +188,18 @@
     <Compile Include="Util\VectorOfKeyPointExtra.cs" />
     <Compile Include="Util\VectorOfMat.cs" />
     <Compile Include="Util\VectorOfMatExtra.cs" />
+    <Compile Include="Util\VectorOfOclPlatformInfo.cs" />
+    <Compile Include="Util\VectorOfPoint3D32F.cs" />
     <Compile Include="Util\VectorOfRect.cs" />
     <Compile Include="Util\VectorOfPoint.cs" />
     <Compile Include="Util\VectorOfPointF.cs" />
     <Compile Include="Util\VectorOfUMat.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint.cs" />
+    <Compile Include="Util\VectorOfVectorOfPoint3D32F.cs" />
+    <Compile Include="Util\VectorOfVectorOfPointExtra.cs" />
+    <Compile Include="Util\VectorOfVectorOfPointF.cs" />
+    <Compile Include="Util\VectorOfVectorOfPoint3D32FExtra.cs" />
+    <Compile Include="Util\VectorOfVectorOfPointFExtra.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />
@@ -271,7 +281,6 @@
     <Compile Include="MemStorage.cs" />
     <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />
-    <Compile Include="PInvoke\CvType\MCvFont.cs" />
     <Compile Include="PInvoke\CvType\MCvHistogram.cs" />
     <Compile Include="PInvoke\CvType\MCvHuMoments.cs" />
     <Compile Include="PInvoke\CvType\MCvMat.cs" />

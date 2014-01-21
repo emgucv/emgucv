@@ -7,7 +7,8 @@
 #pragma once
 #ifndef EMGU_NONFREE_C_H
 #define EMGU_NONFREE_C_H
-
+/*
+#include "cvconfig.h"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/legacy/compat.hpp"
@@ -40,4 +41,5 @@ CVAPI(void) oclSURFDetectorCompute(
    bool useProvidedKeypoints);
 
 CVAPI(int) oclSURFDetectorGetDescriptorSize(cv::ocl::SURF_OCL* detector);
+*/
 #endif

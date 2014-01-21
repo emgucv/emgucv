@@ -34,11 +34,12 @@ void cveCLAHE(cv::_InputArray* src, double clipLimit, emgu::size* tileGridSize, 
    clahe->apply(*src, *dst);
 }
 
+/*
 void cveAdaptiveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, emgu::size* ksize, double sigmaSpace, double maxSigmaColor, CvPoint* anchor, int borderType)
 {
    cv::Size s(ksize->width, ksize->height);
    cv::adaptiveBilateralFilter(*src, *dst, s, sigmaSpace, maxSigmaColor, *anchor, borderType);
-}
+}*/
 
 void cveErode(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue)
 {
@@ -112,14 +113,14 @@ void cveCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int
    cv::copyMakeBorder(*src, *dst, top, bottom, left, right, borderType, *value);
 }
 
-void cveIntegral(cv::_InputArray* src, cv::_OutputArray* sum, cv::_OutputArray* sqsum, cv::_OutputArray* tilted, int sdepth)
+void cveIntegral(cv::_InputArray* src, cv::_OutputArray* sum, cv::_OutputArray* sqsum, cv::_OutputArray* tilted, int sdepth, int sqdepth)
 {
    if (tilted)
    {
-      cv::integral(*src, *sum, *sqsum, *tilted, sdepth);
+      cv::integral(*src, *sum, *sqsum, *tilted, sdepth, sqdepth);
    } else if (sqsum)
    {
-      cv::integral(*src, *sum, *sqsum, sdepth);
+      cv::integral(*src, *sum, *sqsum, sdepth, sqdepth);
    } else 
    {
       cv::integral(*src, *sum, sdepth);
@@ -261,4 +262,24 @@ void cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, CvSize* imgsize
 {
    cv::Mat res = cv::getDefaultNewCameraMatrix(*cameraMatrix, *imgsize, centerPrincipalPoint);
    cv::swap(*cm, res);
+}
+
+void cveEMD(cv::_InputArray* signature1, cv::_InputArray* signature2, int distType, cv::_InputArray* cost, float* lowerBound, cv::_OutputArray* flow)
+{
+   cv::EMD(*signature1, *signature2, distType, cost ? *cost : (cv::InputArray) cv::noArray(), lowerBound, flow ? *flow : (cv::OutputArray) cv::noArray());
+}
+
+void cveCalcHist( cv::_InputArray* images, const std::vector<int>* channels, cv::_InputArray* mask, cv::_OutputArray* hist, std::vector<int>* histSize, std::vector<float>* ranges, bool accumulate )
+{
+   cv::calcHist(*images, *channels, mask ? *mask : (cv::InputArray) cv::noArray(), *hist, *histSize, *ranges, accumulate);
+}
+
+void cveCalcBackProject(cv::_InputArray* images, const std::vector<int>* channels, cv::_InputArray* hist, cv::_OutputArray* dst, const std::vector<float>* ranges, double scale )
+{
+   cv::calcBackProject(*images, *channels, *hist, *dst, *ranges, scale);
+}
+
+double cveCompareHist(cv::_InputArray* h1, cv::_InputArray* h2, int method)
+{
+   return cv::compareHist(*h1, *h2, method);
 }

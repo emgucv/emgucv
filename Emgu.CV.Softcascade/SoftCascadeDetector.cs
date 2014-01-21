@@ -17,16 +17,39 @@ namespace Emgu.CV.Softcascade
    /// </summary>
    public class SoftCascadeDetector : UnmanagedObject
    {
+      /// <summary>
+      /// Algorithm used for non maximum suppression.
+      /// </summary>
       public enum RejectionCriteria
       {
+         /// <summary>
+         /// No rejection
+         /// </summary>
          NoReject = 1,
+         /// <summary>
+         /// Dollar
+         /// </summary>
          Dollar = 2,
+         /// <summary>
+         /// Default
+         /// </summary>
          Default = NoReject,
+         /// <summary>
+         /// NMS mask
+         /// </summary>
          NmsMask = 0xF
       };
 
+      /// <summary>
+      /// Detection result
+      /// </summary>
       public struct Detection
       {
+         /// <summary>
+         /// Create detection result from the given data
+         /// </summary>
+         /// <param name="boundingBox">The bounding box</param>
+         /// <param name="confident">The confident level</param>
          public Detection(Rectangle boundingBox, float confident)
          {
             _boundingBox = boundingBox;
@@ -36,12 +59,18 @@ namespace Emgu.CV.Softcascade
          private Rectangle _boundingBox;
          private float _confident;
 
+         /// <summary>
+         /// Get or set the bounding box
+         /// </summary>
          public Rectangle BoundingBox
          {
             get { return _boundingBox; }
             set { _boundingBox = value; }
          }
 
+         /// <summary>
+         /// Get or set the confident
+         /// </summary>
          public float Confident
          {
             get { return _confident; }
@@ -62,6 +91,12 @@ namespace Emgu.CV.Softcascade
          _ptr = SoftCascadeInvoke.cvSoftCascadeDetectorCreate(trainedCascadeFileName, minScale, maxScale, scales, rejCriteria);
       }
 
+      /// <summary>
+      /// Apply cascade to an input frame and return the vector of Detection objects.
+      /// </summary>
+      /// <param name="image">A frame on which detector will be applied.</param>
+      /// <param name="rois">A vector of regions of interest. Only the objects that fall into one of the regions will be returned.</param>
+      /// <returns>An output array of Detections.</returns>
       public Detection[] Detect(IInputArray image, Rectangle[] rois = null)
       {
          using (VectorOfRect roiRects = new VectorOfRect())
@@ -106,7 +141,7 @@ namespace Emgu.CV.Softcascade
       }
    }
 
-   public static partial class SoftCascadeInvoke
+   internal static partial class SoftCascadeInvoke
    {
       static SoftCascadeInvoke()
       {

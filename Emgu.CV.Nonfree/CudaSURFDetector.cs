@@ -19,22 +19,23 @@ namespace Emgu.CV.Nonfree
    /// </summary>
    public class CudaSURFDetector : UnmanagedObject
    {
+      /*
       /// <summary>
       /// Create a Cuda SURF detector using the specific parameters
       /// </summary>
       /// <param name="detector">The surf detector where the parameters will be borrow from</param>
-      /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea(). Use 0.01 for default</param>
-      public CudaSURFDetector(MCvSURFParams detector, float featuresRatio)
+      /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea().</param>
+      public CudaSURFDetector(MCvSURFParams detector, float featuresRatio = 0.01f)
          : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, (detector.Extended != 0), featuresRatio, (detector.Upright != 0))
       {
-      }
+      }*/
 
       /// <summary>
       /// Create a Cuda SURF detector
       /// </summary>
-      /// <param name="hessianThreshold">The interest operator threshold. Use 100 for default</param>
-      /// <param name="nOctaves">The number of octaves to process. Use 4 for default</param>
-      /// <param name="nIntervals">The number of intervals in each octave. Use 4 for default</param>
+      /// <param name="hessianThreshold">The interest operator threshold.</param>
+      /// <param name="nOctaves">The number of octaves to process.</param>
+      /// <param name="nOctaveLayers">The number of layers in each octave.</param>
       /// <param name="extended">True, if generate 128-len descriptors, false - 64-len descriptors.</param>
       /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea().</param>
       /// <param name="upright">If set to true, the orientation is not computed for the keypoints</param>

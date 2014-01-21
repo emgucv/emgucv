@@ -41,7 +41,7 @@ namespace Emgu.CV
          IInputOutputArray bgdModel,
          IInputOutputArray fgdModel,
          int iterCount,
-         CvEnum.GRABCUT_INIT_TYPE type)
+         CvEnum.GrabcutInitType type)
       {
          cveGrabCut(img.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputOutputArrayPtr, ref rect, bgdModel.InputOutputArrayPtr, fgdModel.InputOutputArrayPtr, iterCount, type);
       }
@@ -54,7 +54,7 @@ namespace Emgu.CV
          IntPtr bgdModel,
          IntPtr fgdModel,
          int iterCount,
-         CvEnum.GRABCUT_INIT_TYPE type);
+         CvEnum.GrabcutInitType type);
 
       /// <summary>
       /// Calculate square root of each source array element. in the case of multichannel
@@ -149,7 +149,18 @@ namespace Emgu.CV
 
          return result;
       }
-      public static int EstimateAffine3D(IInputArray src, IInputArray dst, IOutputArray affineEstimate, IOutputArray inliers, double ransacThreshold, double confidence)
+
+      /// <summary>
+      /// Computes an optimal affine transformation between two 3D point sets.
+      /// </summary>
+      /// <param name="src"> First input 3D point set.</param>
+      /// <param name="dst">Second input 3D point set.</param>
+      /// <param name="affineEstimate">Output 3D affine transformation matrix 3 x 4</param>
+      /// <param name="inliers"> Output vector indicating which points are inliers.</param>
+      /// <param name="ransacThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier.</param>
+      /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
+      /// <returns></returns>
+      public static int EstimateAffine3D(IInputArray src, IInputArray dst, IOutputArray affineEstimate, IOutputArray inliers, double ransacThreshold = 3, double confidence = 0.99)
       {
          return cveEstimateAffine3D(src.InputArrayPtr, dst.InputArrayPtr, affineEstimate.OutputArrayPtr, inliers.OutputArrayPtr, ransacThreshold, confidence);
       }
@@ -166,7 +177,7 @@ namespace Emgu.CV
       /// <param name="minIdx">The returned minimum location</param>
       /// <param name="maxIdx">The returned maximum location</param>
       /// <param name="mask">The extremums are searched across the whole array if mask is IntPtr.Zert. Otherwise, search is performed in the specified array region.</param>
-      public static void MinMaxIdx(IInputArray src, out double minVal, out double maxVal, int[] minIdx, int[] maxIdx, IInputArray mask)
+      public static void MinMaxIdx(IInputArray src, out double minVal, out double maxVal, int[] minIdx, int[] maxIdx, IInputArray mask = null)
       {
          GCHandle minHandle = GCHandle.Alloc(minIdx, GCHandleType.Pinned);
          GCHandle maxHandle = GCHandle.Alloc(maxIdx, GCHandleType.Pinned);
@@ -186,9 +197,9 @@ namespace Emgu.CV
       /// <param name="dst">The destination image</param>
       /// <param name="kernel">Convolution kernel, single-channel floating point matrix. If you want to apply different kernels to different channels, split the image using cvSplit into separate color planes and process them individually</param>
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
-      /// <param name="delta">The optional value added to the filtered pixels before storing them in dst. Use 0 for default</param>
-      /// <param name="borderType">The pixel extrapolation method, user replicate for default</param>
-      public static void Filter2D(IInputArray src, IOutputArray dst, IInputArray kernel, Point anchor, double delta, Emgu.CV.CvEnum.BorderType borderType)
+      /// <param name="delta">The optional value added to the filtered pixels before storing them in dst</param>
+      /// <param name="borderType">The pixel extrapolation method.</param>
+      public static void Filter2D(IInputArray src, IOutputArray dst, IInputArray kernel, Point anchor, double delta = 0, Emgu.CV.CvEnum.BorderType borderType = CvEnum.BorderType.Default)
       {
          cveFilter2D(src.InputArrayPtr, dst.OutputArrayPtr, kernel.InputArrayPtr, ref anchor, delta, borderType);
       }
@@ -251,16 +262,16 @@ namespace Emgu.CV
       /// <returns>The number of matches</returns>
       public static int cvChamferMatching(Image<Gray, Byte> img, Image<Gray, Byte> templ,
          out Point[][] contours, out float[] cost,
-         double templScale, int maxMatches,
-         double minMatchDistance, int padX,
-         int padY, int scales, double minScale, double maxScale,
-         double orientationWeight, double truncate)
+         double templScale = 1, int maxMatches = 20,
+         double minMatchDistance = 1.0, int padX = 3,
+         int padY = 3, int scales = 5, double minScale = 0.6, double maxScale = 1.6,
+         double orientationWeight = 0.5, double truncate = 20)
       {
          using (Emgu.CV.Util.VectorOfVectorOfPoint vecOfVecOfPoint = new Util.VectorOfVectorOfPoint())
          using (Emgu.CV.Util.VectorOfFloat vecOfFloat = new Util.VectorOfFloat())
          {
             int count = _cvChamferMatching(img, templ, vecOfVecOfPoint, vecOfFloat, templScale, maxMatches, minMatchDistance, padX, padY, scales, minScale, maxScale, orientationWeight, truncate);
-            contours = vecOfVecOfPoint.ToArray();
+            contours = vecOfVecOfPoint.ToArrayOfArray();
             cost = vecOfFloat.ToArray();
             return count;
          }
@@ -276,7 +287,7 @@ namespace Emgu.CV
          double orientationWeight, double truncate);
 
       /// <summary>
-      /// Attempts to determine whether the input image is a view of the circle grid pattern and locate circle centers
+      /// Finds centers in the grid of circles
       /// </summary>
       /// <param name="image">Source chessboard view</param>
       /// <param name="patternSize">The number of inner circle per chessboard row and column</param>
@@ -298,6 +309,16 @@ namespace Emgu.CV
             return patternFound? vec.ToArray() : null;
          }
       }
+
+      /// <summary>
+      /// Finds centers in the grid of circles
+      /// </summary>
+      /// <param name="image">Source chessboard view</param>
+      /// <param name="patternSize">The number of inner circle per chessboard row and column</param>
+      /// <param name="flags">Various operation flags</param>
+      /// <param name="featureDetector">The feature detector. Use a SimpleBlobDetector for default</param>
+      /// <param name="centers">output array of detected centers.</param>
+      /// <returns>True if grid found.</returns>
       public static bool FindCirclesGrid(IInputArray image, Size patternSize, IOutputArray centers, CvEnum.CalibCgType flags, Features2D.IFeatureDetector featureDetector)
       {
          return cveFindCirclesGrid(image.InputArrayPtr, ref patternSize, centers.OutputArrayPtr, flags, featureDetector.FeatureDetectorPtr);
@@ -318,11 +339,23 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvSolveLP")]
       private static extern CvEnum.SolveLPResult SolveLP(IntPtr functionMatrix, IntPtr constraintMatrix, IntPtr zMatrix);
 
-      public static void AdaptiveBilateralFilter(IInputArray src, IOutputArray dst, Size ksize, double sigmaSpace, double maxSigmaColor, Point anchor, int borderType)
+      /*
+      /// <summary>
+      /// Applies the adaptive bilateral filter to an image.
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="dst">The destination image; will have the same size and the same type as src</param>
+      /// <param name="ksize">The kernel size. This is the neighborhood where the local variance will be calculated, and where pixels will contribute (in a weighted manner).</param>
+      /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d>0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
+      /// <param name="maxSigmaColor">Maximum allowed sigma color (will clamp the value calculated in the ksize neighborhood. Larger value of the parameter means that more dissimilar pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d>0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace. Use 20 for default.</param>
+      /// <param name="anchor">Use (-1, -1) for default</param>
+      /// <param name="borderType">Pixel extrapolation method.</param>
+      public static void AdaptiveBilateralFilter(IInputArray src, IOutputArray dst, Size ksize, double sigmaSpace, double maxSigmaColor, Point anchor, CvEnum.BorderType borderType = CvEnum.BorderType.Default)
       {
          cveAdaptiveBilateralFilter(src.InputArrayPtr, dst.OutputArrayPtr, ref ksize, sigmaSpace, maxSigmaColor, ref anchor, borderType);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveAdaptiveBilateralFilter(IntPtr src, IntPtr dst, ref Size ksize, double sigmaSpace, double maxSigmaColor, ref Point anchor, int borderType);
+      private static extern void cveAdaptiveBilateralFilter(IntPtr src, IntPtr dst, ref Size ksize, double sigmaSpace, double maxSigmaColor, ref Point anchor, CvEnum.BorderType borderType);
+      */
    }
 }

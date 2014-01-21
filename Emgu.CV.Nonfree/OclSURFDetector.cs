@@ -1,3 +1,4 @@
+/*
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
@@ -175,3 +176,4 @@ namespace Emgu.CV.Nonfree
       internal static extern int oclSURFDetectorGetDescriptorSize(IntPtr detector);
    }
 }
+*/

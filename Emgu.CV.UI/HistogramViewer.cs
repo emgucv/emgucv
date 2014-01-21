@@ -40,9 +40,10 @@ namespace Emgu.CV.UI
          HistogramViewer viewer = new HistogramViewer();
          viewer.HistogramCtrl.GenerateHistograms(image, numberOfBins);
          viewer.HistogramCtrl.Refresh();
-         viewer.Show();
+         viewer.ShowDialog();
       }
 
+      /*
       /// <summary>
       /// Display the specific histogram
       /// </summary>
@@ -56,7 +57,7 @@ namespace Emgu.CV.UI
          
          viewer.HistogramCtrl.Refresh();
          viewer.Show();
-      }
+      }*/
 
       /// <summary>
       /// Get the histogram control of this viewer

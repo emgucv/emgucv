@@ -13,6 +13,56 @@ using MonoTouch.UIKit;
 
 namespace Emgu.CV
 {
+   internal static class IImageExtensions
+   {
+      /// <summary>
+      /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
+      /// </summary>
+      /// <typeparam name="TReturn">The return type</typeparam>
+      /// <param name="image">The source image</param>
+      /// <param name="conv">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
+      /// <returns>An array which contains result for each channel</returns>
+      public static TReturn[] ForEachDuplicateChannel<TReturn>(this IImage image, Func<IImage, int, TReturn> conv)
+      {
+         TReturn[] res = new TReturn[image.NumberOfChannels];
+         if (image.NumberOfChannels == 1)
+            res[0] = conv(image, 0);
+         else
+         {
+            using (Mat tmp = new Mat())
+               for (int i = 0; i < image.NumberOfChannels; i++)
+               {
+                  CvInvoke.ExtractChannel(image, tmp, i);
+                  res[i] = conv(tmp, i);
+               }
+         }
+         return res;
+      }
+
+      /// <summary>
+      /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
+      /// </summary>
+      /// <param name="image">The source image</param>
+      /// <param name="action">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
+      /// <returns>An array which contains result for each channel</returns>
+      public static void ForEachDuplicateChannel(this IImage image, Action<IImage, int> action)
+      {
+         if (image.NumberOfChannels == 1)
+            action(image, 0);
+         else
+         {
+            using (Mat tmp = new Mat())
+               for (int i = 0; i < image.NumberOfChannels; i++)
+               {
+                  CvInvoke.ExtractChannel(image, tmp, i);
+                  action(tmp, i);
+               }
+         }
+      }
+
+
+   }
+
    /// <summary>
    /// IImage interface
    /// </summary>

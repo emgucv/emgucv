@@ -14,8 +14,7 @@ namespace Emgu.CV.Features2D
    /// Descriptor matcher
    /// </summary>
    /// <typeparam name="T">The type of data in the descriptor</typeparam>
-   public abstract class DescriptorMatcher<T> : UnmanagedObject
-      where T : struct
+   public abstract class DescriptorMatcher : UnmanagedObject
    {
       /// <summary>
       /// Find the k-nearest match
@@ -25,18 +24,18 @@ namespace Emgu.CV.Features2D
       /// <param name="distance">The resulting n x <paramref name="k"/> matrix of distance value from the training descriptors</param>
       /// <param name="k">Number of nearest neighbors to search for</param>
       /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
-      public void KnnMatch(Matrix<T> queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, Matrix<Byte> mask)
+      public void KnnMatch(IInputArray queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, Matrix<Byte> mask)
       {
-         DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor, trainIdx, distance, k, mask);
+         DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor.InputArrayPtr, trainIdx, distance, k, mask);
       }
 
       /// <summary>
       /// Add the model descriptors
       /// </summary>
       /// <param name="modelDescriptors">The model discriptors</param>
-      public void Add(Matrix<T> modelDescriptors)
+      public void Add(IInputArray modelDescriptors)
       {
-         DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors);
+         DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors.InputArrayPtr);
       }
    }
 

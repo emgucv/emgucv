@@ -36,8 +36,8 @@ namespace Emgu.CV
       /// <summary>
       /// Train the face recognizer with the specific images and labels
       /// </summary>
-      /// <param name="images">The images used in the training. This can be a VectorOfMat</param>
-      /// <param name="labels">The labels of the images. This can be a VectorOfInt</param>
+      /// <param name="images">The images used in the training.</param>
+      /// <param name="labels">The labels of the images.</param>
       public void Train<TColor, TDepth>(Image<TColor, TDepth>[] images, int[] labels)
          where TColor : struct, IColor
          where TDepth : new()
@@ -180,6 +180,11 @@ namespace Emgu.CV
          _ptr = CvLBPHFaceRecognizerCreate(radius, neighbors, gridX, gridY, threshold);
       }
 
+      /// <summary>
+      /// Updates a FaceRecognizer with given data and associated labels.
+      /// </summary>
+      /// <param name="images">The training images, that means the faces you want to learn. The data has to be given as a VectorOfMat.</param>
+      /// <param name="labels">The labels corresponding to the images</param>
       public void Update(IInputArray images, IInputArray labels)
       {
          CvFaceRecognizerUpdate(_ptr, images.InputArrayPtr, labels.InputArrayPtr);

@@ -18,12 +18,12 @@ namespace Emgu.CV
       /// <param name="dst">The output image of the same format and the same size as input</param>
       /// <param name="flags">The inpainting method</param>
       /// <param name="inpaintRadius">The radius of circlular neighborhood of each point inpainted that is considered by the algorithm</param>
-      public static void Inpaint(IInputArray src, IInputArray mask, IOutputArray dst, double inpaintRadius, CvEnum.INPAINT_TYPE flags)
+      public static void Inpaint(IInputArray src, IInputArray mask, IOutputArray dst, double inpaintRadius, CvEnum.InpaintType flags)
       {
          cveInpaint(src.InputArrayPtr, mask.InputArrayPtr, dst.OutputArrayPtr, inpaintRadius, flags);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveInpaint(IntPtr src, IntPtr mask, IntPtr dst, double inpaintRadius, CvEnum.INPAINT_TYPE flags);
+      private static extern void cveInpaint(IntPtr src, IntPtr mask, IntPtr dst, double inpaintRadius, CvEnum.InpaintType flags);
 
       /// <summary>
       /// Perform image denoising using Non-local Means Denoising algorithm: 
@@ -32,10 +32,10 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Input 8-bit 1-channel, 2-channel or 3-channel image.</param>
       /// <param name="dst">Output image with the same size and type as src.</param>
-      /// <param name="h">Parameter regulating filter strength. Big h value perfectly removes noise but also removes image details, smaller h value preserves details but also preserves some noise. Recommended value 3</param>
-      /// <param name="templateWindowSize">Size in pixels of the template patch that is used to compute weights. Should be odd. Recommended value 7 pixels</param>
-      /// <param name="searchWindowSize">Size in pixels of the window that is used to compute weighted average for given pixel. Should be odd. Affect performance linearly: greater searchWindowsSize - greater denoising time. Recommended value 21 pixels</param>
-      public static void FastNlMeansDenoising(IInputArray src, IOutputArray dst, float h, int templateWindowSize, int searchWindowSize)
+      /// <param name="h">Parameter regulating filter strength. Big h value perfectly removes noise but also removes image details, smaller h value preserves details but also preserves some noise.</param>
+      /// <param name="templateWindowSize">Size in pixels of the template patch that is used to compute weights. Should be odd.</param>
+      /// <param name="searchWindowSize">Size in pixels of the window that is used to compute weighted average for given pixel. Should be odd. Affect performance linearly: greater searchWindowsSize - greater denoising time.</param>
+      public static void FastNlMeansDenoising(IInputArray src, IOutputArray dst, float h = 3, int templateWindowSize = 7, int searchWindowSize = 21)
       {
          cveFastNlMeansDenoising(src.InputArrayPtr, dst.OutputArrayPtr, h, templateWindowSize, searchWindowSize);
       }
@@ -50,16 +50,126 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Input 8-bit 1-channel, 2-channel or 3-channel image.</param>
       /// <param name="dst">Output image with the same size and type as src.</param>
-      /// <param name="h">Parameter regulating filter strength. Big h value perfectly removes noise but also removes image details, smaller h value preserves details but also preserves some noise. Recommended value 3</param>
+      /// <param name="h">Parameter regulating filter strength. Big h value perfectly removes noise but also removes image details, smaller h value preserves details but also preserves some noise.</param>
       /// <param name="hColor">The same as h but for color components. For most images value equals 10 will be enought to remove colored noise and do not distort colors.</param>
-      /// <param name="templateWindowSize">Size in pixels of the template patch that is used to compute weights. Should be odd. Recommended value 7 pixels</param>
-      /// <param name="searchWindowSize">Size in pixels of the window that is used to compute weighted average for given pixel. Should be odd. Affect performance linearly: greater searchWindowsSize - greater denoising time. Recommended value 21 pixels</param>
-      public static void FastNlMeansDenoisingColored(IInputArray src, IOutputArray dst, float h, float hColor, int templateWindowSize, int searchWindowSize)
+      /// <param name="templateWindowSize">Size in pixels of the template patch that is used to compute weights. Should be odd.</param>
+      /// <param name="searchWindowSize">Size in pixels of the window that is used to compute weighted average for given pixel. Should be odd. Affect performance linearly: greater searchWindowsSize - greater denoising time.</param>
+      public static void FastNlMeansDenoisingColored(IInputArray src, IOutputArray dst, float h = 3, float hColor = 3, int templateWindowSize = 7, int searchWindowSize = 21)
       {
          cveFastNlMeansDenoisingColored(src.InputArrayPtr, dst.OutputArrayPtr, h, hColor, templateWindowSize, searchWindowSize);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFastNlMeansDenoisingColored(IntPtr src, IntPtr dst, float h, float hColor, int templateWindowSize, int searchWindowSize);
+
+      /// <summary>
+      /// Filtering is the fundamental operation in image and video processing. Edge-preserving smoothing filters are used in many different applications.
+      /// </summary>
+      /// <param name="src">Input 8-bit 3-channel image</param>
+      /// <param name="dst">Output 8-bit 3-channel image</param>
+      /// <param name="flags">Edge preserving filters</param>
+      /// <param name="sigmaS">Range between 0 to 200</param>
+      /// <param name="sigmaR">Range between 0 to 1</param>
+      public static void EdgePreservingFilter(
+         IInputArray src, IOutputArray dst,
+         CvEnum.EdgePreservingFilterFlag flags = CvEnum.EdgePreservingFilterFlag.RecursFilter,
+         float sigmaS = 60.0f,
+         float sigmaR = 0.4f)
+      {
+         cveEdgePreservingFilter(src.InputArrayPtr, dst.OutputArrayPtr, flags, sigmaS, sigmaR);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveEdgePreservingFilter(IntPtr src, IntPtr dst, CvEnum.EdgePreservingFilterFlag flags, float sigmaS, float sigmaR);
+
+      /// <summary>
+      /// This filter enhances the details of a particular image.
+      /// </summary>
+      /// <param name="src">Input 8-bit 3-channel image</param>
+      /// <param name="dst">Output image with the same size and type as src</param>
+      /// <param name="sigmaS">Range between 0 to 200</param>
+      /// <param name="sigmaR">Range between 0 to 1</param>
+      public static void DetailEnhance(IInputArray src, IOutputArray dst, float sigmaS = 10.0f, float sigmaR = 0.15f)
+      {
+         cveDetailEnhance(src.InputArrayPtr, dst.OutputArrayPtr, sigmaS, sigmaR);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveDetailEnhance(IntPtr src, IntPtr dst, float sigmaS, float sigmaR);
+
+      /// <summary>
+      /// Pencil-like non-photorealistic line drawing
+      /// </summary>
+      /// <param name="src">Input 8-bit 3-channel image</param>
+      /// <param name="dst1">Output 8-bit 1-channel image</param>
+      /// <param name="dst2">Output image with the same size and type as src</param>
+      /// <param name="sigmaS">Range between 0 to 200</param>
+      /// <param name="sigmaR">Range between 0 to 1</param>
+      /// <param name="shadeFactor">Range between 0 to 0.1</param>
+      public static void PencilSketch(IInputArray src, IOutputArray dst1, IOutputArray dst2, float sigmaS = 60.0f, float sigmaR = 0.07f, float shadeFactor = 0.02f)
+      {
+         cvePencilSketch(src.InputArrayPtr, dst1.OutputArrayPtr, dst2.OutputArrayPtr, sigmaS, sigmaR, shadeFactor);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvePencilSketch(IntPtr src, IntPtr dst1, IntPtr dst2, float sigmaS, float sigmaR, float shadeFactor);
+
+      /// <summary>
+      /// Stylization aims to produce digital imagery with a wide variety of effects not focused on photorealism. Edge-aware filters are ideal for stylization, as they can abstract regions of low contrast while preserving, or enhancing, high-contrast features.
+      /// </summary>
+      /// <param name="src">Input 8-bit 3-channel image.</param>
+      /// <param name="dst">Output image with the same size and type as src.</param>
+      /// <param name="sigmaS">Range between 0 to 200.</param>
+      /// <param name="sigmaR"> Range between 0 to 1.</param>
+      public static void Stylization(IInputArray src, IOutputArray dst, float sigmaS = 60, float sigmaR = 0.45f)
+      {
+         cveStylization(src.InputArrayPtr, dst.OutputArrayPtr, sigmaS, sigmaR);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveStylization(IntPtr src, IntPtr dst, float sigmaS, float sigmaR);
+
+      /// <summary>
+      /// Given an original color image, two differently colored versions of this image can be mixed seamlessly.
+      /// </summary>
+      /// <param name="src">Input 8-bit 3-channel image.</param>
+      /// <param name="mask">Input 8-bit 1 or 3-channel image.</param>
+      /// <param name="dst">Output image with the same size and type as src .</param>
+      /// <param name="redMul">R-channel multiply factor. Multiplication factor is between .5 to 2.5.</param>
+      /// <param name="greenMul">G-channel multiply factor. Multiplication factor is between .5 to 2.5.</param>
+      /// <param name="blueMul">B-channel multiply factor. Multiplication factor is between .5 to 2.5.</param>
+      public static void ColorChange(IInputArray src, IInputArray mask, IOutputArray dst, float redMul = 1.0f, float greenMul = 1.0f, float blueMul = 1.0f)
+      {
+         cveColorChange(src.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dst.OutputArrayPtr, redMul, greenMul, blueMul);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveColorChange(IntPtr src, IntPtr mask, IntPtr dst, float redMul, float greenMul, float blueMul);
+
+      /// <summary>
+      /// Applying an appropriate non-linear transformation to the gradient field inside the selection and then integrating back with a Poisson solver, modifies locally the apparent illumination of an image.
+      /// </summary>
+      /// <param name="src">Input 8-bit 3-channel image.</param>
+      /// <param name="mask">Input 8-bit 1 or 3-channel image.</param>
+      /// <param name="dst">Output image with the same size and type as src.</param>
+      /// <param name="alpha">Value ranges between 0-2.</param>
+      /// <param name="beta">Value ranges between 0-2.</param>
+      public static void IlluminationChange(IInputArray src, IInputArray mask, IOutputArray dst, float alpha = 0.2f, float beta = 0.4f)
+      {
+         cveIlluminationChange(src.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dst.OutputArrayPtr, alpha, beta);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveIlluminationChange(IntPtr src, IntPtr mask, IntPtr dst, float alpha, float beta);
+
+      /// <summary>
+      /// By retaining only the gradients at edge locations, before integrating with the Poisson solver, one washes out the texture of the selected region, giving its contents a flat aspect. Here Canny Edge Detector is used.
+      /// </summary>
+      /// <param name="src">Input 8-bit 3-channel image.</param>
+      /// <param name="mask">Input 8-bit 1 or 3-channel image.</param>
+      /// <param name="dst">Output image with the same size and type as src.</param>
+      /// <param name="lowThreshold">Range from 0 to 100.</param>
+      /// <param name="highThreshold">Value &gt; 100</param>
+      /// <param name="kernelSize">The size of the Sobel kernel to be used.</param>
+      public static void TextureFlattening(IInputArray src, IInputArray mask, IOutputArray dst, double lowThreshold = 30, double highThreshold = 45, int kernelSize = 3)
+      {
+         cveTextureFlattening(src.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dst.OutputArrayPtr, lowThreshold, highThreshold, kernelSize);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveTextureFlattening(IntPtr src, IntPtr mask, IntPtr dst, double lowThreshold, double highThreshold, int kernelSize);
 
    }
 }

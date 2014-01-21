@@ -13,9 +13,20 @@ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
+   /// <summary>
+   /// Base class for lines detector algorithm.
+   /// </summary>
    public class CudaHoughLinesDetector : UnmanagedObject
    {
-      public CudaHoughLinesDetector(float rho, float theta, int threshold, bool doSort, int maxLines)
+      /// <summary>
+      /// Create a hough lines detector
+      /// </summary>
+      /// <param name="rho">Distance resolution of the accumulator in pixels.</param>
+      /// <param name="theta">Angle resolution of the accumulator in radians.</param>
+      /// <param name="threshold">Accumulator threshold parameter. Only those lines are returned that get enough votes (&gt; threshold).</param>
+      /// <param name="doSort">Performs lines sort by votes.</param>
+      /// <param name="maxLines">Maximum number of output lines.</param>
+      public CudaHoughLinesDetector(float rho, float theta, int threshold, bool doSort = false, int maxLines = 4096)
       {
          _ptr = CudaInvoke.cudaHoughLinesDetectorCreate(rho, theta, threshold, doSort, maxLines);
       }
@@ -27,6 +38,9 @@ namespace Emgu.CV.Cuda
          return lines;
       }
 
+      /// <summary>
+      /// Release the unmanaged memory associated to this line detector.
+      /// </summary>
       protected override void DisposeObject()
       {
          CudaInvoke.cudaHoughLinesDetectorRelease(ref _ptr);

@@ -86,7 +86,7 @@ namespace Emgu.CV
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
 
          CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
             StructSize.MCvSeq,
             StructSize.PointF,
             handle.AddrOfPinnedObject(),
@@ -114,7 +114,7 @@ namespace Emgu.CV
          IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
             StructSize.MCvSeq,
             StructSize.PointF,
             handle.AddrOfPinnedObject(),
@@ -210,7 +210,7 @@ namespace Emgu.CV
          IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
             StructSize.MCvSeq,
             StructSize.PointF,
             handle.AddrOfPinnedObject(),
@@ -236,7 +236,7 @@ namespace Emgu.CV
          IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
             StructSize.MCvSeq,
             StructSize.PointF,
             handle.AddrOfPinnedObject(),
@@ -261,7 +261,7 @@ namespace Emgu.CV
          IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
             StructSize.MCvSeq,
             StructSize.PointF,
             handle.AddrOfPinnedObject(),
@@ -286,7 +286,7 @@ namespace Emgu.CV
          IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.CV_MAKETYPE((int)CvEnum.MAT_DEPTH.CV_32F, 2),
+            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
             StructSize.MCvSeq,
             StructSize.PointF,
             handle.AddrOfPinnedObject(),
@@ -315,7 +315,7 @@ namespace Emgu.CV
          GCHandle handle = GCHandle.Alloc(points3D, GCHandleType.Pinned);
 
          using (Matrix<float> pts = new Matrix<float>(size.Height, size.Width, 3, handle.AddrOfPinnedObject(), 0))
-            CvInvoke.cvReprojectImageTo3D(disparity.Ptr, pts.Ptr, Q);
+            CvInvoke.ReprojectImageTo3D(disparity, pts, Q, false, CvEnum.DepthType.Cv32F);
 
          handle.Free();
          return points3D;
@@ -334,7 +334,7 @@ namespace Emgu.CV
          GCHandle handle = GCHandle.Alloc(points3D, GCHandleType.Pinned);
 
          using (Matrix<float> pts = new Matrix<float>(size.Height, size.Width, 3, handle.AddrOfPinnedObject(), 0))
-            CvInvoke.cvReprojectImageTo3D(disparity.Ptr, pts.Ptr, Q);
+            CvInvoke.ReprojectImageTo3D(disparity, pts, Q, false, CvEnum.DepthType.Cv32F);
 
          handle.Free();
          return points3D;

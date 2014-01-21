@@ -22,7 +22,7 @@ namespace Emgu.CV.OpenCL
       static OclInvoke()
       {
          //Dummy code to make sure the static constructor of CvInvoke has been called and the error handler has been registered.
-         CvInvoke.CV_MAKETYPE(0, 0);
+         CvInvoke.MakeType(0, 0);
 
 #if IOS || ANDROID
          _hasOpenCL = false;
@@ -836,7 +836,7 @@ namespace Emgu.CV.OpenCL
          IntPtr src3,
          double beta,
          IntPtr dst,
-         CvEnum.GEMM_TYPE tABC);
+         CvEnum.GemmType tABC);
 
       /// <summary>
       /// Warps the image using affine transformation

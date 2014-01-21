@@ -39,7 +39,7 @@ namespace Emgu.CV.Features2D
          DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2;
          using (Matrix<int> indices = new Matrix<int>(observedKeyPoints.Size, k))
          using (Matrix<float> dist = new Matrix<float>(indices.Size))
-         using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))
+         using (BruteForceMatcher matcher = new BruteForceMatcher(dt))
          using (Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1))
          {
             matcher.Add(modelDescriptors);
@@ -115,7 +115,7 @@ namespace Emgu.CV.Features2D
                   startRegion.Intersect(matchMask.ROI);
             }
 
-            CvInvoke.Multiply(matchMask, priorMask, matchMask, 1.0, Mat.GetDepthType(typeof(float)));
+            CvInvoke.Multiply(matchMask, priorMask, matchMask, 1.0, CvInvoke.GetDepthType(typeof(float)));
 
             MCvConnectedComp comp;
             MCvBox2D currentRegion;
@@ -127,7 +127,7 @@ namespace Emgu.CV.Features2D
             using (MemStorage stor = new MemStorage())
             {
                Contour<System.Drawing.PointF> contour = new Contour<PointF>(stor);
-               contour.PushMulti(currentRegion.GetVertices(), Emgu.CV.CvEnum.BACK_OR_FRONT.BACK);
+               contour.PushMulti(currentRegion.GetVertices(), Emgu.CV.CvEnum.BackOrFront.Back);
 
                CvInvoke.cvBoundingRect(contour.Ptr, 1); //this is required before calling the InContour function
 
@@ -204,7 +204,7 @@ namespace Emgu.CV.Features2D
             homography = CameraCalibration.FindHomography(
                pts1, //points on the model image
                pts2, //points on the observed image
-               CvEnum.HOMOGRAPHY_METHOD.RANSAC,
+               CvEnum.HomographyMethod.Ransac,
                3);
             if (homography == null)
                return null;
@@ -320,7 +320,7 @@ namespace Emgu.CV.Features2D
          if (scaleBinSize == 1)
          {
             //handle the case where there is only one scale bin
-            using (DenseHistogram h = new DenseHistogram(new int[] { rotationBins }, new RangeF[] { new RangeF(0, 360) }))
+            using(Mat h = new Mat())
             {
                int count;
                GCHandle rotationHandle = GCHandle.Alloc(rotations, GCHandleType.Pinned);
@@ -328,16 +328,18 @@ namespace Emgu.CV.Features2D
 
                using (Matrix<float> flagsMat = new Matrix<float>(1, elementsCount, flagsHandle.AddrOfPinnedObject()))
                using (Matrix<float> rotationsMat = new Matrix<float>(1, elementsCount, rotationHandle.AddrOfPinnedObject()))
+               using (VectorOfMat vm = new VectorOfMat())
                {
-                  h.Calculate(new Matrix<float>[] { rotationsMat }, true, null);
-
-                  float minVal, maxVal;
-                  int[] minLoc, maxLoc;
+                  vm.Push(rotationsMat);
+                  CvInvoke.CalcHist(vm, new int[] { 0 }, null, h, new int[] { rotationBins }, new float[] { 0, 360 }, false);
+                  double[] minVal, maxVal;
+                  Point[] minLoc, maxLoc;
+                 
                   h.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
 
-                  h.Threshold(maxVal * 0.5);
-
-                  CvInvoke.cvCalcBackProject(new IntPtr[] { rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
+                  CvInvoke.Threshold(h, h, maxVal[0] * 0.5, 0, CvEnum.ThresholdType.ToZero);
+                  CvInvoke.CalcBackProject(vm, new int[] { 0 }, h, flagsMat.Mat, new float[] { 0, 360 });
+                  //CvInvoke.cvCalcBackProject(new IntPtr[] { rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
                   count = CvInvoke.CountNonZero(flagsMat);
                }
                rotationHandle.Free();
@@ -354,7 +356,7 @@ namespace Emgu.CV.Features2D
          }
          else
          {
-            using (DenseHistogram h = new DenseHistogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
+            //using (DenseHistogram h = new DenseHistogram(new int[] { scaleBinSize, rotationBins }, new RangeF[] { new RangeF(minScale, maxScale), new RangeF(0, 360) }))
             {
                int count;
                GCHandle scaleHandle = GCHandle.Alloc(scales, GCHandleType.Pinned);
@@ -364,16 +366,21 @@ namespace Emgu.CV.Features2D
                using (Matrix<float> flagsMat = new Matrix<float>(1, elementsCount, flagsHandle.AddrOfPinnedObject()))
                using (Matrix<float> scalesMat = new Matrix<float>(1, elementsCount, scaleHandle.AddrOfPinnedObject()))
                using (Matrix<float> rotationsMat = new Matrix<float>(1, elementsCount, rotationHandle.AddrOfPinnedObject()))
+               using (Mat h = new Mat())
+               using (VectorOfMat vm = new VectorOfMat())
                {
-                  h.Calculate(new Matrix<float>[] { scalesMat, rotationsMat }, true, null);
+                  vm.Push(scalesMat);
+                  vm.Push(rotationsMat);
+                  CvInvoke.CalcHist(vm, new int[] { 0, 1 }, null, h, new int[] { scaleBinSize, rotationBins }, new float[] { minScale, maxScale, 0, 360 }, false);
+                  //h.Calculate(new Matrix<float>[] { scalesMat, rotationsMat }, true, null);
 
-                  float minVal, maxVal;
-                  int[] minLoc, maxLoc;
+                  double[] minVal, maxVal;
+                  Point[] minLoc, maxLoc;
                   h.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
 
-                  h.Threshold(maxVal * 0.5);
-
-                  CvInvoke.cvCalcBackProject(new IntPtr[] { scalesMat.Ptr, rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
+                  CvInvoke.Threshold(h, h, Math.Max( maxVal[0], maxVal[1]) * 0.5, 0, CvEnum.ThresholdType.ToZero);
+                  CvInvoke.CalcBackProject(vm, new int[] { 0, 1 }, h, flagsMat, new float[] { minScale, maxScale, 0, 360 });
+                  //CvInvoke.cvCalcBackProject(new IntPtr[] { scalesMat.Ptr, rotationsMat.Ptr }, flagsMat.Ptr, h.Ptr);
                   count = CvInvoke.CountNonZero(flagsMat);
                }
                scaleHandle.Free();
@@ -424,7 +431,7 @@ namespace Emgu.CV.Features2D
             DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2;
             using (Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
             using (Matrix<float> dists = new Matrix<float>(observedDescriptors.Rows, k))
-            using (BruteForceMatcher<TDescriptor> matcher = new BruteForceMatcher<TDescriptor>(dt))
+            using (BruteForceMatcher matcher = new BruteForceMatcher(dt))
             {
                matcher.Add(_modelDescriptors);
                matcher.KnnMatch(observedDescriptors, indices, dists, k, null);
@@ -511,7 +518,7 @@ namespace Emgu.CV.Features2D
             resultIdx++;
          }
          handle.Free();
-         return result;
+         return Array.FindAll(result, r => r.SimilarFeatures.Length != 0);
       }
 
       /// <summary>
@@ -693,8 +700,8 @@ namespace Emgu.CV.Features2D
          using (Matrix<float> tmp = new Matrix<float>(firstCol.Size))
          using (Matrix<Byte> maskBuffer = new Matrix<byte>(firstCol.Size))
          {
-            CvInvoke.Divide(firstCol, secCol, tmp, 1.0, Mat.GetDepthType(typeof(float)));
-            using (InputArray ia = new InputArray(uniquenessThreshold))
+            CvInvoke.Divide(firstCol, secCol, tmp, 1.0, CvInvoke.GetDepthType(typeof(float)));
+            using (ScalarArray ia = new ScalarArray(uniquenessThreshold))
                CvInvoke.Compare(tmp, ia, maskBuffer, CvEnum.CmpType.LessEqual);
             CvInvoke.BitwiseAnd(maskBuffer, mask, mask, null);
          }

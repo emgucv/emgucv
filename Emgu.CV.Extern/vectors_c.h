@@ -13,6 +13,7 @@
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/objdetect/objdetect_c.h"
+#include "opencv2/core/ocl.hpp"
 
 template <class dataType> 
 void VectorPushMulti(std::vector<dataType>* v, dataType* values, int count)
@@ -32,111 +33,13 @@ void VectorCopyData(std::vector<dataType>* v, dataType* data)
       memcpy(data, &(*v)[0], v->size() * sizeof(dataType));
 }
 
-/*
-//----------------------------------------------------------------------------
-//
-//  Vector of Byte
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<unsigned char>*) VectorOfByteCreate();
-
-CVAPI(std::vector<unsigned char>*) VectorOfByteCreateSize(int size);
-
-CVAPI(int) VectorOfByteGetSize(std::vector<unsigned char>* v);
-
-CVAPI(void) VectorOfBytePushMulti(std::vector<unsigned char>* v, unsigned char* values, int count);
-
-CVAPI(void) VectorOfByteClear(std::vector<unsigned char>* v);
-
-CVAPI(void) VectorOfByteRelease(std::vector<unsigned char>** v);
-
-CVAPI(void) VectorOfByteCopyData(std::vector<unsigned char>* v, unsigned char* data);
-
-CVAPI(unsigned char*) VectorOfByteGetStartAddress(std::vector<unsigned char>* v);
-
-CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfByte(std::vector<unsigned char>* vec);
-
-CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOfByte(std::vector<unsigned char>* vec);
-
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromVectorOfByte(std::vector<unsigned char>* vec);
-
-
-//----------------------------------------------------------------------------
-//
-//  Vector of Int
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<int>*) VectorOfIntCreate();
-
-CVAPI(std::vector<int>*) VectorOfIntCreateSize(int size);
-
-CVAPI(int) VectorOfIntGetSize(std::vector<int>* v);
-
-CVAPI(void) VectorOfIntPushMulti(std::vector<int>* v, int* values, int count);
-
-CVAPI(void) VectorOfIntClear(std::vector<int>* v);
-
-CVAPI(void) VectorOfIntRelease(std::vector<int>** v);
-
-CVAPI(void) VectorOfIntCopyData(std::vector<int>* v, int* data);
-
-CVAPI(int*) VectorOfIntGetStartAddress(std::vector<int>* v);
-
-CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfInt(std::vector<int>* vec);
-
-CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOfInt(std::vector<int>* vec);
-
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromVectorOfInt(std::vector<int>* vec);
-
-//----------------------------------------------------------------------------
-//
-//  Vector of Float
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<float>*) VectorOfFloatCreate();
-
-CVAPI(std::vector<float>*) VectorOfFloatCreateSize(int size);
-
-CVAPI(int) VectorOfFloatGetSize(std::vector<float>* v);
-
-CVAPI(void) VectorOfFloatPushMulti(std::vector<float>* v, float* values, int count);
-
-CVAPI(void) VectorOfFloatClear(std::vector<float>* v);
-
-CVAPI(void) VectorOfFloatRelease(std::vector<float>** v);
-
-CVAPI(void) VectorOfFloatCopyData(std::vector<float>* v, float* data);
-
-CVAPI(float*) VectorOfFloatGetStartAddress(std::vector<float>* v);
-
-CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfFloat(std::vector<float>* vec);
-
-CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOfFloat(std::vector<float>* vec);
-
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromVectorOfFloat(std::vector<float>* vec);
-*/
 //----------------------------------------------------------------------------
 //
 //  Vector of DMatch
 //
 //----------------------------------------------------------------------------
-CVAPI(std::vector<cv::DMatch>*) VectorOfDMatchCreate();
 
 CVAPI(void) VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* trainIdx, const CvMat* distance = 0, const CvMat* mask = 0);
-
-CVAPI(std::vector<cv::DMatch>*) VectorOfDMatchCreateSize(int size);
-
-CVAPI(int) VectorOfDMatchGetSize(std::vector<cv::DMatch>* v);
-
-CVAPI(void) VectorOfDMatchPushMulti(std::vector<cv::DMatch>* v, cv::DMatch* values, int count);
-
-CVAPI(void) VectorOfDMatchClear(std::vector<cv::DMatch>* v);
-
-CVAPI(void) VectorOfDMatchRelease(std::vector<cv::DMatch>** v);
-
-CVAPI(void) VectorOfDMatchCopyData(std::vector<cv::DMatch>* v, cv::DMatch* data);
-
-CVAPI(cv::DMatch*) VectorOfDMatchGetStartAddress(std::vector<cv::DMatch>* v);
 
 CVAPI(void) VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches, CvMat* trainIdx, CvMat* distance);
 
@@ -145,31 +48,13 @@ CVAPI(void) VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches,
 //  Vector of KeyPoint
 //
 //----------------------------------------------------------------------------
-/*
-CVAPI(std::vector<cv::KeyPoint>*) VectorOfKeyPointCreate();
-
-CVAPI(std::vector<cv::KeyPoint>*) VectorOfKeyPointCreateSize(int size);
-
-CVAPI(int) VectorOfKeyPointGetSize(std::vector<cv::KeyPoint>* v);
-
-CVAPI(void) VectorOfKeyPointPushMulti(std::vector<cv::KeyPoint>* v, cv::KeyPoint* values, int count);
-
-CVAPI(void) VectorOfKeyPointClear(std::vector<cv::KeyPoint>* v);
-
-CVAPI(void) VectorOfKeyPointRelease(std::vector<cv::KeyPoint>** v);
-
-CVAPI(void) VectorOfKeyPointCopyData(std::vector<cv::KeyPoint>* v, cv::KeyPoint* data);
-*/
 CVAPI(void) VectorOfKeyPointFilterByImageBorder( std::vector<cv::KeyPoint>* keypoints, CvSize imageSize, int borderSize );
 
 CVAPI(void) VectorOfKeyPointFilterByKeypointSize( std::vector<cv::KeyPoint>* keypoints, float minSize, float maxSize);
 
 CVAPI(void) VectorOfKeyPointFilterByPixelsMask( std::vector<cv::KeyPoint>* keypoints, CvMat* mask );
 
-//CVAPI(cv::KeyPoint*) VectorOfKeyPointGetStartAddress(std::vector<cv::KeyPoint>* v);
-
-//CVAPI(void) VectorOfKeyPointGetItem(std::vector<cv::KeyPoint>* keypoints, int index, cv::KeyPoint* keypoint);
-
+/*
 //----------------------------------------------------------------------------
 //
 //  Vector of DataMatrixCode
@@ -194,152 +79,5 @@ CVAPI(CvDataMatrixCode*) VectorOfDataMatrixCodeGetItem(std::vector<CvDataMatrixC
 CVAPI(void) VectorOfDataMatrixCodeFind(std::vector<CvDataMatrixCode>* v, IplImage* image);
 
 CVAPI(void) VectorOfDataMatrixCodeDraw(std::vector<CvDataMatrixCode>* v, IplImage* image);
-
-/*
-//----------------------------------------------------------------------------
-//
-//  Vector of Mat
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<cv::Mat>*) VectorOfMatCreate();
-
-CVAPI(int) VectorOfMatGetSize(std::vector<cv::Mat>* v);
-
-CVAPI(void) VectorOfMatPush(std::vector<cv::Mat>* v, cv::Mat* value);
-
-CVAPI(void) VectorOfMatClear(std::vector<cv::Mat>* v);
-
-CVAPI(void) VectorOfMatRelease(std::vector<cv::Mat>** v);
-
-CVAPI(cv::Mat*) VectorOfMatGetItem(std::vector<cv::Mat>* v, int index);
-
-CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfMat(std::vector<cv::Mat>* vec);
-
-CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOfMat(std::vector<cv::Mat>* vec);
-
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromVectorOfMat(std::vector<cv::Mat>* vec);
-
-
-//----------------------------------------------------------------------------
-//
-//  Vector of UMat
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<cv::UMat>*) VectorOfUMatCreate();
-
-CVAPI(int) VectorOfUMatGetSize(std::vector<cv::UMat>* v);
-
-CVAPI(void) VectorOfUMatPush(std::vector<cv::UMat>* v, cv::UMat* value);
-
-CVAPI(void) VectorOfUMatClear(std::vector<cv::UMat>* v);
-
-CVAPI(void) VectorOfUMatRelease(std::vector<cv::UMat>** v);
-
-CVAPI(cv::UMat*) VectorOfUMatGetItem(std::vector<cv::UMat>* v, int index);
-
-CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfUMat(std::vector<cv::UMat>* vec);
-
-CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOfUMat(std::vector<cv::UMat>* vec);
-
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromVectorOfUMat(std::vector<cv::UMat>* vec);
-
-
-//----------------------------------------------------------------------------
-//
-//  Vector of Point
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<cv::Point>*) VectorOfPointCreate();
-
-CVAPI(std::vector<cv::Point>*) VectorOfPointCreateSize(int size);
-
-CVAPI(int) VectorOfPointGetSize(std::vector<cv::Point>* v);
-
-CVAPI(void) VectorOfPointPushMulti(std::vector<cv::Point>* v, cv::Point* values, int count);
-
-CVAPI(void) VectorOfPointClear(std::vector<cv::Point>* v);
-
-CVAPI(void) VectorOfPointRelease(std::vector<cv::Point>** v);
-
-CVAPI(void) VectorOfPointCopyData(std::vector<cv::Point>* v, cv::Point* data);
-
-CVAPI(cv::Point*) VectorOfPointGetStartAddress(std::vector<cv::Point>* v);
-
-CVAPI(void) VectorOfPointGetItem(std::vector<cv::Point>* points, int index, cv::Point* point);
-
-CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfPoint(std::vector<cv::Point>* vec);
-
-CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOfPoint(std::vector<cv::Point>* vec);
-
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromVectorOfPoint(std::vector<cv::Point>* vec);
-
-//----------------------------------------------------------------------------
-//
-//  Vector of PointF
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<cv::Point2f>*) VectorOfPointFCreate();
-
-CVAPI(std::vector<cv::Point2f>*) VectorOfPointFCreateSize(int size);
-
-CVAPI(int) VectorOfPointFGetSize(std::vector<cv::Point2f>* v);
-
-CVAPI(void) VectorOfPointFPushMulti(std::vector<cv::Point2f>* v, cv::Point2f* values, int count);
-
-CVAPI(void) VectorOfPointFClear(std::vector<cv::Point2f>* v);
-
-CVAPI(void) VectorOfPointFRelease(std::vector<cv::Point2f>** v);
-
-CVAPI(void) VectorOfPointFCopyData(std::vector<cv::Point2f>* v, cv::Point2f* data);
-
-CVAPI(cv::Point2f*) VectorOfPointFGetStartAddress(std::vector<cv::Point2f>* v);
-
-CVAPI(void) VectorOfPointFGetItem(std::vector<cv::Point2f>* points, int index, cv::Point2f* point);
-
-CVAPI(cv::_InputArray*) cvInputArrayFromVectorOfPointF(std::vector<cv::Point2f>* vec);
-
-CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOfPointF(std::vector<cv::Point2f>* vec);
-
-CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromVectorOfPointF(std::vector<cv::Point2f>* vec);
-*/
-
-//----------------------------------------------------------------------------
-//
-//  Vector of Vector of Point
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector< std::vector<cv::Point> >*) VectorOfVectorOfPointCreate();
-
-CVAPI(int) VectorOfVectorOfPointGetSize(std::vector< std::vector<cv::Point> >* v);
-
-CVAPI(void) VectorOfVectorOfPointClear(std::vector< std::vector<cv::Point> >* v);
-
-CVAPI(void) VectorOfVectorOfPointRelease(std::vector< std::vector<cv::Point> >** v);
-
-CVAPI(std::vector<cv::Point>*) VectorOfVectorOfPointGetItem(std::vector< std::vector<cv::Point> >* points, int index);
-
-/*
-//----------------------------------------------------------------------------
-//
-//  Vector of CvRect
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<cv::Rect>*) VectorOfRectCreate();
-
-CVAPI(std::vector<cv::Rect>*) VectorOfRectCreateSize(int size);
-
-CVAPI(int) VectorOfRectGetSize(std::vector<cv::Rect>* v);
-
-CVAPI(void) VectorOfRectPushMulti(std::vector<cv::Rect>* v, cv::Rect* values, int count);
-
-CVAPI(void) VectorOfRectClear(std::vector<cv::Rect>* v);
-
-CVAPI(void) VectorOfRectRelease(std::vector<cv::Rect>** v);
-
-CVAPI(void) VectorOfRectCopyData(std::vector<cv::Rect>* v, cv::Rect* data);
-
-CVAPI(cv::Rect*) VectorOfRectGetStartAddress(std::vector<cv::Rect>* v);
-
-CVAPI(void) VectorOfRectGetItem(std::vector<cv::Rect>* points, int index, cv::Rect* point);
 */
 #endif

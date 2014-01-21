@@ -51,8 +51,7 @@ namespace Emgu.CV.Features2D
    /// Wrapped BruteForceMatcher
    /// </summary>
    /// <typeparam name="T">The type of data to be matched. Can be either float or Byte</typeparam>
-   public class BruteForceMatcher<T> : DescriptorMatcher<T>
-      where T : struct
+   public class BruteForceMatcher : DescriptorMatcher
    {
       private DistanceType _distanceType;
 
@@ -72,17 +71,6 @@ namespace Emgu.CV.Features2D
       /// <param name="crossCheck">Specify whether or not cross check is needed. Use false for default.</param>
       public BruteForceMatcher(DistanceType distanceType, bool crossCheck)
       {
-         if (distanceType == DistanceType.Hamming || distanceType == DistanceType.Hamming2)
-         { 
-            if (typeof(T) != typeof(byte))
-               throw new ArgumentException("Hamming distance type requires model descriptor to be Matrix<Byte>");
-         }
-
-         if (typeof(T) != typeof(byte) && typeof(T) != typeof(float))
-         {
-            throw new NotImplementedException(String.Format("Data type of {0} is not supported", typeof(T).ToString()));
-         }
-
          _distanceType = distanceType;
          _ptr = BruteForceMatcherInvoke.CvBruteForceMatcherCreate(_distanceType, crossCheck);
       }

@@ -228,7 +228,7 @@ void cudaHoughCirclesDetectorRelease(cv::cuda::HoughCirclesDetector** detector)
    *detector = 0;
 }
 
-void cudaGammaCorrection(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, bool forward, cv::cuda::Stream* stream)
+void cudaGammaCorrection(cv::_InputArray* src, cv::_OutputArray* dst, bool forward, cv::cuda::Stream* stream)
 {
    cv::cuda::gammaCorrection(*src, *dst, forward, stream ? *stream : cv::cuda::Stream::Null());
 }

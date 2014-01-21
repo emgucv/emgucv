@@ -216,9 +216,9 @@ namespace Emgu.CV
       /// <param name="line">The line to be draw</param>
       /// <param name="color">The color for the line</param>
       /// <param name="thickness">The thickness of the line</param>
-      public override void Draw(LineSegment2DF line, TColor color, int thickness)
+      public override void Draw(LineSegment2DF line, TColor color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-         base.Draw(new LineSegment2D(MapPointToImagePoint(line.P1), MapPointToImagePoint(line.P2)), color, thickness);
+         base.Draw(new LineSegment2DF(MapPointToImagePoint(line.P1), MapPointToImagePoint(line.P2)), color, thickness, lineType, shift);
       }
 
       ///<summary> Draw a Circle of the specific color and thickness </summary>
@@ -262,9 +262,9 @@ namespace Emgu.CV
       /// <param name="font">The font used for drawing</param>
       /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
       /// <param name="color">The color of the text</param>
-      public void Draw(String message, ref MCvFont font, PointF bottomLeft, TColor color)
+      public override void Draw(String message, Point bottomLeft, CvEnum.FontFace fontFace, double fontScale, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, bool bottomLeftOrigin = false)
       {
-         base.Draw(message, ref font, MapPointToImagePoint(bottomLeft), color);
+         base.Draw(message, MapPointToImagePoint(bottomLeft), fontFace, fontScale, color, thickness, lineType, bottomLeftOrigin);
       }
 
       /// <summary>

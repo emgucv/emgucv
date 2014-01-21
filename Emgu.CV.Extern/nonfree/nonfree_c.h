@@ -22,7 +22,7 @@ CVAPI(cv::SIFT*) CvSIFTDetectorCreate(
 CVAPI(void) CvSIFTDetectorRelease(cv::SIFT** detector);
 
 //SURFDetector
-CVAPI(cv::SURF*) CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+CVAPI(cv::SURF*) CvSURFDetectorCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
 CVAPI(void) CvSURFDetectorRelease(cv::SURF** detector);
 
 /*

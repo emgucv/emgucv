@@ -52,7 +52,7 @@ namespace Emgu.CV.Test
 
             Matrix<double> rMat = new Matrix<double>(3, 3);
             q.GetRotationMatrix(rMat);
-            CvInvoke.Gemm(rMat, point, 1.0, null, 0.0, pt2, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_DEFAULT);
+            CvInvoke.Gemm(rMat, point, 1.0, null, 0.0, pt2, Emgu.CV.CvEnum.GemmType.Default);
 
             CvInvoke.AbsDiff(pt1, pt2, pt3);
 
@@ -142,7 +142,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(Math.Abs(q1.Z - q2.Z) < epsilon);
 
          RotationVector3D rVec = new RotationVector3D(new double[] { q1.AxisAngle.x, q1.AxisAngle.y, q1.AxisAngle.z });
-         Matrix<double> m1 = rVec.RotationMatrix;
+         Mat m1 = rVec.RotationMatrix;
          Matrix<double> m2 = new Matrix<double>(3, 3);
          q1.GetRotationMatrix(m2);
          Matrix<double> diff = new Matrix<double>(3, 3);

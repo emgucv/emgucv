@@ -6,6 +6,7 @@
 
 #include "nonfree_ocl_c.h"
 
+/*
 cv::ocl::SURF_OCL* oclSURFDetectorCreate(double _hessianThreshold, int _nOctaves, int _nOctaveLayers, bool _extended, float _keypointsRatio, bool _upright)
 {
    return new cv::ocl::SURF_OCL(_hessianThreshold, _nOctaves, _nOctaveLayers, _extended, _keypointsRatio, _upright);
@@ -51,4 +52,4 @@ void oclSURFDetectorCompute(
 int oclSURFDetectorGetDescriptorSize(cv::ocl::SURF_OCL* detector)
 {
    return detector->descriptorSize();
-}
+}*/

@@ -14,7 +14,7 @@
 #include "mat_c.h"
 
 CVAPI(cv::UMat*) cvUMatCreate();
-CVAPI(void) cvUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator);
+CVAPI(void) cvUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator);
 CVAPI(void) cvUMatCreateData(cv::UMat* mat, int row, int cols, int type);
 CVAPI(cv::UMat*) cvUMatCreateFromROI(cv::UMat* mat, CvRect* roi);
 CVAPI(void) cvUMatRelease(cv::UMat** mat);

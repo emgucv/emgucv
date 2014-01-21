@@ -33,10 +33,6 @@ namespace Emgu.CV.Superres
          /// BTVL using gpu
          /// </summary>
          BTVL1_GPU = 1,
-         /// <summary>
-         /// BTVL using opencl
-         /// </summary>
-         BTVL1_OCL = 2
       }
 
       /// <summary>

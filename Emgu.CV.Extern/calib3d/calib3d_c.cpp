@@ -96,3 +96,117 @@ bool cveFindCirclesGrid(cv::_InputArray* image, CvSize* patternSize, cv::_Output
    ptr.addref();
    return cv::findCirclesGrid(*image, *patternSize, *centers, flags, ptr);
 }
+
+void cveTriangulatePointe(cv::_InputArray* projMat1, cv::_InputArray* projMat2, cv::_InputArray* projPoints1, cv::_InputArray* projPoints2, cv::_OutputArray* points4D)
+{
+   cv::triangulatePoints(*projMat1, *projMat2, *projPoints1, *projPoints2, *points4D);
+}
+
+void cveCorrectMatches(cv::_InputArray* f, cv::_InputArray* points1, cv::_InputArray* points2, cv::_OutputArray* newPoints1, cv::_OutputArray* newPoints2)
+{
+   cv::correctMatches(*f, *points1, *points2, *newPoints1, *newPoints2);
+}
+
+void cveDrawChessboardCorners(cv::_InputOutputArray* image, CvSize* patternSize, cv::_InputArray* corners, bool patternWasFound)
+{
+   cv::drawChessboardCorners(*image, *patternSize, *corners, patternWasFound);
+}
+
+bool cveFindChessboardCorners(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* corners, int flags)
+{
+   return cv::findChessboardCorners(*image, *patternSize, *corners, flags);
+}
+
+bool cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, CvSize* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold)
+{
+   return cv::stereoRectifyUncalibrated(*points1, *points2, *f, *imgSize, *h1, *h2, threshold);
+}
+
+void cveStereoRectify(
+   cv::_InputArray* cameraMatrix1, cv::_InputArray* distCoeffs1,
+   cv::_InputArray* cameraMatrix2, cv::_InputArray* distCoeffs2,
+   CvSize* imageSize, cv::_InputArray* r, cv::_InputArray* t,
+   cv::_OutputArray* r1, cv::_OutputArray* r2,
+   cv::_OutputArray* p1, cv::_OutputArray* p2,
+   cv::_OutputArray* q, int flags,
+   double alpha, CvSize* newImageSize,
+   CvRect* validPixROI1, CvRect* validPixROI2)
+{
+   cv::Rect rect1, rect2;
+   cv::stereoRectify(*cameraMatrix1, *distCoeffs1, *cameraMatrix2, *distCoeffs2, *imageSize, *r, *t, *r1, *r2,
+      *p1, *p2, *q, flags, alpha, *newImageSize, &rect1, &rect2);
+   *validPixROI1 = rect1;
+   *validPixROI2 = rect2;
+}
+
+void cveRodrigues(cv::_InputArray* src, cv::_OutputArray* dst, cv::_OutputArray* jacobian)
+{
+   cv::Rodrigues(*src, *dst, jacobian? *jacobian : (cv::OutputArray) cv::noArray());
+}
+
+double cveCalibrateCamera(
+   cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, CvSize* imageSize, 
+   cv::_InputOutputArray* cameraMatrix, cv::_InputOutputArray* distCoeffs, 
+   cv::_OutputArray* rvecs, cv::_OutputArray* tvecs, int flags, CvTermCriteria* criteria)
+{
+   return cv::calibrateCamera(*objectPoints, *imagePoints, *imageSize, *cameraMatrix, *distCoeffs, *rvecs, *tvecs, flags, *criteria); 
+}
+
+void cveReprojectImageTo3D(cv::_InputArray* disparity, cv::_OutputArray* threeDImage, cv::_InputArray* q, bool handleMissingValues, int ddepth)
+{
+   cv::reprojectImageTo3D(*disparity, *threeDImage, *q, handleMissingValues, ddepth);
+}
+
+void cveConvertPointsToHomogeneous(cv::_InputArray* src, cv::_OutputArray* dst)
+{
+   cv::convertPointsToHomogeneous(*src, *dst);
+}
+
+void cveConvertPointsFromHomogeneous(cv::_InputArray* src, cv::_OutputArray* dst)
+{
+   cv::convertPointsFromHomogeneous(*src, *dst);
+}
+
+void cveFindFundamentalMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_OutputArray* dst, int method, double param1, double param2, cv::_OutputArray* mask)
+{
+   cv::Mat tmp = cv::findFundamentalMat(*points1, *points2, method, param1, param2, mask ? *mask : (cv::OutputArray) cv::noArray());
+   tmp.copyTo(*dst);
+}
+
+void cveFindHomography(cv::_InputArray* srcPoints, cv::_InputArray* dstPoints, cv::_OutputArray* dst, int method, double ransacReprojThreshold, cv::_OutputArray* mask)
+{
+   cv::Mat tmp = cv::findHomography(*srcPoints, *dstPoints,method, ransacReprojThreshold, mask ? *mask : (cv::OutputArray) cv::noArray());
+   tmp.copyTo(*dst);
+}
+
+void cveComputeCorrespondEpilines(cv::_InputArray* points, int whichImage, cv::_InputArray* f, cv::_OutputArray* lines)
+{
+   cv::computeCorrespondEpilines(*points, whichImage, *f, *lines);
+}
+
+void cveProjectPoints(
+   cv::_InputArray* objPoints, cv::_InputArray* rvec, cv::_InputArray* tvec, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
+   cv::_OutputArray* imagePoints, cv::_OutputArray* jacobian, double aspectRatio)
+{
+   cv::projectPoints(*objPoints, *rvec, *tvec, *cameraMatrix, distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray() , *imagePoints, jacobian ? *jacobian : (cv::OutputArray) cv::noArray(), aspectRatio);
+}
+
+void cveCalibrationMatrixValues(
+   cv::_InputArray* cameraMatrix, CvSize* imageSize, double apertureWidth, double apertureHeight, 
+   double* fovx, double* fovy, double* focalLength, CvPoint2D64f* principalPoint, double* aspectRatio)
+{
+   double _fovx, _fovy, _focalLength, _aspectRatio;
+   cv::Point2d _principalPoint;
+
+   cv::calibrationMatrixValues(*cameraMatrix, *imageSize, apertureWidth, apertureHeight, _fovx, _fovy, _focalLength, _principalPoint, _aspectRatio);
+   *fovx = _fovx; *fovy = _fovy; *focalLength = _focalLength; *aspectRatio = _aspectRatio; principalPoint->x = _principalPoint.x; principalPoint->y = _principalPoint.y;
+}
+
+double cveStereoCalibrate(
+   cv::_InputArray* objectPoints, cv::_InputArray* imagePoints1, cv::_InputArray* imagePoints2,
+   cv::_InputOutputArray* cameraMatrix1, cv::_InputOutputArray* distCoeffs1, cv::_InputOutputArray* cameraMatrix2, cv::_InputOutputArray* distCoeffs2,
+   CvSize* imageSize, cv::_OutputArray* r, cv::_OutputArray* t, cv::_OutputArray* e, cv::_OutputArray* f, int flags, CvTermCriteria* criteria)
+{
+   return cv::stereoCalibrate(*objectPoints, *imagePoints1, *imagePoints2, *cameraMatrix1, *distCoeffs1, *cameraMatrix2, *distCoeffs2, *imageSize, *r, *t, *e, *f,
+      flags, *criteria);
+}

@@ -54,44 +54,55 @@ namespace FaceDetection
          }
          else
          {
+            bool tryUseOpenCL = true;
+            bool usingOpenCL = false;
+            if (CvInvoke.HaveOpenCL)
+            {
+               CvInvoke.UseOpenCL = tryUseOpenCL;
+               usingOpenCL = true;
+            }
+
             //Read the HaarCascade objects
             using (CascadeClassifier face = new CascadeClassifier(faceFileName))
             using (CascadeClassifier eye = new CascadeClassifier(eyeFileName))
             {
                watch = Stopwatch.StartNew();
-               using (Image<Gray, Byte> gray = image.Convert<Gray, Byte>()) //Convert it to Grayscale
+               using (UMat uimg = image.Mat.ToUMat(Emgu.CV.CvEnum.AccessType.Read)) //Convert it to Grayscale
+               using (UMat ugray = new UMat())
                {
+                  CvInvoke.CvtColor(uimg, ugray, Emgu.CV.CvEnum.ColorConversion.BGR2GRAY);
+
                   //normalizes brightness and increases contrast of the image
-                  gray._EqualizeHist();
+                  CvInvoke.EqualizeHist(ugray, ugray);
 
                   //Detect the faces  from the gray scale image and store the locations as rectangle
                   //The first dimensional is the channel
                   //The second dimension is the index of the rectangle in the specific channel
                   Rectangle[] facesDetected = face.DetectMultiScale(
-                     gray,
+                     ugray,
                      1.1,
                      10,
-                     new Size(20, 20),
-                     Size.Empty);
+                     new Size(20, 20));
+                     
                   faces.AddRange(facesDetected);
 
                   foreach (Rectangle f in facesDetected)
                   {
-                     //Set the region of interest on the faces
-                     gray.ROI = f;
-                     Rectangle[] eyesDetected = eye.DetectMultiScale(
-                        gray,
-                        1.1,
-                        10,
-                        new Size(20, 20),
-                        Size.Empty);
-                     gray.ROI = Rectangle.Empty;
-
-                     foreach (Rectangle e in eyesDetected)
+                     //Get the region of interest on the faces
+                     using (UMat faceRegion = new UMat(ugray, f))
                      {
-                        Rectangle eyeRect = e;
-                        eyeRect.Offset(f.X, f.Y);
-                        eyes.Add(eyeRect);
+                        Rectangle[] eyesDetected = eye.DetectMultiScale(
+                           faceRegion,
+                           1.1,
+                           10,
+                           new Size(20, 20));
+                        
+                        foreach (Rectangle e in eyesDetected)
+                        {
+                           Rectangle eyeRect = e;
+                           eyeRect.Offset(f.X, f.Y);
+                           eyes.Add(eyeRect);
+                        }
                      }
                   }
                }

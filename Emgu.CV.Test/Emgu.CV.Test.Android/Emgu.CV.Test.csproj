@@ -55,6 +55,9 @@
     <Compile Include="..\AutoTestImage.cs">
       <Link>AutoTestImage.cs</Link>
     </Compile>
+    <Compile Include="..\AutoTestMat.cs">
+      <Link>AutoTestMat.cs</Link>
+    </Compile>
     <Compile Include="..\AutoTestMatrix.cs">
       <Link>AutoTestMatrix.cs</Link>
     </Compile>

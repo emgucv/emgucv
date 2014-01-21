@@ -60,7 +60,7 @@ void cudaMerge(const cv::cuda::GpuMat** src, cv::cuda::GpuMat* dst, cv::cuda::St
 void cudaMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint* minLoc, CvPoint* maxLoc, cv::_InputArray* mask)
 {
    cv::Point minimunLoc, maximunLoc;
-   cv::_InputArray maskMat = mask ? *mask : cv::noArray();
+   cv::_InputArray maskMat = mask ? *mask : (cv::_InputArray) cv::noArray();
    cv::cuda::minMaxLoc(*src, minVal, maxVal, &minimunLoc, &maximunLoc, maskMat);
    maxLoc->x = maximunLoc.x; maxLoc->y = maximunLoc.y;
    minLoc->x = minimunLoc.x; minLoc->y = minimunLoc.y;
@@ -99,40 +99,40 @@ void cudaReduce(cv::_InputArray* mtx, cv::_OutputArray* vec, int dim, int reduce
 
 void cudaBitwiseNot(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-   cv::cuda::bitwise_not(*src, *dst, mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::bitwise_not(*src, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseAnd(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-   cv::cuda::bitwise_and(*src1, *src2, *dst, mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::bitwise_and(*src1, *src2, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseAndS(cv::_InputArray* src1, const CvScalar* sc, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    cv::Scalar s = *sc;
-   cv::cuda::bitwise_and(*src1, s, *dst, mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::bitwise_and(*src1, s, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseOr(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-   cv::cuda::bitwise_or(*src1, *src2, *dst, mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::bitwise_or(*src1, *src2, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseOrS(cv::_InputArray* src1, const CvScalar* sc, cv::_OutputArray* dst,  cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    cv::Scalar s = *sc;
-   cv::cuda::bitwise_or(*src1, s, *dst, mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::bitwise_or(*src1, s, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseXor(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-   cv::cuda::bitwise_xor(*src1, *src2, *dst, mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::bitwise_xor(*src1, *src2, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseXorS(cv::_InputArray* src1, const CvScalar* sc, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    cv::Scalar s = *sc;
-   cv::cuda::bitwise_xor(*src1, s, *dst,  mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::bitwise_xor(*src1, s, *dst,  mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaMin(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::cuda::Stream* stream)
@@ -174,24 +174,24 @@ void cudaRShift(const cv::cuda::GpuMat* a, CvScalar* scale, cv::cuda::GpuMat* c,
 
 void cudaAdd(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-   cv::cuda::add(*a, *b, *c, mask ? *mask : cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::add(*a, *b, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaAddS(cv::_InputArray* a, const CvScalar* scale, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    cv::Scalar s = *scale;
-   cv::cuda::add(*a, s, *c, mask ? *mask : cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::add(*a, s, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaSubtract(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-   cv::cuda::subtract(*a, *b, *c, mask ? *mask : cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::subtract(*a, *b, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaSubtractS(cv::_InputArray* a, const CvScalar* scale, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    cv::Scalar s = *scale;
-   cv::cuda::subtract(*a, s, *c, mask ? *mask : cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::subtract(*a, s, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaMultiply(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, double scale, cv::cuda::Stream* stream)
@@ -278,7 +278,6 @@ void cudaSqrIntegral(cv::_InputArray* src, cv::_OutputArray* sqrSum, cv::cuda::G
    CV_Assert(!stream || buffer);
    cv::cuda::sqrIntegral(*src, *sqrSum, *buffer, stream ? *stream : cv::cuda::Stream::Null());
 }
-
 
 void cudaDft(cv::_InputArray* src, cv::_OutputArray* dst, int flags, cv::cuda::Stream* stream)
 {

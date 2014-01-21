@@ -54,6 +54,10 @@ namespace Emgu.CV.Util
       {
       }
 	  
+	  /// <summary>
+      /// Create an standard vector of ${VECTOR_NAME} with the initial values
+      /// </summary>
+      /// <param name="values">The initial values</param>
 	  public VectorOf${VECTOR_NAME}(params ${VECTOR_ELEMENT_CS}[] values)
 	     : this()
 	  {
@@ -132,6 +136,9 @@ namespace Emgu.CV.Util
             CvInvoke.cveInputOutputArrayRelease(ref _inputOutputArrayPtr);
       }
 
+	  /// <summary>
+      /// Get the pointer to cv::_InputArray
+      /// </summary>
       public IntPtr InputArrayPtr
       {
          get
@@ -141,7 +148,10 @@ namespace Emgu.CV.Util
             return _inputArrayPtr;
          }
       }
-
+	  
+      /// <summary>
+      /// Get the pointer to cv::_OutputArray
+      /// </summary>
       public IntPtr OutputArrayPtr
       {
          get
@@ -152,6 +162,9 @@ namespace Emgu.CV.Util
          }
       }
 
+	  /// <summary>
+      /// Get the pointer to cv::_InputOutputArray
+      /// </summary>
       public IntPtr InputOutputArrayPtr
       {
          get

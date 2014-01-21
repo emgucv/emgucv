@@ -26,13 +26,13 @@ namespace Emgu.CV.Features2D
       /// Create a Good Feature to Track detector
       /// </summary>
       /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
-      /// <param name="maxCorners">The maximum number of features to be detected. Use 1000 for default</param>
-      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners. Use 0.01 for default.</param>
-      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. Use 1 for default</param>
-      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function. Use 3 for default</param>
-      /// <param name="useHarrisDetector">If true, will use Harris corner detector. Use false as default</param>
-      /// <param name="k">K, use 0.04 for default</param>
-      public GFTTDetector(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k)
+      /// <param name="maxCorners">The maximum number of features to be detected.</param>
+      /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners.</param>
+      /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used.</param>
+      /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function.</param>
+      /// <param name="useHarrisDetector">If true, will use Harris corner detector.</param>
+      /// <param name="k">K</param>
+      public GFTTDetector(int maxCorners = 1000, double qualityLevel = 0.01, double minDistance = 1, int blockSize = 3, bool useHarrisDetector = false, double k = 0.04)
       {
          _ptr = CvGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
       }

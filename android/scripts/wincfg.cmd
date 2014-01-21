@@ -1,8 +1,8 @@
 :: variables required for OpenCV build ::
 :: Note: all pathes should be specified without tailing slashes!
-SET ANDROID_NDK=C:\android-ndk-r8e
+SET ANDROID_NDK=C:\android-ndk-r9c
 SET CMAKE_EXE=C:\Program Files (x86)\CMake 2.8\bin\cmake.exe
-SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows\bin\make.exe
+SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
 
 :: variables required for android-opencv build ::
 SET ANDROID_SDK=C:\Program Files (x86)\Android\android-sdk

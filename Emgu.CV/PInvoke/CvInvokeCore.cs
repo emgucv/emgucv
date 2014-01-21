@@ -286,7 +286,7 @@ namespace Emgu.CV
           IntPtr seq,
           IntPtr elements,
           int count,
-          CvEnum.BACK_OR_FRONT backOrFront);
+          CvEnum.BackOrFront backOrFront);
 
       /// <summary>
       /// Removes several elements from either end of the sequence. If the number of the elements to be removed exceeds the total number of elements in the sequence, the function removes as many elements as possible
@@ -302,7 +302,7 @@ namespace Emgu.CV
           IntPtr seq,
           IntPtr elements,
           int count,
-          CvEnum.BACK_OR_FRONT backOrFront);
+          CvEnum.BackOrFront backOrFront);
 
       /// <summary>
       /// 
@@ -402,6 +402,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Source array, image or matrix</param>
       /// <param name="dst">Destination array, image or matrix</param>
+      /// <param name="nx">Flag to specify how many times the src is repeated along the vertical axis.</param>
+      /// <param name="ny">Flag to specify how many times the src is repeated along the horizontal axis.</param>
       public static void Repeat(IInputArray src, int ny, int nx, IOutputArray dst)
       {
          cveRepeat(src.InputArrayPtr, ny, nx, dst.OutputArrayPtr);
@@ -437,19 +439,39 @@ namespace Emgu.CV
          handle.Free();
       }
 
-      /// <summary>
-      /// The function cvMixChannels is a generalized form of cvSplit and cvMerge and some forms of cvCvtColor. It can be used to change the order of the planes, add/remove alpha channel, extract or insert a single plane or multiple planes etc.
-      /// </summary>
-      /// <param name="src">The array of input arrays.</param>
-      /// <param name="dst">The array of output arrays</param>
-      /// <param name="fromTo">The array of pairs of indices of the planes copied. from_to[k*2] is the 0-based index of the input plane, and from_to[k*2+1] is the index of the output plane, where the continuous numbering of the planes over all the input and over all the output arrays is used. When from_to[k*2] is negative, the corresponding output plane is filled with 0's.</param>
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveMixChannels(
          IntPtr src,
          IntPtr dst,
          IntPtr fromTo,
          int npairs);
-    
+
+      /// <summary>
+      /// Extract the specific channel from the image
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="dst">The channel</param>
+      /// <param name="coi">0 based index of the channel to be extracted</param>
+      public static void ExtractChannel(IInputArray src, IOutputArray dst, int coi)
+      {
+         cveExtractChannel(src.InputArrayPtr, dst.OutputArrayPtr, coi);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveExtractChannel(IntPtr src, IntPtr dst, int coi);
+
+      /// <summary>
+      /// Insert the specific channel to the image
+      /// </summary>
+      /// <param name="src">The source channel</param>
+      /// <param name="dst">The destination image where the channel will be inserted into</param>
+      /// <param name="coi">0-based index of the channel to be inserted</param>
+      public static void InsertChannel(IInputArray src, IInputOutputArray dst, int coi)
+      {
+         cveInsertChannel(src.InputArrayPtr, dst.InputOutputArrayPtr, coi);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveInsertChannel(IntPtr src, IntPtr dst, int coi);
+
 
       /// <summary>
       /// Shuffles the matrix by swapping randomly chosen pairs of the matrix elements on each iteration (where each element may contain several components in case of multi-channel arrays)
@@ -462,7 +484,7 @@ namespace Emgu.CV
          cveRandShuffle(mat.InputOutputArrayPtr, iterFactor, rng);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cveRandShuffle(IntPtr mat, double iterFactor, UInt64 rng);
+      private static extern void cveRandShuffle(IntPtr mat, double iterFactor, UInt64 rng);
 
       /*
       /// <summary>
@@ -547,12 +569,13 @@ namespace Emgu.CV
       /// <param name="src2">The second source array.</param>
       /// <param name="dst">The destination array.</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed. </param>
-      public static void Add(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask, Mat.DepthType dtype)
+      /// <param name="dtype">Optional depth type of the output array</param>
+      public static void Add(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask = null, CvEnum.DepthType dtype = CvEnum.DepthType.Default)
       {
          cveAdd(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dtype);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveAdd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, Mat.DepthType dtype);
+      private static extern void cveAdd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, CvEnum.DepthType dtype);
 
       /// <summary>
       /// Subtracts one array from another one:
@@ -563,12 +586,13 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      public static void Subtract(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask, Mat.DepthType dtype)
+      /// <param name="dtype">Optional depth of the output array</param>
+      public static void Subtract(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask = null, CvEnum.DepthType dtype = CvEnum.DepthType.Default)
       {
          cveSubtract(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dtype);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveSubtract(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, Mat.DepthType dtype);
+      private static extern void cveSubtract(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, CvEnum.DepthType dtype);
 
       /// <summary>
       /// Divides one array by another:
@@ -580,13 +604,13 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="scale">Optional scale factor </param>
-      public static void Divide(IInputArray src1, IInputArray src2, IOutputArray dst, double scale, Mat.DepthType dtype)
+      /// <param name="dtype">Optional depth of the output array</param>
+      public static void Divide(IInputArray src1, IInputArray src2, IOutputArray dst, double scale = 1.0, CvEnum.DepthType dtype = CvEnum.DepthType.Default)
       {
          cveDivide(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, scale, dtype);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveDivide(IntPtr src1, IntPtr src2, IntPtr dst, double scale, Mat.DepthType dtype);
-
+      private static extern void cveDivide(IntPtr src1, IntPtr src2, IntPtr dst, double scale, CvEnum.DepthType dtype);
 
       /// <summary>
       /// Calculates per-element product of two arrays:
@@ -597,12 +621,13 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="scale">Optional scale factor</param>
-      public static void Multiply(IInputArray src1, IInputArray src2, IOutputArray dst, double scale, Mat.DepthType dtype)
+      /// <param name="dtype">Optional depth of the output array</param>
+      public static void Multiply(IInputArray src1, IInputArray src2, IOutputArray dst, double scale = 1.0, CvEnum.DepthType dtype = CvEnum.DepthType.Default)
       {
          cveMultiply(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, scale, dtype);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cveMultiply(IntPtr src1, IntPtr src2, IntPtr dst, double scale, Mat.DepthType dtype);
+      private static extern void cveMultiply(IntPtr src1, IntPtr src2, IntPtr dst, double scale, CvEnum.DepthType dtype);
 
       /// <summary>
       /// Calculates per-element bit-wise logical conjunction of two arrays:
@@ -613,7 +638,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      public static void BitwiseAnd(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask)
+      public static void BitwiseAnd(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask = null)
       { 
          cveBitwiseAnd(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
@@ -629,7 +654,7 @@ namespace Emgu.CV
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-      public static void BitwiseOr(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask)
+      public static void BitwiseOr(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask = null)
       {
          cveBitwiseOr(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
@@ -644,8 +669,8 @@ namespace Emgu.CV
       /// <param name="src1">The first source array</param>
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array</param>
-      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed. Use IntPtr.Zero if not needed.</param>
-      public static void BitwiseXor(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask)
+      /// <param name="mask">Mask, 8-bit single channel array; specifies elements of destination array to be changed.</param>
+      public static void BitwiseXor(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask = null)
       {
          cveBitwiseXor(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
@@ -907,7 +932,7 @@ namespace Emgu.CV
       public static void Dft(
          IInputArray src,
          IOutputArray dst,
-         CvEnum.CV_DXT flags,
+         CvEnum.DxtType flags,
          int nonzeroRows)
       {
          cveDft(src.InputArrayPtr, dst.OutputArrayPtr, flags, nonzeroRows);
@@ -916,7 +941,7 @@ namespace Emgu.CV
       private static extern void cveDft(
          IntPtr src,
          IntPtr dst,
-         CvEnum.CV_DXT flags,
+         CvEnum.DxtType flags,
          int nonzeroRows);
 
       /// <summary>
@@ -933,8 +958,9 @@ namespace Emgu.CV
       /// <param name="src1">The first source array</param>
       /// <param name="src2">The second source array</param>
       /// <param name="dst">The destination array of the same type and the same size of the sources</param>
-      /// <param name="flags"></param>
-      public static void MulSpectrums(IInputArray src1, IInputArray src2, IOutputArray dst, CvEnum.MulSpectrumsType flags, bool conjB)
+      /// <param name="flags">Operation flags; currently, the only supported flag is DFT_ROWS, which indicates that each row of src1 and src2 is an independent 1D Fourier spectrum.</param>
+      /// <param name="conjB">Optional flag that conjugates the second input array before the multiplication (true) or not (false).</param>
+      public static void MulSpectrums(IInputArray src1, IInputArray src2, IOutputArray dst, CvEnum.MulSpectrumsType flags, bool conjB = false)
       {
          cveMulSpectrums(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, flags, conjB);
       }
@@ -950,12 +976,12 @@ namespace Emgu.CV
       /// <param name="src">Source array, real 1D or 2D array</param>
       /// <param name="dst">Destination array of the same size and same type as the source</param>
       /// <param name="flags">Transformation flags</param>
-      public static void Dct(IInputArray src, IOutputArray dst, CvEnum.CV_DCT_TYPE flags)
+      public static void Dct(IInputArray src, IOutputArray dst, CvEnum.DctType flags)
       {
          cveDct(src.InputArrayPtr, dst.OutputArrayPtr, flags);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cveDct(IntPtr src, IntPtr dst, CvEnum.CV_DCT_TYPE flags);
+      private static extern void cveDct(IntPtr src, IntPtr dst, CvEnum.DctType flags);
 
       #endregion
 
@@ -977,7 +1003,6 @@ namespace Emgu.CV
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvClipLine(Size imgSize, ref Point pt1, ref Point pt2);
 #endif
-
 
       /// <summary>
       /// Calculates absolute difference between two arrays.
@@ -1005,12 +1030,13 @@ namespace Emgu.CV
       /// <param name="beta">Weight of the second array elements.</param>
       /// <param name="gamma">Scalar, added to each sum. </param>
       /// <param name="dst">The destination array.</param>
-      public static void AddWeighted(IInputArray src1, double alpha, IInputArray src2, double beta, double gamma, IOutputArray dst, Mat.DepthType dtype)
+      /// <param name="dtype">Optional depth of the output array; when both input arrays have the same depth</param>
+      public static void AddWeighted(IInputArray src1, double alpha, IInputArray src2, double beta, double gamma, IOutputArray dst, CvEnum.DepthType dtype = CvEnum.DepthType.Default)
       {
          cveAddWeighted(src1.InputArrayPtr, alpha, src2.InputArrayPtr, beta, gamma, dst.OutputArrayPtr, dtype);
       }
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveAddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst, Mat.DepthType dtype);
+      private static extern void cveAddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst, CvEnum.DepthType dtype);
 
       /// <summary>
       /// Performs range check for every element of the input array:
@@ -1044,7 +1070,7 @@ namespace Emgu.CV
       /// Returns the calculated norm. The multiple-channel array are treated as single-channel, that is, the results for all channels are combined. 
       /// </summary>
       /// <param name="arr1">The first source image</param>
-      /// <param name="arr2">The second source image. If it is IntPtr.Zero, the absolute norm of arr1 is calculated, otherwise absolute or relative norm of arr1-arr2 is calculated</param>
+      /// <param name="arr2">The second source image. If it is null, the absolute norm of arr1 is calculated, otherwise absolute or relative norm of arr1-arr2 is calculated</param>
       /// <param name="normType">Type of norm</param>
       /// <param name="mask">The optional operation mask</param>
       /// <returns>The calculated norm</returns>
@@ -1052,7 +1078,14 @@ namespace Emgu.CV
       {
          return cveNorm(arr1.InputArrayPtr, arr2 == null ? IntPtr.Zero : arr2.InputArrayPtr, normType, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
-      
+
+      /// <summary>
+      /// Returns the calculated norm. The multiple-channel array are treated as single-channel, that is, the results for all channels are combined. 
+      /// </summary>
+      /// <param name="arr1">The first source image</param>
+      /// <param name="normType">Type of norm</param>
+      /// <param name="mask">The optional operation mask</param>
+      /// <returns>The calculated norm</returns>
       public static double Norm(IInputArray arr1, CvEnum.NormType normType = CvEnum.NormType.L2, IInputArray mask = null)
       {
          return Norm(arr1, null, normType, mask);
@@ -1200,7 +1233,7 @@ namespace Emgu.CV
          IntPtr mat,
          int rows,
          int cols,
-         CV.CvEnum.MAT_DEPTH type,
+         CV.CvEnum.DepthType type,
          IntPtr data,
          int step);
 
@@ -1280,7 +1313,7 @@ namespace Emgu.CV
       /// <param name="type">Type of the matrix elements.</param>
       /// <returns>A pointer to the created matrix</returns>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvCreateMat(int rows, int cols, CvEnum.MAT_DEPTH type);
+      public static extern IntPtr cvCreateMat(int rows, int cols, CvEnum.DepthType type);
 
       /// <summary>
       /// Initializes CvMatND structure allocated by the user
@@ -1297,7 +1330,7 @@ namespace Emgu.CV
          int dims,
          [In]
          int[] sizes,
-         CV.CvEnum.MAT_DEPTH type,
+         CV.CvEnum.DepthType type,
          IntPtr data);
 
       /// <summary>
@@ -1318,7 +1351,7 @@ namespace Emgu.CV
       public static extern IntPtr cvCreateSparseMat(
          int dims,
          IntPtr sizes,
-         CV.CvEnum.MAT_DEPTH type);
+         CV.CvEnum.DepthType type);
 
       /// <summary>
       /// The function releases the sparse array and clears the array pointer upon exit.
@@ -1564,44 +1597,20 @@ namespace Emgu.CV
       /// CV_AA - antialiased line. 
       /// </param>
       /// <param name="shift">Number of fractional bits in the point coordinates</param>
-#if ANDROID
-      public static void cvLine(
-          IntPtr img,
-          Point pt1,
-          Point pt2,
-          MCvScalar color,
-          int thickness,
-          CvEnum.LINE_TYPE lineType,
-          int shift)
+      public static void Line(IInputOutputArray img, Point pt1, Point pt2, MCvScalar color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-         cvLine(img, pt1.X, pt1.Y, pt2.X, pt2.Y, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+         cveLine(img.InputOutputArrayPtr, ref pt1, ref pt2, ref color, thickness, lineType, shift);
       }
-
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvLine(
-         IntPtr img,
-         int pt1X,
-         int pt1Y,
-         int pt2X,
-         int pt2Y,
-         double c0,
-         double c1, 
-         double c2, 
-         double c3,
-         int thickness,
-         CvEnum.LINE_TYPE lineType,
-         int shift);
-#else
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvLine(
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveLine(
           IntPtr img,
-          Point pt1,
-          Point pt2,
-          MCvScalar color,
+          ref Point pt1,
+          ref Point pt2,
+          ref MCvScalar color,
           int thickness,
-          CvEnum.LINE_TYPE lineType,
+          CvEnum.LineType lineType,
           int shift);
-#endif
+
 
       /// <summary>
       /// Draws a single or multiple polygonal curves
@@ -1627,14 +1636,14 @@ namespace Emgu.CV
          int isClosed,
          MCvScalar color,
          int thickness,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift)
       {
          cvPolyLine(img, pts, npts, contours, isClosed, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
       }
 
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvPolyLine(IntPtr img, IntPtr pts, IntPtr npts, int coutours, int isClosed, double c0, double c1, double c2, double c3, int thickness, CvEnum.LINE_TYPE lineType, int shift);
+      private static extern void cvPolyLine(IntPtr img, IntPtr pts, IntPtr npts, int coutours, int isClosed, double c0, double c1, double c2, double c3, int thickness, CvEnum.LineType lineType, int shift);
 
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1646,7 +1655,7 @@ namespace Emgu.CV
          int isClosed,
          MCvScalar color,
          int thickness,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift);
 #endif
 
@@ -1673,7 +1682,7 @@ namespace Emgu.CV
          bool isClosed,
          MCvScalar color,
          int thickness,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift)
       {
          GCHandle h0 = GCHandle.Alloc(pts, GCHandleType.Pinned);
@@ -1700,7 +1709,7 @@ namespace Emgu.CV
          Point pt2,
          MCvScalar color,
          int thickness, 
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift)
       {
          cvRectangle(img, pt1.X, pt1.Y, pt2.X, pt2.Y, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
@@ -1718,7 +1727,7 @@ namespace Emgu.CV
          double c2,
          double c3,
          int thickness, 
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift);
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1728,7 +1737,7 @@ namespace Emgu.CV
          Point pt2,
          MCvScalar color,
          int thickness, 
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift);
 #endif
 
@@ -1744,7 +1753,7 @@ namespace Emgu.CV
 #if ANDROID
       public static void cvRectangleR(IntPtr img, Rectangle rect,
                            MCvScalar color, int thickness,
-                           CvEnum.LINE_TYPE lineType,
+                           CvEnum.LineType lineType,
                            int shift)
       {
          cvRectangleR(img, rect.X, rect.Y, rect.Width, rect.Height, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
@@ -1753,13 +1762,13 @@ namespace Emgu.CV
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvRectangleR(IntPtr img, int rectX, int rectY, int rectWidth, int rectHeight,
                            double c0, double c1, double c2, double c3, int thickness,
-                           CvEnum.LINE_TYPE lineType,
+                           CvEnum.LineType lineType,
                            int shift);
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvRectangleR(IntPtr img, Rectangle rect,
                            MCvScalar color, int thickness,
-                           CvEnum.LINE_TYPE lineType,
+                           CvEnum.LineType lineType,
                            int shift);
 #endif
 
@@ -1867,7 +1876,7 @@ namespace Emgu.CV
          int radius,
          MCvScalar color,
          int thickness,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift)
       {
          cvCircle(img, center.X, center.Y, radius, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
@@ -1884,7 +1893,7 @@ namespace Emgu.CV
          double c2, 
          double c3,
          int thickness,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift);
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1894,7 +1903,7 @@ namespace Emgu.CV
          int radius,
          MCvScalar color,
          int thickness,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift);
 #endif
 
@@ -1947,7 +1956,7 @@ namespace Emgu.CV
           double endAngle,
           MCvScalar color,
           int thickness,
-          CvEnum.LINE_TYPE lineType,
+          CvEnum.LineType lineType,
           int shift)
       {
          cvEllipse(img, center.X, center.Y, axes.Width, axes.Height, angle, startAngle, endAngle, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
@@ -1968,7 +1977,7 @@ namespace Emgu.CV
          double c2,
          double c3,
          int thickness,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift);
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1981,7 +1990,7 @@ namespace Emgu.CV
           double endAngle,
           MCvScalar color,
           int thickness,
-          CvEnum.LINE_TYPE lineType,
+          CvEnum.LineType lineType,
           int shift);
 #endif
 
@@ -1999,7 +2008,7 @@ namespace Emgu.CV
           MCvBox2D box,
           MCvScalar color,
           int thickness,
-          CvEnum.LINE_TYPE lineType,
+          CvEnum.LineType lineType,
           int shift)
       {
          Size axes = new Size();
@@ -2105,8 +2114,43 @@ namespace Emgu.CV
       /// <param name="mean">Pointer to the mean value</param>
       /// <param name="stdDev">Pointer to the standard deviation</param>
       /// <param name="mask">The optional operation mask</param>
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvAvgSdv(IntPtr arr, ref MCvScalar mean, ref MCvScalar stdDev, IntPtr mask);
+      public static void MeanStdDev(IInputArray arr, ref MCvScalar mean, ref MCvScalar stdDev, IInputArray mask = null)
+      {
+         using (VectorOfDouble meanVec = new VectorOfDouble(4))
+         using (VectorOfDouble stdDevVec = new VectorOfDouble(4))
+         {
+            MeanStdDev(arr, meanVec, stdDevVec, mask);
+            double[] meanVal = meanVec.ToArray();
+            double[] stdVal = stdDevVec.ToArray();
+            mean.v0 = meanVal[0];
+            stdDev.v0 = stdVal[0];
+
+            if (meanVal.Length > 1)
+            {
+               mean.v1 = meanVal[1];
+               stdDev.v1 = stdVal[1];
+            }
+
+            if (meanVal.Length > 2)
+            {
+               mean.v2 = meanVal[2];
+               stdDev.v2 = stdVal[2];
+            }
+
+            if (meanVal.Length > 3)
+            {
+               mean.v3 = meanVal[3];
+               stdDev.v3 = stdVal[3];
+            }
+         }
+      }
+
+      public static void MeanStdDev(IInputArray arr, IOutputArray mean, IOutputArray stdDev, IInputArray mask = null)
+      {
+         cveMeanStdDev(arr.InputArrayPtr, mean.OutputArrayPtr, stdDev.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveMeanStdDev(IntPtr arr, IntPtr mean, IntPtr stdDev, IntPtr mask);
 
       /// <summary>
       /// Calculates sum S of array elements, independently for each channel
@@ -2122,7 +2166,7 @@ namespace Emgu.CV
          return result;
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cveSum(IntPtr src, ref MCvScalar result);
+      private static extern void cveSum(IntPtr src, ref MCvScalar result);
       
 
       /// <summary>
@@ -2137,12 +2181,13 @@ namespace Emgu.CV
       /// <param name="dst">The output single-row/single-column vector that accumulates somehow all the matrix rows/columns</param>
       /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="type">The reduction operation type</param>
-      public static void Reduce(IInputArray src, IOutputArray dst, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType type, Mat.DepthType dtype)
+      /// <param name="dtype">Optional depth type of the output array</param>
+      public static void Reduce(IInputArray src, IOutputArray dst, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType type, CvEnum.DepthType dtype)
       {
          cveReduce(src.InputArrayPtr, dst.OutputArrayPtr, dim, type, dtype);
       }
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveReduce(IntPtr src, IntPtr dst, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType type, Mat.DepthType dtype);
+      private static extern void cveReduce(IntPtr src, IntPtr dst, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType type, CvEnum.DepthType dtype);
       #endregion
 
       /// <summary>
@@ -2171,7 +2216,7 @@ namespace Emgu.CV
           MCvScalar holeColor,
           int maxLevel,
           int thickness,
-          CvEnum.LINE_TYPE lineType,
+          CvEnum.LineType lineType,
           Point offset)
       {
          cvDrawContours(
@@ -2190,7 +2235,7 @@ namespace Emgu.CV
           double hc0, double hc1, double hc2, double hc3,
           int maxLevel,
           int thickness,
-          CvEnum.LINE_TYPE lineType,
+          CvEnum.LineType lineType,
           int offsetX, int offsetY);
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2201,7 +2246,7 @@ namespace Emgu.CV
           MCvScalar holeColor,
           int maxLevel,
           int thickness,
-          CvEnum.LINE_TYPE lineType,
+          CvEnum.LineType lineType,
           Point offset);
 #endif
 
@@ -2220,7 +2265,7 @@ namespace Emgu.CV
          Point[] pts,
          int npts,
          MCvScalar color,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift)
       {
          cvFillConvexPoly(img, pts, npts, color.v0, color.v1, color.v2, color.v3, lineType, shift);
@@ -2235,7 +2280,7 @@ namespace Emgu.CV
          double c1,
          double c2, 
          double c3,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift);
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2244,70 +2289,35 @@ namespace Emgu.CV
          Point[] pts,
          int npts,
          MCvScalar color,
-         CvEnum.LINE_TYPE lineType,
+         CvEnum.LineType lineType,
          int shift);
 #endif
 
       #region Text
-      /// <summary>
-      /// Initializes the font structure that can be passed to text rendering functions
-      /// </summary>
-      /// <param name="font">Pointer to the font structure initialized by the function</param>
-      /// <param name="fontFace">Font name identifier. Only a subset of Hershey fonts are supported now</param>
-      /// <param name="hscale">Horizontal scale. If equal to 1.0f, the characters have the original width depending on the font type. If equal to 0.5f, the characters are of half the original width</param>
-      /// <param name="vscale">Vertical scale. If equal to 1.0f, the characters have the original height depending on the font type. If equal to 0.5f, the characters are of half the original height</param>
-      /// <param name="shear">Approximate tangent of the character slope relative to the vertical line. Zero value means a non-italic font, 1.0f means 45 slope, etc. thickness Thickness of lines composing letters outlines. The function cvLine is used for drawing letters</param>
-      /// <param name="thickness">Thickness of the text strokes</param>
-      /// <param name="lineType">Type of the strokes</param>
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvInitFont(
-          ref MCvFont font,
-          CvEnum.FONT fontFace,
-          double hscale,
-          double vscale,
-          double shear,
-          int thickness,
-          CvEnum.LINE_TYPE lineType);
-
       /// <summary>
       /// Renders the text in the image with the specified font and color. The printed text is clipped by ROI rectangle. Symbols that do not belong to the specified font are replaced with the rectangle symbol.
       /// </summary>
       /// <param name="img">Input image</param>
       /// <param name="text">String to print</param>
       /// <param name="org">Coordinates of the bottom-left corner of the first letter</param>
-      /// <param name="font">Pointer to the font structure</param>
       /// <param name="color">Text color</param>
-#if ANDROID
-      public static void cvPutText(
-         IntPtr img,
-         String text,
-         Point org,
-         ref MCvFont font,
-         MCvScalar color)
+      public static void PutText(
+         IInputOutputArray img, String text, Point org, CvEnum.FontFace fontFace, double fontScale,
+         MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, bool bottomLeftOrigin = false)
       {
-         cvPutText(img, text, org.X, org.Y, ref font, color.v0, color.v1, color.v2, color.v3);
+         cvePutText(img.InputOutputArrayPtr, text, ref org, fontFace, fontScale, ref color, thickness, lineType, bottomLeftOrigin);
       }
 
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvPutText(
-         IntPtr img, 
-         [MarshalAs(CvInvoke.StringMarshalType)] 
-         String text, 
-         int orgX,
-         int orgY,
-         ref MCvFont font, 
-         double v0, double v1, double v2, double v3
-         );
-#else
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvPutText(
-         IntPtr img, 
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvePutText(
+         IntPtr img,
          [MarshalAs(CvInvoke.StringMarshalType)] String text, 
-         Point org, 
-         ref MCvFont font, 
-         MCvScalar color);
-#endif
+         ref Point org, CvEnum.FontFace fontFace, double fontScale, 
+         ref MCvScalar color, int thickness, CvEnum.LineType lineType, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool bottomLeftOrigin);
 
+      /*
       /// <summary>
       /// Calculates the binding rectangle for the given text string when a specified font is used
       /// </summary>
@@ -2321,7 +2331,7 @@ namespace Emgu.CV
          String textString, 
          ref MCvFont font, 
          ref Size textSize, 
-         ref int baseline);
+         ref int baseline);*/
       #endregion
 
       /// <summary>
@@ -2381,7 +2391,7 @@ namespace Emgu.CV
          ref double maxVal,
          ref Point minLoc,
          ref Point maxLoc,
-         IInputArray mask)
+         IInputArray mask = null)
       {
          cveMinMaxLoc(arr.InputArrayPtr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
@@ -2401,6 +2411,10 @@ namespace Emgu.CV
       /// <param name="dst">The destination image</param>
       /// <param name="bordertype">Type of the border to create around the copied source image rectangle</param>
       /// <param name="value">Value of the border pixels if bordertype=CONSTANT</param>
+      /// <param name="bottom">Parameter specifying how many pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="left">Parameter specifying how many pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="right">Parameter specifying how many pixels in each direction from the source image rectangle to extrapolate.</param>
+      /// <param name="top">Parameter specifying how many pixels in each direction from the source image rectangle to extrapolate.</param>
       public static void CopyMakeBorder(
          IInputArray src,
          IOutputArray dst,
@@ -2599,13 +2613,14 @@ namespace Emgu.CV
       /// <param name="beta">The maximum/minimum value of the output array</param>
       /// <param name="normType">The normalization type</param>
       /// <param name="mask">The operation mask. Makes the function consider and normalize only certain array elements</param>
+      /// <param name="dType">Optional depth type for the dst array</param>
       public static void Normalize(
          IInputArray src,
          IOutputArray dst,
          double alpha = 1,
          double beta = 0,
          CvEnum.NormType normType = CvEnum.NormType.L2,
-         Mat.DepthType dType = Mat.DepthType.Default,
+         CvEnum.DepthType dType = CvEnum.DepthType.Default,
          IInputArray mask = null)
       {
          cveNormalize(src.InputArrayPtr, dst.OutputArrayPtr, alpha, beta, normType, dType, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
@@ -2617,7 +2632,7 @@ namespace Emgu.CV
          double alpha,
          double beta,
          CvEnum.NormType normType,
-         Mat.DepthType dType,
+         CvEnum.DepthType dType,
          IntPtr mask);
 
       /// <summary>
@@ -2647,7 +2662,7 @@ namespace Emgu.CV
          IInputArray src3,
          double beta,
          IOutputArray dst,
-         CvEnum.GEMM_TYPE tABC)
+         CvEnum.GemmType tABC = CvEnum.GemmType.Default)
       {
          cveGemm(src1.InputArrayPtr, src2.InputArrayPtr, alpha, src3 == null ? IntPtr.Zero : src3.InputArrayPtr, beta, dst.OutputArrayPtr, tABC);
       }
@@ -2659,7 +2674,7 @@ namespace Emgu.CV
           IntPtr src3,
           double beta,
           IntPtr dst,
-          CvEnum.GEMM_TYPE tABC);
+          CvEnum.GemmType tABC);
 
       /// <summary>
       /// Performs matrix transformation of every element of array src and stores the results in dst
@@ -2668,7 +2683,6 @@ namespace Emgu.CV
       /// <param name="src">The first source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="m"> transformation 2x2 or 2x3 floating-point matrix.</param>
-      /// <param name="shiftvec">Optional shift vector</param>
       public static void Transform(IInputArray src, IOutputArray dst, IInputArray m)
       {
          cveTransform(src.InputArrayPtr, dst.OutputArrayPtr, m.InputArrayPtr);
@@ -2702,16 +2716,17 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">The source matrix</param>
       /// <param name="dst">The destination matrix</param>
-      /// <param name="order">Order of multipliers</param>
+      /// <param name="aTa">Order of multipliers</param>
       /// <param name="delta">An optional array, subtracted from <paramref name="src"/> before multiplication</param>
       /// <param name="scale">An optional scaling</param>
+      /// <param name="dtype">Optional depth type of the output array</param>
       public static void MulTransposed(
          IInputArray src,
          IOutputArray dst,
          bool aTa,
          IInputArray delta = null,
          double scale = 1,
-         Mat.DepthType dtype = Mat.DepthType.Default)
+         CvEnum.DepthType dtype = CvEnum.DepthType.Default)
       {
          cveMulTransposed(src.InputArrayPtr, dst.OutputArrayPtr, aTa, delta == null? IntPtr.Zero : delta.InputArrayPtr, scale, dtype );
       }
@@ -2723,7 +2738,7 @@ namespace Emgu.CV
          bool aTa,
          IntPtr delta,
          double scale, 
-         Mat.DepthType dtype);
+         CvEnum.DepthType dtype);
 
       /// <summary>
       /// Returns sum of diagonal elements of the matrix <paramref name="mat"/>.
@@ -2797,14 +2812,22 @@ namespace Emgu.CV
       /// <param name="V">Optional right orthogonal matrix (NxN)</param>
       /// <param name="flags">Operation flags</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvSVD(IntPtr A, IntPtr W, IntPtr U, IntPtr V, CvEnum.SVD_TYPE flags);
+      public static extern void cvSVD(IntPtr A, IntPtr W, IntPtr U, IntPtr V, CvEnum.SvdType flags);
 
+      /// <summary>
+      /// Calculates the covariance matrix of a set of vectors.
+      /// </summary>
+      /// <param name="samples">Samples stored either as separate matrices or as rows/columns of a single matrix.</param>
+      /// <param name="covar">Output covariance matrix of the type ctype and square size.</param>
+      /// <param name="mean">Input or output (depending on the flags) array as the average value of the input vectors.</param>
+      /// <param name="flags">Operation flags</param>
+      /// <param name="ctype">Type of the matrix</param>
       public static void CalcCovarMatrix(
          IInputArray samples, 
          IOutputArray covar,
          IInputOutputArray mean,
          CvEnum.CovarMethod flags, 
-         Mat.DepthType ctype = Mat.DepthType.Cv64F)
+         CvEnum.DepthType ctype = CvEnum.DepthType.Cv64F)
       {
          cveCalcCovarMatrix(samples.InputArrayPtr, covar.OutputArrayPtr, mean.InputOutputArrayPtr, flags, ctype);
       }
@@ -2814,7 +2837,7 @@ namespace Emgu.CV
          IntPtr covar,
          IntPtr mean,
          CvEnum.CovarMethod flags, 
-         Mat.DepthType ctype);
+         CvEnum.DepthType ctype);
 
       /// <summary>
       /// Calculates the weighted distance between two vectors and returns it
@@ -2844,7 +2867,7 @@ namespace Emgu.CV
           IntPtr avg,
           IntPtr eigenvalues,
           IntPtr eigenvectors,
-          CvEnum.PCA_TYPE flags);
+          CvEnum.PcaType flags);
 
       /// <summary>
       /// Projects vectors to the specified subspace
@@ -2988,7 +3011,7 @@ namespace Emgu.CV
       public static extern IntPtr cvOpenFileStorage(
          [MarshalAs(StringMarshalType)] String filename,
          IntPtr memstorage,
-         CvEnum.STORAGE_OP flags);
+         CvEnum.StorageOp flags);
 
       /// <summary>
       /// Closes the file associated with the storage and releases all the temporary structures. It must be called after all I/O operations with the storage are finished
@@ -3043,19 +3066,46 @@ namespace Emgu.CV
 
       #endregion
 
-      public static Mat CvArrToMat(IntPtr arr)
+      /// <summary>
+      /// Converts CvMat, IplImage , or CvMatND to Mat.
+      /// </summary>
+      /// <param name="arr">Input CvMat, IplImage , or CvMatND.</param>
+      /// <param name="allowND">When true (default value), CvMatND is converted to 2-dimensional Mat, if it is possible (see the discussion below); if it is not possible, or when the parameter is false, the function will report an error</param>
+      /// <param name="copyData">When false (default value), no data is copied and only the new header is created, in this case, the original array should not be deallocated while the new matrix header is used; if the parameter is true, all the data is copied and you may deallocate the original array right after the conversion.</param>
+      /// <param name="coiMode">Parameter specifying how the IplImage COI (when set) is handled. If coiMode=0 and COI is set, the function reports an error. If coiMode=1 , the function never reports an error. Instead, it returns the header to the whole original image and you will have to check and process COI manually. </param>
+      /// <returns>The Mat header</returns>
+      public static Mat CvArrToMat(IntPtr arr, bool copyData = false, bool allowND = true, int coiMode = 0)
       {
-         Mat m = new Mat();
-         cveArrToMat(arr, m.Ptr);
-         return m;
+         return new Mat(cveArrToMat(arr, copyData, allowND, coiMode), true, false);
       }
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cveArrToMat(IntPtr cvArray, IntPtr mat);
+      private extern static IntPtr cveArrToMat(
+         IntPtr cvArray,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool copyData,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool allowND, 
+         int coiMode);
+
+      public static void HConcat(IInputArray src1, IInputArray src2, IOutputArray dst)
+      {
+         cveHConcat(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr);
+      }
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void  cveHConcat(IntPtr src1, IntPtr src2, IntPtr dst);
+
+      public static void VConcat(IInputArray src1, IInputArray src2, IOutputArray dst)
+      {
+         cveVConcat(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr);
+      }
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void cveVConcat(IntPtr src1, IntPtr src2, IntPtr dst);
 
       #region OpenCL
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private extern static bool cveHaveOpenCL();
+
+      /// <summary>
+      /// Check if we have opencl
+      /// </summary>
       public static bool HaveOpenCL
       {
          get
@@ -3063,12 +3113,13 @@ namespace Emgu.CV
             return cveHaveOpenCL();
          }
       }
-
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private extern static bool cveUseOpenCL();
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cveSetUseOpenCL([MarshalAs(CvInvoke.BoolMarshalType)] bool flag);
+      private extern static bool cveHaveOpenCL();
+
+      /// <summary>
+      /// Get or set if opencl should be used
+      /// </summary>
       public static bool UseOpenCL
       {
          get
@@ -3080,14 +3131,22 @@ namespace Emgu.CV
             cveSetUseOpenCL(value);
          }
       }
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      private extern static bool cveUseOpenCL();
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void cveSetUseOpenCL([MarshalAs(CvInvoke.BoolMarshalType)] bool flag);
 
+      /// <summary>
+      /// Finishes opencl queue.
+      /// </summary>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="cveOclFinish2")]
-      public extern static void OclFinish2();
+      public extern static void OclFinish();
       #endregion
 
       #region Clustering
       /// <summary>
-      /// implements k-means algorithm that finds centers of cluster_count clusters and groups the input samples around the clusters. On output labels(i) contains a cluster index for sample stored in the i-th row of samples matrix
+      /// Implements k-means algorithm that finds centers of cluster_count clusters and groups the input samples around the clusters. On output labels(i) contains a cluster index for sample stored in the i-th row of samples matrix
       /// </summary>
       /// <param name="data">Floating-point matrix of input samples, one row per sample</param>
       /// <param name="bestLabels">Output integer vector storing cluster indices for every sample</param>
@@ -3095,6 +3154,7 @@ namespace Emgu.CV
       /// <param name="attempts">The number of attemps. Use 2 if not sure</param>
       /// <param name="flags">Flags, use 0 if not sure</param>
       /// <param name="centers">Pointer to array of centers, use IntPtr.Zero if not sure</param>
+      /// <param name="k">Number of clusters to split the set by.</param>
       public static double Kmeans(
          IInputArray data,
          int k,

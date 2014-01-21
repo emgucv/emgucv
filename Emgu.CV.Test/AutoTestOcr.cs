@@ -23,9 +23,10 @@ namespace Emgu.CV.Test
          using (Image<Gray, Byte> img = new Image<Gray, byte>(480, 200))
          {
             ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
-            MCvFont font = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
+
             String message = "Hello, World";
-            img.Draw(message, ref font, new Point(50, 100), new Gray(255.0));
+            CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.FontFace.HersheySimplex, 1.0, new MCvScalar(255));
+
             //ImageViewer.Show(img);
             ocr.Recognize(img);
 
@@ -43,9 +44,9 @@ namespace Emgu.CV.Test
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 200))
          {
             ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
-            MCvFont font = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
+
             String message = "Hello, World";
-            img.Draw(message, ref font, new Point(50, 100), new Bgr(Color.Pink));
+            CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.FontFace.HersheySimplex, 1.0, new Bgr(Color.Pink).MCvScalar);
             //ImageViewer.Show(img);
             ocr.Recognize(img);
 

@@ -63,10 +63,6 @@
       <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>
       <Name>Emgu.CV.Cuda</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.csproj">
-      <Project>{BDEC3F55-BBD2-4ED8-9D14-3F0196A944C5}</Project>
-      <Name>Emgu.CV.OpenCL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">
       <Project>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</Project>
       <Name>Emgu.CV</Name>

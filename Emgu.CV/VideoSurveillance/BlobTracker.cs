@@ -54,7 +54,9 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="currentImage">current image</param>
       /// <param name="currentForegroundMask">Current foreground mask</param>
       /// <returns>Newly added blob</returns>
-      public MCvBlob Add(MCvBlob blob, IImage currentImage, Image<Gray, Byte> currentForegroundMask)
+      public MCvBlob Add<TColor, TDepth>(MCvBlob blob, Image<TColor, TDepth> currentImage, Image<Gray, Byte> currentForegroundMask)
+         where TColor : struct, IColor
+         where TDepth : new()
       {
          IntPtr bobPtr = CvBlobTrackerAddBlob(
             _ptr,

@@ -60,7 +60,6 @@ namespace Emgu.CV
          {
             throw new NotImplementedException("Only Bitmap config of Argb888 or Rgb565 is supported.");
          }
-
       }
    }
 }

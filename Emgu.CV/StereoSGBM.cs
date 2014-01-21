@@ -69,6 +69,9 @@ namespace Emgu.CV
          _stereoMatcherPtr = IntPtr.Zero;
       }
 
+      /// <summary>
+      /// Pointer to the StereoMatcher 
+      /// </summary>
       public IntPtr StereoMatcherPtr
       {
          get { return _stereoMatcherPtr; }

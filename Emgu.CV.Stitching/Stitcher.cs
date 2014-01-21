@@ -30,26 +30,11 @@ namespace Emgu.CV.Stitching
       /// <summary>
       /// Compute the panoramic images given the images
       /// </summary>
-      /// <param name="images">The input images</param>
+      /// <param name="images">The input images. This can be, for example, a VectorOfMat</param>
       /// <returns>The panoramic image</returns>
-      public Image<Bgr, Byte> Stitch(Image<Bgr, Byte>[] images)
+      public bool Stitch(IInputArray images, IOutputArray pano)
       {
-         IntPtr[] ptrs = new IntPtr[images.Length];
-         for (int i = 0; i < images.Length; ++i)
-            ptrs[i] = images[i].Ptr;
-
-         GCHandle handle = GCHandle.Alloc(ptrs, GCHandleType.Pinned);
-         IntPtr resultIplImage = StitchingInvoke.CvStitcherStitch(_ptr, handle.AddrOfPinnedObject(), images.Length);
-         handle.Free();
-
-         if (resultIplImage == IntPtr.Zero)
-            throw new ArgumentException("Requires more images");
-
-         MIplImage tmp = (MIplImage) Marshal.PtrToStructure(resultIplImage, typeof(MIplImage));
-         Image<Bgr, Byte> result = new Image<Bgr, byte>(tmp.width, tmp.height);
-         CvInvoke.cvCopy(resultIplImage, result, IntPtr.Zero);
-         CvInvoke.cvReleaseImage(ref resultIplImage);
-         return result;
+         return StitchingInvoke.CvStitcherStitch(_ptr, images.InputArrayPtr, pano.OutputArrayPtr);
       }
 
       /// <summary>
@@ -76,7 +61,8 @@ namespace Emgu.CV.Stitching
          );
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvStitcherStitch(IntPtr stitcherWrapper, IntPtr images, int imgCount);
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool CvStitcherStitch(IntPtr stitcherWrapper, IntPtr images, IntPtr pano);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvStitcherRelease(ref IntPtr stitcherWrapper);

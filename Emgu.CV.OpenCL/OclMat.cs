@@ -153,7 +153,7 @@ namespace Emgu.CV.OpenCL
          : base(OclInvoke.OclMatCreate(
          rows, 
          cols, 
-         CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels)))
+         CvInvoke.MakeType(CvInvoke.GetDepthType(typeof(TDepth)), channels)))
       {
       }
 

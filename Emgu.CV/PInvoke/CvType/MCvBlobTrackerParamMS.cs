@@ -24,7 +24,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// MS profile
       /// </summary>
-      public CvEnum.BLOBTRACKER_MS_PROFILE meanshift_profile;
+      public CvEnum.BlobtrackerMsProfile meanshift_profile;
       /// <summary>
       /// 
       /// </summary>

@@ -46,6 +46,12 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> image = capture.QueryFrame();
       }
 
+      public void TestShowMat()
+      {
+         Mat m = new Mat(323, 241, CvEnum.DepthType.Cv8U, 3);
+         Emgu.CV.UI.ImageViewer.Show(m);
+      }
+
       public void TestKinect()
       {
          using (KinectCapture capture = new KinectCapture(KinectCapture.DeviceType.Kinect, KinectCapture.ImageGeneratorOutputMode.VGA_30HZ))
@@ -74,11 +80,11 @@ namespace Emgu.CV.Test
          double scale = width / 160.0;
          Image<Bgr, Byte> semgu = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
          Image<Bgr, Byte> scv = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
-         MCvFont f1 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_TRIPLEX, 1.5 * scale, 1.5 * scale);
-         MCvFont f2 = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.6 * scale, 2.2 * scale);
-         semgu.Draw("Emgu", ref f1, Point.Round(new PointF((float)(6 * scale), (float)(50 * scale))), new Bgr(55, 155, 255));
+         //MCvFont f1 = new MCvFont(CvEnum.FontFace.HersheyTriplex, 1.5 * scale, 1.5 * scale);
+         //MCvFont f2 = new MCvFont(CvEnum.FontFace.HersheyComplex, 1.6 * scale, 2.2 * scale);
+         semgu.Draw("Emgu", Point.Round(new PointF((float)(6 * scale), (float)(50 * scale))), CvEnum.FontFace.HersheyTriplex, 1.5*scale, new Bgr(55, 155, 255), (int) Math.Round( 1.5*scale ));
          semgu._Dilate((int)(1 * scale));
-         scv.Draw("CV", ref f2, Point.Round(new PointF((float)(50 * scale), (float)(60 * scale))), new Bgr(255, 55, 255));
+         scv.Draw("CV", Point.Round(new PointF((float)(50 * scale), (float)(60 * scale))), CvEnum.FontFace.HersheySimplex, 1.6 * scale,  new Bgr(255, 55, 255), (int) Math.Round(2.2*scale));
          scv._Dilate((int)(2 * scale));
          Image<Bgr, Byte> logoBgr = semgu.Or(scv);
          Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Size);
@@ -191,9 +197,9 @@ namespace Emgu.CV.Test
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) 
          {
             //Create the font
-            MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0);
+            //MCvFont f = new MCvFont(CvEnum.FontFace.HersheyComplex, 1.0, 1.0);
             //Draw "Hello, world." on the image using the specific font
-            img.Draw("Hello, world", ref f, new Point(10, 80), new Bgr(0, 255, 0));
+            img.Draw("Hello, world", new Point(10, 80), CvEnum.FontFace.HersheyComplex, 1.0,  new Bgr(0, 255, 0));
 
             //Show the image
             CvInvoke.cvShowImage(win1, img.Ptr);
@@ -210,10 +216,10 @@ namespace Emgu.CV.Test
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) 
          {
             //Create the font
-            MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 1.0, 1.0);
+            //MCvFont f = new MCvFont(CvEnum.FontFace.HersheyComplex, 1.0, 1.0);
 
             //Draw "Hello, world." on the image using the specific font
-            img.Draw("Hello, world", ref f, new Point(10, 80), new Bgr(0, 255, 0)); 
+            img.Draw("Hello, world", new Point(10, 80), CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0)); 
             
             //Show the image using ImageViewer from Emgu.CV.UI
             ImageViewer.Show(img, "Test Window");
@@ -952,12 +958,12 @@ namespace Emgu.CV.Test
 
          BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
          param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
-         param.FGDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD, fgparam);
+         param.FGDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.ForgroundDetectorType.Fgd, fgparam);
          param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFG);
          param.FGTrainFrames = 10;
          BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 
-         MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
+         //MCvFont font = new MCvFont(Emgu.CV.CvEnum.FontFace.HersheySimplex, 1.0, 1.0);
 
          using(ImageViewer viewer = new ImageViewer())
          using (Capture capture = new Capture())
@@ -972,7 +978,7 @@ namespace Emgu.CV.Test
                foreach (MCvBlob blob in tracker)
                {
                   img.Draw((Rectangle)blob, new Bgr(255.0, 255.0, 255.0), 2);
-                  img.Draw(blob.ID.ToString(), ref font, Point.Round(blob.Center), new Bgr(255.0, 255.0, 255.0));
+                  img.Draw(blob.ID.ToString(), Point.Round(blob.Center), CvEnum.FontFace.HersheySimplex, 1.0, new Bgr(255.0, 255.0, 255.0));
                }
                viewer.Image = img;
             };
@@ -983,7 +989,7 @@ namespace Emgu.CV.Test
 
       public void TestCvBlob()
       {
-         MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 0.5, 0.5);
+         //MCvFont font = new MCvFont(Emgu.CV.CvEnum.FontFace.HersheySimplex, 0.5, 0.5);
          using (CvTracks tracks = new CvTracks())
          using (ImageViewer viewer = new ImageViewer())
          using (Capture capture = new Capture())
@@ -1025,7 +1031,7 @@ namespace Emgu.CV.Test
                      {
                         CvBlob b = blobs[pair.Value.BlobLabel];
                         Bgr color = detector.MeanColor(b, frame);
-                        result.Draw(pair.Key.ToString(), ref font, pair.Value.BoundingBox.Location, color);
+                        result.Draw(pair.Key.ToString(), pair.Value.BoundingBox.Location, CvEnum.FontFace.HersheySimplex, 0.5, color);
                         result.Draw(pair.Value.BoundingBox, color, 2);
                         using (MemStorage stor = new MemStorage())
                         {
@@ -1042,6 +1048,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       public void TestPyrLK()
       {
          const int MAX_CORNERS = 500;
@@ -1057,7 +1064,9 @@ namespace Emgu.CV.Test
             }
 
             currentImage = c.QueryGrayFrame();
-            PointF[] features = oldImage.GoodFeaturesToTrack(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04)[0];
+            Features2D.GFTTDetector detector = new Features2D.GFTTDetector(MAX_CORNERS, 0.05, 3, 3);
+            
+            //PointF[] features = oldImage.GoodFeaturesToTrack(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04)[0];
             PointF[] shiftedFeatures;
             Byte[] status;
             float[] trackErrors;
@@ -1072,7 +1081,7 @@ namespace Emgu.CV.Test
             viewer.Image = displayImage;
          });
          viewer.ShowDialog();
-      }
+      }*/
 
      
       public void TestPyrLKGPU()

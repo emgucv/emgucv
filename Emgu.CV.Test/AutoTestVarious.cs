@@ -55,6 +55,7 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(4 * sizeof(int), Marshal.SizeOf(typeof(Rectangle)));
       }
 
+      /*
       [Test]
       public void TestDenseHistogramRuntimeSerialization()
       {
@@ -77,7 +78,7 @@ namespace Emgu.CV.Test
                EmguAssert.IsTrue(hist.Equals(hist2));
             }
          }
-      }
+      }*/
 
       [Test]
       public void TestLookup()
@@ -234,7 +235,7 @@ namespace Emgu.CV.Test
          using (MemStorage stor = new MemStorage())
          {
             Seq<Point> contour = new Seq<Point>(stor);
-            contour.PushMulti(polyline, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
+            contour.PushMulti(polyline, Emgu.CV.CvEnum.BackOrFront.Front);
             image.Draw(contour, new Gray(255), 1);
             Seq<MCvConvexityDefect> defactSeq =
                contour.GetConvexityDefacts(
@@ -455,12 +456,12 @@ namespace Emgu.CV.Test
       {
          using (Matrix<float> imagePointMat = new Matrix<float>(points3D.GetLength(0), 2))
          {
-            CvInvoke.cvProjectPoints2(new Matrix<float>(points3D), rotation, translation,
+            CvInvoke.ProjectPoints(new Matrix<float>(points3D), rotation, translation,
             new Matrix<double>(new double[,] { 
                {focalLength, 0, 0},
                {0, focalLength, 0}, 
                {0,0,1}}),
-            IntPtr.Zero, imagePointMat, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 0.0);
+            null, imagePointMat);
             return imagePointMat.Data;
          }
       }
@@ -468,16 +469,18 @@ namespace Emgu.CV.Test
       [Test]
       public void TestIntrisicParameters()
       {
+         #if !IOS
          System.Diagnostics.PerformanceCounter memCounter = new PerformanceCounter("Memory", "Available MBytes");
          Trace.WriteLine(String.Format("Available mem before: {0} Mb", memCounter.NextValue()));
-
+         #endif
          IntrinsicCameraParameters[] paramArr = new IntrinsicCameraParameters[100000];
          for (int i = 0; i < paramArr.Length; i++)
          {
             paramArr[i] = new IntrinsicCameraParameters(8);
          }
-
+         #if !IOS
          Trace.WriteLine(String.Format("Available mem after: {0} Mb", memCounter.NextValue()));
+         #endif
       }
 
       /*
@@ -637,7 +640,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestMorphEx()
       {
-         Mat kernel1 = CvInvoke.GetStructuringElement(Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_CROSS, new Size(3, 3), new Point(1, 1));
+         Mat kernel1 = CvInvoke.GetStructuringElement(Emgu.CV.CvEnum.ElementShape.Cross, new Size(3, 3), new Point(1, 1));
          Matrix<byte> kernel2 = new Matrix<byte>(new Byte[3, 3] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } });
          //StructuringElementEx element2 = new StructuringElementEx(new int[3, 3] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } }, 1, 1);
          Image<Bgr, Byte> tmp = new Image<Bgr, byte>(100, 100);
@@ -667,10 +670,10 @@ namespace Emgu.CV.Test
          rect.Offset(10, 0);
          img2.Draw(rect, new Bgr(Color.Red), -1);
 
-         BGStatModel<Bgr> model1 = new BGStatModel<Bgr>(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
+         BGStatModel<Bgr> model1 = new BGStatModel<Bgr>(img1, Emgu.CV.CvEnum.BgStatType.GaussianBgModel);
          model1.Update(img2);
 
-         BGStatModel<Bgr> model2 = new BGStatModel<Bgr>(img1, Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL);
+         BGStatModel<Bgr> model2 = new BGStatModel<Bgr>(img1, Emgu.CV.CvEnum.BgStatType.FgdStatModel);
          model2.Update(img2);
 
          //ImageViewer.Show(model2.Foreground);
@@ -774,7 +777,7 @@ namespace Emgu.CV.Test
             MCvSubdiv2DEdge? edge;
             MCvSubdiv2DPoint? point;
             CvEnum.Subdiv2DPointLocationType location = subdiv.Locate(ref pts[i], out edge, out point);
-            if (location == Emgu.CV.CvEnum.Subdiv2DPointLocationType.ON_EDGE)
+            if (location == Emgu.CV.CvEnum.Subdiv2DPointLocationType.OnEdge)
             {
                //you might want to store the points which is not inserted here.
                //or alternatively, add some random noise to the point and re-insert it again.
@@ -1230,7 +1233,7 @@ namespace Emgu.CV.Test
             //Assert.GreaterOrEqual(contourD.InContour(new PointF(1, 1)), 0);
             //Assert.Less(contourD.InContour(new PointF(3, 3)), 0);
 
-            Seq<Point> seq = new Seq<Point>(CvInvoke.CV_MAKETYPE(4, 2), stor);
+            Seq<Point> seq = new Seq<Point>(CvInvoke.MakeType(CvEnum.DepthType.Cv32S, 2), stor);
             seq.Push(new Point(0, 0));
             seq.Push(new Point(0, 1));
             seq.Push(new Point(1, 1));
@@ -1630,21 +1633,30 @@ namespace Emgu.CV.Test
          {
             Image<Gray, Byte>[] HSVs = img2.Split();
 
-            using (DenseHistogram h = new DenseHistogram(20, new RangeF(0, 180)))
+            using (Mat h = new Mat())
+            using (Mat bpj = new Mat())
+            using (VectorOfMat vm = new VectorOfMat())
             {
-               h.Calculate(new Image<Gray, Byte>[1] { HSVs[0] }, true, null);
-               using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
-               {
-                  Size sz = bpj.Size;
-               }
-               using (Image<Gray, Single> patchBpj = h.BackProjectPatch(
-                  new Image<Gray, Byte>[1] { HSVs[0] },
-                  new Size(5, 5),
-                  Emgu.CV.CvEnum.HISTOGRAM_COMP_METHOD.CV_COMP_CHISQR,
-                  1.0))
-               {
-                  Size sz = patchBpj.Size;
-               }
+               vm.Push(HSVs[0]);
+               CvInvoke.CalcHist(vm, new int[] { 0 }, null, h, new int[] { 20 }, new float[] { 0, 180 }, false);
+               CvInvoke.CalcBackProject(vm, new int[] { 0 }, h, bpj, new float[] { 0, 180 }, 0.1);
+
+               //Emgu.CV.UI.HistogramViewer.Show(bpj);
+               //Emgu.CV.UI.ImageViewer.Show(bpj);
+               //h.Calculate(new Image<Gray, Byte>[1] { HSVs[0] }, true, null);
+               //using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
+               //{
+               //   Size sz = bpj.Size;
+               //}
+
+               //using (Image<Gray, Single> patchBpj = h.BackProjectPatch(
+               //   new Image<Gray, Byte>[1] { HSVs[0] },
+               //   new Size(5, 5),
+               //   Emgu.CV.CvEnum.HISTOGRAM_COMP_METHOD.CV_COMP_CHISQR,
+               //   1.0))
+               //{
+               //   Size sz = patchBpj.Size;
+               //}
             }
 
             foreach (Image<Gray, Byte> i in HSVs)
@@ -1790,9 +1802,9 @@ namespace Emgu.CV.Test
          Matrix<double> fgdModel = new Matrix<double>(1, 13 * 5);
          Image<Gray, byte> mask = new Image<Gray, byte>(img.Size);
 
-         CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.INIT_WITH_RECT);
-         CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GRABCUT_INIT_TYPE.EVAL);
-         using (InputArray ia = new InputArray(3))
+         CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GrabcutInitType.InitWithRect);
+         CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GrabcutInitType.Eval);
+         using (ScalarArray ia = new ScalarArray(3))
             CvInvoke.Compare(mask, ia, mask, CvEnum.CmpType.Equal);
          //Emgu.CV.UI.ImageViewer.Show(img.ConcateHorizontal( mask.Convert<Bgr, Byte>()));
       }
@@ -1813,7 +1825,7 @@ namespace Emgu.CV.Test
             using (Image<Gray, byte> mask = img.GrabCut(rect.Rect, 2))
             {
                //get the mask of the foreground
-               using (InputArray ia = new InputArray(3))
+               using (ScalarArray ia = new ScalarArray(3))
                   CvInvoke.Compare(mask, ia, mask, Emgu.CV.CvEnum.CmpType.Equal);
 
                pedestrianMask._Or(mask);
@@ -1904,7 +1916,7 @@ namespace Emgu.CV.Test
          {
             Stopwatch watch = Stopwatch.StartNew();
             Seq<Point> seq = new Seq<Point>(stor);
-            seq.PushMulti(pts, Emgu.CV.CvEnum.BACK_OR_FRONT.FRONT);
+            seq.PushMulti(pts, Emgu.CV.CvEnum.BackOrFront.Front);
             watch.Stop();
             EmguAssert.WriteLine(String.Format("Time for storing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
 
@@ -1991,7 +2003,7 @@ namespace Emgu.CV.Test
          using (Image<Gray, Byte> gray = image.Convert<Gray, byte>())
          using (RTreeClassifier<Bgr> classifier = new RTreeClassifier<Bgr>())
          {
-            SURFDetector surf = new SURFDetector(300, false);
+            SURFDetector surf = new SURFDetector(300);
             MKeyPoint[] keypoints = surf.Detect(gray, null);
             Point[] points = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint kp) {
                return Point.Round(kp.Point); });
@@ -2142,7 +2154,7 @@ namespace Emgu.CV.Test
             byte[] data = new byte[fs.Length];
             fs.Read(data, 0, (int) fs.Length);
 
-            IntPtr image = CvInvoke.cvDecodeImage(data, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_COLOR);
+            IntPtr image = CvInvoke.cvDecodeImage(data, CvEnum.LoadImageType.Color);
 
             try
             {
@@ -2238,8 +2250,13 @@ namespace Emgu.CV.Test
 
          using (Stitcher stitcher = new Stitcher(false))
          {
-            Image<Bgr, Byte> result = stitcher.Stitch(images);
-            //ImageViewer.Show(result);
+            Mat result = new Mat();
+            using (VectorOfMat vm = new VectorOfMat())
+            {
+               vm.Push(images);
+               stitcher.Stitch(vm, result);
+            }
+            //Emgu.CV.UI.ImageViewer.Show(result);
          }
       }
 
@@ -2391,11 +2408,11 @@ namespace Emgu.CV.Test
                      using (Image<Gray, Byte> mask = img.GrabCut(result, 10))
                      using (Image<Gray, Byte> canny = img.Canny(120, 80))
                      {
-                        MCvFont f = new MCvFont(CvEnum.FONT.CV_FONT_HERSHEY_COMPLEX, 2.0, 2.0);
-                        using (InputArray ia = new InputArray(3))
+                        //MCvFont f = new MCvFont(CvEnum.FontFace.HersheyComplex, 2.0, 2.0);
+                        using (ScalarArray ia = new ScalarArray(3))
                            CvInvoke.Compare(mask, ia, mask, CvEnum.CmpType.NotEqual);
                         CvInvoke.cvSet(canny, new MCvScalar(), mask);
-                        canny.Draw(@"http://www.emgu.com", ref f, new Point(50, 50), new Gray(255));
+                        canny.Draw(@"http://www.emgu.com", new Point(50, 50), CvEnum.FontFace.HersheyComplex, 2.0, new Gray(255), 2);
 
                         CvInvoke.BitwiseNot(canny, canny, null);
 
@@ -2515,13 +2532,14 @@ namespace Emgu.CV.Test
          capture1.Dispose();
          capture2.Dispose();
       }
-
+      #if !IOS
       [Test]
       public void TestGLImageView()
       {
          Emgu.CV.UI.GLView.GLImageViewer viewer = new UI.GLView.GLImageViewer();
          //viewer.ShowDialog();
       }
+      #endif
 
       [Test]
       public void TestERFilter()

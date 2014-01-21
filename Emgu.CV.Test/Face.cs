@@ -68,7 +68,7 @@ namespace Emgu.CV.Test
       private Image<Gray, Byte> _h;
       private Image<Gray, Byte> _s;
       private Image<Gray, Byte> _v;
-      private DenseHistogram _hueHtg;
+      //private DenseHistogram _hueHtg;
       //private Seq<MCvContour> _skinContour;
       private Rectangle _rect;
       private CascadeClassifier _eyeCascade;
@@ -168,6 +168,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       public DenseHistogram HueHistogram
       {
          get
@@ -179,7 +180,7 @@ namespace Emgu.CV.Test
             }
             return _hueHtg;
          }
-      }
+      }*/
 
       public Image<Gray, Byte> SkinMask
       {

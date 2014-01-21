@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿/*
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -28,11 +29,11 @@ namespace Emgu.CV.Structure
       ///<param name="nOctaveLayers">
       /// The number of layers within each octave
       /// </param>
-      public MCvSURFParams(double hessianThreshold, bool extended, int nOctaves, int nOctaveLayers)
+      public MCvSURFParams(double hessianThreshold, bool extended, int nOctaves, int nOctaveLayers, int upright)
       {
          HessianThreshold = hessianThreshold;
          Extended = extended ? 1 : 0;
-         Upright = 0;
+         Upright = upright;
          NOctaves = nOctaves;
          NOctaveLayers = nOctaveLayers;
       }
@@ -80,3 +81,4 @@ namespace Emgu.CV.Structure
       public int NOctaveLayers;
    }
 }
+*/

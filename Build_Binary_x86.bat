@@ -12,6 +12,7 @@ SET PROGRAMFILES_DIR=%programfiles%
 REM Find CMake  
 SET CMAKE="cmake.exe"
 IF EXIST "%PROGRAMFILES_DIR_X86%\CMake 2.8\bin\cmake.exe" SET CMAKE="%PROGRAMFILES_DIR_X86%\CMake 2.8\bin\cmake.exe"
+IF EXIST "%PROGRAMFILES_DIR_X86%\CMake\bin\cmake.exe" SET CMAKE="%PROGRAMFILES_DIR_X86%\CMake\bin\cmake.exe"
 
 IF EXIST "CMakeCache.txt" del CMakeCache.txt
 

@@ -187,6 +187,10 @@ void cveMean(cv::_InputArray* src, cv::_InputArray* mask, CvScalar* result)
    cv::Scalar mean = cv::mean(*src, mask ? *mask : (cv::InputArray) cv::noArray());
    memcpy(&result->val[0], &mean.val[0], sizeof(double) * 4);
 }
+void cveMeanStdDev(cv::_InputArray* src, cv::_OutputArray* mean, cv::_OutputArray* stddev, cv::_InputArray* mask)
+{
+   cv::meanStdDev(*src, *mean, *stddev, mask ? *mask : (cv::InputArray) cv::noArray());
+}
 void cveTrace(cv::_InputArray* mtx, CvScalar* result)
 {
    cv::Scalar trace = cv::trace(*mtx);
@@ -339,9 +343,28 @@ void cveMixChannels(cv::_InputArray* src, cv::_InputOutputArray* dst, const int*
    cv::mixChannels(*src, *dst, fromTo, npairs);
 }
 
+void cveExtractChannel(cv::_InputArray* src, cv::_OutputArray* dst, int coi)
+{
+   cv::extractChannel(*src, *dst, coi);
+}
+void cveInsertChannel(cv::_InputArray* src, cv::_InputOutputArray* dst, int coi)
+{
+   cv::insertChannel(*src, *dst, coi);
+}
+
+
 double cveKmeans(cv::_InputArray* data, int k, cv::_InputOutputArray* bestLabels, CvTermCriteria* criteria, int attempts, int flags, cv::_OutputArray* centers)
 {
    return cv::kmeans(*data, k, *bestLabels, *criteria, attempts, flags, centers ? *centers : (cv::OutputArray) cv::noArray());
+}
+
+void cveHConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst)
+{
+   cv::hconcat(*src1, *src2, *dst);
+}
+void cveVConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst)
+{
+   cv::vconcat(*src1, *src2, *dst);
 }
 
 bool cveHaveOpenCL()
@@ -356,7 +379,24 @@ void cveSetUseOpenCL(bool flag)
 {
    return cv::ocl::setUseOpenCL(flag);
 }
-void cveOclFinish2()
+void cveOclFinish()
 {
-   cv::ocl::finish2();
+   cv::ocl::finish();
+}
+
+void cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift)
+{
+   cv::line(*img, *p1, *p2, *color, thickness, lineType, shift);
+}
+
+void cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* color, int thickness, int lineType, int shift)
+{
+   cv::Point p1(rect->x, rect->y);
+   cv::Point p2(rect->x + rect->width, rect->y + rect->height);
+   cv::rectangle(*img, p1, p2, *color, thickness, lineType, shift);
+}
+
+void cvePutText(cv::_InputOutputArray* img, const char* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin)
+{
+   cv::putText(*img, text, *org, fontFace, fontScale, *color, thickness, lineType, bottomLeftOrigin);
 }

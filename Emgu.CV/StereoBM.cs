@@ -34,6 +34,9 @@ namespace Emgu.CV
             StereoMatcherExtensions.CvStereoMatcherRelease(ref _ptr);
       }
 
+      /// <summary>
+      /// Pointer to the stereo matcher
+      /// </summary>
       public IntPtr StereoMatcherPtr
       {
          get { return _ptr; }

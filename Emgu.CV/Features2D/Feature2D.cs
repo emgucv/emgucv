@@ -46,14 +46,15 @@ namespace Emgu.CV.Features2D
          get { return _descriptorExtractorPtr; }
       }
 
+      
       /// <summary>
-      /// Compute the descriptors on the image from the given keypoint locations.
+      /// Detect keypoints in an image and compute the descriptors on the image from the keypoint locations.
       /// </summary>
-      /// <param name="image">The image to compute descriptors from</param>
+      /// <param name="image">The image</param>
       /// <param name="keyPoints">The detected keypoints will be stored in this vector</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>The descriptors from the given keypoints</returns>
-      public Matrix<TDescriptor> DetectAndCompute(Image<Gray, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints)
+      private Matrix<TDescriptor> DetectAndCompute(Image<Gray, Byte> image, Image<Gray, Byte> mask, VectorOfKeyPoint keyPoints)
       {
          using (Mat descriptor = new Mat())
          {
@@ -67,6 +68,14 @@ namespace Emgu.CV.Features2D
          }
       }
 
+      /// <summary>
+      /// Detect keypoints in an image and compute the descriptors on the image from the keypoint locations.
+      /// </summary>
+      /// <param name="image">The image</param>
+      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="keyPoints">The detected keypoints will be stored in this vector</param>
+      /// <param name="descriptors">The descriptors from the keypoints</param>
+      /// <param name="useProvidedKeyPoints">If true, the method will skip the detection phase and will compute descriptors for the provided keypoints</param>
       public void DetectAndCompute(IInputArray image, IInputArray mask, VectorOfKeyPoint keyPoints, IOutputArray descriptors, bool useProvidedKeyPoints)
       {
          Feature2DInvoke.CvFeature2DDetectAndCompute(_ptr, image.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, keyPoints, descriptors.OutputArrayPtr, useProvidedKeyPoints);

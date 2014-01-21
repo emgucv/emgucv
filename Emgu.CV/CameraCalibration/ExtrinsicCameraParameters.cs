@@ -52,13 +52,15 @@ namespace Emgu.CV
       /// <summary>
       /// Get the 3 x 4 extrinsic matrix: [[r11 r12 r13 t1] [r21 r22 r23 t2] [r31 r32 r33 t2]]
       /// </summary>
-      public Matrix<double> ExtrinsicMatrix
+      public Mat ExtrinsicMatrix
       {
          get
          {
-            using (Matrix<double> rMat = _rotationVector.RotationMatrix)
+            using (Mat rMat = _rotationVector.RotationMatrix)
             {
-               return rMat.ConcateHorizontal(_translationVector);
+               Mat result = new Mat();
+               CvInvoke.HConcat(rMat, _translationVector, result);
+               return result;
             }
          }
       }

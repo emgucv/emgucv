@@ -81,7 +81,7 @@ namespace Emgu.CV
       public new HomographyMatrix Clone()
       {
          HomographyMatrix m = new HomographyMatrix();
-         CvInvoke.cvCopy(Ptr, m, IntPtr.Zero);
+         Mat.CopyTo(m);
          return m;
       }
    }

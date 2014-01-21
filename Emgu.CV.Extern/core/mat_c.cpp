@@ -11,44 +11,47 @@ class EmguMatAllocator : public cv::MatAllocator
 public:
    MatAllocateCallback dataAllocator;
    MatDeallocateCallback dataDeallocator;
-   EmguMatAllocator(MatAllocateCallback allocator, MatDeallocateCallback deallocator)
+   void* allocateDataAction;
+   void* freeDataAction;
+   EmguMatAllocator(MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr)
       :MatAllocator()
    {
       dataAllocator = allocator;
       dataDeallocator = deallocator;
+      allocateDataAction = allocateDataActionPtr;
+      freeDataAction = freeDataActionPtr;
    }
 
-   cv::UMatData* allocate(int dims, const int* sizes, int type,
-      void* data0, size_t* step, int /*flags*/) const
-   {
-      size_t total = CV_ELEM_SIZE(type);
-      for (int i = dims - 1; i >= 0; i--)
-      {
-         if (step)
-         {
-            if (data0 && step[i] != CV_AUTOSTEP)
+    cv::UMatData* allocate(int dims, const int* sizes, int type,
+                       void* data0, size_t* step, int /*flags*/, cv::UMatUsageFlags /*usageFlags*/) const
+    {
+        size_t total = CV_ELEM_SIZE(type);
+        for( int i = dims-1; i >= 0; i-- )
+        {
+            if( step )
             {
-               CV_Assert(total <= step[i]);
-               total = step[i];
+                if( data0 && step[i] != CV_AUTOSTEP )
+                {
+                    CV_Assert(total <= step[i]);
+                    total = step[i];
+                }
+                else
+                    step[i] = total;
             }
-            else
-               step[i] = total;
-         }
-         total *= sizes[i];
-      }
+            total *= sizes[i];
+        }
+        //uchar* data = data0 ? (uchar*)data0 : (uchar*)fastMalloc(total);
+        uchar* data = data0 ? (uchar*)data0 : dataAllocator(CV_MAT_DEPTH(type), CV_MAT_CN(type), total, allocateDataAction);
+        cv::UMatData* u = new cv::UMatData(this);
+        u->data = u->origdata = data;
+        u->size = total;
+        if(data0)
+            u->flags |= cv::UMatData::USER_ALLOCATED;
 
-      uchar* data = data0 ? (uchar*)data0 : dataAllocator(CV_MAT_DEPTH(type), CV_MAT_CN(type), total);
-      cv::UMatData* u = new cv::UMatData(this);
-      u->data = u->origdata = data;
-      u->size = total;
-      u->refcount = data0 == 0;
-      if (data0)
-         u->flags |= cv::UMatData::USER_ALLOCATED;
+        return u;
+    }
 
-      return u;
-   }
-
-   bool allocate(cv::UMatData* u, int /*accessFlags*/) const
+   bool allocate(cv::UMatData* u, int /*accessFlags*/, cv::UMatUsageFlags /*usageFlags*/) const
    {
       if (!u) return false;
       CV_XADD(&u->urefcount, 1);
@@ -61,7 +64,7 @@ public:
       {
          if (!(u->flags & cv::UMatData::USER_ALLOCATED))
          {
-            dataDeallocator(u->origdata);
+            dataDeallocator(freeDataAction);
             //cv::fastFree(u->origdata);
             u->origdata = 0;
          }
@@ -71,23 +74,26 @@ public:
 };
 
 
-cv::MatAllocator* emguMatAllocatorCreate(MatAllocateCallback allocator, MatDeallocateCallback deallocator)
+cv::MatAllocator* emguMatAllocatorCreate(MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr)
 {
-   return new EmguMatAllocator(allocator, deallocator);
+   return new EmguMatAllocator(allocator, deallocator, allocateDataActionPtr, freeDataActionPtr);
 }
 void cvMatAllocatorRelease(cv::MatAllocator** allocator)
 {
-   delete *allocator;
-   *allocator = 0;
+   if (*allocator != 0)
+   {
+      delete *allocator;
+      *allocator = 0;
+   }
 }
 
 cv::Mat* cvMatCreate()
 {
    return new cv::Mat();
 }
-cv::MatAllocator* cvMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator)
+cv::MatAllocator* cvMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr)
 {
-   cv::MatAllocator* a = new EmguMatAllocator(allocator, deallocator);
+   cv::MatAllocator* a = new EmguMatAllocator(allocator, deallocator, allocateDataActionPtr, freeDataActionPtr);
    mat->allocator = a;
    return a;
 }
@@ -121,10 +127,18 @@ void cvMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask)
    else
       mat->copyTo(*m);
 }
-void cveArrToMat(CvArr* cvArray, cv::Mat* mat)
+cv::Mat* cveArrToMat(CvArr* cvArray, bool copyData, bool allowND, int coiMode)
 {
-   cv::Mat tmp = cv::cvarrToMat(cvArray);
+   cv::Mat* mat = new cv::Mat();
+   cv::Mat tmp = cv::cvarrToMat(cvArray, copyData, allowND, coiMode);
    cv::swap(*mat, tmp);
+   return mat;
+}
+
+IplImage* cveMatToIplImage(cv::Mat* mat)
+{
+   IplImage* result = new IplImage(*mat);
+   return result;
 }
 int cvMatGetElementSize(cv::Mat* mat)
 {
@@ -141,7 +155,7 @@ int cvMatGetDepth(cv::Mat* mat)
 }
 uchar* cvMatGetDataPointer(cv::Mat* mat)
 {
-   return mat->ptr(0);
+   return mat->data;
 }
 size_t cvMatGetStep(cv::Mat* mat)
 {
@@ -166,4 +180,15 @@ cv::UMat* cvMatGetUMat(cv::Mat* mat, int access)
    return result;
 }
 
+void cvMatConvertTo(  cv::Mat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta )
+{
+   mat->convertTo(*out, rtype, alpha, beta);
+}
 
+cv::Mat* cvMatReshape(cv::Mat* mat, int cn, int rows)
+{
+   cv::Mat* result = new cv::Mat();
+   cv::Mat m = mat->reshape(cn, rows);
+   cv::swap(m, *result);
+   return result;
+}

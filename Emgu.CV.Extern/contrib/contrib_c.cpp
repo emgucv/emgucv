@@ -27,7 +27,10 @@ void CvOctreeRelease(cv::Octree* tree) { delete tree; }
 //CvAdaptiveSkinDetector
 CvAdaptiveSkinDetector* CvAdaptiveSkinDetectorCreate(int samplingDivider, int morphingMethod) { return new CvAdaptiveSkinDetector(samplingDivider, morphingMethod); }
 void CvAdaptiveSkinDetectorRelease(CvAdaptiveSkinDetector* detector) { delete detector; }
-void CvAdaptiveSkinDetectorProcess(CvAdaptiveSkinDetector* detector, IplImage *inputBGRImage, IplImage *outputHueMask) { detector->process(inputBGRImage, outputHueMask); }
+void CvAdaptiveSkinDetectorProcess(CvAdaptiveSkinDetector* detector, IplImage *inputBGRImage, IplImage *outputHueMask) 
+{ 
+   detector->process(inputBGRImage, outputHueMask); 
+}
 
 //FaceRecognizer
 cv::FaceRecognizer* CvEigenFaceRecognizerCreate(int numComponents, double threshold)

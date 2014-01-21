@@ -34,7 +34,7 @@ namespace Emgu.CV.VideoSurveillance
       public BlobTrackerAuto()
       {
          BlobTrackerAutoParam<TColor> param = new BlobTrackerAutoParam<TColor>();
-         param.FGDetector = new FGDetector<TColor>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
+         param.FGDetector = new FGDetector<TColor>(Emgu.CV.CvEnum.ForgroundDetectorType.Fgd);
          _param = param;
          MCvBlobTrackerAutoParam1 p = _param.MCvBlobTrackerAutoParam1;
          _ptr = BlobTrackerAutoInvoke.CvCreateBlobTrackerAuto1(ref p);

@@ -64,9 +64,9 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::
 }*/
 
 //SURFDetector
-cv::SURF* CvSURFDetectorCreate(CvSURFParams* detector, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+cv::SURF* CvSURFDetectorCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
 {
-   cv::SURF* surf = new cv::SURF(detector->hessianThreshold, detector->nOctaves, detector->nOctaveLayers, detector->extended != 0, detector->upright != 0);
+   cv::SURF* surf = new cv::SURF(hessianThresh, nOctaves, nOctaveLayers, extended, upright);
    *featureDetector = static_cast<cv::FeatureDetector*>(surf);
    *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(surf);
    return surf;

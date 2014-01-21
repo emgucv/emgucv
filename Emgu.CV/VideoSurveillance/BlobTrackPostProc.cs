@@ -22,17 +22,17 @@ namespace Emgu.CV.VideoSurveillance
       /// Create a blob tracking post process module of the specific type
       /// </summary>
       /// <param name="type"></param>
-      public BlobTrackPostProc(CvEnum.BLOB_POST_PROCESS_TYPE type)
+      public BlobTrackPostProc(CvEnum.BlobPostProcessType type)
       {
          switch (type)
          {
-            case Emgu.CV.CvEnum.BLOB_POST_PROCESS_TYPE.Kalman:
+            case Emgu.CV.CvEnum.BlobPostProcessType.Kalman:
                _ptr = CvCreateModuleBlobTrackPostProcKalman();
                break;
-            case Emgu.CV.CvEnum.BLOB_POST_PROCESS_TYPE.TimeAverExp:
+            case Emgu.CV.CvEnum.BlobPostProcessType.TimeAverExp:
                _ptr = CvCreateModuleBlobTrackPostProcTimeAverExp();
                break;
-            case Emgu.CV.CvEnum.BLOB_POST_PROCESS_TYPE.TimeAverRect:
+            case Emgu.CV.CvEnum.BlobPostProcessType.TimeAverRect:
                _ptr = CvCreateModuleBlobTrackPostProcTimeAverRect();
                break;
          }

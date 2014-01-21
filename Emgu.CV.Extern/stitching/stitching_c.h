@@ -29,5 +29,5 @@ CVAPI(cv::StitcherWrapper*) CvStitcherCreateDefault(bool tryUseGpu);
 
 CVAPI(void) CvStitcherRelease(cv::StitcherWrapper** stitcherWrapper);
 
-CVAPI(IplImage*) CvStitcherStitch(cv::StitcherWrapper* stitcherWrapper, IplImage** images, int imgCount);
+CVAPI(bool) CvStitcherStitch(cv::StitcherWrapper* stitcherWrapper, cv::_InputArray* images, cv::_OutputArray* pano);
 #endif

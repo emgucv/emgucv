@@ -61,6 +61,7 @@ CVAPI(void) cveTranspose(cv::_InputArray* src, cv::_OutputArray* dst);
 CVAPI(void) cveLUT(cv::_InputArray* src, cv::_InputArray* lut, cv::_OutputArray* dst);
 CVAPI(void) cveSum(cv::_InputArray* src, CvScalar* result);
 CVAPI(void) cveMean(cv::_InputArray* src, cv::_InputArray* mask, CvScalar* result);
+CVAPI(void) cveMeanStdDev(cv::_InputArray* src, cv::_OutputArray* mean, cv::_OutputArray* stddev, cv::_InputArray* mask);
 CVAPI(void) cveTrace(cv::_InputArray* mtx, CvScalar* result);
 CVAPI(double) cveDeterminant(cv::_InputArray* mtx);
 CVAPI(double) cveNorm(cv::_InputArray* src1, cv::_InputArray* src2, int normType, cv::_InputArray* mask);
@@ -102,10 +103,22 @@ CVAPI(void) cveSplit(cv::_InputArray* src, cv::_OutputArray* mv);
 CVAPI(void) cveMerge(cv::_InputArray* mv, cv::_OutputArray* dst);
 CVAPI(void) cveMixChannels(cv::_InputArray* src, cv::_InputOutputArray* dst, const int* fromTo, int npairs);
 
+CVAPI(void) cveExtractChannel(cv::_InputArray* src, cv::_OutputArray* dst, int coi);
+CVAPI(void) cveInsertChannel(cv::_InputArray* src, cv::_InputOutputArray* dst, int coi);
+
 CVAPI(double) cveKmeans(cv::_InputArray* data, int k, cv::_InputOutputArray* bestLabels, CvTermCriteria* criteria, int attempts, int flags, cv::_OutputArray* centers);
+
+CVAPI(void) cveHConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
+CVAPI(void) cveVConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 
 CVAPI(bool) cveHaveOpenCL();
 CVAPI(bool) cveUseOpenCL();
 CVAPI(void) cveSetUseOpenCL(bool flag);
-CVAPI(void) cveOclFinish2();
+CVAPI(void) cveOclFinish();
+
+CVAPI(void) cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift);
+
+CVAPI(void) cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* color, int thickness, int lineType, int shift);
+
+CVAPI(void) cvePutText(cv::_InputOutputArray* img, const char* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin);
 #endif

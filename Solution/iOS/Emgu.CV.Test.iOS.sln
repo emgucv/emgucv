@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Nonfree.iOS", "..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OpenCL.iOS", "..\..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.iOS.csproj", "{3C97223F-9855-4F61-83AA-D842E2A8A7DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Softcascade.iOS", "..\..\Emgu.CV.Softcascade\Emgu.CV.Softcascade.iOS.csproj", "{3BF42D92-3D10-45F7-865A-F9C009F71C30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -53,6 +55,14 @@ Global
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Release|iPhone.Build.0 = Release|Any CPU
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{317AF9CE-1B65-47A2-B142-BE556A312C72}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{3BF42D92-3D10-45F7-865A-F9C009F71C30}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{3BF42D92-3D10-45F7-865A-F9C009F71C30}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{3BF42D92-3D10-45F7-865A-F9C009F71C30}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{3BF42D92-3D10-45F7-865A-F9C009F71C30}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{3BF42D92-3D10-45F7-865A-F9C009F71C30}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{3BF42D92-3D10-45F7-865A-F9C009F71C30}.Release|iPhone.Build.0 = Release|Any CPU
+		{3BF42D92-3D10-45F7-865A-F9C009F71C30}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{3BF42D92-3D10-45F7-865A-F9C009F71C30}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{3C97223F-9855-4F61-83AA-D842E2A8A7DD}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU

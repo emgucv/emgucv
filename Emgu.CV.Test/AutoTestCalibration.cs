@@ -27,7 +27,12 @@ namespace Emgu.CV.Test
       {
          Size patternSize = new Size(9, 6);
          Image<Gray, Byte> left01 = EmguAssert.LoadImage<Gray, byte>("left01.jpg");
-         PointF[] corners = CameraCalibration.FindChessboardCorners(left01, patternSize, CvEnum.CALIB_CB_TYPE.DEFAULT);
+         using (Util.VectorOfPointF vec = new Util.VectorOfPointF())
+         {
+            CvInvoke.FindChessboardCorners(left01, patternSize, vec);
+            PointF[] corners = vec.ToArray();
+         }
+         
       }
 
       public static MCvPoint3D32f[] CalcChessboardCorners(Size boardSize, float squareSize)
@@ -45,14 +50,11 @@ namespace Emgu.CV.Test
          Size patternSize = new Size(9, 6);
 
          Image<Gray, Byte> chessboardImage = EmguAssert.LoadImage<Gray, byte>("left01.jpg");
-         PointF[] corners =
-            CameraCalibration.FindChessboardCorners(
-            chessboardImage,
-            patternSize,
-            Emgu.CV.CvEnum.CALIB_CB_TYPE.ADAPTIVE_THRESH | Emgu.CV.CvEnum.CALIB_CB_TYPE.NORMALIZE_IMAGE | Emgu.CV.CvEnum.CALIB_CB_TYPE.FILTER_QUADS);
+         Util.VectorOfPointF corners = new Util.VectorOfPointF();
+         bool patternWasFound = CvInvoke.FindChessboardCorners(chessboardImage, patternSize, corners);
 
          chessboardImage.FindCornerSubPix(
-            new PointF[][] { corners },
+            new PointF[][] {corners.ToArray()},
             new Size(10, 10),
             new Size(-1, -1),
             new MCvTermCriteria(0.05));
@@ -60,10 +62,10 @@ namespace Emgu.CV.Test
          MCvPoint3D32f[] objectPts = CalcChessboardCorners(patternSize, 1.0f);
          IntrinsicCameraParameters intrisic = new IntrinsicCameraParameters(8);
          ExtrinsicCameraParameters[] extrinsic;
-         double error = CameraCalibration.CalibrateCamera(new MCvPoint3D32f[][] { objectPts }, new PointF[][] { corners },
-            chessboardImage.Size, intrisic, CvEnum.CALIB_TYPE.DEFAULT, new MCvTermCriteria(30, 1.0e-10),  out extrinsic);
-
-         CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners);
+         double error = CameraCalibration.CalibrateCamera(new MCvPoint3D32f[][] { objectPts }, new PointF[][] { corners.ToArray() },
+            chessboardImage.Size, intrisic, CvEnum.CalibType.Default, new MCvTermCriteria(30, 1.0e-10),  out extrinsic);
+         CvInvoke.DrawChessboardCorners(chessboardImage, patternSize, corners, patternWasFound);
+         //CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners);
          Image<Gray, Byte> undistorted = intrisic.Undistort(chessboardImage);
          //UI.ImageViewer.Show(undistorted, String.Format("Reprojection error: {0}", error));
       }
@@ -74,9 +76,10 @@ namespace Emgu.CV.Test
          Size patternSize = new Size(4, 3);
          Image<Gray, Byte> circlesGridImage = EmguAssert.LoadImage<Gray, byte>("circlesGrid.bmp");
          using (SimpleBlobDetector detector = new SimpleBlobDetector())
+         using (Util.VectorOfPointF centers = new Util.VectorOfPointF())
          {
-            PointF[] centers = CvInvoke.FindCirclesGrid(circlesGridImage, patternSize, CvEnum.CalibCgType.SymmetricGrid | CvEnum.CalibCgType.Clustering, detector);
-            CameraCalibration.DrawChessboardCorners(circlesGridImage, patternSize, centers);
+            bool found = CvInvoke.FindCirclesGrid(circlesGridImage, patternSize, centers, CvEnum.CalibCgType.SymmetricGrid | CvEnum.CalibCgType.Clustering, detector);
+            CvInvoke.DrawChessboardCorners(circlesGridImage, patternSize, centers, found);
             //UI.ImageViewer.Show(circlesGridImage);
          }
       }

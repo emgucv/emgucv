@@ -18,7 +18,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// A GpuMat, use the generic version if possible. The non generic version is good for use as buffer in stream calls.
    /// </summary>
-   public class GpuMat : UnmanagedObject, IInputArray, IOutputArray
+   public class GpuMat : UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
    {
       private IntPtr _inputArrayPtr;
       private IntPtr _outputArrayPtr;
@@ -106,6 +106,9 @@ namespace Emgu.CV.Cuda
          get { return CudaInvoke.GpuMatGetType(_ptr); }
       }
 
+      /// <summary>
+      /// Pointer to the InputArray
+      /// </summary>
       public IntPtr InputArrayPtr
       {
          get 
@@ -116,6 +119,9 @@ namespace Emgu.CV.Cuda
          }
       }
 
+      /// <summary>
+      /// Pointer to the OutputArray
+      /// </summary>
       public IntPtr OutputArrayPtr
       {
          get
@@ -126,6 +132,9 @@ namespace Emgu.CV.Cuda
          }
       }
 
+      /// <summary>
+      /// Pointer to the InputOutputArray
+      /// </summary>
       public IntPtr InputOutputArrayPtr
       {
          get
@@ -184,8 +193,8 @@ namespace Emgu.CV.Cuda
       public GpuMat(int rows, int cols, int channels, bool continuous)
          : base(
             continuous ? 
-            CudaInvoke.GpuMatCreateContinuous(rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels))
-            : CudaInvoke.GpuMatCreate(rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels)))
+            CudaInvoke.GpuMatCreateContinuous(rows, cols, CvInvoke.MakeType(  CvInvoke.GetDepthType(typeof(TDepth)), channels))
+            : CudaInvoke.GpuMatCreate(rows, cols, CvInvoke.MakeType(CvInvoke.GetDepthType(typeof(TDepth)), channels)))
       {
       }
 

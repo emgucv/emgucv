@@ -1462,64 +1462,65 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Fonts
    /// </summary>
-   public enum FONT
+   public enum FontFace
    {
       /// <summary>
-      /// HERSHEY_SIMPLEX
+      /// Hershey simplex
       /// </summary>
-      CV_FONT_HERSHEY_SIMPLEX = 0,
+      HersheySimplex = 0,
       /// <summary>
-      /// HERSHEY_PLAIN
+      /// Hershey plain
       /// </summary>
-      CV_FONT_HERSHEY_PLAIN = 1,
+      HersheyPlain = 1,
       /// <summary>
-      /// HERSHEY_DUPLEX
+      /// Hershey duplex 
       /// </summary>
-      CV_FONT_HERSHEY_DUPLEX = 2,
+      HersheyDuplex = 2,
       /// <summary>
-      /// HERSHEY_COMPLEX
+      /// Hershey complex
       /// </summary>
-      CV_FONT_HERSHEY_COMPLEX = 3,
+      HersheyComplex = 3,
       /// <summary>
-      /// HERSHEY_TRIPLEX
+      /// Hershey triplex
       /// </summary>
-      CV_FONT_HERSHEY_TRIPLEX = 4,
+      HersheyTriplex = 4,
       /// <summary>
-      /// HERSHEY_COMPLEX_SMALL
+      /// Hershey complex small
       /// </summary>
-      CV_FONT_HERSHEY_COMPLEX_SMALL = 5,
+      HersheyComplexSmall = 5,
       /// <summary>
-      /// HERSHEY_SCRIPT_SIMPLEX
+      /// Hershey script simplex
       /// </summary>
-      CV_FONT_HERSHEY_SCRIPT_SIMPLEX = 6,
+      HersheyScriptSimplex = 6,
       /// <summary>
-      /// HERSHEY_SCRIPT_COMPLEX
+      /// Hershey script complex
       /// </summary>
-      CV_FONT_HERSHEY_SCRIPT_COMPLEX = 7
+      HersheyScriptComplex = 7
    }
 
+   
    /// <summary>
-   /// Flags used for cvGEMM function
+   /// Flags used for GEMM function
    /// </summary>
    [Flags]
-   public enum GEMM_TYPE
+   public enum GemmType
    {
       /// <summary>
       /// Do not apply transpose to neither matrices
       /// </summary>
-      CV_GEMM_DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// transpose src1
       /// </summary>
-      CV_GEMM_A_T = 1,
+      Src1Transpose = 1,
       /// <summary>
       /// transpose src2
       /// </summary>
-      CV_GEMM_B_T = 2,
+      Src2Transpose = 2,
       /// <summary>
       /// transpose src3
       /// </summary>
-      CV_GEMM_C_T = 4
+      Src3Transpose = 4
    }
 
    /// <summary>
@@ -1546,19 +1547,35 @@ namespace Emgu.CV.CvEnum
       Gradient = 3
    }
 
+   
    /// <summary>
    /// Inpaint type
    /// </summary>
-   public enum INPAINT_TYPE : int
+   public enum InpaintType : int
    {
       /// <summary>
       /// Navier-Stokes based method.
       /// </summary>
-      CV_INPAINT_NS = 0,
+      NS = 0,
       /// <summary>
       /// The method by Alexandru Telea 
       /// </summary>
-      CV_INPAINT_TELEA = 1
+      Telea = 1
+   }
+
+   /// <summary>
+   /// Edge preserving filter flag
+   /// </summary>
+   public enum EdgePreservingFilterFlag
+   {
+      /// <summary>
+      /// Recurs filter
+      /// </summary>
+      RecursFilter = 1,
+      /// <summary>
+      /// Norm conv filter
+      /// </summary>
+      NormconvFilter = 2
    }
 
    /// <summary>
@@ -1619,67 +1636,71 @@ namespace Emgu.CV.CvEnum
    /// cvLoadImage type
    /// </summary>
    [Flags]
-   public enum LOAD_IMAGE_TYPE
+   public enum LoadImageType
    {
       /// <summary>
       /// 8bit, color or not 
       /// </summary>
-      CV_LOAD_IMAGE_UNCHANGED = -1,
+      Unchanged = -1,
 
       /// <summary>
       /// 8bit, gray
       /// </summary>
-      CV_LOAD_IMAGE_GRAYSCALE = 0,
+      Grayscale = 0,
 
       /// <summary>
       /// ?, color
       /// </summary>
-      CV_LOAD_IMAGE_COLOR = 1,
+      Color = 1,
 
       /// <summary>
       /// any depth, ?
       /// </summary>
-      CV_LOAD_IMAGE_ANYDEPTH = 2,
+      AnyDepth = 2,
 
       /// <summary>
       /// ?, any color
       /// </summary>
-      CV_LOAD_IMAGE_ANYCOLOR = 4,
+      AnyColor = 4,
    }
 
    /// <summary>
-   /// Type of matrix depth
+   /// OpenCV depth type
    /// </summary>
-   public enum MAT_DEPTH
+   public enum DepthType
    {
       /// <summary>
-      /// 8bit unsigned
+      /// default
       /// </summary>
-      CV_8U = 0,
+      Default = -1,
       /// <summary>
-      /// 8bit signed
+      /// Byte
       /// </summary>
-      CV_8S = 1,
+      Cv8U = 0,
       /// <summary>
-      /// 16bit unsigned
+      /// SByte
       /// </summary>
-      CV_16U = 2,
+      Cv8S = 1,
       /// <summary>
-      /// 16bit signed
+      /// UInt16
       /// </summary>
-      CV_16S = 3,
+      Cv16U = 2,
       /// <summary>
-      /// 32bit signed 
+      /// Int16
       /// </summary>
-      CV_32S = 4,
+      Cv16S = 3,
       /// <summary>
-      /// 32bit float
+      /// Int32
       /// </summary>
-      CV_32F = 5,
+      Cv32S = 4,
       /// <summary>
-      /// 64bit
+      /// float
       /// </summary>
-      CV_64F = 6
+      Cv32F = 5,
+      /// <summary>
+      /// double
+      /// </summary>
+      Cv64F = 6
    }
 
    /// <summary>
@@ -1745,59 +1766,59 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// CV_SEQ_ELTYPE
    /// </summary>
-   public enum SEQ_ELTYPE
+   public enum SeqEltype
    {
       ///<summary>
       ///  (x,y) 
       ///</summary>
-      CV_SEQ_ELTYPE_POINT = (((int)MAT_DEPTH.CV_32S) + (((2) - 1) << 3)),
+      Point = (((int)DepthType.Cv32S) + (((2) - 1) << 3)),
       ///<summary>  
       ///freeman code: 0..7 
       ///</summary>
-      CV_SEQ_ELTYPE_CODE = MAT_DEPTH.CV_8U + 0 << 3,
+      Code = DepthType.Cv8U + 0 << 3,
       ///<summary>  
       ///unspecified type of sequence elements 
       ///</summary>
-      CV_SEQ_ELTYPE_GENERIC = 0,
+      Generic = 0,
       ///<summary>  
       ///=6 
       ///</summary>
-      CV_SEQ_ELTYPE_PTR = 7,
+      Ptr = 7,
       ///<summary>  
       ///pointer to element of other sequence 
       ///</summary>
-      CV_SEQ_ELTYPE_PPOINT = 7,
+      Ppoint = 7,
       ///<summary>  
       ///index of element of some other sequence 
       ///</summary>
-      CV_SEQ_ELTYPE_INDEX = MAT_DEPTH.CV_32S,
+      Index = DepthType.Cv32S,
       ///<summary>  
       ///next_o, next_d, vtx_o, vtx_d 
       ///</summary>
-      CV_SEQ_ELTYPE_GRAPH_EDGE = 0,
+      GraphEdge = 0,
       ///<summary>  
       ///first_edge, (x,y) 
       ///</summary>
-      CV_SEQ_ELTYPE_GRAPH_VERTEX = 0,
+      GraphVertex = 0,
       ///<summary>  
       ///vertex of the binary tree   
       ///</summary>
-      CV_SEQ_ELTYPE_TRIAN_ATR = 0,
+      TrainAtr = 0,
       ///<summary>  
       ///connected component  
       ///</summary>
-      CV_SEQ_ELTYPE_CONNECTED_COMP = 0,
+      ConnectedComp = 0,
       ///<summary>  
       ///(x,y,z)  
       ///</summary>
-      CV_SEQ_ELTYPE_POINT3D = MAT_DEPTH.CV_32F + 2 << 3
+      Point3D = DepthType.Cv32F + 2 << 3
 
    }
 
    /// <summary>
    /// The kind of sequence available
    /// </summary>
-   public enum SEQ_KIND
+   public enum SeqKind
    {
       /// <summary>
       /// generic (unspecified) kind of sequence 
@@ -1852,15 +1873,15 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POINT_SET = (SEQ_KIND.CV_SEQ_KIND_GENERIC | SEQ_ELTYPE.CV_SEQ_ELTYPE_POINT),
+      CV_SEQ_POINT_SET = (SeqKind.CV_SEQ_KIND_GENERIC | SeqEltype.Point),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POINT3D_SET = (SEQ_KIND.CV_SEQ_KIND_GENERIC | SEQ_ELTYPE.CV_SEQ_ELTYPE_POINT3D),
+      CV_SEQ_POINT3D_SET = (SeqKind.CV_SEQ_KIND_GENERIC | SeqEltype.Point3D),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POLYLINE = (SEQ_KIND.CV_SEQ_KIND_CURVE | SEQ_ELTYPE.CV_SEQ_ELTYPE_POINT),
+      CV_SEQ_POLYLINE = (SeqKind.CV_SEQ_KIND_CURVE | SeqEltype.Point),
       /// <summary>
       /// 
       /// </summary>
@@ -2045,56 +2066,56 @@ namespace Emgu.CV.CvEnum
    /// Type of floodfill operation
    /// </summary>
    [Flags]
-   public enum FLOODFILL_FLAG
+   public enum FloodFillType
    {
       /// <summary>
       /// The default type
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// If set the difference between the current pixel and seed pixel is considered,
       /// otherwise difference between neighbor pixels is considered (the range is floating).
       /// </summary>
-      FIXED_RANGE = (1 << 16),
+      FixedRange = (1 << 16),
       /// <summary>
       /// If set, the function does not fill the image (new_val is ignored),
       /// but the fills mask (that must be non-NULL in this case).
       /// </summary>
-      MASK_ONLY = (1 << 17)
+      MaskOnly = (1 << 17)
    }
 
    /// <summary>
    /// The type for cvSampleLine
    /// </summary>
-   public enum CONNECTIVITY
+   public enum Connectivity
    {
       /// <summary>
       /// 8-connected
       /// </summary>
-      EIGHT_CONNECTED = 8,
+      EightConnected = 8,
       /// <summary>
       /// 4-connected
       /// </summary>
-      FOUR_CONNECTED = 4
+      FourConnected = 4
    }
 
    /// <summary>
    /// The type of line for drawing
    /// </summary>
-   public enum LINE_TYPE
+   public enum LineType
    {
       /// <summary>
       /// 8-connected
       /// </summary>
-      EIGHT_CONNECTED = 8,
+      EightConnected = 8,
       /// <summary>
       /// 4-connected
       /// </summary>
-      FOUR_CONNECTED = 4,
+      FourConnected = 4,
       /// <summary>
       /// Antialias
       /// </summary>
-      CV_AA = 16
+      AntiAlias = 16
    }
 
    /// <summary>
@@ -2161,79 +2182,79 @@ namespace Emgu.CV.CvEnum
    /// Flag used for cvDFT
    /// </summary>
    [Flags]
-   public enum CV_DXT
+   public enum DxtType
    {
       /// <summary>
       /// Do forward 1D or 2D transform. The result is not scaled
       /// </summary>
-      CV_DXT_FORWARD = 0,
+      Forward = 0,
       /// <summary>
       /// Do inverse 1D or 2D transform. The result is not scaled. CV_DXT_FORWARD and CV_DXT_INVERSE are mutually exclusive, of course
       /// </summary>
-      CV_DXT_INVERSE = 1,
+      Inverse = 1,
       /// <summary>
       /// Scale the result: divide it by the number of array elements. Usually, it is combined with CV_DXT_INVERSE, and one may use a shortcut 
       /// </summary>
-      CV_DXT_SCALE = 2,
+      Scale = 2,
       /// <summary>
       /// Do forward or inverse transform of every individual row of the input matrix. This flag allows user to transform multiple vectors simultaneously and can be used to decrease the overhead (which is sometimes several times larger than the processing itself), to do 3D and higher-dimensional transforms etc
       /// </summary>
-      CV_DXT_ROWS = 4,
+      Rows = 4,
       /// <summary>
       /// Inverse and scale
       /// </summary>
-      CV_DXT_INV_SCALE = (CV_DXT_SCALE | CV_DXT_INVERSE)
+      InvScale = (Scale | Inverse)
    }
 
    /// <summary>
    /// Flag used for cvDCT
    /// </summary>
-   public enum CV_DCT_TYPE
+   public enum DctType
    {
       /// <summary>
       /// Do forward 1D or 2D transform. The result is not scaled
       /// </summary>
-      CV_DXT_FORWARD = 0,
+      Forward = 0,
       /// <summary>
       /// Do inverse 1D or 2D transform. The result is not scaled. CV_DXT_FORWARD and CV_DXT_INVERSE are mutually exclusive, of course
       /// </summary>
-      CV_DXT_INVERSE = 1,
+      Inverse = 1,
       /// <summary>
       /// Do forward or inverse transform of every individual row of the input matrix. This flag allows user to transform multiple vectors simultaneously and can be used to decrease the overhead (which is sometimes several times larger than the processing itself), to do 3D and higher-dimensional transforms etc
       /// </summary>
-      CV_DXT_ROWS = 4
+      Rows = 4
    }
 
    /// <summary>
    /// Calculates fundamental matrix given a set of corresponding points
    /// </summary>
    [Flags]
-   public enum CV_FM
+   public enum FmType
    {
       /// <summary>
       /// for 7-point algorithm. N == 7
       /// </summary>
-      CV_FM_7POINT = 1,
+      SevenPoint = 1,
       /// <summary>
       /// for 8-point algorithm. N >= 8
       /// </summary>
-      CV_FM_8POINT = 2,
+      EightPoint = 2,
       /// <summary>
       /// for LMedS algorithm. N >= 8
       /// </summary>
-      CV_FM_LMEDS_ONLY = 4,
+      LMedsOnly = 4,
       /// <summary>
       /// for RANSAC algorithm. N >= 8
       /// </summary>
-      CV_FM_RANSAC_ONLY = 8,
+      RansacOnly = 8,
       /// <summary>
       /// CV_FM_LMEDS_ONLY | CV_FM_8POINT
       /// </summary>
-      CV_FM_LMEDS = (CV_FM_LMEDS_ONLY | CV_FM_8POINT),
+      LMeds = (LMedsOnly | EightPoint),
       /// <summary>
       /// CV_FM_RANSAC_ONLY | CV_FM_8POINT
       /// </summary>
-      CV_FM_RANSAC = (CV_FM_RANSAC_ONLY | CV_FM_8POINT)
+      Ransac = (RansacOnly | EightPoint)
    }
 
    /// <summary>
@@ -2480,49 +2501,51 @@ namespace Emgu.CV.CvEnum
       GaussianC = 1
    }
 
+   
    /// <summary>
    /// Shape of the Structuring Element
    /// </summary>
-   public enum CV_ELEMENT_SHAPE
+   public enum ElementShape
    {
       /// <summary>
       /// A rectangular element.
       /// </summary>
-      CV_SHAPE_RECT = 0,
+      Rectangle = 0,
       /// <summary>
       /// A cross-shaped element.
       /// </summary>
-      CV_SHAPE_CROSS = 1,
+      Cross = 1,
       /// <summary>
       /// An elliptic element.
       /// </summary>
-      CV_SHAPE_ELLIPSE = 2,
+      Ellipse = 2,
       /// <summary>
       /// A user-defined element.
       /// </summary>
-      CV_SHAPE_CUSTOM = 100
+      Custom = 100
    }
 
    /// <summary>
    /// PCA Type
    /// </summary>
    [Flags]
-   public enum PCA_TYPE
+   public enum PcaType
    {
       /// <summary>
       /// the vectors are stored as rows (i.e. all the components of a certain vector are stored continously)
       /// </summary>
-      CV_PCA_DATA_AS_ROW = 0,
+      DataAsRow = 0,
       /// <summary>
       ///  the vectors are stored as columns (i.e. values of a certain vector component are stored continuously)
       /// </summary>
-      CV_PCA_DATA_AS_COL = 1,
+      DataAsCol = 1,
       /// <summary>
       /// use pre-computed average vector
       /// </summary>
-      CV_PCA_USE_AVG = 2
+      UseAvg = 2
    }
 
+   /*
    /// <summary>
    /// The type of histogram
    /// </summary>
@@ -2536,7 +2559,7 @@ namespace Emgu.CV.CvEnum
       /// sparse matrix
       /// </summary>
       CV_HIST_SPARSE = 1
-   }
+   }*/
 
    
    /// <summary>
@@ -2554,12 +2577,21 @@ namespace Emgu.CV.CvEnum
       /// In case of SVD methods the function returns the inversed condition number of src1 (ratio of the smallest singular value to the largest singular value) and 0 if src1 is all zeros. The SVD methods calculate a pseudo-inverse matrix if src1 is singular
       /// </summary>
       Svd = 1,
+      /// <summary>
+      /// Eig
+      /// </summary>
       Eig = 2,
       /// <summary>
       /// method for a symmetric positively-defined matrix
       /// </summary>
       Cholesky = 3,
+      /// <summary>
+      /// QR decomposition
+      /// </summary>
       QR = 4,
+      /// <summary>
+      /// Normal
+      /// </summary>
       Normal = 16
    }
 
@@ -2607,24 +2639,24 @@ namespace Emgu.CV.CvEnum
    /// Type for cvSVD
    /// </summary>
    [Flags]
-   public enum SVD_TYPE
+   public enum SvdType
    {
       /// <summary>
       /// The default type
       /// </summary>
-      CV_SVD_DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// enables modification of matrix src1 during the operation. It speeds up the processing. 
       /// </summary>
-      CV_SVD_MODIFY_A = 1,
+      ModifyA = 1,
       /// <summary>
       /// means that the tranposed matrix U is returned. Specifying the flag speeds up the processing. 
       /// </summary>
-      CV_SVD_U_T = 2,
+      Ut = 2,
       /// <summary>
       /// means that the tranposed matrix V is returned. Specifying the flag speeds up the processing. 
       /// </summary>
-      CV_SVD_V_T = 4
+      Vt = 4
    }
 
    /// <summary>
@@ -2650,89 +2682,89 @@ namespace Emgu.CV.CvEnum
    /// Various camera calibration flags
    /// </summary>
    [Flags]
-   public enum CALIB_TYPE
+   public enum CalibType
    {
       /// <summary>
       /// The default value
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// intrinsic_matrix contains valid initial values of fx, fy, cx, cy that are optimized further. Otherwise, (cx, cy) is initially set to the image center (image_size is used here), and focal distances are computed in some least-squares fashion
       /// </summary>
-      CV_CALIB_USE_INTRINSIC_GUESS = 1,
+      UserIntrinsicGuess = 1,
       /// <summary>
       /// The optimization procedure consider only one of fx and fy as independent variable and keeps the aspect ratio fx/fy the same as it was set initially in intrinsic_matrix. In this case the actual initial values of (fx, fy) are either taken from the matrix (when CV_CALIB_USE_INTRINSIC_GUESS is set) or estimated somehow (in the latter case fx, fy may be set to arbitrary values, only their ratio is used)
       /// </summary>
-      CV_CALIB_FIX_ASPECT_RATIO = 2,
+      FixAspectRatio = 2,
       /// <summary>
       /// The principal point is not changed during the global optimization, it stays at the center and at the other location specified (when CV_CALIB_FIX_FOCAL_LENGTH - Both fx and fy are fixed.
       /// CV_CALIB_USE_INTRINSIC_GUESS is set as well)
       /// </summary>
-      CV_CALIB_FIX_PRINCIPAL_POINT = 4,
+      FixPrincipalPoint = 4,
       /// <summary>
       /// Tangential distortion coefficients are set to zeros and do not change during the optimization
       /// </summary>
-      CV_CALIB_ZERO_TANGENT_DIST = 8,
+      ZeroTangentDist = 8,
       /// <summary>
       /// The focal length is fixed
       /// </summary>
-      CV_CALIB_FIX_FOCAL_LENGTH = 16,
+      FixFocalLength = 16,
       /// <summary>
       /// The 1st distortion coefficient (k1) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
-      CV_CALIB_FIX_K1 = 32,
+      FixK1 = 32,
       /// <summary>
       /// The 2nd distortion coefficient (k2) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
-      CV_CALIB_FIX_K2 = 64,
+      FixK2 = 64,
       /// <summary>
       /// The 3rd distortion coefficient (k3) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
-      CV_CALIB_FIX_K3 = 128,
+      FixK3 = 128,
       /// <summary>
       /// The 4th distortion coefficient (k4) is fixed (see above)
       /// </summary>
-      CV_CALIB_FIX_K4 = 2048,
+      FixK4 = 2048,
       /// <summary>
       /// The 5th distortion coefficient (k5) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
-      CV_CALIB_FIX_K5 = 4096,
+      FixK5 = 4096,
       /// <summary>
       /// The 6th distortion coefficient (k6) is fixed to 0 or to the initial passed value if CV_CALIB_USE_INTRINSIC_GUESS is passed
       /// </summary>
-      CV_CALIB_FIX_K6 = 8192,
+      FixK6 = 8192,
       /// <summary>
       /// Rational model
       /// </summary>
-      CV_CALIB_RATIONAL_MODEL = 16384
+      RationalModel = 16384
    }
 
    /// <summary>
    /// Type of chessboard calibration
    /// </summary>
    [Flags]
-   public enum CALIB_CB_TYPE
+   public enum CalibCbType
    {
       /// <summary>
       /// Default type
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// Use adaptive thresholding to convert the image to black-n-white, rather than a fixed threshold level (computed from the average image brightness)
       /// </summary>
-      ADAPTIVE_THRESH = 1,
+      AdaptiveThresh = 1,
       /// <summary>
       /// Normalize the image using cvNormalizeHist before applying fixed or adaptive thresholding.
       /// </summary>
-      NORMALIZE_IMAGE = 2,
+      NormalizeImage = 2,
       /// <summary>
       /// Use additional criteria (like contour area, perimeter, square-like shape) to filter out false quads that are extracted at the contour retrieval stage
       /// </summary>
-      FILTER_QUADS = 4,
+      FilterQuads = 4,
       /// <summary>
       /// If it is on, then this check is performed before the main algorithm and if a chessboard is not found, the function returns 0 instead of wasting 0.3-1s on doing the full search.
       /// </summary>
-      FAST_CHECK = 8,
+      FastCheck = 8,
    }
 
    /// <summary>
@@ -2857,27 +2889,27 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Stereo Block Matching Prefilter type
    /// </summary>
-   public enum STEREO_BM_PREFILTER
+   public enum StereoBmPrefilter
    {
       /// <summary>
       /// No prefilter
       /// </summary>
-      NORMALIZED_RESPONSE = 0,
+      NormalizedResponse = 0,
       /// <summary>
       /// XSobel
       /// </summary>
-      XSOBEL = 1
+      XSobel = 1
    }
 
    /// <summary>
    /// Type of cvHomography method
    /// </summary>
-   public enum HOMOGRAPHY_METHOD
+   public enum HomographyMethod
    {
       /// <summary>
       /// regular method using all the point pairs
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// Least-Median robust method
       /// </summary>
@@ -2885,26 +2917,26 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// RANSAC-based robust method
       /// </summary>
-      RANSAC = 8
+      Ransac = 8
    }
 
    /// <summary>
    /// Type used by cvMatchShapes
    /// </summary>
-   public enum CONTOURS_MATCH_TYPE
+   public enum ContoursMatchType
    {
       /// <summary>
       /// I_1(A,B)=sum_{i=1..7} abs(1/m^A_i - 1/m^B_i) where m^A_i=sign(h^A_i) log(h^A_i), m^B_i=sign(h^B_i) log(h^B_i), h^A_i, h^B_i - Hu moments of A and B, respectively
       /// </summary> 
-      CV_CONTOUR_MATCH_I1 = 1,
+      I1 = 1,
       /// <summary>
       /// I_2(A,B)=sum_{i=1..7} abs(m^A_i - m^B_i) where m^A_i=sign(h^A_i) log(h^A_i), m^B_i=sign(h^B_i) log(h^B_i), h^A_i, h^B_i - Hu moments of A and B, respectively
       /// </summary>
-      CV_CONTOURS_MATCH_I2 = 2,
+      I2 = 2,
       /// <summary>
       /// I_3(A,B)=sum_{i=1..7} abs(m^A_i - m^B_i)/abs(m^A_i) where m^A_i=sign(h^A_i) log(h^A_i), m^B_i=sign(h^B_i) log(h^B_i), h^A_i, h^B_i - Hu moments of A and B, respectively
       /// </summary>
-      CV_CONTOURS_MATCH_I3 = 3
+      I3 = 3
    }
 
    /// <summary>
@@ -2915,38 +2947,38 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// One of input arguments is invalid.
       /// </summary>
-      ERROR = -2,
+      Error = -2,
       /// <summary>
       /// Point is outside the subdivision reference rectangle
       /// </summary>
-      OUTSIDE_RECT = -1,
+      OutsideRect = -1,
       /// <summary>
       /// Point falls into some facet
       /// </summary>
-      INSIDE = 0,
+      Inside = 0,
       /// <summary>
       /// Point coincides with one of subdivision vertices
       /// </summary>
-      VERTEX = 1,
+      Vertex = 1,
       /// <summary>
       /// Point falls onto the edge
       /// </summary>
-      ON_EDGE = 2
+      OnEdge = 2
    }
 
    /// <summary>
    /// Type used in cvStereoRectify
    /// </summary>
-   public enum STEREO_RECTIFY_TYPE
+   public enum StereoRectifyType
    {
       /// <summary>
       /// Shift one of the image in horizontal or vertical direction (depending on the orientation of epipolar lines) in order to maximise the useful image area
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// Makes the principal points of each camera have the same pixel coordinates in the rectified views
       /// </summary>
-      CALIB_ZERO_DISPARITY = 1024
+      CalibZeroDisparity = 1024
    }
 
    /// <summary>
@@ -2993,43 +3025,43 @@ namespace Emgu.CV.CvEnum
    /// The types for haar detection
    /// </summary>
    [Flags]
-   public enum HAAR_DETECTION_TYPE
+   public enum HaarDetectionType
    {
       /// <summary>
       /// The default type where no optimization is done.
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// If it is set, the function uses Canny edge detector to reject some image regions that contain too few or too much edges and thus can not contain the searched object. The particular threshold values are tuned for face detection and in this case the pruning speeds up the processing
       /// </summary>
-      DO_CANNY_PRUNING = 1,
+      DoCannyPruning = 1,
       /// <summary>
       /// For each scale factor used the function will downscale the image rather than "zoom" the feature coordinates in the classifier cascade. Currently, the option can only be used alone, i.e. the flag can not be set together with the others
       /// </summary>
-      SCALE_IMAGE = 2,
+      ScaleImage = 2,
       /// <summary>
       /// If it is set, the function finds the largest object (if any) in the image. That is, the output sequence will contain one (or zero) element(s)
       /// </summary>
-      FIND_BIGGEST_OBJECT = 4,
+      FindBiggestObject = 4,
       /// <summary>
       /// It should be used only when CV_HAAR_FIND_BIGGEST_OBJECT is set and min_neighbors &gt; 0. If the flag is set, the function does not look for candidates of a smaller size as soon as it has found the object (with enough neighbor candidates) at the current scale. Typically, when min_neighbors is fixed, the mode yields less accurate (a bit larger) object rectangle than the regular single-object mode (flags=CV_HAAR_FIND_BIGGEST_OBJECT), but it is much faster, up to an order of magnitude. A greater value of min_neighbors may be specified to improve the accuracy
       /// </summary>
-      DO_ROUGH_SEARCH = 8
+      DoRoughSearch = 8
    }
 
    /// <summary>
    /// Specific if it is back or front
    /// </summary>
-   public enum BACK_OR_FRONT
+   public enum BackOrFront
    {
       /// <summary>
       /// Back
       /// </summary>
-      BACK,
+      Back,
       /// <summary>
       /// Front
       /// </summary>
-      FRONT
+      Front
    }
 
    /// <summary>
@@ -3046,20 +3078,20 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// The file storage operation type
    /// </summary>
-   public enum STORAGE_OP
+   public enum StorageOp
    {
       /// <summary>
       /// The storage is open for reading
       /// </summary>
-      READ = 0,
+      Read = 0,
       /// <summary>
       /// The storage is open for writing
       /// </summary>
-      WRITE = 1,
+      Write = 1,
       /// <summary>
       /// The storage is open for append
       /// </summary>
-      APPEND = 2
+      Append = 2
    }
 
    /// <summary>
@@ -3080,16 +3112,16 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// MCvBlobTrackerParamMS profile
    /// </summary>
-   public enum BLOBTRACKER_MS_PROFILE
+   public enum BlobtrackerMsProfile
    {
       /// <summary>
       /// EPANECHNIKOV
       /// </summary>
-      PROFILE_EPANECHNIKOV = 0,
+      Epanechnikov = 0,
       /// <summary>
       /// DoG
       /// </summary>
-      PROFILE_DOG = 1
+      Dog = 1
    }
 
    /// <summary>
@@ -3126,7 +3158,7 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// The type of blob post process module
    /// </summary>
-   public enum BLOB_POST_PROCESS_TYPE
+   public enum BlobPostProcessType
    {
       /// <summary>
       /// Kalman 
@@ -3145,58 +3177,66 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Histogram comparison method
    /// </summary>
-   public enum HISTOGRAM_COMP_METHOD
+   public enum HistogramCompMethod
    {
       /// <summary>
       /// Correlation/ 
       /// </summary>
-      CV_COMP_CORREL = 0,
+      Correl = 0,
       /// <summary>
       /// Chi-Square
       /// </summary>
-      CV_COMP_CHISQR = 1,
+      Chisqr = 1,
       /// <summary>
       /// Intersection
       /// </summary>
-      CV_COMP_INTERSECT = 2,
+      Intersect = 2,
       /// <summary>
       /// Bhattacharyya distance
       /// </summary>
-      CV_COMP_BHATTACHARYYA = 3
+      Bhattacharyya = 3,
+      /// <summary>
+      ///  Synonym for Bhattacharyya
+      /// </summary>
+      Hellinger = Bhattacharyya,
+      /// <summary>
+      /// Alternative Chi-Square
+      /// </summary>
+      ChisqrAlt = 4
    }
 
    /// <summary>
    /// The type of BGStatModel
    /// </summary>
-   public enum BG_STAT_TYPE
+   public enum BgStatType
    {
       /// <summary>
       /// 
       /// </summary>
-      FGD_STAT_MODEL,
+      FgdStatModel,
       /// <summary>
       /// Gaussian background model
       /// </summary>
-      GAUSSIAN_BG_MODEL
+      GaussianBgModel
    }
 
    /// <summary>
    /// Type of foreground detector
    /// </summary>
-   public enum FORGROUND_DETECTOR_TYPE
+   public enum ForgroundDetectorType
    {
       /// <summary>
       /// Latest and greatest algorithm
       /// </summary>
-      FGD = 0,
+      Fgd = 0,
       /// <summary>
       /// "Mixture of Gaussians", older algorithm
       /// </summary>
-      MOG = 1,
+      Mog = 1,
       /// <summary>
       ///  A simplified version of FGD
       /// </summary>
-      FGD_SIMPLE = 2
+      FgdSimple = 2
    }
 
    /// <summary>
@@ -3249,20 +3289,20 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Grabcut initialization type
    /// </summary>
-   public enum GRABCUT_INIT_TYPE
+   public enum GrabcutInitType
    {
       /// <summary>
       /// Initialize with rectangle
       /// </summary>
-      INIT_WITH_RECT = 0,
+      InitWithRect = 0,
       /// <summary>
       /// Initialize with mask
       /// </summary>
-      INIT_WITH_MASK = 1,
+      InitWithMask = 1,
       /// <summary>
       /// Eval
       /// </summary>
-      EVAL = 2
+      Eval = 2
    }
 
    /// <summary>
@@ -3544,40 +3584,30 @@ namespace Emgu.CV.CvEnum
       Blackhat = 6
    }
 
-   /*
    /// <summary>
-   /// Type of Morphological Operation
+   /// Access type
    /// </summary>
-   public enum CV_MORPH_OP
-   {
-      /// <summary>
-      /// Opening.
-      /// </summary>
-      CV_MOP_OPEN = 2,
-      /// <summary>
-      /// Closing.
-      /// </summary>
-      CV_MOP_CLOSE = 3,
-      /// <summary>
-      /// Morphological Gradient.
-      /// </summary>
-      CV_MOP_GRADIENT = 4,
-      /// <summary>
-      /// "Top Hat".
-      /// </summary>
-      CV_MOP_TOPHAT = 5,
-      /// <summary>
-      /// "Black Hat".
-      /// </summary>
-      CV_MOP_BLACKHAT = 6
-   }*/
-
    public enum AccessType
    {
+      /// <summary>
+      /// Read
+      /// </summary>
       Read = 1 << 24,
+      /// <summary>
+      /// Write
+      /// </summary>
       Write = 1 << 25,
+      /// <summary>
+      /// Read and write
+      /// </summary>
       ReadWrite = 3 << 24,
+      /// <summary>
+      /// Mask
+      /// </summary>
       Mask = ReadWrite,
+      /// <summary>
+      /// Dast
+      /// </summary>
       Fast = 1 << 26
    }
 }

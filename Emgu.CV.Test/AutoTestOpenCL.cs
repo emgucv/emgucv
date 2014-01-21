@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
-using Emgu.CV.OpenCL;
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
 using Emgu.CV.Nonfree;
@@ -24,7 +23,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestOclInfo()
       {
-         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatforms())
+         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformInfo())
          {
             if (oclPlatformInfos.Size > 0)
             {
@@ -34,19 +33,25 @@ namespace Emgu.CV.Test
                   String platformName = platformInfo.Name;
                   Trace.WriteLine(String.Format("Platform {0}: {1}", i, platformName));
 
-                  VectorOfOclDeviceInfo devices = platformInfo.Devices;
-                  for (int j = 0; j < devices.Size; j++)
+                  
+                  for (int j = 0; j < platformInfo.DeviceNumber; j++)
                   {
-                     OclDeviceInfo device = devices[j];
+                     OclDevice device = platformInfo.GetDevice(j);
                      Trace.WriteLine(String.Format("   Device {0}: {1}", j, device.Name));
                   }
+                  //VectorOfOclDeviceInfo devices = platformInfo.Devices;
+                  //for (int j = 0; j < devices.Size; j++)
+                  //{
+                  //   OclDeviceInfo device = devices[j];
+                  //   Trace.WriteLine(String.Format("   Device {0}: {1}", j, device.Name));
+                  //}
                }
             }
             Trace.WriteLine("count = " + oclPlatformInfos.Size);
          }
       }
 
-      
+      /*
       [Test]
       public void TestOclMatAdd()
       {
@@ -60,7 +65,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> cpuImgSum = new Image<Gray, byte>(img1.Size);
             Stopwatch watch = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               CvInvoke.Add(img1, img2, cpuImgSum, null, Mat.DepthType.Cv8U);
+               CvInvoke.Add(img1, img2, cpuImgSum, null, CvEnum.DepthType.Cv8U);
             watch.Stop();
             Trace.WriteLine(String.Format("CPU processing time: {0}ms", (double)watch.ElapsedMilliseconds / repeat));
 
@@ -365,13 +370,7 @@ namespace Emgu.CV.Test
 
                Stopwatch watch = Stopwatch.StartNew();
                Rectangle[] rects;
-               /*
-               //using (OclImage<Bgr, Byte> CudaImage = new OclImage<Bgr, byte>(image))
-               //using (OclImage<Bgra, Byte> gpuBgra = CudaImage.Convert<Bgra, Byte>())
-               using (Image<Bgra, Byte> imgBgra = image.Convert<Bgra, Byte>())
-               using (OclImage<Bgra, Byte> gpuBgra = new OclImage<Bgra,byte>(imgBgra))
-                  rects = hog.DetectMultiScale(gpuBgra);
-               */
+        
                using (OclImage<Bgr, Byte> CudaImage = new OclImage<Bgr, byte>(image))
                using (OclImage<Gray, Byte> gpuGray = CudaImage.Convert<Gray, Byte>())
                {
@@ -713,6 +712,6 @@ namespace Emgu.CV.Test
             //ImageViewer.Show(res);
          }
          
-      }
+      }*/
    }
 }

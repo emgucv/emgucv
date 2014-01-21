@@ -19,7 +19,7 @@ namespace Emgu.CV.VideoSurveillance
       /// Create a foreground detector of the specific type
       /// </summary>
       /// <param name="type">The type of the detector to be created</param>
-      public FGDetector(CvEnum.FORGROUND_DETECTOR_TYPE type)
+      public FGDetector(CvEnum.ForgroundDetectorType type)
       {
          _ptr = FGDetectorInvoke.CvCreateFGDetectorBase(type, IntPtr.Zero);
       }
@@ -29,9 +29,9 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="type">The type of the detector to be created. Should be either FGD ot FGD_SIMPLE</param>
       /// <param name="parameter">The FGD parameters</param>
-      public FGDetector(CvEnum.FORGROUND_DETECTOR_TYPE type, MCvFGDStatModelParams parameter)
+      public FGDetector(CvEnum.ForgroundDetectorType type, MCvFGDStatModelParams parameter)
       {
-         if (type == CvEnum.FORGROUND_DETECTOR_TYPE.FGD || type == CvEnum.FORGROUND_DETECTOR_TYPE.FGD_SIMPLE)
+         if (type == CvEnum.ForgroundDetectorType.Fgd || type == CvEnum.ForgroundDetectorType.FgdSimple)
          {
             IntPtr p = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvFGDStatModelParams)));
             Marshal.StructureToPtr(parameter, p, false);
@@ -52,7 +52,7 @@ namespace Emgu.CV.VideoSurveillance
       {
          IntPtr p = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MCvGaussBGStatModelParams)));
          Marshal.StructureToPtr(parameter, p, false);
-         _ptr = FGDetectorInvoke.CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE.MOG, p);
+         _ptr = FGDetectorInvoke.CvCreateFGDetectorBase(CvEnum.ForgroundDetectorType.Mog, p);
          Marshal.FreeHGlobal(p);
       }
 
@@ -115,7 +115,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="param">Pointer to the parameters of the detector</param>
       /// <returns>Pointer the to foreground detector</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE type, IntPtr param);
+      internal extern static IntPtr CvCreateFGDetectorBase(CvEnum.ForgroundDetectorType type, IntPtr param);
 
       /// <summary>
       /// Release the foreground detector
@@ -147,6 +147,6 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="param">The parameters of the detector</param>
       /// <returns>Pointer the to foreground detector</returns>
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvCreateFGDetectorBase(CvEnum.FORGROUND_DETECTOR_TYPE type, ref MCvFGDStatModelParams param);
+      internal extern static IntPtr CvCreateFGDetectorBase(CvEnum.ForgroundDetectorType type, ref MCvFGDStatModelParams param);
    }
 }

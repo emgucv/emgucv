@@ -11,10 +11,14 @@ using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// The stereo matcher interface
+   /// </summary>
    public interface IStereoMatcher
    {
+      /// <summary>
+      /// Pointer to the stereo matcher
+      /// </summary>
       IntPtr StereoMatcherPtr { get; }
    }
-
-
 }

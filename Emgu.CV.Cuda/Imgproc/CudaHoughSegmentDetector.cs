@@ -13,9 +13,20 @@ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
+   /// <summary>
+   /// Base class for line segments detector algorithm.
+   /// </summary>
    public class CudaHoughSegmentDetector : UnmanagedObject
    {
-      public CudaHoughSegmentDetector(float rho, float theta, int minLineLength, int maxLineGap, int maxLines)
+      /// <summary>
+      /// Create a hough segment detector
+      /// </summary>
+      /// <param name="rho">Distance resolution of the accumulator in pixels.</param>
+      /// <param name="theta">Angle resolution of the accumulator in radians.</param>
+      /// <param name="minLineLength"> Minimum line length. Line segments shorter than that are rejected.</param>
+      /// <param name="maxLineGap">Maximum allowed gap between points on the same line to link them.</param>
+      /// <param name="maxLines">Maximum number of output lines.</param>
+      public CudaHoughSegmentDetector(float rho, float theta, int minLineLength, int maxLineGap, int maxLines = 4096)
       {
          _ptr = CudaInvoke.cudaHoughSegmentDetectorCreate(rho, theta, minLineLength, maxLineGap, maxLines);
       }
@@ -27,6 +38,9 @@ namespace Emgu.CV.Cuda
          return lines;
       }
 
+      /// <summary>
+      /// Release the unmanaged memory associated with this segment detector
+      /// </summary>
       protected override void DisposeObject()
       {
          CudaInvoke.cudaHoughSegmentDetectorRelease(ref _ptr);

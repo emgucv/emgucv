@@ -66,7 +66,7 @@ namespace Emgu.CV
       public Matrix(int rows, int cols, int channels, IntPtr data, int step)
       {
          AllocateHeader();
-         CvInvoke.cvInitMatHeader(_ptr, rows, cols, CvInvoke.CV_MAKETYPE((int)CvToolbox.GetMatrixDepth(typeof(TDepth)), channels), data, step);
+         CvInvoke.cvInitMatHeader(_ptr, rows, cols, CvInvoke.MakeType(CvInvoke.GetDepthType(typeof(TDepth)), channels), data, step);
       }
 
       /// <summary>
@@ -200,7 +200,7 @@ namespace Emgu.CV
             _array = value;
             _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
 
-            CvInvoke.cvInitMatHeader(_ptr, _array.GetLength(0), _array.GetLength(1), CvToolbox.GetMatrixDepth(typeof(TDepth)), _dataHandle.AddrOfPinnedObject(), 0x7fffffff);
+            CvInvoke.cvInitMatHeader(_ptr, _array.GetLength(0), _array.GetLength(1), CvInvoke.GetDepthType(typeof(TDepth)), _dataHandle.AddrOfPinnedObject(), 0x7fffffff);
          }
       }
 
@@ -506,7 +506,7 @@ namespace Emgu.CV
       /// <summary>
       /// Returns the min / max locations and values for the matrix
       /// </summary>
-      public void MinMax(out double minValue, out double maxValue, out Point minLocation, out Point maxLocation, IInputArray mask)
+      public void MinMax(out double minValue, out double maxValue, out Point minLocation, out Point maxLocation, IInputArray mask = null)
       {
          //minValue = 0; maxValue = 0;
          minLocation = new Point(); maxLocation = new Point();
@@ -524,7 +524,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Add(Matrix<TDepth> mat2)
       {
          Matrix<TDepth> res = CopyBlank();
-         CvInvoke.Add(this, mat2, res, null, Mat.GetDepthType(typeof(TDepth)));
+         CvInvoke.Add(this, mat2, res, null, CvInvoke.GetDepthType(typeof(TDepth)));
          return res;
       }
 
@@ -534,9 +534,9 @@ namespace Emgu.CV
       public Matrix<TDepth> Add(TDepth val)
       {
          Matrix<TDepth> res = CopyBlank();
-         using (InputArray ia = new InputArray(System.Convert.ToDouble(val)))
+         using (ScalarArray ia = new ScalarArray(System.Convert.ToDouble(val)))
          {
-            CvInvoke.Add(this, ia, res, null, Mat.GetDepthType(typeof(TDepth)));
+            CvInvoke.Add(this, ia, res, null, CvInvoke.GetDepthType(typeof(TDepth)));
          }
          return res;
       }
@@ -549,7 +549,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Sub(Matrix<TDepth> mat2)
       {
          Matrix<TDepth> res = CopyBlank();
-         CvInvoke.Subtract(this, mat2, res, null, Mat.GetDepthType(typeof(TDepth)));
+         CvInvoke.Subtract(this, mat2, res, null, CvInvoke.GetDepthType(typeof(TDepth)));
          return res;
       }
 
@@ -559,9 +559,9 @@ namespace Emgu.CV
       public Matrix<TDepth> Sub(TDepth val)
       {
          Matrix<TDepth> res = CopyBlank();
-         using (InputArray ia = new InputArray(System.Convert.ToDouble(val)))
+         using (ScalarArray ia = new ScalarArray(System.Convert.ToDouble(val)))
          {
-            CvInvoke.Subtract(this, ia, res, null, Mat.GetDepthType(typeof(TDepth)));
+            CvInvoke.Subtract(this, ia, res, null, CvInvoke.GetDepthType(typeof(TDepth)));
          }
          return res;
       }
@@ -574,9 +574,9 @@ namespace Emgu.CV
       public Matrix<TDepth> SubR(TDepth val)
       {
          Matrix<TDepth> res = CopyBlank();
-         using (InputArray ia = new InputArray(System.Convert.ToDouble(val)))
+         using (ScalarArray ia = new ScalarArray(System.Convert.ToDouble(val)))
          {
-            CvInvoke.Subtract(ia, this, res, null, Mat.GetDepthType(typeof(TDepth)));
+            CvInvoke.Subtract(ia, this, res, null, CvInvoke.GetDepthType(typeof(TDepth)));
          }
          return res;
       }
@@ -599,7 +599,7 @@ namespace Emgu.CV
       public Matrix<TDepth> Mul(Matrix<TDepth> mat2)
       {
          Matrix<TDepth> res = new Matrix<TDepth>(Rows, mat2.Cols);
-         CvInvoke.Gemm(this, mat2, 1.0, null, 0.0, res, Emgu.CV.CvEnum.GEMM_TYPE.CV_GEMM_DEFAULT);
+         CvInvoke.Gemm(this, mat2, 1.0, null, 0.0, res, Emgu.CV.CvEnum.GemmType.Default);
          return res;
       }
       #endregion

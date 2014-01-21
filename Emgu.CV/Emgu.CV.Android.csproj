@@ -56,6 +56,7 @@
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgb565.cs" />
     <Compile Include="Color\Rgba.cs" />
+    <Compile Include="DenseOpticalFlow.cs" />
     <Compile Include="ERFilter.cs" />
     <Compile Include="FaceRecognizer.cs" />
     <Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
@@ -83,9 +84,17 @@
     <Compile Include="Geodetic\GeodeticCoordinate.cs" />
     <Compile Include="Features2D\ImageFeature.cs" />
     <Compile Include="Features2D\LDetector.cs" />
+    <Compile Include="IStereoMatcher.cs" />
     <Compile Include="LatentSvmDetector.cs" />
     <Compile Include="LevMarqSparse.cs" />
-    <Compile Include="Util\Mat.cs" />
+    <Compile Include="MatDataAllocator.cs" />
+    <Compile Include="PInvoke\Android\MatAndroid.cs" />
+    <Compile Include="StereoMatcherExtensions.cs" />
+    <Compile Include="UMat.cs" />
+    <Compile Include="Util\IInputArray.cs" />
+    <Compile Include="Util\IInputOutputArray.cs" />
+    <Compile Include="Util\IOutputArray.cs" />
+    <Compile Include="Mat.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
@@ -137,16 +146,22 @@
     <Compile Include="Util\DataLogger.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
+    <Compile Include="Util\VectorOfERStat.cs" />
+    <Compile Include="Util\VectorOfInt.cs" />
     <Compile Include="Util\VectorOfByte.cs" />
     <Compile Include="Util\VectorOfDataMatrixCode.cs" />
     <Compile Include="Util\VectorOfDMatch.cs" />
     <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="Util\VectorOfKeyPoint.cs" />
+    <Compile Include="Util\VectorOfKeyPointExtra.cs" />
     <Compile Include="Util\VectorOfMat.cs" />
+    <Compile Include="Util\VectorOfMatExtra.cs" />
     <Compile Include="Util\VectorOfRect.cs" />
     <Compile Include="Util\VectorOfPoint.cs" />
     <Compile Include="Util\VectorOfPointF.cs" />
+    <Compile Include="Util\VectorOfUMat.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint.cs" />
+    <Compile Include="Util\VectorOfVectorOfPointExtra.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />
@@ -201,7 +216,6 @@
     <Compile Include="IImage.cs" />
     <Compile Include="Kalman.cs" />
     <Compile Include="MotionHistory.cs" />
-    <Compile Include="OpticalFlow.cs" />
     <Compile Include="PInvoke\CvType\MCvBGStatModel.cs" />
     <Compile Include="PInvoke\CvType\MCvChain.cs" />
     <Compile Include="PInvoke\CvType\MCvConnectedComp.cs" />
@@ -226,7 +240,6 @@
     <Compile Include="Shape\Triangle2DF.cs" />
     <Compile Include="Shape\Triangle3DF.cs" />
     <Compile Include="StereoBM.cs" />
-    <Compile Include="StructuringElementEx.cs" />
     <Compile Include="MemStorage.cs" />
     <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />
@@ -250,7 +263,6 @@
     <Compile Include="PInvoke\CvEnum.cs" />
     <Compile Include="PInvoke\CvInvoke.cs" />
     <Compile Include="Shape\Ellipse.cs" />
-    <Compile Include="HaarCascade.cs" />
     <Compile Include="DenseHistogram.cs" />
     <Compile Include="Capture\ICapture.cs" />
     <Compile Include="Capture\IDuplexCapture.cs" />
@@ -268,17 +280,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Emgu.CV.snk" />
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_bioinspired.so">
-      <Link>lib\armeabi\libopencv_bioinspired.so</Link>
-    </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_optim.so">
       <Link>lib\armeabi\libopencv_optim.so</Link>
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_shape.so">
       <Link>lib\armeabi\libopencv_shape.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_bioinspired.so">
-      <Link>lib\armeabi-v7a\libopencv_bioinspired.so</Link>
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_optim.so">
       <Link>lib\armeabi-v7a\libopencv_optim.so</Link>
@@ -286,9 +292,6 @@
     <EmbeddedResource Include="..\libs\armeabi-v7a\libopencv_shape.so">
       <Link>lib\armeabi-v7a\libopencv_shape.so</Link>
     </EmbeddedResource>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_bioinspired.so">
-      <Link>lib\x86\libopencv_bioinspired.so</Link>
-    </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_optim.so">
       <Link>lib\x86\libopencv_optim.so</Link>
     </EmbeddedNativeLibrary>

@@ -115,11 +115,11 @@ namespace Emgu.CV
       }
 
       ///<summary> Get the depth representation for openCV</summary>
-      protected static CvEnum.MAT_DEPTH CvDepth
+      protected static CvEnum.DepthType CvDepth
       {
          get
          {
-            return CvToolbox.GetMatrixDepth(typeof(TDepth));
+            return CvInvoke.GetDepthType(typeof(TDepth));
          }
       }
 

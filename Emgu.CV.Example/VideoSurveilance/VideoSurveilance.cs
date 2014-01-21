@@ -20,7 +20,7 @@ namespace VideoSurveilance
 {
    public partial class VideoSurveilance : Form
    {
-      private static MCvFont _font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
+      private static MCvFont _font = new MCvFont(Emgu.CV.CvEnum.FontType.HersheyPlain, 1.0, 1.0);
       private static Capture _cameraCapture;
       private static BlobTrackerAuto<Bgr> _tracker;
       private static IBGFGDetector<Bgr> _detector;
@@ -43,7 +43,7 @@ namespace VideoSurveilance
             return;
          }
          
-         _detector = new FGDetector<Bgr>(FORGROUND_DETECTOR_TYPE.FGD);
+         _detector = new FGDetector<Bgr>(ForgroundDetectorType.Fgd);
 
          _tracker = new BlobTrackerAuto<Bgr>();
 

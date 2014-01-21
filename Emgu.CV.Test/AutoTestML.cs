@@ -812,7 +812,7 @@ namespace Emgu.CV.Test
             Matrix<float> row = points.GetRows(i * (sampleCount / clustersCount), (i + 1) * (sampleCount / clustersCount), 1);
             row.SetRandNormal(new MCvScalar(r.Next() % imageSize, r.Next() % imageSize), new MCvScalar((r.Next() % imageSize) / 6, (r.Next() % imageSize) / 6));
          }
-         using (InputArray ia = new InputArray(new MCvScalar()))
+         using (ScalarArray ia = new ScalarArray(new MCvScalar()))
          {
             CvInvoke.AbsDiff(points, ia, points);
          }

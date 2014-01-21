@@ -23,20 +23,26 @@ ELSE()
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/VectorOf${VECTOR_NAME}.cs)
 ENDIF()
 
-
 ENDMACRO()
 
 CREATE_VECTOR_CS("Byte" "unsigned char" "byte" TRUE)
 CREATE_VECTOR_CS("Int" "int" "int" TRUE)
 CREATE_VECTOR_CS("Float" "float" "float" TRUE)
+CREATE_VECTOR_CS("Double" "double" "double" TRUE)
 CREATE_VECTOR_CS("Point" "cv::Point" "Point" TRUE)
 CREATE_VECTOR_CS("PointF" "cv::Point2f" "PointF" TRUE)
+CREATE_VECTOR_CS("Point3D32F" "cv::Point3f" "MCvPoint3D32f" TRUE)
 CREATE_VECTOR_CS("Rect" "cv::Rect" "Rectangle" TRUE)
 CREATE_VECTOR_CS("KeyPoint" "cv::KeyPoint" "MKeyPoint" TRUE)
 CREATE_VECTOR_CS("ERStat" "cv::ERStat" "MCvERStat" TRUE)
+CREATE_VECTOR_CS("DMatch" "cv::DMatch" "MDMatch" TRUE)
+
 CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" FALSE)
 CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" FALSE)
-
+CREATE_VECTOR_CS("VectorOfPoint" "std::vector<cv::Point>" "VectorOfPoint" FALSE)
+CREATE_VECTOR_CS("VectorOfPointF" "std::vector<cv::Point2f>" "VectorOfPointF" FALSE)
+CREATE_VECTOR_CS("VectorOfPoint3D32F" "std::vector<cv::Point3f>" "VectorOfPoint3D32F" FALSE)
+CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "OclPlatformInfo" FALSE)
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
@@ -211,9 +217,10 @@ ENDIF()
 
 ############################### GPU START ##############################
 IF(WIN32 AND WITH_CUDA)
-  SET(CUDA_NPP_INCLUDES ${CUDA_SDK_ROOT_DIR}/include)
-
+  SET(CUDA_NPP_INCLUDES ${CUDA_TOOLKIT_ROOT_DIR}/include)
+  #MESSAGE("npp includes: ${CUDA_NPP_INCLUDES}")
   if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
+    #MESSAGE("npp version header: ${CUDA_NPP_INCLUDES}/nppversion.h")
     file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_major REGEX "#define NPP_VERSION_MAJOR.*")
     file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_minor REGEX "#define NPP_VERSION_MINOR.*")
     file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_build REGEX "#define NPP_VERSION_BUILD.*")
@@ -227,7 +234,7 @@ IF(WIN32 AND WITH_CUDA)
     string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
   endif()
 
-  SET(CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_SDK_ROOT_DIR})
+  SET(CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_TOOLKIT_ROOT_DIR})
   #replace any potential backslash in the path with slash
   #STRING(REGEX REPLACE "\\\\" "/" CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_NPP_LIBRARY_ROOT_DIR}) 
 

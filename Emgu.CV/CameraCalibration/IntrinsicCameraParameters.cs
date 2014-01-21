@@ -79,7 +79,7 @@ namespace Emgu.CV
       {
          mapx = new Matrix<float>(height, width);
          mapy = new Matrix<float>(height, width);
-         CvInvoke.InitUndistortRectifyMap(IntrinsicMatrix, DistortionCoeffs, null, IntrinsicMatrix, new Size(width, height), Mat.DepthType.Cv32F, mapx, mapy);
+         CvInvoke.InitUndistortRectifyMap(IntrinsicMatrix, DistortionCoeffs, null, IntrinsicMatrix, new Size(width, height), CvEnum.DepthType.Cv32F, mapx, mapy);
       }
 
       /// <summary>
@@ -110,7 +110,7 @@ namespace Emgu.CV
          focalLength = 0;
          principalPoint = new MCvPoint2D64f();
          pixelAspectRatio = 0;
-         CvInvoke.cvCalibrationMatrixValues(_intrinsicMatrix.Ptr, imgWidth, imgHeight, apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref pixelAspectRatio);
+         CvInvoke.CalibrationMatrixValues(_intrinsicMatrix, new Size(imgWidth, imgHeight), apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref pixelAspectRatio);
       }
 
       /// <summary>

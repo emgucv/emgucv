@@ -13,20 +13,35 @@ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
+   /// <summary>
+   /// Base class for circles detector algorithm.
+   /// </summary>
    public class CudaHoughCirclesDetector : UnmanagedObject
    {
-      public CudaHoughCirclesDetector(float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles)
+
+      /// <summary>
+      /// Create hough circles detector
+      /// </summary>
+      /// <param name="dp">Inverse ratio of the accumulator resolution to the image resolution. For example, if dp=1 , the accumulator has the same resolution as the input image. If dp=2 , the accumulator has half as big width and height.</param>
+      /// <param name="minDist">Minimum distance between the centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed.</param>
+      /// <param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one is twice smaller).</param>
+      /// <param name="votesThreshold">The accumulator threshold for the circle centers at the detection stage. The smaller it is, the more false circles may be detected.</param>
+      /// <param name="minRadius">Minimum circle radius.</param>
+      /// <param name="maxRadius">Maximum circle radius.</param>
+      /// <param name="maxCircles">Maximum number of output circles.</param>
+      public CudaHoughCirclesDetector(float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles = 4096)
       {
          _ptr = CudaInvoke.cudaHoughCirclesDetectorCreate(dp, minDist, cannyThreshold, votesThreshold, minRadius, maxRadius, maxCircles);
       }
 
-      public GpuMat Detect(CudaImage<Gray, Byte> image)
+      public void Detect(IInputArray image, IOutputArray circles)
       {
-         GpuMat circles = new GpuMat();
-         CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, image, circles);
-         return circles;
+         CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, image.InputArrayPtr, circles.OutputArrayPtr);
       }
 
+      /// <summary>
+      /// Release the unmanaged memory associated with this circle detector.
+      /// </summary>
       protected override void DisposeObject()
       {
          CudaInvoke.cudaHoughCirclesDetectorRelease(ref _ptr);

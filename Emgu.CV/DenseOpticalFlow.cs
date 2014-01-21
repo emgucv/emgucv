@@ -22,11 +22,20 @@ namespace Emgu.CV
          CvInvoke.CheckLibraryLoaded();
       }
 
+      /// <summary>
+      /// Calculates an optical flow.
+      /// </summary>
+      /// <param name="i0">First 8-bit single-channel input image.</param>
+      /// <param name="i1">Second input image of the same size and the same type as prev.</param>
+      /// <param name="flow">Computed flow image that has the same size as prev and type CV_32FC2 </param>
       public void Calc(IInputArray i0, IInputArray i1, IInputOutputArray flow)
       {
          cveDenseOpticalFlowCalc(_ptr, i0.InputArrayPtr, i1.InputArrayPtr, flow.InputOutputArrayPtr);
       }
 
+      /// <summary>
+      /// Release the unmanaged object related to this dense optical flow
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
@@ -40,8 +49,14 @@ namespace Emgu.CV
       private static extern void cveDenseOpticalFlowCalc(IntPtr dof, IntPtr i0, IntPtr i1, IntPtr flow);
    }
 
+   /// <summary>
+   /// Dual TV L1 Optical Flow Algorithm.
+   /// </summary>
    public class OpticalFlowDualTVL1 : DenseOpticalFlow
    {
+      /// <summary>
+      /// Create Dual TV L1 Optical Flow.
+      /// </summary>
       public OpticalFlowDualTVL1()
       {
          _ptr = cveDenseOpticalFlowCreateDualTVL1();

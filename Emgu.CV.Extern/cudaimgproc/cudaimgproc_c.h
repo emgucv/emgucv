@@ -113,5 +113,5 @@ CVAPI(cv::cuda::HoughCirclesDetector*) cudaHoughCirclesDetectorCreate(float dp, 
 CVAPI(void) cudaHoughCirclesDetectorDetect(cv::cuda::HoughCirclesDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* circles);
 CVAPI(void) cudaHoughCirclesDetectorRelease(cv::cuda::HoughCirclesDetector** detector);
 
-CVAPI(void) cudaGammaCorrection(cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, bool forward, cv::cuda::Stream* stream);
+CVAPI(void) cudaGammaCorrection(cv::_InputArray* src, cv::_OutputArray* dst, bool forward, cv::cuda::Stream* stream);
 #endif

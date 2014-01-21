@@ -47,8 +47,6 @@ namespace ShapeDetection
                 new Gray(circleAccumulatorThreshold),
                 2.0, //Resolution of the accumulator used to detect centers of the circles
                 20.0, //min distance 
-                100, 
-                100,
                 5, //min radius
                 0 //max radius
                 )[0]; //Get the circles from the first channel

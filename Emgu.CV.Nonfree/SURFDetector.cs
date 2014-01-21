@@ -16,6 +16,7 @@ namespace Emgu.CV.Nonfree
    /// </summary>
    public class SURFDetector : Feature2D<float>
    {
+      /*
       private MCvSURFParams _surfParams;
 
       /// <summary>
@@ -37,7 +38,7 @@ namespace Emgu.CV.Nonfree
       {
          _surfParams = surfParams;
          _ptr = NonfreeInvoke.CvSURFDetectorCreate(ref surfParams, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
-      }
+      }*/
 
       /// <summary>
       /// Create a MCvSURFParams using the specific values
@@ -58,9 +59,9 @@ namespace Emgu.CV.Nonfree
       /// <param name="nOctaveLayers">
       /// The number of layers within each octave
       /// </param>
-      public SURFDetector(double hessianThresh, bool extendedFlag, int nOctaves = 3, int nOctaveLayers = 4)
-         : this(new MCvSURFParams(hessianThresh, extendedFlag, nOctaves, nOctaveLayers))
+      public SURFDetector(double hessianThresh, int nOctaves = 4, int nOctaveLayers = 2, bool extended = true, bool upright = false)
       {
+         _ptr = NonfreeInvoke.CvSURFDetectorCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
       }
 
       /// <summary>
@@ -85,12 +86,19 @@ namespace Emgu.CV.Nonfree
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvSURFDetectorCreate(ref MCvSURFParams detector, ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
+      internal extern static IntPtr CvSURFDetectorCreate(
+         double hessianThresh, int nOctaves, int nOctaveLayers, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool extended, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool upright, 
+         ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSURFDetectorRelease(ref IntPtr detector);
 
       #region Image extensions
+      /*
       /// <summary>
       /// Finds robust features in the image (basic descriptor is returned in this case). For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
       /// </summary>
@@ -140,7 +148,7 @@ namespace Emgu.CV.Nonfree
 
             return res;
          }
-      }
+      }*/
 
       #endregion
    }

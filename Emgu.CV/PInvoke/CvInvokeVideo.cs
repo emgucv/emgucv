@@ -200,8 +200,6 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="prev">First frame, at time t</param>
       /// <param name="curr">Second frame, at time t + dt </param>
-      /// <param name="prevPyrBuffer">Buffer for the pyramid for the first frame. If it is not NULL, the buffer must have a sufficient size to store the pyramid from level 1 to level #level ; the total size of (image_width+8)*image_height/3 bytes is sufficient</param>
-      /// <param name="currPyrBuffer">Similar to prev_pyr, used for the second frame</param>
       /// <param name="prevFeatures">Array of points for which the flow needs to be found</param>
       /// <param name="winSize">Size of the search window of each pyramid level</param>
       /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc</param>
@@ -210,6 +208,7 @@ namespace Emgu.CV
       /// <param name="currFeatures">Array of 2D points containing calculated new positions of input features in the second image</param>
       /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise</param>
       /// <param name="trackError">Array of double numbers containing difference between patches around the original and moved points</param>
+      /// <param name="minEigThreshold">the algorithm calculates the minimum eigen value of a 2x2 normal matrix of optical flow equations (this matrix is called a spatial gradient matrix in [Bouguet00]), divided by number of pixels in a window; if this value is less than minEigThreshold, then a corresponding feature is filtered out and its flow is not processed, so it allows to remove bad points and get a performance boost.</param>
       public static void CalcOpticalFlowPyrLK(
          IInputArray prev,
          IInputArray curr,
@@ -253,15 +252,15 @@ namespace Emgu.CV
       /// <remarks>Both parameters prev_pyr and curr_pyr comply with the following rules: if the image pointer is 0, the function allocates the buffer internally, calculates the pyramid, and releases the buffer after processing. Otherwise, the function calculates the pyramid and stores it in the buffer unless the flag CV_LKFLOW_PYR_A[B]_READY is set. The image should be large enough to fit the Gaussian pyramid data. After the function call both pyramids are calculated and the readiness flag for the corresponding image can be set in the next call (i.e., typically, for all the image pairs except the very first one CV_LKFLOW_PYR_A_READY is set). </remarks>
       /// <param name="prevImg">First frame, at time t. </param>
       /// <param name="nextImg">Second frame, at time t + dt .</param>
-      /// <param name="prevFeatures">Array of points for which the flow needs to be found. </param>
-      /// <param name="currFeatures">Array of 2D points containing calculated new positions of input </param>
-      /// <param name="count">Number of feature points.</param>
+      /// <param name="prevPts">Array of points for which the flow needs to be found. </param>
+      /// <param name="nextPts">Array of 2D points containing calculated new positions of input </param>
       /// <param name="winSize">Size of the search window of each pyramid level.</param>
       /// <param name="maxLevel">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc. </param>
       /// <param name="status">Array. Every element of the array is set to 1 if the flow for the corresponding feature has been found, 0 otherwise.</param>
       /// <param name="err">Array of double numbers containing difference between patches around the original and moved points. Optional parameter; can be NULL </param>
       /// <param name="criteria">Specifies when the iteration process of finding the flow for each point on each pyramid level should be stopped.</param>
       /// <param name="flags">Miscellaneous flags</param>
+      /// <param name="minEigThreshold">the algorithm calculates the minimum eigen value of a 2x2 normal matrix of optical flow equations (this matrix is called a spatial gradient matrix in [Bouguet00]), divided by number of pixels in a window; if this value is less than minEigThreshold, then a corresponding feature is filtered out and its flow is not processed, so it allows to remove bad points and get a performance boost.</param>
       public static void CalcOpticalFlowPyrLK(
          IInputArray prevImg,
          IInputArray nextImg,
@@ -319,7 +318,7 @@ namespace Emgu.CV
          double polySigma,
          CvEnum.OpticalflowFarnebackFlag flags)
       {
-         using (Mat flow0 = new Mat(prev0.Height, prev0.Width, Mat.DepthType.Cv32F, 2))
+         using (Mat flow0 = new Mat(prev0.Height, prev0.Width, CvEnum.DepthType.Cv32F, 2))
          using (Util.VectorOfMat vm = new Util.VectorOfMat(new Mat[] { flowX.Mat, flowY.Mat }))
          {
             if ((int)(flags & Emgu.CV.CvEnum.OpticalflowFarnebackFlag.UseInitialFlow) != 0)

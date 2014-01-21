@@ -11,9 +11,9 @@ cv::UMat* cvUMatCreate()
    return new cv::UMat();
 }
 
-void cvUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator)
+void cvUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator)
 {
-   *matAllocator = emguMatAllocatorCreate(allocator, deallocator);
+   *matAllocator = emguMatAllocatorCreate(allocator, deallocator, allocateDataActionPtr, freeDataActionPtr);
    *oclAllocator = mat->getStdAllocator(*matAllocator);
    
    if (*oclAllocator == *matAllocator)

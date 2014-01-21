@@ -52,7 +52,18 @@ namespace Emgu.CV.Reflection
          if (baseType == null)
             baseType = Toolbox.GetBaseType(image.GetType(), "CudaImage`2");
 
-         return baseType == null ? null : baseType.GetGenericArguments()[0];
+         if (baseType != null)
+            return baseType.GetGenericArguments()[0];
+         else
+         {
+            baseType = Toolbox.GetBaseType(image.GetType(), "Mat");
+            return
+               baseType == null ? null :
+               image.NumberOfChannels == 1 ? typeof(Gray) :
+               image.NumberOfChannels == 3 ? typeof(Bgr) :
+               image.NumberOfChannels == 4 ? typeof(Bgra) :
+               null;
+         }
       }
 
       /// <summary>
@@ -66,7 +77,15 @@ namespace Emgu.CV.Reflection
          if (baseType == null)
             baseType = Toolbox.GetBaseType(image.GetType(), "CudaImage`2");
 
-         return baseType == null ? null : baseType.GetGenericArguments()[1];
+         if (baseType != null)
+            return baseType.GetGenericArguments()[1];
+         else
+         {
+            baseType = Toolbox.GetBaseType(image.GetType(), "Mat");
+            return
+               baseType == null ? null :
+               CvInvoke.GetDepthType((image as Mat).Depth);
+         }
       }
 
 

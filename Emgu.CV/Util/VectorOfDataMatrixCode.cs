@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
+/*
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -38,7 +39,6 @@ namespace Emgu.CV.Util
          }
       }
 
-      /*
       /// <summary>
       /// Extract the DataMatrixCode from the image
       /// </summary>
@@ -56,7 +56,7 @@ namespace Emgu.CV.Util
       {
          CvInvoke.VectorOfDataMatrixCodeDraw(_ptr, image);
       }
-      */
+      
       /// <summary>
       /// Release the standard vector
       /// </summary>
@@ -94,3 +94,4 @@ namespace Emgu.CV.Util
       internal static extern void VectorOfDataMatrixCodeDraw(IntPtr v, IntPtr image);
    }
 }
+*/

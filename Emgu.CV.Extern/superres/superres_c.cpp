@@ -34,8 +34,8 @@ cv::superres::SuperResolution* cvSuperResolutionCreate(int type, cv::superres::F
 {
    cv::Ptr<cv::superres::SuperResolution> ptr = 
       (type == 1) ? cv::superres::createSuperResolution_BTVL1_CUDA() :
-      ((type == 2) ? cv::superres::createSuperResolution_BTVL1_OCL() :
-      cv::superres::createSuperResolution_BTVL1());
+      //((type == 2) ? cv::superres::createSuperResolution_BTVL1_OCL() :
+      cv::superres::createSuperResolution_BTVL1();
    
    cv::Ptr<cv::superres::FrameSource> fsPtr(frameSource);
    

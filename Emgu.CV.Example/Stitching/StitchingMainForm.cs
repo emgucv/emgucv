@@ -1,4 +1,8 @@
-﻿using System;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
+//----------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -7,6 +11,7 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Stitching
 {
@@ -45,8 +50,13 @@ namespace Stitching
             {
                using (Stitcher stitcher = new Stitcher(true))
                {
-                  Image<Bgr, Byte> result = stitcher.Stitch(sourceImages);
-                  resultImageBox.Image = result;
+                  using (VectorOfMat vm = new VectorOfMat())
+                  {
+                     Mat result = new Mat();
+                     vm.Push(sourceImages);
+                     stitcher.Stitch(vm, result);
+                     resultImageBox.Image = result;
+                  }
                }
             }
             finally

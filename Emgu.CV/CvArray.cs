@@ -307,7 +307,7 @@ namespace Emgu.CV
       public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType type)
          where TOtherDepth : new ()
       {
-         CvInvoke.Reduce(this, array1D, dim, type, Mat.GetDepthType(typeof(TDepth)));
+         CvInvoke.Reduce(this, array1D, dim, type, CvInvoke.GetDepthType(typeof(TDepth)));
       }
       #endregion
 
@@ -448,7 +448,7 @@ namespace Emgu.CV
       /// <param name="src2">The other array to be elementwise multiplied with</param>
       public void _Mul(CvArray<TDepth> src2)
       {
-         CvInvoke.Multiply(this, src2, this, 1.0, Mat.GetDepthType(typeof(TDepth)));
+         CvInvoke.Multiply(this, src2, this, 1.0, CvInvoke.GetDepthType(typeof(TDepth)));
       }
       #endregion
 
@@ -476,7 +476,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Logic")]
       public void _Min(double value)
       {
-         using (InputArray ia = new InputArray(value))
+         using (ScalarArray ia = new ScalarArray(value))
          {
             CvInvoke.Min(this, ia, this);
          }
@@ -498,7 +498,7 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Logic")]
       public void _Max(double value)
       {
-         using (InputArray ia = new InputArray(value))
+         using (ScalarArray ia = new ScalarArray(value))
             CvInvoke.Max(this, ia, this);
       }
 
@@ -657,6 +657,9 @@ namespace Emgu.CV
 #endif
 
       #region Input Output array
+      /// <summary>
+      /// The Mat header that represent this CvArr
+      /// </summary>
       protected Mat _cvMat;
       
       /// <summary>
@@ -676,6 +679,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// The unmanaged pointer to the input array.
+      /// </summary>
       public IntPtr InputArrayPtr
       {
          get
@@ -684,6 +690,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// The unmanaged pointer to the output array.
+      /// </summary>
       public IntPtr OutputArrayPtr
       {
          get
@@ -692,6 +701,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// The unmanaged pointer to the input output array.
+      /// </summary>
       public IntPtr InputOutputArrayPtr
       {
          get 

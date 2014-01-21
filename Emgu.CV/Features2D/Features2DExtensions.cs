@@ -26,9 +26,9 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="detector">The feature detector</param>
       /// <param name="image">The image from which the features will be detected from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="mask">The optional mask.</param>
       /// <returns>The features in the image</returns>
-      public static VectorOfKeyPoint DetectRaw(this IFeatureDetector detector, Image<Gray, Byte> image, Image<Gray, Byte> mask)
+      public static VectorOfKeyPoint DetectRaw(this IFeatureDetector detector, Image<Gray, Byte> image, Image<Gray, Byte> mask = null)
       {
          VectorOfKeyPoint kpts = new VectorOfKeyPoint();
          CvFeatureDetectorDetectKeyPoints(detector.FeatureDetectorPtr, image, mask, kpts);
@@ -40,9 +40,9 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="detector">The keypoint detector</param>
       /// <param name="image">The image to extract keypoints from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
+      /// <param name="mask">The optional mask.</param>
       /// <returns>An array of key points</returns>
-      public static MKeyPoint[] Detect(this IFeatureDetector detector, Image<Gray, Byte> image, Image<Gray, byte> mask)
+      public static MKeyPoint[] Detect(this IFeatureDetector detector, Image<Gray, Byte> image, Image<Gray, byte> mask = null)
       {
          using (VectorOfKeyPoint keypoints = detector.DetectRaw(image, mask))
          {
@@ -55,7 +55,6 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="extractor">The descriptor extractor</param>
       /// <param name="image">The image where the descriptor will be computed from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <param name="keyPoints">The keypoint where the descriptor will be computed from</param>
       /// <returns>The descriptors founded on the keypoint location</returns>
       public static ImageFeature<TDescriptor>[] Compute<TColor, TDescriptor>(this IDescriptorExtractor<TColor, TDescriptor> extractor, Image<TColor, Byte> image, MKeyPoint[] keyPoints)
@@ -79,7 +78,6 @@ namespace Emgu.CV.Features2D
       /// <param name="extractor">The descriptor extractor</param>
       /// <param name="image">The image to compute descriptors from</param>
       /// <param name="keyPoints">The keypoints where the descriptor computation is perfromed</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>The descriptors from the given keypoints</returns>
       public static Matrix<TDescriptor> Compute<TColor, TDescriptor>(this IDescriptorExtractor<TColor, TDescriptor> extractor, Image<TColor, Byte> image, VectorOfKeyPoint keyPoints)
          where TColor : struct, IColor

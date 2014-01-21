@@ -34,7 +34,7 @@ namespace Emgu.CV.WPF
         private void image1_Initialized(object sender, EventArgs e)
         {
             Image<Bgr, Byte> image = new Image<Bgr, byte>(400, 100, new Bgr(255, 255, 255));
-            MCvFont f = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 3.0, 3.0);
+            MCvFont f = new MCvFont(Emgu.CV.CvEnum.FontType.HersheyPlain, 3.0, 3.0);
             image.Draw("Hello, world", ref f, new System.Drawing.Point(10, 50), new Bgr(255.0, 0.0, 0.0));
 
             image1.Source = BitmapSourceConvert.ToBitmapSource(image);

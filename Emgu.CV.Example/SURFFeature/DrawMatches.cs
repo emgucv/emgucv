@@ -22,13 +22,14 @@ namespace SURFFeatureExample
       {
          int k = 2;
          double uniquenessThreshold = 0.8;
-         SURFDetector surfCPU = new SURFDetector(500, false);
+         double hessianThresh = 300;
+         
          Stopwatch watch;
          homography = null;
 
          if (CudaInvoke.HasCuda)
          {
-            CudaSURFDetector surfCuda = new CudaSURFDetector(surfCPU.SURFParams, 0.01f);
+            CudaSURFDetector surfCuda = new CudaSURFDetector((float) hessianThresh);
             using (CudaImage<Gray, Byte> gpuModelImage = new CudaImage<Gray, byte>(modelImage))
             //extract features from the object image
             using (GpuMat<float> gpuModelKeyPoints = surfCuda.DetectKeyPointsRaw(gpuModelImage, null))
@@ -83,36 +84,44 @@ namespace SURFFeatureExample
          }
          else
          {
-            //extract features from the object image
-            modelKeyPoints = new VectorOfKeyPoint();
-            Matrix<float> modelDescriptors = surfCPU.DetectAndCompute(modelImage, null, modelKeyPoints);
-
-            watch = Stopwatch.StartNew();
-
-            // extract features from the observed image
-            observedKeyPoints = new VectorOfKeyPoint();
-            Matrix<float> observedDescriptors = surfCPU.DetectAndCompute(observedImage, null, observedKeyPoints);
-            BruteForceMatcher<float> matcher = new BruteForceMatcher<float>(DistanceType.L2);
-            matcher.Add(modelDescriptors);
-
-            indices = new Matrix<int>(observedDescriptors.Rows, k);
-            using (Matrix<float> dist = new Matrix<float>(observedDescriptors.Rows, k))
+            using (UMat uModelImage = modelImage.Mat.ToUMat(AccessType.Read))
+            using (UMat uObservedImage = observedImage.Mat.ToUMat(AccessType.Read))
             {
-               matcher.KnnMatch(observedDescriptors, indices, dist, k, null);
-               mask = new Matrix<byte>(dist.Rows, 1);
-               mask.SetValue(255);
-               Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
-            }
+               SURFDetector surfCPU = new SURFDetector(hessianThresh);
+               //extract features from the object image
+               modelKeyPoints = new VectorOfKeyPoint();
+               Mat modelDescriptors = new Mat();
+               surfCPU.DetectAndCompute(uModelImage, null, modelKeyPoints, modelDescriptors, false);
 
-            int nonZeroCount = CvInvoke.CountNonZero(mask);
-            if (nonZeroCount >= 4)
-            {
-               nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
+               watch = Stopwatch.StartNew();
+
+               // extract features from the observed image
+               observedKeyPoints = new VectorOfKeyPoint();
+               Mat observedDescriptors = new Mat();
+               surfCPU.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
+               BruteForceMatcher matcher = new BruteForceMatcher(DistanceType.L2);
+               matcher.Add(modelDescriptors);
+
+               indices = new Matrix<int>(observedDescriptors.Size.Height, k);
+               using (Matrix<float> dist = new Matrix<float>(observedDescriptors.Size.Height, k))
+               {
+                  matcher.KnnMatch(observedDescriptors, indices, dist, k, null);
+                  mask = new Matrix<byte>(dist.Rows, 1);
+                  mask.SetValue(255);
+                  Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
+               }
+
+               
+               int nonZeroCount = CvInvoke.CountNonZero(mask);
                if (nonZeroCount >= 4)
-                  homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask, 2);
+               {
+                  nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
+                  if (nonZeroCount >= 4)
+                     homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints, observedKeyPoints, indices, mask, 2);
+               }
+               
+               watch.Stop();
             }
-
-            watch.Stop();
          }
          matchTime = watch.ElapsedMilliseconds;
       }
