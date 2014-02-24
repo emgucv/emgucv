@@ -16,6 +16,8 @@ CVAPI(cv::flann::Index*) CvFlannIndexCreateKDTree(CvMat* features, int trees);
 
 CVAPI(cv::flann::Index*) CvFlannIndexCreateLinear(CvMat* features);
 
+CVAPI(cv::flann::Index*) CvFlannIndexCreateLSH(CvMat* features, int tableNumber, int keySize, int multiProbeLevel);
+
 CVAPI(cv::flann::Index*) CvFlannIndexCreateKMeans(CvMat* features, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_);
 
 CVAPI(cv::flann::Index*) CvFlannIndexCreateComposite(CvMat* features, int trees, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_);

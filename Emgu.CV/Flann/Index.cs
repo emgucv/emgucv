@@ -34,6 +34,18 @@ namespace Emgu.CV.Flann
       }
 
       /// <summary>
+      /// Create a flann index using LSH
+      /// </summary>
+      /// <param name="values">A row by row matrix of descriptors</param>
+      /// <param name="tableNumber">The number of hash tables to use (between 10 and 30 usually).</param>
+      /// <param name="keySize">The size of the hash key in bits (between 10 and 20 usually).</param>
+      /// <param name="multiProbeLevel">The number of bits to shift to check for neighboring buckets (0 is regular LSH, 2 is recommended).</param>
+      public Index(Matrix<float> values, int tableNumber, int keySize, int multiProbeLevel)
+      {
+         _ptr = CvFlannIndexCreateLSH(values, tableNumber, keySize, multiProbeLevel);
+      }
+
+      /// <summary>
       /// Create a flann index using a composition of KDTreee and KMeans tree
       /// </summary>
       /// <param name="numberOfKDTrees">The number of KDTrees to be used</param>
@@ -128,6 +140,9 @@ namespace Emgu.CV.Flann
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvFlannIndexCreateLinear(IntPtr features);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr CvFlannIndexCreateLSH(IntPtr features, int tableNumber, int keySize, int multiProbeLevel);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvFlannIndexCreateKDTree(IntPtr features, int numberOfKDTrees);

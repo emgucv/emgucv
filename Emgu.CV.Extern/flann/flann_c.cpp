@@ -20,6 +20,13 @@ cv::flann::Index* CvFlannIndexCreateLinear(CvMat* features)
    return new cv::flann::Index(f, param);
 }
 
+CVAPI(cv::flann::Index*) CvFlannIndexCreateLSH(CvMat* features, int tableNumber, int keySize, int multiProbeLevel)
+{
+   cv::flann::LshIndexParams param = cv::flann::LshIndexParams(tableNumber, keySize, multiProbeLevel);
+   cv::Mat f = cv::cvarrToMat(features);
+   return new cv::flann::Index(f, param);
+}
+
 cv::flann::Index* CvFlannIndexCreateKMeans(CvMat* features, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_)
 {
    cv::flann::KMeansIndexParams param = cv::flann::KMeansIndexParams(branching_, iterations_, centers_init_, cb_index_);
