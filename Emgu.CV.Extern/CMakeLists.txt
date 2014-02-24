@@ -249,37 +249,37 @@ IF(WIN32 AND WITH_CUDA)
     "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
     "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppi${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
     "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npps${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-    "${CUDA_SDK_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
+    "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
     )
   #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
   #  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
   #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
 
   IF(WITH_CUFFT)
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_SDK_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
     #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}) 
   ENDIF()
 
   IF(WITH_CUBLAS)
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_SDK_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
     #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor})
   ENDIF()  
   ELSE()  
   LIST(APPEND CVEXTERN_DEPENDENCY_DLLS 
     "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
-    "${CUDA_SDK_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
+    "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
     )
   #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
   #  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
   #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
 
   IF(WITH_CUFFT)
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_SDK_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
     #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}) 
   ENDIF()
 
   IF(WITH_CUBLAS)
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_SDK_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
     #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
   ENDIF()
   ENDIF()
