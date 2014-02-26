@@ -17,7 +17,7 @@ namespace Emgu.CV.Nonfree
    /// <summary>
    /// Wrapped SIFT detector
    /// </summary>
-   public class SIFTDetector : Feature2D<float>
+   public class SIFTDetector : Feature2D
    {
       /// <summary>
       /// Create a SIFTDetector using the specific values

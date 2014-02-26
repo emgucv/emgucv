@@ -128,9 +128,8 @@ namespace Emgu.CV
       /// <param name="detector">The SVM detector</param>
       public void SetSVMDetector(float[] detector)
       {
-         using (VectorOfFloat vec = new VectorOfFloat())
+         using (VectorOfFloat vec = new VectorOfFloat(detector))
          {
-            vec.Push(detector);
             CvHOGSetSVMDetector(_ptr, vec);
          }
       }
@@ -151,7 +150,7 @@ namespace Emgu.CV
       /// <param name="useMeanshiftGrouping">If true, it will use meanshift grouping.</param>
       /// <returns>The regions where positives are found</returns>
       public MCvObjectDetection[] DetectMultiScale(
-         Image<Bgr, Byte> image,
+         IInputArray image,
          double hitThreshold,
          Size winStride,
          Size padding,
@@ -159,11 +158,21 @@ namespace Emgu.CV
          int finalThreshold,
          bool useMeanshiftGrouping)
       {
-         using (MemStorage stor = new MemStorage())
+         using (Util.VectorOfRect vr = new VectorOfRect())
+         using (Util.VectorOfDouble vd = new VectorOfDouble())
          {
-            Seq<MCvObjectDetection> seq = new Seq<MCvObjectDetection>(stor);
-            CvHOGDescriptorDetectMultiScale(_ptr, image, seq, hitThreshold, ref winStride, ref padding, scale, finalThreshold, useMeanshiftGrouping);
-            return seq.ToArray();
+            CvHOGDescriptorDetectMultiScale(_ptr, image.InputArrayPtr, vr, vd, hitThreshold, ref winStride, ref padding, scale, finalThreshold, useMeanshiftGrouping);
+            Rectangle[] location = vr.ToArray();
+            double[] weight = vd.ToArray();
+            MCvObjectDetection[] result = new MCvObjectDetection[location.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+               MCvObjectDetection od = new MCvObjectDetection();
+               od.Rect = location[i];
+               od.score = (float) weight[i];
+               result[i] = od;
+            }
+            return result;
          }
       }
 
@@ -185,18 +194,17 @@ namespace Emgu.CV
       /// <param name="padding">Padding. Use Size.Empty for default</param>
       /// <param name="locations">Locations for the computation. Can be null if not needed</param>
       /// <returns>The descriptor vector</returns>
-      public float[] Compute(Image<Bgr, Byte> image, Size winStride, Size padding, Point[] locations)
+      public float[] Compute(IInputArray image, Size winStride, Size padding, Point[] locations)
       {
          using (VectorOfFloat desc = new VectorOfFloat())
          {
             if (locations == null)
-               CvHOGDescriptorCompute(_ptr, image, desc, ref winStride, ref padding, IntPtr.Zero);
+               CvHOGDescriptorCompute(_ptr, image.InputArrayPtr, desc, ref winStride, ref padding, IntPtr.Zero);
             else
             {
-               using (MemStorage stor = new MemStorage())
+               using (VectorOfPoint vp = new VectorOfPoint(locations))
                {
-                  Seq<Point> locationSeq = new Seq<Point>(stor);
-                  CvHOGDescriptorCompute(_ptr, image, desc, ref winStride, ref padding, locationSeq);
+                  CvHOGDescriptorCompute(_ptr, image.InputArrayPtr, desc, ref winStride, ref padding, vp);
                }
             }
             return desc.ToArray();
@@ -253,6 +261,7 @@ namespace Emgu.CV
          IntPtr descriptor,
          IntPtr img,
          IntPtr foundLocations,
+         IntPtr weights,
          double hitThreshold,
          ref Size winStride,
          ref Size padding,

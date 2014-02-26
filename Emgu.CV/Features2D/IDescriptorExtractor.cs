@@ -15,9 +15,7 @@ namespace Emgu.CV.Features2D
    /// </summary>
    /// <typeparam name="TColor">The type of color the descriptor extractor operates on</typeparam>
    /// <typeparam name="TDescriptor">The type of data in the descriptor. Can be either float or byte</typeparam>
-   public interface IDescriptorExtractor<TColor, TDescriptor>
-      where TColor : struct, IColor
-      where TDescriptor : struct
+   public interface IDescriptorExtractor
    {
       /*
       /// <summary>

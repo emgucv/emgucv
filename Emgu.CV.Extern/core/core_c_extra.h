@@ -46,6 +46,7 @@ CVAPI(void) cveSubtract(cv::_InputArray* src1, cv::_InputArray* src2, cv::_Outpu
 CVAPI(void) cveDivide(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, double scale, int dtype);
 CVAPI(void) cveMultiply(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, double scale, int dtype);
 CVAPI(void) cveCountNonZero(cv::_InputArray* src);
+CVAPI(void) cveFindNonZero(cv::_InputArray* src, cv::_OutputArray* idx );
 CVAPI(void) cveMin(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 CVAPI(void) cveMax(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 
@@ -120,5 +121,21 @@ CVAPI(void) cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScal
 
 CVAPI(void) cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* color, int thickness, int lineType, int shift);
 
+CVAPI(void) cveCircle(cv::_InputOutputArray* img, CvPoint* center, int radius, CvScalar* color, int thickness, int lineType, int shift);
+
 CVAPI(void) cvePutText(cv::_InputOutputArray* img, const char* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin);
+
+CVAPI(void) cvefillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift);
+
+CVAPI(void) cvefillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset);
+
+CVAPI(void) cvePolylines(cv::_InputOutputArray* img, cv::_InputArray* pts,
+                   bool isClosed, const CvScalar* color,
+                   int thickness, int lineType, int shift );
+
+CVAPI(void) cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes,
+              double angle, double startAngle, double endAngle,
+              const CvScalar* color, int thickness, int lineType, int shift );
+
+CVAPI(double) cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2);
 #endif

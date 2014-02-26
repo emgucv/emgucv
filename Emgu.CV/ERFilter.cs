@@ -183,28 +183,22 @@ namespace Emgu.CV
       /// <param name="groupingTrainedFileName">The XML or YAML file with the classifier model (e.g. trained_classifier_erGrouping.xml)</param>
       /// <param name="minProbability">The minimum probability for accepting a group.</param>
       /// <returns>The output of the algorithm that indicates the text regions</returns>
-      public static System.Drawing.Rectangle[] ERGrouping(Image<Gray, Byte>[] channels, VectorOfERStat[] erstats, String groupingTrainedFileName, float minProbability = 0.5f)
-      {
-         Debug.Assert(channels.Length == erstats.Length, "Length of channels do not match length of erstats");
-         IntPtr[] channelPtrs = new IntPtr[channels.Length];
+      public static System.Drawing.Rectangle[] ERGrouping(IInputArray channels, VectorOfERStat[] erstats, String groupingTrainedFileName, float minProbability = 0.5f)
+      {         
          IntPtr[] erstatPtrs = new IntPtr[erstats.Length];
 
-         for (int i = 0; i < channelPtrs.Length; i++)
+         for (int i = 0; i < erstatPtrs.Length; i++)
          {
-            channelPtrs[i] = channels[i].Ptr;
             erstatPtrs[i] = erstats[i].Ptr;
          }
          
-         GCHandle channelsHandle = GCHandle.Alloc(channelPtrs, GCHandleType.Pinned);
-         GCHandle erstatsHandle = GCHandle.Alloc(erstatPtrs, GCHandleType.Pinned);
          using (VectorOfRect regions = new VectorOfRect())
          {
-            CvERGrouping(channelsHandle.AddrOfPinnedObject(), erstatsHandle.AddrOfPinnedObject(), channelPtrs.Length, groupingTrainedFileName, minProbability, regions);
-            channelsHandle.Free();
+            GCHandle erstatsHandle = GCHandle.Alloc(erstatPtrs, GCHandleType.Pinned);
+            CvERGrouping(channels.InputArrayPtr, erstatsHandle.AddrOfPinnedObject(), erstatPtrs.Length, groupingTrainedFileName, minProbability, regions);
             erstatsHandle.Free();
             return regions.ToArray();
          }
-
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

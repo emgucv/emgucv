@@ -14,13 +14,9 @@ void CvOctreeBuildTree(cv::Octree* tree, cv::Point3f* points, int numberOfPoints
    memcpy(&pts[0], points, numberOfPoints * sizeof(cv::Point3f));  
    tree->buildTree(pts, maxLevels, minPoints); 
 }
-void CvOctreeGetPointsWithinSphere(cv::Octree* tree, cv::Point3f* center, float radius, CvSeq* pointSeq )
+void CvOctreeGetPointsWithinSphere(cv::Octree* tree, cv::Point3f* center, float radius, std::vector<cv::Point3f>* points )
 {
-   std::vector<cv::Point3f> points; 
-   tree->getPointsWithinSphere(*center, radius, points);
-   cvClearSeq(pointSeq);
-   if (!points.empty())
-      cvSeqPushMulti(pointSeq, &points.front(), (int)points.size());
+   tree->getPointsWithinSphere(*center, radius, *points);
 }
 void CvOctreeRelease(cv::Octree* tree) { delete tree; } 
 
@@ -153,30 +149,30 @@ void CvReleaseLevMarqSparse(cv::LevMarqSparse** levMarq)
 }
 
 //ChamferMatching
-int cvChamferMatching( 
-   IplImage* img, IplImage* templ,
+int cveChamferMatching( 
+   cv::Mat* img, cv::Mat* templ,
    std::vector< std::vector<cv::Point> >* results, std::vector<float>* cost,
    double templScale, int maxMatches,
    double minMatchDistance, int padX,
    int padY, int scales, double minScale, double maxScale,
    double orientationWeight, double truncate)
 {
-   cv::Mat imgMat = cv::cvarrToMat(img);
-   cv::Mat templMat = cv::cvarrToMat(templ);
-   return cv::chamerMatching(imgMat, templMat, *results, *cost, templScale, maxMatches, minMatchDistance, padX, padY, scales, minScale, maxScale, orientationWeight, truncate);
+   //cv::Mat imgMat = cv::cvarrToMat(img);
+   //cv::Mat templMat = cv::cvarrToMat(templ);
+   return cv::chamerMatching(*img, *templ, *results, *cost, templScale, maxMatches, minMatchDistance, padX, padY, scales, minScale, maxScale, orientationWeight, truncate);
 }
 
 //SelfSimDescriptor
 cv::SelfSimDescriptor* CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles)
 {  return new cv::SelfSimDescriptor(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles); }
 void CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor) { delete descriptor; }
-void CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, std::vector<float>* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation)
+void CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, cv::Mat* image, std::vector<float>* descriptors, cv::Size* winStride, std::vector<  cv::Point >* locations)
 {
-   std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
-   memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
+   //std::vector<cv::Point> locationVec = std::vector<cv::Point>(numberOfLocation);
+   //memcpy(&locationVec[0], locations, sizeof(cv::Point) * numberOfLocation);
    //CV_Assert(numberOfLocation == locationVec.size());
-   cv::Mat imageMat = cv::cvarrToMat(image);
-   descriptor->compute(imageMat, *descriptors, *winStride, locationVec);
+   //cv::Mat imageMat = cv::cvarrToMat(image);
+   descriptor->compute(*image, *descriptors, *winStride, *locations);
 
    //float sumAbs = 0.0f;
    //for (int i = 0; i < descriptors->data.size(); i++)

@@ -88,8 +88,9 @@ namespace Emgu.CV
       /// <param name="fileName">The name of the file</param>
       /// <param name="loadType">File loading method</param>
       public Mat(String fileName, CvEnum.LoadImageType loadType)
-         : this(MatInvoke.cvMatCreateFromFile(fileName, loadType), true, false)
+         : this(MatInvoke.cvMatCreate(), true, false)
       {
+         CvInvoke.cveImread(fileName, loadType, this);
       }
 
       /// <summary>
@@ -671,13 +672,14 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreateWithData(int rows, int cols, int type, IntPtr data, IntPtr step);
 
+      /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreateFromFile(
          [MarshalAs(CvInvoke.StringMarshalType)]
          String fileName,
          CvEnum.LoadImageType flag
          );
-
+      */
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatGetUMat(IntPtr mat, CvEnum.AccessType access);
 

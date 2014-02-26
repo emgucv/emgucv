@@ -6,10 +6,12 @@
 
 #include "optim_c.h"
 
-int cvSolveLP(const CvMat* Func, const CvMat* Constr, CvMat* z)
+int cveSolveLP(const cv::Mat* Func, const cv::Mat* Constr, cv::Mat* z)
 {
-   cv::Mat funcMat = cv::cvarrToMat(Func);
-   cv::Mat constrMat = cv::cvarrToMat(Constr);
-   cv::Mat zMat = cv::cvarrToMat(z);
-   return cv::optim::solveLP(funcMat, constrMat, zMat);
+   return cv::optim::solveLP(*Func, *Constr, *z);
+}
+
+void cveDenoiseTVL1(const std::vector< cv::Mat >* observations, cv::Mat* result, double lambda, int niters)
+{
+   cv::optim::denoise_TVL1(*observations, *result, lambda, niters);
 }

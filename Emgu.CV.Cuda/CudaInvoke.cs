@@ -821,12 +821,12 @@ namespace Emgu.CV.Cuda
       /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="reduceOp">The reduction operation type</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
-      public static void Reduce(IInputArray mtx, IOutputArray vec, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType reduceOp, Stream stream)
+      public static void Reduce(IInputArray mtx, IOutputArray vec, CvEnum.ReduceDimension dim, CvEnum.ReduceType reduceOp, Stream stream)
       {
          cudaReduce(mtx.InputArrayPtr, vec.OutputArrayPtr, dim, reduceOp, stream);
       }
       [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaReduce(IntPtr mtx, IntPtr vec, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType reduceOp, IntPtr stream);
+      private static extern void cudaReduce(IntPtr mtx, IntPtr vec, CvEnum.ReduceDimension dim, CvEnum.ReduceType reduceOp, IntPtr stream);
 
       /// <summary>
       /// Flips the GpuMat in one of different 3 ways (row and column indices are 0-based):

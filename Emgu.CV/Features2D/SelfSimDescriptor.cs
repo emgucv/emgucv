@@ -17,22 +17,27 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class SelfSimDescriptor : UnmanagedObject
    {
+      static SelfSimDescriptor()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// 
       /// </summary>
-      /// <param name="smallSize">Use 5 for default</param>
-      /// <param name="largeSize">Use 41 for default</param>
-      /// <param name="startDistanceBucket">Use 3 for default</param>
-      /// <param name="numberOfDistanceBuckets">Use 7 for default</param>
-      /// <param name="numberOfAngles">Use 20 for default</param>
+      /// <param name="smallSize"></param>
+      /// <param name="largeSize"></param>
+      /// <param name="startDistanceBucket"></param>
+      /// <param name="numberOfDistanceBuckets"></param>
+      /// <param name="numberOfAngles"></param>
       public SelfSimDescriptor(
-         int smallSize,
-         int largeSize,
-         int startDistanceBucket,
-         int numberOfDistanceBuckets,
-         int numberOfAngles)
+         int smallSize = 5,
+         int largeSize = 41,
+         int startDistanceBucket = 3,
+         int numberOfDistanceBuckets = 7,
+         int numberOfAngles = 20)
       {
-         _ptr = CvInvoke.CvSelfSimDescriptorCreate(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles);
+         _ptr = CvSelfSimDescriptorCreate(smallSize, largeSize, startDistanceBucket, numberOfDistanceBuckets, numberOfAngles);
       }
 
       /// <summary>
@@ -42,7 +47,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return CvInvoke.CvSelfSimDescriptorGetDescriptorSize(_ptr);
+            return CvSelfSimDescriptorGetDescriptorSize(_ptr);
          }
       }
 
@@ -53,13 +58,12 @@ namespace Emgu.CV.Features2D
       /// <param name="winStride"></param>
       /// <param name="locations"></param>
       /// <returns></returns>
-      public float[] Compute(Image<Gray, Byte> image, Size winStride, Point[] locations)
+      public float[] Compute(Mat image, Size winStride, Point[] locations)
       {
          using (VectorOfFloat vof = new VectorOfFloat())
+         using (VectorOfPoint vp = new VectorOfPoint(locations))
          {
-            GCHandle handle = GCHandle.Alloc(locations, GCHandleType.Pinned);
-            CvInvoke.CvSelfSimDescriptorCompute(_ptr, image, vof, ref winStride, handle.AddrOfPinnedObject(), locations.Length);
-            handle.Free();
+            CvSelfSimDescriptorCompute(_ptr, image, vof, ref winStride, vp);
             return vof.ToArray();
          }
       }
@@ -69,15 +73,10 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvSelfSimDescriptorRelease(_ptr);
+         if (_ptr != IntPtr.Zero)
+            CvSelfSimDescriptorRelease(_ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvSelfSimDescriptorCreate(
          int smallSize,
@@ -95,9 +94,7 @@ namespace Emgu.CV
          IntPtr image,
          IntPtr descriptors,
          ref Size winStride,
-         IntPtr locations,
-         int sizeOfLocation
-         );
+         IntPtr locations);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int CvSelfSimDescriptorGetDescriptorSize(IntPtr descriptor);

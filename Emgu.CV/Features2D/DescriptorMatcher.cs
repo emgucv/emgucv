@@ -24,9 +24,9 @@ namespace Emgu.CV.Features2D
       /// <param name="distance">The resulting n x <paramref name="k"/> matrix of distance value from the training descriptors</param>
       /// <param name="k">Number of nearest neighbors to search for</param>
       /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
-      public void KnnMatch(IInputArray queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, Matrix<Byte> mask)
+      public void KnnMatch(IInputArray queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, IInputArray mask)
       {
-         DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor.InputArrayPtr, trainIdx, distance, k, mask);
+         DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor.InputArrayPtr, trainIdx, distance, k, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
 
       /// <summary>

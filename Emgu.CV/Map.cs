@@ -225,12 +225,12 @@ namespace Emgu.CV
       ///<param name="circle"> The circle to be drawn</param>
       ///<param name="color"> The color of the circle </param>
       ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
-      public override void Draw(CircleF circle, TColor color, int thickness)
+      public override void Draw(CircleF circle, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
          base.Draw(
             new CircleF(MapPointToImagePoint(circle.Center), circle.Radius / Resolution.X),
             color,
-            thickness);
+            thickness, lineType, shift);
       }
 
       ///<summary> Draw a convex polygon of the specific color and thickness </summary>

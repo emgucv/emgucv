@@ -86,4 +86,7 @@ CVAPI(void) cveEMD(cv::_InputArray* signature1, cv::_InputArray* signature2, int
 CVAPI(void) cveCalcHist( cv::_InputArray* images, const std::vector<int>* channels, cv::_InputArray* mask, cv::_OutputArray* hist, std::vector<int>* histSize, std::vector<float>* ranges, bool accumulate );
 CVAPI(void) cveCalcBackProject(cv::_InputArray* images, const std::vector<int>* channels, cv::_InputArray* hist, cv::_OutputArray* dst, const std::vector<float>* ranges, double scale );
 CVAPI(double) cveCompareHist(cv::_InputArray* h1, cv::_InputArray* h2, int method);
+
+CVAPI(void) cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D);
+
 #endif

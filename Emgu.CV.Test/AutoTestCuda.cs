@@ -463,7 +463,7 @@ namespace Emgu.CV.Test
             using (CudaImage<Bgr, byte> CudaImage = new CudaImage<Bgr, byte>(img))
             using (GpuMat<byte> reduced = new GpuMat<byte>(1, CudaImage.Size.Width, CudaImage.NumberOfChannels, true))
             {
-               CudaInvoke.Reduce(CudaImage, reduced, CvEnum.REDUCE_DIMENSION.SINGLE_ROW, CvEnum.ReduceType.ReduceAvg, null);
+               CudaInvoke.Reduce(CudaImage, reduced, CvEnum.ReduceDimension.SingleRow, CvEnum.ReduceType.ReduceAvg, null);
             }
          }
       }
@@ -786,8 +786,10 @@ namespace Emgu.CV.Test
 
             #region extract features from the object image
             Stopwatch stopwatch = Stopwatch.StartNew();
-            VectorOfKeyPoint modelKeypoints = fast.DetectRaw(box, null);
-            Matrix<Byte> modelDescriptors = brief.Compute(box, modelKeypoints);
+            VectorOfKeyPoint modelKeypoints = new VectorOfKeyPoint();
+            fast.DetectRaw(box, modelKeypoints);
+            Mat modelDescriptors = new Mat();
+            brief.Compute(box, modelKeypoints, modelDescriptors);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
@@ -796,8 +798,10 @@ namespace Emgu.CV.Test
 
             #region extract features from the observed image
             stopwatch.Reset(); stopwatch.Start();
-            VectorOfKeyPoint observedKeypoints = fast.DetectRaw(observedImage, null);
-            Matrix<Byte> observedDescriptors = brief.Compute(observedImage, observedKeypoints);
+            VectorOfKeyPoint observedKeypoints = new VectorOfKeyPoint();
+            fast.DetectRaw(observedImage, observedKeypoints);
+            Mat observedDescriptors = new Mat();
+            brief.Compute(observedImage, observedKeypoints, observedDescriptors);
             stopwatch.Stop();
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion

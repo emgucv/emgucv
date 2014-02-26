@@ -304,7 +304,7 @@ namespace Emgu.CV
       /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="type">The reduction operation type</param>
       /// <typeparam name="TOtherDepth">The type of depth of the reduced array</typeparam>
-      public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType type)
+      public void Reduce<TOtherDepth>(CvArray<TOtherDepth> array1D, CvEnum.ReduceDimension dim, CvEnum.ReduceType type)
          where TOtherDepth : new ()
       {
          CvInvoke.Reduce(this, array1D, dim, type, CvInvoke.GetDepthType(typeof(TDepth)));

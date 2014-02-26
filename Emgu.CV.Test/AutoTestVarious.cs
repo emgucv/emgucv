@@ -2449,7 +2449,7 @@ namespace Emgu.CV.Test
          {
             Point[][] contours;
             float[] costs;
-            int count = CvInvoke.cvChamferMatching(logoInClutter, logo, out contours, out costs, 1, 1, 1, 3, 3, 5, 0.6, 1.6, 0.5, 20);
+            int count = CvInvoke.ChamferMatching(logoInClutter.Mat, logo.Mat, out contours, out costs, 1, 1, 1, 3, 3, 5, 0.6, 1.6, 0.5, 20);
 
             foreach (Point[] contour in contours)
             {
@@ -2545,31 +2545,40 @@ namespace Emgu.CV.Test
       public void TestERFilter()
       {
          CvInvoke.SanityCheck();
-         bool checkInvert = false;
-         using (Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("scenetext01.jpg"))
+         bool checkInvert = true;
+         using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("scenetext01.jpg"))
          using (ERFilterNM1 er1 = new ERFilterNM1(EmguAssert.GetFile("trained_classifierNM1.xml"), 8, 0.00025f, 0.13f, 0.4f, true, 0.1f))
          using (ERFilterNM2 er2 = new ERFilterNM2(EmguAssert.GetFile("trained_classifierNM2.xml"), 0.3f))
          {
             //using (Image<Gray, Byte> mask = new Image<Gray,byte>(image.Size.Width + 2, image.Size.Height + 2))
+            int channelCount = image.NumberOfChannels;
+            UMat[] channels = new UMat[checkInvert ? channelCount * 2 : channelCount];
+            
+            for (int i = 0; i < channelCount; i++)
+            {
+               UMat c = new UMat();
+               CvInvoke.ExtractChannel(image.Mat, c, i);
+               channels[i] = c;
+            }
 
-            Image<Gray, byte>[] channels;
             if (checkInvert)
             {
-               channels = new Image<Gray, byte>[image.NumberOfChannels * 2];
-               Image<Gray, Byte>[] originalChannles = image.Split();
-               for (int i = 0; i < originalChannles.Length; i++)
+               for (int i = 0; i < channelCount; i++)
                {
-                  channels[2 * i] = originalChannles[i];
-                  channels[2 * i + 1] = originalChannles[i].Not();
+                  UMat c = new UMat();
+                  CvInvoke.BitwiseNot(channels[i], c);
+                  channels[i + channelCount] = c;
                }
-            } else
-            {
-               channels = image.Split();
             }
 
             VectorOfERStat[] regionVecs = new VectorOfERStat[channels.Length];
             for (int i = 0; i < regionVecs.Length; i++)
                regionVecs[i] = new VectorOfERStat();
+
+            //for (int i = 0; i < channels.Length; i++)
+            //{
+            //   Emgu.CV.UI.ImageViewer.Show(channels[i]);
+            //}
 
             try
             {
@@ -2578,32 +2587,35 @@ namespace Emgu.CV.Test
                   er1.Run(channels[i], regionVecs[i]);
                   er2.Run(channels[i], regionVecs[i]);
                }
-               Rectangle[] regions = ERFilter.ERGrouping(channels, regionVecs, EmguAssert.GetFile("trained_classifier_erGrouping.xml"), 0.5f);
-
-               foreach (Rectangle rect in regions)
-                  image.Draw(rect, new Gray(0), 2);
-               //Emgu.CV.UI.ImageViewer.Show(image);
-
-               /*
-               MCvERStat[] regions = regionVec.ToArray();
-               Size size = image.Size;
-               foreach (MCvERStat region in regions)
+               using (VectorOfUMat vm = new VectorOfUMat(channels))
                {
-                  if (region.ParentPtr != IntPtr.Zero)
+                  Rectangle[] regions = ERFilter.ERGrouping(vm, regionVecs, EmguAssert.GetFile("trained_classifier_erGrouping.xml"), 0.5f);
+
+                  foreach (Rectangle rect in regions)
+                     image.Draw(rect, new Bgr(Color.Red), 2);
+                  //Emgu.CV.UI.ImageViewer.Show(image);
+
+                  /*
+                  MCvERStat[] regions = regionVec.ToArray();
+                  Size size = image.Size;
+                  foreach (MCvERStat region in regions)
                   {
-                     Point p = region.GetCenter(size.Width);
-                     int flags = 4 + (255<< 8) + (int)CvEnum.FLOODFILL_FLAG.FIXED_RANGE + (int)CvEnum.FLOODFILL_FLAG.MASK_ONLY;
-                     MCvConnectedComp comp;
-                     CvInvoke.cvFloodFill(image, p, new MCvScalar(255), new MCvScalar(region.Level), new MCvScalar(), out comp, flags, mask);
-                     image.Draw(new CircleF(new PointF(p.X, p.Y), 4), new Gray(0), 2);
-                  }
-               }*/
-               //UI.ImageViewer.Show(image.ConcateHorizontal(mask));
-               //}
+                     if (region.ParentPtr != IntPtr.Zero)
+                     {
+                        Point p = region.GetCenter(size.Width);
+                        int flags = 4 + (255<< 8) + (int)CvEnum.FLOODFILL_FLAG.FIXED_RANGE + (int)CvEnum.FLOODFILL_FLAG.MASK_ONLY;
+                        MCvConnectedComp comp;
+                        CvInvoke.cvFloodFill(image, p, new MCvScalar(255), new MCvScalar(region.Level), new MCvScalar(), out comp, flags, mask);
+                        image.Draw(new CircleF(new PointF(p.X, p.Y), 4), new Gray(0), 2);
+                     }
+                  }*/
+                  //UI.ImageViewer.Show(image.ConcateHorizontal(mask));
+                  //}
+               }
             }
             finally
             {
-               foreach (Image<Gray, byte> tmp in channels)
+               foreach (UMat tmp in channels)
                   if (tmp != null)
                      tmp.Dispose();
                foreach (VectorOfERStat tmp in regionVecs)

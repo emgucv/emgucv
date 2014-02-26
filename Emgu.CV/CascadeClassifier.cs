@@ -71,12 +71,31 @@ namespace Emgu.CV
          }
       }
 
+      public bool IsOldFormatCascade
+      {
+         get
+         {
+            return CvCascadeClassifierIsOldFormatCascade(_ptr);
+         }
+      }
+
+      public Size OriginalWindowSize
+      {
+         get
+         {
+            Size s = new Size();
+            CvCascadeClassifierGetOriginalWindowSize(_ptr, ref s);
+            return s;
+         }
+      }
+
       /// <summary>
       /// Release the CascadeClassifier Object and all the memory associate with it
       /// </summary>
       protected override void DisposeObject()
       {
-         CvCascadeClassifierRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CvCascadeClassifierRelease(ref _ptr);
       }
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -94,6 +113,13 @@ namespace Emgu.CV
          int minNeighbors, int flags,
          ref Size minSize,
          ref Size maxSize);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal extern static bool CvCascadeClassifierIsOldFormatCascade(IntPtr classifier);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void CvCascadeClassifierGetOriginalWindowSize(IntPtr classifier, ref Size size);
    }
 
 }

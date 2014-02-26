@@ -136,6 +136,10 @@ void cveCountNonZero(cv::_InputArray* src)
 {
    cv::countNonZero(*src);
 }
+void cveFindNonZero(cv::_InputArray* src, cv::_OutputArray* idx )
+{
+   cv::findNonZero(*src, *idx);
+}
 void cveMin(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst)
 {
    cv::min(*src1, *src2, *dst);
@@ -396,7 +400,41 @@ void cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* color, int
    cv::rectangle(*img, p1, p2, *color, thickness, lineType, shift);
 }
 
+void cveCircle(cv::_InputOutputArray* img, CvPoint* center, int radius, CvScalar* color, int thickness, int lineType, int shift)
+{
+   cv::circle(*img, *center, radius, *color, thickness, lineType, shift);
+}
+
 void cvePutText(cv::_InputOutputArray* img, const char* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin)
 {
    cv::putText(*img, text, *org, fontFace, fontScale, *color, thickness, lineType, bottomLeftOrigin);
+}
+
+void cvefillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift)
+{
+   cv::fillConvexPoly(*img, *points, *color, lineType, shift);
+}
+
+void cvefillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset)
+{
+   cv::fillPoly(*img, *pts, *color, lineType, shift, *offset);
+}
+
+void cvePolylines(cv::_InputOutputArray* img, cv::_InputArray* pts,
+                   bool isClosed, const CvScalar* color,
+                   int thickness, int lineType, int shift )
+{
+   cv::polylines(*img, *pts, isClosed, *color, thickness, lineType, shift);
+}
+
+void cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes,
+              double angle, double startAngle, double endAngle,
+              const CvScalar* color, int thickness, int lineType, int shift )
+{
+   cv::ellipse(*img, *center, *axes, angle, startAngle, endAngle, *color, thickness, lineType, shift);
+}
+
+double cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2)
+{
+   return cv::PSNR(*src1, *src2);
 }

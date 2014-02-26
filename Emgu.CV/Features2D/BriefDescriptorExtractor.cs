@@ -17,7 +17,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// BRIEF Descriptor
    /// </summary>
-   public class BriefDescriptorExtractor : UnmanagedObject, IDescriptorExtractor<Gray, Byte>
+   public class BriefDescriptorExtractor : UnmanagedObject, IDescriptorExtractor
    {
       static BriefDescriptorExtractor()
       {
@@ -42,7 +42,7 @@ namespace Emgu.CV.Features2D
             CvBriefDescriptorExtractorRelease(ref _ptr);
       }
 
-      IntPtr IDescriptorExtractor<Gray, Byte>.DescriptorExtratorPtr
+      IntPtr IDescriptorExtractor.DescriptorExtratorPtr
       {
          get { return _ptr; }
       }

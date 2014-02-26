@@ -20,17 +20,12 @@ namespace Emgu.CV
          CvInvoke.CheckLibraryLoaded();
       }
 
-      private MemStorage _storage;
-      private Seq<MCvPoint3D32f> _pointSeq;
-
       /// <summary>
       /// Create an empty Oct-Tree
       /// </summary>
       public Octree()
       {
          _ptr = CvOctreeCreate();
-         _storage = new MemStorage();
-         _pointSeq = new Seq<MCvPoint3D32f>(_storage);
       }
 
       /// <summary>
@@ -66,17 +61,11 @@ namespace Emgu.CV
       /// <returns>The points withing the specific sphere</returns>
       public MCvPoint3D32f[] GetPointsWithinSphere(MCvPoint3D32f center, float radius)
       {
-         CvOctreeGetPointsWithinSphere(_ptr, ref center, radius, _pointSeq);
-         return _pointSeq.ToArray();
-      }
-
-      /// <summary>
-      /// Release the managed memory associated with this Oct Tree
-      /// </summary>
-      protected override void ReleaseManagedResources()
-      {
-         _storage.Dispose();
-         base.ReleaseManagedResources();
+         using (Util.VectorOfPoint3D32F pts = new Util.VectorOfPoint3D32F())
+         {
+            CvOctreeGetPointsWithinSphere(_ptr, ref center, radius, pts);
+            return pts.ToArray();
+         }
       }
 
       /// <summary>
@@ -97,7 +86,7 @@ namespace Emgu.CV
       internal extern static void CvOctreeBuildTree(IntPtr tree, IntPtr points, int numberOfPoints, int maxLevels, int minPoints);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvOctreeGetPointsWithinSphere(IntPtr tree, ref MCvPoint3D32f center, float radius, IntPtr pointSeq);
+      internal extern static void CvOctreeGetPointsWithinSphere(IntPtr tree, ref MCvPoint3D32f center, float radius, IntPtr points);
    }
 
 }

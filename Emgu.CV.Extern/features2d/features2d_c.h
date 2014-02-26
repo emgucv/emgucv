@@ -18,7 +18,7 @@ CVAPI(cv::StarDetector*) CvStarDetectorCreate(int maxSize, int responseThreshold
 CVAPI(void) CvStarDetectorRelease(cv::StarDetector** detector);
 
 //FeatureDetector
-CVAPI(void) CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints);
+CVAPI(void) CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask);
 
 CVAPI(void) CvFeatureDetectorRelease(cv::FeatureDetector** detector);
 
@@ -89,7 +89,7 @@ CVAPI(void) CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArr
 
 CVAPI(void) CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
                    CvMat* trainIdx, CvMat* distance, int k,
-                   const CvMat* mask);
+                   cv::_InputArray* mask);
 
 /*
 CVAPI(void) CvDescriptorMatcherRadiusMatch(cv::DescriptorMatcher* matcher, const CvMat* queryDescriptors, 
@@ -114,7 +114,7 @@ CVAPI(cv::OpponentColorDescriptorExtractor*) CvOpponentColorDescriptorExtractorC
 CVAPI(void) CvOpponentColorDescriptorExtractorRelease(cv::OpponentColorDescriptorExtractor** extractor);
 
 //DescriptorExtractor
-CVAPI(void) CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, const IplImage* image,  std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors );
+CVAPI(void) CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, cv::_InputArray* image,  std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors );
 CVAPI(int) CvDescriptorExtractorGetDescriptorSize(cv::DescriptorExtractor* extractor);
 
 //BowKMeansTrainer

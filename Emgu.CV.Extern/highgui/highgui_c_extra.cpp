@@ -38,15 +38,22 @@ void OpenniGetColorPoints(CvCapture* capture, CvSeq* points, IplImage* maskImg)
    }
 }
 
+/*
 cv::Mat* cvMatCreateFromFile(char* fileName, int flags)
 {
    cv::Mat* m = new cv::Mat();
    cv::Mat tmp = cv::imread(fileName, flags);
    cv::swap(*m, tmp);
    return m;
-}
+}*/
 
 bool cveImwrite(const char* filename, cv::_InputArray* img, const std::vector<int>* params)
 {
    return cv::imwrite(filename, *img, params ? *params : std::vector<int>());
+}
+
+void cveImread(const char* fileName, int flags, cv::Mat* result)
+{
+   cv::Mat m = cv::imread(fileName, flags);
+   cv::swap(*result, m);
 }

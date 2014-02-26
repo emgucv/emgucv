@@ -149,31 +149,17 @@ namespace Emgu.CV
       /// <param name="scale">Isotropic scale factor</param>
       /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
       /// <returns>Pointer to the destination 2x3 matrix</returns>
-#if ANDROID
-      public static IntPtr cv2DRotationMatrix(
-          PointF center,
-          double angle,
-          double scale,
-          IntPtr mapMatrix)
+      public static void GetRotationMatrix2D(PointF center, double angle, double scale, IOutputArray mapMatrix)
       {
-         return cv2DRotationMatrix(center.X, center.Y, angle, scale, mapMatrix);
+         cveGetRotationMatrix2D(ref center, angle, scale, mapMatrix.OutputArrayPtr);
       }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveGetRotationMatrix2D(
+          ref PointF center,
+          double angle,
+          double scale,
+          IntPtr mapMatrix);
 
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr cv2DRotationMatrix(
-          float centerX,
-          float centerY,
-          double angle,
-          double scale,
-          IntPtr mapMatrix);
-#else
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cv2DRotationMatrix(
-          PointF center,
-          double angle,
-          double scale,
-          IntPtr mapMatrix);
-#endif
 
       /// <summary>
       /// Applies a perspective transformation to an image
@@ -535,7 +521,7 @@ namespace Emgu.CV
       public static extern void cvSmooth(
           IntPtr src,
           IntPtr dst,
-          CvEnum.SMOOTH_TYPE type,
+          CvEnum.SmoothType type,
           int param1,
           int param2,
           double param3,

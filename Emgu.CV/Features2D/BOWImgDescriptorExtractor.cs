@@ -21,8 +21,7 @@ namespace Emgu.CV.Features2D
    /// the image. The i-th bin of the histogram is a frequency of i-th word of the vocabulary in the given image.
    /// </summary>
    /// <typeparam name="T">The type of values in vocabulary</typeparam>
-   public class BOWImgDescriptorExtractor<T> : UnmanagedObject
-      where T: struct
+   public class BOWImgDescriptorExtractor: UnmanagedObject
    {
 
       /// <summary>
@@ -30,7 +29,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="descriptorExtractor">Descriptor extractor that is used to compute descriptors for an input image and its keypoints.</param>
       /// <param name="descriptorMatcher">Descriptor matcher that is used to find the nearest word of the trained vocabulary for each keypoint descriptor of the image.</param>
-      public BOWImgDescriptorExtractor(IDescriptorExtractor<Gray, T> descriptorExtractor, DescriptorMatcher descriptorMatcher)
+      public BOWImgDescriptorExtractor(IDescriptorExtractor descriptorExtractor, DescriptorMatcher descriptorMatcher)
       {
          _ptr = BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorCreate(descriptorExtractor.DescriptorExtratorPtr, descriptorMatcher);
       }

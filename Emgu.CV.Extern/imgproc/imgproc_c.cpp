@@ -283,3 +283,9 @@ double cveCompareHist(cv::_InputArray* h1, cv::_InputArray* h2, int method)
 {
    return cv::compareHist(*h1, *h2, method);
 }
+
+void cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D)
+{
+   cv::Mat r = cv::getRotationMatrix2D(*center, angle, scale);
+   r.copyTo(*rotationMatrix2D);
+}

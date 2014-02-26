@@ -25,7 +25,10 @@ CVAPI(void) OpenniGetColorPoints(
                                  IplImage* mask // CV_8UC1
                                  );
 
+/*
 CVAPI(cv::Mat*) cvMatCreateFromFile(char* fileName, int flags);
-
+*/
 CVAPI(bool) cveImwrite(const char* filename, cv::_InputArray* img, const std::vector<int>* params);
+
+CVAPI(void) cveImread(const char* fileName, int flags, cv::Mat* result);
 #endif

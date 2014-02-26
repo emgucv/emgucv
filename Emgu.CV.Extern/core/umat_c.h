@@ -25,4 +25,5 @@ CVAPI(int) cvUMatGetChannels(cv::UMat* mat);
 CVAPI(bool) cvUMatIsEmpty(cv::UMat* mat);
 CVAPI(void) cvUMatSetTo(cv::UMat* mat, cv::_InputArray* value, cv::_InputArray* mask);
 
+CVAPI(cv::UMat*) cvUMatReshape(cv::UMat* mat, int cn, int rows);
 #endif

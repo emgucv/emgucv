@@ -15,7 +15,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped ORB detector
    /// </summary>
-   public class ORBDetector : Feature2D<Byte>
+   public class ORBDetector : Feature2D
    {
       /// <summary>
       /// The score type

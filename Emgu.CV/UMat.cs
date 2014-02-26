@@ -217,6 +217,17 @@ namespace Emgu.CV
             return _inputOutputArrayPtr;
          }
       }
+
+      /// <summary>
+      /// Changes the shape and/or the number of channels of a 2D matrix without copying the data.
+      /// </summary>
+      /// <param name="cn">New number of channels. If the parameter is 0, the number of channels remains the same.</param>
+      /// <param name="rows">New number of rows. If the parameter is 0, the number of rows remains the same.</param>
+      /// <returns>A new mat header that has different shape</returns>
+      public UMat Reshape(int cn, int rows = 0)
+      {
+         return new UMat(UMatInvoke.cvUMatReshape(Ptr, cn, rows), true);
+      }
    }
 
    internal static class UMatInvoke
@@ -264,6 +275,10 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvUMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr, ref IntPtr matAllocator, ref IntPtr oclAllocator);
+
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvUMatReshape(IntPtr mat, int cn, int rows);
    }
 }
 

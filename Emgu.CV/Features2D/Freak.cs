@@ -24,7 +24,7 @@ namespace Emgu.CV.Features2D
    /// retinal sampling pattern. FREAKs are in general faster to compute with lower memory load and also more robust than
    /// SIFT, SURF or BRISK. They are competitive alternatives to existing keypoints in particular for embedded applications.
    /// </summary>
-   public class Freak : UnmanagedObject, IDescriptorExtractor<Gray, Byte>
+   public class Freak : UnmanagedObject, IDescriptorExtractor
    {
       static Freak()
       {
@@ -54,7 +54,7 @@ namespace Emgu.CV.Features2D
             CvFreakRelease(ref _ptr);
       }
 
-      IntPtr IDescriptorExtractor<Gray, Byte>.DescriptorExtratorPtr
+      IntPtr IDescriptorExtractor.DescriptorExtratorPtr
       {
          get { return _descriptorExtractorPtr; }
       }

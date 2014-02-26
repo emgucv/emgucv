@@ -117,11 +117,11 @@ namespace Emgu.CV.Cuda
          double scale,
          int groupThreshold)
       {
-         using (MemStorage storage = new MemStorage())
+         using (Util.VectorOfRect vr = new VectorOfRect())
          {
-            Seq<Rectangle> rectSeq = new Seq<Rectangle>(storage);
-            CudaInvoke.cudaHOGDescriptorDetectMultiScale(_ptr, image, rectSeq, hitThreshold, ref winStride, ref padding, scale, groupThreshold);
-            return rectSeq.ToArray();
+            //Seq<Rectangle> rectSeq = new Seq<Rectangle>(storage);
+            CudaInvoke.cudaHOGDescriptorDetectMultiScale(_ptr, image, vr.Ptr, hitThreshold, ref winStride, ref padding, scale, groupThreshold);
+            return vr.ToArray();
          }
       }
 

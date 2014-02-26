@@ -103,10 +103,16 @@ namespace Emgu.CV
       /// <param name="filename">The name of the file to be loaded</param>
       /// <param name="loadType">The image loading type</param>
       /// <returns>The loaded image</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvLoadImage(
+      public static Mat Imread(String filename, CvEnum.LoadImageType loadType)
+      {
+         return new Mat(filename, loadType);
+      }
+      
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveImread(
          [MarshalAs(StringMarshalType)] String filename,
-         CvEnum.LoadImageType loadType);
+         CvEnum.LoadImageType loadType, 
+         IntPtr result);
 
       /// <summary>
       /// Saves the image to the specified file. The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format

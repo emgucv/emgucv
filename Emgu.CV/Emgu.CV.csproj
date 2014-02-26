@@ -120,7 +120,7 @@
     <Compile Include="MatDataAllocator.cs" />
     <Compile Include="OclDevice.cs" />
     <Compile Include="OclPlatformInfo.cs" />
-    <Compile Include="PInvoke\VectorOfDouble.cs" />
+    <Compile Include="PInvoke\CvInvokeOptim.cs" />
     <Compile Include="StereoMatcherExtensions.cs" />
     <Compile Include="UMat.cs" />
     <Compile Include="Util\IInputArray.cs" />
@@ -178,6 +178,7 @@
     <Compile Include="Util\DataLogger.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
+    <Compile Include="Util\VectorOfDouble.cs" />
     <Compile Include="Util\VectorOfERStat.cs" />
     <Compile Include="Util\VectorOfInt.cs" />
     <Compile Include="Util\VectorOfByte.cs" />

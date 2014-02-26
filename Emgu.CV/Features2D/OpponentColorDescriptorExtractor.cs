@@ -21,16 +21,15 @@ namespace Emgu.CV.Features2D
    /// channels and concatenates them into a single color descriptor.
    /// </summary>
    /// <typeparam name="TDescriptor">The type of descriptor</typeparam>
-   public class OpponentColorDescriptorExtractor<TDescriptor> : UnmanagedObject, IDescriptorExtractor<Bgr, TDescriptor>
-            where TDescriptor : struct
+   public class OpponentColorDescriptorExtractor : UnmanagedObject, IDescriptorExtractor
    {
-      private IDescriptorExtractor<Gray, TDescriptor> _baseExtractor;
+      private IDescriptorExtractor _baseExtractor;
 
       /// <summary>
       /// Create a opponent Color descriptor extractor
       /// </summary>
       /// <param name="extractor">The base descriptor extractor</param>
-      public OpponentColorDescriptorExtractor(IDescriptorExtractor<Gray, TDescriptor> extractor)
+      public OpponentColorDescriptorExtractor(IDescriptorExtractor extractor)
       {
          _baseExtractor = extractor;
          _ptr = CvInvoke.CvOpponentColorDescriptorExtractorCreate(extractor.DescriptorExtratorPtr);
@@ -44,7 +43,7 @@ namespace Emgu.CV.Features2D
          CvInvoke.CvOpponentColorDescriptorExtractorRelease(ref _ptr);
       }
 
-      IntPtr IDescriptorExtractor<Bgr, TDescriptor>.DescriptorExtratorPtr
+      IntPtr IDescriptorExtractor.DescriptorExtratorPtr
       {
          get { return _ptr; }
       }

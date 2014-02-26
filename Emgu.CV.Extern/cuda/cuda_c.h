@@ -149,7 +149,7 @@ CVAPI(void) cudaHOGDescriptorRelease(cv::cuda::HOGDescriptor** descriptor);
 CVAPI(void) cudaHOGDescriptorDetectMultiScale(
    cv::cuda::HOGDescriptor* descriptor, 
    cv::cuda::GpuMat* img, 
-   CvSeq* foundLocations,
+   std::vector<cv::Rect>* foundLocations,
    double hitThreshold, 
    emgu::size* winStride,
    emgu::size* padding, 

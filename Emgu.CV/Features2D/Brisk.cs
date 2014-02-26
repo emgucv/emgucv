@@ -15,7 +15,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// BRISK: Binary Robust Invariant Scalable Keypoints
    /// </summary>
-   public class Brisk : Feature2D<byte>
+   public class Brisk : Feature2D
    {
       static Brisk()
       {

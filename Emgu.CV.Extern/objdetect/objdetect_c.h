@@ -35,8 +35,9 @@ CVAPI(void) CvHOGDescriptorRelease(cv::HOGDescriptor* descriptor);
 
 CVAPI(void) CvHOGDescriptorDetectMultiScale(
    cv::HOGDescriptor* descriptor, 
-   CvArr* img, 
-   CvSeq* foundLocations,
+   cv::_InputArray* img, 
+   std::vector<cv::Rect>* foundLocations,
+   std::vector<double>* weights,
    double hitThreshold, 
    CvSize* winStride,
    CvSize* padding, 
@@ -46,11 +47,11 @@ CVAPI(void) CvHOGDescriptorDetectMultiScale(
 
 CVAPI(void) CvHOGDescriptorCompute(
     cv::HOGDescriptor *descriptor,
-    CvArr *img, 
+    cv::_InputArray* img, 
     std::vector<float> *descriptors,
     CvSize* winStride,
     CvSize* padding,
-    CvSeq* locationSeq);
+    std::vector< cv::Point >* locations);
 
 
 /*
@@ -72,7 +73,6 @@ CVAPI(void) cvHOGDescriptorDetect(
 
 CVAPI(unsigned int) CvHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor);
 
-
 CVAPI(cv::CascadeClassifier*) CvCascadeClassifierCreate(char* fileName);
 CVAPI(void) CvCascadeClassifierRelease(cv::CascadeClassifier** classifier);
 CVAPI(void) CvCascadeClassifierDetectMultiScale( 
@@ -83,6 +83,8 @@ CVAPI(void) CvCascadeClassifierDetectMultiScale(
    int minNeighbors, int flags,
    CvSize* minSize,
    CvSize* maxSize); 
+CVAPI(bool) CvCascadeClassifierIsOldFormatCascade(cv::CascadeClassifier* classifier);
+CVAPI(void) CvCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier, CvSize* size);
 
 //ERFilter
 CVAPI(cv::ERFilter*) CvERFilterNM1Create(
@@ -97,6 +99,6 @@ CVAPI(cv::ERFilter*) CvERFilterNM2Create(const char* classifier, float minProbab
 CVAPI(void) CvERFilterRelease(cv::ERFilter** filter);
 CVAPI(void) CvERFilterRun(cv::ERFilter* filter, cv::_InputArray* image, std::vector<cv::ERStat>* regions);
 
-CVAPI(void) CvERGrouping(IplImage** channels, std::vector<cv::ERStat>** regions, int count, const char* fileName, float minProbability, std::vector<cv::Rect>* groups);
+CVAPI(void) CvERGrouping(cv::_InputArray* channels, std::vector<cv::ERStat>** regions, int count, const char* fileName, float minProbability, std::vector<cv::Rect>* groups);
 
 #endif

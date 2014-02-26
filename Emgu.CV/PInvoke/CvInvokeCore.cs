@@ -510,7 +510,7 @@ namespace Emgu.CV
       /// <param name="src">The source array</param>
       /// <param name="dst">The destination array</param>
       /// <param name="mask">The optional mask for the operation, use null to ignore</param>
-      public static void BitwiseNot(IInputArray src, IOutputArray dst, IOutputArray mask)
+      public static void BitwiseNot(IInputArray src, IOutputArray dst, IOutputArray mask = null)
       {
          cveBitwiseNot(src.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.OutputArrayPtr);
       }
@@ -545,6 +545,21 @@ namespace Emgu.CV
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int cveCountNonZero(IntPtr arr);
+
+      public static void FindNonZero(IInputArray src, IOutputArray idx)
+      {
+         cveFindNonZero(src.InputArrayPtr, idx.OutputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveFindNonZero(IntPtr src, IntPtr idx);
+
+
+      public static double PSNR(IInputArray src1, IInputArray src2)
+      {
+         return cvePSNR(src1.InputArrayPtr, src2.InputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern double cvePSNR(IntPtr src1, IntPtr src2);
 
       /// <summary>
       /// Calculates per-element minimum of two arrays:
@@ -1597,7 +1612,7 @@ namespace Emgu.CV
       /// CV_AA - antialiased line. 
       /// </param>
       /// <param name="shift">Number of fractional bits in the point coordinates</param>
-      public static void Line(IInputOutputArray img, Point pt1, Point pt2, MCvScalar color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
+      public static void Line(IInputOutputArray img, Point pt1, Point pt2, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
          cveLine(img.InputOutputArrayPtr, ref pt1, ref pt2, ref color, thickness, lineType, shift);
       }
@@ -1627,119 +1642,18 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the polyline edges</param>
       /// <param name="lineType">Type of the line segments, see cvLine description</param>
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
-#if ANDROID
-      private static void cvPolyLine(
-         IntPtr img,
-         IntPtr pts,
-         IntPtr npts,
-         int contours,
-         int isClosed,
-         MCvScalar color,
-         int thickness,
-         CvEnum.LineType lineType,
-         int shift)
+      public static void Polylines(IInputOutputArray img, IInputArray pts, bool isClosed, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-         cvPolyLine(img, pts, npts, contours, isClosed, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+         cvePolylines(img.InputOutputArrayPtr, pts.InputArrayPtr, isClosed, ref color, thickness, lineType, shift);
       }
 
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvPolyLine(IntPtr img, IntPtr pts, IntPtr npts, int coutours, int isClosed, double c0, double c1, double c2, double c3, int thickness, CvEnum.LineType lineType, int shift);
-
-#else
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvPolyLine(
-         IntPtr img,
-         IntPtr pts,
-         IntPtr npts,
-         int contours,
-         int isClosed,
-         MCvScalar color,
-         int thickness,
-         CvEnum.LineType lineType,
-         int shift);
-#endif
-
-      /// <summary>
-      /// Draws a single or multiple polygonal curves
-      /// </summary>
-      /// <param name="img">Image</param>
-      /// <param name="pts">Array of pointers to polylines</param>
-      /// <param name="npts">Array of polyline vertex counters</param>
-      /// <param name="contours">Number of polyline contours</param>
-      /// <param name="isClosed">
-      /// Indicates whether the polylines must be drawn closed. 
-      /// If true, the function draws the line from the last vertex of every contour to the first vertex.
-      /// </param>
-      /// <param name="color">Polyline color</param>
-      /// <param name="thickness">Thickness of the polyline edges</param>
-      /// <param name="lineType">Type of the line segments, see cvLine description</param>
-      /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
-      public static void cvPolyLine(
-         IntPtr img,
-         IntPtr[] pts,
-         int[] npts,
-         int contours,
-         bool isClosed,
-         MCvScalar color,
-         int thickness,
-         CvEnum.LineType lineType,
-         int shift)
-      {
-         GCHandle h0 = GCHandle.Alloc(pts, GCHandleType.Pinned);
-         GCHandle h1 = GCHandle.Alloc(npts, GCHandleType.Pinned);
-         cvPolyLine(img, h0.AddrOfPinnedObject(), h1.AddrOfPinnedObject(), contours, isClosed ? 1 : 0, color, thickness, lineType, shift);
-         h0.Free();
-         h1.Free();
-      }
-
-      /// <summary>
-      /// Draws a rectangle with two opposite corners pt1 and pt2
-      /// </summary>
-      /// <param name="img">Image</param>
-      /// <param name="pt1">A rectangle vertex</param>
-      /// <param name="pt2">Opposite rectangle vertex</param>
-      /// <param name="color">Line color </param>
-      /// <param name="thickness">Thickness of lines that make up the rectangle. Negative values make the function to draw a filled rectangle.</param>
-      /// <param name="lineType">Type of the line</param>
-      /// <param name="shift">Number of fractional bits in the point coordinates</param>
-#if ANDROID
-      public static void cvRectangle(
-         IntPtr img,
-         Point pt1,
-         Point pt2,
-         MCvScalar color,
-         int thickness, 
-         CvEnum.LineType lineType,
-         int shift)
-      {
-         cvRectangle(img, pt1.X, pt1.Y, pt2.X, pt2.Y, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
-      }
-
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvRectangle(
-         IntPtr img,
-         int pt1X,
-         int pt1Y,
-         int pt2X,
-         int pt2Y,
-         double c0,
-         double c1, 
-         double c2,
-         double c3,
-         int thickness, 
-         CvEnum.LineType lineType,
-         int shift);
-#else
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvRectangle(
-         IntPtr img,
-         Point pt1,
-         Point pt2,
-         MCvScalar color,
-         int thickness, 
-         CvEnum.LineType lineType,
-         int shift);
-#endif
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void  cvePolylines(
+         IntPtr img, IntPtr pts,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool isClosed, 
+         ref MCvScalar color,
+         int thickness, CvEnum.LineType lineType, int shift );
 
       /// <summary>
       /// Draws a rectangle specified by a CvRect structure
@@ -1750,27 +1664,12 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines that make up the rectangle. Negative values make the function to draw a filled rectangle.</param>
       /// <param name="lineType">Type of the line</param>
       /// <param name="shift">Number of fractional bits in the point coordinates</param>
-#if ANDROID
-      public static void cvRectangleR(IntPtr img, Rectangle rect,
-                           MCvScalar color, int thickness,
-                           CvEnum.LineType lineType,
-                           int shift)
+      public static void Rectangle(IInputOutputArray img, Rectangle rect, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-         cvRectangleR(img, rect.X, rect.Y, rect.Width, rect.Height, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+         cveRectangle(img.InputOutputArrayPtr, ref rect, ref color, thickness, lineType, shift);
       }
-
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvRectangleR(IntPtr img, int rectX, int rectY, int rectWidth, int rectHeight,
-                           double c0, double c1, double c2, double c3, int thickness,
-                           CvEnum.LineType lineType,
-                           int shift);
-#else
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvRectangleR(IntPtr img, Rectangle rect,
-                           MCvScalar color, int thickness,
-                           CvEnum.LineType lineType,
-                           int shift);
-#endif
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveRectangle(IntPtr img, ref Rectangle rect, ref MCvScalar color, int thickness, CvEnum.LineType lineType, int shift);
 
       #region Accessing Elements and sub-Arrays
       /// <summary>
@@ -1869,43 +1768,19 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the circle outline if positive, otherwise indicates that a filled circle has to be drawn</param>
       /// <param name="lineType">Type of the circle boundary</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
-#if ANDROID
-      public static void cvCircle(
-         IntPtr img,
-         Point center,
-         int radius,
-         MCvScalar color,
-         int thickness,
-         CvEnum.LineType lineType,
-         int shift)
+      public static void Circle(IInputOutputArray img, Point center, int radius, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-         cvCircle(img, center.X, center.Y, radius, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+         cveCircle(img.InputOutputArrayPtr, ref center, radius, ref color, thickness, lineType, shift);
       }
-
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvCircle(
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveCircle(
          IntPtr img,
-         int centerX,
-         int centerY,
+         ref Point center,
          int radius,
-         double c0,
-         double c1, 
-         double c2, 
-         double c3,
+         ref MCvScalar color,
          int thickness,
          CvEnum.LineType lineType,
          int shift);
-#else
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvCircle(
-         IntPtr img,
-         Point center,
-         int radius,
-         MCvScalar color,
-         int thickness,
-         CvEnum.LineType lineType,
-         int shift);
-#endif
 
       /// <summary>
       /// Divides a multi-channel array into separate single-channel arrays. Two modes are available for the operation. If the source array has N channels then if the first N destination channels are not IntPtr.Zero, all they are extracted from the source array, otherwise if only a single destination channel of the first N is not IntPtr.Zero, this particular channel is extracted, otherwise an error is raised. Rest of destination channels (beyond the first N) must always be IntPtr.Zero. For IplImage cvCopy with COI set can be also used to extract a single channel from the image
@@ -1946,53 +1821,15 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the ellipse arc</param>
       /// <param name="lineType">Type of the ellipse boundary</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and axes' values</param>
-#if ANDROID
-      public static void cvEllipse(
-          IntPtr img,
-          Point center,
-          Size axes,
-          double angle,
-          double startAngle,
-          double endAngle,
-          MCvScalar color,
-          int thickness,
-          CvEnum.LineType lineType,
-          int shift)
+      public static void Ellipse(IInputOutputArray img, Point center, Size axes, double angle, double startAngle, double endAngle, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-         cvEllipse(img, center.X, center.Y, axes.Width, axes.Height, angle, startAngle, endAngle, color.v0, color.v1, color.v2, color.v3, thickness, lineType, shift);
+         cveEllipse(img.InputOutputArrayPtr,  ref center, ref axes, angle, startAngle, endAngle, ref color, thickness, lineType, shift);
       }
-      
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvEllipse(
-         IntPtr img,
-         int centerX,
-         int centerY,
-         int axesW,
-         int axesH,
-         double angle,
-         double startAngle,
-         double endAngle,
-         double c0,
-         double c1, 
-         double c2,
-         double c3,
-         int thickness,
-         CvEnum.LineType lineType,
-         int shift);
-#else
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvEllipse(
-          IntPtr img,
-          Point center,
-          Size axes,
-          double angle,
-          double startAngle,
-          double endAngle,
-          MCvScalar color,
-          int thickness,
-          CvEnum.LineType lineType,
-          int shift);
-#endif
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveEllipse(IntPtr img, ref Point center, ref Size axes,
+              double angle, double startAngle, double endAngle,
+              ref MCvScalar color, int thickness, CvEnum.LineType lineType, int shift);
+
 
       /// <summary>
       /// Draws a simple or thick elliptic arc or fills an ellipse sector. The arc is clipped by ROI rectangle. A piecewise-linear approximation is used for antialiased arcs and thick arcs. All the angles are given in degrees.
@@ -2003,19 +1840,19 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of the ellipse arc</param>
       /// <param name="lineType">Type of the ellipse boundary</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and axes' values</param>
-      public static void cvEllipseBox(
-          IntPtr img,
+      public static void Ellipse(
+          IInputOutputArray img,
           MCvBox2D box,
           MCvScalar color,
-          int thickness,
-          CvEnum.LineType lineType,
-          int shift)
+          int thickness = 1,
+          CvEnum.LineType lineType = CvEnum.LineType.EightConnected,
+          int shift = 0)
       {
          Size axes = new Size();
          axes.Width = (int) Math.Round(box.size.Height * 0.5);
          axes.Height = (int) Math.Round(box.size.Width * 0.5);
 
-         cvEllipse(img, Point.Round(box.center), axes, box.angle, 0, 360, color, thickness, lineType, shift);
+         Ellipse(img, Point.Round(box.center), axes, box.angle, 0, 360, color, thickness, lineType, shift);
       }
 
       /// <summary>
@@ -2047,6 +1884,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvConvertScale(IntPtr src, IntPtr dst, double scale, double shift);
 
+      /*
       /// <summary>
       /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
       /// dst(I)=src(I)*scale + (shift,shift,...)
@@ -2060,7 +1898,7 @@ namespace Emgu.CV
       /// <param name="shift">Value added to the scaled source array elements</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvConvertScale")]
       public static extern void cvCvtScale(IntPtr src, IntPtr dst, double scale, double shift);
-
+     
       /// <summary>
       /// Same as cvConvertScale(src, dest, 1, 0);
       /// </summary>
@@ -2069,7 +1907,7 @@ namespace Emgu.CV
       public static void cvConvert(IntPtr src, IntPtr dest)
       {
          cvConvertScale(src, dest, 1, 0);
-      }
+      }*/
 
       /// <summary>
       /// Similar to cvCvtScale but it stores absolute values of the conversion results:
@@ -2097,7 +1935,7 @@ namespace Emgu.CV
       /// <param name="arr">The array</param>
       /// <param name="mask">The optional operation mask</param>
       /// <returns>average (mean) of array elements</returns>
-      public static MCvScalar Mean(IInputArray arr, IInputArray mask)
+      public static MCvScalar Mean(IInputArray arr, IInputArray mask = null)
       {
          MCvScalar result = new MCvScalar();
          cveMean(arr.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, ref result);
@@ -2182,12 +2020,12 @@ namespace Emgu.CV
       /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="type">The reduction operation type</param>
       /// <param name="dtype">Optional depth type of the output array</param>
-      public static void Reduce(IInputArray src, IOutputArray dst, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType type, CvEnum.DepthType dtype)
+      public static void Reduce(IInputArray src, IOutputArray dst, CvEnum.ReduceDimension dim = CvEnum.ReduceDimension.Auto, CvEnum.ReduceType type = CvEnum.ReduceType.ReduceSum, CvEnum.DepthType dtype = CvEnum.DepthType.Default)
       {
          cveReduce(src.InputArrayPtr, dst.OutputArrayPtr, dim, type, dtype);
       }
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveReduce(IntPtr src, IntPtr dst, CvEnum.REDUCE_DIMENSION dim, CvEnum.ReduceType type, CvEnum.DepthType dtype);
+      private static extern void cveReduce(IntPtr src, IntPtr dst, CvEnum.ReduceDimension dim, CvEnum.ReduceType type, CvEnum.DepthType dtype);
       #endregion
 
       /// <summary>
@@ -2259,39 +2097,32 @@ namespace Emgu.CV
       /// <param name="color">Polygon color</param>
       /// <param name="lineType">Type of the polygon boundaries</param>
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
-#if ANDROID
-      public static void cvFillConvexPoly(
-         IntPtr img,
-         Point[] pts,
-         int npts,
-         MCvScalar color,
-         CvEnum.LineType lineType,
-         int shift)
+      public static void FillConvexPoly(IInputOutputArray img, IInputArray points, MCvScalar color, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-         cvFillConvexPoly(img, pts, npts, color.v0, color.v1, color.v2, color.v3, lineType, shift);
+         cveFillConvexPoly(img.InputOutputArrayPtr, points.InputArrayPtr, ref color, lineType, shift);
       }
 
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvFillConvexPoly(
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveFillConvexPoly(
          IntPtr img,
-         Point[] pts,
-         int npts,
-         double c0,
-         double c1,
-         double c2, 
-         double c3,
+         IntPtr pts,
+         ref MCvScalar color,
          CvEnum.LineType lineType,
          int shift);
-#else
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvFillConvexPoly(
+
+      public static void FillPoly(IInputOutputArray img, IInputArray points, MCvScalar color, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0, Point offset = new Point())
+      {
+         cveFillPoly(img.InputOutputArrayPtr, points.InputArrayPtr, ref color, lineType, shift, ref offset);
+      }
+
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveFillPoly(
          IntPtr img,
-         Point[] pts,
-         int npts,
-         MCvScalar color,
+         IntPtr pts,
+         ref MCvScalar color,
          CvEnum.LineType lineType,
-         int shift);
-#endif
+         int shift,
+         ref Point offset);
 
       #region Text
       /// <summary>

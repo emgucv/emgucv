@@ -60,7 +60,7 @@ namespace Emgu.CV
       /// <param name="scale">Isotropic scale factor.</param>
       public void SetRotation(PointF center, double angle, double scale)
       {
-         CvInvoke.cv2DRotationMatrix(center, angle, scale, Ptr);
+         CvInvoke.GetRotationMatrix2D(center, angle, scale, this);
       }
 
       /// <summary>

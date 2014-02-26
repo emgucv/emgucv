@@ -17,7 +17,7 @@ CVAPI(cv::Octree*) CvOctreeCreate();
 
 CVAPI(void) CvOctreeBuildTree(cv::Octree* tree, cv::Point3f* points, int numberOfPoints, int maxLevels, int minPoints );
 
-CVAPI(void) CvOctreeGetPointsWithinSphere(cv::Octree* tree, cv::Point3f* center, float radius, CvSeq* pointSeq );
+CVAPI(void) CvOctreeGetPointsWithinSphere(cv::Octree* tree, cv::Point3f* center, float radius, std::vector<cv::Point3f>* points );
 
 CVAPI(void) CvOctreeRelease(cv::Octree* tree);
 
@@ -46,8 +46,8 @@ CVAPI(void) CvLevMarqSparseAdjustBundle(int numberOfFrames, int pointCount, CvPo
 CVAPI(void) CvReleaseLevMarqSparse(cv::LevMarqSparse** levMarq);
 
 //ChamferMatching
-CVAPI(int) cvChamferMatching( 
-   IplImage* img, IplImage* templ,
+CVAPI(int) cveChamferMatching( 
+   cv::Mat* img, cv::Mat* templ,
    std::vector< std::vector<cv::Point> >* results, std::vector<float>* cost,
    double templScale, int maxMatches,
    double minMatchDistance, int padX,
@@ -57,6 +57,6 @@ CVAPI(int) cvChamferMatching(
 //SelfSimDescriptor
 CVAPI(cv::SelfSimDescriptor*) CvSelfSimDescriptorCreate(int smallSize,int largeSize, int startDistanceBucket, int numberOfDistanceBuckets, int numberOfAngles);
 CVAPI(void) CvSelfSimDescriptorRelease(cv::SelfSimDescriptor* descriptor);
-CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, IplImage* image, std::vector<float>* descriptors, cv::Size* winStride, cv::Point* locations, int numberOfLocation);
+CVAPI(void) CvSelfSimDescriptorCompute(cv::SelfSimDescriptor* descriptor, cv::Mat* image, std::vector<float>* descriptors, cv::Size* winStride, std::vector<  cv::Point >* locations);
 CVAPI(int) CvSelfSimDescriptorGetDescriptorSize(cv::SelfSimDescriptor* descriptor);
 #endif

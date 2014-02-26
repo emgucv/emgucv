@@ -95,20 +95,20 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Type used for cvReduce function
    /// </summary>
-   public enum REDUCE_DIMENSION
+   public enum ReduceDimension
    {
       /// <summary>
       /// The matrix is reduced to a single row
       /// </summary>
-      SINGLE_ROW = 0,
+      SingleRow = 0,
       /// <summary>
       /// The matrix is reduced to a single column
       /// </summary>
-      SINGLE_COL = 1,
+      SingleCol = 1,
       /// <summary>
       /// The dimension is chosen automatically by analysing the dst size
       /// </summary>
-      AUTO = -1,
+      Auto = -1,
    }
 
    /// <summary>
@@ -1448,6 +1448,7 @@ namespace Emgu.CV.CvEnum
       COLORCVT_MAX = 139
    }
 
+   /*
    /// <summary>
    /// Type for cvPyrUp(cvPryDown)
    /// </summary>
@@ -1457,7 +1458,7 @@ namespace Emgu.CV.CvEnum
       /// 
       /// </summary>
       CV_GAUSSIAN_5x5 = 7
-   }
+   }*/
 
    /// <summary>
    /// Fonts
@@ -1608,28 +1609,28 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Interpolation type
    /// </summary>
-   public enum SMOOTH_TYPE
+   public enum SmoothType
    {
       /// <summary>
       /// (simple blur with no scaling) - summation over a pixel param1xparam2 neighborhood. If the neighborhood size may vary, one may precompute integral image with cvIntegral function
       /// </summary>
-      CV_BLUR_NO_SCALE = 0,
+      BlurNoScale = 0,
       /// <summary>
       /// (simple blur) - summation over a pixel param1xparam2 neighborhood with subsequent scaling by 1/(param1xparam2). 
       /// </summary>
-      CV_BLUR = 1,
+      Blur = 1,
       /// <summary>
       /// (gaussian blur) - convolving image with param1xparam2 Gaussian kernel. 
       /// </summary>
-      CV_GAUSSIAN = 2,
+      Gaussian = 2,
       /// <summary>
       /// (median blur) - finding median of param1xparam1 neighborhood (i.e. the neighborhood is square). 
       /// </summary>
-      CV_MEDIAN = 3,
+      Median = 3,
       /// <summary>
       /// (bilateral filter) - applying bilateral 3x3 filtering with color sigma=param1 and space sigma=param2. Information about bilateral filtering can be found 
       /// </summary>
-      CV_BILATERAL = 4
+      Bilateral = 4
    }
 
    /// <summary>

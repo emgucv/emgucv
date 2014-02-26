@@ -75,3 +75,11 @@ void cvUMatSetTo(cv::UMat* mat, cv::_InputArray* value, cv::_InputArray* mask)
 {
    mat->setTo(*value, mask ? *mask : (cv::InputArray) cv::noArray());
 }
+
+cv::UMat* cvUMatReshape(cv::UMat* mat, int cn, int rows)
+{
+   cv::UMat* result = new cv::UMat();
+   cv::UMat m = mat->reshape(cn, rows);
+   cv::swap(m, *result);
+   return result;
+}

@@ -67,8 +67,10 @@ namespace Emgu.CV.Cuda
       protected override void DisposeObject()
       {
          CudaInvoke.cudaCascadeClassifierRelease(ref _ptr);
-         _buffer.Dispose();
-         _stor.Dispose();
+         if (_buffer != null)
+            _buffer.Dispose();
+         if (_stor != null)
+            _stor.Dispose();
       }
 
       /*

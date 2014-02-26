@@ -28,9 +28,9 @@ namespace Emgu.CV.Flann
       /// </summary>
       /// <param name="numberOfKDTrees">The number of KDTrees to be used</param>
       /// <param name="values">A row by row matrix of descriptors</param>
-      public Index(Matrix<float> values, int numberOfKDTrees)
+      public Index(IInputArray values, int numberOfKDTrees)
       {
-         _ptr = CvFlannIndexCreateKDTree(values, numberOfKDTrees);
+         _ptr = CvFlannIndexCreateKDTree(values.InputArrayPtr, numberOfKDTrees);
       }
 
       /// <summary>
@@ -40,9 +40,9 @@ namespace Emgu.CV.Flann
       /// <param name="tableNumber">The number of hash tables to use (between 10 and 30 usually).</param>
       /// <param name="keySize">The size of the hash key in bits (between 10 and 20 usually).</param>
       /// <param name="multiProbeLevel">The number of bits to shift to check for neighboring buckets (0 is regular LSH, 2 is recommended).</param>
-      public Index(Matrix<float> values, int tableNumber, int keySize, int multiProbeLevel)
+      public Index(IInputArray values, int tableNumber, int keySize, int multiProbeLevel)
       {
-         _ptr = CvFlannIndexCreateLSH(values, tableNumber, keySize, multiProbeLevel);
+         _ptr = CvFlannIndexCreateLSH(values.InputArrayPtr, tableNumber, keySize, multiProbeLevel);
       }
 
       /// <summary>
@@ -54,9 +54,9 @@ namespace Emgu.CV.Flann
       /// <param name="iterations">Max iterations to perform in one kmeans clustering (kmeans tree), use 11 for deafault</param>
       /// <param name="centersInitType">Algorithm used for picking the initial cluster centers for kmeans tree, use RANDOM for default</param>
       /// <param name="cbIndex">Cluster boundary index. Used when searching the kmeans tree. Use 0.2 for default</param>
-      public Index(Matrix<float> values, int numberOfKDTrees, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
+      public Index(IInputArray values, int numberOfKDTrees, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
       {
-         _ptr = CvFlannIndexCreateComposite(values, numberOfKDTrees, branching, iterations, centersInitType, cbIndex);
+         _ptr = CvFlannIndexCreateComposite(values.InputArrayPtr, numberOfKDTrees, branching, iterations, centersInitType, cbIndex);
       }
 
       /// <summary>
@@ -67,18 +67,18 @@ namespace Emgu.CV.Flann
       /// <param name="iterations">Max iterations to perform in one kmeans clustering (kmeans tree), use 11 for deafault</param>
       /// <param name="centersInitType">Algorithm used for picking the initial cluster centers for kmeans tree, use RANDOM for default</param>
       /// <param name="cbIndex">Cluster boundary index. Used when searching the kmeans tree. Use 0.2 for default</param>
-      public Index(Matrix<float> values, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
+      public Index(IInputArray values, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
       {
-         _ptr = CvFlannIndexCreateKMeans(values, branching, iterations, centersInitType, cbIndex);
+         _ptr = CvFlannIndexCreateKMeans(values.InputArrayPtr, branching, iterations, centersInitType, cbIndex);
       }
 
       /// <summary>
       /// Create a linear flann index
       /// </summary>
       /// <param name="values">A row by row matrix of descriptors</param>
-      public Index(Matrix<float> values)
+      public Index(IInputArray values)
       {
-         _ptr = CvFlannIndexCreateLinear(values);
+         _ptr = CvFlannIndexCreateLinear(values.InputArrayPtr);
       }
 
       /// <summary>
@@ -89,9 +89,9 @@ namespace Emgu.CV.Flann
       /// <param name="buildWeight">build tree time weighting factor, use 0.01 if not sure</param>
       /// <param name="memoryWeight">index memory weighting factor, use 0 if not sure</param>
       /// <param name="sampleFraction">what fraction of the dataset to use for autotuning, use 0.1 if not sure</param>
-      public Index(Matrix<float> values, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction)
+      public Index(IInputArray values, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction)
       {
-         _ptr = CvFlannIndexCreateAutotuned(values, targetPrecision, buildWeight, memoryWeight, sampleFraction);
+         _ptr = CvFlannIndexCreateAutotuned(values.InputArrayPtr, targetPrecision, buildWeight, memoryWeight, sampleFraction);
       }
       #endregion
 
@@ -107,9 +107,9 @@ namespace Emgu.CV.Flann
       /// time. If automatic configuration was used when the index was created, the number of
       /// checks required to achieve the specified precision was also computed, in which case
       /// this parameter is ignored </param>
-      public void KnnSearch(Matrix<float> queries, Matrix<int> indices, Matrix<float> squareDistances, int knn, int checks)
+      public void KnnSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, int knn, int checks)
       {
-         CvFlannIndexKnnSearch(_ptr, queries, indices, squareDistances, knn, checks);
+         CvFlannIndexKnnSearch(_ptr, queries.InputArrayPtr, indices.OutputArrayPtr, squareDistances.OutputArrayPtr, knn, checks);
       }
 
       /// <summary>
@@ -125,9 +125,9 @@ namespace Emgu.CV.Flann
       /// checks required to achieve the specified precision was also computed, in which case
       /// this parameter is ignored </param>
       /// <returns>The number of points in the search radius</returns>
-      public int RadiusSearch(Matrix<float> queries, Matrix<int> indices, Matrix<float> squareDistances, float radius, int checks)
+      public int RadiusSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, float radius, int maxResults, int checks)
       {
-         return CvFlannIndexRadiusSearch(_ptr, queries, indices, squareDistances, radius, checks);
+         return CvFlannIndexRadiusSearch(_ptr, queries.InputArrayPtr, indices.OutputArrayPtr, squareDistances.OutputArrayPtr, radius, maxResults, checks);
       }
 
       /// <summary>
@@ -163,7 +163,7 @@ namespace Emgu.CV.Flann
       internal static extern void CvFlannIndexKnnSearch(IntPtr index, IntPtr queries, IntPtr indices, IntPtr dists, int knn, int checks);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern int CvFlannIndexRadiusSearch(IntPtr index, IntPtr queries, IntPtr indices, IntPtr dists, float radius, int checks);
+      internal static extern int CvFlannIndexRadiusSearch(IntPtr index, IntPtr queries, IntPtr indices, IntPtr dists, float radius, int maxResults, int checks);
    }
 }
 

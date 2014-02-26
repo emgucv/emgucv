@@ -89,12 +89,12 @@ void CvBriskRelease(cv::BRISK** detector)
 }
 
 //FeatureDetector
-void CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, IplImage* image, IplImage* mask, std::vector<cv::KeyPoint>* keypoints)
+void CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask)
 {
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-   if (mask) maskMat = cv::cvarrToMat(mask);
-   detector->detect(mat, *keypoints, maskMat);
+   //cv::Mat mat = cv::cvarrToMat(image);
+   //cv::Mat maskMat;
+   //if (mask) maskMat = cv::cvarrToMat(mask);
+   detector->detect(*image, *keypoints, mask ? *mask : (cv::InputArray) cv::noArray() );
 }
 
 void CvFeatureDetectorRelease(cv::FeatureDetector** detector)
@@ -247,19 +247,19 @@ void CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* tra
 
 void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
                    CvMat* trainIdx, CvMat* distance, int k,
-                   const CvMat* mask) 
+                   cv::_InputArray* mask) 
 {
    std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the query
 
    //only implemented for a single trained image for now
    CV_Assert( matcher->getTrainDescriptors().size() == 1);
 
-   cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
-   std::vector<cv::Mat> masks;
-   if (!maskMat.empty()) 
-      masks.push_back(maskMat);
+   //cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
+   //std::vector<cv::Mat> masks;
+   //if (!maskMat.empty()) 
+   //   masks.push_back(maskMat);
 
-   matcher->knnMatch(*queryDescriptors, matches, k, masks, false);
+   matcher->knnMatch(*queryDescriptors, matches, k, mask ? * mask : (cv::InputArray) cv::noArray(), false);
    
    VectorOfDMatchToMat(&matches, trainIdx, distance);
 }
@@ -364,10 +364,10 @@ void CvOpponentColorDescriptorExtractorRelease(cv::OpponentColorDescriptorExtrac
 }
 
 //DescriptorExtractor
-void CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, const IplImage* image,  std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors )
+void CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors )
 {
-   cv::Mat imageMat = cv::cvarrToMat(image);
-   extractor->compute(imageMat, *keypoints, *descriptors);
+   //cv::Mat imageMat = cv::cvarrToMat(image);
+   extractor->compute(*image, *keypoints, *descriptors);
 }
 
 int CvDescriptorExtractorGetDescriptorSize(cv::DescriptorExtractor* extractor)

@@ -26,3 +26,14 @@ void CvCascadeClassifierDetectMultiScale(
 {
    classifier->detectMultiScale(*image, *objects, scaleFactor, minNeighbors, flags, *minSize, *maxSize);
 }
+bool CvCascadeClassifierIsOldFormatCascade(cv::CascadeClassifier* classifier)
+{
+   return classifier->isOldFormatCascade();
+}
+
+void CvCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier, CvSize* size)
+{
+   cv::Size s = classifier->getOriginalWindowSize();
+   size->width = s.width;
+   size->height = s.height;
+}

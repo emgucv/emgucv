@@ -52,21 +52,21 @@ void cudaHOGDescriptorRelease(cv::cuda::HOGDescriptor** descriptor)
 void cudaHOGDescriptorDetectMultiScale(
    cv::cuda::HOGDescriptor* descriptor, 
    cv::cuda::GpuMat* img, 
-   CvSeq* foundLocations,
+   std::vector<cv::Rect>* foundLocations,
    double hitThreshold, 
    emgu::size* winStride,
    emgu::size* padding, 
    double scale,
    int groupThreshold)
 {
-   cvClearSeq(foundLocations);
+   //cvClearSeq(foundLocations);
 
-   std::vector<cv::Rect> rects;
+   //std::vector<cv::Rect> rects;
 
    cv::Size ws(winStride->width, winStride->height);
    cv::Size ps(padding->width, padding->height);
 
-   descriptor->detectMultiScale(*img, rects, hitThreshold, ws, ps, scale, groupThreshold);
-   if (!rects.empty())
-      cvSeqPushMulti(foundLocations, &rects[0], static_cast<int>(rects.size()));
+   descriptor->detectMultiScale(*img, *foundLocations, hitThreshold, ws, ps, scale, groupThreshold);
+   //if (!rects.empty())
+   //   cvSeqPushMulti(foundLocations, &rects[0], static_cast<int>(rects.size()));
 }

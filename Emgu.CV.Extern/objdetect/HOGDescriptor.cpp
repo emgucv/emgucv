@@ -40,8 +40,9 @@ void CvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { delete descriptor; 
 
 void CvHOGDescriptorDetectMultiScale(
    cv::HOGDescriptor* descriptor, 
-   CvArr* img, 
-   CvSeq* foundLocations,
+   cv::_InputArray* img, 
+   std::vector<cv::Rect>* foundLocations,
+   std::vector<double>* weights,
    double hitThreshold, 
    CvSize* winStride,
    CvSize* padding, 
@@ -49,51 +50,25 @@ void CvHOGDescriptorDetectMultiScale(
    double finalThreshold, 
    bool useMeanshiftGrouping)
 {
-   cvClearSeq(foundLocations);
-
-   std::vector<cv::Rect> rects;
-   std::vector<double> weights;
-   cv::Mat mat = cv::cvarrToMat(img);
-   descriptor->detectMultiScale(mat, rects, weights, hitThreshold, *winStride, *padding, scale, finalThreshold, useMeanshiftGrouping );
-   //CV_Assert(rects.size() == weights.size());
-
-   //char message[2000];
-   //sprintf(message, "rect.size() = %d; weights.size() = %d", rects.size(), weights.size());
-   //CV_Error(rects.size() == weights.size(), message);
-
-   for (unsigned int i = 0; i < rects.size(); ++i)
-   {
-      CvObjectDetection d;
-      d.rect = rects[i];
-      //The implementation without meanshift is not producing the right weight.
-      //This is due to the group_rectangle function call do not pass the weights for recalculation.
-      d.score = useMeanshiftGrouping ? (float) weights[i] : 0;  
-      cvSeqPush(foundLocations, &d);
-   }
+   descriptor->detectMultiScale(*img, *foundLocations, *weights, hitThreshold, *winStride, *padding, scale, finalThreshold, useMeanshiftGrouping );
 }
 
 void CvHOGDescriptorCompute(
     cv::HOGDescriptor *descriptor,
-    CvArr *img, 
+    cv::_InputArray* img, 
     std::vector<float> *descriptors,
     CvSize* winStride,
     CvSize* padding,
-    CvSeq* locationSeq) 
+    std::vector< cv::Point >* locations) 
 {
-    cv::Mat mat = cv::cvarrToMat(img);
-    std::vector<cv::Point> location(0);
-    if (locationSeq)
-    {
-       location.resize(locationSeq->total);
-       cvSeqPopMulti(locationSeq, &location[0], locationSeq->total);
-    }
+    std::vector<cv::Point> emptyVec;
     
     descriptor->compute(
-       mat, 
+       *img, 
        *descriptors,
        *winStride,
        *padding,
-       location); 
+       locations ? *locations : emptyVec); 
 }
 
 

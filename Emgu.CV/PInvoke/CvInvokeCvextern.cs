@@ -249,18 +249,18 @@ namespace Emgu.CV
       /// <param name="templ">The template (an edge image)</param>
       /// <param name="contours">The output contours</param>
       /// <param name="cost">The cost associated with the matching</param>
-      /// <param name="templScale">The template scale, use 1 for default</param>
-      /// <param name="maxMatches">The maximum number of matches, use 20 for default</param>
-      /// <param name="minMatchDistance">The minimum match distance. use 1.0 for default</param>
-      /// <param name="padX">PadX, use 3 for default</param>
-      /// <param name="padY">PadY, use 3 for default</param>
-      /// <param name="scales">Scales, use 5 for default</param>
-      /// <param name="minScale">Minimum scale, use 0.6 for default</param>
-      /// <param name="maxScale">Maximum scale, use 1.6 for default</param>
-      /// <param name="orientationWeight">Orientation weight, use 0.5 for default</param>
-      /// <param name="truncate">Truncate, use 20 for default</param>
+      /// <param name="templScale">The template scale</param>
+      /// <param name="maxMatches">The maximum number of matches</param>
+      /// <param name="minMatchDistance">The minimum match distance</param>
+      /// <param name="padX">PadX</param>
+      /// <param name="padY">PadY</param>
+      /// <param name="scales">Scales</param>
+      /// <param name="minScale">Minimum scale</param>
+      /// <param name="maxScale">Maximum scale</param>
+      /// <param name="orientationWeight">Orientation weight</param>
+      /// <param name="truncate">Truncate</param>
       /// <returns>The number of matches</returns>
-      public static int cvChamferMatching(Image<Gray, Byte> img, Image<Gray, Byte> templ,
+      public static int ChamferMatching(Mat img, Mat templ,
          out Point[][] contours, out float[] cost,
          double templScale = 1, int maxMatches = 20,
          double minMatchDistance = 1.0, int padX = 3,
@@ -270,15 +270,14 @@ namespace Emgu.CV
          using (Emgu.CV.Util.VectorOfVectorOfPoint vecOfVecOfPoint = new Util.VectorOfVectorOfPoint())
          using (Emgu.CV.Util.VectorOfFloat vecOfFloat = new Util.VectorOfFloat())
          {
-            int count = _cvChamferMatching(img, templ, vecOfVecOfPoint, vecOfFloat, templScale, maxMatches, minMatchDistance, padX, padY, scales, minScale, maxScale, orientationWeight, truncate);
+            int count = cveChamferMatching(img, templ, vecOfVecOfPoint, vecOfFloat, templScale, maxMatches, minMatchDistance, padX, padY, scales, minScale, maxScale, orientationWeight, truncate);
             contours = vecOfVecOfPoint.ToArrayOfArray();
             cost = vecOfFloat.ToArray();
             return count;
          }
       }
-
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvChamferMatching")]
-      private static extern int _cvChamferMatching(
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cveChamferMatching(
          IntPtr img, IntPtr templ,
          IntPtr results, IntPtr cost,
          double templScale, int maxMatches,
@@ -327,17 +326,7 @@ namespace Emgu.CV
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveFindCirclesGrid(IntPtr image, ref Size patternSize, IntPtr centers, CvEnum.CalibCgType flags, IntPtr blobDetector);
       
-      /// <summary>
-      /// Solve given (non-integer) linear programming problem using the Simplex Algorithm (Simplex Method). 
-      /// What we mean here by “linear programming problem” (or LP problem, for short) can be formulated as:
-      /// Maximize c x subject to: Ax &lt;= b and x &gt;= 0 
-      /// </summary>
-      /// <param name="functionMatrix">This row-vector corresponds to c in the LP problem formulation (see above). It should contain 32- or 64-bit floating point numbers. As a convenience, column-vector may be also submitted, in the latter case it is understood to correspond to c^T.</param>
-      /// <param name="constraintMatrix">m-by-n+1 matrix, whose rightmost column corresponds to b in formulation above and the remaining to A. It should containt 32- or 64-bit floating point numbers.</param>
-      /// <param name="zMatrix">The solution will be returned here as a column-vector - it corresponds to c in the formulation above. It will contain 64-bit floating point numbers.</param>
-      /// <returns>The return codes</returns>
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvSolveLP")]
-      private static extern CvEnum.SolveLPResult SolveLP(IntPtr functionMatrix, IntPtr constraintMatrix, IntPtr zMatrix);
+
 
       /*
       /// <summary>

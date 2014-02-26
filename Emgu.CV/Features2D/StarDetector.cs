@@ -15,6 +15,11 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class StarDetector : UnmanagedObject, IFeatureDetector
    {
+      static StarDetector()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       #region IFeatureDetector Members
       /// <summary>
       /// Get the feature detector. 
@@ -93,7 +98,7 @@ namespace Emgu.CV.Features2D
          _lineThresholdProjected = lineThresholdBinarized;
          _lineThresholdBinarized = lineThresholdBinarized;
          _suppressNonmaxSize = suppressNonmaxSize;
-         _ptr = CvInvoke.CvStarDetectorCreate(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
+         _ptr = CvStarDetectorCreate(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
       }
 
       /// <summary>
@@ -101,15 +106,10 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvStarDetectorRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CvStarDetectorRelease(ref _ptr);
       }
-   }
-}
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize);
 
