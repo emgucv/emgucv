@@ -50,7 +50,6 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped BruteForceMatcher
    /// </summary>
-   /// <typeparam name="T">The type of data to be matched. Can be either float or Byte</typeparam>
    public class BruteForceMatcher : DescriptorMatcher
    {
       private DistanceType _distanceType;

@@ -59,9 +59,9 @@ namespace Emgu.CV.Features2D
          MKeyPoint[] keyPoints = keyPointsVec.ToArray();
          ImageFeature<TDescriptor>[] features = new ImageFeature<TDescriptor>[keyPoints.Length];
          MCvMat header = descriptors.MCvMat;
-         long address = header.data.ToInt64();
+         long address = header.Data.ToInt64();
          int rowSizeInByte = sizeOfdescriptor * Marshal.SizeOf(typeof(TDescriptor));
-         for (int i = 0; i < keyPoints.Length; i++, address += header.step)
+         for (int i = 0; i < keyPoints.Length; i++, address += header.Step)
          {
             features[i].KeyPoint = keyPoints[i];
             TDescriptor[] desc = new TDescriptor[sizeOfdescriptor];
@@ -97,8 +97,8 @@ namespace Emgu.CV.Features2D
          int descriptorLength = features[0].Descriptor.Length;
          int rowSizeInByte = descriptorLength * Marshal.SizeOf(typeof(TDescriptor));
          MCvMat header = descriptors.MCvMat;
-         long address = header.data.ToInt64();
-         for (int i = 0; i < features.Length; i++, address += header.step)
+         long address = header.Data.ToInt64();
+         for (int i = 0; i < features.Length; i++, address += header.Step)
          {
             GCHandle handler = GCHandle.Alloc(features[i].Descriptor, GCHandleType.Pinned);
             Toolbox.memcpy(new IntPtr(address), handler.AddrOfPinnedObject(), rowSizeInByte);

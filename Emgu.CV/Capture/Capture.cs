@@ -365,9 +365,9 @@ namespace Emgu.CV
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
          Image<Gray, Byte> res;
-         if (iplImage.nChannels == 3)
+         if (iplImage.NChannels == 3)
          {  //if the image captured is Bgr, convert it to Grayscale
-            res = new Image<Gray, Byte>(iplImage.width, iplImage.height);
+            res = new Image<Gray, Byte>(iplImage.Width, iplImage.Height);
             using (Mat m = CvInvoke.CvArrToMat(img))
             {
                CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.BGR2GRAY);
@@ -375,7 +375,7 @@ namespace Emgu.CV
          }
          else
          {
-            res = new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
+            res = new Image<Gray, byte>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
          }
 
          //inplace flip the image if necessary
@@ -407,9 +407,9 @@ namespace Emgu.CV
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
          Image<Bgr, Byte> res;
-         if (iplImage.nChannels == 1)
+         if (iplImage.NChannels == 1)
          {  //if the image captured is Grayscale, convert it to BGR
-            res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
+            res = new Image<Bgr, Byte>(iplImage.Width, iplImage.Height);
             using (Mat m = CvInvoke.CvArrToMat(img))
             {
                CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.GRAY2BGR);
@@ -417,7 +417,7 @@ namespace Emgu.CV
          }
          else
          {
-            res = new Image<Bgr, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
+            res = new Image<Bgr, byte>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
          }
 
          //inplace flip the image if necessary

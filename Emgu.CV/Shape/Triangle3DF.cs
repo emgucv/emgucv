@@ -78,7 +78,7 @@ namespace Emgu.CV.Structure
       {
          get
          {
-            return new MCvPoint3D32f((V0.x + V1.x + V2.x) / 3.0f, (V0.y + V1.y + V2.y) / 3.0f, (V0.z + V1.z + V2.z)/3.0f);
+            return new MCvPoint3D32f((V0.X + V1.X + V2.X) / 3.0f, (V0.Y + V1.Y + V2.Y) / 3.0f, (V0.Z + V1.Z + V2.Z)/3.0f);
          }
       }
 

@@ -126,6 +126,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// The number of rows
+      /// </summary>
       public int Rows
       {
          get
@@ -134,6 +137,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// The number of columns
+      /// </summary>
       public int Cols
       {
          get
@@ -323,6 +329,12 @@ namespace Emgu.CV
          return new RangeF((float)minVal, (float) maxVal);
       }
 
+      /// <summary>
+      /// Convert this Mat to Image
+      /// </summary>
+      /// <typeparam name="TColor">The type of Color</typeparam>
+      /// <typeparam name="TDepth">The type of Depth</typeparam>
+      /// <returns>The image</returns>
       public Image<TColor, TDepth> ToImage<TColor, TDepth>()
          where TColor : struct, IColor
          where TDepth : new()
@@ -453,6 +465,11 @@ namespace Emgu.CV
       }
 #endif
 
+      /// <summary>
+      /// Set the mat to the specific value
+      /// </summary>
+      /// <param name="value">The value to set to</param>
+      /// <param name="mask">Optional mask</param>
       public void SetTo(MCvScalar value, IInputArray mask = null)
       {
          using (ScalarArray ia = new ScalarArray(value))
@@ -461,6 +478,11 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Set the mat to the specific value
+      /// </summary>
+      /// <param name="value">The value to set to</param>
+      /// <param name="mask">Optional mask</param>
       public void SetTo(IInputArray value, IInputArray mask = null)
       {
          MatInvoke.cvMatSetTo(Ptr, value.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);

@@ -18,7 +18,7 @@ void getCvStructSizes(emgu::cvStructSizes* sizes)
    sizes->CvBox2D = sizeof(CvBox2D);
    sizes->CvMat = sizeof(CvMat);
    sizes->CvMatND = sizeof(CvMatND);
-   sizes->CvHistogram = sizeof(CvHistogram);
+   //sizes->CvHistogram = sizeof(CvHistogram);
    sizes->CvTermCriteria = sizeof(CvTermCriteria);
    sizes->CvSeq = sizeof(CvSeq);
    sizes->CvContour = sizeof(CvContour);

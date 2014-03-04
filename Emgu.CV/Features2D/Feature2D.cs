@@ -15,7 +15,6 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// The feature 2D base class
    /// </summary>
-   /// <typeparam name="TDescriptor">The type of data in the descriptor. Can be either float or byte</typeparam>
    public abstract class Feature2D : UnmanagedObject, IFeatureDetector, IDescriptorExtractor
             
    {
@@ -46,28 +45,6 @@ namespace Emgu.CV.Features2D
          get { return _descriptorExtractorPtr; }
       }
 
-      /*
-      /// <summary>
-      /// Detect keypoints in an image and compute the descriptors on the image from the keypoint locations.
-      /// </summary>
-      /// <param name="image">The image</param>
-      /// <param name="keyPoints">The detected keypoints will be stored in this vector</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>The descriptors from the given keypoints</returns>
-      private void DetectAndCompute(IInputArray image, IInputArray mask, VectorOfKeyPoint keyPoints, IOutputArray descriptors)
-      {
-         using (Mat descriptor = new Mat())
-         {
-            DetectAndCompute(image, mask, keyPoints, descriptor, false);
-            if (descriptor.IsEmpty)
-               return null;
-            
-            Matrix<TDescriptor> res = new Matrix<TDescriptor>(descriptor.Size);
-            descriptor.CopyTo(res);
-            return res;
-         }
-      }*/
-
       /// <summary>
       /// Detect keypoints in an image and compute the descriptors on the image from the keypoint locations.
       /// </summary>
@@ -80,31 +57,6 @@ namespace Emgu.CV.Features2D
       {
          Feature2DInvoke.CvFeature2DDetectAndCompute(_ptr, image.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, keyPoints, descriptors.OutputArrayPtr, useProvidedKeyPoints);
       }
-
-      /*
-      /// <summary>
-      /// Detect image features from the given image
-      /// </summary>
-      /// <param name="image">The image to detect features from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>The Image features detected from the given image</returns>
-      public ImageFeature<TDescriptor>[] DetectAndCompute(Image<Gray, Byte> image, Image<Gray, byte> mask)
-      {
-         using (VectorOfKeyPoint pts = new VectorOfKeyPoint())
-         using (Matrix<TDescriptor> descVec = DetectAndCompute(image, mask, pts))
-         {
-            return ImageFeature<TDescriptor>.ConvertFromRaw(pts, descVec);
-         }
-      }
-
-      
-      /// <summary>
-      /// Get the size of the descriptor.
-      /// </summary>
-      public abstract int DescriptorSize
-      {
-         get;
-      }*/
 
       /// <summary>
       /// Reset the pointers

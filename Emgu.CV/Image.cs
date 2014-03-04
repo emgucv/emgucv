@@ -86,8 +86,8 @@ namespace Emgu.CV
       {
          _ptr = CvInvoke.cvCreateImageHeader(new Size(width, height), CvDepth, NumberOfChannels);
          MIplImage iplImage = MIplImage;
-         iplImage.imageData = scan0;
-         iplImage.widthStep = stride;
+         iplImage.ImageData = scan0;
+         iplImage.WidthStep = stride;
          Marshal.StructureToPtr(iplImage, _ptr, false);
       }
 
@@ -335,7 +335,7 @@ namespace Emgu.CV
 
          GC.AddMemoryPressure(StructSize.MIplImage);
 
-         Debug.Assert(MIplImage.align == 4, "Only 4 align is supported at this moment");
+         Debug.Assert(MIplImage.Align == 4, "Only 4 align is supported at this moment");
 
          if (typeof(TDepth) == typeof(Byte) && (cols & 3) != 0 && (numberOfChannels & 3) != 0)
          {   //if the managed data isn't 4 aligned, make it so
@@ -491,26 +491,26 @@ namespace Emgu.CV
       /// <summary>
       /// Get the equivalent opencv depth type for this image
       /// </summary>
-      public static CvEnum.IPL_DEPTH CvDepth
+      public static CvEnum.IplDepth CvDepth
       {
          get
          {
             Type typeOfDepth = typeof(TDepth);
 
             if (typeOfDepth == typeof(Single))
-               return CvEnum.IPL_DEPTH.IPL_DEPTH_32F;
+               return CvEnum.IplDepth.IPL_DEPTH_32F;
             else if (typeOfDepth == typeof(Byte))
-               return CvEnum.IPL_DEPTH.IPL_DEPTH_8U;
+               return CvEnum.IplDepth.IPL_DEPTH_8U;
             else if (typeOfDepth == typeof(Double))
-               return CvEnum.IPL_DEPTH.IPL_DEPTH_64F;
+               return CvEnum.IplDepth.IPL_DEPTH_64F;
             else if (typeOfDepth == typeof(SByte))
-               return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8S;
+               return Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_8S;
             else if (typeOfDepth == typeof(UInt16))
-               return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_16U;
+               return Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_16U;
             else if (typeOfDepth == typeof(Int16))
-               return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_16S;
+               return Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_16S;
             else if (typeOfDepth == typeof(Int32))
-               return Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32S;
+               return Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_32S;
             else
 #if NETFX_CORE
                throw new NotImplementedException("Unsupported image depth");
@@ -629,14 +629,14 @@ namespace Emgu.CV
          PointF[] srcCorners = box.GetVertices();
 
          PointF[] destCorners = new PointF[] {
-            new PointF(0, box.size.Height - 1),
+            new PointF(0, box.Size.Height - 1),
             new PointF(0, 0),
-            new PointF(box.size.Width - 1, 0), 
-            new PointF(box.size.Width - 1, box.size.Height - 1)};
+            new PointF(box.Size.Width - 1, 0), 
+            new PointF(box.Size.Width - 1, box.Size.Height - 1)};
 
          using (RotationMatrix2D<double> rot = CameraCalibration.GetAffineTransform(srcCorners, destCorners))
          {
-            Image<TColor, TDepth> res = new Image<TColor, TDepth>((int)box.size.Width, (int)box.size.Height);
+            Image<TColor, TDepth> res = new Image<TColor, TDepth>((int)box.Size.Width, (int)box.Size.Height);
             CvInvoke.WarpAffine(this, res, rot, res.Size);
             return res;
          }
@@ -706,6 +706,8 @@ namespace Emgu.CV
       ///<param name="rect"> The rectangle to be drawn</param>
       ///<param name="color"> The color of the rectangle </param>
       ///<param name="thickness"> If thickness is less than 1, the rectangle is filled up </param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public virtual void Draw(Rectangle rect, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
          CvInvoke.Rectangle(this, rect, color.MCvScalar, thickness, lineType, shift);
@@ -730,6 +732,8 @@ namespace Emgu.CV
       ///<param name="line"> The line segment to be drawn</param>
       ///<param name="color"> The color of the line segment </param>
       ///<param name="thickness"> The thickness of the line segment </param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public virtual void Draw(LineSegment2DF line, TColor color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
 #if !NETFX_CORE
@@ -750,6 +754,8 @@ namespace Emgu.CV
       ///<param name="line"> The line segment to be drawn</param>
       ///<param name="color"> The color of the line segment </param>
       ///<param name="thicknes"> The thickness of the line segment </param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public virtual void Draw(LineSegment2D line, TColor color, int thicknes, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
 #if !NETFX_CORE
@@ -793,6 +799,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="pts">The array of points that define the convex polygon</param>
       /// <param name="color">The color to fill the polygon with</param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public void FillConvexPoly(Point[] pts, TColor color, Emgu.CV.CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
          using (VectorOfPoint vp = new VectorOfPoint(pts))
@@ -807,6 +815,8 @@ namespace Emgu.CV
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public void DrawPolyline(Point[] pts, bool isClosed, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
          DrawPolyline(new Point[][] { pts }, isClosed, color, thickness, lineType, shift);
@@ -819,6 +829,8 @@ namespace Emgu.CV
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
       /// <param name="thickness">the thinkness of the line</param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public void DrawPolyline(Point[][] pts, bool isClosed, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
          if (thickness > 0)
@@ -830,26 +842,30 @@ namespace Emgu.CV
          }
       }
 
-        ///<summary> Draw a Circle of the specific color and thickness </summary>
-        ///<param name="circle"> The circle to be drawn</param>
-        ///<param name="color"> The color of the circle </param>
-        ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
-        public virtual void Draw(CircleF circle, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
-        {
-            CvInvoke.Circle(
-             this,
-             Point.Round(circle.Center),
-             (int)circle.Radius,
-             color.MCvScalar,
-             (thickness <= 0) ? -1 : thickness,
-             lineType,
-             shift);
-        }
+      ///<summary> Draw a Circle of the specific color and thickness </summary>
+      ///<param name="circle"> The circle to be drawn</param>
+      ///<param name="color"> The color of the circle </param>
+      ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
+      public virtual void Draw(CircleF circle, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
+      {
+         CvInvoke.Circle(
+          this,
+          Point.Round(circle.Center),
+          (int)circle.Radius,
+          color.MCvScalar,
+          (thickness <= 0) ? -1 : thickness,
+          lineType,
+          shift);
+      }
 
         ///<summary> Draw a Ellipse of the specific color and thickness </summary>
         ///<param name="ellipse"> The ellipse to be draw</param>
         ///<param name="color"> The color of the ellipse </param>
         ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
+        /// <param name="lineType">Line type</param>
+        /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
         public void Draw(Ellipse ellipse, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
         {
             CvInvoke.Ellipse(this, ellipse.MCvBox2D, color.MCvScalar, thickness, lineType, shift);
@@ -862,6 +878,7 @@ namespace Emgu.CV
         /// <param name="font">The font used for drawing</param>
         /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
         /// <param name="color">The color of the text</param>
+        /// <param name="lineType">Line type</param>
         public virtual void Draw(String message, Point bottomLeft, CvEnum.FontFace fontFace, double fontScale, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, bool bottomLeftOrigin = false)
         {
             CvInvoke.PutText(this, 
@@ -1138,23 +1155,23 @@ namespace Emgu.CV
         protected static void RoiParam(IntPtr ptr, out Int64 start, out int rows, out int elementCount, out int byteWidth, out int widthStep)
         {
             MIplImage ipl = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-            start = ipl.imageData.ToInt64();
-            widthStep = ipl.widthStep;
+            start = ipl.ImageData.ToInt64();
+            widthStep = ipl.WidthStep;
 
-            if (ipl.roi != IntPtr.Zero)
+            if (ipl.Roi != IntPtr.Zero)
             {
                 Rectangle rec = CvInvoke.cvGetImageROI(ptr);
-                elementCount = rec.Width * ipl.nChannels;
-                byteWidth = ((int)ipl.depth >> 3) * elementCount;
+                elementCount = rec.Width * ipl.NChannels;
+                byteWidth = ((int)ipl.Depth >> 3) * elementCount;
 
                 start += rec.Y * widthStep
-                    + ((int)ipl.depth >> 3) * rec.X;
+                    + ((int)ipl.Depth >> 3) * rec.X;
                 rows = rec.Height;
             } else
             {
                 byteWidth = widthStep;
-                elementCount = ipl.width * ipl.nChannels;
-                rows = ipl.height;
+                elementCount = ipl.Width * ipl.NChannels;
+                rows = ipl.Height;
             }
         }
 
@@ -3028,7 +3045,7 @@ namespace Emgu.CV
       {
          Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Width, Height);
 
-         int nchannel = MIplImage.nChannels;
+         int nchannel = MIplImage.NChannels;
 
          Int64 data1;
          int height1, cols1, width1, step1;
@@ -4305,62 +4322,62 @@ namespace Emgu.CV
       private void LoadImageFromIplImagePtr(IntPtr iplImage)
       {
          MIplImage mptr = (MIplImage)Marshal.PtrToStructure(iplImage, typeof(MIplImage));
-         Size size = new Size(mptr.width, mptr.height);
+         Size size = new Size(mptr.Width, mptr.Height);
 
          //Allocate data in mamanged memory
          AllocateData(size.Height, size.Width, NumberOfChannels);
 
-         if (mptr.nChannels == 1)
+         if (mptr.NChannels == 1)
          {  //Grayscale image;
-            switch (mptr.depth)
+            switch (mptr.Depth)
             {
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
-                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+               case CvEnum.IplDepth.IPL_DEPTH_8U:
+                  using (Image<Gray, Byte> tmp = new Image<Gray, byte>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
-                  using (Image<Gray, UInt16> tmp = new Image<Gray, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+               case CvEnum.IplDepth.IPL_DEPTH_16U:
+                  using (Image<Gray, UInt16> tmp = new Image<Gray, ushort>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
-                  using (Image<Gray, float> tmp = new Image<Gray, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+               case CvEnum.IplDepth.IPL_DEPTH_32F:
+                  using (Image<Gray, float> tmp = new Image<Gray, float>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
-                  using (Image<Gray, double> tmp = new Image<Gray, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+               case CvEnum.IplDepth.IPL_DEPTH_64F:
+                  using (Image<Gray, double> tmp = new Image<Gray, double>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
                default:
-                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.Depth, mptr.NChannels));
             }
          }
-         else if (mptr.nChannels == 3)
+         else if (mptr.NChannels == 3)
          {  //BGR image
-            switch (mptr.depth)
+            switch (mptr.Depth)
             {
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_8U:
-                  using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+               case CvEnum.IplDepth.IPL_DEPTH_8U:
+                  using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_16U:
-                  using (Image<Bgr, UInt16> tmp = new Image<Bgr, ushort>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+               case CvEnum.IplDepth.IPL_DEPTH_16U:
+                  using (Image<Bgr, UInt16> tmp = new Image<Bgr, ushort>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_32F:
-                  using (Image<Bgr, float> tmp = new Image<Bgr, float>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+               case CvEnum.IplDepth.IPL_DEPTH_32F:
+                  using (Image<Bgr, float> tmp = new Image<Bgr, float>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IPL_DEPTH.IPL_DEPTH_64F:
-                  using (Image<Bgr, double> tmp = new Image<Bgr, double>(mptr.width, mptr.height, mptr.widthStep, mptr.imageData))
+               case CvEnum.IplDepth.IPL_DEPTH_64F:
+                  using (Image<Bgr, double> tmp = new Image<Bgr, double>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
                default:
-                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+                  throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.Depth, mptr.NChannels));
             }
          }
          else
          {
-            throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.depth, mptr.nChannels));
+            throw new NotImplementedException(String.Format("Loading of {0}, {1} channel image is not implemented.", mptr.Depth, mptr.NChannels));
          }
       }
 
@@ -4409,8 +4426,8 @@ namespace Emgu.CV
       {
          IntPtr mat = CvInvoke.cvEncodeImage(".jpg", Ptr, IntPtr.Zero);
          MCvMat cvMat = (MCvMat) Marshal.PtrToStructure(mat, typeof(MCvMat));
-         byte[] data = new byte[cvMat.rows * cvMat.cols];
-         Marshal.Copy(cvMat.data, data, 0, data.Length);
+         byte[] data = new byte[cvMat.Rows * cvMat.Cols];
+         Marshal.Copy(cvMat.Data, data, 0, data.Length);
          CvInvoke.cvReleaseMat(ref mat);
          return data;
       }
@@ -4424,13 +4441,13 @@ namespace Emgu.CV
          {
             //TODO: this override should not be necessary if cvGetSize is working correctly, need to check when this will be fixed.
             MIplImage iplImage = MIplImage;
-            if (iplImage.roi != IntPtr.Zero)
+            if (iplImage.Roi != IntPtr.Zero)
             {
                return ROI.Size;
             }
             else
             {
-               return new Size(iplImage.width, iplImage.height);
+               return new Size(iplImage.Width, iplImage.Height);
             }
          }
       }

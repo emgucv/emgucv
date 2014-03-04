@@ -30,15 +30,15 @@ namespace Emgu.CV.Structure
 
       ///<summary> Get or set the intensity of the hue color channel ( 0 &lt; hue &lt; 180 ) </summary>
       [DisplayColor(255, 0, 0)]
-      public double Hue { get { return _scalar.v0 ; } set { _scalar.v0 = value; } }
+      public double Hue { get { return _scalar.V0 ; } set { _scalar.V0 = value; } }
 
       ///<summary> Get or set the intensity of the lightness color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double Lightness { get { return _scalar.v1; } set { _scalar.v1 = value; } }
+      public double Lightness { get { return _scalar.V1; } set { _scalar.V1 = value; } }
 
       ///<summary> Get or set the intensity of the satuation color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double Satuation { get { return _scalar.v2; } set { _scalar.v2 = value; } }
+      public double Satuation { get { return _scalar.V2; } set { _scalar.V2 = value; } }
 
       #region IEquatable<Hls> Members
       /// <summary>

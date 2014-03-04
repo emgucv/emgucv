@@ -153,7 +153,6 @@
     <Compile Include="PInvoke\CvType\MCvObjectDetection.cs" />
     <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
     <Compile Include="PInvoke\CvType\CvStructSizes.cs" />
-    <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PInvoke\CvType\MDMatch.cs" />
     <Compile Include="Retina.cs" />
     <Compile Include="SparseMatrix.cs" />
@@ -270,7 +269,6 @@
     <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
-    <Compile Include="PInvoke\CvType\MCvSURFPoint.cs" />
     <Compile Include="Reflection\ReflectColorType.cs" />
     <Compile Include="Reflection\ReflectIImage.cs" />
     <Compile Include="Shape\Cross2DF.cs" />
@@ -282,7 +280,6 @@
     <Compile Include="MemStorage.cs" />
     <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />
-    <Compile Include="PInvoke\CvType\MCvHistogram.cs" />
     <Compile Include="PInvoke\CvType\MCvHuMoments.cs" />
     <Compile Include="PInvoke\CvType\MCvMat.cs" />
     <Compile Include="PInvoke\CvType\MCvMatND.cs" />

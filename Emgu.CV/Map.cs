@@ -97,8 +97,8 @@ namespace Emgu.CV
       public Point MapPointToImagePoint(MCvPoint2D64f pt)
       {
          return new Point(
-           (int)Math.Round(( pt.x - Area.Left) / Resolution.X),
-           (int)Math.Round(( pt.y - Area.Top) / Resolution.Y));
+           (int)Math.Round(( pt.X - Area.Left) / Resolution.X),
+           (int)Math.Round(( pt.Y - Area.Top) / Resolution.Y));
       }
 
       /// <summary>
@@ -216,6 +216,8 @@ namespace Emgu.CV
       /// <param name="line">The line to be draw</param>
       /// <param name="color">The color for the line</param>
       /// <param name="thickness">The thickness of the line</param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public override void Draw(LineSegment2DF line, TColor color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
          base.Draw(new LineSegment2DF(MapPointToImagePoint(line.P1), MapPointToImagePoint(line.P2)), color, thickness, lineType, shift);
@@ -225,6 +227,8 @@ namespace Emgu.CV
       ///<param name="circle"> The circle to be drawn</param>
       ///<param name="color"> The color of the circle </param>
       ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public override void Draw(CircleF circle, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
          base.Draw(
@@ -262,6 +266,7 @@ namespace Emgu.CV
       /// <param name="font">The font used for drawing</param>
       /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
       /// <param name="color">The color of the text</param>
+      /// <param name="lineType">Line type</param>
       public override void Draw(String message, Point bottomLeft, CvEnum.FontFace fontFace, double fontScale, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, bool bottomLeftOrigin = false)
       {
          base.Draw(message, MapPointToImagePoint(bottomLeft), fontFace, fontScale, color, thickness, lineType, bottomLeftOrigin);

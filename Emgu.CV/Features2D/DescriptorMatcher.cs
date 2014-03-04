@@ -13,7 +13,6 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Descriptor matcher
    /// </summary>
-   /// <typeparam name="T">The type of data in the descriptor</typeparam>
    public abstract class DescriptorMatcher : UnmanagedObject
    {
       /// <summary>

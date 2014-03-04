@@ -1983,7 +1983,7 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// IPL_DEPTH
    /// </summary>
-   public enum IPL_DEPTH : uint
+   public enum IplDepth : uint
    {
       /// <summary>
       /// indicates if the value is signed
@@ -3610,5 +3610,24 @@ namespace Emgu.CV.CvEnum
       /// Dast
       /// </summary>
       Fast = 1 << 26
+   }
+
+   /// <summary>
+   /// Method for solving a PnP problem
+   /// </summary>
+   public enum SolvePnpMethod
+   {
+      /// <summary>
+      /// Iterative
+      /// </summary>
+      Iterative = 0,
+      /// <summary>
+      /// F.Moreno-Noguer, V.Lepetit and P.Fua "EPnP: Efficient Perspective-n-Point Camera Pose Estimation"
+      /// </summary>
+      EPnP = 1, 
+      /// <summary>
+      /// X.S. Gao, X.-R. Hou, J. Tang, H.-F. Chang; "Complete Solution Classification for the Perspective-Three-Point Problem"
+      /// </summary>
+      P3P = 2 
    }
 }

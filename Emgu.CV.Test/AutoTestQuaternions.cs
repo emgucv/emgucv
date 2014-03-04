@@ -119,9 +119,9 @@ namespace Emgu.CV.Test
 
          MCvPoint3D64f delta = (q1 * q2).RotatePoint(p) - q1.RotatePoint(q2.RotatePoint(p));
 
-         EmguAssert.IsTrue(delta.x < epsilon);
-         EmguAssert.IsTrue(delta.y < epsilon);
-         EmguAssert.IsTrue(delta.z < epsilon);
+         EmguAssert.IsTrue(delta.X < epsilon);
+         EmguAssert.IsTrue(delta.Y < epsilon);
+         EmguAssert.IsTrue(delta.Z < epsilon);
 
       }
 
@@ -141,7 +141,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(Math.Abs(q1.Y - q2.Y) < epsilon);
          EmguAssert.IsTrue(Math.Abs(q1.Z - q2.Z) < epsilon);
 
-         RotationVector3D rVec = new RotationVector3D(new double[] { q1.AxisAngle.x, q1.AxisAngle.y, q1.AxisAngle.z });
+         RotationVector3D rVec = new RotationVector3D(new double[] { q1.AxisAngle.X, q1.AxisAngle.Y, q1.AxisAngle.Z });
          Mat m1 = rVec.RotationMatrix;
          Matrix<double> m2 = new Matrix<double>(3, 3);
          q1.GetRotationMatrix(m2);
@@ -166,9 +166,9 @@ namespace Emgu.CV.Test
          Quaternions q = q1 * q2;
 
          MCvPoint3D64f angle = q.AxisAngle;
-         EmguAssert.AreNotEqual(double.NaN, angle.x, "Invalid value x");
-         EmguAssert.AreNotEqual(double.NaN, angle.y, "Invalid value y");
-         EmguAssert.AreNotEqual(double.NaN, angle.z, "Invalid value z");
+         EmguAssert.AreNotEqual(double.NaN, angle.X, "Invalid value x");
+         EmguAssert.AreNotEqual(double.NaN, angle.Y, "Invalid value y");
+         EmguAssert.AreNotEqual(double.NaN, angle.Z, "Invalid value z");
       }
 
       [Test]

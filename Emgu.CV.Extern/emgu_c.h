@@ -31,7 +31,7 @@ namespace emgu
       int CvBox2D;
       int CvMat;
       int CvMatND;
-      int CvHistogram;
+      //int CvHistogram;
       int CvTermCriteria;
       int CvSeq;
       int CvContour;

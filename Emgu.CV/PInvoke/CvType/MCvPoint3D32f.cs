@@ -16,17 +16,17 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// x-coordinate
       /// </summary>
-      public float x;
+      public float X;
 
       /// <summary>
       /// y-coordinate
       /// </summary>
-      public float y;
+      public float Y;
 
       /// <summary>
       /// z-coordinate
       /// </summary>
-      public float z;
+      public float Z;
 
       /// <summary>
       /// Create a MCvPoint3D32f structure with the specific x and y coordinates
@@ -36,9 +36,9 @@ namespace Emgu.CV.Structure
       /// <param name="z">z-coordinate</param>
       public MCvPoint3D32f(float x, float y, float z)
       {
-         this.x = x;
-         this.y = y;
-         this.z = z;
+         this.X = x;
+         this.Y = y;
+         this.Z = z;
       }
 
       /// <summary>
@@ -50,9 +50,9 @@ namespace Emgu.CV.Structure
       {
          //A x B = <Ay*Bz - Az*By, Az*Bx - Ax*Bz, Ax*By - Ay*Bx>
          return  new MCvPoint3D32f(
-            y * point.z - z * point.y,
-            z * point.x - x * point.z,
-            x * point.y - y * point.x);
+            Y * point.Z - Z * point.Y,
+            Z * point.X - X * point.Z,
+            X * point.Y - Y * point.X);
       }
 
       /// <summary>
@@ -62,7 +62,7 @@ namespace Emgu.CV.Structure
       /// <returns>The dot product of the two 3D point</returns>
       public float DotProduct(MCvPoint3D32f point)
       {
-         return x * point.x + y * point.y + z * point.z;
+         return X * point.X + Y * point.Y + Z * point.Z;
       }
 
       /// <summary>
@@ -72,7 +72,7 @@ namespace Emgu.CV.Structure
       {
          get
          {
-            return Math.Sqrt(x * x + y * y + z * z);
+            return Math.Sqrt(X * X + Y * Y + Z * Z);
          }
       }
 
@@ -83,7 +83,7 @@ namespace Emgu.CV.Structure
       public MCvPoint3D32f GetNormalizedPoint()
       {
          float norm = (float) Norm;
-         return new MCvPoint3D32f(x / norm, y / norm, z / norm);
+         return new MCvPoint3D32f(X / norm, Y / norm, Z / norm);
       }
 
       /// <summary>
@@ -93,7 +93,7 @@ namespace Emgu.CV.Structure
       /// <returns>The converted point</returns>
       public static implicit operator MCvPoint3D64f(MCvPoint3D32f point)
       {
-         return new MCvPoint3D64f(point.x, point.y, point.z);
+         return new MCvPoint3D64f(point.X, point.Y, point.Z);
       }
 
       #region operator overloads
@@ -105,7 +105,7 @@ namespace Emgu.CV.Structure
       /// <returns>The subtraction of one point from the other</returns>
       public static MCvPoint3D32f operator -(MCvPoint3D32f p1, MCvPoint3D32f p2)
       {
-         return new MCvPoint3D32f(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+         return new MCvPoint3D32f(p1.X - p2.X, p1.Y - p2.Y, p1.Z - p2.Z);
       }
 
       /// <summary>
@@ -116,7 +116,7 @@ namespace Emgu.CV.Structure
       /// <returns>The sum of two points</returns>
       public static MCvPoint3D32f operator +(MCvPoint3D32f p1, MCvPoint3D32f p2)
       {
-         return new MCvPoint3D32f(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
+         return new MCvPoint3D32f(p1.X + p2.X, p1.Y + p2.Y, p1.Z + p2.Z);
       }
 
       /// <summary>
@@ -127,7 +127,7 @@ namespace Emgu.CV.Structure
       /// <returns>The point multiplied by the scale</returns>
       public static MCvPoint3D32f operator *(MCvPoint3D32f p, float scale)
       {
-         return new MCvPoint3D32f(p.x * scale, p.y * scale, p.z * scale);
+         return new MCvPoint3D32f(p.X * scale, p.Y * scale, p.Z * scale);
       }
 
       /// <summary>
@@ -150,7 +150,7 @@ namespace Emgu.CV.Structure
       /// <returns>True if the location of the two points are equal</returns>
       public bool Equals(MCvPoint3D32f other)
       {
-         return (x == other.x) && (y == other.y) && (z == other.z);
+         return (X == other.X) && (Y == other.Y) && (Z == other.Z);
       }
       #endregion
    }

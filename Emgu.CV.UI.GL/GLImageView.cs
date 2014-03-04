@@ -1807,7 +1807,7 @@ namespace Emgu.CV.UI.GLView
                   if (tmp.Size == textureSize)
                   {
                      CvInvoke.CvtColor(tmp, tmp, Emgu.CV.CvEnum.ColorConversion.BGRA2RGBA);
-                     LoadTexture(tmp.Size, tmp.MIplImage.imageData, GLImageView.TextureColor.RGBA, 1);
+                     LoadTexture(tmp.Size, tmp.MIplImage.ImageData, GLImageView.TextureColor.RGBA, 1);
                   }
                   else
                      using (
@@ -1816,12 +1816,12 @@ namespace Emgu.CV.UI.GLView
                                                               Emgu.CV.CvEnum.Inter.Nearest))
                      {
                         CvInvoke.CvtColor(resize, resize, Emgu.CV.CvEnum.ColorConversion.BGRA2RGBA);
-                        LoadTexture(resize.Size, resize.MIplImage.imageData, GLImageView.TextureColor.RGBA, 1);
+                        LoadTexture(resize.Size, resize.MIplImage.ImageData, GLImageView.TextureColor.RGBA, 1);
                      }
                }
                else
                {
-                  LoadTexture(tmp.Size, tmp.MIplImage.imageData, TextureColor.BGRA, 1);
+                  LoadTexture(tmp.Size, tmp.MIplImage.ImageData, TextureColor.BGRA, 1);
                }
             }
          }
@@ -1867,11 +1867,11 @@ namespace Emgu.CV.UI.GLView
 
                CvInvoke.Resize(image, resized, resized.Size, 0, 0, Emgu.CV.CvEnum.Inter.Nearest);
                CvInvoke.CvtColor(resized, resized, Emgu.CV.CvEnum.ColorConversion.BGR2RGB);
-               LoadTexture(resized.Size, resized.MIplImage.imageData, TextureColor.RGB, 0);
+               LoadTexture(resized.Size, resized.MIplImage.ImageData, TextureColor.RGB, 0);
             }
             else
             {
-               LoadTexture(image.Size, image.MIplImage.imageData, TextureColor.BGR, 0);
+               LoadTexture(image.Size, image.MIplImage.ImageData, TextureColor.BGR, 0);
             }
             
             TextureEnabled[0] = true;

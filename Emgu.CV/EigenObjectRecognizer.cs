@@ -179,10 +179,10 @@ namespace Emgu.CV
 #endif
             ConvertAll<Image<Gray, Byte>, IntPtr>(trainingImages, delegate(Image<Gray, Byte> img) { return img.Ptr; });
 
-         if (termCrit.max_iter <= 0 || termCrit.max_iter > trainingImages.Length)
-            termCrit.max_iter = trainingImages.Length;
+         if (termCrit.MaxIter <= 0 || termCrit.MaxIter > trainingImages.Length)
+            termCrit.MaxIter = trainingImages.Length;
          
-         int maxEigenObjs = termCrit.max_iter;
+         int maxEigenObjs = termCrit.MaxIter;
 
          #region initialize eigen images
          eigenImages = new Image<Gray, float>[maxEigenObjs];

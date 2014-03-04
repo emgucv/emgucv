@@ -34,6 +34,10 @@ namespace Emgu.CV.Util
 
       private VectorOfPoint[] _tmp;
 
+      /// <summary>
+      /// Create VectorOfVectorOfPoint from vector of vector of points
+      /// </summary>
+      /// <param name="points"></param>
       public VectorOfVectorOfPoint(Point[][] points)
          : this()
       {
@@ -45,6 +49,9 @@ namespace Emgu.CV.Util
          Push(_tmp);
       }
 
+      /// <summary>
+      /// Release tehe managed resources
+      /// </summary>
       protected override void ReleaseManagedResources()
       {
          base.ReleaseManagedResources();

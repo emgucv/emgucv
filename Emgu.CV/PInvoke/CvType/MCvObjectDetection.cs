@@ -22,6 +22,6 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Confidence level 
       /// </summary>
-      public float score;
+      public float Score;
    }
 }

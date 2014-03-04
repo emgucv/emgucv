@@ -410,7 +410,7 @@ namespace Emgu.CV
 
          sane &= (sizes.CvBox2D == Marshal.SizeOf(typeof(MCvBox2D)));
          sane &= (sizes.CvContour == Marshal.SizeOf(typeof(MCvContour)));
-         sane &= (sizes.CvHistogram == Marshal.SizeOf(typeof(MCvHistogram)));
+         //sane &= (sizes.CvHistogram == Marshal.SizeOf(typeof(MCvHistogram)));
          sane &= (sizes.CvMat == Marshal.SizeOf(typeof(MCvMat)));
          sane &= (sizes.CvMatND == Marshal.SizeOf(typeof(MCvMatND)));
          sane &= (sizes.CvPoint == Marshal.SizeOf(typeof(System.Drawing.Point)));

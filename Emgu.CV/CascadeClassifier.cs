@@ -71,6 +71,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get if the cascade is old format
+      /// </summary>
       public bool IsOldFormatCascade
       {
          get
@@ -79,6 +82,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get the original window size
+      /// </summary>
       public Size OriginalWindowSize
       {
          get

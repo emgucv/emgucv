@@ -953,7 +953,7 @@ namespace Emgu.CV.Test
       public void TestImageDFT2()
       {
          Image<Gray, float> image = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
-         IntPtr complexImage = CvInvoke.cvCreateImage(image.Size, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 2);
+         IntPtr complexImage = CvInvoke.cvCreateImage(image.Size, Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_32F, 2);
          CvInvoke.cvSetImageCOI(complexImage, 1);
          CvInvoke.cvCopy(image, complexImage, IntPtr.Zero);
          CvInvoke.cvSetImageCOI(complexImage, 0);

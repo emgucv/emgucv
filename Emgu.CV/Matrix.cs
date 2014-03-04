@@ -246,7 +246,7 @@ namespace Emgu.CV
       {
          get
          {
-            return CvInvoke.Sum(this).v0;
+            return CvInvoke.Sum(this).V0;
          }
       }
       #endregion
@@ -842,7 +842,7 @@ namespace Emgu.CV
          {
             //TODO: this override should not be necessary if cvGetSize is working correctly, need to check when this will be fixed.
             MCvMat cvMat = MCvMat;
-            return new Size(cvMat.width, cvMat.height);
+            return new Size(cvMat.Width, cvMat.Height);
             
          }
       }

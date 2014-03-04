@@ -42,7 +42,7 @@ namespace Emgu.CV.Cvb
 
             _data = new UInt32[size.Height, size.Width];
             _dataHandle = GCHandle.Alloc(_data, GCHandleType.Pinned);
-            _ptr = CvInvoke.cvCreateImageHeader(size, (CvEnum.IPL_DEPTH)(_sizeOfUInt32 * 8), 1);
+            _ptr = CvInvoke.cvCreateImageHeader(size, (CvEnum.IplDepth)(_sizeOfUInt32 * 8), 1);
             CvInvoke.cvSetData(_ptr, _dataHandle.AddrOfPinnedObject(), _sizeOfUInt32 * size.Width);
          }
 
@@ -121,7 +121,7 @@ namespace Emgu.CV.Cvb
       public Image<Gray, Byte> DrawBlobsMask(CvBlobs blobs)
       {
          MIplImage img = (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
-         Image<Gray, Byte> mask = new Image<Gray, byte>(img.width, img.height);
+         Image<Gray, Byte> mask = new Image<Gray, byte>(img.Width, img.Height);
          cvbCvFilterLabels(Ptr, mask, blobs);
          return mask;
       }

@@ -29,15 +29,15 @@ namespace Emgu.CV.Structure
 
       ///<summary> Get or set the intensity of the Y color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double Y { get { return _scalar.v0; } set { _scalar.v0 = value; } }
+      public double Y { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 
       ///<summary> Get or set the intensity of the Cr color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double Cr { get { return _scalar.v1; } set { _scalar.v1 = value; } }
+      public double Cr { get { return _scalar.V1; } set { _scalar.V1 = value; } }
 
       ///<summary> Get or set the intensity of the Cb color channel </summary>
       [DisplayColor(122, 122, 122)]
-      public double Cb { get { return _scalar.v2; } set { _scalar.v2 = value; } }
+      public double Cb { get { return _scalar.V2; } set { _scalar.V2 = value; } }
 
       #region IEquatable<Ycc> Members
       /// <summary>

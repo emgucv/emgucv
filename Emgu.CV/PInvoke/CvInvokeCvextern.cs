@@ -326,8 +326,6 @@ namespace Emgu.CV
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveFindCirclesGrid(IntPtr image, ref Size patternSize, IntPtr centers, CvEnum.CalibCgType flags, IntPtr blobDetector);
       
-
-
       /*
       /// <summary>
       /// Applies the adaptive bilateral filter to an image.

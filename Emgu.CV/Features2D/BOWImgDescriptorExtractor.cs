@@ -20,7 +20,6 @@ namespace Emgu.CV.Features2D
    /// 3. Compute the bag-of-words image descriptor as is a normalized histogram of vocabulary words encountered in
    /// the image. The i-th bin of the histogram is a frequency of i-th word of the vocabulary in the given image.
    /// </summary>
-   /// <typeparam name="T">The type of values in vocabulary</typeparam>
    public class BOWImgDescriptorExtractor: UnmanagedObject
    {
 

@@ -43,15 +43,15 @@ namespace Emgu.CV.Structure
 
       ///<summary> Get or set the intensity of the red color channel </summary>
       [DisplayColor(0, 0, 255)]
-      public double Red { get { return _scalar.v0; } set { _scalar.v0 = value; } }
+      public double Red { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 
       ///<summary> Get or set the intensity of the green color channel </summary>
       [DisplayColor(0, 255, 0)]
-      public double Green { get { return _scalar.v1; } set { _scalar.v1 = value; } }
+      public double Green { get { return _scalar.V1; } set { _scalar.V1 = value; } }
 
       ///<summary> Get or set the intensity of the blue color channel </summary>
       [DisplayColor(255, 0, 0)]
-      public double Blue { get { return _scalar.v2; } set { _scalar.v2 = value; } }
+      public double Blue { get { return _scalar.V2; } set { _scalar.V2 = value; } }
 
       #region IEquatable<Rgb> Members
       /// <summary>

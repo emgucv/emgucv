@@ -166,7 +166,7 @@ namespace Emgu.CV.Test
          Matrix<double> diag = m.GetDiag();
          EmguAssert.IsTrue(diag[0, 0] == 1);
          EmguAssert.IsTrue(diag[1, 0] == 4);
-         EmguAssert.IsTrue(diag.Sum == m.Trace.v0);
+         EmguAssert.IsTrue(diag.Sum == m.Trace.V0);
 
          Matrix<double> col1 = m.GetCol(1);
          EmguAssert.IsTrue(col1[0, 0] == 2);

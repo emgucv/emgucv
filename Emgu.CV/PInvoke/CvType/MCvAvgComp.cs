@@ -17,11 +17,11 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Bounding rectangle for the object (average rectangle of a group)
       /// </summary>
-      public Rectangle rect;
+      public Rectangle Rect;
 
       /// <summary>
       /// Number of neighbor rectangles in the group
       /// </summary>
-      public int neighbors;
+      public int Neighbors;
    }
 }

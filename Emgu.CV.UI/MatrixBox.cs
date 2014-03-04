@@ -109,7 +109,7 @@ namespace Emgu.CV.UI
                   {
                      dataGridView1.Rows[i].HeaderCell.Value = String.Format("Row {0}", i);
                      for (int j = 0; j < size.Width; j++)
-                        dataGridView1[j, i].Value = CvInvoke.cvGet2D(_matrix.Ptr, i, j).v0;
+                        dataGridView1[j, i].Value = CvInvoke.cvGet2D(_matrix.Ptr, i, j).V0;
                   }
                   break;
                case 2:
@@ -119,7 +119,7 @@ namespace Emgu.CV.UI
                      for (int j = 0; j < size.Width; j++)
                      {
                         MCvScalar scalar = CvInvoke.cvGet2D(_matrix.Ptr, i, j);
-                        dataGridView1[j, i].Value = String.Format("[{0},{1}]", scalar.v0, scalar.v1);
+                        dataGridView1[j, i].Value = String.Format("[{0},{1}]", scalar.V0, scalar.V1);
                      }
                   }
                   break;
@@ -130,7 +130,7 @@ namespace Emgu.CV.UI
                      for (int j = 0; j < size.Width; j++)
                      {
                         MCvScalar scalar = CvInvoke.cvGet2D(_matrix.Ptr, i, j);
-                        dataGridView1[j, i].Value = String.Format("[{0},{1},{2}]", scalar.v0, scalar.v1, scalar.v2);
+                        dataGridView1[j, i].Value = String.Format("[{0},{1},{2}]", scalar.V0, scalar.V1, scalar.V2);
                      }
                   }
                   break;
@@ -142,7 +142,7 @@ namespace Emgu.CV.UI
                      for (int j = 0; j < size.Width; j++)
                      {
                         MCvScalar scalar = CvInvoke.cvGet2D(_matrix.Ptr, i, j);
-                        dataGridView1[j, i].Value = String.Format("[{0},{1},{2},{3}]", scalar.v0, scalar.v1, scalar.v2, scalar.v3);
+                        dataGridView1[j, i].Value = String.Format("[{0},{1},{2},{3}]", scalar.V0, scalar.V1, scalar.V2, scalar.V3);
                      }
                   }
                   break;

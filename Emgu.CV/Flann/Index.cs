@@ -119,6 +119,7 @@ namespace Emgu.CV.Flann
       /// <param name="indices">Indices of the nearest neighbors found</param>
       /// <param name="squareDistances">The square of the Eculidean distance between the neighbours</param>
       /// <param name="radius">The search radius</param>
+      /// <param name="maxResults">The maximum number of results</param>
       /// <param name="checks">The number of times the tree(s) in the index should be recursively traversed. A
       /// higher value for this parameter would give better search precision, but also take more
       /// time. If automatic configuration was used when the index was created, the number of

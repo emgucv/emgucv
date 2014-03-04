@@ -30,6 +30,6 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Distance
       /// </summary>
-      public float distance;
+      public float Distance;
    }
 }

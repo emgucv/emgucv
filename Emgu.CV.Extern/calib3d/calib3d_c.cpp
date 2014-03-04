@@ -210,3 +210,13 @@ double cveStereoCalibrate(
    return cv::stereoCalibrate(*objectPoints, *imagePoints1, *imagePoints2, *cameraMatrix1, *distCoeffs1, *cameraMatrix2, *distCoeffs2, *imageSize, *r, *t, *e, *f,
       flags, *criteria);
 }
+
+bool cveSolvePnP(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_OutputArray* rvec, cv::_OutputArray* tvec, bool useExtrinsicGuess, int flags)
+{
+   return cv::solvePnP(*objectPoints, *imagePoints, *cameraMatrix, *distCoeffs, *rvec, *tvec, useExtrinsicGuess, flags);
+}
+
+void cveSolvePnPRansac(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_OutputArray* rvec, cv::_OutputArray* tvec, bool useExtrinsicGuess, int iterationsCount, float reprojectionError, int minInliersCount, cv::_OutputArray* inliers, int flags )
+{
+   cv::solvePnPRansac(*objectPoints, *imagePoints, *cameraMatrix, distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(), *rvec, *tvec, useExtrinsicGuess, iterationsCount, reprojectionError, minInliersCount, inliers ? *inliers : (cv::OutputArray) cv::noArray(), flags);
+}

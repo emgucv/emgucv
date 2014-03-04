@@ -24,7 +24,7 @@ namespace Emgu.CV
          IInputArray srcPoints,
          IInputArray dstPoints,
          IOutputArray homography,
-         CvEnum.HomographyMethod method= CvEnum.HomographyMethod.Default,
+         CvEnum.HomographyMethod method = CvEnum.HomographyMethod.Default,
          double ransacReprojThreshold = 3,
          IOutputArray mask = null)
       {
@@ -50,13 +50,13 @@ namespace Emgu.CV
       /// <summary>
       /// Calculates fundamental matrix using one of four methods listed above and returns the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. 
       /// </summary>
-      /// <param name="points1">Array of the first image points of 2xN, Nx2, 3xN or Nx3 size (where N is number of points). Multi-channel 1xN or Nx1 array is also acceptable. The point coordinates should be floating-point (single or double precision) </param>
-      /// <param name="points2">Array of the second image points of the same size and format as points1</param>
+      /// <param name="points1">Array of N points from the first image. The point coordinates should be floating-point (single or double precision).</param>
+      /// <param name="points2">Array of the second image points of the same size and format as points1 </param>
       /// <param name="method">Method for computing the fundamental matrix </param>
-      /// <param name="param1">The parameter is used for RANSAC method only. It is the maximum distance from point to epipolar line in pixels, beyond which the point is considered an outlier and is not used for computing the final fundamental matrix. Usually it is set somewhere from 1 to 3. </param>
-      /// <param name="param2">The parameter is used for RANSAC or LMedS methods only. It denotes the desirable level of confidence of the fundamental matrix estimate. </param>
+      /// <param name="param1">Parameter used for RANSAC. It is the maximum distance from a point to an epipolar line in pixels, beyond which the point is considered an outlier and is not used for computing the final fundamental matrix. It can be set to something like 1-3, depending on the accuracy of the point localization, image resolution, and the image noise.</param>
+      /// <param name="param2">Parameter used for the RANSAC or LMedS methods only. It specifies a desirable level of confidence (probability) that the estimated matrix is correct.</param>
       /// <param name="mask">The optional pointer to output array of N elements, every element of which is set to 0 for outliers and to 1 for the "inliers", i.e. points that comply well with the estimated epipolar geometry. The array is computed only in RANSAC and LMedS methods. For other methods it is set to all 1.</param>
-      /// <param name="mask">The output fundamental matrix or matrices.</param>
+      /// <param name="f">The calculated fundamental matrix</param>
       public static void FindFundamentalMat(IInputArray points1, IInputArray points2, IOutputArray f, CvEnum.FmType method = CvEnum.FmType.Ransac, double param1 = 3, double param2 = 0.99, IOutputArray mask = null)
       {
          cveFindFundamentalMat(points1.InputArrayPtr, points2.InputArrayPtr, f.OutputArrayPtr, method, param1, param2, mask == null ? IntPtr.Zero : mask.OutputArrayPtr);
@@ -101,6 +101,11 @@ namespace Emgu.CV
       private static extern void cveConvertPointsToHomogeneous(IntPtr src, IntPtr dst);
 
 
+      /// <summary>
+      /// Converts points from homogeneous to Euclidean space.
+      /// </summary>
+      /// <param name="src">Input vector of N-dimensional points.</param>
+      /// <param name="dst">Output vector of N-1-dimensional points.</param>
       public static void ConvertPointsFromHomogeneous(IInputArray src, IOutputArray dst)
       {
          cveConvertPointsFromHomogeneous(src.InputArrayPtr, dst.OutputArrayPtr);
@@ -114,6 +119,10 @@ namespace Emgu.CV
       /// <param name="disparity">Disparity map</param>
       /// <param name="image3D">3-channel, 16-bit integer or 32-bit floating-point image - the output map of 3D points</param>
       /// <param name="q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
+      /// <param name="handleMissingValues">Indicates, whether the function should handle missing values (i.e. points where the disparity was not computed). 
+      /// If handleMissingValues=true, then pixels with the minimal disparity that corresponds to the outliers (see StereoMatcher::compute ) 
+      /// are transformed to 3D points with a very large Z value (currently set to 10000).</param>
+      /// <param name="ddepth">The optional output array depth. If it is -1, the output image will have CV_32F depth. ddepth can also be set to CV_16S, CV_32S or CV_32F.</param>
       public static void ReprojectImageTo3D(IInputArray disparity, IOutputArray image3D, IInputArray q, bool handleMissingValues = false, CvEnum.DepthType ddepth = CvEnum.DepthType.Default)
       {
          cveReprojectImageTo3D(disparity.InputArrayPtr, image3D.OutputArrayPtr, q.InputArrayPtr, handleMissingValues, ddepth);
@@ -155,17 +164,13 @@ namespace Emgu.CV
       /// Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points). 
       /// </summary>
       /// <param name="objectPoints">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
-      /// <param name="rotationVector">The rotation vector, 1x3 or 3x1</param>
-      /// <param name="translationVector">The translation vector, 1x3 or 3x1</param>
-      /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
-      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is IntPtr.Zero, all distortion coefficients are considered 0's</param>
+      /// <param name="rvec">The rotation vector, 1x3 or 3x1</param>
+      /// <param name="tvec">The translation vector, 1x3 or 3x1</param>
+      /// <param name="cameraMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
+      /// <param name="distCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is IntPtr.Zero, all distortion coefficients are considered 0's</param>
       /// <param name="imagePoints">The output array of image points, 2xN or Nx2, where N is the total number of points in the view</param>
-      /// <param name="dpdrot">Optional Nx3 matrix of derivatives of image points with respect to components of the rotation vector</param>
-      /// <param name="dpdt">Optional Nx3 matrix of derivatives of image points w.r.t. components of the translation vector</param>
-      /// <param name="dpdf">Optional Nx2 matrix of derivatives of image points w.r.t. fx and fy</param>
-      /// <param name="dpdc">Optional Nx2 matrix of derivatives of image points w.r.t. cx and cy</param>
-      /// <param name="dpddist">Optional Nx4 matrix of derivatives of image points w.r.t. distortion coefficients</param>
       /// <param name="aspectRatio">Aspect ratio</param>
+      /// <param name="jacobian">Optional output 2Nx(10+&lt;numDistCoeffs&gt;) jacobian matrix of derivatives of image points with respect to components of the rotation vector, translation vector, focal lengths, coordinates of the principal point and the distortion coefficients. In the old interface different components of the jacobian are returned via different output parameters.</param>
       public static void ProjectPoints(IInputArray objectPoints, IInputArray rvec, IInputArray tvec, IInputArray cameraMatrix, IInputArray distCoeffs, IOutputArray imagePoints, IOutputArray jacobian = null, double aspectRatio = 0)
       {
          cveProjectPoints(objectPoints.InputArrayPtr, rvec.InputArrayPtr, tvec.InputArrayPtr, cameraMatrix.InputArrayPtr, distCoeffs == null ? IntPtr.Zero : distCoeffs.InputArrayPtr, imagePoints.OutputArrayPtr, jacobian == null ? IntPtr.Zero : jacobian.OutputArrayPtr, aspectRatio);
@@ -178,9 +183,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="objectPoints">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
       /// <param name="imagePoints">The joint matrix of corresponding image points, 2xN or Nx2, where N is the total number of points in all views</param>
-      /// <param name="pointCounts">Vector containing numbers of points in each particular view, 1xM or Mx1, where M is the number of a scene views</param>
       /// <param name="imageSize">Size of the image, used only to initialize intrinsic camera matrix</param>
-      /// <param name="intrinsicMatrix">The output camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
+      /// <param name="cameraMatrix">The output camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
       /// <param name="distortionCoeffs">The output 4x1 or 1x4 vector of distortion coefficients [k1, k2, p1, p2]</param>
       /// <param name="rotationVectors">The output 3xM or Mx3 array of rotation vectors (compact representation of rotation matrices, see cvRodrigues2). </param>
       /// <param name="translationVectors">The output 3xM or Mx3 array of translation vectors</param>
@@ -224,7 +228,7 @@ namespace Emgu.CV
       /// <summary>
       /// Computes various useful camera (sensor/lens) characteristics using the computed camera calibration matrix, image frame resolution in pixels and the physical aperture size
       /// </summary>
-      /// <param name="calibMatr">The matrix of intrinsic parameters</param>
+      /// <param name="cameraMatrix">The matrix of intrinsic parameters</param>
       /// <param name="imageSize">Image size in pixels</param>
       /// <param name="apertureWidth">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
       /// <param name="apertureHeight">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
@@ -232,7 +236,7 @@ namespace Emgu.CV
       /// <param name="fovy">Field of view angle in y direction in degrees </param>
       /// <param name="focalLength">Focal length in realworld units </param>
       /// <param name="principalPoint">The principal point in realworld units </param>
-      /// <param name="pixelAspectRatio">The pixel aspect ratio ~ fy/f</param>
+      /// <param name="aspectRatio">The pixel aspect ratio ~ fy/f</param>
       public static void CalibrationMatrixValues(
          IInputArray cameraMatrix, Size imageSize, double apertureWidth, double apertureHeight,
          ref double fovx, ref double fovy, ref double focalLength, ref MCvPoint2D64f principalPoint, ref double aspectRatio)
@@ -255,15 +259,72 @@ namespace Emgu.CV
       /// <param name="rotationVector">The output 3x1 or 1x3 rotation vector (compact representation of a rotation matrix, see cvRodrigues2). </param>
       /// <param name="translationVector">The output 3x1 or 1x3 translation vector</param>
       /// <param name="useExtrinsicGuess">Use the input rotation and translation parameters as a guess</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvFindExtrinsicCameraParams2(
-         IntPtr objectPoints,
-         IntPtr imagePoints,
-         IntPtr intrinsicMatrix,
-         IntPtr distortionCoeffs,
-         IntPtr rotationVector,
-         IntPtr translationVector,
-         int useExtrinsicGuess);
+      /// <param name="flags">Method for solving a PnP problem</param>
+      public static bool SolvePnP(
+         IInputArray objectPoints,
+         IInputArray imagePoints,
+         IInputArray intrinsicMatrix,
+         IInputArray distortionCoeffs,
+         IOutputArray rotationVector,
+         IOutputArray translationVector,
+         bool useExtrinsicGuess = false,
+         CvEnum.SolvePnpMethod flags = CvEnum.SolvePnpMethod.Iterative
+         )
+      {
+         return cveSolvePnP(
+            objectPoints.InputArrayPtr,
+            imagePoints.InputArrayPtr,
+            intrinsicMatrix.InputArrayPtr,
+            distortionCoeffs.InputArrayPtr,
+            rotationVector.OutputArrayPtr,
+            translationVector.OutputArrayPtr,
+            useExtrinsicGuess,
+            flags);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      private static extern bool cveSolvePnP(
+         IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs, 
+         IntPtr rvec, IntPtr tvec, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool useExtrinsicGuess, 
+         CvEnum.SolvePnpMethod flags);
+
+      /// <summary>
+      /// Finds an object pose from 3D-2D point correspondences using the RANSAC scheme.
+      /// </summary>
+      /// <param name="objectPoints">Array of object points in the object coordinate space, 3xN/Nx3 1-channel or 1xN/Nx1 3-channel, where N is the number of points. VectorOfPoint3D32f can be also passed here.</param>
+      /// <param name="imagePoints">Array of corresponding image points, 2xN/Nx2 1-channel or 1xN/Nx1 2-channel, where N is the number of points. VectorOfPointF can be also passed here.</param>
+      /// <param name="cameraMatrix">Input camera matrix</param>
+      /// <param name="distCoeffs">Input vector of distortion coefficients of 4, 5, 8 or 12 elements. If the vector is null/empty, the zero distortion coefficients are assumed.</param>
+      /// <param name="rvec">Output rotation vector </param>
+      /// <param name="tvec">Output translation vector.</param>
+      /// <param name="useExtrinsicGuess">If true, the function uses the provided rvec and tvec values as initial approximations of the rotation and translation vectors, respectively, and further optimizes them.</param>
+      /// <param name="iterationsCount">Number of iterations.</param>
+      /// <param name="reprojectionError">Inlier threshold value used by the RANSAC procedure. The parameter value is the maximum allowed distance between the observed and computed point projections to consider it an inlier.</param>
+      /// <param name="minInliersCount">Number of inliers. If the algorithm at some stage finds more inliers than minInliersCount, it finishes.</param>
+      /// <param name="inliers">Output vector that contains indices of inliers in objectPoints and imagePoints .</param>
+      /// <param name="flags">Method for solving a PnP problem </param>
+      public static void SolvePnPRansac(
+         IInputArray objectPoints, IInputArray imagePoints, IInputArray cameraMatrix, IInputArray distCoeffs,
+         IOutputArray rvec, IOutputArray tvec,
+         bool useExtrinsicGuess, int iterationsCount, float reprojectionError, int minInliersCount,
+         IOutputArray inliers, CvEnum.SolvePnpMethod flags)
+      {
+         cveSolvePnPRansac(
+            objectPoints.InputArrayPtr, imagePoints.InputArrayPtr, cameraMatrix.InputArrayPtr, distCoeffs == null ? IntPtr.Zero : distCoeffs.InputArrayPtr,
+            rvec.OutputArrayPtr, tvec.OutputArrayPtr,
+            useExtrinsicGuess, iterationsCount, reprojectionError, minInliersCount, 
+            inliers == null ? IntPtr.Zero : inliers.OutputArrayPtr, flags);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveSolvePnPRansac(
+         IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs, 
+         IntPtr rvec, IntPtr tvec, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool useExtrinsicGuess, 
+         int iterationsCount, float reprojectionError, int minInliersCount, 
+         IntPtr inliers, CvEnum.SolvePnpMethod flags);
 
       /// <summary>
       /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the fist camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
@@ -273,7 +334,6 @@ namespace Emgu.CV
       /// <param name="objectPoints">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
       /// <param name="imagePoints1">The joint matrix of corresponding image points in the views from the 1st camera, 2xN or Nx2, where N is the total number of points in all views</param>
       /// <param name="imagePoints2">The joint matrix of corresponding image points in the views from the 2nd camera, 2xN or Nx2, where N is the total number of points in all views</param>
-      /// <param name="pointCounts">Vector containing numbers of points in each view, 1xM or Mx1, where M is the number of views</param>
       /// <param name="cameraMatrix1">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
       /// <param name="distCoeffs1">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
       /// <param name="cameraMatrix2">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
@@ -289,7 +349,7 @@ namespace Emgu.CV
       public static double StereoCalibrate(
          IInputArray objectPoints,
          IInputArray imagePoints1,
-         IInputArray imagePoints2,  
+         IInputArray imagePoints2,
          IInputOutputArray cameraMatrix1,
          IInputOutputArray distCoeffs1,
          IInputOutputArray cameraMatrix2,
@@ -335,10 +395,10 @@ namespace Emgu.CV
       /// </remarks>
       /// <param name="points1">The array of 2D points</param>
       /// <param name="points2">The array of 2D points</param>
-      /// <param name="F">Fundamental matrix. It can be computed using the same set of point pairs points1 and points2 using cvFindFundamentalMat</param>
-      /// <param name="imageSize">Size of the image</param>
-      /// <param name="H1">The rectification homography matrices for the first images</param>
-      /// <param name="H2">The rectification homography matrices for the second images</param>
+      /// <param name="f">Fundamental matrix. It can be computed using the same set of point pairs points1 and points2 using cvFindFundamentalMat</param>
+      /// <param name="imgSize">Size of the image</param>
+      /// <param name="h1">The rectification homography matrices for the first images</param>
+      /// <param name="h2">The rectification homography matrices for the second images</param>
       /// <param name="threshold">If the parameter is greater than zero, then all the point pairs that do not comply the epipolar geometry well enough (that is, the points for which fabs(points2[i]T*F*points1[i])>threshold) are rejected prior to computing the homographies</param>
       /// <returns></returns>
       public static bool StereoRectifyUncalibrated(IInputArray points1, IInputArray points2, IInputArray f, Size imgSize, IOutputArray h1, IOutputArray h2, double threshold = 5)
@@ -364,7 +424,7 @@ namespace Emgu.CV
       /// <param name="r2">3x3 Rectification transforms (rotation matrices) for the second camera</param>
       /// <param name="p1">3x4 Projection matrices in the new (rectified) coordinate systems</param>
       /// <param name="p2">3x4 Projection matrices in the new (rectified) coordinate systems</param>
-      /// <param name="1">The optional output disparity-to-depth mapping matrix, 4x4, see cvReprojectImageTo3D. </param>
+      /// <param name="q">The optional output disparity-to-depth mapping matrix, 4x4, see cvReprojectImageTo3D. </param>
       /// <param name="flags">The operation flags, use CALIB_ZERO_DISPARITY for default</param>
       /// <param name="alpha">Use -1 for default</param>
       /// <param name="newImageSize">Use Size.Empty for default</param>
@@ -504,7 +564,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPOSIT(
          IntPtr positObject, IntPtr imagePoints, double focalLength,
-         MCvTermCriteria criteria, 
+         MCvTermCriteria criteria,
          IntPtr rotationMatrix, IntPtr translationVector);
 #endif
 
@@ -516,20 +576,33 @@ namespace Emgu.CV
       public static extern void cvReleasePOSITObject(ref IntPtr positObject);
       #endregion
 
-
+      /// <summary>
+      /// Reconstructs points by triangulation.
+      /// </summary>
+      /// <param name="projMat1">3x4 projection matrix of the first camera.</param>
+      /// <param name="projMat2">3x4 projection matrix of the second camera.</param>
+      /// <param name="projPoints1">2xN array of feature points in the first image. It can be also a vector of feature points or two-channel matrix of size 1xN or Nx1</param>
+      /// <param name="projPoints2">2xN array of corresponding points in the second image. It can be also a vector of feature points or two-channel matrix of size 1xN or Nx1.</param>
+      /// <param name="points4D">4xN array of reconstructed points in homogeneous coordinates.</param>
       public static void TriangulatePoints(IInputArray projMat1, IInputArray projMat2, IInputArray projPoints1, IInputArray projPoints2, IOutputArray points4D)
       {
          cveTriangulatePoints(projMat1.InputArrayPtr, projMat2.InputArrayPtr, projPoints1.InputArrayPtr, projPoints2.InputArrayPtr, points4D.OutputArrayPtr);
       }
-
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveTriangulatePoints(IntPtr projMat1, IntPtr projMat2, IntPtr projPoints1, IntPtr projPoints2, IntPtr points4D);
 
+      /// <summary>
+      /// Refines coordinates of corresponding points.
+      /// </summary>
+      /// <param name="f">3x3 fundamental matrix.</param>
+      /// <param name="points1">1xN array containing the first set of points.</param>
+      /// <param name="points2">1xN array containing the second set of points.</param>
+      /// <param name="newPoints1">The optimized points1.</param>
+      /// <param name="newPoints2">The optimized points2.</param>
       public static void CorrectMatches(IInputArray f, IInputArray points1, IInputArray points2, IOutputArray newPoints1, IOutputArray newPoints2)
       {
          cveCorrectMatches(f.InputArrayPtr, points1.InputArrayPtr, points2.InputArrayPtr, newPoints1.OutputArrayPtr, newPoints2.OutputArrayPtr);
       }
-
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1, IntPtr newPoints2);
 

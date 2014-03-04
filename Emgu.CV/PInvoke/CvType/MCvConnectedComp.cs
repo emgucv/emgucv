@@ -16,21 +16,21 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// area of the segmented component
       /// </summary>
-      public double area;
+      public double Area;
 
       /// <summary>
       /// scalar value
       /// </summary>
-      public MCvScalar value;
+      public MCvScalar Value;
 
       /// <summary>
       /// ROI of the segmented component
       /// </summary>
-      public System.Drawing.Rectangle rect;
+      public System.Drawing.Rectangle Rect;
 
       /// <summary>
       /// Pointer to the CvSeq
       /// </summary>
-      public IntPtr contour;
+      public IntPtr Contour;
    }
 }

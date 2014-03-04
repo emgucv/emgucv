@@ -16,30 +16,30 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Hu invariants
       /// </summary>
-      public double hu1;
+      public double Hu1;
       /// <summary>
       /// Hu invariants
       /// </summary>
-      public double hu2;
+      public double Hu2;
       /// <summary>
       /// Hu invariants
       /// </summary>
-      public double hu3;
+      public double Hu3;
       /// <summary>
       /// Hu invariants
       /// </summary>
-      public double hu4;
+      public double Hu4;
       /// <summary>
       /// Hu invariants
       /// </summary>
-      public double hu5;
+      public double Hu5;
       /// <summary>
       /// Hu invariants
       /// </summary>
-      public double hu6;
+      public double Hu6;
       /// <summary>
       /// Hu invariants
       /// </summary>
-      public double hu7;
+      public double Hu7;
    }
 }

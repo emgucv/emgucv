@@ -17,19 +17,19 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// The scalar value
       /// </summary>
-      public double v0;
+      public double V0;
       /// <summary>
       /// The scalar value
       /// </summary>
-      public double v1;
+      public double V1;
       /// <summary>
       /// The scalar value
       /// </summary>
-      public double v2;
+      public double V2;
       /// <summary>
       /// The scalar value
       /// </summary>
-      public double v3;
+      public double V3;
 
       /// <summary>
       /// The scalar values as a vector (of size 4)
@@ -37,7 +37,7 @@ namespace Emgu.CV.Structure
       /// <returns>The scalar values as an array</returns>
       public double[] ToArray()
       {
-         return new double[4] { v0, v1, v2, v3 };
+         return new double[4] { V0, V1, V2, V3 };
       }
 
       /// <summary>
@@ -46,10 +46,10 @@ namespace Emgu.CV.Structure
       /// <param name="v0">v0</param>
       public MCvScalar(double v0)
       {
-         this.v0 = v0;
-         v1 = 0;
-         v2 = 0;
-         v3 = 0;
+         this.V0 = v0;
+         V1 = 0;
+         V2 = 0;
+         V3 = 0;
       }
 
       /// <summary>
@@ -59,10 +59,10 @@ namespace Emgu.CV.Structure
       /// <param name="v1">v1</param>
       public MCvScalar(double v0, double v1)
       {
-         this.v0 = v0;
-         this.v1 = v1;
-         v2 = 0;
-         v3 = 0;
+         this.V0 = v0;
+         this.V1 = v1;
+         V2 = 0;
+         V3 = 0;
       }
 
       /// <summary>
@@ -73,10 +73,10 @@ namespace Emgu.CV.Structure
       /// <param name="v2">v2</param>
       public MCvScalar(double v0, double v1, double v2)
       {
-         this.v0 = v0;
-         this.v1 = v1;
-         this.v2 = v2;
-         v3 = 0;
+         this.V0 = v0;
+         this.V1 = v1;
+         this.V2 = v2;
+         V3 = 0;
       }
 
       /// <summary>
@@ -88,10 +88,10 @@ namespace Emgu.CV.Structure
       /// <param name="v3">v3</param>
       public MCvScalar(double v0, double v1, double v2, double v3)
       {
-         this.v0 = v0;
-         this.v1 = v1;
-         this.v2 = v2;
-         this.v3 = v3;
+         this.V0 = v0;
+         this.V1 = v1;
+         this.V2 = v2;
+         this.V3 = v3;
       }
 
       #region ICodeGenerable Members
@@ -103,7 +103,7 @@ namespace Emgu.CV.Structure
       public string ToCode(Emgu.Util.TypeEnum.ProgrammingLanguage language)
       {
          return (language == Emgu.Util.TypeEnum.ProgrammingLanguage.CSharp || language == Emgu.Util.TypeEnum.ProgrammingLanguage.CPlusPlus) ?
-            String.Format("new MCvScalar({0}, {1}, {2}, {3})", v0, v1, v2, v3) :
+            String.Format("new MCvScalar({0}, {1}, {2}, {3})", V0, V1, V2, V3) :
             ToString();
       }
 
@@ -117,10 +117,10 @@ namespace Emgu.CV.Structure
       /// <returns>true if the two MCvScalar equals</returns>
       public bool Equals(MCvScalar other)
       {
-         return v0 == other.v0 
-            && v1 == other.v1 
-            && v2 == other.v2 
-            && v3 == other.v3;
+         return V0 == other.V0 
+            && V1 == other.V1 
+            && V2 == other.V2 
+            && V3 == other.V3;
       }
       #endregion
    }

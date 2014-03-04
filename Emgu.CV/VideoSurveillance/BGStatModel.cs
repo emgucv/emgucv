@@ -98,9 +98,9 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            IntPtr statModelbackground = MCvBGStatModel.background;
+            IntPtr statModelbackground = MCvBGStatModel.Background;
             MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(statModelbackground, typeof(MIplImage));
-            return new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
+            return new Image<Gray, byte>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
          }
       }
 
@@ -111,9 +111,9 @@ namespace Emgu.CV.VideoSurveillance
       {
          get
          {
-            IntPtr statModelforeground = MCvBGStatModel.foreground;
+            IntPtr statModelforeground = MCvBGStatModel.Foreground;
             MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(statModelforeground, typeof(MIplImage));
-            return new Image<Gray, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
+            return new Image<Gray, byte>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
          }
       }
 

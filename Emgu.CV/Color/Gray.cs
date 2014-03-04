@@ -26,7 +26,7 @@ namespace Emgu.CV.Structure
       ///<summary> The intensity of the gray color </summary>
       ///<value> The intensity of the gray color</value>
       [DisplayColor(122, 122, 122)]
-      public double Intensity { get { return _scalar.v0; } set { _scalar.v0 = value; } }
+      public double Intensity { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 
       /// <summary>
       /// Returns the hash code for this color

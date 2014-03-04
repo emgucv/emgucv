@@ -16,17 +16,17 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// x-coordinate
       /// </summary>
-      public double x;
+      public double X;
 
       /// <summary>
       /// y-coordinate
       /// </summary>
-      public double y;
+      public double Y;
 
       /// <summary>
       /// z-coordinate
       /// </summary>
-      public double z;
+      public double Z;
 
       /// <summary>
       /// Create a MCvPoint3D64f structure with the specific x and y coordinates
@@ -36,9 +36,9 @@ namespace Emgu.CV.Structure
       /// <param name="z">z-coordinate</param>
       public MCvPoint3D64f(double x, double y, double z)
       {
-         this.x = x;
-         this.y = y;
-         this.z = z;
+         this.X = x;
+         this.Y = y;
+         this.Z = z;
       }
 
       /// <summary>
@@ -50,9 +50,9 @@ namespace Emgu.CV.Structure
       {
          //A x B = <Ay*Bz - Az*By, Az*Bx - Ax*Bz, Ax*By - Ay*Bx>
          return new MCvPoint3D64f(
-            y * point.z - z * point.y,
-            z * point.x - x * point.z,
-            x * point.y - y * point.x);
+            Y * point.Z - Z * point.Y,
+            Z * point.X - X * point.Z,
+            X * point.Y - Y * point.X);
       }
 
       /// <summary>
@@ -62,7 +62,7 @@ namespace Emgu.CV.Structure
       /// <returns>The dot product of the two 3D point</returns>
       public double DotProduct(MCvPoint3D64f point)
       {
-         return x * point.x + y * point.y + z * point.z;
+         return X * point.X + Y * point.Y + Z * point.Z;
       }
 
       #region operator overloads
@@ -74,7 +74,7 @@ namespace Emgu.CV.Structure
       /// <returns>The sum of two points</returns>
       public static MCvPoint3D64f operator +(MCvPoint3D64f p1, MCvPoint3D64f p2)
       {
-         return new MCvPoint3D64f(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
+         return new MCvPoint3D64f(p1.X + p2.X, p1.Y + p2.Y, p1.Z + p2.Z);
       }
 
       /// <summary>
@@ -85,7 +85,7 @@ namespace Emgu.CV.Structure
       /// <returns>The sum of two points</returns>
       public static MCvPoint3D64f operator -(MCvPoint3D64f p1, MCvPoint3D64f p2)
       {
-         return new MCvPoint3D64f(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+         return new MCvPoint3D64f(p1.X - p2.X, p1.Y - p2.Y, p1.Z - p2.Z);
       }
 
       /// <summary>
@@ -96,7 +96,7 @@ namespace Emgu.CV.Structure
       /// <returns>The point multiplied by the scale</returns>
       public static MCvPoint3D64f operator *(MCvPoint3D64f p, double scale)
       {
-         return new MCvPoint3D64f(p.x * scale, p.y * scale, p.z * scale);
+         return new MCvPoint3D64f(p.X * scale, p.Y * scale, p.Z * scale);
       }
 
       /// <summary>
@@ -119,7 +119,7 @@ namespace Emgu.CV.Structure
       /// <returns>True if the two points are equal</returns>
       public bool Equals(MCvPoint3D64f other)
       {
-         return x == other.x && y == other.y && z == other.z;
+         return X == other.X && Y == other.Y && Z == other.Z;
       }
 
       #endregion

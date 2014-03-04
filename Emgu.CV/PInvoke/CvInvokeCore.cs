@@ -546,6 +546,11 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int cveCountNonZero(IntPtr arr);
 
+      /// <summary>
+      /// Find the location of the non-zero pixel
+      /// </summary>
+      /// <param name="src">The source array</param>
+      /// <param name="idx">The output array where the location of the pixels are sorted</param>
       public static void FindNonZero(IInputArray src, IOutputArray idx)
       {
          cveFindNonZero(src.InputArrayPtr, idx.OutputArrayPtr);
@@ -553,7 +558,12 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFindNonZero(IntPtr src, IntPtr idx);
 
-
+      /// <summary>
+      /// Computes PSNR image/video quality metric
+      /// </summary>
+      /// <param name="src1">The first source image</param>
+      /// <param name="src2">The second source image</param>
+      /// <returns>the quality metric</returns>
       public static double PSNR(IInputArray src1, IInputArray src2)
       {
          return cvePSNR(src1.InputArrayPtr, src2.InputArrayPtr);
@@ -1142,7 +1152,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateImage(
          Size size,
-         CvEnum.IPL_DEPTH depth,
+         CvEnum.IplDepth depth,
          int channels);
 #endif
 
@@ -1173,7 +1183,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateImageHeader(
          Size size,
-         CvEnum.IPL_DEPTH depth,
+         CvEnum.IplDepth depth,
          int channels);
 #endif
 
@@ -1211,7 +1221,7 @@ namespace Emgu.CV
       public static extern IntPtr cvInitImageHeader(
          IntPtr image,
          Size size,
-         CvEnum.IPL_DEPTH depth,
+         CvEnum.IplDepth depth,
          int channels,
          int origin,
          int align);
@@ -1632,8 +1642,6 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="img">Image</param>
       /// <param name="pts">Array of pointers to polylines</param>
-      /// <param name="npts">Array of polyline vertex counters</param>
-      /// <param name="contours">Number of polyline contours</param>
       /// <param name="isClosed">
       /// Indicates whether the polylines must be drawn closed. 
       /// If !=0, the function draws the line from the last vertex of every contour to the first vertex.
@@ -1766,7 +1774,7 @@ namespace Emgu.CV
       /// <param name="radius">Radius of the circle.</param>
       /// <param name="color">Color of the circle</param>
       /// <param name="thickness">Thickness of the circle outline if positive, otherwise indicates that a filled circle has to be drawn</param>
-      /// <param name="lineType">Type of the circle boundary</param>
+      /// <param name="lineType">Line type</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public static void Circle(IInputOutputArray img, Point center, int radius, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
@@ -1849,10 +1857,10 @@ namespace Emgu.CV
           int shift = 0)
       {
          Size axes = new Size();
-         axes.Width = (int) Math.Round(box.size.Height * 0.5);
-         axes.Height = (int) Math.Round(box.size.Width * 0.5);
+         axes.Width = (int) Math.Round(box.Size.Height * 0.5);
+         axes.Height = (int) Math.Round(box.Size.Width * 0.5);
 
-         Ellipse(img, Point.Round(box.center), axes, box.angle, 0, 360, color, thickness, lineType, shift);
+         Ellipse(img, Point.Round(box.Center), axes, box.Angle, 0, 360, color, thickness, lineType, shift);
       }
 
       /// <summary>
@@ -1960,29 +1968,36 @@ namespace Emgu.CV
             MeanStdDev(arr, meanVec, stdDevVec, mask);
             double[] meanVal = meanVec.ToArray();
             double[] stdVal = stdDevVec.ToArray();
-            mean.v0 = meanVal[0];
-            stdDev.v0 = stdVal[0];
+            mean.V0 = meanVal[0];
+            stdDev.V0 = stdVal[0];
 
             if (meanVal.Length > 1)
             {
-               mean.v1 = meanVal[1];
-               stdDev.v1 = stdVal[1];
+               mean.V1 = meanVal[1];
+               stdDev.V1 = stdVal[1];
             }
 
             if (meanVal.Length > 2)
             {
-               mean.v2 = meanVal[2];
-               stdDev.v2 = stdVal[2];
+               mean.V2 = meanVal[2];
+               stdDev.V2 = stdVal[2];
             }
 
             if (meanVal.Length > 3)
             {
-               mean.v3 = meanVal[3];
-               stdDev.v3 = stdVal[3];
+               mean.V3 = meanVal[3];
+               stdDev.V3 = stdVal[3];
             }
          }
       }
 
+      /// <summary>
+      /// Calculates a mean and standard deviation of array elements.
+      /// </summary>
+      /// <param name="arr">Input array that should have from 1 to 4 channels so that the results can be stored in MCvScalar</param>
+      /// <param name="mean">Calculated mean value</param>
+      /// <param name="stdDev">Calculateded standard deviation</param>
+      /// <param name="mask">Optional operation mask</param>
       public static void MeanStdDev(IInputArray arr, IOutputArray mean, IOutputArray stdDev, IInputArray mask = null)
       {
          cveMeanStdDev(arr.InputArrayPtr, mean.OutputArrayPtr, stdDev.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
@@ -2092,8 +2107,7 @@ namespace Emgu.CV
       /// Fills convex polygon interior. This function is much faster than The function cvFillPoly and can fill not only the convex polygons but any monotonic polygon, i.e. a polygon whose contour intersects every horizontal line (scan line) twice at the most
       /// </summary>
       /// <param name="img">Image</param>
-      /// <param name="pts">Array of pointers to a single polygon</param>
-      /// <param name="npts">Polygon vertex counter</param>
+      /// <param name="points">Array of pointers to a single polygon</param>
       /// <param name="color">Polygon color</param>
       /// <param name="lineType">Type of the polygon boundaries</param>
       /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
@@ -2110,11 +2124,19 @@ namespace Emgu.CV
          CvEnum.LineType lineType,
          int shift);
 
+      /// <summary>
+      /// Fills the area bounded by one or more polygons.
+      /// </summary>
+      /// <param name="img">Image.</param>
+      /// <param name="points">Array of polygons where each polygon is represented as an array of points.</param>
+      /// <param name="color">Polygon color</param>
+      /// <param name="lineType">Type of the polygon boundaries.</param>
+      /// <param name="shift">Number of fractional bits in the vertex coordinates.</param>
+      /// <param name="offset">Optional offset of all points of the contours.</param>
       public static void FillPoly(IInputOutputArray img, IInputArray points, MCvScalar color, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0, Point offset = new Point())
       {
          cveFillPoly(img.InputOutputArrayPtr, points.InputArrayPtr, ref color, lineType, shift, ref offset);
       }
-
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFillPoly(
          IntPtr img,
@@ -2131,7 +2153,12 @@ namespace Emgu.CV
       /// <param name="img">Input image</param>
       /// <param name="text">String to print</param>
       /// <param name="org">Coordinates of the bottom-left corner of the first letter</param>
+      /// <param name="fontFace">Font type.</param>
+      /// <param name="fontScale">Font scale factor that is multiplied by the font-specific base size.</param>
       /// <param name="color">Text color</param>
+      /// <param name="thickness">Thickness of the lines used to draw a text.</param>
+      /// <param name="lineType">Line type</param>
+      /// <param name="bottomLeftOrigin">When true, the image data origin is at the bottom-left corner. Otherwise, it is at the top-left corner.</param>
       public static void PutText(
          IInputOutputArray img, String text, Point org, CvEnum.FontFace fontFace, double fontScale,
          MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, bool bottomLeftOrigin = false)
@@ -2323,6 +2350,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvGetReal3D(IntPtr arr, int idx0, int idx1, int idx2);
 
+      /*
       /// <summary>
       /// Return the value of the specified bin of 1D histogram. In case of sparse histogram the function returns 0, if the bin is not present in the histogram, and no new bin is created. 
       /// </summary>
@@ -2359,7 +2387,7 @@ namespace Emgu.CV
       public static double cvQueryHistValue_3D(IntPtr hist, int idx0, int idx1, int idx2)
       {
          return cvGetReal3D(Marshal.ReadIntPtr(hist, sizeof(int)), idx0, idx1, idx2);
-      }
+      }*/
 
       /// <summary>
       /// Switches between the mode, where only pure C implementations from cxcore, OpenCV etc. are used, and the mode, where IPP and MKL functions are used if available. When cvUseOptimized(0) is called, all the optimized libraries are unloaded. The function may be useful for debugging, IPP&amp;MKL upgrade on the fly, online speed comparisons etc.  Note that by default the optimized plugins are loaded, so it is not necessary to call cvUseOptimized(1) in the beginning of the program (actually, it will only increase the startup time)
@@ -2918,6 +2946,12 @@ namespace Emgu.CV
          bool allowND, 
          int coiMode);
 
+      /// <summary>
+      /// Horizontally concate two images
+      /// </summary>
+      /// <param name="src1">The first image</param>
+      /// <param name="src2">The second image</param>
+      /// <param name="dst">The result image</param>
       public static void HConcat(IInputArray src1, IInputArray src2, IOutputArray dst)
       {
          cveHConcat(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr);
@@ -2925,6 +2959,12 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void  cveHConcat(IntPtr src1, IntPtr src2, IntPtr dst);
 
+      /// <summary>
+      /// Vertically concate two images
+      /// </summary>
+      /// <param name="src1">The first image</param>
+      /// <param name="src2">The second image</param>
+      /// <param name="dst">The result image</param>
       public static void VConcat(IInputArray src1, IInputArray src2, IOutputArray dst)
       {
          cveVConcat(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr);

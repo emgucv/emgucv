@@ -25,9 +25,9 @@ namespace Emgu.CV.Features2D
       /// Detect the features in the image
       /// </summary>
       /// <param name="detector">The feature detector</param>
+      /// <param name="keypoints">The result vector of keypoints</param>
       /// <param name="image">The image from which the features will be detected from</param>
       /// <param name="mask">The optional mask.</param>
-      /// <returns>The features in the image</returns>
       public static void DetectRaw(this IFeatureDetector detector, IInputArray image, VectorOfKeyPoint keypoints, IInputArray mask = null)
       {
          CvFeatureDetectorDetectKeyPoints(detector.FeatureDetectorPtr, image.InputArrayPtr, keypoints.Ptr, mask == null ? IntPtr.Zero : mask.InputArrayPtr );   
@@ -78,7 +78,7 @@ namespace Emgu.CV.Features2D
       /// <param name="extractor">The descriptor extractor</param>
       /// <param name="image">The image to compute descriptors from</param>
       /// <param name="keyPoints">The keypoints where the descriptor computation is perfromed</param>
-      /// <returns>The descriptors from the given keypoints</returns>
+      /// <param name="descriptors">The descriptors from the given keypoints</param>
       public static void Compute(this IDescriptorExtractor extractor, IInputArray image, VectorOfKeyPoint keyPoints, IOutputArray descriptors)
       {
          CvDescriptorExtractorCompute(extractor.DescriptorExtratorPtr, image.InputArrayPtr, keyPoints.Ptr, descriptors.OutputArrayPtr);  
@@ -87,8 +87,6 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// Get the number of elements in the descriptor.
       /// </summary>
-      /// <typeparam name="TColor">The type of image the descriptor extractor operates on</typeparam>
-      /// <typeparam name="TDescriptor">The depth of the type of descriptor</typeparam>
       /// <param name="extractor">The descriptor extractor</param>
       /// <returns>The number of elements in the descriptor</returns>
       public static int GetDescriptorSize(this IDescriptorExtractor extractor)

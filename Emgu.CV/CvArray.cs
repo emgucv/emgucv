@@ -134,13 +134,13 @@ namespace Emgu.CV
             {
                Matrix<TDepth> matrix = (Matrix<TDepth>)this;
                MCvMat mat = matrix.MCvMat;
-               if (mat.step == 0)
+               if (mat.Step == 0)
                {  //The matrix only have one row
-                  size = mat.cols * NumberOfChannels * Marshal.SizeOf(typeof(TDepth));
+                  size = mat.Cols * NumberOfChannels * Marshal.SizeOf(typeof(TDepth));
                }
                else
-                  size = mat.rows * mat.step;
-               dataStart = mat.data;
+                  size = mat.Rows * mat.Step;
+               dataStart = mat.Data;
             }
             else if (this is MatND<TDepth>)
             {
@@ -149,8 +149,8 @@ namespace Emgu.CV
             else
             {  //this is Image<TColor, TDepth>
                MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
-               size = iplImage.height * iplImage.widthStep;
-               dataStart = iplImage.imageData;
+               size = iplImage.Height * iplImage.WidthStep;
+               dataStart = iplImage.ImageData;
             }
             Byte[] data = new Byte[size];
             Marshal.Copy(dataStart, data, 0, size);

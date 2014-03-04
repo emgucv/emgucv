@@ -14,6 +14,9 @@ namespace Emgu.CV
    {
       private bool _needDispose;
 
+      /// <summary>
+      /// Create a empty OclDevice object
+      /// </summary>
       public OclDevice()
          : this(OclInvoke.oclDeviceCreate(), true)
       {
@@ -548,6 +551,9 @@ namespace Emgu.CV
       All = -1 //0xFFFFFFFF
    }
 
+   /// <summary>
+   /// Class that contains ocl functions.
+   /// </summary>
    public static partial class OclInvoke
    {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

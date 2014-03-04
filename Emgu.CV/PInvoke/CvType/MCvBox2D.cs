@@ -17,16 +17,16 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// The center of the box
       /// </summary>
-      public PointF center;
+      public PointF Center;
       /// <summary>
       /// The size of the box
       /// </summary>
-      public SizeF size;
+      public SizeF Size;
       /// <summary>
       /// The angle between the horizontal axis and the first side (i.e. width) in degrees
       /// </summary>
       /// <remarks>Possitive value means counter-clock wise rotation</remarks>
-      public float angle;
+      public float Angle;
 
       /// <summary>
       /// Create a MCvBox2D structure with the specific parameters
@@ -36,9 +36,9 @@ namespace Emgu.CV.Structure
       /// <param name="angle">The angle of the box in degrees. Possitive value means counter-clock wise rotation</param>
       public MCvBox2D(PointF center, SizeF size, float angle)
       {
-         this.center = center;
-         this.size = size;
-         this.angle = angle;
+         this.Center = center;
+         this.Size = size;
+         this.Angle = angle;
       }
 
       /// <summary>
@@ -48,8 +48,8 @@ namespace Emgu.CV.Structure
       /// <param name="y">The y value to be offseted</param>
       public void Offset(int x, int y)
       {
-         center.X += x;
-         center.Y += y;
+         Center.X += x;
+         Center.Y += y;
       }
 
       /// <summary>
@@ -100,9 +100,9 @@ namespace Emgu.CV.Structure
       /// <returns>True if two boxes are equal</returns>
       public bool Equals(MCvBox2D other)
       {
-         return center.Equals(other.center)
-            && size.Equals(other.size)
-            && angle == other.angle;
+         return Center.Equals(other.Center)
+            && Size.Equals(other.Size)
+            && Angle == other.Angle;
       }
 
       /// <summary>

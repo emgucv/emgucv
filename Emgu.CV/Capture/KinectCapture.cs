@@ -148,7 +148,7 @@ namespace Emgu.CV
             return null;
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
-         Image<Gray, float> res = new Image<Gray, float>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
+         Image<Gray, float> res = new Image<Gray, float>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
 
          //inplace flip the image if necessary
          res._Flip(FlipType);
@@ -176,7 +176,7 @@ namespace Emgu.CV
             return null;
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
-         Image<Gray, int> res = new Image<Gray, int>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
+         Image<Gray, int> res = new Image<Gray, int>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
 
          //inplace flip the image if necessary
          res._Flip(FlipType);
@@ -204,9 +204,9 @@ namespace Emgu.CV
 
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
 
-         MCvPoint3D32f[] points = new MCvPoint3D32f[iplImage.width * iplImage.height];
+         MCvPoint3D32f[] points = new MCvPoint3D32f[iplImage.Width * iplImage.Height];
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         using (Matrix<float> m = new Matrix<float>(iplImage.height, iplImage.width, handle.AddrOfPinnedObject()))
+         using (Matrix<float> m = new Matrix<float>(iplImage.Height, iplImage.Width, handle.AddrOfPinnedObject()))
          {
             CvInvoke.cvCopy(img, m, IntPtr.Zero);
          }

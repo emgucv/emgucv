@@ -169,7 +169,7 @@ namespace Emgu.CV
             {
                MCvObjectDetection od = new MCvObjectDetection();
                od.Rect = location[i];
-               od.score = (float) weight[i];
+               od.Score = (float) weight[i];
                result[i] = od;
             }
             return result;

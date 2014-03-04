@@ -96,11 +96,11 @@ namespace Emgu.CV.Test
          });
          IEnumerator<MCvPoint2D64f> enumerator = interPts.GetEnumerator();
          enumerator.MoveNext();
-         EmguAssert.IsTrue(1.5 == enumerator.Current.x);
-         EmguAssert.IsTrue(2.5 == enumerator.Current.y);
+         EmguAssert.IsTrue(1.5 == enumerator.Current.X);
+         EmguAssert.IsTrue(2.5 == enumerator.Current.Y);
          enumerator.MoveNext();
-         EmguAssert.IsTrue(3.5 == enumerator.Current.x);
-         EmguAssert.IsTrue(-1 == enumerator.Current.y);
+         EmguAssert.IsTrue(3.5 == enumerator.Current.X);
+         EmguAssert.IsTrue(-1 == enumerator.Current.Y);
       }
 
       [Test]
@@ -1293,10 +1293,10 @@ namespace Emgu.CV.Test
          float min = (float) 1.0e10, max = 0;
          foreach (MCvPoint3D32f p in points)
          {
-            if (p.z < min)
-               min = p.z;
-            else if (p.z > max)
-               max = p.z;
+            if (p.Z < min)
+               min = p.Z;
+            else if (p.Z > max)
+               max = p.Z;
          }
          EmguAssert.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
 
@@ -1360,10 +1360,10 @@ namespace Emgu.CV.Test
          float min = (float) 1.0e10, max = 0;
          foreach (MCvPoint3D32f p in points)
          {
-            if (p.z < min)
-               min = p.z;
-            else if (p.z > max)
-               max = p.z;
+            if (p.Z < min)
+               min = p.Z;
+            else if (p.Z > max)
+               max = p.Z;
          }
          EmguAssert.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
 
@@ -1522,7 +1522,7 @@ namespace Emgu.CV.Test
                //viewer.ShowDialog();
             }
          }
-      }*/
+      }
 
       [Test]
       public void TestSURFFeatureRuntimeSerialization()
@@ -1544,7 +1544,7 @@ namespace Emgu.CV.Test
                SURFFeature sf2 = (SURFFeature) o;
             }
          }
-      }
+      }*/
 
       [Test]
       public void TestMatNDRuntimeSerialization()
@@ -2025,15 +2025,15 @@ namespace Emgu.CV.Test
 
          for (int i = 0; i < points.Length; i++)
          {
-            points[i].x = (float) r.NextDouble();
-            points[i].y = (float) r.NextDouble();
-            points[i].z = (float) r.NextDouble();
+            points[i].X = (float) r.NextDouble();
+            points[i].Y = (float) r.NextDouble();
+            points[i].Z = (float) r.NextDouble();
          }
 
          MCvPoint3D32f searchPoint = new MCvPoint3D32f();
-         searchPoint.x = (float) r.NextDouble();
-         searchPoint.y = (float) r.NextDouble();
-         searchPoint.z = (float) r.NextDouble();
+         searchPoint.X = (float) r.NextDouble();
+         searchPoint.Y = (float) r.NextDouble();
+         searchPoint.Z = (float) r.NextDouble();
 
          int indexOfClosest1 = 0;
          double shortestDistance1 = double.MaxValue;
@@ -2351,12 +2351,12 @@ namespace Emgu.CV.Test
             for (int j = 0; j < pN; j++)
             {
                // if the image point is within camera resolution then the point is visible
-               if ((0 <= imagePoints[i][j].x) && (imagePoints[i][j].x <= cameraRes.Height) &&
-                   (0 <= imagePoints[i][j].y) && (imagePoints[i][j].y <= cameraRes.Width))
+               if ((0 <= imagePoints[i][j].X) && (imagePoints[i][j].X <= cameraRes.Height) &&
+                   (0 <= imagePoints[i][j].Y) && (imagePoints[i][j].Y <= cameraRes.Width))
                {  // add randomness	
                   // perturbate
                   visibility[i][j] = 1;
-                  imagePoints[i][j] = new MCvPoint2D64f((float)points[i].x + ran.Next(0, 3), (float)points[i].y + ran.Next(0, 3));
+                  imagePoints[i][j] = new MCvPoint2D64f((float)points[i].X + ran.Next(0, 3), (float)points[i].Y + ran.Next(0, 3));
                }
                // else, the point is not visible 
                else
@@ -2392,14 +2392,14 @@ namespace Emgu.CV.Test
                   MCvObjectDetection[] results = detector.Detect(img, 0.5f);
                   if (results.Length >= 0)
                   {
-                     double maxScore = results[0].score;
+                     double maxScore = results[0].Score;
                      Rectangle result = results[0].Rect;
 
                      for (int i = 1; i < results.Length; ++i)
                      {
-                        if (results[i].score > maxScore)
+                        if (results[i].Score > maxScore)
                         {
-                           maxScore = results[i].score;
+                           maxScore = results[i].Score;
                            result = results[i].Rect;
                         }
                      }

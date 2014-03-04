@@ -139,9 +139,9 @@ namespace Emgu.CV.Util
          int cols = data[0].Length;
          Matrix<T> res = new Matrix<T>(rows, cols);
          MCvMat mat = res.MCvMat;
-         long dataPos = mat.data.ToInt64();
+         long dataPos = mat.Data.ToInt64();
          int rowSizeInBytes = Marshal.SizeOf(typeof(T)) * cols;
-         for (int i = 0; i < rows; i++, dataPos += mat.step)
+         for (int i = 0; i < rows; i++, dataPos += mat.Step)
          {
             GCHandle handle = GCHandle.Alloc(data[i], GCHandleType.Pinned);
             Emgu.Util.Toolbox.memcpy(new IntPtr(dataPos), handle.AddrOfPinnedObject(), rowSizeInBytes);
@@ -165,7 +165,7 @@ namespace Emgu.CV.Util
          for (int i = 0; i < rows; i++)
          {
             GCHandle handleTmp = GCHandle.Alloc(points[i], GCHandleType.Pinned);
-            IntPtr dst = new IntPtr(cvMat.data.ToInt64() + cvMat.step * i);
+            IntPtr dst = new IntPtr(cvMat.Data.ToInt64() + cvMat.Step * i);
             Emgu.Util.Toolbox.memcpy(dst, handleTmp.AddrOfPinnedObject(), points[i].Length * Marshal.SizeOf(typeof(MCvPoint2D64f)));
             handleTmp.Free();
          }
@@ -183,18 +183,18 @@ namespace Emgu.CV.Util
       public static void GetMinMax(IEnumerable<MCvPoint3D64f> points, out MCvPoint3D64f min, out MCvPoint3D64f max)
       {
          min = new MCvPoint3D64f();
-         min.x = min.y = min.z = double.MaxValue;
+         min.X = min.Y = min.Z = double.MaxValue;
          max = new MCvPoint3D64f();
-         max.x = max.y = max.z = double.MinValue;
+         max.X = max.Y = max.Z = double.MinValue;
 
          foreach (MCvPoint3D64f p in points)
          {
-            min.x = Math.Min(min.x, p.x);
-            min.y = Math.Min(min.y, p.y);
-            min.z = Math.Min(min.z, p.z);
-            max.x = Math.Max(max.x, p.x);
-            max.y = Math.Max(max.y, p.y);
-            max.z = Math.Max(max.z, p.z);
+            min.X = Math.Min(min.X, p.X);
+            min.Y = Math.Min(min.Y, p.Y);
+            min.Z = Math.Min(min.Z, p.Z);
+            max.X = Math.Max(max.X, p.X);
+            max.Y = Math.Max(max.Y, p.Y);
+            max.Z = Math.Max(max.Z, p.Z);
          }
       }
 

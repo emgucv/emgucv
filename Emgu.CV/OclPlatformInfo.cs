@@ -68,6 +68,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get the number of device that belongs to the 
+      /// </summary>
       public int DeviceNumber
       {
          get
@@ -85,6 +88,11 @@ namespace Emgu.CV
             OclInvoke.oclPlatformInfoRelease(ref _ptr);
       }
 
+      /// <summary>
+      /// Get the OclDevice with the specific index
+      /// </summary>
+      /// <param name="d">The index of the ocl device</param>
+      /// <returns>The ocl device with the specific index</returns>
       public OclDevice GetDevice(int d)
       {
          OclDevice device = new OclDevice();
@@ -120,6 +128,10 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclGetPlatfomsInfo(IntPtr platformInfoVec);
 
+      /// <summary>
+      /// Get all the platform info as a vector
+      /// </summary>
+      /// <returns>The vector of Platfom info</returns>
       public static Util.VectorOfOclPlatformInfo GetPlatformInfo()
       {
          Util.VectorOfOclPlatformInfo result = new Util.VectorOfOclPlatformInfo();

@@ -134,7 +134,7 @@ namespace Emgu.CV.Util
          _MCvPoint3D32f = Marshal.SizeOf(typeof(MCvPoint3D32f));
          _MCvMatND = Marshal.SizeOf(typeof(MCvMatND));
          _MCvPoint2D64f = Marshal.SizeOf(typeof(MCvPoint2D64f));
-         _MCvHistogram = Marshal.SizeOf(typeof(MCvHistogram));
+         //_MCvHistogram = Marshal.SizeOf(typeof(MCvHistogram));
          _MCvBlob = Marshal.SizeOf(typeof(MCvBlob));
       }
    }

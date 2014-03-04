@@ -15,35 +15,42 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Shape
 {
+   /// <summary>
+   /// Abstract base class for shape distance algorithms.
+   /// </summary>
    public abstract class ShapeDistanceExtractor : UnmanagedObject
    {
+      /// <summary>
+      /// Compute the shape distance between two shapes defined by its contours.
+      /// </summary>
+      /// <param name="contour1">Contour defining first shape</param>
+      /// <param name="contour2">Contour defining second shape</param>
+      /// <returns>The shape distance between two shapes defined by its contours.</returns>
       public float ComputeDistance(Point[] contour1, Point[] contour2)
       {
-         using (Emgu.CV.Util.VectorOfPoint c1 = new Util.VectorOfPoint())
-         using (Emgu.CV.Util.VectorOfPoint c2 = new Util.VectorOfPoint())
+         using (Emgu.CV.Util.VectorOfPoint c1 = new Util.VectorOfPoint(contour1))
+         using (Emgu.CV.Util.VectorOfPoint c2 = new Util.VectorOfPoint(contour2))
          {
-            c1.Push(contour1);
-            c2.Push(contour2);
-            return cvShapeDistanceExtractorComputeDistance(_ptr, c1, c2);
+            return ShapeInvoke.cvShapeDistanceExtractorComputeDistance(_ptr, c1, c2);
          }
       }
-
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static float cvShapeDistanceExtractorComputeDistance(IntPtr extractor, IntPtr contour1, IntPtr contour2);
    }
 
    public class ShapeContextDistanceExtractor : ShapeDistanceExtractor
    {
       public ShapeContextDistanceExtractor(int nAngularBins, int nRadialBins, float innerRadius, float outerRadius, int iterations, HistogramCostExtractor comparer, ShapeTransformer transformer)
       {
-         _ptr = cvShapeContextDistanceExtractorCreate(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparer, transformer);
+         _ptr = ShapeInvoke.cvShapeContextDistanceExtractorCreate(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparer, transformer);
       }
 
       protected override void DisposeObject()
       {
-         cvShapeContextDistanceExtractorRelease(ref _ptr);
+         ShapeInvoke.cvShapeContextDistanceExtractorRelease(ref _ptr);
       }
+   }
 
+   public static partial class ShapeInvoke
+   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvShapeContextDistanceExtractorCreate(
          int nAngularBins, int nRadialBins, float innerRadius, float outerRadius, int iterations,
@@ -51,14 +58,14 @@ namespace Emgu.CV.Shape
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvShapeContextDistanceExtractorRelease(ref IntPtr extractor);
-   }
 
-   public static partial class ShapeInvoke
-   {
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvHausdorffDistanceExtractorRelease(ref IntPtr extractor);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static float cvShapeDistanceExtractorComputeDistance(IntPtr extractor, IntPtr contour1, IntPtr contour2);
    }
 }

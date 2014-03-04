@@ -15,7 +15,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// sizeof(IplImage) 
       /// </summary>
-      public int nSize;
+      public int NSize;
       /// <summary>
       /// version (=0)
       /// </summary>
@@ -23,102 +23,102 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Most of OpenCV functions support 1,2,3 or 4 channels 
       /// </summary>
-      public int nChannels;
+      public int NChannels;
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      public int alphaChannel;
+      public int AlphaChannel;
       /// <summary>
       /// pixel depth in bits: IPL_DEPTH_8U, IPL_DEPTH_8S, IPL_DEPTH_16U, IPL_DEPTH_16S, IPL_DEPTH_32S, IPL_DEPTH_32F and IPL_DEPTH_64F are supported 
       /// </summary>
-      public CvEnum.IPL_DEPTH depth;
+      public CvEnum.IplDepth Depth;
 
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      public byte colorModel0;
+      public byte ColorModel0;
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      public byte colorModel1;
+      public byte ColorModel1;
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      public byte colorModel2;
+      public byte ColorModel2;
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      public byte colorModel3;
+      public byte ColorModel3;
 
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      public byte channelSeq0;
+      public byte ChannelSeq0;
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      public byte channelSeq1;
+      public byte ChannelSeq1;
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      public byte channelSeq2;
+      public byte ChannelSeq2;
       /// <summary>
       /// ignored by OpenCV 
       /// </summary>
-      public byte channelSeq3;
+      public byte ChannelSeq3;
 
       /// <summary>
       /// 0 - interleaved color channels, 1 - separate color channels.
       /// cvCreateImage can only create interleaved images 
       /// </summary>
-      public int dataOrder;
+      public int DataOrder;
       /// <summary>
       /// 0 - top-left origin,
       /// 1 - bottom-left origin (Windows bitmaps style)
       /// </summary>
-      public int origin;
+      public int Origin;
       /// <summary>
       /// Alignment of image rows (4 or 8).
       /// OpenCV ignores it and uses widthStep instead 
       /// </summary>
-      public int align;
+      public int Align;
       /// <summary>
       /// image width in pixels 
       /// </summary>
-      public int width;
+      public int Width;
       /// <summary>
       /// image height in pixels 
       /// </summary>
-      public int height;
+      public int Height;
       /// <summary>
       /// image ROI. when it is not NULL, this specifies image region to process 
       /// </summary>
-      public IntPtr roi;
+      public IntPtr Roi;
       /// <summary>
       /// must be NULL in OpenCV 
       /// </summary>
-      public IntPtr maskROI;
+      public IntPtr MaskROI;
       /// <summary>
       /// ditto
       /// </summary>
-      public IntPtr imageId;
+      public IntPtr ImageId;
       /// <summary>
       /// ditto 
       /// </summary>
-      public IntPtr tileInfo;
+      public IntPtr TileInfo;
       /// <summary>
       /// image data size in bytes
       /// (=image->height*image->widthStep in case of interleaved data)
       /// </summary>
-      public int imageSize;
+      public int ImageSize;
       /// <summary>
       /// pointer to aligned image data 
       /// </summary>
-      public IntPtr imageData;
+      public IntPtr ImageData;
       /// <summary>
       /// size of aligned image row in bytes 
       /// </summary>
-      public int widthStep;
+      public int WidthStep;
 
       /// <summary>
       /// border completion mode, ignored by OpenCV 
@@ -157,7 +157,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       ///  pointer to a very origin of image data (not necessarily aligned) - it is needed for correct image deallocation 
       /// </summary>
-      public IntPtr imageDataOrigin;
+      public IntPtr ImageDataOrigin;
    }
 
    /*

@@ -17,12 +17,12 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// x-coordinate
       /// </summary>
-      public double x;
+      public double X;
 
       /// <summary>
       /// y-coordinate
       /// </summary>
-      public double y;
+      public double Y;
 
       /// <summary>
       /// Create a MCvPoint2D64f structure with the specific x and y coordinates
@@ -31,7 +31,7 @@ namespace Emgu.CV.Structure
       /// <param name="y">y-coordinate</param>
       public MCvPoint2D64f(double x, double y)
       {
-         this.x = x; this.y = y;
+         this.X = x; this.Y = y;
       }
 
       #region operator overloads
@@ -43,7 +43,7 @@ namespace Emgu.CV.Structure
       /// <returns>The sum of two points</returns>
       public static MCvPoint2D64f operator +(MCvPoint2D64f p1, MCvPoint2D64f p2)
       {
-         return new MCvPoint2D64f(p1.x + p2.x, p1.y + p2.y);
+         return new MCvPoint2D64f(p1.X + p2.X, p1.Y + p2.Y);
       }
 
       /// <summary>
@@ -54,7 +54,7 @@ namespace Emgu.CV.Structure
       /// <returns>The sum of two points</returns>
       public static MCvPoint2D64f operator -(MCvPoint2D64f p1, MCvPoint2D64f p2)
       {
-         return new MCvPoint2D64f(p1.x - p2.x, p1.y - p2.y);
+         return new MCvPoint2D64f(p1.X - p2.X, p1.Y - p2.Y);
       }
 
       /// <summary>
@@ -65,7 +65,7 @@ namespace Emgu.CV.Structure
       /// <returns>The point multiplied by the scale</returns>
       public static MCvPoint2D64f operator *(MCvPoint2D64f p, double scale)
       {
-         return new MCvPoint2D64f(p.x * scale, p.y * scale);
+         return new MCvPoint2D64f(p.X * scale, p.Y * scale);
       }
 
       /// <summary>
@@ -88,7 +88,7 @@ namespace Emgu.CV.Structure
       /// <returns>True if the two points equals</returns>
       public bool Equals(MCvPoint2D64f other)
       {
-         return x == other.x && y == other.y;
+         return X == other.X && Y == other.Y;
       }
 
       #endregion
@@ -97,7 +97,7 @@ namespace Emgu.CV.Structure
 
       double IInterpolatable<MCvPoint2D64f>.InterpolationIndex
       {
-         get { return x; }
+         get { return X; }
       }
       /*
       void IInterpolatable<MCvPoint2D64f>.Mul(double scale)
@@ -120,9 +120,9 @@ namespace Emgu.CV.Structure
 
       MCvPoint2D64f IInterpolatable<MCvPoint2D64f>.LinearInterpolate(MCvPoint2D64f other, double index)
       {
-         double f1 = (other.x - index) / (other.x - this.x);
+         double f1 = (other.X - index) / (other.X - this.X);
          double f2 = 1.0-f1;
-         return new MCvPoint2D64f(x * f1 + other.x * f2, y * f1 + other.y * f2);
+         return new MCvPoint2D64f(X * f1 + other.X * f2, Y * f1 + other.Y * f2);
       }
       #endregion
    }

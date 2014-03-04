@@ -16,47 +16,47 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// CvMat signature (CV_MAT_MAGIC_VAL), element type and flags
       /// </summary>
-      public int type;
+      public int Type;
 
       /// <summary>
       /// full row length in bytes
       /// </summary>
-      public int step;
+      public int Step;
 
       /// <summary>
       /// underlying data reference counter
       /// </summary>
-      public IntPtr refcount;
+      public IntPtr Refcount;
 
       /// <summary>
       /// Header reference count
       /// </summary>
-      public int hdr_refcount;
+      public int HdrRefcount;
 
       /// <summary>
       /// data pointers
       /// </summary>
-      public IntPtr data;
+      public IntPtr Data;
 
       /// <summary>
       /// number of rows
       /// </summary>
-      public int rows;
+      public int Rows;
 
       /// <summary>
       /// number of columns
       /// </summary>
-      public int cols;
+      public int Cols;
 
       /// <summary>
       /// Width
       /// </summary>
-      public int width { get { return cols; } }
+      public int Width { get { return Cols; } }
 
       /// <summary>
       /// Height
       /// </summary>
-      public int height { get { return rows; } }
+      public int Height { get { return Rows; } }
 
       /// <summary>
       /// Get the number of channels
@@ -65,7 +65,7 @@ namespace Emgu.CV.Structure
       {
          get
          {
-            return ((((type) & ((64 - 1) << 3)) >> 3) + 1);
+            return ((((Type) & ((64 - 1) << 3)) >> 3) + 1);
          }
       }
    }

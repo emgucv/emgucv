@@ -127,8 +127,8 @@ namespace Emgu.CV
          //Returned angle is clock wise rotation, what we need for the definition of MCvBox is the counter clockwise rotation.
          //For this, we needs to change the sign of the angle
          MCvBox2D b = e.MCvBox2D;
-         b.angle = -b.angle;
-         if (b.angle < 0) b.angle += 360;
+         b.Angle = -b.Angle;
+         if (b.Angle < 0) b.Angle += 360;
          e.MCvBox2D = b;
          
          handle.Free();
@@ -353,10 +353,10 @@ namespace Emgu.CV
          using (Matrix<float> points = new Matrix<float>(numberOfPoints, 2, handle.AddrOfPinnedObject()))
          using (Matrix<float> xValues = points.GetCol(0))
          using (Matrix<float> yValues = points.GetCol(1))
-         using (RotationMatrix2D<float> rotation = new RotationMatrix2D<float>(e.MCvBox2D.center, e.MCvBox2D.angle, 1.0))
+         using (RotationMatrix2D<float> rotation = new RotationMatrix2D<float>(e.MCvBox2D.Center, e.MCvBox2D.Angle, 1.0))
          {
-            xValues.SetRandNormal(new MCvScalar(e.MCvBox2D.center.X), new MCvScalar(e.MCvBox2D.size.Width / 2.0f));
-            yValues.SetRandNormal(new MCvScalar(e.MCvBox2D.center.Y), new MCvScalar(e.MCvBox2D.size.Height / 2.0f));
+            xValues.SetRandNormal(new MCvScalar(e.MCvBox2D.Center.X), new MCvScalar(e.MCvBox2D.Size.Width / 2.0f));
+            yValues.SetRandNormal(new MCvScalar(e.MCvBox2D.Center.Y), new MCvScalar(e.MCvBox2D.Size.Height / 2.0f));
             rotation.RotatePoints(points);
          }
          handle.Free();

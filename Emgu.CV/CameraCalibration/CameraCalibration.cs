@@ -141,22 +141,18 @@ namespace Emgu.CV
       /// <param name="objectPoints">The array of object points</param>
       /// <param name="imagePoints">The array of corresponding image points</param>
       /// <param name="intrin">The intrinsic parameters</param>
+      /// <param name="method">Method for solving a PnP problem</param>
       /// <returns>The extrinsic parameters</returns>
-      public static ExtrinsicCameraParameters FindExtrinsicCameraParams2(
-          MCvPoint3D32f[] objectPoints,
-          PointF[] imagePoints,
-          IntrinsicCameraParameters intrin)
+      public static ExtrinsicCameraParameters SolvePnP(
+         MCvPoint3D32f[] objectPoints,
+         PointF[] imagePoints,
+         IntrinsicCameraParameters intrin, 
+         CvEnum.SolvePnpMethod method = CvEnum.SolvePnpMethod.Iterative)
       {
          ExtrinsicCameraParameters p = new ExtrinsicCameraParameters();
-
-         GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
-         GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
-         using (Matrix<float> objectPointMatrix = new Matrix<float>(objectPoints.Length, 3, handle1.AddrOfPinnedObject()))
-         using (Matrix<float> imagePointMatrix = new Matrix<float>(imagePoints.Length, 2, handle2.AddrOfPinnedObject()))
-            CvInvoke.cvFindExtrinsicCameraParams2(objectPointMatrix, imagePointMatrix, intrin.IntrinsicMatrix.Ptr, intrin.DistortionCoeffs.Ptr, p.RotationVector.Ptr, p.TranslationVector.Ptr, 0);
-         handle1.Free();
-         handle2.Free();
-
+         using (VectorOfPoint3D32F objPtVec = new VectorOfPoint3D32F(objectPoints))
+         using (VectorOfPointF imgPtVec = new VectorOfPointF(imagePoints))
+            CvInvoke.SolvePnP(objPtVec, imgPtVec, intrin.IntrinsicMatrix, intrin.DistortionCoeffs, p.RotationVector, p.TranslationVector, false, method);
          return p;
       }
 
@@ -347,7 +343,7 @@ namespace Emgu.CV
 
          Matrix<float> res = new Matrix<float>(elementCount, floatValueInStructure);
 
-         Int64 address = res.MCvMat.data.ToInt64();
+         Int64 address = res.MCvMat.Data.ToInt64();
 
          foreach (T[] d in data)
          {

@@ -16,7 +16,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// The type of BG model
       /// </summary>
-      public int type;
+      public int Type;
 
       /// <summary>
       /// Pointer to the function that can be used to release this BGStatModel
@@ -31,32 +31,32 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// 8UC3 reference background image
       /// </summary>
-      public IntPtr background;
+      public IntPtr Background;
 
       /// <summary>
       /// 8UC1 foreground image
       /// </summary>
-      public IntPtr foreground;
+      public IntPtr Foreground;
 
       /// <summary>
       /// 8UC3 reference background image, can be null
       /// </summary>
-      public IntPtr layers;
+      public IntPtr Layers;
 
       /// <summary>
       /// Can be zero
       /// </summary>
-      public int layer_count;
+      public int LayerCount;
 
       /// <summary>
       /// Storage for foreground_regions
       /// </summary>
-      public IntPtr storage;
+      public IntPtr Storage;
 
       /// <summary>
       /// Foreground object contours
       /// </summary>
-      public IntPtr foreground_regions;
+      public IntPtr ForegroundRegions;
 
    }
 }

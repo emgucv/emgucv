@@ -42,9 +42,9 @@ namespace Emgu.CV.Structure
       {
          get
          {
-            float dx = P1.x - P2.x;
-            float dy = P1.y - P2.y;
-            float dz = P1.z - P2.z;
+            float dx = P1.X - P2.X;
+            float dy = P1.Y - P2.Y;
+            float dz = P1.Z - P2.Z;
             return Math.Sqrt(dx * dx + dy * dy + dz * dz);
          }
       }

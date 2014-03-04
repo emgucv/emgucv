@@ -109,8 +109,8 @@ namespace Emgu.CV.ML
             if (matPtr == IntPtr.Zero) return null;
             MCvMat mat = (MCvMat)Marshal.PtrToStructure(matPtr, typeof(MCvMat));
 
-            Matrix<float> res = new Matrix<float>(mat.rows, mat.cols, 1, mat.data, mat.step);
-            Debug.Assert(mat.type == res.MCvMat.type, "Matrix type is not float");
+            Matrix<float> res = new Matrix<float>(mat.Rows, mat.Cols, 1, mat.Data, mat.Step);
+            Debug.Assert(mat.Type == res.MCvMat.Type, "Matrix type is not float");
             return res;
          }
       }

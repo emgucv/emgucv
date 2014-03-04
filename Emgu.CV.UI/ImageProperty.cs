@@ -156,7 +156,7 @@ namespace Emgu.CV.UI
          if (isCvArray)
          {
             MCvScalar scalar = CvInvoke.cvGet2D(img.Ptr, location.Y, location.X);
-            _buffer[0] = scalar.v0; _buffer[1] = scalar.v1; _buffer[2] = scalar.v2; _buffer[3] = scalar.v3;
+            _buffer[0] = scalar.V0; _buffer[1] = scalar.V1; _buffer[2] = scalar.V2; _buffer[3] = scalar.V3;
 
             StringBuilder sb = new StringBuilder(String.Format("[{0}", _buffer[0]));
             for (int i = 1; i < img.NumberOfChannels; i++)

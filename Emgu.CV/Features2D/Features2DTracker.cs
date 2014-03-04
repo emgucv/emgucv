@@ -469,14 +469,14 @@ namespace Emgu.CV.Features2D
          MatchedImageFeature[] result = new MatchedImageFeature[resultLength];
 
          MCvMat modelMat = (MCvMat)Marshal.PtrToStructure(modelDescriptorMat.Ptr, typeof(MCvMat));
-         long modelPtr = modelMat.data.ToInt64();
-         int modelStep = modelMat.step;
+         long modelPtr = modelMat.Data.ToInt64();
+         int modelStep = modelMat.Step;
 
          MCvMat observedMat = (MCvMat)Marshal.PtrToStructure(observedDescriptorMat.Ptr, typeof(MCvMat));
-         long observedPtr = observedMat.data.ToInt64();
-         int observedStep = observedMat.step;
+         long observedPtr = observedMat.Data.ToInt64();
+         int observedStep = observedMat.Step;
 
-         int descriptorLength = modelMat.cols;
+         int descriptorLength = modelMat.Cols;
          int descriptorSizeInByte = descriptorLength * Marshal.SizeOf(typeof(TDescriptor));
 
          int k = dists.Cols;

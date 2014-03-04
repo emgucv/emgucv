@@ -13,7 +13,7 @@ if [ "$1" != "simulator" ]; then
     rm -f CMakeCache.txt
     platforms/ios/configure-device_xcode.sh
     rm -rf platforms/ios/armv7s bin/Release opencv/3rdparty/lib/Release 
-    xcodebuild -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
+    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
     mkdir -p platforms/ios/armv7s 
     #cp -r lib/Release/* ios/armv7s/
     cp -r bin/Release/* platforms/ios/armv7s/
@@ -26,7 +26,7 @@ if [ "$1" != "simulator" ]; then
     rm -f CMakeCache.txt
     platforms/ios/configure-device_xcode.sh
     rm -rf platforms/ios/armv7 bin/Release opencv/3rdparty/lib/Release
-    xcodebuild -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
+    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
     mkdir -p platforms/ios/armv7 
     #cp -r lib/Release/* ios/armv7/
     cp -r bin/Release/* platforms/ios/armv7/
@@ -41,7 +41,7 @@ fi
 rm -f CMakeCache.txt
 platforms/ios/configure-simulator_xcode.sh
 rm -rf platforms/ios/i386 bin/Release opencv/3rdparty/lib/Release
-xcodebuild -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release -target ALL_BUILD clean build
+xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release -target ALL_BUILD clean build
 mkdir -p platforms/ios/i386
 #cp -r lib/Release/* ios/i386/
 cp -r bin/Release/* platforms/ios/i386/

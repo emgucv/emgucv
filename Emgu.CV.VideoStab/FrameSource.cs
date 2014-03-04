@@ -52,9 +52,9 @@ namespace Emgu.CV.VideoStab
          MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(_frameBuffer, typeof(MIplImage));
 
          Image<Bgr, Byte> res;
-         if (iplImage.nChannels == 1)
+         if (iplImage.NChannels == 1)
          {  //if the image captured is Grayscale, convert it to BGR
-            res = new Image<Bgr, Byte>(iplImage.width, iplImage.height);
+            res = new Image<Bgr, Byte>(iplImage.Width, iplImage.Height);
             using (Mat m = CvInvoke.CvArrToMat(_frameBuffer))
             {
                CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.GRAY2BGR);
@@ -62,7 +62,7 @@ namespace Emgu.CV.VideoStab
          }
          else
          {
-            res = new Image<Bgr, byte>(iplImage.width, iplImage.height, iplImage.widthStep, iplImage.imageData);
+            res = new Image<Bgr, byte>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
          }
 
          return res;

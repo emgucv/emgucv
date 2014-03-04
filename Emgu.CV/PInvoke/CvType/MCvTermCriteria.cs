@@ -16,17 +16,17 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// CV_TERMCRIT value
       /// </summary>
-      public CvEnum.TermCritType type;
+      public CvEnum.TermCritType Type;
 
       /// <summary>
       /// Maximum iteration
       /// </summary>
-      public int max_iter;
+      public int MaxIter;
 
       /// <summary>
       /// Epsilon
       /// </summary>
-      public double epsilon;
+      public double Epsilon;
 
       ///<summary>
       ///Create the termination criteria using the constrain of maximum iteration
@@ -34,9 +34,9 @@ namespace Emgu.CV.Structure
       ///<param name="maxIteration">The maximum number of iteration allowed</param>
       public MCvTermCriteria(int maxIteration)
       {
-         max_iter = maxIteration;
-         epsilon = 0.0;
-         type = CvEnum.TermCritType.Iter;
+         MaxIter = maxIteration;
+         Epsilon = 0.0;
+         Type = CvEnum.TermCritType.Iter;
       }
 
       ///<summary>
@@ -45,9 +45,9 @@ namespace Emgu.CV.Structure
       ///<param name="eps"> The epsilon value</param>
       public MCvTermCriteria(double eps)
       {
-         max_iter = 0;
-         epsilon = eps;
-         type = CvEnum.TermCritType.Eps;
+         MaxIter = 0;
+         Epsilon = eps;
+         Type = CvEnum.TermCritType.Eps;
       }
 
       /// <summary>
@@ -57,9 +57,9 @@ namespace Emgu.CV.Structure
       /// <param name="eps">The epsilon value</param>
       public MCvTermCriteria(int maxIteration, double eps)
       {
-         max_iter = maxIteration;
-         epsilon = eps;
-         type = CvEnum.TermCritType.Eps | CvEnum.TermCritType.Iter;
+         MaxIter = maxIteration;
+         Epsilon = eps;
+         Type = CvEnum.TermCritType.Eps | CvEnum.TermCritType.Iter;
       }
    }
 }

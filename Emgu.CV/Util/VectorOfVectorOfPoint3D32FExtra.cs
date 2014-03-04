@@ -34,6 +34,10 @@ namespace Emgu.CV.Util
 
       private VectorOfPoint3D32F[] _tmp;
 
+      /// <summary>
+      /// Create VectorOfVectorOfPoint3D32F from vector of vector of points
+      /// </summary>
+      /// <param name="points"></param>
       public VectorOfVectorOfPoint3D32F(MCvPoint3D32f[][] points)
          : this()
       {
@@ -45,6 +49,9 @@ namespace Emgu.CV.Util
          Push(_tmp);
       }
 
+      /// <summary>
+      /// Release the managed resource
+      /// </summary>
       protected override void ReleaseManagedResources()
       {
          base.ReleaseManagedResources();

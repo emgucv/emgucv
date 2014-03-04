@@ -593,7 +593,7 @@ namespace Emgu.CV.Test
          param.calcVarImportance = true;
          param.nactiveVars = 4;
          param.termCrit = new MCvTermCriteria(100, 0.01f);
-         param.termCrit.type = Emgu.CV.CvEnum.TermCritType.Iter;
+         param.termCrit.Type = Emgu.CV.CvEnum.TermCritType.Iter;
 
          using (RTrees forest = new RTrees())
          {
@@ -668,7 +668,7 @@ namespace Emgu.CV.Test
          param.calcVarImportance = true;
          param.nactiveVars = 4;
          param.termCrit = new MCvTermCriteria(100, 0.01f);
-         param.termCrit.type = Emgu.CV.CvEnum.TermCritType.Iter;
+         param.termCrit.Type = Emgu.CV.CvEnum.TermCritType.Iter;
 
          using (ERTrees forest = new ERTrees())
          {

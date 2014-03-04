@@ -20,7 +20,6 @@ namespace Emgu.CV.Features2D
    /// Color Space. Then, an unadapted descriptor extractor (set in the constructor) computes descriptors on each of three
    /// channels and concatenates them into a single color descriptor.
    /// </summary>
-   /// <typeparam name="TDescriptor">The type of descriptor</typeparam>
    public class OpponentColorDescriptorExtractor : UnmanagedObject, IDescriptorExtractor
    {
       private IDescriptorExtractor _baseExtractor;

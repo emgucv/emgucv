@@ -194,7 +194,7 @@ namespace Emgu.CV
          {
             _statePre = value;
             _kalman.state_pre = value.Ptr;
-            _kalman.PosterState = value.MCvMat.data;
+            _kalman.PosterState = value.MCvMat.Data;
          }
       }
 
@@ -211,7 +211,7 @@ namespace Emgu.CV
          {
             _statePost = value;
             _kalman.state_post = value.Ptr;
-            _kalman.PriorState = value.MCvMat.data;
+            _kalman.PriorState = value.MCvMat.Data;
          }
       }
 
@@ -224,7 +224,7 @@ namespace Emgu.CV
          {
             _measurementMatrix = value;
             _kalman.measurement_matrix = value.Ptr;
-            _kalman.MeasurementMatr = value.MCvMat.data;
+            _kalman.MeasurementMatr = value.MCvMat.Data;
          }
          get
          {
@@ -241,7 +241,7 @@ namespace Emgu.CV
          {
             _transitionMatrix = value;
             _kalman.transition_matrix = value.Ptr;
-            _kalman.DynamMatr = value.MCvMat.data;
+            _kalman.DynamMatr = value.MCvMat.Data;
          }
          get
          {
@@ -258,7 +258,7 @@ namespace Emgu.CV
          {
             _processNoiseCov = value;
             _kalman.process_noise_cov = value.Ptr;
-            _kalman.PNCovariance = value.MCvMat.data;
+            _kalman.PNCovariance = value.MCvMat.Data;
          }
          get
          {
@@ -275,7 +275,7 @@ namespace Emgu.CV
          {
             _measurementNoiseCov = value;
             _kalman.measurement_noise_cov = value.Ptr;
-            _kalman.MNCovariance = value.MCvMat.data;
+            _kalman.MNCovariance = value.MCvMat.Data;
          }
          get
          {
@@ -292,7 +292,7 @@ namespace Emgu.CV
          {
             _errorCovPost = value;
             _kalman.error_cov_post = value.Ptr;
-            _kalman.PosterErrorCovariance = value.MCvMat.data;
+            _kalman.PosterErrorCovariance = value.MCvMat.Data;
          }
          get
          {
@@ -309,7 +309,7 @@ namespace Emgu.CV
          {
             _errorCovPre = value;
             _kalman.error_cov_pre = value.Ptr;
-            _kalman.PriorErrorCovariance = value.MCvMat.data;
+            _kalman.PriorErrorCovariance = value.MCvMat.Data;
          }
          get
          {
@@ -342,7 +342,7 @@ namespace Emgu.CV
          {
             _gain = value;
             _kalman.gain = value.Ptr;
-            _kalman.KalmGainMatr = value.MCvMat.data;
+            _kalman.KalmGainMatr = value.MCvMat.Data;
          }
          get
          {
