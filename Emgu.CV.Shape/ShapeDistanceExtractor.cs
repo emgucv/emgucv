@@ -36,16 +36,62 @@ namespace Emgu.CV.Shape
       }
    }
 
+   /// <summary>
+   /// Implementation of the Shape Context descriptor and matching algorithm proposed by Belongie et al. in “Shape Matching and Object Recognition Using Shape Contexts” (PAMI 2002). 
+   /// </summary>
    public class ShapeContextDistanceExtractor : ShapeDistanceExtractor
    {
-      public ShapeContextDistanceExtractor(int nAngularBins, int nRadialBins, float innerRadius, float outerRadius, int iterations, HistogramCostExtractor comparer, ShapeTransformer transformer)
+      /// <summary>
+      /// Create a shape context distance extractor
+      /// </summary>
+      /// <param name="comparer">The histogram cost extractor</param>
+      /// <param name="transformer">The shape transformer</param>
+      /// <param name="nAngularBins">Establish the number of angular bins for the Shape Context Descriptor used in the shape matching pipeline.</param>
+      /// <param name="nRadialBins">Establish the number of radial bins for the Shape Context Descriptor used in the shape matching pipeline.</param>
+      /// <param name="innerRadius">Set the inner radius of the shape context descriptor.</param>
+      /// <param name="outerRadius">Set the outer radius of the shape context descriptor.</param>
+      /// <param name="iterations">Iterations</param>
+      public ShapeContextDistanceExtractor(
+         HistogramCostExtractor comparer, ShapeTransformer transformer,
+         int nAngularBins = 12, 
+         int nRadialBins = 4, 
+         float innerRadius = 0.2f, 
+         float outerRadius = 3, 
+         int iterations = 3)
       {
          _ptr = ShapeInvoke.cvShapeContextDistanceExtractorCreate(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparer, transformer);
       }
 
+      /// <summary>
+      /// Release the memory associated with this shape context distance extractor
+      /// </summary>
       protected override void DisposeObject()
       {
          ShapeInvoke.cvShapeContextDistanceExtractorRelease(ref _ptr);
+      }
+   }
+
+   /// <summary>
+   /// A simple Hausdorff distance measure between shapes defined by contours, according to the paper “Comparing Images using the Hausdorff distance.” by D.P. Huttenlocher, G.A. Klanderman, and W.J. Rucklidge. (PAMI 1993).
+   /// </summary>
+   public class HausdorffDistanceExtractor : ShapeDistanceExtractor
+   {
+      /// <summary>
+      /// Create Hausdorff distance extractor
+      /// </summary>
+      /// <param name="distanceFlag">Rhe norm used to compute the Hausdorff value between two shapes. It can be L1 or L2 norm.</param>
+      /// <param name="rankProp">The rank proportion (or fractional value) that establish the Kth ranked value of the partial Hausdorff distance. Experimentally had been shown that 0.6 is a good value to compare shapes.</param>
+      public HausdorffDistanceExtractor(CvEnum.DistType distanceFlag = CvEnum.DistType.L2, float rankProp = 0.6f)
+      {
+         _ptr = ShapeInvoke.cvHausdorffDistanceExtractorCreate(distanceFlag, rankProp);
+      }
+
+      /// <summary>
+      /// Release the memory associated with this Hausdorff distance extrator
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         ShapeInvoke.cvHausdorffDistanceExtractorRelease(ref _ptr);
       }
    }
 
@@ -60,7 +106,7 @@ namespace Emgu.CV.Shape
       internal extern static void cvShapeContextDistanceExtractorRelease(ref IntPtr extractor);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp);
+      internal extern static IntPtr cvHausdorffDistanceExtractorCreate(CvEnum.DistType distanceFlag, float rankProp);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvHausdorffDistanceExtractorRelease(ref IntPtr extractor);

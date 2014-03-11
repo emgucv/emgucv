@@ -1,8 +1,8 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
-﻿using System;
+ using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV.Structure;
@@ -26,7 +26,7 @@ namespace Emgu.CV
          Rectangle window,
          MCvTermCriteria criteria,
          out MCvConnectedComp comp,
-         out MCvBox2D box);
+         out RotatedRect box);
 
       /// <summary>
       /// Iterates to find the object center given its back projection and initial position of search window. The iterations are made until the search window center moves by less than the given value and/or until the function has done the maximum number of iterations. 

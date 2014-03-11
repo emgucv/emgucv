@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ServiceModel;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
 namespace Webservice_Host
@@ -17,9 +18,8 @@ namespace Webservice_Host
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 300, new Bgr(255, 255, 255));
 
-         MCvFont f = new MCvFont(Emgu.CV.CvEnum.FontType.HersheyPlain, 1.0, 1.0);
          String str = DateTime.Now.Ticks.ToString();
-         img.Draw(str, ref f, new System.Drawing.Point(50, 150), new Bgr(0, 0, 0));
+         img.Draw(str, new System.Drawing.Point(50, 150), FontFace.HersheyPlain, 1.0, new Bgr(0, 0, 0));
          return img;
       }
    }

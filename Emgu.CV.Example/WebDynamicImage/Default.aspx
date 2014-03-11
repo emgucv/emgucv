@@ -43,12 +43,13 @@
 
        using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 40, new Bgr()))
        {
-          MCvFont font = new MCvFont(Emgu.CV.CvEnum.FontType.HersheyPlain, 2.0, 2.0);
           img.Draw(
               DateTime.Now.Ticks.ToString(),
-              ref font,
               new Point(5, img.Height - 5),
-              new Bgr(255.0, 255.0, 255.0));
+              Emgu.CV.CvEnum.FontFace.HersheyPlain,
+              2.0,
+              new Bgr(255.0, 255.0, 255.0),
+              1);
           img._Dilate(1);
 
           img._Not();

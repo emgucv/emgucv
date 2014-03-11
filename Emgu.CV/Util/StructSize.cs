@@ -23,7 +23,7 @@ namespace Emgu.CV.Util
       private static readonly int _MCvPoint3D32f;
       private static readonly int _MCvMatND;
       private static readonly int _MCvPoint2D64f;
-      private static readonly int _MCvHistogram;
+      //private static readonly int _MCvHistogram;
       private static readonly int _MCvBlob;
 
       /// <summary>
@@ -106,13 +106,14 @@ namespace Emgu.CV.Util
          get { return _MCvMatND; }
       }
 
+      /*
       /// <summary>
       /// The size of MCvHistogram
       /// </summary>
       public static int MCvHistogram
       {
          get { return _MCvHistogram; }
-      }
+      }*/
 
       /// <summary>
       /// The size of MCvBlob

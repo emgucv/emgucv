@@ -98,7 +98,7 @@ namespace Emgu.CV
          int line,
          IntPtr userData)
       {
-         cvSetErrStatus(Emgu.CV.CvEnum.ErrorCodes.STSOK); //clear the error status
+         cvSetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
          return 0; //signal the process to continute
       }
 
@@ -125,7 +125,7 @@ namespace Emgu.CV
       {
          try
          {
-            cvSetErrStatus(Emgu.CV.CvEnum.ErrorCodes.STSOK); //clear the error status
+            cvSetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
             return 0; //signal the process to continute
          } finally
          {
@@ -1850,7 +1850,7 @@ namespace Emgu.CV
       /// <param name="shift">Number of fractional bits in the center coordinates and axes' values</param>
       public static void Ellipse(
           IInputOutputArray img,
-          MCvBox2D box,
+          RotatedRect box,
           MCvScalar color,
           int thickness = 1,
           CvEnum.LineType lineType = CvEnum.LineType.EightConnected,
@@ -2233,6 +2233,47 @@ namespace Emgu.CV
          IntPtr seq,
          IntPtr block);
 
+      internal static void MinMax(IImage arr, out double[] minValues, out double[] maxValues, out Point[] minLocations, out Point[] maxLocations)
+      {
+         int numberOfChannels = arr.NumberOfChannels;
+         minValues = new double[numberOfChannels];
+         maxValues = new double[numberOfChannels];
+         minLocations = new Point[numberOfChannels];
+         maxLocations = new Point[numberOfChannels];
+
+         double minVal = 0, maxVal = 0;
+         Point minLoc = new Point(), maxLoc = new Point();
+         //int[] minIdx = new int[2], maxIdx = new int[2];
+         if (numberOfChannels == 1)
+         {
+            CvInvoke.MinMaxLoc(arr, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+            //CvInvoke.CvMinMaxIdx(Ptr, out minVal, out maxVal, minIdx, maxIdx, IntPtr.Zero);
+            minValues[0] = minVal; maxValues[0] = maxVal;
+            //minLoc.X = minIdx[1]; minLoc.Y = minIdx[0];
+            //maxLoc.X = maxIdx[1]; maxLoc.Y = maxIdx[0];
+            minLocations[0] = minLoc; maxLocations[0] = maxLoc;
+
+         }
+         else
+         {
+            IImage[] channels = arr.Split();
+            try
+            {
+               for (int i = 0; i < channels.Length; i++)
+               {
+                  CvInvoke.MinMaxLoc(channels[i], ref minVal, ref maxVal, ref minLoc, ref maxLoc, null);
+                  minValues[i] = minVal; maxValues[i] = maxVal;
+                  minLocations[i] = minLoc; maxLocations[i] = maxLoc;
+               }
+            }
+            finally
+            {
+               for (int i = 0; i < channels.Length; i++)
+                  channels[i].Dispose();
+            }
+         }
+      }
+
       
       /// <summary>
       /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole array, selected ROI (in case of IplImage) or, if mask is not IntPtr.Zero, in the specified array region. If the array has more than one channel, it must be IplImage with COI set. In case if multi-dimensional arrays min_loc->x and max_loc->x will contain raw (linear) positions of the extremums
@@ -2428,7 +2469,7 @@ namespace Emgu.CV
          double param2v0, double param2v1, double param2v2, double param2v3);
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RAND_TYPE distType, MCvScalar param1, MCvScalar param2);
+      public static extern void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RandType distType, MCvScalar param1, MCvScalar param2);
 #endif
 
       #region Linear Algebra
@@ -2513,7 +2554,7 @@ namespace Emgu.CV
       /// <param name="src3">The third source array (shift). Can be IntPtr.Zero, if there is no shift.</param>
       /// <param name="beta">The scalar</param>
       /// <param name="dst">The destination array.</param>
-      /// <param name="tABC">The gemm operation type</param>
+      /// <param name="tAbc">The gemm operation type</param>
       public static void Gemm(
          IInputArray src1,
          IInputArray src2,
@@ -2521,9 +2562,9 @@ namespace Emgu.CV
          IInputArray src3,
          double beta,
          IOutputArray dst,
-         CvEnum.GemmType tABC = CvEnum.GemmType.Default)
+         CvEnum.GemmType tAbc = CvEnum.GemmType.Default)
       {
-         cveGemm(src1.InputArrayPtr, src2.InputArrayPtr, alpha, src3 == null ? IntPtr.Zero : src3.InputArrayPtr, beta, dst.OutputArrayPtr, tABC);
+         cveGemm(src1.InputArrayPtr, src2.InputArrayPtr, alpha, src3 == null ? IntPtr.Zero : src3.InputArrayPtr, beta, dst.OutputArrayPtr, tAbc);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveGemm(
@@ -2533,7 +2574,7 @@ namespace Emgu.CV
           IntPtr src3,
           double beta,
           IntPtr dst,
-          CvEnum.GemmType tABC);
+          CvEnum.GemmType tAbc);
 
       /// <summary>
       /// Performs matrix transformation of every element of array src and stores the results in dst
@@ -2665,13 +2706,13 @@ namespace Emgu.CV
       /// 3. least-squares solution of overdetermined linear systems. This and previous is done by cvSolve function with CV_SVD method 
       /// 4. accurate calculation of different matrix characteristics such as rank (number of non-zero singular values), condition number (ratio of the largest singular value to the smallest one), determinant (absolute value of determinant is equal to the product of singular values). All the things listed in this item do not require calculation of U and V matrices. 
       /// </remarks>
-      /// <param name="A">Source MxN matrix</param>
-      /// <param name="W">Resulting singular value matrix (MxN or NxN) or vector (Nx1). </param>
-      /// <param name="U">Optional left orthogonal matrix (MxM or MxN). If CV_SVD_U_T is specified, the number of rows and columns in the sentence above should be swapped</param>
-      /// <param name="V">Optional right orthogonal matrix (NxN)</param>
+      /// <param name="a">Source MxN matrix</param>
+      /// <param name="w">Resulting singular value matrix (MxN or NxN) or vector (Nx1). </param>
+      /// <param name="u">Optional left orthogonal matrix (MxM or MxN). If CV_SVD_U_T is specified, the number of rows and columns in the sentence above should be swapped</param>
+      /// <param name="v">Optional right orthogonal matrix (NxN)</param>
       /// <param name="flags">Operation flags</param>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvSVD(IntPtr A, IntPtr W, IntPtr U, IntPtr V, CvEnum.SvdType flags);
+      public static extern void cvSVD(IntPtr a, IntPtr w, IntPtr u, IntPtr v, CvEnum.SvdType flags);
 
       /// <summary>
       /// Calculates the covariance matrix of a set of vectors.
@@ -2770,10 +2811,10 @@ namespace Emgu.CV
       /// <param name="arr">Input array</param>
       /// <param name="header">Pointer to CvMat structure used as a temporary buffer</param>
       /// <param name="coi">Optional output parameter for storing COI</param>
-      /// <param name="allowND">If non-zero, the function accepts multi-dimensional dense arrays (CvMatND*) and returns 2D (if CvMatND has two dimensions) or 1D matrix (when CvMatND has 1 dimension or more than 2 dimensions). The array must be continuous</param>
+      /// <param name="allowNd">If non-zero, the function accepts multi-dimensional dense arrays (CvMatND*) and returns 2D (if CvMatND has two dimensions) or 1D matrix (when CvMatND has 1 dimension or more than 2 dimensions). The array must be continuous</param>
       /// <returns>Returns matrix header for the input array</returns>
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvGetMat(IntPtr arr, IntPtr header, out int coi, int allowND);
+      public static extern IntPtr cvGetMat(IntPtr arr, IntPtr header, out int coi, int allowNd);
 
       /// <summary>
       /// Returns image header for the input array that can be matrix - CvMat*, or image - IplImage*.
@@ -2881,7 +2922,7 @@ namespace Emgu.CV
       #endregion
 
       #region Reading Data
-
+      /*
       /// <summary>
       /// 
       /// </summary>
@@ -2909,7 +2950,7 @@ namespace Emgu.CV
          IntPtr fs,
          IntPtr node,
          IntPtr attributes);
-
+      */
       /// <summary>
       /// Finds a file node by name
       /// </summary>

@@ -86,7 +86,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       /// <param name="type">The next edge type</param>
       /// <returns>The next edge</returns>
-      public MCvSubdiv2DEdge cvSubdiv2DGetEdge(CvEnum.CV_NEXT_EDGE_TYPE type)
+      public MCvSubdiv2DEdge cvSubdiv2DGetEdge(CvEnum.NextEdgeType type)
       {
          Int64 edgeInt64 = edge.ToInt64();
          IntPtr ptr = (IntPtr)(edgeInt64 & -4);

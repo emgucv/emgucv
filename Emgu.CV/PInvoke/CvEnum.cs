@@ -145,495 +145,495 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Polygon approximation type
    /// </summary>
-   public enum APPROX_POLY_TYPE
+   public enum ApproxPolyType
    {
       /// <summary>
       /// Douglas-Peucker algorithm
       /// </summary>
-      CV_POLY_APPROX_DP = 0
+      CvPolyApproxDp = 0
    }
 
    /// <summary>
    /// CV Capture property identifier
    /// </summary>
-   public enum CAP_PROP
+   public enum CapProp
    {
       /// <summary>
       /// Turn the feature off (not controlled manually nor automatically)
       /// </summary>
-      CV_CAP_PROP_DC1394_OFF = -4,
+      DC1394Off = -4,
       /// <summary>
       /// Set automatically when a value of the feature is set by the user
       /// </summary>
-      CV_CAP_PROP_DC1394_MODE_MANUAL = -3,
+      DC1394ModeManual = -3,
       /// <summary>
       /// DC1394 mode auto
       /// </summary>
-      CV_CAP_PROP_DC1394_MODE_AUTO = -2,
+      DC1394ModeAuto = -2,
       /// <summary>
       /// DC1394 mode one push auto
       /// </summary>
-      CV_CAP_PROP_DC1394_MODE_ONE_PUSH_AUTO = -1,
+      DC1394ModeOnePushAuto = -1,
       /// <summary>
       /// Film current position in milliseconds or video capture timestamp
       /// </summary>
-      CV_CAP_PROP_POS_MSEC = 0,
+      PosMsec = 0,
       /// <summary>
       /// 0-based index of the frame to be decoded/captured next
       /// </summary>
-      CV_CAP_PROP_POS_FRAMES = 1,
+      PosFrames = 1,
       /// <summary>
       /// Position in relative units (0 - start of the file, 1 - end of the file)
       /// </summary>
-      CV_CAP_PROP_POS_AVI_RATIO = 2,
+      PosAviRatio = 2,
       /// <summary>
       /// Width of frames in the video stream
       /// </summary>
-      CV_CAP_PROP_FRAME_WIDTH = 3,
+      FrameWidth = 3,
       /// <summary>
       /// Height of frames in the video stream
       /// </summary>
-      CV_CAP_PROP_FRAME_HEIGHT = 4,
+      FrameHeight = 4,
       /// <summary>
       /// Frame rate 
       /// </summary>
-      CV_CAP_PROP_FPS = 5,
+      Fps = 5,
       /// <summary>
       /// 4-character code of codec
       /// </summary>
-      CV_CAP_PROP_FOURCC = 6,
+      FourCC = 6,
       /// <summary>
       /// Number of frames in video file
       /// </summary>
-      CV_CAP_PROP_FRAME_COUNT = 7,
+      FrameCount = 7,
       /// <summary>
       /// Format
       /// </summary>
-      CV_CAP_PROP_FORMAT = 8,
+      Format = 8,
       /// <summary>
       /// Mode
       /// </summary>
-      CV_CAP_PROP_MODE = 9,
+      Mode = 9,
       /// <summary>
       /// Brightness
       /// </summary>
-      CV_CAP_PROP_BRIGHTNESS = 10,
+      Brightness = 10,
       /// <summary>
       /// Contrast
       /// </summary>
-      CV_CAP_PROP_CONTRAST = 11,
+      Contrast = 11,
       /// <summary>
       /// Saturation
       /// </summary>
-      CV_CAP_PROP_SATURATION = 12,
+      Staturation = 12,
       /// <summary>
       /// Hue
       /// </summary>
-      CV_CAP_PROP_HUE = 13,
+      Hue = 13,
       /// <summary>
       /// Gain
       /// </summary>
-      CV_CAP_PROP_GAIN = 14,
+      Gain = 14,
       /// <summary>
       /// Exposure
       /// </summary>
-      CV_CAP_PROP_EXPOSURE = 15,
+      Exposure = 15,
       /// <summary>
       /// Convert RGB
       /// </summary>
-      CV_CAP_PROP_CONVERT_RGB = 16,
+      ConvertRgb = 16,
       /// <summary>
       /// White balance blue u
       /// </summary>
-      CV_CAP_PROP_WHITE_BALANCE_BLUE_U = 17,
+      WhiteBalanceBlueU = 17,
       /// <summary>
       /// Rectification
       /// </summary>
-      CV_CAP_PROP_RECTIFICATION = 18,
+      Rectification = 18,
       /// <summary>
       /// Monocrome
       /// </summary>
-      CV_CAP_PROP_MONOCROME = 19,
+      Monocrome = 19,
       /// <summary>
       /// Sharpness
       /// </summary>
-      CV_CAP_PROP_SHARPNESS = 20,
+      Sharpness = 20,
       /// <summary>
       /// Exposure control done by camera, user can adjust refernce level using this feature
       /// </summary>
-      CV_CAP_PROP_AUTO_EXPOSURE = 21,
+      AutoExposure = 21,
       /// <summary>
       /// Gamma
       /// </summary>
-      CV_CAP_PROP_GAMMA = 22,
+      Gamma = 22,
       /// <summary>
       /// Temperature
       /// </summary>
-      CV_CAP_PROP_TEMPERATURE = 23,
+      Temperature = 23,
       /// <summary>
       /// Trigger
       /// </summary>
-      CV_CAP_PROP_TRIGGER = 24,
+      Trigger = 24,
       /// <summary>
       /// Trigger delay
       /// </summary>
-      CV_CAP_PROP_TRIGGER_DELAY = 25,
+      TriggerDelay = 25,
       /// <summary>
       /// White balance red v
       /// </summary>
-      CV_CAP_PROP_WHITE_BALANCE_RED_V = 26,
+      WhiteBalanceRedV = 26,
       /// <summary>
       /// Zoom
       /// </summary>
-      CV_CAP_PROP_ZOOM = 27,
+      Zoom = 27,
       /// <summary>
       /// Focus
       /// </summary>
-      CV_CAP_PROP_FOCUS = 28,
+      Focus = 28,
       /// <summary>
       /// GUID
       /// </summary>
-      CV_CAP_PROP_GUID = 29,
+      Guid = 29,
       /// <summary>
       /// ISO SPEED
       /// </summary>
-      CV_CAP_PROP_ISO_SPEED = 30,
+      IsoSpeed = 30,
       /// <summary>
       /// MAX DC1394
       /// </summary>
-      CV_CAP_PROP_MAX_DC1394 = 31,
+      MaxDC1394 = 31,
       /// <summary>
       /// Backlight
       /// </summary>
-      CV_CAP_PROP_BACKLIGHT = 32,
+      Backlight = 32,
       /// <summary>
       /// Pan
       /// </summary>
-      CV_CAP_PROP_PAN = 33,
+      Pan = 33,
       /// <summary>
       /// Tilt
       /// </summary>
-      CV_CAP_PROP_TILT = 34,
+      Tilt = 34,
       /// <summary>
       /// Roll
       /// </summary>
-      CV_CAP_PROP_ROLL = 35,
+      Roll = 35,
       /// <summary>
       /// Iris
       /// </summary>
-      CV_CAP_PROP_IRIS = 36,
+      Iris = 36,
       /// <summary>
       /// Settings
       /// </summary>
-      CV_CAP_PROP_SETTINGS = 37,
+      Settings = 37,
       /// <summary>
       /// property for highgui class CvCapture_Android only
       /// </summary>
-      CV_CAP_PROP_AUTOGRAB = 1024,
+      Autograb = 1024,
       /// <summary>
       /// readonly, tricky property, returns cpnst char* indeed
       /// </summary>
-      CV_CAP_PROP_SUPPORTED_PREVIEW_SIZES_STRING = 1025,
+      SupportedPreviewSizesString = 1025,
       /// <summary>
       /// readonly, tricky property, returns cpnst char* indeed
       /// </summary>
-      CV_CAP_PROP_PREVIEW_FORMAT = 1026,
+      PreviewFormat = 1026,
       /// <summary>
       /// OpenNI map generators
       /// </summary>
-      CV_CAP_OPENNI_DEPTH_GENERATOR = 1 << 31,
+      OpenniDepthGenerator = 1 << 31,
       /// <summary>
       /// OpenNI map generators
       /// </summary>
-      CV_CAP_OPENNI_IMAGE_GENERATOR = 1 << 30,
+      OpenniImageGenerator = 1 << 30,
       /// <summary>
       /// OpenNI map generators
       /// </summary>
-      CV_CAP_OPENNI_GENERATORS_MASK = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_OPENNI_IMAGE_GENERATOR,
+      OpenniGeneratorsMask = OpenniDepthGenerator + OpenniImageGenerator,
 
       /// <summary>
       /// Properties of cameras available through OpenNI interfaces
       /// </summary>
-      CV_CAP_PROP_OPENNI_OUTPUT_MODE = 100,
+      OpenniOutputMode = 100,
       /// <summary>
       /// Properties of cameras available through OpenNI interfaces, in mm.
       /// </summary>
-      CV_CAP_PROP_OPENNI_FRAME_MAX_DEPTH = 101,
+      OpenniFrameMaxDepth = 101,
       /// <summary>
       /// Properties of cameras available through OpenNI interfaces, in mm.
       /// </summary>
-      CV_CAP_PROP_OPENNI_BASELINE = 102,
+      OpenniBaseline = 102,
       /// <summary>
       /// Properties of cameras available through OpenNI interfaces, in pixels.
       /// </summary>
-      CV_CAP_PROP_OPENNI_FOCAL_LENGTH = 103,
+      OpenniFocalLength = 103,
       /// <summary>
       /// Flag that synchronizes the remapping depth map to image map
       /// by changing depth generator's view point (if the flag is "on") or
       /// sets this view point to its normal one (if the flag is "off").
       /// </summary>
-      CV_CAP_PROP_OPENNI_REGISTRATION = 104,
+      OpenniRegistration = 104,
       /// <summary>
       /// Flag that synchronizes the remapping depth map to image map
       /// by changing depth generator's view point (if the flag is "on") or
       /// sets this view point to its normal one (if the flag is "off").
       /// </summary>
-      CV_CAP_PROP_OPENNI_REGISTRATION_ON = CV_CAP_PROP_OPENNI_REGISTRATION,
+      OpenniRegistrationOn = OpenniRegistration,
       /// <summary>
       /// Approx frame sync
       /// </summary>
-      CV_CAP_PROP_OPENNI_APPROX_FRAME_SYNC = 105,
+      OpenniApproxFrameSync = 105,
       /// <summary>
       /// Max buffer size
       /// </summary>
-      CV_CAP_PROP_OPENNI_MAX_BUFFER_SIZE = 106,
+      OpenniMaxBufferSize = 106,
       /// <summary>
       /// Circle buffer
       /// </summary>
-      CV_CAP_PROP_OPENNI_CIRCLE_BUFFER = 107,
+      OpenniCircleBuffer = 107,
       /// <summary>
       /// Max time duration
       /// </summary>
-      CV_CAP_PROP_OPENNI_MAX_TIME_DURATION = 108,
+      OpenniMaxTimeDuration = 108,
       /// <summary>
       /// Generator present
       /// </summary>
-      CV_CAP_PROP_OPENNI_GENERATOR_PRESENT = 109,
+      OpenniGeneratorPresent = 109,
 
       /// <summary>
       /// Openni image generator present
       /// </summary>
-      CV_CAP_OPENNI_IMAGE_GENERATOR_PRESENT = CV_CAP_OPENNI_IMAGE_GENERATOR + CV_CAP_PROP_OPENNI_GENERATOR_PRESENT,
+      OpenniImageGeneratorPresent = OpenniImageGenerator + OpenniGeneratorPresent,
       /// <summary>
       /// Image generator output mode
       /// </summary>
-      CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE = CV_CAP_OPENNI_IMAGE_GENERATOR + CV_CAP_PROP_OPENNI_OUTPUT_MODE,
+      OpenniImageGeneratorOutputMode = OpenniImageGenerator + OpenniOutputMode,
       /// <summary>
       /// Depth generator baseline, in mm.
       /// </summary>
-      CV_CAP_OPENNI_DEPTH_GENERATOR_BASELINE = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_BASELINE,
+      OpenniDepthGeneratorBaseline = OpenniDepthGenerator + OpenniBaseline,
       /// <summary>
       /// Depth generator focal lenght, in pixels.
       /// </summary>
-      CV_CAP_OPENNI_DEPTH_GENERATOR_FOCAL_LENGTH = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_FOCAL_LENGTH,
+      OpenniDepthGeneratorFocalLength = OpenniDepthGenerator + OpenniFocalLength,
       /// <summary>
       /// Openni generator registration
       /// </summary>
-      CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION = CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_REGISTRATION,
+      OpenniDepthGeneratorRegistration = OpenniDepthGenerator + OpenniRegistration,
       /// <summary>
       /// Openni generator registration on
       /// </summary>
-      CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION_ON = CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION,
+      OpenniDepthGeneratorRegistrationOn = OpenniDepthGeneratorRegistration,
 
       /// <summary>
       /// Properties of cameras available through GStreamer interface. Default is 1
       /// </summary>
-      CV_CAP_GSTREAMER_QUEUE_LENGTH = 200,
+      GstreamerQueueLength = 200,
       /// <summary>
       /// Ip for anable multicast master mode. 0 for disable multicast
       /// </summary>
-      CV_CAP_PROP_PVAPI_MULTICASTIP = 300,
+      PvapiMulticastip = 300,
 
       /// <summary>
       /// Change image resolution by binning or skipping.
       /// </summary>
-      CV_CAP_PROP_XI_DOWNSAMPLING = 400,      
+      XiDownsampling = 400,      
       /// <summary>
       /// Output data format
       /// </summary>
-      CV_CAP_PROP_XI_DATA_FORMAT = 401,     
+      XiDataFormat = 401,     
       /// <summary>
       /// Horizontal offset from the origin to the area of interest (in pixels).
       /// </summary>
-      CV_CAP_PROP_XI_OFFSET_X = 402,      
+      XiOffsetX = 402,      
       /// <summary>
       /// Vertical offset from the origin to the area of interest (in pixels).
       /// </summary>
-      CV_CAP_PROP_XI_OFFSET_Y = 403,      
+      XiOffsetY = 403,      
       /// <summary>
       /// Defines source of trigger.
       /// </summary>
-      CV_CAP_PROP_XI_TRG_SOURCE = 404,      
+      XiTrgSource = 404,      
       /// <summary>
       /// Generates an internal trigger. PRM_TRG_SOURCE must be set to TRG_SOFTWARE.
       /// </summary>
-      CV_CAP_PROP_XI_TRG_SOFTWARE = 405,      
+      XiTrgSoftware = 405,      
       /// <summary>
       /// Selects general purpose input
       /// </summary>
-      CV_CAP_PROP_XI_GPI_SELECTOR = 406,      
+      XiGpiSelector = 406,      
       /// <summary>
       /// Set general purpose input mode
       /// </summary>
-      CV_CAP_PROP_XI_GPI_MODE = 407,      
+      XiGpiMode = 407,      
       /// <summary>
       /// Get general purpose level
       /// </summary>
-      CV_CAP_PROP_XI_GPI_LEVEL = 408,      
+      XiGpiLevel = 408,      
       /// <summary>
       /// Selects general purpose output
       /// </summary>
-      CV_CAP_PROP_XI_GPO_SELECTOR = 409,      
+      XiGpoSelector = 409,      
       /// <summary>
       /// Set general purpose output mode
       /// </summary>
-      CV_CAP_PROP_XI_GPO_MODE = 410,      
+      XiGpoMode = 410,      
       /// <summary>
       /// Selects camera signalling LED
       /// </summary>
-      CV_CAP_PROP_XI_LED_SELECTOR = 411,      
+      XiLedSelector = 411,      
       /// <summary>
       /// Define camera signalling LED functionality
       /// </summary>
-      CV_CAP_PROP_XI_LED_MODE = 412,      
+      XiLedMode = 412,      
       /// <summary>
       /// Calculates White Balance(must be called during acquisition)
       /// </summary>
-      CV_CAP_PROP_XI_MANUAL_WB = 413,      
+      XiManualWb = 413,      
       /// <summary>
       /// Automatic white balance
       /// </summary>
-      CV_CAP_PROP_XI_AUTO_WB = 414,      
+      XiAutoWb = 414,      
       /// <summary>
       /// Automatic exposure/gain
       /// </summary>
-      CV_CAP_PROP_XI_AEAG = 415,      
+      XiAeag = 415,      
       /// <summary>
       /// Exposure priority (0.5 - exposure 50%, gain 50%).
       /// </summary>
-      CV_CAP_PROP_XI_EXP_PRIORITY = 416,      
+      XiExpPriority = 416,      
       /// <summary>
       /// Maximum limit of exposure in AEAG procedure
       /// </summary>
-      CV_CAP_PROP_XI_AE_MAX_LIMIT = 417, 
+      XiAeMaxLimit = 417, 
       /// <summary>
       /// Maximum limit of gain in AEAG procedure
       /// </summary>
-      CV_CAP_PROP_XI_AG_MAX_LIMIT = 418,      
+      XiAgMaxLimit = 418,      
       /// <summary>
       /// Average intensity of output signal AEAG should achieve(in %)
       /// </summary>
-      CV_CAP_PROP_XI_AEAG_LEVEL = 419,       
+      XiAeagLevel = 419,       
       /// <summary>
       /// Image capture timeout in milliseconds
       /// </summary>
-      CV_CAP_PROP_XI_TIMEOUT = 420,     
+      XiTimeout = 420,     
 
       /// <summary>
       /// Android flash mode
       /// </summary>
-      CV_CAP_PROP_ANDROID_FLASH_MODE = 8001,
+      AndroidFlashMode = 8001,
       /// <summary>
       /// Android focus mode
       /// </summary>
-      CV_CAP_PROP_ANDROID_FOCUS_MODE = 8002,
+      AndroidFocusMode = 8002,
       /// <summary>
       /// Android white balance
       /// </summary>
-      CV_CAP_PROP_ANDROID_WHITE_BALANCE = 8003,
+      AndroidWhiteBalance = 8003,
       /// <summary>
       /// Android anti banding
       /// </summary>
-      CV_CAP_PROP_ANDROID_ANTIBANDING = 8004,
+      AndroidAntibanding = 8004,
       /// <summary>
       /// Android focal length
       /// </summary>
-      CV_CAP_PROP_ANDROID_FOCAL_LENGTH = 8005,
+      AndroidFocalLength = 8005,
       /// <summary>
       /// Android focus distance near
       /// </summary>
-      CV_CAP_PROP_ANDROID_FOCUS_DISTANCE_NEAR = 8006,
+      AndroidFocusDistanceNear = 8006,
       /// <summary>
       /// Android focus distance optimal
       /// </summary>
-      CV_CAP_PROP_ANDROID_FOCUS_DISTANCE_OPTIMAL = 8007,
+      AndroidFocusDistanceOptimal = 8007,
       /// <summary>
       /// Android focus distance far
       /// </summary>
-      CV_CAP_PROP_ANDROID_FOCUS_DISTANCE_FAR = 8008,
+      AndroidFocusDistanceFar = 8008,
 
       /// <summary>
       /// iOS device focus
       /// </summary>
-      CV_CAP_PROP_IOS_DEVICE_FOCUS = 9001,
+      IOSDeviceFocus = 9001,
       /// <summary>
       /// iOS device exposure
       /// </summary>
-      CV_CAP_PROP_IOS_DEVICE_EXPOSURE = 9002,
+      IOSDeviceExposure = 9002,
       /// <summary>
       /// iOS device flash
       /// </summary>
-      CV_CAP_PROP_IOS_DEVICE_FLASH = 9003,
+      IOSDeviceFlash = 9003,
       /// <summary>
       /// iOS device whitebalance 
       /// </summary>
-      CV_CAP_PROP_IOS_DEVICE_WHITEBALANCE = 9004,
+      IOSDeviceWhitebalance = 9004,
       /// <summary>
       /// iOS device torch
       /// </summary>
-      CV_CAP_PROP_IOS_DEVICE_TORCH = 9005,
+      IOSDeviceTorch = 9005,
 
       /// <summary>
       /// Smartek Giganetix Ethernet Vision: frame offset X
       /// </summary>
-      CV_CAP_PROP_GIGA_FRAME_OFFSET_X = 10001,
+      GigaFrameOffsetX = 10001,
 
       /// <summary>
       /// Smartek Giganetix Ethernet Vision: frame offset Y
       /// </summary>
-      CV_CAP_PROP_GIGA_FRAME_OFFSET_Y = 10002,
+      GigaFrameOffsetY = 10002,
 
       /// <summary>
       /// Smartek Giganetix Ethernet Vision: frame width max
       /// </summary>
-      CV_CAP_PROP_GIGA_FRAME_WIDTH_MAX = 10003,
+      GigaFrameWidthMax = 10003,
 
       /// <summary>
       /// Smartek Giganetix Ethernet Vision: frame height max
       /// </summary>
-      CV_CAP_PROP_GIGA_FRAME_HEIGH_MAX = 10004,
+      GigaFrameHeighMax = 10004,
 
       /// <summary>
       /// Smartek Giganetix Ethernet Vision: frame sens width
       /// </summary>
-      CV_CAP_PROP_GIGA_FRAME_SENS_WIDTH = 10005,
+      GigaFrameSensWidth = 10005,
 
       /// <summary>
       /// Smartek Giganetix Ethernet Vision: frame sens height
       /// </summary>
-      CV_CAP_PROP_GIGA_FRAME_SENS_HEIGH = 10006
+      GigaFrameSensHeigh = 10006
 
    }
 
    /// <summary>
    /// contour approximation method
    /// </summary>
-   public enum CHAIN_APPROX_METHOD : int
+   public enum ChainApproxMethod : int
    {
       /// <summary>
       /// output contours in the Freeman chain code. All other methods output polygons (sequences of vertices). 
       /// </summary>
-      CV_CHAIN_CODE = 0,
+      ChainCode = 0,
       /// <summary>
       /// translate all the points from the chain code into points;
       /// </summary>
-      CV_CHAIN_APPROX_NONE = 1,
+      ChainApproxNone = 1,
       /// <summary>
       /// compress horizontal, vertical, and diagonal segments, that is, the function leaves only their ending points; 
       /// </summary>
-      CV_CHAIN_APPROX_SIMPLE = 2,
+      ChainApproxSimple = 2,
       /// <summary>
       /// 
       /// </summary>
-      CV_CHAIN_APPROX_TC89_L1 = 3,
+      ChainApproxTc89L1 = 3,
       /// <summary>
       /// apply one of the flavors of Teh-Chin chain approximation algorithm
       /// </summary>
-      CV_CHAIN_APPROX_TC89_KCOS = 4,
+      ChainApproxTc89Kcos = 4,
       /// <summary>
-      /// use completely different contour retrieval algorithm via linking of horizontal segments of 1s. Only CV_RETR_LIST retrieval mode can be used with this method
+      /// use completely different contour retrieval algorithm via linking of horizontal segments of 1s. Only LIST retrieval mode can be used with this method
       /// </summary>
-      CV_LINK_RUNS = 5
+      LinkRuns = 5
    }
 
    /// <summary>
@@ -644,808 +644,808 @@ namespace Emgu.CV.CvEnum
       ///<summary>
       ///Convert BGR color to BGRA color
       ///</summary>
-      BGR2BGRA = 0,
+      Bgr2Bgra = 0,
       /// <summary>
       /// Convert RGB color to RGBA color
       /// </summary>
-      RGB2RGBA = BGR2BGRA,
+      Rgb2Rgba = Bgr2Bgra,
 
       ///<summary>
       ///Convert BGRA color to BGR color
       ///</summary>
-      BGRA2BGR = 1,
+      Bgra2Bgr = 1,
       /// <summary>
       /// Convert RGBA color to RGB color
       /// </summary>
-      RGBA2RGB = BGRA2BGR,
+      Rgba2Rgb = Bgra2Bgr,
       /// <summary>
       /// Convert BGR color to RGBA color
       /// </summary>
-      BGR2RGBA = 2,
+      Bgr2Rgba = 2,
       /// <summary>
       /// Convert RGB color to BGRA color
       /// </summary>
-      RGB2BGRA = BGR2RGBA,
+      Rgb2Bgra = Bgr2Rgba,
       /// <summary>
       /// Convert RGBA color to BGR color
       /// </summary>
-      RGBA2BGR = 3,
+      Rgba2Bgr = 3,
       /// <summary>
       /// Convert BGRA color to RGB color
       /// </summary>
-      BGRA2RGB = RGBA2BGR,
+      Bgra2Rgb = Rgba2Bgr,
       /// <summary>
       /// Convert BGR color to RGB color
       /// </summary>
-      BGR2RGB = 4,
+      Bgr2Rgb = 4,
       /// <summary>
       /// Convert RGB color to BGR color
       /// </summary>
-      RGB2BGR = BGR2RGB,
+      Rgb2Bgr = Bgr2Rgb,
       /// <summary>
       /// Convert BGRA color to RGBA color
       /// </summary>
-      BGRA2RGBA = 5,
+      Bgra2Rgba = 5,
       /// <summary>
       /// Convert RGBA color to BGRA color
       /// </summary>
-      RGBA2BGRA = BGRA2RGBA,
+      Rgba2Bgra = Bgra2Rgba,
       ///<summary>
       ///Convert BGR color to GRAY color
       ///</summary>
-      BGR2GRAY = 6,
+      Bgr2Gray = 6,
       /// <summary>
       /// Convert RGB color to GRAY color
       /// </summary>
-      RGB2GRAY = 7,
+      Rgb2Gray = 7,
       ///<summary>
       ///Convert GRAY color to BGR color
       ///</summary>
-      GRAY2BGR = 8,
+      Gray2Bgr = 8,
       /// <summary>
       /// Convert GRAY color to RGB color
       /// </summary>
-      GRAY2RGB = GRAY2BGR,
+      Gray2Rgb = Gray2Bgr,
       ///<summary>
       ///Convert GRAY color to BGRA color
       ///</summary>
-      GRAY2BGRA = 9,
+      Gray2Bgra = 9,
       /// <summary>
       /// Convert GRAY color to RGBA color
       /// </summary>
-      GRAY2RGBA = GRAY2BGRA,
+      Gray2Rgba = Gray2Bgra,
       ///<summary>
       ///Convert BGRA color to GRAY color
       ///</summary>
-      BGRA2GRAY = 10,
+      Bgra2Gray = 10,
       /// <summary>
       /// Convert RGBA color to GRAY color
       /// </summary>
-      RGBA2GRAY = 11,
+      Rgba2Gray = 11,
       ///<summary>
       ///Convert BGR color to BGR565 color
       ///</summary>
-      BGR2BGR565 = 12,
+      Bgr2Bgr565 = 12,
       /// <summary>
       /// Convert RGB color to BGR565 color
       /// </summary>
-      RGB2BGR565 = 13,
+      Rgb2Bgr565 = 13,
       ///<summary>
       ///Convert BGR565 color to BGR color
       ///</summary>
-      BGR5652BGR = 14,
+      Bgr5652Bgr = 14,
       /// <summary>
       /// Convert BGR565 color to RGB color
       /// </summary>
-      BGR5652RGB = 15,
+      Bgr5652Rgb = 15,
       ///<summary>
       ///Convert BGRA color to BGR565 color
       ///</summary>
-      BGRA2BGR565 = 16,
+      Bgra2Bgr565 = 16,
       /// <summary>
       /// Convert RGBA color to BGR565 color
       /// </summary>
-      RGBA2BGR565 = 17,
+      Rgba2Bgr565 = 17,
       ///<summary>
       ///Convert BGR565 color to BGRA color
       ///</summary>
-      BGR5652BGRA = 18,
+      Bgr5652Bgra = 18,
       /// <summary>
       /// Convert BGR565 color to RGBA color
       /// </summary>
-      BGR5652RGBA = 19,
+      Bgr5652Rgba = 19,
       ///<summary>
       ///Convert GRAY color to BGR565 color
       ///</summary>
-      GRAY2BGR565 = 20,
+      Gray2Bgr565 = 20,
       ///<summary>
       ///Convert BGR565 color to GRAY color
       ///</summary>
-      BGR5652GRAY = 21,
+      Bgr5652Gray = 21,
       ///<summary>
       ///Convert BGR color to BGR555 color
       ///</summary>
-      BGR2BGR555 = 22,
+      Bgr2Bgr555 = 22,
       /// <summary>
       /// Convert RGB color to BGR555 color
       /// </summary>
-      RGB2BGR555 = 23,
+      Rgb2Bgr555 = 23,
       ///<summary>
       ///Convert BGR555 color to BGR color
       ///</summary>
-      BGR5552BGR = 24,
+      Bgr5552Bgr = 24,
       /// <summary>
       /// Convert BGR555 color to RGB color
       /// </summary>
-      BGR5552RGB = 25,
+      Bgr5552Rgb = 25,
       ///<summary>
       ///Convert BGRA color to BGR555 color
       ///</summary>
-      BGRA2BGR555 = 26,
+      Bgra2Bgr555 = 26,
       /// <summary>
       /// Convert RGBA color to BGR555 color
       /// </summary>
-      RGBA2BGR555 = 27,
+      Rgba2Bgr555 = 27,
       ///<summary>
       ///Convert BGR555 color to BGRA color
       ///</summary>
-      BGR5552BGRA = 28,
+      Bgr5552Bgra = 28,
       /// <summary>
       /// Convert BGR555 color to RGBA color
       /// </summary>
-      BGR5552RGBA = 29,
+      Bgr5552Rgba = 29,
       ///<summary>
       ///Convert GRAY color to BGR555 color
       ///</summary>
-      GRAY2BGR555 = 30,
+      Gray2Bgr555 = 30,
       ///<summary>
       ///Convert BGR555 color to GRAY color
       ///</summary>
-      BGR5552GRAY = 31,
+      Bgr5552Gray = 31,
       ///<summary>
       ///Convert BGR color to XYZ color
       ///</summary>
-      BGR2XYZ = 32,
+      Bgr2Xyz = 32,
       /// <summary>
       /// Convert RGB color to XYZ color
       /// </summary>
-      RGB2XYZ = 33,
+      Rgb2Xyz = 33,
       ///<summary>
       ///Convert XYZ color to BGR color
       ///</summary>
-      XYZ2BGR = 34,
+      Xyz2Bgr = 34,
       /// <summary>
       /// Convert XYZ color to RGB color
       /// </summary>
-      XYZ2RGB = 35,
+      Xyz2Rgb = 35,
       ///<summary>
       ///Convert BGR color to YCrCb color
       ///</summary>
-      BGR2YCrCb = 36,
+      Bgr2YCrCb = 36,
       /// <summary>
       /// Convert RGB color to YCrCb color
       /// </summary>
-      RGB2YCrCb = 37,
+      Rgb2YCrCb = 37,
       ///<summary>
       ///Convert YCrCb color to BGR color
       ///</summary>
-      YCrCb2BGR = 38,
+      YCrCb2Bgr = 38,
       /// <summary>
       /// Convert YCrCb color to RGB color
       /// </summary>
-      YCrCb2RGB = 39,
+      YCrCb2Rgb = 39,
       ///<summary>
       ///Convert BGR color to HSV color
       ///</summary>
-      BGR2HSV = 40,
+      Bgr2Hsv = 40,
       /// <summary>
       /// Convert RGB colot to HSV color
       /// </summary>
-      RGB2HSV = 41,
+      Rgb2Hsv = 41,
       ///<summary>
       ///Convert BGR color to Lab color
       ///</summary>
-      BGR2Lab = 44,
+      Bgr2Lab = 44,
       /// <summary>
       /// Convert RGB color to Lab color
       /// </summary>
-      RGB2Lab = 45,
+      Rgb2Lab = 45,
       ///<summary>
       ///Convert BayerBG color to BGR color
       ///</summary>
-      BayerBG2BGR = 46,
+      BayerBg2Bgr = 46,
       ///<summary>
       ///Convert BayerGB color to BGR color
       ///</summary>
-      BayerGB2BGR = 47,
+      BayerGb2Bgr = 47,
       ///<summary>
       ///Convert BayerRG color to BGR color
       ///</summary>
-      BayerRG2BGR = 48,
+      BayerRg2Bgr = 48,
       ///<summary>
       ///Convert BayerGR color to BGR color
       ///</summary>
-      BayerGR2BGR = 49,
+      BayerGr2Bgr = 49,
       /// <summary>
       /// Convert BayerBG color to BGR color
       /// </summary>
-      BayerBG2RGB = BayerRG2BGR,
+      BayerBg2Rgb = BayerRg2Bgr,
       /// <summary>
       /// Convert BayerRG color to BGR color
       /// </summary>
-      BayerGB2RGB = BayerGR2BGR,
+      BayerGb2Rgb = BayerGr2Bgr,
       /// <summary>
       /// Convert BayerRG color to RGB color
       /// </summary>
-      BayerRG2RGB = BayerBG2BGR,
+      BayerRg2Rgb = BayerBg2Bgr,
       /// <summary>
       /// Convert BayerGR color to RGB color
       /// </summary>
-      BayerGR2RGB = BayerGB2BGR,
+      BayerGr2Rgb = BayerGb2Bgr,
       ///<summary>
       ///Convert BGR color to Luv color
       ///</summary>
-      BGR2Luv = 50,
+      Bgr2Luv = 50,
       /// <summary>
       /// Convert RGB color to Luv color
       /// </summary>
-      RGB2Luv = 51,
+      Rgb2Luv = 51,
       ///<summary>
       ///Convert BGR color to HLS color
       ///</summary>
-      BGR2HLS = 52,
+      Bgr2Hls = 52,
       /// <summary>
       /// Convert RGB color to HLS color
       /// </summary>
-      RGB2HLS = 53,
+      Rgb2Hls = 53,
       ///<summary>
       ///Convert HSV color to BGR color
       ///</summary>
-      HSV2BGR = 54,
+      Hsv2Bgr = 54,
       /// <summary>
       /// Convert HSV color to RGB color
       /// </summary>
-      HSV2RGB = 55,
+      Hsv2Rgb = 55,
       ///<summary>
       ///Convert Lab color to BGR color
       ///</summary>
-      Lab2BGR = 56,
+      Lab2Bgr = 56,
       /// <summary>
       /// Convert Lab color to RGB color
       /// </summary>
-      Lab2RGB = 57,
+      Lab2Rgb = 57,
       ///<summary>
       ///Convert Luv color to BGR color
       ///</summary>
-      Luv2BGR = 58,
+      Luv2Bgr = 58,
       /// <summary>
       /// Convert Luv color to RGB color
       /// </summary>
-      Luv2RGB = 59,
+      Luv2Rgb = 59,
       ///<summary>
       ///Convert HLS color to BGR color
       ///</summary>
-      HLS2BGR = 60,
+      Hls2Bgr = 60,
       /// <summary>
       /// Convert HLS color to RGB color
       /// </summary>
-      HLS2RGB = 61,
+      Hls2Rgb = 61,
       /// <summary>
       /// Convert BayerBG pattern to BGR color using VNG
       /// </summary>
-      BayerBG2BGR_VNG = 62,
+      BayerBg2BgrVng = 62,
       /// <summary>
       /// Convert BayerGB pattern to BGR color using VNG
       /// </summary>
-      BayerGB2BGR_VNG = 63,
+      BayerGb2BgrVng = 63,
       /// <summary>
       /// Convert BayerRG pattern to BGR color using VNG
       /// </summary>
-      BayerRG2BGR_VNG = 64,
+      BayerRg2BgrVng = 64,
       /// <summary>
       /// Convert BayerGR pattern to BGR color using VNG
       /// </summary>
-      BayerGR2BGR_VNG = 65,
+      BayerGr2BgrVng = 65,
       /// <summary>
       /// Convert BayerBG pattern to RGB color using VNG
       /// </summary>
-      BayerBG2RGB_VNG = BayerRG2BGR_VNG,
+      BayerBg2RgbVng = BayerRg2BgrVng,
       /// <summary>
       /// Convert BayerGB pattern to RGB color using VNG
       /// </summary>
-      BayerGB2RGB_VNG = BayerGR2BGR_VNG,
+      BayerGb2RgbVng = BayerGr2BgrVng,
       /// <summary>
       /// Convert BayerRG pattern to RGB color using VNG
       /// </summary>
-      BayerRG2RGB_VNG = BayerBG2BGR_VNG,
+      BayerRg2RgbVng = BayerBg2BgrVng,
       /// <summary>
       /// Convert BayerGR pattern to RGB color using VNG
       /// </summary>
-      BayerGR2RGB_VNG = BayerGB2BGR_VNG,
+      BayerGr2RgbVng = BayerGb2BgrVng,
 
       /// <summary>
       /// Convert BGR to HSV
       /// </summary>
-      BGR2HSV_FULL = 66,
+      Bgr2HsvFull = 66,
       /// <summary>
       /// Convert RGB to HSV
       /// </summary>
-      RGB2HSV_FULL = 67,
+      Rgb2HsvFull = 67,
       /// <summary>
       /// Convert BGR to HLS
       /// </summary>
-      BGR2HLS_FULL = 68,
+      Bgr2HlsFull = 68,
       /// <summary>
       /// Convert RGB to HLS
       /// </summary>
-      RGB2HLS_FULL = 69,
+      Rgb2HlsFull = 69,
 
       /// <summary>
       /// Convert HSV color to BGR color
       /// </summary>
-      HSV2BGR_FULL = 70,
+      Hsv2BgrFull = 70,
       /// <summary>
       /// Convert HSV color to RGB color
       /// </summary>
-      HSV2RGB_FULL = 71,
+      Hsv2RgbFull = 71,
       /// <summary>
       /// Convert HLS color to BGR color
       /// </summary>
-      HLS2BGR_FULL = 72,
+      Hls2BgrFull = 72,
       /// <summary>
       /// Convert HLS color to RGB color
       /// </summary>
-      HLS2RGB_FULL = 73,
+      Hls2RgbFull = 73,
 
       /// <summary>
       /// Convert sBGR color to Lab color
       /// </summary>
-      LBGR2Lab = 74,
+      Lbgr2Lab = 74,
       /// <summary>
       /// Convert sRGB color to Lab color
       /// </summary>
-      LRGB2Lab = 75,
+      Lrgb2Lab = 75,
       /// <summary>
       /// Convert sBGR color to Luv color
       /// </summary>
-      LBGR2Luv = 76,
+      Lbgr2Luv = 76,
       /// <summary>
       /// Convert sRGB color to Luv color
       /// </summary>
-      LRGB2Luv = 77,
+      Lrgb2Luv = 77,
 
       /// <summary>
       /// Convert Lab color to sBGR color
       /// </summary>
-      Lab2LBGR = 78,
+      Lab2Lbgr = 78,
       /// <summary>
       /// Convert Lab color to sRGB color
       /// </summary>
-      Lab2LRGB = 79,
+      Lab2Lrgb = 79,
       /// <summary>
       /// Convert Luv color to sBGR color
       /// </summary>
-      Luv2LBGR = 80,
+      Luv2Lbgr = 80,
       /// <summary>
       /// Convert Luv color to sRGB color
       /// </summary>
-      Luv2LRGB = 81,
+      Luv2Lrgb = 81,
 
       /// <summary>
       /// Convert BGR color to YUV
       /// </summary>
-      BGR2YUV = 82,
+      Bgr2Yuv = 82,
       /// <summary>
       /// Convert RGB color to YUV
       /// </summary>
-      RGB2YUV = 83,
+      Rgb2Yuv = 83,
       /// <summary>
       /// Convert YUV color to BGR
       /// </summary>
-      YUV2BGR = 84,
+      Yuv2Bgr = 84,
       /// <summary>
       /// Convert YUV color to RGB
       /// </summary>
-      YUV2RGB = 85,
+      Yuv2Rgb = 85,
 
       /// <summary>
       /// Convert BayerBG to GRAY
       /// </summary>
-      BayerBG2GRAY = 86,
+      BayerBg2Gray = 86,
       /// <summary>
       /// Convert BayerGB to GRAY
       /// </summary>
-      BayerGB2GRAY = 87,
+      BayerGb2Gray = 87,
       /// <summary>
       /// Convert BayerRG to GRAY
       /// </summary>
-      BayerRG2GRAY = 88,
+      BayerRg2Gray = 88,
       /// <summary>
       /// Convert BayerGR to GRAY
       /// </summary>
-      BayerGR2GRAY = 89,
+      BayerGr2Gray = 89,
       /// <summary>
       /// Convert YUV420i to RGB
       /// </summary>
-      YUV420i2RGB = 90,
+      Yuv420I2Rgb = 90,
       /// <summary>
       /// Convert YUV420i to BGR
       /// </summary>
-      YUV420i2BGR = 91,
+      Yuv420I2Bgr = 91,
       /// <summary>
       /// Convert YUV420sp to RGB
       /// </summary>
-      YUV420sp2RGB = 92,
+      Yuv420Sp2Rgb = 92,
       /// <summary>
       /// Convert YUV320sp to BGR
       /// </summary>
-      YUV420sp2BGR = 93,
+      Yuv420Sp2Bgr = 93,
       /// <summary>
       /// Convert YUV320i to RGBA
       /// </summary>
-      YUV420i2RGBA = 94,
+      Yuv420I2Rgba = 94,
       /// <summary>
       /// Convert YUV420i to BGRA
       /// </summary>
-      YUV420i2BGRA = 95,
+      Yuv420I2Bgra = 95,
       /// <summary>
       /// Convert YUV420sp to RGBA
       /// </summary>
-      YUV420sp2RGBA = 96,
+      Yuv420Sp2Rgba = 96,
       /// <summary>
       /// Convert YUV420sp to BGRA
       /// </summary>
-      YUV420sp2BGRA = 97,
+      Yuv420Sp2Bgra = 97,
 
       /// <summary>
       /// Convert YUV (YV12) to RGB
       /// </summary>
-      YUV2RGB_YV12 = 98,
+      Yuv2RgbYv12 = 98,
       /// <summary>
       /// Convert YUV (YV12) to BGR
       /// </summary>
-      YUV2BGR_YV12 = 99,
+      Yuv2BgrYv12 = 99,
       /// <summary>
       /// Convert YUV (iYUV) to RGB
       /// </summary>
-      YUV2RGB_IYUV = 100,
+      Yuv2RgbIyuv = 100,
       /// <summary>
       /// Convert YUV (iYUV) to BGR
       /// </summary>
-      YUV2BGR_IYUV = 101,
+      Yuv2BgrIyuv = 101,
       /// <summary>
       /// Convert YUV (i420) to RGB
       /// </summary>
-      YUV2RGB_I420 = YUV2RGB_IYUV,
+      Yuv2RgbI420 = Yuv2RgbIyuv,
       /// <summary>
       /// Convert YUV (i420) to BGR
       /// </summary>
-      YUV2BGR_I420 = YUV2BGR_IYUV,
+      Yuv2BgrI420 = Yuv2BgrIyuv,
       /// <summary>
       /// Convert YUV (420p) to RGB
       /// </summary>
-      YUV420p2RGB = YUV2RGB_YV12,
+      Yuv420P2Rgb = Yuv2RgbYv12,
       /// <summary>
       /// Convert YUV (420p) to BGR
       /// </summary>
-      YUV420p2BGR = YUV2BGR_YV12,
+      Yuv420P2Bgr = Yuv2BgrYv12,
 
       /// <summary>
       /// Convert YUV (YV12) to RGBA
       /// </summary>
-      YUV2RGBA_YV12 = 102,
+      Yuv2RgbaYv12 = 102,
       /// <summary>
       /// Convert YUV (YV12) to BGRA
       /// </summary>
-      YUV2BGRA_YV12 = 103,
+      Yuv2BgraYv12 = 103,
       /// <summary>
       /// Convert YUV (iYUV) to RGBA
       /// </summary>
-      YUV2RGBA_IYUV = 104,
+      Yuv2RgbaIyuv = 104,
       /// <summary>
       /// Convert YUV (iYUV) to BGRA
       /// </summary>
-      YUV2BGRA_IYUV = 105,
+      Yuv2BgraIyuv = 105,
       /// <summary>
       /// Convert YUV (i420) to RGBA
       /// </summary>
-      YUV2RGBA_I420 = YUV2RGBA_IYUV,
+      Yuv2RgbaI420 = Yuv2RgbaIyuv,
       /// <summary>
       /// Convert YUV (i420) to BGRA
       /// </summary>
-      YUV2BGRA_I420 = YUV2BGRA_IYUV,
+      Yuv2BgraI420 = Yuv2BgraIyuv,
       /// <summary>
       /// Convert YUV (420p) to RGBA
       /// </summary>
-      YUV420p2RGBA = YUV2RGBA_YV12,
+      Yuv420P2Rgba = Yuv2RgbaYv12,
       /// <summary>
       /// Convert YUV (420p) to BGRA
       /// </summary>
-      YUV420p2BGRA = YUV2BGRA_YV12,
+      Yuv420P2Bgra = Yuv2BgraYv12,
 
       /// <summary>
       /// Convert YUV 420 to Gray
       /// </summary>
-      YUV2GRAY_420 = 106,
+      Yuv2Gray420 = 106,
       /// <summary>
       /// Convert YUV NV21 to Gray
       /// </summary>
-      YUV2GRAY_NV21 = YUV2GRAY_420,
+      Yuv2GrayNv21 = Yuv2Gray420,
       /// <summary>
       /// Convert YUV NV12 to Gray
       /// </summary>
-      YUV2GRAY_NV12 = YUV2GRAY_420,
+      Yuv2GrayNv12 = Yuv2Gray420,
       /// <summary>
       /// Convert YUV YV12 to Gray
       /// </summary>
-      YUV2GRAY_YV12 = YUV2GRAY_420,
+      Yuv2GrayYv12 = Yuv2Gray420,
       /// <summary>
       /// Convert YUV (iYUV) to Gray
       /// </summary>
-      YUV2GRAY_IYUV = YUV2GRAY_420,
+      Yuv2GrayIyuv = Yuv2Gray420,
       /// <summary>
       /// Convert YUV (i420) to Gray
       /// </summary>
-      YUV2GRAY_I420 = YUV2GRAY_420,
+      Yuv2GrayI420 = Yuv2Gray420,
       /// <summary>
       /// Convert YUV (420sp) to Gray
       /// </summary>
-      YUV420sp2GRAY = YUV2GRAY_420,
+      Yuv420Sp2Gray = Yuv2Gray420,
       /// <summary>
       /// Convert YUV (420p) to Gray
       /// </summary>
-      YUV420p2GRAY = YUV2GRAY_420,
+      Yuv420P2Gray = Yuv2Gray420,
 
       //YUV 4:2:2 formats family
       /// <summary>
       /// Convert YUV (UYVY) to RGB
       /// </summary>
-      YUV2RGB_UYVY = 107,
+      Yuv2RgbUyvy = 107,
       /// <summary>
       /// Convert YUV (UYVY) to BGR
       /// </summary>
-      YUV2BGR_UYVY = 108,
+      Yuv2BgrUyvy = 108,
       //YUV2RGB_VYUY = 109,
       //YUV2BGR_VYUY = 110,
       /// <summary>
       /// Convert YUV (Y422) to RGB
       /// </summary>
-      YUV2RGB_Y422 = YUV2RGB_UYVY,
+      Yuv2RgbY422 = Yuv2RgbUyvy,
       /// <summary>
       /// Convert YUV (Y422) to BGR
       /// </summary>
-      YUV2BGR_Y422 = YUV2BGR_UYVY,
+      Yuv2BgrY422 = Yuv2BgrUyvy,
       /// <summary>
       /// Convert YUV (UYNY) to RGB
       /// </summary>
-      YUV2RGB_UYNV = YUV2RGB_UYVY,
+      Yuv2RgbUynv = Yuv2RgbUyvy,
       /// <summary>
       /// Convert YUV (UYNV) to BGR
       /// </summary>
-      YUV2BGR_UYNV = YUV2BGR_UYVY,
+      Yuv2BgrUynv = Yuv2BgrUyvy,
 
       /// <summary>
       /// Convert YUV (UYVY) to RGBA
       /// </summary>
-      YUV2RGBA_UYVY = 111,
+      Yuv2RgbaUyvy = 111,
       /// <summary>
       /// Convert YUV (VYUY) to BGRA
       /// </summary>
-      YUV2BGRA_UYVY = 112,
+      Yuv2BgraUyvy = 112,
       //YUV2RGBA_VYUY = 113,
       //YUV2BGRA_VYUY = 114,
       /// <summary>
       /// Convert YUV (Y422) to RGBA
       /// </summary>
-      YUV2RGBA_Y422 = YUV2RGBA_UYVY,
+      Yuv2RgbaY422 = Yuv2RgbaUyvy,
       /// <summary>
       /// Convert YUV (Y422) to BGRA
       /// </summary>
-      YUV2BGRA_Y422 = YUV2BGRA_UYVY,
+      Yuv2BgraY422 = Yuv2BgraUyvy,
       /// <summary>
       /// Convert YUV (UYNV) to RGBA 
       /// </summary>
-      YUV2RGBA_UYNV = YUV2RGBA_UYVY,
+      Yuv2RgbaUynv = Yuv2RgbaUyvy,
       /// <summary>
       /// Convert YUV (UYNV) to BGRA
       /// </summary>
-      YUV2BGRA_UYNV = YUV2BGRA_UYVY,
+      Yuv2BgraUynv = Yuv2BgraUyvy,
 
       /// <summary>
       /// Convert YUV (YUY2) to RGB
       /// </summary>
-      YUV2RGB_YUY2 = 115,
+      Yuv2RgbYuy2 = 115,
       /// <summary>
       /// Convert YUV (YUY2) to BGR
       /// </summary>
-      YUV2BGR_YUY2 = 116,
+      Yuv2BgrYuy2 = 116,
       /// <summary>
       /// Convert YUV (YVYU) to RGB
       /// </summary>
-      YUV2RGB_YVYU = 117,
+      Yuv2RgbYvyu = 117,
       /// <summary>
       /// Convert YUV (YVYU) to BGR
       /// </summary>
-      YUV2BGR_YVYU = 118,
+      Yuv2BgrYvyu = 118,
       /// <summary>
       /// Convert YUV (YUYV) to RGB
       /// </summary>
-      YUV2RGB_YUYV = YUV2RGB_YUY2,
+      Yuv2RgbYuyv = Yuv2RgbYuy2,
       /// <summary>
       /// Convert YUV (YUYV) to BGR 
       /// </summary>
-      YUV2BGR_YUYV = YUV2BGR_YUY2,
+      Yuv2BgrYuyv = Yuv2BgrYuy2,
       /// <summary>
       /// Convert YUV (YUNV) to RGB
       /// </summary>
-      YUV2RGB_YUNV = YUV2RGB_YUY2,
+      Yuv2RgbYunv = Yuv2RgbYuy2,
       /// <summary>
       /// Convert YUV (YUNV) to BGR
       /// </summary>
-      YUV2BGR_YUNV = YUV2BGR_YUY2,
+      Yuv2BgrYunv = Yuv2BgrYuy2,
 
       /// <summary>
       /// Convert YUV (YUY2) to RGBA
       /// </summary>
-      YUV2RGBA_YUY2 = 119,
+      Yuv2RgbaYuy2 = 119,
       /// <summary>
       /// Convert YUV (YUY2) to BGRA
       /// </summary>
-      YUV2BGRA_YUY2 = 120,
+      Yuv2BgraYuy2 = 120,
       /// <summary>
       /// Convert YUV (YVYU) to RGBA
       /// </summary>
-      YUV2RGBA_YVYU = 121,
+      Yuv2RgbaYvyu = 121,
       /// <summary>
       /// Convert YUV (YVYU) to BGRA
       /// </summary>
-      YUV2BGRA_YVYU = 122,
+      Yuv2BgraYvyu = 122,
       /// <summary>
       /// Convert YUV (YUYV) to RGBA
       /// </summary>
-      YUV2RGBA_YUYV = YUV2RGBA_YUY2,
+      Yuv2RgbaYuyv = Yuv2RgbaYuy2,
       /// <summary>
       /// Convert YUV (YUYV) to BGRA
       /// </summary>
-      YUV2BGRA_YUYV = YUV2BGRA_YUY2,
+      Yuv2BgraYuyv = Yuv2BgraYuy2,
       /// <summary>
       /// Convert YUV (YUNV) to RGBA
       /// </summary>
-      YUV2RGBA_YUNV = YUV2RGBA_YUY2,
+      Yuv2RgbaYunv = Yuv2RgbaYuy2,
       /// <summary>
       /// Convert YUV (YUNV) to BGRA
       /// </summary>
-      YUV2BGRA_YUNV = YUV2BGRA_YUY2,
+      Yuv2BgraYunv = Yuv2BgraYuy2,
 
       /// <summary>
       /// Convert YUV (UYVY) to Gray
       /// </summary>
-      YUV2GRAY_UYVY = 123,
+      Yuv2GrayUyvy = 123,
       /// <summary>
       /// Convert YUV (YUY2) to Gray
       /// </summary>
-      YUV2GRAY_YUY2 = 124,
+      Yuv2GrayYuy2 = 124,
       //YUV2GRAY_VYUY = YUV2GRAY_UYVY,
       /// <summary>
       /// Convert YUV (Y422) to Gray
       /// </summary>
-      YUV2GRAY_Y422 = YUV2GRAY_UYVY,
+      Yuv2GrayY422 = Yuv2GrayUyvy,
       /// <summary>
       /// Convert YUV (UYNV) to Gray
       /// </summary>
-      YUV2GRAY_UYNV = YUV2GRAY_UYVY,
+      Yuv2GrayUynv = Yuv2GrayUyvy,
       /// <summary>
       /// Convert YUV (YVYU) to Gray
       /// </summary>
-      YUV2GRAY_YVYU = YUV2GRAY_YUY2,
+      Yuv2GrayYvyu = Yuv2GrayYuy2,
       /// <summary>
       /// Convert YUV (YUYV) to Gray
       /// </summary>
-      YUV2GRAY_YUYV = YUV2GRAY_YUY2,
+      Yuv2GrayYuyv = Yuv2GrayYuy2,
       /// <summary>
       /// Convert YUV (YUNV) to Gray
       /// </summary>
-      YUV2GRAY_YUNV = YUV2GRAY_YUY2,
+      Yuv2GrayYunv = Yuv2GrayYuy2,
 
       /// <summary>
       /// Alpha premultiplication
       /// </summary>
-      RGBA2mRGBA = 125,
+      Rgba2MRgba = 125,
       /// <summary>
       /// Alpha premultiplication
       /// </summary>
-      mRGBA2RGBA = 126,
+      MRgba2Rgba = 126,
 
       // RGB to YUV 4:2:0 family
 
       /// <summary>
       /// Convert RGB to YUV_I420
       /// </summary>
-      RGB2YUV_I420 = 127,
+      Rgb2YuvI420 = 127,
       /// <summary>
       /// Convert BGR to YUV_I420
       /// </summary>
-      BGR2YUV_I420 = 128,
+      Bgr2YuvI420 = 128,
       /// <summary>
       /// Convert RGB to YUV_IYUV
       /// </summary>
-      RGB2YUV_IYUV = RGB2YUV_I420,
+      Rgb2YuvIyuv = Rgb2YuvI420,
       /// <summary>
       /// Convert BGR to YUV_IYUV
       /// </summary>
-      BGR2YUV_IYUV = BGR2YUV_I420,
+      Bgr2YuvIyuv = Bgr2YuvI420,
 
       /// <summary>
       /// Convert RGBA to YUV_I420
       /// </summary>
-      RGBA2YUV_I420 = 129,
+      Rgba2YuvI420 = 129,
       /// <summary>
       /// Convert BGRA to YUV_I420
       /// </summary>
-      BGRA2YUV_I420 = 130,
+      Bgra2YuvI420 = 130,
       /// <summary>
       /// Convert RGBA to YUV_IYUV
       /// </summary>
-      RGBA2YUV_IYUV = RGBA2YUV_I420,
+      Rgba2YuvIyuv = Rgba2YuvI420,
       /// <summary>
       /// Convert BGRA to YUV_IYUV
       /// </summary>
-      BGRA2YUV_IYUV = BGRA2YUV_I420,
+      Bgra2YuvIyuv = Bgra2YuvI420,
       /// <summary>
       /// Convert RGB to YUV_YV12
       /// </summary>
-      RGB2YUV_YV12 = 131,
+      Rgb2YuvYv12 = 131,
       /// <summary>
       /// Convert BGR to YUV_YV12
       /// </summary>
-      BGR2YUV_YV12 = 132,
+      Bgr2YuvYv12 = 132,
       /// <summary>
       /// Convert RGBA to YUV_YV12
       /// </summary>
-      RGBA2YUV_YV12 = 133,
+      Rgba2YuvYv12 = 133,
       /// <summary>
       /// Convert BGRA to YUV_YV12
       /// </summary>
-      BGRA2YUV_YV12 = 134,
+      Bgra2YuvYv12 = 134,
 
       /// <summary>
       /// Convert BayerBG to BGR (Edge-Aware Demosaicing)
       /// </summary>
-      BayerBG2BGR_EA = 135,
+      BayerBg2BgrEa = 135,
       /// <summary>
       /// Convert BayerGB to BGR (Edge-Aware Demosaicing)
       /// </summary>
-      BayerGB2BGR_EA = 136,
+      BayerGb2BgrEa = 136,
       /// <summary>
       /// Convert BayerRG to BGR (Edge-Aware Demosaicing)
       /// </summary>
-      BayerRG2BGR_EA = 137,
+      BayerRg2BgrEa = 137,
       /// <summary>
       /// Convert BayerGR to BGR (Edge-Aware Demosaicing)
       /// </summary>
-      BayerGR2BGR_EA = 138,
+      BayerGr2BgrEa = 138,
 
       /// <summary>
       /// Convert BayerBG to RGB (Edge-Aware Demosaicing)
       /// </summary>
-      BayerBG2RGB_EA = BayerRG2BGR_EA,
+      BayerBg2RgbEa = BayerRg2BgrEa,
       /// <summary>
       /// Convert BayerGB to RGB (Edge-Aware Demosaicing)
       /// </summary>
-      BayerGB2RGB_EA = BayerGR2BGR_EA,
+      BayerGb2RgbEa = BayerGr2BgrEa,
       /// <summary>
       /// Convert BayerRG to RGB (Edge-Aware Demosaicing)
       /// </summary>
-      BayerRG2RGB_EA = BayerBG2BGR_EA,
+      BayerRg2RgbEa = BayerBg2BgrEa,
       /// <summary>
       /// Convert BayerGR to RGB (Edge-Aware Demosaicing)
       /// </summary>
-      BayerGR2RGB_EA = BayerGB2BGR_EA,
+      BayerGr2RgbEa = BayerGb2BgrEa,
 
       /// <summary>
       /// The max number, do not use
       /// </summary>
-      COLORCVT_MAX = 139
+      ColorcvtMax = 139
    }
 
    /*
@@ -1552,7 +1552,7 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// Inpaint type
    /// </summary>
-   public enum InpaintType : int
+   public enum InpaintType
    {
       /// <summary>
       /// Navier-Stokes based method.
@@ -1707,39 +1707,39 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// CV_RAND TYPE
    /// </summary>
-   public enum RAND_TYPE
+   public enum RandType
    {
       /// <summary>
       /// Uniform distribution
       /// </summary>
-      CV_RAND_UNI = 0,
+      Uni = 0,
       /// <summary>
       /// Normal distribution
       /// </summary>
-      CV_RAND_NORMAL = 1
+      Normal = 1
    }
 
    /// <summary>
    /// contour retrieval mode
    /// </summary>
-   public enum RETR_TYPE : int
+   public enum RetrType
    {
       /// <summary>
       /// retrive only the extreme outer contours 
       /// </summary>
-      CV_RETR_EXTERNAL = 0,
+      External = 0,
       /// <summary>
       ///  retrieve all the contours and puts them in the list 
       /// </summary>
-      CV_RETR_LIST = 1,
+      List = 1,
       /// <summary>
       /// retrieve all the contours and organizes them into two-level hierarchy: top level are external boundaries of the components, second level are bounda boundaries of the holes 
       /// </summary>
-      CV_RETR_CCOMP = 2,
+      Ccomp = 2,
       /// <summary>
       /// retrieve all the contours and reconstructs the full hierarchy of nested contours 
       /// </summary>
-      CV_RETR_TREE = 3
+      Tree = 3
    }
 
    internal static class SeqConst
@@ -1747,21 +1747,21 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// The bit to shift for SEQ_ELTYPE
       /// </summary>
-      public const int CV_SEQ_ELTYPE_BITS = 12;
+      public const int EltypeBits = 12;
 
       /// <summary>
       /// The mask of CV_SEQ_ELTYPE
       /// </summary>
-      public const int CV_SEQ_ELTYPE_MASK = ((1 << CV_SEQ_ELTYPE_BITS) - 1);
+      public const int EltypeMask = ((1 << EltypeBits) - 1);
 
       /// <summary>
       /// The bits to shift for SEQ_KIND
       /// </summary>
-      public const int CV_SEQ_KIND_BITS = 2;
+      public const int KindBits = 2;
       /// <summary>
       /// The bits to shift for SEQ_FLAG
       /// </summary>
-      public const int CV_SEQ_FLAG_SHIFT = CV_SEQ_KIND_BITS + CV_SEQ_ELTYPE_BITS;
+      public const int Shift = KindBits + EltypeBits;
    }
 
    /// <summary>
@@ -1824,74 +1824,74 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// generic (unspecified) kind of sequence 
       /// </summary>
-      CV_SEQ_KIND_GENERIC = (0 << SeqConst.CV_SEQ_ELTYPE_BITS),
+      Generic = (0 << SeqConst.EltypeBits),
       /// <summary>
       /// dense sequence subtypes 
       /// </summary>
-      CV_SEQ_KIND_CURVE = (1 << SeqConst.CV_SEQ_ELTYPE_BITS),
+      Curve = (1 << SeqConst.EltypeBits),
       /// <summary>
       /// dense sequence subtypes 
       /// </summary>
-      CV_SEQ_KIND_BIN_TREE = (2 << SeqConst.CV_SEQ_ELTYPE_BITS),
+      BinTree = (2 << SeqConst.EltypeBits),
       /// <summary>
       /// sparse sequence (or set) subtypes 
       /// </summary>
-      CV_SEQ_KIND_GRAPH = (1 << SeqConst.CV_SEQ_ELTYPE_BITS),
+      Graph = (1 << SeqConst.EltypeBits),
       /// <summary>
       /// sparse sequence (or set) subtypes 
       /// </summary>
-      CV_SEQ_KIND_SUBDIV2D = (2 << SeqConst.CV_SEQ_ELTYPE_BITS)
+      Subdiv2D = (2 << SeqConst.EltypeBits)
    }
 
    /// <summary>
    /// Sequence flag
    /// </summary>
-   public enum SEQ_FLAG
+   public enum SeqFlag
    {
       /// <summary>
       /// close sequence
       /// </summary>
-      CV_SEQ_FLAG_CLOSED = (1 << SeqConst.CV_SEQ_FLAG_SHIFT),
+      Closed = (1 << SeqConst.Shift),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_FLAG_SIMPLE = (2 << SeqConst.CV_SEQ_FLAG_SHIFT),
+      Simple = (2 << SeqConst.Shift),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_FLAG_CONVEX = (4 << SeqConst.CV_SEQ_FLAG_SHIFT),
+      Convex = (4 << SeqConst.Shift),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_FLAG_HOLE = (8 << SeqConst.CV_SEQ_FLAG_SHIFT)
+      Hole = (8 << SeqConst.Shift)
    }
 
    /// <summary>
    /// Sequence type for point sets
    /// </summary>
-   public enum SEQ_TYPE
+   public enum SeqType
    {
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POINT_SET = (SeqKind.CV_SEQ_KIND_GENERIC | SeqEltype.Point),
+      PointSet = (SeqKind.Generic | SeqEltype.Point),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POINT3D_SET = (SeqKind.CV_SEQ_KIND_GENERIC | SeqEltype.Point3D),
+      Point3DSet = (SeqKind.Generic | SeqEltype.Point3D),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POLYLINE = (SeqKind.CV_SEQ_KIND_CURVE | SeqEltype.Point),
+      Polyline = (SeqKind.Curve | SeqEltype.Point),
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_POLYGON = (SEQ_FLAG.CV_SEQ_FLAG_CLOSED | CV_SEQ_POLYLINE),
-      //CV_SEQ_CONTOUR         =CV_SEQ_POLYGON,
+      Polygon = (SeqFlag.Closed | Polyline),
+      //CV_SEQ_CONTOUR         =POLYGON,
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_SIMPLE_POLYGON = (SEQ_FLAG.CV_SEQ_FLAG_SIMPLE | CV_SEQ_POLYGON)
+      SimplePolygon = (SeqFlag.Simple | Polygon)
    }
 
    /// <summary>
@@ -1988,39 +1988,39 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// indicates if the value is signed
       /// </summary>
-      IPL_DEPTH_SIGN = 0x80000000,
+      IplDepthSign = 0x80000000,
       /// <summary>
       /// 1bit unsigned
       /// </summary>
-      IPL_DEPTH_1U = 1,
+      IplDepth_1U = 1,
       /// <summary>
       /// 8bit unsigned (Byte)
       /// </summary>
-      IPL_DEPTH_8U = 8,
+      IplDepth_8U = 8,
       /// <summary>
       /// 16bit unsigned
       /// </summary>
-      IPL_DEPTH_16U = 16,
+      IplDepth16U = 16,
       /// <summary>
       /// 32bit float (Single)
       /// </summary>
-      IPL_DEPTH_32F = 32,
+      IplDepth32F = 32,
       /// <summary>
       /// 8bit signed
       /// </summary>
-      IPL_DEPTH_8S = (IPL_DEPTH_SIGN | 8),
+      IplDepth_8S = (IplDepthSign | 8),
       /// <summary>
       /// 16bit signed
       /// </summary>
-      IPL_DEPTH_16S = (IPL_DEPTH_SIGN | 16),
+      IplDepth16S = (IplDepthSign | 16),
       /// <summary>
       /// 32bit signed 
       /// </summary>
-      IPL_DEPTH_32S = (IPL_DEPTH_SIGN | 32),
+      IplDepth32S = (IplDepthSign | 32),
       /// <summary>
       /// double
       /// </summary>
-      IPL_DEPTH_64F = 64
+      IplDepth64F = 64
    }
 
    /// <summary>
@@ -2261,20 +2261,20 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// General enumeration
    /// </summary>
-   public enum GENERAL
+   public enum General
    {
       /// <summary>
       /// 
       /// </summary>
-      CV_MAX_DIM = 32,
+      MaxDim = 32,
       /// <summary>
       /// 
       /// </summary>
-      CV_SEQ_MAGIC_VAL = 0x42990000,
+      SeqMagicVal = 0x42990000,
       /// <summary>
       /// 
       /// </summary>
-      CV_SET_MAGIC_VAL = 0x42980000
+      SetMagicVal = 0x42980000
    }
 
    ///<summary>
@@ -2285,187 +2285,187 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// 
       /// </summary>
-      STSOK = 0,
+      StsOk = 0,
       /// <summary>
       /// 
       /// </summary>
-      STSBACKTRACE = -1,
+      StsBacktrace = -1,
       /// <summary>
       /// 
       /// </summary>
-      STSERROR = -2,
+      StsError = -2,
       /// <summary>
       /// 
       /// </summary>
-      STSINTERNAL = -3,
+      StsInternal = -3,
       /// <summary>
       /// 
       /// </summary>
-      STSNOMEM = -4,
+      StsNoMem = -4,
       /// <summary>
       /// 
       /// </summary>
-      STSBADARG = -5,
+      StsBadArg = -5,
       /// <summary>
       /// 
       /// </summary>
-      STSBADFUNC = -6,
+      StsBadFunc = -6,
       /// <summary>
       /// 
       /// </summary>
-      STSNOCONV = -7,
+      StsNoConv = -7,
       /// <summary>
       /// 
       /// </summary>
-      STSAUTOTRACE = -8,
+      StsAutoTrace = -8,
       /// <summary>
       /// 
       /// </summary>
-      HEADERISNULL = -9,
+      HeaderIsNull = -9,
       /// <summary>
       /// 
       /// </summary>
-      BADIMAGESIZE = -10,
+      BadImageSize = -10,
       /// <summary>
       /// 
       /// </summary>
-      BADOFFSET = -11,
+      BadOffset = -11,
       /// <summary>
       /// 
       /// </summary>
-      BADDATAPTR = -12,
+      BadDataPtr = -12,
       /// <summary>
       /// 
       /// </summary>
-      BADSTEP = -13,
+      Badstep = -13,
       /// <summary>
       /// 
       /// </summary>
-      BADMODELORCHSEQ = -14,
+      BadModelOrChseq = -14,
       /// <summary>
       /// 
       /// </summary>
-      BADNUMCHANNELS = -15,
+      BadNumChannels = -15,
       /// <summary>
       /// 
       /// </summary>
-      BADNUMCHANNEL1U = -16,
+      BadNumChannel1U = -16,
       /// <summary>
       /// 
       /// </summary>
-      BADDEPTH = -17,
+      BadDepth = -17,
       /// <summary>
       /// 
       /// </summary>
-      BADALPHACHANNEL = -18,
+      BadAlphaChannel = -18,
       /// <summary>
       /// 
       /// </summary>
-      BADORDER = -19,
+      BadOrder = -19,
       /// <summary>
       /// 
       /// </summary>
-      BADORIGIN = -20,
+      BadOrigin = -20,
       /// <summary>
       /// 
       /// </summary>
-      BADALIGN = -21,
+      BadAlign = -21,
       /// <summary>
       /// 
       /// </summary>
-      BADCALLBACK = -22,
+      BadCallback = -22,
       /// <summary>
       /// 
       /// </summary>
-      BADTILESIZE = -23,
+      BadTileSize = -23,
       /// <summary>
       /// 
       /// </summary>
-      BADCOI = -24,
+      BadCoi = -24,
       /// <summary>
       /// 
       /// </summary>
-      BADROISIZE = -25,
+      BadRoiSize = -25,
       /// <summary>
       /// 
       /// </summary>
-      MASKISTILED = -26,
+      MaskIsTiled = -26,
       /// <summary>
       /// 
       /// </summary>
-      STSNULLPTR = -27,
+      StsNullPtr = -27,
       /// <summary>
       /// 
       /// </summary>
-      STSVECLENGTHERR = -28,
+      StsVecLengthErr = -28,
       /// <summary>
       /// 
       /// </summary>
-      STSFILTERSTRUCTCONTENTERR = -29,
+      StsFilterStructContenterr = -29,
       /// <summary>
       /// 
       /// </summary>
-      STSKERNELSTRUCTCONTENTERR = -30,
+      StsKernelStructContenterr = -30,
       /// <summary>
       /// 
       /// </summary>
-      STSFILTEROFFSETERR = -31,
+      StsFilterOffSetErr = -31,
       /// <summary>
       /// 
       /// </summary>
-      STSBADSIZE = -201,
+      StsBadSize = -201,
       /// <summary>
       /// 
       /// </summary>
-      STSDIVBYZERO = -202,
+      StsDivByZero = -202,
       /// <summary>
       /// 
       /// </summary>
-      STSINPLACENOTSUPPORTED = -203,
+      StsInplaceNotSupported = -203,
       /// <summary>
       /// 
       /// </summary>
-      STSOBJECTNOTFOUND = -204,
+      StsObjectNotFound = -204,
       /// <summary>
       /// 
       /// </summary>
-      STSUNMATCHEDFORMATS = -205,
+      StsUnmatchedFormats = -205,
       /// <summary>
       /// 
       /// </summary>
-      STSBADFLAG = -206,
+      StsBadFlag = -206,
       /// <summary>
       /// 
       /// </summary>
-      STSBADPOINT = -207,
+      StsBadPoint = -207,
       /// <summary>
       /// 
       /// </summary>
-      STSBADMASK = -208,
+      StsBadMask = -208,
       /// <summary>
       /// 
       /// </summary>
-      STSUNMATCHEDSIZES = -209,
+      StsUnmatchedSizes = -209,
       /// <summary>
       /// 
       /// </summary>
-      STSUNSUPPORTEDFORMAT = -210,
+      StsUnsupportedFormat = -210,
       /// <summary>
       /// 
       /// </summary>
-      STSOUTOFRANGE = -211,
+      StsOutOfRange = -211,
       /// <summary>
       /// 
       /// </summary>
-      STSPARSEERROR = -212,
+      StsParseError = -212,
       /// <summary>
       /// 
       /// </summary>
-      STSNOTIMPLEMENTED = -213,
+      StsNotImplemented = -213,
       /// <summary>
       /// 
       /// </summary>
-      STSBADMEMBLOCK = -214
+      StsBadMemBlock = -214
    }
 
    /// <summary>
@@ -2501,7 +2501,6 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       GaussianC = 1
    }
-
    
    /// <summary>
    /// Shape of the Structuring Element
@@ -2562,7 +2561,6 @@ namespace Emgu.CV.CvEnum
       CV_HIST_SPARSE = 1
    }*/
 
-   
    /// <summary>
    /// cvInvert method
    /// </summary>
@@ -2633,7 +2631,6 @@ namespace Emgu.CV.CvEnum
       /// All the input vectors are stored in a single matrix, as its columns
       /// </summary>
       Cols = 16,
-
    }
 
    /// <summary>
@@ -2786,14 +2783,12 @@ namespace Emgu.CV.CvEnum
       /// Clustering
       /// </summary>
       Clustering = 4,
-
    }
-
 
    /// <summary>
    /// IO type for eigen object related functions
    /// </summary>
-   public enum EIGOBJ_TYPE
+   public enum EigobjType
    {
       /// <summary>
       /// No callback
@@ -2816,40 +2811,40 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// CvNextEdgeType
    /// </summary>
-   public enum CV_NEXT_EDGE_TYPE
+   public enum NextEdgeType
    {
       /// <summary>
       /// next around the edge origin (eOnext)
       /// </summary>
-      CV_NEXT_AROUND_ORG = 0x00,
+      NextAroundOrg = 0x00,
       /// <summary>
       /// next around the edge vertex (eDnext) 
       /// </summary>
-      CV_NEXT_AROUND_DST = 0x22,
+      NextAroundDst = 0x22,
       /// <summary>
       /// previous around the edge origin (reversed eRnext)
       /// </summary>
-      CV_PREV_AROUND_ORG = 0x11,
+      PrevAroundOrg = 0x11,
       /// <summary>
       /// previous around the edge destination (reversed eLnext) 
       /// </summary>
-      CV_PREV_AROUND_DST = 0x33,
+      PreAroundDst = 0x33,
       /// <summary>
       /// next around the left facet (eLnext) 
       /// </summary>
-      CV_NEXT_AROUND_LEFT = 0x13,
+      NextAroundLeft = 0x13,
       /// <summary>
       /// next around the right facet (eRnext)
       /// </summary>
-      CV_NEXT_AROUND_RIGHT = 0x31,
+      NextAroundRight = 0x31,
       /// <summary>
       /// previous around the left facet (reversed eOnext)
       /// </summary>
-      CV_PREV_AROUND_LEFT = 0x20,
+      PrevAroundLeft = 0x20,
       /// <summary>
       /// previous around the right facet (reversed eDnext) 
       /// </summary>
-      CV_PREV_AROUND_RIGHT = 0x02
+      PrevAroundRight = 0x02
    }
 
    /// <summary>
@@ -3068,12 +3063,12 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// The method for matching contour tree
    /// </summary>
-   public enum MATCH_CONTOUR_TREE_METHOD
+   public enum MatchContourTreeMethod
    {
       /// <summary>
       /// 
       /// </summary>
-      CONTOUR_TREES_MATCH_I1 = 1
+      ContourTreesMatchI1 = 1
    }
 
    /// <summary>
@@ -3098,7 +3093,7 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// The type of blob detector
    /// </summary>
-   public enum BLOB_DETECTOR_TYPE
+   public enum BlobDetectorType
    {
       /// <summary>
       /// Simple blob detector
@@ -3314,17 +3309,17 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Autodetect
       /// </summary>
-      ANY = 0,
+      Any = 0,
 
       /// <summary>
       /// MIL proprietary drivers
       /// </summary>
-      MIL = 100,
+      Mil = 100,
 
       /// <summary>
       /// Platform native
       /// </summary>
-      VFW = 200,
+      Vfw = 200,
       /// <summary>
       /// Platform native
       /// </summary>
@@ -3337,11 +3332,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// IEEE 1394 drivers
       /// </summary>
-      FIREWARE = 300,
-      /// <summary>
-      /// IEEE 1394 drivers
-      /// </summary>
-      FIREWIRE = 300,
+      Firewire = 300,
       /// <summary>
       /// IEEE 1394 drivers
       /// </summary>
@@ -3358,27 +3349,27 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
-      STEREO = 400,
+      Stereo = 400,
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
-      TYZX = 400,
+      Tyzx = 400,
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
-      TYZX_LEFT = 400,
+      TyzxLeft = 400,
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
-      TYZX_RIGHT = 401,
+      TyzxRight = 401,
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
-      TYZX_COLOR = 402,
+      TyzxColor = 402,
       /// <summary>
       /// TYZX proprietary drivers
       /// </summary>
-      TYZX_Z = 403,
+      TyzxZ = 403,
 
       /// <summary>
       /// QuickTime
@@ -3388,59 +3379,59 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Unicap drivers
       /// </summary>
-      UNICAP = 600,
+      Unicap = 600,
 
       /// <summary>
       /// DirectShow (via videoInput)
       /// </summary>
-      DSHOW = 700,
+      DShow = 700,
 
       /// <summary>
       /// Microsoft Media Foundation (via videoInput)
       /// </summary>
-      MSMF = 1400,
+      Msmf = 1400,
 
       /// <summary>
       /// PvAPI, Prosilica GigE SDK
       /// </summary>
-      PVAPI = 800,
+      Pvapi = 800,
 
       /// <summary>
       /// OpenNI (for Kinect)
       /// </summary>
-      OPENNI = 900,
+      OpenNI = 900,
 
       /// <summary>
       /// OpenNI (for Asus Xtion)
       /// </summary>
-      OPENNI_ASUS = 910,
+      OpenNIAsus = 910,
 
       /// <summary>
       /// Android
       /// </summary>
-      ANDROID = 1000,
+      Android = 1000,
       /// <summary>
       /// Android back camera
       /// </summary>
-      ANDROID_BACK = ANDROID + 99,
+      AndroidBack = Android + 99,
       /// <summary>
       /// // Android front camera
       /// </summary>
-      ANDROID_FRONT = ANDROID + 98,
+      AndroidFront = Android + 98,
       /// <summary>
       /// XIMEA Camera API
       /// </summary>
-      XIAPI = 1100,
+      XiApi = 1100,
 
       /// <summary>
       /// AVFoundation framework for iOS (OS X Lion will have the same API)
       /// </summary>
-      AVFOUNDATION = 1200,
+      AVFoundation = 1200,
 
       /// <summary>
       ///  Smartek Giganetix GigEVisionSDK
       /// </summary>
-      GIGANETIX = 1300,
+      Giganetix = 1300,
    }
 
    /// <summary>

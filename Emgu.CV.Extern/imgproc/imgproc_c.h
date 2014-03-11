@@ -89,4 +89,18 @@ CVAPI(double) cveCompareHist(cv::_InputArray* h1, cv::_InputArray* h2, int metho
 
 CVAPI(void) cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D);
 
+CVAPI(void) cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, CvPoint* offset);
+CVAPI(double) cvePointPolygonTest(cv::_InputArray* contour, CvPoint2D32f* pt, bool measureDist);
+CVAPI(double) cveContourArea(cv::_InputArray* contour, bool oriented);
+CVAPI(bool) cveIsContourConvex(cv::_InputArray* contour);
+CVAPI(void) cveBoundingRectangle(cv::_InputArray* points, CvRect* boundingRect);
+CVAPI(double) cveArcLength(cv::_InputArray* curve, bool closed);
+CVAPI(void) cveMinAreaRect(cv::_InputArray* points, CvBox2D* box);
+CVAPI(void) cveBoxPoints(CvBox2D* box, cv::_OutputArray* points);
+CVAPI(double) cveMinEnclosingTriangle(cv::_InputArray* points, cv::_OutputArray* triangle);
+CVAPI(void) cveMinEnclosingCircle(cv::_InputArray* points, CvPoint2D32f* center, float* radius);
+CVAPI(double) cveMatchShapes(cv::_InputArray* contour1, cv::_InputArray* contour2, int method, double parameter);
+CVAPI(void) cveFitEllipse(cv::_InputArray* points, CvBox2D* box);
+CVAPI(void) cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps);
+CVAPI(int) cveRotatedRectangleIntersection(CvBox2D* rect1, CvBox2D* rect2, cv::_OutputArray* intersectingRegion);
 #endif

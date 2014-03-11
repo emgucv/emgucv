@@ -54,7 +54,7 @@ namespace Emgu.CV.Test
 
       public void TestKinect()
       {
-         using (KinectCapture capture = new KinectCapture(KinectCapture.DeviceType.Kinect, KinectCapture.ImageGeneratorOutputMode.VGA_30HZ))
+         using (KinectCapture capture = new KinectCapture(KinectCapture.DeviceType.Kinect, KinectCapture.ImageGeneratorOutputMode.Vga30Hz))
          {
             ImageViewer viewer = new ImageViewer();
             Application.Idle += delegate(Object sender, EventArgs e)
@@ -666,7 +666,7 @@ namespace Emgu.CV.Test
       public static void TestCodeBook()
       {
          int learningFrames = 40;
-         using (BlobDetector detector = new BlobDetector(CvEnum.BLOB_DETECTOR_TYPE.Simple))
+         using (BlobDetector detector = new BlobDetector(CvEnum.BlobDetectorType.Simple))
          using (BlobSeq blobs = new BlobSeq())
          using (Capture capture = new Capture("tree.avi"))
          using (BGCodeBookModel<Ycc> bgmodel = new BGCodeBookModel<Ycc>())
@@ -957,7 +957,7 @@ namespace Emgu.CV.Test
          fgparam.T = 0.9f;
 
          BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
-         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
+         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BlobDetectorType.CC);
          param.FGDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.ForgroundDetectorType.Fgd, fgparam);
          param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFG);
          param.FGTrainFrames = 10;

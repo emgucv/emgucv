@@ -21,6 +21,9 @@ namespace Emgu.CV.Superres
       private Mat _frame = new Mat();
       private Image<Bgr, Byte> _image;
 
+      /// <summary>
+      /// The pointer to the frame source
+      /// </summary>
       protected IntPtr _frameSourcePtr;
 
       /// <summary>

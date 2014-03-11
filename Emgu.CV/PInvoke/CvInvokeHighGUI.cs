@@ -70,7 +70,7 @@ namespace Emgu.CV
       /// <param name="prop">Property identifier</param>
       /// <returns>The specified property of camera or video file</returns>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern double cvGetCaptureProperty(IntPtr capture, CvEnum.CAP_PROP prop);
+      public static extern double cvGetCaptureProperty(IntPtr capture, CvEnum.CapProp prop);
 
       /// <summary>
       /// Sets the specified property of video capturing
@@ -79,7 +79,7 @@ namespace Emgu.CV
       /// <param name="propertyId">Property identifier</param>
       /// <param name="value">Value of the property</param>
       [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvSetCaptureProperty(IntPtr capture, CvEnum.CAP_PROP propertyId, double value);
+      public static extern void cvSetCaptureProperty(IntPtr capture, CvEnum.CapProp propertyId, double value);
 
       /// <summary>
       /// Return the type of the capture (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
@@ -120,7 +120,7 @@ namespace Emgu.CV
       /// <param name="filename">The name of the file to be saved to</param>
       /// <param name="image">The image to be saved</param>
       /// <param name="parameters">The parameters</param>
-      /// <returns></returns>
+      /// <returns>true if success</returns>
       public static bool Imwrite(String filename, IInputArray image, params int[] parameters)
       {
          using (Util.VectorOfInt vec = new Util.VectorOfInt())

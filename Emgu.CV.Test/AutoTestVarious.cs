@@ -14,6 +14,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Cuda;
 using Emgu.CV.Stitching;
@@ -163,6 +164,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(diff.Norm < 1.0e-8);
       }
 
+      
       [Test]
       public void TestContour()
       {
@@ -176,13 +178,22 @@ namespace Emgu.CV.Test
             PointF pIn = new PointF(60, 40);
             PointF pOut = new PointF(80, 100);
 
+            using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint() )
+            
+            {
+               CvInvoke.FindContours(img, contour, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+               using (VectorOfPoint firstContour = contours[0])
+               {
+                  EmguAssert.IsTrue( CvInvoke.IsContourConvex(firstContour )  );
+               }
+            }
             using (MemStorage stor = new MemStorage())
             {
-               Contour<Point> cs = img.FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
-               EmguAssert.IsTrue(cs.MCvContour.elem_size == Marshal.SizeOf(typeof(Point)));
+               //Contour<Point> cs = img.FindContours(CvEnum.ChainApproxMethod.ChainApproxSimple, CvEnum.RetrType.List, stor);
+               //EmguAssert.IsTrue(cs.MCvContour.elem_size == Marshal.SizeOf(typeof(Point)));
                //EmguAssert.IsTrue(rect.Width * rect.Height == cs.Area);
 
-               EmguAssert.IsTrue(cs.Convex);
+               //EmguAssert.IsTrue(cs.Convex);
                //EmguAssert.IsTrue(rect.Width * 2 + rect.Height * 2 == cs.Perimeter);
                Rectangle rect2 = cs.BoundingRectangle;
                rect2.Width -= 1;
@@ -210,7 +221,7 @@ namespace Emgu.CV.Test
             using (MemStorage stor = new MemStorage())
             {
                Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
-               Contour<Point> c = img2.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, stor);
+               Contour<Point> c = img2.FindContours(Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple, Emgu.CV.CvEnum.RetrType.List, stor);
                EmguAssert.IsTrue(c == null);
             }
          }
@@ -220,7 +231,7 @@ namespace Emgu.CV.Test
          int sizeRect = Marshal.SizeOf(typeof(Rectangle));
          EmguAssert.IsTrue(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)) == s2);
       }
-
+      /*
       [Test]
       public void TestConvexityDefacts()
       {
@@ -249,7 +260,7 @@ namespace Emgu.CV.Test
             EmguAssert.IsTrue(contour.InContour(new PointF(300, 300)) < 0);
             EmguAssert.IsTrue(contour.InContour(new PointF(10, 10)) == 0);
          }
-      }
+      }*/
 
       [Test]
       public void TestException()
@@ -292,7 +303,7 @@ namespace Emgu.CV.Test
          Point topLeft = new Point((width >> 1) - (size.Width >> 1), (height >> 1) - (size.Height >> 1));
          Rectangle rect = new Rectangle(topLeft, size);
 
-         BlobDetector detector = new BlobDetector(CvEnum.BLOB_DETECTOR_TYPE.Simple);
+         BlobDetector detector = new BlobDetector(CvEnum.BlobDetectorType.Simple);
          //Image<Gray, Byte> forground = new Image<Gray,byte>(bg.Size);
          //forground.SetValue(255);
          BlobSeq newSeq = new BlobSeq();
@@ -322,7 +333,7 @@ namespace Emgu.CV.Test
          Rectangle rect = new Rectangle(topLeft, size);
 
          BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
-         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
+         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BlobDetectorType.CC);
          //param.FGDetector = new FGDetector<Gray>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
          param.FGTrainFrames = 5;
@@ -360,7 +371,7 @@ namespace Emgu.CV.Test
          Rectangle rect = new Rectangle(topLeft, size);
 
          BlobTrackerAutoParam<Gray> param = new BlobTrackerAutoParam<Gray>();
-         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
+         param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BlobDetectorType.CC);
          //param.FGDetector = new FGDetector<Gray>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
          param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
          param.FGTrainFrames = 5;
@@ -587,7 +598,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestGetBox2DPoints()
       {
-         MCvBox2D box = new MCvBox2D(
+         RotatedRect box = new RotatedRect(
             new PointF(3.0f, 2.0f),
             new SizeF(4.0f, 6.0f),
             0.0f);
@@ -1192,6 +1203,7 @@ namespace Emgu.CV.Test
             out extrinsicParameters);
       }*/
 
+      /*
       [Test]
       public void TestContourCreate()
       {
@@ -1239,7 +1251,7 @@ namespace Emgu.CV.Test
             seq.Push(new Point(1, 1));
             seq.Push(new Point(1, 0));
          }
-      }
+      }*/
 
       [Test]
       public void TestConvexHull()
@@ -1454,7 +1466,7 @@ namespace Emgu.CV.Test
          #endregion
 
          Stopwatch watch = Stopwatch.StartNew();
-         MCvBox2D box = PointCollection.MinAreaRect(pts);
+         RotatedRect box = PointCollection.MinAreaRect(pts);
          watch.Stop();
 
          #region draw the points and the box

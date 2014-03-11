@@ -12,43 +12,20 @@ using Emgu.Util;
 namespace Emgu.CV.Nonfree
 {
    /// <summary>
-   /// Wrapped CvSURFParams structure
+   /// Class for extracting Speeded Up Robust Features from an image
    /// </summary>
    public class SURFDetector : Feature2D
    {
-      /*
-      private MCvSURFParams _surfParams;
 
       /// <summary>
-      /// Get the SURF parameters
-      /// </summary>
-      public MCvSURFParams SURFParams
-      {
-         get
-         {
-            return _surfParams;
-         }
-      }
-
-      /// <summary>
-      /// Create a SURF detector with the specific surfParameters
-      /// </summary>
-      /// <param name="surfParams">The surf parameters</param>
-      public SURFDetector(MCvSURFParams surfParams)
-      {
-         _surfParams = surfParams;
-         _ptr = NonfreeInvoke.CvSURFDetectorCreate(ref surfParams, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
-      }*/
-
-      /// <summary>
-      /// Create a MCvSURFParams using the specific values
+      /// Create a SURF detector using the specific values
       /// </summary>
       /// <param name="hessianThresh">      
       /// Only features with keypoint.hessian larger than that are extracted.
       /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
       /// user can further filter out some features based on their hessian values and other characteristics
       /// </param>
-      /// <param name="extendedFlag">      
+      /// <param name="extended">      
       /// false means basic descriptors (64 elements each),
       /// true means extended descriptors (128 elements each)
       /// </param>
@@ -59,6 +36,10 @@ namespace Emgu.CV.Nonfree
       /// <param name="nOctaveLayers">
       /// The number of layers within each octave
       /// </param>
+      /// <param name="upright">
+      /// False means that detector computes orientation of each feature. 
+      /// True means that the orientation is not computed (which is much, much faster). 
+      /// For example, if you match images from a stereo pair, or do image stitching, the matched features likely have very similar angles, and you can speed up feature extraction by setting upright=true.</param>
       public SURFDetector(double hessianThresh, int nOctaves = 4, int nOctaveLayers = 2, bool extended = true, bool upright = false)
       {
          _ptr = NonfreeInvoke.CvSURFDetectorCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _featureDetectorPtr, ref _descriptorExtractorPtr);

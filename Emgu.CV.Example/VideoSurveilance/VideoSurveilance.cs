@@ -20,7 +20,7 @@ namespace VideoSurveilance
 {
    public partial class VideoSurveilance : Form
    {
-      private static MCvFont _font = new MCvFont(Emgu.CV.CvEnum.FontType.HersheyPlain, 1.0, 1.0);
+      //private static MCvFont _font = new MCvFont(Emgu.CV.CvEnum.FontType.HersheyPlain, 1.0, 1.0);
       private static Capture _cameraCapture;
       private static BlobTrackerAuto<Bgr> _tracker;
       private static IBGFGDetector<Bgr> _detector;
@@ -65,7 +65,7 @@ namespace VideoSurveilance
          foreach (MCvBlob blob in _tracker)
          {
             frame.Draw((Rectangle)blob, new Bgr(255.0, 255.0, 255.0), 2);
-            frame.Draw(blob.ID.ToString(), ref _font, Point.Round(blob.Center), new Bgr(255.0, 255.0, 255.0));
+            frame.Draw(blob.ID.ToString(), Point.Round(blob.Center), FontFace.HersheyPlain, 1.0, new Bgr(255.0, 255.0, 255.0));
          }
 
          imageBox1.Image = frame;

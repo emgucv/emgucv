@@ -1806,7 +1806,7 @@ namespace Emgu.CV.UI.GLView
                {
                   if (tmp.Size == textureSize)
                   {
-                     CvInvoke.CvtColor(tmp, tmp, Emgu.CV.CvEnum.ColorConversion.BGRA2RGBA);
+                     CvInvoke.CvtColor(tmp, tmp, Emgu.CV.CvEnum.ColorConversion.Bgra2Rgba);
                      LoadTexture(tmp.Size, tmp.MIplImage.ImageData, GLImageView.TextureColor.RGBA, 1);
                   }
                   else
@@ -1815,7 +1815,7 @@ namespace Emgu.CV.UI.GLView
                                                               _glTextureDimension,
                                                               Emgu.CV.CvEnum.Inter.Nearest))
                      {
-                        CvInvoke.CvtColor(resize, resize, Emgu.CV.CvEnum.ColorConversion.BGRA2RGBA);
+                        CvInvoke.CvtColor(resize, resize, Emgu.CV.CvEnum.ColorConversion.Bgra2Rgba);
                         LoadTexture(resize.Size, resize.MIplImage.ImageData, GLImageView.TextureColor.RGBA, 1);
                      }
                }
@@ -1866,7 +1866,7 @@ namespace Emgu.CV.UI.GLView
                Image<Bgr, Byte> resized = _bgrBuffers.GetBuffer(new Size(_glTextureDimension, _glTextureDimension), 0);
 
                CvInvoke.Resize(image, resized, resized.Size, 0, 0, Emgu.CV.CvEnum.Inter.Nearest);
-               CvInvoke.CvtColor(resized, resized, Emgu.CV.CvEnum.ColorConversion.BGR2RGB);
+               CvInvoke.CvtColor(resized, resized, Emgu.CV.CvEnum.ColorConversion.Bgr2Rgb);
                LoadTexture(resized.Size, resized.MIplImage.ImageData, TextureColor.RGB, 0);
             }
             else

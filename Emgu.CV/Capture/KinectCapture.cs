@@ -25,23 +25,23 @@ namespace Emgu.CV
          /// <summary>
          /// VGA resolution
          /// </summary>
-         VGA_30HZ = 0,
+         Vga30Hz = 0,
          /// <summary>
          /// SXVGA resolution
          /// </summary>
-         SXGA_15HZ = 1,
+         Sxga15Hz = 1,
          /// <summary>
          /// SXVGA resolution
          /// </summary>
-         SXGA_30HZ = 2,
+         Sxga30Hz = 2,
          /// <summary>
          /// QVGA resolution
          /// </summary>
-         QVGA_30HZ = 3,
+         Qvga30Hz = 3,
          /// <summary>
          /// QVGA resolution
          /// </summary>
-         QVGA_60HZ = 4
+         Qvga60Hz = 4
       }
 
       /// <summary>
@@ -105,9 +105,9 @@ namespace Emgu.CV
       /// <param name="type">The kinect device type</param>
       /// <param name="outputMode">The output mode</param>
       public KinectCapture(DeviceType type, ImageGeneratorOutputMode outputMode)
-         : base(type == DeviceType.Kinect ? CvEnum.CaptureType.OPENNI : CvEnum.CaptureType.OPENNI_ASUS)
+         : base(type == DeviceType.Kinect ? CvEnum.CaptureType.OpenNI : CvEnum.CaptureType.OpenNIAsus)
       {
-         SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE, (double)outputMode);
+         SetCaptureProperty(Emgu.CV.CvEnum.CapProp.OpenniImageGeneratorOutputMode, (double)outputMode);
       }
 
       /// <summary>
@@ -261,9 +261,9 @@ namespace Emgu.CV
       public double GetMaxDisparity(double minDistance)
       {
          //baseline in mm
-         double baseline = GetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_OPENNI_DEPTH_GENERATOR_BASELINE);
+         double baseline = GetCaptureProperty(Emgu.CV.CvEnum.CapProp.OpenniDepthGeneratorBaseline);
          //focal length in pixels
-         double f = GetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_OPENNI_DEPTH_GENERATOR_FOCAL_LENGTH);
+         double f = GetCaptureProperty(Emgu.CV.CvEnum.CapProp.OpenniDepthGeneratorFocalLength);
 
          return baseline / f * minDistance;
       }

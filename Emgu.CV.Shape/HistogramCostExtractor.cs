@@ -100,6 +100,9 @@ namespace Emgu.CV.Shape
       }
    }
 
+   /// <summary>
+   /// Library to invoke functions that belongs to the shape module
+   /// </summary>
    public static partial class ShapeInvoke
    {
       static ShapeInvoke()

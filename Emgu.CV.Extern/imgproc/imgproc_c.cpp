@@ -289,3 +289,70 @@ void cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv
    cv::Mat r = cv::getRotationMatrix2D(*center, angle, scale);
    r.copyTo(*rotationMatrix2D);
 }
+
+void cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, CvPoint* offset)
+{
+   cv::findContours(*image, *contours, hierarchy ? *hierarchy: (cv::OutputArray) cv::noArray(), mode, method, *offset);
+}
+
+double cvePointPolygonTest(cv::_InputArray* contour, CvPoint2D32f* pt, bool measureDist)
+{
+   return cv::pointPolygonTest(*contour, *pt, measureDist);
+}
+
+double cveContourArea(cv::_InputArray* contour, bool oriented)
+{
+   return cv::contourArea(*contour, oriented);
+}
+
+bool cveIsContourConvex(cv::_InputArray* contour)
+{
+   return cv::isContourConvex(*contour);
+}
+void cveBoundingRectangle(cv::_InputArray* points, CvRect* boundingRect)
+{
+   cv::Rect rect = cv::boundingRect(*points);
+   *boundingRect = rect;
+}
+double cveArcLength(cv::_InputArray* curve, bool closed)
+{
+   return cv::arcLength(*curve, closed);
+}
+void cveMinAreaRect(cv::_InputArray* points, CvBox2D* box)
+{
+   *box = cv::minAreaRect(*points);
+}
+void cveBoxPoints(CvBox2D* box, cv::_OutputArray* points)
+{
+   cv::boxPoints(*box, *points);
+}
+double cveMinEnclosingTriangle(cv::_InputArray* points, cv::_OutputArray* triangle)
+{
+   return cv::minEnclosingTriangle(*points, *triangle);
+}
+void cveMinEnclosingCircle(cv::_InputArray* points, CvPoint2D32f* center, float* radius)
+{
+   cv::Point2f c; float r;
+   cv::minEnclosingCircle(*points, c, r);
+   *center = c;
+   *radius = r;
+}
+double cveMatchShapes(cv::_InputArray* contour1, cv::_InputArray* contour2, int method, double parameter)
+{
+   return cv::matchShapes(*contour1, *contour2, method, parameter);
+}
+void cveFitEllipse(cv::_InputArray* points, CvBox2D* box)
+{
+   cv::RotatedRect rect = cv::fitEllipse(*points);
+   *box = rect;
+}
+void cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps)
+{
+   cv::fitLine(*points, *line, distType, param, reps, aeps);
+}
+int cveRotatedRectangleIntersection(CvBox2D* rect1, CvBox2D* rect2, cv::_OutputArray* intersectingRegion)
+{
+   cv::RotatedRect r1 = *rect1;
+   cv::RotatedRect r2 = *rect2;
+   return cv::rotatedRectangleIntersection(r1, r2, *intersectingRegion);
+}

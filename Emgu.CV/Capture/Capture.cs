@@ -126,7 +126,7 @@ namespace Emgu.CV
       {
          get
          {
-            return Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH));
+            return Convert.ToInt32(GetCaptureProperty(CvEnum.CapProp.FrameWidth));
          }
       }
 
@@ -135,7 +135,7 @@ namespace Emgu.CV
       {
          get
          {
-            return Convert.ToInt32(GetCaptureProperty(CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
+            return Convert.ToInt32(GetCaptureProperty(CvEnum.CapProp.FrameHeight));
          }
       }
       #endregion
@@ -215,7 +215,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="index">The index for the property</param>
       /// <returns>The value of the specific property</returns>
-      public double GetCaptureProperty(CvEnum.CAP_PROP index)
+      public double GetCaptureProperty(CvEnum.CapProp index)
       {
          return CvInvoke.cvGetCaptureProperty(_ptr, index);
       }
@@ -225,7 +225,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="property">Property identifier</param>
       /// <param name="value">Value of the property</param>
-      public void SetCaptureProperty(CvEnum.CAP_PROP property, double value)
+      public void SetCaptureProperty(CvEnum.CapProp property, double value)
       {
          CvInvoke.cvSetCaptureProperty(Ptr, property, value);
       }
@@ -370,7 +370,7 @@ namespace Emgu.CV
             res = new Image<Gray, Byte>(iplImage.Width, iplImage.Height);
             using (Mat m = CvInvoke.CvArrToMat(img))
             {
-               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.BGR2GRAY);
+               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
             }
          }
          else
@@ -412,7 +412,7 @@ namespace Emgu.CV
             res = new Image<Bgr, Byte>(iplImage.Width, iplImage.Height);
             using (Mat m = CvInvoke.CvArrToMat(img))
             {
-               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.GRAY2BGR);
+               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.Gray2Bgr);
             }
          }
          else

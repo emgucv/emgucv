@@ -369,7 +369,7 @@ namespace Emgu.CV
       /// <param name="ceilingValue">the exclusive upper boundary of random numbers range</param>
       public void SetRandUniform(UInt64 seed, MCvScalar floorValue, MCvScalar ceilingValue)
       {
-         CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RAND_TYPE.CV_RAND_UNI, floorValue, ceilingValue);
+         CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RandType.Uni, floorValue, ceilingValue);
       }
 
       /// <summary>
@@ -391,7 +391,7 @@ namespace Emgu.CV
       /// <param name="std"> the standard deviation of random numbers</param>
       public void SetRandNormal(UInt64 seed, MCvScalar mean, MCvScalar std)
       {
-         CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RAND_TYPE.CV_RAND_NORMAL, mean, std);
+         CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RandType.Normal, mean, std);
       }
 
       /// <summary>

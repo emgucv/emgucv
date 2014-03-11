@@ -194,6 +194,7 @@
     <Compile Include="Util\VectorOfPoint.cs" />
     <Compile Include="Util\VectorOfPointF.cs" />
     <Compile Include="Util\VectorOfUMat.cs" />
+    <Compile Include="Util\VectorOfVectorOfInt.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint3D32F.cs" />
     <Compile Include="Util\VectorOfVectorOfPointExtra.cs" />
@@ -278,7 +279,7 @@
     <Compile Include="Shape\Triangle3DF.cs" />
     <Compile Include="StereoBM.cs" />
     <Compile Include="MemStorage.cs" />
-    <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
+    <Compile Include="PInvoke\CvType\RotatedRect.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />
     <Compile Include="PInvoke\CvType\MCvHuMoments.cs" />
     <Compile Include="PInvoke\CvType\MCvMat.cs" />

@@ -497,43 +497,7 @@ namespace Emgu.CV
       /// <param name="minValues">The minimum values for each channel</param>
       public void MinMax(out double[] minValues, out double[] maxValues, out Point[] minLocations, out Point[] maxLocations)
       {
-         int numberOfChannels = NumberOfChannels;
-         minValues = new double[numberOfChannels];
-         maxValues = new double[numberOfChannels];
-         minLocations = new Point[numberOfChannels];
-         maxLocations = new Point[numberOfChannels];
-
-         double minVal = 0, maxVal = 0;
-         Point minLoc = new Point(), maxLoc = new Point();
-         //int[] minIdx = new int[2], maxIdx = new int[2];
-         if (numberOfChannels == 1)
-         {
-            CvInvoke.MinMaxLoc(this, ref minVal, ref maxVal, ref minLoc, ref maxLoc, null);
-            //CvInvoke.CvMinMaxIdx(Ptr, out minVal, out maxVal, minIdx, maxIdx, IntPtr.Zero);
-            minValues[0] = minVal; maxValues[0] = maxVal;
-            //minLoc.X = minIdx[1]; minLoc.Y = minIdx[0];
-            //maxLoc.X = maxIdx[1]; maxLoc.Y = maxIdx[0];
-            minLocations[0] = minLoc; maxLocations[0] = maxLoc;
-
-         }
-         else
-         {
-            IImage[] channels = ((IImage) this).Split();
-            try
-            {
-               for (int i = 0; i < channels.Length; i++)
-               {
-                  CvInvoke.MinMaxLoc(channels[i], ref minVal, ref maxVal, ref minLoc, ref maxLoc, null);
-                  minValues[i] = minVal; maxValues[i] = maxVal;
-                  minLocations[i] = minLoc; maxLocations[i] = maxLoc;
-               }
-            }
-            finally
-            {
-               for (int i = 0; i < channels.Length; i++)
-                  channels[i].Dispose();
-            }
-         }
+         CvInvoke.MinMax(this, out minValues, out maxValues, out minLocations, out maxLocations);
       }
 
       /// <summary>
@@ -622,21 +586,35 @@ namespace Emgu.CV
          return c;
       }
 
-
-      IImage[] IImage.Split()
-      { 
+      ///<summary> 
+      ///Split current Image into an array of gray scale images where each element 
+      ///in the array represent a single color channel of the original image
+      ///</summary>
+      ///<returns> 
+      ///An array of gray scale images where each element  
+      ///in the array represent a single color channel of the original image 
+      ///</returns>
+      public Mat[] Split()
+      {
          Mat[] mats = new Mat[NumberOfChannels];
-         IImage[] iimages = new IImage[mats.Length];
          for (int i = 0; i < mats.Length; i++)
          {
-            mats[i] = new Mat();
-            iimages[i] = mats[i];
+            mats[i] = new Mat(Rows, Cols, Depth, NumberOfChannels);
          }
          using (VectorOfMat vm = new VectorOfMat(mats))
          {
             CvInvoke.Split(this, vm);
          }
-         return iimages;
+         return mats;
+      }
+
+      IImage[] IImage.Split()
+      {
+         Mat[] tmp = this.Split();
+         IImage[] result = new IImage[tmp.Length];
+         for (int i = 0; i < result.Length; i++)
+            result[i] = tmp[i];
+         return result;
       }
 
       object ICloneable.Clone()

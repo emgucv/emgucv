@@ -15,7 +15,7 @@ namespace Emgu.CV.Structure
    ///<summary> 
    ///Defines a Bgr (Blue Green Red) color
    ///</summary>
-   [ColorInfo(ConversionCodename = "BGR")]
+   [ColorInfo(ConversionCodename = "Bgr")]
    public struct Bgr: IColor, IEquatable<Bgr>
    {
       /// <summary>

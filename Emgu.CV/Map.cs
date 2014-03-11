@@ -263,10 +263,13 @@ namespace Emgu.CV
       /// Draw the text using the specific font on the image
       /// </summary>
       /// <param name="message">The text message to be draw</param>
-      /// <param name="font">The font used for drawing</param>
+      /// <param name="fontFace">Font type.</param>
+      /// <param name="fontScale">Font scale factor that is multiplied by the font-specific base size.</param>
       /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
       /// <param name="color">The color of the text</param>
+      /// <param name="thickness">Thickness of the lines used to draw a text.</param>
       /// <param name="lineType">Line type</param>
+      /// <param name="bottomLeftOrigin">When true, the image data origin is at the bottom-left corner. Otherwise, it is at the top-left corner.</param>
       public override void Draw(String message, Point bottomLeft, CvEnum.FontFace fontFace, double fontScale, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, bool bottomLeftOrigin = false)
       {
          base.Draw(message, MapPointToImagePoint(bottomLeft), fontFace, fontScale, color, thickness, lineType, bottomLeftOrigin);

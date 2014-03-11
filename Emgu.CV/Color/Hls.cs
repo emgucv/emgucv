@@ -10,7 +10,7 @@ namespace Emgu.CV.Structure
    ///<summary> 
    ///Defines a Hls (Hue Lightness Satuation) color
    ///</summary>
-   [ColorInfo(ConversionCodename = "HLS")]
+   [ColorInfo(ConversionCodename = "Hls")]
    public struct Hls : IColor, IEquatable<Hls>
    {
       /// <summary>

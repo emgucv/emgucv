@@ -428,8 +428,8 @@ namespace Emgu.CV
       /// <param name="flags">The operation flags, use CALIB_ZERO_DISPARITY for default</param>
       /// <param name="alpha">Use -1 for default</param>
       /// <param name="newImageSize">Use Size.Empty for default</param>
-      /// <param name="validPixROI1">The valid pixel ROI for image1</param>
-      /// <param name="validPixROI2">The valid pixel ROI for image2</param>
+      /// <param name="validPixRoi1">The valid pixel ROI for image1</param>
+      /// <param name="validPixRoi2">The valid pixel ROI for image2</param>
       public static void StereoRectify(
          IInputArray cameraMatrix1, IInputArray distCoeffs1,
          IInputArray cameraMatrix2, IInputArray distCoeffs2,
@@ -438,7 +438,7 @@ namespace Emgu.CV
          IOutputArray p1, IOutputArray p2,
          IOutputArray q, CvEnum.StereoRectifyType flags,
          double alpha, Size newImageSize,
-         ref Rectangle validPixROI1, ref Rectangle validPixROI2)
+         ref Rectangle validPixRoi1, ref Rectangle validPixRoi2)
       {
          cveStereoRectify(
             cameraMatrix1.InputArrayPtr, distCoeffs1.InputArrayPtr,
@@ -447,7 +447,7 @@ namespace Emgu.CV
             r1.OutputArrayPtr, r2.OutputArrayPtr,
             p1.OutputArrayPtr, p2.OutputArrayPtr,
             q.OutputArrayPtr, flags,
-            alpha, ref newImageSize, ref validPixROI1, ref validPixROI2);
+            alpha, ref newImageSize, ref validPixRoi1, ref validPixRoi2);
       }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveStereoRectify(
@@ -466,8 +466,8 @@ namespace Emgu.CV
          CvEnum.StereoRectifyType flags,
          double alpha,
          ref Size newImageSize,
-         ref Rectangle validPixROI1,
-         ref Rectangle validPixROI2
+         ref Rectangle validPixRoi1,
+         ref Rectangle validPixRoi2
          );
 
 

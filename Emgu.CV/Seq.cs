@@ -68,7 +68,7 @@ namespace Emgu.CV
       /// <param name="eltype">The type of the sequence</param>
       /// <param name="flag">The flag of the sequence</param>
       /// <param name="stor">The storage</param>
-      public Seq(CvEnum.SeqEltype eltype, CvEnum.SeqKind kind, CvEnum.SEQ_FLAG flag, MemStorage stor)
+      public Seq(CvEnum.SeqEltype eltype, CvEnum.SeqKind kind, CvEnum.SeqFlag flag, MemStorage stor)
          : this(((int)kind | (int)eltype | (int)flag), stor)
       {
       }
@@ -110,7 +110,7 @@ namespace Emgu.CV
             return seqType;
          }
 
-         return (seqType & (~(int)CvEnum.SeqConst.CV_SEQ_ELTYPE_MASK)) + elementTypeID;
+         return (seqType & (~(int)CvEnum.SeqConst.EltypeMask)) + elementTypeID;
       }
 
       /// <summary>
@@ -120,14 +120,14 @@ namespace Emgu.CV
       {
          get
          {
-            return MCvSeq.flags & (int)CvEnum.SeqConst.CV_SEQ_ELTYPE_MASK;
+            return MCvSeq.flags & (int)CvEnum.SeqConst.EltypeMask;
          }
          set
          {
             if (ElementType != value)
                Marshal.WriteInt32(
                   new IntPtr(Ptr.ToInt64() + Marshal.OffsetOf(typeof(MCvSeq), "flags").ToInt64()), 
-                  (MCvSeq.flags & (~ (int)CvEnum.SeqConst.CV_SEQ_ELTYPE_MASK )) + value);
+                  (MCvSeq.flags & (~ (int)CvEnum.SeqConst.EltypeMask )) + value);
          }
       }
 
@@ -265,7 +265,7 @@ namespace Emgu.CV
       /// Get the minimum area rectangle for this point sequence
       /// </summary>
       /// <returns>The minimum area rectangle</returns>
-      public MCvBox2D GetMinAreaRect()
+      public RotatedRect GetMinAreaRect()
       {
          return GetMinAreaRect(null);
       }
@@ -275,7 +275,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="stor">The temporary storage to use</param>
       /// <returns>The minimum area rectangle</returns>
-      public MCvBox2D GetMinAreaRect(MemStorage stor)
+      public RotatedRect GetMinAreaRect(MemStorage stor)
       {
          return CvInvoke.cvMinAreaRect2(Ptr, stor == null ? IntPtr.Zero : stor.Ptr);
       }
@@ -449,6 +449,7 @@ namespace Emgu.CV
          get { return MCvSeq.total; }
       }
 
+      /*
       ///<summary> 
       /// Get the area of the contour 
       ///</summary>
@@ -480,7 +481,7 @@ namespace Emgu.CV
          {
             return Math.Abs(CvInvoke.cvContourPerimeter(Ptr));
          }
-      }
+      }*/
 
       /// <summary>
       /// Approximates one curves and returns the approximation result
@@ -513,7 +514,7 @@ namespace Emgu.CV
              Ptr,
              StructSize.MCvContour,
              stor.Ptr,
-             CvEnum.APPROX_POLY_TYPE.CV_POLY_APPROX_DP,
+             CvEnum.ApproxPolyType.CvPolyApproxDp,
              accuracy,
              maxLevel),
              stor);
@@ -529,6 +530,7 @@ namespace Emgu.CV
          return ApproxPoly(accuracy, _stor);
       }
 
+      /*
       ///<summary> Get the smallest bouding rectangle </summary>
       public virtual Rectangle BoundingRectangle
       {
@@ -536,7 +538,7 @@ namespace Emgu.CV
          {
             return CvInvoke.cvBoundingRect(Ptr, false);
          }
-      }
+      }*/
 
       /// <summary>
       /// Removes all elements from the sequence. The function does not return the memory to the storage, but this memory is reused later when new elements are added to the sequence. This function time complexity is O(1). 
@@ -546,6 +548,7 @@ namespace Emgu.CV
          CvInvoke.cvClearSeq(Ptr);
       }
 
+      /*
       /// <summary>
       /// Determines whether the point is inside contour, outside, or lies on an edge (or coinsides with a vertex)
       /// </summary>
@@ -566,7 +569,6 @@ namespace Emgu.CV
          return CvInvoke.cvPointPolygonTest(Ptr, point, 1);
       }
 
-      /*
       /// <summary>
       /// Get the moments for this point sequence
       /// </summary>

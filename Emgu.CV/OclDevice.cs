@@ -61,9 +61,9 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the device vendor
+      /// Get the device vendor name
       /// </summary>
-      public String Vendor
+      public String VendorName
       {
          get
          {

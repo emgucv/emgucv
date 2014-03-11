@@ -12,7 +12,7 @@ namespace Emgu.CV.Structure
    /// Managed structure equivalent to CvBox2D
    /// </summary>
    [StructLayout(LayoutKind.Sequential)]
-   public struct MCvBox2D : IConvexPolygonF, IEquatable<MCvBox2D>
+   public struct RotatedRect : IConvexPolygonF, IEquatable<RotatedRect>
    {
       /// <summary>
       /// The center of the box
@@ -29,12 +29,12 @@ namespace Emgu.CV.Structure
       public float Angle;
 
       /// <summary>
-      /// Create a MCvBox2D structure with the specific parameters
+      /// Create a RotatedRect structure with the specific parameters
       /// </summary>
       /// <param name="center">The center of the box</param>
       /// <param name="size">The size of the box</param>
       /// <param name="angle">The angle of the box in degrees. Possitive value means counter-clock wise rotation</param>
-      public MCvBox2D(PointF center, SizeF size, float angle)
+      public RotatedRect(PointF center, SizeF size, float angle)
       {
          this.Center = center;
          this.Size = size;
@@ -53,13 +53,13 @@ namespace Emgu.CV.Structure
       }
 
       /// <summary>
-      /// Represent an uninitialized MCvBox2D
+      /// Represent an uninitialized RotatedRect
       /// </summary>
-      public static MCvBox2D Empty
+      public static RotatedRect Empty
       {
          get
          {
-            return new MCvBox2D();
+            return new RotatedRect();
          }
       }
 
@@ -67,12 +67,10 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Get the 4 verticies of this Box.
       /// </summary>
-      /// <returns>The vertives of this MCvBox2D</returns>
+      /// <returns>The vertives of this RotatedRect</returns>
       public System.Drawing.PointF[] GetVertices()
       {
-         PointF[] coordinates = new PointF[4];
-         CvInvoke.cvBoxPoints(this, coordinates);
-         return coordinates;
+         return CvInvoke.BoxPoints(this);
       }
 
       #endregion
@@ -83,8 +81,7 @@ namespace Emgu.CV.Structure
       /// <returns>The minimum enclosing rectangle for this Box</returns>
       public System.Drawing.Rectangle MinAreaRect()
       {
-         PointF[] data = new PointF[4];
-         CvInvoke.cvBoxPoints(this, data);
+         PointF[] data = CvInvoke.BoxPoints(this);
          int minX = (int)Math.Round(Math.Min(Math.Min(data[0].X, data[1].X), Math.Min(data[2].X, data[3].X)));
          int maxX = (int)Math.Round(Math.Max(Math.Max(data[0].X, data[1].X), Math.Max(data[2].X, data[3].X)));
          int minY = (int)Math.Round(Math.Min(Math.Min(data[0].Y, data[1].Y), Math.Min(data[2].Y, data[3].Y)));
@@ -92,27 +89,27 @@ namespace Emgu.CV.Structure
          return new Rectangle(minX, minY, maxX - minX, maxY - minY);
       }
 
-      #region IEquatable<MCvBox2D> Members
+      #region IEquatable<RotatedRect> Members
       /// <summary>
       /// Returns true if the two box are equal
       /// </summary>
       /// <param name="other">The other box to compare with</param>
       /// <returns>True if two boxes are equal</returns>
-      public bool Equals(MCvBox2D other)
+      public bool Equals(RotatedRect other)
       {
          return Center.Equals(other.Center)
             && Size.Equals(other.Size)
-            && Angle == other.Angle;
+            && Angle.Equals( other.Angle );
       }
 
       /// <summary>
-      /// Convert a RectangleF to MCvBox2D
+      /// Convert a RectangleF to RotatedRect
       /// </summary>
       /// <param name="rectangle">The rectangle</param>
-      /// <returns>The equivalent MCvBox2D</returns>
-      public static implicit operator MCvBox2D(System.Drawing.RectangleF rectangle)
+      /// <returns>The equivalent RotatedRect</returns>
+      public static implicit operator RotatedRect(System.Drawing.RectangleF rectangle)
       {
-         return new MCvBox2D(
+         return new RotatedRect(
             new PointF(
                rectangle.Location.X + (rectangle.Width * 0.5f), 
                rectangle.Location.Y + (rectangle.Height* 0.5f) ), 

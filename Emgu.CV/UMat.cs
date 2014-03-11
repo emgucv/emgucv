@@ -17,7 +17,7 @@ namespace Emgu.CV
    /// The equavailent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
-   public class UMat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray
+   public class UMat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray, IImage
    {
       private IntPtr _oclMatAllocator;
 
@@ -90,6 +90,28 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// The number of rows
+      /// </summary>
+      public int Rows
+      {
+         get
+         {
+            return Size.Height;
+         }
+      }
+
+      /// <summary>
+      /// The number of columns
+      /// </summary>
+      public int Cols
+      {
+         get
+         {
+            return Size.Width;
+         }
+      }
+
+      /// <summary>
       /// Get the number of channels
       /// </summary>
       public int NumberOfChannels
@@ -97,6 +119,17 @@ namespace Emgu.CV
          get
          {
             return (int)UMatInvoke.cvUMatGetChannels(_ptr);
+         }
+      }
+
+      /// <summary>
+      /// Depth type
+      /// </summary>
+      public CvEnum.DepthType Depth
+      {
+         get
+         {
+            return (CvEnum.DepthType)UMatInvoke.cvUMatGetDepth(_ptr);
          }
       }
 
@@ -153,6 +186,14 @@ namespace Emgu.CV
          {
             return UMatInvoke.cvUMatIsEmpty(_ptr);
          }
+      }
+
+      /// <summary>
+      /// Return the Mat representation of the UMat
+      /// </summary>
+      public Mat ToMat(CvEnum.AccessType access)
+      {
+         return new Mat(UMatInvoke.cvUMatGetMat(_ptr, access), true, false);
       }
 
       /// <summary>
@@ -228,6 +269,108 @@ namespace Emgu.CV
       {
          return new UMat(UMatInvoke.cvUMatReshape(Ptr, cn, rows), true);
       }
+
+      /// <summary>
+      /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
+      /// such that the image data is <b>shared</b> with Bitmap. 
+      /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
+      /// For other types of image this property has the same effect as ToBitmap()
+      /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
+      /// The Set property convert the bitmap to this Image type.
+      /// </summary>
+      public Bitmap Bitmap
+      {
+         get 
+         {
+            using (Mat tmp = ToMat(CvEnum.AccessType.Read))
+            {
+               return tmp.Bitmap;
+            }
+         }
+      }
+
+      /// <summary>
+      /// Returns the min / max location and values for the image
+      /// </summary>
+      /// <param name="maxLocations">The maximum locations for each channel </param>
+      /// <param name="maxValues">The maximum values for each channel</param>
+      /// <param name="minLocations">The minimum locations for each channel</param>
+      /// <param name="minValues">The minimum values for each channel</param>
+      public void MinMax(out double[] minValues, out double[] maxValues, out Point[] minLocations, out Point[] maxLocations)
+      {
+         CvInvoke.MinMax(this, out minValues, out maxValues, out minLocations, out maxLocations);
+      }
+
+      /*
+      /// <summary>
+      /// Convert this Mat to UMat
+      /// </summary>
+      /// <param name="access">Access type</param>
+      /// <returns>The UMat</returns>
+      public Mat ToMat(CvEnum.AccessType access)
+      {
+         return new Mat(UMatInvoke.cvUMatGetMat(Ptr, access), true);
+      }*/
+
+      ///<summary> 
+      ///Split current Image into an array of gray scale images where each element 
+      ///in the array represent a single color channel of the original image
+      ///</summary>
+      ///<returns> 
+      ///An array of gray scale images where each element  
+      ///in the array represent a single color channel of the original image 
+      ///</returns>
+      public UMat[] Split()
+      {
+         UMat[] mats = new UMat[NumberOfChannels];
+         for (int i = 0; i < mats.Length; i++)
+         {
+            mats[i] = new UMat(Rows, Cols, Depth, NumberOfChannels);
+         }
+         using (VectorOfUMat vm = new VectorOfUMat(mats))
+         {
+            CvInvoke.Split(this, vm);
+         }
+         return mats;
+      }
+
+      IImage[] IImage.Split()
+      {
+         UMat[] tmp = this.Split();
+         IImage[] result = new IImage[tmp.Length];
+         for (int i = 0; i < result.Length; i++)
+            result[i] = tmp[i];
+         return result;
+      }
+
+      /// <summary>
+      /// Save this image to the specific file. 
+      /// </summary>
+      /// <param name="fileName">The name of the file to be saved to</param>
+      /// <remarks>The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format.</remarks>
+      public void Save(string fileName)
+      {
+         using (Mat tmp = ToMat(CvEnum.AccessType.Read))
+         {
+            tmp.Save(fileName);
+         }
+      }
+
+      /// <summary>
+      /// Make a clone of the current UMat.
+      /// </summary>
+      /// <returns>A clone of the current UMat.</returns>
+      public UMat Clone()
+      {
+         UMat m = new UMat();
+         CopyTo(m);
+         return m;
+      }
+
+      object ICloneable.Clone()
+      {
+         return Clone();
+      }
    }
 
    internal static class UMatInvoke
@@ -261,6 +404,9 @@ namespace Emgu.CV
       internal extern static int cvUMatGetChannels(IntPtr mat);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static int cvUMatGetDepth(IntPtr mat);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal extern static bool cvUMatIsEmpty(IntPtr mat);
 
@@ -276,6 +422,8 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvUMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr, ref IntPtr matAllocator, ref IntPtr oclAllocator);
 
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvUMatGetMat(IntPtr umat, CvEnum.AccessType access);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvUMatReshape(IntPtr mat, int cn, int rows);

@@ -10,7 +10,7 @@ namespace Emgu.CV.Structure
    ///<summary> 
    ///Defines a HSV (Hue Satuation Value) color
    ///</summary>
-   [ColorInfo(ConversionCodename = "HSV")]
+   [ColorInfo(ConversionCodename = "Hsv")]
    public struct Hsv : IColor, IEquatable<Hsv>
    {
       /// <summary>

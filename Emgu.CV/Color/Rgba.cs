@@ -10,7 +10,7 @@ namespace Emgu.CV.Structure
    ///<summary> 
    ///Defines a Rgba (Red Green Blue Alpha) color
    ///</summary>
-   [ColorInfo(ConversionCodename = "RGBA")]
+   [ColorInfo(ConversionCodename = "Rgba")]
    public struct Rgba : IColor, IEquatable<Rgba>
    {
       /// <summary>

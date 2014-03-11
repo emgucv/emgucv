@@ -498,19 +498,19 @@ namespace Emgu.CV
             Type typeOfDepth = typeof(TDepth);
 
             if (typeOfDepth == typeof(Single))
-               return CvEnum.IplDepth.IPL_DEPTH_32F;
+               return CvEnum.IplDepth.IplDepth32F;
             else if (typeOfDepth == typeof(Byte))
-               return CvEnum.IplDepth.IPL_DEPTH_8U;
+               return CvEnum.IplDepth.IplDepth_8U;
             else if (typeOfDepth == typeof(Double))
-               return CvEnum.IplDepth.IPL_DEPTH_64F;
+               return CvEnum.IplDepth.IplDepth64F;
             else if (typeOfDepth == typeof(SByte))
-               return Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_8S;
+               return Emgu.CV.CvEnum.IplDepth.IplDepth_8S;
             else if (typeOfDepth == typeof(UInt16))
-               return Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_16U;
+               return Emgu.CV.CvEnum.IplDepth.IplDepth16U;
             else if (typeOfDepth == typeof(Int16))
-               return Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_16S;
+               return Emgu.CV.CvEnum.IplDepth.IplDepth16S;
             else if (typeOfDepth == typeof(Int32))
-               return Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_32S;
+               return Emgu.CV.CvEnum.IplDepth.IplDepth32S;
             else
 #if NETFX_CORE
                throw new NotImplementedException("Unsupported image depth");
@@ -624,7 +624,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="box">The boxed region of the image</param>
       /// <returns>A copy of the boxed region of the image</returns>
-      public Image<TColor, TDepth> Copy(MCvBox2D box)
+      public Image<TColor, TDepth> Copy(RotatedRect box)
       {
          PointF[] srcCorners = box.GetVertices();
 
@@ -868,17 +868,20 @@ namespace Emgu.CV
         /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
         public void Draw(Ellipse ellipse, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
         {
-            CvInvoke.Ellipse(this, ellipse.MCvBox2D, color.MCvScalar, thickness, lineType, shift);
+            CvInvoke.Ellipse(this, ellipse.RotatedRect, color.MCvScalar, thickness, lineType, shift);
         }
 
         /// <summary>
         /// Draw the text using the specific font on the image
         /// </summary>
         /// <param name="message">The text message to be draw</param>
-        /// <param name="font">The font used for drawing</param>
+        /// <param name="fontFace">Font type.</param>
+        /// <param name="fontScale">Font scale factor that is multiplied by the font-specific base size.</param>
         /// <param name="bottomLeft">The location of the bottom left corner of the font</param>
         /// <param name="color">The color of the text</param>
+        /// <param name="thickness">Thickness of the lines used to draw a text.</param>
         /// <param name="lineType">Line type</param>
+        /// <param name="bottomLeftOrigin">When true, the image data origin is at the bottom-left corner. Otherwise, it is at the top-left corner.</param>
         public virtual void Draw(String message, Point bottomLeft, CvEnum.FontFace fontFace, double fontScale, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, bool bottomLeftOrigin = false)
         {
             CvInvoke.PutText(this, 
@@ -1017,6 +1020,7 @@ namespace Emgu.CV
       #endregion
 
       #region Contour detection
+      /*
         /// <summary>
         /// Find a list of contours using simple approximation method.
         /// </summary>
@@ -1026,9 +1030,10 @@ namespace Emgu.CV
         /// </returns>
         public Contour<Point> FindContours()
         {
-            return FindContours(CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, CvEnum.RETR_TYPE.CV_RETR_LIST);
+            return FindContours(CvEnum.ChainApproxMethod.ChainApproxSimple, CvEnum.RetrType.List);
         }
 
+      
         /// <summary>
         /// Find contours
         /// </summary>
@@ -1038,11 +1043,12 @@ namespace Emgu.CV
         /// Contour if there is any;
         /// null if no contour is found
         /// </returns>
-        public Contour<Point> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type)
+        public Contour<Point> FindContours(CvEnum.ChainApproxMethod method, CvEnum.RetrType type)
         {
             return FindContours(method, type, new MemStorage());
         }
 
+      
         /// <summary>
         /// Find contours using the specific memory storage
         /// </summary>
@@ -1053,9 +1059,9 @@ namespace Emgu.CV
         /// Contour if there is any;
         /// null if no contour is found
         /// </returns>
-        public Contour<Point> FindContours(CvEnum.CHAIN_APPROX_METHOD method, CvEnum.RETR_TYPE type, MemStorage stor)
+        public Contour<Point> FindContours(CvEnum.ChainApproxMethod method, CvEnum.RetrType type, MemStorage stor)
         {
-            if (method == Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_CODE)
+            if (method == Emgu.CV.CvEnum.ChainApproxMethod.ChainCode)
             {
                 //TODO: wrap CvChain and add code here
 #if NETFX_CORE
@@ -1079,7 +1085,7 @@ namespace Emgu.CV
 
                 return (seq == IntPtr.Zero) ? null : new Contour<Point>(seq, stor);
             }
-        }
+        }*/
       #endregion
 
       #region Indexer
@@ -4121,72 +4127,7 @@ namespace Emgu.CV
       /// <remarks>The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format.</remarks>
       public override void Save(String fileName)
       {
-         bool opencvSaveSuccess = true;
-         try
-         {
-            //save the image using OpenCV
-            opencvSaveSuccess = CvInvoke.Imwrite(fileName, this);
-         }
-         catch (Exception)
-         {
-            opencvSaveSuccess = false;
-         }
-
-         if (!opencvSaveSuccess)
-         {
-#if IOS || NETFX_CORE
-            throw e;
-#elif ANDROID
-            FileInfo fileInfo = new FileInfo(fileName);
-            using (Bitmap bmp = Bitmap)
-            using (FileStream fs = fileInfo.Open(FileMode.Append, FileAccess.Write))
-            {
-               String extension = fileInfo.Extension.ToLower();
-               Debug.Assert(extension.Substring(0, 1).Equals("."));
-               switch (extension)
-               {
-                  case ".jpg":
-                  case ".jpeg":
-                     bmp.Compress(Bitmap.CompressFormat.Jpeg, 90, fs);
-                     break;
-                  case ".png":
-                     bmp.Compress(Bitmap.CompressFormat.Png, 90, fs);
-                     break;
-                  default:
-                     throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
-               }
-            }
-#else 
-            //Saving with OpenCV fails
-            //Try to save the image using .NET's Bitmap class
-            using (Bitmap bmp = Bitmap)
-            {
-               String extension = Path.GetExtension(fileName).ToLower();
-               switch (extension)
-               {
-                  case ".jpg":
-                  case ".jpeg":
-                     bmp.Save(fileName, ImageFormat.Jpeg);
-                     break;
-                  case ".bmp":
-                     bmp.Save(fileName, ImageFormat.Bmp);
-                     break;
-                  case ".png":
-                     bmp.Save(fileName, ImageFormat.Png);
-                     break;
-                  case ".tiff":
-                  case ".tif":
-                     bmp.Save(fileName, ImageFormat.Tiff);
-                     break;
-                  case ".gif":
-                     bmp.Save(fileName, ImageFormat.Gif);
-                     break;
-                  default:
-                     throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
-               }
-            }
-#endif
-         }
+         Mat.Save(fileName);
       }
 
       /// <summary>
@@ -4331,19 +4272,19 @@ namespace Emgu.CV
          {  //Grayscale image;
             switch (mptr.Depth)
             {
-               case CvEnum.IplDepth.IPL_DEPTH_8U:
+               case CvEnum.IplDepth.IplDepth_8U:
                   using (Image<Gray, Byte> tmp = new Image<Gray, byte>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IplDepth.IPL_DEPTH_16U:
+               case CvEnum.IplDepth.IplDepth16U:
                   using (Image<Gray, UInt16> tmp = new Image<Gray, ushort>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IplDepth.IPL_DEPTH_32F:
+               case CvEnum.IplDepth.IplDepth32F:
                   using (Image<Gray, float> tmp = new Image<Gray, float>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IplDepth.IPL_DEPTH_64F:
+               case CvEnum.IplDepth.IplDepth64F:
                   using (Image<Gray, double> tmp = new Image<Gray, double>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
@@ -4355,19 +4296,19 @@ namespace Emgu.CV
          {  //BGR image
             switch (mptr.Depth)
             {
-               case CvEnum.IplDepth.IPL_DEPTH_8U:
+               case CvEnum.IplDepth.IplDepth_8U:
                   using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IplDepth.IPL_DEPTH_16U:
+               case CvEnum.IplDepth.IplDepth16U:
                   using (Image<Bgr, UInt16> tmp = new Image<Bgr, ushort>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IplDepth.IPL_DEPTH_32F:
+               case CvEnum.IplDepth.IplDepth32F:
                   using (Image<Bgr, float> tmp = new Image<Bgr, float>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;
-               case CvEnum.IplDepth.IPL_DEPTH_64F:
+               case CvEnum.IplDepth.IplDepth64F:
                   using (Image<Bgr, double> tmp = new Image<Bgr, double>(mptr.Width, mptr.Height, mptr.WidthStep, mptr.ImageData))
                      ConvertFrom(tmp);
                   break;

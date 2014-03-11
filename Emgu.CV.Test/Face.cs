@@ -215,7 +215,7 @@ namespace Emgu.CV.Test
 
                   using (Image<Gray, Byte> bpj = htg.BackProject(new Image<Gray, Byte>[1] { H }))
                   {
-                      Seq<MCvContour> cList = bpj.FindContours( CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, new MemStorage());
+                      Seq<MCvContour> cList = bpj.FindContours( CvEnum.CHAIN_APPROX_METHOD.CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.LIST, new MemStorage());
                       Seq<MCvContour> maxAreaContour = cList;
                       foreach (Seq<MCvContour> ct in cList)
                       {

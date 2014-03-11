@@ -34,6 +34,11 @@ namespace Emgu.CV.Cuda
          _ptr = CudaInvoke.cudaHoughCirclesDetectorCreate(dp, minDist, cannyThreshold, votesThreshold, minRadius, maxRadius, maxCircles);
       }
 
+      /// <summary>
+      /// Finds circles in a grayscale image using the Hough transform.
+      /// </summary>
+      /// <param name="image">8-bit, single-channel grayscale input image.</param>
+      /// <param name="circles">Output vector of found circles. Each vector is encoded as a 3-element floating-point vector.</param>
       public void Detect(IInputArray image, IOutputArray circles)
       {
          CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, image.InputArrayPtr, circles.OutputArrayPtr);

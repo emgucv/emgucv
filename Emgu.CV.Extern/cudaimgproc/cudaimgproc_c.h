@@ -101,7 +101,7 @@ CVAPI(void) cudaHoughLinesDetectorRelease(cv::cuda::HoughLinesDetector** detecto
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::HoughSegmentDetector*) cudaHoughSegmentDetectorCreate(float rho, float theta, int minLineLength, int maxLineGap, int maxLines);
-CVAPI(void) cudaHoughSegmentDetectorDetect(cv::cuda::HoughSegmentDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* lines);
+CVAPI(void) cudaHoughSegmentDetectorDetect(cv::cuda::HoughSegmentDetector* detector, cv::_InputArray* src, cv::_OutputArray* lines);
 CVAPI(void) cudaHoughSegmentDetectorRelease(cv::cuda::HoughSegmentDetector** detector);
 
 //----------------------------------------------------------------------------

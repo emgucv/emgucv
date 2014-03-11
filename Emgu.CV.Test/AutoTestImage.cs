@@ -13,8 +13,10 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 using NUnit.Framework;
 
@@ -849,7 +851,7 @@ namespace Emgu.CV.Test
 
          using (MemStorage stor = new MemStorage())
          {
-            Seq<Point> pts = new Seq<Point>((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, stor);
+            Seq<Point> pts = new Seq<Point>((int)CvEnum.SeqType.Polygon, stor);
             pts.Push(new Point(20, 20));
             pts.Push(new Point(20, 80));
             pts.Push(new Point(80, 80));
@@ -953,7 +955,7 @@ namespace Emgu.CV.Test
       public void TestImageDFT2()
       {
          Image<Gray, float> image = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
-         IntPtr complexImage = CvInvoke.cvCreateImage(image.Size, Emgu.CV.CvEnum.IplDepth.IPL_DEPTH_32F, 2);
+         IntPtr complexImage = CvInvoke.cvCreateImage(image.Size, Emgu.CV.CvEnum.IplDepth.IplDepth32F, 2);
          CvInvoke.cvSetImageCOI(complexImage, 1);
          CvInvoke.cvCopy(image, complexImage, IntPtr.Zero);
          CvInvoke.cvSetImageCOI(complexImage, 0);
@@ -1040,6 +1042,20 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> res = img.CopyBlank();
          res.SetValue(255);
 
+         using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
+         //using (VectorOfVectorOfInt hierarchy = new VectorOfVectorOfInt())
+         {
+            CvInvoke.FindContours(img, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+            for (int i = 0; i < contours.Size; i++)
+            {
+               using (VectorOfPoint contour = contours[i])
+               {
+                  Point[] pts = contour.ToArray();
+                  CvInvoke.Polylines(res, contour, true, new MCvScalar());
+               }
+            }
+         }
+         /*
          Contour<Point> contour = img.FindContours();
 
          while (contour != null)
@@ -1055,7 +1071,8 @@ namespace Emgu.CV.Test
                res.DrawPolyline(vertices, true, new Gray(200), 1);
             }
             contour = contour.HNext;
-         }
+         }*/
+         Emgu.CV.UI.ImageViewer.Show(res);
       }
 
       public void TestContour2()
@@ -1094,7 +1111,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte> image = new Image<Gray, byte>(200, 200);
          image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
          Image<Bgr, Byte> img = new Image<Bgr, byte>(image.Size);
-         CvInvoke.CvtColor(image, img, Emgu.CV.CvEnum.ColorConversion.BayerBG2BGR);
+         CvInvoke.CvtColor(image, img, Emgu.CV.CvEnum.ColorConversion.BayerBg2Bgr);
       }
 
       [Test]
@@ -1632,8 +1649,8 @@ namespace Emgu.CV.Test
       {
          //draw some blobs
          Image<Gray, Byte> img = new Image<Gray, byte>(400, 400);
-         MCvBox2D box1 = new MCvBox2D(new PointF(100, 200), new SizeF(60, 80), 30.0f);
-         MCvBox2D box2 = new MCvBox2D(new PointF(180, 250), new SizeF(70, 100), 0.0f);
+         RotatedRect box1 = new RotatedRect(new PointF(100, 200), new SizeF(60, 80), 30.0f);
+         RotatedRect box2 = new RotatedRect(new PointF(180, 250), new SizeF(70, 100), 0.0f);
          img.Draw(box1, new Gray(255.0), -1);
          img.Draw(box2, new Gray(255.0), -1);
 

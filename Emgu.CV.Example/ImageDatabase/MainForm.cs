@@ -9,6 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Emgu.CV.CvEnum;
 using NHibernate;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -34,14 +35,13 @@ namespace ImageDatabase
          ISession session = ImageDatabase.GetCurrentSession();
          ITransaction tx = session.BeginTransaction();
 
-         MCvFont f = new MCvFont(Emgu.CV.CvEnum.FontType.HersheySimplex, 1.0, 1.0);
          long tick = DateTime.Now.Ticks;
          for (int i = 0; i < count; i++, tick++)
          {
             PersistentImage image = new PersistentImage(400, 200);
             image.SetRandUniform(new MCvScalar(), new MCvScalar(50, 50, 50));
             
-            image.Draw(tick.ToString(), ref f, new Point(10, 100), new Bgr(Color.White));
+            image.Draw(tick.ToString(), new Point(10, 100), FontFace.HersheySimplex, 1.0, new Bgr(Color.White));
 
             image.SerializationCompressionRatio = 9;
             session.Save(image);

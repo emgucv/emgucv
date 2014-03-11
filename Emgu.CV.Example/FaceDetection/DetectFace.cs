@@ -70,7 +70,7 @@ namespace FaceDetection
                using (UMat uimg = image.Mat.ToUMat(Emgu.CV.CvEnum.AccessType.Read)) //Convert it to Grayscale
                using (UMat ugray = new UMat())
                {
-                  CvInvoke.CvtColor(uimg, ugray, Emgu.CV.CvEnum.ColorConversion.BGR2GRAY);
+                  CvInvoke.CvtColor(uimg, ugray, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
 
                   //normalizes brightness and increases contrast of the image
                   CvInvoke.EqualizeHist(ugray, ugray);

@@ -16,7 +16,7 @@ namespace Emgu.CV
    /// </summary>
    public static partial class CvInvoke
    {
-      private static bool _libraryLoaded;
+      private static readonly bool _libraryLoaded;
 
       /// <summary>
       /// Check to make sure all the unmanaged libraries are loaded
@@ -97,14 +97,7 @@ namespace Emgu.CV
             String subfolder = String.Empty;
             if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
             {
-               if (IntPtr.Size == 8)
-               {  //64bit process
-                  subfolder = "x64";
-               }
-               else
-               {
-                  subfolder = "x86";
-               }
+               subfolder = IntPtr.Size == 8 ? "x64" : "x86";
             }  
             /*
             else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
@@ -278,37 +271,24 @@ namespace Emgu.CV
       /// <returns>The equivalent depth type</returns>
       public static Type GetDepthType(CvEnum.DepthType t)
       {
-         if (t == CvEnum.DepthType.Cv8U)
+         switch (t)
          {
-            return typeof(byte);
-         }
-         else if (t == CvEnum.DepthType.Cv8S)
-         {
-            return typeof(SByte);
-         }
-         else if (t == CvEnum.DepthType.Cv16U)
-         {
-            return typeof(UInt16);
-         }
-         else if (t == CvEnum.DepthType.Cv16S)
-         {
-            return typeof(Int16);
-         }
-         else if (t == CvEnum.DepthType.Cv32S)
-         {
-            return typeof(Int32);
-         }
-         else if (t == CvEnum.DepthType.Cv32F)
-         {
-            return typeof(float);
-         }
-         else if (t == CvEnum.DepthType.Cv64F)
-         {
-            return typeof(double);
-         }
-         else
-         {
-            throw new ArgumentException(String.Format("Unable to convert type {0} to depth type", t.ToString()));
+            case CvEnum.DepthType.Cv8U:
+               return typeof(byte);
+            case CvEnum.DepthType.Cv8S:
+               return typeof(SByte);
+            case CvEnum.DepthType.Cv16U:
+               return typeof(UInt16);
+            case CvEnum.DepthType.Cv16S:
+               return typeof(Int16);
+            case CvEnum.DepthType.Cv32S:
+               return typeof(Int32);
+            case CvEnum.DepthType.Cv32F:
+               return typeof(float);
+            case CvEnum.DepthType.Cv64F:
+               return typeof(double);
+            default:
+               throw new ArgumentException(String.Format("Unable to convert type {0} to depth type", t.ToString()));
          }
       }
 
@@ -361,7 +341,7 @@ namespace Emgu.CV
       /// <returns>An interger tha represent a mat type</returns>
       public static int MakeType(CvEnum.DepthType depth, int channels)
       {
-         int shift = 3;
+         const int shift = 3;
          return (((int)depth) & ((1 << shift) - 1)) + (((channels) - 1) << shift);
       }
 
@@ -405,10 +385,11 @@ namespace Emgu.CV
       public static bool SanityCheck()
       {
          bool sane = true;
+
          CvStructSizes sizes = new CvStructSizes();
          CvInvoke.GetCvStructSizes(ref sizes);
 
-         sane &= (sizes.CvBox2D == Marshal.SizeOf(typeof(MCvBox2D)));
+         sane &= (sizes.CvBox2D == Marshal.SizeOf(typeof(RotatedRect)));
          sane &= (sizes.CvContour == Marshal.SizeOf(typeof(MCvContour)));
          //sane &= (sizes.CvHistogram == Marshal.SizeOf(typeof(MCvHistogram)));
          sane &= (sizes.CvMat == Marshal.SizeOf(typeof(MCvMat)));

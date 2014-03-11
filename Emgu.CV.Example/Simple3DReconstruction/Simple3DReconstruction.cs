@@ -128,7 +128,7 @@ namespace Simlpe3DReconstruction
             squareImg.ROI = Rectangle.Empty;
             _texture = squareImg.Resize(256, 256, Emgu.CV.CvEnum.Inter.Cubic, true);
                _texture._Flip(Emgu.CV.CvEnum.FlipType.Vertical);
-               GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb8, _texture.Width, _texture.Height, 0, PixelFormat.Bgr, PixelType.UnsignedByte, _texture.MIplImage.imageData);
+               GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb8, _texture.Width, _texture.Height, 0, PixelFormat.Bgr, PixelType.UnsignedByte, _texture.MIplImage.ImageData);
          }
          #endregion
          
@@ -148,8 +148,8 @@ namespace Simlpe3DReconstruction
          GL.Color4(1.0, 1.0, 1.0, 1.0);
          foreach (MCvPoint3D32f p in _points)
          {
-            GL.TexCoord2(p.x + 0.5f, p.y + 0.5f);
-            GL.Vertex3(p.x, p.y, p.z);
+            GL.TexCoord2(p.X + 0.5f, p.Y + 0.5f);
+            GL.Vertex3(p.X, p.Y, p.Z);
          }
          GL.End();
          GL.PopMatrix();

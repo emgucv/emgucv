@@ -66,6 +66,11 @@ int cvUMatGetChannels(cv::UMat* mat)
    return mat->channels();
 }
 
+int cvUMatGetDepth(cv::UMat* mat)
+{
+   return mat->depth();
+}
+
 bool cvUMatIsEmpty(cv::UMat* mat)
 {
    return mat->empty();
@@ -74,6 +79,14 @@ bool cvUMatIsEmpty(cv::UMat* mat)
 void cvUMatSetTo(cv::UMat* mat, cv::_InputArray* value, cv::_InputArray* mask)
 {
    mat->setTo(*value, mask ? *mask : (cv::InputArray) cv::noArray());
+}
+
+cv::Mat* cvUMatGetMat(cv::UMat* mat, int access)
+{
+   cv::Mat* result = new cv::Mat();
+   cv::Mat tmp = mat->getMat(access);
+   cv::swap(*result, tmp);
+   return result;
 }
 
 cv::UMat* cvUMatReshape(cv::UMat* mat, int cn, int rows)

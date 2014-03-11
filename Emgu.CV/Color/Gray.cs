@@ -8,7 +8,7 @@ using Emgu.CV;
 namespace Emgu.CV.Structure
 {
    ///<summary> Defines a Gray color </summary>
-   [ColorInfo(ConversionCodename = "GRAY")]
+   [ColorInfo(ConversionCodename = "Gray")]
    public struct Gray : IColor, IEquatable<Gray>
    {
       /// <summary>

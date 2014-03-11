@@ -49,7 +49,7 @@ namespace Emgu.CV
       /// <param name="eltype">The type of the sequence</param>
       /// <param name="flag">The flag of the sequence</param>
       /// <param name="stor">The storage</param>
-      public Contour(CvEnum.SeqEltype eltype, CvEnum.SeqKind kind, CvEnum.SEQ_FLAG flag, MemStorage stor)
+      public Contour(CvEnum.SeqEltype eltype, CvEnum.SeqKind kind, CvEnum.SeqFlag flag, MemStorage stor)
          : this(((int)kind | (int)eltype | (int)flag), stor)
       {
       }
@@ -59,10 +59,11 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="storage">The storage to be used</param>
       public Contour(MemStorage storage)
-         : this((int)CvEnum.SEQ_TYPE.CV_SEQ_POLYGON, storage)
+         : this((int)CvEnum.SeqType.Polygon, storage)
       {
       }
 
+      /*
       /// <summary>
       /// Determines whether the point is inside contour, outside, or lies on an edge (or coinsides with a vertex)
       /// </summary>
@@ -88,7 +89,7 @@ namespace Emgu.CV
 #endif
             return base.BoundingRectangle;
          }
-      }
+      }*/
 
       /// <summary>
       /// Return the MCvContour structure
@@ -203,7 +204,7 @@ namespace Emgu.CV
              Ptr,
              StructSize.MCvContour,
              storage.Ptr,
-             CvEnum.APPROX_POLY_TYPE.CV_POLY_APPROX_DP,
+             CvEnum.ApproxPolyType.CvPolyApproxDp,
              accuracy,
              maxLevel),
              storage);

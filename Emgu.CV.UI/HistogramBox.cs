@@ -79,6 +79,8 @@ namespace Emgu.CV.UI
       /// <param name="name">The name of the histogram</param>
       /// <param name="color">The drawing color</param>
       /// <param name="histogram">The 1D histogram to be drawn</param>
+      /// <param name="binSize">The size of the bin</param>
+      /// <param name="ranges">The ranges</param>
       public void AddHistogram(String name, Color color, Mat histogram, int binSize, float[] ranges)
       {
          //Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported);

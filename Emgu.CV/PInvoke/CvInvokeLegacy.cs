@@ -528,7 +528,7 @@ namespace Emgu.CV
       /// <returns></returns>
       public static IntPtr cvCreateSubdivDelaunay2D(Rectangle rect, IntPtr storage)
       {
-         IntPtr subdiv = cvCreateSubdiv2D((int)CvEnum.SeqKind.CV_SEQ_KIND_SUBDIV2D,
+         IntPtr subdiv = cvCreateSubdiv2D((int)CvEnum.SeqKind.Subdiv2D,
                  Marshal.SizeOf(typeof(MCvSubdiv2D)),
                  Marshal.SizeOf(typeof(MCvSubdiv2DPoint)),
                  Marshal.SizeOf(typeof(MCvQuadEdge2D)),
@@ -620,7 +620,7 @@ namespace Emgu.CV
              obj,
              eigInput.Length,
              eigInput,
-             CvEnum.EIGOBJ_TYPE.CV_EIGOBJ_NO_CALLBACK,
+             CvEnum.EigobjType.CV_EIGOBJ_NO_CALLBACK,
              IntPtr.Zero,
              avg,
              coeffs);
@@ -642,7 +642,7 @@ namespace Emgu.CV
          IntPtr obj,
          int eigenvecCount,
          IntPtr[] eigInput,
-         CvEnum.EIGOBJ_TYPE ioFlags,
+         CvEnum.EigobjType ioFlags,
          IntPtr userData,
          IntPtr avg,
          float[] coeffs);
@@ -669,7 +669,7 @@ namespace Emgu.CV
              input.Length,
              input,
              eigVecs,
-             CvEnum.EIGOBJ_TYPE.CV_EIGOBJ_NO_CALLBACK,
+             CvEnum.EigobjType.CV_EIGOBJ_NO_CALLBACK,
              0,
              IntPtr.Zero,
              ref calcLimit,
@@ -694,7 +694,7 @@ namespace Emgu.CV
          int nObjects,
          IntPtr[] input,
          IntPtr[] output,
-         CvEnum.EIGOBJ_TYPE ioFlags,
+         CvEnum.EigobjType ioFlags,
          int ioBufSize,
          IntPtr userData,
          ref MCvTermCriteria calcLimit,
@@ -717,7 +717,7 @@ namespace Emgu.CV
          CvInvoke.cvEigenProjection(
              inputVecs,
              inputVecs.Length,
-             CvEnum.EIGOBJ_TYPE.CV_EIGOBJ_NO_CALLBACK,
+             CvEnum.EigobjType.CV_EIGOBJ_NO_CALLBACK,
              IntPtr.Zero,
              coeffs,
              avg,
@@ -738,7 +738,7 @@ namespace Emgu.CV
       private extern static void cvEigenProjection(
          IntPtr[] inputVecs,
          int eigenvecCount,
-         CvEnum.EIGOBJ_TYPE ioFlags,
+         CvEnum.EigobjType ioFlags,
          IntPtr userdata,
          float[] coeffs,
          IntPtr avg,

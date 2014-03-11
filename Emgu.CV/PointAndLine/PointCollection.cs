@@ -126,10 +126,10 @@ namespace Emgu.CV
          //The angle returned by cvFitEllipse2 has the wrong sign.
          //Returned angle is clock wise rotation, what we need for the definition of MCvBox is the counter clockwise rotation.
          //For this, we needs to change the sign of the angle
-         MCvBox2D b = e.MCvBox2D;
+         RotatedRect b = e.RotatedRect;
          b.Angle = -b.Angle;
          if (b.Angle < 0) b.Angle += 360;
-         e.MCvBox2D = b;
+         e.RotatedRect = b;
          
          handle.Free();
          Marshal.FreeHGlobal(seq);
@@ -232,22 +232,8 @@ namespace Emgu.CV
       /// <returns>The bounding rectangle for the array of points</returns>
       public static Rectangle BoundingRectangle(PointF[] points)
       {
-         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvContour);
-         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
-         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
-            StructSize.MCvSeq,
-            StructSize.PointF,
-            handle.AddrOfPinnedObject(),
-            points.Length,
-            seq,
-            block);
-         Rectangle rect = CvInvoke.cvBoundingRect(seq, true);
-         handle.Free();
-         Marshal.FreeHGlobal(seq);
-         Marshal.FreeHGlobal(block);
-         return rect;
+         using (VectorOfPointF ptVec = new VectorOfPointF(points))
+         return CvInvoke.BoundingRectangle(ptVec);
       }
 
       /// <summary>
@@ -255,7 +241,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="points">The collection of points</param>
       /// <returns>The bounding rectangle for the array of points</returns>
-      public static MCvBox2D MinAreaRect(PointF[] points)
+      public static RotatedRect MinAreaRect(PointF[] points)
       {
          IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvContour);
          IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
@@ -268,7 +254,7 @@ namespace Emgu.CV
             points.Length,
             seq,
             block);
-         MCvBox2D rect = CvInvoke.cvMinAreaRect2(seq, IntPtr.Zero);
+         RotatedRect rect = CvInvoke.cvMinAreaRect2(seq, IntPtr.Zero);
          handle.Free();
          Marshal.FreeHGlobal(seq);
          Marshal.FreeHGlobal(block);
@@ -353,10 +339,10 @@ namespace Emgu.CV
          using (Matrix<float> points = new Matrix<float>(numberOfPoints, 2, handle.AddrOfPinnedObject()))
          using (Matrix<float> xValues = points.GetCol(0))
          using (Matrix<float> yValues = points.GetCol(1))
-         using (RotationMatrix2D<float> rotation = new RotationMatrix2D<float>(e.MCvBox2D.Center, e.MCvBox2D.Angle, 1.0))
+         using (RotationMatrix2D<float> rotation = new RotationMatrix2D<float>(e.RotatedRect.Center, e.RotatedRect.Angle, 1.0))
          {
-            xValues.SetRandNormal(new MCvScalar(e.MCvBox2D.Center.X), new MCvScalar(e.MCvBox2D.Size.Width / 2.0f));
-            yValues.SetRandNormal(new MCvScalar(e.MCvBox2D.Center.Y), new MCvScalar(e.MCvBox2D.Size.Height / 2.0f));
+            xValues.SetRandNormal(new MCvScalar(e.RotatedRect.Center.X), new MCvScalar(e.RotatedRect.Size.Width / 2.0f));
+            yValues.SetRandNormal(new MCvScalar(e.RotatedRect.Center.Y), new MCvScalar(e.RotatedRect.Size.Height / 2.0f));
             rotation.RotatePoints(points);
          }
          handle.Free();

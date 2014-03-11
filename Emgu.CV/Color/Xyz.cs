@@ -10,7 +10,7 @@ namespace Emgu.CV.Structure
    ///<summary> 
    ///Defines a Xyz color (CIE XYZ.Rec 709 with D65 white point)
    ///</summary>
-   [ColorInfo(ConversionCodename = "XYZ")]
+   [ColorInfo(ConversionCodename = "Xyz")]
    public struct Xyz : IColor, IEquatable<Xyz>
    {
       /// <summary>

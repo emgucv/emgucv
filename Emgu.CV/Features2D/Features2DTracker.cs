@@ -84,10 +84,10 @@ namespace Emgu.CV.Features2D
       /// Use camshift to track the feature
       /// </summary>
       /// <param name="observedFeatures">The feature found from the observed image</param>
-      /// <param name="initRegion">The predicted location of the model in the observed image. If not known, use MCvBox2D.Empty as default</param>
+      /// <param name="initRegion">The predicted location of the model in the observed image. If not known, use RotatedRect.Empty as default</param>
       /// <param name="priorMask">The mask that should be the same size as the observed image. Contains a priori value of the probability a match can be found. If you are not sure, pass an image fills with 1.0s</param>
       /// <returns>If a match is found, the homography projection matrix is returned. Otherwise null is returned</returns>
-      public HomographyMatrix CamShiftTrack(ImageFeature<TDescriptor>[] observedFeatures, MCvBox2D initRegion, Image<Gray, Single> priorMask)
+      public HomographyMatrix CamShiftTrack(ImageFeature<TDescriptor>[] observedFeatures, RotatedRect initRegion, Image<Gray, Single> priorMask)
       {
          using (Image<Gray, Single> matchMask = new Image<Gray, Single>(priorMask.Size))
          {
@@ -106,7 +106,7 @@ namespace Emgu.CV.Features2D
             #endregion
 
             Rectangle startRegion;
-            if (initRegion.Equals(MCvBox2D.Empty))
+            if (initRegion.Equals(RotatedRect.Empty))
                startRegion = matchMask.ROI;
             else
             {
@@ -118,12 +118,18 @@ namespace Emgu.CV.Features2D
             CvInvoke.Multiply(matchMask, priorMask, matchMask, 1.0, CvInvoke.GetDepthType(typeof(float)));
 
             MCvConnectedComp comp;
-            MCvBox2D currentRegion;
+            RotatedRect currentRegion;
             //Updates the current location
             CvInvoke.cvCamShift(matchMask.Ptr, startRegion, new MCvTermCriteria(10, 1.0e-8), out comp, out currentRegion);
 
             #region find the Image features that belongs to the current Region
             MatchedImageFeature[] featuesInCurrentRegion;
+            using (VectorOfPointF contour = new VectorOfPointF(currentRegion.GetVertices()))
+            {
+               featuesInCurrentRegion = Array.FindAll(matchedFeature,
+                  f => CvInvoke.PointPolygonTest(contour, f.ObservedFeature.KeyPoint.Point, false) >= 0);
+            }
+            /*
             using (MemStorage stor = new MemStorage())
             {
                Contour<System.Drawing.PointF> contour = new Contour<PointF>(stor);
@@ -134,7 +140,7 @@ namespace Emgu.CV.Features2D
                featuesInCurrentRegion = Array.FindAll(matchedFeature,
                   delegate(MatchedImageFeature f)
                   { return contour.InContour(f.ObservedFeature.KeyPoint.Point) >= 0; });
-            }
+            }*/
             #endregion
 
             return GetHomographyMatrixFromMatchedFeatures(VoteForSizeAndOrientation(featuesInCurrentRegion, 1.5, 20));

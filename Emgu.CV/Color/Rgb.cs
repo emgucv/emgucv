@@ -15,7 +15,7 @@ namespace Emgu.CV.Structure
    ///<summary> 
    ///Defines a Rgb (Red Green Blue) color
    ///</summary>
-   [ColorInfo(ConversionCodename = "RGB")]
+   [ColorInfo(ConversionCodename = "Rgb")]
    public struct Rgb : IColor, IEquatable<Rgb>
    {
       /// <summary>

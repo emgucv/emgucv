@@ -39,9 +39,10 @@ CREATE_VECTOR_CS("DMatch" "cv::DMatch" "MDMatch" TRUE)
 
 CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" FALSE)
 CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" FALSE)
-CREATE_VECTOR_CS("VectorOfPoint" "std::vector<cv::Point>" "VectorOfPoint" FALSE)
-CREATE_VECTOR_CS("VectorOfPointF" "std::vector<cv::Point2f>" "VectorOfPointF" FALSE)
-CREATE_VECTOR_CS("VectorOfPoint3D32F" "std::vector<cv::Point3f>" "VectorOfPoint3D32F" FALSE)
+CREATE_VECTOR_CS("VectorOfPoint" "std::vector< cv::Point >" "VectorOfPoint" FALSE)
+CREATE_VECTOR_CS("VectorOfPointF" "std::vector< cv::Point2f >" "VectorOfPointF" FALSE)
+CREATE_VECTOR_CS("VectorOfPoint3D32F" "std::vector< cv::Point3f >" "VectorOfPoint3D32F" FALSE)
+CREATE_VECTOR_CS("VectorOfInt" "std::vector< int >" "VectorOfInt" FALSE)
 CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "OclPlatformInfo" FALSE)
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")

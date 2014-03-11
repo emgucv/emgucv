@@ -196,7 +196,7 @@ cv::cuda::HoughSegmentDetector* cudaHoughSegmentDetectorCreate(float rho, float 
    ptr.addref();
    return ptr.get();
 }
-void cudaHoughSegmentDetectorDetect(cv::cuda::HoughSegmentDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* lines)
+void cudaHoughSegmentDetectorDetect(cv::cuda::HoughSegmentDetector* detector, cv::_InputArray* src, cv::_OutputArray* lines)
 {
    detector->detect(*src, *lines);
 }

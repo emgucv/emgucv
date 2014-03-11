@@ -31,11 +31,9 @@ namespace Emgu.CV.Cuda
          _ptr = CudaInvoke.cudaHoughLinesDetectorCreate(rho, theta, threshold, doSort, maxLines);
       }
 
-      public GpuMat Detect(CudaImage<Gray, Byte> image)
+      public void Detect(CudaImage<Gray, Byte> image, GpuMat lines)
       {
-         GpuMat lines = new GpuMat();
          CudaInvoke.cudaHoughLinesDetectorDetect(_ptr, image, lines);
-         return lines;
       }
 
       /// <summary>

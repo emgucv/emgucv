@@ -108,7 +108,7 @@ namespace TrafficSignRecognition
                {
                   mask.Draw(contours, new Gray(255), new Gray(255), 0, -1, new Point(-box.X, -box.Y));
 
-                  double mean = CvInvoke.Mean(candidate, mask).v0;
+                  double mean = CvInvoke.Mean(candidate, mask).V0;
                   candidate._ThresholdBinary(new Gray(mean), new Gray(255.0));
                   candidate._Not();
                   mask._Not();

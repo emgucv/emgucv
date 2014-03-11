@@ -230,6 +230,7 @@ namespace Emgu.CV
       /// The parameter is only used in RANSAC-based homography estimation. 
       /// E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3
       /// </param>
+      /// <param name="mask">Optional output mask set by a robust method ( CV_RANSAC or CV_LMEDS ). Note that the input mask values are ignored.</param>
       /// <returns>The 3x3 homography matrix if found. Null if not found.</returns>
       public static HomographyMatrix FindHomography(
          PointF[] srcPoints,

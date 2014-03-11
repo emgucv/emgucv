@@ -94,17 +94,17 @@ namespace MotionDetection
             foreach (MCvConnectedComp comp in motionComponents)
             {
                //reject the components that have small area;
-               if (comp.area < minArea) continue;
+               if (comp.Area < minArea) continue;
 
                // find the angle and motion pixel count of the specific area
                double angle, motionPixelCount;
-               _motionHistory.MotionInfo(comp.rect, out angle, out motionPixelCount);
+               _motionHistory.MotionInfo(comp.Rect, out angle, out motionPixelCount);
 
                //reject the area that contains too few motion
-               if (motionPixelCount < comp.area * 0.05) continue;
+               if (motionPixelCount < comp.Area * 0.05) continue;
 
                //Draw each individual motion in red
-               DrawMotion(motionImage, comp.rect, angle, new Bgr(Color.Red));
+               DrawMotion(motionImage, comp.Rect, angle, new Bgr(Color.Red));
             }
 
             // find and draw the overall motion angle

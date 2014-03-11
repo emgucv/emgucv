@@ -135,22 +135,22 @@ namespace LicensePlateRecognition
                }
 
                MCvBox2D box = contours.GetMinAreaRect();
-               if (box.angle < -45.0)
+               if (box.Angle < -45.0)
                {
-                  float tmp = box.size.Width;
-                  box.size.Width = box.size.Height;
-                  box.size.Height = tmp;
-                  box.angle += 90.0f;
+                  float tmp = box.Size.Width;
+                  box.Size.Width = box.Size.Height;
+                  box.Size.Height = tmp;
+                  box.Angle += 90.0f;
                }
-               else if (box.angle > 45.0)
+               else if (box.Angle > 45.0)
                {
-                  float tmp = box.size.Width;
-                  box.size.Width = box.size.Height;
-                  box.size.Height = tmp;
-                  box.angle -= 90.0f;
+                  float tmp = box.Size.Width;
+                  box.Size.Width = box.Size.Height;
+                  box.Size.Height = tmp;
+                  box.Angle -= 90.0f;
                }
 
-               double whRatio = (double)box.size.Width / box.size.Height;
+               double whRatio = (double)box.Size.Width / box.Size.Height;
                if (!(3.0 < whRatio && whRatio < 10.0))
                //if (!(1.0 < whRatio && whRatio < 2.0))
                {  //if the width height ratio is not in the specific range,it is not a license plate 

@@ -38,7 +38,7 @@ namespace LatentSvmDetectorExample
 
             foreach (MCvObjectDetection region in regions)
             {
-               if (region.score > -0.5)
+               if (region.Score > -0.5)
                   image.Draw(region.Rect, new Bgr(Color.Red), 1);
             }
 
