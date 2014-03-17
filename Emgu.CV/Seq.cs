@@ -576,7 +576,7 @@ namespace Emgu.CV
       public MCvMoments GetMoments()
       {
          return CvInvoke.Moments(Ptr, false);  
-      }*/
+      }
 
       /// <summary>
       /// Compare the shape of the current contour with <paramref name="objectToMatch"/> 
@@ -587,7 +587,7 @@ namespace Emgu.CV
       public double MatchShapes(Seq<T> objectToMatch, CvEnum.ContoursMatchType method)
       {
          return CvInvoke.cvMatchShapes(Ptr, objectToMatch.Ptr, method, 0.0);
-      }
+      }*/
 
       /// <summary>
       /// Finds all convexity defects of the input contour and returns a sequence of the CvConvexityDefect structures. 

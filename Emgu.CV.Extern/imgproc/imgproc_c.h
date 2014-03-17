@@ -103,4 +103,11 @@ CVAPI(double) cveMatchShapes(cv::_InputArray* contour1, cv::_InputArray* contour
 CVAPI(void) cveFitEllipse(cv::_InputArray* points, CvBox2D* box);
 CVAPI(void) cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps);
 CVAPI(int) cveRotatedRectangleIntersection(CvBox2D* rect1, CvBox2D* rect2, cv::_OutputArray* intersectingRegion);
+CVAPI(void) cveDrawContours(
+   cv::_InputOutputArray* image, cv::_InputArray* contours, int contourIdx, 
+   CvScalar* color, int thickness, int lineType, cv::_InputArray* hierarchy, 
+   int maxLevel, CvPoint* offset);
+CVAPI(void) cveApproxPolyDP(cv::_InputArray* curve, cv::_OutputArray* approxCurve, double epsilon, bool closed);
+CVAPI(void) cveConvexHull(cv::_InputArray* points, cv::_OutputArray* hull, bool clockwise, bool returnPoints);
+CVAPI(void) cveConvexityDefects(cv::_InputArray* contour, cv::_InputArray* convexhull, cv::_OutputArray* convexityDefects); 
 #endif

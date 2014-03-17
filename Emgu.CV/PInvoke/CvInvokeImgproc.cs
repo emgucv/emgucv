@@ -391,20 +391,35 @@ namespace Emgu.CV
       /// <summary>
       /// Fits line to 2D or 3D point set 
       /// </summary>
-      /// <param name="points">Sequence or array of 2D or 3D points with 32-bit integer or floating-point coordinates</param>
+      /// <param name="points">Input vector of 2D or 3D points, stored in std::vector or Mat.</param>
       /// <param name="distType">The distance used for fitting </param>
       /// <param name="param">Numerical parameter (C) for some types of distances, if 0 then some optimal value is chosen</param>
       /// <param name="reps">Sufficient accuracy for radius (distance between the coordinate origin and the line),  0.01 would be a good default</param>
       /// <param name="aeps">Sufficient accuracy for angle, 0.01 would be a good default</param>
-      /// <param name="line">The output line parameters. In case of 2d fitting it is array of 4 floats (vx, vy, x0, y0) where (vx, vy) is a normalized vector collinear to the line and (x0, y0) is some point on the line. In case of 3D fitting it is array of 6 floats (vx, vy, vz, x0, y0, z0) where (vx, vy, vz) is a normalized vector collinear to the line and (x0, y0, z0) is some point on the line.</param>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvFitLine(
-          IntPtr points,
+      /// <param name="line">Output line parameters. In case of 2D ?tting, it should be a vector of 4 elements (like Vec4f) - (vx, vy, x0, y0), where (vx, vy) is a normalized vector collinear to the line 
+      /// and (x0, y0) is a point on the line. In case of 3D ?tting, it should be a vector of 6 elements
+      /// (like Vec6f) - (vx, vy, vz, x0, y0, z0), where (vx, vy, vz) is a normalized vector
+      /// collinear to the line and (x0, y0, z0) is a point on the line.
+      /// </param>
+      public static void FitLine(
+          IInputArray points,
+          IOutputArray line,
           CvEnum.DistType distType,
           double param,
           double reps,
-          double aeps,
-          [Out] float[] line);
+          double aeps)
+      {
+         cveFitLine(points.InputArrayPtr, line.OutputArrayPtr, distType, param, reps, aeps);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveFitLine(IntPtr points, IntPtr line, CvEnum.DistType distType, double param, double reps, double aeps);
+
+      public static int RotatedRectangleIntersection(RotatedRect rect1, RotatedRect rect2, IOutputArray intersectingRegion)
+      {
+         return cveRotatedRectangleIntersection(ref rect1, ref rect2, intersectingRegion.OutputArrayPtr);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cveRotatedRectangleIntersection(ref RotatedRect rect1, ref RotatedRect rect2, IntPtr intersectingRegion);
 
       /// <summary>
       /// Calculates vertices of the input 2d box.
@@ -433,7 +448,6 @@ namespace Emgu.CV
       private static extern void cveBoxPoints(
          ref RotatedRect box,
          IntPtr pt);
-
 
       /// <summary>
       /// Fits an ellipse around a set of 2D points.
@@ -689,6 +703,18 @@ namespace Emgu.CV
       /// <returns>a circumscribed rectangle of the minimal area for 2D point set</returns>
       [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern RotatedRect cvMinAreaRect2(IntPtr points, IntPtr storage);
+
+
+      /// <summary>
+      /// Finds the minimal circumscribed circle for 2D point set using iterative algorithm. It returns nonzero if the resultant circle contains all the input points and zero otherwise (i.e. algorithm failed)
+      /// </summary>
+      /// <param name="points">Sequence or array of 2D points</param>
+      ///<returns>The minimal circumscribed circle for 2D point set</returns>
+      public static CircleF MinEnclosingCircle(PointF[] points)
+      {
+         using (VectorOfPointF vp = new VectorOfPointF(points))
+            return MinEnclosingCircle(vp);
+      }
 
       /// <summary>
       /// Finds the minimal circumscribed circle for 2D point set using iterative algorithm. It returns nonzero if the resultant circle contains all the input points and zero otherwise (i.e. algorithm failed)

@@ -104,10 +104,6 @@
       <Project>{c2293433-3c88-473c-ae81-bbbe5d5e1746}</Project>
       <Name>Emgu.CV.Cuda.Windows.Store</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.Windows.Store.csproj">
-      <Project>{6e1ee7fa-b1e7-4bbf-ad6a-470c5fbf0f56}</Project>
-      <Name>Emgu.CV.OpenCL.Windows.Store</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.Windows.Store.csproj">
       <Project>{1f7091da-c6eb-417b-8d2f-58c6151377a0}</Project>
       <Name>Emgu.CV.Windows.Store</Name>

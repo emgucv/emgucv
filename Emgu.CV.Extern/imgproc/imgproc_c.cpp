@@ -356,3 +356,22 @@ int cveRotatedRectangleIntersection(CvBox2D* rect1, CvBox2D* rect2, cv::_OutputA
    cv::RotatedRect r2 = *rect2;
    return cv::rotatedRectangleIntersection(r1, r2, *intersectingRegion);
 }
+void cveDrawContours(
+   cv::_InputOutputArray* image, cv::_InputArray* contours, int contourIdx, 
+   CvScalar* color, int thickness, int lineType, cv::_InputArray* hierarchy, 
+   int maxLevel, CvPoint* offset)
+{
+   cv::drawContours(*image, *contours, contourIdx, *color, thickness, lineType, *hierarchy, maxLevel, *offset);
+}
+void cveApproxPolyDP(cv::_InputArray* curve, cv::_OutputArray* approxCurve, double epsilon, bool closed)
+{
+   cv::approxPolyDP(*curve, *approxCurve, epsilon, closed);
+}
+void cveConvexHull(cv::_InputArray* points, cv::_OutputArray* hull, bool clockwise, bool returnPoints)
+{
+   cv::convexHull(*points, *hull, clockwise, returnPoints);
+}
+void cveConvexityDefects(cv::_InputArray* contour, cv::_InputArray* convexhull, cv::_OutputArray* convexityDefects)
+{
+   cv::convexityDefects(*contour, *convexhull, *convexityDefects);
+}

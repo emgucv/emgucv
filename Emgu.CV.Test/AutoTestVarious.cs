@@ -181,12 +181,13 @@ namespace Emgu.CV.Test
             using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint() )
             
             {
-               CvInvoke.FindContours(img, contour, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+               CvInvoke.FindContours(img, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
                using (VectorOfPoint firstContour = contours[0])
                {
                   EmguAssert.IsTrue( CvInvoke.IsContourConvex(firstContour )  );
                }
             }
+            /*
             using (MemStorage stor = new MemStorage())
             {
                //Contour<Point> cs = img.FindContours(CvEnum.ChainApproxMethod.ChainApproxSimple, CvEnum.RetrType.List, stor);
@@ -223,7 +224,7 @@ namespace Emgu.CV.Test
                Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
                Contour<Point> c = img2.FindContours(Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple, Emgu.CV.CvEnum.RetrType.List, stor);
                EmguAssert.IsTrue(c == null);
-            }
+            }*/
          }
 
          int s1 = Marshal.SizeOf(typeof(MCvSeq));
@@ -1490,7 +1491,7 @@ namespace Emgu.CV.Test
          #endregion
 
          Stopwatch watch = Stopwatch.StartNew();
-         CircleF circle = PointCollection.MinEnclosingCircle(pts);
+         CircleF circle = CvInvoke.MinEnclosingCircle(pts);
          watch.Stop();
 
          #region draw the points and the circle

@@ -71,6 +71,7 @@ namespace Emgu.CV
              delegate(float d) { return FirstDegreeInterpolate(points, d); });
       }*/
 
+      /*
       /// <summary>
       /// Fit a line to the points collection
       /// </summary>
@@ -101,7 +102,7 @@ namespace Emgu.CV
          Marshal.FreeHGlobal(block);
          normalizedDirection = new PointF(data[0], data[1]);
          aPointOnLine = new PointF(data[2], data[3]);
-      }
+      }*/
 
       /// <summary>
       /// Fit an ellipse to the points collection
@@ -110,31 +111,20 @@ namespace Emgu.CV
       /// <returns>An ellipse</returns>
       public static Ellipse EllipseLeastSquareFitting(PointF[] points)
       {
-         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvSeq);
-         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
-         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
-            StructSize.MCvSeq,
-            StructSize.PointF,
-            handle.AddrOfPinnedObject(),
-            points.Length,
-            seq,
-            block);
-         Ellipse e = new Ellipse(CvInvoke.cvFitEllipse2(seq));
+         using (VectorOfPointF vp = new VectorOfPointF(points))
+         {
+            Ellipse e = new Ellipse(CvInvoke.FitEllipse(vp));
 
-         //The angle returned by cvFitEllipse2 has the wrong sign.
-         //Returned angle is clock wise rotation, what we need for the definition of MCvBox is the counter clockwise rotation.
-         //For this, we needs to change the sign of the angle
-         RotatedRect b = e.RotatedRect;
-         b.Angle = -b.Angle;
-         if (b.Angle < 0) b.Angle += 360;
-         e.RotatedRect = b;
-         
-         handle.Free();
-         Marshal.FreeHGlobal(seq);
-         Marshal.FreeHGlobal(block);
-         return e;
+            //The angle returned by cvFitEllipse2 has the wrong sign.
+            //Returned angle is clock wise rotation, what we need for the definition of MCvBox is the counter clockwise rotation.
+            //For this, we needs to change the sign of the angle
+            RotatedRect b = e.RotatedRect;
+            b.Angle = -b.Angle;
+            if (b.Angle < 0) b.Angle += 360;
+            e.RotatedRect = b;
+
+            return e;
+         }
       }
 
       /// <summary>
@@ -261,6 +251,7 @@ namespace Emgu.CV
          return rect;
       }
 
+      /*
       /// <summary>
       /// Find the minimum enclosing circle for the specific array of points
       /// </summary>
@@ -282,11 +273,10 @@ namespace Emgu.CV
          PointF center;
          float radius;
          CvInvoke.cvMinEnclosingCircle(seq, out center, out radius);
-         handle.Free();
-         Marshal.FreeHGlobal(seq);
-         Marshal.FreeHGlobal(block);
+
+         CvInvoke.MinEnclosingCircle(
          return new CircleF(center, radius);
-      }
+      }*/
 
       /// <summary>
       /// Reproject pixels on a 1-channel disparity map to array of 3D points.
