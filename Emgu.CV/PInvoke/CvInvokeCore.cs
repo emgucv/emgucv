@@ -2053,7 +2053,7 @@ namespace Emgu.CV
       /// <summary>
       /// Draws contour outlines in the image if thickness &gt;=0 or fills area bounded by the contours if thickness&lt;0.
       /// </summary>
-      /// <param name="img">Image where the contours are to be drawn. Like in any other drawing function, the contours are clipped with the ROI</param>
+      /// <param name="image">Image where the contours are to be drawn. Like in any other drawing function, the contours are clipped with the ROI</param>
       /// <param name="contour">Pointer to the first contour</param>
       /// <param name="externalColor">Color of the external contours</param>
       /// <param name="holeColor">Color of internal contours </param>
@@ -2061,47 +2061,40 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative the contour interiors are drawn</param>
       /// <param name="lineType">Type of the contour segments</param>
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
-#if ANDROID
-      public static void cvDrawContours(
-          IntPtr img,
-          IntPtr contour,
-          MCvScalar externalColor,
-          MCvScalar holeColor,
-          int maxLevel,
-          int thickness,
-          CvEnum.LineType lineType,
-          Point offset)
+      public static void DrawContours(
+         IInputOutputArray image,
+         IInputArray contours,
+         int contourIdx,
+         MCvScalar color,
+         int thickness,
+         CvEnum.LineType lineType,
+         IInputArray hierarchy,
+         int maxLevel,
+         Point offset = new Point())
       {
-         cvDrawContours(
-            img, contour,
-            externalColor.v0, externalColor.v1, externalColor.v2, externalColor.v3,
-            holeColor.v0, holeColor.v1, holeColor.v2, holeColor.v3,
-            maxLevel, thickness, lineType,
-            offset.X, offset.Y);
+         cveDrawContours(
+            image.InputOutputArrayPtr,
+            contours.InputArrayPtr,
+            contourIdx,
+            ref color,
+            thickness,
+            lineType,
+            hierarchy == null ? IntPtr.Zero : hierarchy.InputArrayPtr,
+            maxLevel,
+            ref offset);
       }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveDrawContours(
+         IntPtr image,
+         IntPtr contour,
+         int coutourIdx,
+         ref MCvScalar color,
+         int thickness,
+         CvEnum.LineType lineType,
+         IntPtr hierarchy,
+         int maxLevel, 
+         ref Point offset);
 
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvDrawContours(
-          IntPtr img,
-          IntPtr contour,
-          double ec0, double ec1, double ec2, double ec3,
-          double hc0, double hc1, double hc2, double hc3,
-          int maxLevel,
-          int thickness,
-          CvEnum.LineType lineType,
-          int offsetX, int offsetY);
-#else
-      [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvDrawContours(
-          IntPtr img,
-          IntPtr contour,
-          MCvScalar externalColor,
-          MCvScalar holeColor,
-          int maxLevel,
-          int thickness,
-          CvEnum.LineType lineType,
-          Point offset);
-#endif
 
       /// <summary>
       /// Fills convex polygon interior. This function is much faster than The function cvFillPoly and can fill not only the convex polygons but any monotonic polygon, i.e. a polygon whose contour intersects every horizontal line (scan line) twice at the most

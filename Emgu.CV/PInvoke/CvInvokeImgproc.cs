@@ -411,6 +411,26 @@ namespace Emgu.CV
       {
          cveFitLine(points.InputArrayPtr, line.OutputArrayPtr, distType, param, reps, aeps);
       }
+
+      public static void FitLine(
+          PointF[] points,
+          out PointF direction, 
+          out PointF pointOnLine,
+          CvEnum.DistType distType,
+          double param,
+          double reps,
+          double aeps)
+      {
+         using(VectorOfPointF pv = new VectorOfPointF(points))
+         using (VectorOfFloat line = new VectorOfFloat())
+         {
+            cveFitLine(pv.InputArrayPtr, line.OutputArrayPtr, distType, param, reps, aeps);
+            float[] values = line.ToArray();
+            direction = new PointF(values[0], values[1]);
+            pointOnLine = new PointF(values[2], values[3]);
+
+         }
+      }
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFitLine(IntPtr points, IntPtr line, CvEnum.DistType distType, double param, double reps, double aeps);
 

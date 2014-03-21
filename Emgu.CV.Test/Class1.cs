@@ -987,6 +987,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       public void TestCvBlob()
       {
          //MCvFont font = new MCvFont(Emgu.CV.CvEnum.FontFace.HersheySimplex, 0.5, 0.5);
@@ -1016,14 +1017,6 @@ namespace Emgu.CV.Test
 
                   using (Image<Gray, Byte> blobMask = detector.DrawBlobsMask(blobs))
                      CvInvoke.cvCopy(frame, result, blobMask);
-
-                  /*
-                  foreach (KeyValuePair<uint, CvBlob> pair in blobs)
-                  {
-                     Bgr color = mask.MeanColor(pair.Value, frame);
-                     result.Draw(pair.Key.ToString(), ref font, pair.Value.BoundingBox.Location, color);
-                     result.Draw(pair.Value.BoundingBox, color, 2);
-                  }*/
                   
                   foreach(KeyValuePair<uint, CvTrack> pair in tracks)
                   {
@@ -1033,6 +1026,7 @@ namespace Emgu.CV.Test
                         Bgr color = detector.MeanColor(b, frame);
                         result.Draw(pair.Key.ToString(), pair.Value.BoundingBox.Location, CvEnum.FontFace.HersheySimplex, 0.5, color);
                         result.Draw(pair.Value.BoundingBox, color, 2);
+                        
                         using (MemStorage stor = new MemStorage())
                         {
                            Contour<Point> contour = b.GetContour(stor);
@@ -1046,7 +1040,7 @@ namespace Emgu.CV.Test
             capture.Start();
             viewer.ShowDialog();
          }
-      }
+      }*/
 
       /*
       public void TestPyrLK()

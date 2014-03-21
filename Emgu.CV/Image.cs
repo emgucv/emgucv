@@ -895,6 +895,7 @@ namespace Emgu.CV
              bottomLeftOrigin);
         }
 
+      /*
         /// <summary>
         /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
         /// </summary>
@@ -922,7 +923,7 @@ namespace Emgu.CV
         public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness)
         {
             Draw(c, externalColor, holeColor, maxLevel, thickness, Point.Empty);
-        }
+        }*/
 
         /// <summary>
         /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
@@ -938,18 +939,42 @@ namespace Emgu.CV
         /// </param>
         /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
         /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
-        public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness, Point offset)
+        public void Draw(
+      IInputArray contours,
+      int contourIdx,
+      TColor color,
+      int thickness,
+      CvEnum.LineType lineType,
+      IInputArray hierarchy,
+      int maxLevel,
+      Point offset = new Point())
         {
-            CvInvoke.cvDrawContours(
-          Ptr,
-          c.Ptr,
-          externalColor.MCvScalar,
-          holeColor.MCvScalar,
-          maxLevel,
+            CvInvoke.DrawContours(
+          this,
+          contours,
+          contourIdx,
+          color.MCvScalar,
           thickness,
-          CvEnum.LineType.EightConnected,
+          lineType,
+          hierarchy,
+          maxLevel,
           offset);
         }
+
+      public void Draw(
+         Point[] contours,
+         TColor color,
+         int thickness,
+         CvEnum.LineType lineType,
+         Point offset = new Point())
+      {
+         using (VectorOfPoint vp = new VectorOfPoint(contours))
+         using (VectorOfVectorOfPoint vvp = new VectorOfVectorOfPoint())
+         {
+            vvp.Push(vp);
+            Draw(vvp, 0, color, thickness, lineType, null, int.MaxValue);
+         }
+      }
       #endregion
 
       #region Hough line and circles
@@ -1444,13 +1469,12 @@ namespace Emgu.CV
       /// <param name="tc">Termination criteria. The parameter criteria.epsilon is used to define the minimal number of points that must be moved during any iteration to keep the iteration process running. If at some iteration the number of moved points is less than criteria.epsilon or the function performed criteria.max_iter iterations, the function terminates. </param>
       /// <param name="storage">The memory storage used by the resulting sequence</param>
       /// <returns>The snake[d] contour</returns>
-      public Contour<Point> Snake(Seq<Point> contour, float alpha, float beta, float gamma, Size windowSize, MCvTermCriteria tc, MemStorage storage)
+      public void Snake(Point[] contour, float alpha, float beta, float gamma, Size windowSize, MCvTermCriteria tc)
       {
-         int count = contour.Total;
+         int count = contour.Length;
 
          Point[] points = new Point[count];
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         CvInvoke.cvCvtSeqToArray(contour.Ptr, handle.AddrOfPinnedObject(), MCvSlice.WholeSeq);
          CvInvoke.cvSnakeImage(
              Ptr,
              handle.AddrOfPinnedObject(),
@@ -1462,13 +1486,7 @@ namespace Emgu.CV
              windowSize,
              tc,
              true);
-
-         Contour<Point> rSeq = new Contour<Point>(storage);
-
-         CvInvoke.cvSeqPushMulti(rSeq.Ptr, handle.AddrOfPinnedObject(), count, Emgu.CV.CvEnum.BackOrFront.Front);
          handle.Free();
-
-         return rSeq;
       }
 
       /// <summary>

@@ -11,6 +11,7 @@ namespace Emgu.CV
 {
    public static partial class CvInvoke
    {
+      
       /// <summary>
       /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
       /// </summary>

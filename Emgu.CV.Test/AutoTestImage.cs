@@ -849,20 +849,20 @@ namespace Emgu.CV.Test
          Rectangle rect = new Rectangle(40, 30, 20, 40);
          img.Draw(rect, new Gray(255.0), -1);
 
-         using (MemStorage stor = new MemStorage())
-         {
-            Seq<Point> pts = new Seq<Point>((int)CvEnum.SeqType.Polygon, stor);
-            pts.Push(new Point(20, 20));
-            pts.Push(new Point(20, 80));
-            pts.Push(new Point(80, 80));
-            pts.Push(new Point(80, 20));
+         Point[] pts =
+               new Point[] {
+                  new Point(20, 20),
+                  new Point(20, 80),
+                  new Point(80, 80),
+                  new Point(80, 20)};
 
-            Image<Gray, Byte> canny = img.Canny(100.0, 40.0);
-            Seq<Point> snake = canny.Snake(pts, 1.0f, 1.0f, 1.0f, new Size(21, 21), new MCvTermCriteria(40, 0.0002), stor);
+         Image<Gray, Byte> canny = img.Canny(100.0, 40.0);
+         img.Draw(pts, new Gray(120), 1, LineType.EightConnected);
+         canny.Snake(pts, 1.0f, 1.0f, 1.0f, new Size(21, 21), new MCvTermCriteria(40, 0.0002));
 
-            img.Draw(pts, new Gray(120), 1);
-            img.Draw(snake, new Gray(80), 2);
-         }
+
+         img.Draw(pts, new Gray(80), 2, LineType.EightConnected);
+         
       }
 
       [Test]
@@ -1079,20 +1079,16 @@ namespace Emgu.CV.Test
       {
          Image<Bgr, Byte> img1 = new Image<Bgr, byte>(200, 200);
          Image<Bgr, Byte> img2 = new Image<Bgr, byte>(200, 200);
-         using (MemStorage stor = new MemStorage())
-         {
+
             Point[] polyline = new Point[] {
                new Point(20, 20),
                new Point(20, 30),
                new Point(30, 30),
                new Point(30, 20)};
 
-            Contour<Point> c = new Contour<Point>(stor);
-            c.PushMulti(polyline, Emgu.CV.CvEnum.BackOrFront.Front);
-
-            img1.Draw(c, new Bgr(255, 0, 0), new Bgr(), 0, -1, new Point(0, 0));
-            img1.Draw(c, new Bgr(0, 255, 0), new Bgr(), 0, -1, new Point(20, 10));
-            img1.Draw(c, new Bgr(0, 0, 255), new Bgr(), 0, 1, new Point(20, 10));
+            img1.Draw(polyline, new Bgr(255, 0, 0), 1, CvEnum.LineType.EightConnected);
+            img1.Draw(polyline, new Bgr(0, 255, 0), 1, CvEnum.LineType.EightConnected);
+            img1.Draw(polyline, new Bgr(0, 0, 255), 1, CvEnum.LineType.EightConnected);
 
             /*
             for (int i = 0; i < polyline.Length; i++)
@@ -1102,7 +1098,7 @@ namespace Emgu.CV.Test
             }
             img1.DrawPolyline(polyline, true, new Bgr(0, 0, 255), 1);
              */
-         }
+         
       }
 
       [Test]

@@ -115,7 +115,7 @@ namespace Emgu.CV.Test
          pts.Add(new PointF(4.0f, 4.0f));
 
          PointF direction, pointOnLine;
-         PointCollection.Line2DFitting(pts.ToArray(), Emgu.CV.CvEnum.DistType.L2, out direction, out pointOnLine);
+         CvInvoke.FitLine(pts.ToArray(), out direction, out pointOnLine, CvEnum.DistType.L2, 0, 0.1, 0.1);
 
          //check if the line is 45 degree from +x axis
          EmguAssert.AreEqual(45.0, Math.Atan2(direction.Y, direction.X) * 180.0 / Math.PI);

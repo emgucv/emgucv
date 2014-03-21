@@ -361,7 +361,7 @@ void cveDrawContours(
    CvScalar* color, int thickness, int lineType, cv::_InputArray* hierarchy, 
    int maxLevel, CvPoint* offset)
 {
-   cv::drawContours(*image, *contours, contourIdx, *color, thickness, lineType, *hierarchy, maxLevel, *offset);
+   cv::drawContours(*image, *contours, contourIdx, *color, thickness, lineType, hierarchy ? *hierarchy : (cv::_InputArray) cv::noArray(), maxLevel, *offset);
 }
 void cveApproxPolyDP(cv::_InputArray* curve, cv::_OutputArray* approxCurve, double epsilon, bool closed)
 {
