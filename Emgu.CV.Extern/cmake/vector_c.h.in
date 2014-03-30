@@ -12,7 +12,7 @@
 #ifndef EMGU_VECTOR_${VECTOR_NAME}_H
 #define EMGU_VECTOR_${VECTOR_NAME}_H
 
-#include "Vectors_c.h"
+#include "vectors_c.h"
 
 //----------------------------------------------------------------------------
 //
