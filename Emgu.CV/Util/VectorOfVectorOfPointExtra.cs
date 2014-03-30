@@ -26,8 +26,10 @@ namespace Emgu.CV.Util
          Point[][] res = new Point[size][];
          for (int i = 0; i < size; i++)
          {
-            VectorOfPoint v = this[i];
-            res[i] = v.ToArray();
+            using (VectorOfPoint v = this[i])
+            {
+               res[i] = v.ToArray();
+            }
          }
          return res;
       }

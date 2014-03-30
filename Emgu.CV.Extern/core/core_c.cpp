@@ -410,7 +410,7 @@ void cvePutText(cv::_InputOutputArray* img, const char* text, CvPoint* org, int 
    cv::putText(*img, text, *org, fontFace, fontScale, *color, thickness, lineType, bottomLeftOrigin);
 }
 
-void cvefillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift)
+void cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift)
 {
    cv::fillConvexPoly(*img, *points, *color, lineType, shift);
 }

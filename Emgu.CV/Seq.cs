@@ -261,6 +261,7 @@ namespace Emgu.CV
          get { return (MCvSeq)Marshal.PtrToStructure(Ptr, typeof(MCvSeq)); }
       }
 
+      /*
       /// <summary>
       /// Get the minimum area rectangle for this point sequence
       /// </summary>
@@ -300,7 +301,7 @@ namespace Emgu.CV
       public Seq<T> GetConvexHull(CvEnum.Orientation orientation)
       {
          return GetConvexHull(orientation, _stor);
-      }
+      }*/
 
       /// <summary>
       /// Obtain the <paramref name="index"/> element in this sequence
@@ -481,7 +482,7 @@ namespace Emgu.CV
          {
             return Math.Abs(CvInvoke.cvContourPerimeter(Ptr));
          }
-      }*/
+      }
 
       /// <summary>
       /// Approximates one curves and returns the approximation result
@@ -530,7 +531,7 @@ namespace Emgu.CV
          return ApproxPoly(accuracy, _stor);
       }
 
-      /*
+      
       ///<summary> Get the smallest bouding rectangle </summary>
       public virtual Rectangle BoundingRectangle
       {
@@ -587,7 +588,7 @@ namespace Emgu.CV
       public double MatchShapes(Seq<T> objectToMatch, CvEnum.ContoursMatchType method)
       {
          return CvInvoke.cvMatchShapes(Ptr, objectToMatch.Ptr, method, 0.0);
-      }*/
+      }
 
       /// <summary>
       /// Finds all convexity defects of the input contour and returns a sequence of the CvConvexityDefect structures. 
@@ -601,7 +602,7 @@ namespace Emgu.CV
          IntPtr convexHull = CvInvoke.cvConvexHull2(Ptr, stor, orientation, 0);
          IntPtr seq = CvInvoke.cvConvexityDefects(Ptr, convexHull, stor);
          return new Seq<MCvConvexityDefect>(seq, stor);
-      }
+      }*/
 
       /// <summary>
       /// Implicit operator for IntPtr

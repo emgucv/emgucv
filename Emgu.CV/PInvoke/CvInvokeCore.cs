@@ -4,6 +4,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
@@ -2051,25 +2052,26 @@ namespace Emgu.CV
       public static extern void cvReleaseImage(ref IntPtr image);
 
       /// <summary>
-      /// Draws contour outlines in the image if thickness &gt;=0 or fills area bounded by the contours if thickness&lt;0.
+      /// Draws contours outlines or filled contours.
       /// </summary>
       /// <param name="image">Image where the contours are to be drawn. Like in any other drawing function, the contours are clipped with the ROI</param>
-      /// <param name="contour">Pointer to the first contour</param>
-      /// <param name="externalColor">Color of the external contours</param>
-      /// <param name="holeColor">Color of internal contours </param>
+      /// <param name="contours">All the input contours. Each contour is stored as a point vector.</param>
+      /// <param name="contourIdx">Parameter indicating a contour to draw. If it is negative, all the contours are drawn.</param>
+      /// <param name="color">Color of the contours </param>
       /// <param name="maxLevel">Maximal level for drawn contours. If 0, only contour is drawn. If 1, the contour and all contours after it on the same level are drawn. If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level. </param>
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative the contour interiors are drawn</param>
       /// <param name="lineType">Type of the contour segments</param>
+      /// <param name="hierarchy">Optional information about hierarchy. It is only needed if you want to draw only some of the contours</param>
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
       public static void DrawContours(
          IInputOutputArray image,
          IInputArray contours,
          int contourIdx,
          MCvScalar color,
-         int thickness,
-         CvEnum.LineType lineType,
-         IInputArray hierarchy,
-         int maxLevel,
+         int thickness =1,
+         CvEnum.LineType lineType = LineType.EightConnected,
+         IInputArray hierarchy = null,
+         int maxLevel = int.MaxValue,
          Point offset = new Point())
       {
          cveDrawContours(

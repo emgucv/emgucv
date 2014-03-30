@@ -109,11 +109,18 @@ namespace Emgu.CV
          Debug.Assert(typeof(TDepth) == typeof(float) || typeof(TDepth) == typeof(Double), "Only type of double or float is supported");
          Debug.Assert(points.NumberOfChannels == 1 && points.Cols == 2, "The matrix must be a single channel Nx2 matrix where N is the number of points");
 
-         using (Matrix<TDepth> tmp = new Matrix<TDepth>(points.Rows, 3))
+         CvEnum.DepthType dt = CvInvoke.GetDepthType(typeof (TDepth));
+
+         using (Mat tmp = new Mat(points.Rows, 3, CvInvoke.GetDepthType(typeof(TDepth)), 1))
+         using (Mat rotationMatrix = new Mat(Rows, Cols, CvInvoke.GetDepthType(typeof(TDepth)), 1))
          {
             CvInvoke.CopyMakeBorder(points, tmp, 0, 0, 0, 1, Emgu.CV.CvEnum.BorderType.Constant, new MCvScalar(1.0));
-
-            Matrix<TDepth> rotationMatrix = this as Matrix<TDepth> ?? Convert<TDepth>();
+            if (typeof(T).Equals(typeof(TDepth)))
+               this.Mat.CopyTo(rotationMatrix);
+            else
+               this.Mat.ConvertTo(rotationMatrix, CvInvoke.GetDepthType(typeof(TDepth)));
+            
+            //Matrix<TDepth> rotationMatrix = this as Matrix<TDepth> ?? Convert<TDepth>();
 
             CvInvoke.Gemm(
                tmp,
@@ -124,7 +131,7 @@ namespace Emgu.CV
                points,
                Emgu.CV.CvEnum.GemmType.Src2Transpose);
             
-            if (!Object.ReferenceEquals(rotationMatrix, this)) rotationMatrix.Dispose();
+            //if (!Object.ReferenceEquals(rotationMatrix, this)) rotationMatrix.Dispose();
          }
       }
 

@@ -4,12 +4,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 using Emgu.CV.Nonfree;
 
@@ -17,33 +20,38 @@ namespace TrafficSignRecognition
 {
    public class StopSignDetector : DisposableObject
    {
-      private Features2DTracker<float> _tracker;
+      private VectorOfKeyPoint _modelKeypoints;
+      private Mat _modelDescriptors;
+      
+      //private Features2DTracker<float> _tracker;
       private SURFDetector _detector;
-      private MemStorage _octagonStorage;
-      private Contour<Point> _octagon;
+      
+      private VectorOfPoint _octagon;
 
       public StopSignDetector(Image<Bgr, Byte> stopSignModel)
       {
          _detector = new SURFDetector(500);
          using (Image<Gray, Byte> redMask = GetRedPixelMask(stopSignModel))
          {
-            ImageFeature<float>[] features = _detector.DetectAndCompute(redMask, null);
-            if (features.Length == 0)
+            _modelKeypoints = new VectorOfKeyPoint();
+            _modelDescriptors = new Mat();
+            _detector.DetectAndCompute(redMask, null, _modelKeypoints, _modelDescriptors, false);
+            if (_modelKeypoints.Size == 0)
                throw new Exception("No image feature has been found in the stop sign model");
-            _tracker = new Features2DTracker<float>(features);  
          }
-         _octagonStorage = new MemStorage();
-         _octagon = new Contour<Point>(_octagonStorage);
-         _octagon.PushMulti(new Point[] { 
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(3, 1),
-            new Point(3, 2),
-            new Point(2, 3),
-            new Point(1, 3),
-            new Point(0, 2),
-            new Point(0, 1)},
-            Emgu.CV.CvEnum.BackOrFront.Front);
+         _octagon = new VectorOfPoint(
+            new Point[]
+            {
+               new Point(1, 0),
+               new Point(2, 0),
+               new Point(3, 1),
+               new Point(3, 2),
+               new Point(2, 3),
+               new Point(1, 3),
+               new Point(0, 2),
+               new Point(0, 1)
+            });
+         
       }
 
       /// <summary>
@@ -80,57 +88,69 @@ namespace TrafficSignRecognition
          }
       }
 
-      private void FindStopSign(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList, Contour<Point> contours)
+      private void FindStopSign(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList, VectorOfVectorOfPoint contours, int[,] hierachy, int idx1)
       {
-         for (; contours != null; contours = contours.HNext)
+         for (VectorOfPoint c = contours[idx1]; hierachy[idx1,0] >= 0;  c = contours[hierachy[idx1,0]], idx1 = hierachy[idx1,0])
          {
-            contours.ApproxPoly(contours.Perimeter * 0.02, 0, contours.Storage);
-            if (contours.Area > 200)
+            using (VectorOfPoint approx = new VectorOfPoint())
             {
-               double ratio = CvInvoke.cvMatchShapes(_octagon, contours, Emgu.CV.CvEnum.ContoursMatchType.I3, 0);
-
-               if (ratio > 0.1) //not a good match of contour shape
+               CvInvoke.ApproxPolyDP(c, approx, CvInvoke.ArcLength(c, true)*0.02, true);
+               if (CvInvoke.ContourArea(c) > 200)
                {
-                  Contour<Point> child = contours.VNext;
-                  if (child != null)
-                     FindStopSign(img, stopSignList, boxList, child);
-                  continue;
-               }
+                  double ratio = CvInvoke.MatchShapes(_octagon, c, Emgu.CV.CvEnum.ContoursMatchType.I3, 0);
 
-               Rectangle box = contours.BoundingRectangle;
-
-               Image<Gray, Byte> candidate;
-               using (Image<Bgr, Byte> tmp = img.Copy(box))
-                  candidate = tmp.Convert<Gray, byte>();
-
-               //set the value of pixels not in the contour region to zero
-               using (Image<Gray, Byte> mask = new Image<Gray, byte>(box.Size))
-               {
-                  mask.Draw(contours, new Gray(255), new Gray(255), 0, -1, new Point(-box.X, -box.Y));
-
-                  double mean = CvInvoke.Mean(candidate, mask).V0;
-                  candidate._ThresholdBinary(new Gray(mean), new Gray(255.0));
-                  candidate._Not();
-                  mask._Not();
-                  candidate.SetValue(0, mask);
-               }
-
-               ImageFeature<float>[] features = _detector.DetectAndCompute(candidate, null);
-
-               int minMatchCount = 10;
-
-               if (features != null && features.Length >= minMatchCount)
-               {
-                  Features2DTracker<float>.MatchedImageFeature[] matchedFeatures = _tracker.MatchFeature(features, 2);
-
-                  int goodMatchCount = 0;
-                  foreach (Features2DTracker<float>.MatchedImageFeature ms in matchedFeatures)
-                     if (ms.SimilarFeatures[0].Distance < 0.5) goodMatchCount++;
-
-                  if (goodMatchCount >= minMatchCount)
+                  if (ratio > 0.1) //not a good match of contour shape
                   {
-                     boxList.Add(box);
-                     stopSignList.Add(candidate);
+                     if (hierachy[idx1,0] >= 0)
+                        FindStopSign(img, stopSignList, boxList, contours, hierachy, hierachy[idx1,0]);
+                     continue;
+                  }
+
+                  Rectangle box = CvInvoke.BoundingRectangle(c);
+
+                  Image<Gray, Byte> candidate;
+                  using (Image<Bgr, Byte> tmp = img.Copy(box))
+                     candidate = tmp.Convert<Gray, byte>();
+
+                  //set the value of pixels not in the contour region to zero
+                  using (Image<Gray, Byte> mask = new Image<Gray, byte>(box.Size))
+                  {
+                     mask.Draw(contours, idx1,  new Gray(255), -1, LineType.EightConnected, null, int.MaxValue, new Point(-box.X, -box.Y));
+
+                     double mean = CvInvoke.Mean(candidate, mask).V0;
+                     candidate._ThresholdBinary(new Gray(mean), new Gray(255.0));
+                     candidate._Not();
+                     mask._Not();
+                     candidate.SetValue(0, mask);
+                  }
+
+                  int minMatchCount = 10;
+                  double uniquenessThreshold = 0.8;
+                  VectorOfKeyPoint _observeredKeypoint = new VectorOfKeyPoint();
+                  Mat _observeredDescriptor = new Mat();
+                  _detector.DetectAndCompute(candidate, null, _observeredKeypoint, _observeredDescriptor, false);
+                  
+                  if ( _observeredKeypoint.Size >= minMatchCount)
+                  {
+                     BruteForceMatcher matcher = new BruteForceMatcher(DistanceType.L2);
+                     matcher.Add(_modelDescriptors);
+                     int k = 2;
+                     Matrix<int> indices = new Matrix<int>(_observeredDescriptor.Size.Height, k);
+                     Matrix<byte> mask;
+                     using (Matrix<float> dist = new Matrix<float>(_observeredDescriptor.Size.Height, k))
+                     {
+                        matcher.KnnMatch(_observeredDescriptor, indices, dist, k, null);
+                        mask = new Matrix<byte>(dist.Rows, 1);
+                        mask.SetValue(255);
+                        Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
+                     }
+
+                     int nonZeroCount = CvInvoke.CountNonZero(mask);
+                     if (nonZeroCount >= minMatchCount)
+                     {
+                        boxList.Add(box);
+                        stopSignList.Add(candidate);
+                     }
                   }
                }
             }
@@ -147,20 +167,33 @@ namespace TrafficSignRecognition
          smoothedRedMask._Erode(1);
 
          using (Image<Gray, Byte> canny = smoothedRedMask.Canny(100, 50))
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
          {
-            Contour<Point> contours = canny.FindContours(
-               Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
-               Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_TREE,
-               stor);
-            FindStopSign(img, stopSignList, boxList, contours);
+            int[,] hierachy = CvInvoke.FindContourTree(canny, contours, ChainApproxMethod.ChainApproxSimple);
+            
+            if (hierachy.GetLength(0) > 0)
+               FindStopSign(img, stopSignList, boxList, contours, hierachy, 0);
          }
+
       }
 
       protected override void DisposeObject()
       {
-         _tracker.Dispose();
-         _octagonStorage.Dispose();
+         if (_modelKeypoints != null)
+         {
+            _modelKeypoints.Dispose();
+            _modelKeypoints = null;
+         }
+         if (_modelDescriptors != null)
+         {
+            _modelDescriptors.Dispose();
+            _modelDescriptors = null;
+         }
+         if (_octagon != null)
+         {
+            _octagon.Dispose();
+            _octagon = null;
+         }
       }
    }
 }

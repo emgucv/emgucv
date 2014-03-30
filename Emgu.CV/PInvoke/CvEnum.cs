@@ -143,17 +143,6 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
-   /// Polygon approximation type
-   /// </summary>
-   public enum ApproxPolyType
-   {
-      /// <summary>
-      /// Douglas-Peucker algorithm
-      /// </summary>
-      CvPolyApproxDp = 0
-   }
-
-   /// <summary>
    /// CV Capture property identifier
    /// </summary>
    public enum CapProp
@@ -2847,6 +2836,7 @@ namespace Emgu.CV.CvEnum
       PrevAroundRight = 0x02
    }
 
+   
    /// <summary>
    /// orientation
    /// </summary>

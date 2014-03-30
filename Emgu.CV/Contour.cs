@@ -174,6 +174,7 @@ namespace Emgu.CV
          }
       }
 
+      /*
       /// <summary>
       /// Approximates one curves and returns the approximation result. 
       /// </summary>
@@ -185,6 +186,7 @@ namespace Emgu.CV
          return ApproxPoly(accuracy, 0, storage);
       }
 
+      
       /// <summary>
       /// Approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
       /// </summary>
@@ -218,6 +220,6 @@ namespace Emgu.CV
       public new Contour<T> ApproxPoly(double accuracy)
       {
          return ApproxPoly(accuracy, _stor);
-      }
+      }*/
    }
 }

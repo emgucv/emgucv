@@ -35,7 +35,7 @@ namespace LicensePlateRecognition
 
          List<Image<Gray, Byte>> licensePlateImagesList = new List<Image<Gray, byte>>();
          List<Image<Gray, Byte>> filteredLicensePlateImagesList = new List<Image<Gray, byte>>();
-         List<MCvBox2D> licenseBoxList = new List<MCvBox2D>();
+         List<RotatedRect> licenseBoxList = new List<RotatedRect>();
          List<string> words = _licensePlateDetector.DetectLicensePlate(
             image,
             licensePlateImagesList,

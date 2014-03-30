@@ -108,6 +108,11 @@ cv::Mat* cvMatCreateWithData(int rows, int cols, int type, void* data, size_t st
    return new cv::Mat(rows, cols, type, data, step);
 }
 
+cv::Mat* cvMatCreateFromRect(cv::Mat* mat, CvRect* roi)
+{
+   return new cv::Mat(*mat, *roi);
+}
+
 void cvMatRelease(cv::Mat** mat)
 {
    delete *mat;

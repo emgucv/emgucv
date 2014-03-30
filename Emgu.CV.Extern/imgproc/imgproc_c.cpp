@@ -287,7 +287,10 @@ double cveCompareHist(cv::_InputArray* h1, cv::_InputArray* h2, int method)
 void cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D)
 {
    cv::Mat r = cv::getRotationMatrix2D(*center, angle, scale);
-   r.copyTo(*rotationMatrix2D);
+   if (rotationMatrix2D->empty() || r.type() == rotationMatrix2D->type())
+      r.copyTo(*rotationMatrix2D);
+   else
+      r.convertTo(*rotationMatrix2D, rotationMatrix2D->type());
 }
 
 void cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, CvPoint* offset)

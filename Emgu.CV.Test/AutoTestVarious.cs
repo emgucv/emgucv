@@ -1272,17 +1272,16 @@ namespace Emgu.CV.Test
             img.Draw(new CircleF(p, 3), new Bgr(0.0, 0.0, 0.0), 1);
 
          //Find and draw the convex hull
-         using (MemStorage storage = new MemStorage())
-         {
+
             Stopwatch watch = Stopwatch.StartNew();
-            PointF[] hull = PointCollection.ConvexHull(pts, storage, Emgu.CV.CvEnum.Orientation.Clockwise).ToArray();
+            PointF[] hull = CvInvoke.ConvexHull(pts, true);
             watch.Stop();
             img.DrawPolyline(
                 Array.ConvertAll<PointF, Point>(hull, Point.Round),
                 true, new Bgr(255.0, 0.0, 0.0), 1);
 
             //ImageViewer.Show(img, String.Format("Convex Hull Computed in {0} milliseconds", watch.ElapsedMilliseconds));
-         }
+         
       }
 
       [Test]
@@ -1467,7 +1466,7 @@ namespace Emgu.CV.Test
          #endregion
 
          Stopwatch watch = Stopwatch.StartNew();
-         RotatedRect box = PointCollection.MinAreaRect(pts);
+         RotatedRect box = CvInvoke.MinAreaRect(pts);
          watch.Stop();
 
          #region draw the points and the box
@@ -1477,7 +1476,7 @@ namespace Emgu.CV.Test
             img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
          #endregion
 
-         //ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
       [Test]

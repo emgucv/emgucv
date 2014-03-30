@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-
+using Emgu.CV.CvEnum;
 #if ANDROID
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
@@ -928,26 +928,23 @@ namespace Emgu.CV
         /// <summary>
         /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
         /// </summary>
-        /// <param name="c">Pointer to the first contour</param>
-        /// <param name="externalColor">Color of the external contours</param>
-        /// <param name="holeColor">Color of internal contours (holes). </param>
-        /// <param name="maxLevel">
-        /// Maximal level for drawn contours.
-        /// If 0, only contour is drawn.
-        /// If 1, the contour and all contours after it on the same level are drawn.
-        /// If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
-        /// </param>
-        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
-        /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering</param>
+        /// <param name="contours">All the input contours. Each contour is stored as a point vector.</param>
+        /// <param name="contourIdx">Parameter indicating a contour to draw. If it is negative, all the contours are drawn.</param>
+        /// <param name="color">Color of the contours </param>
+        /// <param name="maxLevel">Maximal level for drawn contours. If 0, only contour is drawn. If 1, the contour and all contours after it on the same level are drawn. If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level. </param>
+        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative the contour interiors are drawn</param>
+        /// <param name="lineType">Type of the contour segments</param>
+        /// <param name="hierarchy">Optional information about hierarchy. It is only needed if you want to draw only some of the contours</param>
+        /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
         public void Draw(
-      IInputArray contours,
-      int contourIdx,
-      TColor color,
-      int thickness,
-      CvEnum.LineType lineType,
-      IInputArray hierarchy,
-      int maxLevel,
-      Point offset = new Point())
+         IInputArray contours,
+         int contourIdx,
+         TColor color,
+         int thickness = 1,
+         CvEnum.LineType lineType = CvEnum.LineType.EightConnected,
+         IInputArray hierarchy = null,
+         int maxLevel = int.MaxValue,
+         Point offset = new Point())
         {
             CvInvoke.DrawContours(
           this,
@@ -964,8 +961,8 @@ namespace Emgu.CV
       public void Draw(
          Point[] contours,
          TColor color,
-         int thickness,
-         CvEnum.LineType lineType,
+         int thickness = 1,
+         CvEnum.LineType lineType = CvEnum.LineType.EightConnected,
          Point offset = new Point())
       {
          using (VectorOfPoint vp = new VectorOfPoint(contours))
@@ -1467,7 +1464,6 @@ namespace Emgu.CV
       /// <param name="gamma">Weight[s] of image energy, similar to alpha.</param>
       /// <param name="windowSize">Size of neighborhood of every point used to search the minimum, both win.width and win.height must be odd</param>
       /// <param name="tc">Termination criteria. The parameter criteria.epsilon is used to define the minimal number of points that must be moved during any iteration to keep the iteration process running. If at some iteration the number of moved points is less than criteria.epsilon or the function performed criteria.max_iter iterations, the function terminates. </param>
-      /// <param name="storage">The memory storage used by the resulting sequence</param>
       /// <returns>The snake[d] contour</returns>
       public void Snake(Point[] contour, float alpha, float beta, float gamma, Size windowSize, MCvTermCriteria tc)
       {
@@ -4420,7 +4416,7 @@ namespace Emgu.CV
       /// <summary>
       /// Offset of roi
       /// </summary>
-      public static readonly int RoiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "roi");
+      public static readonly int RoiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "Roi");
    }
 
    internal enum ImageDataReleaseMode

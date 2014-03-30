@@ -187,33 +187,7 @@ namespace Emgu.CV
          return res;
       }
 
-      /// <summary>
-      /// Finds convex hull of 2D point set using Sklansky's algorithm
-      /// </summary>
-      /// <param name="points">The points to find convex hull from</param>
-      /// <param name="storage">the storage used by the resulting sequence</param>
-      /// <param name="orientation">The orientation of the convex hull</param>
-      /// <returns>The convex hull of the points</returns>
-      public static Seq<PointF> ConvexHull(PointF[] points, MemStorage storage, CvEnum.Orientation orientation)
-      {
-         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvSeq);
-         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
-         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
-            StructSize.MCvSeq,
-            StructSize.PointF,
-            handle.AddrOfPinnedObject(),
-            points.Length,
-            seq,
-            block);
 
-         Seq<PointF> convexHull = new Seq<PointF>(CvInvoke.cvConvexHull2(seq, storage.Ptr, orientation, 1), storage);
-         handle.Free();
-         Marshal.FreeHGlobal(seq);
-         Marshal.FreeHGlobal(block);
-         return convexHull;
-      }
 
       /// <summary>
       /// Find the bounding rectangle for the specific array of points
@@ -226,30 +200,7 @@ namespace Emgu.CV
          return CvInvoke.BoundingRectangle(ptVec);
       }
 
-      /// <summary>
-      /// Find the bounding rectangle for the specific array of points
-      /// </summary>
-      /// <param name="points">The collection of points</param>
-      /// <returns>The bounding rectangle for the array of points</returns>
-      public static RotatedRect MinAreaRect(PointF[] points)
-      {
-         IntPtr seq = Marshal.AllocHGlobal(StructSize.MCvContour);
-         IntPtr block = Marshal.AllocHGlobal(StructSize.MCvSeqBlock);
-         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         CvInvoke.cvMakeSeqHeaderForArray(
-            CvInvoke.MakeType(CvEnum.DepthType.Cv32F, 2),
-            StructSize.MCvSeq,
-            StructSize.PointF,
-            handle.AddrOfPinnedObject(),
-            points.Length,
-            seq,
-            block);
-         RotatedRect rect = CvInvoke.cvMinAreaRect2(seq, IntPtr.Zero);
-         handle.Free();
-         Marshal.FreeHGlobal(seq);
-         Marshal.FreeHGlobal(block);
-         return rect;
-      }
+      
 
       /*
       /// <summary>

@@ -8,8 +8,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace LicensePlateRecognition
@@ -81,60 +83,60 @@ namespace LicensePlateRecognition
          Image<Bgr, byte> img, 
          List<Image<Gray, Byte>> licensePlateImagesList, 
          List<Image<Gray, Byte>> filteredLicensePlateImagesList, 
-         List<MCvBox2D> detectedLicensePlateRegionList)
+         List<RotatedRect> detectedLicensePlateRegionList)
       {
          List<String> licenses = new List<String>();
          using (Image<Gray, byte> gray = img.Convert<Gray, Byte>())
          //using (Image<Gray, byte> gray = GetWhitePixelMask(img))
-         using (Image<Gray, Byte> canny = new Image<Gray, byte>(gray.Size))
-         using (MemStorage stor = new MemStorage())
+         using (Mat canny = new Mat())
+         using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
          {
             CvInvoke.Canny(gray, canny, 100, 50, 3, false);
+            int[,] hierachy = CvInvoke.FindContourTree(canny, contours, ChainApproxMethod.ChainApproxSimple);
             
-            Contour<Point> contours = canny.FindContours(
-                 Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
-                 Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_TREE,
-                 stor);
-            FindLicensePlate(contours, gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
+            FindLicensePlate(contours, hierachy, 0, gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
          }
          return licenses;
       }
 
-      private static int GetNumberOfChildren(Contour<Point> contours)
+      private static int GetNumberOfChildren(int[,] hierachy, int idx)
       {
-         Contour<Point> child = contours.VNext;
-         if (child == null) return 0;
-         int count = 0;
-         while (child != null)
+         //first child
+         idx = hierachy[idx,2];
+         if (hierachy[idx,2] < 0)
+            return 0;
+         
+         int count = 1;
+         while (hierachy[idx,0] > 0)
          {
             count++;
-            child = child.HNext;
+            idx = hierachy[idx,0];
          }
          return count;
       }
 
       private void FindLicensePlate(
-         Contour<Point> contours, Image<Gray, Byte> gray, Image<Gray, Byte> canny,
-         List<Image<Gray, Byte>> licensePlateImagesList, List<Image<Gray, Byte>> filteredLicensePlateImagesList, List<MCvBox2D> detectedLicensePlateRegionList,
+         VectorOfVectorOfPoint contours, int[,] hierachy, int idx, Image<Gray, Byte> gray, Mat canny,
+         List<Image<Gray, Byte>> licensePlateImagesList, List<Image<Gray, Byte>> filteredLicensePlateImagesList, List<RotatedRect> detectedLicensePlateRegionList,
          List<String> licenses)
       {
-         for (; contours != null; contours = contours.HNext)
+         for (VectorOfPoint contour = contours[idx]; hierachy[idx,0] >= 0;  contour = contours[hierachy[idx,0]], idx = hierachy[idx,0])
          {
-            int numberOfChildren = GetNumberOfChildren(contours);      
+            int numberOfChildren = GetNumberOfChildren(hierachy, idx);      
             //if it does not contains any children (charactor), it is not a license plate region
             if (numberOfChildren == 0) continue;
 
-            if (contours.Area > 400)
+            if (CvInvoke.ContourArea(contour) > 400)
             {
                if (numberOfChildren < 3) 
                {
                   //If the contour has less than 3 children, it is not a license plate (assuming license plate has at least 3 charactor)
                   //However we should search the children of this contour to see if any of them is a license plate
-                  FindLicensePlate(contours.VNext, gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
+                  FindLicensePlate(contours, hierachy, hierachy[idx,2], gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
                   continue;
                }
 
-               MCvBox2D box = contours.GetMinAreaRect();
+               RotatedRect box = CvInvoke.MinAreaRect(contour);
                if (box.Angle < -45.0)
                {
                   float tmp = box.Size.Width;
@@ -155,9 +157,9 @@ namespace LicensePlateRecognition
                //if (!(1.0 < whRatio && whRatio < 2.0))
                {  //if the width height ratio is not in the specific range,it is not a license plate 
                   //However we should search the children of this contour to see if any of them is a license plate
-                  Contour<Point> child = contours.VNext;
-                  if (child != null)
-                     FindLicensePlate(child, gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
+                  //Contour<Point> child = contours.VNext;
+                  if (hierachy[idx,2] > 0)
+                     FindLicensePlate(contours, hierachy, hierachy[idx,2], gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
                   continue;
                }
 
@@ -208,25 +210,27 @@ namespace LicensePlateRecognition
 
          using (Image<Gray, Byte> plateMask = new Image<Gray, byte>(plate.Size))
          using (Image<Gray, Byte> plateCanny = plate.Canny(100, 50))
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
          {
             plateMask.SetValue(255.0);
-            for (
-               Contour<Point> contours = plateCanny.FindContours(
-                  Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
-                  Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_EXTERNAL,
-                  stor);
-               contours != null; 
-               contours = contours.HNext)
-            {
-               Rectangle rect = contours.BoundingRectangle;
-               if (rect.Height > (plate.Height >> 1))
-               {
-                  rect.X -= 1; rect.Y -= 1; rect.Width += 2; rect.Height += 2;
-                  rect.Intersect(plate.ROI);
+            CvInvoke.FindContours(plateCanny, contours, null, RetrType.External, ChainApproxMethod.ChainApproxSimple);
 
-                  plateMask.Draw(rect, new Gray(0.0), -1);
+            int count = contours.Size;
+            for (int i = 1; i < count; i++)
+            {
+               using (VectorOfPoint contour = contours[i])
+               {
+
+                  Rectangle rect = CvInvoke.BoundingRectangle(contour);
+                  if (rect.Height > (plate.Height >> 1))
+                  {
+                     rect.X -= 1; rect.Y -= 1; rect.Width += 2; rect.Height += 2;
+                     rect.Intersect(plate.ROI);
+
+                     plateMask.Draw(rect, new Gray(0.0), -1);
+                  }
                }
+
             }
 
             thresh.SetValue(0, plateMask);

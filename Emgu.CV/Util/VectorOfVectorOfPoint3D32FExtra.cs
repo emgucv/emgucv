@@ -26,8 +26,10 @@ namespace Emgu.CV.Util
          MCvPoint3D32f[][] res = new MCvPoint3D32f[size][];
          for (int i = 0; i < size; i++)
          {
-            VectorOfPoint3D32F v = this[i];
-            res[i] = v.ToArray();
+            using (VectorOfPoint3D32F v = this[i])
+            {
+               res[i] = v.ToArray();
+            }
          }
          return res;
       }

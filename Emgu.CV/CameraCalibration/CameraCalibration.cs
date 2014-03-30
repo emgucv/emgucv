@@ -44,8 +44,8 @@ namespace Emgu.CV
          using (VectorOfVectorOfPointF vvImgPts = new VectorOfVectorOfPointF(imagePoints))
          {
             double reprojectionError = -1;
-            using (Matrix<double> rotationVectors = new Matrix<double>(imageCount, 3))
-            using (Matrix<double> translationVectors = new Matrix<double>(imageCount, 3))
+            using (VectorOfMat rotationVectors = new VectorOfMat())
+            using (VectorOfMat translationVectors = new VectorOfMat())
             {
                Mat cameraMat = new Mat();
                Mat distorCoeff = new Mat();
@@ -64,10 +64,10 @@ namespace Emgu.CV
                for (int i = 0; i < imageCount; i++)
                {
                   ExtrinsicCameraParameters p = new ExtrinsicCameraParameters();
-                  using (Matrix<double> matR = rotationVectors.GetRow(i))
-                     CvInvoke.Transpose(matR, p.RotationVector);
-                  using (Matrix<double> matT = translationVectors.GetRow(i))
-                     CvInvoke.Transpose(matT, p.TranslationVector);
+                  using (Mat matR = rotationVectors[i])
+                     matR.CopyTo(p.RotationVector);
+                  using (Mat matT = translationVectors[i])
+                     matT.CopyTo( p.TranslationVector);
                   extrinsicParams[i] = p;
                }
             }

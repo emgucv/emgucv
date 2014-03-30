@@ -13,6 +13,7 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.Util;
@@ -29,6 +30,16 @@ namespace Emgu.CV.Test
          Mat m = new Mat();
          m.Create(10, 12, CvEnum.DepthType.Cv8U, 1);
          m.Create(18, 22, CvEnum.DepthType.Cv64F, 3);
+      }
+
+      [Test]
+      public void TestArrToMat()
+      {
+         Matrix<float> m = new Matrix<float>(320, 240);
+         Mat mat = new Mat();
+         m.Mat.CopyTo(mat);
+         Assert.IsTrue(m.Mat.Depth == DepthType.Cv32F);
+         Assert.IsTrue(mat.Depth == DepthType.Cv32F);
       }
    }
 }

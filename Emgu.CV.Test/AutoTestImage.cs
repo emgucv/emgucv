@@ -16,6 +16,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
+using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.Util;
 using NUnit.Framework;
@@ -474,6 +475,7 @@ namespace Emgu.CV.Test
 
       }
 
+      //TODO: Check out what is wrong with this
       [Test]
       public void TestRotation()
       {
@@ -499,31 +501,6 @@ namespace Emgu.CV.Test
             Rectangle[] objects = cascade.DetectMultiScale(image, 1.05, 0, new Size(10, 10), Size.Empty);
             foreach (Rectangle obj in objects)
                image.Draw(obj, new Gray(0.0), 1);
-
-            /*
-            using (MemStorage stor = new MemStorage())
-            {
-               IntPtr objs = CvInvoke
-                             image.Ptr,
-                             cascade.Ptr,
-                             stor.Ptr,
-                             1.05,
-                             0,
-                             Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                             new Size(10, 10),
-                             Size.Empty);
-
-               if (objs != IntPtr.Zero)
-               {
-                  Seq<MCvAvgComp> rects = new Seq<MCvAvgComp>(objs, stor);
-
-                  MCvAvgComp[] rect = rects.ToArray();
-                  for (int i = 0; i < rects.Total; i++)
-                  {
-                     EmguAssert.IsTrue(rect[i].rect.Equals(rects[i].rect));
-                  }
-               }
-            }*/
          }
          TestOpenCL(delegate
                   {
@@ -860,9 +837,8 @@ namespace Emgu.CV.Test
          img.Draw(pts, new Gray(120), 1, LineType.EightConnected);
          canny.Snake(pts, 1.0f, 1.0f, 1.0f, new Size(21, 21), new MCvTermCriteria(40, 0.0002));
 
-
          img.Draw(pts, new Gray(80), 2, LineType.EightConnected);
-         
+         //ImageViewer.Show(img);
       }
 
       [Test]
@@ -1043,6 +1019,13 @@ namespace Emgu.CV.Test
          res.SetValue(255);
 
          using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
+         using (Mat hierachy = new Mat())
+         {
+            CvInvoke.FindContours(img, contours, hierachy, RetrType.Tree, ChainApproxMethod.ChainApproxSimple);
+            
+         }
+
+         using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
          //using (VectorOfVectorOfInt hierarchy = new VectorOfVectorOfInt())
          {
             CvInvoke.FindContours(img, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
@@ -1072,7 +1055,7 @@ namespace Emgu.CV.Test
             }
             contour = contour.HNext;
          }*/
-         Emgu.CV.UI.ImageViewer.Show(res);
+         //Emgu.CV.UI.ImageViewer.Show(res);
       }
 
       public void TestContour2()

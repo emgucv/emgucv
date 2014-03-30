@@ -10,8 +10,10 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using System.Diagnostics;
+using Emgu.CV.Util;
 
 namespace ShapeDetection
 {
@@ -72,52 +74,55 @@ namespace ShapeDetection
             #region Find triangles and rectangles
             watch.Reset(); watch.Start();
             List<Triangle2DF> triangleList = new List<Triangle2DF>();
-            List<MCvBox2D> boxList = new List<MCvBox2D>(); //a box is a rotated rectangle
-            using (MemStorage storage = new MemStorage()) //allocate storage for contour approximation
-               for (
-                  Contour<Point> contours = cannyEdges.FindContours(
-                     Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
-                     Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST,
-                     storage);
-                  contours != null;
-                  contours = contours.HNext)
+            List<RotatedRect> boxList = new List<RotatedRect>(); //a box is a rotated rectangle
+
+            using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
+            {
+               CvInvoke.FindContours(cannyEdges, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple );
+               int count = contours.Size;
+               for (int i = 0; i < count; i++)
                {
-                  Contour<Point> currentContour = contours.ApproxPoly(contours.Perimeter * 0.05, storage);
-
-                  if (currentContour.Area > 250) //only consider contours with area greater than 250
+                  using (VectorOfPoint contour = contours[i])
+                  using (VectorOfPoint approxContour = new VectorOfPoint())
                   {
-                     if (currentContour.Total == 3) //The contour has 3 vertices, it is a triangle
-                     {
-                        Point[] pts = currentContour.ToArray();
-                        triangleList.Add(new Triangle2DF(
-                           pts[0],
-                           pts[1],
-                           pts[2]
-                           ));
-                     }
-                     else if (currentContour.Total == 4) //The contour has 4 vertices.
-                     {
-                        #region determine if all the angles in the contour are within [80, 100] degree
-                        bool isRectangle = true;
-                        Point[] pts = currentContour.ToArray();
-                        LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
 
-                        for (int i = 0; i < edges.Length; i++)
+                     CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.05, true);
+                     if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contours with area greater than 250
+                     {
+                        if (approxContour.Size == 3) //The contour has 3 vertices, it is a triangle
                         {
-                           double angle = Math.Abs(
-                              edges[(i + 1) % edges.Length].GetExteriorAngleDegree(edges[i]));
-                           if (angle < 80 || angle > 100)
-                           {
-                              isRectangle = false;
-                              break;
-                           }
-                        }
-                        #endregion
+                           Point[] pts = approxContour.ToArray();
+                           triangleList.Add(new Triangle2DF(
+                              pts[0],
+                              pts[1],
+                              pts[2]
+                              ));
+                        } else if (approxContour.Size == 4) //The contour has 4 vertices.
+                        {
+                           #region determine if all the angles in the contour are within [80, 100] degree
+                           bool isRectangle = true;
+                           Point[] pts = approxContour.ToArray();
+                           LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
 
-                        if (isRectangle) boxList.Add(currentContour.GetMinAreaRect());
+                           for (int j = 0; j < edges.Length; j++)
+                           {
+                              double angle = Math.Abs(
+                                 edges[(j + 1) % edges.Length].GetExteriorAngleDegree(edges[j]));
+                              if (angle < 80 || angle > 100)
+                              {
+                                 isRectangle = false;
+                                 break;
+                              }
+                           }
+                           #endregion
+
+                           if (isRectangle) boxList.Add(CvInvoke.MinAreaRect(approxContour));
+                        }
                      }
                   }
                }
+            }
+
             watch.Stop();
             msgBuilder.Append(String.Format("Triangles & Rectangles - {0} ms; ", watch.ElapsedMilliseconds));
             #endregion
@@ -129,7 +134,7 @@ namespace ShapeDetection
             Image<Bgr, Byte> triangleRectangleImage = img.CopyBlank();
             foreach (Triangle2DF triangle in triangleList)
                triangleRectangleImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
-            foreach (MCvBox2D box in boxList)
+            foreach (RotatedRect box in boxList)
                triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
             triangleRectangleImageBox.Image = triangleRectangleImage;
             #endregion

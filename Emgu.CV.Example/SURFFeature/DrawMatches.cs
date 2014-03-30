@@ -111,7 +111,6 @@ namespace SURFFeatureExample
                   Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
                }
 
-               
                int nonZeroCount = CvInvoke.CountNonZero(mask);
                if (nonZeroCount >= 4)
                {

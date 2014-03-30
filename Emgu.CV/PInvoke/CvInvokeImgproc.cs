@@ -6,6 +6,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
@@ -448,11 +449,14 @@ namespace Emgu.CV
       /// <returns>The four vertices of rectangles.</returns>
       public static PointF[] BoxPoints(RotatedRect box)
       {
-         using (VectorOfPointF vp = new VectorOfPointF())
+         PointF[] pts = new PointF[4];
+         GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);
+         using (Mat vp = new Mat(4, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), 8))
          {
             cveBoxPoints(ref box, vp.OutputArrayPtr);
-            return vp.ToArray();
          }
+         handle.Free();
+         return pts;
       }
 
       /// <summary>
@@ -483,20 +487,42 @@ namespace Emgu.CV
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFitEllipse(IntPtr points, ref RotatedRect ellipse);
 
+
+      /// <summary>
+      /// Finds convex hull of 2D point set using Sklansky's algorithm
+      /// </summary>
+      /// <param name="points">The points to find convex hull from</param>
+      /// <param name="clockwise">Orientation flag. If it is true, the output convex hull is oriented clockwise. Otherwise, it is oriented counter-clockwise. The assumed coordinate system has its X axis pointing to the right, and its Y axis pointing upwards.</param>
+      /// <returns>The convex hull of the points</returns>
+      public static PointF[] ConvexHull(PointF[] points, bool clockwise = false)
+      {
+         using (VectorOfPointF vpf = new VectorOfPointF(points))
+         using (VectorOfPointF hull = new VectorOfPointF())
+         {
+            CvInvoke.ConvexHull(vpf, hull, clockwise, true);
+            return hull.ToArray();
+         }
+      }
+
       /// <summary>
       /// The function cvConvexHull2 finds convex hull of 2D point set using Sklansky's algorithm. 
       /// </summary>
-      /// <param name="input">Sequence or array of 2D points with 32-bit integer or floating-point coordinates</param>
-      /// <param name="hullStorage">The destination array (CvMat*) or memory storage (CvMemStorage*) that will store the convex hull. If it is array, it should be 1d and have the same number of elements as the input array/sequence. On output the header is modified so to truncate the array downto the hull size</param>
-      /// <param name="orientation">Desired orientation of convex hull: CV_CLOCKWISE or CV_COUNTER_CLOCKWISE</param>
-      /// <param name="returnPoints">If non-zero, the points themselves will be stored in the hull instead of indices if hull_storage is array, or pointers if hull_storage is memory storage</param>
-      /// <returns>If hull_storage is memory storage, the function creates a sequence containing the hull points or pointers to them, depending on return_points value and returns the sequence on output</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvConvexHull2(
-          IntPtr input,
-          IntPtr hullStorage,
-          CvEnum.Orientation orientation,
-          int returnPoints);
+      /// <param name="points"> Input 2D point set</param>
+      /// <param name="hull">Output convex hull. It is either an integer vector of indices or vector of points. In the first case, the hull elements are 0-based indices of the convex hull points in the original array (since the set of convex hull points is a subset of the original point set). In the second case, hull elements are the convex hull points themselves.</param>
+      /// <param name="clockwise">Orientation flag. If it is true, the output convex hull is oriented clockwise. Otherwise, it is oriented counter-clockwise. The assumed coordinate system has its X axis pointing to the right, and its Y axis pointing upwards.</param>
+      /// <param name="returnPoints">Operation flag. In case of a matrix, when the flag is true, the function returns convex hull points. Otherwise, it returns indices of the convex hull points. When the output array is std::vector, the flag is ignored, and the output depends on the type of the vector</param>
+      public static void ConvexHull(IInputArray points, IOutputArray hull, bool clockwise = false, bool returnPoints = true)
+      {
+         cveConvexHull(points.InputArrayPtr, hull.OutputArrayPtr, clockwise, returnPoints);
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveConvexHull(
+         IntPtr points,
+         IntPtr hull,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool clockwise,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool returnPoints);
 
       #endregion
 
@@ -714,15 +740,32 @@ namespace Emgu.CV
          IntPtr convexhull,
          IntPtr storage);
 
+      /// <summary>
+      /// Find the bounding rectangle for the specific array of points
+      /// </summary>
+      /// <param name="points">The collection of points</param>
+      /// <returns>The bounding rectangle for the array of points</returns>
+      public static RotatedRect MinAreaRect(PointF[] points)
+      {
+         using (VectorOfPointF vpf = new VectorOfPointF(points))
+         {
+            return MinAreaRect(vpf);
+         }
+      }
 
       /// <summary>
-      /// Finds a circumscribed rectangle of the minimal area for 2D point set by building convex hull for the set and applying rotating calipers technique to the hull.
+      /// Finds a rotated rectangle of the minimum area enclosing the input 2D point set.
       /// </summary>
-      /// <param name="points">Sequence of points, or two channel int/float depth matrix</param>
-      /// <param name="storage">temporary memory storage</param>
+      /// <param name="points">Input vector of 2D points</param>
       /// <returns>a circumscribed rectangle of the minimal area for 2D point set</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern RotatedRect cvMinAreaRect2(IntPtr points, IntPtr storage);
+      public static RotatedRect MinAreaRect(IInputArray points)
+      {
+         RotatedRect rect = new RotatedRect();
+         cveMinAreaRect(points.InputArrayPtr, ref rect);
+         return rect;
+      }
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveMinAreaRect(IntPtr points, ref RotatedRect box);
 
 
       /// <summary>
@@ -765,28 +808,26 @@ namespace Emgu.CV
       private static extern double cveMinEnclosingTriangle(IntPtr points, IntPtr triangle);
 
       #region Contour Processing Functions
+
       /// <summary>
-      /// Approximates one or more curves and returns the approximation result[s]. 
-      /// In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence). 
+      /// Approximates a polygonal curve(s) with the specified precision.
       /// </summary>
-      /// <param name="srcSeq">Sequence of array of points</param>
-      /// <param name="headerSize">Header size of approximated curve[s].</param>
-      /// <param name="storage">Container for approximated contours. If it is NULL, the input sequences' storage is used</param>
-      /// <param name="method">Approximation method</param>
-      /// <param name="parameter">Desired approximation accuracy</param>
-      /// <param name="parameter2">
-      /// In case if srcSeq is sequence it means whether the single sequence should be approximated or all sequences on the same level or below srcSeq (see cvFindContours for description of hierarchical contour structures). 
-      /// And if srcSeq is array (CvMat*) of points, the parameter specifies whether the curve is closed (parameter2!=0) or not (parameter2=0). 
-      /// </param>
-      /// <returns>The approximation result</returns>
-      [DllImport(OPENCV_IMGPROC_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvApproxPoly(
-          IntPtr srcSeq,
-          int headerSize,
-          IntPtr storage,
-          CvEnum.ApproxPolyType method,
-          double parameter,
-          int parameter2);
+      ///<param name="curve">Input vector of a 2D point</param>
+      /// <param name="approxCurve">Result of the approximation. The type should match the type of the input curve. </param>
+      /// <param name="epsilon">Parameter specifying the approximation accuracy. This is the maximum distance between the original curve and its approximation.</param>
+      /// <param name="closed"> If true, the approximated curve is closed (its first and last vertices are connected). Otherwise, it is not closed.</param>
+      public static void ApproxPolyDP(IInputArray curve, IOutputArray approxCurve, double epsilon, bool closed)
+      {
+         cveApproxPolyDP(curve.InputArrayPtr, approxCurve.OutputArrayPtr, epsilon, closed);         
+      }
+      
+      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveApproxPolyDP(
+         IntPtr curve,
+         IntPtr approxCurve,
+         double epsilon,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool closed);
 
       /// <summary>
       /// Returns the up-right bounding rectangle for 2d point set
@@ -806,9 +847,11 @@ namespace Emgu.CV
       /// Calculates area of the whole contour or contour section. 
       /// </summary>
       /// <param name="contour">Input vector of 2D points (contour vertices), stored in std::vector or Mat. </param>
-      /// <param name="oriented">If zero, the absolute area will be returned. Otherwise the returned value might be negative</param>
+      /// <param name="oriented">Oriented area flag. If it is true, the function returns a signed area value, depending on the contour orientation (clockwise or counter-clockwise).
+      /// Using this feature you can determine orientation of a contour by taking the sign of an area. 
+      /// By default, the parameter is false, which means that the absolute value is returned.</param>
       /// <returns>The area of the whole contour or contour section</returns>
-      public static double ContourArea(IInputArray contour, bool oriented)
+      public static double ContourArea(IInputArray contour, bool oriented = false)
       {
          return cveContourArea(contour.InputArrayPtr, oriented);
       }
@@ -986,6 +1029,26 @@ namespace Emgu.CV
          Point offset = new Point())
       {
          cveFindContours(image.InputOutputArrayPtr, contours.OutputArrayPtr, hierarchy == null ? IntPtr.Zero : hierarchy.OutputArrayPtr, mode, method, ref offset);
+      }
+
+      public static int[,] FindContourTree(
+         IInputOutputArray image, IOutputArray contours,
+         CvEnum.ChainApproxMethod method,
+         Point offset = new Point())
+      {
+         using (Mat hierachyMat = new Mat())
+         {
+            cveFindContours(image.InputOutputArrayPtr, contours.OutputArrayPtr, hierachyMat.OutputArrayPtr, RetrType.Tree, method, ref offset);
+            int[,] hierachy = new int[hierachyMat.Cols, 4];
+            GCHandle handle = GCHandle.Alloc(hierachy, GCHandleType.Pinned);
+            using (Mat tmp = new Mat(hierachyMat.Rows, hierachyMat.Cols, hierachyMat.Depth, 4, handle.AddrOfPinnedObject(), hierachyMat.Step))
+            {
+               hierachyMat.CopyTo(tmp);
+            }
+            handle.Free();
+            return hierachy;
+         }
+
       }
 
       [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]

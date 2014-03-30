@@ -48,8 +48,7 @@
               new Point(5, img.Height - 5),
               Emgu.CV.CvEnum.FontFace.HersheyPlain,
               2.0,
-              new Bgr(255.0, 255.0, 255.0),
-              1);
+              new Bgr(255.0, 255.0, 255.0));
           img._Dilate(1);
 
           img._Not();

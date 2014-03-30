@@ -31,8 +31,7 @@ namespace Emgu.CV.Test
          {
             CvInvoke.FindChessboardCorners(left01, patternSize, vec);
             PointF[] corners = vec.ToArray();
-         }
-         
+         } 
       }
 
       public static MCvPoint3D32f[] CalcChessboardCorners(Size boardSize, float squareSize)

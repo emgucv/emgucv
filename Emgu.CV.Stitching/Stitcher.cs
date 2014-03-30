@@ -31,7 +31,8 @@ namespace Emgu.CV.Stitching
       /// Compute the panoramic images given the images
       /// </summary>
       /// <param name="images">The input images. This can be, for example, a VectorOfMat</param>
-      /// <returns>The panoramic image</returns>
+      /// <param name="pano">The panoramic image</param>
+      /// <returns>true if successful</returns>
       public bool Stitch(IInputArray images, IOutputArray pano)
       {
          return StitchingInvoke.CvStitcherStitch(_ptr, images.InputArrayPtr, pano.OutputArrayPtr);

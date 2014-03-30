@@ -125,7 +125,7 @@ CVAPI(void) cveCircle(cv::_InputOutputArray* img, CvPoint* center, int radius, C
 
 CVAPI(void) cvePutText(cv::_InputOutputArray* img, const char* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin);
 
-CVAPI(void) cvefillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift);
+CVAPI(void) cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift);
 
 CVAPI(void) cvefillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset);
 

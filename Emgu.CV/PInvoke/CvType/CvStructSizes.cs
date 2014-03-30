@@ -50,10 +50,7 @@ namespace Emgu.CV.Structure
       /// The size of CvMatND
       /// </summary>
       public int CvMatND;
-      /// <summary>
-      /// The size of CvHistogram
-      /// </summary>
-      public int CvHistogram;
+
       /// <summary>
       /// The size of CvTermCriteria
       /// </summary>

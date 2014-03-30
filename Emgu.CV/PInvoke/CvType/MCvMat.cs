@@ -78,6 +78,6 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Offset of roi
       /// </summary>
-      public static readonly int TypeOffset = (int)Marshal.OffsetOf(typeof(MCvMat), "type");
+      public static readonly int TypeOffset = (int)Marshal.OffsetOf(typeof(MCvMat), "Type");
    }
 }

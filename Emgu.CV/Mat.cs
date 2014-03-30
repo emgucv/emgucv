@@ -93,6 +93,11 @@ namespace Emgu.CV
          CvInvoke.cveImread(fileName, loadType, this);
       }
 
+      public Mat(Mat mat, Rectangle roi)
+         :this(MatInvoke.cvMatCreateFromRect(mat.Ptr, ref roi), true, true)
+      {  
+      }
+
       /// <summary>
       /// Convert this Mat to UMat
       /// </summary>
@@ -500,6 +505,11 @@ namespace Emgu.CV
          CvInvoke.MinMax(this, out minValues, out maxValues, out minLocations, out maxLocations);
       }
 
+      public Mat GetRow(int i)
+      {
+         return new Mat(this, new Rectangle(new Point(i, 0), new Size(this.Size.Width, 1)));
+      }
+
       /// <summary>
       /// Save this image to the specific file. 
       /// </summary>
@@ -599,7 +609,7 @@ namespace Emgu.CV
          Mat[] mats = new Mat[NumberOfChannels];
          for (int i = 0; i < mats.Length; i++)
          {
-            mats[i] = new Mat(Rows, Cols, Depth, NumberOfChannels);
+            mats[i] = new Mat(Rows, Cols, Depth, 1);
          }
          using (VectorOfMat vm = new VectorOfMat(mats))
          {
@@ -672,6 +682,8 @@ namespace Emgu.CV
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreateWithData(int rows, int cols, int type, IntPtr data, IntPtr step);
 
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cvMatCreateFromRect(IntPtr mat, ref Rectangle roi);
       /*
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreateFromFile(
