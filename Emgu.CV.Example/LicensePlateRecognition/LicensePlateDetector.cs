@@ -103,7 +103,7 @@ namespace LicensePlateRecognition
       {
          //first child
          idx = hierachy[idx,2];
-         if (hierachy[idx,2] < 0)
+         if (idx < 0)
             return 0;
          
          int count = 1;
@@ -120,80 +120,87 @@ namespace LicensePlateRecognition
          List<Image<Gray, Byte>> licensePlateImagesList, List<Image<Gray, Byte>> filteredLicensePlateImagesList, List<RotatedRect> detectedLicensePlateRegionList,
          List<String> licenses)
       {
-         for (VectorOfPoint contour = contours[idx]; hierachy[idx,0] >= 0;  contour = contours[hierachy[idx,0]], idx = hierachy[idx,0])
+         for (; idx >= 0;  idx = hierachy[idx,0])
          {
             int numberOfChildren = GetNumberOfChildren(hierachy, idx);      
             //if it does not contains any children (charactor), it is not a license plate region
             if (numberOfChildren == 0) continue;
 
-            if (CvInvoke.ContourArea(contour) > 400)
+            using (VectorOfPoint contour = contours[idx])
             {
-               if (numberOfChildren < 3) 
+               if (CvInvoke.ContourArea(contour) > 400)
                {
-                  //If the contour has less than 3 children, it is not a license plate (assuming license plate has at least 3 charactor)
-                  //However we should search the children of this contour to see if any of them is a license plate
-                  FindLicensePlate(contours, hierachy, hierachy[idx,2], gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
-                  continue;
-               }
-
-               RotatedRect box = CvInvoke.MinAreaRect(contour);
-               if (box.Angle < -45.0)
-               {
-                  float tmp = box.Size.Width;
-                  box.Size.Width = box.Size.Height;
-                  box.Size.Height = tmp;
-                  box.Angle += 90.0f;
-               }
-               else if (box.Angle > 45.0)
-               {
-                  float tmp = box.Size.Width;
-                  box.Size.Width = box.Size.Height;
-                  box.Size.Height = tmp;
-                  box.Angle -= 90.0f;
-               }
-
-               double whRatio = (double)box.Size.Width / box.Size.Height;
-               if (!(3.0 < whRatio && whRatio < 10.0))
-               //if (!(1.0 < whRatio && whRatio < 2.0))
-               {  //if the width height ratio is not in the specific range,it is not a license plate 
-                  //However we should search the children of this contour to see if any of them is a license plate
-                  //Contour<Point> child = contours.VNext;
-                  if (hierachy[idx,2] > 0)
-                     FindLicensePlate(contours, hierachy, hierachy[idx,2], gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
-                  continue;
-               }
-
-               using (Image<Gray, Byte> tmp1 = gray.Copy(box))
-               //resize the license plate such that the front is ~ 10-12. This size of front results in better accuracy from tesseract
-               using (Image<Gray, Byte> tmp2 = tmp1.Resize(240, 180, Emgu.CV.CvEnum.Inter.Cubic, true))
-               {
-                  //removes some pixels from the edge
-                  int edgePixelSize = 2;
-                  tmp2.ROI = new Rectangle(new Point(edgePixelSize, edgePixelSize), tmp2.Size - new Size(2 * edgePixelSize, 2 * edgePixelSize));
-                  Image<Gray, Byte> plate = tmp2.Copy();
-
-                  Image<Gray, Byte> filteredPlate = FilterPlate(plate);
-
-                  Tesseract.Charactor[] words;
-                  StringBuilder strBuilder = new StringBuilder();
-                  using (Image<Gray, Byte> tmp = filteredPlate.Clone())
+                  if (numberOfChildren < 3)
                   {
-                     _ocr.Recognize(tmp);
-                     words = _ocr.GetCharactors();
-                     
-                     if (words.Length == 0) continue;
-
-                     for (int i = 0; i < words.Length; i++)
-                     {
-                        strBuilder.Append(words[i].Text);
-                     }
+                     //If the contour has less than 3 children, it is not a license plate (assuming license plate has at least 3 charactor)
+                     //However we should search the children of this contour to see if any of them is a license plate
+                     FindLicensePlate(contours, hierachy, hierachy[idx, 2], gray, canny, licensePlateImagesList,
+                        filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
+                     continue;
                   }
 
-                  licenses.Add(strBuilder.ToString());
-                  licensePlateImagesList.Add(plate);
-                  filteredLicensePlateImagesList.Add(filteredPlate);
-                  detectedLicensePlateRegionList.Add(box);
+                  RotatedRect box = CvInvoke.MinAreaRect(contour);
+                  if (box.Angle < -45.0)
+                  {
+                     float tmp = box.Size.Width;
+                     box.Size.Width = box.Size.Height;
+                     box.Size.Height = tmp;
+                     box.Angle += 90.0f;
+                  }
+                  else if (box.Angle > 45.0)
+                  {
+                     float tmp = box.Size.Width;
+                     box.Size.Width = box.Size.Height;
+                     box.Size.Height = tmp;
+                     box.Angle -= 90.0f;
+                  }
 
+                  double whRatio = (double) box.Size.Width/box.Size.Height;
+                  if (!(3.0 < whRatio && whRatio < 10.0))
+                     //if (!(1.0 < whRatio && whRatio < 2.0))
+                  {
+                     //if the width height ratio is not in the specific range,it is not a license plate 
+                     //However we should search the children of this contour to see if any of them is a license plate
+                     //Contour<Point> child = contours.VNext;
+                     if (hierachy[idx, 2] > 0)
+                        FindLicensePlate(contours, hierachy, hierachy[idx, 2], gray, canny, licensePlateImagesList,
+                           filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
+                     continue;
+                  }
+
+                  using (Image<Gray, Byte> tmp1 = gray.Copy(box))
+                     //resize the license plate such that the front is ~ 10-12. This size of front results in better accuracy from tesseract
+                  using (Image<Gray, Byte> tmp2 = tmp1.Resize(240, 180, Emgu.CV.CvEnum.Inter.Cubic, true))
+                  {
+                     //removes some pixels from the edge
+                     int edgePixelSize = 2;
+                     tmp2.ROI = new Rectangle(new Point(edgePixelSize, edgePixelSize),
+                        tmp2.Size - new Size(2*edgePixelSize, 2*edgePixelSize));
+                     Image<Gray, Byte> plate = tmp2.Copy();
+
+                     Image<Gray, Byte> filteredPlate = FilterPlate(plate);
+
+                     Tesseract.Charactor[] words;
+                     StringBuilder strBuilder = new StringBuilder();
+                     using (Image<Gray, Byte> tmp = filteredPlate.Clone())
+                     {
+                        _ocr.Recognize(tmp);
+                        words = _ocr.GetCharactors();
+
+                        if (words.Length == 0) continue;
+
+                        for (int i = 0; i < words.Length; i++)
+                        {
+                           strBuilder.Append(words[i].Text);
+                        }
+                     }
+
+                     licenses.Add(strBuilder.ToString());
+                     licensePlateImagesList.Add(plate);
+                     filteredLicensePlateImagesList.Add(filteredPlate);
+                     detectedLicensePlateRegionList.Add(box);
+
+                  }
                }
             }
          }

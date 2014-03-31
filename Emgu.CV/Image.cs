@@ -2958,7 +2958,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> Erode(int iterations)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.Erode(this, res, null, new Point(-1, -1), iterations, CvEnum.BorderType.Constant, new MCvScalar());
+         CvInvoke.Erode(this, res, null, new Point(-1, -1), iterations, CvEnum.BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
          return res;
       }
 

@@ -22,7 +22,7 @@ namespace TrafficSignRecognition
    {
       private VectorOfKeyPoint _modelKeypoints;
       private Mat _modelDescriptors;
-      
+      private BruteForceMatcher _modelDescriptorMatcher;
       //private Features2DTracker<float> _tracker;
       private SURFDetector _detector;
       
@@ -39,6 +39,10 @@ namespace TrafficSignRecognition
             if (_modelKeypoints.Size == 0)
                throw new Exception("No image feature has been found in the stop sign model");
          }
+
+         _modelDescriptorMatcher = new BruteForceMatcher(DistanceType.L2);
+         _modelDescriptorMatcher.Add(_modelDescriptors);
+
          _octagon = new VectorOfPoint(
             new Point[]
             {
@@ -88,34 +92,37 @@ namespace TrafficSignRecognition
          }
       }
 
-      private void FindStopSign(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList, VectorOfVectorOfPoint contours, int[,] hierachy, int idx1)
+      private void FindStopSign(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList, VectorOfVectorOfPoint contours, int[,] hierachy, int idx)
       {
-         for (VectorOfPoint c = contours[idx1]; hierachy[idx1,0] >= 0;  c = contours[hierachy[idx1,0]], idx1 = hierachy[idx1,0])
+         for (; idx >= 0; idx = hierachy[idx,0])
          {
+            using (VectorOfPoint c =contours[idx])
             using (VectorOfPoint approx = new VectorOfPoint())
             {
                CvInvoke.ApproxPolyDP(c, approx, CvInvoke.ArcLength(c, true)*0.02, true);
-               if (CvInvoke.ContourArea(c) > 200)
+               double area = CvInvoke.ContourArea(approx);
+               if (area > 200)
                {
-                  double ratio = CvInvoke.MatchShapes(_octagon, c, Emgu.CV.CvEnum.ContoursMatchType.I3, 0);
+                  double ratio = CvInvoke.MatchShapes(_octagon, approx, Emgu.CV.CvEnum.ContoursMatchType.I3);
 
                   if (ratio > 0.1) //not a good match of contour shape
                   {
-                     if (hierachy[idx1,0] >= 0)
-                        FindStopSign(img, stopSignList, boxList, contours, hierachy, hierachy[idx1,0]);
+                     //check children
+                     if (hierachy[idx,2] >= 0)
+                        FindStopSign(img, stopSignList, boxList, contours, hierachy, hierachy[idx,2]);
                      continue;
                   }
-
+                  
                   Rectangle box = CvInvoke.BoundingRectangle(c);
 
                   Image<Gray, Byte> candidate;
                   using (Image<Bgr, Byte> tmp = img.Copy(box))
                      candidate = tmp.Convert<Gray, byte>();
-
+                  //Emgu.CV.UI.ImageViewer.Show(candidate);
                   //set the value of pixels not in the contour region to zero
                   using (Image<Gray, Byte> mask = new Image<Gray, byte>(box.Size))
                   {
-                     mask.Draw(contours, idx1,  new Gray(255), -1, LineType.EightConnected, null, int.MaxValue, new Point(-box.X, -box.Y));
+                     mask.Draw(contours, idx,  new Gray(255), -1, LineType.EightConnected, null, int.MaxValue, new Point(-box.X, -box.Y));
 
                      double mean = CvInvoke.Mean(candidate, mask).V0;
                      candidate._ThresholdBinary(new Gray(mean), new Gray(255.0));
@@ -124,7 +131,7 @@ namespace TrafficSignRecognition
                      candidate.SetValue(0, mask);
                   }
 
-                  int minMatchCount = 10;
+                  int minMatchCount = 8;
                   double uniquenessThreshold = 0.8;
                   VectorOfKeyPoint _observeredKeypoint = new VectorOfKeyPoint();
                   Mat _observeredDescriptor = new Mat();
@@ -132,14 +139,12 @@ namespace TrafficSignRecognition
                   
                   if ( _observeredKeypoint.Size >= minMatchCount)
                   {
-                     BruteForceMatcher matcher = new BruteForceMatcher(DistanceType.L2);
-                     matcher.Add(_modelDescriptors);
                      int k = 2;
                      Matrix<int> indices = new Matrix<int>(_observeredDescriptor.Size.Height, k);
                      Matrix<byte> mask;
                      using (Matrix<float> dist = new Matrix<float>(_observeredDescriptor.Size.Height, k))
                      {
-                        matcher.KnnMatch(_observeredDescriptor, indices, dist, k, null);
+                        _modelDescriptorMatcher.KnnMatch(_observeredDescriptor, indices, dist, k, null);
                         mask = new Matrix<byte>(dist.Rows, 1);
                         mask.SetValue(255);
                         Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
@@ -154,7 +159,7 @@ namespace TrafficSignRecognition
                   }
                }
             }
-         }
+         } 
       }
 
       public void DetectStopSign(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList)
@@ -169,8 +174,12 @@ namespace TrafficSignRecognition
          using (Image<Gray, Byte> canny = smoothedRedMask.Canny(100, 50))
          using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
          {
-            int[,] hierachy = CvInvoke.FindContourTree(canny, contours, ChainApproxMethod.ChainApproxSimple);
             
+            int[,] hierachy = CvInvoke.FindContourTree(canny, contours, ChainApproxMethod.ChainApproxSimple);
+            //Image<Gray, Byte> tmp = new Image<Gray, byte>(canny.Size);
+            //CvInvoke.DrawContours(tmp, contours, -1, new MCvScalar(255, 255, 255));
+            //Emgu.CV.UI.ImageViewer.Show(tmp);
+
             if (hierachy.GetLength(0) > 0)
                FindStopSign(img, stopSignList, boxList, contours, hierachy, 0);
          }
@@ -188,6 +197,11 @@ namespace TrafficSignRecognition
          {
             _modelDescriptors.Dispose();
             _modelDescriptors = null;
+         }
+         if (_modelDescriptorMatcher != null)
+         {
+            _modelDescriptorMatcher.Dispose();
+            _modelDescriptorMatcher = null;
          }
          if (_octagon != null)
          {
