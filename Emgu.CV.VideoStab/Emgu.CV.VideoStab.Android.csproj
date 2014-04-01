@@ -53,7 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV.GPU\Emgu.CV.GPU.Android.csproj">
+    <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj">
       <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
       <Name>Emgu.CV.GPU.Android</Name>
     </ProjectReference>

@@ -10,6 +10,9 @@ using System.Runtime.Serialization;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+#if ANDROID
+using Bitmap = Android.Graphics.Bitmap;
+#endif
 
 namespace Emgu.CV
 {

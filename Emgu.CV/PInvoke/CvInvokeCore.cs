@@ -726,7 +726,7 @@ namespace Emgu.CV
 #if ANDROID
       public static void cvSet(IntPtr arr, MCvScalar value, IntPtr mask)
       {
-         cvSet(arr, value.v0, value.v1, value.v2, value.v3, mask);
+         cvSet(arr, value.V0, value.V1, value.V2, value.V3, mask);
       }
 
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1138,7 +1138,7 @@ namespace Emgu.CV
 #if ANDROID
       public static IntPtr cvCreateImage(
          Size size,
-         CvEnum.IPL_DEPTH depth,
+         CvEnum.IplDepth depth,
          int channels)
       {
          return cvCreateImage(size.Width, size.Height, depth, channels);
@@ -1147,7 +1147,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr cvCreateImage(
          int width, int height,
-         CvEnum.IPL_DEPTH depth,
+         CvEnum.IplDepth depth,
          int channels);
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1170,7 +1170,7 @@ namespace Emgu.CV
 #if ANDROID
       public static IntPtr cvCreateImageHeader(
          Size size,
-         CvEnum.IPL_DEPTH depth,
+         CvEnum.IplDepth depth,
          int channels)
       {
          return cvCreateImageHeader(size.Width, size.Height, depth, channels);
@@ -1178,7 +1178,7 @@ namespace Emgu.CV
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr cvCreateImageHeader(
          int width, int height,
-         CvEnum.IPL_DEPTH depth,
+         CvEnum.IplDepth depth,
          int channels);
 #else
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1202,7 +1202,7 @@ namespace Emgu.CV
       public static IntPtr cvInitImageHeader(
          IntPtr image,
          Size size,
-         CvEnum.IPL_DEPTH depth,
+         CvEnum.IplDepth depth,
          int channels,
          int origin,
          int align)
@@ -1213,7 +1213,7 @@ namespace Emgu.CV
       private static extern IntPtr cvInitImageHeader(
          IntPtr image,
          int width, int height,
-         CvEnum.IPL_DEPTH depth,
+         CvEnum.IplDepth depth,
          int channels,
          int origin,
          int align);
@@ -1579,7 +1579,7 @@ namespace Emgu.CV
 #if ANDROID
       public static void cvSet2D(IntPtr arr, int idx0, int idx1, MCvScalar value)
       {
-         cvSet2D(arr, idx0, idx1, value.v0, value.v1, value.v2, value.v3);
+         cvSet2D(arr, idx0, idx1, value.V0, value.V1, value.V2, value.V3);
       }
 
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2452,14 +2452,14 @@ namespace Emgu.CV
       /// <param name="param1">The first parameter of distribution. In case of uniform distribution it is the inclusive lower boundary of random numbers range. In case of normal distribution it is the mean value of random numbers</param>
       /// <param name="param2">The second parameter of distribution. In case of uniform distribution it is the exclusive upper boundary of random numbers range. In case of normal distribution it is the standard deviation of random numbers</param>
 #if ANDROID
-      public static void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RAND_TYPE distType, MCvScalar param1, MCvScalar param2)
+      public static void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RandType distType, MCvScalar param1, MCvScalar param2)
       {
-         cvRandArr(ref rng, arr, distType, param1.v0, param1.v1, param1.v2, param1.v3, param2.v0, param2.v1, param2.v2, param2.v3);
+         cvRandArr(ref rng, arr, distType, param1.V0, param1.V1, param1.V2, param1.V3, param2.V0, param2.V1, param2.V2, param2.V3);
       }
 
       [DllImport(OPENCV_CORE_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvRandArr(
-         ref UInt64 rng, IntPtr arr, CvEnum.RAND_TYPE dist_type, 
+         ref UInt64 rng, IntPtr arr, CvEnum.RandType dist_type, 
          double param1v0, double param1v1, double param1v2, double param1v3,
          double param2v0, double param2v1, double param2v2, double param2v3);
 #else

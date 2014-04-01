@@ -550,7 +550,7 @@ namespace Emgu.CV
          MCvTermCriteria criteria, 
          IntPtr rotationMatrix, IntPtr translationVector)
       {
-         cvPOSIT(positObject, imagePoints, focalLength, criteria.type, criteria.max_iter, criteria.epsilon, rotationMatrix, translationVector);
+         cvPOSIT(positObject, imagePoints, focalLength, criteria.Type, criteria.MaxIter, criteria.Epsilon, rotationMatrix, translationVector);
       }
 
       [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
