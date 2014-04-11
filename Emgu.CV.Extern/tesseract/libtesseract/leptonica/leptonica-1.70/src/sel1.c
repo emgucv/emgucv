@@ -139,7 +139,7 @@
 #include <string.h>
 #include "allheaders.h"
 
-static const l_int32  L_BUF_SIZE = 256;
+#define  L_BUF_SIZE 256
 static const l_int32  INITIAL_PTR_ARRAYSIZE = 50;  /* n'import quoi */
 static const l_int32  MANY_SELS = 1000;
 

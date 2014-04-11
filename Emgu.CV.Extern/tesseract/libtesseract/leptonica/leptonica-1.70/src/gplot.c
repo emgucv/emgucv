@@ -92,7 +92,7 @@
 #include <string.h>
 #include "allheaders.h"
 
-static const l_int32  L_BUF_SIZE = 512;
+#define L_BUF_SIZE 512
 
 const char  *gplotstylenames[] = {"with lines",
                                   "with points",

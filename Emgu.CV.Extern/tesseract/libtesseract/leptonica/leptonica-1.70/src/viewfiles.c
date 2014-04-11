@@ -38,7 +38,7 @@
 #include <windows.h>   /* for CreateDirectory() */
 #endif
 
-static const l_int32  L_BUF_SIZE = 512;
+#define L_BUF_SIZE 512
 static const l_int32  DEFAULT_THUMB_WIDTH = 120;
 static const l_int32  DEFAULT_VIEW_WIDTH = 800;
 static const l_int32  MIN_THUMB_WIDTH = 50;

@@ -98,10 +98,10 @@ typedef void *L_TIMER;
  *  non-functioning stubs to be linked.
  */
 #ifndef HAVE_CONFIG_H
-#define  HAVE_LIBJPEG     1
-#define  HAVE_LIBTIFF     1
-#define  HAVE_LIBPNG      1
-#define  HAVE_LIBZ        1
+#define  HAVE_LIBJPEG     0
+#define  HAVE_LIBTIFF     0
+#define  HAVE_LIBPNG      0
+#define  HAVE_LIBZ        0
 #define  HAVE_LIBGIF      0
 #define  HAVE_LIBUNGIF    0
 #define  HAVE_LIBWEBP     0
@@ -131,11 +131,11 @@ typedef void *L_TIMER;
  *  Leptonica supplies image I/O for bmp, pnm, jp2k, pdf and ps.
  *  Setting any of these to 0 causes non-functioning stubs to be linked.
  */
-#define  USE_BMPIO        1
-#define  USE_PNMIO        1
-#define  USE_JP2KIO       1
-#define  USE_PDFIO        1
-#define  USE_PSIO         1
+#define  USE_BMPIO        0
+#define  USE_PNMIO        0
+#define  USE_JP2KIO       0
+#define  USE_PDFIO        0
+#define  USE_PSIO         0
 
 
 /*--------------------------------------------------------------------*

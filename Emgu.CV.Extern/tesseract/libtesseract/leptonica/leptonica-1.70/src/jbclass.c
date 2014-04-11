@@ -206,7 +206,7 @@
 #include <math.h>
 #include "allheaders.h"
 
-static const l_int32  L_BUF_SIZE = 512;
+#define  L_BUF_SIZE 512
 
     /* For jbClassifyRankHaus(): size of border added around
      * pix of each c.c., to allow further processing.  This
@@ -232,7 +232,7 @@ static const l_int32  MAX_WORD_COMP_WIDTH = 1000;  /* default max word width */
 static const l_int32  MAX_COMP_HEIGHT = 120;  /* default max component height */
 
     /* Max allowed dilation to merge characters into words */
-static const l_int32  MAX_ALLOWED_DILATION = 25;
+#define MAX_ALLOWED_DILATION 25
 
     /* This stores the state of a state machine which fetches
      * similar sized templates */

@@ -46,7 +46,7 @@
 #include <string.h>
 #include "allheaders.h"
 
-static const l_int32  L_BUF_SIZE = 512;    /* max token size */
+#define L_BUF_SIZE 512    /* max token size */
 
 static l_int32 getNextNonCommentLine(SARRAY *sa, l_int32 start, l_int32 *pnext);
 static l_int32 getNextNonBlankLine(SARRAY *sa, l_int32 start, l_int32 *pnext);
