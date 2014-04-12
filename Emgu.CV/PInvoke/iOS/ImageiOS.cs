@@ -28,12 +28,13 @@ namespace Emgu.CV
          if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(byte))
          {
             RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
+            using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
             using (CGBitmapContext context = new CGBitmapContext(
              MIplImage.imageData,
              Width, Height,
              8,
              Width * 4,
-             CGColorSpace.CreateDeviceRGB(),
+             cspace,
              CGImageAlphaInfo.PremultipliedLast))
                context.DrawImage(rect, cgImage);
          } else
@@ -53,12 +54,13 @@ namespace Emgu.CV
          //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
          if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(Byte))
          {
+            using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
             using (CGBitmapContext context = new CGBitmapContext(
          		MIplImage.imageData,
          		Width, Height,
          		8,
          		Width * 4,
-         		CGColorSpace.CreateDeviceRGB(),
+               cspace,
          		CGImageAlphaInfo.PremultipliedLast))
             using (CGImage cgImage =  context.ToImage())
             {
