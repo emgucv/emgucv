@@ -2,6 +2,8 @@
 
 <%@ Import Namespace="System" %>
 <%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="Emgu.CV.CvEnum" %>
+<%@ Import Namespace="Emgu.Util" %>
 <%@ Import Namespace="Emgu.CV" %>
 <%@ Import Namespace="Emgu.CV.Structure" %>
 <%@ Import Namespace="Emgu.CV.OCR" %>
@@ -43,12 +45,14 @@
 
        using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 40, new Bgr()))
        {
+          
           img.Draw(
               DateTime.Now.Ticks.ToString(),
               new Point(5, img.Height - 5),
               Emgu.CV.CvEnum.FontFace.HersheyPlain,
               2.0,
-              new Bgr(255.0, 255.0, 255.0));
+              new Bgr(255.0, 255.0, 255.0),
+              1, LineType.EightConnected, false);
           img._Dilate(1);
 
           img._Not();
