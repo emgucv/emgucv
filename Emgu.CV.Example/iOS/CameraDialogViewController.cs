@@ -118,7 +118,7 @@ bool SetupCaptureSession ()
             }
          }
 
-         private static MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0);
+         //private static MCvFont font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_PLAIN, 1.0, 1.0);
 
          UIImage ImageFromSampleBuffer (CMSampleBuffer sampleBuffer)
          {
@@ -137,7 +137,12 @@ bool SetupCaptureSession ()
                using (Image<Bgr, byte> bgr = bgra.Convert<Bgr, byte>())
                using (Image<Bgr, byte> bgr2 = bgr.Rotate(90, new Bgr(0,0,0)))
                {
-                  bgr2.Draw(string.Format("{0} x {1}", width, height), ref font, new Point(20, 20), new Bgr(255, 0, 0));
+                  bgr2.Draw(
+                     string.Format("{0} x {1}", width, height),
+                     new Point(20, 20), 
+                     CvEnum.FontFace.HersheySimplex,
+                     1.0,
+                     new Bgr(255, 0, 0));
                   //CvInvoke.cvCvtColor(bgr2, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
                   UIImage result = bgr2.ToUIImage();
                   pixelBuffer.Unlock(0);

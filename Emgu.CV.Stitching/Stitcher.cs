@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
+#if !IOS
 using Emgu.CV.Cuda;
+#endif
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -49,11 +51,13 @@ namespace Emgu.CV.Stitching
 
    internal static partial class StitchingInvoke
    {
+      #if !IOS
       static StitchingInvoke()
       {
          //Dummy code to make sure the static constructor of GpuInvoke has been called
          bool hasCuda = CudaInvoke.HasCuda;
       }
+      #endif
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvStitcherCreateDefault(

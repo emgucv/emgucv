@@ -3,29 +3,30 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>Emgu.CV.Example</RootNamespace>
-    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;IOS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <MtouchDebug>True</MtouchDebug>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
     <MtouchLink>None</MtouchLink>
     <MtouchSdkVersion>6.0</MtouchSdkVersion>
+    <AssemblyName>EmguCVExampleiOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -34,28 +35,34 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
     <MtouchSdkVersion>6.0</MtouchSdkVersion>
+    <AssemblyName>EmguCVExampleiOS</AssemblyName>
+    <DefineConstants>IOS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\iPhone\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;IOS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>True</MtouchDebug>
     <MtouchLink>None</MtouchLink>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
-    <IpaPackageName />
+    <IpaPackageName>
+    </IpaPackageName>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
     <MtouchSdkVersion>7.0</MtouchSdkVersion>
+    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -66,10 +73,14 @@
     <ConsolePause>False</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchUseLlvm>True</MtouchUseLlvm>
     <MtouchExtraArgs>-nosymbolstrip -cxx</MtouchExtraArgs>
-    <IpaPackageName />
+    <IpaPackageName>
+    </IpaPackageName>
+    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
+    <DefineConstants>IOS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -80,9 +91,12 @@
     <ConsolePause>False</ConsolePause>
     <BuildIpa>True</BuildIpa>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
+    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
+    <DefineConstants>IOS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -92,9 +106,12 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
+    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
+    <DefineConstants>IOS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -141,10 +158,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.iOS.csproj">
-      <Project>{765DB687-906C-47C0-B0BD-531A1A4E51CA}</Project>
-      <Name>Emgu.CV.Cuda.iOS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.iOS.csproj">
       <Project>{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}</Project>
       <Name>Emgu.CV.ML.iOS</Name>
@@ -164,6 +177,10 @@
     <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.iOS.csproj">
       <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
       <Name>Emgu.Util.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.iOS.csproj">
+      <Project>{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}</Project>
+      <Name>Emgu.CV.Nonfree.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,9 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+#if !IOS
 using Emgu.CV.Cuda;
+#endif
 using Emgu.CV.Nonfree;
 
 namespace SURFFeatureExample
@@ -27,6 +29,7 @@ namespace SURFFeatureExample
          Stopwatch watch;
          homography = null;
 
+         #if !IOS
          if (CudaInvoke.HasCuda)
          {
             CudaSURFDetector surfCuda = new CudaSURFDetector((float) hessianThresh);
@@ -83,6 +86,7 @@ namespace SURFFeatureExample
             }
          }
          else
+         #endif
          {
             using (UMat uModelImage = modelImage.Mat.ToUMat(AccessType.Read))
             using (UMat uObservedImage = observedImage.Mat.ToUMat(AccessType.Read))

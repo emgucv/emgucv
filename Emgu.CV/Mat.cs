@@ -16,6 +16,7 @@ using System.IO;
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
 using MonoTouch.UIKit;
+using MonoTouch.CoreGraphics;
 #elif NETFX_CORE
 #else
 using System.Drawing.Imaging;
@@ -312,6 +313,22 @@ namespace Emgu.CV
          }
       }
 
+      public int Width
+      {
+         get
+         {
+            return Size.Width;
+         }
+      }
+
+      public int Height
+      {
+         get
+         {
+            return Size.Height;
+         }
+      }
+
       /// <summary>
       /// Get the minimum and maximum value across all channels of the mat
       /// </summary>
@@ -470,7 +487,34 @@ namespace Emgu.CV
             throw new NotImplementedException("Only Bitmap config of Argb888 or Rgb565 is supported.");
          }
       }
-#elif !IOS
+#elif IOS
+      public UIImage ToUIImage()
+      {
+         //if 4 channels, assume the color space is RGBA
+         if (NumberOfChannels == 4 && this.Depth == Emgu.CV.CvEnum.DepthType.Cv8U)
+         {
+            Size s = this.Size;
+            using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
+            using (CGBitmapContext context = new CGBitmapContext(
+               DataPointer,
+               s.Width, s.Height,
+               8,
+               s.Width * 4,
+               cspace,
+               CGImageAlphaInfo.PremultipliedLast))
+            using (CGImage cgImage =  context.ToImage())
+            {
+               return UIImage.FromImage(cgImage);
+            }
+         } else
+         {
+            using (Image<Rgba, Byte> tmp = ToImage<Rgba, Byte>())
+            {
+               return tmp.ToUIImage();
+            }
+         }
+      }
+#else
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
       /// such that the image data is <b>shared</b> with Bitmap. 
@@ -551,18 +595,22 @@ namespace Emgu.CV
       /// <remarks>The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format.</remarks>
       public void Save(string fileName)
       {
-         bool opencvSaveSuccess = true;
+         //bool opencvSaveSuccess = true;
+         Exception e = null;
          try
          {
             //save the image using OpenCV
-            opencvSaveSuccess = CvInvoke.Imwrite(fileName, this);
+            if (!CvInvoke.Imwrite(fileName, this))
+            {
+               e = new Exception("Unable to save image");
+            }
          }
-         catch (Exception)
+         catch (Exception excpt)
          {
-            opencvSaveSuccess = false;
+            e = excpt;
          }
 
-         if (!opencvSaveSuccess)
+         if (e != null)
          {
 #if IOS || NETFX_CORE
             throw e;

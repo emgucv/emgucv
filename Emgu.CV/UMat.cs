@@ -12,6 +12,9 @@ using Emgu.CV.Util;
 using Emgu.Util;
 #if ANDROID
 using Bitmap = Android.Graphics.Bitmap;
+#elif IOS
+using MonoTouch.UIKit;
+using MonoTouch.CoreGraphics;
 #endif
 
 namespace Emgu.CV
@@ -274,6 +277,122 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Convert this Mat to Image
+      /// </summary>
+      /// <typeparam name="TColor">The type of Color</typeparam>
+      /// <typeparam name="TDepth">The type of Depth</typeparam>
+      /// <returns>The image</returns>
+      public Image<TColor, TDepth> ToImage<TColor, TDepth>()
+         where TColor : struct, IColor
+         where TDepth : new()
+      {
+         TColor c = new TColor();
+
+         int numberOfChannels = NumberOfChannels;
+         if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension == numberOfChannels)
+         {
+            //same color, same depth
+            Image<TColor, TDepth> img = new Image<TColor, TDepth>(Size);
+            CopyTo(img);
+            return img;
+         }
+         else if (typeof(TDepth) != CvInvoke.GetDepthType(this.Depth) && c.Dimension == numberOfChannels)
+         {
+            //different depth, same color
+            Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
+            if (numberOfChannels == 1)
+            {
+               using (Image<Gray, TDepth> tmp = this.ToImage<Gray, TDepth>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (numberOfChannels == 3)
+            {
+               using (Image<Bgr, TDepth> tmp = this.ToImage<Bgr, TDepth>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (numberOfChannels == 4)
+            {
+               using (Image<Bgra, TDepth> tmp = this.ToImage<Bgra, TDepth>())
+                  result.ConvertFrom(tmp);
+            }
+            else
+            {
+               throw new Exception("Unsupported conversion");
+            }
+            return result;
+         }
+         else if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension != numberOfChannels)
+         {
+            //same depth, different color
+            Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
+
+            CvEnum.DepthType depth = Depth;
+            if (depth == CvEnum.DepthType.Cv8U)
+            {
+               using (Image<TColor, Byte> tmp = this.ToImage<TColor, Byte>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (depth == CvEnum.DepthType.Cv8S)
+            {
+               using (Image<TColor, SByte> tmp = this.ToImage<TColor, SByte>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (depth == CvEnum.DepthType.Cv16U)
+            {
+               using (Image<TColor, UInt16> tmp = this.ToImage<TColor, UInt16>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (depth == CvEnum.DepthType.Cv16S)
+            {
+               using (Image<TColor, Int16> tmp = this.ToImage<TColor, Int16>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (depth == CvEnum.DepthType.Cv32S)
+            {
+               using (Image<TColor, Int32> tmp = this.ToImage<TColor, Int32>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (depth == CvEnum.DepthType.Cv32F)
+            {
+               using (Image<TColor, float> tmp = this.ToImage<TColor, float>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (depth == CvEnum.DepthType.Cv64F)
+            {
+               using (Image<TColor, double> tmp = this.ToImage<TColor, double>())
+                  result.ConvertFrom(tmp);
+            }
+            else
+            {
+               throw new Exception("Unsupported conversion");
+            }
+            return result;
+         }
+         else
+         {
+            //different color, different depth
+            //TODO: Implement this
+            throw new NotImplementedException();
+            /*
+            using (Mat tmp = new Mat())
+            {
+               ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth)));
+               return tmp.ToImage<TColor, TDepth>();
+            }*/
+
+         }
+      }
+
+      #if IOS
+      public UIImage ToUIImage()
+      {
+         using (Image<Rgba, Byte> tmp = ToImage<Rgba, Byte>())
+            {
+               return tmp.ToUIImage();
+            }
+      }
+      #else
+      /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
       /// such that the image data is <b>shared</b> with Bitmap. 
       /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
@@ -291,6 +410,7 @@ namespace Emgu.CV
             }
          }
       }
+      #endif
 
       /// <summary>
       /// Returns the min / max location and values for the image

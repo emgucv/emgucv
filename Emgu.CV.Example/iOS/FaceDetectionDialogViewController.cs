@@ -48,7 +48,7 @@ namespace Emgu.CV.Example.MonoTouch
                foreach (Rectangle eye in eyes)
                   image.Draw(eye, new Bgr(Color.Blue), 1);
                Size frameSize = FrameSize;
-               using (Image<Bgr, Byte> resized =image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
+               using (Image<Bgr, Byte> resized =image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.Inter.Nearest, true))
                {
                   SetImage(resized);
                }

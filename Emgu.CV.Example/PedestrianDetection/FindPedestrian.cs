@@ -8,7 +8,9 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
 using System.Diagnostics;
+#if !IOS
 using Emgu.CV.Cuda;
+#endif
 
 namespace PedestrianDetection
 {
@@ -25,6 +27,7 @@ namespace PedestrianDetection
          Stopwatch watch;
          Rectangle[] regions;
 
+         #if !IOS
          //check if there is a compatible Cuda device to run pedestrian detection
          if (CudaInvoke.HasCuda)
          {  //this is the Cuda version
@@ -41,6 +44,7 @@ namespace PedestrianDetection
             }
          }
          else
+         #endif
          {  //this is the CPU version
             using (HOGDescriptor des = new HOGDescriptor())
             {
