@@ -97,7 +97,7 @@ bool cveFindCirclesGrid(cv::_InputArray* image, CvSize* patternSize, cv::_Output
    return cv::findCirclesGrid(*image, *patternSize, *centers, flags, ptr);
 }
 
-void cveTriangulatePointe(cv::_InputArray* projMat1, cv::_InputArray* projMat2, cv::_InputArray* projPoints1, cv::_InputArray* projPoints2, cv::_OutputArray* points4D)
+void cveTriangulatePoints(cv::_InputArray* projMat1, cv::_InputArray* projMat2, cv::_InputArray* projPoints1, cv::_InputArray* projPoints2, cv::_OutputArray* points4D)
 {
    cv::triangulatePoints(*projMat1, *projMat2, *projPoints1, *projPoints2, *points4D);
 }

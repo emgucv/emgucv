@@ -539,6 +539,11 @@ namespace Emgu.CV
          CvInvoke.MinMax(this, out minValues, out maxValues, out minLocations, out maxLocations);
       }
 
+      /// <summary>
+      /// Create a Mat object with data pointed towards the specific row of the original matrix
+      /// </summary>
+      /// <param name="i">The row number</param>
+      /// <returns>A Mat object with data pointed towards the specific row of the original matrix</returns>
       public Mat GetRow(int i)
       {
          return new Mat(this, new Rectangle(new Point(i, 0), new Size(this.Size.Width, 1)));

@@ -415,7 +415,7 @@ void cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, cons
    cv::fillConvexPoly(*img, *points, *color, lineType, shift);
 }
 
-void cvefillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset)
+void cveFillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset)
 {
    cv::fillPoly(*img, *pts, *color, lineType, shift, *offset);
 }

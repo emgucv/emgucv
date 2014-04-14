@@ -89,6 +89,11 @@ cv::Mat* cvUMatGetMat(cv::UMat* mat, int access)
    return result;
 }
 
+void cvUMatConvertTo(  cv::UMat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta )
+{
+   mat->convertTo(*out, rtype, alpha, beta);
+}
+
 cv::UMat* cvUMatReshape(cv::UMat* mat, int cn, int rows)
 {
    cv::UMat* result = new cv::UMat();

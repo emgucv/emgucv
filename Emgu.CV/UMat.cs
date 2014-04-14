@@ -304,6 +304,18 @@ namespace Emgu.CV
          CvInvoke.MinMax(this, out minValues, out maxValues, out minLocations, out maxLocations);
       }
 
+      /// <summary>
+      /// Converts an array to another data type with optional scaling.
+      /// </summary>
+      /// <param name="m">Output matrix; if it does not have a proper size or type before the operation, it is reallocated.</param>
+      /// <param name="rtype">Desired output matrix type or, rather, the depth since the number of channels are the same as the input has; if rtype is negative, the output matrix will have the same type as the input.</param>
+      /// <param name="alpha">Optional scale factor.</param>
+      /// <param name="beta">Optional delta added to the scaled values.</param>
+      public void ConvertTo(IOutputArray m, CvEnum.DepthType rtype, double alpha = 1.0, double beta = 0.0)
+      {
+         UMatInvoke.cvUMatConvertTo(Ptr, m.OutputArrayPtr, rtype, alpha, beta);
+      }
+
       /*
       /// <summary>
       /// Convert this Mat to UMat
@@ -427,6 +439,9 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvUMatGetMat(IntPtr umat, CvEnum.AccessType access);
+
+      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvUMatConvertTo(IntPtr umat, IntPtr outArray, CvEnum.DepthType rtype, double alpha, double beta);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvUMatReshape(IntPtr mat, int cn, int rows);
