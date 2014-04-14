@@ -16,7 +16,9 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
+#if !IOS
 using Emgu.CV.UI;
+#endif
 using Emgu.CV.Util;
 using Emgu.Util;
 using NUnit.Framework;

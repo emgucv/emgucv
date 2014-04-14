@@ -88,7 +88,7 @@ namespace Emgu.CV.Softcascade
       /// <param name="rejCriteria">Algorithm used for non maximum suppression.</param>
       public SoftCascadeDetector(String trainedCascadeFileName, double minScale = 0.4, double maxScale = 5.0, int scales = 55, RejectionCriteria rejCriteria = RejectionCriteria.NoReject)
       {
-         _ptr = SoftCascadeInvoke.cvSoftCascadeDetectorCreate(trainedCascadeFileName, minScale, maxScale, scales, rejCriteria);
+         _ptr = SoftCascadeInvoke.cveSoftCascadeDetectorCreate(trainedCascadeFileName, minScale, maxScale, scales, rejCriteria);
       }
 
       /// <summary>
@@ -113,7 +113,7 @@ namespace Emgu.CV.Softcascade
                roiRects.Push(rois);
                roisPtr = roiRects.Ptr;
             }
-            SoftCascadeInvoke.cvSoftCascadeDetectorDetect(_ptr, image.InputArrayPtr, roisPtr, regions, confidents);
+            SoftCascadeInvoke.cveSoftCascadeDetectorDetect(_ptr, image.InputArrayPtr, roisPtr, regions, confidents);
 
             if (regions.Size == 0)
                return new Detection[0];
@@ -137,28 +137,30 @@ namespace Emgu.CV.Softcascade
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            SoftCascadeInvoke.cvSoftCascadeDetectorRelease(ref _ptr);
+            SoftCascadeInvoke.cveSoftCascadeDetectorRelease(ref _ptr);
       }
    }
 
    internal static partial class SoftCascadeInvoke
    {
+      #if !IOS
       static SoftCascadeInvoke()
       {
          //Dummy code to make sure the static constructor of CudaInvoke (and CvInvoke) has been called and the error handler has been registered.
          bool hasCuda = Cuda.CudaInvoke.HasCuda;
       }
+      #endif
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvSoftCascadeDetectorCreate(
+      internal extern static IntPtr cveSoftCascadeDetectorCreate(
          [MarshalAs(CvInvoke.StringMarshalType)]
          String fileName, 
          double minScale, double maxScale, int scales, SoftCascadeDetector.RejectionCriteria rejCriteria);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvSoftCascadeDetectorDetect(IntPtr detector, IntPtr image, IntPtr rois, IntPtr rects, IntPtr confidents);
+      internal extern static void cveSoftCascadeDetectorDetect(IntPtr detector, IntPtr image, IntPtr rois, IntPtr rects, IntPtr confidents);
 
       [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvSoftCascadeDetectorRelease(ref IntPtr detector);
+      internal extern static void cveSoftCascadeDetectorRelease(ref IntPtr detector);
    }
 }

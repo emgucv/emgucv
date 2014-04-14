@@ -127,7 +127,7 @@ CVAPI(void) cvePutText(cv::_InputOutputArray* img, const char* text, CvPoint* or
 
 CVAPI(void) cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift);
 
-CVAPI(void) cvefillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset);
+CVAPI(void) cveFillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset);
 
 CVAPI(void) cvePolylines(cv::_InputOutputArray* img, cv::_InputArray* pts,
                    bool isClosed, const CvScalar* color,
