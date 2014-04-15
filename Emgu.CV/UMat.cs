@@ -371,14 +371,11 @@ namespace Emgu.CV
          else
          {
             //different color, different depth
-            //TODO: Implement this
-            throw new NotImplementedException();
-            /*
-            using (Mat tmp = new Mat())
+            using (UMat tmp = new UMat())
             {
                ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth)));
                return tmp.ToImage<TColor, TDepth>();
-            }*/
+            }
 
          }
       }

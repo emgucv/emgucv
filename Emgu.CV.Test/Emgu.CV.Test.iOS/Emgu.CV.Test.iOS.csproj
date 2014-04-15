@@ -287,6 +287,14 @@
       <Project>{3BF42D92-3D10-45F7-865A-F9C009F71C30}</Project>
       <Name>Emgu.CV.Softcascade.iOS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Shape\Emgu.CV.Shape.iOS.csproj">
+      <Project>{A4126442-4948-4C60-BF46-932B5A4F9ACB}</Project>
+      <Name>Emgu.CV.Shape.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.iOS.csproj">
+      <Project>{0F4522BD-7526-4052-BAC2-7CB674F94412}</Project>
+      <Name>Emgu.CV.VideoStab.iOS</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="tessdata\" />
