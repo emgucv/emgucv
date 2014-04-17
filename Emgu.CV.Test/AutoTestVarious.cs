@@ -16,10 +16,12 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
-using Emgu.CV.Cuda;
 using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
+#if !IOS
+using Emgu.CV.Cuda;
 using Emgu.CV.Tiff;
+#endif
 using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.CV.Nonfree;
@@ -1476,7 +1478,7 @@ namespace Emgu.CV.Test
             img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
          #endregion
 
-         Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
       [Test]

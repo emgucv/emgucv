@@ -57,7 +57,7 @@ namespace Emgu.CV.Example.MonoTouch
 
                List<Image<Gray, Byte>> licensePlateImagesList = new List<Image<Gray, byte>>();
                List<Image<Gray, Byte>> filteredLicensePlateImagesList = new List<Image<Gray, byte>>();
-               List<MCvBox2D> licenseBoxList = new List<MCvBox2D>();
+               List<RotatedRect> licenseBoxList = new List<RotatedRect>();
                List<string> words = detector.DetectLicensePlate(
                   image,
                   licensePlateImagesList,
@@ -74,12 +74,12 @@ namespace Emgu.CV.Example.MonoTouch
 
                messageElement.GetImmediateRootElement().Reload(messageElement, UITableViewRowAnimation.Automatic);
                licenseElement.GetImmediateRootElement().Reload(licenseElement, UITableViewRowAnimation.Automatic);
-               foreach (MCvBox2D box in licenseBoxList)
+               foreach (RotatedRect box in licenseBoxList)
                {
                   image.Draw(box, new Bgr(Color.Red), 2);
                }
                   Size frameSize = FrameSize;
-                  using (Image<Bgr, byte> resized = image.Resize( frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
+               using (Image<Bgr, byte> resized = image.Resize( frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.Inter.Cubic, true))
                   {
                      imageView.Image = resized.ToUIImage();
                      imageView.Frame = new RectangleF(PointF.Empty, resized.Size);

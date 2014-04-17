@@ -8,7 +8,9 @@ using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
+#if !IOS
 using Emgu.CV.Cuda;
+#endif
 
 namespace FaceDetection
 {
@@ -18,6 +20,7 @@ namespace FaceDetection
       {
          Stopwatch watch;
 
+         #if !IOS
          if (CudaInvoke.HasCuda)
          {
             using (CudaCascadeClassifier face = new CudaCascadeClassifier(faceFileName))
@@ -53,6 +56,7 @@ namespace FaceDetection
             }
          }
          else
+         #endif
          {
             bool tryUseOpenCL = true;
             bool usingOpenCL = false;

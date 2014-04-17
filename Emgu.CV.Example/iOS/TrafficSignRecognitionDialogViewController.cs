@@ -45,7 +45,7 @@ namespace Emgu.CV.Example.MonoTouch
                   image.Draw(rect, new Bgr(Color.Red), 2);
                }
                Size frameSize = FrameSize;
-               using (Image<Bgr, byte> resized = image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC, true))
+               using (Image<Bgr, byte> resized = image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.Inter.Cubic, true))
                {
                   MessageText = String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
                   SetImage(resized);

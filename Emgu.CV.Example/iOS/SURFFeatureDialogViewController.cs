@@ -35,7 +35,7 @@ namespace Emgu.CV.Example.MonoTouch
             using (Image<Gray, byte> modelImage = new Image<Gray, byte>("box.png"))
             using (Image<Gray, byte> observedImage = new Image<Gray, byte>("box_in_scene.png"))
             using (Image<Bgr, Byte> image = DrawMatches.Draw(modelImage, observedImage, out processingTime))
-            using (Image<Bgr, Byte> resized =image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
+            using (Image<Bgr, Byte> resized =image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.Inter.Nearest, true))
             {
                MessageText = String.Format("Matching Time: {0} milliseconds.", processingTime);
                SetImage(resized);

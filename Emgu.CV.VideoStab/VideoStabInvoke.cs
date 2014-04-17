@@ -6,18 +6,22 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV;
+#if !IOS
 using Emgu.CV.Cuda;
+#endif
 using Emgu.CV.Structure;
 
 namespace Emgu.CV.VideoStab
 {
    internal static partial class VideoStabInvoke
    {
+      #if !IOS
       static VideoStabInvoke()
       {
          //Dummy code to make sure the static constructor of GpuInvoke has been called
          bool hasCuda = CudaInvoke.HasCuda;
       }
+      #endif
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VideostabCaptureFrameSourceCreate(IntPtr capture, ref IntPtr frameSourcePtr);

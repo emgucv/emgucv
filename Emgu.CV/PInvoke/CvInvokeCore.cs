@@ -12,6 +12,7 @@ namespace Emgu.CV
 {
    public partial class CvInvoke
    {
+      /*
       /// <summary>
       /// Returns information about one of or all of the registered modules
       /// </summary>
@@ -23,9 +24,9 @@ namespace Emgu.CV
          IntPtr moduleName,
          ref IntPtr version,
          ref IntPtr loadedAddonPlugins);
-
+     
       #region Memory Management
-      /*
+
       private static IntPtr DefaultCvAllocFunc(uint size, IntPtr UserData)
       {
          return Marshal.AllocHGlobal((int)size);
@@ -34,7 +35,7 @@ namespace Emgu.CV
       private static int DefaultCvFreeFunc(IntPtr ptr, IntPtr userData)
       {
          Marshal.FreeHGlobal(ptr);
-      }*/
+      }
 
       /// <summary>
       /// Delegate used to allocate data by OpenCV
@@ -54,6 +55,7 @@ namespace Emgu.CV
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       public delegate int CvFreeFunc(IntPtr ptr, IntPtr userData);
 
+
       /// <summary>
       /// The function cvSetMemoryManager sets user-defined memory managment functions (substitutors for malloc and free) that will be called by cvAlloc, cvFree and higher-level functions (e.g. cvCreateImage)
       /// </summary>
@@ -67,7 +69,7 @@ namespace Emgu.CV
          IntPtr userdata);
 
       #endregion
-
+      */
       #region Error handling
       /// <summary>
       /// The default Exception callback to handle Error thrown by OpenCV
@@ -3047,7 +3049,7 @@ namespace Emgu.CV
       /// <summary>
       /// Finishes opencl queue.
       /// </summary>
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="cveOclFinish2")]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="cveOclFinish")]
       public extern static void OclFinish();
       #endregion
 

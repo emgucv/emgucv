@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</ProjectGuid>
     <ProjectTypeGuids>{F5B4F3BC-B597-4E2B-B552-EF5D8A32436F};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -46,11 +46,11 @@
     <Compile Include="AdaptiveSkinDetector.cs" />
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="CameraCalibration\Quaternions.cs" />
-    <Compile Include="Capture\KinectCapture.cs" />
     <Compile Include="CascadeClassifier.cs" />
     <Compile Include="Color\Rgb.cs" />
     <Compile Include="Color\Rgb565.cs" />
     <Compile Include="Color\Rgba.cs" />
+    <Compile Include="DenseOpticalFlow.cs" />
     <Compile Include="ERFilter.cs" />
     <Compile Include="FaceRecognizer.cs" />
     <Compile Include="Features2D\BOWImgDescriptorExtractor.cs" />
@@ -78,8 +78,17 @@
     <Compile Include="Geodetic\GeodeticCoordinate.cs" />
     <Compile Include="Features2D\ImageFeature.cs" />
     <Compile Include="Features2D\LDetector.cs" />
+    <Compile Include="IStereoMatcher.cs" />
     <Compile Include="LatentSvmDetector.cs" />
     <Compile Include="LevMarqSparse.cs" />
+    <Compile Include="MatDataAllocator.cs" />
+    <Compile Include="PInvoke\CvInvokeOptim.cs" />
+    <Compile Include="StereoMatcherExtensions.cs" />
+    <Compile Include="UMat.cs" />
+    <Compile Include="Util\IInputArray.cs" />
+    <Compile Include="Util\IInputOutputArray.cs" />
+    <Compile Include="Util\IOutputArray.cs" />
+    <Compile Include="Mat.cs" />
     <Compile Include="Octree.cs" />
     <Compile Include="HOGDescriptor.cs" />
     <Compile Include="Features2D\PatchGenerator.cs" />
@@ -106,9 +115,7 @@
     <Compile Include="PInvoke\CvType\MCvObjectDetection.cs" />
     <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
     <Compile Include="PInvoke\CvType\CvStructSizes.cs" />
-    <Compile Include="PInvoke\CvType\MCvSURFParams.cs" />
     <Compile Include="PInvoke\CvType\MDMatch.cs" />
-    <Compile Include="Retina.cs" />
     <Compile Include="SparseMatrix.cs" />
     <Compile Include="Features2D\StarDetector.cs" />
     <Compile Include="Features2D\MSERDetector.cs" />
@@ -124,23 +131,35 @@
     <Compile Include="Reflection\GenericParameter.cs" />
     <Compile Include="StereoGC.cs" />
     <Compile Include="StereoSGBM.cs" />
-    <Compile Include="Tiff\TiffWriter.cs" />
-    <Compile Include="Tiff\TileTiffWriter.cs" />
     <Compile Include="Util\CvException.cs" />
     <Compile Include="Util\CvToolbox.cs" />
     <Compile Include="Util\DataLogger.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
+    <Compile Include="Util\VectorOfDouble.cs" />
+    <Compile Include="Util\VectorOfERStat.cs" />
+    <Compile Include="Util\VectorOfInt.cs" />
     <Compile Include="Util\VectorOfByte.cs" />
     <Compile Include="Util\VectorOfDataMatrixCode.cs" />
     <Compile Include="Util\VectorOfDMatch.cs" />
     <Compile Include="Util\VectorOfFloat.cs" />
     <Compile Include="Util\VectorOfKeyPoint.cs" />
+    <Compile Include="Util\VectorOfKeyPointExtra.cs" />
     <Compile Include="Util\VectorOfMat.cs" />
+    <Compile Include="Util\VectorOfMatExtra.cs" />
+    <Compile Include="Util\VectorOfPoint3D32F.cs" />
     <Compile Include="Util\VectorOfRect.cs" />
     <Compile Include="Util\VectorOfPoint.cs" />
     <Compile Include="Util\VectorOfPointF.cs" />
+    <Compile Include="Util\VectorOfUMat.cs" />
+    <Compile Include="Util\VectorOfVectorOfInt.cs" />
+    <Compile Include="Util\VectorOfVectorOfIntExtra.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint.cs" />
+    <Compile Include="Util\VectorOfVectorOfPoint3D32F.cs" />
+    <Compile Include="Util\VectorOfVectorOfPointExtra.cs" />
+    <Compile Include="Util\VectorOfVectorOfPointF.cs" />
+    <Compile Include="Util\VectorOfVectorOfPoint3D32FExtra.cs" />
+    <Compile Include="Util\VectorOfVectorOfPointFExtra.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />
@@ -210,7 +229,6 @@
     <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
     <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
-    <Compile Include="PInvoke\CvType\MCvSURFPoint.cs" />
     <Compile Include="Reflection\ReflectColorType.cs" />
     <Compile Include="Reflection\ReflectIImage.cs" />
     <Compile Include="Shape\Cross2DF.cs" />
@@ -220,10 +238,8 @@
     <Compile Include="Shape\Triangle3DF.cs" />
     <Compile Include="StereoBM.cs" />
     <Compile Include="MemStorage.cs" />
-    <Compile Include="PInvoke\CvType\MCvBox2D.cs" />
+    <Compile Include="PInvoke\CvType\RotatedRect.cs" />
     <Compile Include="PInvoke\CvType\MCvContour.cs" />
-    <Compile Include="PInvoke\CvType\MCvFont.cs" />
-    <Compile Include="PInvoke\CvType\MCvHistogram.cs" />
     <Compile Include="PInvoke\CvType\MCvHuMoments.cs" />
     <Compile Include="PInvoke\CvType\MCvMat.cs" />
     <Compile Include="PInvoke\CvType\MCvMatND.cs" />
@@ -260,20 +276,6 @@
       <DependentUpon>libemgucv.a</DependentUpon>
     </Compile>
     <Compile Include="PInvoke\iOS\ImageiOS.cs" />
-    <Compile Include="Util\VectorOfUMat.cs" />
-    <Compile Include="Util\VectorOfERStat.cs" />
-    <Compile Include="Util\IInputArray.cs" />
-    <Compile Include="Util\IInputOutputArray.cs" />
-    <Compile Include="Util\IOutputArray.cs" />
-    <Compile Include="Util\VectorOfKeyPointExtra.cs" />
-    <Compile Include="Util\VectorOfMatExtra.cs" />
-    <Compile Include="IStereoMatcher.cs" />
-    <Compile Include="Mat.cs" />
-    <Compile Include="StereoMatcherExtensions.cs" />
-    <Compile Include="UMat.cs" />
-    <Compile Include="MatDataAllocator.cs" />
-    <Compile Include="Util\VectorOfInt.cs" />
-    <Compile Include="DenseOpticalFlow.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\StringTable.resx">

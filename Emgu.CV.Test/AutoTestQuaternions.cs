@@ -17,7 +17,9 @@ using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
+#if !IOS
 using Emgu.CV.Tiff;
+#endif
 using NUnit.Framework;
 
 namespace Emgu.CV.Test

@@ -36,12 +36,25 @@ if [ "$1" != "simulator" ]; then
     libtool -static -o libemgucv_armv7.a *.a
     cd ../../..
 
+    rm -f CMakeCache.txt
+    platforms/ios/configure-device_xcode.sh
+    rm -rf platforms/ios/arm64 bin/Release opencv/3rdparty/lib/Release
+    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="arm64" -target ALL_BUILD clean build
+    mkdir -p platforms/ios/arm64 
+    #cp -r lib/Release/* ios/arm64/
+    cp -r bin/Release/* platforms/ios/arm64/
+    cp -r opencv/3rdparty/lib/Release/* platforms/ios/arm64/
+    #cp -r opencv/lib/Release/* ios/arm64/
+    cd platforms/ios/arm64
+    libtool -static -o libemgucv_arm64.a *.a
+    cd ../../..
+
 fi
 
 rm -f CMakeCache.txt
 platforms/ios/configure-simulator_xcode.sh
 rm -rf platforms/ios/i386 bin/Release opencv/3rdparty/lib/Release
-xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release -target ALL_BUILD clean build
+xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="i386" -target ALL_BUILD clean build
 mkdir -p platforms/ios/i386
 #cp -r lib/Release/* ios/i386/
 cp -r bin/Release/* platforms/ios/i386/
@@ -51,17 +64,30 @@ cd platforms/ios/i386
 libtool -static -o libemgucv_i386.a *.a
 cd ../../..
 
+rm -f CMakeCache.txt
+platforms/ios/configure-simulator_xcode.sh
+rm -rf platforms/ios/x86_64 bin/Release opencv/3rdparty/lib/Release
+xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="x86_64" -target ALL_BUILD clean build
+mkdir -p platforms/ios/x86_64
+#cp -r lib/Release/* ios/x86_64/
+cp -r bin/Release/* platforms/ios/x86_64/
+#cp -r opencv/lib/Release/* ios/x86_64/
+cp -r opencv/3rdparty/lib/Release/* platforms/ios/x86_64/
+cd platforms/ios/x86_64
+libtool -static -o libemgucv_x86_64.a *.a
+cd ../../..
+
 rm -rf platforms/ios/universal
 mkdir -p platforms/ios/universal
 if [ "$1" == "simulator" ]; then
-    cp platforms/ios/i386/libemgucv_i386.a platforms/ios/universal/libemgucv.a
+    lipo -create -output platforms/ios/universal/libemgucv.a  platforms/ios/i386/libemgucv_i386.a  platforms/ios/x86_64/libemgucv_x86_64.a
 else
 #    lipo -create -output ios/universal/libemgucv.a ios/armv6/libemgucv_armv6.a ios/armv7/libemgucv_armv7.a ios/i386/libemgucv_i386.a
-    lipo -create -output platforms/ios/universal/libemgucv.a platforms/ios/armv7/libemgucv_armv7.a platforms/ios/armv7s/libemgucv_armv7s.a platforms/ios/i386/libemgucv_i386.a
+    lipo -create -output platforms/ios/universal/libemgucv.a platforms/ios/armv7/libemgucv_armv7.a platforms/ios/armv7s/libemgucv_armv7s.a platforms/ios/arm64/libemgucv_arm64.a platforms/ios/i386/libemgucv_i386.a  platforms/ios/x86_64/libemgucv_x86_64.a
 fi
 
-mkdir -p Emgu.CV/PInvoke/iOS
-cp -f platforms/ios/universal/libemgucv.a Emgu.CV/PInvoke/iOS
+mkdir -p Emgu.CV/PInvoke/MonoTouch
+cp -f platforms/ios/universal/libemgucv.a Emgu.CV/PInvoke/MonoTouch
 
 cd platforms/ios
 

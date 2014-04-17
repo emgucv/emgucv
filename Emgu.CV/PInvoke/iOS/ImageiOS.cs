@@ -30,7 +30,7 @@ namespace Emgu.CV
             RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
             using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
             using (CGBitmapContext context = new CGBitmapContext(
-             MIplImage.imageData,
+             MIplImage.ImageData,
              Width, Height,
              8,
              Width * 4,
@@ -56,7 +56,7 @@ namespace Emgu.CV
          {
             using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
             using (CGBitmapContext context = new CGBitmapContext(
-         		MIplImage.imageData,
+               MIplImage.ImageData,
          		Width, Height,
          		8,
          		Width * 4,
