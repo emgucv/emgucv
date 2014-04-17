@@ -8,14 +8,14 @@ rm -rf build
 call scripts\build armeabi
 call scripts\build armeabi-v7a
 call scripts\build x86
-unzip build_armeabi\libemgucv-android-armeabi-cuda -d build
-unzip build_armeabi-v7a\libemgucv-android-armeabi-v7a-cuda -d build
-unzip build_x86\libemgucv-android-x86-cuda -d build
+unzip build_armeabi\libemgucv-android-armeabi -d build
+unzip build_armeabi-v7a\libemgucv-android-armeabi-v7a -d build
+unzip build_x86\libemgucv-android-x86 -d build
 cd build
 mkdir libemgucv-android 
-xcopy libemgucv-android-x86-cuda libemgucv-android /E /Y
-xcopy libemgucv-android-armeabi-cuda libemgucv-android /E /Y
-xcopy libemgucv-android-armeabi-v7a-cuda libemgucv-android /E /Y
+xcopy libemgucv-android-x86 libemgucv-android /E /Y
+xcopy libemgucv-android-armeabi libemgucv-android /E /Y
+xcopy libemgucv-android-armeabi-v7a libemgucv-android /E /Y
 cd libemgucv-android
 mv bin libs
 xcopy sdk\native\libs libs /E /Y

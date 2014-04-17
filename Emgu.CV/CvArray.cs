@@ -22,13 +22,14 @@ namespace Emgu.CV
    ///<summary>
    ///Wrapped CvArr 
    ///</summary>
-   ///<typeparam name="TDepth">The type of elements in this CvArray</typeparam>
-#if NETFX_CORE
-   public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable where TDepth : new()
-#else
-   public abstract class CvArray<TDepth> : UnmanagedObject, IXmlSerializable, ISerializable, IInputArray, IOutputArray, IInputOutputArray
-      where TDepth : new()
+   ///<typeparam name="TDepth">The type of elements in this CvArray</typeparam> 
+   public abstract class CvArray<TDepth> : 
+      UnmanagedObject, IXmlSerializable, IInputArray, IOutputArray, IInputOutputArray
+#if !NETFX_CORE
+      , ISerializable
 #endif
+      where TDepth : new()
+
    {
       /// <summary>
       /// The size of the elements in the CvArray, it is the cached value of Marshal.SizeOf(typeof(TDepth)).

@@ -5,7 +5,6 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;

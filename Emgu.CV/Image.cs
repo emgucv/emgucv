@@ -107,15 +107,12 @@ namespace Emgu.CV
       public Image(String fileName)
       {
 #if NETFX_CORE
-         IntPtr ptr = CvInvoke.cvLoadImage(fileName, CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_ANYCOLOR | CvEnum.LOAD_IMAGE_TYPE.CV_LOAD_IMAGE_ANYDEPTH);
-         if (ptr == IntPtr.Zero)
-            throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", fileName));
-         try
+         using (Mat m = CvInvoke.Imread(fileName, LoadImageType.AnyColor | LoadImageType.AnyDepth))
          {
-            LoadImageFromIplImagePtr(ptr);
-         } finally
-         {
-            CvInvoke.cvReleaseImage(ref ptr);
+            if (m.IsEmpty)
+               throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", fileName));
+
+            LoadImageFromMat(m);
          }
 #else
 
