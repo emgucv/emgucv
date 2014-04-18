@@ -958,6 +958,14 @@ namespace Emgu.CV
           offset);
         }
 
+        /// <summary>
+        /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
+        /// </summary>
+        /// <param name="contours">The input contour stored as a point vector.</param>
+        /// <param name="color">Color of the contours </param>
+        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative the contour interiors are drawn</param>
+        /// <param name="lineType">Type of the contour segments</param>
+        /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
       public void Draw(
          Point[] contours,
          TColor color,

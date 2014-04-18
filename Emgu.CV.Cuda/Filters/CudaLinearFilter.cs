@@ -36,7 +36,7 @@ namespace Emgu.CV.Cuda
 
    public static partial class CudaInvoke
    {
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cudaCreateLinearFilter(int srcType, int dstType, IntPtr kernel, ref Point anchor, CvEnum.BorderType borderMode, ref MCvScalar borderValue);
    }
 }

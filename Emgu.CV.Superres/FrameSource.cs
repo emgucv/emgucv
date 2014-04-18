@@ -120,20 +120,20 @@ namespace Emgu.CV.Superres
          bool hasCuda = CudaInvoke.HasCuda;
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvSuperresCreateFrameSourceVideo(
          [MarshalAs(CvInvoke.StringMarshalType)]
            String fileName,
          [MarshalAs(CvInvoke.BoolMarshalType)]
            bool useGpu);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvSuperresCreateFrameSourceCamera(int deviceId);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cvSuperresFrameSourceRelease(ref IntPtr frameSource);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cvSuperresFrameSourceNextFrame(IntPtr frameSource, IntPtr frame);
    }
 

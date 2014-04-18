@@ -230,13 +230,13 @@ namespace Emgu.CV
          }
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvHOGDescriptorPeopleDetectorCreate(IntPtr seq);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvHOGDescriptorCreateDefault();
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvHOGDescriptorCreate(
          ref Size winSize,
          ref Size blockSize,
@@ -250,13 +250,13 @@ namespace Emgu.CV
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool gammaCorrection);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvHOGDescriptorRelease(IntPtr descriptor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvHOGDescriptorDetectMultiScale(
          IntPtr descriptor,
          IntPtr img,
@@ -270,7 +270,7 @@ namespace Emgu.CV
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useMeanshiftGrouping);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvHOGDescriptorCompute(
          IntPtr descriptor,
          IntPtr img,
@@ -279,7 +279,7 @@ namespace Emgu.CV
          ref Size padding,
          IntPtr locations);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static uint CvHOGDescriptorGetDescriptorSize(IntPtr descriptor);
    }
 

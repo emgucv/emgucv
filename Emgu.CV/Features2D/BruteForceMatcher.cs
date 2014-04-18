@@ -90,13 +90,13 @@ namespace Emgu.CV.Features2D
          CvInvoke.CheckLibraryLoaded();
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBruteForceMatcherCreate(
          Features2D.DistanceType distanceType,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool crossCheck);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBruteForceMatcherRelease(ref IntPtr matcher);
    }
 }

@@ -20,7 +20,7 @@ namespace Emgu.CV
       /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field).</param>
       /// <param name="box">Circumscribed box for the object. If not IntPtr.Zero, contains object size and orientation</param>
       /// <returns>The number of iterations made within cvMeanShift</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvCamShift(
          IntPtr probImage,
          Rectangle window,
@@ -36,7 +36,7 @@ namespace Emgu.CV
       /// <param name="criteria">Criteria applied to determine when the window search should be finished. </param>
       /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field). </param>
       /// <returns>The number of iterations made</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvMeanShift(
          IntPtr probImage,
          Rectangle window,
@@ -59,7 +59,7 @@ namespace Emgu.CV
       {
          cveUpdateMotionHistory(silhouette.InputArrayPtr, mhi.InputOutputArrayPtr, timestamp, duration);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveUpdateMotionHistory(
           IntPtr silhouette,
           IntPtr mhi,
@@ -87,7 +87,7 @@ namespace Emgu.CV
       {
          cveCalcMotionGradient(mhi.InputArrayPtr, mask.OutputArrayPtr, orientation.OutputArrayPtr, delta1, delta2, apertureSize);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCalcMotionGradient(
           IntPtr mhi,
           IntPtr mask,
@@ -105,7 +105,7 @@ namespace Emgu.CV
       /// <param name="timestamp">Current time in milliseconds or other units</param>
       /// <param name="segThresh">Segmentation threshold; recommended to be equal to the interval between motion history "steps" or greater</param>
       /// <returns>Pointer to the sequence of MCvConnectedComp</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvSegmentMotion(
           IntPtr mhi,
           IntPtr segMask,
@@ -131,7 +131,7 @@ namespace Emgu.CV
       {
          return cveCalcGlobalOrientation(orientation.InputArrayPtr, mask.InputArrayPtr, mhi.InputArrayPtr, timestamp, duration);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveCalcGlobalOrientation(IntPtr orientation, IntPtr mask, IntPtr mhi, double timestamp, double duration);
       #endregion
 
@@ -143,7 +143,7 @@ namespace Emgu.CV
       /// <param name="measureParams">dimensionality of the measurement vector </param>
       /// <param name="controlParams">dimensionality of the control vector </param>
       /// <returns>Pointer to the created Kalman filter</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateKalman(int dynamParams, int measureParams, int controlParams);
 
       /// <summary>
@@ -153,7 +153,7 @@ namespace Emgu.CV
       /// <param name="kalman">Pointer to the structure to be updated</param>
       /// <param name="measurement">Pointer to the structure CvMat containing the measurement vector</param>
       /// <returns>The function stores adjusted state at kalman->state_post and returns it on output</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvKalmanCorrect(IntPtr kalman, IntPtr measurement);
 
       /// <summary>
@@ -163,7 +163,7 @@ namespace Emgu.CV
       /// <param name="kalman">Pointer to the structure to be updated</param>
       /// <param name="measurement">Pointer to the structure CvMat containing the measurement vector</param>
       /// <returns>The function stores adjusted state at kalman->state_post and returns it on output</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvKalmanCorrect(ref MCvKalman kalman, IntPtr measurement);
 
       /// <summary>
@@ -173,7 +173,7 @@ namespace Emgu.CV
       /// <param name="kalman">Kalman filter state</param>
       /// <param name="control">Control vector (uk), should be NULL iff there is no external control (controlParams=0). </param>
       /// <returns>the estimated state</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvKalmanPredict(IntPtr kalman, IntPtr control);
 
       /// <summary>
@@ -183,14 +183,14 @@ namespace Emgu.CV
       /// <param name="kalman">Kalman filter state</param>
       /// <param name="control">Control vector (uk), should be NULL iff there is no external control (controlParams=0). </param>
       /// <returns>the estimated state</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvKalmanPredict(ref MCvKalman kalman, IntPtr control);
 
       /// <summary>
       /// Releases the structure CvKalman and all underlying matrices
       /// </summary>
       /// <param name="kalman">reference of the pointer to the Kalman filter structure.</param>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseKalman(ref IntPtr kalman);
       #endregion
 
@@ -277,7 +277,7 @@ namespace Emgu.CV
          cveCalcOpticalFlowPyrLK(prevImg.InputArrayPtr, nextImg.InputArrayPtr, prevPts.InputArrayPtr, nextPts.InputOutputArrayPtr, status.OutputArrayPtr, err.OutputArrayPtr, ref winSize, maxLevel, ref criteria, flags, minEigThreshold);
       }
 
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCalcOpticalFlowPyrLK(
          IntPtr prevImg, 
          IntPtr nextImg, 
@@ -358,7 +358,7 @@ namespace Emgu.CV
       {
          cveCalcOpticalFlowFarneback(prev0.InputArrayPtr, next0.InputArrayPtr, flow.InputOutputArrayPtr, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveCalcOpticalFlowFarneback(
          IntPtr prev0,
          IntPtr next0,
@@ -381,7 +381,7 @@ namespace Emgu.CV
       /// <param name="M">The resulting Matrix&lt;double&gt; that represent the affine transformation</param>
       /// <param name="fullAffine">Indicates if full affine should be performed</param>
       /// <returns>True if eatimated sucessfully, false otherwise</returns>
-      [DllImport(OPENCV_VIDEO_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool cvEstimateRigidTransform(
          IntPtr A, 

@@ -70,7 +70,7 @@ namespace Emgu.CV.Features2D
             CvDenseFeatureDetectorRelease(ref _ptr);
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvDenseFeatureDetectorCreate(
          float initFeatureScale,
          int featureScaleLevels,
@@ -82,7 +82,7 @@ namespace Emgu.CV.Features2D
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool varyImgBoundWithScale);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvDenseFeatureDetectorRelease(ref IntPtr detector);
    }
 }

@@ -24,7 +24,7 @@ namespace Emgu.CV
       {
          return cveSolveLP(functionMatrix, constraintMatrix, zMatrix);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern CvEnum.SolveLPResult cveSolveLP(IntPtr functionMatrix, IntPtr constraintMatrix, IntPtr zMatrix);
 
       /// <summary>
@@ -43,7 +43,7 @@ namespace Emgu.CV
             cveDenoiseTVL1(vm, result, lambda, niters);
          }
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDenoiseTVL1(IntPtr observations, IntPtr result, double lambda, int niters);
    }
 }

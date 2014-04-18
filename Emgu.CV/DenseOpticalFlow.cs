@@ -42,10 +42,10 @@ namespace Emgu.CV
             cveDenseOpticalFlowRelease(ref _ptr);
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDenseOpticalFlowRelease(ref IntPtr flow);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDenseOpticalFlowCalc(IntPtr dof, IntPtr i0, IntPtr i1, IntPtr flow);
    }
 
@@ -62,7 +62,7 @@ namespace Emgu.CV
          _ptr = cveDenseOpticalFlowCreateDualTVL1();
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr cveDenseOpticalFlowCreateDualTVL1();
    }
 }

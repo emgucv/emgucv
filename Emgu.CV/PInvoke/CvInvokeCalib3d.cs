@@ -30,7 +30,7 @@ namespace Emgu.CV
       {
          cveFindHomography(srcPoints.InputArrayPtr, dstPoints.InputArrayPtr, homography.OutputArrayPtr, method, ransacReprojThreshold, mask == null ? IntPtr.Zero : mask.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFindHomography(IntPtr srcPoints, IntPtr dstPoints, IntPtr homography, CvEnum.HomographyMethod method, double ransacReprojThreshold, IntPtr mask);
 
       /// <summary>
@@ -43,7 +43,7 @@ namespace Emgu.CV
       {
          cveRodrigues(src.InputArrayPtr, dst.OutputArrayPtr, jacobian == null ? IntPtr.Zero : jacobian.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveRodrigues(IntPtr src, IntPtr dst, IntPtr jacobian);
 
       #region Epipolar Geometry, Stereo Correspondence
@@ -61,7 +61,7 @@ namespace Emgu.CV
       {
          cveFindFundamentalMat(points1.InputArrayPtr, points2.InputArrayPtr, f.OutputArrayPtr, method, param1, param2, mask == null ? IntPtr.Zero : mask.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFindFundamentalMat(IntPtr points1, IntPtr points2, IntPtr dst, CvEnum.FmType method, double param1, double param2, IntPtr mask);
 
 
@@ -81,7 +81,7 @@ namespace Emgu.CV
       {
          cveComputeCorrespondEpilines(points.InputArrayPtr, whichImage, fundamentalMatrix.InputArrayPtr, correspondentLines.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveComputeCorrespondEpilines(
          IntPtr points,
          int whichImage,
@@ -97,7 +97,7 @@ namespace Emgu.CV
       {
          cveConvertPointsToHomogeneous(src.InputArrayPtr, dst.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveConvertPointsToHomogeneous(IntPtr src, IntPtr dst);
 
 
@@ -110,7 +110,7 @@ namespace Emgu.CV
       {
          cveConvertPointsFromHomogeneous(src.InputArrayPtr, dst.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveConvertPointsFromHomogeneous(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -127,7 +127,7 @@ namespace Emgu.CV
       {
          cveReprojectImageTo3D(disparity.InputArrayPtr, image3D.OutputArrayPtr, q.InputArrayPtr, handleMissingValues, ddepth);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveReprojectImageTo3D(
          IntPtr disparity,
          IntPtr image3D,
@@ -150,7 +150,7 @@ namespace Emgu.CV
       /// <param name="param3">defines a highly reliable region (set of contiguous pixels whose reliability is at least param3)</param>
       /// <param name="param4">defines a moderately reliable region</param>
       /// <param name="param5">defines a slightly reliable region</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvCalib3dLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvFindStereoCorrespondence(
          IntPtr leftImage, IntPtr rightImage,
          int mode, IntPtr depthImage,
@@ -175,7 +175,7 @@ namespace Emgu.CV
       {
          cveProjectPoints(objectPoints.InputArrayPtr, rvec.InputArrayPtr, tvec.InputArrayPtr, cameraMatrix.InputArrayPtr, distCoeffs == null ? IntPtr.Zero : distCoeffs.InputArrayPtr, imagePoints.OutputArrayPtr, jacobian == null ? IntPtr.Zero : jacobian.OutputArrayPtr, aspectRatio);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveProjectPoints(IntPtr objPoints, IntPtr rvec, IntPtr tvec, IntPtr cameraMatrix, IntPtr distCoeffs, IntPtr imagePoints, IntPtr jacobian, double aspectRatio);
 
       /// <summary>
@@ -213,7 +213,7 @@ namespace Emgu.CV
             flags,
             ref termCriteria);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveCalibrateCamera(
          IntPtr objectPoints,
          IntPtr imagePoints,
@@ -244,7 +244,7 @@ namespace Emgu.CV
          cveCalibrationMatrixValues(
             cameraMatrix.InputArrayPtr, ref imageSize, apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref aspectRatio);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCalibrationMatrixValues(
          IntPtr cameraMatrix, ref Size imageSize, double apertureWidth, double apertureHeight,
          ref double fovx, ref double fovy, ref double focalLength, ref MCvPoint2D64f principalPoint, ref double aspectRatio);
@@ -281,7 +281,7 @@ namespace Emgu.CV
             useExtrinsicGuess,
             flags);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveSolvePnP(
          IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs, 
@@ -317,7 +317,7 @@ namespace Emgu.CV
             useExtrinsicGuess, iterationsCount, reprojectionError, minInliersCount, 
             inliers == null ? IntPtr.Zero : inliers.OutputArrayPtr, flags);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveSolvePnPRansac(
          IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs, 
          IntPtr rvec, IntPtr tvec, 
@@ -370,7 +370,7 @@ namespace Emgu.CV
             r.OutputArrayPtr, t.OutputArrayPtr, e.OutputArrayPtr, f.OutputArrayPtr,
             flags, ref termCrit);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveStereoCalibrate(
          IntPtr objectPoints,
          IntPtr imagePoints1,
@@ -405,7 +405,7 @@ namespace Emgu.CV
       {
          return cveStereoRectifyUncalibrated(points1.InputArrayPtr, points2.InputArrayPtr, f.InputArrayPtr, ref imgSize, h1.OutputArrayPtr, h2.OutputArrayPtr, threshold);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveStereoRectifyUncalibrated(IntPtr points1, IntPtr points2, IntPtr f, ref Size imgSize, IntPtr h1, IntPtr h2, double threshold);
 
@@ -449,7 +449,7 @@ namespace Emgu.CV
             q.OutputArrayPtr, flags,
             alpha, ref newImageSize, ref validPixRoi1, ref validPixRoi2);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveStereoRectify(
          IntPtr cameraMatrix1,
          IntPtr distCoeffs1,
@@ -484,7 +484,7 @@ namespace Emgu.CV
       {
          return cveFindChessboardCorners(image.InputArrayPtr, ref patternSize, corners.OutputArrayPtr, flags);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern bool cveFindChessboardCorners(IntPtr image, ref Size patternSize, IntPtr corners, CvEnum.CalibCbType flags);
 
 
@@ -499,7 +499,7 @@ namespace Emgu.CV
       {
          cveDrawChessboardCorners(image.InputOutputArrayPtr, ref patternSize, corners.InputArrayPtr, patternWasFound);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDrawChessboardCorners(IntPtr image, ref Size patternSize, IntPtr corners, [MarshalAs(CvInvoke.BoolMarshalType)] bool patternWasFound);
       #endregion
 
@@ -513,7 +513,7 @@ namespace Emgu.CV
       /// <param name="points3D">A two dimensional array contains the points of the 3D object model, the second dimension must be 3. </param>
       /// <param name="pointCount">Number of object points</param>
       /// <returns>A pointer to the CvPOSITObject</returns>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvCalib3dLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreatePOSITObject(float[,] points3D, int pointCount);
 
       /*
@@ -527,7 +527,7 @@ namespace Emgu.CV
       /// <param name="criteria">Termination criteria of the iterative POSIT algorithm. The parameter criteria.epsilon serves to stop the algorithm if the difference is small.</param>
       /// <param name="rotationMatrix">A vector which contains the 9 elements of the 3x3 rotation matrix</param>
       /// <param name="translationVector">Translation vector (3x1)</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvCalib3DLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPOSIT(
          IntPtr positObject, float[,] imagePoints, double focalLength,
          MCvTermCriteria criteria, 
@@ -553,7 +553,7 @@ namespace Emgu.CV
          cvPOSIT(positObject, imagePoints, focalLength, criteria.Type, criteria.MaxIter, criteria.Epsilon, rotationMatrix, translationVector);
       }
 
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvCalib3DLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvPOSIT(
          IntPtr positObject, IntPtr imagePoints, double focalLength,
          CvEnum.TermCritType type,
@@ -561,7 +561,7 @@ namespace Emgu.CV
          double epsilon,
          IntPtr rotationMatrix, IntPtr translationVector);
 #else
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvCalib3dLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPOSIT(
          IntPtr positObject, IntPtr imagePoints, double focalLength,
          MCvTermCriteria criteria,
@@ -572,7 +572,7 @@ namespace Emgu.CV
       /// The function cvReleasePOSITObject releases memory previously allocated by the function cvCreatePOSITObject. 
       /// </summary>
       /// <param name="positObject">pointer to CvPOSIT structure</param>
-      [DllImport(OPENCV_CALIB3D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvCalib3dLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleasePOSITObject(ref IntPtr positObject);
       #endregion
 
@@ -588,7 +588,7 @@ namespace Emgu.CV
       {
          cveTriangulatePoints(projMat1.InputArrayPtr, projMat2.InputArrayPtr, projPoints1.InputArrayPtr, projPoints2.InputArrayPtr, points4D.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveTriangulatePoints(IntPtr projMat1, IntPtr projMat2, IntPtr projPoints1, IntPtr projPoints2, IntPtr points4D);
 
       /// <summary>
@@ -603,7 +603,7 @@ namespace Emgu.CV
       {
          cveCorrectMatches(f.InputArrayPtr, points1.InputArrayPtr, points2.InputArrayPtr, newPoints1.OutputArrayPtr, newPoints2.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1, IntPtr newPoints2);
 
    }

@@ -70,7 +70,7 @@ namespace Emgu.CV
 {
    public static partial class CvInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvPatchGeneratorInit(ref Features2D.PatchGenerator pg);
    }
 }

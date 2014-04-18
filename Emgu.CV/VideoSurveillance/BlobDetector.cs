@@ -60,7 +60,7 @@ namespace Emgu.CV.VideoSurveillance
       /// Release the blob detector
       /// </summary>
       /// <param name="detector">the detector to be released</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBlobDetectorRelease(ref IntPtr detector);
 
       /// <summary>
@@ -71,7 +71,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="imgFG">The foreground mask</param>
       /// <param name="newBlobList">The new blob list</param>
       /// <param name="oldBlobList">The old blob list</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       internal extern static bool CvBlobDetectorDetectNewBlob(IntPtr detector, IntPtr img, IntPtr imgFG, IntPtr newBlobList, IntPtr oldBlobList);
 
@@ -79,14 +79,14 @@ namespace Emgu.CV.VideoSurveillance
       /// Get a simple blob detector 
       /// </summary>
       /// <returns>Pointer to the blob detector</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvCreateBlobDetectorSimple();
 
       /// <summary>
       /// Get a CC blob detector 
       /// </summary>
       /// <returns>Pointer to the blob detector</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvCreateBlobDetectorCC();
    }
 }

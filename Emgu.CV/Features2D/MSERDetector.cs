@@ -172,10 +172,10 @@ namespace Emgu.CV
 {
    public static partial class CvInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvMserGetFeatureDetector(ref MCvMSERParams detector);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvMserFeatureDetectorRelease(ref IntPtr detector);
    }
 }

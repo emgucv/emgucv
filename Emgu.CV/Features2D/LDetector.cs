@@ -109,7 +109,7 @@ namespace Emgu.CV
 {
    public static partial class CvInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvLDetectorDetectKeyPoints(
          ref Features2D.LDetector detector,
          IntPtr image,

@@ -9,17 +9,17 @@ namespace Emgu.CV
       /// <summary>
       /// The file name of the cvextern library
       /// </summary>
-      public const string EXTERN_LIBRARY = "${CVEXTERN_OUTPUT_NAME}";
+      public const string ExternLibrary = "${CVEXTERN_OUTPUT_NAME}";
 	  
 	  /// <summary>
       /// The file name of the cvextern library
       /// </summary>
-      public const string EXTERN_CUDA_LIBRARY = EXTERN_LIBRARY;
+      public const string ExternCudaLibrary = ExternLibrary;
 
       /// <summary>
       /// The file name of the opencv_ffmpeg library
       /// </summary>
-      public const string OPENCV_FFMPEG_LIBRARY = "${OPENCV_FFMPEG_OUTPUT_NAME}";
+      public const string OpencvFFMpegLibrary = "${OPENCV_FFMPEG_OUTPUT_NAME}";
 
 	  ${ENTRYPOINT_CS_STRING}
 	  

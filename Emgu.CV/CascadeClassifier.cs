@@ -104,13 +104,13 @@ namespace Emgu.CV
             CvCascadeClassifierRelease(ref _ptr);
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvCascadeClassifierCreate([MarshalAs(CvInvoke.StringMarshalType)] String fileName);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvCascadeClassifierRelease(ref IntPtr classifier);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvCascadeClassifierDetectMultiScale(
          IntPtr classifier,
          IntPtr image,
@@ -120,11 +120,11 @@ namespace Emgu.CV
          ref Size minSize,
          ref Size maxSize);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal extern static bool CvCascadeClassifierIsOldFormatCascade(IntPtr classifier);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvCascadeClassifierGetOriginalWindowSize(IntPtr classifier, ref Size size);
    }
 

@@ -80,16 +80,16 @@ namespace Emgu.CV.Cuda
 
    public static partial class CudaInvoke
    {
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cudaPyrLKOpticalFlowCreate(
          Size winSize, int maxLevel, int iters,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useInitialFlow);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaPyrLKOpticalFlowDense(IntPtr flow, IntPtr prevImg, IntPtr nextImg, IntPtr u, IntPtr v, IntPtr err);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaPyrLKOpticalFlowSparse(
          IntPtr flow,
          IntPtr prevImg,
@@ -99,7 +99,7 @@ namespace Emgu.CV.Cuda
          IntPtr status,
          IntPtr err);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaPyrLKOpticalFlowRelease(ref IntPtr flow);
    }
 }

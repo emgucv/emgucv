@@ -70,7 +70,7 @@ namespace Emgu.CV.Features2D
 
    internal partial class Feature2DInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFeature2DDetectAndCompute(
          IntPtr feature2D,
          IntPtr image,

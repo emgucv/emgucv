@@ -15,7 +15,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="index">Index of the camera to be used. If there is only one camera or it does not matter what camera to use -1 may be passed</param>
       /// <returns>Pointer to the capture structure</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateCameraCapture(int index);
 
       /// <summary>
@@ -24,14 +24,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="filename">Name of the video file.</param>
       /// <returns>Pointer to the capture structure.</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateFileCapture([MarshalAs(StringMarshalType)] String filename);
 
       /// <summary>
       /// The function cvReleaseCapture releases the CvCapture structure allocated by cvCreateFileCapture or cvCreateCameraCapture
       /// </summary>
       /// <param name="capture">pointer to video capturing structure.</param>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseCapture(ref IntPtr capture);
 
       /// <summary>
@@ -40,7 +40,7 @@ namespace Emgu.CV
       /// <param name="capture">Video capturing structure</param>
       /// <returns>Pointer to the queryed frame</returns>
       /// <remarks>The returned image should not be released or modified by user. </remarks>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvQueryFrame(IntPtr capture);
 
       /// <summary>
@@ -48,7 +48,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="capture">Video capturing structure</param>
       /// <returns>True on success</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool cvGrabFrame(IntPtr capture);
 
@@ -60,7 +60,7 @@ namespace Emgu.CV
       /// <param name="streamIdx">Stream index</param>
       /// <returns>Pointer to the queryed frame</returns>
       /// <remarks>The returned image should not be released or modified by user. </remarks>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvRetrieveFrame(IntPtr capture, int streamIdx);
 
       /// <summary>
@@ -69,7 +69,7 @@ namespace Emgu.CV
       /// <param name="capture">Video capturing structure</param>
       /// <param name="prop">Property identifier</param>
       /// <returns>The specified property of camera or video file</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvGetCaptureProperty(IntPtr capture, CvEnum.CapProp prop);
 
       /// <summary>
@@ -78,7 +78,7 @@ namespace Emgu.CV
       /// <param name="capture">Video capturing structure</param>
       /// <param name="propertyId">Property identifier</param>
       /// <param name="value">Value of the property</param>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSetCaptureProperty(IntPtr capture, CvEnum.CapProp propertyId, double value);
 
       /// <summary>
@@ -86,7 +86,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="capture">The pointer to CvCapture</param>
       /// <returns>The type of the capture</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvGetCaptureDomain(IntPtr capture);  
 
       /// <summary>
@@ -108,7 +108,7 @@ namespace Emgu.CV
          return new Mat(filename, loadType);
       }
       
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveImread(
          [MarshalAs(StringMarshalType)] String filename,
          CvEnum.LoadImageType loadType, 
@@ -131,7 +131,7 @@ namespace Emgu.CV
             return cveImwrite(filename, image.InputArrayPtr, vec);
          }
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveImwrite([MarshalAs(StringMarshalType)] String filename, IntPtr image, IntPtr parameters);
 
@@ -141,7 +141,7 @@ namespace Emgu.CV
       /// <param name="bufMat">A pointer to the CvMat that holds the buffer</param>
       /// <param name="loadType">The image loading type</param>
       /// <returns>A pointer to the Image decoded.</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvDecodeImage(IntPtr bufMat, CvEnum.LoadImageType loadType);
 
       /// <summary>
@@ -151,7 +151,7 @@ namespace Emgu.CV
       /// <param name="image">The image</param>
       /// <param name="parameters">The pointer to the array of intergers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
       /// <returns>A pointer to single-row 8uC1 CvMat that represent the encoded image.</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvEncodeImage([MarshalAs(StringMarshalType)] String ext, IntPtr image, IntPtr parameters);
 
       /// <summary>
@@ -182,7 +182,7 @@ namespace Emgu.CV
          }
       }
 
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvNamedWindow")]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvNamedWindow")]
       private static extern int _cvNamedWindow([MarshalAs(StringMarshalType)] String name, int flags);
 
       /// <summary>
@@ -200,7 +200,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="delay">Delay in milliseconds.</param>
       /// <returns>The code of the pressed key or -1 if no key were pressed until the specified timeout has elapsed</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int cvWaitKey(int delay);
 
       /// <summary>
@@ -208,14 +208,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="name">Name of the window</param>
       /// <param name="image">Image to be shown</param>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvShowImage([MarshalAs(StringMarshalType)] String name, IntPtr image);
 
       /// <summary>
       /// Destroys the window with a given name
       /// </summary>
       /// <param name="name">Name of the window to be destroyed</param>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvDestroyWindow([MarshalAs(StringMarshalType)] String name);
 
       /// <summary>
@@ -227,7 +227,7 @@ namespace Emgu.CV
       /// <param name="frameSize">Size of video frames.</param>
       /// <param name="isColor">If != 0, the encoder will expect and encode color frames, otherwise it will work with grayscale frames </param>
       /// <returns>The video writer</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateVideoWriter(
           [MarshalAs(StringMarshalType)] String filename,
           int fourcc,
@@ -257,7 +257,7 @@ namespace Emgu.CV
       /// Finishes writing to video file and releases the structure.
       /// </summary>
       /// <param name="writer">pointer to video file writer structure</param>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseVideoWriter(ref IntPtr writer);
 
       /// <summary>
@@ -266,7 +266,7 @@ namespace Emgu.CV
       /// <param name="writer">video writer structure.</param>
       /// <param name="image">the written frame</param>
       /// <returns>True on success, false otherwise</returns>
-      [DllImport(OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool cvWriteFrame(IntPtr writer, IntPtr image);
 

@@ -307,10 +307,10 @@ namespace Emgu.CV
 
    public static partial class CvInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void OpenniGetColorPoints(IntPtr capture, IntPtr points /* sequence of ColorPoint */, IntPtr mask);
 
-      [DllImport(CvInvoke.OPENCV_HIGHGUI_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvGetOpenniCaptureContext(IntPtr capture);
    }
 }

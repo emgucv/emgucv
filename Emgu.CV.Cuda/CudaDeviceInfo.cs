@@ -180,10 +180,10 @@ namespace Emgu.CV.Cuda
 
    public static partial class CudaInvoke
    {
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cudaDeviceInfoCreate(ref int deviceId);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaDeviceInfoRelease(ref IntPtr di);
 
       /// <summary>
@@ -192,7 +192,7 @@ namespace Emgu.CV.Cuda
       /// <param name="device">The device</param>
       /// <param name="major">The major version of the compute capability</param>
       /// <param name="minor">The minor version of the compute capability</param>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaDeviceInfoComputeCapability(IntPtr device, ref int major, ref int minor);
 
       /// <summary>
@@ -200,30 +200,30 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="device">The device</param>
       /// <returns>The number of multiprocessors on device</returns>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int cudaDeviceInfoMultiProcessorCount(IntPtr device);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaDeviceInfoFreeMemInfo(IntPtr device, ref UIntPtr free);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaDeviceInfoTotalMemInfo(IntPtr device, ref UIntPtr total);
 
       /// <summary>
       /// Get the device name
       /// </summary>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaDeviceInfoDeviceName(
          IntPtr device,
          [MarshalAs(CvInvoke.StringMarshalType)]
          StringBuilder buffer,
          int maxSizeInBytes);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal static extern bool cudaDeviceInfoSupports(IntPtr device, CudaDeviceInfo.GpuFeature feature);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal static extern bool cudaDeviceInfoIsCompatible(IntPtr device);
    }

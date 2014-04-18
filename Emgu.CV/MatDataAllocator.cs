@@ -147,7 +147,7 @@ namespace Emgu.CV
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       internal delegate void MatDeallocateCallback(IntPtr data);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvMatAllocatorRelease(ref IntPtr allocator);
    }
 }

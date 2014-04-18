@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
+/*
 using System;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.DebuggerVisualizers;
@@ -20,7 +21,7 @@ namespace Emgu.CV.DebuggerVisualizers
       protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
       {
          DenseHistogram hist = objectProvider.GetObject() as DenseHistogram;
-         if (hist.Dimension > 1)
+         if (hist.Cols > 1)
          {
             MessageBox.Show("Only 1-D histogram visualization is supported");
             return;
@@ -30,11 +31,11 @@ namespace Emgu.CV.DebuggerVisualizers
          {
             using (HistogramViewer viewer = new HistogramViewer())
             {
-               viewer.HistogramCtrl.AddHistogram("Histogram", System.Drawing.Color.Black, hist);
+               viewer.HistogramCtrl.AddHistogram("Histogram", System.Drawing.Color.Black, hist, 256, new float[] {0, 255});
                viewer.HistogramCtrl.Refresh();
                windowService.ShowDialog(viewer);
             }
          }
       }
    }
-}
+}*/

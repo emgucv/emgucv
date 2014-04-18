@@ -45,10 +45,10 @@ namespace Emgu.CV.Features2D
          CvInvoke.CheckLibraryLoaded();
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvDescriptorMatcherKnnMatch(IntPtr matcher, IntPtr queryDescriptors,
                    IntPtr trainIdx, IntPtr distance, int k,
                    IntPtr mask);

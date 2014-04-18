@@ -56,16 +56,16 @@ namespace Emgu.CV.Cuda
    public static partial class CudaInvoke
    {
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cudaCreateCannyEdgeDetector(
          double lowThreshold, double highThreshold, int apertureSize,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool L2gradient);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaCannyEdgeDetectorDetect(IntPtr detector, IntPtr src, IntPtr edges);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaCannyEdgeDetectorRelease(ref IntPtr detector);
 
    }

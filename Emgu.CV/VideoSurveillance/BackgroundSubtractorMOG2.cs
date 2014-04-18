@@ -39,14 +39,14 @@ namespace Emgu.CV.VideoSurveillance
          CvBackgroundSubtractorMOG2Release(ref _ptr);
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvBackgroundSubtractorMOG2Create(
          int history,
          float varThreshold,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool bShadowDetection);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvBackgroundSubtractorMOG2Release(ref IntPtr bgSubstractor);
    }
 }

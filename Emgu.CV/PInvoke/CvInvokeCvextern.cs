@@ -46,7 +46,7 @@ namespace Emgu.CV
          cveGrabCut(img.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputOutputArrayPtr, ref rect, bgdModel.InputOutputArrayPtr, fgdModel.InputOutputArrayPtr, iterCount, type);
       }
 
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveGrabCut(
          IntPtr img,
          IntPtr mask,
@@ -67,7 +67,7 @@ namespace Emgu.CV
       {
          cveSqrt(src.InputArrayPtr, dst.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveSqrt(IntPtr src, IntPtr dst);
 
       /// <summary>
@@ -83,7 +83,7 @@ namespace Emgu.CV
       {
          cveApplyColorMap(src.InputArrayPtr, dst.OutputArrayPtr, colorMapType);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
 
       
@@ -109,7 +109,7 @@ namespace Emgu.CV
       {
          return cveCheckRange(arr.InputArrayPtr, quiet, ref pos, minVal, maxVal);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private extern static bool cveCheckRange(
          IntPtr arr,
@@ -164,7 +164,7 @@ namespace Emgu.CV
       {
          return cveEstimateAffine3D(src.InputArrayPtr, dst.InputArrayPtr, affineEstimate.OutputArrayPtr, inliers.OutputArrayPtr, ransacThreshold, confidence);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cveEstimateAffine3D(IntPtr src, IntPtr dst, IntPtr affineEstimate, IntPtr inliers, double ransacThreshold, double confidence);
 
 
@@ -187,7 +187,7 @@ namespace Emgu.CV
          minHandle.Free();
          maxHandle.Free();
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveMinMaxIdx(IntPtr src, ref double minVal, ref double maxVal, IntPtr minIdx, IntPtr maxIdx, IntPtr mask);
 
       /// <summary>
@@ -204,7 +204,7 @@ namespace Emgu.CV
          cveFilter2D(src.InputArrayPtr, dst.OutputArrayPtr, kernel.InputArrayPtr, ref anchor, delta, borderType);
       }
 
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, double delta, Emgu.CV.CvEnum.BorderType borderType);
 
 
@@ -219,7 +219,7 @@ namespace Emgu.CV
       {
          cveCLAHE(src.InputArrayPtr, clipLimit, ref tileGridSize, dst.OutputArrayPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCLAHE(IntPtr srcArr, double clipLimit, ref Size tileGridSize, IntPtr dstArr);
 
 
@@ -227,7 +227,7 @@ namespace Emgu.CV
       /// This function retrive the Open CV structure sizes in unmanaged code
       /// </summary>
       /// <param name="sizes">The structure that will hold the Open CV structure sizes</param>
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="getCvStructSizes")]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="getCvStructSizes")]
       public static extern void GetCvStructSizes(ref CvStructSizes sizes);
 
       /*
@@ -236,7 +236,7 @@ namespace Emgu.CV
          TestDrawLine(img, startX, startY, endX, endY, color.v0, color.v1, color.v2, color.v3);
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="testDrawLine")]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="testDrawLine")]
       private static extern void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, double v0, double v1, double v2, double v3);
       */
 
@@ -276,7 +276,7 @@ namespace Emgu.CV
             return count;
          }
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int cveChamferMatching(
          IntPtr img, IntPtr templ,
          IntPtr results, IntPtr cost,
@@ -322,7 +322,7 @@ namespace Emgu.CV
       {
          return cveFindCirclesGrid(image.InputArrayPtr, ref patternSize, centers.OutputArrayPtr, flags, featureDetector.FeatureDetectorPtr);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveFindCirclesGrid(IntPtr image, ref Size patternSize, IntPtr centers, CvEnum.CalibCgType flags, IntPtr blobDetector);
       
@@ -341,7 +341,7 @@ namespace Emgu.CV
       {
          cveAdaptiveBilateralFilter(src.InputArrayPtr, dst.OutputArrayPtr, ref ksize, sigmaSpace, maxSigmaColor, ref anchor, borderType);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveAdaptiveBilateralFilter(IntPtr src, IntPtr dst, ref Size ksize, double sigmaSpace, double maxSigmaColor, ref Point anchor, CvEnum.BorderType borderType);
       */
    }

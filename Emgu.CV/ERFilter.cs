@@ -201,13 +201,13 @@ namespace Emgu.CV
          }
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvERFilterRelease(ref IntPtr filter);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvERFilterRun(IntPtr filter, IntPtr image, IntPtr regions);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvERGrouping(
          IntPtr channels, IntPtr regions, int count,
          [MarshalAs(CvInvoke.StringMarshalType)]
@@ -243,7 +243,7 @@ namespace Emgu.CV
          _ptr = CvERFilterNM1Create(classifierFileName, thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvERFilterNM1Create(
          [MarshalAs(CvInvoke.StringMarshalType)]
          String classifier,
@@ -271,7 +271,7 @@ namespace Emgu.CV
          _ptr = CvERFilterNM2Create(classifierFileName, minProbability);
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvERFilterNM2Create(
          [MarshalAs(CvInvoke.StringMarshalType)]
          String classifier,

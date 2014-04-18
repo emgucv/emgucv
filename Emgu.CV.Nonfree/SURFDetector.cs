@@ -66,7 +66,7 @@ namespace Emgu.CV.Nonfree
          CvInvoke.CheckLibraryLoaded();
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvSURFDetectorCreate(
          double hessianThresh, int nOctaves, int nOctaveLayers, 
          [MarshalAs(CvInvoke.BoolMarshalType)]
@@ -75,7 +75,7 @@ namespace Emgu.CV.Nonfree
          bool upright, 
          ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSURFDetectorRelease(ref IntPtr detector);
 
       #region Image extensions

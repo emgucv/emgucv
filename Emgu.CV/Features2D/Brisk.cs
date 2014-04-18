@@ -42,10 +42,10 @@ namespace Emgu.CV.Features2D
          base.DisposeObject();
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBriskCreate(int thresh, int octaves, float patternScale, ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBriskRelease(ref IntPtr detector);
    }
 }

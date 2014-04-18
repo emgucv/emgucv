@@ -1,8 +1,8 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2013 by EMGU. All rights reserved.       
 //----------------------------------------------------------------------------
 
-﻿using System;
+ using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 
@@ -15,7 +15,7 @@ namespace Emgu.CV
       /// Deallocates the cascade that has been created manually or loaded using cvLoadHaarClassifierCascade or cvLoad
       /// </summary>
       /// <param name="cascade">Double pointer to the released cascade. The pointer is cleared by the function. </param>
-      [DllImport(OPENCV_OBJDETECT_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvObjdetectLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseHaarClassifierCascade(ref IntPtr cascade);
 
       /// <summary>
@@ -30,7 +30,7 @@ namespace Emgu.CV
       /// <param name="minSize">Use Size.Empty as default. Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection). </param>
       /// <param name="maxSize">Use Size.Empty to ignor the parameter. </param>
       /// <returns>Rectangular regions in the given image that are likely to contain objects the cascade has been trained for</returns>
-      [DllImport(OPENCV_OBJDETECT_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvObjdetectLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvHaarDetectObjects(
          IntPtr image,
          IntPtr cascade,

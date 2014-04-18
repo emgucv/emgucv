@@ -869,7 +869,7 @@ namespace Emgu.CV.UI.GLView
                   LoadTexture(img.Size, img.MIplImage.imageData, TextureColor.RGB, 0);
                }
             }*/
-
+            
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Enable(EnableCap.Blend);
          }

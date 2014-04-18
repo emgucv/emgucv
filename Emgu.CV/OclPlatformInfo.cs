@@ -109,23 +109,23 @@ namespace Emgu.CV
          CvInvoke.CheckLibraryLoaded();
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclPlatformInfoGetProperties(
          IntPtr oclPlatformInfo,
          ref IntPtr platformVersion,
          ref IntPtr platformName,
          ref IntPtr platformVendor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclPlatformInfoRelease(ref IntPtr platformInfo);
 
-      //[DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       //internal static extern IntPtr oclPlatformInfoGetDevices(IntPtr oclPlatformInfo);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int oclPlatformInfoDeviceNumber(IntPtr platformInfo);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclGetPlatfomsInfo(IntPtr platformInfoVec);
 
       /// <summary>
@@ -139,7 +139,7 @@ namespace Emgu.CV
          return result;
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclPlatformInfoGetDevice(IntPtr platformInfo, IntPtr device, int d);
    }
 }

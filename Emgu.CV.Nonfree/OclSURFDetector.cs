@@ -139,7 +139,7 @@ namespace Emgu.CV.Nonfree
 
    public static partial class NonfreeInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr oclSURFDetectorCreate(
          double hessianThreshold,
          int nOctaves,
@@ -150,19 +150,19 @@ namespace Emgu.CV.Nonfree
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool upright);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclSURFDetectorRelease(ref IntPtr detector);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclSURFDetectorDetectKeyPoints(IntPtr detector, IntPtr img, IntPtr mask, IntPtr keypoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclSURFDownloadKeypoints(IntPtr detector, IntPtr keypointsGPU, IntPtr keypoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclSURFUploadKeypoints(IntPtr detector, IntPtr keypoints, IntPtr keypointsGPU);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclSURFDetectorCompute(
          IntPtr detector,
          IntPtr img,
@@ -172,7 +172,7 @@ namespace Emgu.CV.Nonfree
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useProvidedKeypoints);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int oclSURFDetectorGetDescriptorSize(IntPtr detector);
    }
 }

@@ -556,7 +556,7 @@ namespace Emgu.CV
    /// </summary>
    public static partial class OclInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclDeviceGetProperty(
          IntPtr oclDeviceInfo,
          ref int type,
@@ -579,10 +579,10 @@ namespace Emgu.CV
          ref IntPtr openCLVersion
          );
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr oclDeviceCreate();
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclDeviceRelease(ref IntPtr oclDevice);
    }
 }

@@ -47,13 +47,13 @@ namespace Emgu.CV.Nonfree
 
    public static partial class NonfreeInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvSIFTDetectorCreate(
          int nFeatures, int nOctaveLayers,
          double contrastThreshold, double edgeThreshold,
          double sigma, ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSIFTDetectorRelease(ref IntPtr detector);
    }
 }

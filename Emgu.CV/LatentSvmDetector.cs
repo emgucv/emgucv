@@ -66,7 +66,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="filename">Path to the file containing the parameters of trained Latent SVM detector</param>
       /// <returns>Trained Latent SVM detector in internal representation</returns>
-      [DllImport(CvInvoke.OPENCV_OBJDETECT_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.OpencvObjdetectLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr cvLoadLatentSvmDetector(
          [MarshalAs(CvInvoke.StringMarshalType)]
          String filename);
@@ -75,7 +75,7 @@ namespace Emgu.CV
       /// Release memory allocated for CvLatentSvmDetector structure
       /// </summary>
       /// <param name="detector">Pointer to the trained Latent SVM detector</param>
-      [DllImport(CvInvoke.OPENCV_OBJDETECT_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.OpencvObjdetectLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvReleaseLatentSvmDetector(ref IntPtr detector);
 
       /// <summary>
@@ -87,7 +87,7 @@ namespace Emgu.CV
       /// <param name="overlapThreshold">Threshold for the non-maximum suppression algorithm, use 0.5f for default</param>
       /// <param name="numThreads">Use -1 for default</param>
       /// <returns>Sequence of detected objects (bounding boxes and confidence levels stored in MCvObjectDetection structures</returns>
-      [DllImport(CvInvoke.OPENCV_OBJDETECT_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.OpencvObjdetectLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern IntPtr cvLatentSvmDetectObjects(
          IntPtr image,
          IntPtr detector,

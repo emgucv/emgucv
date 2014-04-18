@@ -22,7 +22,7 @@ namespace Emgu.CV
       /// <param name="frameSize">Size of video frames.</param>
       /// <param name="isColor">If != 0, the encoder will expect and encode color frames, otherwise it will work with grayscale frames </param>
       /// <returns>The video writer</returns>
-      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFfmpegLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateVideoWriter_FFMPEG(
           [MarshalAs(StringMarshalType)] String filename,
           int fourcc,
@@ -35,7 +35,7 @@ namespace Emgu.CV
       /// Finishes writing to video file and releases the structure.
       /// </summary>
       /// <param name="writer">pointer to video file writer structure</param>
-      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFfmpegLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseVideoWriter_FFMPEG(ref IntPtr writer);
 
       /// <summary>
@@ -44,7 +44,7 @@ namespace Emgu.CV
       /// <param name="writer">video writer structure.</param>
       /// <param name="image">the written frame</param>
       /// <returns>True on success, false otherwise</returns>
-      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFfmpegLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool cvWriteFrame_FFMPEG(IntPtr writer, IntPtr image);
 
@@ -53,14 +53,14 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="filename">The name of the file</param>
       /// <returns>Pointer to the cvCapture structure</returns>
-      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFfmpegLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateFileCapture_FFMPEG([MarshalAs(StringMarshalType)] String filename);
 
       /// <summary>
       /// Release the capture
       /// </summary>
       /// <param name="capture">The capture to be released</param>
-      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFfmpegLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseCapture_FFMPEG(ref IntPtr capture);
 
       /// <summary>
@@ -68,7 +68,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="capture">Video capturing structure</param>
       /// <returns>True on success</returns>
-      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFfmpegLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool cvGrabFrame_FFMPEG(IntPtr capture);
 
@@ -80,7 +80,7 @@ namespace Emgu.CV
       /// <param name="streamIdx">Stream index</param>
       /// <returns>Pointer to the queryed frame</returns>
       /// <remarks>The returned image should not be released or modified by user. </remarks>
-      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFfmpegLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvRetrieveFrame_FFMPEG(IntPtr capture, int streamIdx);
 
       /// <summary>
@@ -89,7 +89,7 @@ namespace Emgu.CV
       /// <param name="capture">Video capturing structure</param>
       /// <param name="prop">Property identifier</param>
       /// <returns>The specified property of camera or video file</returns>
-      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFfmpegLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvGetCaptureProperty_FFMPEG(IntPtr capture, CvEnum.CAP_PROP prop);
 
       /// <summary>
@@ -98,7 +98,7 @@ namespace Emgu.CV
       /// <param name="capture">Video capturing structure</param>
       /// <param name="propertyId">Property identifier</param>
       /// <param name="value">Value of the property</param>
-      [DllImport(OPENCV_FFMPEG_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFfmpegLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSetCaptureProperty_FFMPEG(IntPtr capture, CvEnum.CAP_PROP propertyId, double value);
 
    }

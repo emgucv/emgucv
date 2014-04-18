@@ -75,19 +75,19 @@ namespace Emgu.CV.Features2D
       }
       #endregion
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr GridAdaptedFeatureDetectorCreate(
          IntPtr detector,
          int maxTotalKeypoints, int gridRows, int gridCols);
 
       /*
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void GridAdaptedFeatureDetectorDetect(
          IntPtr detector,
          IntPtr image, IntPtr keypoints, IntPtr mask);
       */
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void GridAdaptedFeatureDetectorRelease(ref IntPtr detector);
 
    }

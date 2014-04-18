@@ -104,14 +104,14 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="blobSize">The size of the blob in bytes</param>
       /// <returns>Pointer to the BlobSeq</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBlobSeqCreate(int blobSize);
 
       /// <summary>
       /// Release the blob sequence
       /// </summary>
       /// <param name="blobSeq">The BlobSeq to be released</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBlobSeqRelease(ref IntPtr blobSeq);
 
       /// <summary>
@@ -120,7 +120,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="blobSeq">The blob sequence</param>
       /// <param name="blobIndex">The index of the blob to be retrieved</param>
       /// <returns>Pointer to the specific blob</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBlobSeqGetBlob(IntPtr blobSeq, int blobIndex);
 
       /// <summary>
@@ -129,7 +129,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="blobSeq">The blob sequence</param>
       /// <param name="blobId">The index of the blob to be retrieved</param>
       /// <returns>Pointer to the specific blob</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBlobSeqGetBlobByID(IntPtr blobSeq, int blobId);
 
       /// <summary>
@@ -137,7 +137,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="blobSeq">The blob sequence</param>
       /// <returns>The number of blob in the blob sequence</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int CvBlobSeqGetBlobNum(IntPtr blobSeq);
 
       /// <summary>
@@ -145,14 +145,14 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="blobSeq">The blob sequence</param>
       /// <param name="blob">The blob sequence to be added</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBlobSeqAddBlob(IntPtr blobSeq, ref MCvBlob blob);
 
       /// <summary>
       /// Clear the blob sequence
       /// </summary>
       /// <param name="blobSeq">The blob sequence to be cleared</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBlobSeqClear(IntPtr blobSeq);
    }
 }

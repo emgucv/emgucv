@@ -90,7 +90,7 @@ namespace Emgu.CV
 {
    public static partial class CvInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvBackgroundSubtractorUpdate(IntPtr bgSubstractor, IntPtr image, IntPtr fgmask, double learningRate);
    }
 }

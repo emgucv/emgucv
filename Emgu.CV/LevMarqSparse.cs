@@ -83,7 +83,7 @@ namespace Emgu.CV
          CvInvoke.CvReleaseLevMarqSparse(ref _ptr);
       }*/
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvLevMarqSparseAdjustBundle(
          int numberOfFrames,
          int pointCount,
@@ -97,10 +97,10 @@ namespace Emgu.CV
          ref MCvTermCriteria termCrit);
 
       /*
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvCreateLevMarqSparse();
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvReleaseLevMarqSparse(ref IntPtr levMarq);
       */
    }

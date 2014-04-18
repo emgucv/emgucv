@@ -59,7 +59,7 @@ namespace Emgu.CV.Features2D
          get { return _descriptorExtractorPtr; }
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvFreakCreate(
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool orientationNormalized,
@@ -69,7 +69,7 @@ namespace Emgu.CV.Features2D
          int nOctaves, 
          ref IntPtr descriptorExtractorPtr);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFreakRelease(ref IntPtr extractor);
    }
 }

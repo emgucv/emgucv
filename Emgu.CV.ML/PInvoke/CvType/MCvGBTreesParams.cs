@@ -93,7 +93,7 @@ namespace Emgu.CV.ML
 {
    public partial class MlInvoke
    {
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvGBTreesParamsGetDefault(ref Emgu.CV.ML.Structure.MCvGBTreesParams p); 
    }
 }

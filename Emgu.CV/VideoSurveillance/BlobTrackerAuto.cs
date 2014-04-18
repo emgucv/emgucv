@@ -148,14 +148,14 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="param">The parameters for the tracker</param>
       /// <returns>Pointer to the blob tracker auto</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvCreateBlobTrackerAuto1(ref MCvBlobTrackerAutoParam1 param);
 
       /// <summary>
       /// Release the blob tracker auto
       /// </summary>
       /// <param name="tracker">The tracker to be released</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBlobTrackerAutoRelease(ref IntPtr tracker);
 
       /// <summary>
@@ -164,7 +164,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="tracker">The auto blob tracker</param>
       /// <param name="index">The index of the blob</param>
       /// <returns>Pointer to the the blob</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBlobTrackerAutoGetBlob(IntPtr tracker, int index);
 
       /// <summary>
@@ -173,7 +173,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="tracker">The auto blob tracker</param>
       /// <param name="blobID">The id of the blob</param>
       /// <returns>Pointer to the blob of specific ID</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBlobTrackerAutoGetBlobByID(IntPtr tracker, int blobID);
 
       /// <summary>
@@ -181,7 +181,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="tracker">The auto blob tracker</param>
       /// <returns>The number of blobs</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int CvBlobTrackerAutoGetBlobNum(IntPtr tracker);
 
       /// <summary>
@@ -190,7 +190,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="tracker">The auto blob tracker</param>
       /// <param name="pImg">The frame to process</param>
       /// <param name="pMask">The foreground mask, can be IntPtr.Zero if not needed</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBlobTrackerAutoProcess(IntPtr tracker, IntPtr pImg, IntPtr pMask);
 
       /// <summary>
@@ -198,7 +198,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="tracker">The auto blob tracker</param>
       /// <returns>Pointer to the foreground mask</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBlobTrackerAutoGetFGMask(IntPtr tracker);
    }
 

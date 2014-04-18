@@ -51,28 +51,28 @@ namespace Emgu.CV.VideoSurveillance
       /// Returns a Kalman blob tracking post process module
       /// </summary>
       /// <returns>Pointer to the tracking module</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvCreateModuleBlobTrackPostProcKalman();
 
       /// <summary>
       /// Returns a TimeAverRect blob tracking post process module
       /// </summary>
       /// <returns>Pointer to the tracking module</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvCreateModuleBlobTrackPostProcTimeAverRect();
 
       /// <summary>
       /// Returns a TimeAverExp blob tracking post process module
       /// </summary>
       /// <returns>Pointer to the tracking module</returns>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvCreateModuleBlobTrackPostProcTimeAverExp();
 
       /// <summary>
       /// Release the blob tracking post process module
       /// </summary>
       /// <param name="postProc">The post process module to be released</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBlobTrackPostProcRelease(ref IntPtr postProc);
       #endregion
    }

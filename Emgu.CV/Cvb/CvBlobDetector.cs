@@ -159,16 +159,16 @@ namespace Emgu.CV.Cvb
          }
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static uint cvbCvLabel(IntPtr img, IntPtr imgOut, IntPtr blobs);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvbCvRenderBlobs(IntPtr labelMask, IntPtr blobs, IntPtr imgSource, IntPtr imgDest, Cvb.CvBlobDetector.BlobRenderType mode, double alpha);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static MCvScalar cvbCvBlobMeanColor(IntPtr blob, IntPtr imgLabel, IntPtr img);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvbCvFilterLabels(IntPtr imgIn, IntPtr imgOut, IntPtr blobs);
    }
 }

@@ -19,7 +19,7 @@ namespace Emgu.CV
       /// <param name="storage">The storage for the returned sequence</param>
       /// <param name="param">The star detector parameters</param>
       /// <returns>Pointer to the sequence of star keypoint locations</returns>
-      [DllImport(OPENCV_FEATURES2D_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvFeatures2dLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvGetStarKeypoints(
          IntPtr img,
          IntPtr storage,

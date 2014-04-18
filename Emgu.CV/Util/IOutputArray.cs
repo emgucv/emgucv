@@ -30,7 +30,7 @@ namespace Emgu.CV
       /// Release the input / output array
       /// </summary>
       /// <param name="arr">Pointer to the input / output array</param>
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cveOutputArrayRelease(ref IntPtr arr);
    }
 }

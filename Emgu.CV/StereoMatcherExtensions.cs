@@ -33,16 +33,16 @@ namespace Emgu.CV
          CvStereoMatcherCompute(matcher.StereoMatcherPtr, left.InputArrayPtr, right.InputArrayPtr, disparity.OutputArrayPtr);
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvStereoMatcherCompute(IntPtr disparitySolver, IntPtr left, IntPtr right, IntPtr disparity);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvStereoMatcherRelease(ref IntPtr matcher);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvStereoBMCreate(int numberOfDisparities, int blockSize);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvStereoSGBMCreate(
          int minDisparity, int numDisparities, int blockSize,
          int P1, int P2, int disp12MaxDiff,
@@ -50,7 +50,7 @@ namespace Emgu.CV
          int speckleWindowSize, int speckleRange,
          StereoSGBM.Mode mode, ref IntPtr stereoMatcher);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvStereoSGBMRelease(ref IntPtr obj);
    }
 }

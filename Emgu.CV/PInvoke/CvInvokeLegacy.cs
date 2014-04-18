@@ -31,7 +31,7 @@ namespace Emgu.CV
       /// Gradient flag. If != 0, the function calculates gradient magnitude for every image pixel and consideres it as the energy field, 
       /// otherwise the input image itself is considered
       /// </param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSnakeImage(
          IntPtr image,
          IntPtr points,
@@ -63,7 +63,7 @@ namespace Emgu.CV
       /// Gradient flag. If != 0, the function calculates gradient magnitude for every image pixel and consideres it as the energy field, 
       /// otherwise the input image itself is considered
       /// </param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSnakeImage(
          IntPtr image,
          [In, Out]
@@ -126,7 +126,7 @@ namespace Emgu.CV
       /// Create a BG code book model
       /// </summary>
       /// <returns>Poionter to BG code book model</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateBGCodeBookModel();
 
       /// <summary>
@@ -136,7 +136,7 @@ namespace Emgu.CV
       /// <param name="image">The image for update</param>
       /// <param name="roi">The update roi, use Rectangle.Empty for the whole image</param>
       /// <param name="mask">Can be IntPtr.Zero if not needed. The update mask. </param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvBGCodeBookUpdate(
          IntPtr model,
          IntPtr image,
@@ -150,7 +150,7 @@ namespace Emgu.CV
       /// <param name="image">The image for update</param>
       /// <param name="roi">The update roi, use Rectangle.Empty for the whole image</param>
       /// <param name="mask">Can be IntPtr.Zero if not needed. The update mask. </param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvBGCodeBookUpdate(
          ref MCvBGCodeBookModel model,
          IntPtr image,
@@ -165,7 +165,7 @@ namespace Emgu.CV
       /// <param name="fgmask">The returned foreground mask</param>
       /// <param name="roi">The region of interest for the diff. Use Rectangle.Empty for the whole image</param>
       /// <returns></returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int cvBGCodeBookDiff(
          IntPtr model,
          IntPtr image,
@@ -180,7 +180,7 @@ namespace Emgu.CV
       /// <param name="fgmask">The returned foreground mask</param>
       /// <param name="roi">The region of interest for the diff. Use Rectangle.Empty for the whole image</param>
       /// <returns></returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int cvBGCodeBookDiff(
          ref MCvBGCodeBookModel model,
          IntPtr image,
@@ -194,7 +194,7 @@ namespace Emgu.CV
       /// <param name="staleThresh"></param>
       /// <param name="roi"></param>
       /// <param name="mask"></param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvBGCodeBookClearStale(
          IntPtr model,
          int staleThresh,
@@ -208,7 +208,7 @@ namespace Emgu.CV
       /// <param name="staleThresh"></param>
       /// <param name="roi"></param>
       /// <param name="mask"></param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvBGCodeBookClearStale(
          ref MCvBGCodeBookModel model,
          int staleThresh,
@@ -220,7 +220,7 @@ namespace Emgu.CV
       /// Release the BG code book model
       /// </summary>
       /// <param name="model">The BG code book model to be released</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvReleaseBGCodeBookModel(ref IntPtr model);
       #endregion
 
@@ -229,7 +229,7 @@ namespace Emgu.CV
       /// Releases memory used by BGStatMode
       /// </summary>
       /// <param name="bgModel">The bgModel to be released</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static void cvReleaseBGStatModel(ref IntPtr bgModel);
 
       /// <summary>
@@ -239,7 +239,7 @@ namespace Emgu.CV
       /// <param name="bgModel">The bg model</param>
       /// <param name="learningRate">The leaning rate, use -1 for default value</param>
       /// <returns>The number of found foreground regions</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static int cvUpdateBGStatModel(IntPtr currentFrame, IntPtr bgModel,
                                 double learningRate);
 
@@ -248,7 +248,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Background image</param>
       /// <param name="param">Parameters for the background model</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, IntPtr param);
 
       /// <summary>
@@ -256,7 +256,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Background image</param>
       /// <param name="param">Parameters for the background model</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateFGDStatModel(IntPtr image, IntPtr param);
 
       /// <summary>
@@ -265,7 +265,7 @@ namespace Emgu.CV
       /// <param name="firstFrame">The first frame</param>
       /// <param name="parameters">The foreground statistic parameters</param>
       /// <returns>Pointer to the foreground model</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateFGDStatModel(IntPtr firstFrame, ref MCvFGDStatModelParams parameters);
 
       /// <summary>
@@ -273,7 +273,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">Background image</param>
       /// <param name="parameters">Parameters for the background model</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public extern static IntPtr cvCreateGaussianBGModel(IntPtr image, ref MCvGaussBGStatModelParams parameters);
       #endregion
 
@@ -305,7 +305,7 @@ namespace Emgu.CV
       /// <param name="winSize">Size of the averaging window used for grouping pixels. </param>
       /// <param name="velx">Horizontal component of the optical flow of the same size as input images, 32-bit floating-point, single-channel.</param>
       /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel.</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowLK(
               IntPtr prev,
               IntPtr curr,
@@ -345,7 +345,7 @@ namespace Emgu.CV
       /// <param name="vely">Vertical component of the optical flow of the same size as input images, 32-bit floating-point, single-channel</param>
       /// <param name="lambda">Lagrangian multiplier</param>
       /// <param name="criteria">Criteria of termination of velocity computing</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowHS(
               IntPtr prev,
               IntPtr curr,
@@ -391,7 +391,7 @@ namespace Emgu.CV
       /// <param name="usePrevious">Uses previous (input) velocity field. </param>
       /// <param name="velx">Horizontal component of the optical flow of floor((prev->width - block_size.width)/shiftSize.width) x floor((prev->height - block_size.height)/shiftSize.height) size, 32-bit floating-point, single-channel. </param>
       /// <param name="vely">Vertical component of the optical flow of the same size velx, 32-bit floating-point, single-channel.</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcOpticalFlowBM(
               IntPtr prev,
               IntPtr curr,
@@ -410,7 +410,7 @@ namespace Emgu.CV
       /// <param name="numberOfDisparities">The number of disparities. The disparity search range will be state.minDisparity &lt;= disparity &lt; state.minDisparity + state.numberOfDisparities</param>
       /// <param name="maxIters">Maximum number of iterations. On each iteration all possible (or reasonable) alpha-expansions are tried. The algorithm may terminate earlier if it could not find an alpha-expansion that decreases the overall cost function value</param>
       /// <returns>The initialized stereo correspondence structure</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateStereoGCState(
          int numberOfDisparities,
          int maxIters);
@@ -419,7 +419,7 @@ namespace Emgu.CV
       /// Releases the stereo correspondence structure and all the associated internal buffers
       /// </summary>
       /// <param name="state">A reference to the pointer of StereoGCState structure</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseStereoGCState(ref IntPtr state);
 
       /// <summary>
@@ -431,7 +431,7 @@ namespace Emgu.CV
       /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
       /// <param name="state">Stereo correspondence structure</param>
       /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindStereoCorrespondenceGC(
          IntPtr left,
          IntPtr right,
@@ -449,7 +449,7 @@ namespace Emgu.CV
       /// <param name="dispRight">The optional output single-channel 16-bit signed right disparity map of the same size as input images</param>
       /// <param name="state">Stereo correspondence structure</param>
       /// <param name="useDisparityGuess">If the parameter is not zero, the algorithm will start with pre-defined disparity maps. Both dispLeft and dispRight should be valid disparity maps. Otherwise, the function starts with blank disparity maps (all pixels are marked as occlusions)</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindStereoCorrespondenceGC(
          IntPtr left,
          IntPtr right,
@@ -465,7 +465,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="desc">n x d matrix of n d-dimensional feature vectors (CV_32FC1 or CV_64FC1)</param>
       /// <returns>A balanced kd-tree index of the given feature vectors</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateKDTree(IntPtr desc);
 
       /// <summary>
@@ -476,14 +476,14 @@ namespace Emgu.CV
       /// <param name="rho"></param>
       /// <param name="tau"></param>
       /// <returns>A spill tree index of the given feature vectors</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateSpillTree(IntPtr desc, int naive, double rho, double tau);
 
       /// <summary>
       /// Deallocates the given kd-tree
       /// </summary>
       /// <param name="tr">Pointer to tree being destroyed</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseFeatureTree(IntPtr tr);
 
       /// <summary>
@@ -496,7 +496,7 @@ namespace Emgu.CV
       /// <param name="dist">m x k matrix of distances to k nearest neighbors</param>
       /// <param name="k">The number of neighbors to find</param>
       /// <param name="emax">For k-d tree only: the maximum number of leaves to visit.</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindFeatures(
          IntPtr tr,
          IntPtr desc,
@@ -512,7 +512,7 @@ namespace Emgu.CV
       /// <param name="boundsMin">1 x d or d x 1 vector (CV_32FC1 or CV_64FC1) giving minimum value for each dimension</param>
       /// <param name="boundsMax">1 x d or d x 1 vector (CV_32FC1 or CV_64FC1) giving maximum value for each dimension</param>
       /// <param name="results">1 x m or m x 1 vector (CV_32SC1) to contain output row indices (referring to matrix passed to cvCreateFeatureTree)</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvFindFeaturesBoxed(
          IntPtr tr,
          IntPtr boundsMin,
@@ -544,7 +544,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="subdiv"></param>
       /// <param name="rect"></param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvInitSubdivDelaunay2D(IntPtr subdiv, Rectangle rect);
 
       /// <summary>
@@ -553,7 +553,7 @@ namespace Emgu.CV
       /// <param name="subdiv">Delaunay or another subdivision</param>
       /// <param name="pt">Input point</param>
       /// <returns>pointer to the found subdivision vertex (CvSubdiv2DPoint)</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvFindNearestPoint2D(IntPtr subdiv, PointF pt);
 
       /// <summary>
@@ -565,7 +565,7 @@ namespace Emgu.CV
       /// <param name="quadedgeSize"></param>
       /// <param name="storage"></param>
       /// <returns></returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateSubdiv2D(
           int subdivType,
           int headerSize,
@@ -578,7 +578,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="subdiv">Delaunay subdivision created by function cvCreateSubdivDelaunay2D</param>
       /// <param name="pt">Inserted point.</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvSubdivDelaunay2DInsert(IntPtr subdiv, PointF pt);
 
       /// <summary>
@@ -589,7 +589,7 @@ namespace Emgu.CV
       /// <param name="edge">The output edge the point falls onto or right to</param>
       /// <param name="vertex">Optional output vertex double pointer the input point coincides with</param>
       /// <returns>The type of location for the point</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern CvEnum.Subdiv2DPointLocationType cvSubdiv2DLocate(IntPtr subdiv, PointF pt,
                                            out IntPtr edge,
                                            ref IntPtr vertex);
@@ -598,7 +598,7 @@ namespace Emgu.CV
       /// Calculates coordinates of virtual points. All virtual points corresponding to some vertex of original subdivision form (when connected together) a boundary of Voronoi cell of that point
       /// </summary>
       /// <param name="subdiv">Delaunay subdivision, where all the points are added already</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcSubdivVoronoi2D(IntPtr subdiv);
       #endregion
 
@@ -638,7 +638,7 @@ namespace Emgu.CV
       /// <param name="userData">Pointer to the structure that contains all necessary data for the callback functions</param>
       /// <param name="avg">Averaged object (Pointer to IplImage)</param>
       /// <param name="coeffs">Calculated coefficients; an output parameter</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvEigenDecomposite(
          IntPtr obj,
          int eigenvecCount,
@@ -690,7 +690,7 @@ namespace Emgu.CV
       /// <param name="calcLimit">Criteria that determine when to stop calculation of eigen objects. Depending on the parameter calcLimit, calculations are finished either after first calcLimit.max_iter dominating eigen objects are retrieved or if the ratio of the current eigenvalue to the largest eigenvalue comes down to calcLimit.epsilon threshold. The value calcLimit -> type must be CV_TERMCRIT_NUMB, CV_TERMCRIT_EPS, or CV_TERMCRIT_NUMB | CV_TERMCRIT_EPS . The function returns the real values calcLimit->max_iter and calcLimit->epsilon</param>
       /// <param name="avg">Averaged object</param>
       /// <param name="eigVals">Pointer to the eigenvalues array in the descending order; may be NULL</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvCalcEigenObjects(
          int nObjects,
          IntPtr[] input,
@@ -735,7 +735,7 @@ namespace Emgu.CV
       /// <param name="coeffs">Previously calculated decomposition coefficients</param>
       /// <param name="avg">Average vector</param>
       /// <param name="proj">Projection to the eigen sub-space</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cvEigenProjection(
          IntPtr[] inputVecs,
          int eigenvecCount,
@@ -754,14 +754,14 @@ namespace Emgu.CV
       /// <param name="measureParams">Dimension of the measurement vector</param>
       /// <param name="sampleCount">Number of samples</param>
       /// <returns>Pointer to the CvConDensation structure</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateConDensation(int dynamParams, int measureParams, int sampleCount);
 
       /// <summary>
       /// Releases the structure CvConDensation (see cvConDensation) and frees all memory previously allocated for the structure. 
       /// </summary>
       /// <param name="condens">Pointer to the CvConDensation structure</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseConDensation(ref IntPtr condens);
 
       /// <summary>
@@ -770,14 +770,14 @@ namespace Emgu.CV
       /// <param name="condens">Pointer to a structure to be initialized</param>
       /// <param name="lowerBound">Vector of the lower boundary for each dimension</param>
       /// <param name="upperBound">Vector of the upper boundary for each dimension</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvConDensInitSampleSet(IntPtr condens, IntPtr lowerBound, IntPtr upperBound);
 
       /// <summary>
       /// Estimates the subsequent stochastic model state from its current state
       /// </summary>
       /// <param name="condens">Pointer to the structure to be updated</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvConDensUpdateByTime(IntPtr condens);
       #endregion
 
@@ -795,7 +795,7 @@ namespace Emgu.CV
       /// <param name="level">Maximum level of the pyramid for the segmentation</param>
       /// <param name="threshold1">Error threshold for establishing the links</param>
       /// <param name="threshold2">Error threshold for the segments clustering</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvPyrSegmentation(
           IntPtr src,
           IntPtr dst,
@@ -810,7 +810,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="contour">Input contour. Currently, only integer point coordinates are allowed</param>
       /// <param name="hist">Calculated histogram; must be two-dimensional</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCalcPGH(IntPtr contour, IntPtr hist);
 
       /// <summary>
@@ -818,7 +818,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="subdiv">Pointer to the MCvSubdiv2D</param>
       /// <returns>True if valid, false otherwise</returns>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool icvSubdiv2DCheck(IntPtr subdiv);
 
@@ -847,7 +847,7 @@ namespace Emgu.CV
             useProvidedKeyPoints);
       }
       
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvExtractSURF(
          IntPtr image, IntPtr mask,
          ref IntPtr keypoints,
@@ -856,7 +856,7 @@ namespace Emgu.CV
          int extended, int upright, double hessianThreshold, int nOctaves, int nOctaveLayers,
          int useProvidedKeyPoints);
 #else
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvExtractSURF(
          IntPtr image, IntPtr mask,
          ref IntPtr keypoints,
@@ -875,7 +875,7 @@ namespace Emgu.CV
       /// <param name="contours">The contours where MSER will be stored</param>
       /// <param name="storage">Memory storage</param>
       /// <param name="parameters">MSER parameters</param>
-      [DllImport(OPENCV_LEGACY_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvExtractMSER(
          IntPtr img,
          IntPtr mask,

@@ -55,17 +55,17 @@ namespace Emgu.CV.Stitching
          bool hasCuda = CudaInvoke.HasCuda;
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvStitcherCreateDefault(
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool tryUseGpu
          );
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal static extern bool CvStitcherStitch(IntPtr stitcherWrapper, IntPtr images, IntPtr pano);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvStitcherRelease(ref IntPtr stitcherWrapper);
    }
 }

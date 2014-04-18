@@ -31,6 +31,13 @@ namespace Emgu.CV.Cuda
          _ptr = CudaInvoke.cudaHoughLinesDetectorCreate(rho, theta, threshold, doSort, maxLines);
       }
 
+      /// <summary>
+      /// Finds line segments in a binary image using the probabilistic Hough transform.
+      /// </summary>
+      /// <param name="image">8-bit, single-channel binary source image</param>
+      /// <param name="lines">Output vector of lines.Output vector of lines. Each line is represented by a two-element vector. 
+      /// The first element is the distance from the coordinate origin (top-left corner of the image). 
+      /// The second element is the line rotation angle in radians.</param>
       public void Detect(CudaImage<Gray, Byte> image, GpuMat lines)
       {
          CudaInvoke.cudaHoughLinesDetectorDetect(_ptr, image, lines);
@@ -47,17 +54,17 @@ namespace Emgu.CV.Cuda
 
    public static partial class CudaInvoke
    {
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cudaHoughLinesDetectorCreate(
          float rho, float theta, int threshold, 
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool doSort, 
          int maxLines);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaHoughLinesDetectorDetect(IntPtr detector, IntPtr src, IntPtr lines);
 
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaHoughLinesDetectorRelease(ref IntPtr detector);
    }
 }

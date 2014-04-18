@@ -149,16 +149,16 @@ namespace Emgu.CV.Softcascade
          bool hasCuda = Cuda.CudaInvoke.HasCuda;
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvSoftCascadeDetectorCreate(
          [MarshalAs(CvInvoke.StringMarshalType)]
          String fileName, 
          double minScale, double maxScale, int scales, SoftCascadeDetector.RejectionCriteria rejCriteria);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvSoftCascadeDetectorDetect(IntPtr detector, IntPtr image, IntPtr rois, IntPtr rects, IntPtr confidents);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvSoftCascadeDetectorRelease(ref IntPtr detector);
    }
 }

@@ -77,7 +77,7 @@ namespace Emgu.CV.Features2D
             CvSelfSimDescriptorRelease(_ptr);
       }
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvSelfSimDescriptorCreate(
          int smallSize,
          int largeSize,
@@ -85,10 +85,10 @@ namespace Emgu.CV.Features2D
          int numberOfDistanceBuckets,
          int numberOfAngles);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSelfSimDescriptorRelease(IntPtr descriptor);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSelfSimDescriptorCompute(
          IntPtr descriptor,
          IntPtr image,
@@ -96,7 +96,7 @@ namespace Emgu.CV.Features2D
          ref Size winStride,
          IntPtr locations);
 
-      [DllImport(CvInvoke.EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int CvSelfSimDescriptorGetDescriptorSize(IntPtr descriptor);
    }
 }

@@ -27,7 +27,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="featureSet">The feature set to be checked.</param>
       /// <returns>True if the GPU module is build with the specific feature set.</returns>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsBuildWith")]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsBuildWith")]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       public static extern bool BuildWith(CudaDeviceInfo.GpuFeature featureSet);
 
@@ -37,7 +37,7 @@ namespace Emgu.CV.Cuda
       /// <param name="major">The major version</param>
       /// <param name="minor">The minor version</param>
       /// <returns>True if the GPU module is targeted for the specific device version.</returns>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHas")]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHas")]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       public static extern bool Has(int major, int minor);
 
@@ -47,7 +47,7 @@ namespace Emgu.CV.Cuda
       /// <param name="major">The major version</param>
       /// <param name="minor">The minor version</param>
       /// <returns>True if the GPU module is targeted for the specific PTX version.</returns>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasPtx")]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasPtx")]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       public static extern bool HasPtx(int major, int minor);
 
@@ -57,7 +57,7 @@ namespace Emgu.CV.Cuda
       /// <param name="major">The major version</param>
       /// <param name="minor">The minor version</param>
       /// <returns>True if the GPU module is targeted for the specific BIN version.</returns>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasBin")]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasBin")]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       public static extern bool HasBin(int major, int minor);
 
@@ -67,7 +67,7 @@ namespace Emgu.CV.Cuda
       /// <param name="major">The major version</param>
       /// <param name="minor">The minor version</param>
       /// <returns>True if the GPU module is targeted for equal or less PTX version.</returns>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasEqualOrLessPtx")]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasEqualOrLessPtx")]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       public static extern bool HasEqualOrLessPtx(int major, int minor);
 
@@ -77,7 +77,7 @@ namespace Emgu.CV.Cuda
       /// <param name="major">The major version</param>
       /// <param name="minor">The minor version</param>
       /// <returns>True if the GPU module is targeted for equal or greater device version.</returns>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasEqualOrGreater")]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasEqualOrGreater")]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       public static extern bool HasEqualOrGreater(int major, int minor);
 
@@ -87,7 +87,7 @@ namespace Emgu.CV.Cuda
       /// <param name="major">The major version</param>
       /// <param name="minor">The minor version</param>
       /// <returns>True if the GPU module is targeted for equal or greater PTX version.</returns>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasEqualOrGreaterPtx")]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasEqualOrGreaterPtx")]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       public static extern bool HasEqualOrGreaterPtx(int major, int minor);
 
@@ -97,7 +97,7 @@ namespace Emgu.CV.Cuda
       /// <param name="major">The major version</param>
       /// <param name="minor">The minor version</param>
       /// <returns>True if the GPU module is targeted for equal or greater BIN version.</returns>
-      [DllImport(CvInvoke.EXTERN_CUDA_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasEqualOrGreaterBin")]
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "targetArchsHasEqualOrGreaterBin")]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       public static extern bool HasEqualOrGreaterBin(int major, int minor);
       #endregion

@@ -22,7 +22,7 @@ namespace Emgu.CV
       {
          cveInpaint(src.InputArrayPtr, mask.InputArrayPtr, dst.OutputArrayPtr, inpaintRadius, flags);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveInpaint(IntPtr src, IntPtr mask, IntPtr dst, double inpaintRadius, CvEnum.InpaintType flags);
 
       /// <summary>
@@ -39,7 +39,7 @@ namespace Emgu.CV
       {
          cveFastNlMeansDenoising(src.InputArrayPtr, dst.OutputArrayPtr, h, templateWindowSize, searchWindowSize);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFastNlMeansDenoising(IntPtr src, IntPtr dst, float h, int templateWindowSize, int searchWindowSize);
 
       /// <summary>
@@ -58,7 +58,7 @@ namespace Emgu.CV
       {
          cveFastNlMeansDenoisingColored(src.InputArrayPtr, dst.OutputArrayPtr, h, hColor, templateWindowSize, searchWindowSize);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFastNlMeansDenoisingColored(IntPtr src, IntPtr dst, float h, float hColor, int templateWindowSize, int searchWindowSize);
 
       /// <summary>
@@ -77,7 +77,7 @@ namespace Emgu.CV
       {
          cveEdgePreservingFilter(src.InputArrayPtr, dst.OutputArrayPtr, flags, sigmaS, sigmaR);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveEdgePreservingFilter(IntPtr src, IntPtr dst, CvEnum.EdgePreservingFilterFlag flags, float sigmaS, float sigmaR);
 
       /// <summary>
@@ -91,7 +91,7 @@ namespace Emgu.CV
       {
          cveDetailEnhance(src.InputArrayPtr, dst.OutputArrayPtr, sigmaS, sigmaR);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDetailEnhance(IntPtr src, IntPtr dst, float sigmaS, float sigmaR);
 
       /// <summary>
@@ -107,7 +107,7 @@ namespace Emgu.CV
       {
          cvePencilSketch(src.InputArrayPtr, dst1.OutputArrayPtr, dst2.OutputArrayPtr, sigmaS, sigmaR, shadeFactor);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePencilSketch(IntPtr src, IntPtr dst1, IntPtr dst2, float sigmaS, float sigmaR, float shadeFactor);
 
       /// <summary>
@@ -121,7 +121,7 @@ namespace Emgu.CV
       {
          cveStylization(src.InputArrayPtr, dst.OutputArrayPtr, sigmaS, sigmaR);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveStylization(IntPtr src, IntPtr dst, float sigmaS, float sigmaR);
 
       /// <summary>
@@ -137,7 +137,7 @@ namespace Emgu.CV
       {
          cveColorChange(src.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dst.OutputArrayPtr, redMul, greenMul, blueMul);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveColorChange(IntPtr src, IntPtr mask, IntPtr dst, float redMul, float greenMul, float blueMul);
 
       /// <summary>
@@ -152,7 +152,7 @@ namespace Emgu.CV
       {
          cveIlluminationChange(src.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dst.OutputArrayPtr, alpha, beta);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveIlluminationChange(IntPtr src, IntPtr mask, IntPtr dst, float alpha, float beta);
 
       /// <summary>
@@ -168,7 +168,7 @@ namespace Emgu.CV
       {
          cveTextureFlattening(src.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dst.OutputArrayPtr, lowThreshold, highThreshold, kernelSize);
       }
-      [DllImport(EXTERN_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveTextureFlattening(IntPtr src, IntPtr mask, IntPtr dst, double lowThreshold, double highThreshold, int kernelSize);
 
    }
