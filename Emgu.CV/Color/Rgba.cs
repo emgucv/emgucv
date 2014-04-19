@@ -30,7 +30,7 @@ namespace Emgu.CV.Structure
 
       ///<summary> Get or set the intensity of the red color channel </summary>
       [DisplayColor(0, 0, 255)]
-      public double Red { get { return _scalar.V2; } set { _scalar.V2 = value; } }
+      public double Red { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 
       ///<summary> Get or set the intensity of the green color channel </summary>
       [DisplayColor(0, 255, 0)]
@@ -38,7 +38,7 @@ namespace Emgu.CV.Structure
 
       ///<summary> Get or set the intensity of the blue color channel </summary>
       [DisplayColor(255, 0, 0)]
-      public double Blue { get { return _scalar.V0; } set { _scalar.V0 = value; } }
+      public double Blue { get { return _scalar.V2; } set { _scalar.V2 = value; } }
 
       ///<summary> Get or set the intensity of the alpha color channel </summary>
       [DisplayColor(122, 122, 122)]
