@@ -33,7 +33,7 @@ CVAPI(void) cudaBroxOpticalFlowRelease(cv::cuda::BroxOpticalFlow** flow);
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::PyrLKOpticalFlow*) cudaPyrLKOpticalFlowCreate(emgu::size winSize, int maxLevel, int iters, bool useInitialFlow);
-CVAPI(void) cudaPryLKOpticalFlowSparse(
+CVAPI(void) cudaPyrLKOpticalFlowSparse(
    cv::cuda::PyrLKOpticalFlow* flow, 
    const cv::cuda::GpuMat* prevImg, 
    const cv::cuda::GpuMat* nextImg, 
