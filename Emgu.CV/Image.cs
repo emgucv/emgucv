@@ -140,7 +140,8 @@ namespace Emgu.CV
 #if ANDROID
             extension.Equals(".png")
 #else
-            (typeof(TColor) == typeof(Bgra) && typeof(TColor) == typeof(Byte) && extension.Equals(".png"))
+            //load png image with alpha channel using Bitmap. OpenCV do not seems to handle alpa channel correctly. 
+            ( (typeof(TColor) == typeof(Bgra) || typeof(TColor) == typeof(Rgba)) && typeof(TDepth) == typeof(Byte) && extension.Equals(".png"))
 #endif
             || extension.Equals(".tiff") 
             || extension.Equals(".tif"))
