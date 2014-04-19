@@ -318,6 +318,10 @@ namespace Emgu.CV
          }
       }
 
+
+      /// <summary>
+      /// Get the width of the mat
+      /// </summary>
       public int Width
       {
          get
@@ -326,6 +330,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get the height of the mat.
+      /// </summary>
       public int Height
       {
          get
