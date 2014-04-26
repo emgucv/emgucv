@@ -17,7 +17,6 @@ namespace Emgu.CV.VideoStab
    /// </summary>
    public abstract class FrameSource : UnmanagedObject
    {
-      private IntPtr _frameBuffer;
       private Capture.CaptureModuleType _captureSource;
 
       /// <summary>
@@ -44,28 +43,11 @@ namespace Emgu.CV.VideoStab
       /// Retrieve the next frame from the FrameSoure
       /// </summary>
       /// <returns></returns>
-      public Image<Bgr, Byte> NextFrame()
+      public Mat NextFrame()
       {
-         if (!VideoStabInvoke.VideostabFrameSourceGetNextFrame(FrameSourcePtr, ref _frameBuffer) || _frameBuffer == IntPtr.Zero)
-            return null;
-
-         MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(_frameBuffer, typeof(MIplImage));
-
-         Image<Bgr, Byte> res;
-         if (iplImage.NChannels == 1)
-         {  //if the image captured is Grayscale, convert it to BGR
-            res = new Image<Bgr, Byte>(iplImage.Width, iplImage.Height);
-            using (Mat m = CvInvoke.CvArrToMat(_frameBuffer))
-            {
-               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.Gray2Bgr);
-            }
-         }
-         else
-         {
-            res = new Image<Bgr, byte>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
-         }
-
-         return res;
+         Mat frame = new Mat();
+         VideoStabInvoke.VideostabFrameSourceGetNextFrame(FrameSourcePtr, frame);
+         return frame;
       }
 
       /// <summary>
@@ -73,10 +55,6 @@ namespace Emgu.CV.VideoStab
       /// </summary>
       protected override void DisposeObject()
       {
-         if (_frameBuffer != IntPtr.Zero)
-         {
-            CvInvoke.cvReleaseImage(ref _frameBuffer);
-         }
          FrameSourcePtr = IntPtr.Zero;
       }
    }

@@ -567,7 +567,7 @@ namespace Emgu.CV.Test
             {
                watch.Reset();
                watch.Start();
-               Image<Bgr, byte> frame = stabilizer.NextFrame();
+               Mat frame = stabilizer.NextFrame();
                watch.Stop();
                if (watch.ElapsedMilliseconds < 200)
                {
@@ -597,7 +597,7 @@ namespace Emgu.CV.Test
             {
                watch.Reset();
                watch.Start();
-               Image<Bgr, byte> frame = stabilizer.NextFrame();
+               Mat frame = stabilizer.NextFrame();
                watch.Stop();
                if (watch.ElapsedMilliseconds < 200)
                {
@@ -655,7 +655,7 @@ namespace Emgu.CV.Test
          {
             Application.Idle += delegate(object sender, EventArgs e)
             {
-               Image<Bgr, byte> frame = frameSource.NextFrame();
+               Mat frame = frameSource.NextFrame();
                if (frame != null)
                   viewer.Image = frame;
             };

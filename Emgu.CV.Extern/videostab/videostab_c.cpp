@@ -19,21 +19,15 @@ void VideostabCaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource)
    *captureFrameSource = 0;
 }
 
-bool VideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage** nextFrame)
+bool VideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, cv::Mat* nextFrame)
 {
    cv::Mat mat = frameSource->nextFrame();
    if (mat.empty())
       return false;
 
-   IplImage tmp = (IplImage) mat;
-   if (!(*nextFrame))
-   {
-      *nextFrame = cvCreateImage(cvSize(tmp.width, tmp.height), tmp.depth, tmp.nChannels);
-   }
-   CV_Assert(*nextFrame && mat.rows == (*nextFrame)->height && mat.cols == (*nextFrame)->width && mat.channels() == (*nextFrame)->nChannels);
-   cv::Mat tmpMat = cv::cvarrToMat(*nextFrame);
-   mat.copyTo(tmpMat);
-   return true;}
+   cv::swap(mat, *nextFrame);
+   return true;
+}
 
 /*
 void StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::IGlobalMotionEstimator* motionEstimator)
