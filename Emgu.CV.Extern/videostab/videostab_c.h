@@ -36,7 +36,7 @@ protected:
 
 CVAPI(CaptureFrameSource*) VideostabCaptureFrameSourceCreate(CvCapture* capture, cv::videostab::IFrameSource** frameSource);
 CVAPI(void) VideostabCaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource);
-CVAPI(bool) VideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, IplImage** nextFrame);
+CVAPI(bool) VideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, cv::Mat* nextFrame);
 
 /*
 CVAPI(void) StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::IGlobalMotionEstimator* motionEstimator);

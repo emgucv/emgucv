@@ -31,7 +31,7 @@ namespace Emgu.CV.VideoStab
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal static extern bool VideostabFrameSourceGetNextFrame(IntPtr frameSource, ref IntPtr nextFrame);
+      internal static extern bool VideostabFrameSourceGetNextFrame(IntPtr frameSource, IntPtr nextFrame);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr OnePassStabilizerCreate(IntPtr capture, ref IntPtr stabilizerBase, ref IntPtr frameSource);
