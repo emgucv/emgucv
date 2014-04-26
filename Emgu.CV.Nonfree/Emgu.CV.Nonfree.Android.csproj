@@ -49,16 +49,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SIFTDetector.cs" />
     <Compile Include="SURFDetector.cs" />
-    <Compile Include="SURFFeature.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj">
       <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
       <Name>Emgu.CV.Cuda.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.Android.csproj">
-      <Project>{67EAC0E9-E834-416F-A9D0-B6014C10724A}</Project>
-      <Name>Emgu.CV.OpenCL.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.Android.csproj">
       <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>

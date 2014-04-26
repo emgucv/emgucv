@@ -258,8 +258,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   legacy contrib 
   cudalegacy cudaarithm cudawarping cuda cudafilters cudaimgproc cudaoptflow 
   cudastereo cudabgsegm cudafeatures2d 
-  ocl
-  photo bioinspired superres nonfree stitching 
+  photo superres nonfree stitching 
   videostab  optim softcascade shape
   cudev  cudacodec 
   )

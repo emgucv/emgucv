@@ -37,7 +37,8 @@ namespace AndroidExamples
          _buttonText = buttonText;
 
          //dummy code to load the opencv libraries
-         CvInvoke.CV_FOURCC('m', 'j', 'p', 'g');
+         bool loaded = CvInvoke.CheckLibraryLoaded();
+         //CvInvoke.CV_FOURCC('m', 'j', 'p', 'g');
       }
 
       /*

@@ -553,7 +553,7 @@ namespace Emgu.CV
          cvPOSIT(positObject, imagePoints, focalLength, criteria.Type, criteria.MaxIter, criteria.Epsilon, rotationMatrix, translationVector);
       }
 
-      [DllImport(OpencvCalib3DLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(OpencvCalib3dLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvPOSIT(
          IntPtr positObject, IntPtr imagePoints, double focalLength,
          CvEnum.TermCritType type,

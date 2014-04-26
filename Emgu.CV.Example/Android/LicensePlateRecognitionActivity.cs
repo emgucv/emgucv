@@ -67,7 +67,7 @@ namespace AndroidExamples
 
                List<Image<Gray, Byte>> licensePlateImagesList = new List<Image<Gray, byte>>();
                List<Image<Gray, Byte>> filteredLicensePlateImagesList = new List<Image<Gray, byte>>();
-               List<MCvBox2D> licenseBoxList = new List<MCvBox2D>();
+               List<RotatedRect> licenseBoxList = new List<RotatedRect>();
                List<string> words = detector.DetectLicensePlate(
                   image,
                   licensePlateImagesList,
@@ -82,7 +82,7 @@ namespace AndroidExamples
                   builder.AppendFormat("{0} ", w);
                SetMessage(builder.ToString());
 
-               foreach (MCvBox2D box in licenseBoxList)
+               foreach (RotatedRect box in licenseBoxList)
                {
                   Rectangle rect = box.MinAreaRect();
                   image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);

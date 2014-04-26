@@ -5,15 +5,17 @@ using System.Text;
 
 using System.Drawing;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
    public abstract class ImageFilter : Emgu.Util.DisposableObject, ICloneable
    {
-      protected ImageBufferFactory<Image<Bgr, Byte>> _bgrBuffers;
-      protected ImageBufferFactory<Image<Gray, Byte>> _grayBuffers;
-      protected ImageBufferFactory<Image<Bgr, Single>> _bgrSingleBuffers;
+      protected ImageBufferFactory<Mat> _bgrBuffers;
+      protected ImageBufferFactory<Mat> _grayBuffers;
+      protected ImageBufferFactory<Mat> _bgrSingleBuffers;
       protected bool _inplaceCapable = false;
 
       public ImageFilter()
@@ -31,26 +33,26 @@ namespace Emgu.CV
          }
       }
 
-      public abstract void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> destImage);
+      public abstract void ProcessData(Mat sourceImage, Mat destImage);
 
-      public Image<Bgr, Single> GetBufferBgrSingle(Size size, int index)
+      public Mat GetBufferBgrSingle(Size size, int index)
       {
          if (_bgrSingleBuffers == null)
-            _bgrSingleBuffers = new ImageBufferFactory<Image<Bgr, Single>>(s => new Image<Bgr, Single>(s));
+            _bgrSingleBuffers = new ImageBufferFactory<Mat>(s => new Mat(s.Height, s.Width, DepthType.Cv8U, 3));
          return _bgrSingleBuffers.GetBuffer(size, index);
       }
 
-      public Image<Bgr, Byte> GetBufferBgr(Size size, int index)
+      public Mat GetBufferBgr(Size size, int index)
       {
          if (_bgrBuffers == null)
-            _bgrBuffers = new ImageBufferFactory<Image<Bgr, Byte>>( s => new Image<Bgr, Byte>(s));
+            _bgrBuffers = new ImageBufferFactory<Mat>( s => new Mat(s.Height, s.Width, DepthType.Cv8U, 3));
          return _bgrBuffers.GetBuffer(size, index);
       }
 
-      public Image<Gray, Byte> GetBufferGray(Size size, int index)
+      public Mat GetBufferGray(Size size, int index)
       {
          if (_grayBuffers == null)
-            _grayBuffers = new ImageBufferFactory<Image<Gray, Byte>>( s => new Image<Gray, Byte>(s));
+            _grayBuffers = new ImageBufferFactory<Mat>( s => new Mat(s.Height, s.Width, DepthType.Cv8U, 1));
          return _grayBuffers.GetBuffer(size, index);
       }
 
@@ -91,22 +93,25 @@ namespace Emgu.CV
          _inplaceCapable = true;
       }
 
-      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> destImage)
+      public override void ProcessData(Mat sourceImage, Mat destImage)
       {
          Size size = sourceImage.Size;
 
-         Image<Gray, Byte> i0 = GetBufferGray(size, 0);
-         Image<Gray, Byte> i1 = GetBufferGray(size, 1);
-         Image<Gray, Byte> i2 = GetBufferGray(size, 2);
-         Image<Gray, Byte> i3 = GetBufferGray(size, 3);
-         //Image<Gray, Byte> gCanny = GetBufferGray(size, 4);
-         //Image<Gray, Byte> rCanny = GetBufferGray(size, 5);
+         Mat i0 = GetBufferGray(size, 0);
+         Mat i1 = GetBufferGray(size, 1);
+         Mat i2 = GetBufferGray(size, 2);
+         Mat i3 = GetBufferGray(size, 3);
+         CvInvoke.ExtractChannel(sourceImage, i0, 0);
+         CvInvoke.Canny(i0, i1, _thresh, _threshLinking, _apertureSize );
+         CvInvoke.ExtractChannel(sourceImage, i0, 1);
+         CvInvoke.Canny(i0, i2, _thresh, _threshLinking, _apertureSize);
+         CvInvoke.ExtractChannel(sourceImage, i0, 2);
+         CvInvoke.Canny(i0, i3, _thresh, _threshLinking, _apertureSize);
+         using (VectorOfMat vm = new VectorOfMat(i1, i2, i3))
+         {
+            CvInvoke.Merge(vm, destImage );
+         }
 
-         CvInvoke.cvSplit(sourceImage, i1, i2, i3, IntPtr.Zero);
-         CvInvoke.cvCanny(i1, i0, _thresh, _threshLinking, _apertureSize);
-         CvInvoke.cvCanny(i2, i1, _thresh, _threshLinking, _apertureSize);
-         CvInvoke.cvCanny(i3, i2, _thresh, _threshLinking, _apertureSize);
-         CvInvoke.cvMerge(i0, i1, i2, IntPtr.Zero, destImage);
       }
 
       public override object Clone()
@@ -125,7 +130,7 @@ namespace Emgu.CV
          _inplaceCapable = true;
       }
 
-      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> destImage)
+      public override void ProcessData(Mat sourceImage, Mat destImage)
       {
          CvInvoke.ApplyColorMap(sourceImage, destImage, _colorMapType);
       }
@@ -164,7 +169,7 @@ namespace Emgu.CV
          _distorCoeff = distorCoeff;
       }
 
-      public override void ProcessData(Image<Bgr, Byte> sourceImage, Image<Bgr, Byte> destImage)
+      public override void ProcessData(Mat sourceImage, Mat destImage)
       {
          if (!sourceImage.Size.Equals(_size))
          {
@@ -187,7 +192,7 @@ namespace Emgu.CV
             IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
             int centerY = (int)(_size.Width * _centerY);
             int centerX = (int)(_size.Height * _centerX);
-            CvInvoke.cvSetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
+            CvInvoke.SetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
             p.IntrinsicMatrix.Data[0, 2] = centerY;
             p.IntrinsicMatrix.Data[1, 2] = centerX;
             p.IntrinsicMatrix.Data[2, 2] = 1;
@@ -196,7 +201,7 @@ namespace Emgu.CV
             p.InitUndistortMap(_size.Width, _size.Height, out _mapX, out _mapY);
          }
 
-         CvInvoke.cvRemap(sourceImage, destImage, _mapX, _mapY, (int)Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR | (int)Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar());
+         CvInvoke.Remap(sourceImage, destImage, _mapX, _mapY, Emgu.CV.CvEnum.Inter.Linear);
       }
 
       public override object Clone()

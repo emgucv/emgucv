@@ -24,6 +24,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using Paint = Android.Graphics.Paint;
@@ -50,7 +51,7 @@ namespace AndroidExamples
          bool cameraPreviewCallbackWithBuffer = false;
          SetContentView(Resource.Layout.CameraPreviewLayout);
 
-         _bgrBuffers = new ImageBufferFactory<Image<Bgr, Byte>>(size => new Image<Bgr, Byte>(size));
+         _bgrBuffers = new ImageBufferFactory<Mat>(size => new Mat(size.Height, size.Width, DepthType.Cv8U, 3));
          _previewBitmapBuffers = new ImageBufferFactory<Android.Graphics.Bitmap>(s => Android.Graphics.Bitmap.CreateBitmap(s.Width, s.Height, Android.Graphics.Bitmap.Config.Rgb565));
 
          _topLayer = new ProcessedCameraPreview(this, cameraPreviewCallbackWithBuffer);
@@ -140,7 +141,7 @@ namespace AndroidExamples
       }
 
       private ImageFilter _imageFilter;
-      private ImageBufferFactory<Image<Bgr, Byte>> _bgrBuffers;
+      private ImageBufferFactory<Mat> _bgrBuffers;
       private FileInfo _lastSavedImageFile;
 
       public void ImagePreview(Object sender, ProcessedCameraPreview.ImagePreviewEventArgs e)
@@ -163,21 +164,21 @@ namespace AndroidExamples
          }
          s.Width = width;
          s.Height = height;
-         Image<Bgr, byte> thumbnail = _bgrBuffers.GetBuffer(s, 1);
+         Mat thumbnail = _bgrBuffers.GetBuffer(s, 1);
 #endregion
 
          if (_imageFilter == null)
          {
-            CvInvoke.cvCvtColor(yuv420sp, image, Emgu.CV.CvEnum.COLOR_CONVERSION.YUV420sp2BGR);
-            CvInvoke.cvResize(image, thumbnail, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
+            CvInvoke.CvtColor(yuv420sp, image, Emgu.CV.CvEnum.ColorConversion.Yuv420Sp2Bgr);
+            CvInvoke.Resize(image, thumbnail, s, 0, 0, Emgu.CV.CvEnum.Inter.Nearest);
          }
          else
          {
-            Image<Bgr, Byte> bgr = _bgrBuffers.GetBuffer(image.Size, 0);
-            CvInvoke.cvCvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.COLOR_CONVERSION.YUV420sp2BGR);
+            Mat bgr = _bgrBuffers.GetBuffer(image.Size, 0);
+            CvInvoke.CvtColor(yuv420sp, bgr, Emgu.CV.CvEnum.ColorConversion.Yuv420Sp2Bgr);
             lock (typeof(ImageFilter))
-               _imageFilter.ProcessData(bgr, image);
-            CvInvoke.cvResize(bgr, thumbnail, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
+               _imageFilter.ProcessData(bgr, image.Mat);
+            CvInvoke.Resize(bgr, thumbnail, s, 0, 0, Emgu.CV.CvEnum.Inter.Nearest);
          }
 
          {
@@ -189,7 +190,7 @@ namespace AndroidExamples
             int startBufferIndex = 2;
             for (int i = 1; i < _previewFilters.Length; i++)
             {
-               Image<Bgr, Byte> buffer = _bgrBuffers.GetBuffer(s, startBufferIndex + i - 1);
+               Mat buffer = _bgrBuffers.GetBuffer(s, startBufferIndex + i - 1);
                _previewFilters[i].ProcessData(thumbnail, buffer);
 
                Android.Graphics.Bitmap bmp = _previewBitmapBuffers.GetBuffer(s, i);
@@ -239,11 +240,11 @@ namespace AndroidExamples
                   }
 
                   if (filter.InplaceCapable)
-                     filter.ProcessData(buffer1, buffer1);
+                     filter.ProcessData(buffer1.Mat, buffer1.Mat);
                   else
                   {
                      Image<Bgr, Byte> buffer2 = new Image<Bgr, byte>(buffer1.Size);
-                     filter.ProcessData(buffer1, buffer2);
+                     filter.ProcessData(buffer1.Mat, buffer2.Mat);
                      buffer1.Dispose();
                      buffer1 = buffer2;
                   }

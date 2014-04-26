@@ -32,6 +32,7 @@ namespace AndroidExamples
          OnButtonClick += delegate
          {
             int maxValue = 600, pointCount = 30;
+
             SetImageBitmap(DrawSubdivision.Draw(maxValue, pointCount).Bitmap);
          };
       }
