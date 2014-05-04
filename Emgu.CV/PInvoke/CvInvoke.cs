@@ -211,6 +211,7 @@ namespace Emgu.CV
             //Debug.WriteLine(string.Format(handle == IntPtr.Zero ? "Failed to load {0}." : "Loaded {0}.", module));
             try
             {
+               Debug.WriteLine(string.Format("Trying to load {0}.", module));
                Java.Lang.JavaSystem.LoadLibrary(module);
                Debug.WriteLine(string.Format("Loaded {0}.", module));
             }

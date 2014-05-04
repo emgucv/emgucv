@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:minWidth="25px"
+        android:minHeight="25px">
+        <TextView
+            android:text="Emgu CV for Android"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="http://www.emgu.com/"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:textSize="10dip"
+            android:background="@android:drawable/alert_dark_frame" />
+        <View
+            android:background="#00B7EB"
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dip" />
+        <TextView
+            android:text="Open CV"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="License ...."
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/openCVLicenseTextView"
+            android:singleLine="false"
+            android:textSize="10dip"
+            android:background="@android:drawable/alert_dark_frame" />
+    </LinearLayout>
+</ScrollView>

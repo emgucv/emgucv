@@ -9,7 +9,7 @@
 #define EMGU_CORE_C_H
 
 #include "opencv2/core/core_c.h"
-#include "opencv2/core/ocl.hpp"
+//#include "opencv2/core/ocl.hpp"
 //#include "opencv2/imgproc/imgproc.hpp"
 #include "emgu_c.h"
 
@@ -111,11 +111,6 @@ CVAPI(double) cveKmeans(cv::_InputArray* data, int k, cv::_InputOutputArray* bes
 
 CVAPI(void) cveHConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 CVAPI(void) cveVConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
-
-CVAPI(bool) cveHaveOpenCL();
-CVAPI(bool) cveUseOpenCL();
-CVAPI(void) cveSetUseOpenCL(bool flag);
-CVAPI(void) cveOclFinish();
 
 CVAPI(void) cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift);
 

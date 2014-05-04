@@ -371,22 +371,7 @@ void cveVConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* 
    cv::vconcat(*src1, *src2, *dst);
 }
 
-bool cveHaveOpenCL()
-{
-   return cv::ocl::haveOpenCL();
-}
-bool cveUseOpenCL()
-{
-   return cv::ocl::useOpenCL();
-}
-void cveSetUseOpenCL(bool flag)
-{
-   return cv::ocl::setUseOpenCL(flag);
-}
-void cveOclFinish()
-{
-   cv::ocl::finish();
-}
+
 
 void cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift)
 {

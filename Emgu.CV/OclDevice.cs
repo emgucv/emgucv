@@ -49,8 +49,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -58,7 +62,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return Marshal.PtrToStringAnsi(version);
          }
@@ -81,8 +86,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -90,7 +99,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return Marshal.PtrToStringAnsi(vendor);
          }
@@ -113,8 +123,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -122,7 +136,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return Marshal.PtrToStringAnsi(driverVersion);
          }
@@ -145,8 +160,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -154,7 +173,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return Marshal.PtrToStringAnsi(extensions);
          }
@@ -177,8 +197,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -186,7 +210,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return Marshal.PtrToStringAnsi(name);
          }
@@ -209,8 +234,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -218,7 +247,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return (OclDeviceType) type;
          }
@@ -241,8 +271,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -250,7 +284,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return maxWorkGroupSize;
          }
@@ -273,8 +308,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -282,7 +321,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return maxComputeUnits;
          }
@@ -305,8 +345,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -314,7 +358,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return localMemorySize;
          }
@@ -337,8 +382,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -346,7 +395,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return maxMemAllocSize;
          }
@@ -369,8 +419,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -378,7 +432,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return deviceVersionMajor;
          }
@@ -401,8 +456,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -410,7 +469,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return deviceVersionMinor;
          }
@@ -433,8 +493,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -442,7 +506,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return doubleFPConfig;
          }
@@ -465,8 +530,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -474,7 +543,8 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return hostUnifiedMemory;
          }
@@ -497,8 +567,12 @@ namespace Emgu.CV
 
             int maxWorkGroupSize = 0;
             int maxComputeUnits = 0;
+            int globalMemorySize = 0;
             int localMemorySize = 0;
+
             int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
             int deviceVersionMajor = 0;
             int deviceVersionMinor = 0;
             int doubleFPConfig = 0;
@@ -506,9 +580,115 @@ namespace Emgu.CV
             IntPtr openCLVersion = IntPtr.Zero;
 
             OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
-               ref maxWorkGroupSize, ref maxComputeUnits, ref localMemorySize, ref maxMemAllocSize, ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
 
             return Marshal.PtrToStringAnsi(openCLVersion);
+         }
+      }
+
+      /// <summary>
+      /// Get the global memory size
+      /// </summary>
+      public int GlobalMemorySize
+      {
+         get
+         {
+            int type = 0;
+            IntPtr version = IntPtr.Zero;
+            IntPtr name = IntPtr.Zero;
+            IntPtr vendor = IntPtr.Zero;
+            int vendorId = 0;
+            IntPtr driverVersion = IntPtr.Zero;
+            IntPtr extensions = IntPtr.Zero;
+
+            int maxWorkGroupSize = 0;
+            int maxComputeUnits = 0;
+            int globalMemorySize = 0;
+            int localMemorySize = 0;
+
+            int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
+            int deviceVersionMajor = 0;
+            int deviceVersionMinor = 0;
+            int doubleFPConfig = 0;
+            int hostUnifiedMemory = 0;
+            IntPtr openCLVersion = IntPtr.Zero;
+
+            OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+
+            return globalMemorySize;
+         }
+      }
+
+      public int Image2DMaxWidth
+      {
+         get
+         {
+            int type = 0;
+            IntPtr version = IntPtr.Zero;
+            IntPtr name = IntPtr.Zero;
+            IntPtr vendor = IntPtr.Zero;
+            int vendorId = 0;
+            IntPtr driverVersion = IntPtr.Zero;
+            IntPtr extensions = IntPtr.Zero;
+
+            int maxWorkGroupSize = 0;
+            int maxComputeUnits = 0;
+            int globalMemorySize = 0;
+            int localMemorySize = 0;
+
+            int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
+            int deviceVersionMajor = 0;
+            int deviceVersionMinor = 0;
+            int doubleFPConfig = 0;
+            int hostUnifiedMemory = 0;
+            IntPtr openCLVersion = IntPtr.Zero;
+
+            OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+
+            return image2DMaxWidth;
+         }
+      }
+
+      public int Image2DMaxHeight
+      {
+         get
+         {
+            int type = 0;
+            IntPtr version = IntPtr.Zero;
+            IntPtr name = IntPtr.Zero;
+            IntPtr vendor = IntPtr.Zero;
+            int vendorId = 0;
+            IntPtr driverVersion = IntPtr.Zero;
+            IntPtr extensions = IntPtr.Zero;
+
+            int maxWorkGroupSize = 0;
+            int maxComputeUnits = 0;
+            int globalMemorySize = 0;
+            int localMemorySize = 0;
+
+            int maxMemAllocSize = 0;
+            int image2DMaxWidth = 0;
+            int image2DMaxHeight = 0;
+            int deviceVersionMajor = 0;
+            int deviceVersionMinor = 0;
+            int doubleFPConfig = 0;
+            int hostUnifiedMemory = 0;
+            IntPtr openCLVersion = IntPtr.Zero;
+
+            OclInvoke.oclDeviceGetProperty(_ptr, ref type, ref version, ref name, ref vendor, ref vendorId, ref driverVersion, ref extensions,
+               ref maxWorkGroupSize, ref maxComputeUnits, ref globalMemorySize, ref localMemorySize, ref maxMemAllocSize, ref image2DMaxWidth, ref image2DMaxHeight,
+               ref deviceVersionMajor, ref deviceVersionMinor, ref doubleFPConfig, ref hostUnifiedMemory, ref openCLVersion);
+
+            return image2DMaxHeight;
          }
       }
 
@@ -524,6 +704,11 @@ namespace Emgu.CV
                OclInvoke.oclDeviceRelease(ref _ptr);
             }
          }
+      }
+
+      public override string ToString()
+      {
+         return String.Format("{0} {1}.{2} ({3}):Version - {4}; Global memory - {5}； Local memory - {6}; Max image size - {7}x{8}", Name, DeviceVersionMajor, DeviceVersionMinor, Type, Version, GlobalMemorySize, LocalMemorySize, Image2DMaxWidth, Image2DMaxHeight);
       }
    }
 
@@ -550,6 +735,14 @@ namespace Emgu.CV
       /// </summary>
       Accelerator = (1 << 3),
       /// <summary>
+      /// DGpu
+      /// </summary>
+      DGpu = Gpu | (1 << 16),
+      /// <summary>
+      /// IGpu
+      /// </summary>
+      IGpu = Gpu | (1 << 17),
+      /// <summary>
       /// All
       /// </summary>
       All = -1 //0xFFFFFFFF
@@ -574,8 +767,11 @@ namespace Emgu.CV
 
          ref int maxWorkGroupSize,
          ref int maxComputeUnits,
+            ref int globalMemorySize,
          ref int localMemorySize,
          ref int maxMemAllocSize,
+            ref int image2DMaxWidth,
+   ref int image2DMaxHeight,
          ref int deviceVersionMajor,
          ref int deviceVersionMinor,
          ref int doubleFPConfig,

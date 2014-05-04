@@ -4,6 +4,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Text;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -3051,6 +3052,35 @@ namespace Emgu.CV
       /// </summary>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="cveOclFinish")]
       public extern static void OclFinish();
+
+      /// <summary>
+      /// Get the opencl platform summary as a string
+      /// </summary>
+      /// <returns>An opencl platfor summary</returns>
+      public static String OclGetPlatformsSummary()
+      {
+         StringBuilder builder = new StringBuilder();
+         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformInfo())
+         {
+            if (oclPlatformInfos.Size > 0)
+            {
+               for (int i = 0; i < oclPlatformInfos.Size; i++)
+               {
+                  OclPlatformInfo platformInfo = oclPlatformInfos[i];
+                  builder.Append(String.Format("Platform {0}: {1}{2}", i, platformInfo.ToString(), Environment.NewLine));
+
+
+                  for (int j = 0; j < platformInfo.DeviceNumber; j++)
+                  {
+                     OclDevice device = platformInfo.GetDevice(j);
+                     builder.Append(String.Format("   Device {0}: {1}{2}", j, device.ToString(), Environment.NewLine));
+                  }
+               }
+            }
+            return builder.ToString();
+         }
+      }
+
       #endregion
 
       #region Clustering

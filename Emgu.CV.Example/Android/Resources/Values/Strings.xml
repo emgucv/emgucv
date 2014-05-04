@@ -7,6 +7,13 @@
    <string name="FaceDetection">Face Detection</string>
    <string name="HelloWorld">Hello World</string>
    <string name="TrafficSignRecognition">Traffic Sign Recognition</string>
-   <string name="ApplicationName">AndroidExamples</string>
+   <string name="application_name">AndroidExamples</string>
    <string name="Camera">Camera</string>
+   <string name="menu_option_settings">Settings</string>
+   <string name="menu_option_about_us">"About us"</string>
+   <string name="software_license">"Software License"</string>
+   <string name="show_software_license">"Show Software License"</string>
+   <string name="application_version">"App Version"</string>
+   <string name="application_website">"http://www.emgu.com/"</string>
+   <string name="email_support">"support@emgu.com"</string>
 </resources>

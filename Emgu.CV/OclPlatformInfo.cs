@@ -103,6 +103,11 @@ namespace Emgu.CV
          OclInvoke.oclPlatformInfoGetDevice(Ptr, device, d);
          return device;
       }
+
+      public override string ToString()
+      {
+         return Name;
+      }
    }
 
 
@@ -130,7 +135,7 @@ namespace Emgu.CV
       internal static extern int oclPlatformInfoDeviceNumber(IntPtr platformInfo);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclGetPlatfomsInfo(IntPtr platformInfoVec);
+      internal static extern void oclGetPlatformsInfo(IntPtr platformInfoVec);
 
       /// <summary>
       /// Get all the platform info as a vector
@@ -139,7 +144,7 @@ namespace Emgu.CV
       public static Util.VectorOfOclPlatformInfo GetPlatformInfo()
       {
          Util.VectorOfOclPlatformInfo result = new Util.VectorOfOclPlatformInfo();
-         OclInvoke.oclGetPlatfomsInfo(result);
+         OclInvoke.oclGetPlatformsInfo(result);
          return result;
       }
 

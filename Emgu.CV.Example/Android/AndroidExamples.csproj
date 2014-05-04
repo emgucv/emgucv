@@ -128,9 +128,11 @@
     <Compile Include="CameraPreviewActivity.cs" />
     <Compile Include="ImageBufferFactory.cs" />
     <Compile Include="ImageFilter.cs" />
+    <Compile Include="LicenseDialogPreference.cs" />
     <Compile Include="LicensePlateRecognitionActivity.cs" />
     <Compile Include="ProcessedCameraPreview.cs" />
     <Compile Include="Report.cs" />
+    <Compile Include="SettingActivity.cs" />
     <Compile Include="TrafficSignRecognitionActivity.cs" />
     <Compile Include="FaceDetectionActivity.cs" />
     <Compile Include="PedestrianDetectionActivity.cs" />
@@ -174,6 +176,9 @@
     <AndroidResource Include="Resources\Layout\CameraPreviewLayout.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\Setting.axml" />
+    <AndroidResource Include="Resources\Layout\LicenseDisplay.axml" />
+    <AndroidResource Include="Resources\Layout\AboutUs.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\AndroidExamples.axml" />
@@ -246,6 +251,7 @@
     <AndroidResource Include="Resources\drawable-ldpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable-mdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\Drawable\ic_launcher.png" />
+    <AndroidResource Include="Resources\raw\openCVLicense.txt" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="xamarin.mobile">
@@ -253,6 +259,7 @@
       <Version>0.6.3</Version>
     </XamarinComponentReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

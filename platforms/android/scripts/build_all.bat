@@ -1,13 +1,13 @@
 pushd %~p0
-cd ..
-cp -f ..\opencv\platforms\android\android.toolchain.cmake android.toolchain.cmake
+cd ..\..\..
+cp -f opencv\platforms\android\android.toolchain.cmake android.toolchain.cmake
 rm -rf build_armeabi
 rm -rf build_armeabi-v7a
 rm -rf build_x86
 rm -rf build
-call scripts\build armeabi
-call scripts\build armeabi-v7a
-call scripts\build x86
+call platforms\android\scripts\build armeabi
+call platforms\android\scripts\build armeabi-v7a
+call platforms\android\scripts\build x86
 unzip build_armeabi\libemgucv-android-armeabi -d build
 unzip build_armeabi-v7a\libemgucv-android-armeabi-v7a -d build
 unzip build_x86\libemgucv-android-x86 -d build

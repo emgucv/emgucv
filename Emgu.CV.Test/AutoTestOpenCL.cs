@@ -23,32 +23,9 @@ namespace Emgu.CV.Test
       [Test]
       public void TestOclInfo()
       {
-         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformInfo())
-         {
-            if (oclPlatformInfos.Size > 0)
-            {
-               for (int i = 0; i < oclPlatformInfos.Size; i++)
-               {
-                  OclPlatformInfo platformInfo = oclPlatformInfos[i];
-                  String platformName = platformInfo.Name;
-                  Trace.WriteLine(String.Format("Platform {0}: {1}", i, platformName));
 
-                  
-                  for (int j = 0; j < platformInfo.DeviceNumber; j++)
-                  {
-                     OclDevice device = platformInfo.GetDevice(j);
-                     Trace.WriteLine(String.Format("   Device {0}: {1}", j, device.Name));
-                  }
-                  //VectorOfOclDeviceInfo devices = platformInfo.Devices;
-                  //for (int j = 0; j < devices.Size; j++)
-                  //{
-                  //   OclDeviceInfo device = devices[j];
-                  //   Trace.WriteLine(String.Format("   Device {0}: {1}", j, device.Name));
-                  //}
-               }
-            }
-            Trace.WriteLine("count = " + oclPlatformInfos.Size);
-         }
+         Trace.WriteLine(CvInvoke.OclGetPlatformsSummary());
+         
       }
 
       /*

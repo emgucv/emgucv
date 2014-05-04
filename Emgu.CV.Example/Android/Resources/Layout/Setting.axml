@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/software_license">
+        <com.emgu.cv.examples.LicenseDialogPreference
+            android:title="@string/show_software_license"
+            android:dialogTitle="@string/software_license"
+            android:dialogLayout="@layout/LicenseDisplay"
+            android:negativeButtonText="@null" />
+    </PreferenceCategory>
+</PreferenceScreen>
