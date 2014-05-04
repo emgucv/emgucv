@@ -94,14 +94,14 @@ namespace SURFFeatureExample
                SURFDetector surfCPU = new SURFDetector(hessianThresh);
                //extract features from the object image
                modelKeyPoints = new VectorOfKeyPoint();
-               Mat modelDescriptors = new Mat();
+               UMat modelDescriptors = new UMat();
                surfCPU.DetectAndCompute(uModelImage, null, modelKeyPoints, modelDescriptors, false);
 
                watch = Stopwatch.StartNew();
 
                // extract features from the observed image
                observedKeyPoints = new VectorOfKeyPoint();
-               Mat observedDescriptors = new Mat();
+               UMat observedDescriptors = new UMat();
                surfCPU.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
                BruteForceMatcher matcher = new BruteForceMatcher(DistanceType.L2);
                matcher.Add(modelDescriptors);
@@ -136,7 +136,7 @@ namespace SURFFeatureExample
       /// <param name="observedImage">The observed image</param>
       /// <param name="matchTime">The output total time for computing the homography matrix.</param>
       /// <returns>The model image and observed image, the matched features and homography projection.</returns>
-      public static Image<Bgr, Byte> Draw(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime)
+      public static Mat Draw(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime)
       {
          HomographyMatrix homography;
          VectorOfKeyPoint modelKeyPoints;
@@ -147,8 +147,9 @@ namespace SURFFeatureExample
          FindMatch(modelImage, observedImage, out matchTime, out modelKeyPoints, out observedKeyPoints, out indices, out mask, out homography);
 
          //Draw the matched keypoints
-         Image<Bgr, Byte> result = Features2DToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
-            indices, new Bgr(255, 255, 255), new Bgr(255, 255, 255), mask);
+         Mat result = new Mat();
+         Features2DToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
+            indices, result, new Bgr(255, 255, 255), new Bgr(255, 255, 255), mask);
 
          #region draw the projected region on the image
          if (homography != null)
@@ -161,7 +162,12 @@ namespace SURFFeatureExample
                new PointF(rect.Left, rect.Top)};
             homography.ProjectPoints(pts);
 
-            result.DrawPolyline(Array.ConvertAll<PointF, Point>(pts, Point.Round), true, new Bgr(Color.Red), 5);
+            Point[] points = Array.ConvertAll<PointF, Point>(pts, Point.Round);
+            using (VectorOfPoint vp = new VectorOfPoint(points))
+            {
+               CvInvoke.Polylines(result, vp, true, new MCvScalar(255, 0, 0, 255), 5);
+            }
+            //result.DrawPolyline(, true, new Bgr(Color.Red), 5);
          }
          #endregion
 

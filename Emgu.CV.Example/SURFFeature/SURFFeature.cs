@@ -32,7 +32,7 @@ namespace SURFFeatureExample
          using(Image<Gray, Byte> modelImage = new Image<Gray, byte>("box.png"))
          using (Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png"))
          {
-            Image<Bgr, byte> result = DrawMatches.Draw(modelImage, observedImage, out matchTime);
+            Mat result = DrawMatches.Draw(modelImage, observedImage, out matchTime);
             ImageViewer.Show(result, String.Format("Matched using {0} in {1} milliseconds", CudaInvoke.HasCuda ? "GPU" : "CPU", matchTime));
          }
       }

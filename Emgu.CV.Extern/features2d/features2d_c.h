@@ -68,18 +68,18 @@ CVAPI(void) CvSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector);
 
 // Draw keypoints.
 CVAPI(void) drawKeypoints(
-                          const IplImage* image, 
-                          const std::vector<cv::KeyPoint>* keypoints, 
-                          IplImage* outImage,
-                          const CvScalar* color, 
-                          int flags);
+   cv::_InputArray* image, 
+   const std::vector<cv::KeyPoint>* keypoints, 
+   cv::_InputOutputArray* outImage,
+   const CvScalar* color, 
+   int flags);
 
 // Draws matches of keypints from two images on output image.
 CVAPI(void) drawMatchedFeatures(
-                                const IplImage* img1, const std::vector<cv::KeyPoint>* keypoints1,
-                                const IplImage* img2, const std::vector<cv::KeyPoint>* keypoints2,
+   cv::_InputArray* img1, const std::vector<cv::KeyPoint>* keypoints1,
+   cv::_InputArray* img2, const std::vector<cv::KeyPoint>* keypoints2,
                                 const CvMat* matchIndicies, 
-                                IplImage* outImg,
+                                cv::_InputOutputArray* outImg,
                                 const CvScalar* matchColor, const CvScalar* singlePointColor,
                                 const CvMat* matchesMask, 
                                 int flags);

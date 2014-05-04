@@ -112,12 +112,12 @@ namespace AndroidExamples
             };
 
             TextView aboutUsNoteTextView =
-               aboutWindow.ContentView.FindViewById<TextView>(Resource.Id.AboutUsNoteTextView);
+               aboutWindow.ContentView.FindViewById<TextView>(Resource.Id.AboutUsOpenclTextView);
             //Emgu.CV.Util.VectorOfOclPlatformInfo oclInfo = Emgu.CV.OclInvoke.GetPlatformInfo();
             
             String txt = String.Format("Has OpenCL: {0}", CvInvoke.HaveOpenCL);
             
-            txt = String.Format("{0}{1}Use OpenCL: {2}", txt, System.Environment.NewLine, CvInvoke.UseOpenCL);
+            txt = String.Format("{0}{1}Use OpenCL: {2}{3}{4}", txt, System.Environment.NewLine, CvInvoke.UseOpenCL, System.Environment.NewLine, CvInvoke.OclGetPlatformsSummary());
             
             aboutUsNoteTextView.Text = txt;
 

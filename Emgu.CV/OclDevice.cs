@@ -624,6 +624,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get the image 2d max width
+      /// </summary>
       public int Image2DMaxWidth
       {
          get
@@ -658,6 +661,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get the image2d max height
+      /// </summary>
       public int Image2DMaxHeight
       {
          get
@@ -706,6 +712,10 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get the string represetation of this oclDevice
+      /// </summary>
+      /// <returns>A string represetation of this oclDevice</returns>
       public override string ToString()
       {
          return String.Format("{0} {1}.{2} ({3}):Version - {4}; Global memory - {5}； Local memory - {6}; Max image size - {7}x{8}", Name, DeviceVersionMajor, DeviceVersionMinor, Type, Version, GlobalMemorySize, LocalMemorySize, Image2DMaxWidth, Image2DMaxHeight);

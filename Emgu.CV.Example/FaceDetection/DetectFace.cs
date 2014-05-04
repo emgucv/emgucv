@@ -59,11 +59,9 @@ namespace FaceDetection
          #endif
          {
             bool tryUseOpenCL = true;
-            bool usingOpenCL = false;
             if (CvInvoke.HaveOpenCL)
             {
                CvInvoke.UseOpenCL = tryUseOpenCL;
-               usingOpenCL = true;
             }
 
             //Read the HaarCascade objects
@@ -71,10 +69,9 @@ namespace FaceDetection
             using (CascadeClassifier eye = new CascadeClassifier(eyeFileName))
             {
                watch = Stopwatch.StartNew();
-               using (UMat uimg = image.Mat.ToUMat(Emgu.CV.CvEnum.AccessType.Read)) //Convert it to Grayscale
                using (UMat ugray = new UMat())
                {
-                  CvInvoke.CvtColor(uimg, ugray, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
+                  CvInvoke.CvtColor(image, ugray, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
 
                   //normalizes brightness and increases contrast of the image
                   CvInvoke.EqualizeHist(ugray, ugray);

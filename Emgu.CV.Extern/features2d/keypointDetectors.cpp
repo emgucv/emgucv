@@ -207,35 +207,30 @@ void CvSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector)
 
 // Draw keypoints.
 void drawKeypoints(
-                          const IplImage* image, 
-                          const std::vector<cv::KeyPoint>* keypoints, 
-                          IplImage* outImage,
-                          const CvScalar* color, 
-                          int flags)
+   cv::_InputArray* image, 
+   const std::vector<cv::KeyPoint>* keypoints, 
+   cv::_InputOutputArray* outImage,
+   const CvScalar* color, 
+   int flags)
 {
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat outMat = cv::cvarrToMat(outImage);
-   cv::drawKeypoints(mat, *keypoints, outMat, *color, flags);
+   cv::drawKeypoints(*image, *keypoints, *outImage, *color, flags);
 }
 
 // Draws matches of keypints from two images on output image.
 void drawMatchedFeatures(
-                                const IplImage* img1, const std::vector<cv::KeyPoint>* keypoints1,
-                                const IplImage* img2, const std::vector<cv::KeyPoint>* keypoints2,
-                                const CvMat* matchIndices, 
-                                IplImage* outImg,
-                                const CvScalar* matchColor, const CvScalar* singlePointColor,
-                                const CvMat* matchesMask, 
-                                int flags)
+   cv::_InputArray* img1, const std::vector<cv::KeyPoint>* keypoints1,
+   cv::_InputArray* img2, const std::vector<cv::KeyPoint>* keypoints2,
+   const CvMat* matchIndices, 
+   cv::_InputOutputArray* outImg,
+   const CvScalar* matchColor, const CvScalar* singlePointColor,
+   const CvMat* matchesMask, 
+   int flags)
 {
-   cv::Mat mat1 = cv::cvarrToMat(img1);
-   cv::Mat mat2 = cv::cvarrToMat(img2);
-
    std::vector<cv::DMatch> matches;
    VectorOfDMatchPushMatrix(&matches, matchIndices, 0, matchesMask);
 
-   cv::Mat outMat = cv::cvarrToMat(outImg);
-   cv::drawMatches(mat1, *keypoints1, mat2, *keypoints2, matches, outMat, 
+   
+   cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, matches, *outImg, 
       *matchColor, *singlePointColor, std::vector<char>(), flags);
 }
 

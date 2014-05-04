@@ -49,15 +49,20 @@ namespace PedestrianDetection
             using (HOGDescriptor des = new HOGDescriptor())
             {
                des.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
+               
+               //load the image to umat so it will automatically use opencl is available
+               UMat umat = image.ToUMat();
 
                watch = Stopwatch.StartNew();
-               MCvObjectDetection[] results = des.DetectMultiScale(image);
+               
+               MCvObjectDetection[] results = des.DetectMultiScale(umat);
                regions = new Rectangle[results.Length];
                for (int i = 0; i < results.Length; i++)
                   regions[i] = results[i].Rect;
+               watch.Stop();
             }
          }
-         watch.Stop();
+        
 
          processingTime = watch.ElapsedMilliseconds;
 

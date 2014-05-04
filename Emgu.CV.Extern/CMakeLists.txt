@@ -43,6 +43,7 @@ CREATE_VECTOR_CS("VectorOfPoint" "std::vector< cv::Point >" "VectorOfPoint" FALS
 CREATE_VECTOR_CS("VectorOfPointF" "std::vector< cv::Point2f >" "VectorOfPointF" FALSE)
 CREATE_VECTOR_CS("VectorOfPoint3D32F" "std::vector< cv::Point3f >" "VectorOfPoint3D32F" FALSE)
 CREATE_VECTOR_CS("VectorOfInt" "std::vector< int >" "VectorOfInt" FALSE)
+CREATE_VECTOR_CS("VectorOfDMatch" "std::vector< cv::DMatch >" "VectorOfDMatch" FALSE)
 
 IF(NOT IOS)
 CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "OclPlatformInfo" FALSE)

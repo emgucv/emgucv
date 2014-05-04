@@ -104,6 +104,10 @@ namespace Emgu.CV
          return device;
       }
 
+      /// <summary>
+      /// Get the string that represent this oclPlatformInfo object
+      /// </summary>
+      /// <returns>A string that represent this oclPlatformInfo object</returns>
       public override string ToString()
       {
          return Name;

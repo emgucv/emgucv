@@ -27,12 +27,7 @@ namespace Emgu.CV.Test
       {
          if (CudaInvoke.HasCuda)
          {
-            int deviceCount = CudaInvoke.GetCudaEnabledDeviceCount();
-            Trace.WriteLine(String.Format("Device count: {0}", deviceCount));
-            if (deviceCount > 0)
-            {
-               CudaDeviceInfo d0 = new CudaDeviceInfo(0);
-            }
+            Trace.WriteLine(CudaInvoke.GetCudaDevicesSummary());
          }
       }
 

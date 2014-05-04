@@ -38,21 +38,21 @@ namespace Emgu.CV
       /// <param name="cellSize">Cell size. Use (8, 8) for default.</param>
       /// <param name="blockStride">Block stride. Must be a multiple of cell size. Use (8,8) for default.</param>
       /// <param name="gammaCorrection">Do gamma correction preprocessing or not. Use true for default.</param>
-      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage. Use 0.2 for default.</param>
-      /// <param name="nbins">Number of bins. Use 9 for default.</param>
-      /// <param name="winSigma">Gaussian smoothing window parameter. Use -1 for default. </param>
+      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage.</param>
+      /// <param name="nbins">Number of bins.</param>
+      /// <param name="winSigma">Gaussian smoothing window parameter.</param>
       /// <param name="winSize">Detection window size. Must be aligned to block size and block stride. Must match the size of the training image. Use (64, 128) for default.</param>
-      /// <param name="derivAperture">Use 1 for default.</param>
+      /// <param name="derivAperture"></param>
       public HOGDescriptor(
          Size winSize,
          Size blockSize,
          Size blockStride,
          Size cellSize,
-         int nbins,
-         int derivAperture,
-         double winSigma,
-         double L2HysThreshold,
-         bool gammaCorrection)
+         int nbins = 9,
+         int derivAperture = 1,
+         double winSigma = -1,
+         double L2HysThreshold = 0.2,
+         bool gammaCorrection = true)
       {
          _ptr = CvHOGDescriptorCreate(
             ref winSize,
@@ -84,11 +84,11 @@ namespace Emgu.CV
          Size blockSize,
          Size blockStride,
          Size cellSize,
-         int nbins,
-         int derivAperture,
-         double winSigma,
-         double L2HysThreshold,
-         bool gammaCorrection)
+         int nbins = 9,
+         int derivAperture = 1,
+         double winSigma = -1,
+         double L2HysThreshold = 0.2,
+         bool gammaCorrection = true)
          : this(template.Size, blockSize, blockStride, cellSize, nbins, derivAperture, winSigma, L2HysThreshold, gammaCorrection)
       {
 
@@ -105,7 +105,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="template">The template image to be detected.</param>
       public HOGDescriptor(Image<Bgr, Byte> template)
-         : this(template, new Size(16, 16), new Size(8, 8), new Size(8, 8), 9, 1, -1, 0.2, true)
+         : this(template, new Size(16, 16), new Size(8, 8), new Size(8, 8))
       {
       }
 
@@ -151,12 +151,12 @@ namespace Emgu.CV
       /// <returns>The regions where positives are found</returns>
       public MCvObjectDetection[] DetectMultiScale(
          IInputArray image,
-         double hitThreshold,
-         Size winStride,
-         Size padding,
-         double scale,
-         int finalThreshold,
-         bool useMeanshiftGrouping)
+         double hitThreshold = 0,
+         Size winStride = new Size(),
+         Size padding = new Size(),
+         double scale = 1.05,
+         double finalThreshold = 2.0,
+         bool useMeanshiftGrouping = false)
       {
          using (Util.VectorOfRect vr = new VectorOfRect())
          using (Util.VectorOfDouble vd = new VectorOfDouble())
@@ -177,16 +177,6 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Perfroms object detection with increasing detection window.
-      /// </summary>
-      /// <param name="image">The image to search in</param>
-      /// <returns>The regions where positives are found.</returns>
-      public MCvObjectDetection[] DetectMultiScale(Image<Bgr, Byte> image)
-      {
-         return DetectMultiScale(image, 0, new Size(8, 8), new Size(32, 32), 1.05, 2, false);
-      }
-
-      /// <summary>
       /// 
       /// </summary>
       /// <param name="image">The image</param>
@@ -194,7 +184,7 @@ namespace Emgu.CV
       /// <param name="padding">Padding. Use Size.Empty for default</param>
       /// <param name="locations">Locations for the computation. Can be null if not needed</param>
       /// <returns>The descriptor vector</returns>
-      public float[] Compute(IInputArray image, Size winStride, Size padding, Point[] locations)
+      public float[] Compute(IInputArray image, Size winStride = new Size(), Size padding = new Size(), Point[] locations = null)
       {
          using (VectorOfFloat desc = new VectorOfFloat())
          {

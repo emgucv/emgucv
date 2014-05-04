@@ -207,14 +207,15 @@ namespace Emgu.CV.Cuda
                   CudaInvoke.CvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), stream);
                   stream.WaitForCompletion();
                }
-            } catch
+            } catch (Exception excpt)
             {
                throw new NotSupportedException(String.Format(
-                  "Convertion from Image<{0}, {1}> to Image<{2}, {3}> is not supported by OpenCV",
+                  "Convertion from CudaImage<{0}, {1}> to CudaImage<{2}, {3}> is not supported by OpenCV: {4}",
                   srcColor.ToString(),
                   typeof(TDepth).ToString(),
                   destColor.ToString(),
-                  typeof(TDepth).ToString()));
+                  typeof(TDepth).ToString(),
+                  excpt.Message));
             }
          }
       }

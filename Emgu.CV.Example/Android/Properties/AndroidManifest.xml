@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="com.emgu.cv.examples" android:versionCode="1" android:versionName="2.4.2">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="com.emgu.cv.examples" android:versionCode="2" android:versionName="3.0.0">
 	<uses-sdk android:targetSdkVersion="10" />
 	<application android:label="Emgu CV Examples" android:icon="@drawable/ic_launcher"></application>
 	<uses-permission android:name="android.permission.CAMERA" />

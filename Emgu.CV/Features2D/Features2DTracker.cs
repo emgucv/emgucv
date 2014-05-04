@@ -582,19 +582,16 @@ namespace Emgu.CV.Features2D
       /// <param name="keypoints">The keypoints to be drawn</param>
       /// <param name="color">The color used to draw the keypoints</param>
       /// <param name="type">The drawing type</param>
-      /// <returns>The image with the keypoints drawn</returns>
-      /// <typeparam name="TColor">The type of color for the source image. Should be either Gray or Bgr</typeparam>
-      public static Image<Bgr, Byte> DrawKeypoints<TColor>(
-         Image<TColor, Byte> image,
+      /// <param name="outImage">The image with the keypoints drawn</param> 
+      public static void DrawKeypoints(
+         IInputArray image,
          VectorOfKeyPoint keypoints,
+         IInputOutputArray outImage,
          Bgr color,
          Features2DToolbox.KeypointDrawType type)
-         where TColor : struct, IColor
       {
-         Image<Bgr, Byte> result = new Image<Bgr, Byte>(image.Size);
          MCvScalar c = color.MCvScalar;
-         CvInvoke.drawKeypoints(image, keypoints, result, ref c, type);
-         return result;
+         CvInvoke.drawKeypoints(image.InputArrayPtr, keypoints, outImage.InputOutputArrayPtr, ref c, type);
       }
 
       /// <summary>
@@ -609,20 +606,20 @@ namespace Emgu.CV.Features2D
       /// <param name="singlePointColor">The color for highlighting the keypoints</param>
       /// <param name="matchesMask">The mask for the matches. Use null for all matches.</param>
       /// <param name="flags">The drawing type</param>
-      /// <returns>The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</returns>
-      /// <typeparam name="TColor">The type of color for the source images. Should be either Gray or Bgr</typeparam>
-      public static Image<Bgr, Byte> DrawMatches<TColor>(
-         Image<TColor, Byte> modelImage, VectorOfKeyPoint modelKeypoints,
-         Image<TColor, Byte> observerdImage, VectorOfKeyPoint observedKeyPoints,
-         Matrix<int> matchIndices, Bgr matchColor, Bgr singlePointColor,
+      /// <param name="result">The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</param>
+      public static void DrawMatches(
+         IInputArray modelImage, VectorOfKeyPoint modelKeypoints,
+         IInputArray observerdImage, VectorOfKeyPoint observedKeyPoints,
+         Matrix<int> matchIndices, 
+         IInputOutputArray result,
+         Bgr matchColor, Bgr singlePointColor,
          Matrix<Byte> matchesMask, KeypointDrawType flags = KeypointDrawType.Default)
-         where TColor : struct, IColor
       {
-         Image<Bgr, Byte> result = new Image<Bgr, byte>(modelImage.Cols + observerdImage.Cols, Math.Max(modelImage.Rows, observerdImage.Rows));
+         //Image<Bgr, Byte> result = new Image<Bgr, byte>(modelImage.Cols + observerdImage.Cols, Math.Max(modelImage.Rows, observerdImage.Rows));
          MCvScalar mc = matchColor.MCvScalar;
          MCvScalar spc = singlePointColor.MCvScalar;
-         CvInvoke.drawMatchedFeatures(observerdImage, observedKeyPoints, modelImage, modelKeypoints, matchIndices, result, ref mc, ref spc, matchesMask, flags);
-         return result;
+         CvInvoke.drawMatchedFeatures(observerdImage.InputArrayPtr, observedKeyPoints, modelImage.InputArrayPtr, modelKeypoints, matchIndices, result.InputOutputArrayPtr, ref mc, ref spc, matchesMask, flags);
+         //return result;
       }
 
       /// <summary>
@@ -703,8 +700,8 @@ namespace Emgu.CV.Features2D
       {
          using (Matrix<float> firstCol = distance.GetCol(0))
          using (Matrix<float> secCol = distance.GetCol(1))
-         using (Matrix<float> tmp = new Matrix<float>(firstCol.Size))
-         using (Matrix<Byte> maskBuffer = new Matrix<byte>(firstCol.Size))
+         using (Mat tmp = new Mat())
+         using (Mat maskBuffer = new Mat())
          {
             CvInvoke.Divide(firstCol, secCol, tmp, 1.0, CvInvoke.GetDepthType(typeof(float)));
             using (ScalarArray ia = new ScalarArray(uniquenessThreshold))

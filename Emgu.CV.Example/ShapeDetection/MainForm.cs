@@ -38,20 +38,22 @@ namespace ShapeDetection
                .Resize(400, 400, Emgu.CV.CvEnum.Inter.Linear, true);
 
             //Convert the image to grayscale and filter out the noise
-            Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
+            UMat uimage = new UMat();
+            CvInvoke.CvtColor(img, uimage, ColorConversion.Bgr2Gray);
+
+            //use image pyr to remove noise
+            UMat pyrDown = new UMat();
+            CvInvoke.PyrDown(uimage, pyrDown);
+            CvInvoke.PyrUp(pyrDown, uimage);
+            
+            //Image<Gray, Byte> gray = img.Convert<Gray, Byte>().PyrDown().PyrUp();
 
             #region circle detection
             Stopwatch watch = Stopwatch.StartNew();
             double cannyThreshold = 180.0;
             double circleAccumulatorThreshold = 120;
-            CircleF[] circles = gray.HoughCircles(
-                new Gray(cannyThreshold),
-                new Gray(circleAccumulatorThreshold),
-                2.0, //Resolution of the accumulator used to detect centers of the circles
-                20.0, //min distance 
-                5, //min radius
-                0 //max radius
-                )[0]; //Get the circles from the first channel
+            CircleF[] circles = CvInvoke.HoughCircles(uimage, HoughType.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
+
             watch.Stop();
             msgBuilder.Append(String.Format("Hough circles - {0} ms; ", watch.ElapsedMilliseconds));
             #endregion
@@ -59,14 +61,17 @@ namespace ShapeDetection
             #region Canny and edge detection
             watch.Reset(); watch.Start();
             double cannyThresholdLinking = 120.0;
-            Image<Gray, Byte> cannyEdges = gray.Canny(cannyThreshold, cannyThresholdLinking);
-            LineSegment2D[] lines = cannyEdges.HoughLinesBinary(
-                1, //Distance resolution in pixel-related units
-                Math.PI / 45.0, //Angle resolution measured in radians.
-                20, //threshold
-                30, //min Line width
-                10 //gap between lines
-                )[0]; //Get the lines from the first channel
+            UMat cannyEdges = new UMat();
+            CvInvoke.Canny(uimage, cannyEdges, cannyThreshold, cannyThresholdLinking);
+
+            LineSegment2D[] lines = CvInvoke.HoughLinesP(
+               cannyEdges, 
+               1, //Distance resolution in pixel-related units
+               Math.PI/45.0, //Angle resolution measured in radians.
+               20, //threshold
+               30, //min Line width
+               10); //gap between lines
+
             watch.Stop();
             msgBuilder.Append(String.Format("Canny & Hough lines - {0} ms; ", watch.ElapsedMilliseconds));
             #endregion
@@ -85,7 +90,6 @@ namespace ShapeDetection
                   using (VectorOfPoint contour = contours[i])
                   using (VectorOfPoint approxContour = new VectorOfPoint())
                   {
-
                      CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.05, true);
                      if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contours with area greater than 250
                      {

@@ -26,18 +26,20 @@ namespace PedestrianDetection
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
 
-         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
+         using (Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png"))
          {
             long processingTime;
             Rectangle[] results = FindPedestrian.Find(image, out processingTime);
             foreach (Rectangle rect in results)
             {
-               image.Draw(rect, new Bgr(Color.Red), 1);
+               CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255, 255));
             }
             ImageViewer.Show(
                image,
                String.Format("Pedestrain detection using {0} in {1} milliseconds.",
-                  CudaInvoke.HasCuda ? "GPU" : "CPU",
+                  CudaInvoke.HasCuda ? "GPU" : 
+                  (CvInvoke.HaveOpenCL ? "OpenCL":
+                  "CPU"),
                   processingTime));
          }
       }

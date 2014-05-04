@@ -50,7 +50,7 @@ namespace Emgu.CV.Cuda
       {
          get
          {
-#if IOS || ANDROID
+#if IOS
             return _hasCuda;
 #else
             if (_testedCuda)
@@ -74,6 +74,37 @@ namespace Emgu.CV.Cuda
 
       #endregion
 
+      /// <summary>
+      /// Get the opencl platform summary as a string
+      /// </summary>
+      /// <returns>An opencl platfor summary</returns>
+      public static String GetCudaDevicesSummary()
+      {
+         
+         StringBuilder builder = new StringBuilder();
+         if (HasCuda)
+         {
+            builder.Append(String.Format("Has cuda: true{0}", Environment.NewLine));
+
+            int deviceCount = GetCudaEnabledDeviceCount();
+            builder.Append(String.Format("Cuda devices: {0}{1}", deviceCount, Environment.NewLine));
+
+            for (int i = 0; i < deviceCount; i++)
+            {
+               using (CudaDeviceInfo deviceInfo = new CudaDeviceInfo(i))
+               {
+                  builder.Append(String.Format("  Device {0}: {1}{2}", i, deviceInfo.Name, Environment.NewLine));
+               }
+            }
+
+            return builder.ToString();
+         }
+         else
+         {
+            return "Has cuda: false";
+         }
+
+      }
       /// <summary>
       /// Get the number of Cuda enabled devices
       /// </summary>
