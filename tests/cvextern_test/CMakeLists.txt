@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2013 by EMGU. All rights reserved.
+#  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.
 #
 #  CMake file for cvextern_test. See root CMakeLists.txt
 # --------------------------------------------------------
