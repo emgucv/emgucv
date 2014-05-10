@@ -27,9 +27,6 @@ namespace AndroidExamples
          // Create your application here
          AddPreferencesFromResource(Resource.Layout.Setting);
 
-        
-
-
       }
    }
 }

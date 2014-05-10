@@ -29,7 +29,8 @@ namespace AndroidExamples
          LayoutInflater inflator = LayoutInflater.FromContext(this.Context);
          View dialog = inflator.Inflate(Resource.Layout.LicenseDisplay, null);
          TextView opencvLicenseTextView = dialog.FindViewById<TextView>(Resource.Id.openCVLicenseTextView);
-         using (System.IO.StreamReader reader = new StreamReader(Context.Resources.OpenRawResource(Resource.Raw.openCVLicense)))
+         
+         using (System.IO.StreamReader reader = new StreamReader(Context.Resources.OpenRawResource(Resource.Raw.LICENSE)))
          {
             opencvLicenseTextView.Text = reader.ReadToEnd();
          }

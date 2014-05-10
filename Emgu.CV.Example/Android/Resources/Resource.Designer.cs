@@ -64,10 +64,10 @@ namespace AndroidExamples
 			public const int AboutUsCloseButton = 2131099653;
 			
 			// aapt resource value: 0x7f060003
-			public const int AboutUsEmailTextView = 2131099651;
+			public const int AboutUsEmailSupportTextView = 2131099651;
 			
 			// aapt resource value: 0x7f060004
-			public const int AboutUsOpenclTextView = 2131099652;
+			public const int AboutUsModuleInfoTextView = 2131099652;
 			
 			// aapt resource value: 0x7f060001
 			public const int AboutUsVersionTextView = 2131099649;
@@ -161,7 +161,7 @@ namespace AndroidExamples
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int AboutUs = 2130903040;
+			public const int about_us = 2130903040;
 			
 			// aapt resource value: 0x7f030001
 			public const int AndroidExamples = 2130903041;
@@ -192,7 +192,7 @@ namespace AndroidExamples
 		{
 			
 			// aapt resource value: 0x7f040000
-			public const int openCVLicense = 2130968576;
+			public const int LICENSE = 2130968576;
 			
 			static Raw()
 			{

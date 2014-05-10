@@ -584,6 +584,7 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BorderType borderType, ref MCvScalar borderValue);
 
+
       public static void GaussianBlur(IInputArray src, IOutputArray dst, Size ksize, double sigmaX, double sigmaY = 0,
          CvEnum.BorderType borderType = BorderType.Default)
       {
@@ -592,6 +593,14 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveGaussianBlur(IntPtr src, IntPtr dst, ref Size ksize, double sigmaX, double sigmaY, CvEnum.BorderType borderType);
 
+      /// <summary>
+      /// Blurs an image using the normalized box filter.
+      /// </summary>
+      /// <param name="src">input image; it can have any number of channels, which are processed independently, but the depth should be CV_8U, CV_16U, CV_16S, CV_32F or CV_64F.</param>
+      /// <param name="dst">Output image of the same size and type as src.</param>
+      /// <param name="ksize">Blurring kernel size.</param>
+      /// <param name="anchor">Anchor point; default value Point(-1,-1) means that the anchor is at the kernel center.</param>
+      /// <param name="borderType">Border mode used to extrapolate pixels outside of the image.</param>
       public static void Blur(IInputArray src, IOutputArray dst, Size ksize, Point anchor,
          CvEnum.BorderType borderType = BorderType.Default)
       {
@@ -600,6 +609,12 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveBlur(IntPtr src, IntPtr dst, ref Size kSize, ref Point anchor, CvEnum.BorderType borderType);
 
+      /// <summary>
+      /// Blurs an image using the median filter.
+      /// </summary>
+      /// <param name="src">Input 1-, 3-, or 4-channel image; when ksize is 3 or 5, the image depth should be CV_8U, CV_16U, or CV_32F, for larger aperture sizes, it can only be CV_8U.</param>
+      /// <param name="dst">Destination array of the same size and type as src.</param>
+      /// <param name="ksize">Aperture linear size; it must be odd and greater than 1, for example: 3, 5, 7 ...</param>
       public static void MedianBlur(IInputArray src, IOutputArray dst, int ksize)
       {
          cveMedianBlur(src.InputArrayPtr, dst.OutputArrayPtr, ksize);
@@ -607,14 +622,36 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveMedianBlur(IntPtr src, IntPtr dst, int ksize);
 
+      /// <summary>
+      /// Blurs an image using the box filter.
+      /// </summary>
+      /// <param name="src">Input image.</param>
+      /// <param name="dst">Output image of the same size and type as src.</param>
+      /// <param name="ddepth">The output image depth (-1 to use src.depth()).</param>
+      /// <param name="ksize">Blurring kernel size.</param>
+      /// <param name="anchor">Anchor point; default value Point(-1,-1) means that the anchor is at the kernel center.</param>
+      /// <param name="normalize">Specifying whether the kernel is normalized by its area or not.</param>
+      /// <param name="borderType">Border mode used to extrapolate pixels outside of the image.</param>
       public static void BoxFilter(IInputArray src, IOutputArray dst, DepthType ddepth, Size ksize, Point anchor,
          bool normalize = true, CvEnum.BorderType borderType = BorderType.Default)
       {
          cveBoxFilter(src.InputArrayPtr, dst.OutputArrayPtr, ddepth, ref ksize, ref anchor, normalize, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveBoxFilter(IntPtr src, IntPtr dst, DepthType ddepth, ref Size ksize, ref Point anchor, bool normailize, CvEnum.BorderType borderType);
+      private static extern void cveBoxFilter(
+         IntPtr src, IntPtr dst, DepthType ddepth, ref Size ksize, ref Point anchor, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool normailize, CvEnum.BorderType borderType);
 
+      /// <summary>
+      /// Applies the bilateral filter to an image.
+      /// </summary>
+      /// <param name="src">Source 8-bit or floating-point, 1-channel or 3-channel image.</param>
+      /// <param name="dst">Destination image of the same size and type as src .</param>
+      /// <param name="d">Diameter of each pixel neighborhood that is used during filtering. If it is non-positive, it is computed from sigmaSpace .</param>
+      /// <param name="sigmaColor">Filter sigma in the color space. A larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace ) will be mixed together, resulting in larger areas of semi-equal color.</param>
+      /// <param name="sigmaSpace">Filter sigma in the coordinate space. A larger value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see sigmaColor ). When d>0 , it specifies the neighborhood size regardless of sigmaSpace. Otherwise, d is proportional to sigmaSpace.</param>
+      /// <param name="borderType">Border mode used to extrapolate pixels outside of the image.</param>
       public static void BilateralFilter(IInputArray src, IOutputArray dst, int d, double sigmaColor, double sigmaSpace,
          CvEnum.BorderType borderType = BorderType.Default)
       {

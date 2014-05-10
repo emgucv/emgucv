@@ -170,6 +170,9 @@
     <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.traineddata">
       <Link>Assets\tessdata\eng.traineddata</Link>
     </AndroidAsset>
+    <AndroidResource Include="..\..\opencv\LICENSE">
+      <Link>Resources\Raw\LICENSE</Link>
+    </AndroidResource>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\PlanarSubdivision.axml" />
@@ -178,7 +181,7 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\Setting.axml" />
     <AndroidResource Include="Resources\Layout\LicenseDisplay.axml" />
-    <AndroidResource Include="Resources\Layout\AboutUs.axml" />
+    <AndroidResource Include="Resources\Layout\about_us.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\AndroidExamples.axml" />
@@ -251,7 +254,6 @@
     <AndroidResource Include="Resources\drawable-ldpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable-mdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\Drawable\ic_launcher.png" />
-    <AndroidResource Include="Resources\raw\openCVLicense.txt" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="xamarin.mobile">

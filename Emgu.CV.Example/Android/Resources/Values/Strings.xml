@@ -7,7 +7,7 @@
    <string name="FaceDetection">Face Detection</string>
    <string name="HelloWorld">Hello World</string>
    <string name="TrafficSignRecognition">Traffic Sign Recognition</string>
-   <string name="application_name">AndroidExamples</string>
+   <string name="application_name">Emgu CV examples</string>
    <string name="Camera">Camera</string>
    <string name="menu_option_settings">Settings</string>
    <string name="menu_option_about_us">"About us"</string>

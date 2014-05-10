@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Emgu.CV;
+using Emgu.CV.Cuda;
 
 namespace AndroidExamples
 {
@@ -99,7 +100,7 @@ namespace AndroidExamples
             int width = (int)Math.Min(display.Width * 0.8, 360 * metrics.Density);
             int height = (int)Math.Min(display.Height * 0.8, 480 * metrics.Density);
 
-            PopupWindow aboutWindow = new PopupWindow(LayoutInflater.Inflate(Resource.Layout.AboutUs, null, false), width, height);
+            PopupWindow aboutWindow = new PopupWindow(LayoutInflater.Inflate(Resource.Layout.about_us, null, false), width, height);
             TextView appVersionText = aboutWindow.ContentView.FindViewById<TextView>(Resource.Id.AboutUsVersionTextView);
             appVersionText.Text = String.Format("{0}: {1}",
                Resources.GetString(Resource.String.application_version),
@@ -112,13 +113,21 @@ namespace AndroidExamples
             };
 
             TextView aboutUsNoteTextView =
-               aboutWindow.ContentView.FindViewById<TextView>(Resource.Id.AboutUsOpenclTextView);
+               aboutWindow.ContentView.FindViewById<TextView>(Resource.Id.AboutUsModuleInfoTextView);
             //Emgu.CV.Util.VectorOfOclPlatformInfo oclInfo = Emgu.CV.OclInvoke.GetPlatformInfo();
             
             String txt = String.Format("Has OpenCL: {0}", CvInvoke.HaveOpenCL);
+
+            if (CvInvoke.HaveOpenCL)
+            {
+               txt = String.Format("{0}{1}Use OpenCL: {2}{3}{4}{5}",
+                  txt, System.Environment.NewLine,
+                  CvInvoke.UseOpenCL, System.Environment.NewLine,
+                  CvInvoke.OclGetPlatformsSummary(), System.Environment.NewLine);
+            }
+            txt = String.Format("{0}Has Cuda: {1}", txt, CudaInvoke.HasCuda);
             
-            txt = String.Format("{0}{1}Use OpenCL: {2}{3}{4}", txt, System.Environment.NewLine, CvInvoke.UseOpenCL, System.Environment.NewLine, CvInvoke.OclGetPlatformsSummary());
-            
+
             aboutUsNoteTextView.Text = txt;
 
             aboutWindow.ShowAtLocation(this.Window.DecorView, GravityFlags.Center, 0, 0);
