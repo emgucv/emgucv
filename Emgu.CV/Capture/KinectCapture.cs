@@ -114,105 +114,63 @@ namespace Emgu.CV
       /// Retrieve Gray frame from Kinect
       /// </summary>
       /// <returns>A Gray frame from Kinect</returns>
-      public override Image<Gray, Byte> RetrieveGrayFrame()
+      public bool RetrieveGrayFrame(IOutputArray image)
       {
-         return RetrieveGrayFrame((int)OpenNIDataType.GrayImage);
+         return RetrieveFrame(image, (int)OpenNIDataType.GrayImage);
       }
 
       /// <summary>
       /// Retrieve Bgr frame from Kinect
       /// </summary>
       /// <returns>A Bgr frame from Kinect</returns>
-      public override Image<Bgr, Byte> RetrieveBgrFrame()
+      public bool RetrieveBgrFrame(IOutputArray image)
       {
-         return RetrieveBgrFrame((int)OpenNIDataType.BgrImage);
+         return RetrieveFrame(image, (int)OpenNIDataType.BgrImage);
       }
 
       /// <summary>
       /// Retrieve disparity map (in pixels) from Kinect
       /// </summary>
       /// <returns>The disparity map from Kinect</returns>
-      public Image<Gray, Byte> RetrieveDisparityMap()
+      public bool RetrieveDisparityMap(IOutputArray image)
       {
-         return RetrieveGrayFrame((int)OpenNIDataType.DisparityMap);
+         return RetrieveFrame(image, (int)OpenNIDataType.DisparityMap);
       }
 
       /// <summary>
       /// Retrieve disparity map (in pixels) from Kinect
       /// </summary>
       /// <returns>The disparity map from Kinect</returns>
-      public Image<Gray, float> RetrieveDisparityMap32f()
+      public bool RetrieveDisparityMap32f(IOutputArray image)
       {
-         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, (int)OpenNIDataType.DisparityMap32f);
-         if (img == IntPtr.Zero)
-            return null;
-         MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
-
-         Image<Gray, float> res = new Image<Gray, float>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
-
-         //inplace flip the image if necessary
-         res._Flip(FlipType);
-
-         return res;
+         return RetrieveFrame(image, (int)OpenNIDataType.DisparityMap32f);        
       }
 
       /// <summary>
       /// Retrieve the valid depth map from Kinect
       /// </summary>
       /// <returns>The valid depth map from Kinect</returns>
-      public Image<Gray, Byte> RetrieveValidDepthMap()
+      public bool RetrieveValidDepthMap(IOutputArray image)
       {
-         return RetrieveGrayFrame((int)OpenNIDataType.ValidDepthMask);
+         return RetrieveFrame(image, (int)OpenNIDataType.ValidDepthMask);
       }
 
       /// <summary>
       /// Retrieve the depth map from Kinect (in mm)
       /// </summary>
       /// <returns>The depth map from Kinect (in mm)</returns>
-      public Image<Gray, int> RetrieveDepthMap()
+      public bool RetrieveDepthMap(IOutputArray image)
       {
-         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, (int)OpenNIDataType.DepthMap);
-         if (img == IntPtr.Zero)
-            return null;
-         MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
-
-         Image<Gray, int> res = new Image<Gray, int>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
-
-         //inplace flip the image if necessary
-         res._Flip(FlipType);
-
-         return res;
+         return RetrieveFrame(image, (int)OpenNIDataType.DepthMap);
       }
 
       /// <summary>
       /// Retrieve all the points (x, y, z position in meters) from Kinect, row by row.
       /// </summary>
       /// <returns>All the points (x, y, z position in meters) from Kinect, row by row.</returns>
-      public MCvPoint3D32f[] RetrievePointCloudMap()
+      public bool RetrievePointCloudMap(IOutputArray image)
       {
-         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, (int)OpenNIDataType.PointCloudMap);
-         if (img == IntPtr.Zero)
-            return null;
-
-         if (FlipType != Emgu.CV.CvEnum.FlipType.None)
-         {
-            using (Mat m = CvInvoke.CvArrToMat(img))
-            {
-               CvInvoke.Flip(m, m, FlipType);
-            }
-         }
-
-         MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
-
-         MCvPoint3D32f[] points = new MCvPoint3D32f[iplImage.Width * iplImage.Height];
-         GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-         using (Matrix<float> m = new Matrix<float>(iplImage.Height, iplImage.Width, handle.AddrOfPinnedObject()))
-         {
-            CvInvoke.cvCopy(img, m, IntPtr.Zero);
-         }
-         handle.Free();
-
-         return points;
+         return RetrieveFrame(image, (int) OpenNIDataType.PointCloudMap);
       }
 
       /// <summary>

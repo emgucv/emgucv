@@ -16,11 +16,11 @@ namespace Emgu.CV
       ///<summary> Capture a Bgr image frame </summary>
       ///<returns> A Bgr image frame</returns>
       [OperationContract]
-      Image<Bgr, Byte> QueryFrame();
+      Mat QueryFrame();
 
       ///<summary> Capture a Bgr image frame that is half width and half heigh</summary>
       ///<returns> A Bgr image frame that is half width and half height</returns>
       [OperationContract]
-      Image<Bgr, Byte> QuerySmallFrame();
+      Mat QuerySmallFrame();
    }
 }

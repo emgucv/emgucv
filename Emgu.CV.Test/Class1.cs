@@ -43,12 +43,13 @@ namespace Emgu.CV.Test
       public void TestCapture()
       {
          Capture capture = new Capture("abc.efg");
-         Image<Bgr, Byte> image = capture.QueryFrame();
+         Mat image = capture.QueryFrame();
       }
 
       public void TestShowMat()
       {
          Mat m = new Mat(323, 241, CvEnum.DepthType.Cv8U, 3);
+         m.SetTo(new MCvScalar());
          Emgu.CV.UI.ImageViewer.Show(m);
       }
 
@@ -61,7 +62,8 @@ namespace Emgu.CV.Test
             {
                //Image<Bgr, Byte> img = capture.RetrieveBgrFrame();
                capture.Grab();
-               Image<Gray, Byte> img = capture.RetrieveDisparityMap();
+               Mat img = new Mat();
+               capture.RetrieveDisparityMap(img);
                viewer.Image = img;
             };
 
@@ -288,9 +290,8 @@ namespace Emgu.CV.Test
             capture.Start();
             viewer.ShowDialog(); //show the image viewer
          }
-      }*/
+      }
 
-      
       public void TestGpuBackgroundModel()
       {
          int warmUpFrames = 20;
@@ -370,7 +371,7 @@ namespace Emgu.CV.Test
             capture.Start();
             viewer.ShowDialog(); //show the image viewer
          }
-      }
+      }*/
 
       public void CameraTest()
       {
@@ -379,13 +380,16 @@ namespace Emgu.CV.Test
          {
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {  //run this until application closed (close button click on image viewer)
-               viewer.Image = capture.RetrieveBgrFrame(0); //draw the image obtained from camera
+               Mat m = new Mat();
+               capture.RetrieveFrame(m);
+               viewer.Image = m; //draw the image obtained from camera
             };
             capture.Start();
             viewer.ShowDialog(); //show the image viewer
          }
       }
 
+      /*
       public void CameraTest2()
       {
          using (ImageViewer viewer = new ImageViewer())
@@ -409,7 +413,7 @@ namespace Emgu.CV.Test
             capture.Start();
             viewer.ShowDialog();
          }
-      }
+      }*/
 
       public void CameraTest3()
       {
@@ -418,10 +422,10 @@ namespace Emgu.CV.Test
          {
             Application.Idle += delegate(object sender, EventArgs e)
             {
-               Image<Bgr, byte> frame = capture.QueryFrame();
+               Mat frame = capture.QueryFrame();
                if (frame != null)
                {
-                  Bitmap bmp = frame.ToBitmap();
+                  Bitmap bmp = frame.ToImage<Bgr, Byte>().ToBitmap();
 
                   viewer.Image = new Image<Bgr, Byte>(bmp);
                   
@@ -663,6 +667,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       public static void TestCodeBook()
       {
          int learningFrames = 40;
@@ -671,13 +676,13 @@ namespace Emgu.CV.Test
          using (Capture capture = new Capture("tree.avi"))
          using (BGCodeBookModel<Ycc> bgmodel = new BGCodeBookModel<Ycc>())
          {
-            /*
+            
             #region Set color thresholds values
-            bgmodel.MCvBGCodeBookModel.ModMin0 = bgmodel.MCvBGCodeBookModel.ModMin1 = bgmodel.MCvBGCodeBookModel.ModMin2 = 3;
-            bgmodel.MCvBGCodeBookModel.ModMax0 = bgmodel.MCvBGCodeBookModel.ModMax1 = bgmodel.MCvBGCodeBookModel.ModMax2 = 10;
-            bgmodel.MCvBGCodeBookModel.CbBounds0 = bgmodel.MCvBGCodeBookModel.CbBounds1 = bgmodel.MCvBGCodeBookModel.CbBounds2 = 10;
+            //bgmodel.MCvBGCodeBookModel.ModMin0 = bgmodel.MCvBGCodeBookModel.ModMin1 = bgmodel.MCvBGCodeBookModel.ModMin2 = 3;
+            //bgmodel.MCvBGCodeBookModel.ModMax0 = bgmodel.MCvBGCodeBookModel.ModMax1 = bgmodel.MCvBGCodeBookModel.ModMax2 = 10;
+            //bgmodel.MCvBGCodeBookModel.CbBounds0 = bgmodel.MCvBGCodeBookModel.CbBounds1 = bgmodel.MCvBGCodeBookModel.CbBounds2 = 10;
             #endregion
-            */
+            
 
             ImageViewer viewer = new ImageViewer();
             int count = 0;
@@ -723,7 +728,6 @@ namespace Emgu.CV.Test
          }
       }
 
-      /*
       public void TestArrayChangeDimension()
       {
          float[] vec = new float[10];
@@ -920,6 +924,7 @@ namespace Emgu.CV.Test
 
       }
 
+      /*
       public void TestCodeBookBGModel()
       {
          using (Capture capture = new Capture())
@@ -930,7 +935,7 @@ namespace Emgu.CV.Test
 
             Application.Idle += delegate(Object sender, EventArgs args)
             {
-               Image<Bgr, Byte> frame = capture.QueryFrame();
+               Mat frame = capture.QueryFrame();
                model.Update(frame);
                viewer.Image = model.ForegroundMask; 
             };
@@ -987,7 +992,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      /*
+      
       public void TestCvBlob()
       {
          //MCvFont font = new MCvFont(Emgu.CV.CvEnum.FontFace.HersheySimplex, 0.5, 0.5);
@@ -1095,10 +1100,10 @@ namespace Emgu.CV.Test
             {
                if (oldImage == null)
                {
-                  oldImage = new CudaImage<Gray,byte>( c.QueryGrayFrame() );
+                  oldImage = new CudaImage<Gray,byte>( c.QueryFrame() );
                }
 
-               currentImage = new CudaImage<Gray,byte>( c.QueryGrayFrame() );
+               currentImage = new CudaImage<Gray,byte>( c.QueryFrame() );
                using (CudaImage<Gray, float> u = new CudaImage<Gray, float>())
                using (CudaImage<Gray, float> v = new CudaImage<Gray, float>())
                using (GpuMat<float> vertex = new GpuMat<float>())
@@ -1229,7 +1234,7 @@ namespace Emgu.CV.Test
             v.ShowDialog();
 
          }
-      }*/
+      }
 
       public void TestStereo()
       {
@@ -1268,6 +1273,6 @@ namespace Emgu.CV.Test
 
             v.ShowDialog();
          }
-      }
+      }*/
    }
 }

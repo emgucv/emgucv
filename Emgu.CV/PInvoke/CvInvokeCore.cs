@@ -1119,7 +1119,6 @@ namespace Emgu.CV
       {
          return Norm(arr1, null, normType, mask);
       }
-
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveNorm(
           IntPtr arr1,
@@ -2161,13 +2160,14 @@ namespace Emgu.CV
          IInputOutputArray img, String text, Point org, CvEnum.FontFace fontFace, double fontScale,
          MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, bool bottomLeftOrigin = false)
       {
-         cvePutText(img.InputOutputArrayPtr, text, ref org, fontFace, fontScale, ref color, thickness, lineType, bottomLeftOrigin);
+         using (CvString s = new CvString(text))
+            cvePutText(img.InputOutputArrayPtr, s, ref org, fontFace, fontScale, ref color, thickness, lineType, bottomLeftOrigin);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePutText(
          IntPtr img,
-         [MarshalAs(CvInvoke.StringMarshalType)] String text, 
+         IntPtr text, 
          ref Point org, CvEnum.FontFace fontFace, double fontScale, 
          ref MCvScalar color, int thickness, CvEnum.LineType lineType, 
          [MarshalAs(CvInvoke.BoolMarshalType)]
@@ -2485,22 +2485,20 @@ namespace Emgu.CV
       /// <summary>
       /// Computes eigenvalues and eigenvectors of a symmetric matrix
       /// </summary>
-      /// <param name="mat">The input symmetric square matrix, modified during the processing</param>
-      /// <param name="evects">The output matrix of eigenvectors, stored as subsequent rows</param>
-      /// <param name="evals">The output vector of eigenvalues, stored in the descending order (order of eigenvalues and eigenvectors is syncronized, of course)</param>
-      /// <param name="eps">Accuracy of diagonalization. Typically, DBL EPSILON (about 10^(-15)) works well. THIS PARAMETER IS CURRENTLY IGNORED.</param>
-      /// <param name="lowindex">Optional index of largest eigenvalue/-vector to calculate. If either low- or highindex is supplied the other is required, too. Indexing is 1-based. Use 0 for default.</param>
-      /// <param name="highindex">Optional index of smallest eigenvalue/-vector to calculate. If either low- or highindex is supplied the other is required, too. Indexing is 1-based. Use 0 for default.</param>
+      /// <param name="src">The input symmetric square matrix, modified during the processing</param>
+      /// <param name="eigenVectors">The output matrix of eigenvectors, stored as subsequent rows</param>
+      /// <param name="eigenValues">The output vector of eigenvalues, stored in the descending order (order of eigenvalues and eigenvectors is syncronized, of course)</param>
       /// <remarks>Currently the function is slower than cvSVD yet less accurate, so if A is known to be positivelydefined (for example, it is a covariance matrix)it is recommended to use cvSVD to find eigenvalues and eigenvectors of A, especially if eigenvectors are not required.</remarks>
       /// <example>To calculate the largest eigenvector/-value set lowindex = highindex = 1. For legacy reasons this function always returns a square matrix the same size as the source matrix with eigenvectors and a vector the length of the source matrix with eigenvalues. The selected eigenvectors/-values are always in the first highindex - lowindex + 1 rows.</example>
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvEigenVV(
-         IntPtr mat,
-         IntPtr evects,
-         IntPtr evals,
-         double eps,
-         int lowindex,
-         int highindex);
+      public static void Eigen(
+         IInputArray src,
+         IOutputArray eigenValues,
+         IOutputArray eigenVectors = null)
+      {
+         cveEigen(src.InputArrayPtr, eigenValues.OutputArrayPtr, eigenVectors == null ? IntPtr.Zero : eigenVectors.OutputArrayPtr);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveEigen(IntPtr src, IntPtr eigenValues, IntPtr eigenVectors);
 
       /// <summary>
       /// normalizes the input array so that it's norm or value range takes the certain value(s).

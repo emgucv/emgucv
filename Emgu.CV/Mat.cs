@@ -91,7 +91,8 @@ namespace Emgu.CV
       public Mat(String fileName, CvEnum.LoadImageType loadType)
          : this(MatInvoke.cvMatCreate(), true, false)
       {
-         CvInvoke.cveImread(fileName, loadType, this);
+         using (CvString s = new CvString(fileName))
+            CvInvoke.cveImread(s, loadType, this);
       }
 
       /// <summary>

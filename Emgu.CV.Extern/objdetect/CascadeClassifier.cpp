@@ -6,9 +6,9 @@
 
 #include "objdetect_c.h"
 
-cv::CascadeClassifier* CvCascadeClassifierCreate(char* fileName)
+cv::CascadeClassifier* CvCascadeClassifierCreate(cv::String* fileName)
 {
-   return new cv::CascadeClassifier(fileName);
+   return new cv::CascadeClassifier(*fileName);
 }
 void CvCascadeClassifierRelease(cv::CascadeClassifier** classifier)
 {

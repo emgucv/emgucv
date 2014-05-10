@@ -33,8 +33,8 @@ CVAPI(cv::FaceRecognizer*) CvLBPHFaceRecognizerCreate(int radius, int neighbors,
 CVAPI(void) CvFaceRecognizerTrain(cv::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
 CVAPI(void) CvFaceRecognizerUpdate(cv::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
 CVAPI(void) CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* distance);
-CVAPI(void) CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, const char* fileName);
-CVAPI(void) CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, const char* fileName);
+CVAPI(void) CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, cv::String* fileName);
+CVAPI(void) CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, cv::String* fileName);
 CVAPI(void) CvFaceRecognizerRelease(cv::FaceRecognizer** recognizer);
 
 //color map

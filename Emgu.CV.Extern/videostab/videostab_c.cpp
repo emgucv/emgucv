@@ -7,7 +7,7 @@
 
 #include "videostab_c.h"
 
-CaptureFrameSource* VideostabCaptureFrameSourceCreate(CvCapture* capture, cv::videostab::IFrameSource** frameSource)
+CaptureFrameSource* VideostabCaptureFrameSourceCreate(cv::VideoCapture* capture, cv::videostab::IFrameSource** frameSource)
 {
    CaptureFrameSource* stabilizer = new CaptureFrameSource(capture);
    *frameSource = static_cast<cv::videostab::IFrameSource*>(stabilizer);

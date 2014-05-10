@@ -13,6 +13,11 @@
 //#include "opencv2/imgproc/imgproc.hpp"
 #include "emgu_c.h"
 
+CVAPI(cv::String*) cveStringCreate();
+CVAPI(cv::String*) cveStringCreateFromStr(const char* c);
+CVAPI(void) cveStringGetCStr(cv::String* string, const char** c, int* size);
+CVAPI(void) cveStringRelease(cv::String** string);
+
 CVAPI(cv::_InputArray*) cveInputArrayFromDouble(double* scalar);
 CVAPI(cv::_InputArray*) cveInputArrayFromScalar(cv::Scalar* scalar);
 CVAPI(cv::_InputArray*) cveInputArrayFromMat(cv::Mat* mat);
@@ -118,7 +123,7 @@ CVAPI(void) cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* col
 
 CVAPI(void) cveCircle(cv::_InputOutputArray* img, CvPoint* center, int radius, CvScalar* color, int thickness, int lineType, int shift);
 
-CVAPI(void) cvePutText(cv::_InputOutputArray* img, const char* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin);
+CVAPI(void) cvePutText(cv::_InputOutputArray* img, cv::String* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin);
 
 CVAPI(void) cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift);
 
@@ -133,4 +138,6 @@ CVAPI(void) cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes
               const CvScalar* color, int thickness, int lineType, int shift );
 
 CVAPI(double) cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2);
+
+CVAPI(bool) cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputArray* eigenVectors);
 #endif

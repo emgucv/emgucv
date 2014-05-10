@@ -82,3 +82,19 @@ void cveCalcGlobalOrientation(cv::_InputArray* orientation, cv::_InputArray* mas
 {
    cv::calcGlobalOrientation(*orientation, *mask, *mhi, timestamp, duration);
 }
+
+void cveCamShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, CvBox2D* result)
+{
+   cv::Rect rect = *window;
+   cv::RotatedRect rr = cv::CamShift(*probImage, rect, *criteria);
+   *window = rect;
+   *result = rr;
+}
+
+int cveMeanShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria )
+{
+   cv::Rect rect = *window;
+   int result = cv::meanShift(*probImage, rect, *criteria);
+   *window = rect;
+   return result;
+}

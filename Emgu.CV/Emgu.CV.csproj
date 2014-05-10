@@ -123,6 +123,7 @@
     <Compile Include="PInvoke\CvInvokeOptim.cs" />
     <Compile Include="StereoMatcherExtensions.cs" />
     <Compile Include="UMat.cs" />
+    <Compile Include="Util\CvString.cs" />
     <Compile Include="Util\IInputArray.cs" />
     <Compile Include="Util\IInputOutputArray.cs" />
     <Compile Include="Util\IOutputArray.cs" />

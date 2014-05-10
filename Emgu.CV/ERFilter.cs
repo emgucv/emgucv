@@ -193,9 +193,10 @@ namespace Emgu.CV
          }
          
          using (VectorOfRect regions = new VectorOfRect())
+         using (CvString s = new CvString(groupingTrainedFileName))
          {
             GCHandle erstatsHandle = GCHandle.Alloc(erstatPtrs, GCHandleType.Pinned);
-            CvERGrouping(channels.InputArrayPtr, erstatsHandle.AddrOfPinnedObject(), erstatPtrs.Length, groupingTrainedFileName, minProbability, regions);
+            CvERGrouping(channels.InputArrayPtr, erstatsHandle.AddrOfPinnedObject(), erstatPtrs.Length, s, minProbability, regions);
             erstatsHandle.Free();
             return regions.ToArray();
          }
@@ -210,8 +211,7 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvERGrouping(
          IntPtr channels, IntPtr regions, int count,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String groupingTrainedFileName,
+         IntPtr groupingTrainedFileName,
          float minProbability, IntPtr groups);
 
    }
@@ -240,13 +240,13 @@ namespace Emgu.CV
          bool nonMaxSuppression = true,
          float minProbabilityDiff = 0.1f)
       {
-         _ptr = CvERFilterNM1Create(classifierFileName, thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
+         using (CvString s = new CvString(classifierFileName))
+            _ptr = CvERFilterNM1Create(s, thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvERFilterNM1Create(
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String classifier,
+         IntPtr classifier,
          int thresholdDelta,
          float minArea,
          float maxArea,
@@ -268,13 +268,13 @@ namespace Emgu.CV
       /// <param name="minProbability">The minimum probability P(er|character) allowed for retreived ER’s.</param>
       public ERFilterNM2(String classifierFileName, float minProbability = 0.3f)
       {
-         _ptr = CvERFilterNM2Create(classifierFileName, minProbability);
+         using (CvString s = new CvString(classifierFileName))
+            _ptr = CvERFilterNM2Create(s, minProbability);
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvERFilterNM2Create(
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String classifier,
+         IntPtr classifier,
          float minProbability);
    }
 }

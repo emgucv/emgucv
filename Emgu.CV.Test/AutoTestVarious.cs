@@ -2131,6 +2131,7 @@ namespace Emgu.CV.Test
       }
 
 #if !ANDROID
+      /*
       [Test]
       public void TestCaptureFromFile()
       {
@@ -2146,7 +2147,7 @@ namespace Emgu.CV.Test
                }
             }
          }
-      }
+      }*/
 #endif
 
       [Test]
@@ -2488,7 +2489,8 @@ namespace Emgu.CV.Test
          //capture one will continute capturing all the frames.
          EventHandler captureHandle1 = delegate
          {
-            Image<Bgr, Byte> img = capture1.RetrieveBgrFrame(0);
+            Mat img = new Mat();
+            capture1.RetrieveFrame(img);
             totalFrames1++;
             Trace.WriteLine(String.Format("capture 1 frame {0}: {1}", totalFrames1, DateTime.Now.ToString()));
          };
@@ -2512,7 +2514,8 @@ namespace Emgu.CV.Test
                counter = 0;
             }
 
-            Image<Bgr, Byte> img = capture2.RetrieveBgrFrame(0);
+            Mat img = new Mat();
+             capture2.RetrieveFrame(img);
             Trace.WriteLine(String.Format("capture 2 frame {0}: {1}", totalFrames2, DateTime.Now.ToString()));
 
             if (needPause)
@@ -2554,6 +2557,18 @@ namespace Emgu.CV.Test
          //viewer.ShowDialog();
       }
       #endif
+
+      [Test]
+      public void TestCvString()
+      {
+         string s = "From ? to ?";
+
+         using (CvString str = new CvString(s))
+         {
+            string s2 = str.ToString();
+            EmguAssert.IsTrue(s.Equals(s2));
+         }
+      }
 
       [Test]
       public void TestERFilter()

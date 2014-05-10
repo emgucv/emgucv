@@ -3723,9 +3723,8 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true, Category = "Smoothing")]
       public Image<TColor, TDepth> SmoothBlur(int width, int height, bool scale)
       {
-         Emgu.CV.CvEnum.SmoothType type = scale ? Emgu.CV.CvEnum.SmoothType.Blur : Emgu.CV.CvEnum.SmoothType.BlurNoScale;
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSmooth(Ptr, res.Ptr, type, width, height, 0.0, 0.0);
+         CvInvoke.BoxFilter(this, res, CvInvoke.GetDepthType(typeof(TDepth)), new Size(width, height), new Point(-1, -1), scale);   
          return res;
       }
 
@@ -3738,7 +3737,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> SmoothMedian(int size)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSmooth(Ptr, res.Ptr, Emgu.CV.CvEnum.SmoothType.Median, size, size, 0, 0);
+         CvInvoke.MedianBlur(this, res, size);
          return res;
       }
 
@@ -3753,7 +3752,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> SmoothBilatral(int kernelSize, int colorSigma, int spaceSigma)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSmooth(Ptr, res.Ptr, Emgu.CV.CvEnum.SmoothType.Bilateral, kernelSize, kernelSize, colorSigma, spaceSigma);
+         CvInvoke.BilateralFilter(this, res, kernelSize, colorSigma, spaceSigma);
          return res;
       }
 
@@ -3776,7 +3775,7 @@ namespace Emgu.CV
       public Image<TColor, TDepth> SmoothGaussian(int kernelWidth, int kernelHeight, double sigma1, double sigma2)
       {
          Image<TColor, TDepth> res = CopyBlank();
-         CvInvoke.cvSmooth(Ptr, res.Ptr, CvEnum.SmoothType.Gaussian, kernelWidth, kernelHeight, sigma1, sigma2);
+         CvInvoke.GaussianBlur(this, res, new Size(kernelWidth, kernelHeight), sigma1, sigma2);
          return res;
       }
 
@@ -3794,7 +3793,7 @@ namespace Emgu.CV
       ///<param name="sigma2"> The standard deviation of the Gaussian kernel in the vertical dimwnsion</param>
       public void _SmoothGaussian(int kernelWidth, int kernelHeight, double sigma1, double sigma2)
       {
-         CvInvoke.cvSmooth(Ptr, Ptr, CvEnum.SmoothType.Gaussian, kernelWidth, kernelHeight, sigma1, sigma2);
+         CvInvoke.GaussianBlur(this, this, new Size(kernelWidth, kernelHeight), sigma1, sigma2);
       }
 
       ///<summary> 

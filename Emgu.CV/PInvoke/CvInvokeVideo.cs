@@ -17,16 +17,23 @@ namespace Emgu.CV
       /// <param name="probImage">Back projection of object histogram </param>
       /// <param name="window">Initial search window</param>
       /// <param name="criteria">Criteria applied to determine when the window search should be finished</param>
-      /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field).</param>
-      /// <param name="box">Circumscribed box for the object. If not IntPtr.Zero, contains object size and orientation</param>
-      /// <returns>The number of iterations made within cvMeanShift</returns>
-      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvCamShift(
-         IntPtr probImage,
-         Rectangle window,
-         MCvTermCriteria criteria,
-         out MCvConnectedComp comp,
-         out RotatedRect box);
+      /// <returns>Circumscribed box for the object, contains object size and orientation</returns>
+      public static RotatedRect CamShift(
+         IInputArray probImage,
+         ref Rectangle window,
+         MCvTermCriteria criteria)
+      {
+         RotatedRect box = new RotatedRect();
+         cveCamShift(probImage.InputArrayPtr, ref window, ref criteria, ref box);
+         return box;
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+         private static extern void cveCamShift(
+            IntPtr probImage,
+            ref Rectangle window,
+            ref MCvTermCriteria criteria,
+            ref RotatedRect box);
 
       /// <summary>
       /// Iterates to find the object center given its back projection and initial position of search window. The iterations are made until the search window center moves by less than the given value and/or until the function has done the maximum number of iterations. 
@@ -34,14 +41,19 @@ namespace Emgu.CV
       /// <param name="probImage">Back projection of object histogram</param>
       /// <param name="window">Initial search window</param>
       /// <param name="criteria">Criteria applied to determine when the window search should be finished. </param>
-      /// <param name="comp">Resultant structure that contains converged search window coordinates (comp->rect field) and sum of all pixels inside the window (comp->area field). </param>
       /// <returns>The number of iterations made</returns>
-      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvMeanShift(
+      public static int MeanShift(
+         IInputArray probImage,
+         ref Rectangle window,
+         MCvTermCriteria criteria)
+      {
+         return cveMeanShift(probImage.InputArrayPtr, ref window, ref criteria);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cveMeanShift(
          IntPtr probImage,
-         Rectangle window,
-         MCvTermCriteria criteria,
-         out MCvConnectedComp comp);
+         ref Rectangle window,
+         ref MCvTermCriteria criteria);
 
       #region motion history
       /// <summary>

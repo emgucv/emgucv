@@ -403,7 +403,7 @@ namespace Emgu.CV.Test
 
          Matrix<float> evects = new Matrix<float>(symMat.Size);
          Matrix<float> evals = new Matrix<float>(symMat.Rows, 1);
-         CvInvoke.cvEigenVV(symMat, evects, evals, 1.0e-15, 0, 0);
+         CvInvoke.Eigen(symMat, evals, evects);
       }
 
       [Test]

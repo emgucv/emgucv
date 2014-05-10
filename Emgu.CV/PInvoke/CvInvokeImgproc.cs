@@ -111,7 +111,6 @@ namespace Emgu.CV
          CvEnum.BorderType borderMode,
          ref MCvScalar fillval);
 
-
       /// <summary>
       /// Calculates the matrix of an affine transform such that:
       /// (x'_i,y'_i)^T=map_matrix (x_i,y_i,1)^T
@@ -444,8 +443,6 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFitLine(IntPtr points, IntPtr line, CvEnum.DistType distType, double param, double reps, double aeps);
 
-
-
       /// <summary>
       /// Finds out if there is any intersection between two rotated rectangles.
       /// </summary>
@@ -587,32 +584,44 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BorderType borderType, ref MCvScalar borderValue);
 
-      /// <summary>
-      /// Smooths image using one of several methods. Every of the methods has some features and restrictions listed below
-      /// Blur with no scaling works with single-channel images only and supports accumulation of 8-bit to 16-bit format (similar to cvSobel and cvLaplace) and 32-bit floating point to 32-bit floating-point format.
-      /// Simple blur and Gaussian blur support 1- or 3-channel, 8-bit and 32-bit floating point images. These two methods can process images in-place.
-      /// Median and bilateral filters work with 1- or 3-channel 8-bit images and can not process images in-place.
-      /// </summary>
-      /// <param name="src">The source image</param>
-      /// <param name="dst">The destination image</param>
-      /// <param name="type">Type of the smoothing</param>
-      /// <param name="param1">The first parameter of smoothing operation</param>
-      /// <param name="param2">The second parameter of smoothing operation. In case of simple scaled/non-scaled and Gaussian blur if param2 is zero, it is set to param1</param>
-      /// <param name="param3">In case of Gaussian kernel this parameter may specify Gaussian sigma (standard deviation). If it is zero, it is calculated from the kernel size:
-      /// sigma = (n/2 - 1)*0.3 + 0.8, where n=param1 for horizontal kernel,
-      /// n=param2 for vertical kernel.
-      /// With the standard sigma for small kernels (3x3 to 7x7) the performance is better. If param3 is not zero, while param1 and param2 are zeros, the kernel size is calculated from the sigma (to provide accurate enough operation). 
-      /// </param>
-      /// <param name="param4">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction</param>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvSmooth(
-          IntPtr src,
-          IntPtr dst,
-          CvEnum.SmoothType type,
-          int param1,
-          int param2,
-          double param3,
-          double param4);
+      public static void GaussianBlur(IInputArray src, IOutputArray dst, Size ksize, double sigmaX, double sigmaY = 0,
+         CvEnum.BorderType borderType = BorderType.Default)
+      {
+         cveGaussianBlur(src.InputArrayPtr, dst.OutputArrayPtr, ref ksize, sigmaX, sigmaY, borderType);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveGaussianBlur(IntPtr src, IntPtr dst, ref Size ksize, double sigmaX, double sigmaY, CvEnum.BorderType borderType);
+
+      public static void Blur(IInputArray src, IOutputArray dst, Size ksize, Point anchor,
+         CvEnum.BorderType borderType = BorderType.Default)
+      {
+         cveBlur(src.InputArrayPtr, dst.OutputArrayPtr, ref ksize, ref anchor, borderType);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveBlur(IntPtr src, IntPtr dst, ref Size kSize, ref Point anchor, CvEnum.BorderType borderType);
+
+      public static void MedianBlur(IInputArray src, IOutputArray dst, int ksize)
+      {
+         cveMedianBlur(src.InputArrayPtr, dst.OutputArrayPtr, ksize);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveMedianBlur(IntPtr src, IntPtr dst, int ksize);
+
+      public static void BoxFilter(IInputArray src, IOutputArray dst, DepthType ddepth, Size ksize, Point anchor,
+         bool normalize = true, CvEnum.BorderType borderType = BorderType.Default)
+      {
+         cveBoxFilter(src.InputArrayPtr, dst.OutputArrayPtr, ddepth, ref ksize, ref anchor, normalize, borderType);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveBoxFilter(IntPtr src, IntPtr dst, DepthType ddepth, ref Size ksize, ref Point anchor, bool normailize, CvEnum.BorderType borderType);
+
+      public static void BilateralFilter(IInputArray src, IOutputArray dst, int d, double sigmaColor, double sigmaSpace,
+         CvEnum.BorderType borderType = BorderType.Default)
+      {
+         cveBilateralFilter(src.InputArrayPtr, dst.OutputArrayPtr, d, sigmaColor, sigmaSpace, borderType);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveBilateralFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpace, CvEnum.BorderType borderType);
 
       /// <summary>
       /// The Sobel operators combine Gaussian smoothing and differentiation so the result is more or less robust to the noise. Most often, the function is called with (xorder=1, yorder=0, aperture_size=3) or (xorder=0, yorder=1, aperture_size=3) to calculate first x- or y- image derivative. The first case corresponds to

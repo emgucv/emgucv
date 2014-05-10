@@ -8,7 +8,7 @@
 
 //ERFilter
 cv::ERFilter* CvERFilterNM1Create(
-   const char* classifier, 
+   cv::String* classifier, 
    int thresholdDelta, 
    float minArea,
    float maxArea, 
@@ -16,13 +16,13 @@ cv::ERFilter* CvERFilterNM1Create(
    bool nonMaxSuppression,
    float minProbabilityDiff)
 {
-   cv::Ptr<cv::ERFilter> filter = cv::createERFilterNM1(cv::loadClassifierNM1(classifier), thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
+   cv::Ptr<cv::ERFilter> filter = cv::createERFilterNM1(cv::loadClassifierNM1(*classifier), thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
    filter.addref();
    return filter.get();
 }
-cv::ERFilter* CvERFilterNM2Create(const char* classifier, float minProbability)
+cv::ERFilter* CvERFilterNM2Create(cv::String* classifier, float minProbability)
 {
-   cv::Ptr<cv::ERFilter> filter = cv::createERFilterNM2(cv::loadClassifierNM2(classifier), minProbability);
+   cv::Ptr<cv::ERFilter> filter = cv::createERFilterNM2(cv::loadClassifierNM2(*classifier), minProbability);
    filter.addref();
    return filter.get();
 
@@ -37,14 +37,14 @@ void CvERFilterRun(cv::ERFilter* filter, cv::_InputArray* image, std::vector<cv:
    filter->run(*image, *regions);
 }
 
-void CvERGrouping(cv::_InputArray* channels, std::vector<cv::ERStat>** regions, int count, const char* fileName, float minProbability, std::vector<cv::Rect>* groups)
+void CvERGrouping(cv::_InputArray* channels, std::vector<cv::ERStat>** regions, int count, cv::String* fileName, float minProbability, std::vector<cv::Rect>* groups)
 {
    std::vector< std::vector< cv::ERStat > > statVecs;
    for (int i = 0; i < count; i++)
    {
       statVecs.push_back(*regions[i]);
    }
-   std::string s(fileName);
-   cv::erGrouping(*channels, statVecs, s, minProbability, *groups);
+   
+   cv::erGrouping(*channels, statVecs, *fileName, minProbability, *groups);
 
 }

@@ -6,6 +6,25 @@
 
 #include "core_c_extra.h"
 
+cv::String* cveStringCreate()
+{
+   return new cv::String();
+}
+cv::String* cveStringCreateFromStr(const char* c)
+{
+   return new cv::String(c);
+}
+void cveStringGetCStr(cv::String* string, const char** c, int* size)
+{
+   *c = string->c_str();
+   *size = string->size();
+}
+void cveStringRelease(cv::String** string)
+{
+   delete *string;
+   *string = 0;
+}
+
 cv::_InputArray* cveInputArrayFromDouble(double* scalar)
 {
    return new cv::_InputArray(*scalar);
@@ -390,9 +409,9 @@ void cveCircle(cv::_InputOutputArray* img, CvPoint* center, int radius, CvScalar
    cv::circle(*img, *center, radius, *color, thickness, lineType, shift);
 }
 
-void cvePutText(cv::_InputOutputArray* img, const char* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin)
+void cvePutText(cv::_InputOutputArray* img, cv::String* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin)
 {
-   cv::putText(*img, text, *org, fontFace, fontScale, *color, thickness, lineType, bottomLeftOrigin);
+   cv::putText(*img, *text, *org, fontFace, fontScale, *color, thickness, lineType, bottomLeftOrigin);
 }
 
 void cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift)
@@ -422,4 +441,9 @@ void cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes,
 double cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2)
 {
    return cv::PSNR(*src1, *src2);
+}
+
+bool cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputArray* eigenVectors)
+{
+   return cv::eigen(*src, *eigenValues, eigenVectors ? *eigenVectors : (cv::OutputArray) cv::noArray());
 }

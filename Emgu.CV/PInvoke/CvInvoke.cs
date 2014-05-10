@@ -27,11 +27,12 @@ namespace Emgu.CV
             return _libraryLoaded;
       }
 
+      
       /// <summary>
       /// string marshaling type
       /// </summary>
       public const UnmanagedType StringMarshalType = UnmanagedType.LPStr;
-
+      
       /// <summary>
       /// Represent a bool value in C++
       /// </summary>
@@ -363,7 +364,7 @@ namespace Emgu.CV
       private static int _CV_ELEM_SIZE(int type)
       {
          return (_CV_MAT_CN(type) << ((((4 / 4 + 1) * 16384 | 0x3a50) >> _CV_DepthType(type) * 2) & 3));
-      }*/
+      }
 
       /// <summary>
       /// Generate 4-character code of codec used to compress the frames. For example, CV_FOURCC('P','I','M','1') is MPEG-1 codec, CV_FOURCC('M','J','P','G') is motion-jpeg codec etc.
@@ -376,7 +377,7 @@ namespace Emgu.CV
       public static int CV_FOURCC(char c1, char c2, char c3, char c4)
       {
          return (((c1) & 255) + (((c2) & 255) << 8) + (((c3) & 255) << 16) + (((c4) & 255) << 24));
-      }
+      }*/
       #endregion
 
       /// <summary>

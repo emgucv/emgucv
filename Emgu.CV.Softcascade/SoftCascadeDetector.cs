@@ -88,7 +88,8 @@ namespace Emgu.CV.Softcascade
       /// <param name="rejCriteria">Algorithm used for non maximum suppression.</param>
       public SoftCascadeDetector(String trainedCascadeFileName, double minScale = 0.4, double maxScale = 5.0, int scales = 55, RejectionCriteria rejCriteria = RejectionCriteria.NoReject)
       {
-         _ptr = SoftCascadeInvoke.cveSoftCascadeDetectorCreate(trainedCascadeFileName, minScale, maxScale, scales, rejCriteria);
+         using (CvString s = new CvString(trainedCascadeFileName))
+            _ptr = SoftCascadeInvoke.cveSoftCascadeDetectorCreate(s, minScale, maxScale, scales, rejCriteria);
       }
 
       /// <summary>
@@ -153,8 +154,7 @@ namespace Emgu.CV.Softcascade
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveSoftCascadeDetectorCreate(
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String fileName, 
+         IntPtr fileName, 
          double minScale, double maxScale, int scales, SoftCascadeDetector.RejectionCriteria rejCriteria);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

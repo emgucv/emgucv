@@ -117,10 +117,8 @@ namespace Emgu.CV.Features2D
 
             CvInvoke.Multiply(matchMask, priorMask, matchMask, 1.0, CvInvoke.GetDepthType(typeof(float)));
 
-            MCvConnectedComp comp;
-            RotatedRect currentRegion;
             //Updates the current location
-            CvInvoke.cvCamShift(matchMask.Ptr, startRegion, new MCvTermCriteria(10, 1.0e-8), out comp, out currentRegion);
+            RotatedRect currentRegion = CvInvoke.CamShift(matchMask, ref startRegion, new MCvTermCriteria(10, 1.0e-8));
 
             #region find the Image features that belongs to the current Region
             MatchedImageFeature[] featuesInCurrentRegion;

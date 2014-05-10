@@ -60,16 +60,14 @@ void CvFaceRecognizerUpdate(cv::FaceRecognizer* recognizer, cv::_InputArray* ima
    recognizer->update(*images, *labels);
 }
 
-void CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, const char* fileName)
+void CvFaceRecognizerSave(cv::FaceRecognizer* recognizer, cv::String* fileName)
 {
-   std::string file(fileName);
-   recognizer->save(file);
+   recognizer->save(*fileName);
 }
 
-void CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, const char* fileName)
+void CvFaceRecognizerLoad(cv::FaceRecognizer* recognizer, cv::String* fileName)
 {
-   std::string file(fileName);
-   recognizer->load(file);
+   recognizer->load(*fileName);
 }
 
 void CvFaceRecognizerPredict(cv::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* dist)

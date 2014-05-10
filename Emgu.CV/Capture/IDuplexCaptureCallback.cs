@@ -19,6 +19,6 @@ namespace Emgu.CV
       ///</summary>
       ///<param name="img">The image received</param>
       [OperationContract(IsOneWay = true)]
-      void ReceiveFrame(Image<Bgr, Byte> img);
+      void ReceiveFrame(Mat img);
    }
 }

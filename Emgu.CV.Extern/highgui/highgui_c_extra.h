@@ -28,7 +28,22 @@ CVAPI(void) OpenniGetColorPoints(
 /*
 CVAPI(cv::Mat*) cvMatCreateFromFile(char* fileName, int flags);
 */
-CVAPI(bool) cveImwrite(const char* filename, cv::_InputArray* img, const std::vector<int>* params);
+CVAPI(bool) cveImwrite(cv::String* filename, cv::_InputArray* img, const std::vector<int>* params);
 
-CVAPI(void) cveImread(const char* fileName, int flags, cv::Mat* result);
+CVAPI(void) cveImread(cv::String* fileName, int flags, cv::Mat* result);
+
+CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device);
+CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromFile(cv::String* fileName);
+CVAPI(void) cveVideoCaptureRelease(cv::VideoCapture** capture);
+CVAPI(bool) cveVideoCaptureSet(cv::VideoCapture* capture, int propId, double value);
+CVAPI(double) cveVideoCaptureGet(cv::VideoCapture* capture, int propId);
+CVAPI(bool) cveVideoCaptureGrab(cv::VideoCapture* capture);
+CVAPI(bool) cveVideoCaptureRetrieve(cv::VideoCapture* capture, cv::_OutputArray* image, int flag);
+CVAPI(bool) cveVideoCaptureRead(cv::VideoCapture* capture, cv::_OutputArray* image);
+
+CVAPI(cv::VideoWriter*) cveVideoWriterCreate(cv::String* filename, int fourcc, double fps, CvSize* frameSize, bool isColor);
+CVAPI(void) cveVideoWriterRelease(cv::VideoWriter** writer);
+CVAPI(void) cveVideoWriterWrite(cv::VideoWriter* writer, cv::Mat* image);
+CVAPI(int) cveVideoWriterFourcc(char c1, char c2, char c3, char c4);
+
 #endif

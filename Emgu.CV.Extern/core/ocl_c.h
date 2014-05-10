@@ -34,6 +34,12 @@ CVAPI(void) oclPlatformInfoGetProperties(
    const char** platformVendor
    );
 
+CVAPI(void) oclPlatformInfoGetVersion(cv::ocl::PlatformInfo* oclPlatformInfo, cv::String* platformVersion);
+
+CVAPI(void) oclPlatformInfoGetName(cv::ocl::PlatformInfo* oclPlatformInfo, cv::String* platformName);
+
+CVAPI(void) oclPlatformInfoGetVender(cv::ocl::PlatformInfo* oclPlatformInfo, cv::String* platformVender);
+
 CVAPI(int) oclPlatformInfoDeviceNumber(cv::ocl::PlatformInfo* platformInfo);
 
 CVAPI(void) oclPlatformInfoGetDevice(cv::ocl::PlatformInfo* platformInfo, cv::ocl::Device* device, int d);
@@ -49,29 +55,24 @@ CVAPI(cv::ocl::Device*) oclDeviceCreate();
 
 CVAPI(void) oclDeviceRelease(cv::ocl::Device** device);
 
-CVAPI(void) oclDeviceGetProperty(
-   cv::ocl::Device* oclDeviceInfo, 
-   int* type, 
-   
-   const char** version,
-   const char** name, 
-   const char** vendor, 
-   int* vendorId,
-   const char** driverVersion, 
-   const char** extensions,
-   
-   int* maxWorkGroupSize,
-   int* maxComputeUnits,
-   int* globalMemorySize,
-   int* localMemorySize,
-   int* maxMemAllocSize,
-   int* image2DMaxWidth,
-   int* image2DMaxHeight,
-   int* deviceVersionMajor,
-   int* deviceVersionMinor,
-   int* doubleFPConfig,
-   int* hostUnifiedMemory,
-   const char** openCLVersion
-   );
+CVAPI(int) oclDeviceGetType(cv::ocl::Device* oclDeviceInfo);
+CVAPI(void) oclDeviceGetVersion(cv::ocl::Device* oclDeviceInfo, cv::String* version);
+CVAPI(void) oclDeviceGetName(cv::ocl::Device* oclDeviceInfo, cv::String* name);
+CVAPI(void) oclDeviceGetVenderName(cv::ocl::Device* oclDeviceInfo, cv::String* vender);
+CVAPI(int) oclDeviceGetVenderId(cv::ocl::Device* oclDeviceInfo, int venderId);
+CVAPI(void) oclDeviceGetDriverVersion(cv::ocl::Device* oclDeviceInfo, cv::String* driverVersion);
+CVAPI(void) oclDeviceGetExtensions(cv::ocl::Device* oclDeviceInfo, cv::String* extensions);
+CVAPI(int) oclDeviceGetMaxWorkGroupSize(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetMaxComputeUnits(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetGlobalMemorySize(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetLocalMemorySize(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetMaxMemAllocSize(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetImage2DMaxWidth(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetImage2DMaxHeight(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetDeviceVersionMajor(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetDeviceVersionMinor(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetDoubleFPConfig(cv::ocl::Device* oclDeviceInfo);
+CVAPI(int) oclDeviceGetHostUnifiedMemory(cv::ocl::Device* oclDeviceInfo);
+CVAPI(void) oclDeviceGetOpenCLVersion(cv::ocl::Device* oclDeviceInfo, cv::String* extensions);
 
 #endif

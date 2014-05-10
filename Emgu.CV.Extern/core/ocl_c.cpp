@@ -36,17 +36,21 @@ void cveOclFinish()
 //
 //----------------------------------------------------------------------------
 
-void oclPlatformInfoGetProperties(
-   cv::ocl::PlatformInfo* oclPlatformInfo,
-   const char** platformVersion,
-   const char** platformName,
-   const char** platformVendor
-   )
+void oclPlatformInfoGetVersion(cv::ocl::PlatformInfo* oclPlatformInfo, cv::String* platformVersion)
 {
-   *platformVersion = oclPlatformInfo->version().c_str();
-   *platformName = oclPlatformInfo->name().c_str();
-   *platformVendor = oclPlatformInfo->vendor().c_str();
+   *platformVersion = oclPlatformInfo->version();
 }
+
+void oclPlatformInfoGetName(cv::ocl::PlatformInfo* oclPlatformInfo, cv::String* platformName)
+{
+   *platformName = oclPlatformInfo->name();
+}
+
+void oclPlatformInfoGetVender(cv::ocl::PlatformInfo* oclPlatformInfo, cv::String* platformVender)
+{
+   *platformVender = oclPlatformInfo->vendor();
+}
+
 int oclPlatformInfoDeviceNumber(cv::ocl::PlatformInfo* platformInfo)
 {
    return platformInfo->deviceNumber();
@@ -77,53 +81,81 @@ void oclDeviceRelease(cv::ocl::Device** device)
    *device = 0;
 }
 
-void oclDeviceGetProperty(
-   cv::ocl::Device* oclDeviceInfo, 
-   int* type, 
-   
-   const char** version,
-   const char** name, 
-   const char** vendor, 
-   int* vendorId,
-   const char** driverVersion, 
-   const char** extensions,
-   
-   int* maxWorkGroupSize,
-   int* maxComputeUnits,
-   int* globalMemorySize,
-   int* localMemorySize,
-   int* maxMemAllocSize,
-   int* image2DMaxWidth,
-   int* image2DMaxHeight,
-   int* deviceVersionMajor,
-   int* deviceVersionMinor,
-   int* doubleFPConfig,
-   int* hostUnifiedMemory,
-   const char** openCLVersion
-   )
+int oclDeviceGetType(cv::ocl::Device* oclDeviceInfo)
 {
-   *type = oclDeviceInfo->type();
-   
-   *version = oclDeviceInfo->version().c_str();
-   *name = oclDeviceInfo->name().c_str();
-   *vendor = oclDeviceInfo->vendorName().c_str();
-   *vendorId = oclDeviceInfo->vendorID();
-   *driverVersion = oclDeviceInfo->driverVersion().c_str();
-   *extensions = oclDeviceInfo->extensions().c_str();
-
-   *maxWorkGroupSize = static_cast<int>( oclDeviceInfo->maxWorkGroupSize() );
-   *maxComputeUnits = static_cast<int>( oclDeviceInfo->maxComputeUnits() );
-   *globalMemorySize = static_cast<int>( oclDeviceInfo->globalMemSize() );
-   *localMemorySize = static_cast<int> (oclDeviceInfo->localMemSize() );
-   *maxMemAllocSize = static_cast<int> (oclDeviceInfo->maxMemAllocSize() );
-   *image2DMaxWidth = static_cast<int> (oclDeviceInfo->image2DMaxWidth());
-   *image2DMaxHeight = static_cast<int> (oclDeviceInfo->image2DMaxHeight());
-   *deviceVersionMajor = oclDeviceInfo->deviceVersionMajor();
-   *deviceVersionMinor = oclDeviceInfo->deviceVersionMinor();
-   *doubleFPConfig = oclDeviceInfo->doubleFPConfig();
-   *hostUnifiedMemory = oclDeviceInfo->hostUnifiedMemory();
-
-   *openCLVersion = oclDeviceInfo->OpenCLVersion().c_str();
+   return oclDeviceInfo->type();
+}
+void oclDeviceGetVersion(cv::ocl::Device* oclDeviceInfo, cv::String* version)
+{
+   *version = oclDeviceInfo->version();
+}
+void oclDeviceGetName(cv::ocl::Device* oclDeviceInfo, cv::String* name)
+{
+   *name = oclDeviceInfo->name();
+}
+void oclDeviceGetVenderName(cv::ocl::Device* oclDeviceInfo, cv::String* vender)
+{
+   *vender = oclDeviceInfo->vendorName();
+}
+int oclDeviceGetVenderId(cv::ocl::Device* oclDeviceInfo, int venderId)
+{
+   return oclDeviceInfo->vendorID();
+}
+void oclDeviceGetDriverVersion(cv::ocl::Device* oclDeviceInfo, cv::String* driverVersion)
+{
+   *driverVersion = oclDeviceInfo->driverVersion();
+}
+void oclDeviceGetExtensions(cv::ocl::Device* oclDeviceInfo, cv::String* extensions)
+{
+   *extensions = oclDeviceInfo->extensions();
+}
+int oclDeviceGetMaxWorkGroupSize(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->maxWorkGroupSize();
+}
+int oclDeviceGetMaxComputeUnits(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->maxComputeUnits();
+}
+int oclDeviceGetGlobalMemorySize(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->globalMemSize();
+}
+int oclDeviceGetLocalMemorySize(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->localMemSize();
+}
+int oclDeviceGetMaxMemAllocSize(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->maxMemAllocSize();
+}
+int oclDeviceGetImage2DMaxWidth(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->image2DMaxWidth();
+}
+int oclDeviceGetImage2DMaxHeight(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->image2DMaxHeight();
+}
+int oclDeviceGetDeviceVersionMajor(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->deviceVersionMajor();
+}
+int oclDeviceGetDeviceVersionMinor(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->deviceVersionMinor();
+}
+int oclDeviceGetDoubleFPConfig(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->doubleFPConfig();
+}
+int oclDeviceGetHostUnifiedMemory(cv::ocl::Device* oclDeviceInfo)
+{
+   return oclDeviceInfo->hostUnifiedMemory();
+}
+void oclDeviceGetOpenCLVersion(cv::ocl::Device* oclDeviceInfo, cv::String* extensions)
+{
+   *extensions = oclDeviceInfo->extensions();
 }
 
 

@@ -47,13 +47,67 @@ cv::Mat* cvMatCreateFromFile(char* fileName, int flags)
    return m;
 }*/
 
-bool cveImwrite(const char* filename, cv::_InputArray* img, const std::vector<int>* params)
+bool cveImwrite(cv::String* filename, cv::_InputArray* img, const std::vector<int>* params)
 {
-   return cv::imwrite(filename, *img, params ? *params : std::vector<int>());
+   return cv::imwrite(*filename, *img, params ? *params : std::vector<int>());
 }
 
-void cveImread(const char* fileName, int flags, cv::Mat* result)
+void cveImread(cv::String* fileName, int flags, cv::Mat* result)
 {
-   cv::Mat m = cv::imread(fileName, flags);
+   cv::Mat m = cv::imread(*fileName, flags);
    cv::swap(*result, m);
+}
+
+cv::VideoCapture* cveVideoCaptureCreateFromDevice(int device)
+{
+   return new cv::VideoCapture(device);
+}
+
+cv::VideoCapture* cveVideoCaptureCreateFromFile(cv::String* fileName)
+{
+   return new cv::VideoCapture(*fileName);
+}
+
+void cveVideoCaptureRelease(cv::VideoCapture** capture)
+{
+   delete *capture;
+   *capture = 0;
+}
+bool cveVideoCaptureSet(cv::VideoCapture* capture, int propId, double value)
+{
+   return capture->set(propId, value);
+}
+double cveVideoCaptureGet(cv::VideoCapture* capture, int propId)
+{
+   return capture->get(propId);
+}
+bool cveVideoCaptureGrab(cv::VideoCapture* capture)
+{
+   return capture->grab();
+}
+bool cveVideoCaptureRetrieve(cv::VideoCapture* capture, cv::_OutputArray* image, int flag)
+{
+   return capture->retrieve(*image, flag);
+}
+bool cveVideoCaptureRead(cv::VideoCapture* capture, cv::_OutputArray* image)
+{
+   return capture->read(*image);
+}
+
+cv::VideoWriter* cveVideoWriterCreate(cv::String* filename, int fourcc, double fps, CvSize* frameSize, bool isColor)
+{
+   return new cv::VideoWriter(*filename, fourcc, fps, *frameSize, isColor);
+}
+void cveVideoWriterRelease(cv::VideoWriter** writer)
+{
+   delete *writer;
+   *writer = 0;
+}
+void cveVideoWriterWrite(cv::VideoWriter* writer, cv::Mat* image)
+{
+   writer->write(*image);
+}
+int cveVideoWriterFourcc(char c1, char c2, char c3, char c4)
+{
+   return cv::VideoWriter::fourcc(c1, c2, c3, c4);
 }

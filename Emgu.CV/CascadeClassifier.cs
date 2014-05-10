@@ -37,8 +37,8 @@ namespace Emgu.CV
          if (!file.Exists)
             throw new FileNotFoundException(Properties.StringTable.FileNotFound, file.FullName);
 #endif
-
-         _ptr = CvCascadeClassifierCreate(fileName);
+         using (CvString s = new CvString(fileName))
+            _ptr = CvCascadeClassifierCreate(s);
 
          if (_ptr == IntPtr.Zero)
          {
@@ -105,7 +105,7 @@ namespace Emgu.CV
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvCascadeClassifierCreate([MarshalAs(CvInvoke.StringMarshalType)] String fileName);
+      internal extern static IntPtr CvCascadeClassifierCreate(IntPtr fileName);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvCascadeClassifierRelease(ref IntPtr classifier);

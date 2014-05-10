@@ -73,7 +73,7 @@ CVAPI(void) cvHOGDescriptorDetect(
 
 CVAPI(unsigned int) CvHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor);
 
-CVAPI(cv::CascadeClassifier*) CvCascadeClassifierCreate(char* fileName);
+CVAPI(cv::CascadeClassifier*) CvCascadeClassifierCreate(cv::String* fileName);
 CVAPI(void) CvCascadeClassifierRelease(cv::CascadeClassifier** classifier);
 CVAPI(void) CvCascadeClassifierDetectMultiScale( 
    cv::CascadeClassifier* classifier,
@@ -88,17 +88,17 @@ CVAPI(void) CvCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* clas
 
 //ERFilter
 CVAPI(cv::ERFilter*) CvERFilterNM1Create(
-   const char* classifier,
+   cv::String* classifier,
    int thresholdDelta,
    float minArea,
    float maxArea,
    float minProbability,
    bool nonMaxSuppression,
    float minProbabilityDiff);
-CVAPI(cv::ERFilter*) CvERFilterNM2Create(const char* classifier, float minProbability);
+CVAPI(cv::ERFilter*) CvERFilterNM2Create(cv::String* classifier, float minProbability);
 CVAPI(void) CvERFilterRelease(cv::ERFilter** filter);
 CVAPI(void) CvERFilterRun(cv::ERFilter* filter, cv::_InputArray* image, std::vector<cv::ERStat>* regions);
 
-CVAPI(void) CvERGrouping(cv::_InputArray* channels, std::vector<cv::ERStat>** regions, int count, const char* fileName, float minProbability, std::vector<cv::Rect>* groups);
+CVAPI(void) CvERGrouping(cv::_InputArray* channels, std::vector<cv::ERStat>** regions, int count, cv::String* fileName, float minProbability, std::vector<cv::Rect>* groups);
 
 #endif

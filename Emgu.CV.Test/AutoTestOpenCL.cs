@@ -23,9 +23,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestOclInfo()
       {
-
          Trace.WriteLine(CvInvoke.OclGetPlatformsSummary());
-         
       }
 
       /*

@@ -4,7 +4,9 @@
 
 using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Emgu.CV.CvEnum;
 using ZedGraph;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -103,11 +105,19 @@ namespace Emgu.CV.UI
             start += step;
          }
 
-         PointPairList pointList = new PointPairList(
-            bin,
-            Array.ConvertAll<float, double>( (float[]) histogram.Data, System.Convert.ToDouble));
+         double[] binVal = new double[histogram.Size.Height];
+         GCHandle handle = GCHandle.Alloc(binVal, GCHandleType.Pinned);
+         using (Matrix<double> m = new Matrix<double>(binVal.Length, 1, handle.AddrOfPinnedObject(), sizeof(double)))
+         {
+            histogram.ConvertTo(m, DepthType.Cv64F);
+            PointPairList pointList = new PointPairList(
+               bin,
+               binVal);
 
-         pane.AddCurve(name, pointList, color);
+            pane.AddCurve(name, pointList, color);
+         }
+         handle.Free();
+         
          #endregion
 
          zedGraphControl1.MasterPane.Add(pane);

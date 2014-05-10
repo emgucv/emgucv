@@ -164,7 +164,7 @@ namespace Emgu.CV
 
 #if TEST_CAPTURE
 #else
-         _ptr = CvInvoke.cvCreateCameraCapture(camIndex);
+         _ptr = CvInvoke.cveVideoCaptureCreateFromDevice(camIndex);
          if (_ptr == IntPtr.Zero)
          {
             throw new NullReferenceException(String.Format("Error: Unable to create capture from camera {0}", camIndex));
@@ -178,20 +178,23 @@ namespace Emgu.CV
       /// <param name="fileName">The name of a file, or an url pointed to a stream.</param>
       public Capture(String fileName)
       {
-         /*
-         if (Util.CvToolbox.HasFFMPEG)
+         using (CvString s = new CvString(fileName))
          {
-            _captureModuleType = CaptureModuleType.FFMPEG;
-            _ptr = CvInvoke.cvCreateFileCapture_FFMPEG(fileName);
-         }
-         else*/
-         {
-            _captureModuleType = CaptureModuleType.Highgui;
-            _ptr = CvInvoke.cvCreateFileCapture(fileName);
-         }
+            /*
+            if (Util.CvToolbox.HasFFMPEG)
+            {
+               _captureModuleType = CaptureModuleType.FFMPEG;
+               _ptr = CvInvoke.cvCreateFileCapture_FFMPEG(fileName);
+            }
+            else*/
+            {
+               _captureModuleType = CaptureModuleType.Highgui;
+               _ptr = CvInvoke.cveVideoCaptureCreateFromFile(s);
+            }
 
-         if (_ptr == IntPtr.Zero)
-            throw new NullReferenceException(String.Format("Unable to create capture from {0}", fileName));
+            if (_ptr == IntPtr.Zero)
+               throw new NullReferenceException(String.Format("Unable to create capture from {0}", fileName));
+         }
       }
       #endregion
 
@@ -204,7 +207,7 @@ namespace Emgu.CV
 #if TEST_CAPTURE
 #else
          Stop();
-         CvInvoke.cvReleaseCapture(ref _ptr);
+         CvInvoke.cveVideoCaptureRelease(ref _ptr);
          
 #endif
       }
@@ -217,7 +220,7 @@ namespace Emgu.CV
       /// <returns>The value of the specific property</returns>
       public double GetCaptureProperty(CvEnum.CapProp index)
       {
-         return CvInvoke.cvGetCaptureProperty(_ptr, index);
+         return CvInvoke.cveVideoCaptureGet(_ptr, index);
       }
 
       /// <summary>
@@ -225,9 +228,10 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="property">Property identifier</param>
       /// <param name="value">Value of the property</param>
-      public void SetCaptureProperty(CvEnum.CapProp property, double value)
+      /// <returns>True if success</returns>
+      public bool SetCaptureProperty(CvEnum.CapProp property, double value)
       {
-         CvInvoke.cvSetCaptureProperty(Ptr, property, value);
+         return CvInvoke.cveVideoCaptureSet(Ptr, property, value);
       }
 
       /// <summary>
@@ -239,7 +243,7 @@ namespace Emgu.CV
          if (_ptr == IntPtr.Zero)
             return false;
 
-         bool grabbed = CvInvoke.cvGrabFrame(_ptr);
+         bool grabbed = CvInvoke.cveVideoCaptureGrab(Ptr);
          if (grabbed && ImageGrabbed != null)
             ImageGrabbed(this, new EventArgs());
          return grabbed;
@@ -346,93 +350,26 @@ namespace Emgu.CV
       /// <summary> 
       /// Retrieve a Gray image frame after Grab()
       /// </summary>
+      /// <param name="image">The output image</param>
+      /// <param name="flag">retrieve flags</param>
       /// <returns> A Gray image frame</returns>
-      public virtual Image<Gray, Byte> RetrieveGrayFrame()
-      {
-         return RetrieveGrayFrame(0);
-      }
-
-      /// <summary> 
-      /// Retrieve a Gray image frame after Grab()
-      /// </summary>
-      /// <param name="streamIndex">Stream index. Use 0 for default.</param>
-      /// <returns> A Gray image frame</returns>
-      public virtual Image<Gray, Byte> RetrieveGrayFrame(int streamIndex)
-      {
-         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIndex);
-         if (img == IntPtr.Zero)
-            return null;
-         MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
-
-         Image<Gray, Byte> res;
-         if (iplImage.NChannels == 3)
-         {  //if the image captured is Bgr, convert it to Grayscale
-            res = new Image<Gray, Byte>(iplImage.Width, iplImage.Height);
-            using (Mat m = CvInvoke.CvArrToMat(img))
-            {
-               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
-            }
+      public virtual bool RetrieveFrame(IOutputArray image, int flag = 0)
+      {      
+         if (FlipType == CvEnum.FlipType.None)
+         {
+            return CvInvoke.cveVideoCaptureRetrieve(Ptr, image.OutputArrayPtr, flag);
          }
          else
          {
-            res = new Image<Gray, byte>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
-         }
-
-         //inplace flip the image if necessary
-         res._Flip(FlipType);
-
-         return res;
-      }
-
-      /// <summary> 
-      /// Retrieve a Bgr image frame after Grab()
-      /// </summary>
-      /// <returns> A Bgr image frame</returns>
-      public virtual Image<Bgr, Byte> RetrieveBgrFrame()
-      {
-         return RetrieveBgrFrame(0);
-      }
-
-      /// <summary> 
-      /// Retrieve a Bgr image frame after Grab()
-      /// </summary>
-      /// <param name="streamIndex">Stream index</param>
-      /// <returns> A Bgr image frame</returns>
-      public virtual Image<Bgr, Byte> RetrieveBgrFrame(int streamIndex)
-      {
-         IntPtr img = CvInvoke.cvRetrieveFrame(Ptr, streamIndex);
-         if (img == IntPtr.Zero)
-            return null;
-
-         MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(img, typeof(MIplImage));
-
-         Image<Bgr, Byte> res;
-         if (iplImage.NChannels == 1)
-         {  //if the image captured is Grayscale, convert it to BGR
-            res = new Image<Bgr, Byte>(iplImage.Width, iplImage.Height);
-            using (Mat m = CvInvoke.CvArrToMat(img))
+            using (Mat tmp = new Mat())
             {
-               CvInvoke.CvtColor(m, res, Emgu.CV.CvEnum.ColorConversion.Gray2Bgr);
+               bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, tmp.OutputArrayPtr, flag);
+
+               if (success)
+                  CvInvoke.Flip(tmp, image, FlipType);
+               return success;
             }
          }
-         else
-         {
-            res = new Image<Bgr, byte>(iplImage.Width, iplImage.Height, iplImage.WidthStep, iplImage.ImageData);
-         }
-
-         //inplace flip the image if necessary
-         res._Flip(FlipType);
-
-         return res;
-      }
-
-      /// <summary> 
-      /// Capture a Gray image frame
-      /// </summary>
-      /// <returns> A Gray image frame</returns>
-      public virtual Image<Gray, Byte> QueryGrayFrame()
-      {
-         return Grab() ? RetrieveGrayFrame(0) : null;
       }
 
       #region implement ICapture
@@ -440,9 +377,18 @@ namespace Emgu.CV
       /// Capture a Bgr image frame
       /// </summary>
       /// <returns> A Bgr image frame. If no more frames are available, null will be returned.</returns>
-      public virtual Image<Bgr, Byte> QueryFrame()
+      public virtual Mat QueryFrame()
       {
-         return Grab() ? RetrieveBgrFrame(0) : null;
+         if (Grab())
+         {
+            Mat image = new Mat();
+            RetrieveFrame(image);
+            return image;
+         }
+         else
+         {
+            return null;
+         }
       }
 
       ///<summary> 
@@ -451,10 +397,24 @@ namespace Emgu.CV
       ///</summary>
       ///<remarks>Internally, this is a cvQueryFrame operation follow by a cvPyrDown</remarks>
       ///<returns> A Bgr image frame that is half width and half height</returns>
-      public virtual Image<Bgr, Byte> QuerySmallFrame()
+      public virtual Mat QuerySmallFrame()
       {
-         using (Image<Bgr, Byte> frame = QueryFrame())
-            return frame == null ? null : frame.PyrDown();
+         Mat tmp = QueryFrame();
+
+         if (tmp != null)
+         {
+            if (!tmp.IsEmpty)
+            {
+               CvInvoke.PyrDown(tmp, tmp);
+               return tmp;
+            }
+            else
+            {
+               tmp.Dispose();
+            }
+         }
+         return null;
+         
       }
       #endregion
 
@@ -494,9 +454,10 @@ namespace Emgu.CV
       public virtual void DuplexQueryFrame()
       {
          IDuplexCaptureCallback callback = OperationContext.Current.GetCallbackChannel<IDuplexCaptureCallback>();
-
-         Image<Bgr, Byte> img = QueryFrame();
-         callback.ReceiveFrame(img);
+         using (Mat img = QueryFrame())
+         {
+            callback.ReceiveFrame(img);
+         }
       }
 
       /// <summary>
@@ -505,10 +466,91 @@ namespace Emgu.CV
       public virtual void DuplexQuerySmallFrame()
       {
          IDuplexCaptureCallback callback = OperationContext.Current.GetCallbackChannel<IDuplexCaptureCallback>();
-
-         Image<Bgr, Byte> img = QuerySmallFrame();
-         callback.ReceiveFrame(img);
+         using (Mat img = QuerySmallFrame())
+         {
+            callback.ReceiveFrame(img);
+         }
       }
 #endif
+   }
+
+   partial class CvInvoke
+   {
+      /// <summary>
+      /// Allocates and initialized the CvCapture structure for reading a video stream from the camera. Currently two camera interfaces can be used on Windows: Video for Windows (VFW) and Matrox Imaging Library (MIL); and two on Linux: V4L and FireWire (IEEE1394). 
+      /// </summary>
+      /// <param name="index">Index of the camera to be used. If there is only one camera or it does not matter what camera to use -1 may be passed</param>
+      /// <returns>Pointer to the capture structure</returns>
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveVideoCaptureCreateFromDevice(int index);
+
+      /// <summary>
+      /// Allocates and initialized the CvCapture structure for reading the video stream from the specified file. 
+      ///After the allocated structure is not used any more it should be released by cvReleaseCapture function. 
+      /// </summary>
+      /// <param name="filename">Name of the video file.</param>
+      /// <returns>Pointer to the capture structure.</returns>
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveVideoCaptureCreateFromFile(IntPtr filename);
+
+      /// <summary>
+      /// The function cvReleaseCapture releases the CvCapture structure allocated by cvCreateFileCapture or cvCreateCameraCapture
+      /// </summary>
+      /// <param name="capture">pointer to video capturing structure.</param>
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveVideoCaptureRelease(ref IntPtr capture);
+
+      /// <summary>
+      /// Grabs a frame from camera or video file, decompresses and returns it. This function is just a combination of cvGrabFrame and cvRetrieveFrame in one call. 
+      /// </summary>
+      /// <param name="capture">Video capturing structure</param>
+      /// <param name="frame">The output frame</param>
+      /// <returns>true id a frame is read</returns>
+      /// <remarks>The returned image should not be released or modified by user. </remarks>
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      internal static extern bool cveVideoCaptureRead(IntPtr capture, IntPtr frame);
+
+      /// <summary>
+      /// Grab a frame
+      /// </summary>
+      /// <param name="capture">Video capturing structure</param>
+      /// <returns>True on success</returns>
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      internal static extern bool cveVideoCaptureGrab(IntPtr capture);
+
+      /// <summary>
+      /// Get the frame grabbed with cvGrabFrame(..)
+      /// This function may apply some frame processing like frame decompression, flipping etc.
+      /// </summary>
+      /// <param name="capture">Video capturing structure</param>
+      /// <param name="image">The output image</param>
+      /// <param name="flag">The frame retrieve flag</param>
+      /// <returns>True on success</returns>
+      /// <remarks>The returned image should not be released or modified by user. </remarks>
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+      internal static extern bool cveVideoCaptureRetrieve(IntPtr capture, IntPtr image, int flag);
+
+      /// <summary>
+      /// Retrieves the specified property of camera or video file
+      /// </summary>
+      /// <param name="capture">Video capturing structure</param>
+      /// <param name="prop">Property identifier</param>
+      /// <returns>The specified property of camera or video file</returns>
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern double cveVideoCaptureGet(IntPtr capture, CvEnum.CapProp prop);
+
+      /// <summary>
+      /// Sets the specified property of video capturing
+      /// </summary>
+      /// <param name="capture">Video capturing structure</param>
+      /// <param name="propertyId">Property identifier</param>
+      /// <param name="value">Value of the property</param>
+      /// <returns>True on success</returns>
+      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern bool cveVideoCaptureSet(IntPtr capture, CvEnum.CapProp propertyId, double value);
+
    }
 }

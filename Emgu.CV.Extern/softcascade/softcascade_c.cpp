@@ -6,9 +6,9 @@
 
 #include "softcascade_c.h"
 
-cv::softcascade::Detector* cveSoftCascadeDetectorCreate(const char* fileName, double minScale, double maxScale, int scales, int rejCriteria)
+cv::softcascade::Detector* cveSoftCascadeDetectorCreate(cv::String* fileName, double minScale, double maxScale, int scales, int rejCriteria)
 {
-   cv::FileStorage fs(fileName, cv::FileStorage::READ);
+   cv::FileStorage fs(*fileName, cv::FileStorage::READ);
    char errMsg[512];
 
    if (!fs.isOpened())
@@ -48,9 +48,9 @@ void cveSoftCascadeDetectorRelease(cv::softcascade::Detector** detector)
    *detector = 0;
 }
 
-cv::softcascade::SCascade* cudaSoftCascadeDetectorCreate(const char* fileName, const double minScale, const double maxScale, const int scales, const int flags)
+cv::softcascade::SCascade* cudaSoftCascadeDetectorCreate(cv::String* fileName, const double minScale, const double maxScale, const int scales, const int flags)
 {
-   cv::FileStorage fs(fileName, cv::FileStorage::READ);
+   cv::FileStorage fs(*fileName, cv::FileStorage::READ);
    char errMsg[512];
 
    if (!fs.isOpened())

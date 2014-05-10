@@ -378,3 +378,24 @@ void cveConvexityDefects(cv::_InputArray* contour, cv::_InputArray* convexhull, 
 {
    cv::convexityDefects(*contour, *convexhull, *convexityDefects);
 }
+
+void cveGaussianBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize, double sigmaX, double sigmaY, int borderType)
+{
+   cv::GaussianBlur(*src, *dst, *ksize, sigmaX, sigmaY, borderType);
+}
+void cveBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* kSize, CvPoint* anchor, int borderType)
+{
+   cv::blur(*src, *dst, *kSize, *anchor, borderType);
+}
+void cveMedianBlur(cv::_InputArray* src, cv::_OutputArray* dst, int ksize)
+{
+   cv::medianBlur(*src, *dst, ksize);
+}
+void cveBoxFilter(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, CvSize* ksize, CvPoint* anchor, bool normailize, int borderType)
+{
+   cv::boxFilter(*src, *dst, ddepth, *ksize, *anchor, normailize, borderType);
+}
+void cveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d, double sigmaColor, double sigmaSpace, int borderType)
+{
+   cv::bilateralFilter(*src, *dst, d, sigmaColor, sigmaSpace, borderType);
+}

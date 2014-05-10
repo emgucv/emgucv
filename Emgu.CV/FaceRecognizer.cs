@@ -84,7 +84,8 @@ namespace Emgu.CV
       /// <param name="fileName">The file name to be saved to</param>
       public void Save(String fileName)
       {
-         CvFaceRecognizerSave(_ptr, fileName);
+         using (CvString s = new CvString(fileName))
+            CvFaceRecognizerSave(_ptr, s);
       }
 
       /// <summary>
@@ -93,7 +94,8 @@ namespace Emgu.CV
       /// <param name="fileName">The file where the FaceRecognizer will be loaded from</param>
       public void Load(String fileName)
       {
-         CvFaceRecognizerLoad(_ptr, fileName);
+         using (CvString s = new CvString(fileName))
+            CvFaceRecognizerLoad(_ptr, s);
       }
 
       /// <summary>
@@ -112,13 +114,11 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFaceRecognizerSave(
          IntPtr recognizer,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String fileName);
+         IntPtr fileName);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFaceRecognizerLoad(
          IntPtr recognizer,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String fileName);
+         IntPtr fileName);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFaceRecognizerRelease(ref IntPtr recognizer);

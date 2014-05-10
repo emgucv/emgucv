@@ -57,6 +57,9 @@
     <Compile Include="SIFTDetector.cs" />
     <Compile Include="SURFDetector.cs" />
   </ItemGroup>
+    <ItemGroup>
+    <None Include="..\Emgu.CV.snk" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.csproj">
       <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>

@@ -10,31 +10,33 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/highgui/highgui_c.h"
+#include "opencv2/highgui/highgui.hpp"
 #include "opencv2/videostab/stabilizer.hpp"
 
 class CaptureFrameSource : public cv::videostab::IFrameSource
 {
 public:
-   CaptureFrameSource(CvCapture* capture)
+   CaptureFrameSource(cv::VideoCapture* capture)
       : _capture(capture)
    {};
 
    virtual void reset() 
    { 
-      cvSetCaptureProperty(_capture, CV_CAP_PROP_POS_FRAMES, 0);  
+      _capture->set(CV_CAP_PROP_POS_FRAMES, 0);  
    };
 
    virtual cv::Mat nextFrame()
    {
-      IplImage* tmp = cvQueryFrame(_capture);
-      return cv::cvarrToMat(tmp);
+      cv::Mat m;
+      _capture->read(m);
+      return m;
    }
 protected:
-   CvCapture* _capture;
+   cv::VideoCapture* _capture;
 };
 
 
-CVAPI(CaptureFrameSource*) VideostabCaptureFrameSourceCreate(CvCapture* capture, cv::videostab::IFrameSource** frameSource);
+CVAPI(CaptureFrameSource*) VideostabCaptureFrameSourceCreate(cv::VideoCapture* capture, cv::videostab::IFrameSource** frameSource);
 CVAPI(void) VideostabCaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource);
 CVAPI(bool) VideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, cv::Mat* nextFrame);
 
