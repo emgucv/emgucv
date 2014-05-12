@@ -196,13 +196,9 @@
     <Compile Include="Util\VectorOfUMat.cs" />
     <Compile Include="Util\VectorOfVectorOfDMatch.cs" />
     <Compile Include="Util\VectorOfVectorOfInt.cs" />
-    <Compile Include="Util\VectorOfVectorOfIntExtra.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint3D32F.cs" />
-    <Compile Include="Util\VectorOfVectorOfPointExtra.cs" />
     <Compile Include="Util\VectorOfVectorOfPointF.cs" />
-    <Compile Include="Util\VectorOfVectorOfPoint3D32FExtra.cs" />
-    <Compile Include="Util\VectorOfVectorOfPointFExtra.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />

@@ -150,15 +150,13 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(TestFeature2DTracker(orb, orb), "Unable to find homography matrix");
       }
 
-      /*
-      //TODO: Find out why this fails
       [Test]
       public void TestFreak()
       {
          FastDetector fast = new FastDetector(10, true);
          Freak freak = new Freak(true, true, 22.0f, 4);
-         EmguAssert.IsTrue(TestFeature2DTracker<byte>(fast, freak), "Unable to find homography matrix");
-      }*/
+         EmguAssert.IsTrue(TestFeature2DTracker(fast, freak), "Unable to find homography matrix");
+      }
 
       public static bool TestFeature2DTracker(IFeatureDetector keyPointDetector, IDescriptorExtractor descriptorGenerator)
       {
@@ -237,23 +235,24 @@ namespace Emgu.CV.Test
 
                int k = 2;
                DistanceType dt = modelDescriptors.Depth == CvEnum.DepthType.Cv8U ? DistanceType.Hamming : DistanceType.L2;
-               using (Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
-               using (Matrix<float> dist = new Matrix<float>(observedDescriptors.Rows, k))
+               //using (Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
+               //using (Matrix<float> dist = new Matrix<float>(observedDescriptors.Rows, k))
+               using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
                using (BruteForceMatcher matcher = new BruteForceMatcher(dt))
                {
                   matcher.Add(modelDescriptors);
-                  matcher.KnnMatch(observedDescriptors, indices, dist, k, null);
+                  matcher.KnnMatch(observedDescriptors, matches, k, null);
 
-                  Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1);
+                  Matrix<byte> mask = new Matrix<byte>(matches.Size, 1);
                   mask.SetValue(255);
-                  Features2DToolbox.VoteForUniqueness(dist, 0.8, mask);
+                  Features2DToolbox.VoteForUniqueness(matches, 0.8, mask);
 
                   int nonZeroCount = CvInvoke.CountNonZero(mask);
                   if (nonZeroCount >= 4)
                   {
-                     nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, indices, mask, 1.5, 20);
+                     nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, matches, mask, 1.5, 20);
                      if (nonZeroCount >= 4)
-                        homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, indices, mask, 2);
+                        homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, matches, mask, 2);
                   }
                }
                stopwatch.Stop();

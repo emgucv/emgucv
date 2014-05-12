@@ -17,7 +17,7 @@ cv::cuda::BackgroundSubtractorMOG* cudaBackgroundSubtractorMOGCreate(int history
    ptr.addref();
    return ptr.get();
 }
-void cudaBackgroundSubtractorMOGApply(cv::cuda::BackgroundSubtractorMOG* mog, cv::cuda::GpuMat* frame, float learningRate, cv::cuda::GpuMat* fgMask, cv::cuda::Stream* stream)
+void cudaBackgroundSubtractorMOGApply(cv::cuda::BackgroundSubtractorMOG* mog, cv::_InputArray* frame, float learningRate, cv::_OutputArray* fgMask, cv::cuda::Stream* stream)
 {
    mog->apply(*frame, *fgMask, learningRate, stream ? *stream : cv::cuda::Stream::Null());
 }
@@ -39,7 +39,7 @@ cv::cuda::BackgroundSubtractorMOG2* cudaBackgroundSubtractorMOG2Create(int histo
    return ptr.get();
 }
 
-void cudaBackgroundSubtractorMOG2Apply(cv::cuda::BackgroundSubtractorMOG2* mog, cv::cuda::GpuMat* frame, float learningRate, cv::cuda::GpuMat* fgMask, cv::cuda::Stream* stream)
+void cudaBackgroundSubtractorMOG2Apply(cv::cuda::BackgroundSubtractorMOG2* mog, cv::_InputArray* frame, float learningRate, cv::_OutputArray* fgMask, cv::cuda::Stream* stream)
 {
    mog->apply(*frame, *fgMask, learningRate, stream ? *stream : cv::cuda::Stream::Null());
 }
@@ -61,7 +61,7 @@ CVAPI(cv::cuda::BackgroundSubtractorGMG*) cudaBackgroundSubtractorGMGCreate(int 
    ptr.addref();
    return ptr.get();
 }
-void cudaBackgroundSubtractorGMGApply(cv::cuda::BackgroundSubtractorGMG* gmg, cv::cuda::GpuMat* frame, double learningRate, cv::cuda::GpuMat* fgMask, cv::cuda::Stream* stream)
+void cudaBackgroundSubtractorGMGApply(cv::cuda::BackgroundSubtractorGMG* gmg, cv::_InputArray* frame, double learningRate, cv::_OutputArray* fgMask, cv::cuda::Stream* stream)
 {
    gmg->apply(*frame, *fgMask, learningRate, stream ? *stream : cv::cuda::Stream::Null());
 }

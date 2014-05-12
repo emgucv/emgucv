@@ -17,12 +17,9 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Base Cuda filter class
    /// </summary>
-   /// <typeparam name="TColor">Color type of image this filter can process</typeparam>
-   /// <typeparam name="TDepth">Depth of image this filter can process</typeparam>
-   public abstract class CudaFilter<TColor, TDepth> : UnmanagedObject
-      where TColor : struct, IColor
-      where TDepth : new()
+   public abstract class CudaFilter : UnmanagedObject
    {
+      /*
       /// <summary>
       /// The MatType for CudaImage&lt; TColor, TDepth &gt;
       /// </summary>
@@ -37,7 +34,7 @@ namespace Emgu.CV.Cuda
          {
             _matType = tmp.Type;
          }
-      }
+      }*/
 
       /// <summary>
       /// Release all the unmanaged memory associated with this gpu filter
@@ -54,7 +51,7 @@ namespace Emgu.CV.Cuda
       /// <param name="image">The source CudaImage where the filter will be applied to</param>
       /// <param name="dst">The destination CudaImage</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Apply(CudaImage<TColor, TDepth> image, CudaImage<TColor, TDepth> dst, Stream stream)
+      public void Apply(IInputArray image, IOutputArray dst, Stream stream)
       {
          CudaInvoke.cudaFilterApply(_ptr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
       }

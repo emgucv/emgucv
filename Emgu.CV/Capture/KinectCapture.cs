@@ -116,7 +116,7 @@ namespace Emgu.CV
       /// <returns>A Gray frame from Kinect</returns>
       public bool RetrieveGrayFrame(IOutputArray image)
       {
-         return RetrieveFrame(image, (int)OpenNIDataType.GrayImage);
+         return Retrieve(image, (int)OpenNIDataType.GrayImage);
       }
 
       /// <summary>
@@ -125,7 +125,7 @@ namespace Emgu.CV
       /// <returns>A Bgr frame from Kinect</returns>
       public bool RetrieveBgrFrame(IOutputArray image)
       {
-         return RetrieveFrame(image, (int)OpenNIDataType.BgrImage);
+         return Retrieve(image, (int)OpenNIDataType.BgrImage);
       }
 
       /// <summary>
@@ -134,7 +134,7 @@ namespace Emgu.CV
       /// <returns>The disparity map from Kinect</returns>
       public bool RetrieveDisparityMap(IOutputArray image)
       {
-         return RetrieveFrame(image, (int)OpenNIDataType.DisparityMap);
+         return Retrieve(image, (int)OpenNIDataType.DisparityMap);
       }
 
       /// <summary>
@@ -143,7 +143,7 @@ namespace Emgu.CV
       /// <returns>The disparity map from Kinect</returns>
       public bool RetrieveDisparityMap32f(IOutputArray image)
       {
-         return RetrieveFrame(image, (int)OpenNIDataType.DisparityMap32f);        
+         return Retrieve(image, (int)OpenNIDataType.DisparityMap32f);        
       }
 
       /// <summary>
@@ -152,7 +152,7 @@ namespace Emgu.CV
       /// <returns>The valid depth map from Kinect</returns>
       public bool RetrieveValidDepthMap(IOutputArray image)
       {
-         return RetrieveFrame(image, (int)OpenNIDataType.ValidDepthMask);
+         return Retrieve(image, (int)OpenNIDataType.ValidDepthMask);
       }
 
       /// <summary>
@@ -161,7 +161,7 @@ namespace Emgu.CV
       /// <returns>The depth map from Kinect (in mm)</returns>
       public bool RetrieveDepthMap(IOutputArray image)
       {
-         return RetrieveFrame(image, (int)OpenNIDataType.DepthMap);
+         return Retrieve(image, (int)OpenNIDataType.DepthMap);
       }
 
       /// <summary>
@@ -170,7 +170,7 @@ namespace Emgu.CV
       /// <returns>All the points (x, y, z position in meters) from Kinect, row by row.</returns>
       public bool RetrievePointCloudMap(IOutputArray image)
       {
-         return RetrieveFrame(image, (int) OpenNIDataType.PointCloudMap);
+         return Retrieve(image, (int) OpenNIDataType.PointCloudMap);
       }
 
       /// <summary>

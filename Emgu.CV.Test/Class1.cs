@@ -381,7 +381,7 @@ namespace Emgu.CV.Test
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {  //run this until application closed (close button click on image viewer)
                Mat m = new Mat();
-               capture.RetrieveFrame(m);
+               capture.Retrieve(m);
                viewer.Image = m; //draw the image obtained from camera
             };
             capture.Start();

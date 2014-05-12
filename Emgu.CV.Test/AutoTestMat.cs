@@ -38,8 +38,20 @@ namespace Emgu.CV.Test
          Matrix<float> m = new Matrix<float>(320, 240);
          Mat mat = new Mat();
          m.Mat.CopyTo(mat);
-         Assert.IsTrue(m.Mat.Depth == DepthType.Cv32F);
-         Assert.IsTrue(mat.Depth == DepthType.Cv32F);
+         EmguAssert.IsTrue(m.Mat.Depth == DepthType.Cv32F);
+         EmguAssert.IsTrue(mat.Depth == DepthType.Cv32F);
+      }
+
+      [Test]
+      public void TestMatEquals()
+      {
+         Mat m1 = new Mat(640, 320, DepthType.Cv8U, 3);
+         m1.SetTo(new MCvScalar(1, 2, 3));
+         Mat m2 = new Mat(640, 320, DepthType.Cv8U, 3);
+         m2.SetTo(new MCvScalar(1, 2, 3));
+         
+         EmguAssert.IsTrue(m1.Equals(m2));
+
       }
    }
 }

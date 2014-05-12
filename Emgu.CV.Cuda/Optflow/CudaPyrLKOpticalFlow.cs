@@ -35,9 +35,9 @@ namespace Emgu.CV.Cuda
       /// <param name="frame1">Frame to track (with the same size as <paramref name="frame0"/>)</param>
       /// <param name="u">Flow horizontal component (along x axis)</param>
       /// <param name="v">Flow vertical component (along y axis)</param>
-      public void Dense(CudaImage<Gray, byte> frame0, CudaImage<Gray, byte> frame1, CudaImage<Gray, float> u, CudaImage<Gray, float> v)
+      public void Dense(GpuMat frame0, GpuMat frame1, GpuMat u, GpuMat v, GpuMat error = null)
       {
-         CudaInvoke.cudaPyrLKOpticalFlowDense(_ptr, frame0, frame1, u, v, IntPtr.Zero);
+         CudaInvoke.cudaPyrLKOpticalFlowDense(_ptr, frame0, frame1, u, v, error);
       }
 
       /// <summary>
@@ -61,11 +61,8 @@ namespace Emgu.CV.Cuda
       /// the original and moved points or min eigen value if getMinEigenVals is checked. It can be
       /// null, if not needed.
       /// </param>
-      public void Sparse(CudaImage<Gray, byte> frame0, CudaImage<Gray, byte> frame1, GpuMat<float> points0, out GpuMat<float> points1, out GpuMat<Byte> status, out GpuMat<float> err)
+      public void Sparse(GpuMat frame0, GpuMat frame1, GpuMat points0, GpuMat points1, GpuMat status, GpuMat err = null)
       {
-         points1 = new GpuMat<float>();
-         status = new GpuMat<byte>();
-         err = new GpuMat<float>();
          CudaInvoke.cudaPyrLKOpticalFlowSparse(_ptr, frame0, frame1, points0, points1, status, err);
       }
 

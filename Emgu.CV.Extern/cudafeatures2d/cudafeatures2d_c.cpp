@@ -25,29 +25,13 @@ void cudaBruteForceMatcherAdd(cv::cuda::BFMatcher_CUDA* matcher, const cv::cuda:
    matcher->add(mats);
 }
 
-void cudaBruteForceMatcherKnnMatchSingle(
+void cudaBruteForceMatcherKnnMatch(
                                   cv::cuda::BFMatcher_CUDA* matcher,
                                   const cv::cuda::GpuMat* queryDescs, const cv::cuda::GpuMat* trainDescs,
-                                  cv::cuda::GpuMat* trainIdx, cv::cuda::GpuMat* distance, 
-                                  int k, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
+                                  std::vector< std::vector< cv::DMatch > >* matches, 
+                                  int k, const cv::cuda::GpuMat* mask, bool compactResult)
 {
-   cv::cuda::GpuMat emptyMat;
-   mask = mask ? mask : &emptyMat;
-
-   if (k == 2)
-   {  //special case for k == 2;
-      cv::cuda::GpuMat idxMat = trainIdx->reshape(2, 1);
-      cv::cuda::GpuMat distMat = distance->reshape(2, 1);
-      matcher->knnMatchSingle(*queryDescs, *trainDescs, 
-         idxMat, distMat, 
-         emptyMat, k, *mask,
-         stream ? *stream : cv::cuda::Stream::Null());
-      CV_Assert(idxMat.channels() == 2);
-      CV_Assert(distMat.channels() == 2);
-      CV_Assert(idxMat.data == trainIdx->data);
-      CV_Assert(distMat.data == distance->data);
-   } else
-      matcher->knnMatchSingle(*queryDescs, *trainDescs, *trainIdx, *distance, emptyMat, k, *mask, stream ? *stream : cv::cuda::Stream::Null());
+   matcher->knnMatch(*queryDescs, *trainDescs, *matches, k, mask ? * mask : cv::cuda::GpuMat(), compactResult);
 }
 
 //----------------------------------------------------------------------------

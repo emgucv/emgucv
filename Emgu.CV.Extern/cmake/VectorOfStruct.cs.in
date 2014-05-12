@@ -9,6 +9,7 @@
 
 using System;
 using System.Drawing;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
@@ -16,13 +17,14 @@ using Emgu.CV.Structure;
 using System.Runtime.Serialization;
 #endif
 
-namespace Emgu.CV.Util
+namespace ${NAMESPACE_CS}
 {
    /// <summary>
    /// Wraped class of the C++ standard vector of ${VECTOR_NAME}.
    /// </summary>
 #if !NETFX_CORE
    [Serializable]
+   [DebuggerTypeProxy(typeof(VectorOf${VECTOR_NAME}.DebuggerProxy))]
 #endif
    public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
 #if !NETFX_CORE
@@ -225,6 +227,21 @@ namespace Emgu.CV.Util
             if (_inputOutputArrayPtr == IntPtr.Zero)
                _inputOutputArrayPtr = cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr);
             return _inputOutputArrayPtr;
+         }
+      }
+	  
+	  internal class DebuggerProxy
+      {
+         private VectorOf${VECTOR_NAME} _v;
+
+         public DebuggerProxy(VectorOf${VECTOR_NAME} v)
+         {
+            _v = v;
+         }
+
+         public ${VECTOR_ELEMENT_CS}[] Values
+         {
+            get { return _v.ToArray(); }
          }
       }
 

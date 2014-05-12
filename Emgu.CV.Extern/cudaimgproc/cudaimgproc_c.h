@@ -16,25 +16,25 @@
 #include "emgu_c.h"
 
 CVAPI(void) cudaBlendLinear(
-   const cv::cuda::GpuMat* img1, const cv::cuda::GpuMat* img2, 
-   const cv::cuda::GpuMat* weights1, const cv::cuda::GpuMat* weights2, 
-   cv::cuda::GpuMat* result, cv::cuda::Stream* stream);
+   cv::_InputArray* img1, cv::_InputArray* img2, 
+   cv::_InputArray* weights1, cv::_InputArray* weights2, 
+   cv::_OutputArray* result, cv::cuda::Stream* stream);
    
-CVAPI(void) cudaCvtColor(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int code, cv::cuda::Stream* stream);
+CVAPI(void) cudaCvtColor(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dcn, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaSwapChannels(cv::cuda::GpuMat* image, const int* dstOrder, cv::cuda::Stream* stream);
+CVAPI(void) cudaSwapChannels(cv::_InputOutputArray* image, const int* dstOrder, cv::cuda::Stream* stream);
 
 
-CVAPI(void) cudaMeanShiftFiltering(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int sp, int sr,
+CVAPI(void) cudaMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr,
    CvTermCriteria* criteria, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaMeanShiftProc(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dstr, cv::cuda::GpuMat* dstsp, int sp, int sr,
+CVAPI(void) cudaMeanShiftProc(cv::_InputArray* src, cv::_OutputArray* dstr, cv::_OutputArray* dstsp, int sp, int sr,
    CvTermCriteria* criteria, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaMeanShiftSegmentation(const cv::cuda::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
+CVAPI(void) cudaMeanShiftSegmentation(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr, int minsize,
    CvTermCriteria* criteria);
 
-CVAPI(void) cudaHistEven(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* hist, cv::cuda::GpuMat* buffer, int histSize, int lowerLevel, int upperLevel, cv::cuda::Stream* stream);
+CVAPI(void) cudaHistEven(cv::_InputArray* src, cv::_OutputArray* hist, cv::_InputOutputArray* buffer, int histSize, int lowerLevel, int upperLevel, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream);
 
@@ -53,7 +53,7 @@ CVAPI(void) cudaCornernessCriteriaRelease(cv::cuda::CornernessCriteria** detecto
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::CLAHE*) cudaCLAHECreate(double clipLimit, emgu::size* tileGridSize);
-CVAPI(void) cudaCLAHEApply(cv::cuda::CLAHE* clahe, cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  cv::cuda::Stream* stream);
+CVAPI(void) cudaCLAHEApply(cv::cuda::CLAHE* clahe, cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* stream);
 CVAPI(void) cudaCLAHERelease(cv::cuda::CLAHE** clahe);
 
 //----------------------------------------------------------------------------
@@ -63,7 +63,7 @@ CVAPI(void) cudaCLAHERelease(cv::cuda::CLAHE** clahe);
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::CannyEdgeDetector*) cudaCreateCannyEdgeDetector(double lowThreshold, double highThreshold, int apertureSize, bool L2gradient);
 
-CVAPI(void) cudaCannyEdgeDetectorDetect(cv::cuda::CannyEdgeDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* edges);
+CVAPI(void) cudaCannyEdgeDetectorDetect(cv::cuda::CannyEdgeDetector* detector, cv::_InputArray* src, cv::_OutputArray* edges);
 
 CVAPI(void) cudaCannyEdgeDetectorRelease(cv::cuda::CannyEdgeDetector** detector);
 
@@ -84,7 +84,7 @@ CVAPI(void) cudaCornersDetectorRelease(cv::cuda::CornersDetector** detector);
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::TemplateMatching*) cudaTemplateMatchingCreate(int srcType, int method, emgu::size* blockSize);
 CVAPI(void) cudaTemplateMatchingRelease(cv::cuda::TemplateMatching** tm);
-CVAPI(void) cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, const cv::cuda::GpuMat* image, const cv::cuda::GpuMat* templ, cv::cuda::GpuMat* result, cv::cuda::Stream* stream);
+CVAPI(void) cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result, cv::cuda::Stream* stream);
 
 //----------------------------------------------------------------------------
 //

@@ -35,9 +35,9 @@ namespace Emgu.CV.Cuda
       /// <param name="source">Source image</param>
       /// <param name="dst">Destination image</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Apply(CudaImage<Gray, Byte> source, CudaImage<Gray, Byte> dst, Stream stream)
+      public void Apply(IInputArray source, IOutputArray dst, Stream stream = null)
       {
-         CudaInvoke.cudaCLAHEApply(_ptr, source, dst, stream);
+         CudaInvoke.cudaCLAHEApply(_ptr, source.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
 
       /// <summary>

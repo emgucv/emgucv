@@ -141,9 +141,9 @@ bool targetArchsHasEqualOrGreaterBin(int major, int minor)
 
 cv::cuda::GpuMat* gpuMatCreateDefault() { return new cv::cuda::GpuMat() ; }
 
-cv::cuda::GpuMat* gpuMatCreate(int rows, int cols, int type)
+void gpuMatCreate(cv::cuda::GpuMat* m, int rows, int cols, int type)
 {
-   return new cv::cuda::GpuMat(rows, cols, type);
+   m->create(rows, cols, type);
 }
 
 cv::cuda::GpuMat* gpuMatCreateContinuous(int rows, int cols, int type)
@@ -169,10 +169,9 @@ void gpuMatRelease(cv::cuda::GpuMat** mat)
    *mat = 0;
 }
 
-cv::cuda::GpuMat* gpuMatCreateFromArr(CvArr* arr)
+cv::cuda::GpuMat* gpuMatCreateFromInputArray(cv::_InputArray* arr)
 {
-   cv::Mat mat = cv::cvarrToMat(arr);
-   return new cv::cuda::GpuMat(mat);
+   return new cv::cuda::GpuMat(*arr);
 }
 
 emgu::size gpuMatGetSize(cv::cuda::GpuMat* gpuMat)
@@ -199,25 +198,28 @@ int gpuMatGetType(cv::cuda::GpuMat* gpuMat)
    return gpuMat->type();
 }
 
-void gpuMatUpload(cv::cuda::GpuMat* gpuMat, CvArr* arr)
+int gpuMatGetDepth(cv::cuda::GpuMat* gpuMat)
 {
-   cv::Mat mat = cv::cvarrToMat(arr);
-   gpuMat->upload(mat);
+   return gpuMat->depth();
 }
 
-void gpuMatDownload(cv::cuda::GpuMat* gpuMat, CvArr* arr)
+void gpuMatUpload(cv::cuda::GpuMat* gpuMat, cv::_InputArray* arr)
 {
-   cv::Mat mat = cv::cvarrToMat(arr);
-   gpuMat->download(mat);
+   gpuMat->upload(*arr);
+}
+
+void gpuMatDownload(cv::cuda::GpuMat* gpuMat, cv::_OutputArray* arr)
+{
+   gpuMat->download(*arr);
 }
 
 
-void gpuMatConvertTo(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, double alpha, double beta, cv::cuda::Stream* stream)
+void gpuMatConvertTo(const cv::cuda::GpuMat* src, cv::_OutputArray* dst, int rtype, double alpha, double beta, cv::cuda::Stream* stream)
 {
-   src->convertTo(*dst, dst->type(), alpha, beta, stream ? *stream : cv::cuda::Stream::Null());
+   src->convertTo(*dst, rtype, alpha, beta, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void gpuMatCopy(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream)
+void gpuMatCopyTo(const cv::cuda::GpuMat* src, cv::_OutputArray* dst, const cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    if (mask)
       src->copyTo(*dst, *mask, stream ? *stream : cv::cuda::Stream::Null());
@@ -243,6 +245,3 @@ cv::cuda::GpuMat* gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* rect)
 { 
    return new cv::cuda::GpuMat(*arr, *rect);
 }
-
-
-

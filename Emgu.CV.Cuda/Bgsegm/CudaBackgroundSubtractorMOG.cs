@@ -4,9 +4,11 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using System.Drawing;
+﻿using System.Runtime.InteropServices;
 using System.Text;
-using Emgu.CV.Structure;
+﻿using Emgu.CV.CvEnum;
+﻿using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
@@ -15,27 +17,12 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Gaussian Mixture-based Background/Foreground Segmentation Algorithm.
    /// </summary>
-   /// <typeparam name="TColor">The color type of the CudaImage to be processed</typeparam>
-   public class CudaBackgroundSubtractorMOG<TColor> : UnmanagedObject
-       where TColor : struct, IColor
+   public class CudaBackgroundSubtractorMOG : UnmanagedObject
    {
-      private CudaImage<Gray, Byte> _forgroundMask;
-
-      /// <summary>
-      /// The forground mask
-      /// </summary>
-      public CudaImage<Gray, Byte> ForgroundMask
-      {
-         get
-         {
-            return _forgroundMask;
-         }
-      }
-
       /// <summary>
       /// Create a Gaussian Mixture-based Background/Foreground Segmentation model
       /// </summary>
-      public CudaBackgroundSubtractorMOG(int history, int nMixtures, double backgroundRatio, double noiseSigma)
+      public CudaBackgroundSubtractorMOG(int history = 200, int nMixtures = 4, double backgroundRatio = 0.7, double noiseSigma = 0)
       {
          _ptr = CudaInvoke.cudaBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma);
       }
@@ -46,25 +33,10 @@ namespace Emgu.CV.Cuda
       /// <param name="frame">Next video frame.</param>
       /// <param name="learningRate">The learning rate, use -1.0f for default value.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Update(CudaImage<TColor, Byte> frame, float learningRate, Stream stream)
+      public void Update(IInputArray frame, float learningRate, IOutputArray forgroundMask, Stream stream = null)
       {
-         if (_forgroundMask == null)
-         {
-            _forgroundMask = new CudaImage<Gray, byte>(frame.Size);
-         }
-         CudaInvoke.cudaBackgroundSubtractorMOGApply(_ptr, frame, learningRate, _forgroundMask, stream);
-      }
 
-      /// <summary>
-      /// Release all the managed resource associated with this object
-      /// </summary>
-      protected override void ReleaseManagedResources()
-      {
-         base.ReleaseManagedResources();
-         if (_forgroundMask != null)
-         {
-            _forgroundMask.Dispose();
-         }
+         CudaInvoke.cudaBackgroundSubtractorMOGApply(_ptr, frame.InputArrayPtr, learningRate, forgroundMask.OutputArrayPtr, stream);
       }
 
       /// <summary>

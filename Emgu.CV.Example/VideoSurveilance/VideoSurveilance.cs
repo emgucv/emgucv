@@ -52,20 +52,22 @@ namespace VideoSurveilance
 
       void ProcessFrame(object sender, EventArgs e)
       {
-         Image<Bgr, Byte> frame = _cameraCapture.QueryFrame();
-         frame._SmoothGaussian(3); //filter out noises
+         Mat frame = _cameraCapture.QueryFrame();
+         Image<Bgr, Byte> smoothedFrame = new Image<Bgr, byte>(frame.Size);
+         CvInvoke.GaussianBlur(frame, smoothedFrame, new Size(3, 3), 1); //filter out noises
+         //frame._SmoothGaussian(3); 
 
          #region use the BG/FG detector to find the forground mask
-         _detector.Update(frame);
+         _detector.Update(smoothedFrame);
          Image<Gray, Byte> forgroundMask = _detector.ForegroundMask;
          #endregion
 
-         _tracker.Process(frame, forgroundMask);
+         _tracker.Process(smoothedFrame, forgroundMask);
 
          foreach (MCvBlob blob in _tracker)
          {
-            frame.Draw((Rectangle)blob, new Bgr(255.0, 255.0, 255.0), 2);
-            frame.Draw(blob.ID.ToString(), Point.Round(blob.Center), FontFace.HersheyPlain, 1.0, new Bgr(255.0, 255.0, 255.0));
+            CvInvoke.Rectangle(frame, (Rectangle)blob, new MCvScalar(255.0, 255.0, 255.0), 2);
+            CvInvoke.PutText(frame, blob.ID.ToString(), Point.Round(blob.Center), FontFace.HersheyPlain, 1.0, new MCvScalar(255.0, 255.0, 255.0));
          }
 
          imageBox1.Image = frame;

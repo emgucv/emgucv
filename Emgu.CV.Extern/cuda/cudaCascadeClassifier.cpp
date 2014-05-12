@@ -6,9 +6,9 @@
 
 #include "cuda_c.h"
 
-cv::cuda::CascadeClassifier_CUDA* cudaCascadeClassifierCreate(const char* filename)
+cv::cuda::CascadeClassifier_CUDA* cudaCascadeClassifierCreate(cv::String* filename)
 {
-   return new cv::cuda::CascadeClassifier_CUDA(filename);
+   return new cv::cuda::CascadeClassifier_CUDA(*filename);
 }
 
 void cudaCascadeClassifierRelease(cv::cuda::CascadeClassifier_CUDA** classifier)

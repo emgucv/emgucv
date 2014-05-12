@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Drawing;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -17,8 +18,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// BoxMin filter
    /// </summary>
-   public class CudaBoxMinFilter<TColor> : CudaFilter<TColor, Byte>
-      where TColor : struct, IColor
+   public class CudaBoxMinFilter : CudaFilter
    {
       /// <summary>
       /// Create a BoxMin filter.
@@ -27,15 +27,15 @@ namespace Emgu.CV.Cuda
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="borderType">The border type.</param>
       /// <param name="borderValue">The border value.</param>
-      public CudaBoxMinFilter(Size ksize, Point anchor, CvEnum.BorderType borderType, MCvScalar borderValue)
+      public CudaBoxMinFilter(DepthType srcDepth, int srcChannels, Size ksize, Point anchor, CvEnum.BorderType borderType = BorderType.Default, MCvScalar borderValue = new MCvScalar())
       {
-         _ptr = CudaInvoke.cudaCreateBoxMinFilter(_matType, ref ksize, ref anchor, (int)borderType, ref borderValue);
+         _ptr = CudaInvoke.cudaCreateBoxMinFilter(CvInvoke.MakeType(srcDepth, srcChannels), ref ksize, ref anchor, borderType, ref borderValue);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateBoxMinFilter(int srcType, ref Size ksize, ref Point anchor, int borderMode, ref MCvScalar borderValue);
+      internal static extern IntPtr cudaCreateBoxMinFilter(int srcType, ref Size ksize, ref Point anchor, CvEnum.BorderType borderMode, ref MCvScalar borderValue);
    }
 }

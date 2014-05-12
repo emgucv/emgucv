@@ -21,7 +21,7 @@
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::BackgroundSubtractorMOG*) cudaBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma);
-CVAPI(void) cudaBackgroundSubtractorMOGApply(cv::cuda::BackgroundSubtractorMOG* mog, cv::cuda::GpuMat* frame, float learningRate, cv::cuda::GpuMat* fgMask, cv::cuda::Stream* stream);
+CVAPI(void) cudaBackgroundSubtractorMOGApply(cv::cuda::BackgroundSubtractorMOG* mog, cv::_InputArray* frame, float learningRate, cv::_OutputArray* fgMask, cv::cuda::Stream* stream);
 CVAPI(void) cudaBackgroundSubtractorMOGRelease(cv::cuda::BackgroundSubtractorMOG** mog);
 
 //----------------------------------------------------------------------------
@@ -30,7 +30,7 @@ CVAPI(void) cudaBackgroundSubtractorMOGRelease(cv::cuda::BackgroundSubtractorMOG
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::BackgroundSubtractorMOG2*) cudaBackgroundSubtractorMOG2Create(int history, double varThreshold, bool detectShadows);
-CVAPI(void) cudaBackgroundSubtractorMOG2Apply(cv::cuda::BackgroundSubtractorMOG2* mog, cv::cuda::GpuMat* frame, float learningRate, cv::cuda::GpuMat* fgMask, cv::cuda::Stream* stream);
+CVAPI(void) cudaBackgroundSubtractorMOG2Apply(cv::cuda::BackgroundSubtractorMOG2* mog, cv::_InputArray* frame, float learningRate, cv::_OutputArray* fgMask, cv::cuda::Stream* stream);
 CVAPI(void) cudaBackgroundSubtractorMOG2Release(cv::cuda::BackgroundSubtractorMOG2** mog);
 
 //----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ CVAPI(void) cudaBackgroundSubtractorMOG2Release(cv::cuda::BackgroundSubtractorMO
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::BackgroundSubtractorGMG*) cudaBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold);
-CVAPI(void) cudaBackgroundSubtractorGMGApply(cv::cuda::BackgroundSubtractorGMG* gmg, cv::cuda::GpuMat* frame, double learningRate, cv::cuda::GpuMat* fgMask, cv::cuda::Stream* stream);
+CVAPI(void) cudaBackgroundSubtractorGMGApply(cv::cuda::BackgroundSubtractorGMG* gmg, cv::cuda::GpuMat* frame, double learningRate, cv::_OutputArray* fgMask, cv::cuda::Stream* stream);
 CVAPI(void) cudaBackgroundSubtractorGMGRelease(cv::cuda::BackgroundSubtractorGMG** gmg);
 
 //----------------------------------------------------------------------------

@@ -377,10 +377,14 @@ namespace Emgu.CV.Test
       public void TestFromJpegData()
       {
          Byte[] data = GetBytesFromFile(EmguAssert.GetFile("lena.jpg"));
-         Image<Bgr, Byte> imgJpg = Image<Bgr, Byte>.FromRawImageData(data);
+         Mat imgJpg = new Mat();
+         CvInvoke.Imdecode(data, LoadImageType.Color, imgJpg);
+         
          //Emgu.CV.UI.ImageViewer.Show(imgJpg);
+
+         Mat imgPng = new Mat();
          data = GetBytesFromFile(EmguAssert.GetFile("pedestrian.png"));
-         Image<Bgr, Byte> imgPng = Image<Bgr, Byte>.FromRawImageData(data);
+         CvInvoke.Imdecode(data, LoadImageType.Color, imgPng);
          //Emgu.CV.UI.ImageViewer.Show(imgPng);
       }
 

@@ -21,14 +21,14 @@ CVAPI(void) cudaPyrDown(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::S
 
 CVAPI(void) cudaPyrUp(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst, const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
+CVAPI(void) cudaWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* M, CvSize* dSize, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst,  const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
+CVAPI(void) cudaWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst,  cv::_InputArray* M, CvSize* size, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* xmap, cv::_InputArray* ymap, int interpolation, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaResize(cv::_InputArray* src, cv::_OutputArray* dst, int interpolation, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaRotate(cv::_InputArray* src, cv::_OutputArray* dst, double angle, double xShift, double yShift, int interpolation, cv::cuda::Stream* s);
+CVAPI(void) cudaRotate(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dSize, double angle, double xShift, double yShift, int interpolation, cv::cuda::Stream* s);
 
 #endif

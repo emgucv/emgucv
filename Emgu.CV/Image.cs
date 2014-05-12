@@ -4441,6 +4441,7 @@ namespace Emgu.CV
          return result;
       }
 
+      /*
       /// <summary>
       /// Decode the image from opencv supported image data. 
       /// </summary>
@@ -4464,20 +4465,19 @@ namespace Emgu.CV
                return tmp.Convert<TColor, TDepth>();
             }
          }
-      }
+      }*/
 
       /// <summary>
       /// Get the jpeg representation of the image
       /// </summary>
       /// <returns>An byte array that contains the image as jpeg data</returns>
-      public byte[] ToJpegData()
+      public byte[] ToJpegData(int quality = 95)
       {
-         IntPtr mat = CvInvoke.cvEncodeImage(".jpg", Ptr, IntPtr.Zero);
-         MCvMat cvMat = (MCvMat) Marshal.PtrToStructure(mat, typeof(MCvMat));
-         byte[] data = new byte[cvMat.Rows * cvMat.Cols];
-         Marshal.Copy(cvMat.Data, data, 0, data.Length);
-         CvInvoke.cvReleaseMat(ref mat);
-         return data;
+         using (VectorOfByte buf = new VectorOfByte())
+         {
+            CvInvoke.Imencode(".jpg", this, buf, quality);
+            return buf.ToArray();
+         }
       }
 
       ///<summary> 

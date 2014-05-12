@@ -14,6 +14,7 @@
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/objdetect/objdetect_c.h"
 #include "opencv2/core/ocl.hpp"
+#include "opencv2/core/cuda.hpp"
 
 template <class dataType> 
 void VectorPushMulti(std::vector<dataType>* v, dataType* values, int count)

@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Emgu.CV;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Features2D
@@ -19,13 +20,11 @@ namespace Emgu.CV.Features2D
       /// Find the k-nearest match
       /// </summary>
       /// <param name="queryDescriptor">An n x m matrix of descriptors to be query for nearest neighbours. n is the number of descriptor and m is the size of the descriptor</param>
-      /// <param name="trainIdx">The resulting n x <paramref name="k"/> matrix of descriptor index from the training descriptors</param>
-      /// <param name="distance">The resulting n x <paramref name="k"/> matrix of distance value from the training descriptors</param>
       /// <param name="k">Number of nearest neighbors to search for</param>
       /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
-      public void KnnMatch(IInputArray queryDescriptor, Matrix<int> trainIdx, Matrix<float> distance, int k, IInputArray mask)
+      public void KnnMatch(IInputArray queryDescriptor, VectorOfVectorOfDMatch matches, int k, IInputArray mask)
       {
-         DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor.InputArrayPtr, trainIdx, distance, k, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor.InputArrayPtr, matches, k, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
 
       /// <summary>
@@ -50,7 +49,7 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvDescriptorMatcherKnnMatch(IntPtr matcher, IntPtr queryDescriptors,
-                   IntPtr trainIdx, IntPtr distance, int k,
+                   IntPtr matches, int k,
                    IntPtr mask);
    }
 }

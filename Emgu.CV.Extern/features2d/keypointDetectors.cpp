@@ -220,18 +220,38 @@ void drawKeypoints(
 void drawMatchedFeatures(
    cv::_InputArray* img1, const std::vector<cv::KeyPoint>* keypoints1,
    cv::_InputArray* img2, const std::vector<cv::KeyPoint>* keypoints2,
-   const CvMat* matchIndices, 
+   std::vector< std::vector< cv::DMatch > >* matches, 
    cv::_InputOutputArray* outImg,
    const CvScalar* matchColor, const CvScalar* singlePointColor,
-   const CvMat* matchesMask, 
+   cv::_InputArray* matchesMask, 
    int flags)
 {
-   std::vector<cv::DMatch> matches;
-   VectorOfDMatchPushMatrix(&matches, matchIndices, 0, matchesMask);
+   if (matchesMask)
+   {
+      int size = matchesMask->rows() * matchesMask->cols() * matchesMask->channels();
+      std::vector< std::vector< char > > matchesVec(
+         size,
+         std::vector< char >(2));
+      cv::Mat m = matchesMask->getMat();
+     
+      cv::MatIterator_<unsigned char> begin, end;
+      int i = 0;
+      for (
+         i = 0, begin = m.begin<unsigned char>(), end = m.end<unsigned char>();
+         begin != end;
+         ++begin, ++i)
+      {
+         matchesVec[i][0] = (char) *begin;
+         matchesVec[i][1] = 0;
+      }
+      cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg, 
+         *matchColor, *singlePointColor, matchesVec, flags);
+   } else
+   {
+      cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg, 
+         *matchColor, *singlePointColor, std::vector< std::vector< char > >(), flags);
+   }
 
-   
-   cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, matches, *outImg, 
-      *matchColor, *singlePointColor, std::vector<char>(), flags);
 }
 
 //DescriptorMatcher
@@ -241,22 +261,22 @@ void CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* tra
 }
 
 void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
-                   CvMat* trainIdx, CvMat* distance, int k,
+                   std::vector< std::vector< cv::DMatch > >* matches, int k,
                    cv::_InputArray* mask) 
 {
-   std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the query
+   //std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the query
 
    //only implemented for a single trained image for now
-   CV_Assert( matcher->getTrainDescriptors().size() == 1);
+   //CV_Assert( matcher->getTrainDescriptors().size() == 1);
 
    //cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
    //std::vector<cv::Mat> masks;
    //if (!maskMat.empty()) 
    //   masks.push_back(maskMat);
 
-   matcher->knnMatch(*queryDescriptors, matches, k, mask ? * mask : (cv::InputArray) cv::noArray(), false);
+   matcher->knnMatch(*queryDescriptors, *matches, k, mask ? * mask : (cv::InputArray) cv::noArray(), false);
    
-   VectorOfDMatchToMat(&matches, trainIdx, distance);
+   //VectorOfDMatchToMat(&matches, trainIdx, distance);
 }
 
 cv::DescriptorMatcher* CvBruteForceMatcherCreate(int distanceType, bool crossCheck)
@@ -271,11 +291,11 @@ void CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher)
 }
 
 //2D tracker
-int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins)
+int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, std::vector< std::vector< cv::DMatch > >* matches, CvArr* mask, double scaleIncrement, int rotationBins)
 {
    CV_Assert(!modelKeyPoints->empty());
    CV_Assert(!observedKeyPoints->empty());
-   cv::Mat_<int> indicesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
+   //cv::Mat_<int> indicesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
    cv::Mat_<uchar> maskMat = (cv::Mat_<uchar>) cv::cvarrToMat(mask);
    std::vector<float> logScale;
    std::vector<float> rotations;
@@ -287,7 +307,7 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
       if ( maskMat(i, 0)) 
       {
          cv::KeyPoint observedKeyPoint = observedKeyPoints->at(i);
-         cv::KeyPoint modelKeyPoint = modelKeyPoints->at( indicesMat(i, 0));
+         cv::KeyPoint modelKeyPoint = modelKeyPoints->at( matches->at(i).at(0).trainIdx);
          s = log10( observedKeyPoint.size / modelKeyPoint.size );
          logScale.push_back(s);
          maxS = s > maxS ? s : maxS;

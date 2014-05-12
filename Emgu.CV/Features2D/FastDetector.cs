@@ -41,9 +41,9 @@ namespace Emgu.CV.Features2D
       /// Create a fast detector with the specific parameters
       /// </summary>
       /// <param name="threshold">Threshold on difference between intensity of center pixel and pixels on circle around
-      /// this pixel. Use 10 for default.</param>
-      /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used. Use true for default.</param>
-      public FastDetector(int threshold, bool nonmaxSupression)
+      /// this pixel.</param>
+      /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used.</param>
+      public FastDetector(int threshold = 10, bool nonmaxSupression = true)
       {
          _threshold = threshold;
          _nonmaxSupression = nonmaxSupression;
@@ -77,7 +77,7 @@ namespace Emgu.CV.Features2D
       internal extern static IntPtr CvFASTGetFeatureDetector(
          int threshold,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool nonmax_supression);
+         bool nonmaxSupression);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFASTFeatureDetectorRelease(ref IntPtr detector);

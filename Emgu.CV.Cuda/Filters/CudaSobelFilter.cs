@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Drawing;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -17,9 +18,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Sobel filter
    /// </summary>
-   public class CudaSobelFilter<TColor, TDepth> : CudaFilter<TColor, TDepth>
-      where TColor : struct, IColor
-      where TDepth : new()
+   public class CudaSobelFilter : CudaFilter
    {
       /// <summary>
       /// Create a Sobel filter.
@@ -30,15 +29,20 @@ namespace Emgu.CV.Cuda
       /// <param name="scale">Optional scale, use 1 for default.</param>
       /// <param name="rowBorderType">The row border type.</param>
       /// <param name="columnBorderType">The column border type.</param>
-      public CudaSobelFilter(int dx, int dy, int ksize, double scale, CvEnum.BorderType rowBorderType, CvEnum.BorderType columnBorderType)
+      public CudaSobelFilter(
+         DepthType srcDepth, int srcChannels, 
+         DepthType dstDepth, int dstChannels,
+         int dx, int dy, int ksize = 3, double scale = 1.0, 
+         CvEnum.BorderType rowBorderType = BorderType.Default, CvEnum.BorderType columnBorderType = BorderType.NegativeOne)
       {
-         _ptr = CudaInvoke.cudaCreateSobelFilter(_matType, _matType, dx, dy, ksize, scale, (int)rowBorderType, (int)columnBorderType);
+         _ptr = CudaInvoke.cudaCreateSobelFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
+            dx, dy, ksize, scale, rowBorderType, columnBorderType);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateSobelFilter(int srcType, int dstType, int dx, int dy, int ksize, double scale, int rowBorderType, int columnBorderType);
+      internal static extern IntPtr cudaCreateSobelFilter(int srcType, int dstType, int dx, int dy, int ksize, double scale, CvEnum.BorderType rowBorderType, CvEnum.BorderType columnBorderType);
    }
 }

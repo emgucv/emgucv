@@ -53,9 +53,11 @@ namespace MotionDetection
 
       private void ProcessFrame(object sender, EventArgs e)
       {
-         using (Image<Bgr, Byte> image = _capture.RetrieveBgrFrame())
+         using (Mat image = new Mat())
+         //using (Image<Bgr, Byte> image = _capture.RetrieveBgrFrame())
          using (MemStorage storage = new MemStorage()) //create storage for motion components
          {
+            _capture.Retrieve(image);
             if (_forgroundDetector == null)
             {
                //_forgroundDetector = new BGCodeBookModel<Bgr>();
@@ -63,7 +65,7 @@ namespace MotionDetection
                //_forgroundDetector = new BGStatModel<Bgr>(image, Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL);
             }
 
-            _forgroundDetector.Update(image);
+            _forgroundDetector.Update(image.ToImage<Bgr, Byte>());
 
             capturedImageBox.Image = image;
 

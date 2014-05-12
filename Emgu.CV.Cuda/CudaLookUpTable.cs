@@ -22,20 +22,18 @@ namespace Emgu.CV.Cuda
       /// Create the look up table
       /// </summary>
       /// <param name="lookUpTable">It should be either 1 or 3 channel matrix of 1x256</param>
-      public CudaLookUpTable(Matrix<Byte> lookUpTable)
+      public CudaLookUpTable(IInputArray lookUpTable)
       {
-         _ptr = CudaInvoke.cudaLookUpTableCreate(lookUpTable);
+         _ptr = CudaInvoke.cudaLookUpTableCreate(lookUpTable.InputArrayPtr);
       }
 
       /// <summary>
       /// Transform the image using the lookup table
       /// </summary>
-      /// <typeparam name="TColor">The type of color, should be either 3 channel or 1 channel</typeparam>
       /// <param name="image">The image to be transformed</param>
       /// <param name="dst">The transformation result</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Transform<TColor>(CudaImage<TColor, byte> image, CudaImage<TColor, byte> dst, Stream stream)
-         where TColor : struct, IColor
+      public void Transform(IInputArray image, IOutputArray dst, Stream stream = null)
       {
          CudaInvoke.cudaLookUpTableTransform(_ptr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
       }

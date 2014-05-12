@@ -21,13 +21,13 @@ CVAPI(cv::cuda::Filter*) cudaCreateGaussianFilter(int srcType, int dstType, emgu
 
 CVAPI(cv::cuda::Filter*) cudaCreateLaplacianFilter(int srcType, int dstType, int ksize, double scale, int borderMode, CvScalar* borderValue);
 
-CVAPI(cv::cuda::Filter*) cudaCreateLinearFilter(int srcType, int dstType, const CvArr* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue);
+CVAPI(cv::cuda::Filter*) cudaCreateLinearFilter(int srcType, int dstType, cv::_InputArray* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue);
 
 CVAPI(cv::cuda::Filter*) cudaCreateBoxMaxFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue);
 
 CVAPI(cv::cuda::Filter*) cudaCreateBoxMinFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue);
 
-CVAPI(cv::cuda::Filter*) cudaCreateMorphologyFilter( int op, int srcType, const CvArr* kernel, CvPoint* anchor, int iterations);
+CVAPI(cv::cuda::Filter*) cudaCreateMorphologyFilter( int op, int srcType, cv::_InputArray* kernel, CvPoint* anchor, int iterations);
 
 //----------------------------------------------------------------------------
 //

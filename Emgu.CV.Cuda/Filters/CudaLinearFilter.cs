@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Drawing;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -17,9 +18,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
    /// </summary>
-   public class CudaLinearFilter<TColor, TDepth> : CudaFilter<TColor, TDepth>
-      where TColor : struct, IColor
-      where TDepth : new()
+   public class CudaLinearFilter: CudaFilter
    {
       /// <summary>
       /// Create a Gpu LinearFilter
@@ -28,9 +27,16 @@ namespace Emgu.CV.Cuda
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="borderType">Border type. Use REFLECT101 as default.</param>
       /// <param name="borderValue">The border value</param>
-      public CudaLinearFilter(Matrix<float> kernel, System.Drawing.Point anchor, CvEnum.BorderType borderType, MCvScalar borderValue)
+      public CudaLinearFilter(
+         DepthType srcDepth, int srcChannels,
+         DepthType dstDepth, int dstChannels,
+         IInputArray kernel, 
+         System.Drawing.Point anchor, 
+         CvEnum.BorderType borderType = BorderType.Default, MCvScalar borderValue = new MCvScalar())
       {
-         _ptr = CudaInvoke.cudaCreateLinearFilter(_matType, _matType, kernel, ref anchor, borderType, ref borderValue);
+         _ptr = CudaInvoke.cudaCreateLinearFilter(
+            CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
+            kernel.InputArrayPtr, ref anchor, borderType, ref borderValue);
       }
    }
 

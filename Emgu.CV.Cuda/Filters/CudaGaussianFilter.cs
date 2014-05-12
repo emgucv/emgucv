@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Drawing;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -17,9 +18,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Gaussian filter
    /// </summary>
-   public class CudaGaussianFilter<TColor, TDepth> : CudaFilter<TColor, TDepth>
-      where TColor : struct, IColor
-      where TDepth : new()
+   public class CudaGaussianFilter : CudaFilter
    {
       /// <summary>
       /// Create a Gaussian filter.
@@ -29,9 +28,16 @@ namespace Emgu.CV.Cuda
       /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
       /// <param name="rowBorderType">The row border type.</param>
       /// <param name="columnBorderType">The column border type.</param>
-      public CudaGaussianFilter(Size ksize, double sigma1, double sigma2, CvEnum.BorderType rowBorderType, CvEnum.BorderType columnBorderType)
+      public CudaGaussianFilter(
+         DepthType srcDepth, int srcChannels,
+         DepthType dstDepth, int dstChannels,
+         Size ksize, 
+         double sigma1, double sigma2 = 0, 
+         CvEnum.BorderType rowBorderType = BorderType.Default, CvEnum.BorderType columnBorderType = BorderType.NegativeOne)
       {
-         _ptr = CudaInvoke.cudaCreateGaussianFilter(_matType, _matType, ref ksize, sigma1, sigma2, (int)rowBorderType, (int)columnBorderType);
+         _ptr = CudaInvoke.cudaCreateGaussianFilter(
+            CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
+            ref ksize, sigma1, sigma2, (int)rowBorderType, (int)columnBorderType);
       }
    }
 

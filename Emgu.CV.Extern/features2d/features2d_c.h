@@ -78,17 +78,17 @@ CVAPI(void) drawKeypoints(
 CVAPI(void) drawMatchedFeatures(
    cv::_InputArray* img1, const std::vector<cv::KeyPoint>* keypoints1,
    cv::_InputArray* img2, const std::vector<cv::KeyPoint>* keypoints2,
-                                const CvMat* matchIndicies, 
-                                cv::_InputOutputArray* outImg,
-                                const CvScalar* matchColor, const CvScalar* singlePointColor,
-                                const CvMat* matchesMask, 
-                                int flags);
+   std::vector< std::vector< cv::DMatch > >* matches, 
+   cv::_InputOutputArray* outImg,
+   const CvScalar* matchColor, const CvScalar* singlePointColor,
+   cv::_InputArray* matchesMask, 
+   int flags);
 
 //DescriptorMatcher
 CVAPI(void) CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* trainDescriptors);
 
 CVAPI(void) CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
-                   CvMat* trainIdx, CvMat* distance, int k,
+                   std::vector< std::vector< cv::DMatch > >* matches, int k,
                    cv::_InputArray* mask);
 
 /*
@@ -104,7 +104,7 @@ CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher);
 
 
 //2D Tracker
-CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, CvArr* indices, CvArr* mask, double scaleIncrement, int rotationBins);
+CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, std::vector< std::vector< cv::DMatch > >* matches, CvArr* mask, double scaleIncrement, int rotationBins);
 
 //Feature2D
 CVAPI(void) CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* image, cv::_InputArray* mask, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors, bool useProvidedKeyPoints);

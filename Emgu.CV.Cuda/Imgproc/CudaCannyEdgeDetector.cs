@@ -28,7 +28,7 @@ namespace Emgu.CV.Cuda
       /// <param name="highThreshold">The second threshold, used to find initial segments of strong edges</param>
       /// <param name="apertureSize">Aperture parameter for Sobel operator, use 3 for default</param>
       /// <param name="L2gradient">Use false for default</param>
-      public CudaCannyEdgeDetector(double lowThreshold, double highThreshold, int apertureSize, bool L2gradient)
+      public CudaCannyEdgeDetector(double lowThreshold, double highThreshold, int apertureSize = 3, bool L2gradient = false)
       {
          _ptr = CudaInvoke.cudaCreateCannyEdgeDetector(lowThreshold, highThreshold, apertureSize, L2gradient);
       }
@@ -38,9 +38,9 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">Input image</param>
       /// <param name="edges">Image to store the edges found by the function</param>
-      public void Detect(IntPtr src, IntPtr edges)
+      public void Detect(IInputArray src, IOutputArray edges)
       {
-         CudaInvoke.cudaCannyEdgeDetectorDetect(_ptr, src, edges);
+         CudaInvoke.cudaCannyEdgeDetectorDetect(_ptr, src.InputArrayPtr, edges.OutputArrayPtr);
       }
 
       /// <summary>

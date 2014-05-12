@@ -26,11 +26,11 @@ CVAPI(void) cudaBruteForceMatcherRelease(cv::cuda::BFMatcher_CUDA** matcher);
 
 CVAPI(void) cudaBruteForceMatcherAdd(cv::cuda::BFMatcher_CUDA* matcher, const cv::cuda::GpuMat* trainDescs);
 
-CVAPI(void) cudaBruteForceMatcherKnnMatchSingle(
-   cv::cuda::BFMatcher_CUDA* matcher,
-   const cv::cuda::GpuMat* queryDescs, const cv::cuda::GpuMat* trainDescs,
-   cv::cuda::GpuMat* trainIdx, cv::cuda::GpuMat* distance, 
-   int k, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
+CVAPI(void) cudaBruteForceMatcherKnnMatch(
+                                  cv::cuda::BFMatcher_CUDA* matcher,
+                                  const cv::cuda::GpuMat* queryDescs, const cv::cuda::GpuMat* trainDescs,
+                                  std::vector< std::vector< cv::DMatch > >* matches, 
+                                  int k, const cv::cuda::GpuMat* mask, bool compactResult);
    
 //----------------------------------------------------------------------------
 //

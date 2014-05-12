@@ -15,23 +15,8 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Background/Foreground Segmentation Algorithm.
    /// </summary>
-   /// <typeparam name="TColor">The color type of the CudaImage to be processed</typeparam>
-   public class CudaBackgroundSubtractorGMG<TColor> : UnmanagedObject
-       where TColor : struct, IColor
+   public class CudaBackgroundSubtractorGMG : UnmanagedObject
    {
-      private CudaImage<Gray, Byte> _forgroundMask;
-
-      /// <summary>
-      /// The forground mask
-      /// </summary>
-      public CudaImage<Gray, Byte> ForgroundMask
-      {
-         get
-         {
-            return _forgroundMask;
-         }
-      }
-
       /// <summary>
       /// Create a Background/Foreground Segmentation model
       /// </summary>
@@ -46,25 +31,9 @@ namespace Emgu.CV.Cuda
       /// <param name="frame">Next video frame.</param>
       /// <param name="learningRate">The learning rate, use -1.0f for default value.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Update(CudaImage<TColor, Byte> frame, double learningRate, Stream stream)
+      public void Apply(IInputArray frame, double learningRate, IOutputArray forgroundMask, Stream stream = null)
       {
-         if (_forgroundMask == null)
-         {
-            _forgroundMask = new CudaImage<Gray, byte>(frame.Size);
-         }
-         CudaInvoke.cudaBackgroundSubtractorGMGApply(_ptr, frame, learningRate, _forgroundMask, stream);
-      }
-
-      /// <summary>
-      /// Release all the managed resource associated with this object
-      /// </summary>
-      protected override void ReleaseManagedResources()
-      {
-         base.ReleaseManagedResources();
-         if (_forgroundMask != null)
-         {
-            _forgroundMask.Dispose();
-         }
+         CudaInvoke.cudaBackgroundSubtractorGMGApply(_ptr, frame.InputArrayPtr, learningRate, forgroundMask.OutputArrayPtr, stream);
       }
 
       /// <summary>

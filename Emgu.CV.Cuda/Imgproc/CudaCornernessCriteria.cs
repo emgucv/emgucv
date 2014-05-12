@@ -19,22 +19,6 @@ namespace Emgu.CV.Cuda
    public abstract class CudaCornernessCriteria : UnmanagedObject
    {
       /// <summary>
-      /// The MatType for CudaImage&lt; TColor, TDepth &gt;
-      /// </summary>
-      protected static int _matType;
-
-      /// <summary>
-      /// dummy code to make sure the _matType value is setup properly
-      /// </summary>
-      static CudaCornernessCriteria()
-      {
-         using (CudaImage<Gray, Byte> tmp = new CudaImage<Gray, Byte>(4, 4))
-         {
-            _matType = tmp.Type;
-         }
-      }
-
-      /// <summary>
       /// Release all the unmanaged memory associated with this gpu filter
       /// </summary>
       protected override void DisposeObject()
@@ -49,7 +33,7 @@ namespace Emgu.CV.Cuda
       /// <param name="image">The source CudaImage where the filter will be applied to</param>
       /// <param name="dst">The destination CudaImage</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Apply(CudaImage<Gray, Byte> image, CudaImage<Gray, Byte> dst, Stream stream)
+      public void Apply(IInputArray image, IOutputArray dst, Stream stream)
       {
          CudaInvoke.cudaCornernessCriteriaCompute(_ptr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
       }

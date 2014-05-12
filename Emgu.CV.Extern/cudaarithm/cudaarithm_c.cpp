@@ -46,14 +46,9 @@ void cudaPolarToCart(cv::_InputArray* magnitude, cv::_InputArray* angle, cv::_Ou
    cv::cuda::polarToCart(*magnitude, *angle, *x, *y, angleInDegrees, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaMerge(const cv::cuda::GpuMat** src, cv::cuda::GpuMat* dst, cv::cuda::Stream* stream)
+void cudaMerge(std::vector< cv::cuda::GpuMat >* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
-   int channels = dst->channels();
-   cv::cuda::GpuMat* srcArr = new cv::cuda::GpuMat[channels];
-   for (int i = 0; i < channels; ++i)
-      srcArr[i] = *(src[i]);
-   cv::cuda::merge(srcArr, dst->channels(), *dst, stream ? *stream : cv::cuda::Stream::Null());
-   delete[] srcArr;
+   cv::cuda::merge(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 //only support single channel gpuMat
@@ -92,9 +87,9 @@ int cudaCountNonZero(cv::_InputArray* src)
    return cv::cuda::countNonZero(*src, buf);
 }
 
-void cudaReduce(cv::_InputArray* mtx, cv::_OutputArray* vec, int dim, int reduceOp, cv::cuda::Stream* stream)
+void cudaReduce(cv::_InputArray* mtx, cv::_OutputArray* vec, int dim, int reduceOp, int dType, cv::cuda::Stream* stream)
 {
-   cv::cuda::reduce(*mtx, *vec, dim, reduceOp, vec->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::reduce(*mtx, *vec, dim, reduceOp, dType, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseNot(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
@@ -107,21 +102,9 @@ void cudaBitwiseAnd(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArr
    cv::cuda::bitwise_and(*src1, *src2, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaBitwiseAndS(cv::_InputArray* src1, const CvScalar* sc, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
-{
-   cv::Scalar s = *sc;
-   cv::cuda::bitwise_and(*src1, s, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
-}
-
 void cudaBitwiseOr(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    cv::cuda::bitwise_or(*src1, *src2, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
-}
-
-void cudaBitwiseOrS(cv::_InputArray* src1, const CvScalar* sc, cv::_OutputArray* dst,  cv::_InputArray* mask, cv::cuda::Stream* stream)
-{
-   cv::Scalar s = *sc;
-   cv::cuda::bitwise_or(*src1, s, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBitwiseXor(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
@@ -129,30 +112,14 @@ void cudaBitwiseXor(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArr
    cv::cuda::bitwise_xor(*src1, *src2, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaBitwiseXorS(cv::_InputArray* src1, const CvScalar* sc, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
-{
-   cv::Scalar s = *sc;
-   cv::cuda::bitwise_xor(*src1, s, *dst,  mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
-}
-
 void cudaMin(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
    cv::cuda::min(*src1, *src2, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaMinS(cv::_InputArray* src1, double src2, cv::_OutputArray* dst, cv::cuda::Stream* stream)
-{
-   cv::cuda::min(*src1, src2, *dst, stream ? *stream : cv::cuda::Stream::Null());
-}
-
 void cudaMax(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
    cv::cuda::max(*src1, *src2, *dst, stream ? *stream : cv::cuda::Stream::Null());
-}
-
-void cudaMaxS(cv::_InputArray* src1, double src2, cv::_OutputArray* dst, cv::cuda::Stream* stream)
-{
-   cv::cuda::max(*src1, src2, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaGemm(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, double alpha, 
@@ -279,9 +246,9 @@ void cudaSqrIntegral(cv::_InputArray* src, cv::_OutputArray* sqrSum, cv::cuda::G
    cv::cuda::sqrIntegral(*src, *sqrSum, *buffer, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaDft(cv::_InputArray* src, cv::_OutputArray* dst, int flags, cv::cuda::Stream* stream)
+void cudaDft(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dftSize, int flags, cv::cuda::Stream* stream)
 {
-   cv::cuda::dft(*src, *dst, dst->size(), flags | (dst->channels() == 1 ? cv::DFT_REAL_OUTPUT : 0), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::dft(*src, *dst, *dftSize, flags | (dst->channels() == 1 ? cv::DFT_REAL_OUTPUT : 0), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaFlip(cv::_InputArray* src, cv::_OutputArray* dst, int flipcode, cv::cuda::Stream* stream)
@@ -289,20 +256,14 @@ void cudaFlip(cv::_InputArray* src, cv::_OutputArray* dst, int flipcode, cv::cud
    cv::cuda::flip(*src, *dst, flipcode, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaSplit(const cv::cuda::GpuMat* src, cv::cuda::GpuMat** dst, cv::cuda::Stream* stream)
+void cudaSplit(cv::_InputArray* src, std::vector< cv::cuda::GpuMat >* dst, cv::cuda::Stream* stream)
 {
-   int channels = src->channels();
-   cv::cuda::GpuMat* dstArr = new cv::cuda::GpuMat[channels];
-   for (int i = 0; i < channels; i++)
-      dstArr[i] = *(dst[i]);
-   cv::cuda::split(*src, dstArr, stream? *stream : cv::cuda::Stream::Null());
-   delete[] dstArr;
+   cv::cuda::split(*src, *dst, stream? *stream : cv::cuda::Stream::Null());
 }
 
-cv::cuda::LookUpTable* cudaLookUpTableCreate( const CvArr* lut )
+cv::cuda::LookUpTable* cudaLookUpTableCreate( cv::_InputArray* lut )
 {
-   cv::Mat lutMat = cv::cvarrToMat(lut);
-   cv::Ptr<cv::cuda::LookUpTable> ptr = cv::cuda::createLookUpTable(lutMat);
+   cv::Ptr<cv::cuda::LookUpTable> ptr = cv::cuda::createLookUpTable(*lut);
    ptr.addref();
    return ptr.get();
 }

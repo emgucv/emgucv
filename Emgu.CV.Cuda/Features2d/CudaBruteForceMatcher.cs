@@ -6,16 +6,15 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.Features2D;
-using Emgu.Util;
+ using Emgu.CV.Util;
+ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
    /// <summary>
    /// A Brute force matcher using Cuda
    /// </summary>
-   /// <typeparam name="T">The type of data to be matched. Can be either float or Byte</typeparam>
-   public class CudaBruteForceMatcher<T> : UnmanagedObject
-      where T : struct
+   public class CudaBruteForceMatcher : UnmanagedObject
    {
       /// <summary>
       /// Create a CudaBruteForceMatcher using the specific distance type
@@ -23,17 +22,6 @@ namespace Emgu.CV.Cuda
       /// <param name="distanceType">The distance type</param>
       public CudaBruteForceMatcher(DistanceType distanceType)
       {
-         if (distanceType == DistanceType.Hamming)
-         {
-            if (typeof(T) != typeof(byte))
-               throw new ArgumentException("Hamming distance type requires model descriptor to be Matrix<Byte>");
-         }
-
-         if (typeof(T) != typeof(byte) && typeof(T) != typeof(float))
-         {
-            throw new NotImplementedException(String.Format("Data type of {0} is not supported", typeof(T).ToString()));
-         }
-
          _ptr = CudaInvoke.cudaBruteForceMatcherCreate(distanceType);
       }
 
@@ -65,18 +53,13 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="queryDescriptors">The query descriptors</param>
       /// <param name="modelDescriptors">The model descriptors</param>
-      /// <param name="modelIdx">The model index. A n x <paramref name="k"/> matrix where n = <paramref name="queryDescriptors"/>.Cols</param>
-      /// <param name="distance">The matrix where the distance valus is stored. A n x <paramref name="k"/> matrix where n = <paramref name="queryDescriptors"/>.Size.Height</param>
+      
       /// <param name="k">The number of nearest neighbours to be searched</param>
       /// <param name="mask">The mask</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void KnnMatchSingle(GpuMat<T> queryDescriptors, GpuMat<T> modelDescriptors, GpuMat<int> modelIdx, GpuMat<float> distance, int k, GpuMat<Byte> mask, Stream stream)
+      
+      public void KnnMatch(GpuMat queryDescriptors, GpuMat modelDescriptors, VectorOfVectorOfDMatch matches, int k, GpuMat mask = null, bool compactResult = false)
       {
-         if (k == 2 && !(modelIdx.IsContinuous && distance.IsContinuous))
-         {
-            throw new ArgumentException("For k == 2, the allocated index matrix and distance matrix must be continuous");
-         }
-         CudaInvoke.cudaBruteForceMatcherKnnMatchSingle(_ptr, queryDescriptors, modelDescriptors, modelIdx, distance, k, mask, stream);
+         CudaInvoke.cudaBruteForceMatcherKnnMatch(_ptr, queryDescriptors, modelDescriptors, matches, k, mask, compactResult);
       }
 
       /// <summary>
@@ -100,11 +83,12 @@ namespace Emgu.CV.Cuda
       //private extern static void gpuBruteForceMatcherAdd(IntPtr matcher, IntPtr trainDescs);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaBruteForceMatcherKnnMatchSingle(
+      internal extern static void cudaBruteForceMatcherKnnMatch(
          IntPtr matcher,
          IntPtr queryDescs, IntPtr trainDescs,
-         IntPtr trainIdx, IntPtr distance,
+         IntPtr matches,
          int k, IntPtr mask,
-         IntPtr stream);
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool compactResult);
    }
 }

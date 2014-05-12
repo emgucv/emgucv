@@ -7,45 +7,51 @@
 #include "cudaimgproc_c.h"
 
 void cudaBlendLinear(
-            const cv::cuda::GpuMat* img1, const cv::cuda::GpuMat* img2, 
-            const cv::cuda::GpuMat* weights1, const cv::cuda::GpuMat* weights2, 
-            cv::cuda::GpuMat* result, cv::cuda::Stream* stream)
+   cv::_InputArray* img1, cv::_InputArray* img2, 
+   cv::_InputArray* weights1, cv::_InputArray* weights2, 
+   cv::_OutputArray* result, cv::cuda::Stream* stream)
 {
    cv::cuda::blendLinear(*img1, *img2, *weights1, *weights2, *result, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaCvtColor(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int code, cv::cuda::Stream* stream)
+void cudaCvtColor(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dcn, cv::cuda::Stream* stream)
 {
-   cv::cuda::cvtColor(*src, *dst, code, dst->channels(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::cvtColor(*src, *dst, code, dcn, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaSwapChannels(cv::cuda::GpuMat* image, const int* dstOrder, cv::cuda::Stream* stream)
+void cudaSwapChannels(cv::_InputOutputArray* image, const int* dstOrder, cv::cuda::Stream* stream)
 {
    cv::cuda::swapChannels(*image, dstOrder, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaMeanShiftFiltering(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int sp, int sr,
+void cudaMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr,
                               CvTermCriteria* criteria, cv::cuda::Stream* stream)
 {
    cv::cuda::meanShiftFiltering(*src, *dst, sp, sr, *criteria, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaMeanShiftProc(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dstr, cv::cuda::GpuMat* dstsp, int sp, int sr,
+void cudaMeanShiftProc(cv::_InputArray* src, cv::_OutputArray* dstr, cv::_OutputArray* dstsp, int sp, int sr,
                          CvTermCriteria* criteria, cv::cuda::Stream* stream)
 {
    cv::cuda::meanShiftProc(*src, *dstr, *dstsp, sp, sr, *criteria, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaMeanShiftSegmentation(const cv::cuda::GpuMat* src, cv::Mat* dst, int sp, int sr, int minsize,
+void cudaMeanShiftSegmentation(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr, int minsize,
                                  CvTermCriteria* criteria)
 {
    cv::cuda::meanShiftSegmentation(*src, *dst, sp, sr, minsize, *criteria);
 }
 
-void cudaHistEven(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* hist, cv::cuda::GpuMat* buffer, int histSize, int lowerLevel, int upperLevel, cv::cuda::Stream* stream)
+void cudaHistEven(cv::_InputArray* src, cv::_OutputArray* hist, cv::_InputOutputArray* buffer, int histSize, int lowerLevel, int upperLevel, cv::cuda::Stream* stream)
 {
-   cv::cuda::GpuMat bufferMat = buffer ? *buffer : cv::cuda::GpuMat();
-   cv::cuda::histEven(*src, *hist, bufferMat, histSize, lowerLevel, upperLevel, stream ? *stream : cv::cuda::Stream::Null());
+   if (buffer)
+   {
+      cv::cuda::histEven(*src, *hist, *buffer, histSize, lowerLevel, upperLevel, stream ? *stream : cv::cuda::Stream::Null());
+   } else
+   {
+      cv::cuda::GpuMat tmp;
+      cv::cuda::histEven(*src, *hist, tmp, histSize, lowerLevel, upperLevel, stream ? *stream : cv::cuda::Stream::Null());
+   }
 }
 
 void cudaBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream)
@@ -88,7 +94,7 @@ cv::cuda::CLAHE* cudaCLAHECreate(double clipLimit, emgu::size* tileGridSize)
    ptr.addref();
    return ptr.get();
 }
-void cudaCLAHEApply(cv::cuda::CLAHE* clahe, cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst,  cv::cuda::Stream* stream)
+void cudaCLAHEApply(cv::cuda::CLAHE* clahe, cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* stream)
 {
    clahe->apply(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
@@ -109,7 +115,7 @@ cv::cuda::CannyEdgeDetector* cudaCreateCannyEdgeDetector(double lowThreshold, do
    ptr.addref();
    return ptr.get();
 }
-void cudaCannyEdgeDetectorDetect(cv::cuda::CannyEdgeDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* edges)
+void cudaCannyEdgeDetectorDetect(cv::cuda::CannyEdgeDetector* detector, cv::_InputArray* src, cv::_OutputArray* edges)
 {
    detector->detect(*src, *edges);
 }
@@ -153,7 +159,7 @@ cv::cuda::TemplateMatching* cudaTemplateMatchingCreate(int srcType, int method, 
    return ptr.get();
 }
 
-void cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, const cv::cuda::GpuMat* image, const cv::cuda::GpuMat* templ, cv::cuda::GpuMat* result,  cv::cuda::Stream* stream)
+void cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result,  cv::cuda::Stream* stream)
 {
    tm->match(*image, *templ, *result, stream ? *stream : cv::cuda::Stream::Null());
 }

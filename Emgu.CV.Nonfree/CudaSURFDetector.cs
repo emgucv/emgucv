@@ -60,9 +60,9 @@ namespace Emgu.CV.Nonfree
       /// keypoints.at&lt;float[6]&gt;(1, i) contains i'th keypoint
       /// format: (x, y, size, response, angle, octave)
       /// </returns>
-      public GpuMat<float> DetectKeyPointsRaw(CudaImage<Gray, Byte> img, CudaImage<Gray, Byte> mask)
+      public GpuMat DetectKeyPointsRaw(GpuMat img, GpuMat mask = null)
       {
-         GpuMat<float> result = new GpuMat<float>();
+         GpuMat result = new GpuMat();
          NonfreeInvoke.cudaSURFDetectorDetectKeyPoints(_ptr, img, mask, result);
          return result;
       }
@@ -73,9 +73,9 @@ namespace Emgu.CV.Nonfree
       /// <param name="img">The image where keypoints will be detected from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>An array of keypoints</returns>
-      public MKeyPoint[] DetectKeyPoints(CudaImage<Gray, Byte> img, CudaImage<Gray, Byte> mask)
+      public MKeyPoint[] DetectKeyPoints(GpuMat img, GpuMat mask)
       {
-         using (GpuMat<float> tmp = DetectKeyPointsRaw(img, mask))
+         using (GpuMat tmp = DetectKeyPointsRaw(img, mask))
          using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
             DownloadKeypoints(tmp, kpts);
@@ -88,7 +88,7 @@ namespace Emgu.CV.Nonfree
       /// </summary>
       /// <param name="src">The keypoints obtained from DetectKeyPointsRaw</param>
       /// <param name="dst">The vector of keypoints</param>
-      public void DownloadKeypoints(GpuMat<float> src, VectorOfKeyPoint dst)
+      public void DownloadKeypoints(GpuMat src, VectorOfKeyPoint dst)
       {
          NonfreeInvoke.cudaSURFDownloadKeypoints(_ptr, src, dst);
       }
@@ -98,7 +98,7 @@ namespace Emgu.CV.Nonfree
       /// </summary>
       /// <param name="src">The keypoints array</param>
       /// <param name="dst">A GpuMat that represent the keypoints</param>
-      public void UploadKeypoints(VectorOfKeyPoint src, GpuMat<float> dst)
+      public void UploadKeypoints(VectorOfKeyPoint src, GpuMat dst)
       {
          NonfreeInvoke.cudaSURFUploadKeypoints(_ptr, src, dst);
       }
@@ -110,9 +110,10 @@ namespace Emgu.CV.Nonfree
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <param name="keyPoints">The keypoint where the descriptor will be computed from. The order of the keypoints might be changed unless the GPU_SURF detector is UP-RIGHT.</param>
       /// <returns>The image features founded on the keypoint location</returns>
-      public GpuMat<float> ComputeDescriptorsRaw(CudaImage<Gray, Byte> image, CudaImage<Gray, byte> mask, GpuMat<float> keyPoints)
+      public GpuMat ComputeDescriptorsRaw(GpuMat image, GpuMat mask, GpuMat keyPoints)
       {
-         GpuMat<float> descriptors = new GpuMat<float>(keyPoints.Size.Height, DescriptorSize, 1);
+         //GpuMat descriptors = new GpuMat(keyPoints.Size.Height, DescriptorSize, 1);
+         GpuMat descriptors = new GpuMat();
          NonfreeInvoke.cudaSURFDetectorCompute(_ptr, image, mask, keyPoints, descriptors, true);
          return descriptors;
       }

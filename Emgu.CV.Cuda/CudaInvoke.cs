@@ -7,7 +7,8 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV;
-using Emgu.CV.Structure;
+﻿using Emgu.CV.CvEnum;
+﻿using Emgu.CV.Structure;
 using System.IO;
 using Emgu.Util;
 
@@ -128,43 +129,6 @@ namespace Emgu.CV.Cuda
       #endregion
 
       /// <summary>
-      /// Create an empty GpuMat 
-      /// </summary>
-      /// <returns>Pointer to an empty GpuMat</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreateDefault")]
-      internal static extern IntPtr GpuMatCreateDefault();
-
-      /// <summary>
-      /// Create a GpuMat of the specified size
-      /// </summary>
-      /// <param name="rows">The number of rows (height)</param>
-      /// <param name="cols">The number of columns (width)</param>
-      /// <param name="type">The type of GpuMat</param>
-      /// <returns>Pointer to the GpuMat</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreate")]
-      public static extern IntPtr GpuMatCreate(int rows, int cols, int type);
-
-      /// <summary>
-      /// Create a GpuMat of the specified size. The allocated data is continuous within this GpuMat.
-      /// </summary>
-      /// <param name="rows">The number of rows (height)</param>
-      /// <param name="cols">The number of columns (width)</param>
-      /// <param name="type">The type of GpuMat</param>
-      /// <returns>Pointer to the GpuMat</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreateContinuous")]
-      internal static extern IntPtr GpuMatCreateContinuous(int rows, int cols, int type);
-
-      /// <summary>
-      /// Returns true iff the GpuMatrix data is continuous
-      /// (i.e. when there are no gaps between successive rows).
-      /// </summary>
-      /// <param name="gpuMat">The GpuMat to be checked</param>
-      /// <returns>True if the GpuMat is continuous</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatIsContinuous")]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      public static extern bool GpuMatIsContinuous(IntPtr gpuMat);
-
-      /// <summary>
       /// Create a GpuMat from the specific region of <paramref name="gpuMat"/>. The data is shared between the two GpuMat.
       /// </summary>
       /// <param name="gpuMat">The gpuMat to extract regions from.</param>
@@ -173,30 +137,6 @@ namespace Emgu.CV.Cuda
       /// <returns>Pointer to the GpuMat</returns>
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetRegion")]
       public static extern IntPtr GetRegion(IntPtr gpuMat, ref MCvSlice rowRange, ref MCvSlice colRange);
-
-      /// <summary>
-      /// Check if the GpuMat is empty
-      /// </summary>
-      /// <param name="gpuMat">The GpuMat</param>
-      /// <returns>True if the GpuMat is empty</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatIsEmpty")]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      public static extern bool GpuMatIsEmpty(IntPtr gpuMat);
-
-      /// <summary>
-      /// Copies scalar value to every selected element of the destination GpuMat:
-      /// arr(I)=value if mask(I)!=0
-      /// </summary>
-      /// <param name="mat">The destination GpuMat</param>
-      /// <param name="value">Fill value</param>
-      /// <param name="mask">Operation mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Can be IntPtr.Zero if not used</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>     
-      public static void GpuMatSetTo(GpuMat mat, MCvScalar value, IInputArray mask, Stream stream)
-      {
-         gpuMatSetTo(mat, ref value, mask == null ? IntPtr.Zero : mask.InputArrayPtr, stream);
-      }
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void gpuMatSetTo(IntPtr mat, ref MCvScalar value, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Resize the GpuMat
@@ -209,7 +149,7 @@ namespace Emgu.CV.Cuda
       public static extern void GpuMatResize(IntPtr src, IntPtr dst, CvEnum.Inter interpolation, IntPtr stream);
 
       /// <summary>
-      /// Reshape the src GpuMat  
+      /// gpuMatReshape the src GpuMat  
       /// </summary>
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The resulting GpuMat, as input it should be an empty GpuMat.</param>
@@ -219,74 +159,22 @@ namespace Emgu.CV.Cuda
       public static extern void GpuMatReshape(IntPtr src, IntPtr dst, int cn, int rows);
 
       /// <summary>
-      /// Release the GpuMat
-      /// </summary>
-      /// <param name="mat">Pointer to the GpuMat</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatRelease")]
-      public static extern void GpuMatRelease(ref IntPtr mat);
-
-      /// <summary>
-      /// Convert a CvArr to a GpuMat
-      /// </summary>
-      /// <param name="arr">Pointer to a CvArr</param>
-      /// <returns>Pointer to the GpuMat</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCreateFromArr")]
-      public static extern IntPtr GpuMatCreateFromArr(IntPtr arr);
-
-      /// <summary>
-      /// Get the GpuMat size:
-      /// width == number of columns, height == number of rows
-      /// </summary>
-      /// <param name="gpuMat">The GpuMat</param>
-      /// <returns>The size of the matrix</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetSize")]
-      public static extern Size GpuMatGetSize(IntPtr gpuMat);
-
-      /// <summary>
-      /// Get the number of channels in the GpuMat
-      /// </summary>
-      /// <param name="gpuMat">The GpuMat</param>
-      /// <returns>The number of channels in the GpuMat</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetChannels")]
-      public static extern int GpuMatGetChannels(IntPtr gpuMat);
-
-      /// <summary>
-      /// Get the GpuMat type
-      /// </summary>
-      /// <param name="gpuMat">The GpuMat</param>
-      /// <returns>The GpuMat type</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetType")]
-      public static extern int GpuMatGetType(IntPtr gpuMat);
-
-      /// <summary>
-      /// Pefroms blocking upload data to GpuMat.
-      /// </summary>
-      /// <param name="gpuMat">The destination gpuMat</param>
-      /// <param name="arr">The CvArray to be uploaded to GPU</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatUpload")]
-      public static extern void GpuMatUpload(IntPtr gpuMat, IntPtr arr);
-
-      /// <summary>
-      /// Downloads data from device to host memory. Blocking calls.
-      /// </summary>
-      /// <param name="gpuMat">The source GpuMat</param>
-      /// <param name="arr">The CvArray where data will be downloaded to</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatDownload")]
-      public static extern void GpuMatDownload(IntPtr gpuMat, IntPtr arr);
-
-      /// <summary>
       /// Converts image from one color space to another
       /// </summary>
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="code">The color conversion code</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaCvtColor")]
-      public static extern void CvtColor(IntPtr src, IntPtr dst, CvEnum.ColorConversion code, IntPtr stream);
-
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void CvtColor(IInputArray src, IOutputArray dst, CvEnum.ColorConversion code, int dcn = 0, Stream stream = null)
+      {
+         cudaCvtColor(src.InputArrayPtr, dst.OutputArrayPtr, code, dcn, stream);
+      }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaSwapChannels(IntPtr src, IntPtr dstOrder, IntPtr stream);
+      private static extern void cudaCvtColor(IntPtr src, IntPtr dst, CvEnum.ColorConversion code, int dcn, IntPtr stream);
 
+      
+
+     
       /// <summary>
       /// Swap channels.
       /// </summary>
@@ -297,25 +185,17 @@ namespace Emgu.CV.Cuda
       /// the output image. E.g. Given an RGBA image, aDstOrder = [3,2,1,0] converts this to ABGR
       /// channel order.
       /// </param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void SwapChannels(IntPtr src, int[] dstOrder, IntPtr stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void SwapChannels(IInputOutputArray src, int[] dstOrder, Stream stream)
       {
          if (dstOrder == null || dstOrder.Length < 4)
             throw new ArgumentException("dstOrder must be an int array of size 4");
          GCHandle handle = GCHandle.Alloc(dstOrder, GCHandleType.Pinned);
-         cudaSwapChannels(src, handle.AddrOfPinnedObject(), stream);
+         cudaSwapChannels(src.InputOutputArrayPtr, handle.AddrOfPinnedObject(), stream);
          handle.Free();
       }
-
-      /// <summary>
-      /// Copy the source GpuMat to destination GpuMat, using an optional mask.
-      /// </summary>
-      /// <param name="src">The GpuMat to be copied from</param>
-      /// <param name="dst">The GpuMat to be copied to</param>
-      /// <param name="mask">The optional mask, use IntPtr.Zero if not needed.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatCopy")]
-      public static extern void Copy(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaSwapChannels(IntPtr src, IntPtr dstOrder, IntPtr stream);
 
       /// <summary>
       /// Returns header, corresponding to a specified rectangle of the input GpuMat. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array.
@@ -458,7 +338,7 @@ namespace Emgu.CV.Cuda
       /// <param name="a">The first GpuMat to be element-wise divided.</param>
       /// <param name="scalar">The scalar to be divided</param>
       /// <param name="c">The result of the GpuMat divided by the scalar</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Divide(IInputArray a, MCvScalar scalar, IOutputArray c, Stream stream)
       {
          cudaDivideSR(a.InputArrayPtr, ref scalar, c.OutputArrayPtr, stream);
@@ -472,7 +352,7 @@ namespace Emgu.CV.Cuda
       /// <param name="b">The second GpuMat to be element-wise divided.</param>
       /// <param name="scalar">The first scalar to be divided</param>
       /// <param name="c">The result of the scalar dividing the GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Divide(double scalar, IInputArray b, IOutputArray c, Stream stream)
       {
          cudaDivideSL(scalar, b.InputArrayPtr, c.OutputArrayPtr, stream);
@@ -489,7 +369,7 @@ namespace Emgu.CV.Cuda
       /// <param name="beta">The weight for <paramref name="src2"/></param>
       /// <param name="gamma">The constant to be added</param>
       /// <param name="dst">The result</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void AddWeighted(IInputArray src1, double alpha, IInputArray src2, double beta, double gamma, IOutputArray dst, Stream stream)
       {
          cudaAddWeighted(src1.InputArrayPtr, alpha, src2.InputArrayPtr, beta, gamma, dst.OutputArrayPtr, stream);
@@ -503,7 +383,7 @@ namespace Emgu.CV.Cuda
       /// <param name="a">The first GpuMat</param>
       /// <param name="b">The second GpuMat</param>
       /// <param name="c">The result of the element-wise absolute difference.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Absdiff(IInputArray a, IInputArray b, IOutputArray c, Stream stream)
       {
          cudaAbsdiff(a.InputArrayPtr, b.InputArrayPtr, c.OutputArrayPtr, stream);
@@ -517,7 +397,7 @@ namespace Emgu.CV.Cuda
       /// <param name="a">A GpuMat</param>
       /// <param name="scalar">A scalar</param>
       /// <param name="c">The result of the element-wise absolute difference.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Absdiff(IInputArray a, MCvScalar scalar, IOutputArray c, Stream stream)
       {
          cudaAbsdiffS(a.InputArrayPtr, ref scalar, c.OutputArrayPtr, stream);
@@ -530,7 +410,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The source GpuMat, support depth of Int16 and float.</param>
       /// <param name="dst">The resulting GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Abs(IInputArray src, IOutputArray dst, Stream stream)
       {
          cudaAbs(src.InputArrayPtr, dst.OutputArrayPtr, stream);
@@ -543,7 +423,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The source GpuMat, support depth of byte, UInt16, Int16 and float.</param>
       /// <param name="dst">The resulting GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Sqr(IInputArray src, IOutputArray dst, Stream stream)
       {
          cudaSqr(src.InputArrayPtr, dst.OutputArrayPtr, stream);
@@ -556,7 +436,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The source GpuMat, support depth of byte, UInt16, Int16 and float.</param>
       /// <param name="dst">The resulting GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Sqrt(IInputArray src, IOutputArray dst, Stream stream)
       {
          cudaSqrt(src.InputArrayPtr, dst.OutputArrayPtr, stream);
@@ -573,7 +453,7 @@ namespace Emgu.CV.Cuda
       /// <param name="b">The second GpuMat</param>
       /// <param name="c">The result of the comparison.</param>
       /// <param name="cmpop">The type of comparison</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Compare(IInputArray a, IInputArray b, IOutputArray c, CvEnum.CmpType cmpop, Stream stream)
       {
          cudaCompare(a.InputArrayPtr, b.InputArrayPtr, c.OutputArrayPtr, cmpop, stream);
@@ -587,7 +467,7 @@ namespace Emgu.CV.Cuda
       /// <param name="src">The source image. Has to be GpuMat&lt;Byte&gt;. If stream is used, the GpuMat has to be either single channel or 4 channels.</param>
       /// <param name="dst">The destination image.</param>
       /// <param name="interpolation">The interpolation type. Supports INTER_NEAREST, INTER_LINEAR.</param>
-      /// <param name="stream">Use a stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Resize(IInputArray src, IOutputArray dst, CvEnum.Inter interpolation, Stream stream)
       {
          cudaResize(src.InputArrayPtr, dst.OutputArrayPtr, interpolation, stream);
@@ -596,23 +476,17 @@ namespace Emgu.CV.Cuda
       private static extern void cudaResize(IntPtr src, IntPtr dst, CvEnum.Inter interpolation, IntPtr stream);
 
       /// <summary>
-      /// Changes shape of GpuMat without copying data.
-      /// </summary>
-      /// <param name="src">The GpuMat to be reshaped.</param>
-      /// <param name="newCn">New number of channels. newCn = 0 means that the number of channels remains unchanged.</param>
-      /// <param name="newRows">New number of rows. newRows = 0 means that the number of rows remains unchanged unless it needs to be changed according to newCn value.</param>
-      /// <returns>A GpuMat of different shape</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatReshape")]
-      public static extern IntPtr Reshape(IntPtr src, int newCn, int newRows);
-
-      /// <summary>
       /// Copies each plane of a multi-channel GpuMat to a dedicated GpuMat
       /// </summary>
       /// <param name="src">The multi-channel gpuMat</param>
       /// <param name="dstArray">Pointer to an array of single channel GpuMat pointers</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaSplit")]
-      public static extern void Split(IntPtr src, IntPtr dstArray, IntPtr stream);
+      public static void Split(IInputArray src, VectorOfGpuMat dstArray, Stream stream = null)
+      {
+         cudaSplit(src.InputArrayPtr, dstArray, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaSplit(IntPtr src, IntPtr dstArray, IntPtr stream);
 
       /// <summary>
       /// Makes multi-channel GpuMat out of several single-channel GpuMats
@@ -620,20 +494,23 @@ namespace Emgu.CV.Cuda
       /// <param name="srcArr">Pointer to an array of single channel GpuMat pointers</param>
       /// <param name="dst">The multi-channel gpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaMerge")]
-      public static extern void Merge(IntPtr srcArr, IntPtr dst, IntPtr stream);
+      public static void Merge(VectorOfGpuMat srcArr, IOutputArray dst, Stream stream = null)
+      {
+         cudaMerge(srcArr, dst.OutputArrayPtr, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaMerge(IntPtr srcArr, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// Computes exponent of each matrix element (b = exp(a))
       /// </summary>
       /// <param name="src">The source GpuMat. Supports Byte, UInt16, Int16 and float type.</param>
       /// <param name="dst">The resulting GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void Exp(IInputArray src, IOutputArray dst, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void Exp(IInputArray src, IOutputArray dst, Stream stream = null)
       {
          cudaExp(src.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
-
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaExp(IntPtr src, IntPtr dst, IntPtr stream);
 
@@ -646,8 +523,8 @@ namespace Emgu.CV.Cuda
       /// <param name="src">The source GpuMat</param>
       /// <param name="power">The power</param>
       /// <param name="dst">The resulting GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void Pow(IInputArray src, double power, IOutputArray dst, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void Pow(IInputArray src, double power, IOutputArray dst, Stream stream = null)
       {
          cudaPow(src.InputArrayPtr, power, dst.OutputArrayPtr, stream);
       }
@@ -659,8 +536,8 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The source GpuMat. Supports Byte, UInt16, Int16 and float type.</param>
       /// <param name="dst">The resulting GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void Log(IInputArray src, IOutputArray dst, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void Log(IInputArray src, IOutputArray dst, Stream stream = null)
       {
          cudaLog(src.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
@@ -673,8 +550,8 @@ namespace Emgu.CV.Cuda
       /// <param name="x">The source GpuMat. Supports only floating-point type</param>
       /// <param name="y">The source GpuMat. Supports only floating-point type</param>
       /// <param name="magnitude">The destination GpuMat. Supports only floating-point type</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void Magnitude(IInputArray x, IInputArray y, IOutputArray magnitude, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void Magnitude(IInputArray x, IInputArray y, IOutputArray magnitude, Stream stream = null)
       {
          cudaMagnitude(x.InputArrayPtr, y.InputArrayPtr, magnitude.OutputArrayPtr, stream);
       }
@@ -687,9 +564,13 @@ namespace Emgu.CV.Cuda
       /// <param name="x">The source GpuMat. Supports only floating-point type</param>
       /// <param name="y">The source GpuMat. Supports only floating-point type</param>
       /// <param name="magnitude">The destination GpuMat. Supports only floating-point type</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaMagnitudeSqr")]
-      public static extern void MagnitudeSqr(IntPtr x, IntPtr y, IntPtr magnitude, IntPtr stream);
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void MagnitudeSqr(IInputArray x, IInputArray y, IOutputArray magnitude, Stream stream = null)
+      {
+         cudaMagnitudeSqr(x.InputArrayPtr, y.InputArrayPtr, magnitude.OutputArrayPtr, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaMagnitudeSqr(IntPtr x, IntPtr y, IntPtr magnitude, IntPtr stream);
 
       /// <summary>
       /// Computes angle (angle(i)) of each (x(i), y(i)) vector
@@ -698,8 +579,8 @@ namespace Emgu.CV.Cuda
       /// <param name="y">The source GpuMat. Supports only floating-point type</param>
       /// <param name="angle">The destination GpuMat. Supports only floating-point type</param>
       /// <param name="angleInDegrees">If true, the output angle is in degrees, otherwise in radian</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void Phase(IInputArray x, IInputArray y, IOutputArray angle, bool angleInDegrees, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void Phase(IInputArray x, IInputArray y, IOutputArray angle, bool angleInDegrees = false, Stream stream = null)
       {
          cudaPhase(x.InputArrayPtr, y.InputArrayPtr, angle.OutputArrayPtr, angleInDegrees, stream);
       }
@@ -717,8 +598,8 @@ namespace Emgu.CV.Cuda
       /// <param name="magnitude">The destination GpuMat. Supports only floating-point type</param>
       /// <param name="angle">The destination GpuMat. Supports only floating-point type</param>
       /// <param name="angleInDegrees">If true, the output angle is in degrees, otherwise in radian</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void CartToPolar(IInputArray x, IInputArray y, IOutputArray magnitude, IOutputArray angle, bool angleInDegrees, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void CartToPolar(IInputArray x, IInputArray y, IOutputArray magnitude, IOutputArray angle, bool angleInDegrees = false, Stream stream = null)
       {
          cudaCartToPolar(x.InputArrayPtr, y.InputArrayPtr, magnitude.OutputArrayPtr, angle.OutputArrayPtr, angleInDegrees, stream);
       }
@@ -736,8 +617,8 @@ namespace Emgu.CV.Cuda
       /// <param name="x">The destination GpuMat. Supports only floating-point type</param>
       /// <param name="y">The destination GpuMat. Supports only floating-point type</param>
       /// <param name="angleInDegrees">If true, the input angle is in degrees, otherwise in radian</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void PolarToCart(IInputArray magnitude, IInputArray angle, IOutputArray x, IOutputArray y, bool angleInDegrees, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void PolarToCart(IInputArray magnitude, IInputArray angle, IOutputArray x, IOutputArray y, bool angleInDegrees = false, Stream stream = null)
       {
          cudaPolarToCart(magnitude.InputArrayPtr, angle.InputArrayPtr, x.OutputArrayPtr, y.OutputArrayPtr, angleInDegrees, stream);
       }
@@ -748,21 +629,6 @@ namespace Emgu.CV.Cuda
          bool angleInDegrees, IntPtr stream);
 
       /// <summary>
-      /// This function has several different purposes and thus has several synonyms. It copies one GpuMat to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
-      /// dst(I)=src(I)*scale + (shift,shift,...)
-      /// All the channels of multi-channel GpuMats are processed independently.
-      /// The type conversion is done with rounding and saturation, that is if a result of scaling + conversion can not be represented exactly by a value of destination GpuMat element type, it is set to the nearest representable value on the real axis.
-      /// In case of scale=1, shift=0 no prescaling is done. This is a specially optimized case and it has the appropriate convertTo synonym.
-      /// </summary>
-      /// <param name="src">Source GpuMat</param>
-      /// <param name="dst">Destination GpuMat</param>
-      /// <param name="scale">Scale factor</param>
-      /// <param name="shift">Value added to the scaled source GpuMat elements</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatConvertTo")]
-      public static extern void ConvertTo(IntPtr src, IntPtr dst, double scale, double shift, IntPtr stream);
-
-      /// <summary>
       /// Finds minimum and maximum element values and their positions. The extremums are searched over the whole GpuMat or, if mask is not IntPtr.Zero, in the specified GpuMat region.
       /// </summary>
       /// <param name="gpuMat">The source GpuMat, single-channel</param>
@@ -771,7 +637,7 @@ namespace Emgu.CV.Cuda
       /// <param name="minLoc">Pointer to returned minimum location</param>
       /// <param name="maxLoc">Pointer to returned maximum location</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use null if not needed</param>
-      public static void MinMaxLoc(IInputArray gpuMat, ref double minVal, ref double maxVal, ref Point minLoc, ref Point maxLoc, IInputArray mask)
+      public static void MinMaxLoc(IInputArray gpuMat, ref double minVal, ref double maxVal, ref Point minLoc, ref Point maxLoc, IInputArray mask = null)
       {
          cudaMinMaxLoc(gpuMat.InputArrayPtr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
       }
@@ -783,8 +649,8 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The source CudaImage.</param>
       /// <param name="dst">The destination CudaImage, should have 2x smaller width and height than the source.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
-      public static void PyrDown(IInputArray src, IOutputArray dst, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
+      public static void PyrDown(IInputArray src, IOutputArray dst, Stream stream = null)
       {
          cudaPyrDown(src.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
@@ -796,8 +662,8 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The source CudaImage.</param>
       /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
-      public static void PyrUp(IInputArray src, IOutputArray dst, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
+      public static void PyrUp(IInputArray src, IOutputArray dst, Stream stream = null)
       {
          cudaPyrUp(src.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
@@ -811,7 +677,7 @@ namespace Emgu.CV.Cuda
       /// <param name="mean">The mean value</param>
       /// <param name="stddev">The standard deviation</param>
       /// <param name="buffer">The buffer for the processing. Can be null if you do not wants to specify such.</param>
-      public static void MeanStdDev(IInputArray mtx, ref MCvScalar mean, ref MCvScalar stddev, GpuMat buffer)
+      public static void MeanStdDev(IInputArray mtx, ref MCvScalar mean, ref MCvScalar stddev, GpuMat buffer = null)
       {
          cudaMeanStdDev(mtx.InputArrayPtr, ref mean, ref stddev, buffer);
       }
@@ -851,13 +717,13 @@ namespace Emgu.CV.Cuda
       /// <param name="vec">The destination GpuMat. Must be preallocated 1 x n matrix and have the same number of channels as the input GpuMat</param>
       /// <param name="dim">The dimension index along which the matrix is reduce.</param>
       /// <param name="reduceOp">The reduction operation type</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
-      public static void Reduce(IInputArray mtx, IOutputArray vec, CvEnum.ReduceDimension dim, CvEnum.ReduceType reduceOp, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>      
+      public static void Reduce(IInputArray mtx, IOutputArray vec, CvEnum.ReduceDimension dim, CvEnum.ReduceType reduceOp, DepthType dType = DepthType.Default, Stream stream = null)
       {
-         cudaReduce(mtx.InputArrayPtr, vec.OutputArrayPtr, dim, reduceOp, stream);
+         cudaReduce(mtx.InputArrayPtr, vec.OutputArrayPtr, dim, reduceOp, dType, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaReduce(IntPtr mtx, IntPtr vec, CvEnum.ReduceDimension dim, CvEnum.ReduceType reduceOp, IntPtr stream);
+      private static extern void cudaReduce(IntPtr mtx, IntPtr vec, CvEnum.ReduceDimension dim, CvEnum.ReduceType reduceOp, DepthType dType, IntPtr stream);
 
       /// <summary>
       /// Flips the GpuMat in one of different 3 ways (row and column indices are 0-based):
@@ -884,7 +750,7 @@ namespace Emgu.CV.Cuda
       /// <param name="dst">Destination GpuMat. The same source and type as <paramref name="src"/></param>
       /// <param name="flipType">Specifies how to flip the GpuMat.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>      
-      public static void Flip(IInputArray src, IOutputArray dst, CvEnum.FlipType flipType, Stream stream)
+      public static void Flip(IInputArray src, IOutputArray dst, CvEnum.FlipType flipType, Stream stream = null)
       {
          int flipMode =
             //-1 indicates vertical and horizontal flip
@@ -908,28 +774,12 @@ namespace Emgu.CV.Cuda
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="mask">Mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void BitwiseXor(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask, Stream stream)
+      public static void BitwiseXor(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask = null, Stream stream = null)
       {
          cudaBitwiseXor(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaBitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
-
-      /// <summary>
-      /// Calculates per-element bit-wise logical conjunction of a GpuMat and a scalar:
-      /// dst(I)=src1(I)^scalar
-      /// In the case of a floating-point GpuMat its bit representation is used for the operation.
-      /// </summary>
-      /// <param name="src1">The first source GpuMat</param>
-      /// <param name="scalar">The scalar</param>
-      /// <param name="dst">The destination GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void BitwiseXor(IInputArray src1, MCvScalar scalar, IOutputArray dst, Stream stream)
-      {
-         cudaBitwiseXorS(src1.InputArrayPtr, ref scalar, dst.OutputArrayPtr, stream);
-      }
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaBitwiseXorS(IntPtr src1, ref MCvScalar scalar, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical or of two GpuMats:
@@ -940,29 +790,13 @@ namespace Emgu.CV.Cuda
       /// <param name="src2">The second source GpuMat</param>
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="mask">Mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Use IntPtr.Zero if not needed.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void BitwiseOr(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void BitwiseOr(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask = null, Stream stream = null)
       {
          cudaBitwiseOr(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaBitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
-
-      /// <summary>
-      /// Calculates per-element bit-wise logical or a GpuMat and a scalar:
-      /// dst(I)=src1(I) | scalar
-      /// In the case of a floating-point GpuMat its bit representation is used for the operation.
-      /// </summary>
-      /// <param name="src1">The first source GpuMat</param>
-      /// <param name="scalar">The scalar</param>
-      /// <param name="dst">The destination GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void BitwiseOr(IInputArray src1, MCvScalar scalar, IOutputArray dst, Stream stream)
-      {
-         cudaBitwiseOrS(src1.InputArrayPtr, ref scalar, dst.OutputArrayPtr, stream);
-      }
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaBitwiseOrS(IntPtr src1, ref MCvScalar scalar, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical and of two GpuMats:
@@ -974,28 +808,12 @@ namespace Emgu.CV.Cuda
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="mask">Mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void BitwiseAnd(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask, Stream stream)
+      public static void BitwiseAnd(IInputArray src1, IInputArray src2, IOutputArray dst, IInputArray mask = null, Stream stream = null)
       {
          cudaBitwiseAnd(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaBitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
-
-      /// <summary>
-      /// Calculates per-element bit-wise logical and of a GpuMat and a scalar:
-      /// dst(I)=src1(I) &amp; scalar
-      /// In the case of a floating-point GpuMat its bit representation is used for the operation.
-      /// </summary>
-      /// <param name="src1">The first source GpuMat</param>
-      /// <param name="scalar">The scalar</param>
-      /// <param name="dst">The destination GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void BitwiseAnd(IInputArray src1, MCvScalar scalar, IOutputArray dst, Stream stream)
-      {
-         cudaBitwiseAndS(src1.InputArrayPtr, ref scalar, dst.OutputArrayPtr, stream);
-      }
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaBitwiseAndS(IntPtr src1, ref MCvScalar scalar, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// Calculates per-element bit-wise logical not
@@ -1021,26 +839,12 @@ namespace Emgu.CV.Cuda
       /// <param name="src2">The second GpuMat</param>
       /// <param name="dst">The result GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Min(IInputArray src1, IInputArray src2, IOutputArray dst, Stream stream)
+      public static void Min(IInputArray src1, IInputArray src2, IOutputArray dst, Stream stream = null)
       {
          cudaMin(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaMin(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr stream);
-
-      /// <summary>
-      /// Computes per-element minimum of GpuMat and scalar (dst = min(src1, src2))
-      /// </summary>
-      /// <param name="src1">The first GpuMat</param>
-      /// <param name="src2">The scalar</param>
-      /// <param name="dst">The result GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Min(IInputArray src1, double src2, IOutputArray dst, Stream stream)
-      {
-         cudaMinS(src1.InputArrayPtr, src2, dst.OutputArrayPtr, stream);
-      }
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaMinS(IntPtr src1, double src2, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// Computes per-element maximum of two GpuMats (dst = max(src1, src2))
@@ -1049,26 +853,12 @@ namespace Emgu.CV.Cuda
       /// <param name="src2">The second GpuMat</param>
       /// <param name="dst">The result GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Max(IInputArray src1, IInputArray src2, IOutputArray dst, Stream stream)
+      public static void Max(IInputArray src1, IInputArray src2, IOutputArray dst, Stream stream = null)
       {
          cudaMax(src1.InputArrayPtr, src2.InputArrayPtr, dst.OutputArrayPtr, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaMax(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr stream);
-
-      /// <summary>
-      /// Computes per-element maximum of GpuMat and scalar (dst = max(src1, src2))
-      /// </summary>
-      /// <param name="src1">The first GpuMat</param>
-      /// <param name="src2">The scalar</param>
-      /// <param name="dst">The result GpuMat</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Max(IInputArray src1, double src2, IOutputArray dst, Stream stream)
-      {
-         cudaMaxS(src1.InputArrayPtr, src2, dst.OutputArrayPtr, stream);
-      }
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaMaxS(IntPtr src1, double src2, IntPtr dst, IntPtr stream);
 
       /// <summary>
       /// Applies fixed-level thresholding to single-channel array. The function is typically used to get bi-level (binary) image out of grayscale image or for removing a noise, i.e. filtering out pixels with too small or too large values. There are several types of thresholding the function supports that are determined by thresholdType
@@ -1078,8 +868,8 @@ namespace Emgu.CV.Cuda
       /// <param name="threshold">Threshold value</param>
       /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
       /// <param name="thresholdType">Thresholding type</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static double Threshold(IInputArray src, IOutputArray dst, double threshold, double maxValue, CvEnum.ThresholdType thresholdType, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static double Threshold(IInputArray src, IOutputArray dst, double threshold, double maxValue, CvEnum.ThresholdType thresholdType, Stream stream = null)
       {
          return cudaThreshold(src.InputArrayPtr, dst.OutputArrayPtr, threshold, maxValue, thresholdType, stream);
       }
@@ -1097,9 +887,21 @@ namespace Emgu.CV.Cuda
       /// <param name="beta">The scalar</param>
       /// <param name="dst">The destination array.</param>
       /// <param name="tABC">The gemm operation type</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaGemm")]
-      public static extern void Gemm(
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void Gemm(
+         IInputArray src1,
+         IInputArray src2,
+         double alpha,
+         IInputArray src3,
+         double beta,
+         IOutputArray dst,
+         CvEnum.GemmType tABC = GemmType.Default,
+         Stream stream = null)
+      {
+         cudaGemm(src1.InputArrayPtr, src2.InputArrayPtr, alpha, src3 == null ? IntPtr.Zero : src3.InputArrayPtr, beta, dst.OutputArrayPtr, tABC, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaGemm(
          IntPtr src1,
          IntPtr src2,
          double alpha,
@@ -1118,13 +920,13 @@ namespace Emgu.CV.Cuda
       /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
       /// <param name="borderMode">The border mode, use BORDER_TYPE.CONSTANT for default.</param>
       /// <param name="borderValue">The border value, use new MCvScalar() for default.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void WarpAffine(IInputArray src, IOutputArray dst, IntPtr M, CvEnum.Inter flags, CvEnum.BorderType borderMode, MCvScalar borderValue, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void WarpAffine(IInputArray src, IOutputArray dst, IInputArray M, Size dSize, CvEnum.Inter flags = Inter.Linear, CvEnum.BorderType borderMode = BorderType.Constant, MCvScalar borderValue = new MCvScalar(), Stream stream = null)
       {
-         cudaWarpAffine(src.InputArrayPtr, dst.OutputArrayPtr, M, flags, borderMode, ref borderValue, stream);
+         cudaWarpAffine(src.InputArrayPtr, dst.OutputArrayPtr, M.InputArrayPtr, ref dSize, flags, borderMode, ref borderValue, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaWarpAffine(IntPtr src, IntPtr dst, IntPtr M, CvEnum.Inter flags, CvEnum.BorderType borderMode, ref MCvScalar borderValue, IntPtr stream);
+      private static extern void cudaWarpAffine(IntPtr src, IntPtr dst, IntPtr M, ref Size dSize, CvEnum.Inter flags, CvEnum.BorderType borderMode, ref MCvScalar borderValue, IntPtr stream);
 
       /// <summary>
       /// Warps the image using perspective transformation
@@ -1135,13 +937,13 @@ namespace Emgu.CV.Cuda
       /// <param name="flags">Supports NN, LINEAR, CUBIC</param>
       /// <param name="borderMode">The border mode, use BORDER_TYPE.CONSTANT for default.</param>
       /// <param name="borderValue">The border value, use new MCvScalar() for default.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void WarpPerspective(IInputArray src, IOutputArray dst, IntPtr M, CvEnum.Inter flags, CvEnum.BorderType borderMode, MCvScalar borderValue, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void WarpPerspective(IInputArray src, IOutputArray dst, IInputArray M, Size dSize, CvEnum.Inter flags = Inter.Linear, CvEnum.BorderType borderMode = BorderType.Constant, MCvScalar borderValue = new MCvScalar(), Stream stream = null)
       {
-         cudaWarpPerspective(src.InputArrayPtr, dst.OutputArrayPtr, M, flags, borderMode, ref borderValue, stream);
+         cudaWarpPerspective(src.InputArrayPtr, dst.OutputArrayPtr, M.InputArrayPtr, ref dSize, flags, borderMode, ref borderValue, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaWarpPerspective(IntPtr src, IntPtr dst, IntPtr M, CvEnum.Inter flags, CvEnum.BorderType borderMode, ref MCvScalar borderValue, IntPtr stream);
+      private static extern void cudaWarpPerspective(IntPtr src, IntPtr dst, IntPtr M, ref Size dSize, CvEnum.Inter flags, CvEnum.BorderType borderMode, ref MCvScalar borderValue, IntPtr stream);
 
       /// <summary>
       /// DST[x,y] = SRC[xmap[x,y],ymap[x,y]] with bilinear interpolation.
@@ -1153,8 +955,8 @@ namespace Emgu.CV.Cuda
       /// <param name="interpolation">Interpolation type.</param>
       /// <param name="borderMode">Border mode. Use BORDER_CONSTANT for default.</param>
       /// <param name="borderValue">The value of the border.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void Remap(IInputArray src, IOutputArray dst, IInputArray xmap, IInputArray ymap, CvEnum.Inter interpolation, CvEnum.BorderType borderMode, MCvScalar borderValue, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void Remap(IInputArray src, IOutputArray dst, IInputArray xmap, IInputArray ymap, CvEnum.Inter interpolation, CvEnum.BorderType borderMode = BorderType.Constant, MCvScalar borderValue = new MCvScalar(), Stream stream = null)
       {
          cudaRemap(src.InputArrayPtr, dst.OutputArrayPtr, xmap.InputArrayPtr, ymap.InputArrayPtr, interpolation, borderMode, ref borderValue, stream);
       }
@@ -1170,9 +972,14 @@ namespace Emgu.CV.Cuda
       /// <param name="sp">Spatial window radius.</param>
       /// <param name="sr">Color window radius.</param>
       /// <param name="criteria">Termination criteria.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaMeanShiftFiltering")]
-      public static extern void MeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, ref MCvTermCriteria criteria, IntPtr stream);
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
+      public static void MeanShiftFiltering(IInputArray src, IOutputArray dst, int sp, int sr, MCvTermCriteria criteria,
+         Stream stream = null)
+      {
+         cudaMeanShiftFiltering(src.InputArrayPtr, dst.OutputArrayPtr, sp, sr, ref criteria, stream);       
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaMeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, ref MCvTermCriteria criteria, IntPtr stream);
 
       /// <summary>
       /// Performs mean-shift procedure and stores information about processed points (i.e. their colors
@@ -1184,9 +991,14 @@ namespace Emgu.CV.Cuda
       /// <param name="sp">Spatial window radius.</param>
       /// <param name="sr">Color window radius.</param>
       /// <param name="criteria">Termination criteria.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaMeanShiftProc")]
-      public static extern void MeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, ref MCvTermCriteria criteria, IntPtr stream);
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
+      public static void MeanShiftProc(IInputArray src, IOutputArray dstr, IOutputArray dstsp, int sp, int sr,
+         MCvTermCriteria criteria, Stream stream = null)
+      {
+         cudaMeanShiftProc(src.InputArrayPtr, dstr.OutputArrayPtr, dstsp.OutputArrayPtr, sp, sr, ref criteria, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaMeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, ref MCvTermCriteria criteria, IntPtr stream);
 
       /// <summary>
       /// Performs mean-shift segmentation of the source image and eleminates small segments.
@@ -1195,10 +1007,16 @@ namespace Emgu.CV.Cuda
       /// <param name="dst">Segmented Image. Will have the same size and type as src. Note that this is an Image type and not CudaImage type</param>
       /// <param name="sp">Spatial window radius.</param>
       /// <param name="sr">Color window radius.</param>
-      /// <param name="minsize">Minimum segment size. Smaller segements will be merged.</param>
+      /// <param name="minSize">Minimum segment size. Smaller segements will be merged.</param>
       /// <param name="criteria">Termination criteria.</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaMeanShiftSegmentation")]
-      public static extern void MeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, ref MCvTermCriteria criteria);
+      public static void MeanShiftSegmentation(
+         IInputArray src, IOutputArray dst, int sp, int sr, int minSize,
+         MCvTermCriteria criteria)
+      {
+         cudaMeanShiftSegmentation(src.InputArrayPtr, dst.OutputArrayPtr, sp, sr, minSize, ref criteria);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaMeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, ref MCvTermCriteria criteria);
 
       /// <summary>
       /// Rotates an image around the origin (0,0) and then shifts it.
@@ -1210,12 +1028,12 @@ namespace Emgu.CV.Cuda
       /// <param name="yShift">Shift along the verticle axis</param>
       /// <param name="interpolation">Interpolation method. Only INTER_NEAREST, INTER_LINEAR, and INTER_CUBIC are supported.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Rotate(IInputArray src, IOutputArray dst, double angle, double xShift, double yShift, CvEnum.InpaintType interpolation, Stream stream)
+      public static void Rotate(IInputArray src, IOutputArray dst, Size dSize, double angle, double xShift = 0, double yShift = 0, CvEnum.Inter interpolation = Inter.Linear, Stream stream = null)
       {
-         cudaRotate(src.InputArrayPtr, dst.OutputArrayPtr, angle, xShift, yShift, interpolation, stream);
+         cudaRotate(src.InputArrayPtr, dst.OutputArrayPtr, ref dSize, angle, xShift, yShift, interpolation, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaRotate(IntPtr src, IntPtr dst, double angle, double xShift, double yShift, CvEnum.InpaintType interpolation, IntPtr stream);
+      private static extern void cudaRotate(IntPtr src, IntPtr dst, ref Size dSize, double angle, double xShift, double yShift, CvEnum.Inter interpolation, IntPtr stream);
 
       /// <summary>
       /// Copies a 2D array to a larger destination array and pads borders with the given constant.
@@ -1228,8 +1046,8 @@ namespace Emgu.CV.Cuda
       /// <param name="right">Number of pixels in each direction from the source image rectangle to extrapolate.</param>
       /// <param name="borderType">Border Type</param>
       /// <param name="value">Border value.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
-      public static void CopyMakeBorder(IInputArray src, IOutputArray dst, int top, int bottom, int left, int right, CvEnum.BorderType borderType, MCvScalar value, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      public static void CopyMakeBorder(IInputArray src, IOutputArray dst, int top, int bottom, int left, int right, CvEnum.BorderType borderType, MCvScalar value = new MCvScalar(), Stream stream = null)
       {
          cudaCopyMakeBorder(src.InputArrayPtr, dst.OutputArrayPtr, top, bottom, left, right, borderType, ref value, stream);
       }
@@ -1243,22 +1061,12 @@ namespace Emgu.CV.Cuda
       /// <param name="sum">The sum GpuMat, supports only CV_32S source type, but will contain unsigned int values</param>
       /// <param name="buffer">The buffer GpuMat, supports only CV32F source type.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Integral(IInputArray src, IOutputArray sum, GpuMat buffer, Stream stream)
+      public static void Integral(IInputArray src, IOutputArray sum, GpuMat buffer, Stream stream = null)
       {
          cudaIntegral(src.InputArrayPtr, sum.OutputArrayPtr, buffer, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaIntegral(IntPtr src, IntPtr sum, IntPtr buffer, IntPtr stream);
-
-      /// <summary>
-      /// Computes the integral image
-      /// </summary>
-      /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>
-      /// <param name="sum">The sum GpuMat, supports only CV_32S source type, but will contain unsigned int values</param>
-      public static void Integral(IInputArray src, IOutputArray sum)
-      {
-         Integral(src, sum, null, null);
-      }
 
       /// <summary>
       /// Computes squared integral image 
@@ -1267,7 +1075,7 @@ namespace Emgu.CV.Cuda
       /// <param name="sqsum">The sqsum GpuMat, supports only CV32F source type.</param>
       /// <param name="buffer">The buffer GpuMat, supports only CV32F source type.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void SqrIntegral(IInputArray src, IOutputArray sqsum, GpuMat buffer, Stream stream)
+      public static void SqrIntegral(IInputArray src, IOutputArray sqsum, GpuMat buffer, Stream stream = null)
       {
          cudaSqrIntegral(src.InputArrayPtr, sqsum.OutputArrayPtr, buffer, stream);
       }
@@ -1290,46 +1098,31 @@ namespace Emgu.CV.Cuda
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The resulting GpuMat of the DST, must be pre-allocated and continious. If single channel, the result is real. If double channel, the result is complex</param>
       /// <param name="flags">DFT flags</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
-      public static void Dft(IInputArray src, IOutputArray dst, CvEnum.DxtType flags, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
+      public static void Dft(IInputArray src, IOutputArray dst, Size dftSize, CvEnum.DxtType flags = DxtType.Forward, Stream stream = null)
       {
-         cudaDft(src.InputArrayPtr, dst.OutputArrayPtr, flags, stream);
+         cudaDft(src.InputArrayPtr, dst.OutputArrayPtr, ref dftSize, flags, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaDft(IntPtr src, IntPtr dst, CvEnum.DxtType flags, IntPtr stream);
+      private static extern void cudaDft(IntPtr src, IntPtr dst, ref Size dftSize, CvEnum.DxtType flags, IntPtr stream);
 
       /// <summary>
       /// Calculates histogram with evenly distributed bins for signle channel source.
       /// </summary>
       /// <param name="src">The source GpuMat. Supports CV_8UC1, CV_16UC1 and CV_16SC1 types.</param>
-      /// <param name="buffer">The GpuMat Buffer</param>
-      /// <param name="histSize">The size of histogram (number of levels)</param>
-      /// <param name="lowerLevel">The lower level</param>
-      /// <param name="upperLevel">The upper level</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       /// <param name="hist">Histogram with evenly distributed bins. A GpuMat&lt;int&gt; type.</param>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="cudaHistEven")]
-      public static extern void HistEven(IntPtr src, IntPtr hist, IntPtr buffer, int histSize, int lowerLevel, int upperLevel, IntPtr stream);
-
-      /// <summary>
-      /// Calculates histogram with evenly distributed bins for signle channel source.
-      /// </summary>
-      /// <param name="src">The source GpuMat. Supports CV_8UC1, CV_16UC1 and CV_16SC1 types.</param>
       /// <param name="buffer">The GpuMat Buffer</param>
       /// <param name="histSize">The size of histogram (number of levels)</param>
       /// <param name="lowerLevel">The lower level</param>
       /// <param name="upperLevel">The upper level</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       /// <returns>Histogram with evenly distributed bins</returns>
-      public static GpuMat<Int32> HistEven(IntPtr src, IntPtr buffer, int histSize, int lowerLevel, int upperLevel, IntPtr stream)
+      public static void HistEven(IInputArray src, IOutputArray hist, IInputOutputArray buffer, int histSize, int lowerLevel, int upperLevel, Stream stream = null)
       {
-         GpuMat<int> hist = new GpuMat<int>();
-         HistEven(src, hist, buffer, histSize, lowerLevel, upperLevel, stream);
-         return hist;
+         cudaHistEven(src.InputArrayPtr, hist.OutputArrayPtr, buffer == null ? IntPtr.Zero:buffer.InputOutputArrayPtr, histSize, lowerLevel, upperLevel, stream);  
       }
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaCreateOpticalFlowNeedleMap")]
-      private static extern void CreateOpticalFlowNeedleMap(IntPtr u, IntPtr v, IntPtr vertex, IntPtr colors);
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaHistEven(IntPtr src, IntPtr hist, IntPtr buffer, int histSize, int lowerLevel, int upperLevel, IntPtr stream);
 
       /// <summary>
       /// Draw the optical flow needle map
@@ -1338,10 +1131,12 @@ namespace Emgu.CV.Cuda
       /// <param name="v"></param>
       /// <param name="vertex"></param>
       /// <param name="colors"></param>
-      public static void CreateOpticalFlowNeedleMap(CudaImage<Gray, float> u, CudaImage<Gray, float> v, GpuMat<float> vertex, GpuMat<float> colors)
+      public static void CreateOpticalFlowNeedleMap(GpuMat u, GpuMat v, GpuMat vertex, GpuMat colors)
       {
-         CreateOpticalFlowNeedleMap(u, v, vertex, colors);
+         cudaCreateOpticalFlowNeedleMap(u, v, vertex, colors);
       }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaCreateOpticalFlowNeedleMap(IntPtr u, IntPtr v, IntPtr vertex, IntPtr colors);
 
       /// <summary>
       /// Performs linear blending of two images.
@@ -1351,9 +1146,14 @@ namespace Emgu.CV.Cuda
       /// <param name="weights1">Weights for first image. Must have tha same size as img1. Supports only CV_32F type.</param>
       /// <param name="weights2">Weights for second image. Must have tha same size as img2. Supports only CV_32F type.</param>
       /// <param name="result">Destination image.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaBlendLinear")]
-      public static extern void BlendLinear(IntPtr img1, IntPtr img2, IntPtr weights1, IntPtr weights2, IntPtr result, IntPtr stream);
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
+      public static void BlendLinear(IInputArray img1, IInputArray img2, IInputArray weights1, IInputArray weights2, IOutputArray result,
+         Stream stream = null)
+      {
+         cudaBlendLinear(img1.InputArrayPtr, img2.InputArrayPtr, weights1.InputArrayPtr, weights2.InputArrayPtr, result.OutputArrayPtr, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaBlendLinear(IntPtr img1, IntPtr img2, IntPtr weights1, IntPtr weights2, IntPtr result, IntPtr stream);
 
       /// <summary>
       /// Applies bilateral filter to the image.
@@ -1364,14 +1164,13 @@ namespace Emgu.CV.Cuda
       /// <param name="sigmaColor">Filter sigma in the color space. Larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting in larger areas of semi-equal color</param>
       /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
       /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
-      public static void BilateralFilter(IInputArray src, IOutputArray dst, int kernelSize, float sigmaColor, float sigmaSpace, CvEnum.BorderType borderType, Stream stream)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
+      public static void BilateralFilter(IInputArray src, IOutputArray dst, int kernelSize, float sigmaColor, float sigmaSpace, CvEnum.BorderType borderType = BorderType.Default, Stream stream = null)
       {
          cudaBilateralFilter(src.InputArrayPtr, dst.OutputArrayPtr, kernelSize, sigmaColor, sigmaSpace, borderType, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaBilateralFilter(IntPtr src, IntPtr dst, int kernelSize, float sigmaColor, float sigmaSpace, CvEnum.BorderType borderType, IntPtr stream);
-
 
       /// <summary>
       /// Routines for correcting image color gamma

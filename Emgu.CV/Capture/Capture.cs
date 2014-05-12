@@ -353,7 +353,7 @@ namespace Emgu.CV
       /// <param name="image">The output image</param>
       /// <param name="flag">retrieve flags</param>
       /// <returns> A Gray image frame</returns>
-      public virtual bool RetrieveFrame(IOutputArray image, int flag = 0)
+      public virtual bool Retrieve(IOutputArray image, int flag = 0)
       {      
          if (FlipType == CvEnum.FlipType.None)
          {
@@ -363,7 +363,7 @@ namespace Emgu.CV
          {
             using (Mat tmp = new Mat())
             {
-               bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, tmp.OutputArrayPtr, flag);
+               bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, tmp, flag);
 
                if (success)
                   CvInvoke.Flip(tmp, image, FlipType);
@@ -382,7 +382,7 @@ namespace Emgu.CV
          if (Grab())
          {
             Mat image = new Mat();
-            RetrieveFrame(image);
+            Retrieve(image);
             return image;
          }
          else

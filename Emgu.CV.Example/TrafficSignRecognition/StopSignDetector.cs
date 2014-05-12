@@ -140,14 +140,15 @@ namespace TrafficSignRecognition
                   if ( _observeredKeypoint.Size >= minMatchCount)
                   {
                      int k = 2;
-                     Matrix<int> indices = new Matrix<int>(_observeredDescriptor.Size.Height, k);
+                     //Matrix<int> indices = new Matrix<int>(_observeredDescriptor.Size.Height, k);
                      Matrix<byte> mask;
-                     using (Matrix<float> dist = new Matrix<float>(_observeredDescriptor.Size.Height, k))
+                     //using (Matrix<float> dist = new Matrix<float>(_observeredDescriptor.Size.Height, k))
+                     using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
                      {
-                        _modelDescriptorMatcher.KnnMatch(_observeredDescriptor, indices, dist, k, null);
-                        mask = new Matrix<byte>(dist.Rows, 1);
+                        _modelDescriptorMatcher.KnnMatch(_observeredDescriptor, matches, k, null);
+                        mask = new Matrix<byte>(matches.Size, 1);
                         mask.SetValue(255);
-                        Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
+                        Features2DToolbox.VoteForUniqueness(matches, uniquenessThreshold, mask);
                      }
 
                      int nonZeroCount = CvInvoke.CountNonZero(mask);

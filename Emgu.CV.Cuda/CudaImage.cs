@@ -38,8 +38,8 @@ namespace Emgu.CV.Cuda
       /// Create the CudaImage from the unmanaged pointer.
       /// </summary>
       /// <param name="ptr">The unmanaged pointer to the GpuMat. It is the user's responsibility that the Color type and depth matches between the managed class and unmanaged pointer.</param>
-      public CudaImage(IntPtr ptr)
-         : base(ptr)
+      internal CudaImage(IntPtr ptr, bool needDispose)
+         : base(ptr, needDispose)
       {
       }
 
@@ -47,7 +47,7 @@ namespace Emgu.CV.Cuda
       /// Create a GPU image from a regular image
       /// </summary>
       /// <param name="img">The image to be converted to GPU image</param>
-      public CudaImage(Image<TColor, TDepth> img)
+      public CudaImage(IInputArray img)
          : base(img)
       {
       }
@@ -89,7 +89,7 @@ namespace Emgu.CV.Cuda
       /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       public CudaImage(CudaImage<TColor, TDepth> image, MCvSlice rowRange, MCvSlice colRange)
-         :this(CudaInvoke.GetRegion(image, ref rowRange, ref colRange))
+         :this(CudaInvoke.GetRegion(image, ref rowRange, ref colRange), true)
       {
       }
       #endregion
@@ -143,7 +143,7 @@ namespace Emgu.CV.Cuda
             #region same color
             if (typeof(TDepth) == typeof(TSrcDepth)) //same depth
             {
-               CudaInvoke.Copy(srcImage.Ptr, Ptr, IntPtr.Zero, IntPtr.Zero);
+               srcImage.CopyTo(this);
             } else //different depth
             {
                if (typeof(TDepth) == typeof(Byte) && typeof(TSrcDepth) != typeof(Byte))
@@ -164,11 +164,12 @@ namespace Emgu.CV.Cuda
                      scale = (max == min) ? 0.0 : 255.0 / (max - min);
                      shift = (scale == 0) ? min : -min * scale;
                   }
-
-                  CudaInvoke.ConvertTo(srcImage.Ptr, Ptr, scale, shift, IntPtr.Zero);
+                  srcImage.ConvertTo(this, CvInvoke.GetDepthType(typeof(TDepth)), scale, shift, null);
+                  
                } else
                {
-                  CudaInvoke.ConvertTo(srcImage.Ptr, Ptr, 1.0, 0.0, IntPtr.Zero);
+                  srcImage.ConvertTo(this, CvInvoke.GetDepthType(typeof(TDepth)), 1.0, 0.0, null);
+                  //CudaInvoke.ConvertTo(srcImage.Ptr, Ptr, 1.0, 0.0, IntPtr.Zero);
                }
 
             }
@@ -178,22 +179,22 @@ namespace Emgu.CV.Cuda
             #region different color
             if (typeof(TDepth) == typeof(TSrcDepth))
             {   //same depth
-               ConvertColor(srcImage.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size, null);
+               ConvertColor(srcImage, this, typeof(TSrcColor), typeof(TColor), NumberOfChannels, Size, null);
             } else
             {   //different depth
                using (CudaImage<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
-                  ConvertColor(tmp.Ptr, Ptr, typeof(TSrcColor), typeof(TColor), Size, null);
+                  ConvertColor(tmp, this, typeof(TSrcColor), typeof(TColor), NumberOfChannels, Size, null);
             }
             #endregion
          }
       }
 
-      private static void ConvertColor(IntPtr src, IntPtr dest, Type srcColor, Type destColor, Size size, Stream stream)
+      private static void ConvertColor(IInputArray src, IOutputArray dest, Type srcColor, Type destColor, int dcn, Size size, Stream stream)
       {
          try
          {
             // if the direct conversion exist, apply the conversion
-            CudaInvoke.CvtColor(src, dest, CvToolbox.GetColorCvtCode(srcColor, destColor), stream);
+            CudaInvoke.CvtColor(src, dest, CvToolbox.GetColorCvtCode(srcColor, destColor), dcn, stream);
          } catch
          {
             try
@@ -203,8 +204,8 @@ namespace Emgu.CV.Cuda
                //we don't want the tmp image to be released before the operation is completed.
                using (CudaImage<Bgr, TDepth> tmp = new CudaImage<Bgr, TDepth>(size))
                {
-                  CudaInvoke.CvtColor(src, tmp.Ptr, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)), stream);
-                  CudaInvoke.CvtColor(tmp.Ptr, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), stream);
+                  CudaInvoke.CvtColor(src, tmp, CvToolbox.GetColorCvtCode(srcColor, typeof(Bgr)), 3, stream);
+                  CudaInvoke.CvtColor(tmp, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor), dcn, stream);
                   stream.WaitForCompletion();
                }
             } catch (Exception excpt)
@@ -228,10 +229,12 @@ namespace Emgu.CV.Cuda
       public CudaImage<TColor, TDepth> Clone(Stream stream)
       {
          CudaImage<TColor, TDepth> result = new CudaImage<TColor, TDepth>(Size);
-         CudaInvoke.Copy(_ptr, result, IntPtr.Zero, stream);
+         CopyTo(result, null, stream);
+         
          return result;
       }
 
+      /*
       ///<summary> 
       ///Split current Image into an array of gray scale images where each element 
       ///in the array represent a single color channel of the original image
@@ -252,7 +255,7 @@ namespace Emgu.CV.Cuda
 
          SplitInto(result, stream);
          return result;
-      }
+      }*/
 
       /// <summary>
       /// Resize the CudaImage. The calling GpuMat be GpuMat%lt;Byte&gt;. If stream is specified, it has to be either 1 or 4 channels.
@@ -268,23 +271,6 @@ namespace Emgu.CV.Cuda
          return result;
       }
 
-      ///<summary> 
-      ///Performs a convolution using the specific <paramref name="kernel"/> 
-      ///</summary>
-      ///<param name="kernel">The convolution kernel</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      ///<returns>The result of the convolution</returns>
-      public CudaImage<TColor, TDepth> Convolution(ConvolutionKernelF kernel, Stream stream)
-      {
-         CudaImage<TColor, TDepth> result = new CudaImage<TColor, TDepth>(Size);
-         using (CudaLinearFilter<TColor, TDepth> linearFilter = new CudaLinearFilter<TColor, TDepth>(kernel, kernel.Center, CvEnum.BorderType.Reflect101, new MCvScalar()))
-         {
-            linearFilter.Apply(this, result, stream);
-         }
-         
-         return result;
-      }
-
       /// <summary>
       /// Returns a CudaImage corresponding to a specified rectangle of the current CudaImage. The data is shared with the current matrix. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array.
       /// </summary>
@@ -293,7 +279,7 @@ namespace Emgu.CV.Cuda
       /// <remarks>The parent CudaImage should never be released before the returned CudaImage that represent the subregion</remarks>
       public new CudaImage<TColor, TDepth> GetSubRect(Rectangle region)
       {
-         return new CudaImage<TColor, TDepth>(CudaInvoke.GetSubRect(this, ref region));
+         return new CudaImage<TColor, TDepth>(CudaInvoke.GetSubRect(this, ref region), true);
       }
 
       /// <summary>
@@ -378,23 +364,6 @@ namespace Emgu.CV.Cuda
          }
       }
 #endif
-
-      IImage[] IImage.Split()
-      {
-         return Split(null);
-      }
-
-      /// <summary>
-      /// Saving the GPU image to file
-      /// </summary>
-      /// <param name="fileName">The file to be saved to</param>
-      public void Save(string fileName)
-      {
-         using (Image<TColor, TDepth> tmp = ToImage())
-         {
-            tmp.Save(fileName);
-         }
-      }
 
       #endregion
 

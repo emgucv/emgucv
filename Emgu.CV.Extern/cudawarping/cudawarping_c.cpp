@@ -16,16 +16,14 @@ void cudaPyrUp(cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* s
    cv::cuda::pyrUp(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst,  const CvArr* M, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
+void cudaWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst,  cv::_InputArray* M, CvSize* dSize, int flags, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
 {
-   cv::Mat Mat = cv::cvarrToMat(M);
-   cv::cuda::warpAffine(*src, *dst, Mat, dst->size(), flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::warpAffine(*src, *dst, *M, *dSize, flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst,  const CvArr* M, int flags,  int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
+void cudaWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst,  cv::_InputArray* M, CvSize* size, int flags,  int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
 {
-   cv::Mat Mat = cv::cvarrToMat(M);
-   cv::cuda::warpPerspective(*src, *dst, Mat, dst->size(), flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::warpPerspective(*src, *dst, *M, *size, flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* xmap, cv::_InputArray* ymap, int interpolation, int borderMode, CvScalar* borderValue, cv::cuda::Stream* stream)
@@ -59,7 +57,7 @@ void cudaResize(cv::_InputArray* src, cv::_OutputArray* dst, int interpolation, 
    }
 }
 
-void cudaRotate(cv::_InputArray* src, cv::_OutputArray* dst, double angle, double xShift, double yShift, int interpolation, cv::cuda::Stream* s)
+void cudaRotate(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dSize, double angle, double xShift, double yShift, int interpolation, cv::cuda::Stream* s)
 {
-	cv::cuda::rotate(*src, *dst, dst->size(), angle, xShift, yShift, interpolation, s ? *s : cv::cuda::Stream::Null());
+	cv::cuda::rotate(*src, *dst, *dSize, angle, xShift, yShift, interpolation, s ? *s : cv::cuda::Stream::Null());
 }

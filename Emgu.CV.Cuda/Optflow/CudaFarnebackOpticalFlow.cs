@@ -47,7 +47,7 @@ namespace Emgu.CV.Cuda
       /// <param name="u">Flow horizontal component (along x axis)</param>
       /// <param name="v">Flow vertical component (along y axis)</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Compute(CudaImage<Gray, float> frame0, CudaImage<Gray, float> frame1, CudaImage<Gray, Byte> u, CudaImage<Gray, Byte> v, Stream stream)
+      public void Compute(GpuMat frame0, GpuMat frame1, GpuMat u, GpuMat v, Stream stream = null)
       {
          CudaInvoke.cudaFarnebackOpticalFlowCompute(_ptr, frame0, frame1, u, v, stream);
       }

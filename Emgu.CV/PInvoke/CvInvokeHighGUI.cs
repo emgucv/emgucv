@@ -5,6 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
@@ -56,14 +57,27 @@ namespace Emgu.CV
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveImwrite(IntPtr filename, IntPtr image, IntPtr parameters);
 
+      public static void Imdecode(byte[] buf, CvEnum.LoadImageType loadType, Mat dst)
+      {
+         using (VectorOfByte vb = new VectorOfByte(buf))
+         {
+            Imdecode(vb, loadType, dst);
+         }
+      }
+
       /// <summary>
       /// Decode image stored in the buffer
       /// </summary>
-      /// <param name="bufMat">A pointer to the CvMat that holds the buffer</param>
+      /// <param name="buf">The buffer</param>
       /// <param name="loadType">The image loading type</param>
-      /// <returns>A pointer to the Image decoded.</returns>
-      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvDecodeImage(IntPtr bufMat, CvEnum.LoadImageType loadType);
+      public static void Imdecode(IInputArray buf, CvEnum.LoadImageType loadType, Mat dst)
+      {
+         cveImdecode(buf.InputArrayPtr, loadType, dst);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveImdecode(IntPtr buf, CvEnum.LoadImageType loadType, IntPtr dst);
+
+
 
       /// <summary>
       /// encode image and store the result as a byte vector.
@@ -71,37 +85,22 @@ namespace Emgu.CV
       /// <param name="ext">The image format</param>
       /// <param name="image">The image</param>
       /// <param name="parameters">The pointer to the array of intergers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
-      /// <returns>A pointer to single-row 8uC1 CvMat that represent the encoded image.</returns>
-      [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvEncodeImage([MarshalAs(StringMarshalType)] String ext, IntPtr image, IntPtr parameters);
-
-      /// <summary>
-      /// Decode image stored in the buffer
-      /// </summary>
-      /// <param name="bufMat">The buffer</param>
-      /// <param name="loadType">The image loading type</param>
-      /// <returns>A pointer to the Image decoded.</returns>
-      public static IntPtr cvDecodeImage(byte[] bufMat, CvEnum.LoadImageType loadType)
+      public static void Imencode(String ext, IInputArray image, VectorOfByte buf, params int[] parameters)
       {
-         GCHandle handle = GCHandle.Alloc(bufMat, GCHandleType.Pinned);
-         try
+         using (CvString extStr = new CvString(ext))
+         using (VectorOfInt p = new VectorOfInt())
          {
-            using (Matrix<byte> mat = new Matrix<byte>(bufMat.Length, 1, 1, handle.AddrOfPinnedObject(), bufMat.Length))
-            {
-#region set the continute flag for the mat
-               int CV_MAT_CONT_FLAG = 1<< 14;
-               int type = Marshal.ReadInt32(mat.Ptr, MCvMatConstants.TypeOffset );
-               Marshal.WriteInt32(mat.Ptr, MCvMatConstants.TypeOffset, type | CV_MAT_CONT_FLAG);
-#endregion
+            if (parameters.Length > 0)
+               p.Push(parameters);
 
-               return cvDecodeImage(mat, loadType);
-            }
-         }
-         finally
-         {
-            handle.Free();
+            cveImencode(extStr, image.InputArrayPtr, buf, p);
+            
          }
       }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveImencode(IntPtr ext, IntPtr image, IntPtr buffer, IntPtr parameters);
+
 
       [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvNamedWindow")]
       private static extern int _cvNamedWindow([MarshalAs(StringMarshalType)] String name, int flags);

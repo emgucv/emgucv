@@ -10,7 +10,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV;
-using Emgu.CV.Structure;
+ using Emgu.CV.CvEnum;
+ using Emgu.CV.Structure;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -20,7 +21,7 @@ namespace Emgu.CV.Cuda
    /// </summary>
    public class CudaCascadeClassifier : UnmanagedObject
    {
-      private GpuMat<int> _buffer;
+      private GpuMat _buffer;
       private MemStorage _stor;
 
       /// <summary>
@@ -32,8 +33,9 @@ namespace Emgu.CV.Cuda
 #if !NETFX_CORE
          Debug.Assert(File.Exists(fileName), String.Format("The Cascade file {0} does not exist.", fileName));
 #endif
-         _ptr = CudaInvoke.cudaCascadeClassifierCreate(fileName);
-         _buffer = new GpuMat<int>(1, 100, 4);
+         using (CvString s = new CvString(fileName))
+            _ptr = CudaInvoke.cudaCascadeClassifierCreate(s);
+         _buffer = new GpuMat(1, 100, DepthType.Cv32S, 4);
          _stor = new MemStorage();
       }
 
@@ -45,7 +47,7 @@ namespace Emgu.CV.Cuda
       /// <param name="minNeighbors">Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure. Use 4 for default.</param>
       /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection). Use Size.Empty for default</param>
       /// <returns>An array of regions for the detected objects</returns>
-      public Rectangle[] DetectMultiScale<TColor>(CudaImage<TColor, Byte> image, double scaleFactor, int minNeighbors, Size minSize) where TColor : struct, IColor
+      public Rectangle[] DetectMultiScale(GpuMat image, double scaleFactor = 1.2, int minNeighbors = 4, Size minSize = new Size())
       {
          try
          {
@@ -83,9 +85,7 @@ namespace Emgu.CV.Cuda
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cudaCascadeClassifierCreate(
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String filename);
+      internal extern static IntPtr cudaCascadeClassifierCreate(IntPtr filename);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaCascadeClassifierRelease(ref IntPtr classified);

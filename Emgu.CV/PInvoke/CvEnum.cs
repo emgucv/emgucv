@@ -2973,6 +2973,11 @@ namespace Emgu.CV.CvEnum
    public enum BorderType
    {
       /// <summary>
+      /// Used by some cuda methods, will pass the value -1 to the function
+      /// </summary>
+      NegativeOne = -1,
+
+      /// <summary>
       /// Border is filled with the fixed value, passed as last parameter of the function
       /// </summary>
       Constant = 0,

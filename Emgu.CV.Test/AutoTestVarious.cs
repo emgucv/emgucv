@@ -2164,24 +2164,43 @@ namespace Emgu.CV.Test
       [Test]
       public void TestImageDecodeBuffer()
       {
-         using (FileStream fs = File.OpenRead(EmguAssert.GetFile( "lena.jpg" )))
+         using (FileStream fs = File.OpenRead(EmguAssert.GetFile("lena.jpg")))
          {
             byte[] data = new byte[fs.Length];
-            fs.Read(data, 0, (int) fs.Length);
+            fs.Read(data, 0, (int)fs.Length);
 
-            IntPtr image = CvInvoke.cvDecodeImage(data, CvEnum.LoadImageType.Color);
+            Mat image = new Mat();
 
-            try
+            CvInvoke.Imdecode(data, LoadImageType.Color, image);
+            Emgu.CV.UI.ImageViewer.Show(image);
+         }
+      }
+
+      [Test]
+      public void TestVectorOfVector()
+      {
+         int[][] v0 = new int[][]
+         {
+            new int[] {1, 2, 3},
+            new int[] {4, 5}, 
+            new int[] {6}
+         };
+
+         using (VectorOfVectorOfInt v = new VectorOfVectorOfInt(v0))
+         {
+            int[][] v1 = v.ToArrayOfArray();
+
+            for (int i = 0; i < v0.Length; i++)
             {
-               Image<Bgr, Byte> img = Image<Bgr, byte>.FromIplImagePtr(image);
-
-               //Emgu.CV.UI.ImageViewer.Show(img);
-            }
-            finally
-            {
-               CvInvoke.cvReleaseImage(ref image);
+               int[] a = v0[i];
+               int[] b = v1[i];
+               for (int j = 0; j < a.Length; j++)
+               {
+                  EmguAssert.IsTrue(a[j] == b[j]);
+               }
             }
          }
+
       }
 
       [Test]
@@ -2490,7 +2509,7 @@ namespace Emgu.CV.Test
          EventHandler captureHandle1 = delegate
          {
             Mat img = new Mat();
-            capture1.RetrieveFrame(img);
+            capture1.Retrieve(img);
             totalFrames1++;
             Trace.WriteLine(String.Format("capture 1 frame {0}: {1}", totalFrames1, DateTime.Now.ToString()));
          };
@@ -2515,7 +2534,7 @@ namespace Emgu.CV.Test
             }
 
             Mat img = new Mat();
-             capture2.RetrieveFrame(img);
+             capture2.Retrieve(img);
             Trace.WriteLine(String.Format("capture 2 frame {0}: {1}", totalFrames2, DateTime.Now.ToString()));
 
             if (needPause)

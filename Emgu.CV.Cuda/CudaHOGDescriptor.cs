@@ -32,22 +32,22 @@ namespace Emgu.CV.Cuda
       /// <param name="blockSize">Block size in cells. Use (16, 16) for default.</param>
       /// <param name="cellSize">Cell size. Use (8, 8) for default.</param>
       /// <param name="blockStride">Block stride. Must be a multiple of cell size. Use (8,8) for default.</param>
-      /// <param name="gammaCorrection">Do gamma correction preprocessing or not. Use true for default.</param>
-      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage. Use 0.2 for default.</param>
-      /// <param name="nbins">Number of bins. Use 9 bins per cell for deafault.</param>
-      /// <param name="nLevels">Maximum number of detection window increases. Use 64 for default</param>
-      /// <param name="winSigma">Gaussian smoothing window parameter. Use -1 for default.</param>
+      /// <param name="gammaCorrection">Do gamma correction preprocessing or not.</param>
+      /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage.</param>
+      /// <param name="nbins">Number of bins.</param>
+      /// <param name="nLevels">Maximum number of detection window increases.</param>
+      /// <param name="winSigma">Gaussian smoothing window parameter.</param>
       /// <param name="winSize">Detection window size. Must be aligned to block size and block stride. Must match the size of the training image. Use (64, 128) for default.</param>
       public CudaHOGDescriptor(
          Size winSize,
          Size blockSize,
          Size blockStride,
          Size cellSize,
-         int nbins,
-         double winSigma,
-         double L2HysThreshold,
-         bool gammaCorrection,
-         int nLevels)
+         int nbins = 9,
+         double winSigma = -1,
+         double L2HysThreshold = 0.2,
+         bool gammaCorrection = true,
+         int nLevels = 64)
       {
          _ptr = CudaInvoke.cudaHOGDescriptorCreate(
             ref winSize,
@@ -109,82 +109,29 @@ namespace Emgu.CV.Cuda
          }
       }
 
-      private Rectangle[] DetectMultiScale(
-         IntPtr image,
-         double hitThreshold,
-         Size winStride,
-         Size padding,
-         double scale,
-         int groupThreshold)
+      /// <summary>
+      /// Perfroms object detection with increasing detection window.
+      /// </summary>
+      /// <param name="image">The CudaImage to search in</param>
+      /// <param name="hitThreshold">The threshold for the distance between features and classifying plane.</param>
+      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
+      /// <param name="padding">Mock parameter to keep CPU interface compatibility. Must be (0,0).</param>
+      /// <param name="scale">Coefficient of the detection window increase.</param>
+      /// <param name="groupThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping.</param>
+      /// <returns>The regions where positives are found</returns>
+      public Rectangle[] DetectMultiScale(
+         GpuMat image,
+         double hitThreshold = 0,
+         Size winStride = new Size(),
+         Size padding = new Size(),
+         double scale = 1.05,
+         int groupThreshold = 2)
       {
          using (Util.VectorOfRect vr = new VectorOfRect())
          {
-            //Seq<Rectangle> rectSeq = new Seq<Rectangle>(storage);
             CudaInvoke.cudaHOGDescriptorDetectMultiScale(_ptr, image, vr.Ptr, hitThreshold, ref winStride, ref padding, scale, groupThreshold);
             return vr.ToArray();
          }
-      }
-
-      /// <summary>
-      /// Perfroms object detection with increasing detection window.
-      /// </summary>
-      /// <param name="image">The CudaImage to search in</param>
-      /// <param name="hitThreshold">The threshold for the distance between features and classifying plane.</param>
-      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
-      /// <param name="padding">Mock parameter to keep CPU interface compatibility. Must be (0,0).</param>
-      /// <param name="scale">Coefficient of the detection window increase.</param>
-      /// <param name="groupThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping.</param>
-      /// <returns>The regions where positives are found</returns>
-      public Rectangle[] DetectMultiScale(
-         CudaImage<Bgra, Byte> image,
-         double hitThreshold,
-         Size winStride,
-         Size padding,
-         double scale,
-         int groupThreshold)
-      {
-         return DetectMultiScale(image.Ptr, hitThreshold, winStride, padding, scale, groupThreshold);
-      }
-
-      /// <summary>
-      /// Perfroms object detection with increasing detection window.
-      /// </summary>
-      /// <param name="image">The CudaImage to search in</param>
-      /// <param name="hitThreshold">The threshold for the distance between features and classifying plane.</param>
-      /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
-      /// <param name="padding">Mock parameter to keep CPU interface compatibility. Must be (0,0).</param>
-      /// <param name="scale">Coefficient of the detection window increase.</param>
-      /// <param name="groupThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping.</param>
-      /// <returns>The regions where positives are found</returns>
-      public Rectangle[] DetectMultiScale(
-         CudaImage<Gray, Byte> image,
-         double hitThreshold,
-         Size winStride,
-         Size padding,
-         double scale,
-         int groupThreshold)
-      {
-         return DetectMultiScale(image.Ptr, hitThreshold, winStride, padding, scale, groupThreshold);
-      }
-
-      /// <summary>
-      /// Perfroms object detection with increasing detection window.
-      /// </summary>
-      /// <param name="image">The CudaImage to search in</param>
-      /// <returns>The regions where positives are found</returns>
-      public Rectangle[] DetectMultiScale(CudaImage<Bgra, Byte> image)
-      {
-         return DetectMultiScale(image, 0, new Size(8, 8), new Size(0, 0), 1.05, 2);
-      }
-
-      /// <summary>
-      /// Perfroms object detection with increasing detection window.
-      /// </summary>
-      /// <param name="image">The CudaImage to search in</param>
-      /// <returns>The regions where positives are found</returns>
-      public Rectangle[] DetectMultiScale(CudaImage<Gray, Byte> image)
-      {
-         return DetectMultiScale(image, 0, new Size(8, 8), new Size(0, 0), 1.05, 2);
       }
 
       /// <summary>

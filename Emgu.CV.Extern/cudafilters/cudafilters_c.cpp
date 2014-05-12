@@ -28,10 +28,9 @@ cv::cuda::Filter* cudaCreateLaplacianFilter(int srcType, int dstType, int ksize,
    return ptr.get();
 }
 
-cv::cuda::Filter* cudaCreateLinearFilter(int srcType, int dstType, const CvArr* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue)
+cv::cuda::Filter* cudaCreateLinearFilter(int srcType, int dstType, cv::_InputArray* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue)
 {
-   cv::Mat kMat = cv::cvarrToMat(kernel);
-   cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createLinearFilter(srcType, dstType, kMat, *anchor, borderMode, *borderValue);
+   cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createLinearFilter(srcType, dstType, *kernel, *anchor, borderMode, *borderValue);
    ptr.addref();
    return ptr.get();
 }
@@ -52,10 +51,9 @@ cv::cuda::Filter* cudaCreateBoxMinFilter( int srcType, emgu::size* ksize, CvPoin
    return ptr.get();
 }
 
-cv::cuda::Filter* cudaCreateMorphologyFilter( int op, int srcType, const CvArr* kernel, CvPoint* anchor, int iterations)
+cv::cuda::Filter* cudaCreateMorphologyFilter( int op, int srcType, cv::_InputArray* kernel, CvPoint* anchor, int iterations)
 {
-   cv::Mat kernelMat = kernel ? cv::cvarrToMat(kernel) : cv::Mat();
-   cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createMorphologyFilter(op, srcType, kernelMat, *anchor, iterations);
+   cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createMorphologyFilter(op, srcType, *kernel, *anchor, iterations);
    ptr.addref();
    return ptr.get();
 }

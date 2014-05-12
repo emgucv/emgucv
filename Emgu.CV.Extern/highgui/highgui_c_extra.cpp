@@ -111,3 +111,12 @@ int cveVideoWriterFourcc(char c1, char c2, char c3, char c4)
 {
    return cv::VideoWriter::fourcc(c1, c2, c3, c4);
 }
+
+void cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst)
+{
+   cv::imdecode(*buf, flags, dst);
+}
+void cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params)
+{
+   cv::imencode(*ext, *img, *buf, params ? *params : std::vector<int>());
+}

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -28,7 +29,7 @@ namespace Emgu.CV
    /// The equavailent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
-   public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray, IImage
+   public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray, IImage, IEquatable<Mat>
    {
       internal IntPtr _inputArrayPtr;
       internal IntPtr _outputArrayPtr;
@@ -730,6 +731,17 @@ namespace Emgu.CV
       object ICloneable.Clone()
       {
          return this.Clone();
+      }
+
+      public bool Equals(Mat other)
+      {
+         if (!Size.Equals(other.Size) && NumberOfChannels == other.NumberOfChannels)
+            return false;
+
+         Mat cmpResult = new Mat();
+         CvInvoke.Compare(this, other, cmpResult, CmpType.NotEqual);
+         Mat reshaped = cmpResult.Reshape(1);
+         return CvInvoke.CountNonZero(reshaped) == 0;
       }
    }
 

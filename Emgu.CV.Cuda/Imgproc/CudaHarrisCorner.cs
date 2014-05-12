@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
@@ -28,9 +29,9 @@ namespace Emgu.CV.Cuda
       /// <param name="kSize"></param>
       /// <param name="k">Harris detector free parameter.</param>
       /// <param name="borderType">Boreder type, use REFLECT101 for default</param>
-      public CudaHarrisCorner(int blockSize, int kSize, double k, CvEnum.BorderType borderType)
+      public CudaHarrisCorner(DepthType srcDepth, int srcChannels, int blockSize, int kSize, double k, CvEnum.BorderType borderType = BorderType.Default)
       {
-         _ptr = CudaInvoke.cudaCreateHarrisCorner(_matType, blockSize, kSize, k, borderType);
+         _ptr = CudaInvoke.cudaCreateHarrisCorner(CvInvoke.MakeType(srcDepth, srcChannels), blockSize, kSize, k, borderType);
       }
    }
 

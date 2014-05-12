@@ -74,7 +74,7 @@ CVAPI(bool) targetArchsHasEqualOrGreaterBin(int major, int minor);
 
 CVAPI(cv::cuda::GpuMat*) gpuMatCreateDefault();
 
-CVAPI(cv::cuda::GpuMat*) gpuMatCreate(int rows, int cols, int type);
+CVAPI(void) gpuMatCreate(cv::cuda::GpuMat* m, int rows, int cols, int type);
 
 CVAPI(cv::cuda::GpuMat*) gpuMatCreateContinuous(int rows, int cols, int type);
 
@@ -84,7 +84,7 @@ CVAPI(cv::cuda::GpuMat*) gpuMatGetRegion(cv::cuda::GpuMat* other, CvSlice* rowRa
 
 CVAPI(void) gpuMatRelease(cv::cuda::GpuMat** mat);
 
-CVAPI(cv::cuda::GpuMat*) gpuMatCreateFromArr(CvArr* arr);
+CVAPI(cv::cuda::GpuMat*) gpuMatCreateFromInputArray(cv::_InputArray* arr);
 
 CVAPI(emgu::size) gpuMatGetSize(cv::cuda::GpuMat* gpuMat);
 
@@ -94,13 +94,15 @@ CVAPI(int) gpuMatGetChannels(cv::cuda::GpuMat* gpuMat);
 
 CVAPI(int) gpuMatGetType(cv::cuda::GpuMat* gpuMat);
 
-CVAPI(void) gpuMatUpload(cv::cuda::GpuMat* gpuMat, CvArr* arr);
+CVAPI(int) gpuMatGetDepth(cv::cuda::GpuMat* gpuMat);
 
-CVAPI(void) gpuMatDownload(cv::cuda::GpuMat* gpuMat, CvArr* arr);
+CVAPI(void) gpuMatUpload(cv::cuda::GpuMat* gpuMat, cv::_InputArray* arr);
 
-CVAPI(void) gpuMatConvertTo(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, double alpha, double beta, cv::cuda::Stream* stream);
+CVAPI(void) gpuMatDownload(cv::cuda::GpuMat* gpuMat, cv::_OutputArray* arr);
 
-CVAPI(void) gpuMatCopy(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, const cv::cuda::GpuMat* mask, cv::cuda::Stream* stream);
+CVAPI(void) gpuMatConvertTo(const cv::cuda::GpuMat* src, cv::_OutputArray* dst, int rtype, double alpha, double beta, cv::cuda::Stream* stream);
+
+CVAPI(void) gpuMatCopyTo(const cv::cuda::GpuMat* src, cv::_OutputArray* dst, const cv::_InputArray* mask, cv::cuda::Stream* stream);
 
 CVAPI(void) gpuMatSetTo(cv::cuda::GpuMat* mat, const CvScalar* s, cv::_InputArray* mask, cv::cuda::Stream* stream);
 
@@ -114,7 +116,7 @@ CVAPI(cv::cuda::GpuMat*) gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* r
 //  CudaCascadeClassifier
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::CascadeClassifier_CUDA*) cudaCascadeClassifierCreate(const char* filename);
+CVAPI(cv::cuda::CascadeClassifier_CUDA*) cudaCascadeClassifierCreate(cv::String* filename);
 
 CVAPI(void) cudaCascadeClassifierRelease(cv::cuda::CascadeClassifier_CUDA** classifier);
 

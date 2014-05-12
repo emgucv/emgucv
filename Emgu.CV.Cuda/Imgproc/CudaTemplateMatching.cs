@@ -8,7 +8,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
-using Emgu.CV.Structure;
+﻿using Emgu.CV.CvEnum;
+﻿using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
@@ -17,22 +18,16 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Cuda template matching filter.
    /// </summary>
-   public class CudaTemplateMatching<TColor, TDepth> : UnmanagedObject
-      where TColor : struct, IColor
-      where TDepth : new()
+   public class CudaTemplateMatching : UnmanagedObject
    {
-      private CvEnum.TemplateMatchingType _method;
-      private Size _blockSize;
-
       /// <summary>
       /// Create a Cuda template matching filter
       /// </summary>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
       /// <param name="blockSize">The block size</param>
-      public CudaTemplateMatching(CvEnum.TemplateMatchingType method, Size blockSize)
+      public CudaTemplateMatching(DepthType depthType, int channels, CvEnum.TemplateMatchingType method, Size blockSize = new Size())
       {
-         _method = method;
-         _blockSize = blockSize;
+         _ptr = CudaInvoke.cudaTemplateMatchingCreate(CvInvoke.MakeType(depthType, channels), method, ref blockSize);     
       }
 
       /// <summary>
@@ -42,15 +37,10 @@ namespace Emgu.CV.Cuda
       /// <param name="templ">Searched template; must be not greater than the source image and the same data type as the image</param>
       /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
-      public void Match(CudaImage<TColor, TDepth> image, CudaImage<TColor, TDepth> templ, CudaImage<Gray, float> result, Stream stream)
+      public void Match(IInputArray image, IInputArray templ, IOutputArray result, Stream stream = null)
       {
-         if (_ptr == IntPtr.Zero)
-         {
-            _ptr = CudaInvoke.cudaTemplateMatchingCreate(image.Type, _method, ref _blockSize);
-         }
-         CudaInvoke.cudaTemplateMatchingMatch(_ptr, image, templ, result, stream);
+         CudaInvoke.cudaTemplateMatchingMatch(_ptr, image.InputArrayPtr, templ.InputArrayPtr, result.OutputArrayPtr, stream);
       }
-
 
       /// <summary>
       /// Release the buffer

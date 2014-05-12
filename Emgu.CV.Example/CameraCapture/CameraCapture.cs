@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
@@ -23,6 +24,7 @@ namespace CameraCapture
       public CameraCapture()
       {
          InitializeComponent();
+         CvInvoke.UseOpenCL = false;
          try
          {
             _capture = new Capture();
@@ -36,12 +38,21 @@ namespace CameraCapture
 
       private void ProcessFrame(object sender, EventArgs arg)
       {
-         Image<Bgr, Byte> frame = _capture.RetrieveBgrFrame();
+         UMat frame = new UMat();
+         _capture.Retrieve(frame, 0);
+         UMat grayFrame = new UMat();
+         CvInvoke.CvtColor(frame, grayFrame, ColorConversion.Bgr2Gray);
+         UMat smallGrayFrame = new UMat();
+         CvInvoke.PyrDown(grayFrame, smallGrayFrame);
+         UMat smoothedGrayFrame = new UMat();
+         CvInvoke.PyrUp(smallGrayFrame, smoothedGrayFrame);
+         
+         //Image<Gray, Byte> smallGrayFrame = grayFrame.PyrDown();
+         //Image<Gray, Byte> smoothedGrayFrame = smallGrayFrame.PyrUp();
+         UMat cannyFrame = new UMat();
+         CvInvoke.Canny(smoothedGrayFrame, cannyFrame, 100, 60);
 
-         Image<Gray, Byte> grayFrame = frame.Convert<Gray, Byte>();
-         Image<Gray, Byte> smallGrayFrame = grayFrame.PyrDown();
-         Image<Gray, Byte> smoothedGrayFrame = smallGrayFrame.PyrUp();
-         Image<Gray, Byte> cannyFrame = smoothedGrayFrame.Canny(100, 60);
+         //Image<Gray, Byte> cannyFrame = smoothedGrayFrame.Canny(100, 60);
 
          captureImageBox.Image = frame;
          grayscaleImageBox.Image = grayFrame;
