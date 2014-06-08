@@ -181,7 +181,7 @@ cv::cuda::HoughLinesDetector* cudaHoughLinesDetectorCreate(float rho, float thet
    ptr.addref();
    return ptr.get();
 }
-void cudaHoughLinesDetectorDetect(cv::cuda::HoughLinesDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* lines)
+void cudaHoughLinesDetectorDetect(cv::cuda::HoughLinesDetector* detector, cv::_InputArray* src, cv::_OutputArray* lines)
 {
    detector->detect(*src, *lines);
 }

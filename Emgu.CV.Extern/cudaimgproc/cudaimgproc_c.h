@@ -92,7 +92,7 @@ CVAPI(void) cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, cv::_Input
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::HoughLinesDetector*) cudaHoughLinesDetectorCreate(float rho, float theta, int threshold, bool doSort, int maxLines);
-CVAPI(void) cudaHoughLinesDetectorDetect(cv::cuda::HoughLinesDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* lines);
+CVAPI(void) cudaHoughLinesDetectorDetect(cv::cuda::HoughLinesDetector* detector, cv::_InputArray* src, cv::_OutputArray* lines);
 CVAPI(void) cudaHoughLinesDetectorRelease(cv::cuda::HoughLinesDetector** detector);
 
 //----------------------------------------------------------------------------

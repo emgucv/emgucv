@@ -1,0 +1,446 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4A19699C-FA59-4B27-8F3A-74B523EB73F6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Emgu.CV.Test.Windows.Store</RootNamespace>
+    <AssemblyName>Emgu.CV.Test.Windows.Store</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>Emgu.CV.Test.Windows.Store_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AppXPackage>True</AppXPackage>
+    <AppxPackageIncludePrivateSymbols>true</AppxPackageIncludePrivateSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <!--A reference to the entire .Net Framework and Windows SDK are automatically included-->
+    <SDKReference Include="MSTestFramework, Version=11.0" />
+    <SDKReference Include="TestPlatform, Version=11.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\AutoTestImage.cs">
+      <Link>AutoTestImage.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestMat.cs">
+      <Link>AutoTestMat.cs</Link>
+    </Compile>
+    <Compile Include="..\EmguAssert.cs">
+      <Link>EmguAssert.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\bin\x64\cvextern.dll">
+      <Link>x64\cvextern.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_calib3d300.dll">
+      <Link>x64\opencv_calib3d300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_contrib300.dll">
+      <Link>x64\opencv_contrib300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_core300.dll">
+      <Link>x64\opencv_core300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cuda300.dll">
+      <Link>x64\opencv_cuda300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cudaarithm300.dll">
+      <Link>x64\opencv_cudaarithm300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cudabgsegm300.dll">
+      <Link>x64\opencv_cudabgsegm300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cudacodec300.dll">
+      <Link>x64\opencv_cudacodec300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cudafeatures2d300.dll">
+      <Link>x64\opencv_cudafeatures2d300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cudafilters300.dll">
+      <Link>x64\opencv_cudafilters300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cudaimgproc300.dll">
+      <Link>x64\opencv_cudaimgproc300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cudaoptflow300.dll">
+      <Link>x64\opencv_cudaoptflow300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cudastereo300.dll">
+      <Link>x64\opencv_cudastereo300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_cudawarping300.dll">
+      <Link>x64\opencv_cudawarping300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_features2d300.dll">
+      <Link>x64\opencv_features2d300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_flann300.dll">
+      <Link>x64\opencv_flann300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_highgui300.dll">
+      <Link>x64\opencv_highgui300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_imgproc300.dll">
+      <Link>x64\opencv_imgproc300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_legacy300.dll">
+      <Link>x64\opencv_legacy300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_ml300.dll">
+      <Link>x64\opencv_ml300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_nonfree300.dll">
+      <Link>x64\opencv_nonfree300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_objdetect300.dll">
+      <Link>x64\opencv_objdetect300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_optim300.dll">
+      <Link>x64\opencv_optim300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_photo300.dll">
+      <Link>x64\opencv_photo300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_shape300.dll">
+      <Link>x64\opencv_shape300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_softcascade300.dll">
+      <Link>x64\opencv_softcascade300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_stitching300.dll">
+      <Link>x64\opencv_stitching300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_superres300.dll">
+      <Link>x64\opencv_superres300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_video300.dll">
+      <Link>x64\opencv_video300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_videostab300.dll">
+      <Link>x64\opencv_videostab300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\cvextern.dll">
+      <Link>x86\cvextern.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_calib3d300.dll">
+      <Link>x86\opencv_calib3d300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_contrib300.dll">
+      <Link>x86\opencv_contrib300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_core300.dll">
+      <Link>x86\opencv_core300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cuda300.dll">
+      <Link>x86\opencv_cuda300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cudaarithm300.dll">
+      <Link>x86\opencv_cudaarithm300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cudabgsegm300.dll">
+      <Link>x86\opencv_cudabgsegm300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cudacodec300.dll">
+      <Link>x86\opencv_cudacodec300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cudafeatures2d300.dll">
+      <Link>x86\opencv_cudafeatures2d300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cudafilters300.dll">
+      <Link>x86\opencv_cudafilters300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cudaimgproc300.dll">
+      <Link>x86\opencv_cudaimgproc300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cudaoptflow300.dll">
+      <Link>x86\opencv_cudaoptflow300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cudastereo300.dll">
+      <Link>x86\opencv_cudastereo300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_cudawarping300.dll">
+      <Link>x86\opencv_cudawarping300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_features2d300.dll">
+      <Link>x86\opencv_features2d300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_flann300.dll">
+      <Link>x86\opencv_flann300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_highgui300.dll">
+      <Link>x86\opencv_highgui300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_imgproc300.dll">
+      <Link>x86\opencv_imgproc300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_legacy300.dll">
+      <Link>x86\opencv_legacy300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_ml300.dll">
+      <Link>x86\opencv_ml300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_nonfree300.dll">
+      <Link>x86\opencv_nonfree300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_objdetect300.dll">
+      <Link>x86\opencv_objdetect300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_optim300.dll">
+      <Link>x86\opencv_optim300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_photo300.dll">
+      <Link>x86\opencv_photo300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_shape300.dll">
+      <Link>x86\opencv_shape300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_softcascade300.dll">
+      <Link>x86\opencv_softcascade300.dll</Link>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_stitching300.dll">
+      <Link>x86\opencv_stitching300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_superres300.dll">
+      <Link>x86\opencv_superres300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_video300.dll">
+      <Link>x86\opencv_video300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_videostab300.dll">
+      <Link>x86\opencv_videostab300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <None Include="Emgu.CV.Test.Windows.Store_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
+      <Link>haarcascade_eye.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\c\box.png">
+      <Link>box.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\c\box_in_scene.png">
+      <Link>box_in_scene.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\c\lena.jpg">
+      <Link>lena.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\c\stuff.jpg">
+      <Link>stuff.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\pedestrian.png">
+      <Link>pedestrian.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\UnitTestLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\UnitTestSmallLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\UnitTestSplashScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\UnitTestStoreLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Windows.Store.csproj">
+      <Project>{c2293433-3c88-473c-ae81-bbbe5d5e1746}</Project>
+      <Name>Emgu.CV.Cuda.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.Windows.Store.csproj">
+      <Project>{8de0b8cf-c318-44cc-9363-221067b74347}</Project>
+      <Name>Emgu.CV.ML.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.Windows.Store.csproj">
+      <Project>{30d83975-9df1-46d5-9fcd-55cdc5086af0}</Project>
+      <Name>Emgu.CV.Nonfree.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Shape\Emgu.CV.Shape.Windows.Store.csproj">
+      <Project>{4e99b79c-61e5-4244-8017-0c45b59da98d}</Project>
+      <Name>Emgu.CV.Shape.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Softcascade\Emgu.CV.Softcascade.Windows.Store.csproj">
+      <Project>{1819bb9a-c4a9-453b-9eb9-a7e4a85edc29}</Project>
+      <Name>Emgu.CV.Softcascade.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Windows.Store.csproj">
+      <Project>{67658000-1e4b-4417-a982-54a374e9d94b}</Project>
+      <Name>Emgu.CV.Stitching.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.Windows.Store.csproj">
+      <Project>{5eaf5de0-b0db-40df-b136-892299044003}</Project>
+      <Name>Emgu.CV.VideoStab.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Windows.Store.csproj">
+      <Project>{1f7091da-c6eb-417b-8d2f-58c6151377a0}</Project>
+      <Name>Emgu.CV.Windows.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.Windows.Store.csproj">
+      <Project>{991d295c-714d-4427-835b-e0314009ae5c}</Project>
+      <Name>Emgu.Util.Windows.Store</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
+    <VisualStudioVersion>11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>  
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -18,7 +18,6 @@ namespace Emgu.CV.Cuda
    /// </summary>
    public class CudaHoughCirclesDetector : UnmanagedObject
    {
-
       /// <summary>
       /// Create hough circles detector
       /// </summary>
@@ -43,7 +42,7 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaImage = image.GetInputArray())
          using (OutputArray oaCircles = circles.GetOutputArray())
-         CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, iaImage, oaCircles);
+            CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, iaImage, oaCircles);
       }
 
       /// <summary>

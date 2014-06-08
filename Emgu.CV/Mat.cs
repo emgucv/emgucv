@@ -363,6 +363,8 @@ namespace Emgu.CV
          {
             //different depth, same color
             Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
+            ConvertTo(result, CvInvoke.GetDepthType(typeof(TDepth)) );
+            /*
             if (numberOfChannels == 1)
             {
                using (Image<Gray, TDepth> tmp = this.ToImage<Gray, TDepth>())
@@ -381,14 +383,20 @@ namespace Emgu.CV
             else
             {
                throw new Exception("Unsupported conversion");
-            }
+            }*/
             return result;
          }
          else if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension != numberOfChannels)
          {
             //same depth, different color
             Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
-
+            CvInvoke.CvtColor(
+               this, result, 
+               numberOfChannels == 1 ? typeof(Gray) : 
+               numberOfChannels == 3 ? typeof(Bgr) :
+               typeof(Bgra), 
+               typeof(TColor));
+            /*
             CvEnum.DepthType depth = Depth;
             if (depth == CvEnum.DepthType.Cv8U)
             {
@@ -428,7 +436,7 @@ namespace Emgu.CV
             else
             {
                throw new Exception("Unsupported conversion");
-            }
+            }*/
             return result;
          }
          else

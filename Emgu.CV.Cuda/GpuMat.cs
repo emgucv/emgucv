@@ -419,6 +419,7 @@ namespace Emgu.CV.Cuda
          return result;
       }
 
+#if !NETFX_CORE
       public Bitmap Bitmap
       {
          get
@@ -430,6 +431,7 @@ namespace Emgu.CV.Cuda
             }
          }
       }
+#endif
 
       /// <summary>
       /// Returns the min / max location and values for the image
@@ -474,7 +476,13 @@ namespace Emgu.CV.Cuda
 
       IImage[] IImage.Split()
       {
-         return Array.ConvertAll(Split(null), (m) => (IImage) m);
+         return
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll(Split(null), (m) => (IImage) m);
       }
 
       public void Save(string fileName)

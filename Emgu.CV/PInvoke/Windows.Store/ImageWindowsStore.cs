@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Windows.Media.Capture;
 using Windows.Storage.Streams;
@@ -19,10 +20,7 @@ using System.Threading.Tasks;
 
 namespace Emgu.CV
 {
-   public partial class Image<TColor, TDepth>
-      : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>>
-      where TColor : struct, IColor
-      where TDepth : new()
+   public partial class Mat
    {
       public WriteableBitmap ToWritableBitmap()
       {
@@ -42,7 +40,7 @@ namespace Emgu.CV
          return bmp;
       }
       
-      public static async Task<Image<TColor, TDepth>> FromStorageFile(StorageFile file)
+      public static async Task<Mat> FromStorageFile(StorageFile file)
       {
          using (IRandomAccessStream fileStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
          {
@@ -59,16 +57,15 @@ namespace Emgu.CV
             GCHandle handle = GCHandle.Alloc(sourcePixels, GCHandleType.Pinned);
             using (Image<Bgra, Byte> img = new Image<Bgra, byte>(s.Width, s.Height, s.Width * 4, handle.AddrOfPinnedObject()))
             {
-               Image<TColor, TDepth> result = new Image<TColor, TDepth>(img.Size);
-               result.ConvertFrom(img);
-
+               Mat m = new Mat();
+               CvInvoke.CvtColor(img, m, ColorConversion.Bgra2Bgr);
                handle.Free();
-               return result;
+               return m;
             }
          }
       }
 
-      public static async Task<Image<TColor, TDepth>> FromMediaCapture(MediaCapture _mediaCapture)
+      public static async Task<Mat> FromMediaCapture(MediaCapture _mediaCapture)
       {
          using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
          {
@@ -76,7 +73,9 @@ namespace Emgu.CV
             stream.Seek(0);
             byte[] data = new byte[stream.Size];
             await stream.AsStreamForRead().ReadAsync(data, 0, data.Length);
-            return Image<TColor, TDepth>.FromRawImageData(data);
+            Mat result = new Mat();
+            CvInvoke.Imdecode(data, LoadImageType.Color, result);
+            return result;
          }
       }
    }

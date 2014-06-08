@@ -105,6 +105,11 @@ namespace System.Drawing
          {
             return new PointF(X, Y);
          }
+         set
+         {
+            X = value.X;
+            Y = value.Y;
+         }
       }
 
       public SizeF Size
@@ -112,6 +117,11 @@ namespace System.Drawing
          get
          {
             return new SizeF(Width, Height);
+         }
+         set
+         {
+            Width = value.Width;
+            Height = value.Height;
          }
       }
 

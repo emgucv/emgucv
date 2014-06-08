@@ -61,9 +61,9 @@ namespace WindowsStoreCameraApp
 
       private async void CaptureAndProcessButtonClick(object sender, RoutedEventArgs e)
       {
-         using (Image<Bgr, Byte> img = await Image<Bgr, Byte>.FromMediaCapture(_mediaCapture))
+         using (Mat img = await Mat.FromMediaCapture(_mediaCapture))
          {
-            img._Not();
+            CvInvoke.BitwiseNot(img, img);
             ImageView.Source = img.ToWritableBitmap();
          }
       }
@@ -80,9 +80,9 @@ namespace WindowsStoreCameraApp
          StorageFile file = await picker.PickSingleFileAsync();
          if (file != null)
          {
-            using (Image<Bgr, byte> img = await Image<Bgr, Byte>.FromStorageFile(file))
+            using (Mat img = await Mat.FromStorageFile(file))
             {
-               img._Not();
+               CvInvoke.BitwiseNot(img, img);
                ImageView.Source = img.ToWritableBitmap();
             }
          }

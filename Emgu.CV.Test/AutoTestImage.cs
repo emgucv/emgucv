@@ -16,12 +16,20 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-#if !IOS
+#if !(IOS || NETFX_CORE)
 using Emgu.CV.UI;
 #endif
 using Emgu.CV.Util;
 using Emgu.Util;
+
+#if NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+using Trace = System.Diagnostics.Debug;
+#else
 using NUnit.Framework;
+#endif
 
 namespace Emgu.CV.Test
 {
@@ -29,7 +37,7 @@ namespace Emgu.CV.Test
    [TestFixture]
    public class AutoTestImage
    {
-      [Test]
+      [TestAttribute]
       public void TestOpenCLSetGet()
       {
          CvInvoke.UseOpenCL = false;
@@ -50,7 +58,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestAccumulateWeighted()
       {
          int startValue = 50;
@@ -76,7 +84,7 @@ namespace Emgu.CV.Test
                   });
       }
 
-      [Test]
+      [TestAttribute]
       public void TestSobelScharr()
       {
          Image<Gray, byte> img = EmguAssert.LoadImage<Gray, Byte>("lena.jpg");
@@ -99,7 +107,7 @@ namespace Emgu.CV.Test
                   });
       }
 
-      [Test]
+      [TestAttribute]
       public void TestSetValue()
       {
          Image<Bgr, Single> img1 = new Image<Bgr, float>(50, 20, new Bgr(8.0, 1.0, 2.0));
@@ -111,7 +119,7 @@ namespace Emgu.CV.Test
             }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestIplImageSize()
       {
          //EmguAssert.IsTrue(Marshal.SizeOf(typeof(MIplImage)) == 144);
@@ -121,7 +129,7 @@ namespace Emgu.CV.Test
          int tmp = s.Width + s.Height;
       }
 
-      [Test]
+      [TestAttribute]
       public void TestMinMax()
       {
          Image<Gray, Byte> img1 = new Image<Gray, Byte>(50, 60);
@@ -170,7 +178,7 @@ namespace Emgu.CV.Test
          }*/
       }
 
-      [Test]
+      [TestAttribute]
       public void TestAvgSdv()
       {
          Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
@@ -180,7 +188,7 @@ namespace Emgu.CV.Test
          img1.AvgSdv(out mean, out std);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestBgrFloat()
       {
          //String fileName = "lena.jpg";
@@ -189,7 +197,7 @@ namespace Emgu.CV.Test
          Size s = img.Size;
       }
 
-      [Test]
+      [TestAttribute]
       public void TestGenericOperation()
       {
          Image<Gray, Single> img1 = new Image<Gray, float>(50, 20);
@@ -296,7 +304,7 @@ namespace Emgu.CV.Test
          gimg2.Dispose();
       }
 
-      [Test]
+      [TestAttribute]
       public void TestConvertDepth()
       {
          Image<Gray, Byte> img1 = new Image<Gray, byte>(100, 100, new Gray(10.0));
@@ -310,7 +318,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(img5.Equals(img1));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestMemory()
       {
          for (int i = 0; i <= 100; i++)
@@ -319,7 +327,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestConversion()
       {
          Image<Bgr, Single> img1 = new Image<Bgr, Single>(100, 100);
@@ -331,7 +339,7 @@ namespace Emgu.CV.Test
 
       }
 
-      [Test]
+      [TestAttribute]
       public void TestGenericSetColor()
       {
          Image<Bgr, Byte> img1 = new Image<Bgr, Byte>(20, 40, new Bgr());
@@ -363,6 +371,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(img1.Equals(img2));
       }
 
+#if !NETFX_CORE
       public static byte[] GetBytesFromFile(string fullFilePath)
       {
          using (FileStream fs = File.OpenRead(fullFilePath))
@@ -373,7 +382,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestFromJpegData()
       {
          Byte[] data = GetBytesFromFile(EmguAssert.GetFile("lena.jpg"));
@@ -388,7 +397,7 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(imgPng);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestRuntimeSerialize()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
@@ -411,7 +420,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestRuntimeSerializeWithROI()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
@@ -435,8 +444,9 @@ namespace Emgu.CV.Test
             }
          }
       }
+#endif
 
-      [Test]
+      [TestAttribute]
       public void TestSampleLine()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(101, 133);
@@ -449,7 +459,7 @@ namespace Emgu.CV.Test
          buffer = img.Sample(new LineSegment2D(new Point(0, 0), new Point(100, 100)), Emgu.CV.CvEnum.Connectivity.FourConnected);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestGetSize()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(10, 10, new Bgr(255, 255, 255));
@@ -457,7 +467,7 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(size, new Size(10, 10));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestXmlSerialize()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
@@ -482,7 +492,7 @@ namespace Emgu.CV.Test
       }
 
       //TODO: Check out what is wrong with this
-      [Test]
+      [TestAttribute]
       public void TestRotation()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 80);
@@ -496,7 +506,7 @@ namespace Emgu.CV.Test
 
       }
 
-      [Test]
+      [TestAttribute]
       public void TestCascadeClassifierFaceDetect()
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");
@@ -527,7 +537,7 @@ namespace Emgu.CV.Test
       }
 
       /*
-      [Test]
+      [TestAttribute]
       public void TestCascadeClassifierFaceDetect()
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");
@@ -543,8 +553,8 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(image);
       }*/
 
-#if !(IOS || ANDROID)
-      [Test]
+#if !(IOS || ANDROID || NETFX_CORE)
+      [TestAttribute]
       public void TestConstructor()
       {
          for (int i = 0; i < 20; i++)
@@ -576,7 +586,7 @@ namespace Emgu.CV.Test
 
       }
 #endif
-      [Test]
+      [TestAttribute]
       public void TestSub()
       {
          Image<Bgr, Byte> img = new Image<Bgr, Byte>(101, 133);
@@ -587,7 +597,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> img2 = img - 10;
       }
 
-      [Test]
+      [TestAttribute]
       public void TestConvolutionAndLaplace()
       {
          Image<Gray, Byte> image = new Image<Gray, byte>(300, 400);
@@ -620,6 +630,7 @@ namespace Emgu.CV.Test
          }*/
       }
 
+#if !NETFX_CORE
       private static String GetTempFileName()
       {
          string filename = Path.GetTempFileName();
@@ -628,9 +639,10 @@ namespace Emgu.CV.Test
 
          return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
       }
+#endif
 
-#if !(IOS || ANDROID)
-      [Test]
+#if !(IOS || ANDROID || NETFX_CORE)
+      [TestAttribute]
       public void TestImageSave()
       {
          TestImageSaveHelper(".bmp", System.Drawing.Imaging.ImageFormat.Bmp, 0.0);
@@ -698,7 +710,7 @@ namespace Emgu.CV.Test
 
       }
 
-      [Test]
+      [TestAttribute]
       public void TestBitmapConstructor()
       {
          using (Bitmap bmp0 = new Bitmap(1200, 1080, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
@@ -739,7 +751,7 @@ namespace Emgu.CV.Test
          #endregion
       }
 
-      [Test]
+      [TestAttribute]
       public void TestBitmapSharedDataWithImage()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 320);
@@ -749,7 +761,7 @@ namespace Emgu.CV.Test
          Assert.IsTrue(img.Equals(img2));
       }
 #endif
-      [Test]
+      [TestAttribute]
       public void TestSplitMerge()
       {
          Image<Bgr, Byte> img1 = new Image<Bgr, byte>(301, 234);
@@ -760,7 +772,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(img1.Equals(img2));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestAccumulate()
       {
          Image<Gray, Single> img1 = new Image<Gray, Single>(300, 200);
@@ -774,7 +786,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(img3.Equals(img1 + img2));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestCanny()
       {
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, byte>("stuff.jpg");
@@ -785,7 +797,7 @@ namespace Emgu.CV.Test
          Size size = image2.Size;
       }
 
-      [Test]
+      [TestAttribute]
       public void TestInplaceFlip()
       {
          Image<Bgr, byte> image = new Image<Bgr, byte>(20, 20);
@@ -803,7 +815,7 @@ namespace Emgu.CV.Test
             }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestFlipPerformance()
       {
          Image<Bgr, byte> image = new Image<Bgr, byte>(2048, 1024);
@@ -814,7 +826,7 @@ namespace Emgu.CV.Test
          EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestMoment()
       {
          Image<Gray, byte> image = new Image<Gray, byte>(100, 200);
@@ -824,7 +836,7 @@ namespace Emgu.CV.Test
          MCvHuMoments huMoment = moment.GetHuMoment();
       }
 
-      [Test]
+      [TestAttribute]
       public void TestSnake()
       {
          Image<Gray, Byte> img = new Image<Gray, Byte>(100, 100, new Gray());
@@ -847,7 +859,7 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(img);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestWaterShed()
       {
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, byte>("stuff.jpg");
@@ -868,7 +880,7 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(result.ConcateHorizontal(mask.Convert<Bgr, Byte>()));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestMatrixDFT()
       {
          //The matrix to be transformed.
@@ -903,7 +915,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestImageDFT()
       {
          Image<Gray, float> matA = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
@@ -915,7 +927,7 @@ namespace Emgu.CV.Test
             {1.0f / 16.0f, 8.0f / 16.0f, 1.0f / 16.0f}, 
             {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f}});
 
-         Image<Gray, float> convolvedImage = new Image<Gray, float>(matA.Size + matB.Size - new Size(1, 1));
+         Image<Gray, float> convolvedImage = new Image<Gray, float>(new Size(matA.Width + matB.Width -1, matA.Height + matB.Height -1));
 
          Matrix<float> dftA = new Matrix<float>(
             CvInvoke.GetOptimalDFTSize(convolvedImage.Rows),
@@ -933,7 +945,7 @@ namespace Emgu.CV.Test
          dftA.GetSubRect(new Rectangle(Point.Empty, convolvedImage.Size)).CopyTo(convolvedImage);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestImageDFT2()
       {
          Image<Gray, float> image = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
@@ -949,7 +961,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestEqualizeHist()
       {
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg");
@@ -957,7 +969,7 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(image);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestResize()
       {
          Image<Gray, Byte> image = new Image<Gray, byte>(123, 321);
@@ -965,7 +977,7 @@ namespace Emgu.CV.Test
          image.Resize(512, 512, CvEnum.Inter.Cubic);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestRoi()
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>(1, 1);
@@ -975,7 +987,7 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(roi.Height, image.Height);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestGetSubRect()
       {
          Image<Bgr, Single> image = new Image<Bgr, float>(200, 100);
@@ -987,7 +999,7 @@ namespace Emgu.CV.Test
       }
 
       /*
-      [Test]
+      [TestAttribute]
       public void TestGoodFeature()
       {
          using (GFTTDetector detector = new GFTTDetector())
@@ -1015,7 +1027,7 @@ namespace Emgu.CV.Test
          }
       }*/
 
-      [Test]
+      [TestAttribute]
       public void TestContour()
       {
          Image<Gray, Byte> img = EmguAssert.LoadImage<Gray, byte>("stuff.jpg");
@@ -1090,7 +1102,7 @@ namespace Emgu.CV.Test
          
       }
 
-      [Test]
+      [TestAttribute]
       public void TestBayerBG2BGR()
       {
          Image<Gray, Byte> image = new Image<Gray, byte>(200, 200);
@@ -1099,7 +1111,7 @@ namespace Emgu.CV.Test
          CvInvoke.CvtColor(image, img, Emgu.CV.CvEnum.ColorConversion.BayerBg2Bgr);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestGamma()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(320, 240);
@@ -1107,7 +1119,7 @@ namespace Emgu.CV.Test
          img._GammaCorrect(0.5);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestImageIndexer()
       {
          using (Image<Bgr, Byte> image = new Image<Bgr, byte>(100, 500))
@@ -1133,7 +1145,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestSetRandomNormal()
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>(400, 200);
@@ -1141,7 +1153,7 @@ namespace Emgu.CV.Test
          image.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(20, 20, 20));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestGenericConvert()
       {
          Image<Gray, Single> g = new Image<Gray, Single>(80, 40);
@@ -1151,7 +1163,7 @@ namespace Emgu.CV.Test
          });
       }
 
-      [Test]
+      [TestAttribute]
       public void TestDrawHorizontalLine()
       {
          Point p1 = new Point(10, 10);
@@ -1161,7 +1173,7 @@ namespace Emgu.CV.Test
          img.Draw(l1, new Bgr(0.0, 0.0, 0.0), 1);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestMapDrawRectangle()
       {
          PointF p1 = new PointF(1.1f, 2.2f);
@@ -1174,7 +1186,7 @@ namespace Emgu.CV.Test
          map.Draw(rect, new Gray(0.0), 1);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestGetSubRect2()
       {
          Image<Bgr, Byte> image = new Image<Bgr, byte>(2048, 2048);
@@ -1195,7 +1207,7 @@ namespace Emgu.CV.Test
 
       }
 
-      [Test]
+      [TestAttribute]
       public void TestImageLoader()
       {
          using (Image<Bgr, Single> img = EmguAssert.LoadImage<Bgr, Single>("stuff.jpg"))
@@ -1208,7 +1220,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestBgrSplit()
       {
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(100, 100, new Bgr(0, 100, 200)))
@@ -1218,7 +1230,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestDrawFont()
       {
          using (Image<Gray, Byte> img = new Image<Gray, Byte>(200, 300, new Gray()))
@@ -1231,7 +1243,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestThreshold()
       {
          using (Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("stuff.jpg"))
@@ -1245,7 +1257,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestThreshold2()
       {
          using (Image<Gray, short> image = new Image<Gray, short>(1024, 960))
@@ -1255,7 +1267,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestBgra()
       {
          Image<Bgra, Byte> img = new Image<Bgra, byte>(100, 100);
@@ -1263,7 +1275,7 @@ namespace Emgu.CV.Test
          Image<Gray, Byte>[] channels = img.Split();
       }
 
-      [Test]
+      [TestAttribute]
       public void TestMixed()
       {
          using (Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("stuff.jpg"))
@@ -1334,7 +1346,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestImageConvert()
       {
          try
@@ -1350,7 +1362,7 @@ namespace Emgu.CV.Test
       }
 
       /*
-            [Test]
+            [TestAttribute]
             public void TestPlanarObjectDetector()
             {
                Image<Gray, byte> box = new Image<Gray, byte>(String.Format(_formatString, "box.png"));
@@ -1389,7 +1401,9 @@ namespace Emgu.CV.Test
                }
             }
       */
-      [Test]
+
+#if !NETFX_CORE
+      [TestAttribute]
       public void TestSaveImage()
       {
          String fileName = Path.Combine(Path.GetTempPath(), "tmp.jpg");
@@ -1403,8 +1417,9 @@ namespace Emgu.CV.Test
          if (File.Exists(fileName))
             File.Delete(fileName);
       }
+#endif
 
-      [Test]
+      [TestAttribute]
       public void PerformanceComparison()
       {
          Image<Gray, Byte> img1 = new Image<Gray, byte>(1920, 1080);
@@ -1449,8 +1464,8 @@ namespace Emgu.CV.Test
 
       }
 
-#if !(IOS || ANDROID)
-      [Test]
+#if !(IOS || ANDROID || NETFX_CORE)
+      [TestAttribute]
       public void TestMultiThreadInMemoryWithBMP()
       {
          if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
@@ -1490,7 +1505,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestMultiThreadWithBMP()
       {
          //TODO: find out why this test fails on unix
@@ -1539,7 +1554,7 @@ namespace Emgu.CV.Test
       }
 #endif
 
-      [Test]
+      [TestAttribute]
       public void TestPhaseCorrelate()
       {
          Image<Gray, float> image1 = EmguAssert.LoadImage<Gray, float>("pedestrian.png");
@@ -1549,7 +1564,7 @@ namespace Emgu.CV.Test
          MCvPoint2D64f pt = CvInvoke.PhaseCorrelate(image1, image2, null, out response);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestColorMap()
       {
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
@@ -1558,7 +1573,7 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestClahe()
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
@@ -1567,7 +1582,7 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestDenoise()
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
@@ -1576,7 +1591,7 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestDenoiseColor()
       {
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
@@ -1585,7 +1600,7 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestDistor()
       {
          Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
@@ -1607,7 +1622,7 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
       }
 
-      [Test]
+      [TestAttribute]
       public void TestCompare()
       {
          Matrix<float> f1 = new Matrix<float>(1, 380);
@@ -1629,7 +1644,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      [Test]
+      [TestAttribute]
       public void TestMorphologyClosing()
       {
          //draw some blobs

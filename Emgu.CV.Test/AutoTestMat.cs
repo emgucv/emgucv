@@ -17,14 +17,19 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.Util;
+#if NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+#else
 using NUnit.Framework;
-
+#endif
 namespace Emgu.CV.Test
 {
    [TestFixture]
    public class AutoTestMat
    {
-      [Test]
+      [TestAttribute]
       public void TestMatCreate()
       {
          Mat m = new Mat();
@@ -32,7 +37,7 @@ namespace Emgu.CV.Test
          m.Create(18, 22, CvEnum.DepthType.Cv64F, 3);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestArrToMat()
       {
          Matrix<float> m = new Matrix<float>(320, 240);
@@ -42,7 +47,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(mat.Depth == DepthType.Cv32F);
       }
 
-      [Test]
+      [TestAttribute]
       public void TestMatEquals()
       {
          Mat m1 = new Mat(640, 320, DepthType.Cv8U, 3);
