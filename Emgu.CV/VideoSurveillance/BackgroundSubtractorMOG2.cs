@@ -23,10 +23,10 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Create an "Improved adaptive Gausian mixture model for background subtraction".
       /// </summary>
-      /// <param name="history">The length of the history. Use 0 for default</param>
-      /// <param name="varThreshold">The maximum allowed number of mixture comonents.  Actual number is determined dynamically per pixel.</param>
-      /// <param name="shadowDetection">If true, perform shadow detection.</param>
-      public BackgroundSubtractorMOG2(int history, float varThreshold, bool shadowDetection)
+      /// <param name="history">The length of the history.</param>
+      /// <param name="varThreshold">The maximum allowed number of mixture comonents. Actual number is determined dynamically per pixel.</param>
+      /// <param name="shadowDetection">If true, the algorithm will detect shadows and mark them. It decreases the speed a bit, so if you do not need this feature, set the parameter to false.</param>
+      public BackgroundSubtractorMOG2(int history = 500, float varThreshold = 16, bool shadowDetection = true)
       {
          _ptr = CvBackgroundSubtractorMOG2Create(history, varThreshold, shadowDetection);
       }

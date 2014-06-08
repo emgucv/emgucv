@@ -18,9 +18,6 @@ namespace Emgu.CV.Superres
    /// </summary>
    public class FrameSource : UnmanagedObject
    {
-      private Mat _frame = new Mat();
-      private Image<Bgr, Byte> _image;
-
       /// <summary>
       /// The pointer to the frame source
       /// </summary>
@@ -33,20 +30,21 @@ namespace Emgu.CV.Superres
       /// <param name="tryUseGpu">If true, it will try to create video frame source using gpu</param>
       public FrameSource(String fileName, bool tryUseGpu)
       {
+         using(CvString s = new CvString(fileName))
          if (tryUseGpu)
          {
             try
             {
-               _ptr = SuperresInvoke.cvSuperresCreateFrameSourceVideo(fileName, true);
+               _ptr = SuperresInvoke.cvSuperresCreateFrameSourceVideo(s, true);
             }
             catch
             {
-               _ptr = SuperresInvoke.cvSuperresCreateFrameSourceVideo(fileName, false);
+               _ptr = SuperresInvoke.cvSuperresCreateFrameSourceVideo(s, false);
             }
          }
          else
          {
-            _ptr = SuperresInvoke.cvSuperresCreateFrameSourceVideo(fileName, false);
+            _ptr = SuperresInvoke.cvSuperresCreateFrameSourceVideo(s, false);
          }
 
          _frameSourcePtr = _ptr;
@@ -67,20 +65,11 @@ namespace Emgu.CV.Superres
       /// <summary>
       /// Get the next frame
       /// </summary>
-      /// <returns>The next frame, this image should not be release by the user. I will be reused over frames. If there are no more frames available, null will be returned</returns>
-      public Image<Bgr, Byte> NextFrame()
+      public void NextFrame(IOutputArray frame)
       {
-         SuperresInvoke.cvSuperresFrameSourceNextFrame(_frameSourcePtr, _frame);
+         using (OutputArray oaFrame = frame.GetOutputArray())
+            SuperresInvoke.cvSuperresFrameSourceNextFrame(_frameSourcePtr, oaFrame);
 
-         if (_frame.IsEmpty)
-            return null;
-
-         if (_image == null || _image.Ptr == IntPtr.Zero)
-            _image = new Image<Bgr, byte>(_frame.Size);
-
-         _frame.CopyTo(_image, null);
-
-         return _image;
       }
 
       /// <summary>
@@ -90,25 +79,6 @@ namespace Emgu.CV.Superres
       {
          if (_ptr != IntPtr.Zero)
             SuperresInvoke.cvSuperresFrameSourceRelease(ref _ptr);
-
-         ReleaseCache();
-      }
-
-      /// <summary>
-      /// Release the cached images
-      /// </summary>
-      protected void ReleaseCache()
-      {
-         if (_frameSourcePtr != IntPtr.Zero)
-         {
-            _frame.Dispose();
-            if (_image != null)
-            {
-               _image.Dispose();
-               _image = null;
-            }
-            _frameSourcePtr = IntPtr.Zero;
-         }
       }
    }
 
@@ -122,10 +92,9 @@ namespace Emgu.CV.Superres
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvSuperresCreateFrameSourceVideo(
-         [MarshalAs(CvInvoke.StringMarshalType)]
-           String fileName,
+         IntPtr fileName,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-           bool useGpu);
+         bool useGpu);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvSuperresCreateFrameSourceCamera(int deviceId);

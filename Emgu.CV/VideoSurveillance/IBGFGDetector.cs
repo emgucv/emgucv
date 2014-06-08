@@ -8,7 +8,6 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV.VideoSurveillance
 {
-   
    /// <summary>
    /// The interface for a background foreground Detector
    /// </summary>

@@ -87,7 +87,7 @@ namespace Emgu.CV.Test
          String path = System.IO.Path.Combine(a0.DirectoryName, "..") + System.IO.Path.DirectorySeparatorChar;
          return new Tesseract(path, "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
 #else
-         return new Tesseract("./", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+         return new Tesseract("./", "eng", Tesseract.OcrEngineMode.OemTesseractCubeCombined);
 #endif
       }
 

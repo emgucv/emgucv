@@ -65,21 +65,11 @@ CVAPI(void) cudaRShift(const cv::cuda::GpuMat* a, CvScalar* scale, cv::cuda::Gpu
 
 CVAPI(void) cudaAdd(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaAddS(cv::_InputArray* a, const CvScalar* scale, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream);
-
 CVAPI(void) cudaSubtract(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream);
-
-CVAPI(void) cudaSubtractS(cv::_InputArray* a, const CvScalar* scale, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaMultiply(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, double scale, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaMultiplyS(cv::_InputArray* a, const CvScalar* s, cv::_OutputArray* c, cv::cuda::Stream* stream);
-
 CVAPI(void) cudaDivide(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, double scale, cv::cuda::Stream* stream);
-
-CVAPI(void) cudaDivideSR(cv::_InputArray* a, const CvScalar* s, cv::_OutputArray* c, cv::cuda::Stream* stream);
-
-CVAPI(void) cudaDivideSL(const double s, cv::_InputArray* b, cv::_OutputArray* c, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaAddWeighted(cv::_InputArray* src1, double alpha, cv::_InputArray* src2, double beta, double gamma, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 
@@ -90,8 +80,6 @@ CVAPI(void) cudaAbs(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Strea
 CVAPI(void) cudaSqr(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaSqrt(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream);
-
-CVAPI(void) cudaAbsdiffS(cv::_InputArray* a, const CvScalar* s, cv::_OutputArray* c, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaCompare(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, int cmpop, cv::cuda::Stream* stream);
 

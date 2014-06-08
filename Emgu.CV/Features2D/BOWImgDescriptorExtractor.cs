@@ -47,16 +47,10 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="image">Image, for which the descriptor is computed</param>
       /// <param name="keypoints">Keypoints detected in the input image.</param>
-      /// <returns>Image descriptor.</returns>
-      public Matrix<float> Compute(Image<Gray, Byte> image, VectorOfKeyPoint keypoints)
+      public void Compute(IInputArray image, VectorOfKeyPoint keypoints, Mat imgDescriptors)
       {
-         using (Mat m = new Mat())
-         {
-            BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorCompute(_ptr, image.Mat, keypoints, m);
-            Matrix<float> result = new Matrix<float>(m.Size);
-            m.CopyTo(result, null);
-            return result;
-         }
+         using (InputArray iaImage = image.GetInputArray())
+            BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorCompute(_ptr, iaImage, keypoints, imgDescriptors);
       }
 
       /// <summary>

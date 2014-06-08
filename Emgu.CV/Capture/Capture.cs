@@ -357,13 +357,15 @@ namespace Emgu.CV
       {      
          if (FlipType == CvEnum.FlipType.None)
          {
-            return CvInvoke.cveVideoCaptureRetrieve(Ptr, image.OutputArrayPtr, flag);
+            using (OutputArray oaImage = image.GetOutputArray())
+               return CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, flag);
          }
          else
          {
             using (Mat tmp = new Mat())
+            using (OutputArray oaTmp = tmp.GetOutputArray())
             {
-               bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, tmp, flag);
+               bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaTmp, flag);
 
                if (success)
                   CvInvoke.Flip(tmp, image, FlipType);

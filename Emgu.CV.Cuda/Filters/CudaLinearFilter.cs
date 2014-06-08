@@ -18,7 +18,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
    /// </summary>
-   public class CudaLinearFilter: CudaFilter
+   public class CudaLinearFilter : CudaFilter
    {
       /// <summary>
       /// Create a Gpu LinearFilter
@@ -30,13 +30,14 @@ namespace Emgu.CV.Cuda
       public CudaLinearFilter(
          DepthType srcDepth, int srcChannels,
          DepthType dstDepth, int dstChannels,
-         IInputArray kernel, 
-         System.Drawing.Point anchor, 
+         IInputArray kernel,
+         System.Drawing.Point anchor,
          CvEnum.BorderType borderType = BorderType.Default, MCvScalar borderValue = new MCvScalar())
       {
-         _ptr = CudaInvoke.cudaCreateLinearFilter(
-            CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
-            kernel.InputArrayPtr, ref anchor, borderType, ref borderValue);
+         using (InputArray iaKernel = kernel.GetInputArray())
+            _ptr = CudaInvoke.cudaCreateLinearFilter(
+               CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels),
+               iaKernel, ref anchor, borderType, ref borderValue);
       }
    }
 

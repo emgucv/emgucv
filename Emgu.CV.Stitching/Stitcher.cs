@@ -37,7 +37,9 @@ namespace Emgu.CV.Stitching
       /// <returns>true if successful</returns>
       public bool Stitch(IInputArray images, IOutputArray pano)
       {
-         return StitchingInvoke.CvStitcherStitch(_ptr, images.InputArrayPtr, pano.OutputArrayPtr);
+         using (InputArray iaImages = images.GetInputArray())
+         using (OutputArray oaPano = pano.GetOutputArray())
+         return StitchingInvoke.CvStitcherStitch(_ptr, iaImages, oaPano);
       }
 
       /// <summary>

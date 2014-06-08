@@ -2,10 +2,11 @@
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
- using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
@@ -24,16 +25,19 @@ namespace Emgu.CV
          MCvTermCriteria criteria)
       {
          RotatedRect box = new RotatedRect();
-         cveCamShift(probImage.InputArrayPtr, ref window, ref criteria, ref box);
+         using (InputArray iaProbImage = probImage.GetInputArray())
+         {
+            cveCamShift(iaProbImage, ref window, ref criteria, ref box);
+         }
          return box;
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-         private static extern void cveCamShift(
-            IntPtr probImage,
-            ref Rectangle window,
-            ref MCvTermCriteria criteria,
-            ref RotatedRect box);
+      private static extern void cveCamShift(
+         IntPtr probImage,
+         ref Rectangle window,
+         ref MCvTermCriteria criteria,
+         ref RotatedRect box);
 
       /// <summary>
       /// Iterates to find the object center given its back projection and initial position of search window. The iterations are made until the search window center moves by less than the given value and/or until the function has done the maximum number of iterations. 
@@ -47,7 +51,8 @@ namespace Emgu.CV
          ref Rectangle window,
          MCvTermCriteria criteria)
       {
-         return cveMeanShift(probImage.InputArrayPtr, ref window, ref criteria);
+         using (InputArray iaProbImage = probImage.GetInputArray())
+            return cveMeanShift(iaProbImage, ref window, ref criteria);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int cveMeanShift(
@@ -67,9 +72,11 @@ namespace Emgu.CV
       /// <param name="mhi">Motion history image, that is updated by the function (single-channel, 32-bit floating-point) </param>
       /// <param name="timestamp">Current time in milliseconds or other units. </param>
       /// <param name="duration">Maximal duration of motion track in the same units as timestamp. </param>
-      public static void UpdateMotionHistory(IInputArray silhouette, IInputOutputArray mhi, double timestamp,  double duration)
+      public static void UpdateMotionHistory(IInputArray silhouette, IInputOutputArray mhi, double timestamp, double duration)
       {
-         cveUpdateMotionHistory(silhouette.InputArrayPtr, mhi.InputOutputArrayPtr, timestamp, duration);
+         using (InputArray iaSilhouette = silhouette.GetInputArray())
+         using (InputOutputArray ioaMhi = mhi.GetInputOutputArray())
+            cveUpdateMotionHistory(iaSilhouette, ioaMhi, timestamp, duration);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveUpdateMotionHistory(
@@ -97,7 +104,10 @@ namespace Emgu.CV
          double delta2,
          int apertureSize = 3)
       {
-         cveCalcMotionGradient(mhi.InputArrayPtr, mask.OutputArrayPtr, orientation.OutputArrayPtr, delta1, delta2, apertureSize);
+         using (InputArray iaMhi = mhi.GetInputArray())
+         using (OutputArray oaMask = mask.GetOutputArray())
+         using (OutputArray oaOrientation = orientation.GetOutputArray())
+            cveCalcMotionGradient(iaMhi, oaMask, oaOrientation, delta1, delta2, apertureSize);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCalcMotionGradient(
@@ -113,15 +123,26 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="mhi">Motion history image</param>
       /// <param name="segMask">Image where the mask found should be stored, single-channel, 32-bit floating-point</param>
-      /// <param name="storage">Memory storage that will contain a sequence of motion connected components</param>
       /// <param name="timestamp">Current time in milliseconds or other units</param>
       /// <param name="segThresh">Segmentation threshold; recommended to be equal to the interval between motion history "steps" or greater</param>
-      /// <returns>Pointer to the sequence of MCvConnectedComp</returns>
-      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvSegmentMotion(
+      public static void SegmentMotion(
+         IInputArray mhi,
+         IOutputArray segMask,
+         VectorOfRect boundingRects,
+         double timestamp,
+         double segThresh)
+      {
+         using (InputArray iaMhi = mhi.GetInputArray())
+         using (OutputArray oaSegMask = segMask.GetOutputArray())
+         {
+            cveSegmentMotion(iaMhi, oaSegMask, boundingRects, timestamp, segThresh);
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveSegmentMotion(
           IntPtr mhi,
           IntPtr segMask,
-          IntPtr storage,
+          IntPtr boundingRects,
           double timestamp,
           double segThresh);
 
@@ -141,7 +162,10 @@ namespace Emgu.CV
          double timestamp,
          double duration)
       {
-         return cveCalcGlobalOrientation(orientation.InputArrayPtr, mask.InputArrayPtr, mhi.InputArrayPtr, timestamp, duration);
+         using (InputArray iaOrientation = orientation.GetInputArray())
+         using (InputArray iaMask = mask.GetInputArray())
+         using (InputArray iaMhi = mhi.GetInputArray())
+            return cveCalcGlobalOrientation(iaOrientation, iaMask, iaMhi, timestamp, duration);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveCalcGlobalOrientation(IntPtr orientation, IntPtr mask, IntPtr mhi, double timestamp, double duration);
@@ -286,21 +310,27 @@ namespace Emgu.CV
          CvEnum.LKFlowFlag flags = CvEnum.LKFlowFlag.Default,
          double minEigThreshold = 1.0e-4)
       {
-         cveCalcOpticalFlowPyrLK(prevImg.InputArrayPtr, nextImg.InputArrayPtr, prevPts.InputArrayPtr, nextPts.InputOutputArrayPtr, status.OutputArrayPtr, err.OutputArrayPtr, ref winSize, maxLevel, ref criteria, flags, minEigThreshold);
+         using (InputArray iaPrevImg = prevImg.GetInputArray())
+         using (InputArray iaNextImg = nextImg.GetInputArray())
+         using (InputArray iaPrevPts = prevPts.GetInputArray())
+         using (InputOutputArray ioaNextPts = nextPts.GetInputOutputArray())
+         using (OutputArray oaStatus = status.GetOutputArray())
+         using (OutputArray oaErr = err.GetOutputArray())
+            cveCalcOpticalFlowPyrLK(iaPrevImg, iaNextImg, iaPrevPts, ioaNextPts, oaStatus, oaErr, ref winSize, maxLevel, ref criteria, flags, minEigThreshold);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCalcOpticalFlowPyrLK(
-         IntPtr prevImg, 
-         IntPtr nextImg, 
-         IntPtr prevPts, 
-         IntPtr nextPts, 
-         IntPtr status, 
-         IntPtr err, 
-         ref Size winSize, 
+         IntPtr prevImg,
+         IntPtr nextImg,
+         IntPtr prevPts,
+         IntPtr nextPts,
+         IntPtr status,
+         IntPtr err,
+         ref Size winSize,
          int maxLevel,
-         ref MCvTermCriteria criteria, 
-         CvEnum.LKFlowFlag flags, 
+         ref MCvTermCriteria criteria,
+         CvEnum.LKFlowFlag flags,
          double minEigenThreshold);
 
       /// <summary>
@@ -368,7 +398,10 @@ namespace Emgu.CV
          double polySigma,
          CvEnum.OpticalflowFarnebackFlag flags)
       {
-         cveCalcOpticalFlowFarneback(prev0.InputArrayPtr, next0.InputArrayPtr, flow.InputOutputArrayPtr, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+         using (InputArray iaPrev0 = prev0.GetInputArray())
+         using (InputArray iaNext0 = next0.GetInputArray())
+         using (InputOutputArray ioaFlow = flow.GetInputOutputArray())
+         cveCalcOpticalFlowFarneback(iaPrev0, iaNext0, ioaFlow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveCalcOpticalFlowFarneback(
@@ -396,9 +429,9 @@ namespace Emgu.CV
       [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool cvEstimateRigidTransform(
-         IntPtr A, 
-         IntPtr B, 
-         IntPtr M, 
+         IntPtr A,
+         IntPtr B,
+         IntPtr M,
          [MarshalAs(CvInvoke.BoolToIntMarshalType)]
          bool fullAffine);
    }

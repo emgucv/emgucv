@@ -11,10 +11,10 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/superres.hpp"
 
-CVAPI(cv::superres::FrameSource*) cvSuperresCreateFrameSourceVideo(const char* fileName, bool useGpu);
+CVAPI(cv::superres::FrameSource*) cvSuperresCreateFrameSourceVideo(cv::String* fileName, bool useGpu);
 CVAPI(cv::superres::FrameSource*) cvSuperresCreateFrameSourceCamera(int deviceId);
 CVAPI(void) cvSuperresFrameSourceRelease(cv::superres::FrameSource** frameSource);
-CVAPI(void) cvSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv::Mat* frame);
+CVAPI(void) cvSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv::_OutputArray* frame);
 
 CVAPI(cv::superres::SuperResolution*) cvSuperResolutionCreate(int type, cv::superres::FrameSource* frameSource, cv::superres::FrameSource** frameSourceOut);
 CVAPI(void) cvSuperResolutionRelease(cv::superres::SuperResolution** superres);

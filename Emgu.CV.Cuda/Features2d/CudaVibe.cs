@@ -33,7 +33,7 @@ namespace Emgu.CV.Cuda
          _forgroundMask = new CudaImage<Gray, byte>(firstFrame.Size);
       }
 
-      public void Update(CudaImage<TColor, Byte> frame, Stream stream)
+      public void Apply(CudaImage<TColor, Byte> frame, Stream stream)
       {
          GpuInvoke.gpuVibeCompute(_ptr, frame, _forgroundMask, stream);
       }

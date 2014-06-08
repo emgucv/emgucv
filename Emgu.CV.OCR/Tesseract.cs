@@ -146,7 +146,7 @@ namespace Emgu.CV.OCR
       public Tesseract(String dataPath, String language, OcrEngineMode mode, String whiteList)
          : this(dataPath, language, mode)
       {
-         if (mode == OcrEngineMode.OEM_CUBE_ONLY || mode == OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED)
+         if (mode == OcrEngineMode.OemCubeOnly || mode == OcrEngineMode.OemTesseractCubeCombined)
             throw new ArgumentException("White list is not supported by CUBE engine");
 
          SetVariable("tessedit_char_whitelist", whiteList);
@@ -344,22 +344,22 @@ namespace Emgu.CV.OCR
          /// <summary>
          /// Run Tesseract only - fastest
          /// </summary>
-         OEM_TESSERACT_ONLY,
+         OemTesseractOnly,
          /// <summary>
          /// Run Cube only - better accuracy, but slower
          /// </summary>
-         OEM_CUBE_ONLY,
+         OemCubeOnly,
          /// <summary>
          /// Run both and combine results - best accuracy
          /// </summary>
-         OEM_TESSERACT_CUBE_COMBINED,
+         OemTesseractCubeCombined,
          /// <summary>
          /// Specify this mode to indicate that any of the above modes
          /// should be automatically inferred from the variables in the 
          /// language-specific config, or if not specified in any of 
          /// the above should be set to the default OEM_TESSERACT_ONLY.
          /// </summary>
-         OEM_DEFAULT
+         OemDefault
       };
    }
 }

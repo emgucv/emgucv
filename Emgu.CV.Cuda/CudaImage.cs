@@ -234,29 +234,6 @@ namespace Emgu.CV.Cuda
          return result;
       }
 
-      /*
-      ///<summary> 
-      ///Split current Image into an array of gray scale images where each element 
-      ///in the array represent a single color channel of the original image
-      ///</summary>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      ///<returns> 
-      ///An array of gray scale images where each element  
-      ///in the array represent a single color channel of the original image 
-      ///</returns>
-      public new CudaImage<Gray, TDepth>[] Split(Stream stream)
-      {
-         CudaImage<Gray, TDepth>[] result = new CudaImage<Gray, TDepth>[NumberOfChannels];
-         Size size = Size;
-         for (int i = 0; i < result.Length; i++)
-         {
-            result[i] = new CudaImage<Gray, TDepth>(size);
-         }
-
-         SplitInto(result, stream);
-         return result;
-      }*/
-
       /// <summary>
       /// Resize the CudaImage. The calling GpuMat be GpuMat%lt;Byte&gt;. If stream is specified, it has to be either 1 or 4 channels.
       /// </summary>

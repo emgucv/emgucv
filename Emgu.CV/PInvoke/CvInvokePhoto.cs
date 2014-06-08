@@ -20,7 +20,10 @@ namespace Emgu.CV
       /// <param name="inpaintRadius">The radius of circlular neighborhood of each point inpainted that is considered by the algorithm</param>
       public static void Inpaint(IInputArray src, IInputArray mask, IOutputArray dst, double inpaintRadius, CvEnum.InpaintType flags)
       {
-         cveInpaint(src.InputArrayPtr, mask.InputArrayPtr, dst.OutputArrayPtr, inpaintRadius, flags);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaMask = mask.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveInpaint(iaSrc, iaMask, oaDst, inpaintRadius, flags);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveInpaint(IntPtr src, IntPtr mask, IntPtr dst, double inpaintRadius, CvEnum.InpaintType flags);
@@ -37,7 +40,9 @@ namespace Emgu.CV
       /// <param name="searchWindowSize">Size in pixels of the window that is used to compute weighted average for given pixel. Should be odd. Affect performance linearly: greater searchWindowsSize - greater denoising time.</param>
       public static void FastNlMeansDenoising(IInputArray src, IOutputArray dst, float h = 3, int templateWindowSize = 7, int searchWindowSize = 21)
       {
-         cveFastNlMeansDenoising(src.InputArrayPtr, dst.OutputArrayPtr, h, templateWindowSize, searchWindowSize);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveFastNlMeansDenoising(iaSrc, oaDst, h, templateWindowSize, searchWindowSize);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFastNlMeansDenoising(IntPtr src, IntPtr dst, float h, int templateWindowSize, int searchWindowSize);
@@ -56,7 +61,9 @@ namespace Emgu.CV
       /// <param name="searchWindowSize">Size in pixels of the window that is used to compute weighted average for given pixel. Should be odd. Affect performance linearly: greater searchWindowsSize - greater denoising time.</param>
       public static void FastNlMeansDenoisingColored(IInputArray src, IOutputArray dst, float h = 3, float hColor = 3, int templateWindowSize = 7, int searchWindowSize = 21)
       {
-         cveFastNlMeansDenoisingColored(src.InputArrayPtr, dst.OutputArrayPtr, h, hColor, templateWindowSize, searchWindowSize);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveFastNlMeansDenoisingColored(iaSrc, oaDst, h, hColor, templateWindowSize, searchWindowSize);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFastNlMeansDenoisingColored(IntPtr src, IntPtr dst, float h, float hColor, int templateWindowSize, int searchWindowSize);
@@ -75,7 +82,9 @@ namespace Emgu.CV
          float sigmaS = 60.0f,
          float sigmaR = 0.4f)
       {
-         cveEdgePreservingFilter(src.InputArrayPtr, dst.OutputArrayPtr, flags, sigmaS, sigmaR);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveEdgePreservingFilter(iaSrc, oaDst, flags, sigmaS, sigmaR);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveEdgePreservingFilter(IntPtr src, IntPtr dst, CvEnum.EdgePreservingFilterFlag flags, float sigmaS, float sigmaR);
@@ -89,7 +98,9 @@ namespace Emgu.CV
       /// <param name="sigmaR">Range between 0 to 1</param>
       public static void DetailEnhance(IInputArray src, IOutputArray dst, float sigmaS = 10.0f, float sigmaR = 0.15f)
       {
-         cveDetailEnhance(src.InputArrayPtr, dst.OutputArrayPtr, sigmaS, sigmaR);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveDetailEnhance(iaSrc, oaDst, sigmaS, sigmaR);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDetailEnhance(IntPtr src, IntPtr dst, float sigmaS, float sigmaR);
@@ -105,7 +116,10 @@ namespace Emgu.CV
       /// <param name="shadeFactor">Range between 0 to 0.1</param>
       public static void PencilSketch(IInputArray src, IOutputArray dst1, IOutputArray dst2, float sigmaS = 60.0f, float sigmaR = 0.07f, float shadeFactor = 0.02f)
       {
-         cvePencilSketch(src.InputArrayPtr, dst1.OutputArrayPtr, dst2.OutputArrayPtr, sigmaS, sigmaR, shadeFactor);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst1 = dst1.GetOutputArray())
+         using (OutputArray oaDst2 = dst2.GetOutputArray())
+            cvePencilSketch(iaSrc, oaDst1, oaDst2, sigmaS, sigmaR, shadeFactor);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePencilSketch(IntPtr src, IntPtr dst1, IntPtr dst2, float sigmaS, float sigmaR, float shadeFactor);
@@ -119,7 +133,9 @@ namespace Emgu.CV
       /// <param name="sigmaR"> Range between 0 to 1.</param>
       public static void Stylization(IInputArray src, IOutputArray dst, float sigmaS = 60, float sigmaR = 0.45f)
       {
-         cveStylization(src.InputArrayPtr, dst.OutputArrayPtr, sigmaS, sigmaR);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveStylization(iaSrc, oaDst, sigmaS, sigmaR);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveStylization(IntPtr src, IntPtr dst, float sigmaS, float sigmaR);
@@ -135,7 +151,10 @@ namespace Emgu.CV
       /// <param name="blueMul">B-channel multiply factor. Multiplication factor is between .5 to 2.5.</param>
       public static void ColorChange(IInputArray src, IInputArray mask, IOutputArray dst, float redMul = 1.0f, float greenMul = 1.0f, float blueMul = 1.0f)
       {
-         cveColorChange(src.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dst.OutputArrayPtr, redMul, greenMul, blueMul);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cveColorChange(iaSrc, iaMask, oaDst, redMul, greenMul, blueMul);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveColorChange(IntPtr src, IntPtr mask, IntPtr dst, float redMul, float greenMul, float blueMul);
@@ -150,7 +169,10 @@ namespace Emgu.CV
       /// <param name="beta">Value ranges between 0-2.</param>
       public static void IlluminationChange(IInputArray src, IInputArray mask, IOutputArray dst, float alpha = 0.2f, float beta = 0.4f)
       {
-         cveIlluminationChange(src.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dst.OutputArrayPtr, alpha, beta);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cveIlluminationChange(iaSrc, iaMask, oaDst, alpha, beta);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveIlluminationChange(IntPtr src, IntPtr mask, IntPtr dst, float alpha, float beta);
@@ -166,7 +188,10 @@ namespace Emgu.CV
       /// <param name="kernelSize">The size of the Sobel kernel to be used.</param>
       public static void TextureFlattening(IInputArray src, IInputArray mask, IOutputArray dst, double lowThreshold = 30, double highThreshold = 45, int kernelSize = 3)
       {
-         cveTextureFlattening(src.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, dst.OutputArrayPtr, lowThreshold, highThreshold, kernelSize);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cveTextureFlattening(iaSrc, iaMask, oaDst, lowThreshold, highThreshold, kernelSize);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveTextureFlattening(IntPtr src, IntPtr mask, IntPtr dst, double lowThreshold, double highThreshold, int kernelSize);

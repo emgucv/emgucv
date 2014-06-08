@@ -43,7 +43,11 @@ namespace Emgu.CV
          int iterCount,
          CvEnum.GrabcutInitType type)
       {
-         cveGrabCut(img.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputOutputArrayPtr, ref rect, bgdModel.InputOutputArrayPtr, fgdModel.InputOutputArrayPtr, iterCount, type);
+         using (InputArray iaImg = img.GetInputArray())
+         using (InputOutputArray ioaMask = mask == null ? InputOutputArray.GetEmpty() : mask.GetInputOutputArray())
+         using (InputOutputArray ioaBgdModel = bgdModel.GetInputOutputArray())
+         using (InputOutputArray ioaFgdModel = fgdModel.GetInputOutputArray())
+            cveGrabCut(iaImg, ioaMask, ref rect, ioaBgdModel, ioaFgdModel, iterCount, type);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -65,7 +69,9 @@ namespace Emgu.CV
       /// <param name="dst">The destination array; will have the same size and the same type as src</param>
       public static void Sqrt(IInputArray src, IOutputArray dst)
       {
-         cveSqrt(src.InputArrayPtr, dst.OutputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveSqrt(iaSrc, oaDst);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveSqrt(IntPtr src, IntPtr dst);
@@ -81,12 +87,14 @@ namespace Emgu.CV
       /// <param name="colorMapType">The type of color map</param>
       public static void ApplyColorMap(IInputArray src, IOutputArray dst, CvEnum.ColorMapType colorMapType)
       {
-         cveApplyColorMap(src.InputArrayPtr, dst.OutputArrayPtr, colorMapType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveApplyColorMap(iaSrc, oaDst, colorMapType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
 
-      
+
       /// <summary>
       /// Check that every array element is neither NaN nor +- inf. The functions also check that each value
       /// is between minVal and maxVal. in the case of multi-channel arrays each channel is processed
@@ -107,7 +115,8 @@ namespace Emgu.CV
          double minVal,
          double maxVal)
       {
-         return cveCheckRange(arr.InputArrayPtr, quiet, ref pos, minVal, maxVal);
+         using (InputArray iaArr = arr.GetInputArray())
+            return cveCheckRange(iaArr, quiet, ref pos, minVal, maxVal);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
@@ -118,7 +127,7 @@ namespace Emgu.CV
          ref Point pos,
          double minVal,
          double maxVal);
-      
+
       /// <summary>
       /// Computes an optimal affine transformation between two 3D point sets.
       /// </summary>
@@ -136,8 +145,8 @@ namespace Emgu.CV
          int result;
 
          estimate = new Matrix<double>(3, 4);
-         using (Matrix<float> srcMat = new Matrix<float>(1,  src.Length, 3, srcHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * src.Length))
-         using (Matrix<float> dstMat = new Matrix<float>(1,  dst.Length, 3, dstHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * dst.Length ))
+         using (Matrix<float> srcMat = new Matrix<float>(1, src.Length, 3, srcHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * src.Length))
+         using (Matrix<float> dstMat = new Matrix<float>(1, dst.Length, 3, dstHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * dst.Length))
          using (Util.VectorOfByte vectorOfByte = new Util.VectorOfByte())
          {
             result = EstimateAffine3D(srcMat, dstMat, estimate, vectorOfByte, ransacThreshold, confidence);
@@ -162,7 +171,11 @@ namespace Emgu.CV
       /// <returns></returns>
       public static int EstimateAffine3D(IInputArray src, IInputArray dst, IOutputArray affineEstimate, IOutputArray inliers, double ransacThreshold = 3, double confidence = 0.99)
       {
-         return cveEstimateAffine3D(src.InputArrayPtr, dst.InputArrayPtr, affineEstimate.OutputArrayPtr, inliers.OutputArrayPtr, ransacThreshold, confidence);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaDst = dst.GetInputArray())
+         using (OutputArray oaAffineEstimate = affineEstimate.GetOutputArray())
+         using (OutputArray oaInliners = inliers.GetOutputArray())
+            return cveEstimateAffine3D(iaSrc, iaDst, oaAffineEstimate, oaInliners, ransacThreshold, confidence);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cveEstimateAffine3D(IntPtr src, IntPtr dst, IntPtr affineEstimate, IntPtr inliers, double ransacThreshold, double confidence);
@@ -183,7 +196,9 @@ namespace Emgu.CV
          GCHandle maxHandle = GCHandle.Alloc(maxIdx, GCHandleType.Pinned);
          minVal = 0;
          maxVal = 0;
-         cveMinMaxIdx(src.InputArrayPtr, ref minVal, ref maxVal, minHandle.AddrOfPinnedObject(), maxHandle.AddrOfPinnedObject(), mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cveMinMaxIdx(iaSrc, ref minVal, ref maxVal, minHandle.AddrOfPinnedObject(), maxHandle.AddrOfPinnedObject(), iaMask);
          minHandle.Free();
          maxHandle.Free();
       }
@@ -201,9 +216,11 @@ namespace Emgu.CV
       /// <param name="borderType">The pixel extrapolation method.</param>
       public static void Filter2D(IInputArray src, IOutputArray dst, IInputArray kernel, Point anchor, double delta = 0, Emgu.CV.CvEnum.BorderType borderType = CvEnum.BorderType.Default)
       {
-         cveFilter2D(src.InputArrayPtr, dst.OutputArrayPtr, kernel.InputArrayPtr, ref anchor, delta, borderType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaKernel = kernel.GetInputArray())
+            cveFilter2D(iaSrc, oaDst, iaKernel, ref anchor, delta, borderType);
       }
-
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, double delta, Emgu.CV.CvEnum.BorderType borderType);
 
@@ -217,7 +234,9 @@ namespace Emgu.CV
       /// <param name="dst">The destination image</param>
       public static void CLAHE(IInputArray src, double clipLimit, Size tileGridSize, IOutputArray dst)
       {
-         cveCLAHE(src.InputArrayPtr, clipLimit, ref tileGridSize, dst.OutputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveCLAHE(iaSrc, clipLimit, ref tileGridSize, oaDst);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCLAHE(IntPtr srcArr, double clipLimit, ref Size tileGridSize, IntPtr dstArr);
@@ -227,7 +246,7 @@ namespace Emgu.CV
       /// This function retrive the Open CV structure sizes in unmanaged code
       /// </summary>
       /// <param name="sizes">The structure that will hold the Open CV structure sizes</param>
-      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="getCvStructSizes")]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "getCvStructSizes")]
       public static extern void GetCvStructSizes(ref CvStructSizes sizes);
 
       /*
@@ -301,11 +320,11 @@ namespace Emgu.CV
                FindCirclesGrid(
                   image,
                   patternSize,
-                  vec, 
+                  vec,
                   flags,
                   featureDetector
-                  ) ;
-            return patternFound? vec.ToArray() : null;
+                  );
+            return patternFound ? vec.ToArray() : null;
          }
       }
 
@@ -320,12 +339,14 @@ namespace Emgu.CV
       /// <returns>True if grid found.</returns>
       public static bool FindCirclesGrid(IInputArray image, Size patternSize, IOutputArray centers, CvEnum.CalibCgType flags, Features2D.IFeatureDetector featureDetector)
       {
-         return cveFindCirclesGrid(image.InputArrayPtr, ref patternSize, centers.OutputArrayPtr, flags, featureDetector.FeatureDetectorPtr);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaCenters = centers.GetOutputArray())
+            return cveFindCirclesGrid(iaImage, ref patternSize, oaCenters, flags, featureDetector.FeatureDetectorPtr);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveFindCirclesGrid(IntPtr image, ref Size patternSize, IntPtr centers, CvEnum.CalibCgType flags, IntPtr blobDetector);
-      
+
       /*
       /// <summary>
       /// Applies the adaptive bilateral filter to an image.

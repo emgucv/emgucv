@@ -2,8 +2,9 @@
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
- using System;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.Structure;
@@ -40,9 +41,12 @@ namespace Emgu.CV.Cuda
       /// <param name="image">The image</param>
       /// <param name="dst">The output disparity map, should have the same size as the input disparity map</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Apply(CudaImage<Gray, Byte> disparity, CudaImage<Gray, Byte> image, CudaImage<Gray, byte> dst, Stream stream)
+      public void Apply(IInputArray disparity, IInputArray image, IOutputArray dst, Stream stream)
       {
-         CudaInvoke.cudaDisparityBilateralFilterApply(this, disparity.InputArrayPtr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
+         using (InputArray iaDisparity = disparity.GetInputArray())
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            CudaInvoke.cudaDisparityBilateralFilterApply(this, iaDisparity, iaImage, oaDst, stream);
       }
 
       /// <summary>

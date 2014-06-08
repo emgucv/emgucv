@@ -65,8 +65,9 @@ namespace Emgu.CV
       public Rectangle[] DetectMultiScale(IInputArray image, double scaleFactor = 1.1, int minNeighbors = 3, Size minSize = new Size(), Size maxSize = new Size())
       {
          using (Util.VectorOfRect rectangles = new Util.VectorOfRect())
+         using (InputArray iaImage = image.GetInputArray())
          {
-            CvCascadeClassifierDetectMultiScale(_ptr, image.InputArrayPtr, rectangles, scaleFactor, minNeighbors, 0, ref minSize, ref maxSize);
+            CvCascadeClassifierDetectMultiScale(_ptr, iaImage, rectangles, scaleFactor, minNeighbors, 0, ref minSize, ref maxSize);
             return rectangles.ToArray();
          }
       }

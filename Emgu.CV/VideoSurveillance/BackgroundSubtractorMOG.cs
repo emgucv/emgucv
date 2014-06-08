@@ -24,11 +24,11 @@ namespace Emgu.CV.VideoSurveillance
       /// <summary>
       /// Create an "Improved adaptive Gausian mixture model for background subtraction".
       /// </summary>
-      /// <param name="history">The length of the history. Use 0 for default.</param>
-      /// <param name="nMixtures">The maximum number of gaussian mixtures. Use 0 for default.</param>
-      /// <param name="backgroundRatio">Use 0 for default.</param>
-      /// <param name="noiseSigma">Use 0 for default.</param>
-      public BackgroundSubtractorMOG(int history, int nMixtures, double backgroundRatio, double noiseSigma)
+      /// <param name="history">The length of the history.</param>
+      /// <param name="nMixtures">The maximum number of gaussian mixtures.</param>
+      /// <param name="backgroundRatio">Background ratio</param>
+      /// <param name="noiseSigma">Noise strength (standard deviation of the brightness or each color channel). 0 means some automatic value.</param>
+      public BackgroundSubtractorMOG(int history = 200, int nMixtures = 5, double backgroundRatio = 0.7, double noiseSigma = 0)
       {
          _ptr = CvBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma);
       }

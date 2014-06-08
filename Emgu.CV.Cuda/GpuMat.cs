@@ -19,11 +19,8 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// A GpuMat, use the generic version if possible. The non generic version is good for use as buffer in stream calls.
    /// </summary>
-   public class GpuMat : UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray, IEquatable<GpuMat>, IImage
+   public class GpuMat : UnmanagedObject, IEquatable<GpuMat>, IImage
    {
-      private IntPtr _inputArrayPtr;
-      private IntPtr _outputArrayPtr;
-      private IntPtr _inputOutputArrayPtr;
 
       internal bool _needDispose;
 
@@ -74,8 +71,9 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="arr">The CvArry to be converted to GpuMat</param>
       public GpuMat(IInputArray arr)
-         : this(CudaInvoke.gpuMatCreateFromInputArray(arr.InputArrayPtr), true)
+         : this()
       {
+         Upload(arr);
       }
 
       /// <summary>
@@ -96,15 +94,6 @@ namespace Emgu.CV.Cuda
       {
          if (_ptr != IntPtr.Zero)
             CudaInvoke.gpuMatRelease(ref _ptr);
-
-         if (_inputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveInputArrayRelease(ref _inputArrayPtr);
-
-         if (_outputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveOutputArrayRelease(ref _outputArrayPtr);
-
-         if (_inputOutputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveInputOutputArrayRelease(ref _inputOutputArrayPtr);
       }
 
       /// <summary>
@@ -162,49 +151,35 @@ namespace Emgu.CV.Cuda
       /// <summary>
       /// Pointer to the InputArray
       /// </summary>
-      public IntPtr InputArrayPtr
+      public InputArray GetInputArray()
       {
-         get 
-         {
-            if (_inputArrayPtr == IntPtr.Zero)
-               _inputArrayPtr = CudaInvoke.cveInputArrayFromGpuMat(_ptr);
-            return _inputArrayPtr; 
-         }
-      }
+            return new InputArray( CudaInvoke.cveInputArrayFromGpuMat(_ptr));
+       }
 
       /// <summary>
       /// Pointer to the OutputArray
       /// </summary>
-      public IntPtr OutputArrayPtr
+      public OutputArray GetOutputArray()
       {
-         get
-         {
-            if (_outputArrayPtr == IntPtr.Zero)
-               _outputArrayPtr = CudaInvoke.cveOutputArrayFromGpuMat(_ptr);
-            return _outputArrayPtr;
-         }
+         return new OutputArray(CudaInvoke.cveOutputArrayFromGpuMat(_ptr));
       }
 
       /// <summary>
       /// Pointer to the InputOutputArray
       /// </summary>
-      public IntPtr InputOutputArrayPtr
+      public InputOutputArray GetInputOutputArray()
       {
-         get
-         {
-            if (_inputOutputArrayPtr == IntPtr.Zero)
-               _inputOutputArrayPtr = CudaInvoke.cveInputOutputArrayFromGpuMat(_ptr);
-            return _inputOutputArrayPtr;
-         }
+         return new InputOutputArray(CudaInvoke.cveInputOutputArrayFromGpuMat(_ptr));
       }
 
       /// <summary>
       /// Pefroms blocking upload data to GpuMat
       /// </summary>
       /// <param name="arr">The CvArray to be uploaded to GpuMat</param>
-      public void Upload(IOutputArray arr)
+      public void Upload(IInputArray arr)
       {
-         CudaInvoke.gpuMatUpload(_ptr, arr.OutputArrayPtr);
+         using (InputArray iaArr = arr.GetInputArray())
+         CudaInvoke.gpuMatUpload(_ptr, iaArr);
       }
 
       /// <summary>
@@ -214,7 +189,8 @@ namespace Emgu.CV.Cuda
       public void Download(IOutputArray arr)
       {
          //Debug.Assert(arr.Size.Equals(Size), "Destination CvArray size does not match source GpuMat size");
-         CudaInvoke.gpuMatDownload(_ptr, arr.OutputArrayPtr);
+         using (OutputArray oaArr = arr.GetOutputArray())
+         CudaInvoke.gpuMatDownload(_ptr, oaArr);
       }
 
       public Mat ToMat()
@@ -233,7 +209,8 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>     
       public void SetTo(MCvScalar value, IInputArray mask = null, Stream stream = null)
       {
-         CudaInvoke.gpuMatSetTo(Ptr, ref value, mask == null ? IntPtr.Zero : mask.InputArrayPtr, stream);
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         CudaInvoke.gpuMatSetTo(Ptr, ref value, iaMask, stream);
       }
 
       /// <summary>
@@ -244,7 +221,9 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
       public void CopyTo(IOutputArray dst, IInputArray mask = null, Stream stream = null)
       {
-         CudaInvoke.gpuMatCopyTo(Ptr, dst.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, stream);
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         CudaInvoke.gpuMatCopyTo(Ptr, oaDst, iaMask, stream);
       }
 
 
@@ -261,7 +240,8 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
       public void ConvertTo(IOutputArray dst, CvEnum.DepthType rtype, double scale = 1.0, double shift = 0, Stream stream = null)
       {
-         CudaInvoke.gpuMatConvertTo(Ptr, dst.OutputArrayPtr, rtype, scale, shift, stream);
+         using (OutputArray oaDst = dst.GetOutputArray())
+         CudaInvoke.gpuMatConvertTo(Ptr, oaDst, rtype, scale, shift, stream);
       }
 
       /// <summary>

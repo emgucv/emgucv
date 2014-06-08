@@ -558,15 +558,17 @@ namespace Emgu.CV.Test
          if (!CudaInvoke.HasCuda)
             return;
          using(Image<Bgr, Byte> img = new Image<Bgr, byte>("box.png"))
-         using (CudaImage<Bgr, Byte> CudaImage = new CudaImage<Bgr,byte>(img))
-         using (CudaImage<Gray, Byte> grayCudaImage = CudaImage.Convert<Gray, Byte>()) 
+         using (GpuMat cudaImage = new GpuMat(img))
+         using (GpuMat grayCudaImage = new GpuMat()) 
          using (CudaORBDetector detector = new CudaORBDetector(500))
          using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+         using (GpuMat keyPointMat = new GpuMat())
+         using (GpuMat descriptorMat = new GpuMat())
          {
-            GpuMat<float> keyPointsMat;
-            GpuMat<Byte> descriptorsMat;
-            detector.ComputeRaw(grayCudaImage, null, out keyPointsMat, out descriptorsMat);
-            detector.DownloadKeypoints(keyPointsMat, kpts);
+            CudaInvoke.CvtColor(cudaImage, grayCudaImage, ColorConversion.Bgr2Gray);
+            
+            detector.ComputeRaw(grayCudaImage, null, keyPointMat, descriptorMat);
+            detector.DownloadKeypoints(keyPointMat, kpts);
 
             foreach (MKeyPoint kpt in kpts.ToArray())
             {

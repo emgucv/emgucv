@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
- using System;
+using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.Util;
@@ -47,9 +47,12 @@ namespace Emgu.CV.Cuda
       /// <param name="right">The right image of the same size and the same type</param>
       /// <param name="disparity">The disparity map</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void FindStereoCorrespondence(CudaImage<Gray, Byte> left, CudaImage<Gray, Byte> right, CudaImage<Gray, Byte> disparity, Stream stream)
+      public void FindStereoCorrespondence(IInputArray left, IInputArray right, IOutputArray disparity, Stream stream)
       {
-         CudaInvoke.cudaStereoBMFindStereoCorrespondence(_ptr, left.InputArrayPtr, right.InputArrayPtr, disparity.OutputArrayPtr, stream);
+         using (InputArray iaLeft = left.GetInputArray())
+         using (InputArray iaRight = right.GetInputArray())
+         using (OutputArray oaDisparity = disparity.GetOutputArray())
+            CudaInvoke.cudaStereoBMFindStereoCorrespondence(_ptr, iaLeft, iaRight, oaDisparity, stream);
       }
 
       /// <summary>

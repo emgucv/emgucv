@@ -30,7 +30,9 @@ namespace Emgu.CV
       /// <param name="labels">The labels of the images. This can be a VectorOfInt</param>
       public void Train(IInputArray images, IInputArray labels)
       {
-         CvFaceRecognizerTrain(_ptr, images.InputArrayPtr, labels.InputArrayPtr);
+         using (InputArray iaImage = images.GetInputArray())
+         using (InputArray iaLabels = labels.GetInputArray())
+            CvFaceRecognizerTrain(_ptr, iaImage, iaLabels);
       }
 
       /// <summary>
@@ -59,7 +61,8 @@ namespace Emgu.CV
       {
          int label = -1;
          double distance = -1;
-         CvFaceRecognizerPredict(_ptr, image.InputArrayPtr, ref label, ref distance);
+         using (InputArray iaImage = image.GetInputArray())
+            CvFaceRecognizerPredict(_ptr, iaImage, ref label, ref distance);
          return new PredictionResult() { Label = label, Distance = distance };
       }
 
@@ -187,7 +190,9 @@ namespace Emgu.CV
       /// <param name="labels">The labels corresponding to the images</param>
       public void Update(IInputArray images, IInputArray labels)
       {
-         CvFaceRecognizerUpdate(_ptr, images.InputArrayPtr, labels.InputArrayPtr);
+         using (InputArray iaImages = images.GetInputArray())
+         using (InputArray iaLabels = labels.GetInputArray())
+         CvFaceRecognizerUpdate(_ptr, iaImages, iaLabels);
       }
 
       /// <summary>

@@ -19,6 +19,7 @@ using System.Xml.Linq;
 using Emgu.CV;
 using Emgu.CV.Cvb;
 using Emgu.CV.Cuda;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
@@ -277,7 +278,7 @@ namespace Emgu.CV.Test
                   }
                   else
                   {
-                     vibe.Update(gpuGray, null);
+                     vibe.Apply(gpuGray, null);
                      if (mask == null)
                         mask = new Image<Gray, byte>(vibe.ForgroundMask.Size);
 
@@ -337,16 +338,16 @@ namespace Emgu.CV.Test
                      //bgModel = new CudaBackgroundSubtractorMOG2<Bgr>(500, 16, true);
                      //bgModel = new CudaBackgroundSubtractorMOG<Bgr>(200, 5, 0.7, 0);
                      bgModel = new CudaBackgroundSubtractorGMG<Bgr>(120, 0.8);
-                     bgModel.Update(gpuFrame, -1.0f, null);
+                     bgModel.Apply(gpuFrame, -1.0f, null);
                      //bgModel = new CudaBackgroundSubtractorFGD<Bgr>(128, 15, 25, 64, 25, 40, true, 1, 0.1f, 0.005f, 0.1f, 2.0f, 0.9f, 15.0f);
-                     //bgModel.Update(gpuFrame, -1.0f);
+                     //bgModel.Apply(gpuFrame, -1.0f);
                      
                      return;
                   }
                   else
                   {
-                     bgModel.Update(gpuFrame, -1.0f, null);
-                     //bgModel.Update(gpuFrame, -1.0f);
+                     bgModel.Apply(gpuFrame, -1.0f, null);
+                     //bgModel.Apply(gpuFrame, -1.0f);
                      
                      if (mask == null)
                         mask = new Image<Gray, byte>(bgModel.ForgroundMask.Size);
@@ -630,14 +631,15 @@ namespace Emgu.CV.Test
                watch.Start();
                
                //Image<Bgr, byte> frame = frameSource.NextFrame();
-               Image<Bgr, Byte> frame = sr.NextFrame();
+               Mat frame = new Mat(); 
+               sr.NextFrame(frame);
                //Image<Gray, Byte> frame = capture.QueryGrayFrame();
                watch.Stop();
                if (watch.ElapsedMilliseconds < 200)
                {
                   Thread.Sleep(200 - (int)watch.ElapsedMilliseconds);
                }
-               if (frame != null)
+               if (!frame.IsEmpty)
                {
                   viewer.Image = frame;
                   viewer.Text = String.Format("Frame {0}: {1} milliseconds.", counter++, watch.ElapsedMilliseconds);
@@ -702,7 +704,7 @@ namespace Emgu.CV.Test
                      bgmodel.ClearStale(bgmodel.MCvBGCodeBookModel.T / 2, Rectangle.Empty, null);
 
                   if (learningFrames > 0)
-                     bgmodel.Update(ycc); 
+                     bgmodel.Apply(ycc); 
                   else if (learningFrames <= 0)
                   {
                      bgmodel.Diff(ycc, Rectangle.Empty);
@@ -936,7 +938,7 @@ namespace Emgu.CV.Test
             Application.Idle += delegate(Object sender, EventArgs args)
             {
                Mat frame = capture.QueryFrame();
-               model.Update(frame);
+               model.Apply(frame);
                viewer.Image = model.ForegroundMask; 
             };
             viewer.ShowDialog();
@@ -1007,7 +1009,7 @@ namespace Emgu.CV.Test
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {
                Image<Bgr, Byte> frame = capture.RetrieveBgrFrame();
-               bgModel.Update(frame);
+               bgModel.Apply(frame);
 
                Image<Gray, Byte> gray = bgModel.ForegroundMask;
                using (CvBlobDetector detector = new CvBlobDetector())
@@ -1016,7 +1018,7 @@ namespace Emgu.CV.Test
                   detector.Detect(gray, blobs);
                   blobs.FilterByArea(100, int.MaxValue);
 
-                  tracks.Update(blobs, 20.0, 10, 0);
+                  tracks.Apply(blobs, 20.0, 10, 0);
 
                   Image<Bgr, Byte> result = new Image<Bgr, byte>(frame.Size);
 
@@ -1091,27 +1093,39 @@ namespace Emgu.CV.Test
          const int MAX_CORNERS = 500;
          Capture c = new Capture();
          ImageViewer viewer = new ImageViewer();
-         CudaImage<Gray, Byte> oldImage = null;
-         CudaImage<Gray, Byte> currentImage = null;
-         using (CudaGoodFeaturesToTrackDetector<Gray, Byte> detector = new CudaGoodFeaturesToTrackDetector<Gray, Byte>(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04))
+         GpuMat oldImage = null;
+         GpuMat currentImage = null;
+         using (CudaGoodFeaturesToTrackDetector detector = new CudaGoodFeaturesToTrackDetector(DepthType.Cv8U, 1, MAX_CORNERS, 0.05, 3.0, 3, false, 0.04))
          using (CudaPyrLKOpticalFlow flow = new CudaPyrLKOpticalFlow(new Size(21, 21), 3, 30, false))
          {
             Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
             {
                if (oldImage == null)
                {
-                  oldImage = new CudaImage<Gray,byte>( c.QueryFrame() );
+                  Mat bgrFrame = c.QueryFrame();
+                  using (GpuMat oldBgrImage = new GpuMat(bgrFrame))
+                  {
+                     oldImage = new GpuMat();
+                     CudaInvoke.CvtColor(oldBgrImage, oldImage, ColorConversion.Bgr2Gray);
+                  }
                }
 
-               currentImage = new CudaImage<Gray,byte>( c.QueryFrame() );
-               using (CudaImage<Gray, float> u = new CudaImage<Gray, float>())
-               using (CudaImage<Gray, float> v = new CudaImage<Gray, float>())
-               using (GpuMat<float> vertex = new GpuMat<float>())
-               using (GpuMat<float> colors = new GpuMat<float>())
+               using (Mat tmpFrame = c.QueryFrame())
+               using (GpuMat tmp = new GpuMat(tmpFrame))
+               {
+                  currentImage = new GpuMat();
+                  CudaInvoke.CvtColor(tmp, currentImage, ColorConversion.Bgr2Gray);
+               }
+               using (GpuMat u = new GpuMat())
+               using (GpuMat v = new GpuMat())
+               using (GpuMat vertex = new GpuMat())
+               using (GpuMat colors = new GpuMat())
+               using(GpuMat corners = new GpuMat())
                {
                   flow.Dense(oldImage, currentImage, u, v);
 
                   CudaInvoke.CreateOpticalFlowNeedleMap(u, v, vertex, colors);
+                  detector.Detect(oldImage, corners, null);
                   //GpuMat<float> detector.Detect(oldImage, null);
                   /*
                   //PointF[] features = oldImage.GoodFeaturesToTrack(MAX_CORNERS, 0.05, 3.0, 3, false, 0.04)[0];
@@ -1122,7 +1136,9 @@ namespace Emgu.CV.Test
                      out shiftedFeatures, out status, out trackErrors);
                   */
 
-                  CudaImage<Gray, Byte> displayImage = currentImage.Clone(null);
+                  Mat displayImage = new Mat();
+                  currentImage.Download(displayImage);
+                      
                   /*
                   for (int i = 0; i < features.Length; i++)
                      displayImage.Draw(new LineSegment2DF(features[i], shiftedFeatures[i]), new Gray(), 2);

@@ -30,7 +30,10 @@ namespace Emgu.CV
       /// <param name="flow">Computed flow image that has the same size as prev and type CV_32FC2 </param>
       public void Calc(IInputArray i0, IInputArray i1, IInputOutputArray flow)
       {
-         cveDenseOpticalFlowCalc(_ptr, i0.InputArrayPtr, i1.InputArrayPtr, flow.InputOutputArrayPtr);
+         using (InputArray iaI0 = i0.GetInputArray())
+         using (InputArray iaI1 = i1.GetInputArray())
+         using (InputOutputArray ioaFlow = flow.GetInputOutputArray())
+            cveDenseOpticalFlowCalc(_ptr, iaI0, iaI1, ioaFlow);
       }
 
       /// <summary>

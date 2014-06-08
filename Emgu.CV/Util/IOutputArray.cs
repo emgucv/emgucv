@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -21,16 +20,8 @@ namespace Emgu.CV
       /// <summary>
       /// The unmanaged pointer to the output array
       /// </summary>
-      IntPtr OutputArrayPtr { get; }
+      OutputArray GetOutputArray();
    }
 
-   public partial class CvInvoke
-   {
-      /// <summary>
-      /// Release the input / output array
-      /// </summary>
-      /// <param name="arr">Pointer to the input / output array</param>
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void cveOutputArrayRelease(ref IntPtr arr);
-   }
+
 }

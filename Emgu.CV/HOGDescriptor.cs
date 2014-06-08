@@ -160,8 +160,9 @@ namespace Emgu.CV
       {
          using (Util.VectorOfRect vr = new VectorOfRect())
          using (Util.VectorOfDouble vd = new VectorOfDouble())
+         using (InputArray iaImage = image.GetInputArray())
          {
-            CvHOGDescriptorDetectMultiScale(_ptr, image.InputArrayPtr, vr, vd, hitThreshold, ref winStride, ref padding, scale, finalThreshold, useMeanshiftGrouping);
+            CvHOGDescriptorDetectMultiScale(_ptr, iaImage, vr, vd, hitThreshold, ref winStride, ref padding, scale, finalThreshold, useMeanshiftGrouping);
             Rectangle[] location = vr.ToArray();
             double[] weight = vd.ToArray();
             MCvObjectDetection[] result = new MCvObjectDetection[location.Length];
@@ -187,14 +188,17 @@ namespace Emgu.CV
       public float[] Compute(IInputArray image, Size winStride = new Size(), Size padding = new Size(), Point[] locations = null)
       {
          using (VectorOfFloat desc = new VectorOfFloat())
+         using (InputArray iaImage = image.GetInputArray())
          {
             if (locations == null)
-               CvHOGDescriptorCompute(_ptr, image.InputArrayPtr, desc, ref winStride, ref padding, IntPtr.Zero);
+            {
+               CvHOGDescriptorCompute(_ptr, iaImage, desc, ref winStride, ref padding, IntPtr.Zero);
+            }
             else
             {
                using (VectorOfPoint vp = new VectorOfPoint(locations))
                {
-                  CvHOGDescriptorCompute(_ptr, image.InputArrayPtr, desc, ref winStride, ref padding, vp);
+                  CvHOGDescriptorCompute(_ptr, iaImage, desc, ref winStride, ref padding, vp);
                }
             }
             return desc.ToArray();

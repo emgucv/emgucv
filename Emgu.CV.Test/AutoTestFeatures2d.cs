@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using Emgu.CV;
 using Emgu.CV.Features2D;
@@ -518,7 +519,8 @@ namespace Emgu.CV.Test
          BOWImgDescriptorExtractor extractor = new BOWImgDescriptorExtractor(detector, matcher);
          extractor.SetVocabulary(vocabulary);
 
-         Matrix<float> d = extractor.Compute(box, kpts);
+         Mat descriptors2 = new Mat();
+         extractor.Compute(box, kpts, descriptors2);
       }
 
       [Test]
@@ -544,7 +546,8 @@ namespace Emgu.CV.Test
          vocabulary.ConvertTo(vocabularyByte, CvEnum.DepthType.Cv8U);
          extractor.SetVocabulary(vocabularyByte);
 
-         Matrix<float> d = extractor.Compute(box, kpts);
+         Mat descriptors2 = new Mat();
+         extractor.Compute(box, kpts, descriptors2);
       }
    }
 }

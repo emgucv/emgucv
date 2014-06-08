@@ -80,7 +80,9 @@ namespace Emgu.CV
       /// <param name="interpolation">Interpolation method</param>
       public static void Resize(IInputArray src, IOutputArray dst, Size dsize, double fx = 0, double fy = 0, CvEnum.Inter interpolation = CvEnum.Inter.Linear)
       {
-         cveResize(src.InputArrayPtr, dst.OutputArrayPtr, ref dsize, fx, fy, interpolation);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveResize(iaSrc, oaDst, ref dsize, fx, fy, interpolation);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveResize(IntPtr src, IntPtr dst, ref Size dsize, double fx, double fy, CvEnum.Inter interpolation);
@@ -98,7 +100,10 @@ namespace Emgu.CV
       /// <param name="borderValue">A value used to fill outliers</param>
       public static void WarpAffine(IInputArray src, IOutputArray dst, IInputArray mapMatrix, Size dsize, CvEnum.Inter interpMethod = CvEnum.Inter.Linear, CvEnum.Warp warpMethod = CvEnum.Warp.Default, CvEnum.BorderType borderMode = CvEnum.BorderType.Constant, MCvScalar borderValue = new MCvScalar())
       {
-         cveWarpAffine(src.InputArrayPtr, dst.OutputArrayPtr, mapMatrix.InputArrayPtr, ref dsize, (int) interpMethod | (int) warpMethod, borderMode, ref borderValue); 
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMapMatrix = mapMatrix.GetInputArray())
+            cveWarpAffine(iaSrc, oaDst, iaMapMatrix, ref dsize, (int)interpMethod | (int)warpMethod, borderMode, ref borderValue);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -151,7 +156,8 @@ namespace Emgu.CV
       /// <returns>Pointer to the destination 2x3 matrix</returns>
       public static void GetRotationMatrix2D(PointF center, double angle, double scale, IOutputArray mapMatrix)
       {
-         cveGetRotationMatrix2D(ref center, angle, scale, mapMatrix.OutputArrayPtr);
+         using (OutputArray oaMapMatrix = mapMatrix.GetOutputArray())
+            cveGetRotationMatrix2D(ref center, angle, scale, oaMapMatrix);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveGetRotationMatrix2D(
@@ -182,7 +188,10 @@ namespace Emgu.CV
          CvEnum.BorderType borderMode = CvEnum.BorderType.Constant,
          MCvScalar borderValue = new MCvScalar())
       {
-         cveWarpPerspective(src.InputArrayPtr, dst.OutputArrayPtr, mapMatrix.InputArrayPtr, ref dsize, (int)interpolationType | (int)warpType, borderMode, ref borderValue);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMapMatrix = mapMatrix.GetInputArray())
+            cveWarpPerspective(iaSrc, oaDst, iaMapMatrix, ref dsize, (int)interpolationType | (int)warpType, borderMode, ref borderValue);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveWarpPerspective(
@@ -236,12 +245,16 @@ namespace Emgu.CV
       /// <param name="borderValue">A value used to fill outliers</param>
       public static void Remap(
          IInputArray src, IOutputArray dst,
-         IInputArray map1, IInputArray map2, 
-         CvEnum.Inter interpolation, 
+         IInputArray map1, IInputArray map2,
+         CvEnum.Inter interpolation,
          CvEnum.BorderType borderMode = CvEnum.BorderType.Constant,
-         MCvScalar borderValue = new MCvScalar() )
+         MCvScalar borderValue = new MCvScalar())
       {
-         cveRemap(src.InputArrayPtr, dst.OutputArrayPtr, map1.InputArrayPtr, map2.InputArrayPtr, interpolation, borderMode, ref borderValue);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMap1 = map1.GetInputArray())
+         using (InputArray iaMap2 = map2.GetInputArray())
+            cveRemap(iaSrc, oaDst, iaMap1, iaMap2, interpolation, borderMode, ref borderValue);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -254,7 +267,9 @@ namespace Emgu.CV
       /// <param name="im">Output reverse affine transformation.</param>
       public static void InvertAffineTransform(IInputArray m, IOutputArray im)
       {
-         cveInvertAffineTransform(m.InputArrayPtr, im.OutputArrayPtr);
+         using (InputArray iaM = m.GetInputArray())
+         using (OutputArray oaIm = im.GetOutputArray())
+            cveInvertAffineTransform(iaM, oaIm);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveInvertAffineTransform(IntPtr m, IntPtr im);
@@ -269,14 +284,15 @@ namespace Emgu.CV
       public static Mat GetDefaultNewCameraMatrix(IInputArray cameraMatrix, Size imgsize = new Size(), bool centerPrincipalPoint = false)
       {
          Mat m = new Mat();
-         cveGetDefaultNewCameraMatrix(cameraMatrix.InputArrayPtr, ref imgsize, centerPrincipalPoint, m.Ptr);
+         using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+            cveGetDefaultNewCameraMatrix(iaCameraMatrix, ref imgsize, centerPrincipalPoint, m.Ptr);
          return m;
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveGetDefaultNewCameraMatrix(
-         IntPtr cameraMatrix, ref Size imgsize, 
+         IntPtr cameraMatrix, ref Size imgsize,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool centerPrincipalPoint, 
+         bool centerPrincipalPoint,
          IntPtr cm);
 
       /// <summary>
@@ -293,10 +309,12 @@ namespace Emgu.CV
          IOutputArray dst,
          PointF center,
          double M,
-         CvEnum.Inter interpolationType = CvEnum.Inter.Linear, 
+         CvEnum.Inter interpolationType = CvEnum.Inter.Linear,
          CvEnum.Warp warpType = CvEnum.Warp.FillOutliers)
       {
-         cveLogPolar(src.InputArrayPtr, dst.OutputArrayPtr, ref center, M, (int)interpolationType | (int)warpType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveLogPolar(iaSrc, oaDst, ref center, M, (int)interpolationType | (int)warpType);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -324,7 +342,9 @@ namespace Emgu.CV
          CvEnum.Inter interpolationType = CvEnum.Inter.Linear,
          CvEnum.Warp warpType = CvEnum.Warp.FillOutliers)
       {
-         cveLinearPolar(src.InputArrayPtr, dst.OutputArrayPtr, ref center, maxRadius, (int)interpolationType | (int)warpType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveLinearPolar(iaSrc, oaDst, ref center, maxRadius, (int)interpolationType | (int)warpType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveLinearPolar(
@@ -345,7 +365,9 @@ namespace Emgu.CV
       public static void PyrDown(IInputArray src, IOutputArray dst, CvEnum.BorderType borderType = CvEnum.BorderType.Default)
       {
          Size s = Size.Empty;
-         cvePyrDown(src.InputArrayPtr, dst.OutputArrayPtr, ref s, borderType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cvePyrDown(iaSrc, oaDst, ref s, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePyrDown(IntPtr src, IntPtr dst, ref Size size, CvEnum.BorderType borderType);
@@ -359,7 +381,9 @@ namespace Emgu.CV
       public static void PyrUp(IInputArray src, IOutputArray dst, CvEnum.BorderType borderType = CvEnum.BorderType.Default)
       {
          Size s = Size.Empty;
-         cvePyrUp(src.InputArrayPtr, dst.OutputArrayPtr, ref s, borderType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cvePyrUp(iaSrc, oaDst, ref s, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePyrUp(IntPtr src, IntPtr dst, ref Size size, CvEnum.BorderType borderType);
@@ -372,7 +396,9 @@ namespace Emgu.CV
       /// <param name="markers">The input/output Int32 depth single-channel image (map) of markers. </param>
       public static void Watershed(IInputArray image, IInputOutputArray markers)
       {
-         cveWatershed(image.InputArrayPtr, markers.InputOutputArrayPtr);
+         using (InputArray iaImage = image.GetInputArray())
+         using (InputOutputArray ioaMarkers = markers.GetInputOutputArray())
+            cveWatershed(iaImage, ioaMarkers);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveWatershed(IntPtr image, IntPtr markers);
@@ -408,7 +434,9 @@ namespace Emgu.CV
           double reps,
           double aeps)
       {
-         cveFitLine(points.InputArrayPtr, line.OutputArrayPtr, distType, param, reps, aeps);
+         using (InputArray iaPoints = points.GetInputArray())
+         using (OutputArray oaLine = line.GetOutputArray())
+            cveFitLine(iaPoints, oaLine, distType, param, reps, aeps);
       }
 
       /// <summary>
@@ -423,17 +451,19 @@ namespace Emgu.CV
       /// <param name="pointOnLine">A point on the line.</param>
       public static void FitLine(
           PointF[] points,
-          out PointF direction, 
+          out PointF direction,
           out PointF pointOnLine,
           CvEnum.DistType distType,
           double param,
           double reps,
           double aeps)
       {
-         using(VectorOfPointF pv = new VectorOfPointF(points))
+         using (VectorOfPointF pv = new VectorOfPointF(points))
          using (VectorOfFloat line = new VectorOfFloat())
+         using (InputArray iaPv = pv.GetInputArray())
+         using (OutputArray oaLine = line.GetOutputArray())
          {
-            cveFitLine(pv.InputArrayPtr, line.OutputArrayPtr, distType, param, reps, aeps);
+            cveFitLine(iaPv, oaLine, distType, param, reps, aeps);
             float[] values = line.ToArray();
             direction = new PointF(values[0], values[1]);
             pointOnLine = new PointF(values[2], values[3]);
@@ -452,7 +482,8 @@ namespace Emgu.CV
       /// <returns>The intersect type</returns>
       public static CvEnum.RectIntersectType RotatedRectangleIntersection(RotatedRect rect1, RotatedRect rect2, IOutputArray intersectingRegion)
       {
-         return cveRotatedRectangleIntersection(ref rect1, ref rect2, intersectingRegion.OutputArrayPtr);
+         using (OutputArray oaIntersectingRegion = intersectingRegion.GetOutputArray())
+            return cveRotatedRectangleIntersection(ref rect1, ref rect2, oaIntersectingRegion);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern CvEnum.RectIntersectType cveRotatedRectangleIntersection(ref RotatedRect rect1, ref RotatedRect rect2, IntPtr intersectingRegion);
@@ -467,8 +498,9 @@ namespace Emgu.CV
          PointF[] pts = new PointF[4];
          GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);
          using (Mat vp = new Mat(4, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), 8))
+         using (OutputArray oaVp = vp.GetOutputArray())
          {
-            cveBoxPoints(ref box, vp.OutputArrayPtr);
+            cveBoxPoints(ref box, oaVp);
          }
          handle.Free();
          return pts;
@@ -481,7 +513,8 @@ namespace Emgu.CV
       /// <param name="points">The output array of four vertices of rectangles.</param>
       public static void BoxPoints(RotatedRect box, IOutputArray points)
       {
-         cveBoxPoints(ref box, points.OutputArrayPtr);
+         using (OutputArray oaPoints = points.GetOutputArray())
+            cveBoxPoints(ref box, oaPoints);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveBoxPoints(
@@ -496,7 +529,8 @@ namespace Emgu.CV
       public static RotatedRect FitEllipse(IInputArray points)
       {
          RotatedRect ellipse = new RotatedRect();
-         cveFitEllipse(points.InputArrayPtr, ref ellipse);
+         using (InputArray iaPoints = points.GetInputArray())
+            cveFitEllipse(iaPoints, ref ellipse);
          return ellipse;
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -528,7 +562,9 @@ namespace Emgu.CV
       /// <param name="returnPoints">Operation flag. In case of a matrix, when the flag is true, the function returns convex hull points. Otherwise, it returns indices of the convex hull points. When the output array is std::vector, the flag is ignored, and the output depends on the type of the vector</param>
       public static void ConvexHull(IInputArray points, IOutputArray hull, bool clockwise = false, bool returnPoints = true)
       {
-         cveConvexHull(points.InputArrayPtr, hull.OutputArrayPtr, clockwise, returnPoints);
+         using (InputArray iaPoints = points.GetInputArray())
+         using (OutputArray oaHull = hull.GetOutputArray())
+            cveConvexHull(iaPoints, oaHull, clockwise, returnPoints);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveConvexHull(
@@ -561,7 +597,10 @@ namespace Emgu.CV
       /// <param name="anchor">Position of the anchor within the element; default value (-1, -1) means that the anchor is at the element center.</param>
       public static void Erode(IInputArray src, IOutputArray dst, IInputArray element, Point anchor, int iterations, CvEnum.BorderType borderType, MCvScalar borderValue)
       {
-         cveErode(src.InputArrayPtr, dst.OutputArrayPtr, element == null ? IntPtr.Zero : element.InputArrayPtr, ref anchor, iterations, borderType, ref borderValue);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaElement = element == null ? InputArray.GetEmpty() : element.GetInputArray())
+            cveErode(iaSrc, oaDst, iaElement, ref anchor, iterations, borderType, ref borderValue);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveErode(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BorderType borderType, ref MCvScalar borderValue);
@@ -579,7 +618,10 @@ namespace Emgu.CV
       /// <param name="anchor">Position of the anchor within the element; default value (-1, -1) means that the anchor is at the element center.</param>
       public static void Dilate(IInputArray src, IOutputArray dst, IInputArray element, Point anchor, int iterations, CvEnum.BorderType borderType, MCvScalar borderValue)
       {
-         cveDilate(src.InputArrayPtr, dst.OutputArrayPtr, element == null ? IntPtr.Zero : element.InputArrayPtr, ref anchor, iterations, borderType, ref borderValue);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaElement = element == null ? InputArray.GetEmpty() : element.GetInputArray())
+            cveDilate(iaSrc, oaDst, iaElement, ref anchor, iterations, borderType, ref borderValue);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BorderType borderType, ref MCvScalar borderValue);
@@ -588,7 +630,9 @@ namespace Emgu.CV
       public static void GaussianBlur(IInputArray src, IOutputArray dst, Size ksize, double sigmaX, double sigmaY = 0,
          CvEnum.BorderType borderType = BorderType.Default)
       {
-         cveGaussianBlur(src.InputArrayPtr, dst.OutputArrayPtr, ref ksize, sigmaX, sigmaY, borderType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveGaussianBlur(iaSrc, oaDst, ref ksize, sigmaX, sigmaY, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveGaussianBlur(IntPtr src, IntPtr dst, ref Size ksize, double sigmaX, double sigmaY, CvEnum.BorderType borderType);
@@ -604,7 +648,9 @@ namespace Emgu.CV
       public static void Blur(IInputArray src, IOutputArray dst, Size ksize, Point anchor,
          CvEnum.BorderType borderType = BorderType.Default)
       {
-         cveBlur(src.InputArrayPtr, dst.OutputArrayPtr, ref ksize, ref anchor, borderType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveBlur(iaSrc, oaDst, ref ksize, ref anchor, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveBlur(IntPtr src, IntPtr dst, ref Size kSize, ref Point anchor, CvEnum.BorderType borderType);
@@ -617,7 +663,9 @@ namespace Emgu.CV
       /// <param name="ksize">Aperture linear size; it must be odd and greater than 1, for example: 3, 5, 7 ...</param>
       public static void MedianBlur(IInputArray src, IOutputArray dst, int ksize)
       {
-         cveMedianBlur(src.InputArrayPtr, dst.OutputArrayPtr, ksize);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveMedianBlur(iaSrc, oaDst, ksize);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveMedianBlur(IntPtr src, IntPtr dst, int ksize);
@@ -635,11 +683,13 @@ namespace Emgu.CV
       public static void BoxFilter(IInputArray src, IOutputArray dst, DepthType ddepth, Size ksize, Point anchor,
          bool normalize = true, CvEnum.BorderType borderType = BorderType.Default)
       {
-         cveBoxFilter(src.InputArrayPtr, dst.OutputArrayPtr, ddepth, ref ksize, ref anchor, normalize, borderType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveBoxFilter(iaSrc, oaDst, ddepth, ref ksize, ref anchor, normalize, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveBoxFilter(
-         IntPtr src, IntPtr dst, DepthType ddepth, ref Size ksize, ref Point anchor, 
+         IntPtr src, IntPtr dst, DepthType ddepth, ref Size ksize, ref Point anchor,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool normailize, CvEnum.BorderType borderType);
 
@@ -655,7 +705,9 @@ namespace Emgu.CV
       public static void BilateralFilter(IInputArray src, IOutputArray dst, int d, double sigmaColor, double sigmaSpace,
          CvEnum.BorderType borderType = BorderType.Default)
       {
-         cveBilateralFilter(src.InputArrayPtr, dst.OutputArrayPtr, d, sigmaColor, sigmaSpace, borderType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveBilateralFilter(iaSrc, oaDst, d, sigmaColor, sigmaSpace, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveBilateralFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpace, CvEnum.BorderType borderType);
@@ -693,17 +745,19 @@ namespace Emgu.CV
       ///<param name="scale">Optional scale factor for the computed derivative values</param>
       ///<param name="delta">Optional delta value that is added to the results prior to storing them in <paramref name="dst"/></param>
       public static void Sobel(
-         IInputArray src, IOutputArray dst, 
-         CvEnum.DepthType ddepth, int xorder, int yorder, 
-         int kSize = 3, double scale = 1, double delta = 0, 
+         IInputArray src, IOutputArray dst,
+         CvEnum.DepthType ddepth, int xorder, int yorder,
+         int kSize = 3, double scale = 1, double delta = 0,
          CvEnum.BorderType borderType = CvEnum.BorderType.Default)
       {
-         cveSobel(src.InputArrayPtr, dst.OutputArrayPtr, ddepth, xorder, yorder, kSize, scale, delta, borderType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveSobel(iaSrc, oaDst, ddepth, xorder, yorder, kSize, scale, delta, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveSobel(IntPtr src, IntPtr dst, CvEnum.DepthType ddepth, int xorder, int yorder, int apertureSize, double scale, double delta, CvEnum.BorderType borderType);
 
-      
+
       /// <summary>
       /// Calculates Laplacian of the source image by summing second x- and y- derivatives calculated using Sobel operator:
       /// dst(x,y) = d2src/dx2 + d2src/dy2
@@ -721,11 +775,13 @@ namespace Emgu.CV
       /// <param name="delta">Optional delta value that is added to the results prior to storing them in dst.</param>
       /// <param name="borderType"> Pixel extrapolation method.</param>
       public static void Laplacian(
-         IInputArray src, IOutputArray dst, 
-         CvEnum.DepthType ddepth, int ksize = 1, double scale = 1, double delta = 0, 
+         IInputArray src, IOutputArray dst,
+         CvEnum.DepthType ddepth, int ksize = 1, double scale = 1, double delta = 0,
          CvEnum.BorderType borderType = CvEnum.BorderType.Default)
       {
-         cveLaplacian(src.InputArrayPtr, dst.OutputArrayPtr, ddepth, ksize, scale, delta, borderType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveLaplacian(iaSrc, oaDst, ddepth, ksize, scale, delta, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveLaplacian(IntPtr src, IntPtr dst, CvEnum.DepthType ddepth, int ksize, double scale, double delta, CvEnum.BorderType borderType);
@@ -747,10 +803,12 @@ namespace Emgu.CV
           int apertureSize = 3,
           bool l2Gradient = false)
       {
-         cveCanny(image.InputArrayPtr, edges.OutputArrayPtr, threshold1, threshold2, apertureSize, l2Gradient);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaEdges = edges.GetOutputArray())
+            cveCanny(iaImage, oaEdges, threshold1, threshold2, apertureSize, l2Gradient);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveCanny(IntPtr image, IntPtr edges, double threshold1, double threshold2, int apertureSize, 
+      private static extern void cveCanny(IntPtr image, IntPtr edges, double threshold1, double threshold2, int apertureSize,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool l2Gradient);
 
@@ -761,7 +819,8 @@ namespace Emgu.CV
       /// <returns>true if input is convex</returns>
       public static bool IsContourConvex(IInputArray contour)
       {
-         return cveIsContourConvex(contour.InputArrayPtr);
+         using (InputArray iaContour = contour.GetInputArray())
+            return cveIsContourConvex(iaContour);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -780,7 +839,8 @@ namespace Emgu.CV
       /// </returns>
       public static double PointPolygonTest(IInputArray contour, PointF pt, bool measureDist)
       {
-         return cvePointPolygonTest(contour.InputArrayPtr, ref pt, measureDist);
+         using (InputArray iaContour = contour.GetInputArray())
+            return cvePointPolygonTest(iaContour, ref pt, measureDist);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -825,7 +885,8 @@ namespace Emgu.CV
       public static RotatedRect MinAreaRect(IInputArray points)
       {
          RotatedRect rect = new RotatedRect();
-         cveMinAreaRect(points.InputArrayPtr, ref rect);
+         using (InputArray iaPoints = points.GetInputArray())
+            cveMinAreaRect(iaPoints, ref rect);
          return rect;
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -852,7 +913,8 @@ namespace Emgu.CV
       {
          PointF center = new PointF();
          float radius = 0;
-         cveMinEnclosingCircle(points.InputArrayPtr, ref center, ref radius);
+         using (InputArray iaPoints = points.GetInputArray())
+            cveMinEnclosingCircle(iaPoints, ref center, ref radius);
          return new CircleF(center, radius);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -866,7 +928,9 @@ namespace Emgu.CV
       /// <returns>The triangle's area</returns>
       public static double MinEnclosingTriangle(IInputArray points, IOutputArray triangles)
       {
-         return cveMinEnclosingTriangle(points.InputArrayPtr, triangles.OutputArrayPtr);
+         using (InputArray iaPoints = points.GetInputArray())
+         using (OutputArray oaTriangles = triangles.GetOutputArray())
+            return cveMinEnclosingTriangle(iaPoints, oaTriangles);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveMinEnclosingTriangle(IntPtr points, IntPtr triangle);
@@ -882,9 +946,11 @@ namespace Emgu.CV
       /// <param name="closed"> If true, the approximated curve is closed (its first and last vertices are connected). Otherwise, it is not closed.</param>
       public static void ApproxPolyDP(IInputArray curve, IOutputArray approxCurve, double epsilon, bool closed)
       {
-         cveApproxPolyDP(curve.InputArrayPtr, approxCurve.OutputArrayPtr, epsilon, closed);         
+         using (InputArray iaCurve = curve.GetInputArray())
+         using (OutputArray oaApproxCurve = approxCurve.GetOutputArray())
+            cveApproxPolyDP(iaCurve, oaApproxCurve, epsilon, closed);
       }
-      
+
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveApproxPolyDP(
          IntPtr curve,
@@ -901,7 +967,8 @@ namespace Emgu.CV
       public static Rectangle BoundingRectangle(IInputArray points)
       {
          Rectangle rectangle = new Rectangle();
-         cveBoundingRectangle(points.InputArrayPtr, ref rectangle);
+         using (InputArray iaPoints = points.GetInputArray())
+            cveBoundingRectangle(iaPoints, ref rectangle);
          return rectangle;
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -917,11 +984,12 @@ namespace Emgu.CV
       /// <returns>The area of the whole contour or contour section</returns>
       public static double ContourArea(IInputArray contour, bool oriented = false)
       {
-         return cveContourArea(contour.InputArrayPtr, oriented);
+         using (InputArray iaContour = contour.GetInputArray())
+            return cveContourArea(iaContour, oriented);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveContourArea(
-         IntPtr contour, 
+         IntPtr contour,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool oriented);
 
@@ -935,7 +1003,8 @@ namespace Emgu.CV
       /// <returns>Contour perimeter or a curve length</returns>
       public static double ArcLength(IInputArray curve, bool isClosed)
       {
-         return cveArcLength(curve.InputArrayPtr, isClosed);
+         using (InputArray iaCurve = curve.GetInputArray())
+            return cveArcLength(iaCurve, isClosed);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveArcLength(
@@ -1029,7 +1098,9 @@ namespace Emgu.CV
          double maxValue,
          CvEnum.ThresholdType thresholdType)
       {
-         return cveThreshold(src.InputArrayPtr, dst.OutputArrayPtr, threshold, maxValue, thresholdType);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            return cveThreshold(iaSrc, oaDst, threshold, maxValue, thresholdType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveThreshold(
@@ -1054,7 +1125,7 @@ namespace Emgu.CV
       /// <param name="blockSize">The size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, ... </param>
       /// <param name="param1">Constant subtracted from mean or weighted mean. It may be negative. </param>
       public static void AdaptiveThreshold(
-         IInputOutputArray src,
+         IInputArray src,
          IOutputArray dst,
          double maxValue,
          CvEnum.AdaptiveThresholdType adaptiveType,
@@ -1062,8 +1133,9 @@ namespace Emgu.CV
          int blockSize,
          double param1)
       {
-         cveAdaptiveThreshold(src.InputOutputArrayPtr, dst.OutputArrayPtr,
-            maxValue, adaptiveType, thresholdType, blockSize, param1);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveAdaptiveThreshold(iaSrc, oaDst, maxValue, adaptiveType, thresholdType, blockSize, param1);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveAdaptiveThreshold(
@@ -1092,7 +1164,10 @@ namespace Emgu.CV
          CvEnum.ChainApproxMethod method,
          Point offset = new Point())
       {
-         cveFindContours(image.InputOutputArrayPtr, contours.OutputArrayPtr, hierarchy == null ? IntPtr.Zero : hierarchy.OutputArrayPtr, mode, method, ref offset);
+         using (InputOutputArray ioaImage = image.GetInputOutputArray())
+         using (OutputArray oaContours = contours.GetOutputArray())
+         using (OutputArray oaHierarchy = hierarchy == null ? OutputArray.GetEmpty() : hierarchy.GetOutputArray())
+            cveFindContours(ioaImage, oaContours, oaHierarchy, mode, method, ref offset);
       }
 
       /// <summary>
@@ -1111,7 +1186,7 @@ namespace Emgu.CV
       {
          using (Mat hierachyMat = new Mat())
          {
-            cveFindContours(image.InputOutputArrayPtr, contours.OutputArrayPtr, hierachyMat.OutputArrayPtr, RetrType.Tree, method, ref offset);
+            FindContours(image, contours, hierachyMat, RetrType.Tree, method, offset);
             int[,] hierachy = new int[hierachyMat.Cols, 4];
             GCHandle handle = GCHandle.Alloc(hierachy, GCHandleType.Pinned);
             using (Mat tmp = new Mat(hierachyMat.Rows, hierachyMat.Cols, hierachyMat.Depth, 4, handle.AddrOfPinnedObject(), hierachyMat.Step))
@@ -1227,7 +1302,7 @@ namespace Emgu.CV
             else if (
                Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows &&
                Emgu.Util.Platform.ClrType == Emgu.Util.TypeEnum.ClrType.DotNet &&
-               srcColorType == typeof(Bgr) && srcDepthType == typeof(Byte) 
+               srcColorType == typeof(Bgr) && srcDepthType == typeof(Byte)
                && (step & 3) == 0)
             {   //Bgr byte    
                return new Bitmap(
@@ -1367,7 +1442,9 @@ namespace Emgu.CV
       /// <param name="dstCn">number of channels in the destination image; if the parameter is 0, the number of the channels is derived automatically from src and code .</param>
       public static void CvtColor(IInputArray src, IOutputArray dst, CvEnum.ColorConversion code, int dstCn = 0)
       {
-         cveCvtColor(src.InputArrayPtr, dst.OutputArrayPtr, code, dstCn);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveCvtColor(iaSrc, oaDst, code, dstCn);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCvtColor(IntPtr src, IntPtr dst, CvEnum.ColorConversion code, int dstCn);
@@ -1397,7 +1474,9 @@ namespace Emgu.CV
          int minRadius = 0,
          int maxRadius = 0)
       {
-         cveHoughCircles(image.InputArrayPtr, circles.OutputArrayPtr, method, dp, minDist, param1, param2, minRadius, maxRadius);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaCircles = circles.GetOutputArray())
+            cveHoughCircles(iaImage, oaCircles, method, dp, minDist, param1, param2, minRadius, maxRadius);
       }
 
       /// <summary>
@@ -1462,7 +1541,9 @@ namespace Emgu.CV
       /// <param name="stn"> For the multi-scale Hough transform, it is a divisor for the distance resolution theta</param>
       public static void HoughLines(IInputArray image, IOutputArray lines, double rho, double theta, int threshold, double srn = 0, double stn = 0)
       {
-         cveHoughLines(image.InputArrayPtr, lines.OutputArrayPtr, rho, theta, threshold, srn, stn);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaLines = lines.GetOutputArray())
+            cveHoughLines(iaImage, oaLines, rho, theta, threshold, srn, stn);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveHoughLines(IntPtr image, IntPtr lines, double rho, double theta, int threshold, double srn, double stn);
@@ -1508,7 +1589,9 @@ namespace Emgu.CV
       /// <param name="maxGap">Maximum allowed gap between points on the same line to link them.</param>
       public static void HoughLinesP(IInputArray image, IOutputArray lines, double rho, double theta, int threshold, double minLineLength = 0, double maxGap = 0)
       {
-         cveHoughLinesP(image.InputArrayPtr, lines.OutputArrayPtr, rho, theta, threshold, minLineLength, maxGap);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaLines = lines.GetOutputArray())
+            cveHoughLinesP(iaImage, oaLines, rho, theta, threshold, minLineLength, maxGap);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveHoughLinesP(IntPtr image, IntPtr lines, double rho, double theta, int threshold, double minLineLength, double maxGap);
@@ -1522,14 +1605,15 @@ namespace Emgu.CV
       public static MCvMoments Moments(IInputArray arr, bool binaryImage = false)
       {
          MCvMoments m = new MCvMoments();
-         cveMoments(arr.InputArrayPtr, binaryImage, ref m);
+         using (InputArray iaArr = arr.GetInputArray())
+            cveMoments(iaArr, binaryImage, ref m);
          return m;
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveMoments(
-         IntPtr arr, 
+         IntPtr arr,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool binaryImage, 
+         bool binaryImage,
          ref MCvMoments moments);
 
       /*
@@ -1579,7 +1663,10 @@ namespace Emgu.CV
          IOutputArray result,
          CvEnum.TemplateMatchingType method)
       {
-         cveMatchTemplate(image.InputArrayPtr, templ.InputArrayPtr, result.OutputArrayPtr, method);
+         using (InputArray iaImage = image.GetInputArray())
+         using (InputArray iaTempl = templ.GetInputArray())
+         using (OutputArray oaResult = result.GetOutputArray())
+            cveMatchTemplate(iaImage, iaTempl, oaResult, method);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveMatchTemplate(
@@ -1597,11 +1684,13 @@ namespace Emgu.CV
       /// <param name="parameter">Method-specific parameter (is not used now)</param>
       /// <returns>The result of the comparison</returns>
       public static double MatchShapes(
-         IInputArray contour1, IInputArray contour2, 
+         IInputArray contour1, IInputArray contour2,
          CvEnum.ContoursMatchType method,
          double parameter = 0)
       {
-         return cveMatchShapes(contour1.InputArrayPtr, contour2.InputArrayPtr, method, parameter);
+         using (InputArray iaContour1 = contour1.GetInputArray())
+         using (InputArray iaContour2 = contour2.GetInputArray())
+            return cveMatchShapes(iaContour1, iaContour2, method, parameter);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveMatchShapes(
@@ -1648,7 +1737,10 @@ namespace Emgu.CV
          CvEnum.BorderType borderType,
          MCvScalar borderValue)
       {
-         cveMorphologyEx(src.InputArrayPtr, dst.OutputArrayPtr, operation, kernel.InputArrayPtr, ref anchor, iterations, borderType, ref borderValue);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaKernel = kernel.GetInputArray())
+            cveMorphologyEx(iaSrc, oaDst, operation, iaKernel, ref anchor, iterations, borderType, ref borderValue);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveMorphologyEx(
@@ -1657,7 +1749,7 @@ namespace Emgu.CV
          CvEnum.MorphOp operation,
          IntPtr kernel,
          ref Point anchor,
-         int iterations, 
+         int iterations,
          CvEnum.BorderType borderType,
          ref MCvScalar borderValue);
 
@@ -1871,7 +1963,9 @@ namespace Emgu.CV
       /// <param name="dst">The output image of the same size and the same data type as src</param>
       public static void EqualizeHist(IInputArray src, IOutputArray dst)
       {
-         cveEqualizeHist(src.InputArrayPtr, dst.OutputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveEqualizeHist(iaSrc, oaDst);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveEqualizeHist(IntPtr src, IntPtr dst);
@@ -1891,15 +1985,18 @@ namespace Emgu.CV
          using (VectorOfInt channelsVec = new VectorOfInt(channels))
          using (VectorOfInt histSizeVec = new VectorOfInt(histSize))
          using (VectorOfFloat rangesVec = new VectorOfFloat(ranges))
+         using (InputArray iaImages = images.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         using (OutputArray oaHist = hist.GetOutputArray())
          {
-            cveCalcHist(images.InputArrayPtr, channelsVec, mask == null ? IntPtr.Zero : mask.InputArrayPtr, hist.OutputArrayPtr, histSizeVec, rangesVec, accumulate);
+            cveCalcHist(iaImages, channelsVec, iaMask, oaHist, histSizeVec, rangesVec, accumulate);
          }
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCalcHist(
-         IntPtr images, IntPtr channels, IntPtr mask, IntPtr hist, IntPtr histSize, IntPtr ranges, 
+         IntPtr images, IntPtr channels, IntPtr mask, IntPtr hist, IntPtr histSize, IntPtr ranges,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool accumulate );
+         bool accumulate);
 
       /// <summary>
       /// Calculates the back projection of a histogram.
@@ -1914,8 +2011,11 @@ namespace Emgu.CV
       {
          using (VectorOfInt channelsVec = new VectorOfInt(channels))
          using (VectorOfFloat rangeVec = new VectorOfFloat(ranges))
+         using (InputArray iaImages = images.GetInputArray())
+         using (InputArray iaHist = hist.GetInputArray())
+         using (OutputArray oaBackProject = backProject.GetOutputArray())
          {
-            cveCalcBackProject(images.InputArrayPtr, channelsVec, hist.InputArrayPtr, backProject.OutputArrayPtr, rangeVec, scale);
+            cveCalcBackProject(iaImages, channelsVec, iaHist, oaBackProject, rangeVec, scale);
          }
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1930,7 +2030,9 @@ namespace Emgu.CV
       /// <returns>The distance between the histogram</returns>
       public static double CompareHist(IInputArray h1, IInputArray h2, CvEnum.HistogramCompMethod method)
       {
-         return cveCompareHist(h1.InputArrayPtr, h2.InputArrayPtr, method);
+         using (InputArray iaH1 = h1.GetInputArray())
+         using (InputArray iaH2 = h2.GetInputArray())
+            return cveCompareHist(iaH1, iaH2, method);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveCompareHist(IntPtr h1, IntPtr h2, CvEnum.HistogramCompMethod method);
@@ -1991,7 +2093,10 @@ namespace Emgu.CV
       /// <param name="mask">Optional operation mask</param>
       public static void Accumulate(IInputArray src, IInputOutputArray dst, IInputArray mask = null)
       {
-         cveAccumulate(src.InputArrayPtr, dst.InputOutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputOutputArray ioaDst = dst.GetInputOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cveAccumulate(iaSrc, ioaDst, iaMask);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2005,7 +2110,10 @@ namespace Emgu.CV
       /// <param name="mask">Optional operation mask</param>
       public static void AccumulateSquare(IInputArray src, IInputOutputArray dst, IInputArray mask = null)
       {
-         cveAccumulateSquare(src.InputArrayPtr, dst.InputOutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputOutputArray ioaDst = dst.GetInputOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cveAccumulateSquare(iaSrc, ioaDst, iaMask);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2018,9 +2126,13 @@ namespace Emgu.CV
       /// <param name="src2">Second input image, the same format as the first one</param>
       /// <param name="dst">Accumulator of the same number of channels as input images, 32-bit or 64-bit floating-point</param>
       /// <param name="mask">Optional operation mask</param>
-      public static void AccumulateProduct(IInputArray src1, IInputArray src2, IInputOutputArray dst, IInputOutputArray mask = null)
+      public static void AccumulateProduct(IInputArray src1, IInputArray src2, IInputOutputArray dst, IInputArray mask = null)
       {
-         cveAccumulateProduct(src1.InputArrayPtr, src2.InputArrayPtr, dst.InputOutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputOutputArrayPtr);
+         using (InputArray iaSrc1 = src1.GetInputArray())
+         using (InputArray iaSrc2 = src2.GetInputArray())
+         using (InputOutputArray ioaDst = dst.GetInputOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cveAccumulateProduct(iaSrc1, iaSrc2, ioaDst, iaMask);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveAccumulateProduct(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
@@ -2036,7 +2148,10 @@ namespace Emgu.CV
       /// <param name="mask">Optional operation mask</param>
       public static void AccumulateWeighted(IInputArray src, IInputOutputArray dst, double alpha, IInputArray mask = null)
       {
-         cveAccumulateWeighted(src.InputArrayPtr, dst.InputOutputArrayPtr, alpha, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputOutputArray ioaDst = dst.GetInputOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cveAccumulateWeighted(iaSrc, ioaDst, alpha, iaMask);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2057,20 +2172,22 @@ namespace Emgu.CV
       /// to the destination image. Corners in the image can be found as local maxima of the destination image.
       /// </summary>
       /// <param name="image">Input image</param>
-      /// <param name="harrisResponce">Image to store the Harris detector responces. Should have the same size as image </param>
+      /// <param name="harrisResponse">Image to store the Harris detector responces. Should have the same size as image </param>
       /// <param name="blockSize">Neighborhood size </param>
       /// <param name="apertureSize">Aperture parameter for Sobel operator (see cvSobel). format. In the case of floating-point input format this parameter is the number of the fixed float filter used for differencing. </param>
       /// <param name="k">Harris detector free parameter.</param>
       /// <param name="borderType">Pixel extrapolation method.</param>
       public static void CornerHarris(
          IInputArray image,
-         IOutputArray harrisResponce,
+         IOutputArray harrisResponse,
          int blockSize,
          int apertureSize = 3,
-         double k = 0.04, 
+         double k = 0.04,
          CvEnum.BorderType borderType = CvEnum.BorderType.Default)
       {
-         cveCornerHarris(image.InputArrayPtr, harrisResponce.OutputArrayPtr, blockSize, apertureSize, k, borderType);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaHarrisResponse = harrisResponse.GetOutputArray())
+            cveCornerHarris(iaImage, oaHarrisResponse, blockSize, apertureSize, k, borderType);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCornerHarris(
@@ -2095,7 +2212,9 @@ namespace Emgu.CV
          Size zeroZone,
          MCvTermCriteria criteria)
       {
-         cveCornerSubPix(image.InputArrayPtr, corners.InputOutputArrayPtr, ref win, ref zeroZone, ref criteria);
+         using (InputArray iaImage = image.GetInputArray())
+         using (InputOutputArray ioaCorners = corners.GetInputOutputArray())
+            cveCornerSubPix(iaImage, ioaCorners, ref win, ref zeroZone, ref criteria);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCornerSubPix(
@@ -2120,22 +2239,23 @@ namespace Emgu.CV
          IInputArray image,
          IOutputArray sum,
          IOutputArray sqsum = null,
-         IOutputArray tiltedSum = null, 
-         CvEnum.DepthType sdepth = CvEnum.DepthType.Default, 
+         IOutputArray tiltedSum = null,
+         CvEnum.DepthType sdepth = CvEnum.DepthType.Default,
          CvEnum.DepthType sqdepth = CvEnum.DepthType.Default)
       {
-         cveIntegral(image.InputArrayPtr, sum.OutputArrayPtr, 
-            sqsum == null ? IntPtr.Zero : sqsum.OutputArrayPtr, 
-            tiltedSum == null ? IntPtr.Zero : tiltedSum.OutputArrayPtr, 
-            sdepth, sqdepth);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaSum = sum.GetOutputArray())
+         using (OutputArray oaSqsum = sqsum == null ? OutputArray.GetEmpty() : sqsum.GetOutputArray())
+         using (OutputArray oaTiltedSum = tiltedSum == null ? OutputArray.GetEmpty() : tiltedSum.GetOutputArray())
+            cveIntegral(iaImage, oaSum, oaSqsum, oaTiltedSum, sdepth, sqdepth);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveIntegral(
          IntPtr image,
          IntPtr sum,
          IntPtr sqsum,
-         IntPtr tiltedSum, 
-         CvEnum.DepthType sdepth, 
+         IntPtr tiltedSum,
+         CvEnum.DepthType sdepth,
          CvEnum.DepthType sqdepth);
 
       /// <summary>
@@ -2201,12 +2321,14 @@ namespace Emgu.CV
          CvEnum.FloodFillType flags = CvEnum.FloodFillType.Default)
       {
          rect = new Rectangle();
-         return cveFloodFill(
-            src.InputOutputArrayPtr, 
-            mask == null ? IntPtr.Zero : mask.InputOutputArrayPtr, 
-            ref seedPoint, ref newVal, 
-            ref rect,
-            ref loDiff, ref upDiff, (int)connectivity | (int)flags);
+         using (InputOutputArray ioaSrc = src.GetInputOutputArray())
+         using (InputOutputArray ioaMask = mask == null ? InputOutputArray.GetEmpty() : mask.GetInputOutputArray())
+            return cveFloodFill(
+               ioaSrc,
+               ioaMask,
+               ref seedPoint, ref newVal,
+               ref rect,
+               ref loDiff, ref upDiff, (int)connectivity | (int)flags);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int cveFloodFill(
@@ -2233,7 +2355,9 @@ namespace Emgu.CV
          double sp, double sr, int maxLevel,
          MCvTermCriteria termcrit)
       {
-         cvePyrMeanShiftFiltering(src.InputArrayPtr, dst.OutputArrayPtr, sp, sr, maxLevel, ref termcrit);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cvePyrMeanShiftFiltering(iaSrc, oaDst, sp, sr, maxLevel, ref termcrit);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePyrMeanShiftFiltering(
@@ -2254,7 +2378,11 @@ namespace Emgu.CV
       /// <param name="nninterpolation">Flag indicating whether the fixed-point maps are used for the nearest-neighbor or for a more complex interpolation.</param>
       public static void ConvertMaps(IInputArray map1, IInputArray map2, IOutputArray dstmap1, IOutputArray dstmap2, CvEnum.DepthType dstmap1Depth, int dstmap1Channels, bool nninterpolation = false)
       {
-         cveConvertMaps(map1.InputArrayPtr, map2 == null ? IntPtr.Zero : map2.InputArrayPtr, dstmap1.OutputArrayPtr, dstmap2 == null ? IntPtr.Zero : dstmap2.OutputArrayPtr, CvInvoke.MakeType(dstmap1Depth, dstmap1Channels), nninterpolation);
+         using (InputArray iaMap1 = map1.GetInputArray())
+         using (InputArray iaMap2 = map2 == null ? InputArray.GetEmpty() : map2.GetInputArray())
+         using (OutputArray oaDstmap1 = dstmap1.GetOutputArray())
+         using (OutputArray oaDstmap2 = dstmap2 == null ? OutputArray.GetEmpty() : dstmap2.GetOutputArray())
+            cveConvertMaps(iaMap1, iaMap2, oaDstmap1, oaDstmap2, CvInvoke.MakeType(dstmap1Depth, dstmap1Channels), nninterpolation);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveConvertMaps(
@@ -2279,12 +2407,12 @@ namespace Emgu.CV
          IInputArray distortionCoeffs,
          IInputArray newCameraMatrix = null)
       {
-         cveUndistort(
-            src.InputArrayPtr,
-            dst.OutputArrayPtr,
-            cameraMatrix.InputArrayPtr,
-            distortionCoeffs.InputArrayPtr,
-            newCameraMatrix == null ? IntPtr.Zero : newCameraMatrix.InputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+         using (InputArray iaDistortionCoeffs = distortionCoeffs.GetInputArray())
+         using (InputArray iaNewCameraMatrix = newCameraMatrix == null ? InputArray.GetEmpty() : newCameraMatrix.GetInputArray())
+            cveUndistort(iaSrc, oaDst, iaCameraMatrix, iaDistortionCoeffs, iaNewCameraMatrix);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2311,21 +2439,26 @@ namespace Emgu.CV
          IInputArray distCoeffs,
          IInputArray R,
          IInputArray newCameraMatrix,
-         Size size, 
+         Size size,
          CvEnum.DepthType depthType,
          IOutputArray map1,
          IOutputArray map2 = null)
       {
          int channels = map2 == null ? 2 : 1;
-         cveInitUndistortRectifyMap(
-            cameraMatrix.InputArrayPtr,
-            distCoeffs.InputArrayPtr,
-            R == null ? IntPtr.Zero : R.InputArrayPtr,
-            newCameraMatrix.InputArrayPtr,
-            ref size,
-            CvInvoke.MakeType(depthType, channels),
-            map1.OutputArrayPtr,
-            map2 == null ? IntPtr.Zero : map2.OutputArrayPtr);
+         using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+         using (InputArray iaDistCoeffs = distCoeffs.GetInputArray())
+         using (InputArray iaR = R == null ? InputArray.GetEmpty() : R.GetInputArray())
+         using (InputArray iaNewCameraMatrix = newCameraMatrix.GetInputArray())
+         using (OutputArray oaMap1 = map1.GetOutputArray())
+         using (OutputArray oaMap2 = map2 == null ? OutputArray.GetEmpty() : map2.GetOutputArray())
+            cveInitUndistortRectifyMap(
+               iaCameraMatrix,
+               iaDistCoeffs,
+               iaR,
+               iaNewCameraMatrix,
+               ref size,
+               CvInvoke.MakeType(depthType, channels),
+               oaMap1, oaMap2);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveInitUndistortRectifyMap(
@@ -2357,13 +2490,19 @@ namespace Emgu.CV
          IInputArray R = null,
          IInputArray P = null)
       {
-         cveUndistortPoints(
-            src.InputArrayPtr,
-            dst.OutputArrayPtr,
-            cameraMatrix.InputArrayPtr,
-            distCoeffs.InputArrayPtr,
-            R == null ? IntPtr.Zero : R.InputArrayPtr,
-            P == null ? IntPtr.Zero : P.InputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+         using (InputArray iaDistCoeffs = distCoeffs.GetInputArray())
+         using (InputArray iaR = R == null ? InputArray.GetEmpty() : R.GetInputArray())
+         using (InputArray iaP = P == null ? InputArray.GetEmpty() : P.GetInputArray())
+            cveUndistortPoints(
+               iaSrc,
+               oaDst,
+               iaCameraMatrix,
+               iaDistCoeffs,
+               iaR,
+               iaP);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveUndistortPoints(
@@ -2399,11 +2538,15 @@ namespace Emgu.CV
             lbHandle = new GCHandle();
          try
          {
+            using (InputArray iaSigniture1 = signature1.GetInputArray())
+            using (InputArray iaSigniture2 = signature2.GetInputArray())
+            using (InputArray iaCost = cost == null ? InputArray.GetEmpty() : cost.GetInputArray())
+            using (OutputArray oaFlow = flow == null ? OutputArray.GetEmpty() : flow.GetOutputArray())
             return cveEMD(
-               signature1.InputArrayPtr, signature2.InputArrayPtr, distType,
-               cost == null ? IntPtr.Zero : cost.InputArrayPtr,
+               iaSigniture1, iaSigniture2, distType,
+               iaCost,
                lowerBoundPtr,
-               flow == null ? IntPtr.Zero : flow.OutputArrayPtr);
+               oaFlow);
          }
          finally
          {
@@ -2436,7 +2579,10 @@ namespace Emgu.CV
       {
          MCvPoint2D64f resultPt = new MCvPoint2D64f();
          response = 0;
-         cvePhaseCorrelate(src1.InputArrayPtr, src2.InputArrayPtr, window == null ? IntPtr.Zero : window.InputArrayPtr, ref response, ref resultPt);
+         using (InputArray iaSrc1 = src1.GetInputArray())
+         using (InputArray iaSrc2 = src2.GetInputArray())
+         using (InputArray iaWindow = window == null ? InputArray.GetEmpty() : window.GetInputArray())
+            cvePhaseCorrelate(iaSrc1, iaSrc2, iaWindow, ref response, ref resultPt);
          return resultPt;
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2450,7 +2596,8 @@ namespace Emgu.CV
       /// <param name="type">Created array type</param>
       public static void CreateHanningWindow(IOutputArray dst, Size winSize, CvEnum.DepthType type)
       {
-         cveCreateHanningWindow(dst.OutputArrayPtr, ref winSize, type);
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveCreateHanningWindow(oaDst, ref winSize, type);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCreateHanningWindow(IntPtr dst, ref Size winSize, CvEnum.DepthType type);

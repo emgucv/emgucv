@@ -51,9 +51,11 @@ namespace Emgu.CV.Cuda
       /// <param name="image">The source CudaImage where the filter will be applied to</param>
       /// <param name="dst">The destination CudaImage</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Apply(IInputArray image, IOutputArray dst, Stream stream)
+      public void Apply(IInputArray image, IOutputArray dst, Stream stream = null)
       {
-         CudaInvoke.cudaFilterApply(_ptr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         CudaInvoke.cudaFilterApply(_ptr, iaImage, oaDst, stream);
       }
    }
 

@@ -20,7 +20,7 @@ namespace Emgu.CV.Cuda
       /// <summary>
       /// Create a Background/Foreground Segmentation model
       /// </summary>
-      public CudaBackgroundSubtractorGMG(int initializationFrames, double decisionThreshold)
+      public CudaBackgroundSubtractorGMG(int initializationFrames = 120, double decisionThreshold = 0.8)
       {
          _ptr = CudaInvoke.cudaBackgroundSubtractorGMGCreate(initializationFrames, decisionThreshold);
       }
@@ -31,9 +31,11 @@ namespace Emgu.CV.Cuda
       /// <param name="frame">Next video frame.</param>
       /// <param name="learningRate">The learning rate, use -1.0f for default value.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Apply(IInputArray frame, double learningRate, IOutputArray forgroundMask, Stream stream = null)
+      public void Apply(IInputArray frame, IOutputArray forgroundMask, double learningRate = -1, Stream stream = null)
       {
-         CudaInvoke.cudaBackgroundSubtractorGMGApply(_ptr, frame.InputArrayPtr, learningRate, forgroundMask.OutputArrayPtr, stream);
+         using (InputArray iaFrame = frame.GetInputArray())
+         using (OutputArray oaForgroundMask = forgroundMask.GetOutputArray())
+            CudaInvoke.cudaBackgroundSubtractorGMGApply(_ptr, iaFrame, oaForgroundMask, learningRate, stream);
       }
 
       /// <summary>
@@ -51,7 +53,7 @@ namespace Emgu.CV.Cuda
       internal static extern IntPtr cudaBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaBackgroundSubtractorGMGApply(IntPtr gmg, IntPtr frame, double learningRate, IntPtr fgMask, IntPtr stream);
+      internal static extern void cudaBackgroundSubtractorGMGApply(IntPtr gmg, IntPtr frame, IntPtr fgMask, double learningRate, IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaBackgroundSubtractorGMGRelease(ref IntPtr gmg);

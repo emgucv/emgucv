@@ -22,11 +22,11 @@ void CvBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubstrac
 }
 
 //BackgroundSubtractor
-void CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubstractor, IplImage* image, IplImage* fgmask, double learningRate)
+void CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubstractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate)
 {
-   cv::Mat imgMat = cv::cvarrToMat(image);
-   cv::Mat fgMat = cv::cvarrToMat(fgmask);
-   bgSubstractor->apply(imgMat, fgMat, learningRate);
+   //cv::Mat imgMat = cv::cvarrToMat(image);
+   //cv::Mat fgMat = cv::cvarrToMat(fgmask);
+   bgSubstractor->apply(*image, *fgmask, learningRate);
 }
 
 //BackgroundSubtractorMOG
@@ -81,6 +81,10 @@ void cveCalcMotionGradient(cv::_InputArray* mhi, cv::_OutputArray* mask, cv::_Ou
 void cveCalcGlobalOrientation(cv::_InputArray* orientation, cv::_InputArray* mask, cv::_InputArray* mhi, double timestamp, double duration)
 {
    cv::calcGlobalOrientation(*orientation, *mask, *mhi, timestamp, duration);
+}
+void cveSegmentMotion(cv::_InputArray* mhi, cv::_OutputArray* segmask, std::vector< cv::Rect >* boundingRects, double timestamp, double segThresh)
+{
+   cv::segmentMotion(*mhi, *segmask, *boundingRects, timestamp, segThresh);
 }
 
 void cveCamShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, CvBox2D* result)

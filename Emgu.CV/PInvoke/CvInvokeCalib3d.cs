@@ -28,7 +28,11 @@ namespace Emgu.CV
          double ransacReprojThreshold = 3,
          IOutputArray mask = null)
       {
-         cveFindHomography(srcPoints.InputArrayPtr, dstPoints.InputArrayPtr, homography.OutputArrayPtr, method, ransacReprojThreshold, mask == null ? IntPtr.Zero : mask.OutputArrayPtr);
+         using (InputArray iaSrcPoints = srcPoints.GetInputArray())
+         using (InputArray iaDstPoints = dstPoints.GetInputArray())
+         using (OutputArray oaHomography = homography.GetOutputArray())
+         using (OutputArray oaMask = mask == null ? OutputArray.GetEmpty() : mask.GetOutputArray())
+            cveFindHomography(iaSrcPoints, iaDstPoints, oaHomography, method, ransacReprojThreshold, oaMask);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFindHomography(IntPtr srcPoints, IntPtr dstPoints, IntPtr homography, CvEnum.HomographyMethod method, double ransacReprojThreshold, IntPtr mask);
@@ -41,7 +45,10 @@ namespace Emgu.CV
       /// <param name="jacobian">Optional output Jacobian matrix, 3x9 or 9x3 - partial derivatives of the output array components w.r.t the input array components</param>
       public static void Rodrigues(IInputArray src, IOutputArray dst, IOutputArray jacobian = null)
       {
-         cveRodrigues(src.InputArrayPtr, dst.OutputArrayPtr, jacobian == null ? IntPtr.Zero : jacobian.OutputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (OutputArray oaJacobian = jacobian == null ? OutputArray.GetEmpty() : jacobian.GetOutputArray())
+            cveRodrigues(iaSrc, oaDst, oaJacobian);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveRodrigues(IntPtr src, IntPtr dst, IntPtr jacobian);
@@ -59,7 +66,11 @@ namespace Emgu.CV
       /// <param name="f">The calculated fundamental matrix</param>
       public static void FindFundamentalMat(IInputArray points1, IInputArray points2, IOutputArray f, CvEnum.FmType method = CvEnum.FmType.Ransac, double param1 = 3, double param2 = 0.99, IOutputArray mask = null)
       {
-         cveFindFundamentalMat(points1.InputArrayPtr, points2.InputArrayPtr, f.OutputArrayPtr, method, param1, param2, mask == null ? IntPtr.Zero : mask.OutputArrayPtr);
+         using (InputArray iaPoints1 = points1.GetInputArray())
+         using (InputArray iaPoints2 = points2.GetInputArray())
+         using (OutputArray oaF = f.GetOutputArray())
+         using (OutputArray oaMask = mask == null ? OutputArray.GetEmpty() : mask.GetOutputArray())
+            cveFindFundamentalMat(iaPoints1, iaPoints2, oaF, method, param1, param2, oaMask);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFindFundamentalMat(IntPtr points1, IntPtr points2, IntPtr dst, CvEnum.FmType method, double param1, double param2, IntPtr mask);
@@ -79,7 +90,10 @@ namespace Emgu.CV
       /// <param name="correspondentLines">Computed epilines, 3xN or Nx3 array </param>
       public static void ComputeCorrespondEpilines(IInputArray points, int whichImage, IInputArray fundamentalMatrix, IOutputArray correspondentLines)
       {
-         cveComputeCorrespondEpilines(points.InputArrayPtr, whichImage, fundamentalMatrix.InputArrayPtr, correspondentLines.OutputArrayPtr);
+         using (InputArray iaPoints = points.GetInputArray())
+         using (InputArray iaFundamentalMatrix = fundamentalMatrix.GetInputArray())
+         using (OutputArray oaCorrespondentLines = correspondentLines.GetOutputArray())
+            cveComputeCorrespondEpilines(iaPoints, whichImage, iaFundamentalMatrix, oaCorrespondentLines);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveComputeCorrespondEpilines(
@@ -95,7 +109,9 @@ namespace Emgu.CV
       /// <param name="dst">Output vector of N+1-dimensional points.</param>
       public static void ConvertPointsToHomogeneous(IInputArray src, IOutputArray dst)
       {
-         cveConvertPointsToHomogeneous(src.InputArrayPtr, dst.OutputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveConvertPointsToHomogeneous(iaSrc, oaDst);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveConvertPointsToHomogeneous(IntPtr src, IntPtr dst);
@@ -108,7 +124,9 @@ namespace Emgu.CV
       /// <param name="dst">Output vector of N-1-dimensional points.</param>
       public static void ConvertPointsFromHomogeneous(IInputArray src, IOutputArray dst)
       {
-         cveConvertPointsFromHomogeneous(src.InputArrayPtr, dst.OutputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveConvertPointsFromHomogeneous(iaSrc, oaDst);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveConvertPointsFromHomogeneous(IntPtr src, IntPtr dst);
@@ -125,7 +143,10 @@ namespace Emgu.CV
       /// <param name="ddepth">The optional output array depth. If it is -1, the output image will have CV_32F depth. ddepth can also be set to CV_16S, CV_32S or CV_32F.</param>
       public static void ReprojectImageTo3D(IInputArray disparity, IOutputArray image3D, IInputArray q, bool handleMissingValues = false, CvEnum.DepthType ddepth = CvEnum.DepthType.Default)
       {
-         cveReprojectImageTo3D(disparity.InputArrayPtr, image3D.OutputArrayPtr, q.InputArrayPtr, handleMissingValues, ddepth);
+         using (InputArray iaDisparity = disparity.GetInputArray())
+         using (OutputArray oaImage3D = image3D.GetOutputArray())
+         using (InputArray iaQ = q.GetInputArray())
+            cveReprojectImageTo3D(iaDisparity, oaImage3D, iaQ, handleMissingValues, ddepth);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveReprojectImageTo3D(
@@ -173,7 +194,15 @@ namespace Emgu.CV
       /// <param name="jacobian">Optional output 2Nx(10+&lt;numDistCoeffs&gt;) jacobian matrix of derivatives of image points with respect to components of the rotation vector, translation vector, focal lengths, coordinates of the principal point and the distortion coefficients. In the old interface different components of the jacobian are returned via different output parameters.</param>
       public static void ProjectPoints(IInputArray objectPoints, IInputArray rvec, IInputArray tvec, IInputArray cameraMatrix, IInputArray distCoeffs, IOutputArray imagePoints, IOutputArray jacobian = null, double aspectRatio = 0)
       {
-         cveProjectPoints(objectPoints.InputArrayPtr, rvec.InputArrayPtr, tvec.InputArrayPtr, cameraMatrix.InputArrayPtr, distCoeffs == null ? IntPtr.Zero : distCoeffs.InputArrayPtr, imagePoints.OutputArrayPtr, jacobian == null ? IntPtr.Zero : jacobian.OutputArrayPtr, aspectRatio);
+         using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+         using (InputArray iaRvec = rvec.GetInputArray())
+         using (InputArray iaTvec = tvec.GetInputArray())
+         using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+         using (InputArray iaDistCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+         using (OutputArray oaImagePoints = imagePoints.GetOutputArray())
+         using (OutputArray oaJacobian = jacobian == null ? OutputArray.GetEmpty() : jacobian.GetOutputArray())
+            cveProjectPoints(iaObjectPoints, iaRvec, iaTvec, iaCameraMatrix, iaDistCoeffs,
+               oaImagePoints, oaJacobian, aspectRatio);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveProjectPoints(IntPtr objPoints, IntPtr rvec, IntPtr tvec, IntPtr cameraMatrix, IntPtr distCoeffs, IntPtr imagePoints, IntPtr jacobian, double aspectRatio);
@@ -202,14 +231,20 @@ namespace Emgu.CV
          CvEnum.CalibType flags,
          MCvTermCriteria termCriteria)
       {
+         using(InputArray iaObjectPoints = objectPoints.GetInputArray())
+         using (InputArray iaImagePoints = imagePoints.GetInputArray())
+         using (InputOutputArray ioaCameraMatrix = cameraMatrix.GetInputOutputArray())
+         using (InputOutputArray ioaDistortionCoeffs = distortionCoeffs.GetInputOutputArray())
+         using (OutputArray oaRotationVectors = rotationVectors.GetOutputArray())
+         using (OutputArray oaTranslationVectors = translationVectors.GetOutputArray())
          return cveCalibrateCamera(
-            objectPoints.InputArrayPtr,
-            imagePoints.InputArrayPtr,
+            iaObjectPoints,
+            iaImagePoints,
             ref imageSize,
-            cameraMatrix.InputOutputArrayPtr,
-            distortionCoeffs.InputOutputArrayPtr,
-            rotationVectors.OutputArrayPtr,
-            translationVectors.OutputArrayPtr,
+            ioaCameraMatrix,
+            ioaDistortionCoeffs,
+            oaRotationVectors,
+            oaTranslationVectors,
             flags,
             ref termCriteria);
       }
@@ -241,8 +276,9 @@ namespace Emgu.CV
          IInputArray cameraMatrix, Size imageSize, double apertureWidth, double apertureHeight,
          ref double fovx, ref double fovy, ref double focalLength, ref MCvPoint2D64f principalPoint, ref double aspectRatio)
       {
+         using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
          cveCalibrationMatrixValues(
-            cameraMatrix.InputArrayPtr, ref imageSize, apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref aspectRatio);
+            iaCameraMatrix, ref imageSize, apertureWidth, apertureHeight, ref fovx, ref fovy, ref focalLength, ref principalPoint, ref aspectRatio);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCalibrationMatrixValues(
@@ -271,23 +307,29 @@ namespace Emgu.CV
          CvEnum.SolvePnpMethod flags = CvEnum.SolvePnpMethod.Iterative
          )
       {
+         using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+         using (InputArray iaImagePoints = imagePoints.GetInputArray() )
+         using (InputArray iaIntrisicMatrix = intrinsicMatrix.GetInputArray())
+         using (InputArray iaDistortionCoeffs = distortionCoeffs.GetInputArray())
+         using (OutputArray oaRotationVector = rotationVector.GetOutputArray())
+         using (OutputArray oaTranslationVector = translationVector.GetOutputArray())
          return cveSolvePnP(
-            objectPoints.InputArrayPtr,
-            imagePoints.InputArrayPtr,
-            intrinsicMatrix.InputArrayPtr,
-            distortionCoeffs.InputArrayPtr,
-            rotationVector.OutputArrayPtr,
-            translationVector.OutputArrayPtr,
+            iaObjectPoints,
+            iaImagePoints,
+            iaIntrisicMatrix,
+            iaDistortionCoeffs,
+            oaRotationVector,
+            oaTranslationVector,
             useExtrinsicGuess,
             flags);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveSolvePnP(
-         IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs, 
-         IntPtr rvec, IntPtr tvec, 
+         IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs,
+         IntPtr rvec, IntPtr tvec,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool useExtrinsicGuess, 
+         bool useExtrinsicGuess,
          CvEnum.SolvePnpMethod flags);
 
       /// <summary>
@@ -311,19 +353,26 @@ namespace Emgu.CV
          bool useExtrinsicGuess, int iterationsCount, float reprojectionError, int minInliersCount,
          IOutputArray inliers, CvEnum.SolvePnpMethod flags)
       {
+         using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+         using (InputArray iaImagePoints = imagePoints.GetInputArray())
+         using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+         using (InputArray iaDistortionCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+         using (OutputArray oaRotationVector = rvec.GetOutputArray())
+         using (OutputArray oaTranslationVector = tvec.GetOutputArray())
+         using (OutputArray oaInliers = inliers == null ? OutputArray.GetEmpty() : inliers.GetOutputArray())
          cveSolvePnPRansac(
-            objectPoints.InputArrayPtr, imagePoints.InputArrayPtr, cameraMatrix.InputArrayPtr, distCoeffs == null ? IntPtr.Zero : distCoeffs.InputArrayPtr,
-            rvec.OutputArrayPtr, tvec.OutputArrayPtr,
-            useExtrinsicGuess, iterationsCount, reprojectionError, minInliersCount, 
-            inliers == null ? IntPtr.Zero : inliers.OutputArrayPtr, flags);
+            iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs,
+            oaRotationVector, oaTranslationVector,
+            useExtrinsicGuess, iterationsCount, reprojectionError, minInliersCount,
+            oaInliers, flags);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveSolvePnPRansac(
-         IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs, 
-         IntPtr rvec, IntPtr tvec, 
+         IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs,
+         IntPtr rvec, IntPtr tvec,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool useExtrinsicGuess, 
-         int iterationsCount, float reprojectionError, int minInliersCount, 
+         bool useExtrinsicGuess,
+         int iterationsCount, float reprojectionError, int minInliersCount,
          IntPtr inliers, CvEnum.SolvePnpMethod flags);
 
       /// <summary>
@@ -362,12 +411,23 @@ namespace Emgu.CV
          CvEnum.CalibType flags,
          MCvTermCriteria termCrit)
       {
+         using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+         using (InputArray iaImagePoints1 = imagePoints1.GetInputArray())
+         using (InputArray iaImagePoints2 = imagePoints2.GetInputArray())
+         using (InputOutputArray ioaCameraMatrix1 = cameraMatrix1.GetInputOutputArray())
+         using (InputOutputArray ioaCameraMatrix2 = cameraMatrix2.GetInputOutputArray())
+         using (InputOutputArray ioaDistCoeffs1 = distCoeffs1.GetInputOutputArray())
+         using (InputOutputArray ioaDistCoeffs2 = distCoeffs2.GetInputOutputArray())
+         using (OutputArray oaR = r.GetOutputArray())
+         using (OutputArray oaT = t.GetOutputArray())
+         using (OutputArray oaE = e.GetOutputArray())
+         using (OutputArray oaF = f.GetOutputArray())
          return cveStereoCalibrate(
-            objectPoints.InputArrayPtr, imagePoints1.InputArrayPtr, imagePoints2.InputArrayPtr,
-            cameraMatrix1.InputOutputArrayPtr, distCoeffs1.InputOutputArrayPtr,
-            cameraMatrix2.InputOutputArrayPtr, distCoeffs2.InputOutputArrayPtr,
+            iaObjectPoints, iaImagePoints1, iaImagePoints2,
+            ioaCameraMatrix1, ioaDistCoeffs1,
+            ioaCameraMatrix2, ioaDistCoeffs2,
             ref imageSize,
-            r.OutputArrayPtr, t.OutputArrayPtr, e.OutputArrayPtr, f.OutputArrayPtr,
+            oaR, oaT, oaE, oaF,
             flags, ref termCrit);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -403,7 +463,12 @@ namespace Emgu.CV
       /// <returns></returns>
       public static bool StereoRectifyUncalibrated(IInputArray points1, IInputArray points2, IInputArray f, Size imgSize, IOutputArray h1, IOutputArray h2, double threshold = 5)
       {
-         return cveStereoRectifyUncalibrated(points1.InputArrayPtr, points2.InputArrayPtr, f.InputArrayPtr, ref imgSize, h1.OutputArrayPtr, h2.OutputArrayPtr, threshold);
+         using (InputArray iaPoints1 = points1.GetInputArray())
+         using (InputArray iaPoints2 = points2.GetInputArray())
+         using (InputArray iaF = f.GetInputArray())
+         using (OutputArray oaH1 = h1.GetOutputArray())
+         using (OutputArray oaH2 = h2.GetOutputArray())
+         return cveStereoRectifyUncalibrated(iaPoints1, iaPoints2, iaF, ref imgSize, oaH1, oaH2, threshold);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
@@ -440,13 +505,24 @@ namespace Emgu.CV
          double alpha, Size newImageSize,
          ref Rectangle validPixRoi1, ref Rectangle validPixRoi2)
       {
+         using (InputArray iaCameraMatrix1 = cameraMatrix1.GetInputArray())
+         using (InputArray iaDistCoeffs1 = distCoeffs1.GetInputArray())
+         using (InputArray iaCameraMatrix2 = cameraMatrix2.GetInputArray())
+         using (InputArray iaDistCoeffs2 = distCoeffs2.GetInputArray())
+         using (InputArray iaR = r.GetInputArray())
+         using (InputArray iaT = t.GetInputArray() )
+         using (OutputArray oaR1 = r1.GetOutputArray())
+         using (OutputArray oaR2 = r2.GetOutputArray())
+         using (OutputArray oaP1 = p1.GetOutputArray())
+         using (OutputArray oaP2 = p2.GetOutputArray())
+         using (OutputArray oaQ = q.GetOutputArray())
          cveStereoRectify(
-            cameraMatrix1.InputArrayPtr, distCoeffs1.InputArrayPtr,
-            cameraMatrix2.InputArrayPtr, distCoeffs2.InputArrayPtr,
-            ref imageSize, r.InputArrayPtr, t.InputArrayPtr,
-            r1.OutputArrayPtr, r2.OutputArrayPtr,
-            p1.OutputArrayPtr, p2.OutputArrayPtr,
-            q.OutputArrayPtr, flags,
+            iaCameraMatrix1, iaDistCoeffs1,
+            iaCameraMatrix2, iaDistCoeffs2,
+            ref imageSize, iaR, iaT,
+            oaR1, oaR2,
+            oaP1, oaP2,
+            oaQ, flags,
             alpha, ref newImageSize, ref validPixRoi1, ref validPixRoi2);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -482,7 +558,9 @@ namespace Emgu.CV
       /// <remarks>The coordinates detected are approximate, and to determine their position more accurately, the user may use the function cvFindCornerSubPix</remarks>
       public static bool FindChessboardCorners(IInputArray image, Size patternSize, IOutputArray corners, CvEnum.CalibCbType flags = CvEnum.CalibCbType.AdaptiveThresh | CvEnum.CalibCbType.NormalizeImage)
       {
-         return cveFindChessboardCorners(image.InputArrayPtr, ref patternSize, corners.OutputArrayPtr, flags);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaCorners = corners.GetOutputArray())
+         return cveFindChessboardCorners(iaImage, ref patternSize, oaCorners, flags);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern bool cveFindChessboardCorners(IntPtr image, ref Size patternSize, IntPtr corners, CvEnum.CalibCbType flags);
@@ -497,7 +575,9 @@ namespace Emgu.CV
       /// <param name="patternWasFound">Indicates whether the complete board was found (!=0) or not (=0). One may just pass the return value cvFindChessboardCorners here. </param>
       public static void DrawChessboardCorners(IInputOutputArray image, Size patternSize, IInputArray corners, bool patternWasFound)
       {
-         cveDrawChessboardCorners(image.InputOutputArrayPtr, ref patternSize, corners.InputArrayPtr, patternWasFound);
+         using (InputOutputArray ioaImage = image.GetInputOutputArray())
+         using (InputArray iaCorners = corners.GetInputArray())
+         cveDrawChessboardCorners(ioaImage, ref patternSize, iaCorners, patternWasFound);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDrawChessboardCorners(IntPtr image, ref Size patternSize, IntPtr corners, [MarshalAs(CvInvoke.BoolMarshalType)] bool patternWasFound);
@@ -586,7 +666,12 @@ namespace Emgu.CV
       /// <param name="points4D">4xN array of reconstructed points in homogeneous coordinates.</param>
       public static void TriangulatePoints(IInputArray projMat1, IInputArray projMat2, IInputArray projPoints1, IInputArray projPoints2, IOutputArray points4D)
       {
-         cveTriangulatePoints(projMat1.InputArrayPtr, projMat2.InputArrayPtr, projPoints1.InputArrayPtr, projPoints2.InputArrayPtr, points4D.OutputArrayPtr);
+         using (InputArray iaProjMat1 = projMat1.GetInputArray())
+         using (InputArray iaProjMat2 = projMat2.GetInputArray())
+         using (InputArray iaProjPoints1 = projPoints1.GetInputArray())
+         using (InputArray iaProjPoints2 = projPoints2.GetInputArray())
+         using (OutputArray oaPoints4D = points4D.GetOutputArray())
+            cveTriangulatePoints(iaProjMat1, iaProjMat2, iaProjPoints1, iaProjPoints2, oaPoints4D);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveTriangulatePoints(IntPtr projMat1, IntPtr projMat2, IntPtr projPoints1, IntPtr projPoints2, IntPtr points4D);
@@ -601,7 +686,12 @@ namespace Emgu.CV
       /// <param name="newPoints2">The optimized points2.</param>
       public static void CorrectMatches(IInputArray f, IInputArray points1, IInputArray points2, IOutputArray newPoints1, IOutputArray newPoints2)
       {
-         cveCorrectMatches(f.InputArrayPtr, points1.InputArrayPtr, points2.InputArrayPtr, newPoints1.OutputArrayPtr, newPoints2.OutputArrayPtr);
+         using (InputArray iaF = f.GetInputArray())
+         using (InputArray iaPoints1 = points1.GetInputArray())
+         using (InputArray iaPoints2 = points2.GetInputArray())
+         using (OutputArray oaNewPoints1 = newPoints1.GetOutputArray())
+         using (OutputArray oaNewPoints2 = newPoints2.GetOutputArray())
+            cveCorrectMatches(iaF, iaPoints1, iaPoints2, oaNewPoints1, oaNewPoints2);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1, IntPtr newPoints2);

@@ -24,7 +24,7 @@ namespace Emgu.CV
    ///</summary>
    ///<typeparam name="TDepth">The type of elements in this CvArray</typeparam> 
    public abstract class CvArray<TDepth> : 
-      UnmanagedObject, IXmlSerializable, IInputArray, IOutputArray, IInputOutputArray
+      UnmanagedObject, IXmlSerializable, IInputOutputArray
 #if !NETFX_CORE
       , ISerializable
 #endif
@@ -683,34 +683,26 @@ namespace Emgu.CV
       /// <summary>
       /// The unmanaged pointer to the input array.
       /// </summary>
-      public IntPtr InputArrayPtr
+      public InputArray GetInputArray()
       {
-         get
-         {
-            return Mat.InputArrayPtr;
-         }
+         return Mat.GetInputArray();
+         
       }
 
       /// <summary>
       /// The unmanaged pointer to the output array.
       /// </summary>
-      public IntPtr OutputArrayPtr
+      public OutputArray GetOutputArray()
       {
-         get
-         {
-            return Mat.OutputArrayPtr;
-         }
+         return Mat.GetOutputArray();
       }
 
       /// <summary>
       /// The unmanaged pointer to the input output array.
       /// </summary>
-      public IntPtr InputOutputArrayPtr
+      public InputOutputArray GetInputOutputArray()
       {
-         get 
-         {
-            return Mat.InputOutputArrayPtr;
-         }
+         return Mat.GetInputOutputArray();
       }
 
       #endregion

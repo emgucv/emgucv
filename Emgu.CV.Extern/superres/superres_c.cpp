@@ -6,11 +6,11 @@
 
 #include "superres_c.h"
 
-cv::superres::FrameSource* cvSuperresCreateFrameSourceVideo(const char* fileName, bool useGpu)
+cv::superres::FrameSource* cvSuperresCreateFrameSourceVideo(cv::String* fileName, bool useGpu)
 {
    cv::Ptr<cv::superres::FrameSource> ptr = useGpu ?
-      cv::superres::createFrameSource_Video_CUDA(fileName)
-      : cv::superres::createFrameSource_Video(fileName);
+      cv::superres::createFrameSource_Video_CUDA(*fileName)
+      : cv::superres::createFrameSource_Video(*fileName);
    ptr.addref();
    return ptr.get();
 }
@@ -25,7 +25,7 @@ void cvSuperresFrameSourceRelease(cv::superres::FrameSource** frameSource)
    delete *frameSource;
    *frameSource = 0;
 }
-void cvSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv::Mat* frame)
+void cvSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv::_OutputArray* frame)
 {
    frameSource->nextFrame(*frame);
 }

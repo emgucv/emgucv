@@ -126,6 +126,8 @@
     <Compile Include="Util\CvString.cs" />
     <Compile Include="Util\IInputArray.cs" />
     <Compile Include="Util\IInputOutputArray.cs" />
+    <Compile Include="Util\InputArray.cs" />
+    <Compile Include="Util\InputOutputArray.cs" />
     <Compile Include="Util\IOutputArray.cs" />
     <Compile Include="Mat.cs" />
     <Compile Include="Octree.cs" />
@@ -175,6 +177,8 @@
     <Compile Include="Util\CvException.cs" />
     <Compile Include="Util\CvToolbox.cs" />
     <Compile Include="Util\DataLogger.cs" />
+    <Compile Include="Util\OutputArray.cs" />
+    <Compile Include="Util\ScalarArray.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
     <Compile Include="Util\VectorOfDouble.cs" />

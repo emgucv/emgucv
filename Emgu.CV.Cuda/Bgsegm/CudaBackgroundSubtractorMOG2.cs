@@ -32,9 +32,11 @@ namespace Emgu.CV.Cuda
       /// <param name="frame">Next video frame.</param>
       /// <param name="learningRate">The learning rate, use -1.0f for default value.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Update(IInputArray frame, float learningRate, IOutputArray forgroundMask, Stream stream = null)
+      public void Update(IInputArray frame, double learningRate, IOutputArray forgroundMask, Stream stream = null)
       {
-         CudaInvoke.cudaBackgroundSubtractorMOG2Apply(_ptr, frame.InputArrayPtr, learningRate, forgroundMask.OutputArrayPtr, stream);
+         using (InputArray iaFrame = frame.GetInputArray())
+         using (OutputArray oaForgroundMask = forgroundMask.GetOutputArray())
+            CudaInvoke.cudaBackgroundSubtractorMOG2Apply(_ptr, iaFrame, oaForgroundMask, learningRate, stream);
       }
 
       /// <summary>
@@ -50,13 +52,13 @@ namespace Emgu.CV.Cuda
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cudaBackgroundSubtractorMOG2Create(
-         int history, 
-         double varThreshold, 
+         int history,
+         double varThreshold,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool detectShadows);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaBackgroundSubtractorMOG2Apply(IntPtr mog, IntPtr frame, float learningRate, IntPtr fgMask, IntPtr stream);
+      internal static extern void cudaBackgroundSubtractorMOG2Apply(IntPtr mog, IntPtr frame, IntPtr fgMask, double learningRate, IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaBackgroundSubtractorMOG2Release(ref IntPtr mog);

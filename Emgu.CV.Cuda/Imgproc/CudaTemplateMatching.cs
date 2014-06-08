@@ -27,7 +27,7 @@ namespace Emgu.CV.Cuda
       /// <param name="blockSize">The block size</param>
       public CudaTemplateMatching(DepthType depthType, int channels, CvEnum.TemplateMatchingType method, Size blockSize = new Size())
       {
-         _ptr = CudaInvoke.cudaTemplateMatchingCreate(CvInvoke.MakeType(depthType, channels), method, ref blockSize);     
+         _ptr = CudaInvoke.cudaTemplateMatchingCreate(CvInvoke.MakeType(depthType, channels), method, ref blockSize);
       }
 
       /// <summary>
@@ -39,7 +39,10 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       public void Match(IInputArray image, IInputArray templ, IOutputArray result, Stream stream = null)
       {
-         CudaInvoke.cudaTemplateMatchingMatch(_ptr, image.InputArrayPtr, templ.InputArrayPtr, result.OutputArrayPtr, stream);
+         using (InputArray iaImage = image.GetInputArray())
+         using (InputArray iaTempl = templ.GetInputArray())
+         using (OutputArray oaResult = result.GetOutputArray())
+            CudaInvoke.cudaTemplateMatchingMatch(_ptr, iaImage, iaTempl, oaResult, stream);
       }
 
       /// <summary>
@@ -70,7 +73,5 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaTemplateMatchingMatch(IntPtr tm, IntPtr image, IntPtr templ, IntPtr result, IntPtr stream);
-
-
    }
 }

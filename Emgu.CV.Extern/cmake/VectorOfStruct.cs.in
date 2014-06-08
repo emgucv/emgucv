@@ -26,7 +26,7 @@ namespace ${NAMESPACE_CS}
    [Serializable]
    [DebuggerTypeProxy(typeof(VectorOf${VECTOR_NAME}.DebuggerProxy))]
 #endif
-   public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
+   public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, IInputOutputArray
 #if !NETFX_CORE
    , ISerializable
 #endif
@@ -37,10 +37,6 @@ namespace ${NAMESPACE_CS}
       {
          CvInvoke.CheckLibraryLoaded();
       }
-
-      private IntPtr _inputArrayPtr;
-      private IntPtr _outputArrayPtr;
-      private IntPtr _inputOutputArrayPtr;
 
 #if !NETFX_CORE
       /// <summary>
@@ -180,54 +176,30 @@ namespace ${NAMESPACE_CS}
       {
          if (_needDispose && _ptr != IntPtr.Zero)
             VectorOf${VECTOR_NAME}Release(ref _ptr);
-
-         if (_inputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveInputArrayRelease(ref _inputArrayPtr);
-
-         if (_outputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveOutputArrayRelease(ref _outputArrayPtr);
-
-         if (_inputOutputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveInputOutputArrayRelease(ref _inputOutputArrayPtr);
       }
 
 	  /// <summary>
       /// Get the pointer to cv::_InputArray
       /// </summary>
-      public IntPtr InputArrayPtr
+      public InputArray GetInputArray()
       {
-         get
-         {
-            if (_inputArrayPtr == IntPtr.Zero)
-               _inputArrayPtr = cvInputArrayFromVectorOf${VECTOR_NAME}(_ptr);
-            return _inputArrayPtr;
-         }
+         return new InputArray( cvInputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
       }
 	  
 	  /// <summary>
       /// Get the pointer to cv::_OutputArray
       /// </summary>
-      public IntPtr OutputArrayPtr
+      public OutputArray GetOutputArray()
       {
-         get
-         {
-            if (_outputArrayPtr == IntPtr.Zero)
-               _outputArrayPtr = cvOutputArrayFromVectorOf${VECTOR_NAME}(_ptr);
-            return _outputArrayPtr;
-         }
+         return new OutputArray( cvOutputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
       }
 
 	  /// <summary>
       /// Get the pointer to cv::_InputOutputArray
       /// </summary>
-      public IntPtr InputOutputArrayPtr
+      public InputOutputArray GetInputOutputArray()
       {
-         get
-         {
-            if (_inputOutputArrayPtr == IntPtr.Zero)
-               _inputOutputArrayPtr = cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr);
-            return _inputOutputArrayPtr;
-         }
+         return new InputOutputArray( cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
       }
 	  
 	  internal class DebuggerProxy

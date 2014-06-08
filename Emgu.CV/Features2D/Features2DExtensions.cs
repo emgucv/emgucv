@@ -30,7 +30,9 @@ namespace Emgu.CV.Features2D
       /// <param name="mask">The optional mask.</param>
       public static void DetectRaw(this IFeatureDetector detector, IInputArray image, VectorOfKeyPoint keypoints, IInputArray mask = null)
       {
-         CvFeatureDetectorDetectKeyPoints(detector.FeatureDetectorPtr, image.InputArrayPtr, keypoints.Ptr, mask == null ? IntPtr.Zero : mask.InputArrayPtr );   
+         using (InputArray iaImage = image.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         CvFeatureDetectorDetectKeyPoints(detector.FeatureDetectorPtr, iaImage, keypoints.Ptr, iaMask );   
       }
 
       /// <summary>
@@ -81,7 +83,9 @@ namespace Emgu.CV.Features2D
       /// <param name="descriptors">The descriptors from the given keypoints</param>
       public static void Compute(this IDescriptorExtractor extractor, IInputArray image, VectorOfKeyPoint keyPoints, IOutputArray descriptors)
       {
-         CvDescriptorExtractorCompute(extractor.DescriptorExtratorPtr, image.InputArrayPtr, keyPoints.Ptr, descriptors.OutputArrayPtr);  
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaDescriptors = descriptors.GetOutputArray())
+         CvDescriptorExtractorCompute(extractor.DescriptorExtratorPtr, iaImage, keyPoints.Ptr, oaDescriptors);  
       }
 
       /// <summary>

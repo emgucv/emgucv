@@ -24,7 +24,9 @@ namespace Emgu.CV.Features2D
       /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
       public void KnnMatch(IInputArray queryDescriptor, VectorOfVectorOfDMatch matches, int k, IInputArray mask)
       {
-         DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, queryDescriptor.InputArrayPtr, matches, k, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         using (InputArray iaQueryDesccriptor = queryDescriptor.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, iaQueryDesccriptor, matches, k, iaMask);
       }
 
       /// <summary>
@@ -33,7 +35,8 @@ namespace Emgu.CV.Features2D
       /// <param name="modelDescriptors">The model discriptors</param>
       public void Add(IInputArray modelDescriptors)
       {
-         DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_ptr, modelDescriptors.InputArrayPtr);
+         using (InputArray iaModelDescriptors = modelDescriptors.GetInputArray())
+            DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_ptr, iaModelDescriptors);
       }
    }
 

@@ -24,7 +24,8 @@ namespace Emgu.CV.Cuda
       /// <param name="lookUpTable">It should be either 1 or 3 channel matrix of 1x256</param>
       public CudaLookUpTable(IInputArray lookUpTable)
       {
-         _ptr = CudaInvoke.cudaLookUpTableCreate(lookUpTable.InputArrayPtr);
+         using (InputArray iaLookupTable = lookUpTable.GetInputArray())
+         _ptr = CudaInvoke.cudaLookUpTableCreate(iaLookupTable);
       }
 
       /// <summary>
@@ -35,7 +36,9 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void Transform(IInputArray image, IOutputArray dst, Stream stream = null)
       {
-         CudaInvoke.cudaLookUpTableTransform(_ptr, image.InputArrayPtr, dst.OutputArrayPtr, stream);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         CudaInvoke.cudaLookUpTableTransform(_ptr, iaImage, oaDst, stream);
       }
 
       /// <summary>

@@ -3762,7 +3762,7 @@ namespace Emgu.CV
       ///<returns> The smoothed image</returns>
       public Image<TColor, TDepth> SmoothGaussian(int kernelSize)
       {
-         return SmoothGaussian(kernelSize, 0, 0, 0);
+         return SmoothGaussian(kernelSize, kernelSize, 0, 0);
       }
 
       ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>

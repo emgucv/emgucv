@@ -41,7 +41,9 @@ namespace Emgu.CV.Cuda
       /// <param name="circles">Output vector of found circles. Each vector is encoded as a 3-element floating-point vector.</param>
       public void Detect(IInputArray image, IOutputArray circles)
       {
-         CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, image.InputArrayPtr, circles.OutputArrayPtr);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaCircles = circles.GetOutputArray())
+         CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, iaImage, oaCircles);
       }
 
       /// <summary>

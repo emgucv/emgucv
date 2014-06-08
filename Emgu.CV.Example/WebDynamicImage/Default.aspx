@@ -33,7 +33,7 @@
           string appDataPath = Server.MapPath("App_Data");
           if (!appDataPath.EndsWith(Path.DirectorySeparatorChar.ToString()))
               appDataPath += Path.DirectorySeparatorChar.ToString();
-          Tesseract ocr = new Tesseract(appDataPath, "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+          Tesseract ocr = new Tesseract(appDataPath, "eng", Tesseract.OcrEngineMode.OemTesseractCubeCombined);
           ocr.Recognize(img);
           String result = ocr.GetText();
           Response.Write(String.Format("Text recognized: {0}", result));

@@ -29,11 +29,8 @@ namespace Emgu.CV
    /// The equavailent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
-   public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray, IImage, IEquatable<Mat>
+   public partial class Mat : MatDataAllocator, IImage, IEquatable<Mat>
    {
-      internal IntPtr _inputArrayPtr;
-      internal IntPtr _outputArrayPtr;
-      internal IntPtr _inputOutputArrayPtr;
 
       internal bool _needDispose;
 
@@ -223,7 +220,9 @@ namespace Emgu.CV
       /// <param name="mask">Operation mask. Its non-zero elements indicate which matrix elements need to be copied.</param>
       public void CopyTo(IOutputArray m, IInputArray mask = null)
       {
-         MatInvoke.cvMatCopyTo(Ptr, m.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         using (OutputArray oaM = m.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         MatInvoke.cvMatCopyTo(Ptr, oaM, iaMask);
       }
 
       /// <summary>
@@ -235,7 +234,8 @@ namespace Emgu.CV
       /// <param name="beta">Optional delta added to the scaled values.</param>
       public void ConvertTo(IOutputArray m, CvEnum.DepthType rtype, double alpha = 1.0, double beta = 0.0)
       {
-         MatInvoke.cvMatConvertTo(Ptr, m.OutputArrayPtr, rtype, alpha, beta);
+         using (OutputArray oaM = m.GetOutputArray())
+         MatInvoke.cvMatConvertTo(Ptr, oaM, rtype, alpha, beta);
       }
 
       /// <summary>
@@ -268,15 +268,6 @@ namespace Emgu.CV
          if (_needDispose && _ptr != IntPtr.Zero)
             MatInvoke.cvMatRelease(ref _ptr);
 
-         if (_inputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveInputArrayRelease(ref _inputArrayPtr);
-
-         if (_outputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveOutputArrayRelease(ref _outputArrayPtr);
-
-         if (_inputOutputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveInputOutputArrayRelease(ref _inputOutputArrayPtr);
-
          base.DisposeObject();
 
       }
@@ -284,40 +275,25 @@ namespace Emgu.CV
       /// <summary>
       /// Pointer to the InputArray
       /// </summary>
-      public IntPtr InputArrayPtr
+      public InputArray GetInputArray()
       {
-         get 
-         { 
-            if (_inputArrayPtr == IntPtr.Zero)
-               _inputArrayPtr = MatInvoke.cveInputArrayFromMat(_ptr);
-            return _inputArrayPtr; 
-         }
+         return new InputArray(MatInvoke.cveInputArrayFromMat(_ptr));
       }
 
       /// <summary>
       /// Pointer to the OutputArray
       /// </summary>
-      public IntPtr OutputArrayPtr
+      public OutputArray GetOutputArray()
       {
-         get
-         {
-            if (_outputArrayPtr == IntPtr.Zero)
-               _outputArrayPtr = MatInvoke.cveOutputArrayFromMat(_ptr);
-            return _outputArrayPtr;
-         }
+         return new OutputArray( MatInvoke.cveOutputArrayFromMat(_ptr) );
       }
 
       /// <summary>
       /// Pointer to the InputOutputArray
       /// </summary>
-      public IntPtr InputOutputArrayPtr
+      public InputOutputArray GetInputOutputArray()
       {
-         get 
-         {
-            if (_inputOutputArrayPtr == IntPtr.Zero)
-               _inputOutputArrayPtr = MatInvoke.cveInputOutputArrayFromMat(_ptr);
-            return _inputOutputArrayPtr;
-         }
+         return new InputOutputArray( MatInvoke.cveInputOutputArrayFromMat(_ptr) );
       }
 
 
@@ -582,7 +558,9 @@ namespace Emgu.CV
       /// <param name="mask">Optional mask</param>
       public void SetTo(IInputArray value, IInputArray mask = null)
       {
-         MatInvoke.cvMatSetTo(Ptr, value.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         using (InputArray iaValue = value.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         MatInvoke.cvMatSetTo(Ptr, iaValue, iaMask);
       }
 
       /// <summary>

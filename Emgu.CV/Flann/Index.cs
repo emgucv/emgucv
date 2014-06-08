@@ -30,7 +30,8 @@ namespace Emgu.CV.Flann
       /// <param name="values">A row by row matrix of descriptors</param>
       public Index(IInputArray values, int numberOfKDTrees)
       {
-         _ptr = CvFlannIndexCreateKDTree(values.InputArrayPtr, numberOfKDTrees);
+         using (InputArray iaValues = values.GetInputArray())
+            _ptr = CvFlannIndexCreateKDTree(iaValues, numberOfKDTrees);
       }
 
       /// <summary>
@@ -42,7 +43,8 @@ namespace Emgu.CV.Flann
       /// <param name="multiProbeLevel">The number of bits to shift to check for neighboring buckets (0 is regular LSH, 2 is recommended).</param>
       public Index(IInputArray values, int tableNumber, int keySize, int multiProbeLevel)
       {
-         _ptr = CvFlannIndexCreateLSH(values.InputArrayPtr, tableNumber, keySize, multiProbeLevel);
+         using (InputArray iaValues = values.GetInputArray())
+            _ptr = CvFlannIndexCreateLSH(iaValues, tableNumber, keySize, multiProbeLevel);
       }
 
       /// <summary>
@@ -56,7 +58,8 @@ namespace Emgu.CV.Flann
       /// <param name="cbIndex">Cluster boundary index. Used when searching the kmeans tree. Use 0.2 for default</param>
       public Index(IInputArray values, int numberOfKDTrees, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
       {
-         _ptr = CvFlannIndexCreateComposite(values.InputArrayPtr, numberOfKDTrees, branching, iterations, centersInitType, cbIndex);
+         using (InputArray iaValues = values.GetInputArray())
+            _ptr = CvFlannIndexCreateComposite(iaValues, numberOfKDTrees, branching, iterations, centersInitType, cbIndex);
       }
 
       /// <summary>
@@ -69,7 +72,8 @@ namespace Emgu.CV.Flann
       /// <param name="cbIndex">Cluster boundary index. Used when searching the kmeans tree. Use 0.2 for default</param>
       public Index(IInputArray values, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
       {
-         _ptr = CvFlannIndexCreateKMeans(values.InputArrayPtr, branching, iterations, centersInitType, cbIndex);
+         using (InputArray iaValues = values.GetInputArray())
+            _ptr = CvFlannIndexCreateKMeans(iaValues, branching, iterations, centersInitType, cbIndex);
       }
 
       /// <summary>
@@ -78,7 +82,8 @@ namespace Emgu.CV.Flann
       /// <param name="values">A row by row matrix of descriptors</param>
       public Index(IInputArray values)
       {
-         _ptr = CvFlannIndexCreateLinear(values.InputArrayPtr);
+         using (InputArray iaValues = values.GetInputArray())
+            _ptr = CvFlannIndexCreateLinear(iaValues);
       }
 
       /// <summary>
@@ -91,7 +96,8 @@ namespace Emgu.CV.Flann
       /// <param name="sampleFraction">what fraction of the dataset to use for autotuning, use 0.1 if not sure</param>
       public Index(IInputArray values, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction)
       {
-         _ptr = CvFlannIndexCreateAutotuned(values.InputArrayPtr, targetPrecision, buildWeight, memoryWeight, sampleFraction);
+         using (InputArray iaValues = values.GetInputArray())
+            _ptr = CvFlannIndexCreateAutotuned(iaValues, targetPrecision, buildWeight, memoryWeight, sampleFraction);
       }
       #endregion
 
@@ -109,7 +115,10 @@ namespace Emgu.CV.Flann
       /// this parameter is ignored </param>
       public void KnnSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, int knn, int checks)
       {
-         CvFlannIndexKnnSearch(_ptr, queries.InputArrayPtr, indices.OutputArrayPtr, squareDistances.OutputArrayPtr, knn, checks);
+         using (InputArray iaQueries = queries.GetInputArray())
+         using (OutputArray oaIndices = indices.GetOutputArray())
+         using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
+         CvFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks);
       }
 
       /// <summary>
@@ -128,7 +137,10 @@ namespace Emgu.CV.Flann
       /// <returns>The number of points in the search radius</returns>
       public int RadiusSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, float radius, int maxResults, int checks)
       {
-         return CvFlannIndexRadiusSearch(_ptr, queries.InputArrayPtr, indices.OutputArrayPtr, squareDistances.OutputArrayPtr, radius, maxResults, checks);
+         using (InputArray iaQueries = queries.GetInputArray())
+         using (OutputArray oaIndicies = indices.GetOutputArray())
+         using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
+         return CvFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks);
       }
 
       /// <summary>

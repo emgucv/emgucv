@@ -23,9 +23,9 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="threshold">Threshold on difference between intensity of center pixel and pixels on circle around
       /// this pixel. Use 10 for default.</param>
-      /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used. Use true for default.</param>
-      /// <param name="keypointsRatio">MaxKeypoints = keypointsRatio * img.size().area(); Use 0.05 for default.</param>
-      public CudaFASTDetector(int threshold, bool nonmaxSupression, double keypointsRatio)
+      /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used.</param>
+      /// <param name="keypointsRatio">MaxKeypoints = keypointsRatio * img.size().area()</param>
+      public CudaFASTDetector(int threshold, bool nonmaxSupression = true, double keypointsRatio = 0.05)
       {
          _ptr = CudaInvoke.cudaFASTDetectorCreate(threshold, nonmaxSupression, keypointsRatio);
       }

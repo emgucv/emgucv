@@ -585,7 +585,9 @@ namespace Emgu.CV.Features2D
             Features2DToolbox.KeypointDrawType type)
          {
             MCvScalar c = color.MCvScalar;
-            CvInvoke.drawKeypoints(image.InputArrayPtr, keypoints, outImage.InputOutputArrayPtr, ref c, type);
+            using (InputArray iaImage = image.GetInputArray())
+            using (InputOutputArray ioaOutImage = outImage.GetInputOutputArray())
+            CvInvoke.drawKeypoints(iaImage, keypoints, ioaOutImage, ref c, type);
          }
 
          /// <summary>
@@ -597,7 +599,7 @@ namespace Emgu.CV.Features2D
          /// <param name="observedKeyPoints">The keypoints in the observed image</param>
          /// <param name="matchColor">The color for the match correspondence lines</param>
          /// <param name="singlePointColor">The color for highlighting the keypoints</param>
-         /// <param name="matchesMask">The mask for the matches. Use null for all matches.</param>
+         /// <param name="mask">The mask for the matches. Use null for all matches.</param>
          /// <param name="flags">The drawing type</param>
          /// <param name="result">The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</param>
          public static void DrawMatches(
@@ -609,8 +611,12 @@ namespace Emgu.CV.Features2D
             IInputArray mask = null,
             KeypointDrawType flags = KeypointDrawType.Default)
          {
-            CvInvoke.drawMatchedFeatures(observerdImage.InputArrayPtr, observedKeyPoints, modelImage.InputArrayPtr,
-               modelKeypoints, matches, result.InputOutputArrayPtr, ref matchColor, ref singlePointColor, mask == null ? IntPtr.Zero : mask.InputArrayPtr , flags);
+            using (InputArray iaModelImage = modelImage.GetInputArray())
+            using (InputArray iaObserverdImage = observerdImage.GetInputArray())
+            using (InputOutputArray ioaResult = result.GetInputOutputArray())
+            using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            CvInvoke.drawMatchedFeatures(iaObserverdImage, observedKeyPoints, iaModelImage,
+               modelKeypoints, matches, ioaResult, ref matchColor, ref singlePointColor, iaMask , flags);
          }
 
          /// <summary>
@@ -635,7 +641,7 @@ namespace Emgu.CV.Features2D
             /// orientation will be drawn.
             /// </summary>
             DrawRichKeypoints = 4
-         };
+         }
 
          /// <summary>
          /// Eliminate the matched features whose scale and rotation do not aggree with the majority's scale and rotation.
@@ -644,7 +650,6 @@ namespace Emgu.CV.Features2D
          /// <param name="scaleIncrement">This determins the different in scale for neighbour hood bins, a good value might be 1.5 (which means matched features in bin i+1 is scaled 1.5 times larger than matched features in bin i</param>
          /// <param name="modelKeyPoints">The keypoints from the model image</param>
          /// <param name="observedKeyPoints">The keypoints from the observed image</param>
-         
          /// <param name="mask">This is both input and output. This matrix indicates which row is valid for the matches.</param>
          /// <returns> The number of non-zero elements in the resulting mask</returns>
          public static int VoteForSizeAndOrientation(VectorOfKeyPoint modelKeyPoints, VectorOfKeyPoint observedKeyPoints,
@@ -659,7 +664,6 @@ namespace Emgu.CV.Features2D
          /// </summary>
          /// <param name="model">The model keypoints</param>
          /// <param name="observed">The observed keypoints</param>
-         
          /// <param name="ransacReprojThreshold">
          /// The maximum allowed reprojection error to treat a point pair as an inlier. 
          /// If srcPoints and dstPoints are measured in pixels, it usually makes sense to set this parameter somewhere in the range 1 to 10.

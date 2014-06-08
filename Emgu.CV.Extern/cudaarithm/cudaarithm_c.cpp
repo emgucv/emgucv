@@ -144,21 +144,9 @@ void cudaAdd(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_I
    cv::cuda::add(*a, *b, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaAddS(cv::_InputArray* a, const CvScalar* scale, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream)
-{
-   cv::Scalar s = *scale;
-   cv::cuda::add(*a, s, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
-}
-
 void cudaSubtract(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    cv::cuda::subtract(*a, *b, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
-}
-
-void cudaSubtractS(cv::_InputArray* a, const CvScalar* scale, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream)
-{
-   cv::Scalar s = *scale;
-   cv::cuda::subtract(*a, s, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaMultiply(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, double scale, cv::cuda::Stream* stream)
@@ -166,26 +154,9 @@ void cudaMultiply(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, d
    cv::cuda::multiply(*a, *b, *c, scale, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaMultiplyS(cv::_InputArray* a, const CvScalar* s, cv::_OutputArray* c, cv::cuda::Stream* stream)
-{
-   cv::Scalar scalar = *s;
-   cv::cuda::multiply(*a, scalar, *c, 1, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
-}
-
 void cudaDivide(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, double scale, cv::cuda::Stream* stream)
 {
    cv::cuda::divide(*a, *b, *c, scale, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
-}
-
-void cudaDivideSR(cv::_InputArray* a, const CvScalar* s, cv::_OutputArray* c, cv::cuda::Stream* stream)
-{
-   cv::Scalar scalar = *s;
-   cv::cuda::divide(*a, scalar, *c, 1, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
-}
-
-void cudaDivideSL(const double s, cv::_InputArray* b, cv::_OutputArray* c, cv::cuda::Stream* stream)
-{
-   cv::cuda::divide(s, *b, *c, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaAddWeighted(cv::_InputArray* src1, double alpha, cv::_InputArray* src2, double beta, double gamma, cv::_OutputArray* dst, cv::cuda::Stream* stream)
@@ -211,12 +182,6 @@ void cudaSqr(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stre
 void cudaSqrt(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
    cv::cuda::sqrt(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
-}
-
-void cudaAbsdiffS(cv::_InputArray* a, const CvScalar* s, cv::_OutputArray* c, cv::cuda::Stream* stream)
-{
-   cv::Scalar scalar = *s;
-   cv::cuda::absdiff(*a, scalar, *c, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaCompare(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, int cmpop, cv::cuda::Stream* stream)

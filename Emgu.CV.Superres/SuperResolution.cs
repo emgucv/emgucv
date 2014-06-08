@@ -55,7 +55,6 @@ namespace Emgu.CV.Superres
          {
             SuperresInvoke.cvSuperResolutionRelease(ref _ptr);
          }
-         ReleaseCache();
       }
    }
 

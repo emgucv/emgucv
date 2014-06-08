@@ -21,7 +21,7 @@ namespace OCR
       public OCRForm()
       {
          InitializeComponent();
-         _ocr = new Tesseract("", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+         _ocr = new Tesseract("", "eng", Tesseract.OcrEngineMode.OemTesseractCubeCombined);
          languageNameLabel.Text = "eng : tesseract + cube";
       }
 
@@ -64,7 +64,7 @@ namespace OCR
             _ocr.Dispose();
             string path = Path.GetDirectoryName(openLanguageFileDialog.FileName);
             string lang =  Path.GetFileNameWithoutExtension(openLanguageFileDialog.FileName).Split('.')[0];
-            _ocr = new Tesseract(path, lang, Tesseract.OcrEngineMode.OEM_DEFAULT);
+            _ocr = new Tesseract(path, lang, Tesseract.OcrEngineMode.OemDefault);
             languageNameLabel.Text = String.Format("{0} : tesseract", lang);
          }
       }

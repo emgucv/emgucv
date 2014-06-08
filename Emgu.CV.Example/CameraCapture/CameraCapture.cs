@@ -38,18 +38,18 @@ namespace CameraCapture
 
       private void ProcessFrame(object sender, EventArgs arg)
       {
-         UMat frame = new UMat();
+         Mat frame = new Mat();
          _capture.Retrieve(frame, 0);
-         UMat grayFrame = new UMat();
+         Mat grayFrame = new Mat();
          CvInvoke.CvtColor(frame, grayFrame, ColorConversion.Bgr2Gray);
-         UMat smallGrayFrame = new UMat();
+         Mat smallGrayFrame = new Mat();
          CvInvoke.PyrDown(grayFrame, smallGrayFrame);
-         UMat smoothedGrayFrame = new UMat();
+         Mat smoothedGrayFrame = new Mat();
          CvInvoke.PyrUp(smallGrayFrame, smoothedGrayFrame);
          
          //Image<Gray, Byte> smallGrayFrame = grayFrame.PyrDown();
          //Image<Gray, Byte> smoothedGrayFrame = smallGrayFrame.PyrUp();
-         UMat cannyFrame = new UMat();
+         Mat cannyFrame = new Mat();
          CvInvoke.Canny(smoothedGrayFrame, cannyFrame, 100, 60);
 
          //Image<Gray, Byte> cannyFrame = smoothedGrayFrame.Canny(100, 60);

@@ -29,7 +29,8 @@ namespace Emgu.CV.Cuda
       /// <param name="iterations">Number of times erosion and dilation to be applied.</param>
       public CudaMorphologyFilter(CvEnum.MorphOp op, DepthType srcDepth, int srcChannels, IInputArray kernel, Point anchor, int iterations)
       {
-         _ptr = CudaInvoke.cudaCreateMorphologyFilter(op, CvInvoke.MakeType(srcDepth, srcChannels), kernel.InputArrayPtr, ref anchor, iterations);
+         using (InputArray iaKernel = kernel.GetInputArray())
+            _ptr = CudaInvoke.cudaCreateMorphologyFilter(op, CvInvoke.MakeType(srcDepth, srcChannels), iaKernel, ref anchor, iterations);
       }
    }
 

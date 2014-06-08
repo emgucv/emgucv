@@ -114,7 +114,8 @@ namespace Emgu.CV.Softcascade
                roiRects.Push(rois);
                roisPtr = roiRects.Ptr;
             }
-            SoftCascadeInvoke.cveSoftCascadeDetectorDetect(_ptr, image.InputArrayPtr, roisPtr, regions, confidents);
+            using (InputArray iaImage = image.GetInputArray())
+            SoftCascadeInvoke.cveSoftCascadeDetectorDetect(_ptr, iaImage, roisPtr, regions, confidents);
 
             if (regions.Size == 0)
                return new Detection[0];

@@ -60,7 +60,8 @@ namespace Emgu.CV.Features2D
       /// <returns>The cluster centers</returns>
       public void Cluster(IOutputArray cluster)
       {
-         CvBOWKMeansTrainerCluster(_ptr, cluster.OutputArrayPtr);
+         using (OutputArray oaCluster = cluster.GetOutputArray())
+         CvBOWKMeansTrainerCluster(_ptr, oaCluster);
       }
 
       /// <summary>

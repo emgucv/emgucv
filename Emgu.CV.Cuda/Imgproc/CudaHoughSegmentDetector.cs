@@ -38,7 +38,9 @@ namespace Emgu.CV.Cuda
       /// <param name="lines">Output vector of lines. Each line is represented by a 4-element vector (x1, y1, x2, y2) , where (x1, y1) and (x2, y2) are the ending points of each detected line segment.</param>
       public void Detect(IInputArray image, IOutputArray lines)
       {
-         CudaInvoke.cudaHoughSegmentDetectorDetect(_ptr, image.InputArrayPtr, lines.OutputArrayPtr);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaLines = lines.GetOutputArray())
+            CudaInvoke.cudaHoughSegmentDetectorDetect(_ptr, iaImage, oaLines);
       }
 
       /// <summary>

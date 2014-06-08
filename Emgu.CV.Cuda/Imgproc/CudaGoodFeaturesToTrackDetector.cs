@@ -6,7 +6,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using Emgu.CV.Structure;
+﻿using Emgu.CV.CvEnum;
+﻿using Emgu.CV.Structure;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -14,35 +15,23 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Cuda implementation of GoodFeaturesToTrackDetector
    /// </summary>
-   public class CudaGoodFeaturesToTrackDetector<TColor, TDepth> : UnmanagedObject
-      where TColor : struct, IColor
-      where TDepth : new()
+   public class CudaGoodFeaturesToTrackDetector : UnmanagedObject
    {
-      static int _srcType;
-
-      static CudaGoodFeaturesToTrackDetector()
-      {
-         using (CudaImage<TColor, TDepth> tmp = new CudaImage<TColor, TDepth>(4, 4))
-         {
-            _srcType = tmp.Type;
-         }
-      }
+     
       /// <summary>
       /// Create the Cuda implementation of GoodFeaturesToTrackDetector
       /// </summary>
-      public CudaGoodFeaturesToTrackDetector(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK)
+      public CudaGoodFeaturesToTrackDetector(DepthType srcDepth, int srcChannels, int maxCorners = 1000, double qualityLevel = 0.01, double minDistance = 0, int blockSize = 3, bool useHarrisDetector = false, double harrisK = 0.04)
       {
-         _ptr = CudaInvoke.cudaGoodFeaturesToTrackDetectorCreate(_srcType, maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK);
+         _ptr = CudaInvoke.cudaGoodFeaturesToTrackDetectorCreate(CvInvoke.MakeType(srcDepth, srcChannels), maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK);
       }
 
       /// <summary>
       /// Find the good features to track
       /// </summary>
-      public GpuMat<float> Detect(CudaImage<Gray, byte> image, CudaImage<Gray, byte> mask)
+      public void Detect(GpuMat image, GpuMat corners, GpuMat mask = null)
       {
-         GpuMat<float> corners = new Cuda.GpuMat<float>();
          CudaInvoke.cudaCornersDetectorDetect(_ptr, image, corners, mask);
-         return corners;
       }
 
       /// <summary>

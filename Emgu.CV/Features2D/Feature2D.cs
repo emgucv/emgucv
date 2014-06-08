@@ -16,7 +16,6 @@ namespace Emgu.CV.Features2D
    /// The feature 2D base class
    /// </summary>
    public abstract class Feature2D : UnmanagedObject, IFeatureDetector, IDescriptorExtractor
-            
    {
       /// <summary>
       /// The pointer to the feature detector
@@ -55,7 +54,10 @@ namespace Emgu.CV.Features2D
       /// <param name="useProvidedKeyPoints">If true, the method will skip the detection phase and will compute descriptors for the provided keypoints</param>
       public void DetectAndCompute(IInputArray image, IInputArray mask, VectorOfKeyPoint keyPoints, IOutputArray descriptors, bool useProvidedKeyPoints)
       {
-         Feature2DInvoke.CvFeature2DDetectAndCompute(_ptr, image.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr, keyPoints, descriptors.OutputArrayPtr, useProvidedKeyPoints);
+         using (InputArray iaImage = image.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         using (OutputArray oaDescriptors = descriptors.GetOutputArray())
+            Feature2DInvoke.CvFeature2DDetectAndCompute(_ptr, iaImage, iaMask, keyPoints, oaDescriptors, useProvidedKeyPoints);
       }
 
       /// <summary>

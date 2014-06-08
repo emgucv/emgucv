@@ -10,7 +10,9 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
 
@@ -20,7 +22,7 @@ namespace MotionDetection
    {
       private Capture _capture;
       private MotionHistory _motionHistory;
-      private IBGFGDetector<Bgr> _forgroundDetector;
+      private BackgroundSubtractor _forgroundDetector;
 
       public Form1()
       {
@@ -51,75 +53,85 @@ namespace MotionDetection
          }
       }
 
+      private Mat _segMask = new Mat();
+      private Mat _forgroundMask = new Mat();
       private void ProcessFrame(object sender, EventArgs e)
       {
-         using (Mat image = new Mat())
-         //using (Image<Bgr, Byte> image = _capture.RetrieveBgrFrame())
-         using (MemStorage storage = new MemStorage()) //create storage for motion components
+         Mat image = new Mat();
+
+         _capture.Retrieve(image);
+         if (_forgroundDetector == null)
          {
-            _capture.Retrieve(image);
-            if (_forgroundDetector == null)
-            {
-               //_forgroundDetector = new BGCodeBookModel<Bgr>();
-               _forgroundDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.ForgroundDetectorType.Fgd);
-               //_forgroundDetector = new BGStatModel<Bgr>(image, Emgu.CV.CvEnum.BG_STAT_TYPE.FGD_STAT_MODEL);
-            }
-
-            _forgroundDetector.Update(image.ToImage<Bgr, Byte>());
-
-            capturedImageBox.Image = image;
-
-            //update the motion history
-            _motionHistory.Update(_forgroundDetector.ForegroundMask);
-
-            forgroundImageBox.Image = _forgroundDetector.ForegroundMask;
-
-            #region get a copy of the motion mask and enhance its color
-            double[] minValues, maxValues;
-            Point[] minLoc, maxLoc;
-            _motionHistory.Mask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
-            Image<Gray, Byte> motionMask = _motionHistory.Mask.Mul(255.0 / maxValues[0]);
-            #endregion
-
-            //create the motion image 
-            Image<Bgr, Byte> motionImage = new Image<Bgr, byte>(motionMask.Size);
-            //display the motion pixels in blue (first channel)
-            motionImage[0] = motionMask;
-
-            //Threshold to define a motion area, reduce the value to detect smaller motion
-            double minArea = 100;
-
-            storage.Clear(); //clear the storage
-            Seq<MCvConnectedComp> motionComponents = _motionHistory.GetMotionComponents(storage);
-
-            //iterate through each of the motion component
-            foreach (MCvConnectedComp comp in motionComponents)
-            {
-               //reject the components that have small area;
-               if (comp.Area < minArea) continue;
-
-               // find the angle and motion pixel count of the specific area
-               double angle, motionPixelCount;
-               _motionHistory.MotionInfo(comp.Rect, out angle, out motionPixelCount);
-
-               //reject the area that contains too few motion
-               if (motionPixelCount < comp.Area * 0.05) continue;
-
-               //Draw each individual motion in red
-               DrawMotion(motionImage, comp.Rect, angle, new Bgr(Color.Red));
-            }
-
-            // find and draw the overall motion angle
-            double overallAngle, overallMotionPixelCount;
-            _motionHistory.MotionInfo(motionMask.ROI, out overallAngle, out overallMotionPixelCount);
-            DrawMotion(motionImage, motionMask.ROI, overallAngle, new Bgr(Color.Green));
-
-            //Display the amount of motions found on the current image
-            UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionComponents.Total, overallMotionPixelCount));
-
-            //Display the image of the motion
-            motionImageBox.Image = motionImage;
+            _forgroundDetector = new BackgroundSubtractorMOG2();
          }
+
+         _forgroundDetector.Apply(image, _forgroundMask);
+
+         capturedImageBox.Image = image;
+
+         //update the motion history
+         _motionHistory.Update(_forgroundMask);
+
+         forgroundImageBox.Image = _forgroundMask;
+
+         #region get a copy of the motion mask and enhance its color
+         double[] minValues, maxValues;
+         Point[] minLoc, maxLoc;
+         _motionHistory.Mask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
+         Mat motionMask = new Mat();
+         using (ScalarArray sa = new ScalarArray(255.0 / maxValues[0]))
+            CvInvoke.Multiply(_motionHistory.Mask, sa, motionMask, 1, DepthType.Cv8U);
+         //Image<Gray, Byte> motionMask = _motionHistory.Mask.Mul(255.0 / maxValues[0]);
+         #endregion
+
+         //create the motion image 
+         Image<Bgr, Byte> motionImage = new Image<Bgr, byte>(motionMask.Size);
+         //display the motion pixels in blue (first channel)
+         //motionImage[0] = motionMask;
+         CvInvoke.InsertChannel(motionMask, motionImage, 0);
+
+         //Threshold to define a motion area, reduce the value to detect smaller motion
+         double minArea = 100;
+
+         //storage.Clear(); //clear the storage
+         Rectangle[] rects;
+         using (VectorOfRect boundingRect = new VectorOfRect())
+         {
+            _motionHistory.GetMotionComponents(_segMask, boundingRect);
+            rects = boundingRect.ToArray();
+         }
+         //Seq<MCvConnectedComp> motionComponents = _motionHistory.GetMotionComponents(storage);
+
+         //iterate through each of the motion component
+         foreach (Rectangle comp in rects)
+         {
+            int area = comp.Width * comp.Height;
+            //reject the components that have small area;
+            if (area < minArea) continue;
+
+            // find the angle and motion pixel count of the specific area
+            double angle, motionPixelCount;
+            _motionHistory.MotionInfo(_forgroundMask, comp, out angle, out motionPixelCount);
+
+            //reject the area that contains too few motion
+            if (motionPixelCount < area * 0.05) continue;
+
+            //Draw each individual motion in red
+            DrawMotion(motionImage, comp, angle, new Bgr(Color.Red));
+         }
+
+         // find and draw the overall motion angle
+         double overallAngle, overallMotionPixelCount;
+
+         _motionHistory.MotionInfo(_forgroundMask, new Rectangle(Point.Empty, motionMask.Size), out overallAngle, out overallMotionPixelCount);
+         DrawMotion(motionImage, new Rectangle(Point.Empty, motionMask.Size), overallAngle, new Bgr(Color.Green));
+
+         //Display the amount of motions found on the current image
+         UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", rects.Length, overallMotionPixelCount));
+
+         //Display the image of the motion
+         motionImageBox.Image = motionImage;
+
       }
 
       private void UpdateText(String text)
@@ -134,10 +146,11 @@ namespace MotionDetection
          }
       }
 
-      private static void DrawMotion(Image<Bgr, Byte> image, Rectangle motionRegion, double angle, Bgr color)
+      private static void DrawMotion(IInputOutputArray image, Rectangle motionRegion, double angle, Bgr color)
       {
+         //CvInvoke.Rectangle(image, motionRegion, new MCvScalar(255, 255, 0));
          float circleRadius = (motionRegion.Width + motionRegion.Height) >> 2;
-         Point center = new Point(motionRegion.X + motionRegion.Width >> 1, motionRegion.Y + motionRegion.Height >> 1);
+         Point center = new Point(motionRegion.X + (motionRegion.Width >> 1), motionRegion.Y + (motionRegion.Height >> 1));
 
          CircleF circle = new CircleF(
             center,
@@ -149,9 +162,9 @@ namespace MotionDetection
              center.X + xDirection,
              center.Y - yDirection);
          LineSegment2D line = new LineSegment2D(center, pointOnCircle);
+         CvInvoke.Circle(image, Point.Round(circle.Center), (int)circle.Radius, color.MCvScalar);
+         CvInvoke.Line(image, line.P1, line.P2, color.MCvScalar);
 
-         image.Draw(circle, color, 1);
-         image.Draw(line, color, 2);
       }
 
       /// <summary>

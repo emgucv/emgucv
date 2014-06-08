@@ -48,7 +48,23 @@ cv::_InputArray* cveInputArrayFromUMat(cv::UMat* mat)
 {
    return new cv::_InputArray(*mat);
 }
-
+void cveInputArrayGetSize(cv::_InputArray* ia, CvSize* size, int idx)
+{
+   cv::Size s = ia->size(idx);
+   *size = s;
+}
+int cveInputArrayGetDepth(cv::_InputArray* ia, int idx)
+{
+   return ia->depth(idx);
+}
+int cveInputArrayGetChannels(cv::_InputArray* ia, int idx)
+{
+   return ia->channels(idx);
+}
+bool cveInputArrayIsEmpty(cv::_InputArray* ia)
+{
+   return ia->empty();
+}
 void cveInputArrayRelease(cv::_InputArray** arr)
 {
    delete *arr;

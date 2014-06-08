@@ -40,7 +40,9 @@ namespace Emgu.CV.Cuda
       /// <param name="edges">Image to store the edges found by the function</param>
       public void Detect(IInputArray src, IOutputArray edges)
       {
-         CudaInvoke.cudaCannyEdgeDetectorDetect(_ptr, src.InputArrayPtr, edges.OutputArrayPtr);
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaEdges = edges.GetOutputArray())
+            CudaInvoke.cudaCannyEdgeDetectorDetect(_ptr, iaSrc, oaEdges);
       }
 
       /// <summary>

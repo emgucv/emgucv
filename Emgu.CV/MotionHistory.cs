@@ -3,6 +3,8 @@
 //----------------------------------------------------------------------------
 
 using System;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Util;
 using Emgu.Util;
 using Emgu.CV.Structure;
 
@@ -16,13 +18,12 @@ namespace Emgu.CV
    /// </remarks>
    public class MotionHistory : DisposableObject
    {
-      private Image<Gray, Byte> _foregroundMask;
+      //private IInputArray _foregroundMask;
       private double _mhiDuration;
-      private Image<Gray, Single> _mhi;
-      private Image<Gray, Byte> _mask;
-      private Image<Gray, Single> _orientation;
-      private Image<Gray, Single> _segMask;
-
+      private Mat _mhi;
+      private Mat _mask = new Mat();
+      private Mat _orientation = new Mat();
+      
       private DateTime _initTime;
       private DateTime _lastTime;
       private double _maxTimeDelta;
@@ -30,23 +31,10 @@ namespace Emgu.CV
 
 
       /// <summary>
-      /// The Motion Segment Mask. 
-      /// Same as the seg_mask in cvSegmentMotion function
-      /// Do not dispose this image.
-      /// </summary>
-      public Image<Gray, Single> SegmentMask
-      {
-         get
-         {
-            return _segMask;
-         }
-      }
-
-      /// <summary>
       /// The motion mask. 
       /// Do not dispose this image.
       /// </summary>
-      public Image<Gray, Byte> Mask
+      public Mat Mask
       {
          get
          {
@@ -84,7 +72,7 @@ namespace Emgu.CV
       /// Update the motion history with the specific image and current timestamp
       /// </summary>
       /// <param name="image">The image to be added to history</param>
-      public void Update(Image<Gray, Byte> image)
+      public void Update(Mat image)
       {
          Update(image, DateTime.Now);
       }
@@ -94,35 +82,28 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="foregroundMask">The foreground of the image to be added to history</param>
       /// <param name="timestamp">The time when the image is captured</param>
-      public void Update(Image<Gray, Byte> foregroundMask, DateTime timestamp)
+      public void Update(Mat foregroundMask, DateTime timestamp)
       {
          _lastTime = timestamp;
          TimeSpan ts = _lastTime.Subtract(_initTime);
-
-         _foregroundMask = foregroundMask;
-         if (_mhi == null) _mhi = new Image<Gray, float>(foregroundMask.Size);
-         if (_mask == null) _mask = foregroundMask.CopyBlank();
-         if (_orientation == null) _orientation = new Image<Gray, float>(foregroundMask.Size);
-
+         if (_mhi == null)
+            _mhi = new Mat(foregroundMask.Rows, foregroundMask.Cols, DepthType.Cv32F, 1);
          CvInvoke.UpdateMotionHistory(foregroundMask, _mhi, ts.TotalSeconds, _mhiDuration);
          double scale = 255.0 / _mhiDuration;
-         CvInvoke.cvConvertScale(_mhi.Ptr, _mask.Ptr, scale, (_mhiDuration - ts.TotalSeconds) * scale);
-
+         _mhi.ConvertTo(_mask, DepthType.Cv8U, scale, (_mhiDuration - ts.TotalSeconds) * scale);
+         
          CvInvoke.CalcMotionGradient(_mhi, _mask, _orientation, _maxTimeDelta, _minTimeDelta);
       }
 
       /// <summary>
       /// Get a sequence of motion component
       /// </summary>
-      /// <param name="storage">The storage used by the motion components</param>
       /// <returns>A sequence of motion components</returns>
-      public Seq<MCvConnectedComp> GetMotionComponents(MemStorage storage)
+      public void GetMotionComponents(IOutputArray segMask, VectorOfRect boundingRects)
       {
          TimeSpan ts = _lastTime.Subtract(_initTime);
-         if (_segMask == null)
-            _segMask = new Image<Gray, float>(_mhi.Size);
-         Seq<MCvConnectedComp> seq = new Seq<MCvConnectedComp>(CvInvoke.cvSegmentMotion(_mhi, _segMask, storage, ts.TotalSeconds, _maxTimeDelta), storage);
-         return seq;
+         
+         CvInvoke.SegmentMotion(_mhi, segMask, boundingRects, ts.TotalSeconds, _maxTimeDelta);
       }
 
       /// <summary>
@@ -131,27 +112,22 @@ namespace Emgu.CV
       /// <param name="motionRectangle">The rectangle area of the motion</param>
       /// <param name="angle">The orientation of the motion</param>
       /// <param name="motionPixelCount">Number of motion pixels within silhoute ROI</param>
-      public void MotionInfo(System.Drawing.Rectangle motionRectangle, out double angle, out double motionPixelCount)
+      public void MotionInfo(Mat forgroundMask, System.Drawing.Rectangle motionRectangle, out double angle, out double motionPixelCount)
       {
          TimeSpan ts = _lastTime.Subtract(_initTime);
          // select component ROI
-         CvInvoke.cvSetImageROI(_foregroundMask, motionRectangle);
-         CvInvoke.cvSetImageROI(_mhi, motionRectangle);
-         CvInvoke.cvSetImageROI(_orientation, motionRectangle);
-         CvInvoke.cvSetImageROI(_mask, motionRectangle);
+         using (Mat forgroundMaskRect = new Mat(forgroundMask, motionRectangle))
+         using (Mat mhiRect = new Mat(_mhi, motionRectangle))
+         using (Mat orientationRect = new Mat(_orientation, motionRectangle))
+         using (Mat maskRect = new Mat(_mask, motionRectangle))
+         {
+            // calculate orientation
+            angle = CvInvoke.CalcGlobalOrientation(orientationRect, maskRect, mhiRect, ts.TotalSeconds, _mhiDuration);
+            angle = 360.0 - angle; // adjust for images with top-left origin
 
-         // calculate orientation
-         angle = CvInvoke.CalcGlobalOrientation(_orientation, _mask, _mhi, ts.TotalSeconds, _mhiDuration);
-         angle = 360.0 - angle; // adjust for images with top-left origin
-
-         // caculate number of points within silhoute ROI
-         motionPixelCount = CvInvoke.Norm(_foregroundMask, null, CvEnum.NormType.L1); // calculate number of points within silhouette ROI
-
-         // reset the ROI
-         CvInvoke.cvResetImageROI(_mhi);
-         CvInvoke.cvResetImageROI(_orientation);
-         CvInvoke.cvResetImageROI(_mask);
-         CvInvoke.cvResetImageROI(_foregroundMask);
+            // calculate number of points within silhouette ROI
+            motionPixelCount = CvInvoke.Norm(forgroundMaskRect, null, CvEnum.NormType.L1);  
+         }
       }
 
       /// <summary>
@@ -169,7 +145,6 @@ namespace Emgu.CV
          if (_mhi != null) _mhi.Dispose();
          if (_mask != null) _mask.Dispose();
          if (_orientation != null) _orientation.Dispose();
-         if (_segMask != null) _segMask.Dispose();
       }
    }
 }

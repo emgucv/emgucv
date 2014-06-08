@@ -50,7 +50,8 @@ namespace Emgu.CV
             if (parameters.Length > 0)
                vec.Push(parameters);
             using(CvString s = new CvString(filename))
-               return cveImwrite(s, image.InputArrayPtr, vec);
+            using(InputArray iaImage = image.GetInputArray())
+               return cveImwrite(s, iaImage, vec);
          }
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -72,12 +73,11 @@ namespace Emgu.CV
       /// <param name="loadType">The image loading type</param>
       public static void Imdecode(IInputArray buf, CvEnum.LoadImageType loadType, Mat dst)
       {
-         cveImdecode(buf.InputArrayPtr, loadType, dst);
+         using (InputArray iaBuffer = buf.GetInputArray())
+            cveImdecode(iaBuffer, loadType, dst);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveImdecode(IntPtr buf, CvEnum.LoadImageType loadType, IntPtr dst);
-
-
 
       /// <summary>
       /// encode image and store the result as a byte vector.
@@ -92,12 +92,10 @@ namespace Emgu.CV
          {
             if (parameters.Length > 0)
                p.Push(parameters);
-
-            cveImencode(extStr, image.InputArrayPtr, buf, p);
-            
+            using (InputArray iaImage = image.GetInputArray())
+               cveImencode(extStr, iaImage, buf, p);
          }
       }
-
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveImencode(IntPtr ext, IntPtr image, IntPtr buffer, IntPtr parameters);
 

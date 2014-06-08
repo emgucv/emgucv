@@ -23,13 +23,9 @@ namespace Emgu.CV
    /// The equavailent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
-   public class UMat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray, IImage
+   public class UMat : MatDataAllocator, IImage
    {
       private IntPtr _oclMatAllocator;
-
-      private IntPtr _inputArrayPtr;
-      private IntPtr _outputArrayPtr;
-      private IntPtr _inputOutputArrayPtr;
 
       private bool _needDispose;
 
@@ -157,7 +153,9 @@ namespace Emgu.CV
       /// <param name="m">The input array to copy to</param>
       public void CopyTo(IOutputArray m, IInputArray mask = null)
       {
-         UMatInvoke.cvUMatCopyTo(this, m.OutputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         using (OutputArray oaM = m.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         UMatInvoke.cvUMatCopyTo(this, oaM, iaMask);
       }
 
       /// <summary>
@@ -167,7 +165,9 @@ namespace Emgu.CV
       /// <param name="mask">Operation mask of the same size as the umat.</param>
       public void SetTo(IInputArray value, IInputArray mask = null)
       {
-         UMatInvoke.cvUMatSetTo(Ptr, value.InputArrayPtr, mask == null ? IntPtr.Zero : mask.InputArrayPtr);
+         using (InputArray iaValue = value.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         UMatInvoke.cvUMatSetTo(Ptr, iaValue, iaMask);
       }
 
       /// <summary>
@@ -210,15 +210,6 @@ namespace Emgu.CV
          if (_needDispose && _ptr != IntPtr.Zero)
             UMatInvoke.cvUMatRelease(ref _ptr);
 
-         if (_inputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveInputArrayRelease(ref _inputArrayPtr);
-
-         if (_outputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveOutputArrayRelease(ref _outputArrayPtr);
-
-         if (_inputOutputArrayPtr != IntPtr.Zero)
-            CvInvoke.cveInputOutputArrayRelease(ref _inputOutputArrayPtr);
-
          if (_oclMatAllocator != IntPtr.Zero)
             MatDataAllocatorInvoke.cvMatAllocatorRelease(ref _oclMatAllocator);
 
@@ -229,40 +220,25 @@ namespace Emgu.CV
       /// <summary>
       /// Pointer to the InputArray
       /// </summary>
-      public IntPtr InputArrayPtr
+      public InputArray GetInputArray()
       {
-         get
-         {
-            if (_inputArrayPtr == IntPtr.Zero)
-               _inputArrayPtr = UMatInvoke.cveInputArrayFromUMat(_ptr);
-            return _inputArrayPtr;
-         }
+         return new InputArray(UMatInvoke.cveInputArrayFromUMat(_ptr));
       }
 
       /// <summary>
       /// Pointer to the OutputArray
       /// </summary>
-      public IntPtr OutputArrayPtr
+      public OutputArray GetOutputArray()
       {
-         get
-         {
-            if (_outputArrayPtr == IntPtr.Zero)
-               _outputArrayPtr = UMatInvoke.cveOutputArrayFromUMat(_ptr);
-            return _outputArrayPtr;
-         }
+         return new OutputArray( UMatInvoke.cveOutputArrayFromUMat(_ptr) );
       }
 
       /// <summary>
       /// Pointer to the InputOutputArray
       /// </summary>
-      public IntPtr InputOutputArrayPtr
+      public InputOutputArray GetInputOutputArray()
       {
-         get
-         {
-            if (_inputOutputArrayPtr == IntPtr.Zero)
-               _inputOutputArrayPtr = UMatInvoke.cveInputOutputArrayFromUMat(_ptr);
-            return _inputOutputArrayPtr;
-         }
+         return new InputOutputArray( UMatInvoke.cveInputOutputArrayFromUMat(_ptr) );
       }
 
       /// <summary>
@@ -430,7 +406,8 @@ namespace Emgu.CV
       /// <param name="beta">Optional delta added to the scaled values.</param>
       public void ConvertTo(IOutputArray m, CvEnum.DepthType rtype, double alpha = 1.0, double beta = 0.0)
       {
-         UMatInvoke.cvUMatConvertTo(Ptr, m.OutputArrayPtr, rtype, alpha, beta);
+         using (OutputArray oaM = m.GetOutputArray())
+         UMatInvoke.cvUMatConvertTo(Ptr, oaM, rtype, alpha, beta);
       }
 
       /*
