@@ -92,6 +92,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestEMLegacy()
       {
@@ -127,14 +128,14 @@ namespace Emgu.CV.Test
          {
             EMParams parameters1 = new EMParams();
             parameters1.Nclusters = N;
-            parameters1.CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_DIAGONAL;
+            parameters1.CovMatType = Emgu.CV.ML.MlEnum.EmCovarianMatrixType.COV_MAT_DIAGONAL;
             parameters1.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_AUTO_STEP;
             parameters1.TermCrit = new MCvTermCriteria(10, 0.01);
             emModel1.Train(samples, parameters1, labels);
 
             EMParams parameters2 = new EMParams();
             parameters2.Nclusters = N;
-            parameters2.CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_GENERIC;
+            parameters2.CovMatType = Emgu.CV.ML.MlEnum.EmCovarianMatrixType.COV_MAT_GENERIC;
             parameters2.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_E_STEP;
             parameters2.TermCrit = new MCvTermCriteria(100, 1.0e-6);
             parameters2.Means = emModel1.Means;
@@ -185,15 +186,15 @@ namespace Emgu.CV.Test
                featuresM[i, j] = 100 * (float) r.NextDouble() - 50;
 
          EMParams pars = new EMParams();
-         pars.CovMatType = Emgu.CV.ML.MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_DIAGONAL;
+         pars.CovMatType = Emgu.CV.ML.MlEnum.EmCovarianMatrixType.COV_MAT_DIAGONAL;
          pars.Nclusters = numberOfClusters;
          pars.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_AUTO_STEP;
          pars.TermCrit = new MCvTermCriteria(100, 1.0e-6);
 
          em.Train(featuresM, pars, labels);
-      }
+      }*/
 
-      /*
+      
       [Test]
       public void TestEM2()
       {
@@ -202,7 +203,7 @@ namespace Emgu.CV.Test
          int dimensions = 20;
          int numberOfClusters = 10;
 
-         EM em = new EM(numberOfClusters, MlEnum.EM_COVARIAN_MATRIX_TYPE.COV_MAT_DIAGONAL, new MCvTermCriteria(100, 1.0e-6));
+         EM em = new EM(numberOfClusters, MlEnum.EmCovarianMatrixType.Diagonal, new MCvTermCriteria(100, 1.0e-6));
          Matrix<int> labels = new Matrix<int>(numberOfPoints, 1);
          Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
          for (int i = 0; i < numberOfPoints; i++)
@@ -210,7 +211,7 @@ namespace Emgu.CV.Test
                featuresM[i, j] = 100 * (float) r.NextDouble() - 50;
 
          em.Train(featuresM, labels, null, null);
-      }*/
+      }
       
       #region contribution from Albert G
       [Test]

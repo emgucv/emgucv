@@ -7,6 +7,7 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV.ML.Structure
 {
+   /*
    /// <summary>
    /// Wrapped CvEMParams
    /// </summary>
@@ -19,7 +20,7 @@ namespace Emgu.CV.ML.Structure
       /// <summary>
       /// The type of the mixture covariation matrices
       /// </summary>
-      public MlEnum.EM_COVARIAN_MATRIX_TYPE cov_mat_type;
+      public MlEnum.EmCovarianMatrixType cov_mat_type;
       /// <summary>
       /// The initial step the algorithm starts from
       /// </summary>
@@ -44,5 +45,5 @@ namespace Emgu.CV.ML.Structure
       /// Termination criteria of the procedure. EM algorithm stops either after a certain number of iterations (term_crit.num_iter), or when the parameters change too little (no more than term_crit.epsilon) from iteration to iteration
       /// </summary>
       public MCvTermCriteria term_crit;
-   }
+   }*/
 }

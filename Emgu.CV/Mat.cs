@@ -347,7 +347,7 @@ namespace Emgu.CV
       /// <typeparam name="TColor">The type of Color</typeparam>
       /// <typeparam name="TDepth">The type of Depth</typeparam>
       /// <returns>The image</returns>
-      public Image<TColor, TDepth> ToImage<TColor, TDepth>()
+      public Image<TColor, TDepth> ToImage<TColor, TDepth>(bool tryShareData = false)
          where TColor : struct, IColor
          where TDepth : new()
       {
@@ -357,7 +357,14 @@ namespace Emgu.CV
          if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension == numberOfChannels)
          {
             //same color, same depth
-            return new Image<TColor, TDepth>(MatInvoke.cveMatToIplImage(Ptr));
+            if (tryShareData)
+               return new Image<TColor, TDepth>(MatInvoke.cveMatToIplImage(Ptr));
+            else
+            {
+               Image<TColor, TDepth> img = new Image<TColor, TDepth>(Size);
+               CopyTo(img);
+               return img;
+            }
          }
          else if (typeof(TDepth) != CvInvoke.GetDepthType(this.Depth) && c.Dimension == numberOfChannels)
          {

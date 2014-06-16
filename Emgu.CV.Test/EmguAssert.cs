@@ -4,8 +4,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Storage.Streams;
+
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
@@ -17,6 +16,9 @@ using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestCl
 using Trace = System.Diagnostics.Debug;
 using System.Threading.Tasks;
 using Windows.Storage;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
 #else
 using NUnit.Framework;
 #endif
@@ -43,22 +45,21 @@ namespace Emgu.CV.Test
          return fileName;
       }
 
-      private static async Task<byte[]> ReadFile(String fileName)
+      private static async Task<Mat> ReadFile(String fileName)
       {
          StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///" + fileName));
-         //StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
-         IBuffer buffer = await FileIO.ReadBufferAsync(file);
-         return buffer.ToArray();
+         Mat m = await Mat.FromStorageFile(file);
+         return m;
       }
 
       public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
          where TColor : struct, IColor
          where TDepth : new()
       {
-         byte[] data = Task.Run(async () => await ReadFile(name)).Result;
-         Mat m = new Mat();
-         CvInvoke.Imdecode(data, LoadImageType.Unchanged, m);
-         return m.ToImage<TColor, TDepth>();
+         using (Mat m = Task.Run(async () => await ReadFile(name)).Result)
+         {
+            return m.ToImage<TColor, TDepth>();
+         }
       }
 #else
       public static String GetFile(String fileName)

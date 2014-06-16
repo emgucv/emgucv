@@ -205,13 +205,13 @@ namespace Emgu.CV.ML
       /// <param name="termcrit">The termination criteria of the EM algorithm. The EM algorithm can be terminated by the number of iterations termCrit.maxCount (number of M-steps) or when relative change of likelihood logarithm is less than termCrit.epsilon. Default maximum number of iterations is 100</param>
       /// <returns>Pointer to the EM model</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvEMDefaultCreate(int nclusters, MlEnum.EM_COVARIAN_MATRIX_TYPE covMatType, ref MCvTermCriteria termcrit);
+      internal static extern IntPtr CvEMDefaultCreate(int nclusters, MlEnum.EmCovarianMatrixType covMatType, ref MCvTermCriteria termcrit);
 
       /// <summary>
       /// Release the EM model
       /// </summary>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvEMRelease(ref IntPtr emModel);
+      internal static extern void CvEMRelease(ref IntPtr emModel);
 
       /// <summary>
       /// Starts with Expectation step. Initial values of the model parameters will be estimated by the k-means algorithm.
@@ -224,12 +224,34 @@ namespace Emgu.CV.ML
       /// <returns>The methods return true if the Gaussian mixture model was trained successfully, otherwise it returns false.</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      public static extern bool CvEMTrain(
+      internal static extern bool CvEMTrain(
          IntPtr model,
          IntPtr samples,
+         IntPtr logLikelihoods,
          IntPtr labels,
-         IntPtr probs,
-         IntPtr logLikelihoods);
+         IntPtr probs
+         );
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool CvEMTrainE(
+         IntPtr model, 
+         IntPtr samples,
+         IntPtr means0,
+         IntPtr covs0,
+         IntPtr weights0,
+         IntPtr logLikelihoods,
+         IntPtr labels,
+         IntPtr probs);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool CvEMTrainM(
+         IntPtr model, 
+         IntPtr samples,
+         IntPtr probs0,
+         IntPtr logLikelihoods,
+         IntPtr labels,
+         IntPtr probs);
 
       /// <summary>
       /// Given the EM <paramref name="model"/>, predit the probability of the <paramref name="samples"/>
@@ -237,16 +259,16 @@ namespace Emgu.CV.ML
       /// <param name="model">The EM model</param>
       /// <param name="samples">The input samples</param>
       /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
-      /// <param name="likelihood">The likelihood logarithm value</param>
       /// <returns>In case of classification the method returns the class label, in case of regression - the output function value</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern double CvEMPredict(
+      internal static extern void CvEMPredict(
          IntPtr model,
          IntPtr samples,
-         IntPtr probs,
-         ref double likelihood);
+         ref MCvPoint2D64f result, 
+         IntPtr probs);
       #endregion
 
+      /*
       #region CvEMLegacy
       /// <summary>
       /// Create a default EM model
@@ -332,7 +354,7 @@ namespace Emgu.CV.ML
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern int CvEMLegacyGetNclusters(IntPtr model);
       #endregion
-
+      */
       #region CvSVM
       /// <summary>
       /// Create a default SVM model

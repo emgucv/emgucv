@@ -96,6 +96,8 @@
     <Compile Include="Util\CvString.cs" />
     <Compile Include="Util\IInputArray.cs" />
     <Compile Include="Util\IInputOutputArray.cs" />
+    <Compile Include="Util\InputArray.cs" />
+    <Compile Include="Util\InputOutputArray.cs" />
     <Compile Include="Util\IOutputArray.cs" />
     <Compile Include="Mat.cs" />
     <Compile Include="Octree.cs" />
@@ -145,6 +147,8 @@
     <Compile Include="Util\CvException.cs" />
     <Compile Include="Util\CvToolbox.cs" />
     <Compile Include="Util\DataLogger.cs" />
+    <Compile Include="Util\OutputArray.cs" />
+    <Compile Include="Util\ScalarArray.cs" />
     <Compile Include="Util\StructSize.cs" />
     <Compile Include="Util\TbbTaskScheduler.cs" />
     <Compile Include="Util\VectorOfDouble.cs" />
@@ -164,14 +168,11 @@
     <Compile Include="Util\VectorOfPoint.cs" />
     <Compile Include="Util\VectorOfPointF.cs" />
     <Compile Include="Util\VectorOfUMat.cs" />
+    <Compile Include="Util\VectorOfVectorOfDMatch.cs" />
     <Compile Include="Util\VectorOfVectorOfInt.cs" />
-    <Compile Include="Util\VectorOfVectorOfIntExtra.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint3D32F.cs" />
-    <Compile Include="Util\VectorOfVectorOfPointExtra.cs" />
     <Compile Include="Util\VectorOfVectorOfPointF.cs" />
-    <Compile Include="Util\VectorOfVectorOfPoint3D32FExtra.cs" />
-    <Compile Include="Util\VectorOfVectorOfPointFExtra.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />

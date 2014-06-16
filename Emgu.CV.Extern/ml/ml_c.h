@@ -36,10 +36,27 @@ CVAPI(float) CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int 
                                    float** neighbors, CvMat* neighbor_responses, CvMat* dist );
 
 //EM
-CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const cv::TermCriteria* termcrit);
+CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const CvTermCriteria* termcrit);
 CVAPI(void) CvEMRelease(cv::EM** model);
-CVAPI(bool) CvEMTrain(cv::EM* model, CvMat* samples, CvMat* labels, CvMat* probs, CvMat* logLikelihoods );
-CVAPI(double) CvEMPredict(cv::EM* model, CvMat* sample, CvMat* probs, double* likelihood);
+CVAPI(bool) CvEMTrain(cv::EM* model, cv::_InputArray* samples, cv::_OutputArray* logLikelihoods, cv::_OutputArray* labels, cv::_OutputArray* probs);
+CVAPI(bool) CvEMTrainE(
+   cv::EM* model, 
+   cv::_InputArray* samples,
+   cv::_InputArray* means0,
+   cv::_InputArray* covs0,
+   cv::_InputArray* weights0,
+   cv::_OutputArray* logLikelihoods,
+   cv::_OutputArray* labels,
+   cv::_OutputArray* probs);
+CVAPI(bool) CvEMTrainM(
+   cv::EM* model, 
+   cv::_InputArray* samples,
+   cv::_InputArray* probs0,
+   cv::_OutputArray* logLikelihoods,
+   cv::_OutputArray* labels,
+   cv::_OutputArray* probs);
+
+CVAPI(void) CvEMPredict(cv::EM* model, cv::_InputArray* sample, CvPoint2D64f* result, cv::_OutputArray* probs);
 
 //SVM
 CVAPI(CvSVM*) CvSVMDefaultCreate();

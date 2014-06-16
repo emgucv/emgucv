@@ -9,22 +9,23 @@ namespace Emgu.CV.ML.MlEnum
    /// <summary>
    /// The type of the mixture covariation matrices
    /// </summary>
-   public enum EM_COVARIAN_MATRIX_TYPE
+   public enum EmCovarianMatrixType
    {
       /// <summary>
       /// A covariation matrix of each mixture is a scaled identity matrix, ?k*I, so the only parameter to be estimated is ?k. The option may be used in special cases, when the constraint is relevant, or as a first step in the optimization (e.g. in case when the data is preprocessed with PCA). The results of such preliminary estimation may be passed again to the optimization procedure, this time with cov_mat_type=COV_MAT_DIAGONAL
       /// </summary>
-      COV_MAT_SPHERICAL = 0, 
+      Spherical = 0, 
       /// <summary>
       /// A covariation matrix of each mixture may be arbitrary diagonal matrix with positive diagonal elements, that is, non-diagonal elements are forced to be 0's, so the number of free parameters is d  for each matrix. This is most commonly used option yielding good estimation results
       /// </summary>
-      COV_MAT_DIAGONAL = 1, 
+      Diagonal = 1, 
       /// <summary>
       /// A covariation matrix of each mixture may be arbitrary symmetrical positively defined matrix, so the number of free parameters in each matrix is about d2/2. It is not recommended to use this option, unless there is pretty accurate initial estimation of the parameters and/or a huge number of training samples
       /// </summary>
-      COV_MAT_GENERIC = 2
+      Generic = 2
    }
 
+   /*
    /// <summary>
    /// The initial step the algorithm starts from
    /// </summary>
@@ -44,7 +45,7 @@ namespace Emgu.CV.ML.MlEnum
       /// No values are required from the user, k-means algorithm is used to estimate initial mixtures parameters
       /// </summary>
       START_AUTO_STEP = 0
-   }
+   }*/
 
    /// <summary>
    /// Type of SVM

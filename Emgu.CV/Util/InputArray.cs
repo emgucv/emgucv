@@ -4,9 +4,9 @@
 
 using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using Emgu.CV.CvEnum;
 using Emgu.Util;
-using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {

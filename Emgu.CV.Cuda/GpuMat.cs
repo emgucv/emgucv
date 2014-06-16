@@ -14,6 +14,14 @@ using Emgu.CV.Util;
 using Emgu.CV;
 using Emgu.Util;
 
+#if ANDROID
+using Bitmap = Android.Graphics.Bitmap;
+#elif IOS
+using MonoTouch.UIKit;
+using MonoTouch.CoreGraphics;
+#else
+#endif
+
 namespace Emgu.CV.Cuda
 {
    /// <summary>

@@ -22,7 +22,7 @@ namespace Emgu.CV.ML
       /// <param name="nclusters">The number of mixture components in the Gaussian mixture model. Use 5 for default.</param>
       /// <param name="covMatType">Constraint on covariance matrices which defines type of matrices</param>
       /// <param name="termcrit">The termination criteria of the EM algorithm. The EM algorithm can be terminated by the number of iterations termCrit.maxCount (number of M-steps) or when relative change of likelihood logarithm is less than termCrit.epsilon. Default maximum number of iterations is 100</param>
-      public EM(int nclusters, MlEnum.EM_COVARIAN_MATRIX_TYPE covMatType, MCvTermCriteria termcrit)
+      public EM(int nclusters, MlEnum.EmCovarianMatrixType covMatType, MCvTermCriteria termcrit)
       {
          _ptr = MlInvoke.CvEMDefaultCreate(nclusters, covMatType, ref termcrit);
       }
@@ -35,26 +35,60 @@ namespace Emgu.CV.ML
       /// <param name="logLikelihoods">Can be null if not needed. The optional output matrix that contains a likelihood logarithm value for each sample. It has nsamples x 1 size and CV_64FC1 type.</param>
       /// <param name="probs">Can be null if not needed. Initial probabilities p_{i,k} of sample i to belong to mixture component k. It is a one-channel floating-point matrix of nsamples x nclusters size.</param>
       /// <returns>The methods return true if the Gaussian mixture model was trained successfully, otherwise it returns false.</returns>
-      public bool Train(Matrix<float> samples, Matrix<Int32> labels, Matrix<float> probs, Matrix<double> logLikelihoods)
+      public bool Train(IInputArray samples, IOutputArray logLikelihoods = null, IOutputArray labels = null, IOutputArray probs = null)
       {
-         return MlInvoke.CvEMTrain(_ptr, samples, labels, probs, logLikelihoods);
+         using (InputArray iaSamples = samples.GetInputArray())
+         using (OutputArray oaLoglikelihoods = logLikelihoods == null ? OutputArray.GetEmpty() : logLikelihoods.GetOutputArray())
+         using (OutputArray oaLabels = labels == null ? OutputArray.GetEmpty() : labels.GetOutputArray())
+         using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
+            return MlInvoke.CvEMTrain(_ptr, iaSamples, oaLoglikelihoods, oaLabels, oaProbs);
       }
+
+      public bool TrainE(IInputArray samples, IInputArray means0, IInputArray covs0, IInputArray weights0,
+         IOutputArray loglikelihoods, IOutputArray labels, IOutputArray probs)
+      {
+         using (InputArray iaSamples = samples.GetInputArray())
+         using (InputArray iaMeans0 = means0.GetInputArray())
+         using (InputArray iaCovs0 = covs0 == null ? InputArray.GetEmpty() : covs0.GetInputArray())
+         using (InputArray iaWeights = weights0 == null ? InputArray.GetEmpty() : weights0.GetInputArray())
+         using (OutputArray oaLogLikelihood = loglikelihoods == null ? OutputArray.GetEmpty() : loglikelihoods.GetOutputArray())
+         using (OutputArray oaLabels = labels == null ? OutputArray.GetEmpty() : labels.GetOutputArray())
+         using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
+            return MlInvoke.CvEMTrainE(_ptr, iaSamples, iaMeans0, iaCovs0, iaWeights, oaLogLikelihood, oaLabels, oaProbs);
+      }
+
+      public bool CvEMTrainM(
+         IInputArray samples,
+         IInputArray probs0,
+         IOutputArray logLikelihoods,
+         IOutputArray labels,
+         IOutputArray probs)
+      {
+         using (InputArray iaSamples = samples.GetInputArray())
+         using (InputArray iaProbs0 = probs0.GetInputArray())
+         using (OutputArray oaLogLikelihood = logLikelihoods == null ? OutputArray.GetEmpty() : logLikelihoods.GetOutputArray())
+         using (OutputArray oaLabels = labels == null ? OutputArray.GetEmpty() : labels.GetOutputArray())
+         using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
+            return MlInvoke.CvEMTrainM(_ptr, iaSamples, iaProbs0, oaLogLikelihood, oaLabels, oaProbs);
+      }
+
 
       /// <summary>
       /// Predit the probability of the <paramref name="samples"/>
       /// </summary>
       /// <param name="samples">The input samples</param>
       /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
-      /// <param name="likelihood">The likelihood logarithm value</param>
-      /// <returns>an index of the most probable mixture component for the given sample.</returns>
-      public double Predict(Matrix<float> samples, Matrix<float> probs, out double likelihood)
+      public MCvPoint2D64f Predict(IInputArray samples, IOutputArray probs = null)
       {
-         likelihood = 0;
-         return  MlInvoke.CvEMPredict(
-            _ptr,
-            samples.Ptr,
-            probs == null ? IntPtr.Zero : probs.Ptr,
-            ref likelihood);
+         MCvPoint2D64f result = new MCvPoint2D64f();
+         using (InputArray iaSamples = samples.GetInputArray())
+         using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
+            MlInvoke.CvEMPredict(
+              _ptr,
+              iaSamples,
+              ref result,
+              oaProbs);
+         return result;
       }
 
       /// <summary>

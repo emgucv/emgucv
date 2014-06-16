@@ -37,7 +37,7 @@ float CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int k, CvMa
 { return classifier->find_nearest(_samples, k, results, (const float**) neighbors, neighbor_responses, dist); }
 
 //EM
-CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const cv::TermCriteria* termcrit)
+CVAPI(cv::EM*) CvEMDefaultCreate(int nclusters, int covMatType, const CvTermCriteria* termcrit)
 { 
    return new cv::EM(nclusters, covMatType, *termcrit); 
 }
@@ -46,36 +46,58 @@ void CvEMRelease(cv::EM** model)
    delete *model;  
    *model = 0;
 }
-bool CvEMTrain(cv::EM* model, CvMat* samples, CvMat* labels, CvMat* probs, CvMat* logLikelihoods )
+bool CvEMTrain(cv::EM* model, cv::_InputArray* samples, cv::_OutputArray* logLikelihoods, cv::_OutputArray* labels, cv::_OutputArray* probs)
 {
-   cv::Mat samplesMat = cv::cvarrToMat(samples);
-   cv::Mat labelsMat = labels ? cv::cvarrToMat(labels) : cv::Mat();
-   cv::Mat probsMat = probs? cv::cvarrToMat(probs) : cv::Mat();
-   cv::Mat logLikelihoodsMat = logLikelihoods ? cv::cvarrToMat(logLikelihoods) : cv::Mat();
-
-   cv::Size labelsSize = labels ? labelsMat.size() : cv::Size();
-   cv::Size probsSize = probs ? probsMat.size() : cv::Size();
-   cv::Size logLikelihoodsSize = logLikelihoods ? logLikelihoodsMat.size() : cv::Size();
-
-   bool result = model->train(
-      samplesMat, 
-      labels ? labelsMat : cv::noArray(), 
-      probs ? probsMat: cv::noArray(), 
-      logLikelihoods? logLikelihoodsMat : cv::noArray());
-
-   CV_Assert(!labels || (labelsSize.width == labelsMat.size().width && labelsSize.height == labelsMat.size().height));
-   CV_Assert(!probs || (probsSize.width == probsMat.size().width && probsSize.height == probsMat.size().height));
-   CV_Assert(!logLikelihoods || (logLikelihoodsSize.width == logLikelihoodsMat.size().width && logLikelihoodsSize.height == logLikelihoodsMat.size().height));
-   return result;
+   return model->train(
+      *samples, 
+      logLikelihoods? *logLikelihoods : (cv::OutputArray) cv::noArray(),
+      labels ? *labels : (cv::OutputArray) cv::noArray(), 
+      probs ? *probs : (cv::OutputArray) cv::noArray() );
+}
+bool CvEMTrainE(
+   cv::EM* model, 
+   cv::_InputArray* samples,
+   cv::_InputArray* means0,
+   cv::_InputArray* covs0,
+   cv::_InputArray* weights0,
+   cv::_OutputArray* logLikelihoods,
+   cv::_OutputArray* labels,
+   cv::_OutputArray* probs)
+{
+   return model->trainE(
+      *samples, 
+      *means0, 
+      covs0 ? *covs0 : (cv::InputArray) cv::noArray(),
+      weights0 ? *weights0 : (cv::InputArray) cv::noArray(),
+      logLikelihoods ? *logLikelihoods : (cv::OutputArray) cv::noArray(),
+      labels ? *labels : (cv::OutputArray) cv::noArray(),
+      probs ? *probs : (cv::OutputArray) cv::noArray);
+}
+bool CvEMTrainM(
+   cv::EM* model, 
+   cv::_InputArray* samples,
+   cv::_InputArray* probs0,
+   cv::_OutputArray* logLikelihoods,
+   cv::_OutputArray* labels,
+   cv::_OutputArray* probs)
+{
+   return model->trainM(
+      *samples, 
+      *probs,
+      logLikelihoods ? *logLikelihoods : (cv::OutputArray) cv::noArray(),
+      labels ? *labels : (cv::OutputArray) cv::noArray(),
+      probs ? *probs : (cv::OutputArray) cv::noArray());
 }
 
-double CvEMPredict(cv::EM* model, CvMat* sample, CvMat* probs, double* likelihood)  
+void CvEMPredict(cv::EM* model, cv::_InputArray* sample, CvPoint2D64f* result, cv::_OutputArray* probs)  
 { 
-   cv::Mat sampleMat = cv::cvarrToMat(sample);
-   cv::Mat probsMat = probs? cv::cvarrToMat(probs) : cv::Mat(); 
-   cv::Vec2d result = model->predict(sampleMat, probs ? probsMat : cv::noArray()); 
-   *likelihood =  result(0);
-   return result(1);
+   //cv::Mat sampleMat = cv::cvarrToMat(sample);
+   //cv::Mat probsMat = probs? cv::cvarrToMat(probs) : cv::Mat(); 
+   cv::Vec2d vec = model->predict(*sample, probs ? *probs : (cv::OutputArray) cv::noArray());
+   result->x = vec(0);
+   result->y = vec(1);
+   //*likelihood =  result(0);
+   //return result(1);
 }
 
 //SVM
