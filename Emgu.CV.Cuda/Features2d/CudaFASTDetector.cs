@@ -35,16 +35,16 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="img">The image where keypoints will be detected from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>
+      /// <param name="keypoints">
       /// The keypoints GpuMat that will have 1 row.
       /// keypoints.at&lt;float[6]&gt;(1, i) contains i'th keypoint
       /// format: (x, y, size, response, angle, octave)
-      /// </returns>
-      public GpuMat<float> DetectKeyPointsRaw(CudaImage<Gray, Byte> img, CudaImage<Gray, Byte> mask)
+      /// </param>
+      public void DetectKeyPointsRaw(GpuMat img, GpuMat mask, GpuMat keypoints)
       {
-         GpuMat<float> result = new GpuMat<float>();
-         CudaInvoke.cudaFASTDetectorDetectKeyPoints(_ptr, img, mask, result);
-         return result;
+         
+         CudaInvoke.cudaFASTDetectorDetectKeyPoints(_ptr, img, mask, keypoints);
+         
       }
 
       /// <summary>
@@ -53,11 +53,12 @@ namespace Emgu.CV.Cuda
       /// <param name="img">The image where keypoints will be detected from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>An array of keypoints</returns>
-      public MKeyPoint[] DetectKeyPoints(CudaImage<Gray, Byte> img, CudaImage<Gray, Byte> mask)
+      public MKeyPoint[] DetectKeyPoints(GpuMat img, GpuMat mask)
       {
-         using (GpuMat<float> tmp = DetectKeyPointsRaw(img, mask))
+         using (GpuMat tmp = new GpuMat())
          using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          {
+            DetectKeyPointsRaw(img, mask, tmp);
             DownloadKeypoints(tmp, kpts);
             return kpts.ToArray();
          }
@@ -68,7 +69,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The keypoints obtained from DetectKeyPointsRaw</param>
       /// <param name="dst">The vector of keypoints</param>
-      public void DownloadKeypoints(GpuMat<float> src, VectorOfKeyPoint dst)
+      public void DownloadKeypoints(GpuMat src, VectorOfKeyPoint dst)
       {
          CudaInvoke.cudaFASTDownloadKeypoints(_ptr, src, dst);
       }
@@ -98,6 +99,6 @@ namespace Emgu.CV.Cuda
       internal static extern void cudaFASTDetectorDetectKeyPoints(IntPtr detector, IntPtr img, IntPtr mask, IntPtr keypoints);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaFASTDownloadKeypoints(IntPtr detector, IntPtr keypointsGPU, IntPtr keypoints);
+      internal static extern void cudaFASTDownloadKeypoints(IntPtr detector, IntPtr keypointsGpu, IntPtr keypoints);
    }
 }

@@ -36,8 +36,8 @@ namespace Emgu.CV.Test
    {
       public void TestRotationMatrix2D()
       {
-         RotationMatrix2D<float> mat = new RotationMatrix2D<float>(new PointF(1, 2), 30, 1);
-         RotationMatrix2D<double> mat2 = new RotationMatrix2D<double>(new PointF(1, 2), 30, 1);
+         RotationMatrix2D mat = new RotationMatrix2D(new PointF(1, 2), 30, 1);
+         RotationMatrix2D mat2 = new RotationMatrix2D(new PointF(1, 2), 30, 1);
          //Trace.WriteLine(Emgu.Toolbox.MatrixToString<float>(mat.Data, ", ", ";\r\n"));
       }
 
@@ -534,6 +534,23 @@ namespace Emgu.CV.Test
 
       }
 
+      public void TestPlayVideo()
+      {
+         Capture capture = new Capture("car.avi");
+         ImageViewer viewer = new ImageViewer(null);
+          
+         Application.Idle += delegate(Object sender, EventArgs e)
+         {
+            Mat m = capture.QueryFrame();
+            if (m != null && !m.IsEmpty)
+            {
+               viewer.Image = m;
+               Thread.Sleep(300);
+            }
+         };
+         viewer.ShowDialog();
+      }
+
       /*
       public static void TestOnePassVideoStabilizerCamera()
       {
@@ -620,7 +637,7 @@ namespace Emgu.CV.Test
          ImageViewer viewer = new ImageViewer();
          //using (Capture capture = new Capture("car.avi"))
          using (Superres.FrameSource frameSource = new Superres.FrameSource("car.avi", false))
-         using (Superres.SuperResolution sr = new Superres.SuperResolution(Superres.SuperResolution.OpticalFlowType.BTVL, frameSource))
+         using (Superres.SuperResolution sr = new Superres.SuperResolution(Superres.SuperResolution.OpticalFlowType.Btvl, frameSource))
          //using (Superres.SuperResolution sr = new Superres.SuperResolution(Superres.SuperResolution.OpticalFlowType.BTVL1_OCL, frameSource))
          {
             Stopwatch watch = new Stopwatch();

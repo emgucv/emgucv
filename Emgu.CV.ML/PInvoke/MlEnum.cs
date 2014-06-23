@@ -25,59 +25,37 @@ namespace Emgu.CV.ML.MlEnum
       Generic = 2
    }
 
-   /*
-   /// <summary>
-   /// The initial step the algorithm starts from
-   /// </summary>
-   public enum EM_INIT_STEP_TYPE
-   {
-      /// <summary>
-      /// The algorithm starts with E-step. 
-      /// At least, the initial values of mean vectors, CvEMParams.Means must be passed. 
-      /// Optionally, the user may also provide initial values for weights (CvEMParams.Weights) and/or covariation matrices (CvEMParams.Covs).
-      /// </summary>
-      START_E_STEP = 1, 
-      /// <summary>
-      /// The algorithm starts with M-step. The initial probabilities p_{i,k} must be provided
-      /// </summary>
-      START_M_STEP = 2, 
-      /// <summary>
-      /// No values are required from the user, k-means algorithm is used to estimate initial mixtures parameters
-      /// </summary>
-      START_AUTO_STEP = 0
-   }*/
-
    /// <summary>
    /// Type of SVM
    /// </summary>
-   public enum SVM_TYPE
+   public enum SvmType
    {
       /// <summary>
       /// n-class classification (n>=2), allows imperfect separation of classes with penalty multiplier C for outliers
       /// </summary>
-      C_SVC = 100,
+      CSvc = 100,
       /// <summary>
       /// n-class classification with possible imperfect separation. Parameter nu (in the range 0..1, the larger the value, the smoother the decision boundary) is used instead of C
       /// </summary>
-      NU_SVC = 101,
+      NuSvc = 101,
       /// <summary>
       /// one-class SVM. All the training data are from the same class, SVM builds a boundary that separates the class from the rest of the feature space
       /// </summary>
-      ONE_CLASS = 102, 
+      OneClass = 102, 
       /// <summary>
       /// Regression. The distance between feature vectors from the training set and the fitting hyper-plane must be less than p. For outliers the penalty multiplier C is used
       /// </summary>
-      EPS_SVR = 103,
+      EpsSvr = 103,
       /// <summary>
       /// Regression; nu is used instead of p.
       /// </summary>
-      NU_SVR = 104
+      NuSvr = 104
    }
 
    /// <summary>
    /// The type of SVM parameters
    /// </summary>
-   public enum SVM_PARAM_TYPE
+   public enum SvmParamType
    {
       /// <summary>
       /// C
@@ -86,7 +64,7 @@ namespace Emgu.CV.ML.MlEnum
       /// <summary>
       /// Gamma
       /// </summary>
-      GAMMA = 1,
+      Gamma = 1,
       /// <summary>
       /// P
       /// </summary>
@@ -94,171 +72,171 @@ namespace Emgu.CV.ML.MlEnum
       /// <summary>
       /// NU
       /// </summary>
-      NU = 3,
+      Nu = 3,
       /// <summary>
       /// COEF
       /// </summary>
-      COEF = 4,
+      Coef = 4,
       /// <summary>
       /// DEGREE
       /// </summary>
-      DEGREE = 5
+      Degree = 5
    }
 
    /// <summary>
    /// SVM kernel type
    /// </summary>
-   public enum SVM_KERNEL_TYPE
+   public enum SvmKernelType
    {
       /// <summary>
       /// No mapping is done, linear discrimination (or regression) is done in the original feature space. It is the fastest option. d(x,y) = x y == (x,y)
       /// </summary>
-      LINEAR = 0,
+      Linear = 0,
       /// <summary>
       /// polynomial kernel: d(x,y) = (gamma*(xy)+coef0)^degree
       /// </summary>
-      POLY = 1, 
+      Poly = 1, 
       /// <summary>
       /// Radial-basis-function kernel; a good choice in most cases: d(x,y) = exp(-gamma*|x-y|^2)
       /// </summary>
-      RBF = 2, 
+      Rbf = 2, 
       /// <summary>
       /// sigmoid function is used as a kernel: d(x,y) = tanh(gamma*(xy)+coef0)
       /// </summary>
-      SIGMOID = 3
+      Sigmoid = 3
    }
 
    /// <summary>
    /// Training method for ANN_MLP
    /// </summary>
-   public enum ANN_MLP_TRAIN_METHOD
+   public enum AnnMlpTrainMethod
    {
       /// <summary>
       /// Back-propagation algorithmn
       /// </summary>
-      BACKPROP = 0, 
+      Backprop = 0, 
       /// <summary>
       /// Batch RPROP algorithm
       /// </summary>
-      RPROP = 1 
+      Rprop = 1 
    }
 
    /// <summary>
    /// Possible activation functions
    /// </summary>
-   public enum ANN_MLP_ACTIVATION_FUNCTION
+   public enum AnnMlpActivationFunction
    {
       /// <summary>
       /// Identity
       /// </summary>
-      IDENTITY = 0,
+      Identity = 0,
       /// <summary>
       /// sigmoif symetric
       /// </summary>
-      SIGMOID_SYM = 1, 
+      SigmoidSym = 1, 
       /// <summary>
       /// Gaussian
       /// </summary>
-      GAUSSIAN = 2
+      Gaussian = 2
    }
 
    /// <summary>
    /// The flags for the neural network training function
    /// </summary>
    [Flags]
-   public enum ANN_MLP_TRAINING_FLAG
+   public enum AnnMlpTrainingFlag
    {
       /// <summary>
       /// 
       /// </summary>
-      DEFAULT = 0,
+      Default = 0,
       /// <summary>
       /// 
       /// </summary>
-      UPDATE_WEIGHTS = 1, 
+      UpdateWeights = 1, 
       /// <summary>
       /// 
       /// </summary>
-      NO_INPUT_SCALE = 2, 
+      NoInputScale = 2, 
       /// <summary>
       /// 
       /// </summary>
-      NO_OUTPUT_SCALE = 4
+      NoOutputScale = 4
    }
 
    /// <summary>
    /// The data layout type
    /// </summary>
-   public enum DATA_LAYOUT_TYPE
+   public enum DataLayoutType
    {
       /// <summary>
       /// Feature vectors are stored as cols
       /// </summary>
-      COL_SAMPLE = 0,
+      ColSample = 0,
       /// <summary>
       /// Feature vectors are stored as rows
       /// </summary>
-      ROW_SAMPLE =1
+      RowSample =1
    }
 
    /// <summary>
    /// Boosting type
    /// </summary>
-   public enum BOOST_TYPE
+   public enum BoostType
    {
       /// <summary>
       /// Discrete AdaBoost
       /// </summary>
-      DISCRETE = 0, 
+      Discrete = 0, 
       /// <summary>
       /// Real AdaBoost
       /// </summary>
-      REAL = 1, 
+      Real = 1, 
       /// <summary>
       /// LogitBoost
       /// </summary>
-      LOGIT = 2, 
+      Logit = 2, 
       /// <summary>
       /// Gentle AdaBoost
       /// </summary>
-      GENTLE = 3
+      Gentle = 3
    }
 
    /// <summary>
    /// Splitting criteria, used to choose optimal splits during a weak tree construction
    /// </summary>
-   public enum BOOST_SPLIT_CREITERIA
+   public enum BoostSplitCreiteria
    {
       /// <summary>
       /// Use the default criteria for the particular boosting method, see below
       /// </summary>
-      DEFAULT = 0, 
+      Default = 0, 
       /// <summary>
       /// Use Gini index. This is default option for Real AdaBoost; may be also used for Discrete AdaBoost
       /// </summary>
-      GINI = 1, 
+      Gini = 1, 
       /// <summary>
       /// Use misclassification rate. This is default option for Discrete AdaBoost; may be also used for Real AdaBoost
       /// </summary>
-      MISCLASS = 3, 
+      Misclass = 3, 
       /// <summary>
       /// Use least squares criteria. This is default and the only option for LogitBoost and Gentle AdaBoost
       /// </summary>
-      SQERR = 4 
+      Sqerr = 4 
    }
 
    /// <summary>
    /// Variable type
    /// </summary>
-   public enum VAR_TYPE
+   public enum VarType
    {
       /// <summary>
       /// Numerical or Ordered
       /// </summary>
-      NUMERICAL  =   0,
+      Numerical  =   0,
       /// <summary>
       /// Catagorical
       /// </summary>
-      CATEGORICAL   = 1
+      Categorical   = 1
    }
 }

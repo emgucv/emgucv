@@ -15,12 +15,12 @@ namespace Emgu.CV.ML.Structure
       /// <summary>
       /// The type of SVM
       /// </summary>
-      public MlEnum.SVM_TYPE svm_type;
+      public MlEnum.SvmType svm_type;
 
       /// <summary>
       /// The type of SVM kernel
       /// </summary>
-      public MlEnum.SVM_KERNEL_TYPE kernel_type;
+      public MlEnum.SvmKernelType kernel_type;
       /// <summary>
       /// for poly
       /// </summary>

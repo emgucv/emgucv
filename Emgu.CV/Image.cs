@@ -632,7 +632,7 @@ namespace Emgu.CV
             new PointF(box.Size.Width - 1, 0), 
             new PointF(box.Size.Width - 1, box.Size.Height - 1)};
 
-         using (RotationMatrix2D<double> rot = CameraCalibration.GetAffineTransform(srcCorners, destCorners))
+         using (Mat rot = CameraCalibration.GetAffineTransform(srcCorners, destCorners))
          {
             Image<TColor, TDepth> res = new Image<TColor, TDepth>((int)box.Size.Width, (int)box.Size.Height);
             CvInvoke.WarpAffine(this, res, rot, res.Size);
@@ -2266,8 +2266,7 @@ namespace Emgu.CV
       /// <param name="borderMode">Pixel extrapolation method</param>
       /// <param name="backgroundColor">A value used to fill outliers</param>
       /// <returns>The result of the transformation</returns>
-      public Image<TColor, TDepth> WarpAffine<TMapDepth>(Matrix<TMapDepth> mapMatrix, CvEnum.Inter interpolationType, CvEnum.Warp warpType, CvEnum.BorderType borderMode, TColor backgroundColor)
-         where TMapDepth : new()
+      public Image<TColor, TDepth> WarpAffine(Mat mapMatrix, CvEnum.Inter interpolationType, CvEnum.Warp warpType, CvEnum.BorderType borderMode, TColor backgroundColor)
       {
          return WarpAffine(mapMatrix, Width, Height, interpolationType, warpType, borderMode, backgroundColor);
       }
@@ -2284,8 +2283,7 @@ namespace Emgu.CV
       /// <param name="backgroundColor">A value used to fill outliers</param>
       /// <typeparam name="TMapDepth">The depth type of <paramref name="mapMatrix"/>, should be either float or double</typeparam>
       /// <returns>The result of the transformation</returns>
-      public Image<TColor, TDepth> WarpAffine<TMapDepth>(Matrix<TMapDepth> mapMatrix, int width, int height, CvEnum.Inter interpolationType, CvEnum.Warp warpType, CvEnum.BorderType borderMode, TColor backgroundColor)
-         where TMapDepth : new()
+      public Image<TColor, TDepth> WarpAffine(Mat mapMatrix, int width, int height, CvEnum.Inter interpolationType, CvEnum.Warp warpType, CvEnum.BorderType borderMode, TColor backgroundColor)
       {
          Image<TColor, TDepth> res = new Image<TColor, TDepth>(width, height);
          CvInvoke.WarpAffine(this, res, mapMatrix, res.Size, interpolationType, warpType, borderMode, backgroundColor.MCvScalar);
@@ -2362,14 +2360,20 @@ namespace Emgu.CV
       {
          if (crop)
          {
-            using (RotationMatrix2D<float> rotationMatrix = new RotationMatrix2D<float>(center, -angle, 1))
-               return WarpAffine(rotationMatrix, interpolationMethod, Emgu.CV.CvEnum.Warp.FillOutliers, CvEnum.BorderType.Constant, background);
+            using (Mat rotationMatrix = new Mat())
+            {
+               CvInvoke.GetRotationMatrix2D(center, -angle, 1, rotationMatrix);
+               
+               return WarpAffine(rotationMatrix, interpolationMethod, Emgu.CV.CvEnum.Warp.FillOutliers,
+                  CvEnum.BorderType.Constant, background);
+            }
          }
          else
          {
             Size dstImgSize;
-            using (RotationMatrix2D<float> rotationMatrix = RotationMatrix2D<float>.CreateRotationMatrix(center, -angle, Size, out dstImgSize))
+            using (Mat rotationMatrix = RotationMatrix2D.CreateRotationMatrix(center, -angle, Size, out dstImgSize))
             {
+               //CvInvoke.GetRotationMatrix2D(center, -angle, 1.0, rotationMatrix);
                return WarpAffine(rotationMatrix, dstImgSize.Width, dstImgSize.Height, interpolationMethod, Emgu.CV.CvEnum.Warp.FillOutliers, CvEnum.BorderType.Constant, background);
             }
          }

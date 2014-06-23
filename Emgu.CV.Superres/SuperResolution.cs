@@ -28,11 +28,11 @@ namespace Emgu.CV.Superres
          /// <summary>
          /// BTVL
          /// </summary>
-         BTVL = 0,
+         Btvl = 0,
          /// <summary>
          /// BTVL using gpu
          /// </summary>
-         BTVL1_GPU = 1,
+         Btvl1Gpu = 1,
       }
 
       /// <summary>

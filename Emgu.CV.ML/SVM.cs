@@ -73,7 +73,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="type">The SVM type</param>
       /// <returns>The default parameter grid for the specific SVM type </returns>
-      public static MCvParamGrid GetDefaultGrid(MlEnum.SVM_PARAM_TYPE type)
+      public static MCvParamGrid GetDefaultGrid(MlEnum.SvmParamType type)
       {
          MCvParamGrid grid = new MCvParamGrid();
          MlInvoke.CvSVMGetDefaultGrid(type, ref grid);
@@ -105,12 +105,12 @@ namespace Emgu.CV.ML
             sampleIdx,
             parameters,
             kFold,
-            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.C),
-            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.GAMMA),
-            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.P),
-            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.NU),
-            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.COEF),
-            GetDefaultGrid(Emgu.CV.ML.MlEnum.SVM_PARAM_TYPE.DEGREE));
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SvmParamType.C),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SvmParamType.Gamma),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SvmParamType.P),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SvmParamType.Nu),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SvmParamType.Coef),
+            GetDefaultGrid(Emgu.CV.ML.MlEnum.SvmParamType.Degree));
       }
 
       /// <summary>

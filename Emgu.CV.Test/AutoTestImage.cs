@@ -85,6 +85,16 @@ namespace Emgu.CV.Test
       }
 
       [TestAttribute]
+      public void TestAddWeighted()
+      {
+         UMat img1 = new UMat(320, 480, DepthType.Cv8U, 1);
+         UMat img2 = new UMat(320, 480, DepthType.Cv8U, 1);
+         
+         UMat result = new UMat();
+         CvInvoke.AddWeighted(img1, 0.2, img2, 0.3, 0, result);
+      }
+
+      [TestAttribute]
       public void TestSobelScharr()
       {
          Image<Gray, byte> img = EmguAssert.LoadImage<Gray, Byte>("lena.jpg");

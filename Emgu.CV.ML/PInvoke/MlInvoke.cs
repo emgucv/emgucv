@@ -396,7 +396,7 @@ namespace Emgu.CV.ML
       /// <param name="type">The SVM type</param>
       /// <param name="grid">The parameter grid reference, values will be filled in by the funtion call</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvSVMGetDefaultGrid(MlEnum.SVM_PARAM_TYPE type, ref MCvParamGrid grid);
+      public static extern void CvSVMGetDefaultGrid(MlEnum.SvmParamType type, ref MCvParamGrid grid);
 
       /// <summary>
       /// The method trains the SVM model automatically by choosing the optimal parameters C, gamma, p, nu, coef0, degree from CvSVMParams. By the optimality one mean that the cross-validation estimate of the test set error is minimal. 
@@ -488,7 +488,7 @@ namespace Emgu.CV.ML
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr CvANN_MLPCreate(
          IntPtr layerSizes,
-         MlEnum.ANN_MLP_ACTIVATION_FUNCTION activeFunction,
+         MlEnum.AnnMlpActivationFunction activeFunction,
          double fParam1,
          double fParam2);
 
@@ -518,7 +518,7 @@ namespace Emgu.CV.ML
          IntPtr sampleWeights,
          IntPtr sampleIdx,
          ref MCvANN_MLP_TrainParams parameters,
-         MlEnum.ANN_MLP_TRAINING_FLAG flags);
+         MlEnum.AnnMlpTrainingFlag flags);
 
       /// <summary>
       /// Given the <paramref name="model"/>, predit the <paramref name="outputs"/> response of the <paramref name="inputs"/> samples
@@ -588,7 +588,7 @@ namespace Emgu.CV.ML
       public static extern bool CvDTreeTrain(
          IntPtr model,
          IntPtr trainData,
-         MlEnum.DATA_LAYOUT_TYPE tflag,
+         MlEnum.DataLayoutType tflag,
          IntPtr responses,
          IntPtr varIdx,
          IntPtr sampleIdx,
@@ -668,7 +668,7 @@ namespace Emgu.CV.ML
       public static extern bool CvRTreesTrain(
          IntPtr model,
          IntPtr trainData,
-         MlEnum.DATA_LAYOUT_TYPE tFlag,
+         MlEnum.DataLayoutType tFlag,
          IntPtr responses,
          IntPtr varIdx,
          IntPtr sampleIdx,
@@ -748,7 +748,7 @@ namespace Emgu.CV.ML
       public static extern bool CvBoostTrain(
          IntPtr model,
          IntPtr trainData,
-         MlEnum.DATA_LAYOUT_TYPE tFlag,
+         MlEnum.DataLayoutType tFlag,
          IntPtr responses,
          IntPtr varIdx,
          IntPtr sampleIdx,
@@ -813,7 +813,7 @@ namespace Emgu.CV.ML
       public static extern bool CvGBTreesTrain(
          IntPtr model,
          IntPtr trainData,
-         MlEnum.DATA_LAYOUT_TYPE tFlag,
+         MlEnum.DataLayoutType tFlag,
          IntPtr responses,
          IntPtr varIdx,
          IntPtr sampleIdx,

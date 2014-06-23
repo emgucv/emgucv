@@ -253,6 +253,12 @@ void cveUndistortPoints(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputA
    cv::undistortPoints(*src, *dst, *cameraMatrix, *distCoeffs, r ? *r : (cv::InputArray) cv::noArray(), p ? *p : (cv::InputArray) cv::noArray());
 }
 
+void cveGetAffineTransform(cv::_InputArray* src, cv::_InputArray* dst, cv::Mat* affine)
+{
+   cv::Mat result = cv::getAffineTransform(*src, *dst); 
+   cv::swap(result, *affine);
+}
+
 void cveInvertAffineTransform(cv::_InputArray* m, cv::_OutputArray* im)
 {
    cv::invertAffineTransform(*m, *im);

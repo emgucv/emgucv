@@ -29,7 +29,7 @@ CVAPI(void) cudaBroxOpticalFlowRelease(cv::cuda::BroxOpticalFlow** flow);
 
 //----------------------------------------------------------------------------
 //
-//  GpuPyrLKOpticalFlow
+//  CudaPyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::PyrLKOpticalFlow*) cudaPyrLKOpticalFlowCreate(emgu::size winSize, int maxLevel, int iters, bool useInitialFlow);
@@ -52,7 +52,7 @@ CVAPI(void) cudaPyrLKOpticalFlowRelease(cv::cuda::PyrLKOpticalFlow** flow);
 
 //----------------------------------------------------------------------------
 //
-//  GpuFarnebackOpticalFlow
+//  CudaFarnebackOpticalFlow
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::FarnebackOpticalFlow*) cudaFarnebackOpticalFlowCreate(    
@@ -69,6 +69,16 @@ CVAPI(void) cudaFarnebackOpticalFlowCompute(cv::cuda::FarnebackOpticalFlow* flow
 
 CVAPI(void) cudaFarnebackOpticalFlowRelease(cv::cuda::FarnebackOpticalFlow** flow);
 
+//----------------------------------------------------------------------------
+//
+//  CudaOpticalFlowDualTvl1
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::cuda::OpticalFlowDual_TVL1_CUDA*) cudaOpticalFlowDualTvl1Create();
+
+CVAPI(void) cudaOpticalFlowDualTvl1Compute(cv::cuda::OpticalFlowDual_TVL1_CUDA* flow, const cv::cuda::GpuMat* frame0, const cv::cuda::GpuMat* frame1, cv::cuda::GpuMat* u, cv::cuda::GpuMat* v);
+
+CVAPI(void) cudaOpticalFlowDualTvl1Release(cv::cuda::OpticalFlowDual_TVL1_CUDA** flow);
 
 //----------------------------------------------------------------------------
 //

@@ -19,7 +19,7 @@ namespace Emgu.CV.ML
       /// <param name="activeFunction">Activation function</param>
       /// <param name="fParam1">Free parameters of the activation function, alpha</param>
       /// <param name="fParam2">Free parameters of the activation function, beta</param>
-      public ANN_MLP(Matrix<int> layerSize, MlEnum.ANN_MLP_ACTIVATION_FUNCTION activeFunction, double fParam1, double fParam2)
+      public ANN_MLP(Matrix<int> layerSize, MlEnum.AnnMlpActivationFunction activeFunction, double fParam1, double fParam2)
       {
          _ptr = MlInvoke.CvANN_MLPCreate(layerSize.Ptr, activeFunction, fParam1, fParam2);
       }
@@ -48,7 +48,7 @@ namespace Emgu.CV.ML
          Matrix<float> sampleWeights,
          Matrix<Byte> sampleMask,
          MCvANN_MLP_TrainParams parameters,
-         MlEnum.ANN_MLP_TRAINING_FLAG flag)
+         MlEnum.AnnMlpTrainingFlag flag)
       {
          return 
             MlInvoke.CvANN_MLPTrain(
@@ -77,7 +77,7 @@ namespace Emgu.CV.ML
          Matrix<float> sampleWeights,
          Matrix<int> sampleIdx,
          MCvANN_MLP_TrainParams parameters,
-         MlEnum.ANN_MLP_TRAINING_FLAG flag)
+         MlEnum.AnnMlpTrainingFlag flag)
       {
          return
             MlInvoke.CvANN_MLPTrain(
@@ -104,7 +104,7 @@ namespace Emgu.CV.ML
          Matrix<float> responses,
          Matrix<float> sampleWeights,
          MCvANN_MLP_TrainParams parameters,
-         MlEnum.ANN_MLP_TRAINING_FLAG flag)
+         MlEnum.AnnMlpTrainingFlag flag)
       {
          return
             MlInvoke.CvANN_MLPTrain(

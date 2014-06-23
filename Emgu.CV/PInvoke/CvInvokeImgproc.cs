@@ -123,14 +123,25 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Pointer to an array of PointF, Coordinates of 3 triangle vertices in the source image.</param>
       /// <param name="dst">Pointer to an array of PointF, Coordinates of the 3 corresponding triangle vertices in the destination image</param>
-      /// <param name="mapMatrix">Pointer to the destination 2x3 matrix</param>
-      /// <returns>Pointer to the destination 2x3 matrix</returns>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvGetAffineTransform(
+      /// <returns>The destination 2x3 matrix</returns>
+      public static Mat GetAffineTransform(
+         IInputArray src,
+         IOutputArray dst)
+      {
+         Mat affine = new Mat();
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveGetAffineTransform(iaSrc, oaDst, affine);
+         return affine;
+      }
+      
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cveGetAffineTransform(
          IntPtr src,
          IntPtr dst,
-         IntPtr mapMatrix);
+         IntPtr result);
 
+      /*
       /// <summary>
       /// Calculates the matrix of an affine transform such that:
       /// (x'_i,y'_i)^T=map_matrix (x_i,y_i,1)^T
@@ -145,7 +156,7 @@ namespace Emgu.CV
          PointF[] src,
          PointF[] dst,
          IntPtr mapMatrix);
-
+      */
       /// <summary>
       /// Calculates rotation matrix
       /// </summary>

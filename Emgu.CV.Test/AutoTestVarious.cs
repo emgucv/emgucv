@@ -1439,7 +1439,7 @@ namespace Emgu.CV.Test
          #region generate random points
          System.Random r = new Random();
          int sampleCount = 100;
-         Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(150, 60), 30);
+         Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(150, 60), 90);
          PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
          #endregion
 
@@ -1453,8 +1453,8 @@ namespace Emgu.CV.Test
             img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
          img.Draw(fittedEllipse, new Bgr(Color.Red), 2);
          #endregion
-
-         //ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         //TODO: Fix this, the fitted rectangle is different from the point cloud
+         //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
       [Test]
@@ -2154,10 +2154,12 @@ namespace Emgu.CV.Test
       public void TestRotationMatrix()
       {
          Size dstImageSize;
-         using (RotationMatrix2D<float> rotationMatrix = RotationMatrix2D<float>.CreateRotationMatrix(new System.Drawing.PointF(320, 240), -90, new Size(640, 480), out dstImageSize))
+         using (RotationMatrix2D rotationMatrix = RotationMatrix2D.CreateRotationMatrix(new System.Drawing.PointF(320, 240), -90, new Size(640, 480), out dstImageSize))
+         using (Matrix<double> m = new Matrix<double>(3, 2))
          {
+            rotationMatrix.CopyTo(m);
             Trace.WriteLine("emgu.cv.test", String.Format("dstSize: {0}x{1}", dstImageSize.Width, dstImageSize.Height));
-            Trace.WriteLine("emgu.cv.test", String.Format("rotationMat: [ [{0}, {1}, {2}], [{3}, {4}, {5}] ]", rotationMatrix.Data[0, 0], rotationMatrix.Data[0, 1], rotationMatrix.Data[0, 2], rotationMatrix.Data[1, 0], rotationMatrix.Data[1, 1], rotationMatrix.Data[1, 2]));
+            Trace.WriteLine("emgu.cv.test", String.Format("rotationMat: [ [{0}, {1}, {2}], [{3}, {4}, {5}] ]", m.Data[0, 0], m.Data[0, 1], m.Data[0, 2], m.Data[1, 0], m.Data[1, 1], m.Data[1, 2]));
          }
       }
 
@@ -2209,7 +2211,7 @@ namespace Emgu.CV.Test
          double angle = 32;
          Size size = new Size(960, 480);
          PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
-         using (RotationMatrix2D<double> rotationMatrix = new RotationMatrix2D<double>(center, -angle, 1))
+         using (RotationMatrix2D rotationMatrix = new RotationMatrix2D(center, -angle, 1))
          {
             PointF[] corners = new PointF[] {
                   new PointF(0, 0),
@@ -2221,7 +2223,7 @@ namespace Emgu.CV.Test
 
             rotationMatrix.RotatePoints(corners);
 
-            RotationMatrix2D<double> transformation = CameraCalibration.EstimateRigidTransform(oldCorners, corners, true);
+            Mat transformation = CameraCalibration.EstimateRigidTransform(oldCorners, corners, true);
 
             Matrix<double> delta = new Matrix<double>(transformation.Size);
             CvInvoke.AbsDiff(rotationMatrix, transformation, delta);

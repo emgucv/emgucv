@@ -24,7 +24,7 @@ namespace PlanarSubdivisionExample
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
 
-         Image<Bgr, Byte> img = DrawSubdivision.Draw(600, 20);
+         Mat img = DrawSubdivision.Draw(600, 20);
 
          //display the image
          ImageViewer.Show(img, "Plannar Subdivision");

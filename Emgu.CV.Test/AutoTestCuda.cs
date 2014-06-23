@@ -539,9 +539,10 @@ namespace Emgu.CV.Test
          using (CudaImage<Gray, Byte> grayCudaImage = CudaImage.Convert<Gray, Byte>())
          using (CudaFASTDetector detector = new CudaFASTDetector(10, true, 0.05))
          using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+         using (GpuMat keyPointsMat = new GpuMat())
          {
-            GpuMat<float> keyPointsMat = detector.DetectKeyPointsRaw(grayCudaImage, null);
-                        detector.DownloadKeypoints(keyPointsMat, kpts);
+            detector.DetectKeyPointsRaw(grayCudaImage, null, keyPointsMat);
+            detector.DownloadKeypoints(keyPointsMat, kpts);
 
             foreach (MKeyPoint kpt in kpts.ToArray())
             {
