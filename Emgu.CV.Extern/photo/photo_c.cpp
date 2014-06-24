@@ -59,3 +59,64 @@ void cveTextureFlattening(cv::_InputArray* src, cv::_InputArray* mask, cv::_Outp
 {
    cv::textureFlattening(*src, mask ? *mask : (cv::InputArray) cv::noArray(), *dst, lowThreshold, highThreshold, kernelSize);
 }
+
+void cveCalibrateCRFProcess(cv::CalibrateCRF* calibrateCRF, cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* times)
+{
+   calibrateCRF->process(*src, *dst, *times);
+}
+
+cv::CalibrateDebevec* cveCreateCalibrateDebevec(int samples, float lambda, bool random, cv::CalibrateCRF** calibrateCRF)
+{
+   cv::Ptr<cv::CalibrateDebevec> res = cv::createCalibrateDebevec(samples, lambda, random);
+   res.addref();
+   *calibrateCRF = static_cast<cv::CalibrateCRF*>(res.get());
+   return res.get();
+}
+
+cv::CalibrateRobertson* cveCreateCalibrateRobertson(int max_iter, float threshold, cv::CalibrateCRF** calibrateCRF)
+{
+   cv::Ptr<cv::CalibrateRobertson> res = cv::createCalibrateRobertson(max_iter, threshold);
+   res.addref();
+   *calibrateCRF = static_cast<cv::CalibrateCRF*>(res.get());
+   return res.get();
+}
+
+void cveMergeExposuresProcess(
+   cv::MergeExposures* mergeExposures, 
+   cv::_InputArray* src, cv::_OutputArray* dst,
+   cv::_InputArray* times, cv::_InputArray* response)
+{
+   mergeExposures->process(*src, *dst, *times, *response);
+}
+
+cv::MergeDebevec* cveCreateMergeDebevec(cv::MergeExposures** merge)
+{
+   cv::Ptr<cv::MergeDebevec> res = cv::createMergeDebevec();
+   res.addref();
+   *merge = static_cast<cv::MergeExposures*>(res.get());
+   return res.get();
+}
+void cveMergeDebevecRelease(cv::MergeDebevec** merge)
+{
+   delete *merge;
+   *merge = 0;
+}
+
+cv::MergeMertens* cveCreateMergeMertens(float contrast_weight, float saturation_weight, float exposure_weight, cv::MergeExposures** merge)
+{
+   cv::Ptr<cv::MergeMertens> res = cv::createMergeMertens(contrast_weight, saturation_weight, exposure_weight);
+   res.addref();
+   *merge = static_cast<cv::MergeExposures*>(res.get());
+   return res.get();
+}
+
+void cveMergeRobertsonRelease(cv::MergeRobertson** merge)
+{
+   delete *merge;
+   *merge = 0;
+}
+void cveMergeMertensRelease(cv::MergeMertens** merge)
+{
+   delete *merge;
+   *merge = 0;
+}

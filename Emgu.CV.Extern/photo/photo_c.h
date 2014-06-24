@@ -35,4 +35,24 @@ CVAPI(void) cveIlluminationChange(cv::_InputArray* src, cv::_InputArray* mask, c
 
 CVAPI(void) cveTextureFlattening(cv::_InputArray* src, cv::_InputArray* mask, cv::_OutputArray* dst, double lowThreshold, double highThreshold, int kernelSize);
 
+
+CVAPI(void) cveCalibrateCRFProcess(cv::CalibrateCRF* calibrateCRF, cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* times);
+
+CVAPI(cv::CalibrateDebevec*) cveCreateCalibrateDebevec(int samples, float lambda, bool random, cv::CalibrateCRF** calibrateCRF);
+
+CVAPI(cv::CalibrateRobertson*) cveCreateCalibrateRobertson(int max_iter, float threshold, cv::CalibrateCRF** calibrateCRF);
+
+CVAPI(void) cveMergeExposuresProcess(
+   cv::MergeExposures* mergeExposures, 
+   cv::_InputArray* src, cv::_OutputArray* dst,
+   cv::_InputArray* times, cv::_InputArray* response);
+
+CVAPI(cv::MergeDebevec*) cveCreateMergeDebevec(cv::MergeExposures** merge);
+CVAPI(void) cveMergeDebevecRelease(cv::MergeDebevec** merge);
+
+CVAPI(cv::MergeMertens*) cveCreateMergeMertens(float contrast_weight, float saturation_weight, float exposure_weight, cv::MergeExposures** merge);
+CVAPI(void) cveMergeMertensRelease(cv::MergeMertens** merge);
+
+CVAPI(cv::MergeRobertson*) cveCreateMergeRobertson(cv::MergeExposures** merge);
+CVAPI(void) cveMergeRobertsonRelease(cv::MergeRobertson** merge);
 #endif

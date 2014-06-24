@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdaptiveSkinDetector.cs" />
+    <Compile Include="CalibrateCRF.cs" />
     <Compile Include="CameraCalibration\HomographyMatrix.cs" />
     <Compile Include="CameraCalibration\Quaternions.cs" />
     <Compile Include="Capture\KinectCapture.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="LatentSvmDetector.cs" />
     <Compile Include="LevMarqSparse.cs" />
     <Compile Include="MatDataAllocator.cs" />
+    <Compile Include="MergeExposures.cs" />
     <Compile Include="OclDevice.cs" />
     <Compile Include="OclPlatformInfo.cs" />
     <Compile Include="PInvoke\CvInvokeOptim.cs" />
