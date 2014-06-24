@@ -16,12 +16,12 @@ namespace Emgu.CV.ML
       /// <summary>
       /// The type of SVM
       /// </summary>
-      private MlEnum.SVM_TYPE _svmType;
+      private MlEnum.SvmType _svmType;
 
       /// <summary>
       /// The type of SVM kernel
       /// </summary>
-      private MlEnum.SVM_KERNEL_TYPE _kernelType;
+      private MlEnum.SvmKernelType _kernelType;
 
       /// <summary>
       /// For poly
@@ -60,7 +60,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// The type of SVM
       /// </summary>
-      public MlEnum.SVM_TYPE SVMType
+      public MlEnum.SvmType SVMType
       {
          get
          {
@@ -75,7 +75,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// The type of SVM kernel
       /// </summary>
-      public MlEnum.SVM_KERNEL_TYPE KernelType
+      public MlEnum.SvmKernelType KernelType
       {
          get
          {

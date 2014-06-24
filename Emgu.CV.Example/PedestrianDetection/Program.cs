@@ -29,7 +29,7 @@ namespace PedestrianDetection
          using (Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png"))
          {
             long processingTime;
-            Rectangle[] results = FindPedestrian.Find(image, out processingTime);
+            Rectangle[] results = FindPedestrian.Find(image.Mat, out processingTime);
             foreach (Rectangle rect in results)
             {
                CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255, 255));

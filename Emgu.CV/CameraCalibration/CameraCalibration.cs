@@ -272,14 +272,14 @@ namespace Emgu.CV
       /// <param name="src">Coordinates of 3 triangle vertices in the source image. If the array contains more than 3 points, only the first 3 will be used</param>
       /// <param name="dest">Coordinates of the 3 corresponding triangle vertices in the destination image. If the array contains more than 3 points, only the first 3 will be used</param>
       /// <returns>The 2x3 rotation matrix that defines the Affine transform</returns>
-      public static RotationMatrix2D<double> GetAffineTransform(PointF[] src, PointF[] dest)
+      public static Mat GetAffineTransform(PointF[] src, PointF[] dest)
       {
          Debug.Assert(src.Length >= 3, "The source should contain at least 3 points");
          Debug.Assert(dest.Length >= 3, "The destination should contain at least 3 points");
 
-         RotationMatrix2D<double> rot = new RotationMatrix2D<double>();
-         CvInvoke.cvGetAffineTransform(src, dest, rot);
-         return rot;
+         using (VectorOfPointF ptSrc = new VectorOfPointF(src))
+         using (VectorOfPointF ptDest = new VectorOfPointF(dest))
+            return CvInvoke.GetAffineTransform(ptSrc, ptDest);
       }
 
       /// <summary>
@@ -289,29 +289,11 @@ namespace Emgu.CV
       /// <param name="destinationPoints">The corresponding points from the destination image</param>
       /// <param name="fullAffine">Indicates if full affine should be performed</param>
       /// <returns>If success, the 2x3 rotation matrix that defines the Affine transform. Otherwise null is returned.</returns>
-      public static RotationMatrix2D<double> EstimateRigidTransform(PointF[] sourcePoints, PointF[] destinationPoints, bool fullAffine)
+      public static Mat EstimateRigidTransform(PointF[] sourcePoints, PointF[] destinationPoints, bool fullAffine)
       {
-         RotationMatrix2D<double> result = new RotationMatrix2D<double>();
-         GCHandle handleA = GCHandle.Alloc(sourcePoints, GCHandleType.Pinned);
-         GCHandle handleB = GCHandle.Alloc(destinationPoints, GCHandleType.Pinned);
-         bool success;
-         using (Matrix<float> a = new Matrix<float>(sourcePoints.Length, 1, 2, handleA.AddrOfPinnedObject(), 2 * sizeof(float)))
-         using (Matrix<float> b = new Matrix<float>(destinationPoints.Length, 1, 2, handleB.AddrOfPinnedObject(), 2 * sizeof(float)))
-         {
-            success = CvInvoke.cvEstimateRigidTransform(a, b, result, fullAffine);
-         }
-         handleA.Free();
-         handleB.Free();
-
-         if (success)
-         {
-            return result;
-         }
-         else
-         {
-            result.Dispose();
-            return null;
-         }
+         using (VectorOfPointF srcVec = new VectorOfPointF(sourcePoints))
+         using (VectorOfPointF dstVec = new VectorOfPointF(destinationPoints))
+            return CvInvoke.EstimateRigidTransform(srcVec, dstVec, fullAffine);
       }
 
       /// <summary>

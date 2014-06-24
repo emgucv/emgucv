@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
@@ -267,6 +268,7 @@ namespace Emgu.CV
          return points3D;
       }
 
+      
       /// <summary>
       /// Generate a random point cloud around the ellipse. 
       /// </summary>
@@ -280,8 +282,10 @@ namespace Emgu.CV
          using (Matrix<float> points = new Matrix<float>(numberOfPoints, 2, handle.AddrOfPinnedObject()))
          using (Matrix<float> xValues = points.GetCol(0))
          using (Matrix<float> yValues = points.GetCol(1))
-         using (RotationMatrix2D<float> rotation = new RotationMatrix2D<float>(e.RotatedRect.Center, e.RotatedRect.Angle, 1.0))
+         using (RotationMatrix2D rotation = new RotationMatrix2D(e.RotatedRect.Center, e.RotatedRect.Angle, 1.0))
+         using (Mat tmp = new Mat())
          {
+            rotation.ConvertTo(tmp, DepthType.Cv32F);
             xValues.SetRandNormal(new MCvScalar(e.RotatedRect.Center.X), new MCvScalar(e.RotatedRect.Size.Width / 2.0f));
             yValues.SetRandNormal(new MCvScalar(e.RotatedRect.Center.Y), new MCvScalar(e.RotatedRect.Size.Height / 2.0f));
             rotation.RotatePoints(points);

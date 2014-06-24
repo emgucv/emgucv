@@ -252,8 +252,8 @@ namespace Emgu.CV.Test
          using (SVM model = new SVM())
          {
             SVMParams p = new SVMParams();
-            p.KernelType = Emgu.CV.ML.MlEnum.SVM_KERNEL_TYPE.LINEAR;
-            p.SVMType = Emgu.CV.ML.MlEnum.SVM_TYPE.C_SVC;
+            p.KernelType = Emgu.CV.ML.MlEnum.SvmKernelType.Linear;
+            p.SVMType = Emgu.CV.ML.MlEnum.SvmType.CSvc;
             p.C = 1;
             p.TermCrit = new MCvTermCriteria(100, 0.00001);
 
@@ -423,7 +423,7 @@ namespace Emgu.CV.Test
 
          using (GBTrees classifier = new GBTrees())
          {
-            classifier.Train(trainData, MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE, trainClasses.Convert<float>(), null, null, MCvGBTreesParams.GetDefaultParameter(), false);
+            classifier.Train(trainData, MlEnum.DataLayoutType.RowSample, trainClasses.Convert<float>(), null, null, MCvGBTreesParams.GetDefaultParameter(), false);
 
             String fileName = Path.Combine(Path.GetTempPath(), "GBTrees.xml");
             classifier.Save(fileName);
@@ -506,7 +506,7 @@ namespace Emgu.CV.Test
          int trainingSampleCount = (int) (data.Rows * 0.8);
 
          Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
-         varType.SetValue((byte) MlEnum.VAR_TYPE.CATEGORICAL); //the data is categorical
+         varType.SetValue((byte) MlEnum.VarType.Categorical); //the data is categorical
 
          Matrix<byte> sampleIdx = new Matrix<byte>(data.Rows, 1);
          using (Matrix<byte> sampleRows = sampleIdx.GetRows(0, trainingSampleCount, 1))
@@ -530,7 +530,7 @@ namespace Emgu.CV.Test
          {
             bool success = dtree.Train(
                data,
-               Emgu.CV.ML.MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE,
+               Emgu.CV.ML.MlEnum.DataLayoutType.RowSample,
                response,
                null,
                sampleIdx,
@@ -577,8 +577,8 @@ namespace Emgu.CV.Test
          int trainingSampleCount = (int) (data.Rows * 0.8);
 
          Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
-         varType.SetValue((byte) MlEnum.VAR_TYPE.NUMERICAL); //the data is numerical
-         varType[data.Cols, 0] = (byte) MlEnum.VAR_TYPE.CATEGORICAL; //the response is catagorical
+         varType.SetValue((byte) MlEnum.VarType.Numerical); //the data is numerical
+         varType[data.Cols, 0] = (byte) MlEnum.VarType.Categorical; //the response is catagorical
 
          Matrix<byte> sampleIdx = new Matrix<byte>(data.Rows, 1);
          using (Matrix<byte> sampleRows = sampleIdx.GetRows(0, trainingSampleCount, 1))
@@ -600,7 +600,7 @@ namespace Emgu.CV.Test
          {
             bool success = forest.Train(
                data, 
-               Emgu.CV.ML.MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE,
+               Emgu.CV.ML.MlEnum.DataLayoutType.RowSample,
                response, 
                null, 
                sampleIdx,
@@ -656,8 +656,8 @@ namespace Emgu.CV.Test
          int trainingSampleCount = (int) (data.Rows * 0.8);
 
          Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
-         varType.SetValue((byte) MlEnum.VAR_TYPE.NUMERICAL); //the data is numerical
-         varType[data.Cols, 0] = (byte) MlEnum.VAR_TYPE.CATEGORICAL; //the response is catagorical
+         varType.SetValue((byte) MlEnum.VarType.Numerical); //the data is numerical
+         varType[data.Cols, 0] = (byte) MlEnum.VarType.Categorical; //the response is catagorical
 
          MCvRTParams param = new MCvRTParams();
          param.maxDepth = 10;
@@ -675,7 +675,7 @@ namespace Emgu.CV.Test
          {
             bool success = forest.Train(
                data.GetRows(0, trainingSampleCount, 1),
-               Emgu.CV.ML.MlEnum.DATA_LAYOUT_TYPE.ROW_SAMPLE,
+               Emgu.CV.ML.MlEnum.DataLayoutType.RowSample,
                response.GetRows(0, trainingSampleCount, 1),
                null,
                null, 
@@ -747,13 +747,13 @@ namespace Emgu.CV.Test
 
          MCvANN_MLP_TrainParams parameters = new MCvANN_MLP_TrainParams();
          parameters.term_crit = new MCvTermCriteria(10, 1.0e-8);
-         parameters.train_method = Emgu.CV.ML.MlEnum.ANN_MLP_TRAIN_METHOD.BACKPROP;
+         parameters.train_method = Emgu.CV.ML.MlEnum.AnnMlpTrainMethod.Backprop;
          parameters.bp_dw_scale = 0.1;
          parameters.bp_moment_scale = 0.1;
 
-         using (ANN_MLP network = new ANN_MLP(layerSize, Emgu.CV.ML.MlEnum.ANN_MLP_ACTIVATION_FUNCTION.SIGMOID_SYM, 1.0, 1.0))
+         using (ANN_MLP network = new ANN_MLP(layerSize, Emgu.CV.ML.MlEnum.AnnMlpActivationFunction.SigmoidSym, 1.0, 1.0))
          {
-            network.Train(trainData, trainClasses, null, parameters, Emgu.CV.ML.MlEnum.ANN_MLP_TRAINING_FLAG.DEFAULT);
+            network.Train(trainData, trainClasses, null, parameters, Emgu.CV.ML.MlEnum.AnnMlpTrainingFlag.Default);
 
             String fileName = Path.Combine(Path.GetTempPath(), "ann_mlp_model.xml");
             network.Save(fileName);

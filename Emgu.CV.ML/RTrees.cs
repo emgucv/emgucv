@@ -54,7 +54,7 @@ namespace Emgu.CV.ML
       /// <returns></returns>
       public bool Train(
          Matrix<float> trainData,
-         MlEnum.DATA_LAYOUT_TYPE tflag,
+         MlEnum.DataLayoutType tflag,
          Matrix<float> responses,
          Matrix<Byte> varIdx,
          Matrix<Byte> sampleIdx,

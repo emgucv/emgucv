@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace PlanarSubdivisionExample
 {
@@ -43,7 +45,7 @@ namespace PlanarSubdivisionExample
       /// <param name="maxValue">The points contains values between [0, maxValue)</param>
       /// <param name="pointCount">The total number of points</param>
       /// <returns>An image representing the planar subvidision of the points</returns>
-      public static Image<Bgr, Byte> Draw(float maxValue, int pointCount)
+      public static Mat Draw(float maxValue, int pointCount)
       {
          Triangle2DF[] delaunayTriangles;
          VoronoiFacet[] voronoiFacets;
@@ -52,29 +54,37 @@ namespace PlanarSubdivisionExample
          CreateSubdivision(maxValue, pointCount, out delaunayTriangles, out voronoiFacets);
 
          //create an image for display purpose
-         Image<Bgr, Byte> img = new Image<Bgr, byte>((int)maxValue, (int)maxValue);
+         Mat img = new Mat((int)maxValue, (int)maxValue, DepthType.Cv8U, 3);
 
          //Draw the voronoi Facets
          foreach (VoronoiFacet facet in voronoiFacets)
          {
             Point[] polyline = Array.ConvertAll<PointF, Point>(facet.Vertices, Point.Round);
+            using (VectorOfPoint vp = new VectorOfPoint(polyline))
+            using (VectorOfVectorOfPoint vvp = new VectorOfVectorOfPoint(vp))
+            {
+               //Draw the facet in color
+               CvInvoke.FillPoly(
+                  img, vvp, 
+                  new Bgr(r.NextDouble()*120, r.NextDouble()*120, r.NextDouble()*120).MCvScalar);
 
-            //Draw the facet in color
-            img.FillConvexPoly(
-                polyline,
-                new Bgr(r.NextDouble() * 120, r.NextDouble() * 120, r.NextDouble() * 120)
-                );
-
-            //highlight the edge of the facet in black
-            img.DrawPolyline(polyline, true, new Bgr(Color.Black), 2);
-
+               //highlight the edge of the facet in black
+               CvInvoke.Polylines(img, vp, true, new Bgr(Color.Black).MCvScalar, 2);
+            }
             //draw the points associated with each facet in red
-            img.Draw(new CircleF(facet.Point, 5.0f), new Bgr(Color.Red), 0);
+            CvInvoke.Circle(img, Point.Round( facet.Point ), 5, new Bgr(Color.Red).MCvScalar, -1);
+            
          }
 
          //Draw the Delaunay triangulation
          foreach (Triangle2DF triangle in delaunayTriangles)
-            img.Draw(triangle, new Bgr(Color.White), 1);
+         {
+            Point[] vertices = Array.ConvertAll<PointF, Point>(triangle.GetVertices(), Point.Round);
+            using (VectorOfPoint vp = new VectorOfPoint(vertices))
+            {
+               CvInvoke.Polylines(img, vp, true, new Bgr(Color.White).MCvScalar);
+            }
+         }
 
          return img;
       }

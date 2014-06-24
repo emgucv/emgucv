@@ -71,13 +71,14 @@
     <Compile Include="Imgproc\CudaHoughCirclesDetector.cs" />
     <Compile Include="Imgproc\CudaHoughLinesDetector.cs" />
     <Compile Include="Imgproc\CudaHoughSegmentDetector.cs" />
+    <Compile Include="Optflow\CudaFarnebackOpticalFlow.cs" />
     <Compile Include="Optflow\CudaBroxOpticalFlow.cs" />
     <Compile Include="Features2d\CudaBruteForceMatcher.cs" />
     <Compile Include="Imgproc\CudaCannyEdgeDetector.cs" />
     <Compile Include="CudaCascadeClassifier.cs" />
     <Compile Include="CudaDeviceInfo.cs" />
     <Compile Include="Stereo\CudaDisparityBilateralFilter.cs" />
-    <Compile Include="Optflow\CudaFarnebackOpticalFlow.cs" />
+    <Compile Include="Optflow\CudaOpticalFlowDualTvl1.cs" />
     <Compile Include="Features2d\CudaFASTDetector.cs" />
     <Compile Include="Filters\CudaFilter.cs" />
     <Compile Include="Imgproc\CudaGoodFeaturesToTrackDetector.cs" />

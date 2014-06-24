@@ -36,7 +36,7 @@ namespace Emgu.CV.ML
       /// <returns></returns>
       public bool Train(
          Matrix<float> trainData,
-         MlEnum.DATA_LAYOUT_TYPE tflag,
+         MlEnum.DataLayoutType tflag,
          Matrix<float> responses,
          Matrix<int> varIdx,
          Matrix<int> sampleIdx,
@@ -70,7 +70,7 @@ namespace Emgu.CV.ML
       /// <returns></returns>
       public bool Train(
          Matrix<float> trainData,
-         MlEnum.DATA_LAYOUT_TYPE tflag,
+         MlEnum.DataLayoutType tflag,
          Matrix<float> responses,
          Matrix<Byte> varMask,
          Matrix<Byte> sampleMask,
@@ -102,7 +102,7 @@ namespace Emgu.CV.ML
       /// <returns></returns>
       public bool Train(
          Matrix<float> trainData,
-         MlEnum.DATA_LAYOUT_TYPE tflag,
+         MlEnum.DataLayoutType tflag,
          Matrix<float> responses,
          Matrix<Byte> varType,
          Matrix<Byte> missingMask,

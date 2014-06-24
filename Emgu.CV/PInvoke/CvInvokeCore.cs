@@ -1151,7 +1151,7 @@ namespace Emgu.CV
          using (OutputArray oaDst = dst.GetOutputArray())
             cveAddWeighted(iaSrc1, alpha, iaSrc2, beta, gamma, oaDst, dtype);
       }
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveAddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst, CvEnum.DepthType dtype);
 
       /// <summary>
@@ -2160,7 +2160,7 @@ namespace Emgu.CV
          using (OutputArray oaDst = dst.GetOutputArray())
             cveReduce(iaSrc, oaDst, dim, type, dtype);
       }
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveReduce(IntPtr src, IntPtr dst, CvEnum.ReduceDimension dim, CvEnum.ReduceType type, CvEnum.DepthType dtype);
       #endregion
 
@@ -2907,7 +2907,7 @@ namespace Emgu.CV
          using (InputArray iaIconvar = iconvar.GetInputArray())
             return cveMahalanobis(iaV1, iaV2, iaIconvar);
       }
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveMahalanobis(IntPtr v1, IntPtr v2, IntPtr iconvar);
 
       /// <summary>
@@ -3057,6 +3057,7 @@ namespace Emgu.CV
       /// <param name="status">The error status</param>
       /// <returns>the textual description for the specified error status code.</returns>
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.StringMarshalType)]
       public static extern String cvErrorStr(int status);
 
       #region File Storage

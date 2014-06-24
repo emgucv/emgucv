@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using System.Drawing;
 using System.Diagnostics;
@@ -22,7 +23,7 @@ namespace PedestrianDetection
       /// <param name="image">The image</param>
       /// <param name="processingTime">The pedestrian detection time in milliseconds</param>
       /// <returns>The region where pedestrians are detected</returns>
-      public static Rectangle[] Find(Image<Bgr, Byte> image, out long processingTime)
+      public static Rectangle[] Find(Mat image, out long processingTime)
       {
          Stopwatch watch;
          Rectangle[] regions;
@@ -36,22 +37,23 @@ namespace PedestrianDetection
                des.SetSVMDetector(CudaHOGDescriptor.GetDefaultPeopleDetector());
 
                watch = Stopwatch.StartNew();
-               using (CudaImage<Bgr, Byte> cudaImg = new CudaImage<Bgr, byte>(image))
-               using (CudaImage<Bgra, Byte> cudaBgra = cudaImg.Convert<Bgra, Byte>())
+               using (GpuMat cudaBgr = new GpuMat(image))
+               using (GpuMat cudaBgra = new GpuMat() )
                {
+                  CudaInvoke.CvtColor(cudaBgr, cudaBgra, ColorConversion.Bgr2Bgra);
                   regions = des.DetectMultiScale(cudaBgra);
                }
             }
          }
          else
          #endif
-         {  //this is the CPU version
+         {  //this is the CPU/OpenCL version
             using (HOGDescriptor des = new HOGDescriptor())
             {
                des.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
                
                //load the image to umat so it will automatically use opencl is available
-               UMat umat = image.ToUMat();
+               UMat umat = image.ToUMat(AccessType.Read);
 
                watch = Stopwatch.StartNew();
                
@@ -63,7 +65,6 @@ namespace PedestrianDetection
             }
          }
         
-
          processingTime = watch.ElapsedMilliseconds;
 
          return regions;

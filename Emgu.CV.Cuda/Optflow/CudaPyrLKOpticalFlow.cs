@@ -20,10 +20,10 @@ namespace Emgu.CV.Cuda
       /// Create the PyrLK optical flow solver
       /// </summary>
       /// <param name="winSize">Windows size. Use 21x21 for default</param>
-      /// <param name="maxLevel">The maximum number of pyramid leveles. Use 3 for default</param>
-      /// <param name="iters">The number of iterations. Use 30 for default.</param>
-      /// <param name="useInitialFlow">Weather or not use the initial flow in the input matrix. Use false for default.</param>
-      public CudaPyrLKOpticalFlow(Size winSize, int maxLevel, int iters, bool useInitialFlow)
+      /// <param name="maxLevel">The maximum number of pyramid leveles.</param>
+      /// <param name="iters">The number of iterations.</param>
+      /// <param name="useInitialFlow">Weather or not use the initial flow in the input matrix.</param>
+      public CudaPyrLKOpticalFlow(Size winSize, int maxLevel = 3, int iters = 30, bool useInitialFlow = false)
       {
          _ptr = CudaInvoke.cudaPyrLKOpticalFlowCreate(winSize, maxLevel, iters, useInitialFlow);
       }

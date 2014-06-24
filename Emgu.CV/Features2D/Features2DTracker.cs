@@ -691,27 +691,6 @@ namespace Emgu.CV.Features2D
             }
          }
 
-         /*
-         /// <summary>
-         /// Filter the matched Features, such that if a match is not unique, it is rejected.
-         /// </summary>
-         /// <param name="distance">The matched distances, should have at lease 2 col</param>
-         /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
-         /// <param name="mask">This is both input and output. This matrix indicates which row is valid for the matches.</param>
-         public static void VoteForUniqueness(Matrix<float> distance, double uniquenessThreshold, Matrix<Byte> mask)
-         {
-            using (Matrix<float> firstCol = distance.GetCol(0))
-            using (Matrix<float> secCol = distance.GetCol(1))
-            using (Mat tmp = new Mat())
-            using (Mat maskBuffer = new Mat())
-            {
-               CvInvoke.Divide(firstCol, secCol, tmp, 1.0, CvInvoke.GetDepthType(typeof (float)));
-               using (ScalarArray ia = new ScalarArray(uniquenessThreshold))
-                  CvInvoke.Compare(tmp, ia, maskBuffer, CvEnum.CmpType.LessEqual);
-               CvInvoke.BitwiseAnd(maskBuffer, mask, mask, null);
-            }
-         }*/
-
          /// <summary>
          /// Filter the matched Features, such that if a match is not unique, it is rejected.
          /// </summary>

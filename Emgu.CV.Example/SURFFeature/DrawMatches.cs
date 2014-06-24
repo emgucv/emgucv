@@ -42,7 +42,6 @@ namespace SURFFeatureExample
             using (GpuMat gpuModelDescriptors = surfCuda.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints))
             using (CudaBruteForceMatcher matcher = new CudaBruteForceMatcher(DistanceType.L2))
             {
-
                surfCuda.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
                watch = Stopwatch.StartNew();
 
@@ -50,8 +49,8 @@ namespace SURFFeatureExample
                using (GpuMat gpuObservedImage = new GpuMat(observedImage))
                using (GpuMat gpuObservedKeyPoints = surfCuda.DetectKeyPointsRaw(gpuObservedImage, null))
                using (GpuMat gpuObservedDescriptors = surfCuda.ComputeDescriptorsRaw(gpuObservedImage, null, gpuObservedKeyPoints))
-               using (GpuMat tmp = new GpuMat())
-               using (Stream stream = new Stream())
+               //using (GpuMat tmp = new GpuMat())
+               //using (Stream stream = new Stream())
                {
                   matcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, matches, k);
 

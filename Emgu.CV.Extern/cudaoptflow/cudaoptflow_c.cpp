@@ -68,6 +68,27 @@ void cudaFarnebackOpticalFlowRelease(cv::cuda::FarnebackOpticalFlow** flow)
 
 //----------------------------------------------------------------------------
 //
+//  CudaOpticalFlowDualTvl1
+//
+//----------------------------------------------------------------------------
+cv::cuda::OpticalFlowDual_TVL1_CUDA* cudaOpticalFlowDualTvl1Create()
+{
+   return new cv::cuda::OpticalFlowDual_TVL1_CUDA();
+}
+
+void cudaOpticalFlowDualTvl1Compute(cv::cuda::OpticalFlowDual_TVL1_CUDA* flow, const cv::cuda::GpuMat* frame0, const cv::cuda::GpuMat* frame1, cv::cuda::GpuMat* u, cv::cuda::GpuMat* v)
+{
+   (*flow)(*frame0, *frame1, *u, *v);
+}
+
+void cudaOpticalFlowDualTvl1Release(cv::cuda::OpticalFlowDual_TVL1_CUDA** flow)
+{
+   delete *flow;
+   *flow = 0;
+}
+
+//----------------------------------------------------------------------------
+//
 //  CudaPyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------

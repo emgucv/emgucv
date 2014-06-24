@@ -19,7 +19,7 @@ namespace Emgu.CV.ML.Structure
       /// <summary>
       /// The type of training method
       /// </summary>
-      public MlEnum.ANN_MLP_TRAIN_METHOD train_method;
+      public MlEnum.AnnMlpTrainMethod train_method;
 
       /// <summary>
       /// backpropagation parameters

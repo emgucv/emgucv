@@ -71,7 +71,7 @@ namespace Emgu.CV.ML.Structure
       /// <summary>
       /// Boosting type
       /// </summary>
-      public MlEnum.BOOST_TYPE boostType;
+      public MlEnum.BoostType boostType;
       /// <summary>
       /// The number of weak classifiers to build
       /// </summary>

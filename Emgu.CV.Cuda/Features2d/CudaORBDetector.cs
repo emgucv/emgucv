@@ -47,11 +47,11 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="img">The image where keypoints will be detected from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>
+      /// <param name="keyPoints">
       /// The keypoints GpuMat that will have 1 row.
       /// keypoints.at&lt;float[6]&gt;(1, i) contains i'th keypoint
       /// format: (x, y, size, response, angle, octave)
-      /// </returns>
+      /// </param>
       public void DetectKeyPointsRaw(GpuMat img, GpuMat mask, GpuMat keyPoints)
       {
          CudaInvoke.cudaORBDetectorDetectKeyPoints(_ptr, img, mask, keyPoints);
@@ -63,7 +63,7 @@ namespace Emgu.CV.Cuda
       /// <param name="img">The image where keypoints will be detected from</param>
       /// <param name="mask">The optional mask, can be null if not needed</param>
       /// <returns>An array of keypoints</returns>
-      public MKeyPoint[] DetectKeyPoints(CudaImage<Gray, Byte> img, CudaImage<Gray, Byte> mask)
+      public MKeyPoint[] DetectKeyPoints(GpuMat img, GpuMat mask)
       {
          using (GpuMat tmp = new GpuMat())
          using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())

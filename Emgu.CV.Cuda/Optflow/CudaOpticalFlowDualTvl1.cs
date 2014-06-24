@@ -13,30 +13,14 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Farneback optical flow
    /// </summary>
-   public class CudaFarnebackOpticalFlow : UnmanagedObject
+   public class CudaOpticalFlowDualTvl1 : UnmanagedObject
    {
       /// <summary>
       /// 
       /// </summary>
-      /// <param name="numLevels"></param>
-      /// <param name="pyrScale"></param>
-      /// <param name="fastPyramids"></param>
-      /// <param name="winSize"></param>
-      /// <param name="numIters"></param>
-      /// <param name="polyN"></param>
-      /// <param name="polySigma"></param>
-      /// <param name="flags"></param>
-      public CudaFarnebackOpticalFlow(
-         int numLevels = 5,
-         double pyrScale = 0.5,
-         bool fastPyramids = false,
-         int winSize = 13,
-         int numIters = 10,
-         int polyN = 5,
-         double polySigma = 1.1,
-         int flags = 0)
+      public CudaOpticalFlowDualTvl1()
       {
-         _ptr = CudaInvoke.cudaFarnebackOpticalFlowCreate(numLevels, pyrScale, fastPyramids, winSize, numIters, polyN, polySigma, flags);
+         _ptr = CudaInvoke.cudaOpticalFlowDualTvl1Create();
       }
 
       /// <summary>
@@ -47,9 +31,9 @@ namespace Emgu.CV.Cuda
       /// <param name="u">Flow horizontal component (along x axis)</param>
       /// <param name="v">Flow vertical component (along y axis)</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Compute(GpuMat frame0, GpuMat frame1, GpuMat u, GpuMat v, Stream stream = null)
+      public void Compute(GpuMat frame0, GpuMat frame1, GpuMat u, GpuMat v)
       {
-         CudaInvoke.cudaFarnebackOpticalFlowCompute(_ptr, frame0, frame1, u, v, stream);
+         CudaInvoke.cudaOpticalFlowDualTvl1Compute(_ptr, frame0, frame1, u, v);
       }
 
       /// <summary>
@@ -57,28 +41,19 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.cudaFarnebackOpticalFlowRelease(ref _ptr);
+         CudaInvoke.cudaOpticalFlowDualTvl1Release(ref _ptr);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cudaFarnebackOpticalFlowCreate(
-         int numLevels,
-         double pyrScale,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool fastPyramids,
-         int winSize,
-         int numIters,
-         int polyN,
-         double polySigma,
-         int flags);
+      internal static extern IntPtr cudaOpticalFlowDualTvl1Create();
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaFarnebackOpticalFlowRelease(ref IntPtr flow);
+      internal extern static void cudaOpticalFlowDualTvl1Release(ref IntPtr flow);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaFarnebackOpticalFlowCompute(IntPtr flow, IntPtr frame0, IntPtr frame1, IntPtr u, IntPtr v, IntPtr stream);
+      internal extern static void cudaOpticalFlowDualTvl1Compute(IntPtr flow, IntPtr frame0, IntPtr frame1, IntPtr u, IntPtr v);
    }
 }

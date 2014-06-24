@@ -421,18 +421,24 @@ namespace Emgu.CV
       /// <summary>
       /// Estimate rigid transformation between 2 images or 2 point sets.
       /// </summary>
-      /// <param name="A">First image or 2D point set (as a 2 channel Matrix&lt;float&gt;)</param>
-      /// <param name="B">First image or 2D point set (as a 2 channel Matrix&lt;float&gt;)</param>
-      /// <param name="M">The resulting Matrix&lt;double&gt; that represent the affine transformation</param>
+      /// <param name="src">First image or 2D point set (as a 2 channel Matrix&lt;float&gt;)</param>
+      /// <param name="dst">First image or 2D point set (as a 2 channel Matrix&lt;float&gt;)</param>
       /// <param name="fullAffine">Indicates if full affine should be performed</param>
-      /// <returns>True if eatimated sucessfully, false otherwise</returns>
-      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
-      public static extern bool cvEstimateRigidTransform(
-         IntPtr A,
-         IntPtr B,
-         IntPtr M,
+      /// <returns>The resulting Matrix&lt;double&gt; that represent the affine transformation</returns>
+      public static Mat EstimateRigidTransform(IInputArray src, IInputArray dst, bool fullAffine)
+      {
+         Mat result = new Mat();
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaDst = dst.GetInputArray())
+            cveEstimateRigidTransform(iaSrc, iaDst, fullAffine, result);
+         return result;
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern bool cveEstimateRigidTransform(
+         IntPtr src,
+         IntPtr dst,
          [MarshalAs(CvInvoke.BoolToIntMarshalType)]
-         bool fullAffine);
+         bool fullAffine, 
+         IntPtr result);
    }
 }
