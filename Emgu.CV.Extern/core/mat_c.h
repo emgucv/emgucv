@@ -39,4 +39,7 @@ CVAPI(void) cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* ma
 CVAPI(cv::UMat*) cvMatGetUMat(cv::Mat* mat, int access);
 CVAPI(void) cvMatConvertTo( cv::Mat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta );
 CVAPI(cv::Mat*) cvMatReshape(cv::Mat* mat, int cn, int rows);
+
+CVAPI(double) cvMatDot(cv::Mat* mat, cv::_InputArray* m);
+CVAPI(void) cvMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result);
 #endif

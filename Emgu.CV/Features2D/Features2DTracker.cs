@@ -602,6 +602,7 @@ namespace Emgu.CV.Features2D
          /// <param name="mask">The mask for the matches. Use null for all matches.</param>
          /// <param name="flags">The drawing type</param>
          /// <param name="result">The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</param>
+         /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
          public static void DrawMatches(
             IInputArray modelImage, VectorOfKeyPoint modelKeypoints,
             IInputArray observerdImage, VectorOfKeyPoint observedKeyPoints,
@@ -651,6 +652,7 @@ namespace Emgu.CV.Features2D
          /// <param name="modelKeyPoints">The keypoints from the model image</param>
          /// <param name="observedKeyPoints">The keypoints from the observed image</param>
          /// <param name="mask">This is both input and output. This matrix indicates which row is valid for the matches.</param>
+         /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
          /// <returns> The number of non-zero elements in the resulting mask</returns>
          public static int VoteForSizeAndOrientation(VectorOfKeyPoint modelKeyPoints, VectorOfKeyPoint observedKeyPoints,
             VectorOfVectorOfDMatch matches, Matrix<Byte> mask, double scaleIncrement, int rotationBins)
@@ -674,6 +676,7 @@ namespace Emgu.CV.Features2D
          /// If the value is 1 and RANSAC determine the match is an outlier, the value will be set to 0.
          /// </param>
          /// <returns>The homography matrix, if it cannot be found, null is returned</returns>
+         /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
          public static HomographyMatrix GetHomographyMatrixFromMatchedFeatures(VectorOfKeyPoint model,
             VectorOfKeyPoint observed, VectorOfVectorOfDMatch matches, Matrix<Byte> mask, double ransacReprojThreshold)
          {
@@ -696,6 +699,7 @@ namespace Emgu.CV.Features2D
          /// </summary>
          /// <param name="uniquenessThreshold">The distance different ratio which a match is consider unique, a good number will be 0.8</param>
          /// <param name="mask">This is both input and output. This matrix indicates which row is valid for the matches.</param>
+         /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param> 
          public static void VoteForUniqueness(VectorOfVectorOfDMatch matches, double uniquenessThreshold, Matrix<Byte> mask)
          {
             MDMatch[][] mArr = matches.ToArrayOfArray();

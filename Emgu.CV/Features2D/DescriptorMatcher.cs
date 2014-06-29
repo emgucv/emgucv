@@ -22,6 +22,7 @@ namespace Emgu.CV.Features2D
       /// <param name="queryDescriptor">An n x m matrix of descriptors to be query for nearest neighbours. n is the number of descriptor and m is the size of the descriptor</param>
       /// <param name="k">Number of nearest neighbors to search for</param>
       /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
+      /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
       public void KnnMatch(IInputArray queryDescriptor, VectorOfVectorOfDMatch matches, int k, IInputArray mask)
       {
          using (InputArray iaQueryDesccriptor = queryDescriptor.GetInputArray())

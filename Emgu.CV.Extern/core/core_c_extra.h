@@ -29,6 +29,9 @@ CVAPI(int) cveInputArrayGetChannels(cv::_InputArray* ia, int idx);
 CVAPI(bool) cveInputArrayIsEmpty(cv::_InputArray* ia);
 CVAPI(void) cveInputArrayRelease(cv::_InputArray** arr);
 
+CVAPI(void) cveInputArrayGetMat(cv::_InputArray* ia, cv::Mat* mat);
+CVAPI(void) cveInputArrayGetUMat(cv::_InputArray* ia, cv::UMat* umat);
+
 CVAPI(cv::_OutputArray*) cveOutputArrayFromMat(cv::Mat* mat);
 CVAPI(cv::_OutputArray*) cveOutputArrayFromGpuMat(cv::cuda::GpuMat* mat);
 CVAPI(cv::_OutputArray*) cveOutputArrayFromUMat(cv::UMat* mat);

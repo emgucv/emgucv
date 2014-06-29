@@ -15,8 +15,8 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Class to compute an image descriptor using the bag of visual words. Such a computation consists of the following
    /// steps:
-   /// 1. Compute descriptors for a given image and its keypoints set.
-   /// 2. Find the nearest visual words from the vocabulary for each keypoint descriptor.
+   /// 1. Compute descriptors for a given image and its key points set.
+   /// 2. Find the nearest visual words from the vocabulary for each key point descriptor.
    /// 3. Compute the bag-of-words image descriptor as is a normalized histogram of vocabulary words encountered in
    /// the image. The i-th bin of the histogram is a frequency of i-th word of the vocabulary in the given image.
    /// </summary>
@@ -26,8 +26,8 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// 
       /// </summary>
-      /// <param name="descriptorExtractor">Descriptor extractor that is used to compute descriptors for an input image and its keypoints.</param>
-      /// <param name="descriptorMatcher">Descriptor matcher that is used to find the nearest word of the trained vocabulary for each keypoint descriptor of the image.</param>
+      /// <param name="descriptorExtractor">Descriptor extractor that is used to compute descriptors for an input image and its key points.</param>
+      /// <param name="descriptorMatcher">Descriptor matcher that is used to find the nearest word of the trained vocabulary for each key point descriptor of the image.</param>
       public BOWImgDescriptorExtractor(IDescriptorExtractor descriptorExtractor, DescriptorMatcher descriptorMatcher)
       {
          _ptr = BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorCreate(descriptorExtractor.DescriptorExtratorPtr, descriptorMatcher);
@@ -46,7 +46,8 @@ namespace Emgu.CV.Features2D
       /// Computes an image descriptor using the set visual vocabulary.
       /// </summary>
       /// <param name="image">Image, for which the descriptor is computed</param>
-      /// <param name="keypoints">Keypoints detected in the input image.</param>
+      /// <param name="keypoints">Key points detected in the input image.</param>
+      /// <param name="imgDescriptors">The output image descriptors.</param>
       public void Compute(IInputArray image, VectorOfKeyPoint keypoints, Mat imgDescriptors)
       {
          using (InputArray iaImage = image.GetInputArray())

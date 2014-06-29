@@ -71,6 +71,18 @@ void cveInputArrayRelease(cv::_InputArray** arr)
    *arr = 0;
 }
 
+void cveInputArrayGetMat(cv::_InputArray* ia, int idx, cv::Mat* mat)
+{
+   cv::Mat m = ia->getMat(idx);
+   cv::swap(m, *mat);
+}
+void cveInputArrayGetUMat(cv::_InputArray* ia, int idx, cv::UMat* umat)
+{
+   cv::UMat m = ia->getUMat(idx);
+   cv::swap(m, *umat);
+}
+
+
 cv::_OutputArray* cveOutputArrayFromMat(cv::Mat* mat)
 {
    return new cv::_OutputArray(*mat);

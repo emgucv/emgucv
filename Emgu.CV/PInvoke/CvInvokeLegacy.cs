@@ -1,8 +1,8 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-﻿using System;
+ using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV.Structure;
@@ -621,7 +621,7 @@ namespace Emgu.CV
              obj,
              eigInput.Length,
              eigInput,
-             CvEnum.EigobjType.CV_EIGOBJ_NO_CALLBACK,
+             CvEnum.EigobjType.NoCallback,
              IntPtr.Zero,
              avg,
              coeffs);
@@ -670,7 +670,7 @@ namespace Emgu.CV
              input.Length,
              input,
              eigVecs,
-             CvEnum.EigobjType.CV_EIGOBJ_NO_CALLBACK,
+             CvEnum.EigobjType.NoCallback,
              0,
              IntPtr.Zero,
              ref calcLimit,
@@ -718,7 +718,7 @@ namespace Emgu.CV
          CvInvoke.cvEigenProjection(
              inputVecs,
              inputVecs.Length,
-             CvEnum.EigobjType.CV_EIGOBJ_NO_CALLBACK,
+             CvEnum.EigobjType.NoCallback,
              IntPtr.Zero,
              coeffs,
              avg,

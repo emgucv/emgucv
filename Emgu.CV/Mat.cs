@@ -726,15 +726,36 @@ namespace Emgu.CV
          return this.Clone();
       }
 
+      /// <summary>
+      /// Compares two Mats and check if they are equal
+      /// </summary>
+      /// <param name="other">The other mat to compare with</param>
+      /// <returns>True if the two Mats are equal</returns>
       public bool Equals(Mat other)
       {
          if (!Size.Equals(other.Size) && NumberOfChannels == other.NumberOfChannels)
             return false;
 
-         Mat cmpResult = new Mat();
-         CvInvoke.Compare(this, other, cmpResult, CmpType.NotEqual);
-         Mat reshaped = cmpResult.Reshape(1);
-         return CvInvoke.CountNonZero(reshaped) == 0;
+         using (Mat cmpResult = new Mat())
+         {
+            CvInvoke.Compare(this, other, cmpResult, CmpType.NotEqual);
+            using (Mat reshaped = cmpResult.Reshape(1))
+               return CvInvoke.CountNonZero(reshaped) == 0;
+         }
+      }
+
+      public double Dot(IInputArray m)
+      {
+         using (InputArray iaM = m.GetInputArray())
+            return MatInvoke.cvMatDot(Ptr, iaM);
+      }
+
+      public Mat Cross(IInputArray m)
+      {
+         Mat result = new Mat();
+         using (InputArray iaM = m.GetInputArray())
+            MatInvoke.cvMatCross(Ptr, iaM, result);
+         return result;
       }
    }
 
@@ -811,6 +832,12 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveMatToIplImage(IntPtr mat);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static double cvMatDot(IntPtr mat, IntPtr m);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvMatCross(IntPtr mat, IntPtr m, IntPtr result);
    }
 }
 

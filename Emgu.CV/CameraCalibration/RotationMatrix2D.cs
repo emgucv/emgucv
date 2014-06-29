@@ -14,7 +14,6 @@ namespace Emgu.CV
    /// <summary>
    /// A (2x3) 2D rotation matrix. This Matrix defines an Affine Transform
    /// </summary>
-   ///<typeparam name="T">The depth of the rotation matrix, should be float / double</typeparam>
 #if !NETFX_CORE
    [Serializable]
 #endif

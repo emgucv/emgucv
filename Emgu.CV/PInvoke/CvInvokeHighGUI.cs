@@ -58,6 +58,12 @@ namespace Emgu.CV
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveImwrite(IntPtr filename, IntPtr image, IntPtr parameters);
 
+      /// <summary>
+      /// Decode image stored in the buffer
+      /// </summary>
+      /// <param name="buf">The buffer</param>
+      /// <param name="loadType">The image loading type</param>
+      /// <param name="dst">The output placeholder for the decoded matrix.</param>
       public static void Imdecode(byte[] buf, CvEnum.LoadImageType loadType, Mat dst)
       {
          using (VectorOfByte vb = new VectorOfByte(buf))
@@ -71,6 +77,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="buf">The buffer</param>
       /// <param name="loadType">The image loading type</param>
+      /// <param name="dst">The output placeholder for the decoded matrix.</param>
       public static void Imdecode(IInputArray buf, CvEnum.LoadImageType loadType, Mat dst)
       {
          using (InputArray iaBuffer = buf.GetInputArray())
@@ -84,6 +91,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="ext">The image format</param>
       /// <param name="image">The image</param>
+      /// <param name="buf">Output buffer resized to fit the compressed image.</param>
       /// <param name="parameters">The pointer to the array of intergers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
       public static void Imencode(String ext, IInputArray image, VectorOfByte buf, params int[] parameters)
       {
@@ -98,7 +106,6 @@ namespace Emgu.CV
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveImencode(IntPtr ext, IntPtr image, IntPtr buffer, IntPtr parameters);
-
 
       [DllImport(OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvNamedWindow")]
       private static extern int _cvNamedWindow([MarshalAs(StringMarshalType)] String name, int flags);

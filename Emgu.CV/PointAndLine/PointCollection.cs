@@ -231,10 +231,10 @@ namespace Emgu.CV
       }*/
 
       /// <summary>
-      /// Reproject pixels on a 1-channel disparity map to array of 3D points.
+      /// Re-project pixels on a 1-channel disparity map to array of 3D points.
       /// </summary>
       /// <param name="disparity">Disparity map</param>
-      /// <param name="Q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
+      /// <param name="Q">The re-projection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
       /// <returns>The reprojected 3D points</returns>
       public static MCvPoint3D32f[] ReprojectImageTo3D(Image<Gray, Int16> disparity, Matrix<double> Q)
       {
@@ -250,10 +250,10 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Reproject pixels on a 1-channel disparity map to array of 3D points.
+      /// Re-project pixels on a 1-channel disparity map to array of 3D points.
       /// </summary>
       /// <param name="disparity">Disparity map</param>
-      /// <param name="Q">The reprojection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
+      /// <param name="Q">The re-projection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
       /// <returns>The reprojected 3D points</returns>
       public static MCvPoint3D32f[] ReprojectImageTo3D(Image<Gray, Byte> disparity, Matrix<double> Q)
       {

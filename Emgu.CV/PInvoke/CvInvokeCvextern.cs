@@ -32,8 +32,8 @@ namespace Emgu.CV
       /// Temporary arrays for the foreground model. Do not modify it while you are
       /// processing the same image.
       /// </param>
-      /// <param name="iterCount">The number of iternations</param>
-      /// <param name="type">The initilization type</param>
+      /// <param name="iterCount">The number of iterations</param>
+      /// <param name="type">The initialization type</param>
       public static void GrabCut(
          IInputArray img,
          IInputOutputArray mask,
@@ -226,7 +226,7 @@ namespace Emgu.CV
 
 
       /// <summary>
-      /// Contrast Limited Adaptative Histogram Equalization (CLAHE)
+      /// Contrast Limited Adaptive Histogram Equalization (CLAHE)
       /// </summary>
       /// <param name="src">The source image</param>
       /// <param name="clipLimit">Clip Limit, use 40 for default</param>
@@ -243,7 +243,7 @@ namespace Emgu.CV
 
 
       /// <summary>
-      /// This function retrive the Open CV structure sizes in unmanaged code
+      /// This function retrieve the Open CV structure sizes in unmanaged code
       /// </summary>
       /// <param name="sizes">The structure that will hold the Open CV structure sizes</param>
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "getCvStructSizes")]

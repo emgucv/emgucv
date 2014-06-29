@@ -10,22 +10,52 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// This is the proxy class for passing read-only input arrays into OpenCV functions.
+   /// </summary>
    public class InputArray : UnmanagedObject
    {
       private InputArray()
       {        
       }
 
+      /// <summary>
+      /// Create a Input array from an existing unmanaged inputArray pointer
+      /// </summary>
+      /// <param name="inputArrayPtr">The unmanaged pointer the the InputArray</param>
       public InputArray(IntPtr inputArrayPtr)
       {
          _ptr = inputArrayPtr;
       }
 
+      /// <summary>
+      /// Get an empty input array
+      /// </summary>
+      /// <returns>An empty input array</returns>
       public static InputArray GetEmpty()
       {
          return new InputArray();
       }
 
+      public Mat GetMat(int idx = -1)
+      {
+         Mat m = new Mat();
+         CvInvoke.cveInputArrayGetMat(Ptr, idx, m);
+         return m;
+      }
+
+      public UMat GetUMat(int idx = -1)
+      {
+         UMat m = new UMat();
+         CvInvoke.cveInputArrayGetUMat(Ptr, idx, m);
+         return m;
+      }
+
+      /// <summary>
+      /// Get the size of the input array
+      /// </summary>
+      /// <param name="idx">The optional index</param>
+      /// <returns>The size of the input array</returns>
       public Size GetSize(int idx = -1)
       {
          Size s = new Size();
@@ -34,6 +64,10 @@ namespace Emgu.CV
          return s;
       }
 
+      /// <summary>
+      /// Return true if the input array is empty
+      /// </summary>
+      /// <returns>True if the input array is empty</returns>
       public bool IsEmpty()
       {
          if (_ptr == IntPtr.Zero)
@@ -41,6 +75,11 @@ namespace Emgu.CV
          return CvInvoke.cveInputArrayIsEmpty(_ptr);
       }
 
+      /// <summary>
+      /// Get the depth type
+      /// </summary>
+      /// <param name="idx">The optional index</param>
+      /// <returns>The depth type</returns>
       public DepthType GetDepth(int idx = -1)
       {
          if (_ptr == IntPtr.Zero)
@@ -48,6 +87,11 @@ namespace Emgu.CV
          return CvInvoke.cveInputArrayGetDepth(_ptr, idx);
       }
 
+      /// <summary>
+      /// Get the number of channels
+      /// </summary>
+      /// <param name="idx">The optional index</param>
+      /// <returns>The number of channels</returns>
       public int GetChannels(int idx = -1)
       {
          if (_ptr == IntPtr.Zero)
@@ -55,6 +99,9 @@ namespace Emgu.CV
          return CvInvoke.cveInputArrayGetChannels(_ptr, idx);
       }
 
+      /// <summary>
+      /// Release all the unmanaged memory associated with this InputArray
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
@@ -83,5 +130,11 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(BoolMarshalType)]
       internal static extern bool cveInputArrayIsEmpty(IntPtr ia);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveInputArrayGetMat(IntPtr ia, int idx, IntPtr mat);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveInputArrayGetUMat(IntPtr ia, int idx, IntPtr umat);
    }
 }

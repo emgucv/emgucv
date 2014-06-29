@@ -2281,7 +2281,6 @@ namespace Emgu.CV
       /// <param name="warpType">Warp type</param>
       /// <param name="borderMode">Pixel extrapolation method</param>
       /// <param name="backgroundColor">A value used to fill outliers</param>
-      /// <typeparam name="TMapDepth">The depth type of <paramref name="mapMatrix"/>, should be either float or double</typeparam>
       /// <returns>The result of the transformation</returns>
       public Image<TColor, TDepth> WarpAffine(Mat mapMatrix, int width, int height, CvEnum.Inter interpolationType, CvEnum.Warp warpType, CvEnum.BorderType borderMode, TColor backgroundColor)
       {
