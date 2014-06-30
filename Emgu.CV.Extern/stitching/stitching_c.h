@@ -30,4 +30,17 @@ CVAPI(cv::StitcherWrapper*) CvStitcherCreateDefault(bool tryUseGpu);
 CVAPI(void) CvStitcherRelease(cv::StitcherWrapper** stitcherWrapper);
 
 CVAPI(bool) CvStitcherStitch(cv::StitcherWrapper* stitcherWrapper, cv::_InputArray* images, cv::_OutputArray* pano);
+
+CVAPI(cv::detail::SurfFeaturesFinder*) cveSurfFeaturesFinderCreate(
+   double hess_thresh, int num_octaves, int num_layers,
+   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f); 
+
+#ifdef HAVE_OPENCV_NONFREE
+CVAPI(cv::detail::SurfFeaturesFinderGpu*) cveSurfFeaturesFinderGpuCreate(
+   double hess_thresh, int num_octaves, int num_layers,
+   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f); 
+#endif
+
+CVAPI(cv::detail::OrbFeaturesFinder*) cveOrbFeaturesFinderCreate(CvSize* grid_size, int nfeaturea, float scaleFactor, int nlevels, cv::detail::FeaturesFinder** f);
+
 #endif

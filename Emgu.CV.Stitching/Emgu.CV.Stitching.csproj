@@ -39,13 +39,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="FeaturesFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stitcher.cs" />
   </ItemGroup>
