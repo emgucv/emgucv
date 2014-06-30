@@ -112,6 +112,7 @@ namespace Emgu.CV
       /// <param name="motionRectangle">The rectangle area of the motion</param>
       /// <param name="angle">The orientation of the motion</param>
       /// <param name="motionPixelCount">Number of motion pixels within silhoute ROI</param>
+      /// <param name="forgroundMask">The forground mask used to calculate the motion info.</param>
       public void MotionInfo(Mat forgroundMask, System.Drawing.Rectangle motionRectangle, out double angle, out double motionPixelCount)
       {
          TimeSpan ts = _lastTime.Subtract(_initTime);

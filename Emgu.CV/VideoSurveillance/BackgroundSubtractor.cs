@@ -26,6 +26,7 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       /// <param name="image">The image that is used to update the background model</param>
       /// <param name="learningRate">Use -1 for default</param>
+      /// <param name="fgMask">The output forground mask</param>
       public void Apply(IInputArray image, IOutputArray fgMask, double learningRate = -1)
       {
          using (InputArray iaImage = image.GetInputArray())

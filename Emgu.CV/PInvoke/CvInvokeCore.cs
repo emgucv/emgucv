@@ -43,7 +43,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="size">Size of the memory to allocate</param>
       /// <param name="userData">User data that is transparetly passed to the custom functions</param>
-      /// <returns>Pointer to the allocated memort</returns>
+      /// <returns>Pointer to the allocated memory</returns>
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       public delegate IntPtr CvAllocFunc(uint size, IntPtr userData);
 
@@ -58,11 +58,11 @@ namespace Emgu.CV
 
 
       /// <summary>
-      /// The function cvSetMemoryManager sets user-defined memory managment functions (substitutors for malloc and free) that will be called by cvAlloc, cvFree and higher-level functions (e.g. cvCreateImage)
+      /// The function cvSetMemoryManager sets user-defined memory management functions (substitutors for malloc and free) that will be called by cvAlloc, cvFree and higher-level functions (e.g. cvCreateImage)
       /// </summary>
       /// <param name="allocFunc">Allocation function</param>
       /// <param name="freeFunc">Deallocation function</param>
-      /// <param name="userdata">User data that is transparetly passed to the custom functions</param>
+      /// <param name="userdata">User data that is transparently passed to the custom functions</param>
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvSetMemoryManager(
          CvAllocFunc allocFunc,
@@ -77,19 +77,19 @@ namespace Emgu.CV
       /// </summary>
       public static readonly CvErrorCallback CvErrorHandlerThrowException = (CvErrorCallback)CvErrorHandler;
       /// <summary>
-      /// An error handler which will ignore any error and continute
+      /// An error handler which will ignore any error and continue
       /// </summary>
       public static readonly CvErrorCallback CvErrorHandlerIgnoreError = (CvErrorCallback)CvIgnoreErrorErrorHandler;
 
       /// <summary>
-      /// A custome error handler for opencv
+      /// A custom error handler for OpenCV
       /// </summary>
       /// <param name="status">The numeric code for error status</param>
       /// <param name="funcName">The source file name where error is encountered</param>
       /// <param name="errMsg">A description of the error</param>
       /// <param name="fileName">The source file name where error is encountered</param>
-      /// <param name="line">The line number in the souce where error is encountered</param>
-      /// <param name="userData">Arbitrary pointer that is transparetly passed to the error handler.</param>
+      /// <param name="line">The line number in the source where error is encountered</param>
+      /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
       /// <returns></returns>
 #if IOS
       [MonoTouch.MonoPInvokeCallback(typeof(CvErrorCallback))]
@@ -103,18 +103,18 @@ namespace Emgu.CV
          IntPtr userData)
       {
          cvSetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
-         return 0; //signal the process to continute
+         return 0; //signal the process to continue
       }
 
       /// <summary>
-      /// A custome error handler for opencv
+      /// A custom error handler for OpenCV
       /// </summary>
       /// <param name="status">The numeric code for error status</param>
       /// <param name="funcName">The source file name where error is encountered</param>
       /// <param name="errMsg">A description of the error</param>
       /// <param name="fileName">The source file name where error is encountered</param>
-      /// <param name="line">The line number in the souce where error is encountered</param>
-      /// <param name="userData">Arbitrary pointer that is transparetly passed to the error handler.</param>
+      /// <param name="line">The line number in the source where error is encountered</param>
+      /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
       /// <returns></returns>
 #if IOS
       [MonoTouch.MonoPInvokeCallback(typeof(CvErrorCallback))]
@@ -130,7 +130,7 @@ namespace Emgu.CV
          try
          {
             cvSetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
-            return 0; //signal the process to continute
+            return 0; //signal the process to continue
          }
          finally
          {
@@ -148,8 +148,8 @@ namespace Emgu.CV
       /// <param name="funcName">The source file name where error is encountered</param>
       /// <param name="errMsg">A description of the error</param>
       /// <param name="fileName">The source file name where error is encountered</param>
-      /// <param name="line">The line number in the souce where error is encountered</param>
-      /// <param name="userData">Arbitrary pointer that is transparetly passed to the error handler.</param>
+      /// <param name="line">The line number in the source where error is encountered</param>
+      /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
       /// <returns></returns>
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       public delegate int CvErrorCallback(
@@ -159,7 +159,7 @@ namespace Emgu.CV
       /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
       /// </summary>
       /// <param name="errorHandler">The new error handler</param>
-      /// <param name="userdata">Arbitrary pointer that is transparetly passed to the error handler.</param>
+      /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
       /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
       /// <returns></returns>
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -172,7 +172,7 @@ namespace Emgu.CV
       /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
       /// </summary>
       /// <param name="errorHandler">Pointer to the new error handler</param>
-      /// <param name="userdata">Arbitrary pointer that is transparetly passed to the error handler.</param>
+      /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
       /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
       /// <returns></returns>
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -228,7 +228,7 @@ namespace Emgu.CV
          IntPtr storage);
 
       /// <summary>
-      /// Adds an element to the end of sequence and retuns pointer to the allocated element. If the input element is NULL, the function simply allocates a space for one more element.
+      /// Adds an element to the end of sequence and returns pointer to the allocated element. If the input element is NULL, the function simply allocates a space for one more element.
       /// </summary>
       /// <param name="seq">Sequence</param>
       /// <param name="element">Added element</param>
@@ -236,7 +236,7 @@ namespace Emgu.CV
       public static extern void cvSeqPush(IntPtr seq, IntPtr element);
 
       /// <summary>
-      /// Adds an element to the front of sequence and retuns pointer to the allocated element. If the input element is NULL, the function simply allocates a space for one more element.
+      /// Adds an element to the front of sequence and returns pointer to the allocated element. If the input element is NULL, the function simply allocates a space for one more element.
       /// </summary>
       /// <param name="seq">Sequence</param>
       /// <param name="element">Added element</param>
@@ -324,7 +324,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="elemSize">the size of the element</param>
       /// <param name="reader">the sequence reader</param>
-      public static void CV_NEXT_SEQ_ELEM(int elemSize, ref MCvSeqReader reader)
+      public static void cvNextSeqElem(int elemSize, ref MCvSeqReader reader)
       {
          Int64 newAddress = reader.ptr.ToInt64() + elemSize;
          reader.ptr = new IntPtr(newAddress);
@@ -338,10 +338,10 @@ namespace Emgu.CV
       /// <typeparam name="T">The type of structure to be read</typeparam>
       /// <param name="reader">The sequence reader</param>
       /// <returns>The read object</returns>
-      public static T CV_READ_SEQ_ELEM<T>(ref MCvSeqReader reader)
+      public static T cvReadSeqElem<T>(ref MCvSeqReader reader)
       {
          T res = (T)Marshal.PtrToStructure(reader.ptr, typeof(T));
-         CV_NEXT_SEQ_ELEM(Marshal.SizeOf(typeof(T)), ref reader);
+         cvNextSeqElem(Marshal.SizeOf(typeof(T)), ref reader);
          return res;
       }
 
@@ -350,10 +350,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="ptr">Pointer to the node</param>
       /// <returns>true if the specified node is occupied</returns>
-      public static bool CV_IS_SET_ELEM(IntPtr ptr)
+      public static bool cvIsSetElem(IntPtr ptr)
       {
          return Marshal.ReadInt32(ptr) >= 0;
-         //return ((MCvSetElem)Marshal.PtrToStructure(ptr, typeof(MCvSetElem))).flags >= 0;
       }
 
       /// <summary>
@@ -492,7 +491,7 @@ namespace Emgu.CV
       /// Shuffles the matrix by swapping randomly chosen pairs of the matrix elements on each iteration (where each element may contain several components in case of multi-channel arrays)
       /// </summary>
       /// <param name="mat">The input/output matrix. It is shuffled in-place. </param>
-      /// <param name="rng">Pointer to MCvRNG radom number generator. Use 0 if not sure</param>
+      /// <param name="rng">Pointer to MCvRNG random number generator. Use 0 if not sure</param>
       /// <param name="iterFactor">The relative parameter that characterizes intensity of the shuffling performed. The number of iterations (i.e. pairs swapped) is round(iter_factor*rows(mat)*cols(mat)), so iter_factor=0 means that no shuffling is done, iter_factor=1 means that the function swaps rows(mat)*cols(mat) random pairs etc</param>
       public static void RandShuffle(IInputOutputArray mat, double iterFactor, UInt64 rng)
       {
@@ -501,24 +500,6 @@ namespace Emgu.CV
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveRandShuffle(IntPtr mat, double iterFactor, UInt64 rng);
-
-      /*
-      /// <summary>
-      /// This function is the opposite to cvSplit. If the destination array has N channels then if the first N input channels are not IntPtr.Zero, all they are copied to the destination array, otherwise if only a single source channel of the first N is not IntPtr.Zero, this particular channel is copied into the destination array, otherwise an error is raised. Rest of source channels (beyond the first N) must always be IntPtr.Zero. For IplImage cvCopy with COI set can be also used to insert a single channel into the image. 
-      /// </summary>
-      /// <param name="src0">Input channels.</param>
-      /// <param name="src1">Input channels.</param>
-      /// <param name="src2">Input channels.</param>
-      /// <param name="src3">Input channels.</param>
-      /// <param name="dst">Destination array. </param>
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvMerge")]
-      public static extern void cvCvtPlaneToPix(
-          IntPtr src0,
-          IntPtr src1,
-          IntPtr src2,
-          IntPtr src3,
-          IntPtr dst);
-      */
 
       /// <summary>
       /// Inverses every bit of every array element:
@@ -812,7 +793,7 @@ namespace Emgu.CV
       /// arr(i,j)=value if i=j,
       /// 0 otherwise
       /// </summary>
-      /// <param name="mat">The matrix to initialize (not necesserily square).</param>
+      /// <param name="mat">The matrix to initialize (not necessarily square).</param>
       /// <param name="value">The value to assign to the diagonal elements.</param>
       public static void SetIdentity(IInputOutputArray mat, MCvScalar value)
       {
@@ -869,14 +850,14 @@ namespace Emgu.CV
          bool angleInDegrees);
 
       /// <summary>
-      /// Calculates either x-coodinate, y-coordinate or both of every vector magnitude(I)* exp(angle(I)*j), j=sqrt(-1):
+      /// Calculates either x-coordinate, y-coordinate or both of every vector magnitude(I)* exp(angle(I)*j), j=sqrt(-1):
       /// x(I)=magnitude(I)*cos(angle(I)),
       /// y(I)=magnitude(I)*sin(angle(I))
       /// </summary>
-      /// <param name="magnitude">The array of magnitudes. If it is IntPtr.Zero, the magnitudes are assumed all 1's</param>
-      /// <param name="angle">The array of angles, whether in radians or degrees</param>
-      /// <param name="x">The destination array of x-coordinates, may be set to IntPtr.Zero if it is not needed</param>
-      /// <param name="y">The destination array of y-coordinates, mau be set to IntPtr.Zero if it is not needed</param>
+      /// <param name="magnitude">Input floating-point array of magnitudes of 2D vectors; it can be an empty matrix (=Mat()), in this case, the function assumes that all the magnitudes are =1; if it is not empty, it must have the same size and type as angle</param>
+      /// <param name="angle">input floating-point array of angles of 2D vectors.</param>
+      /// <param name="x">Output array of x-coordinates of 2D vectors; it has the same size and type as angle.</param>
+      /// <param name="y">Output array of y-coordinates of 2D vectors; it has the same size and type as angle.</param>
       /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
       public static void PolarToCart(
          IInputArray magnitude,
@@ -1551,12 +1532,12 @@ namespace Emgu.CV
             //creating the following dummy will do the job
             //a bug(?) in OpenCV
             //see http://opencvlibrary.sourceforge.net/FaceDetection 
-            //after step 11 there is an explaination
+            //after step 11 there is an explanation
             using (Image<Gray, Byte> dummy = new Image<Gray, Byte>(1, 1))
             {
                dummy._Erode(1);
             }
-            //After opencv structure reorganization, opencv_objdetect is needed in memory
+            //After OpenCV structure reorganization, opencv_objdetect is needed in memory
             //This can be done by loading the HOG detector
             using (HOGDescriptor desc = new HOGDescriptor())
             {
@@ -1832,7 +1813,7 @@ namespace Emgu.CV
       /// Return the header, corresponding to a specified col span of the input array
       /// </summary>
       /// <param name="arr">Input array</param>
-      /// <param name="submat">Pointer to the prelocated mempry of the resulting sub-array header</param>
+      /// <param name="submat">Pointer to the prelocated memory of the resulting sub-array header</param>
       /// <param name="startCol">Zero-based index of the selected column</param>
       /// <param name="endCol">Zero-based index of the ending column (exclusive) of the span</param>
       /// <returns>The header, corresponding to a specified col span of the input array</returns>
@@ -2111,7 +2092,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="arr">Input array that should have from 1 to 4 channels so that the results can be stored in MCvScalar</param>
       /// <param name="mean">Calculated mean value</param>
-      /// <param name="stdDev">Calculateded standard deviation</param>
+      /// <param name="stdDev">Calculated standard deviation</param>
       /// <param name="mask">Optional operation mask</param>
       public static void MeanStdDev(IInputArray arr, IOutputArray mean, IOutputArray stdDev, IInputArray mask = null)
       {
@@ -2130,7 +2111,7 @@ namespace Emgu.CV
       /// If the array is IplImage and COI is set, the function processes the selected channel only and stores the sum to the first scalar component (S0).
       /// </summary>
       /// <param name="src">The array</param>
-      /// <returns>The sum of arary elements</returns>
+      /// <returns>The sum of array elements</returns>
       public static MCvScalar Sum(IInputArray src)
       {
          MCvScalar result = new MCvScalar();
@@ -2182,7 +2163,7 @@ namespace Emgu.CV
       /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative the contour interiors are drawn</param>
       /// <param name="lineType">Type of the contour segments</param>
       /// <param name="hierarchy">Optional information about hierarchy. It is only needed if you want to draw only some of the contours</param>
-      /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
+      /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrieved in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
       public static void DrawContours(
          IInputOutputArray image,
          IInputArray contours,
@@ -2370,7 +2351,6 @@ namespace Emgu.CV
          if (numberOfChannels == 1)
          {
             CvInvoke.MinMaxLoc(arr, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
-            //CvInvoke.CvMinMaxIdx(Ptr, out minVal, out maxVal, minIdx, maxIdx, IntPtr.Zero);
             minValues[0] = minVal; maxValues[0] = maxVal;
             //minLoc.X = minIdx[1]; minLoc.Y = minIdx[0];
             //maxLoc.X = maxIdx[1]; maxLoc.Y = maxIdx[0];
@@ -2518,45 +2498,6 @@ namespace Emgu.CV
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern double cvGetReal3D(IntPtr arr, int idx0, int idx1, int idx2);
 
-      /*
-      /// <summary>
-      /// Return the value of the specified bin of 1D histogram. In case of sparse histogram the function returns 0, if the bin is not present in the histogram, and no new bin is created. 
-      /// </summary>
-      /// <param name="hist">Histogram</param>
-      /// <param name="idx0">Indices of the bin</param>
-      /// <returns>the value of the specified bin of 1D histogram</returns>
-      public static double cvQueryHistValue_1D(IntPtr hist, int idx0)
-      {
-         return cvGetReal1D(Marshal.ReadIntPtr(hist, sizeof(int)), idx0);
-         //MCvHistogram h = (MCvHistogram) Marshal.PtrToStructure(hist, typeof(MCvHistogram));
-         //return cvGetReal1D(h.bins, idx0); 
-      }
-
-      /// <summary>
-      /// Return the value of the specified bin of 2D histogram. In case of sparse histogram the function returns 0, if the bin is not present in the histogram, and no new bin is created. 
-      /// </summary>
-      /// <param name="hist">Histogram</param>
-      /// <param name="idx0">Indices of the bin</param>
-      /// <param name="idx1">Indices of the bin</param>
-      /// <returns>the value of the specified bin of 2D histogram</returns>
-      public static double cvQueryHistValue_2D(IntPtr hist, int idx0, int idx1)
-      {
-         return cvGetReal2D(Marshal.ReadIntPtr(hist, sizeof(int)), idx0, idx1);
-      }
-
-      /// <summary>
-      /// Return the value of the specified bin of 3D histogram. In case of sparse histogram the function returns 0, if the bin is not present in the histogram, and no new bin is created. 
-      /// </summary>
-      /// <param name="hist">Histogram</param>
-      /// <param name="idx0">Indices of the bin</param>
-      /// <param name="idx1">Indices of the bin</param>
-      /// <param name="idx2">Indices of the bin</param>
-      /// <returns>the value of the specified bin of 3D histogram</returns>
-      public static double cvQueryHistValue_3D(IntPtr hist, int idx0, int idx1, int idx2)
-      {
-         return cvGetReal3D(Marshal.ReadIntPtr(hist, sizeof(int)), idx0, idx1, idx2);
-      }*/
-
       /// <summary>
       /// Switches between the mode, where only pure C implementations from cxcore, OpenCV etc. are used, and the mode, where IPP and MKL functions are used if available. When cvUseOptimized(0) is called, all the optimized libraries are unloaded. The function may be useful for debugging, IPP&amp;MKL upgrade on the fly, online speed comparisons etc.  Note that by default the optimized plugins are loaded, so it is not necessary to call cvUseOptimized(1) in the beginning of the program (actually, it will only increase the startup time)
       /// </summary>
@@ -2685,7 +2626,7 @@ namespace Emgu.CV
       /// <param name="src3">The third source array (shift). Can be null, if there is no shift.</param>
       /// <param name="beta">The scalar</param>
       /// <param name="dst">The destination array.</param>
-      /// <param name="tAbc">The gemm operation type</param>
+      /// <param name="tAbc">The Gemm operation type</param>
       public static void Gemm(
          IInputArray src1,
          IInputArray src2,
@@ -2929,7 +2870,7 @@ namespace Emgu.CV
       /// <summary>
       /// Projects vectors to the specified subspace
       /// </summary>
-      /// <param name="data">The input data. Each vector is eigher a single row or a single column.</param>
+      /// <param name="data">The input data. Each vector is either a single row or a single column.</param>
       /// <param name="avg">
       /// The mean (average) vector. If it is a single-row vector, it means that the input vectors are stored as rows of data;
       /// Otherwise, it should be a single-column vector, then the vectors are stored as columns of data.
@@ -2987,7 +2928,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="arr">The array to check.</param>
       /// <param name="flags">The operation flags, CHECK_NAN_INFINITY or combination of
-      /// CHECK_RANGE - if set, the function checks that every value of array is within [minVal,maxVal) range, otherwise it just checks that every element is neigther NaN nor Infinity.
+      /// CHECK_RANGE - if set, the function checks that every value of array is within [minVal,maxVal) range, otherwise it just checks that every element is neither NaN nor Infinity.
       /// CHECK_QUIET - if set, the function does not raises an error if an element is invalid or out of range 
       /// </param>
       /// <param name="minVal">The inclusive lower boundary of valid values range. It is used only if CHECK_RANGE is set.</param>
@@ -3024,7 +2965,7 @@ namespace Emgu.CV
       /// All the arrays must have the same type, except the destination, and the same size (or ROI size)
       /// </summary>
       /// <param name="src1">The first image to compare with</param>
-      /// <param name="src2">The second image to comapare with</param>
+      /// <param name="src2">The second image to compare with</param>
       /// <param name="dst">dst(I) is set to 0xff (all '1'-bits) if the particular relation between the elements is true and 0 otherwise.</param>
       /// <param name="cmpOp">The comparison operator type</param>
       public static void Compare(IInputArray src1, IInputArray src2, IOutputArray dst, CvEnum.CmpType cmpOp)
@@ -3037,20 +2978,6 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCompare(IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.CmpType cmpOp);
 
-      /*
-      /// <summary>
-      /// Compares the corresponding elements of array and scalar and fills the destination mask array:
-      /// dst(I)=src(I) op scalar,
-      /// where op is '=', '&gt;', '&gt;=', '&lt;', '&lt;=' or '!='.
-      /// dst(I) is set to 0xff (all '1'-bits) if the particular relation between the elements is true and 0 otherwise. All the arrays must have the same size (or ROI size)
-      /// </summary>
-      /// <param name="src">The source array, must have a single channel</param>
-      /// <param name="value">The scalar value to compare each array element with</param>
-      /// <param name="dst">The destination array, must have 8u or 8s type</param>
-      /// <param name="cmpOp">The flag specifying the relation between the elements to be checked</param>
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvCmpS(IntPtr src, double value, IntPtr dst, CvEnum.CMP_TYPE cmpOp);
-      */
       /// <summary>
       /// Returns the textual description for the specified error status code. In case of unknown status the function returns NULL pointer. 
       /// </summary>
@@ -3065,13 +2992,13 @@ namespace Emgu.CV
       /// Opens file storage for reading or writing data. In the latter case a new file is created or existing file is rewritten. Type of the read of written file is determined by the filename extension: .xml for XML, and .yml or .yaml for YAML
       /// </summary>
       /// <param name="filename">Name of the file associated with the storage</param>
-      /// <param name="memstorage">Memory storage used for temporary data and for storing dynamic structures, such as CvSeq or CvGraph. If it is NULL, a temporary memory storage is created and used</param>
+      /// <param name="memStorage">Memory storage used for temporary data and for storing dynamic structures, such as CvSeq or CvGraph. If it is NULL, a temporary memory storage is created and used</param>
       /// <param name="flags"></param>
       /// <returns>Pointer to CvFileStorage structure</returns>
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvOpenFileStorage(
          [MarshalAs(StringMarshalType)] String filename,
-         IntPtr memstorage,
+         IntPtr memStorage,
          CvEnum.StorageOp flags);
 
       /// <summary>
@@ -3149,7 +3076,7 @@ namespace Emgu.CV
          int coiMode);
 
       /// <summary>
-      /// Horizontally concate two images
+      /// Horizontally concatenate two images
       /// </summary>
       /// <param name="src1">The first image</param>
       /// <param name="src2">The second image</param>
@@ -3165,7 +3092,7 @@ namespace Emgu.CV
       private extern static void cveHConcat(IntPtr src1, IntPtr src2, IntPtr dst);
 
       /// <summary>
-      /// Vertically concate two images
+      /// Vertically concatenate two images
       /// </summary>
       /// <param name="src1">The first image</param>
       /// <param name="src2">The second image</param>
@@ -3183,7 +3110,7 @@ namespace Emgu.CV
       #region OpenCL
 
       /// <summary>
-      /// Check if we have opencl
+      /// Check if we have OpenCL
       /// </summary>
       public static bool HaveOpenCL
       {
@@ -3197,7 +3124,7 @@ namespace Emgu.CV
       private extern static bool cveHaveOpenCL();
 
       /// <summary>
-      /// Get or set if opencl should be used
+      /// Get or set if OpenCL should be used
       /// </summary>
       public static bool UseOpenCL
       {
@@ -3217,15 +3144,15 @@ namespace Emgu.CV
       private extern static void cveSetUseOpenCL([MarshalAs(CvInvoke.BoolMarshalType)] bool flag);
 
       /// <summary>
-      /// Finishes opencl queue.
+      /// Finishes OpenCL queue.
       /// </summary>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveOclFinish")]
       public extern static void OclFinish();
 
       /// <summary>
-      /// Get the opencl platform summary as a string
+      /// Get the OpenCL platform summary as a string
       /// </summary>
-      /// <returns>An opencl platfor summary</returns>
+      /// <returns>An OpenCL platform summary</returns>
       public static String OclGetPlatformsSummary()
       {
          StringBuilder builder = new StringBuilder();
@@ -3259,7 +3186,7 @@ namespace Emgu.CV
       /// <param name="data">Floating-point matrix of input samples, one row per sample</param>
       /// <param name="bestLabels">Output integer vector storing cluster indices for every sample</param>
       /// <param name="termcrit">Specifies maximum number of iterations and/or accuracy (distance the centers move by between the subsequent iterations)</param>
-      /// <param name="attempts">The number of attemps. Use 2 if not sure</param>
+      /// <param name="attempts">The number of attempts. Use 2 if not sure</param>
       /// <param name="flags">Flags, use 0 if not sure</param>
       /// <param name="centers">Pointer to array of centers, use IntPtr.Zero if not sure</param>
       /// <param name="k">Number of clusters to split the set by.</param>

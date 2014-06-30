@@ -8,7 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{03215a85-5e82-40d0-8fc1-aa1795446be1}</ProjectGuid>
-    <SHFBSchemaVersion>1.9.3.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
     <AssemblyName>Documentation</AssemblyName>
@@ -32,49 +32,67 @@
     </BuildLogFile>
     <HelpFileFormat>Website</HelpFileFormat>
     <CppCommentsFixup>False</CppCommentsFixup>
-    <FrameworkVersion>.NET 3.5</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 3.5</FrameworkVersion>
     <HelpTitle>Emgu CV Library Documentation</HelpTitle>
-    <CopyrightText>2013 Emgu, All Rights Reserved,</CopyrightText>
+    <CopyrightText>2014 Emgu Corporation, All Rights Reserved,</CopyrightText>
     <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
     <HeaderText>http://www.emgu.com</HeaderText>
     <FooterText>For questions and discussions please visit http://www.emgu.com/forum</FooterText>
-    <PresentationStyle>vs2005</PresentationStyle>
+    <PresentationStyle>VS2010</PresentationStyle>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Solution\VS2010_2012_2013\Emgu.CV.sln" />
     </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="True">Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. The wrapper can be compiled in Mono and run on Windows, Linux, Mac OS X, iPhone, iPad and Android devices.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu" isDocumented="True">Root namespace for class and functions implemented by Emgu</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV's image processing functions. 
+<NamespaceSummaryItem name="Emgu" isDocumented="True">Root namespace for class and functions implemented by Emgu</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV's image processing functions. 
 Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">Camera calibration related functions</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">OpenCV Enumeration</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.ML" isDocumented="True">Wrapper of OpenCV's  Machine Learning Library</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.ML.MlEnum" isDocumented="True">OpenCV's Machine Learning enumeration</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.ML.Structure" isDocumented="True">OpenCV's Machine Learning structures</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" />
-      <NamespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True">Code that use reflection to get image information from Emgu CV objects</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.Structure" isDocumented="True">Wrapped OpenCV structures</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.VideoSurveillance" isDocumented="True">Background/Foreground segmentation and Blob tracking</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.Util" isDocumented="True">A collection of utilities used by Emgu projects</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True">Various enumeration for Emgu.Util namespace</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="ZedGraph" isDocumented="False" />
-      <NamespaceSummaryItem name="Emgu.CV.Flann" isDocumented="True">Fast Library for Approximate Nearest Neighbors (Marius Muja and David Lowe)</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.Features2D" isDocumented="True">Contains classes for 2D feature detection, extraction and matching.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.Geodetic" isDocumented="True">Contains library that can be use for geomatic transformation.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.Tiff" isDocumented="True">Contains writer classes that can be used to write different tiff formats, such as tile tiff and geotiff.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.GPU" isDocumented="True">Computer vision using GPU</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.Util" isDocumented="True">A collection of utilities used by Emgu.CV projects</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.OCR" isDocumented="True">Optical character recognition. Wraps the tesseract-ocr engine.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.Cvb" isDocumented="True">Contains interface for the CvBlob library</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.Stitching" isDocumented="True">Image stitching</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.VideoStab" isDocumented="True">Video Stabalization</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.OpenCL" isDocumented="True">Computer vision using OpenCL</NamespaceSummaryItem>
-    </NamespaceSummaries>
+<NamespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">Camera calibration related functions</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">OpenCV Enumeration</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.ML" isDocumented="True">Wrapper of OpenCV's  Machine Learning Library</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.ML.MlEnum" isDocumented="True">OpenCV's Machine Learning enumeration</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.ML.Structure" isDocumented="True">OpenCV's Machine Learning structures</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" />
+<NamespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True">Code that use reflection to get image information from Emgu CV objects</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Structure" isDocumented="True">Wrapped OpenCV structures</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.VideoSurveillance" isDocumented="True">Background/Foreground segmentation and Blob tracking</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.Util" isDocumented="True">A collection of utilities used by Emgu projects</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True">Various enumeration for Emgu.Util namespace</NamespaceSummaryItem>
+<NamespaceSummaryItem name="ZedGraph" isDocumented="False" />
+<NamespaceSummaryItem name="Emgu.CV.Flann" isDocumented="True">Fast Library for Approximate Nearest Neighbors (Marius Muja and David Lowe)</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Features2D" isDocumented="True">Contains classes for 2D feature detection, extraction and matching.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Geodetic" isDocumented="True">Contains library that can be use for geomatic transformation.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Tiff" isDocumented="True">Contains writer classes that can be used to write different tiff formats, such as tile tiff and geotiff.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.GPU" isDocumented="False">Computer vision using GPU</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Util" isDocumented="True">A collection of utilities used by Emgu.CV projects</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.OCR" isDocumented="True">Optical character recognition. Wraps the tesseract-ocr engine.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Cvb" isDocumented="True">Contains interface for the CvBlob library</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Stitching" isDocumented="True">Image stitching</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.VideoStab" isDocumented="True">The video stabilization module contains a set of functions and classes that can be used to solve the problem of video stabilization.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.OpenCL" isDocumented="True">Computer vision using OpenCL</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Cuda" isDocumented="True">NVidia Cuda image processing functions</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Nonfree" isDocumented="True">The module contains algorithms that may be patented in some countries or have some other limitations on the use.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Shape" isDocumented="True">The module contains algorithms that embed a notion of shape distance. These algorithms may be used for shape matching and retrieval, or shape comparison.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Softcascade" isDocumented="True">Softcascade classifier</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Emgu.CV.Superres" isDocumented="True">The Super Resolution module contains a set of functions and classes that can be used to solve the problem of resolution enhancement.</NamespaceSummaryItem></NamespaceSummaries>
     <PlugInConfigurations>
     </PlugInConfigurations>
+    <MaximumGroupParts>2</MaximumGroupParts>
+    <NamespaceGrouping>False</NamespaceGrouping>
+    <SyntaxFilters>Standard</SyntaxFilters>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <Preliminary>False</Preliminary>
+    <NamingMethod>Guid</NamingMethod>
+    <Language>en-US</Language>
+    <FeedbackEMailLinkText>support%40emgu.com</FeedbackEMailLinkText>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <IndentHtml>False</IndentHtml>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <CleanIntermediates>True</CleanIntermediates>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

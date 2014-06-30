@@ -125,6 +125,7 @@ namespace Emgu.CV
       /// <param name="segMask">Image where the mask found should be stored, single-channel, 32-bit floating-point</param>
       /// <param name="timestamp">Current time in milliseconds or other units</param>
       /// <param name="segThresh">Segmentation threshold; recommended to be equal to the interval between motion history "steps" or greater</param>
+      /// <param name="boundingRects">Vector containing ROIs of motion connected components.</param>
       public static void SegmentMotion(
          IInputArray mhi,
          IOutputArray segMask,
@@ -434,7 +435,7 @@ namespace Emgu.CV
          return result;
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern bool cveEstimateRigidTransform(
+      private static extern bool cveEstimateRigidTransform(
          IntPtr src,
          IntPtr dst,
          [MarshalAs(CvInvoke.BoolToIntMarshalType)]

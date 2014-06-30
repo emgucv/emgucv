@@ -240,15 +240,15 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       Rectification = 18,
       /// <summary>
-      /// Monocrome
+      /// Monochrome
       /// </summary>
-      Monocrome = 19,
+      Monochrome = 19,
       /// <summary>
       /// Sharpness
       /// </summary>
       Sharpness = 20,
       /// <summary>
-      /// Exposure control done by camera, user can adjust refernce level using this feature
+      /// Exposure control done by camera, user can adjust reference level using this feature
       /// </summary>
       AutoExposure = 21,
       /// <summary>
@@ -402,7 +402,7 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       OpenniDepthGeneratorBaseline = OpenniDepthGenerator + OpenniBaseline,
       /// <summary>
-      /// Depth generator focal lenght, in pixels.
+      /// Depth generator focal length, in pixels.
       /// </summary>
       OpenniDepthGeneratorFocalLength = OpenniDepthGenerator + OpenniFocalLength,
       /// <summary>
@@ -419,7 +419,7 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       GstreamerQueueLength = 200,
       /// <summary>
-      /// Ip for anable multicast master mode. 0 for disable multicast
+      /// Ip for enable multicast master mode. 0 for disable multicast
       /// </summary>
       PvapiMulticastip = 300,
 
@@ -468,11 +468,11 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       XiGpoMode = 410,      
       /// <summary>
-      /// Selects camera signalling LED
+      /// Selects camera signaling LED
       /// </summary>
       XiLedSelector = 411,      
       /// <summary>
-      /// Define camera signalling LED functionality
+      /// Define camera signaling LED functionality
       /// </summary>
       XiLedMode = 412,      
       /// <summary>
@@ -554,7 +554,7 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       IOSDeviceFlash = 9003,
       /// <summary>
-      /// iOS device whitebalance 
+      /// iOS device white-balance 
       /// </summary>
       IOSDeviceWhitebalance = 9004,
       /// <summary>
@@ -1609,7 +1609,7 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       Blur = 1,
       /// <summary>
-      /// (gaussian blur) - convolving image with param1xparam2 Gaussian kernel. 
+      /// (Gaussian blur) - convolving image with param1xparam2 Gaussian kernel. 
       /// </summary>
       Gaussian = 2,
       /// <summary>
@@ -1714,7 +1714,7 @@ namespace Emgu.CV.CvEnum
    public enum RetrType
    {
       /// <summary>
-      /// retrive only the extreme outer contours 
+      /// retrieve only the extreme outer contours 
       /// </summary>
       External = 0,
       /// <summary>
@@ -1754,7 +1754,7 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
-   /// CV_SEQ_ELTYPE
+   /// Sequence element type
    /// </summary>
    public enum SeqEltype
    {
@@ -2039,7 +2039,7 @@ namespace Emgu.CV.CvEnum
    public enum CheckType
    {
       /// <summary>
-      /// Checks that every element is neigther NaN nor Infinity
+      /// Checks that every element is neither NaN nor Infinity
       /// </summary>
       NanInfinity = 0,
       /// <summary>
@@ -2103,7 +2103,7 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       FourConnected = 4,
       /// <summary>
-      /// Antialias
+      /// Anti-alias
       /// </summary>
       AntiAlias = 16
    }
@@ -2637,11 +2637,11 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       ModifyA = 1,
       /// <summary>
-      /// means that the tranposed matrix U is returned. Specifying the flag speeds up the processing. 
+      /// means that the transposed matrix U is returned. Specifying the flag speeds up the processing. 
       /// </summary>
       Ut = 2,
       /// <summary>
-      /// means that the tranposed matrix V is returned. Specifying the flag speeds up the processing. 
+      /// means that the transposed matrix V is returned. Specifying the flag speeds up the processing. 
       /// </summary>
       Vt = 4
    }
@@ -2782,19 +2782,19 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// No callback
       /// </summary>
-      CV_EIGOBJ_NO_CALLBACK = 0,
+      NoCallback = 0,
       /// <summary>
       /// input callback
       /// </summary>
-      CV_EIGOBJ_INPUT_CALLBACK = 1,
+      InputCallback = 1,
       /// <summary>
       /// output callback
       /// </summary>
-      CV_EIGOBJ_OUTPUT_CALLBACK = 2,
+      OutputCallback = 2,
       /// <summary>
       /// both callback
       /// </summary>
-      CV_EIGOBJ_BOTH_CALLBACK = 3
+      BothCallback = 3
    }
 
    /// <summary>

@@ -8,22 +8,36 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// This type is very similar to InputArray except that it is used for input/output function parameters.
+   /// </summary>
    public class InputOutputArray : UnmanagedObject
    {
       private InputOutputArray()
       {
       }
 
-      public InputOutputArray(IntPtr intputOutputArrayPtr)
+      /// <summary>
+      /// Create an InputOutputArray from an existing unmanaged inputOutputArray pointer
+      /// </summary>
+      /// <param name="inputOutputArrayPtr">The pointer to the existing inputOutputArray</param>
+      public InputOutputArray(IntPtr inputOutputArrayPtr)
       {
-         _ptr = intputOutputArrayPtr;
+         _ptr = inputOutputArrayPtr;
       }
 
+      /// <summary>
+      /// Get an empty InputOutputArray
+      /// </summary>
+      /// <returns>An empty InputOutputArray</returns>
       public static InputOutputArray GetEmpty()
       {
          return new InputOutputArray();
       }
 
+      /// <summary>
+      /// Release all the memory associated with this InputOutputArry
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)

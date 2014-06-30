@@ -197,3 +197,13 @@ cv::Mat* cvMatReshape(cv::Mat* mat, int cn, int rows)
    cv::swap(m, *result);
    return result;
 }
+
+double cvMatDot(cv::Mat* mat, cv::_InputArray* m)
+{
+   return mat->dot(*m);
+}
+void cvMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result)
+{
+   cv::Mat r = mat->cross(*m);
+   cv::swap(r, *result);
+}

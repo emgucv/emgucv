@@ -17,7 +17,7 @@ namespace Emgu.CV
       /// <param name="srcPoints">Point coordinates in the original plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogeneous coordinates), where N is the number of points. </param>
       /// <param name="dstPoints">Point coordinates in the destination plane, 2xN, Nx2, 3xN or Nx3 array (the latter two are for representation in homogeneous coordinates) </param>
       /// <param name="method">The type of the method</param>
-      /// <param name="ransacReprojThreshold">The maximum allowed reprojection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
+      /// <param name="ransacReprojThreshold">The maximum allowed re-projection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
       /// <param name="mask">The optional output mask set by a robust method (RANSAC or LMEDS). </param>
       /// <param name="homography">Output 3x3 homography matrix. Homography matrix is determined up to a scale, thus it is normalized to make h33=1</param>
       public static void FindHomography(
@@ -265,12 +265,12 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="cameraMatrix">The matrix of intrinsic parameters</param>
       /// <param name="imageSize">Image size in pixels</param>
-      /// <param name="apertureWidth">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
-      /// <param name="apertureHeight">Aperture width in realworld units (optional input parameter). Set it to 0 if not used</param>
+      /// <param name="apertureWidth">Aperture width in real-world units (optional input parameter). Set it to 0 if not used</param>
+      /// <param name="apertureHeight">Aperture width in real-world units (optional input parameter). Set it to 0 if not used</param>
       /// <param name="fovx">Field of view angle in x direction in degrees</param>
       /// <param name="fovy">Field of view angle in y direction in degrees </param>
-      /// <param name="focalLength">Focal length in realworld units </param>
-      /// <param name="principalPoint">The principal point in realworld units </param>
+      /// <param name="focalLength">Focal length in real-world units </param>
+      /// <param name="principalPoint">The principal point in real-world units </param>
       /// <param name="aspectRatio">The pixel aspect ratio ~ fy/f</param>
       public static void CalibrationMatrixValues(
          IInputArray cameraMatrix, Size imageSize, double apertureWidth, double apertureHeight,
@@ -392,7 +392,7 @@ namespace Emgu.CV
       /// <param name="t">The translation vector between the cameras' coordinate systems</param>
       /// <param name="e">The optional output essential matrix</param>
       /// <param name="f">The optional output fundamental matrix </param>
-      /// <param name="termCrit">Termination criteria for the iterative optimiziation algorithm</param>
+      /// <param name="termCrit">Termination criteria for the iterative optimization algorithm</param>
       /// <param name="flags">The calibration flags</param>
       /// <returns></returns>
       public static double StereoCalibrate(

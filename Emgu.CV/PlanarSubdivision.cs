@@ -234,7 +234,7 @@ namespace Emgu.CV
          MCvSeqReader reader = new MCvSeqReader();
          CvInvoke.cvStartReadSeq(subdivEdges, ref reader, false);
 
-         for (; CvInvoke.CV_IS_SET_ELEM(reader.ptr); CvInvoke.CV_NEXT_SEQ_ELEM(elemSize, ref reader))
+         for (; CvInvoke.cvIsSetElem(reader.ptr); CvInvoke.cvNextSeqElem(elemSize, ref reader))
          {
             yield return (MCvQuadEdge2D)Marshal.PtrToStructure(reader.ptr, typeof(MCvQuadEdge2D));
          }
