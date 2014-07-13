@@ -364,7 +364,7 @@ namespace Emgu.CV
                return tmp.ToUIImage();
             }
       }
-      #elif !NETFX_CORE
+      #elif ! ( NETFX_CORE || UNITY_ANDROID )
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
       /// such that the image data is <b>shared</b> with Bitmap. 

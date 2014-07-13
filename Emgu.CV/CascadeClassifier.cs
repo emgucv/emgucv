@@ -35,14 +35,18 @@ namespace Emgu.CV
 #if !NETFX_CORE
          FileInfo file = new FileInfo(fileName);
          if (!file.Exists)
+#if UNITY_ANDROID
+            throw new FileNotFoundException("File '{0}' not found", file.FullName);
+#else
             throw new FileNotFoundException(Properties.StringTable.FileNotFound, file.FullName);
+#endif
 #endif
          using (CvString s = new CvString(fileName))
             _ptr = CvCascadeClassifierCreate(s);
 
          if (_ptr == IntPtr.Zero)
          {
-#if NETFX_CORE
+#if NETFX_CORE || UNITY_ANDROID
             throw new NullReferenceException(String.Format("Fail to create HaarCascade object: {0}", fileName));
 #else
             throw new NullReferenceException(String.Format(Properties.StringTable.FailToCreateHaarCascade, file.FullName));

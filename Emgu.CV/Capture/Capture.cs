@@ -4,7 +4,9 @@
 
 //#define TEST_CAPTURE
 using System;
+#if !UNITY_ANDROID
 using System.ServiceModel;
+#endif
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Threading;
@@ -20,13 +22,13 @@ namespace Emgu.CV
    /// <summary> 
    /// Capture images from either camera or video file. 
    /// </summary>
-#if (ANDROID || IOS || NETFX_CORE)
+#if (ANDROID || IOS || NETFX_CORE || UNITY_ANDROID)
 #else
    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 #endif
    public class Capture :
        UnmanagedObject,
-#if (ANDROID || IOS || NETFX_CORE)
+#if (ANDROID || IOS || NETFX_CORE || UNITY_ANDROID)
 #else
  IDuplexCapture,
 #endif
@@ -448,7 +450,7 @@ namespace Emgu.CV
             }
         }*/
 
-#if (ANDROID || IOS || NETFX_CORE)
+#if (ANDROID || IOS || NETFX_CORE || UNITY_ANDROID)
 #else
       /// <summary>
       /// Query a frame duplexly over WCF

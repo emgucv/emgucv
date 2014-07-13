@@ -2,10 +2,12 @@
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-﻿using System;
+using System;
 using Emgu.CV;
 #if NETFX_CORE
 using Windows.UI;
+#elif UNITY_ANDROID
+using UnityEngine;
 #else
 using System.Drawing;
 #endif
@@ -37,7 +39,11 @@ namespace Emgu.CV.Structure
       /// </summary>
       /// <param name="winColor">System.Drawing.Color</param>
       public Rgb(Color winColor)
+#if UNITY_ANDROID
+         : this(winColor.r * 255.0, winColor.g * 255.0, winColor.b * 255.0)
+#else
          : this(winColor.R, winColor.G, winColor.B)
+#endif
       {
       }
 
