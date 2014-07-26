@@ -7,6 +7,8 @@ using Emgu.CV;
 
 #if NETFX_CORE
 using Windows.UI;
+#elif UNITY_ANDROID
+using UnityEngine;
 #else
 using System.Drawing;
 #endif
@@ -41,7 +43,11 @@ namespace Emgu.CV.Structure
       /// </summary>
       /// <param name="winColor">System.Drawing.Color</param>
       public Bgr565(Color winColor)
+#if UNITY_ANDROID
+         : this(winColor.r * 255.0, winColor.g * 255.0, winColor.b * 255.0)
+#else
          : this(winColor.R, winColor.G, winColor.B)
+#endif
       {
       }
       

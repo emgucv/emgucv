@@ -6,6 +6,8 @@ using System;
 
 #if NETFX_CORE
 using Windows.UI;
+#elif UNITY_ANDROID
+using UnityEngine;
 #else
 using System.Drawing;
 #endif
@@ -19,6 +21,8 @@ namespace Emgu.CV
       {
 #if NETFX_CORE
          _displayColor = Color.FromArgb(255, (byte)red, (byte)green, (byte) blue);
+#elif UNITY_ANDROID
+         _displayColor = new Color(red/255.0f, green/255.0f, blue/255.0f, 1.0f);
 #else
          _displayColor = Color.FromArgb(red, green, blue);
 #endif

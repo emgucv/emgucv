@@ -6,6 +6,8 @@ using System;
 using Emgu.CV;
 #if NETFX_CORE
 using Windows.UI;
+#elif UNITY_ANDROID
+using UnityEngine;
 #else
 using System.Drawing;
 #endif
@@ -38,7 +40,11 @@ namespace Emgu.CV.Structure
       /// <param name="winColor">System.Drawing.Color</param>
       public Bgr(Color winColor)
       {
+#if UNITY_ANDROID
+         _scalar = new MCvScalar(winColor.b * 255.0, winColor.g * 255.0, winColor.r * 255.0);
+#else
          _scalar = new MCvScalar(winColor.B, winColor.G, winColor.R);
+#endif
       }
 
       ///<summary> Get or set the intensity of the blue color channel </summary>

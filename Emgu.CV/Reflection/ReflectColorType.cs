@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 #if NETFX_CORE
 using Windows.UI;
+#elif UNITY_ANDROID
+using UnityEngine;
 #else
 using System.Drawing;
 #endif
@@ -28,7 +30,7 @@ namespace Emgu.CV.Reflection
          List<Color> channelColor = new List<Color>();
          foreach (System.Reflection.PropertyInfo pInfo in color.GetType().GetProperties())
          {
-            Object[] displayAtts = pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true);
+            object[] displayAtts = pInfo.GetCustomAttributes(typeof(DisplayColorAttribute), true);
             if (displayAtts.Length > 0)
                channelColor.Add(((DisplayColorAttribute)displayAtts[0]).DisplayColor);
          }
@@ -38,7 +40,11 @@ namespace Emgu.CV.Reflection
          Color[] res = new Color[color.Dimension];
          for (int i = 0; i < res.Length; i++)
             //res[i] = Color.FromArgb(255, 125, 125, 125);
+#if UNITY_ANDROID
+		      res[i] = Color.gray;
+#else
             res[i] = Color.Gray;
+#endif
          return res;
       }
 
