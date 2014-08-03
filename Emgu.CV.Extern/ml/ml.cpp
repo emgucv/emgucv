@@ -71,7 +71,7 @@ bool CvEMTrainE(
       weights0 ? *weights0 : (cv::InputArray) cv::noArray(),
       logLikelihoods ? *logLikelihoods : (cv::OutputArray) cv::noArray(),
       labels ? *labels : (cv::OutputArray) cv::noArray(),
-      probs ? *probs : (cv::OutputArray) cv::noArray);
+      probs ? *probs : (cv::OutputArray) cv::noArray());
 }
 bool CvEMTrainM(
    cv::EM* model, 
