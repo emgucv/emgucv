@@ -11,23 +11,38 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/flann/flann.hpp"
 
+
 //flann index
-CVAPI(cv::flann::Index*) CvFlannIndexCreateKDTree(cv::_InputArray* features, int trees);
+CVAPI(cv::flann::LinearIndexParams*) cveLinearIndexParamsCreate(cv::flann::IndexParams** ip);
+CVAPI(void) cveLinearIndexParamsRelease( cv::flann::LinearIndexParams** p);
 
-CVAPI(cv::flann::Index*) CvFlannIndexCreateLinear(cv::_InputArray* features);
+CVAPI(cv::flann::KDTreeIndexParams*) cveKDTreeIndexParamsCreate(cv::flann::IndexParams** ip, int trees);
+CVAPI(void) cveKDTreeIndexParamsRelease( cv::flann::KDTreeIndexParams** p);
 
-CVAPI(cv::flann::Index*) CvFlannIndexCreateLSH(cv::_InputArray* features, int tableNumber, int keySize, int multiProbeLevel);
+CVAPI(cv::flann::LshIndexParams*) cveLshIndexParamsCreate(cv::flann::IndexParams** ip, int tableNumber, int keySize, int multiProbeLevel);
+CVAPI(void) cveLshIndexParamsRelease( cv::flann::LshIndexParams** p);
 
-CVAPI(cv::flann::Index*) CvFlannIndexCreateKMeans(cv::_InputArray* features, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_);
+CVAPI(cv::flann::KMeansIndexParams*) cveKMeansIndexParamsCreate(cv::flann::IndexParams** ip, int branching, int iterations, cvflann::flann_centers_init_t centersInit, float cbIndex);
+CVAPI(void) cveKMeansIndexParamsRelease( cv::flann::KMeansIndexParams** p);
 
-CVAPI(cv::flann::Index*) CvFlannIndexCreateComposite(cv::_InputArray* features, int trees, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_);
+CVAPI(cv::flann::CompositeIndexParams*) cveCompositeIndexParamsCreate(cv::flann::IndexParams** ip, int trees, int branching, int iterations, cvflann::flann_centers_init_t centersInit, float cbIndex);
+CVAPI(void) cveCompositeIndexParamsRelease( cv::flann::CompositeIndexParams** p);
 
-CVAPI(cv::flann::Index*) CvFlannIndexCreateAutotuned(cv::_InputArray* features, float target_precision, float build_weight, float memory_weight, float sample_fraction);
+CVAPI(cv::flann::AutotunedIndexParams*) cveAutotunedIndexParamsCreate(cv::flann::IndexParams** ip, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
+CVAPI(void) cveAutotunedIndexParamsRelease( cv::flann::AutotunedIndexParams** p);
+
+CVAPI(cv::flann::HierarchicalClusteringIndexParams*) cveHierarchicalClusteringIndexParamsCreate(cv::flann::IndexParams** ip, int branching, cvflann::flann_centers_init_t centersInit, int trees, int leafSize );
+CVAPI(void) cveHierarchicalClusteringIndexParamsRelease( cv::flann::HierarchicalClusteringIndexParams** p);
+
+CVAPI(cv::flann::SearchParams*) cveSearchParamsCreate(cv::flann::IndexParams** ip, int checks, float eps, bool sorted );
+CVAPI(void) cveSearchParamsRelease( cv::flann::SearchParams** p);
+
+CVAPI(cv::flann::Index*) cveFlannIndexCreate(cv::_InputArray* features, cv::flann::IndexParams* p);
 
 CVAPI(void) CvFlannIndexKnnSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, int knn, int checks);
 
 CVAPI(int) CvFlannIndexRadiusSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, float radius, int maxResults, int checks);
 
-CVAPI(void) CvFlannIndexRelease(cv::flann::Index* index);
+CVAPI(void) CvFlannIndexRelease(cv::flann::Index** index);
 
 #endif

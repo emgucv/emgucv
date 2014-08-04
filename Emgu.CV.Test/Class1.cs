@@ -74,20 +74,27 @@ namespace Emgu.CV.Test
 
       public void GenerateLogo()
       {
-         GenerateLogo(1600);
+         GenerateLogo(200, 258);
       }
 
-      public void GenerateLogo(int width)
+      public void GenerateLogo(int width, int height = -1)
       {
-         int height = (int)(width / 160.0 * 72.0);
+         int heightShift = 0;
+         int textHeight = (int)(width / 160.0 * 72.0);
+         if (height <= 0)
+            height = textHeight;
+         else
+         {
+            heightShift = Math.Max((height - textHeight)/2, 0);
+         }
          double scale = width / 160.0;
          Image<Bgr, Byte> semgu = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
          Image<Bgr, Byte> scv = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
          //MCvFont f1 = new MCvFont(CvEnum.FontFace.HersheyTriplex, 1.5 * scale, 1.5 * scale);
          //MCvFont f2 = new MCvFont(CvEnum.FontFace.HersheyComplex, 1.6 * scale, 2.2 * scale);
-         semgu.Draw("Emgu", Point.Round(new PointF((float)(6 * scale), (float)(50 * scale))), CvEnum.FontFace.HersheyTriplex, 1.5*scale, new Bgr(55, 155, 255), (int) Math.Round( 1.5*scale ));
+         semgu.Draw("Emgu", Point.Round(new PointF((float)(6 * scale), (float)(50 * scale + heightShift))), CvEnum.FontFace.HersheyTriplex, 1.5*scale, new Bgr(55, 155, 255), (int) Math.Round( 1.5*scale ));
          semgu._Dilate((int)(1 * scale));
-         scv.Draw("CV", Point.Round(new PointF((float)(50 * scale), (float)(60 * scale))), CvEnum.FontFace.HersheySimplex, 1.6 * scale,  new Bgr(255, 55, 255), (int) Math.Round(2.2*scale));
+         scv.Draw("CV", Point.Round(new PointF((float)(50 * scale), (float)(60 * scale + heightShift))), CvEnum.FontFace.HersheySimplex, 1.6 * scale,  new Bgr(255, 55, 255), (int) Math.Round(2.2*scale));
          scv._Dilate((int)(2 * scale));
          Image<Bgr, Byte> logoBgr = semgu.Or(scv);
          Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Size);
@@ -983,7 +990,7 @@ namespace Emgu.CV.Test
          BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
          param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BlobDetectorType.CC);
          param.FGDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.ForgroundDetectorType.Fgd, fgparam);
-         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BlobTrackerType.MSFG);
+         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFG);
          param.FGTrainFrames = 10;
          BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 

@@ -23,67 +23,16 @@ namespace Emgu.CV.Flann
       }
 
       #region constructors
-      /// <summary>
-      /// Create a flann index using multiple KDTrees
-      /// </summary>
-      /// <param name="numberOfKDTrees">The number of KDTrees to be used</param>
-      /// <param name="values">A row by row matrix of descriptors</param>
-      public Index(IInputArray values, int numberOfKDTrees)
-      {
-         using (InputArray iaValues = values.GetInputArray())
-            _ptr = CvFlannIndexCreateKDTree(iaValues, numberOfKDTrees);
-      }
 
       /// <summary>
-      /// Create a flann index using LSH
+      /// Create a flann index
       /// </summary>
       /// <param name="values">A row by row matrix of descriptors</param>
-      /// <param name="tableNumber">The number of hash tables to use (between 10 and 30 usually).</param>
-      /// <param name="keySize">The size of the hash key in bits (between 10 and 20 usually).</param>
-      /// <param name="multiProbeLevel">The number of bits to shift to check for neighboring buckets (0 is regular LSH, 2 is recommended).</param>
-      public Index(IInputArray values, int tableNumber, int keySize, int multiProbeLevel)
+      /// <param name="ip">The index parameter</param>
+      public Index(IInputArray values, IIndexParams ip)
       {
          using (InputArray iaValues = values.GetInputArray())
-            _ptr = CvFlannIndexCreateLSH(iaValues, tableNumber, keySize, multiProbeLevel);
-      }
-
-      /// <summary>
-      /// Create a flann index using a composition of KDTreee and KMeans tree
-      /// </summary>
-      /// <param name="numberOfKDTrees">The number of KDTrees to be used</param>
-      /// <param name="values">A row by row matrix of descriptors</param>
-      /// <param name="branching">Branching factor (for kmeans tree), use 32 for default</param>
-      /// <param name="iterations">Max iterations to perform in one kmeans clustering (kmeans tree), use 11 for deafault</param>
-      /// <param name="centersInitType">Algorithm used for picking the initial cluster centers for kmeans tree, use Random for default</param>
-      /// <param name="cbIndex">Cluster boundary index. Used when searching the kmeans tree. Use 0.2 for default</param>
-      public Index(IInputArray values, int numberOfKDTrees, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
-      {
-         using (InputArray iaValues = values.GetInputArray())
-            _ptr = CvFlannIndexCreateComposite(iaValues, numberOfKDTrees, branching, iterations, centersInitType, cbIndex);
-      }
-
-      /// <summary>
-      /// Create a flann index using Kmeans
-      /// </summary>
-      /// <param name="values">A row by row matrix of descriptors</param>
-      /// <param name="branching">Branching factor (for kmeans tree), use 32 for default</param>
-      /// <param name="iterations">Max iterations to perform in one kmeans clustering (kmeans tree), use 11 for deafault</param>
-      /// <param name="centersInitType">Algorithm used for picking the initial cluster centers for kmeans tree, use Random for default</param>
-      /// <param name="cbIndex">Cluster boundary index. Used when searching the kmeans tree. Use 0.2 for default</param>
-      public Index(IInputArray values, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
-      {
-         using (InputArray iaValues = values.GetInputArray())
-            _ptr = CvFlannIndexCreateKMeans(iaValues, branching, iterations, centersInitType, cbIndex);
-      }
-
-      /// <summary>
-      /// Create a linear flann index
-      /// </summary>
-      /// <param name="values">A row by row matrix of descriptors</param>
-      public Index(IInputArray values)
-      {
-         using (InputArray iaValues = values.GetInputArray())
-            _ptr = CvFlannIndexCreateLinear(iaValues);
+            _ptr = cveFlannIndexCreate(iaValues, ip.IndexParamPtr);
       }
 
       /// <summary>
@@ -148,20 +97,12 @@ namespace Emgu.CV.Flann
       /// </summary>
       protected override void DisposeObject()
       {
-         CvFlannIndexRelease(_ptr);
+         if (_ptr != IntPtr.Zero)
+            CvFlannIndexRelease(ref _ptr);
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvFlannIndexCreateLinear(IntPtr features);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvFlannIndexCreateLSH(IntPtr features, int tableNumber, int keySize, int multiProbeLevel);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvFlannIndexCreateKDTree(IntPtr features, int numberOfKDTrees);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvFlannIndexCreateKMeans(IntPtr features, int branching, int iterations, Flann.CenterInitType centersInitType, float cbIndex);
+      internal static extern IntPtr cveFlannIndexCreate(IntPtr features, IntPtr ip);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvFlannIndexCreateComposite(IntPtr features, int numberOfKDTrees, int branching, int iterations, Flann.CenterInitType centersInitType, float cbIndex);
@@ -170,7 +111,7 @@ namespace Emgu.CV.Flann
       internal static extern IntPtr CvFlannIndexCreateAutotuned(IntPtr features, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvFlannIndexRelease(IntPtr index);
+      internal static extern void CvFlannIndexRelease(ref IntPtr index);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvFlannIndexKnnSearch(IntPtr index, IntPtr queries, IntPtr indices, IntPtr dists, int knn, int checks);

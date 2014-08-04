@@ -699,6 +699,7 @@ namespace Emgu.CV
 
       #endregion
 
+#if !UNITY_ANDROID
       #region Drawing functions
       ///<summary> Draw an Rectangle of the specific color and thickness </summary>
       ///<param name="rect"> The rectangle to be drawn</param>
@@ -979,6 +980,7 @@ namespace Emgu.CV
          }
       }
       #endregion
+#endif
 
       #region Hough line and circles
         ///<summary>
@@ -2379,6 +2381,7 @@ namespace Emgu.CV
          }
       }
 
+#if !UNITY_ANDROID
       ///<summary>
       /// Convert the image to log polar, simulating the human foveal vision
       /// </summary>
@@ -2398,6 +2401,7 @@ namespace Emgu.CV
          CvInvoke.LogPolar(this, imgPolar, center, magnitude, interpolationType, warpType);
          return imgPolar;
       }
+#endif
       #endregion
 
       #region Image color and depth conversion

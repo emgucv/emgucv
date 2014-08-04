@@ -15,18 +15,18 @@ cv::BackgroundSubtractorMOG2* CvBackgroundSubtractorMOG2Create(int history,  flo
    //return new cv::BackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
 }
 
-void CvBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubstractor)
+void CvBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor)
 {
-   delete *bgSubstractor;
-   *bgSubstractor = 0;
+   delete *bgSubtractor;
+   *bgSubtractor = 0;
 }
 
 //BackgroundSubtractor
-void CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubstractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate)
+void CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate)
 {
    //cv::Mat imgMat = cv::cvarrToMat(image);
    //cv::Mat fgMat = cv::cvarrToMat(fgmask);
-   bgSubstractor->apply(*image, *fgmask, learningRate);
+   bgSubtractor->apply(*image, *fgmask, learningRate);
 }
 
 //BackgroundSubtractorMOG
@@ -38,10 +38,38 @@ cv::BackgroundSubtractorMOG* CvBackgroundSubtractorMOGCreate(int history, int nm
    return ptr.get();
 }
 
-void CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubstractor)
+void CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubtractor)
 {
-   delete *bgSubstractor;
-   *bgSubstractor = 0;
+   delete *bgSubtractor;
+   *bgSubtractor = 0;
+}
+
+//BackgroundSubtractorKNN
+cv::BackgroundSubtractorKNN* CvBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows)
+{
+   cv::Ptr<cv::BackgroundSubtractorKNN> ptr = cv::createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows);
+  
+   ptr.addref();
+   return ptr.get();
+}
+void CvBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor)
+{
+   delete *bgSubtractor;
+   *bgSubtractor = 0;
+}
+
+//BackgroundSubtractorGMG
+cv::BackgroundSubtractorGMG* CvBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold)
+{
+   cv::Ptr<cv::BackgroundSubtractorGMG> ptr = cv::createBackgroundSubtractorGMG(initializationFrames, decisionThreshold);
+  
+   ptr.addref();
+   return ptr.get();
+}
+void CvBackgroundSubtractorGMGRelease(cv::BackgroundSubtractorGMG** bgSubtractor)
+{
+   delete *bgSubtractor;
+   *bgSubtractor = 0;
 }
 
 cv::DenseOpticalFlow* cveDenseOpticalFlowCreateDualTVL1()

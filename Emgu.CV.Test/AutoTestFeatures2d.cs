@@ -250,8 +250,9 @@ namespace Emgu.CV.Test
                //using (Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
                //using (Matrix<float> dist = new Matrix<float>(observedDescriptors.Rows, k))
                using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
-               using (BruteForceMatcher matcher = new BruteForceMatcher(dt))
+               using (BFMatcher matcher = new BFMatcher(dt))
                {
+                  ParamDef[] parameterDefs = matcher.GetParams();
                   matcher.Add(modelDescriptors);
                   matcher.KnnMatch(observedDescriptors, matches, k, null);
 
@@ -538,7 +539,7 @@ namespace Emgu.CV.Test
          Mat vocabulary = new Mat();
          trainer.Cluster(vocabulary);
 
-         BruteForceMatcher matcher = new BruteForceMatcher(DistanceType.L2);
+         BFMatcher matcher = new BFMatcher(DistanceType.L2);
 
          BOWImgDescriptorExtractor extractor = new BOWImgDescriptorExtractor(detector, matcher);
          extractor.SetVocabulary(vocabulary);
@@ -563,7 +564,7 @@ namespace Emgu.CV.Test
          Mat vocabulary = new Mat();
          trainer.Cluster(vocabulary);
 
-         BruteForceMatcher matcher = new BruteForceMatcher(DistanceType.L2);
+         BFMatcher matcher = new BFMatcher(DistanceType.L2);
 
          BOWImgDescriptorExtractor extractor = new BOWImgDescriptorExtractor(detector, matcher);
          Mat vocabularyByte = new Mat();

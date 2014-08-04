@@ -13,14 +13,22 @@
 
 //BackgroundSubtractorMOG2
 CVAPI(cv::BackgroundSubtractorMOG2*) CvBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection);
-CVAPI(void) CvBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubstractor);
+CVAPI(void) CvBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor);
 
 //BackgroundSubtractor
-CVAPI(void) CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubstractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate);
+CVAPI(void) CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate);
 
 //BackgroundSubtractorMOG
 CVAPI(cv::BackgroundSubtractorMOG*) CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma);
-CVAPI(void) CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubstractor);
+CVAPI(void) CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubtractor);
+
+//BackgroundSubtractorKNN
+CVAPI(cv::BackgroundSubtractorKNN*) CvBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows);
+CVAPI(void) CvBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor);
+
+//BackgroundSubtractorGMG
+CVAPI(cv::BackgroundSubtractorGMG*) CvBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold);
+CVAPI(void) CvBackgroundSubtractorGMGRelease(cv::BackgroundSubtractorGMG** bgSubtractor);
 
 CVAPI(cv::DenseOpticalFlow*) cveDenseOpticalFlowCreateDualTVL1();
 CVAPI(void) cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow);

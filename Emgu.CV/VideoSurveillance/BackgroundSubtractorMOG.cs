@@ -12,7 +12,7 @@ using Emgu.Util;
 namespace Emgu.CV.VideoSurveillance
 {
    /// <summary>
-   /// Gaussian Mixture-based Backbround/Foreground Segmentation Algorithm.
+   /// Gaussian Mixture-based Background/Foreground Segmentation Algorithm.
    /// The class implements the following algorithm:
    /// "An improved adaptive background mixture model for real-time tracking with shadow detection"
    /// P. KadewTraKuPong and R. Bowden,
@@ -22,7 +22,7 @@ namespace Emgu.CV.VideoSurveillance
    public class BackgroundSubtractorMOG : BackgroundSubtractor
    {
       /// <summary>
-      /// Create an "Improved adaptive Gausian mixture model for background subtraction".
+      /// Create an "Improved adaptive Gaussian mixture model for background subtraction".
       /// </summary>
       /// <param name="history">The length of the history.</param>
       /// <param name="nMixtures">The maximum number of gaussian mixtures.</param>

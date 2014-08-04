@@ -16,6 +16,7 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
+using Emgu.CV.Flann;
 using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
 #if !IOS
@@ -1078,8 +1079,8 @@ namespace Emgu.CV.Test
          float[][] features = new float[10][];
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
-
-         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features));
+         Flann.LinearIndexParamses p = new LinearIndexParamses();
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), p);
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
@@ -1099,7 +1100,8 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
 
-         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), 4);
+         Flann.KdTreeIndexParamses p = new KdTreeIndexParamses(4);
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), p);
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
@@ -1119,7 +1121,8 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
 
-         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), 4, 32, 11, Emgu.CV.Flann.CenterInitType.Random, 0.2f);
+         Flann.CompositeIndexParamses p = new CompositeIndexParamses(4, 32, 11, Emgu.CV.Flann.CenterInitType.Random, 0.2f);
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), p);
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
@@ -2077,8 +2080,8 @@ namespace Emgu.CV.Test
                indexOfClosest1 = i;
             }
          }
-
-         Flann.Index3D index3D = new Emgu.CV.Flann.Index3D(points);
+         Flann.LinearIndexParamses p = new LinearIndexParamses();
+         Flann.Index3D index3D = new Emgu.CV.Flann.Index3D(points,p);
          double shortestDistance2;
          int indexOfClosest2 = index3D.ApproximateNearestNeighbour(searchPoint, out shortestDistance2);
          shortestDistance2 = Math.Sqrt(shortestDistance2);

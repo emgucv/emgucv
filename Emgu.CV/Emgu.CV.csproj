@@ -94,12 +94,13 @@
     <Compile Include="Features2D\BOWKMeansTrainer.cs" />
     <Compile Include="Features2D\BriefDescriptorExtractor.cs" />
     <Compile Include="Features2D\Brisk.cs" />
-    <Compile Include="Features2D\BruteForceMatcher.cs" />
+    <Compile Include="Features2D\BFMatcher.cs" />
     <Compile Include="Features2D\DenseFeatureDetector.cs" />
     <Compile Include="Features2D\DescriptorMatcher.cs" />
     <Compile Include="Features2D\FastDetector.cs" />
     <Compile Include="Features2D\Feature2D.cs" />
     <Compile Include="Features2D\Features2DTracker.cs" />
+    <Compile Include="Features2D\FlannBasedMatcher.cs" />
     <Compile Include="Features2D\Freak.cs" />
     <Compile Include="Features2D\GFTTDetector.cs" />
     <Compile Include="Features2D\GridAdaptedFeatureDetector.cs" />
@@ -111,8 +112,10 @@
     <Compile Include="Features2D\ORBDetector.cs" />
     <Compile Include="Features2D\SimpleBlobDetector.cs" />
     <Compile Include="Flann\CenterInitType.cs" />
+    <Compile Include="Flann\IIndexParams.cs" />
     <Compile Include="Flann\Index.cs" />
     <Compile Include="Flann\Index3D.cs" />
+    <Compile Include="Flann\IndexParams.cs" />
     <Compile Include="Geodetic\GeodeticCoordinate.cs" />
     <Compile Include="Features2D\ImageFeature.cs" />
     <Compile Include="Features2D\LDetector.cs" />
@@ -210,6 +213,8 @@
     <Compile Include="Util\VectorOfVectorOfPointF.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubtractorGMG.cs" />
+    <Compile Include="VideoSurveillance\BackgroundSubtractorKNN.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractorMOG2.cs" />
     <Compile Include="VideoSurveillance\BGStatModel.cs" />

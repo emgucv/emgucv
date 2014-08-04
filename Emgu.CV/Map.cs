@@ -196,6 +196,7 @@ namespace Emgu.CV
          }
       }
 
+#if !UNITY_ANDROID
       /// <summary>
       /// Draw a rectangle in the map
       /// </summary>
@@ -295,6 +296,7 @@ namespace Emgu.CV
             color,
             thickness);
       }
+#endif
 
 #if !NETFX_CORE
       #region Implement ISerializable interface

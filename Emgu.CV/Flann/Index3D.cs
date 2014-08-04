@@ -25,19 +25,19 @@ namespace Emgu.CV.Flann
       private GCHandle _dataHandle;
 
       /// <summary>
-      /// Create a linear flann index for 3D points
+      /// Create a flann index for 3D points
       /// </summary>
       /// <param name="points">The IPosition3D array</param>
-      public Index3D(MCvPoint3D32f[] points)
+      /// <param name="ip">The index parameters</param>
+      public Index3D(MCvPoint3D32f[] points, IIndexParams ip)
       {
          _points = points;
 
          _dataHandle = GCHandle.Alloc(_points, GCHandleType.Pinned);
          _dataMatrix = new Matrix<float>(_points.Length, 3, _dataHandle.AddrOfPinnedObject());
          
-            _flannIndex = new Index(_dataMatrix);
+         _flannIndex = new Index(_dataMatrix, ip);
          
-
          _query = new Matrix<float>(1, 3);
          _distance = new Matrix<float>(1, 1);
          _index = new Matrix<int>(1, 1);

@@ -1,7 +1,8 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
-﻿using System;
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -211,7 +212,7 @@ namespace Emgu.CV.Cuda
             } catch (Exception excpt)
             {
                throw new NotSupportedException(String.Format(
-                  "Convertion from CudaImage<{0}, {1}> to CudaImage<{2}, {3}> is not supported by OpenCV: {4}",
+                  "Conversion from CudaImage<{0}, {1}> to CudaImage<{2}, {3}> is not supported by OpenCV: {4}",
                   srcColor.ToString(),
                   typeof(TDepth).ToString(),
                   destColor.ToString(),
@@ -311,9 +312,9 @@ namespace Emgu.CV.Cuda
       {
          throw new NotImplementedException();
       }
-#elif !NETFX_CORE
+#elif !(NETFX_CORE || UNITY_ANDROID)
       /// <summary>
-      /// convert the current CudaImage to its equavalent Bitmap representation
+      /// convert the current CudaImage to its equivalent Bitmap representation
       /// </summary>
       ///
       public Bitmap Bitmap

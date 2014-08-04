@@ -322,30 +322,12 @@ namespace Emgu.CV
          CvInvoke.cvCopy(Ptr, destination.Ptr, IntPtr.Zero);
       }
 
-      ///<summary> 
-      ///Set the element of the Array to <paramref name="value"/>
-      ///</summary>
-      ///<param name="value"> The value to be set for each element of the Array </param>
-      public void SetValue(MCvScalar value)
-      {
-         CvInvoke.cvSet(_ptr, value, IntPtr.Zero);
-      }
-
-      ///<summary> 
-      ///Set the element of the Array to <paramref name="value"/>
-      ///</summary>
-      ///<param name="value"> The value to be set for each element of the Array </param>
-      public void SetValue(double value)
-      {
-         SetValue(new MCvScalar(value, value, value, value));
-      }
-
       ///<summary>
       ///Set the element of the Array to <paramref name="value"/>, using the specific <paramref name="mask"/>
       ///</summary>
       ///<param name="value">The value to be set</param>
       ///<param name="mask">The mask for the operation</param>
-      public void SetValue(MCvScalar value, CvArray<Byte> mask)
+      public void SetValue(MCvScalar value, CvArray<Byte> mask = null)
       {
          CvInvoke.cvSet(_ptr, value, mask == null ? IntPtr.Zero : mask.Ptr);
       }
@@ -355,7 +337,7 @@ namespace Emgu.CV
       ///</summary>
       ///<param name="value">The value to be set</param>
       ///<param name="mask">The mask for the operation</param>
-      public void SetValue(double value, CvArray<Byte> mask)
+      public void SetValue(double value, CvArray<Byte> mask = null)
       {
          SetValue(new MCvScalar(value, value, value, value), mask);
       }

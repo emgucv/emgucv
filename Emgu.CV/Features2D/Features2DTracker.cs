@@ -42,7 +42,7 @@ namespace Emgu.CV.Features2D
          DistanceType dt = typeof (TDescriptor) == typeof (Byte) ? DistanceType.Hamming : DistanceType.L2;
          using (Matrix<int> indices = new Matrix<int>(observedKeyPoints.Size, k))
          using (Matrix<float> dist = new Matrix<float>(indices.Size))
-         using (BruteForceMatcher matcher = new BruteForceMatcher(dt))
+         using (BFMatcher matcher = new BFMatcher(dt))
          using (Matrix<byte> mask = new Matrix<byte>(dist.Rows, 1))
          using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
          {
@@ -432,7 +432,7 @@ namespace Emgu.CV.Features2D
             DistanceType dt = typeof(TDescriptor) == typeof(Byte) ? DistanceType.Hamming : DistanceType.L2;
             //using (Matrix<int> indices = new Matrix<int>(observedDescriptors.Rows, k))
             //using (Matrix<float> dists = new Matrix<float>(observedDescriptors.Rows, k))
-            using (BruteForceMatcher matcher = new BruteForceMatcher(dt))
+            using (BFMatcher matcher = new BFMatcher(dt))
             using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())            
             {
                matcher.Add(_modelDescriptors);

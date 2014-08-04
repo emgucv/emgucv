@@ -13,7 +13,7 @@ namespace Emgu.CV.VideoSurveillance
 {
    /// <summary>
    /// The class implements the following algorithm:
-   /// "Improved adaptive Gausian mixture model for background subtraction"
+   /// "Improved adaptive Gaussian mixture model for background subtraction"
    /// Z.Zivkovic
    /// International Conference Pattern Recognition, UK, August, 2004.
    /// http://www.zoranz.net/Publications/zivkovic2004ICPR.pdf
@@ -21,10 +21,10 @@ namespace Emgu.CV.VideoSurveillance
    public class BackgroundSubtractorMOG2 : BackgroundSubtractor
    {
       /// <summary>
-      /// Create an "Improved adaptive Gausian mixture model for background subtraction".
+      /// Create an "Improved adaptive Gaussian mixture model for background subtraction".
       /// </summary>
       /// <param name="history">The length of the history.</param>
-      /// <param name="varThreshold">The maximum allowed number of mixture comonents. Actual number is determined dynamically per pixel.</param>
+      /// <param name="varThreshold">The maximum allowed number of mixture components. Actual number is determined dynamically per pixel.</param>
       /// <param name="shadowDetection">If true, the algorithm will detect shadows and mark them. It decreases the speed a bit, so if you do not need this feature, set the parameter to false.</param>
       public BackgroundSubtractorMOG2(int history = 500, float varThreshold = 16, bool shadowDetection = true)
       {

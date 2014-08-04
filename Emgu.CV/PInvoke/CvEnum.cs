@@ -3085,6 +3085,7 @@ namespace Emgu.CV.CvEnum
       Append = 2
    }
 
+   /*
    /// <summary>
    /// The type of blob detector
    /// </summary>
@@ -3163,7 +3164,7 @@ namespace Emgu.CV.CvEnum
       /// TimeAverExp
       /// </summary>
       TimeAverExp
-   }
+   }*/
 
    /// <summary>
    /// Histogram comparison method
@@ -3210,7 +3211,7 @@ namespace Emgu.CV.CvEnum
       /// Gaussian background model
       /// </summary>
       GaussianBgModel
-   }*/
+   }
 
    /// <summary>
    /// Type of foreground detector
@@ -3229,7 +3230,7 @@ namespace Emgu.CV.CvEnum
       ///  A simplified version of FGD
       /// </summary>
       FgdSimple = 2
-   }
+   }*/
 
    /// <summary>
    /// The available flags for Farneback optical flow computation

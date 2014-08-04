@@ -101,16 +101,16 @@ CVAPI(void) CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_Inp
                    std::vector< std::vector< cv::DMatch > >* matches, int k,
                    cv::_InputArray* mask);
 
+CVAPI(cv::Algorithm*) CvDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher);
+
 /*
 CVAPI(void) CvDescriptorMatcherRadiusMatch(cv::DescriptorMatcher* matcher, const CvMat* queryDescriptors, 
                    CvMat* trainIdx, CvMat* distance, int k,
                    const CvMat* mask);*/
 
 //BruteForceMatcher
-CVAPI(cv::DescriptorMatcher*) CvBruteForceMatcherCreate(int distanceType, bool crossCheck);
-
-CVAPI(void) CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher);
-
+CVAPI(cv::BFMatcher*) cveBFMatcherCreate(cv::DescriptorMatcher** m, int distanceType, bool crossCheck);
+CVAPI(void) cveBFMatcherRelease(cv::BFMatcher** matcher);
 
 
 //2D Tracker

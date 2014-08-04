@@ -627,7 +627,7 @@ namespace Emgu.CV.Test
             stopwatch.Reset(); stopwatch.Start();
             OclBruteForceMatcher<byte> hammingMatcher = new OclBruteForceMatcher<Byte>(DistanceType.Hamming);
 
-            //BruteForceMatcher hammingMatcher = new BruteForceMatcher(BruteForceMatcher.DistanceType.Hamming, modelDescriptors);
+            //BFMatcher hammingMatcher = new BFMatcher(BFMatcher.DistanceType.Hamming, modelDescriptors);
             int k = 2;
             Matrix<int> trainIdx = new Matrix<int>(observedKeypoints.Size, k);
             Matrix<float> distance = new Matrix<float>(trainIdx.Size);

@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
-﻿using System;
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV;
-﻿using Emgu.CV.CvEnum;
-﻿using Emgu.CV.Structure;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
 using System.IO;
 using Emgu.Util;
 

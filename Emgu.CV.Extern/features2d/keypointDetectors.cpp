@@ -289,12 +289,19 @@ void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray
    //VectorOfDMatchToMat(&matches, trainIdx, distance);
 }
 
-cv::DescriptorMatcher* CvBruteForceMatcherCreate(int distanceType, bool crossCheck)
+cv::Algorithm* CvDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher)
 {
-   return new cv::BFMatcher(distanceType, crossCheck);
+   return (cv::Algorithm*) matcher;
 }
 
-void CvBruteForceMatcherRelease(cv::DescriptorMatcher** matcher)
+cv::BFMatcher* cveBFMatcherCreate(cv::DescriptorMatcher** m, int distanceType, bool crossCheck)
+{
+   cv::BFMatcher* matcher = new cv::BFMatcher(distanceType, crossCheck);
+   *m = (cv::DescriptorMatcher*) matcher;
+   return matcher;
+}
+
+void cveBFMatcherRelease(cv::BFMatcher** matcher)
 {
    delete *matcher;
    *matcher = 0;

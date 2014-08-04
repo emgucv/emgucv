@@ -13,54 +13,119 @@ using Emgu.Util;
 
 namespace Emgu.CV.Stitching
 {
+   /// <summary>
+   /// Finds features in the given image.
+   /// </summary>
    public abstract class FeaturesFinder : UnmanagedObject
    {
-      protected IntPtr _featuresFinderPtr;
+      /// <summary>
+      /// Pointer to the unmanaged FeaturesFinder object
+      /// </summary>
+      protected IntPtr FeaturesFinderPtr;
    }
 
+   /// <summary>
+   /// SURF features finder
+   /// </summary>
    public class SurfFeaturesFinder : FeaturesFinder
    {
+      /// <summary>
+      /// Create SURF Features finder
+      /// </summary>
+      /// <param name="hessThresh">      
+      /// Only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="numOctaves">
+      /// The number of octaves to be used for extraction.
+      /// With each next octave the feature size is doubled
+      /// </param>
+      /// <param name="numLayers">
+      /// The number of layers within each octave
+      /// </param>
+      /// <param name="numOctavesDescr">The number of Octaves descriptors</param>
+      /// <param name="numLayersDescr">The number of Layers descriptors</param>
       public SurfFeaturesFinder(
-         double hessThresh, int numOctaves, int numLayers,
-         int numOctavesDescr, int numLayersDescr)
+         double hessThresh = 300, int numOctaves = 3, int numLayers = 4,
+         int numOctavesDescr = 3, int numLayersDescr = 4)
       {
          _ptr = StitchingInvoke.cveSurfFeaturesFinderCreate(
             hessThresh, numOctaves, numLayers, numOctavesDescr, numLayersDescr,
-            ref _featuresFinderPtr);
+            ref FeaturesFinderPtr);
       }
 
+      /// <summary>
+      /// Release all the unmanaged memory associated with this SurfFeature finder.
+      /// </summary>
       protected override void DisposeObject()
       {
          StitchingInvoke.cveOrbFeaturesFinderRelease(ref _ptr);
       }
    }
 
+   /// <summary>
+   /// Gpu version of the SURF features finder
+   /// </summary>
    public class SurfFeaturesFinderGpu : FeaturesFinder
    {
+      /// <summary>
+      /// Create the GPU version of SURF Features finder
+      /// </summary>
+      /// <param name="hessThresh">      
+      /// Only features with keypoint.hessian larger than that are extracted.
+      /// good default value is ~300-500 (can depend on the average local contrast and sharpness of the image).
+      /// user can further filter out some features based on their hessian values and other characteristics
+      /// </param>
+      /// <param name="numOctaves">
+      /// The number of octaves to be used for extraction.
+      /// With each next octave the feature size is doubled
+      /// </param>
+      /// <param name="numLayers">
+      /// The number of layers within each octave
+      /// </param>
+      /// <param name="numOctavesDescr">The number of Octaves descriptors</param>
+      /// <param name="numLayersDescr">The number of Layers descriptors</param>
       public SurfFeaturesFinderGpu(
-         double hessThresh, int numOctaves, int numLayers,
-         int numOctavesDescr, int numLayersDescr)
+         double hessThresh = 300, int numOctaves = 3, int numLayers = 4,
+         int numOctavesDescr = 3, int numLayersDescr = 4)
       {
          _ptr = StitchingInvoke.cveSurfFeaturesFinderGpuCreate(
             hessThresh, numOctaves, numLayers, numOctavesDescr, numLayersDescr,
-            ref _featuresFinderPtr);
+            ref FeaturesFinderPtr);
       }
 
+      /// <summary>
+      /// Release all the unmanaged memory associated with this FeaturesFinder
+      /// </summary>
       protected override void DisposeObject()
       {
          StitchingInvoke.cveSurfFeaturesFinderGpuRelease(ref  _ptr);
       }
    }
 
+   /// <summary>
+   /// ORB features finder.
+   /// </summary>
    public class OrbFeaturesFinder : FeaturesFinder
    {
-      public OrbFeaturesFinder(Size gridSize, int nfeature = 1500, float scaleFactor = 1.3f, int nlevels = 5)
+      /// <summary>
+      /// Creates an ORB features finder
+      /// </summary>
+      /// <param name="gridSize">Use (3, 1) for default grid size </param>
+      /// <param name="nFeature">The number of desired features. </param>
+      /// <param name="scaleFactor">Coefficient by which we divide the dimensions from one scale pyramid level to the next.</param>
+      /// <param name="nLevels">The number of levels in the scale pyramid. </param>
+      public OrbFeaturesFinder(Size gridSize, int nFeature = 1500, float scaleFactor = 1.3f, int nLevels = 5)
       {
          _ptr = StitchingInvoke.cveOrbFeaturesFinderCreate(
-            ref gridSize, nfeature, scaleFactor, nlevels,
-            ref _featuresFinderPtr);
+            ref gridSize, nFeature, scaleFactor, nLevels,
+            ref FeaturesFinderPtr);
       }
 
+      /// <summary>
+      /// Release all the unmanaged memory associated with this FeaturesFinder
+      /// </summary>
       protected override void DisposeObject()
       {
          StitchingInvoke.cveOrbFeaturesFinderRelease(ref _ptr);

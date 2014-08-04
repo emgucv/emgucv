@@ -19,23 +19,28 @@ namespace Emgu.CV.Features2D
       /// 
       /// </summary>
       Inf = 1,
+
       /// <summary>
       /// Manhattan distance (city block distance)
       /// </summary>
       L1 = 2,
+
       /// <summary>
       /// Squared Euclidean distance
       /// </summary>
-      L2 = 4, 
+      L2 = 4,
+
       /// <summary>
       /// Euclidean distance
       /// </summary>
       L2Sqr = 5,
+
       /// <summary>
       /// Hamming distance functor - counts the bit differences between two strings - useful for the Brief descriptor, 
       /// bit count of A exclusive XOR'ed with B. 
       /// </summary>
       Hamming = 6,
+
       /// <summary>
       /// Hamming distance functor - counts the bit differences between two strings - useful for the Brief descriptor, 
       /// bit count of A exclusive XOR'ed with B. 
@@ -48,55 +53,43 @@ namespace Emgu.CV.Features2D
    }
 
    /// <summary>
-   /// Wrapped BruteForceMatcher
+   /// Wrapped BFMatcher
    /// </summary>
-   public class BruteForceMatcher : DescriptorMatcher
+   public class BFMatcher : DescriptorMatcher
    {
-      private DistanceType _distanceType;
-
       /// <summary>
-      /// Create a BruteForceMatcher of the specific distance type, without cross check.
-      /// </summary>
-      /// <param name="distanceType">The distance type</param>
-      public BruteForceMatcher(DistanceType distanceType)
-         : this (distanceType, false)
-      {
-      }
-
-      /// <summary>
-      /// Create a BruteForceMatcher of the specific distance type
+      /// Create a BFMatcher of the specific distance type
       /// </summary>
       /// <param name="distanceType">The distance type</param>
       /// <param name="crossCheck">Specify whether or not cross check is needed. Use false for default.</param>
-      public BruteForceMatcher(DistanceType distanceType, bool crossCheck)
+      public BFMatcher(DistanceType distanceType, bool crossCheck = false)
       {
-         _distanceType = distanceType;
-         _ptr = BruteForceMatcherInvoke.CvBruteForceMatcherCreate(_distanceType, crossCheck);
+         _ptr = CvInvoke.cveBFMatcherCreate(ref _descriptorMatcherPtr, distanceType, crossCheck);
       }
 
       /// <summary>
-      /// Release the unmanaged resource associated with the BruteForceMatcher
+      /// Release the unmanaged resource associated with the BFMatcher
       /// </summary>
       protected override void DisposeObject()
       {
-         BruteForceMatcherInvoke.CvBruteForceMatcherRelease(ref _ptr);
+         CvInvoke.cveBFMatcherRelease(ref _ptr);
       }
    }
+}
 
-   internal static partial class BruteForceMatcherInvoke
+namespace Emgu.CV
+{
+
+   public static partial class CvInvoke
    {
-      static BruteForceMatcherInvoke()
-      {
-         CvInvoke.CheckLibraryLoaded();
-      }
-
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvBruteForceMatcherCreate(
+      internal extern static IntPtr cveBFMatcherCreate(
+         ref IntPtr dmPtr,
          Features2D.DistanceType distanceType,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool crossCheck);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvBruteForceMatcherRelease(ref IntPtr matcher);
+      internal extern static void cveBFMatcherRelease(ref IntPtr matcher);
    }
 }

@@ -5,6 +5,12 @@ cd ..
 cd opencv
 git clean -d -fx "" 
 cd ..
+
+cd ..
+cd opencv_contrib
+git clean -d -fx "" 
+cd ..
+
 cd Emgu.CV.Extern
 
 cd cvblob

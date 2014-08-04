@@ -14,8 +14,10 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Descriptor matcher
    /// </summary>
-   public abstract class DescriptorMatcher : UnmanagedObject
+   public abstract class DescriptorMatcher : UnmanagedObject, IAlgorithm
    {
+      protected IntPtr _descriptorMatcherPtr;
+
       /// <summary>
       /// Find the k-nearest match
       /// </summary>
@@ -27,17 +29,22 @@ namespace Emgu.CV.Features2D
       {
          using (InputArray iaQueryDesccriptor = queryDescriptor.GetInputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-            DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(Ptr, iaQueryDesccriptor, matches, k, iaMask);
+            DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(_descriptorMatcherPtr, iaQueryDesccriptor, matches, k, iaMask);
       }
 
       /// <summary>
       /// Add the model descriptors
       /// </summary>
-      /// <param name="modelDescriptors">The model discriptors</param>
+      /// <param name="modelDescriptors">The model descriptors</param>
       public void Add(IInputArray modelDescriptors)
       {
          using (InputArray iaModelDescriptors = modelDescriptors.GetInputArray())
-            DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_ptr, iaModelDescriptors);
+            DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_descriptorMatcherPtr, iaModelDescriptors);
+      }
+
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get { return DescriptorMatcherInvoke.CvDescriptorMatcherGetAlgorithm(_ptr); }
       }
    }
 
@@ -55,5 +62,8 @@ namespace Emgu.CV.Features2D
       internal extern static void CvDescriptorMatcherKnnMatch(IntPtr matcher, IntPtr queryDescriptors,
                    IntPtr matches, int k,
                    IntPtr mask);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr CvDescriptorMatcherGetAlgorithm(IntPtr matcher);
    }
 }

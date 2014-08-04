@@ -1,3 +1,4 @@
+/*
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
@@ -156,3 +157,4 @@ namespace Emgu.CV.VideoSurveillance
       internal extern static void CvBlobSeqClear(IntPtr blobSeq);
    }
 }
+*/

@@ -6,64 +6,121 @@
 
 #include "flann_c.h"
 
-cv::flann::Index* CvFlannIndexCreateKDTree(cv::_InputArray* features, int trees)
+cv::flann::LinearIndexParams* cveLinearIndexParamsCreate(cv::flann::IndexParams** ip)
 {
-   cv::flann::KDTreeIndexParams param = cv::flann::KDTreeIndexParams(trees);
-   //cv::Mat f = cv::cvarrToMat(features);
-   return new cv::flann::Index(*features, param);
+   cv::flann::LinearIndexParams* p = new cv::flann::LinearIndexParams();
+   *ip = (cv::flann::IndexParams*) p;
+   return p;
+}
+void cveLinearIndexParamsRelease( cv::flann::LinearIndexParams** p)
+{
+   delete *p;
+   *p = 0;
 }
 
-cv::flann::Index* CvFlannIndexCreateLinear(cv::_InputArray* features)
+cv::flann::KDTreeIndexParams* cveKDTreeIndexParamsCreate(cv::flann::IndexParams** ip, int trees)
 {
-   cv::flann::LinearIndexParams param;
-   //cv::Mat f = cv::cvarrToMat(features);
-   return new cv::flann::Index(*features, param);
+   cv::flann::KDTreeIndexParams* p = new cv::flann::KDTreeIndexParams(trees);
+   *ip = (cv::flann::IndexParams*) p;
+   return p;
+}
+void cveKDTreeIndexParamsRelease( cv::flann::KDTreeIndexParams** p)
+{
+   delete *p;
+   *p = 0;
 }
 
-CVAPI(cv::flann::Index*) CvFlannIndexCreateLSH(cv::_InputArray* features, int tableNumber, int keySize, int multiProbeLevel)
+cv::flann::LshIndexParams* cveLshIndexParamsCreate(cv::flann::IndexParams** ip, int tableNumber, int keySize, int multiProbeLevel)
 {
-   cv::flann::LshIndexParams param = cv::flann::LshIndexParams(tableNumber, keySize, multiProbeLevel);
-   //cv::Mat f = cv::cvarrToMat(features);
-   return new cv::flann::Index(*features, param);
+   cv::flann::LshIndexParams* p = new cv::flann::LshIndexParams(tableNumber, keySize, multiProbeLevel);
+   *ip = (cv::flann::IndexParams*) p;
+   return p;
+}
+void cveLshIndexParamsRelease( cv::flann::LshIndexParams** p)
+{
+   delete *p;
+   *p = 0;
 }
 
-cv::flann::Index* CvFlannIndexCreateKMeans(cv::_InputArray* features, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_)
+cv::flann::KMeansIndexParams* cveKMeansIndexParamsCreate(cv::flann::IndexParams** ip, int branching, int iterations, cvflann::flann_centers_init_t centersInit, float cbIndex)
 {
-   cv::flann::KMeansIndexParams param = cv::flann::KMeansIndexParams(branching_, iterations_, centers_init_, cb_index_);
-   //cv::Mat f = cv::cvarrToMat(features);
-   return new cv::flann::Index(*features, param);
+   cv::flann::KMeansIndexParams* p = new cv::flann::KMeansIndexParams(branching, iterations, centersInit, cbIndex);
+   *ip = (cv::flann::IndexParams*) p;
+   return p;
+}
+void cveKMeansIndexParamsRelease( cv::flann::KMeansIndexParams** p)
+{
+   delete *p;
+   *p = 0;
 }
 
-cv::flann::Index* CvFlannIndexCreateComposite(cv::_InputArray* features, int trees, int branching_, int iterations_, cvflann::flann_centers_init_t centers_init_, float cb_index_)
+cv::flann::CompositeIndexParams* cveCompositeIndexParamsCreate(cv::flann::IndexParams** ip, int trees, int branching, int iterations, cvflann::flann_centers_init_t centersInit, float cbIndex)
 {
-   cv::flann::CompositeIndexParams param = cv::flann::CompositeIndexParams(trees, branching_, iterations_, centers_init_, cb_index_);
-   //cv::Mat f = cv::cvarrToMat(features);
-   return new cv::flann::Index(*features, param);
+   cv::flann::CompositeIndexParams* p = new cv::flann::CompositeIndexParams(trees, branching, iterations, centersInit, cbIndex);
+   *ip = (cv::flann::IndexParams*) p;
+   return p;
+}
+void cveCompositeIndexParamsRelease( cv::flann::CompositeIndexParams** p)
+{
+   delete *p;
+   *p = 0;
 }
 
-cv::flann::Index* CvFlannIndexCreateAutotuned(cv::_InputArray* features, float target_precision, float build_weight, float memory_weight, float sample_fraction)
+cv::flann::AutotunedIndexParams* cveAutotunedIndexParamsCreate(cv::flann::IndexParams** ip, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction)
 {
-	cv::flann::AutotunedIndexParams param = cv::flann::AutotunedIndexParams(target_precision, build_weight, memory_weight, sample_fraction);
-	cv::Mat f = cv::cvarrToMat(features);
-	return new cv::flann::Index(f, param);
+   cv::flann::AutotunedIndexParams* p = new cv::flann::AutotunedIndexParams(targetPrecision, buildWeight, memoryWeight, sampleFraction);
+   *ip = (cv::flann::IndexParams*) p;
+   return p;
+}
+void cveAutotunedIndexParamsRelease( cv::flann::AutotunedIndexParams** p)
+{
+   delete *p;
+   *p = 0;
+}
+
+cv::flann::HierarchicalClusteringIndexParams* cveHierarchicalClusteringIndexParamsCreate(cv::flann::IndexParams** ip, int branching, cvflann::flann_centers_init_t centersInit, int trees, int leafSize )
+{
+   cv::flann::HierarchicalClusteringIndexParams* p = new cv::flann::HierarchicalClusteringIndexParams(branching, centersInit, trees, leafSize);
+   *ip = (cv::flann::IndexParams*) p;
+   return p;
+}
+void cveHierarchicalClusteringIndexParamsRelease( cv::flann::HierarchicalClusteringIndexParams** p)
+{
+   delete *p;
+   *p = 0;
+}
+
+cv::flann::SearchParams* cveSearchParamsCreate(cv::flann::IndexParams** ip, int checks, float eps, bool sorted )
+{
+   cv::flann::SearchParams* p = new cv::flann::SearchParams(checks, eps, sorted);
+   *ip = (cv::flann::IndexParams*) p;
+   return p;
+}
+void cveSearchParamsRelease( cv::flann::SearchParams** p)
+{
+   delete *p;
+   *p = 0;
+}
+
+cv::flann::Index* cveFlannIndexCreate(cv::_InputArray* features, cv::flann::IndexParams* p)
+{
+   return new cv::flann::Index(*features, *p);
 }
 
 void CvFlannIndexKnnSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, int knn, int checks)
 {
    cv::flann::SearchParams p = cv::flann::SearchParams(checks);
-   //cv::Mat queriesMat = cv::cvarrToMat(queries); 
-   //cv::Mat indicesMat = cv::cvarrToMat(indices);
-   //cv::Mat distsMat = cv::cvarrToMat(dists);
    index->knnSearch(*queries, *indices, *dists, knn, p);
 }
 
 int CvFlannIndexRadiusSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, float radius, int maxResults, int checks)
 {
    cv::flann::SearchParams p = cv::flann::SearchParams(checks);
-   //cv::Mat queriesMat = cv::cvarrToMat(queries); 
-   //cv::Mat indicesMat = cv::cvarrToMat(indices);
-   //cv::Mat distsMat = cv::cvarrToMat(dists);
    return index->radiusSearch(*queries, *indices, *dists, radius, maxResults, p);
 }
 
-void CvFlannIndexRelease(cv::flann::Index* index) { delete index; }
+void CvFlannIndexRelease(cv::flann::Index** index) 
+{ 
+   delete *index; 
+   *index = 0;
+}
