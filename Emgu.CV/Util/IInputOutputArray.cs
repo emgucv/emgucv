@@ -15,7 +15,7 @@ namespace Emgu.CV
    /// <summary>
    /// This type is very similar to InputArray except that it is used for input/output function parameters.
    /// </summary>
-   public interface IInputOutputArray : IInputArray, IOutputArray
+   public interface IInputOutputArray : IInputArray, IOutputArray, IInputArrayOfArrays
    {
       /// <summary>
       /// The unmanaged pointer to the input/output array

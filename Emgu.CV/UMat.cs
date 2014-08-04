@@ -20,7 +20,7 @@ using MonoTouch.CoreGraphics;
 namespace Emgu.CV
 {
    /// <summary>
-   /// The equavailent of cv::Mat, should only be used if you know what you are doing.
+   /// The equivalent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
    public class UMat : MatDataAllocator, IImage

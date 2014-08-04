@@ -53,7 +53,6 @@ CVAPI(void) CvHOGDescriptorCompute(
     CvSize* padding,
     std::vector< cv::Point >* locations);
 
-
 /*
 CVAPI(void) cvHOGDescriptorDetect(
    cv::HOGDescriptor* descriptor, 
@@ -85,20 +84,5 @@ CVAPI(void) CvCascadeClassifierDetectMultiScale(
    CvSize* maxSize); 
 CVAPI(bool) CvCascadeClassifierIsOldFormatCascade(cv::CascadeClassifier* classifier);
 CVAPI(void) CvCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier, CvSize* size);
-
-//ERFilter
-CVAPI(cv::ERFilter*) CvERFilterNM1Create(
-   cv::String* classifier,
-   int thresholdDelta,
-   float minArea,
-   float maxArea,
-   float minProbability,
-   bool nonMaxSuppression,
-   float minProbabilityDiff);
-CVAPI(cv::ERFilter*) CvERFilterNM2Create(cv::String* classifier, float minProbability);
-CVAPI(void) CvERFilterRelease(cv::ERFilter** filter);
-CVAPI(void) CvERFilterRun(cv::ERFilter* filter, cv::_InputArray* image, std::vector<cv::ERStat>* regions);
-
-CVAPI(void) CvERGrouping(cv::_InputArray* channels, std::vector<cv::ERStat>** regions, int count, cv::String* fileName, float minProbability, std::vector<cv::Rect>* groups);
 
 #endif

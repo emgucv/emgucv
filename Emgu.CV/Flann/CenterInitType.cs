@@ -16,14 +16,14 @@ namespace Emgu.CV.Flann
       /// <summary>
       /// Random
       /// </summary>
-      RANDOM = 0,
+      Random = 0,
       /// <summary>
       /// 
       /// </summary>
-      GONZALES = 1,
+      Gonzales = 1,
       /// <summary>
       /// 
       /// </summary>
-      KMEANSPP = 2
+      Kmeanspp = 2
    }
 }

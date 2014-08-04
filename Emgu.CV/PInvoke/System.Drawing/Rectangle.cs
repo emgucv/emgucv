@@ -137,6 +137,12 @@ namespace System.Drawing
          Height = intersect.Height;
       }
 
+      public bool Contains(Point point)
+      {
+         return point.X >= X && point.Y >= Y && point.X < (X + Width) &&
+                point.Y < (Y + Height);
+      }
+
       public bool Contains(Rectangle other)
       {
          return other.Equals(GetIntersection(other));

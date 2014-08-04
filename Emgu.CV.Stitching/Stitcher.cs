@@ -42,6 +42,11 @@ namespace Emgu.CV.Stitching
          return StitchingInvoke.CvStitcherStitch(_ptr, iaImages, oaPano);
       }
 
+      public void SetFeaturesFinder(FeaturesFinder finder)
+      {
+         StitchingInvoke.CvStitcherSetFeaturesFinder(_ptr, finder.Ptr);
+      }
+
       /// <summary>
       /// Release memory associated with this stitcher
       /// </summary>
@@ -70,6 +75,9 @@ namespace Emgu.CV.Stitching
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal static extern bool CvStitcherStitch(IntPtr stitcherWrapper, IntPtr images, IntPtr pano);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void CvStitcherSetFeaturesFinder(IntPtr stitcherWrapper, IntPtr finder);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvStitcherRelease(ref IntPtr stitcherWrapper);

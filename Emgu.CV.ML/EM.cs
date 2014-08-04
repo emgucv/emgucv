@@ -14,7 +14,7 @@ namespace Emgu.CV.ML
    /// <summary>
    /// Expectation Maximization model
    /// </summary>
-   public class EM : UnmanagedObject
+   public class EM : UnmanagedObject, IAlgorithm
    {
       /// <summary>
       /// Create an Expectation Maximization model
@@ -97,6 +97,11 @@ namespace Emgu.CV.ML
       protected override void DisposeObject()
       {
          MlInvoke.CvEMRelease(ref _ptr);
+      }
+
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get { return _ptr; }
       }
    }
 }

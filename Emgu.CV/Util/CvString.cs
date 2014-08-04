@@ -17,6 +17,14 @@ namespace Emgu.CV
    /// </summary>
    public class CvString : UnmanagedObject
    {
+      private bool _needDispose;
+
+      internal CvString(IntPtr ptr, bool needDispose)
+      {
+         _ptr = ptr;
+         _needDispose = needDispose;
+      }
+
       /// <summary>
       /// Create a CvString from System.String
       /// </summary>
@@ -27,6 +35,7 @@ namespace Emgu.CV
          GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
          _ptr = CvInvoke.cveStringCreateFromStr(handle.AddrOfPinnedObject());
          handle.Free();
+         _needDispose = true;
       }
 
       /// <summary>
@@ -35,6 +44,7 @@ namespace Emgu.CV
       public CvString()
       {
          _ptr = CvInvoke.cveStringCreate();
+         _needDispose = true;
       }
 
       /// <summary>
@@ -60,7 +70,8 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.cveStringRelease(ref _ptr);
+         if (_needDispose && _ptr != IntPtr.Zero)
+            CvInvoke.cveStringRelease(ref _ptr);
       }
    }
 

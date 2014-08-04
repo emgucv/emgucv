@@ -1326,6 +1326,7 @@ namespace Emgu.CV
             return res;
         }
 
+      /*
         /// <summary>
         /// Get the star keypoints from this image
         /// </summary>
@@ -1341,7 +1342,6 @@ namespace Emgu.CV
             }
         }
 
-      /*
         /// <summary>
         /// Finds corners with big eigenvalues in the image.
         /// </summary>
@@ -1460,6 +1460,7 @@ namespace Emgu.CV
       }
       #endregion
 
+      /*
       #region Object Tracking
       /// <summary>
       /// Updates snake in order to minimize its total energy that is a sum of internal energy that depends on contour shape (the smoother contour is, the smaller internal energy is) and external energy that depends on the energy field and reaches minimum at the local energy extremums that correspond to the image edges in case of image gradient.
@@ -1474,7 +1475,6 @@ namespace Emgu.CV
       public void Snake(Point[] contour, float alpha, float beta, float gamma, Size windowSize, MCvTermCriteria tc)
       {
          int count = contour.Length;
-
          Point[] points = new Point[count];
          GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
          CvInvoke.cvSnakeImage(
@@ -1516,6 +1516,7 @@ namespace Emgu.CV
              calculateGradiant ? 1 : 0);
       }
       #endregion
+      */
 
       #region Logic
       #region And Methods

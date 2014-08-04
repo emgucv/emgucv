@@ -15,7 +15,13 @@ using System.Xml.Linq;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
+#if NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+#else
 using NUnit.Framework;
+#endif
 
 namespace Emgu.CV.Test
 {
@@ -194,6 +200,7 @@ namespace Emgu.CV.Test
          }
       }
 
+#if !NETFX_CORE
       [Test]
       public void TestRuntimeSerialize1()
       {
@@ -272,6 +279,7 @@ namespace Emgu.CV.Test
          }
          handle.Free();
       }
+#endif
 
       [Test]
       public void TestStressTestMatrixGC()

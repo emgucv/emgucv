@@ -983,7 +983,7 @@ namespace Emgu.CV.Test
          BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
          param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BlobDetectorType.CC);
          param.FGDetector = new FGDetector<Bgr>(Emgu.CV.CvEnum.ForgroundDetectorType.Fgd, fgparam);
-         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFG);
+         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BlobTrackerType.MSFG);
          param.FGTrainFrames = 10;
          BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 

@@ -34,40 +34,13 @@ namespace Emgu.CV.Features2D
       }
       #endregion
 
-      private int _maxSize;
-      private int _responseThreshold;
-      private int _lineThresholdProjected;
-      private int _lineThresholdBinarized;
-      private int _suppressNonmaxSize;
-
-      /// <summary>
-      /// Maximum size of the features. The following
-      /// values of the parameter are supported:
-      /// 4, 6, 8, 11, 12, 16, 22, 23, 32, 45, 46, 64, 90, 128
-      /// </summary>
-      public int MaxSize { get { return _maxSize; } }
-      /// <summary>
-      /// Threshold for the approximated laplacian,
-      /// used to eliminate weak features. The larger it is,
-      /// the less features will be retrieved
-      /// </summary>
-      public int ResponseThreshold { get { return _responseThreshold; } }
-      /// <summary>
-      /// Another threshold for the laplacian to
-      /// eliminate edges.
-      /// The larger the threshold, the more points you get.
-      /// </summary>
-      public int LineThresholdProjected { get { return _lineThresholdProjected; } }
-      /// <summary>
-      /// Another threshold for the feature
-      /// size to eliminate edges. 
-      /// The larger the threshold, the more points you get.
-      /// </summary>
-      public int LineThresholdBinarized { get { return _lineThresholdBinarized; } }
-      /// <summary>
-      /// 
-      /// </summary>
-      public int SuppressNonmaxSize { get { return _suppressNonmaxSize; } }
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get
+         {
+            return CvInvoke.cveAlgorithmFromFeatureDetector(((IFeatureDetector)this).FeatureDetectorPtr);
+         }
+      }
 
       /// <summary>
       /// Create a star detector with the specific parameters
@@ -93,11 +66,6 @@ namespace Emgu.CV.Features2D
       /// </param>
       public StarDetector(int maxSize = 45, int responseThreshold = 30, int lineThresholdProjected = 10, int lineThresholdBinarized = 8, int suppressNonmaxSize = 5)
       {
-         _maxSize = maxSize;
-         _responseThreshold = responseThreshold;
-         _lineThresholdProjected = lineThresholdBinarized;
-         _lineThresholdBinarized = lineThresholdBinarized;
-         _suppressNonmaxSize = suppressNonmaxSize;
          _ptr = CvStarDetectorCreate(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
       }
 
@@ -115,5 +83,6 @@ namespace Emgu.CV.Features2D
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvStarDetectorRelease(ref IntPtr detector);
+
    }
 }

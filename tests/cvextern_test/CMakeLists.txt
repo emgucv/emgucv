@@ -14,8 +14,7 @@ INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ml/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/calib3d/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/objdetect/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/features2d/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/legacy/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/contrib/include")
+
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
@@ -74,7 +73,7 @@ set_target_properties(${the_target} PROPERTIES
 	)
 
 ADD_DEPENDENCIES(${the_target} 
-  cvextern opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
+  cvextern opencv_core opencv_calib3d opencv_features2d opencv_highgui opencv_imgproc opencv_ml opencv_objdetect 
 #  ${ZLIB_LIBRARY} 
 #  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY}
 )
@@ -88,7 +87,7 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  cvextern opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect 
+  cvextern opencv_core opencv_calib3d opencv_features2d opencv_highgui opencv_imgproc opencv_ml opencv_objdetect 
 #  ${ZLIB_LIBRARY} 
 #  ${TIFF_LIBRARY} 
 #  ${GEOTIFF_LIBRARY}

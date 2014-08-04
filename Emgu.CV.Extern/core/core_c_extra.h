@@ -106,7 +106,7 @@ CVAPI(void) cveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_Input
 
 CVAPI(void) cveMahalanobis(cv::_InputArray* v1, cv::_InputArray* v2, cv::_InputArray* icovar);
 CVAPI(void) cveCalcCovarMatrix(cv::_InputArray* samples, cv::_OutputArray* covar, cv::_InputOutputArray* mean, int flags, int ctype);
-CVAPI(void) cveNormalize(cv::_InputArray* src, cv::_OutputArray* dst, double alpha, double beta, int normType, int dType, cv::_InputArray* mask);
+CVAPI(void) cveNormalize(cv::_InputArray* src, cv::_InputOutputArray* dst, double alpha, double beta, int normType, int dType, cv::_InputArray* mask);
 
 CVAPI(void) cvePerspectiveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m);
 
@@ -147,4 +147,18 @@ CVAPI(void) cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes
 CVAPI(double) cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2);
 
 CVAPI(bool) cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputArray* eigenVectors);
+
+//Algorithm 
+CVAPI(int) cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name);
+CVAPI(void) cveAlgorithmSetInt(cv::Algorithm* algorithm, cv::String* name, int value);
+
+CVAPI(double) cveAlgorithmGetDouble(cv::Algorithm* algorithm, cv::String* name);
+CVAPI(void) cveAlgorithmSetDouble(cv::Algorithm* algorithm, cv::String* name, double value);
+
+CVAPI(void) cveAlgorithmGetString(cv::Algorithm* algorithm, cv::String* name, cv::String* result);
+CVAPI(void) cveAlgorithmSetString(cv::Algorithm* algorithm, cv::String* name, cv::String* value);
+
+CVAPI(void) cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* names, std::vector< int >* types, std::vector<cv::String>* help);
+
+CVAPI(void) cveAlgorithmGetList(std::vector< cv::String >* names);
 #endif

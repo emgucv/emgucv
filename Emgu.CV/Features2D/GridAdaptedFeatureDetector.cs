@@ -75,6 +75,14 @@ namespace Emgu.CV.Features2D
       }
       #endregion
 
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get
+         {
+            return CvInvoke.cveAlgorithmFromFeatureDetector(((IFeatureDetector)this).FeatureDetectorPtr);
+         }
+      }
+
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr GridAdaptedFeatureDetectorCreate(
          IntPtr detector,

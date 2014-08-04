@@ -19,31 +19,29 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// Create a MSER detector using the specific parameters
       /// </summary>
-      /// <param name="delta">Use 5 as defalut. In the code, it compares (size_{i}-size_{i-delta})/size_{i-delta}</param>
-      /// <param name="maxArea">Use 60 as default. Prune the area which bigger than max_area</param>
-      /// <param name="minArea">Use 14400 as default. Prune the area which smaller than min_area</param>
-      /// <param name="maxVariation">Use .25f as default. Prune the area have simliar size to its children</param>
-      /// <param name="minDiversity">Use .2f as default. Trace back to cut off mser with diversity &lt; min_diversity</param>
-      /// <param name="maxEvolution">Use 200 as default. For color image, the evolution steps</param>
-      /// <param name="areaThreshold">Use 1.01 as default. The area threshold to cause re-initialize</param>
-      /// <param name="minMargin">Use 0.003 as default. Ignore too small margin</param>
-      /// <param name="edgeBlurSize">Use 5 as default. The aperture size for edge blur</param>
+      /// <param name="delta">In the code, it compares (size_{i}-size_{i-delta})/size_{i-delta}</param>
+      /// <param name="maxArea">Prune the area which bigger than max_area</param>
+      /// <param name="minArea">Prune the area which smaller than min_area</param>
+      /// <param name="maxVariation">Prune the area have similar size to its children</param>
+      /// <param name="minDiversity">Trace back to cut off mser with diversity &lt; min_diversity</param>
+      /// <param name="maxEvolution">For color image, the evolution steps</param>
+      /// <param name="areaThreshold">The area threshold to cause re-initialize</param>
+      /// <param name="minMargin">Ignore too small margin</param>
+      /// <param name="edgeBlurSize">The aperture size for edge blur</param>
       public MSERDetector(
-         int delta, int maxArea, int minArea, float maxVariation, float minDiversity,
-         int maxEvolution, double areaThreshold, double minMargin, int edgeBlurSize)
+         int delta = 5, int minArea = 60, int maxArea = 14400, double maxVariation = 0.25, double minDiversity = 0.2,
+         int maxEvolution = 200, double areaThreshold = 1.01, double minMargin = 0.003, int edgeBlurSize = 5)
       {
-         _delta = delta;
-         _maxArea = maxArea;
-         _minArea = minArea;
-         _maxVariation = maxVariation;
-         _minDiversity = minDiversity;
-         _maxEvolution = maxEvolution;
-         _areaThreshold = areaThreshold;
-         _minMargin = minMargin;
-         _edgeBlurSize = edgeBlurSize;
-
-         MCvMSERParams p = GetMSERParameters();
-         _ptr = CvInvoke.CvMserGetFeatureDetector(ref p);
+         _ptr = CvInvoke.CvMserGetFeatureDetector(
+            delta,
+            minArea,
+            maxArea,
+            maxVariation,
+            minDiversity,
+            maxEvolution,
+            areaThreshold,
+            minMargin,
+            edgeBlurSize);
       }
 
       /// <summary>
@@ -53,77 +51,6 @@ namespace Emgu.CV.Features2D
          : this(5, 14400, 60, .25f, .2f, 200, 1.01, 0.003, 5)
       {
       }
-
-      private int _delta;
-      private int _maxArea;
-      private int _minArea;
-      private float _maxVariation;
-      private float _minDiversity;
-      private int _maxEvolution;
-      private double _areaThreshold;
-      private double _minMargin;
-      private int _edgeBlurSize;
-
-      /// <summary>
-      /// Delta, in the code, it compares (size_{i}-size_{i-delta})/size_{i-delta}
-      /// </summary>
-      public int Delta { get { return _delta; } }
-
-      /// <summary>
-      /// Prune the area which bigger than max_area
-      /// </summary>
-      public int MaxArea { get { return _maxArea; } }
-      /// <summary>
-      /// Prune the area which smaller than min_area
-      /// </summary>
-      public int MinArea { get { return _minArea; } }
-
-      /// <summary>
-      /// Prune the area have simliar size to its children
-      /// </summary>
-      public float MaxVariation { get { return _maxVariation; } }
-
-      /// <summary>
-      /// Trace back to cut off mser with diversity &lt; min_diversity
-      /// </summary>
-      public float MinDiversity { get { return _minDiversity; } }
-
-      /// <summary>
-      /// For color image, the evolution steps
-      /// </summary>
-      public int MaxEvolution { get { return _maxEvolution; } }
-
-      /// <summary>
-      /// The area threshold to cause re-initialize
-      /// </summary>
-      public double AreaThreshold { get { return _areaThreshold; } }
-
-      /// <summary>
-      /// Ignore too small margin
-      /// </summary>
-      public double MinMargin { get { return _minMargin; } }
-
-      /// <summary>
-      /// The aperture size for edge blur
-      /// </summary>
-      public int EdgeBlurSize { get { return _edgeBlurSize; } }
-
-      /*
-      /// <summary>
-      /// Extracts the contours of Maximally Stable Extremal Regions
-      /// </summary>
-      /// <param name="image">The image where mser will be extracted from</param>
-      /// <param name="mask">Can be null if not needed. Optional parameter for the region of interest</param>
-      /// <param name="storage">The storage where the contour will be saved</param>
-      /// <returns>The MSER regions</returns>
-      public Seq<Point>[] ExtractContours(IImage image, Image<Gray, Byte> mask, MemStorage storage)
-      {
-         MCvMSERParams p = GetMSERParameters();
-         IntPtr mserPtr = new IntPtr();
-         CvInvoke.cvExtractMSER(image.Ptr, mask, ref mserPtr, storage, p);
-         IntPtr[] mserSeq = new Seq<IntPtr>(mserPtr, storage).ToArray();
-         return Array.ConvertAll<IntPtr, Seq<Point>>(mserSeq, delegate(IntPtr ptr) { return new Seq<Point>(ptr, storage); });
-      }*/
 
       #region IFeatureDetector Members
       /// <summary>
@@ -139,23 +66,12 @@ namespace Emgu.CV.Features2D
       }
       #endregion
 
-      /// <summary>
-      /// Get the MSER parameters
-      /// </summary>
-      /// <returns>The MSER parameters</returns>
-      public MCvMSERParams GetMSERParameters()
+      IntPtr IAlgorithm.AlgorithmPtr
       {
-         MCvMSERParams p = new MCvMSERParams();
-         p.Delta = Delta;
-         p.MaxArea = MaxArea;
-         p.MinArea = MinArea;
-         p.MaxVariation = MaxVariation;
-         p.MinDiversity = MinDiversity;
-         p.MaxEvolution = MaxEvolution;
-         p.AreaThreshold = AreaThreshold;
-         p.MinMargin = MinMargin;
-         p.EdgeBlurSize = EdgeBlurSize;
-         return p;
+         get
+         {
+            return CvInvoke.cveAlgorithmFromFeatureDetector(((IFeatureDetector)this).FeatureDetectorPtr);
+         }
       }
 
       /// <summary>
@@ -173,7 +89,16 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvMserGetFeatureDetector(ref MCvMSERParams detector);
+      internal extern static IntPtr CvMserGetFeatureDetector(
+         int delta,
+         int minArea,
+         int maxArea,
+         double maxVariation,
+         double minDiversity,
+         int maxEvolution,
+         double areaThreshold,
+         double minMargin,
+         int edgeBlurSize);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvMserFeatureDetectorRelease(ref IntPtr detector);

@@ -48,8 +48,6 @@
     <Compile Include="Boost.cs" />
     <Compile Include="DTree.cs" />
     <Compile Include="EM.cs" />
-    <Compile Include="EMLegacy.cs" />
-    <Compile Include="EMParams.cs" />
     <Compile Include="ERTrees.cs" />
     <Compile Include="GBTrees.cs" />
     <Compile Include="KNearest.cs" />

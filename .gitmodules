@@ -8,3 +8,6 @@
 	path = opencv
 	url = git://git.code.sf.net/p/emgucv/opencv
 	ignore = dirty
+[submodule "opencv_contrib"]
+	path = opencv_contrib
+	url = git://git.code.sf.net/p/emgucv/opencv_contrib

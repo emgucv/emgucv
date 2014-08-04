@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -57,6 +58,14 @@ namespace Emgu.CV.Features2D
       IntPtr IDescriptorExtractor.DescriptorExtratorPtr
       {
          get { return _descriptorExtractorPtr; }
+      }
+
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get
+         {
+            return CvInvoke.cveAlgorithmFromDescriptorExtractor(((IDescriptorExtractor)this).DescriptorExtratorPtr);
+         }
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

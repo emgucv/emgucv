@@ -4,7 +4,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-
+using System.Linq;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
@@ -27,6 +27,26 @@ namespace Emgu.CV.Test
 {
    public static class EmguAssert
    {
+      #if NETFX_CORE
+      public async static Task<string[]> ReadAllLinesAsync(String fileName)
+      {
+         StorageFile sf = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///" + fileName));
+         var lines = await FileIO.ReadLinesAsync(sf);
+         return lines.ToArray();
+      }
+      #endif
+
+      public static string[] ReadAllLines(String fileName)
+      {
+         string f = GetFile(fileName);
+#if NETFX_CORE
+         var t = ReadAllLinesAsync(f);
+         return t.Result;
+#else
+         return System.IO.File.ReadAllLines(f);
+#endif
+      }
+
 #if ANDROID
       public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
          where TColor : struct, IColor

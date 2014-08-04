@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -100,32 +100,32 @@
       <Link>left01.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\c\airplane.jpg">
+    <Content Include="..\..\opencv\samples\cpp\airplane.jpg">
       <Link>airplane.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\c\box.png">
+    <Content Include="..\..\opencv\samples\cpp\box.png">
       <Link>box.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\c\box_in_scene.png">
+    <Content Include="..\..\opencv\samples\cpp\box_in_scene.png">
       <Link>box_in_scene.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\c\lena.jpg">
+    <Content Include="..\..\opencv\samples\cpp\lena.jpg">
       <Link>lena.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\c\scene_l.bmp">
+    <Content Include="..\..\opencv\samples\cpp\scene_l.bmp">
       <Link>scene_l.bmp</Link>
     </Content>
-    <Content Include="..\..\opencv\samples\c\scene_r.bmp">
+    <Content Include="..\..\opencv\samples\cpp\scene_r.bmp">
       <Link>scene_r.bmp</Link>
     </Content>
-    <Content Include="..\..\opencv\samples\c\stuff.jpg">
+    <Content Include="..\..\opencv\samples\cpp\stuff.jpg">
       <Link>stuff.jpg</Link>
     </Content>
-    <Content Include="..\..\opencv\samples\c\tree.avi">
+    <Content Include="..\..\opencv\samples\cpp\tree.avi">
       <Link>tree.avi</Link>
     </Content>
     <Content Include="..\pedestrian.png">
@@ -141,7 +141,7 @@
     <Content Include="..\..\opencv\samples\cpp\letter-recognition.data">
       <Link>letter-recognition.data</Link>
     </Content>
-    <Content Include="..\..\opencv\samples\c\agaricus-lepiota.data">
+    <Content Include="..\..\opencv\samples\cpp\agaricus-lepiota.data">
       <Link>agaricus-lepiota.data</Link>
     </Content>
     <Content Include="..\stitch1.jpg">
@@ -257,7 +257,7 @@
       <Link>EmguAssert.cs</Link>
     </Compile>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.iOS.csproj">
       <Project>{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}</Project>

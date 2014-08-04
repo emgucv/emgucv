@@ -44,6 +44,14 @@ namespace Emgu.CV.Features2D
          get { return _descriptorExtractorPtr; }
       }
 
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get
+         {
+            return CvInvoke.cveAlgorithmFromFeatureDetector(((IFeatureDetector)this).FeatureDetectorPtr);
+         }
+      }
+
       /// <summary>
       /// Detect keypoints in an image and compute the descriptors on the image from the keypoint locations.
       /// </summary>

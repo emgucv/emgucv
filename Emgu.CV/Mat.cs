@@ -744,12 +744,22 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Computes a dot-product of two vectors.
+      /// </summary>
+      /// <param name="m">Another dot-product operand</param>
+      /// <returns>The dot-product of two vectors.</returns>
       public double Dot(IInputArray m)
       {
          using (InputArray iaM = m.GetInputArray())
             return MatInvoke.cvMatDot(Ptr, iaM);
       }
 
+      /// <summary>
+      /// Computes a cross-product of two 3-element vectors.
+      /// </summary>
+      /// <param name="m">Another cross-product operand.</param>
+      /// <returns>Cross-product of two 3-element vectors.</returns>
       public Mat Cross(IInputArray m)
       {
          Mat result = new Mat();

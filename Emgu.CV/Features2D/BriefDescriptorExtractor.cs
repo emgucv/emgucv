@@ -47,6 +47,15 @@ namespace Emgu.CV.Features2D
          get { return _ptr; }
       }
 
+
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get
+         {
+            return CvInvoke.cveAlgorithmFromDescriptorExtractor(((IDescriptorExtractor) this).DescriptorExtratorPtr);
+         }
+      }
+
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvBriefDescriptorExtractorCreate(int descriptorSize);
 

@@ -51,6 +51,14 @@ namespace Emgu.CV.Features2D
       }
       #endregion
 
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get
+         {
+            return CvInvoke.cveAlgorithmFromFeatureDetector(((IFeatureDetector)this).FeatureDetectorPtr);
+         }
+      }
+
       /// <summary>
       /// Release the unmanaged memory associated with this detector.
       /// </summary>

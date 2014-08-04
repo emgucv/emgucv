@@ -422,7 +422,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="mv">Input vector of matrices to be merged; all the matrices in mv must have the same size and the same depth.</param>
       /// <param name="dst">output array of the same size and the same depth as mv[0]; The number of channels will be the total number of channels in the matrix array.</param>
-      public static void Merge(IInputArray mv, IOutputArray dst)
+      public static void Merge(IInputArrayOfArrays mv, IOutputArray dst)
       {
          using (InputArray iaMv = mv.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
@@ -438,7 +438,7 @@ namespace Emgu.CV
       /// <param name="dst">The array of output arrays</param>
       /// <param name="fromTo">The array of pairs of indices of the planes copied. from_to[k*2] is the 0-based index of the input plane, and from_to[k*2+1] is the index of the output plane, where the continuous numbering of the planes over all the input and over all the output arrays is used. When from_to[k*2] is negative, the corresponding output plane is filled with 0's.</param>
       public static void MixChannels(
-         IInputArray src,
+         IInputArrayOfArrays src,
          IInputOutputArray dst,
          int[] fromTo)
       {
@@ -1175,10 +1175,10 @@ namespace Emgu.CV
       /// <param name="normType">Type of norm</param>
       /// <param name="mask">The optional operation mask</param>
       /// <returns>The calculated norm</returns>
-      public static double Norm(IInputArray arr1, IInputArray arr2, CvEnum.NormType normType = CvEnum.NormType.L2, IInputArray mask = null)
+      public static double Norm(IInputArray arr1, IInputOutputArray arr2, CvEnum.NormType normType = CvEnum.NormType.L2, IInputArray mask = null)
       {
          using (InputArray iaArr1 = arr1.GetInputArray())
-         using (InputArray iaArr2 = arr2 == null ? InputArray.GetEmpty() : arr2.GetInputArray())
+         using (InputOutputArray iaArr2 = arr2 == null ? InputOutputArray.GetEmpty() : arr2.GetInputOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             return cveNorm(iaArr1, iaArr2, normType, iaMask);
       }

@@ -25,7 +25,7 @@ using Emgu.CV.Tiff;
 using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.CV.Nonfree;
-using Emgu.CV.Softcascade;
+//using Emgu.CV.Softcascade;
 using Emgu.Util;
 using NUnit.Framework;
 
@@ -295,6 +295,7 @@ namespace Emgu.CV.Test
          PointF[] points = CameraCalibration.ProjectPoints(new MCvPoint3D32f[] { point }, extrin, intrin);
       }
 
+      /*
       [Test]
       public void TestBlobDetector()
       {
@@ -338,7 +339,7 @@ namespace Emgu.CV.Test
          BlobTrackerAutoParam<Bgr> param = new BlobTrackerAutoParam<Bgr>();
          param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BlobDetectorType.CC);
          //param.FGDetector = new FGDetector<Gray>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
-         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
+         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BlobTrackerType.MSFGS);
          param.FGTrainFrames = 5;
          BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 
@@ -376,7 +377,7 @@ namespace Emgu.CV.Test
          BlobTrackerAutoParam<Gray> param = new BlobTrackerAutoParam<Gray>();
          param.BlobDetector = new BlobDetector(Emgu.CV.CvEnum.BlobDetectorType.CC);
          //param.FGDetector = new FGDetector<Gray>(Emgu.CV.CvEnum.FORGROUND_DETECTOR_TYPE.FGD);
-         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS);
+         param.BlobTracker = new BlobTracker(Emgu.CV.CvEnum.BlobTrackerType.MSFGS);
          param.FGTrainFrames = 5;
          BlobTrackerAuto<Gray> tracker = new BlobTrackerAuto<Gray>(param);
 
@@ -453,7 +454,6 @@ namespace Emgu.CV.Test
          #endregion
       }
 
-      /*
       [Test]
       public void StressMemoryTestHaar()
       {
@@ -483,7 +483,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestIntrisicParameters()
       {
-         #if !IOS
+         #if !(IOS || ANDROID)
          System.Diagnostics.PerformanceCounter memCounter = new PerformanceCounter("Memory", "Available MBytes");
          Trace.WriteLine(String.Format("Available mem before: {0} Mb", memCounter.NextValue()));
          #endif
@@ -492,7 +492,7 @@ namespace Emgu.CV.Test
          {
             paramArr[i] = new IntrinsicCameraParameters(8);
          }
-         #if !IOS
+         #if !(IOS || ANDROID)
          Trace.WriteLine(String.Format("Available mem after: {0} Mb", memCounter.NextValue()));
          #endif
       }
@@ -633,7 +633,6 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(max[1] < eps);
          EmguAssert.IsTrue(max[2] < eps);
 
-
          stopwatch.Reset();
          stopwatch.Start();
          using (Bitmap bmp = new Bitmap("tmp.png"))
@@ -652,6 +651,12 @@ namespace Emgu.CV.Test
 #endif
 
       [Test]
+      public void TestAlgorithmGetList()
+      {
+         String[] list = AlgorithmExtensions.AlgorithmList;
+      }
+
+      [Test]
       public void TestMorphEx()
       {
          Mat kernel1 = CvInvoke.GetStructuringElement(Emgu.CV.CvEnum.ElementShape.Cross, new Size(3, 3), new Point(1, 1));
@@ -664,6 +669,7 @@ namespace Emgu.CV.Test
          //Image<Bgr, Byte> tmp3 = tmp.MorphologyEx(element2, Emgu.CV.CvEnum.CV_MORPH_OP.CV_MOP_BLACKHAT, 1);
       }
 
+      /*
       [Test]
       public void TestBGModel()
       {
@@ -692,8 +698,9 @@ namespace Emgu.CV.Test
 
          //ImageViewer.Show(model2.Foreground);
          //ImageViewer.Show(model1.Background);
-      }
+      }*/
 
+      /*
       public void TestPlanarSubdivisionHelper(int pointCount)
       {
          #region generate random points
@@ -705,10 +712,10 @@ namespace Emgu.CV.Test
          }
          #endregion
 
-         PlanarSubdivision division;
+         Subdiv2D division;
 
          Stopwatch watch = Stopwatch.StartNew();
-         division = new PlanarSubdivision(points, true);
+         division = new Subdiv2D(points, true);
          Triangle2DF[] triangles = division.GetDelaunayTriangles(false);
          watch.Stop();
          EmguAssert.WriteLine(String.Format("delaunay triangulation: {2} points, {0} milli-seconds, {1} triangles", watch.ElapsedMilliseconds, triangles.Length, points));
@@ -717,7 +724,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(CvInvoke.icvSubdiv2DCheck(division));
 
          watch.Start();
-         division = new PlanarSubdivision(points);
+         division = new Subdiv2D(points);
          VoronoiFacet[] facets = division.GetVoronoiFacets();
          watch.Stop();
          EmguAssert.WriteLine(String.Format("Voronoi facets: {2} points, {0} milli-seconds, {1} facets", watch.ElapsedMilliseconds, facets.Length, points));
@@ -744,7 +751,7 @@ namespace Emgu.CV.Test
          TestPlanarSubdivisionHelper(13);
          TestPlanarSubdivisionHelper(41);
          TestPlanarSubdivisionHelper(69);
-      }
+      }*/
 
       [Test]
       public void TestPlanarSubdivision2()
@@ -785,12 +792,12 @@ namespace Emgu.CV.Test
          pts[31] = new PointF(412, 68);
          pts[32] = new PointF(348, 32);
 
-         PlanarSubdivision subdiv = new PlanarSubdivision(pts);
+         Subdiv2D subdiv = new Subdiv2D(pts);
          for (int i = 0; i < pts.Length; i++)
          {
-            MCvSubdiv2DEdge? edge;
-            MCvSubdiv2DPoint? point;
-            CvEnum.Subdiv2DPointLocationType location = subdiv.Locate(ref pts[i], out edge, out point);
+            int edge;
+            int point;
+            CvEnum.Subdiv2DPointLocationType location = subdiv.Locate(pts[i], out edge, out point);
             if (location == Emgu.CV.CvEnum.Subdiv2DPointLocationType.OnEdge)
             {
                //you might want to store the points which is not inserted here.
@@ -847,7 +854,7 @@ namespace Emgu.CV.Test
             writer.WriteLine("};");
             writer.Close();
             */
-            Emgu.CV.PlanarSubdivision psd = new Emgu.CV.PlanarSubdivision(points);
+            Emgu.CV.Subdiv2D psd = new Emgu.CV.Subdiv2D(points);
 
             // hangs here:
             Emgu.CV.Structure.Triangle2DF[] triangles = psd.GetDelaunayTriangles();
@@ -958,6 +965,7 @@ namespace Emgu.CV.Test
          CvInvoke.CalcOpticalFlowFarneback(prevImg, currImg, flowx, flowy, 0.5, 3, 5, 20, 7, 1.5, Emgu.CV.CvEnum.OpticalflowFarnebackFlag.Default);
       }
 
+      /*
       [Test]
       public void TestOpticalFlowBM()
       {
@@ -982,7 +990,7 @@ namespace Emgu.CV.Test
             "Time: {0} milliseconds",
             watch.ElapsedMilliseconds));
 
-      }
+      }*/
 
       [Test]
       public void TestOpticalFlowLK()
@@ -1027,6 +1035,7 @@ namespace Emgu.CV.Test
             watch.ElapsedMilliseconds));
       }
 
+      /*
       [Test]
       public void TestKDTree()
       {
@@ -1061,7 +1070,7 @@ namespace Emgu.CV.Test
          tree.FindFeatures(features2, out result, out distance, 1, 20);
          EmguAssert.IsTrue(result[0, 0] == 5);
          EmguAssert.IsTrue(distance[0, 0] == 0.0);
-      }
+      }*/
 
       [Test]
       public void TestFlannLinear()
@@ -1110,7 +1119,7 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
 
-         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), 4, 32, 11, Emgu.CV.Flann.CenterInitType.RANDOM, 0.2f);
+         Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), 4, 32, 11, Emgu.CV.Flann.CenterInitType.Random, 0.2f);
 
          float[][] features2 = new float[1][];
          features2[0] = new float[] { 5.0f };
@@ -1123,6 +1132,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(distances[0, 0] == 0.0);
       }
 
+      /*
       [Test]
       public void TestEigenObjectRecognizer()
       {
@@ -1141,7 +1151,7 @@ namespace Emgu.CV.Test
             //Trace.WriteLine(rec.Recognize(img));
          }
       }
-
+      
       [Test]
       public void TestFaceRecognizer()
       {
@@ -1182,7 +1192,6 @@ namespace Emgu.CV.Test
 
       }
 
-      /*
       //This took ~ 60 seconds to finishes
       [Test]
       public void TestCameraCalibration()
@@ -1286,6 +1295,7 @@ namespace Emgu.CV.Test
          
       }
 
+      /*
       [Test]
       public void TestStereoGCCorrespondence()
       {
@@ -1315,10 +1325,10 @@ namespace Emgu.CV.Test
          EmguAssert.WriteLine(String.Format("Min : {0}\r\nMax : {1}", min, max));
 
          //ImageViewer.Show(leftDisparity*(-16));
-      }
+      }*/
 
+      /*
       //TODO: This test is failing, check when this will be fixed.
-/*
       [Test]
       public void TestStereoBMCorrespondence()
       {
@@ -1629,6 +1639,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(m2.Equals(n2));
       }
 
+      /*
       [Test]
       public void TestPyrSegmentation()
       {
@@ -1637,7 +1648,7 @@ namespace Emgu.CV.Test
          MemStorage storage = new MemStorage();
          IntPtr comp;
          CvInvoke.cvPyrSegmentation(image, segImage, storage, out comp, 4, 255, 30);
-      }
+      }*/
 
       [Test]
       public void TestHistogram()
@@ -1678,6 +1689,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestSoftcascade()
       {
@@ -1692,7 +1704,7 @@ namespace Emgu.CV.Test
 
             //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
-      }
+      }*/
 
       [Test]
       public void TestHOG1()
@@ -1774,6 +1786,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestOctTree()
       {
@@ -1790,7 +1803,7 @@ namespace Emgu.CV.Test
             MCvPoint3D32f[] p = tree.GetPointsWithinSphere(new MCvPoint3D32f(0, 0, 0), 5);
             int i = p.Length;
          }
-      }
+      }*/
 
       /*
       [Test]
@@ -1868,6 +1881,7 @@ namespace Emgu.CV.Test
          CvInvoke.cvDistTransform(img, dst, Emgu.CV.CvEnum.DistType.L2, 3, null, IntPtr.Zero);
       }
 
+      /*
       [Test]
       public void TestAdaptiveSkinDetector()
       {
@@ -1879,7 +1893,7 @@ namespace Emgu.CV.Test
             //mask._EqualizeHist();
             //ImageViewer.Show(mask);
          }
-      }
+      }*/
 
       [Test]
       public void TestBinaryStorage()
@@ -1947,12 +1961,13 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestCondensation()
       {
          IntPtr conden = CvInvoke.cvCreateConDensation(5, 5, 100);
          CvInvoke.cvReleaseConDensation(ref conden);
-      }
+      }*/
 
       private static String GetTempFileName()
       {
@@ -2008,6 +2023,7 @@ namespace Emgu.CV.Test
          File.Delete(fi.FullName);
       }*/
 
+      /*
 #if !ANDROID 
       //took too long to test on android, disabling for now
       [Test]
@@ -2030,6 +2046,7 @@ namespace Emgu.CV.Test
          }
       }
 #endif
+      */
 
       [Test]
       public void TestIndex3D()
@@ -2155,7 +2172,7 @@ namespace Emgu.CV.Test
       {
          Size dstImageSize;
          using (RotationMatrix2D rotationMatrix = RotationMatrix2D.CreateRotationMatrix(new System.Drawing.PointF(320, 240), -90, new Size(640, 480), out dstImageSize))
-         using (Matrix<double> m = new Matrix<double>(3, 2))
+         using (Matrix<double> m = new Matrix<double>(2, 3))
          {
             rotationMatrix.CopyTo(m);
             Trace.WriteLine("emgu.cv.test", String.Format("dstSize: {0}x{1}", dstImageSize.Width, dstImageSize.Height));
@@ -2174,7 +2191,7 @@ namespace Emgu.CV.Test
             Mat image = new Mat();
 
             CvInvoke.Imdecode(data, LoadImageType.Color, image);
-            Emgu.CV.UI.ImageViewer.Show(image);
+            //Emgu.CV.UI.ImageViewer.Show(image);
          }
       }
 
@@ -2275,7 +2292,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestStitching()
+      public void TestStitching1()
       {
          Image<Bgr, Byte>[] images = new Image<Bgr, byte>[4];
 
@@ -2292,7 +2309,31 @@ namespace Emgu.CV.Test
                vm.Push(images);
                stitcher.Stitch(vm, result);
             }
-            //Emgu.CV.UI.ImageViewer.Show(result);
+            Emgu.CV.UI.ImageViewer.Show(result);
+         }
+      }
+
+      [Test]
+      public void TestStitching2()
+      {
+         Image<Bgr, Byte>[] images = new Image<Bgr, byte>[4];
+
+         images[0] = EmguAssert.LoadImage<Bgr, Byte>("stitch1.jpg");
+         images[1] = EmguAssert.LoadImage<Bgr, Byte>("stitch2.jpg");
+         images[2] = EmguAssert.LoadImage<Bgr, Byte>("stitch3.jpg");
+         images[3] = EmguAssert.LoadImage<Bgr, Byte>("stitch4.jpg");
+
+         using (Stitcher stitcher = new Stitcher(false))
+         using (OrbFeaturesFinder finder = new OrbFeaturesFinder(new Size(3, 1)))
+         {
+            stitcher.SetFeaturesFinder(finder);
+            Mat result = new Mat();
+            using (VectorOfMat vm = new VectorOfMat())
+            {
+               vm.Push(images);
+               stitcher.Stitch(vm, result);
+            }
+            Emgu.CV.UI.ImageViewer.Show(result);
          }
       }
 
@@ -2329,6 +2370,7 @@ namespace Emgu.CV.Test
          CvInvoke.EstimateAffine3D(srcPts, dstPts, out estimate, out inlier, 3, 0.99);
       }
 
+      /*
       #region Test code contributed by Daniel Bell, modified by Canming
       [Test]
       public void TestLevMarqSparse()
@@ -2360,9 +2402,9 @@ namespace Emgu.CV.Test
             double r = 4 + Math.Sin(3 * Math.PI * y / 10);
             for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI / 4)
             {
-               double px = r * Math.Cos(theta) + y; /*+ rng.gaussian(1)*/
-               double py = 5 - y; /*+ rng.gaussian(1)*/
-               double pz = r * Math.Sin(theta) + y; /*+ rng.gaussian(1)*/
+               double px = r * Math.Cos(theta) + y; //+ rng.gaussian(1)
+               double py = 5 - y; //+ rng.gaussian(1)
+               double pz = r * Math.Sin(theta) + y; //+ rng.gaussian(1)
 
                points[y + pN / 2] = new MCvPoint3D64f(px, py, pz);
             }
@@ -2452,7 +2494,7 @@ namespace Emgu.CV.Test
 
                         CvInvoke.BitwiseNot(canny, canny, null);
 
-                        Image<Bgr, byte> displayImg = img.ConcateHorizontal(canny.Convert<Bgr, Byte>()/*mask.Convert<Bgr, Byte>()*/);
+                        Image<Bgr, byte> displayImg = img.ConcateHorizontal(canny.Convert<Bgr, Byte>());
 
                         //displayImg.Save("out_" + files[idx]);
                         //ImageViewer.Show(displayImg);
@@ -2462,7 +2504,6 @@ namespace Emgu.CV.Test
          }
       }
 
-      /*
       [Test]
       public void TestDataMatrix()
       {
@@ -2474,7 +2515,7 @@ namespace Emgu.CV.Test
             v.Draw(img);
             //ImageViewer.Show(img);
          }
-      }*/
+      }
 
       [Test]
       public void TestChamferMatching()
@@ -2496,7 +2537,7 @@ namespace Emgu.CV.Test
             }
             //Emgu.CV.UI.ImageViewer.Show(image);
          }
-      }
+      }*/
 
       //TODO: Check why this fails again
       [Test]
@@ -2570,7 +2611,7 @@ namespace Emgu.CV.Test
          capture1.Dispose();
          capture2.Dispose();
       }
-      #if !IOS
+      #if !(IOS || ANDROID)
       [Test]
       public void TestGLImageView()
       {

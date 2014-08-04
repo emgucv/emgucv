@@ -93,28 +93,28 @@
     <AndroidAsset Include="..\..\opencv\samples\cpp\left01.jpg">
       <Link>Assets\left01.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\c\airplane.jpg">
+    <AndroidAsset Include="..\..\opencv\samples\cpp\airplane.jpg">
       <Link>Assets\airplane.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\c\box.png">
+    <AndroidAsset Include="..\..\opencv\samples\cpp\box.png">
       <Link>Assets\box.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\c\box_in_scene.png">
+    <AndroidAsset Include="..\..\opencv\samples\cpp\box_in_scene.png">
       <Link>Assets\box_in_scene.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\c\lena.jpg">
+    <AndroidAsset Include="..\..\opencv\samples\cpp\lena.jpg">
       <Link>Assets\lena.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\c\scene_l.bmp">
+    <AndroidAsset Include="..\..\opencv\samples\cpp\scene_l.bmp">
       <Link>Assets\scene_l.bmp</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\c\scene_r.bmp">
+    <AndroidAsset Include="..\..\opencv\samples\cpp\scene_r.bmp">
       <Link>Assets\scene_r.bmp</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\c\stuff.jpg">
+    <AndroidAsset Include="..\..\opencv\samples\cpp\stuff.jpg">
       <Link>Assets\stuff.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\c\tree.avi">
+    <AndroidAsset Include="..\..\opencv\samples\cpp\tree.avi">
       <Link>Assets\tree.avi</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\chessBoard.jpg">
@@ -132,7 +132,7 @@
     <AndroidAsset Include="..\..\opencv\samples\cpp\letter-recognition.data">
       <Link>Assets\letter-recognition.data</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\c\agaricus-lepiota.data">
+    <AndroidAsset Include="..\..\opencv\samples\cpp\agaricus-lepiota.data">
       <Link>Assets\agaricus-lepiota.data</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\stitch1.jpg">
@@ -201,10 +201,6 @@
       <Project>{17B67F34-D591-4BAD-ABB8-4D4199B20833}</Project>
       <Name>Emgu.CV.OCR.Android</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.OpenCL\Emgu.CV.OpenCL.Android.csproj">
-      <Project>{67eac0e9-e834-416f-a9d0-b6014c10724a}</Project>
-      <Name>Emgu.CV.OpenCL.Android</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Android.csproj">
       <Project>{89BCA3BE-823B-4702-9498-025C6B21462F}</Project>
       <Name>Emgu.CV.Stitching.Android</Name>
@@ -234,6 +230,11 @@
     </AndroidAsset>
     <AndroidAsset Include="..\..\opencv\samples\cpp\logo_in_clutter.png">
       <Link>Assets\logo_in_clutter.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\opencv_contrib\modules\text\samples\scenetext01.jpg">
+      <Link>Assets\scenetext01.jpg</Link>
     </AndroidAsset>
   </ItemGroup>
 </Project>

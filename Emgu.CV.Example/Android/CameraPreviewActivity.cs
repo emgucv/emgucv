@@ -122,10 +122,11 @@ namespace AndroidExamples
             }
          };
          _previewButtons[1] = FindViewById<ImageButton>(Resource.Id.cannyImageButton);
-         //_previewFilters[1] = new CannyFilter(100, 60, 3);
-         _previewFilters[1] = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Autumn);
+         _previewFilters[1] = new CannyFilter(100, 60, 3);
+         //_previewFilters[1] = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Autumn);
          _previewButtons[2] = FindViewById<ImageButton>(Resource.Id.colorMapImageButton);
-         _previewFilters[2] = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Summer);
+         //_previewFilters[2] = new ColorMapFilter(Emgu.CV.CvEnum.ColorMapType.Summer);
+         _previewFilters[2] = null;
          _previewButtons[3] = FindViewById<ImageButton>(Resource.Id.distorImageButton);
          _previewFilters[3] =  new DistorFilter(0.5, 0.5, -1.5);
          for (int i = 1; i < _previewButtons.Length; ++i)

@@ -9,6 +9,8 @@
 
 #include "vector_${VECTOR_NAME}.h"
 
+${VECTOR_ADDITIONAL_CODE}
+
 std::vector< ${VECTOR_ELEMENT} >* VectorOf${VECTOR_NAME}Create() 
 { 
    return new std::vector< ${VECTOR_ELEMENT} >(); 

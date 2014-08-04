@@ -16,8 +16,8 @@ INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ml/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/calib3d/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/objdetect/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/features2d/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/legacy/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/contrib/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/legacy/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/contrib/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/highgui/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
@@ -62,7 +62,7 @@ if(ENABLE_SOLUTION_FOLDERS)
 endif() 
 
 ADD_DEPENDENCIES(${the_target} 
-  opencv_core opencv_calib3d opencv_contrib opencv_features2d opencv_highgui opencv_imgproc opencv_legacy opencv_ml opencv_objdetect)
+  opencv_core opencv_calib3d opencv_features2d opencv_highgui opencv_imgproc opencv_ml opencv_objdetect)
 
 #INSTALL(TARGETS ${the_target} 
 #    ARCHIVE DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)

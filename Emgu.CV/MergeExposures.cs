@@ -12,10 +12,23 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// The base class algorithms that can merge exposure sequence to a single image.
+   /// </summary>
    public abstract class MergeExposures
    {
+      /// <summary>
+      /// The pointer to the unmanaged MergeExposure object
+      /// </summary>
       protected IntPtr _mergeExposuresPtr;
 
+      /// <summary>
+      /// Merges images.
+      /// </summary>
+      /// <param name="src">Vector of input images</param>
+      /// <param name="dst">Result image</param>
+      /// <param name="times">Vector of exposure time values for each image</param>
+      /// <param name="response">256x1 matrix with inverse camera response function for each pixel value, it should have the same number of channels as images.</param>
       public void Process(IInputArray src, IOutputArray dst, IInputArray times, IInputArray response)
       {
          using (InputArray iaSrc = src.GetInputArray())

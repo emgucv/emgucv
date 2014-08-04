@@ -29,7 +29,7 @@ namespace PlanarSubdivisionExample
             pts[i] = new PointF((float)r.NextDouble() * maxValue, (float)r.NextDouble() * maxValue);
          #endregion
 
-         using (PlanarSubdivision subdivision = new PlanarSubdivision(pts))
+         using (Subdiv2D subdivision = new Subdiv2D(pts))
          {
             //Obtain the delaunay's triangulation from the set of points;
             delaunayTriangles = subdivision.GetDelaunayTriangles();

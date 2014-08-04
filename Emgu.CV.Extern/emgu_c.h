@@ -10,7 +10,7 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/objdetect/objdetect.hpp"
-#include "opencv2/objdetect/erfilter.hpp"
+#include "opencv2/text/erfilter.hpp"
 namespace emgu
 {
    struct size

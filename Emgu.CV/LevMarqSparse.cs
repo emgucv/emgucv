@@ -1,3 +1,4 @@
+/*
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
@@ -25,14 +26,14 @@ namespace Emgu.CV
          CvInvoke.CheckLibraryLoaded();
       }
 
-      /*
-      /// <summary>
-      /// Create a LevMarqSparse solver
-      /// </summary>
-      public LevMarqSparse()
-      {
-         _ptr = CvInvoke.CvCreateLevMarqSparse();
-      }*/
+      
+      // /// <summary>
+      // /// Create a LevMarqSparse solver
+      // /// </summary>
+      //public LevMarqSparse()
+      //{
+      //   _ptr = CvInvoke.CvCreateLevMarqSparse();
+      //}
 
       /// <summary>
       /// Useful function to do simple bundle adjustment tasks
@@ -74,14 +75,14 @@ namespace Emgu.CV
          }
       }
 
-      /*
-      /// <summary>
-      /// Release all unmanaged memory associated with the LevMarqSpare solver.
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         CvInvoke.CvReleaseLevMarqSparse(ref _ptr);
-      }*/
+      
+      // /// <summary>
+      // /// Release all unmanaged memory associated with the LevMarqSpare solver.
+      // /// </summary>
+      //protected override void DisposeObject()
+      //{
+      //   CvInvoke.CvReleaseLevMarqSparse(ref _ptr);
+      //}
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvLevMarqSparseAdjustBundle(
@@ -96,14 +97,15 @@ namespace Emgu.CV
          IntPtr distCoefs, //distortion coefficients of all cameras (input and output)
          ref MCvTermCriteria termCrit);
 
-      /*
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvCreateLevMarqSparse();
+      
+      //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      //internal static extern IntPtr CvCreateLevMarqSparse();
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvReleaseLevMarqSparse(ref IntPtr levMarq);
-      */
+      //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      //internal static extern void CvReleaseLevMarqSparse(ref IntPtr levMarq);
+      
    }
 
 }
 
+*/

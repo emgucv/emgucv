@@ -1,3 +1,4 @@
+/*
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
@@ -47,13 +48,6 @@ namespace Emgu.CV.VideoSurveillance
          _ptr = CvInvoke.cvCreateGaussianBGModel(image, ref parameters);
       }
 
-      /*
-      /// <summary>
-      /// A cache of the update function
-      /// </summary>
-      private BGStatModelDelegates.UpdateFunctionDelagate updateFunction;
-      */
-
       /// <summary>
       /// Update the statistic model
       /// </summary>
@@ -63,12 +57,6 @@ namespace Emgu.CV.VideoSurveillance
       public virtual int Update(Image<TColor, Byte> image, double learningRate)
       {
          return CvInvoke.cvUpdateBGStatModel(image, _ptr, learningRate);
-         /*
-         if (updateFunction == null)
-         {
-            updateFunction = (BGStatModelDelegates.UpdateFunctionDelagate)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvUpdateBGStatModel, typeof(BGStatModelDelegates.UpdateFunctionDelagate));
-         }
-         return updateFunction(image.Ptr, _ptr, learningRate);*/
       }
 
       /// <summary>
@@ -122,30 +110,8 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         /*
-         BGStatModelDelegates.ReleaseFunction releaseFunction = (BGStatModelDelegates.ReleaseFunction)Marshal.GetDelegateForFunctionPointer(MCvBGStatModel.CvReleaseBGStatModel, typeof(BGStatModelDelegates.ReleaseFunction));
-         releaseFunction(ref _ptr);*/
          CvInvoke.cvReleaseBGStatModel(ref _ptr);
       }
    }
-   /*
-   internal static class BGStatModelDelegates
-   {
-      /// <summary>
-      /// Defines an image update function
-      /// </summary>
-      /// <param name="img">The image to be used for update</param>
-      /// <param name="statModel">The stat model to update</param>
-      /// <param name="learningRate">Use -1 for default</param>
-      /// <returns></returns>
-      [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
-      public delegate int UpdateFunctionDelagate(IntPtr img, IntPtr statModel, double learningRate);
-
-      /// <summary>
-      /// Define the Release function
-      /// </summary>
-      /// <param name="ptr">The background mode to be released</param>
-      [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
-      public delegate void ReleaseFunction(ref IntPtr ptr);
-   }*/
 }
+*/

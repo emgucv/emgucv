@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_5_1;UNITY_4_5;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_5_2;UNITY_4_5;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -46,6 +46,30 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Emgu.CV.ML\ANN_MLP.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\Boost.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvANN_MLP_TrainParams.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvBoostParams.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvDTreeNode.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvDTreeParams.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvDTreeSplit.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvEMParams.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvGBTreesParams.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvParamGrid.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvRTParams.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\CvType\MCvSVMParams.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\DTree.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\EM.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\ERTrees.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\GBTrees.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\KNearest.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\MlEnum.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\MlInvoke.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\NormalBayesClassifier.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\RTrees.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\SVM.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\SVMParams.cs" />
+     <Compile Include="Assets\Emgu.CV.ML\StatModel.cs" />
      <Compile Include="Assets\Emgu.CV\AdaptiveSkinDetector.cs" />
      <Compile Include="Assets\Emgu.CV\CalibrateCRF.cs" />
      <Compile Include="Assets\Emgu.CV\CameraCalibration\CameraCalibration.cs" />
@@ -167,7 +191,6 @@
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvGaussBGStatModelParams.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvHuMoments.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvKalman.cs" />
-     <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvMSERParams.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvMat.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvMatND.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvMoments.cs" />
@@ -175,7 +198,6 @@
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvPoint2D64f.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvPoint3D32f.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvPoint3D64f.cs" />
-     <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvQuadEdge2D.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvScalar.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvSeq.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvSeqBlock.cs" />
@@ -187,9 +209,6 @@
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvStarKeypoint.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvStereoBMState.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvStereoGCState.cs" />
-     <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvSubdiv2D.cs" />
-     <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvSubdiv2DEdge.cs" />
-     <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvSubdiv2DPoint.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MCvTermCriteria.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MDMatch.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\CvType\MIplImage.cs" />
@@ -202,7 +221,6 @@
      <Compile Include="Assets\Emgu.CV\PInvoke\System.Drawing\RectangleF.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\System.Drawing\Size.cs" />
      <Compile Include="Assets\Emgu.CV\PInvoke\System.Drawing\SizeF.cs" />
-     <Compile Include="Assets\Emgu.CV\PlanarSubdivision.cs" />
      <Compile Include="Assets\Emgu.CV\PointAndLine\LineSegment2D.cs" />
      <Compile Include="Assets\Emgu.CV\PointAndLine\LineSegment2DF.cs" />
      <Compile Include="Assets\Emgu.CV\PointAndLine\LineSegment3DF.cs" />
@@ -224,6 +242,7 @@
      <Compile Include="Assets\Emgu.CV\StereoGC.cs" />
      <Compile Include="Assets\Emgu.CV\StereoMatcherExtensions.cs" />
      <Compile Include="Assets\Emgu.CV\StereoSGBM.cs" />
+     <Compile Include="Assets\Emgu.CV\Subdiv2D.cs" />
      <Compile Include="Assets\Emgu.CV\Tiff\TiffWriter.cs" />
      <Compile Include="Assets\Emgu.CV\Tiff\TileTiffWriter.cs" />
      <Compile Include="Assets\Emgu.CV\TimedImage.cs" />
@@ -257,6 +276,7 @@
      <Compile Include="Assets\Emgu.CV\Util\VectorOfPoint3D32F.cs" />
      <Compile Include="Assets\Emgu.CV\Util\VectorOfPointF.cs" />
      <Compile Include="Assets\Emgu.CV\Util\VectorOfRect.cs" />
+     <Compile Include="Assets\Emgu.CV\Util\VectorOfTriangle2DF.cs" />
      <Compile Include="Assets\Emgu.CV\Util\VectorOfUMat.cs" />
      <Compile Include="Assets\Emgu.CV\Util\VectorOfVectorOfDMatch.cs" />
      <Compile Include="Assets\Emgu.CV\Util\VectorOfVectorOfInt.cs" />

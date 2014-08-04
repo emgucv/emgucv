@@ -9,8 +9,8 @@
     <ProjectGuid>{8DE0B8CF-C318-44CC-9363-221067B74347}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.ML.Windows.Store</RootNamespace>
-    <AssemblyName>Emgu.CV.ML.Windows.Store</AssemblyName>
+    <RootNamespace>Emgu.CV.ML</RootNamespace>
+    <AssemblyName>Emgu.CV.ML</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -113,8 +113,6 @@
     <Compile Include="Boost.cs" />
     <Compile Include="DTree.cs" />
     <Compile Include="EM.cs" />
-    <Compile Include="EMLegacy.cs" />
-    <Compile Include="EMParams.cs" />
     <Compile Include="ERTrees.cs" />
     <Compile Include="GBTrees.cs" />
     <Compile Include="KNearest.cs" />

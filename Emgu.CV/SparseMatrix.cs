@@ -54,7 +54,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release the unmanaged memory associated with this sparase matrix
+      /// Release the unmanaged memory associated with this sparse matrix
       /// </summary>
       protected override void DisposeObject()
       {

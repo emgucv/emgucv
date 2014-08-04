@@ -16,7 +16,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-#if !(IOS || NETFX_CORE)
+#if !(IOS || NETFX_CORE || ANDROID)
 using Emgu.CV.UI;
 #endif
 using Emgu.CV.Util;
@@ -846,6 +846,7 @@ namespace Emgu.CV.Test
          MCvHuMoments huMoment = moment.GetHuMoment();
       }
 
+      /*
       [TestAttribute]
       public void TestSnake()
       {
@@ -867,7 +868,7 @@ namespace Emgu.CV.Test
 
          img.Draw(pts, new Gray(80), 2, LineType.EightConnected);
          //ImageViewer.Show(img);
-      }
+      }*/
 
       [TestAttribute]
       public void TestWaterShed()
@@ -1574,6 +1575,7 @@ namespace Emgu.CV.Test
          MCvPoint2D64f pt = CvInvoke.PhaseCorrelate(image1, image2, null, out response);
       }
 
+      /*
       [TestAttribute]
       public void TestColorMap()
       {
@@ -1581,7 +1583,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
          CvInvoke.ApplyColorMap(image, result, CvEnum.ColorMapType.Hot);
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
-      }
+      }*/
 
       [TestAttribute]
       public void TestClahe()

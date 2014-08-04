@@ -12,10 +12,22 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// The base class for camera response calibration algorithms.
+   /// </summary>
    public abstract class CalibrateCRF
    {
+      /// <summary>
+      /// The pointer the the calibrateCRF object
+      /// </summary>
       protected IntPtr _calibrateCRFPtr;
 
+      /// <summary>
+      /// Recovers inverse camera response.
+      /// </summary>
+      /// <param name="src">Vector of input images</param>
+      /// <param name="dst">256x1 matrix with inverse camera response function</param>
+      /// <param name="times">Vector of exposure time values for each image</param>
       public void Process(IInputArray src, IOutputArray dst, IInputArray times)
       {
          using (InputArray iaSrc = src.GetInputArray())

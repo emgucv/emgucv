@@ -1,8 +1,9 @@
-﻿//----------------------------------------------------------------------------
+﻿/*
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
- using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV.Structure;
@@ -28,7 +29,7 @@ namespace Emgu.CV
       /// <param name="win">Size of neighborhood of every point used to search the minimum, both win.width and win.height must be odd</param>
       /// <param name="criteria">Termination criteria</param>
       /// <param name="calcGradient">
-      /// Gradient flag. If != 0, the function calculates gradient magnitude for every image pixel and consideres it as the energy field, 
+      /// Gradient flag. If != 0, the function calculates gradient magnitude for every image pixel and considers it as the energy field, 
       /// otherwise the input image itself is considered
       /// </param>
       [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -822,65 +823,6 @@ namespace Emgu.CV
       [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool icvSubdiv2DCheck(IntPtr subdiv);
 
-      /*
-      /// <summary>
-      /// Finds robust features in the image. For each feature it returns its location, size, orientation and optionally the descriptor, basic or extended. The function can be used for object tracking and localization, image stitching etc
-      /// </summary>
-      /// <param name="image">The input 8-bit grayscale image</param>
-      /// <param name="mask">The optional input 8-bit mask. The features are only found in the areas that contain more than 50% of non-zero mask pixels</param>
-      /// <param name="keypoints">The output parameter; double pointer to the sequence of keypoints. This will be the sequence of MCvSURFPoint structures</param>
-      /// <param name="descriptors">The optional output parameter; double pointer to the sequence of descriptors; Depending on the params.extended value, each element of the sequence will be either 64-element or 128-element floating-point (CV_32F) vector. If the parameter is IntPtr.Zero, the descriptors are not computed</param>
-      /// <param name="storage">Memory storage where keypoints and descriptors will be stored</param>
-      /// <param name="parameters">Various algorithm parameters put to the structure CvSURFParams</param>
-      /// <param name="useProvidedKeyPoints">If 1, the provided key points are locations for computing SURF descriptors</param>
-#if ANDROID
-      public static void cvExtractSURF(
-         IntPtr image, IntPtr mask,
-         ref IntPtr keypoints,
-         ref IntPtr descriptors,
-         IntPtr storage,
-         MCvSURFParams parameters,
-         int useProvidedKeyPoints)
-      {
-         cvExtractSURF(image, mask, ref keypoints, ref descriptors, storage, 
-            parameters.Extended, parameters.Upright, parameters.HessianThreshold, parameters.NOctaves, parameters.NOctaveLayers,
-            useProvidedKeyPoints);
-      }
-      
-      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvExtractSURF(
-         IntPtr image, IntPtr mask,
-         ref IntPtr keypoints,
-         ref IntPtr descriptors,
-         IntPtr storage,
-         int extended, int upright, double hessianThreshold, int nOctaves, int nOctaveLayers,
-         int useProvidedKeyPoints);
-#else
-      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvExtractSURF(
-         IntPtr image, IntPtr mask,
-         ref IntPtr keypoints,
-         ref IntPtr descriptors,
-         IntPtr storage,
-         MCvSURFParams parameters,
-         int useProvidedKeyPoints);
-#endif
-
-      
-      /// <summary>
-      /// Extracts the contours of Maximally Stable Extremal Regions
-      /// </summary>
-      /// <param name="img">The image where MSER will be extracted</param>
-      /// <param name="mask">The mask for region of interest</param>
-      /// <param name="contours">The contours where MSER will be stored</param>
-      /// <param name="storage">Memory storage</param>
-      /// <param name="parameters">MSER parameters</param>
-      [DllImport(OpencvLegacyLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvExtractMSER(
-         IntPtr img,
-         IntPtr mask,
-         ref IntPtr contours,
-         IntPtr storage,
-         MCvMSERParams parameters);*/
    }
 }
+*/

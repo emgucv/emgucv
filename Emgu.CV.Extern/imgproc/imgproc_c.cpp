@@ -405,3 +405,46 @@ void cveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d, doub
 {
    cv::bilateralFilter(*src, *dst, d, sigmaColor, sigmaSpace, borderType);
 }
+
+
+//Subdiv2D
+cv::Subdiv2D* cveSubdiv2DCreate(CvRect* rect)
+{
+   return new cv::Subdiv2D(*rect);
+}
+void cveSubdiv2DRelease(cv::Subdiv2D** subdiv)
+{
+   delete *subdiv;
+   *subdiv = 0;
+}
+void cveSubdiv2DInsertMulti(cv::Subdiv2D* subdiv, std::vector<cv::Point2f>* points)
+{
+   subdiv->insert(*points);
+}
+int cveSubdiv2DInsertSingle(cv::Subdiv2D* subdiv, CvPoint2D32f* pt)
+{
+   return subdiv->insert(*pt);
+}
+void cveSubdiv2DGetTriangleList(cv::Subdiv2D* subdiv, std::vector<cv::Vec6f>* triangleList)
+{
+   subdiv->getTriangleList(*triangleList);
+}
+void cveSubdiv2DGetVoronoiFacetList(cv::Subdiv2D* subdiv, std::vector<int>* idx, std::vector< std::vector< cv::Point2f> >* facetList, std::vector< cv::Point2f >* facetCenters)
+{
+   subdiv->getVoronoiFacetList(*idx, *facetList, *facetCenters);
+}
+int cveSubdiv2DFindNearest(cv::Subdiv2D* subdiv, CvPoint2D32f* pt,  CvPoint2D32f* nearestPt)
+{
+   cv::Point2f np;
+   int result = subdiv->findNearest(*pt, &np);
+   *nearestPt = np;
+   return result;
+}
+int cveSubdiv2DLocate(cv::Subdiv2D* subdiv, CvPoint2D32f* pt, int* edge, int* vertex)
+{
+   int e = 0, v = 0;
+   int result = subdiv->locate(*pt, e, v);
+   *edge = e;
+   *vertex = v;
+   return result;
+}

@@ -25,22 +25,30 @@ namespace cv {
    };
 }
 
+
+
 CVAPI(cv::StitcherWrapper*) CvStitcherCreateDefault(bool tryUseGpu);
 
 CVAPI(void) CvStitcherRelease(cv::StitcherWrapper** stitcherWrapper);
 
+CVAPI(void) CvStitcherSetFeaturesFinder(cv::StitcherWrapper* stitcherWrapper, cv::detail::FeaturesFinder* finder);
+
 CVAPI(bool) CvStitcherStitch(cv::StitcherWrapper* stitcherWrapper, cv::_InputArray* images, cv::_OutputArray* pano);
 
+#ifdef HAVE_OPENCV_NONFREE
 CVAPI(cv::detail::SurfFeaturesFinder*) cveSurfFeaturesFinderCreate(
    double hess_thresh, int num_octaves, int num_layers,
-   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f); 
+   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f);
 
-#ifdef HAVE_OPENCV_NONFREE
+CVAPI(void) cveSurfFeaturesFinderRelease(cv::detail::SurfFeaturesFinder** finder);
+
 CVAPI(cv::detail::SurfFeaturesFinderGpu*) cveSurfFeaturesFinderGpuCreate(
    double hess_thresh, int num_octaves, int num_layers,
    int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f); 
+
+CVAPI(void) cveSurfFeaturesFinderGpuRelease(cv::detail::SurfFeaturesFinderGpu** finder);
 #endif
 
 CVAPI(cv::detail::OrbFeaturesFinder*) cveOrbFeaturesFinderCreate(CvSize* grid_size, int nfeaturea, float scaleFactor, int nlevels, cv::detail::FeaturesFinder** f);
-
+CVAPI(void) cveOrbFeaturesFinderRelease(cv::detail::OrbFeaturesFinder** finder);
 #endif

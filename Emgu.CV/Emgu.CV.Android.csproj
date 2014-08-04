@@ -92,6 +92,7 @@
     <Compile Include="OclPlatformInfo.cs" />
     <Compile Include="PInvoke\CvInvokeOptim.cs" />
     <Compile Include="StereoMatcherExtensions.cs" />
+    <Compile Include="Subdiv2D.cs" />
     <Compile Include="UMat.cs" />
     <Compile Include="Util\CvString.cs" />
     <Compile Include="Util\IInputArray.cs" />
@@ -122,7 +123,6 @@
     <Compile Include="Features2D\PlanarObjectDetector.cs" />
     <Compile Include="Features2D\RTreeClassifier.cs" />
     <Compile Include="Features2D\SelfSimDescriptor.cs" />
-    <Compile Include="PInvoke\CvType\MCvMSERParams.cs" />
     <Compile Include="PInvoke\CvType\MCvObjectDetection.cs" />
     <Compile Include="PInvoke\CvType\MCvStarDetectorParams.cs" />
     <Compile Include="PInvoke\CvType\CvStructSizes.cs" />
@@ -167,6 +167,7 @@
     <Compile Include="Util\VectorOfRect.cs" />
     <Compile Include="Util\VectorOfPoint.cs" />
     <Compile Include="Util\VectorOfPointF.cs" />
+    <Compile Include="Util\VectorOfTriangle2DF.cs" />
     <Compile Include="Util\VectorOfUMat.cs" />
     <Compile Include="Util\VectorOfVectorOfDMatch.cs" />
     <Compile Include="Util\VectorOfVectorOfInt.cs" />
@@ -205,7 +206,6 @@
     <Compile Include="PInvoke\CvType\MCvAvgComp.cs" />
     <Compile Include="PInvoke\CvType\MCvConvexityDefect.cs" />
     <Compile Include="PInvoke\CvType\MCvSeqBlock.cs" />
-    <Compile Include="PlanarSubdivision.cs" />
     <Compile Include="CvArray.cs" />
     <Compile Include="CameraCalibration\CameraCalibration.cs" />
     <Compile Include="CameraCalibration\ExtrinsicCameraParameters.cs" />
@@ -233,15 +233,11 @@
     <Compile Include="PInvoke\CvType\MCvKalman.cs" />
     <Compile Include="PInvoke\CvType\MCvPoint2D64f.cs" />
     <Compile Include="PInvoke\CvType\MCvPoint3D64f.cs" />
-    <Compile Include="PInvoke\CvType\MCvQuadEdge2D.cs" />
     <Compile Include="PInvoke\CvType\MCvSeqReader.cs" />
     <Compile Include="PInvoke\CvType\MCvSet.cs" />
     <Compile Include="PInvoke\CvType\MCvSetElem.cs" />
     <Compile Include="PInvoke\CvType\MCvStereoBMState.cs" />
     <Compile Include="PInvoke\CvType\MCvStereoGCState.cs" />
-    <Compile Include="PInvoke\CvType\MCvSubdiv2D.cs" />
-    <Compile Include="PInvoke\CvType\MCvSubdiv2DEdge.cs" />
-    <Compile Include="PInvoke\CvType\MCvSubdiv2DPoint.cs" />
     <Compile Include="Reflection\ReflectColorType.cs" />
     <Compile Include="Reflection\ReflectIImage.cs" />
     <Compile Include="Shape\Cross2DF.cs" />
@@ -309,101 +305,38 @@
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_superres.so">
       <Link>lib\armeabi\libopencv_superres.so</Link>
     </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cuda.so">
-      <Link>lib\armeabi\libopencv_cuda.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cudaarithm.so">
-      <Link>lib\armeabi\libopencv_cudaarithm.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cudabgsegm.so">
-      <Link>lib\armeabi\libopencv_cudabgsegm.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cudacodec.so">
-      <Link>lib\armeabi\libopencv_cudacodec.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cudafeatures2d.so">
-      <Link>lib\armeabi\libopencv_cudafeatures2d.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cudafilters.so">
-      <Link>lib\armeabi\libopencv_cudafilters.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cudaimgproc.so">
-      <Link>lib\armeabi\libopencv_cudaimgproc.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cudaoptflow.so">
-      <Link>lib\armeabi\libopencv_cudaoptflow.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cudastereo.so">
-      <Link>lib\armeabi\libopencv_cudastereo.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_cudawarping.so">
-      <Link>lib\armeabi\libopencv_cudawarping.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cuda.so">
-      <Link>lib\armeabi-v7a\libopencv_cuda.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cudaarithm.so">
-      <Link>lib\armeabi-v7a\libopencv_cudaarithm.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cudabgsegm.so">
-      <Link>lib\armeabi-v7a\libopencv_cudabgsegm.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cudacodec.so">
-      <Link>lib\armeabi-v7a\libopencv_cudacodec.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cudafeatures2d.so">
-      <Link>lib\armeabi-v7a\libopencv_cudafeatures2d.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cudafilters.so">
-      <Link>lib\armeabi-v7a\libopencv_cudafilters.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cudaimgproc.so">
-      <Link>lib\armeabi-v7a\libopencv_cudaimgproc.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cudaoptflow.so">
-      <Link>lib\armeabi-v7a\libopencv_cudaoptflow.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cudastereo.so">
-      <Link>lib\armeabi-v7a\libopencv_cudastereo.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_cudawarping.so">
-      <Link>lib\armeabi-v7a\libopencv_cudawarping.so</Link>
-    </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_superres.so">
       <Link>lib\armeabi-v7a\libopencv_superres.so</Link>
     </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cuda.so">
-      <Link>lib\x86\libopencv_cuda.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cudaarithm.so">
-      <Link>lib\x86\libopencv_cudaarithm.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cudabgsegm.so">
-      <Link>lib\x86\libopencv_cudabgsegm.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cudacodec.so">
-      <Link>lib\x86\libopencv_cudacodec.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cudafeatures2d.so">
-      <Link>lib\x86\libopencv_cudafeatures2d.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cudafilters.so">
-      <Link>lib\x86\libopencv_cudafilters.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cudaimgproc.so">
-      <Link>lib\x86\libopencv_cudaimgproc.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cudaoptflow.so">
-      <Link>lib\x86\libopencv_cudaoptflow.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cudastereo.so">
-      <Link>lib\x86\libopencv_cudastereo.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_cudawarping.so">
-      <Link>lib\x86\libopencv_cudawarping.so</Link>
-    </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_superres.so">
       <Link>lib\x86\libopencv_superres.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_imgcodecs.so">
+      <Link>lib\armeabi\libopencv_imgcodecs.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_text.so">
+      <Link>lib\armeabi\libopencv_text.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_videoio.so">
+      <Link>lib\armeabi\libopencv_videoio.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_imgcodecs.so">
+      <Link>lib\armeabi-v7a\libopencv_imgcodecs.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_text.so">
+      <Link>lib\armeabi-v7a\libopencv_text.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_videoio.so">
+      <Link>lib\armeabi-v7a\libopencv_videoio.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_imgcodecs.so">
+      <Link>lib\x86\libopencv_imgcodecs.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_text.so">
+      <Link>lib\x86\libopencv_text.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_videoio.so">
+      <Link>lib\x86\libopencv_videoio.so</Link>
     </EmbeddedNativeLibrary>
   </ItemGroup>
   <ItemGroup>
@@ -412,9 +345,6 @@
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_calib3d.so">
       <Link>lib\armeabi\libopencv_calib3d.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_contrib.so">
-      <Link>lib\armeabi\libopencv_contrib.so</Link>
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_core.so">
       <Link>lib\armeabi\libopencv_core.so</Link>
@@ -430,9 +360,6 @@
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_imgproc.so">
       <Link>lib\armeabi\libopencv_imgproc.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_legacy.so">
-      <Link>lib\armeabi\libopencv_legacy.so</Link>
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_ml.so">
       <Link>lib\armeabi\libopencv_ml.so</Link>
@@ -461,9 +388,6 @@
     <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_calib3d.so">
       <Link>lib\armeabi-v7a\libopencv_calib3d.so</Link>
     </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_contrib.so">
-      <Link>lib\armeabi-v7a\libopencv_contrib.so</Link>
-    </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_core.so">
       <Link>lib\armeabi-v7a\libopencv_core.so</Link>
     </EmbeddedNativeLibrary>
@@ -478,9 +402,6 @@
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_imgproc.so">
       <Link>lib\armeabi-v7a\libopencv_imgproc.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_legacy.so">
-      <Link>lib\armeabi-v7a\libopencv_legacy.so</Link>
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_ml.so">
       <Link>lib\armeabi-v7a\libopencv_ml.so</Link>
@@ -509,9 +430,6 @@
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_calib3d.so">
       <Link>lib\x86\libopencv_calib3d.so</Link>
     </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_contrib.so">
-      <Link>lib\x86\libopencv_contrib.so</Link>
-    </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_core.so">
       <Link>lib\x86\libopencv_core.so</Link>
     </EmbeddedNativeLibrary>
@@ -526,9 +444,6 @@
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_imgproc.so">
       <Link>lib\x86\libopencv_imgproc.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_legacy.so">
-      <Link>lib\x86\libopencv_legacy.so</Link>
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_ml.so">
       <Link>lib\x86\libopencv_ml.so</Link>
@@ -550,15 +465,6 @@
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_videostab.so">
       <Link>lib\x86\libopencv_videostab.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_softcascade.so">
-      <Link>lib\armeabi\libopencv_softcascade.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_softcascade.so">
-      <Link>lib\armeabi-v7a\libopencv_softcascade.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_softcascade.so">
-      <Link>lib\x86\libopencv_softcascade.so</Link>
     </EmbeddedNativeLibrary>
   </ItemGroup>
   <ItemGroup>

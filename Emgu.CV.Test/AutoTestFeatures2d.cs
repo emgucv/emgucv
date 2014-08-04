@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms.VisualStyles;
+//using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using Emgu.CV;
 using Emgu.CV.Features2D;
@@ -19,7 +19,13 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.Nonfree;
 using Emgu.Util;
+#if NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+#else
 using NUnit.Framework;
+#endif
 
 namespace Emgu.CV.Test
 {
@@ -54,6 +60,7 @@ namespace Emgu.CV.Test
       public void TestSURF()
       {
          SURFDetector detector = new SURFDetector(500);
+         ParamDef[] parameters = detector.GetParams();
          EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
       }
 
@@ -74,7 +81,7 @@ namespace Emgu.CV.Test
 
          //SURFDetector descriptorGenerator = new SURFDetector(500, false);
          SIFTDetector descriptorGenerator = new SIFTDetector();
-
+         ParamDef[] parameters = keyPointDetector.GetParams();
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
@@ -83,6 +90,7 @@ namespace Emgu.CV.Test
       {
          GFTTDetector keyPointDetector = new GFTTDetector(1000, 0.01, 1, 3, false, 0.04);
          SIFTDetector descriptorGenerator = new SIFTDetector();
+         ParamDef[] parameters = keyPointDetector.GetParams();
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
@@ -114,7 +122,7 @@ namespace Emgu.CV.Test
       {
          MSERDetector keyPointDetector = new MSERDetector();
          SIFTDetector descriptorGenerator = new SIFTDetector();
-
+         ParamDef[] parameters = keyPointDetector.GetParams();
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
@@ -141,6 +149,7 @@ namespace Emgu.CV.Test
          FastDetector fast = new FastDetector(10, true);
          GridAdaptedFeatureDetector fastGrid = new GridAdaptedFeatureDetector(fast, 2000, 4, 4);
          BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
+         ParamDef[] parameters = fastGrid.GetParams();
          EmguAssert.IsTrue(TestFeature2DTracker(fastGrid, brief), "Unable to find homography matrix");
       }
 
@@ -156,6 +165,8 @@ namespace Emgu.CV.Test
       {
          FastDetector fast = new FastDetector(10, true);
          Freak freak = new Freak(true, true, 22.0f, 4);
+         ParamDef[] parameters = freak.GetParams();
+         int nOctaves = freak.GetInt("nbOctave");
          EmguAssert.IsTrue(TestFeature2DTracker(fast, freak), "Unable to find homography matrix");
       }
 
@@ -267,7 +278,14 @@ namespace Emgu.CV.Test
 
                   for (int i = 0; i < points.Length; i++)
                      points[i].Y += modelImage.Height;
-                  res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
+                  
+                  res.DrawPolyline(
+#if NETFX_CORE
+                     Extensions.
+#else
+                     Array.
+#endif
+                     ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
 
                   success = true;
                }
@@ -380,7 +398,13 @@ namespace Emgu.CV.Test
         // EmguAssert.IsTrue(features1.Length == features2.Length);
          //EmguAssert.IsTrue(features2.Length == features3.Length);
 
-         PointF[] pts = Array.ConvertAll<MKeyPoint, PointF>(keypoints, delegate(MKeyPoint mkp)
+         PointF[] pts =
+#if NETFX_CORE
+            Extensions.
+#else
+            Array.
+#endif
+            ConvertAll<MKeyPoint, PointF>(keypoints, delegate(MKeyPoint mkp)
          {
             return mkp.Point;
          });
@@ -465,7 +489,7 @@ namespace Emgu.CV.Test
          ImageFeature<float>[] features1 = surfDetector.DetectAndCompute(box, null);
          Features2DTracker<float> tracker = new Features2DTracker<float>(features1);
          HomographyMatrix m = tracker.Detect(features1, 0.8);
-      }*/
+      }
 
       [Test]
       public void TestLDetectorAndSelfSimDescriptor()
@@ -498,7 +522,7 @@ namespace Emgu.CV.Test
          {
             box.Draw(new CircleF(kp.Point, kp.Size), new Gray(255), 1);
          }
-      }
+      }*/
 
       [Test]
       public void TestBOWKmeansTrainer()

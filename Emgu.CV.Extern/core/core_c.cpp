@@ -366,7 +366,7 @@ void cveCalcCovarMatrix(cv::_InputArray* samples, cv::_OutputArray* covar, cv::_
    cv::calcCovarMatrix(*samples, *covar, *mean, flags, ctype);
 }
 
-void cveNormalize(cv::_InputArray* src, cv::_OutputArray* dst, double alpha, double beta, int normType, int dType, cv::_InputArray* mask)
+void cveNormalize(cv::_InputArray* src, cv::_InputOutputArray* dst, double alpha, double beta, int normType, int dType, cv::_InputArray* mask)
 {
    cv::normalize(*src, *dst, alpha, beta, normType, dType, mask ? *mask : (cv::InputArray) cv::noArray());
 }
@@ -417,7 +417,6 @@ void cveVConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* 
 {
    cv::vconcat(*src1, *src2, *dst);
 }
-
 
 
 void cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift)
@@ -474,4 +473,47 @@ double cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2)
 bool cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputArray* eigenVectors)
 {
    return cv::eigen(*src, *eigenValues, eigenVectors ? *eigenVectors : (cv::OutputArray) cv::noArray());
+}
+
+//Algorithm 
+int cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name)
+{
+   return algorithm->getInt(*name);
+}
+void cveAlgorithmSetInt(cv::Algorithm* algorithm, cv::String* name, int value)
+{
+   return algorithm->setInt(*name, value);
+}
+double cveAlgorithmGetDouble(cv::Algorithm* algorithm, cv::String* name)
+{
+   return algorithm->getDouble(*name);
+}
+void cveAlgorithmSetDouble(cv::Algorithm* algorithm, cv::String* name, double value)
+{
+   return algorithm->setDouble(*name, value);
+}
+void cveAlgorithmGetString(cv::Algorithm* algorithm, cv::String* name, cv::String* result)
+{
+   *result = algorithm->getString(*name);
+}
+void cveAlgorithmSetString(cv::Algorithm* algorithm, cv::String* name, cv::String* value)
+{
+   algorithm->setString(*name, *value);
+}
+
+void cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* names, std::vector< int >* types, std::vector<cv::String>* help)
+{
+   algorithm->getParams(*names);
+   types->clear();
+   help->clear();
+   for (std::vector<cv::String>::iterator it = names->begin(); it != names->end(); ++it)
+   {
+      types->push_back(algorithm->paramType(*it));
+      help->push_back(algorithm->paramHelp(*it));
+   }
+}
+
+void cveAlgorithmGetList(std::vector< cv::String >* names)
+{
+   cv::Algorithm::getList( *names );
 }

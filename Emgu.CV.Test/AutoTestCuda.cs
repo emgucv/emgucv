@@ -15,7 +15,7 @@ using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
 using Emgu.CV.Nonfree;
-using Emgu.CV.Softcascade;
+//using Emgu.CV.Softcascade;
 using NUnit.Framework;
 
 namespace Emgu.CV.Test
@@ -752,6 +752,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestSoftcascadeCuda()
       {
@@ -782,7 +783,7 @@ namespace Emgu.CV.Test
                }
             }
          }
-      }
+      }*/
 
       [Test]
       public void TestBruteForceHammingDistance()

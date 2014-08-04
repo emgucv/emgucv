@@ -24,7 +24,7 @@ namespace Emgu.CV
       public enum Mode
       {
          /// <summary>
-         /// This is the defult mode, the algorithm is single-pass, which means that you consider only 5 directions instead of 8
+         /// This is the default mode, the algorithm is single-pass, which means that you consider only 5 directions instead of 8
          /// </summary>
          SGBM = 0,
          /// <summary>

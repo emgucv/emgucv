@@ -37,6 +37,11 @@ namespace Emgu.CV
          return new InputArray();
       }
 
+      /// <summary>
+      /// Get the Mat from the input array
+      /// </summary>
+      /// <param name="idx">The index, in case if this is an VectorOfMat</param>
+      /// <returns>The Mat</returns>
       public Mat GetMat(int idx = -1)
       {
          Mat m = new Mat();
@@ -44,6 +49,11 @@ namespace Emgu.CV
          return m;
       }
 
+      /// <summary>
+      /// Get the UMat from the input array
+      /// </summary>
+      /// <param name="idx">The index, in case if this is an VectorOfUMat</param>
+      /// <returns>The UMat</returns>
       public UMat GetUMat(int idx = -1)
       {
          UMat m = new UMat();

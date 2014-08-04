@@ -9,7 +9,8 @@
 //StarDetector
 cv::StarDetector* CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize)
 {
-   return new cv::StarDetector(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
+   cv::StarDetector* detector = new cv::StarDetector(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
+   return detector;
 }
 
 void CvStarDetectorRelease(cv::StarDetector** detector)
@@ -174,18 +175,27 @@ void CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector)
 }
 
 // MSER detector
-cv::MSER* CvMserGetFeatureDetector(CvMSERParams* detector)
+cv::MSER* CvMserGetFeatureDetector(
+   int delta, 
+   int minArea, 
+   int maxArea,
+   double maxVariation, 
+   double minDiversity,
+   int maxEvolution, 
+   double areaThreshold,
+   double minMargin, 
+   int edgeBlurSize)
 {  
    return new cv::MSER(
-      detector->delta,
-      detector->minArea, 
-      detector->maxArea,
-      detector->maxVariation,
-      detector->minDiversity, 
-      detector->maxEvolution,
-      detector->areaThreshold,
-      detector->minMargin, 
-      detector->edgeBlurSize);
+      delta,
+      minArea, 
+      maxArea,
+      maxVariation,
+      minDiversity, 
+      maxEvolution,
+      areaThreshold,
+      minMargin, 
+      edgeBlurSize);
 }
 
 void CvMserFeatureDetectorRelease(cv::MSER** detector)
@@ -459,3 +469,30 @@ void CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDes
    bowImgDescriptorExtractor->compute(*image, *keypoints, *imgDescriptor);
 }
 
+//KAZEDetector
+cv::KAZE* cveKAZEDetectorCreate(
+  bool extended, bool upright, float threshold,
+  int octaves, int sublevels, int diffusivity, 
+  cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+{
+   cv::KAZE* kaze = new cv::KAZE(extended, upright, threshold, octaves, sublevels, diffusivity);
+   *featureDetector = static_cast<cv::FeatureDetector*>(kaze);
+   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(kaze);
+   return kaze;
+}
+void cveKAZEDetectorRelease(cv::KAZE** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
+
+
+//Algorithm
+cv::Algorithm* cveAlgorithmFromFeatureDetector(cv::FeatureDetector* detector)
+{
+   return (cv::Algorithm*) detector;
+}
+cv::Algorithm* cveAlgorithmFromDescriptorExtractor(cv::DescriptorExtractor* extractor)
+{
+   return (cv::Algorithm*) extractor;
+}

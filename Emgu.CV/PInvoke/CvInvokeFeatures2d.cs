@@ -1,3 +1,4 @@
+
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
@@ -12,6 +13,7 @@ namespace Emgu.CV
 {
    public static partial class CvInvoke
    {
+      /*
       /// <summary>
       /// Retrieve the star keypoint location from the specific image
       /// </summary>
@@ -23,6 +25,6 @@ namespace Emgu.CV
       public static extern IntPtr cvGetStarKeypoints(
          IntPtr img,
          IntPtr storage,
-         MCvStarDetectorParams param);
+         MCvStarDetectorParams param);*/
    }
 }

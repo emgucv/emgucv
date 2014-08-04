@@ -20,7 +20,13 @@ using Emgu.Util;
 #if !IOS
 using Emgu.CV.Tiff;
 #endif
+#if NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+#else
 using NUnit.Framework;
+#endif
 
 namespace Emgu.CV.Test
 {

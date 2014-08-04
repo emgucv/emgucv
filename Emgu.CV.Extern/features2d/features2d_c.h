@@ -10,7 +10,7 @@
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/features2d/features2d.hpp"
-#include "opencv2/legacy/compat.hpp"
+//#include "opencv2/legacy/compat.hpp"
 #include "vectors_c.h"
 
 //StarDetector
@@ -59,8 +59,18 @@ CVAPI(cv::DenseFeatureDetector*) CvDenseFeatureDetectorCreate( float initFeature
 CVAPI(void) CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector);
 
 // MSER detector
-CVAPI(cv::MSER*) CvMserGetFeatureDetector(CvMSERParams* detector);
-CVAPI(void) CvMserFeatureDetectorRelease(cv::MSER** detector);
+CVAPI(cv::MSER*) CvMserGetFeatureDetector(
+   int delta, 
+   int minArea, 
+   int maxArea,
+   double maxVariation, 
+   double minDiversity,
+   int maxEvolution, 
+   double areaThreshold,
+   double minMargin, 
+   int edgeBlurSize);
+CVAPI(void) CvMserFeatureDetectorRelease(cv::MSER** mser);
+
 
 // SimpleBlobDetector
 CVAPI(cv::SimpleBlobDetector*) CvSimpleBlobDetectorCreate();
@@ -130,4 +140,14 @@ CVAPI(void) CvBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** d
 CVAPI(void) CvBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary);
 CVAPI(void) CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor);
 
+//KAZEDetector
+CVAPI(cv::KAZE*) cveKAZEDetectorCreate(
+  bool extended, bool upright, float threshold,
+  int octaves, int sublevels, int diffusivity, 
+  cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+CVAPI(void) cveKAZEDetectorRelease(cv::KAZE** detector);
+
+//Algorithm
+CVAPI(cv::Algorithm*) cveAlgorithmFromFeatureDetector(cv::FeatureDetector* detector);
+CVAPI(cv::Algorithm*) cveAlgorithmFromDescriptorExtractor(cv::DescriptorExtractor* extractor);
 #endif

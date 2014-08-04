@@ -254,13 +254,13 @@ ADD_SUBDIRECTORY(${OPENCV_SUBFOLDER})
 SET(CMAKE_SOURCE_DIR ${CMAKE_OLD_SOURCE_DIR})
 
 SET (OPENCV_MODULE_NAME_CANDIDATES
-  core imgproc video flann ml highgui objdetect features2d calib3d
-  legacy contrib 
+  core imgproc video flann ml imgcodecs videoio highgui objdetect features2d calib3d
   cudalegacy cudaarithm cudawarping cuda cudafilters cudaimgproc cudaoptflow 
   cudastereo cudabgsegm cudafeatures2d 
   photo superres nonfree stitching 
-  videostab  optim softcascade shape
+  videostab optim shape
   cudev  cudacodec 
+  text
   )
   
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})

@@ -9,8 +9,8 @@
     <ProjectGuid>{4A19699C-FA59-4B27-8F3A-74B523EB73F6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.Test.Windows.Store</RootNamespace>
-    <AssemblyName>Emgu.CV.Test.Windows.Store</AssemblyName>
+    <RootNamespace>Emgu.CV.Test</RootNamespace>
+    <AssemblyName>Emgu.CV.Test</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -109,11 +109,29 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\AutoTestFeatures2d.cs">
+      <Link>AutoTestFeatures2d.cs</Link>
+    </Compile>
     <Compile Include="..\AutoTestImage.cs">
       <Link>AutoTestImage.cs</Link>
     </Compile>
     <Compile Include="..\AutoTestMat.cs">
       <Link>AutoTestMat.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestMatrix.cs">
+      <Link>AutoTestMatrix.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestML.cs">
+      <Link>AutoTestML.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestQuaternions.cs">
+      <Link>AutoTestQuaternions.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestSanity.cs">
+      <Link>AutoTestSanity.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestUMat.cs">
+      <Link>AutoTestUMat.cs</Link>
     </Compile>
     <Compile Include="..\EmguAssert.cs">
       <Link>EmguAssert.cs</Link>
@@ -129,52 +147,8 @@
       <Link>x64\opencv_calib3d300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\bin\x64\opencv_contrib300.dll">
-      <Link>x64\opencv_contrib300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\bin\x64\opencv_core300.dll">
       <Link>x64\opencv_core300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cuda300.dll">
-      <Link>x64\opencv_cuda300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cudaarithm300.dll">
-      <Link>x64\opencv_cudaarithm300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cudabgsegm300.dll">
-      <Link>x64\opencv_cudabgsegm300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cudacodec300.dll">
-      <Link>x64\opencv_cudacodec300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cudafeatures2d300.dll">
-      <Link>x64\opencv_cudafeatures2d300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cudafilters300.dll">
-      <Link>x64\opencv_cudafilters300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cudaimgproc300.dll">
-      <Link>x64\opencv_cudaimgproc300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cudaoptflow300.dll">
-      <Link>x64\opencv_cudaoptflow300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cudastereo300.dll">
-      <Link>x64\opencv_cudastereo300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_cudawarping300.dll">
-      <Link>x64\opencv_cudawarping300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\bin\x64\opencv_features2d300.dll">
@@ -189,12 +163,12 @@
       <Link>x64\opencv_highgui300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\bin\x64\opencv_imgproc300.dll">
-      <Link>x64\opencv_imgproc300.dll</Link>
+    <Content Include="..\..\bin\x64\opencv_imgcodecs300.dll">
+      <Link>x64\opencv_imgcodecs300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\bin\x64\opencv_legacy300.dll">
-      <Link>x64\opencv_legacy300.dll</Link>
+    <Content Include="..\..\bin\x64\opencv_imgproc300.dll">
+      <Link>x64\opencv_imgproc300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\bin\x64\opencv_ml300.dll">
@@ -221,10 +195,6 @@
       <Link>x64\opencv_shape300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\bin\x64\opencv_softcascade300.dll">
-      <Link>x64\opencv_softcascade300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\bin\x64\opencv_stitching300.dll">
       <Link>x64\opencv_stitching300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -233,8 +203,16 @@
       <Link>x64\opencv_superres300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\bin\x64\opencv_text300.dll">
+      <Link>x64\opencv_text300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\bin\x64\opencv_video300.dll">
       <Link>x64\opencv_video300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x64\opencv_videoio300.dll">
+      <Link>x64\opencv_videoio300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\bin\x64\opencv_videostab300.dll">
@@ -249,43 +227,9 @@
       <Link>x86\opencv_calib3d300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\bin\x86\opencv_contrib300.dll">
-      <Link>x86\opencv_contrib300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\bin\x86\opencv_core300.dll">
       <Link>x86\opencv_core300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cuda300.dll">
-      <Link>x86\opencv_cuda300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cudaarithm300.dll">
-      <Link>x86\opencv_cudaarithm300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cudabgsegm300.dll">
-      <Link>x86\opencv_cudabgsegm300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cudacodec300.dll">
-      <Link>x86\opencv_cudacodec300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cudafeatures2d300.dll">
-      <Link>x86\opencv_cudafeatures2d300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cudafilters300.dll">
-      <Link>x86\opencv_cudafilters300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cudaimgproc300.dll">
-      <Link>x86\opencv_cudaimgproc300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cudaoptflow300.dll">
-      <Link>x86\opencv_cudaoptflow300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cudastereo300.dll">
-      <Link>x86\opencv_cudastereo300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_cudawarping300.dll">
-      <Link>x86\opencv_cudawarping300.dll</Link>
     </Content>
     <Content Include="..\..\bin\x86\opencv_features2d300.dll">
       <Link>x86\opencv_features2d300.dll</Link>
@@ -299,12 +243,12 @@
       <Link>x86\opencv_highgui300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\bin\x86\opencv_imgproc300.dll">
-      <Link>x86\opencv_imgproc300.dll</Link>
+    <Content Include="..\..\bin\x86\opencv_imgcodecs300.dll">
+      <Link>x86\opencv_imgcodecs300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\bin\x86\opencv_legacy300.dll">
-      <Link>x86\opencv_legacy300.dll</Link>
+    <Content Include="..\..\bin\x86\opencv_imgproc300.dll">
+      <Link>x86\opencv_imgproc300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\bin\x86\opencv_ml300.dll">
@@ -321,6 +265,7 @@
     </Content>
     <Content Include="..\..\bin\x86\opencv_optim300.dll">
       <Link>x86\opencv_optim300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\bin\x86\opencv_photo300.dll">
       <Link>x86\opencv_photo300.dll</Link>
@@ -328,9 +273,7 @@
     </Content>
     <Content Include="..\..\bin\x86\opencv_shape300.dll">
       <Link>x86\opencv_shape300.dll</Link>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_softcascade300.dll">
-      <Link>x86\opencv_softcascade300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\bin\x86\opencv_stitching300.dll">
       <Link>x86\opencv_stitching300.dll</Link>
@@ -340,8 +283,16 @@
       <Link>x86\opencv_superres300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\bin\x86\opencv_text300.dll">
+      <Link>x86\opencv_text300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\bin\x86\opencv_video300.dll">
       <Link>x86\opencv_video300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_videoio300.dll">
+      <Link>x86\opencv_videoio300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\bin\x86\opencv_videostab300.dll">
@@ -353,6 +304,14 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="..\..\opencv\samples\cpp\agaricus-lepiota.data">
+      <Link>agaricus-lepiota.data</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\cpp\letter-recognition.data">
+      <Link>letter-recognition.data</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Emgu.CV.Test.Windows.Store_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -360,19 +319,19 @@
       <Link>haarcascade_eye.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\c\box.png">
+    <Content Include="..\..\opencv\samples\cpp\box.png">
       <Link>box.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\c\box_in_scene.png">
+    <Content Include="..\..\opencv\samples\cpp\box_in_scene.png">
       <Link>box_in_scene.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\c\lena.jpg">
+    <Content Include="..\..\opencv\samples\cpp\lena.jpg">
       <Link>lena.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\c\stuff.jpg">
+    <Content Include="..\..\opencv\samples\cpp\stuff.jpg">
       <Link>stuff.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

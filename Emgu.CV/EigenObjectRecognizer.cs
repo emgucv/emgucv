@@ -1,3 +1,4 @@
+/*
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
@@ -130,14 +131,6 @@ namespace Emgu.CV
          Debug.Assert(eigenDistanceThreshold >= 0.0, "Eigen-distance threshold should always >= 0.0");
 
          CalcEigenObjects(images, ref termCrit, out _eigenImages, out _avgImage);
-
-         /*
-         _avgImage.SerializationCompressionRatio = 9;
-
-         foreach (Image<Gray, Single> img in _eigenImages)
-             //Set the compression ration to best compression. The serialized object can therefore save spaces
-             img.SerializationCompressionRatio = 9;
-         */
 
          _eigenValues =
 #if NETFX_CORE
@@ -324,3 +317,4 @@ namespace Emgu.CV
       }
    }
 }
+*/

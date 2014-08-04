@@ -14,7 +14,7 @@ using Emgu.Util;
 namespace Emgu.CV
 {
    /// <summary>
-   /// A HOG discriptor
+   /// A HOG descriptor
    /// </summary>
    public class HOGDescriptor : UnmanagedObject
    {
@@ -135,12 +135,12 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Perfroms object detection with increasing detection window.
+      /// Performs object detection with increasing detection window.
       /// </summary>
       /// <param name="image">The image to search in</param>
       /// <param name="hitThreshold">
       /// Threshold for the distance between features and SVM classifying plane.
-      /// Usually it is 0 and should be specfied in the detector coefficients (as the last free coefficient).
+      /// Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient).
       /// But if the free coefficient is omitted (which is allowed), you can specify it manually here.
       ///</param>
       /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>

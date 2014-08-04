@@ -20,4 +20,12 @@ namespace Emgu.CV
       /// </summary>
       InputArray GetInputArray();
    }
+
+   /// <summary>
+   /// InputArrayOfArrays
+   /// </summary>
+   public interface IInputArrayOfArrays : IInputArray
+   {
+      
+   }
 }

@@ -131,10 +131,6 @@
       <Link>logo_in_clutter.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\cpp\scenetext01.jpg">
-      <Link>scenetext01.jpg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\opencv\samples\cpp\trained_classifierNM1.xml">
       <Link>trained_classifierNM1.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -147,36 +143,40 @@
       <Link>trained_classifier_erGrouping.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\airplane.jpg">
+    <Content Include="..\opencv\samples\cpp\airplane.jpg">
       <Link>airplane.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\box.png">
+    <Content Include="..\opencv\samples\cpp\box.png">
       <Link>box.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\box_in_scene.png">
+    <Content Include="..\opencv\samples\cpp\box_in_scene.png">
       <Link>box_in_scene.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\lena.jpg">
+    <Content Include="..\opencv\samples\cpp\lena.jpg">
       <Link>lena.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\scene_l.bmp">
+    <Content Include="..\opencv\samples\cpp\scene_l.bmp">
       <Link>scene_l.bmp</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\scene_r.bmp">
+    <Content Include="..\opencv\samples\cpp\scene_r.bmp">
       <Link>scene_r.bmp</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\stuff.jpg">
+    <Content Include="..\opencv\samples\cpp\stuff.jpg">
       <Link>stuff.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\c\tree.avi">
+    <Content Include="..\opencv\samples\cpp\tree.avi">
       <Link>tree.avi</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\opencv_contrib\modules\text\samples\scenetext01.jpg">
+      <Link>scenetext01.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="car.avi">
@@ -234,10 +234,6 @@
       <Project>{61b5a667-1bf5-4580-ad09-07d6d7ad7e3d}</Project>
       <Name>Emgu.CV.Shape</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.Softcascade\Emgu.CV.Softcascade.csproj">
-      <Project>{787d75d2-fe4d-4739-b9a5-2fb2617a42cc}</Project>
-      <Name>Emgu.CV.Softcascade</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.Stitching\Emgu.CV.Stitching.csproj">
       <Project>{D9C9B824-2B7A-48C0-A7D3-484410288CD2}</Project>
       <Name>Emgu.CV.Stitching</Name>
@@ -279,7 +275,7 @@
       <Link>letter-recognition.data</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="..\opencv\samples\c\agaricus-lepiota.data">
+    <None Include="..\opencv\samples\cpp\agaricus-lepiota.data">
       <Link>agaricus-lepiota.data</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

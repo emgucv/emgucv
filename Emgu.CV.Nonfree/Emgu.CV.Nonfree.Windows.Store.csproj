@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Emgu.CV.Nonfree</RootNamespace>
-    <AssemblyName>Emgu.CV.Nonfree.Windows.Store</AssemblyName>
+    <AssemblyName>Emgu.CV.Nonfree</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -115,7 +115,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CudaSURFDetector.cs" />
-    <Compile Include="OclSURFDetector.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>

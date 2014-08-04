@@ -15,7 +15,7 @@ namespace Emgu.CV
    /// <summary>
    /// Dense Optical flow
    /// </summary>
-   public abstract class DenseOpticalFlow : UnmanagedObject
+   public abstract class DenseOpticalFlow : UnmanagedObject, IAlgorithm
    {
       static DenseOpticalFlow()
       {
@@ -50,6 +50,12 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDenseOpticalFlowCalc(IntPtr dof, IntPtr i0, IntPtr i1, IntPtr flow);
+
+
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get { return _ptr; }
+      }
    }
 
    /// <summary>

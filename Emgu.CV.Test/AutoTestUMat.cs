@@ -16,7 +16,13 @@ using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.Util;
+#if NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+#else
 using NUnit.Framework;
+#endif
 
 namespace Emgu.CV.Test
 {

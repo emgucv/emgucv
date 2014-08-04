@@ -22,26 +22,26 @@ namespace Emgu.CV.VideoSurveillance
       /// Create a blob trakcer of the specific type
       /// </summary>
       /// <param name="type">The type of the blob tracker</param>
-      public BlobTracker(CvEnum.BLOBTRACKER_TYPE type)
+      public BlobTracker(CvEnum.BlobTrackerType type)
       {
          switch (type)
          {
-            case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CC:
+            case Emgu.CV.CvEnum.BlobTrackerType.CC:
                _ptr = CvCreateBlobTrackerCC();
                break;
-            case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.CCMSPF:
+            case Emgu.CV.CvEnum.BlobTrackerType.CCMSPF:
                _ptr = CvCreateBlobTrackerCCMSPF();
                break;
-            case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MS:
+            case Emgu.CV.CvEnum.BlobTrackerType.MS:
                _ptr = CvCreateBlobTrackerMS();
                break;
-            case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFG:
+            case Emgu.CV.CvEnum.BlobTrackerType.MSFG:
                _ptr = CvCreateBlobTrackerMSFG();
                break;
-            case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSFGS:
+            case Emgu.CV.CvEnum.BlobTrackerType.MSFGS:
                _ptr = CvCreateBlobTrackerMSFGS();
                break;
-            case Emgu.CV.CvEnum.BLOBTRACKER_TYPE.MSPF:
+            case Emgu.CV.CvEnum.BlobTrackerType.MSPF:
                _ptr = CvCreateBlobTrackerMSPF();
                break;
          }

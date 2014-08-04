@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -84,6 +84,7 @@
     <Compile Include="MatDataAllocator.cs" />
     <Compile Include="PInvoke\CvInvokeOptim.cs" />
     <Compile Include="StereoMatcherExtensions.cs" />
+    <Compile Include="Subdiv2D.cs" />
     <Compile Include="UMat.cs" />
     <Compile Include="Util\IInputArray.cs" />
     <Compile Include="Util\IInputOutputArray.cs" />
@@ -151,15 +152,12 @@
     <Compile Include="Util\VectorOfRect.cs" />
     <Compile Include="Util\VectorOfPoint.cs" />
     <Compile Include="Util\VectorOfPointF.cs" />
+    <Compile Include="Util\VectorOfTriangle2DF.cs" />
     <Compile Include="Util\VectorOfUMat.cs" />
     <Compile Include="Util\VectorOfVectorOfInt.cs" />
-    <Compile Include="Util\VectorOfVectorOfIntExtra.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint.cs" />
     <Compile Include="Util\VectorOfVectorOfPoint3D32F.cs" />
-    <Compile Include="Util\VectorOfVectorOfPointExtra.cs" />
     <Compile Include="Util\VectorOfVectorOfPointF.cs" />
-    <Compile Include="Util\VectorOfVectorOfPoint3D32FExtra.cs" />
-    <Compile Include="Util\VectorOfVectorOfPointFExtra.cs" />
     <Compile Include="Util\ZlibCompression.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractor.cs" />
     <Compile Include="VideoSurveillance\BackgroundSubtractorMOG.cs" />
@@ -192,7 +190,6 @@
     <Compile Include="PInvoke\CvType\MCvAvgComp.cs" />
     <Compile Include="PInvoke\CvType\MCvConvexityDefect.cs" />
     <Compile Include="PInvoke\CvType\MCvSeqBlock.cs" />
-    <Compile Include="PlanarSubdivision.cs" />
     <Compile Include="CvArray.cs" />
     <Compile Include="CameraCalibration\CameraCalibration.cs" />
     <Compile Include="CameraCalibration\ExtrinsicCameraParameters.cs" />

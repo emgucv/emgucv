@@ -10,31 +10,44 @@ INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
 
 MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder namespace_cs)
+   SET(VECTOR_NAME ${vname})
+   SET(VECTOR_ELEMENT ${velement})
+   SET(VECTOR_ELEMENT_CS ${velement_cs})
+   SET(NAMESPACE_CS ${namespace_cs})
+   SET(IS_VECTOR_OF_VECTOR false)
 
-SET(VECTOR_NAME ${vname})
-SET(VECTOR_ELEMENT ${velement})
-SET(VECTOR_ELEMENT_CS ${velement_cs})
-SET(NAMESPACE_CS ${namespace_cs})
-SET(IS_VECTOR_OF_VECTOR false)
+   SET(VECTOR_ADDITIONAL_INCLUDE "")
+   SET(VECTOR_ADDITIONAL_CODE "")
 
-if (${element_type} STREQUAL "struct")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfStruct.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
-ELSEIF(${element_type} STREQUAL "vector")
-  SET(VECTOR_ELEMENT_CS ${vname})
-  SET(ELEMENT_OF_ELEMENT ${velement_cs})
-  SET(IS_VECTOR_OF_VECTOR true)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfVector.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}Extra.cs)
-ELSE()
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
-ENDIF()
+   SET(extra_macro_args ${ARGN})
+   # Did we get any optional args?
+   LIST(LENGTH extra_macro_args num_extra_args)
+   IF (${num_extra_args} GREATER 0)
+      list(GET extra_macro_args 0 additional_c_header)
+      SET(VECTOR_ADDITIONAL_INCLUDE ${additional_c_header})
+   ENDIF()
+   IF (${num_extra_args} GREATER 1)
+      list(GET extra_macro_args 1 additional_c_code)
+      SET(VECTOR_ADDITIONAL_CODE ${additional_c_code})
+   ENDIF()
 
+   if (${element_type} STREQUAL "struct")
+     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
+     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
+     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfStruct.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
+   ELSEIF(${element_type} STREQUAL "vector")
+     SET(VECTOR_ELEMENT_CS ${vname})
+     SET(ELEMENT_OF_ELEMENT ${velement_cs})
+     SET(IS_VECTOR_OF_VECTOR true)
+     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
+     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
+     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
+     #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfVector.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}Extra.cs)
+   ELSE()
+     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
+     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
+     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
+   ENDIF()
 ENDMACRO()
 
 CREATE_VECTOR_CS("Byte" "unsigned char" "byte" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
@@ -46,11 +59,13 @@ CREATE_VECTOR_CS("PointF" "cv::Point2f" "PointF" "struct" ${CMAKE_CURRENT_SOURCE
 CREATE_VECTOR_CS("Point3D32F" "cv::Point3f" "MCvPoint3D32f" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("Rect" "cv::Rect" "Rectangle" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("KeyPoint" "cv::KeyPoint" "MKeyPoint" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
-CREATE_VECTOR_CS("ERStat" "cv::ERStat" "MCvERStat" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
+CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/text/erfilter.hpp\"")
 CREATE_VECTOR_CS("DMatch" "cv::DMatch" "MDMatch" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
+CREATE_VECTOR_CS("Triangle2DF" "cv::Vec6f" "Triangle2DF" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 
 CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
+CREATE_VECTOR_CS("CvString" "cv::String" "CvString" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 
 CREATE_VECTOR_CS("VectorOfPoint" "std::vector< cv::Point >" "Point" "vector" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("VectorOfPointF" "std::vector< cv::Point2f >" "PointF" "vector" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
@@ -59,8 +74,8 @@ CREATE_VECTOR_CS("VectorOfInt" "std::vector< int >" "int" "vector" ${CMAKE_CURRE
 CREATE_VECTOR_CS("VectorOfDMatch" "std::vector< cv::DMatch >" "MDMatch" "vector" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 
 IF(NOT IOS)
-CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "OclPlatformInfo" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
-CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda Emgu.CV.Cuda)
+CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "OclPlatformInfo" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/core/ocl.hpp\"")
+CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda Emgu.CV.Cuda "#include \"opencv2/core/cuda.hpp\"")
 ENDIF()
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
@@ -77,8 +92,11 @@ IF(IOS)
 ENDIF()
 
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
-  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
-  #MESSAGE("Included:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+
+  #MESSAGE("Retriveing source folder for project :  opencv_${CVEXTERN_OPTIONAL_DEP}")
+  #GET_TARGET_PROPERTY(OPENCV_MODULE_SOURCE_DIR opencv_${CVEXTERN_OPTIONAL_DEP} PROJECT_SOURCE_DIR)
+  INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
+  #MESSAGE("Included:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
 
   SET(CVEXTERN_OPTIONAL_DIR "${PROJECT_SOURCE_DIR}/${CVEXTERN_OPTIONAL_DEP}")
   IF(EXISTS "${CVEXTERN_OPTIONAL_DIR}" AND IS_DIRECTORY "${CVEXTERN_OPTIONAL_DIR}")
@@ -477,14 +495,6 @@ ADD_DEPENDENCIES(${the_target}
   ${ZLIB_LIBRARY} 
 #  xtiff
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY} )
-
-#SET(CVEXTERN_OPTIONAL_DEPS
-#  core calib3d contrib features2d highgui imgproc legacy ml objdetect stitching videostab bioinspired photo optim superres 
-#  ocl
-#  nonfree
-#  gpu cudev gpuarithm gpubgsegm gpucodec 
-#  gpufeatures2d gpufilters gpuimgproc gpuoptflow 
-#  gpustereo gpuwarping)
 
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
 #  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")

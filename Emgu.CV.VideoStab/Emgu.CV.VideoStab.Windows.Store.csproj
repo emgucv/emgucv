@@ -9,8 +9,8 @@
     <ProjectGuid>{5EAF5DE0-B0DB-40DF-B136-892299044003}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.VideoStab.Windows.Store</RootNamespace>
-    <AssemblyName>Emgu.CV.VideoStab.Windows.Store</AssemblyName>
+    <RootNamespace>Emgu.CV.VideoStab</RootNamespace>
+    <AssemblyName>Emgu.CV.VideoStab</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

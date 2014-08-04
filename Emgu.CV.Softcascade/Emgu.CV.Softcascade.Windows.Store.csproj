@@ -9,8 +9,8 @@
     <ProjectGuid>{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.Softcascade</RootNamespace>
-    <AssemblyName>Emgu.CV.Softcascade.Windows.Store</AssemblyName>
+    <RootNamespace>Emgu.CV</RootNamespace>
+    <AssemblyName>Emgu.CV.Softcascade</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

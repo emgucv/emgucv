@@ -76,6 +76,7 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveSqrt(IntPtr src, IntPtr dst);
 
+      /*
       /// <summary>
       /// Apply color map to the image
       /// </summary>
@@ -93,7 +94,7 @@ namespace Emgu.CV
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
-
+      */
 
       /// <summary>
       /// Check that every array element is neither NaN nor +- inf. The functions also check that each value
@@ -257,7 +258,6 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="testDrawLine")]
       private static extern void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, double v0, double v1, double v2, double v3);
-      */
 
       /// <summary>
       /// Implements the chamfer matching algorithm on images taking into account both distance from
@@ -303,6 +303,7 @@ namespace Emgu.CV
          double minMatchDistance, int padX,
          int padY, int scales, double minScale, double maxScale,
          double orientationWeight, double truncate);
+      */
 
       /// <summary>
       /// Finds centers in the grid of circles

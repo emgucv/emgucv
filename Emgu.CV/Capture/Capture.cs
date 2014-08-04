@@ -304,7 +304,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Start the grab process in a sperate thread. Once started, use the ImageGrabbed event handler and RetrieveGrayFrame/RetrieveBgrFrame to obtain the images.
+      /// Start the grab process in a separate thread. Once started, use the ImageGrabbed event handler and RetrieveGrayFrame/RetrieveBgrFrame to obtain the images.
       /// </summary>
       public void Start()
       {

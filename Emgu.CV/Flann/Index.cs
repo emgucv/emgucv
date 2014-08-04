@@ -54,7 +54,7 @@ namespace Emgu.CV.Flann
       /// <param name="values">A row by row matrix of descriptors</param>
       /// <param name="branching">Branching factor (for kmeans tree), use 32 for default</param>
       /// <param name="iterations">Max iterations to perform in one kmeans clustering (kmeans tree), use 11 for deafault</param>
-      /// <param name="centersInitType">Algorithm used for picking the initial cluster centers for kmeans tree, use RANDOM for default</param>
+      /// <param name="centersInitType">Algorithm used for picking the initial cluster centers for kmeans tree, use Random for default</param>
       /// <param name="cbIndex">Cluster boundary index. Used when searching the kmeans tree. Use 0.2 for default</param>
       public Index(IInputArray values, int numberOfKDTrees, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
       {
@@ -68,7 +68,7 @@ namespace Emgu.CV.Flann
       /// <param name="values">A row by row matrix of descriptors</param>
       /// <param name="branching">Branching factor (for kmeans tree), use 32 for default</param>
       /// <param name="iterations">Max iterations to perform in one kmeans clustering (kmeans tree), use 11 for deafault</param>
-      /// <param name="centersInitType">Algorithm used for picking the initial cluster centers for kmeans tree, use RANDOM for default</param>
+      /// <param name="centersInitType">Algorithm used for picking the initial cluster centers for kmeans tree, use Random for default</param>
       /// <param name="cbIndex">Cluster boundary index. Used when searching the kmeans tree. Use 0.2 for default</param>
       public Index(IInputArray values, int branching, int iterations, CenterInitType centersInitType, float cbIndex)
       {

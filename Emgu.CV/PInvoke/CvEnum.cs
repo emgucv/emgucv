@@ -3118,7 +3118,7 @@ namespace Emgu.CV.CvEnum
    /// <summary>
    /// The types of blob trakcer
    /// </summary>
-   public enum BLOBTRACKER_TYPE
+   public enum BlobTrackerType
    {
       /// <summary>
       /// Simple blob tracker based on connected component tracking
@@ -3196,6 +3196,7 @@ namespace Emgu.CV.CvEnum
       ChisqrAlt = 4
    }
 
+   /*
    /// <summary>
    /// The type of BGStatModel
    /// </summary>
@@ -3209,7 +3210,7 @@ namespace Emgu.CV.CvEnum
       /// Gaussian background model
       /// </summary>
       GaussianBgModel
-   }
+   }*/
 
    /// <summary>
    /// Type of foreground detector
@@ -3231,7 +3232,7 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
-   /// The available flags for farneback optical flow computation
+   /// The available flags for Farneback optical flow computation
    /// </summary>
    [Flags]
    public enum OpticalflowFarnebackFlag
@@ -3302,7 +3303,7 @@ namespace Emgu.CV.CvEnum
    public enum CaptureType
    {
       /// <summary>
-      /// Autodetect
+      /// Auto detect
       /// </summary>
       Any = 0,
 

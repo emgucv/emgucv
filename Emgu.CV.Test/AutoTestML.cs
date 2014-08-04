@@ -12,7 +12,13 @@ using Emgu.CV.ML;
 using Emgu.CV.ML.Structure;
 using Emgu.CV.Structure;
 using Emgu.CV;
+#if NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+#else
 using NUnit.Framework;
+#endif
 using MlEnum = Emgu.CV.ML.MlEnum;
 
 namespace Emgu.CV.Test
@@ -204,6 +210,7 @@ namespace Emgu.CV.Test
          int numberOfClusters = 10;
 
          EM em = new EM(numberOfClusters, MlEnum.EmCovarianMatrixType.Diagonal, new MCvTermCriteria(100, 1.0e-6));
+         ParamDef[] parameters = em.GetParams();
          Matrix<int> labels = new Matrix<int>(numberOfPoints, 1);
          Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
          for (int i = 0; i < numberOfPoints; i++)
@@ -259,10 +266,12 @@ namespace Emgu.CV.Test
 
             //bool trained = model.Train(trainData, trainClasses, null, null, p);
             bool trained = model.TrainAuto(trainData, trainClasses, null, null, p.MCvSVMParams, 5);
+#if !NETFX_CORE
             String fileName = Path.Combine(Path.GetTempPath(), "svmModel.xml");
             model.Save(fileName);
             if (File.Exists(fileName))
                File.Delete(fileName);
+#endif
 
             for (int i = 0; i < img.Height; i++)
             {
@@ -342,10 +351,12 @@ namespace Emgu.CV.Test
          {
             classifier.Train(trainData, trainClasses, null, null, false);
 
+#if !NETFX_CORE
             String fileName = Path.Combine(Path.GetTempPath(), "normalBayes.xml");
             classifier.Save(fileName);
             if (File.Exists(fileName))
                File.Delete(fileName);
+#endif
 
             #region Classify every image pixel
             for (int i = 0; i < img.Height; i++)
@@ -425,10 +436,13 @@ namespace Emgu.CV.Test
          {
             classifier.Train(trainData, MlEnum.DataLayoutType.RowSample, trainClasses.Convert<float>(), null, null, MCvGBTreesParams.GetDefaultParameter(), false);
 
+#if !NETFX_CORE
             String fileName = Path.Combine(Path.GetTempPath(), "GBTrees.xml");
             classifier.Save(fileName);
             if (File.Exists(fileName))
                File.Delete(fileName);
+#endif
+
             #region Classify every image pixel
             for (int i = 0; i < img.Height; i++)
                for (int j = 0; j < img.Width; j++)
@@ -460,7 +474,7 @@ namespace Emgu.CV.Test
 
       private static void ReadLetterRecognitionData(out Matrix<float> data, out Matrix<float> response)
       {
-         string[] rows = System.IO.File.ReadAllLines(EmguAssert.GetFile( "letter-recognition.data" ));
+         string[] rows = EmguAssert.ReadAllLines("letter-recognition.data");
 
          int varCount = rows[0].Split(',').Length - 1;
          data = new Matrix<float>(rows.Length, varCount);
@@ -479,7 +493,7 @@ namespace Emgu.CV.Test
 
       private static void ReadMushroomData(out Matrix<float> data, out Matrix<float> response)
       {
-         string[] rows = System.IO.File.ReadAllLines(EmguAssert.GetFile( "agaricus-lepiota.data" ));
+         string[] rows = EmguAssert.ReadAllLines("agaricus-lepiota.data");
 
          int varCount = rows[0].Split(',').Length - 1;
          data = new Matrix<float>(rows.Length, varCount);
@@ -686,10 +700,12 @@ namespace Emgu.CV.Test
             if (!success)
                return;
 
+#if !NETFX_CORE
             String fileName = Path.Combine(Path.GetTempPath(), "ERTree.xml");
             forest.Save(fileName);
             if (File.Exists(fileName))
                File.Delete(fileName);
+#endif
 
             double trainDataCorrectRatio = 0;
             double testDataCorrectRatio = 0;
@@ -755,10 +771,12 @@ namespace Emgu.CV.Test
          {
             network.Train(trainData, trainClasses, null, parameters, Emgu.CV.ML.MlEnum.AnnMlpTrainingFlag.Default);
 
+#if !NETFX_CORE
             String fileName = Path.Combine(Path.GetTempPath(), "ann_mlp_model.xml");
             network.Save(fileName);
             if (File.Exists(fileName))
                File.Delete(fileName);
+#endif
 
             for (int i = 0; i < img.Height; i++)
             {
