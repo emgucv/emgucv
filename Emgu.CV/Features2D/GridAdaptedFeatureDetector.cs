@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿/*
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -88,15 +89,9 @@ namespace Emgu.CV.Features2D
          IntPtr detector,
          int maxTotalKeypoints, int gridRows, int gridCols);
 
-      /*
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void GridAdaptedFeatureDetectorDetect(
-         IntPtr detector,
-         IntPtr image, IntPtr keypoints, IntPtr mask);
-      */
-
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void GridAdaptedFeatureDetectorRelease(ref IntPtr detector);
 
    }
 }
+*/

@@ -17,7 +17,7 @@ using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using Emgu.CV.Nonfree;
+using Emgu.CV.XFeatures2D;
 using Emgu.Util;
 #if NETFX_CORE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -47,6 +47,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
       }
 
+      /*
       [Test]
       public void TestDense()
       {
@@ -54,7 +55,7 @@ namespace Emgu.CV.Test
          SIFTDetector extractor = new SIFTDetector();
          EmguAssert.IsTrue(TestFeature2DTracker(detector, extractor), "Unable to find homography matrix");
       
-      }
+      }*/
 
       [Test]
       public void TestSURF()
@@ -147,10 +148,10 @@ namespace Emgu.CV.Test
       public void TestFAST()
       {
          FastDetector fast = new FastDetector(10, true);
-         GridAdaptedFeatureDetector fastGrid = new GridAdaptedFeatureDetector(fast, 2000, 4, 4);
+         //GridAdaptedFeatureDetector fastGrid = new GridAdaptedFeatureDetector(fast, 2000, 4, 4);
          BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
-         ParamDef[] parameters = fastGrid.GetParams();
-         EmguAssert.IsTrue(TestFeature2DTracker(fastGrid, brief), "Unable to find homography matrix");
+         //ParamDef[] parameters = fastGrid.GetParams();
+         EmguAssert.IsTrue(TestFeature2DTracker(fast, brief), "Unable to find homography matrix");
       }
 
       [Test]
@@ -327,7 +328,7 @@ namespace Emgu.CV.Test
          }
       }
 
-
+      /*
       [Test]
       public void TestDetectorColor()
       {
@@ -365,7 +366,7 @@ namespace Emgu.CV.Test
                }
             }
          }
-      }
+      }*/
 
       [Test]
       public void TestSURFDetector2()
@@ -429,6 +430,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestGridAdaptedFeatureDetectorRepeatedRun()
       {
@@ -441,7 +443,7 @@ namespace Emgu.CV.Test
          VectorOfKeyPoint kpts2 = new VectorOfKeyPoint();
          detector.DetectRaw(box, kpts2);
          EmguAssert.IsTrue(kpts1.Size == kpts2.Size);
-      }
+      }*/
 
       /*
       [Test]

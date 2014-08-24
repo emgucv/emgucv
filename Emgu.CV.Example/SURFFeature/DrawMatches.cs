@@ -14,7 +14,7 @@ using Emgu.CV.Util;
 #if !IOS
 using Emgu.CV.Cuda;
 #endif
-using Emgu.CV.Nonfree;
+using Emgu.CV.XFeatures2D;
 
 namespace SURFFeatureExample
 {
@@ -91,7 +91,7 @@ namespace SURFFeatureExample
 
                UMat observedDescriptors = new UMat();
                surfCPU.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
-               BruteForceMatcher matcher = new BruteForceMatcher(DistanceType.L2);
+               BFMatcher matcher = new BFMatcher(DistanceType.L2);
                matcher.Add(modelDescriptors);
 
                matcher.KnnMatch(observedDescriptors, matches, k, null);

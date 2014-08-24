@@ -124,26 +124,6 @@ CVAPI(double) cveKmeans(cv::_InputArray* data, int k, cv::_InputOutputArray* bes
 CVAPI(void) cveHConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 CVAPI(void) cveVConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 
-CVAPI(void) cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift);
-
-CVAPI(void) cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* color, int thickness, int lineType, int shift);
-
-CVAPI(void) cveCircle(cv::_InputOutputArray* img, CvPoint* center, int radius, CvScalar* color, int thickness, int lineType, int shift);
-
-CVAPI(void) cvePutText(cv::_InputOutputArray* img, cv::String* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin);
-
-CVAPI(void) cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift);
-
-CVAPI(void) cveFillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset);
-
-CVAPI(void) cvePolylines(cv::_InputOutputArray* img, cv::_InputArray* pts,
-                   bool isClosed, const CvScalar* color,
-                   int thickness, int lineType, int shift );
-
-CVAPI(void) cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes,
-              double angle, double startAngle, double endAngle,
-              const CvScalar* color, int thickness, int lineType, int shift );
-
 CVAPI(double) cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2);
 
 CVAPI(bool) cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputArray* eigenVectors);
@@ -161,4 +141,6 @@ CVAPI(void) cveAlgorithmSetString(cv::Algorithm* algorithm, cv::String* name, cv
 CVAPI(void) cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* names, std::vector< int >* types, std::vector<cv::String>* help);
 
 CVAPI(void) cveAlgorithmGetList(std::vector< cv::String >* names);
+
+CVAPI(bool) cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2);
 #endif

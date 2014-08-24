@@ -120,3 +120,8 @@ void cveMergeMertensRelease(cv::MergeMertens** merge)
    delete *merge;
    *merge = 0;
 }
+
+void cveDenoiseTVL1(const std::vector< cv::Mat >* observations, cv::Mat* result, double lambda, int niters)
+{
+   cv::denoise_TVL1(*observations, *result, lambda, niters);
+}

@@ -25,7 +25,7 @@ using Emgu.CV.Tiff;
 #endif
 using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
-using Emgu.CV.Nonfree;
+using Emgu.CV.XFeatures2D;
 //using Emgu.CV.Softcascade;
 using Emgu.Util;
 using NUnit.Framework;
@@ -48,7 +48,7 @@ namespace Emgu.CV.Test
       {
          Point m1 = new Point(-1, 10);
          Point m2 = new Point(100, 10);
-         int inside = CvInvoke.cvClipLine(new Size(20, 20), ref m1, ref m2);
+         bool inside = CvInvoke.ClipLine(new Rectangle(Point.Empty, new Size(20, 20)), ref m1, ref m2);
          EmguAssert.AreEqual(0, m1.X);
          EmguAssert.AreEqual(19, m2.X);
       }
@@ -2312,7 +2312,7 @@ namespace Emgu.CV.Test
                vm.Push(images);
                stitcher.Stitch(vm, result);
             }
-            Emgu.CV.UI.ImageViewer.Show(result);
+            //Emgu.CV.UI.ImageViewer.Show(result);
          }
       }
 
@@ -2336,7 +2336,7 @@ namespace Emgu.CV.Test
                vm.Push(images);
                stitcher.Stitch(vm, result);
             }
-            Emgu.CV.UI.ImageViewer.Show(result);
+            //Emgu.CV.UI.ImageViewer.Show(result);
          }
       }
 
@@ -2635,6 +2635,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestERFilter()
       {
@@ -2689,20 +2690,21 @@ namespace Emgu.CV.Test
                      image.Draw(rect, new Bgr(Color.Red), 2);
                   //Emgu.CV.UI.ImageViewer.Show(image);
 
-                  /*
-                  MCvERStat[] regions = regionVec.ToArray();
-                  Size size = image.Size;
-                  foreach (MCvERStat region in regions)
-                  {
-                     if (region.ParentPtr != IntPtr.Zero)
-                     {
-                        Point p = region.GetCenter(size.Width);
-                        int flags = 4 + (255<< 8) + (int)CvEnum.FLOODFILL_FLAG.FIXED_RANGE + (int)CvEnum.FLOODFILL_FLAG.MASK_ONLY;
-                        MCvConnectedComp comp;
-                        CvInvoke.cvFloodFill(image, p, new MCvScalar(255), new MCvScalar(region.Level), new MCvScalar(), out comp, flags, mask);
-                        image.Draw(new CircleF(new PointF(p.X, p.Y), 4), new Gray(0), 2);
-                     }
-                  }*/
+                  
+                  //MCvERStat[] regions = regionVec.ToArray();
+                  //Size size = image.Size;
+                  //foreach (MCvERStat region in regions)
+                  //{
+                  //   if (region.ParentPtr != IntPtr.Zero)
+                  //   {
+                  //      Point p = region.GetCenter(size.Width);
+                  //      int flags = 4 + (255<< 8) + (int)CvEnum.FLOODFILL_FLAG.FIXED_RANGE + (int)CvEnum.FLOODFILL_FLAG.MASK_ONLY;
+                  //      MCvConnectedComp comp;
+                  //      CvInvoke.cvFloodFill(image, p, new MCvScalar(255), new MCvScalar(region.Level), new MCvScalar(), out comp, flags, mask);
+                  //      image.Draw(new CircleF(new PointF(p.X, p.Y), 4), new Gray(0), 2);
+                  //   }
+                  //}
+       
                   //UI.ImageViewer.Show(image.ConcateHorizontal(mask));
                   //}
                }
@@ -2718,6 +2720,6 @@ namespace Emgu.CV.Test
             }
          }
 
-      }
+      }*/
    }
 }

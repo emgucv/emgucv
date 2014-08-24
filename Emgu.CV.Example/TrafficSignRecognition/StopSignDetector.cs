@@ -14,7 +14,7 @@ using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
-using Emgu.CV.Nonfree;
+using Emgu.CV.XFeatures2D;
 
 namespace TrafficSignRecognition
 {
@@ -22,7 +22,7 @@ namespace TrafficSignRecognition
    {
       private VectorOfKeyPoint _modelKeypoints;
       private Mat _modelDescriptors;
-      private BruteForceMatcher _modelDescriptorMatcher;
+      private BFMatcher _modelDescriptorMatcher;
       //private Features2DTracker<float> _tracker;
       private SURFDetector _detector;
       
@@ -40,7 +40,7 @@ namespace TrafficSignRecognition
                throw new Exception("No image feature has been found in the stop sign model");
          }
 
-         _modelDescriptorMatcher = new BruteForceMatcher(DistanceType.L2);
+         _modelDescriptorMatcher = new BFMatcher(DistanceType.L2);
          _modelDescriptorMatcher.Add(_modelDescriptors);
 
          _octagon = new VectorOfPoint(

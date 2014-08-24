@@ -304,10 +304,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="..\..\opencv\samples\cpp\agaricus-lepiota.data">
-      <Link>agaricus-lepiota.data</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\opencv\samples\cpp\letter-recognition.data">
       <Link>letter-recognition.data</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -353,6 +349,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Windows.Store.csproj">
+      <Project>{1819bb9a-c4a9-453b-9eb9-a7e4a85edc29}</Project>
+      <Name>Emgu.CV.Contrib.Windows.Store</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Windows.Store.csproj">
       <Project>{c2293433-3c88-473c-ae81-bbbe5d5e1746}</Project>
       <Name>Emgu.CV.Cuda.Windows.Store</Name>
@@ -361,17 +361,9 @@
       <Project>{8de0b8cf-c318-44cc-9363-221067b74347}</Project>
       <Name>Emgu.CV.ML.Windows.Store</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.Windows.Store.csproj">
-      <Project>{30d83975-9df1-46d5-9fcd-55cdc5086af0}</Project>
-      <Name>Emgu.CV.Nonfree.Windows.Store</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.Shape\Emgu.CV.Shape.Windows.Store.csproj">
       <Project>{4e99b79c-61e5-4244-8017-0c45b59da98d}</Project>
       <Name>Emgu.CV.Shape.Windows.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Softcascade\Emgu.CV.Softcascade.Windows.Store.csproj">
-      <Project>{1819bb9a-c4a9-453b-9eb9-a7e4a85edc29}</Project>
-      <Name>Emgu.CV.Softcascade.Windows.Store</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Windows.Store.csproj">
       <Project>{67658000-1e4b-4417-a982-54a374e9d94b}</Project>

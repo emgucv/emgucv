@@ -46,13 +46,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CaptureFrameSource.cs" />
-    <Compile Include="FrameSource.cs" />
-    <Compile Include="GaussianMotionFilter.cs" />
-    <Compile Include="MotionModel.cs" />
-    <Compile Include="OnePassStabilizer.cs" />
-    <Compile Include="TwoPassStabilizer.cs" />
-    <Compile Include="VideoStabInvoke.cs" />
+    <Compile Include="*.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

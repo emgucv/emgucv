@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿/*
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return CvInvoke.cveAlgorithmFromDescriptorExtractor(((IDescriptorExtractor)this).DescriptorExtratorPtr);
+            return CvInvoke.AlgorithmPtrFromDescriptorExtractorPtr(((IDescriptorExtractor)this).DescriptorExtratorPtr);
          }
       }
    }
@@ -69,3 +70,4 @@ namespace Emgu.CV
 
    }
 }
+*/

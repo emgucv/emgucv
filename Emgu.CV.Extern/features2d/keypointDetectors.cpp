@@ -6,18 +6,7 @@
 
 #include "features2d_c.h"
 
-//StarDetector
-cv::StarDetector* CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize)
-{
-   cv::StarDetector* detector = new cv::StarDetector(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
-   return detector;
-}
 
-void CvStarDetectorRelease(cv::StarDetector** detector)
-{
-   delete *detector;
-   *detector = 0;
-}
 
 //ORB
 cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
@@ -60,19 +49,7 @@ void CvOrbDetectorRelease(cv::ORB** detector)
    *detector = 0;
 }
 
-//FREAK
-cv::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::DescriptorExtractor** descriptorExtractor)
-{
-   cv::FREAK* freak = new cv::FREAK(orientationNormalized, scaleNormalized, patternScale, nOctaves);
-   *descriptorExtractor = (cv::DescriptorExtractor*) freak;
-   return freak;
-}
 
-void CvFreakRelease(cv::FREAK** detector)
-{
-   delete * detector;
-   *detector = 0;
-}
 
 //Brisk
 cv::BRISK* CvBriskCreate(int thresh, int octaves, float patternScale, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
@@ -104,63 +81,6 @@ void CvFeatureDetectorRelease(cv::FeatureDetector** detector)
    *detector = 0;
 }
 
-//GridAdaptedFeatureDetector
-cv::GridAdaptedFeatureDetector* GridAdaptedFeatureDetectorCreate(   
-   cv::FeatureDetector* detector,
-   int maxTotalKeypoints,
-   int gridRows, int gridCols)
-{
-   cv::Ptr<cv::FeatureDetector> detectorPtr(detector);
-   detectorPtr.addref(); //increment the counter such that it should never be release by the grid adapeted feature detector
-   return new cv::GridAdaptedFeatureDetector(detectorPtr, maxTotalKeypoints, gridRows, gridCols);
-}
-/*
-void GridAdaptedFeatureDetectorDetect(
-   cv::GridAdaptedFeatureDetector* detector, 
-   const cv::Mat* image, std::vector<cv::KeyPoint>* keypoints, const cv::Mat* mask)
-{
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat = mask? cv::cvarrToMat(mask) : cv::Mat();
-   detector->detect(mat, *keypoints, maskMat);
-}*/
-
-void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector)
-{
-   delete *detector;
-   *detector = 0;
-}
-
-cv::BriefDescriptorExtractor* CvBriefDescriptorExtractorCreate(int descriptorSize)
-{
-   return new cv::BriefDescriptorExtractor(descriptorSize);
-}
-
-/*
-int CvBriefDescriptorExtractorGetDescriptorSize(cv::BriefDescriptorExtractor* extractor)
-{
-   return extractor->descriptorSize();
-}
-
-void CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor, IplImage* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors)
-{
-   if (keypoints->size() <= 0) return;
-   cv::Mat img = cv::cvarrToMat(image);
-   if (img.channels() == 1)
-   {
-     extractor->compute(img, *keypoints, *descriptors);
-   } else //opponent brief
-   {
-      cv::Ptr<cv::DescriptorExtractor> briefExtractor = new cv::BriefDescriptorExtractor(extractor->descriptorSize());
-      cv::OpponentColorDescriptorExtractor colorDescriptorExtractor(briefExtractor);
-      colorDescriptorExtractor.compute(img, *keypoints, *descriptors);
-   }
-}*/
-
-void CvBriefDescriptorExtractorRelease(cv::BriefDescriptorExtractor** extractor)
-{
-   delete *extractor;
-   *extractor = 0;
-}
 
 // detect corners using FAST algorithm
 cv::FastFeatureDetector* CvFASTGetFeatureDetector(int threshold, bool nonmax_supression)
@@ -382,6 +302,7 @@ void CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* imag
    (*feature2D)(*image, mask ? *mask : (cv::InputArray) cv::noArray(), *keypoints, *descriptors, useProvidedKeyPoints);
 }
 
+/*
 //OpponentColorDescriptorExtractor
 cv::OpponentColorDescriptorExtractor* CvOpponentColorDescriptorExtractorCreate(cv::DescriptorExtractor* extractor)
 {
@@ -393,7 +314,7 @@ void CvOpponentColorDescriptorExtractorRelease(cv::OpponentColorDescriptorExtrac
 {
    delete *extractor;
    *extractor = 0;
-}
+}*/
 
 //DescriptorExtractor
 void CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors )
@@ -418,16 +339,6 @@ void CvGFTTDetectorRelease(cv::GFTTDetector** detector)
    *detector = 0;
 }
 
-//DenseFeatureDetector
-cv::DenseFeatureDetector* CvDenseFeatureDetectorCreate( float initFeatureScale, int featureScaleLevels, float featureScaleMul, int initXyStep, int initImgBound, bool varyXyStepWithScale, bool varyImgBoundWithScale)
-{
-   return new cv::DenseFeatureDetector(initFeatureScale, featureScaleLevels, featureScaleMul, initXyStep, initImgBound, varyXyStepWithScale, varyImgBoundWithScale);
-}
-void CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector)
-{
-   delete * detector;
-   *detector = 0;
-}
 
 //BowKMeansTrainer
 cv::BOWKMeansTrainer* CvBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria* termcrit, int attempts, int flags)

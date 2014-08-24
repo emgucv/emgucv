@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,6 +9,7 @@
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>Emgu.CV.Example</RootNamespace>
+    <AssemblyName>EmguCVExampleiOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>True</DebugSymbols>
@@ -62,7 +63,7 @@
     </IpaPackageName>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
     <MtouchSdkVersion>7.0</MtouchSdkVersion>
-    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
+    <AssemblyName>EmguCVExampleiOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -79,7 +80,7 @@
     <MtouchExtraArgs>-nosymbolstrip -cxx</MtouchExtraArgs>
     <IpaPackageName>
     </IpaPackageName>
-    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
+    <AssemblyName>EmguCVExampleiOS</AssemblyName>
     <DefineConstants>IOS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
@@ -95,7 +96,7 @@
     </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
-    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
+    <AssemblyName>EmguCVExampleiOS</AssemblyName>
     <DefineConstants>IOS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
@@ -110,7 +111,7 @@
     </MtouchI18n>
     <MtouchArch>ARMv7, ARMv7s</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
-    <AssemblyName>Emgu.CV.Example.iOS</AssemblyName>
+    <AssemblyName>EmguCVExampleiOS</AssemblyName>
     <DefineConstants>IOS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
@@ -156,7 +157,7 @@
     <Compile Include="CameraDialogViewController.cs" />
     <Compile Include="PedestrianDetectionDialogViewController.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.iOS.csproj">
       <Project>{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}</Project>
@@ -177,10 +178,6 @@
     <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.iOS.csproj">
       <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
       <Name>Emgu.Util.iOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.iOS.csproj">
-      <Project>{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}</Project>
-      <Name>Emgu.CV.Nonfree.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -244,8 +241,5 @@
     <Content Include="AppIcons\appIcon_57x57.png" />
     <Content Include="AppIcons\iTunesArtwork_512x512.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="tessdata\" />
-    <Folder Include="AppIcons\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

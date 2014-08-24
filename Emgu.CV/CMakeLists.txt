@@ -10,11 +10,11 @@ FILE(GLOB_RECURSE SRC_CV RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
 LIST(APPEND SRC_CV ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
 IF (NETFX_CORE)
-  #Remove android, or ios related files
-  FILE(GLOB_RECURSE SRC_CV_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "PInvoke/iOS/*.cs" "PInvoke/Android/*.cs" "PInvoke/System.Drawing/*.cs" "StringTable.Designer.cs" )
+  #Remove android, ios or unity related files
+  FILE(GLOB_RECURSE SRC_CV_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "PInvoke/iOS/*.cs" "PInvoke/Android/*.cs" "PInvoke/Unity/*.cs" "PInvoke/System.Drawing/*.cs"  "StringTable.Designer.cs" )
 ELSE()
-  #Remove android, ios or windows store library related files
-  FILE(GLOB_RECURSE SRC_CV_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "PInvoke/iOS/*.cs" "PInvoke/Android/*.cs" "PInvoke/System.Drawing/*.cs" "PInvoke/Windows.Store/*.cs")
+  #Remove android, ios, windows store or unity related files
+  FILE(GLOB_RECURSE SRC_CV_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "PInvoke/iOS/*.cs" "PInvoke/Android/*.cs" "PInvoke/Unity/*.cs" "PInvoke/System.Drawing/*.cs" "PInvoke/Windows.Store/*.cs")
 ENDIF()
 
 LIST(REMOVE_ITEM SRC_CV ${SRC_CV_EXCLUDES})
@@ -50,27 +50,49 @@ IF(WIN32 OR APPLE)
 
 IF(NETFX_CORE)
   SET(CSPROJ_FILE "${PROJECT_NAME}.Windows.Store.csproj")
+  INSTALL(
+	  DIRECTORY
+	  ${CMAKE_CURRENT_SOURCE_DIR}
+	  DESTINATION .
+		COMPONENT emgucv_source
+	  FILES_MATCHING 
+	  PATTERN "*.cs"
+	  PATTERN "${CSPROJ_FILE}"
+	  PATTERN "*.resx"
+	  PATTERN "README.txt"
+	  PATTERN ".svn" EXCLUDE
+	  PATTERN "obj" EXCLUDE
+	  PATTERN "CMakeFiles" EXCLUDE
+	  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+	  PATTERN "*Android*" EXCLUDE
+	  PATTERN "*iOS*" EXCLUDE
+	  PATTERN "*Unity*" EXCLUDE
+	)
 ELSE()
   SET(CSPROJ_FILE "${PROJECT_NAME}.csproj")
+  INSTALL(
+	  DIRECTORY
+	  ${CMAKE_CURRENT_SOURCE_DIR}
+	  DESTINATION .
+		COMPONENT emgucv_source
+	  FILES_MATCHING 
+	  PATTERN "*.cs"
+	  PATTERN "${CSPROJ_FILE}"
+	  PATTERN "*.resx"
+	  PATTERN "README.txt"
+	  PATTERN ".svn" EXCLUDE
+	  PATTERN "obj" EXCLUDE
+	  PATTERN "CMakeFiles" EXCLUDE
+	  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+	  PATTERN "*Android*" EXCLUDE
+	  PATTERN "*iOS*" EXCLUDE
+	  PATTERN "*Unity*" EXCLUDE
+	  PATTERN "*System.Drawing*" EXCLUDE
+	  PATTERN "*Windows.Store*" EXCLUDE
+	)
 ENDIF()
   
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  DESTINATION .
-    COMPONENT emgucv_source
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "${CSPROJ_FILE}"
-  PATTERN "*.resx"
-  PATTERN "README.txt"
-  PATTERN ".svn" EXCLUDE
-  PATTERN "obj" EXCLUDE
-  PATTERN "CMakeFiles" EXCLUDE
-  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-  PATTERN "*Android*" EXCLUDE
-  PATTERN "*iOS*" EXCLUDE
-)
+
 ENDIF()
 
 ENDIF()

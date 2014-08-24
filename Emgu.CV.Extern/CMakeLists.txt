@@ -59,7 +59,7 @@ CREATE_VECTOR_CS("PointF" "cv::Point2f" "PointF" "struct" ${CMAKE_CURRENT_SOURCE
 CREATE_VECTOR_CS("Point3D32F" "cv::Point3f" "MCvPoint3D32f" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("Rect" "cv::Rect" "Rectangle" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("KeyPoint" "cv::KeyPoint" "MKeyPoint" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
-CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/text/erfilter.hpp\"")
+CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text Emgu.CV.Text "#include \"opencv2/text/erfilter.hpp\"")
 CREATE_VECTOR_CS("DMatch" "cv::DMatch" "MDMatch" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("Triangle2DF" "cv::Vec6f" "Triangle2DF" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 
@@ -350,31 +350,16 @@ IF(WITH_OPENCL)
 ENDIF()
 ############################### OpenCL END ################################
 
-############################### nonfree START ##############################
-IF(BUILD_opencv_nonfree)
-  MESSAGE(STATUS "Building cvextern with opencv_nonfree")
-  #file(GLOB_RECURSE nonfree_extern_srcs "nonfree/*.cpp")
-  #file(GLOB_RECURSE nonfree_extern_hdrs "nonfree/*.h*")
-  
-  IF(NOT WITH_OPENCL)
-    FILE(GLOB nonfree_ocl_extern_srcs_excludes "nonfree/nonfree_ocl_c.cpp")
-    LIST(REMOVE_ITEM extern_srcs ${nonfree_ocl_extern_srcs_excludes})
-    FILE(GLOB nonfree_ocl_extern_hdrs_excludes "nonfree/nonfree_ocl_c.h")
-    LIST(REMOVE_ITEM extern_hdrs ${nonfree_ocl_extern_hdrs_excludes})
+############################### xfeatures2d START ##############################
+IF(BUILD_opencv_xfeatures2d)
+  IF( (NOT WITH_CUDA) OR (NOT (TARGET opencv_cuda)) )
+    FILE(GLOB xfeatures2d_srcs_excludes "xfeatures2d/nonfree_gpu_c.cpp")
+    LIST(REMOVE_ITEM extern_srcs ${xfeatures2d_srcs_excludes})
+    FILE(GLOB xfeatures2d_hdrs_excludes "xfeatures2d/nonfree_gpu_c.h")
+    LIST(REMOVE_ITEM extern_hdrs ${xfeatures2d_hdrs_excludes})
   ENDIF()
-  
-  IF(NOT WITH_CUDA)
-    FILE(GLOB nonfree_gpu_extern_srcs_excludes "nonfree/nonfree_gpu_c.cpp")
-    LIST(REMOVE_ITEM extern_srcs ${nonfree_gpu_extern_srcs_excludes})
-    FILE(GLOB nonfree_gpu_extern_hdrs_excludes "nonfree/nonfree_gpu_c.h")
-    LIST(REMOVE_ITEM extern_hdrs ${nonfree_gpu_extern_hdrs_excludes})
-  ENDIF()
-  
-  #source_group("Src_nonfree" FILES ${nonfree_extern_srcs})
-  #source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
-
 ENDIF()
-############################### nonfree END ################################
+############################### xfeatures2d END ################################
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   INSTALL(

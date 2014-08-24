@@ -55,4 +55,6 @@ CVAPI(void) cveMergeMertensRelease(cv::MergeMertens** merge);
 
 CVAPI(cv::MergeRobertson*) cveCreateMergeRobertson(cv::MergeExposures** merge);
 CVAPI(void) cveMergeRobertsonRelease(cv::MergeRobertson** merge);
+
+CVAPI(void) cveDenoiseTVL1(const std::vector< cv::Mat >* observations, cv::Mat* result, double lambda, int niters);
 #endif

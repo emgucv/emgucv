@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidExamples", "..\..\Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.VideoStab.Android", "..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.Android.csproj", "{832C330B-CA00-4CA8-BC0C-E94957AD6B2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Nonfree.Android", "..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.Android.csproj", "{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Contrib.Android", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Android.csproj", "{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -119,7 +119,7 @@ namespace Emgu.CV
 
       private void Calculate(Mat[] arrays, bool accumulate, CvArray<Byte> mask)
       {
-#if !(NETFX_CORE || UNITY_ANDROID)
+#if !(NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ))
          Debug.Assert(arrays.Length == _binSizes.Length, Properties.StringTable.IncompatibleDimension);
 #endif
          int[] channels = new int[arrays.Length];
@@ -140,7 +140,7 @@ namespace Emgu.CV
       ///<typeparam name="TDepth">The type of depth of the image</typeparam>
       public Image<Gray, TDepth> BackProject<TDepth>(Image<Gray, TDepth>[] srcs) where TDepth : new()
       {
-#if !(NETFX_CORE || UNITY_ANDROID)
+#if !(NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ))
          Debug.Assert(srcs.Length == _binSizes.Length, Properties.StringTable.IncompatibleDimension);
 #endif
          using (VectorOfMat vm = new VectorOfMat())
@@ -167,7 +167,7 @@ namespace Emgu.CV
       ///<typeparam name="TDepth">The type of depth of the matrix</typeparam>
       public Matrix<TDepth> BackProject<TDepth>(Matrix<TDepth>[] srcs) where TDepth : new()
       {
-#if !(NETFX_CORE || UNITY_ANDROID)
+#if !(NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ))
          Debug.Assert(srcs.Length == _binSizes.Length, Properties.StringTable.IncompatibleDimension);
 #endif
          using (VectorOfMat vm = new VectorOfMat())

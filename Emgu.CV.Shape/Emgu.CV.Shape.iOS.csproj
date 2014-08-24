@@ -8,7 +8,7 @@
     <ProjectGuid>{A4126442-4948-4C60-BF46-932B5A4F9ACB}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Emgu.CV.Shape.iOS</RootNamespace>
+    <RootNamespace>Emgu.CV.Shape</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>Emgu.CV.Shape.iOS</AssemblyName>
   </PropertyGroup>
@@ -43,10 +43,8 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="HistogramCostExtractor.cs" />
+    <Compile Include="*.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShapeDistanceExtractor.cs" />
-    <Compile Include="ShapeTransformer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>

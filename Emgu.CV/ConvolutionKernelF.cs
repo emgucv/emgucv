@@ -69,7 +69,7 @@ namespace Emgu.CV
          _center = center;
       }
 
-      ///<summary> Get a filpped copy of the convolution kernel</summary>
+      ///<summary> Get a flipped copy of the convolution kernel</summary>
       ///<param name="flipType">The type of the flipping</param>
       ///<returns> The flipped copy of <i>this</i> image </returns>
       public ConvolutionKernelF Flip(CvEnum.FlipType flipType)

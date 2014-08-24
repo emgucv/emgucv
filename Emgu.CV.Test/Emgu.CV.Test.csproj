@@ -107,14 +107,6 @@
       <Link>haarcascade_frontalface_alt2.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\data\softcascade\inria_caltech-17.01.2013.xml">
-      <Link>inria_caltech-17.01.2013.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\opencv\data\softcascade\soft-cascade-17.12.2012.xml">
-      <Link>soft-cascade-17.12.2012.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\opencv\samples\cpp\board.jpg">
       <Link>board.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -131,15 +123,15 @@
       <Link>logo_in_clutter.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\cpp\trained_classifierNM1.xml">
+    <Content Include="..\opencv_contrib\modules\text\samples\trained_classifierNM1.xml">
       <Link>trained_classifierNM1.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\cpp\trained_classifierNM2.xml">
+    <Content Include="..\opencv_contrib\modules\text\samples\trained_classifierNM2.xml">
       <Link>trained_classifierNM2.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\cpp\trained_classifier_erGrouping.xml">
+    <Content Include="..\opencv_contrib\modules\text\samples\trained_classifier_erGrouping.xml">
       <Link>trained_classifier_erGrouping.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -214,6 +206,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.Contrib\Emgu.CV.Contrib.csproj">
+      <Project>{787d75d2-fe4d-4739-b9a5-2fb2617a42cc}</Project>
+      <Name>Emgu.CV.Contrib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.csproj">
       <Project>{8728cb1f-f193-4f75-aea9-221aa85a3e80}</Project>
       <Name>Emgu.CV.Cuda</Name>
@@ -221,10 +217,6 @@
     <ProjectReference Include="..\Emgu.CV.ML\Emgu.CV.ML.csproj">
       <Project>{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}</Project>
       <Name>Emgu.CV.ML</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.csproj">
-      <Project>{910D133F-1B44-4151-80A5-F3B25741747D}</Project>
-      <Name>Emgu.CV.Nonfree</Name>
     </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.OCR\Emgu.CV.OCR.csproj">
       <Project>{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}</Project>
@@ -275,10 +267,6 @@
       <Link>letter-recognition.data</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="..\opencv\samples\cpp\agaricus-lepiota.data">
-      <Link>agaricus-lepiota.data</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

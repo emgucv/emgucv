@@ -6,7 +6,7 @@ using System;
 using Emgu.CV;
 #if NETFX_CORE
 using Windows.UI;
-#elif UNITY_ANDROID
+#elif ( UNITY_ANDROID || UNITY_IPHONE )
 using UnityEngine;
 #else
 using System.Drawing;
@@ -39,7 +39,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       /// <param name="winColor">System.Drawing.Color</param>
       public Rgb(Color winColor)
-#if UNITY_ANDROID
+#if ( UNITY_ANDROID || UNITY_IPHONE )
          : this(winColor.r * 255.0, winColor.g * 255.0, winColor.b * 255.0)
 #else
          : this(winColor.R, winColor.G, winColor.B)

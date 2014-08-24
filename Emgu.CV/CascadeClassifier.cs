@@ -35,7 +35,7 @@ namespace Emgu.CV
 #if !NETFX_CORE
          FileInfo file = new FileInfo(fileName);
          if (!file.Exists)
-#if UNITY_ANDROID
+#if ( UNITY_ANDROID || UNITY_IPHONE )
             throw new FileNotFoundException("File '{0}' not found", file.FullName);
 #else
             throw new FileNotFoundException(Properties.StringTable.FileNotFound, file.FullName);
@@ -46,7 +46,7 @@ namespace Emgu.CV
 
          if (_ptr == IntPtr.Zero)
          {
-#if NETFX_CORE || UNITY_ANDROID
+#if NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE )
             throw new NullReferenceException(String.Format("Fail to create HaarCascade object: {0}", fileName));
 #else
             throw new NullReferenceException(String.Format(Properties.StringTable.FailToCreateHaarCascade, file.FullName));

@@ -33,6 +33,7 @@ namespace Emgu.CV.Test
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultFullName = global::Emgu.CV.Test.Resource.Id.ResultFullName;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultMessage = global::Emgu.CV.Test.Resource.Id.ResultMessage;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultResultState = global::Emgu.CV.Test.Resource.Id.ResultResultState;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultRunSingleMethodTest = global::Emgu.CV.Test.Resource.Id.ResultRunSingleMethodTest;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultStackTrace = global::Emgu.CV.Test.Resource.Id.ResultStackTrace;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsFailed = global::Emgu.CV.Test.Resource.Id.ResultsFailed;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsId = global::Emgu.CV.Test.Resource.Id.ResultsId;
@@ -90,20 +91,23 @@ namespace Emgu.CV.Test
 			// aapt resource value: 0x7f040000
 			public const int OptionRemoteServer = 2130968576;
 			
-			// aapt resource value: 0x7f04000f
-			public const int OptionsButton = 2130968591;
-			
-			// aapt resource value: 0x7f04000a
-			public const int ResultFullName = 2130968586;
-			
-			// aapt resource value: 0x7f04000c
-			public const int ResultMessage = 2130968588;
+			// aapt resource value: 0x7f040010
+			public const int OptionsButton = 2130968592;
 			
 			// aapt resource value: 0x7f04000b
-			public const int ResultResultState = 2130968587;
+			public const int ResultFullName = 2130968587;
 			
 			// aapt resource value: 0x7f04000d
-			public const int ResultStackTrace = 2130968589;
+			public const int ResultMessage = 2130968589;
+			
+			// aapt resource value: 0x7f04000c
+			public const int ResultResultState = 2130968588;
+			
+			// aapt resource value: 0x7f04000a
+			public const int ResultRunSingleMethodTest = 2130968586;
+			
+			// aapt resource value: 0x7f04000e
+			public const int ResultStackTrace = 2130968590;
 			
 			// aapt resource value: 0x7f040006
 			public const int ResultsFailed = 2130968582;
@@ -126,11 +130,11 @@ namespace Emgu.CV.Test
 			// aapt resource value: 0x7f040004
 			public const int ResultsResult = 2130968580;
 			
-			// aapt resource value: 0x7f04000e
-			public const int RunTestsButton = 2130968590;
+			// aapt resource value: 0x7f04000f
+			public const int RunTestsButton = 2130968591;
 			
-			// aapt resource value: 0x7f040010
-			public const int TestSuiteListView = 2130968592;
+			// aapt resource value: 0x7f040011
+			public const int TestSuiteListView = 2130968593;
 			
 			static Id()
 			{

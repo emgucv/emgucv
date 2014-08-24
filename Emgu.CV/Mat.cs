@@ -18,7 +18,7 @@ using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
 using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
-#elif NETFX_CORE || UNITY_ANDROID
+#elif NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE )
 #else
 using System.Drawing.Imaging;
 #endif
@@ -26,7 +26,7 @@ using System.Drawing.Imaging;
 namespace Emgu.CV
 {
    /// <summary>
-   /// The equavailent of cv::Mat, should only be used if you know what you are doing.
+   /// The equivalent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
    public partial class Mat : MatDataAllocator, IImage, IEquatable<Mat>
@@ -159,7 +159,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Pointer to the begining of the raw data
+      /// Pointer to the beginning of the raw data
       /// </summary>
       public IntPtr DataPointer
       {
@@ -457,41 +457,8 @@ namespace Emgu.CV
             
          }
       }
+
 #if ANDROID
-      public Bitmap Bitmap
-      {
-         get { return ToBitmap(Android.Graphics.Bitmap.Config.Argb8888); }
-      }
-
-      public Bitmap ToBitmap(Bitmap.Config config)
-      {
-         System.Drawing.Size size = Size;
-
-         if (config == Bitmap.Config.Argb8888)
-         {
-            Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Argb8888);
-
-            using (BitmapArgb8888Image bi = new BitmapArgb8888Image(result))
-            using (Image<Rgba, Byte> tmp = ToImage<Rgba, Byte>())
-            {
-               tmp.Copy(bi, null);
-            }
-            return result;
-         }
-         else if (config == Bitmap.Config.Rgb565)
-         {
-            Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Rgb565);
-
-            using (BitmapRgb565Image bi = new BitmapRgb565Image(result))
-            using (Image<Bgr, Byte> tmp = ToImage<Bgr, Byte>())
-               bi.ConvertFrom(tmp);
-            return result;
-         }
-         else
-         {
-            throw new NotImplementedException("Only Bitmap config of Argb888 or Rgb565 is supported.");
-         }
-      }
 #elif IOS
       public UIImage ToUIImage()
       {
@@ -519,7 +486,7 @@ namespace Emgu.CV
             }
          }
       }
-#elif !( NETFX_CORE || UNITY_ANDROID )
+#elif !( NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ) )
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
       /// such that the image data is <b>shared</b> with Bitmap. 
@@ -624,7 +591,7 @@ namespace Emgu.CV
 
          if (e != null)
          {
-#if IOS || NETFX_CORE || UNITY_ANDROID
+#if IOS || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE )
             throw e;
 #elif ANDROID
             FileInfo fileInfo = new FileInfo(fileName);

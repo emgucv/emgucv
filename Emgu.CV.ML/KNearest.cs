@@ -5,22 +5,27 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using Emgu.Util;
 
 namespace Emgu.CV.ML
 {
    /// <summary>
    /// The KNearest classifier
    /// </summary>
-   public class KNearest : StatModel
+   public class KNearest : UnmanagedObject, IStatModel
    {
+      private IntPtr _statModelPtr;
+      private IntPtr _algorithmPtr;
+
       /// <summary>
       /// Create a default KNearest classifier
       /// </summary>
-      public KNearest()
+      public KNearest(int defaultK = 10, bool isClassifier = true)
       {
-         _ptr = MlInvoke.CvKNearestDefaultCreate();
+         _ptr = MlInvoke.CvKNearestCreate(defaultK, isClassifier, ref _statModelPtr, ref _algorithmPtr);
       }
 
+      /*
       /// <summary>
       /// Creaet a KNearest classifier using the specific traing data
       /// </summary>
@@ -32,7 +37,7 @@ namespace Emgu.CV.ML
       public KNearest(Matrix<float> trainData, Matrix<float> responses, Matrix<Byte> sampleIdx, bool isRegression, int maxK)
       {
          _ptr = MlInvoke.CvKNearestCreate(trainData, responses, sampleIdx == null? IntPtr.Zero : sampleIdx.Ptr, isRegression, maxK);
-      }
+      }*/
 
       /// <summary>
       /// Release the classifer and all the memory associated with it
@@ -42,6 +47,7 @@ namespace Emgu.CV.ML
          MlInvoke.CvKNearestRelease(ref _ptr);
       }
 
+      /*
       /// <summary>
       /// Update the KNearest classifier using the specific traing data.
       /// </summary>
@@ -114,6 +120,16 @@ namespace Emgu.CV.ML
             }
          }
          return res;
+      }*/
+
+      IntPtr IStatModel.StatModelPtr
+      {
+         get { return _statModelPtr; }
+      }
+
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get { return _algorithmPtr; }
       }
    }
 }

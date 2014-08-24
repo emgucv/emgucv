@@ -37,7 +37,11 @@ void CvERFilterRun(cv::text::ERFilter* filter, cv::_InputArray* image, std::vect
    filter->run(*image, *regions);
 }
 
-void CvERGrouping(cv::_InputArray* channels, std::vector<cv::text::ERStat>** regions, int count, cv::String* fileName, float minProbability, std::vector<cv::Rect>* groups)
+void CvERGrouping(
+   cv::_InputArray* image, cv::_InputArray* channels, 
+   std::vector<cv::text::ERStat>** regions, int count, 
+   std::vector< std::vector<cv::Vec2i> >* groups, std::vector<cv::Rect>* group_rects, 
+   int method, cv::String* fileName, float minProbability )
 {
    std::vector< std::vector< cv::text::ERStat > > statVecs;
    for (int i = 0; i < count; i++)
@@ -45,6 +49,6 @@ void CvERGrouping(cv::_InputArray* channels, std::vector<cv::text::ERStat>** reg
       statVecs.push_back(*regions[i]);
    }
    
-   cv::text::erGrouping(*channels, statVecs, *fileName, minProbability, *groups);
+   cv::text::erGrouping(*image, *channels, statVecs, *groups, *group_rects, method, *fileName, minProbability);
 
 }

@@ -22,7 +22,9 @@ namespace Emgu.CV.ML.MlEnum
       /// <summary>
       /// A covariation matrix of each mixture may be arbitrary symmetrical positively defined matrix, so the number of free parameters in each matrix is about d2/2. It is not recommended to use this option, unless there is pretty accurate initial estimation of the parameters and/or a huge number of training samples
       /// </summary>
-      Generic = 2
+      Generic = 2,
+
+      Default = Diagonal
    }
 
    /// <summary>
@@ -88,6 +90,7 @@ namespace Emgu.CV.ML.MlEnum
    /// </summary>
    public enum SvmKernelType
    {
+      Custom = -1,
       /// <summary>
       /// No mapping is done, linear discrimination (or regression) is done in the original feature space. It is the fastest option. d(x,y) = x y == (x,y)
       /// </summary>
@@ -103,7 +106,9 @@ namespace Emgu.CV.ML.MlEnum
       /// <summary>
       /// sigmoid function is used as a kernel: d(x,y) = tanh(gamma*(xy)+coef0)
       /// </summary>
-      Sigmoid = 3
+      Sigmoid = 3,
+      Chi2=4,
+      Inter = 5
    }
 
    /// <summary>
@@ -131,7 +136,7 @@ namespace Emgu.CV.ML.MlEnum
       /// </summary>
       Identity = 0,
       /// <summary>
-      /// sigmoif symetric
+      /// sigmoid symetric
       /// </summary>
       SigmoidSym = 1, 
       /// <summary>
@@ -167,16 +172,16 @@ namespace Emgu.CV.ML.MlEnum
    /// <summary>
    /// The data layout type
    /// </summary>
-   public enum DataLayoutType
+   public enum DataLayoutType 
    {
       /// <summary>
       /// Feature vectors are stored as cols
       /// </summary>
-      ColSample = 0,
+      ColSample = 1,
       /// <summary>
       /// Feature vectors are stored as rows
       /// </summary>
-      RowSample =1
+      RowSample =0
    }
 
    /// <summary>

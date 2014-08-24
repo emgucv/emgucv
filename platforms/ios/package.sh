@@ -6,17 +6,22 @@ cd platforms/ios
 rm -rf ios-package
 mkdir ios-package
 cp -r ../../tmp/Emgu.CV ios-package/Emgu.CV
-rm -rf ios-package/Emgu.CV/Android
+rm -rf ios-package/Emgu.CV/PInvoke/Android
+rm -rf ios-package/Emgu.CV/PInvoke/System.Drawing
+rm -rf ios-package/Emgu.CV/PInvoke/Windows.Store
+rm -rf ios-package/Emgu.CV/PInvoke/Unity
 cp -rf ../../Emgu.CV/PInvoke/iOS/libemgucv.a ios-package/Emgu.CV/PInvoke/iOS
 cp ../../Emgu.CV/PInvoke/CvInvokeEntryPoints.cs ios-package/Emgu.CV/PInvoke
+cp -f ../../Emgu.CV/Util/VectorOf*.cs ios-package/Emgu.CV/Util
 
 cp -r ../../tmp/Emgu.CV.ML ios-package/Emgu.CV.ML
 cp -r ../../tmp/Emgu.CV.OCR ios-package/Emgu.CV.OCR
 cp -r ../../tmp/Emgu.CV.Stitching ios-package/Emgu.CV.Stitching
 cp -r ../../tmp/Emgu.Util ios-package/Emgu.Util
 cp -r ../../tmp/Emgu.CV.Cuda ios-package/Emgu.CV.Cuda
-cp -r ../../tmp/Emgu.CV.OpenCL ios-package/Emgu.CV.OpenCL
-cp -r ../../tmp/Emgu.CV.Nonfree ios-package/Emgu.CV.Nonfree
+cp -r ../../tmp/Emgu.CV.Shape ios-package/Emgu.CV.Shape
+cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
+cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
 
 mkdir -p ios-package/Solution/iOS
 cp ../../tmp/Solution/iOS/Emgu.CV.iOS.sln ios-package/Solution/iOS/Emgu.CV.iOS.sln
@@ -49,7 +54,7 @@ find ./ios-package -type f -name CMakeList* -exec rm '{}' \;
 find ./ios-package -type f -name *Android* -exec rm '{}' \;
 find ./ios-package -type f -name *Windows.Store* -exec rm '{}' \;
 cd ios-package
-rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.Cuda/Emgu.CV.Cuda.csproj Emgu.CV.OCR/Emgu.CV.OCR.csproj Emgu.Util/Emgu.Util.csproj Emgu.CV.Stitching/Emgu.CV.Stitching.csproj Emgu.CV.Nonfree/Emgu.CV.Nonfree.csproj Emgu.CV.OpenCL/Emgu.CV.OpenCL.csproj
+rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.Cuda/Emgu.CV.Cuda.csproj Emgu.CV.OCR/Emgu.CV.OCR.csproj Emgu.Util/Emgu.Util.csproj Emgu.CV.Stitching/Emgu.CV.Stitching.csproj Emgu.CV.Contrib/Emgu.CV.Contrib.csproj Emgu.CV.Shape/Emgu.CV.Shape.csproj
 cd ..
 
 gitversion=$(git log --oneline | wc -l | tr -d " ")

@@ -405,7 +405,6 @@ namespace Emgu.CV
          sane &= (sizes.CvSize == Marshal.SizeOf(typeof(System.Drawing.Size)));
          sane &= (sizes.CvSize2D32f == Marshal.SizeOf(typeof(System.Drawing.SizeF)));
          sane &= (sizes.CvTermCriteria == Marshal.SizeOf(typeof(MCvTermCriteria)));
-         sane &= (sizes.ERStat == Marshal.SizeOf(typeof(MCvERStat)));
 
          return sane;
       }

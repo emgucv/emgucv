@@ -190,13 +190,13 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Android.csproj">
+      <Project>{511c9a1f-fa2a-43ad-acb6-ae7794a49d42}</Project>
+      <Name>Emgu.CV.Contrib.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj">
       <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
       <Name>Emgu.CV.GPU.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.Android.csproj">
-      <Project>{511c9a1f-fa2a-43ad-acb6-ae7794a49d42}</Project>
-      <Name>Emgu.CV.Nonfree.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.Android.csproj">
       <Project>{17B67F34-D591-4BAD-ABB8-4D4199B20833}</Project>

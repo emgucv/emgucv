@@ -28,7 +28,7 @@ namespace Emgu.CV
 {
    public partial class CvInvoke
    {
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveAlgorithmFromDescriptorExtractor(IntPtr extractor);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveAlgorithmFromDescriptorExtractor")]
+      public extern static IntPtr AlgorithmPtrFromDescriptorExtractorPtr(IntPtr extractor);
    }
 }

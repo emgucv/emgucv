@@ -102,18 +102,9 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryFileStorage.cs" />
-    <Compile Include="DisposableObject.cs" />
-    <Compile Include="EventArgs.cs" />
-    <Compile Include="ICodeGenerable.cs" />
-    <Compile Include="IInterpolatable.cs" />
-    <Compile Include="PinnedArray.cs" />
-    <Compile Include="Platform.cs" />
+    <Compile Include="*.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
-    <Compile Include="Toolbox.cs" />
-    <Compile Include="TypeEnum.cs" />
-    <Compile Include="UnmanagedObject.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

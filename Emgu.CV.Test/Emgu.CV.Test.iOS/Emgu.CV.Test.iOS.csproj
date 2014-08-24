@@ -141,9 +141,6 @@
     <Content Include="..\..\opencv\samples\cpp\letter-recognition.data">
       <Link>letter-recognition.data</Link>
     </Content>
-    <Content Include="..\..\opencv\samples\cpp\agaricus-lepiota.data">
-      <Link>agaricus-lepiota.data</Link>
-    </Content>
     <Content Include="..\stitch1.jpg">
       <Link>stitch1.jpg</Link>
     </Content>
@@ -207,18 +204,18 @@
       <Link>logo_in_clutter.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\cpp\scenetext01.jpg">
+    <Content Include="..\..\opencv_contrib\modules\text\samples\scenetext01.jpg">
       <Link>scenetext01.jpg</Link>
     </Content>
-    <Content Include="..\..\opencv\samples\cpp\trained_classifier_erGrouping.xml">
+    <Content Include="..\..\opencv_contrib\modules\text\samples\trained_classifier_erGrouping.xml">
       <Link>trained_classifier_erGrouping.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\cpp\trained_classifierNM1.xml">
+    <Content Include="..\..\opencv_contrib\modules\text\samples\trained_classifierNM1.xml">
       <Link>trained_classifierNM1.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\opencv\samples\cpp\trained_classifierNM2.xml">
+    <Content Include="..\..\opencv_contrib\modules\text\samples\trained_classifierNM2.xml">
       <Link>trained_classifierNM2.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -279,11 +276,7 @@
       <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
       <Name>Emgu.Util.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.iOS.csproj">
-      <Project>{9CD79BDD-7407-4871-9807-A2B1B2E78B8D}</Project>
-      <Name>Emgu.CV.Nonfree.iOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Softcascade\Emgu.CV.Softcascade.iOS.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.iOS.csproj">
       <Project>{3BF42D92-3D10-45F7-865A-F9C009F71C30}</Project>
       <Name>Emgu.CV.Softcascade.iOS</Name>
     </ProjectReference>
@@ -296,9 +289,7 @@
       <Name>Emgu.CV.VideoStab.iOS</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="tessdata\" />
-  </ItemGroup>
+  <ItemGroup />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>

@@ -257,10 +257,10 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   core imgproc video flann ml imgcodecs videoio highgui objdetect features2d calib3d
   cudalegacy cudaarithm cudawarping cuda cudafilters cudaimgproc cudaoptflow 
   cudastereo cudabgsegm cudafeatures2d 
-  photo superres nonfree stitching 
-  videostab optim shape
+  photo superres stitching 
+  videostab shape
   cudev  cudacodec 
-  text
+  text face ximgproc xobjdetect xfeatures2d bgsegm optflow
   )
   
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
@@ -407,10 +407,9 @@ ADD_SUBDIRECTORY(Emgu.CV.OCR)
 ADD_SUBDIRECTORY(Emgu.CV.Stitching)
 ADD_SUBDIRECTORY(Emgu.CV.VideoStab)
 #ADD_SUBDIRECTORY(Emgu.CV.OpenCL)
-ADD_SUBDIRECTORY(Emgu.CV.Nonfree)
 ADD_SUBDIRECTORY(Emgu.CV.Superres)
 ADD_SUBDIRECTORY(Emgu.CV.Shape)
-ADD_SUBDIRECTORY(Emgu.CV.Softcascade)
+ADD_SUBDIRECTORY(Emgu.CV.Contrib)
 IF(NOT NETFX_CORE)
   ADD_SUBDIRECTORY(Emgu.CV.UI.GL)
 ENDIF()
@@ -418,7 +417,7 @@ ENDIF()
 
 IF (ANDROID)
   SET(CPACK_GENERATOR ZIP)
-  SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.ML Emgu.CV.Cuda Emgu.CV.Stitching Emgu.CV.VideoStab Emgu.CV.Nonfree Emgu.CV.Superres Emgu.CV.Shape Emgu.CV.Softcascade)
+  SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.Contrib Emgu.CV.ML Emgu.CV.Cuda Emgu.CV.Stitching Emgu.CV.VideoStab Emgu.CV.Superres Emgu.CV.Shape)
   IF(EMGU_CV_WITH_TESSERACT)
     LIST(APPEND ANDROID_SOURCE_FOLDERS Emgu.CV.OCR)
   ENDIF()
@@ -470,7 +469,7 @@ IF (ANDROID)
   INSTALL(
     FILES
     "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
-    "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
+    #"${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
 	"${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
     DESTINATION "opencv/data/haarcascades"
     COMPONENT main
@@ -1127,7 +1126,7 @@ INSTALL(
 ELSE() #LINUX
   SET(MONO_GACUTIL_EXEC "gacutil")
   SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
-  SET(EMGUCV_MANAGED_DLLS "Emgu.Util" "Emgu.CV" "Emgu.CV.ML" "Emgu.CV.Cuda" "Emgu.CV.UI" "Emgu.CV.Stitching" "Emgu.CV.VideoStab" "Emgu.CV.Superres" "Emgu.CV.Nonfree" "Emgu.CV.Shape" "Emgu.CV.Softcascade" "ZedGraph")
+  SET(EMGUCV_MANAGED_DLLS "Emgu.Util" "Emgu.CV" "Emgu.CV.ML" "Emgu.CV.Cuda" "Emgu.CV.UI" "Emgu.CV.Stitching" "Emgu.CV.VideoStab" "Emgu.CV.Superres" "Emgu.CV.Contrib" "Emgu.CV.Shape" "ZedGraph")
   IF(EMGU_CV_WITH_TESSERACT)
     LIST(APPEND EMGUCV_MANAGED_DLLS "Emgu.CV.OCR")
   ENDIF()
@@ -1185,7 +1184,7 @@ ELSE() #LINUX
     ENDIF()
   ENDIF()
    
-  SET(PREINST_SCRIPT "#!/bin/sh\nmkdir -p /usr/lib/pkgconfig /usr/${CPACK_PACKAGE_CLI_FOLDER} /usr/share/opencv/haarcascades /usr/share/opencv/lbpcascades /usr/share/opencv/doc /usr/share/opencv/doc/vidsurv /usr/share/opencv/doc/papers /usr/include/opencv2/flann /usr/include/opencv2/core /usr/include/opencv2/contrib /usr/include/opencv2/features2d /usr/include/opencv2/ffmpeg /usr/include/opencv2/gpu /usr/include/opencv2/haartraining /usr/include/opencv2/highgui /usr/include/opencv2/imgproc /usr/include/opencv2/legacy /usr/include/opencv2/ml /usr/include/opencv2/objdetect /usr/include/opencv2/calib3d /usr/include/opencv2/video /usr/include/opencv\n")
+  SET(PREINST_SCRIPT "#!/bin/sh\nmkdir -p /usr/lib/pkgconfig /usr/${CPACK_PACKAGE_CLI_FOLDER} /usr/share/opencv/haarcascades /usr/share/opencv/lbpcascades /usr/share/opencv/doc /usr/share/opencv/doc/vidsurv /usr/share/opencv/doc/papers /usr/include/opencv2/flann /usr/include/opencv2/core /usr/include/opencv2/features2d /usr/include/opencv2/ffmpeg /usr/include/opencv2/haartraining /usr/include/opencv2/highgui /usr/include/opencv2/imgproc /usr/include/opencv2/ml /usr/include/opencv2/objdetect /usr/include/opencv2/calib3d /usr/include/opencv2/video /usr/include/opencv\n")
   LIST(FIND CPACK_GENERATOR "DEB" TEMP)
   IF(NOT (${TEMP} EQUAL -1))
     SET(DEBIAN_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian")
@@ -1197,7 +1196,7 @@ ELSE() #LINUX
     
     SET(DEBIAN_PACKAGE_PRIORITY "optional")
     SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/preinst;${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
-    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libtiff5, libgeotiff2, gtk2-engines, libgstreamer0.10-0, libavcodec54, libswscale2, libavformat54, libopenexr6, libjasper1, libdc1394-22, libv4l-0, libqt4-opengl")
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libtiff5, libgeotiff2, libgtk-3-0, libgstreamer1.0-0, libavcodec54, libswscale2, libavformat54, libopenexr6, libjasper1, libdc1394-22, libv4l-0, libqt4-opengl")
     IF(EMGU_CV_WITH_TESSERACT)
       SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, libtesseract3")
     ENDIF()

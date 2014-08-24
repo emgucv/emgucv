@@ -14,19 +14,40 @@ namespace Emgu.CV.ML
    /// <summary>
    /// Expectation Maximization model
    /// </summary>
-   public class EM : UnmanagedObject, IAlgorithm
+   public class EM : UnmanagedObject, IStatModel
    {
+      public class Params :UnmanagedObject
+      {
+         /// <summary>
+         /// Create EM parameters
+         /// </summary>
+         /// <param name="nclusters">The number of mixture components in the Gaussian mixture model. Use 5 for default.</param>
+         /// <param name="covMatType">Constraint on covariance matrices which defines type of matrices</param>
+         /// <param name="termcrit">The termination criteria of the EM algorithm. The EM algorithm can be terminated by the number of iterations termCrit.maxCount (number of M-steps) or when relative change of likelihood logarithm is less than termCrit.epsilon. Default maximum number of iterations is 100</param>
+         public Params(int nclusters, MlEnum.EmCovarianMatrixType covMatType, MCvTermCriteria termcrit)
+         {
+            _ptr = MlInvoke.cveEmParamsCreate(nclusters, covMatType, ref termcrit);
+         }
+
+         protected override void DisposeObject()
+         {
+            MlInvoke.cveEmParamsRelease(ref _ptr);
+         }
+      }
+
+      private IntPtr _statModel;
+      private IntPtr _algorithm;
+
       /// <summary>
       /// Create an Expectation Maximization model
       /// </summary>
-      /// <param name="nclusters">The number of mixture components in the Gaussian mixture model. Use 5 for default.</param>
-      /// <param name="covMatType">Constraint on covariance matrices which defines type of matrices</param>
-      /// <param name="termcrit">The termination criteria of the EM algorithm. The EM algorithm can be terminated by the number of iterations termCrit.maxCount (number of M-steps) or when relative change of likelihood logarithm is less than termCrit.epsilon. Default maximum number of iterations is 100</param>
-      public EM(int nclusters, MlEnum.EmCovarianMatrixType covMatType, MCvTermCriteria termcrit)
+     public EM(Params p)
       {
-         _ptr = MlInvoke.CvEMDefaultCreate(nclusters, covMatType, ref termcrit);
+         _ptr = MlInvoke.CvEMDefaultCreate(p, ref _statModel, ref _algorithm);
       }
 
+
+      /*
       /// <summary>
       /// Starts with Expectation step. Initial values of the model parameters will be estimated by the k-means algorithm.
       /// </summary>
@@ -42,10 +63,10 @@ namespace Emgu.CV.ML
          using (OutputArray oaLabels = labels == null ? OutputArray.GetEmpty() : labels.GetOutputArray())
          using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
             return MlInvoke.CvEMTrain(_ptr, iaSamples, oaLoglikelihoods, oaLabels, oaProbs);
-      }
+      }*/
 
-      public bool TrainE(IInputArray samples, IInputArray means0, IInputArray covs0, IInputArray weights0,
-         IOutputArray loglikelihoods, IOutputArray labels, IOutputArray probs)
+      public EM(IInputArray samples, IInputArray means0, IInputArray covs0, IInputArray weights0,
+         IOutputArray loglikelihoods, IOutputArray labels, IOutputArray probs, Params p)
       {
          using (InputArray iaSamples = samples.GetInputArray())
          using (InputArray iaMeans0 = means0.GetInputArray())
@@ -54,22 +75,31 @@ namespace Emgu.CV.ML
          using (OutputArray oaLogLikelihood = loglikelihoods == null ? OutputArray.GetEmpty() : loglikelihoods.GetOutputArray())
          using (OutputArray oaLabels = labels == null ? OutputArray.GetEmpty() : labels.GetOutputArray())
          using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
-            return MlInvoke.CvEMTrainE(_ptr, iaSamples, iaMeans0, iaCovs0, iaWeights, oaLogLikelihood, oaLabels, oaProbs);
+         {
+            
+            _ptr = MlInvoke.CvEMTrainStartWithE(iaSamples, iaMeans0, iaCovs0, iaWeights, oaLogLikelihood, oaLabels,
+               oaProbs, p, ref _statModel, ref _algorithm);
+            
+         }
       }
 
-      public bool CvEMTrainM(
+      public EM(
          IInputArray samples,
          IInputArray probs0,
          IOutputArray logLikelihoods,
          IOutputArray labels,
-         IOutputArray probs)
+         IOutputArray probs,
+         Params p)
       {
          using (InputArray iaSamples = samples.GetInputArray())
          using (InputArray iaProbs0 = probs0.GetInputArray())
          using (OutputArray oaLogLikelihood = logLikelihoods == null ? OutputArray.GetEmpty() : logLikelihoods.GetOutputArray())
          using (OutputArray oaLabels = labels == null ? OutputArray.GetEmpty() : labels.GetOutputArray())
          using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
-            return MlInvoke.CvEMTrainM(_ptr, iaSamples, iaProbs0, oaLogLikelihood, oaLabels, oaProbs);
+         {
+            _ptr = MlInvoke.CvEMTrainStartWithM(iaSamples, iaProbs0, oaLogLikelihood, oaLabels, oaProbs, p, ref _statModel, ref _algorithm);
+            
+         }
       }
 
 
@@ -101,7 +131,12 @@ namespace Emgu.CV.ML
 
       IntPtr IAlgorithm.AlgorithmPtr
       {
-         get { return _ptr; }
+         get { return _algorithm; }
+      }
+
+      IntPtr IStatModel.StatModelPtr
+      {
+         get { return _statModel; }
       }
    }
 }

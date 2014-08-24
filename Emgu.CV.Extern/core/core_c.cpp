@@ -419,52 +419,6 @@ void cveVConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* 
 }
 
 
-void cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift)
-{
-   cv::line(*img, *p1, *p2, *color, thickness, lineType, shift);
-}
-
-void cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* color, int thickness, int lineType, int shift)
-{
-   cv::Point p1(rect->x, rect->y);
-   cv::Point p2(rect->x + rect->width, rect->y + rect->height);
-   cv::rectangle(*img, p1, p2, *color, thickness, lineType, shift);
-}
-
-void cveCircle(cv::_InputOutputArray* img, CvPoint* center, int radius, CvScalar* color, int thickness, int lineType, int shift)
-{
-   cv::circle(*img, *center, radius, *color, thickness, lineType, shift);
-}
-
-void cvePutText(cv::_InputOutputArray* img, cv::String* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin)
-{
-   cv::putText(*img, *text, *org, fontFace, fontScale, *color, thickness, lineType, bottomLeftOrigin);
-}
-
-void cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift)
-{
-   cv::fillConvexPoly(*img, *points, *color, lineType, shift);
-}
-
-void cveFillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset)
-{
-   cv::fillPoly(*img, *pts, *color, lineType, shift, *offset);
-}
-
-void cvePolylines(cv::_InputOutputArray* img, cv::_InputArray* pts,
-                   bool isClosed, const CvScalar* color,
-                   int thickness, int lineType, int shift )
-{
-   cv::polylines(*img, *pts, isClosed, *color, thickness, lineType, shift);
-}
-
-void cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes,
-              double angle, double startAngle, double endAngle,
-              const CvScalar* color, int thickness, int lineType, int shift )
-{
-   cv::ellipse(*img, *center, *axes, angle, startAngle, endAngle, *color, thickness, lineType, shift);
-}
-
 double cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2)
 {
    return cv::PSNR(*src1, *src2);
@@ -516,4 +470,13 @@ void cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* na
 void cveAlgorithmGetList(std::vector< cv::String >* names)
 {
    cv::Algorithm::getList( *names );
+}
+
+bool cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2)
+{
+   cv::Point p1 = *pt1, p2 = *pt2;
+   bool r = cv::clipLine(*rect, p1, p2);
+   pt1->x = p1.x; pt1->y = p1.y;
+   pt2->x = p2.x; pt2->y = p2.y;
+   return r;
 }

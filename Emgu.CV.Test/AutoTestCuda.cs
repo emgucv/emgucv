@@ -14,7 +14,7 @@ using Emgu.CV.Cuda;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
-using Emgu.CV.Nonfree;
+using Emgu.CV.XFeatures2D;
 //using Emgu.CV.Softcascade;
 using NUnit.Framework;
 

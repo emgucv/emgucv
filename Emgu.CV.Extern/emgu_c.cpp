@@ -23,7 +23,7 @@ void getCvStructSizes(emgu::cvStructSizes* sizes)
    sizes->CvSeq = sizeof(CvSeq);
    sizes->CvContour = sizeof(CvContour);
    sizes->IplImage = sizeof(IplImage);
-   sizes->ERStat = sizeof(cv::text::ERStat);   
+   //sizes->ERStat = sizeof(cv::text::ERStat);   
 }
 
 void testDrawLine(IplImage* img, int startX, int startY, int endX, int endY, CvScalar c)

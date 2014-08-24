@@ -25,6 +25,9 @@ CVAPI(cv::text::ERFilter*) CvERFilterNM2Create(cv::String* classifier, float min
 CVAPI(void) CvERFilterRelease(cv::text::ERFilter** filter);
 CVAPI(void) CvERFilterRun(cv::text::ERFilter* filter, cv::_InputArray* image, std::vector<cv::text::ERStat>* regions);
 
-CVAPI(void) CvERGrouping(cv::_InputArray* channels, std::vector<cv::text::ERStat>** regions, int count, cv::String* fileName, float minProbability, std::vector<cv::Rect>* groups);
-
+CVAPI(void) CvERGrouping(
+   cv::_InputArray* image, cv::_InputArray* channels, 
+   std::vector<cv::text::ERStat>** regions, int count, 
+   std::vector< std::vector<cv::Vec2i> >* groups, std::vector<cv::Rect>* group_rects, 
+   int method, cv::String* fileName, float minProbability );
 #endif

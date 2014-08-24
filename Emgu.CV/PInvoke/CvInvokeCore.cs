@@ -1077,23 +1077,20 @@ namespace Emgu.CV
       #endregion
 
       /// <summary>
-      /// Calculates a part of the line segment which is entirely in the image. It returns 0 if the line segment is completely outside the image and 1 otherwise.
+      /// Calculates a part of the line segment which is entirely in the rectangle.
       /// </summary>
-      /// <param name="imgSize">Size of the image</param>
+      /// <param name="rectangle">The rectangle</param>
       /// <param name="pt1">First ending point of the line segment. It is modified by the function</param>
       /// <param name="pt2">Second ending point of the line segment. It is modified by the function.</param>
-      /// <returns>It returns 0 if the line segment is completely outside the image and 1 otherwise.</returns>
-#if ANDROID
-      public static int cvClipLine(Size imgSize, ref Point pt1, ref Point pt2)
+      /// <returns>It returns false if the line segment is completely outside the rectangle and true otherwise.</returns>
+
+      public static bool ClipLine(Rectangle rectangle, ref Point pt1, ref Point pt2)
       {
-         return cvClipLine(imgSize.Width, imgSize.Height, ref pt1, ref pt2);
+         return cveClipLine(ref rectangle, ref pt1, ref pt2);
       }
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int cvClipLine(int imgSizeWidth, int imgSizeHeight, ref Point pt1, ref Point pt2);
-#else
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvClipLine(Size imgSize, ref Point pt1, ref Point pt2);
-#endif
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      private static extern bool cveClipLine(ref Rectangle rect, ref Point pt1, ref Point pt2);
 
       /// <summary>
       /// Calculates absolute difference between two arrays.

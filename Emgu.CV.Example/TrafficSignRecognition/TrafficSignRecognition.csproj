@@ -83,9 +83,9 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.csproj">
-      <Project>{910D133F-1B44-4151-80A5-F3B25741747D}</Project>
-      <Name>Emgu.CV.Nonfree</Name>
+    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.csproj">
+      <Project>{787d75d2-fe4d-4739-b9a5-2fb2617a42cc}</Project>
+      <Name>Emgu.CV.Contrib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.UI\Emgu.CV.UI.csproj">
       <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>

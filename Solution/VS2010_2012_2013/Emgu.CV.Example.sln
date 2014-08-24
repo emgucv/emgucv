@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\HelloWorld\HelloWorld.csproj", "{28682DB8-9662-452D-A5AD-646EA7BC8AD0}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebDynamicImage", "..\..\Emgu.CV.Example\WebDynamicImage\", "{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}"
@@ -70,15 +70,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedestrianDetection", "..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.csproj", "{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatentSvmDetector", "..\..\Emgu.CV.Example\LatentSvmDetector\LatentSvmDetector.csproj", "{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OCR", "..\..\Emgu.CV.Example\OCR\OCR.csproj", "{32BFC19B-AE74-413F-90FC-345CBCE13B69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stitching", "..\..\Emgu.CV.Example\Stitching\Stitching.csproj", "{331F904E-E7E8-42E0-8C82-22539C35E8F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.csproj", "{D9C9B824-2B7A-48C0-A7D3-484410288CD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Nonfree", "..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.csproj", "{910D133F-1B44-4151-80A5-F3B25741747D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.csproj", "{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -226,12 +224,6 @@ Global
 		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}.Release|x86.ActiveCfg = Release|Any CPU
-		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|x86.ActiveCfg = Release|Any CPU
-		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|x86.ActiveCfg = Release|Any CPU
 		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|x86.ActiveCfg = Release|Any CPU
@@ -250,12 +242,12 @@ Global
 		{D9C9B824-2B7A-48C0-A7D3-484410288CD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9C9B824-2B7A-48C0-A7D3-484410288CD2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D9C9B824-2B7A-48C0-A7D3-484410288CD2}.Release|x86.ActiveCfg = Release|Any CPU
-		{910D133F-1B44-4151-80A5-F3B25741747D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{910D133F-1B44-4151-80A5-F3B25741747D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{910D133F-1B44-4151-80A5-F3B25741747D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{910D133F-1B44-4151-80A5-F3B25741747D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{910D133F-1B44-4151-80A5-F3B25741747D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{910D133F-1B44-4151-80A5-F3B25741747D}.Release|x86.ActiveCfg = Release|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

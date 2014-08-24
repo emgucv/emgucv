@@ -3,20 +3,24 @@
 //----------------------------------------------------------------------------
 
 using System;
+using Emgu.Util;
 
 namespace Emgu.CV.ML
 {
    /// <summary>
    /// A Normal Bayes Classifier
    /// </summary>
-   public class NormalBayesClassifier : StatModel
+   public class NormalBayesClassifier : UnmanagedObject, IStatModel
    {
+      private IntPtr _statModelPtr;
+      private IntPtr _algorithmPtr;
+
       /// <summary>
       /// Create a normal Bayes classifier
       /// </summary>
       public NormalBayesClassifier()
       {
-         _ptr = MlInvoke.CvNormalBayesClassifierDefaultCreate();
+         _ptr = MlInvoke.CvNormalBayesClassifierDefaultCreate(ref _statModelPtr, ref _algorithmPtr);
       }
 
       /*
@@ -44,6 +48,7 @@ namespace Emgu.CV.ML
          MlInvoke.CvNormalBayesClassifierRelease(ref _ptr);
       }
 
+      /*
       /// <summary>
       /// Train the classifier using the specific data
       /// </summary>
@@ -76,7 +81,17 @@ namespace Emgu.CV.ML
             _ptr, 
             samples.Ptr, 
             results == null? IntPtr.Zero: results.Ptr);
+      }*/
+
+
+      IntPtr IStatModel.StatModelPtr
+      {
+         get { return _statModelPtr; }
       }
 
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get { return _algorithmPtr; }
+      }
    }
 }

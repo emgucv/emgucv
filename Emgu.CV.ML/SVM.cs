@@ -3,6 +3,9 @@
 //----------------------------------------------------------------------------
 
 using System;
+using Emgu.CV.ML.MlEnum;
+using Emgu.CV.Structure;
+using Emgu.Util;
 using Emgu.CV.ML.Structure;
 using System.Runtime.InteropServices;
 
@@ -11,14 +14,17 @@ namespace Emgu.CV.ML
    /// <summary>
    /// Support Vector Machine 
    /// </summary>
-   public class SVM : StatModel
+   public class SVM : UnmanagedObject, IStatModel
    {
+      private IntPtr _statModelPtr;
+      private IntPtr _algorithmPtr;
+
       /// <summary>
       /// Create a support Vector Machine
       /// </summary>
-      public SVM()
+      public SVM(Params p)
       {
-         _ptr = MlInvoke.CvSVMDefaultCreate();
+         _ptr = MlInvoke.CvSVMDefaultCreate(p, ref _statModelPtr, ref _algorithmPtr);
       }
 
       /// <summary>
@@ -29,43 +35,30 @@ namespace Emgu.CV.ML
          MlInvoke.CvSVMRelease(ref _ptr);
       }
 
-      /// <summary>
-      /// Get a copy of the SVM parameters
-      /// </summary>
-      public MCvSVMParams Parameters
+      public class Params : UnmanagedObject
       {
-         get
-         {
-            MCvSVMParams p = new MCvSVMParams();
-            MlInvoke.CvSVMGetParameters(Ptr, ref p);
-            return p;
-         }
-      }
 
-      /// <summary>
-      /// Train the SVM model with the specific paramters
-      /// </summary>
-      /// <param name="trainData">The training data.</param>
-      /// <param name="responses">The response for the training data.</param>
-      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&lt;int&gt; of nx1</param>
-      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&lt;int&gt; of nx1</param>
-      /// <param name="parameters">The parameters for SVM</param>
-      /// <returns></returns>
-      public bool Train(
-         Matrix<float> trainData,
-         Matrix<float> responses,
-         Matrix<Byte> varIdx,
-         Matrix<Byte> sampleIdx,
-         SVMParams parameters)
-      {
-         MCvSVMParams svmparam = parameters.MCvSVMParams;
-         return MlInvoke.CvSVMTrain(
-            _ptr, 
-            trainData.Ptr, 
-            responses.Ptr, 
-            varIdx == null ? IntPtr.Zero: varIdx.Ptr, 
-            sampleIdx == null ? IntPtr.Zero : varIdx.Ptr, 
-            ref svmparam);
+         public Params(
+            MlEnum.SvmType svmType, MlEnum.SvmKernelType kernelType, double degree, double gamma, double coef0,
+            double c, double nu, double p, Mat classWeights, MCvTermCriteria termCrit)
+         {
+            _ptr = MlInvoke.CvSVMParamsCreate(
+                     svmType, kernelType, degree, gamma, coef0, c, nu, p, classWeights ?? IntPtr.Zero,
+                     ref termCrit);
+         }
+
+         public Params(
+            MlEnum.SvmType svmType = SvmType.CSvc, MlEnum.SvmKernelType kernelType = SvmKernelType.Rbf, double degree = 0, double gamma = 1, double coef0 = 0,
+            double c = 1, double nu = 0, double p = 0, Mat classWeights = null)
+            : this(svmType, kernelType, degree, gamma, coef0, c, nu, p, classWeights, new MCvTermCriteria(1000, 1.0e-7) )
+         {
+
+         }
+
+         protected override void DisposeObject()
+         {
+            MlInvoke.CvSVMParamsRelease(ref _ptr);
+         }
       }
 
       /// <summary>
@@ -84,26 +77,14 @@ namespace Emgu.CV.ML
       /// The method trains the SVM model automatically by choosing the optimal parameters C, gamma, p, nu, coef0, degree from CvSVMParams. By the optimality one mean that the cross-validation estimate of the test set error is minimal. 
       /// </summary>
       /// <param name="trainData">The training data.</param>
-      /// <param name="responses">The response for the training data.</param>
-      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&lt;int&gt; of nx1</param>
-      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&lt;int&gt; of nx1</param>
-      /// <param name="parameters">The parameters for SVM</param>
       /// <param name="kFold">Cross-validation parameter. The training set is divided into k_fold subsets, one subset being used to train the model, the others forming the test set. So, the SVM algorithm is executed k_fold times</param>
       /// <returns></returns>
       public bool TrainAuto(
-         Matrix<float> trainData,
-         Matrix<float> responses,
-         Matrix<Byte> varIdx,
-         Matrix<Byte> sampleIdx,
-         MCvSVMParams parameters,
+         TrainData trainData,
          int kFold)
       {
          return TrainAuto(
             trainData,
-            responses,
-            varIdx,
-            sampleIdx,
-            parameters,
             kFold,
             GetDefaultGrid(Emgu.CV.ML.MlEnum.SvmParamType.C),
             GetDefaultGrid(Emgu.CV.ML.MlEnum.SvmParamType.Gamma),
@@ -117,10 +98,6 @@ namespace Emgu.CV.ML
       /// The method trains the SVM model automatically by choosing the optimal parameters C, gamma, p, nu, coef0, degree from CvSVMParams. By the optimality one mean that the cross-validation estimate of the test set error is minimal. 
       /// </summary>
       /// <param name="trainData">The training data.</param>
-      /// <param name="responses">The response for the training data.</param>
-      /// <param name="varIdx">Can be null if not needed. When specified, identifies variables (features) of interest. It is a Matrix&lt;int&gt; of nx1</param>
-      /// <param name="sampleIdx">Can be null if not needed. When specified, identifies samples of interest. It is a Matrix&lt;int&gt; of nx1</param>
-      /// <param name="parameters">The parameters for SVM</param>
       /// <param name="kFold">Cross-validation parameter. The training set is divided into k_fold subsets, one subset being used to train the model, the others forming the test set. So, the SVM algorithm is executed k_fold times</param>
       /// <param name="cGrid">cGrid</param>
       /// <param name="gammaGrid">gammaGrid</param>
@@ -130,87 +107,44 @@ namespace Emgu.CV.ML
       /// <param name="degreeGrid">degreeGrid</param>
       /// <returns></returns>
       public bool TrainAuto(
-         Matrix<float> trainData,
-         Matrix<float> responses,
-         Matrix<Byte> varIdx,
-         Matrix<Byte> sampleIdx,
-         MCvSVMParams parameters,
+         TrainData trainData,
          int kFold,
          MCvParamGrid cGrid,
          MCvParamGrid gammaGrid,
          MCvParamGrid pGrid,
          MCvParamGrid nuGrid,
          MCvParamGrid coefGrid,
-         MCvParamGrid degreeGrid)
+         MCvParamGrid degreeGrid,
+         bool balanced = false)
       {
          return MlInvoke.CvSVMTrainAuto(
             Ptr,
             trainData.Ptr,
-            responses.Ptr,
-            varIdx == null ? IntPtr.Zero : varIdx.Ptr,
-            sampleIdx == null ? IntPtr.Zero : sampleIdx.Ptr,
-            ref parameters,
             kFold,
             ref cGrid,
             ref gammaGrid, 
             ref pGrid, 
             ref nuGrid,
             ref coefGrid,
-            ref degreeGrid);
+            ref degreeGrid,
+            balanced);
       }
 
-      #region contribution from Albert G
-      /// <summary>
-      /// Predicts response for the input sample.
-      /// </summary>
-      /// <param name="sample">The input sample</param>
-      /// <returns>The predicted lable</returns>
-      public float Predict(Matrix<float> sample)
+      public Mat GetSupportVectors()
       {
-         return MlInvoke.CvSVMPredict(Ptr, sample.Ptr, false);
+         Mat m = new Mat();
+         MlInvoke.CvSVMGetSupportVectors(_ptr, m);
+         return m;
       }
 
-      /// <summary>
-      /// Get the decision value for the input sample.
-      /// </summary>
-      /// <param name="sample">The input sample</param>
-      /// <returns>The decision value for the sample</returns>
-      public float GetDecisionValue(Matrix<float> sample)
+      IntPtr IStatModel.StatModelPtr
       {
-         return MlInvoke.CvSVMPredict(Ptr, sample.Ptr, true);
+         get { return _statModelPtr; }
       }
 
-      /// <summary>
-      /// The method retrieves a given support vector
-      /// </summary>
-      /// <param name="i">The index of the support vector</param>       
-      /// <returns>The <paramref name="i"/>th support vector</returns>
-      public float[] GetSupportVector(int i)
+      IntPtr IAlgorithm.AlgorithmPtr
       {
-         int k = GetVarCount();
-         float[] res = new float[k];
-         IntPtr vector = MlInvoke.CvSVMGetSupportVector(Ptr, i);
-         Marshal.Copy(vector, res, 0, k);
-         return res;
+         get { return _algorithmPtr; }
       }
-
-      /// <summary>
-      /// The method retrieves the number of support vectors
-      /// </summary>
-      /// <returns>The number of support vectors</returns>
-      public int GetSupportVectorCount()
-      {
-         return MlInvoke.CvSVMGetSupportVectorCount(Ptr);
-      }
-
-      /// <summary>
-      /// The method retrieves the number of vars
-      /// </summary>
-      /// <returns>The number of variables</returns>
-      public int GetVarCount()
-      {
-         return MlInvoke.CvSVMGetVarCount(Ptr);
-      }
-      #endregion
    }
 }

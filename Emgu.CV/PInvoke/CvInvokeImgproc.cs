@@ -1285,7 +1285,7 @@ namespace Emgu.CV
          IntPtr scanner,
          IntPtr newContour);*/
 
-#if !( IOS || ANDROID || NETFX_CORE || UNITY_ANDROID)
+#if !( IOS || ANDROID || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ))
       /// <summary>
       /// Convert raw data to bitmap
       /// </summary>

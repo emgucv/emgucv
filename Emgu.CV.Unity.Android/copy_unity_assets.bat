@@ -6,7 +6,7 @@ mkdir Emgu.Util
 mkdir Emgu.CV
 mkdir Emgu.CV.ML
 mkdir Emgu.CV.Cuda
-mkdir Emgu.CV.Nonfree
+mkdir Emgu.CV.Contrib
 mkdir Emgu.CV.OCR
 mkdir Emgu.CV.Stitching
 mkdir Emgu.CV.Shape
@@ -52,7 +52,16 @@ xcopy ..\Emgu.CV.Cuda\Optflow Assets\Emgu.CV\Emgu.CV.Cuda\ /s /e
 mkdir Assets\Emgu.CV\Emgu.CV.Cuda\Stereo
 xcopy ..\Emgu.CV.Cuda\Stereo Assets\Emgu.CV\Emgu.CV.Cuda\ /s /e
 
-cp -r ../Emgu.CV.Nonfree/*.cs Assets/Emgu.CV.Nonfree/
+cp -r ../Emgu.CV.Contrib/*.cs Assets/Emgu.CV.Contrib/
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\BgSegm
+xcopy ..\Emgu.CV.Contrib\BgSegm Assets\Emgu.CV\Emgu.CV.Contrib\ /s /e
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Face
+xcopy ..\Emgu.CV.Contrib\Face Assets\Emgu.CV\Emgu.CV.Contrib\ /s /e
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Text
+xcopy ..\Emgu.CV.Contrib\Text Assets\Emgu.CV\Emgu.CV.Contrib\ /s /e
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D
+xcopy ..\Emgu.CV.Contrib\XFeatures2D Assets\Emgu.CV\Emgu.CV.Contrib\ /s /e
+
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV.OCR/
 

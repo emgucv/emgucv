@@ -132,9 +132,6 @@
     <AndroidAsset Include="..\..\opencv\samples\cpp\letter-recognition.data">
       <Link>Assets\letter-recognition.data</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\agaricus-lepiota.data">
-      <Link>Assets\agaricus-lepiota.data</Link>
-    </AndroidAsset>
     <AndroidAsset Include="..\stitch1.jpg">
       <Link>Assets\stitch1.jpg</Link>
     </AndroidAsset>
@@ -185,13 +182,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Android.csproj">
+      <Project>{511c9a1f-fa2a-43ad-acb6-ae7794a49d42}</Project>
+      <Name>Emgu.CV.Contrib.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj">
       <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
       <Name>Emgu.CV.Cuda.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.Android.csproj">
-      <Project>{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}</Project>
-      <Name>Emgu.CV.Nonfree.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.Android.csproj">
       <Project>{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}</Project>
@@ -235,6 +232,11 @@
   <ItemGroup>
     <AndroidAsset Include="..\..\opencv_contrib\modules\text\samples\scenetext01.jpg">
       <Link>Assets\scenetext01.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\circlesGrid.bmp">
+      <Link>Assets\circlesGrid.bmp</Link>
     </AndroidAsset>
   </ItemGroup>
 </Project>

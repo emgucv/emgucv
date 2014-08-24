@@ -78,13 +78,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.csproj">
+      <Project>{787d75d2-fe4d-4739-b9a5-2fb2617a42cc}</Project>
+      <Name>Emgu.CV.Contrib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.csproj">
       <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>
       <Name>Emgu.CV.GPU</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Nonfree\Emgu.CV.Nonfree.csproj">
-      <Project>{910D133F-1B44-4151-80A5-F3B25741747D}</Project>
-      <Name>Emgu.CV.Nonfree</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.UI\Emgu.CV.UI.csproj">
       <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>

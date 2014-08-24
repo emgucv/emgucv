@@ -8,15 +8,18 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.CvEnum;
 using Emgu.CV.ML;
 using Emgu.CV.ML.Structure;
 using Emgu.CV.Structure;
 using Emgu.CV;
+
 #if NETFX_CORE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
 #else
+//using Emgu.CV.UI.GLView;
 using NUnit.Framework;
 #endif
 using MlEnum = Emgu.CV.ML.MlEnum;
@@ -26,6 +29,7 @@ namespace Emgu.CV.Test
    [TestFixture]
    public class AutoTestML
    {
+      
       [Test]
       public void TestKNearest()
       {
@@ -57,8 +61,10 @@ namespace Emgu.CV.Test
          neighborResponses = new Matrix<float>(sample.Rows, K);
          //dist = new Matrix<float>(sample.Rows, K);
 
-         using (KNearest knn = new KNearest(trainData, trainClasses, null, false, K))
+         using (KNearest knn = new KNearest(K, true))
          {
+            knn.Train(trainData, MlEnum.DataLayoutType.RowSample, trainClasses);
+            //ParamDef[] defs =  knn.GetParams();
             //TODO: find out when knn.save will be implemented
             //knn.Save("knn.xml");
 
@@ -70,7 +76,7 @@ namespace Emgu.CV.Test
                   sample.Data[0, 1] = i;
 
                   // estimates the response and get the neighbors' labels
-                  float response = knn.FindNearest(sample, K, results, null, neighborResponses, null);
+                  float response = knn.Predict(sample); //knn.FindNearest(sample, K, results, null, neighborResponses, null);
 
                   int accuracy = 0;
                   // compute the number of neighbors representing the majority
@@ -96,6 +102,8 @@ namespace Emgu.CV.Test
             PointF p2 = new PointF(trainData2[i, 0], trainData2[i, 1]);
             img.Draw(new CircleF(p2, 2.0f), new Bgr(100, 255, 100), -1);
          }
+
+         //Emgu.CV.UI.ImageViewer.Show(img);
       }
 
       /*
@@ -174,33 +182,9 @@ namespace Emgu.CV.Test
             }
             #endregion 
          }
-      }
-
-      [Test]
-      public void TestEMLegacy2()
-      {
-         Random r = new Random(DateTime.Now.Millisecond);
-         int numberOfPoints = 2000;
-         int dimensions = 20;
-         int numberOfClusters = 10;
-
-         EMLegacy em = new EMLegacy();
-         Matrix<int> labels = new Matrix<int>(numberOfPoints, 1);
-         Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
-         for (int i = 0; i < numberOfPoints; i++)
-            for (int j = 0; j < dimensions; j++)
-               featuresM[i, j] = 100 * (float) r.NextDouble() - 50;
-
-         EMParams pars = new EMParams();
-         pars.CovMatType = Emgu.CV.ML.MlEnum.EmCovarianMatrixType.COV_MAT_DIAGONAL;
-         pars.Nclusters = numberOfClusters;
-         pars.StartStep = Emgu.CV.ML.MlEnum.EM_INIT_STEP_TYPE.START_AUTO_STEP;
-         pars.TermCrit = new MCvTermCriteria(100, 1.0e-6);
-
-         em.Train(featuresM, pars, labels);
       }*/
 
-      
+
       [Test]
       public void TestEM2()
       {
@@ -209,15 +193,21 @@ namespace Emgu.CV.Test
          int dimensions = 20;
          int numberOfClusters = 10;
 
-         EM em = new EM(numberOfClusters, MlEnum.EmCovarianMatrixType.Diagonal, new MCvTermCriteria(100, 1.0e-6));
-         ParamDef[] parameters = em.GetParams();
-         Matrix<int> labels = new Matrix<int>(numberOfPoints, 1);
-         Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
-         for (int i = 0; i < numberOfPoints; i++)
-            for (int j = 0; j < dimensions; j++)
-               featuresM[i, j] = 100 * (float) r.NextDouble() - 50;
+         using (
+            EM.Params p = new EM.Params(numberOfClusters, MlEnum.EmCovarianMatrixType.Diagonal,
+               new MCvTermCriteria(100, 1.0e-6)))
+         using (EM em = new EM(p))
+         {
+            
+            //ParamDef[] parameters = em.GetParams();
+            Matrix<int> labels = new Matrix<int>(numberOfPoints, 1);
+            Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
+            for (int i = 0; i < numberOfPoints; i++)
+               for (int j = 0; j < dimensions; j++)
+                  featuresM[i, j] = 100*(float) r.NextDouble() - 50;
 
-         em.Train(featuresM, labels, null, null);
+            em.Train(featuresM, MlEnum.DataLayoutType.RowSample, labels);
+         }
       }
       
       #region contribution from Albert G
@@ -255,17 +245,13 @@ namespace Emgu.CV.Test
          trainClasses3.SetValue(3);
 
          #endregion
-
-         using (SVM model = new SVM())
+         using (SVM.Params p = new SVM.Params(MlEnum.SvmType.CSvc, MlEnum.SvmKernelType.Linear, 0, 1, 0, 1, 0, 0, null, new MCvTermCriteria(100, 1.0e-6)))
+         using (SVM model = new SVM(p))
+         using (Matrix<int> trainClassesInt = trainClasses.Convert<int>())
+         using (TrainData td = new TrainData(trainData, MlEnum.DataLayoutType.RowSample, trainClassesInt))
          {
-            SVMParams p = new SVMParams();
-            p.KernelType = Emgu.CV.ML.MlEnum.SvmKernelType.Linear;
-            p.SVMType = Emgu.CV.ML.MlEnum.SvmType.CSvc;
-            p.C = 1;
-            p.TermCrit = new MCvTermCriteria(100, 0.00001);
-
-            //bool trained = model.Train(trainData, trainClasses, null, null, p);
-            bool trained = model.TrainAuto(trainData, trainClasses, null, null, p.MCvSVMParams, 5);
+            //bool trained = model.TrainAuto(td, 5);
+            model.Train(td);
 #if !NETFX_CORE
             String fileName = Path.Combine(Path.GetTempPath(), "svmModel.xml");
             model.Save(fileName);
@@ -288,14 +274,27 @@ namespace Emgu.CV.Test
                      new Bgr(0, 0, 90);
                }
             }
+            Mat supportVectors = model.GetSupportVectors();
+            //TODO: find out how to draw the support vectors
+            Image<Gray, float> pts = supportVectors.ToImage<Gray, float>(); 
+            PointF[] vectors = new PointF[supportVectors.Rows];
+            GCHandle handler = GCHandle.Alloc(vectors, GCHandleType.Pinned);
+            using (
+               Mat vMat = new Mat(supportVectors.Rows, supportVectors.Cols, DepthType.Cv32F, 1,
+                  handler.AddrOfPinnedObject(), supportVectors.Cols*4))
+            {
+               supportVectors.CopyTo(vMat);
+            }
+            handler.Free();
 
+            /*
             int c = model.GetSupportVectorCount();
             for (int i = 0; i < c; i++)
             {
                float[] v = model.GetSupportVector(i);
                PointF p1 = new PointF(v[0], v[1]);
                img.Draw(new CircleF(p1, 4), new Bgr(128, 128, 128), 2);
-            }
+            }*/
          }
 
          // display the original training samples
@@ -308,8 +307,11 @@ namespace Emgu.CV.Test
             PointF p3 = new PointF(trainData3[i, 0], trainData3[i, 1]);
             img.Draw(new CircleF(p3, 2.0f), new Bgr(100, 100, 255), -1);
          }
+
+         //Emgu.CV.UI.ImageViewer.Show(img);
       }
       #endregion
+      
 
       [Test]
       public void TestNormalBayesClassifier()
@@ -347,10 +349,13 @@ namespace Emgu.CV.Test
          trainClasses3.SetValue(3);
          #endregion
 
+         using (TrainData td = new TrainData(trainData, MlEnum.DataLayoutType.RowSample, trainClasses))
          using (NormalBayesClassifier classifier = new NormalBayesClassifier())
          {
-            classifier.Train(trainData, trainClasses, null, null, false);
-
+            //ParamDef[] defs = classifier.GetParams();
+            classifier.Train(trainData, MlEnum.DataLayoutType.RowSample, trainClasses);
+            classifier.Clear();
+            classifier.Train(td);
 #if !NETFX_CORE
             String fileName = Path.Combine(Path.GetTempPath(), "normalBayes.xml");
             classifier.Save(fileName);
@@ -387,6 +392,7 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(img);
       }
 
+      /*
       [Test]
       public void TestBoost()
       {
@@ -470,7 +476,7 @@ namespace Emgu.CV.Test
          }
 
          //Emgu.CV.UI.ImageViewer.Show(img);
-      }
+      }*/
 
       private static void ReadLetterRecognitionData(out Matrix<float> data, out Matrix<float> response)
       {
@@ -490,7 +496,7 @@ namespace Emgu.CV.Test
             count++;
          }
       }
-
+      /*
       private static void ReadMushroomData(out Matrix<float> data, out Matrix<float> response)
       {
          string[] rows = EmguAssert.ReadAllLines("agaricus-lepiota.data");
@@ -580,7 +586,7 @@ namespace Emgu.CV.Test
          }
 
          priorsHandle.Free();
-      }
+      }*/
 
       [Test]
       public void TestRTreesLetterRecognition()
@@ -598,6 +604,18 @@ namespace Emgu.CV.Test
          using (Matrix<byte> sampleRows = sampleIdx.GetRows(0, trainingSampleCount, 1))
             sampleRows.SetValue(255);
 
+         using(RTrees.Params p = new RTrees.Params(
+            10, 
+            10,
+            0,
+            false,
+            15,
+            null, 
+            true,
+            4, 
+            new MCvTermCriteria(100, 0.01)))
+
+         /*
          MCvRTParams param = new MCvRTParams();
          param.maxDepth = 10;
          param.minSampleCount = 10;
@@ -608,10 +626,13 @@ namespace Emgu.CV.Test
          param.calcVarImportance = true;
          param.nactiveVars = 4;
          param.termCrit = new MCvTermCriteria(100, 0.01f);
-         param.termCrit.Type = Emgu.CV.CvEnum.TermCritType.Iter;
+         param.termCrit.Type = Emgu.CV.CvEnum.TermCritType.Iter;*/
 
-         using (RTrees forest = new RTrees())
+         using (RTrees forest = new RTrees(p))
+         using (TrainData td = new TrainData(data, MlEnum.DataLayoutType.RowSample, response, null, sampleIdx, null, varType))
          {
+            bool success = forest.Train(td);
+            /*
             bool success = forest.Train(
                data, 
                Emgu.CV.ML.MlEnum.DataLayoutType.RowSample,
@@ -620,7 +641,7 @@ namespace Emgu.CV.Test
                sampleIdx,
                varType, 
                null, 
-               param);
+               param);*/
 
             if (!success)
                return;
@@ -647,13 +668,14 @@ namespace Emgu.CV.Test
             testDataCorrectRatio /= (data.Rows - trainingSampleCount);
 
             StringBuilder builder = new StringBuilder("Variable Importance: ");
+            /*
             using (Matrix<float> varImportance = forest.VarImportance)
             {
                for (int i = 0; i < varImportance.Cols; i++)
                {
                   builder.AppendFormat("{0} ", varImportance[0, i]);
                }
-            }
+            }*/
 
             EmguAssert.WriteLine(String.Format("Prediction accuracy for training data :{0}%", trainDataCorrectRatio * 100));
             EmguAssert.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio * 100));
@@ -661,6 +683,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestERTreesLetterRecognition()
       {
@@ -732,8 +755,9 @@ namespace Emgu.CV.Test
             EmguAssert.WriteLine(String.Format("Prediction accuracy for test data :{0}%", testDataCorrectRatio * 100));
 
          }
-      }
+      }*/
 
+#if !ANDROID
       [Test]
       public void TestANN_MLP()
       {
@@ -759,17 +783,21 @@ namespace Emgu.CV.Test
          trainClasses2.SetValue(2);
          #endregion
 
-         Matrix<int> layerSize = new Matrix<int>(new int[] { 2, 5, 1 });
-
-         MCvANN_MLP_TrainParams parameters = new MCvANN_MLP_TrainParams();
-         parameters.term_crit = new MCvTermCriteria(10, 1.0e-8);
-         parameters.train_method = Emgu.CV.ML.MlEnum.AnnMlpTrainMethod.Backprop;
-         parameters.bp_dw_scale = 0.1;
-         parameters.bp_moment_scale = 0.1;
-
-         using (ANN_MLP network = new ANN_MLP(layerSize, Emgu.CV.ML.MlEnum.AnnMlpActivationFunction.SigmoidSym, 1.0, 1.0))
+         using(Matrix<int> layerSize = new Matrix<int>(new int[] { 2, 5, 1 }))
+         using(Mat layerSizeMat = layerSize.Mat)
+         using(ANN_MLP.Params p = new ANN_MLP.Params(
+            layerSizeMat, 
+            Emgu.CV.ML.MlEnum.AnnMlpActivationFunction.SigmoidSym,
+            0, 0, 
+            new MCvTermCriteria(10, 1.0e-8), 
+            Emgu.CV.ML.MlEnum.AnnMlpTrainMethod.Backprop,
+            0.1, 0.1
+            ))
+         
+         using (TrainData td = new TrainData(trainData, MlEnum.DataLayoutType.RowSample, trainClasses))
+         using (ANN_MLP network = new ANN_MLP(p))
          {
-            network.Train(trainData, trainClasses, null, parameters, Emgu.CV.ML.MlEnum.AnnMlpTrainingFlag.Default);
+            network.Train(td, (int) Emgu.CV.ML.MlEnum.AnnMlpTrainingFlag.Default);
 
 #if !NETFX_CORE
             String fileName = Path.Combine(Path.GetTempPath(), "ann_mlp_model.xml");
@@ -803,8 +831,12 @@ namespace Emgu.CV.Test
             PointF p2 = new PointF((int) trainData2[i, 0], (int) trainData2[i, 1]);
             img.Draw(new CircleF(p2, 2), new Bgr(100, 255, 100), -1);
          }
-      }
 
+         //Emgu.CV.UI.ImageViewer.Show(img);
+      }
+#endif
+
+      /*
       [Test]
       public void TestKMeans()
       {
@@ -853,6 +885,6 @@ namespace Emgu.CV.Test
          }
 
          //Emgu.CV.UI.ImageViewer.Show(image);
-      }
+      }*/
    }
 }

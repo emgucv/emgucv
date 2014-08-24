@@ -12,7 +12,7 @@ using Emgu.CV.OCR;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
-using Emgu.CV.Nonfree;
+using Emgu.CV.XFeatures2D;
 using NUnit.Framework;
 
 namespace Emgu.CV.Test

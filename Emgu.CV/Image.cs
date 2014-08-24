@@ -4380,7 +4380,7 @@ namespace Emgu.CV
          MIplImage mptr = (MIplImage)Marshal.PtrToStructure(iplImage, typeof(MIplImage));
          Size size = new Size(mptr.Width, mptr.Height);
 
-         //Allocate data in mamanged memory
+         //Allocate data in managed memory
          AllocateData(size.Height, size.Width, NumberOfChannels);
 
          if (mptr.NChannels == 1)

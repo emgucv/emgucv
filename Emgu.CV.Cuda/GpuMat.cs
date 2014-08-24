@@ -427,7 +427,7 @@ namespace Emgu.CV.Cuda
          return result;
       }
 
-#if !(NETFX_CORE || UNITY_ANDROID)
+#if !(NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ))
       public Bitmap Bitmap
       {
          get

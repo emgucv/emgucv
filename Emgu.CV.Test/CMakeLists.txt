@@ -45,6 +45,6 @@ if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
 endif()
 
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI Emgu.CV.ML Emgu.UI Emgu.CV.OCR Emgu.CV.Cuda Emgu.CV.Stitching Emgu.CV.Nonfree Emgu.CV.Softcascade Emgu.CV.UI.GL)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI Emgu.CV.ML Emgu.UI Emgu.CV.OCR Emgu.CV.Cuda Emgu.CV.Stitching Emgu.CV.Contrib Emgu.CV.UI.GL)
 
 ENDIF()

@@ -196,7 +196,7 @@ namespace Emgu.CV
          }
       }
 
-#if !UNITY_ANDROID
+#if !( UNITY_ANDROID || UNITY_IPHONE )
       /// <summary>
       /// Draw a rectangle in the map
       /// </summary>

@@ -1,23 +1,19 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
-Project("{E9AC01BA-891A-3410-ED61-8306B2142035}") = "Emgu.CV.Unity.Android", "Assembly-CSharp.csproj", "{2B279706-C8BD-7A40-C502-3F2CCD0BE63A}"
-EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2B279706-C8BD-7A40-C502-3F2CCD0BE63A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B279706-C8BD-7A40-C502-3F2CCD0BE63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B279706-C8BD-7A40-C502-3F2CCD0BE63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B279706-C8BD-7A40-C502-3F2CCD0BE63A}.Release|Any CPU.Build.0 = Release|Any CPU
+
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																																							GlobalSection(MonoDevelopProperties) = preSolution
+																																																																									GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

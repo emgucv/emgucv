@@ -29,20 +29,7 @@ void CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_I
    bgSubtractor->apply(*image, *fgmask, learningRate);
 }
 
-//BackgroundSubtractorMOG
-cv::BackgroundSubtractorMOG* CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma)
-{
-   cv::Ptr<cv::BackgroundSubtractorMOG> ptr = cv::createBackgroundSubtractorMOG(history, nmixtures, backgroundRatio, noiseSigma);
-  
-   ptr.addref();
-   return ptr.get();
-}
 
-void CvBackgroundSubtractorMOGRelease(cv::BackgroundSubtractorMOG** bgSubtractor)
-{
-   delete *bgSubtractor;
-   *bgSubtractor = 0;
-}
 
 //BackgroundSubtractorKNN
 cv::BackgroundSubtractorKNN* CvBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows)
@@ -58,19 +45,7 @@ void CvBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor
    *bgSubtractor = 0;
 }
 
-//BackgroundSubtractorGMG
-cv::BackgroundSubtractorGMG* CvBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold)
-{
-   cv::Ptr<cv::BackgroundSubtractorGMG> ptr = cv::createBackgroundSubtractorGMG(initializationFrames, decisionThreshold);
-  
-   ptr.addref();
-   return ptr.get();
-}
-void CvBackgroundSubtractorGMGRelease(cv::BackgroundSubtractorGMG** bgSubtractor)
-{
-   delete *bgSubtractor;
-   *bgSubtractor = 0;
-}
+
 
 cv::DenseOpticalFlow* cveDenseOpticalFlowCreateDualTVL1()
 {
@@ -96,23 +71,6 @@ void cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, c
 void cveCalcOpticalFlowPyrLK(cv::_InputArray* prevImg, cv::_InputArray* nextImg, cv::_InputArray* prevPts, cv::_InputOutputArray* nextPts, cv::_OutputArray* status, cv::_OutputArray* err, CvSize* winSize, int maxLevel, CvTermCriteria* criteria, int flags, double minEigenThreshold)
 {
    cv::calcOpticalFlowPyrLK(*prevImg, *nextImg, *prevPts, *nextPts, *status, *err, *winSize, maxLevel, *criteria, flags, minEigenThreshold);
-}
-
-void cveUpdateMotionHistory(cv::_InputArray* silhouette, cv::_InputOutputArray* mhi, double timestamp, double duration)
-{
-   cv::updateMotionHistory(*silhouette, *mhi, timestamp, duration);
-}
-void cveCalcMotionGradient(cv::_InputArray* mhi, cv::_OutputArray* mask, cv::_OutputArray* orientation, double delta1, double delta2, int apertureSize)
-{
-   cv::calcMotionGradient(*mhi, *mask, *orientation, delta1, delta2, apertureSize);
-}
-void cveCalcGlobalOrientation(cv::_InputArray* orientation, cv::_InputArray* mask, cv::_InputArray* mhi, double timestamp, double duration)
-{
-   cv::calcGlobalOrientation(*orientation, *mask, *mhi, timestamp, duration);
-}
-void cveSegmentMotion(cv::_InputArray* mhi, cv::_OutputArray* segmask, std::vector< cv::Rect >* boundingRects, double timestamp, double segThresh)
-{
-   cv::segmentMotion(*mhi, *segmask, *boundingRects, timestamp, segThresh);
 }
 
 void cveCamShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, CvBox2D* result)

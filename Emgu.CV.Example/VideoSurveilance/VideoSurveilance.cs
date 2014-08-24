@@ -11,6 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using Emgu.CV;
+using Emgu.CV.Cvb;
 using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
@@ -22,8 +23,9 @@ namespace VideoSurveilance
    {
       //private static MCvFont _font = new MCvFont(Emgu.CV.CvEnum.FontType.HersheyPlain, 1.0, 1.0);
       private static Capture _cameraCapture;
-      private static BlobTrackerAuto<Bgr> _tracker;
-      private static IBGFGDetector<Bgr> _detector;
+      
+      private static BackgroundSubtractor _fgDetector;
+      private static Emgu.CV.Cvb.CvBlobDetector _blobDetector;
 
       public VideoSurveilance()
       {
@@ -42,10 +44,10 @@ namespace VideoSurveilance
             MessageBox.Show(e.Message);
             return;
          }
-         
-         _detector = new FGDetector<Bgr>(ForgroundDetectorType.Fgd);
 
-         _tracker = new BlobTrackerAuto<Bgr>();
+         _fgDetector = new Emgu.CV.VideoSurveillance.BackgroundSubtractorMOG2();
+         _blobDetector = new CvBlobDetector();
+         //_tracker = new BlobTrackerAuto<Bgr>();
 
          Application.Idle += ProcessFrame;
       }
@@ -58,16 +60,20 @@ namespace VideoSurveilance
          //frame._SmoothGaussian(3); 
 
          #region use the BG/FG detector to find the forground mask
-         _detector.Update(smoothedFrame);
-         Image<Gray, Byte> forgroundMask = _detector.ForegroundMask;
+         Mat forgroundMask = new Mat();
+         _fgDetector.Apply(smoothedFrame, forgroundMask);
+         
          #endregion
+         CvBlobs blobs = new CvBlobs();
+         _blobDetector.Detect(forgroundMask.ToImage<Gray, byte>(), blobs);
+         blobs.FilterByArea(100, int.MaxValue);
+         //_tracker.Process(smoothedFrame, forgroundMask);
 
-         _tracker.Process(smoothedFrame, forgroundMask);
-
-         foreach (MCvBlob blob in _tracker)
+         foreach (var pair in blobs)
          {
-            CvInvoke.Rectangle(frame, (Rectangle)blob, new MCvScalar(255.0, 255.0, 255.0), 2);
-            CvInvoke.PutText(frame, blob.ID.ToString(), Point.Round(blob.Center), FontFace.HersheyPlain, 1.0, new MCvScalar(255.0, 255.0, 255.0));
+            CvBlob b = pair.Value;
+            CvInvoke.Rectangle(frame, b.BoundingBox, new MCvScalar(255.0, 255.0, 255.0), 2);
+            //CvInvoke.PutText(frame,  blob.ID.ToString(), Point.Round(blob.Center), FontFace.HersheyPlain, 1.0, new MCvScalar(255.0, 255.0, 255.0));
          }
 
          imageBox1.Image = frame;

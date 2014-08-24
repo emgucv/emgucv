@@ -13,38 +13,25 @@
 //#include "opencv2/legacy/compat.hpp"
 #include "vectors_c.h"
 
-//StarDetector
-CVAPI(cv::StarDetector*) CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize);
-CVAPI(void) CvStarDetectorRelease(cv::StarDetector** detector);
 
 //FeatureDetector
 CVAPI(void) CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask);
 
 CVAPI(void) CvFeatureDetectorRelease(cv::FeatureDetector** detector);
 
-//GridAdaptedFeatureDetector
-CVAPI(cv::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorCreate(   
-   cv::FeatureDetector* detector,
-   int maxTotalKeypoints,
-   int gridRows, int gridCols);
 
-CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector);
 
 //ORB
 CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
 CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
 
-//Freak
-CVAPI(cv::FREAK*) CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::DescriptorExtractor** descriptorExtractor);
-CVAPI(void) CvFreakRelease(cv::FREAK** detector);
+
 
 //Brisk
 CVAPI(cv::BRISK*) CvBriskCreate(int thresh, int octaves, float patternScale, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
 CVAPI(void) CvBriskRelease(cv::BRISK** detector);
 
-//Brief descriptor extractor
-CVAPI(cv::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize);
-CVAPI(void) CvBriefDescriptorExtractorRelease(cv::BriefDescriptorExtractor** extractor);
+
 
 //FAST algorithm
 CVAPI(cv::FastFeatureDetector*) CvFASTGetFeatureDetector(int threshold, bool nonmax_supression);
@@ -54,9 +41,7 @@ CVAPI(void) CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector);
 CVAPI(cv::GFTTDetector*) CvGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k);
 CVAPI(void) CvGFTTDetectorRelease(cv::GFTTDetector** detector);
 
-//DenseFeatureDetector
-CVAPI(cv::DenseFeatureDetector*) CvDenseFeatureDetectorCreate( float initFeatureScale, int featureScaleLevels, float featureScaleMul, int initXyStep, int initImgBound, bool varyXyStepWithScale, bool varyImgBoundWithScale);
-CVAPI(void) CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector);
+
 
 // MSER detector
 CVAPI(cv::MSER*) CvMserGetFeatureDetector(
@@ -119,10 +104,11 @@ CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, 
 //Feature2D
 CVAPI(void) CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* image, cv::_InputArray* mask, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors, bool useProvidedKeyPoints);
 
+/*
 //OpponentColorDescriptorExtractor
 CVAPI(cv::OpponentColorDescriptorExtractor*) CvOpponentColorDescriptorExtractorCreate(cv::DescriptorExtractor* extractor);
 CVAPI(void) CvOpponentColorDescriptorExtractorRelease(cv::OpponentColorDescriptorExtractor** extractor);
-
+*/
 //DescriptorExtractor
 CVAPI(void) CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, cv::_InputArray* image,  std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors );
 CVAPI(int) CvDescriptorExtractorGetDescriptorSize(cv::DescriptorExtractor* extractor);
