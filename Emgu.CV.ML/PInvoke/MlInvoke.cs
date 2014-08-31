@@ -78,6 +78,7 @@ namespace Emgu.CV.ML
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr CvNormalBayesClassifierDefaultCreate(ref IntPtr statModel, ref IntPtr algorithm);
 
+      /*
       /// <summary>
       /// Create a normal Bayes classifier using the specific training data
       /// </summary>
@@ -92,6 +93,7 @@ namespace Emgu.CV.ML
          IntPtr responses,
          IntPtr varIdx,
          IntPtr sampleIdx);
+      */
 
       /// <summary>
       /// Release the memory associated with the bayes classifier
@@ -100,6 +102,7 @@ namespace Emgu.CV.ML
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void CvNormalBayesClassifierRelease(ref IntPtr classifier);
 
+      /*
       /// <summary>
       /// Train the classifier using the specific data
       /// </summary>
@@ -129,7 +132,7 @@ namespace Emgu.CV.ML
       /// <param name="results">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
       /// <returns>In case of classification the method returns the class label, in case of regression - the output function value</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern float CvNormalBayesClassifierPredict(IntPtr model, IntPtr samples, IntPtr results);
+      public static extern float CvNormalBayesClassifierPredict(IntPtr model, IntPtr samples, IntPtr results);*/
       #endregion
 
       #region CvKNearest
@@ -152,6 +155,7 @@ namespace Emgu.CV.ML
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void CvKNearestRelease(ref IntPtr knearest);
 
+      /*
       /// <summary>
       /// Create the KNearest classifier using the specific traing data.
       /// </summary>
@@ -220,6 +224,7 @@ namespace Emgu.CV.ML
          IntPtr[] kNearestNeighbors,
          IntPtr neighborResponses,
          IntPtr dist);
+      */
       #endregion
 
       #region CvEM
@@ -243,6 +248,7 @@ namespace Emgu.CV.ML
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvEMRelease(ref IntPtr emModel);
 
+      /*
       /// <summary>
       /// Starts with Expectation step. Initial values of the model parameters will be estimated by the k-means algorithm.
       /// </summary>
@@ -261,7 +267,7 @@ namespace Emgu.CV.ML
          IntPtr labels,
          IntPtr probs
          );
-
+      */
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvEMTrainStartWithE(
          IntPtr samples,
@@ -480,6 +486,7 @@ namespace Emgu.CV.ML
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void CvRTreesRelease(ref IntPtr model);
 
+      /*
       /// <summary>
       /// Get the number of Trees in the Random tree
       /// </summary>
@@ -494,9 +501,10 @@ namespace Emgu.CV.ML
       /// <param name="model">The randome tree</param>
       /// <returns>Pointer to the matrix that represents the variable importance</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvRTreesGetVarImportance(IntPtr model);
+      public static extern IntPtr CvRTreesGetVarImportance(IntPtr model);*/
       #endregion
 
+      /*
       #region Extreme Random tree
       /// <summary>
       /// Create a default extreme random tree
@@ -512,7 +520,7 @@ namespace Emgu.CV.ML
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void CvERTreesRelease(ref IntPtr model);
       #endregion
-
+*/
       #region Boost
       /// <summary>
       /// Create default parameters for CvBoost
@@ -547,6 +555,7 @@ namespace Emgu.CV.ML
       public static extern void CvBoostRelease(ref IntPtr model);
       #endregion
 
+      /*
       #region GBTree
       /// <summary>
       /// Train the boost tree using the specific traning data
@@ -611,5 +620,6 @@ namespace Emgu.CV.ML
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void CvGBTreesRelease(ref IntPtr model);
       #endregion
+      */
    }
 }

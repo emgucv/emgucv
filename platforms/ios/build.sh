@@ -86,8 +86,8 @@ else
     lipo -create -output platforms/ios/universal/libemgucv.a platforms/ios/armv7/libemgucv_armv7.a platforms/ios/armv7s/libemgucv_armv7s.a platforms/ios/arm64/libemgucv_arm64.a platforms/ios/i386/libemgucv_i386.a  platforms/ios/x86_64/libemgucv_x86_64.a
 fi
 
-mkdir -p Emgu.CV/PInvoke/MonoTouch
-cp -f platforms/ios/universal/libemgucv.a Emgu.CV/PInvoke/MonoTouch
+mkdir -p Emgu.CV/PInvoke/iOS
+cp -f platforms/ios/universal/libemgucv.a Emgu.CV/PInvoke/iOS
 
 cd platforms/ios
 

@@ -173,6 +173,7 @@ namespace Emgu.CV
          return Retrieve(image, (int) OpenNIDataType.PointCloudMap);
       }
 
+      #if !IOS
       /// <summary>
       /// Get an enumerator of the colored points from Kinect. This function can only be called after the Grab() function.
       /// </summary>
@@ -210,6 +211,7 @@ namespace Emgu.CV
                   }
          }*/
       }
+      #endif
 
       /// <summary>
       /// Given the minimum distance in mm, return the maximum valid disparity value.
@@ -226,6 +228,7 @@ namespace Emgu.CV
          return baseline / f * minDistance;
       }
 
+      #if !IOS
       /// <summary>
       /// Get the unmanaged OpenNI Context from the capture.
       /// </summary>
@@ -235,6 +238,7 @@ namespace Emgu.CV
       {
          return CvInvoke.cvGetOpenniCaptureContext(Ptr);
       }
+      #endif
 
       /// <summary>
       /// A point with Bgr color information
@@ -263,12 +267,15 @@ namespace Emgu.CV
       }
    }
 
+   #if !IOS
    public static partial class CvInvoke
    {
+
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void OpenniGetColorPoints(IntPtr capture, IntPtr points /* sequence of ColorPoint */, IntPtr mask);
 
       [DllImport(CvInvoke.OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvGetOpenniCaptureContext(IntPtr capture);
    }
+   #endif
 }

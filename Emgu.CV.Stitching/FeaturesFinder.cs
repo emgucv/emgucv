@@ -24,6 +24,7 @@ namespace Emgu.CV.Stitching
       protected IntPtr FeaturesFinderPtr;
    }
 
+   /*
    /// <summary>
    /// SURF features finder
    /// </summary>
@@ -60,10 +61,10 @@ namespace Emgu.CV.Stitching
       /// </summary>
       protected override void DisposeObject()
       {
-         StitchingInvoke.cveOrbFeaturesFinderRelease(ref _ptr);
+         StitchingInvoke.cveSurfFeaturesFinderRelease(ref _ptr);
       }
    }
-
+      
    /// <summary>
    /// Gpu version of the SURF features finder
    /// </summary>
@@ -102,7 +103,7 @@ namespace Emgu.CV.Stitching
       {
          StitchingInvoke.cveSurfFeaturesFinderGpuRelease(ref  _ptr);
       }
-   }
+   }*/
 
    /// <summary>
    /// ORB features finder.
@@ -134,6 +135,7 @@ namespace Emgu.CV.Stitching
 
    internal static partial class StitchingInvoke
    {
+      /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveSurfFeaturesFinderCreate(
          double hessThresh, int numOctaves, int numLayers,
@@ -149,6 +151,7 @@ namespace Emgu.CV.Stitching
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveSurfFeaturesFinderGpuRelease(ref IntPtr finder);
+      */
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveOrbFeaturesFinderCreate(ref Size gridSize, int nfeature, float scaleFactor, int nlevels, ref IntPtr f);

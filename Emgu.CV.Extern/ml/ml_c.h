@@ -114,7 +114,7 @@ CVAPI(cv::ml::DTrees::Params*) CvDTreeParamsCreate(
    int maxCategories, int CVFolds,
    bool use1SERule, bool truncatePrunedTree,
    cv::Mat* priors);
-CVAPI(void) CvDTreeParamsRelease(cv::ml::DTrees** params);
+CVAPI(void) CvDTreeParamsRelease(cv::ml::DTrees::Params** params);
 CVAPI(cv::ml::DTrees*) CvDTreeCreate(cv::ml::DTrees::Params* p, cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
 CVAPI(void) CvDTreeRelease(cv::ml::DTrees** model);
 

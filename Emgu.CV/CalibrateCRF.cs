@@ -4,7 +4,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Drawing;
+//using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;

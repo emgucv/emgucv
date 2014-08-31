@@ -1084,7 +1084,7 @@ namespace Emgu.CV
          IntPtr tree,
          IntPtr storage,
          MCvTermCriteria criteria);
-#endif*/
+#endif
 
       /// <summary>
       /// Calculates the value of the matching measure for two contour trees. The similarity measure is calculated level by level from the binary tree roots. If at the certain level difference between contours becomes less than threshold, the reconstruction process is interrupted and the current difference is returned
@@ -1100,6 +1100,7 @@ namespace Emgu.CV
          IntPtr tree2,
          CvEnum.MatchContourTreeMethod method,
          double threshold);
+      */
       #endregion
 
       /// <summary>

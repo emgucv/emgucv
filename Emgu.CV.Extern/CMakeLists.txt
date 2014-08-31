@@ -73,8 +73,8 @@ CREATE_VECTOR_CS("VectorOfPoint3D32F" "std::vector< cv::Point3f >" "MCvPoint3D32
 CREATE_VECTOR_CS("VectorOfInt" "std::vector< int >" "int" "vector" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("VectorOfDMatch" "std::vector< cv::DMatch >" "MDMatch" "vector" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 
-IF(NOT IOS)
 CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "OclPlatformInfo" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/core/ocl.hpp\"")
+IF(NOT IOS)
 CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda Emgu.CV.Cuda "#include \"opencv2/core/cuda.hpp\"")
 ENDIF()
 

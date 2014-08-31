@@ -3055,6 +3055,7 @@ namespace Emgu.CV.CvEnum
       Front
    }
 
+   /*
    /// <summary>
    /// The method for matching contour tree
    /// </summary>
@@ -3064,7 +3065,7 @@ namespace Emgu.CV.CvEnum
       /// 
       /// </summary>
       ContourTreesMatchI1 = 1
-   }
+   }*/
 
    /// <summary>
    /// The file storage operation type

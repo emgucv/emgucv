@@ -158,6 +158,7 @@ namespace Emgu.CV
          CvEnum.DepthType ddepth);
       #endregion
 
+      /*
       /// <summary>
       /// Calculates disparity for stereo-pair 
       /// </summary>
@@ -178,7 +179,7 @@ namespace Emgu.CV
          int maxDisparity,
          double param1, double param2, double param3,
          double param4, double param5);
-
+      */
       #region Camera Calibration
       /// <summary>
       /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters.

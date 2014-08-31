@@ -1,3 +1,4 @@
+#if !(IOS || UNITY_IOS)
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
@@ -177,3 +178,4 @@ namespace Emgu.CV.XFeatures2D
       internal static extern int cudaSURFDetectorGetDescriptorSize(IntPtr detector);
    }
 }
+#endif

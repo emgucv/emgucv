@@ -35,6 +35,7 @@ namespace Emgu.CV.Flann
             _ptr = cveFlannIndexCreate(iaValues, ip.IndexParamPtr);
       }
 
+      /*
       /// <summary>
       /// Create an auto-tuned flann index
       /// </summary>
@@ -47,7 +48,7 @@ namespace Emgu.CV.Flann
       {
          using (InputArray iaValues = values.GetInputArray())
             _ptr = CvFlannIndexCreateAutotuned(iaValues, targetPrecision, buildWeight, memoryWeight, sampleFraction);
-      }
+      }*/
       #endregion
 
       /// <summary>
@@ -104,11 +105,11 @@ namespace Emgu.CV.Flann
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveFlannIndexCreate(IntPtr features, IntPtr ip);
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvFlannIndexCreateComposite(IntPtr features, int numberOfKDTrees, int branching, int iterations, Flann.CenterInitType centersInitType, float cbIndex);
+      //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      //internal static extern IntPtr CvFlannIndexCreateComposite(IntPtr features, int numberOfKDTrees, int branching, int iterations, Flann.CenterInitType centersInitType, float cbIndex);
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvFlannIndexCreateAutotuned(IntPtr features, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
+      //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      //internal static extern IntPtr CvFlannIndexCreateAutotuned(IntPtr features, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvFlannIndexRelease(ref IntPtr index);

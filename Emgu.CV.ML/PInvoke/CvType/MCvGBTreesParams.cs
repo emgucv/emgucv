@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿/*
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -97,3 +98,4 @@ namespace Emgu.CV.ML
       internal static extern void CvGBTreesParamsGetDefault(ref Emgu.CV.ML.Structure.MCvGBTreesParams p); 
    }
 }
+*/

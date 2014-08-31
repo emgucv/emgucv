@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿/*
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -41,4 +42,4 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cveFlannBasedMatcherRelease(ref IntPtr matcher);
    }
-}
+}*/

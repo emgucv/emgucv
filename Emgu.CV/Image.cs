@@ -11,7 +11,7 @@ using Emgu.CV.CvEnum;
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
 using MonoTouch.UIKit;
-#elif NETFX_CORE || UNITY_ANDROID
+#elif NETFX_CORE || UNITY_ANDROID || UNITY_IOS
 #else
 using System.Drawing.Imaging;
 #endif
@@ -106,7 +106,7 @@ namespace Emgu.CV
       /// <param name="fileName">the name of the file that contains the image</param>
       public Image(String fileName)
       {
-#if NETFX_CORE || UNITY_ANDROID
+#if NETFX_CORE || UNITY_ANDROID || UNITY_IOS
          using (Mat m = CvInvoke.Imread(fileName, LoadImageType.AnyColor | LoadImageType.AnyDepth))
          {
             if (m.IsEmpty)
@@ -210,7 +210,7 @@ namespace Emgu.CV
 #endif
       }
 
-#if IOS || NETFX_CORE || UNITY_ANDROID
+#if IOS || NETFX_CORE || UNITY_ANDROID || UNITY_IOS
 #else
       /// <summary>
       /// Load the specific file using Bitmap
@@ -244,7 +244,7 @@ namespace Emgu.CV
       }
 #endif
 
-#if IOS || NETFX_CORE || UNITY_ANDROID
+#if IOS || NETFX_CORE || UNITY_ANDROID || UNITY_IOS
 #else
       /// <summary>
       /// Obtain the image from the specific Bitmap
@@ -510,7 +510,7 @@ namespace Emgu.CV
             else if (typeOfDepth == typeof(Int32))
                return Emgu.CV.CvEnum.IplDepth.IplDepth32S;
             else
-#if (NETFX_CORE || UNITY_ANDROID)
+#if (NETFX_CORE || UNITY_ANDROID || UNITY_IOS)
                throw new NotImplementedException("Unsupported image depth");
 #else
                throw new NotImplementedException(Properties.StringTable.UnsupportedImageDepth);
@@ -699,7 +699,7 @@ namespace Emgu.CV
 
       #endregion
 
-#if !UNITY_ANDROID
+#if !(UNITY_ANDROID || UNITY_IOS)
       #region Drawing functions
       ///<summary> Draw an Rectangle of the specific color and thickness </summary>
       ///<param name="rect"> The rectangle to be drawn</param>
@@ -718,7 +718,7 @@ namespace Emgu.CV
       ///<param name="thickness"> Must be &gt; 0 </param>
       public void Draw(Cross2DF cross, TColor color, int thickness)
       {
-#if !(NETFX_CORE || UNITY_ANDROID)
+#if !(NETFX_CORE || UNITY_ANDROID || UNITY_IOS)
          Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
 #endif
          if (thickness > 0)
@@ -735,7 +735,7 @@ namespace Emgu.CV
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public virtual void Draw(LineSegment2DF line, TColor color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-#if !(NETFX_CORE || UNITY_ANDROID)
+#if !(NETFX_CORE || UNITY_ANDROID || UNITY_IOS)
          Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
 #endif
          if (thickness > 0)
@@ -757,7 +757,7 @@ namespace Emgu.CV
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public virtual void Draw(LineSegment2D line, TColor color, int thicknes, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-#if !(NETFX_CORE || UNITY_ANDROID)
+#if !(NETFX_CORE || UNITY_ANDROID || UNITY_IOS)
          Debug.Assert(thicknes > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
 #endif
          if (thicknes > 0)
@@ -2381,7 +2381,7 @@ namespace Emgu.CV
          }
       }
 
-#if !UNITY_ANDROID
+#if !(UNITY_ANDROID || UNITY_IOS)
       ///<summary>
       /// Convert the image to log polar, simulating the human foveal vision
       /// </summary>
@@ -2618,7 +2618,7 @@ namespace Emgu.CV
       }
       #endregion
 
-#if IOS || NETFX_CORE || UNITY_ANDROID
+#if IOS || NETFX_CORE || UNITY_ANDROID || UNITY_IOS
 #else
       //#region Conversion with Bitmap
       /// <summary>
