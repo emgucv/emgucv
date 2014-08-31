@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D9C9B824-2B7A-48C0-A7D3-484410288CD2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -51,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.csproj">
-      <Project>{8728cb1f-f193-4f75-aea9-221aa85a3e80}</Project>
+      <Project>{8728CB1F-F193-4F75-AEA9-221AA85A3E80}</Project>
       <Name>Emgu.CV.Cuda</Name>
     </ProjectReference>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">

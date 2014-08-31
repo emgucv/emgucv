@@ -47,7 +47,14 @@ namespace PedestrianDetection
          }
          else
          #endif
-         {  //this is the CPU/OpenCL version
+         {  
+            bool tryUseOpenCL = true;
+            //Many opencl functions require opencl compatible gpu devices. 
+            //As of opencv 3.0-alpha, opencv will crash if opencl is enable and only opencv compatible cpu device is presented
+            //So we need to call CvInvoke.HaveOpenCLCompatibleGpuDevice instead of CvInvoke.HaveOpenCL (which also returns true on a system that only have cpu opencl devices).
+            CvInvoke.UseOpenCL = tryUseOpenCL && CvInvoke.HaveOpenCLCompatibleGpuDevice;
+
+            //this is the CPU/OpenCL version
             using (HOGDescriptor des = new HOGDescriptor())
             {
                des.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());

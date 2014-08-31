@@ -3174,6 +3174,34 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Gets a value indicating whether this device have open CL compatible gpu device.
+      /// </summary>
+      /// <value><c>true</c> if have open CL compatible gpu device; otherwise, <c>false</c>.</value>
+      public static bool HaveOpenCLCompatibleGpuDevice
+      {
+         get {
+            using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformInfo())
+            {
+               if (oclPlatformInfos.Size > 0)
+               {
+                  for (int i = 0; i < oclPlatformInfos.Size; i++)
+                  {
+                     OclPlatformInfo platformInfo = oclPlatformInfos[i];
+
+                     for (int j = 0; j < platformInfo.DeviceNumber; j++)
+                     {
+                        OclDevice device = platformInfo.GetDevice(j);
+                        if (device.Type == OclDeviceType.Gpu)
+                           return true;
+                     }
+                  }
+               }
+            }
+            return false;
+         }
+      }
+
       #endregion
 
       #region Clustering

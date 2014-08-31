@@ -3,15 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TrafficSignRecognition</RootNamespace>
     <AssemblyName>Example.TrafficSignRecognition</AssemblyName>
-    <StartupObject>
-    </StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -62,8 +58,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZedGraph, Version=5.1.4.31904, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ZedGraph">
       <HintPath>..\..\lib\3rdParty\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -84,7 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.csproj">
-      <Project>{787d75d2-fe4d-4739-b9a5-2fb2617a42cc}</Project>
+      <Project>{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}</Project>
       <Name>Emgu.CV.Contrib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.UI\Emgu.CV.UI.csproj">
