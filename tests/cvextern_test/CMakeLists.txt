@@ -24,15 +24,15 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
 #INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 
 ############################### IPP START ##############################
-IF(WITH_IPP)
-include(${OPENCV_SUBFOLDER}/cmake/OpenCVFindIPP.cmake)
-  IF (IPP_FOUND)
-    message(STATUS "CVEXTERN: USING IPP: ${IPP_LIBRARY_DIRS} ")
-    add_definitions(-DHAVE_IPP)
-    include_directories(${IPP_INCLUDE_DIRS})
-    LINK_DIRECTORIES(${IPP_LIBRARY_DIRS})
-  ENDIF()
-ENDIF()
+#IF(WITH_IPP)
+#include(${OPENCV_SUBFOLDER}/cmake/OpenCVFindIPP.cmake)
+#  IF (IPP_FOUND)
+#    message(STATUS "CVEXTERN: USING IPP: ${IPP_LIBRARY_DIRS} ")
+#    add_definitions(-DHAVE_IPP)
+#    include_directories(${IPP_INCLUDE_DIRS})
+#    LINK_DIRECTORIES(${IPP_LIBRARY_DIRS})
+#  ENDIF()
+#ENDIF()
 ############################### IPP END ################################
 
 ############################### TBB START ##############################

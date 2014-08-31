@@ -118,15 +118,15 @@ IF(WIN32 AND CV_ICC)
 ENDIF()
 
 ############################### IPP START ##############################
-IF(WITH_IPP)
-  include(${OPENCV_SUBFOLDER}/cmake/OpenCVFindIPP.cmake)
-  IF (IPP_FOUND)
-    message(STATUS "CVEXTERN: USING IPP: ${IPP_LIBRARY_DIRS} ")
-    add_definitions(-DHAVE_IPP)
-    include_directories(${IPP_INCLUDE_DIRS})
-    LINK_DIRECTORIES(${IPP_LIBRARY_DIRS})
-  ENDIF()
-ENDIF()
+#IF(WITH_IPP)
+#  include(${OPENCV_SUBFOLDER}/cmake/OpenCVFindIPP.cmake)
+#  IF (IPP_FOUND)
+#    message(STATUS "CVEXTERN: USING IPP: ${IPP_LIBRARY_DIRS} ")
+#    add_definitions(-DHAVE_IPP)
+#    include_directories(${IPP_INCLUDE_DIRS})
+#    LINK_DIRECTORIES(${IPP_LIBRARY_DIRS})
+#  ENDIF()
+#ENDIF()
 ############################### IPP END ################################
 
 ############################### TBB START ##############################
@@ -333,7 +333,7 @@ ENDIF()
 
 ############################### OpenCL START ##############################
 IF(WITH_OPENCL)
-  MESSAGE(STATUS "Building cvextern with opencv_ocl")
+  MESSAGE(STATUS "Building cvextern with OPENCL")
 
   IF(WIN32 AND WITH_OPENCL AND NOT (NETFX_CORE))
     SET(OPENCL_PROJ OpenCL)
