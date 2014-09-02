@@ -11,7 +11,7 @@ LIST(APPEND SRC_CV ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
 IF (NETFX_CORE)
   #Remove android, ios or unity related files
-  FILE(GLOB_RECURSE SRC_CV_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "PInvoke/iOS/*.cs" "PInvoke/Android/*.cs" "PInvoke/Unity/*.cs" "PInvoke/System.Drawing/*.cs"  "StringTable.Designer.cs" )
+  FILE(GLOB_RECURSE SRC_CV_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "PInvoke/iOS/*.cs" "PInvoke/Android/*.cs" "PInvoke/Unity/*.cs"  "StringTable.Designer.cs" )
 ELSE()
   #Remove android, ios, windows store or unity related files
   FILE(GLOB_RECURSE SRC_CV_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "PInvoke/iOS/*.cs" "PInvoke/Android/*.cs" "PInvoke/Unity/*.cs" "PInvoke/System.Drawing/*.cs" "PInvoke/Windows.Store/*.cs")

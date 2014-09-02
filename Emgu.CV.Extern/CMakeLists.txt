@@ -203,8 +203,7 @@ IF(ANDROID)
     SET(TESSERACT_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccutil" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/api" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccmain" "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr/ccstruct" "${PROJECT_SOURCE_DIR}/tesseract")
     SET(TESSERACT_LIBRARY tesseract_ccstruct tesseract_ccutil tesseract_classify tesseract_cube tesseract_cutil tesseract_dict tesseract_opencl tesseract_neural_networks tesseract_api tesseract_textord tesseract_viewer tesseract_wordrec libleptonica tesseract_ccmain)
   ENDIF()
-ELSE()
-IF(WIN32 OR APPLE)
+ELSEIF(WIN32 OR APPLE)
   IF(NETFX_CORE)
     SET(EMGU_CV_WITH_TESSERACT OFF CACHE BOOL "BUILD OCR")
   ELSE()
@@ -226,7 +225,6 @@ ELSE()
     SET(TESSERACT_INCLUDE_DIRS "")
     SET(TESSERACT_LIBRARY "")
   ENDIF()
-ENDIF()
 ENDIF()
 
 IF(EMGU_CV_WITH_TESSERACT)
@@ -479,8 +477,12 @@ ADD_DEPENDENCIES(${the_target}
   ${OPENCL_PROJ}
   ${ZLIB_LIBRARY} 
 #  xtiff
-  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY} )
+  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${CVBLOB_LIBRARY} )
 
+IF(EMGU_CV_WITH_TESSERACT)
+  ADD_DEPENDENCIES(${TESSERACT_LIBRARY})
+ENDIF()
+  
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
 #  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
 #  MESSAGE("Included:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
@@ -508,8 +510,12 @@ ENDIF()
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
   ${ZLIB_LIBRARY} 
 #  xtiff 
-  ${TESSERACT_LIBRARY} ${CVBLOB_LIBRARY})
+  ${CVBLOB_LIBRARY})
 
+IF(EMGU_CV_WITH_TESSERACT)
+  ADD_DEPENDENCIES(${TESSERACT_LIBRARY})
+ENDIF()
+  
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()

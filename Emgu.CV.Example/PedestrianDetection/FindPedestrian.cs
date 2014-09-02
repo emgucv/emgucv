@@ -23,14 +23,14 @@ namespace PedestrianDetection
       /// <param name="image">The image</param>
       /// <param name="processingTime">The pedestrian detection time in milliseconds</param>
       /// <returns>The region where pedestrians are detected</returns>
-      public static Rectangle[] Find(Mat image, out long processingTime)
+      public static Rectangle[] Find(Mat image, bool tryUseCuda, bool tryUseOpenCL, out long processingTime)
       {
          Stopwatch watch;
          Rectangle[] regions;
 
          #if !IOS
          //check if there is a compatible Cuda device to run pedestrian detection
-         if (CudaInvoke.HasCuda)
+         if (tryUseCuda && CudaInvoke.HasCuda)
          {  //this is the Cuda version
             using (CudaHOGDescriptor des = new CudaHOGDescriptor())
             {
@@ -48,7 +48,6 @@ namespace PedestrianDetection
          else
          #endif
          {  
-            bool tryUseOpenCL = true;
             //Many opencl functions require opencl compatible gpu devices. 
             //As of opencv 3.0-alpha, opencv will crash if opencl is enable and only opencv compatible cpu device is presented
             //So we need to call CvInvoke.HaveOpenCLCompatibleGpuDevice instead of CvInvoke.HaveOpenCL (which also returns true on a system that only have cpu opencl devices).

@@ -33,10 +33,10 @@ namespace Simlpe3DReconstruction
          InitializeComponent();
          _left = new Image<Bgr, byte>("imL.png");
          _right = new Image<Bgr, byte>("imR.png");
-         Image<Gray, short> disparityMap;
+         Mat disparityMap = new Mat();
 
          Stopwatch watch = Stopwatch.StartNew();
-         Computer3DPointsFromStereoPair(_left.Convert<Gray, Byte>(), _right.Convert<Gray, Byte>(), out disparityMap, out _points);
+         Computer3DPointsFromStereoPair(_left.Convert<Gray, Byte>(), _right.Convert<Gray, Byte>(), disparityMap, out _points);
          watch.Stop();
          long disparityComputationTime = watch.ElapsedMilliseconds;
 
@@ -51,19 +51,17 @@ namespace Simlpe3DReconstruction
       /// </summary>
       /// <param name="left">The left image</param>
       /// <param name="right">The right image</param>
-      /// <param name="disparityMap">The left disparity map</param>
+      /// <param name="outputDisparityMap">The left disparity map</param>
       /// <param name="points">The 3D point cloud within a [-0.5, 0.5] cube</param>
-      private static void Computer3DPointsFromStereoPair(Image<Gray, Byte> left, Image<Gray, Byte> right, out Image<Gray, short> disparityMap, out MCvPoint3D32f[] points)
+      private static void Computer3DPointsFromStereoPair(Image<Gray, Byte> left, Image<Gray, Byte> right, Mat outputDisparityMap, out MCvPoint3D32f[] points)
       {
          Size size = left.Size;
-
-         disparityMap = new Image<Gray, short>(size);
          
          //using (StereoSGBM stereoSolver = new StereoSGBM(5, 64, 0))
          using (StereoBM stereoSolver = new StereoBM())
          //using (Mat dm = new Mat())
          {
-            stereoSolver.Compute(left, right, disparityMap);
+            stereoSolver.Compute(left, right, outputDisparityMap);
 
             float scale = Math.Max(size.Width, size.Height);
 
@@ -74,7 +72,7 @@ namespace Simlpe3DReconstruction
                   {0.0, -1.0, 0.0, size.Height/2}, //shift the y origin to image center and flip it upside down
                   {0.0, 0.0, -1.0, 0.0}, //Multiply the z value by -1.0, 
                   {0.0, 0.0, 0.0, scale}})) //scale the object's corrdinate to within a [-0.5, 0.5] cube
-               points = PointCollection.ReprojectImageTo3D(disparityMap, q);
+               points = PointCollection.ReprojectImageTo3D(outputDisparityMap, q);
          }
       }
 

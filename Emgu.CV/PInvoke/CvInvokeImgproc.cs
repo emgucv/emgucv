@@ -1384,7 +1384,7 @@ namespace Emgu.CV
               System.Drawing.Imaging.ImageLockMode.WriteOnly,
              format);
          using (Mat bmpMat = new Mat(size.Height, size.Width, CvEnum.DepthType.Cv8U, numberOfChannels, data.Scan0, data.Stride))
-         using (Mat dataMat = new Mat(size.Height, size.Width, CvEnum.DepthType.Cv8U, numberOfChannels, scan0, step))
+         using (Mat dataMat = new Mat(size.Height, size.Width, CvInvoke.GetDepthType(srcDepthType), numberOfChannels, scan0, step))
          {
             if (srcDepthType == typeof(Byte))
                dataMat.CopyTo(bmpMat);

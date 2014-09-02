@@ -16,12 +16,16 @@ namespace FaceDetection
 {
    public static class DetectFace
    {
-      public static void Detect(Image<Bgr, Byte> image, String faceFileName, String eyeFileName, List<Rectangle> faces, List<Rectangle> eyes, out long detectionTime)
+      public static void Detect(
+        Mat image, String faceFileName, String eyeFileName, 
+        List<Rectangle> faces, List<Rectangle> eyes, 
+        bool tryUseCuda, bool tryUseOpenCL,
+        out long detectionTime)
       {
          Stopwatch watch;
-
+         
          #if !IOS
-         if (CudaInvoke.HasCuda)
+         if (tryUseCuda && CudaInvoke.HasCuda)
          {
             using (CudaCascadeClassifier face = new CudaCascadeClassifier(faceFileName))
             using (CudaCascadeClassifier eye = new CudaCascadeClassifier(eyeFileName))
@@ -58,7 +62,6 @@ namespace FaceDetection
          else
          #endif
          {
-            bool tryUseOpenCL = true;
             //Many opencl functions require opencl compatible gpu devices. 
             //As of opencv 3.0-alpha, opencv will crash if opencl is enable and only opencv compatible cpu device is presented
             //So we need to call CvInvoke.HaveOpenCLCompatibleGpuDevice instead of CvInvoke.HaveOpenCL (which also returns true on a system that only have cpu opencl devices).

@@ -236,7 +236,7 @@ namespace Emgu.CV
       /// <param name="disparity">Disparity map</param>
       /// <param name="Q">The re-projection 4x4 matrix, can be arbitrary, e.g. the one, computed by cvStereoRectify</param>
       /// <returns>The reprojected 3D points</returns>
-      public static MCvPoint3D32f[] ReprojectImageTo3D(Image<Gray, Int16> disparity, Matrix<double> Q)
+      public static MCvPoint3D32f[] ReprojectImageTo3D(Mat disparity, IInputArray Q)
       {
          Size size = disparity.Size;
          MCvPoint3D32f[] points3D = new MCvPoint3D32f[size.Width * size.Height];
@@ -249,6 +249,7 @@ namespace Emgu.CV
          return points3D;
       }
 
+      /*
       /// <summary>
       /// Re-project pixels on a 1-channel disparity map to array of 3D points.
       /// </summary>
@@ -266,7 +267,7 @@ namespace Emgu.CV
 
          handle.Free();
          return points3D;
-      }
+      }*/
 
       
       /// <summary>

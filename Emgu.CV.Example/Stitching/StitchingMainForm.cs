@@ -48,7 +48,9 @@ namespace Stitching
             }
             try
             {
-               using (Stitcher stitcher = new Stitcher(true))
+               //using (Stitcher stitcher = new Stitcher(true))
+               //CUDA bruteforce matcher seems to cause issue in this release, not using CUDA for matching for this reason
+               using (Stitcher stitcher = new Stitcher(false))
                {
                   using (VectorOfMat vm = new VectorOfMat())
                   {

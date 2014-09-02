@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Cuda;
@@ -30,20 +31,34 @@ namespace FaceDetection
 
       static void Run()
       {
-         Image<Bgr, Byte> image = new Image<Bgr, byte>("lena.jpg"); //Read the files as an 8-bit Bgr image  
+         Mat image = new Mat("lena.jpg", LoadImageType.Color); //Read the files as an 8-bit Bgr image  
          long detectionTime;
          List<Rectangle> faces = new List<Rectangle>();
          List<Rectangle> eyes = new List<Rectangle>();
-         DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes, out detectionTime);
+
+         //The cuda cascade classifier doesn't seem to be able to load "haarcascade_frontalface_default.xml" file in this release
+         //disabling CUDA module for now
+         bool tryUseCuda = false;
+         bool tryUseOpenCL = true;
+
+         DetectFace.Detect(
+           image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", 
+           faces, eyes,
+           tryUseCuda,
+           tryUseOpenCL,
+           out detectionTime);
+
          foreach (Rectangle face in faces)
-            image.Draw(face, new Bgr(Color.Red), 2);
+            CvInvoke.Rectangle(image, face, new Bgr(Color.Red).MCvScalar, 2);
          foreach (Rectangle eye in eyes)
-            image.Draw(eye, new Bgr(Color.Blue), 2);
+            CvInvoke.Rectangle(image, eye, new Bgr(Color.Blue).MCvScalar, 2);
 
          //display the image 
          ImageViewer.Show(image, String.Format(
             "Completed face and eye detection using {0} in {1} milliseconds", 
-            CudaInvoke.HasCuda ? "GPU": "CPU", 
+            (tryUseCuda && CudaInvoke.HasCuda) ? "GPU"
+            : (tryUseOpenCL && CvInvoke.HaveOpenCLCompatibleGpuDevice) ? "OpenCL" 
+            : "CPU",
             detectionTime));
       }
 

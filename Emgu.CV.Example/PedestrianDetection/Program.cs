@@ -9,7 +9,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Emgu.CV;
-using Emgu.CV.Structure;
+﻿using Emgu.CV.CvEnum;
+﻿using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Cuda;
 
@@ -26,20 +27,22 @@ namespace PedestrianDetection
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
 
-         using (Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png"))
+         using (Mat image = new Mat("pedestrian.png", LoadImageType.Color))
          {
+            bool tryUseCuda = false;
+            bool tryuseOpenCL = false;
             long processingTime;
-            Rectangle[] results = FindPedestrian.Find(image.Mat, out processingTime);
+            Rectangle[] results = FindPedestrian.Find(image, tryUseCuda, tryuseOpenCL, out processingTime);
             foreach (Rectangle rect in results)
             {
-               CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255, 255));
+               CvInvoke.Rectangle(image, rect, new Bgr(Color.Red).MCvScalar);
             }
             ImageViewer.Show(
                image,
                String.Format("Pedestrain detection using {0} in {1} milliseconds.",
-                  CudaInvoke.HasCuda ? "GPU" : 
-                  (CvInvoke.HaveOpenCL ? "OpenCL":
-                  "CPU"),
+                  (tryUseCuda && CudaInvoke.HasCuda) ? "GPU" : 
+                  (tryuseOpenCL && CvInvoke.HaveOpenCLCompatibleGpuDevice) ? "OpenCL":
+                  "CPU",
                   processingTime));
          }
       }

@@ -547,7 +547,7 @@ ELSEIF (WIN32)
   # ----------------------------------------------------------------------------
   #  Bundle MSCVRT into deployment package
   # ----------------------------------------------------------------------------
-  IF(MSVC)
+  IF(MSVC AND (NOT NETFX_CORE))
     IF(MSVC12)
 	  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc12_redist")
     ELSEIF(MSVC11)
@@ -587,6 +587,7 @@ ELSEIF (WIN32)
 	    MESSAGE(FATAL_ERROR "Unable to find MSVC reistributable. Please verify that the following file exist: ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}")
       ENDIF()
 	ENDIF()
+	
   ENDIF()
 
   IF(DEFINED UNIVERSAL_BUILD)
