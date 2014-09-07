@@ -1186,7 +1186,7 @@ ELSE() #LINUX
     ENDIF()
   ENDIF()
    
-  SET(PREINST_SCRIPT "#!/bin/sh\nmkdir -p /usr/lib/pkgconfig /usr/${CPACK_PACKAGE_CLI_FOLDER} /usr/share/opencv/haarcascades /usr/share/opencv/lbpcascades /usr/share/opencv/doc /usr/share/opencv/doc/vidsurv /usr/share/opencv/doc/papers /usr/include/opencv2/flann /usr/include/opencv2/core /usr/include/opencv2/features2d /usr/include/opencv2/ffmpeg /usr/include/opencv2/haartraining /usr/include/opencv2/highgui /usr/include/opencv2/imgproc /usr/include/opencv2/ml /usr/include/opencv2/objdetect /usr/include/opencv2/calib3d /usr/include/opencv2/video /usr/include/opencv\n")
+  SET(PREINST_SCRIPT "#!/bin/sh\nmkdir -p /usr/lib/pkgconfig /usr/${CPACK_PACKAGE_CLI_FOLDER} /usr/share/opencv/haarcascades /usr/share/opencv/lbpcascades /usr/share/opencv/doc \n")
   LIST(FIND CPACK_GENERATOR "DEB" TEMP)
   IF(NOT (${TEMP} EQUAL -1))
     SET(DEBIAN_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian")
@@ -1213,6 +1213,9 @@ ELSE() #LINUX
     SET(CPACK_RPM_PACKAGE_REQUIRES "mono-core >= 2.6, mono-wcf, jasper, libgeotiff, gtk2, OpenEXR, libv4l, libdc1394, qt")
     IF (WITH_TBB)
       SET(CPACK_RPM_PACKAGE_REQUIRES ", tbb")
+    ENDIF()
+    IF(EMGUCV_WITH_TESSERACT AND TESSERACT_FOUND)
+      SET(CPACK_RPM_PACKAGE_REQUIRES ", tesseract")
     ENDIF()    
     SET(RPM_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/rpm")
     FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/preinst ${PREINST_SCRIPT})
