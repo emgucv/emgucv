@@ -62,7 +62,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} libleptonica)
+#ADD_DEPENDENCIES(${PROJECT_NAME} libleptonica)
 
 #cutil
 PROJECT(tesseract_cutil)
@@ -80,7 +80,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_viewer)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_viewer)
 
 #opencl
 PROJECT(tesseract_opencl)
@@ -99,7 +99,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_viewer libleptonica)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_viewer libleptonica)
 
 #ccstruct
 PROJECT(tesseract_ccstruct)
@@ -117,7 +117,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_cutil tesseract_viewer tesseract_opencl libleptonica)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_opencl)
 
 #dict
 PROJECT(tesseract_dict)
@@ -135,7 +135,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccstruct)
 
 #classify
 PROJECT(tesseract_classify)
@@ -153,7 +153,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccstruct tesseract_dict)
 
 #wordrec
 PROJECT(tesseract_wordrec)
@@ -171,7 +171,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_classify)
 
 #neural_networks
 PROJECT(tesseract_neural_networks)
@@ -206,7 +206,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_wordrec)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_wordrec)
 
 #cube
 PROJECT(tesseract_cube)
@@ -225,7 +225,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord)
 
 #api
 PROJECT(tesseract_api)
@@ -259,7 +259,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord tesseract_cube)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord tesseract_cube)
 
 #ccmain
 PROJECT(tesseract_ccmain)
@@ -279,7 +279,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tesseract")
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
-ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord tesseract_cube)
+#ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord tesseract_cube)
 
 
 
