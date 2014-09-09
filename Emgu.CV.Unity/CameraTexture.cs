@@ -9,7 +9,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
 
-public class ChangeTexture : MonoBehaviour
+public class CameraTexture : MonoBehaviour
 {
    public WebCamTexture webcamTexture;
    public Color32[] data;

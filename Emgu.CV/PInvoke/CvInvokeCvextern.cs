@@ -76,7 +76,6 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveSqrt(IntPtr src, IntPtr dst);
 
-      /*
       /// <summary>
       /// Apply color map to the image
       /// </summary>
@@ -94,8 +93,7 @@ namespace Emgu.CV
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
-      */
-
+      
       /// <summary>
       /// Check that every array element is neither NaN nor +- inf. The functions also check that each value
       /// is between minVal and maxVal. in the case of multi-channel arrays each channel is processed

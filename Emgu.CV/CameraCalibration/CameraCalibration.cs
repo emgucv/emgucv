@@ -277,8 +277,9 @@ namespace Emgu.CV
          Debug.Assert(src.Length >= 3, "The source should contain at least 3 points");
          Debug.Assert(dest.Length >= 3, "The destination should contain at least 3 points");
 
-         using (VectorOfPointF ptSrc = new VectorOfPointF(src))
-         using (VectorOfPointF ptDest = new VectorOfPointF(dest))
+         
+         using (VectorOfPointF ptSrc = src.Length == 3 ? new VectorOfPointF(src) : new VectorOfPointF(new PointF[] {src[0], src[1], src[2]}))
+         using (VectorOfPointF ptDest = dest.Length == 3 ? new VectorOfPointF(dest) : new VectorOfPointF(new PointF[]{dest[0], dest[1], dest[2]}))
             return CvInvoke.GetAffineTransform(ptSrc, ptDest);
       }
 

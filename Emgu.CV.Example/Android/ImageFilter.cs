@@ -120,7 +120,6 @@ namespace Emgu.CV
       }
    }
 
-   /*
    public class ColorMapFilter : ImageFilter
    {
       private Emgu.CV.CvEnum.ColorMapType _colorMapType;
@@ -140,7 +139,7 @@ namespace Emgu.CV
       {
          return new ColorMapFilter(_colorMapType);
       }
-   }*/
+   }
 
    public class DistorFilter : ImageFilter
    {

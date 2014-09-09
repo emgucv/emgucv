@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
-
+using System.Linq.Expressions;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -58,7 +58,7 @@ namespace AndroidExamples
                long time;
                List<Rectangle> faces = new List<Rectangle>();
                List<Rectangle> eyes = new List<Rectangle>();
-               DetectFace.Detect(image, faceXml, eyeXml, faces, eyes, out time);
+               DetectFace.Detect(image.Mat, faceXml, eyeXml, faces, eyes, false, true, out time);
                SetMessage(String.Format("Detected in {0} milliseconds.", time));
 
                foreach (Rectangle rect in faces)

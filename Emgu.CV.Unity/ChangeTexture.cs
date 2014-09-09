@@ -1,3 +1,4 @@
+using System.IO;
 using Emgu.CV.CvEnum;
 using UnityEngine;
 using System;
@@ -14,7 +15,7 @@ public class ChangeTexture : MonoBehaviour
 
    // Use this for initialization
    void Start()
-   {
+   {      
       Image<Bgr, Byte> img = new Image<Bgr, byte>(640, 240);
 
       String openclStr = "None";
@@ -39,9 +40,7 @@ public class ChangeTexture : MonoBehaviour
 
       Texture2D texture = TextureConvert.ImageToTexture2D(img);
 
-      GUITexture[] textures = GameObject.FindObjectsOfType(typeof(GUITexture)) as GUITexture[];
-      foreach (GUITexture t in textures)
-         t.texture = texture;
+      this.guiTexture.texture = texture;
    }
 
    // Update is called once per frame

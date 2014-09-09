@@ -24,19 +24,33 @@ namespace Emgu.CV
          int width = texture.width;
          int height = texture.height;
 
-         Image<TColor, TDepth> result = new Image<TColor, TDepth>(width, height);
-         Color32[] colors = texture.GetPixels32();
-         GCHandle handle = GCHandle.Alloc(colors, GCHandleType.Pinned);
-         
-         using (Image<Rgba, Byte> rgba = new Image<Rgba, byte>(width, height, width*4, handle.AddrOfPinnedObject()))
-         {
-            result.ConvertFrom(rgba);  
-         }
-         handle.Free();
 
+         Image<TColor, TDepth> result = new Image<TColor, TDepth>(width, height);
+         try
+         {
+            Color32[] colors = texture.GetPixels32();
+            GCHandle handle = GCHandle.Alloc(colors, GCHandleType.Pinned);
+            using (Image<Rgba, Byte> rgba = new Image<Rgba, byte>(width, height, width * 4, handle.AddrOfPinnedObject()))
+            {
+               result.ConvertFrom(rgba);
+            }
+            handle.Free();
+         }
+         catch (Exception)
+         {
+            byte[] jpgBytes = texture.EncodeToJPG();
+            using (Mat tmp = new Mat())
+            {
+               CvInvoke.Imdecode(jpgBytes, LoadImageType.AnyColor, tmp);
+               result.ConvertFrom(tmp);
+            }
+         }
          if (correctForVerticleFlip)
             CvInvoke.Flip(result, result, Emgu.CV.CvEnum.FlipType.Vertical);
          return result;
+         
+         
+
       }
 
       public static Texture2D ImageToTexture2D<TColor, TDepth>(Image<TColor, TDepth> image, bool correctForVerticleFlip = true)

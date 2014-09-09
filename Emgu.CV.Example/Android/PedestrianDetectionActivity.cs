@@ -35,7 +35,7 @@ namespace AndroidExamples
             {
                if (image == null)
                   return;
-               Rectangle[] pedestrians = FindPedestrian.Find(image.Mat, out time);
+               Rectangle[] pedestrians = FindPedestrian.Find(image.Mat, false, true, out time);
 
                SetMessage(String.Format("Detection completed in {0} milliseconds.", time));
                foreach (Rectangle rect in pedestrians)
