@@ -32,6 +32,8 @@ namespace Emgu.CV
       public CvString(String s)
       {
          byte[] bytes = Encoding.UTF8.GetBytes(s);
+         Array.Resize (ref bytes, bytes.Length + 1);
+         bytes [bytes.Length - 1] = 0; //The end of string '\0' character
          GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
          _ptr = CvInvoke.cveStringCreateFromStr(handle.AddrOfPinnedObject());
          handle.Free();

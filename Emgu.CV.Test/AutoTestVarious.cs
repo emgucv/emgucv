@@ -1382,7 +1382,8 @@ namespace Emgu.CV.Test
 
          Matrix<double> q = new Matrix<double>(4, 4);
          q.SetIdentity();
-         MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(disparity * (-16), q);
+         Image<Gray, Int16> disparityScaled = disparity * (-16);
+         MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(disparityScaled.Mat, q);
 
          float min = (float) 1.0e10, max = 0;
          foreach (MCvPoint3D32f p in points)
