@@ -190,7 +190,13 @@ ELSE()
   SET(CPACK_PACKAGE_FILE_NAME "lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 ENDIF()
 
-SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt")
+
+IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Commercial.License.txt")
+  SET(LICENSE_FILE_NAME "Emgu.CV.Commercial.License.txt")
+ELSE()
+  SET(LICENSE_FILE_NAME "Emgu.CV.License.txt")
+ENDIF()
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}")
 
 IF (WIN32 OR APPLE)
   SET(CPACK_PACKAGE_CLI_FOLDER bin)
@@ -522,7 +528,7 @@ IF (ANDROID)
     FILES
     "CommonAssemblyInfo.cs" 
 	"Emgu.CV.snk"
-	"Emgu.CV.License.txt"
+	"${LICENSE_FILE_NAME}"
     DESTINATION .
     COMPONENT main
     )
@@ -752,7 +758,7 @@ INSTALL(
   FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
   "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt"
+  "${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}"
   DESTINATION .
   COMPONENT emgucv_source
   )
@@ -962,7 +968,7 @@ SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\
 # ----------------------------------------------------------------------------
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\" ")
 
-SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Emgu CV License.lnk\\\"  \\\"$INSTDIR\\\\Emgu.CV.License.txt\\\" ")	
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Emgu CV License.lnk\\\"  \\\"$INSTDIR\\\\${LICENSE_FILE_NAME}\\\" ")	
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Open CV License.lnk\\\"  \\\"$INSTDIR\\\\doc\\\\license.txt\\\" ")
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\ZedGraph License.lnk\\\"  \\\"$INSTDIR\\\\bin\\\\ZedGraph.license.txt\\\" ")	
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Tesseract OCR License.lnk\\\"  \\\"$INSTDIR\\\\lib\\\\3rdParty\\\\tesseract-ocr.license.txt\\\" ")	
@@ -1002,7 +1008,7 @@ INSTALL(
   FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
   "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt"
+  "${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}"
   DESTINATION .
   COMPONENT emgucv_source
   )
