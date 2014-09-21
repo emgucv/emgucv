@@ -1,4 +1,7 @@
 pushd %~p0
+
+call remove_from_path PATH "C:\Program Files (x86)\Git\bin;"
+
 cd ..\..\..
 cp -f opencv\platforms\android\android.toolchain.cmake android.toolchain.cmake
 rm -rf build_armeabi
