@@ -822,6 +822,7 @@ IF(NETFX_CORE)
     PATTERN "CMake*" EXCLUDE
     PATTERN "Release" EXCLUDE
     PATTERN "Debug" EXCLUDE
+	PATTERN "RelWithDebInfo" EXCLUDE
     PATTERN "*.dir" EXCLUDE
   )
 ELSE()
@@ -892,6 +893,7 @@ ELSE()
     PATTERN "CMake*" EXCLUDE
     PATTERN "Release" EXCLUDE
     PATTERN "Debug" EXCLUDE
+    PATTERN "RelWithDebInfo" EXCLUDE
     PATTERN "*.dir" EXCLUDE
     PATTERN "Android" EXCLUDE
     PATTERN "iOS" EXCLUDE

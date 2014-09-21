@@ -11,3 +11,6 @@
 [submodule "opencv_contrib"]
 	path = opencv_contrib
 	url = git://git.code.sf.net/p/emgucv/opencv_contrib
+[submodule "opencv_extra"]
+	path = opencv_extra
+	url = https://github.com/Itseez/opencv_extra.git

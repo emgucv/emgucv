@@ -19,9 +19,9 @@ public class FaceDetection : MonoBehaviour
    {  
       Texture2D lenaTexture = Resources.Load<Texture2D>("lena");    
 
-      updateTextureWithString("load lena ok");
+      //updateTextureWithString("load lena ok");
       Image<Bgr, Byte> img = TextureConvert.Texture2dToImage<Bgr, byte>(lenaTexture);
-      updateTextureWithString("convert to image ok");
+      //updateTextureWithString("convert to image ok");
 
       //String fileName = "haarcascade_frontalface_default";
       //String fileName = "lbpcascade_frontalface";
@@ -29,25 +29,25 @@ public class FaceDetection : MonoBehaviour
       String filePath = Path.Combine(Application.persistentDataPath, fileName + ".xml");
       //if (!File.Exists(filePath))
       {
-         updateTextureWithString("start move cascade xml");
+         //updateTextureWithString("start move cascade xml");
          TextAsset cascadeModel = Resources.Load<TextAsset>(fileName);
          
          File.WriteAllBytes(filePath, cascadeModel.bytes);
-         updateTextureWithString("File size: " + new FileInfo(filePath).Length);
+         //updateTextureWithString("File size: " + new FileInfo(filePath).Length);
       }
 
       
       using (CascadeClassifier classifier = new CascadeClassifier(filePath))
       using (Image<Gray, Byte> gray = img.Convert<Gray, byte>())
       {
-         updateTextureWithString("classifier create ok");
+         //updateTextureWithString("classifier create ok");
 
          Rectangle[] faces = null;
          try
          {
             faces = classifier.DetectMultiScale(gray);
 
-            updateTextureWithString("face detected");
+            //updateTextureWithString("face detected");
             foreach (Rectangle face in faces)
             {
                CvInvoke.Rectangle(img, face, new MCvScalar(0, 255, 0));
@@ -56,11 +56,11 @@ public class FaceDetection : MonoBehaviour
          catch (Exception e)
          {
             
-            updateTextureWithString(e.Message);
+            //updateTextureWithString(e.Message);
             return;
          }
          
-         updateTextureWithString(String.Format("{0} face found on image of {1} x {2}", faces.Length, img.Width, img.Height));
+         //updateTextureWithString(String.Format("{0} face found on image of {1} x {2}", faces.Length, img.Width, img.Height));
       }
 
       Texture2D texture = TextureConvert.ImageToTexture2D(img);
