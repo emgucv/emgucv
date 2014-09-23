@@ -36,11 +36,12 @@ namespace Emgu.CV.Example.MonoTouch
                List<Rectangle> faces = new List<Rectangle>();
                List<Rectangle> eyes = new List<Rectangle>();
                DetectFace.Detect(
-                        image,
+                        image.Mat,
                         "haarcascade_frontalface_default.xml",
                         "haarcascade_eye.xml",
                         faces,
-                        eyes,
+                        eyes, 
+                        false, false,
                         out processingTime
                );
                foreach (Rectangle face in faces)
