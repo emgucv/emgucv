@@ -1,0 +1,1 @@
+find . -name "*html" -type f | xargs sed -i 's/%1/%2/g'

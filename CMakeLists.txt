@@ -179,7 +179,7 @@ IF(CV_ICC)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-icc")
 ENDIF()
 
-SET(CPACK_PACKAGE_VENDOR "Emgu")
+SET(CPACK_PACKAGE_VENDOR "Emgu Corporation")
 SET(CPACK_PACKAGE_VERSION_MAJOR ${OPENCV_VERSION_MAJOR})
 SET(CPACK_PACKAGE_VERSION_MINOR ${OPENCV_VERSION_MINOR})
 SET(CPACK_PACKAGE_VERSION_PATCH ${OPENCV_VERSION_PATCH})
@@ -191,11 +191,11 @@ ELSE()
 ENDIF()
 
 
-IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Commercial.License.txt")
-  SET(LICENSE_FILE_NAME "Emgu.CV.Commercial.License.txt")
-ELSE()
+#IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Commercial.License.txt")
+#  SET(LICENSE_FILE_NAME "Emgu.CV.Commercial.License.txt")
+#ELSE()
   SET(LICENSE_FILE_NAME "Emgu.CV.License.txt")
-ENDIF()
+#ENDIF()
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}")
 
 IF (WIN32 OR APPLE)
@@ -532,6 +532,12 @@ IF (ANDROID)
     DESTINATION .
     COMPONENT main
     )
+  INSTALL(
+    FILES
+    "opencv/LICENSE"
+    DESTINATION "opencv"
+    COMPONENT main
+    )
 ELSEIF (WIN32)
   IF(NETFX_CORE)
     SET(CPACK_GENERATOR ZIP)
@@ -613,7 +619,8 @@ ELSEIF (WIN32)
     SET(DEBUGER_VISUALIZER_FILES 
       "Emgu.Util"
       "Emgu.CV"
-      "Emgu.CV.UI")
+      "Emgu.CV.UI"
+	  "ZedGraph")
     SET(DEBUGGER_VISUALIZER_UNMANAGED_FILES
       #    "Emgu.CV.DebuggerVisualizers"
       ${OPENCV_LIBRARY_OUTPUT_NAMES}
@@ -932,8 +939,8 @@ SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\
 # ----------------------------------------------------------------------------
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Documentation\\\" ")
 
-SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Documentation\\\\Open CV Documentation.lnk\\\"  \\\"$INSTDIR\\\\doc\\\\opencv2refman.pdf\\\" ")	
-SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Documentation\\\\Open CV Documentation.lnk\\\" ")
+#SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Documentation\\\\Open CV Documentation.lnk\\\"  \\\"$INSTDIR\\\\doc\\\\opencv2refman.pdf\\\" ")	
+#SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Documentation\\\\Open CV Documentation.lnk\\\" ")
 
 IF(EMGU_CV_DOCUMENTATION_BUILD)
   LIST(APPEND CPACK_COMPONENTS_ALL emgucv_document)
@@ -957,10 +964,8 @@ LIST(APPEND CPACK_NSIS_MENU_LINKS "http://www.emgu.com/bugs/buglist.cgi?query_fo
 # ----------------------------------------------------------------------------
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\" ")
 
-SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2008 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\VS2008\\\\Emgu.CV.Example.sln\\\" ")	
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2010 2012 2013 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\VS2010_2012_2013\\\\Emgu.CV.Example.sln\\\" ")	
 
-SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2008 Examples.lnk\\\" ")
 SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2010 2012 2013 Examples.lnk\\\" ")
 
 SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\nRMDir  \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\" ")
@@ -971,8 +976,8 @@ SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\" ")
 
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Emgu CV License.lnk\\\"  \\\"$INSTDIR\\\\${LICENSE_FILE_NAME}\\\" ")	
-SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Open CV License.lnk\\\"  \\\"$INSTDIR\\\\doc\\\\license.txt\\\" ")
-SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\ZedGraph License.lnk\\\"  \\\"$INSTDIR\\\\bin\\\\ZedGraph.license.txt\\\" ")	
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Open CV License.lnk\\\"  \\\"$INSTDIR\\\\lib\\\\opencv.license.txt\\\" ")
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\ZedGraph License.lnk\\\"  \\\"$INSTDIR\\\\lib\\\\3rdParty\\\\ZedGraph.license.txt\\\" ")	
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Tesseract OCR License.lnk\\\"  \\\"$INSTDIR\\\\lib\\\\3rdParty\\\\tesseract-ocr.license.txt\\\" ")	
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\CvBlob License.lnk\\\"  \\\"$INSTDIR\\\\lib\\\\3rdParty\\\\cvblob.license.txt\\\" ")	
 

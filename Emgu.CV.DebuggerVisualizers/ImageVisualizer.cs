@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 [assembly: DebuggerVisualizer(
 typeof(Emgu.CV.DebuggerVisualizers.ImageVisualizer),
-Target = typeof(Image<,>))]
+Target = typeof(IImage))]
 
 
 namespace Emgu.CV.DebuggerVisualizers

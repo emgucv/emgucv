@@ -100,10 +100,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.Windows.Store.csproj">
-      <Project>{c2293433-3c88-473c-ae81-bbbe5d5e1746}</Project>
-      <Name>Emgu.CV.Cuda.Windows.Store</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV\Emgu.CV.Windows.Store.csproj">
       <Project>{1f7091da-c6eb-417b-8d2f-58c6151377a0}</Project>
       <Name>Emgu.CV.Windows.Store</Name>

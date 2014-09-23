@@ -1,0 +1,14 @@
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py calib3_*.xml -m median -f "^(.(?!OCL))*$" > calib3.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py core_*.xml -m median -f "^(.(?!OCL))*$" > core.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py features2_*.xml -m median -f "^(.(?!OCL))*$" > features2.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py imgcodecs_*.xml -m median -f "^(.(?!OCL))*$" > imgcodecs.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py imgproc_*.xml -m median -f "^(.(?!OCL))*$" > imgproc.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py objdetect_*.xml -m median -f "^(.(?!OCL))*$" > objdetect.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py photo_*.xml -m median -f "^(.(?!OCL))*$" > photo.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py reg_*.xml -m median -f "^(.(?!OCL))*$" > reg.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py stitching_*.xml -m median -f "^(.(?!OCL))*$" > stitching.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py superres_*.xml -m median -f "^(.(?!OCL))*$" > superres.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py video_*.xml -m median -f "^(.(?!OCL))*$" > video.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py videoio_*.xml -m median -f "^(.(?!OCL))*$" > videoio.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py xfeatures2_*.xml -m median -f "^(.(?!OCL))*$" > xfeatures2.html
+C:\Python27\python.exe ..\..\opencv\modules\ts\misc\summary.py ximageproc_*.xml -m median -f "^(.(?!OCL))*$" > ximageproc.html
