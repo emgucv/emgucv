@@ -58,5 +58,29 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(m1.Equals(m2));
 
       }
+
+      [TestAttribute]
+      public void TestRuntimeSerialize()
+      {
+         Mat img = new Mat(100, 80, DepthType.Cv8U, 3);
+
+         using (MemoryStream ms = new MemoryStream())
+         {
+            //img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+            //img.SerializationCompressionRatio = 9;
+            CvInvoke.SetIdentity(img, new MCvScalar(1, 2, 3));
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            formatter.Serialize(ms, img);
+            Byte[] bytes = ms.GetBuffer();
+
+            using (MemoryStream ms2 = new MemoryStream(bytes))
+            {
+               Object o = formatter.Deserialize(ms2);
+               Mat img2 = (Mat)o;
+               EmguAssert.IsTrue(img.Equals(img2));
+            }
+         }
+      }
    }
 }

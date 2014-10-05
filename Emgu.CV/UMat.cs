@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.CV.CvEnum;
 using Emgu.Util;
 #if ANDROID
 using Bitmap = Android.Graphics.Bitmap;
@@ -23,8 +24,86 @@ namespace Emgu.CV
    /// The equivalent of cv::Mat, should only be used if you know what you are doing.
    /// In most case you should use the Matrix class instead
    /// </summary>
-   public class UMat : MatDataAllocator, IImage
+#if !NETFX_CORE
+   [Serializable]
+#endif
+   public class UMat : MatDataAllocator, IImage, IEquatable<UMat>
+#if !NETFX_CORE
+, ISerializable
+#endif
    {
+      #if !NETFX_CORE
+      #region Implement ISerializable interface
+      /// <summary>
+      /// Constructor used to deserialize runtime serialized object
+      /// </summary>
+      /// <param name="info">The serialization info</param>
+      /// <param name="context">The streaming context</param>
+      public UMat(SerializationInfo info, StreamingContext context)
+         : this()
+      {
+         DeserializeObjectData(info, context);
+      }
+
+      /// <summary>
+      /// A function used for runtime deserailization of the object
+      /// </summary>
+      /// <param name="info">Serialization info</param>
+      /// <param name="context">Streaming context</param>
+      protected virtual void DeserializeObjectData(SerializationInfo info, StreamingContext context)
+      {
+         int rows = (int)info.GetValue("Rows", typeof(int));
+         int cols = (int)info.GetValue("Cols", typeof(int));
+         int depthType = (int) info.GetValue("DepthType", typeof (int));
+         int numberOfChannels = (int)info.GetValue("NumberOfChannels", typeof(int));
+         Create(rows, cols, (DepthType) depthType, numberOfChannels );
+         Bytes = (Byte[])info.GetValue("Bytes", typeof(Byte[]));
+      }
+
+      /// <summary>
+      /// A function used for runtime serialization of the object
+      /// </summary>
+      /// <param name="info">Serialization info</param>
+      /// <param name="context">streaming context</param>
+      public void GetObjectData(SerializationInfo info, StreamingContext context)
+      {
+         info.AddValue("Rows", Rows);
+         info.AddValue("Cols", Cols);
+         info.AddValue("DepthType", (int)Depth);
+         info.AddValue("NumberOfChannels", NumberOfChannels);
+         info.AddValue("Bytes", Bytes);  
+      }
+
+      #endregion
+#endif
+
+      private byte[] Bytes
+      {
+         get
+         {
+            if (IsEmpty)
+               return null;
+            byte[] data = new byte[Rows* Cols * ElementSize];
+            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            using (Mat m = new Mat(Rows, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols*ElementSize))
+            {
+               CopyTo(m);
+            }
+            handle.Free();
+            return data;
+         }
+         set
+         {
+            Debug.Assert(value.Length == Rows * Cols* ElementSize, String.Format("Invalid byte length, expecting {0} but was {1}", Rows * Cols * ElementSize, value.Length));
+            GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
+            using (Mat m = new Mat(Rows, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols * ElementSize))
+            {
+               m.CopyTo(this);
+            }
+            handle.Free();
+         }
+      }
+
       private IntPtr _oclMatAllocator;
 
       private bool _needDispose;
@@ -479,6 +558,19 @@ namespace Emgu.CV
       object ICloneable.Clone()
       {
          return Clone();
+      }
+
+      public bool Equals(UMat other)
+      {
+         if (!(Size.Equals(other.Size) && NumberOfChannels == other.NumberOfChannels && Depth == other.Depth))
+            return false;
+
+         using (Mat cmpResult = new Mat())
+         {
+            CvInvoke.Compare(this, other, cmpResult, CmpType.NotEqual);
+            using (Mat reshaped = cmpResult.Reshape(1))
+               return CvInvoke.CountNonZero(reshaped) == 0;
+         }
       }
    }
 

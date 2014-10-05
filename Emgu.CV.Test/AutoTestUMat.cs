@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
+using Emgu.CV.CvEnum;
 using Emgu.Util;
 #if NETFX_CORE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -50,6 +51,30 @@ namespace Emgu.CV.Test
             UMat m2 = new UMat();
             m2.Create(10, 12, CvEnum.DepthType.Cv8U, 1);
             //EmguAssert.IsTrue(m2.Data != null);
+         }
+      }
+
+      [TestAttribute]
+      public void TestRuntimeSerialize()
+      {
+         UMat img = new UMat(100, 80, DepthType.Cv8U, 3);
+
+         using (MemoryStream ms = new MemoryStream())
+         {
+            //img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+            //img.SerializationCompressionRatio = 9;
+            CvInvoke.SetIdentity(img, new MCvScalar(1, 2, 3));
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            formatter.Serialize(ms, img);
+            Byte[] bytes = ms.GetBuffer();
+
+            using (MemoryStream ms2 = new MemoryStream(bytes))
+            {
+               Object o = formatter.Deserialize(ms2);
+               UMat img2 = (UMat)o;
+               EmguAssert.IsTrue(img.Equals(img2));
+            }
          }
       }
    }

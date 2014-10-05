@@ -14,6 +14,8 @@
     <FileAlignment>512</FileAlignment>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk />
+    <TargetFrameworkVersion>v2.3</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,9 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="XFeatures2D\*.cs" />
-	 <Compile Include="Face\*.cs" />
-	 	 <Compile Include="Text\*.cs" />
-	<Compile Include="BgSegm\*.cs" />
+    <Compile Include="Face\*.cs" />
+    <Compile Include="Text\*.cs" />
+    <Compile Include="BgSegm\*.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>

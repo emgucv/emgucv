@@ -317,7 +317,6 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="info">Serialization info</param>
       /// <param name="context">streaming context</param>
-      [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
       public override void GetObjectData(SerializationInfo info, StreamingContext context)
       {
          base.GetObjectData(info, context);
