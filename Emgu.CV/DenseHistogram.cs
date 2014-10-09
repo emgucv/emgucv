@@ -39,7 +39,7 @@ namespace Emgu.CV
       public DenseHistogram(int[] binSizes, RangeF[] ranges)
       {
          _binSizes = binSizes;
-         _ranges = Ranges;
+         _ranges = ranges;
       }
       #endregion
 
