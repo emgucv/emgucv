@@ -311,7 +311,11 @@ namespace Emgu.CV
          Debug.Assert(dest.Length >= 4, "The destination should contain at least 4 points");
 
          HomographyMatrix rot = new HomographyMatrix();
-         CvInvoke.cvGetPerspectiveTransform(src, dest, rot);
+	     GCHandle handleSrc = GCHandle.Alloc (src, GCHandleType.Pinned);
+	     GCHandle handleDest = GCHandle.Alloc (dest, GCHandleType.Pinned);
+         CvInvoke.cvGetPerspectiveTransform(handleSrc.AddrOfPinnedObject(), handleDest.AddrOfPinnedObject(), rot);
+	     handleSrc.Free ();
+		 handleDest.Free ();
          return rot;
       }
 

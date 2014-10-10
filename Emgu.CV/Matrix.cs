@@ -200,7 +200,7 @@ namespace Emgu.CV
             _array = value;
             _dataHandle = GCHandle.Alloc(_array, GCHandleType.Pinned);
 
-            CvInvoke.cvInitMatHeader(_ptr, _array.GetLength(0), _array.GetLength(1), CvInvoke.GetDepthType(typeof(TDepth)), _dataHandle.AddrOfPinnedObject(), 0x7fffffff);
+            CvInvoke.cvInitMatHeader(_ptr, _array.GetLength(0), _array.GetLength(1), CvInvoke.MakeType( CvInvoke.GetDepthType(typeof(TDepth)), 1), _dataHandle.AddrOfPinnedObject(), 0x7fffffff);
          }
       }
 

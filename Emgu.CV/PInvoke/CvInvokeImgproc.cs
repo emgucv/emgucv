@@ -214,6 +214,7 @@ namespace Emgu.CV
          CvEnum.BorderType borderMode,
          ref MCvScalar fillval);
 
+		/*
       /// <summary>
       /// calculates matrix of perspective transform such that:
       /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)^T
@@ -227,7 +228,7 @@ namespace Emgu.CV
       public static extern IntPtr cvGetPerspectiveTransform(
          PointF[] src,
          PointF[] dst,
-         IntPtr mapMatrix);
+         IntPtr mapMatrix);*/
 
       /// <summary>
       /// calculates matrix of perspective transform such that:

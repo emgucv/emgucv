@@ -168,6 +168,7 @@ namespace Emgu.CV
           IntPtr userdata,
           IntPtr prevUserdata);
 
+#if !UNITY_IOS
       /// <summary>
       /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
       /// </summary>
@@ -180,6 +181,7 @@ namespace Emgu.CV
           IntPtr errorHandler,
           IntPtr userdata,
           IntPtr prevUserdata);
+#endif
 
       /// <summary>
       /// Sets the specified error mode.
@@ -1318,6 +1320,7 @@ namespace Emgu.CV
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseImageHeader(ref IntPtr image);
 
+		/*
       /// <summary>
       /// Initializes already allocated CvMat structure. It can be used to process raw data with OpenCV matrix functions.
       /// </summary>
@@ -1336,7 +1339,8 @@ namespace Emgu.CV
          CV.CvEnum.DepthType type,
          IntPtr data,
          int step);
-
+*/
+	
       /// <summary>
       /// Initializes already allocated CvMat structure. It can be used to process raw data with OpenCV matrix functions.
       /// </summary>

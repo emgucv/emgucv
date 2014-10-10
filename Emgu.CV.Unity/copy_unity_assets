@@ -73,6 +73,7 @@ mkdir Plugins
 cd Plugins
 mkdir iOS
 cd iOS
+cp ../../../../Emgu.CV/PInvoke/iOS/libemgucv.a ./
 cd ..
 cd ..
 cd ..
