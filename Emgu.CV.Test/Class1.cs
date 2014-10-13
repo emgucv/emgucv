@@ -201,7 +201,7 @@ namespace Emgu.CV.Test
          String win1 = "Test Window";
 
          //Create the window using the specific name
-         CvInvoke.cvNamedWindow(win1);
+         CvInvoke.NamedWindow(win1, -1);
 
          //Create an image of 400x200 of Blue color
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) 
@@ -212,11 +212,11 @@ namespace Emgu.CV.Test
             img.Draw("Hello, world", new Point(10, 80), CvEnum.FontFace.HersheyComplex, 1.0,  new Bgr(0, 255, 0));
 
             //Show the image
-            CvInvoke.cvShowImage(win1, img.Ptr);
+            CvInvoke.Imshow(win1, img);
             //Wait for the key pressing event
-            CvInvoke.cvWaitKey(0);
-            //Destory the window
-            CvInvoke.cvDestroyWindow(win1); 
+            CvInvoke.WaitKey(0);
+            //Destroy the window
+            CvInvoke.DestroyWindow(win1); 
          }
       }
 
@@ -676,6 +676,16 @@ namespace Emgu.CV.Test
          }
       }
 
+      public static void TestImageViewMat()
+      {
+         Mat m = CvInvoke.Imread(EmguAssert.GetFile("box.png"), LoadImageType.AnyColor);
+         Mat m2 = new Mat();
+         CvInvoke.CvtColor(m, m2, ColorConversion.Gray2Rgb);
+         Mat m3 = new Mat();
+         m2.ConvertTo(m3, DepthType.Cv16U);
+         
+         ImageViewer.Show(m3);
+      }
       
       public static void TestCaptureFrameSource()
       {

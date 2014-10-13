@@ -1882,7 +1882,7 @@ namespace Emgu.CV.Test
          img._Not();
          Image<Gray, Single> dst = new Image<Gray, Single>(img.Size);
 
-         CvInvoke.cvDistTransform(img, dst, Emgu.CV.CvEnum.DistType.L2, 3, null, IntPtr.Zero);
+         CvInvoke.DistanceTransform(img, dst,  null, Emgu.CV.CvEnum.DistType.L2, 3);
       }
 
       /*

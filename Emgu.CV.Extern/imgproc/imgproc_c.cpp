@@ -500,3 +500,14 @@ void cveApplyColorMap(cv::_InputArray* src, cv::_OutputArray* dst, int colorMap)
 {
    cv::applyColorMap(*src, *dst, colorMap);
 }
+
+
+void cveDistanceTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_OutputArray* labels, int distanceType, int maskSize, int labelType)
+{
+  cv::distanceTransform(*src, *dst, labels ? *labels : cv::_OutputArray(), distanceType, maskSize, labelType);
+}
+
+void cveHuMoments(CvMoments* moments, cv::_OutputArray* hu)
+{
+  cv::HuMoments(*moments, *hu);
+}

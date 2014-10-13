@@ -2182,9 +2182,14 @@ namespace Emgu.CV
       /// Calculates seven Hu invariants
       /// </summary>
       /// <param name="moments">Pointer to the moment state structure</param>
-      /// <param name="huMoments">Pointer to Hu moments structure.</param>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvGetHuMoments(ref MCvMoments moments, ref MCvHuMoments huMoments);
+      /// <param name="hu">Pointer to Hu moments structure.</param>
+      public static void HuMoments(MCvMoments moments, IOutputArray hu)
+      {
+         using (OutputArray oaHu = hu.GetOutputArray())
+            cveHuMoments(ref moments, oaHu);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void cveHuMoments(ref MCvMoments moments, IntPtr huMoments);
 
       /// <summary>
       /// Runs the Harris edge detector on image. Similarly to cvCornerMinEigenVal and cvCornerEigenValsAndVecs, for each pixel it calculates 2x2 gradient covariation matrix M over block_size x block_size neighborhood. Then, it stores
@@ -2286,18 +2291,31 @@ namespace Emgu.CV
       /// <param name="distanceType">Type of distance</param>
       /// <param name="maskSize">Size of distance transform mask; can be 3 or 5.
       /// In case of CV_DIST_L1 or CV_DIST_C the parameter is forced to 3, because 3x3 mask gives the same result as 5x5 yet it is faster.</param>
-      /// <param name="userMask">User-defined mask in case of user-defined distance.
-      /// It consists of 2 numbers (horizontal/vertical shift cost, diagonal shift cost) in case of 3x3 mask
-      /// and 3 numbers (horizontal/vertical shift cost, diagonal shift cost, knights move cost) in case of 5x5 mask.</param>
-      /// <param name="labels">The optional output 2d array of labels of integer type and the same size as src and dst.</param>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvDistTransform(
-         IntPtr src,
-         IntPtr dst,
+      /// <param name="labels">The optional output 2d array of labels of integer type and the same size as src and dst. Can be null if not needed</param>
+      public static void DistanceTransform(
+         IInputArray src,
+         IOutputArray dst,
+         IOutputArray labels,
          CvEnum.DistType distanceType,
          int maskSize,
-         float[] userMask,
-         IntPtr labels);
+         CvEnum.DistLabelType labelType = DistLabelType.CComp)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (OutputArray oaLabels = labels == null ? OutputArray.GetEmpty() : labels.GetOutputArray())
+         {
+            cveDistanceTransform(iaSrc, oaDst, oaLabels, distanceType, maskSize, labelType);   
+         }
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveDistanceTransform(
+         IntPtr src,
+         IntPtr dst,
+         IntPtr labels,
+         CvEnum.DistType distanceType,
+         int maskSize,
+         CvEnum.DistLabelType labelType);
 
       /// <summary>
       /// Fills a connected component with given color.

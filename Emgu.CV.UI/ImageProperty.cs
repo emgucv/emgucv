@@ -5,8 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.Util.TypeEnum;
 using Emgu.CV.Structure;
 using System.Text;
@@ -60,6 +62,23 @@ namespace Emgu.CV.UI
          zoomLabel.Visible = zoomLevelComboBox.Visible = zoom;
       }
 
+      private bool IsSubTypeOf(Type objType, Type typeToCheck)
+      {
+         while (objType != typeToCheck)
+         {
+            if (objType.IsGenericType && objType.GetGenericTypeDefinition() == typeToCheck)
+            {
+               return true;
+            }
+            objType = objType.BaseType;
+            if (objType == null)
+            {
+               return false;
+            }
+         }
+         return true;
+      }
+
       public void SetImage(IImage image)
       {
 
@@ -105,26 +124,20 @@ namespace Emgu.CV.UI
          #region check if image is a subclass of CvArr type
          if (image != null)
          {
-            Type imageType = image.GetType();
-            isCvArray = true;
-            Type cvArrayType = typeof(CvArray<>);
-            while (cvArrayType != imageType)
+            Type imgType = image.GetType();
+            if (IsSubTypeOf(imgType, typeof (CvArray<>)))
+               _imageType = typeof (CvArray<>);
+            else if (IsSubTypeOf(imgType, typeof (Mat)))
+               _imageType = typeof (Mat);
+            else
             {
-               if (imageType.IsGenericType && imageType.GetGenericTypeDefinition() == cvArrayType)
-               {
-                  break;
-               }
-               imageType = imageType.BaseType;
-               if (imageType == null)
-               {
-                  isCvArray = false;
-                  break;
-               }
+               _imageType = null;
             }
          }
          else
          {
-            isCvArray = false;
+            _imageType = null;
+            
          }
          #endregion
 
@@ -132,12 +145,17 @@ namespace Emgu.CV.UI
          UpdateZoomScale();
       }
 
-      private bool isCvArray = true;
+      private Type _imageType = null;
+      //private bool isCvArray = true;
 
-      /// <summary>
-      /// A buffer used by SetMousePositionOnImage function
-      /// </summary>
-      private double[] _buffer = new double[4];
+      private String BufferToString<T>(T[] data, int numberOfChannels)
+      {
+         StringBuilder sb = new StringBuilder(String.Format("[{0}", data[0]));
+         for (int i = 1; i < numberOfChannels; i++)
+            sb.AppendFormat(",{0}", data[i]);
+         sb.Append("]");
+         return sb.ToString();
+      }
 
       /// <summary>
       /// Set the mouse position over the image. 
@@ -153,19 +171,74 @@ namespace Emgu.CV.UI
 
          mousePositionTextbox.Text = location.ToString();
 
-         if (isCvArray)
+         if (_imageType == typeof(CvArray<>))
          {
             MCvScalar scalar = CvInvoke.cvGet2D(img.Ptr, location.Y, location.X);
-            _buffer[0] = scalar.V0; _buffer[1] = scalar.V1; _buffer[2] = scalar.V2; _buffer[3] = scalar.V3;
-
-            StringBuilder sb = new StringBuilder(String.Format("[{0}", _buffer[0]));
-            for (int i = 1; i < img.NumberOfChannels; i++)
-               sb.AppendFormat(",{0}", _buffer[i]);
-            sb.Append("]");
-
-            colorIntensityTextbox.Text = sb.ToString();
+            
+            colorIntensityTextbox.Text = BufferToString(scalar.ToArray(), img.NumberOfChannels);
          }
-         else
+         else if (_imageType == typeof (Mat))
+         {
+            Mat mat = img as Mat;
+            byte[] raw =  mat.GetData(location.Y, location.X);
+
+            if (mat.Depth == DepthType.Cv8U)
+            {
+               colorIntensityTextbox.Text = BufferToString(raw, img.NumberOfChannels);
+            }
+            else if (mat.Depth == DepthType.Cv8S)
+            {
+               sbyte[] data = new sbyte[img.NumberOfChannels];
+               GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+               Marshal.Copy(raw, 0, handle.AddrOfPinnedObject(), mat.ElementSize);
+               handle.Free();
+               colorIntensityTextbox.Text = BufferToString(data, data.Length);
+            }
+            else if (mat.Depth == DepthType.Cv16S)
+            {
+               GCHandle handle = GCHandle.Alloc(raw, GCHandleType.Pinned);
+               short[] data = new short[img.NumberOfChannels];
+               Marshal.Copy(handle.AddrOfPinnedObject(), data, 0, data.Length);
+               handle.Free();
+               colorIntensityTextbox.Text = BufferToString(data, data.Length);
+            }
+            else if (mat.Depth == DepthType.Cv16U)
+            {
+               UInt16[] data = new UInt16[img.NumberOfChannels];
+               GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+               Marshal.Copy(raw, 0, handle.AddrOfPinnedObject(), mat.ElementSize);
+               handle.Free();
+               colorIntensityTextbox.Text = BufferToString(data, data.Length);
+            }
+            else if (mat.Depth == DepthType.Cv32F)
+            {
+               GCHandle handle = GCHandle.Alloc(raw, GCHandleType.Pinned);
+               float[] floatData = new float[img.NumberOfChannels];
+               Marshal.Copy(handle.AddrOfPinnedObject(), floatData, 0, floatData.Length);
+               handle.Free();
+               colorIntensityTextbox.Text = BufferToString(floatData, floatData.Length);
+            }
+            else if (mat.Depth == DepthType.Cv32S)
+            {
+               int[] data = new int[img.NumberOfChannels];
+               GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+               Marshal.Copy(raw, 0, handle.AddrOfPinnedObject(), mat.ElementSize);
+               handle.Free();
+               colorIntensityTextbox.Text = BufferToString(data, data.Length);
+            }
+            else if (mat.Depth == DepthType.Cv64F)
+            {
+               GCHandle handle = GCHandle.Alloc(raw, GCHandleType.Pinned);
+               double[] doubleData = new double[img.NumberOfChannels];
+               Marshal.Copy(handle.AddrOfPinnedObject(), doubleData, 0, doubleData.Length);
+               handle.Free();
+               colorIntensityTextbox.Text = BufferToString(doubleData, doubleData.Length);
+            }
+            else
+            {
+               colorIntensityTextbox.Text = String.Empty;
+            }
+         } else
          {
             colorIntensityTextbox.Text = String.Empty;
          }

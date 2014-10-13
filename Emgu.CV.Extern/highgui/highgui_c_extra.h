@@ -49,4 +49,9 @@ CVAPI(int) cveVideoWriterFourcc(char c1, char c2, char c3, char c4);
 CVAPI(void) cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst);
 CVAPI(void) cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params);
 
+CVAPI(void) cveImshow(cv::String* winname, cv::_InputArray* mat);
+CVAPI(void) cveNamedWindow(cv::String* winname, int flags);
+CVAPI(void) cveDestroyWindow(cv::String* winname);
+CVAPI(void) cveDestroyAllWindows();
+CVAPI(int) cveWaitKey(int delay);
 #endif
