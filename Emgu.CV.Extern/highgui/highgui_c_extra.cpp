@@ -120,3 +120,25 @@ void cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned ch
 {
    cv::imencode(*ext, *img, *buf, params ? *params : std::vector<int>());
 }
+
+
+void cveImshow(cv::String* winname, cv::_InputArray* mat)
+{
+  cv::imshow(*winname, *mat);
+}
+void cveNamedWindow(cv::String* winname, int flags)
+{
+  cv::namedWindow(*winname, flags);
+}
+void cveDestroyWindow(cv::String* winname)
+{
+  cv::destroyWindow(*winname);
+}
+void cveDestroyAllWindows()
+{
+  cv::destroyAllWindows();
+}
+int cveWaitKey(int delay)
+{
+  return cv::waitKey(delay);
+}

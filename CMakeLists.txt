@@ -23,7 +23,7 @@ IF (NOT ANDROID)
     #SET CSC 4.5 (in the .Net framework 4.0 folder) as the prefered compiler for EMGU CV
 	SET(CSC_TARGET_FRAMEWORK "" CACHE STRING "C# target framework")
   ENDIF()
-  
+
   FIND_PACKAGE(CSharp REQUIRED)
   INCLUDE (CSharpMacros)
 ENDIF()

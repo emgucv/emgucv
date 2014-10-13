@@ -2109,6 +2109,21 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
+   /// Distance transform algorithm flags
+   /// </summary>
+   public enum DistLabelType
+   {
+      /// <summary>
+      /// Connected component
+      /// </summary>
+      CComp = 0,
+      /// <summary>
+      /// The pixel
+      /// </summary>
+      Pixel = 1
+   }
+
+   /// <summary>
    /// Defines for Distance Transform
    /// </summary>
    public enum DistType

@@ -83,6 +83,12 @@ namespace Emgu.CV
       #endregion
 #endif
 
+      /// <summary>
+      /// Gets or sets the data as byte array.
+      /// </summary>
+      /// <value>
+      /// The bytes.
+      /// </value>
       private byte[] Bytes
       {
          get
@@ -245,6 +251,44 @@ namespace Emgu.CV
          {
             return MatInvoke.cvMatGetDataPointer(_ptr);
          }
+      }
+
+      public byte[] GetData(params int[] indices)
+      {
+         switch (indices.Length)
+         {
+            case 0:
+               return Bytes;
+            case 1:
+               if (IsEmpty)
+                  return null;
+               int row = indices[0];
+               
+               byte[] data = new byte[Cols * ElementSize];
+               GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+               using (Mat matRow = GetRow(row))
+               using (Mat m = new Mat(1, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols*ElementSize))
+               {
+                  matRow.CopyTo(m);
+               }
+               handle.Free();
+               return data;
+            case 2:
+               if (IsEmpty)
+                  return null;
+               int rowIdx = indices[0];
+               int colIdx = indices[1];
+
+               byte[] rawData = new byte[ElementSize];
+               Marshal.Copy(new IntPtr(DataPointer.ToInt64() + rowIdx * Step + colIdx * rawData.Length), rawData, 0, rawData.Length);
+               return rawData;
+
+            default:
+               throw  new NotImplementedException(String.Format("GetData with indices size {0} is not implemented", indices.Length));
+         }
+         
+            
+         
       }
 
       /// <summary>
@@ -413,7 +457,7 @@ namespace Emgu.CV
          {
             using (Mat tmp = Reshape(1))
             {
-               CvInvoke.MinMaxLoc(this, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+               CvInvoke.MinMaxLoc(tmp, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
             }
          }
          return new RangeF((float)minVal, (float) maxVal);

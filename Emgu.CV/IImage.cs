@@ -16,7 +16,7 @@ namespace Emgu.CV
    internal static class IImageExtensions
    {
       /// <summary>
-      /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
+      /// Apply converter and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
       /// </summary>
       /// <typeparam name="TReturn">The return type</typeparam>
       /// <param name="image">The source image</param>
@@ -40,7 +40,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Apply convertor and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
+      /// Apply converter and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor
       /// </summary>
       /// <param name="image">The source image</param>
       /// <param name="action">The converter such that accept the IntPtr of a single channel IplImage, and image channel index which returning result of type R</param>
@@ -79,9 +79,9 @@ namespace Emgu.CV
       UIImage ToUIImage();
 #else
       /// <summary>
-      /// Convert this image into Bitmap, when avaialbe, data is shared with this image.
+      /// Convert this image into Bitmap, when available, data is shared with this image.
       /// </summary>
-      /// <returns>The Bitmap, when avaialbe, data is shared with this image</returns>
+      /// <returns>The Bitmap, when available, data is shared with this image</returns>
       Bitmap Bitmap
       {
          get;

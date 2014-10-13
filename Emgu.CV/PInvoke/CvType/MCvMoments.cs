@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Structure
 {
@@ -142,11 +143,14 @@ namespace Emgu.CV.Structure
       /// Get the HuMoments 
       /// </summary>
       /// <returns>The Hu moment computed from this moment</returns>
-      public MCvHuMoments GetHuMoment()
+      public double[] GetHuMoment()
       {
-         MCvHuMoments huMoment = new MCvHuMoments();
-         CvInvoke.cvGetHuMoments(ref this, ref huMoment);
-         return huMoment;
+         using (VectorOfDouble vd = new VectorOfDouble())
+         {
+            CvInvoke.HuMoments(this, vd);
+            return vd.ToArray();
+         }
+        
       }
    }
 }
