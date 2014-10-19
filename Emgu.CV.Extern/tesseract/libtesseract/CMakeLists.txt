@@ -3,8 +3,8 @@
 # --------------------------------------------------------
 
 cmake_minimum_required(VERSION 2.8)
-SET(TESSERACT_DIR "tesseract-ocr")
-SET(LEPTONICA_DIR "leptonica/leptonica-1.70/src")
+SET(TESSERACT_DIR "tesseract-ocr.git")
+SET(LEPTONICA_DIR "leptonica/leptonica-1.71/src")
 IF(WIN32 AND CV_ICC) 
   STRING(REGEX REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
   STRING(REGEX REPLACE "/O3" "/O2" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})

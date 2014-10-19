@@ -24,7 +24,7 @@ cd ..
 
 cd tesseract
 cd libtesseract
-cd tesseract-ocr
+cd tesseract-ocr.git
 git clean -d -fx "" 
 cd ..
 cd .. 

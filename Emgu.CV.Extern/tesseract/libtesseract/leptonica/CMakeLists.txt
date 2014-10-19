@@ -4,12 +4,20 @@
 
 PROJECT(libleptonica)
 
-SET(LEPTON_DIR "leptonica-1.70")
+#IF(MSVC)
+#enable_language(CXX)
+#ENDIF()
 
+SET(LEPTON_DIR "leptonica-1.71")
+ 
 file(GLOB lepton_srcs "${LEPTON_DIR}/src/*.c")
 file(GLOB lepton_srcs_excludes "${LEPTON_DIR}/src/freetype.c" "${LEPTON_DIR}/src/endiantest.c" "${LEPTON_DIR}/src/xtractprotos.c")
 LIST(REMOVE_ITEM lepton_srcs ${lepton_srcs_excludes})
 file(GLOB lepton_hdrs "${LEPTON_DIR}/src/*.h")
+
+IF(MSVC)
+  SET_SOURCE_FILES_PROPERTIES( ${lepton_srcs} PROPERTIES LANGUAGE CXX)
+ENDIF()
 
 source_group("Src" FILES ${lepton_srcs})
 source_group("Include" FILES ${lepton_hdrs})
