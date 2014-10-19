@@ -48,11 +48,11 @@ void CvStereoMatcherRelease(cv::StereoMatcher** matcher)
 }
 
 //2D tracker
-bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, std::vector< std::vector< cv::DMatch > >* matches, CvArr* mask, double randsacThreshold, CvMat* homography)
+bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, std::vector< std::vector< cv::DMatch > >* matches,cv::Mat* mask, double randsacThreshold, cv::Mat* homography)
 {
    //cv::Mat_<int> indMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
 
-   cv::Mat_<uchar> maskMat = mask ? (cv::Mat_<uchar>) cv::cvarrToMat(mask) : cv::Mat_<uchar>(matches->size(), 1, 255);
+   cv::Mat_<uchar> maskMat = mask ? (cv::Mat_<uchar>) *mask : cv::Mat_<uchar>(matches->size(), 1, 255);
    int nonZero = mask? cv::countNonZero(maskMat): matches->size();
    if (nonZero < 4) return false;
 
@@ -76,8 +76,7 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
    {
       return false;
    }
-   cv::Mat hMat = cv::cvarrToMat(homography);
-   result.copyTo(hMat);
+   cv::swap(result, *homography);
 
    int idx = 0;
    for (int i = 0; i < maskMat.rows; i++)

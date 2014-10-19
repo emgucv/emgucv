@@ -259,6 +259,12 @@ void cveGetAffineTransform(cv::_InputArray* src, cv::_InputArray* dst, cv::Mat* 
    cv::swap(result, *affine);
 }
 
+void cveGetPerspectiveTransform(cv::_InputArray* src, cv::_InputArray* dst, cv::Mat* perspective)
+{
+   cv::Mat result = cv::getPerspectiveTransform(*src, *dst);
+   cv::swap(result, *perspective);
+}
+
 void cveInvertAffineTransform(cv::_InputArray* m, cv::_OutputArray* im)
 {
    cv::invertAffineTransform(*m, *im);
@@ -455,6 +461,11 @@ void cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* col
    cv::line(*img, *p1, *p2, *color, thickness, lineType, shift);
 }
 
+void cveArrowedLine(cv::_InputOutputArray* img, CvPoint* pt1, CvPoint* pt2, CvScalar* color, int thickness, int lineType, int shift, double tipLength)
+{
+   cv::arrowedLine(*img, *pt1, *pt2, *color, thickness, lineType, shift, tipLength);
+}
+
 void cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* color, int thickness, int lineType, int shift)
 {
    cv::Point p1(rect->x, rect->y);
@@ -510,4 +521,9 @@ void cveDistanceTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_Outp
 void cveHuMoments(CvMoments* moments, cv::_OutputArray* hu)
 {
   cv::HuMoments(*moments, *hu);
+}
+
+void cveGetRectSubPix(cv::_InputArray* image, CvSize* patchSize, CvPoint2D32f* center, cv::_OutputArray* patch, int patchType)
+{
+   cv::getRectSubPix(*image, *patchSize, *center, *patch, patchType);
 }

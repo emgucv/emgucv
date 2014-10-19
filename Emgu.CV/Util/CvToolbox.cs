@@ -46,14 +46,14 @@ namespace Emgu.CV.Util
       }
 
       /// <summary>
-      /// Convert the color pallette to four lookup tables
+      /// Convert the color palette to four lookup tables
       /// </summary>
-      /// <param name="pallette">The color pallette to transform</param>
+      /// <param name="palette">The color palette to transform</param>
       /// <param name="bTable">Lookup table for the B channel</param>
       /// <param name="gTable">Lookup table for the G channel</param>
       /// <param name="rTable">Lookup table for the R channel</param>
       /// <param name="aTable">Lookup table for the A channel</param>
-      public static void ColorPaletteToLookupTable(ColorPalette pallette, out Matrix<Byte> bTable, out Matrix<Byte> gTable, out Matrix<Byte> rTable, out Matrix<Byte> aTable)
+      public static void ColorPaletteToLookupTable(ColorPalette palette, out Matrix<Byte> bTable, out Matrix<Byte> gTable, out Matrix<Byte> rTable, out Matrix<Byte> aTable)
       {
          bTable = new Matrix<byte>(256, 1);
          gTable = new Matrix<byte>(256, 1);
@@ -64,7 +64,7 @@ namespace Emgu.CV.Util
          byte[,] rData = rTable.Data;
          byte[,] aData = aTable.Data;
 
-         Color[] colors = pallette.Entries;
+         Color[] colors = palette.Entries;
          for (int i = 0; i < colors.Length; i++)
          {
             Color c = colors[i];

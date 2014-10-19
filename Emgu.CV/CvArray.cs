@@ -329,7 +329,8 @@ namespace Emgu.CV
       ///<param name="mask">The mask for the operation</param>
       public void SetValue(MCvScalar value, CvArray<Byte> mask = null)
       {
-         CvInvoke.cvSet(_ptr, value, mask == null ? IntPtr.Zero : mask.Ptr);
+         this.Mat.SetTo(value, mask);
+         //CvInvoke.cvSet(_ptr, value, mask == null ? IntPtr.Zero : mask.Ptr);
       }
 
       ///<summary>
@@ -342,8 +343,9 @@ namespace Emgu.CV
          SetValue(new MCvScalar(value, value, value, value), mask);
       }
 
-      private readonly static Random _randomGenerator = new Random();
+      //private readonly static Random _randomGenerator = new Random();
 
+      /*
       /// <summary>
       /// Inplace fills Array with uniformly distributed random numbers
       /// </summary>
@@ -353,7 +355,7 @@ namespace Emgu.CV
       public void SetRandUniform(UInt64 seed, MCvScalar floorValue, MCvScalar ceilingValue)
       {
          CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RandType.Uni, floorValue, ceilingValue);
-      }
+      }*/
 
       /// <summary>
       /// Inplace fills Array with uniformly distributed random numbers
@@ -363,9 +365,13 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true)]
       public void SetRandUniform(MCvScalar floorValue, MCvScalar ceilingValue)
       {
-         SetRandUniform((UInt64)_randomGenerator.Next(), floorValue, ceilingValue);
+         using (ScalarArray saLow = new ScalarArray(floorValue))
+         using (ScalarArray saHigh = new ScalarArray(ceilingValue))
+            CvInvoke.Randu(this.Mat, saLow, saHigh);
+         //SetRandUniform((UInt64)_randomGenerator.Next(), floorValue, ceilingValue);
       }
 
+      /*
       /// <summary>
       /// Inplace fills Array with normally distributed random numbers
       /// </summary>
@@ -375,7 +381,7 @@ namespace Emgu.CV
       public void SetRandNormal(UInt64 seed, MCvScalar mean, MCvScalar std)
       {
          CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RandType.Normal, mean, std);
-      }
+      }*/
 
       /// <summary>
       /// Inplace fills Array with normally distributed random numbers
@@ -385,11 +391,14 @@ namespace Emgu.CV
       [ExposableMethod(Exposable = true)]
       public void SetRandNormal(MCvScalar mean, MCvScalar std)
       {
-         SetRandNormal((UInt64)_randomGenerator.Next(), mean, std);
+         using (ScalarArray saMean = new ScalarArray(mean))
+         using (ScalarArray saStd = new ScalarArray(std))
+            CvInvoke.Randn(this.Mat, saMean, saStd);
+         //SetRandNormal((UInt64)_randomGenerator.Next(), mean, std);
       }
 
       /// <summary>
-      /// Initializs scaled identity matrix
+      /// Initializes scaled identity matrix
       /// </summary>
       /// <param name="value">The value on the diagonal</param>
       public void SetIdentity(MCvScalar value)
@@ -402,7 +411,8 @@ namespace Emgu.CV
       /// </summary>
       public void SetZero()
       {
-         CvInvoke.cvSetZero(Ptr);
+         this.SetValue(0);
+         //CvInvoke.cvSetZero(Ptr);
       }
 
       /// <summary>

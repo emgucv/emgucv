@@ -140,7 +140,7 @@ namespace Emgu.CV.Test
       {
          using (Matrix<Byte> mat = new Matrix<Byte>(1, 10))
          {
-            mat.SetRandUniform((ulong) DateTime.Now.Ticks, new MCvScalar(0.0), new MCvScalar(255.0));
+            mat.SetRandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
 
             Matrix<Byte> matT = mat.Transpose();
 
@@ -155,7 +155,7 @@ namespace Emgu.CV.Test
       {
          using (Matrix<float> mat = new Matrix<float>(1, 3))
          {
-            mat.SetRandUniform((ulong) DateTime.Now.Ticks, new MCvScalar(-1000.0), new MCvScalar(1000.0));
+            mat.SetRandUniform(new MCvScalar(-1000.0), new MCvScalar(1000.0));
 
             Matrix<float> matT = mat.Transpose();
 
@@ -190,7 +190,7 @@ namespace Emgu.CV.Test
       {
          using (Matrix<Byte> mat = new Matrix<byte>(50, 60))
          {
-            mat.SetRandUniform((ulong) DateTime.Now.Ticks, new MCvScalar(0), new MCvScalar(255));
+            mat.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
             XDocument doc = Toolbox.XmlSerialize<Matrix<Byte>>(mat);
             //Trace.WriteLine(doc.OuterXml);
 
@@ -205,7 +205,7 @@ namespace Emgu.CV.Test
       public void TestRuntimeSerialize1()
       {
          Matrix<Byte> mat = new Matrix<Byte>(100, 80, 2);
-         mat.SetRandNormal((ulong) DateTime.Now.Ticks, new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+         mat.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
 
          System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
              formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();

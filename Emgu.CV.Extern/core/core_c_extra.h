@@ -143,4 +143,8 @@ CVAPI(void) cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::Stri
 CVAPI(void) cveAlgorithmGetList(std::vector< cv::String >* names);
 
 CVAPI(bool) cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2);
+
+CVAPI(void) cveRandn(cv::_InputOutputArray* dst, cv::_InputArray* mean, cv::_InputArray* stddev);
+
+CVAPI(void) cveRandu(cv::_InputOutputArray* dst, cv::_InputArray* low, cv::_InputArray* high);
 #endif

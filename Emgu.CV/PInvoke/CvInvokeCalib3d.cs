@@ -5,12 +5,53 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
    public static partial class CvInvoke
    {
+      /// <summary>
+      /// Finds perspective transformation H=||h_ij|| between the source and the destination planes
+      /// </summary>
+      /// <param name="srcPoints">Point coordinates in the original plane</param>
+      /// <param name="dstPoints">Point coordinates in the destination plane</param>
+      /// <param name="method">FindHomography method</param>
+      /// <param name="ransacReprojThreshold">
+      /// The maximum allowed reprojection error to treat a point pair as an inlier. 
+      /// The parameter is only used in RANSAC-based homography estimation. 
+      /// E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3
+      /// </param>
+      /// <param name="mask">Optional output mask set by a robust method ( CV_RANSAC or CV_LMEDS ). Note that the input mask values are ignored.</param>
+      /// <returns>The 3x3 homography matrix if found. Null if not found.</returns>
+      public static void FindHomography(
+         PointF[] srcPoints,
+         PointF[] dstPoints,
+         IOutputArray homography,
+         CvEnum.HomographyMethod method,
+         double ransacReprojThreshold = 3,
+         IOutputArray mask = null)
+      {
+         GCHandle srcHandle = GCHandle.Alloc(srcPoints, GCHandleType.Pinned);
+         GCHandle dstHandle = GCHandle.Alloc(dstPoints, GCHandleType.Pinned);
+         try
+         {
+            using (
+               Mat srcPointMatrix = new Mat(srcPoints.Length, 2, DepthType.Cv32F, 1, srcHandle.AddrOfPinnedObject(), 8))
+            using (
+               Mat dstPointMatrix = new Mat(dstPoints.Length, 2, DepthType.Cv32F, 1, dstHandle.AddrOfPinnedObject(), 8))
+            {
+               CvInvoke.FindHomography(srcPointMatrix, dstPointMatrix, homography, method, ransacReprojThreshold, mask);
+            }
+         }
+         finally
+         {
+            srcHandle.Free();
+            dstHandle.Free();
+         }
+      }
+
       /// <summary>
       /// Finds perspective transformation H=||hij|| between the source and the destination planes
       /// </summary>

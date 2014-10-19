@@ -33,6 +33,8 @@ namespace Emgu.CV.ML
       protected override void DisposeObject()
       {
          MlInvoke.CvSVMRelease(ref _ptr);
+         _statModelPtr = IntPtr.Zero;
+         _algorithmPtr = IntPtr.Zero;
       }
 
       public class Params : UnmanagedObject

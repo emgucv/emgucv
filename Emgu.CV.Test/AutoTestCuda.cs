@@ -816,7 +816,7 @@ namespace Emgu.CV.Test
             Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
             #endregion
 
-            HomographyMatrix homography = null;
+            Mat homography = null;
             using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors)) //initialization of GPU code might took longer time.
             {
                stopwatch.Reset(); stopwatch.Start();
@@ -841,8 +841,8 @@ namespace Emgu.CV.Test
                   //gpuDistance.Download(distance);
 
 
-                  Matrix<Byte> mask = new Matrix<byte>(distance.Rows, 1);
-                  mask.SetValue(255);
+                  Mat mask = new Mat(distance.Rows, 1, DepthType.Cv8U, 1);
+                  mask.SetTo(new MCvScalar(255));
                   Features2DToolbox.VoteForUniqueness(matches, 0.8, mask);
 
                   int nonZeroCount = CvInvoke.CountNonZero(mask);
@@ -871,8 +871,8 @@ namespace Emgu.CV.Test
                new PointF(rect.Right, rect.Top),
                new PointF(rect.Left, rect.Top)};
 
-               PointF[] points = pts.Clone() as PointF[];
-               homography.ProjectPoints(points);
+               PointF[] points = CvInvoke.PerspectiveTransform(pts, homography);
+               //homography.ProjectPoints(points);
 
                //Merge the object image and the observed image into one big image for display
                Image<Gray, Byte> res = box.ConcateVertical(observedImage);

@@ -93,6 +93,11 @@ namespace Emgu.CV.Test
       {
          return new Image<TColor, TDepth>(name);
       }
+
+      public static Mat LoadMat(string name)
+      {
+         return CvInvoke.Imread(name, LoadImageType.AnyColor | LoadImageType.AnyDepth);
+      }
 #endif
 
 #if IOS || ANDROID

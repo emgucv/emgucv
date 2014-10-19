@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
@@ -112,20 +113,20 @@ namespace Emgu.CV
       /// If the window with such a name already exists, the function does nothing.
       /// </summary>
       /// <param name="name">Name of the window which is used as window identifier and appears in the window caption</param>
-      public static void NamedWindow(String name, int flags)
+      public static void NamedWindow(String name, CvEnum.NamedWindowType flags = NamedWindowType.AutoSize)
       {
          using (CvString s = new CvString(name))
             cveNamedWindow(s, flags);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveNamedWindow(IntPtr name, int flags);
+      private static extern void cveNamedWindow(IntPtr name, CvEnum.NamedWindowType flags);
 
       /// <summary>
       /// Waits for key event infinitely (delay &lt;= 0) or for "delay" milliseconds. 
       /// </summary>
       /// <param name="delay">Delay in milliseconds.</param>
       /// <returns>The code of the pressed key or -1 if no key were pressed until the specified timeout has elapsed</returns>
-      public static int WaitKey(int delay)
+      public static int WaitKey(int delay = 0)
       {
          return cveWaitKey(delay);
       }

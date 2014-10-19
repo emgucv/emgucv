@@ -23,7 +23,7 @@ namespace Emgu.CV.OCR
       static Tesseract()
       {
          //dummy code that is used to involve the static constructor of CvInvoke, if it has not already been called.
-         CvInvoke.MakeType(0, 0);
+         CvInvoke.CheckLibraryLoaded();
       }
 
       #region PInvoke
@@ -202,7 +202,7 @@ namespace Emgu.CV.OCR
             int lastSlash = dataPath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
             if (lastSlash != -1)
             {  
-               //there is a direcotry separator, get the path up to the separator, the same way tesseract-ocr calculate the folder
+               //there is a directory separator, get the path up to the separator, the same way tesseract-ocr calculate the folder
                dataPath = dataPath.Substring(0, lastSlash + 1);
             }
          }
@@ -235,7 +235,7 @@ namespace Emgu.CV.OCR
       }
 
       /// <summary>
-      /// Set the image for optical charater recognition
+      /// Set the image for optical character recognition
       /// </summary>
       /// <typeparam name="TColor">The color type of the image</typeparam>
       /// <param name="image">The image where detection took place</param>
@@ -271,10 +271,10 @@ namespace Emgu.CV.OCR
       }
 
       /// <summary>
-      /// Detect all the charactors in the image.
+      /// Detect all the characters in the image.
       /// </summary>
-      /// <returns>All the charactors in the image</returns>
-      public Charactor[] GetCharactors()
+      /// <returns>All the characters in the image</returns>
+      public Character[] GetCharacters()
       {
          using (MemStorage stor = new MemStorage())
          {
@@ -285,7 +285,7 @@ namespace Emgu.CV.OCR
             byte[] bytes = textSeq.ToArray();
             TesseractResult[] trs = results.ToArray();
 
-            Charactor[] res = new Charactor[trs.Length];
+            Character[] res = new Character[trs.Length];
             int idx = 0;
             for (int i = 0; i < trs.Length; i++)
             {
@@ -304,9 +304,9 @@ namespace Emgu.CV.OCR
       }
 
       /// <summary>
-      /// This represent a charactor that is detected by the OCR engine
+      /// This represent a character that is detected by the OCR engine
       /// </summary>
-      public struct Charactor
+      public struct Character
       {
          /// <summary>
          /// The text
@@ -317,7 +317,7 @@ namespace Emgu.CV.OCR
          /// </summary>
          public float Cost;
          /// <summary>
-         /// The region where the charactor is detected.
+         /// The region where the character is detected.
          /// </summary>
          public Rectangle Region;
       }

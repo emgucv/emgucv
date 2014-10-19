@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using System.Diagnostics;
 
 namespace Emgu.CV
 {
@@ -40,21 +41,21 @@ namespace Emgu.CV
       /// dst(x, y) = src(x + center.x - (width(dst)-1)*0.5, y + center.y - (height(dst)-1)*0.5)
       /// where the values of pixels at non-integer coordinates are retrieved using bilinear interpolation. Every channel of multiple-channel images is processed independently. Whereas the rectangle center must be inside the image, the whole rectangle may be partially occluded. In this case, the replication border mode is used to get pixel values beyond the image boundaries.
       /// </summary>
-      /// <param name="src">Source image</param>
-      /// <param name="dst">Extracted rectangle</param>
+      /// <param name="image">Source image</param>
+      /// <param name="patch">Extracted rectangle</param>
       /// <param name="center">Floating point coordinates of the extracted rectangle center within the source image. The center must be inside the image.</param>
-#if ANDROID
-      public static void cvGetRectSubPix(IntPtr src, IntPtr dst, PointF center)
+      public static void GetRectSubPix(IInputArray image, Size patchSize, PointF center, IOutputArray patch, DepthType patchType = DepthType.Default)
       {
-         cvGetRectSubPix(src, dst, center.X, center.Y);
+         using (InputArray iaSrc = image.GetInputArray())
+         using (OutputArray oaPatch = patch.GetOutputArray())
+         {
+            cveGetRectSubPix(iaSrc, ref patchSize, ref center, oaPatch, patchType);
+         }
       }
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvGetRectSubPix(IntPtr src, IntPtr dst, float centerX, float centerY);
-#else
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvGetRectSubPix(IntPtr src, IntPtr dst, PointF center);
-#endif
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveGetRectSubPix(IntPtr image, ref Size patchSize, ref PointF center, IntPtr patch, DepthType patchType);
 
+      /*
       /// <summary>
       /// Extracts pixels from src at sub-pixel accuracy and stores them to dst as follows:
       /// dst(x, y)= src( A_11 x'+A_12 y'+ b1, A_21 x'+A_22 y'+ b2),
@@ -68,6 +69,7 @@ namespace Emgu.CV
       /// <param name="mapMatrix">The transformation 2 x 3 matrix [A|b]</param>
       [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvGetQuadrangleSubPix(IntPtr src, IntPtr dst, IntPtr mapMatrix);
+      */
 
       /// <summary>
       /// Resizes the image src down to or up to the specified size
@@ -214,7 +216,7 @@ namespace Emgu.CV
          CvEnum.BorderType borderMode,
          ref MCvScalar fillval);
 
-		/*
+      /*
       /// <summary>
       /// calculates matrix of perspective transform such that:
       /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)^T
@@ -237,10 +239,43 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
       /// <param name="dst">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
-      /// <param name="mapMatrix">Pointer to the destination 3x3 matrix</param>
-      /// <returns>Pointer to the perspective transform matrix</returns>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvGetPerspectiveTransform(
+      /// <returns>The perspective transform matrix</returns>
+      public static Mat GetPerspectiveTransform(IInputArray src, IInputArray dst)
+      {
+         Mat m = new Mat();
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaDst = dst.GetInputArray())
+            cveGetPerspectiveTransform(iaSrc, iaDst, m);
+         return m;
+      }
+
+      /// <summary>
+      /// calculates matrix of perspective transform such that:
+      /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)^T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..3.
+      /// </summary>
+      /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
+      /// <param name="dest">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
+      /// <returns>The 3x3 Homography matrix</returns>
+      public static Mat GetPerspectiveTransform(PointF[] src, PointF[] dest)
+      {
+         Debug.Assert(src.Length >= 4, "The source should contain at least 4 points");
+         Debug.Assert(dest.Length >= 4, "The destination should contain at least 4 points");
+
+         //HomographyMatrix rot = new HomographyMatrix();
+         Mat rot;
+         GCHandle handleSrc = GCHandle.Alloc(src, GCHandleType.Pinned);
+         GCHandle handleDest = GCHandle.Alloc(dest, GCHandleType.Pinned);
+         using (Mat mSrc = new Mat(src.Length, 2, DepthType.Cv32F, 1, handleSrc.AddrOfPinnedObject(), 8))
+         using (Mat mDst = new Mat(dest.Length, 2, DepthType.Cv32F, 1, handleDest.AddrOfPinnedObject(), 8))
+            rot = CvInvoke.GetPerspectiveTransform(mSrc, mDst);
+         handleSrc.Free();
+         handleDest.Free();
+         return rot;
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveGetPerspectiveTransform(
          IntPtr src,
          IntPtr dst,
          IntPtr mapMatrix);
@@ -876,13 +911,22 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="contour">Input contour</param>
       /// <param name="convexhull">Convex hull obtained using cvConvexHull2 that should contain pointers or indices to the contour points, not the hull points themselves, i.e. return_points parameter in cvConvexHull2 should be 0</param>
-      /// <param name="storage">Container for output sequence of convexity defects. If it is NULL, contour or hull (in that order) storage is used</param>
-      /// <returns>Pointer to the sequence of the CvConvexityDefect structures. </returns>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvConvexityDefects(
+      public static void ConvexityDefects(
+         IInputArray contour,
+         IInputArray convexhull,
+         IOutputArray convexityDefects)
+      {
+         using (InputArray iaContour = contour.GetInputArray())
+         using (InputArray iaConvexhull = convexhull.GetInputArray())
+         using (OutputArray oaConvecxityDefects = convexityDefects.GetOutputArray())
+            cveConvexityDefects(iaContour, iaContour, oaConvecxityDefects);
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveConvexityDefects(
          IntPtr contour,
          IntPtr convexhull,
-         IntPtr storage);
+         IntPtr convexityDefects);
 
       /// <summary>
       /// Find the bounding rectangle for the specific array of points
