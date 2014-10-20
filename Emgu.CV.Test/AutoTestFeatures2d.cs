@@ -14,6 +14,7 @@ using System.Threading;
 //using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -241,7 +242,7 @@ namespace Emgu.CV.Test
                new PointF(rect.Right, rect.Top),
                new PointF(rect.Left, rect.Top)};
 
-               HomographyMatrix homography = null;
+               Mat homography = null;
 
                stopwatch.Reset();
                stopwatch.Start();
@@ -257,8 +258,9 @@ namespace Emgu.CV.Test
                   matcher.Add(modelDescriptors);
                   matcher.KnnMatch(observedDescriptors, matches, k, null);
 
-                  Matrix<byte> mask = new Matrix<byte>(matches.Size, 1);
-                  mask.SetValue(255);
+                  Mat mask = new Mat(matches.Size, 1, DepthType.Cv8U, 1);
+                  mask.SetTo(new MCvScalar(255));
+                  //mask.SetValue(255);
                   Features2DToolbox.VoteForUniqueness(matches, 0.8, mask);
 
                   int nonZeroCount = CvInvoke.CountNonZero(mask);
@@ -276,7 +278,8 @@ namespace Emgu.CV.Test
                if (homography != null)
                {
                   PointF[] points = pts.Clone() as PointF[];
-                  homography.ProjectPoints(points);
+                  points = CvInvoke.PerspectiveTransform(points, homography);
+                  //homography.ProjectPoints(points);
 
                   for (int i = 0; i < points.Length; i++)
                      points[i].Y += modelImage.Height;

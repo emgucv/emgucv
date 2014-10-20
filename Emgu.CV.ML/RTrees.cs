@@ -59,6 +59,8 @@ namespace Emgu.CV.ML
       protected override void DisposeObject()
       {
          MlInvoke.CvRTreesRelease(ref _ptr);
+         _statModelPtr = IntPtr.Zero;
+         _algorithmPtr = IntPtr.Zero;
       }
 
       /*

@@ -104,7 +104,7 @@ namespace Emgu.CV.ML
 
 
       /// <summary>
-      /// Predit the probability of the <paramref name="samples"/>
+      /// Predict the probability of the <paramref name="samples"/>
       /// </summary>
       /// <param name="samples">The input samples</param>
       /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
@@ -127,6 +127,8 @@ namespace Emgu.CV.ML
       protected override void DisposeObject()
       {
          MlInvoke.CvEMRelease(ref _ptr);
+         _statModel = IntPtr.Zero;
+         _algorithm = IntPtr.Zero;
       }
 
       IntPtr IAlgorithm.AlgorithmPtr

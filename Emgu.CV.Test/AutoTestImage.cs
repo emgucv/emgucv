@@ -97,15 +97,13 @@ namespace Emgu.CV.Test
       [TestAttribute]
       public void TestSobelScharr()
       {
-         Image<Gray, byte> img = EmguAssert.LoadImage<Gray, Byte>("lena.jpg");
-         Image<Gray, Byte> result = new Image<Gray, byte>(img.Size);
+         Mat img = EmguAssert.LoadMat("lena.jpg");
+         Mat result = new Mat();
          CvInvoke.Sobel(img, result, CvEnum.DepthType.Cv8U, 1, 0, -1, 1.0);
          TestOpenCL(delegate
                   {
-
                      UMat uresult = new UMat();
-
-                     using (UMat um = img.ToUMat())
+                     using (UMat um = img.ToUMat(AccessType.ReadWrite))
                      {
                         Stopwatch watch = Stopwatch.StartNew();
                         CvInvoke.Sobel(img, uresult, CvEnum.DepthType.Cv8U, 1, 0, -1, 1.0, 0.0, CvEnum.BorderType.Default);
@@ -501,7 +499,6 @@ namespace Emgu.CV.Test
 
       }
 
-      //TODO: Check out what is wrong with this
       [TestAttribute]
       public void TestRotation()
       {
@@ -513,7 +510,7 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(img.Width, imgRotated.Height);
          EmguAssert.AreEqual(img.Height, imgRotated.Width);
          imgRotated = img.Rotate(30, new Bgr(255, 255, 255), false);
-
+         //ImageViewer.Show(imgRotated);
       }
 
       [TestAttribute]
@@ -625,7 +622,7 @@ namespace Emgu.CV.Test
          Image<Gray, float> absDiff = new Image<Gray, float>(convoluted.Size);
          CvInvoke.AbsDiff(laplace, convoluted, absDiff);
          //Emgu.CV.UI.ImageViewer.Show(absDiff.Convert<Gray, byte>());
-         //EmguAssert.IsTrue(laplace.Equals(convoluted));
+         EmguAssert.IsTrue(laplace.Equals(convoluted));
 
          /*
          try

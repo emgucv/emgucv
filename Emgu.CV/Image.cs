@@ -2705,13 +2705,15 @@ namespace Emgu.CV
 
                      using (Image<Bgra, Byte> mat = new Image<Bgra, Byte>(value.Width, value.Height, data.Stride, data.Scan0))
                      {
+                        CvInvoke.MixChannels(mat, this, new []{ 0, 0, 1, 1, 2, 2} );
+                        /*
                         for (int i = 0; i < 3; i++)
                         {
                            CvInvoke.cvSetImageCOI(Ptr, i + 1);
                            CvInvoke.cvSetImageCOI(mat, i + 1);
                            CvInvoke.cvCopy(mat, Ptr, IntPtr.Zero);
                         }
-                        CvInvoke.cvSetImageCOI(Ptr, 0);
+                        CvInvoke.cvSetImageCOI(Ptr, 0);*/
                      }
 
                      value.UnlockBits(data);
@@ -2737,7 +2739,7 @@ namespace Emgu.CV
                   }
                   break;
                case PixelFormat.Format8bppIndexed:
-                  if (this is Image<Bgra, Byte>)
+                  if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
                   {
                      Matrix<Byte> bTable, gTable, rTable, aTable;
                      CvToolbox.ColorPaletteToLookupTable(value.Palette, out bTable, out gTable, out rTable, out aTable);
@@ -2747,16 +2749,16 @@ namespace Emgu.CV
                         value.PixelFormat);
                      using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(value.Width, value.Height, data.Stride, data.Scan0))
                      {
-                        using (Image<Gray, Byte> b = indexValue.CopyBlank())
-                        using (Image<Gray, Byte> g = indexValue.CopyBlank())
-                        using (Image<Gray, Byte> r = indexValue.CopyBlank())
-                        using (Image<Gray, Byte> a = indexValue.CopyBlank())
+                        using (Mat b = new Mat())
+                        using (Mat g = new Mat())
+                        using (Mat r = new Mat())
+                        using (Mat a = new Mat())
                         {
                            CvInvoke.LUT(indexValue, bTable, b);
                            CvInvoke.LUT(indexValue, gTable, g);
                            CvInvoke.LUT(indexValue, rTable, r);
                            CvInvoke.LUT(indexValue, aTable, a);
-                           using (VectorOfMat mv = new VectorOfMat(new Mat[] { b.Mat, g.Mat, r.Mat, a.Mat }))
+                           using (VectorOfMat mv = new VectorOfMat(new Mat[] { b, g, r, a }))
                            {
                               CvInvoke.Merge(mv, this);
                            }

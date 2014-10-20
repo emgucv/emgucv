@@ -219,49 +219,7 @@ namespace Emgu.CV
          return homography;
       }*/
 
-      /// <summary>
-      /// Finds perspective transformation H=||h_ij|| between the source and the destination planes
-      /// </summary>
-      /// <param name="srcPoints">Point coordinates in the original plane</param>
-      /// <param name="dstPoints">Point coordinates in the destination plane</param>
-      /// <param name="method">FindHomography method</param>
-      /// <param name="ransacReprojThreshold">
-      /// The maximum allowed reprojection error to treat a point pair as an inlier. 
-      /// The parameter is only used in RANSAC-based homography estimation. 
-      /// E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3
-      /// </param>
-      /// <param name="mask">Optional output mask set by a robust method ( CV_RANSAC or CV_LMEDS ). Note that the input mask values are ignored.</param>
-      /// <returns>The 3x3 homography matrix if found. Null if not found.</returns>
-      public static HomographyMatrix FindHomography(
-         PointF[] srcPoints,
-         PointF[] dstPoints,
-         CvEnum.HomographyMethod method,
-         double ransacReprojThreshold = 3, 
-         IOutputArray mask = null)
-      {
-         HomographyMatrix homography;
 
-         GCHandle srcHandle = GCHandle.Alloc(srcPoints, GCHandleType.Pinned);
-         GCHandle dstHandle = GCHandle.Alloc(dstPoints, GCHandleType.Pinned);
-         using (Matrix<float> srcPointMatrix = new Matrix<float>(srcPoints.Length, 2, srcHandle.AddrOfPinnedObject()))
-         using (Matrix<float> dstPointMatrix = new Matrix<float>(dstPoints.Length, 2, dstHandle.AddrOfPinnedObject()))
-         using (Mat h = new Mat())
-         {
-            CvInvoke.FindHomography(srcPointMatrix, dstPointMatrix, h, method, ransacReprojThreshold, mask);
-            if (h.IsEmpty)
-            {
-               homography = null;
-            }
-            else
-            {
-               homography = new HomographyMatrix();
-               h.CopyTo(homography);
-            }
-         }
-         srcHandle.Free();
-         dstHandle.Free();
-         return homography;
-      }
 
 
       /// <summary>
@@ -297,27 +255,7 @@ namespace Emgu.CV
             return CvInvoke.EstimateRigidTransform(srcVec, dstVec, fullAffine);
       }
 
-      /// <summary>
-      /// calculates matrix of perspective transform such that:
-      /// (t_i x'_i,t_i y'_i,t_i)^T=map_matrix (x_i,y_i,1)^T
-      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..3.
-      /// </summary>
-      /// <param name="src">Coordinates of 4 quadrangle vertices in the source image</param>
-      /// <param name="dest">Coordinates of the 4 corresponding quadrangle vertices in the destination image</param>
-      /// <returns>The 3x3 Homography matrix</returns>
-      public static HomographyMatrix GetPerspectiveTransform(PointF[] src, PointF[] dest)
-      {
-         Debug.Assert(src.Length >= 4, "The source should contain at least 4 points");
-         Debug.Assert(dest.Length >= 4, "The destination should contain at least 4 points");
 
-         HomographyMatrix rot = new HomographyMatrix();
-	     GCHandle handleSrc = GCHandle.Alloc (src, GCHandleType.Pinned);
-	     GCHandle handleDest = GCHandle.Alloc (dest, GCHandleType.Pinned);
-         CvInvoke.cvGetPerspectiveTransform(handleSrc.AddrOfPinnedObject(), handleDest.AddrOfPinnedObject(), rot);
-	     handleSrc.Free ();
-		 handleDest.Free ();
-         return rot;
-      }
 
       #region helper methods
       private static Matrix<float> ToMatrix<T>(T[][] data)

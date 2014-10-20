@@ -106,18 +106,18 @@ namespace Emgu.Util
 
       /*
       /// <summary>
-      /// Read a text file to an array of string, each row are seperated using by the input seperator
+      /// Read a text file to an array of string, each row are separated using by the input separator
       /// </summary>
       /// <param name="fileName">The text file to read from</param>
-      /// <param name="seperator">The row seperator</param>
+      /// <param name="seperator">The row separator</param>
       /// <returns></returns>
-      public static string FileToString(string fileName, char seperator)
+      public static string FileToString(string fileName, char separator)
       {
          StringBuilder res = new StringBuilder();
          string input;
          using (StreamReader sr = File.OpenText(fileName))
             while ((input = sr.ReadLine()) != null)
-               res.AppendFormat("{0}{1}", input, seperator);
+               res.AppendFormat("{0}{1}", input, separator);
 
          return res.ToString();
       }*/
@@ -141,7 +141,7 @@ namespace Emgu.Util
       /// Call a command from command line
       /// </summary>
       /// <param name="execFileName">The name of the executable</param>
-      /// <param name="arguments">The arguments to the executeable</param>
+      /// <param name="arguments">The arguments to the executable</param>
       /// <returns>The standard output</returns>
       public static string ExecuteCmd(string execFileName, string arguments)
       {
@@ -468,9 +468,9 @@ namespace Emgu.Util
          {
             if (Platform.ClrType == TypeEnum.ClrType.NetFxCore)
             {
-               const int LoadLibrarySearchDllLoadDir = 0x00000100;
-               const int LoadLibrarySearchDefaultDirs = 0x00001000;
-               return NetFxCoreLoadLibrary(dllname, IntPtr.Zero, LoadLibrarySearchDllLoadDir | LoadLibrarySearchDefaultDirs);
+               const int loadLibrarySearchDllLoadDir = 0x00000100;
+               const int loadLibrarySearchDefaultDirs = 0x00001000;
+               return NetFxCoreLoadLibrary(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
             } else
                return WinAPILoadLibrary(dllname);
          } else

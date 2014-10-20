@@ -228,12 +228,13 @@ void cveBFMatcherRelease(cv::BFMatcher** matcher)
 }
 
 //2D tracker
-int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, std::vector< std::vector< cv::DMatch > >* matches, CvArr* mask, double scaleIncrement, int rotationBins)
+int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double scaleIncrement, int rotationBins)
 {
    CV_Assert(!modelKeyPoints->empty());
    CV_Assert(!observedKeyPoints->empty());
+   CV_Assert(mask->depth() == CV_8U && mask->channels() == 1);
    //cv::Mat_<int> indicesMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
-   cv::Mat_<uchar> maskMat = (cv::Mat_<uchar>) cv::cvarrToMat(mask);
+   cv::Mat_<uchar> maskMat = (cv::Mat_<uchar>) *mask;
    std::vector<float> logScale;
    std::vector<float> rotations;
    float s, maxS, minS, r;

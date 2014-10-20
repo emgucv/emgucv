@@ -50,6 +50,8 @@ namespace Emgu.CV.ML
       protected override void DisposeObject()
       {
          MlInvoke.CvBoostRelease(ref _ptr);
+         _statModel = IntPtr.Zero;
+         _algorithm = IntPtr.Zero;
       }
 
       IntPtr IStatModel.StatModelPtr

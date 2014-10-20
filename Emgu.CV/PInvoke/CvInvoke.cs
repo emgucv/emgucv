@@ -49,11 +49,11 @@ namespace Emgu.CV
       public const CallingConvention CvCallingConvention = CallingConvention.Cdecl;
 
       /// <summary>
-      /// Attemps to load opencv modules from the specific location
+      /// Attempts to load opencv modules from the specific location
       /// </summary>
       /// <param name="loadDirectory">The directory where the unmanaged modules will be loaded. If it is null, the default location will be used.</param>
       /// <param name="unmanagedModules">The names of opencv modules. e.g. "opencv_cxcore.dll" on windows.</param>
-      /// <returns>True if all the modules has been loaded sucessfully</returns>
+      /// <returns>True if all the modules has been loaded successfully</returns>
       /// <remarks>If <paramref name="loadDirectory"/> is null, the default location on windows is the dll's path appended by either "x64" or "x86", depends on the applications current mode.</remarks>
       public static bool LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
       {

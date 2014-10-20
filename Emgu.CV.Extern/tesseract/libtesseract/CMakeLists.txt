@@ -3,8 +3,8 @@
 # --------------------------------------------------------
 
 cmake_minimum_required(VERSION 2.8)
-SET(TESSERACT_DIR "tesseract-ocr")
-SET(LEPTONICA_DIR "leptonica/leptonica-1.70/src")
+SET(TESSERACT_DIR "tesseract-ocr.git")
+SET(LEPTONICA_DIR "leptonica/leptonica-1.71/src")
 IF(WIN32 AND CV_ICC) 
   STRING(REGEX REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
   STRING(REGEX REPLACE "/O3" "/O2" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
@@ -12,7 +12,7 @@ ENDIF()
 
 INSTALL(
   FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/tesseract-ocr/COPYING"
+  "${TESSERACT_DIR}/COPYING"
   DESTINATION "lib/3rdParty"
   COMPONENT emgucv_source
   RENAME "tesseract-ocr.license.txt"
@@ -24,8 +24,8 @@ ADD_SUBDIRECTORY(leptonica)
 #ccutil
 PROJECT(tesseract_ccutil)
 file(GLOB tesseract_ccutil_srcs "${TESSERACT_DIR}/ccutil/*.cpp")
-file(GLOB tesseract_ccutil_srcs_excludes "${TESSERACT_DIR}/ccutil/scanutils.cpp")
-LIST(REMOVE_ITEM tesseract_ccutil_srcs ${tesseract_ccutil_srcs_excludes})
+#file(GLOB tesseract_ccutil_srcs_excludes "${TESSERACT_DIR}/ccutil/scanutils.cpp")
+#LIST(REMOVE_ITEM tesseract_ccutil_srcs ${tesseract_ccutil_srcs_excludes})
 file(GLOB tesseract_ccutil_hdrs "${TESSERACT_DIR}/ccutil/*.h")
 source_group("Src" FILES ${tesseract_ccutil_srcs})
 source_group("Include" FILES ${tesseract_ccutil_hdrs})
@@ -300,7 +300,7 @@ IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
 IF(NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_main tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord tesseract_cube)
+  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccmain tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord tesseract_cube)
 ENDIF()
 
 

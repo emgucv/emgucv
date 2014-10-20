@@ -480,3 +480,13 @@ bool cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2)
    pt2->x = p2.x; pt2->y = p2.y;
    return r;
 }
+
+void cveRandn(cv::_InputOutputArray* dst, cv::_InputArray* mean, cv::_InputArray* stddev)
+{
+   cv::randn(*dst, *mean, *stddev);
+}
+
+void cveRandu(cv::_InputOutputArray* dst, cv::_InputArray* low, cv::_InputArray* high)
+{
+   cv::randu(*dst, *low, *high);
+}

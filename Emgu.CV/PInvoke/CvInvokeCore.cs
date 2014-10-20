@@ -439,6 +439,7 @@ namespace Emgu.CV
       /// <param name="src">The array of input arrays.</param>
       /// <param name="dst">The array of output arrays</param>
       /// <param name="fromTo">The array of pairs of indices of the planes copied. from_to[k*2] is the 0-based index of the input plane, and from_to[k*2+1] is the index of the output plane, where the continuous numbering of the planes over all the input and over all the output arrays is used. When from_to[k*2] is negative, the corresponding output plane is filled with 0's.</param>
+      /// <remarks>Unlike many other new-style C++ functions in OpenCV, mixChannels requires the output arrays to be pre-allocated before calling the function.</remarks>
       public static void MixChannels(
          IInputArrayOfArrays src,
          IInputOutputArray dst,
@@ -753,6 +754,7 @@ namespace Emgu.CV
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvCopy(IntPtr src, IntPtr des, IntPtr mask);
 
+      /*
       /// <summary>
       /// Copies scalar value to every selected element of the destination array:
       /// arr(I)=value if mask(I)!=0
@@ -788,7 +790,7 @@ namespace Emgu.CV
       public static void cvZero(IntPtr arr)
       {
          cvSetZero(arr);
-      }
+      }*/
 
       /// <summary>
       /// Initializes scaled identity matrix:
@@ -1320,7 +1322,7 @@ namespace Emgu.CV
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseImageHeader(ref IntPtr image);
 
-		/*
+      /*
       /// <summary>
       /// Initializes already allocated CvMat structure. It can be used to process raw data with OpenCV matrix functions.
       /// </summary>
@@ -1340,7 +1342,7 @@ namespace Emgu.CV
          IntPtr data,
          int step);
 */
-	
+   
       /// <summary>
       /// Initializes already allocated CvMat structure. It can be used to process raw data with OpenCV matrix functions.
       /// </summary>
@@ -1719,6 +1721,18 @@ namespace Emgu.CV
           CvEnum.LineType lineType,
           int shift);
 
+      public static void ArrowedLine(IInputOutputArray img, Point pt1, Point pt2, MCvScalar color, int thickness = 1,
+         CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0, double tipLength = 0.1)
+      {
+         using (InputOutputArray ioaImg = img.GetInputOutputArray())
+         {
+            cveArrowedLine(ioaImg, ref pt1, ref pt2, ref color, thickness, lineType, shift, tipLength);   
+         }
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveArrowedLine(IntPtr img, ref Point pt1, ref Point pt2, ref MCvScalar color,
+         int thickness, CvEnum.LineType lineType, int shift, double tipLength);
 
       /// <summary>
       /// Draws a single or multiple polygonal curves
@@ -2517,6 +2531,32 @@ namespace Emgu.CV
          return cvUseOptimized(optimize ? 1 : 0);
       }
 
+
+      public static void Randn(IInputOutputArray dst, IInputArray mean, IInputArray stddev)
+      {
+         using (InputOutputArray ioaDst = dst.GetInputOutputArray())
+         using (InputArray iaMean = mean.GetInputArray())
+         using (InputArray iaStddev = stddev.GetInputArray())
+         {
+            cveRandn(ioaDst, iaMean, iaStddev);
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveRandn(IntPtr dst, IntPtr mean, IntPtr stddev);
+
+      public static void Randu(IInputOutputArray dst, IInputArray low, IInputArray high)
+      {
+         using (InputOutputArray ioaDst = dst.GetInputOutputArray())
+         using (InputArray iaLow = low.GetInputArray())
+         using (InputArray iaHigh = high.GetInputArray())
+         {
+            cveRandu(ioaDst, iaLow, iaHigh);
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveRandu(IntPtr dst, IntPtr low, IntPtr high);
+
+      /*
       /// <summary>
       /// Fills the destination array with uniformly or normally distributed random numbers.
       /// </summary>
@@ -2539,7 +2579,7 @@ namespace Emgu.CV
 #else
       [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RandType distType, MCvScalar param1, MCvScalar param2);
-#endif
+#endif*/
 
       #region Linear Algebra
       /// <summary>
@@ -2670,6 +2710,22 @@ namespace Emgu.CV
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveTransform(IntPtr src, IntPtr dst, IntPtr transmat);
+
+      public static PointF[] PerspectiveTransform(PointF[] src, IInputArray mat)
+      {
+         PointF[] dst = new PointF[src.Length];
+         GCHandle handle = GCHandle.Alloc(src, GCHandleType.Pinned);
+         GCHandle destHandle = GCHandle.Alloc(dst, GCHandleType.Pinned);
+         using (Matrix<float> pointMat = new Matrix<float>(src.Length, 1, 2, handle.AddrOfPinnedObject(), 0))
+         using (Mat dstMat = new Mat(dst.Length, 1, DepthType.Cv32F, 2, destHandle.AddrOfPinnedObject(), 8))
+         {
+            CvInvoke.PerspectiveTransform(pointMat, dstMat, mat);
+         }
+
+         handle.Free();
+         destHandle.Free();
+         return dst;
+      }
 
       /// <summary>
       /// Transforms every element of src (by treating it as 2D or 3D vector) in the following way:

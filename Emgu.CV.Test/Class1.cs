@@ -201,7 +201,7 @@ namespace Emgu.CV.Test
          String win1 = "Test Window";
 
          //Create the window using the specific name
-         CvInvoke.NamedWindow(win1, -1);
+         CvInvoke.NamedWindow(win1);
 
          //Create an image of 400x200 of Blue color
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0))) 
@@ -249,7 +249,7 @@ namespace Emgu.CV.Test
       {
          using (Image<Bgr, byte> img = new Image<Bgr, byte>(200, 200))
          {
-            img.SetRandNormal(0xffffffff, new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(50.0, 50.0, 50.0));
+            img.SetRandNormal(new MCvScalar(0.0, 0.0, 0.0), new MCvScalar(50.0, 50.0, 50.0));
             ImageViewer.Show(img);
          }
       }

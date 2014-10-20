@@ -1,6 +1,3 @@
-[submodule "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr"]
-	path = Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr
-	url = git://git.code.sf.net/p/emgucv/tesseract-ocr
 [submodule "Emgu.CV.Extern/cvblob/libcvblob"]
 	path = Emgu.CV.Extern/cvblob/libcvblob
 	url = git://git.code.sf.net/p/emgucv/cvblob
@@ -14,3 +11,6 @@
 [submodule "opencv_extra"]
 	path = opencv_extra
 	url = https://github.com/Itseez/opencv_extra.git
+[submodule "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git"]
+	path = Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git
+	url = git://git.code.sf.net/p/emgucv/tesseract-ocr-git

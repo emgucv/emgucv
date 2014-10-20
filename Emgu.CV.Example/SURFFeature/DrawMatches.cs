@@ -20,7 +20,7 @@ namespace SURFFeatureExample
 {
    public static class DrawMatches
    {
-      public static void FindMatch(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime, out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint observedKeyPoints, VectorOfVectorOfDMatch matches, out Matrix<byte> mask, out HomographyMatrix homography)
+      public static void FindMatch(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime, out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint observedKeyPoints, VectorOfVectorOfDMatch matches, out Matrix<byte> mask, out Mat homography)
       {
          int k = 2;
          double uniquenessThreshold = 0.8;
@@ -124,7 +124,7 @@ namespace SURFFeatureExample
       /// <returns>The model image and observed image, the matched features and homography projection.</returns>
       public static Mat Draw(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime)
       {
-         HomographyMatrix homography;
+         Mat homography;
          VectorOfKeyPoint modelKeyPoints;
          VectorOfKeyPoint observedKeyPoints;
          using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
@@ -153,7 +153,7 @@ namespace SURFFeatureExample
                   new PointF(rect.Right, rect.Top),
                   new PointF(rect.Left, rect.Top)
                };
-               homography.ProjectPoints(pts);
+               pts = CvInvoke.PerspectiveTransform(pts, homography);
 
                Point[] points = Array.ConvertAll<PointF, Point>(pts, Point.Round);
                using (VectorOfPoint vp = new VectorOfPoint(points))
