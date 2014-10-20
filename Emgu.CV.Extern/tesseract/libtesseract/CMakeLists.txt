@@ -12,7 +12,7 @@ ENDIF()
 
 INSTALL(
   FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/tesseract-ocr/COPYING"
+  "${TESSERACT_DIR}/COPYING"
   DESTINATION "lib/3rdParty"
   COMPONENT emgucv_source
   RENAME "tesseract-ocr.license.txt"
@@ -300,7 +300,7 @@ IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${PROJECT_NAME} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
 IF(NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_main tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord tesseract_cube)
+  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccmain tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_neural_networks tesseract_wordrec tesseract_textord tesseract_cube)
 ENDIF()
 
 
