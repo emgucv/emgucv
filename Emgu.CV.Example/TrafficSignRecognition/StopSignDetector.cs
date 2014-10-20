@@ -141,13 +141,13 @@ namespace TrafficSignRecognition
                   {
                      int k = 2;
                      //Matrix<int> indices = new Matrix<int>(_observeredDescriptor.Size.Height, k);
-                     Matrix<byte> mask;
+                     Mat mask;
                      //using (Matrix<float> dist = new Matrix<float>(_observeredDescriptor.Size.Height, k))
                      using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
                      {
                         _modelDescriptorMatcher.KnnMatch(_observeredDescriptor, matches, k, null);
-                        mask = new Matrix<byte>(matches.Size, 1);
-                        mask.SetValue(255);
+                        mask = new Mat(matches.Size, 1, DepthType.Cv8U, 1);
+                        mask.SetTo(new MCvScalar(255));
                         Features2DToolbox.VoteForUniqueness(matches, uniquenessThreshold, mask);
                      }
 

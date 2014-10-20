@@ -37,15 +37,14 @@ namespace OCR
                using (Image<Gray, byte> gray = image.Convert<Gray, Byte>())
                {
                   _ocr.Recognize(gray);
-                  Tesseract.Charactor[] charactors = _ocr.GetCharactors();
-                  foreach (Tesseract.Charactor c in charactors)
+                  Tesseract.Character[] characters = _ocr.GetCharacters();
+                  foreach (Tesseract.Character c in characters)
                   {
                      image.Draw(c.Region, drawColor, 1);
                   }
 
                   imageBox1.Image = image;
 
-                  //String text = String.Concat( Array.ConvertAll(charactors, delegate(Tesseract.Charactor t) { return t.Text; }) );
                   String text = _ocr.GetText();
                   ocrTextBox.Text = text;
                }

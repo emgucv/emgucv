@@ -503,13 +503,13 @@ IF (ANDROID)
     DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
     COMPONENT main
     )
-  INSTALL(
-    DIRECTORY "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr/tessdata"
-	DESTINATION "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr"
-    COMPONENT main
-    FILES_MATCHING 
-    PATTERN "*eng.*"
-    )
+#  INSTALL(
+#    DIRECTORY "Emgu.CV.Extern/tesseract/libtesseract/tessdata"
+#	DESTINATION "Emgu.CV.Extern/tesseract/libtesseract/tessdata"
+#    COMPONENT main
+#    FILES_MATCHING 
+#    PATTERN "*eng.*"
+#    )
   INSTALL(
     FILES
     "Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs"
