@@ -42,7 +42,7 @@ namespace emgu
    };
 }
 
-CVAPI(void) getCvStructSizes(emgu::cvStructSizes* sizes);
+CVAPI(void) cveGetCvStructSizes(emgu::cvStructSizes* sizes);
 
 CVAPI(void) testDrawLine(IplImage* img, int startX, int startY, int endX, int endY, CvScalar c);
 

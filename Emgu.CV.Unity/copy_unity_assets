@@ -30,7 +30,7 @@ rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Windows.Store
 rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Android
 cp -r ../Emgu.CV/PointAndLine Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Shape Assets/Emgu.CV/Emgu.CV/
-cp -r ../Emgu.CV/Tiff Assets/Emgu.CV/Emgu.CV/
+#cp -r ../Emgu.CV/Tiff Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Util Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 

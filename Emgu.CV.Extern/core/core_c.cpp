@@ -351,6 +351,12 @@ void cveMulSpectrums(cv::_InputArray *a, cv::_InputArray* b, cv::_OutputArray* c
 {
    cv::mulSpectrums(*a, *b, *c, flags, conjB);
 }
+
+int cveGetOptimalDFTSize(int vecsize)
+{
+   return cv::getOptimalDFTSize(vecsize);
+}
+
 void cveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m)
 {
    cv::transform(*src, *dst, *m);

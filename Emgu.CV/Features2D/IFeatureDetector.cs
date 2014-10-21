@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
@@ -29,7 +30,12 @@ namespace Emgu.CV
 {
    public partial class CvInvoke
    {
+      public static IntPtr AlgorithmPtrFromFeatureDetector(IFeatureDetector detector)
+      {
+         return cveAlgorithmFromFeatureDetector(detector.FeatureDetectorPtr);
+      }
+
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveAlgorithmFromFeatureDetector(IntPtr detector);
+      private extern static IntPtr cveAlgorithmFromFeatureDetector(IntPtr detector);
    }
 }

@@ -101,6 +101,7 @@ CVAPI(void) cveInvert(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
 CVAPI(void) cveDft(cv::_InputArray* src, cv::_OutputArray* dst, int flags, int nonzeroRows);
 CVAPI(void) cveDct(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
 CVAPI(void) cveMulSpectrums(cv::_InputArray *a, cv::_InputArray* b, cv::_OutputArray* c, int flags, bool conjB);
+CVAPI(int) cveGetOptimalDFTSize(int vecsize);
 
 CVAPI(void) cveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m);
 

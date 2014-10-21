@@ -391,8 +391,7 @@ namespace Emgu.CV
       {
          bool sane = true;
 
-         CvStructSizes sizes = new CvStructSizes();
-         CvInvoke.GetCvStructSizes(ref sizes);
+         CvStructSizes sizes = CvInvoke.GetCvStructSizes();
 
          sane &= (sizes.CvBox2D == Marshal.SizeOf(typeof(RotatedRect)));
          sane &= (sizes.CvContour == Marshal.SizeOf(typeof(MCvContour)));

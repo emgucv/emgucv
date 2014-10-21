@@ -20,7 +20,7 @@ namespace SURFFeatureExample
 {
    public static class DrawMatches
    {
-      public static void FindMatch(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime, out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint observedKeyPoints, VectorOfVectorOfDMatch matches, out Matrix<byte> mask, out Mat homography)
+      public static void FindMatch(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime, out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint observedKeyPoints, VectorOfVectorOfDMatch matches, out Mat mask, out Mat homography)
       {
          int k = 2;
          double uniquenessThreshold = 0.8;
@@ -56,8 +56,8 @@ namespace SURFFeatureExample
 
                   surfCuda.DownloadKeypoints(gpuObservedKeyPoints, observedKeyPoints);
 
-                  mask = new Matrix<byte>(matches.Size, 1);
-                  mask.SetValue(255);
+                  mask = new Mat(matches.Size, 1, DepthType.Cv8U, 1);
+                  mask.SetTo(new MCvScalar(255));
                   Features2DToolbox.VoteForUniqueness(matches, uniquenessThreshold, mask);
 
                   int nonZeroCount = CvInvoke.CountNonZero(mask);
@@ -95,8 +95,8 @@ namespace SURFFeatureExample
                matcher.Add(modelDescriptors);
 
                matcher.KnnMatch(observedDescriptors, matches, k, null);
-               mask = new Matrix<byte>(matches.Size, 1);
-               mask.SetValue(255);
+               mask = new Mat(matches.Size, 1, DepthType.Cv8U, 1);
+               mask.SetTo(new MCvScalar(255));
                Features2DToolbox.VoteForUniqueness(matches, uniquenessThreshold, mask);
 
                int nonZeroCount = CvInvoke.CountNonZero(mask);
@@ -130,7 +130,7 @@ namespace SURFFeatureExample
          using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
          {
 
-            Matrix<byte> mask;
+            Mat mask;
 
             FindMatch(modelImage, observedImage, out matchTime, out modelKeyPoints, out observedKeyPoints, matches,
                out mask, out homography);

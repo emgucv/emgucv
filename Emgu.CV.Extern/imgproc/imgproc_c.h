@@ -161,4 +161,5 @@ CVAPI(void) cveDistanceTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv
 CVAPI(void) cveHuMoments(CvMoments* moments, cv::_OutputArray* hu);
 
 CVAPI(void) cveGetRectSubPix(cv::_InputArray* image, CvSize* patchSize, CvPoint2D32f* center, cv::_OutputArray* patch, int patchType);
+
 #endif
