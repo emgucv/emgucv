@@ -133,6 +133,13 @@ CVAPI(cv::KAZE*) cveKAZEDetectorCreate(
   cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
 CVAPI(void) cveKAZEDetectorRelease(cv::KAZE** detector);
 
+//AKAZEDetector
+CVAPI(cv::AKAZE*) cveAKAZEDetectorCreate(
+int descriptorType, int descriptorSize, int descriptorChannels,
+  float threshold, int octaves, int sublevels, int diffusivity,
+  cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+CVAPI(void) cveAKAZEDetectorRelease(cv::AKAZE** detector);
+
 //Algorithm
 CVAPI(cv::Algorithm*) cveAlgorithmFromFeatureDetector(cv::FeatureDetector* detector);
 CVAPI(cv::Algorithm*) cveAlgorithmFromDescriptorExtractor(cv::DescriptorExtractor* extractor);

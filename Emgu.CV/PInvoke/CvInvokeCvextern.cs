@@ -51,7 +51,7 @@ namespace Emgu.CV
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cveGrabCut(
+      private static extern void cveGrabCut(
          IntPtr img,
          IntPtr mask,
          ref Rectangle rect,
@@ -73,8 +73,9 @@ namespace Emgu.CV
          using (OutputArray oaDst = dst.GetOutputArray())
             cveSqrt(iaSrc, oaDst);
       }
+
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cveSqrt(IntPtr src, IntPtr dst);
+      private static extern void cveSqrt(IntPtr src, IntPtr dst);
 
       /// <summary>
       /// Apply color map to the image
@@ -91,9 +92,10 @@ namespace Emgu.CV
          using (OutputArray oaDst = dst.GetOutputArray())
             cveApplyColorMap(iaSrc, oaDst, colorMapType);
       }
+
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cveApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
-      
+      private static extern void cveApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
+
       /// <summary>
       /// Check that every array element is neither NaN nor +- inf. The functions also check that each value
       /// is between minVal and maxVal. in the case of multi-channel arrays each channel is processed
@@ -117,12 +119,12 @@ namespace Emgu.CV
          using (InputArray iaArr = arr.GetInputArray())
             return cveCheckRange(iaArr, quiet, ref pos, minVal, maxVal);
       }
+
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private extern static bool cveCheckRange(
+      private static extern bool cveCheckRange(
          IntPtr arr,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool quiet,
+         [MarshalAs(CvInvoke.BoolMarshalType)] bool quiet,
          ref Point pos,
          double minVal,
          double maxVal);
@@ -137,15 +139,20 @@ namespace Emgu.CV
       /// <param name="ransacThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier.</param>
       /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
       /// <returns></returns>
-      public static int EstimateAffine3D(MCvPoint3D32f[] src, MCvPoint3D32f[] dst, out Matrix<double> estimate, out Byte[] inliers, double ransacThreshold, double confidence)
+      public static int EstimateAffine3D(MCvPoint3D32f[] src, MCvPoint3D32f[] dst, out Matrix<double> estimate,
+         out Byte[] inliers, double ransacThreshold, double confidence)
       {
          GCHandle srcHandle = GCHandle.Alloc(src, GCHandleType.Pinned);
          GCHandle dstHandle = GCHandle.Alloc(dst, GCHandleType.Pinned);
          int result;
 
          estimate = new Matrix<double>(3, 4);
-         using (Matrix<float> srcMat = new Matrix<float>(1, src.Length, 3, srcHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * src.Length))
-         using (Matrix<float> dstMat = new Matrix<float>(1, dst.Length, 3, dstHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f)) * dst.Length))
+         using (
+            Matrix<float> srcMat = new Matrix<float>(1, src.Length, 3, srcHandle.AddrOfPinnedObject(),
+               Marshal.SizeOf(typeof (MCvPoint3D32f))*src.Length))
+         using (
+            Matrix<float> dstMat = new Matrix<float>(1, dst.Length, 3, dstHandle.AddrOfPinnedObject(),
+               Marshal.SizeOf(typeof (MCvPoint3D32f))*dst.Length))
          using (Util.VectorOfByte vectorOfByte = new Util.VectorOfByte())
          {
             result = EstimateAffine3D(srcMat, dstMat, estimate, vectorOfByte, ransacThreshold, confidence);
@@ -168,7 +175,8 @@ namespace Emgu.CV
       /// <param name="ransacThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier.</param>
       /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
       /// <returns></returns>
-      public static int EstimateAffine3D(IInputArray src, IInputArray dst, IOutputArray affineEstimate, IOutputArray inliers, double ransacThreshold = 3, double confidence = 0.99)
+      public static int EstimateAffine3D(IInputArray src, IInputArray dst, IOutputArray affineEstimate,
+         IOutputArray inliers, double ransacThreshold = 3, double confidence = 0.99)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (InputArray iaDst = dst.GetInputArray())
@@ -176,8 +184,10 @@ namespace Emgu.CV
          using (OutputArray oaInliners = inliers.GetOutputArray())
             return cveEstimateAffine3D(iaSrc, iaDst, oaAffineEstimate, oaInliners, ransacThreshold, confidence);
       }
+
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cveEstimateAffine3D(IntPtr src, IntPtr dst, IntPtr affineEstimate, IntPtr inliers, double ransacThreshold, double confidence);
+      internal static extern int cveEstimateAffine3D(IntPtr src, IntPtr dst, IntPtr affineEstimate, IntPtr inliers,
+         double ransacThreshold, double confidence);
 
 
       /// <summary>
@@ -189,7 +199,8 @@ namespace Emgu.CV
       /// <param name="minIdx">The returned minimum location</param>
       /// <param name="maxIdx">The returned maximum location</param>
       /// <param name="mask">The extremums are searched across the whole array if mask is IntPtr.Zert. Otherwise, search is performed in the specified array region.</param>
-      public static void MinMaxIdx(IInputArray src, out double minVal, out double maxVal, int[] minIdx, int[] maxIdx, IInputArray mask = null)
+      public static void MinMaxIdx(IInputArray src, out double minVal, out double maxVal, int[] minIdx, int[] maxIdx,
+         IInputArray mask = null)
       {
          GCHandle minHandle = GCHandle.Alloc(minIdx, GCHandleType.Pinned);
          GCHandle maxHandle = GCHandle.Alloc(maxIdx, GCHandleType.Pinned);
@@ -197,12 +208,15 @@ namespace Emgu.CV
          maxVal = 0;
          using (InputArray iaSrc = src.GetInputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-            cveMinMaxIdx(iaSrc, ref minVal, ref maxVal, minHandle.AddrOfPinnedObject(), maxHandle.AddrOfPinnedObject(), iaMask);
+            cveMinMaxIdx(iaSrc, ref minVal, ref maxVal, minHandle.AddrOfPinnedObject(), maxHandle.AddrOfPinnedObject(),
+               iaMask);
          minHandle.Free();
          maxHandle.Free();
       }
+
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cveMinMaxIdx(IntPtr src, ref double minVal, ref double maxVal, IntPtr minIdx, IntPtr maxIdx, IntPtr mask);
+      private static extern void cveMinMaxIdx(IntPtr src, ref double minVal, ref double maxVal, IntPtr minIdx,
+         IntPtr maxIdx, IntPtr mask);
 
       /// <summary>
       /// Applies arbitrary linear filter to the image. In-place operation is supported. When the aperture is partially outside the image, the function interpolates outlier pixel values from the nearest pixels that is inside the image
@@ -213,15 +227,18 @@ namespace Emgu.CV
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="delta">The optional value added to the filtered pixels before storing them in dst</param>
       /// <param name="borderType">The pixel extrapolation method.</param>
-      public static void Filter2D(IInputArray src, IOutputArray dst, IInputArray kernel, Point anchor, double delta = 0, Emgu.CV.CvEnum.BorderType borderType = CvEnum.BorderType.Default)
+      public static void Filter2D(IInputArray src, IOutputArray dst, IInputArray kernel, Point anchor, double delta = 0,
+         Emgu.CV.CvEnum.BorderType borderType = CvEnum.BorderType.Default)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
          using (InputArray iaKernel = kernel.GetInputArray())
             cveFilter2D(iaSrc, oaDst, iaKernel, ref anchor, delta, borderType);
       }
+
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, double delta, Emgu.CV.CvEnum.BorderType borderType);
+      private static extern void cveFilter2D(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, double delta,
+         Emgu.CV.CvEnum.BorderType borderType);
 
 
       /// <summary>
@@ -237,6 +254,7 @@ namespace Emgu.CV
          using (OutputArray oaDst = dst.GetOutputArray())
             cveCLAHE(iaSrc, clipLimit, ref tileGridSize, oaDst);
       }
+
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCLAHE(IntPtr srcArr, double clipLimit, ref Size tileGridSize, IntPtr dstArr);
 
@@ -244,9 +262,16 @@ namespace Emgu.CV
       /// <summary>
       /// This function retrieve the Open CV structure sizes in unmanaged code
       /// </summary>
-      /// <param name="sizes">The structure that will hold the Open CV structure sizes</param>
-      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "getCvStructSizes")]
-      public static extern void GetCvStructSizes(ref CvStructSizes sizes);
+      /// <returns>The structure that will hold the Open CV structure sizes</returns>
+      public static CvStructSizes GetCvStructSizes()
+      {
+         CvStructSizes sizes = new CvStructSizes();
+         cveGetCvStructSizes(ref sizes);
+         return sizes;
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveGetCvStructSizes(ref CvStructSizes sizes);
 
       /*
       public static void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, MCvScalar color)

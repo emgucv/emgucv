@@ -406,6 +406,24 @@ void cveKAZEDetectorRelease(cv::KAZE** detector)
 }
 
 
+//AKAZEDetector
+cv::AKAZE* cveAKAZEDetectorCreate(
+  int descriptorType, int descriptorSize, int descriptorChannels,
+  float threshold, int octaves, int sublevels, int diffusivity,
+  cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+{
+   cv::AKAZE* akaze = new cv::AKAZE(descriptorType, descriptorSize, descriptorChannels, threshold, octaves, sublevels, diffusivity);
+   *featureDetector = static_cast<cv::FeatureDetector*>(akaze);
+   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(akaze);
+   return akaze;
+}
+void cveAKAZEDetectorRelease(cv::AKAZE** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
+
+
 //Algorithm
 cv::Algorithm* cveAlgorithmFromFeatureDetector(cv::FeatureDetector* detector)
 {

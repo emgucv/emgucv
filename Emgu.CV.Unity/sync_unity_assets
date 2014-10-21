@@ -17,7 +17,7 @@ cp -r Assets/Emgu.CV/Emgu.CV/Reflection/*.cs ../Emgu.CV/Reflection
 
 cp -r Assets/Emgu.CV/Emgu.CV/PointAndLine/*.cs ../Emgu.CV/PointAndLine 
 cp -r Assets/Emgu.CV/Emgu.CV/Shape/*.cs ../Emgu.CV/Shape 
-cp -r Assets/Emgu.CV/Emgu.CV/Tiff/*.cs ../Emgu.CV/Tiff 
+#cp -r Assets/Emgu.CV/Emgu.CV/Tiff/*.cs ../Emgu.CV/Tiff 
 cp -r Assets/Emgu.CV/Emgu.CV/Util/*.cs ../Emgu.CV/Util 
 cp -r Assets/Emgu.CV/Emgu.CV/VideoSurveillance/*.cs ../Emgu.CV/VideoSurveillance 
 

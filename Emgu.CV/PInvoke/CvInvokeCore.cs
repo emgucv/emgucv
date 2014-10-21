@@ -1037,10 +1037,14 @@ namespace Emgu.CV
       /// <summary>
       /// Returns the minimum number N that is greater to equal to size0, such that DFT of a vector of size N can be computed fast. In the current implementation N=2^p x 3^q x 5^r for some p, q, r. 
       /// </summary>
-      /// <param name="size0">Vector size</param>
+      /// <param name="vecsize">Vector size</param>
       /// <returns>The minimum number N that is greater to equal to size0, such that DFT of a vector of size N can be computed fast. In the current implementation N=2^p x 3^q x 5^r for some p, q, r. </returns>
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvGetOptimalDFTSize")]
-      public static extern int GetOptimalDFTSize(int size0);
+      public static int GetOptimalDFTSize(int vecsize)
+      {
+         return cveGetOptimalDFTSize(vecsize);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cveGetOptimalDFTSize(int vecsize);
 
       /// <summary>
       /// Performs per-element multiplication of the two CCS-packed or complex matrices that are results of real or complex Fourier transform. 
@@ -1500,6 +1504,7 @@ namespace Emgu.CV
       public static extern void cvReleaseMemStorage(ref IntPtr storage);
       #endregion
 
+      /*
       /// <summary>
       /// Loads object from file. It provides a simple interface to cvRead. After object is loaded, the file storage is closed and all the temporary buffers are deleted. Thus, to load a dynamic structure, such as sequence, contour or graph, one should pass a valid destination memory storage to the function.
       /// </summary>
@@ -1548,7 +1553,7 @@ namespace Emgu.CV
 
             return _cvLoad(fileName, memstorage, name, realName);
          }
-      }
+      }*/
 
       /// <summary>
       /// Creates a sequence that represents the specified slice of the input sequence. The new sequence either shares the elements with the original sequence or has own copy of the elements. So if one needs to process a part of sequence but the processing function does not have a slice parameter, the required sub-sequence may be extracted using this function.
@@ -3203,8 +3208,12 @@ namespace Emgu.CV
       /// <summary>
       /// Finishes OpenCL queue.
       /// </summary>
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveOclFinish")]
-      public extern static void OclFinish();
+      public static void OclFinish()
+      {
+         cveOclFinish();
+      }
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void cveOclFinish();
 
       /// <summary>
       /// Get the OpenCL platform summary as a string

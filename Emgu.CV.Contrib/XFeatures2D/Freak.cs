@@ -65,7 +65,7 @@ namespace Emgu.CV.XFeatures2D
       {
          get
          {
-            return CvInvoke.AlgorithmPtrFromDescriptorExtractorPtr(((IDescriptorExtractor)this).DescriptorExtratorPtr);
+            return CvInvoke.AlgorithmPtrFromDescriptorExtractor((IDescriptorExtractor)this);
          }
       }
 

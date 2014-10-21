@@ -55,7 +55,7 @@ namespace Emgu.CV.Features2D
       {
          get
          {
-            return CvInvoke.cveAlgorithmFromFeatureDetector(((IFeatureDetector)this).FeatureDetectorPtr);
+            return CvInvoke.AlgorithmPtrFromFeatureDetector((IFeatureDetector)this);
          }
       }
 

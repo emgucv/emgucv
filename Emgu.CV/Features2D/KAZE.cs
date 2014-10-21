@@ -44,7 +44,7 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// Create KAZE using the specific values
       /// </summary>
-      public KAZE(bool extended, bool upright, float threshold, int octaves, int sublevels, Diffusivity diffusivity)
+      public KAZE(bool extended, bool upright, float threshold = 0.001f, int octaves = 4, int sublevels = 4, Diffusivity diffusivity = Diffusivity.PmG2)
       {
          _ptr = CvInvoke.cveKAZEDetectorCreate(extended, upright, threshold, octaves, sublevels, diffusivity,
             ref _featureDetectorPtr, ref _descriptorExtractorPtr);

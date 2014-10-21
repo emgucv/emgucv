@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
@@ -28,7 +29,12 @@ namespace Emgu.CV
 {
    public partial class CvInvoke
    {
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveAlgorithmFromDescriptorExtractor")]
-      public extern static IntPtr AlgorithmPtrFromDescriptorExtractorPtr(IntPtr extractor);
+      public static IntPtr AlgorithmPtrFromDescriptorExtractor(IDescriptorExtractor extractor)
+      {
+         return cveAlgorithmFromDescriptorExtractor(extractor.DescriptorExtratorPtr);
+      }
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static IntPtr cveAlgorithmFromDescriptorExtractor(IntPtr extractor);
    }
 }

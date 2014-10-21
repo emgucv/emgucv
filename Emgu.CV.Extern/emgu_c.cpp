@@ -6,7 +6,7 @@
 
 #include "emgu_c.h"
 
-void getCvStructSizes(emgu::cvStructSizes* sizes)
+void cveGetCvStructSizes(emgu::cvStructSizes* sizes)
 {
    sizes->CvPoint = sizeof(CvPoint);
    sizes->CvPoint2D32f = sizeof(CvPoint2D32f);
