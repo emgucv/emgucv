@@ -1,0 +1,11 @@
+cd ../../bin
+rm *.dylib
+cd ..
+make
+cd platforms/osx
+rm -rf emgucv.bundle
+mkdir emgucv.bundle
+mkdir emgucv.bundle/Contents
+mkdir emgucv.bundle/Contents/libs
+./dylibbundler -od -b -x ../../bin/libcvextern.dylib -d emgucv.bundle/Contents/libs
+cp Info.plist emgucv.bundle/Contents/
