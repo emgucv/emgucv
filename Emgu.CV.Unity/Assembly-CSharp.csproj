@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_5_2;UNITY_4_5;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_5_4;UNITY_4_5;UNITY_IPHONE;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;UNITY_IPHONE_API;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_GAMECENTER;UNITY_IOS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_OSX;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -39,84 +39,42 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\CameraTexture.cs" />
      <Compile Include="Assets\ChangeTexture.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BackgroundSubtractorGMG.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BackgroundSubtractorMOG.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BriefDescriptorExtractor.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\CudaSURFDetector.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BgSegm\BackgroundSubtractorGMG.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BgSegm\BackgroundSubtractorMOG.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\CudaSoftCascadeDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\ERFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\FaceRecognizer.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\Freak.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\SIFTDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\SURFDetector.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\Face\FaceRecognizer.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\SoftCascadeDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\StarDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\VectorOfERStat.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaBackgroundSubtractorFGD.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaBackgroundSubtractorGMG.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaBackgroundSubtractorMOG.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaBackgroundSubtractorMOG2.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaBoxMaxFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaBoxMinFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaBroxOpticalFlow.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaBruteForceMatcher.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaCannyEdgeDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaCascadeClassifier.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaClahe.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaCornernessCriteria.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaDeviceInfo.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaDisparityBilateralFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaFASTDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaFarnebackOpticalFlow.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaGaussianFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaGoodFeaturesToTrackDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaHOGDescriptor.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaHarrisCorner.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaHoughCirclesDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaHoughLinesDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaHoughSegmentDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaImage.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaInvoke.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaLaplacianFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaLinearFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaLookUpTable.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaMorphologyFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaORBDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaOpticalFlowDualTvl1.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaPyrLKOpticalFlow.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaSobelFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaStereoBM.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaStereoConstantSpaceBP.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaTemplateMatching.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\CudaVibe.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\GpuMat.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\Stream.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\TargetArchs.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Cuda\VectorOfGpuMat.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\Text\ERFilter.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\Text\VectorOfERStat.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\BriefDescriptorExtractor.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\CudaSURFDetector.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\Freak.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\SIFTDetector.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\SURFDetector.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\StarDetector.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\ANN_MLP.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\Boost.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvDTreeNode.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvDTreeSplit.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvEMParams.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvGBTreesParams.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvParamGrid.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\DTree.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\EM.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\GBTrees.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\KNearest.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\MlEnum.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\MlInvoke.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\NormalBayesClassifier.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvDTreeNode.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvDTreeSplit.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvEMParams.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvGBTreesParams.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvParamGrid.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\MlEnum.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\MlInvoke.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\RTrees.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\SVM.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\StatModel.cs" />
@@ -164,6 +122,7 @@
      <Compile Include="Assets\Emgu.CV\Emgu.CV\DenseOpticalFlow.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\EigenObjectRecognizer.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\FeatureTree.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV\Features2D\AKAZE.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\Features2D\BFMatcher.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\Features2D\BOWImgDescriptorExtractor.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\Features2D\BOWKMeansTrainer.cs" />
@@ -245,7 +204,6 @@
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\CvType\MCvConvexityDefect.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\CvType\MCvFGDStatModelParams.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\CvType\MCvGaussBGStatModelParams.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\CvType\MCvHuMoments.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\CvType\MCvKalman.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\CvType\MCvMat.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\CvType\MCvMatND.cs" />
@@ -300,8 +258,6 @@
      <Compile Include="Assets\Emgu.CV\Emgu.CV\StereoMatcherExtensions.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\StereoSGBM.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\Subdiv2D.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV\Tiff\TiffWriter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV\Tiff\TileTiffWriter.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\TimedImage.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\UMat.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\Util\CvException.cs" />
