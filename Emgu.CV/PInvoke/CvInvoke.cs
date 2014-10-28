@@ -127,7 +127,29 @@ namespace Emgu.CV
                   altLoadDirectory = Path.Combine(altLoadDirectory, subfolder);
 
                if (!Directory.Exists(altLoadDirectory))
-                  return false;
+               {
+                  if (directory.Parent != null && directory.Parent.Parent != null)
+                  {
+                     String unityAltFolder =
+                        Path.Combine(
+                           Path.Combine(Path.Combine(directory.Parent.Parent.FullName, "Assets"), "Plugins"),
+                           subfolder);
+                     
+                     if (Directory.Exists(unityAltFolder))
+                        loadDirectory = unityAltFolder;
+                     else
+                     {
+                        Debug.WriteLine("No suitable directory found to load unmanaged modules");
+                        return false;
+                     }
+                     
+                  }
+                  else
+                  {
+                     Debug.WriteLine("No suitable directory found to load unmanaged modules");
+                     return false;
+                  }
+               }
                else
                   loadDirectory = altLoadDirectory;
             }
@@ -136,6 +158,8 @@ namespace Emgu.CV
          String oldDir = Environment.CurrentDirectory;
          Environment.CurrentDirectory = loadDirectory;
 #endif
+
+         System.Diagnostics.Debug.WriteLine(String.Format("Loading open cv binary from {0}", loadDirectory));
          bool success = true;
 
          string prefix = string.Empty;
@@ -166,7 +190,11 @@ namespace Emgu.CV
                success = false;
             }
 #else
-            success &= (File.Exists(fullPath) && !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath)));
+            bool fileExist = File.Exists(fullPath);
+            System.Diagnostics.Debug.WriteIf(!fileExist, String.Format("File {0} do not exist.", fullPath));
+            bool fileExistAndLoaded = fileExist && !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath));
+            System.Diagnostics.Debug.WriteIf(fileExist && (!fileExistAndLoaded) , String.Format("File {0} cannot be loaded.", fullPath));
+            success &= fileExistAndLoaded;
 #endif
          }
 

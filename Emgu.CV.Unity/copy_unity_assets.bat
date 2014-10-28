@@ -75,7 +75,7 @@ cd Plugins
 mkdir Android
 cd Android
 mkdir libs
-xcopy ..\..\..\..\libs libs\ /s /e
+REM xcopy ..\..\..\..\libs libs\ /s /e
 cd ..
 cd ..
 cd ..

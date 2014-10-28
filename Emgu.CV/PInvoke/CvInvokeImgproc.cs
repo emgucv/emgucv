@@ -1331,7 +1331,7 @@ namespace Emgu.CV
          IntPtr scanner,
          IntPtr newContour);*/
 
-#if !( IOS || ANDROID || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ))
+#if !( IOS || ANDROID || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE))
       /// <summary>
       /// Convert raw data to bitmap
       /// </summary>
@@ -1488,12 +1488,13 @@ namespace Emgu.CV
                   CvInvoke.CvtColor(tmp, dest, CvToolbox.GetColorCvtCode(typeof(Bgr), destColor));
                }
             }
-            catch
+            catch (Exception excpt)
             {
                throw new NotSupportedException(String.Format(
-                  "Convertion from {0} to {1} is not supported by OpenCV",
+                  "There is an error converting {0} to {1}: {2}",
                   srcColor.ToString(),
-                  destColor.ToString()));
+                  destColor.ToString(), 
+              excpt.Message), excpt);
             }
          }
       }

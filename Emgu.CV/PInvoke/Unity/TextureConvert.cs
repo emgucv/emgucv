@@ -36,13 +36,23 @@ namespace Emgu.CV
             }
             handle.Free();
          }
-         catch (Exception)
+         catch (Exception excpt)
          {
-            byte[] jpgBytes = texture.EncodeToJPG();
-            using (Mat tmp = new Mat())
+            if (texture.format == TextureFormat.ARGB32 ||
+                texture.format == TextureFormat.RGBA32 ||
+                texture.format == TextureFormat.RGB24 ||
+                texture.format == TextureFormat.Alpha8)
             {
-               CvInvoke.Imdecode(jpgBytes, LoadImageType.AnyColor, tmp);
-               result.ConvertFrom(tmp);
+               byte[] jpgBytes = texture.EncodeToJPG();
+               using (Mat tmp = new Mat())
+               {
+                  CvInvoke.Imdecode(jpgBytes, LoadImageType.AnyColor, tmp);
+                  result.ConvertFrom(tmp);
+               }
+            }
+            else
+            {
+               throw new Exception(String.Format("Texture format of {0} cannot be converted to Image<,> type", texture.format), excpt );
             }
          }
          if (correctForVerticleFlip)
