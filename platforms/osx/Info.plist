@@ -9,13 +9,15 @@
   <key>CFBundleName</key>
   <string>EmguCV</string>
   <key>CFBundleIconFile</key>
-  <string>foo.icns</string>
+  <string>icons.icns</string>
   <key>CFBundleShortVersionString</key>
   <string>0.01</string>
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
   <key>CFBundlePackageType</key>
-  <string>APPL</string>
+  <string>BNDL</string>
+  <key>CFBundleSignature</key>
+  <string>????</string>
   <key>IFMajorVersion</key>
   <integer>0</integer>
   <key>IFMinorVersion</key>

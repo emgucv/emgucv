@@ -9,7 +9,13 @@ namespace Emgu.CV
       /// <summary>
       /// The file name of the cvextern library
       /// </summary>
+#if UNITY_EDITOR_OSX
+      public const string ExternLibrary = "emgucv.bundle/Contents/MacOS/libcvextern.dylib";
+#elif UNITY_STANDALONE_OSX
+      public const string ExternLibrary = "@executable_path/../Plugins/emgucv.bundle/Contents/MacOS/libcvextern.dylib";
+#else
       public const string ExternLibrary = "${CVEXTERN_OUTPUT_NAME}";
+#endif
 	  
 	  /// <summary>
       /// The file name of the cvextern library

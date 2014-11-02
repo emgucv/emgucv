@@ -128,7 +128,8 @@ namespace Emgu.CV
 
                if (!Directory.Exists(altLoadDirectory))
                {
-                  if (directory.Parent != null && directory.Parent.Parent != null)
+#if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
+				  if (directory.Parent != null && directory.Parent.Parent != null)
                   {
                      String unityAltFolder =
                         Path.Combine(
@@ -145,6 +146,28 @@ namespace Emgu.CV
                      
                   }
                   else
+#elif (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX)
+							if (directory.Parent != null && directory.Parent.Parent != null)
+						{
+							String unityAltFolder =
+								Path.Combine(Path.Combine(Path.Combine(
+									Path.Combine(Path.Combine(directory.Parent.Parent.FullName, "Assets"), "Plugins"),
+									"emgucv.bundle"), "Contents"), "MacOS");
+							
+							if (Directory.Exists(unityAltFolder))
+							{
+								loadDirectory = unityAltFolder;
+								Console.Write(String.Format("Unity load folder {0}", loadDirectory));
+							}
+							else
+							{
+								Console.WriteLine("No suitable directory found to load unmanaged modules");
+								return false;
+							}
+							
+						}
+						else
+#endif
                   {
                      Debug.WriteLine("No suitable directory found to load unmanaged modules");
                      return false;

@@ -18,12 +18,12 @@ IF (NOT ANDROID)
   SET(CSC_PREFERRED_VERSION "4.0")
   IF((NOT NETFX_CORE) AND MSVC) 
     #SET CSC 3.5 as the prefered compiler for EMGU CV
-	SET(CSC_TARGET_FRAMEWORK "3.5" CACHE STRING "C#  target framework")
+    SET(CSC_TARGET_FRAMEWORK "3.5" CACHE STRING "C#  target framework")
   ELSE()
     #SET CSC 4.5 (in the .Net framework 4.0 folder) as the prefered compiler for EMGU CV
-	SET(CSC_TARGET_FRAMEWORK "" CACHE STRING "C# target framework")
+    SET(CSC_TARGET_FRAMEWORK "" CACHE STRING "C# target framework")
   ENDIF()
-
+  
   FIND_PACKAGE(CSharp REQUIRED)
   INCLUDE (CSharpMacros)
 ENDIF()
@@ -343,29 +343,41 @@ FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
 	     Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library,")
   ENDIF()
   
-  IF(WIN32 AND NOT ANDROID)
+  IF((WIN32 AND NOT ANDROID) OR APPLE)
     SET(ANDROID_ENTRYPOINT "opencv_${OPENCV_MODULE_NAME}")
-	SET(IOS_ENTRYPOINT "__Internal")
-	
-	IF("${OPENCV_${OPENCV_MODULE_NAME_UPPER}_OUTPUT_NAME}" STREQUAL "")
-	   SET(ANDROID_ENTRYPOINT "")
-	   SET(IOS_ENTRYPOINT "")
-	ENDIF()
+    SET(OSX_ENTRYPOINT "opencv_${OPENCV_MODULE_NAME}.${OPENCV_VERSION_MAJOR}.${OPENCV_VERSION_MINOR}.${OPENCV_VERSION_PATCH}")
+    SET(OSX_UNITY_STANDALONE_ENTRYPOINT "@executable_path/../Plugins/emgucv.bundle/Contents/MacOS/lib${OSX_ENTRYPOINT}.dylib")
+#    SET(OSX_UNITY_EDITOR_ENTRYPOINT "@loader_path/../../Assets/Plugins/emgucv.bundle/Contents/MacOS/lib${OSX_ENTRYPOINT}.dylib")
+    SET(OSX_UNITY_EDITOR_ENTRYPOINT "emgucv.bundle/Contents/MacOS/lib${OSX_ENTRYPOINT}.dylib")
+    SET(WINDOWS_ENTRYPOINT "opencv_${OPENCV_MODULE_NAME}${OPENCV_VERSION_MAJOR}${OPENCV_VERSION_MINOR}${OPENCV_VERSION_PATCH}")
+    SET(IOS_ENTRYPOINT "__Internal")
+    
+    IF("${OPENCV_${OPENCV_MODULE_NAME_UPPER}_OUTPUT_NAME}" STREQUAL "")
+      SET(ANDROID_ENTRYPOINT "")
+      SET(OSX_ENTRYPOINT "")
+      SET(OSX_UNITY_ENTRYPOINT "emgucv")
+      SET(WINDOWS_ENTRYPOINT "")
+      SET(IOS_ENTRYPOINT "")
+    ENDIF()
 	
     SET(ENTRYPOINT_CS_STRING "${ENTRYPOINT_CS_STRING} 
       /// <summary>
       /// The file name of the ${OPENCV_MODULE_NAME} library
       /// </summary>
-	  #if UNITY_EDITOR_WIN
-	  public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${OPENCV_${OPENCV_MODULE_NAME_UPPER}_OUTPUT_NAME}\";
-	  #elif IOS || UNITY_IOS
-	  public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${IOS_ENTRYPOINT}\";
-	  #elif ANDROID || UNITY_ANDROID
-	  public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${ANDROID_ENTRYPOINT}\";
-	  #else
-	  public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${OPENCV_${OPENCV_MODULE_NAME_UPPER}_OUTPUT_NAME}\";
-	  #endif
-	  ")
+      #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+      public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${WINDOWS_ENTRYPOINT}\";
+      #elif UNITY_EDITOR_OSX
+      public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${OSX_UNITY_EDITOR_ENTRYPOINT}\";   
+      #elif UNITY_STANDALONE_OSX
+      public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${OSX_UNITY_STANDALONE_ENTRYPOINT}\";   
+      #elif IOS || UNITY_IOS
+      public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${IOS_ENTRYPOINT}\";
+      #elif ANDROID || UNITY_ANDROID
+      public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${ANDROID_ENTRYPOINT}\";
+      #else
+      public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${OPENCV_${OPENCV_MODULE_NAME_UPPER}_OUTPUT_NAME}\";
+      #endif
+")
   ELSEIF(IOS)
     SET(ENTRYPOINT_CS_STRING "${ENTRYPOINT_CS_STRING} 
       /// <summary>
@@ -1030,6 +1042,8 @@ set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
 ELSEIF (APPLE)
   SET(CPACK_GENERATOR ZIP)
   SET(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
+
+  SET(CPACK_BUNDLE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/platforms/osx/icons.icns")
 
 # ----------------------------------------------------------------------------
 #  The source files
