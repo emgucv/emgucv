@@ -36,7 +36,9 @@ cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 
 cp -r ../Emgu.CV.ML/*.cs Assets/Emgu.CV/Emgu.CV.ML/
 mkdir Assets/Emgu.CV/Emgu.CV.ML/PInvoke 
-cp -r ../Emgu.CV.ML/PInvoke Assets/Emgu.CV/Emgu.CV.ML/ 
+cp -r ../Emgu.CV.ML/PInvoke/*.cs Assets/Emgu.CV/Emgu.CV.ML/PInvoke/
+mkdir Assets/Emgu.CV/Emgu.CV.ML/PInvoke/CvType 
+cp -r ../Emgu.CV.ML/PInvoke/CvType/*.cs Assets/Emgu.CV/Emgu.CV.ML/PInvoke/CvType/
 
 #cp -r ../Emgu.CV.Cuda/*.cs Assets/Emgu.CV/Emgu.CV.Cuda/
 #mkdir Assets/Emgu.CV/Emgu.CV.Cuda/Bgsegm
@@ -69,11 +71,18 @@ cp -r ../Emgu.CV.Stitching/*.cs Assets/Emgu.CV/Emgu.CV.Stitching/
 cp -r ../Emgu.CV.Shape/*.cs Assets/Emgu.CV/Emgu.CV.Shape/
 
 cd Assets
-mkdir Plugins
+mkdir -p Plugins
 cd Plugins
-mkdir iOS
+mkdir -p iOS
 cd iOS
-cp ../../../../Emgu.CV/PInvoke/iOS/libemgucv.a ./
+if test -f "../../../../Emgu.CV/PInvoke/iOS/libemgucv.a"
+then
+  cp ../../../../Emgu.CV/PInvoke/iOS/libemgucv.a ./
+fi
 cd ..
+if test -d "../../../platforms/osx/emgucv.bundle"
+then
+  cp -rf ../../../platforms/osx/emgucv.bundle ./
+fi
 cd ..
 cd ..
