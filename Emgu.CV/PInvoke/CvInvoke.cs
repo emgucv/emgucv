@@ -68,7 +68,11 @@ namespace Emgu.CV
          {
             if (IntPtr.Size == 8)
             {  //64bit process
+#if UNITY_METRO
+               subfolder = "x86_64";
+#else
                subfolder = "x64";
+#endif
             }
             else
             {
@@ -77,7 +81,12 @@ namespace Emgu.CV
          }
 
          Windows.Storage.StorageFolder installFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+         
+#if UNITY_METRO
          loadDirectory = Path.Combine(installFolder.Path, subfolder);
+#else
+         loadDirectory = Path.Combine(installFolder.Path, subfolder);
+#endif
 
          var t = System.Threading.Tasks.Task.Run(async () => 
          {
@@ -96,10 +105,19 @@ namespace Emgu.CV
          if (loadDirectory == null)
          {
             String subfolder = String.Empty;
+#if UNITY_EDITOR_WIN
+            if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+            {
+               subfolder = IntPtr.Size == 8 ? "x86_64" : "x86";
+            }
+#elif UNITY_STANDALONE_WIN
+#else
             if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
             {
                subfolder = IntPtr.Size == 8 ? "x64" : "x86";
-            }  
+            }
+#endif
+
             /*
             else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
             {
@@ -114,7 +132,21 @@ namespace Emgu.CV
             
             if (!String.IsNullOrEmpty(subfolder))
             loadDirectory = Path.Combine(loadDirectory, subfolder);
-
+            
+#if (UNITY_STANDALONE_WIN && !UNITY_EDITOR_WIN)
+            if (directory.Parent != null)
+            {
+               String unityAltFolder = Path.Combine(directory.Parent.FullName, "Plugins");
+              
+               if (Directory.Exists(unityAltFolder))
+                  loadDirectory = unityAltFolder;
+               else
+               {
+                  Debug.WriteLine("No suitable directory found to load unmanaged modules");
+                  return false;
+               }
+            }
+#else
             if (!Directory.Exists(loadDirectory))
             {
                //try to find an alternative loadDirectory path
@@ -128,8 +160,8 @@ namespace Emgu.CV
 
                if (!Directory.Exists(altLoadDirectory))
                {
-#if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
-				  if (directory.Parent != null && directory.Parent.Parent != null)
+#if UNITY_EDITOR_WIN
+              if (directory.Parent != null && directory.Parent.Parent != null)
                   {
                      String unityAltFolder =
                         Path.Combine(
@@ -143,32 +175,30 @@ namespace Emgu.CV
                         Debug.WriteLine("No suitable directory found to load unmanaged modules");
                         return false;
                      }
-                     
+                    
                   }
                   else
 #elif (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX)
-							if (directory.Parent != null && directory.Parent.Parent != null)
-						{
-							String unityAltFolder =
-								Path.Combine(Path.Combine(Path.Combine(
-									Path.Combine(Path.Combine(directory.Parent.Parent.FullName, "Assets"), "Plugins"),
-									"emgucv.bundle"), "Contents"), "MacOS");
-							
-							if (Directory.Exists(unityAltFolder))
-							{
-								loadDirectory = unityAltFolder;
-								Console.Write(String.Format("Unity load folder {0}", loadDirectory));
-							}
-							else
-							{
-								Console.WriteLine("No suitable directory found to load unmanaged modules");
-								return false;
-							}
-							
-						}
-						else
-#endif
+                     if (directory.Parent != null && directory.Parent.Parent != null)
                   {
+                     String unityAltFolder =
+                        Path.Combine(Path.Combine(Path.Combine(
+                           Path.Combine(Path.Combine(directory.Parent.Parent.FullName, "Assets"), "Plugins"),
+                           "emgucv.bundle"), "Contents"), "MacOS");
+                     
+                     if (Directory.Exists(unityAltFolder))
+                     {
+                        loadDirectory = unityAltFolder;
+                     }
+                     else
+                     {
+                        return false;
+                     }
+                     
+                  }
+                  else
+#endif
+              {
                      Debug.WriteLine("No suitable directory found to load unmanaged modules");
                      return false;
                   }
@@ -176,6 +206,7 @@ namespace Emgu.CV
                else
                   loadDirectory = altLoadDirectory;
             }
+#endif
          }
          
          String oldDir = Environment.CurrentDirectory;
@@ -214,9 +245,11 @@ namespace Emgu.CV
             }
 #else
             bool fileExist = File.Exists(fullPath);
-            System.Diagnostics.Debug.WriteIf(!fileExist, String.Format("File {0} do not exist.", fullPath));
+            if (!fileExist)
+               System.Diagnostics.Debug.WriteLine(String.Format("File {0} do not exist.", fullPath));
             bool fileExistAndLoaded = fileExist && !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath));
-            System.Diagnostics.Debug.WriteIf(fileExist && (!fileExistAndLoaded) , String.Format("File {0} cannot be loaded.", fullPath));
+            if (fileExist && (!fileExistAndLoaded))
+               System.Diagnostics.Debug.WriteLine(String.Format("File {0} cannot be loaded.", fullPath));
             success &= fileExistAndLoaded;
 #endif
          }
@@ -273,7 +306,7 @@ namespace Emgu.CV
                Debug.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
             }
          }
-#elif IOS || UNITY_IOS
+#elif IOS || UNITY_IPHONE
 #else
          if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {
@@ -285,7 +318,7 @@ namespace Emgu.CV
          }
 #endif
 
-#if !UNITY_IOS
+#if !UNITY_IPHONE
          //Use the custom error handler
          //cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
 #endif

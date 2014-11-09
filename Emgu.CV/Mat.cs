@@ -18,7 +18,7 @@ using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
 using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
-#elif NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE)
+#elif NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
 #else
 using System.Drawing.Imaging;
 #endif
@@ -608,7 +608,7 @@ namespace Emgu.CV
             }
          }
       }
-#elif !( NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE) )
+#elif !( NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
       /// such that the image data is <b>shared</b> with Bitmap. 
@@ -713,7 +713,7 @@ namespace Emgu.CV
 
          if (e != null)
          {
-#if IOS || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE)
+#if IOS || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
             throw e;
 #elif ANDROID
             FileInfo fileInfo = new FileInfo(fileName);

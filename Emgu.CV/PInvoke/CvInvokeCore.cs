@@ -168,7 +168,7 @@ namespace Emgu.CV
           IntPtr userdata,
           IntPtr prevUserdata);
 
-#if !UNITY_IOS
+#if !UNITY_IPHONE
       /// <summary>
       /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
       /// </summary>

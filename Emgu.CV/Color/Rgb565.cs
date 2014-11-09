@@ -5,10 +5,10 @@
 using System;
 using Emgu.CV;
 
-#if NETFX_CORE
-using Windows.UI;
-#elif ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE)
+#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
 using UnityEngine;
+#elif NETFX_CORE
+using Windows.UI;
 #else
 using System.Drawing;
 #endif
@@ -43,7 +43,7 @@ namespace Emgu.CV.Structure
       /// </summary>
       /// <param name="winColor">System.Drawing.Color</param>
       public Bgr565(Color winColor)
-#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE)
+#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
          : this(winColor.r * 255.0, winColor.g * 255.0, winColor.b * 255.0)
 #else
          : this(winColor.R, winColor.G, winColor.B)

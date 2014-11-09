@@ -2,7 +2,9 @@
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
- using System;
+#if !NETFX_CORE
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -363,3 +365,5 @@ namespace Emgu.CV.OCR
       };
    }
 }
+
+#endif

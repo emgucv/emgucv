@@ -63,10 +63,10 @@ public class FaceDetection : MonoBehaviour
          //updateTextureWithString(String.Format("{0} face found on image of {1} x {2}", faces.Length, img.Width, img.Height));
       }
 
-      Texture2D texture = TextureConvert.ImageToTexture2D(img);
+      Texture2D texture = TextureConvert.ImageToTexture2D(img, FlipType.Vertical);
 
-      //this.guiTexture.texture = texture;
-      
+      this.guiTexture.texture = texture;
+      this.guiTexture.pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);
    }
 
    private void updateTextureWithString(String text)

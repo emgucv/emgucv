@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
 
-public class ChangeTexture : MonoBehaviour
+public class HelloTexture : MonoBehaviour
 {
 
    // Use this for initialization
@@ -32,15 +32,17 @@ public class ChangeTexture : MonoBehaviour
          }
       }
 
-      CvInvoke.PutText(img, "Emgu CV for Unity Android", new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
+      CvInvoke.PutText(img, String.Format("Emgu CV for Unity {0}", Emgu.Util.Platform.OperationSystem), new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
                        1.0, new MCvScalar(0, 255, 0));
 
       CvInvoke.PutText(img, String.Format("OpenCL: {0}",openclStr), new System.Drawing.Point(10, 120), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
                        1.0, new MCvScalar(0, 0, 255));
 
-      Texture2D texture = TextureConvert.ImageToTexture2D(img);
+      Texture2D texture = TextureConvert.ImageToTexture2D(img, FlipType.Vertical);
 
       this.guiTexture.texture = texture;
+      this.guiTexture.pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);
+      
    }
 
    // Update is called once per frame

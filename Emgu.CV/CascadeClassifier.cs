@@ -35,7 +35,7 @@ namespace Emgu.CV
 #if !NETFX_CORE
          FileInfo file = new FileInfo(fileName);
          if (!file.Exists)
-#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE)
+#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
             throw new FileNotFoundException("File '{0}' not found", file.FullName);
 #else
             throw new FileNotFoundException(Properties.StringTable.FileNotFound, file.FullName);
@@ -46,7 +46,7 @@ namespace Emgu.CV
 
          if (_ptr == IntPtr.Zero)
          {
-#if NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE)
+#if NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
             throw new NullReferenceException(String.Format("Fail to create HaarCascade object: {0}", fileName));
 #else
             throw new NullReferenceException(String.Format(Properties.StringTable.FailToCreateHaarCascade, file.FullName));
@@ -64,7 +64,7 @@ namespace Emgu.CV
       /// <param name="scaleFactor">The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%</param>
       /// <param name="minNeighbors">Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure. Use 3 for default.</param>
       /// <param name="minSize">Minimum window size. Use Size.Empty for default, where it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
-      /// <param name="maxSize">Maxumum window size. Use Size.Empty for default, where the parameter will be ignored.</param>
+      /// <param name="maxSize">Maximum window size. Use Size.Empty for default, where the parameter will be ignored.</param>
       /// <returns>The objects detected, one array per channel</returns>
       public Rectangle[] DetectMultiScale(IInputArray image, double scaleFactor = 1.1, int minNeighbors = 3, Size minSize = new Size(), Size maxSize = new Size())
       {

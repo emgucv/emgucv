@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-#if !(IOS || UNITY_IOS || UNITY_STANDALONE_OSX || NETFX_CORE)
+#if !(IOS || UNITY_IPHONE || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
 using Emgu.CV.Cuda;
 #endif
 using Emgu.CV.Structure;
@@ -58,7 +58,7 @@ namespace Emgu.CV.Stitching
 
    internal static partial class StitchingInvoke
    {
-      #if !(IOS || UNITY_IOS || UNITY_STANDALONE_OSX || NETFX_CORE)
+      #if !(IOS || UNITY_IPHONE || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
       static StitchingInvoke()
       {
          //Dummy code to make sure the static constructor of GpuInvoke has been called

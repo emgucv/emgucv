@@ -20,10 +20,10 @@ namespace Emgu.Util
 
       static Platform()
       {
-#if IOS
+#if IOS || UNITY_IPHONE
          _os = OS.IOS;
          _runtime = ClrType.Mono;
-#elif ANDROID
+#elif ANDROID || UNITY_ANDROID
          _os = OS.Android;
          _runtime = ClrType.Mono;
 #elif NETFX_CORE

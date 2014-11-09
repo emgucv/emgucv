@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_5_4;UNITY_4_5;UNITY_IPHONE;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;UNITY_IPHONE_API;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_GAMECENTER;UNITY_IOS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_OSX;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_5_5;UNITY_4_5;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -39,42 +39,43 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\CameraTexture.cs" />
-     <Compile Include="Assets\ChangeTexture.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BgSegm\BackgroundSubtractorGMG.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BgSegm\BackgroundSubtractorMOG.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BackgroundSubtractorGMG.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BackgroundSubtractorMOG.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\BriefDescriptorExtractor.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\CudaSURFDetector.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\CudaSoftCascadeDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\Face\FaceRecognizer.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\ERFilter.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\FaceRecognizer.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\Freak.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\SIFTDetector.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\SURFDetector.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\SoftCascadeDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\Text\ERFilter.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\Text\VectorOfERStat.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\BriefDescriptorExtractor.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\CudaSURFDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\Freak.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\SIFTDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\SURFDetector.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D\StarDetector.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\StarDetector.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Contrib\VectorOfERStat.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Demo\CameraTexture.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Demo\FaceDetection.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.Demo\HelloTexture.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\ANN_MLP.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\Boost.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvDTreeNode.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvDTreeSplit.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvEMParams.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvGBTreesParams.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\CvType\MCvParamGrid.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\DTree.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\EM.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\GBTrees.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\KNearest.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\MlEnum.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\MlInvoke.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\NormalBayesClassifier.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvDTreeNode.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvDTreeSplit.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvEMParams.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvGBTreesParams.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\CvType\MCvParamGrid.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\MlEnum.cs" />
-     <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\PInvoke\MlInvoke.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\RTrees.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\SVM.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV.ML\StatModel.cs" />
@@ -236,6 +237,9 @@
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\System.Drawing\Size.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\System.Drawing\SizeF.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\Unity\TextureConvert.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\Windows.Store\Extensions.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\Windows.Store\ICloneable.cs" />
+     <Compile Include="Assets\Emgu.CV\Emgu.CV\PInvoke\Windows.Store\ImageWindowsStore.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PointAndLine\LineSegment2D.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PointAndLine\LineSegment2DF.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.CV\PointAndLine\LineSegment3DF.cs" />
@@ -323,8 +327,10 @@
      <Compile Include="Assets\Emgu.CV\Emgu.Util\Toolbox.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.Util\TypeEnum.cs" />
      <Compile Include="Assets\Emgu.CV\Emgu.Util\UnmanagedObject.cs" />
-     <Compile Include="Assets\FaceDetection.cs" />
-     <None Include="Assets\Resources\haarcascade_frontalface_alt2.xml" />
+     <None Include="Assets\Emgu.CV\opencv.license.txt" />
+     <None Include="Assets\Emgu.CV\tesseract.ocr.license.txt" />
+     <None Include="Assets\Emgu.CV\README.txt" />
+     <None Include="Assets\Emgu.CV\Emgu.CV.Demo\Resources\haarcascade_frontalface_alt2.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -370,7 +370,7 @@ FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
       public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${OSX_UNITY_EDITOR_ENTRYPOINT}\";   
       #elif UNITY_STANDALONE_OSX
       public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${OSX_UNITY_STANDALONE_ENTRYPOINT}\";   
-      #elif IOS || UNITY_IOS
+      #elif IOS || UNITY_IPHONE
       public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${IOS_ENTRYPOINT}\";
       #elif ANDROID || UNITY_ANDROID
       public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${ANDROID_ENTRYPOINT}\";

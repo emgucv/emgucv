@@ -72,12 +72,45 @@ namespace Emgu.CV.Test
          }
       }
 
-      public void GenerateLogo()
+      public void CreateUnityIcons()
       {
-         GenerateLogo(200, 258);
+         //128x128
+         Image<Bgra, Byte> imgSmall = GenerateLogo(128, 128);
+         
+         //200x258
+         Image<Bgra, Byte> imgMedium = GenerateLogo(200, 120).ConcateVertical(new Image<Bgra, byte>(200, 138));
+         
+
+
+         //860x389
+         int screenShotWidth = 400;
+         int rightPadding = 40;
+         Image<Bgra, Byte> screenShot =
+            new Image<Bgr, byte>(@"..\Emgu.CV.Unity\unityStoreIcons\unity_screenshot.png").Resize(screenShotWidth, 209, Inter.Linear,
+               true).Convert<Bgra, Byte>();
+         if (screenShot.Width < screenShotWidth)
+            screenShot = new Image<Bgra, byte>((screenShotWidth - screenShot.Width) / 2, screenShot.Height).ConcateHorizontal(screenShot);
+         Image<Bgra, Byte> imgLarge = 
+            new Image<Bgra, byte>(860 - (screenShotWidth + rightPadding), 389, new Bgra(255, 255, 255, 0)).ConcateHorizontal(
+            GenerateLogo(screenShotWidth, 389-screenShot.Height).ConcateVertical( screenShot)).ConcateHorizontal(
+            new Image<Bgra, byte>(rightPadding, 389, new Bgra(255, 255, 255, 0)));
+
+         imgSmall.Save(@"..\Emgu.CV.Unity\unityStoreIcons\EmguCVLogo_128x128.png");
+         imgMedium.Save(@"..\Emgu.CV.Unity\unityStoreIcons\EmguCVLogo_200x258.png");
+         imgLarge.Save(@"..\Emgu.CV.Unity\unityStoreIcons\EmguCVLogo_860x389.png");
+         //Image<Bgra, Byte> result = imgSmall.ConcateVertical(imgMedium).ConcateVertical(imgLarge);
+         //result.Draw(new LineSegment2D(new Point(0, imgSmall.Height), new Point(result.Width, imgSmall.Height) ), new Bgra(0, 0, 0, 255), 1  );
+         //result.Draw(new LineSegment2D(new Point(0, imgSmall.Height + imgMedium.Height), new Point(result.Width, imgSmall.Height + imgMedium.Height)), new Bgra(0, 0, 0, 255), 1);
+         //ImageViewer.Show(result);
       }
 
-      public void GenerateLogo(int width, int height = -1)
+      public void GenerateLogo()
+      {
+         Image<Bgra, Byte> logo = GenerateLogo(860, 389);
+         logo.Save("EmguCVLogo.png");
+      }
+
+      public Image<Bgra, byte> GenerateLogo(int width, int height = -1)
       {
          int heightShift = 0;
          int textHeight = (int)(width / 160.0 * 72.0);
@@ -105,8 +138,8 @@ namespace Emgu.CV.Test
          channels = new Image<Gray, byte>[] { channels[0], channels[1], channels[2], new Image<Gray, Byte>(channels[0].Width, channels[0].Height, new Gray(255.0)) };
          Image<Bgra, Byte> logoBgra = new Image<Bgra, byte>(channels);
          logoBgra.SetValue(new Bgra(0.0, 0.0, 0.0, 0.0), logoA);
-         logoBgra.Save("EmguCVLogo.gif");
-
+         //logoBgra.Save("EmguCVLogo.png");
+         return logoBgra;
          /*
          Image<Bgr, Byte> bg_header = new Image<Bgr, byte>(1, 92);
          for (int i = 0; i < 92; i++)

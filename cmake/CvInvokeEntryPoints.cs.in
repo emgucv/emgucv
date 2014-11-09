@@ -13,6 +13,8 @@ namespace Emgu.CV
       public const string ExternLibrary = "Assets/Plugins/emgucv.bundle/Contents/MacOS/libcvextern.dylib";
 #elif UNITY_STANDALONE_OSX
       public const string ExternLibrary = "@executable_path/../Plugins/emgucv.bundle/Contents/MacOS/libcvextern.dylib";
+#elif IOS || UNITY_IPHONE
+      public const string ExternLibrary = "__Internal";
 #else
       public const string ExternLibrary = "${CVEXTERN_OUTPUT_NAME}";
 #endif

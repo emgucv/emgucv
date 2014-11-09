@@ -4,10 +4,11 @@
 
 using System;
 using System.Collections.Generic;
-#if NETFX_CORE
-using Windows.UI;
-#elif ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE)
+
+#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
 using UnityEngine;
+#elif NETFX_CORE
+using Windows.UI;
 #else
 using System.Drawing;
 #endif
@@ -40,7 +41,7 @@ namespace Emgu.CV.Reflection
          Color[] res = new Color[color.Dimension];
          for (int i = 0; i < res.Length; i++)
             //res[i] = Color.FromArgb(255, 125, 125, 125);
-#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE)
+#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
             res[i] = Color.gray;
 #else
             res[i] = Color.Gray;

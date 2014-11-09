@@ -59,13 +59,13 @@ namespace Emgu.CV
          using (VectorOfPointF vpf = new VectorOfPointF(points))
          if (silent)
          {
-#if !UNITY_IOS
+#if !UNITY_IPHONE
             //ignore all errors
             IntPtr oldErrorCallback = CvInvoke.cvRedirectError(CvInvoke.CvErrorHandlerIgnoreError, IntPtr.Zero, IntPtr.Zero);
 #endif
             CvInvoke.cveSubdiv2DInsertMulti(_ptr, vpf);
             
-#if !UNITY_IOS
+#if !UNITY_IPHONE
             //reset the error handler 
             CvInvoke.cvRedirectError(oldErrorCallback, IntPtr.Zero, IntPtr.Zero);
 #endif

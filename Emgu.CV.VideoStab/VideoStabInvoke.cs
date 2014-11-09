@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV;
-#if !(IOS || UNITY_IOS || NETFX_CORE)
+#if !(IOS || UNITY_IPHONE || NETFX_CORE)
 using Emgu.CV.Cuda;
 #endif
 using Emgu.CV.Structure;
@@ -15,7 +15,7 @@ namespace Emgu.CV.VideoStab
 {
    internal static partial class VideoStabInvoke
    {
-#if !(IOS || UNITY_IOS || NETFX_CORE)
+#if !(IOS || UNITY_IPHONE || NETFX_CORE)
       static VideoStabInvoke()
       {
          //Dummy code to make sure the static constructor of GpuInvoke has been called

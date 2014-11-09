@@ -312,7 +312,7 @@ namespace Emgu.CV.Cuda
       {
          throw new NotImplementedException();
       }
-#elif !(NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE))
+#elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
       /// <summary>
       /// convert the current CudaImage to its equivalent Bitmap representation
       /// </summary>

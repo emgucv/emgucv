@@ -26,7 +26,7 @@ mkdir Assets/Emgu.CV/Emgu.CV/PInvoke
 cp -r ../Emgu.CV/PInvoke Assets/Emgu.CV/Emgu.CV 
 cp -r ../Emgu.CV/Reflection Assets/Emgu.CV/Emgu.CV/
 rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/iOS
-rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Windows.Store
+#rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Windows.Store
 rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Android
 cp -r ../Emgu.CV/PointAndLine Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Shape Assets/Emgu.CV/Emgu.CV/

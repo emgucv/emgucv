@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using Emgu.CV.CvEnum;
+using Emgu.CV.ML;
 using UnityEngine;
 using System;
 using System.Drawing;
@@ -17,7 +18,7 @@ namespace Emgu.CV
 {
    public static class TextureConvert
    {
-      public static Image<TColor, TDepth> Texture2dToImage<TColor, TDepth>(Texture2D texture, bool correctForVerticleFlip = true)
+      public static Image<TColor, TDepth> Texture2dToImage<TColor, TDepth>(Texture2D texture, Emgu.CV.CvEnum.FlipType flipType = FlipType.Vertical)
          where TColor : struct, IColor
          where TDepth : new()
       {
@@ -55,15 +56,12 @@ namespace Emgu.CV
                throw new Exception(String.Format("Texture format of {0} cannot be converted to Image<,> type", texture.format), excpt );
             }
          }
-         if (correctForVerticleFlip)
-            CvInvoke.Flip(result, result, Emgu.CV.CvEnum.FlipType.Vertical);
+         if (flipType != FlipType.None)
+            CvInvoke.Flip(result, result, flipType);
          return result;
-         
-         
-
       }
 
-      public static Texture2D ImageToTexture2D<TColor, TDepth>(Image<TColor, TDepth> image, bool correctForVerticleFlip = true)
+      public static Texture2D ImageToTexture2D<TColor, TDepth>(Image<TColor, TDepth> image, Emgu.CV.CvEnum.FlipType flipType = FlipType.Vertical)
          where TColor : struct, IColor
          where TDepth : new()
       {
@@ -77,8 +75,8 @@ namespace Emgu.CV
             using (Image<Rgb, byte> rgb = new Image<Rgb, byte>(size.Width, size.Height, size.Width * 3, dataHandle.AddrOfPinnedObject()))
             {
                rgb.ConvertFrom(image);
-               if (correctForVerticleFlip)
-                  CvInvoke.Flip(rgb, rgb, Emgu.CV.CvEnum.FlipType.Vertical);
+               if (flipType != FlipType.None)
+                  CvInvoke.Flip(rgb, rgb, flipType);
             }
             dataHandle.Free();
             texture.LoadRawTextureData(data);
@@ -93,8 +91,8 @@ namespace Emgu.CV
             using (Image<Rgba, byte> rgba = new Image<Rgba, byte>(size.Width, size.Height, size.Width * 4, dataHandle.AddrOfPinnedObject()))
             {
                rgba.ConvertFrom(image);
-               if (correctForVerticleFlip)
-                  CvInvoke.Flip(rgba, rgba, Emgu.CV.CvEnum.FlipType.Vertical);
+               if (flipType != FlipType.None)
+                  CvInvoke.Flip(rgba, rgba, flipType);
             }
             dataHandle.Free();
             texture.LoadRawTextureData(data);
@@ -111,9 +109,9 @@ namespace Emgu.CV
       /// 
       /// </summary>
       /// <param name="image">The input image, if 3 channel, we assume it is Bgr, if 4 channels, we assume it is Bgra</param>
-      /// <param name="correctForVerticleFlip"></param>
+      /// <param name="verticleFlip"></param>
       /// <returns></returns>
-      public static Texture2D ToTexture2D(IInputArray image, bool correctForVerticleFlip = true)
+      public static Texture2D ToTexture2D(IInputArray image, bool verticleFlip = true)
       {
          using (Mat m = image.GetInputArray().GetMat())
          {
@@ -129,7 +127,7 @@ namespace Emgu.CV
                      dataHandle.AddrOfPinnedObject()))
                {
                   rgb.ConvertFrom(m);
-                  if (correctForVerticleFlip)
+                  if (verticleFlip)
                      CvInvoke.Flip(rgb, rgb, Emgu.CV.CvEnum.FlipType.Vertical);
                }
                dataHandle.Free();
@@ -147,7 +145,7 @@ namespace Emgu.CV
                      dataHandle.AddrOfPinnedObject()))
                {
                   rgba.ConvertFrom(m);
-                  if (correctForVerticleFlip)
+                  if (verticleFlip)
                      CvInvoke.Flip(rgba, rgba, Emgu.CV.CvEnum.FlipType.Vertical);
                }
                dataHandle.Free();
