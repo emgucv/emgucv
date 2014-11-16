@@ -7,10 +7,12 @@
 #include "xfeatures2d_c.h"
 
 //StarDetector
-cv::xfeatures2d::StarDetector* CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize)
+cv::xfeatures2d::StarDetector* CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D)
 {
-   cv::xfeatures2d::StarDetector* detector = new cv::xfeatures2d::StarDetector(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
-   return detector;
+   cv::Ptr<cv::xfeatures2d::StarDetector> detectorPtr = cv::xfeatures2d::StarDetector::create(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
+   detectorPtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(detectorPtr.get());
+   return detectorPtr.get();
 }
 
 void CvStarDetectorRelease(cv::xfeatures2d::StarDetector** detector)
@@ -38,11 +40,12 @@ void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector
 }*/
 
 //FREAK
-cv::xfeatures2d::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::DescriptorExtractor** descriptorExtractor)
+cv::xfeatures2d::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor)
 {
-   cv::xfeatures2d::FREAK* freak = new cv::xfeatures2d::FREAK(orientationNormalized, scaleNormalized, patternScale, nOctaves);
-   *descriptorExtractor = (cv::DescriptorExtractor*) freak;
-   return freak;
+   cv::Ptr<cv::xfeatures2d::FREAK> freakPtr = cv::xfeatures2d::FREAK::create(orientationNormalized, scaleNormalized, patternScale, nOctaves);
+   freakPtr.addref();
+   *descriptorExtractor =static_cast<cv::Feature2D*>( freakPtr.get());
+   return freakPtr.get();
 }
 
 void CvFreakRelease(cv::xfeatures2d::FREAK** detector)
@@ -52,9 +55,12 @@ void CvFreakRelease(cv::xfeatures2d::FREAK** detector)
 }
 
 //Brief
-cv::xfeatures2d::BriefDescriptorExtractor* CvBriefDescriptorExtractorCreate(int descriptorSize)
+cv::xfeatures2d::BriefDescriptorExtractor* CvBriefDescriptorExtractorCreate(int descriptorSize, cv::Feature2D** feature2D)
 {
-   return new cv::xfeatures2d::BriefDescriptorExtractor(descriptorSize);
+   cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor> briefPtr = cv::xfeatures2d::BriefDescriptorExtractor::create(descriptorSize);
+   briefPtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(briefPtr.get());
+   return briefPtr.get();
 }
 
 /*

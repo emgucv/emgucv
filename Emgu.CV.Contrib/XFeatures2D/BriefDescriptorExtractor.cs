@@ -18,7 +18,7 @@ namespace Emgu.CV.XFeatures2D
    /// <summary>
    /// BRIEF Descriptor
    /// </summary>
-   public class BriefDescriptorExtractor : UnmanagedObject, IDescriptorExtractor
+   public class BriefDescriptorExtractor : Feature2D
    {
       static BriefDescriptorExtractor()
       {
@@ -31,7 +31,7 @@ namespace Emgu.CV.XFeatures2D
       /// <param name="descriptorSize">The size of descriptor. It can be equal 16, 32 or 64 bytes.</param>
       public BriefDescriptorExtractor(int descriptorSize = 32)
       {
-         _ptr = CvBriefDescriptorExtractorCreate(descriptorSize);
+         _ptr = CvBriefDescriptorExtractorCreate(descriptorSize, ref _feature2D);
       }
 
       /// <summary>
@@ -41,24 +41,11 @@ namespace Emgu.CV.XFeatures2D
       {
          if (_ptr != IntPtr.Zero)
             CvBriefDescriptorExtractorRelease(ref _ptr);
-      }
-
-      IntPtr IDescriptorExtractor.DescriptorExtratorPtr
-      {
-         get { return _ptr; }
-      }
-
-
-      IntPtr IAlgorithm.AlgorithmPtr
-      {
-         get
-         {
-            return CvInvoke.AlgorithmPtrFromDescriptorExtractor((IDescriptorExtractor) this);
-         }
+         base.DisposeObject();
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvBriefDescriptorExtractorCreate(int descriptorSize);
+      internal extern static IntPtr CvBriefDescriptorExtractorCreate(int descriptorSize, ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvBriefDescriptorExtractorRelease(ref IntPtr extractor);

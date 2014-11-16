@@ -10,12 +10,13 @@
 cv::xfeatures2d::SIFT* CvSIFTDetectorCreate(
    int nFeatures, int nOctaveLayers, 
    double contrastThreshold, double edgeThreshold, 
-   double sigma, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+   double sigma, cv::Feature2D** feature2D)
 {
-   cv::xfeatures2d::SIFT* sift = new cv::xfeatures2d::SIFT(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
-   *featureDetector = static_cast<cv::FeatureDetector*>(sift);
-   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(sift);
-   return sift;
+   cv::Ptr<cv::xfeatures2d::SIFT> siftPtr = cv::xfeatures2d::SIFT::create(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
+   siftPtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(siftPtr.get());
+   
+   return siftPtr.get();
 }
 
 void CvSIFTDetectorRelease(cv::xfeatures2d::SIFT** detector)
@@ -64,12 +65,13 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::
 }*/
 
 //SURFDetector
-cv::xfeatures2d::SURF* CvSURFDetectorCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+cv::xfeatures2d::SURF* CvSURFDetectorCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D)
 {
-   cv::xfeatures2d::SURF* surf = new cv::xfeatures2d::SURF(hessianThresh, nOctaves, nOctaveLayers, extended, upright);
-   *featureDetector = static_cast<cv::FeatureDetector*>(surf);
-   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(surf);
-   return surf;
+   cv::Ptr<cv::xfeatures2d::SURF> surfPtr = cv::xfeatures2d::SURF::create(hessianThresh, nOctaves, nOctaveLayers, extended, upright);
+   surfPtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(surfPtr.get());
+   
+   return surfPtr.get();
 }
 
 void CvSURFDetectorRelease(cv::xfeatures2d::SURF** detector)

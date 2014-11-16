@@ -42,7 +42,7 @@ namespace Emgu.CV.XFeatures2D
       /// For example, if you match images from a stereo pair, or do image stitching, the matched features likely have very similar angles, and you can speed up feature extraction by setting upright=true.</param>
       public SURFDetector(double hessianThresh, int nOctaves = 4, int nOctaveLayers = 2, bool extended = true, bool upright = false)
       {
-         _ptr = ContribInvoke.CvSURFDetectorCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
+         _ptr = ContribInvoke.CvSURFDetectorCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _feature2D);
       }
 
       /// <summary>
@@ -73,7 +73,7 @@ namespace Emgu.CV.XFeatures2D
          bool extended, 
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool upright, 
-         ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
+         ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSURFDetectorRelease(ref IntPtr detector);

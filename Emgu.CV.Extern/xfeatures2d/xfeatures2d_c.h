@@ -14,7 +14,7 @@
 #include "vectors_c.h"
 
 //StarDetector
-CVAPI(cv::xfeatures2d::StarDetector*) CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize);
+CVAPI(cv::xfeatures2d::StarDetector*) CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D);
 CVAPI(void) CvStarDetectorRelease(cv::xfeatures2d::StarDetector** detector);
 
 /*
@@ -27,11 +27,11 @@ CVAPI(cv::xfeatures2d ::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorC
 CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector);
 */
 //Freak
-CVAPI(cv::xfeatures2d::FREAK*) CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::DescriptorExtractor** descriptorExtractor);
+CVAPI(cv::xfeatures2d::FREAK*) CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor);
 CVAPI(void) CvFreakRelease(cv::xfeatures2d::FREAK** detector);
 
 //Brief descriptor extractor
-CVAPI(cv::xfeatures2d::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize);
+CVAPI(cv::xfeatures2d::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize, cv::Feature2D** feature2D);
 CVAPI(void) CvBriefDescriptorExtractorRelease(cv::xfeatures2d::BriefDescriptorExtractor** extractor);
 
 /*

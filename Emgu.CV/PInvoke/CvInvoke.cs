@@ -83,7 +83,9 @@ namespace Emgu.CV
          Windows.Storage.StorageFolder installFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
          
 #if UNITY_METRO
-         loadDirectory = Path.Combine(installFolder.Path, subfolder);
+         loadDirectory = Path.Combine(
+            Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName( installFolder.Path))))
+            , "Plugins", "Metro", subfolder);
 #else
          loadDirectory = Path.Combine(installFolder.Path, subfolder);
 #endif
@@ -106,10 +108,7 @@ namespace Emgu.CV
          {
             String subfolder = String.Empty;
 #if UNITY_EDITOR_WIN
-            if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
-            {
-               subfolder = IntPtr.Size == 8 ? "x86_64" : "x86";
-            }
+            subfolder = IntPtr.Size == 8 ? "x86_64" : "x86";
 #elif UNITY_STANDALONE_WIN
 #else
             if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
@@ -266,6 +265,11 @@ namespace Emgu.CV
       /// <returns>On Windows, "{0}".dll will be returned; On Linux, "lib{0}.so" will be returned; Otherwise {0} is returned.</returns>
       public static String GetModuleFormatString()
       {
+#if UNITY_EDITOR_WIN
+         return "{0}.dll";
+#elif UNITY_EDITOR_OSX
+         return "lib{0}.dylib";
+#else
          String formatString = "{0}";
          if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
             formatString = "{0}.dll";
@@ -274,6 +278,7 @@ namespace Emgu.CV
          else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
             formatString = "lib{0}.dylib";
          return formatString;
+#endif
       }
 
       /// <summary>
@@ -320,7 +325,7 @@ namespace Emgu.CV
 
 #if !UNITY_IPHONE
          //Use the custom error handler
-         //cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
+         cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
 #endif
       }
 

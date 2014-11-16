@@ -15,7 +15,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    ///  Wrapping class for feature detection using the goodFeaturesToTrack() function.
    /// </summary>
-   public class GFTTDetector : UnmanagedObject, IFeatureDetector
+   public class GFTTDetector : Feature2D
    {
       static GFTTDetector()
       {
@@ -34,29 +34,7 @@ namespace Emgu.CV.Features2D
       /// <param name="k">K</param>
       public GFTTDetector(int maxCorners = 1000, double qualityLevel = 0.01, double minDistance = 1, int blockSize = 3, bool useHarrisDetector = false, double k = 0.04)
       {
-         _ptr = CvGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
-      }
-
-      #region IFeatureDetector Members
-      /// <summary>
-      /// Get the feature detector. 
-      /// </summary>
-      /// <returns>The feature detector</returns>
-      IntPtr IFeatureDetector.FeatureDetectorPtr
-      {
-         get
-         {
-            return Ptr;
-         }
-      }
-      #endregion
-
-      IntPtr IAlgorithm.AlgorithmPtr
-      {
-         get
-         {
-            return CvInvoke.AlgorithmPtrFromFeatureDetector((IFeatureDetector)this);
-         }
+         _ptr = CvGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k, ref _feature2D);
       }
 
       /// <summary>
@@ -66,10 +44,12 @@ namespace Emgu.CV.Features2D
       {
          if(_ptr != IntPtr.Zero)
             CvGFTTDetectorRelease(ref _ptr);
+
+         base.DisposeObject();
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvGFTTDetectorCreate(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k);
+      internal extern static IntPtr CvGFTTDetectorCreate(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k, ref IntPtr feature2DPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvGFTTDetectorRelease(ref IntPtr detector);

@@ -14,33 +14,11 @@ namespace Emgu.CV.XFeatures2D
    /// <summary>
    /// StarDetector
    /// </summary>
-   public class StarDetector : UnmanagedObject, IFeatureDetector
+   public class StarDetector : Feature2D
    {
       static StarDetector()
       {
          CvInvoke.CheckLibraryLoaded();
-      }
-
-      #region IFeatureDetector Members
-      /// <summary>
-      /// Get the feature detector. 
-      /// </summary>
-      /// <returns>The feature detector</returns>
-      IntPtr IFeatureDetector.FeatureDetectorPtr
-      {
-         get
-         {
-            return _ptr;
-         }
-      }
-      #endregion
-
-      IntPtr IAlgorithm.AlgorithmPtr
-      {
-         get
-         {
-            return CvInvoke.AlgorithmPtrFromFeatureDetector((IFeatureDetector)this);
-         }
       }
 
       /// <summary>
@@ -67,7 +45,7 @@ namespace Emgu.CV.XFeatures2D
       /// </param>
       public StarDetector(int maxSize = 45, int responseThreshold = 30, int lineThresholdProjected = 10, int lineThresholdBinarized = 8, int suppressNonmaxSize = 5)
       {
-         _ptr = CvStarDetectorCreate(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
+         _ptr = CvStarDetectorCreate(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize, ref _feature2D);
       }
 
       /// <summary>
@@ -77,10 +55,11 @@ namespace Emgu.CV.XFeatures2D
       {
          if (_ptr != IntPtr.Zero)
             CvStarDetectorRelease(ref _ptr);
+         base.DisposeObject();
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize);
+      internal extern static IntPtr CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvStarDetectorRelease(ref IntPtr detector);

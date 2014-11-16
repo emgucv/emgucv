@@ -26,14 +26,12 @@ namespace Emgu.CV.XFeatures2D
    /// retinal sampling pattern. FREAKs are in general faster to compute with lower memory load and also more robust than
    /// SIFT, SURF or BRISK. They are competitive alternatives to existing keypoints in particular for embedded applications.
    /// </summary>
-   public class Freak : UnmanagedObject, IDescriptorExtractor
+   public class Freak : Feature2D
    {
       static Freak()
       {
          CvInvoke.CheckLibraryLoaded();
       }
-
-      private IntPtr _descriptorExtractorPtr;
 
       /// <summary>
       /// Create a Freak descriptor extractor.
@@ -44,7 +42,7 @@ namespace Emgu.CV.XFeatures2D
       /// <param name="nOctaves">Number of octaves covered by the detected keypoints.</param>
       public Freak(bool orientationNormalized = true, bool scaleNormalized = true, float patternScale = 22.0f, int nOctaves = 4)
       {
-         _ptr = CvFreakCreate(orientationNormalized, scaleNormalized, patternScale, nOctaves, ref _descriptorExtractorPtr);
+         _ptr = CvFreakCreate(orientationNormalized, scaleNormalized, patternScale, nOctaves, ref _feature2D);
       }
 
       /// <summary>
@@ -54,20 +52,9 @@ namespace Emgu.CV.XFeatures2D
       {
          if (_ptr != IntPtr.Zero)
             CvFreakRelease(ref _ptr);
+         base.DisposeObject();
       }
 
-      IntPtr IDescriptorExtractor.DescriptorExtratorPtr
-      {
-         get { return _descriptorExtractorPtr; }
-      }
-
-      IntPtr IAlgorithm.AlgorithmPtr
-      {
-         get
-         {
-            return CvInvoke.AlgorithmPtrFromDescriptorExtractor((IDescriptorExtractor)this);
-         }
-      }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvFreakCreate(
@@ -77,7 +64,7 @@ namespace Emgu.CV.XFeatures2D
          bool scaleNormalized,
          float patternScale,
          int nOctaves, 
-         ref IntPtr descriptorExtractorPtr);
+         ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFreakRelease(ref IntPtr extractor);

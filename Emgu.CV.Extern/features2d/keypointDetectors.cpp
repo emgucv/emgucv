@@ -9,39 +9,13 @@
 
 
 //ORB
-cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D)
 {
-   cv::ORB* orb = new cv::ORB(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize);
-   *featureDetector = static_cast<cv::FeatureDetector*>(orb);
-   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(orb);
-   return orb;
+   cv::Ptr<cv::ORB> orbPtr = cv::ORB::create(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold);
+   orbPtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(orbPtr.get());
+   return orbPtr.get();
 }
-
-/*
-int CvOrbDetectorGetDescriptorSize(cv::ORB* detector)
-{
-   return detector->descriptorSize();
-}
-
-void CvOrbDetectorComputeDescriptors(cv::ORB* detector, IplImage* image, std::vector<cv::KeyPoint>* keypoints, CvMat* descriptors)
-{
-   if (keypoints->size() <= 0) return;
-   cv::Mat mat = cv::cvarrToMat(image);
-   cv::Mat maskMat;
-
-   cv::Mat descriptorsMat = cv::cvarrToMat(descriptors);
-   if (mat.channels() == 1)
-   {
-      (*detector)(mat, maskMat, *keypoints, descriptorsMat, true);
-   } else
-   {
-      //TODO: create the extractor using the parameters in the ORB detector instead of using the default values
-      cv::Ptr<cv::DescriptorExtractor> extractor = new cv::OrbDescriptorExtractor();
-
-      cv::OpponentColorDescriptorExtractor colorExtractor(extractor);
-      colorExtractor.compute(mat, *keypoints, descriptorsMat);
-   }
-}*/
 
 void CvOrbDetectorRelease(cv::ORB** detector)
 {
@@ -49,15 +23,13 @@ void CvOrbDetectorRelease(cv::ORB** detector)
    *detector = 0;
 }
 
-
-
 //Brisk
-cv::BRISK* CvBriskCreate(int thresh, int octaves, float patternScale, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+cv::BRISK* CvBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D)
 {
-   cv::BRISK* brisk = new cv::BRISK(thresh, octaves, patternScale);
-   *featureDetector = static_cast<cv::FeatureDetector*>(brisk);
-   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(brisk);
-   return brisk;
+   cv::Ptr<cv::BRISK> briskPtr = cv::BRISK::create(thresh, octaves, patternScale);
+   briskPtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(briskPtr.get());
+   return briskPtr.get();
 }
 
 void CvBriskRelease(cv::BRISK** detector)
@@ -66,26 +38,13 @@ void CvBriskRelease(cv::BRISK** detector)
    *detector = 0;
 }
 
-//FeatureDetector
-void CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask)
-{
-   //cv::Mat mat = cv::cvarrToMat(image);
-   //cv::Mat maskMat;
-   //if (mask) maskMat = cv::cvarrToMat(mask);
-   detector->detect(*image, *keypoints, mask ? *mask : (cv::InputArray) cv::noArray() );
-}
-
-void CvFeatureDetectorRelease(cv::FeatureDetector** detector)
-{
-   delete *detector;
-   *detector = 0;
-}
-
-
 // detect corners using FAST algorithm
-cv::FastFeatureDetector* CvFASTGetFeatureDetector(int threshold, bool nonmax_supression)
+cv::FastFeatureDetector* CvFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D)
 {
-   return new cv::FastFeatureDetector(threshold, nonmax_supression);
+   cv::Ptr<cv::FastFeatureDetector> fastPtr = cv::FastFeatureDetector::create(threshold, nonmax_supression, type);
+   fastPtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(fastPtr.get());
+   return fastPtr.get();
 }
 
 void CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector)
@@ -104,9 +63,10 @@ cv::MSER* CvMserGetFeatureDetector(
    int maxEvolution, 
    double areaThreshold,
    double minMargin, 
-   int edgeBlurSize)
+   int edgeBlurSize, 
+   cv::Feature2D** feature2D)
 {  
-   return new cv::MSER(
+   cv::Ptr<cv::MSER> mserPtr = cv::MSER::create(
       delta,
       minArea, 
       maxArea,
@@ -116,6 +76,9 @@ cv::MSER* CvMserGetFeatureDetector(
       areaThreshold,
       minMargin, 
       edgeBlurSize);
+   mserPtr.addref();
+   *feature2D = static_cast<cv::MSER*>(mserPtr.get());
+   return mserPtr.get();
 }
 
 void CvMserFeatureDetectorRelease(cv::MSER** detector)
@@ -125,9 +88,12 @@ void CvMserFeatureDetectorRelease(cv::MSER** detector)
 }
 
 // SimpleBlobDetector
-cv::SimpleBlobDetector* CvSimpleBlobDetectorCreate()
+cv::SimpleBlobDetector* CvSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr)
 {
-   return new cv::SimpleBlobDetector();
+   cv::Ptr<cv::SimpleBlobDetector> detectorPtr = cv::SimpleBlobDetector::create();
+   detectorPtr.addref();
+   *feature2DPtr = static_cast<cv::Feature2D*>(detectorPtr.get());
+   return detectorPtr.get();
 }
 void CvSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector)
 {
@@ -298,10 +264,28 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
    return nonZeroCount;
 }
 
+//Feature2D
 void CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* image, cv::_InputArray* mask, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors, bool useProvidedKeyPoints)
 {
-   (*feature2D)(*image, mask ? *mask : (cv::InputArray) cv::noArray(), *keypoints, *descriptors, useProvidedKeyPoints);
+   feature2D->detectAndCompute(*image, mask ? *mask : (cv::InputArray) cv::noArray(), *keypoints, *descriptors, useProvidedKeyPoints);
 }
+void CvFeature2DDetect(cv::Feature2D* feature2D, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask)
+{
+   feature2D->detect(*image, *keypoints, mask ? *mask : (cv::InputArray) cv::noArray());
+}
+void CvFeature2DCompute(cv::Feature2D* feature2D, cv::_InputArray* image,  std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors)
+{
+   feature2D->compute(*image, *keypoints, *descriptors);
+}
+int CvFeature2DGetDescriptorSize(cv::Feature2D* feature2D)
+{
+   return feature2D->descriptorSize();
+}
+cv::Algorithm* CvFeature2DGetAlgorithm(cv::Feature2D* feature2D)
+{
+   return static_cast<cv::Algorithm*>( feature2D );
+}
+
 
 /*
 //OpponentColorDescriptorExtractor
@@ -317,22 +301,14 @@ void CvOpponentColorDescriptorExtractorRelease(cv::OpponentColorDescriptorExtrac
    *extractor = 0;
 }*/
 
-//DescriptorExtractor
-void CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors )
-{
-   //cv::Mat imageMat = cv::cvarrToMat(image);
-   extractor->compute(*image, *keypoints, *descriptors);
-}
-
-int CvDescriptorExtractorGetDescriptorSize(cv::DescriptorExtractor* extractor)
-{
-   return extractor->descriptorSize();
-}
 
 //GFTT
-cv::GFTTDetector* CvGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k)
+cv::GFTTDetector* CvGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k, cv::Feature2D** feature2D)
 {
-   return new cv::GFTTDetector(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
+   cv::Ptr<cv::GFTTDetector> gfttPtr = cv::GFTTDetector::create(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
+   gfttPtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(gfttPtr.get());
+   return gfttPtr.get();
 }
 void CvGFTTDetectorRelease(cv::GFTTDetector** detector)
 {
@@ -366,9 +342,9 @@ void CvBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::_OutputArray* 
 }
 
 //BOWImgDescriptorExtractor
-cv::BOWImgDescriptorExtractor* CvBOWImgDescriptorExtractorCreate(cv::DescriptorExtractor* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher)
+cv::BOWImgDescriptorExtractor* CvBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher)
 {
-   cv::Ptr<cv::DescriptorExtractor> extractorPtr(descriptorExtractor);
+   cv::Ptr<cv::Feature2D> extractorPtr(descriptorExtractor);
    extractorPtr.addref();
    cv::Ptr<cv::DescriptorMatcher> matcherPtr(descriptorMatcher);
    matcherPtr.addref();
@@ -392,12 +368,13 @@ void CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDes
 cv::KAZE* cveKAZEDetectorCreate(
   bool extended, bool upright, float threshold,
   int octaves, int sublevels, int diffusivity, 
-  cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+  cv::Feature2D** feature2D)
 {
-   cv::KAZE* kaze = new cv::KAZE(extended, upright, threshold, octaves, sublevels, diffusivity);
-   *featureDetector = static_cast<cv::FeatureDetector*>(kaze);
-   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(kaze);
-   return kaze;
+   cv::Ptr<cv::KAZE> kazePtr = cv::KAZE::create(extended, upright, threshold, octaves, sublevels, diffusivity);
+   kazePtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(kazePtr.get());
+   
+   return kazePtr.get();
 }
 void cveKAZEDetectorRelease(cv::KAZE** detector)
 {
@@ -410,26 +387,15 @@ void cveKAZEDetectorRelease(cv::KAZE** detector)
 cv::AKAZE* cveAKAZEDetectorCreate(
   int descriptorType, int descriptorSize, int descriptorChannels,
   float threshold, int octaves, int sublevels, int diffusivity,
-  cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor)
+  cv::Feature2D** feature2D)
 {
-   cv::AKAZE* akaze = new cv::AKAZE(descriptorType, descriptorSize, descriptorChannels, threshold, octaves, sublevels, diffusivity);
-   *featureDetector = static_cast<cv::FeatureDetector*>(akaze);
-   *descriptorExtractor = static_cast<cv::DescriptorExtractor*>(akaze);
-   return akaze;
+   cv::Ptr<cv::AKAZE> akazePtr = cv::AKAZE::create(descriptorType, descriptorSize, descriptorChannels, threshold, octaves, sublevels, diffusivity);
+   akazePtr.addref();
+   *feature2D = static_cast<cv::Feature2D*>(akazePtr.get());
+   return akazePtr.get();
 }
 void cveAKAZEDetectorRelease(cv::AKAZE** detector)
 {
    delete *detector;
    *detector = 0;
-}
-
-
-//Algorithm
-cv::Algorithm* cveAlgorithmFromFeatureDetector(cv::FeatureDetector* detector)
-{
-   return (cv::Algorithm*) detector;
-}
-cv::Algorithm* cveAlgorithmFromDescriptorExtractor(cv::DescriptorExtractor* extractor)
-{
-   return (cv::Algorithm*) extractor;
 }

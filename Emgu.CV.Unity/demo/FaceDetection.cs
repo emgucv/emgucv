@@ -32,7 +32,11 @@ public class FaceDetection : MonoBehaviour
          //updateTextureWithString("start move cascade xml");
          TextAsset cascadeModel = Resources.Load<TextAsset>(fileName);
          
+#if UNITY_METRO
+         UnityEngine.Windows.File.WriteAllBytes(filePath, cascadeModel.bytes);
+#else
          File.WriteAllBytes(filePath, cascadeModel.bytes);
+#endif
          //updateTextureWithString("File size: " + new FileInfo(filePath).Length);
       }
 

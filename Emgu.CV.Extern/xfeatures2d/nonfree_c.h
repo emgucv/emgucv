@@ -16,11 +16,11 @@
 CVAPI(cv::xfeatures2d::SIFT*) CvSIFTDetectorCreate(
    int nFeatures, int nOctaveLayers, 
    double contrastThreshold, double edgeThreshold, 
-   double sigma, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+   double sigma, cv::Feature2D** feature2D);
 CVAPI(void) CvSIFTDetectorRelease(cv::xfeatures2d::SIFT** detector);
 
 //SURFDetector
-CVAPI(cv::xfeatures2d::SURF*) CvSURFDetectorCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+CVAPI(cv::xfeatures2d::SURF*) CvSURFDetectorCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D);
 CVAPI(void) CvSURFDetectorRelease(cv::xfeatures2d::SURF** detector);
 
 /*

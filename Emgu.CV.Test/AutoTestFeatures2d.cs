@@ -62,7 +62,7 @@ namespace Emgu.CV.Test
       public void TestSURF()
       {
          SURFDetector detector = new SURFDetector(500);
-         ParamDef[] parameters = detector.GetParams();
+         //ParamDef[] parameters = detector.GetParams();
          EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
       }
 
@@ -83,7 +83,7 @@ namespace Emgu.CV.Test
 
          //SURFDetector descriptorGenerator = new SURFDetector(500, false);
          SIFTDetector descriptorGenerator = new SIFTDetector();
-         ParamDef[] parameters = keyPointDetector.GetParams();
+         //ParamDef[] parameters = keyPointDetector.GetParams();
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
@@ -92,7 +92,7 @@ namespace Emgu.CV.Test
       {
          GFTTDetector keyPointDetector = new GFTTDetector(1000, 0.01, 1, 3, false, 0.04);
          SIFTDetector descriptorGenerator = new SIFTDetector();
-         ParamDef[] parameters = keyPointDetector.GetParams();
+         //ParamDef[] parameters = keyPointDetector.GetParams();
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
@@ -124,7 +124,7 @@ namespace Emgu.CV.Test
       {
          MSERDetector keyPointDetector = new MSERDetector();
          SIFTDetector descriptorGenerator = new SIFTDetector();
-         ParamDef[] parameters = keyPointDetector.GetParams();
+         //ParamDef[] parameters = keyPointDetector.GetParams();
          TestFeature2DTracker(keyPointDetector, descriptorGenerator);
       }
 
@@ -159,6 +159,7 @@ namespace Emgu.CV.Test
       public void TestORB()
       {
          ORBDetector orb = new ORBDetector(700);
+         String[] parameters = orb.GetParamNames();
          EmguAssert.IsTrue(TestFeature2DTracker(orb, orb), "Unable to find homography matrix");
       }
 
@@ -168,11 +169,11 @@ namespace Emgu.CV.Test
          FastDetector fast = new FastDetector(10, true);
          Freak freak = new Freak(true, true, 22.0f, 4);
          ParamDef[] parameters = freak.GetParams();
-         int nOctaves = freak.GetInt("nbOctave");
+         //int nOctaves = freak.GetInt("nbOctave");
          EmguAssert.IsTrue(TestFeature2DTracker(fast, freak), "Unable to find homography matrix");
       }
 
-      public static bool TestFeature2DTracker(IFeatureDetector keyPointDetector, IDescriptorExtractor descriptorGenerator)
+      public static bool TestFeature2DTracker(Feature2D keyPointDetector, Feature2D descriptorGenerator)
       {
          //for (int k = 0; k < 1; k++)
          {
@@ -254,7 +255,7 @@ namespace Emgu.CV.Test
                using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
                using (BFMatcher matcher = new BFMatcher(dt))
                {
-                  ParamDef[] parameterDefs = matcher.GetParams();
+                  //ParamDef[] parameterDefs = matcher.GetParams();
                   matcher.Add(modelDescriptors);
                   matcher.KnnMatch(observedDescriptors, matches, k, null);
 

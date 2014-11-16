@@ -1028,6 +1028,7 @@ namespace Emgu.CV.Test
 
          Stopwatch watch = Stopwatch.StartNew();
          OpticalFlowDualTVL1 flow = new OpticalFlowDualTVL1();
+         string[] paramNames = flow.GetParamNames();
          flow.Calc(prevImg, currImg, result);
 
          watch.Stop();
@@ -1367,8 +1368,8 @@ namespace Emgu.CV.Test
       [Test]
       public void TestStereoSGBMCorrespondence()
       {
-         Image<Gray, Byte> left = EmguAssert.LoadImage<Gray, byte>("scene_l.bmp");
-         Image<Gray, Byte> right = EmguAssert.LoadImage<Gray, byte>("scene_r.bmp");
+         Image<Gray, Byte> left = EmguAssert.LoadImage<Gray, byte>("aloeL.jpg");
+         Image<Gray, Byte> right = EmguAssert.LoadImage<Gray, byte>("aloeR.jpg");
          Size size = left.Size;
 
          Image<Gray, Int16> disparity = new Image<Gray, Int16>(size);
@@ -1826,9 +1827,9 @@ namespace Emgu.CV.Test
       [Test]
       public void TestGrabCut1()
       {
-         Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("airplane.jpg");
+         Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg");
 
-         Rectangle rect = new Rectangle(new Point(24, 126), new Size(483, 294));
+         Rectangle rect = new Rectangle(new Point(50, 50), new Size(400, 400));
          Matrix<double> bgdModel = new Matrix<double>(1, 13 * 5);
          Matrix<double> fgdModel = new Matrix<double>(1, 13 * 5);
          Image<Gray, byte> mask = new Image<Gray, byte>(img.Size);

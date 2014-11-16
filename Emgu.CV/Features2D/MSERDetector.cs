@@ -14,7 +14,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Wrapped CvMSERParams structure
    /// </summary>
-   public class MSERDetector : UnmanagedObject, IFeatureDetector
+   public class MSERDetector : Feature2D
    {
       /// <summary>
       /// Create a MSER detector using the specific parameters
@@ -41,7 +41,8 @@ namespace Emgu.CV.Features2D
             maxEvolution,
             areaThreshold,
             minMargin,
-            edgeBlurSize);
+            edgeBlurSize,
+            ref _feature2D);
       }
 
       /// <summary>
@@ -52,34 +53,15 @@ namespace Emgu.CV.Features2D
       {
       }
 
-      #region IFeatureDetector Members
-      /// <summary>
-      /// Get the feature detector. 
-      /// </summary>
-      /// <returns>The feature detector</returns>
-      public IntPtr FeatureDetectorPtr
-      {
-         get
-         {
-            return _ptr;
-         }
-      }
-      #endregion
-
-      IntPtr IAlgorithm.AlgorithmPtr
-      {
-         get
-         {
-            return CvInvoke.AlgorithmPtrFromFeatureDetector((IFeatureDetector)this);
-         }
-      }
 
       /// <summary>
       /// Release the unmanaged memory associated with this detector.
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.CvMserFeatureDetectorRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CvInvoke.CvMserFeatureDetectorRelease(ref _ptr);
+         base.DisposeObject();
       }
    }
 }
@@ -98,7 +80,8 @@ namespace Emgu.CV
          int maxEvolution,
          double areaThreshold,
          double minMargin,
-         int edgeBlurSize);
+         int edgeBlurSize, 
+         ref IntPtr feature2D );
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvMserFeatureDetectorRelease(ref IntPtr detector);

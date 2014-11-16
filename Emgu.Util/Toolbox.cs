@@ -436,7 +436,7 @@ namespace Emgu.Util
       }*/
 
 
-#if IOS || ANDROID
+#if (IOS || ANDROID || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX) && (!UNITY_EDITOR_WIN)
       /// <summary>
       /// memcpy function
       /// </summary>
@@ -464,6 +464,9 @@ namespace Emgu.Util
       /// <returns>The handle to the library</returns>
       public static IntPtr LoadLibrary(String dllname)
       {
+#if UNITY_EDITOR_WIN
+         return WinAPILoadLibrary(dllname);
+#else	  
          if (Platform.OperationSystem == TypeEnum.OS.Windows)
          {
             if (Platform.ClrType == TypeEnum.ClrType.NetFxCore)
@@ -477,6 +480,7 @@ namespace Emgu.Util
          {
             return Dlopen(dllname, 2); // 2 == RTLD_NOW
          }
+#endif
       }
 
       [DllImport("Kernel32.dll", EntryPoint="LoadLibraryEx")]

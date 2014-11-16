@@ -14,62 +14,32 @@ namespace Emgu.CV.Features2D
 {
    /// <summary>
    /// FAST(Features from Accelerated Segment Test) keypoint detector. 
-   /// See Detects corners using FAST algorithm by E. Rosten (”Machine learning for high-speed corner
-   /// detection”, 2006).
+   /// See Detects corners using FAST algorithm by E. Rosten ("Machine learning for high-speed corner
+   /// detection, 2006).
    /// </summary>
-   public class FastDetector : UnmanagedObject, IFeatureDetector
+   public class FastDetector : Feature2D
    {
       static FastDetector()
       {
          CvInvoke.CheckLibraryLoaded();
       }
-      private int _threshold;
-      private bool _nonmaxSupression;
 
-      /// <summary>
-      /// Threshold on difference between intensity of center pixel and pixels on circle around
-      /// this pixel. See description of the algorithm.
-      /// </summary>
-      public int Threshold { get { return _threshold; } }
-      /// <summary>
-      /// If it is true then non-maximum supression will be applied to detected corners
-      /// (keypoints)
-      /// </summary>
-      public bool NonmaxSupression { get { return _nonmaxSupression; } }
+      public enum DetectorType
+      {
+         Type5_8 = 0,
+         Type7_12 = 1,
+         Type9_16 = 2
+      }
 
       /// <summary>
       /// Create a fast detector with the specific parameters
       /// </summary>
       /// <param name="threshold">Threshold on difference between intensity of center pixel and pixels on circle around
       /// this pixel.</param>
-      /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used.</param>
-      public FastDetector(int threshold = 10, bool nonmaxSupression = true)
+      /// <param name="nonmaxSupression">Specify if non-maximum suppression should be used.</param>
+      public FastDetector(int threshold = 10, bool nonmaxSupression = true, DetectorType type = DetectorType.Type9_16)
       {
-         _threshold = threshold;
-         _nonmaxSupression = nonmaxSupression;
-         _ptr = CvFASTGetFeatureDetector(Threshold, NonmaxSupression);
-      }
-
-      #region IFeatureDetector Members
-      /// <summary>
-      /// Get the feature detector. 
-      /// </summary>
-      /// <returns>The feature detector</returns>
-      IntPtr IFeatureDetector.FeatureDetectorPtr
-      {
-         get
-         {
-            return Ptr;
-         }
-      }
-      #endregion
-
-      IntPtr IAlgorithm.AlgorithmPtr
-      {
-         get
-         {
-            return CvInvoke.AlgorithmPtrFromFeatureDetector((IFeatureDetector)this);
-         }
+         _ptr = CvFASTGetFeatureDetector(threshold, nonmaxSupression, type, ref _feature2D);
       }
 
       /// <summary>
@@ -79,13 +49,16 @@ namespace Emgu.CV.Features2D
       {
          if (_ptr != IntPtr.Zero)
             CvFASTFeatureDetectorRelease(ref _ptr);
+         base.DisposeObject();
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvFASTGetFeatureDetector(
          int threshold,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool nonmaxSupression);
+         bool nonmaxSupression, 
+         DetectorType type,
+         ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFASTFeatureDetectorRelease(ref IntPtr detector);

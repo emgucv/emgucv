@@ -438,31 +438,49 @@ bool cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputAr
 //Algorithm 
 int cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name)
 {
+   if (algorithm->info() == 0)
+      CV_Error(-1, "Algorithm info is not available");
    return algorithm->getInt(*name);
 }
 void cveAlgorithmSetInt(cv::Algorithm* algorithm, cv::String* name, int value)
 {
+   if (algorithm->info() == 0)
+      CV_Error(-1, "Algorithm info is not available");
    return algorithm->setInt(*name, value);
 }
 double cveAlgorithmGetDouble(cv::Algorithm* algorithm, cv::String* name)
 {
+   if (algorithm->info() == 0)
+      CV_Error(-1, "Algorithm info is not available");
+
    return algorithm->getDouble(*name);
 }
 void cveAlgorithmSetDouble(cv::Algorithm* algorithm, cv::String* name, double value)
 {
+   if (algorithm->info() == 0)
+      CV_Error(-1, "Algorithm info is not available");
+
    return algorithm->setDouble(*name, value);
 }
 void cveAlgorithmGetString(cv::Algorithm* algorithm, cv::String* name, cv::String* result)
 {
+   if (algorithm->info() == 0)
+      CV_Error(-1, "Algorithm info is not available");
+
    *result = algorithm->getString(*name);
 }
 void cveAlgorithmSetString(cv::Algorithm* algorithm, cv::String* name, cv::String* value)
 {
+   if (algorithm->info() == 0)
+      CV_Error(-1, "Algorithm info is not available");
+
    algorithm->setString(*name, *value);
 }
 
 void cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* names, std::vector< int >* types, std::vector<cv::String>* help)
 {
+   if (algorithm->info() == 0)
+      return;
    algorithm->getParams(*names);
    types->clear();
    help->clear();
@@ -471,6 +489,13 @@ void cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* na
       types->push_back(algorithm->paramType(*it));
       help->push_back(algorithm->paramHelp(*it));
    }
+}
+
+void cveAlgorithmGetParamNames(cv::Algorithm* algorithm, std::vector<cv::String>* names)
+{
+   if (algorithm->info() == 0)
+      return;
+   algorithm->getParams(*names);
 }
 
 void cveAlgorithmGetList(std::vector< cv::String >* names)

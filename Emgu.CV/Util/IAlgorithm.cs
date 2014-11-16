@@ -213,6 +213,21 @@ namespace Emgu.CV
          }
       }
 
+      public static String[] GetParamNames(this IAlgorithm algorithm)
+      {
+         using (VectorOfCvString names = new VectorOfCvString())
+         {
+            CvInvoke.cveAlgorithmGetParamNames(algorithm.AlgorithmPtr, names);
+            String[] results = new string[names.Size];
+            for (int i = 0; i < results.Length; i++)
+            {
+               using (CvString n = names[i])
+                  results[i] = n.ToString();
+            }
+            return results;
+         }
+      }
+
       /// <summary>
       /// Get the list of algorithms available from opencv
       /// </summary>
@@ -259,6 +274,9 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveAlgorithmGetParams(IntPtr algorithm, IntPtr names, IntPtr types, IntPtr helps);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveAlgorithmGetParamNames(IntPtr algorithm, IntPtr names);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveAlgorithmGetList(IntPtr names);

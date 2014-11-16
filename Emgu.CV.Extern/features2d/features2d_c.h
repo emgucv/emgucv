@@ -13,35 +13,21 @@
 //#include "opencv2/legacy/compat.hpp"
 #include "vectors_c.h"
 
-
-//FeatureDetector
-CVAPI(void) CvFeatureDetectorDetectKeyPoints(cv::FeatureDetector* detector, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask);
-
-CVAPI(void) CvFeatureDetectorRelease(cv::FeatureDetector** detector);
-
-
-
 //ORB
-CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D);
 CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
 
-
-
 //Brisk
-CVAPI(cv::BRISK*) CvBriskCreate(int thresh, int octaves, float patternScale, cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+CVAPI(cv::BRISK*) CvBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D);
 CVAPI(void) CvBriskRelease(cv::BRISK** detector);
 
-
-
 //FAST algorithm
-CVAPI(cv::FastFeatureDetector*) CvFASTGetFeatureDetector(int threshold, bool nonmax_supression);
+CVAPI(cv::FastFeatureDetector*) CvFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D);
 CVAPI(void) CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector);
 
 //GFTT
-CVAPI(cv::GFTTDetector*) CvGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k);
+CVAPI(cv::GFTTDetector*) CvGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k, cv::Feature2D** feature2D);
 CVAPI(void) CvGFTTDetectorRelease(cv::GFTTDetector** detector);
-
-
 
 // MSER detector
 CVAPI(cv::MSER*) CvMserGetFeatureDetector(
@@ -53,12 +39,13 @@ CVAPI(cv::MSER*) CvMserGetFeatureDetector(
    int maxEvolution, 
    double areaThreshold,
    double minMargin, 
-   int edgeBlurSize);
+   int edgeBlurSize,
+   cv::Feature2D** feature2D);
 CVAPI(void) CvMserFeatureDetectorRelease(cv::MSER** mser);
 
 
 // SimpleBlobDetector
-CVAPI(cv::SimpleBlobDetector*) CvSimpleBlobDetectorCreate();
+CVAPI(cv::SimpleBlobDetector*) CvSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr);
 CVAPI(void) CvSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector);
 
 // Draw keypoints.
@@ -103,15 +90,10 @@ CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, 
 
 //Feature2D
 CVAPI(void) CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* image, cv::_InputArray* mask, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors, bool useProvidedKeyPoints);
-
-/*
-//OpponentColorDescriptorExtractor
-CVAPI(cv::OpponentColorDescriptorExtractor*) CvOpponentColorDescriptorExtractorCreate(cv::DescriptorExtractor* extractor);
-CVAPI(void) CvOpponentColorDescriptorExtractorRelease(cv::OpponentColorDescriptorExtractor** extractor);
-*/
-//DescriptorExtractor
-CVAPI(void) CvDescriptorExtractorCompute(cv::DescriptorExtractor* extractor, cv::_InputArray* image,  std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors );
-CVAPI(int) CvDescriptorExtractorGetDescriptorSize(cv::DescriptorExtractor* extractor);
+CVAPI(void) CvFeature2DDetect(cv::Feature2D* feature2D, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask);
+CVAPI(void) CvFeature2DCompute(cv::Feature2D* feature2D, cv::_InputArray* image,  std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors);
+CVAPI(int) CvFeature2DGetDescriptorSize(cv::Feature2D* feature2D);
+CVAPI(cv::Algorithm*) CvFeature2DGetAlgorithm(cv::Feature2D* feature2D);
 
 //BowKMeansTrainer
 CVAPI(cv::BOWKMeansTrainer*) CvBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria* termcrit, int attempts, int flags);
@@ -121,7 +103,7 @@ CVAPI(void) CvBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, cv::Mat* descri
 CVAPI(void) CvBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster);
 
 //BOWImgDescriptorExtractor
-CVAPI(cv::BOWImgDescriptorExtractor*) CvBOWImgDescriptorExtractorCreate(cv::DescriptorExtractor* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher);
+CVAPI(cv::BOWImgDescriptorExtractor*) CvBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher);
 CVAPI(void) CvBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descriptorExtractor);
 CVAPI(void) CvBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary);
 CVAPI(void) CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor);
@@ -130,17 +112,14 @@ CVAPI(void) CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bo
 CVAPI(cv::KAZE*) cveKAZEDetectorCreate(
   bool extended, bool upright, float threshold,
   int octaves, int sublevels, int diffusivity, 
-  cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+  cv::Feature2D** feature2D);
 CVAPI(void) cveKAZEDetectorRelease(cv::KAZE** detector);
 
 //AKAZEDetector
 CVAPI(cv::AKAZE*) cveAKAZEDetectorCreate(
-int descriptorType, int descriptorSize, int descriptorChannels,
+  int descriptorType, int descriptorSize, int descriptorChannels,
   float threshold, int octaves, int sublevels, int diffusivity,
-  cv::FeatureDetector** featureDetector, cv::DescriptorExtractor** descriptorExtractor);
+  cv::Feature2D** feature2D);
 CVAPI(void) cveAKAZEDetectorRelease(cv::AKAZE** detector);
 
-//Algorithm
-CVAPI(cv::Algorithm*) cveAlgorithmFromFeatureDetector(cv::FeatureDetector* detector);
-CVAPI(cv::Algorithm*) cveAlgorithmFromDescriptorExtractor(cv::DescriptorExtractor* extractor);
 #endif

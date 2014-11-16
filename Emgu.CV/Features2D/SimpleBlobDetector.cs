@@ -14,7 +14,7 @@ namespace Emgu.CV.Features2D
    /// <summary>
    /// Simple Blob detector
    /// </summary>
-   public class SimpleBlobDetector : UnmanagedObject, IFeatureDetector
+   public class SimpleBlobDetector : Feature2D
    {
       static SimpleBlobDetector()
       {
@@ -26,29 +26,7 @@ namespace Emgu.CV.Features2D
       /// </summary>
       public SimpleBlobDetector()
       {
-         _ptr = CvSimpleBlobDetectorCreate();
-      }
-
-      #region IFeatureDetector Members
-      /// <summary>
-      /// Get the feature detector. 
-      /// </summary>
-      /// <returns>The feature detector</returns>
-      IntPtr IFeatureDetector.FeatureDetectorPtr
-      {
-         get
-         {
-            return _ptr;
-         }
-      }
-      #endregion
-
-      IntPtr IAlgorithm.AlgorithmPtr
-      {
-         get
-         {
-            return CvInvoke.AlgorithmPtrFromFeatureDetector((IFeatureDetector)this);
-         }
+         _ptr = CvSimpleBlobDetectorCreate(ref _feature2D);
       }
 
       /// <summary>
@@ -58,10 +36,12 @@ namespace Emgu.CV.Features2D
       {
          if (_ptr != IntPtr.Zero)
             CvSimpleBlobDetectorRelease(ref _ptr);
+
+         base.DisposeObject();
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvSimpleBlobDetectorCreate();
+      internal extern static IntPtr CvSimpleBlobDetectorCreate(ref IntPtr feature2DPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSimpleBlobDetectorRelease(ref IntPtr detector);

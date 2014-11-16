@@ -16,7 +16,7 @@ cv::StereoSGBM* CvStereoSGBMCreate(
   int speckleWindowSize, int speckleRange,
   int mode, cv::StereoMatcher** stereoMatcher)
 {
-   cv::Ptr<cv::StereoSGBM> ptr =  cv::createStereoSGBM(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode);
+   cv::Ptr<cv::StereoSGBM> ptr =  cv::StereoSGBM::create(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode);
    ptr.addref();
    cv::StereoSGBM* result = ptr.get();
    *stereoMatcher = (cv::StereoMatcher*) result;
@@ -31,7 +31,7 @@ void CvStereoSGBMRelease(cv::StereoSGBM** obj)
 //StereoBM
 cv::StereoMatcher* CvStereoBMCreate(int numberOfDisparities, int blockSize)
 {
-   cv::Ptr<cv::StereoMatcher> ptr = cv::createStereoBM(numberOfDisparities, blockSize);
+   cv::Ptr<cv::StereoMatcher> ptr = cv::StereoBM::create(numberOfDisparities, blockSize);
    ptr.addref();
    return ptr.get();
 }
@@ -89,9 +89,9 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
 
 }
 
-bool cveFindCirclesGrid(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* centers, int flags, cv::FeatureDetector* blobDetector)
+bool cveFindCirclesGrid(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* centers, int flags, cv::Feature2D* blobDetector)
 {
-   cv::Ptr<cv::FeatureDetector> ptr(blobDetector);
+   cv::Ptr<cv::Feature2D> ptr(blobDetector);
    ptr.addref();
    return cv::findCirclesGrid(*image, *patternSize, *centers, flags, ptr);
 }

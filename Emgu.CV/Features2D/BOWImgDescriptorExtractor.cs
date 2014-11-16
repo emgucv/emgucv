@@ -29,9 +29,9 @@ namespace Emgu.CV.Features2D
       /// </summary>
       /// <param name="descriptorExtractor">Descriptor extractor that is used to compute descriptors for an input image and its key points.</param>
       /// <param name="descriptorMatcher">Descriptor matcher that is used to find the nearest word of the trained vocabulary for each key point descriptor of the image.</param>
-      public BOWImgDescriptorExtractor(IDescriptorExtractor descriptorExtractor, DescriptorMatcher descriptorMatcher)
+      public BOWImgDescriptorExtractor(Feature2D descriptorExtractor, DescriptorMatcher descriptorMatcher)
       {
-         _ptr = BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorCreate(descriptorExtractor.DescriptorExtratorPtr, descriptorMatcher);
+         _ptr = BOWImgDescriptorExtractorInvoke.CvBOWImgDescriptorExtractorCreate(descriptorExtractor.Feature2DPtr, descriptorMatcher);
       }
 
       /// <summary>

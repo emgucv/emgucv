@@ -17,11 +17,6 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class Brisk : Feature2D
    {
-      static Brisk()
-      {
-         CvInvoke.CheckLibraryLoaded();
-      }
-
       /// <summary>
       /// Create a BRISK keypoint detector and descriptor extractor.
       /// </summary>
@@ -30,7 +25,7 @@ namespace Emgu.CV.Features2D
       /// <param name="patternScale">Pattern scale</param>
       public Brisk(int thresh = 30, int octaves = 3, float patternScale = 1.0f)
       {
-         _ptr = CvBriskCreate(thresh, octaves, patternScale, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
+         _ptr = CvInvoke.CvBriskCreate(thresh, octaves, patternScale, ref _feature2D);
       }
 
       /// <summary>
@@ -38,14 +33,23 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvBriskRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            CvInvoke.CvBriskRelease(ref _ptr);
          base.DisposeObject();
       }
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvBriskCreate(int thresh, int octaves, float patternScale, ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
+      internal static extern IntPtr CvBriskCreate(int thresh, int octaves, float patternScale,
+         ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvBriskRelease(ref IntPtr detector);
+      internal static extern void CvBriskRelease(ref IntPtr detector);
    }
 }

@@ -32,7 +32,7 @@ namespace Emgu.CV.XFeatures2D
          double contrastThreshold = 0.04, double edgeThreshold = 10.0,
          double sigma = 1.6)
       {
-         _ptr = ContribInvoke.CvSIFTDetectorCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma, ref _featureDetectorPtr, ref _descriptorExtractorPtr);
+         _ptr = ContribInvoke.CvSIFTDetectorCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma, ref _feature2D);
       }
 
       /// <summary>
@@ -40,7 +40,8 @@ namespace Emgu.CV.XFeatures2D
       /// </summary>
       protected override void DisposeObject()
       {
-         ContribInvoke.CvSIFTDetectorRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            ContribInvoke.CvSIFTDetectorRelease(ref _ptr);
          base.DisposeObject();
       }
    }
@@ -51,7 +52,7 @@ namespace Emgu.CV.XFeatures2D
       internal extern static IntPtr CvSIFTDetectorCreate(
          int nFeatures, int nOctaveLayers,
          double contrastThreshold, double edgeThreshold,
-         double sigma, ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
+         double sigma, ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvSIFTDetectorRelease(ref IntPtr detector);

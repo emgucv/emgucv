@@ -35,7 +35,7 @@ namespace Emgu.CV.Features2D
          _ptr = CvInvoke.cveAKAZEDetectorCreate(
             descriptorType, descriptorSize, descriptorChannels, 
             threshold, octaves, sublevels, diffusivity,
-            ref _featureDetectorPtr, ref _descriptorExtractorPtr);
+            ref _feature2D);
       }
 
       /// <summary>
@@ -59,7 +59,7 @@ namespace Emgu.CV
       internal extern static IntPtr cveAKAZEDetectorCreate(
          AKAZE.DescriptorType descriptorType, int descriptorSize, int descriptorChannels,
          float threshold, int octaves, int sublevels, KAZE.Diffusivity diffusivity,
-         ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
+         ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cveAKAZEDetectorRelease(ref IntPtr detector);

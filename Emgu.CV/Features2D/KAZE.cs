@@ -47,7 +47,7 @@ namespace Emgu.CV.Features2D
       public KAZE(bool extended, bool upright, float threshold = 0.001f, int octaves = 4, int sublevels = 4, Diffusivity diffusivity = Diffusivity.PmG2)
       {
          _ptr = CvInvoke.cveKAZEDetectorCreate(extended, upright, threshold, octaves, sublevels, diffusivity,
-            ref _featureDetectorPtr, ref _descriptorExtractorPtr);
+            ref _feature2D);
       }
 
       /// <summary>
@@ -75,7 +75,7 @@ namespace Emgu.CV
          bool upright, 
          float threshold,
          int octaves, int sublevels, KAZE.Diffusivity diffusivity,
-         ref IntPtr featureDetector, ref IntPtr descriptorExtractor);
+         ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cveKAZEDetectorRelease(ref IntPtr detector);

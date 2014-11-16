@@ -141,6 +141,8 @@ CVAPI(void) cveAlgorithmSetString(cv::Algorithm* algorithm, cv::String* name, cv
 
 CVAPI(void) cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* names, std::vector< int >* types, std::vector<cv::String>* help);
 
+CVAPI(void) cveAlgorithmGetParamNames(cv::Algorithm* algorithm, std::vector<cv::String>* names);
+
 CVAPI(void) cveAlgorithmGetList(std::vector< cv::String >* names);
 
 CVAPI(bool) cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2);
