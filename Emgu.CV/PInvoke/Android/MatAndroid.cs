@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
@@ -19,6 +20,19 @@ namespace Emgu.CV
 {
    public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray, IImage
    {
+      public Mat(AssetManager assets, String fileName)
+         : this()
+      {
+         using (Stream imageStream = assets.Open(fileName))
+         {
+            using (BinaryReader br = new BinaryReader(imageStream))
+            {
+               byte[] b = br.ReadBytes((int)imageStream.Length);
+               CvInvoke.Imdecode(b, LoadImageType.AnyColor | LoadImageType.AnyDepth, this);
+            }
+         }
+      }
+
       public Bitmap Bitmap
       {
          get { return ToBitmap(Android.Graphics.Bitmap.Config.Argb8888); }

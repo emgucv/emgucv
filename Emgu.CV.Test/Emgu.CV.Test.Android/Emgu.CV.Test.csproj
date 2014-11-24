@@ -90,31 +90,31 @@
     <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_alt2.xml">
       <Link>Assets\haarcascade_frontalface_alt2.xml</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\left01.jpg">
+	<AndroidAsset Include="..\..\opencv\samples\data\board.jpg">
+      <Link>Assets\board.jpg</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\opencv\samples\data\left01.jpg">
       <Link>Assets\left01.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\airplane.jpg">
-      <Link>Assets\airplane.jpg</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\box.png">
+    <AndroidAsset Include="..\..\opencv\samples\data\box.png">
       <Link>Assets\box.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\box_in_scene.png">
+    <AndroidAsset Include="..\..\opencv\samples\data\box_in_scene.png">
       <Link>Assets\box_in_scene.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\lena.jpg">
+    <AndroidAsset Include="..\..\opencv\samples\data\lena.jpg">
       <Link>Assets\lena.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\scene_l.bmp">
-      <Link>Assets\scene_l.bmp</Link>
+    <AndroidAsset Include="..\..\opencv\samples\data\aloeL.jpg">
+      <Link>Assets\aloeL.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\scene_r.bmp">
-      <Link>Assets\scene_r.bmp</Link>
+    <AndroidAsset Include="..\..\opencv\samples\data\aloeR.jpg">
+      <Link>Assets\aloeL.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\stuff.jpg">
+    <AndroidAsset Include="..\..\opencv\samples\data\stuff.jpg">
       <Link>Assets\stuff.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\tree.avi">
+    <AndroidAsset Include="..\..\opencv\samples\data\tree.avi">
       <Link>Assets\tree.avi</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\chessBoard.jpg">
@@ -129,7 +129,7 @@
     <AndroidAsset Include="..\squares.gif">
       <Link>Assets\squares.gif</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\letter-recognition.data">
+    <AndroidAsset Include="..\..\opencv\samples\data\letter-recognition.data">
       <Link>Assets\letter-recognition.data</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\stitch1.jpg">
@@ -219,14 +219,6 @@
   <ItemGroup>
     <AndroidAsset Include="..\..\Emgu.CV.Example\LicensePlateRecognition\license-plate.jpg">
       <Link>Assets\license-plate.jpg</Link>
-    </AndroidAsset>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\logo.png">
-      <Link>Assets\logo.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\samples\cpp\logo_in_clutter.png">
-      <Link>Assets\logo_in_clutter.png</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>

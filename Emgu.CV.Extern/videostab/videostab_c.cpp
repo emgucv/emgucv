@@ -10,7 +10,7 @@
 CaptureFrameSource* VideostabCaptureFrameSourceCreate(cv::VideoCapture* capture, cv::videostab::IFrameSource** frameSource)
 {
    CaptureFrameSource* stabilizer = new CaptureFrameSource(capture);
-   *frameSource = static_cast<cv::videostab::IFrameSource*>(stabilizer);
+   *frameSource = dynamic_cast<cv::videostab::IFrameSource*>(stabilizer);
    return stabilizer;
 }
 void VideostabCaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource)
@@ -43,8 +43,8 @@ template<class cvstabilizer> cvstabilizer* StabilizerCreate(cv::videostab::IFram
    cv::Ptr<cv::videostab::IFrameSource> ptr(baseFrameSource);
    ptr.addref(); // add reference such that it won't release the CaptureFrameSource
    stabilizer->setFrameSource(ptr);
-   *stabilizerBase = static_cast<cv::videostab::StabilizerBase*>(stabilizer);
-   *frameSource = static_cast<cv::videostab::IFrameSource*>(stabilizer);
+   *stabilizerBase = dynamic_cast<cv::videostab::StabilizerBase*>(stabilizer);
+   *frameSource = dynamic_cast<cv::videostab::IFrameSource*>(stabilizer);
    return stabilizer;
 }
 

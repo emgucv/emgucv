@@ -14,7 +14,7 @@ cv::xfeatures2d::SIFT* CvSIFTDetectorCreate(
 {
    cv::Ptr<cv::xfeatures2d::SIFT> siftPtr = cv::xfeatures2d::SIFT::create(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
    siftPtr.addref();
-   *feature2D = static_cast<cv::Feature2D*>(siftPtr.get());
+   *feature2D = dynamic_cast<cv::Feature2D*>(siftPtr.get());
    
    return siftPtr.get();
 }
@@ -69,7 +69,7 @@ cv::xfeatures2d::SURF* CvSURFDetectorCreate(double hessianThresh, int nOctaves, 
 {
    cv::Ptr<cv::xfeatures2d::SURF> surfPtr = cv::xfeatures2d::SURF::create(hessianThresh, nOctaves, nOctaveLayers, extended, upright);
    surfPtr.addref();
-   *feature2D = static_cast<cv::Feature2D*>(surfPtr.get());
+   *feature2D = dynamic_cast<cv::Feature2D*>(surfPtr.get());
    
    return surfPtr.get();
 }

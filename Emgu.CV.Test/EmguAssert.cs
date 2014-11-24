@@ -55,6 +55,11 @@ namespace Emgu.CV.Test
          return AssetsUtil.LoadImage<TColor, TDepth>(name);
       }
 
+      public static Mat LoadMat(String name)
+      {
+         return AssetsUtil.LoadMat(name);
+      }
+
       public static String GetFile(String fileName)
       {
          return AssetsUtil.LoadFile(fileName);

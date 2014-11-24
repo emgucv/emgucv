@@ -62,8 +62,8 @@ cv::ml::NormalBayesClassifier* CvNormalBayesClassifierDefaultCreate(cv::ml::Stat
    cv::Ptr<cv::ml::NormalBayesClassifier> ptr = cv::ml::NormalBayesClassifier::create();
    ptr.addref();
    cv::ml::NormalBayesClassifier* p = ptr.get();
-   *statModel = (cv::ml::StatModel*) p;
-   *algorithm = (cv::Algorithm*) p;
+   *statModel = dynamic_cast< cv::ml::StatModel* >( p );
+   *algorithm = dynamic_cast< cv::Algorithm* > (p);
    return p;
 }
 /*
@@ -90,8 +90,8 @@ cv::ml::KNearest* CvKNearestCreate(int defaultK, bool isClassifier, cv::ml::Stat
    cv::Ptr<cv::ml::KNearest> ptr = cv::ml::KNearest::create(p);
    ptr.addref();
    cv::ml::KNearest* r = ptr.get();
-   *statModel = (cv::ml::StatModel*) r;
-   *algorithm = (cv::Algorithm*) r;
+   *statModel = dynamic_cast<cv::ml::StatModel*>( r );
+   *algorithm = dynamic_cast< cv::Algorithm* >( r );
    return r;
 }
 void CvKNearestRelease(cv::ml::KNearest** classifier) 
@@ -126,8 +126,8 @@ cv::ml::EM* CvEMDefaultCreate(cv::ml::EM::Params* p, cv::ml::StatModel** statMod
    cv::Ptr<cv::ml::EM> ptr = cv::ml::EM::create(*p);
    ptr.addref();
    cv::ml::EM* em = ptr.get();
-   *statModel = (cv::ml::StatModel*) em;
-   *algorithm = (cv::Algorithm*) em;
+   *statModel = dynamic_cast<cv::ml::StatModel*>( em );
+   *algorithm = dynamic_cast<cv::Algorithm*>( em );
    return em;
 }
 cv::ml::EM* CvEMTrainStartWithE(
@@ -152,8 +152,8 @@ cv::ml::EM* CvEMTrainStartWithE(
       *p);
    ptr.addref();
    cv::ml::EM* em = ptr.get();
-   *statModel = (cv::ml::StatModel*) em;
-   *algorithm = (cv::Algorithm*) em;
+   *statModel = dynamic_cast<cv::ml::StatModel*>( em );
+   *algorithm = dynamic_cast<cv::Algorithm*>( em );
    return em;
 }
 cv::ml::EM* CvEMTrainStartWithM(
@@ -219,8 +219,8 @@ cv::ml::SVM* CvSVMDefaultCreate(cv::ml::SVM::Params* p, cv::ml::StatModel** mode
    cv::Ptr<cv::ml::SVM> ptr = cv::ml::SVM::create(*p);
    ptr.addref();
    cv::ml::SVM* svm = ptr.get();
-   *model = (cv::ml::StatModel*) svm;
-   *algorithm = (cv::Algorithm*) svm;
+   *model = dynamic_cast<cv::ml::StatModel*>( svm );
+   *algorithm = dynamic_cast<cv::Algorithm*>( svm );
    return svm;
 }
 
@@ -275,8 +275,8 @@ cv::ml::ANN_MLP* CvANN_MLPCreate(cv::ml::ANN_MLP::Params* p, cv::ml::StatModel**
    cv::Ptr<cv::ml::ANN_MLP> ptr = cv::ml::ANN_MLP::create(*p);
    ptr.addref();
    cv::ml::ANN_MLP* r = ptr.get();
-   *model = (cv::ml::StatModel*) r;
-   *algorithm = (cv::Algorithm*) r;
+   *model = dynamic_cast<cv::ml::StatModel*>( r );
+   *algorithm = dynamic_cast<cv::Algorithm*>( r );
    return r;
 }
 void CvANN_MLPRelease(cv::ml::ANN_MLP** model) 
@@ -312,8 +312,8 @@ cv::ml::DTrees* CvDTreeCreate(cv::ml::DTrees::Params* params, cv::ml::StatModel*
    cv::Ptr<cv::ml::DTrees> ptr = cv::ml::DTrees::create(*params);
    ptr.addref();
    cv::ml::DTrees* dtree = ptr.get();
-   *statModel = (cv::ml::StatModel*) dtree;
-   *algorithm = (cv::Algorithm*) dtree;
+   *statModel = dynamic_cast<cv::ml::StatModel*>( dtree );
+   *algorithm = dynamic_cast<cv::Algorithm*>( dtree );
    return dtree;
 }
 void CvDTreeRelease(cv::ml::DTrees** model) 
@@ -348,8 +348,8 @@ cv::ml::RTrees* CvRTreesCreate(cv::ml::RTrees::Params* p, cv::ml::StatModel** st
    cv::Ptr<cv::ml::RTrees> ptr = cv::ml::RTrees::create(*p);
    ptr.addref();
    cv::ml::RTrees* rtrees = ptr.get();
-   *statModel = (cv::ml::StatModel*) rtrees;
-   *algorithm = (cv::Algorithm*) rtrees;
+   *statModel = dynamic_cast<cv::ml::StatModel*>( rtrees );
+   *algorithm = dynamic_cast<cv::Algorithm*>( rtrees );
    return rtrees;
 }
 void CvRTreesRelease(cv::ml::RTrees** model) 
@@ -387,8 +387,8 @@ cv::ml::Boost* CvBoostCreate(cv::ml::Boost::Params* p, cv::ml::StatModel** statM
    cv::Ptr<cv::ml::Boost> ptr = cv::ml::Boost::create(*p);
    ptr.addref();
    cv::ml::Boost* boost = ptr.get();
-   *statModel = (cv::ml::StatModel*) boost;
-   *algorithm = (cv::Algorithm*) boost;
+   *statModel = dynamic_cast<cv::ml::StatModel*>( boost );
+   *algorithm = dynamic_cast<cv::Algorithm*>( boost );
    return boost;
 }
 void CvBoostRelease(cv::ml::Boost** model) 

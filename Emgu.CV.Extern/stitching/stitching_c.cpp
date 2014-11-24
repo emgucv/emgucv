@@ -35,7 +35,7 @@ cv::detail::SurfFeaturesFinder* cveSurfFeaturesFinderCreate(
    int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f)
 {
    cv::detail::SurfFeaturesFinder* finder = new cv::detail::SurfFeaturesFinder(hess_thresh, num_octaves, num_layers, num_octaves_descr, num_layers_descr);
-   *f = (cv::detail::FeaturesFinder*)(finder);
+   *f = dynamic_cast<cv::detail::FeaturesFinder*>(finder);
    return finder;
 }
 
@@ -50,7 +50,7 @@ cv::detail::SurfFeaturesFinderGpu* cveSurfFeaturesFinderGpuCreate(
    int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f)
 {
    cv::detail::SurfFeaturesFinderGpu* finder = new cv::detail::SurfFeaturesFinderGpu(hess_thresh, num_octaves, num_layers, num_octaves_descr, num_layers_descr);
-   *f = (cv::detail::FeaturesFinder*)(finder);
+   *f = dynamic_cast<cv::detail::FeaturesFinder*>(finder);
    return finder;
 }
 
@@ -64,7 +64,7 @@ void cveSurfFeaturesFinderGpuRelease(cv::detail::SurfFeaturesFinderGpu** finder)
 cv::detail::OrbFeaturesFinder* cveOrbFeaturesFinderCreate(CvSize* grid_size, int nfeaturea, float scaleFactor, int nlevels, cv::detail::FeaturesFinder** f)
 {
    cv::detail::OrbFeaturesFinder* finder = new cv::detail::OrbFeaturesFinder(*grid_size, nfeaturea, scaleFactor, nlevels);
-   *f = (cv::detail::FeaturesFinder*)(finder);
+   *f = dynamic_cast<cv::detail::FeaturesFinder*>(finder);
    return finder;
 }
 void cveOrbFeaturesFinderRelease(cv::detail::OrbFeaturesFinder** finder)

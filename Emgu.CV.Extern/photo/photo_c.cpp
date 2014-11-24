@@ -69,7 +69,7 @@ cv::CalibrateDebevec* cveCreateCalibrateDebevec(int samples, float lambda, bool 
 {
    cv::Ptr<cv::CalibrateDebevec> res = cv::createCalibrateDebevec(samples, lambda, random);
    res.addref();
-   *calibrateCRF = static_cast<cv::CalibrateCRF*>(res.get());
+   *calibrateCRF = dynamic_cast<cv::CalibrateCRF*>(res.get());
    return res.get();
 }
 
@@ -77,7 +77,7 @@ cv::CalibrateRobertson* cveCreateCalibrateRobertson(int max_iter, float threshol
 {
    cv::Ptr<cv::CalibrateRobertson> res = cv::createCalibrateRobertson(max_iter, threshold);
    res.addref();
-   *calibrateCRF = static_cast<cv::CalibrateCRF*>(res.get());
+   *calibrateCRF = dynamic_cast<cv::CalibrateCRF*>(res.get());
    return res.get();
 }
 
@@ -93,7 +93,7 @@ cv::MergeDebevec* cveCreateMergeDebevec(cv::MergeExposures** merge)
 {
    cv::Ptr<cv::MergeDebevec> res = cv::createMergeDebevec();
    res.addref();
-   *merge = static_cast<cv::MergeExposures*>(res.get());
+   *merge = dynamic_cast<cv::MergeExposures*>(res.get());
    return res.get();
 }
 void cveMergeDebevecRelease(cv::MergeDebevec** merge)
@@ -106,7 +106,7 @@ cv::MergeMertens* cveCreateMergeMertens(float contrast_weight, float saturation_
 {
    cv::Ptr<cv::MergeMertens> res = cv::createMergeMertens(contrast_weight, saturation_weight, exposure_weight);
    res.addref();
-   *merge = static_cast<cv::MergeExposures*>(res.get());
+   *merge = dynamic_cast<cv::MergeExposures*>(res.get());
    return res.get();
 }
 

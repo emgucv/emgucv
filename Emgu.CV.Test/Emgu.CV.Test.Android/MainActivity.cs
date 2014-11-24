@@ -42,6 +42,11 @@ namespace Emgu.CV.Test
          return new Image<TColor, TDepth>(Assets, name);
       }
 
+      public static Mat LoadMat(string name)
+      {
+         return new Mat(Assets, name);
+      }
+
       public static string LoadFile(string assetName)
       {
          AndroidFileAsset.OverwriteMethod method = AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;

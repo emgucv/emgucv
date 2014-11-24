@@ -13,7 +13,7 @@ cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevel
 {
    cv::Ptr<cv::ORB> orbPtr = cv::ORB::create(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold);
    orbPtr.addref();
-   *feature2D = static_cast<cv::Feature2D*>(orbPtr.get());
+   *feature2D = dynamic_cast<cv::Feature2D*>(orbPtr.get());
    return orbPtr.get();
 }
 
@@ -28,7 +28,7 @@ cv::BRISK* CvBriskCreate(int thresh, int octaves, float patternScale, cv::Featur
 {
    cv::Ptr<cv::BRISK> briskPtr = cv::BRISK::create(thresh, octaves, patternScale);
    briskPtr.addref();
-   *feature2D = static_cast<cv::Feature2D*>(briskPtr.get());
+   *feature2D = dynamic_cast<cv::Feature2D*>(briskPtr.get());
    return briskPtr.get();
 }
 
@@ -43,7 +43,7 @@ cv::FastFeatureDetector* CvFASTGetFeatureDetector(int threshold, bool nonmax_sup
 {
    cv::Ptr<cv::FastFeatureDetector> fastPtr = cv::FastFeatureDetector::create(threshold, nonmax_supression, type);
    fastPtr.addref();
-   *feature2D = static_cast<cv::Feature2D*>(fastPtr.get());
+   *feature2D = dynamic_cast<cv::Feature2D*>(fastPtr.get());
    return fastPtr.get();
 }
 
@@ -77,7 +77,7 @@ cv::MSER* CvMserGetFeatureDetector(
       minMargin, 
       edgeBlurSize);
    mserPtr.addref();
-   *feature2D = static_cast<cv::MSER*>(mserPtr.get());
+   *feature2D = dynamic_cast<cv::MSER*>(mserPtr.get());
    return mserPtr.get();
 }
 
@@ -92,7 +92,7 @@ cv::SimpleBlobDetector* CvSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr)
 {
    cv::Ptr<cv::SimpleBlobDetector> detectorPtr = cv::SimpleBlobDetector::create();
    detectorPtr.addref();
-   *feature2DPtr = static_cast<cv::Feature2D*>(detectorPtr.get());
+   *feature2DPtr = dynamic_cast<cv::Feature2D*>(detectorPtr.get());
    return detectorPtr.get();
 }
 void CvSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector)
@@ -177,13 +177,13 @@ void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray
 
 cv::Algorithm* CvDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher)
 {
-   return (cv::Algorithm*) matcher;
+   return dynamic_cast<cv::Algorithm*>( matcher );
 }
 
 cv::BFMatcher* cveBFMatcherCreate(cv::DescriptorMatcher** m, int distanceType, bool crossCheck)
 {
    cv::BFMatcher* matcher = new cv::BFMatcher(distanceType, crossCheck);
-   *m = (cv::DescriptorMatcher*) matcher;
+   *m = dynamic_cast< cv::DescriptorMatcher* > (matcher);
    return matcher;
 }
 
@@ -283,7 +283,7 @@ int CvFeature2DGetDescriptorSize(cv::Feature2D* feature2D)
 }
 cv::Algorithm* CvFeature2DGetAlgorithm(cv::Feature2D* feature2D)
 {
-   return static_cast<cv::Algorithm*>( feature2D );
+   return dynamic_cast<cv::Algorithm*>( feature2D );
 }
 
 
@@ -372,7 +372,7 @@ cv::KAZE* cveKAZEDetectorCreate(
 {
    cv::Ptr<cv::KAZE> kazePtr = cv::KAZE::create(extended, upright, threshold, octaves, sublevels, diffusivity);
    kazePtr.addref();
-   *feature2D = static_cast<cv::Feature2D*>(kazePtr.get());
+   *feature2D = dynamic_cast<cv::Feature2D*>(kazePtr.get());
    
    return kazePtr.get();
 }
@@ -391,7 +391,7 @@ cv::AKAZE* cveAKAZEDetectorCreate(
 {
    cv::Ptr<cv::AKAZE> akazePtr = cv::AKAZE::create(descriptorType, descriptorSize, descriptorChannels, threshold, octaves, sublevels, diffusivity);
    akazePtr.addref();
-   *feature2D = static_cast<cv::Feature2D*>(akazePtr.get());
+   *feature2D = dynamic_cast<cv::Feature2D*>(akazePtr.get());
    return akazePtr.get();
 }
 void cveAKAZEDetectorRelease(cv::AKAZE** detector)

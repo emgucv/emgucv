@@ -19,7 +19,7 @@ cv::StereoSGBM* CvStereoSGBMCreate(
    cv::Ptr<cv::StereoSGBM> ptr =  cv::StereoSGBM::create(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode);
    ptr.addref();
    cv::StereoSGBM* result = ptr.get();
-   *stereoMatcher = (cv::StereoMatcher*) result;
+   *stereoMatcher = dynamic_cast<cv::StereoMatcher*>( result );
    return result;
 }
 void CvStereoSGBMRelease(cv::StereoSGBM** obj) 

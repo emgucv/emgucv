@@ -42,7 +42,7 @@ cv::superres::SuperResolution* cvSuperResolutionCreate(int type, cv::superres::F
    ptr->setInput(fsPtr);
    cv::Mat tmp;
    ptr->nextFrame(tmp);
-   *frameSourceOut = static_cast<cv::superres::FrameSource*>(ptr.get());
+   *frameSourceOut = dynamic_cast<cv::superres::FrameSource*>(ptr.get());
 
    fsPtr.addref();
    ptr.addref();
