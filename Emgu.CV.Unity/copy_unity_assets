@@ -13,6 +13,10 @@ mkdir Emgu.CV.Shape
 cd ..
 cd ..
 
+cp ../opencv/LICENSE Assets/Emgu.CV/opencv.license.txt
+cp ../Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git/COPYING Assets/Emgu.CV/tesseract.ocr.license.txt
+cp unityStoreIcons/README.txt Assets/Emgu.CV/README.txt
+
 cp -r ../Emgu.Util/*.cs Assets/Emgu.CV/Emgu.Util/
 
 cp -r ../Emgu.CV/*.cs Assets/Emgu.CV/Emgu.CV/
