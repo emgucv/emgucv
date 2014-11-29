@@ -46,4 +46,5 @@ CVAPI(void) cveGetCvStructSizes(emgu::cvStructSizes* sizes);
 
 CVAPI(void) testDrawLine(IplImage* img, int startX, int startY, int endX, int endY, CvScalar c);
 
+CVAPI(void) cveMemcpy(void* dst, void* src, int length);
 #endif

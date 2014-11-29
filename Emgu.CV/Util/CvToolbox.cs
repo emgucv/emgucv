@@ -144,7 +144,7 @@ namespace Emgu.CV.Util
          for (int i = 0; i < rows; i++, dataPos += mat.Step)
          {
             GCHandle handle = GCHandle.Alloc(data[i], GCHandleType.Pinned);
-            Emgu.Util.Toolbox.memcpy(new IntPtr(dataPos), handle.AddrOfPinnedObject(), rowSizeInBytes);
+            Memcpy(new IntPtr(dataPos), handle.AddrOfPinnedObject(), rowSizeInBytes);
             handle.Free();
          }
          return res;
@@ -166,7 +166,7 @@ namespace Emgu.CV.Util
          {
             GCHandle handleTmp = GCHandle.Alloc(points[i], GCHandleType.Pinned);
             IntPtr dst = new IntPtr(cvMat.Data.ToInt64() + cvMat.Step * i);
-            Emgu.Util.Toolbox.memcpy(dst, handleTmp.AddrOfPinnedObject(), points[i].Length * Marshal.SizeOf(typeof(MCvPoint2D64f)));
+            Memcpy(dst, handleTmp.AddrOfPinnedObject(), points[i].Length * Marshal.SizeOf(typeof(MCvPoint2D64f)));
             handleTmp.Free();
          }
          return res;
@@ -239,6 +239,72 @@ namespace Emgu.CV.Util
       }
       #endregion
       */
+
+      /// <summary>
+      /// Copy a generic vector to the unmanaged memory
+      /// </summary>
+      /// <typeparam name="TData">The data type of the vector</typeparam>
+      /// <param name="src">The source vector</param>
+      /// <param name="dest">Pointer to the destination unmanaged memory</param>
+      public static void CopyVector<TData>(TData[] src, IntPtr dest)
+      {
+         int size = Marshal.SizeOf(typeof(TData)) * src.Length;
+         GCHandle handle = GCHandle.Alloc(src, GCHandleType.Pinned);
+         Memcpy(dest, handle.AddrOfPinnedObject(), size);
+         handle.Free();
+      }
+
+      /// <summary>
+      /// Copy a jagged two dimensional array to the unmanaged memory
+      /// </summary>
+      /// <typeparam name="TData">The data type of the jagged two dimensional</typeparam>
+      /// <param name="source">The source array</param>
+      /// <param name="dest">Pointer to the destination unmanaged memory</param>
+      public static void CopyMatrix<TData>(TData[][] source, IntPtr dest)
+      {
+         int datasize = Marshal.SizeOf(typeof(TData));
+         int step = datasize * source[0].Length;
+         int current = dest.ToInt32();
+
+         for (int i = 0; i < source.Length; i++, current += step)
+         {
+            GCHandle handle = GCHandle.Alloc(source[i], GCHandleType.Pinned);
+            Memcpy(new IntPtr(current), handle.AddrOfPinnedObject(), step);
+            handle.Free();
+         }
+      }
+
+      /// <summary>
+      /// Copy a jagged two dimensional array from the unmanaged memory
+      /// </summary>
+      /// <typeparam name="D">The data type of the jagged two dimensional</typeparam>
+      /// <param name="src">The src array</param>
+      /// <param name="dest">Pointer to the destination unmanaged memory</param>
+      public static void CopyMatrix<D>(IntPtr src, D[][] dest)
+      {
+         int datasize = Marshal.SizeOf(typeof(D));
+         int step = datasize * dest[0].Length;
+         int current = src.ToInt32();
+
+         for (int i = 0; i < dest.Length; i++, current += step)
+         {
+            GCHandle handle = GCHandle.Alloc(dest[i], GCHandleType.Pinned);
+            Memcpy(handle.AddrOfPinnedObject(), new IntPtr(current), step);
+            handle.Free();
+         }
+      }
+
+      /// <summary>
+      /// memcpy function
+      /// </summary>
+      /// <param name="dest">the destination of memory copy</param>
+      /// <param name="src">the source of memory copy</param>
+      /// <param name="len">the number of bytes to be copied</param>
+      public static void Memcpy(IntPtr dest, IntPtr src, int len)
+      {
+         CvInvoke.cveMemcpy(dest, src, len);
+      }
+
       #region color conversion
       private static Dictionary<Type, Dictionary<Type, CvEnum.ColorConversion>> _lookupTable
          = new Dictionary<Type, Dictionary<Type, CvEnum.ColorConversion>>();
@@ -313,5 +379,8 @@ namespace Emgu.CV
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveMemcpy(IntPtr dst, IntPtr src, int length);
    }
 }

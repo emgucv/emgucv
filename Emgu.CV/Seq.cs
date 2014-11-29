@@ -342,7 +342,7 @@ namespace Emgu.CV
             IntPtr address = buffer.AddrOfPinnedObject();
             for (int i = 0; i < Total; i++)
             {
-               Toolbox.memcpy(address, CvInvoke.cvGetSeqElem(_ptr, i), _sizeOfElement);
+               CvToolbox.Memcpy(address, CvInvoke.cvGetSeqElem(_ptr, i), _sizeOfElement);
                yield return buffer.Array[0];
                //yield return (T)Marshal.PtrToStructure(CvInvoke.cvGetSeqElem(_ptr, i), typeof(T));
                //yield return this[i];

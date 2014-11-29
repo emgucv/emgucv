@@ -19,7 +19,7 @@ using Emgu.CV.Features2D;
 using Emgu.CV.Flann;
 using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
-#if !IOS
+#if !(IOS || NETFX_CORE)
 using Emgu.CV.Cuda;
 using Emgu.CV.Tiff;
 #endif
@@ -28,7 +28,14 @@ using Emgu.CV.VideoSurveillance;
 using Emgu.CV.XFeatures2D;
 //using Emgu.CV.Softcascade;
 using Emgu.Util;
+#if NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+using Windows.UI;
+#else
 using NUnit.Framework;
+#endif
 
 namespace Emgu.CV.Test
 {
@@ -124,6 +131,7 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(45.0, Math.Atan2(direction.Y, direction.X) * 180.0 / Math.PI);
       }
 
+#if !WINDOWS_PHONE_APP
       [Test]
       public void TestXmlSerialization()
       {
@@ -154,6 +162,7 @@ namespace Emgu.CV.Test
          img1.Dispose();
          img2.Dispose();
       }
+#endif
 
       [Test]
       public void TestRotationMatrix3D()
@@ -484,7 +493,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestIntrisicParameters()
       {
-         #if !(IOS || ANDROID)
+         #if !(IOS || ANDROID || NETFX_CORE)
          System.Diagnostics.PerformanceCounter memCounter = new PerformanceCounter("Memory", "Available MBytes");
          Trace.WriteLine(String.Format("Available mem before: {0} Mb", memCounter.NextValue()));
          #endif
@@ -493,7 +502,7 @@ namespace Emgu.CV.Test
          {
             paramArr[i] = new IntrinsicCameraParameters(8);
          }
-         #if !(IOS || ANDROID)
+         #if !(IOS || ANDROID || NETFX_CORE)
          Trace.WriteLine(String.Format("Available mem after: {0} Mb", memCounter.NextValue()));
          #endif
       }
@@ -612,7 +621,7 @@ namespace Emgu.CV.Test
          //Assert.IsTrue(vertices[1].Equals(new PointF(6.0f, 0.0f)));
       }
 
-#if !(IOS || ANDROID)
+#if !(IOS || ANDROID || NETFX_CORE)
       [Test]
       public void TestGrayscaleBitmapConstructor()
       {
@@ -860,7 +869,7 @@ namespace Emgu.CV.Test
             // hangs here:
             Emgu.CV.Structure.Triangle2DF[] triangles = psd.GetDelaunayTriangles();
 
-            System.Console.WriteLine("done.");
+            //System.Console.WriteLine("done.");
          }
          while (iter < maxIter);
       }
@@ -1292,8 +1301,12 @@ namespace Emgu.CV.Test
             PointF[] hull = CvInvoke.ConvexHull(pts, true);
             watch.Stop();
             img.DrawPolyline(
+#if NETFX_CORE
+                Extensions.ConvertAll<PointF, Point>(hull, Point.Round),
+#else
                 Array.ConvertAll<PointF, Point>(hull, Point.Round),
-                true, new Bgr(255.0, 0.0, 0.0), 1);
+#endif
+            true, new Bgr(255.0, 0.0, 0.0), 1);
 
             //ImageViewer.Show(img, String.Format("Convex Hull Computed in {0} milliseconds", watch.ElapsedMilliseconds));
          
@@ -1398,6 +1411,7 @@ namespace Emgu.CV.Test
 
       }
 
+#if !WINDOWS_PHONE_APP
       [Test]
       public void TestExtrinsicCameraParametersRuntimeSerialize()
       {
@@ -1447,6 +1461,7 @@ namespace Emgu.CV.Test
             EmguAssert.IsTrue(param.Equals(param2));
          }
       }
+#endif
 
       [Test]
       public void TestEllipseFitting()
@@ -1463,10 +1478,10 @@ namespace Emgu.CV.Test
          watch.Stop();
 
          #region draw the points and the fitted ellipse
-         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(Color.White));
+         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(255, 255, 255));
          foreach (PointF p in pts)
-            img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
-         img.Draw(fittedEllipse, new Bgr(Color.Red), 2);
+            img.Draw(new CircleF(p, 2), new Bgr(0, 255, 0), 1);
+         img.Draw(fittedEllipse, new Bgr(0, 0, 255), 2);
          #endregion
          //TODO: Fix this, the fitted rectangle is different from the point cloud
          //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
@@ -1487,10 +1502,10 @@ namespace Emgu.CV.Test
          watch.Stop();
 
          #region draw the points and the box
-         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(Color.White));
-         img.Draw(box, new Bgr(Color.Red), 1);
+         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(255, 255, 255));
+         img.Draw(box, new Bgr(0, 0, 255), 1);
          foreach (PointF p in pts)
-            img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
+            img.Draw(new CircleF(p, 2), new Bgr(0, 255, 0), 1);
          #endregion
 
          //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
@@ -1511,10 +1526,10 @@ namespace Emgu.CV.Test
          watch.Stop();
 
          #region draw the points and the circle
-         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(Color.White));
-         img.Draw(circle, new Bgr(Color.Red), 1);
+         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(255, 255, 255));
+         img.Draw(circle, new Bgr(0, 0, 255), 1);
          foreach (PointF p in pts)
-            img.Draw(new CircleF(p, 2), new Bgr(Color.Green), 1);
+            img.Draw(new CircleF(p, 2), new Bgr(0, 255, 0), 1);
          #endregion
 
          //ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
@@ -1575,6 +1590,7 @@ namespace Emgu.CV.Test
          }
       }*/
 
+#if !WINDOWS_PHONE_APP
       [Test]
       public void TestMatNDRuntimeSerialization()
       {
@@ -1622,6 +1638,7 @@ namespace Emgu.CV.Test
             }
          }
       }
+#endif
 
       [Test]
       public void TestVectorOfMat()
@@ -1727,7 +1744,7 @@ namespace Emgu.CV.Test
             EmguAssert.AreEqual(1, rects.Length);
 
             foreach (MCvObjectDetection rect in rects)
-               image.Draw(rect.Rect, new Bgr(Color.Red), 1);
+               image.Draw(rect.Rect, new Bgr(0, 0, 255), 1);
             EmguAssert.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
             //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
@@ -1749,7 +1766,7 @@ namespace Emgu.CV.Test
 
             EmguAssert.AreEqual(0, rects.Length);
             foreach (MCvObjectDetection rect in rects)
-               image.Draw(rect.Rect, new Bgr(Color.Red), 1);
+               image.Draw(rect.Rect, new Bgr(0, 0, 255), 1);
             EmguAssert.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
@@ -1767,7 +1784,7 @@ namespace Emgu.CV.Test
             MCvObjectDetection[] rects = hog.DetectMultiScale(image);
             watch.Stop();
             foreach (MCvObjectDetection rect in rects)
-               image.Draw(rect.Rect, new Bgr(Color.Red), 1);
+               image.Draw(rect.Rect, new Bgr(0, 0, 255), 1);
 
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
          }
@@ -1784,7 +1801,7 @@ namespace Emgu.CV.Test
             MCvObjectDetection[] rects = hog.DetectMultiScale(image);
             watch.Stop();
             foreach (MCvObjectDetection rect in rects)
-               image.Draw(rect.Rect, new Bgr(Color.Red), 1);
+               image.Draw(rect.Rect, new Bgr(0, 0, 255), 1);
 
             EmguAssert.WriteLine(String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
             //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
@@ -1900,6 +1917,7 @@ namespace Emgu.CV.Test
          }
       }*/
 
+#if !WINDOWS_PHONE_APP
       [Test]
       public void TestBinaryStorage()
       {
@@ -1939,6 +1957,7 @@ namespace Emgu.CV.Test
             //EmguAssert.IsTrue(pts[i] == pts2[i]);
          }
       }
+#endif
 
       [Test]
       public void TestSeqPerformance()
@@ -1974,6 +1993,7 @@ namespace Emgu.CV.Test
          CvInvoke.cvReleaseConDensation(ref conden);
       }*/
 
+#if !WINDOWS_PHONE_APP
       private static String GetTempFileName()
       {
          string filename = Path.GetTempFileName();
@@ -1982,6 +2002,7 @@ namespace Emgu.CV.Test
 
          return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
       }
+#endif
 
       /*
       [Test]
@@ -2180,11 +2201,12 @@ namespace Emgu.CV.Test
          using (Matrix<double> m = new Matrix<double>(2, 3))
          {
             rotationMatrix.CopyTo(m);
-            Trace.WriteLine("emgu.cv.test", String.Format("dstSize: {0}x{1}", dstImageSize.Width, dstImageSize.Height));
-            Trace.WriteLine("emgu.cv.test", String.Format("rotationMat: [ [{0}, {1}, {2}], [{3}, {4}, {5}] ]", m.Data[0, 0], m.Data[0, 1], m.Data[0, 2], m.Data[1, 0], m.Data[1, 1], m.Data[1, 2]));
+            System.Diagnostics.Debug.WriteLine("emgu.cv.test", String.Format("dstSize: {0}x{1}", dstImageSize.Width, dstImageSize.Height));
+            System.Diagnostics.Debug.WriteLine("emgu.cv.test", String.Format("rotationMat: [ [{0}, {1}, {2}], [{3}, {4}, {5}] ]", m.Data[0, 0], m.Data[0, 1], m.Data[0, 2], m.Data[1, 0], m.Data[1, 1], m.Data[1, 2]));
          }
       }
 
+#if !WINDOWS_PHONE_APP
       [Test]
       public void TestImageDecodeBuffer()
       {
@@ -2199,6 +2221,7 @@ namespace Emgu.CV.Test
             //Emgu.CV.UI.ImageViewer.Show(image);
          }
       }
+#endif
 
       [Test]
       public void TestVectorOfVector()
@@ -2544,6 +2567,7 @@ namespace Emgu.CV.Test
          }
       }*/
 
+#if !WINDOWS_PHONE_APP
       //TODO: Check why this fails again
       [Test]
       public void TestFileCapturePause()
@@ -2624,7 +2648,7 @@ namespace Emgu.CV.Test
          //viewer.ShowDialog();
       }
       #endif
-
+#endif
       [Test]
       public void TestCvString()
       {

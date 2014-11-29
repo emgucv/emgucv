@@ -34,6 +34,12 @@ source_group("Src" FILES ${cvblob_srcs})
 source_group("Include" FILES ${cvblob_hdrs})
 set(the_target ${PROJECT_NAME})
 
+IF(ENABLE_WINRT_MODE)
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4703")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4703")
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+ENDIF()
+
 add_library(${the_target} STATIC ${cvblob_srcs} ${cvblob_hdrs})
 
 if (NOT WIN32)

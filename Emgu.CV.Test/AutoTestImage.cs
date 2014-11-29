@@ -326,6 +326,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(img5.Equals(img1));
       }
 
+#if !WINDOWS_PHONE_APP
       [TestAttribute]
       public void TestMemory()
       {
@@ -334,6 +335,7 @@ namespace Emgu.CV.Test
             Image<Bgr, Single> img = new Image<Bgr, Single>(1000, 1000);
          }
       }
+#endif
 
       [TestAttribute]
       public void TestConversion()
@@ -475,6 +477,7 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(size, new Size(10, 10));
       }
 
+#if !WINDOWS_PHONE_APP
       [TestAttribute]
       public void TestXmlSerialize()
       {
@@ -498,6 +501,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(img.Equals(img4));
 
       }
+#endif
 
       [TestAttribute]
       public void TestRotation()

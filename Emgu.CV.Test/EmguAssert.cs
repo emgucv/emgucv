@@ -86,6 +86,11 @@ namespace Emgu.CV.Test
             return m.ToImage<TColor, TDepth>();
          }
       }
+
+      public static Mat LoadMat(String name)
+      {
+         return Task.Run(async () => await ReadFile(name)).Result;
+      }
 #else
       public static String GetFile(String fileName)
       {

@@ -191,12 +191,14 @@ namespace Emgu.CV.Test
          using (Matrix<Byte> mat = new Matrix<byte>(50, 60))
          {
             mat.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
+
+#if !WINDOWS_PHONE_APP
             XDocument doc = Toolbox.XmlSerialize<Matrix<Byte>>(mat);
             //Trace.WriteLine(doc.OuterXml);
 
             using (Matrix<Byte> mat2 = Toolbox.XmlDeserialize<Matrix<Byte>>(doc))
                EmguAssert.IsTrue(mat.Equals(mat2));
-
+#endif
          }
       }
 
@@ -281,6 +283,7 @@ namespace Emgu.CV.Test
       }
 #endif
 
+#if !WINDOWS_PHONE_APP //bad garbage collector in Windows phone results in failed test?
       [Test]
       public void TestStressTestMatrixGC()
       {
@@ -301,6 +304,7 @@ namespace Emgu.CV.Test
             //Trace.WriteLine(i);
          }
       }
+#endif
 
       [Test]
       public void TestSubMatrix()
@@ -394,9 +398,11 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(20, m.Cols);
          EmguAssert.AreEqual(2, m.NumberOfChannels);
 
+#if !WINDOWS_PHONE_APP
          XDocument xDoc = Toolbox.XmlSerialize<Matrix<float>>(m);
          Matrix<float> m2 = Toolbox.XmlDeserialize<Matrix<float>>(xDoc);
          EmguAssert.IsTrue(m.Equals(m2));
+#endif
       }
 
       [Test]

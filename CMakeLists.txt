@@ -63,21 +63,27 @@ ENDIF()
 #  Check if 32bit or 64-bit
 # ----------------------------------------------------------------------------
 CHECK_TARGET_ARCH()
-IF (TARGET_ARCH_64)
-  MESSAGE(STATUS "Building 64bit library")
-ELSE()
-  MESSAGE(STATUS "Building 32bit library")
-ENDIF()
+
 
 IF (WIN32)
   IF(TARGET_ARCH_64)
     SET(EMGUCV_ARCH win64)
+  ELSEIF ("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+    MESSAGE(STATUS "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
+	STRING(FIND "${CMAKE_GENERATOR}" "ARM" IS_ARM)
+	IF(IS_ARM GREATER -1)
+      SET(EMGUCV_ARCH arm)
+	ELSE()
+	  SET(EMGUCV_ARCH win32)
+	ENDIF()
   ELSE()
     SET(EMGUCV_ARCH win32)
   ENDIF()
 ELSE(WIN32)
   SET(EMGUCV_ARCH ${CMAKE_SYSTEM_NAME})
 ENDIF(WIN32)
+
+MESSAGE(STATUS "Building for ${EMGUCV_ARCH}")
 
 IF(WIN32 AND CV_ICC)
 #  SET(CV_ICC_ADDITIONAL_FLAGS_RELEASE "/O3 /QaxCORE-AVX2,AVX,SSE4.1,SSE3 /Qparallel /Qopt-report:1 /Qopt-report-phase:vec /Qopt-report-phase:par /Qopt-report-file:stderr /Qipo /Qunroll-aggressive")
@@ -101,7 +107,7 @@ SET(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 IF(ANDROID)
   SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/${ANDROID_ABI}")
 ELSEIF(WIN32)
-  IF (TARGET_ARCH_64)
+  IF ("${EMGUCV_ARCH}" STREQUAL "win64")
     SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/x64")
 	#Check for x86 binary as well...
 	FILE(GLOB UNMANAGED_DLL_32BIT "${CMAKE_CURRENT_SOURCE_DIR}/bin/x86/*.dll")
@@ -110,6 +116,8 @@ ELSEIF(WIN32)
 	   SET(UNIVERSAL_BUILD ON)
 	   MESSAGE(STATUS "Performing a universal build.")	
 	ENDIF()
+  ELSEIF("${EMGUCV_ARCH}" STREQUAL "arm")
+    SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/arm")
   ELSE()
     SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/x86")
   ENDIF()
@@ -227,30 +235,30 @@ SET(ENTRYPOINT_CS_STRING "")
 SET(ENTRYPOINT_MODULES_STRING "")
 
 #Add opencl
-IF(WIN32 AND (NOT NETFX_CORE) )
-  IF(WITH_OPENCL)
-    MESSAGE(STATUS "Open CL build included")
-	SET(OPENCL_SOURCE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/lib/opencl-icd-1.2.11.0/icd")
-	ADD_SUBDIRECTORY(${OPENCL_SOURCE_FOLDER})
-	#GET_TARGET_PROPERTY(OPENCL_OUTPUT_NAME OpenCL OUTPUT_NAME)
+#IF(WIN32 AND (NOT NETFX_CORE) )
+#  IF(WITH_OPENCL)
+#    MESSAGE(STATUS "Open CL build included")
+#	SET(OPENCL_SOURCE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/lib/opencl-icd-1.2.11.0/icd")
+#	ADD_SUBDIRECTORY(${OPENCL_SOURCE_FOLDER})
+#	#GET_TARGET_PROPERTY(OPENCL_OUTPUT_NAME OpenCL OUTPUT_NAME)
 	
-	set(OPENCL_FOUND YES)
-	set(OPENCL_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/bin/Release/opencl.lib" CACHE STRING "OpenCL library")
-	set(OPENCL_INCLUDE_DIR "${OPENCL_SOURCE_FOLDER}/inc" CACHE STRING "OpenCL include directory")
-	mark_as_advanced(OPENCL_INCLUDE_DIR OPENCL_LIBRARY)
+#	set(OPENCL_FOUND YES)
+#	set(OPENCL_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/bin/Release/opencl.lib" CACHE STRING "OpenCL library")
+#	set(OPENCL_INCLUDE_DIR "${OPENCL_SOURCE_FOLDER}/inc" CACHE STRING "OpenCL include directory")
+#	mark_as_advanced(OPENCL_INCLUDE_DIR OPENCL_LIBRARY)
 	
-	SET(ENTRYPOINT_MODULES_STRING "${ENTRYPOINT_MODULES_STRING}
-	     OpenclLibrary,")
-    SET(ENTRYPOINT_CS_STRING "${ENTRYPOINT_CS_STRING} 
-      /// <summary>
-      /// The file name of the OpenCL library
-      /// </summary>
-      public const string OpenclLibrary = \"OpenCL\";")
-  ELSE()
-    SET(OPENCL_OUTPUT_NAME "")
-	MESSAGE(STATUS "Open CL build not included")
-  ENDIF()
-ENDIF()
+#	SET(ENTRYPOINT_MODULES_STRING "${ENTRYPOINT_MODULES_STRING}
+#	     OpenclLibrary,")
+#   SET(ENTRYPOINT_CS_STRING "${ENTRYPOINT_CS_STRING} 
+#      /// <summary>
+#      /// The file name of the OpenCL library
+#      /// </summary>
+#      public const string OpenclLibrary = \"OpenCL\";")
+#  ELSE()
+#    SET(OPENCL_OUTPUT_NAME "")
+#	MESSAGE(STATUS "Open CL build not included")
+#  ENDIF()
+#ENDIF()
 
 SET(CMAKE_OLD_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 SET(CMAKE_SOURCE_DIR ${OPENCV_SUBFOLDER})
@@ -263,11 +271,12 @@ SET(CMAKE_SOURCE_DIR ${CMAKE_OLD_SOURCE_DIR})
 SET (OPENCV_MODULE_NAME_CANDIDATES
   core imgproc video flann ml imgcodecs videoio highgui objdetect features2d calib3d
   cudalegacy cudaarithm cudawarping cuda cudafilters cudaimgproc cudaoptflow 
-  cudastereo cudabgsegm cudafeatures2d 
-  photo superres stitching 
+  cudastereo cudabgsegm cudafeatures2d cudacodec 
+  photo superres  
   videostab shape
-  cudev  cudacodec 
+  cudev  
   text face ximgproc xobjdetect xfeatures2d bgsegm optflow
+  stitching
   )
   
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})

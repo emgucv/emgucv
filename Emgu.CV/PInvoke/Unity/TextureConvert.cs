@@ -104,7 +104,7 @@ namespace Emgu.CV
          //return null;
       }
 
-      /*
+      
       /// <summary>
       /// 
       /// </summary>
@@ -155,6 +155,6 @@ namespace Emgu.CV
                return texture;
             }
          }
-      }*/
+      }
    }
 }

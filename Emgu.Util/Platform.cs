@@ -26,6 +26,9 @@ namespace Emgu.Util
 #elif ANDROID || UNITY_ANDROID
          _os = OS.Android;
          _runtime = ClrType.Mono;
+#elif WINDOWS_PHONE_APP
+         _os = OS.WindowsPhone;
+         _runtime = ClrType.NetFxCore;
 #elif NETFX_CORE
          _os = OS.Windows;
          _runtime = ClrType.NetFxCore;

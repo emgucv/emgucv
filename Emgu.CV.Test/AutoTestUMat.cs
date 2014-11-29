@@ -54,6 +54,7 @@ namespace Emgu.CV.Test
          }
       }
 
+#if !WINDOWS_PHONE_APP
       [TestAttribute]
       public void TestRuntimeSerialize()
       {
@@ -77,5 +78,6 @@ namespace Emgu.CV.Test
             }
          }
       }
+#endif
    }
 }

@@ -207,60 +207,6 @@ namespace Emgu.Util
       }
 
       /// <summary>
-      /// Copy a generic vector to the unmanaged memory
-      /// </summary>
-      /// <typeparam name="TData">The data type of the vector</typeparam>
-      /// <param name="src">The source vector</param>
-      /// <param name="dest">Pointer to the destination unmanaged memory</param>
-      public static void CopyVector<TData>(TData[] src, IntPtr dest)
-      {
-         int size = Marshal.SizeOf(typeof(TData)) * src.Length;
-         GCHandle handle = GCHandle.Alloc(src, GCHandleType.Pinned);
-         memcpy(dest, handle.AddrOfPinnedObject(), size);
-         handle.Free();
-      }
-
-      /// <summary>
-      /// Copy a jagged two dimensional array to the unmanaged memory
-      /// </summary>
-      /// <typeparam name="TData">The data type of the jagged two dimensional</typeparam>
-      /// <param name="source">The source array</param>
-      /// <param name="dest">Pointer to the destination unmanaged memory</param>
-      public static void CopyMatrix<TData>(TData[][] source, IntPtr dest)
-      {
-         int datasize = Marshal.SizeOf(typeof(TData));
-         int step = datasize * source[0].Length;
-         int current = dest.ToInt32();
-
-         for (int i = 0; i < source.Length; i++, current += step)
-         {
-            GCHandle handle = GCHandle.Alloc(source[i], GCHandleType.Pinned);
-            memcpy(new IntPtr(current), handle.AddrOfPinnedObject(), step);
-            handle.Free();
-         }
-      }
-
-      /// <summary>
-      /// Copy a jagged two dimensional array from the unmanaged memory
-      /// </summary>
-      /// <typeparam name="D">The data type of the jagged two dimensional</typeparam>
-      /// <param name="src">The src array</param>
-      /// <param name="dest">Pointer to the destination unmanaged memory</param>
-      public static void CopyMatrix<D>(IntPtr src, D[][] dest)
-      {
-         int datasize = Marshal.SizeOf(typeof(D));
-         int step = datasize * dest[0].Length;
-         int current = src.ToInt32();
-
-         for (int i = 0; i < dest.Length; i++, current += step)
-         {
-            GCHandle handle = GCHandle.Alloc(dest[i], GCHandleType.Pinned);
-            memcpy(handle.AddrOfPinnedObject(), new IntPtr(current), step);
-            handle.Free();
-         }
-      }
-
-      /// <summary>
       /// Perform first degree interpolation give the sorted data <paramref name="src"/> and the interpolation <paramref name="indexes"/>
       /// </summary>
       /// <param name="src">The sorted data that will be interpolated from</param>
@@ -435,26 +381,29 @@ namespace Emgu.Util
          return a;
       }*/
 
-
-#if (IOS || ANDROID || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX) && (!UNITY_EDITOR_WIN)
+      /*
       /// <summary>
       /// memcpy function
       /// </summary>
       /// <param name="dest">the destination of memory copy</param>
       /// <param name="src">the source of memory copy</param>
       /// <param name="len">the number of bytes to be copied</param>
+#if (IOS || ANDROID || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX) && (!UNITY_EDITOR_WIN)
       [DllImport("c", EntryPoint = "memcpy")]
       public static extern void memcpy(IntPtr dest, IntPtr src, int len);
+#elif WINDOWS_PHONE_APP
+      //[DllImport("PhoneAppModelHost.dll", EntryPoint = "CopyMemory")]
+      //public static extern void memcpy(IntPtr dest, IntPtr src, int len);
+
+      public static void memcpy(IntPtr dest, IntPtr src, int len)
+      {
+         Marshal.Copy()
+      }
 #else
-      /// <summary>
-      /// memcpy function
-      /// </summary>
-      /// <param name="dest">the destination of memory copy</param>
-      /// <param name="src">the source of memory copy</param>
-      /// <param name="len">the number of bytes to be copied</param>
       [DllImport("kernel32.dll", EntryPoint = "CopyMemory")]
       public static extern void memcpy(IntPtr dest, IntPtr src, int len);
 #endif
+       */
       #endregion
 
       /// <summary>
@@ -476,6 +425,18 @@ namespace Emgu.Util
                return NetFxCoreLoadLibrary(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
             } else
                return WinAPILoadLibrary(dllname);
+         } else if (Platform.OperationSystem == TypeEnum.OS.WindowsPhone)
+         {
+            //const int loadLibrarySearchDllLoadDir = 0x00000100;
+            //const int loadLibrarySearchDefaultDirs = 0x00001000;
+            //return NetFxCoreLoadLibrary(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+            IntPtr handler = WindowsPhoneLoadPackagedLibrary(dllname, 0);
+            if (handler == IntPtr.Zero)
+            {
+               int error = WindowsPhoneGetLastError();
+               System.Diagnostics.Debug.WriteLine(String.Format("Error loading {0}: code {1}", dllname, error));
+            }
+            return handler;
          } else
          {
             return Dlopen(dllname, 2); // 2 == RTLD_NOW
@@ -489,6 +450,15 @@ namespace Emgu.Util
          String fileName, 
          IntPtr hFile,
          int dwFlags);
+
+      [DllImport("PhoneAppModelHost.dll", EntryPoint = "LoadPackagedLibrary")]
+      private static extern IntPtr WindowsPhoneLoadPackagedLibrary(
+         [MarshalAs(UnmanagedType.LPStr)]
+         String fileName,
+         int dwFlags);
+
+      [DllImport("KernelBase.dll", EntryPoint = "GetLastError")]
+      private static extern int WindowsPhoneGetLastError();
 
       [DllImport("kernel32.dll", EntryPoint="LoadLibrary")]
       private static extern IntPtr WinAPILoadLibrary(

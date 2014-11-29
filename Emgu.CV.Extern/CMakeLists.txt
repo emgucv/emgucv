@@ -151,6 +151,8 @@ if (WITH_TBB AND TBB_INCLUDE_DIRS AND TBB_LIB_DIR)
 	SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc10")
   elseif(MSVC11)
 	SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc11")
+  elseif(MSVC12)
+	SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc12")
   endif()
 
   #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES tbb)
@@ -339,12 +341,12 @@ ENDIF()
 ############################### GPU END ################################
 
 ############################### OpenCL START ##############################
-IF(WITH_OPENCL)
-  MESSAGE(STATUS "Building cvextern with OPENCL")
+#IF(WITH_OPENCL)
+#  MESSAGE(STATUS "Building cvextern with OPENCL")
 
-  IF(WIN32 AND WITH_OPENCL AND NOT (NETFX_CORE))
-    SET(OPENCL_PROJ OpenCL)
-  ENDIF()
+#  IF(WIN32 AND WITH_OPENCL AND NOT (NETFX_CORE))
+#    SET(OPENCL_PROJ OpenCL)
+#  ENDIF()
 #  IF(WIN32)
 #    IF(TARGET_ARCH_64) 
 #      MESSAGE("Including OpenCL dll: ${PROJECT_SOURCE_DIR}/../lib/3rdParty/x64/OpenCL.dll")
@@ -354,7 +356,7 @@ IF(WITH_OPENCL)
 #      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${PROJECT_SOURCE_DIR}/../lib/3rdParty/x64/OpenCL.dll")
 #    ENDIF()
 #  ENDIF()
-ENDIF()
+#ENDIF()
 ############################### OpenCL END ################################
 
 ############################### xfeatures2d START ##############################

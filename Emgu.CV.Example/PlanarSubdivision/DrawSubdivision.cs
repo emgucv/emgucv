@@ -59,7 +59,11 @@ namespace PlanarSubdivisionExample
          //Draw the voronoi Facets
          foreach (VoronoiFacet facet in voronoiFacets)
          {
+#if NETFX_CORE
+            Point[] polyline = Extensions.ConvertAll<PointF, Point>(facet.Vertices, Point.Round);
+#else
             Point[] polyline = Array.ConvertAll<PointF, Point>(facet.Vertices, Point.Round);
+#endif
             using (VectorOfPoint vp = new VectorOfPoint(polyline))
             using (VectorOfVectorOfPoint vvp = new VectorOfVectorOfPoint(vp))
             {
@@ -69,20 +73,24 @@ namespace PlanarSubdivisionExample
                   new Bgr(r.NextDouble()*120, r.NextDouble()*120, r.NextDouble()*120).MCvScalar);
 
                //highlight the edge of the facet in black
-               CvInvoke.Polylines(img, vp, true, new Bgr(Color.Black).MCvScalar, 2);
+               CvInvoke.Polylines(img, vp, true, new Bgr(0, 0, 0).MCvScalar, 2);
             }
             //draw the points associated with each facet in red
-            CvInvoke.Circle(img, Point.Round( facet.Point ), 5, new Bgr(Color.Red).MCvScalar, -1);
+            CvInvoke.Circle(img, Point.Round( facet.Point ), 5, new Bgr(0, 0, 255).MCvScalar, -1);
             
          }
 
          //Draw the Delaunay triangulation
          foreach (Triangle2DF triangle in delaunayTriangles)
          {
+#if NETFX_CORE
+            Point[] vertices = Extensions.ConvertAll<PointF, Point>(triangle.GetVertices(), Point.Round);
+#else
             Point[] vertices = Array.ConvertAll<PointF, Point>(triangle.GetVertices(), Point.Round);
+#endif
             using (VectorOfPoint vp = new VectorOfPoint(vertices))
             {
-               CvInvoke.Polylines(img, vp, true, new Bgr(Color.White).MCvScalar);
+               CvInvoke.Polylines(img, vp, true, new Bgr(255, 255, 255).MCvScalar);
             }
          }
 

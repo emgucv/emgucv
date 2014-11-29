@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
-#if !IOS
+#if !(IOS || NETFX_CORE)
 using Emgu.CV.Cuda;
 #endif
 
@@ -24,7 +24,7 @@ namespace FaceDetection
       {
          Stopwatch watch;
          
-         #if !IOS
+         #if !(IOS || NETFX_CORE)
          if (tryUseCuda && CudaInvoke.HasCuda)
          {
             using (CudaCascadeClassifier face = new CudaCascadeClassifier(faceFileName))

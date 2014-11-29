@@ -64,7 +64,7 @@ namespace Emgu.CV
          }
 
          String subfolder = String.Empty;
-         if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+         if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows) //|| Platform.OperationSystem == Emgu.Util.TypeEnum.OS.WindowsPhone)
          {
             if (IntPtr.Size == 8)
             {  //64bit process
@@ -90,14 +90,24 @@ namespace Emgu.CV
          loadDirectory = Path.Combine(installFolder.Path, subfolder);
 #endif
 
-         var t = System.Threading.Tasks.Task.Run(async () => 
+         var t = System.Threading.Tasks.Task.Run(async () =>
          {
-            Windows.Storage.StorageFolder loadFolder = await installFolder.GetFolderAsync(subfolder);
             List<string> files = new List<string>();
-            foreach (var file in await loadFolder.GetFilesAsync())
+            Windows.Storage.StorageFolder loadFolder = installFolder;
+            try
             {
-               files.Add(file.Path);
+               
+               if (!String.IsNullOrEmpty(subfolder))
+                  loadFolder = await installFolder.GetFolderAsync(subfolder);
+
+               foreach (var file in await loadFolder.GetFilesAsync())
+                  files.Add(file.Path);
             }
+            catch (Exception e)
+            {
+               System.Diagnostics.Debug.WriteLine(String.Format("Unable to retrieve files in folder '{0}':{1}", loadFolder.Path, e.StackTrace));
+            }
+
             return files;
          });
          t.Wait();
@@ -271,7 +281,8 @@ namespace Emgu.CV
          return "lib{0}.dylib";
 #else
          String formatString = "{0}";
-         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows 
+            || Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.WindowsPhone)
             formatString = "{0}.dll";
          else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Linux)
             formatString = "lib{0}.so";

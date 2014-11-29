@@ -138,7 +138,7 @@ namespace Emgu.CV
          TDepth[,] mat = new TDepth[data.Length, 1];
          GCHandle hdl1 = GCHandle.Alloc(data, GCHandleType.Pinned);
          GCHandle hdl2 = GCHandle.Alloc(mat, GCHandleType.Pinned);
-         Emgu.Util.Toolbox.memcpy(hdl2.AddrOfPinnedObject(), hdl1.AddrOfPinnedObject(), data.Length * SizeOfElement);
+         CvToolbox.Memcpy(hdl2.AddrOfPinnedObject(), hdl1.AddrOfPinnedObject(), data.Length * SizeOfElement);
          hdl1.Free();
          hdl2.Free();
          Data = mat;

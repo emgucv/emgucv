@@ -75,6 +75,12 @@ namespace System.Drawing
          Height = height;
       }
 
+      public void Offset(int x, int y)
+      {
+         X += x;
+         Y += y;
+      }
+
       public Rectangle(Point p, Size s)
       {
          X = p.X;

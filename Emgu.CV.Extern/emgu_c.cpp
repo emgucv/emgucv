@@ -34,3 +34,8 @@ void testDrawLine(IplImage* img, int startX, int startY, int endX, int endY, CvS
    cv::Scalar color(c.val[0], c.val[1], c.val[2], c.val[3]);
    cv::line(m, start, end, color);
 }
+
+void cveMemcpy(void* dst, void* src, int length)
+{
+   memcpy(dst, src, length);
+}
