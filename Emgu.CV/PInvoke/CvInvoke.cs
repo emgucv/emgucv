@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.Util;
+using Platform = Emgu.Util.Platform;
 
 namespace Emgu.CV
 {
@@ -64,7 +65,7 @@ namespace Emgu.CV
          }
 
          String subfolder = String.Empty;
-         if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows) //|| Platform.OperationSystem == Emgu.Util.TypeEnum.OS.WindowsPhone)
+         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows) //|| Platform.OperationSystem == Emgu.Util.TypeEnum.OS.WindowsPhone)
          {
             if (IntPtr.Size == 8)
             {  //64bit process
@@ -324,7 +325,7 @@ namespace Emgu.CV
          }
 #elif IOS || UNITY_IPHONE
 #else
-         if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
+         if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {
             String formatString = GetModuleFormatString();
             for (int i = 0; i < modules.Count; ++i)

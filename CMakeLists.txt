@@ -96,11 +96,11 @@ IF(WIN32 AND CV_ICC)
 ENDIF()
 
 IF(WIN32 AND NOT MINGW)
-  SET(NETFX_CORE OFF CACHE BOOL "Build Windows Store App")
-  IF(NETFX_CORE)
-    add_definitions(-DWINAPI_FAMILY=WINAPI_FAMILY_APP -DWINVER=0x0602 -D_WIN32_WINNT=0x0602) 
-	add_definitions(-D_UNICODE)
-  ENDIF()
+  SET(NETFX_CORE OFF CACHE BOOL "Build Windows Store or Phone App")
+#  IF(NETFX_CORE)
+#    add_definitions(-DWINAPI_FAMILY=WINAPI_FAMILY_APP -DWINVER=0x0602 -D_WIN32_WINNT=0x0602) 
+#	add_definitions(-D_UNICODE)
+#  ENDIF()
 ENDIF()
 
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
@@ -117,6 +117,13 @@ ELSEIF(WIN32)
 	   MESSAGE(STATUS "Performing a universal build.")	
 	ENDIF()
   ELSEIF("${EMGUCV_ARCH}" STREQUAL "arm")
+	#Check for x86 binary as well...
+	FILE(GLOB UNMANAGED_DLL_32BIT "${CMAKE_CURRENT_SOURCE_DIR}/bin/x86/*.dll")
+    LIST(LENGTH UNMANAGED_DLL_32BIT UNMANAGED_DLL_32BIT_LENGTH)
+	IF(UNMANAGED_DLL_32BIT_LENGTH GREATER 0)
+	   SET(UNIVERSAL_BUILD ON)
+	   MESSAGE(STATUS "Performing a universal build.")	
+	ENDIF()
     SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/arm")
   ELSE()
     SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/x86")
@@ -152,7 +159,11 @@ ELSEIF (APPLE)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-osx")
 ELSEIF (WIN32)
   IF (NETFX_CORE)
-    SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows-store") 
+    IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+	  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows-phone") 
+	ELSE()
+      SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows-store") 
+	ENDIF()
   ELSE()
     SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-windows") 
   ENDIF()
@@ -160,12 +171,12 @@ ENDIF()
 
 IF(ANDROID)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-${ANDROID_ABI}")
+ELSEIF(DEFINED UNIVERSAL_BUILD)
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-universal") 
 ELSEIF(TARGET_ARCH_64)
-  IF(DEFINED UNIVERSAL_BUILD)
-    SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-universal") 
-  ELSE()
-    SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-x64") 
-  ENDIF()
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-x64") 
+ELSEIF("${EMGUCV_ARCH}" STREQUAL "arm")
+  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-arm")
 ELSE()
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-x86")
 ENDIF()
@@ -830,6 +841,63 @@ INSTALL(
   )
 
 IF(NETFX_CORE)    
+  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+    INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+    DESTINATION .
+    COMPONENT emgucv_source
+    FILES_MATCHING 
+    PATTERN "Emgu.CV.Windows.Phone.sln"
+    PATTERN ".git" EXCLUDE
+    PATTERN "bin" EXCLUDE
+  )  
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+    DESTINATION .
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "Emgu.CV.Example.Windows.Phone.sln"
+    PATTERN ".git" EXCLUDE
+    PATTERN "bin" EXCLUDE
+    )
+	
+  # ----------------------------------------------------------------------------
+  #  The example files
+  # ----------------------------------------------------------------------------
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
+    DESTINATION .
+    COMPONENT emgucv_example_source
+    FILES_MATCHING 
+    PATTERN "WindowsPhoneApp/*.cs"
+	PATTERN "WindowsPhoneApp/Properties/*.cs"
+	PATTERN "WindowsPhoneApp/Common/*.xaml"
+    PATTERN "WindowsPhoneApp/Common/*.txt"
+	PATTERN "WindowsPhoneApp/Common/*.cs"
+	PATTERN "WindowsPhoneApp/DataModel/*.json"
+	PATTERN "WindowsPhoneApp/DataModel/*.cs"
+    PATTERN "WindowsPhoneApp/Strings/en-US/*.resw"
+    PATTERN "WindowsPhoneApp/*.csproj"
+    PATTERN "WindowsPhoneApp/*.appxmanifest"
+    PATTERN "WindowsPhoneApp/*.xaml"
+    PATTERN "WindowsPhoneApp/Assets/*.png"  
+	PATTERN "FaceDetection/DetectFace.cs" 
+    PATTERN "FaceDetection/lena.jpg" 
+	PATTERN "PlanarSubdivision/DrawSubdivision.cs" 
+	PATTERN "PedestrianDetection/FindPedestrian.cs" 
+	PATTERN "PedestrianDetection/pedestrian.png" 
+    PATTERN ".git" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "CMake*" EXCLUDE
+    PATTERN "Release" EXCLUDE
+    PATTERN "Debug" EXCLUDE
+	PATTERN "RelWithDebInfo" EXCLUDE
+    PATTERN "*.dir" EXCLUDE
+  )
+  ELSE()
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Solution
@@ -875,6 +943,7 @@ IF(NETFX_CORE)
 	PATTERN "RelWithDebInfo" EXCLUDE
     PATTERN "*.dir" EXCLUDE
   )
+  ENDIF()
 ELSE()
   INSTALL(
     DIRECTORY

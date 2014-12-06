@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Emgu.CV.Test.Windows.Phone</RootNamespace>
-    <AssemblyName>Emgu.CV.Test.Windows.Phone</AssemblyName>
+    <AssemblyName>Emgu.CV.Test.Windows.Phone.Emulator</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
@@ -132,9 +132,109 @@
       <Link>letter-recognition.data</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Emgu.CV.Test.Windows.Phone.Device.csproj" />
     <None Include="Emgu.CV.Test.WindowsPhone_TemporaryKey.pfx" />
   </ItemGroup>
-  <ItemGroup>
+    <Choose>
+    <When Condition=" '$(Platform)'=='ARM' ">
+	  <ItemGroup>
+    <Content Include="..\..\bin\arm\cvextern.dll">
+      <Link>cvextern.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_bgsegm300.dll">
+      <Link>opencv_bgsegm300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_calib3d300.dll">
+      <Link>opencv_calib3d300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_core300.dll">
+      <Link>opencv_core300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_face300.dll">
+      <Link>opencv_face300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_features2d300.dll">
+      <Link>opencv_features2d300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_flann300.dll">
+      <Link>opencv_flann300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_highgui300.dll">
+      <Link>opencv_highgui300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_imgcodecs300.dll">
+      <Link>opencv_imgcodecs300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_imgproc300.dll">
+      <Link>opencv_imgproc300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_ml300.dll">
+      <Link>opencv_ml300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_objdetect300.dll">
+      <Link>opencv_objdetect300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_optflow300.dll">
+      <Link>opencv_optflow300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_photo300.dll">
+      <Link>opencv_photo300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_shape300.dll">
+      <Link>opencv_shape300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_stitching300.dll">
+      <Link>opencv_stitching300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_superres300.dll">
+      <Link>opencv_superres300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_text300.dll">
+      <Link>opencv_text300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_video300.dll">
+      <Link>opencv_video300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_videoio300.dll">
+      <Link>opencv_videoio300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_videostab300.dll">
+      <Link>opencv_videostab300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_xfeatures2d300.dll">
+      <Link>opencv_xfeatures2d300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\arm\opencv_ximgproc300.dll">
+      <Link>opencv_ximgproc300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+     </ItemGroup>
+    </When>
+    <When Condition=" '$(Platform)'=='x86' ">
+      <ItemGroup>
+
     <Content Include="..\..\bin\x86\cvextern.dll">
       <Link>cvextern.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -231,6 +331,10 @@
       <Link>opencv_xobjdetect300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+	     </ItemGroup>
+    </When>
+  </Choose>
+  <ItemGroup>
     <Content Include="..\..\opencv\samples\data\aloeL.jpg">
       <Link>aloeL.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

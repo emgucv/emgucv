@@ -49,7 +49,11 @@ INSTALL(
 IF(WIN32 OR APPLE)
 
 IF(NETFX_CORE)
-  SET(CSPROJ_FILE "${PROJECT_NAME}.Windows.Store.csproj")
+  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+    SET(CSPROJ_FILE "${PROJECT_NAME}.Windows.Phone.csproj")
+  ELSE()
+    SET(CSPROJ_FILE "${PROJECT_NAME}.Windows.Store.csproj")
+  ENDIF()	
   INSTALL(
 	  DIRECTORY
 	  ${CMAKE_CURRENT_SOURCE_DIR}

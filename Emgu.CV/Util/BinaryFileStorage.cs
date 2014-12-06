@@ -11,13 +11,14 @@ using System.Runtime.InteropServices;
 #if NETFX_CORE
 using Windows.Storage;
 #endif
+using Emgu.Util;
 
-namespace Emgu.Util
+namespace Emgu.CV.Util
 {
    /// <summary>
    /// A raw data storage
    /// </summary>
-   /// <typeparam name="T">The type of elments in the storage</typeparam>
+   /// <typeparam name="T">The type of elements in the storage</typeparam>
    public class BinaryFileStorage<T> 
 #if !NETFX_CORE
       : IEnumerable<T> 
@@ -222,7 +223,7 @@ namespace Emgu.Util
       /// Get the subsampled data in this storage
       /// </summary>
       /// <param name="subsampleRate">The subsample rate</param>
-      /// <returns>The subsampled data in this storage</returns>
+      /// <returns>The sub-sampled data in this storage</returns>
       public IEnumerable<T> GetSubsamples(int subsampleRate)
       {
          if (!_fileInfo.Exists)
@@ -238,7 +239,7 @@ namespace Emgu.Util
             IntPtr addr = buffer.AddrOfPinnedObject();
             while (bufferStream.Read(buffer.Array, 0, bufferSize) > 0)
             {
-               Toolbox.memcpy(structAddr, addr, bufferSize);
+               CvToolbox.Memcpy(structAddr, addr, bufferSize);
                yield return structure.Array[0];
             }
          }

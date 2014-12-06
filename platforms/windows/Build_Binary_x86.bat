@@ -4,6 +4,11 @@ cd ..\..
 IF "%1%"=="64" ECHO "BUILDING 64bit solution" 
 IF NOT "%1%"=="64" ECHO "BUILDING 32bit solution"
 
+SET NETFX_CORE=""
+IF "%3%"=="WindowsPhoneDevice" SET NETFX_CORE="TRUE" 
+IF "%3%"=="WindowsPhoneEmulator" SET NETFX_CORE="TRUE"
+IF "%3%"=="WindowsStore" SET NETFX_CORE="TRUE"
+
 SET OS_MODE=
 IF "%1%"=="64" SET OS_MODE= Win64
 IF "%3%"=="WindowsPhoneDevice" SET OS_MODE= ARM
@@ -59,6 +64,8 @@ SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DBUILD_TESTS:BOOL=FALSE ^
 -DBUILD_opencv_apps:BOOL=FALSE ^
 -DBUILD_opencv_adas:BOOL=FALSE ^
+-DBUILD_opencv_line_descriptor:BOOL=FALSE ^
+-DBUILD_opencv_saliency:BOOL=FALSE ^
 -DEMGU_ENABLE_SSE:BOOL=TRUE ^
 -DCMAKE_INSTALL_PREFIX="%TEMP%" ^
 -DBUILD_WITH_DEBUG_INFO:BOOL=FALSE ^
@@ -68,7 +75,7 @@ SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DWITH_OPENGL:BOOL=OFF ^
 -DOPENCV_EXTRA_MODULES_PATH=opencv_contrib/modules 
 
-IF "%3%"=="netfx_core" (
+IF NOT "%NETFX_CORE%"=="" (
 SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DBUILD_opencv_ts:BOOL=OFF ^
 -DBUILD_PERF_TESTS:BOOL=OFF 

@@ -9,8 +9,8 @@
     <ProjectGuid>{66827755-4D68-4B7C-A3EB-1E13D6A583C7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.Contrib.Windows.Phone</RootNamespace>
-    <AssemblyName>Emgu.CV.Contrib.Windows.Phone</AssemblyName>
+    <RootNamespace>Emgu.CV.Contrib</RootNamespace>
+    <AssemblyName>Emgu.CV.Contrib</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
@@ -84,9 +84,9 @@
       <Project>{914d1fef-0744-451d-8df7-d53e888bd94c}</Project>
       <Name>Emgu.CV.Windows.Phone</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Emgu.Util\Emgu.Util.Window.Phone.csproj">
+    <ProjectReference Include="..\Emgu.Util\Emgu.Util.Windows.Phone.csproj">
       <Project>{e239ac5a-82f4-491e-a3c5-03cb3b0352d2}</Project>
-      <Name>Emgu.Util.Window.Phone</Name>
+      <Name>Emgu.Util.Windows.Phone</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
