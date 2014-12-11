@@ -126,15 +126,15 @@ namespace Emgu.CV.Cuda
       /// <typeparam name="TSrcColor">The color type of the source image</typeparam>
       /// <typeparam name="TSrcDepth">The color depth of the source image</typeparam>
       /// <param name="srcImage">The sourceImage</param>
-      public void ConvertFrom<TSrcColor, TSrcDepth>(CudaImage<TSrcColor, TSrcDepth> srcImage)
+      public void ConvertFrom<TSrcColor, TSrcDepth>(CudaImage<TSrcColor, TSrcDepth> srcImage, Stream stream=null)
          where TSrcColor : struct, IColor
          where TSrcDepth : new()
       {
          if (!Size.Equals(srcImage.Size))
          {  //if the size of the source image do not match the size of the current image
-            using (CudaImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Size, Emgu.CV.CvEnum.Inter.Linear, null))
+             using (CudaImage<TSrcColor, TSrcDepth> tmp = srcImage.Resize(Size, Emgu.CV.CvEnum.Inter.Linear, stream))
             {
-               ConvertFrom(tmp);
+                ConvertFrom(tmp, stream);
                return;
             }
          }
@@ -144,7 +144,7 @@ namespace Emgu.CV.Cuda
             #region same color
             if (typeof(TDepth) == typeof(TSrcDepth)) //same depth
             {
-               srcImage.CopyTo(this);
+               srcImage.CopyTo(this, null, stream);
             } else //different depth
             {
                if (typeof(TDepth) == typeof(Byte) && typeof(TSrcDepth) != typeof(Byte))
@@ -165,11 +165,11 @@ namespace Emgu.CV.Cuda
                      scale = (max == min) ? 0.0 : 255.0 / (max - min);
                      shift = (scale == 0) ? min : -min * scale;
                   }
-                  srcImage.ConvertTo(this, CvInvoke.GetDepthType(typeof(TDepth)), scale, shift, null);
+                  srcImage.ConvertTo(this, CvInvoke.GetDepthType(typeof(TDepth)), scale, shift, stream);
                   
                } else
                {
-                  srcImage.ConvertTo(this, CvInvoke.GetDepthType(typeof(TDepth)), 1.0, 0.0, null);
+                   srcImage.ConvertTo(this, CvInvoke.GetDepthType(typeof(TDepth)), 1.0, 0.0, stream);
                   //CudaInvoke.ConvertTo(srcImage.Ptr, Ptr, 1.0, 0.0, IntPtr.Zero);
                }
 
@@ -180,11 +180,11 @@ namespace Emgu.CV.Cuda
             #region different color
             if (typeof(TDepth) == typeof(TSrcDepth))
             {   //same depth
-               ConvertColor(srcImage, this, typeof(TSrcColor), typeof(TColor), NumberOfChannels, Size, null);
+                ConvertColor(srcImage, this, typeof(TSrcColor), typeof(TColor), NumberOfChannels, Size, stream);
             } else
             {   //different depth
                using (CudaImage<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
-                  ConvertColor(tmp, this, typeof(TSrcColor), typeof(TColor), NumberOfChannels, Size, null);
+                   ConvertColor(tmp, this, typeof(TSrcColor), typeof(TColor), NumberOfChannels, Size, stream);
             }
             #endregion
          }
