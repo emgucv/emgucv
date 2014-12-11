@@ -379,7 +379,7 @@ namespace Emgu.CV.Cuda
       ///in the array represent a single channel of the original GpuMat 
       ///</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      private void SplitInto(GpuMat[] gpuMats, Stream stream)
+      public void SplitInto(GpuMat[] gpuMats, Stream stream)
       {
          Debug.Assert(NumberOfChannels == gpuMats.Length, "Number of channels does not agrees with the length of gpuMats");
 
