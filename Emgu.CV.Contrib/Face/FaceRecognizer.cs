@@ -1,10 +1,9 @@
-﻿//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using Emgu.CV;

@@ -92,7 +92,7 @@ namespace Emgu.CV
       /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
       /// <returns></returns>
 #if IOS
-      [MonoTouch.MonoPInvokeCallback(typeof(CvErrorCallback))]
+      [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
       private static int CvIgnoreErrorErrorHandler(
                   int status,
@@ -117,7 +117,7 @@ namespace Emgu.CV
       /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
       /// <returns></returns>
 #if IOS
-      [MonoTouch.MonoPInvokeCallback(typeof(CvErrorCallback))]
+      [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
       private static int CvErrorHandler(
          int status,

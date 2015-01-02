@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using MonoTouch.CoreGraphics;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using CoreGraphics;
+using Foundation;
+using UIKit;
 
 namespace Emgu.CV.Example.MonoTouch
 {

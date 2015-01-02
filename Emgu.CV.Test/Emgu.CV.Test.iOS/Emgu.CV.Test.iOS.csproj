@@ -4,9 +4,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProjectGuid>{C0320210-E9AE-4C7C-83ED-EAE579BCADB5}</ProjectGuid>
-    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>Emgu.CV.Test</RootNamespace>
+    <TargetFrameworkIdentifier>Xamarin.iOS</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,11 +56,12 @@
     <MtouchLink>None</MtouchLink>
     <MtouchI18n>
     </MtouchI18n>
-    <MtouchArch>ARMv7, ARMv7s</MtouchArch>
+    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <IpaPackageName>
     </IpaPackageName>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
     <AssemblyName>Emgu_CV_Test_iOS</AssemblyName>
+    <MtouchProfiling>true</MtouchProfiling>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -73,7 +76,7 @@
     <MtouchI18n>
     </MtouchI18n>
     <MtouchUseLlvm>true</MtouchUseLlvm>
-    <MtouchArch>ARMv7</MtouchArch>
+    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <IpaPackageName>
     </IpaPackageName>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
@@ -83,10 +86,10 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="monotouch" />
     <Reference Include="MonoTouch.NUnitLite" />
-    <Reference Include="OpenTK" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Xamarin.iOS" />
+    <Reference Include="OpenTK-1.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
@@ -243,7 +246,6 @@
       <Link>EmguAssert.cs</Link>
     </Compile>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.iOS.csproj">
       <Project>{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}</Project>
@@ -289,4 +291,5 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
