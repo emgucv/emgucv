@@ -42,7 +42,9 @@ namespace Emgu.CV
       /// where the values of pixels at non-integer coordinates are retrieved using bilinear interpolation. Every channel of multiple-channel images is processed independently. Whereas the rectangle center must be inside the image, the whole rectangle may be partially occluded. In this case, the replication border mode is used to get pixel values beyond the image boundaries.
       /// </summary>
       /// <param name="image">Source image</param>
+      /// <param name="patchSize">Size of the extracted patch.</param>
       /// <param name="patch">Extracted rectangle</param>
+      /// <param name="patchType">Depth of the extracted pixels. By default, they have the same depth as <paramref name="image"/>.</param>
       /// <param name="center">Floating point coordinates of the extracted rectangle center within the source image. The center must be inside the image.</param>
       public static void GetRectSubPix(IInputArray image, Size patchSize, PointF center, IOutputArray patch, DepthType patchType = DepthType.Default)
       {
@@ -54,22 +56,6 @@ namespace Emgu.CV
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveGetRectSubPix(IntPtr image, ref Size patchSize, ref PointF center, IntPtr patch, DepthType patchType);
-
-      /*
-      /// <summary>
-      /// Extracts pixels from src at sub-pixel accuracy and stores them to dst as follows:
-      /// dst(x, y)= src( A_11 x'+A_12 y'+ b1, A_21 x'+A_22 y'+ b2),
-      /// where A and b are taken from map_matrix:
-      /// map_matrix = [ [A11 A12  b1], [ A21 A22  b2 ] ]
-      /// x'=x-(width(dst)-1)*0.5, y'=y-(height(dst)-1)*0.5
-      /// where the values of pixels at non-integer coordinates A (x,y)^T + b are retrieved using bilinear interpolation. When the function needs pixels outside of the image, it uses replication border mode to reconstruct the values. Every channel of multiple-channel images is processed independently.
-      /// </summary>
-      /// <param name="src">Source image</param>
-      /// <param name="dst">Extracted quadrangle</param>
-      /// <param name="mapMatrix">The transformation 2 x 3 matrix [A|b]</param>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvGetQuadrangleSubPix(IntPtr src, IntPtr dst, IntPtr mapMatrix);
-      */
 
       /// <summary>
       /// Resizes the image src down to or up to the specified size
@@ -907,10 +893,11 @@ namespace Emgu.CV
 
 
       /// <summary>
-      /// Finds all convexity defects of the input contour and returns a sequence of the CvConvexityDefect structures. 
+      /// Finds the convexity defects of a contour.
       /// </summary>
       /// <param name="contour">Input contour</param>
-      /// <param name="convexhull">Convex hull obtained using cvConvexHull2 that should contain pointers or indices to the contour points, not the hull points themselves, i.e. return_points parameter in cvConvexHull2 should be 0</param>
+      /// <param name="convexhull">Convex hull obtained using ConvexHull that should contain pointers or indices to the contour points, not the hull points themselves, i.e. return_points parameter in cvConvexHull2 should be 0</param>
+      /// <param name="convexityDefects">The output vector of convexity defects. Each convexity defect is represented as 4-element integer vector (a.k.a. cv::Vec4i): (start_index, end_index, farthest_pt_index, fixpt_depth), where indices are 0-based indices in the original contour of the convexity defect beginning, end and the farthest point, and fixpt_depth is fixed-point approximation (with 8 fractional bits) of the distance between the farthest contour point and the hull. That is, to get the floating-point value of the depth will be fixpt_depth/256.0. </param>
       public static void ConvexityDefects(
          IInputArray contour,
          IInputArray convexhull,
@@ -2235,7 +2222,7 @@ namespace Emgu.CV
             cveHuMoments(ref moments, oaHu);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cveHuMoments(ref MCvMoments moments, IntPtr huMoments);
+      private static extern void cveHuMoments(ref MCvMoments moments, IntPtr huMoments);
 
       /// <summary>
       /// Runs the Harris edge detector on image. Similarly to cvCornerMinEigenVal and cvCornerEigenValsAndVecs, for each pixel it calculates 2x2 gradient covariation matrix M over block_size x block_size neighborhood. Then, it stores
@@ -2338,6 +2325,7 @@ namespace Emgu.CV
       /// <param name="maskSize">Size of distance transform mask; can be 3 or 5.
       /// In case of CV_DIST_L1 or CV_DIST_C the parameter is forced to 3, because 3x3 mask gives the same result as 5x5 yet it is faster.</param>
       /// <param name="labels">The optional output 2d array of labels of integer type and the same size as src and dst. Can be null if not needed</param>
+      /// <param name="labelType">Type of the label array to build. If labelType==CCOMP then each connected component of zeros in src (as well as all the non-zero pixels closest to the connected component) will be assigned the same label. If labelType==PIXEL then each zero pixel (and all the non-zero pixels closest to it) gets its own label.</param>
       public static void DistanceTransform(
          IInputArray src,
          IOutputArray dst,
@@ -2685,5 +2673,104 @@ namespace Emgu.CV
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveCreateHanningWindow(IntPtr dst, ref Size winSize, CvEnum.DepthType type);
+
+      /// <summary>
+      /// Draws the line segment between pt1 and pt2 points in the image. The line is clipped by the image or ROI rectangle. For non-antialiased lines with integer coordinates the 8-connected or 4-connected Bresenham algorithm is used. Thick lines are drawn with rounding endings. Antialiased lines are drawn using Gaussian filtering.
+      /// </summary>
+      /// <param name="img">The image</param>
+      /// <param name="pt1">First point of the line segment</param>
+      /// <param name="pt2">Second point of the line segment</param>
+      /// <param name="color">Line color</param>
+      /// <param name="thickness">Line thickness. </param>
+      /// <param name="lineType">Type of the line:
+      /// 8 (or 0) - 8-connected line.
+      /// 4 - 4-connected line.
+      /// CV_AA - antialiased line. 
+      /// </param>
+      /// <param name="shift">Number of fractional bits in the point coordinates</param>
+      public static void Line(IInputOutputArray img, Point pt1, Point pt2, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
+      {
+         using (InputOutputArray ioaImg = img.GetInputOutputArray())
+            cveLine(ioaImg, ref pt1, ref pt2, ref color, thickness, lineType, shift);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveLine(
+          IntPtr img,
+          ref Point pt1,
+          ref Point pt2,
+          ref MCvScalar color,
+          int thickness,
+          CvEnum.LineType lineType,
+          int shift);
+
+      /// <summary>
+      /// Draws a arrow segment pointing from the first point to the second one.
+      /// </summary>
+      /// <param name="img">Image</param>
+      /// <param name="pt1">The point the arrow starts from.</param>
+      /// <param name="pt2">The point the arrow points to.</param>
+      /// <param name="color">Line color.</param>
+      /// <param name="thickness">Line thickness.</param>
+      /// <param name="lineType">Type of the line.</param>
+      /// <param name="shift">Number of fractional bits in the point coordinates.</param>
+      /// <param name="tipLength">The length of the arrow tip in relation to the arrow length</param>
+      public static void ArrowedLine(IInputOutputArray img, Point pt1, Point pt2, MCvScalar color, int thickness = 1,
+         CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0, double tipLength = 0.1)
+      {
+         using (InputOutputArray ioaImg = img.GetInputOutputArray())
+         {
+            cveArrowedLine(ioaImg, ref pt1, ref pt2, ref color, thickness, lineType, shift, tipLength);
+         }
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveArrowedLine(IntPtr img, ref Point pt1, ref Point pt2, ref MCvScalar color,
+         int thickness, CvEnum.LineType lineType, int shift, double tipLength);
+
+      /// <summary>
+      /// Draws a single or multiple polygonal curves
+      /// </summary>
+      /// <param name="img">Image</param>
+      /// <param name="pts">Array of pointers to polylines</param>
+      /// <param name="isClosed">
+      /// Indicates whether the polylines must be drawn closed. 
+      /// If !=0, the function draws the line from the last vertex of every contour to the first vertex.
+      /// </param>
+      /// <param name="color">Polyline color</param>
+      /// <param name="thickness">Thickness of the polyline edges</param>
+      /// <param name="lineType">Type of the line segments, see cvLine description</param>
+      /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
+      public static void Polylines(IInputOutputArray img, IInputArray pts, bool isClosed, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
+      {
+         using (InputOutputArray ioaImg = img.GetInputOutputArray())
+         using (InputArray iaPts = pts.GetInputArray())
+            cvePolylines(ioaImg, iaPts, isClosed, ref color, thickness, lineType, shift);
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cvePolylines(
+         IntPtr img, IntPtr pts,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool isClosed,
+         ref MCvScalar color,
+         int thickness, CvEnum.LineType lineType, int shift);
+
+      /// <summary>
+      /// Draws a rectangle specified by a CvRect structure
+      /// </summary>
+      /// /// <param name="img">Image</param>
+      /// <param name="rect">The rectangle to be drawn</param>
+      /// <param name="color">Line color </param>
+      /// <param name="thickness">Thickness of lines that make up the rectangle. Negative values make the function to draw a filled rectangle.</param>
+      /// <param name="lineType">Type of the line</param>
+      /// <param name="shift">Number of fractional bits in the point coordinates</param>
+      public static void Rectangle(IInputOutputArray img, Rectangle rect, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
+      {
+         using (InputOutputArray ioaImg = img.GetInputOutputArray())
+            cveRectangle(ioaImg, ref rect, ref color, thickness, lineType, shift);
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveRectangle(IntPtr img, ref Rectangle rect, ref MCvScalar color, int thickness, CvEnum.LineType lineType, int shift);
+
    }
 }

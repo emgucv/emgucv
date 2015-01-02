@@ -17,6 +17,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="srcPoints">Point coordinates in the original plane</param>
       /// <param name="dstPoints">Point coordinates in the destination plane</param>
+      /// <param name="homography">The output homography matrix</param>
       /// <param name="method">FindHomography method</param>
       /// <param name="ransacReprojThreshold">
       /// The maximum allowed reprojection error to treat a point pair as an inlier. 

@@ -36,7 +36,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <OutputPath>bin\arm_phone\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -46,7 +46,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
-    <OutputPath>bin\ARM\Release\</OutputPath>
+    <OutputPath>bin\arm_phone\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -58,7 +58,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <OutputPath>bin\arm_phone\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -68,7 +68,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
-    <OutputPath>bin\ARM\Release\</OutputPath>
+    <OutputPath>bin\arm_phone\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>bin\x86_phone\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -90,7 +90,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
+    <OutputPath>bin\x86_phone\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -103,99 +103,99 @@
   <Choose>
     <When Condition=" '$(Platform)'=='ARM' ">
       <ItemGroup>
-        <Content Include="..\..\bin\arm\cvextern.dll">
+        <Content Include="..\..\bin\arm_phone\cvextern.dll">
           <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_bgsegm300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_bgsegm300.dll">
           <Link>opencv_bgsegm300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_calib3d300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_calib3d300.dll">
           <Link>opencv_calib3d300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_core300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_core300.dll">
           <Link>opencv_core300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_face300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_face300.dll">
           <Link>opencv_face300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_features2d300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_features2d300.dll">
           <Link>opencv_features2d300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_flann300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_flann300.dll">
           <Link>opencv_flann300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_highgui300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_highgui300.dll">
           <Link>opencv_highgui300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_imgcodecs300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_imgcodecs300.dll">
           <Link>opencv_imgcodecs300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_imgproc300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_imgproc300.dll">
           <Link>opencv_imgproc300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_ml300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_ml300.dll">
           <Link>opencv_ml300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_objdetect300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_objdetect300.dll">
           <Link>opencv_objdetect300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_optflow300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_optflow300.dll">
           <Link>opencv_optflow300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_photo300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_photo300.dll">
           <Link>opencv_photo300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_shape300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_shape300.dll">
           <Link>opencv_shape300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_stitching300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_stitching300.dll">
           <Link>opencv_stitching300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_superres300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_superres300.dll">
           <Link>opencv_superres300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_text300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_text300.dll">
           <Link>opencv_text300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_video300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_video300.dll">
           <Link>opencv_video300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_videoio300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_videoio300.dll">
           <Link>opencv_videoio300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_videostab300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_videostab300.dll">
           <Link>opencv_videostab300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_xfeatures2d300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_xfeatures2d300.dll">
           <Link>opencv_xfeatures2d300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_ximgproc300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_ximgproc300.dll">
           <Link>opencv_ximgproc300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\arm\opencv_xobjdetect300.dll">
+        <Content Include="..\..\bin\arm_phone\opencv_xobjdetect300.dll">
           <Link>opencv_xobjdetect300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -203,99 +203,99 @@
     </When>
     <When Condition=" '$(Platform)'=='x86' ">
       <ItemGroup>
-        <Content Include="..\..\bin\x86\cvextern.dll">
+        <Content Include="..\..\bin\x86_phone\cvextern.dll">
           <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_bgsegm300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_bgsegm300.dll">
           <Link>opencv_bgsegm300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_calib3d300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_calib3d300.dll">
           <Link>opencv_calib3d300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_core300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_core300.dll">
           <Link>opencv_core300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_face300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_face300.dll">
           <Link>opencv_face300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_features2d300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_features2d300.dll">
           <Link>opencv_features2d300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_flann300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_flann300.dll">
           <Link>opencv_flann300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_highgui300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_highgui300.dll">
           <Link>opencv_highgui300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_imgcodecs300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_imgcodecs300.dll">
           <Link>opencv_imgcodecs300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_imgproc300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_imgproc300.dll">
           <Link>opencv_imgproc300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_ml300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_ml300.dll">
           <Link>opencv_ml300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_objdetect300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_objdetect300.dll">
           <Link>opencv_objdetect300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_optflow300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_optflow300.dll">
           <Link>opencv_optflow300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_photo300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_photo300.dll">
           <Link>opencv_photo300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_shape300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_shape300.dll">
           <Link>opencv_shape300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_stitching300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_stitching300.dll">
           <Link>opencv_stitching300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_superres300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_superres300.dll">
           <Link>opencv_superres300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_text300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_text300.dll">
           <Link>opencv_text300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_video300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_video300.dll">
           <Link>opencv_video300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_videoio300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_videoio300.dll">
           <Link>opencv_videoio300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_videostab300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_videostab300.dll">
           <Link>opencv_videostab300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_xfeatures2d300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_xfeatures2d300.dll">
           <Link>opencv_xfeatures2d300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_ximgproc300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_ximgproc300.dll">
           <Link>opencv_ximgproc300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\..\bin\x86\opencv_xobjdetect300.dll">
+        <Content Include="..\..\bin\x86_phone\opencv_xobjdetect300.dll">
           <Link>opencv_xobjdetect300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

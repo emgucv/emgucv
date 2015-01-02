@@ -136,11 +136,13 @@ namespace Emgu.CV
       public Matrix(TDepth[] data)
       {
          TDepth[,] mat = new TDepth[data.Length, 1];
+         Buffer.BlockCopy(data, 0, mat, 0, data.Length * SizeOfElement);
+         /*
          GCHandle hdl1 = GCHandle.Alloc(data, GCHandleType.Pinned);
          GCHandle hdl2 = GCHandle.Alloc(mat, GCHandleType.Pinned);
          CvToolbox.Memcpy(hdl2.AddrOfPinnedObject(), hdl1.AddrOfPinnedObject(), data.Length * SizeOfElement);
          hdl1.Free();
-         hdl2.Free();
+         hdl2.Free();*/
          Data = mat;
       }
       #endregion

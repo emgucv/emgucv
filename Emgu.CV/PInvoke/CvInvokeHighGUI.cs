@@ -113,6 +113,7 @@ namespace Emgu.CV
       /// If the window with such a name already exists, the function does nothing.
       /// </summary>
       /// <param name="name">Name of the window which is used as window identifier and appears in the window caption</param>
+      /// <param name="flags">Flags of the window.</param>
       public static void NamedWindow(String name, CvEnum.NamedWindowType flags = NamedWindowType.AutoSize)
       {
          using (CvString s = new CvString(name))
