@@ -174,7 +174,7 @@ namespace Emgu.CV.Util
       public static DataCallback Handler = DataHandler;
 
 #if IOS
-      [MonoTouch.MonoPInvokeCallback(typeof(DataLoggerHelper.DataCallback))]
+      [ObjCRuntime.MonoPInvokeCallback(typeof(DataLoggerHelper.DataCallback))]
 #endif
       public static void DataHandler(IntPtr data, int loggerId)
       {

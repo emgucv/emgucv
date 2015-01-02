@@ -6,8 +6,8 @@ using System;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using MonoTouch.CoreGraphics;
-using MonoTouch.UIKit;
+using CoreGraphics;
+using UIKit;
 
 namespace Emgu.CV
 {
@@ -17,7 +17,7 @@ namespace Emgu.CV
       where TDepth : new()
    {
       public Image(CGImage cgImage)
-         : this(cgImage.Width, cgImage.Height)
+         : this( (int) cgImage.Width, (int) cgImage.Height)
       {
          ConvertFromCGImage(cgImage);
       }

@@ -14,8 +14,8 @@ using Emgu.Util;
 #if ANDROID
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
-using MonoTouch.UIKit;
-using MonoTouch.CoreGraphics;
+using UIKit;
+using CoreGraphics;
 #endif
 
 namespace Emgu.CV

@@ -1,5 +1,5 @@
 using System;
-using MonoTouch.ObjCRuntime;
+using ObjCRuntime;
 
 [assembly: LinkWith (
    "libemgucv.a", 
