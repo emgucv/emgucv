@@ -17,7 +17,7 @@ namespace Emgu.CV
       /// <param name="mask">The inpainting mask, 8-bit 1-channel image. Non-zero pixels indicate the area that needs to be inpainted</param>
       /// <param name="dst">The output image of the same format and the same size as input</param>
       /// <param name="flags">The inpainting method</param>
-      /// <param name="inpaintRadius">The radius of circlular neighborhood of each point inpainted that is considered by the algorithm</param>
+      /// <param name="inpaintRadius">The radius of circular neighborhood of each point inpainted that is considered by the algorithm</param>
       public static void Inpaint(IInputArray src, IInputArray mask, IOutputArray dst, double inpaintRadius, CvEnum.InpaintType flags)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -186,7 +186,7 @@ namespace Emgu.CV
       /// <param name="lowThreshold">Range from 0 to 100.</param>
       /// <param name="highThreshold">Value &gt; 100</param>
       /// <param name="kernelSize">The size of the Sobel kernel to be used.</param>
-      public static void TextureFlattening(IInputArray src, IInputArray mask, IOutputArray dst, double lowThreshold = 30, double highThreshold = 45, int kernelSize = 3)
+      public static void TextureFlattening(IInputArray src, IInputArray mask, IOutputArray dst, float lowThreshold = 30, float highThreshold = 45, int kernelSize = 3)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
@@ -194,7 +194,7 @@ namespace Emgu.CV
             cveTextureFlattening(iaSrc, iaMask, oaDst, lowThreshold, highThreshold, kernelSize);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveTextureFlattening(IntPtr src, IntPtr mask, IntPtr dst, double lowThreshold, double highThreshold, int kernelSize);
+      private static extern void cveTextureFlattening(IntPtr src, IntPtr mask, IntPtr dst, float lowThreshold, float highThreshold, int kernelSize);
 
    }
 }
