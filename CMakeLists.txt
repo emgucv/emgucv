@@ -296,7 +296,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   photo superres  
   videostab shape
   cudev  
-  text face ximgproc xobjdetect xfeatures2d bgsegm optflow
+  text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
   stitching
   )
   
