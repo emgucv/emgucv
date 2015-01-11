@@ -59,7 +59,7 @@ namespace Emgu.CV.Test
 
       }
 
-#if !WINDOWS_PHONE_APP
+#if !NETFX_CORE
       [TestAttribute]
       public void TestRuntimeSerialize()
       {

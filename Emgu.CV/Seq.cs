@@ -43,7 +43,11 @@ namespace Emgu.CV
       /// <summary>
       /// The size of the elements in this sequence
       /// </summary>
+#if NETFX_CORE 
+      protected static readonly int _sizeOfElement = Marshal.SizeOf<T>();
+#else
       protected static readonly int _sizeOfElement = Marshal.SizeOf(typeof(T));
+#endif
 
       #region Constructors
       /// <summary>
@@ -126,7 +130,12 @@ namespace Emgu.CV
          {
             if (ElementType != value)
                Marshal.WriteInt32(
-                  new IntPtr(Ptr.ToInt64() + Marshal.OffsetOf(typeof(MCvSeq), "flags").ToInt64()), 
+                  new IntPtr(Ptr.ToInt64() + 
+#if NETFX_CORE 
+                     Marshal.OffsetOf<MCvSeq>("flags").ToInt64()), 
+#else
+                     Marshal.OffsetOf(typeof(MCvSeq), "flags").ToInt64()), 
+#endif
                   (MCvSeq.flags & (~ (int)CvEnum.SeqConst.EltypeMask )) + value);
          }
       }
@@ -191,7 +200,11 @@ namespace Emgu.CV
       {
          IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);
          CvInvoke.cvSeqPop(Ptr, dataCopy);
+#if NETFX_CORE
+         T res = Marshal.PtrToStructure<T>(dataCopy);
+#else
          T res = (T)Marshal.PtrToStructure(dataCopy, typeof(T));
+#endif
          Marshal.FreeHGlobal(dataCopy);
          return res;
       }
@@ -204,7 +217,11 @@ namespace Emgu.CV
       {
          IntPtr dataCopy = Marshal.AllocHGlobal(_sizeOfElement);
          CvInvoke.cvSeqPopFront(Ptr, dataCopy);
+#if NETFX_CORE
+         T res = Marshal.PtrToStructure<T>(dataCopy);
+#else
          T res = (T)Marshal.PtrToStructure(dataCopy, typeof(T));
+#endif
          Marshal.FreeHGlobal(dataCopy);
          return res;
       }
@@ -258,7 +275,14 @@ namespace Emgu.CV
       /// </summary>
       public MCvSeq MCvSeq
       {
-         get { return (MCvSeq)Marshal.PtrToStructure(Ptr, typeof(MCvSeq)); }
+         get
+         {
+#if NETFX_CORE
+            return Marshal.PtrToStructure<MCvSeq>(Ptr);
+#else
+            return (MCvSeq)Marshal.PtrToStructure(Ptr, typeof(MCvSeq));
+#endif
+         }
       }
 
       /*
@@ -312,7 +336,11 @@ namespace Emgu.CV
       {
          get
          {
+#if NETFX_CORE
+            return Marshal.PtrToStructure<T>(CvInvoke.cvGetSeqElem(_ptr, index));
+#else
             return (T)Marshal.PtrToStructure(CvInvoke.cvGetSeqElem(_ptr, index), typeof(T));
+#endif
          }
       }
 

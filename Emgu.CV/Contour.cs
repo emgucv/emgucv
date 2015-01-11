@@ -98,7 +98,11 @@ namespace Emgu.CV
       {
          get
          {
+#if NETFX_CORE
+            return Marshal.PtrToStructure<MCvContour>(Ptr);
+#else
             return (MCvContour)Marshal.PtrToStructure(Ptr, typeof(MCvContour));
+#endif
          }
       }
 

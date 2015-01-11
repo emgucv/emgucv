@@ -25,7 +25,11 @@ namespace Emgu.CV.Util
 #endif
       where T : struct
    {
+#if NETFX_CORE 
+      private static int _elementSize = Marshal.SizeOf<T>();
+#else
       private static int _elementSize = Marshal.SizeOf(typeof(T));
+#endif
 
       private int _trunkSize;
 

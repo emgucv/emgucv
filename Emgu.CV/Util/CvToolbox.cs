@@ -140,7 +140,7 @@ namespace Emgu.CV.Util
          Matrix<T> res = new Matrix<T>(rows, cols);
          MCvMat mat = res.MCvMat;
          long dataPos = mat.Data.ToInt64();
-         int rowSizeInBytes = Marshal.SizeOf(typeof(T)) * cols;
+         //int rowSizeInBytes = Marshal.SizeOf(typeof(T)) * cols;
          for (int i = 0; i < rows; i++, dataPos += mat.Step)
          {
             CopyVector(data[i], new IntPtr(dataPos));
@@ -246,10 +246,14 @@ namespace Emgu.CV.Util
       {
          int size;
          if (bytesToCopy < 0)
-          size = Marshal.SizeOf(typeof(TData)) * src.Length;
+#if NETFX_CORE 
+         size = Marshal.SizeOf<TData>() * src.Length;
+#else
+         size = Marshal.SizeOf(typeof(TData)) * src.Length;
+#endif
          else
             size = bytesToCopy;
-         
+
          GCHandle handle = GCHandle.Alloc(src, GCHandleType.Pinned);
          Memcpy(dest, handle.AddrOfPinnedObject(), size);
          handle.Free();
@@ -281,7 +285,11 @@ namespace Emgu.CV.Util
       /// <param name="dest">Pointer to the destination unmanaged memory</param>
       public static void CopyMatrix<D>(IntPtr src, D[][] dest)
       {
+#if NETFX_CORE 
+         int datasize = Marshal.SizeOf<D>();
+#else
          int datasize = Marshal.SizeOf(typeof(D));
+#endif
          int step = datasize * dest[0].Length;
          long current = src.ToInt64();
 

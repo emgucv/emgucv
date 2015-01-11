@@ -342,8 +342,13 @@ namespace Emgu.CV
       /// <returns>The read object</returns>
       public static T cvReadSeqElem<T>(ref MCvSeqReader reader)
       {
+#if NETFX_CORE
+         T res = Marshal.PtrToStructure<T>(reader.ptr);
+         cvNextSeqElem(Marshal.SizeOf<T>(), ref reader);
+#else
          T res = (T)Marshal.PtrToStructure(reader.ptr, typeof(T));
          cvNextSeqElem(Marshal.SizeOf(typeof(T)), ref reader);
+#endif
          return res;
       }
 
