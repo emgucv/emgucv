@@ -422,7 +422,11 @@ namespace Emgu.CV
       {
          get
          {
+#if NETFX_CORE 
+            return Marshal.PtrToStructure<MIplImage>(Ptr);
+#else
             return (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
+#endif
          }
       }
 
@@ -1189,7 +1193,11 @@ namespace Emgu.CV
         /// <param name="widthStep">The width step required to jump to the next row</param>
         protected static void RoiParam(IntPtr ptr, out Int64 start, out int rows, out int elementCount, out int byteWidth, out int widthStep)
         {
-            MIplImage ipl = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+#if NETFX_CORE 
+           MIplImage ipl = Marshal.PtrToStructure<MIplImage>(ptr);
+#else
+           MIplImage ipl = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+#endif
             start = ipl.ImageData.ToInt64();
             widthStep = ipl.WidthStep;
 
@@ -4378,7 +4386,11 @@ namespace Emgu.CV
       /// <param name="iplImage">The pointer to the iplImage</param>
       private void LoadImageFromIplImagePtr(IntPtr iplImage)
       {
+#if NETFX_CORE 
+         MIplImage mptr = Marshal.PtrToStructure<MIplImage>(iplImage);
+#else
          MIplImage mptr = (MIplImage)Marshal.PtrToStructure(iplImage, typeof(MIplImage));
+#endif
          Size size = new Size(mptr.Width, mptr.Height);
 
          //Allocate data in managed memory
@@ -4518,7 +4530,11 @@ namespace Emgu.CV
       /// <summary>
       /// Offset of roi
       /// </summary>
+#if NETFX_CORE
+      public static readonly int RoiOffset = (int)Marshal.OffsetOf<MIplImage>("Roi");
+#else
       public static readonly int RoiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "Roi");
+#endif
    }
 
    internal enum ImageDataReleaseMode

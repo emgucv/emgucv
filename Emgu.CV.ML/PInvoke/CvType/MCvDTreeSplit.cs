@@ -44,7 +44,11 @@ namespace Emgu.CV.ML.Structure
          get
          {
             GCHandle handle = GCHandle.Alloc(_subset, GCHandleType.Pinned);
+#if NETFX_CORE 
+            MOrder res = Marshal.PtrToStructure<MOrder>(handle.AddrOfPinnedObject());
+#else
             MOrder res = (MOrder) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(MOrder));
+#endif
             handle.Free();
             return res;
          }

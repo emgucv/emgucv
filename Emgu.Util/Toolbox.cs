@@ -198,7 +198,11 @@ namespace Emgu.Util
       /// <returns>the byte vector</returns>
       public static Byte[] ToBytes<TData>(TData[] data)
       {
+#if NETFX_CORE 
+         int size = Marshal.SizeOf<TData>() * data.Length;
+#else
          int size = Marshal.SizeOf(typeof(TData)) * data.Length;
+#endif
          Byte[] res = new Byte[size];
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          Marshal.Copy(handle.AddrOfPinnedObject(), res, 0, size);

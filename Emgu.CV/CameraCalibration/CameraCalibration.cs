@@ -262,8 +262,15 @@ namespace Emgu.CV
          where T: struct
       {
          int elementCount = 0;
+
+#if NETFX_CORE
+         int structureSize = Marshal.SizeOf<T>();
+         int floatValueInStructure = structureSize / Marshal.SizeOf<float>();
+#else
          int structureSize = Marshal.SizeOf(typeof(T));
-         int floatValueInStructure = Marshal.SizeOf(typeof(T)) / Marshal.SizeOf(typeof(float));
+         int floatValueInStructure = structureSize / Marshal.SizeOf(typeof(float));
+#endif
+
          foreach (T[] d in data) 
             elementCount += d.Length;
 

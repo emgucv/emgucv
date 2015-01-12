@@ -25,7 +25,11 @@ namespace Emgu.CV.Cvb
       private uint[,] _data;
       private GCHandle _dataHandle;
 
+#if NETFX_CORE 
+      private static int _sizeOfUInt32 = Marshal.SizeOf<UInt32>();
+#else
       private static int _sizeOfUInt32 = Marshal.SizeOf(typeof(UInt32));
+#endif
       /// <summary>
       /// Detect blobs from input image.
       /// </summary>
@@ -120,7 +124,11 @@ namespace Emgu.CV.Cvb
       /// <returns>The binary mask for the specific blobs</returns>
       public Image<Gray, Byte> DrawBlobsMask(CvBlobs blobs)
       {
+#if NETFX_CORE 
+         MIplImage img = Marshal.PtrToStructure<MIplImage>(Ptr);
+#else
          MIplImage img = (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
+#endif
          Image<Gray, Byte> mask = new Image<Gray, byte>(img.Width, img.Height);
          cvbCvFilterLabels(Ptr, mask, blobs);
          return mask;
