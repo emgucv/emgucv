@@ -2360,10 +2360,10 @@ namespace Emgu.CV
       /// Rotate this image the specified <paramref name="angle"/>
       /// </summary>
       /// <param name="angle">The angle of rotation in degrees. Positive means clockwise.</param>
-      /// <param name="background">The color with wich to fill the background</param>
+      /// <param name="background">The color with with to fill the background</param>
       /// <param name="crop">If set to true the image is cropped to its original size, possibly losing corners information. If set to false the result image has different size than original and all rotation information is preserved</param>
       /// <param name="center">The center of rotation</param>
-      /// <param name="interpolationMethod">The intepolation method</param>
+      /// <param name="interpolationMethod">The interpolation method</param>
       /// <returns>The rotated image</returns>
       public Image<TColor, TDepth> Rotate(double angle, PointF center, CvEnum.Inter interpolationMethod, TColor background, bool crop)
       {

@@ -518,6 +518,31 @@ namespace Emgu.CV.Test
       }
 
       [TestAttribute]
+      public void TestRotationSpeed()
+      {
+         Image<Bgr, Byte> img = new Image<Bgr, byte>(1024, 720);
+
+         img.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
+
+         Stopwatch watch = Stopwatch.StartNew();
+         Image<Bgr, Byte> imgRotated = img.Rotate(90, new Bgr(), false);
+         watch.Stop();
+         Trace.WriteLine(String.Format("Rotation time (wrap affine): {0}", watch.ElapsedMilliseconds));
+         EmguAssert.AreEqual(img.Width, imgRotated.Height);
+         EmguAssert.AreEqual(img.Height, imgRotated.Width);
+
+         watch.Reset();
+         watch.Start();
+         Image<Bgr, Byte> imgRotated2 = new Image<Bgr, byte>(img.Height, img.Width);
+
+         CvInvoke.Transpose(img, imgRotated2);
+         CvInvoke.Flip(imgRotated2, imgRotated2, FlipType.Horizontal);
+         watch.Stop();
+         Trace.WriteLine(String.Format("Rotation time (transpose & flip): {0}", watch.ElapsedMilliseconds));
+         EmguAssert.IsTrue(imgRotated.Equals(imgRotated2));         
+      }
+
+      [TestAttribute]
       public void TestCascadeClassifierFaceDetect()
       {
          Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, byte>("lena.jpg");

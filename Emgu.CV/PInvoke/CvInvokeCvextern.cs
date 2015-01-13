@@ -151,7 +151,7 @@ namespace Emgu.CV
 #if NETFX_CORE
          int sizeOfPoint3D32f = Marshal.SizeOf<MCvPoint3D32f>();
 #else
-         int sizeOfPoint2D32f = Marshal.SizeOf(typeof (MCvPoint3D32f));
+         int sizeOfPoint3D32f = Marshal.SizeOf(typeof (MCvPoint3D32f));
 #endif
          using (
             Matrix<float> srcMat = new Matrix<float>(1, src.Length, 3, srcHandle.AddrOfPinnedObject(),

@@ -286,9 +286,7 @@ namespace Emgu.CV
             default:
                throw  new NotImplementedException(String.Format("GetData with indices size {0} is not implemented", indices.Length));
          }
-         
-            
-         
+       
       }
 
       /// <summary>

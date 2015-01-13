@@ -1089,7 +1089,7 @@ namespace Emgu.CV.Test
          float[][] features = new float[10][];
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
-         Flann.LinearIndexParamses p = new LinearIndexParamses();
+         Flann.LinearIndexParams p = new LinearIndexParams();
          Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), p);
 
          float[][] features2 = new float[1][];
@@ -2103,7 +2103,7 @@ namespace Emgu.CV.Test
                indexOfClosest1 = i;
             }
          }
-         Flann.LinearIndexParamses p = new LinearIndexParamses();
+         Flann.LinearIndexParams p = new LinearIndexParams();
          Flann.Index3D index3D = new Emgu.CV.Flann.Index3D(points,p);
          double shortestDistance2;
          int indexOfClosest2 = index3D.ApproximateNearestNeighbour(searchPoint, out shortestDistance2);
