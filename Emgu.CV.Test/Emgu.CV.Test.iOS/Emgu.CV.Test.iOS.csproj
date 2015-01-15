@@ -23,9 +23,10 @@
     <MtouchLink>None</MtouchLink>
     <MtouchI18n>
     </MtouchI18n>
-    <MtouchArch>ARMv7, ARMv7s</MtouchArch>
+    <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
     <AssemblyName>EmguCVTestiOS</AssemblyName>
+    <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -38,9 +39,10 @@
     <DefineConstants>IOS</DefineConstants>
     <MtouchI18n>
     </MtouchI18n>
-    <MtouchArch>ARMv7, ARMv7s</MtouchArch>
+    <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchExtraArgs>-cxx</MtouchExtraArgs>
     <AssemblyName>EmguCVTestiOS</AssemblyName>
+    <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
