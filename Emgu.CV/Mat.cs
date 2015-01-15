@@ -16,8 +16,8 @@ using System.IO;
 #if ANDROID
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
-using MonoTouch.UIKit;
-using MonoTouch.CoreGraphics;
+using UIKit;
+using CoreGraphics;
 #elif NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
 #else
 using System.Drawing.Imaging;
@@ -286,9 +286,7 @@ namespace Emgu.CV
             default:
                throw  new NotImplementedException(String.Format("GetData with indices size {0} is not implemented", indices.Length));
          }
-         
-            
-         
+       
       }
 
       /// <summary>

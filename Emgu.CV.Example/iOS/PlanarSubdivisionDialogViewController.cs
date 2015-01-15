@@ -8,8 +8,8 @@ using System.Linq;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using MonoTouch.Dialog;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using Foundation;
+using UIKit;
 using PlanarSubdivisionExample;
 
 namespace Emgu.CV.Example.MonoTouch
@@ -32,7 +32,7 @@ namespace Emgu.CV.Example.MonoTouch
             root.Add(new Section()
                  { new StyledStringElement("Process", delegate {
 
-            using (Mat resized = DrawSubdivision.Draw(Math.Min( View.Frame.Width, View.Frame.Height) , 20))
+            using (Mat resized = DrawSubdivision.Draw(Math.Min( (int) View.Frame.Width, (int) View.Frame.Height) , 20))
             //using (Image<Bgr, Byte> resized = result.Resize((int)View.Frame.Width, (int)View.Frame.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN, true))
             {
                imageView.Frame = new RectangleF(PointF.Empty, resized.Size);

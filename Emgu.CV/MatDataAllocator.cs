@@ -84,7 +84,7 @@ namespace Emgu.CV
       }
 
 #if IOS
-      [MonoTouch.MonoPInvokeCallback(typeof(MatDataAllocatorInvoke.MatAllocateCallback))]
+      [ObjCRuntime.MonoPInvokeCallback(typeof(MatDataAllocatorInvoke.MatAllocateCallback))]
 #endif
       static internal IntPtr AllocateCallback(CvEnum.DepthType type, int channels, int totalInBytes, IntPtr allocateDataActionPtr)
       {
@@ -94,7 +94,7 @@ namespace Emgu.CV
       }
 
 #if IOS
-      [MonoTouch.MonoPInvokeCallback(typeof(MatDataAllocatorInvoke.MatDeallocateCallback))]
+      [ObjCRuntime.MonoPInvokeCallback(typeof(MatDataAllocatorInvoke.MatDeallocateCallback))]
 #endif
       static internal void DeallocateCallback(IntPtr freeDataActionPtr)
       {

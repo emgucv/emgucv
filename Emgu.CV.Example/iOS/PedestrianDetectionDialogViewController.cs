@@ -8,8 +8,8 @@ using System.Linq;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using MonoTouch.Dialog;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using Foundation;
+using UIKit;
 using PedestrianDetection;
 
 namespace Emgu.CV.Example.MonoTouch

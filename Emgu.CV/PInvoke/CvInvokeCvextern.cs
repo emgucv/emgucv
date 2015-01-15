@@ -148,12 +148,17 @@ namespace Emgu.CV
          int result;
 
          estimate = new Matrix<double>(3, 4);
+#if NETFX_CORE
+         int sizeOfPoint3D32f = Marshal.SizeOf<MCvPoint3D32f>();
+#else
+         int sizeOfPoint3D32f = Marshal.SizeOf(typeof (MCvPoint3D32f));
+#endif
          using (
             Matrix<float> srcMat = new Matrix<float>(1, src.Length, 3, srcHandle.AddrOfPinnedObject(),
-               Marshal.SizeOf(typeof (MCvPoint3D32f))*src.Length))
+               sizeOfPoint3D32f * src.Length))
          using (
             Matrix<float> dstMat = new Matrix<float>(1, dst.Length, 3, dstHandle.AddrOfPinnedObject(),
-               Marshal.SizeOf(typeof (MCvPoint3D32f))*dst.Length))
+               sizeOfPoint3D32f * dst.Length))
          using (Util.VectorOfByte vectorOfByte = new Util.VectorOfByte())
          {
             result = EstimateAffine3D(srcMat, dstMat, estimate, vectorOfByte, ransacThreshold, confidence);

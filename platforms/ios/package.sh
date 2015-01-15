@@ -58,4 +58,4 @@ rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.Cuda/Emgu.CV.Cuda
 cd ..
 
 gitversion=$(git log --oneline | wc -l | tr -d " ")
-zip -r libemgucv-ios-$gitversion ios-package
+zip -r libemgucv-ios-unified-$gitversion ios-package

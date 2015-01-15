@@ -10,7 +10,7 @@ using Emgu.CV.CvEnum;
 #if ANDROID
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
-using MonoTouch.UIKit;
+using UIKit;
 #elif NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
 #else
 using System.Drawing.Imaging;
@@ -422,7 +422,11 @@ namespace Emgu.CV
       {
          get
          {
+#if NETFX_CORE 
+            return Marshal.PtrToStructure<MIplImage>(Ptr);
+#else
             return (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
+#endif
          }
       }
 
@@ -1189,7 +1193,11 @@ namespace Emgu.CV
         /// <param name="widthStep">The width step required to jump to the next row</param>
         protected static void RoiParam(IntPtr ptr, out Int64 start, out int rows, out int elementCount, out int byteWidth, out int widthStep)
         {
-            MIplImage ipl = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+#if NETFX_CORE 
+           MIplImage ipl = Marshal.PtrToStructure<MIplImage>(ptr);
+#else
+           MIplImage ipl = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
+#endif
             start = ipl.ImageData.ToInt64();
             widthStep = ipl.WidthStep;
 
@@ -2352,10 +2360,10 @@ namespace Emgu.CV
       /// Rotate this image the specified <paramref name="angle"/>
       /// </summary>
       /// <param name="angle">The angle of rotation in degrees. Positive means clockwise.</param>
-      /// <param name="background">The color with wich to fill the background</param>
+      /// <param name="background">The color with with to fill the background</param>
       /// <param name="crop">If set to true the image is cropped to its original size, possibly losing corners information. If set to false the result image has different size than original and all rotation information is preserved</param>
       /// <param name="center">The center of rotation</param>
-      /// <param name="interpolationMethod">The intepolation method</param>
+      /// <param name="interpolationMethod">The interpolation method</param>
       /// <returns>The rotated image</returns>
       public Image<TColor, TDepth> Rotate(double angle, PointF center, CvEnum.Inter interpolationMethod, TColor background, bool crop)
       {
@@ -4378,7 +4386,11 @@ namespace Emgu.CV
       /// <param name="iplImage">The pointer to the iplImage</param>
       private void LoadImageFromIplImagePtr(IntPtr iplImage)
       {
+#if NETFX_CORE 
+         MIplImage mptr = Marshal.PtrToStructure<MIplImage>(iplImage);
+#else
          MIplImage mptr = (MIplImage)Marshal.PtrToStructure(iplImage, typeof(MIplImage));
+#endif
          Size size = new Size(mptr.Width, mptr.Height);
 
          //Allocate data in managed memory
@@ -4518,7 +4530,11 @@ namespace Emgu.CV
       /// <summary>
       /// Offset of roi
       /// </summary>
+#if NETFX_CORE
+      public static readonly int RoiOffset = (int)Marshal.OffsetOf<MIplImage>("Roi");
+#else
       public static readonly int RoiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "Roi");
+#endif
    }
 
    internal enum ImageDataReleaseMode

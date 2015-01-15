@@ -193,7 +193,11 @@ namespace Emgu.CV
       {
          get
          {
+#if NETFX_CORE 
+            return Marshal.PtrToStructure<MCvMatND>(_ptr);
+#else
             return (MCvMatND)Marshal.PtrToStructure(_ptr, typeof(MCvMatND));
+#endif
          }
       }
 

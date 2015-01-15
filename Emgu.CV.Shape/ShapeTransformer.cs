@@ -1,10 +1,9 @@
-﻿//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2014 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.IO;

@@ -426,87 +426,87 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Change image resolution by binning or skipping.
       /// </summary>
-      XiDownsampling = 400,      
+      XiDownsampling = 400,
       /// <summary>
       /// Output data format
       /// </summary>
-      XiDataFormat = 401,     
+      XiDataFormat = 401,
       /// <summary>
       /// Horizontal offset from the origin to the area of interest (in pixels).
       /// </summary>
-      XiOffsetX = 402,      
+      XiOffsetX = 402,
       /// <summary>
       /// Vertical offset from the origin to the area of interest (in pixels).
       /// </summary>
-      XiOffsetY = 403,      
+      XiOffsetY = 403,
       /// <summary>
       /// Defines source of trigger.
       /// </summary>
-      XiTrgSource = 404,      
+      XiTrgSource = 404,
       /// <summary>
       /// Generates an internal trigger. PRM_TRG_SOURCE must be set to TRG_SOFTWARE.
       /// </summary>
-      XiTrgSoftware = 405,      
+      XiTrgSoftware = 405,
       /// <summary>
       /// Selects general purpose input
       /// </summary>
-      XiGpiSelector = 406,      
+      XiGpiSelector = 406,
       /// <summary>
       /// Set general purpose input mode
       /// </summary>
-      XiGpiMode = 407,      
+      XiGpiMode = 407,
       /// <summary>
       /// Get general purpose level
       /// </summary>
-      XiGpiLevel = 408,      
+      XiGpiLevel = 408,
       /// <summary>
       /// Selects general purpose output
       /// </summary>
-      XiGpoSelector = 409,      
+      XiGpoSelector = 409,
       /// <summary>
       /// Set general purpose output mode
       /// </summary>
-      XiGpoMode = 410,      
+      XiGpoMode = 410,
       /// <summary>
       /// Selects camera signaling LED
       /// </summary>
-      XiLedSelector = 411,      
+      XiLedSelector = 411,
       /// <summary>
       /// Define camera signaling LED functionality
       /// </summary>
-      XiLedMode = 412,      
+      XiLedMode = 412,
       /// <summary>
       /// Calculates White Balance(must be called during acquisition)
       /// </summary>
-      XiManualWb = 413,      
+      XiManualWb = 413,
       /// <summary>
       /// Automatic white balance
       /// </summary>
-      XiAutoWb = 414,      
+      XiAutoWb = 414,
       /// <summary>
       /// Automatic exposure/gain
       /// </summary>
-      XiAeag = 415,      
+      XiAeag = 415,
       /// <summary>
       /// Exposure priority (0.5 - exposure 50%, gain 50%).
       /// </summary>
-      XiExpPriority = 416,      
+      XiExpPriority = 416,
       /// <summary>
       /// Maximum limit of exposure in AEAG procedure
       /// </summary>
-      XiAeMaxLimit = 417, 
+      XiAeMaxLimit = 417,
       /// <summary>
       /// Maximum limit of gain in AEAG procedure
       /// </summary>
-      XiAgMaxLimit = 418,      
+      XiAgMaxLimit = 418,
       /// <summary>
       /// Average intensity of output signal AEAG should achieve(in %)
       /// </summary>
-      XiAeagLevel = 419,       
+      XiAeagLevel = 419,
       /// <summary>
       /// Image capture timeout in milliseconds
       /// </summary>
-      XiTimeout = 420,     
+      XiTimeout = 420,
 
       /// <summary>
       /// Android flash mode
@@ -622,7 +622,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// the ratio of the image is respected
       /// </summary>
-      KeepRatio = 0x00000000  
+      KeepRatio = 0x00000000
    }
 
    /// <summary>
@@ -1519,7 +1519,7 @@ namespace Emgu.CV.CvEnum
       HersheyScriptComplex = 7
    }
 
-   
+
    /// <summary>
    /// Flags used for GEMM function
    /// </summary>
@@ -1568,7 +1568,7 @@ namespace Emgu.CV.CvEnum
       Gradient = 3
    }
 
-   
+
    /// <summary>
    /// Inpaint type
    /// </summary>
@@ -2537,7 +2537,7 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       GaussianC = 1
    }
-   
+
    /// <summary>
    /// Shape of the Structuring Element
    /// </summary>
@@ -2883,7 +2883,7 @@ namespace Emgu.CV.CvEnum
       PrevAroundRight = 0x02
    }
 
-   
+
    /// <summary>
    /// orientation
    /// </summary>
@@ -3679,10 +3679,25 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// F.Moreno-Noguer, V.Lepetit and P.Fua "EPnP: Efficient Perspective-n-Point Camera Pose Estimation"
       /// </summary>
-      EPnP = 1, 
+      EPnP = 1,
       /// <summary>
       /// X.S. Gao, X.-R. Hou, J. Tang, H.-F. Chang; "Complete Solution Classification for the Perspective-Three-Point Problem"
       /// </summary>
-      P3P = 2 
+      P3P = 2
    }
+
+   /// <summary>
+   /// White balance algorithms
+   /// </summary>
+   public enum WhiteBalanceMethod
+   {
+      /// <summary>
+      /// Simple
+      /// </summary>
+      Simple = 0,
+      /// <summary>
+      /// Grayworld
+      /// </summary>
+      Grayworld = 1
+   };
 }

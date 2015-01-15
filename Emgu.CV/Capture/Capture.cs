@@ -285,7 +285,7 @@ namespace Emgu.CV
          }
          catch (Exception e)
          {
-            throw e;
+            throw;
          }
          finally
          {

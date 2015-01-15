@@ -12,13 +12,13 @@ using System.Threading;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using MonoTouch.Dialog;
-using MonoTouch.Foundation;
-using MonoTouch.AVFoundation;
-using MonoTouch.UIKit;
-using MonoTouch.CoreVideo;
-using MonoTouch.CoreMedia;
-using MonoTouch.CoreGraphics;
-using MonoTouch.CoreFoundation;
+using Foundation;
+using AVFoundation;
+using UIKit;
+using CoreVideo;
+using CoreMedia;
+using CoreGraphics;
+using CoreFoundation;
 
 namespace Emgu.CV.Example.MonoTouch
 {
@@ -70,17 +70,20 @@ bool SetupCaptureSession ()
          session.AddInput (input);
 
          // create a VideoDataOutput and add it to the sesion
+         AVVideoSettingsUncompressed settingUncomp = new AVVideoSettingsUncompressed();
+         settingUncomp.PixelFormatType = CVPixelFormatType.CV32BGRA;
          var output = new AVCaptureVideoDataOutput () {
-            VideoSettings = new AVVideoSettings (CVPixelFormatType.CV32BGRA),
+            UncompressedVideoSetting = settingUncomp,
 
             // If you want to cap the frame rate at a given speed, in this sample: 15 frames per second
             //MinFrameDuration = new CMTime (1, 15)
          };
+        
 
          // configure the output
          queue = new DispatchQueue ("myQueue");
          outputRecorder = new OutputRecorder (ImageView);
-         output.SetSampleBufferDelegateAndQueue (outputRecorder, queue);
+         output.SetSampleBufferDelegateQueue(outputRecorder, queue);
          session.AddOutput (output);
 
          session.StartRunning ();
@@ -102,7 +105,7 @@ bool SetupCaptureSession ()
                // Do something with the image, we just stuff it in our main view.
                BeginInvokeOnMainThread (delegate {
                   if (_imageView.Frame.Size != image.Size)
-                     _imageView.Frame = new RectangleF(Point.Empty, image.Size);
+                     _imageView.Frame = new CGRect(CGPoint.Empty, image.Size);
                   _imageView.Image = image;
                });
 
@@ -129,9 +132,9 @@ bool SetupCaptureSession ()
                pixelBuffer.Lock (0);
                // Get the number of bytes per row for the pixel buffer
                IntPtr baseAddress = pixelBuffer.BaseAddress;
-               int bytesPerRow = pixelBuffer.BytesPerRow;
-               int width = pixelBuffer.Width;
-               int height = pixelBuffer.Height;
+               int bytesPerRow = (int)pixelBuffer.BytesPerRow;
+               int width = (int)pixelBuffer.Width;
+               int height = (int)pixelBuffer.Height;
 
                using (Image<Bgra, byte> bgra = new Image<Bgra, byte>(width, height, bytesPerRow, baseAddress))
                using (Image<Bgr, byte> bgr = bgra.Convert<Bgr, byte>())

@@ -7,8 +7,8 @@ using System.Drawing;
 #if ANDROID
 using Bitmap =  Android.Graphics.Bitmap;
 #elif IOS
-using MonoTouch.CoreGraphics;
-using MonoTouch.UIKit;
+using CoreGraphics;
+using UIKit;
 #endif
 
 namespace Emgu.CV

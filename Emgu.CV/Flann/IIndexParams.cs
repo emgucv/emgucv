@@ -12,8 +12,17 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Flann
 {
+   /// <summary>
+   /// The index parameters interface
+   /// </summary>
    public interface IIndexParams
    {
+      /// <summary>
+      /// Gets the pointer to the index parameter.
+      /// </summary>
+      /// <value>
+      /// The index parameter pointer.
+      /// </value>
       IntPtr IndexParamPtr { get; }
    }
 }

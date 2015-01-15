@@ -34,7 +34,11 @@ namespace Emgu.CV
       /// <summary>
       /// The size of the elements in the CvArray, it is the cached value of Marshal.SizeOf(typeof(TDepth)).
       /// </summary>
+#if NETFX_CORE 
+      private static readonly int _sizeOfElement = Marshal.SizeOf<TDepth>();
+#else
       private static readonly int _sizeOfElement = Marshal.SizeOf(typeof(TDepth));
+#endif
 
       /// <summary>
       /// The pinned GCHandle to _array;
@@ -137,7 +141,7 @@ namespace Emgu.CV
                MCvMat mat = matrix.MCvMat;
                if (mat.Step == 0)
                {  //The matrix only have one row
-                  size = mat.Cols * NumberOfChannels * Marshal.SizeOf(typeof(TDepth));
+                  size = mat.Cols * NumberOfChannels * _sizeOfElement;
                }
                else
                   size = mat.Rows * mat.Step;
@@ -149,7 +153,11 @@ namespace Emgu.CV
             }
             else
             {  //this is Image<TColor, TDepth>
+#if NETFX_CORE 
+               MIplImage iplImage = Marshal.PtrToStructure<MIplImage>(Ptr);
+#else
                MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
+#endif
                size = iplImage.Height * iplImage.WidthStep;
                dataStart = iplImage.ImageData;
             }

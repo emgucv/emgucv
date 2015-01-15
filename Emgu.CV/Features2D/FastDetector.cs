@@ -19,15 +19,23 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class FastDetector : Feature2D
    {
-      static FastDetector()
-      {
-         CvInvoke.CheckLibraryLoaded();
-      }
 
+      /// <summary>
+      /// One of the three neighborhoods as defined in the paper
+      /// </summary>
       public enum DetectorType
       {
+         /// <summary>
+         /// The type5_8
+         /// </summary>
          Type5_8 = 0,
+         /// <summary>
+         /// The type7_12
+         /// </summary>
          Type7_12 = 1,
+         /// <summary>
+         /// The type9_16
+         /// </summary>
          Type9_16 = 2
       }
 
@@ -37,9 +45,10 @@ namespace Emgu.CV.Features2D
       /// <param name="threshold">Threshold on difference between intensity of center pixel and pixels on circle around
       /// this pixel.</param>
       /// <param name="nonmaxSupression">Specify if non-maximum suppression should be used.</param>
+      /// <param name="type">One of the three neighborhoods as defined in the paper</param>
       public FastDetector(int threshold = 10, bool nonmaxSupression = true, DetectorType type = DetectorType.Type9_16)
       {
-         _ptr = CvFASTGetFeatureDetector(threshold, nonmaxSupression, type, ref _feature2D);
+         _ptr = CvInvoke.CvFASTGetFeatureDetector(threshold, nonmaxSupression, type, ref _feature2D);
       }
 
       /// <summary>
@@ -48,19 +57,28 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvFASTFeatureDetectorRelease(ref _ptr);
+            CvInvoke.CvFASTFeatureDetectorRelease(ref _ptr);
          base.DisposeObject();
       }
 
+   }
+
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr CvFASTGetFeatureDetector(
          int threshold,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool nonmaxSupression, 
-         DetectorType type,
+         bool nonmaxSupression,
+         Features2D.FastDetector.DetectorType type,
          ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFASTFeatureDetectorRelease(ref IntPtr detector);
    }
 }
+

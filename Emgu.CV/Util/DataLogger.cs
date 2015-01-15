@@ -107,7 +107,11 @@ namespace Emgu.CV.Util
             Marshal.FreeHGlobal(unmanagedData);
          } else
          {
+#if NETFX_CORE
+            IntPtr unmanagedData = Marshal.AllocHGlobal(Marshal.SizeOf<T>());
+#else
             IntPtr unmanagedData = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
+#endif
             Marshal.StructureToPtr(data, unmanagedData, false);
             _logger.Log(unmanagedData, logLevel);
             Marshal.FreeHGlobal(unmanagedData);
@@ -124,7 +128,11 @@ namespace Emgu.CV.Util
                result = (T) ((Object) Marshal.PtrToStringAnsi(e.Value));
             } else
             {
+#if NETFX_CORE
+               result = Marshal.PtrToStructure<T>(e.Value);
+#else
                result = (T) Marshal.PtrToStructure(e.Value, typeof(T));
+#endif
             }
             OnDataReceived(this, new EventArgs<T>(result));
          }
@@ -174,7 +182,7 @@ namespace Emgu.CV.Util
       public static DataCallback Handler = DataHandler;
 
 #if IOS
-      [MonoTouch.MonoPInvokeCallback(typeof(DataLoggerHelper.DataCallback))]
+      [ObjCRuntime.MonoPInvokeCallback(typeof(DataLoggerHelper.DataCallback))]
 #endif
       public static void DataHandler(IntPtr data, int loggerId)
       {

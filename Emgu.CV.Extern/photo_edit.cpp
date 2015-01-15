@@ -266,7 +266,7 @@ bool hueInRange(float hue, float start, float end)
 
 float normal_pdf(float x, float mean, float sigma)
 {
-    static const float inv_sqrt_2pi = 0.3989422804014327;
+    static const float inv_sqrt_2pi = 0.3989422804014327f;
     float a = (x - mean) / sigma;
     return inv_sqrt_2pi / sigma * std::exp(-0.5f * a * a);
 }

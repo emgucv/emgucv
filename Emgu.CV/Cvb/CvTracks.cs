@@ -116,7 +116,11 @@ namespace Emgu.CV.Cvb
          }
          else
          {
+#if NETFX_CORE 
+            track = Marshal.PtrToStructure<CvTrack>(trackPtr);
+#else
             track = (CvTrack)Marshal.PtrToStructure(trackPtr, typeof(CvTrack));
+#endif
             return true;
          }
       }

@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using MonoTouch.Dialog;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using Foundation;
+using UIKit;
 using SURFFeatureExample;
 
 namespace Emgu.CV.Example.MonoTouch
