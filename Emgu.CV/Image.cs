@@ -3800,7 +3800,7 @@ namespace Emgu.CV
       ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref name="kernelSize"/> x <paramref name="kernelSize"/>)</param>
       public void _SmoothGaussian(int kernelSize)
       {
-         _SmoothGaussian(kernelSize, 0, 0, 0);
+          _SmoothGaussian(kernelSize, kernelSize, 0, 0);
       }
 
       ///<summary> Perform Gaussian Smoothing inplace for the current image </summary>

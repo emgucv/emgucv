@@ -906,7 +906,7 @@ namespace Emgu.CV
          using (InputArray iaContour = contour.GetInputArray())
          using (InputArray iaConvexhull = convexhull.GetInputArray())
          using (OutputArray oaConvecxityDefects = convexityDefects.GetOutputArray())
-            cveConvexityDefects(iaContour, iaContour, oaConvecxityDefects);
+             cveConvexityDefects(iaContour, iaConvexhull, oaConvecxityDefects);
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
