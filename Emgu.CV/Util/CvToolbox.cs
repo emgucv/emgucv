@@ -240,7 +240,7 @@ namespace Emgu.CV.Util
       /// <typeparam name="TData">The data type of the vector</typeparam>
       /// <param name="src">The source vector</param>
       /// <param name="dest">Pointer to the destination unmanaged memory</param>
-      /// <param name="bytesToCopy">Specify the number of bytes to copy. If this is -1, the number of bytes equals the number of bytes in the <param name="src"> array</param></param>
+      /// <param name="bytesToCopy">Specify the number of bytes to copy. If this is -1, the number of bytes equals the number of bytes in the <paramref name="src"> array</paramref></param>
       /// <returns>The number of bytes copied</returns>
       public static int CopyVector<TData>(TData[] src, IntPtr dest, int bytesToCopy = -1)
       {

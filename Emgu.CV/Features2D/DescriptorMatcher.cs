@@ -16,6 +16,9 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public abstract class DescriptorMatcher : UnmanagedObject, IAlgorithm
    {
+      /// <summary>
+      /// The pointer to the Descriptor matcher
+      /// </summary>
       protected IntPtr _descriptorMatcherPtr;
 
       /// <summary>

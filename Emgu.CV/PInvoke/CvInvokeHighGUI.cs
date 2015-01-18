@@ -163,6 +163,9 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDestroyWindow(IntPtr name);
 
+      /// <summary>
+      /// Destroys all of the HighGUI windows.
+      /// </summary>
       public static void DestroyAllWindows()
       {
          cveDestroyAllWindows();

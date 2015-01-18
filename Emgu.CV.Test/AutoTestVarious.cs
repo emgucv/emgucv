@@ -18,6 +18,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Flann;
 using Emgu.CV.Stitching;
+using Emgu.CV.Text;
 using Emgu.CV.Structure;
 #if !(IOS || NETFX_CORE)
 using Emgu.CV.Cuda;
@@ -2661,7 +2662,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      /*
+      
       [Test]
       public void TestERFilter()
       {
@@ -2696,11 +2697,12 @@ namespace Emgu.CV.Test
             for (int i = 0; i < regionVecs.Length; i++)
                regionVecs[i] = new VectorOfERStat();
 
-            //for (int i = 0; i < channels.Length; i++)
-            //{
-            //   Emgu.CV.UI.ImageViewer.Show(channels[i]);
-            //}
-
+            /*
+            for (int i = 0; i < channels.Length; i++)
+            {
+               Emgu.CV.UI.ImageViewer.Show(channels[i]);
+            }*/
+            
             try
             {
                for (int i = 0; i < channels.Length; i++)
@@ -2710,29 +2712,11 @@ namespace Emgu.CV.Test
                }
                using (VectorOfUMat vm = new VectorOfUMat(channels))
                {
-                  Rectangle[] regions = ERFilter.ERGrouping(vm, regionVecs, EmguAssert.GetFile("trained_classifier_erGrouping.xml"), 0.5f);
+                  Rectangle[] regions = ERFilter.ERGrouping(image, vm, regionVecs, ERFilter.GroupingMethod.OrientationHoriz, EmguAssert.GetFile("trained_classifier_erGrouping.xml"), 0.5f);
 
                   foreach (Rectangle rect in regions)
                      image.Draw(rect, new Bgr(Color.Red), 2);
-                  //Emgu.CV.UI.ImageViewer.Show(image);
-
                   
-                  //MCvERStat[] regions = regionVec.ToArray();
-                  //Size size = image.Size;
-                  //foreach (MCvERStat region in regions)
-                  //{
-                  //   if (region.ParentPtr != IntPtr.Zero)
-                  //   {
-                  //      Point p = region.GetCenter(size.Width);
-                  //      int flags = 4 + (255<< 8) + (int)CvEnum.FLOODFILL_FLAG.FIXED_RANGE + (int)CvEnum.FLOODFILL_FLAG.MASK_ONLY;
-                  //      MCvConnectedComp comp;
-                  //      CvInvoke.cvFloodFill(image, p, new MCvScalar(255), new MCvScalar(region.Level), new MCvScalar(), out comp, flags, mask);
-                  //      image.Draw(new CircleF(new PointF(p.X, p.Y), 4), new Gray(0), 2);
-                  //   }
-                  //}
-       
-                  //UI.ImageViewer.Show(image.ConcateHorizontal(mask));
-                  //}
                }
             }
             finally
@@ -2744,8 +2728,10 @@ namespace Emgu.CV.Test
                   if (tmp != null)
                      tmp.Dispose();
             }
+            //Emgu.CV.UI.ImageViewer.Show(image);
+            
          }
 
-      }*/
+      }
    }
 }

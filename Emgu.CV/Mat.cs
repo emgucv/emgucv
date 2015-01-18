@@ -26,8 +26,7 @@ using System.Drawing.Imaging;
 namespace Emgu.CV
 {
    /// <summary>
-   /// The equivalent of cv::Mat, should only be used if you know what you are doing.
-   /// In most case you should use the Matrix class instead
+   /// The equivalent of cv::Mat
    /// </summary>
 #if !NETFX_CORE
    [Serializable]
@@ -253,6 +252,12 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Gets the binary data from the specific indices.
+      /// </summary>
+      /// <param name="indices">The indices.</param>
+      /// <returns></returns>
+      /// <exception cref="System.NotImplementedException">Indices of length more than 2 is not implemented</exception>
       public byte[] GetData(params int[] indices)
       {
          switch (indices.Length)

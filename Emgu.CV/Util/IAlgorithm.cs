@@ -213,6 +213,11 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Gets the parameter names of the algorithm
+      /// </summary>
+      /// <param name="algorithm">The algorithm.</param>
+      /// <returns>The list of names of the parameters</returns>
       public static String[] GetParamNames(this IAlgorithm algorithm)
       {
          using (VectorOfCvString names = new VectorOfCvString())

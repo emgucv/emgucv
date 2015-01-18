@@ -22,6 +22,9 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected IntPtr _feature2D;
 
+      /// <summary>
+      /// The pointer to the Algorithm object.
+      /// </summary>
       protected IntPtr _algorithm;
 
       /// <summary>
@@ -86,7 +89,6 @@ namespace Emgu.CV.Features2D
       /// <summary>
       /// Detect the keypoints from the image
       /// </summary>
-      /// <param name="detector">The keypoint detector</param>
       /// <param name="image">The image to extract keypoints from</param>
       /// <param name="mask">The optional mask.</param>
       /// <returns>An array of key points</returns>
