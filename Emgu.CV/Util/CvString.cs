@@ -31,12 +31,20 @@ namespace Emgu.CV
       /// <param name="s">The System.String object to be converted to CvString</param>
       public CvString(String s)
       {
-         byte[] bytes = Encoding.UTF8.GetBytes(s);
-         Array.Resize (ref bytes, bytes.Length + 1);
-         bytes [bytes.Length - 1] = 0; //The end of string '\0' character
-         GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-         _ptr = CvInvoke.cveStringCreateFromStr(handle.AddrOfPinnedObject());
-         handle.Free();
+         if (s == null)
+         {
+            _ptr = CvInvoke.cveStringCreate();
+         }
+         else
+         {
+            byte[] bytes = Encoding.UTF8.GetBytes(s);
+            Array.Resize(ref bytes, bytes.Length + 1);
+            bytes[bytes.Length - 1] = 0; //The end of string '\0' character
+            GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+            _ptr = CvInvoke.cveStringCreateFromStr(handle.AddrOfPinnedObject());
+            handle.Free();
+         }
+         
          _needDispose = true;
       }
 
@@ -61,10 +69,21 @@ namespace Emgu.CV
          Byte[] data = new byte[size];
          Marshal.Copy(cStr, data, 0, size);
 #if NETFX_CORE
-         return Encoding.UTF8.GetString(data, 0, data.Length);
+         return Encoding.UTF8.ReadString(data, 0, data.Length);
 #else
          return Encoding.UTF8.GetString(data);
 #endif
+      }
+
+      /// <summary>
+      /// Gets the length of the string
+      /// </summary>
+      /// <value>
+      /// The length of the string
+      /// </value>
+      public int Length
+      {
+         get { return CvInvoke.cveStringGetLength(_ptr); }
       }
 
       /// <summary>
@@ -84,6 +103,9 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveStringRelease(ref IntPtr str);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int cveStringGetLength(IntPtr str);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveStringGetCStr(IntPtr str, ref IntPtr cStr, ref int size);

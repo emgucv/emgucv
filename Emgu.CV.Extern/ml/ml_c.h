@@ -161,4 +161,18 @@ CVAPI(bool) CvGBTreesTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
 CVAPI(float) CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
                             CvMat* weak_responses, CvSlice* slice,
                             bool raw_mode);*/
+
+//LogisticRegression
+CVAPI(cv::ml::LogisticRegression::Params*) cveLogisticRegressionParamsCreate(
+   double learning_rate,
+   int iters,
+   int method,
+   int normalization,
+   int reg,
+   int batch_size);
+CVAPI(void) cveLogisticRegressionParamsRelease(cv::ml::LogisticRegression::Params** params);
+
+CVAPI(cv::ml::LogisticRegression*) cveLogisticRegressionCreate(cv::ml::LogisticRegression::Params* p, cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
+CVAPI(void) cveLogisticRegressionRelease(cv::ml::LogisticRegression** model);
+
 #endif

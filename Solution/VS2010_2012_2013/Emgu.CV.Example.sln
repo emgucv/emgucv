@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\HelloWorld\HelloWorld.csproj", "{28682DB8-9662-452D-A5AD-646EA7BC8AD0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceDetection", "..\..\Emgu.CV.Example\FaceDetection\FaceDetection.csproj", "{B2C15B1D-BF04-4CBC-AF22-0ECF38591B09}"
@@ -52,6 +54,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.csproj", "{D9C9B824-2B7A-48C0-A7D3-484410288CD2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.csproj", "{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatentSvmDetector", "..\..\Emgu.CV.Example\LatentSvmDetector\LatentSvmDetector.csproj", "{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -217,6 +221,12 @@ Global
 		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{787D75D2-FE4D-4739-B9A5-2FB2617A42CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DFE9874-D72E-4A70-9FEE-859C9AB06DA6}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

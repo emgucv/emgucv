@@ -46,8 +46,22 @@ namespace Emgu.CV.ML
          get { return _algorithmPtr; }
       }
 
+      /// <summary>
+      /// Parameters of the MLP and of the training algorithm. 
+      /// </summary>
       public class Params : UnmanagedObject
       {
+         /// <summary>
+         /// Initializes a new instance of the <see cref="Params"/> class.
+         /// </summary>
+         /// <param name="layerSizes">Integer vector specifying the number of neurons in each layer including the input and output layers.</param>
+         /// <param name="activateFunc">Parameter specifying the activation function for each neuron.</param>
+         /// <param name="fparam1">The first parameter of activation function.</param>
+         /// <param name="fparam2">The second parameter of the activation function.</param>
+         /// <param name="termCrit">Termination criteria of the training algorithm. You can specify the maximum number of iterations (maxCount) and/or how much the error could change between the iterations to make the algorithm continue (epsilon).</param>
+         /// <param name="trainMethod">Training method of the MLP.</param>
+         /// <param name="param1">Parameter of the training method. It is rp_dw0 for RPROP and bp_dw_scale for BACKPROP.</param>
+         /// <param name="param2">Parameter of the training method. It is rp_dw_min for RPROP and bp_moment_scale for BACKPROP.</param>
          public Params(
             Mat layerSizes, AnnMlpActivationFunction activateFunc, double fparam1, double fparam2,
             MCvTermCriteria termCrit, AnnMlpTrainMethod trainMethod, double param1, double param2)
@@ -56,6 +70,9 @@ namespace Emgu.CV.ML
                param2);
          }
 
+         /// <summary>
+         /// Release the unmanaged resources
+         /// </summary>
          protected override void DisposeObject()
          {
             MlInvoke.CvANN_MLPParamsRelease(ref  _ptr);

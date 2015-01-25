@@ -432,7 +432,7 @@ namespace Emgu.CV
 
             res.Timestamp = System.DateTime.Now;
 
-            if (FlipType == Emgu.CV.CvEnum.FLIP.NONE)
+            if (FlipType == Emgu.CV.CvEnum.FLIP.None)
             {
                 CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
                 return res;

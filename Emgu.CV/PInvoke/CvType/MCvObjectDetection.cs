@@ -23,5 +23,10 @@ namespace Emgu.CV.Structure
       /// Confidence level 
       /// </summary>
       public float Score;
+
+      /// <summary>
+      /// The class identifier
+      /// </summary>
+      public int ClassId;
    }
 }

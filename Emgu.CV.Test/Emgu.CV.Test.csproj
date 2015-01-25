@@ -115,6 +115,14 @@
       <Link>left01.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\opencv_contrib\modules\latentsvm\testdata\latentsvm\cat.png">
+      <Link>cat.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\opencv_contrib\modules\latentsvm\testdata\latentsvm\models_VOC2007_cascade\cat.xml">
+      <Link>cat.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\opencv_contrib\modules\text\samples\trained_classifierNM1.xml">
       <Link>trained_classifierNM1.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -160,9 +168,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="car.avi">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="car.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="chessBoard.jpg">

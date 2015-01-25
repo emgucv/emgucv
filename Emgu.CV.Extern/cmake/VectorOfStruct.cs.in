@@ -20,7 +20,7 @@ using System.Runtime.Serialization;
 namespace ${NAMESPACE_CS}
 {
    /// <summary>
-   /// Wraped class of the C++ standard vector of ${VECTOR_NAME}.
+   /// Wrapped class of the C++ standard vector of ${VECTOR_NAME}.
    /// </summary>
 #if !NETFX_CORE
    [Serializable]
@@ -202,7 +202,7 @@ namespace ${NAMESPACE_CS}
          return new InputOutputArray( cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
       }
 	  
-	  internal class DebuggerProxy
+      internal class DebuggerProxy
       {
          private VectorOf${VECTOR_NAME} _v;
 
@@ -241,7 +241,7 @@ namespace ${NAMESPACE_CS}
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void VectorOf${VECTOR_NAME}Clear(IntPtr v);
 
-	  [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void VectorOf${VECTOR_NAME}GetItem(IntPtr vec, int index, ref ${VECTOR_ELEMENT_CS} element);
 	  
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

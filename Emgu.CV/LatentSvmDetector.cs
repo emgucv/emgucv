@@ -1,4 +1,3 @@
-/*
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
@@ -9,11 +8,12 @@ using System.Drawing;
 using System.IO;
 using Emgu.CV.Structure;
 using Emgu.Util;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
    /// <summary>
-   /// Laten SVM detector
+   /// Latent SVM detector
    /// </summary>
    public class LatentSvmDetector : UnmanagedObject
    {
@@ -23,33 +23,85 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Load the trained detector from file
+      /// Load the trained detector from files
       /// </summary>
-      /// <param name="fileName">The trained laten svm file</param>
-      public LatentSvmDetector(String fileName)
+      /// <param name="fileNames">The names of the trained latent svm file</param>
+      /// <param name="classNames">The names of the class</param>
+      public LatentSvmDetector(String[] fileNames, String[] classNames = null)
       {
-         _ptr = cvLoadLatentSvmDetector(fileName);
-         if (_ptr == IntPtr.Zero)
-            throw new ArgumentException(String.Format("Unable to load latent svm model from the file {0}.", fileName));
+         CvString[] fileNameStrings = new CvString[fileNames.Length];
+         for (int i = 0; i < fileNames.Length ;i++)
+            fileNameStrings[i] = new CvString(fileNames[i]);
+
+         CvString[] classNameStrings = null;
+         if (classNames != null)
+         {
+            classNameStrings = new CvString[classNames.Length];
+            for (int i = 0; i < classNames.Length; i++)
+               classNameStrings[i] = new CvString(classNames[i]);
+         }
+         try
+         {
+            using (VectorOfCvString fvcs = new VectorOfCvString(fileNameStrings))
+            using (VectorOfCvString cvcs = new VectorOfCvString())
+            {
+               if (classNameStrings != null)
+                  cvcs.Push(classNameStrings);
+
+               _ptr = cveLSVMDetectorCreate(fvcs, cvcs);
+            }
+         }
+         finally
+         {
+            for (int i =  0; i < fileNameStrings.Length; i++)
+               fileNameStrings[i].Dispose();
+
+            if (classNameStrings != null)
+               for (int i = 0; i < classNameStrings.Length; i++)
+                  classNameStrings[i].Dispose();
+         }
       }
 
       /// <summary>
       /// Find rectangular regions in the given image that are likely to contain objects and corresponding confidence levels
       /// </summary>
       /// <param name="image">The image to detect objects in</param>
-      /// <param name="overlapThreshold">Threshold for the non-maximum suppression algorithm, Use default value of 0.5</param>
+      /// <param name="overlapThreshold">Threshold for the non-maximum suppression algorithm</param>
       /// <returns>Array of detected objects</returns>
-      public MCvObjectDetection[] Detect(Image<Bgr, Byte> image, float overlapThreshold)
+      public MCvObjectDetection[] Detect(Mat image, float overlapThreshold = 0.5f)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfObjectDetection vod = new VectorOfObjectDetection())
          {
-            IntPtr seqPtr = cvLatentSvmDetectObjects(image, Ptr, stor, overlapThreshold, -1);
-            if (seqPtr == IntPtr.Zero)
-               return new MCvObjectDetection[0];
-            Seq<MCvObjectDetection> seq = new Seq<MCvObjectDetection>(seqPtr, stor);
-            return seq.ToArray();
+            cveLSVMDetectorDetect(_ptr, image, vod, overlapThreshold);
+            return vod.ToArray();
          }
       }
+
+      public int ClassCount
+      {
+         get { return cveLSVMGetClassCount(_ptr); }
+      }
+
+      public String[] ClassNames
+      {
+         get
+         {
+            using (VectorOfCvString vcs = new VectorOfCvString())
+            {
+               cveLSVMGetClassNames(_ptr, vcs);
+              
+               String[] r = new String[vcs.Size];
+               for (int i = 0; i < r.Length; i++)
+               {
+                  CvString s = vcs[i];
+                  r[i] = s.ToString();
+                  s.Dispose();
+               }
+               return r;
+            }
+         }
+      }
+
       /// <summary>
       /// Release the unmanaged memory associated with the LatenSvnDetector
       /// </summary>
@@ -57,44 +109,27 @@ namespace Emgu.CV
       {
          if (_ptr != IntPtr.Zero)
          {
-            cvReleaseLatentSvmDetector(ref _ptr);
-            _ptr = IntPtr.Zero;
+            cveLSVMDetectorRelease(ref _ptr);
          }
       }
 
-      /// <summary>
-      /// Load trained detector from a file
-      /// </summary>
-      /// <param name="filename">Path to the file containing the parameters of trained Latent SVM detector</param>
-      /// <returns>Trained Latent SVM detector in internal representation</returns>
-      [DllImport(CvInvoke.OpencvObjdetectLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr cvLoadLatentSvmDetector(
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String filename);
+      
 
-      /// <summary>
-      /// Release memory allocated for CvLatentSvmDetector structure
-      /// </summary>
-      /// <param name="detector">Pointer to the trained Latent SVM detector</param>
-      [DllImport(CvInvoke.OpencvObjdetectLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cvReleaseLatentSvmDetector(ref IntPtr detector);
 
-      /// <summary>
-      /// Find rectangular regions in the given image that are likely to contain objects and corresponding confidence levels
-      /// </summary>
-      /// <param name="image">Image to detect objects in</param>
-      /// <param name="detector">Latent SVM detector in internal representation</param>
-      /// <param name="storage">Memory storage to store the resultant sequence of the object candidate rectangles</param>
-      /// <param name="overlapThreshold">Threshold for the non-maximum suppression algorithm, use 0.5f for default</param>
-      /// <param name="numThreads">Use -1 for default</param>
-      /// <returns>Sequence of detected objects (bounding boxes and confidence levels stored in MCvObjectDetection structures</returns>
-      [DllImport(CvInvoke.OpencvObjdetectLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr cvLatentSvmDetectObjects(
-         IntPtr image,
-         IntPtr detector,
-         IntPtr storage,
-         float overlapThreshold,
-         int numThreads);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveLSVMDetectorCreate(IntPtr filenames, IntPtr classNames);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveLSVMDetectorDetect(IntPtr detector, IntPtr image, IntPtr objects, float overlapThreshold);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveLSVMDetectorRelease(ref IntPtr detector);
+      
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int cveLSVMGetClassCount(IntPtr detector);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveLSVMGetClassNames(IntPtr detector, IntPtr classNames);
    }
 }
-*/

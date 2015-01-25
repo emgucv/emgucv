@@ -585,6 +585,70 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestFileStorage1()
+      {
+         FileStorage fs = new FileStorage("haarcascade_eye.xml", FileStorage.Mode.Read);
+         
+      }
+
+      [Test]
+      public void TestFileStorage2()
+      {
+         Mat m = new Mat(40, 30, DepthType.Cv8U, 3);
+         
+         using (ScalarArray lower = new ScalarArray(new MCvScalar(0, 0, 0)))
+         using (ScalarArray higher = new ScalarArray(new MCvScalar(255, 255, 255)))
+            CvInvoke.Randu(m, lower, higher );
+
+         int intValue = 10;
+         float floatValue = 213.993f;
+         double doubleValue = 32.314;
+
+         using (FileStorage fs = new FileStorage(".xml", FileStorage.Mode.Write | FileStorage.Mode.Memory))
+         {
+            fs.Write(m, "m");
+            fs.Write(intValue, "int");
+            fs.Write(floatValue, "float");
+            fs.Write(doubleValue, "double");
+            string s = fs.ReleaseAndGetString();
+
+            using (FileStorage fs2 = new FileStorage(s, FileStorage.Mode.Read | FileStorage.Mode.Memory))
+            {
+               
+               using (FileNode node = fs2.GetFirstTopLevelNode())
+               {
+                  Mat m2 = new Mat();
+                  node.ReadMat(m2);
+                  EmguAssert.IsTrue(m.Equals(m2));
+               }
+
+               using (FileNode node = fs2.GetNode("m"))
+               {
+                  Mat m2 = new Mat();
+                  node.ReadMat(m2);
+                  EmguAssert.IsTrue(m.Equals(m2));
+               }
+
+               using (FileNode node = fs2.GetNode("int"))
+               {
+                  EmguAssert.IsTrue(intValue.Equals(node.ReadInt()));   
+               }
+
+               using (FileNode node = fs2.GetNode("float"))
+               {
+                  EmguAssert.IsTrue(floatValue.Equals(node.ReadFloat()));
+               }
+
+               using (FileNode node = fs2.GetNode("double"))
+               {
+                  EmguAssert.IsTrue(doubleValue.Equals(node.ReadDouble()));
+               }
+            }
+         }
+      }
+
+
+      [Test]
       public void TestTriangle()
       {
          PointF p1 = new PointF(0, 0);
@@ -2484,17 +2548,17 @@ namespace Emgu.CV.Test
 
       }
       #endregion
-
+      
       [Test]
-      public void TestLatenSVM()
+      public void TestLatenSVM2()
       {
-         using (LatentSvmDetector detector = new LatentSvmDetector(EmguAssert.GetFile( "car.xml" )))
+         using (LatentSvmDetector detector = new LatentSvmDetector(new string[] {EmguAssert.GetFile( "car.xml" )}))
          {
             String[] files = new String[] { 
                "license-plate.jpg"};
 
             for (int idx = 0; idx < files.Length; idx++)
-               using (Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>(files[idx]))
+               using (Mat img = EmguAssert.LoadMat(files[idx]))
                {
                   MCvObjectDetection[] results = detector.Detect(img, 0.5f);
                   if (results.Length >= 0)
@@ -2510,7 +2574,9 @@ namespace Emgu.CV.Test
                            result = results[i].Rect;
                         }
                      }
-
+                     CvInvoke.Rectangle(img, result, new MCvScalar(0, 0, 255));
+                     Emgu.CV.UI.ImageViewer.Show(img);
+                     
                      result.Inflate((int)(result.Width * 0.2), (int)(result.Height * 0.2));
                      using (Image<Gray, Byte> mask = img.GrabCut(result, 10))
                      using (Image<Gray, Byte> canny = img.Canny(120, 80))
@@ -2518,7 +2584,8 @@ namespace Emgu.CV.Test
                         //MCvFont f = new MCvFont(CvEnum.FontFace.HersheyComplex, 2.0, 2.0);
                         using (ScalarArray ia = new ScalarArray(3))
                            CvInvoke.Compare(mask, ia, mask, CvEnum.CmpType.NotEqual);
-                        CvInvoke.cvSet(canny, new MCvScalar(), mask);
+                        //CvInvoke.Set(canny, new MCvScalar(), mask);
+                        canny.SetValue(new MCvScalar(), mask);
                         canny.Draw(@"http://www.emgu.com", new Point(50, 50), CvEnum.FontFace.HersheyComplex, 2.0, new Gray(255), 2);
 
                         CvInvoke.BitwiseNot(canny, canny, null);
@@ -2526,13 +2593,13 @@ namespace Emgu.CV.Test
                         Image<Bgr, byte> displayImg = img.ConcateHorizontal(canny.Convert<Bgr, Byte>());
 
                         //displayImg.Save("out_" + files[idx]);
-                        //ImageViewer.Show(displayImg);
+                        Emgu.CV.UI.ImageViewer.Show(displayImg);
                      }
                   }
                }
          }
       }
-
+      
       [Test]
       public void TestDataMatrix()
       {
@@ -2567,6 +2634,38 @@ namespace Emgu.CV.Test
             //Emgu.CV.UI.ImageViewer.Show(image);
          }
       }*/
+
+      [Test]
+      public void TestLatenSVM()
+      {
+         using (LatentSvmDetector detector = new LatentSvmDetector(new string[] { EmguAssert.GetFile("cat.xml") }))
+         {
+            String[] files = new String[] { "cat.png"};
+
+            for (int idx = 0; idx < files.Length; idx++)
+               using (Mat img = EmguAssert.LoadMat(files[idx]))
+               {
+                  MCvObjectDetection[] results = detector.Detect(img, 0.5f);
+                  if (results.Length >= 0)
+                  {
+                     double maxScore = results[0].Score;
+                     Rectangle result = results[0].Rect;
+
+                     for (int i = 1; i < results.Length; ++i)
+                     {
+                        if (results[i].Score > maxScore)
+                        {
+                           maxScore = results[i].Score;
+                           result = results[i].Rect;
+                        }
+                     }
+                     CvInvoke.Rectangle(img, result, new MCvScalar(0, 0, 255));
+                     //Emgu.CV.UI.ImageViewer.Show(img);
+
+                  }
+               }
+         }
+      }
 
 #if !WINDOWS_PHONE_APP
       //TODO: Check why this fails again

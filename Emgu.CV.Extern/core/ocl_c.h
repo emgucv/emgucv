@@ -8,7 +8,7 @@
 #ifndef EMGU_OCL_C_H
 #define EMGU_OCL_C_H
 
-#include "opencv2/core/types_c.h"
+//#include "opencv2/core/types_c.h"
 #include "opencv2/core/core_c.h"
 #include "opencv2/core/ocl.hpp"
 #include "emgu_c.h"

@@ -445,3 +445,39 @@ float CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
    return model->predict(_sample, _missing, weak_responses, *slice, raw_mode);
 }
 */
+
+
+
+//LogisticRegression
+cv::ml::LogisticRegression::Params* cveLogisticRegressionParamsCreate(
+   double learning_rate,
+   int iters,
+   int method,
+   int normalization,
+   int reg,
+   int batch_size)
+{
+   return new cv::ml::LogisticRegression::Params(learning_rate, iters, method, normalization, reg, batch_size);
+}
+void cveLogisticRegressionParamsRelease(cv::ml::LogisticRegression::Params** params)
+{
+   delete *params;
+   *params = 0;
+}
+
+cv::ml::LogisticRegression* cveLogisticRegressionCreate(cv::ml::LogisticRegression::Params* p, cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
+{
+   cv::Ptr<cv::ml::LogisticRegression> ptr = cv::ml::LogisticRegression::create(*p);
+   ptr.addref();
+   cv::ml::LogisticRegression* model = ptr.get();
+   *statModel = dynamic_cast<cv::ml::StatModel*>(model);
+   *algorithm = dynamic_cast<cv::Algorithm*>(model);
+   return model;
+
+}
+
+void cveLogisticRegressionRelease(cv::ml::LogisticRegression** model)
+{
+   delete *model;
+   *model = 0;
+}

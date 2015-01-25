@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using Emgu.CV.CvEnum;
 using Emgu.CV.ML.MlEnum;
 using Emgu.CV.Structure;
 using Emgu.Util;
@@ -37,26 +38,61 @@ namespace Emgu.CV.ML
          _algorithmPtr = IntPtr.Zero;
       }
 
+      /// <summary>
+      /// SVM training parameters.
+      /// </summary>
       public class Params : UnmanagedObject
       {
-
+         /// <summary>
+         /// Initializes a new instance of the <see cref="Params"/> class.
+         /// </summary>
+         /// <param name="svmType">Type of a SVM formulation.</param>
+         /// <param name="kernelType">Type of a SVM kernel.</param>
+         /// <param name="degree">The degree of a kernel function (POLY).</param>
+         /// <param name="gamma">The gamma of a kernel function (POLY / RBF / SIGMOID / CHI2).</param>
+         /// <param name="coef0">The coef0 of a kernel function (POLY / SIGMOID)..</param>
+         /// <param name="c">The c of a SVM optimization problem (C_SVC / EPS_SVR / NU_SVR).</param>
+         /// <param name="nu">The nu of a SVM optimization problem (NU_SVC / ONE_CLASS / NU_SVR).</param>
+         /// <param name="p">The p of a SVM optimization problem (EPS_SVR)..</param>
+         /// <param name="classWeights"> Optional weights in the C_SVC problem , assigned to particular classes. They are multiplied by C so the parameter C of class #i becomes classWeights(i) * C. Thus these weights affect the misclassification penalty for different classes. The larger weight, the larger penalty on misclassification of data from the corresponding class.</param>
+         /// <param name="termCrit">Termination criteria of the iterative SVM training procedure which solves a partial case of constrained quadratic optimization problem. You can specify tolerance and/or the maximum number of iterations.</param>
          public Params(
-            MlEnum.SvmType svmType, MlEnum.SvmKernelType kernelType, double degree, double gamma, double coef0,
-            double c, double nu, double p, Mat classWeights, MCvTermCriteria termCrit)
+            MlEnum.SvmType svmType = SvmType.CSvc, MlEnum.SvmKernelType kernelType = SvmKernelType.Rbf, double degree = 0, double gamma = 1, double coef0 = 0,
+            double c = 1, double nu = 0, double p = 0, Mat classWeights = null, MCvTermCriteria termCrit = new MCvTermCriteria())
          {
+            if (termCrit.Epsilon == 0f && termCrit.MaxIter == 0 && termCrit.Type == 0)
+            {
+               termCrit = new MCvTermCriteria(1000, 1.0e-7);
+            }
             _ptr = MlInvoke.CvSVMParamsCreate(
                      svmType, kernelType, degree, gamma, coef0, c, nu, p, classWeights ?? IntPtr.Zero,
                      ref termCrit);
          }
 
+         /*
+         /// <summary>
+         /// Initializes a new instance of the <see cref="Params"/> class.
+         /// </summary>
+         /// <param name="svmType">Type of a SVM formulation.</param>
+         /// <param name="kernelType">Type of a SVM kernel.</param>
+         /// <param name="degree">The degree of a kernel function (POLY).</param>
+         /// <param name="gamma">The gamma of a kernel function (POLY / RBF / SIGMOID / CHI2).</param>
+         /// <param name="coef0">The coef0 of a kernel function (POLY / SIGMOID)..</param>
+         /// <param name="c">The c of a SVM optimization problem (C_SVC / EPS_SVR / NU_SVR).</param>
+         /// <param name="nu">The nu of a SVM optimization problem (NU_SVC / ONE_CLASS / NU_SVR).</param>
+         /// <param name="p">The p of a SVM optimization problem (EPS_SVR)..</param>
+         /// <param name="classWeights"> Optional weights in the C_SVC problem , assigned to particular classes. They are multiplied by C so the parameter C of class #i becomes classWeights(i) * C. Thus these weights affect the misclassification penalty for different classes. The larger weight, the larger penalty on misclassification of data from the corresponding class.</param>
          public Params(
             MlEnum.SvmType svmType = SvmType.CSvc, MlEnum.SvmKernelType kernelType = SvmKernelType.Rbf, double degree = 0, double gamma = 1, double coef0 = 0,
             double c = 1, double nu = 0, double p = 0, Mat classWeights = null)
             : this(svmType, kernelType, degree, gamma, coef0, c, nu, p, classWeights, new MCvTermCriteria(1000, 1.0e-7) )
          {
 
-         }
+         }*/
 
+         /// <summary>
+         /// Release the unmanaged resources
+         /// </summary>
          protected override void DisposeObject()
          {
             MlInvoke.CvSVMParamsRelease(ref _ptr);

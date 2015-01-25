@@ -1372,7 +1372,7 @@ namespace Emgu.CV.UI.GLView
                      Report.Warn(PackageName, String.Format("Error after setting texture position: {0}", glError));
                   }
 
-                  if (_textureFlipMode[i] == Emgu.CV.CvEnum.FLIP.NONE)
+                  if (_textureFlipMode[i] == Emgu.CV.CvEnum.FLIP.None)
                   {
                      ES20.GL.VertexAttribPointer(textureCoordHandle, 2, ES20.All.Float, false, 0, squareTextureCoords);
                   }
@@ -1455,7 +1455,7 @@ namespace Emgu.CV.UI.GLView
                   ES11.GL.BindTexture(ES11.All.Texture2D, _textureIds[i]);
                   ES11.GL.VertexPointer(3, ES11.All.Float, 0, _textureVertexCoords[i]);
 
-                  if (_textureFlipMode[i] == Emgu.CV.CvEnum.FLIP.NONE)
+                  if (_textureFlipMode[i] == Emgu.CV.CvEnum.FLIP.None)
                   {
                      ES11.GL.TexCoordPointer(2, ES11.All.Float, 0, squareTextureCoords);
                   }

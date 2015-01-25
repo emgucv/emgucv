@@ -16,6 +16,7 @@
 CVAPI(cv::String*) cveStringCreate();
 CVAPI(cv::String*) cveStringCreateFromStr(const char* c);
 CVAPI(void) cveStringGetCStr(cv::String* string, const char** c, int* size);
+CVAPI(int) cveStringGetLength(cv::String* string);
 CVAPI(void) cveStringRelease(cv::String** string);
 
 CVAPI(cv::_InputArray*) cveInputArrayFromDouble(double* scalar);
@@ -150,4 +151,28 @@ CVAPI(bool) cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2);
 CVAPI(void) cveRandn(cv::_InputOutputArray* dst, cv::_InputArray* mean, cv::_InputArray* stddev);
 
 CVAPI(void) cveRandu(cv::_InputOutputArray* dst, cv::_InputArray* low, cv::_InputArray* high);
+
+//File Storage
+CVAPI(cv::FileStorage*) cveFileStorageCreate(const cv::String* source, int flags, const cv::String* encoding);
+CVAPI(bool) cveFileStorageIsOpened(cv::FileStorage* storage);
+CVAPI(void) cveFileStorageReleaseAndGetString(cv::FileStorage* storage, cv::String* result);
+CVAPI(void) cveFileStorageRelease(cv::FileStorage** storage);
+CVAPI(void) cveFileStorageWriteMat(cv::FileStorage* fs, cv::String* name, cv::Mat* value);
+CVAPI(void) cveFileStorageWriteInt(cv::FileStorage* fs, cv::String* name, int value);
+CVAPI(void) cveFileStorageWriteFloat(cv::FileStorage* fs, cv::String* name, float value);
+CVAPI(void) cveFileStorageWriteDouble(cv::FileStorage* fs, cv::String* name, double value);
+CVAPI(void) cveFileStorageWriteString(cv::FileStorage* fs, cv::String* name, cv::String* value);
+
+CVAPI(cv::FileNode*) cveFileStorageRoot(cv::FileStorage* fs, int streamIdx);
+CVAPI(cv::FileNode*) cveFileStorageGetFirstTopLevelNode(cv::FileStorage* fs);
+CVAPI(cv::FileNode*) cveFileStorageGetNode(cv::FileStorage* fs, cv::String* nodeName);
+
+CVAPI(int) cveFileNodeGetType(cv::FileNode* node);
+CVAPI(bool) cveFileNodeIsEmpty(cv::FileNode* node);
+CVAPI(void) cveFileNodeReadMat(cv::FileNode* node, cv::Mat* mat, cv::Mat* defaultMat);
+CVAPI(void) cveFileNodeReadString(cv::FileNode* node, cv::String* str, cv::String* defaultStr);
+CVAPI(int) cveFileNodeReadInt(cv::FileNode* node, int defaultInt);
+CVAPI(double) cveFileNodeReadDouble(cv::FileNode* node, double defaultDouble);
+CVAPI(float) cveFileNodeReadFloat(cv::FileNode* node, float defaultFloat);
+CVAPI(void) cveFileNodeRelease(cv::FileNode** node);
 #endif

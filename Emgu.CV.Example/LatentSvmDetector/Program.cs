@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using System.Diagnostics;
@@ -29,8 +30,8 @@ namespace LatentSvmDetectorExample
 
       static void Run()
       {
-         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("cat.jpg"))
-         using (LatentSvmDetector detector = new LatentSvmDetector("cat.xml"))
+         using (Mat image = CvInvoke.Imread("cat.jpg", LoadImageType.AnyColor | LoadImageType.AnyDepth))
+         using (LatentSvmDetector detector = new LatentSvmDetector(new string[] { "cat.xml" }))
          {
             Stopwatch watch = Stopwatch.StartNew();
             MCvObjectDetection[] regions = detector.Detect(image, 0.5f);
@@ -38,8 +39,7 @@ namespace LatentSvmDetectorExample
 
             foreach (MCvObjectDetection region in regions)
             {
-               if (region.Score > -0.5)
-                  image.Draw(region.Rect, new Bgr(Color.Red), 1);
+               CvInvoke.Rectangle(image, region.Rect, new MCvScalar(0, 0, 255));
             }
 
             ImageViewer.Show(image, String.Format("Object detected in {0} milliseconds", watch.ElapsedMilliseconds));

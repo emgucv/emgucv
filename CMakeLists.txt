@@ -297,7 +297,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   videostab shape
   cudev  
   text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
-  stitching
+  stitching latentsvm
   )
   
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})

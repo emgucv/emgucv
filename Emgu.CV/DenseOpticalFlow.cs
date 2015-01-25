@@ -17,11 +17,6 @@ namespace Emgu.CV
    /// </summary>
    public abstract class DenseOpticalFlow : UnmanagedObject, IAlgorithm
    {
-      static DenseOpticalFlow()
-      {
-         CvInvoke.CheckLibraryLoaded();
-      }
-
       /// <summary>
       /// Calculates an optical flow.
       /// </summary>
@@ -33,7 +28,7 @@ namespace Emgu.CV
          using (InputArray iaI0 = i0.GetInputArray())
          using (InputArray iaI1 = i1.GetInputArray())
          using (InputOutputArray ioaFlow = flow.GetInputOutputArray())
-            cveDenseOpticalFlowCalc(_ptr, iaI0, iaI1, ioaFlow);
+            CvInvoke.cveDenseOpticalFlowCalc(_ptr, iaI0, iaI1, ioaFlow);
       }
 
       /// <summary>
@@ -42,15 +37,8 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            cveDenseOpticalFlowRelease(ref _ptr);
+            CvInvoke.cveDenseOpticalFlowRelease(ref _ptr);
       }
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveDenseOpticalFlowRelease(ref IntPtr flow);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveDenseOpticalFlowCalc(IntPtr dof, IntPtr i0, IntPtr i1, IntPtr flow);
-
 
       IntPtr IAlgorithm.AlgorithmPtr
       {
@@ -68,10 +56,19 @@ namespace Emgu.CV
       /// </summary>
       public OpticalFlowDualTVL1()
       {
-         _ptr = cveDenseOpticalFlowCreateDualTVL1();
-      }
+         _ptr = CvInvoke.cveDenseOpticalFlowCreateDualTVL1();
+      }  
+   }
+
+   public static partial class CvInvoke
+   {
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveDenseOpticalFlowRelease(ref IntPtr flow);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr cveDenseOpticalFlowCreateDualTVL1();
+      internal static extern void cveDenseOpticalFlowCalc(IntPtr dof, IntPtr i0, IntPtr i1, IntPtr flow);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveDenseOpticalFlowCreateDualTVL1();
    }
 }

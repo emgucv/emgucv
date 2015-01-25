@@ -30,7 +30,7 @@ namespace Emgu.CV.ML
       /// <param name="statModel">The statistic model to save</param>
       /// <param name="fileName">The file name to save to</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void StatModelSave(IntPtr statModel, IntPtr fileName);
+      internal static extern void StatModelSave(IntPtr statModel, IntPtr fileName);
 
       /*
       /// <summary>
@@ -46,19 +46,19 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="statModel">The model to be cleared</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void StatModelClear(IntPtr statModel);
+      internal static extern void StatModelClear(IntPtr statModel);
 
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      public static extern bool StatModelTrain(IntPtr model, IntPtr samples, DataLayoutType layout, IntPtr responses);
+      internal static extern bool StatModelTrain(IntPtr model, IntPtr samples, DataLayoutType layout, IntPtr responses);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      public static extern bool StatModelTrainWithData(IntPtr model, IntPtr data, int flags);
+      internal static extern bool StatModelTrainWithData(IntPtr model, IntPtr data, int flags);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern float StatModelPredict(IntPtr model, IntPtr samples, IntPtr results, int flags); 
+      internal static extern float StatModelPredict(IntPtr model, IntPtr samples, IntPtr results, int flags);
       #endregion
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -76,7 +76,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <returns>The normal bayes classifier</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvNormalBayesClassifierDefaultCreate(ref IntPtr statModel, ref IntPtr algorithm);
+      internal static extern IntPtr CvNormalBayesClassifierDefaultCreate(ref IntPtr statModel, ref IntPtr algorithm);
 
       /*
       /// <summary>
@@ -100,7 +100,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="classifier">The classifier to release</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvNormalBayesClassifierRelease(ref IntPtr classifier);
+      internal static extern void CvNormalBayesClassifierRelease(ref IntPtr classifier);
 
       /*
       /// <summary>
@@ -141,11 +141,11 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <returns>The KNearest classifier</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvKNearestCreate(
-         int defaultK, 
+      internal static extern IntPtr CvKNearestCreate(
+         int defaultK,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool isClassifier, 
-         ref IntPtr statModel, 
+         bool isClassifier,
+         ref IntPtr statModel,
          ref IntPtr algorithm);
 
       /// <summary>
@@ -153,7 +153,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="knearest">The classifier to release</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvKNearestRelease(ref IntPtr knearest);
+      internal static extern void CvKNearestRelease(ref IntPtr knearest);
 
       /*
       /// <summary>
@@ -238,7 +238,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Create a default EM model
       /// </summary>
-     /// <returns>Pointer to the EM model</returns>
+      /// <returns>Pointer to the EM model</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvEMDefaultCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
 
@@ -276,7 +276,7 @@ namespace Emgu.CV.ML
          IntPtr weights0,
          IntPtr logLikelihoods,
          IntPtr labels,
-         IntPtr probs, 
+         IntPtr probs,
          IntPtr parameters,
          ref IntPtr statModel,
          ref IntPtr algorithm);
@@ -292,25 +292,26 @@ namespace Emgu.CV.ML
          ref IntPtr statModel,
          ref IntPtr algorithm);
 
+      
       /// <summary>
       /// Given the EM <paramref name="model"/>, predit the probability of the <paramref name="samples"/>
       /// </summary>
       /// <param name="model">The EM model</param>
       /// <param name="samples">The input samples</param>
       /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
-      /// <returns>In case of classification the method returns the class label, in case of regression - the output function value</returns>
+      
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvEMPredict(
          IntPtr model,
          IntPtr samples,
-         ref MCvPoint2D64f result, 
+         ref MCvPoint2D64f result,
          IntPtr probs);
       #endregion
 
 
       #region CvSVM
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal  static extern IntPtr CvSVMParamsCreate(
+      internal static extern IntPtr CvSVMParamsCreate(
          MlEnum.SvmType svmType, MlEnum.SvmKernelType kernelType, double degree, double gamma, double coef0,
          double con, double nu, double p, IntPtr classWeights, ref MCvTermCriteria termCrit);
 
@@ -322,14 +323,14 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <returns>Pointer to the SVM model</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvSVMDefaultCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
+      internal static extern IntPtr CvSVMDefaultCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
 
       /// <summary>
       /// Release the SVM model and all the memory associated to ir
       /// </summary>
       /// <param name="model">The SVM model to be released</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvSVMRelease(ref IntPtr model);
+      internal static extern void CvSVMRelease(ref IntPtr model);
 
 
       /// <summary>
@@ -338,7 +339,7 @@ namespace Emgu.CV.ML
       /// <param name="type">The SVM type</param>
       /// <param name="grid">The parameter grid reference, values will be filled in by the funtion call</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvSVMGetDefaultGrid(MlEnum.SvmParamType type, ref MCvParamGrid grid);
+      internal static extern void CvSVMGetDefaultGrid(MlEnum.SvmParamType type, ref MCvParamGrid grid);
 
       /// <summary>
       /// The method trains the SVM model automatically by choosing the optimal parameters C, gamma, p, nu, coef0, degree from CvSVMParams. By the optimality one mean that the cross-validation estimate of the test set error is minimal. 
@@ -355,7 +356,7 @@ namespace Emgu.CV.ML
       /// <returns></returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      public static extern bool CvSVMTrainAuto(
+      internal static extern bool CvSVMTrainAuto(
          IntPtr model,
          IntPtr trainData,
          int kFold,
@@ -377,18 +378,16 @@ namespace Emgu.CV.ML
       #endregion
 
       #region CvANN_MLP
-
-      
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr  CvANN_MLPParamsCreate(
+      internal static extern IntPtr CvANN_MLPParamsCreate(
          IntPtr layerSizes, AnnMlpActivationFunction activateFunc, double fparam1, double fparam2,
          ref MCvTermCriteria termCrit, AnnMlpTrainMethod trainMethod, double param1, double param2);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvANN_MLPParamsRelease(ref IntPtr p);
+      internal static extern void CvANN_MLPParamsRelease(ref IntPtr p);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvANN_MLPCreate(
+      internal static extern IntPtr CvANN_MLPCreate(
          IntPtr p,
          ref IntPtr statModel,
          ref IntPtr algorithm);
@@ -398,7 +397,7 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="model">The ANN_MLP model to be released</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvANN_MLPRelease(ref IntPtr model);
+      internal static extern void CvANN_MLPRelease(ref IntPtr model);
       /*
       /// <summary>
       /// Get the number of layers in the ANN_MLP
@@ -414,12 +413,13 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <returns>Pointer to the default CvDTreeParams</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvDTreeParamsCreate(
+      internal static extern IntPtr CvDTreeParamsCreate(
          int maxDepth, int minSampleCount,
-         double regressionAccuracy, 
+         double regressionAccuracy,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useSurrogates,
-         int maxCategories, int CvFolds,
+         int maxCategories,
+         int CvFolds,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool use1SERule,
          [MarshalAs(CvInvoke.BoolMarshalType)]
@@ -431,21 +431,21 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="dTreeParam">Pointer to the decision tree parameters to be released</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvDTreeParamsRelease(ref IntPtr dTreeParam);
+      internal static extern void CvDTreeParamsRelease(ref IntPtr dTreeParam);
 
       /// <summary>
       /// Create a default decision tree
       /// </summary>
       /// <returns>Pointer to the decision tree</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvDTreeCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
+      internal static extern IntPtr CvDTreeCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
 
       /// <summary>
       /// Release the decision tree model
       /// </summary>
       /// <param name="model">The decision tree model to be released</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvDTreeRelease(ref IntPtr model);
+      internal static extern void CvDTreeRelease(ref IntPtr model);
       #endregion
 
       #region Random tree
@@ -454,14 +454,14 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <returns>Pointer to the default CvRTParams</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvRTParamsCreate(
+      internal static extern IntPtr CvRTParamsCreate(
          int maxDepth, int minSampleCount,
-         double regressionAccuracy, 
+         double regressionAccuracy,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useSurrogates,
          int maxCategories, IntPtr priors,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool calcVarImportance, 
+         bool calcVarImportance,
          int nactiveVars,
          ref MCvTermCriteria termCrit);
 
@@ -470,21 +470,21 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="rTreesParam">Pointer to the random tree parameters to be released</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvRTParamsRelease(ref IntPtr rTreesParam);
+      internal static extern void CvRTParamsRelease(ref IntPtr rTreesParam);
 
       /// <summary>
       /// Create a default random tree
       /// </summary>
       /// <returns>Pointer to the random tree</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvRTreesCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
+      internal static extern IntPtr CvRTreesCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
 
       /// <summary>
       /// Release the random tree model
       /// </summary>
       /// <param name="model">The random tree model to be released</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvRTreesRelease(ref IntPtr model);
+      internal static extern void CvRTreesRelease(ref IntPtr model);
 
       /*
       /// <summary>
@@ -527,8 +527,8 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <returns>Pointer to the default CvBoostParams</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvBoostParamsCreate(
-         int boostType, int weakCount, double weightTrimRate,
+      internal static extern IntPtr CvBoostParamsCreate(
+         Boost.Type boostType, int weakCount, double weightTrimRate,
          int maxDepth,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool useSurrogates, IntPtr priors);
@@ -538,21 +538,21 @@ namespace Emgu.CV.ML
       /// </summary>
       /// <param name="bTreeParam">Pointer to the boost tree parameters to be released</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvBoostParamsRelease(ref IntPtr bTreeParam);
+      internal static extern void CvBoostParamsRelease(ref IntPtr bTreeParam);
 
       /// <summary>
       /// Create a default boost classifier
       /// </summary>
       /// <returns>Pointer to the boost classifier</returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr CvBoostCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
+      internal static extern IntPtr CvBoostCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
 
       /// <summary>
       /// Release the boost classifier
       /// </summary>
       /// <param name="model">The boost classifier to be released</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void CvBoostRelease(ref IntPtr model);
+      internal static extern void CvBoostRelease(ref IntPtr model);
       #endregion
 
       /*
@@ -621,5 +621,26 @@ namespace Emgu.CV.ML
       public static extern void CvGBTreesRelease(ref IntPtr model);
       #endregion
       */
+
+      #region Logistic Regression
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveLogisticRegressionParamsCreate(
+         double learningRate,
+         int iters,
+         LogisticRegression.TrainMethod method,
+         LogisticRegression.NormalizationMethod normalization,
+         int reg,
+         int batchSize);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveLogisticRegressionParamsRelease(ref IntPtr parameters);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveLogisticRegressionCreate(IntPtr p, ref IntPtr statModel, ref IntPtr algorithm);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveLogisticRegressionRelease(ref IntPtr model);
+
+      #endregion
    }
 }

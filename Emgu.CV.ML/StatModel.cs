@@ -8,12 +8,15 @@ using Emgu.Util;
 
 namespace Emgu.CV.ML
 {
+   /// <summary>
+   /// Interface for statistical models in OpenCV ML.
+   /// </summary>
    public interface IStatModel : IAlgorithm
    {
       /// <summary>
-      /// Return the pointer to the algorithm object
+      /// Return the pointer to the StatModel object
       /// </summary>
-      /// <returns>The pointer to the algorithm object</returns>
+      /// <returns>The pointer to the StatModel object</returns>
       IntPtr StatModelPtr { get; }
    }
 
@@ -32,6 +35,14 @@ namespace Emgu.CV.ML
             MlInvoke.StatModelSave(model.StatModelPtr, fs);
       }
 
+      /// <summary>
+      /// Trains the statistical model.
+      /// </summary>
+      /// <param name="model">The stat model.</param>
+      /// <param name="samples">The training samples.</param>
+      /// <param name="layoutType">Type of the layout.</param>
+      /// <param name="responses">Vector of responses associated with the training samples.</param>
+      /// <returns></returns>
       public static bool Train(this IStatModel model, IInputArray samples, DataLayoutType layoutType, IInputArray responses)
       {
          using (InputArray iaSamples = samples.GetInputArray())

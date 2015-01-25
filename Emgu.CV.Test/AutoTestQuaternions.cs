@@ -143,7 +143,7 @@ namespace Emgu.CV.Test
          Quaternions q2 = new Quaternions();
          q2.AxisAngle = q1.AxisAngle;
 
-         double epsilon = 1.0e-12;
+         double epsilon = 1.0e-8;
          EmguAssert.IsTrue(Math.Abs(q1.W - q2.W) < epsilon);
          EmguAssert.IsTrue(Math.Abs(q1.X - q2.X) < epsilon);
          EmguAssert.IsTrue(Math.Abs(q1.Y - q2.Y) < epsilon);

@@ -17,7 +17,11 @@ cv::String* cveStringCreateFromStr(const char* c)
 void cveStringGetCStr(cv::String* string, const char** c, int* size)
 {
    *c = string->c_str();
-   *size = string->size();
+   *size = static_cast<int>(string->size());
+}
+int cveStringGetLength(cv::String* string)
+{
+   return static_cast<int>(string->size());
 }
 void cveStringRelease(cv::String** string)
 {
@@ -520,4 +524,107 @@ void cveRandn(cv::_InputOutputArray* dst, cv::_InputArray* mean, cv::_InputArray
 void cveRandu(cv::_InputOutputArray* dst, cv::_InputArray* low, cv::_InputArray* high)
 {
    cv::randu(*dst, *low, *high);
+}
+
+//File Storage
+cv::FileStorage* cveFileStorageCreate(const cv::String* source, int flags, const cv::String* encoding)
+{
+   return new cv::FileStorage(*source, flags, *encoding);
+}
+bool cveFileStorageIsOpened(cv::FileStorage* storage)
+{
+   return storage->isOpened();
+}
+void cveFileStorageReleaseAndGetString(cv::FileStorage* storage, cv::String* result)
+{
+   cv::String res = storage->releaseAndGetString();
+   res.swap(*result);
+}
+void cveFileStorageRelease(cv::FileStorage** storage)
+{
+   delete *storage;
+   *storage = 0;
+}
+void cveFileStorageWriteMat(cv::FileStorage* fs, cv::String* name, cv::Mat* value)
+{
+   cv::write(*fs, *name, *value);
+}
+void cveFileStorageWriteInt(cv::FileStorage* fs, cv::String* name, int value)
+{
+   cv::write(*fs, *name, value);
+}
+void cveFileStorageWriteFloat(cv::FileStorage* fs, cv::String* name, float value)
+{
+      cv::write(*fs, *name, value);  
+}
+void cveFileStorageWriteDouble(cv::FileStorage* fs, cv::String* name, double value)
+{
+   cv::write(*fs, *name, value);
+}
+void cveFileStorageWriteString(cv::FileStorage* fs, cv::String* name, cv::String* value)
+{
+   cv::write(*fs, *name, *value);
+}
+
+cv::FileNode* cveFileStorageRoot(cv::FileStorage* fs, int streamIdx)
+{
+   cv::FileNode* n = new cv::FileNode();
+   cv::FileNode root = fs->root(streamIdx);
+   *n = root;
+   return n;
+}
+cv::FileNode* cveFileStorageGetFirstTopLevelNode(cv::FileStorage* fs)
+{
+   cv::FileNode* n = new cv::FileNode();
+   cv::FileNode root = fs->getFirstTopLevelNode();
+   *n = root;
+   return n;
+}
+cv::FileNode* cveFileStorageGetNode(cv::FileStorage* fs, cv::String* nodeName)
+{
+   cv::FileNode* n = new cv::FileNode();
+   cv::FileNode root = (*fs)[*nodeName];
+   *n = root;
+   return n;
+}
+
+//File Node
+void cveFileNodeReadMat(cv::FileNode* node, cv::Mat* mat, cv::Mat* defaultMat)
+{
+   cv::read(*node, *mat, *defaultMat);
+}
+int cveFileNodeGetType(cv::FileNode* node)
+{
+   return node->type();
+}
+bool cveFileNodeIsEmpty(cv::FileNode* node)
+{
+   return node->empty();
+}
+void cveFileNodeReadString(cv::FileNode* node, cv::String* str, cv::String* defaultStr)
+{
+   cv::read(*node, *str, *defaultStr);
+}
+int cveFileNodeReadInt(cv::FileNode* node, int defaultInt)
+{
+   int result = 0;
+   cv::read(*node, result, defaultInt);
+   return result;
+}
+double cveFileNodeReadDouble(cv::FileNode* node, double defaultDouble)
+{
+   double result = 0;
+   cv::read(*node, result, defaultDouble);
+   return result;
+}
+float cveFileNodeReadFloat(cv::FileNode* node, float defaultFloat)
+{
+   float result = 0;
+   cv::read(*node, result, defaultFloat);
+   return result;
+}
+void cveFileNodeRelease(cv::FileNode** node)
+{
+   delete *node;
+   *node = 0;
 }

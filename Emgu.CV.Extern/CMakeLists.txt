@@ -62,6 +62,7 @@ CREATE_VECTOR_CS("KeyPoint" "cv::KeyPoint" "MKeyPoint" "struct" ${CMAKE_CURRENT_
 CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text Emgu.CV.Text "#include \"opencv2/text/erfilter.hpp\"")
 CREATE_VECTOR_CS("DMatch" "cv::DMatch" "MDMatch" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("Triangle2DF" "cv::Vec6f" "Triangle2DF" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
+CREATE_VECTOR_CS("ObjectDetection" "cv::lsvm::LSVMDetector::ObjectDetection" "MCvObjectDetection" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/latentsvm.hpp\"")
 
 CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
