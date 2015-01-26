@@ -16,6 +16,8 @@
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AssemblyName>Emgu.CV.Test.Android</AssemblyName>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <AndroidUseLatestPlatformSdk />
+    <TargetFrameworkVersion>v2.3</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -90,7 +92,7 @@
     <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_alt2.xml">
       <Link>Assets\haarcascade_frontalface_alt2.xml</Link>
     </AndroidAsset>
-	<AndroidAsset Include="..\..\opencv\samples\data\board.jpg">
+    <AndroidAsset Include="..\..\opencv\samples\data\board.jpg">
       <Link>Assets\board.jpg</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\..\opencv\samples\data\left01.jpg">
@@ -212,11 +214,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\car.xml">
-      <Link>Assets\car.xml</Link>
-    </AndroidAsset>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="..\..\Emgu.CV.Example\LicensePlateRecognition\license-plate.jpg">
       <Link>Assets\license-plate.jpg</Link>
     </AndroidAsset>
@@ -229,6 +226,16 @@
   <ItemGroup>
     <AndroidAsset Include="..\circlesGrid.bmp">
       <Link>Assets\circlesGrid.bmp</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\opencv_contrib\modules\latentsvm\testdata\latentsvm\models_VOC2007_cascade\cat.xml">
+      <Link>Assets\cat.xml</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\opencv_contrib\modules\latentsvm\testdata\latentsvm\cat.png">
+      <Link>Assets\cat.png</Link>
     </AndroidAsset>
   </ItemGroup>
 </Project>

@@ -138,6 +138,12 @@
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_xobjdetect.so">
       <Link>lib\armeabi\libopencv_xobjdetect.so</Link>
     </EmbeddedNativeLibrary>
+	<EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_xphoto.so">
+      <Link>lib\armeabi\libopencv_xphoto.so</Link>
+    </EmbeddedNativeLibrary>
+	<EmbeddedNativeLibrary Include="..\libs\armeabi\libopencv_latentsvm.so">
+      <Link>lib\armeabi\libopencv_latentsvm.so</Link>
+    </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_bgsegm.so">
       <Link>lib\armeabi-v7a\libopencv_bgsegm.so</Link>
     </EmbeddedNativeLibrary>
@@ -155,6 +161,12 @@
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_xobjdetect.so">
       <Link>lib\armeabi-v7a\libopencv_xobjdetect.so</Link>
+    </EmbeddedNativeLibrary>
+	<EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_xphoto.so">
+      <Link>lib\armeabi-v7a\libopencv_xphoto.so</Link>
+    </EmbeddedNativeLibrary>
+	<EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libopencv_latentsvm.so">
+      <Link>lib\armeabi-v7a\libopencv_latentsvm.so</Link>
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_bgsegm.so">
       <Link>lib\x86\libopencv_bgsegm.so</Link>
@@ -174,8 +186,6 @@
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_xobjdetect.so">
       <Link>lib\x86\libopencv_xobjdetect.so</Link>
     </EmbeddedNativeLibrary>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedNativeLibrary Include="..\libs\armeabi\libcvextern.so">
       <Link>lib\armeabi\libcvextern.so</Link>
     </EmbeddedNativeLibrary>
@@ -292,6 +302,12 @@
     </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\x86\libopencv_videostab.so">
       <Link>lib\x86\libopencv_videostab.so</Link>
+    </EmbeddedNativeLibrary>
+	<EmbeddedNativeLibrary Include="..\libs\x86\libopencv_xphoto.so">
+      <Link>lib\x86\libopencv_xphoto.so</Link>
+    </EmbeddedNativeLibrary>
+	<EmbeddedNativeLibrary Include="..\libs\x86\libopencv_latentsvm.so">
+      <Link>lib\x86\libopencv_latentsvm.so</Link>
     </EmbeddedNativeLibrary>
   </ItemGroup>
   <ItemGroup>
