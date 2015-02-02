@@ -4,7 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "cuda_c.h"
+#include "core_cuda_c.h"
 
 cv::cuda::Stream* streamCreate() 
 { 

@@ -8,7 +8,7 @@
 #ifndef EMGU_CUDAOPTFLOW_C_H
 #define EMGU_CUDAOPTFLOW_C_H
 
-#include "opencv2/cuda.hpp"
+//#include "opencv2/cuda.hpp"
 #include "opencv2/cudaoptflow.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/types_c.h"

@@ -8,7 +8,7 @@
 #ifndef EMGU_CUDAIMGPROC_C_H
 #define EMGU_CUDAIMGPROC_C_H
 
-#include "opencv2/cuda.hpp"
+//#include "opencv2/cuda.hpp"
 #include "opencv2/cudaimgproc.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/types_c.h"

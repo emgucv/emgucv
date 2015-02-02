@@ -8,7 +8,7 @@
 #ifndef EMGU_CUDAFEATURES2D_C_H
 #define EMGU_CUDAFEATURES2D_C_H
 
-#include "opencv2/cuda.hpp"
+//#include "opencv2/cuda.hpp"
 #include "opencv2/cudafeatures2d.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/types_c.h"
@@ -17,55 +17,73 @@
 
 //----------------------------------------------------------------------------
 //
-//  CudaBruteForceMatcher
+//  CudaDescriptorMatcher
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::BFMatcher_CUDA*) cudaBruteForceMatcherCreate(int distType);
 
-CVAPI(void) cudaBruteForceMatcherRelease(cv::cuda::BFMatcher_CUDA** matcher);
+CVAPI(cv::cuda::DescriptorMatcher*) cveCudaDescriptorMatcherCreateBFMatcher(int distType, cv::Algorithm** algorithm);
 
-CVAPI(void) cudaBruteForceMatcherAdd(cv::cuda::BFMatcher_CUDA* matcher, const cv::cuda::GpuMat* trainDescs);
+CVAPI(void) cveCudaDescriptorMatcherRelease(cv::cuda::DescriptorMatcher** matcher);
 
-CVAPI(void) cudaBruteForceMatcherKnnMatch(
-                                  cv::cuda::BFMatcher_CUDA* matcher,
-                                  const cv::cuda::GpuMat* queryDescs, const cv::cuda::GpuMat* trainDescs,
+CVAPI(void) cveCudaDescriptorMatcherAdd(cv::cuda::DescriptorMatcher* matcher, const std::vector<cv::cuda::GpuMat>* trainDescs);
+
+CVAPI(void) cveCudaDescriptorMatcherKnnMatch(
+                                  cv::cuda::DescriptorMatcher* matcher,
+                                  cv::_InputArray* queryDescs, cv::_InputArray* trainDescs,
                                   std::vector< std::vector< cv::DMatch > >* matches, 
-                                  int k, const cv::cuda::GpuMat* mask, bool compactResult);
+                                  int k, cv::_OutputArray* masks, bool compactResult);
    
 //----------------------------------------------------------------------------
 //
-//  CudaFASTDetector
+//  Feature2dAsync
+//
+//----------------------------------------------------------------------------
+CVAPI(void) cveCudaFeature2dAsyncDetectAsync(
+   cv::cuda::Feature2DAsync* feature2d,
+   cv::_InputArray* image,
+   cv::_OutputArray* keypoints,
+   cv::_InputArray* mask,
+   cv::cuda::Stream* stream);
+
+CVAPI(void) cveCudaFeature2dAsyncComputeAsync(
+   cv::cuda::Feature2DAsync* feature2d,
+   cv::_InputArray* image,
+   cv::_OutputArray* keypoints,
+   cv::_OutputArray* descriptors,
+   cv::cuda::Stream* stream);
+
+CVAPI(void) cveCudaFeature2dAsyncDetectAndComputeAsync(
+   cv::cuda::Feature2DAsync* feature2d,
+   cv::_InputArray* image,
+   cv::_InputArray* mask,
+   cv::_OutputArray* keypoints,
+   cv::_OutputArray* descriptors,
+   bool useProvidedKeypoints,
+   cv::cuda::Stream* stream);
+
+CVAPI(void) cveCudaFeature2dAsyncConvert(
+   cv::cuda::Feature2DAsync* feature2d,
+   cv::_InputArray* gpu_keypoints,
+   std::vector<cv::KeyPoint>* keypoints);
+
+//----------------------------------------------------------------------------
+//
+//  CudaFastFeatureDetector
 //
 //----------------------------------------------------------------------------
 
-CVAPI(cv::cuda::FAST_CUDA*) cudaFASTDetectorCreate(int threshold, bool nonmaxSupression, double keypointsRatio);
+CVAPI(cv::cuda::FastFeatureDetector*) cveCudaFastFeatureDetectorCreate(int threshold, bool nonmaxSupression, int type, int maxPoints, cv::Feature2D** feature2D, cv::cuda::Feature2DAsync** feature2dAsync);
 
-CVAPI(void) cudaFASTDetectorRelease(cv::cuda::FAST_CUDA** detector);
+CVAPI(void) cveCudaFastFeatureDetectorRelease(cv::cuda::FastFeatureDetector** detector);
 
-CVAPI(void) cudaFASTDetectorDetectKeyPoints(cv::cuda::FAST_CUDA* detector, const cv::cuda::GpuMat* img, const cv::cuda::GpuMat* mask, cv::cuda::GpuMat* keypoints);
-
-CVAPI(void) cudaFASTDownloadKeypoints(cv::cuda::FAST_CUDA* detector, cv::cuda::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints);
 
 //----------------------------------------------------------------------------
 //
-//  CudaORBDetector
+//  CudaORB
 //
 //----------------------------------------------------------------------------
+CVAPI(cv::cuda::ORB*) cveCudaORBCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::Feature2D** feature2D, cv::cuda::Feature2DAsync** feature2dAsync);
 
-CVAPI(cv::cuda::ORB_CUDA*) cudaORBDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize);
+CVAPI(void) cveCudaORBRelease(cv::cuda::ORB** detector);
 
-CVAPI(void) cudaORBDetectorRelease(cv::cuda::ORB_CUDA** detector);
-
-CVAPI(void) cudaORBDetectorDetectKeyPoints(cv::cuda::ORB_CUDA* detector, const cv::cuda::GpuMat* img, const cv::cuda::GpuMat* mask, cv::cuda::GpuMat* keypoints);
-
-CVAPI(void) cudaORBDownloadKeypoints(cv::cuda::ORB_CUDA* detector, cv::cuda::GpuMat* keypointsGPU, std::vector<cv::KeyPoint>* keypoints);
-
-CVAPI(void) cudaORBDetectorCompute(
-   cv::cuda::ORB_CUDA* detector, 
-   const cv::cuda::GpuMat* img, 
-   const cv::cuda::GpuMat* mask, 
-   cv::cuda::GpuMat* keypoints, 
-   cv::cuda::GpuMat* descriptors);
-
-CVAPI(int) cudaORBDetectorGetDescriptorSize(cv::cuda::ORB_CUDA* detector);
 #endif

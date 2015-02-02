@@ -12,54 +12,41 @@ using Emgu.CV.Features2D;
 namespace Emgu.CV.Cuda
 {
    /// <summary>
-   /// A Brute force matcher using Cuda
+   /// Descriptor matcher
    /// </summary>
-   public class CudaBruteForceMatcher : UnmanagedObject
+   public abstract class DescriptorMatcher : UnmanagedObject, IAlgorithm
    {
-      /// <summary>
-      /// Create a CudaBruteForceMatcher using the specific distance type
-      /// </summary>
-      /// <param name="distanceType">The distance type</param>
-      public CudaBruteForceMatcher(DistanceType distanceType)
-      {
-         _ptr = CudaInvoke.cudaBruteForceMatcherCreate(distanceType);
-      }
 
-      /*
+      protected IntPtr _algorithmPtr;
+
       /// <summary>
-      /// Add the model descriptors
+      /// Find the k-nearest match
       /// </summary>
-      /// <param name="modelDescriptors">The model discriptors</param>
-      public void Add(Matrix<Byte> modelDescriptors)
+      /// <param name="queryDescriptors">An n x m matrix of descriptors to be query for nearest neighbours. n is the number of descriptor and m is the size of the descriptor</param>
+      /// <param name="k">Number of nearest neighbors to search for</param>
+      /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
+      /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
+      public void KnnMatch(IInputArray queryDescriptors, IInputArray trainDescriptors, VectorOfVectorOfDMatch matches, int k, IInputArray mask, bool compactResult)
       {
-         if (!(_distanceType == DistanceType.HammingDist))
-            throw new ArgumentException("Hamming distance type requires model descriptor to be Matrix<Byte>");
-         gpuBruteForceMatcherAdd(_ptr, modelDescriptors);
+         using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
+         using (InputArray iaTrainDescriptors = trainDescriptors.GetInputArray() )
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            CudaInvoke.cveCudaDescriptorMatcherKnnMatch(_ptr, iaQueryDescriptors, iaTrainDescriptors, matches, k, iaMask, compactResult);
       }
 
       /// <summary>
       /// Add the model descriptors
       /// </summary>
-      /// <param name="modelDescriptors">The model discriptors</param>
-      public void Add(Matrix<float> modelDescriptors)
-      {
-         if (!(_distanceType == DistanceType.L2 || _distanceType == DistanceType.L1))
-            throw new ArgumentException("L1 / L2 distance type requires model descriptor to be Matrix<float>");
-         gpuBruteForceMatcherAdd(_ptr, modelDescriptors);
-      }*/
-
-      /// <summary>
-      /// Find the k nearest neighbour using the brute force matcher. 
-      /// </summary>
-      /// <param name="queryDescriptors">The query descriptors</param>
       /// <param name="modelDescriptors">The model descriptors</param>
-      
-      /// <param name="k">The number of nearest neighbours to be searched</param>
-      /// <param name="mask">The mask</param>
-      
-      public void KnnMatch(GpuMat queryDescriptors, GpuMat modelDescriptors, VectorOfVectorOfDMatch matches, int k, GpuMat mask = null, bool compactResult = false)
+      public void Add(IInputArray modelDescriptors)
       {
-         CudaInvoke.cudaBruteForceMatcherKnnMatch(_ptr, queryDescriptors, modelDescriptors, matches, k, mask, compactResult);
+         using (InputArray iaModelDescriptors = modelDescriptors.GetInputArray())
+           CudaInvoke.cveCudaDescriptorMatcherAdd(_ptr, iaModelDescriptors);
+      }
+
+      IntPtr IAlgorithm.AlgorithmPtr
+      {
+         get { return _algorithmPtr; }
       }
 
       /// <summary>
@@ -67,28 +54,48 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.cudaBruteForceMatcherRelease(ref _ptr);
+         CudaInvoke.cveCudaDescriptorMatcherRelease(ref _ptr);
       }
+   }
+
+
+   /// <summary>
+   /// A Brute force matcher using Cuda
+   /// </summary>
+   public class BFMatcher : DescriptorMatcher
+   {
+      /// <summary>
+      /// Create a CudaBruteForceMatcher using the specific distance type
+      /// </summary>
+      /// <param name="distanceType">The distance type</param>
+      public BFMatcher(DistanceType distanceType)
+      {
+         _ptr = CudaInvoke.cveCudaDescriptorMatcherCreateBFMatcher(distanceType, ref _algorithmPtr);
+      }
+      
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cudaBruteForceMatcherCreate(DistanceType distType);
+      internal extern static IntPtr cveCudaDescriptorMatcherCreateBFMatcher(DistanceType distType, ref IntPtr algorithm);
+
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaBruteForceMatcherRelease(ref IntPtr ptr);
-
-      //[DllImport(CvInvoke.EXTERN_GPU_LIBRARY, CallingConvention = CvInvoke.CvCallingConvention)]
-      //private extern static void gpuBruteForceMatcherAdd(IntPtr matcher, IntPtr trainDescs);
+      internal extern static void cveCudaDescriptorMatcherRelease(ref IntPtr ptr);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaBruteForceMatcherKnnMatch(
+      internal extern static void cveCudaDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescs);
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveCudaDescriptorMatcherKnnMatch(
          IntPtr matcher,
          IntPtr queryDescs, IntPtr trainDescs,
-         IntPtr matches,
-         int k, IntPtr mask,
+         IntPtr matches, 
+         int k, IntPtr masks, 
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool compactResult);
+
+         
    }
 }

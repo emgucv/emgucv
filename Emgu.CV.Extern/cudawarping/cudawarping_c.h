@@ -8,7 +8,7 @@
 #ifndef EMGU_CUDAWARPING_C_H
 #define EMGU_CUDAWARPING_C_H
 
-#include "opencv2/cuda.hpp"
+//#include "opencv2/cuda.hpp"
 #include "opencv2/cudaarithm.hpp"
 #include "opencv2/cudawarping.hpp"
 #include "opencv2/core/cuda.hpp"

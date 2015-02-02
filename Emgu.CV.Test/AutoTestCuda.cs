@@ -537,12 +537,15 @@ namespace Emgu.CV.Test
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>("box.png"))
          using (CudaImage<Bgr, Byte> CudaImage = new CudaImage<Bgr, byte>(img))
          using (CudaImage<Gray, Byte> grayCudaImage = CudaImage.Convert<Gray, Byte>())
-         using (CudaFASTDetector detector = new CudaFASTDetector(10, true, 0.05))
+         using (CudaFastFeatureDetector featureDetector = new CudaFastFeatureDetector(10, true, FastDetector.DetectorType.Type5_8, 1000 ))
          using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          using (GpuMat keyPointsMat = new GpuMat())
          {
-            detector.DetectKeyPointsRaw(grayCudaImage, null, keyPointsMat);
-            detector.DownloadKeypoints(keyPointsMat, kpts);
+            featureDetector.DetectAsync(grayCudaImage, keyPointsMat);
+            featureDetector.Convert(keyPointsMat, kpts);
+            //featureDetector.DetectKeyPointsRaw(grayCudaImage, null, keyPointsMat);
+
+            //featureDetector.DownloadKeypoints(keyPointsMat, kpts);
 
             foreach (MKeyPoint kpt in kpts.ToArray())
             {

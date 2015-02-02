@@ -16,8 +16,11 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// An ORB detector using Cuda
    /// </summary>
-   public class CudaORBDetector : UnmanagedObject
+   public class CudaORBDetector : ORBDetector, IFeature2DAsync
    {
+
+      private IntPtr _feature2DAsyncPtr;
+
       /// <summary>
       /// Create a ORBDetector using the specific values
       /// </summary>
@@ -39,106 +42,32 @@ namespace Emgu.CV.Cuda
          ORBDetector.ScoreType scoreType = ORBDetector.ScoreType.Harris, 
          int patchSize = 31)
       {
-         _ptr = CudaInvoke.cudaORBDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize);
+         _ptr = CudaInvoke.cveCudaORBCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, ref _feature2D, ref _feature2DAsyncPtr);
       }
 
-      /// <summary>
-      /// Detect keypoints in the CudaImage
-      /// </summary>
-      /// <param name="img">The image where keypoints will be detected from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="keyPoints">
-      /// The keypoints GpuMat that will have 1 row.
-      /// keypoints.at&lt;float[6]&gt;(1, i) contains i'th keypoint
-      /// format: (x, y, size, response, angle, octave)
-      /// </param>
-      public void DetectKeyPointsRaw(GpuMat img, GpuMat mask, GpuMat keyPoints)
-      {
-         CudaInvoke.cudaORBDetectorDetectKeyPoints(_ptr, img, mask, keyPoints);
-      }
-
-      /// <summary>
-      /// Detect keypoints in the CudaImage
-      /// </summary>
-      /// <param name="img">The image where keypoints will be detected from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <returns>An array of keypoints</returns>
-      public MKeyPoint[] DetectKeyPoints(GpuMat img, GpuMat mask)
-      {
-         using (GpuMat tmp = new GpuMat())
-         using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
-         {
-            DetectKeyPointsRaw(img, mask, tmp);
-            DownloadKeypoints(tmp, kpts);
-            return kpts.ToArray();
-         }
-      }
-
-      /// <summary>
-      /// Obtain the keypoints array from GpuMat
-      /// </summary>
-      /// <param name="src">The keypoints obtained from DetectKeyPointsRaw</param>
-      /// <param name="dst">The vector of keypoints</param>
-      public void DownloadKeypoints(GpuMat src, VectorOfKeyPoint dst)
-      {
-         CudaInvoke.cudaORBDownloadKeypoints(_ptr, src, dst);
-      }
-
-      /// <summary>
-      /// Compute the keypoints and descriptors given the image
-      /// </summary>
-      /// <param name="image">The image where the keypoints and descriptors will be computed from</param>
-      /// <param name="mask">The optional mask, can be null if not needed</param>
-      /// <param name="descriptors">The resulting descriptors</param>
-      /// <param name="keyPoints">The resulting keypoints</param>
-      public void ComputeRaw(GpuMat image, GpuMat mask, GpuMat keyPoints, GpuMat descriptors)
-      {
-         CudaInvoke.cudaORBDetectorCompute(_ptr, image, mask, keyPoints, descriptors);
-      }
-
-      /// <summary>
-      /// Return the size of the descriptor (64/128)
-      /// </summary>
-      public int DescriptorSize
-      {
-         get
-         {
-            return CudaInvoke.cudaORBDetectorGetDescriptorSize(_ptr);
-         }
-      }
 
       /// <summary>
       /// Release the unmanaged resource associate to the Detector
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.cudaORBDetectorRelease(ref _ptr);
+         CudaInvoke.cveCudaORBRelease(ref _ptr);
+      }
+
+      IntPtr IFeature2DAsync.Feature2DAsyncPtr
+      {
+         get { return _feature2DAsyncPtr; }
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaORBDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, ORBDetector.ScoreType scoreType, int patchSize);
+      internal static extern IntPtr cveCudaORBCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, ORBDetector.ScoreType scoreType, int patchSize, ref IntPtr feature2D, ref IntPtr feature2DAsync);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaORBDetectorRelease(ref IntPtr detector);
+      internal static extern void cveCudaORBRelease(ref IntPtr detector);
 
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaORBDetectorDetectKeyPoints(IntPtr detector, IntPtr img, IntPtr mask, IntPtr keypoints);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaORBDownloadKeypoints(IntPtr detector, IntPtr keypointsGPU, IntPtr keypoints);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaORBDetectorCompute(
-         IntPtr detector,
-         IntPtr img,
-         IntPtr mask,
-         IntPtr keypoints,
-         IntPtr descriptors);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern int cudaORBDetectorGetDescriptorSize(IntPtr detector);
+    
    }
 }

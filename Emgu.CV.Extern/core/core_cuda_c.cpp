@@ -4,13 +4,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "cuda_c.h"
+#include "core_cuda_c.h"
 
 /*
 #if !defined (HAVE_CUDA) || defined (CUDA_DISABLER)
-void cv::cuda::matchTemplate(const GpuMat&, const GpuMat&, GpuMat&, int, MatchTemplateBuf&, Stream&) 
+void cv::cuda::matchTemplate(const GpuMat&, const GpuMat&, GpuMat&, int, MatchTemplateBuf&, Stream&)
 {
-   CV_Error(CV_GpuNotSupported, "The library is compiled without GPU support");
+CV_Error(CV_GpuNotSupported, "The library is compiled without GPU support");
 }
 #endif
 */
@@ -139,7 +139,7 @@ bool targetArchsHasEqualOrGreaterBin(int major, int minor)
 //
 //----------------------------------------------------------------------------
 
-cv::cuda::GpuMat* gpuMatCreateDefault() { return new cv::cuda::GpuMat() ; }
+cv::cuda::GpuMat* gpuMatCreateDefault() { return new cv::cuda::GpuMat(); }
 
 void gpuMatCreate(cv::cuda::GpuMat* m, int rows, int cols, int type)
 {
@@ -241,7 +241,7 @@ CVAPI(void) gpuMatReshape(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, in
    dst->swap(tmp);
 }
 
-cv::cuda::GpuMat* gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* rect) 
-{ 
+cv::cuda::GpuMat* gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* rect)
+{
    return new cv::cuda::GpuMat(*arr, *rect);
 }

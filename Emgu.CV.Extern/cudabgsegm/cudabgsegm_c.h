@@ -8,7 +8,7 @@
 #ifndef EMGU_CUDABGSEGM_C_H
 #define EMGU_CUDABGSEGM_C_H
 
-#include "opencv2/cuda.hpp"
+//#include "opencv2/cuda.hpp"
 #include "opencv2/cudabgsegm.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/types_c.h"
