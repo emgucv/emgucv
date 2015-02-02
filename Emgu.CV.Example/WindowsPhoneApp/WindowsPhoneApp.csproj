@@ -7,8 +7,8 @@
     <ProjectGuid>{C8B17BAC-54E4-49FE-BC3F-AD2EFB55C4B4}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WindowsPhoneApp</RootNamespace>
-    <AssemblyName>WindowsPhoneApp</AssemblyName>
+    <RootNamespace>EmguCVWindowsPhoneApp</RootNamespace>
+    <AssemblyName>EmguCVWindowsPhoneApp</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
@@ -199,6 +199,14 @@
           <Link>opencv_xobjdetect300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\..\bin\arm_phone\opencv_latentsvm300.dll">
+          <Link>opencv_latentsvm300.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+		<Content Include="..\..\bin\arm_phone\opencv_xphoto300.dll">
+          <Link>opencv_xphoto300.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
       </ItemGroup>
     </When>
     <When Condition=" '$(Platform)'=='x86' ">
@@ -297,6 +305,14 @@
         </Content>
         <Content Include="..\..\bin\x86_phone\opencv_xobjdetect300.dll">
           <Link>opencv_xobjdetect300.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\bin\x86_phone\opencv_latentsvm300.dll">
+          <Link>opencv_latentsvm300.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+		<Content Include="..\..\bin\x86_phone\opencv_xphoto300.dll">
+          <Link>opencv_xphoto300.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>

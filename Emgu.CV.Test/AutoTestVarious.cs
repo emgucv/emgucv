@@ -1038,6 +1038,11 @@ namespace Emgu.CV.Test
          Image<Gray, Single> flowx = new Image<Gray, float>(prevImg.Size);
          Image<Gray, Single> flowy = new Image<Gray, float>(prevImg.Size);
          CvInvoke.CalcOpticalFlowFarneback(prevImg, currImg, flowx, flowy, 0.5, 3, 5, 20, 7, 1.5, Emgu.CV.CvEnum.OpticalflowFarnebackFlag.Default);
+         Point pos = new Point();
+         bool noNan = CvInvoke.CheckRange(flowx, true, ref pos, double.MinValue, double.MaxValue);
+         EmguAssert.IsTrue(noNan, "Flowx contains nan");
+         noNan = CvInvoke.CheckRange(flowy, true, ref pos, double.MinValue, double.MaxValue);
+         EmguAssert.IsTrue(noNan, "Flowy contains nan");
       }
 
       /*
@@ -2814,7 +2819,7 @@ namespace Emgu.CV.Test
                   Rectangle[] regions = ERFilter.ERGrouping(image, vm, regionVecs, ERFilter.GroupingMethod.OrientationHoriz, EmguAssert.GetFile("trained_classifier_erGrouping.xml"), 0.5f);
 
                   foreach (Rectangle rect in regions)
-                     image.Draw(rect, new Bgr(Color.Red), 2);
+                     image.Draw(rect, new Bgr(0, 0, 255), 2);
                   
                }
             }

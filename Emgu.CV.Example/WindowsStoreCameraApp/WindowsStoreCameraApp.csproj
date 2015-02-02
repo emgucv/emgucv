@@ -172,6 +172,10 @@
       <Link>x64\opencv_imgproc300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\bin\x64\opencv_latentsvm300.dll">
+      <Link>x64\opencv_latentsvm300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\bin\x64\opencv_ml300.dll">
       <Link>x64\opencv_ml300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -228,6 +232,10 @@
       <Link>x64\opencv_xobjdetect300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\bin\x64\opencv_xphoto300.dll">
+      <Link>x64\opencv_xphoto300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\bin\x86\cvextern.dll">
       <Link>x86\cvextern.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -266,6 +274,10 @@
     </Content>
     <Content Include="..\..\bin\x86\opencv_imgproc300.dll">
       <Link>x86\opencv_imgproc300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\bin\x86\opencv_latentsvm300.dll">
+      <Link>x86\opencv_latentsvm300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\bin\x86\opencv_ml300.dll">
@@ -324,6 +336,10 @@
       <Link>x86\opencv_xobjdetect300.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\bin\x86\opencv_xphoto300.dll">
+      <Link>x86\opencv_xphoto300.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
@@ -348,6 +364,13 @@
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+    <Import Project="..\..\Solution\Windows.Store\packages\NokiaImagingSDK.1.2.99\build\win81\NokiaImagingSDK.targets" Condition="Exists('..\..\Solution\Windows.Store\packages\NokiaImagingSDK.1.2.99\build\win81\NokiaImagingSDK.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\Solution\Windows.Store\packages\NokiaImagingSDK.1.2.99\build\win81\NokiaImagingSDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Solution\Windows.Store\packages\NokiaImagingSDK.1.2.99\build\win81\NokiaImagingSDK.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

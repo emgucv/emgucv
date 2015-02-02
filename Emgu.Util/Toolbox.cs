@@ -418,23 +418,22 @@ namespace Emgu.Util
       public static IntPtr LoadLibrary(String dllname)
       {
 #if UNITY_EDITOR_WIN
-         return WinAPILoadLibrary(dllname);
-#else	  
+          const int loadLibrarySearchDllLoadDir = 0x00000100;
+          const int loadLibrarySearchDefaultDirs = 0x00001000;
+          return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+#else
          if (Platform.OperationSystem == TypeEnum.OS.Windows)
          {
-            if (Platform.ClrType == TypeEnum.ClrType.NetFxCore)
+            //if (Platform.ClrType == TypeEnum.ClrType.NetFxCore)
             {
                const int loadLibrarySearchDllLoadDir = 0x00000100;
                const int loadLibrarySearchDefaultDirs = 0x00001000;
-               return NetFxCoreLoadLibrary(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
-            } else
-               return WinAPILoadLibrary(dllname);
+               return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+            } //else
+               //return WinAPILoadLibrary(dllname);
          } else if (Platform.OperationSystem == TypeEnum.OS.WindowsPhone)
          {
-            //const int loadLibrarySearchDllLoadDir = 0x00000100;
-            //const int loadLibrarySearchDefaultDirs = 0x00001000;
-            //return NetFxCoreLoadLibrary(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
-            IntPtr handler = WindowsPhoneLoadPackagedLibrary(dllname, 0);
+            IntPtr handler = LoadPackagedLibrary(dllname, 0);
             if (handler == IntPtr.Zero)
             {
                int error = WindowsPhoneGetLastError();
@@ -449,14 +448,14 @@ namespace Emgu.Util
       }
 
       [DllImport("Kernel32.dll", EntryPoint="LoadLibraryEx")]
-      private static extern IntPtr NetFxCoreLoadLibrary(
+      private static extern IntPtr LoadLibraryEx(
          [MarshalAs(UnmanagedType.LPStr)]
          String fileName, 
          IntPtr hFile,
          int dwFlags);
 
       [DllImport("PhoneAppModelHost.dll", EntryPoint = "LoadPackagedLibrary")]
-      private static extern IntPtr WindowsPhoneLoadPackagedLibrary(
+      private static extern IntPtr LoadPackagedLibrary(
          [MarshalAs(UnmanagedType.LPStr)]
          String fileName,
          int dwFlags);
@@ -464,10 +463,11 @@ namespace Emgu.Util
       [DllImport("KernelBase.dll", EntryPoint = "GetLastError")]
       private static extern int WindowsPhoneGetLastError();
 
+      /*
       [DllImport("kernel32.dll", EntryPoint="LoadLibrary")]
       private static extern IntPtr WinAPILoadLibrary(
          [MarshalAs(UnmanagedType.LPStr)]
-         String dllname);
+         String dllname);*/
 
       [DllImport("dl", EntryPoint = "dlopen")]
       private static extern IntPtr Dlopen(
