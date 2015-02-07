@@ -570,9 +570,10 @@ namespace Emgu.CV.Test
          using (GpuMat descriptorMat = new GpuMat())
          {
             CudaInvoke.CvtColor(cudaImage, grayCudaImage, ColorConversion.Bgr2Gray);
-            
-            detector.ComputeRaw(grayCudaImage, null, keyPointMat, descriptorMat);
-            detector.DownloadKeypoints(keyPointMat, kpts);
+            detector.ComputeAsync(grayCudaImage, keyPointMat, descriptorMat);
+            detector.Convert(keyPointMat, kpts);
+            //detector.ComputeRaw(grayCudaImage, null, keyPointMat, descriptorMat);
+            //detector.DownloadKeypoints(keyPointMat, kpts);
 
             foreach (MKeyPoint kpt in kpts.ToArray())
             {
@@ -823,7 +824,7 @@ namespace Emgu.CV.Test
             using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors)) //initialization of GPU code might took longer time.
             {
                stopwatch.Reset(); stopwatch.Start();
-               CudaBruteForceMatcher hammingMatcher = new CudaBruteForceMatcher(DistanceType.Hamming);
+               Cuda.BFMatcher hammingMatcher = new Cuda.BFMatcher(DistanceType.Hamming);
 
                //BFMatcher hammingMatcher = new BFMatcher(BFMatcher.DistanceType.Hamming, modelDescriptors);
                int k = 2;
@@ -836,7 +837,8 @@ namespace Emgu.CV.Test
                using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
                {
                   Stopwatch w2 = Stopwatch.StartNew();
-                  hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, matches, k);
+                  //hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, matches, k);
+                  hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, matches, k, null, true);
                   w2.Stop();
                   Trace.WriteLine(String.Format("Time for feature matching (excluding data transfer): {0} milli-sec",
                      w2.ElapsedMilliseconds));

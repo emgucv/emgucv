@@ -21,19 +21,44 @@ namespace Emgu.CV.Test
       {
          using (Tesseract ocr = GetTesseract())
          using (Image<Gray, Byte> img = new Image<Gray, byte>(480, 200))
+         
          {
+
             ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
+            IntPtr oclDevice = new IntPtr();
+            int deviceId = ocr.GetOpenCLDevice(ref oclDevice);
 
             String message = "Hello, World";
             CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.FontFace.HersheySimplex, 1.0, new MCvScalar(255));
 
-            //ImageViewer.Show(img);
-            ocr.Recognize(img);
+            //
+            //ocr.Recognize(img);
+            using (Image<Gray, Byte> rotatedImg = img.Rotate(10, new Gray(), false))
+            {
+              
 
-            String messageOcr = ocr.GetText().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
-            EmguAssert.AreEqual(message, messageOcr, String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
+               ocr.PageSegMode = PageSegMode.AutoOsd;
 
-            Tesseract.Character[] results = ocr.GetCharacters();
+               ocr.Recognize(rotatedImg);
+               using (PageIterator pi = ocr.AnalyseLayout())
+               {
+                  Orientation or = pi.Orientation;
+                  LineSegment2D? baseLine = pi.GetBaseLine(PageIteratorLevel.Textline);
+                  if (baseLine.HasValue)
+                  {
+                     CvInvoke.Line(rotatedImg, baseLine.Value.P1, baseLine.Value.P2, new MCvScalar(255));
+                     Emgu.CV.UI.ImageViewer.Show(rotatedImg);       
+                  }
+               }
+
+
+               /*
+               String messageOcr = ocr.GetText().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
+               EmguAssert.AreEqual(message, messageOcr,
+                  String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
+
+               Tesseract.Character[] results = ocr.GetCharacters();*/
+            }
          }
       }
 
@@ -87,7 +112,7 @@ namespace Emgu.CV.Test
          String path = System.IO.Path.Combine(a0.DirectoryName, "..") + System.IO.Path.DirectorySeparatorChar;
          return new Tesseract(path, "eng", Tesseract.OcrEngineMode.OemTesseractCubeCombined);
 #else
-         return new Tesseract("./", "eng", Tesseract.OcrEngineMode.OemTesseractCubeCombined);
+         return new Tesseract("./", "eng", OcrEngineMode.TesseractCubeCombined);
 #endif
       }
 

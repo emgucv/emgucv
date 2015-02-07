@@ -22,52 +22,7 @@ namespace Emgu.CV.OCR
    /// </summary>
    public class Tesseract : UnmanagedObject
    {
-      static Tesseract()
-      {
-         //dummy code that is used to involve the static constructor of CvInvoke, if it has not already been called.
-         CvInvoke.CheckLibraryLoaded();
-      }
-
-      #region PInvoke
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr TessBaseAPICreate();
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int TessBaseAPIInit(
-         IntPtr ocr,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String dataPath,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String language,
-         OcrEngineMode mode);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void TessBaseAPIRelease(ref IntPtr ocr);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void TessBaseAPIRecognizeImage(IntPtr ocr, IntPtr image);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void TessBaseAPIGetUTF8Text(
-         IntPtr ocr,
-         IntPtr text);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void TessBaseAPIExtractResult(IntPtr ocr, IntPtr charSeq, IntPtr resultSeq);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      private static extern bool TessBaseAPISetVariable(
-         IntPtr ocr,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String varName,
-         [MarshalAs(CvInvoke.StringMarshalType)]
-         String value);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern IntPtr TesseractGetVersion();
-      #endregion
-
+      
       private UTF8Encoding _utf8 = new UTF8Encoding();
 
       /// <summary>
@@ -77,7 +32,7 @@ namespace Emgu.CV.OCR
       {
          get
          {
-            IntPtr ptr = TesseractGetVersion();
+            IntPtr ptr = OcrInvoke.TesseractGetVersion();
             return new Version(ptr == IntPtr.Zero ? "0.0" : Marshal.PtrToStringAnsi(ptr));
          }
       }
@@ -87,7 +42,12 @@ namespace Emgu.CV.OCR
       /// </summary>
       public Tesseract()
       {
-         _ptr = TessBaseAPICreate();
+         _ptr = OcrInvoke.TessBaseAPICreate();
+      }
+
+      public int GetOpenCLDevice(ref IntPtr device)
+      {
+         return OcrInvoke.TessBaseAPIGetOpenCLDevice(_ptr, ref device);
       }
 
       /// <summary>
@@ -148,7 +108,7 @@ namespace Emgu.CV.OCR
       public Tesseract(String dataPath, String language, OcrEngineMode mode, String whiteList)
          : this(dataPath, language, mode)
       {
-         if (mode == OcrEngineMode.OemCubeOnly || mode == OcrEngineMode.OemTesseractCubeCombined)
+         if (mode == OcrEngineMode.CubeOnly || mode == OcrEngineMode.TesseractCubeCombined)
             throw new ArgumentException("White list is not supported by CUBE engine");
 
          SetVariable("tessedit_char_whitelist", whiteList);
@@ -170,6 +130,18 @@ namespace Emgu.CV.OCR
          }
          return true;
       }*/
+
+      /// <summary>
+      /// Gets or sets the page seg mode.
+      /// </summary>
+      /// <value>
+      /// The page seg mode.
+      /// </value>
+      public PageSegMode PageSegMode
+      {
+         get { return OcrInvoke.TessBaseAPIGetPageSegMode(_ptr); }
+         set { OcrInvoke.TessBaseAPISetPageSegMode(_ptr, value); }
+      }
 
       /// <summary>
       /// Initialize the OCR engine using the specific dataPath and language name.
@@ -198,7 +170,6 @@ namespace Emgu.CV.OCR
       public void Init(String dataPath, String language, OcrEngineMode mode)
       {
          
-         
          if (!(dataPath.Length > 0 && dataPath.Substring(dataPath.Length - 1).ToCharArray()[0] == System.IO.Path.DirectorySeparatorChar))
          {  //if the data path end in slash
             int lastSlash = dataPath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
@@ -224,7 +195,7 @@ namespace Emgu.CV.OCR
 
          /*if (!IsEngineModeSupported(mode))
             throw new ArgumentException(String.Format("The Ocr engine mode {0} is not supported in tesseract v{1}", mode, Version));*/
-         int initResult = TessBaseAPIInit(_ptr, dataPath, language, mode);
+         int initResult = OcrInvoke.TessBaseAPIInit(_ptr, dataPath, language, mode);
          if (initResult != 0) throw new ArgumentException(String.Format("Unable to create ocr model using Path {0} and language {1}.", dataPath, language));
       }
 
@@ -233,17 +204,18 @@ namespace Emgu.CV.OCR
       /// </summary>
       protected override void DisposeObject()
       {
-         TessBaseAPIRelease(ref _ptr);
+         OcrInvoke.TessBaseAPIRelease(ref _ptr);
       }
 
       /// <summary>
       /// Set the image for optical character recognition
       /// </summary>
-      /// <typeparam name="TColor">The color type of the image</typeparam>
+      
       /// <param name="image">The image where detection took place</param>
-      public void Recognize<TColor>(Image<TColor, Byte> image) where TColor : struct, IColor
+      public void Recognize(IInputArray image)
       {
-         TessBaseAPIRecognizeImage(_ptr, image);
+         using (InputArray iaImage = image.GetInputArray())
+            OcrInvoke.TessBaseAPIRecognizeArray(_ptr, iaImage);
       }
 
       /// <summary>
@@ -253,7 +225,7 @@ namespace Emgu.CV.OCR
       /// <param name="value">The value to be set</param>
       public void SetVariable(String variableName, String value)
       {
-         if (!TessBaseAPISetVariable(_ptr, variableName, value))
+         if (!OcrInvoke.TessBaseAPISetVariable(_ptr, variableName, value))
          {
             throw new System.ArgumentException(String.Format("Unable to set {0} to {1}", variableName, value));
          }
@@ -267,7 +239,7 @@ namespace Emgu.CV.OCR
       {
          using (Util.VectorOfByte bytes = new Util.VectorOfByte())
          {
-            TessBaseAPIGetUTF8Text(_ptr, bytes);
+            OcrInvoke.TessBaseAPIGetUTF8Text(_ptr, bytes);
             return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
          }
       }
@@ -282,7 +254,7 @@ namespace Emgu.CV.OCR
          {
             Seq<byte> textSeq = new Seq<byte>(stor);
             Seq<TesseractResult> results = new Seq<TesseractResult>(stor);
-            TessBaseAPIExtractResult(_ptr, textSeq, results);
+            OcrInvoke.TessBaseAPIExtractResult(_ptr, textSeq, results);
 
             byte[] bytes = textSeq.ToArray();
             TesseractResult[] trs = results.ToArray();
@@ -324,6 +296,12 @@ namespace Emgu.CV.OCR
          public Rectangle Region;
       }
 
+      public PageIterator AnalyseLayout(bool mergeSimilarWords = false)
+      {
+         return  new PageIterator(OcrInvoke.TessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords));
+      }
+
+
       /// <summary>
       /// This structure is primary used for PInvoke
       /// </summary>
@@ -336,34 +314,106 @@ namespace Emgu.CV.OCR
 #pragma warning restore 0649
       }
 
-      /// <summary>
-      /// When Tesseract/Cube is initialized we can choose to instantiate/load/run
-      /// only the Tesseract part, only the Cube part or both along with the combiner.
-      /// The preference of which engine to use is stored in tessedit_ocr_engine_mode.
-      /// </summary>
-      public enum OcrEngineMode
-      {
-         /// <summary>
-         /// Run Tesseract only - fastest
-         /// </summary>
-         OemTesseractOnly,
-         /// <summary>
-         /// Run Cube only - better accuracy, but slower
-         /// </summary>
-         OemCubeOnly,
-         /// <summary>
-         /// Run both and combine results - best accuracy
-         /// </summary>
-         OemTesseractCubeCombined,
-         /// <summary>
-         /// Specify this mode to indicate that any of the above modes
-         /// should be automatically inferred from the variables in the 
-         /// language-specific config, or if not specified in any of 
-         /// the above should be set to the default OEM_TESSERACT_ONLY.
-         /// </summary>
-         OemDefault
-      };
+
    }
+
+   /// <summary>
+   /// When Tesseract/Cube is initialized we can choose to instantiate/load/run
+   /// only the Tesseract part, only the Cube part or both along with the combiner.
+   /// The preference of which engine to use is stored in tessedit_ocr_engine_mode.
+   /// </summary>
+   public enum OcrEngineMode
+   {
+      /// <summary>
+      /// Run Tesseract only - fastest
+      /// </summary>
+      TesseractOnly,
+      /// <summary>
+      /// Run Cube only - better accuracy, but slower
+      /// </summary>
+      CubeOnly,
+      /// <summary>
+      /// Run both and combine results - best accuracy
+      /// </summary>
+      TesseractCubeCombined,
+      /// <summary>
+      /// Specify this mode to indicate that any of the above modes
+      /// should be automatically inferred from the variables in the 
+      /// language-specific config, or if not specified in any of 
+      /// the above should be set to the default OEM_TESSERACT_ONLY.
+      /// </summary>
+      Default
+   };
+
+   /// <summary>
+   /// Tesseract page segmentation mode
+   /// </summary>
+   public enum PageSegMode
+   {
+      /// <summary>
+      /// PageOrientation and script detection only.
+      /// </summary>
+      OsdOnly,
+      /// <summary>
+      /// Automatic page segmentation with orientation and script detection. (OSD)
+      /// </summary>
+      AutoOsd,
+      /// <summary>
+      /// Automatic page segmentation, but no OSD, or OCR.
+      /// </summary>
+      AutoOnly,
+      /// <summary>
+      /// Fully automatic page segmentation, but no OSD.
+      /// </summary>
+      Auto,
+      /// <summary>
+      /// Assume a single column of text of variable sizes.
+      /// </summary>
+      SingleColumn,
+      /// <summary>
+      /// Assume a single uniform block of vertically aligned text.
+      /// </summary>
+      SingleBlockVertText,
+
+
+      /// <summary>
+      /// Assume a single uniform block of text. (Default.)
+      /// </summary>
+      SingleBlock,
+      /// <summary>
+      /// Treat the image as a single text line.
+      /// </summary>
+      SingleLine,
+      /// <summary>
+      /// Treat the image as a single word.
+      /// </summary>
+      SingleWord,
+      /// <summary>
+      /// Treat the image as a single word in a circle.
+      /// </summary>
+      CircleWord,
+      /// <summary>
+      /// Treat the image as a single character.
+      /// </summary>
+      SingleChar,
+      /// <summary>
+      /// Find as much text as possible in no particular order.
+      /// </summary>
+      SparseText,
+      /// <summary>
+      /// Sparse text with orientation and script det.
+      /// </summary>
+      SparseTextOsd,
+      /// <summary>
+      /// Treat the image as a single text line, bypassing hacks that are Tesseract-specific.
+      /// </summary>
+      RawLine,
+
+      /// <summary>
+      /// Number of enum entries.
+      /// </summary>
+      Count
+   };
 }
 
 #endif

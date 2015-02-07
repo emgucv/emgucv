@@ -265,7 +265,7 @@ namespace Emgu.CV.Test
             Seq<MCvConvexityDefect> defactSeq =
                contour.GetConvexityDefacts(
                   stor,
-                  Emgu.CV.CvEnum.Orientation.Clockwise);
+                  Emgu.CV.CvEnum.PageOrientation.Clockwise);
             MCvConvexityDefect[] defacts = defactSeq.ToArray();
             EmguAssert.IsTrue(1 == defacts.Length);
             EmguAssert.IsTrue(new Point(100, 100).Equals(defacts [0].DepthPoint));

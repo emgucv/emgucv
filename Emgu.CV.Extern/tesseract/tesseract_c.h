@@ -17,6 +17,7 @@ typedef unsigned __int64 UINT64;
 #include "opencv2/core/core_c.h"
 #include "stdio.h"
 #include "baseapi.h"
+#include "allheaders.h"
 
 class EmguTesseract: public tesseract::TessBaseAPI
 {
@@ -61,7 +62,9 @@ CVAPI(int) TessBaseAPIInit(EmguTesseract* ocr, const char* dataPath, const char*
 
 CVAPI(void) TessBaseAPIRelease(EmguTesseract** ocr);
 
-CVAPI(void) TessBaseAPIRecognizeImage(EmguTesseract* ocr, IplImage* image);
+//CVAPI(void) TessBaseAPIRecognizeImage(EmguTesseract* ocr, IplImage* image);
+
+CVAPI(void) TessBaseAPIRecognizeArray(EmguTesseract* ocr, cv::_InputArray* mat);
 
 CVAPI(void) TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte);
 
@@ -69,4 +72,22 @@ CVAPI(void) TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* 
 
 CVAPI(bool) TessBaseAPISetVariable(EmguTesseract* ocr, const char* varName, const char* value);
 
+CVAPI(void) TessBaseAPISetPageSegMode(EmguTesseract* ocr, tesseract::PageSegMode mode);
+
+CVAPI(tesseract::PageSegMode) TessBaseAPIGetPageSegMode(EmguTesseract* ocr);
+
+CVAPI(int) TessBaseAPIGetOpenCLDevice(EmguTesseract* ocr, void **device);
+
+CVAPI(tesseract::PageIterator*) TessBaseAPIAnalyseLayout(EmguTesseract* ocr, bool mergeSimilarWords);
+
+CVAPI(void) TessPageIteratorGetOrientation(tesseract::PageIterator* iterator, tesseract::Orientation* orientation, tesseract::WritingDirection* writingDirection, tesseract::TextlineOrder* order, float* deskewAngle);
+
+CVAPI(void) TessPageIteratorRelease(tesseract::PageIterator** iterator);
+
+CVAPI(bool) TessPageIteratorGetBaseLine(
+   tesseract::PageIterator* iterator,
+   tesseract::PageIteratorLevel level,
+   int* x1, int* y1, int* x2, int* y2);
+
+CVAPI(Pix*) leptCreatePixFromMat(cv::Mat* m);
 #endif

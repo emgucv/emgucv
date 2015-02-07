@@ -200,13 +200,20 @@ ENDIF()
 
 ############################### TESSERACT START ########################
 SET(TESSERACT_OCR_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr.git")
+SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/leptonica-1.71")
 IF(ANDROID)
   SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
   IF(EMGU_CV_WITH_TESSERACT)
     ADD_SUBDIRECTORY(tesseract/libtesseract)
     IF(TESSERACT_FOUND)
     ELSE()
-      SET(TESSERACT_INCLUDE_DIRS "${TESSERACT_OCR_ROOT_DIR}/ccutil" "${TESSERACT_OCR_ROOT_DIR}/api" "${TESSERACT_OCR_ROOT_DIR}/ccmain" "${TESSERACT_OCR_ROOT_DIR}/ccstruct" "${PROJECT_SOURCE_DIR}/tesseract")
+      SET(TESSERACT_INCLUDE_DIRS 
+        "${TESSERACT_OCR_ROOT_DIR}/ccutil" 
+        "${TESSERACT_OCR_ROOT_DIR}/api" 
+        "${TESSERACT_OCR_ROOT_DIR}/ccmain" 
+        "${TESSERACT_OCR_ROOT_DIR}/ccstruct" 
+        "${LEPT_ROOT_DIR}/src" 
+        "${PROJECT_SOURCE_DIR}/tesseract")
       #SET(TESSERACT_PROJECTS libleptonica tesseract_ccutil tesseract_viewer tesseract_cutil tesseract_opencl tesseract_ccstruct tesseract_dict tesseract_classify tesseract_wordrec tesseract_neural_networks tesseract_textord tesseract_cube tesseract_api tesseract_ccmain)
 	  SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_cube tesseract_textord tesseract_neural_networks tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
     ENDIF()
@@ -221,7 +228,13 @@ ELSEIF(WIN32 OR APPLE)
     ADD_SUBDIRECTORY(tesseract/libtesseract)
     IF(TESSERACT_FOUND)
     ELSE()
-      SET(TESSERACT_INCLUDE_DIRS "${TESSERACT_OCR_ROOT_DIR}/ccutil" "${TESSERACT_OCR_ROOT_DIR}/api" "${TESSERACT_OCR_ROOT_DIR}/ccmain" "${TESSERACT_OCR_ROOT_DIR}/ccstruct" "${PROJECT_SOURCE_DIR}/tesseract")
+      SET(TESSERACT_INCLUDE_DIRS 
+        "${TESSERACT_OCR_ROOT_DIR}/ccutil" 
+        "${TESSERACT_OCR_ROOT_DIR}/api" 
+        "${TESSERACT_OCR_ROOT_DIR}/ccmain" 
+        "${TESSERACT_OCR_ROOT_DIR}/ccstruct" 
+        "${LEPT_ROOT_DIR}/src" 
+        "${PROJECT_SOURCE_DIR}/tesseract")
       #SET(TESSERACT_PROJECTS libleptonica tesseract_ccutil tesseract_viewer tesseract_cutil tesseract_opencl tesseract_ccstruct tesseract_dict tesseract_classify tesseract_wordrec tesseract_neural_networks tesseract_textord tesseract_cube tesseract_api tesseract_ccmain)
 	  SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_cube tesseract_textord tesseract_neural_networks tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
     ENDIF()
@@ -541,6 +554,13 @@ ENDIF()
 #IF(WITH_IPP)
 #  target_link_libraries(${the_target} ippdc_l)
 #ENDIF()  
+
+IF(TESSERACT_OPENCL)
+  #SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${OPENCV_SUBFOLDER}/cmake/")
+  #include(${OPENCV_SUBFOLDER}/cmake/OpenCVDetectOpenCL.cmake)
+  #MESSAGE(STATUS "OPENCVL_LIBRARIES: ${OPENCV_LIBRARIES}")
+  target_link_libraries(${the_target} OpenCL)
+ENDIF()
 
 IF(ANDROID)
   IF(EMGU_CV_WITH_TESSERACT)
