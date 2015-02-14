@@ -22,11 +22,11 @@ namespace Emgu.CV.Cuda
       /// <summary>
       /// Find the k-nearest match
       /// </summary>
-      /// <param name="queryDescriptors">An n x m matrix of descriptors to be query for nearest neighbours. n is the number of descriptor and m is the size of the descriptor</param>
+      /// <param name="queryDescriptors">An n x m matrix of descriptors to be query for nearest neighbors. n is the number of descriptor and m is the size of the descriptor</param>
       /// <param name="k">Number of nearest neighbors to search for</param>
       /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
       /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
-      public void KnnMatch(IInputArray queryDescriptors, IInputArray trainDescriptors, VectorOfVectorOfDMatch matches, int k, IInputArray mask, bool compactResult)
+      public void KnnMatch(IInputArray queryDescriptors, IInputArray trainDescriptors, VectorOfVectorOfDMatch matches, int k, IInputArray mask = null, bool compactResult = false)
       {
          using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
          using (InputArray iaTrainDescriptors = trainDescriptors.GetInputArray() )
@@ -62,13 +62,13 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// A Brute force matcher using Cuda
    /// </summary>
-   public class BFMatcher : DescriptorMatcher
+   public class CudaBFMatcher : DescriptorMatcher
    {
       /// <summary>
       /// Create a CudaBruteForceMatcher using the specific distance type
       /// </summary>
       /// <param name="distanceType">The distance type</param>
-      public BFMatcher(DistanceType distanceType)
+      public CudaBFMatcher(DistanceType distanceType)
       {
          _ptr = CudaInvoke.cveCudaDescriptorMatcherCreateBFMatcher(distanceType, ref _algorithmPtr);
       }

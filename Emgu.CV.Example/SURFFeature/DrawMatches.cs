@@ -40,7 +40,7 @@ namespace SURFFeatureExample
             //extract features from the object image
             using (GpuMat gpuModelKeyPoints = surfCuda.DetectKeyPointsRaw(gpuModelImage, null))
             using (GpuMat gpuModelDescriptors = surfCuda.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints))
-            using (CudaBruteForceMatcher matcher = new CudaBruteForceMatcher(DistanceType.L2))
+            using (CudaBFMatcher matcher = new CudaBFMatcher(DistanceType.L2))
             {
                surfCuda.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
                watch = Stopwatch.StartNew();

@@ -1059,8 +1059,7 @@ namespace Emgu.CV.Test
             capture.Start();
             viewer.ShowDialog();
          }
-      }
-
+      }*/
       
       public void TestCvBlob()
       {
@@ -1068,6 +1067,7 @@ namespace Emgu.CV.Test
          using (CvTracks tracks = new CvTracks())
          using (ImageViewer viewer = new ImageViewer())
          using (Capture capture = new Capture())
+         using (Mat fgMask = new Mat())
          {
             //BGStatModel<Bgr> bgModel = new BGStatModel<Bgr>(capture.QueryFrame(), Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
             BackgroundSubtractorMOG2 bgModel = new BackgroundSubtractorMOG2(0, 0, true);
@@ -1075,46 +1075,46 @@ namespace Emgu.CV.Test
 
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {
-               Image<Bgr, Byte> frame = capture.RetrieveBgrFrame();
-               bgModel.Apply(frame);
+               Mat frame = new Mat();
+               capture.Retrieve(frame);
+               bgModel.Apply(frame, fgMask);
 
-               Image<Gray, Byte> gray = bgModel.ForegroundMask;
                using (CvBlobDetector detector = new CvBlobDetector())
                using (CvBlobs blobs = new CvBlobs())
                {
-                  detector.Detect(gray, blobs);
+                  detector.Detect(fgMask.ToImage<Gray, Byte>(), blobs);
                   blobs.FilterByArea(100, int.MaxValue);
 
-                  tracks.Apply(blobs, 20.0, 10, 0);
+                  tracks.Update(blobs, 20.0, 10, 0);
 
                   Image<Bgr, Byte> result = new Image<Bgr, byte>(frame.Size);
 
                   using (Image<Gray, Byte> blobMask = detector.DrawBlobsMask(blobs))
-                     CvInvoke.cvCopy(frame, result, blobMask);
-                  
-                  foreach(KeyValuePair<uint, CvTrack> pair in tracks)
+                  {
+                     frame.CopyTo(result, blobMask);
+                  }
+                  //CvInvoke.cvCopy(frame, result, blobMask);
+
+                  foreach (KeyValuePair<uint, CvTrack> pair in tracks)
                   {
                      if (pair.Value.Inactive == 0) //only draw the active tracks.
                      {
                         CvBlob b = blobs[pair.Value.BlobLabel];
-                        Bgr color = detector.MeanColor(b, frame);
+                        Bgr color = detector.MeanColor(b, frame.ToImage<Bgr, Byte>());
                         result.Draw(pair.Key.ToString(), pair.Value.BoundingBox.Location, CvEnum.FontFace.HersheySimplex, 0.5, color);
                         result.Draw(pair.Value.BoundingBox, color, 2);
-                        
-                        using (MemStorage stor = new MemStorage())
-                        {
-                           Contour<Point> contour = b.GetContour(stor);
-                           result.Draw(contour, new Bgr(0, 0, 255), 1);
-                        }
+                        Point[] contour = b.GetContour();
+                        result.Draw(contour, new Bgr(0, 0, 255), 1);
                      }
                   }
-                  viewer.Image = frame.ConcateVertical(gray.Convert<Bgr, Byte>().ConcateHorizontal(result));
+
+                  viewer.Image = frame.ToImage<Bgr, Byte>().ConcateVertical(fgMask.ToImage<Bgr, Byte>().ConcateHorizontal(result));
                }
             };
             capture.Start();
             viewer.ShowDialog();
          }
-      }*/
+      }
 
       /*
       public void TestPyrLK()

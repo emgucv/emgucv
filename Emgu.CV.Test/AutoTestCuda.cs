@@ -824,7 +824,7 @@ namespace Emgu.CV.Test
             using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors)) //initialization of GPU code might took longer time.
             {
                stopwatch.Reset(); stopwatch.Start();
-               Cuda.BFMatcher hammingMatcher = new Cuda.BFMatcher(DistanceType.Hamming);
+               CudaBFMatcher hammingMatcher = new CudaBFMatcher(DistanceType.Hamming);
 
                //BFMatcher hammingMatcher = new BFMatcher(BFMatcher.DistanceType.Hamming, modelDescriptors);
                int k = 2;

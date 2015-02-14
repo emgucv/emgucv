@@ -91,13 +91,15 @@ namespace Emgu.CV.Cvb
       /// <summary>
       /// Get the contour that defines the blob
       /// </summary>
-      /// <param name="storage">The memory storage when the resulting contour will be allocated</param>
       /// <returns>The contour of the blob</returns>
-      public Contour<Point> GetContour(MemStorage storage)
+      public Point[] GetContour()
       {
-         Contour<Point> contour = new Contour<Point>(storage);
-         cvbCvBlobGetContour(_ptr, contour);
-         return contour;
+         using (MemStorage storage = new MemStorage())
+         {
+            Contour<Point> contour = new Contour<Point>(storage);
+            cvbCvBlobGetContour(_ptr, contour);
+            return contour.ToArray();
+         }
       }
 
       /// <summary>

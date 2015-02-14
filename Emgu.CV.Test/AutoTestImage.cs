@@ -7,11 +7,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
@@ -23,6 +25,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 
 #if NETFX_CORE
+using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
@@ -674,6 +677,43 @@ namespace Emgu.CV.Test
          File.Delete(filename);
 
          return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
+      }
+#endif
+
+#if (NETFX_CORE)
+
+      public static Image<Bgr, Byte> WritableBitmapToImage(WriteableBitmap bmp0)
+      {
+         byte[] data = new byte[bmp0.PixelWidth * bmp0.PixelHeight * 4];
+         bmp0.PixelBuffer.CopyTo(data);
+         GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         try
+         {
+            using (
+               Image<Bgra, Byte> image = new Image<Bgra, byte>(bmp0.PixelWidth, bmp0.PixelHeight, bmp0.PixelWidth * 4,
+                  dataHandle.AddrOfPinnedObject()))
+            {
+               return image.Convert<Bgr, Byte>();
+            }
+         }
+         finally
+         {
+            dataHandle.Free();
+         }
+      }
+         
+      [TestAttribute]
+      public void TestBitmapConversion()
+      {
+
+         Stopwatch watch = Stopwatch.StartNew();
+         Image<Bgr, Byte> image0 = new Image<Bgr, byte>(1200, 1080);
+         image0.SetRandNormal(new MCvScalar(120, 120, 120), new MCvScalar(50, 50, 50) );
+         WriteableBitmap bmp = image0.Mat.ToWritableBitmap();
+         Image<Bgr, Byte> image1 = WritableBitmapToImage(bmp);
+         watch.Stop();
+         
+         Assert.IsTrue(image0.Equals(image1));
       }
 #endif
 

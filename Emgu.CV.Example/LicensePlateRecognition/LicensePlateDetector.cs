@@ -36,13 +36,14 @@ namespace LicensePlateRecognition
       public LicensePlateDetector(String dataPath)
       {
          //create OCR engine
-         _ocr = new Tesseract(dataPath, "eng", Tesseract.OcrEngineMode.OemTesseractCubeCombined);
+         _ocr = new Tesseract(dataPath, "eng", OcrEngineMode.TesseractCubeCombined);
          _ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
       }
 
+      /*
       /// <summary>
       /// Compute the white pixel mask for the given image. 
-      /// A white pixel is a pixel where:  satuation &lt; 40 AND value &gt; 200
+      /// A white pixel is a pixel where:  saturation &lt; 40 AND value &gt; 200
       /// </summary>
       /// <param name="image">The color image to find white mask from</param>
       /// <returns>The white pixel mask</returns>
@@ -69,7 +70,7 @@ namespace LicensePlateRecognition
             }
             return channels[0];
          }
-      }
+      }*/
 
       /// <summary>
       /// Detect license plate from the given image
