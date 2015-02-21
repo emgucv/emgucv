@@ -61,14 +61,12 @@ void cudaMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint
    minLoc->x = minimunLoc.x; minLoc->y = minimunLoc.y;
 }
 
-void cudaMeanStdDev(cv::_InputArray* mtx, CvScalar* mean, CvScalar* stddev, cv::cuda::GpuMat* buffer)
+void cudaMeanStdDev(cv::_InputArray* mtx, CvScalar* mean, CvScalar* stddev)
 {
    cv::Scalar meanVal, stdDevVal;
-   if (buffer)
-      cv::cuda::meanStdDev(*mtx, meanVal, stdDevVal, *buffer);
-   else
-      cv::cuda::meanStdDev(*mtx, meanVal, stdDevVal);
-
+   
+   cv::cuda::meanStdDev(*mtx, meanVal, stdDevVal);
+   
    memcpy(mean->val, meanVal.val, sizeof(double)*4);
    memcpy(stddev->val, stdDevVal.val, sizeof(double)*4);
 }
@@ -83,8 +81,7 @@ double cudaNorm(cv::_InputArray* src1, cv::_InputArray* src2, int normType)
 
 int cudaCountNonZero(cv::_InputArray* src)
 {
-   cv::cuda::GpuMat buf;
-   return cv::cuda::countNonZero(*src, buf);
+   return cv::cuda::countNonZero(*src);
 }
 
 void cudaReduce(cv::_InputArray* mtx, cv::_OutputArray* vec, int dim, int reduceOp, int dType, cv::cuda::Stream* stream)
@@ -199,16 +196,14 @@ void cudaCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, in
    cv::cuda::copyMakeBorder(*src, *dst, top, bottom, left, right, gpuBorderType, *value, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaIntegral(cv::_InputArray* src, cv::_OutputArray* sum, cv::cuda::GpuMat* buffer, cv::cuda::Stream* stream)
+void cudaIntegral(cv::_InputArray* src, cv::_OutputArray* sum, cv::cuda::Stream* stream)
 {
-   CV_Assert(!stream || buffer);
-   cv::cuda::integralBuffered(*src, *sum, *buffer, stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::integral(*src, *sum, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaSqrIntegral(cv::_InputArray* src, cv::_OutputArray* sqrSum, cv::cuda::GpuMat* buffer,  cv::cuda::Stream* stream)
+void cudaSqrIntegral(cv::_InputArray* src, cv::_OutputArray* sqrSum,  cv::cuda::Stream* stream)
 {
-   CV_Assert(!stream || buffer);
-   cv::cuda::sqrIntegral(*src, *sqrSum, *buffer, stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::sqrIntegral(*src, *sqrSum, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaDft(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dftSize, int flags, cv::cuda::Stream* stream)

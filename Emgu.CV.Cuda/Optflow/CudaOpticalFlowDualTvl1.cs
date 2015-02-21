@@ -11,29 +11,21 @@ using Emgu.Util;
 namespace Emgu.CV.Cuda
 {
    /// <summary>
-   /// Farneback optical flow
+   /// DualTvl1 optical flow
    /// </summary>
-   public class CudaOpticalFlowDualTvl1 : UnmanagedObject
+   public class CudaOpticalFlowDualTvl1 : UnmanagedObject, IDenseOpticalFlow
    {
+      private IntPtr _denseFlow;
+   
       /// <summary>
-      /// 
+      /// Initializes a new instance of the <see cref="CudaOpticalFlowDualTvl1"/> class.
       /// </summary>
-      public CudaOpticalFlowDualTvl1()
+      public CudaOpticalFlowDualTvl1(
+         double tau, double lambda, double theta, int nscales, int warps,
+         double epsilon, int iterations, double scaleStep, double gamma, 
+         bool useInitialFlow)
       {
-         _ptr = CudaInvoke.cudaOpticalFlowDualTvl1Create();
-      }
-
-      /// <summary>
-      /// Compute the optical flow.
-      /// </summary>
-      /// <param name="frame0">Source frame</param>
-      /// <param name="frame1">Frame to track (with the same size as <paramref name="frame0"/>)</param>
-      /// <param name="u">Flow horizontal component (along x axis)</param>
-      /// <param name="v">Flow vertical component (along y axis)</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Compute(GpuMat frame0, GpuMat frame1, GpuMat u, GpuMat v)
-      {
-         CudaInvoke.cudaOpticalFlowDualTvl1Compute(_ptr, frame0, frame1, u, v);
+         _ptr = CudaInvoke.cudaOpticalFlowDualTvl1Create(tau, lambda, theta, nscales, warps, epsilon, iterations, scaleStep, gamma, useInitialFlow, ref _denseFlow);
       }
 
       /// <summary>
@@ -41,19 +33,31 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.cudaOpticalFlowDualTvl1Release(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+         {
+            CudaInvoke.cudaOpticalFlowDualTvl1Release(ref _ptr);
+            _denseFlow = IntPtr.Zero;
+         }
+      }
+
+      IntPtr IDenseOpticalFlow.DenseOpticalFlowPtr
+      {
+         get { return _denseFlow;  }
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaOpticalFlowDualTvl1Create();
+      internal static extern IntPtr cudaOpticalFlowDualTvl1Create(
+         double tau, double lambda, double theta, int nscales, int warps,
+         double epsilon, int iterations, double scaleStep, double gamma, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool useInitialFlow,
+         ref IntPtr denseFlow);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaOpticalFlowDualTvl1Release(ref IntPtr flow);
 
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaOpticalFlowDualTvl1Compute(IntPtr flow, IntPtr frame0, IntPtr frame1, IntPtr u, IntPtr v);
    }
 }

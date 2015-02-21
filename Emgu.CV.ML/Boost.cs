@@ -57,8 +57,9 @@ namespace Emgu.CV.ML
             int maxDepth = 1,
             bool useSurrogates = false, Mat priors = null)
          {
+            IntPtr priorsPtr = (priors == null ? IntPtr.Zero : priors.Ptr);
             _ptr = MlInvoke.CvBoostParamsCreate(boostType, weakCount, weightTrimRate, maxDepth, useSurrogates,
-               priors ?? IntPtr.Zero);
+               priorsPtr);
          }
 
          /// <summary>

@@ -13,8 +13,10 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Farneback optical flow
    /// </summary>
-   public class CudaFarnebackOpticalFlow : UnmanagedObject
+   public class CudaFarnebackOpticalFlow : UnmanagedObject, IDenseOpticalFlow
    {
+      private IntPtr _denseFlow;
+
       /// <summary>
       /// 
       /// </summary>
@@ -36,20 +38,7 @@ namespace Emgu.CV.Cuda
          double polySigma = 1.1,
          int flags = 0)
       {
-         _ptr = CudaInvoke.cudaFarnebackOpticalFlowCreate(numLevels, pyrScale, fastPyramids, winSize, numIters, polyN, polySigma, flags);
-      }
-
-      /// <summary>
-      /// Compute the optical flow.
-      /// </summary>
-      /// <param name="frame0">Source frame</param>
-      /// <param name="frame1">Frame to track (with the same size as <paramref name="frame0"/>)</param>
-      /// <param name="u">Flow horizontal component (along x axis)</param>
-      /// <param name="v">Flow vertical component (along y axis)</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Compute(GpuMat frame0, GpuMat frame1, GpuMat u, GpuMat v, Stream stream = null)
-      {
-         CudaInvoke.cudaFarnebackOpticalFlowCompute(_ptr, frame0, frame1, u, v, stream);
+         _ptr = CudaInvoke.cudaFarnebackOpticalFlowCreate(numLevels, pyrScale, fastPyramids, winSize, numIters, polyN, polySigma, flags, ref _denseFlow);
       }
 
       /// <summary>
@@ -57,7 +46,16 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.cudaFarnebackOpticalFlowRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+         {
+            CudaInvoke.cudaFarnebackOpticalFlowRelease(ref _ptr);
+            _denseFlow = IntPtr.Zero;
+         }
+      }
+
+      IntPtr IDenseOpticalFlow.DenseOpticalFlowPtr
+      {
+         get { return _denseFlow; }
       }
    }
 
@@ -73,12 +71,11 @@ namespace Emgu.CV.Cuda
          int numIters,
          int polyN,
          double polySigma,
-         int flags);
+         int flags,
+         ref IntPtr denseFlow);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaFarnebackOpticalFlowRelease(ref IntPtr flow);
 
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaFarnebackOpticalFlowCompute(IntPtr flow, IntPtr frame0, IntPtr frame1, IntPtr u, IntPtr v, IntPtr stream);
    }
 }

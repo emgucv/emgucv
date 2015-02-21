@@ -41,11 +41,12 @@ namespace Emgu.CV.ML
             bool use1SERule = true, bool truncatePrunedTree = true,
             Mat priors = null)
          {
+            IntPtr priorsPtr = (priors == null ? IntPtr.Zero : priors.Ptr);
             _ptr = MlInvoke.CvDTreeParamsCreate(
                maxDepth, minSampleCount,
                regressionAccuracy, useSurrogates,
                maxCategories, CvFolds, use1SERule, truncatePrunedTree,
-               priors ?? IntPtr.Zero);
+               priorsPtr);
          }
 
          /// <summary>

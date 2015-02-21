@@ -654,14 +654,13 @@ namespace Emgu.CV.Cuda
       /// <param name="mtx">The GpuMat. Supports only CV_8UC1 type</param>
       /// <param name="mean">The mean value</param>
       /// <param name="stddev">The standard deviation</param>
-      /// <param name="buffer">The buffer for the processing. Can be null if you do not wants to specify such.</param>
-      public static void MeanStdDev(IInputArray mtx, ref MCvScalar mean, ref MCvScalar stddev, GpuMat buffer = null)
+      public static void MeanStdDev(IInputArray mtx, ref MCvScalar mean, ref MCvScalar stddev)
       {
          using (InputArray iaMtx = mtx.GetInputArray())
-            cudaMeanStdDev(iaMtx, ref mean, ref stddev, buffer);
+            cudaMeanStdDev(iaMtx, ref mean, ref stddev);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaMeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev, IntPtr buffer);
+      private static extern void cudaMeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
 
       /// <summary>
       /// Computes norm of the difference between two GpuMats
@@ -1093,32 +1092,30 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>
       /// <param name="sum">The sum GpuMat, supports only CV_32S source type, but will contain unsigned int values</param>
-      /// <param name="buffer">The buffer GpuMat, supports only CV32F source type.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Integral(IInputArray src, IOutputArray sum, GpuMat buffer, Stream stream = null)
+      public static void Integral(IInputArray src, IOutputArray sum, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaSum = sum.GetOutputArray())
-            cudaIntegral(iaSrc, oaSum, buffer, stream);
+            cudaIntegral(iaSrc, oaSum, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaIntegral(IntPtr src, IntPtr sum, IntPtr buffer, IntPtr stream);
+      private static extern void cudaIntegral(IntPtr src, IntPtr sum, IntPtr stream);
 
       /// <summary>
       /// Computes squared integral image 
       /// </summary>
       /// <param name="src">The source GpuMat, supports only CV_8UC1 source type</param>
       /// <param name="sqsum">The sqsum GpuMat, supports only CV32F source type.</param>
-      /// <param name="buffer">The buffer GpuMat, supports only CV32F source type.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void SqrIntegral(IInputArray src, IOutputArray sqsum, GpuMat buffer, Stream stream = null)
+      public static void SqrIntegral(IInputArray src, IOutputArray sqsum, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaSqsum = sqsum.GetOutputArray())
-            cudaSqrIntegral(iaSrc, oaSqsum, buffer, stream);
+            cudaSqrIntegral(iaSrc, oaSqsum, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaSqrIntegral(IntPtr src, IntPtr sqsum, IntPtr buffer, IntPtr stream);
+      private static extern void cudaSqrIntegral(IntPtr src, IntPtr sqsum, IntPtr stream);
 
       /// <summary>
       /// Performs a forward or inverse discrete Fourier transform (1D or 2D) of floating point matrix.
@@ -1151,22 +1148,21 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The source GpuMat. Supports CV_8UC1, CV_16UC1 and CV_16SC1 types.</param>
       /// <param name="hist">Histogram with evenly distributed bins. A GpuMat&lt;int&gt; type.</param>
-      /// <param name="buffer">The GpuMat Buffer</param>
-      /// <param name="histSize">The size of histogram (number of levels)</param>
+      /// <param name="histSize">The size of histogram (number of levels)</param>                                                                                                                                                                                                                                                             
       /// <param name="lowerLevel">The lower level</param>
       /// <param name="upperLevel">The upper level</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       /// <returns>Histogram with evenly distributed bins</returns>
-      public static void HistEven(IInputArray src, IOutputArray hist, IInputOutputArray buffer, int histSize, int lowerLevel, int upperLevel, Stream stream = null)
+      public static void HistEven(IInputArray src, IOutputArray hist, int histSize, int lowerLevel, int upperLevel, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaHist = hist.GetOutputArray())
-         using (InputOutputArray ioaBuffer = buffer == null ? InputOutputArray.GetEmpty() : buffer.GetInputOutputArray())
-            cudaHistEven(iaSrc, oaHist, ioaBuffer, histSize, lowerLevel, upperLevel, stream);
+            cudaHistEven(iaSrc, oaHist, histSize, lowerLevel, upperLevel, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaHistEven(IntPtr src, IntPtr hist, IntPtr buffer, int histSize, int lowerLevel, int upperLevel, IntPtr stream);
+      private static extern void cudaHistEven(IntPtr src, IntPtr hist, int histSize, int lowerLevel, int upperLevel, IntPtr stream);
 
+      /*
       /// <summary>
       /// Draw the optical flow needle map
       /// </summary>
@@ -1180,6 +1176,7 @@ namespace Emgu.CV.Cuda
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaCreateOpticalFlowNeedleMap(IntPtr u, IntPtr v, IntPtr vertex, IntPtr colors);
+      */
 
       /// <summary>
       /// Performs linear blending of two images.

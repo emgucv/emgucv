@@ -42,16 +42,9 @@ void cudaMeanShiftSegmentation(cv::_InputArray* src, cv::_OutputArray* dst, int 
    cv::cuda::meanShiftSegmentation(*src, *dst, sp, sr, minsize, *criteria);
 }
 
-void cudaHistEven(cv::_InputArray* src, cv::_OutputArray* hist, cv::_InputOutputArray* buffer, int histSize, int lowerLevel, int upperLevel, cv::cuda::Stream* stream)
+void cudaHistEven(cv::_InputArray* src, cv::_OutputArray* hist, int histSize, int lowerLevel, int upperLevel, cv::cuda::Stream* stream)
 {
-   if (buffer)
-   {
-      cv::cuda::histEven(*src, *hist, *buffer, histSize, lowerLevel, upperLevel, stream ? *stream : cv::cuda::Stream::Null());
-   } else
-   {
-      cv::cuda::GpuMat tmp;
-      cv::cuda::histEven(*src, *hist, tmp, histSize, lowerLevel, upperLevel, stream ? *stream : cv::cuda::Stream::Null());
-   }
+   cv::cuda::histEven(*src, *hist, histSize, lowerLevel, upperLevel, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream)

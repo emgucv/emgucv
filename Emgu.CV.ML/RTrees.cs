@@ -48,10 +48,11 @@ namespace Emgu.CV.ML
             {
                termCrit = new MCvTermCriteria(50, 0.1);
             }
+            IntPtr priorsPtr = (priors == null ? IntPtr.Zero : priors.Ptr);
             _ptr =
                MlInvoke.CvRTParamsCreate(
                   maxDepth, minSampleCount, regressionAccuracy, useSurrogates,
-                  maxCategories, priors ?? IntPtr.Zero, calcVarImportance, nactiveVars, ref termCrit
+                  maxCategories, priorsPtr, calcVarImportance, nactiveVars, ref termCrit
             );
          }
 

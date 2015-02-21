@@ -13,8 +13,10 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Brox optical flow
    /// </summary>
-   public class CudaBroxOpticalFlow : UnmanagedObject
+   public class CudaBroxOpticalFlow : UnmanagedObject, IDenseOpticalFlow
    {
+      private IntPtr _denseFlow;
+
       /// <summary>
       /// Create the Brox optical flow solver
       /// </summary>
@@ -24,22 +26,9 @@ namespace Emgu.CV.Cuda
       /// <param name="innerIterations">Number of lagged non-linearity iterations (inner loop)</param>
       /// <param name="outerIterations">Number of warping iterations (number of pyramid levels)</param>
       /// <param name="solverIterations">Number of linear system solver iterations</param>
-      public CudaBroxOpticalFlow(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations)
+      public CudaBroxOpticalFlow(double alpha = 0.197, double gamma = 50, double scaleFactor = 0.8, int innerIterations = 5, int outerIterations = 150, int solverIterations = 10)
       {
-         _ptr = CudaInvoke.cudaBroxOpticalFlowCreate(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations);
-      }
-
-      /// <summary>
-      /// Compute the optical flow.
-      /// </summary>
-      /// <param name="frame0">Source frame</param>
-      /// <param name="frame1">Frame to track (with the same size as <paramref name="frame0"/>)</param>
-      /// <param name="u">Flow horizontal component (along x axis)</param>
-      /// <param name="v">Flow vertical component (along y axis)</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Compute(GpuMat frame0, GpuMat frame1, GpuMat u, GpuMat v, Stream stream = null)
-      {
-         CudaInvoke.cudaBroxOpticalFlowCompute(_ptr, frame0, frame1, u, v, stream);
+         _ptr = CudaInvoke.cudaBroxOpticalFlowCreate(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations, ref _denseFlow);
       }
 
       /// <summary>
@@ -47,19 +36,25 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.cudaBroxOpticalFlowRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+         {
+            CudaInvoke.cudaBroxOpticalFlowRelease(ref _ptr);
+            _denseFlow = IntPtr.Zero;
+         }
+      }
+
+      IntPtr IDenseOpticalFlow.DenseOpticalFlowPtr
+      {
+         get { return _denseFlow; }
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cudaBroxOpticalFlowCreate(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations);
+      internal extern static IntPtr cudaBroxOpticalFlowCreate(double alpha, double gamma, double scaleFactor, int innerIterations, int outerIterations, int solverIterations, ref IntPtr denseFlow);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaBroxOpticalFlowRelease(ref IntPtr flow);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaBroxOpticalFlowCompute(IntPtr flow, IntPtr frame0, IntPtr frame1, IntPtr u, IntPtr v, IntPtr stream);
    }
 }

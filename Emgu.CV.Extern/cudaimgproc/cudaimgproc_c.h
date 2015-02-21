@@ -34,7 +34,7 @@ CVAPI(void) cudaMeanShiftProc(cv::_InputArray* src, cv::_OutputArray* dstr, cv::
 CVAPI(void) cudaMeanShiftSegmentation(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr, int minsize,
    CvTermCriteria* criteria);
 
-CVAPI(void) cudaHistEven(cv::_InputArray* src, cv::_OutputArray* hist, cv::_InputOutputArray* buffer, int histSize, int lowerLevel, int upperLevel, cv::cuda::Stream* stream);
+CVAPI(void) cudaHistEven(cv::_InputArray* src, cv::_OutputArray* hist, int histSize, int lowerLevel, int upperLevel, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream);
 

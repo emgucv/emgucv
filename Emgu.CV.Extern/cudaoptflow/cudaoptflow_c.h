@@ -17,38 +17,56 @@
 
 //----------------------------------------------------------------------------
 //
+//  DenseOpticalFlow 
+//
+//----------------------------------------------------------------------------
+
+CVAPI(void) cudaDenseOpticalFlowCalc(
+   cv::cuda::DenseOpticalFlow* opticalFlow, 
+   cv::_InputArray* I0, 
+   cv::_InputArray* I1, 
+   cv::_InputOutputArray* flow, 
+   cv::cuda::Stream* stream);
+
+//----------------------------------------------------------------------------
+//
+//  SparseOpticalFlow 
+//
+//----------------------------------------------------------------------------
+
+CVAPI(void) cudaSparseOpticalFlowCalc(
+   cv::cuda::SparseOpticalFlow* opticalFlow,
+   cv::_InputArray* prevImg, cv::_InputArray* nextImg,
+   cv::_InputArray* prevPts, cv::_InputOutputArray* nextPts,
+   cv::_OutputArray* status,
+   cv::_OutputArray* err,
+   cv::cuda::Stream* stream);
+
+//----------------------------------------------------------------------------
+//
 //  CudaBroxOpticalFlow 
 //
 //----------------------------------------------------------------------------
 
-CVAPI(cv::cuda::BroxOpticalFlow*) cudaBroxOpticalFlowCreate(float alpha, float gamma, float scaleFactor, int innerIterations, int outerIterations, int solverIterations);
-
-CVAPI(void) cudaBroxOpticalFlowCompute(cv::cuda::BroxOpticalFlow* flow, cv::cuda::GpuMat* frame0, const cv::cuda::GpuMat* frame1, cv::cuda::GpuMat* u, cv::cuda::GpuMat* v, cv::cuda::Stream* stream);
+CVAPI(cv::cuda::BroxOpticalFlow*) cudaBroxOpticalFlowCreate(double alpha, double gamma, double scaleFactor, int innerIterations, int outerIterations, int solverIterations, cv::cuda::DenseOpticalFlow** denseFlow);
 
 CVAPI(void) cudaBroxOpticalFlowRelease(cv::cuda::BroxOpticalFlow** flow);
 
 //----------------------------------------------------------------------------
 //
-//  CudaPyrLKOpticalFlow
+//  CudaDensePyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::PyrLKOpticalFlow*) cudaPyrLKOpticalFlowCreate(emgu::size winSize, int maxLevel, int iters, bool useInitialFlow);
-CVAPI(void) cudaPyrLKOpticalFlowSparse(
-   cv::cuda::PyrLKOpticalFlow* flow, 
-   const cv::cuda::GpuMat* prevImg, 
-   const cv::cuda::GpuMat* nextImg, 
-   const cv::cuda::GpuMat* prevPts, 
-   cv::cuda::GpuMat* nextPts,
-   cv::cuda::GpuMat* status, 
-   cv::cuda::GpuMat* err);
-CVAPI(void) cudaPyrLKOpticalFlowDense(
-   cv::cuda::PyrLKOpticalFlow* flow, 
-   const cv::cuda::GpuMat* prevImg, 
-   const cv::cuda::GpuMat* nextImg,
-   cv::cuda::GpuMat* u, 
-   cv::cuda::GpuMat* v, 
-   cv::cuda::GpuMat* err);
-CVAPI(void) cudaPyrLKOpticalFlowRelease(cv::cuda::PyrLKOpticalFlow** flow);
+CVAPI(cv::cuda::DensePyrLKOpticalFlow *) cudaDensePyrLKOpticalFlowCreate(CvSize* winSize, int maxLevel, int iters, bool useInitialFlow, cv::cuda::DenseOpticalFlow** denseFlow);
+CVAPI(void) cudaDensePyrLKOpticalFlowRelease(cv::cuda::DensePyrLKOpticalFlow** flow);
+
+//----------------------------------------------------------------------------
+//
+//  CudaSparsePyrLKOpticalFlow
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::cuda::SparsePyrLKOpticalFlow *) cudaSparsePyrLKOpticalFlowCreate(CvSize* winSize, int maxLevel, int iters, bool useInitialFlow, cv::cuda::SparseOpticalFlow** sparseFlow);
+CVAPI(void) cudaSparsePyrLKOpticalFlowRelease(cv::cuda::SparsePyrLKOpticalFlow** flow);
 
 //----------------------------------------------------------------------------
 //
@@ -63,9 +81,8 @@ CVAPI(cv::cuda::FarnebackOpticalFlow*) cudaFarnebackOpticalFlowCreate(
    int numIters,
    int polyN,
    double polySigma,
-   int flags);
-
-CVAPI(void) cudaFarnebackOpticalFlowCompute(cv::cuda::FarnebackOpticalFlow* flow, const cv::cuda::GpuMat* frame0, const cv::cuda::GpuMat* frame1, cv::cuda::GpuMat* u, cv::cuda::GpuMat* v, cv::cuda::Stream* stream);
+   int flags,
+   cv::cuda::DenseOpticalFlow** denseFlow);
 
 CVAPI(void) cudaFarnebackOpticalFlowRelease(cv::cuda::FarnebackOpticalFlow** flow);
 
@@ -74,17 +91,19 @@ CVAPI(void) cudaFarnebackOpticalFlowRelease(cv::cuda::FarnebackOpticalFlow** flo
 //  CudaOpticalFlowDualTvl1
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::OpticalFlowDual_TVL1_CUDA*) cudaOpticalFlowDualTvl1Create();
+CVAPI(cv::cuda::OpticalFlowDual_TVL1*) cudaOpticalFlowDualTvl1Create(
+   double tau, double lambda, double theta, int nscales, int warps,
+   double epsilon, int iterations, double scaleStep, double gamma, bool useInitialFlow,
+   cv::cuda::DenseOpticalFlow** denseFlow);
 
-CVAPI(void) cudaOpticalFlowDualTvl1Compute(cv::cuda::OpticalFlowDual_TVL1_CUDA* flow, const cv::cuda::GpuMat* frame0, const cv::cuda::GpuMat* frame1, cv::cuda::GpuMat* u, cv::cuda::GpuMat* v);
+CVAPI(void) cudaOpticalFlowDualTvl1Release(cv::cuda::OpticalFlowDual_TVL1** flow);
 
-CVAPI(void) cudaOpticalFlowDualTvl1Release(cv::cuda::OpticalFlowDual_TVL1_CUDA** flow);
-
+/*
 //----------------------------------------------------------------------------
 //
 //  Utilities
 //
 //----------------------------------------------------------------------------
 CVAPI(void) cudaCreateOpticalFlowNeedleMap(const cv::cuda::GpuMat* u, const cv::cuda::GpuMat* v, cv::cuda::GpuMat* vertex, cv::cuda::GpuMat* colors);
-
+*/
 #endif

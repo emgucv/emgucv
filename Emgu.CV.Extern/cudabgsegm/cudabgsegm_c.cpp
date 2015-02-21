@@ -50,6 +50,7 @@ void cudaBackgroundSubtractorMOG2Release(cv::cuda::BackgroundSubtractorMOG2** mo
    *mog = 0;
 }
 
+/*
 //----------------------------------------------------------------------------
 //
 //  Cuda BackgroundSubtractorGMG
@@ -70,6 +71,7 @@ void cudaBackgroundSubtractorGMGRelease(cv::cuda::BackgroundSubtractorGMG** gmg)
    delete *gmg;
    *gmg = 0;
 }
+
 
 //----------------------------------------------------------------------------
 //
@@ -120,4 +122,4 @@ void cudaBackgroundSubtractorFGDRelease(cv::cuda::BackgroundSubtractorFGD** fgd)
 {
    delete *fgd;
    *fgd=0;
-}
+}*/

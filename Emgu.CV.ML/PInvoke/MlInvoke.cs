@@ -280,8 +280,8 @@ namespace Emgu.CV.ML
          IntPtr parameters,
          ref IntPtr statModel,
          ref IntPtr algorithm);
+
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal static extern IntPtr CvEMTrainStartWithM(
          IntPtr samples,
          IntPtr probs0,

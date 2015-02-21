@@ -64,8 +64,10 @@ namespace Emgu.CV.ML
             {
                termCrit = new MCvTermCriteria(1000, 1.0e-7);
             }
+
+            IntPtr classWeightsPtr = (classWeights == null ? IntPtr.Zero : classWeights.Ptr);
             _ptr = MlInvoke.CvSVMParamsCreate(
-                     svmType, kernelType, degree, gamma, coef0, c, nu, p, classWeights ?? IntPtr.Zero,
+                     svmType, kernelType, degree, gamma, coef0, c, nu, p, classWeightsPtr,
                      ref termCrit);
          }
 
