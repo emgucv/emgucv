@@ -30,9 +30,9 @@ void cveCudaDescriptorMatcherKnnMatch(
    cv::cuda::DescriptorMatcher* matcher,
    cv::_InputArray* queryDescs, cv::_InputArray* trainDescs,
    std::vector< std::vector< cv::DMatch > >* matches,
-   int k, cv::_OutputArray* masks, bool compactResult)
+   int k, cv::_InputArray* masks, bool compactResult)
 {
-   matcher->knnMatch(*queryDescs, *trainDescs, *matches, k, masks ? *masks : std::vector<cv::cuda::GpuMat>(), compactResult);
+   matcher->knnMatch(*queryDescs, *trainDescs, *matches, k, masks ? *masks : (cv::_InputArray) cv::noArray(), compactResult);
 }
 
 //----------------------------------------------------------------------------

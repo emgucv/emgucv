@@ -6,7 +6,6 @@
 
 #include "objdetect_c.h"
 
-//#include "stdio.h"
 void CvHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq) 
 {   
    std::vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();  

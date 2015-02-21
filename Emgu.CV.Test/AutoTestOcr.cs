@@ -47,7 +47,7 @@ namespace Emgu.CV.Test
                   if (baseLine.HasValue)
                   {
                      CvInvoke.Line(rotatedImg, baseLine.Value.P1, baseLine.Value.P2, new MCvScalar(255));
-                     Emgu.CV.UI.ImageViewer.Show(rotatedImg);       
+                     //Emgu.CV.UI.ImageViewer.Show(rotatedImg);       
                   }
                }
 

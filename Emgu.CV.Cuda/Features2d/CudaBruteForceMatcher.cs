@@ -30,7 +30,7 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
          using (InputArray iaTrainDescriptors = trainDescriptors.GetInputArray() )
-         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         using (InputArray iaMask = (mask == null ? InputArray.GetEmpty() : mask.GetInputArray()))
             CudaInvoke.cveCudaDescriptorMatcherKnnMatch(_ptr, iaQueryDescriptors, iaTrainDescriptors, matches, k, iaMask, compactResult);
       }
 

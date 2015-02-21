@@ -292,7 +292,7 @@ SET(CMAKE_SOURCE_DIR ${CMAKE_OLD_SOURCE_DIR})
 SET (OPENCV_MODULE_NAME_CANDIDATES
   core imgproc video flann ml imgcodecs videoio highgui objdetect features2d calib3d
   cudalegacy cudaarithm cudawarping cudafilters cudaimgproc cudaoptflow 
-  cudastereo cudabgsegm cudafeatures2d cudacodec cudaobjectdetect
+  cudastereo cudabgsegm cudafeatures2d cudacodec cudaobjdetect
   photo superres  
   videostab shape
   cudev  

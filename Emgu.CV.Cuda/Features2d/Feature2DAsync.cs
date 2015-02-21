@@ -11,7 +11,7 @@ using System.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Cuda
 {
    /// <summary>
    /// The feature 2D base class
@@ -86,11 +86,9 @@ namespace Emgu.CV.Features2D
             CudaInvoke.cveCudaFeature2dAsyncConvert(feature2DAsync.Feature2DAsyncPtr, iaGpuKeypoints, keypoints);
          }
       }
-
    }
 
-
-   internal partial class CudaInvoke
+   public partial class CudaInvoke
    {
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

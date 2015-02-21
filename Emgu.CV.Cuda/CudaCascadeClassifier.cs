@@ -12,7 +12,8 @@ using System.Text;
 using Emgu.CV;
  using Emgu.CV.CvEnum;
  using Emgu.CV.Structure;
-using Emgu.Util;
+ using Emgu.CV.Util;
+ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
@@ -43,23 +44,22 @@ namespace Emgu.CV.Cuda
       /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles.
       /// </summary>
       /// <param name="image">The image where search will take place</param>
-      /// <param name="scaleFactor">The factor by which the search window is scaled between the subsequent scans, for example, 1.1 means increasing window by 10%. Use 1.2 for default.</param>
-      /// <param name="minNeighbors">Minimum number (minus 1) of neighbor rectangles that makes up an object. All the groups of a smaller number of rectangles than min_neighbors-1 are rejected. If min_neighbors is 0, the function does not any grouping at all and returns all the detected candidate rectangles, which may be useful if the user wants to apply a customized grouping procedure. Use 4 for default.</param>
-      /// <param name="minSize">Minimum window size. By default, it is set to the size of samples the classifier has been trained on (~20x20 for face detection). Use Size.Empty for default</param>
       /// <returns>An array of regions for the detected objects</returns>
-      public Rectangle[] DetectMultiScale(GpuMat image, double scaleFactor = 1.2, int minNeighbors = 4, Size minSize = new Size())
+      public void DetectMultiScale(IInputArray image, IOutputArray objects, Stream stream = null)
       {
-         try
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaObjects = objects.GetOutputArray())
+            CudaInvoke.cudaCascadeClassifierDetectMultiScale(_ptr, iaImage, oaObjects,
+               stream == null ? IntPtr.Zero : stream.Ptr);
+      }
+
+      public Rectangle[] Convert(IOutputArray objects)
+      {
+         using (OutputArray oaObjects = objects.GetOutputArray())
+         using (VectorOfRect vr = new VectorOfRect())
          {
-            Seq<Rectangle> regions = new Seq<Rectangle>(_stor);
-            int count = CudaInvoke.cudaCascadeClassifierDetectMultiScale(_ptr, image, _buffer, scaleFactor, minNeighbors, minSize, regions);
-            if (count == 0) return new Rectangle[0];
-            Rectangle[] result = regions.ToArray();
-            return result;
-         }
-         finally
-         {
-            _stor.Clear();
+            CudaInvoke.cudaCascadeClassifierConvert(_ptr, oaObjects, vr);
+            return vr.ToArray();
          }
       }
 
@@ -75,11 +75,34 @@ namespace Emgu.CV.Cuda
             _stor.Dispose();
       }
 
-      /*
-      public static void test()
+      public double ScaleFactor
       {
-         Trace.WriteLine(Marshal.SizeOf(typeof(Rectangle)) == 4 * sizeof(int));
-      }*/
+         get { return CudaInvoke.cudaCascadeClassifierGetScaleFactor(_ptr); }
+         set
+         {
+            CudaInvoke.cudaCascadeClassifierSetScaleFactor(_ptr, value);
+         }
+      }
+
+      public int MinNeighbors
+      {
+         get { return CudaInvoke.cudaCascadeClassifierGetMinNeighbors(_ptr); }
+         set {  CudaInvoke.cudaCascadeClassifierSetMinNeighbors(_ptr, value);}
+      }
+
+      public Size MinObjectSize
+      {
+         get
+         {
+            Size s = new Size();
+            CudaInvoke.cudaCascadeClassifierGetMinObjectSize(_ptr, ref s);
+            return s;
+         }
+         set
+         {
+            CudaInvoke.cudaCascadeClassifierSetMinObjectSize(_ptr, ref value);
+         }
+      }
    }
 
    public static partial class CudaInvoke
@@ -91,6 +114,27 @@ namespace Emgu.CV.Cuda
       internal extern static void cudaCascadeClassifierRelease(ref IntPtr classified);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cudaCascadeClassifierDetectMultiScale(IntPtr classifier, IntPtr image, IntPtr objectsBuf, double scaleFactor, int minNeighbors, Size minSize, IntPtr resultSeq);
+      internal extern static int cudaCascadeClassifierDetectMultiScale(IntPtr classifier, IntPtr image, IntPtr objects, IntPtr stream);
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cudaCascadeClassifierConvert(IntPtr classifier, IntPtr gpuObjects, IntPtr objects);
+
+           [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static double cudaCascadeClassifierGetScaleFactor(IntPtr classifier);
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cudaCascadeClassifierSetScaleFactor(IntPtr classifier, double scaleFactor);
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static int cudaCascadeClassifierGetMinNeighbors(IntPtr classifier);
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cudaCascadeClassifierSetMinNeighbors(IntPtr classifier, int minNeighbours);
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cudaCascadeClassifierGetMinObjectSize(IntPtr classifier, ref Size minObjectSize);
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cudaCascadeClassifierSetMinObjectSize(IntPtr classifier, ref Size minObjectSize);
    }
 }

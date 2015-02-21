@@ -1163,7 +1163,7 @@ namespace Emgu.CV.Test
          GpuMat oldImage = null;
          GpuMat currentImage = null;
          using (CudaGoodFeaturesToTrackDetector detector = new CudaGoodFeaturesToTrackDetector(DepthType.Cv8U, 1, MAX_CORNERS, 0.05, 3.0, 3, false, 0.04))
-         using (CudaPyrLKOpticalFlow flow = new CudaPyrLKOpticalFlow(new Size(21, 21), 3, 30, false))
+         using (CudaDensePyrLKOpticalFlow flow = new CudaDensePyrLKOpticalFlow(new Size(21, 21), 3, 30, false))
          {
             Application.Idle += new EventHandler(delegate(object sender, EventArgs e)
             {
@@ -1183,15 +1183,15 @@ namespace Emgu.CV.Test
                   currentImage = new GpuMat();
                   CudaInvoke.CvtColor(tmp, currentImage, ColorConversion.Bgr2Gray);
                }
-               using (GpuMat u = new GpuMat())
-               using (GpuMat v = new GpuMat())
+               using (GpuMat f = new GpuMat())
+               
                using (GpuMat vertex = new GpuMat())
                using (GpuMat colors = new GpuMat())
                using(GpuMat corners = new GpuMat())
                {
-                  flow.Dense(oldImage, currentImage, u, v);
+                  flow.Calc(oldImage, currentImage, f);
 
-                  CudaInvoke.CreateOpticalFlowNeedleMap(u, v, vertex, colors);
+                  //CudaInvoke.CreateOpticalFlowNeedleMap(u, v, vertex, colors);
                   detector.Detect(oldImage, corners, null);
                   //GpuMat<float> detector.Detect(oldImage, null);
                   /*

@@ -40,9 +40,13 @@ namespace Emgu.CV.Cuda
          int firstLevel = 0, 
          int WTK_A = 2, 
          ORBDetector.ScoreType scoreType = ORBDetector.ScoreType.Harris, 
-         int patchSize = 31)
+         int patchSize = 31,
+         int fastThreshold = 20, 
+         bool blurForDescriptor = false)
       {
-         _ptr = CudaInvoke.cveCudaORBCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, ref _feature2D, ref _feature2DAsyncPtr);
+         _ptr = CudaInvoke.cveCudaORBCreate(
+            numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, blurForDescriptor,
+            ref _feature2D, ref _feature2DAsyncPtr);
       }
 
 
@@ -63,7 +67,20 @@ namespace Emgu.CV.Cuda
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cveCudaORBCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, ORBDetector.ScoreType scoreType, int patchSize, ref IntPtr feature2D, ref IntPtr feature2DAsync);
+      internal static extern IntPtr cveCudaORBCreate(
+         int numberOfFeatures, 
+         float scaleFactor, 
+         int nLevels, 
+         int edgeThreshold, 
+         int firstLevel, 
+         int WTA_K, 
+         ORBDetector.ScoreType scoreType, 
+         int patchSize, 
+         int fastThreshold, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool blurForDescriptor, 
+         ref IntPtr feature2D, 
+         ref IntPtr feature2DAsync);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveCudaORBRelease(ref IntPtr detector);

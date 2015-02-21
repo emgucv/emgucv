@@ -31,7 +31,7 @@ CVAPI(void) cveCudaDescriptorMatcherKnnMatch(
                                   cv::cuda::DescriptorMatcher* matcher,
                                   cv::_InputArray* queryDescs, cv::_InputArray* trainDescs,
                                   std::vector< std::vector< cv::DMatch > >* matches, 
-                                  int k, cv::_OutputArray* masks, bool compactResult);
+                                  int k, cv::_InputArray* masks, bool compactResult);
    
 //----------------------------------------------------------------------------
 //
@@ -82,7 +82,7 @@ CVAPI(void) cveCudaFastFeatureDetectorRelease(cv::cuda::FastFeatureDetector** de
 //  CudaORB
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::ORB*) cveCudaORBCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, cv::Feature2D** feature2D, cv::cuda::Feature2DAsync** feature2dAsync);
+CVAPI(cv::cuda::ORB*) cveCudaORBCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, bool blurForDescriptor, cv::Feature2D** feature2D, cv::cuda::Feature2DAsync** feature2dAsync);
 
 CVAPI(void) cveCudaORBRelease(cv::cuda::ORB** detector);
 

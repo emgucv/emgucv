@@ -110,55 +110,6 @@ CVAPI(void) gpuMatReshape(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, in
 
 CVAPI(cv::cuda::GpuMat*) gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* rect);
 
-
-/*
-//----------------------------------------------------------------------------
-//
-//  CudaCascadeClassifier
-//
-//----------------------------------------------------------------------------
-CVAPI(cv::cuda::CascadeClassifier_CUDA*) cudaCascadeClassifierCreate(cv::String* filename);
-
-CVAPI(void) cudaCascadeClassifierRelease(cv::cuda::CascadeClassifier_CUDA** classifier);
-
-CVAPI(int) cudaCascadeClassifierDetectMultiScale(cv::cuda::CascadeClassifier_CUDA* classifier, const cv::cuda::GpuMat* image, cv::cuda::GpuMat* objectsBuf, double scaleFactor, int minNeighbors, CvSize minSize, CvSeq* results);
-
-//----------------------------------------------------------------------------
-//
-//  CudaHOGDescriptor
-//
-//----------------------------------------------------------------------------
-CVAPI(void) cudaHOGDescriptorGetPeopleDetector64x128(std::vector<float>* vector);
-
-CVAPI(void) cudaHOGDescriptorGetPeopleDetector48x96(std::vector<float>* vector);
-
-CVAPI(cv::cuda::HOGDescriptor*) cudaHOGDescriptorCreateDefault();
-
-CVAPI(cv::cuda::HOGDescriptor*) cudaHOGDescriptorCreate(
-   emgu::size* _winSize,
-   emgu::size* _blockSize,
-   emgu::size* _blockStride,
-   emgu::size* _cellSize,
-   int _nbins,
-   double _winSigma,
-   double _L2HysThreshold,
-   bool _gammaCorrection,
-   int _nlevels);
-
-CVAPI(void) cudaHOGSetSVMDetector(cv::cuda::HOGDescriptor* descriptor, std::vector<float>* vector);
-
-CVAPI(void) cudaHOGDescriptorRelease(cv::cuda::HOGDescriptor** descriptor);
-
-CVAPI(void) cudaHOGDescriptorDetectMultiScale(
-   cv::cuda::HOGDescriptor* descriptor,
-   cv::cuda::GpuMat* img,
-   std::vector<cv::Rect>* foundLocations,
-   double hitThreshold,
-   emgu::size* winStride,
-   emgu::size* padding,
-   double scale,
-   int groupThreshold);
-   */
 //----------------------------------------------------------------------------
 //
 //  Stream

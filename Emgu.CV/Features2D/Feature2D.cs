@@ -71,6 +71,7 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          _feature2D = IntPtr.Zero;
+         _algorithm = IntPtr.Zero;
       }
 
       /// <summary>

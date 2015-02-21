@@ -51,7 +51,7 @@ namespace Emgu.CV.Test
             int counter = 0;
             Stopwatch watch = Stopwatch.StartNew();
             using (GpuMat img1 = new GpuMat(3000, 2000, DepthType.Cv8U, 3))
-            using (GpuMat img2 = new GpuMat())
+            using (GpuMat img2 = new GpuMat(3000, 2000, DepthType.Cv8U, 3))
             using (GpuMat img3 = new GpuMat())
             using (Stream stream = new Stream())
             using (GpuMat mat1 = new GpuMat())
@@ -392,17 +392,21 @@ namespace Emgu.CV.Test
       {
          if (CudaInvoke.HasCuda)
          {
-            using (CudaHOGDescriptor hog = new CudaHOGDescriptor())
+            using (CudaHOG hog = new CudaHOG(new Size(64, 128), new Size(16, 16), new Size(8, 8), new Size(8,8), 9))
+            using (Mat pedestrianDescriptor = hog.GetDefaultPeopleDetector())
             using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
             {
-               float[] pedestrianDescriptor = CudaHOGDescriptor.GetDefaultPeopleDetector();
                hog.SetSVMDetector(pedestrianDescriptor);
-
+               //hog.GroupThreshold = 0;
                Stopwatch watch = Stopwatch.StartNew();
                Rectangle[] rects;
                using (CudaImage<Bgr, Byte> CudaImage = new CudaImage<Bgr, byte>(image))
                using (CudaImage<Bgra, Byte> gpuBgra = CudaImage.Convert<Bgra, Byte>())
-                  rects = hog.DetectMultiScale(gpuBgra);
+               using (VectorOfRect vRect = new VectorOfRect())
+               {
+                  hog.DetectMultiScale(gpuBgra, vRect);
+                  rects = vRect.ToArray();
+               }
                watch.Stop();
 
                Assert.AreEqual(1, rects.Length);
@@ -421,29 +425,27 @@ namespace Emgu.CV.Test
       {
          if (CudaInvoke.HasCuda)
          {
-            using (CudaHOGDescriptor hog = new CudaHOGDescriptor(
+            using (CudaHOG hog = new CudaHOG(
                new Size (48, 96), //winSize
                new Size(16, 16), //blockSize
                new Size(8,8), //blockStride
-               new Size(8, 8), //cellSize
-               9, //nbins
-               -1, //winSigma
-               0.2, //L2HysThreshold
-               true, //gammaCorrection
-               64 //nLevels
+               new Size(8, 8)  //cellSize
                ))
+            using (Mat pedestrianDescriptor = hog.GetDefaultPeopleDetector())
             using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
             {
-               float[] pedestrianDescriptor = CudaHOGDescriptor.GetPeopleDetector48x96();
+               //float[] pedestrianDescriptor = CudaHOGDescriptor.GetPeopleDetector48x96();
                hog.SetSVMDetector(pedestrianDescriptor);
 
                Stopwatch watch = Stopwatch.StartNew();
                Rectangle[] rects;
                using (GpuMat cudaImage = new GpuMat(image))
                using (GpuMat gpuBgra = new GpuMat())
+               using (VectorOfRect vRect = new VectorOfRect())
                {
                   CudaInvoke.CvtColor(cudaImage, gpuBgra, ColorConversion.Bgr2Bgra);
-                  rects = hog.DetectMultiScale(gpuBgra);
+                  hog.DetectMultiScale(gpuBgra, vRect);
+                  rects = vRect.ToArray();
                }
                watch.Stop();
 
@@ -537,7 +539,7 @@ namespace Emgu.CV.Test
          using (Image<Bgr, Byte> img = new Image<Bgr, byte>("box.png"))
          using (CudaImage<Bgr, Byte> CudaImage = new CudaImage<Bgr, byte>(img))
          using (CudaImage<Gray, Byte> grayCudaImage = CudaImage.Convert<Gray, Byte>())
-         using (CudaFastFeatureDetector featureDetector = new CudaFastFeatureDetector(10, true, FastDetector.DetectorType.Type5_8, 1000 ))
+         using (CudaFastFeatureDetector featureDetector = new CudaFastFeatureDetector(10, true, FastDetector.DetectorType.Type9_16, 1000 ))
          using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
          using (GpuMat keyPointsMat = new GpuMat())
          {
@@ -570,7 +572,7 @@ namespace Emgu.CV.Test
          using (GpuMat descriptorMat = new GpuMat())
          {
             CudaInvoke.CvtColor(cudaImage, grayCudaImage, ColorConversion.Bgr2Gray);
-            detector.ComputeAsync(grayCudaImage, keyPointMat, descriptorMat);
+            detector.DetectAsync(grayCudaImage, keyPointMat);
             detector.Convert(keyPointMat, kpts);
             //detector.ComputeRaw(grayCudaImage, null, keyPointMat, descriptorMat);
             //detector.DownloadKeypoints(keyPointMat, kpts);
@@ -724,17 +726,15 @@ namespace Emgu.CV.Test
             return;
          Image<Gray, Byte> prevImg, currImg;
          AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
-         Image<Gray, Single> flowx = new Image<Gray, float>(prevImg.Size);
-         Image<Gray, Single> flowy = new Image<Gray, float>(prevImg.Size);
-         CudaPyrLKOpticalFlow flow = new CudaPyrLKOpticalFlow(new Size(21, 21), 3, 30, false);
+         Mat flow = new Mat();
+         CudaDensePyrLKOpticalFlow opticalflow = new CudaDensePyrLKOpticalFlow(new Size(21, 21), 3, 30, false);
          using (CudaImage<Gray, Byte> prevGpu = new CudaImage<Gray, byte>(prevImg))
          using (CudaImage<Gray, byte> currGpu = new CudaImage<Gray, byte>(currImg))
-         using (CudaImage<Gray, float> flowxGpu = new CudaImage<Gray, float>(prevGpu.Size))
-         using (CudaImage<Gray, float> flowyGpu = new CudaImage<Gray, float>(prevGpu.Size))
+         using (GpuMat flowGpu = new GpuMat())
          {
-            flow.Dense(prevGpu, currGpu, flowxGpu, flowyGpu);
-            flowxGpu.Download(flowx);
-            flowyGpu.Download(flowy);
+            opticalflow.Calc(prevGpu, currGpu, flowGpu);
+
+            flowGpu.Download(flow);
          }
          
       }

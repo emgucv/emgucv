@@ -375,7 +375,7 @@ ENDIF()
 
 ############################### xfeatures2d START ##############################
 IF(BUILD_opencv_xfeatures2d)
-  IF( (NOT WITH_CUDA) OR (NOT (TARGET opencv_cuda)) )
+  IF( (NOT WITH_CUDA) OR (NOT (TARGET opencv_cudaimgproc)) )
     FILE(GLOB xfeatures2d_srcs_excludes "xfeatures2d/nonfree_gpu_c.cpp")
     LIST(REMOVE_ITEM extern_srcs ${xfeatures2d_srcs_excludes})
     FILE(GLOB xfeatures2d_hdrs_excludes "xfeatures2d/nonfree_gpu_c.h")

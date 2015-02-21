@@ -19,7 +19,7 @@ namespace Emgu.CV.Cuda
 
    public static partial class CudaInvoke
    {
-      public static void SparseOpticalFlowCalc(this ISparseOpticalFlow sparseFlow, IInputArray prevImg, IInputArray nextImg, IInputArray prevPts, IInputOutputArray nextPts, IOutputArray status = null, IOutputArray err = null, Stream stream = null)
+      public static void Calc(this ISparseOpticalFlow sparseFlow, IInputArray prevImg, IInputArray nextImg, IInputArray prevPts, IInputOutputArray nextPts, IOutputArray status = null, IOutputArray err = null, Stream stream = null)
       {
          using (InputArray iaPrevImg = prevImg.GetInputArray())
          using (InputArray iaNextImg = nextImg.GetInputArray())
