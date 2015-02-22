@@ -21,8 +21,45 @@ using System.Threading.Tasks;
 
 namespace Emgu.CV
 {
+   public partial class Image<TColor, TDepth>
+      : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>>
+      where TColor : struct, IColor
+      where TDepth : new()
+   {
+      public WriteableBitmap ToWriteableBitmap()
+      {
+         using (Mat m = this.Mat)
+         {
+            return m.ToWritableBitmap();
+         }
+      }
+   }
+
    public partial class Mat
    {
+      public Mat(WriteableBitmap writeableBitmap)
+         : this(writeableBitmap.PixelHeight, writeableBitmap.PixelWidth, DepthType.Cv8U, 3)
+      {
+         byte[] data = new byte[writeableBitmap.PixelWidth * writeableBitmap.PixelHeight * 4];
+         writeableBitmap.PixelBuffer.CopyTo(data);
+         
+         GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         try
+         {
+            using (
+               Image<Bgra, Byte> image = new Image<Bgra, byte>(writeableBitmap.PixelWidth, writeableBitmap.PixelHeight, writeableBitmap.PixelWidth * 4,
+                  dataHandle.AddrOfPinnedObject()))
+            {
+               CvInvoke.CvtColor(image, this, ColorConversion.Bgra2Bgr);
+            }
+         }
+         finally
+         {
+            dataHandle.Free();
+         }
+
+      }
+
       public WriteableBitmap ToWritableBitmap()
       {
          Size size = Size;

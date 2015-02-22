@@ -121,7 +121,7 @@ namespace WindowsStoreCameraApp
       }
 
       private bool _isRendering = false;
-
+      private byte[] _buffer;
       private async void OnPreviewFrameAvailable(IImageSize imageSize)
       {
          if (!_isRendering)
@@ -133,27 +133,30 @@ namespace WindowsStoreCameraApp
                   CoreDispatcherPriority.High,
                   () =>
                   {
-                     byte[] buffer = new byte[_writeableBitmap.PixelWidth * _writeableBitmap.PixelHeight * 4];
-                     using (Stream s = _writeableBitmap.PixelBuffer.AsStream())
+                     int bufferSize = _writeableBitmap.PixelWidth * _writeableBitmap.PixelHeight * 4;
+                     if (_buffer == null || _buffer.Length != bufferSize)
+                        _buffer = new byte[bufferSize];
+                     IBuffer pixelBuffer = _writeableBitmap.PixelBuffer;
+                     pixelBuffer.CopyTo(_buffer);
+
+                     GCHandle handle = GCHandle.Alloc(_buffer, GCHandleType.Pinned);
+                     using (
+                        Mat m = new Mat(_writeableBitmap.PixelHeight, _writeableBitmap.PixelWidth,
+                           DepthType.Cv8U, 4,
+                           handle.AddrOfPinnedObject(), _writeableBitmap.PixelWidth * 4))
+                     using (Mat gray = new Mat())
+                     using (Mat canny = new Mat())
                      {
-                        s.Read(buffer, 0, buffer.Length);
-                        
-                        GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-                        using (
-                           Mat m = new Mat(_writeableBitmap.PixelHeight, _writeableBitmap.PixelWidth,
-                              DepthType.Cv8U, 4,
-                              handle.AddrOfPinnedObject(), _writeableBitmap.PixelWidth*4))
-                        using (Mat gray = new Mat())
-                        using (Mat canny = new Mat())
-                        {
-                           CvInvoke.CvtColor(m, gray, ColorConversion.Bgr2Gray);
-                           CvInvoke.Canny(gray, canny, 40, 60);
-                           CvInvoke.CvtColor(canny, m, ColorConversion.Gray2Bgra);
-                        }
-                        
+                        CvInvoke.CvtColor(m, gray, ColorConversion.Bgr2Gray);
+                        CvInvoke.Canny(gray, canny, 40, 60);
+                        CvInvoke.CvtColor(canny, m, ColorConversion.Gray2Bgra);
                      }
-                     using (Stream s = _writeableBitmap.PixelBuffer.AsStream())
-                        s.Write(buffer, 0, buffer.Length);
+                     handle.Free();
+                     
+                     using (Stream s = pixelBuffer.AsStream())
+                     {
+                        s.Write(_buffer, 0, _buffer.Length);
+                     }
                     
                      _writeableBitmap.Invalidate();
                   });

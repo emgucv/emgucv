@@ -299,7 +299,8 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
   stitching latentsvm
   )
-  
+
+
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
 IF(TARGET opencv_${OPENCV_MODULE_NAME})
   LIST(APPEND OPENCV_MODULE_NAMES ${OPENCV_MODULE_NAME})
@@ -439,6 +440,41 @@ SET(ENTRYPOINT_MODULES_STRING "public static List<String> OpenCVModuleList = new
         ExternLibrary
       };
 ")
+
+IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+  SET (MSBUILD_IMPORT "  <PropertyGroup>
+  <OpenCVBinaryDir>..\\..\\bin</OpenCVBinaryDir>
+  </PropertyGroup>
+  <Choose>
+  <When Condition=\" '$(Platform)'=='ARM' \">
+  <ItemGroup>")  
+  FOREACH(OPENCV_LIBRARY_OUTPUT_NAME ${OPENCV_LIBRARY_OUTPUT_NAMES})
+    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
+  <Content Include=\"\$(OpenCVBinaryDir)\\arm_phone\\${OPENCV_LIBRARY_OUTPUT_NAME}.dll\">
+    <Link>${OPENCV_LIBRARY_OUTPUT_NAME}.dll</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>")
+  ENDFOREACH()
+  SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}
+  </ItemGroup>
+  </When>
+  <When Condition=\" '$(Platform)'=='x86' \">
+    <ItemGroup>")
+  FOREACH(OPENCV_LIBRARY_OUTPUT_NAME ${OPENCV_LIBRARY_OUTPUT_NAMES})
+    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
+  <Content Include=\"\$(OpenCVBinaryDir)\\x86_phone\\${OPENCV_LIBRARY_OUTPUT_NAME}.dll\">
+    <Link>${OPENCV_LIBRARY_OUTPUT_NAME}.dll</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>")
+  ENDFOREACH()
+  SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}
+    </ItemGroup>
+  </When>
+  </Choose>")
+  
+  SET(MSBUILD_IMPORT_FILENAME ${CMAKE_CURRENT_SOURCE_DIR}/import.csproj)
+  FILE(WRITE ${MSBUILD_IMPORT_FILENAME} ${MSBUILD_IMPORT})
+ENDIF()
 
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
 LIST(APPEND OPENCV_LIBRARY_OUTPUT_NAMES ${CVEXTERN_OUTPUT_NAME})

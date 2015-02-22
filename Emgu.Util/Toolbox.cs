@@ -437,7 +437,8 @@ namespace Emgu.Util
             if (handler == IntPtr.Zero)
             {
                int error = WindowsPhoneGetLastError();
-               System.Diagnostics.Debug.WriteLine(String.Format("Error loading {0}: code {1}", dllname, error));
+               
+               System.Diagnostics.Debug.WriteLine(String.Format("Error loading {0}: error code {1}", dllname, error));
             }
             return handler;
          } else

@@ -9,8 +9,6 @@
 #define EMGU_CORE_C_H
 
 #include "opencv2/core/core_c.h"
-//#include "opencv2/core/ocl.hpp"
-//#include "opencv2/imgproc/imgproc.hpp"
 #include "emgu_c.h"
 
 CVAPI(cv::String*) cveStringCreate();
@@ -175,4 +173,7 @@ CVAPI(int) cveFileNodeReadInt(cv::FileNode* node, int defaultInt);
 CVAPI(double) cveFileNodeReadDouble(cv::FileNode* node, double defaultDouble);
 CVAPI(float) cveFileNodeReadFloat(cv::FileNode* node, float defaultFloat);
 CVAPI(void) cveFileNodeRelease(cv::FileNode** node);
+
+
+
 #endif
