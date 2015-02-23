@@ -154,10 +154,7 @@ int cvMatGetChannels(cv::Mat* mat)
 {
    return mat->channels();
 }
-int cvMatGetDepth(cv::Mat* mat)
-{
-   return mat->depth();
-}
+
 uchar* cvMatGetDataPointer(cv::Mat* mat)
 {
    return mat->data;
@@ -165,11 +162,6 @@ uchar* cvMatGetDataPointer(cv::Mat* mat)
 size_t cvMatGetStep(cv::Mat* mat)
 {
    return mat->step;
-}
-
-bool cvMatIsEmpty(cv::Mat* mat)
-{
-   return mat->empty();
 }
 
 void cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask)

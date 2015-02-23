@@ -724,12 +724,12 @@ namespace Emgu.CV.Test
          }
       }
 #endif
-
+      /*
       [Test]
       public void TestAlgorithmGetList()
       {
          String[] list = AlgorithmExtensions.AlgorithmList;
-      }
+      }*/
 
       [Test]
       public void TestMorphEx()
@@ -1107,7 +1107,7 @@ namespace Emgu.CV.Test
 
          Stopwatch watch = Stopwatch.StartNew();
          OpticalFlowDualTVL1 flow = new OpticalFlowDualTVL1();
-         string[] paramNames = flow.GetParamNames();
+         //string[] paramNames = flow.GetParamNames();
          flow.Calc(prevImg, currImg, result);
 
          watch.Stop();

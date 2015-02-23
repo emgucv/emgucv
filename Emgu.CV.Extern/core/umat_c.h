@@ -22,8 +22,7 @@ CVAPI(emgu::size) cvUMatGetSize(cv::UMat* mat);
 CVAPI(void) cvUMatCopyTo(cv::UMat* mat, cv::_OutputArray* m, cv::_InputArray* mask);
 CVAPI(int) cvUMatGetElementSize(cv::UMat* mat);
 CVAPI(int) cvUMatGetChannels(cv::UMat* mat);
-CVAPI(int) cvUMatGetDepth(cv::UMat* mat);
-CVAPI(bool) cvUMatIsEmpty(cv::UMat* mat);
+
 CVAPI(void) cvUMatSetTo(cv::UMat* mat, cv::_InputArray* value, cv::_InputArray* mask);
 CVAPI(cv::Mat*) cvUMatGetMat(cv::UMat* mat, int access);
 CVAPI(void) cvUMatConvertTo( cv::UMat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta );

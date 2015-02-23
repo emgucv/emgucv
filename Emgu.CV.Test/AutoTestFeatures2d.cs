@@ -159,7 +159,7 @@ namespace Emgu.CV.Test
       public void TestORB()
       {
          ORBDetector orb = new ORBDetector(700);
-         String[] parameters = orb.GetParamNames();
+         //String[] parameters = orb.GetParamNames();
          EmguAssert.IsTrue(TestFeature2DTracker(orb, orb), "Unable to find homography matrix");
       }
 
@@ -168,7 +168,7 @@ namespace Emgu.CV.Test
       {
          FastDetector fast = new FastDetector(10, true);
          Freak freak = new Freak(true, true, 22.0f, 4);
-         ParamDef[] parameters = freak.GetParams();
+         //ParamDef[] parameters = freak.GetParams();
          //int nOctaves = freak.GetInt("nbOctave");
          EmguAssert.IsTrue(TestFeature2DTracker(fast, freak), "Unable to find homography matrix");
       }

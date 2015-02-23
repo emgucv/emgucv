@@ -37,7 +37,7 @@ namespace Emgu.CV.ML
          /// </summary>
          Gentle=3
       }
-
+      /*
       /// <summary>
       /// Boosting training parameters.
       /// </summary>
@@ -69,7 +69,7 @@ namespace Emgu.CV.ML
          {
             MlInvoke.CvBoostParamsRelease(ref _ptr);
          }
-      }
+      }*/
 
       private IntPtr _statModel;
       private IntPtr _algorithm;
@@ -77,9 +77,9 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Create a default Boost classifier
       /// </summary>
-      public Boost(Params p)
+      public Boost()
       {
-         _ptr = MlInvoke.CvBoostCreate(p, ref _statModel, ref _algorithm);
+         _ptr = MlInvoke.cveBoostCreate(ref _statModel, ref _algorithm);
       }
 
       /// <summary>
@@ -87,7 +87,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvBoostRelease(ref _ptr);
+         MlInvoke.cveBoostRelease(ref _ptr);
          _statModel = IntPtr.Zero;
          _algorithm = IntPtr.Zero;
       }

@@ -31,10 +31,10 @@ CVAPI(cv::Mat*) cveArrToMat(CvArr* cvArray, bool copyData, bool allowND, int coi
 CVAPI(IplImage*) cveMatToIplImage(cv::Mat* mat);
 CVAPI(int) cvMatGetElementSize(cv::Mat* mat);
 CVAPI(int) cvMatGetChannels(cv::Mat* mat);
-CVAPI(int) cvMatGetDepth(cv::Mat* mat);
+
 CVAPI(uchar*) cvMatGetDataPointer(cv::Mat* mat);
 CVAPI(size_t) cvMatGetStep(cv::Mat* mat);
-CVAPI(bool) cvMatIsEmpty(cv::Mat* mat);
+
 CVAPI(void) cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask);
 CVAPI(cv::UMat*) cvMatGetUMat(cv::Mat* mat, int access);
 CVAPI(void) cvMatConvertTo( cv::Mat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta );

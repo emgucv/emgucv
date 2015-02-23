@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -22,6 +23,7 @@ namespace Emgu.CV
       IntPtr AlgorithmPtr { get; }
    }
 
+   /*
    /// <summary>
    /// The type of the parameter
    /// </summary>
@@ -286,5 +288,5 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveAlgorithmGetList(IntPtr names);
 
-   }
+   }*/
 }

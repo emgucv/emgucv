@@ -440,6 +440,7 @@ bool cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputAr
 }
 
 //Algorithm 
+/*
 int cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name)
 {
    if (algorithm->info() == 0)
@@ -505,7 +506,7 @@ void cveAlgorithmGetParamNames(cv::Algorithm* algorithm, std::vector<cv::String>
 void cveAlgorithmGetList(std::vector< cv::String >* names)
 {
    cv::Algorithm::getList( *names );
-}
+}*/
 
 bool cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2)
 {

@@ -66,16 +66,6 @@ int cvUMatGetChannels(cv::UMat* mat)
    return mat->channels();
 }
 
-int cvUMatGetDepth(cv::UMat* mat)
-{
-   return mat->depth();
-}
-
-bool cvUMatIsEmpty(cv::UMat* mat)
-{
-   return mat->empty();
-}
-
 void cvUMatSetTo(cv::UMat* mat, cv::_InputArray* value, cv::_InputArray* mask)
 {
    mat->setTo(*value, mask ? *mask : (cv::InputArray) cv::noArray());

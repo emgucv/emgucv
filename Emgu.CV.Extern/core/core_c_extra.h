@@ -129,6 +129,7 @@ CVAPI(double) cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2);
 CVAPI(bool) cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputArray* eigenVectors);
 
 //Algorithm 
+/*
 CVAPI(int) cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name);
 CVAPI(void) cveAlgorithmSetInt(cv::Algorithm* algorithm, cv::String* name, int value);
 
@@ -143,7 +144,7 @@ CVAPI(void) cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::Stri
 CVAPI(void) cveAlgorithmGetParamNames(cv::Algorithm* algorithm, std::vector<cv::String>* names);
 
 CVAPI(void) cveAlgorithmGetList(std::vector< cv::String >* names);
-
+*/
 CVAPI(bool) cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2);
 
 CVAPI(void) cveRandn(cv::_InputOutputArray* dst, cv::_InputArray* mean, cv::_InputArray* stddev);

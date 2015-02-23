@@ -27,7 +27,7 @@ namespace Emgu.CV
 #if !NETFX_CORE
    [Serializable]
 #endif
-   public class UMat : MatDataAllocator, IImage, IEquatable<UMat>
+   public partial class UMat : MatDataAllocator, IImage, IEquatable<UMat>
 #if !NETFX_CORE
 , ISerializable
 #endif
@@ -204,17 +204,6 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Depth type
-      /// </summary>
-      public CvEnum.DepthType Depth
-      {
-         get
-         {
-            return (CvEnum.DepthType)UMatInvoke.cvUMatGetDepth(_ptr);
-         }
-      }
-
-      /// <summary>
       /// The size of the elements in this matrix
       /// </summary>
       public int ElementSize
@@ -259,17 +248,6 @@ namespace Emgu.CV
          using (ScalarArray ia = new ScalarArray(value))
          {
             SetTo(ia, mask);
-         }
-      }
-
-      /// <summary>
-      /// Indicates if this cv::UMat is empty
-      /// </summary>
-      public bool IsEmpty
-      {
-         get
-         {
-            return UMatInvoke.cvUMatIsEmpty(_ptr);
          }
       }
 
@@ -610,13 +588,6 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cvUMatGetChannels(IntPtr mat);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cvUMatGetDepth(IntPtr mat);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal extern static bool cvUMatIsEmpty(IntPtr mat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvUMatCreateData(IntPtr mat, int row, int cols, int type);

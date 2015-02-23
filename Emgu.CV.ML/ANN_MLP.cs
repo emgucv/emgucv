@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Runtime.InteropServices;
 using Emgu.CV.ML.MlEnum;
 using Emgu.CV.ML.Structure;
 using Emgu.CV.Structure;
@@ -13,25 +14,61 @@ namespace Emgu.CV.ML
    /// <summary>
    /// Neural network
    /// </summary>
-   public class ANN_MLP : UnmanagedObject, IStatModel
+   public partial class ANN_MLP : UnmanagedObject, IStatModel
    {
+      /// <summary>
+      /// Possible activation functions
+      /// </summary>
+      public enum AnnMlpActivationFunction
+      {
+         /// <summary>
+         /// Identity
+         /// </summary>
+         Identity = 0,
+         /// <summary>
+         /// sigmoid symmetric
+         /// </summary>
+         SigmoidSym = 1,
+         /// <summary>
+         /// Gaussian
+         /// </summary>
+         Gaussian = 2
+      }
+
+      /// <summary>
+      /// Training method for ANN_MLP
+      /// </summary>
+      public enum AnnMlpTrainMethod
+      {
+         /// <summary>
+         /// Back-propagation algorithm
+         /// </summary>
+         Backprop = 0,
+         /// <summary>
+         /// Batch RPROP algorithm
+         /// </summary>
+         Rprop = 1
+      }
+
+
       private IntPtr _statModelPtr;
       private IntPtr _algorithmPtr;
 
       /// <summary>
       /// Create a neural network using the specific parameters
       /// </summary>
-      public ANN_MLP(Params p)
+      public ANN_MLP()
       {
-         _ptr = MlInvoke.CvANN_MLPCreate(p, ref _statModelPtr, ref _algorithmPtr);
+         _ptr = MlInvoke.cveANN_MLPCreate(ref _statModelPtr, ref _algorithmPtr);
       }
+
 
       /// <summary>
       /// Release the memory associated with this neural network
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvANN_MLPRelease(ref _ptr);
+         MlInvoke.cveANN_MLPRelease(ref _ptr);
          _statModelPtr = IntPtr.Zero;
          _algorithmPtr = IntPtr.Zero;
       }
@@ -46,37 +83,47 @@ namespace Emgu.CV.ML
          get { return _algorithmPtr; }
       }
 
-      /// <summary>
-      /// Parameters of the MLP and of the training algorithm. 
-      /// </summary>
-      public class Params : UnmanagedObject
+      public void SetLayerSizes(IInputArray layerSizes)
       {
-         /// <summary>
-         /// Initializes a new instance of the <see cref="Params"/> class.
-         /// </summary>
-         /// <param name="layerSizes">Integer vector specifying the number of neurons in each layer including the input and output layers.</param>
-         /// <param name="activateFunc">Parameter specifying the activation function for each neuron.</param>
-         /// <param name="fparam1">The first parameter of activation function.</param>
-         /// <param name="fparam2">The second parameter of the activation function.</param>
-         /// <param name="termCrit">Termination criteria of the training algorithm. You can specify the maximum number of iterations (maxCount) and/or how much the error could change between the iterations to make the algorithm continue (epsilon).</param>
-         /// <param name="trainMethod">Training method of the MLP.</param>
-         /// <param name="param1">Parameter of the training method. It is rp_dw0 for RPROP and bp_dw_scale for BACKPROP.</param>
-         /// <param name="param2">Parameter of the training method. It is rp_dw_min for RPROP and bp_moment_scale for BACKPROP.</param>
-         public Params(
-            Mat layerSizes, AnnMlpActivationFunction activateFunc, double fparam1, double fparam2,
-            MCvTermCriteria termCrit, AnnMlpTrainMethod trainMethod, double param1, double param2)
-         {
-            _ptr = MlInvoke.CvANN_MLPParamsCreate(layerSizes, activateFunc, fparam1, fparam2, ref termCrit, trainMethod, param1,
-               param2);
-         }
-
-         /// <summary>
-         /// Release the unmanaged resources
-         /// </summary>
-         protected override void DisposeObject()
-         {
-            MlInvoke.CvANN_MLPParamsRelease(ref  _ptr);
-         }
+         using (InputArray iaLayerSizes = layerSizes.GetInputArray())
+            MlInvoke.cveANN_MLPSetLayerSizes(_ptr, iaLayerSizes);
       }
+
+      public void SetActivationFunction(ANN_MLP.AnnMlpActivationFunction function, double param1 = 0, double param2 = 0)
+      {
+         MlInvoke.cveANN_MLPSetActivationFunction(_ptr, function, param1, param2);
+      }
+
+      public void SetTrainMethod(ANN_MLP.AnnMlpTrainMethod method, double param1, double param2)
+      {
+         MlInvoke.cveANN_MLPSetTrainMethod(_ptr, method, param1, param2);
+      }
+   }
+
+   public static partial class MlInvoke
+   {
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveANN_MLPCreate(
+         ref IntPtr statModel,
+         ref IntPtr algorithm);
+
+      /// <summary>
+      /// Release the ANN_MLP model
+      /// </summary>
+      /// <param name="model">The ANN_MLP model to be released</param>
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveANN_MLPRelease(ref IntPtr model);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveANN_MLPSetLayerSizes(IntPtr model, IntPtr layerSizes);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveANN_MLPSetActivationFunction(IntPtr model, ANN_MLP.AnnMlpActivationFunction type, double param1, double param2);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveANN_MLPSetTrainMethod(IntPtr model, ANN_MLP.AnnMlpTrainMethod method, double param1, double param2);
+
+
    }
 }

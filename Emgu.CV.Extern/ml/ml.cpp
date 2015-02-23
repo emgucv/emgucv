@@ -84,10 +84,10 @@ float CvNormalBayesClassifierPredict(cv::ml::NormalBayesClassifier* classifier, 
 { return classifier->predict(_samples, results); }
 */
 //KNearest
-cv::ml::KNearest* CvKNearestCreate(int defaultK, bool isClassifier, cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
+cv::ml::KNearest* CvKNearestCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
 { 
-   cv::ml::KNearest::Params p(defaultK, isClassifier);
-   cv::Ptr<cv::ml::KNearest> ptr = cv::ml::KNearest::create(p);
+   //cv::ml::KNearest::Params p(defaultK, isClassifier);
+   cv::Ptr<cv::ml::KNearest> ptr = cv::ml::KNearest::create();
    ptr.addref();
    cv::ml::KNearest* r = ptr.get();
    *statModel = dynamic_cast<cv::ml::StatModel*>( r );
@@ -112,25 +112,18 @@ float CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int k, CvMa
 { return classifier->find_nearest(_samples, k, results, (const float**) neighbors, neighbor_responses, dist); }
 */
 //EM
-cv::ml::EM::Params* cveEmParamsCreate(int nclusters, int covMatType, CvTermCriteria* termcrit)
-{
-   return new cv::ml::EM::Params(nclusters, covMatType, *termcrit);
-}
-void cveEmParamsRelease(cv::ml::EM::Params** p)
-{
-   delete *p;
-   *p = 0;
-}
-cv::ml::EM* CvEMDefaultCreate(cv::ml::EM::Params* p, cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
+
+cv::ml::EM* CvEMDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
 { 
-   cv::Ptr<cv::ml::EM> ptr = cv::ml::EM::create(*p);
+   cv::Ptr<cv::ml::EM> ptr = cv::ml::EM::create();
    ptr.addref();
    cv::ml::EM* em = ptr.get();
    *statModel = dynamic_cast<cv::ml::StatModel*>( em );
    *algorithm = dynamic_cast<cv::Algorithm*>( em );
    return em;
 }
-cv::ml::EM* CvEMTrainStartWithE(
+void CvEMTrainE(
+   cv::ml::EM* model,
    cv::_InputArray* samples,
    cv::_InputArray* means0,
    cv::_InputArray* covs0,
@@ -138,45 +131,34 @@ cv::ml::EM* CvEMTrainStartWithE(
    cv::_OutputArray* logLikelihoods,
    cv::_OutputArray* labels,
    cv::_OutputArray* probs,
-   cv::ml::EM::Params* p, 
    cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
 {
-   cv::Ptr<cv::ml::EM> ptr = cv::ml::EM::train_startWithE(
+   model->trainE(
       *samples, 
       *means0, 
       covs0 ? *covs0 : (cv::InputArray) cv::noArray(),
       weights0 ? *weights0 : (cv::InputArray) cv::noArray(),
       logLikelihoods ? *logLikelihoods : (cv::OutputArray) cv::noArray(),
       labels ? *labels : (cv::OutputArray) cv::noArray(),
-      probs ? *probs : (cv::OutputArray) cv::noArray(),
-      *p);
-   ptr.addref();
-   cv::ml::EM* em = ptr.get();
-   *statModel = dynamic_cast<cv::ml::StatModel*>( em );
-   *algorithm = dynamic_cast<cv::Algorithm*>( em );
-   return em;
+      probs ? *probs : (cv::OutputArray) cv::noArray());
+   
+   
 }
-cv::ml::EM* CvEMTrainStartWithM(
+void CvEMTrainM(
+   cv::ml::EM* model,
    cv::_InputArray* samples,
    cv::_InputArray* probs0,
    cv::_OutputArray* logLikelihoods,
    cv::_OutputArray* labels,
    cv::_OutputArray* probs,
-   cv::ml::EM::Params* p, 
    cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
 {
-   cv::Ptr<cv::ml::EM> ptr = cv::ml::EM::train_startWithM(
+   model->trainM(
       *samples, 
       *probs,
       logLikelihoods ? *logLikelihoods : (cv::OutputArray) cv::noArray(),
       labels ? *labels : (cv::OutputArray) cv::noArray(),
-      probs ? *probs : (cv::OutputArray) cv::noArray(),
-      *p);
-   ptr.addref();
-   cv::ml::EM* em = ptr.get();
-   *statModel = (cv::ml::StatModel*) em;
-   *algorithm = (cv::Algorithm*) em;
-   return em;
+      probs ? *probs : (cv::OutputArray) cv::noArray());
 }
 void CvEMPredict(cv::ml::EM* model, cv::_InputArray* sample, CvPoint2D64f* result, cv::_OutputArray* probs)  
 { 
@@ -202,6 +184,7 @@ bool CvEMTrain(cv::EM* model, cv::_InputArray* samples, cv::_OutputArray* logLik
 */
 
 //SVM
+/*
 cv::ml::SVM::Params* CvSVMParamsCreate(
    int svmType, int kernelType, double degree, double gamma, double coef0,
    double con, double nu, double p, cv::Mat* classWeights, CvTermCriteria* termCrit)
@@ -212,11 +195,11 @@ void CvSVMParamsRelease(cv::ml::SVM::Params** p)
 {
    delete *p;
    *p = 0;
-}
+}*/
 
-cv::ml::SVM* CvSVMDefaultCreate(cv::ml::SVM::Params* p, cv::ml::StatModel** model, cv::Algorithm** algorithm) 
+cv::ml::SVM* CvSVMDefaultCreate(cv::ml::StatModel** model, cv::Algorithm** algorithm) 
 { 
-   cv::Ptr<cv::ml::SVM> ptr = cv::ml::SVM::create(*p);
+   cv::Ptr<cv::ml::SVM> ptr = cv::ml::SVM::create();
    ptr.addref();
    cv::ml::SVM* svm = ptr.get();
    *model = dynamic_cast<cv::ml::StatModel*>( svm );
@@ -259,100 +242,75 @@ CVAPI(void) CvSVMGetSupportVectors(cv::ml::SVM* model, cv::Mat* supportVectors)
 }
 
 //ANN_MLP
-cv::ml::ANN_MLP::Params* CvANN_MLPParamsCreate(
-   cv::Mat* layerSizes, int activateFunc, double fparam1, double fparam2,
-   CvTermCriteria* termCrit, int trainMethod, double param1, double param2)
-{
-   return new cv::ml::ANN_MLP::Params(*layerSizes, activateFunc, fparam1, fparam2, *termCrit, trainMethod, param1, param2);
-}
-void CvANN_MLPParamsRelease(cv::ml::ANN_MLP::Params** p)
-{
-   delete *p;
-   *p = 0;
-}
-cv::ml::ANN_MLP* CvANN_MLPCreate(cv::ml::ANN_MLP::Params* p, cv::ml::StatModel** model, cv::Algorithm** algorithm)
+//cv::ml::ANN_MLP::Params* CvANN_MLPParamsCreate(
+//   cv::Mat* layerSizes, int activateFunc, double fparam1, double fparam2,
+//   CvTermCriteria* termCrit, int trainMethod, double param1, double param2)
+//{
+//   return new cv::ml::ANN_MLP::Params(*layerSizes, activateFunc, fparam1, fparam2, *termCrit, trainMethod, param1, param2);
+//}
+//void CvANN_MLPParamsRelease(cv::ml::ANN_MLP::Params** p)
+//{
+//   delete *p;
+//   *p = 0;
+//}
+cv::ml::ANN_MLP* cveANN_MLPCreate(cv::ml::StatModel** model, cv::Algorithm** algorithm)
 { 
-   cv::Ptr<cv::ml::ANN_MLP> ptr = cv::ml::ANN_MLP::create(*p);
+   cv::Ptr<cv::ml::ANN_MLP> ptr = cv::ml::ANN_MLP::create();
    ptr.addref();
    cv::ml::ANN_MLP* r = ptr.get();
    *model = dynamic_cast<cv::ml::StatModel*>( r );
    *algorithm = dynamic_cast<cv::Algorithm*>( r );
    return r;
 }
-void CvANN_MLPRelease(cv::ml::ANN_MLP** model) 
-{ 
-   delete *model; 
-   *model = 0; 
+
+
+void cveANN_MLPSetLayerSizes(cv::ml::ANN_MLP* model, cv::_InputArray* layerSizes)
+{
+   model->setLayerSizes(*layerSizes);
+}
+
+void cveANN_MLPSetTrainMethod(cv::ml::ANN_MLP* model, int method, double param1, double param2)
+{
+   model->setTrainMethod(method, param1, param2);
+}
+
+void cveANN_MLPSetActivationFunction(cv::ml::ANN_MLP* model, int type, double param1, double param2)
+{
+}
+void cveANN_MLPRelease(cv::ml::ANN_MLP** model)
+{
+   delete *model;
+   *model = 0;
 }
 
 //Decision Tree
-cv::ml::DTrees::Params* CvDTreeParamsCreate(
-   int maxDepth, int minSampleCount,
-   double regressionAccuracy, bool useSurrogates,
-   int maxCategories, int CVFolds,
-   bool use1SERule, bool truncatePrunedTree,
-   cv::Mat* priors) 
+cv::ml::DTrees* cveDTreesCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
 { 
-   return new cv::ml::DTrees::Params(
-      maxDepth, minSampleCount, 
-      regressionAccuracy, useSurrogates,
-      maxCategories, CVFolds,
-      use1SERule, truncatePrunedTree,
-      priors ? *priors : cv::Mat()
-      ); 
-}
-void CvDTreeParamsRelease(cv::ml::DTrees::Params** params) 
-{ 
-   delete *params; 
-   *params = 0;
-}
-
-cv::ml::DTrees* CvDTreeCreate(cv::ml::DTrees::Params* params, cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
-{ 
-   cv::Ptr<cv::ml::DTrees> ptr = cv::ml::DTrees::create(*params);
+   cv::Ptr<cv::ml::DTrees> ptr = cv::ml::DTrees::create();
    ptr.addref();
    cv::ml::DTrees* dtree = ptr.get();
    *statModel = dynamic_cast<cv::ml::StatModel*>( dtree );
    *algorithm = dynamic_cast<cv::Algorithm*>( dtree );
    return dtree;
 }
-void CvDTreeRelease(cv::ml::DTrees** model) 
+void cveDTreesRelease(cv::ml::DTrees** model) 
 { 
    delete *model; 
    *model = 0;
 }
 
 //Random Tree
-cv::ml::RTrees::Params* CvRTParamsCreate(
-   int maxDepth, int minSampleCount,
-   double regressionAccuracy, bool useSurrogates,
-   int maxCategories, cv::Mat* priors,
-   bool calcVarImportance, int nactiveVars,
-   CvTermCriteria* termCrit)
-{ 
-   return new cv::ml::RTrees::Params(
-      maxDepth, minSampleCount,
-      regressionAccuracy, useSurrogates,
-      maxCategories, priors ? *priors : cv::Mat(),
-      calcVarImportance, nactiveVars,
-      *termCrit);
-}
-void CvRTParamsRelease(cv::ml::RTrees::Params** params) 
-{ 
-   delete *params; 
-   *params = 0; 
-}
 
-cv::ml::RTrees* CvRTreesCreate(cv::ml::RTrees::Params* p, cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
+cv::ml::RTrees* cveRTreesCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
 { 
-   cv::Ptr<cv::ml::RTrees> ptr = cv::ml::RTrees::create(*p);
+   cv::Ptr<cv::ml::RTrees> ptr = cv::ml::RTrees::create();
    ptr.addref();
    cv::ml::RTrees* rtrees = ptr.get();
    *statModel = dynamic_cast<cv::ml::StatModel*>( rtrees );
    *algorithm = dynamic_cast<cv::Algorithm*>( rtrees );
    return rtrees;
 }
-void CvRTreesRelease(cv::ml::RTrees** model) 
+void cveRTreesRelease(cv::ml::RTrees** model) 
 { 
    delete *model; 
    *model = 0; 
@@ -367,31 +325,31 @@ CvMat* CvRTreesGetVarImportance(CvRTrees* model) { return (CvMat*) model->get_va
 //void CvERTreesRelease(CvERTrees** model) { delete *model; *model = 0; }
 
 //CvBoost
-cv::ml::Boost::Params* CvBoostParamsCreate(
-   int boostType, int weakCount, double weightTrimRate,
-   int maxDepth, bool useSurrogates, cv::Mat* priors)
-{ 
-   return new cv::ml::Boost::Params(
-      boostType, weakCount, weightTrimRate,
-      maxDepth, useSurrogates, 
-      priors ? *priors : cv::Mat()); 
-}
-void CvBoostParamsRelease(cv::ml::Boost::Params** params) 
-{ 
-   delete *params; 
-   *params = 0; 
-}
+//cv::ml::Boost::Params* CvBoostParamsCreate(
+//   int boostType, int weakCount, double weightTrimRate,
+//   int maxDepth, bool useSurrogates, cv::Mat* priors)
+//{ 
+//   return new cv::ml::Boost::Params(
+//      boostType, weakCount, weightTrimRate,
+//      maxDepth, useSurrogates, 
+//      priors ? *priors : cv::Mat()); 
+//}
+//void CvBoostParamsRelease(cv::ml::Boost::Params** params) 
+//{ 
+//   delete *params; 
+//   *params = 0; 
+//}
 
-cv::ml::Boost* CvBoostCreate(cv::ml::Boost::Params* p, cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
+cv::ml::Boost* cveBoostCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
 { 
-   cv::Ptr<cv::ml::Boost> ptr = cv::ml::Boost::create(*p);
+   cv::Ptr<cv::ml::Boost> ptr = cv::ml::Boost::create();
    ptr.addref();
    cv::ml::Boost* boost = ptr.get();
    *statModel = dynamic_cast<cv::ml::StatModel*>( boost );
    *algorithm = dynamic_cast<cv::Algorithm*>( boost );
    return boost;
 }
-void CvBoostRelease(cv::ml::Boost** model) 
+void cveBoostRelease(cv::ml::Boost** model) 
 { 
    delete *model; 
    *model = 0; 
@@ -449,6 +407,7 @@ float CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
 
 
 //LogisticRegression
+/*
 cv::ml::LogisticRegression::Params* cveLogisticRegressionParamsCreate(
    double learning_rate,
    int iters,
@@ -464,10 +423,10 @@ void cveLogisticRegressionParamsRelease(cv::ml::LogisticRegression::Params** par
    delete *params;
    *params = 0;
 }
-
-cv::ml::LogisticRegression* cveLogisticRegressionCreate(cv::ml::LogisticRegression::Params* p, cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
+*/
+cv::ml::LogisticRegression* cveLogisticRegressionCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
 {
-   cv::Ptr<cv::ml::LogisticRegression> ptr = cv::ml::LogisticRegression::create(*p);
+   cv::Ptr<cv::ml::LogisticRegression> ptr = cv::ml::LogisticRegression::create();
    ptr.addref();
    cv::ml::LogisticRegression* model = ptr.get();
    *statModel = dynamic_cast<cv::ml::StatModel*>(model);

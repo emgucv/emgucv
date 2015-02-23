@@ -61,8 +61,10 @@ namespace Emgu.CV.Test
          neighborResponses = new Matrix<float>(sample.Rows, K);
          //dist = new Matrix<float>(sample.Rows, K);
 
-         using (KNearest knn = new KNearest(K, true))
+         using (KNearest knn = new KNearest())
          {
+            knn.DefaultK = K;
+            knn.IsClassifier = true;
             knn.Train(trainData, MlEnum.DataLayoutType.RowSample, trainClasses);
             //ParamDef[] defs =  knn.GetParams();
             //TODO: find out when knn.save will be implemented
@@ -193,12 +195,14 @@ namespace Emgu.CV.Test
          int dimensions = 20;
          int numberOfClusters = 10;
 
-         using (
-            EM.Params p = new EM.Params(numberOfClusters, MlEnum.EmCovarianMatrixType.Diagonal,
-               new MCvTermCriteria(100, 1.0e-6)))
-         using (EM em = new EM(p))
+         //using (
+         //   EM.Params p = new EM.Params(numberOfClusters, MlEnum.EmCovarianMatrixType.Diagonal,
+         //      new MCvTermCriteria(100, 1.0e-6)))
+         using (EM em = new EM())
          {
-            
+            em.ClustersNumber = numberOfClusters;
+            em.CovarianceMatrixType = EM.CovarianMatrixType.Diagonal;
+            em.TermCriteria = new MCvTermCriteria(100, 1.0e-6);
             //ParamDef[] parameters = em.GetParams();
             Matrix<int> labels = new Matrix<int>(numberOfPoints, 1);
             Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
@@ -245,11 +249,20 @@ namespace Emgu.CV.Test
          trainClasses3.SetValue(3);
 
          #endregion
-         using (SVM.Params p = new SVM.Params(MlEnum.SvmType.CSvc, MlEnum.SvmKernelType.Linear, 0, 1, 0, 1, 0, 0, null, new MCvTermCriteria(100, 1.0e-6)))
-         using (SVM model = new SVM(p))
+         //using (SVM.Params p = new SVM.Params(MlEnum.SvmType.CSvc, MlEnum.SvmKernelType.Linear, 0, 1, 0, 1, 0, 0, null, new MCvTermCriteria(100, 1.0e-6)))
+         using (SVM model = new SVM())
          using (Matrix<int> trainClassesInt = trainClasses.Convert<int>())
          using (TrainData td = new TrainData(trainData, MlEnum.DataLayoutType.RowSample, trainClassesInt))
          {
+            model.Type = SVM.SvmType.CSvc;
+            model.SetKernel(SVM.SvmKernelType.Inter);
+            model.Degree = 0;
+            model.Gamma = 1;
+            model.Coef0 = 0;
+            model.C = 1;
+            model.Nu = 0;
+            model.P = 0;
+            model.TermCriteria = new MCvTermCriteria(100, 1.0e-6);
             //bool trained = model.TrainAuto(td, 5);
             model.Train(td);
 #if !NETFX_CORE
@@ -604,44 +617,18 @@ namespace Emgu.CV.Test
          using (Matrix<byte> sampleRows = sampleIdx.GetRows(0, trainingSampleCount, 1))
             sampleRows.SetValue(255);
 
-         using(RTrees.Params p = new RTrees.Params(
-            10, 
-            10,
-            0,
-            false,
-            15,
-            null, 
-            true,
-            4, 
-            new MCvTermCriteria(100, 0.01)))
-
-         /*
-         MCvRTParams param = new MCvRTParams();
-         param.maxDepth = 10;
-         param.minSampleCount = 10;
-         param.regressionAccuracy = 0.0f;
-         param.useSurrogates = false;
-         param.maxCategories = 15;
-         param.priors = IntPtr.Zero;
-         param.calcVarImportance = true;
-         param.nactiveVars = 4;
-         param.termCrit = new MCvTermCriteria(100, 0.01f);
-         param.termCrit.Type = Emgu.CV.CvEnum.TermCritType.Iter;*/
-
-         using (RTrees forest = new RTrees(p))
+         using (RTrees forest = new RTrees())
          using (TrainData td = new TrainData(data, MlEnum.DataLayoutType.RowSample, response, null, sampleIdx, null, varType))
          {
+            forest.MaxDepth = 10;
+            forest.MinSampleCount = 10;
+            forest.RegressionAccuracy = 0.0f;
+            forest.UseSurrogates = false;
+            forest.MaxCategories = 15;
+            forest.CalculateVarImportance = true;
+            forest.ActiveVarCount = 4;
+            forest.TermCriteria = new MCvTermCriteria(100, 0.01f);
             bool success = forest.Train(td);
-            /*
-            bool success = forest.Train(
-               data, 
-               Emgu.CV.ML.MlEnum.DataLayoutType.RowSample,
-               response, 
-               null, 
-               sampleIdx,
-               varType, 
-               null, 
-               param);*/
 
             if (!success)
                return;
@@ -785,18 +772,14 @@ namespace Emgu.CV.Test
 
          using(Matrix<int> layerSize = new Matrix<int>(new int[] { 2, 5, 1 }))
          using(Mat layerSizeMat = layerSize.Mat)
-         using(ANN_MLP.Params p = new ANN_MLP.Params(
-            layerSizeMat, 
-            Emgu.CV.ML.MlEnum.AnnMlpActivationFunction.SigmoidSym,
-            0, 0, 
-            new MCvTermCriteria(10, 1.0e-8), 
-            Emgu.CV.ML.MlEnum.AnnMlpTrainMethod.Backprop,
-            0.1, 0.1
-            ))
-         
+
          using (TrainData td = new TrainData(trainData, MlEnum.DataLayoutType.RowSample, trainClasses))
-         using (ANN_MLP network = new ANN_MLP(p))
-         {
+         using (ANN_MLP network = new ANN_MLP())
+         { 
+            network.SetLayerSizes(layerSizeMat);
+            network.SetActivationFunction(ANN_MLP.AnnMlpActivationFunction.SigmoidSym, 0, 0);
+            network.TermCriteria = new MCvTermCriteria(10, 1.0e-8);
+            network.SetTrainMethod(ANN_MLP.AnnMlpTrainMethod.Backprop, 0.1, 0.1);
             network.Train(td, (int) Emgu.CV.ML.MlEnum.AnnMlpTrainingFlag.Default);
 
 #if !NETFX_CORE

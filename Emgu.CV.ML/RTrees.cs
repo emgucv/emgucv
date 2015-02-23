@@ -13,13 +13,14 @@ using System.Diagnostics;
 namespace Emgu.CV.ML
 {
    /// <summary>
-   /// Random tree
+   /// Random trees
    /// </summary>
-   public class RTrees : UnmanagedObject, IStatModel
+   public partial class RTrees : UnmanagedObject, IStatModel
    {
       private IntPtr _statModelPtr;
       private IntPtr _algorithmPtr;
 
+      /*
       /// <summary>
       /// Training parameters of random trees.
       /// </summary>
@@ -63,14 +64,14 @@ namespace Emgu.CV.ML
          {
             MlInvoke.CvRTParamsRelease(ref _ptr);
          }
-      }
+      }*/
 
       /// <summary>
       /// Create a random tree
       /// </summary>
-      public RTrees(Params p)
+      public RTrees()
       {
-         _ptr = MlInvoke.CvRTreesCreate(p, ref _statModelPtr, ref _algorithmPtr);
+         _ptr = MlInvoke.cveRTreesCreate(ref _statModelPtr, ref _algorithmPtr);
       }
 
 
@@ -79,7 +80,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvRTreesRelease(ref _ptr);
+         MlInvoke.cveRTreesRelease(ref _ptr);
          _statModelPtr = IntPtr.Zero;
          _algorithmPtr = IntPtr.Zero;
       }

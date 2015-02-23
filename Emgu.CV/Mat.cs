@@ -316,6 +316,7 @@ namespace Emgu.CV
          }
       }
 
+      /*
       /// <summary>
       /// Depth type
       /// </summary>
@@ -325,7 +326,7 @@ namespace Emgu.CV
          {
             return (CvEnum.DepthType)MatInvoke.cvMatGetDepth(_ptr);
          }
-      }
+      }*/
 
       /// <summary>
       /// The size of the elements in this matrix
@@ -363,6 +364,7 @@ namespace Emgu.CV
          MatInvoke.cvMatConvertTo(Ptr, oaM, rtype, alpha, beta);
       }
 
+      /*
       /// <summary>
       /// Indicates if this cv::Mat is empty
       /// </summary>
@@ -372,7 +374,7 @@ namespace Emgu.CV
          {
             return MatInvoke.cvMatIsEmpty(_ptr);
          }
-      }
+      }*/
 
       /// <summary>
       /// Changes the shape and/or the number of channels of a 2D matrix without copying the data.
@@ -893,16 +895,20 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cvMatGetChannels(IntPtr mat);
+      
+      /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cvMatGetDepth(IntPtr mat);
+      internal extern static int cvMatGetDepth(IntPtr mat);*/
+
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatGetDataPointer(IntPtr mat);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatGetStep(IntPtr mat);
 
+      /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal extern static bool cvMatIsEmpty(IntPtr mat);
+      internal extern static bool cvMatIsEmpty(IntPtr mat);*/
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvMatCreateData(IntPtr mat, int row, int cols, int type);

@@ -3,33 +3,36 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics;
+using Emgu.CV;
+using Emgu.CV.ML.Structure;
+using System.Runtime.InteropServices;
 using Emgu.Util;
 
 namespace Emgu.CV.ML
 {
    /// <summary>
-   /// The KNearest classifier
+   /// Decision Trees 
    /// </summary>
-   public partial class KNearest : UnmanagedObject, IStatModel
+   public partial class DTrees : UnmanagedObject , IStatModel
    {
       private IntPtr _statModelPtr;
       private IntPtr _algorithmPtr;
 
+
       /// <summary>
-      /// Create a default KNearest classifier
+      /// Create a default decision tree
       /// </summary>
-      public KNearest()
+      public DTrees()
       {
-         _ptr = MlInvoke.CvKNearestCreate(ref _statModelPtr, ref _algorithmPtr);
+         _ptr = MlInvoke.cveDTreesCreate(ref _statModelPtr, ref _algorithmPtr);
       }
 
       /// <summary>
-      /// Release the classifier and all the memory associated with it
+      /// Release the decision tree and all the memory associate with it
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvKNearestRelease(ref _ptr);
+         MlInvoke.cveDTreesRelease(ref _ptr);
          _statModelPtr = IntPtr.Zero;
          _algorithmPtr = IntPtr.Zero;
       }
