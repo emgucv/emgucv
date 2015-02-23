@@ -455,11 +455,15 @@ IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>")
   ENDFOREACH()
-  SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}
+    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
+  <Content Include=\"\$(OpenCVBinaryDir)\\arm_phone\\cvextern.dll\">
+    <Link>cvextern.dll</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
   </ItemGroup>
   </When>
   <When Condition=\" '$(Platform)'=='x86' \">
-    <ItemGroup>")
+  <ItemGroup>")
   FOREACH(OPENCV_LIBRARY_OUTPUT_NAME ${OPENCV_LIBRARY_OUTPUT_NAMES})
     SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
   <Content Include=\"\$(OpenCVBinaryDir)\\x86_phone\\${OPENCV_LIBRARY_OUTPUT_NAME}.dll\">
@@ -467,8 +471,12 @@ IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>")
   ENDFOREACH()
-  SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}
-    </ItemGroup>
+    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
+  <Content Include=\"\$(OpenCVBinaryDir)\\x86_phone\\cvextern.dll\">
+    <Link>cvextern.dll</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  </ItemGroup>
   </When>
   </Choose>")
   

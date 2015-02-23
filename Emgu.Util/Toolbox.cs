@@ -433,13 +433,16 @@ namespace Emgu.Util
                //return WinAPILoadLibrary(dllname);
          } else if (Platform.OperationSystem == TypeEnum.OS.WindowsPhone)
          {
+         
             IntPtr handler = LoadPackagedLibrary(dllname, 0);
+            
             if (handler == IntPtr.Zero)
             {
-               int error = WindowsPhoneGetLastError();
+               int error = Marshal.GetLastWin32Error();
                
-               System.Diagnostics.Debug.WriteLine(String.Format("Error loading {0}: error code {1}", dllname, error));
+               System.Diagnostics.Debug.WriteLine(String.Format("Error loading {0}: error code {1}", dllname, (uint) error));
             }
+            
             return handler;
          } else
          {
@@ -448,21 +451,21 @@ namespace Emgu.Util
 #endif
       }
 
-      [DllImport("Kernel32.dll", EntryPoint="LoadLibraryEx")]
+      [DllImport("Kernel32.dll", SetLastError = true)]
       private static extern IntPtr LoadLibraryEx(
          [MarshalAs(UnmanagedType.LPStr)]
          String fileName, 
          IntPtr hFile,
          int dwFlags);
 
-      [DllImport("PhoneAppModelHost.dll", EntryPoint = "LoadPackagedLibrary")]
+      [DllImport("PhoneAppModelHost.dll", SetLastError = true)]
       private static extern IntPtr LoadPackagedLibrary(
          [MarshalAs(UnmanagedType.LPStr)]
          String fileName,
          int dwFlags);
 
-      [DllImport("KernelBase.dll", EntryPoint = "GetLastError")]
-      private static extern int WindowsPhoneGetLastError();
+      //[DllImport("KernelBase.dll", EntryPoint = "GetLastError")]
+      //private static extern int WindowsPhoneGetLastError();
 
       /*
       [DllImport("kernel32.dll", EntryPoint="LoadLibrary")]

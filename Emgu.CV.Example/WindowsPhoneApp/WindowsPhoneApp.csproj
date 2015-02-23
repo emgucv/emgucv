@@ -205,11 +205,15 @@
   <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_latentsvm300.dll">
     <Link>opencv_latentsvm300.dll</Link>
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content> 
+  <Content Include="$(OpenCVBinaryDir)\arm_phone\cvextern.dll">
+    <Link>cvextern.dll</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
   </ItemGroup>
   </When>
   <When Condition=" '$(Platform)'=='x86' ">
-    <ItemGroup> 
+  <ItemGroup> 
   <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_core300.dll">
     <Link>opencv_core300.dll</Link>
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -309,8 +313,12 @@
   <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_latentsvm300.dll">
     <Link>opencv_latentsvm300.dll</Link>
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content> 
+  <Content Include="$(OpenCVBinaryDir)\x86_phone\cvextern.dll">
+    <Link>cvextern.dll</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
-    </ItemGroup>
+  </ItemGroup>
   </When>
   </Choose>
   <ItemGroup>

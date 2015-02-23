@@ -240,8 +240,13 @@ namespace Emgu.CV
             {
                mName = module.Replace("_64", String.Empty);
             }
-
-            String fullPath = Path.Combine(loadDirectory, Path.Combine(prefix, mName));
+     
+            String fullPath = Path.Combine(prefix, mName);
+            if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.WindowsPhone)
+            {
+               //Do not use absolute path for Windows Phone
+               fullPath = Path.Combine(loadDirectory, fullPath);
+            }
 
 #if NETFX_CORE
             if (loadableFiles.Exists(sf => sf.Equals(fullPath)))
