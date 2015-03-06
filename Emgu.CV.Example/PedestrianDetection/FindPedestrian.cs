@@ -9,6 +9,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using System.Drawing;
 using System.Diagnostics;
+using Emgu.CV.Util;
 #if !(IOS || NETFX_CORE)
 using Emgu.CV.Cuda;
 #endif
@@ -32,16 +33,18 @@ namespace PedestrianDetection
          //check if there is a compatible Cuda device to run pedestrian detection
          if (tryUseCuda && CudaInvoke.HasCuda)
          {  //this is the Cuda version
-            using (CudaHOGDescriptor des = new CudaHOGDescriptor())
+            using (CudaHOG des = new CudaHOG(new Size(64, 128), new Size(16, 16), new Size(8,8), new Size(8,8)))
             {
-               des.SetSVMDetector(CudaHOGDescriptor.GetDefaultPeopleDetector());
+               des.SetSVMDetector(des.GetDefaultPeopleDetector());
 
                watch = Stopwatch.StartNew();
                using (GpuMat cudaBgr = new GpuMat(image))
                using (GpuMat cudaBgra = new GpuMat() )
+               using (VectorOfRect vr = new VectorOfRect())
                {
                   CudaInvoke.CvtColor(cudaBgr, cudaBgra, ColorConversion.Bgr2Bgra);
-                  regions = des.DetectMultiScale(cudaBgra);
+                  des.DetectMultiScale(cudaBgra, vr);
+                  regions = vr.ToArray();
                }
             }
          }

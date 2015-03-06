@@ -35,7 +35,7 @@ namespace Emgu.CV
       /// <param name="dst">Destination image</param>
       /// <param name="sigma">Expected noise standard deviation</param>
       /// <param name="psize">Size of block side where dct is computed</param>
-      public static void cveDctDenoising(Mat src, Mat dst, double sigma, int psize = 16)
+      public static void DctDenoising(Mat src, Mat dst, double sigma, int psize = 16)
       {
          cveDctDenoising(src, dst, sigma, psize);
       }

@@ -30,11 +30,19 @@ namespace FaceDetection
             using (CudaCascadeClassifier face = new CudaCascadeClassifier(faceFileName))
             using (CudaCascadeClassifier eye = new CudaCascadeClassifier(eyeFileName))
             {
+               face.ScaleFactor = 1.1;
+               face.MinNeighbors = 10;
+               face.MinObjectSize = Size.Empty;
+               eye.ScaleFactor = 1.1;
+               eye.MinNeighbors = 10;
+               eye.MinObjectSize = Size.Empty;
                watch = Stopwatch.StartNew();
                using (CudaImage<Bgr, Byte> gpuImage = new CudaImage<Bgr, byte>(image))
                using (CudaImage<Gray, Byte> gpuGray = gpuImage.Convert<Gray, Byte>())
+               using (GpuMat region = new GpuMat())
                {
-                  Rectangle[] faceRegion = face.DetectMultiScale(gpuGray, 1.1, 10, Size.Empty);
+                  face.DetectMultiScale(gpuGray, region);
+                  Rectangle[] faceRegion = face.Convert(region);
                   faces.AddRange(faceRegion);
                   foreach (Rectangle f in faceRegion)
                   {
@@ -43,9 +51,10 @@ namespace FaceDetection
                         //For some reason a clone is required.
                         //Might be a bug of CudaCascadeClassifier in opencv
                         using (CudaImage<Gray, Byte> clone = faceImg.Clone(null))
+                        using (GpuMat eyeRegionMat = new GpuMat())
                         {
-                           Rectangle[] eyeRegion = eye.DetectMultiScale(clone, 1.1, 10, Size.Empty);
-
+                           eye.DetectMultiScale(clone, eyeRegionMat);
+                           Rectangle[] eyeRegion = eye.Convert(eyeRegionMat);
                            foreach (Rectangle e in eyeRegion)
                            {
                               Rectangle eyeRect = e;

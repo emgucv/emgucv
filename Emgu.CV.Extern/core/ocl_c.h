@@ -62,7 +62,7 @@ CVAPI(void) oclDeviceGetVenderName(cv::ocl::Device* oclDeviceInfo, cv::String* v
 CVAPI(int) oclDeviceGetVenderId(cv::ocl::Device* oclDeviceInfo, int venderId);
 CVAPI(void) oclDeviceGetDriverVersion(cv::ocl::Device* oclDeviceInfo, cv::String* driverVersion);
 CVAPI(void) oclDeviceGetExtensions(cv::ocl::Device* oclDeviceInfo, cv::String* extensions);
-CVAPI(int) oclDeviceGetMaxWorkGroupSize(cv::ocl::Device* oclDeviceInfo);
+//CVAPI(int) oclDeviceGetMaxWorkGroupSize(cv::ocl::Device* oclDeviceInfo);
 CVAPI(int) oclDeviceGetMaxComputeUnits(cv::ocl::Device* oclDeviceInfo);
 CVAPI(int) oclDeviceGetGlobalMemorySize(cv::ocl::Device* oclDeviceInfo);
 CVAPI(int) oclDeviceGetLocalMemorySize(cv::ocl::Device* oclDeviceInfo);

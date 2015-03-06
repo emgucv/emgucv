@@ -62,7 +62,10 @@ CREATE_VECTOR_CS("KeyPoint" "cv::KeyPoint" "MKeyPoint" "struct" ${CMAKE_CURRENT_
 CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text Emgu.CV.Text "#include \"opencv2/text/erfilter.hpp\"")
 CREATE_VECTOR_CS("DMatch" "cv::DMatch" "MDMatch" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("Triangle2DF" "cv::Vec6f" "Triangle2DF" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
-CREATE_VECTOR_CS("ObjectDetection" "cv::lsvm::LSVMDetector::ObjectDetection" "MCvObjectDetection" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/latentsvm.hpp\"")
+
+IF(BUILD_opencv_latentsvm)
+  CREATE_VECTOR_CS("ObjectDetection" "cv::lsvm::LSVMDetector::ObjectDetection" "MCvObjectDetection" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/latentsvm.hpp\"")
+ENDIF()
 
 CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
@@ -329,6 +332,32 @@ IF(BUILD_opencv_core)
   "CvInvoke"
   "UMat"
   "#include \"umat_c.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+  "core/ocl_device_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclDeviceGenerated.cs"
+  "cv::ocl::Device" 
+  "OclDevice" 
+  "maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight" 
+  "int;int;int;int;int;int;int;int;int;int;int" 
+  "val;val;val;val;val;val;val;val;val;val;val"
+  "MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight" 
+  "int;int;int;int;int;int;int;int;int;int;int"
+  "The maximum work group size;
+  The max compute unit;
+  The local memory size;
+  The maximum memory allocation size;
+  The device major version number;
+  The Device minor version number;
+  The device double float point configuration;
+  True if the device use unified memory;
+  The global memory size;
+  The image 2d max width;
+  the image2d max height"
+  "Emgu.CV"
+  "CvInvoke"
+  "OclDevice"
+  "#include \"ocl_c.h\"")
 ENDIF()
 ############################### core code gen END ################################
 
@@ -630,11 +659,11 @@ IF(ANDROID)
 	  SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_cube tesseract_textord tesseract_neural_networks tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
     ENDIF()
   ENDIF()
-ELSEIF(WIN32 OR APPLE)
+ELSE() #ELSEIF(WIN32 OR APPLE)
   IF(NETFX_CORE)
-    SET(EMGU_CV_WITH_TESSERACT OFF CACHE BOOL "BUILD OCR")
+    SET(EMGU_CV_WITH_TESSERACT OFF CACHE BOOL "BUILD TESSERACT OCR")
   ELSE()
-    SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
+    SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD TESSERACT OCR")
   ENDIF()
   IF(EMGU_CV_WITH_TESSERACT)
     ADD_SUBDIRECTORY(tesseract/libtesseract)
@@ -652,17 +681,18 @@ ELSEIF(WIN32 OR APPLE)
     ENDIF()
     ADD_DEFINITIONS(-D__MSW32__)
   ENDIF()
-ELSE()
-  SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/modules")
-  FIND_PACKAGE(TESSERACT)
-  IF(TESSERACT_FOUND)
-    SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
-  ELSE()
-    SET(EMGU_CV_WITH_TESSERACT OFF CACHE BOOL "BUILD OCR")
-    SET(TESSERACT_INCLUDE_DIRS "")
-    SET(TESSERACT_PROJECTS "")
-  ENDIF()
 ENDIF()
+#ELSE()
+#  SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/modules")
+#  FIND_PACKAGE(TESSERACT)
+#  IF(TESSERACT_FOUND)
+#    SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
+#  ELSE()
+#    SET(EMGU_CV_WITH_TESSERACT OFF CACHE BOOL "BUILD OCR")
+#    SET(TESSERACT_INCLUDE_DIRS "")
+#    SET(TESSERACT_PROJECTS "")
+#  ENDIF()
+#ENDIF()
 
 IF(EMGU_CV_WITH_TESSERACT)
   INCLUDE_DIRECTORIES(${TESSERACT_INCLUDE_DIRS})

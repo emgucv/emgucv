@@ -109,10 +109,10 @@ void oclDeviceGetExtensions(cv::ocl::Device* oclDeviceInfo, cv::String* extensio
 {
    *extensions = oclDeviceInfo->extensions();
 }
-int oclDeviceGetMaxWorkGroupSize(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->maxWorkGroupSize();
-}
+//int oclDeviceGetMaxWorkGroupSize(cv::ocl::Device* oclDeviceInfo)
+//{
+//   return oclDeviceInfo->maxWorkGroupSize();
+//}
 int oclDeviceGetMaxComputeUnits(cv::ocl::Device* oclDeviceInfo)
 {
    return oclDeviceInfo->maxComputeUnits();
