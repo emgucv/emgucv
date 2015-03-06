@@ -193,17 +193,6 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the number of channels
-      /// </summary>
-      public int NumberOfChannels
-      {
-         get
-         {
-            return (int)UMatInvoke.cvUMatGetChannels(_ptr);
-         }
-      }
-
-      /// <summary>
       /// The size of the elements in this matrix
       /// </summary>
       public int ElementSize
@@ -585,9 +574,6 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cvUMatGetElementSize(IntPtr mat);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cvUMatGetChannels(IntPtr mat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvUMatCreateData(IntPtr mat, int row, int cols, int type);

@@ -36,7 +36,7 @@ namespace Emgu.CV
 , ISerializable
 #endif
    {
-      
+
 #if !NETFX_CORE
       #region Implement ISerializable interface
       /// <summary>
@@ -59,9 +59,9 @@ namespace Emgu.CV
       {
          int rows = (int)info.GetValue("Rows", typeof(int));
          int cols = (int)info.GetValue("Cols", typeof(int));
-         int depthType = (int) info.GetValue("DepthType", typeof (int));
+         int depthType = (int)info.GetValue("DepthType", typeof(int));
          int numberOfChannels = (int)info.GetValue("NumberOfChannels", typeof(int));
-         Create(rows, cols, (DepthType) depthType, numberOfChannels );
+         Create(rows, cols, (DepthType)depthType, numberOfChannels);
          Bytes = (Byte[])info.GetValue("Bytes", typeof(Byte[]));
       }
 
@@ -76,7 +76,7 @@ namespace Emgu.CV
          info.AddValue("Cols", Cols);
          info.AddValue("DepthType", (int)Depth);
          info.AddValue("NumberOfChannels", NumberOfChannels);
-         info.AddValue("Bytes", Bytes);  
+         info.AddValue("Bytes", Bytes);
       }
 
       #endregion
@@ -94,9 +94,9 @@ namespace Emgu.CV
          {
             if (IsEmpty)
                return null;
-            byte[] data = new byte[Rows* Cols * ElementSize];
+            byte[] data = new byte[Rows * Cols * ElementSize];
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            using (Mat m = new Mat(Rows, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols*ElementSize))
+            using (Mat m = new Mat(Rows, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols * ElementSize))
             {
                CopyTo(m);
             }
@@ -105,7 +105,7 @@ namespace Emgu.CV
          }
          set
          {
-            Debug.Assert(value.Length == Rows * Cols* ElementSize, String.Format("Invalid byte length, expecting {0} but was {1}", Rows * Cols * ElementSize, value.Length));
+            Debug.Assert(value.Length == Rows * Cols * ElementSize, String.Format("Invalid byte length, expecting {0} but was {1}", Rows * Cols * ElementSize, value.Length));
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
             using (Mat m = new Mat(Rows, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols * ElementSize))
             {
@@ -134,7 +134,7 @@ namespace Emgu.CV
       /// </summary>
       public Mat()
          : this(MatInvoke.cvMatCreate(), true, true)
-      {  
+      {
       }
 
       /// <summary>
@@ -182,8 +182,8 @@ namespace Emgu.CV
       /// <param name="mat">The mat where the new Mat header will share data from</param>
       /// <param name="roi">The region of interest</param>
       public Mat(Mat mat, Rectangle roi)
-         :this(MatInvoke.cvMatCreateFromRect(mat.Ptr, ref roi), true, true)
-      {  
+         : this(MatInvoke.cvMatCreateFromRect(mat.Ptr, ref roi), true, true)
+      {
       }
 
       /// <summary>
@@ -268,11 +268,11 @@ namespace Emgu.CV
                if (IsEmpty)
                   return null;
                int row = indices[0];
-               
+
                byte[] data = new byte[Cols * ElementSize];
                GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
                using (Mat matRow = GetRow(row))
-               using (Mat m = new Mat(1, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols*ElementSize))
+               using (Mat m = new Mat(1, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols * ElementSize))
                {
                   matRow.CopyTo(m);
                }
@@ -289,9 +289,9 @@ namespace Emgu.CV
                return rawData;
 
             default:
-               throw  new NotImplementedException(String.Format("GetData with indices size {0} is not implemented", indices.Length));
+               throw new NotImplementedException(String.Format("GetData with indices size {0} is not implemented", indices.Length));
          }
-       
+
       }
 
       /// <summary>
@@ -305,28 +305,6 @@ namespace Emgu.CV
          }
       }
 
-      /// <summary>
-      /// Number of channels
-      /// </summary>
-      public int NumberOfChannels
-      {
-         get
-         {
-            return (int)MatInvoke.cvMatGetChannels(_ptr);
-         }
-      }
-
-      /*
-      /// <summary>
-      /// Depth type
-      /// </summary>
-      public CvEnum.DepthType Depth
-      {
-         get
-         {
-            return (CvEnum.DepthType)MatInvoke.cvMatGetDepth(_ptr);
-         }
-      }*/
 
       /// <summary>
       /// The size of the elements in this matrix
@@ -348,7 +326,7 @@ namespace Emgu.CV
       {
          using (OutputArray oaM = m.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-         MatInvoke.cvMatCopyTo(Ptr, oaM, iaMask);
+            MatInvoke.cvMatCopyTo(Ptr, oaM, iaMask);
       }
 
       /// <summary>
@@ -361,7 +339,7 @@ namespace Emgu.CV
       public void ConvertTo(IOutputArray m, CvEnum.DepthType rtype, double alpha = 1.0, double beta = 0.0)
       {
          using (OutputArray oaM = m.GetOutputArray())
-         MatInvoke.cvMatConvertTo(Ptr, oaM, rtype, alpha, beta);
+            MatInvoke.cvMatConvertTo(Ptr, oaM, rtype, alpha, beta);
       }
 
       /*
@@ -412,7 +390,7 @@ namespace Emgu.CV
       /// </summary>
       public OutputArray GetOutputArray()
       {
-         return new OutputArray( MatInvoke.cveOutputArrayFromMat(_ptr) );
+         return new OutputArray(MatInvoke.cveOutputArrayFromMat(_ptr));
       }
 
       /// <summary>
@@ -420,7 +398,7 @@ namespace Emgu.CV
       /// </summary>
       public InputOutputArray GetInputOutputArray()
       {
-         return new InputOutputArray( MatInvoke.cveInputOutputArrayFromMat(_ptr) );
+         return new InputOutputArray(MatInvoke.cveInputOutputArrayFromMat(_ptr));
       }
 
 
@@ -452,7 +430,7 @@ namespace Emgu.CV
       /// <returns>The range that contains the minimum and maximum values</returns>
       public RangeF GetValueRange()
       {
-         double minVal = 0, maxVal =0;
+         double minVal = 0, maxVal = 0;
          Point minLoc = new Point(), maxLoc = new Point();
          if (NumberOfChannels == 1)
          {
@@ -465,7 +443,7 @@ namespace Emgu.CV
                CvInvoke.MinMaxLoc(tmp, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
             }
          }
-         return new RangeF((float)minVal, (float) maxVal);
+         return new RangeF((float)minVal, (float)maxVal);
       }
 
       /// <summary>
@@ -497,7 +475,7 @@ namespace Emgu.CV
          {
             //different depth, same color
             Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
-            ConvertTo(result, CvInvoke.GetDepthType(typeof(TDepth)) );
+            ConvertTo(result, CvInvoke.GetDepthType(typeof(TDepth)));
             /*
             if (numberOfChannels == 1)
             {
@@ -525,10 +503,10 @@ namespace Emgu.CV
             //same depth, different color
             Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
             CvInvoke.CvtColor(
-               this, result, 
-               numberOfChannels == 1 ? typeof(Gray) : 
+               this, result,
+               numberOfChannels == 1 ? typeof(Gray) :
                numberOfChannels == 3 ? typeof(Bgr) :
-               typeof(Bgra), 
+               typeof(Bgra),
                typeof(TColor));
             /*
             CvEnum.DepthType depth = Depth;
@@ -581,7 +559,7 @@ namespace Emgu.CV
                ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth)));
                return tmp.ToImage<TColor, TDepth>();
             }
-            
+
          }
       }
 
@@ -624,25 +602,25 @@ namespace Emgu.CV
       /// </summary>
       public Bitmap Bitmap
       {
-         get 
+         get
          {
             int channels = NumberOfChannels;
             Type colorType;
-            switch(channels)
+            switch (channels)
             {
                case 1:
                   colorType = typeof(Gray);
                   break;
                case 3:
-                  colorType = typeof(Bgr) ;
+                  colorType = typeof(Bgr);
                   break;
                case 4:
-                  colorType =typeof(Bgra);
+                  colorType = typeof(Bgra);
                   break;
                default:
                   throw new Exception("Unknown color type");
             }
-            return CvInvoke.RawDataToBitmap(DataPointer, this.Step, this.Size, colorType , NumberOfChannels, CvInvoke.GetDepthType(Depth), true);
+            return CvInvoke.RawDataToBitmap(DataPointer, this.Step, this.Size, colorType, NumberOfChannels, CvInvoke.GetDepthType(Depth), true);
          }
       }
 #endif
@@ -669,7 +647,7 @@ namespace Emgu.CV
       {
          using (InputArray iaValue = value.GetInputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-         MatInvoke.cvMatSetTo(Ptr, iaValue, iaMask);
+            MatInvoke.cvMatSetTo(Ptr, iaValue, iaMask);
       }
 
       /// <summary>
@@ -827,7 +805,7 @@ namespace Emgu.CV
       /// <returns>True if the two Mats are equal</returns>
       public bool Equals(Mat other)
       {
-         if (! (Size.Equals(other.Size) && NumberOfChannels == other.NumberOfChannels && Depth == other.Depth))
+         if (!(Size.Equals(other.Size) && NumberOfChannels == other.NumberOfChannels && Depth == other.Depth))
             return false;
 
          using (Mat cmpResult = new Mat())
@@ -888,17 +866,8 @@ namespace Emgu.CV
       internal extern static void cvMatCopyTo(IntPtr mat, IntPtr m, IntPtr mask);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cvMatGetElementSize(IntPtr mat);
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cvMatGetChannels(IntPtr mat);
-      
-      /*
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cvMatGetDepth(IntPtr mat);*/
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatGetDataPointer(IntPtr mat);
@@ -930,10 +899,13 @@ namespace Emgu.CV
       internal extern static IntPtr cvMatGetUMat(IntPtr mat, CvEnum.AccessType access);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatConvertTo( IntPtr mat, IntPtr outArray, CvEnum.DepthType rtype, double alpha, double beta );
+      internal extern static void cvMatConvertTo(IntPtr mat, IntPtr outArray, CvEnum.DepthType rtype, double alpha, double beta);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatReshape(IntPtr mat, int cn, int rows);

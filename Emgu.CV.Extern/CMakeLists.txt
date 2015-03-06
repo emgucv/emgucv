@@ -300,15 +300,16 @@ IF(BUILD_opencv_core)
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/MatGenerated.cs"
   "cv::Mat" 
   "Mat" 
-  "isContinuous;isSubmatrix;depth;empty" 
-  "bool;bool;int;bool" 
-  "val;val;val;val"
-  "IsContinuous;IsSubmatrix;Depth;IsEmpty" 
-  "bool;bool;CvEnum.DepthType;bool"
+  "isContinuous;isSubmatrix;depth;empty;channels" 
+  "bool;bool;int;bool;int" 
+  "val;val;val;val;val"
+  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels" 
+  "bool;bool;CvEnum.DepthType;bool;int"
   "True if the data is continues;
   True if the matrix is a submatrix of another matrix;
   Depth type;
-  True if the Mat is empty"
+  True if the Mat is empty;
+  Number of channels"
   "Emgu.CV"
   "CvInvoke"
   "Mat"
@@ -319,15 +320,16 @@ IF(BUILD_opencv_core)
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/UMatGenerated.cs"
   "cv::UMat" 
   "UMat" 
-  "isContinuous;isSubmatrix;depth;empty" 
-  "bool;bool;int;bool" 
-  "val;val;val;val"
-  "IsContinuous;IsSubmatrix;Depth;IsEmpty" 
-  "bool;bool;CvEnum.DepthType;bool"
+  "isContinuous;isSubmatrix;depth;empty;channels" 
+  "bool;bool;int;bool;int" 
+  "val;val;val;val;val"
+  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels" 
+  "bool;bool;CvEnum.DepthType;bool;int"
   "True if the data is continues;
   True if the matrix is a submatrix of another matrix;
   Depth type;
-  True if the matrix is empty"
+  True if the matrix is empty;
+  Number of channels"
   "Emgu.CV"
   "CvInvoke"
   "UMat"
@@ -338,11 +340,11 @@ IF(BUILD_opencv_core)
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclDeviceGenerated.cs"
   "cv::ocl::Device" 
   "OclDevice" 
-  "maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight" 
-  "int;int;int;int;int;int;int;int;int;int;int" 
-  "val;val;val;val;val;val;val;val;val;val;val"
-  "MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight" 
-  "int;int;int;int;int;int;int;int;int;int;int"
+  "maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type" 
+  "int;int;int;int;int;int;int;int;int;int;int;int" 
+  "val;val;val;val;val;val;val;val;val;val;val;val"
+  "MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type" 
+  "int;int;int;int;int;int;int;int;int;int;int;OclDeviceType"
   "The maximum work group size;
   The max compute unit;
   The local memory size;
@@ -353,7 +355,8 @@ IF(BUILD_opencv_core)
   True if the device use unified memory;
   The global memory size;
   The image 2d max width;
-  the image2d max height"
+  The image2d max height;
+  The ocl device type"
   "Emgu.CV"
   "CvInvoke"
   "OclDevice"

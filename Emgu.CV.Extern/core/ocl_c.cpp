@@ -81,10 +81,6 @@ void oclDeviceRelease(cv::ocl::Device** device)
    *device = 0;
 }
 
-int oclDeviceGetType(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->type();
-}
 void oclDeviceGetVersion(cv::ocl::Device* oclDeviceInfo, cv::String* version)
 {
    *version = oclDeviceInfo->version();
@@ -97,10 +93,7 @@ void oclDeviceGetVenderName(cv::ocl::Device* oclDeviceInfo, cv::String* vender)
 {
    *vender = oclDeviceInfo->vendorName();
 }
-int oclDeviceGetVenderId(cv::ocl::Device* oclDeviceInfo, int venderId)
-{
-   return oclDeviceInfo->vendorID();
-}
+
 void oclDeviceGetDriverVersion(cv::ocl::Device* oclDeviceInfo, cv::String* driverVersion)
 {
    *driverVersion = oclDeviceInfo->driverVersion();
@@ -108,50 +101,6 @@ void oclDeviceGetDriverVersion(cv::ocl::Device* oclDeviceInfo, cv::String* drive
 void oclDeviceGetExtensions(cv::ocl::Device* oclDeviceInfo, cv::String* extensions)
 {
    *extensions = oclDeviceInfo->extensions();
-}
-//int oclDeviceGetMaxWorkGroupSize(cv::ocl::Device* oclDeviceInfo)
-//{
-//   return oclDeviceInfo->maxWorkGroupSize();
-//}
-int oclDeviceGetMaxComputeUnits(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->maxComputeUnits();
-}
-int oclDeviceGetGlobalMemorySize(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->globalMemSize();
-}
-int oclDeviceGetLocalMemorySize(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->localMemSize();
-}
-int oclDeviceGetMaxMemAllocSize(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->maxMemAllocSize();
-}
-int oclDeviceGetImage2DMaxWidth(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->image2DMaxWidth();
-}
-int oclDeviceGetImage2DMaxHeight(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->image2DMaxHeight();
-}
-int oclDeviceGetDeviceVersionMajor(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->deviceVersionMajor();
-}
-int oclDeviceGetDeviceVersionMinor(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->deviceVersionMinor();
-}
-int oclDeviceGetDoubleFPConfig(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->doubleFPConfig();
-}
-int oclDeviceGetHostUnifiedMemory(cv::ocl::Device* oclDeviceInfo)
-{
-   return oclDeviceInfo->hostUnifiedMemory();
 }
 void oclDeviceGetOpenCLVersion(cv::ocl::Device* oclDeviceInfo, cv::String* extensions)
 {

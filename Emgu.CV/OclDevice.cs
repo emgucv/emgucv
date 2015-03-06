@@ -107,17 +107,6 @@ namespace Emgu.CV
          }
       }
 
-      /// <summary>
-      /// Get the ocl device type
-      /// </summary>
-      public OclDeviceType Type
-      {
-         get
-         {
-            return (OclDeviceType) OclInvoke.oclDeviceGetType(_ptr);
-         }
-      }
-
 
       /// <summary>
       /// Get the opencl version
@@ -200,8 +189,7 @@ namespace Emgu.CV
    /// </summary>
    public static partial class OclInvoke
    {
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern int oclDeviceGetType(IntPtr oclDeviceInfo);
+
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclDeviceGetVersion(IntPtr oclDeviceInfo, IntPtr version);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

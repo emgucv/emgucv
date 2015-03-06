@@ -61,11 +61,6 @@ int cvUMatGetElementSize(cv::UMat* mat)
    return static_cast<int>( mat->elemSize());
 }
 
-int cvUMatGetChannels(cv::UMat* mat)
-{
-   return mat->channels();
-}
-
 void cvUMatSetTo(cv::UMat* mat, cv::_InputArray* value, cv::_InputArray* mask)
 {
    mat->setTo(*value, mask ? *mask : (cv::InputArray) cv::noArray());
