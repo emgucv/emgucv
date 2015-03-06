@@ -33,6 +33,35 @@ namespace Emgu.CV
             return m.ToWritableBitmap();
          }
       }
+
+      public Image(WriteableBitmap writeableBitmap)
+         : this(writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)
+      {
+         byte[] data = new byte[writeableBitmap.PixelWidth * writeableBitmap.PixelHeight * 4];
+         writeableBitmap.PixelBuffer.CopyTo(data);
+
+         GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         try
+         {
+            using (
+               Image<Bgra, Byte> image = new Image<Bgra, byte>(writeableBitmap.PixelWidth, writeableBitmap.PixelHeight, writeableBitmap.PixelWidth * 4,
+                  dataHandle.AddrOfPinnedObject()))
+            {
+               if (typeof (TColor) == typeof (Bgra) && typeof (TDepth) == typeof (byte))
+               {
+                  image.Mat.CopyTo(Mat);
+               }
+               else
+               {
+                  this.ConvertFrom(image);
+               }
+            }
+         }
+         finally
+         {
+            dataHandle.Free();
+         }
+      }
    }
 
    public partial class Mat

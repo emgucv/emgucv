@@ -242,7 +242,7 @@ namespace Emgu.CV
             }
      
             String fullPath = Path.Combine(prefix, mName);
-            if (Platform.OperationSystem != Emgu.Util.TypeEnum.OS.WindowsPhone)
+            if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.WindowsPhone)
             {
                //Do not use absolute path for Windows Phone
                fullPath = Path.Combine(loadDirectory, fullPath);
