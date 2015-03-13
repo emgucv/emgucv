@@ -242,7 +242,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
      ")
      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
-     /// ${CS_DOCUMENTATION}
+    /// ${CS_DOCUMENTATION}
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
@@ -521,7 +521,6 @@ IF(BUILD_opencv_ml)
   "#include \"ml_c.h\"")
 ENDIF()
 ############################### ml code gen END ################################
-
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
