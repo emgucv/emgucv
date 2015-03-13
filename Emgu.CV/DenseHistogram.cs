@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Emgu.CV.Structure;
@@ -15,6 +16,9 @@ namespace Emgu.CV
    ///<summary> 
    /// A Uniform Multi-dimensional Dense Histogram 
    ///</summary>
+#if !NETFX_CORE
+   [DebuggerTypeProxy(typeof(DenseHistogram.DebuggerProxy))]
+#endif
    public class DenseHistogram : Mat
    {
       private int[] _binSizes;
@@ -209,6 +213,51 @@ namespace Emgu.CV
          }
       }
       #endregion
+
+      public float[] GetBinValues()
+      {
+         if (IsEmpty)
+            return null;
+         int totalDim = 1;
+         for (int i = 0; i < _binSizes.Length; i++)
+         {
+            totalDim *= _binSizes[i];
+         }
+         float[] result = new float[totalDim];
+         GCHandle handle = GCHandle.Alloc(result, GCHandleType.Pinned);
+         try
+         {
+            using (
+               Mat m = new Mat(this.Rows, this.Cols, this.Depth, this.NumberOfChannels, handle.AddrOfPinnedObject(),
+                  this.Step))
+            {
+               CopyTo(m);
+            }
+         }
+         finally
+         {
+            handle.Free();
+         }
+         return result;
+      }
+      
+         
+      
+
+      internal class DebuggerProxy
+      {
+         private DenseHistogram _v;
+
+         public DebuggerProxy(DenseHistogram v)
+         {
+            _v = v;
+         }
+
+         public float[] BinValues
+         {
+            get { return _v.GetBinValues(); }
+         }
+      }
 
    }
 }

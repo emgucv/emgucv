@@ -67,15 +67,16 @@ namespace Emgu.CV.Test
          EmguAssert.AreEqual(4 * sizeof(int), Marshal.SizeOf(typeof(Rectangle)));
       }
 
-      /*
+      
       [Test]
-      public void TestDenseHistogramRuntimeSerialization()
+      public void TestDenseHistogram()
       {
          Image<Gray, Byte> img = new Image<Gray, byte>(400, 400);
          img.SetRandUniform(new MCvScalar(), new MCvScalar(255));
          DenseHistogram hist = new DenseHistogram(256, new RangeF(0.0f, 255.0f));
          hist.Calculate<Byte>(new Image<Gray, byte>[] { img }, true, null);
-
+         float[] binValues = hist.GetBinValues();
+         /*
          using (MemoryStream ms = new MemoryStream())
          {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
@@ -89,8 +90,8 @@ namespace Emgu.CV.Test
                DenseHistogram hist2 = (DenseHistogram)o;
                EmguAssert.IsTrue(hist.Equals(hist2));
             }
-         }
-      }*/
+         }*/
+      }
 
       [Test]
       public void TestLookup()
