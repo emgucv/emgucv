@@ -72,12 +72,12 @@ namespace Emgu.CV
 #if UNITY_METRO
                subfolder = "x86_64";
 #else
-               subfolder = "x64";
+               subfolder = String.Empty;
 #endif
             }
             else
             {
-               subfolder = "x86";
+               subfolder = String.Empty;
             }
          }
 
@@ -102,7 +102,7 @@ namespace Emgu.CV
                   loadFolder = await installFolder.GetFolderAsync(subfolder);
 
                foreach (var file in await loadFolder.GetFilesAsync())
-                  files.Add(file.Path);
+                  files.Add(file.Name);
             }
             catch (Exception e)
             {
@@ -242,11 +242,12 @@ namespace Emgu.CV
             }
      
             String fullPath = Path.Combine(prefix, mName);
+            /*
             if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.WindowsPhone)
             {
                //Do not use absolute path for Windows Phone
                fullPath = Path.Combine(loadDirectory, fullPath);
-            }
+            }*/
 
 #if NETFX_CORE
             if (loadableFiles.Exists(sf => sf.Equals(fullPath)))
@@ -328,7 +329,7 @@ namespace Emgu.CV
                Debug.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
             }
          }
-#elif IOS || UNITY_IPHONE
+#elif IOS || UNITY_IPHONE || NETFX_CORE
 #else
          if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {

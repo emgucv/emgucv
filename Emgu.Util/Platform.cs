@@ -15,8 +15,10 @@ namespace Emgu.Util
       private static readonly OS _os;
       private static readonly ClrType _runtime;
 
+#if !(IOS || UNITY_IPHONE || ANDROID || UNITY_ANDROID || WINDOWS_PHONE_APP || NETFX_CORE)
       [DllImport("c")]
       private static extern int uname(IntPtr buffer);
+#endif
 
       static Platform()
       {

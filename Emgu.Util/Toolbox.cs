@@ -136,7 +136,21 @@ namespace Emgu.Util
          return c;
       }
 
-#if !NETFX_CORE
+#if WINDOWS_PHONE_APP
+
+      [DllImport("PhoneAppModelHost.dll", SetLastError = true)]
+      private static extern IntPtr LoadPackagedLibrary(
+         [MarshalAs(UnmanagedType.LPStr)]
+         String fileName,
+         int dwFlags);
+#elif NETFX_CORE
+      [DllImport("Kernel32.dll", SetLastError = true)]
+      private static extern IntPtr LoadPackagedLibrary(
+         [MarshalAs(UnmanagedType.LPStr)]
+         String fileName,
+         int dwFlags);
+
+#else
       /// <summary>
       /// Call a command from command line
       /// </summary>
@@ -421,6 +435,17 @@ namespace Emgu.Util
           const int loadLibrarySearchDllLoadDir = 0x00000100;
           const int loadLibrarySearchDefaultDirs = 0x00001000;
           return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+#elif NETFX_CORE
+         IntPtr handler = LoadPackagedLibrary(dllname, 0);
+
+         if (handler == IntPtr.Zero)
+         {
+            int error = Marshal.GetLastWin32Error();
+
+            System.Diagnostics.Debug.WriteLine(String.Format("Error loading {0}: error code {1}", dllname, (uint)error));
+         }
+
+         return handler;
 #else
          if (Platform.OperationSystem == TypeEnum.OS.Windows)
          {
@@ -451,27 +476,14 @@ namespace Emgu.Util
 #endif
       }
 
+#if !NETFX_CORE
+      
       [DllImport("Kernel32.dll", SetLastError = true)]
       private static extern IntPtr LoadLibraryEx(
          [MarshalAs(UnmanagedType.LPStr)]
-         String fileName, 
+         String fileName,
          IntPtr hFile,
          int dwFlags);
-
-      [DllImport("PhoneAppModelHost.dll", SetLastError = true)]
-      private static extern IntPtr LoadPackagedLibrary(
-         [MarshalAs(UnmanagedType.LPStr)]
-         String fileName,
-         int dwFlags);
-
-      //[DllImport("KernelBase.dll", EntryPoint = "GetLastError")]
-      //private static extern int WindowsPhoneGetLastError();
-
-      /*
-      [DllImport("kernel32.dll", EntryPoint="LoadLibrary")]
-      private static extern IntPtr WinAPILoadLibrary(
-         [MarshalAs(UnmanagedType.LPStr)]
-         String dllname);*/
 
       [DllImport("dl", EntryPoint = "dlopen")]
       private static extern IntPtr Dlopen(
@@ -493,6 +505,6 @@ namespace Emgu.Util
       /// <returns>True if success</returns>
       [DllImport("kernel32.dll")]
       public static extern bool SetDllDirectory(String path);
-
+#endif
    }
 }

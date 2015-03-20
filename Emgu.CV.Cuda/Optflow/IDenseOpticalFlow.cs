@@ -6,7 +6,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
-﻿using System.Security.Cryptography.X509Certificates;
 ﻿using Emgu.CV.Structure;
 using Emgu.Util;
 
