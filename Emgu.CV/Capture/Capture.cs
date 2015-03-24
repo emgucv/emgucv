@@ -554,6 +554,7 @@ namespace Emgu.CV
       /// <param name="value">Value of the property</param>
       /// <returns>True on success</returns>
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
       public static extern bool cveVideoCaptureSet(IntPtr capture, CvEnum.CapProp propertyId, double value);
 
    }
