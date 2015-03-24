@@ -456,19 +456,6 @@ namespace Emgu.Util
                return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
             } //else
                //return WinAPILoadLibrary(dllname);
-         } else if (Platform.OperationSystem == TypeEnum.OS.WindowsPhone)
-         {
-         
-            IntPtr handler = LoadPackagedLibrary(dllname, 0);
-            
-            if (handler == IntPtr.Zero)
-            {
-               int error = Marshal.GetLastWin32Error();
-               
-               System.Diagnostics.Debug.WriteLine(String.Format("Error loading {0}: error code {1}", dllname, (uint) error));
-            }
-            
-            return handler;
          } else
          {
             return Dlopen(dllname, 2); // 2 == RTLD_NOW
