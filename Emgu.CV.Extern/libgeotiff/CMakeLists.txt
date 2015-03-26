@@ -71,6 +71,15 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${GEOTIFF_BUILD_OUTPUT_DIRECTORY})
 ###############################################################################
 # Platform and compiler specific settings
 
+        IF(NETFX_CORE)
+          MESSAGE(STATUS "Disabling depreciation")
+          ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+          #ADD_DEFINITIONS(/sdl-)
+          #target_compile_options(geotiff_archive PRIVATE -sdl-)
+          #SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -sdl-")
+          #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sdl-")
+        ENDIF()
+
 IF(WIN32)
     IF(MSVC) 
         ADD_DEFINITIONS(-DBUILD_AS_DLL=1)

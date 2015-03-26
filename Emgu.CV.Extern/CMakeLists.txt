@@ -59,12 +59,16 @@ CREATE_VECTOR_CS("PointF" "cv::Point2f" "PointF" "struct" ${CMAKE_CURRENT_SOURCE
 CREATE_VECTOR_CS("Point3D32F" "cv::Point3f" "MCvPoint3D32f" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("Rect" "cv::Rect" "Rectangle" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("KeyPoint" "cv::KeyPoint" "MKeyPoint" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
-CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text Emgu.CV.Text "#include \"opencv2/text/erfilter.hpp\"")
+
 CREATE_VECTOR_CS("DMatch" "cv::DMatch" "MDMatch" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("Triangle2DF" "cv::Vec6f" "Triangle2DF" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 
-IF(BUILD_opencv_latentsvm)
+IF(HAVE_opencv_latentsvm)
   CREATE_VECTOR_CS("ObjectDetection" "cv::lsvm::LSVMDetector::ObjectDetection" "MCvObjectDetection" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/latentsvm.hpp\"")
+ENDIF()
+
+IF(HAVE_opencv_text)
+  CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text Emgu.CV.Text "#include \"opencv2/text/erfilter.hpp\"")
 ENDIF()
 
 CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
@@ -294,7 +298,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
 ENDMACRO()
 
 ############################### core code gen START ##############################
-IF(BUILD_opencv_core)
+IF(HAVE_opencv_core)
   CREATE_OCV_CLASS_PROPERTY( 
   "core/mat_property" 
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/MatGenerated.cs"
@@ -365,7 +369,7 @@ ENDIF()
 ############################### core code gen END ################################
 
 ############################### ml code gen START ##############################
-IF(BUILD_opencv_ml)
+IF(HAVE_opencv_ml)
   CREATE_OCV_CLASS_PROPERTY( 
   "ml/em_property" 
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/EMGenerated.cs"
@@ -539,7 +543,9 @@ FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
 
   #MESSAGE("Retriveing source folder for project :  opencv_${CVEXTERN_OPTIONAL_DEP}")
   #GET_TARGET_PROPERTY(OPENCV_MODULE_SOURCE_DIR opencv_${CVEXTERN_OPTIONAL_DEP} PROJECT_SOURCE_DIR)
-  INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
+  IF (HAVE_opencv_${CVEXTERN_OPTIONAL_DEP})
+    INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
+  ENDIF()
   #MESSAGE("Included:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
 
   SET(CVEXTERN_OPTIONAL_DIR "${PROJECT_SOURCE_DIR}/${CVEXTERN_OPTIONAL_DEP}")
@@ -843,12 +849,6 @@ IF(ANDROID OR APPLE)
   FILE(GLOB extern_hdrs_excludes "${PROJECT_SOURCE_DIR}/tiffio_c.h")
   LIST(REMOVE_ITEM extern_hdrs ${extern_hdrs_excludes})
 ENDIF()
-
-
-#source_group("Src_cuda" FILES ${gpu_extern_srcs})
-#source_group("Include_cuda" FILES ${gpu_extern_hdrs})
-#source_group("Src_nonfree" FILES ${nonfree_srcs})
-#source_group("Include_nonfree" FILES ${nonfree_extern_hdrs})
 
 set(the_target ${PROJECT_NAME})
 add_library(${the_target} ${extern_srcs} ${extern_hdrs} )
