@@ -67,7 +67,7 @@ namespace Emgu.CV
    public partial class Mat
    {
       public Mat(WriteableBitmap writeableBitmap)
-         : this(writeableBitmap.PixelHeight, writeableBitmap.PixelWidth, DepthType.Cv8U, 3)
+         : this()
       {
          byte[] data = new byte[writeableBitmap.PixelWidth * writeableBitmap.PixelHeight * 4];
          writeableBitmap.PixelBuffer.CopyTo(data);

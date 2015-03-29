@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.Windows.Phone", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.Windows.Phone", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Windows.Phone.csproj", "{346CAAF6-8D64-48A4-A8DF-A2AB06874003}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsPhoneApp", "..\..\Emgu.CV.Example\WindowsPhoneApp\WindowsPhoneApp.csproj", "{C8B17BAC-54E4-49FE-BC3F-AD2EFB55C4B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Windows.Phone.App", "..\..\Emgu.CV.Example\WindowsPhoneApp\Emgu.CV.Windows.Phone.App.csproj", "{C8B17BAC-54E4-49FE-BC3F-AD2EFB55C4B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util.Windows.Phone", "..\..\Emgu.Util\Emgu.Util.Windows.Phone.csproj", "{E239AC5A-82F4-491E-A3C5-03CB3B0352D2}"
 EndProject

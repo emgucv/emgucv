@@ -1,7 +1,11 @@
 ﻿using System.Drawing;
+using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using WindowsPhoneApp.Common;
-using WindowsPhoneApp.Data;
+using Emgu.CV.Windows.Phone.App.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,13 +22,14 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Storage;
 
 // The Hub Application template is documented at http://go.microsoft.com/fwlink/?LinkID=391641
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
-namespace WindowsPhoneApp
+namespace Emgu.CV.Windows.Phone.App
 {
     /// <summary>
     /// A page that displays details for a single item within a group.
@@ -60,7 +65,28 @@ namespace WindowsPhoneApp
             get { return this.defaultViewModel; }
         }
 
-        /// <summary>
+       private async Task<Mat> LoadImage(String imageUri)
+       {
+
+          StorageFile file =
+             await Package.Current.InstalledLocation.GetFileAsync(imageUri);
+          using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
+          
+          {
+             BitmapImage bmpImage = new BitmapImage();
+             bmpImage.SetSource(fileStream);
+             
+             WriteableBitmap bmp = new WriteableBitmap(bmpImage.PixelWidth, bmpImage.PixelHeight);
+             bmp.SetSource(await file.OpenAsync(FileAccessMode.Read));
+
+             Mat img = new Mat(bmp);
+            
+             return img;
+
+          }
+       }
+
+       /// <summary>
         /// Populates the page with content passed during navigation. Any saved state is also
         /// provided when recreating a page from a prior session.
         /// </summary>
@@ -89,20 +115,23 @@ namespace WindowsPhoneApp
               ImageView.Source = img.ToWritableBitmap();
            } else if (item.Title.Equals("Run Face Detection"))
            {
-              Mat img = CvInvoke.Imread("lena.jpg", LoadImageType.Color | LoadImageType.AnyDepth);
+              Mat img = await LoadImage(@"Assets\Images\lena.jpg");
+
               List<Rectangle> faces = new List<Rectangle>();
               List<Rectangle> eyes = new List<Rectangle>();
               long detectionTime;
-              FaceDetection.DetectFace.Detect(img, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes, false, false,  out detectionTime);
+              FaceDetection.DetectFace.Detect(img, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml",
+                 faces, eyes, false, false, out detectionTime);
 
               foreach (Rectangle face in faces)
                  CvInvoke.Rectangle(img, face, new Bgr(0, 0, 255).MCvScalar, 2);
               foreach (Rectangle eye in eyes)
                  CvInvoke.Rectangle(img, eye, new Bgr(255, 0, 0).MCvScalar, 2);
               ImageView.Source = img.ToWritableBitmap();
+            
            } else if (item.Title.Equals("Run Pedestrian Detection"))
            {
-              Mat img = CvInvoke.Imread("pedestrian.png", LoadImageType.Color | LoadImageType.AnyDepth);
+              Mat img = await LoadImage(@"Assets\Images\pedestrian.png");
               Mat gray = new Mat();
               CvInvoke.CvtColor(img, gray, ColorConversion.Bgr2Gray);
               long detectionTime;

@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Media.Imaging;
 // responsiveness by initiating the data loading task in the code behind for App.xaml when the app 
 // is first launched.
 
-namespace WindowsPhoneApp.Data
+namespace Emgu.CV.Windows.Phone.App.Data
 {
     /// <summary>
     /// Generic item data model.
