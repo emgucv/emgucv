@@ -123,7 +123,7 @@ namespace Emgu.CV.Test
             CudaImage<Gray, Byte> gpuImgSum = new CudaImage<Gray, byte>(gpuImg1.Size);
             Stopwatch watch2 = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
-               CudaInvoke.Add(gpuImg1, gpuImg2, gpuImgSum, null, null);
+               CudaInvoke.Add(gpuImg1, gpuImg2, gpuImgSum);
             watch2.Stop();
             Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
             watch.Stop();
@@ -252,7 +252,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> small = img.Resize(100, 200, Emgu.CV.CvEnum.Inter.Linear);
             CudaImage<Gray, Byte> gpuImg = new CudaImage<Gray, byte>(img);
             CudaImage<Gray, byte> smallGpuImg = new CudaImage<Gray, byte>(small.Size);
-            CudaInvoke.Resize(gpuImg, smallGpuImg, Emgu.CV.CvEnum.Inter.Linear, null);
+            CudaInvoke.Resize(gpuImg, smallGpuImg, small.Size);
             Image<Gray, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
             //ImageViewer.Show(smallGpuImg.ToImage());
             //ImageViewer.Show(small);
@@ -323,12 +323,12 @@ namespace Emgu.CV.Test
             CudaImage<Bgr, Byte> cudaImg = new CudaImage<Bgr, byte>(img);
             CudaImage<Bgr, byte> smallCudaImg = new CudaImage<Bgr, byte>(size);
 
-            CudaInvoke.Resize(cudaImg, smallCudaImg, Emgu.CV.CvEnum.Inter.Linear, null);
+            CudaInvoke.Resize(cudaImg, smallCudaImg, size);
             Image<Bgr, Byte> smallCpuImg = img.Resize(size.Width, size.Height, Emgu.CV.CvEnum.Inter.Linear);
 
 
             Image<Bgr, Byte> diff = smallCudaImg.ToImage().AbsDiff(smallCpuImg);
-            //TODO: Check why they are not an excat match
+            //TODO: Check why they are not an exact match
             //Assert.IsTrue(diff.CountNonzero()[0] == 0);
             //ImageViewer.Show(smallGpuImg.ToImage());
             //ImageViewer.Show(small);

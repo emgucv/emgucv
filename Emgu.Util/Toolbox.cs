@@ -453,7 +453,17 @@ namespace Emgu.Util
             {
                const int loadLibrarySearchDllLoadDir = 0x00000100;
                const int loadLibrarySearchDefaultDirs = 0x00001000;
-               return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+               IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+               if (handler == IntPtr.Zero)
+               {
+                  int error = Marshal.GetLastWin32Error();
+
+                  System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception();
+                  System.Diagnostics.Debug.WriteLine(String.Format("LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
+
+                  
+               }
+               return handler;
             } //else
                //return WinAPILoadLibrary(dllname);
          } else
