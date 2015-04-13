@@ -24,11 +24,7 @@ namespace Emgu.CV.Cuda
       /// <param name="ndisp">Number of disparities. Use 64 as default</param>
       /// <param name="radius">Filter radius, use 3 as default</param>
       /// <param name="iters">Number of iterations, use 1 as default</param>
-      /*
-      /// <param name="edgeThreshold">Truncation of data continuity, use 0.1 as default</param>
-      /// <param name="maxDiscThreshold">Truncation of disparity continuity, use 0.2 as default</param>
-      /// <param name="sigmaRange">Filter range sigma, use 10.0 as default</param>*/
-      public CudaDisparityBilateralFilter(int ndisp, int radius, int iters)
+      public CudaDisparityBilateralFilter(int ndisp = 64, int radius = 3, int iters = 1)
       {
          _ptr = CudaInvoke.cudaDisparityBilateralFilterCreate(ndisp, radius, iters);
       }
@@ -40,7 +36,7 @@ namespace Emgu.CV.Cuda
       /// <param name="image">The image</param>
       /// <param name="dst">The output disparity map, should have the same size as the input disparity map</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Apply(IInputArray disparity, IInputArray image, IOutputArray dst, Stream stream)
+      public void Apply(IInputArray disparity, IInputArray image, IOutputArray dst, Stream stream = null)
       {
          using (InputArray iaDisparity = disparity.GetInputArray())
          using (InputArray iaImage = image.GetInputArray())

@@ -31,7 +31,7 @@ void cudaRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* xma
 	cv::cuda::remap(*src, *dst, *xmap, *ymap, interpolation, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaResize(cv::_InputArray* src, cv::_OutputArray* dst, int interpolation, cv::cuda::Stream* stream)
+void cudaResize(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dsize, double fx, double fy, int interpolation, cv::cuda::Stream* stream)
 {  
    /*
    if ( !stream && !(src->channels() == 1 || src->channels() == 4 || src->channels() == 3) )
@@ -53,7 +53,7 @@ void cudaResize(cv::_InputArray* src, cv::_OutputArray* dst, int interpolation, 
       ts.waitForCompletion();
    } else*/
    {  
-      cv::cuda::resize(*src, *dst, dst->size(), 0, 0, interpolation, stream ? *stream : cv::cuda::Stream::Null());
+      cv::cuda::resize(*src, *dst, *dsize, fx, fy, interpolation, stream ? *stream : cv::cuda::Stream::Null());
    }
 }
 

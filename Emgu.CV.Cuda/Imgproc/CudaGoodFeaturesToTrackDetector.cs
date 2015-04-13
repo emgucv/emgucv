@@ -29,9 +29,12 @@ namespace Emgu.CV.Cuda
       /// <summary>
       /// Find the good features to track
       /// </summary>
-      public void Detect(GpuMat image, GpuMat corners, GpuMat mask = null)
+      public void Detect(IInputArray image, IOutputArray corners, IInputArray mask = null, Stream stream = null)
       {
-         CudaInvoke.cudaCornersDetectorDetect(_ptr, image, corners, mask);
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaCorners = corners.GetOutputArray())
+         using (InputArray iaMask = (mask == null ? mask.GetInputArray() : InputArray.GetEmpty()))
+            CudaInvoke.cudaCornersDetectorDetect(_ptr, iaImage, oaCorners, iaMask, stream);
       }
 
       /// <summary>
@@ -53,7 +56,7 @@ namespace Emgu.CV.Cuda
          double harrisK );
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaCornersDetectorDetect(IntPtr detector, IntPtr image, IntPtr corners, IntPtr mask);
+      internal extern static void cudaCornersDetectorDetect(IntPtr detector, IntPtr image, IntPtr corners, IntPtr mask, IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaCornersDetectorRelease(ref IntPtr detector);

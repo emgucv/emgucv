@@ -47,6 +47,7 @@
     <Compile Include="Optflow\*.cs" />
     <Compile Include="Features2d\*.cs" />
     <Compile Include="Stereo\*.cs" />
+	<Compile Include="Legacy\*.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

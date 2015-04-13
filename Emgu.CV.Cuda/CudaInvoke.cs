@@ -238,16 +238,16 @@ namespace Emgu.CV.Cuda
       /// <param name="c">The sum of the two matrix</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use null if not needed</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Add(IInputArray a, IInputArray b, IOutputArray c, IInputArray mask, Stream stream)
+      public static void Add(IInputArray a, IInputArray b, IOutputArray c, IInputArray mask = null, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
          using (InputArray iaB = b.GetInputArray())
          using (OutputArray oaC = c.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-            cudaAdd(iaA, iaB, oaC, iaMask, stream);
+            cudaAdd(iaA, iaB, oaC, iaMask, depthType, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaAdd(IntPtr a, IntPtr b, IntPtr c, IntPtr mask, IntPtr stream);
+      private static extern void cudaAdd(IntPtr a, IntPtr b, IntPtr c, IntPtr mask, DepthType depthType, IntPtr stream);
 
       /// <summary>
       /// Subtracts one matrix from another (c = a - b).
@@ -257,16 +257,16 @@ namespace Emgu.CV.Cuda
       /// <param name="c">The result of a - b</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use null if not needed</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Subtract(IInputArray a, IInputArray b, IOutputArray c, IInputArray mask, Stream stream)
+      public static void Subtract(IInputArray a, IInputArray b, IOutputArray c, IInputArray mask = null, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
          using (InputArray iaB = b.GetInputArray())
          using (OutputArray oaC = c.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-            cudaSubtract(iaA, iaB, oaC, iaMask, stream);
+            cudaSubtract(iaA, iaB, oaC, iaMask, depthType, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaSubtract(IntPtr a, IntPtr b, IntPtr c, IntPtr mask, IntPtr stream);
+      private static extern void cudaSubtract(IntPtr a, IntPtr b, IntPtr c, IntPtr mask, DepthType depthType, IntPtr stream);
 
       /// <summary>
       /// Computes element-wise product of the two GpuMat: c = scale * a * b.
@@ -276,15 +276,15 @@ namespace Emgu.CV.Cuda
       /// <param name="c">The element-wise multiplication of the two GpuMat</param>
       /// <param name="scale">The scale</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Multiply(IInputArray a, IInputArray b, IOutputArray c, double scale, Stream stream)
+      public static void Multiply(IInputArray a, IInputArray b, IOutputArray c, double scale = 1.0, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
          using (InputArray iaB = b.GetInputArray())
          using (OutputArray oaC = c.GetOutputArray())
-            cudaMultiply(iaA, iaB, oaC, scale, stream);
+            cudaMultiply(iaA, iaB, oaC, scale, depthType, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaMultiply(IntPtr a, IntPtr b, IntPtr c, double scale, IntPtr stream);
+      private static extern void cudaMultiply(IntPtr a, IntPtr b, IntPtr c, double scale, DepthType depthType, IntPtr stream);
 
       /// <summary>
       /// Computes element-wise quotient of the two GpuMat (c = scale *  a / b).
@@ -294,15 +294,15 @@ namespace Emgu.CV.Cuda
       /// <param name="c">The element-wise quotient of the two GpuMat</param>
       /// <param name="scale">The scale</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Divide(IInputArray a, IInputArray b, IOutputArray c, double scale, Stream stream)
+      public static void Divide(IInputArray a, IInputArray b, IOutputArray c, double scale = 1.0, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
          using (InputArray iaB = b.GetInputArray())
          using (OutputArray oaC = c.GetOutputArray())
-            cudaDivide(iaA, iaB, oaC, scale, stream);
+            cudaDivide(iaA, iaB, oaC, scale, depthType, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaDivide(IntPtr a, IntPtr b, IntPtr c, double scale, IntPtr stream);
+      private static extern void cudaDivide(IntPtr a, IntPtr b, IntPtr c, double scale, DepthType depthType, IntPtr stream);
 
       /// <summary>
       /// Computes the weighted sum of two arrays (dst = alpha*src1 + beta*src2 + gamma)
@@ -314,15 +314,15 @@ namespace Emgu.CV.Cuda
       /// <param name="gamma">The constant to be added</param>
       /// <param name="dst">The result</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void AddWeighted(IInputArray src1, double alpha, IInputArray src2, double beta, double gamma, IOutputArray dst, Stream stream)
+      public static void AddWeighted(IInputArray src1, double alpha, IInputArray src2, double beta, double gamma, IOutputArray dst, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaSrc1 = src1.GetInputArray())
          using (InputArray iaSrc2 = src2.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
-            cudaAddWeighted(iaSrc1, alpha, iaSrc2, beta, gamma, oaDst, stream);
+            cudaAddWeighted(iaSrc1, alpha, iaSrc2, beta, gamma, oaDst, depthType, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaAddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst, IntPtr stream);
+      private static extern void cudaAddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst, DepthType depthType, IntPtr stream);
 
       /// <summary>
       /// Computes element-wise absolute difference of two GpuMats (c = abs(a - b)).
@@ -331,7 +331,7 @@ namespace Emgu.CV.Cuda
       /// <param name="b">The second GpuMat</param>
       /// <param name="c">The result of the element-wise absolute difference.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Absdiff(IInputArray a, IInputArray b, IOutputArray c, Stream stream)
+      public static void Absdiff(IInputArray a, IInputArray b, IOutputArray c, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
          using (InputArray iaB = b.GetInputArray())
@@ -347,7 +347,7 @@ namespace Emgu.CV.Cuda
       /// <param name="src">The source GpuMat, support depth of Int16 and float.</param>
       /// <param name="dst">The resulting GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Abs(IInputArray src, IOutputArray dst, Stream stream)
+      public static void Abs(IInputArray src, IOutputArray dst, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
@@ -362,7 +362,7 @@ namespace Emgu.CV.Cuda
       /// <param name="src">The source GpuMat, support depth of byte, UInt16, Int16 and float.</param>
       /// <param name="dst">The resulting GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Sqr(IInputArray src, IOutputArray dst, Stream stream)
+      public static void Sqr(IInputArray src, IOutputArray dst, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
@@ -377,7 +377,7 @@ namespace Emgu.CV.Cuda
       /// <param name="src">The source GpuMat, support depth of byte, UInt16, Int16 and float.</param>
       /// <param name="dst">The resulting GpuMat</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Sqrt(IInputArray src, IOutputArray dst, Stream stream)
+      public static void Sqrt(IInputArray src, IOutputArray dst, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
@@ -385,6 +385,15 @@ namespace Emgu.CV.Cuda
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaSqrt(IntPtr src, IntPtr dst, IntPtr stream);
+
+      public static void Transpose(IInputArray src, IOutputArray dst, Stream stream = null)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cudaTranspose(iaSrc, oaDst, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaTranspose(IntPtr src, IntPtr dst, IntPtr stream);
       #endregion
 
       /// <summary>
@@ -396,7 +405,7 @@ namespace Emgu.CV.Cuda
       /// <param name="c">The result of the comparison.</param>
       /// <param name="cmpop">The type of comparison</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Compare(IInputArray a, IInputArray b, IOutputArray c, CvEnum.CmpType cmpop, Stream stream)
+      public static void Compare(IInputArray a, IInputArray b, IOutputArray c, CvEnum.CmpType cmpop, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
          using (InputArray iaB = b.GetInputArray())
@@ -413,14 +422,14 @@ namespace Emgu.CV.Cuda
       /// <param name="dst">The destination image.</param>
       /// <param name="interpolation">The interpolation type. Supports INTER_NEAREST, INTER_LINEAR.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Resize(IInputArray src, IOutputArray dst, CvEnum.Inter interpolation, Stream stream)
+      public static void Resize(IInputArray src, IOutputArray dst, Size dsize, double fx = 0, double fy = 0, CvEnum.Inter interpolation = Inter.Linear, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
-            cudaResize(iaSrc, oaDst, interpolation, stream);
+            cudaResize(iaSrc, oaDst, ref dsize, fx, fy, interpolation, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaResize(IntPtr src, IntPtr dst, CvEnum.Inter interpolation, IntPtr stream);
+      private static extern void cudaResize(IntPtr src, IntPtr dst, ref Size dsize, double fx, double fy, CvEnum.Inter interpolation, IntPtr stream);
 
       /// <summary>
       /// Copies each plane of a multi-channel GpuMat to a dedicated GpuMat
@@ -618,6 +627,22 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaMinMaxLoc(IntPtr gpuMat, ref double minVal, ref double maxVal, ref Point minLoc, ref Point maxLoc, IntPtr mask);
 
+
+      public static void FindMinMaxLoc(IInputArray src, IOutputArray minMaxVals, IOutputArray loc,
+         IInputArray mask = null, Stream stream = null)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaMinMaxVals = minMaxVals.GetOutputArray())
+         using (OutputArray oaLoc = loc.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         {
+            cudaFindMinMaxLoc(iaSrc, oaMinMaxVals, oaLoc, iaMask, stream);
+         }
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaFindMinMaxLoc(IntPtr src, IntPtr minMaxVals, IntPtr loc, IntPtr mask, IntPtr stream);
+
+
       /// <summary>
       /// Performs downsampling step of Gaussian pyramid decomposition. 
       /// </summary>
@@ -669,14 +694,88 @@ namespace Emgu.CV.Cuda
       /// <param name="src2">If IntPtr.Zero, norm operation is apply to <paramref name="src1"/> only. Otherwise, this is the GpuMat of type CV_8UC1</param>
       /// <param name="normType">The norm type. Supports NORM_INF, NORM_L1, NORM_L2.</param>
       /// <returns>The norm of the <paramref name="src1"/> if <paramref name="src2"/> is IntPtr.Zero. Otherwise the norm of the difference between two GpuMats.</returns>
-      public static double Norm(IInputArray src1, IInputArray src2, Emgu.CV.CvEnum.NormType normType)
+      public static double Norm(IInputArray src1, IInputArray src2, Emgu.CV.CvEnum.NormType normType = NormType.L2)
       {
          using (InputArray iaSrc1 = src1.GetInputArray())
          using (InputArray iaSrc2 = src2 == null ? InputArray.GetEmpty() : src2.GetInputArray())
-            return cudaNorm(iaSrc1, iaSrc2, normType);
+            return cudaNorm2(iaSrc1, iaSrc2, normType);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern double cudaNorm(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NormType normType);
+      private static extern double cudaNorm2(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NormType normType);
+
+      public static double Norm(IInputArray src, Emgu.CV.CvEnum.NormType normType, IInputArray mask = null)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            return cudaNorm1(iaSrc, normType, iaMask);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern double cudaNorm1(IntPtr src1, Emgu.CV.CvEnum.NormType normType, IntPtr mask);
+
+      public static void CalcNorm(IInputArray src, IOutputArray dst, NormType normType = NormType.L2, IInputArray mask = null,
+         Stream stream = null)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cudaCalcNorm(iaSrc, oaDst, normType, iaMask, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaCalcNorm(IntPtr src, IntPtr dst, NormType normType, IntPtr mask, IntPtr stream);
+
+      public static void CalcNormDiff(IInputArray src1, IInputArray src2, IOutputArray dst, NormType normType = NormType.L2,
+         Stream stream = null)
+      {
+         using (InputArray iaSrc1 = src1.GetInputArray())
+         using (InputArray iaSrc2 = src2.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cudaCalcNormDiff(iaSrc1, iaSrc2, oaDst, normType, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaCalcNormDiff(IntPtr src1, IntPtr src2, IntPtr dst, NormType normType, IntPtr stream);
+
+
+      public static MCvScalar AbsSum(IInputArray src, IInputArray mask = null)
+      {
+         MCvScalar result = new MCvScalar();
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cudaAbsSum(iaSrc, ref result, iaMask);
+         return result;
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaAbsSum(IntPtr src, ref MCvScalar sum, IntPtr mask);
+
+      public static void CalcAbsSum(IInputArray src, IOutputArray dst, IInputArray mask = null, Stream stream = null)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cudaCalcAbsSum(iaSrc, oaDst, iaMask, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaCalcAbsSum(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
+
+      public static MCvScalar SqrSum(IInputArray src, IInputArray mask = null)
+      {
+         MCvScalar result = new MCvScalar();
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cudaSqrSum(iaSrc, ref result, iaMask);
+         return result;
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaSqrSum(IntPtr src, ref MCvScalar sqrSum, IntPtr mask);
+
+      public static void CalcSqrSum(IInputArray src, IOutputArray dst, IInputArray mask = null, Stream stream = null)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cudaCalcSqrSum(iaSrc, oaDst, iaMask, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaCalcSqrSum(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Counts non-zero array elements
@@ -686,10 +785,34 @@ namespace Emgu.CV.Cuda
       public static int CountNonZero(IInputArray src)
       {
          using (InputArray iaSrc = src.GetInputArray())
-            return cudaCountNonZero(iaSrc);
+            return cudaCountNonZero1(iaSrc);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int cudaCountNonZero(IntPtr src);
+      private static extern int cudaCountNonZero1(IntPtr src);
+
+      public static void CountNonZero(IInputArray src, IOutputArray dst, Stream stream = null)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cudaCountNonZero2(iaSrc, oaDst, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaCountNonZero2(IntPtr src, IntPtr dst, IntPtr stream);
+
+
+      public static void Normalize(IInputArray src, IOutputArray dst, double alpha, double beta, NormType normType,
+         CvEnum.DepthType depthType, IInputArray mask = null, Stream stream = null)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         {
+           cudaNormalize(iaSrc, oaDst, alpha, beta, normType, depthType, iaMask, stream); 
+         }
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaNormalize(IntPtr src, IntPtr dst, double alpha, double beta,
+         NormType normType, CvEnum.DepthType dtype, IntPtr mask, IntPtr stream);
 
       /// <summary>
       /// Reduces GpuMat to a vector by treating the GpuMat rows/columns as a set of 1D vectors and performing the specified operation on the vectors until a single row/column is obtained. 
@@ -821,7 +944,7 @@ namespace Emgu.CV.Cuda
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="mask">Mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Use IntPtr.Zero if not needed.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void BitwiseNot(IInputArray src, IOutputArray dst, IInputArray mask, Stream stream)
+      public static void BitwiseNot(IInputArray src, IOutputArray dst, IInputArray mask = null, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())

@@ -441,47 +441,64 @@ SET(ENTRYPOINT_MODULES_STRING "public static List<String> OpenCVModuleList = new
       };
 ")
 
-IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-  SET (MSBUILD_IMPORT "  <PropertyGroup>
+MACRO(CREATE_IMPORT_CSPROJ platforms folders dest_folders)
+  SET (MSBUILD_IMPORT "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<Project ToolsVersion=\"12.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">
+  <PropertyGroup>
   <OpenCVBinaryDir>..\\..\\bin</OpenCVBinaryDir>
   </PropertyGroup>
   <Choose>
-  <When Condition=\" '$(Platform)'=='ARM' \">
-  <ItemGroup>")  
-  FOREACH(OPENCV_LIBRARY_OUTPUT_NAME ${OPENCV_LIBRARY_OUTPUT_NAMES})
-    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
-  <Content Include=\"\$(OpenCVBinaryDir)\\arm_phone\\${OPENCV_LIBRARY_OUTPUT_NAME}.dll\">
-    <Link>${OPENCV_LIBRARY_OUTPUT_NAME}.dll</Link>
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>")
-  ENDFOREACH()
-    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
-  <Content Include=\"\$(OpenCVBinaryDir)\\arm_phone\\cvextern.dll\">
-    <Link>cvextern.dll</Link>
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  </ItemGroup>
-  </When>
-  <When Condition=\" '$(Platform)'=='x86' \">
-  <ItemGroup>")
-  FOREACH(OPENCV_LIBRARY_OUTPUT_NAME ${OPENCV_LIBRARY_OUTPUT_NAMES})
-    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
-  <Content Include=\"\$(OpenCVBinaryDir)\\x86_phone\\${OPENCV_LIBRARY_OUTPUT_NAME}.dll\">
-    <Link>${OPENCV_LIBRARY_OUTPUT_NAME}.dll</Link>
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>")
-  ENDFOREACH()
-    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
-  <Content Include=\"\$(OpenCVBinaryDir)\\x86_phone\\cvextern.dll\">
-    <Link>cvextern.dll</Link>
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  </ItemGroup>
-  </When>
-  </Choose>")
+  ")
+  SET(PLATFORM_NAMES ${platforms})
+  SET(FOLDER_NAMES ${folders})
+  SET(DEST_FOLDER_NAMES ${dest_folders})
+  LIST(LENGTH PLATFORM_NAMES PROPERTY_COUNT)
   
+  MESSAGE(STATUS "platforms: ${PLATFORM_NAMES}")
+  MESSAGE(STATUS "folders: ${FOLDER_NAMES}")
+  math(EXPR idx "${PROPERTY_COUNT} - 1")
+  MESSAGE(STATUS "idx: ${idx}")
+  FOREACH(val RANGE ${idx})
+    MESSAGE(STATUS "val: ${val}")
+    LIST(GET PLATFORM_NAMES ${val} PLATFORM_NAME)
+    LIST(GET FOLDER_NAMES ${val} FOLDER_NAME)
+	LIST(GET DEST_FOLDER_NAMES ${val} DEST_FOLDER_NAME)
+    MESSAGE(STATUS "PLATFORM_NAME: ${PLATFORM_NAME}")
+	MESSAGE(STATUS "FOLDER_NAME: ${FOLDER_NAME}")
+    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}  <When Condition=\" '$(Platform)'=='${PLATFORM_NAME}' \">
+  <ItemGroup>")  
+  SET(DEST_SUBFOLDER_PATH "${DEST_FOLDER_NAME}\\\\")
+  IF("${DEST_FOLDER_NAME}" STREQUAL ".")
+    SET(DEST_SUBFOLDER_PATH "")
+  ENDIF()
+  FOREACH(OPENCV_LIBRARY_OUTPUT_NAME ${OPENCV_LIBRARY_OUTPUT_NAMES})
+    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
+  <Content Include=\"\$(OpenCVBinaryDir)\\${FOLDER_NAME}\\${OPENCV_LIBRARY_OUTPUT_NAME}.dll\">
+    <Link>${DEST_SUBFOLDER_PATH}${OPENCV_LIBRARY_OUTPUT_NAME}.dll</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>")
+  ENDFOREACH()
+	
+	SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}  
+  <Content Include=\"\$(OpenCVBinaryDir)\\${FOLDER_NAME}\\cvextern.dll\">
+    <Link>${DEST_SUBFOLDER_PATH}cvextern.dll</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+	</ItemGroup>
+  </When>")
+  ENDFOREACH()
+  SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}
+  </Choose>
+</Project>
+") 
   SET(MSBUILD_IMPORT_FILENAME ${CMAKE_CURRENT_SOURCE_DIR}/import.csproj)
   FILE(WRITE ${MSBUILD_IMPORT_FILENAME} ${MSBUILD_IMPORT})
+ENDMACRO()
+
+IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+  CREATE_IMPORT_CSPROJ("ARM;x86" "arm_phone;x86_phone" ".;.")
+ELSEIF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore")
+  CREATE_IMPORT_CSPROJ("x64;x86" "x64;x86" ".;.")
 ENDIF()
 
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)

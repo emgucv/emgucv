@@ -36,11 +36,11 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="image">8-bit, single-channel binary source image</param>
       /// <param name="lines">Output vector of lines. Each line is represented by a 4-element vector (x1, y1, x2, y2) , where (x1, y1) and (x2, y2) are the ending points of each detected line segment.</param>
-      public void Detect(IInputArray image, IOutputArray lines)
+      public void Detect(IInputArray image, IOutputArray lines, Stream stream = null)
       {
          using (InputArray iaImage = image.GetInputArray())
          using (OutputArray oaLines = lines.GetOutputArray())
-            CudaInvoke.cudaHoughSegmentDetectorDetect(_ptr, iaImage, oaLines);
+            CudaInvoke.cudaHoughSegmentDetectorDetect(_ptr, iaImage, oaLines, stream);
       }
 
       /// <summary>
@@ -58,7 +58,7 @@ namespace Emgu.CV.Cuda
       internal static extern IntPtr cudaHoughSegmentDetectorCreate(float rho, float theta, int minLineLength, int maxLineGap, int maxLines);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaHoughSegmentDetectorDetect(IntPtr detector, IntPtr src, IntPtr lines);
+      internal static extern void cudaHoughSegmentDetectorDetect(IntPtr detector, IntPtr src, IntPtr lines, IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaHoughSegmentDetectorRelease(ref IntPtr detector);

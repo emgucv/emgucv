@@ -1,5 +1,4 @@
-﻿/*
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -117,4 +116,3 @@ namespace Emgu.CV.Cuda
       internal static extern void cudaBackgroundSubtractorFGDRelease(ref IntPtr fgd);
    }
 }
-*/

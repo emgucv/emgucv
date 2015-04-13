@@ -23,7 +23,7 @@ namespace Emgu.CV.Cuda
       /// <param name="iters">The number of BP iterations on each level. Use 8 as default.</param>
       /// <param name="levels">The number of levels. Use 4 as default</param>
       /// <param name="nrPlane">The number of active disparity on the first level. Use 4 as default.</param>
-      public CudaStereoConstantSpaceBP(int ndisp, int iters, int levels, int nrPlane)
+      public CudaStereoConstantSpaceBP(int ndisp = 128, int iters = 8, int levels = 4, int nrPlane = 4)
       {
          _ptr = CudaInvoke.cudaStereoConstantSpaceBPCreate(ndisp, iters, levels, nrPlane);
       }
@@ -35,7 +35,7 @@ namespace Emgu.CV.Cuda
       /// <param name="right">The right image of the same size and the same type</param>
       /// <param name="disparity">The disparity map</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void FindStereoCorrespondence(IInputArray left, IInputArray right, IOutputArray disparity, Stream stream)
+      public void FindStereoCorrespondence(IInputArray left, IInputArray right, IOutputArray disparity, Stream stream = null)
       {
          using (InputArray iaLeft = left.GetInputArray())
          using (InputArray iaRight = right.GetInputArray())

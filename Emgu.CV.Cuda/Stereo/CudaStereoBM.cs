@@ -35,7 +35,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="numberOfDisparities">The number of disparities. Must be multiple of 8. Use 64 for default </param>
       /// <param name="blockSize">The SAD window size. Use 19 for default</param>
-      public CudaStereoBM(int numberOfDisparities, int blockSize)
+      public CudaStereoBM(int numberOfDisparities = 64, int blockSize = 19)
       {
          _ptr = CudaInvoke.cudaStereoBMCreate(numberOfDisparities, blockSize);
       }
@@ -47,7 +47,7 @@ namespace Emgu.CV.Cuda
       /// <param name="right">The right image of the same size and the same type</param>
       /// <param name="disparity">The disparity map</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void FindStereoCorrespondence(IInputArray left, IInputArray right, IOutputArray disparity, Stream stream)
+      public void FindStereoCorrespondence(IInputArray left, IInputArray right, IOutputArray disparity, Stream stream = null)
       {
          using (InputArray iaLeft = left.GetInputArray())
          using (InputArray iaRight = right.GetInputArray())

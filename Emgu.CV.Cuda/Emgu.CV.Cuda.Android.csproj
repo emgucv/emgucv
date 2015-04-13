@@ -53,6 +53,7 @@
     <Compile Include="Optflow\*.cs" />
     <Compile Include="Features2d\*.cs" />
 	<Compile Include="Stereo\*.cs" />
+	<Compile Include="Legacy\*.cs" />
     <Compile Include="*.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

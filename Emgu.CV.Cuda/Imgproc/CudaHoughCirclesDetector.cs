@@ -38,11 +38,11 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="image">8-bit, single-channel grayscale input image.</param>
       /// <param name="circles">Output vector of found circles. Each vector is encoded as a 3-element floating-point vector.</param>
-      public void Detect(IInputArray image, IOutputArray circles)
+      public void Detect(IInputArray image, IOutputArray circles, Stream stream = null)
       {
          using (InputArray iaImage = image.GetInputArray())
          using (OutputArray oaCircles = circles.GetOutputArray())
-            CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, iaImage, oaCircles);
+            CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, iaImage, oaCircles, stream);
       }
 
       /// <summary>
@@ -60,7 +60,7 @@ namespace Emgu.CV.Cuda
       internal static extern IntPtr cudaHoughCirclesDetectorCreate(float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaHoughCirclesDetectorDetect(IntPtr detector, IntPtr src, IntPtr circles);
+      internal static extern void cudaHoughCirclesDetectorDetect(IntPtr detector, IntPtr src, IntPtr circles, IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaHoughCirclesDetectorRelease(ref IntPtr detector);

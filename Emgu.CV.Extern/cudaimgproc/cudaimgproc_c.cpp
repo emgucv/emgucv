@@ -108,9 +108,9 @@ cv::cuda::CannyEdgeDetector* cudaCreateCannyEdgeDetector(double lowThreshold, do
    ptr.addref();
    return ptr.get();
 }
-void cudaCannyEdgeDetectorDetect(cv::cuda::CannyEdgeDetector* detector, cv::_InputArray* src, cv::_OutputArray* edges)
+void cudaCannyEdgeDetectorDetect(cv::cuda::CannyEdgeDetector* detector, cv::_InputArray* src, cv::_OutputArray* edges, cv::cuda::Stream* stream)
 {
-   detector->detect(*src, *edges);
+   detector->detect(*src, *edges, stream ? *stream : cv::cuda::Stream::Null());
 }
 void cudaCannyEdgeDetectorRelease(cv::cuda::CannyEdgeDetector** detector)
 {
@@ -129,9 +129,9 @@ cv::cuda::CornersDetector* cudaGoodFeaturesToTrackDetectorCreate(int srcType, in
 	detector.addref();
    return detector.get();
 }
-void cudaCornersDetectorDetect(cv::cuda::CornersDetector* detector, const cv::cuda::GpuMat* image, cv::cuda::GpuMat* corners, const cv::cuda::GpuMat* mask)
+void cudaCornersDetectorDetect(cv::cuda::CornersDetector* detector, cv::_InputArray* image, cv::_OutputArray* corners, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-   detector->detect (*image, *corners, mask ? *mask : cv::cuda::GpuMat());
+   detector->detect(*image, *corners, mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 void cudaCornersDetectorRelease(cv::cuda::CornersDetector** detector)
 {
@@ -174,9 +174,9 @@ cv::cuda::HoughLinesDetector* cudaHoughLinesDetectorCreate(float rho, float thet
    ptr.addref();
    return ptr.get();
 }
-void cudaHoughLinesDetectorDetect(cv::cuda::HoughLinesDetector* detector, cv::_InputArray* src, cv::_OutputArray* lines)
+void cudaHoughLinesDetectorDetect(cv::cuda::HoughLinesDetector* detector, cv::_InputArray* src, cv::_OutputArray* lines, cv::cuda::Stream* stream)
 {
-   detector->detect(*src, *lines);
+   detector->detect(*src, *lines, stream ? *stream : cv::cuda::Stream::Null());
 }
 void cudaHoughLinesDetectorRelease(cv::cuda::HoughLinesDetector** detector)
 {
@@ -195,9 +195,9 @@ cv::cuda::HoughSegmentDetector* cudaHoughSegmentDetectorCreate(float rho, float 
    ptr.addref();
    return ptr.get();
 }
-void cudaHoughSegmentDetectorDetect(cv::cuda::HoughSegmentDetector* detector, cv::_InputArray* src, cv::_OutputArray* lines)
+void cudaHoughSegmentDetectorDetect(cv::cuda::HoughSegmentDetector* detector, cv::_InputArray* src, cv::_OutputArray* lines, cv::cuda::Stream* stream)
 {
-   detector->detect(*src, *lines);
+   detector->detect(*src, *lines, stream ? *stream : cv::cuda::Stream::Null());
 }
 void cudaHoughSegmentDetectorRelease(cv::cuda::HoughSegmentDetector** detector)
 {
@@ -217,9 +217,9 @@ cv::cuda::HoughCirclesDetector* cudaHoughCirclesDetectorCreate(float dp, float m
    return ptr.get();
 
 }
-void cudaHoughCirclesDetectorDetect(cv::cuda::HoughCirclesDetector* detector, cv::cuda::GpuMat* src, cv::cuda::GpuMat* circles)
+void cudaHoughCirclesDetectorDetect(cv::cuda::HoughCirclesDetector* detector, cv::_InputArray* src, cv::_OutputArray* circles, cv::cuda::Stream* stream)
 {
-   detector->detect(*src, *circles);
+   detector->detect(*src, *circles, stream ? *stream : cv::cuda::Stream::Null());
 }
 void cudaHoughCirclesDetectorRelease(cv::cuda::HoughCirclesDetector** detector)
 {

@@ -727,6 +727,7 @@ ENDIF()
 
 ############################### GPU START ##############################
 IF(WIN32 AND WITH_CUDA)
+  INCLUDE_DIRECTORIES(${CUDA_TOOLKIT_ROOT_DIR}/include)
   SET(CUDA_NPP_INCLUDES ${CUDA_TOOLKIT_ROOT_DIR}/include)
   #MESSAGE("npp includes: ${CUDA_NPP_INCLUDES}")
   if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)

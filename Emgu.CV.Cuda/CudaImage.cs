@@ -242,10 +242,10 @@ namespace Emgu.CV.Cuda
       /// <param name="interpolationType">The interpolation type</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       /// <returns>A CudaImage of the new size</returns>
-      public CudaImage<TColor, TDepth> Resize(Size size, CvEnum.Inter interpolationType, Stream stream)
+      public CudaImage<TColor, TDepth> Resize(Size size, CvEnum.Inter interpolationType, Stream stream = null)
       {
          CudaImage<TColor, TDepth> result = new CudaImage<TColor, TDepth>(size);
-         CudaInvoke.Resize(this, result, interpolationType, stream);
+         CudaInvoke.Resize(this, result, size, 0, 0, interpolationType, stream);
          return result;
       }
 

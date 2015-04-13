@@ -38,11 +38,11 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">Input image</param>
       /// <param name="edges">Image to store the edges found by the function</param>
-      public void Detect(IInputArray src, IOutputArray edges)
+      public void Detect(IInputArray src, IOutputArray edges, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaEdges = edges.GetOutputArray())
-            CudaInvoke.cudaCannyEdgeDetectorDetect(_ptr, iaSrc, oaEdges);
+            CudaInvoke.cudaCannyEdgeDetectorDetect(_ptr, iaSrc, oaEdges, stream);
       }
 
       /// <summary>
@@ -65,7 +65,7 @@ namespace Emgu.CV.Cuda
          bool L2gradient);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaCannyEdgeDetectorDetect(IntPtr detector, IntPtr src, IntPtr edges);
+      internal static extern void cudaCannyEdgeDetectorDetect(IntPtr detector, IntPtr src, IntPtr edges, IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaCannyEdgeDetectorRelease(ref IntPtr detector);

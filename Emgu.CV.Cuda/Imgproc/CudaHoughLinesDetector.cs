@@ -38,11 +38,11 @@ namespace Emgu.CV.Cuda
       /// <param name="lines">Output vector of lines.Output vector of lines. Each line is represented by a two-element vector. 
       /// The first element is the distance from the coordinate origin (top-left corner of the image). 
       /// The second element is the line rotation angle in radians.</param>
-      public void Detect(IInputArray image, IOutputArray lines)
+      public void Detect(IInputArray image, IOutputArray lines, Stream stream = null)
       {
          using (InputArray iaImage = image.GetInputArray())
          using (OutputArray oaLines = lines.GetOutputArray())
-            CudaInvoke.cudaHoughLinesDetectorDetect(_ptr, iaImage, oaLines);
+            CudaInvoke.cudaHoughLinesDetectorDetect(_ptr, iaImage, oaLines, stream);
       }
 
       /// <summary>
@@ -64,7 +64,7 @@ namespace Emgu.CV.Cuda
          int maxLines);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaHoughLinesDetectorDetect(IntPtr detector, IntPtr src, IntPtr lines);
+      internal static extern void cudaHoughLinesDetectorDetect(IntPtr detector, IntPtr src, IntPtr lines, IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaHoughLinesDetectorRelease(ref IntPtr detector);

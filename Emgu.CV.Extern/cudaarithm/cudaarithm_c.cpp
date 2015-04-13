@@ -61,6 +61,12 @@ void cudaMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint
    minLoc->x = minimunLoc.x; minLoc->y = minimunLoc.y;
 }
 
+void cudaFindMinMaxLoc(cv::_InputArray* src, cv::_OutputArray* minMaxVals, cv::_OutputArray* loc, cv::_InputArray* mask, cv::cuda::Stream* stream)
+{
+   cv::cuda::findMinMaxLoc(*src, *minMaxVals, *loc, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+}
+
+
 void cudaMeanStdDev(cv::_InputArray* mtx, CvScalar* mean, CvScalar* stddev)
 {
    cv::Scalar meanVal, stdDevVal;
@@ -71,17 +77,48 @@ void cudaMeanStdDev(cv::_InputArray* mtx, CvScalar* mean, CvScalar* stddev)
    memcpy(stddev->val, stdDevVal.val, sizeof(double)*4);
 }
 
-double cudaNorm(cv::_InputArray* src1, cv::_InputArray* src2, int normType)
+double cudaNorm1(cv::_InputArray* src1, int normType, cv::_InputArray* mask)
 {
-   if (src2)
-      return cv::cuda::norm(*src1, *src2, normType);
-   else
-      return cv::cuda::norm(*src1, normType);
+   return cv::cuda::norm(*src1, normType, mask ? *mask : (cv::_InputArray) cv::noArray());
+}
+double cudaNorm2(cv::_InputArray* src1, cv::_InputArray* src2, int normType)
+{
+   return cv::cuda::norm(*src1, *src2, normType);
+}
+void cudaCalcNorm(cv::_InputArray* src, cv::_OutputArray* dst, int normType, cv::_InputArray* mask, cv::cuda::Stream* stream)
+{
+   cv::cuda::calcNorm(*src, *dst, normType, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+}
+void cudaCalcNormDiff(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int normType, cv::cuda::Stream* stream)
+{
+   cv::cuda::calcNormDiff(*src1, *src2, *dst, normType, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-int cudaCountNonZero(cv::_InputArray* src)
+void cudaAbsSum(cv::_InputArray* src, CvScalar* sum, cv::_InputArray* mask)
+{
+   *sum = cv::cuda::absSum(*src, mask ? *mask : (cv::_InputArray) cv::noArray());
+}
+void cudaCalcAbsSum(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
+{
+   cv::cuda::calcAbsSum(*src, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+}
+void cudaSqrSum(cv::_InputArray* src, CvScalar* sqrSum, cv::_InputArray* mask)
+{
+   *sqrSum = cv::cuda::sqrSum(*src, mask ? *mask : (cv::_InputArray) cv::noArray());
+}
+void cudaCalcSqrSum(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream)
+{
+   cv::cuda::calcSqrSum(*src, *dst, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+}
+
+int cudaCountNonZero1(cv::_InputArray* src)
 {
    return cv::cuda::countNonZero(*src);
+}
+
+void cudaCountNonZero2(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
+{
+   cv::cuda::countNonZero(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaReduce(cv::_InputArray* mtx, cv::_OutputArray* vec, int dim, int reduceOp, int dType, cv::cuda::Stream* stream)
@@ -136,29 +173,29 @@ void cudaRShift(const cv::cuda::GpuMat* a, CvScalar* scale, cv::cuda::GpuMat* c,
 	cv::cuda::rshift(*a, *scale, *c, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaAdd(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream)
+void cudaAdd(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, int dtype, cv::cuda::Stream* stream)
 {
-   cv::cuda::add(*a, *b, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::add(*a, *b, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), dtype, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaSubtract(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, cv::cuda::Stream* stream)
+void cudaSubtract(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, int dtype, cv::cuda::Stream* stream)
 {
-   cv::cuda::subtract(*a, *b, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), c->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::subtract(*a, *b, *c, mask ? *mask : (cv::_InputArray) cv::noArray(), dtype, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaMultiply(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, double scale, cv::cuda::Stream* stream)
+void cudaMultiply(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, double scale, int dtype, cv::cuda::Stream* stream)
 {
-   cv::cuda::multiply(*a, *b, *c, scale, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::multiply(*a, *b, *c, scale, dtype, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaDivide(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, double scale, cv::cuda::Stream* stream)
+void cudaDivide(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, double scale, int dtype, cv::cuda::Stream* stream)
 {
-   cv::cuda::divide(*a, *b, *c, scale, c->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::divide(*a, *b, *c, scale, dtype, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaAddWeighted(cv::_InputArray* src1, double alpha, cv::_InputArray* src2, double beta, double gamma, cv::_OutputArray* dst, cv::cuda::Stream* stream)
+void cudaAddWeighted(cv::_InputArray* src1, double alpha, cv::_InputArray* src2, double beta, double gamma, cv::_OutputArray* dst, int dtype, cv::cuda::Stream* stream)
 {
-   cv::cuda::addWeighted(*src1, alpha, *src2, beta, gamma, *dst, dst->depth(), stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::addWeighted(*src1, alpha, *src2, beta, gamma, *dst, dtype, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaAbsdiff(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::cuda::Stream* stream)
@@ -235,4 +272,15 @@ void cudaLookUpTableRelease(cv::cuda::LookUpTable** lut)
 {
    delete *lut;
    *lut=0;
+}
+
+void cudaTranspose(cv::_InputArray* src1, cv::_OutputArray* dst, cv::cuda::Stream* stream)
+{
+   cv::cuda::transpose(*src1, *dst, stream ? *stream : cv::cuda::Stream::Null());
+}
+
+void cudaNormalize(cv::_InputArray* src, cv::_OutputArray* dst, double alpha, double beta,
+   int norm_type, int dtype, cv::_InputArray* mask, cv::cuda::Stream* stream)
+{
+   cv::cuda::normalize(*src, *dst, alpha, beta, norm_type, dtype, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null()); 
 }
