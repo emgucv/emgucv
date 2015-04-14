@@ -242,12 +242,6 @@ namespace Emgu.CV
             }
      
             String fullPath = Path.Combine(prefix, mName);
-            /*
-            if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.WindowsPhone)
-            {
-               //Do not use absolute path for Windows Phone
-               fullPath = Path.Combine(loadDirectory, fullPath);
-            }*/
 
 #if NETFX_CORE
             if (loadableFiles.Exists(sf => sf.Equals(fullPath)))
@@ -260,6 +254,9 @@ namespace Emgu.CV
                success = false;
             }
 #else
+            //Use absolute path for Windows Desktop
+            fullPath = Path.Combine(loadDirectory, fullPath);
+
             bool fileExist = File.Exists(fullPath);
             if (!fileExist)
                System.Diagnostics.Debug.WriteLine(String.Format("File {0} do not exist.", fullPath));

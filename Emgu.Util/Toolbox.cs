@@ -453,15 +453,16 @@ namespace Emgu.Util
             {
                const int loadLibrarySearchDllLoadDir = 0x00000100;
                const int loadLibrarySearchDefaultDirs = 0x00001000;
+               //const int loadLibrarySearchUserDirs = 0x00000400;
                IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+               //IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchUserDirs);
                if (handler == IntPtr.Zero)
                {
                   int error = Marshal.GetLastWin32Error();
 
-                  System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception();
+                  System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception(error);
                   System.Diagnostics.Debug.WriteLine(String.Format("LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
 
-                  
                }
                return handler;
             } //else
@@ -474,7 +475,7 @@ namespace Emgu.Util
       }
 
 #if !NETFX_CORE
-      
+
       [DllImport("Kernel32.dll", SetLastError = true)]
       private static extern IntPtr LoadLibraryEx(
          [MarshalAs(UnmanagedType.LPStr)]
@@ -492,7 +493,8 @@ namespace Emgu.Util
       /// </summary>
       /// <param name="handle">The handle to the library</param>
       /// <returns>If the function succeeds, the return value is true. If the function fails, the return value is false.</returns>
-      [DllImport("kernel32.dll")]
+      [DllImport("kernel32.dll", SetLastError = true)]
+      [return: MarshalAs(UnmanagedType.Bool)]
       public static extern bool FreeLibrary(IntPtr handle);
 
       /// <summary>
@@ -500,7 +502,8 @@ namespace Emgu.Util
       /// </summary>
       /// <param name="path">The directory to be searched for DLLs</param>
       /// <returns>True if success</returns>
-      [DllImport("kernel32.dll")]
+      [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+      [return: MarshalAs(UnmanagedType.Bool)]
       public static extern bool SetDllDirectory(String path);
 #endif
    }
