@@ -374,12 +374,12 @@ FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
   STRING (SUBSTRING "${OPENCV_MODULE_NAME}" 1 -1 OPENCV_MODULE_NAME_REMAINDER)
   SET(OPENCV_MODULE_NAME_FIRST_LETTER_UPPER "${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}${OPENCV_MODULE_NAME_REMAINDER}")
   
-  GET_TARGET_PROPERTY(OPENCV_OUTPUT_PROJ_TYPE opencv_${OPENCV_MODULE_NAME} TYPE)
-  
+  SET(OPENCV_OUTPUT_PROJ_TYPE "")
   IF(NOT (TARGET opencv_${OPENCV_MODULE_NAME}))
     SET(OPENCV_${OPENCV_MODULE_NAME_UPPER}_OUTPUT_NAME "")
   ELSE()
 	#MESSAGE( STATUS "opencv_${OPENCV_MODULE_NAME} type: ${OPENCV_OUTPUT_PROJ_TYPE}")
+	GET_TARGET_PROPERTY(OPENCV_OUTPUT_PROJ_TYPE opencv_${OPENCV_MODULE_NAME} TYPE)
 	IF(NOT ("${OPENCV_OUTPUT_PROJ_TYPE}" STREQUAL "SHARED_LIBRARY"))
       SET(OPENCV_${OPENCV_MODULE_NAME_UPPER}_OUTPUT_NAME "")
 	ELSE()
@@ -707,48 +707,47 @@ ELSEIF (WIN32)
   # ----------------------------------------------------------------------------
   #  Bundle MSCVRT into deployment package
   # ----------------------------------------------------------------------------
-  IF(MSVC AND (NOT NETFX_CORE))
-    IF(MSVC12)
-	  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc12_redist")
-    ELSEIF(MSVC11)
-	  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc11_redist")
-    ELSEIF(MSVC10)
-      SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc10_redist")
-    ELSEIF(MSVC90)
-      SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc9_redist")
-    ENDIF()
-
-    SET(VCRT_REDIST_NAME "vcredist_x86.exe")
-    IF(MSVC_REDIST_FOLDER AND (DEFINED UNIVERSAL_BUILD OR (NOT DEFINED TARGET_ARCH_64)))    
-	  MESSAGE(STATUS "Including ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME} in package")
-      INSTALL(
-        FILES
-        "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
-        DESTINATION .
-        COMPONENT emgucv_binary 
-        )
-      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'")
-    ENDIF()
+#  IF(MSVC AND (NOT NETFX_CORE))
+#    IF(MSVC12)
+#	  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc12_redist")
+#    ELSEIF(MSVC11)
+#	  SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc11_redist")
+#    ELSEIF(MSVC10)
+#      SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc10_redist")
+#    ELSEIF(MSVC90)
+#      SET(MSVC_REDIST_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/msvc9_redist")
+#    ENDIF()
+#
+#    SET(VCRT_REDIST_NAME "vcredist_x86.exe")
+#    IF(MSVC_REDIST_FOLDER AND (DEFINED UNIVERSAL_BUILD OR (NOT DEFINED TARGET_ARCH_64)))    
+#	  MESSAGE(STATUS "Including ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME} in package")
+#      INSTALL(
+#        FILES
+#        "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
+#        DESTINATION .
+#        COMPONENT emgucv_binary 
+#        )
+#      SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'")
+#    ENDIF()
 	
-    IF(TARGET_ARCH_64)
-      SET(VCRT_REDIST_NAME "vcredist_x64.exe")
-   
-      IF(MSVC_REDIST_FOLDER)
-        MESSAGE(STATUS "Including ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME} in package")
-        INSTALL(
-        FILES
-        "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
-        DESTINATION .
-        COMPONENT emgucv_binary 
-        )
-        SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
-		"${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n!include 'x64.nsh'\n${If} ${RunningX64}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'\n${EndIf}")
-	  ELSE()
-	    MESSAGE(FATAL_ERROR "Unable to find MSVC reistributable. Please verify that the following file exist: ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}")
-      ENDIF()
-	ENDIF()
-	
-  ENDIF()
+#    IF(TARGET_ARCH_64)
+#      SET(VCRT_REDIST_NAME "vcredist_x64.exe")
+#   
+#      IF(MSVC_REDIST_FOLDER)
+#        MESSAGE(STATUS "Including ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME} in package")
+#        INSTALL(
+#        FILES
+#        "${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}"
+#        DESTINATION .
+#        COMPONENT emgucv_binary 
+#        )
+#        SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
+#		"${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n!include 'x64.nsh'\n${If} ${RunningX64}\nExecWait '$INSTDIR\\\\${VCRT_REDIST_NAME} /passive'\n${EndIf}")
+#	  ELSE()
+#	    MESSAGE(FATAL_ERROR "Unable to find MSVC reistributable. Please verify that the following file exist: ${MSVC_REDIST_FOLDER}/${VCRT_REDIST_NAME}")
+#      ENDIF()
+#	ENDIF()
+#  ENDIF()
 
   IF(DEFINED UNIVERSAL_BUILD)
     MESSAGE(STATUS "Including the following files in package: ${UNMANAGED_DLL_32BIT}")

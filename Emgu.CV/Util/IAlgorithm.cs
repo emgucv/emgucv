@@ -93,12 +93,23 @@ namespace Emgu.CV
       /// </summary>
       public String Help;
    }
-
+   */
    /// <summary>
    /// Extension methods to the IAlgorithm interface
    /// </summary>
    public static class AlgorithmExtensions
    {
+      public static void Read(this IAlgorithm algorithm, FileNode node)
+      {
+         CvInvoke.cveAlgorithmRead(algorithm.AlgorithmPtr, node);
+      }
+
+      public static void Write(this IAlgorithm algorithm, FileStorage storage)
+      {
+         CvInvoke.cveAlgorithmWrite(algorithm.AlgorithmPtr, storage);
+      }
+
+      /*
       /// <summary>
       /// Returns the algorithm parameter
       /// </summary>
@@ -256,11 +267,17 @@ namespace Emgu.CV
                return results;
             }
          }
-      }
+      }*/
    }
 
    public partial class CvInvoke
    {
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveAlgorithmRead(IntPtr algorithm, IntPtr node);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveAlgorithmWrite(IntPtr algorithm, IntPtr storage);
+      /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static int cveAlgorithmGetInt(IntPtr algorithm, IntPtr name);
 
@@ -287,6 +304,6 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveAlgorithmGetList(IntPtr names);
-
-   }*/
+      */
+   }
 }

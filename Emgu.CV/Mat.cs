@@ -133,7 +133,7 @@ namespace Emgu.CV
       /// Create an empty cv::Mat
       /// </summary>
       public Mat()
-         : this(MatInvoke.cvMatCreate(), true, true)
+         : this(MatInvoke.cveMatCreate(), true, true)
       {
       }
 
@@ -160,7 +160,7 @@ namespace Emgu.CV
       /// <param name="data">Pointer to the user data. Matrix constructors that take data and step parameters do not allocate matrix data. Instead, they just initialize the matrix header that points to the specified data, which means that no data is copied. This operation is very efficient and can be used to process external data using OpenCV functions. The external data is not automatically deallocated, so you should take care of it.</param>
       /// <param name="step">Number of bytes each matrix row occupies. The value should include the padding bytes at the end of each row, if any.</param>
       public Mat(int rows, int cols, CvEnum.DepthType type, int channels, IntPtr data, int step)
-         : this(MatInvoke.cvMatCreateWithData(rows, cols, CvInvoke.MakeType(type, channels), data, new IntPtr(step)), true, true)
+         : this(MatInvoke.cveMatCreateWithData(rows, cols, CvInvoke.MakeType(type, channels), data, new IntPtr(step)), true, true)
       {
       }
 
@@ -170,7 +170,7 @@ namespace Emgu.CV
       /// <param name="fileName">The name of the file</param>
       /// <param name="loadType">File loading method</param>
       public Mat(String fileName, CvEnum.LoadImageType loadType)
-         : this(MatInvoke.cvMatCreate(), true, false)
+         : this(MatInvoke.cveMatCreate(), true, false)
       {
          using (CvString s = new CvString(fileName))
             CvInvoke.cveImread(s, loadType, this);
@@ -182,7 +182,7 @@ namespace Emgu.CV
       /// <param name="mat">The mat where the new Mat header will share data from</param>
       /// <param name="roi">The region of interest</param>
       public Mat(Mat mat, Rectangle roi)
-         : this(MatInvoke.cvMatCreateFromRect(mat.Ptr, ref roi), true, true)
+         : this(MatInvoke.cveMatCreateFromRect(mat.Ptr, ref roi), true, true)
       {
       }
 
@@ -205,7 +205,7 @@ namespace Emgu.CV
       /// <param name="channels">New matrix number of channels</param>
       public void Create(int rows, int cols, CvEnum.DepthType type, int channels)
       {
-         MatInvoke.cvMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels));
+         MatInvoke.cveMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels));
       }
 
       /// <summary>
@@ -215,7 +215,7 @@ namespace Emgu.CV
       {
          get
          {
-            return MatInvoke.cvMatGetSize(_ptr);
+            return MatInvoke.cveMatGetSize(_ptr);
          }
       }
 
@@ -248,7 +248,7 @@ namespace Emgu.CV
       {
          get
          {
-            return MatInvoke.cvMatGetDataPointer(_ptr);
+            return MatInvoke.cveMatGetDataPointer(_ptr);
          }
       }
 
@@ -301,7 +301,7 @@ namespace Emgu.CV
       {
          get
          {
-            return (int)MatInvoke.cvMatGetStep(_ptr);
+            return (int)MatInvoke.cveMatGetStep(_ptr);
          }
       }
 
@@ -313,7 +313,7 @@ namespace Emgu.CV
       {
          get
          {
-            return MatInvoke.cvMatGetElementSize(_ptr);
+            return MatInvoke.cveMatGetElementSize(_ptr);
          }
       }
 
@@ -326,7 +326,7 @@ namespace Emgu.CV
       {
          using (OutputArray oaM = m.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-            MatInvoke.cvMatCopyTo(Ptr, oaM, iaMask);
+            MatInvoke.cveMatCopyTo(Ptr, oaM, iaMask);
       }
 
       /// <summary>
@@ -339,7 +339,7 @@ namespace Emgu.CV
       public void ConvertTo(IOutputArray m, CvEnum.DepthType rtype, double alpha = 1.0, double beta = 0.0)
       {
          using (OutputArray oaM = m.GetOutputArray())
-            MatInvoke.cvMatConvertTo(Ptr, oaM, rtype, alpha, beta);
+            MatInvoke.cveMatConvertTo(Ptr, oaM, rtype, alpha, beta);
       }
 
       /*
@@ -362,7 +362,7 @@ namespace Emgu.CV
       /// <returns>A new mat header that has different shape</returns>
       public Mat Reshape(int cn, int rows = 0)
       {
-         return new Mat(MatInvoke.cvMatReshape(Ptr, cn, rows), true, false);
+         return new Mat(MatInvoke.cveMatReshape(Ptr, cn, rows), true, false);
       }
 
       /// <summary>
@@ -371,7 +371,7 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if (_needDispose && _ptr != IntPtr.Zero)
-            MatInvoke.cvMatRelease(ref _ptr);
+            MatInvoke.cveMatRelease(ref _ptr);
 
          base.DisposeObject();
 
@@ -824,7 +824,7 @@ namespace Emgu.CV
       public double Dot(IInputArray m)
       {
          using (InputArray iaM = m.GetInputArray())
-            return MatInvoke.cvMatDot(Ptr, iaM);
+            return MatInvoke.cveMatDot(Ptr, iaM);
       }
 
       /// <summary>
@@ -836,7 +836,7 @@ namespace Emgu.CV
       {
          Mat result = new Mat();
          using (InputArray iaM = m.GetInputArray())
-            MatInvoke.cvMatCross(Ptr, iaM, result);
+            MatInvoke.cveMatCross(Ptr, iaM, result);
          return result;
       }
    }
@@ -856,23 +856,23 @@ namespace Emgu.CV
       internal extern static IntPtr cveInputOutputArrayFromMat(IntPtr mat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvMatCreate();
+      internal extern static IntPtr cveMatCreate();
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatRelease(ref IntPtr mat);
+      internal extern static void cveMatRelease(ref IntPtr mat);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static Size cvMatGetSize(IntPtr mat);
+      internal extern static Size cveMatGetSize(IntPtr mat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatCopyTo(IntPtr mat, IntPtr m, IntPtr mask);
+      internal extern static void cveMatCopyTo(IntPtr mat, IntPtr m, IntPtr mask);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cvMatGetElementSize(IntPtr mat);
+      internal extern static int cveMatGetElementSize(IntPtr mat);
 
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvMatGetDataPointer(IntPtr mat);
+      internal extern static IntPtr cveMatGetDataPointer(IntPtr mat);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvMatGetStep(IntPtr mat);
+      internal extern static IntPtr cveMatGetStep(IntPtr mat);
 
       /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -880,13 +880,13 @@ namespace Emgu.CV
       internal extern static bool cvMatIsEmpty(IntPtr mat);*/
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatCreateData(IntPtr mat, int row, int cols, int type);
+      internal extern static void cveMatCreateData(IntPtr mat, int row, int cols, int type);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvMatCreateWithData(int rows, int cols, int type, IntPtr data, IntPtr step);
+      internal extern static IntPtr cveMatCreateWithData(int rows, int cols, int type, IntPtr data, IntPtr step);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvMatCreateFromRect(IntPtr mat, ref Rectangle roi);
+      internal extern static IntPtr cveMatCreateFromRect(IntPtr mat, ref Rectangle roi);
       /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreateFromFile(
@@ -902,22 +902,23 @@ namespace Emgu.CV
       internal extern static void cvMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr);
+      internal extern static IntPtr cveMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatConvertTo(IntPtr mat, IntPtr outArray, CvEnum.DepthType rtype, double alpha, double beta);
+      internal extern static void cveMatConvertTo(IntPtr mat, IntPtr outArray, CvEnum.DepthType rtype, double alpha, double beta);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvMatReshape(IntPtr mat, int cn, int rows);
+      internal extern static IntPtr cveMatReshape(IntPtr mat, int cn, int rows);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveMatToIplImage(IntPtr mat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static double cvMatDot(IntPtr mat, IntPtr m);
+      internal extern static double cveMatDot(IntPtr mat, IntPtr m);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatCross(IntPtr mat, IntPtr m, IntPtr result);
+      internal extern static void cveMatCross(IntPtr mat, IntPtr m, IntPtr result);
+
    }
 }
 

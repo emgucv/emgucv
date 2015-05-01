@@ -55,13 +55,5 @@ CVAPI(cv::ocl::Device*) oclDeviceCreate();
 
 CVAPI(void) oclDeviceRelease(cv::ocl::Device** device);
 
-CVAPI(void) oclDeviceGetVersion(cv::ocl::Device* oclDeviceInfo, cv::String* version);
-CVAPI(void) oclDeviceGetName(cv::ocl::Device* oclDeviceInfo, cv::String* name);
-CVAPI(void) oclDeviceGetVenderName(cv::ocl::Device* oclDeviceInfo, cv::String* vender);
-
-CVAPI(void) oclDeviceGetDriverVersion(cv::ocl::Device* oclDeviceInfo, cv::String* driverVersion);
-CVAPI(void) oclDeviceGetExtensions(cv::ocl::Device* oclDeviceInfo, cv::String* extensions);
-
-CVAPI(void) oclDeviceGetOpenCLVersion(cv::ocl::Device* oclDeviceInfo, cv::String* extensions);
 
 #endif

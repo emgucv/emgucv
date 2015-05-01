@@ -32,97 +32,6 @@ namespace Emgu.CV
          _needDispose = needDispose;
       }
 
-      /// <summary>
-      /// Get the device version
-      /// </summary>
-      public String Version
-      {
-         get
-         {
-            using (CvString s = new CvString())
-            {
-               OclInvoke.oclDeviceGetVersion(_ptr, s);
-               return s.ToString();
-            }
-         }
-      }
-
-      /// <summary>
-      /// Get the device vendor name
-      /// </summary>
-      public String VendorName
-      {
-         get
-         {
-            using (CvString s = new CvString())
-            {
-               OclInvoke.oclDeviceGetVenderName(_ptr, s);
-               return s.ToString();
-            }
-         }
-      }
-
-      /// <summary>
-      /// Get the device driver version
-      /// </summary>
-      public String DriverVersion
-      {
-         get
-         {
-            using (CvString s = new CvString())
-            {
-               OclInvoke.oclDeviceGetDriverVersion(_ptr, s);
-               return s.ToString();
-            }
-         }
-      }
-
-      /// <summary>
-      /// Get the device extensions
-      /// </summary>
-      public String Extensions
-      {
-         get
-         {
-            using (CvString s = new CvString())
-            {
-               OclInvoke.oclDeviceGetExtensions(_ptr, s);
-               return s.ToString();
-            }
-         }
-      }
-
-      /// <summary>
-      /// Get the device name
-      /// </summary>
-      public String Name
-      {
-         get
-         {
-            using (CvString s = new CvString())
-            {
-               OclInvoke.oclDeviceGetName(_ptr, s);
-               return s.ToString();
-            }
-         }
-      }
-
-
-      /// <summary>
-      /// Get the opencl version
-      /// </summary>
-      public String OpenCLVersion
-      {
-         get
-         {
-            using (CvString s = new CvString())
-            {
-               OclInvoke.oclDeviceGetOpenCLVersion(_ptr, s);
-               return s.ToString();
-            }
-         }
-      }
-
 
       /// <summary>
       /// Release all the unmanaged memory associated with this OclInfo
@@ -189,23 +98,6 @@ namespace Emgu.CV
    /// </summary>
    public static partial class OclInvoke
    {
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclDeviceGetVersion(IntPtr oclDeviceInfo, IntPtr version);
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclDeviceGetName(IntPtr oclDeviceInfo, IntPtr name);
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclDeviceGetVenderName(IntPtr oclDeviceInfo, IntPtr vender);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclDeviceGetDriverVersion(IntPtr oclDeviceInfo, IntPtr driverVersion);
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclDeviceGetExtensions(IntPtr oclDeviceInfo, IntPtr extensions);
-
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclDeviceGetOpenCLVersion(IntPtr oclDeviceInfo, IntPtr extensions);
-
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr oclDeviceCreate();
 

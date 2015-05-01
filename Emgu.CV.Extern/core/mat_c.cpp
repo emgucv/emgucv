@@ -78,7 +78,7 @@ cv::MatAllocator* emguMatAllocatorCreate(MatAllocateCallback allocator, MatDeall
 {
    return new EmguMatAllocator(allocator, deallocator, allocateDataActionPtr, freeDataActionPtr);
 }
-void cvMatAllocatorRelease(cv::MatAllocator** allocator)
+void cveMatAllocatorRelease(cv::MatAllocator** allocator)
 {
    if (*allocator != 0)
    {
@@ -87,45 +87,45 @@ void cvMatAllocatorRelease(cv::MatAllocator** allocator)
    }
 }
 
-cv::Mat* cvMatCreate()
+cv::Mat* cveMatCreate()
 {
    return new cv::Mat();
 }
-cv::MatAllocator* cvMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr)
+cv::MatAllocator* cveMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr)
 {
    cv::MatAllocator* a = new EmguMatAllocator(allocator, deallocator, allocateDataActionPtr, freeDataActionPtr);
    mat->allocator = a;
    return a;
 }
 
-void cvMatCreateData(cv::Mat* mat, int row, int cols, int type)
+void cveMatCreateData(cv::Mat* mat, int row, int cols, int type)
 {
    mat->create(row, cols, type);
 }
 
-cv::Mat* cvMatCreateWithData(int rows, int cols, int type, void* data, size_t step)
+cv::Mat* cveMatCreateWithData(int rows, int cols, int type, void* data, size_t step)
 {
    return new cv::Mat(rows, cols, type, data, step);
 }
 
-cv::Mat* cvMatCreateFromRect(cv::Mat* mat, CvRect* roi)
+cv::Mat* cveMatCreateFromRect(cv::Mat* mat, CvRect* roi)
 {
    return new cv::Mat(*mat, *roi);
 }
 
-void cvMatRelease(cv::Mat** mat)
+void cveMatRelease(cv::Mat** mat)
 {
    delete *mat;
    *mat = 0;
 }
-emgu::size cvMatGetSize(cv::Mat* mat)
+emgu::size cveMatGetSize(cv::Mat* mat)
 {
    emgu::size s;
    s.width = mat->cols;
    s.height = mat->rows;
    return s;
 }
-void cvMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask)
+void cveMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask)
 {
    if (mask)
       mat->copyTo(*m, *mask);
@@ -145,21 +145,21 @@ IplImage* cveMatToIplImage(cv::Mat* mat)
    IplImage* result = new IplImage(*mat);
    return result;
 }
-int cvMatGetElementSize(cv::Mat* mat)
+int cveMatGetElementSize(cv::Mat* mat)
 {
    return static_cast<int>( mat->elemSize());
 }
 
-int cvMatGetChannels(cv::Mat* mat)
-{
-   return mat->channels();
-}
+//int cveMatGetChannels(cv::Mat* mat)
+//{
+//   return mat->channels();
+//}
 
-uchar* cvMatGetDataPointer(cv::Mat* mat)
+uchar* cveMatGetDataPointer(cv::Mat* mat)
 {
    return mat->data;
 }
-size_t cvMatGetStep(cv::Mat* mat)
+size_t cveMatGetStep(cv::Mat* mat)
 {
    return mat->step;
 }
@@ -177,12 +177,12 @@ cv::UMat* cvMatGetUMat(cv::Mat* mat, int access)
    return result;
 }
 
-void cvMatConvertTo(  cv::Mat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta )
+void cveMatConvertTo(  cv::Mat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta )
 {
    mat->convertTo(*out, rtype, alpha, beta);
 }
 
-cv::Mat* cvMatReshape(cv::Mat* mat, int cn, int rows)
+cv::Mat* cveMatReshape(cv::Mat* mat, int cn, int rows)
 {
    cv::Mat* result = new cv::Mat();
    cv::Mat m = mat->reshape(cn, rows);
@@ -190,11 +190,11 @@ cv::Mat* cvMatReshape(cv::Mat* mat, int cn, int rows)
    return result;
 }
 
-double cvMatDot(cv::Mat* mat, cv::_InputArray* m)
+double cveMatDot(cv::Mat* mat, cv::_InputArray* m)
 {
    return mat->dot(*m);
 }
-void cvMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result)
+void cveMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result)
 {
    cv::Mat r = mat->cross(*m);
    cv::swap(r, *result);

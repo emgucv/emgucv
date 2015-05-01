@@ -120,7 +120,7 @@ namespace Emgu.CV
       /// Create an empty cv::UMat
       /// </summary>
       public UMat()
-         : this(UMatInvoke.cvUMatCreate(), true)
+         : this(UMatInvoke.cveUMatCreate(), true)
       {
       }
 
@@ -143,7 +143,7 @@ namespace Emgu.CV
       /// <param name="parent">The parent Umat</param>
       /// <param name="roi">The region of interest</param>
       public UMat(UMat parent, Rectangle roi)
-        : this(UMatInvoke.cvUMatCreateFromROI(parent.Ptr, ref roi), true)
+        : this(UMatInvoke.cveUMatCreateFromROI(parent.Ptr, ref roi), true)
       {
       }
 
@@ -156,7 +156,7 @@ namespace Emgu.CV
       /// <param name="channels">New matrix number of channels</param>
       public void Create(int rows, int cols, CvEnum.DepthType type, int channels)
       {
-         UMatInvoke.cvUMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels));
+         UMatInvoke.cveUMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels));
       }
 
       /// <summary>
@@ -166,7 +166,7 @@ namespace Emgu.CV
       {
          get
          {
-            return UMatInvoke.cvUMatGetSize(_ptr);
+            return UMatInvoke.cveUMatGetSize(_ptr);
          }
       }
 
@@ -199,7 +199,7 @@ namespace Emgu.CV
       {
          get
          {
-            return UMatInvoke.cvUMatGetElementSize(_ptr);
+            return UMatInvoke.cveUMatGetElementSize(_ptr);
          }
       }
 
@@ -212,7 +212,7 @@ namespace Emgu.CV
       {
          using (OutputArray oaM = m.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-         UMatInvoke.cvUMatCopyTo(this, oaM, iaMask);
+         UMatInvoke.cveUMatCopyTo(this, oaM, iaMask);
       }
 
       /// <summary>
@@ -224,7 +224,7 @@ namespace Emgu.CV
       {
          using (InputArray iaValue = value.GetInputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-         UMatInvoke.cvUMatSetTo(Ptr, iaValue, iaMask);
+         UMatInvoke.cveUMatSetTo(Ptr, iaValue, iaMask);
       }
 
       /// <summary>
@@ -245,7 +245,7 @@ namespace Emgu.CV
       /// </summary>
       public Mat ToMat(CvEnum.AccessType access)
       {
-         return new Mat(UMatInvoke.cvUMatGetMat(_ptr, access), true, false);
+         return new Mat(UMatInvoke.cveUMatGetMat(_ptr, access), true, false);
       }
 
       /// <summary>
@@ -254,10 +254,10 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if (_needDispose && _ptr != IntPtr.Zero)
-            UMatInvoke.cvUMatRelease(ref _ptr);
+            UMatInvoke.cveUMatRelease(ref _ptr);
 
          if (_oclMatAllocator != IntPtr.Zero)
-            MatDataAllocatorInvoke.cvMatAllocatorRelease(ref _oclMatAllocator);
+            MatDataAllocatorInvoke.cveMatAllocatorRelease(ref _oclMatAllocator);
 
          base.DisposeObject();
 
@@ -295,7 +295,7 @@ namespace Emgu.CV
       /// <returns>A new mat header that has different shape</returns>
       public UMat Reshape(int cn, int rows = 0)
       {
-         return new UMat(UMatInvoke.cvUMatReshape(Ptr, cn, rows), true);
+         return new UMat(UMatInvoke.cveUMatReshape(Ptr, cn, rows), true);
       }
 
       /// <summary>
@@ -453,7 +453,7 @@ namespace Emgu.CV
       public void ConvertTo(IOutputArray m, CvEnum.DepthType rtype, double alpha = 1.0, double beta = 0.0)
       {
          using (OutputArray oaM = m.GetOutputArray())
-         UMatInvoke.cvUMatConvertTo(Ptr, oaM, rtype, alpha, beta);
+         UMatInvoke.cveUMatConvertTo(Ptr, oaM, rtype, alpha, beta);
       }
 
       /*
@@ -563,38 +563,38 @@ namespace Emgu.CV
       internal extern static IntPtr cveInputOutputArrayFromUMat(IntPtr mat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvUMatCreate();
+      internal extern static IntPtr cveUMatCreate();
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvUMatRelease(ref IntPtr mat);
+      internal extern static void cveUMatRelease(ref IntPtr mat);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static Size cvUMatGetSize(IntPtr mat);
+      internal extern static Size cveUMatGetSize(IntPtr mat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvUMatCopyTo(IntPtr mat, IntPtr m, IntPtr mask);
+      internal extern static void cveUMatCopyTo(IntPtr mat, IntPtr m, IntPtr mask);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cvUMatGetElementSize(IntPtr mat);
+      internal extern static int cveUMatGetElementSize(IntPtr mat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvUMatCreateData(IntPtr mat, int row, int cols, int type);
+      internal extern static void cveUMatCreateData(IntPtr mat, int row, int cols, int type);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvUMatCreateFromROI(IntPtr mat, ref Rectangle roi);
+      internal extern static IntPtr cveUMatCreateFromROI(IntPtr mat, ref Rectangle roi);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvUMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
+      internal extern static void cveUMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvUMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr, ref IntPtr matAllocator, ref IntPtr oclAllocator);
+      internal extern static void cveUMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr, ref IntPtr matAllocator, ref IntPtr oclAllocator);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvUMatGetMat(IntPtr umat, CvEnum.AccessType access);
+      internal extern static IntPtr cveUMatGetMat(IntPtr umat, CvEnum.AccessType access);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvUMatConvertTo(IntPtr umat, IntPtr outArray, CvEnum.DepthType rtype, double alpha, double beta);
+      internal extern static void cveUMatConvertTo(IntPtr umat, IntPtr outArray, CvEnum.DepthType rtype, double alpha, double beta);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvUMatReshape(IntPtr mat, int cn, int rows);
+      internal extern static IntPtr cveUMatReshape(IntPtr mat, int cn, int rows);
    }
 }
 

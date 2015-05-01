@@ -5,9 +5,9 @@ SET CMAKE_EXE=C:\Program Files (x86)\CMake\bin\cmake.exe
 SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
 
 :: variables required for android-opencv build ::
-SET ANDROID_SDK=C:\Program Files (x86)\Android\android-sdk
+SET ANDROID_SDK=C:\Android\android-sdk
 SET ANT_DIR=C:\apache-ant-1.9.2
-SET JAVA_HOME=C:\Program Files (x86)\Java\jdk1.6.0_27
+SET JAVA_HOME=C:\Program Files (x86)\Java\jdk1.6.0_39
 
 :: configuration options ::
 :::: general ARM-V7 settings

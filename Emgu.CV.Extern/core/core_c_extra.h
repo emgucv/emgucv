@@ -129,6 +129,9 @@ CVAPI(double) cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2);
 CVAPI(bool) cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputArray* eigenVectors);
 
 //Algorithm 
+CVAPI(void) cveAlgorithmRead(cv::Algorithm* algorithm, cv::FileNode* node);
+CVAPI(void) cveAlgorithmWrite(cv::Algorithm* algorithm, cv::FileStorage* storage);
+
 /*
 CVAPI(int) cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name);
 CVAPI(void) cveAlgorithmSetInt(cv::Algorithm* algorithm, cv::String* name, int value);

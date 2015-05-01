@@ -16,30 +16,34 @@ typedef uchar* (CV_CDECL *MatAllocateCallback)(int depthType, int channel, int t
 typedef void (CV_CDECL *MatDeallocateCallback)(void* freeDataActionPtr);
 
 CVAPI(cv::MatAllocator*) emguMatAllocatorCreate(MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr);
-CVAPI(void) cvMatAllocatorRelease(cv::MatAllocator** allocator);
+CVAPI(void) cveMatAllocatorRelease(cv::MatAllocator** allocator);
 
-CVAPI(cv::Mat*) cvMatCreate();
-CVAPI(cv::MatAllocator*) cvMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr);
-CVAPI(void) cvMatCreateData(cv::Mat* mat, int row, int cols, int type);
-CVAPI(cv::Mat*) cvMatCreateWithData(int rows, int cols, int type, void* data, size_t step);
-CVAPI(cv::Mat*) cvMatCreateFromRect(cv::Mat* mat, CvRect* roi);
+CVAPI(cv::Mat*) cveMatCreate();
+CVAPI(cv::MatAllocator*) cveMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr);
+CVAPI(void) cveMatCreateData(cv::Mat* mat, int row, int cols, int type);
+CVAPI(cv::Mat*) cveMatCreateWithData(int rows, int cols, int type, void* data, size_t step);
+CVAPI(cv::Mat*) cveMatCreateFromRect(cv::Mat* mat, CvRect* roi);
 
-CVAPI(void) cvMatRelease(cv::Mat** mat);
-CVAPI(emgu::size) cvMatGetSize(cv::Mat* mat);
-CVAPI(void) cvMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask);
+CVAPI(void) cveMatRelease(cv::Mat** mat);
+CVAPI(emgu::size) cveMatGetSize(cv::Mat* mat);
+CVAPI(void) cveMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask);
 CVAPI(cv::Mat*) cveArrToMat(CvArr* cvArray, bool copyData, bool allowND, int coiMode);
 CVAPI(IplImage*) cveMatToIplImage(cv::Mat* mat);
-CVAPI(int) cvMatGetElementSize(cv::Mat* mat);
-CVAPI(int) cvMatGetChannels(cv::Mat* mat);
+CVAPI(int) cveMatGetElementSize(cv::Mat* mat);
+//CVAPI(int) cveMatGetChannels(cv::Mat* mat);
 
-CVAPI(uchar*) cvMatGetDataPointer(cv::Mat* mat);
-CVAPI(size_t) cvMatGetStep(cv::Mat* mat);
+CVAPI(uchar*) cveMatGetDataPointer(cv::Mat* mat);
+CVAPI(size_t) cveMatGetStep(cv::Mat* mat);
 
 CVAPI(void) cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask);
 CVAPI(cv::UMat*) cvMatGetUMat(cv::Mat* mat, int access);
-CVAPI(void) cvMatConvertTo( cv::Mat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta );
-CVAPI(cv::Mat*) cvMatReshape(cv::Mat* mat, int cn, int rows);
+CVAPI(void) cveMatConvertTo( cv::Mat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta );
+CVAPI(cv::Mat*) cveMatReshape(cv::Mat* mat, int cn, int rows);
 
-CVAPI(double) cvMatDot(cv::Mat* mat, cv::_InputArray* m);
-CVAPI(void) cvMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result);
+CVAPI(double) cveMatDot(cv::Mat* mat, cv::_InputArray* m);
+CVAPI(void) cveMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result);
+
+
+
+
 #endif

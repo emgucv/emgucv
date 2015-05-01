@@ -25,13 +25,6 @@ CVAPI(void) OpenniGetColorPoints(
                                  IplImage* mask // CV_8UC1
                                  );
 
-/*
-CVAPI(cv::Mat*) cvMatCreateFromFile(char* fileName, int flags);
-*/
-CVAPI(bool) cveImwrite(cv::String* filename, cv::_InputArray* img, const std::vector<int>* params);
-
-CVAPI(void) cveImread(cv::String* fileName, int flags, cv::Mat* result);
-
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device);
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromFile(cv::String* fileName);
 CVAPI(void) cveVideoCaptureRelease(cv::VideoCapture** capture);
@@ -45,9 +38,6 @@ CVAPI(cv::VideoWriter*) cveVideoWriterCreate(cv::String* filename, int fourcc, d
 CVAPI(void) cveVideoWriterRelease(cv::VideoWriter** writer);
 CVAPI(void) cveVideoWriterWrite(cv::VideoWriter* writer, cv::Mat* image);
 CVAPI(int) cveVideoWriterFourcc(char c1, char c2, char c3, char c4);
-
-CVAPI(void) cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst);
-CVAPI(void) cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params);
 
 CVAPI(void) cveImshow(cv::String* winname, cv::_InputArray* mat);
 CVAPI(void) cveNamedWindow(cv::String* winname, int flags);

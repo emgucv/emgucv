@@ -12,9 +12,9 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV
 {
    /// <summary>
-   /// This class contains ocl runtime information
+   /// This class contains ocl platform information
    /// </summary>
-   public class OclPlatformInfo : UnmanagedObject
+   public partial class OclPlatformInfo : UnmanagedObject
    {
       private bool _needDispose;
 
@@ -22,62 +22,6 @@ namespace Emgu.CV
       {
          _ptr = ptr;
          _needDispose = needDispose;
-      }
-
-      /// <summary>
-      /// Get the platform version
-      /// </summary>
-      public String Version
-      {
-         get
-         {
-            using (CvString s = new CvString())
-            {
-               OclInvoke.oclPlatformInfoGetVersion(_ptr, s);
-               return s.ToString();
-            }
-         }
-      }
-
-      /// <summary>
-      /// Get the platform name
-      /// </summary>
-      public String Name
-      {
-         get
-         {
-            using (CvString s = new CvString())
-            {
-               OclInvoke.oclPlatformInfoGetName(_ptr, s);
-               return s.ToString();
-            }
-         }
-      }
-
-      /// <summary>
-      /// Get the platform vendor
-      /// </summary>
-      public String Vendor
-      {
-         get
-         {
-            using (CvString s = new CvString())
-            {
-               OclInvoke.oclPlatformInfoGetVender(_ptr, s);
-               return s.ToString();
-            }
-         }
-      }
-
-      /// <summary>
-      /// Get the number of device that belongs to the 
-      /// </summary>
-      public int DeviceNumber
-      {
-         get
-         {
-            return OclInvoke.oclPlatformInfoDeviceNumber(_ptr);
-         }
       }
 
       /// <summary>
@@ -119,20 +63,10 @@ namespace Emgu.CV
          CvInvoke.CheckLibraryLoaded();
       }
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclPlatformInfoGetVersion(IntPtr oclPlatformInfo, IntPtr platformVersion);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclPlatformInfoGetName(IntPtr oclPlatformInfo, IntPtr platformName);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclPlatformInfoGetVender(IntPtr oclPlatformInfo, IntPtr platformVender);
+   
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclPlatformInfoRelease(ref IntPtr platformInfo);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern int oclPlatformInfoDeviceNumber(IntPtr platformInfo);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclGetPlatformsInfo(IntPtr platformInfoVec);

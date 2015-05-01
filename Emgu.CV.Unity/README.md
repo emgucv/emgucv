@@ -2,7 +2,7 @@ Creating Unity package:
 
 * Copy "x86" folder to "Assets\Plugins\x86"
 * Copy "x64" folder to "Assets\Plugins\x86_64"
-* Copy Android "libs" folder to "Assets\Plugins\Android\libs"
+* Copy Android "libs" folder to "Assets\Plugins\Android\libs", only "armeabi-v7a" and "x86" is needed. 
 * Copy Metro "x86" folder to "Assets\Plugins\Metro\Win81\x86"
 * Copy Metro "x64" folder to "Assets\Plugins\Metro\Win81\x86_64"
 * Copy Metro "arm" folder to "Assets\Plugins\Metro\Win81\arm"

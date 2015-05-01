@@ -81,31 +81,6 @@ void oclDeviceRelease(cv::ocl::Device** device)
    *device = 0;
 }
 
-void oclDeviceGetVersion(cv::ocl::Device* oclDeviceInfo, cv::String* version)
-{
-   *version = oclDeviceInfo->version();
-}
-void oclDeviceGetName(cv::ocl::Device* oclDeviceInfo, cv::String* name)
-{
-   *name = oclDeviceInfo->name();
-}
-void oclDeviceGetVenderName(cv::ocl::Device* oclDeviceInfo, cv::String* vender)
-{
-   *vender = oclDeviceInfo->vendorName();
-}
-
-void oclDeviceGetDriverVersion(cv::ocl::Device* oclDeviceInfo, cv::String* driverVersion)
-{
-   *driverVersion = oclDeviceInfo->driverVersion();
-}
-void oclDeviceGetExtensions(cv::ocl::Device* oclDeviceInfo, cv::String* extensions)
-{
-   *extensions = oclDeviceInfo->extensions();
-}
-void oclDeviceGetOpenCLVersion(cv::ocl::Device* oclDeviceInfo, cv::String* extensions)
-{
-   *extensions = oclDeviceInfo->extensions();
-}
 
 
 

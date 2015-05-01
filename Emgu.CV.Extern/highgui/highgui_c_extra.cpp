@@ -38,26 +38,6 @@ void OpenniGetColorPoints(CvCapture* capture, CvSeq* points, IplImage* maskImg)
    }
 }
 
-/*
-cv::Mat* cvMatCreateFromFile(char* fileName, int flags)
-{
-   cv::Mat* m = new cv::Mat();
-   cv::Mat tmp = cv::imread(fileName, flags);
-   cv::swap(*m, tmp);
-   return m;
-}*/
-
-bool cveImwrite(cv::String* filename, cv::_InputArray* img, const std::vector<int>* params)
-{
-   return cv::imwrite(*filename, *img, params ? *params : std::vector<int>());
-}
-
-void cveImread(cv::String* fileName, int flags, cv::Mat* result)
-{
-   cv::Mat m = cv::imread(*fileName, flags);
-   cv::swap(*result, m);
-}
-
 cv::VideoCapture* cveVideoCaptureCreateFromDevice(int device)
 {
    return new cv::VideoCapture(device);
@@ -111,16 +91,6 @@ int cveVideoWriterFourcc(char c1, char c2, char c3, char c4)
 {
    return cv::VideoWriter::fourcc(c1, c2, c3, c4);
 }
-
-void cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst)
-{
-   cv::imdecode(*buf, flags, dst);
-}
-void cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params)
-{
-   cv::imencode(*ext, *img, *buf, params ? *params : std::vector<int>());
-}
-
 
 void cveImshow(cv::String* winname, cv::_InputArray* mat)
 {

@@ -117,7 +117,7 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if (_memoryAllocator != IntPtr.Zero)
-            MatDataAllocatorInvoke.cvMatAllocatorRelease(ref _memoryAllocator);
+            MatDataAllocatorInvoke.cveMatAllocatorRelease(ref _memoryAllocator);
 
          if (_allocateDataActionPtr != IntPtr.Zero)
          {
@@ -148,6 +148,6 @@ namespace Emgu.CV
       internal delegate void MatDeallocateCallback(IntPtr data);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvMatAllocatorRelease(ref IntPtr allocator);
+      internal extern static void cveMatAllocatorRelease(ref IntPtr allocator);
    }
 }

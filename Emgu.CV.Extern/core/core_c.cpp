@@ -440,6 +440,16 @@ bool cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputAr
 }
 
 //Algorithm 
+void cveAlgorithmRead(cv::Algorithm* algorithm, cv::FileNode* node)
+{
+   algorithm->read(*node);
+}
+
+void cveAlgorithmWrite(cv::Algorithm* algorithm, cv::FileStorage* storage)
+{
+   algorithm->write(*storage);
+}
+
 /*
 int cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name)
 {

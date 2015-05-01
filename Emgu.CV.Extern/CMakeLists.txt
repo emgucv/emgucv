@@ -86,7 +86,16 @@ IF(NOT IOS)
 CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda Emgu.CV.Cuda "#include \"opencv2/core/cuda.hpp\"")
 ENDIF()
 
-
+#################################################################################
+# Code Generation
+# Types:
+#
+# * val: [c++] {obj}.${PROPERTY_NAME}() [C#] {obj}.${CS_FUNCTION_NAME} {get;}
+# * struct: [c++] {obj}.Get${PROPERTY_NAME}(); {obj}.Set${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
+# * propW: [c++] {obj}.Set${PROPERTY_NAME}(val); [C#] {obj}.Set${CS_FUNCTION_NAME}(val)
+# * propR: [c++] {obj}.Get${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME}
+# * act1, act1obj: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val)
+#################################################################################
 MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mtypes cs_func_names csptypes csp_docs cs_namespace cs_invoke_class cs_class_name)
    SET(FILE_NAME ${fname})
    SET(CLASS_NAME_FULL ${cname_full})
@@ -163,6 +172,35 @@ namespace ${cs_namespace}
      ENDIF()
 
      IF("${MARSHAL_TYPE}" STREQUAL "val")
+     IF (${PROPERTY_TYPE} STREQUAL "cv::String") #special handling for functions that returns strings
+     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
+     ")
+     SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}(); }   
+     ")
+
+     SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern void cve${CLASS_NAME}${CS_FUNCTION_NAME}(IntPtr obj, IntPtr str);
+     ")
+     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
+     {
+        get 
+        { 
+           using (CvString s = new CvString())
+           {  
+              ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, s); 
+              return s.ToString();
+           }
+        } 
+     }
+     ")
+     ELSE()
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
      ")
@@ -183,6 +221,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
         get { return ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); } 
      }
      ")
+     ENDIF()
      ELSEIF("${MARSHAL_TYPE}" STREQUAL "struct")
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);
@@ -232,7 +271,54 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
+     ELSEIF("${MARSHAL_TYPE}" STREQUAL "act1")
+     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
+     ")
+     SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->${PROPERTY_NAME}( value ); }     
+     ")
+
+     SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+     internal static extern void cve${CLASS_NAME}${CS_FUNCTION_NAME}(
+        IntPtr obj, ${MARSHAL_IN} 
+        ${CS_PROPERTY_TYPE} val);
+     ")
+     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public void ${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} value)
+     {
+        ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
+     }
+     ")
+     ELSEIF("${MARSHAL_TYPE}" STREQUAL "act1obj")
+     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
+     ")
+     SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { obj->${PROPERTY_NAME}( *value ); }     
+     ")
+
+     SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+     internal static extern void cve${CLASS_NAME}${CS_FUNCTION_NAME}(
+        IntPtr obj, ${MARSHAL_IN} 
+        IntPtr val);
+     ")
+     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public void ${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} value)
+     {
+        ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
+     }
+     ")
      ELSEIF("${MARSHAL_TYPE}" STREQUAL "propR")
+
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
      ")
@@ -253,6 +339,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
         get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
      }
      ")
+     
      ELSE() # for "prop" type
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
@@ -304,16 +391,18 @@ IF(HAVE_opencv_core)
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/MatGenerated.cs"
   "cv::Mat" 
   "Mat" 
-  "isContinuous;isSubmatrix;depth;empty;channels" 
-  "bool;bool;int;bool;int" 
-  "val;val;val;val;val"
-  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels" 
-  "bool;bool;CvEnum.DepthType;bool;int"
+  "isContinuous;isSubmatrix;depth;empty;channels;pop_back;push_back" 
+  "bool;bool;int;bool;int;int;cv::Mat" 
+  "val;val;val;val;val;act1;act1obj"
+  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;PopBack;PushBack" 
+  "bool;bool;CvEnum.DepthType;bool;int;int;Mat"
   "True if the data is continues;
   True if the matrix is a submatrix of another matrix;
   Depth type;
   True if the Mat is empty;
-  Number of channels"
+  Number of channels;
+  The method removes one or more rows from the bottom of the matrix;
+  Adds elements to the bottom of the matrix"
   "Emgu.CV"
   "CvInvoke"
   "Mat"
@@ -344,11 +433,11 @@ IF(HAVE_opencv_core)
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclDeviceGenerated.cs"
   "cv::ocl::Device" 
   "OclDevice" 
-  "maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type" 
-  "int;int;int;int;int;int;int;int;int;int;int;int" 
-  "val;val;val;val;val;val;val;val;val;val;val;val"
-  "MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type" 
-  "int;int;int;int;int;int;int;int;int;int;int;OclDeviceType"
+  "maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion" 
+  "int;int;int;int;int;int;int;int;int;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String" 
+  "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val"
+  "MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type;Name;Version;VendorName;DriverVersion;Extensions;OpenCLVersion" 
+  "int;int;int;int;int;int;int;int;int;int;int;OclDeviceType;String;String;String;String;String;String"
   "The maximum work group size;
   The max compute unit;
   The local memory size;
@@ -360,11 +449,55 @@ IF(HAVE_opencv_core)
   The global memory size;
   The image 2d max width;
   The image2d max height;
-  The ocl device type"
+  The ocl device type;
+  The device name;
+  The device version;
+  The device vendor name;
+  The device driver version;
+  The device extensions;
+  The device OpenCL version"
   "Emgu.CV"
   "CvInvoke"
   "OclDevice"
   "#include \"ocl_c.h\"")
+
+    CREATE_OCV_CLASS_PROPERTY( 
+  "core/ocl_platform_info_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclPlatformInfoGenerated.cs"
+  "cv::ocl::PlatformInfo" 
+  "OclPlatformInfo" 
+  "name;version;vendor;deviceNumber" 
+  "cv::String;cv::String;cv::String;int" 
+  "val;val;val;val"
+  "Name;Version;Vendor;DeviceNumber" 
+  "String;String;String;int"
+  "The platform name;
+  The platform version;
+  The platform vendor;
+  The number of devices"
+  "Emgu.CV"
+  "CvInvoke"
+  "OclPlatformInfo"
+  "#include \"ocl_c.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+  "core/gpumat_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/GpuMatGenerated.cs"
+  "cv::cuda::GpuMat" 
+  "GpuMat" 
+  "isContinuous;depth;empty;channels" 
+  "bool;int;bool;int" 
+  "val;val;val;val"
+  "IsContinuous;Depth;IsEmpty;NumberOfChannels" 
+  "bool;CvEnum.DepthType;bool;int"
+  "True if the data is continues;
+  Depth type;
+  True if the matrix is empty;
+  Number of channels"
+  "Emgu.CV.Cuda"
+  "CudaInvoke"
+  "GpuMat"
+  "#include \"opencv2/core/cuda.hpp\"")
 ENDIF()
 ############################### core code gen END ################################
 
@@ -635,6 +768,13 @@ IF(WIN32 AND CV_ICC)
 ENDIF()
 ############################### INTEL ICL START ##############################
 
+IF(WIN32 AND MSVC)
+  # Add install rules for required system runtimes such as MSVCRxx.dll
+  SET (CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP ON)
+  INCLUDE(InstallRequiredSystemLibraries)
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS})   
+ENDIF()
+
 ############################### OPENNI START ##############################
 IF(WIN32 AND WITH_OPENNI)
   IF(TARGET_ARCH_64)
@@ -643,7 +783,7 @@ IF(WIN32 AND WITH_OPENNI)
     SET(OPENNI_BINARY_FILE "${OPENNI_LIB_DIR}/../Bin/OpenNI.dll")
   ENDIF()
   
-LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${OPENNI_BINARY_FILE})   
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${OPENNI_BINARY_FILE})   
 ENDIF()
 ############################### OPENNI END ################################
 

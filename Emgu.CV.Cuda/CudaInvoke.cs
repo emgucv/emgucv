@@ -807,7 +807,7 @@ namespace Emgu.CV.Cuda
          using (OutputArray oaDst = dst.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
          {
-           cudaNormalize(iaSrc, oaDst, alpha, beta, normType, depthType, iaMask, stream); 
+            cudaNormalize(iaSrc, oaDst, alpha, beta, normType, depthType, iaMask, stream);
          }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1266,8 +1266,28 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaDft(IntPtr src, IntPtr dst, ref Size dftSize, CvEnum.DxtType flags, IntPtr stream);
 
+      public static void CalcHist(IInputArray src, IOutputArray hist, Stream stream)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaHist = hist.GetOutputArray())
+         {
+            cudaCalcHist(iaSrc, oaHist, stream);
+         }
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaCalcHist(IntPtr src, IntPtr hist, IntPtr stream);
+
+      public static void EqualizeHist(IInputArray src, IOutputArray dst, Stream stream)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cudaEqualizeHist(iaSrc, oaDst, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaEqualizeHist(IntPtr src, IntPtr dst, IntPtr stream);
+
       /// <summary>
-      /// Calculates histogram with evenly distributed bins for signle channel source.
+      /// Calculates histogram with evenly distributed bins for single channel source.
       /// </summary>
       /// <param name="src">The source GpuMat. Supports CV_8UC1, CV_16UC1 and CV_16SC1 types.</param>
       /// <param name="hist">Histogram with evenly distributed bins. A GpuMat&lt;int&gt; type.</param>
@@ -1284,6 +1304,16 @@ namespace Emgu.CV.Cuda
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaHistEven(IntPtr src, IntPtr hist, int histSize, int lowerLevel, int upperLevel, IntPtr stream);
+
+      public static void HistRange(IInputArray src, IOutputArray hist, IInputArray levels, Stream stream = null)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaHist = hist.GetOutputArray())
+         using (InputArray iaLevels = levels.GetInputArray())
+            cudaHistRange(iaSrc, oaHist, iaLevels, stream);
+      }
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaHistRange(IntPtr src, IntPtr hist, IntPtr levels, IntPtr stream);
 
       /*
       /// <summary>

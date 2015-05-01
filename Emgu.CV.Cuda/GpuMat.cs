@@ -27,7 +27,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// A GpuMat, use the generic version if possible. The non generic version is good for use as buffer in stream calls.
    /// </summary>
-   public class GpuMat : UnmanagedObject, IEquatable<GpuMat>, IImage
+   public partial class GpuMat : UnmanagedObject, IEquatable<GpuMat>, IImage
    {
 
       internal bool _needDispose;
@@ -105,28 +105,6 @@ namespace Emgu.CV.Cuda
       }
 
       /// <summary>
-      /// Check if the GpuMat is Empty
-      /// </summary>
-      public bool IsEmpty
-      {
-         get
-         {
-            return CudaInvoke.gpuMatIsEmpty(_ptr);
-         }
-      }
-
-      /// <summary>
-      /// Check if the GpuMat is Continuous
-      /// </summary>
-      public bool IsContinuous
-      {
-         get
-         {
-            return CudaInvoke.gpuMatIsContinuous(_ptr);
-         }
-      }
-
-      /// <summary>
       /// Get the GpuMat size:
       /// width == number of columns, height == number of rows
       /// </summary>
@@ -135,13 +113,7 @@ namespace Emgu.CV.Cuda
          get { return CudaInvoke.gpuMatGetSize(_ptr); }
       }
 
-      /// <summary>
-      /// Get the number of channels in the GpuMat
-      /// </summary>
-      public int NumberOfChannels
-      {
-         get { return CudaInvoke.gpuMatGetChannels(_ptr); }
-      }
+
 
       /// <summary>
       /// Get the type of the GpuMat
@@ -149,11 +121,6 @@ namespace Emgu.CV.Cuda
       public int Type
       {
          get { return CudaInvoke.gpuMatGetType(_ptr); }
-      }
-
-      public DepthType Depth
-      {
-         get { return CudaInvoke.gpuMatGetDepth(_ptr); }
       }
 
       /// <summary>
@@ -551,23 +518,12 @@ namespace Emgu.CV.Cuda
       internal static extern Size gpuMatGetSize(IntPtr gpuMat);
 
       /// <summary>
-      /// Get the number of channels in the GpuMat
-      /// </summary>
-      /// <param name="gpuMat">The GpuMat</param>
-      /// <returns>The number of channels in the GpuMat</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern int gpuMatGetChannels(IntPtr gpuMat);
-
-      /// <summary>
       /// Get the GpuMat type
       /// </summary>
       /// <param name="gpuMat">The GpuMat</param>
       /// <returns>The GpuMat type</returns>
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int gpuMatGetType(IntPtr gpuMat);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern DepthType gpuMatGetDepth(IntPtr gpuMat);
 
       /// <summary>
       /// Create a GpuMat of the specified size
@@ -589,25 +545,7 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr gpuMatCreateContinuous(int rows, int cols, int type);
 
-      /// <summary>
-      /// Returns true iff the GpuMatrix data is continuous
-      /// (i.e. when there are no gaps between successive rows).
-      /// </summary>
-      /// <param name="gpuMat">The GpuMat to be checked</param>
-      /// <returns>True if the GpuMat is continuous</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal static extern bool gpuMatIsContinuous(IntPtr gpuMat);
-
-      /// <summary>
-      /// Check if the GpuMat is empty
-      /// </summary>
-      /// <param name="gpuMat">The GpuMat</param>
-      /// <returns>True if the GpuMat is empty</returns>
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal static extern bool gpuMatIsEmpty(IntPtr gpuMat);
-
+ 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void gpuMatSetTo(IntPtr mat, ref MCvScalar value, IntPtr mask, IntPtr stream);
 
