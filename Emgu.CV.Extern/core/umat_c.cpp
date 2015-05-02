@@ -29,7 +29,7 @@ void cveUMatCreateData(cv::UMat* mat, int row, int cols, int type)
 {
    mat->create(row, cols, type);
 }
-cv::UMat* cvUMatCreateFromROI(cv::UMat* mat, CvRect* roi)
+cv::UMat* cveUMatCreateFromROI(cv::UMat* mat, CvRect* roi)
 {
    return new cv::UMat(*mat, *roi);
 }
