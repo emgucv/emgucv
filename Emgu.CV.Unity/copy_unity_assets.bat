@@ -58,13 +58,13 @@ REM xcopy ..\Emgu.CV.Cuda\Stereo Assets\Emgu.CV\Emgu.CV.Cuda\ /s /e /Y
 
 cp -r ../Emgu.CV.Contrib/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\BgSegm
-xcopy ..\Emgu.CV.Contrib\BgSegm Assets\Emgu.CV\Emgu.CV.Contrib\ /s /e /Y
+cp -r ../Emgu.CV.Contrib/BgSegm/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Face
-xcopy ..\Emgu.CV.Contrib\Face Assets\Emgu.CV\Emgu.CV.Contrib\ /s /e /Y
+cp -r ../Emgu.CV.Contrib/Face/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Face
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Text
-xcopy ..\Emgu.CV.Contrib\Text Assets\Emgu.CV\Emgu.CV.Contrib\ /s /e /Y
+cp -r ../Emgu.CV.Contrib/Text/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Text 
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D
-xcopy ..\Emgu.CV.Contrib\XFeatures2D Assets\Emgu.CV\Emgu.CV.Contrib\ /s /e /Y
+cp -r ../Emgu.CV.Contrib/XFeatures2D/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/XFeatures2D
 
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/

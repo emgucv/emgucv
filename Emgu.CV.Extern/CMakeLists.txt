@@ -768,7 +768,7 @@ IF(WIN32 AND CV_ICC)
 ENDIF()
 ############################### INTEL ICL START ##############################
 
-IF(WIN32 AND MSVC)
+IF(WIN32 AND MSVC AND (NOT NETFX_CORE))
   # Add install rules for required system runtimes such as MSVCRxx.dll
   SET (CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP ON)
   INCLUDE(InstallRequiredSystemLibraries)
@@ -789,7 +789,7 @@ ENDIF()
 
 ############################### TESSERACT START ########################
 SET(TESSERACT_OCR_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr.git")
-SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/leptonica-1.71")
+SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/leptonica-1.72")
 IF(ANDROID)
   SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
   IF(EMGU_CV_WITH_TESSERACT)

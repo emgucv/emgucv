@@ -34,8 +34,8 @@ public class CameraTexture : MonoBehaviour
             1.0, new MCvScalar(0, 255, 0));
          Texture2D texture = TextureConvert.ImageToTexture2D(img, FlipType.Vertical);
 
-         this.guiTexture.texture = texture;
-         this.guiTexture.pixelInset = new Rect(-img.Width/2, -img.Height/2, img.Width, img.Height);
+         this.GetComponent<GUITexture>().texture = texture;
+         this.GetComponent<GUITexture>().pixelInset = new Rect(-img.Width/2, -img.Height/2, img.Width, img.Height);
       }
       else
       {
@@ -88,11 +88,11 @@ public class CameraTexture : MonoBehaviour
 
          if (!_textureResized)
          {
-            this.guiTexture.pixelInset = new Rect(-webcamTexture.width / 2, -webcamTexture.height / 2, webcamTexture.width, webcamTexture.height);
+            this.GetComponent<GUITexture>().pixelInset = new Rect(-webcamTexture.width / 2, -webcamTexture.height / 2, webcamTexture.width, webcamTexture.height);
             _textureResized = true;
          }
          transform.rotation = baseRotation * Quaternion.AngleAxis(webcamTexture.videoRotationAngle, Vector3.up);
-         this.guiTexture.texture = resultTexture;
+         this.GetComponent<GUITexture>().texture = resultTexture;
          //count++;
 
       }

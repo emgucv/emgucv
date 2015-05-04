@@ -40,8 +40,8 @@ public class HelloTexture : MonoBehaviour
 
       Texture2D texture = TextureConvert.ImageToTexture2D(img, FlipType.Vertical);
 
-      this.guiTexture.texture = texture;
-      this.guiTexture.pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);
+      this.GetComponent<GUITexture>().texture = texture;
+      this.GetComponent<GUITexture>().pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);
       
    }
 

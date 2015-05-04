@@ -2,7 +2,6 @@
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !NETFX_CORE
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -145,6 +144,7 @@ namespace Emgu.CV.Text
       }
    }
 
+   #if !NETFX_CORE
    /// <summary>
    /// Base class for 1st and 2nd stages of Neumann and Matas scene text detection algorithm
    /// </summary>
@@ -293,5 +293,5 @@ namespace Emgu.CV.Text
          IntPtr classifier,
          float minProbability);
    }
+   #endif
 }
-#endif

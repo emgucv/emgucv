@@ -69,8 +69,8 @@ public class FaceDetection : MonoBehaviour
 
       Texture2D texture = TextureConvert.ImageToTexture2D(img, FlipType.Vertical);
 
-      this.guiTexture.texture = texture;
-      this.guiTexture.pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);
+      this.GetComponent<GUITexture>().texture = texture;
+      this.GetComponent<GUITexture>().pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);
    }
 
    private void updateTextureWithString(String text)
@@ -81,7 +81,7 @@ public class FaceDetection : MonoBehaviour
 
       Texture2D texture = TextureConvert.ImageToTexture2D(img);
 
-      this.guiTexture.texture = texture;
+      this.GetComponent<GUITexture>().texture = texture;
    }
 
    // Update is called once per frame

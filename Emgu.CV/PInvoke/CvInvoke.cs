@@ -175,7 +175,7 @@ namespace Emgu.CV
                   {
                      String unityAltFolder =
                         Path.Combine(
-                           Path.Combine(Path.Combine(directory.Parent.Parent.FullName, "Assets"), "Plugins"),
+                           Path.Combine(Path.Combine(Path.Combine(directory.Parent.Parent.FullName, "Assets"), "Emgu.CV"), "Plugins"),
                            subfolder);
                      
                      if (Directory.Exists(unityAltFolder))
@@ -208,7 +208,7 @@ namespace Emgu.CV
                   }
                   else
 #endif
-              {
+                  {
                      Debug.WriteLine("No suitable directory found to load unmanaged modules");
                      return false;
                   }

@@ -8,7 +8,7 @@ PROJECT(libleptonica)
 #enable_language(CXX)
 #ENDIF()
 
-SET(LEPTON_DIR "leptonica-1.72")
+SET(LEPTON_DIR ${LEPT_ROOT_DIR})
  
 file(GLOB lepton_srcs "${LEPTON_DIR}/src/*.c")
 file(GLOB lepton_srcs_excludes "${LEPTON_DIR}/src/freetype.c" "${LEPTON_DIR}/src/endiantest.c" "${LEPTON_DIR}/src/xtractprotos.c")
