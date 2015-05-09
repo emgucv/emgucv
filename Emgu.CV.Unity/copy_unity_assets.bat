@@ -1,14 +1,18 @@
-rm -rf Assets/Emgu.CV
-mkdir Assets\Emgu.CV
 cd Assets
 cd Emgu.CV
+rm -rf Emgu.Util
 mkdir Emgu.Util
+rm -rf Emgu.CV
 mkdir Emgu.CV
+rm -rf Emgu.CV.ML
 mkdir Emgu.CV.ML
-REM mkdir Emgu.CV.Cuda
+rm -rf Emgu.CV.Contrib
 mkdir Emgu.CV.Contrib
+rm -rf Emgu.CV.OCR
 mkdir Emgu.CV.OCR
+rm -rf Emgu.CV.Stitching
 mkdir Emgu.CV.Stitching
+rm -rf Emgu.CV.Shape
 mkdir Emgu.CV.Shape
 cd ..
 cd ..
@@ -72,14 +76,3 @@ cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/
 cp -r ../Emgu.CV.Stitching/*.cs Assets/Emgu.CV/Emgu.CV.Stitching/
 
 cp -r ../Emgu.CV.Shape/*.cs Assets/Emgu.CV/Emgu.CV.Shape/
-
-cd Assets
-mkdir Plugins
-cd Plugins
-mkdir Android
-cd Android
-mkdir libs
-REM xcopy ..\..\..\..\libs libs\ /s /e
-cd ..
-cd ..
-cd ..

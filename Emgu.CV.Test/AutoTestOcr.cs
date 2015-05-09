@@ -110,7 +110,7 @@ namespace Emgu.CV.Test
          System.IO.FileInfo a6 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.cube.word-freq", "tmp", overwriteMethod);
          System.IO.FileInfo a7 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.tesseract_cube.nn", "tmp", overwriteMethod);
          String path = System.IO.Path.Combine(a0.DirectoryName, "..") + System.IO.Path.DirectorySeparatorChar;
-         return new Tesseract(path, "eng", Tesseract.OcrEngineMode.OemTesseractCubeCombined);
+         return new Tesseract(path, "eng", OcrEngineMode.TesseractCubeCombined);
 #else
          return new Tesseract("./", "eng", OcrEngineMode.TesseractCubeCombined);
 #endif

@@ -304,26 +304,36 @@ namespace Emgu.CV
          List<String> modules = CvInvoke.OpenCVModuleList;
          modules.RemoveAll(String.IsNullOrEmpty);
 
-         _libraryLoaded = true;    
-#if ANDROID
+         _libraryLoaded = true;
+#if ANDROID || (UNITY_ANDROID && !UNITY_EDITOR)
+		 
          System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
          FileInfo file = new FileInfo(asm.Location);
          DirectoryInfo directory = file.Directory;
 
+#if (UNITY_ANDROID && !UNITY_EDITOR)
+         UnityEngine.AndroidJavaObject jo = new UnityEngine.AndroidJavaObject("java.lang.System");
+#endif
          foreach (String module in modules)
          {
             //IntPtr handle = Emgu.Util.Toolbox.LoadLibrary(module);
             //Debug.WriteLine(string.Format(handle == IntPtr.Zero ? "Failed to load {0}." : "Loaded {0}.", module));
             try
             {
-               Debug.WriteLine(string.Format("Trying to load {0}.", module));
+			
+               Console.WriteLine(string.Format("Trying to load {0}.", module));
+#if ANDROID
                Java.Lang.JavaSystem.LoadLibrary(module);
-               Debug.WriteLine(string.Format("Loaded {0}.", module));
+#else //(UNITY_ANDROID && !UNITY_EDITOR)
+
+               jo.CallStatic("loadLibrary", module); 
+#endif
+               Console.WriteLine(string.Format("Loaded {0}.", module));
             }
             catch (Exception e)
             {
                _libraryLoaded = false; 
-               Debug.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
+               Console.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
             }
          }
 #elif IOS || UNITY_IPHONE || NETFX_CORE

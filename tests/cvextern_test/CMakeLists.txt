@@ -43,6 +43,16 @@ if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
 endif()
 ############################### TBB END ################################
 
+############################### GPU START ##############################
+IF(WIN32 AND WITH_CUDA)
+  IF(TARGET_ARCH_64)
+    LINK_DIRECTORIES(${CUDA_TOOLKIT_ROOT_DIR}/lib/x64)
+  ELSE()
+    LINK_DIRECTORIES(${CUDA_TOOLKIT_ROOT_DIR}/lib/Win32)
+  ENDIF()
+ENDIF()
+############################### GPU END ################################
+
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function")
 endif()
