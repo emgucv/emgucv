@@ -21,9 +21,9 @@ cp ../opencv/LICENSE Assets/Emgu.CV/opencv.license.txt
 cp ../Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git/COPYING Assets/Emgu.CV/tesseract.ocr.license.txt
 cp unityStoreIcons/README.txt Assets/Emgu.CV/README.txt
 
-cp -r ../Emgu.Util/*.cs Assets/Emgu.CV/Emgu.Util/
+cp ../Emgu.Util/*.cs Assets/Emgu.CV/Emgu.Util/
 
-cp -r ../Emgu.CV/*.cs Assets/Emgu.CV/Emgu.CV/
+cp ../Emgu.CV/*.cs Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/CameraCalibration Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Color Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Cvb Assets/Emgu.CV/Emgu.CV/
@@ -42,7 +42,7 @@ REM cp -r ../Emgu.CV/Tiff Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Util Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 
-cp -r ../Emgu.CV.ML/*.cs Assets/Emgu.CV/Emgu.CV.ML/
+cp ../Emgu.CV.ML/*.cs Assets/Emgu.CV/Emgu.CV.ML/
 mkdir Assets\Emgu.CV\Emgu.CV.ML\PInvoke 
 xcopy ..\Emgu.CV.ML\PInvoke Assets\Emgu.CV\Emgu.CV.ML\ /s /e /Y
 

@@ -57,6 +57,9 @@ namespace MotionDetection
       private Mat _forgroundMask = new Mat();
       private void ProcessFrame(object sender, EventArgs e)
       {
+         if (this.Disposing || this.IsDisposed)
+            return;
+
          Mat image = new Mat();
 
          _capture.Retrieve(image);

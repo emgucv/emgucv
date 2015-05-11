@@ -266,8 +266,14 @@ namespace Emgu.CV.Test
             //bool trained = model.TrainAuto(td, 5);
             model.Train(td);
 #if !NETFX_CORE
-            String fileName = Path.Combine(Path.GetTempPath(), "svmModel.xml");
+            String fileName = "svmModel.xml";
+            //String fileName = Path.Combine(Path.GetTempPath(), "svmModel.xml");
             model.Save(fileName);
+
+            SVM model2 = new SVM();
+            FileStorage fs = new FileStorage(fileName,  FileStorage.Mode.Read);
+            model2.Read(fs.GetFirstTopLevelNode());
+
             if (File.Exists(fileName))
                File.Delete(fileName);
 #endif
