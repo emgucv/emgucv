@@ -6,6 +6,7 @@ cd platforms/ios
 rm -rf ios-package
 mkdir ios-package
 cp -r ../../tmp/Emgu.CV ios-package/Emgu.CV
+cp -f ../../Emgu.CV/*.cs ios-package/Emgu.CV/
 rm -rf ios-package/Emgu.CV/PInvoke/Android
 rm -rf ios-package/Emgu.CV/PInvoke/System.Drawing
 rm -rf ios-package/Emgu.CV/PInvoke/Windows.Store
@@ -15,10 +16,12 @@ cp ../../Emgu.CV/PInvoke/CvInvokeEntryPoints.cs ios-package/Emgu.CV/PInvoke
 cp -f ../../Emgu.CV/Util/VectorOf*.cs ios-package/Emgu.CV/Util
 
 cp -r ../../tmp/Emgu.CV.ML ios-package/Emgu.CV.ML
+cp -f ../../Emgu.CV.ML/*.cs ios-package/Emgu.CV.ML/
 cp -r ../../tmp/Emgu.CV.OCR ios-package/Emgu.CV.OCR
 cp -r ../../tmp/Emgu.CV.Stitching ios-package/Emgu.CV.Stitching
 cp -r ../../tmp/Emgu.Util ios-package/Emgu.Util
 cp -r ../../tmp/Emgu.CV.Cuda ios-package/Emgu.CV.Cuda
+cp -f ../../Emgu.CV.Cuda/*.cs ios-package/Emgu.CV.Cuda/
 cp -r ../../tmp/Emgu.CV.Shape ios-package/Emgu.CV.Shape
 cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
 cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
