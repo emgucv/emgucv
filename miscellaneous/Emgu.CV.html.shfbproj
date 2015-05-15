@@ -84,7 +84,7 @@ Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
     <NamespaceGrouping>False</NamespaceGrouping>
     <SyntaxFilters>Standard</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
     <Preliminary>False</Preliminary>
     <NamingMethod>Guid</NamingMethod>
     <Language>en-US</Language>
