@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XFeatures2D\*.cs" />
+	<Compile Include="Face\*.cs" />
     <Compile Include="Text\*.cs" />
     <Compile Include="BgSegm\*.cs" />
   </ItemGroup>
