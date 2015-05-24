@@ -8,7 +8,7 @@
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Emgu.CV.Windows.Phone.App</RootNamespace>
-    <AssemblyName>EmguCVApp</AssemblyName>
+    <AssemblyName>EmguCVDemoApp</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
@@ -103,139 +103,7 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <OpenCVBinaryDir>..\..\bin</OpenCVBinaryDir>
-  </PropertyGroup>
-  <Choose>
-    <When Condition=" '$(Platform)'=='ARM' ">
-      <ItemGroup>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_core300.dll">
-          <Link>opencv_core300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_imgproc300.dll">
-          <Link>opencv_imgproc300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_video300.dll">
-          <Link>opencv_video300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_flann300.dll">
-          <Link>opencv_flann300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_ml300.dll">
-          <Link>opencv_ml300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_objdetect300.dll">
-          <Link>opencv_objdetect300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_features2d300.dll">
-          <Link>opencv_features2d300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_calib3d300.dll">
-          <Link>opencv_calib3d300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_photo300.dll">
-          <Link>opencv_photo300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_shape300.dll">
-          <Link>opencv_shape300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_face300.dll">
-          <Link>opencv_face300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_xphoto300.dll">
-          <Link>opencv_xphoto300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_stitching300.dll">
-          <Link>opencv_stitching300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\opencv_latentsvm300.dll">
-          <Link>opencv_latentsvm300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\arm_phone\cvextern.dll">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-    <When Condition=" '$(Platform)'=='x86' ">
-      <ItemGroup>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_core300.dll">
-          <Link>opencv_core300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_imgproc300.dll">
-          <Link>opencv_imgproc300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_video300.dll">
-          <Link>opencv_video300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_flann300.dll">
-          <Link>opencv_flann300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_ml300.dll">
-          <Link>opencv_ml300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_objdetect300.dll">
-          <Link>opencv_objdetect300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_features2d300.dll">
-          <Link>opencv_features2d300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_calib3d300.dll">
-          <Link>opencv_calib3d300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_photo300.dll">
-          <Link>opencv_photo300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_shape300.dll">
-          <Link>opencv_shape300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_face300.dll">
-          <Link>opencv_face300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_xphoto300.dll">
-          <Link>opencv_xphoto300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_stitching300.dll">
-          <Link>opencv_stitching300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\opencv_latentsvm300.dll">
-          <Link>opencv_latentsvm300.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="$(OpenCVBinaryDir)\x86_phone\cvextern.dll">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-  </Choose>
+  <Import Project="..\..\import.csproj" /> 
   <ItemGroup>
     <Compile Include="..\FaceDetection\DetectFace.cs">
       <Link>DetectFace.cs</Link>

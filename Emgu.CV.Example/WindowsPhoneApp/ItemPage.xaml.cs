@@ -22,7 +22,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Windows.Storage;
 
 // The Hub Application template is documented at http://go.microsoft.com/fwlink/?LinkID=391641
 using Emgu.CV;

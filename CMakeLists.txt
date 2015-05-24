@@ -452,7 +452,7 @@ SET(ENTRYPOINT_MODULES_STRING "public static List<String> OpenCVModuleList = new
       };
 ")
 
-MACRO(CREATE_IMPORT_CSPROJ platforms folders dest_folders)
+MACRO(CREATE_IMPORT_CSPROJ platforms folders dest_folders msbuild_import_file_name)
   SET (MSBUILD_IMPORT "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <Project ToolsVersion=\"12.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">
   <PropertyGroup>
@@ -502,14 +502,28 @@ MACRO(CREATE_IMPORT_CSPROJ platforms folders dest_folders)
   </Choose>
 </Project>
 ") 
-  SET(MSBUILD_IMPORT_FILENAME ${CMAKE_CURRENT_SOURCE_DIR}/import.csproj)
-  FILE(WRITE ${MSBUILD_IMPORT_FILENAME} ${MSBUILD_IMPORT})
+  #SET(MSBUILD_IMPORT_FILENAME ${CMAKE_CURRENT_SOURCE_DIR}/import.csproj)
+  FILE(WRITE ${msbuild_import_file_name} ${MSBUILD_IMPORT})
 ENDMACRO()
 
+SET(CSPROJ_IMPORT_NAME "import.csproj")
+SET(CSPROJ_IMPORT_FULL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${CSPROJ_IMPORT_NAME}")
 IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-  CREATE_IMPORT_CSPROJ("ARM;x86" "arm_phone;x86_phone" ".;.")
+  CREATE_IMPORT_CSPROJ("ARM;x86" "arm_phone;x86_phone" ".;." "${CSPROJ_IMPORT_FULL_PATH}")
+  INSTALL(
+    FILES
+	"${CSPROJ_IMPORT_FULL_PATH}"
+    DESTINATION .
+    COMPONENT main
+    )
 ELSEIF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore")
-  CREATE_IMPORT_CSPROJ("x64;x86" "x64;x86" ".;.")
+  CREATE_IMPORT_CSPROJ("x64;x86" "x64;x86" ".;." "${CSPROJ_IMPORT_FULL_PATH}")
+  INSTALL(
+    FILES
+    "${CSPROJ_IMPORT_FULL_PATH}"
+    DESTINATION .
+    COMPONENT main
+    )
 ENDIF()
 
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
@@ -938,16 +952,16 @@ INSTALL(
 
 IF(NETFX_CORE)    
   IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-    INSTALL(
-    DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
-    DESTINATION .
-    COMPONENT emgucv_source
-    FILES_MATCHING 
-    PATTERN "Emgu.CV.Windows.Phone.sln"
-    PATTERN ".git" EXCLUDE
-    PATTERN "bin" EXCLUDE
-  )  
+#    INSTALL(
+#    DIRECTORY
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
+#    DESTINATION .
+#    COMPONENT emgucv_source
+#    FILES_MATCHING 
+#    PATTERN "Emgu.CV.Windows.Phone.sln"
+#    PATTERN ".git" EXCLUDE
+#    PATTERN "bin" EXCLUDE
+#  )  
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Solution
@@ -1010,7 +1024,7 @@ IF(NETFX_CORE)
     DESTINATION .
     COMPONENT emgucv_example_source
     FILES_MATCHING 
-    PATTERN "Emgu.CV.Windows.Store.Example.sln"
+    PATTERN "Emgu.CV.Example.Windows.Store.sln"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
     )
