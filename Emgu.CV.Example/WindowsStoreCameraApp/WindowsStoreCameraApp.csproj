@@ -16,6 +16,9 @@
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <TargetFrameworkVersion />
+    <NuGetPackageImportStamp>36ee2d9b</NuGetPackageImportStamp>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\Solution\Windows.Store\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -129,10 +132,10 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="WindowsStoreCameraApp_TemporaryKey.pfx" />
+    <None Include="packages.config" />
   </ItemGroup>
-    <PropertyGroup>
-  <OpenCVBinaryDir>..\..\bin</OpenCVBinaryDir>
+  <PropertyGroup>
+    <OpenCVBinaryDir>..\..\bin</OpenCVBinaryDir>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.png" />
@@ -162,15 +165,17 @@
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
-  <Import Project="..\..\import.csproj" /> 
+  <Import Project="..\..\import.csproj" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="..\..\Solution\Windows.Store\packages\NokiaImagingSDK.1.2.99\build\win81\NokiaImagingSDK.targets" Condition="Exists('..\..\Solution\Windows.Store\packages\NokiaImagingSDK.1.2.99\build\win81\NokiaImagingSDK.targets')" />
+  <Import Project="..\..\Solution\Windows.Store\packages\LumiaImagingSDK.2.0.208\build\win81\LumiaImagingSDK.targets" Condition="Exists('..\..\Solution\Windows.Store\packages\LumiaImagingSDK.2.0.208\build\win81\LumiaImagingSDK.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\Solution\Windows.Store\packages\NokiaImagingSDK.1.2.99\build\win81\NokiaImagingSDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Solution\Windows.Store\packages\NokiaImagingSDK.1.2.99\build\win81\NokiaImagingSDK.targets'))" />
+    <Error Condition="!Exists('..\..\Solution\Windows.Store\packages\LumiaImagingSDK.2.0.208\build\win81\LumiaImagingSDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Solution\Windows.Store\packages\LumiaImagingSDK.2.0.208\build\win81\LumiaImagingSDK.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

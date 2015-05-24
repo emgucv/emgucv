@@ -969,6 +969,10 @@ IF(NETFX_CORE)
     COMPONENT emgucv_example_source
     FILES_MATCHING 
     PATTERN "Emgu.CV.Example.Windows.Phone.sln"
+    PATTERN "Windows.Phone/.nuget/NuGet.Config"
+	PATTERN "Windows.Phone/.nuget/NuGet.exe"
+	PATTERN "Windows.Phone/.nuget/NuGet.targets"
+	PATTERN "Windows.Phone/packages/repositories.config"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
     )
@@ -993,6 +997,8 @@ IF(NETFX_CORE)
     PATTERN "WindowsPhoneApp/*.csproj"
     PATTERN "WindowsPhoneApp/*.appxmanifest"
     PATTERN "WindowsPhoneApp/*.xaml"
+	PATTERN "WindowsPhoneApp/*.xml"
+	PATTERN "WindowsPhoneApp/packages.config"
     PATTERN "WindowsPhoneApp/Assets/*.png"  
 	PATTERN "FaceDetection/DetectFace.cs" 
     PATTERN "FaceDetection/lena.jpg" 
@@ -1025,6 +1031,10 @@ IF(NETFX_CORE)
     COMPONENT emgucv_example_source
     FILES_MATCHING 
     PATTERN "Emgu.CV.Example.Windows.Store.sln"
+    PATTERN "Windows.Store/.nuget/NuGet.Config"
+	PATTERN "Windows.Store/.nuget/NuGet.exe"
+	PATTERN "Windows.Store/.nuget/NuGet.targets"
+	PATTERN "Windows.Store/packages/repositories.config"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
     )
@@ -1044,6 +1054,7 @@ IF(NETFX_CORE)
     PATTERN "WindowsStoreCameraApp/*.csproj"
     PATTERN "WindowsStoreCameraApp/*.appxmanifest"
     PATTERN "WindowsStoreCameraApp/*.xaml"
+	PATTERN "WindowsStoreCameraApp/packages.config"
     PATTERN "WindowsStoreCameraApp/Assets/*.png"  
     PATTERN ".git" EXCLUDE
     PATTERN "obj" EXCLUDE

@@ -1073,34 +1073,34 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(roi1.Equals(roi2));
       }
 
-      /*
+      
       [TestAttribute]
       public void TestGoodFeature()
       {
          using (GFTTDetector detector = new GFTTDetector())
-         using (Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("stuff.jpg"))
+         using (Mat img = EmguAssert.LoadMat("stuff.jpg"))
          {
-            
-            PointF[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
-            img.FindCornerSubPix(pts, new Size(5, 5), new Size(-1, -1), new MCvTermCriteria(20, 0.0001));
 
-            foreach (PointF p in pts[0])
-               img.Draw(new CircleF(p, 3.0f), new Bgr(255, 0, 0), 1);
+            var keypoints = detector.Detect(img);
+            foreach (MKeyPoint p in keypoints)
+               CvInvoke.Circle(img, Point.Round( p.Point), 3, new Bgr(255, 0, 0).MCvScalar, 1);
+            //ImageViewer.Show(img);
          }
 
-         //using(Util.TbbTaskScheduler scheduler = new Util.TbbTaskScheduler())
+
+         using (GFTTDetector detector = new GFTTDetector())
          using (Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("stuff.jpg"))
          {
             Stopwatch watch = Stopwatch.StartNew();
             int runs = 10;
             for (int i = 0; i < runs; i++)
             {
-               PointF[][] pts = img.GoodFeaturesToTrack(100, 0.1, 10, 5);
+               var pts = detector.Detect(img);
             }
             watch.Stop();
             EmguAssert.WriteLine(String.Format("Avg time to extract good features from image of {0}: {1}", img.Size, watch.ElapsedMilliseconds / runs));
          }
-      }*/
+      }
 
       [TestAttribute]
       public void TestContour()

@@ -29,7 +29,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-using Nokia.Graphics.Imaging;
+using Lumia.Imaging;
 
 namespace WindowsStoreCameraApp
 {
@@ -45,16 +45,7 @@ namespace WindowsStoreCameraApp
          
          this.InitializeComponent();
          CaptureButton.Content = "Capture and Canny";
-         /*
-         _mediaCapture = new MediaCapture();
 
-         MediaCaptureInitializationSettings setttings = new MediaCaptureInitializationSettings();
-         setttings.AudioDeviceId = String.Empty;
-         setttings.VideoDeviceId = String.Empty;
-         setttings.StreamingCaptureMode = StreamingCaptureMode.Video;
-         setttings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
-
-         _mediaCapture.InitializeAsync(setttings);*/
       }
 
       /// <summary>

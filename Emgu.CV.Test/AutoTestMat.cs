@@ -16,6 +16,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 #if NETFX_CORE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -56,6 +57,34 @@ namespace Emgu.CV.Test
          m2.SetTo(new MCvScalar(1, 2, 3));
          
          EmguAssert.IsTrue(m1.Equals(m2));
+
+      }
+
+      [TestAttribute]
+      public void TestMatToFileStorage()
+      {
+         //create a matrix m with random values
+         Mat m = new Mat(120, 240, DepthType.Cv8U, 1);
+         using (ScalarArray low = new ScalarArray(0))
+         using (ScalarArray high = new ScalarArray(255))
+         CvInvoke.Randu(m, low, high);
+
+         //Convert the random matrix m to yml format, good for matrix that contains values such as calibration, homography etc.
+         String mStr;
+         using (FileStorage fs = new FileStorage(".yml", FileStorage.Mode.Write | FileStorage.Mode.Memory))
+         {
+            fs.Write(m, "m");
+            mStr = fs.ReleaseAndGetString();
+         }
+
+         //Treat the Mat as image data and convert it to png format.
+         using (VectorOfByte bytes = new VectorOfByte())
+         {
+            CvInvoke.Imencode(".png", m, bytes);
+
+            byte[] rawData =  bytes.ToArray();
+         }
+
 
       }
 

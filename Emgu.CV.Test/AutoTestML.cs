@@ -94,6 +94,22 @@ namespace Emgu.CV.Test
                         (accuracy > 5 ? new Bgr(0, 90, 0) : new Bgr(40, 90, 0));
                }
             }
+
+            String knnModelStr;
+            //save stat model to string
+            using (FileStorage fs = new FileStorage(".yml", FileStorage.Mode.Write | FileStorage.Mode.Memory))
+            {
+               knn.Write(fs);
+
+               knnModelStr = fs.ReleaseAndGetString();
+            }
+
+            //load stat model from string
+            using (FileStorage fs = new FileStorage(knnModelStr, FileStorage.Mode.Read | FileStorage.Mode.Memory))
+            {
+               KNearest knn2 = new KNearest();
+               knn2.Read(fs.GetRoot());
+            }
          }
 
          // display the original training samples
