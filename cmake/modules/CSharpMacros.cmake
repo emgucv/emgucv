@@ -335,7 +335,7 @@ ENDIF(${target_type} STREQUAL "library")
 	FOREACH(TMP_NAME ${proper_file_list})
 	  SET(TMP "${TMP} \"${TMP_NAME}\"")
 	ENDFOREACH()
-	FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/${target}_SourceList.rsp  ${TMP})
+	FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${target}_SourceList.rsp  ${TMP})
 	
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
