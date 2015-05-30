@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -20,9 +21,9 @@ namespace Simlpe3DReconstruction
    public partial class Simple3DReconstruction : Form
    {
       bool _glLoaded = false;
-      private Image<Bgr, Byte> _left;
-      private Image<Bgr, byte> _right;
-      private Image<Bgr, Byte> _texture;
+      private Mat _left;
+      private Mat _right;
+      private Mat _texture;
       private static double _angle = 0.0;
       private static double _angleIncrement = 0.2;
       private MCvPoint3D32f[] _points;
@@ -31,19 +32,23 @@ namespace Simlpe3DReconstruction
       public Simple3DReconstruction()
       {
          InitializeComponent();
-         _left = new Image<Bgr, byte>("imL.png");
-         _right = new Image<Bgr, byte>("imR.png");
+         _left = CvInvoke.Imread("imL.png", LoadImageType.Color);
+         _right = CvInvoke.Imread("imR.png", LoadImageType.Color);
          Mat disparityMap = new Mat();
 
          Stopwatch watch = Stopwatch.StartNew();
-         Computer3DPointsFromStereoPair(_left.Convert<Gray, Byte>(), _right.Convert<Gray, Byte>(), disparityMap, out _points);
+         UMat leftGray = new UMat();
+         UMat rightGray = new UMat();
+         CvInvoke.CvtColor(_left, leftGray, ColorConversion.Bgr2Gray);
+         CvInvoke.CvtColor(_right, rightGray, ColorConversion.Bgr2Gray);
+         Computer3DPointsFromStereoPair(leftGray, rightGray, disparityMap, out _points);
          watch.Stop();
          long disparityComputationTime = watch.ElapsedMilliseconds;
 
          //Display the disparity map
          imageBox1.Image = disparityMap;
 
-         watch.Reset(); watch.Start();
+         watch.Reset(); 
       }
 
       /// <summary>
@@ -53,13 +58,13 @@ namespace Simlpe3DReconstruction
       /// <param name="right">The right image</param>
       /// <param name="outputDisparityMap">The left disparity map</param>
       /// <param name="points">The 3D point cloud within a [-0.5, 0.5] cube</param>
-      private static void Computer3DPointsFromStereoPair(Image<Gray, Byte> left, Image<Gray, Byte> right, Mat outputDisparityMap, out MCvPoint3D32f[] points)
+      private static void Computer3DPointsFromStereoPair(IInputArray left, IInputArray right, Mat outputDisparityMap, out MCvPoint3D32f[] points)
       {
-         Size size = left.Size;
+         Size size;
+         using (InputArray ia = left.GetInputArray())
+            size = ia.GetSize();
          
-         //using (StereoSGBM stereoSolver = new StereoSGBM(5, 64, 0))
          using (StereoBM stereoSolver = new StereoBM())
-         //using (Mat dm = new Mat())
          {
             stereoSolver.Compute(left, right, outputDisparityMap);
 
@@ -71,7 +76,7 @@ namespace Simlpe3DReconstruction
                   {1.0, 0.0, 0.0, -size.Width/2}, //shift the x origin to image center
                   {0.0, -1.0, 0.0, size.Height/2}, //shift the y origin to image center and flip it upside down
                   {0.0, 0.0, -1.0, 0.0}, //Multiply the z value by -1.0, 
-                  {0.0, 0.0, 0.0, scale}})) //scale the object's corrdinate to within a [-0.5, 0.5] cube
+                  {0.0, 0.0, 0.0, scale}})) //scale the object's coordinate to within a [-0.5, 0.5] cube
                points = PointCollection.ReprojectImageTo3D(outputDisparityMap, q);
          }
       }
@@ -118,15 +123,19 @@ namespace Simlpe3DReconstruction
 
          Size size = _left.Size;
          int maxDim = Math.Max(size.Width, size.Height);
-         using (Image<Bgr, Byte> squareImg = new Image<Bgr, byte>(maxDim, maxDim))
+         using (Mat squareImg = new Mat(maxDim, maxDim, DepthType.Cv8U, 3))
          {
+            squareImg.SetTo(new MCvScalar());
             Rectangle roi = new Rectangle(maxDim / 2 - size.Width / 2, maxDim / 2 - size.Height / 2, size.Width, size.Height);
-            squareImg.ROI = roi;
-            CvInvoke.cvCopy(_left, squareImg, IntPtr.Zero);
-            squareImg.ROI = Rectangle.Empty;
-            _texture = squareImg.Resize(256, 256, Emgu.CV.CvEnum.Inter.Cubic, true);
-               _texture._Flip(Emgu.CV.CvEnum.FlipType.Vertical);
-               GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb8, _texture.Width, _texture.Height, 0, PixelFormat.Bgr, PixelType.UnsignedByte, _texture.MIplImage.ImageData);
+            Mat roiImg = new Mat(squareImg, roi);
+            _left.CopyTo(roiImg);
+
+            if (_texture == null)
+               _texture = new Mat();
+            CvInvoke.Resize(squareImg, _texture, new Size(256, 256), 0, 0, Emgu.CV.CvEnum.Inter.Cubic);
+           
+            CvInvoke.Flip(_texture, _texture, Emgu.CV.CvEnum.FlipType.Vertical);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb8, _texture.Width, _texture.Height, 0, PixelFormat.Bgr, PixelType.UnsignedByte, _texture.DataPointer);
          }
          #endregion
          

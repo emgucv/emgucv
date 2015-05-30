@@ -20,7 +20,7 @@ namespace SURFFeatureExample
 {
    public static class DrawMatches
    {
-      public static void FindMatch(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime, out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint observedKeyPoints, VectorOfVectorOfDMatch matches, out Mat mask, out Mat homography)
+      public static void FindMatch(Mat modelImage, Mat observedImage, out long matchTime, out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint observedKeyPoints, VectorOfVectorOfDMatch matches, out Mat mask, out Mat homography)
       {
          int k = 2;
          double uniquenessThreshold = 0.8;
@@ -73,12 +73,11 @@ namespace SURFFeatureExample
                   watch.Stop();
                }
             }
-         
          else
          #endif
          {
-            using (UMat uModelImage = modelImage.Mat.ToUMat(AccessType.Read))
-            using (UMat uObservedImage = observedImage.Mat.ToUMat(AccessType.Read))
+            using (UMat uModelImage = modelImage.ToUMat(AccessType.Read))
+            using (UMat uObservedImage = observedImage.ToUMat(AccessType.Read))
             {
                SURFDetector surfCPU = new SURFDetector(hessianThresh);
                //extract features from the object image
@@ -88,7 +87,6 @@ namespace SURFFeatureExample
                watch = Stopwatch.StartNew();
 
                // extract features from the observed image
-
                UMat observedDescriptors = new UMat();
                surfCPU.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
                BFMatcher matcher = new BFMatcher(DistanceType.L2);
@@ -122,16 +120,14 @@ namespace SURFFeatureExample
       /// <param name="observedImage">The observed image</param>
       /// <param name="matchTime">The output total time for computing the homography matrix.</param>
       /// <returns>The model image and observed image, the matched features and homography projection.</returns>
-      public static Mat Draw(Image<Gray, Byte> modelImage, Image<Gray, byte> observedImage, out long matchTime)
+      public static Mat Draw(Mat modelImage, Mat observedImage, out long matchTime)
       {
          Mat homography;
          VectorOfKeyPoint modelKeyPoints;
          VectorOfKeyPoint observedKeyPoints;
          using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
          {
-
             Mat mask;
-
             FindMatch(modelImage, observedImage, out matchTime, out modelKeyPoints, out observedKeyPoints, matches,
                out mask, out homography);
 
@@ -145,7 +141,7 @@ namespace SURFFeatureExample
             if (homography != null)
             {
                //draw a rectangle along the projected model
-               Rectangle rect = modelImage.ROI;
+               Rectangle rect = new Rectangle(Point.Empty, modelImage.Size);
                PointF[] pts = new PointF[]
                {
                   new PointF(rect.Left, rect.Bottom),
@@ -160,7 +156,7 @@ namespace SURFFeatureExample
                {
                   CvInvoke.Polylines(result, vp, true, new MCvScalar(255, 0, 0, 255), 5);
                }
-               //result.DrawPolyline(, true, new Bgr(Color.Red), 5);
+               
             }
 
             #endregion

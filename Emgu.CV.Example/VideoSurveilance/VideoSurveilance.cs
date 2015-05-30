@@ -55,7 +55,7 @@ namespace VideoSurveilance
       void ProcessFrame(object sender, EventArgs e)
       {
          Mat frame = _cameraCapture.QueryFrame();
-         Image<Bgr, Byte> smoothedFrame = new Image<Bgr, byte>(frame.Size);
+         Mat smoothedFrame = new Mat();
          CvInvoke.GaussianBlur(frame, smoothedFrame, new Size(3, 3), 1); //filter out noises
          //frame._SmoothGaussian(3); 
 

@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using System.Diagnostics;
@@ -24,18 +25,19 @@ namespace TrafficSignRecognition
       {
          InitializeComponent();
          using (Image<Bgr, Byte> stopSignModel = new Image<Bgr, Byte>("stop-sign-model.png"))
-         using (Image<Bgr, Byte> image = new Image<Bgr, byte>("stop-sign.jpg"))
          {
+            Mat image = CvInvoke.Imread("stop-sign.jpg", LoadImageType.Color);
+
             _stopSignDetector = new StopSignDetector(stopSignModel);
             ProcessImage(image);
          }
       }
 
-      private void ProcessImage(Image<Bgr, byte> image)
+      private void ProcessImage(Mat image)
       {
          Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
-         List<Image<Gray, Byte>> stopSignList = new List<Image<Gray, byte>>();
+         List<Mat> stopSignList = new List<Mat>();
          List<Rectangle> stopSignBoxList = new List<Rectangle>();
          _stopSignDetector.DetectStopSign(image, stopSignList, stopSignBoxList);
 
@@ -52,7 +54,8 @@ namespace TrafficSignRecognition
                ref startPoint,
                String.Format("Stop Sign [{0},{1}]:", rect.Location.Y + rect.Width / 2, rect.Location.Y + rect.Height / 2),
                stopSignList[i]);
-            image.Draw(rect, new Bgr(Color.Aquamarine), 2);
+            CvInvoke.Rectangle(image, rect, new Bgr(Color.Aquamarine).MCvScalar, 2);
+
          }
 
          imageBox1.Image = image;
@@ -81,10 +84,10 @@ namespace TrafficSignRecognition
          DialogResult result = openFileDialog1.ShowDialog();
          if (result == DialogResult.OK)
          {
-            Image<Bgr, Byte> img;
+            Mat img;
             try
             {
-               img = new Image<Bgr, byte>(openFileDialog1.FileName);
+               img = CvInvoke.Imread(openFileDialog1.FileName, LoadImageType.Color);
             }
             catch
             {

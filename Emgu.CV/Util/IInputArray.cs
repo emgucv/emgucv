@@ -28,4 +28,13 @@ namespace Emgu.CV
    {
       
    }
+
+   public static class IInputArrayExtensions
+   {
+      public static bool IsUmat(this IInputArray arr)
+      {
+         using (InputArray ia = arr.GetInputArray())
+            return ia.IsUMat;
+      }
+   }
 }

@@ -2731,6 +2731,25 @@ namespace Emgu.CV
       /// Draws a single or multiple polygonal curves
       /// </summary>
       /// <param name="img">Image</param>
+      /// <param name="pts">Array points</param>
+      /// <param name="isClosed">
+      /// Indicates whether the polylines must be drawn closed. 
+      /// If !=0, the function draws the line from the last vertex of every contour to the first vertex.
+      /// </param>
+      /// <param name="color">Polyline color</param>
+      /// <param name="thickness">Thickness of the polyline edges</param>
+      /// <param name="lineType">Type of the line segments, see cvLine description</param>
+      /// <param name="shift">Number of fractional bits in the vertex coordinates</param>
+      public static void Polylines(IInputOutputArray img, Point[] pts, bool isClosed, MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
+      {    
+         using (VectorOfPoint vps = new VectorOfPoint(pts))
+            Polylines(img, vps, isClosed, color, thickness, lineType, shift);
+      }
+
+      /// <summary>
+      /// Draws a single or multiple polygonal curves
+      /// </summary>
+      /// <param name="img">Image</param>
       /// <param name="pts">Array of pointers to polylines</param>
       /// <param name="isClosed">
       /// Indicates whether the polylines must be drawn closed. 

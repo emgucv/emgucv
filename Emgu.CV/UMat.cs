@@ -138,6 +138,18 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Create a umat of the specific type.
+      /// </summary>
+      /// <param name="size">Size of the UMat</param>
+      /// <param name="type">Mat element type</param>
+      /// <param name="channels">Number of channels</param>
+      public UMat(Size size, CvEnum.DepthType type, int channels)
+         : this(size.Height, size.Width, type, channels)
+      {
+
+      }
+
+      /// <summary>
       /// Get the Umat header for the specific roi of the parent
       /// </summary>
       /// <param name="parent">The parent Umat</param>

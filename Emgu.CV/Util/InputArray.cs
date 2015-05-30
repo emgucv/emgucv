@@ -13,9 +13,9 @@ namespace Emgu.CV
    /// <summary>
    /// This is the proxy class for passing read-only input arrays into OpenCV functions.
    /// </summary>
-   public class InputArray : UnmanagedObject
+   public partial class InputArray : UnmanagedObject
    {
-      private InputArray()
+      internal InputArray()
       {        
       }
 

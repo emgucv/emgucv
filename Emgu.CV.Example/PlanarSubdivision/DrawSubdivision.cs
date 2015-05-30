@@ -77,7 +77,6 @@ namespace PlanarSubdivisionExample
             }
             //draw the points associated with each facet in red
             CvInvoke.Circle(img, Point.Round( facet.Point ), 5, new Bgr(0, 0, 255).MCvScalar, -1);
-            
          }
 
          //Draw the Delaunay triangulation

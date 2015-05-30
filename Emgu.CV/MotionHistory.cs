@@ -46,8 +46,8 @@ namespace Emgu.CV
       /// Create a motion history object
       /// </summary>
       /// <param name="mhiDuration">In second, the duration of motion history you wants to keep</param>
-      /// <param name="maxTimeDelta">In second. Any change happens between a time interval greater than this will not be considerred</param>
-      /// <param name="minTimeDelta">In second. Any change happens between a time interval smaller than this will not be considerred.</param>
+      /// <param name="maxTimeDelta">In second. Any change happens between a time interval greater than this will not be considered</param>
+      /// <param name="minTimeDelta">In second. Any change happens between a time interval smaller than this will not be considered.</param>
       public MotionHistory(double mhiDuration, double maxTimeDelta, double minTimeDelta)
          : this (mhiDuration, maxTimeDelta, minTimeDelta, DateTime.Now)
       {
@@ -57,8 +57,8 @@ namespace Emgu.CV
       /// Create a motion history object
       /// </summary>
       /// <param name="mhiDuration">In second, the duration of motion history you wants to keep</param>
-      /// <param name="maxTimeDelta">In second. Any change happens between a time interval larger than this will not be considerred</param>
-      /// <param name="minTimeDelta">In second. Any change happens between a time interval smaller than this will not be considerred.</param>
+      /// <param name="maxTimeDelta">In second. Any change happens between a time interval larger than this will not be considered</param>
+      /// <param name="minTimeDelta">In second. Any change happens between a time interval smaller than this will not be considered.</param>
       /// <param name="startTime">The start time of the motion history</param>
       public MotionHistory(double mhiDuration, double maxTimeDelta, double minTimeDelta, DateTime startTime)
       {

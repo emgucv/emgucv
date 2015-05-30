@@ -428,6 +428,64 @@ IF(HAVE_opencv_core)
   "UMat"
   "#include \"umat_c.h\"")
 
+CREATE_OCV_CLASS_PROPERTY( 
+  "core/input_array_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/InputArrayGenerated.cs"
+  "cv::_InputArray" 
+  "InputArray" 
+  "isMat;isUMat;isMatVector;isUMatVector;isMatx" 
+  "bool;bool;bool;bool;bool" 
+  "val;val;val;val;val"
+  "IsMat;IsUMat;IsMatVector;IsUMatVector;IsMatx" 
+  "bool;bool;bool;bool;bool"
+  "True if the input array is a Mat;
+  True if the input array is an UMat;
+  True if the input array is a vector of Mat;
+  True if the input array is a vector of UMat;
+  True if the input array is a Matx"
+  "Emgu.CV"
+  "CvInvoke"
+  "InputArray"
+  "#include \"core_c_extra.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+  "core/output_array_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/OutputArrayGenerated.cs"
+  "cv::_OutputArray" 
+  "OutputArray" 
+  "fixedSize;fixedType;needed" 
+  "bool;bool;bool" 
+  "val;val;val"
+  "FixedSize;FixedType;Needed" 
+  "bool;bool;bool"
+  "True if the output array is fixed size;
+  True if the output array is fixed type;
+  True if the output array is needed"
+  "Emgu.CV"
+  "CvInvoke"
+  "OutputArray"
+  "#include \"core_c_extra.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+  "core/umat_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/UMatGenerated.cs"
+  "cv::UMat" 
+  "UMat" 
+  "isContinuous;isSubmatrix;depth;empty;channels" 
+  "bool;bool;int;bool;int" 
+  "val;val;val;val;val"
+  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels" 
+  "bool;bool;CvEnum.DepthType;bool;int"
+  "True if the data is continues;
+  True if the matrix is a submatrix of another matrix;
+  Depth type;
+  True if the matrix is empty;
+  Number of channels"
+  "Emgu.CV"
+  "CvInvoke"
+  "UMat"
+  "#include \"umat_c.h\"")
+
   CREATE_OCV_CLASS_PROPERTY( 
   "core/ocl_device_property" 
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclDeviceGenerated.cs"

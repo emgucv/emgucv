@@ -11,9 +11,10 @@ namespace Emgu.CV
    /// <summary>
    /// This type is very similar to InputArray except that it is used for input/output function parameters.
    /// </summary>
-   public class InputOutputArray : UnmanagedObject
+   public class InputOutputArray : OutputArray
    {
-      private InputOutputArray()
+      internal InputOutputArray()
+         : base()
       {
       }
 
@@ -22,6 +23,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="inputOutputArrayPtr">The pointer to the existing inputOutputArray</param>
       public InputOutputArray(IntPtr inputOutputArrayPtr)
+         : base(inputOutputArrayPtr)
       {
          _ptr = inputOutputArrayPtr;
       }

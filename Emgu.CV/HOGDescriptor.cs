@@ -67,6 +67,12 @@ namespace Emgu.CV
             gammaCorrection);
       }
 
+      private static Size InputArrGetSize(IInputArray arr)
+      {
+         using (InputArray ia = arr.GetInputArray())
+            return ia.GetSize();
+      }
+
       /// <summary>
       /// Create a new HOGDescriptor using the specific parameters.
       /// </summary>
@@ -80,7 +86,7 @@ namespace Emgu.CV
       /// <param name="winSigma">Gaussian smoothing window parameter. Use -1 for default. </param>
       /// <param name="derivAperture">Use 1 for default.</param>
       public HOGDescriptor(
-         Image<Bgr, Byte> template,
+         IInputArray template,
          Size blockSize,
          Size blockStride,
          Size cellSize,
@@ -89,7 +95,7 @@ namespace Emgu.CV
          double winSigma = -1,
          double L2HysThreshold = 0.2,
          bool gammaCorrection = true)
-         : this(template.Size, blockSize, blockStride, cellSize, nbins, derivAperture, winSigma, L2HysThreshold, gammaCorrection)
+         : this(InputArrGetSize(template), blockSize, blockStride, cellSize, nbins, derivAperture, winSigma, L2HysThreshold, gammaCorrection)
       {
 
          float[] descriptor = Compute(
@@ -104,7 +110,7 @@ namespace Emgu.CV
       /// Create a new HogDescriptor using the specific template and default parameters.
       /// </summary>
       /// <param name="template">The template image to be detected.</param>
-      public HOGDescriptor(Image<Bgr, Byte> template)
+      public HOGDescriptor(IInputArray template)
          : this(template, new Size(16, 16), new Size(8, 8), new Size(8, 8))
       {
       }

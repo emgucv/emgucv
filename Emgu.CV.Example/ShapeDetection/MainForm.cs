@@ -135,25 +135,35 @@ namespace ShapeDetection
             this.Text = msgBuilder.ToString();
 
             #region draw triangles and rectangles
-            Image<Bgr, Byte> triangleRectangleImage = img.CopyBlank();
+            Mat triangleRectangleImage = new Mat(img.Size, DepthType.Cv8U, 3);
+            triangleRectangleImage.SetTo(new MCvScalar(0));
             foreach (Triangle2DF triangle in triangleList)
-               triangleRectangleImage.Draw(triangle, new Bgr(Color.DarkBlue), 2);
+            {
+               CvInvoke.Polylines(triangleRectangleImage, Array.ConvertAll(triangle.GetVertices(), Point.Round), true, new Bgr(Color.DarkBlue).MCvScalar, 2);
+            }
             foreach (RotatedRect box in boxList)
-               triangleRectangleImage.Draw(box, new Bgr(Color.DarkOrange), 2);
+            {
+               CvInvoke.Polylines(triangleRectangleImage, Array.ConvertAll(box.GetVertices(), Point.Round), true, new Bgr(Color.DarkOrange).MCvScalar, 2);
+            }
+               
             triangleRectangleImageBox.Image = triangleRectangleImage;
             #endregion
 
             #region draw circles
-            Image<Bgr, Byte> circleImage = img.CopyBlank();
+            Mat circleImage = new Mat(img.Size, DepthType.Cv8U, 3);
+            circleImage.SetTo(new MCvScalar(0));
             foreach (CircleF circle in circles)
-               circleImage.Draw(circle, new Bgr(Color.Brown), 2);
+               CvInvoke.Circle(circleImage, Point.Round(circle.Center), (int) circle.Radius, new Bgr(Color.Brown).MCvScalar, 2);
+               
             circleImageBox.Image = circleImage;
             #endregion
 
             #region draw lines
-            Image<Bgr, Byte> lineImage = img.CopyBlank();
+            Mat lineImage = new Mat(img.Size, DepthType.Cv8U, 3);
+            lineImage.SetTo(new MCvScalar(0));
             foreach (LineSegment2D line in lines)
-               lineImage.Draw(line, new Bgr(Color.Green), 2);
+               CvInvoke.Line(lineImage, line.P1, line.P2, new Bgr(Color.Green).MCvScalar, 2);
+               
             lineImageBox.Image = lineImage;
             #endregion
          }

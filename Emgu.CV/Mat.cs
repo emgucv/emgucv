@@ -151,6 +151,17 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Create a mat of the specific type.
+      /// </summary>
+      /// <param name="size">Size of the Mat</param>
+      /// <param name="type">Mat element type</param>
+      /// <param name="channels">Number of channels</param>
+      public Mat(Size size, CvEnum.DepthType type, int channels)
+         : this(size.Height, size.Width, type, channels)
+      {
+      }
+
+      /// <summary>
       /// Create a Mat header from existing data
       /// </summary>
       /// <param name="rows">Number of rows in a 2D array.</param>
@@ -161,6 +172,19 @@ namespace Emgu.CV
       /// <param name="step">Number of bytes each matrix row occupies. The value should include the padding bytes at the end of each row, if any.</param>
       public Mat(int rows, int cols, CvEnum.DepthType type, int channels, IntPtr data, int step)
          : this(MatInvoke.cveMatCreateWithData(rows, cols, CvInvoke.MakeType(type, channels), data, new IntPtr(step)), true, true)
+      {
+      }
+
+      /// <summary>
+      /// Create a Mat header from existing data
+      /// </summary>
+      /// <param name="size">Size of the Mat</param>
+      /// <param name="type">Mat element type</param>
+      /// <param name="channels">Number of channels</param>
+      /// <param name="data">Pointer to the user data. Matrix constructors that take data and step parameters do not allocate matrix data. Instead, they just initialize the matrix header that points to the specified data, which means that no data is copied. This operation is very efficient and can be used to process external data using OpenCV functions. The external data is not automatically deallocated, so you should take care of it.</param>
+      /// <param name="step">Number of bytes each matrix row occupies. The value should include the padding bytes at the end of each row, if any.</param>
+      public Mat(Size size, CvEnum.DepthType type, int channels, IntPtr data, int step)
+         : this(size.Height, size.Width, type, channels, data, step)
       {
       }
 
@@ -610,6 +634,19 @@ namespace Emgu.CV
             {
                case 1:
                   colorType = typeof(Gray);
+                  Size s = this.Size;
+                  if ((s.Width | 3) != 0) //handle the special case where width is not a multiple of 4
+                  {
+                     Bitmap bmp = new Bitmap(s.Width, s.Height, PixelFormat.Format8bppIndexed);
+                     bmp.Palette = CvToolbox.GrayscalePalette;
+                     BitmapData bitmapData = bmp.LockBits(new Rectangle(Point.Empty, s), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+                     using (Mat m = new Mat(s.Height, s.Width, DepthType.Cv8U, 1, bitmapData.Scan0, bitmapData.Stride))
+                     {
+                        CopyTo(m);
+                     }
+                     bmp.UnlockBits(bitmapData);
+                     return bmp;
+                  }
                   break;
                case 3:
                   colorType = typeof(Bgr);
