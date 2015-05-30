@@ -10,10 +10,12 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 
 using System.Diagnostics;
+using Emgu.CV.Util;
 
 namespace LicensePlateRecognition
 {
@@ -25,16 +27,18 @@ namespace LicensePlateRecognition
       {
          InitializeComponent();
          _licensePlateDetector = new LicensePlateDetector("");
-
-         ProcessImage(new Image<Bgr, byte>("license-plate.jpg"));
+         Mat m = new Mat("license-plate.jpg", LoadImageType.AnyColor);
+         UMat um = m.ToUMat(AccessType.ReadWrite);
+         imageBox1.Image = um;
+         ProcessImage(m);
       }
 
-      private void ProcessImage(Image<Bgr, byte> image)
+      private void ProcessImage(IInputOutputArray image)
       {
          Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
-         List<Image<Gray, Byte>> licensePlateImagesList = new List<Image<Gray, byte>>();
-         List<Image<Gray, Byte>> filteredLicensePlateImagesList = new List<Image<Gray, byte>>();
+         List<IInputOutputArray> licensePlateImagesList = new List<IInputOutputArray>();
+         List<IInputOutputArray> filteredLicensePlateImagesList = new List<IInputOutputArray>();
          List<RotatedRect> licenseBoxList = new List<RotatedRect>();
          List<string> words = _licensePlateDetector.DetectLicensePlate(
             image,
@@ -49,14 +53,19 @@ namespace LicensePlateRecognition
          Point startPoint = new Point(10, 10);
          for (int i = 0; i < words.Count; i++)
          {
+            Mat dest = new Mat();
+            CvInvoke.VConcat(licensePlateImagesList[i], filteredLicensePlateImagesList[i], dest);
             AddLabelAndImage(
                ref startPoint,
                String.Format("License: {0}", words[i]),
-               licensePlateImagesList[i].ConcateVertical(filteredLicensePlateImagesList[i]));
-            image.Draw(licenseBoxList[i], new Bgr(Color.Red), 2);
+               dest);
+            PointF[] verticesF = licenseBoxList[i].GetVertices();
+            Point[] vertices = Array.ConvertAll(verticesF, Point.Round);
+            using(VectorOfPoint pts = new VectorOfPoint(vertices))
+               CvInvoke.Polylines(image, pts, true, new Bgr(Color.Red).MCvScalar,2  );
+            
          }
 
-         imageBox1.Image = image;
       }
 
       private void AddLabelAndImage(ref Point startPoint, String labelText, IImage image)
@@ -82,10 +91,11 @@ namespace LicensePlateRecognition
          DialogResult result = openFileDialog1.ShowDialog();
          if (result == DialogResult.OK)
          {
-            Image<Bgr, Byte> img;
+            Mat img;
             try
             {
-               img = new Image<Bgr, byte>(openFileDialog1.FileName);
+               img = CvInvoke.Imread(openFileDialog1.FileName, LoadImageType.Color);
+
             }
             catch
             {
@@ -93,7 +103,8 @@ namespace LicensePlateRecognition
                return;
             }
 
-            ProcessImage(img);
+            UMat uImg = img.ToUMat(AccessType.ReadWrite);
+            ProcessImage(uImg);
          }
       }
    }

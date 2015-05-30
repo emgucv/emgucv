@@ -57,9 +57,6 @@ namespace MotionDetection
       private Mat _forgroundMask = new Mat();
       private void ProcessFrame(object sender, EventArgs e)
       {
-         if (this.Disposing || this.IsDisposed)
-            return;
-
          Mat image = new Mat();
 
          _capture.Retrieve(image);
@@ -70,12 +67,8 @@ namespace MotionDetection
 
          _forgroundDetector.Apply(image, _forgroundMask);
 
-         capturedImageBox.Image = image;
-
          //update the motion history
-         _motionHistory.Update(_forgroundMask);
-
-         forgroundImageBox.Image = _forgroundMask;
+         _motionHistory.Update(_forgroundMask);         
 
          #region get a copy of the motion mask and enhance its color
          double[] minValues, maxValues;
@@ -88,7 +81,7 @@ namespace MotionDetection
          #endregion
 
          //create the motion image 
-         Image<Bgr, Byte> motionImage = new Image<Bgr, byte>(motionMask.Size);
+         Mat motionImage = new Mat(motionMask.Size.Height, motionMask.Size.Width, DepthType.Cv8U, 3);
          //display the motion pixels in blue (first channel)
          //motionImage[0] = motionMask;
          CvInvoke.InsertChannel(motionMask, motionImage, 0);
@@ -103,7 +96,6 @@ namespace MotionDetection
             _motionHistory.GetMotionComponents(_segMask, boundingRect);
             rects = boundingRect.ToArray();
          }
-         //Seq<MCvConnectedComp> motionComponents = _motionHistory.GetMotionComponents(storage);
 
          //iterate through each of the motion component
          foreach (Rectangle comp in rects)
@@ -129,6 +121,12 @@ namespace MotionDetection
          _motionHistory.MotionInfo(_forgroundMask, new Rectangle(Point.Empty, motionMask.Size), out overallAngle, out overallMotionPixelCount);
          DrawMotion(motionImage, new Rectangle(Point.Empty, motionMask.Size), overallAngle, new Bgr(Color.Green));
 
+         if (this.Disposing || this.IsDisposed)
+            return;
+
+         capturedImageBox.Image = image;
+         forgroundImageBox.Image = _forgroundMask;
+
          //Display the amount of motions found on the current image
          UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", rects.Length, overallMotionPixelCount));
 
@@ -139,7 +137,7 @@ namespace MotionDetection
 
       private void UpdateText(String text)
       {
-         if (InvokeRequired && !IsDisposed)
+         if (!IsDisposed && !Disposing && InvokeRequired)
          {
             Invoke((Action<String>)UpdateText, text);
          }

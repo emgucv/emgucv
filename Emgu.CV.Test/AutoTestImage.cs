@@ -1077,13 +1077,21 @@ namespace Emgu.CV.Test
       [TestAttribute]
       public void TestGoodFeature()
       {
-         using (GFTTDetector detector = new GFTTDetector())
+         using (GFTTDetector detector = new GFTTDetector(1000, 0.01, 1, 3, false, 0.04))
          using (Mat img = EmguAssert.LoadMat("stuff.jpg"))
          {
 
             var keypoints = detector.Detect(img);
+            int nanCount = 0;
             foreach (MKeyPoint p in keypoints)
-               CvInvoke.Circle(img, Point.Round( p.Point), 3, new Bgr(255, 0, 0).MCvScalar, 1);
+            {
+               CvInvoke.Circle(img, Point.Round(p.Point), 3, new Bgr(255, 0, 0).MCvScalar, 1);
+               if (float.IsNaN(p.Point.X) || float.IsNaN(p.Point.Y))
+                  nanCount ++;
+            }
+
+            System.Diagnostics.Debug.WriteLine(String.Format("NanCount: {0}", nanCount));
+            EmguAssert.IsTrue(nanCount == 0);
             //ImageViewer.Show(img);
          }
 

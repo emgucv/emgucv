@@ -81,17 +81,17 @@ namespace LicensePlateRecognition
       /// <param name="detectedLicensePlateRegionList">A list where the regions of license plate (defined by an MCvBox2D) are stored</param>
       /// <returns>The list of words for each license plate</returns>
       public List<String> DetectLicensePlate(
-         Image<Bgr, byte> img, 
-         List<Image<Gray, Byte>> licensePlateImagesList, 
-         List<Image<Gray, Byte>> filteredLicensePlateImagesList, 
+         IInputArray img, 
+         List<IInputOutputArray> licensePlateImagesList, 
+         List<IInputOutputArray> filteredLicensePlateImagesList, 
          List<RotatedRect> detectedLicensePlateRegionList)
       {
          List<String> licenses = new List<String>();
-         using (Image<Gray, byte> gray = img.Convert<Gray, Byte>())
-         //using (Image<Gray, byte> gray = GetWhitePixelMask(img))
+         using (Mat gray = new Mat())
          using (Mat canny = new Mat())
          using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
          {
+            CvInvoke.CvtColor(img, gray, ColorConversion.Bgr2Gray);
             CvInvoke.Canny(gray, canny, 100, 50, 3, false);
             int[,] hierachy = CvInvoke.FindContourTree(canny, contours, ChainApproxMethod.ChainApproxSimple);
             
@@ -117,8 +117,8 @@ namespace LicensePlateRecognition
       }
 
       private void FindLicensePlate(
-         VectorOfVectorOfPoint contours, int[,] hierachy, int idx, Image<Gray, Byte> gray, Mat canny,
-         List<Image<Gray, Byte>> licensePlateImagesList, List<Image<Gray, Byte>> filteredLicensePlateImagesList, List<RotatedRect> detectedLicensePlateRegionList,
+         VectorOfVectorOfPoint contours, int[,] hierachy, int idx, IInputArray gray, IInputArray canny,
+         List<IInputOutputArray> licensePlateImagesList, List<IInputOutputArray> filteredLicensePlateImagesList, List<RotatedRect> detectedLicensePlateRegionList,
          List<String> licenses)
       {
          for (; idx >= 0;  idx = hierachy[idx,0])
@@ -169,21 +169,39 @@ namespace LicensePlateRecognition
                      continue;
                   }
 
-                  using (Image<Gray, Byte> tmp1 = gray.Copy(box))
-                     //resize the license plate such that the front is ~ 10-12. This size of front results in better accuracy from tesseract
-                  using (Image<Gray, Byte> tmp2 = tmp1.Resize(240, 180, Emgu.CV.CvEnum.Inter.Cubic, true))
+                  using (UMat tmp1 = new UMat())
+                  using (UMat tmp2 = new UMat())
                   {
+                     PointF[] srcCorners = box.GetVertices();
+                     
+                     PointF[] destCorners = new PointF[] {
+                        new PointF(0, box.Size.Height - 1),
+                        new PointF(0, 0),
+                        new PointF(box.Size.Width - 1, 0), 
+                        new PointF(box.Size.Width - 1, box.Size.Height - 1)};
+                     
+                     using (Mat rot = CameraCalibration.GetAffineTransform(srcCorners, destCorners))
+                     {
+                        CvInvoke.WarpAffine(gray, tmp1, rot, Size.Round(box.Size));           
+                     }
+
+                     //resize the license plate such that the front is ~ 10-12. This size of front results in better accuracy from tesseract
+                     Size approxSize = new Size(240, 180);
+                     double scale = Math.Min(approxSize.Width/box.Size.Width, approxSize.Height/box.Size.Height);
+                     Size newSize = new Size( (int)Math.Round(box.Size.Width*scale),(int) Math.Round(box.Size.Height*scale));
+                     CvInvoke.Resize(tmp1, tmp2, newSize, 0, 0, Inter.Cubic);
+
                      //removes some pixels from the edge
                      int edgePixelSize = 2;
-                     tmp2.ROI = new Rectangle(new Point(edgePixelSize, edgePixelSize),
+                     Rectangle newRoi = new Rectangle(new Point(edgePixelSize, edgePixelSize),
                         tmp2.Size - new Size(2*edgePixelSize, 2*edgePixelSize));
-                     Image<Gray, Byte> plate = tmp2.Copy();
+                     UMat plate = new UMat(tmp2, newRoi);
 
-                     Image<Gray, Byte> filteredPlate = FilterPlate(plate);
+                     UMat filteredPlate = FilterPlate(plate);
 
                      Tesseract.Character[] words;
                      StringBuilder strBuilder = new StringBuilder();
-                     using (Image<Gray, Byte> tmp = filteredPlate.Clone())
+                     using (UMat tmp = filteredPlate.Clone())
                      {
                         _ocr.Recognize(tmp);
                         words = _ocr.GetCharacters();
@@ -212,15 +230,19 @@ namespace LicensePlateRecognition
       /// </summary>
       /// <param name="plate">The license plate image</param>
       /// <returns>License plate image without the noise</returns>
-      private static Image<Gray, Byte> FilterPlate(Image<Gray, Byte> plate)
+      private static UMat FilterPlate(UMat plate)
       {
-         Image<Gray, Byte> thresh = plate.ThresholdBinaryInv(new Gray(120), new Gray(255));
+         UMat thresh = new UMat();
+         CvInvoke.Threshold(plate, thresh, 120, 255, ThresholdType.BinaryInv);
+         //Image<Gray, Byte> thresh = plate.ThresholdBinaryInv(new Gray(120), new Gray(255));
 
-         using (Image<Gray, Byte> plateMask = new Image<Gray, byte>(plate.Size))
-         using (Image<Gray, Byte> plateCanny = plate.Canny(100, 50))
+         Size plateSize = plate.Size;
+         using (Mat plateMask = new Mat(plateSize.Height, plateSize.Width, DepthType.Cv8U, 1))
+         using (Mat plateCanny = new Mat())
          using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
          {
-            plateMask.SetValue(255.0);
+            plateMask.SetTo(new MCvScalar(255.0));
+            CvInvoke.Canny(plate, plateCanny, 100, 50);
             CvInvoke.FindContours(plateCanny, contours, null, RetrType.External, ChainApproxMethod.ChainApproxSimple);
 
             int count = contours.Size;
@@ -230,22 +252,23 @@ namespace LicensePlateRecognition
                {
 
                   Rectangle rect = CvInvoke.BoundingRectangle(contour);
-                  if (rect.Height > (plate.Height >> 1))
+                  if (rect.Height > (plateSize.Height >> 1))
                   {
                      rect.X -= 1; rect.Y -= 1; rect.Width += 2; rect.Height += 2;
-                     rect.Intersect(plate.ROI);
-
-                     plateMask.Draw(rect, new Gray(0.0), -1);
+                     Rectangle roi = new Rectangle(Point.Empty, plate.Size);
+                     rect.Intersect(roi);
+                     CvInvoke.Rectangle(plateMask, rect, new MCvScalar(), -1);
+                     //plateMask.Draw(rect, new Gray(0.0), -1);
                   }
                }
 
             }
 
-            thresh.SetValue(0, plateMask);
+            thresh.SetTo(new MCvScalar(), plateMask);
          }
 
-         thresh._Erode(1);
-         thresh._Dilate(1);
+         CvInvoke.Erode(thresh, thresh, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
+         CvInvoke.Dilate(thresh, thresh, null, new Point(-1, -1), 1, BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
 
          return thresh;
       }
