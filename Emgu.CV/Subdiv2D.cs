@@ -61,13 +61,13 @@ namespace Emgu.CV
          {
 #if !UNITY_IPHONE
             //ignore all errors
-            IntPtr oldErrorCallback = CvInvoke.cvRedirectError(CvInvoke.CvErrorHandlerIgnoreError, IntPtr.Zero, IntPtr.Zero);
+            IntPtr oldErrorCallback = CvInvoke.RedirectError(CvInvoke.CvErrorHandlerIgnoreError, IntPtr.Zero, IntPtr.Zero);
 #endif
             CvInvoke.cveSubdiv2DInsertMulti(_ptr, vpf);
             
 #if !UNITY_IPHONE
             //reset the error handler 
-            CvInvoke.cvRedirectError(oldErrorCallback, IntPtr.Zero, IntPtr.Zero);
+            CvInvoke.RedirectError(oldErrorCallback, IntPtr.Zero, IntPtr.Zero);
 #endif
          }
          else

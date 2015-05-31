@@ -14,7 +14,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// PyrLK optical flow
    /// </summary>
-   public class CudaDensePyrLKOpticalFlow : UnmanagedObject, IDenseOpticalFlow
+   public class CudaDensePyrLKOpticalFlow : UnmanagedObject, ICudaDenseOpticalFlow
    {
       private IntPtr _denseFlow;
 
@@ -42,7 +42,7 @@ namespace Emgu.CV.Cuda
          }
       }
 
-      IntPtr IDenseOpticalFlow.DenseOpticalFlowPtr
+      IntPtr ICudaDenseOpticalFlow.DenseOpticalFlowPtr
       {
          get { return _denseFlow; }
       }

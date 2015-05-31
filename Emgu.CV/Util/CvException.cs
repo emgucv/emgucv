@@ -34,7 +34,7 @@ namespace Emgu.CV.Util
       /// </summary>
       public String ErrorStr
       {
-         get { return CvInvoke.cvErrorStr(Status); }
+         get { return CvInvoke.ErrorStr(Status); }
       }
 
       /// <summary>

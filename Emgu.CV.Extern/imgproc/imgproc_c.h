@@ -162,4 +162,12 @@ CVAPI(void) cveHuMoments(CvMoments* moments, cv::_OutputArray* hu);
 
 CVAPI(void) cveGetRectSubPix(cv::_InputArray* image, CvSize* patchSize, CvPoint2D32f* center, cv::_OutputArray* patch, int patchType);
 
+
+CVAPI(int) cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, int connectivity);
+
+CVAPI(double) cveGetSparialMoment(CvMoments* moments, int xOrder, int yOrder);
+CVAPI(double) cveGetCentralMoment(CvMoments* moments, int xOrder, int yOrder);
+CVAPI(double) cveGetNormalizedCentralMoment(CvMoments* moments, int xOrder, int yOrder);
+
+CVAPI(void) cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result);
 #endif

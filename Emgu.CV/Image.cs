@@ -2201,10 +2201,12 @@ namespace Emgu.CV
 
          TDepth[,] data = new TDepth[size, NumberOfChannels];
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         Point p1 = line.P1;
+         Point p2 = line.P2;
          CvInvoke.cvSampleLine(
              Ptr,
-             line.P1,
-             line.P2,
+             ref p1,
+             ref p2,
              handle.AddrOfPinnedObject(),
              type);
          handle.Free();

@@ -26,8 +26,9 @@ CVAPI(void) CvBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSub
 
 
 
-CVAPI(cv::DenseOpticalFlow*) cveDenseOpticalFlowCreateDualTVL1();
-CVAPI(void) cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow);
+CVAPI(cv::DualTVL1OpticalFlow*) cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm);
+CVAPI(void) cveDualTVL1OpticalFlowRelease(cv::DualTVL1OpticalFlow** flow);
+
 CVAPI(void) cveDenseOpticalFlowCalc(cv::DenseOpticalFlow* dof, cv::_InputArray* i0, cv::_InputArray* i1, cv::_InputOutputArray* flow);
 
 CVAPI(void) cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags);
@@ -38,4 +39,13 @@ CVAPI(void) cveCamShift( cv::_InputArray* probImage, CvRect* window, CvTermCrite
 CVAPI(int) cveMeanShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria );
 
 CVAPI(void) cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool fullAffine, cv::Mat* result);
+
+CVAPI(cv::KalmanFilter*) cveKalmanFilterCreate(int dynamParams, int measureParams, int controlParams, int type);
+
+CVAPI(void) cveKalmanFilterRelease(cv::KalmanFilter** filter);
+
+CVAPI(const cv::Mat*) cveKalmanFilterPredict(cv::KalmanFilter* kalman, cv::Mat* control);
+
+CVAPI(const cv::Mat*) cveKalmanFilterCorrect(cv::KalmanFilter* kalman, cv::Mat* measurement);
+
 #endif

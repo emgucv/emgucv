@@ -282,7 +282,7 @@ namespace Emgu.CV
       /// <returns>src1 dot src2</returns>
       public double DotProduct(CvArray<TDepth> otherArray)
       {
-         return CvInvoke.cvDotProduct(Ptr, otherArray.Ptr);
+         return this.Mat.Dot(otherArray.Mat);
       }
 
       /// <summary>

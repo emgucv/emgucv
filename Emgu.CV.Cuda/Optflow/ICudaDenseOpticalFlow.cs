@@ -11,14 +11,14 @@ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
-   public interface IDenseOpticalFlow
+   public interface ICudaDenseOpticalFlow
    {
       IntPtr DenseOpticalFlowPtr { get; }
    }
 
    public static partial class CudaInvoke
    {
-      public static void Calc(this IDenseOpticalFlow denseFlow, IInputArray i0, IInputArray i1, IInputOutputArray flow, Stream stream = null)
+      public static void Calc(this ICudaDenseOpticalFlow denseFlow, IInputArray i0, IInputArray i1, IInputOutputArray flow, Stream stream = null)
       {
          using (InputArray iaI0 = i0.GetInputArray())
          using (InputArray iaI1 = i1.GetInputArray())

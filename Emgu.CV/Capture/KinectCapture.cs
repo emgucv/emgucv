@@ -3,6 +3,8 @@
 //----------------------------------------------------------------------------
 
 #if !(IOS || ANDROID || NETFX_CORE)
+
+using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -181,11 +183,10 @@ namespace Emgu.CV
       /// <returns>An enumerator of the colored points from Kinect</returns>
       public ColorPoint[] GetColorPoints(Image<Gray, Byte> mask)
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfColorPoint vcp = new VectorOfColorPoint())
          {
-            Seq<ColorPoint> seq = new Seq<ColorPoint>(stor);
-            CvInvoke.OpenniGetColorPoints(Ptr, seq, mask);
-            return seq.ToArray();
+            CvInvoke.OpenniGetColorPoints(Ptr, vcp, mask);
+            return vcp.ToArray();
          }
          /*
          MCvPoint3D32f[] positions = RetrievePointCloudMap();
@@ -227,6 +228,7 @@ namespace Emgu.CV
          return baseline / f * minDistance;
       }
 
+      /*
       /// <summary>
       /// Get the unmanaged OpenNI Context from the capture.
       /// </summary>
@@ -236,32 +238,8 @@ namespace Emgu.CV
       {
          return CvInvoke.cvGetOpenniCaptureContext(Ptr);
       }
+      */
 
-      /// <summary>
-      /// A point with Bgr color information
-      /// </summary>
-      public struct ColorPoint
-      {
-         /// <summary>
-         /// The position in meters
-         /// </summary>
-         public MCvPoint3D32f Position;
-
-         /// <summary>
-         /// The blue color
-         /// </summary>
-         public Byte Blue;
-
-         /// <summary>
-         /// The green color
-         /// </summary>
-         public Byte Green;
-
-         /// <summary>
-         /// The red color
-         /// </summary>
-         public Byte Red;
-      }
    }
 
 
@@ -270,9 +248,9 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void OpenniGetColorPoints(IntPtr capture, IntPtr points /* sequence of ColorPoint */, IntPtr mask);
-
+      /*
       [DllImport(CvInvoke.OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cvGetOpenniCaptureContext(IntPtr capture);
+      internal static extern IntPtr cvGetOpenniCaptureContext(IntPtr capture);*/
    }
    
 }

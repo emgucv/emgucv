@@ -2673,7 +2673,7 @@ namespace Emgu.CV.CvEnum
    /// Type for cvSVD
    /// </summary>
    [Flags]
-   public enum SvdType
+   public enum SvdFlag
    {
       /// <summary>
       /// The default type
@@ -2684,13 +2684,15 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       ModifyA = 1,
       /// <summary>
-      /// means that the transposed matrix U is returned. Specifying the flag speeds up the processing. 
+      /// indicates that only a vector of singular values `w` is to be processed, while u and vt will be set to empty matrices
       /// </summary>
-      Ut = 2,
+      NoUV = 2,
       /// <summary>
-      /// means that the transposed matrix V is returned. Specifying the flag speeds up the processing. 
+      /// when the matrix is not square, by default the algorithm produces u and vt matrices of
+      /// sufficiently large size for the further A reconstruction; if, however, FULL_UV flag is
+      /// specified, u and vt will be full-size square orthogonal matrices.
       /// </summary>
-      Vt = 4
+      FullUV = 4
    }
 
    /// <summary>

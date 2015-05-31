@@ -1218,6 +1218,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       public void TestKalman()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 400);
@@ -1284,7 +1285,7 @@ namespace Emgu.CV.Test
          viewer.Disposed += delegate(Object sender, EventArgs e) { timer.Stop(); };
          viewer.Text = "Actual State: White; Measurement: Red; Prediction: Green";
          viewer.ShowDialog();
-      }
+      }*/
 
       //TODO: Fix this
       /*

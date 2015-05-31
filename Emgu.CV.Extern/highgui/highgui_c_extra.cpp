@@ -6,7 +6,7 @@
 
 #include "highgui_c_extra.h"
 
-void OpenniGetColorPoints(CvCapture* capture, CvSeq* points, IplImage* maskImg)
+void OpenniGetColorPoints(CvCapture* capture, std::vector<ColorPoint>* points, IplImage* maskImg)
 {
    IplImage* pcm = cvRetrieveFrame(capture, CV_CAP_OPENNI_POINT_CLOUD_MAP); //XYZ in meters (CV_32FC3)
    IplImage* bgr = cvRetrieveFrame(capture, CV_CAP_OPENNI_BGR_IMAGE); //CV_8UC3
@@ -25,7 +25,8 @@ void OpenniGetColorPoints(CvCapture* capture, CvSeq* points, IplImage* maskImg)
          {
             memcpy(&cp.position, position, sizeof(CvPoint3D32f));
             memcpy(&cp.red, color, 3);
-            cvSeqPush(points, &cp);
+            points->push_back(cp);
+            
          }
    } else
    {
@@ -33,7 +34,8 @@ void OpenniGetColorPoints(CvCapture* capture, CvSeq* points, IplImage* maskImg)
       {
          memcpy(&cp.position, position, sizeof(CvPoint3D32f));
          memcpy(&cp.red, color, 3);
-         cvSeqPush(points, &cp);
+         points->push_back(cp); 
+         
       }
    }
 }

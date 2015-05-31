@@ -21,7 +21,7 @@ struct ColorPoint
 
 CVAPI(void) OpenniGetColorPoints(
                                  CvCapture* capture, // must be an openni capture
-                                 CvSeq* points, // sequence of ColorPoint
+                                 std::vector<ColorPoint>* points, // sequence of ColorPoint
                                  IplImage* mask // CV_8UC1
                                  );
 
@@ -44,4 +44,6 @@ CVAPI(void) cveNamedWindow(cv::String* winname, int flags);
 CVAPI(void) cveDestroyWindow(cv::String* winname);
 CVAPI(void) cveDestroyAllWindows();
 CVAPI(int) cveWaitKey(int delay);
+
+
 #endif

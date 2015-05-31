@@ -6,6 +6,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Cvb
@@ -94,11 +95,10 @@ namespace Emgu.CV.Cvb
       /// <returns>The contour of the blob</returns>
       public Point[] GetContour()
       {
-         using (MemStorage storage = new MemStorage())
+         using (VectorOfPoint vp = new VectorOfPoint())
          {
-            Contour<Point> contour = new Contour<Point>(storage);
-            cvbCvBlobGetContour(_ptr, contour);
-            return contour.ToArray();
+            cvbCvBlobGetContour(_ptr, vp.Ptr);
+            return vp.ToArray();
          }
       }
 

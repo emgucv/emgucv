@@ -23,7 +23,6 @@ namespace Emgu.CV.Cuda
    public class CudaCascadeClassifier : UnmanagedObject
    {
       private GpuMat _buffer;
-      private MemStorage _stor;
 
       /// <summary>
       /// Create a Cuda cascade classifier using the specific file
@@ -37,7 +36,6 @@ namespace Emgu.CV.Cuda
          using (CvString s = new CvString(fileName))
             _ptr = CudaInvoke.cudaCascadeClassifierCreate(s);
          _buffer = new GpuMat(1, 100, DepthType.Cv32S, 4);
-         _stor = new MemStorage();
       }
 
       /// <summary>
@@ -71,8 +69,6 @@ namespace Emgu.CV.Cuda
          CudaInvoke.cudaCascadeClassifierRelease(ref _ptr);
          if (_buffer != null)
             _buffer.Dispose();
-         if (_stor != null)
-            _stor.Dispose();
       }
 
       public double ScaleFactor

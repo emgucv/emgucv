@@ -91,7 +91,7 @@ namespace Emgu.CV.Util
 
          pluginName = Marshal.PtrToStringAnsi(pluginInfo);
          versionName = Marshal.PtrToStringAnsi(version);
-      }*/
+      }
 
       /// <summary>
       /// Enable or diable IPL optimization for opencv
@@ -102,7 +102,7 @@ namespace Emgu.CV.Util
          CvInvoke.cvUseOptimized(enable);
       }
 
-      /*
+      
       /// <summary>
       /// Get the OpenCV matrix depth enumeration from depth type
       /// </summary>

@@ -2,8 +2,8 @@
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+using Emgu.CV.Util;
 #if !NETFX_CORE
-
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -250,10 +250,11 @@ namespace Emgu.CV.OCR
       /// <returns>All the characters in the image</returns>
       public Character[] GetCharacters()
       {
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfByte textSeq = new VectorOfByte())
+         using (VectorOfTesseractResult results = new VectorOfTesseractResult())
          {
-            Seq<byte> textSeq = new Seq<byte>(stor);
-            Seq<TesseractResult> results = new Seq<TesseractResult>(stor);
+            //Seq<byte> textSeq = new Seq<byte>(stor);
+            //Seq<TesseractResult> results = new Seq<TesseractResult>(stor);
             OcrInvoke.TessBaseAPIExtractResult(_ptr, textSeq, results);
 
             byte[] bytes = textSeq.ToArray();
@@ -300,21 +301,18 @@ namespace Emgu.CV.OCR
       {
          return  new PageIterator(OcrInvoke.TessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords));
       }
+   }
 
-
-      /// <summary>
-      /// This structure is primary used for PInvoke
-      /// </summary>
-      private struct TesseractResult
-      {
+   /// <summary>
+   /// This structure is primary used for PInvoke
+   /// </summary>
+   public struct TesseractResult
+   {
 #pragma warning disable 0649
-         public int Length;
-         public float Cost;
-         public Rectangle Region;
+      public int Length;
+      public float Cost;
+      public Rectangle Region;
 #pragma warning restore 0649
-      }
-
-
    }
 
    /// <summary>

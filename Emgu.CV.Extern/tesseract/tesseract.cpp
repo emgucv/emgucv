@@ -56,7 +56,7 @@ void TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vect
    delete[] result;
 }
 
-void TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* resultSeq)
+void TessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<unsigned char>* charSeq, std::vector<TesseractResult>* resultSeq)
 {
    if (ocr == NULL)
       return;
@@ -87,10 +87,15 @@ void TessBaseAPIExtractResult(EmguTesseract* ocr, CvSeq* charSeq, CvSeq* resultS
       tr.region.y = height - y1[i];
       tr.region.width = x1[i] - x0[i];
       tr.region.height = y1[i] - y0[i];
-      cvSeqPush(resultSeq, &tr);
+      resultSeq->push_back(tr);
+      //cvSeqPush(resultSeq, &tr);
    }
    if (n > 0)
-      cvSeqPushMulti(charSeq, text, totalTextLength);
+   {
+      charSeq->resize(totalTextLength);
+      memcpy(&(*charSeq)[0], text, totalTextLength);
+   }
+      
    delete[] text;
    delete[] lengths;
    delete[] x0;

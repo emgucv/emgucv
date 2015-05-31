@@ -1107,9 +1107,10 @@ namespace Emgu.CV.Test
          Mat result = new Mat();
 
          Stopwatch watch = Stopwatch.StartNew();
-         OpticalFlowDualTVL1 flow = new OpticalFlowDualTVL1();
+         DualTVL1OpticalFlow flow = new DualTVL1OpticalFlow();
+
          //string[] paramNames = flow.GetParamNames();
-         flow.Calc(prevImg, currImg, result);
+         CvInvoke.Calc(flow, prevImg, currImg, result);
 
          watch.Stop();
          EmguAssert.WriteLine(String.Format(
@@ -1606,6 +1607,7 @@ namespace Emgu.CV.Test
          //ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
+      /*
       [Test]
       public void TestMemstorage()
       {
@@ -1617,7 +1619,7 @@ namespace Emgu.CV.Test
             }
          }
       }
-      /*
+      
       [Test]
       public void TestMatND()
       {
@@ -2030,6 +2032,7 @@ namespace Emgu.CV.Test
       }
 #endif
 
+      /*
       [Test]
       public void TestSeqPerformance()
       {
@@ -2056,7 +2059,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      /*
+      
       [Test]
       public void TestCondensation()
       {
@@ -2184,6 +2187,7 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue((shortestDistance1 - shortestDistance2) <= 1.0e-3 * shortestDistance1);
       }
 
+      /*
       [Test]
       public void TestPOSIT()
       {
@@ -2192,7 +2196,7 @@ namespace Emgu.CV.Test
          CvInvoke.cvReleasePOSITObject(ref ptr);
       }
 
-      /*
+      
       [Test]
       public void TestTiffWriter()
       {

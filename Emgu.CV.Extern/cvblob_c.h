@@ -53,7 +53,7 @@ CvBlobMoments;
 CVAPI(unsigned int) cvbCvBlobGetLabel(cvb::CvBlob* blob);
 CVAPI(void) cvbCvBlobGetRect(cvb::CvBlob* blob, CvRect* rect);
 CVAPI(void) cvbCvBlobGetMoment(cvb::CvBlob* blob, CvBlobMoments* moments);
-CVAPI(void) cvbCvBlobGetContour(cvb::CvBlob* blob, CvSeq* contour);
+CVAPI(void) cvbCvBlobGetContour(cvb::CvBlob* blob, std::vector<CvPoint>* contour);
 
 //CvTracks
 CVAPI(cvb::CvTracks*) cvbCvTracksCreate();

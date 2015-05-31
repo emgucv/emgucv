@@ -172,6 +172,7 @@ namespace Emgu.CV
       private static extern double cveCalcGlobalOrientation(IntPtr orientation, IntPtr mask, IntPtr mhi, double timestamp, double duration);
       #endregion
 
+      /*
       #region Kalman Filter
       /// <summary>
       /// Allocates CvKalman and all its matrices and initializes them somehow. 
@@ -183,17 +184,6 @@ namespace Emgu.CV
       [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreateKalman(int dynamParams, int measureParams, int controlParams);
 
-		/*
-      /// <summary>
-      /// Adjusts stochastic model state on the basis of the given measurement of the model state.
-      /// The function stores adjusted state at kalman->state_post and returns it on output
-      /// </summary>
-      /// <param name="kalman">Pointer to the structure to be updated</param>
-      /// <param name="measurement">Pointer to the structure CvMat containing the measurement vector</param>
-      /// <returns>The function stores adjusted state at kalman->state_post and returns it on output</returns>
-      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvKalmanCorrect(IntPtr kalman, IntPtr measurement);*/
-
       /// <summary>
       /// Adjusts stochastic model state on the basis of the given measurement of the model state.
       /// The function stores adjusted state at kalman->state_post and returns it on output
@@ -204,16 +194,6 @@ namespace Emgu.CV
       [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvKalmanCorrect(ref MCvKalman kalman, IntPtr measurement);
 
-		/*
-      /// <summary>
-      /// Estimates the subsequent stochastic model state by its current state and stores it at kalman->state_pre
-      /// The function returns the estimated state
-      /// </summary>
-      /// <param name="kalman">Kalman filter state</param>
-      /// <param name="control">Control vector (uk), should be NULL iff there is no external control (controlParams=0). </param>
-      /// <returns>the estimated state</returns>
-      [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvKalmanPredict(IntPtr kalman, IntPtr control);*/
 
       /// <summary>
       /// Estimates the subsequent stochastic model state by its current state and stores it at kalman->state_pre
@@ -232,7 +212,7 @@ namespace Emgu.CV
       [DllImport(OpencvVideoLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleaseKalman(ref IntPtr kalman);
       #endregion
-
+*/
       #region optical flow
       /// <summary>
       /// Calculates optical flow for a sparse feature set using iterative Lucas-Kanade method in pyramids

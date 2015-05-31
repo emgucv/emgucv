@@ -13,7 +13,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Farneback optical flow
    /// </summary>
-   public class CudaFarnebackOpticalFlow : UnmanagedObject, IDenseOpticalFlow
+   public class CudaFarnebackOpticalFlow : UnmanagedObject, ICudaDenseOpticalFlow
    {
       private IntPtr _denseFlow;
 
@@ -53,7 +53,7 @@ namespace Emgu.CV.Cuda
          }
       }
 
-      IntPtr IDenseOpticalFlow.DenseOpticalFlowPtr
+      IntPtr ICudaDenseOpticalFlow.DenseOpticalFlowPtr
       {
          get { return _denseFlow; }
       }

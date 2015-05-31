@@ -527,3 +527,28 @@ void cveGetRectSubPix(cv::_InputArray* image, CvSize* patchSize, CvPoint2D32f* c
 {
    cv::getRectSubPix(*image, *patchSize, *center, *patch, patchType);
 }
+
+int cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, int connectivity)
+{
+   return cvSampleLine(_img, *pt1, *pt2, _buffer, connectivity);
+}
+
+double cveGetSparialMoment(CvMoments* moments, int xOrder, int yOrder)
+{
+   return cvGetSpatialMoment(moments, xOrder, yOrder);
+}
+
+double cveGetCentralMoment(CvMoments* moments, int xOrder, int yOrder)
+{
+   return cvGetCentralMoment(moments, xOrder, yOrder);
+}
+
+double cveGetNormalizedCentralMoment(CvMoments* moments, int xOrder, int yOrder)
+{
+   return cvGetNormalizedCentralMoment(moments, xOrder, yOrder);
+}
+
+void cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result)
+{
+   *result = cvMaxRect(rect1, rect2);
+}

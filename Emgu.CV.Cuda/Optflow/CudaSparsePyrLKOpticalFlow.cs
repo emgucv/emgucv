@@ -14,7 +14,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Sparse PyrLK optical flow
    /// </summary>
-   public class CudaSparsePyrLKOpticalFlow : UnmanagedObject, ISparseOpticalFlow
+   public class CudaSparsePyrLKOpticalFlow : UnmanagedObject, ICudaSparseOpticalFlow
    {
       private IntPtr _sparseFlow;
 
@@ -42,7 +42,7 @@ namespace Emgu.CV.Cuda
          }
       }
 
-      IntPtr ISparseOpticalFlow.SparseOpticalFlowPtr
+      IntPtr ICudaSparseOpticalFlow.SparseOpticalFlowPtr
       {
          get { return _sparseFlow; }
       }

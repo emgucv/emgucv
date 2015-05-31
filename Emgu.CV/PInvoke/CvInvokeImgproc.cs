@@ -24,17 +24,8 @@ namespace Emgu.CV
       /// <param name="buffer">Buffer to store the line points; must have enough size to store max( |pt2.x-pt1.x|+1, |pt2.y-pt1.y|+1 ) points in case of 8-connected line and |pt2.x-pt1.x|+|pt2.y-pt1.y|+1 in case of 4-connected line</param>
       /// <param name="connectivity">The line connectivity, 4 or 8</param>
       /// <returns></returns>
-#if ANDROID
-      public static int cvSampleLine(IntPtr image, Point pt1, Point pt2, IntPtr buffer, CvEnum.Connectivity connectivity)
-      {
-         return cvSampleLine(image, pt1.X, pt1.Y, pt2.X, pt2.Y, buffer, connectivity);
-      }
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern int cvSampleLine(IntPtr image, int pt1X, int pt1Y, int pt2X, int pt2Y, IntPtr buffer, CvEnum.Connectivity connectivity);
-#else
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern int cvSampleLine(IntPtr image, Point pt1, Point pt2, IntPtr buffer, CvEnum.Connectivity connectivity);
-#endif
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSampleLine")]
+      public static extern int cvSampleLine(IntPtr image, ref Point pt1, ref Point pt2, IntPtr buffer, CvEnum.Connectivity connectivity);
 
       /// <summary>
       /// Extracts pixels from src:
@@ -437,14 +428,21 @@ namespace Emgu.CV
       private static extern void cveWatershed(IntPtr image, IntPtr markers);
 
       #region Computational Geometry
+
       /// <summary>
       /// Finds minimum area rectangle that contains both input rectangles inside
       /// </summary>
       /// <param name="rect1">First rectangle </param>
       /// <param name="rect2">Second rectangle </param>
       /// <returns>The minimum area rectangle that contains both input rectangles inside</returns>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern Rectangle cvMaxRect(ref Rectangle rect1, ref Rectangle rect2);
+      public static Rectangle cvMaxRect(Rectangle rect1, Rectangle rect2)
+      {
+         Rectangle rect = new Rectangle();
+         cveMaxRect(ref rect1, ref rect2, ref rect);
+         return rect;
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveMaxRect(ref Rectangle rect1, ref Rectangle rect2, ref Rectangle result);
 
       /// <summary>
       /// Fits line to 2D or 3D point set 
@@ -1441,6 +1439,7 @@ namespace Emgu.CV
       }
 #endif
 
+      /*
       /// <summary>
       /// Finishes the scanning process and returns a pointer to the first contour on the
       /// highest level.
@@ -1448,7 +1447,7 @@ namespace Emgu.CV
       /// <param name="scanner">Reference to the contour scanner</param>
       /// <returns>pointer to the first contour on the highest level</returns>
       [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern IntPtr cvEndFindContours(ref IntPtr scanner);
+      public static extern IntPtr cvEndFindContours(ref IntPtr scanner);*/
 
       /// <summary>
       /// Converts input image from one color space to another. The function ignores colorModel and channelSeq fields of IplImage header, so the source image color space should be specified correctly (including order of the channels in case of RGB space, e.g. BGR means 24-bit format with B0 G0 R0 B1 G1 R1 ... layout, whereas RGB means 24-bit format with R0 G0 B0 R1 G1 B1 ... layout). 
@@ -2101,7 +2100,7 @@ namespace Emgu.CV
       /// <param name="xOrder">x order of the retrieved moment, xOrder &gt;= 0. </param>
       /// <param name="yOrder">y order of the retrieved moment, yOrder &gt;= 0 and xOrder + y_order &lt;= 3</param>
       /// <returns>The spatial moment</returns>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetSpatialMoment")]
       public static extern double cvGetSpatialMoment(
           ref MCvMoments moments,
           int xOrder,
@@ -2116,7 +2115,7 @@ namespace Emgu.CV
       /// <param name="xOrder">x order of the retrieved moment, xOrder &gt;= 0.</param>
       /// <param name="yOrder">y order of the retrieved moment, yOrder &gt;= 0 and xOrder + y_order &lt;= 3</param>
       /// <returns>The center moment</returns>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetCentralMoment")]
       public static extern double cvGetCentralMoment(
           ref MCvMoments moments,
           int xOrder,
@@ -2131,7 +2130,7 @@ namespace Emgu.CV
       /// <param name="xOrder">x order of the retrieved moment, xOrder &gt;= 0.</param>
       /// <param name="yOrder">y order of the retrieved moment, yOrder &gt;= 0 and xOrder + y_order &lt;= 3</param>
       /// <returns>The normalized center moment</returns>
-      [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetNormalizedCentralMoment")]
       public static extern double cvGetNormalizedCentralMoment(
           ref MCvMoments moments,
           int xOrder,

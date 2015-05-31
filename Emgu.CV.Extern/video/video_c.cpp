@@ -46,14 +46,16 @@ void CvBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor
 }
 
 
-
-cv::DenseOpticalFlow* cveDenseOpticalFlowCreateDualTVL1()
+cv::DualTVL1OpticalFlow* cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm)
 {
-   cv::Ptr<cv::DenseOpticalFlow> dof = cv::createOptFlow_DualTVL1();
+   cv::Ptr<cv::DualTVL1OpticalFlow> dof = cv::createOptFlow_DualTVL1();
    dof.addref();
-   return dof.get();
+   cv::DualTVL1OpticalFlow* ptr = dof.get();
+   *denseOpticalFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr);
+   *algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+   return ptr;
 }
-void cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow)
+void cveDualTVL1OpticalFlowRelease(cv::DualTVL1OpticalFlow** flow)
 {
    delete *flow;
    *flow = 0;
@@ -93,4 +95,25 @@ void cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool 
 {
    cv::Mat r = cv::estimateRigidTransform(*src, *dst, fullAffine);
    cv::swap(r, *result);
+}
+
+cv::KalmanFilter* cveKalmanFilterCreate(int dynamParams, int measureParams, int controlParams, int type)
+{
+   return new cv::KalmanFilter(dynamParams, measureParams, controlParams, type);
+}
+
+void cveKalmanFilterRelease(cv::KalmanFilter** filter)
+{
+   delete *filter;
+   *filter = 0;
+}
+
+const cv::Mat* cveKalmanFilterPredict(cv::KalmanFilter* kalman, cv::Mat* control)
+{
+   return &(kalman->predict(control ? *control : cv::Mat()));
+}
+
+const cv::Mat* cveKalmanFilterCorrect(cv::KalmanFilter* kalman, cv::Mat* measurement)
+{
+   return &(kalman->correct(*measurement));
 }

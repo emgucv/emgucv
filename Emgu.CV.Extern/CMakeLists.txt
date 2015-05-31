@@ -71,6 +71,14 @@ IF(HAVE_opencv_text)
   CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text Emgu.CV.Text "#include \"opencv2/text/erfilter.hpp\"")
 ENDIF()
 
+IF(HAVE_opencv_highgui)
+  CREATE_VECTOR_CS("ColorPoint" "ColorPoint" "ColorPoint" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"highgui_c_extra.h\"")
+ENDIF()
+
+IF(EMGU_CV_WITH_TESSERACT)
+  CREATE_VECTOR_CS("TesseractResult" "TesseractResult" "TesseractResult" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.OCR/ Emgu.CV.OCR "#include \"tesseract_c.h\"")
+ENDIF()
+
 CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("CvString" "cv::String" "CvString" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
@@ -93,8 +101,11 @@ ENDIF()
 # * val: [c++] {obj}.${PROPERTY_NAME}() [C#] {obj}.${CS_FUNCTION_NAME} {get;}
 # * struct: [c++] {obj}.Get${PROPERTY_NAME}(); {obj}.Set${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
 # * propW: [c++] {obj}.Set${PROPERTY_NAME}(val); [C#] {obj}.Set${CS_FUNCTION_NAME}(val)
-# * propR: [c++] {obj}.Get${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME}
-# * act1, act1obj: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val)
+# * propR: [c++] {obj}.Get${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME} {get;} 
+# * prop: [c++] {obj}.Set${PROPERTY_NAME}(val); & {obj}.Get${PROPERTY_NAME}();; [C#] {obj}.${CS_FUNCTION_NAME} {get;}
+# * act1: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is a value / structure
+# * act1obj: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is an object
+# * element: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
 #################################################################################
 MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mtypes cs_func_names csptypes csp_docs cs_namespace cs_invoke_class cs_class_name)
    SET(FILE_NAME ${fname})
@@ -171,7 +182,7 @@ namespace ${cs_namespace}
      [return: MarshalAs(CvInvoke.BoolMarshalType)]")
      ENDIF()
 
-     IF("${MARSHAL_TYPE}" STREQUAL "val")
+     IF(${MARSHAL_TYPE} STREQUAL "val")
      IF (${PROPERTY_TYPE} STREQUAL "cv::String") #special handling for functions that returns strings
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
@@ -222,7 +233,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
      }
      ")
      ENDIF()
-     ELSEIF("${MARSHAL_TYPE}" STREQUAL "struct")
+     ELSEIF(${MARSHAL_TYPE} STREQUAL "struct")
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
@@ -248,7 +259,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, ref value); }
      }
      ")
-     ELSEIF("${MARSHAL_TYPE}" STREQUAL "propW")
+     ELSEIF(${MARSHAL_TYPE} STREQUAL "propW")
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
@@ -271,7 +282,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
-     ELSEIF("${MARSHAL_TYPE}" STREQUAL "act1")
+     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1")
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
@@ -294,7 +305,7 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
         ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
-     ELSEIF("${MARSHAL_TYPE}" STREQUAL "act1obj")
+     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1obj")
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
      ")
@@ -317,7 +328,7 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
         ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
-     ELSEIF("${MARSHAL_TYPE}" STREQUAL "propR")
+     ELSEIF(${MARSHAL_TYPE} STREQUAL "propR")
 
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
@@ -339,7 +350,57 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
         get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
      }
      ")
-     
+     ELSEIF("${MARSHAL_TYPE}" STREQUAL "element")
+     IF (${PROPERTY_TYPE} STREQUAL "cv::Mat") #special handling for functions that returns Mats
+     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}*) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
+     ")
+     SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return &(obj->${PROPERTY_NAME}); }
+     ")
+
+     SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern IntPtr cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj);
+     ")
+     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
+     {
+        get { return new ${CS_PROPERTY_TYPE}( ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr), false); } 
+     }
+     ")
+     ELSE()
+     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
+     ")
+     SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}; }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->${PROPERTY_NAME} = value; }     
+     ")
+
+     SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern ${CS_PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj);
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+     internal static extern void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(
+        IntPtr obj, ${MARSHAL_IN} 
+        ${CS_PROPERTY_TYPE} val);
+     ")
+     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
+     {
+        get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
+        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); }
+     }
+     ")
+     ENDIF()
      ELSE() # for "prop" type
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
@@ -717,6 +778,57 @@ IF(HAVE_opencv_ml)
 ENDIF()
 ############################### ml code gen END ################################
 
+############################### video code gen START ##############################
+IF(HAVE_opencv_video)
+    CREATE_OCV_CLASS_PROPERTY( 
+  "video/dual_tvl1_opticalflow_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/DualTVL1OpticalFlowGenerated.cs"
+  "cv::DualTVL1OpticalFlow" 
+  "DualTVL1OpticalFlow" 
+  "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
+  "double;double;double;double;int;int;double;int;int;bool;double;int" 
+  "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+  "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
+  "double;double;double;double;int;int;double;int;int;bool;double;int"
+  "Time step of the numerical scheme;
+  Weight parameter for the data term, attachment parameter;
+  Weight parameter for (u - v)^2, tightness parameter;
+  Coefficient for additional illumination variation term;
+  Number of scales used to create the pyramid of images;
+  Number of warpings per scale;
+  Stopping criterion threshold used in the numerical scheme, which is a trade-off between precision and running time;
+  Inner iterations (between outlier filtering) used in the numerical scheme;
+  Outer iterations (number of inner loops) used in the numerical scheme;
+  Use initial flow;
+  Step between scales (less than 1);
+  Median filter kernel size (1 = no filter) (3 or 5)"
+  "Emgu.CV"
+  "CvInvoke"
+  "DualTVL1OpticalFlow"
+  "#include \"video_c.h\"")
+
+      CREATE_OCV_CLASS_PROPERTY( 
+  "video/kalmanfilter_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/KalmanFilterGenerated.cs"
+  "cv::KalmanFilter" 
+  "KalmanFilter" 
+  "statePre;statePost;transitionMatrix;controlMatrix;measurementMatrix" 
+  "cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat" 
+  "element;element;element;element;element"
+  "StatePre;StatePost;TransitionMatrix;ControlMatrix;MeasurementMatrix" 
+  "Mat;Mat;Mat;Mat;Mat"
+  "Predicted state (x'(k)): x(k)=A*x(k-1)+B*u(k);
+  Corrected state (x(k)): x(k)=x'(k)+K(k)*(z(k)-H*x'(k));
+  State transition matrix (A);
+  Control matrix (B) (not used if there is no control);
+  Measurement matrix (H)"
+  "Emgu.CV"
+  "CvInvoke"
+  "KalmanFilter"
+  "#include \"video_c.h\"")
+ENDIF()
+############################### video code gen END ################################
+
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
@@ -731,7 +843,6 @@ IF(IOS)
 ENDIF()
 
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
-
   #MESSAGE("Retriveing source folder for project :  opencv_${CVEXTERN_OPTIONAL_DEP}")
   #GET_TARGET_PROPERTY(OPENCV_MODULE_SOURCE_DIR opencv_${CVEXTERN_OPTIONAL_DEP} PROJECT_SOURCE_DIR)
   IF (HAVE_opencv_${CVEXTERN_OPTIONAL_DEP})
@@ -1028,7 +1139,7 @@ ENDIF()
 ############################### OpenCL END ################################
 
 ############################### xfeatures2d START ##############################
-IF(BUILD_opencv_xfeatures2d)
+IF(HAVE_opencv_xfeatures2d)
   IF( (NOT WITH_CUDA) OR (NOT (TARGET opencv_cudaimgproc)) )
     FILE(GLOB xfeatures2d_srcs_excludes "xfeatures2d/nonfree_gpu_c.cpp")
     LIST(REMOVE_ITEM extern_srcs ${xfeatures2d_srcs_excludes})
@@ -1055,7 +1166,7 @@ IF(ANDROID OR APPLE)
 ENDIF()
 
 set(the_target ${PROJECT_NAME})
-add_library(${the_target} ${extern_srcs} ${extern_hdrs} )
+add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} )
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   FOREACH(CVEXTERN_DEPENDENCY_DLL ${CVEXTERN_DEPENDENCY_DLLS})
@@ -1170,8 +1281,8 @@ ENDIF()
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
 #  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
 #  MESSAGE("Included:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
-  ADD_DEPENDENCIES(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
-  target_link_libraries(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
+    ADD_DEPENDENCIES(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
+    target_link_libraries(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
 ENDFOREACH()
 
 IF(EMGU_ENABLE_SSE)

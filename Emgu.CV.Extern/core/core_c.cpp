@@ -6,6 +6,45 @@
 
 #include "core_c_extra.h"
 
+CvErrorCallback cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata)
+{
+   return cvRedirectError(error_handler, userdata, prev_userdata);
+}
+
+int  cveGetErrMode()
+{
+   return cvGetErrMode();
+}
+int cveSetErrMode(int mode)
+{
+   return cvSetErrMode(mode);
+}
+int cveGetErrStatus()
+{
+   return cvGetErrStatus();
+}
+void cveSetErrStatus(int status)
+{
+   cvSetErrStatus(status); 
+}
+const char* cveErrorStr(int status)
+{
+   return cvErrorStr(status);
+}
+
+int cveGetThreadNum()
+{
+   return cv::getThreadNum();
+}
+void cveSetNumThreads(int nthreads)
+{
+   cv::setNumThreads(nthreads);
+}
+int cveGetNumThreads()
+{
+   return cv::getNumThreads();
+}
+
 cv::String* cveStringCreate()
 {
    return new cv::String();
@@ -638,4 +677,224 @@ void cveFileNodeRelease(cv::FileNode** node)
 {
    delete *node;
    *node = 0;
+}
+
+IplImage* cveCreateImage(CvSize* size, int depth, int channels)
+{
+   return cvCreateImage(*size, depth, channels);
+}
+IplImage* cveCreateImageHeader(CvSize* size, int depth, int channels)
+{
+   return cvCreateImageHeader(*size, depth, channels);
+}
+IplImage* cveInitImageHeader(IplImage* image, CvSize* size, int depth, int channels, int origin, int align)
+{
+   return cvInitImageHeader(image, *size, depth, channels, origin, align);
+}
+void cveSetData(CvArr* arr, void* data, int step)
+{
+   cvSetData(arr, data, step);
+}
+void cveReleaseImageHeader(IplImage** image)
+{
+   cvReleaseImageHeader(image);
+}
+void cveSetImageCOI(IplImage* image, int coi)
+{
+   cvSetImageCOI(image, coi);
+}
+int cveGetImageCOI(IplImage* image)
+{
+   return cvGetImageCOI(image);
+}
+void cveResetImageROI(IplImage* image)
+{
+   cvResetImageROI(image);
+}
+void cveSetImageROI(IplImage* image, CvRect* rect)
+{
+   cvSetImageROI(image, *rect);
+}
+void cveGetImageROI(IplImage* image, CvRect* rect)
+{
+   CvRect rect2 = cvGetImageROI(image);
+   memcpy(rect, &rect2, sizeof(CvRect));
+}
+
+CvMat* cveInitMatHeader(CvMat* mat, int rows, int cols, int type, void* data, int step)
+{
+   return cvInitMatHeader(mat, rows, cols, type, data, step);
+}
+
+CvMat* cveCreateMat(int rows, int cols, int type)
+{
+   return cvCreateMat(rows, cols, type);
+}
+
+CvMatND* cveInitMatNDHeader(CvMatND* mat, int dims, int* sizes, int type, void* data)
+{
+   return cvInitMatNDHeader(mat, dims, sizes, type, data);
+}
+
+void cveReleaseMat(CvMat** mat)
+{
+   cvReleaseMat(mat);
+}
+
+CvSparseMat* cveCreateSparseMat(int dim, int* sizes, int type)
+{
+   return cvCreateSparseMat(dim, sizes, type);
+}
+void cveReleaseSparseMat(CvSparseMat** mat)
+{
+   cvReleaseSparseMat(mat);
+}
+
+void cveSet2D(CvArr* arr, int idx0, int idx1, CvScalar* value)
+{
+   cvSet2D(arr, idx0, idx1, *value);
+}
+
+CvMat* cveGetSubRect(CvArr* arr, CvMat* submat, CvRect* rect)
+{
+   return cvGetSubRect(arr, submat, *rect);
+}
+CvMat* cveGetRows(CvArr* arr, CvMat* submat, int startRow, int endRow, int deltaRow)
+{
+   return cvGetRows(arr, submat, startRow, endRow, deltaRow);
+}
+CvMat* cveGetCols(CvArr* arr, CvMat* submat, int startCol, int endCol)
+{
+   return cvGetCols(arr, submat, startCol, endCol);
+}
+
+void cveGetSize(CvArr* arr, CvSize* size)
+{
+   *size = cvGetSize(arr);
+}
+
+void cveCopy(CvArr* src, CvArr* dst, CvArr* mask)
+{
+   cvCopy(src, dst, mask);
+}
+void cveRange(CvArr* mat, double start, double end)
+{
+   cvRange(mat, start, end);
+}
+
+void cveSetReal1D(CvArr* arr, int idx0, double value)
+{
+   cvSetReal1D(arr, idx0, value);
+}
+void cveSetReal2D(CvArr* arr, int idx0, int idx1, double value)
+{
+   cvSetReal2D(arr, idx0, idx1, value);
+}
+void cveSetReal3D(CvArr* arr, int idx0, int idx1, int idx2, double value)
+{
+   cvSetReal3D(arr, idx0, idx1, idx2, value);
+}
+void cveSetRealND(CvArr* arr, int* idx, double value)
+{
+   cvSetRealND(arr, idx, value);
+}
+void cveGet1D(CvArr* arr, int idx0, CvScalar* value)
+{
+   *value = cvGet1D(arr, idx0);
+}
+void cveGet2D(CvArr* arr, int idx0, int idx1, CvScalar* value)
+{
+   *value = cvGet2D(arr, idx0, idx1);
+}
+void cveGet3D(CvArr* arr, int idx0, int idx1, int idx2, CvScalar* value)
+{
+   *value = cvGet3D(arr, idx0, idx1, idx2);
+}
+double cveGetReal1D(CvArr* arr, int idx0)
+{
+   return cvGetReal1D(arr, idx0);
+}
+double cveGetReal2D(CvArr* arr, int idx0, int idx1)
+{
+   return cvGetReal2D(arr, idx0, idx1);
+}
+double cveGetReal3D(CvArr* arr, int idx0, int idx1, int idx2)
+{
+   return cvGetReal3D(arr, idx0, idx1, idx2);
+}
+void cveClearND(CvArr* arr, int* idx)
+{
+   cvClearND(arr, idx);
+}
+
+bool cveUseOptimized()
+{
+   return cv::useOptimized();
+}
+void cveSetUseOptimized(bool onoff)
+{
+   cv::setUseOptimized(onoff);
+}
+
+void cveGetRawData(CvArr* arr, uchar** data, int* step, CvSize* roiSize)
+{
+   cvGetRawData(arr, data, step, roiSize);
+}
+CvMat* cveGetMat(CvArr* arr, CvMat* header, int* coi, int allowNd)
+{
+   return cvGetMat(arr, header, coi, allowNd);
+}
+IplImage* cveGetImage(CvArr* arr, IplImage* imageHeader)
+{
+   return cvGetImage(arr, imageHeader);
+}
+
+int cveCheckArr(CvArr* arr, int flags, double minVal, double maxVal)
+{
+   return cvCheckArr(arr, flags, minVal, maxVal);
+}
+
+CvMat* cveReshape(CvArr* arr, CvMat* header, int newCn, int newRows)
+{
+   return cvReshape(arr, header, newCn, newRows);
+}
+CvMat* cveGetDiag(CvArr* arr, CvMat* submat, int diag)
+{
+   return cvGetDiag(arr, submat, diag);
+}
+void cveConvertScale(CvArr* arr, CvArr* dst, double scale, double shift)
+{
+   cvConvertScale(arr, dst, scale, shift);
+}
+
+void cveReleaseImage(IplImage** image)
+{
+   cvReleaseImage(image);
+}
+
+void cveSVDecomp(cv::_InputArray* src, cv::_OutputArray* w, cv::_OutputArray* u, cv::_OutputArray* vt, int flags)
+{
+   cv::SVDecomp(*src, *w, *u, *vt, flags);
+}
+void cveSVBackSubst(cv::_InputArray* w, cv::_InputArray* u, cv::_InputArray* vt, cv::_InputArray* rhs, cv::_OutputArray* dst)
+{
+   cv::SVBackSubst(*w, *u, *vt, *rhs, *dst);
+}
+
+void cvePCACompute1(cv::_InputArray* data, cv::_InputOutputArray* mean, cv::_OutputArray* eigenvectors, int maxComponents)
+{
+   cv::PCACompute(*data, *mean, *eigenvectors, maxComponents);
+}
+
+void cvePCACompute2(cv::_InputArray* data, cv::_InputOutputArray* mean, cv::_OutputArray* eigenvectors, double retainedVariance)
+{
+   cv::PCACompute(*data, *mean, *eigenvectors, retainedVariance);
+}
+void cvePCAProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputArray* eigenvectors, cv::_OutputArray* result)
+{
+   cv::PCAProject(*data, *mean, *eigenvectors, *result);
+}
+void cvePCABackProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputArray* eigenvectors, cv::_OutputArray* result)
+{
+   cv::PCABackProject(*data, *mean, *eigenvectors, *result);
 }

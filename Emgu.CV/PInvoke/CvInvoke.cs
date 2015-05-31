@@ -350,7 +350,7 @@ namespace Emgu.CV
 
 #if !UNITY_IPHONE
          //Use the custom error handler
-         cvRedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
+         RedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
 #endif
       }
 

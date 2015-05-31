@@ -626,6 +626,7 @@ namespace Emgu.CV
       private static extern void cveDrawChessboardCorners(IntPtr image, ref Size patternSize, IntPtr corners, [MarshalAs(CvInvoke.BoolMarshalType)] bool patternWasFound);
       #endregion
 
+      /*
       #region Pose Estimation
       /// <summary>
       /// Allocates memory for the object structure and computes the object inverse matrix. 
@@ -639,7 +640,7 @@ namespace Emgu.CV
       [DllImport(OpencvCalib3dLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern IntPtr cvCreatePOSITObject(float[,] points3D, int pointCount);
 
-      /*
+      
       /// <summary>
       /// Implements POSIT algorithm. Image coordinates are given in a camera-related coordinate system. The focal length may be retrieved using camera calibration functions. At every iteration of the algorithm new perspective projection of estimated pose is computed. 
       /// </summary>
@@ -655,7 +656,7 @@ namespace Emgu.CV
          IntPtr positObject, float[,] imagePoints, double focalLength,
          MCvTermCriteria criteria, 
          float[] rotationMatrix, float[] translationVector);
-      */
+      
 
       /// <summary>
       /// Implements POSIT algorithm. Image coordinates are given in a camera-related coordinate system. The focal length may be retrieved using camera calibration functions. At every iteration of the algorithm new perspective projection of estimated pose is computed. 
@@ -698,7 +699,8 @@ namespace Emgu.CV
       [DllImport(OpencvCalib3dLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       public static extern void cvReleasePOSITObject(ref IntPtr positObject);
       #endregion
-
+      */
+        
       /// <summary>
       /// Reconstructs points by triangulation.
       /// </summary>

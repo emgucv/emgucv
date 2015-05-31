@@ -13,7 +13,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Brox optical flow
    /// </summary>
-   public class CudaBroxOpticalFlow : UnmanagedObject, IDenseOpticalFlow
+   public class CudaBroxOpticalFlow : UnmanagedObject, ICudaDenseOpticalFlow
    {
       private IntPtr _denseFlow;
 
@@ -43,7 +43,7 @@ namespace Emgu.CV.Cuda
          }
       }
 
-      IntPtr IDenseOpticalFlow.DenseOpticalFlowPtr
+      IntPtr ICudaDenseOpticalFlow.DenseOpticalFlowPtr
       {
          get { return _denseFlow; }
       }

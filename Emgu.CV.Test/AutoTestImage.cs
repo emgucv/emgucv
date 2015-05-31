@@ -1024,16 +1024,14 @@ namespace Emgu.CV.Test
       public void TestImageDFT2()
       {
          Image<Gray, float> image = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
-         IntPtr complexImage = CvInvoke.cvCreateImage(image.Size, Emgu.CV.CvEnum.IplDepth.IplDepth32F, 2);
-         CvInvoke.cvSetImageCOI(complexImage, 1);
-         CvInvoke.cvCopy(image, complexImage, IntPtr.Zero);
-         CvInvoke.cvSetImageCOI(complexImage, 0);
+
+         Mat complexImage = new Mat(image.Size, DepthType.Cv32F, 2 );
+         complexImage.SetTo(new MCvScalar(0, 0));
+         CvInvoke.InsertChannel(image, complexImage, 0);
 
          Matrix<float> dft = new Matrix<float>(image.Rows, image.Cols, 2);
-         using (Mat complexMat = CvInvoke.CvArrToMat(complexImage))
-         {
-            CvInvoke.Dft(complexMat, dft, Emgu.CV.CvEnum.DxtType.Forward, 0);
-         }
+       
+         CvInvoke.Dft(complexImage, dft, Emgu.CV.CvEnum.DxtType.Forward, 0);
       }
 
       [TestAttribute]

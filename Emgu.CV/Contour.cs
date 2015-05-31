@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+/*
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -63,33 +64,6 @@ namespace Emgu.CV
       {
       }
 
-      /*
-      /// <summary>
-      /// Determines whether the point is inside contour, outside, or lies on an edge (or coinsides with a vertex)
-      /// </summary>
-      /// <param name="point">The point to be tested</param>
-      /// <returns>Positive if inside; negative if out side; 0 if on the contour</returns>
-      /// <remarks>Requires MCvContour.rect to be pre-computed</remarks>
-      public override double InContour(PointF point)
-      {
-#if !NETFX_CORE
-         Debug.Assert(!MCvContour.rect.IsEmpty, Properties.StringTable.BoundingRectangleNotCalculated);
-#endif
-         return base.InContour(point);
-      }
-
-      ///<summary>Get the smallest bouding rectangle </summary>
-      ///<remarks>Requires MCvContour.rect to be pre-computed</remarks>
-      public override Rectangle BoundingRectangle
-      {
-         get
-         {
-#if !NETFX_CORE
-            Debug.Assert(!MCvContour.rect.IsEmpty, Properties.StringTable.BoundingRectangleNotCalculated);
-#endif
-            return base.BoundingRectangle;
-         }
-      }*/
 
       /// <summary>
       /// Return the MCvContour structure
@@ -178,52 +152,6 @@ namespace Emgu.CV
          }
       }
 
-      /*
-      /// <summary>
-      /// Approximates one curves and returns the approximation result. 
-      /// </summary>
-      /// <param name="accuracy">The desired approximation accuracy</param>
-      /// <param name="storage"> The storage the resulting sequence use</param>
-      /// <returns>The approximated contour</returns>
-      public new Contour<T> ApproxPoly(double accuracy, MemStorage storage)
-      {
-         return ApproxPoly(accuracy, 0, storage);
-      }
-
-      
-      /// <summary>
-      /// Approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
-      /// </summary>
-      /// <param name="accuracy">The desired approximation accuracy</param>
-      /// <param name="storage"> The storage the resulting sequence use</param>
-      /// <param name="maxLevel">
-      /// Maximal level for contour approximation. 
-      /// If 0, only contour is arrpoximated. 
-      /// If 1, the contour and all contours after it on the same level are approximated. 
-      /// If 2, all contours after and all contours one level below the contours are approximated, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
-      /// </param>
-      /// <returns>The approximated contour</returns>
-      public new Contour<T> ApproxPoly(double accuracy, int maxLevel, MemStorage storage)
-      {
-         return new Contour<T>(
-             CvInvoke.cvApproxPoly(
-             Ptr,
-             StructSize.MCvContour,
-             storage.Ptr,
-             CvEnum.ApproxPolyType.CvPolyApproxDp,
-             accuracy,
-             maxLevel),
-             storage);
-      }
-
-      /// <summary>
-      /// Approximates one or more curves and returns the approximation result[s]. In case of multiple curves approximation the resultant tree will have the same structure as the input one (1:1 correspondence)
-      /// </summary>
-      /// <param name="accuracy">The desired approximation accuracy</param>
-      /// <returns>The approximated contour</returns>
-      public new Contour<T> ApproxPoly(double accuracy)
-      {
-         return ApproxPoly(accuracy, _stor);
-      }*/
    }
 }
+*/

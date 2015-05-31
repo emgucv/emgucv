@@ -13,7 +13,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// DualTvl1 optical flow
    /// </summary>
-   public class CudaOpticalFlowDualTvl1 : UnmanagedObject, IDenseOpticalFlow
+   public class CudaOpticalFlowDualTvl1 : UnmanagedObject, ICudaDenseOpticalFlow
    {
       private IntPtr _denseFlow;
    
@@ -40,7 +40,7 @@ namespace Emgu.CV.Cuda
          }
       }
 
-      IntPtr IDenseOpticalFlow.DenseOpticalFlowPtr
+      IntPtr ICudaDenseOpticalFlow.DenseOpticalFlowPtr
       {
          get { return _denseFlow;  }
       }

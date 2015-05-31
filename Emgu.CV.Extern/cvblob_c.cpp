@@ -144,10 +144,11 @@ void cvbCvBlobGetMoment(cvb::CvBlob* blob, CvBlobMoments* moments)
    moments->p2 = blob->p2;
 }
 
-void cvbCvBlobGetContour(cvb::CvBlob* blob, CvSeq* contour)
+void cvbCvBlobGetContour(cvb::CvBlob* blob, std::vector<CvPoint>* contour)
 {
    std::vector<CvPoint>* pts = cvb::cvConvertChainCodesToPolygon(&blob->contour);
-   cvSeqPushMulti(contour, &(*pts)[0], pts->size());
+   contour->resize(pts->size());
+   memcpy(&(*contour)[0], &(*pts)[0], pts->size() * sizeof(CvPoint));
    delete pts;
 }
 

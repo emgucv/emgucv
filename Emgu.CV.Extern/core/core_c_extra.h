@@ -11,6 +11,17 @@
 #include "opencv2/core/core_c.h"
 #include "emgu_c.h"
 
+CVAPI(CvErrorCallback) cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata);
+CVAPI(int)  cveGetErrMode();
+CVAPI(int) cveSetErrMode(int mode);
+CVAPI(int) cveGetErrStatus();
+CVAPI(void) cveSetErrStatus(int status);
+CVAPI(const char*) cveErrorStr(int status);
+
+CVAPI(int) cveGetNumThreads();
+CVAPI(void) cveSetNumThreads(int nthreads);
+CVAPI(int) cveGetThreadNum();
+
 CVAPI(cv::String*) cveStringCreate();
 CVAPI(cv::String*) cveStringCreateFromStr(const char* c);
 CVAPI(void) cveStringGetCStr(cv::String* string, const char** c, int* size);
@@ -178,6 +189,66 @@ CVAPI(double) cveFileNodeReadDouble(cv::FileNode* node, double defaultDouble);
 CVAPI(float) cveFileNodeReadFloat(cv::FileNode* node, float defaultFloat);
 CVAPI(void) cveFileNodeRelease(cv::FileNode** node);
 
+CVAPI(IplImage*) cveCreateImage(CvSize* size, int depth, int channels);
+CVAPI(IplImage*) cveCreateImageHeader(CvSize* size, int depth, int channels);
+CVAPI(IplImage*) cveInitImageHeader(IplImage* image, CvSize* size, int depth, int channels, int origin, int align);
+CVAPI(void) cveSetData(CvArr* arr, void* data, int step);
+CVAPI(void) cveReleaseImageHeader(IplImage** image);
+CVAPI(void) cveSetImageCOI(IplImage* image, int coi);
+CVAPI(int) cveGetImageCOI(IplImage* image);
+CVAPI(void) cveResetImageROI(IplImage* image);
+CVAPI(void) cveSetImageROI(IplImage* image, CvRect* rect);
+CVAPI(void) cveGetImageROI(IplImage* image, CvRect* rect);
 
+CVAPI(CvMat*) cveInitMatHeader(CvMat* mat, int rows, int cols, int type, void* data, int step);
+CVAPI(CvMat*) cveCreateMat(int rows, int cols, int type);
+CVAPI(CvMatND*) cveInitMatNDHeader(CvMatND* mat, int dims, int* sizes, int type, void* data);
+CVAPI(void) cveReleaseMat(CvMat** mat);
 
+CVAPI(CvSparseMat*) cveCreateSparseMat(int dim, int* sizes, int type);
+CVAPI(void) cveReleaseSparseMat(CvSparseMat** mat);
+
+CVAPI(void) cveSet2D(CvArr* arr, int idx0, int idx1, CvScalar* value);
+CVAPI(CvMat*) cveGetSubRect(CvArr* arr, CvMat* submat, CvRect* rect);
+CVAPI(CvMat*) cveGetRows(CvArr* arr, CvMat* submat, int startRow, int endRow, int deltaRow);
+CVAPI(CvMat*) cveGetCols(CvArr* arr, CvMat* submat, int startCol, int endCol);
+
+CVAPI(void) cveGetSize(CvArr* arr, CvSize* size);
+
+CVAPI(void) cveCopy(CvArr* src, CvArr* dst, CvArr* mask);
+CVAPI(void) cveRange(CvArr* mat, double start, double end);
+
+CVAPI(void) cveSetReal1D(CvArr* arr, int idx0, double value);
+CVAPI(void) cveSetReal2D(CvArr* arr, int idx0, int idx1, double value);
+CVAPI(void) cveSetReal3D(CvArr* arr, int idx0, int idx1, int idx2, double value);
+CVAPI(void) cveSetRealND(CvArr* arr, int* idx, double value);
+CVAPI(void) cveGet1D(CvArr* arr, int idx0, CvScalar* value);
+CVAPI(void) cveGet2D(CvArr* arr, int idx0, int idx1, CvScalar* value);
+CVAPI(void) cveGet3D(CvArr* arr, int idx0, int idx1, int idx2, CvScalar* value);
+CVAPI(double) cveGetReal1D(CvArr* arr, int idx0);
+CVAPI(double) cveGetReal2D(CvArr* arr, int idx0, int idx1);
+CVAPI(double) cveGetReal3D(CvArr* arr, int idx0, int idx1, int idx2);
+CVAPI(void) cveClearND(CvArr* arr, int* idx);
+
+CVAPI(bool) cveUseOptimized();
+CVAPI(void) cveSetUseOptimized(bool onoff);
+
+CVAPI(void) cveGetRawData(CvArr* arr, uchar** data, int* step, CvSize* roiSize);
+CVAPI(CvMat*) cveGetMat(CvArr* arr, CvMat* header, int* coi, int allowNd);
+CVAPI(IplImage*) cveGetImage(CvArr* arr, IplImage* imageHeader);
+
+CVAPI(int) cveCheckArr(CvArr* arr, int flags, double minVal, double maxVal);
+CVAPI(CvMat*) cveReshape(CvArr* arr, CvMat* header, int newCn, int newRows);
+CVAPI(CvMat*) cveGetDiag(CvArr* arr, CvMat* submat, int diag);
+CVAPI(void) cveConvertScale(CvArr* arr, CvArr* dst, double scale, double shift);
+
+CVAPI(void) cveReleaseImage(IplImage** image);
+
+CVAPI(void) cveSVDecomp(cv::_InputArray* src, cv::_OutputArray* w, cv::_OutputArray* u, cv::_OutputArray* vt, int flags);
+CVAPI(void) cveSVBackSubst(cv::_InputArray* w, cv::_InputArray* u, cv::_InputArray* vt, cv::_InputArray* rhs, cv::_OutputArray* dst);
+
+CVAPI(void) cvePCACompute1(cv::_InputArray* data, cv::_InputOutputArray* mean, cv::_OutputArray* eigenvectors, int maxComponents);
+CVAPI(void) cvePCACompute2(cv::_InputArray* data, cv::_InputOutputArray* mean, cv::_OutputArray* eigenvectors, double retainedVariance);
+CVAPI(void) cvePCAProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputArray* eigenvectors, cv::_OutputArray* result);
+CVAPI(void) cvePCABackProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputArray* eigenvectors, cv::_OutputArray* result);
 #endif
