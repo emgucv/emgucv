@@ -42,10 +42,10 @@ namespace AndroidExamples
 
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
-               List<Image<Gray, Byte>> stopSignList = new List<Image<Gray, byte>>();
+               List<Mat> stopSignList = new List<Mat>();
                List<Rectangle> stopSignBoxList = new List<Rectangle>();
                StopSignDetector detector = new StopSignDetector(stopSignModel);
-               detector.DetectStopSign(image, stopSignList, stopSignBoxList);
+               detector.DetectStopSign(image.Mat, stopSignList, stopSignBoxList);
 
                watch.Stop(); //stop the timer
                SetMessage(String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds));

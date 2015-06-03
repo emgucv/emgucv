@@ -829,6 +829,19 @@ IF(HAVE_opencv_video)
 ENDIF()
 ############################### video code gen END ################################
 
+############################### OPENMP START ##############################
+IF(WITH_OPENMP)
+FIND_PACKAGE( OpenMP REQUIRED)
+if(OPENMP_FOUND)
+  MESSAGE("Compiling cvextern with OPENMP")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
+ENDIF()
+############################### IPP END ################################
+
+
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
@@ -1166,7 +1179,12 @@ IF(ANDROID OR APPLE)
 ENDIF()
 
 set(the_target ${PROJECT_NAME})
-add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} )
+IF(IOS)
+  add_library(${the_target} STATIC ${extern_srcs} ${extern_hdrs} )
+ELSE()
+  add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} )
+ENDIF()  
+
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   FOREACH(CVEXTERN_DEPENDENCY_DLL ${CVEXTERN_DEPENDENCY_DLLS})
