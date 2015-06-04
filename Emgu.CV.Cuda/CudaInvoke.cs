@@ -1360,17 +1360,17 @@ namespace Emgu.CV.Cuda
       /// <param name="dst">The destination image; should have the same size and the same type as src</param>
       /// <param name="kernelSize">The diameter of each pixel neighborhood, that is used during filtering.</param>
       /// <param name="sigmaColor">Filter sigma in the color space. Larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting in larger areas of semi-equal color</param>
-      /// <param name="sigmaSpace">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
+      /// <param name="sigmaSpatial">Filter sigma in the coordinate space. Larger value of the parameter means that farther pixels will influence each other (as long as their colors are close enough; see sigmaColor). Then d&gt;0, it specifies the neighborhood size regardless of sigmaSpace, otherwise d is proportional to sigmaSpace.</param>
       /// <param name="borderType">Pixel extrapolation method, use DEFAULT for default</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
-      public static void BilateralFilter(IInputArray src, IOutputArray dst, int kernelSize, float sigmaColor, float sigmaSpace, CvEnum.BorderType borderType = BorderType.Default, Stream stream = null)
+      public static void BilateralFilter(IInputArray src, IOutputArray dst, int kernelSize, float sigmaColor, float sigmaSpatial, CvEnum.BorderType borderType = BorderType.Default, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
-            cudaBilateralFilter(iaSrc, oaDst, kernelSize, sigmaColor, sigmaSpace, borderType, stream);
+            cudaBilateralFilter(iaSrc, oaDst, kernelSize, sigmaColor, sigmaSpatial, borderType, stream);
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cudaBilateralFilter(IntPtr src, IntPtr dst, int kernelSize, float sigmaColor, float sigmaSpace, CvEnum.BorderType borderType, IntPtr stream);
+      private static extern void cudaBilateralFilter(IntPtr src, IntPtr dst, int kernelSize, float sigmaColor, float sigmaSpatial, CvEnum.BorderType borderType, IntPtr stream);
 
       /// <summary>
       /// Routines for correcting image color gamma

@@ -533,7 +533,7 @@ int cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, i
    return cvSampleLine(_img, *pt1, *pt2, _buffer, connectivity);
 }
 
-double cveGetSparialMoment(CvMoments* moments, int xOrder, int yOrder)
+double cveGetSpatialMoment(CvMoments* moments, int xOrder, int yOrder)
 {
    return cvGetSpatialMoment(moments, xOrder, yOrder);
 }

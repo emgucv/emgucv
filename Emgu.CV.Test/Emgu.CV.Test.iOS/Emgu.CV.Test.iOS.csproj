@@ -182,7 +182,7 @@
     <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.bigrams">
       <Link>tessdata\eng.cube.bigrams</Link>
     </Content>
-    <Content Include="..\car.xml">
+    <Content Include="..\..\opencv_extra\testdata\cv\latentsvmdetector\models_VOC2007\car.xml">
       <Link>car.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
