@@ -12,7 +12,7 @@ using Emgu.Util;
 namespace Emgu.CV.Features2D
 {
    /// <summary>
-   /// Wrapped CvMSERParams structure
+   /// MSER detector
    /// </summary>
    public class MSERDetector : Feature2D
    {
@@ -32,7 +32,7 @@ namespace Emgu.CV.Features2D
          int delta = 5, int minArea = 60, int maxArea = 14400, double maxVariation = 0.25, double minDiversity = 0.2,
          int maxEvolution = 200, double areaThreshold = 1.01, double minMargin = 0.003, int edgeBlurSize = 5)
       {
-         _ptr = CvInvoke.CvMserGetFeatureDetector(
+         _ptr = CvInvoke.cveMserGetFeatureDetector(
             delta,
             minArea,
             maxArea,
@@ -46,21 +46,12 @@ namespace Emgu.CV.Features2D
       }
 
       /// <summary>
-      /// Create the default MSER detector
-      /// </summary>
-      public MSERDetector()
-         : this(5, 14400, 60, .25f, .2f, 200, 1.01, 0.003, 5)
-      {
-      }
-
-
-      /// <summary>
       /// Release the unmanaged memory associated with this detector.
       /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.CvMserFeatureDetectorRelease(ref _ptr);
+            CvInvoke.cveMserFeatureDetectorRelease(ref _ptr);
          base.DisposeObject();
       }
    }
@@ -71,7 +62,7 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvMserGetFeatureDetector(
+      internal extern static IntPtr cveMserGetFeatureDetector(
          int delta,
          int minArea,
          int maxArea,
@@ -84,6 +75,6 @@ namespace Emgu.CV
          ref IntPtr feature2D );
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvMserFeatureDetectorRelease(ref IntPtr detector);
+      internal extern static void cveMserFeatureDetectorRelease(ref IntPtr detector);
    }
 }

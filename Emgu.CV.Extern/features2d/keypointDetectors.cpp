@@ -9,7 +9,7 @@
 
 
 //ORB
-cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D)
+cv::ORB* cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D)
 {
    cv::Ptr<cv::ORB> orbPtr = cv::ORB::create(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold);
    orbPtr.addref();
@@ -17,14 +17,14 @@ cv::ORB* CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevel
    return orbPtr.get();
 }
 
-void CvOrbDetectorRelease(cv::ORB** detector)
+void cveOrbDetectorRelease(cv::ORB** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
 //Brisk
-cv::BRISK* CvBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D)
+cv::BRISK* cveBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D)
 {
    cv::Ptr<cv::BRISK> briskPtr = cv::BRISK::create(thresh, octaves, patternScale);
    briskPtr.addref();
@@ -32,14 +32,14 @@ cv::BRISK* CvBriskCreate(int thresh, int octaves, float patternScale, cv::Featur
    return briskPtr.get();
 }
 
-void CvBriskRelease(cv::BRISK** detector)
+void cveBriskRelease(cv::BRISK** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
 // detect corners using FAST algorithm
-cv::FastFeatureDetector* CvFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D)
+cv::FastFeatureDetector* cveFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D)
 {
    cv::Ptr<cv::FastFeatureDetector> fastPtr = cv::FastFeatureDetector::create(threshold, nonmax_supression, type);
    fastPtr.addref();
@@ -47,14 +47,14 @@ cv::FastFeatureDetector* CvFASTGetFeatureDetector(int threshold, bool nonmax_sup
    return fastPtr.get();
 }
 
-void CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector)
+void cveFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
 // MSER detector
-cv::MSER* CvMserGetFeatureDetector(
+cv::MSER* cveMserGetFeatureDetector(
    int delta, 
    int minArea, 
    int maxArea,
@@ -81,21 +81,21 @@ cv::MSER* CvMserGetFeatureDetector(
    return mserPtr.get();
 }
 
-void CvMserFeatureDetectorRelease(cv::MSER** detector)
+void cveMserFeatureDetectorRelease(cv::MSER** detector)
 {
    delete *detector;
    *detector = 0;
 }
 
 // SimpleBlobDetector
-cv::SimpleBlobDetector* CvSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr)
+cv::SimpleBlobDetector* cveSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr)
 {
    cv::Ptr<cv::SimpleBlobDetector> detectorPtr = cv::SimpleBlobDetector::create();
    detectorPtr.addref();
    *feature2DPtr = dynamic_cast<cv::Feature2D*>(detectorPtr.get());
    return detectorPtr.get();
 }
-void CvSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector)
+void cveSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector)
 {
    delete *detector;
    *detector = 0;
@@ -160,19 +160,7 @@ void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray
                    std::vector< std::vector< cv::DMatch > >* matches, int k,
                    cv::_InputArray* mask) 
 {
-   //std::vector< std::vector< cv::DMatch > > matches; //The first index is the index of the query
-
-   //only implemented for a single trained image for now
-   //CV_Assert( matcher->getTrainDescriptors().size() == 1);
-
-   //cv::Mat maskMat = mask ? cv::cvarrToMat(mask) : cv::Mat();
-   //std::vector<cv::Mat> masks;
-   //if (!maskMat.empty()) 
-   //   masks.push_back(maskMat);
-
    matcher->knnMatch(*queryDescriptors, *matches, k, mask ? * mask : (cv::InputArray) cv::noArray(), false);
-   
-   //VectorOfDMatchToMat(&matches, trainIdx, distance);
 }
 
 cv::Algorithm* CvDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher)
@@ -303,14 +291,14 @@ void CvOpponentColorDescriptorExtractorRelease(cv::OpponentColorDescriptorExtrac
 
 
 //GFTT
-cv::GFTTDetector* CvGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k, cv::Feature2D** feature2D)
+cv::GFTTDetector* cveGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k, cv::Feature2D** feature2D)
 {
    cv::Ptr<cv::GFTTDetector> gfttPtr = cv::GFTTDetector::create(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
    gfttPtr.addref();
-   *feature2D = static_cast<cv::Feature2D*>(gfttPtr.get());
+   *feature2D = dynamic_cast<cv::Feature2D*>(gfttPtr.get());
    return gfttPtr.get();
 }
-void CvGFTTDetectorRelease(cv::GFTTDetector** detector)
+void cveGFTTDetectorRelease(cv::GFTTDetector** detector)
 {
    delete *detector;
    *detector = 0;

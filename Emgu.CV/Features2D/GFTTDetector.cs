@@ -34,7 +34,7 @@ namespace Emgu.CV.Features2D
       /// <param name="k">K</param>
       public GFTTDetector(int maxCorners = 1000, double qualityLevel = 0.01, double minDistance = 1, int blockSize = 3, bool useHarrisDetector = false, double k = 0.04)
       {
-         _ptr = CvGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k, ref _feature2D);
+         _ptr = CvInvoke.cveGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k, ref _feature2D);
       }
 
       /// <summary>
@@ -43,15 +43,31 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          if(_ptr != IntPtr.Zero)
-            CvGFTTDetectorRelease(ref _ptr);
+            CvInvoke.cveGFTTDetectorRelease(ref _ptr);
 
          base.DisposeObject();
       }
 
+
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class CvInvoke
+   {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvGFTTDetectorCreate(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k, ref IntPtr feature2DPtr);
+      internal extern static IntPtr cveGFTTDetectorCreate(
+         int maxCorners,
+         double qualityLevel,
+         double minDistance,
+         int blockSize,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool useHarrisDetector,
+         double k,
+         ref IntPtr feature2DPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvGFTTDetectorRelease(ref IntPtr detector);
+      internal extern static void cveGFTTDetectorRelease(ref IntPtr detector);
    }
 }

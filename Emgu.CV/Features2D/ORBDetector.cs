@@ -46,7 +46,7 @@ namespace Emgu.CV.Features2D
       /// <param name="patchSize">Patch size.</param>
       public ORBDetector(int numberOfFeatures = 500, float scaleFactor = 1.2f, int nLevels = 8, int edgeThreshold = 31, int firstLevel = 0, int WTK_A = 2, ScoreType scoreType = ScoreType.Harris, int patchSize = 31, int fastThreshold = 20)
       {
-         _ptr = CvInvoke.CvOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, ref _feature2D);
+         _ptr = CvInvoke.cveOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, ref _feature2D);
       }
 
       /// <summary>
@@ -55,7 +55,7 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.CvOrbDetectorRelease(ref _ptr);
+            CvInvoke.cveOrbDetectorRelease(ref _ptr);
          base.DisposeObject();
       }
    }
@@ -67,9 +67,9 @@ namespace Emgu.CV
    {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, Features2D.ORBDetector.ScoreType scoreType, int patchSize, int fastThreshold, ref IntPtr feature2D);
+      internal extern static IntPtr cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, Features2D.ORBDetector.ScoreType scoreType, int patchSize, int fastThreshold, ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvOrbDetectorRelease(ref IntPtr detector);
+      internal extern static void cveOrbDetectorRelease(ref IntPtr detector);
    }
 }

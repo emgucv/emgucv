@@ -14,23 +14,23 @@
 #include "vectors_c.h"
 
 //ORB
-CVAPI(cv::ORB*) CvOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D);
-CVAPI(void) CvOrbDetectorRelease(cv::ORB** detector);
+CVAPI(cv::ORB*) cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D);
+CVAPI(void) cveOrbDetectorRelease(cv::ORB** detector);
 
 //Brisk
-CVAPI(cv::BRISK*) CvBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D);
-CVAPI(void) CvBriskRelease(cv::BRISK** detector);
+CVAPI(cv::BRISK*) cveBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D);
+CVAPI(void) cveBriskRelease(cv::BRISK** detector);
 
 //FAST algorithm
-CVAPI(cv::FastFeatureDetector*) CvFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D);
-CVAPI(void) CvFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector);
+CVAPI(cv::FastFeatureDetector*) cveFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D);
+CVAPI(void) cveFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector);
 
 //GFTT
-CVAPI(cv::GFTTDetector*) CvGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k, cv::Feature2D** feature2D);
-CVAPI(void) CvGFTTDetectorRelease(cv::GFTTDetector** detector);
+CVAPI(cv::GFTTDetector*) cveGFTTDetectorCreate( int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k, cv::Feature2D** feature2D);
+CVAPI(void) cveGFTTDetectorRelease(cv::GFTTDetector** detector);
 
 // MSER detector
-CVAPI(cv::MSER*) CvMserGetFeatureDetector(
+CVAPI(cv::MSER*) cveMserGetFeatureDetector(
    int delta, 
    int minArea, 
    int maxArea,
@@ -41,12 +41,12 @@ CVAPI(cv::MSER*) CvMserGetFeatureDetector(
    double minMargin, 
    int edgeBlurSize,
    cv::Feature2D** feature2D);
-CVAPI(void) CvMserFeatureDetectorRelease(cv::MSER** mser);
+CVAPI(void) cveMserFeatureDetectorRelease(cv::MSER** mser);
 
 
 // SimpleBlobDetector
-CVAPI(cv::SimpleBlobDetector*) CvSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr);
-CVAPI(void) CvSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector);
+CVAPI(cv::SimpleBlobDetector*) cveSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr);
+CVAPI(void) cveSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector);
 
 // Draw keypoints.
 CVAPI(void) drawKeypoints(

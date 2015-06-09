@@ -48,7 +48,7 @@ namespace Emgu.CV.Features2D
       /// <param name="type">One of the three neighborhoods as defined in the paper</param>
       public FastDetector(int threshold = 10, bool nonmaxSupression = true, DetectorType type = DetectorType.Type9_16)
       {
-         _ptr = CvInvoke.CvFASTGetFeatureDetector(threshold, nonmaxSupression, type, ref _feature2D);
+         _ptr = CvInvoke.cveFASTGetFeatureDetector(threshold, nonmaxSupression, type, ref _feature2D);
       }
 
       /// <summary>
@@ -57,7 +57,7 @@ namespace Emgu.CV.Features2D
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvInvoke.CvFASTFeatureDetectorRelease(ref _ptr);
+            CvInvoke.cveFASTFeatureDetectorRelease(ref _ptr);
          base.DisposeObject();
       }
 
@@ -70,7 +70,7 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvFASTGetFeatureDetector(
+      internal extern static IntPtr cveFASTGetFeatureDetector(
          int threshold,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool nonmaxSupression,
@@ -78,7 +78,7 @@ namespace Emgu.CV
          ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFASTFeatureDetectorRelease(ref IntPtr detector);
+      internal extern static void cveFASTFeatureDetectorRelease(ref IntPtr detector);
    }
 }
 

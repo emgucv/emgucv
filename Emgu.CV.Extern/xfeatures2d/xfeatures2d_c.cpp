@@ -101,3 +101,32 @@ void CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector)
    delete * detector;
    *detector = 0;
 }*/
+
+
+//LUCID
+cv::xfeatures2d::LUCID* cveLUCIDCreate(int lucidKernel, int blurKernel, cv::Feature2D** feature2D)
+{
+   cv::Ptr<cv::xfeatures2d::LUCID> lucidPtr = cv::xfeatures2d::LUCID::create(lucidKernel, blurKernel);
+   lucidPtr.addref();
+   *feature2D = dynamic_cast<cv::Feature2D*>(lucidPtr.get());
+   return lucidPtr.get();
+}
+void cveLUCIDRelease(cv::xfeatures2d::LUCID** lucid)
+{
+   delete *lucid;
+   *lucid = 0;
+}
+
+//LATCH
+cv::xfeatures2d::LATCH* cveLATCHCreate(int bytes, bool rotationInvariance, int halfSsdSize, cv::DescriptorExtractor** extractor)
+{
+   cv::Ptr<cv::xfeatures2d::LATCH> latchPtr = cv::xfeatures2d::LATCH::create(bytes, rotationInvariance, halfSsdSize);
+   latchPtr.addref();
+   *extractor = dynamic_cast<cv::DescriptorExtractor*>(latchPtr.get());
+   return latchPtr.get();
+}
+void cveLATCHRelease(cv::xfeatures2d::LATCH** latch)
+{
+   delete *latch;
+   *latch = 0;
+}

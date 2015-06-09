@@ -1358,30 +1358,32 @@ namespace Emgu.CV.Test
          PointF[] pts = new PointF[200];
          for (int i = 0; i < pts.Length; i++)
          {
-            pts[i] = new PointF((float) (100 + r.NextDouble() * 400), (float) (100 + r.NextDouble() * 400));
+            pts[i] = new PointF((float)(100 + r.NextDouble() * 400), (float)(100 + r.NextDouble() * 400));
          }
          #endregion
 
-         Image<Bgr, Byte> img = new Image<Bgr, byte>(600, 600, new Bgr(255.0, 255.0, 255.0));
+         Mat img = new Mat(600, 600, DepthType.Cv8U, 3);
+         img.SetTo(new MCvScalar(255.0, 255.0, 255.0));
          //Draw the points 
          foreach (PointF p in pts)
-            img.Draw(new CircleF(p, 3), new Bgr(0.0, 0.0, 0.0), 1);
+            CvInvoke.Circle(img, Point.Round(p), 3, new MCvScalar(0.0, 0.0, 0.0));
 
          //Find and draw the convex hull
 
-            Stopwatch watch = Stopwatch.StartNew();
-            PointF[] hull = CvInvoke.ConvexHull(pts, true);
-            watch.Stop();
-            img.DrawPolyline(
+         Stopwatch watch = Stopwatch.StartNew();
+         PointF[] hull = CvInvoke.ConvexHull(pts, true);
+         watch.Stop();
+         CvInvoke.Polylines(
+            img,
 #if NETFX_CORE
-                Extensions.ConvertAll<PointF, Point>(hull, Point.Round),
+            Extensions.ConvertAll<PointF, Point>(hull, Point.Round),
 #else
-                Array.ConvertAll<PointF, Point>(hull, Point.Round),
+            Array.ConvertAll<PointF, Point>(hull, Point.Round),
 #endif
-            true, new Bgr(255.0, 0.0, 0.0), 1);
+            true, new MCvScalar(255.0, 0.0, 0.0));
 
-            //ImageViewer.Show(img, String.Format("Convex Hull Computed in {0} milliseconds", watch.ElapsedMilliseconds));
-         
+         //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Convex Hull Computed in {0} milliseconds", watch.ElapsedMilliseconds));
+
       }
 
       /*
@@ -1549,13 +1551,16 @@ namespace Emgu.CV.Test
          Ellipse fittedEllipse = PointCollection.EllipseLeastSquareFitting(pts);
          watch.Stop();
 
-         #region draw the points and the fitted ellipse
-         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(255, 255, 255));
+         #region draw the points and the fitted ellips
+         Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
+         img.SetTo(new MCvScalar(255, 255, 255));
          foreach (PointF p in pts)
-            img.Draw(new CircleF(p, 2), new Bgr(0, 255, 0), 1);
-         img.Draw(fittedEllipse, new Bgr(0, 0, 255), 2);
+            CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
+         RotatedRect rect = fittedEllipse.RotatedRect;
+         rect.Angle += 90; //the detected ellipse was off by 90 degree
+         CvInvoke.Ellipse(img, rect, new MCvScalar(0, 0, 255), 2);
          #endregion
-         //TODO: Fix this, the fitted rectangle is different from the point cloud
+         
          //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
@@ -1574,10 +1579,12 @@ namespace Emgu.CV.Test
          watch.Stop();
 
          #region draw the points and the box
-         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(255, 255, 255));
-         img.Draw(box, new Bgr(0, 0, 255), 1);
+         Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
+         img.SetTo(new MCvScalar(255, 255, 255));
+         Point[] vertices = Array.ConvertAll(box.GetVertices(), Point.Round);
+         CvInvoke.Polylines(img, vertices, true, new MCvScalar(0, 0, 255), 1);
          foreach (PointF p in pts)
-            img.Draw(new CircleF(p, 2), new Bgr(0, 255, 0), 1);
+            CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
          #endregion
 
          //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
@@ -1598,27 +1605,16 @@ namespace Emgu.CV.Test
          watch.Stop();
 
          #region draw the points and the circle
-         Image<Bgr, byte> img = new Image<Bgr, byte>(400, 400, new Bgr(255, 255, 255));
-         img.Draw(circle, new Bgr(0, 0, 255), 1);
+         Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
+         img.SetTo(new MCvScalar(255, 255, 255));
          foreach (PointF p in pts)
-            img.Draw(new CircleF(p, 2), new Bgr(0, 255, 0), 1);
+            CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
          #endregion
 
-         //ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+         //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
 
       /*
-      [Test]
-      public void TestMemstorage()
-      {
-         for (int i = 0; i < 100000; i++)
-         {
-            using (MemStorage stor = new MemStorage())
-            {
-               Seq<PointF> seq = new Seq<PointF>(stor);
-            }
-         }
-      }
       
       [Test]
       public void TestMatND()
