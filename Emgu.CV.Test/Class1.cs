@@ -598,7 +598,7 @@ namespace Emgu.CV.Test
          using (Capture capture = new Capture())
          using (GaussianMotionFilter motionFilter = new GaussianMotionFilter())
          //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
-         using (Features2D.SURFDetector detector = new Features2D.SURFDetector(500, false))
+         using (Features2D.SURF detector = new Features2D.SURF(500, false))
          //using (Features2D.ORBDetector detector = new Features2D.ORBDetector(500))
          using (OnePassStabilizer stabilizer = new OnePassStabilizer(capture))
          {
@@ -648,7 +648,7 @@ namespace Emgu.CV.Test
          using (Capture capture = new Capture("tree.avi"))
          using (GaussianMotionFilter motionFilter = new GaussianMotionFilter(15, -1.0f))
          //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
-         //using (Features2D.SURFDetector detector = new Features2D.SURFDetector(500, false))
+         //using (Features2D.SURF detector = new Features2D.SURF(500, false))
          //using (Features2D.ORBDetector detector = new Features2D.ORBDetector(500))
          using (CaptureFrameSource frameSource = new CaptureFrameSource(capture))
          using (TwoPassStabilizer stabilizer = new TwoPassStabilizer(frameSource))

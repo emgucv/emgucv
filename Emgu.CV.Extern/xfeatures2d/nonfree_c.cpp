@@ -7,7 +7,7 @@
 #include "nonfree_c.h"
 
 //SIFTDetector
-cv::xfeatures2d::SIFT* CvSIFTDetectorCreate(
+cv::xfeatures2d::SIFT* cveSIFTCreate(
    int nFeatures, int nOctaveLayers, 
    double contrastThreshold, double edgeThreshold, 
    double sigma, cv::Feature2D** feature2D)
@@ -19,7 +19,7 @@ cv::xfeatures2d::SIFT* CvSIFTDetectorCreate(
    return siftPtr.get();
 }
 
-void CvSIFTDetectorRelease(cv::xfeatures2d::SIFT** detector)
+void cveSIFTRelease(cv::xfeatures2d::SIFT** detector)
 {
    delete *detector;
    *detector = 0;
@@ -65,7 +65,7 @@ void CvSIFTDetectorComputeDescriptors(cv::SIFT* detector, IplImage* image, std::
 }*/
 
 //SURFDetector
-cv::xfeatures2d::SURF* CvSURFDetectorCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D)
+cv::xfeatures2d::SURF* cveSURFCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D)
 {
    cv::Ptr<cv::xfeatures2d::SURF> surfPtr = cv::xfeatures2d::SURF::create(hessianThresh, nOctaves, nOctaveLayers, extended, upright);
    surfPtr.addref();
@@ -74,7 +74,7 @@ cv::xfeatures2d::SURF* CvSURFDetectorCreate(double hessianThresh, int nOctaves, 
    return surfPtr.get();
 }
 
-void CvSURFDetectorRelease(cv::xfeatures2d::SURF** detector)
+void cveSURFRelease(cv::xfeatures2d::SURF** detector)
 {
    delete *detector;
    *detector = 0;

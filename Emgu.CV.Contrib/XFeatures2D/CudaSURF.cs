@@ -18,19 +18,8 @@ namespace Emgu.CV.XFeatures2D
    /// <summary>
    /// A SURF detector using Cuda
    /// </summary>
-   public class CudaSURFDetector : UnmanagedObject
+   public class CudaSURF : UnmanagedObject
    {
-      /*
-      /// <summary>
-      /// Create a Cuda SURF detector using the specific parameters
-      /// </summary>
-      /// <param name="detector">The surf detector where the parameters will be borrow from</param>
-      /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea().</param>
-      public CudaSURFDetector(MCvSURFParams detector, float featuresRatio = 0.01f)
-         : this((float)detector.HessianThreshold, detector.NOctaves, detector.NOctaveLayers, (detector.Extended != 0), featuresRatio, (detector.Upright != 0))
-      {
-      }*/
-
       /// <summary>
       /// Create a Cuda SURF detector
       /// </summary>
@@ -40,7 +29,7 @@ namespace Emgu.CV.XFeatures2D
       /// <param name="extended">True, if generate 128-len descriptors, false - 64-len descriptors.</param>
       /// <param name="featuresRatio">Max features = featuresRatio * img.size().srea().</param>
       /// <param name="upright">If set to true, the orientation is not computed for the keypoints</param>
-      public CudaSURFDetector(
+      public CudaSURF(
          float hessianThreshold = 100.0f,
          int nOctaves = 4,
          int nOctaveLayers = 2, 
@@ -113,7 +102,6 @@ namespace Emgu.CV.XFeatures2D
       /// <returns>The image features founded on the keypoint location</returns>
       public GpuMat ComputeDescriptorsRaw(GpuMat image, GpuMat mask, GpuMat keyPoints)
       {
-         //GpuMat descriptors = new GpuMat(keyPoints.Size.Height, DescriptorSize, 1);
          GpuMat descriptors = new GpuMat();
          ContribInvoke.cudaSURFDetectorCompute(_ptr, image, mask, keyPoints, descriptors, true);
          return descriptors;

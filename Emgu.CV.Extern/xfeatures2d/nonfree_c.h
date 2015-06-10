@@ -13,15 +13,15 @@
 #include "opencv2/xfeatures2d.hpp"
 
 //SIFTDetector
-CVAPI(cv::xfeatures2d::SIFT*) CvSIFTDetectorCreate(
+CVAPI(cv::xfeatures2d::SIFT*) cveSIFTCreate(
    int nFeatures, int nOctaveLayers, 
    double contrastThreshold, double edgeThreshold, 
    double sigma, cv::Feature2D** feature2D);
-CVAPI(void) CvSIFTDetectorRelease(cv::xfeatures2d::SIFT** detector);
+CVAPI(void) cveSIFTRelease(cv::xfeatures2d::SIFT** detector);
 
 //SURFDetector
-CVAPI(cv::xfeatures2d::SURF*) CvSURFDetectorCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D);
-CVAPI(void) CvSURFDetectorRelease(cv::xfeatures2d::SURF** detector);
+CVAPI(cv::xfeatures2d::SURF*) cveSURFCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D);
+CVAPI(void) cveSURFRelease(cv::xfeatures2d::SURF** detector);
 
 /*
 //----------------------------------------------------------------------------

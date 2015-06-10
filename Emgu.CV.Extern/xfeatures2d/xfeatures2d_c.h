@@ -13,8 +13,8 @@
 #include "vectors_c.h"
 
 //StarDetector
-CVAPI(cv::xfeatures2d::StarDetector*) CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D);
-CVAPI(void) CvStarDetectorRelease(cv::xfeatures2d::StarDetector** detector);
+CVAPI(cv::xfeatures2d::StarDetector*) cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D);
+CVAPI(void) cveStarDetectorRelease(cv::xfeatures2d::StarDetector** detector);
 
 /*
 //GridAdaptedFeatureDetector
@@ -45,13 +45,13 @@ CVAPI(void) cveLUCIDRelease(cv::xfeatures2d::LUCID** lucid);
 
 
 //LATCH
-CVAPI(cv::xfeatures2d::LATCH*) cveLATCHCreate(int bytes, bool rotationInvariance, int halfSsdSize, cv::DescriptorExtractor** extractor);
+CVAPI(cv::xfeatures2d::LATCH*) cveLATCHCreate(int bytes, bool rotationInvariance, int halfSsdSize, cv::Feature2D** extractor);
 CVAPI(void) cveLATCHRelease(cv::xfeatures2d::LATCH** lucid);
 
 //DAISY
-CVAPI(cv::xfeatures2d::DAISY*) cveDAISYCreate(float radius = 15, int q_radius = 3, int q_theta = 8,
-   int q_hist = 8, int norm, cv::_InputArray* H,
-   bool interpolation, bool use_orientation = false, cv::DescriptorExtractor** extractor);
+CVAPI(cv::xfeatures2d::DAISY*) cveDAISYCreate(float radius, int qRadius, int qTheta,
+   int qHist, int norm, cv::_InputArray* H,
+   bool interpolation, bool useOrientation, cv::Feature2D** extractor);
 CVAPI(void) cveDAISYRelease(cv::xfeatures2d::DAISY** daisy);
 
 #endif

@@ -14,7 +14,7 @@ namespace Emgu.CV.XFeatures2D
    /// <summary>
    /// Class for extracting Speeded Up Robust Features from an image
    /// </summary>
-   public class SURFDetector : Feature2D
+   public class SURF : Feature2D
    {
 
       /// <summary>
@@ -40,9 +40,9 @@ namespace Emgu.CV.XFeatures2D
       /// False means that detector computes orientation of each feature. 
       /// True means that the orientation is not computed (which is much, much faster). 
       /// For example, if you match images from a stereo pair, or do image stitching, the matched features likely have very similar angles, and you can speed up feature extraction by setting upright=true.</param>
-      public SURFDetector(double hessianThresh, int nOctaves = 4, int nOctaveLayers = 2, bool extended = true, bool upright = false)
+      public SURF(double hessianThresh, int nOctaves = 4, int nOctaveLayers = 2, bool extended = true, bool upright = false)
       {
-         _ptr = ContribInvoke.CvSURFDetectorCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _feature2D);
+         _ptr = ContribInvoke.cveSURFCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _feature2D);
       }
 
       /// <summary>
@@ -51,13 +51,13 @@ namespace Emgu.CV.XFeatures2D
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            ContribInvoke.CvSURFDetectorRelease(ref _ptr);
+            ContribInvoke.cveSURFRelease(ref _ptr);
          base.DisposeObject();
       }
    }
 
    /// <summary>
-   /// This class wraps the functional calls to the opencv_nonfree module
+   /// This class wraps the functional calls to the opencv contrib modules
    /// </summary>
    public static partial class ContribInvoke
    {
@@ -67,7 +67,7 @@ namespace Emgu.CV.XFeatures2D
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvSURFDetectorCreate(
+      internal extern static IntPtr cveSURFCreate(
          double hessianThresh, int nOctaves, int nOctaveLayers, 
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool extended, 
@@ -76,6 +76,6 @@ namespace Emgu.CV.XFeatures2D
          ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvSURFDetectorRelease(ref IntPtr detector);
+      internal extern static void cveSURFRelease(ref IntPtr detector);
    }
 }

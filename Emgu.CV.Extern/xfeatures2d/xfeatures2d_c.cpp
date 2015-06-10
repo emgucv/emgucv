@@ -7,7 +7,7 @@
 #include "xfeatures2d_c.h"
 
 //StarDetector
-cv::xfeatures2d::StarDetector* CvStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D)
+cv::xfeatures2d::StarDetector* cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D)
 {
    cv::Ptr<cv::xfeatures2d::StarDetector> detectorPtr = cv::xfeatures2d::StarDetector::create(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
    detectorPtr.addref();
@@ -15,7 +15,7 @@ cv::xfeatures2d::StarDetector* CvStarDetectorCreate(int maxSize, int responseThr
    return detectorPtr.get();
 }
 
-void CvStarDetectorRelease(cv::xfeatures2d::StarDetector** detector)
+void cveStarDetectorRelease(cv::xfeatures2d::StarDetector** detector)
 {
    delete *detector;
    *detector = 0;
@@ -118,15 +118,31 @@ void cveLUCIDRelease(cv::xfeatures2d::LUCID** lucid)
 }
 
 //LATCH
-cv::xfeatures2d::LATCH* cveLATCHCreate(int bytes, bool rotationInvariance, int halfSsdSize, cv::DescriptorExtractor** extractor)
+cv::xfeatures2d::LATCH* cveLATCHCreate(int bytes, bool rotationInvariance, int halfSsdSize, cv::Feature2D** extractor)
 {
    cv::Ptr<cv::xfeatures2d::LATCH> latchPtr = cv::xfeatures2d::LATCH::create(bytes, rotationInvariance, halfSsdSize);
    latchPtr.addref();
-   *extractor = dynamic_cast<cv::DescriptorExtractor*>(latchPtr.get());
+   *extractor = dynamic_cast<cv::Feature2D*>(latchPtr.get());
    return latchPtr.get();
 }
 void cveLATCHRelease(cv::xfeatures2d::LATCH** latch)
 {
    delete *latch;
    *latch = 0;
+}
+
+//DAISY
+cv::xfeatures2d::DAISY* cveDAISYCreate(float radius, int qRadius, int qTheta,
+   int qHist, int norm, cv::_InputArray* H,
+   bool interpolation, bool useOrientation, cv::Feature2D** extractor)
+{
+   cv::Ptr<cv::xfeatures2d::DAISY> daisyPtr = cv::xfeatures2d::DAISY::create(radius, qRadius, qTheta, qHist, norm, H ? *H : (cv::_InputArray) cv::noArray(), interpolation, useOrientation);
+   daisyPtr.addref();
+   *extractor = dynamic_cast<cv::Feature2D*>(daisyPtr.get());
+   return daisyPtr.get();
+}
+void cveDAISYRelease(cv::xfeatures2d::DAISY** daisy)
+{
+   delete* daisy;
+   *daisy = 0;
 }

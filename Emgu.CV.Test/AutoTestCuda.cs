@@ -1,8 +1,8 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-﻿using System;
+ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -524,7 +524,7 @@ namespace Emgu.CV.Test
 
             EmguAssert.IsTrue(gpuMat.ToMat().Equals(image.Mat));
 
-            CudaSURFDetector cudaSurf = new CudaSURFDetector(100.0f, 2, 4, false, 0.01f, false);
+            CudaSURF cudaSurf = new CudaSURF(100.0f, 2, 4, false, 0.01f, false);
             GpuMat cudaKpts = cudaSurf.DetectKeyPointsRaw(gpuMat, null);
             VectorOfKeyPoint kpts = new VectorOfKeyPoint();
             cudaSurf.DownloadKeypoints(cudaKpts, kpts);

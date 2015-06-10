@@ -151,8 +151,6 @@ namespace Emgu.CV.Features2D
             return Feature2DInvoke.CvFeature2DGetDescriptorSize(_feature2D);
          }
       }
-
-     
    }
 
    internal partial class Feature2DInvoke

@@ -35,7 +35,7 @@ namespace SURFFeatureExample
          #if !IOS
          if ( CudaInvoke.HasCuda)
          {
-            CudaSURFDetector surfCuda = new CudaSURFDetector((float) hessianThresh);
+            CudaSURF surfCuda = new CudaSURF((float) hessianThresh);
             using (GpuMat gpuModelImage = new GpuMat(modelImage))
             //extract features from the object image
             using (GpuMat gpuModelKeyPoints = surfCuda.DetectKeyPointsRaw(gpuModelImage, null))
@@ -79,7 +79,7 @@ namespace SURFFeatureExample
             using (UMat uModelImage = modelImage.ToUMat(AccessType.Read))
             using (UMat uObservedImage = observedImage.ToUMat(AccessType.Read))
             {
-               SURFDetector surfCPU = new SURFDetector(hessianThresh);
+               SURF surfCPU = new SURF(hessianThresh);
                //extract features from the object image
                UMat modelDescriptors = new UMat();
                surfCPU.DetectAndCompute(uModelImage, null, modelKeyPoints, modelDescriptors, false);

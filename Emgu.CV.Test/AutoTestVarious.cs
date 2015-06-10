@@ -2129,7 +2129,7 @@ namespace Emgu.CV.Test
          using (Image<Gray, Byte> gray = image.Convert<Gray, byte>())
          using (RTreeClassifier<Bgr> classifier = new RTreeClassifier<Bgr>())
          {
-            SURFDetector surf = new SURFDetector(300);
+            SURF surf = new SURF(300);
             MKeyPoint[] keypoints = surf.Detect(gray, null);
             Point[] points = Array.ConvertAll<MKeyPoint, Point>(keypoints, delegate(MKeyPoint kp) {
                return Point.Round(kp.Point); });
