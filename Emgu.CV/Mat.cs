@@ -629,12 +629,15 @@ namespace Emgu.CV
          get
          {
             int channels = NumberOfChannels;
+            Size s = this.Size;
             Type colorType;
             switch (channels)
             {
                case 1:
                   colorType = typeof(Gray);
-                  Size s = this.Size;
+                  
+                  if (s.Equals(Size.Empty))
+                     return null;
                   if ((s.Width | 3) != 0) //handle the special case where width is not a multiple of 4
                   {
                      Bitmap bmp = new Bitmap(s.Width, s.Height, PixelFormat.Format8bppIndexed);
@@ -657,7 +660,7 @@ namespace Emgu.CV
                default:
                   throw new Exception("Unknown color type");
             }
-            return CvInvoke.RawDataToBitmap(DataPointer, this.Step, this.Size, colorType, NumberOfChannels, CvInvoke.GetDepthType(Depth), true);
+            return CvInvoke.RawDataToBitmap(DataPointer, this.Step, s, colorType, NumberOfChannels, CvInvoke.GetDepthType(Depth), true);
          }
       }
 #endif

@@ -40,7 +40,7 @@ void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector
 }*/
 
 //FREAK
-cv::xfeatures2d::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor)
+cv::xfeatures2d::FREAK* cveFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor)
 {
    cv::Ptr<cv::xfeatures2d::FREAK> freakPtr = cv::xfeatures2d::FREAK::create(orientationNormalized, scaleNormalized, patternScale, nOctaves);
    freakPtr.addref();
@@ -48,14 +48,14 @@ cv::xfeatures2d::FREAK* CvFreakCreate(bool orientationNormalized, bool scaleNorm
    return freakPtr.get();
 }
 
-void CvFreakRelease(cv::xfeatures2d::FREAK** detector)
+void cveFreakRelease(cv::xfeatures2d::FREAK** detector)
 {
    delete * detector;
    *detector = 0;
 }
 
 //Brief
-cv::xfeatures2d::BriefDescriptorExtractor* CvBriefDescriptorExtractorCreate(int descriptorSize, cv::Feature2D** feature2D)
+cv::xfeatures2d::BriefDescriptorExtractor* cveBriefDescriptorExtractorCreate(int descriptorSize, cv::Feature2D** feature2D)
 {
    cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor> briefPtr = cv::xfeatures2d::BriefDescriptorExtractor::create(descriptorSize);
    briefPtr.addref();
@@ -84,7 +84,7 @@ void CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor
    }
 }*/
 
-void CvBriefDescriptorExtractorRelease(cv::xfeatures2d::BriefDescriptorExtractor** extractor)
+void cveBriefDescriptorExtractorRelease(cv::xfeatures2d::BriefDescriptorExtractor** extractor)
 {
    delete *extractor;
    *extractor = 0;

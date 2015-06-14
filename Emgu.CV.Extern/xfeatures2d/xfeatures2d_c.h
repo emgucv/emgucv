@@ -26,12 +26,12 @@ CVAPI(cv::xfeatures2d ::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorC
 CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector);
 */
 //Freak
-CVAPI(cv::xfeatures2d::FREAK*) CvFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor);
-CVAPI(void) CvFreakRelease(cv::xfeatures2d::FREAK** detector);
+CVAPI(cv::xfeatures2d::FREAK*) cveFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor);
+CVAPI(void) cveFreakRelease(cv::xfeatures2d::FREAK** detector);
 
 //Brief descriptor extractor
-CVAPI(cv::xfeatures2d::BriefDescriptorExtractor*) CvBriefDescriptorExtractorCreate(int descriptorSize, cv::Feature2D** feature2D);
-CVAPI(void) CvBriefDescriptorExtractorRelease(cv::xfeatures2d::BriefDescriptorExtractor** extractor);
+CVAPI(cv::xfeatures2d::BriefDescriptorExtractor*) cveBriefDescriptorExtractorCreate(int descriptorSize, cv::Feature2D** feature2D);
+CVAPI(void) cveBriefDescriptorExtractorRelease(cv::xfeatures2d::BriefDescriptorExtractor** extractor);
 
 /*
 //DenseFeatureDetector
