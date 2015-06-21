@@ -17,11 +17,6 @@ namespace Emgu.CV
    /// </summary>
    public class LatentSvmDetector : UnmanagedObject
    {
-      static LatentSvmDetector()
-      {
-         CvInvoke.CheckLibraryLoaded();
-      }
-
       /// <summary>
       /// Load the trained detector from files
       /// </summary>
@@ -48,7 +43,7 @@ namespace Emgu.CV
                if (classNameStrings != null)
                   cvcs.Push(classNameStrings);
 
-               _ptr = cveLSVMDetectorCreate(fvcs, cvcs);
+               _ptr = CvInvoke.cveLSVMDetectorCreate(fvcs, cvcs);
             }
          }
          finally
@@ -72,30 +67,41 @@ namespace Emgu.CV
       {
          using (VectorOfObjectDetection vod = new VectorOfObjectDetection())
          {
-            cveLSVMDetectorDetect(_ptr, image, vod, overlapThreshold);
+            CvInvoke.cveLSVMDetectorDetect(_ptr, image, vod, overlapThreshold);
             return vod.ToArray();
          }
       }
 
+      /// <summary>
+      /// Gets the class count.
+      /// </summary>
+      /// <value>
+      /// The class count.
+      /// </value>
       public int ClassCount
       {
-         get { return cveLSVMGetClassCount(_ptr); }
+         get { return CvInvoke.cveLSVMGetClassCount(_ptr); }
       }
 
+      /// <summary>
+      /// Gets the class names.
+      /// </summary>
+      /// <value>
+      /// The class names.
+      /// </value>
       public String[] ClassNames
       {
          get
          {
             using (VectorOfCvString vcs = new VectorOfCvString())
             {
-               cveLSVMGetClassNames(_ptr, vcs);
+               CvInvoke.cveLSVMGetClassNames(_ptr, vcs);
               
                String[] r = new String[vcs.Size];
                for (int i = 0; i < r.Length; i++)
                {
-                  CvString s = vcs[i];
-                  r[i] = s.ToString();
-                  s.Dispose();
+                  using(CvString s = vcs[i])
+                     r[i] = s.ToString();
                }
                return r;
             }
@@ -109,13 +115,13 @@ namespace Emgu.CV
       {
          if (_ptr != IntPtr.Zero)
          {
-            cveLSVMDetectorRelease(ref _ptr);
+            CvInvoke.cveLSVMDetectorRelease(ref _ptr);
          }
       }
+   }
 
-      
-
-
+   public static partial class CvInvoke
+   {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveLSVMDetectorCreate(IntPtr filenames, IntPtr classNames);
 
@@ -124,7 +130,6 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveLSVMDetectorRelease(ref IntPtr detector);
-      
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int cveLSVMGetClassCount(IntPtr detector);

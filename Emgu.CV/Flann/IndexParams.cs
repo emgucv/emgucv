@@ -221,10 +221,16 @@ namespace Emgu.CV.Flann
       }
    }
 
+   /// <summary>
+   /// Hierarchical Clustering Index Parameters
+   /// </summary>
    public class HierarchicalClusteringIndexParams : UnmanagedObject, IIndexParams
    {
       private IntPtr _indexParamPtr;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="HierarchicalClusteringIndexParams"/>.
+      /// </summary>
       public HierarchicalClusteringIndexParams(int branching = 32, Flann.CenterInitType centersInit = CenterInitType.Random, int trees = 4, int leafSize = 100)
       {
          _ptr = CvInvoke.cveHierarchicalClusteringIndexParamsCreate(ref _indexParamPtr, branching, centersInit, trees, leafSize);

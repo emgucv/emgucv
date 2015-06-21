@@ -1225,8 +1225,7 @@ namespace Emgu.CV.Test
 
          SyntheticData syntheticData = new SyntheticData();
 
-         // state is (phi, delta_phi) - angle and angle increment 
-         Matrix<float> state = new Matrix<float>(new float[] { 0.0f, 0.0f}); //initial guess
+         //Matrix<float> state = new Matrix<float>(new float[] { 0.0f, 0.0f}); //initial guess
 
          #region initialize Kalman filter
          KalmanFilter tracker = new KalmanFilter(2, 1, 0);
@@ -1236,7 +1235,7 @@ namespace Emgu.CV.Test
          syntheticData.ProcessNoise.Mat.CopyTo(tracker.ProcessNoiseCov);
          syntheticData.MeasurementNoise.Mat.CopyTo(tracker.MeasurementNoiseCov);
          syntheticData.ErrorCovariancePost.Mat.CopyTo(tracker.ErrorCovPost);
-         state.Mat.CopyTo(tracker.StatePost);
+         tracker.StatePost.SetTo(new float[] { 0.0f, 0.0f });
          #endregion 
 
          System.Converter<double, PointF> angleToPoint = 

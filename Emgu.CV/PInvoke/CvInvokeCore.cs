@@ -2447,6 +2447,13 @@ namespace Emgu.CV
          [MarshalAs(BoolMarshalType)]
          bool onoff);
 
+      /// <summary>
+      /// Enables or disables the optimized code.
+      /// </summary>
+      /// <value>
+      ///   <c>true</c> if [use optimized]; otherwise, <c>false</c>.
+      /// </value>
+      /// <remarks>The function can be used to dynamically turn on and off optimized code (code that uses SSE2, AVX, and other instructions on the platforms that support it). It sets a global flag that is further checked by OpenCV functions. Since the flag is not checked in the inner OpenCV loops, it is only safe to call the function on the very top level in your application where you can be sure that no other OpenCV function is currently executed.</remarks>
       public static bool UseOptimized
       {
          get { return cveUseOptimized(); }
@@ -2831,7 +2838,7 @@ namespace Emgu.CV
       /// 3. least-squares solution of overdetermined linear systems. This and previous is done by cvSolve function with CV_SVD method 
       /// 4. accurate calculation of different matrix characteristics such as rank (number of non-zero singular values), condition number (ratio of the largest singular value to the smallest one), determinant (absolute value of determinant is equal to the product of singular values). All the things listed in this item do not require calculation of U and V matrices. 
       /// </remarks>
-      /// <param name="a">Source MxN matrix</param>
+      /// <param name="src">Source MxN matrix</param>
       /// <param name="w">Resulting singular value matrix (MxN or NxN) or vector (Nx1). </param>
       /// <param name="u">Optional left orthogonal matrix (MxM or MxN). If CV_SVD_U_T is specified, the number of rows and columns in the sentence above should be swapped</param>
       /// <param name="v">Optional right orthogonal matrix (NxN)</param>
@@ -2849,6 +2856,14 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveSVDecomp(IntPtr src, IntPtr w, IntPtr u, IntPtr v, CvEnum.SvdFlag flags);
 
+      /// <summary>
+      /// Performs a singular value back substitution.
+      /// </summary>
+      /// <param name="w">Singular values</param>
+      /// <param name="u">Left singular vectors</param>
+      /// <param name="vt">Transposed matrix of right singular vectors.</param>
+      /// <param name="rhs">Right-hand side of a linear system</param>
+      /// <param name="dst">Found solution of the system.</param>
       public static void SVBackSubst(IInputArray w, IInputArray u, IInputArray vt, IInputArray rhs, IOutputArray dst)
       {
          using (InputArray iaW = w.GetInputArray())
@@ -2908,7 +2923,14 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cveMahalanobis(IntPtr v1, IntPtr v2, IntPtr iconvar);
 
-      public static void PCACompute(IInputArray data, IInputOutputArray mean, IOutputArray eigenvectors, int maxComponents)
+      /// <summary>
+      /// Performs Principal Component Analysis of the supplied dataset.
+      /// </summary>
+      /// <param name="data">Input samples stored as the matrix rows or as the matrix columns.</param>
+      /// <param name="mean">Optional mean value; if the matrix is empty, the mean is computed from the data.</param>
+      /// <param name="eigenvectors">The eigenvectors.</param>
+      /// <param name="maxComponents">Maximum number of components that PCA should retain; by default, all the components are retained.</param>
+      public static void PCACompute(IInputArray data, IInputOutputArray mean, IOutputArray eigenvectors, int maxComponents = 0)
       {
          using (InputArray iaData = data.GetInputArray())
          using (InputOutputArray ioaMean = mean.GetInputOutputArray())
@@ -2918,6 +2940,13 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePCACompute1(IntPtr data, IntPtr mean, IntPtr eigenvectors, int maxComponents);
 
+      /// <summary>
+      /// Performs Principal Component Analysis of the supplied dataset.
+      /// </summary>
+      /// <param name="data">Input samples stored as the matrix rows or as the matrix columns.</param>
+      /// <param name="mean">Optional mean value; if the matrix is empty, the mean is computed from the data.</param>
+      /// <param name="eigenvectors">The eigenvectors.</param>
+      /// <param name="retainedVariance">Percentage of variance that PCA should retain. Using this parameter will let the PCA decided how many components to retain but it will always keep at least 2.</param>
       public static void PCACompute(IInputArray data, IInputOutputArray mean, IOutputArray eigenvectors, double retainedVariance)
       {
          using (InputArray iaData = data.GetInputArray())
@@ -2928,6 +2957,13 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePCACompute2(IntPtr data, IntPtr mean, IntPtr eigenvectors, double retainedVariance);
 
+      /// <summary>
+      /// Projects vector(s) to the principal component subspace.
+      /// </summary>
+      /// <param name="data">Input vector(s); must have the same dimensionality and the same layout as the input data used at PCA phase</param>
+      /// <param name="mean">The mean.</param>
+      /// <param name="eigenvectors">The eigenvectors.</param>
+      /// <param name="result">The result.</param>
       public static void PCAProject(IInputArray data, IInputArray mean, IInputArray eigenvectors, IOutputArray result)
       {
          using (InputArray iaData = data.GetInputArray())
@@ -2939,6 +2975,13 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePCAProject(IntPtr data, IntPtr mean, IntPtr eigenvectors, IntPtr result);
 
+      /// <summary>
+      /// Reconstructs vectors from their PC projections.
+      /// </summary>
+      /// <param name="data">Coordinates of the vectors in the principal component subspace</param>
+      /// <param name="mean">The mean.</param>
+      /// <param name="eigenvectors">The eigenvectors.</param>
+      /// <param name="result">The result.</param>
       public static void PCABackProject(IInputArray data, IInputArray mean, IInputArray eigenvectors,
          IOutputArray result)
       {

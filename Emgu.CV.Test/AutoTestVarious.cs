@@ -299,12 +299,23 @@ namespace Emgu.CV.Test
       [Test]
       public void TestProjectPoints()
       {
-         IntrinsicCameraParameters intrin = new IntrinsicCameraParameters();
-         intrin.IntrinsicMatrix.SetIdentity();
-         ExtrinsicCameraParameters extrin = new ExtrinsicCameraParameters();
+         Mat cameraMatrix = new Mat(3, 3, DepthType.Cv64F, 1);
+         CvInvoke.SetIdentity(cameraMatrix, new MCvScalar(1));
+
+         Mat distortionCoeff = new Mat(8, 1, DepthType.Cv64F, 1);
+         distortionCoeff.SetTo(new MCvScalar());
+
+         VectorOfDouble rotationVector = new VectorOfDouble(new double[]{0,0,0});
+         VectorOfDouble translationVector = new VectorOfDouble(new double[] { 0, 0, 0 });
+                 
          MCvPoint3D32f point = new MCvPoint3D32f(12, 32, 9);
 
-         PointF[] points = CvInvoke.ProjectPoints(new MCvPoint3D32f[] { point }, extrin.RotationVector, extrin.TranslationVector, intrin.IntrinsicMatrix, intrin.DistortionCoeffs);
+         PointF[] points = CvInvoke.ProjectPoints(
+            new MCvPoint3D32f[] { point }, 
+            rotationVector, 
+            translationVector, 
+            cameraMatrix, 
+            distortionCoeff);
       }
 
       /*
@@ -1109,8 +1120,7 @@ namespace Emgu.CV.Test
          Stopwatch watch = Stopwatch.StartNew();
          DualTVL1OpticalFlow flow = new DualTVL1OpticalFlow();
 
-         //string[] paramNames = flow.GetParamNames();
-         CvInvoke.Calc(flow, prevImg, currImg, result);
+         flow.Calc(prevImg, currImg, result);
 
          watch.Stop();
          EmguAssert.WriteLine(String.Format(

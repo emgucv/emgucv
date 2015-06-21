@@ -216,7 +216,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Copy the data in this mat to the other mat
+      /// Copy the data in this umat to the other mat
       /// </summary>
       /// <param name="mask">Operation mask. Its non-zero elements indicate which matrix elements need to be copied.</param>
       /// <param name="m">The input array to copy to</param>
@@ -224,7 +224,22 @@ namespace Emgu.CV
       {
          using (OutputArray oaM = m.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-         UMatInvoke.cveUMatCopyTo(this, oaM, iaMask);
+            UMatInvoke.cveUMatCopyTo(this, oaM, iaMask);
+      }
+
+      /// <summary>
+      /// Copies the values of the UMat to <paramref name="data"/>.
+      /// </summary>
+      /// <param name="data">The data storage, must match the size of the UMat</param>
+      public void CopyTo(Array data)
+      {
+         if (IsEmpty)
+         {
+            throw new Exception("The UMat is empty");
+         }
+
+         using (Mat.MatWithHandle m = Mat.PrepareArrayForCopy(Depth, Size, NumberOfChannels, data))
+            CopyTo(m);
       }
 
       /// <summary>
@@ -236,7 +251,7 @@ namespace Emgu.CV
       {
          using (InputArray iaValue = value.GetInputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-         UMatInvoke.cveUMatSetTo(Ptr, iaValue, iaMask);
+            UMatInvoke.cveUMatSetTo(Ptr, iaValue, iaMask);
       }
 
       /// <summary>
@@ -247,9 +262,43 @@ namespace Emgu.CV
       public void SetTo(MCvScalar value, IInputArray mask = null)
       {
          using (ScalarArray ia = new ScalarArray(value))
-         {
             SetTo(ia, mask);
+      }
+
+      /// <summary>
+      /// Copies the values of the <paramref name="data"/> to Mat.
+      /// </summary>
+      /// <param name="data">The data storage, must match the size of the Mat</param>
+      public void SetTo(Array data)
+      {
+         if (IsEmpty)
+         {
+            int dimension = data.Rank;
+
+            DepthType dt = Mat.GetDepthTypeFromArray(data);
+            if (dt == DepthType.Default)
+               throw new Exception("The specific data type is not supported.");
+
+            if (dimension == 1)
+            {
+               this.Create(data.GetLength(0), 1, dt, 1);
+            }
+            else if (dimension == 2)
+            {
+               this.Create(data.GetLength(0), data.GetLength(1), dt, 1);
+            }
+            else if (dimension == 3)
+            {
+               this.Create(data.GetLength(0), data.GetLength(1), dt, 1);
+            }
+            else
+            {
+               throw new Exception("The Mat has to be pre-allocated");
+            }
          }
+
+         using (Mat.MatWithHandle m = Mat.PrepareArrayForCopy(Depth, Size, NumberOfChannels, data))
+            m.CopyTo(this);
       }
 
       /// <summary>

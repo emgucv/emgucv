@@ -88,7 +88,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get the equaivalent euler angle
+      /// Get the equivalent euler angle
       /// </summary>
       /// <param name="x">Rotation around x-axis (roll) in radian</param>
       /// <param name="y">Rotation around y-axis (pitch) in radian</param>
@@ -99,7 +99,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Get or set the equaivalent axis angle representation. (x,y,z) is the rotatation axis and |(x,y,z)| is the rotation angle in radians
+      /// Get or set the equivalent axis angle representation. (x,y,z) is the rotation axis and |(x,y,z)| is the rotation angle in radians
       /// </summary>
       public MCvPoint3D64f AxisAngle
       {
@@ -125,7 +125,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Rotate the points in <paramref name="pointsSrc"/> and save the result in <paramref name="pointsDst"/>. Inplace operation is supported (<paramref name="pointsSrc"/> == <paramref name="pointsDst"/>).
+      /// Rotate the points in <paramref name="pointsSrc"/> and save the result in <paramref name="pointsDst"/>. In-place operation is supported (<paramref name="pointsSrc"/> == <paramref name="pointsDst"/>).
       /// </summary>
       /// <param name="pointsSrc">The points to be rotated</param>
       /// <param name="pointsDst">The result of the rotation, should be the same size as <paramref name="pointsSrc"/>, can be <paramref name="pointsSrc"/> as well for inplace rotation</param>

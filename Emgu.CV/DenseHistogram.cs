@@ -214,6 +214,10 @@ namespace Emgu.CV
       }
       #endregion
 
+      /// <summary>
+      /// Gets the bin values.
+      /// </summary>
+      /// <returns>The bin values</returns>
       public float[] GetBinValues()
       {
          if (IsEmpty)

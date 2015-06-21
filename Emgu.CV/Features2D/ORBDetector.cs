@@ -44,6 +44,7 @@ namespace Emgu.CV.Features2D
       /// <param name="WTK_A">How many random points are used to produce each cell of the descriptor (2, 3, 4 ...).</param>
       /// <param name="scoreType">Type of the score to use.</param>
       /// <param name="patchSize">Patch size.</param>
+      /// <param name="fastThreshold">FAST threshold</param>
       public ORBDetector(int numberOfFeatures = 500, float scaleFactor = 1.2f, int nLevels = 8, int edgeThreshold = 31, int firstLevel = 0, int WTK_A = 2, ScoreType scoreType = ScoreType.Harris, int patchSize = 31, int fastThreshold = 20)
       {
          _ptr = CvInvoke.cveOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, ref _feature2D);

@@ -359,68 +359,128 @@ namespace Emgu.CV
             MatInvoke.cveMatCopyTo(Ptr, oaM, iaMask);
       }
 
+      internal class MatWithHandle : Mat
+      {
+         private GCHandle _handle;
+
+         public MatWithHandle(GCHandle handle, Size s, DepthType dt, int channels, int step)
+            : base(s, dt, channels, handle.AddrOfPinnedObject(), step)
+         {
+            _handle = handle;
+         }
+
+         protected override void ReleaseManagedResources()
+         {
+            base.ReleaseManagedResources();
+            _handle.Free();
+         }
+      }
+
+      internal static MatWithHandle PrepareArrayForCopy(DepthType dt, Size s, int channels, Array data)
+      {
+         int dimension = data.Rank;
+         int length0 = data.GetLength(0);
+         if (dimension == 1)
+         {
+            if (data is byte[])
+            {
+               int elementSize =
+               (dt == DepthType.Cv64F)
+                  ? 8
+                  : (dt == DepthType.Cv32S || dt == DepthType.Cv32F)
+                     ? 4
+                     : (dt == DepthType.Cv16S || dt == DepthType.Cv16U)
+                        ? 2
+                        : 1;
+               if (length0 != s.Width * s.Height * channels * elementSize)
+                  throw new Exception(String.Format(
+                     "The total length of data ({0} bytes) does not match that of the Mat ({1} bytes)",
+                     length0, s.Width * s.Height * channels * elementSize));
+            }
+            else if (length0 != s.Width * s.Height * channels)
+               throw new Exception(String.Format(
+                  "The total length of data ({0}) does not match that of the Mat ({1})",
+                  length0, s.Width * s.Height * channels));
+         }
+         else //dimension > 1
+         {
+            if (length0 != s.Height)
+               throw new Exception(String.Format(
+                  "The number of rows in data ({0}) does not match that of the Mat ({1})",
+                  length0, s.Height));
+
+            if (data.GetLength(1) != s.Width)
+               throw new Exception(String.Format(
+                  "The number of cols in data ({0}) does not match that of the Mat ({1})",
+                  data.GetLength(1), s.Width));
+
+            if (dimension == 2 && (channels != 1))
+            {
+               throw new Exception(String.Format(
+                  "A 3 dimension data array is required for Mat that contains {0} channels", channels));
+            }
+
+            if (dimension == 3)
+            {
+               if (data.GetLength(2) != channels)
+                  throw new Exception(
+                     String.Format(
+                        "The size of the 3rd dimension in data ({0}) does not match that of the number of channels of the Mat ({1})",
+                        data.GetLength(2), channels));
+            }
+            else if (dimension > 3)
+            {
+               throw new Exception(String.Format("The dimension of the data ({0}) is too high.", dimension));
+            }
+         }
+
+         int step;
+         if ((data is double[] || data is double[,] || data is double[, ,]) && dt == DepthType.Cv64F)
+         {
+            step = sizeof(double) * s.Width * channels;
+         }
+         else if ((data is byte[] || data is byte[,] || data is byte[, ,]) && dt == DepthType.Cv8U)
+         {
+            step = sizeof(byte) * s.Width * channels;
+         }
+         else if ((data is float[] || data is float[,] || data is float[, ,]) && dt == DepthType.Cv32F)
+         {
+            step = sizeof(float) * s.Width * channels;
+         }
+         else if ((data is int[] || data is int[,] || data is int[, ,]) && dt == DepthType.Cv32S)
+         {
+            step = sizeof(int) * s.Width * channels;
+         }
+         else if ((data is UInt16[] || data is UInt16[,] || data is UInt16[, ,]) && dt == DepthType.Cv16U)
+         {
+            step = sizeof(UInt16) * s.Width * channels;
+         }
+         else if ((data is Int16[] || data is Int16[,] || data is Int16[, ,]) && dt == DepthType.Cv16S)
+         {
+            step = sizeof(Int16) * s.Width * channels;
+         }
+         else
+         {
+            throw new Exception(String.Format("The type of data doesn't match the type of the Mat ({1}).", dt));
+         }
+
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         return new MatWithHandle(handle, s, dt, channels, step);
+      }
+
+      /// <summary>
+      /// Copies the values of the Mat to <paramref name="data"/>.
+      /// </summary>
+      /// <param name="data">The data storage, must match the size of the Mat</param>
       public void CopyTo(Array data)
       {
          if (IsEmpty)
          {
-            throw new Exception("The matrix is empty");
+            throw new Exception("The Mat is empty");
          }
 
-         DepthType dt = Depth;
-         Size s = Size;
-         int dimension = data.Rank;
-         if (data.GetLength(0) != s.Height)
-            throw new Exception(String.Format("The number of rows in data ({0}) does not match that of the Mat ({1})",
-               data.GetLength(0), s.Height));
-
-         if (data.GetLength(1) != s.Width)
-            throw new Exception(String.Format("The number of cols in data ({0}) does not match that of the Mat ({1})",
-               data.GetLength(1), s.Width));
-
-         int channels = NumberOfChannels;
-         if (dimension == 3)
-         {
-            if (data.GetLength(2) != channels)
-               throw new Exception(String.Format("The size of the 3rd dimension in data ({0}) does not match that of the number of channels of the Mat ({1})",
-                  data.GetLength(2), channels));
-         }
-         else if (dimension > 3)
-         {
-            throw new Exception(String.Format("The dimension of the data ({0}) is too high.", dimension));
-         }
-
-         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-         try
-         {
-            int step;
-            if ((data is double[,] || data is double[,,])&& dt == DepthType.Cv64F)
-            {
-               step = sizeof (double)*s.Width*channels;
-            }
-            else if ((data is byte[,] || data is byte[,,]) && dt == DepthType.Cv8U)
-            {
-               step = sizeof (byte)*s.Width*channels;
-            }
-            else if ((data is float[,] || data is float[,,]) && dt == DepthType.Cv32F)
-            {
-               step = sizeof (float)*s.Width*channels;
-            }
-            else if ((data is int[,] || data is int[,,]) && dt == DepthType.Cv32S)
-            {
-               step = sizeof (int)*s.Width*channels;
-            }
-            else
-            {
-               throw new Exception(String.Format("The type of data doesn't match the type of the Mat ({1}).", dt));
-            }
-
-            using (Mat m = new Mat(s, dt, channels, handle.AddrOfPinnedObject(), step))
-               CopyTo(m);
-         }
-         finally
-         {
-            handle.Free();
-         }
+         using (MatWithHandle m = PrepareArrayForCopy(Depth, Size, NumberOfChannels, data))
+            CopyTo(m);
       }
 
       /// <summary>
@@ -722,6 +782,100 @@ namespace Emgu.CV
          }
       }
 #endif
+
+      internal static DepthType GetDepthTypeFromArray(Array data)
+      {
+         int dimension = data.Rank;
+
+            if (dimension == 1)
+            {
+               return
+                  data is byte[]
+                     ? DepthType.Cv8U
+                     : data is UInt16[]
+                        ? DepthType.Cv16U
+                        : data is Int16[]
+                           ? DepthType.Cv16S
+                           : data is float[]
+                              ? DepthType.Cv32F
+                              : data is int[]
+                                 ? DepthType.Cv32S
+                                 : data is double[]
+                                    ? DepthType.Cv64F
+                                    : DepthType.Default;                      
+            } else if (dimension == 2)
+            {
+               return
+                  data is byte[,]
+                     ? DepthType.Cv8U
+                     : data is UInt16[,]
+                        ? DepthType.Cv16U
+                        : data is Int16[,]
+                           ? DepthType.Cv16S
+                           : data is float[,]
+                              ? DepthType.Cv32F
+                              : data is int[,]
+                                 ? DepthType.Cv32S
+                                 : data is double[,]
+                                    ? DepthType.Cv64F
+                                    : DepthType.Default;               
+            } else if (dimension == 3)
+            {
+               return
+                  data is byte[,,]
+                     ? DepthType.Cv8U
+                     : data is UInt16[,,]
+                        ? DepthType.Cv16U
+                        : data is Int16[,,]
+                           ? DepthType.Cv16S
+                           : data is float[,,]
+                              ? DepthType.Cv32F
+                              : data is int[,,]
+                                 ? DepthType.Cv32S
+                                 : data is double[,,]
+                                    ? DepthType.Cv64F
+                                    : DepthType.Default;               
+            }
+            else
+            {
+               return DepthType.Default;
+            }
+         
+      }
+
+      /// <summary>
+      /// Copies the values of the <paramref name="data"/> to Mat.
+      /// </summary>
+      /// <param name="data">The data storage, must match the size of the Mat</param>
+      public void SetTo(Array data)
+      {
+         if (IsEmpty)
+         {
+            int dimension = data.Rank;
+
+            DepthType dt = GetDepthTypeFromArray(data);
+            if (dt == DepthType.Default)
+               throw new Exception("The specific data type is not supported.");
+
+            if (dimension == 1)
+            {
+               this.Create(data.GetLength(0), 1, dt, 1);
+            } else if (dimension == 2)
+            {
+               this.Create(data.GetLength(0), data.GetLength(1), dt, 1);
+            } else if (dimension == 3)
+            {
+               this.Create(data.GetLength(0), data.GetLength(1), dt, 1);
+            }
+            else
+            {
+               throw new Exception("The Mat has to be pre-allocated");
+            } 
+         }
+
+         using (MatWithHandle m = PrepareArrayForCopy(Depth, Size, NumberOfChannels, data))
+            m.CopyTo(this);
+      }
 
       /// <summary>
       /// Set the mat to the specific value

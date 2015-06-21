@@ -28,13 +28,15 @@ namespace Emgu.CV
          _ptr = inputOutputArrayPtr;
       }
 
+      private static InputOutputArray _empty = new InputOutputArray();
+
       /// <summary>
       /// Get an empty InputOutputArray
       /// </summary>
       /// <returns>An empty InputOutputArray</returns>
-      public static InputOutputArray GetEmpty()
+      public static new InputOutputArray GetEmpty()
       {
-         return new InputOutputArray();
+         return _empty;
       }
 
       /// <summary>

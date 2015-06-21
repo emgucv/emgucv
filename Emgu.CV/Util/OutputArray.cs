@@ -28,13 +28,15 @@ namespace Emgu.CV
          
       }
 
+      private static OutputArray _empty = new OutputArray();
+
       /// <summary>
       /// Get an empty output array
       /// </summary>
       /// <returns>An empty output array</returns>
-      public static OutputArray GetEmpty()
+      public static new OutputArray GetEmpty()
       {
-         return new OutputArray();
+         return _empty;
       }
 
       /// <summary>

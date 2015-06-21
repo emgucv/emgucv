@@ -13,6 +13,7 @@ namespace Emgu.CV
 #if !NETFX_CORE
    [Serializable]
 #endif
+   [Obsolete("This class will be removed in the next release, please use separate rotation vector and translation as parameters with the CvInvoke function instead.")]
    public class ExtrinsicCameraParameters : IEquatable<ExtrinsicCameraParameters>
    {
       private RotationVector3D _rotationVector;

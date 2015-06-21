@@ -15,6 +15,7 @@ namespace Emgu.CV
    /// <summary>
    /// Camera calibration functions
    /// </summary>
+   [Obsolete("This class will be removed in the next release. Please uses the corresponding CvInvoke function instead.")]
    public static class CameraCalibration
    {
       /// <summary>

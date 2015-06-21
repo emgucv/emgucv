@@ -16,6 +16,7 @@ namespace Emgu.CV
 #if !NETFX_CORE
    [Serializable]
 #endif
+   [Obsolete("This class will be removed in the next release, please use separate camera matrix and distortion coefficient with the CvInvoke function instead.")]
    public class IntrinsicCameraParameters : IEquatable<IntrinsicCameraParameters>
    {
       private Matrix<double> _intrinsicMatrix;

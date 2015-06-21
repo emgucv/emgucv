@@ -29,8 +29,16 @@ namespace Emgu.CV
       
    }
 
+   /// <summary>
+   /// Extension methods for IInputArrays
+   /// </summary>
    public static class IInputArrayExtensions
    {
+      /// <summary>
+      /// Determines whether the specified input array is umat.
+      /// </summary>
+      /// <param name="arr">The array</param>
+      /// <returns>True if it is a umat</returns>
       public static bool IsUmat(this IInputArray arr)
       {
          using (InputArray ia = arr.GetInputArray())
