@@ -134,14 +134,16 @@ namespace Emgu.CV
                subfolder = "..";
             }*/
 
-            System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+            System.Reflection.Assembly asm = typeof (CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
+            if (!File.Exists(asm.Location))
+               return false;
             FileInfo file = new FileInfo(asm.Location);
             //FileInfo file = new FileInfo(asm.CodeBase);
             DirectoryInfo directory = file.Directory;
             loadDirectory = directory.FullName;
             
             if (!String.IsNullOrEmpty(subfolder))
-            loadDirectory = Path.Combine(loadDirectory, subfolder);
+               loadDirectory = Path.Combine(loadDirectory, subfolder);
             
 #if (UNITY_STANDALONE_WIN && !UNITY_EDITOR_WIN)
             if (directory.Parent != null)
