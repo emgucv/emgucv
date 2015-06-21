@@ -635,7 +635,7 @@ namespace Emgu.CV
             new PointF(box.Size.Width - 1, 0), 
             new PointF(box.Size.Width - 1, box.Size.Height - 1)};
 
-         using (Mat rot = CameraCalibration.GetAffineTransform(srcCorners, destCorners))
+         using (Mat rot = CvInvoke.GetAffineTransform(srcCorners, destCorners))
          {
             Image<TColor, TDepth> res = new Image<TColor, TDepth>((int)box.Size.Width, (int)box.Size.Height);
             CvInvoke.WarpAffine(this, res, rot, res.Size);

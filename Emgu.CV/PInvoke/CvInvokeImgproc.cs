@@ -95,6 +95,25 @@ namespace Emgu.CV
          CvEnum.BorderType borderMode,
          ref MCvScalar fillval);
 
+
+      /// <summary>
+      /// Calculates the matrix of an affine transform such that:
+      /// (x'_i,y'_i)^T=map_matrix (x_i,y_i,1)^T
+      /// where dst(i)=(x'_i,y'_i), src(i)=(x_i,y_i), i=0..2.
+      /// </summary>
+      /// <param name="src">Coordinates of 3 triangle vertices in the source image. If the array contains more than 3 points, only the first 3 will be used</param>
+      /// <param name="dest">Coordinates of the 3 corresponding triangle vertices in the destination image. If the array contains more than 3 points, only the first 3 will be used</param>
+      /// <returns>The 2x3 rotation matrix that defines the Affine transform</returns>
+      public static Mat GetAffineTransform(PointF[] src, PointF[] dest)
+      {
+         Debug.Assert(src.Length >= 3, "The source should contain at least 3 points");
+         Debug.Assert(dest.Length >= 3, "The destination should contain at least 3 points");
+
+         using (VectorOfPointF ptSrc = src.Length == 3 ? new VectorOfPointF(src) : new VectorOfPointF(new PointF[] { src[0], src[1], src[2] }))
+         using (VectorOfPointF ptDest = dest.Length == 3 ? new VectorOfPointF(dest) : new VectorOfPointF(new PointF[] { dest[0], dest[1], dest[2] }))
+            return CvInvoke.GetAffineTransform(ptSrc, ptDest);
+      }
+
       /// <summary>
       /// Calculates the matrix of an affine transform such that:
       /// (x'_i,y'_i)^T=map_matrix (x_i,y_i,1)^T

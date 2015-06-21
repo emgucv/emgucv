@@ -401,6 +401,21 @@ namespace Emgu.CV
 
       #endregion
 
+
+      /// <summary>
+      /// Estimate rigid transformation between 2 point sets.
+      /// </summary>
+      /// <param name="sourcePoints">The points from the source image</param>
+      /// <param name="destinationPoints">The corresponding points from the destination image</param>
+      /// <param name="fullAffine">Indicates if full affine should be performed</param>
+      /// <returns>If success, the 2x3 rotation matrix that defines the Affine transform. Otherwise null is returned.</returns>
+      public static Mat EstimateRigidTransform(PointF[] sourcePoints, PointF[] destinationPoints, bool fullAffine)
+      {
+         using (VectorOfPointF srcVec = new VectorOfPointF(sourcePoints))
+         using (VectorOfPointF dstVec = new VectorOfPointF(destinationPoints))
+            return EstimateRigidTransform(srcVec, dstVec, fullAffine);
+      }
+
       /// <summary>
       /// Estimate rigid transformation between 2 images or 2 point sets.
       /// </summary>

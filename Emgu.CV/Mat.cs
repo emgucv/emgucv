@@ -115,6 +115,12 @@ namespace Emgu.CV
          }
       }
 
+      /*
+      public void SetData(Array data)
+      {
+         
+      }*/
+
       internal bool _needDispose;
 
       internal Mat(IntPtr ptr, bool needDispose, bool useCustomMemAllocator = false)
@@ -353,6 +359,70 @@ namespace Emgu.CV
             MatInvoke.cveMatCopyTo(Ptr, oaM, iaMask);
       }
 
+      public void CopyTo(Array data)
+      {
+         if (IsEmpty)
+         {
+            throw new Exception("The matrix is empty");
+         }
+
+         DepthType dt = Depth;
+         Size s = Size;
+         int dimension = data.Rank;
+         if (data.GetLength(0) != s.Height)
+            throw new Exception(String.Format("The number of rows in data ({0}) does not match that of the Mat ({1})",
+               data.GetLength(0), s.Height));
+
+         if (data.GetLength(1) != s.Width)
+            throw new Exception(String.Format("The number of cols in data ({0}) does not match that of the Mat ({1})",
+               data.GetLength(1), s.Width));
+
+         int channels = NumberOfChannels;
+         if (dimension == 3)
+         {
+            if (data.GetLength(2) != channels)
+               throw new Exception(String.Format("The size of the 3rd dimension in data ({0}) does not match that of the number of channels of the Mat ({1})",
+                  data.GetLength(2), channels));
+         }
+         else if (dimension > 3)
+         {
+            throw new Exception(String.Format("The dimension of the data ({0}) is too high.", dimension));
+         }
+
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         try
+         {
+            int step;
+            if ((data is double[,] || data is double[,,])&& dt == DepthType.Cv64F)
+            {
+               step = sizeof (double)*s.Width*channels;
+            }
+            else if ((data is byte[,] || data is byte[,,]) && dt == DepthType.Cv8U)
+            {
+               step = sizeof (byte)*s.Width*channels;
+            }
+            else if ((data is float[,] || data is float[,,]) && dt == DepthType.Cv32F)
+            {
+               step = sizeof (float)*s.Width*channels;
+            }
+            else if ((data is int[,] || data is int[,,]) && dt == DepthType.Cv32S)
+            {
+               step = sizeof (int)*s.Width*channels;
+            }
+            else
+            {
+               throw new Exception(String.Format("The type of data doesn't match the type of the Mat ({1}).", dt));
+            }
+
+            using (Mat m = new Mat(s, dt, channels, handle.AddrOfPinnedObject(), step))
+               CopyTo(m);
+         }
+         finally
+         {
+            handle.Free();
+         }
+      }
+
       /// <summary>
       /// Converts an array to another data type with optional scaling.
       /// </summary>
@@ -365,18 +435,6 @@ namespace Emgu.CV
          using (OutputArray oaM = m.GetOutputArray())
             MatInvoke.cveMatConvertTo(Ptr, oaM, rtype, alpha, beta);
       }
-
-      /*
-      /// <summary>
-      /// Indicates if this cv::Mat is empty
-      /// </summary>
-      public bool IsEmpty
-      {
-         get
-         {
-            return MatInvoke.cvMatIsEmpty(_ptr);
-         }
-      }*/
 
       /// <summary>
       /// Changes the shape and/or the number of channels of a 2D matrix without copying the data.

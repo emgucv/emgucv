@@ -2459,6 +2459,21 @@ namespace Emgu.CV
       /// <param name="dst">Output array of random numbers; the array must be pre-allocated and have 1 to 4 channels.</param>
       /// <param name="mean">Mean value (expectation) of the generated random numbers.</param>
       /// <param name="stddev">Standard deviation of the generated random numbers; it can be either a vector (in which case a diagonal standard deviation matrix is assumed) or a square matrix.</param>
+      public static void Randn(IInputOutputArray dst, MCvScalar mean, MCvScalar stddev)
+      {
+         using (ScalarArray saMean = new ScalarArray(mean))
+         using (ScalarArray saStddev = new ScalarArray(stddev))
+         {
+            Randn(dst, saMean, saStddev);
+         }
+      }
+
+      /// <summary>
+      /// Fills the array with normally distributed random numbers.
+      /// </summary>
+      /// <param name="dst">Output array of random numbers; the array must be pre-allocated and have 1 to 4 channels.</param>
+      /// <param name="mean">Mean value (expectation) of the generated random numbers.</param>
+      /// <param name="stddev">Standard deviation of the generated random numbers; it can be either a vector (in which case a diagonal standard deviation matrix is assumed) or a square matrix.</param>
       public static void Randn(IInputOutputArray dst, IInputArray mean, IInputArray stddev)
       {
          using (InputOutputArray ioaDst = dst.GetInputOutputArray())
@@ -2470,6 +2485,21 @@ namespace Emgu.CV
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveRandn(IntPtr dst, IntPtr mean, IntPtr stddev);
+
+      /// <summary>
+      /// Generates a single uniformly-distributed random number or an array of random numbers.
+      /// </summary>
+      /// <param name="dst">Output array of random numbers; the array must be pre-allocated.</param>
+      /// <param name="low">Inclusive lower boundary of the generated random numbers.</param>
+      /// <param name="high">Exclusive upper boundary of the generated random numbers.</param>
+      public static void Randu(IInputOutputArray dst, MCvScalar low, MCvScalar high)
+      {
+         using (ScalarArray iaLow = new ScalarArray(low))
+         using (ScalarArray iaHigh = new ScalarArray(high))
+         {
+            Randu(dst, low, high);
+         }
+      }
 
       /// <summary>
       /// Generates a single uniformly-distributed random number or an array of random numbers.

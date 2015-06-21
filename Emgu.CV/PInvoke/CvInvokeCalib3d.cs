@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
@@ -223,6 +224,48 @@ namespace Emgu.CV
          double param4, double param5);
       */
       #region Camera Calibration
+
+      /// <summary>
+      /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. 
+      /// Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. 
+      /// The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. 
+      /// The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters. 
+      /// </summary>
+      /// <remarks>Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points) </remarks>
+      /// <param name="objectPoints">The array of object points.</param>
+      /// <param name="rvec">The rotation vector, 1x3 or 3x1</param>
+      /// <param name="tvec">The translation vector, 1x3 or 3x1</param>
+      /// <param name="cameraMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
+      /// <param name="distCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is IntPtr.Zero, all distortion coefficients are considered 0's</param>
+      /// <returns>The output array of image points, 2xN or Nx2, where N is the total number of points in the view</returns>
+      /// <param name="aspectRatio">Aspect ratio</param>
+      /// <param name="jacobian">Optional output 2Nx(10+&lt;numDistCoeffs&gt;) jacobian matrix of derivatives of image points with respect to components of the rotation vector, translation vector, focal lengths, coordinates of the principal point and the distortion coefficients. In the old interface different components of the jacobian are returned via different output parameters.</param>
+      /// <returns>The array of image points which is the projection of <paramref name="objectPoints"/></returns>
+      public static PointF[] ProjectPoints(
+          MCvPoint3D32f[] objectPoints,
+          IInputArray rvec, IInputArray tvec, IInputArray cameraMatrix, IInputArray distCoeffs, IOutputArray jacobian = null, double aspectRatio = 0)
+      {
+         PointF[] imagePoints = new PointF[objectPoints.Length];
+
+         GCHandle handle1 = GCHandle.Alloc(objectPoints, GCHandleType.Pinned);
+         GCHandle handle2 = GCHandle.Alloc(imagePoints, GCHandleType.Pinned);
+         using (Mat pointMatrix = new Mat(objectPoints.Length, 1, DepthType.Cv32F, 3, handle1.AddrOfPinnedObject(), 3 * sizeof(float)))
+         using (Mat imagePointMatrix = new Mat(imagePoints.Length, 1, DepthType.Cv32F, 2, handle2.AddrOfPinnedObject(), 2 * sizeof(float)))
+            CvInvoke.ProjectPoints(
+                  pointMatrix,
+                  rvec,
+                  tvec,
+                  cameraMatrix,
+                  distCoeffs,
+                  imagePointMatrix,
+                  jacobian, 
+                  aspectRatio);
+         handle1.Free();
+         handle2.Free();
+         return imagePoints;
+      }
+
+
       /// <summary>
       /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters.
       /// Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points). 
@@ -249,6 +292,67 @@ namespace Emgu.CV
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveProjectPoints(IntPtr objPoints, IntPtr rvec, IntPtr tvec, IntPtr cameraMatrix, IntPtr distCoeffs, IntPtr imagePoints, IntPtr jacobian, double aspectRatio);
+
+
+      /// <summary>
+      /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
+      /// </summary>
+      /// <param name="objectPoints">The 3D location of the object points. The first index is the index of image, second index is the index of the point</param>
+      /// <param name="imagePoints">The 2D image location of the points. The first index is the index of the image, second index is the index of the point</param>
+      /// <param name="imageSize">The size of the image, used only to initialize intrinsic camera matrix</param>
+      /// <param name="rotationVectors">The output 3xM or Mx3 array of rotation vectors (compact representation of rotation matrices, see cvRodrigues2). </param>
+      /// <param name="translationVectors">The output 3xM or Mx3 array of translation vectors</param>/// <param name="calibrationType">cCalibration type</param>
+      /// <param name="termCriteria">The termination criteria</param>
+      /// <param name="cameraMatrix">The output camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
+      /// <param name="distortionCoeffs">The output 4x1 or 1x4 vector of distortion coefficients [k1, k2, p1, p2]</param>
+      /// <returns>The final reprojection error</returns>
+      public static double CalibrateCamera(
+         MCvPoint3D32f[][] objectPoints,
+         PointF[][] imagePoints,
+         Size imageSize,
+         IInputOutputArray cameraMatrix,
+         IInputOutputArray distortionCoeffs,
+         CvEnum.CalibType calibrationType,
+         MCvTermCriteria termCriteria,
+         out Mat[] rotationVectors,
+         out Mat[] translationVectors)
+      {
+         System.Diagnostics.Debug.Assert(objectPoints.Length == imagePoints.Length, "The number of images for objects points should be equal to the number of images for image points");
+         int imageCount = objectPoints.Length;
+
+         using (VectorOfVectorOfPoint3D32F vvObjPts = new VectorOfVectorOfPoint3D32F(objectPoints))
+         using (VectorOfVectorOfPointF vvImgPts = new VectorOfVectorOfPointF(imagePoints))
+         {
+            double reprojectionError;
+            using (VectorOfMat rVecs = new VectorOfMat())
+            using (VectorOfMat tVecs = new VectorOfMat())
+            {
+               reprojectionError = CvInvoke.CalibrateCamera(
+                   vvObjPts,
+                   vvImgPts,
+                   imageSize,
+                   cameraMatrix,
+                   distortionCoeffs,
+                   rVecs,
+                   tVecs,
+                   calibrationType,
+                   termCriteria);
+
+               rotationVectors = new Mat[imageCount];
+               translationVectors = new Mat[imageCount];
+               for (int i = 0; i < imageCount; i++)
+               {
+                  rotationVectors[i] = new Mat();
+                  using (Mat matR = rotationVectors[i])
+                     matR.CopyTo(rotationVectors[i]);
+                  translationVectors[i] = new Mat();
+                  using (Mat matT = translationVectors[i])
+                     matT.CopyTo(translationVectors[i]);                
+               }
+            }
+            return reprojectionError;
+         }
+      }
 
       /// <summary>
       /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
@@ -327,6 +431,34 @@ namespace Emgu.CV
       private static extern void cveCalibrationMatrixValues(
          IntPtr cameraMatrix, ref Size imageSize, double apertureWidth, double apertureHeight,
          ref double fovx, ref double fovy, ref double focalLength, ref MCvPoint2D64f principalPoint, ref double aspectRatio);
+
+
+      /// <summary>
+      /// Estimates extrinsic camera parameters using known intrinsic parameters and extrinsic parameters for each view. The coordinates of 3D object points and their correspondent 2D projections must be specified. This function also minimizes back-projection error. 
+      /// </summary>
+      /// <param name="objectPoints">The array of object points</param>
+      /// <param name="imagePoints">The array of corresponding image points</param>
+      /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
+      /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is IntPtr.Zero, all distortion coefficients are considered 0's.</param>
+      /// <param name="rotationVector">The output 3x1 or 1x3 rotation vector (compact representation of a rotation matrix, see cvRodrigues2). </param>
+      /// <param name="translationVector">The output 3x1 or 1x3 translation vector</param>
+      /// <param name="useExtrinsicGuess">Use the input rotation and translation parameters as a guess</param>
+      /// <param name="method">Method for solving a PnP problem</param>
+      /// <returns>The extrinsic parameters</returns>
+      public static bool SolvePnP(
+         MCvPoint3D32f[] objectPoints,
+         PointF[] imagePoints,
+         IInputArray intrinsicMatrix,
+         IInputArray distortionCoeffs,
+         IOutputArray rotationVector,
+         IOutputArray translationVector,
+         bool useExtrinsicGuess = false,
+         CvEnum.SolvePnpMethod method = CvEnum.SolvePnpMethod.Iterative)
+      {
+         using (VectorOfPoint3D32F objPtVec = new VectorOfPoint3D32F(objectPoints))
+         using (VectorOfPointF imgPtVec = new VectorOfPointF(imagePoints))
+            return CvInvoke.SolvePnP(objPtVec, imgPtVec, intrinsicMatrix, distortionCoeffs, rotationVector, translationVector, false, method);
+      }
 
       /// <summary>
       /// Estimates extrinsic camera parameters using known intrinsic parameters and extrinsic parameters for each view. The coordinates of 3D object points and their correspondent 2D projections must be specified. This function also minimizes back-projection error
@@ -417,6 +549,66 @@ namespace Emgu.CV
          bool useExtrinsicGuess,
          int iterationsCount, float reprojectionError, int minInliersCount,
          IntPtr inliers, CvEnum.SolvePnpMethod flags);
+
+
+      /// <summary>
+      /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the fist camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
+      /// R2=R*R1,
+      /// T2=R*T1 + T
+      /// </summary>
+      /// <param name="objectPoints">The 3D location of the object points. The first index is the index of image, second index is the index of the point</param>
+      /// <param name="imagePoints1">The 2D image location of the points for camera 1. The first index is the index of the image, second index is the index of the point</param>
+      /// <param name="imagePoints2">The 2D image location of the points for camera 2. The first index is the index of the image, second index is the index of the point</param>
+      /// <param name="cameraMatrix1">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
+      /// <param name="distCoeffs1">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
+      /// <param name="cameraMatrix2">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
+      /// <param name="distCoeffs2">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
+      /// <param name="imageSize">Size of the image, used only to initialize intrinsic camera matrix</param>
+      /// <param name="r">The rotation matrix between the 1st and the 2nd cameras' coordinate systems </param>
+      /// <param name="t">The translation vector between the cameras' coordinate systems</param>
+      /// <param name="e">The optional output essential matrix</param>
+      /// <param name="f">The optional output fundamental matrix </param>
+      /// <param name="termCrit">Termination criteria for the iterative optimization algorithm</param>
+      /// <param name="flags">The calibration flags</param>
+      public static void StereoCalibrate(
+         MCvPoint3D32f[][] objectPoints,
+         PointF[][] imagePoints1,
+         PointF[][] imagePoints2,
+         IInputOutputArray cameraMatrix1,
+         IInputOutputArray distCoeffs1,
+         IInputOutputArray cameraMatrix2,
+         IInputOutputArray distCoeffs2,
+         Size imageSize,
+         IOutputArray r,
+         IOutputArray t,
+         IOutputArray e,
+         IOutputArray f,
+         CvEnum.CalibType flags,
+         MCvTermCriteria termCrit)
+      {
+         System.Diagnostics.Debug.Assert(objectPoints.Length == imagePoints1.Length && objectPoints.Length == imagePoints2.Length, "The number of images for objects points should be equal to the number of images for image points");
+
+         using (VectorOfVectorOfPoint3D32F objectPointVec = new VectorOfVectorOfPoint3D32F(objectPoints))
+         using (VectorOfVectorOfPointF imagePoints1Vec = new VectorOfVectorOfPointF(imagePoints1))
+         using (VectorOfVectorOfPointF imagePoints2Vec = new VectorOfVectorOfPointF(imagePoints2))
+         {
+            CvInvoke.StereoCalibrate(
+               objectPointVec,
+               imagePoints1Vec,
+               imagePoints2Vec,
+               cameraMatrix1,
+               distCoeffs1,
+               cameraMatrix2,
+               distCoeffs2,
+               imageSize,
+               r,
+               t,
+               e, 
+               f,
+               flags,
+               termCrit);
+         }
+      }
 
       /// <summary>
       /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the fist camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:

@@ -302,9 +302,9 @@ namespace Emgu.CV.Test
          IntrinsicCameraParameters intrin = new IntrinsicCameraParameters();
          intrin.IntrinsicMatrix.SetIdentity();
          ExtrinsicCameraParameters extrin = new ExtrinsicCameraParameters();
-         MCvPoint3D32f point = new MCvPoint3D32f();
+         MCvPoint3D32f point = new MCvPoint3D32f(12, 32, 9);
 
-         PointF[] points = CameraCalibration.ProjectPoints(new MCvPoint3D32f[] { point }, extrin, intrin);
+         PointF[] points = CvInvoke.ProjectPoints(new MCvPoint3D32f[] { point }, extrin.RotationVector, extrin.TranslationVector, intrin.IntrinsicMatrix, intrin.DistortionCoeffs);
       }
 
       /*
@@ -1485,15 +1485,16 @@ namespace Emgu.CV.Test
 
       }
 
+      /*
 #if !WINDOWS_PHONE_APP
       [Test]
       public void TestExtrinsicCameraParametersRuntimeSerialize()
       {
          ExtrinsicCameraParameters param = new ExtrinsicCameraParameters();
 
-         param.RotationVector.SetRandUniform(new MCvScalar(), new MCvScalar(1.0));
-         param.TranslationVector.SetRandUniform(new MCvScalar(), new MCvScalar(100));
-
+         CvInvoke.Randu(param.RotationVector, new MCvScalar(), new MCvScalar(1.0));
+         CvInvoke.Randu(param.TranslationVector, new MCvScalar(), new MCvScalar(100)  );
+       
          System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
              formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
@@ -1536,7 +1537,7 @@ namespace Emgu.CV.Test
          }
       }
 #endif
-
+*/
       [Test]
       public void TestEllipseFitting()
       {
@@ -2339,7 +2340,7 @@ namespace Emgu.CV.Test
 
             rotationMatrix.RotatePoints(corners);
 
-            Mat transformation = CameraCalibration.EstimateRigidTransform(oldCorners, corners, true);
+            Mat transformation = CvInvoke.EstimateRigidTransform(oldCorners, corners, true);
 
             Matrix<double> delta = new Matrix<double>(transformation.Size);
             CvInvoke.AbsDiff(rotationMatrix, transformation, delta);

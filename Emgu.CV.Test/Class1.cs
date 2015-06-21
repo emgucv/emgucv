@@ -1218,7 +1218,7 @@ namespace Emgu.CV.Test
          }
       }
 
-      /*
+      //[Test]
       public void TestKalman()
       {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 400);
@@ -1229,16 +1229,17 @@ namespace Emgu.CV.Test
          Matrix<float> state = new Matrix<float>(new float[] { 0.0f, 0.0f}); //initial guess
 
          #region initialize Kalman filter
-         Kalman tracker = new Kalman(2, 1, 0);
-         tracker.TransitionMatrix = syntheticData.TransitionMatrix;
-         tracker.MeasurementMatrix = syntheticData.MeasurementMatrix;
-         tracker.ProcessNoiseCovariance = syntheticData.ProcessNoise;
-         tracker.MeasurementNoiseCovariance = syntheticData.MeasurementNoise;
-         tracker.ErrorCovariancePost = syntheticData.ErrorCovariancePost;
-         tracker.CorrectedState = state;
+         KalmanFilter tracker = new KalmanFilter(2, 1, 0);
+         syntheticData.TransitionMatrix.Mat.CopyTo(tracker.TransitionMatrix);
+         syntheticData.MeasurementMatrix.Mat.CopyTo(tracker.MeasurementMatrix);
+
+         syntheticData.ProcessNoise.Mat.CopyTo(tracker.ProcessNoiseCov);
+         syntheticData.MeasurementNoise.Mat.CopyTo(tracker.MeasurementNoiseCov);
+         syntheticData.ErrorCovariancePost.Mat.CopyTo(tracker.ErrorCovPost);
+         state.Mat.CopyTo(tracker.StatePost);
          #endregion 
 
-         System.Converter<double, PointF> angleToPoint =
+         System.Converter<double, PointF> angleToPoint = 
             delegate(double radianAngle)
             {
                return new PointF(
@@ -1259,13 +1260,19 @@ namespace Emgu.CV.Test
          {
             Matrix<float> measurement = syntheticData.GetMeasurement();
             // adjust Kalman filter state 
-            tracker.Correct(measurement);
+            tracker.Correct(measurement.Mat);
 
             tracker.Predict();
 
             #region draw the state, prediction and the measurement
-            PointF statePoint = angleToPoint(tracker.CorrectedState[0, 0]);
-            PointF predictPoint = angleToPoint(tracker.PredictedState[0, 0]);
+            //Matrix<float> correctedState = new Matrix<float>(1, 1);
+            //Matrix<float> predictedState = new Matrix<float>(1, 1);
+            float[,] correctedState = new float[2,1];
+            float[,] predictedState = new float[2,1];
+            tracker.StatePost.CopyTo(correctedState);
+            tracker.StatePre.CopyTo(predictedState);
+            PointF statePoint = angleToPoint(correctedState[0, 0]);
+            PointF predictPoint = angleToPoint(predictedState[0, 0]);
             PointF measurementPoint = angleToPoint(measurement[0, 0]);
 
             img.SetZero(); //clear the image
@@ -1285,7 +1292,7 @@ namespace Emgu.CV.Test
          viewer.Disposed += delegate(Object sender, EventArgs e) { timer.Stop(); };
          viewer.Text = "Actual State: White; Measurement: Red; Prediction: Green";
          viewer.ShowDialog();
-      }*/
+      }
 
       //TODO: Fix this
       /*

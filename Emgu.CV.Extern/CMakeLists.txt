@@ -811,17 +811,21 @@ IF(HAVE_opencv_video)
   "video/kalmanfilter_property" 
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/KalmanFilterGenerated.cs"
   "cv::KalmanFilter" 
-  "KalmanFilter" 
-  "statePre;statePost;transitionMatrix;controlMatrix;measurementMatrix" 
-  "cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat" 
-  "element;element;element;element;element"
-  "StatePre;StatePost;TransitionMatrix;ControlMatrix;MeasurementMatrix" 
-  "Mat;Mat;Mat;Mat;Mat"
+  "KalmanFilter"  "statePre;statePost;transitionMatrix;controlMatrix;measurementMatrix;processNoiseCov;measurementNoiseCov;errorCovPre;gain;errorCovPost" 
+  "cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat" 
+  "element;element;element;element;element;element;element;element;element;element"
+  "StatePre;StatePost;TransitionMatrix;ControlMatrix;MeasurementMatrix;ProcessNoiseCov;MeasurementNoiseCov;ErrorCovPre;Gain;ErrorCovPost" 
+  "Mat;Mat;Mat;Mat;Mat;Mat;Mat;Mat;Mat;Mat"
   "Predicted state (x'(k)): x(k)=A*x(k-1)+B*u(k);
   Corrected state (x(k)): x(k)=x'(k)+K(k)*(z(k)-H*x'(k));
   State transition matrix (A);
   Control matrix (B) (not used if there is no control);
-  Measurement matrix (H)"
+  Measurement matrix (H);
+  Process noise covariance matrix (Q);
+  Measurement noise covariance matrix (R);
+  priori error estimate covariance matrix (P'(k)): P'(k)=A*P(k-1)*At + Q);
+  Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R);
+  posteriori error estimate covariance matrix (P(k)): P(k)=(I-K(k)*H)*P'(k)"
   "Emgu.CV"
   "CvInvoke"
   "KalmanFilter"
