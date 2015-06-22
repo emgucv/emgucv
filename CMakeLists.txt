@@ -593,6 +593,13 @@ IF (ANDROID)
   SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.Contrib Emgu.CV.ML Emgu.CV.Cuda Emgu.CV.Stitching Emgu.CV.VideoStab Emgu.CV.Superres Emgu.CV.Shape)
   IF(EMGU_CV_WITH_TESSERACT)
     LIST(APPEND ANDROID_SOURCE_FOLDERS Emgu.CV.OCR)
+    INSTALL(
+      DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.OCR/tessdata"
+	  DESTINATION Emgu.CV.OCR
+      COMPONENT main
+      FILES_MATCHING 
+      PATTERN "*eng.*"
+    )
   ENDIF()
   FOREACH(ANDROID_SOURCE_FOLDER ${ANDROID_SOURCE_FOLDERS})
   INSTALL(
@@ -669,13 +676,6 @@ IF (ANDROID)
     DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
     COMPONENT main
     )
-#  INSTALL(
-#    DIRECTORY "Emgu.CV.Extern/tesseract/libtesseract/tessdata"
-#	DESTINATION "Emgu.CV.Extern/tesseract/libtesseract/tessdata"
-#    COMPONENT main
-#    FILES_MATCHING 
-#    PATTERN "*eng.*"
-#    )
   INSTALL(
     FILES
     "Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs"

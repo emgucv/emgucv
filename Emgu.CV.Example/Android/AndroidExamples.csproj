@@ -143,31 +143,31 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.bigrams">
+    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.bigrams">
       <Link>Assets\tessdata\eng.cube.bigrams</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.fold">
+    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.fold">
       <Link>Assets\tessdata\eng.cube.fold</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.lm">
+    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.lm">
       <Link>Assets\tessdata\eng.cube.lm</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.nn">
+    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.nn">
       <Link>Assets\tessdata\eng.cube.nn</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.params">
+    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.params">
       <Link>Assets\tessdata\eng.cube.params</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.size">
+    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.size">
       <Link>Assets\tessdata\eng.cube.size</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.cube.word-freq">
+    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.word-freq">
       <Link>Assets\tessdata\eng.cube.word-freq</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.tesseract_cube.nn">
+    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.tesseract_cube.nn">
       <Link>Assets\tessdata\eng.tesseract_cube.nn</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.Extern\tesseract\libtesseract\tesseract-ocr\tessdata\eng.traineddata">
+    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.traineddata">
       <Link>Assets\tessdata\eng.traineddata</Link>
     </AndroidAsset>
     <AndroidResource Include="..\..\opencv\LICENSE">

@@ -6,11 +6,12 @@ cd ..\..\..
 cp -f opencv\platforms\android\android.toolchain.cmake android.toolchain.cmake
 if "%1%"=="noclean" GOTO END_CLEAN
 
+rm -rf build
+
 :CLEAN
 rm -rf build_armeabi
 rm -rf build_armeabi-v7a
 rm -rf build_x86
-rm -rf build
 
 :END_CLEAN
 call platforms\android\scripts\build armeabi
