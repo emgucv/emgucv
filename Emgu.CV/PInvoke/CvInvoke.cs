@@ -135,13 +135,60 @@ namespace Emgu.CV
             }*/
 
             System.Reflection.Assembly asm = typeof (CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
-            if (!File.Exists(asm.Location))
-               return false;
+            if (String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location))
+            {
+               //if may be running in a debugger visualizer under a unit test in this case
+               String visualStudioDir = AppDomain.CurrentDomain.BaseDirectory;
+               DirectoryInfo visualStudioDirInfo = new DirectoryInfo(visualStudioDir);
+               String debuggerVisualzerPath = 
+                  Path.Combine(Path.Combine(Path.Combine(
+                  visualStudioDirInfo.Parent.FullName, "Packages"), "Debugger"), "Visualizers");
+
+               if (Directory.Exists(debuggerVisualzerPath))
+                  loadDirectory = debuggerVisualzerPath;
+               else
+                  loadDirectory = String.Empty;
+/*
+               loadDirectory = Path.GetDirectoryName(new UriBuilder(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).Path);
+
+               DirectoryInfo dir = new DirectoryInfo(loadDirectory);
+               string subdir = String.Join(";", Array.ConvertAll(dir.GetDirectories(), d => d.ToString()));
+               
+               throw new Exception(String.Format(
+                  "The Emgu.CV.dll assembly path (typeof (CvInvoke).Assembly.Location) '{0}' is invalid." +
+                  Environment.NewLine
+                  + " Other possible path (System.Reflection.Assembly.GetExecutingAssembly().Location): '{1}';" +
+                  Environment.NewLine
+                  + " Other possible path (Path.GetDirectoryName(new UriBuilder(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).Path): '{2}';" +
+                  Environment.NewLine
+                  + " Other possible path (System.Reflection.Assembly.GetExecutingAssembly().CodeBase): '{3};'" +
+                  Environment.NewLine
+                  + " Other possible path (typeof(CvInvoke).Assembly.CodeBase): '{4}'" +
+                  Environment.NewLine
+                  + " Other possible path (AppDomain.CurrentDomain.BaseDirectory): '{5}'" +
+                  Environment.NewLine
+                  + " subfolder name: '{6}'",
+                  asm.Location,
+                  Path.GetDirectoryName(new UriBuilder(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).Path),
+                  loadDirectory + ": subdir '" + subdir +"'",
+                  System.Reflection.Assembly.GetExecutingAssembly().CodeBase,
+                  typeof(CvInvoke).Assembly.Location,
+                  AppDomain.CurrentDomain.BaseDirectory,
+                  subfolder
+                  ));
+ */
+            }
+            else
+            {
+               loadDirectory = Path.GetDirectoryName(asm.Location);
+            }
+            /*
             FileInfo file = new FileInfo(asm.Location);
             //FileInfo file = new FileInfo(asm.CodeBase);
             DirectoryInfo directory = file.Directory;
             loadDirectory = directory.FullName;
-            
+            */
+
             if (!String.IsNullOrEmpty(subfolder))
                loadDirectory = Path.Combine(loadDirectory, subfolder);
             
