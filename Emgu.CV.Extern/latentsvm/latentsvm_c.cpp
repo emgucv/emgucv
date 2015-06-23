@@ -8,14 +8,16 @@
 
 inline void copyStringVector(std::vector<cv::String>& vSrc, std::vector<std::string>& vDst)
 {
-   for (std::vector<cv::String>::iterator it = vSrc.begin(); it != vSrc.end(); it++)
-      vDst.push_back(*it);
+   if (!vSrc.empty())
+      for (std::vector<cv::String>::iterator it = vSrc.begin(); it != vSrc.end(); it++)
+         vDst.push_back(*it);
 }
 
 inline void copyStringVector(std::vector<std::string>& vSrc, std::vector<cv::String>& vDst)
 {
-   for (std::vector<std::string>::iterator it = vSrc.begin(); it != vSrc.end(); it++)
-      vDst.push_back(*it);
+   if (!vSrc.empty())
+      for (std::vector<std::string>::iterator it = vSrc.begin(); it != vSrc.end(); it++)
+         vDst.push_back(*it);
 }
 
 //Latent svm
