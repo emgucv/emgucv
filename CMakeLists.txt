@@ -1025,7 +1025,7 @@ IF(NETFX_CORE)
 	PATTERN "RelWithDebInfo" EXCLUDE
     PATTERN "*.dir" EXCLUDE
   )
-  ELSE()
+  ELSE() #Windows Store
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Solution
@@ -1077,7 +1077,7 @@ IF(NETFX_CORE)
     PATTERN "*.dir" EXCLUDE
   )
   ENDIF()
-ELSE()
+ELSE(NETFX_CORE) #WIN32 and not NETFX_CORE
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Solution
@@ -1088,6 +1088,10 @@ ELSE()
     PATTERN "Emgu.CV.DebuggerVisualizers.sln"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
+	PATTERN "Android" EXCLUDE
+	PATTERN "iOS" EXCLUDE
+	PATTERN "Windows.Phone" EXCLUDE
+	PATTERN "Windows.Store" EXCLUDE
   )
   INSTALL(
     DIRECTORY
@@ -1107,6 +1111,10 @@ ELSE()
     PATTERN "Emgu.CV.Example.sln"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
+	PATTERN "Android" EXCLUDE
+	PATTERN "iOS" EXCLUDE
+	PATTERN "Windows.Phone" EXCLUDE
+	PATTERN "Windows.Store" EXCLUDE
     )
 	
   # ----------------------------------------------------------------------------
@@ -1150,6 +1158,8 @@ ELSE()
     PATTERN "Android" EXCLUDE
     PATTERN "iOS" EXCLUDE
     PATTERN "WindowsStore" EXCLUDE
+	PATTERN "WindowsPhoneApp" EXCLUDE
+	PATTERN "WindowsStoreCameraApp" EXCLUDE
   )
 ENDIF()
 

@@ -2,8 +2,8 @@
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-using Emgu.CV.Util;
 #if !NETFX_CORE
+using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -301,18 +301,6 @@ namespace Emgu.CV.OCR
       {
          return  new PageIterator(OcrInvoke.TessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords));
       }
-   }
-
-   /// <summary>
-   /// This structure is primary used for PInvoke
-   /// </summary>
-   public struct TesseractResult
-   {
-#pragma warning disable 0649
-      public int Length;
-      public float Cost;
-      public Rectangle Region;
-#pragma warning restore 0649
    }
 
    /// <summary>

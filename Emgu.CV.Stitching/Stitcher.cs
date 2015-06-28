@@ -58,13 +58,16 @@ namespace Emgu.CV.Stitching
 
    internal static partial class StitchingInvoke
    {
-      #if !(IOS || UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
+      
       static StitchingInvoke()
       {
+#if !(IOS || UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
          //Dummy code to make sure the static constructor of GpuInvoke has been called
          bool hasCuda = CudaInvoke.HasCuda;
+#else		 
+		 CvInvoke.CheckLibraryLoaded();
+#endif		 
       }
-      #endif
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvStitcherCreateDefault(
