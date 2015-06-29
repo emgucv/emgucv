@@ -1,4 +1,8 @@
-﻿using System;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
+using System;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;

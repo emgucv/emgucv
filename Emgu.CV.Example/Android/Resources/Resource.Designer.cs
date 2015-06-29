@@ -105,14 +105,14 @@ namespace AndroidExamples
 			// aapt resource value: 0x7f06000b
 			public const int GotoTrafficSignRecognitionButton = 2131099659;
 			
-			// aapt resource value: 0x7f06001b
-			public const int MyImage = 2131099675;
-			
 			// aapt resource value: 0x7f06001c
-			public const int PlanarSubdivisionImageView = 2131099676;
+			public const int MyImage = 2131099676;
 			
-			// aapt resource value: 0x7f06001a
-			public const int RedrawSubdivisionButton = 2131099674;
+			// aapt resource value: 0x7f06001d
+			public const int PlanarSubdivisionImageView = 2131099677;
+			
+			// aapt resource value: 0x7f06001b
+			public const int RedrawSubdivisionButton = 2131099675;
 			
 			// aapt resource value: 0x7f060015
 			public const int cannyImageButton = 2131099669;
@@ -128,6 +128,9 @@ namespace AndroidExamples
 			
 			// aapt resource value: 0x7f060019
 			public const int openCVLicenseTextView = 2131099673;
+			
+			// aapt resource value: 0x7f06001a
+			public const int opencl_preference_toggleButton = 2131099674;
 			
 			// aapt resource value: 0x7f060014
 			public const int previewImageButton = 2131099668;
@@ -173,10 +176,13 @@ namespace AndroidExamples
 			public const int LicenseDisplay = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int PlanarSubdivision = 2130903044;
+			public const int opencl_preference = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int Setting = 2130903045;
+			public const int PlanarSubdivision = 2130903045;
+			
+			// aapt resource value: 0x7f030006
+			public const int Setting = 2130903046;
 			
 			static Layout()
 			{

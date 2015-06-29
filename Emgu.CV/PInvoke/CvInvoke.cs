@@ -135,7 +135,7 @@ namespace Emgu.CV
             }*/
 
             System.Reflection.Assembly asm = typeof (CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
-            if (String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location))
+            if ((String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location)) && AppDomain.CurrentDomain.BaseDirectory != null)
             {
                //if may be running in a debugger visualizer under a unit test in this case
                String visualStudioDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -205,6 +205,7 @@ namespace Emgu.CV
                   return false;
                }
             }
+#elif ANDROID || UNITY_ANDROID
 #else
             if (!Directory.Exists(loadDirectory))
             {
@@ -219,8 +220,6 @@ namespace Emgu.CV
 
                if (!Directory.Exists(altLoadDirectory))
                {
-               FileInfo file = new FileInfo(asm.Location);
-               DirectoryInfo directory = file.Directory;
 #if UNITY_EDITOR_WIN
               if (directory.Parent != null && directory.Parent.Parent != null)
                   {
@@ -257,7 +256,7 @@ namespace Emgu.CV
                      }
                      
                   }
-                  else
+                  else       
 #endif
                   {
                      Debug.WriteLine("No suitable directory found to load unmanaged modules");
@@ -271,7 +270,8 @@ namespace Emgu.CV
          }
          
          String oldDir = Environment.CurrentDirectory;
-         Environment.CurrentDirectory = loadDirectory;
+         if (!String.IsNullOrEmpty(loadDirectory))
+            Environment.CurrentDirectory = loadDirectory;
 #endif
 
          System.Diagnostics.Debug.WriteLine(String.Format("Loading open cv binary from {0}", loadDirectory));
@@ -348,6 +348,59 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Attempts to load opencv modules from the specific location
+      /// </summary>
+      /// <param name="modules">The names of opencv modules. e.g. "opencv_cxcore.dll" on windows.</param>
+      /// <returns>True if all the modules has been loaded successfully</returns>
+      public static bool DefaultLoadUnmanagedModules(String[] modules)
+      {
+         bool libraryLoaded = true;
+#if ANDROID || (UNITY_ANDROID && !UNITY_EDITOR)
+
+         System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+         FileInfo file = new FileInfo(asm.Location);
+         DirectoryInfo directory = file.Directory;
+
+#if (UNITY_ANDROID && !UNITY_EDITOR)
+         UnityEngine.AndroidJavaObject jo = new UnityEngine.AndroidJavaObject("java.lang.System");
+#endif
+         foreach (String module in modules)
+         {
+            //IntPtr handle = Emgu.Util.Toolbox.LoadLibrary(module);
+            //Debug.WriteLine(string.Format(handle == IntPtr.Zero ? "Failed to load {0}." : "Loaded {0}.", module));
+            try
+            {
+
+               Console.WriteLine(string.Format("Trying to load {0}.", module));
+#if ANDROID
+               Java.Lang.JavaSystem.LoadLibrary(module);
+#else //(UNITY_ANDROID && !UNITY_EDITOR)
+
+               jo.CallStatic("loadLibrary", module); 
+#endif
+               Console.WriteLine(string.Format("Loaded {0}.", module));
+            }
+            catch (Exception e)
+            {
+               libraryLoaded = false;
+               Console.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
+            }
+         }
+#elif IOS || UNITY_IPHONE || NETFX_CORE
+#else
+         if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
+         {
+            String formatString = GetModuleFormatString();
+            for (int i = 0; i < modules.Count; ++i)
+               modules[i] = String.Format(formatString, modules[i]);
+
+            libraryLoaded &= LoadUnmanagedModules(null, modules.ToArray());
+         }
+#endif
+         return libraryLoaded;
+      }
+
+      /// <summary>
       /// Static Constructor to setup opencv environment
       /// </summary>
       static CvInvoke()
@@ -355,6 +408,8 @@ namespace Emgu.CV
          List<String> modules = CvInvoke.OpenCVModuleList;
          modules.RemoveAll(String.IsNullOrEmpty);
 
+         _libraryLoaded = DefaultLoadUnmanagedModules(modules.ToArray());
+         /*
          _libraryLoaded = true;
 #if ANDROID || (UNITY_ANDROID && !UNITY_EDITOR)
 		 
@@ -397,7 +452,7 @@ namespace Emgu.CV
 
             _libraryLoaded &= LoadUnmanagedModules(null, modules.ToArray());
          }
-#endif
+#endif*/
 
 #if !UNITY_IPHONE
          //Use the custom error handler

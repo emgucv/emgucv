@@ -1,4 +1,8 @@
-﻿using System;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
+using System;
 
 using Android.App;
 using Android.Content;
@@ -125,7 +129,7 @@ namespace AndroidExamples
                   CvInvoke.UseOpenCL, System.Environment.NewLine,
                   CvInvoke.OclGetPlatformsSummary(), System.Environment.NewLine);
             }
-            txt = String.Format("{0}Has Cuda: {1}", txt, CudaInvoke.HasCuda);
+            txt = String.Format("{0}{1}Has Cuda: {2}", txt, System.Environment.NewLine, CudaInvoke.HasCuda);
             
 
             aboutUsNoteTextView.Text = txt;

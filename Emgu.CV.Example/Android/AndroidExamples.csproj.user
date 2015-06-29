@@ -2,5 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <AndroidDesignerPreferredDevice>3.7" WVGA %28Nexus One%29</AndroidDesignerPreferredDevice>
+    <SelectedDevice>HTC One</SelectedDevice>
   </PropertyGroup>
 </Project>

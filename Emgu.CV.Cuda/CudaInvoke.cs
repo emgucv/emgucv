@@ -25,6 +25,7 @@ namespace Emgu.CV.Cuda
          //Dummy code to make sure the static constructor of CvInvoke has been called and the error handler has been registered.
          CvInvoke.CheckLibraryLoaded();
 
+         /*
 #if !IOS
          String[] modules = new String[] 
          {
@@ -38,7 +39,7 @@ namespace Emgu.CV.Cuda
          }
 
          CvInvoke.LoadUnmanagedModules(null, modules);
-#endif
+#endif  */
       }
 
       #region device info

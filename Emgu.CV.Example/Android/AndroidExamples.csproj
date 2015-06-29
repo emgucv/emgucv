@@ -123,6 +123,7 @@
     <Compile Include="..\TrafficSignRecognition\StopSignDetector.cs">
       <Link>StopSignDetector.cs</Link>
     </Compile>
+    <Compile Include="AppPreference.cs" />
     <Compile Include="ButtonMessageImageActivity.cs" />
     <Compile Include="CameraPreview.cs" />
     <Compile Include="CameraPreviewActivity.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="ImageFilter.cs" />
     <Compile Include="LicenseDialogPreference.cs" />
     <Compile Include="LicensePlateRecognitionActivity.cs" />
+    <Compile Include="OpenCLDialogPreference.cs" />
     <Compile Include="ProcessedCameraPreview.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="SettingActivity.cs" />
@@ -182,6 +184,9 @@
     <AndroidResource Include="Resources\Layout\Setting.axml" />
     <AndroidResource Include="Resources\Layout\LicenseDisplay.axml" />
     <AndroidResource Include="Resources\Layout\about_us.axml" />
+    <AndroidResource Include="Resources\Layout\opencl_preference.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\AndroidExamples.axml" />

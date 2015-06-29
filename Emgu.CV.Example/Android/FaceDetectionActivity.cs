@@ -1,4 +1,8 @@
-﻿using System;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,6 +37,7 @@ namespace AndroidExamples
 
          OnButtonClick += delegate
          {
+            AppPreference appPreference = new AppPreference();
             using (Image<Bgr, Byte> image = PickImage("lena.jpg"))
             {
                ISharedPreferences preference = PreferenceManager.GetDefaultSharedPreferences(ApplicationContext);
@@ -58,8 +63,10 @@ namespace AndroidExamples
                long time;
                List<Rectangle> faces = new List<Rectangle>();
                List<Rectangle> eyes = new List<Rectangle>();
-               DetectFace.Detect(image.Mat, faceXml, eyeXml, faces, eyes, false, true, out time);
-               SetMessage(String.Format("Detected in {0} milliseconds.", time));
+
+               bool tryUseOpenCL = appPreference.UseOpenCL;
+               DetectFace.Detect(image.Mat, faceXml, eyeXml, faces, eyes, false, tryUseOpenCL, out time);
+               SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, CvInvoke.UseOpenCL ? "OpenCL" : "CPU"));
 
                foreach (Rectangle rect in faces)
                   image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);

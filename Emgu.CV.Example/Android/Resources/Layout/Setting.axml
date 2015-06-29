@@ -7,5 +7,10 @@
             android:dialogTitle="@string/software_license"
             android:dialogLayout="@layout/LicenseDisplay"
             android:negativeButtonText="@null" />
+        <androidexamples.OpenCLDialogPreference
+            android:title="Open CL"
+            android:dialogTitle="OpenCL"
+            android:dialogLayout="@layout/opencl_preference"
+            android:negativeButtonText="@null" />
     </PreferenceCategory>
 </PreferenceScreen>
