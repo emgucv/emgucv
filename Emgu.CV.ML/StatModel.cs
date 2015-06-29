@@ -28,6 +28,7 @@ namespace Emgu.CV.ML
       /// <summary>
       /// Save the statistic model to file
       /// </summary>
+      /// <param name="model">The StatModel</param>
       /// <param name="fileName">The file name where this StatModel will be saved</param>
       public static void Save(this IStatModel model, String fileName)
       {
@@ -52,11 +53,26 @@ namespace Emgu.CV.ML
          }
       }
 
+      /// <summary>
+      /// Trains the statistical model.
+      /// </summary>
+      /// <param name="model">The model.</param>
+      /// <param name="trainData">The train data.</param>
+      /// <param name="flags">The flags.</param>
+      /// <returns></returns>
       public static bool Train(this IStatModel model, TrainData trainData, int flags = 0)
       {
          return MlInvoke.StatModelTrainWithData(model.StatModelPtr, trainData, flags);
       }
 
+      /// <summary>
+      /// Predicts response(s) for the provided sample(s)
+      /// </summary>
+      /// <param name="model">The model.</param>
+      /// <param name="samples">The input samples, floating-point matrix.</param>
+      /// <param name="results">The optional output matrix of results.</param>
+      /// <param name="flags">The optional flags, model-dependent.</param>
+      /// <returns>Response for the provided sample</returns>
       public static float Predict(this IStatModel model, IInputArray samples, IOutputArray results = null, int flags = 0)
       {
          using (InputArray iaSamples = samples.GetInputArray())

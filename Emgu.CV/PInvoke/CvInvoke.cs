@@ -391,10 +391,10 @@ namespace Emgu.CV
          if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {
             String formatString = GetModuleFormatString();
-            for (int i = 0; i < modules.Count; ++i)
+            for (int i = 0; i < modules.Length; ++i)
                modules[i] = String.Format(formatString, modules[i]);
 
-            libraryLoaded &= LoadUnmanagedModules(null, modules.ToArray());
+            libraryLoaded &= LoadUnmanagedModules(null, modules);
          }
 #endif
          return libraryLoaded;

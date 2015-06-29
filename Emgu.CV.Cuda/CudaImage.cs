@@ -316,8 +316,7 @@ namespace Emgu.CV.Cuda
       /// <summary>
       /// convert the current CudaImage to its equivalent Bitmap representation
       /// </summary>
-      ///
-      public Bitmap Bitmap
+      public new Bitmap Bitmap
       {
          get
          {

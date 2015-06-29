@@ -83,18 +83,34 @@ namespace Emgu.CV.ML
          get { return _algorithmPtr; }
       }
 
+      /// <summary>
+      /// Sets the layer sizes.
+      /// </summary>
+      /// <param name="layerSizes">Integer vector specifying the number of neurons in each layer including the input and output layers. The very first element specifies the number of elements in the input layer. The last element - number of elements in the output layer.</param>
       public void SetLayerSizes(IInputArray layerSizes)
       {
          using (InputArray iaLayerSizes = layerSizes.GetInputArray())
             MlInvoke.cveANN_MLPSetLayerSizes(_ptr, iaLayerSizes);
       }
 
+      /// <summary>
+      /// Initialize the activation function for each neuron.
+      /// </summary>
+      /// <param name="function">Currently the default and the only fully supported activation function is SigmoidSym </param>
+      /// <param name="param1">The first parameter of the activation function.</param>
+      /// <param name="param2">The second parameter of the activation function.</param>
       public void SetActivationFunction(ANN_MLP.AnnMlpActivationFunction function, double param1 = 0, double param2 = 0)
       {
          MlInvoke.cveANN_MLPSetActivationFunction(_ptr, function, param1, param2);
       }
 
-      public void SetTrainMethod(ANN_MLP.AnnMlpTrainMethod method, double param1, double param2)
+      /// <summary>
+      /// Sets training method and common parameters.
+      /// </summary>
+      /// <param name="method">The training method.</param>
+      /// <param name="param1">The param1.</param>
+      /// <param name="param2">The param2.</param>
+      public void SetTrainMethod(ANN_MLP.AnnMlpTrainMethod method = AnnMlpTrainMethod.Rprop, double param1 = 0, double param2 = 0)
       {
          MlInvoke.cveANN_MLPSetTrainMethod(_ptr, method, param1, param2);
       }

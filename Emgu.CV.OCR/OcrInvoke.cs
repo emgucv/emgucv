@@ -17,6 +17,9 @@ using System.Diagnostics;
 
 namespace Emgu.CV.OCR
 {
+   /// <summary>
+   /// Library to invoke Tesseract OCR functions
+   /// </summary>
    public static class OcrInvoke
    {
       static OcrInvoke()

@@ -22,23 +22,38 @@ namespace Emgu.CV.ML
       /// </summary>
       public enum TrainType
       {
+         /// <summary>
+         /// Batch method
+         /// </summary>
          Batch,
+         /// <summary>
+         /// Set MiniBatchSize to a positive integer when using this method.
+         /// </summary>
          MiniBatch
       }
 
       /// <summary>
       /// Specifies the kind of regularization to be applied. 
       /// </summary>
-      public enum NormalizationMethod
+      public enum RegularizationMethod
       {
-         L1,
-         L2
+         /// <summary>
+         /// Regularization disabled.
+         /// </summary>
+         Disable = -1,
+         /// <summary>
+         /// L1 norm
+         /// </summary>
+         L1 = 0,
+         /// <summary>
+         /// L2 norm
+         /// </summary>
+         L2 = 1
       }
 
       /// <summary>
       /// Initializes a new instance of the <see cref="LogisticRegression"/> class.
       /// </summary>
-      /// <param name="p">The parameters.</param>
       public LogisticRegression()
       {
          _ptr = MlInvoke.cveLogisticRegressionCreate(ref _statModelPtr, ref _algorithmPtr);

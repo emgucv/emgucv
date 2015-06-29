@@ -291,12 +291,12 @@ namespace Emgu.CV.ML
 
       
       /// <summary>
-      /// Given the EM <paramref name="model"/>, predit the probability of the <paramref name="samples"/>
+      /// Given the EM <paramref name="model"/>, predict the probability of the <paramref name="samples"/>
       /// </summary>
       /// <param name="model">The EM model</param>
       /// <param name="samples">The input samples</param>
       /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
-      
+      /// <param name="result">The result.</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvEMPredict(
          IntPtr model,
@@ -343,6 +343,7 @@ namespace Emgu.CV.ML
       /// <param name="nuGrid">nuGrid</param>
       /// <param name="coefGrid">coedGrid</param>
       /// <param name="degreeGrid">degreeGrid</param>
+      /// <param name="balanced">If true and the problem is 2-class classification then the method creates more balanced cross-validation subsets that is proportions between classes in subsets are close to such proportion in the whole train dataset.</param>
       /// <returns></returns>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
@@ -363,6 +364,7 @@ namespace Emgu.CV.ML
       /// The method retrieves a given support vector
       /// </summary>
       /// <param name="model">The SVM model</param>
+      /// <param name="supportVectors">The output support vectors</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvSVMGetSupportVectors(IntPtr model, IntPtr supportVectors);
       #endregion

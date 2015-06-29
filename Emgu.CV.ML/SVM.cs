@@ -50,6 +50,9 @@ namespace Emgu.CV.ML
       /// </summary>
       public enum SvmKernelType
       {
+         /// <summary>
+         /// Custom svm kernel type
+         /// </summary>
          Custom = -1,
          /// <summary>
          /// No mapping is done, linear discrimination (or regression) is done in the original feature space. It is the fastest option. d(x,y) = x y == (x,y)
@@ -67,7 +70,13 @@ namespace Emgu.CV.ML
          /// sigmoid function is used as a kernel: d(x,y) = tanh(gamma*(xy)+coef0)
          /// </summary>
          Sigmoid = 3,
+         /// <summary>
+         /// Exponential Chi2 kernel, similar to the RBF kernel
+         /// </summary>
          Chi2 = 4,
+         /// <summary>
+         /// Histogram intersection kernel. A fast kernel. K(xi,xj)=min(xi,xj).
+         /// </summary>
          Inter = 5
       }
 
@@ -145,7 +154,7 @@ namespace Emgu.CV.ML
       /// <returns></returns>
       public bool TrainAuto(
          TrainData trainData,
-         int kFold)
+         int kFold = 10)
       {
          return TrainAuto(
             trainData,
@@ -164,11 +173,12 @@ namespace Emgu.CV.ML
       /// <param name="trainData">The training data.</param>
       /// <param name="kFold">Cross-validation parameter. The training set is divided into k_fold subsets, one subset being used to train the model, the others forming the test set. So, the SVM algorithm is executed k_fold times</param>
       /// <param name="cGrid">cGrid</param>
-      /// <param name="gammaGrid">gammaGrid</param>
-      /// <param name="pGrid">pGrid</param>
-      /// <param name="nuGrid">nuGrid</param>
-      /// <param name="coefGrid">coedGrid</param>
-      /// <param name="degreeGrid">degreeGrid</param>
+      /// <param name="gammaGrid">grid for gamma</param>
+      /// <param name="pGrid">grid for p</param>
+      /// <param name="nuGrid">grid for nu</param>
+      /// <param name="coefGrid">grid for coeff</param>
+      /// <param name="degreeGrid">grid for degree</param>
+      /// <param name="balanced">If true and the problem is 2-class classification then the method creates more balanced cross-validation subsets that is proportions between classes in subsets are close to such proportion in the whole train dataset.</param>
       /// <returns></returns>
       public bool TrainAuto(
          TrainData trainData,
@@ -194,6 +204,10 @@ namespace Emgu.CV.ML
             balanced);
       }
 
+      /// <summary>
+      /// Retrieves all the support vectors.
+      /// </summary>
+      /// <returns>All the support vector as floating-point matrix, where support vectors are stored as matrix rows.</returns>
       public Mat GetSupportVectors()
       {
          Mat m = new Mat();

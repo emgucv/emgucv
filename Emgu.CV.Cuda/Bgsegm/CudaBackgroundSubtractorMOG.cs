@@ -33,11 +33,12 @@ namespace Emgu.CV.Cuda
       /// <param name="frame">Next video frame.</param>
       /// <param name="learningRate">The learning rate, use -1.0f for default value.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Update(IInputArray frame, IOutputArray forgroundMask, double learningRate, Stream stream = null)
+      /// <param name="foregroundMask">The foregroundMask</param>
+      public void Update(IInputArray frame, IOutputArray foregroundMask, double learningRate, Stream stream = null)
       {
          using (InputArray iaFrame = frame.GetInputArray())
-         using (OutputArray oaForgroundMask = forgroundMask.GetOutputArray())
-            CudaInvoke.cudaBackgroundSubtractorMOGApply(_ptr, iaFrame, oaForgroundMask, learningRate, stream);
+         using (OutputArray oaForegroundMask = foregroundMask.GetOutputArray())
+            CudaInvoke.cudaBackgroundSubtractorMOGApply(_ptr, iaFrame, oaForegroundMask, learningRate, stream);
       }
 
       /// <summary>

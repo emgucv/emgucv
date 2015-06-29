@@ -15,6 +15,16 @@ namespace Emgu.CV.ML
    /// </summary>
    public class TrainData : UnmanagedObject
    {
+      /// <summary>
+      /// Creates training data from in-memory arrays.
+      /// </summary>
+      /// <param name="samples">Matrix of samples. It should have CV_32F type.</param>
+      /// <param name="layoutType">Type of the layout.</param>
+      /// <param name="response">Matrix of responses. If the responses are scalar, they should be stored as a single row or as a single column. The matrix should have type CV_32F or CV_32S (in the former case the responses are considered as ordered by default; in the latter case - as categorical)</param>
+      /// <param name="varIdx">Vector specifying which variables to use for training. It can be an integer vector (CV_32S) containing 0-based variable indices or byte vector (CV_8U) containing a mask of active variables.</param>
+      /// <param name="sampleIdx">Vector specifying which samples to use for training. It can be an integer vector (CV_32S) containing 0-based sample indices or byte vector (CV_8U) containing a mask of training samples.</param>
+      /// <param name="sampleWeight">Optional vector with weights for each sample. It should have CV_32F type.</param>
+      /// <param name="varType">Optional vector of type CV_8U and size &lt;number_of_variables_in_samples&gt; + &lt;number_of_variables_in_responses&gt;, containing types of each input and output variable.</param>
       public TrainData(
          IInputArray samples, DataLayoutType layoutType, IInputArray response,
          IInputArray varIdx = null, IInputArray sampleIdx = null,
@@ -33,6 +43,9 @@ namespace Emgu.CV.ML
          }
       }
 
+      /// <summary>
+      /// Release the unmanaged resources
+      /// </summary>
       protected override void DisposeObject()
       {
          MlInvoke.cveTrainDataRelease(ref _ptr);
