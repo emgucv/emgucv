@@ -193,6 +193,8 @@ namespace Emgu.CV
                loadDirectory = Path.Combine(loadDirectory, subfolder);
             
 #if (UNITY_STANDALONE_WIN && !UNITY_EDITOR_WIN)
+				FileInfo file = new FileInfo(asm.Location);
+				DirectoryInfo directory = file.Directory;
             if (directory.Parent != null)
             {
                String unityAltFolder = Path.Combine(directory.Parent.FullName, "Plugins");
@@ -220,6 +222,8 @@ namespace Emgu.CV
 
                if (!Directory.Exists(altLoadDirectory))
                {
+			   FileInfo file = new FileInfo(asm.Location);
+               DirectoryInfo directory = file.Directory;
 #if UNITY_EDITOR_WIN
               if (directory.Parent != null && directory.Parent.Parent != null)
                   {
@@ -228,6 +232,7 @@ namespace Emgu.CV
                            Path.Combine(Path.Combine(Path.Combine(directory.Parent.Parent.FullName, "Assets"), "Emgu.CV"), "Plugins"),
                            subfolder);
                      
+					 Debug.WriteLine("Trying unityAltFolder: " + unityAltFolder);
                      if (Directory.Exists(unityAltFolder))
                         loadDirectory = unityAltFolder;
                      else
@@ -270,7 +275,7 @@ namespace Emgu.CV
          }
          
          String oldDir = Environment.CurrentDirectory;
-         if (!String.IsNullOrEmpty(loadDirectory))
+         if (!String.IsNullOrEmpty(loadDirectory) && Directory.Exists(loadDirectory))
             Environment.CurrentDirectory = loadDirectory;
 #endif
 
