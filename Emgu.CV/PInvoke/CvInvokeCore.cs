@@ -155,6 +155,65 @@ namespace Emgu.CV
       public delegate int CvErrorCallback(
          int status, IntPtr funcName, IntPtr errMsg, IntPtr fileName, int line, IntPtr userData);
 
+
+#if UNITY_IPHONE
+      /// <summary>
+      /// Returns the current error status - the value set with the last cvSetErrStatus call. Note, that in Leaf mode the program terminates immediately after error occurred, so to always get control after the function call, one should call cvSetErrMode and set Parent or Silent error mode.
+      /// </summary>
+      /// <returns>the current error status</returns>
+      public static int GetErrStatus()
+      {
+         return 0;
+      }
+
+      /// <summary>
+      /// Sets the error status to the specified value. Mostly, the function is used to reset the error status (set to it CV_StsOk) to recover after error. In other cases it is more natural to call cvError or CV_ERROR.
+      /// </summary>
+      /// <param name="code">The error status.</param>
+      public static void SetErrStatus(CvEnum.ErrorCodes code)
+      {
+      }
+
+      /// <summary>
+      /// Returns the textual description for the specified error status code. In case of unknown status the function returns NULL pointer. 
+      /// </summary>
+      /// <param name="status">The error status</param>
+      /// <returns>the textual description for the specified error status code.</returns>
+      public static String ErrorStr(int status)
+      {
+         return String.Empty;
+      }
+
+      /// <summary>
+      /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
+      /// </summary>
+      /// <param name="errorHandler">The new error handler</param>
+      /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
+      /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
+      /// <returns></returns>
+      public static IntPtr RedirectError(
+          CvErrorCallback errorHandler,
+          IntPtr userdata,
+          IntPtr prevUserdata)
+      {
+         return IntPtr.Zero;
+      }
+
+      /// <summary>
+      /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
+      /// </summary>
+      /// <param name="errorHandler">Pointer to the new error handler</param>
+      /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
+      /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
+      /// <returns></returns>
+      public static IntPtr RedirectError(
+          IntPtr errorHandler,
+          IntPtr userdata,
+          IntPtr prevUserdata)
+      {
+         return IntPtr.Zero;
+      }
+#else
       /// <summary>
       /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
       /// </summary>
@@ -168,7 +227,6 @@ namespace Emgu.CV
           IntPtr userdata,
           IntPtr prevUserdata);
 
-#if !UNITY_IPHONE
       /// <summary>
       /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
       /// </summary>
@@ -181,7 +239,6 @@ namespace Emgu.CV
           IntPtr errorHandler,
           IntPtr userdata,
           IntPtr prevUserdata);
-#endif
 
       /// <summary>
       /// Sets the specified error mode.
@@ -220,6 +277,7 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveErrorStr")]
       [return: MarshalAs(CvInvoke.StringMarshalType)]
       public static extern String ErrorStr(int status);
+#endif
 
       #endregion
       /*
@@ -3041,7 +3099,7 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveCheckArr")]
       public static extern int cvCheckArr(IntPtr arr, CvEnum.CheckType flags, double minVal, double maxVal);
       
-
+#if !UNITY_IPHONE
       /// <summary>
       /// Return the current number of threads that are used by parallelized (via OpenMP) OpenCV functions.
       /// </summary>
@@ -3062,6 +3120,7 @@ namespace Emgu.CV
       /// <returns>The index, from 0 to cvGetNumThreads()-1, of the thread that called the function. It is a wrapper for the function omp_get_thread_num() from OpenMP runtime. The retrieved index may be used to access local-thread data inside the parallelized code fragments. </returns>
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetThreadNum")]
       public static extern int GetThreadNum();
+#endif
 
       /// <summary>
       /// Compares the corresponding elements of two arrays and fills the destination mask array:
