@@ -30,11 +30,11 @@ namespace Emgu.CV.Example.MonoTouch
          delegate
          {
             using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>("stop-sign-model.png"))
-            using (Image<Bgr, Byte> image = new Image<Bgr, Byte>("stop-sign.jpg"))
+            using (Mat image = CvInvoke.Imread("stop-sign.jpg", Emgu.CV.CvEnum.LoadImageType.AnyColor))
             {
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
-               List<Image<Gray, Byte>> stopSignList = new List<Image<Gray, byte>>();
+               List<Mat> stopSignList = new List<Mat>();
                List<Rectangle> stopSignBoxList = new List<Rectangle>();
                StopSignDetector detector = new StopSignDetector(stopSignModel);
                detector.DetectStopSign(image, stopSignList, stopSignBoxList);
@@ -42,10 +42,10 @@ namespace Emgu.CV.Example.MonoTouch
                watch.Stop(); //stop the timer
                foreach (Rectangle rect in stopSignBoxList)
                {
-                  image.Draw(rect, new Bgr(Color.Red), 2);
+                  CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255), 2);
                }
                Size frameSize = FrameSize;
-               using (Image<Bgr, byte> resized = image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.Inter.Cubic, true))
+               using (Image<Bgr, byte> resized = image.ToImage<Bgr, Byte>().Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.Inter.Cubic, true))
                {
                   MessageText = String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
                   SetImage(resized);

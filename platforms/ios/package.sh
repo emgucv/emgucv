@@ -13,7 +13,7 @@ rm -rf ios-package/Emgu.CV/PInvoke/Windows.Store
 rm -rf ios-package/Emgu.CV/PInvoke/Unity
 cp -rf ../../Emgu.CV/PInvoke/iOS/libemgucv.a ios-package/Emgu.CV/PInvoke/iOS
 cp ../../Emgu.CV/PInvoke/CvInvokeEntryPoints.cs ios-package/Emgu.CV/PInvoke
-cp -f ../../Emgu.CV/Util/VectorOf*.cs ios-package/Emgu.CV/Util
+cp -f ../../Emgu.CV/Util/*.cs ios-package/Emgu.CV/Util
 
 cp -r ../../tmp/Emgu.CV.ML ios-package/Emgu.CV.ML
 cp -f ../../Emgu.CV.ML/*.cs ios-package/Emgu.CV.ML/
@@ -25,6 +25,7 @@ cp -f ../../Emgu.CV.Cuda/*.cs ios-package/Emgu.CV.Cuda/
 cp -r ../../tmp/Emgu.CV.Shape ios-package/Emgu.CV.Shape
 cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
 cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
+cp -f ../../Emgu.CV.OCR/*.cs ios-package/Emgu.CV.OCR/
 
 mkdir -p ios-package/Solution/iOS
 cp ../../tmp/Solution/iOS/Emgu.CV.iOS.sln ios-package/Solution/iOS/Emgu.CV.iOS.sln
@@ -56,8 +57,10 @@ cp ../../CommonAssemblyInfo.cs ios-package
 find ./ios-package -type f -name CMakeList* -exec rm '{}' \;
 find ./ios-package -type f -name *Android* -exec rm '{}' \;
 find ./ios-package -type f -name *Windows.Store* -exec rm '{}' \;
+find ./ios-package -type f -name *Windows.Phone* -exec rm '{}' \;
 cd ios-package
 rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.Cuda/Emgu.CV.Cuda.csproj Emgu.CV.OCR/Emgu.CV.OCR.csproj Emgu.Util/Emgu.Util.csproj Emgu.CV.Stitching/Emgu.CV.Stitching.csproj Emgu.CV.Contrib/Emgu.CV.Contrib.csproj Emgu.CV.Shape/Emgu.CV.Shape.csproj
+#find . -regex  '.*[^S].csproj' -exec rm '{}' \;
 cd ..
 
 gitversion=$(git log --oneline | wc -l | tr -d " ")

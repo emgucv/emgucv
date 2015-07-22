@@ -32,8 +32,8 @@ namespace Emgu.CV.Example.MonoTouch
          {
             long processingTime;
             Size frameSize = FrameSize;
-            using (Image<Gray, byte> modelImage = new Image<Gray, byte>("box.png"))
-            using (Image<Gray, byte> observedImage = new Image<Gray, byte>("box_in_scene.png"))
+            using (Mat modelImage = CvInvoke.Imread("box.png", Emgu.CV.CvEnum.LoadImageType.Grayscale))
+            using (Mat observedImage = CvInvoke.Imread("box_in_scene.png", Emgu.CV.CvEnum.LoadImageType.Grayscale))
             using (Mat image = DrawMatches.Draw(modelImage, observedImage, out processingTime))
             using (Mat resized = new Mat())
             {

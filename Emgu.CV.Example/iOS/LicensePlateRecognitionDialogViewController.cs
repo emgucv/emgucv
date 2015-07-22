@@ -55,8 +55,8 @@ namespace Emgu.CV.Example.MonoTouch
                LicensePlateDetector detector = new LicensePlateDetector(".");
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
-               List<Image<Gray, Byte>> licensePlateImagesList = new List<Image<Gray, byte>>();
-               List<Image<Gray, Byte>> filteredLicensePlateImagesList = new List<Image<Gray, byte>>();
+               List<IInputOutputArray> licensePlateImagesList = new List<IInputOutputArray>();
+               List<IInputOutputArray> filteredLicensePlateImagesList = new List<IInputOutputArray>();
                List<RotatedRect> licenseBoxList = new List<RotatedRect>();
                List<string> words = detector.DetectLicensePlate(
                   image,
