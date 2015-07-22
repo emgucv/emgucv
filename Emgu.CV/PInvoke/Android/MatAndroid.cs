@@ -24,12 +24,10 @@ namespace Emgu.CV
          : this()
       {
          using (Stream imageStream = assets.Open(fileName))
+         using (MemoryStream ms = new MemoryStream())
          {
-            using (BinaryReader br = new BinaryReader(imageStream))
-            {
-               byte[] b = br.ReadBytes((int)imageStream.Length);
-               CvInvoke.Imdecode(b, LoadImageType.AnyColor | LoadImageType.AnyDepth, this);
-            }
+            imageStream.CopyTo(ms);
+            CvInvoke.Imdecode(ms.ToArray(), LoadImageType.AnyColor | LoadImageType.AnyDepth, this);
          }
       }
 

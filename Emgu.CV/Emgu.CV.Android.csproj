@@ -81,16 +81,22 @@
     <EmbeddedNativeLibrary Include="..\libs\armeabi-v7a\libcvextern.so">
       <Link>lib\armeabi-v7a\libcvextern.so</Link>
     </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\arm64-v8a\libcvextern.so">
+      <Link>lib\arm64-v8a\libcvextern.so</Link>
+    </EmbeddedNativeLibrary>
     <EmbeddedNativeLibrary Include="..\libs\x86\libcvextern.so">
       <Link>lib\x86\libcvextern.so</Link>
     </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\libs\x86_64\libcvextern.so">
+      <Link>lib\x86_64\libcvextern.so</Link>
+    </EmbeddedNativeLibrary>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Emgu.CV.License.txt">
+    <None Include="..\Emgu.CV.License.txt">
       <Link>Emgu.CV.License.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="README.txt" />
+    </None>
+    <None Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\StringTable.resx">

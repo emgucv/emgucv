@@ -41,7 +41,7 @@ namespace AndroidExamples
                   return;
                Rectangle[] pedestrians = FindPedestrian.Find(image.Mat, false, true, out time);
 
-               SetMessage(String.Format("Detection completed in {0} milliseconds.", time));
+               SetMessage(String.Format("Detection completed with {1} in {0} milliseconds.", time, CvInvoke.UseOpenCL ? "OpenCL" : "CPU"));
                foreach (Rectangle rect in pedestrians)
                {
                   image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
