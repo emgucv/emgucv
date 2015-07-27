@@ -329,7 +329,7 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
      }
      ")
      ELSEIF(${MARSHAL_TYPE} STREQUAL "propR")
-
+     
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
      ")
@@ -1091,6 +1091,10 @@ IF(WIN32 AND WITH_CUDA)
   #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
   #  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
   #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
+
+  #IF(WITH_NVCUVID)
+  #  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+  #ENDIF()
 
   IF(WITH_CUFFT)
     LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")

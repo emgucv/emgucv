@@ -49,6 +49,7 @@
     </Compile>
     <Compile Include="Bgsegm\*.cs" />
     <Compile Include="Filters\*.cs" />
+	<Compile Include="Codec\*.cs" />
     <Compile Include="Imgproc\*.cs" />
     <Compile Include="Optflow\*.cs" />
     <Compile Include="Features2d\*.cs" />

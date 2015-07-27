@@ -756,6 +756,22 @@ namespace Emgu.CV.Test
          }
       }
 
+      [Test]
+      public void TestCudaVideoReadWrite()
+      {
+         if (CudaInvoke.HasCuda)
+         {
+            using (CudaVideoWriter writer = new CudaVideoWriter("cudavideo.avi", new Size(640, 480), 24))
+            {
+               using (GpuMat m1 = new GpuMat(480, 640, DepthType.Cv8U, 3))
+                  writer.Write(m1, false);
+               using (GpuMat m2 = new GpuMat(480, 640, DepthType.Cv8U, 3))
+                  writer.Write(m2, true);
+            }
+
+         }
+      }
+
       /*
       [Test]
       public void TestSoftcascadeCuda()
