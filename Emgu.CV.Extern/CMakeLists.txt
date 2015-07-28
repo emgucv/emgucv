@@ -712,14 +712,15 @@ IF(HAVE_opencv_ml)
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/LogisticRegressionGenerated.cs"
   "cv::ml::LogisticRegression" 
   "LogisticRegression" 
-  "LearningRate;Iterations;TrainMethod;MiniBatchSize;TermCriteria" 
-  "double;int;int;int;CvTermCriteria" 
-  "prop;prop;prop;prop;struct"
-  "LearningRate;Iterations;TrainMethod;MiniBatchSize;TermCriteria" 
-  "double;int;LogisticRegression.TrainType;int;MCvTermCriteria;"
+  "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
+  "double;int;int;int;int;CvTermCriteria" 
+  "prop;prop;prop;prop;prop;struct"
+  "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
+  "double;int;LogisticRegression.RegularizationMethod;LogisticRegression.TrainType;int;MCvTermCriteria;"
   "Learning rate;
   Number of iterations;
   Kind of regularization to be applied;
+  Kind of training method to be applied;
   Specifies the number of training samples taken in each step of Mini-Batch Gradient Descent;
   Termination criteria of the algorithm"
   "Emgu.CV.ML"
@@ -774,6 +775,29 @@ IF(HAVE_opencv_ml)
   "Emgu.CV.ML"
   "MlInvoke"
   "DTrees"
+  "#include \"ml_c.h\"")
+
+    CREATE_OCV_CLASS_PROPERTY( 
+  "ml/boost_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/BoostGenerated.cs"
+  "cv::ml::Boost" 
+  "Boost" 
+  "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
+  "int;int;int;int;bool;bool;bool;float" 
+  "prop;prop;prop;prop;prop;prop;prop;prop"
+  "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
+  "int;int;int;int;bool;bool;bool;float"
+  "Cluster possible values of a categorical variable into K less than or equals maxCategories clusters to find a suboptimal split;
+  The maximum possible depth of the tree;
+  If the number of samples in a node is less than this parameter then the node will not be split;
+  If CVFolds greater than 1 then algorithms prunes the built decision tree using K-fold;
+  If true then surrogate splits will be built;
+  If true then a pruning will be harsher;
+  If true then pruned branches are physically removed from the tree;
+  Termination criteria for regression trees"
+  "Emgu.CV.ML"
+  "MlInvoke"
+  "Boost"
   "#include \"ml_c.h\"")
 ENDIF()
 ############################### ml code gen END ################################

@@ -37,39 +37,6 @@ namespace Emgu.CV.ML
          /// </summary>
          Gentle=3
       }
-      /*
-      /// <summary>
-      /// Boosting training parameters.
-      /// </summary>
-      public class Params : UnmanagedObject
-      {
-         /// <summary>
-         /// Initializes a new instance of the <see cref="Params"/> class.
-         /// </summary>
-         /// <param name="boostType">Type of the boosting algorithm.</param>
-         /// <param name="weakCount">The number of weak classifiers.</param>
-         /// <param name="weightTrimRate"> A threshold between 0 and 1 used to save computational time. Samples with summary weight &lt;= 1 - weight_trim_rate do not participate in the next iteration of training. Set this parameter to 0 to turn off this functionality</param>
-         /// <param name="maxDepth">The maximum depth.</param>
-         /// <param name="useSurrogates">if set to <c>true</c> [use surrogates].</param>
-         /// <param name="priors">The priors.</param>
-         public Params(
-            Type boostType = Type.Real, int weakCount = 100, double weightTrimRate = 0.95,
-            int maxDepth = 1,
-            bool useSurrogates = false, Mat priors = null)
-         {
-            IntPtr priorsPtr = (priors == null ? IntPtr.Zero : priors.Ptr);
-            _ptr = MlInvoke.CvBoostParamsCreate(boostType, weakCount, weightTrimRate, maxDepth, useSurrogates,
-               priorsPtr);
-         }
-
-         /// <summary>
-         /// Release the unmanaged resources
-         /// </summary>
-         protected override void DisposeObject()
-         {
-            MlInvoke.CvBoostParamsRelease(ref _ptr);
-         }
-      }*/
 
       private IntPtr _statModel;
       private IntPtr _algorithm;
