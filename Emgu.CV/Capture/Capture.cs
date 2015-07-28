@@ -353,21 +353,21 @@ namespace Emgu.CV
       /// Retrieve a Gray image frame after Grab()
       /// </summary>
       /// <param name="image">The output image</param>
-      /// <param name="flag">retrieve flags</param>
-      /// <returns> A Gray image frame</returns>
-      public virtual bool Retrieve(IOutputArray image, int flag = 0)
+      /// <param name="channel">The channel to retrieve image</param>
+      /// <returns>True if the frame can be retrieved</returns>
+      public virtual bool Retrieve(IOutputArray image, int channel = 0)
       {      
          if (FlipType == CvEnum.FlipType.None)
          {
             using (OutputArray oaImage = image.GetOutputArray())
-               return CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, flag);
+               return CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, channel);
          }
          else
          {
             using (Mat tmp = new Mat())
             using (OutputArray oaTmp = tmp.GetOutputArray())
             {
-               bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaTmp, flag);
+               bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaTmp, channel);
 
                if (success)
                   CvInvoke.Flip(tmp, image, FlipType);
