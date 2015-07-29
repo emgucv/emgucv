@@ -13,7 +13,7 @@ namespace Emgu.CV.ML
    /// <summary>
    /// Boost Tree 
    /// </summary>
-   public class Boost : UnmanagedObject, IStatModel
+   partial class Boost : UnmanagedObject, IStatModel
    {
       /// <summary>
       /// Boost Type

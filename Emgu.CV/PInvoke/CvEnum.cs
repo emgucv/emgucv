@@ -3359,11 +3359,6 @@ namespace Emgu.CV.CvEnum
       Any = 0,
 
       /// <summary>
-      /// MIL proprietary drivers
-      /// </summary>
-      Mil = 100,
-
-      /// <summary>
       /// Platform native
       /// </summary>
       Vfw = 200,
@@ -3374,7 +3369,7 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// Platform native
       /// </summary>
-      V4L2 = 200,
+      V4L2 = V4L,
 
       /// <summary>
       /// IEEE 1394 drivers
@@ -3383,40 +3378,15 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// IEEE 1394 drivers
       /// </summary>
-      IEEE1394 = 300,
+      IEEE1394 = Firewire,
       /// <summary>
       /// IEEE 1394 drivers
       /// </summary>
-      DC1394 = 300,
+      DC1394 = Firewire,
       /// <summary>
       /// IEEE 1394 drivers
       /// </summary>
-      CMU1394 = 300,
-
-      /// <summary>
-      /// TYZX proprietary drivers
-      /// </summary>
-      Stereo = 400,
-      /// <summary>
-      /// TYZX proprietary drivers
-      /// </summary>
-      Tyzx = 400,
-      /// <summary>
-      /// TYZX proprietary drivers
-      /// </summary>
-      TyzxLeft = 400,
-      /// <summary>
-      /// TYZX proprietary drivers
-      /// </summary>
-      TyzxRight = 401,
-      /// <summary>
-      /// TYZX proprietary drivers
-      /// </summary>
-      TyzxColor = 402,
-      /// <summary>
-      /// TYZX proprietary drivers
-      /// </summary>
-      TyzxZ = 403,
+      CMU1394 = Firewire,
 
       /// <summary>
       /// QuickTime
@@ -3432,11 +3402,6 @@ namespace Emgu.CV.CvEnum
       /// DirectShow (via videoInput)
       /// </summary>
       DShow = 700,
-
-      /// <summary>
-      /// Microsoft Media Foundation (via videoInput)
-      /// </summary>
-      Msmf = 1400,
 
       /// <summary>
       /// PvAPI, Prosilica GigE SDK
@@ -3457,14 +3422,7 @@ namespace Emgu.CV.CvEnum
       /// Android
       /// </summary>
       Android = 1000,
-      /// <summary>
-      /// Android back camera
-      /// </summary>
-      AndroidBack = Android + 99,
-      /// <summary>
-      /// // Android front camera
-      /// </summary>
-      AndroidFront = Android + 98,
+      
       /// <summary>
       /// XIMEA Camera API
       /// </summary>
@@ -3479,6 +3437,44 @@ namespace Emgu.CV.CvEnum
       ///  Smartek Giganetix GigEVisionSDK
       /// </summary>
       Giganetix = 1300,
+
+      /// <summary>
+      /// Microsoft Media Foundation (via videoInput)
+      /// </summary>
+      Msmf = 1400,
+
+      /// <summary>
+      /// Microsoft Windows Runtime using Media Foundation
+      /// </summary>
+      Winrt = 1410,
+      /// <summary>
+      /// Intel Perceptual Computing SDK
+      /// </summary>
+      IntelPerc = 1500,
+      /// <summary>
+      /// OpenNI2 (for Kinect)
+      /// </summary>
+      Openni2 = 1600,
+      /// <summary>
+      /// OpenNI2 (for Asus Xtion and Occipital Structure sensors)
+      /// </summary>
+      Openni2Asus = 1610,
+      /// <summary>
+      /// gPhoto2 connection
+      /// </summary>
+      Gphoto2 = 1700,
+      /// <summary>
+      /// GStreamer
+      /// </summary>
+      Gstreamer = 1800,
+      /// <summary>
+      /// FFMPEG
+      /// </summary>
+      Ffmpeg = 1900,
+      /// <summary>
+      /// OpenCV Image Sequence (e.g. img_%02d.jpg)
+      /// </summary>
+      Images = 2000   
    }
 
    /// <summary>
