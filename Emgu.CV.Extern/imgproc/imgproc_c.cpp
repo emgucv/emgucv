@@ -130,15 +130,17 @@ void cveIntegral(cv::_InputArray* src, cv::_OutputArray* sum, cv::_OutputArray* 
 int cveFloodFill(cv::_InputOutputArray* image, cv::_InputOutputArray* mask, CvPoint* seedPoint, CvScalar* newVal, CvRect* rect, CvScalar* loDiff, CvScalar* upDiff, int flags)
 {
    cv::Rect r = *rect;
+   int val = 0;
    if (mask)
-      return cv::floodFill(*image, *mask, *seedPoint, *newVal, &r, *loDiff, *upDiff, flags);
+      val = cv::floodFill(*image, *mask, *seedPoint, *newVal, &r, *loDiff, *upDiff, flags);
    else
-      return cv::floodFill(*image, *seedPoint, *newVal, &r, *loDiff, *upDiff, flags);
+      val = cv::floodFill(*image, *seedPoint, *newVal, &r, *loDiff, *upDiff, flags);
 
    rect->x = r.x;
    rect->y = r.y;
    rect->width = r.width;
    rect->height = r.height;
+   return val;
 }
 
 void cvePyrMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, double sp, double sr, int maxLevel, CvTermCriteria* termCrit)

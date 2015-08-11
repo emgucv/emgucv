@@ -2778,7 +2778,26 @@ namespace Emgu.CV.Test
          }
       }
 
-      
+      [Test]
+      public void TestFloodFill()
+      {
+         Image<Gray, byte> img = EmguAssert.LoadImage<Bgr, Byte>("box.png").Convert<Gray, Byte>();
+         Rectangle boundingRect;
+         int area = CvInvoke.FloodFill(img,
+             null,
+             new Point(0, 0),
+             new MCvScalar(255),
+             out boundingRect,
+             new MCvScalar(255),
+             new MCvScalar(255),
+             Connectivity.EightConnected,
+             FloodFillType.Default);
+         int bRectArea = boundingRect.Size.Width * boundingRect.Size.Height;
+         Trace.WriteLine("Flooded area: " + area + ". Bounding rectangle area: " + bRectArea); 
+         EmguAssert.IsTrue(bRectArea != 0, "Area should not be 0");
+
+      }
+
       [Test]
       public void TestERFilter()
       {
