@@ -20,7 +20,10 @@ public class FaceDetection : MonoBehaviour
       Texture2D lenaTexture = Resources.Load<Texture2D>("lena");    
 
       //updateTextureWithString("load lena ok");
-      Image<Bgr, Byte> img = TextureConvert.Texture2dToImage<Bgr, byte>(lenaTexture);
+      Mat img = new Mat();
+      TextureConvert.Texture2dToOutputArray(lenaTexture, img);
+      CvInvoke.Flip(img, img, FlipType.Vertical);
+
       //updateTextureWithString("convert to image ok");
 
       //String fileName = "haarcascade_frontalface_default";
@@ -42,8 +45,9 @@ public class FaceDetection : MonoBehaviour
 
       
       using (CascadeClassifier classifier = new CascadeClassifier(filePath))
-      using (Image<Gray, Byte> gray = img.Convert<Gray, byte>())
+      using (Mat gray = new Mat())
       {
+         CvInvoke.CvtColor(img, gray, ColorConversion.Bgr2Gray);
          //updateTextureWithString("classifier create ok");
 
          Rectangle[] faces = null;
@@ -67,7 +71,7 @@ public class FaceDetection : MonoBehaviour
          //updateTextureWithString(String.Format("{0} face found on image of {1} x {2}", faces.Length, img.Width, img.Height));
       }
 
-      Texture2D texture = TextureConvert.ImageToTexture2D(img, FlipType.Vertical);
+      Texture2D texture = TextureConvert.InputArrayToTexture2D(img, FlipType.Vertical);
 
       this.GetComponent<GUITexture>().texture = texture;
       this.GetComponent<GUITexture>().pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);

@@ -20,6 +20,7 @@ public class CameraTexture : MonoBehaviour
    public int cameraCount = 0;
    private bool _textureResized = false;
    private Quaternion baseRotation;
+
    // Use this for initialization
    void Start()
    {
@@ -54,24 +55,29 @@ public class CameraTexture : MonoBehaviour
    {
       if (webcamTexture != null && webcamTexture.didUpdateThisFrame)
       {
-
          if (data == null || (data.Length != webcamTexture.width * webcamTexture.height))
          {
             data = new Color32[webcamTexture.width * webcamTexture.height];
          }
          webcamTexture.GetPixels32(data);
-
+         
          if (bytes == null || bytes.Length != data.Length*3)
          {
             bytes = new byte[data.Length*3];
          }
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          GCHandle resultHandle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-         using (Image<Bgra, byte> image = new Image<Bgra, byte>(webcamTexture.width, webcamTexture.height, webcamTexture.width * 4, handle.AddrOfPinnedObject()))
+         using (Mat bgra = new Mat(new Size(webcamTexture.width, webcamTexture.height), DepthType.Cv8U, 4, handle.AddrOfPinnedObject(), webcamTexture.width * 4))
          using (Mat bgr = new Mat(webcamTexture.height, webcamTexture.width, DepthType.Cv8U, 3, resultHandle.AddrOfPinnedObject(), webcamTexture.width * 3))
          {
-            CvInvoke.CvtColor(image, bgr, ColorConversion.Bgra2Bgr);
+            CvInvoke.CvtColor(bgra, bgr, ColorConversion.Bgra2Bgr);
+            
+            #region do some image processing here
+
             CvInvoke.BitwiseNot(bgr, bgr);
+            
+            #endregion
+
             if (flip != FlipType.None)
                CvInvoke.Flip(bgr, bgr, flip);
          }

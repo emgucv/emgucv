@@ -16,7 +16,7 @@ public class HelloTexture : MonoBehaviour
    // Use this for initialization
    void Start()
    {      
-      Image<Bgr, Byte> img = new Image<Bgr, byte>(640, 240);
+      Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
 
       String openclStr = "None";
       if (CvInvoke.HaveOpenCL)
@@ -38,7 +38,7 @@ public class HelloTexture : MonoBehaviour
       CvInvoke.PutText(img, String.Format("OpenCL: {0}",openclStr), new System.Drawing.Point(10, 120), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
                        1.0, new MCvScalar(0, 0, 255));
 
-      Texture2D texture = TextureConvert.ImageToTexture2D(img, FlipType.Vertical);
+      Texture2D texture = TextureConvert.InputArrayToTexture2D(img, FlipType.Vertical);
 
       this.GetComponent<GUITexture>().texture = texture;
       this.GetComponent<GUITexture>().pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);
