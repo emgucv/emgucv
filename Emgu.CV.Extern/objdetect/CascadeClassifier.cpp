@@ -6,16 +6,24 @@
 
 #include "objdetect_c.h"
 
-cv::CascadeClassifier* CvCascadeClassifierCreate(cv::String* fileName)
+cv::CascadeClassifier* cveCascadeClassifierCreate()
+{
+   return new cv::CascadeClassifier();
+}
+cv::CascadeClassifier* cveCascadeClassifierCreateFromFile(cv::String* fileName)
 {
    return new cv::CascadeClassifier(*fileName);
 }
-void CvCascadeClassifierRelease(cv::CascadeClassifier** classifier)
+bool cveCascadeClassifierRead(cv::CascadeClassifier* classifier, cv::FileNode* node)
+{
+   return classifier->read(*node);
+}
+void cveCascadeClassifierRelease(cv::CascadeClassifier** classifier)
 {
    delete *classifier;
    *classifier = 0;
 }
-void CvCascadeClassifierDetectMultiScale( 
+void cveCascadeClassifierDetectMultiScale( 
    cv::CascadeClassifier* classifier,
    cv::_InputArray* image,
    std::vector<cv::Rect>* objects,
@@ -26,12 +34,12 @@ void CvCascadeClassifierDetectMultiScale(
 {
    classifier->detectMultiScale(*image, *objects, scaleFactor, minNeighbors, flags, *minSize, *maxSize);
 }
-bool CvCascadeClassifierIsOldFormatCascade(cv::CascadeClassifier* classifier)
+bool cveCascadeClassifierIsOldFormatCascade(cv::CascadeClassifier* classifier)
 {
    return classifier->isOldFormatCascade();
 }
 
-void CvCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier, CvSize* size)
+void cveCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier, CvSize* size)
 {
    cv::Size s = classifier->getOriginalWindowSize();
    size->width = s.width;

@@ -6,15 +6,15 @@
 
 #include "objdetect_c.h"
 
-void CvHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq) 
+void cveHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq) 
 {   
    std::vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();  
    seq->resize(v.size());
    memcpy(&(*seq)[0], &v[0], sizeof(float)* seq->size());
 }
-cv::HOGDescriptor* CvHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
+cv::HOGDescriptor* cveHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
 
-cv::HOGDescriptor* CvHOGDescriptorCreate(
+cv::HOGDescriptor* cveHOGDescriptorCreate(
    CvSize* _winSize, 
    CvSize* _blockSize, 
    CvSize* _blockStride,
@@ -29,15 +29,19 @@ cv::HOGDescriptor* CvHOGDescriptorCreate(
    return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
 }
 
-void CvHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vector) 
+void cveHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vector) 
 { 
    descriptor->setSVMDetector(*vector); 
 }
 
-void CvHOGDescriptorRelease(cv::HOGDescriptor* descriptor) { delete descriptor; }
+void cveHOGDescriptorRelease(cv::HOGDescriptor** descriptor)
+{
+   delete *descriptor;
+   *descriptor = nullptr;
+}
 
 
-void CvHOGDescriptorDetectMultiScale(
+void cveHOGDescriptorDetectMultiScale(
    cv::HOGDescriptor* descriptor, 
    cv::_InputArray* img, 
    std::vector<cv::Rect>* foundLocations,
@@ -52,7 +56,7 @@ void CvHOGDescriptorDetectMultiScale(
    descriptor->detectMultiScale(*img, *foundLocations, *weights, hitThreshold, *winStride, *padding, scale, finalThreshold, useMeanshiftGrouping );
 }
 
-void CvHOGDescriptorCompute(
+void cveHOGDescriptorCompute(
     cv::HOGDescriptor *descriptor,
     cv::_InputArray* img, 
     std::vector<float> *descriptors,
@@ -89,7 +93,7 @@ void CvHOGDescriptorDetect(
       cvSeqPushMulti(foundLocations, &rects[0], rects.size());
 }*/
 
-unsigned int CvHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor)
+unsigned int cveHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor)
 {
-   return (unsigned int) descriptor->getDescriptorSize();
+   return static_cast<unsigned int>(descriptor->getDescriptorSize());
 }

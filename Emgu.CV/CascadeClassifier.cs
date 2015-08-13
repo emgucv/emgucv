@@ -16,16 +16,13 @@ namespace Emgu.CV
    /// </summary>
    public class CascadeClassifier : UnmanagedObject
    {
-      static CascadeClassifier()
-      {
-         CvInvoke.CheckLibraryLoaded();
-      }
 
       /// <summary>
       /// A dummy constructor that mainly aimed for those who would like to inherite this class
       /// </summary>
-      protected CascadeClassifier()
+      public CascadeClassifier()
       {
+         _ptr = CvInvoke.cveCascadeClassifierCreate();
       }
 
       ///<summary> Create a CascadeClassifier from the specific file</summary>
@@ -42,7 +39,7 @@ namespace Emgu.CV
 #endif
 #endif
          using (CvString s = new CvString(fileName))
-            _ptr = CvCascadeClassifierCreate(s);
+            _ptr = CvInvoke.cveCascadeClassifierCreateFromFile(s);
 
          if (_ptr == IntPtr.Zero)
          {
@@ -52,6 +49,16 @@ namespace Emgu.CV
             throw new NullReferenceException(String.Format(Properties.StringTable.FailToCreateHaarCascade, file.FullName));
 #endif
          }
+      }
+
+      /// <summary>
+      /// Load the cascade classifier from a file node
+      /// </summary>
+      /// <param name="node">The file node, The file may contain a new cascade classifier only.</param>
+      /// <returns>True if the classifier can be imported.</returns>
+      public bool Read(FileNode node)
+      {
+         return CvInvoke.cveCascadeClassifierRead(_ptr, node);
       }
 
       /// <summary>
@@ -66,12 +73,14 @@ namespace Emgu.CV
       /// <param name="minSize">Minimum window size. Use Size.Empty for default, where it is set to the size of samples the classifier has been trained on (~20x20 for face detection)</param>
       /// <param name="maxSize">Maximum window size. Use Size.Empty for default, where the parameter will be ignored.</param>
       /// <returns>The objects detected, one array per channel</returns>
-      public Rectangle[] DetectMultiScale(IInputArray image, double scaleFactor = 1.1, int minNeighbors = 3, Size minSize = new Size(), Size maxSize = new Size())
+      public Rectangle[] DetectMultiScale(IInputArray image, double scaleFactor = 1.1, int minNeighbors = 3,
+         Size minSize = new Size(), Size maxSize = new Size())
       {
          using (Util.VectorOfRect rectangles = new Util.VectorOfRect())
          using (InputArray iaImage = image.GetInputArray())
          {
-            CvCascadeClassifierDetectMultiScale(_ptr, iaImage, rectangles, scaleFactor, minNeighbors, 0, ref minSize, ref maxSize);
+            CvInvoke.cveCascadeClassifierDetectMultiScale(_ptr, iaImage, rectangles, scaleFactor, minNeighbors, 0, ref minSize,
+               ref maxSize);
             return rectangles.ToArray();
          }
       }
@@ -81,10 +90,7 @@ namespace Emgu.CV
       /// </summary>
       public bool IsOldFormatCascade
       {
-         get
-         {
-            return CvCascadeClassifierIsOldFormatCascade(_ptr);
-         }
+         get { return CvInvoke.cveCascadeClassifierIsOldFormatCascade(_ptr); }
       }
 
       /// <summary>
@@ -95,7 +101,7 @@ namespace Emgu.CV
          get
          {
             Size s = new Size();
-            CvCascadeClassifierGetOriginalWindowSize(_ptr, ref s);
+            CvInvoke.cveCascadeClassifierGetOriginalWindowSize(_ptr, ref s);
             return s;
          }
       }
@@ -106,17 +112,28 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvCascadeClassifierRelease(ref _ptr);
+            CvInvoke.cveCascadeClassifierRelease(ref _ptr);
       }
+   }
+
+   public static partial class CvInvoke
+   {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvCascadeClassifierCreate(IntPtr fileName);
+      internal extern static IntPtr cveCascadeClassifierCreate();
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvCascadeClassifierRelease(ref IntPtr classifier);
+      internal extern static IntPtr cveCascadeClassifierCreateFromFile(IntPtr fileName);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvCascadeClassifierDetectMultiScale(
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal extern static bool cveCascadeClassifierRead(IntPtr classifier, IntPtr node);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveCascadeClassifierRelease(ref IntPtr classifier);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveCascadeClassifierDetectMultiScale(
          IntPtr classifier,
          IntPtr image,
          IntPtr objects,
@@ -127,10 +144,10 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal extern static bool CvCascadeClassifierIsOldFormatCascade(IntPtr classifier);
+      internal extern static bool cveCascadeClassifierIsOldFormatCascade(IntPtr classifier);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvCascadeClassifierGetOriginalWindowSize(IntPtr classifier, ref Size size);
+      internal extern static void cveCascadeClassifierGetOriginalWindowSize(IntPtr classifier, ref Size size);
    }
 
 }
