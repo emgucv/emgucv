@@ -25,6 +25,7 @@ using Emgu.Util;
 #if NETFX_CORE
 using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using System.Runtime.InteropServices.WindowsRuntime;
 using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
 using Trace = System.Diagnostics.Debug;

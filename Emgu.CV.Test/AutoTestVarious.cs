@@ -1592,11 +1592,16 @@ namespace Emgu.CV.Test
          #region draw the points and the box
          Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
          img.SetTo(new MCvScalar(255, 255, 255));
+#if NETFX_CORE
+         Point[] vertices = Extensions.ConvertAll(box.GetVertices(), Point.Round);
+#else
          Point[] vertices = Array.ConvertAll(box.GetVertices(), Point.Round);
+#endif
+         
          CvInvoke.Polylines(img, vertices, true, new MCvScalar(0, 0, 255), 1);
          foreach (PointF p in pts)
             CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
-         #endregion
+#endregion
 
          //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
@@ -1604,23 +1609,23 @@ namespace Emgu.CV.Test
       [Test]
       public void TestMinEnclosingCircle()
       {
-         #region generate random points
+#region generate random points
          System.Random r = new Random();
          int sampleCount = 100;
          Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(90, 60), -60);
          PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
-         #endregion
+#endregion
 
          Stopwatch watch = Stopwatch.StartNew();
          CircleF circle = CvInvoke.MinEnclosingCircle(pts);
          watch.Stop();
 
-         #region draw the points and the circle
+#region draw the points and the circle
          Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
          img.SetTo(new MCvScalar(255, 255, 255));
          foreach (PointF p in pts)
             CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
-         #endregion
+#endregion
 
          //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
       }
@@ -2131,7 +2136,7 @@ namespace Emgu.CV.Test
       }*/
 
       /*
-#if !ANDROID 
+#if !ANDROID
       //took too long to test on android, disabling for now
       [Test]
       public void TestRTreeClassifier()
@@ -2481,7 +2486,7 @@ namespace Emgu.CV.Test
       }
 
       /*
-      #region Test code contributed by Daniel Bell, modified by Canming
+#region Test code contributed by Daniel Bell, modified by Canming
       [Test]
       public void TestLevMarqSparse()
       {
@@ -2564,7 +2569,7 @@ namespace Emgu.CV.Test
          LevMarqSparse.BundleAdjust(points, imagePoints, visibility, cameraMatrix.ToArray(), R.ToArray(), T.ToArray(), distcoeff.ToArray(), termCrit);
 
       }
-      #endregion
+#endregion
       
       [Test]
       public void TestLatenSVM2()
@@ -2757,14 +2762,14 @@ namespace Emgu.CV.Test
          capture1.Dispose();
          capture2.Dispose();
       }
-      #if !(IOS || ANDROID)
+#if !(IOS || ANDROID)
       [Test]
       public void TestGLImageView()
       {
          Emgu.CV.UI.GLView.GLImageViewer viewer = new UI.GLView.GLImageViewer();
          //viewer.ShowDialog();
       }
-      #endif
+#endif
 #endif
       [Test]
       public void TestCvString()
@@ -2797,6 +2802,9 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(bRectArea != 0, "Area should not be 0");
 
       }
+
+#if !NETFX_CORE
+
 
       [Test]
       public void TestERFilter()
@@ -2868,5 +2876,6 @@ namespace Emgu.CV.Test
          }
 
       }
+#endif
    }
 }
