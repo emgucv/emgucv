@@ -11,12 +11,17 @@ PROJECT(libleptonica)
 SET(LEPTON_DIR ${LEPT_ROOT_DIR})
  
 file(GLOB lepton_srcs "${LEPTON_DIR}/src/*.c")
-file(GLOB lepton_srcs_excludes "${LEPTON_DIR}/src/freetype.c" "${LEPTON_DIR}/src/endiantest.c" "${LEPTON_DIR}/src/xtractprotos.c")
+file(GLOB lepton_srcs_excludes "${LEPTON_DIR}/src/freetype.c" "${LEPTON_DIR}/src/endiantest.c" "${LEPTON_DIR}/src/xtractprotos.c" "${LEPTON_DIR}/src/leptwin.c"  )
 LIST(REMOVE_ITEM lepton_srcs ${lepton_srcs_excludes})
 file(GLOB lepton_hdrs "${LEPTON_DIR}/src/*.h")
 
 IF(MSVC)
   SET_SOURCE_FILES_PROPERTIES( ${lepton_srcs} PROPERTIES LANGUAGE CXX)
+ENDIF()
+
+IF(NETFX_CORE)
+ #LIST(APPEND lepton_hdrs "${LEPTON_DIR}/../windows_runtime_macro.h")
+ add_definitions(-sdl- -UUNICODE -U_UNICODE -FI"${LEPTON_DIR}/../windows_runtime_macro.h")
 ENDIF()
 
 source_group("Src" FILES ${lepton_srcs})

@@ -2311,6 +2311,8 @@ l_int32  ret;
     ret = fileCopy(srcpath, newpath);
     if (!ret)
         remove(srcpath);
+#elif WINAPI_FAMILY_APP   
+    ret = 1;
 #else
     ret = MoveFileEx(srcpath, newpath,
                      MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING) ? 0 : 1;
