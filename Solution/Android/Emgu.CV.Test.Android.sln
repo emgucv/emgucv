@@ -1,62 +1,64 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Android", "..\..\Emgu.CV\Emgu.CV.Android.csproj", "{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}"
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Test", "..\..\Emgu.CV.Test\Emgu.CV.Test.Android\Emgu.CV.Test.csproj", "{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.Util", "..\..\Emgu.Util\Emgu.Util.shproj", "{98561642-5EC3-4244-BAF9-6876D9BA5527}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Emgu.CV.shproj", "{12D024EE-D0A5-4BBC-B7C0-7B18CF1AB262}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.shproj", "{11E54A7E-778D-466C-A176-71E150976AC1}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.ML", "..\..\Emgu.CV.ML\Emgu.CV.ML.shproj", "{3F3BC3E1-3B59-48AB-959A-71844B9AD9BE}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.shproj", "{7BC723CB-1678-415F-A65F-4027F8758A6F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.shproj", "{7B22BB32-C867-45A7-AC53-5BDA820DB91C}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Stitching", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.shproj", "{0D0C868D-23D6-46F7-A3E0-5F595C84939C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util.Android", "..\..\Emgu.Util\Emgu.Util.Android.csproj", "{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.Android", "..\..\Emgu.CV.ML\Emgu.CV.ML.Android.csproj", "{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.OCR.Android", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.Android.csproj", "{17B67F34-D591-4BAD-ABB8-4D4199B20833}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.Android", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Android.csproj", "{89BCA3BE-823B-4702-9498-025C6B21462F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Test", "..\..\Emgu.CV.Test\Emgu.CV.Test.Android\Emgu.CV.Test.csproj", "{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Cuda.Android", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj", "{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Contrib.Android", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Android.csproj", "{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Android", "..\..\Emgu.CV\Emgu.CV.Android.csproj", "{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
+		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
+		..\..\Emgu.CV\Emgu.CV.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0d0c868d-23d6-46f7-a3e0-5f595c84939c}*SharedItemsImports = 13
+		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f3bc3e1-3b59-48ab-959a-71844b9ad9be}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17B67F34-D591-4BAD-ABB8-4D4199B20833}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89BCA3BE-823B-4702-9498-025C6B21462F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89BCA3BE-823B-4702-9498-025C6B21462F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89BCA3BE-823B-4702-9498-025C6B21462F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89BCA3BE-823B-4702-9498-025C6B21462F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}.Release|Any CPU.Build.0 = Release|Any CPU
-		{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{511C9A1F-FA2A-43AD-ACB6-AE7794A49D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

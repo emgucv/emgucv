@@ -182,7 +182,11 @@ namespace Emgu.CV.Test
       [Test]
       public void TestQuaternionsSize()
       {
+#if NETFX_CORE
+         EmguAssert.AreEqual(4 * Marshal.SizeOf<double>(), Marshal.SizeOf<Quaternions>());
+#else
          EmguAssert.AreEqual(4 * Marshal.SizeOf(typeof(double)), Marshal.SizeOf(typeof(Quaternions)));
+#endif
       }
 
       [Test]

@@ -16,7 +16,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-#if !(IOS || NETFX_CORE || ANDROID)
+#if !(IOS || NETFX_CORE || __ANDROID__)
 using Emgu.CV.UI;
 #endif
 using Emgu.CV.Util;
@@ -591,7 +591,7 @@ namespace Emgu.CV.Test
          //Emgu.CV.UI.ImageViewer.Show(image);
       }*/
 
-#if !(IOS || ANDROID || NETFX_CORE)
+#if !(IOS || __ANDROID__ || NETFX_CORE)
       [TestAttribute]
       public void TestConstructor()
       {
@@ -716,7 +716,7 @@ namespace Emgu.CV.Test
       }
 #endif
 
-#if !(IOS || ANDROID || NETFX_CORE)
+#if !(IOS || __ANDROID__ || NETFX_CORE)
       [TestAttribute]
       public void TestImageSave()
       {
@@ -1546,7 +1546,7 @@ namespace Emgu.CV.Test
 
       }
 
-#if !(IOS || ANDROID || NETFX_CORE)
+#if !(IOS || __ANDROID__ || NETFX_CORE)
       [TestAttribute]
       public void TestMultiThreadInMemoryWithBMP()
       {

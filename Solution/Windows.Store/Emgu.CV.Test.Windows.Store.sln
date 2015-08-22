@@ -1,27 +1,49 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.Util.Windows.Store", "..\..\Emgu.Util\Emgu.Util.Windows.Store.csproj", "{991D295C-714D-4427-835B-E0314009AE5C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Windows.Store", "..\..\Emgu.CV\Emgu.CV.Windows.Store.csproj", "{1F7091DA-C6EB-417B-8D2F-58C6151377A0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.ML.Windows.Store", "..\..\Emgu.CV.ML\Emgu.CV.ML.Windows.Store.csproj", "{8DE0B8CF-C318-44CC-9363-221067B74347}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Cuda.Windows.Store", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Windows.Store.csproj", "{C2293433-3C88-473C-AE81-BBBE5D5E1746}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Stitching.Windows.Store", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Windows.Store.csproj", "{67658000-1E4B-4417-A982-54A374E9D94B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.VideoStab.Windows.Store", "..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.Windows.Store.csproj", "{5EAF5DE0-B0DB-40DF-B136-892299044003}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Shape.Windows.Store", "..\..\Emgu.CV.Shape\Emgu.CV.Shape.Windows.Store.csproj", "{4E99B79C-61E5-4244-8017-0C45B59DA98D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Test.Windows.Store", "..\..\Emgu.CV.Test\Emgu.CV.Test.Windows.Store\Emgu.CV.Test.Windows.Store.csproj", "{4A19699C-FA59-4B27-8F3A-74B523EB73F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Contrib.Windows.Store", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Windows.Store.csproj", "{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Emgu.CV.shproj", "{12D024EE-D0A5-4BBC-B7C0-7B18CF1AB262}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.ML", "..\..\Emgu.CV.ML\Emgu.CV.ML.shproj", "{3F3BC3E1-3B59-48AB-959A-71844B9AD9BE}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.shproj", "{11E54A7E-778D-466C-A176-71E150976AC1}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.VideoStab", "..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.shproj", "{31227F37-5594-4C29-92A2-4AE729D3878D}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.shproj", "{7B22BB32-C867-45A7-AC53-5BDA820DB91C}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Shape", "..\..\Emgu.CV.Shape\Emgu.CV.Shape.shproj", "{1C41F1CC-B8A8-4E72-8167-0E1A42EDF843}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Stitching", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.shproj", "{0D0C868D-23D6-46F7-A3E0-5F595C84939C}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.Util", "..\..\Emgu.Util\Emgu.Util.shproj", "{98561642-5EC3-4244-BAF9-6876D9BA5527}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.shproj", "{7BC723CB-1678-415F-A65F-4027F8758A6F}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{1c41f1cc-b8a8-4e72-8167-0e1a42edf843}*SharedItemsImports = 13
+		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
+		..\..\Emgu.Util\Emgu.Util.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
+		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
+		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
+		..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
+		..\..\Emgu.CV\Emgu.CV.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
+		..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems*{31227f37-5594-4c29-92a2-4ae729d3878d}*SharedItemsImports = 13
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0d0c868d-23d6-46f7-a3e0-5f595c84939c}*SharedItemsImports = 13
+		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f3bc3e1-3b59-48ab-959a-71844b9ad9be}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -29,62 +51,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{991D295C-714D-4427-835B-E0314009AE5C}.Debug|x64.ActiveCfg = Debug|x64
-		{991D295C-714D-4427-835B-E0314009AE5C}.Debug|x64.Build.0 = Debug|x64
-		{991D295C-714D-4427-835B-E0314009AE5C}.Debug|x86.ActiveCfg = Debug|x86
-		{991D295C-714D-4427-835B-E0314009AE5C}.Debug|x86.Build.0 = Debug|x86
-		{991D295C-714D-4427-835B-E0314009AE5C}.Release|x64.ActiveCfg = Release|x64
-		{991D295C-714D-4427-835B-E0314009AE5C}.Release|x64.Build.0 = Release|x64
-		{991D295C-714D-4427-835B-E0314009AE5C}.Release|x86.ActiveCfg = Release|x86
-		{991D295C-714D-4427-835B-E0314009AE5C}.Release|x86.Build.0 = Release|x86
-		{1F7091DA-C6EB-417B-8D2F-58C6151377A0}.Debug|x64.ActiveCfg = Debug|x64
-		{1F7091DA-C6EB-417B-8D2F-58C6151377A0}.Debug|x64.Build.0 = Debug|x64
-		{1F7091DA-C6EB-417B-8D2F-58C6151377A0}.Debug|x86.ActiveCfg = Debug|x86
-		{1F7091DA-C6EB-417B-8D2F-58C6151377A0}.Debug|x86.Build.0 = Debug|x86
-		{1F7091DA-C6EB-417B-8D2F-58C6151377A0}.Release|x64.ActiveCfg = Release|x64
-		{1F7091DA-C6EB-417B-8D2F-58C6151377A0}.Release|x64.Build.0 = Release|x64
-		{1F7091DA-C6EB-417B-8D2F-58C6151377A0}.Release|x86.ActiveCfg = Release|x86
-		{1F7091DA-C6EB-417B-8D2F-58C6151377A0}.Release|x86.Build.0 = Release|x86
-		{8DE0B8CF-C318-44CC-9363-221067B74347}.Debug|x64.ActiveCfg = Debug|x64
-		{8DE0B8CF-C318-44CC-9363-221067B74347}.Debug|x64.Build.0 = Debug|x64
-		{8DE0B8CF-C318-44CC-9363-221067B74347}.Debug|x86.ActiveCfg = Debug|x86
-		{8DE0B8CF-C318-44CC-9363-221067B74347}.Debug|x86.Build.0 = Debug|x86
-		{8DE0B8CF-C318-44CC-9363-221067B74347}.Release|x64.ActiveCfg = Release|x64
-		{8DE0B8CF-C318-44CC-9363-221067B74347}.Release|x64.Build.0 = Release|x64
-		{8DE0B8CF-C318-44CC-9363-221067B74347}.Release|x86.ActiveCfg = Release|x86
-		{8DE0B8CF-C318-44CC-9363-221067B74347}.Release|x86.Build.0 = Release|x86
-		{C2293433-3C88-473C-AE81-BBBE5D5E1746}.Debug|x64.ActiveCfg = Debug|x64
-		{C2293433-3C88-473C-AE81-BBBE5D5E1746}.Debug|x64.Build.0 = Debug|x64
-		{C2293433-3C88-473C-AE81-BBBE5D5E1746}.Debug|x86.ActiveCfg = Debug|x86
-		{C2293433-3C88-473C-AE81-BBBE5D5E1746}.Debug|x86.Build.0 = Debug|x86
-		{C2293433-3C88-473C-AE81-BBBE5D5E1746}.Release|x64.ActiveCfg = Release|x64
-		{C2293433-3C88-473C-AE81-BBBE5D5E1746}.Release|x64.Build.0 = Release|x64
-		{C2293433-3C88-473C-AE81-BBBE5D5E1746}.Release|x86.ActiveCfg = Release|x86
-		{C2293433-3C88-473C-AE81-BBBE5D5E1746}.Release|x86.Build.0 = Release|x86
-		{67658000-1E4B-4417-A982-54A374E9D94B}.Debug|x64.ActiveCfg = Debug|x64
-		{67658000-1E4B-4417-A982-54A374E9D94B}.Debug|x64.Build.0 = Debug|x64
-		{67658000-1E4B-4417-A982-54A374E9D94B}.Debug|x86.ActiveCfg = Debug|x86
-		{67658000-1E4B-4417-A982-54A374E9D94B}.Debug|x86.Build.0 = Debug|x86
-		{67658000-1E4B-4417-A982-54A374E9D94B}.Release|x64.ActiveCfg = Release|x64
-		{67658000-1E4B-4417-A982-54A374E9D94B}.Release|x64.Build.0 = Release|x64
-		{67658000-1E4B-4417-A982-54A374E9D94B}.Release|x86.ActiveCfg = Release|x86
-		{67658000-1E4B-4417-A982-54A374E9D94B}.Release|x86.Build.0 = Release|x86
-		{5EAF5DE0-B0DB-40DF-B136-892299044003}.Debug|x64.ActiveCfg = Debug|x64
-		{5EAF5DE0-B0DB-40DF-B136-892299044003}.Debug|x64.Build.0 = Debug|x64
-		{5EAF5DE0-B0DB-40DF-B136-892299044003}.Debug|x86.ActiveCfg = Debug|x86
-		{5EAF5DE0-B0DB-40DF-B136-892299044003}.Debug|x86.Build.0 = Debug|x86
-		{5EAF5DE0-B0DB-40DF-B136-892299044003}.Release|x64.ActiveCfg = Release|x64
-		{5EAF5DE0-B0DB-40DF-B136-892299044003}.Release|x64.Build.0 = Release|x64
-		{5EAF5DE0-B0DB-40DF-B136-892299044003}.Release|x86.ActiveCfg = Release|x86
-		{5EAF5DE0-B0DB-40DF-B136-892299044003}.Release|x86.Build.0 = Release|x86
-		{4E99B79C-61E5-4244-8017-0C45B59DA98D}.Debug|x64.ActiveCfg = Debug|x64
-		{4E99B79C-61E5-4244-8017-0C45B59DA98D}.Debug|x64.Build.0 = Debug|x64
-		{4E99B79C-61E5-4244-8017-0C45B59DA98D}.Debug|x86.ActiveCfg = Debug|x86
-		{4E99B79C-61E5-4244-8017-0C45B59DA98D}.Debug|x86.Build.0 = Debug|x86
-		{4E99B79C-61E5-4244-8017-0C45B59DA98D}.Release|x64.ActiveCfg = Release|x64
-		{4E99B79C-61E5-4244-8017-0C45B59DA98D}.Release|x64.Build.0 = Release|x64
-		{4E99B79C-61E5-4244-8017-0C45B59DA98D}.Release|x86.ActiveCfg = Release|x86
-		{4E99B79C-61E5-4244-8017-0C45B59DA98D}.Release|x86.Build.0 = Release|x86
 		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|x64.ActiveCfg = Debug|x64
 		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|x64.Build.0 = Debug|x64
 		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|x64.Deploy.0 = Debug|x64
@@ -97,14 +63,6 @@ Global
 		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|x86.ActiveCfg = Release|x86
 		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|x86.Build.0 = Release|x86
 		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|x86.Deploy.0 = Release|x86
-		{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}.Debug|x64.ActiveCfg = Debug|x64
-		{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}.Debug|x64.Build.0 = Debug|x64
-		{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}.Debug|x86.ActiveCfg = Debug|x86
-		{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}.Debug|x86.Build.0 = Debug|x86
-		{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}.Release|x64.ActiveCfg = Release|x64
-		{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}.Release|x64.Build.0 = Release|x64
-		{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}.Release|x86.ActiveCfg = Release|x86
-		{1819BB9A-C4A9-453B-9EB9-A7E4A85EDC29}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

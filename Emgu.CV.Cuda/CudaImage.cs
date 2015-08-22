@@ -10,7 +10,7 @@ using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-#if ANDROID
+#if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
 #endif
 
@@ -320,7 +320,7 @@ namespace Emgu.CV.Cuda
       {
          get
          {
-#if !ANDROID
+#if !__ANDROID__
             if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
             {  
                Size s = Size;

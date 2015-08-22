@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !NETFX_CORE
+
 using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,15 @@ namespace Emgu.CV.OCR
          get
          {
             IntPtr ptr = OcrInvoke.TesseractGetVersion();
-            return new Version(ptr == IntPtr.Zero ? "0.0" : Marshal.PtrToStringAnsi(ptr));
+            if (ptr == IntPtr.Zero)
+               return new Version(0, 0);
+            else
+            {
+               String vStr = Marshal.PtrToStringAnsi(ptr);
+               
+               return new Version(vStr.Replace("dev", String.Empty));
+            }
+            
          }
       }
 
@@ -170,6 +178,7 @@ namespace Emgu.CV.OCR
       public void Init(String dataPath, String language, OcrEngineMode mode)
       {
          
+#if !NETFX_CORE
          if (!(dataPath.Length > 0 && dataPath.Substring(dataPath.Length - 1).ToCharArray()[0] == System.IO.Path.DirectorySeparatorChar))
          {  //if the data path end in slash
             int lastSlash = dataPath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
@@ -179,6 +188,7 @@ namespace Emgu.CV.OCR
                dataPath = dataPath.Substring(0, lastSlash + 1);
             }
          }
+#endif
          
          /*
          if (!System.IO.Directory.Exists(System.IO.Path.Combine(dataPath, "tessdata")))
@@ -240,7 +250,12 @@ namespace Emgu.CV.OCR
          using (Util.VectorOfByte bytes = new Util.VectorOfByte())
          {
             OcrInvoke.TessBaseAPIGetUTF8Text(_ptr, bytes);
+#if NETFX_CORE
+            byte[] bArr = bytes.ToArray();
+            return _utf8.GetString(bArr, 0, bArr.Length).Replace("\n", Environment.NewLine);
+#else
             return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
+#endif
          }
       }
 
@@ -402,4 +417,3 @@ namespace Emgu.CV.OCR
    };
 }
 
-#endif

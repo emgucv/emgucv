@@ -131,6 +131,9 @@
     <Compile Include="..\AutoTestML.cs">
       <Link>AutoTestML.cs</Link>
     </Compile>
+    <Compile Include="..\AutoTestOcr.cs">
+      <Link>AutoTestOcr.cs</Link>
+    </Compile>
     <Compile Include="..\AutoTestQuaternions.cs">
       <Link>AutoTestQuaternions.cs</Link>
     </Compile>
@@ -140,211 +143,74 @@
     <Compile Include="..\AutoTestUMat.cs">
       <Link>AutoTestUMat.cs</Link>
     </Compile>
+    <Compile Include="..\AutoTestVarious.cs">
+      <Link>AutoTestVarious.cs</Link>
+    </Compile>
     <Compile Include="..\EmguAssert.cs">
       <Link>EmguAssert.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\bin\x64\cvextern.dll">
-      <Link>x64\cvextern.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_bgsegm300.dll">
-      <Link>x64\opencv_bgsegm300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_calib3d300.dll">
-      <Link>x64\opencv_calib3d300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_core300.dll">
-      <Link>x64\opencv_core300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_face300.dll">
-      <Link>x64\opencv_face300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_features2d300.dll">
-      <Link>x64\opencv_features2d300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_flann300.dll">
-      <Link>x64\opencv_flann300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_highgui300.dll">
-      <Link>x64\opencv_highgui300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_imgcodecs300.dll">
-      <Link>x64\opencv_imgcodecs300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_imgproc300.dll">
-      <Link>x64\opencv_imgproc300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_ml300.dll">
-      <Link>x64\opencv_ml300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_objdetect300.dll">
-      <Link>x64\opencv_objdetect300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_optflow300.dll">
-      <Link>x64\opencv_optflow300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_photo300.dll">
-      <Link>x64\opencv_photo300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_shape300.dll">
-      <Link>x64\opencv_shape300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_stitching300.dll">
-      <Link>x64\opencv_stitching300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_superres300.dll">
-      <Link>x64\opencv_superres300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_text300.dll">
-      <Link>x64\opencv_text300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_video300.dll">
-      <Link>x64\opencv_video300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_videoio300.dll">
-      <Link>x64\opencv_videoio300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_videostab300.dll">
-      <Link>x64\opencv_videostab300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_xfeatures2d300.dll">
-      <Link>x64\opencv_xfeatures2d300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_ximgproc300.dll">
-      <Link>x64\opencv_ximgproc300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x64\opencv_xobjdetect300.dll">
-      <Link>x64\opencv_xobjdetect300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\cvextern.dll">
-      <Link>x86\cvextern.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_bgsegm300.dll">
-      <Link>x86\opencv_bgsegm300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_calib3d300.dll">
-      <Link>x86\opencv_calib3d300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_core300.dll">
-      <Link>x86\opencv_core300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_face300.dll">
-      <Link>x86\opencv_face300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_features2d300.dll">
-      <Link>x86\opencv_features2d300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_flann300.dll">
-      <Link>x86\opencv_flann300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_highgui300.dll">
-      <Link>x86\opencv_highgui300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_imgcodecs300.dll">
-      <Link>x86\opencv_imgcodecs300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_imgproc300.dll">
-      <Link>x86\opencv_imgproc300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_ml300.dll">
-      <Link>x86\opencv_ml300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_objdetect300.dll">
-      <Link>x86\opencv_objdetect300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_optflow300.dll">
-      <Link>x86\opencv_optflow300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_photo300.dll">
-      <Link>x86\opencv_photo300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_shape300.dll">
-      <Link>x86\opencv_shape300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_stitching300.dll">
-      <Link>x86\opencv_stitching300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_superres300.dll">
-      <Link>x86\opencv_superres300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_text300.dll">
-      <Link>x86\opencv_text300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_video300.dll">
-      <Link>x86\opencv_video300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_videoio300.dll">
-      <Link>x86\opencv_videoio300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_videostab300.dll">
-      <Link>x86\opencv_videostab300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  <Choose>
+    <When Condition=" '$(Platform)'=='x64' ">
+      <ItemGroup>
+        <Content Include="..\..\bin\x64\cvextern.dll">
+          <Link>cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
+    <When Condition=" '$(Platform)'=='x86' ">
+      <ItemGroup>
+        <Content Include="..\..\bin\x86\cvextern.dll">
+          <Link>cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
+  </Choose>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="..\..\bin\x86\opencv_xfeatures2d300.dll">
-      <Link>x86\opencv_xfeatures2d300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_ximgproc300.dll">
-      <Link>x86\opencv_ximgproc300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\bin\x86\opencv_xobjdetect300.dll">
-      <Link>x86\opencv_xobjdetect300.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\opencv\samples\data\letter-recognition.data">
       <Link>letter-recognition.data</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.bigrams">
+      <Link>tessdata\eng.cube.bigrams</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.fold">
+      <Link>tessdata\eng.cube.fold</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.lm">
+      <Link>tessdata\eng.cube.lm</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.nn">
+      <Link>tessdata\eng.cube.nn</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.params">
+      <Link>tessdata\eng.cube.params</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.size">
+      <Link>tessdata\eng.cube.size</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.word-freq">
+      <Link>tessdata\eng.cube.word-freq</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.tesseract_cube.nn">
+      <Link>tessdata\eng.tesseract_cube.nn</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.traineddata">
+      <Link>tessdata\eng.traineddata</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Emgu.CV.Test.Windows.Store_TemporaryKey.pfx" />
@@ -387,44 +253,19 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Windows.Store.csproj">
-      <Project>{1819bb9a-c4a9-453b-9eb9-a7e4a85edc29}</Project>
-      <Name>Emgu.CV.Contrib.Windows.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Windows.Store.csproj">
-      <Project>{c2293433-3c88-473c-ae81-bbbe5d5e1746}</Project>
-      <Name>Emgu.CV.Cuda.Windows.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.Windows.Store.csproj">
-      <Project>{8de0b8cf-c318-44cc-9363-221067b74347}</Project>
-      <Name>Emgu.CV.ML.Windows.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Shape\Emgu.CV.Shape.Windows.Store.csproj">
-      <Project>{4e99b79c-61e5-4244-8017-0c45b59da98d}</Project>
-      <Name>Emgu.CV.Shape.Windows.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Windows.Store.csproj">
-      <Project>{67658000-1e4b-4417-a982-54a374e9d94b}</Project>
-      <Name>Emgu.CV.Stitching.Windows.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.Windows.Store.csproj">
-      <Project>{5eaf5de0-b0db-40df-b136-892299044003}</Project>
-      <Name>Emgu.CV.VideoStab.Windows.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Windows.Store.csproj">
-      <Project>{1f7091da-c6eb-417b-8d2f-58c6151377a0}</Project>
-      <Name>Emgu.CV.Windows.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.Windows.Store.csproj">
-      <Project>{991d295c-714d-4427-835b-e0314009ae5c}</Project>
-      <Name>Emgu.Util.Windows.Store</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
+  <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems')" />
+  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems')" />
+  <Import Project="..\..\Emgu.CV.ML\Emgu.CV.ML.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.ML\Emgu.CV.ML.projitems')" />
+  <Import Project="..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems')" />
+  <Import Project="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems')" />
+  <Import Project="..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems')" />
+  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\..\Emgu.Util\Emgu.Util.projitems')" />
+  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

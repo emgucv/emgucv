@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV.CvEnum;
-#if ANDROID
+#if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
 using UIKit;
@@ -137,7 +137,7 @@ namespace Emgu.CV
          }
 #else
          if ( 
-#if ANDROID
+#if __ANDROID__
             extension.Equals(".png")
 #else
             //load png image with alpha channel using Bitmap. OpenCV do not seems to handle alpa channel correctly. 
@@ -154,7 +154,7 @@ namespace Emgu.CV
 #endif
          try
          {
-#if ANDROID
+#if __ANDROID__
             int rotation = 0;
             Android.Media.ExifInterface exif = new Android.Media.ExifInterface(fi.FullName);
             int orientation = exif.GetAttributeInt(Android.Media.ExifInterface.TagOrientation, int.MinValue);
@@ -218,7 +218,7 @@ namespace Emgu.CV
       /// <param name="file"></param>
       private void LoadFileUsingBitmap(FileInfo file)
       {
-#if ANDROID
+#if __ANDROID__
          using (Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(file.FullName))
 #else
          using (Bitmap bmp = new Bitmap(file.FullName))
@@ -513,11 +513,7 @@ namespace Emgu.CV
             else if (typeOfDepth == typeof(Int32))
                return Emgu.CV.CvEnum.IplDepth.IplDepth32S;
             else
-#if (NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
                throw new NotImplementedException("Unsupported image depth");
-#else
-               throw new NotImplementedException(Properties.StringTable.UnsupportedImageDepth);
-#endif
          }
       }
 
@@ -721,9 +717,8 @@ namespace Emgu.CV
       ///<param name="thickness"> Must be &gt; 0 </param>
       public void Draw(Cross2DF cross, TColor color, int thickness)
       {
-#if !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
-         Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
-#endif
+         Debug.Assert(thickness > 0, "Thickness should be > 0");
+
          if (thickness > 0)
          {
             Draw(cross.Horizontal, color, thickness);
@@ -738,9 +733,7 @@ namespace Emgu.CV
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public virtual void Draw(LineSegment2DF line, TColor color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-#if !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
-         Debug.Assert(thickness > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
-#endif
+         Debug.Assert(thickness > 0, "Thickness should be > 0");
          if (thickness > 0)
             CvInvoke.Line(
                 this,
@@ -755,21 +748,19 @@ namespace Emgu.CV
       ///<summary> Draw a line segment using the specific color and thickness </summary>
       ///<param name="line"> The line segment to be drawn</param>
       ///<param name="color"> The color of the line segment </param>
-      ///<param name="thicknes"> The thickness of the line segment </param>
+      ///<param name="thickness"> The thickness of the line segment </param>
       /// <param name="lineType">Line type</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
-      public virtual void Draw(LineSegment2D line, TColor color, int thicknes, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
+      public virtual void Draw(LineSegment2D line, TColor color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
       {
-#if !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
-         Debug.Assert(thicknes > 0, Properties.StringTable.ThicknessShouldBeGreaterThanZero);
-#endif
-         if (thicknes > 0)
+         Debug.Assert(thickness > 0, "Thickness should be > 0");
+         if (thickness > 0)
             CvInvoke.Line(
                 this,
                 line.P1,
                 line.P2,
                 color.MCvScalar,
-                thicknes,
+                thickness,
                 lineType,
                 shift);
       }
@@ -2642,7 +2633,7 @@ namespace Emgu.CV
       {
          get
          {
-#if ANDROID
+#if __ANDROID__
             return ToBitmap();
 #else
             IntPtr scan0;
@@ -2655,7 +2646,7 @@ namespace Emgu.CV
          }
          set
          {
-#if ANDROID
+#if __ANDROID__
             #region reallocate memory if necessary
             Size size = new Size(value.Width, value.Height);
             if (Ptr == IntPtr.Zero)
@@ -2869,7 +2860,7 @@ namespace Emgu.CV
          }
       }
 
-#if ANDROID
+#if __ANDROID__
 #else
       /// <summary>
       /// Utility function for Bitmap Set property
@@ -2896,7 +2887,7 @@ namespace Emgu.CV
       /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
       public Bitmap ToBitmap()
       {
-#if ANDROID
+#if __ANDROID__
          return ToBitmap(Android.Graphics.Bitmap.Config.Argb8888);
 #else
          Type typeOfColor = typeof(TColor);

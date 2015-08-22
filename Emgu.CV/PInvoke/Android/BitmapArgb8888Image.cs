@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+#if __ANDROID__
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,3 +87,5 @@ namespace Emgu.CV
       }
    }
 }
+
+#endif

@@ -506,7 +506,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestIntrisicParameters()
       {
-         #if !(IOS || ANDROID || NETFX_CORE)
+         #if !(IOS || __ANDROID__ || NETFX_CORE)
          System.Diagnostics.PerformanceCounter memCounter = new PerformanceCounter("Memory", "Available MBytes");
          Trace.WriteLine(String.Format("Available mem before: {0} Mb", memCounter.NextValue()));
          #endif
@@ -515,7 +515,7 @@ namespace Emgu.CV.Test
          {
             paramArr[i] = new IntrinsicCameraParameters(8);
          }
-         #if !(IOS || ANDROID || NETFX_CORE)
+         #if !(IOS || __ANDROID__ || NETFX_CORE)
          Trace.WriteLine(String.Format("Available mem after: {0} Mb", memCounter.NextValue()));
          #endif
       }
@@ -698,7 +698,7 @@ namespace Emgu.CV.Test
          //Assert.IsTrue(vertices[1].Equals(new PointF(6.0f, 0.0f)));
       }
 
-#if !(IOS || ANDROID || NETFX_CORE)
+#if !(IOS || __ANDROID__ || NETFX_CORE)
       [Test]
       public void TestGrayscaleBitmapConstructor()
       {
@@ -1675,7 +1675,7 @@ namespace Emgu.CV.Test
          }
       }*/
 
-#if !WINDOWS_PHONE_APP
+#if !NETFX_CORE
       [Test]
       public void TestMatNDRuntimeSerialization()
       {
@@ -2002,7 +2002,7 @@ namespace Emgu.CV.Test
          }
       }*/
 
-#if !WINDOWS_PHONE_APP
+#if !NETFX_CORE
       [Test]
       public void TestBinaryStorage()
       {
@@ -2079,7 +2079,7 @@ namespace Emgu.CV.Test
          CvInvoke.cvReleaseConDensation(ref conden);
       }*/
 
-#if !WINDOWS_PHONE_APP
+#if !NETFX_CORE
       private static String GetTempFileName()
       {
          string filename = Path.GetTempFileName();
@@ -2293,7 +2293,7 @@ namespace Emgu.CV.Test
          }
       }
 
-#if !WINDOWS_PHONE_APP
+#if !NETFX_CORE
       [Test]
       public void TestImageDecodeBuffer()
       {
@@ -2689,7 +2689,7 @@ namespace Emgu.CV.Test
          }
       }
 
-#if !WINDOWS_PHONE_APP
+#if !NETFX_CORE
       //TODO: Check why this fails again
       [Test]
       public void TestFileCapturePause()
@@ -2762,7 +2762,7 @@ namespace Emgu.CV.Test
          capture1.Dispose();
          capture2.Dispose();
       }
-#if !(IOS || ANDROID)
+#if !(IOS || __ANDROID__)
       [Test]
       public void TestGLImageView()
       {
@@ -2798,7 +2798,9 @@ namespace Emgu.CV.Test
              Connectivity.EightConnected,
              FloodFillType.Default);
          int bRectArea = boundingRect.Size.Width * boundingRect.Size.Height;
+#if !NETFX_CORE
          Trace.WriteLine("Flooded area: " + area + ". Bounding rectangle area: " + bRectArea); 
+#endif
          EmguAssert.IsTrue(bRectArea != 0, "Area should not be 0");
 
       }

@@ -47,7 +47,7 @@ namespace Emgu.CV.Test
 #endif
       }
 
-#if ANDROID
+#if __ANDROID__
       public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
          where TColor : struct, IColor
          where TDepth : new()
@@ -110,7 +110,7 @@ namespace Emgu.CV.Test
       }
 #endif
 
-#if IOS || ANDROID
+#if IOS || __ANDROID__
       public static void IsTrue(bool condition)
       {
          Assert.True(condition);

@@ -39,12 +39,12 @@ namespace Emgu.CV.Test
          where TColor : struct, IColor
          where TDepth : new()
       {
-         return new Image<TColor, TDepth>(Assets, name);
+         return new Image<TColor, TDepth>(AssetsUtil.Assets, name);
       }
 
       public static Mat LoadMat(string name)
       {
-         return new Mat(Assets, name);
+         return new Mat(AssetsUtil.Assets, name);
       }
 
       public static string LoadFile(string assetName)

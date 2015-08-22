@@ -207,7 +207,7 @@ namespace Emgu.CV
                   return false;
                }
             }
-#elif ANDROID || UNITY_ANDROID
+#elif __ANDROID__ || UNITY_ANDROID
 #else
             if (!Directory.Exists(loadDirectory))
             {
@@ -360,7 +360,7 @@ namespace Emgu.CV
       public static bool DefaultLoadUnmanagedModules(String[] modules)
       {
          bool libraryLoaded = true;
-#if ANDROID || (UNITY_ANDROID && !UNITY_EDITOR)
+#if __ANDROID__ || (UNITY_ANDROID && !UNITY_EDITOR)
 
          System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
          FileInfo file = new FileInfo(asm.Location);
@@ -377,7 +377,7 @@ namespace Emgu.CV
             {
 
                Console.WriteLine(string.Format("Trying to load {0}.", module));
-#if ANDROID
+#if __ANDROID__
                Java.Lang.JavaSystem.LoadLibrary(module);
 #else //(UNITY_ANDROID && !UNITY_EDITOR)
 
@@ -416,7 +416,7 @@ namespace Emgu.CV
          _libraryLoaded = DefaultLoadUnmanagedModules(modules.ToArray());
          /*
          _libraryLoaded = true;
-#if ANDROID || (UNITY_ANDROID && !UNITY_EDITOR)
+#if __ANDROID__ || (UNITY_ANDROID && !UNITY_EDITOR)
 		 
          System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
          FileInfo file = new FileInfo(asm.Location);
@@ -433,7 +433,7 @@ namespace Emgu.CV
             {
 			
                Console.WriteLine(string.Format("Trying to load {0}.", module));
-#if ANDROID
+#if __ANDROID__
                Java.Lang.JavaSystem.LoadLibrary(module);
 #else //(UNITY_ANDROID && !UNITY_EDITOR)
 

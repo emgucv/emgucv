@@ -13,7 +13,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using System.IO;
 
-#if ANDROID
+#if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
 using UIKit;
@@ -705,7 +705,7 @@ namespace Emgu.CV
          }
       }
 
-#if ANDROID
+#if __ANDROID__
 #elif IOS
       public UIImage ToUIImage()
       {
@@ -950,9 +950,9 @@ namespace Emgu.CV
          {
 #if IOS || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
             throw e;
-#elif ANDROID
+#elif __ANDROID__
             FileInfo fileInfo = new FileInfo(fileName);
-            using (Bitmap bmp = Bitmap)
+            using (Bitmap bmp = this.Bitmap)
             using (FileStream fs = fileInfo.Open(FileMode.Append, FileAccess.Write))
             {
                String extension = fileInfo.Extension.ToLower();

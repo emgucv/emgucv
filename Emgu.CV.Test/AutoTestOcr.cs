@@ -9,7 +9,15 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
+
+#if NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+#else
+//using Emgu.CV.UI.GLView;
 using NUnit.Framework;
+#endif
 
 namespace Emgu.CV.Test
 {
@@ -71,7 +79,7 @@ namespace Emgu.CV.Test
             ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
 
             String message = "Hello, World";
-            CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.FontFace.HersheySimplex, 1.0, new Bgr(Color.Pink).MCvScalar);
+            CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.FontFace.HersheySimplex, 1.0, new MCvScalar(0, 0, 255));
             //ImageViewer.Show(img);
             ocr.Recognize(img);
 
@@ -98,7 +106,7 @@ namespace Emgu.CV.Test
 
       private static Tesseract GetTesseract()
       {
-#if ANDROID
+#if __ANDROID__
          Emgu.Util.AndroidFileAsset.OverwriteMethod overwriteMethod = Emgu.Util.AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;
          System.IO.FileInfo a8 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context , "tessdata/eng.traineddata", "tmp", overwriteMethod);
          System.IO.FileInfo a0 = Emgu.Util.AndroidFileAsset.WritePermanantFileAsset(AssetsUtil.Context, "tessdata/eng.cube.bigrams", "tmp", overwriteMethod);

@@ -11,7 +11,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.Util;
-#if ANDROID
+#if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
 #elif IOS
 using UIKit;

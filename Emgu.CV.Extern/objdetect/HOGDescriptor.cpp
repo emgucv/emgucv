@@ -37,7 +37,7 @@ void cveHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vec
 void cveHOGDescriptorRelease(cv::HOGDescriptor** descriptor)
 {
    delete *descriptor;
-   *descriptor = nullptr;
+   *descriptor = 0;
 }
 
 

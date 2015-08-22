@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;ANDROID</DefineConstants>
+    <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
@@ -48,7 +48,8 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <DefineConstants>ANDROID</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <AndroidLinkSkip />
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
@@ -66,6 +67,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
@@ -209,36 +211,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Android.csproj">
-      <Project>{511c9a1f-fa2a-43ad-acb6-ae7794a49d42}</Project>
-      <Name>Emgu.CV.Contrib.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj">
-      <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
-      <Name>Emgu.CV.Cuda.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.Android.csproj">
-      <Project>{B767C8FF-228A-4DCF-B33B-C4B6A1E059C6}</Project>
-      <Name>Emgu.CV.ML.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.Android.csproj">
-      <Project>{17B67F34-D591-4BAD-ABB8-4D4199B20833}</Project>
-      <Name>Emgu.CV.OCR.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Android.csproj">
-      <Project>{89BCA3BE-823B-4702-9498-025C6B21462F}</Project>
-      <Name>Emgu.CV.Stitching.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Android.csproj">
-      <Project>{7dd21a10-96aa-4594-bdb9-c5cebacc212f}</Project>
-      <Name>Emgu.CV.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.Android.csproj">
-      <Project>{9CC9534A-41C4-4659-BB5C-47946BF7D7E0}</Project>
-      <Name>Emgu.Util.Android</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="..\..\Emgu.CV.Example\LicensePlateRecognition\license-plate.jpg">
       <Link>Assets\license-plate.jpg</Link>
     </AndroidAsset>
@@ -271,4 +243,11 @@
       <Link>Assets\trained_classifierNM2.xml</Link>
     </AndroidAsset>
   </ItemGroup>
+  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.ML\Emgu.CV.ML.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems" Label="Shared" />
 </Project>

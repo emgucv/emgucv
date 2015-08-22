@@ -2,7 +2,6 @@
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !NETFX_CORE
 
 using System;
 using System.Collections.Generic;
@@ -121,4 +120,3 @@ namespace Emgu.CV.OCR
       Symbol
    }
 }
-#endif

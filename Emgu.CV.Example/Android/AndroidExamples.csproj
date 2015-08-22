@@ -94,6 +94,7 @@
     <Reference Include="OpenTK-1.0" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="Xamarin.Mobile, Version=0.6.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -195,28 +196,6 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Android.csproj">
-      <Project>{511c9a1f-fa2a-43ad-acb6-ae7794a49d42}</Project>
-      <Name>Emgu.CV.Contrib.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.Android.csproj">
-      <Project>{5FA96BAF-CA3C-44CB-8E0F-12FEE3400874}</Project>
-      <Name>Emgu.CV.GPU.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.Android.csproj">
-      <Project>{17B67F34-D591-4BAD-ABB8-4D4199B20833}</Project>
-      <Name>Emgu.CV.OCR.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Android.csproj">
-      <Project>{7DD21A10-96AA-4594-BDB9-C5CEBACC212F}</Project>
-      <Name>Emgu.CV.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.Android.csproj">
-      <Project>{9cc9534a-41c4-4659-bb5c-47946bf7d7e0}</Project>
-      <Name>Emgu.Util.Android</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="..\SURFFeature\box.png">
       <Link>Assets\box.png</Link>
     </AndroidAsset>
@@ -267,6 +246,11 @@
     </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

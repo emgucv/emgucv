@@ -406,7 +406,7 @@ namespace Emgu.Util
       /// <param name="dest">the destination of memory copy</param>
       /// <param name="src">the source of memory copy</param>
       /// <param name="len">the number of bytes to be copied</param>
-#if (IOS || ANDROID || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX) && (!UNITY_EDITOR_WIN)
+#if (IOS || __ANDROID__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX) && (!UNITY_EDITOR_WIN)
       [DllImport("c", EntryPoint = "memcpy")]
       public static extern void memcpy(IntPtr dest, IntPtr src, int len);
 #elif WINDOWS_PHONE_APP

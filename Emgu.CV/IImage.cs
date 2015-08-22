@@ -4,7 +4,7 @@
 using System;
 using System.Drawing;
 
-#if ANDROID
+#if __ANDROID__
 using Bitmap =  Android.Graphics.Bitmap;
 #elif IOS
 using CoreGraphics;
