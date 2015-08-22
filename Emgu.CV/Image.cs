@@ -9,7 +9,7 @@ using System.Drawing;
 using Emgu.CV.CvEnum;
 #if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
-#elif IOS
+#elif __IOS__
 using UIKit;
 #elif NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
 #else
@@ -123,7 +123,7 @@ namespace Emgu.CV
          }
 
          String extension = fi.Extension.ToLower();
-#if IOS
+#if __IOS__
          //Open CV's libpng doesn't seem to be able to handle png in iOS
          //Use UIImage to load png
          if (extension.Equals(".png"))
@@ -195,7 +195,7 @@ namespace Emgu.CV
             throw e;
          } catch (Exception)
          {
-#if IOS
+#if __IOS__
             using (UIImage tmp = UIImage.FromFile(fileName))
             {
                AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
@@ -210,7 +210,7 @@ namespace Emgu.CV
 #endif
       }
 
-#if IOS || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
 #else
       /// <summary>
       /// Load the specific file using Bitmap
@@ -244,7 +244,7 @@ namespace Emgu.CV
       }
 #endif
 
-#if IOS || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
 #else
       /// <summary>
       /// Obtain the image from the specific Bitmap
@@ -2618,7 +2618,7 @@ namespace Emgu.CV
       }
       #endregion
 
-#if IOS || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
 #else
       //#region Conversion with Bitmap
       /// <summary>

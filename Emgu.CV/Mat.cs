@@ -15,7 +15,7 @@ using System.IO;
 
 #if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
-#elif IOS
+#elif __IOS__
 using UIKit;
 using CoreGraphics;
 #elif NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
@@ -706,7 +706,7 @@ namespace Emgu.CV
       }
 
 #if __ANDROID__
-#elif IOS
+#elif __IOS__
       public UIImage ToUIImage()
       {
          //if 4 channels, assume the color space is RGBA
@@ -948,7 +948,7 @@ namespace Emgu.CV
 
          if (e != null)
          {
-#if IOS || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#if __IOS__ || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
             throw e;
 #elif __ANDROID__
             FileInfo fileInfo = new FileInfo(fileName);

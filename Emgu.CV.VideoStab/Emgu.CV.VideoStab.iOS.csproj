@@ -9,7 +9,6 @@
     <RootNamespace>Emgu.CV.VideoStab</RootNamespace>
     <AssemblyName>Emgu.CV.VideoStab</AssemblyName>
     <TargetFrameworkIdentifier>Xamarin.iOS</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

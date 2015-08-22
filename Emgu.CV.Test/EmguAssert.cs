@@ -110,7 +110,7 @@ namespace Emgu.CV.Test
       }
 #endif
 
-#if IOS || __ANDROID__
+#if __IOS__ || __ANDROID__
       public static void IsTrue(bool condition)
       {
          Assert.True(condition);

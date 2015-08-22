@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 
-#if (__ANDROID__ || IOS || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#if (__ANDROID__ || __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
 #else
 using System.Drawing.Imaging;
 #endif
@@ -24,7 +24,7 @@ namespace Emgu.CV.Util
    /// </summary>
    public static class CvToolbox
    {
-#if __ANDROID__ || IOS || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#if __ANDROID__ || __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
 #else
       #region Color Pallette
       /// <summary>

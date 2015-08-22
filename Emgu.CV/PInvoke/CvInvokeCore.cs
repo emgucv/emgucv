@@ -91,7 +91,7 @@ namespace Emgu.CV
       /// <param name="line">The line number in the source where error is encountered</param>
       /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
       /// <returns></returns>
-#if IOS
+#if __IOS__
       [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
       private static int CvIgnoreErrorErrorHandler(
@@ -116,7 +116,7 @@ namespace Emgu.CV
       /// <param name="line">The line number in the source where error is encountered</param>
       /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
       /// <returns></returns>
-#if IOS
+#if __IOS__
       [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
       private static int CvErrorHandler(

@@ -13,7 +13,7 @@ using Emgu.CV.CvEnum;
 using Emgu.Util;
 #if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
-#elif IOS
+#elif __IOS__
 using UIKit;
 using CoreGraphics;
 #endif
@@ -463,7 +463,7 @@ namespace Emgu.CV
          }
       }
 
-      #if IOS
+      #if __IOS__
       public UIImage ToUIImage()
       {
          using (Image<Rgba, Byte> tmp = ToImage<Rgba, Byte>())

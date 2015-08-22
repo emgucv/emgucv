@@ -391,7 +391,7 @@ namespace Emgu.CV
                Console.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
             }
          }
-#elif IOS || UNITY_IPHONE || NETFX_CORE
+#elif __IOS__ || UNITY_IPHONE || NETFX_CORE
 #else
          if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {
@@ -447,7 +447,7 @@ namespace Emgu.CV
                Console.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
             }
          }
-#elif IOS || UNITY_IPHONE || NETFX_CORE
+#elif __IOS__ || UNITY_IPHONE || NETFX_CORE
 #else
          if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {

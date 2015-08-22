@@ -83,7 +83,7 @@ namespace Emgu.CV
          return _dataHandle.AddrOfPinnedObject();
       }
 
-#if IOS
+#if __IOS__
       [ObjCRuntime.MonoPInvokeCallback(typeof(MatDataAllocatorInvoke.MatAllocateCallback))]
 #endif
       static internal IntPtr AllocateCallback(CvEnum.DepthType type, int channels, int totalInBytes, IntPtr allocateDataActionPtr)
@@ -93,7 +93,7 @@ namespace Emgu.CV
          return allocateDataAction(type, channels, totalInBytes);
       }
 
-#if IOS
+#if __IOS__
       [ObjCRuntime.MonoPInvokeCallback(typeof(MatDataAllocatorInvoke.MatDeallocateCallback))]
 #endif
       static internal void DeallocateCallback(IntPtr freeDataActionPtr)

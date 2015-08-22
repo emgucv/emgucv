@@ -6,7 +6,7 @@ using System.Drawing;
 
 #if __ANDROID__
 using Bitmap =  Android.Graphics.Bitmap;
-#elif IOS
+#elif __IOS__
 using CoreGraphics;
 using UIKit;
 #endif
@@ -69,7 +69,7 @@ namespace Emgu.CV
    public interface IImage : IDisposable, ICloneable, IInputOutputArray
    {
 #if NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
-#elif IOS 
+#elif __IOS__ 
       /// <summary>
       /// Convert this image to UIImage
       /// </summary>
