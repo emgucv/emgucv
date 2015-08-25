@@ -506,7 +506,7 @@ namespace Emgu.CV.Test
       [Test]
       public void TestIntrisicParameters()
       {
-         #if !(IOS || __ANDROID__ || NETFX_CORE)
+         #if !(__IOS__ || __ANDROID__ || NETFX_CORE)
          System.Diagnostics.PerformanceCounter memCounter = new PerformanceCounter("Memory", "Available MBytes");
          Trace.WriteLine(String.Format("Available mem before: {0} Mb", memCounter.NextValue()));
          #endif
@@ -515,7 +515,7 @@ namespace Emgu.CV.Test
          {
             paramArr[i] = new IntrinsicCameraParameters(8);
          }
-         #if !(IOS || __ANDROID__ || NETFX_CORE)
+         #if !(__IOS__ || __ANDROID__ || NETFX_CORE)
          Trace.WriteLine(String.Format("Available mem after: {0} Mb", memCounter.NextValue()));
          #endif
       }
@@ -698,7 +698,7 @@ namespace Emgu.CV.Test
          //Assert.IsTrue(vertices[1].Equals(new PointF(6.0f, 0.0f)));
       }
 
-#if !(IOS || __ANDROID__ || NETFX_CORE)
+#if !(__IOS__ || __ANDROID__ || NETFX_CORE)
       [Test]
       public void TestGrayscaleBitmapConstructor()
       {
@@ -2762,7 +2762,7 @@ namespace Emgu.CV.Test
          capture1.Dispose();
          capture2.Dispose();
       }
-#if !(IOS || __ANDROID__)
+#if !(__IOS__ || __ANDROID__)
       [Test]
       public void TestGLImageView()
       {

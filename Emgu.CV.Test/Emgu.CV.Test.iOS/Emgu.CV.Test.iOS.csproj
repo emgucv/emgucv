@@ -86,6 +86,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="MonoTouch.NUnitLite" />
@@ -249,40 +250,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.iOS.csproj">
-      <Project>{5187E8E5-5EB5-4383-869E-E5C6B7996A9A}</Project>
-      <Name>Emgu.CV.ML.iOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.iOS.csproj">
-      <Project>{53F56A65-CDA9-49C2-A9BD-316EA18AEB49}</Project>
-      <Name>Emgu.CV.iOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.OCR\Emgu.CV.OCR.iOS.csproj">
-      <Project>{DFC37FFE-63A3-4D8C-9DBF-E9A1A7242998}</Project>
-      <Name>Emgu.CV.OCR.iOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.iOS.csproj">
-      <Project>{2B9B1965-3A6D-4D06-9427-43335D4C668F}</Project>
-      <Name>Emgu.CV.Stitching.iOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.iOS.csproj">
-      <Project>{317AF9CE-1B65-47A2-B142-BE556A312C72}</Project>
-      <Name>Emgu.Util.iOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.iOS.csproj">
-      <Project>{3BF42D92-3D10-45F7-865A-F9C009F71C30}</Project>
-      <Name>Emgu.CV.Contrib.iOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Shape\Emgu.CV.Shape.iOS.csproj">
-      <Project>{A4126442-4948-4C60-BF46-932B5A4F9ACB}</Project>
-      <Name>Emgu.CV.Shape.iOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.iOS.csproj">
-      <Project>{0F4522BD-7526-4052-BAC2-7CB674F94412}</Project>
-      <Name>Emgu.CV.VideoStab.iOS</Name>
+    <ProjectReference Include="..\..\Emgu.CV.World\Emgu.CV.World.IOS.csproj">
+      <Project>{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}</Project>
+      <Name>Emgu.CV.World.IOS</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>

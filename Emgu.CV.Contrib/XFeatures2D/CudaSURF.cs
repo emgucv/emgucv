@@ -1,4 +1,4 @@
-#if !(IOS || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_METRO || UNITY_EDITOR_WIN || NETFX_CORE)
+#if !(__IOS__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_METRO || UNITY_EDITOR_WIN || NETFX_CORE)
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------

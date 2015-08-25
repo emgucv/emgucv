@@ -28,7 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Windows.Store\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)PInvoke\Android\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\System.Drawing\*.cs" />
-
+    <Compile Include="$(MSBuildThisFileDirectory)PInvoke\iOS\ImageiOS.cs" />
   </ItemGroup>
   <PropertyGroup>
   <OpenCVBinaryDir>$(MSBuildThisFileDirectory)..\bin</OpenCVBinaryDir>
@@ -37,7 +37,7 @@
 	<!-- Windows store 8.1 (64bit) -->
     <When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x64')">
     <ItemGroup>  
-    <Content Include="$(OpenCVBinaryDir)\x64\cvextern.dll">
+    <Content Include="$(OpenCVBinaryDir)\x64_store\cvextern.dll">
       <Link>cvextern.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -47,7 +47,7 @@
 	<!-- Windows store 8.1 (32bit) -->
 	<When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86')">
     <ItemGroup>  
-    <Content Include="$(OpenCVBinaryDir)\x86\cvextern.dll">
+    <Content Include="$(OpenCVBinaryDir)\x86_store\cvextern.dll">
       <Link>cvextern.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -71,6 +71,18 @@
       <Link>cvextern.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+	</ItemGroup>
+    </When>  	
+	
+	<!-- IOS -->
+	<When Condition="('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')">
+  	<ItemGroup>
+    <ObjcBindingNativeLibrary Include="$(MSBuildThisFileDirectory)\PInvoke\iOS\libemgucv.a" />
+    </ItemGroup>
+	    <ItemGroup>  
+    <Compile Include="$(MSBuildThisFileDirectory)\PInvoke\iOS\libemgucv.linkwith.cs">
+      <DependentUpon>libemgucv.a</DependentUpon>
+    </Compile>
 	</ItemGroup>
     </When>  	
 

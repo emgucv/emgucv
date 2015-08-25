@@ -17,8 +17,12 @@ IF(WIN32)
 FIND_PROGRAM (CSC_EXECUTABLE_20 csc
 $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
 "C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727")
+FIND_PROGRAM (MSBUILD_EXECUTABLE_20 msbuild
+$ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
+"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727")
 IF(CSC_EXECUTABLE_20)
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_20})
+SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_20})
 ENDIF()
 
 FIND_PROGRAM (CSC_EXECUTABLE_35 csc
@@ -27,13 +31,15 @@ $ENV{windir}/Microsoft.NET/Framework64/v3.5/
 $ENV{windir}/Microsoft.NET/Framework/v3.5/
 "C:/Windows/Microsoft.NET/Framework/v3.5"
 )
-#MESSAGE( "$ENV{programfiles}/Reference Assemblies/Microsoft/Framework/.NETFramework/v3.5/Profile/Client/" )
-FIND_FILE (CSC_MSCORLIB_35 mscorlib.dll
-"$ENV{programfiles}/Reference Assemblies/Microsoft/Framework/.NETFramework/v3.5/Profile/Client/"
-"C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v3.5/Profile/Client/"
+FIND_PROGRAM (MSBUILD_EXECUTABLE_35 msbuild
+$ENV{windir}/Microsoft.NET/Framework64/v3.5/
+"C:/Windows/Microsoft.NET/Framework64/v3.5"
+$ENV{windir}/Microsoft.NET/Framework/v3.5/
+"C:/Windows/Microsoft.NET/Framework/v3.5"
 )
 IF(CSC_EXECUTABLE_35)
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_35})
+SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_35})
 ENDIF()
 
 FIND_PROGRAM (CSC_EXECUTABLE_40 csc 
@@ -41,24 +47,32 @@ $ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
 "C:/Microsoft.NET/Framework64/v4.0.30319/"
 $ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
 "C:/Microsoft.NET/Framework/v4.0.30319/")
+FIND_PROGRAM (MSBUILD_EXECUTABLE_40 msbuild 
+$ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
+"C:/Microsoft.NET/Framework64/v4.0.30319/"
+$ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
+"C:/Microsoft.NET/Framework/v4.0.30319/")
 IF(CSC_EXECUTABLE_40)
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_40})
+SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_40})
 ENDIF()
 
 IF(CSC_EXECUTABLE_20 AND CSC_PREFERRED_VERSION MATCHES "2.0")
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_20})
+SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_20})
 ENDIF()
 
 IF(CSC_EXECUTABLE_35 AND CSC_PREFERRED_VERSION MATCHES "3.5")
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_35})
+SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_35})
 ENDIF()
 
 IF(CSC_EXECUTABLE_40 AND CSC_PREFERRED_VERSION MATCHES "4.0")
-SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_40})
+SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_40})
 ENDIF()
-
 ELSE(WIN32)
 FIND_PROGRAM (CSC_EXECUTABLE mcs)
+FIND_PROGRAM (MSBUILD_EXECUTABLE xbuild)
 ENDIF(WIN32)
 
 FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil 
@@ -97,27 +111,11 @@ FIND_PROGRAM (RESGEN_EXECUTABLE resgen
 "$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/Bin"
 "$ENV{programfiles}/Microsoft Visual Studio 8/SDK/v2.0/Bin"
 /usr/bin)
-
-# ----------------------------------------------------------------------------
-#  FIND MSBUILD
-# ----------------------------------------------------------------------------
-FIND_PROGRAM(MSBUILD_PROGRAM
-  NAMES MSBuild
-  HINTS
-#  comment out MSBUILD 4.0 for SHFB 
-  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework64/v4.0.30319"
-  "C:/WINDOWS/Microsoft.NET/Framework64/v4.0.30319"
-  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v4.0.30319"
-  "C:/WINDOWS/Microsoft.NET/Framework/v4.0.30319"
-#  "$ENV{SYSTEMROOT}/Microsoft.NET/Framework/v3.5"
-#  "C:/WINDOWS/Microsoft.NET/Framework/v3.5"
-  )
   
 SET (CSharp_FOUND FALSE)
-
-IF (CSC_EXECUTABLE AND AL_EXECUTABLE AND RESGEN_EXECUTABLE)
+IF (CSC_EXECUTABLE AND AL_EXECUTABLE AND RESGEN_EXECUTABLE AND MSBUILD_EXECUTABLE)
 	SET (CSharp_FOUND TRUE)
-ENDIF (CSC_EXECUTABLE AND AL_EXECUTABLE AND RESGEN_EXECUTABLE)
+ENDIF ()
 
 IF (NOT CSharp_FIND_QUIETLY)
    IF (CSC_EXECUTABLE)
@@ -132,16 +130,19 @@ IF (NOT CSharp_FIND_QUIETLY)
    IF (RESGEN_EXECUTABLE)
 	MESSAGE(STATUS "Found resgen: ${RESGEN_EXECUTABLE}")
    ENDIF(RESGEN_EXECUTABLE)
+   IF (MSBUILD_EXECUTABLE)
+    MESSAGE(STATUS "Found msbuild: ${MSBUILD_EXECUTABLE}")
+   ENDIF(MSBUILD_EXECUTABLE)
 ENDIF (NOT CSharp_FIND_QUIETLY)
 
 IF (CSharp_FOUND)
 ELSE (CSharp_FOUND)
 	IF (CSharp_FIND_REQUIRED)
 		MESSAGE(FATAL_ERROR "Could not find one or more of the
-following programs: csc, gacutil, al, resgen")
+following programs: csc, gacutil, al, resgen, msbuild")
 	ENDIF (CSharp_FIND_REQUIRED)
 ENDIF (CSharp_FOUND)
 
-MARK_AS_ADVANCED(CSC_EXECUTABLE AL_EXECUTABLE GACUTIL_EXECUTABLE)
+MARK_AS_ADVANCED(CSC_EXECUTABLE AL_EXECUTABLE GACUTIL_EXECUTABLE MSBUILD_EXECUTABLE)
 
 

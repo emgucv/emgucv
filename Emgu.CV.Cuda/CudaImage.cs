@@ -307,11 +307,12 @@ namespace Emgu.CV.Cuda
       }
 
       #region IImage Members
-#if IOS
-      public MonoTouch.UIKit.UIImage ToUIImage()
+#if __IOS__
+      /*
+      public UIKit.UIImage ToUIImage()
       {
          throw new NotImplementedException();
-      }
+      }*/
 #elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
       /// <summary>
       /// convert the current CudaImage to its equivalent Bitmap representation

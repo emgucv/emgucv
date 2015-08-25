@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+#if __IOS__
 using System;
 using System.Drawing;
 using Emgu.CV;
@@ -77,3 +78,4 @@ namespace Emgu.CV
    }
 }
 
+#endif

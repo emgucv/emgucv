@@ -16,9 +16,9 @@ using Emgu.Util;
 
 #if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
-#elif IOS
-using MonoTouch.UIKit;
-using MonoTouch.CoreGraphics;
+#elif __IOS__
+using UIKit;
+using CoreGraphics;
 #else
 #endif
 
@@ -174,6 +174,14 @@ namespace Emgu.CV.Cuda
          Download(m);
          return m;
       }
+
+#if __IOS__
+      public UIImage ToUIImage()
+      {
+         using (Mat m = ToMat())
+            return m.ToUIImage();
+      }
+#endif
 
       /// <summary>
       /// Copies scalar value to every selected element of the destination GpuMat:
@@ -394,7 +402,7 @@ namespace Emgu.CV.Cuda
          return result;
       }
 
-#if !(NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO))
+#if !(__IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
       public Bitmap Bitmap
       {
          get
