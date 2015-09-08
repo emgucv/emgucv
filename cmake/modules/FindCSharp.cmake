@@ -42,6 +42,11 @@ SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_35})
 SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_35})
 ENDIF()
 
+FIND_FILE (CSC_MSCORLIB_35 mscorlib.dll
+"$ENV{programfiles}/Reference Assemblies/Microsoft/Framework/.NETFramework/v3.5/Profile/Client/"
+"C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v3.5/Profile/Client/"
+)
+
 FIND_PROGRAM (CSC_EXECUTABLE_40 csc 
 $ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
 "C:/Microsoft.NET/Framework64/v4.0.30319/"
