@@ -61,6 +61,20 @@ namespace Emgu.CV.Test
       }
 
       [TestAttribute]
+      public void TestMatPixelAccess()
+      {
+         Mat m1 = EmguAssert.LoadMat("lena.jpg");
+         byte[] data = new byte[m1.Width * m1.Height * 3]; //3 channel bgr image data
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         using (Mat m2 = new Mat(m1.Size, DepthType.Cv8U, 3, handle.AddrOfPinnedObject(), m1.Width * 3))
+            CvInvoke.BitwiseNot(m1, m2);
+         handle.Free();
+         //now the data array contains the pixel data of the inverted lena image.
+         //note that if the m2 Mat was allocated with the wrong size, data[] array will contains all 0s, and no exception will be thrown
+         //so be really careful when performing the above operations.
+      }
+
+      [TestAttribute]
       public void TestMatToFileStorage()
       {
          //create a matrix m with random values

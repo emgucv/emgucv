@@ -100,6 +100,23 @@ void cveSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector)
    delete *detector;
    *detector = 0;
 }
+cv::SimpleBlobDetector* cveSimpleBlobDetectorCreateWithParams(cv::Feature2D** feature2DPtr, cv::SimpleBlobDetector::Params* params)
+{
+   cv::Ptr<cv::SimpleBlobDetector> detectorPtr = cv::SimpleBlobDetector::create(*params);
+   detectorPtr.addref();
+   *feature2DPtr = dynamic_cast<cv::Feature2D*>(detectorPtr.get());
+   return detectorPtr.get();
+}
+cv::SimpleBlobDetector::Params* cveSimpleBlobDetectorParamsCreate()
+{
+   cv::SimpleBlobDetector::Params* p = new cv::SimpleBlobDetector::Params();
+   return p;
+}
+void cveSimpleBlobDetectorParamsRelease(cv::SimpleBlobDetector::Params** params)
+{
+   delete *params;
+   *params = 0;
+}
 
 // Draw keypoints.
 void drawKeypoints(

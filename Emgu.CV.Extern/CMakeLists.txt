@@ -620,6 +620,44 @@ CREATE_OCV_CLASS_PROPERTY(
 ENDIF()
 ############################### core code gen END ################################
 
+############################### features2d code gen START ##############################
+IF(HAVE_opencv_features2d)
+  CREATE_OCV_CLASS_PROPERTY( 
+  "features2d/SimpleBlobDetector_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/SimpleBlobDetectorParamsGenerated.cs"
+  "cv::SimpleBlobDetector::Params" 
+  "SimpleBlobDetectorParams" 
+  "thresholdStep;minThreshold;maxThreshold;minDistBetweenBlobs;filterByColor;blobColor;filterByArea;minArea;maxArea;filterByCircularity;minCircularity;maxCircularity;filterByInertia;minInertiaRatio;maxInertiaRatio;filterByConvexity;minConvexity;maxConvexity;minRepeatability" 
+  "float;float;float;float;bool;uchar;bool;float;float;bool;float;float;bool;float;float;bool;float;float;size_t" 
+  "element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element"
+  "ThresholdStep;MinThreshold;MaxThreshold;MinDistBetweenBlobs;FilterByColor;blobColor;FilterByArea;MinArea;MaxArea;FilterByCircularity;MinCircularity;MaxCircularity;FilterByInertia;MinInertiaRatio;MaxInertiaRatio;FilterByConvexity;MinConvexity;MaxConvexity;MinRepeatability" 
+  "float;float;float;float;bool;Byte;bool;float;float;bool;float;float;bool;float;float;bool;float;float;IntPtr"
+  "Threshold step;
+  Min threshold;
+  Max threshold;
+  Min dist between blobs;
+  Filter by color;
+  Blob color;
+  Filter by area;
+  Min area;
+  Max area;
+  Filter by circularity;
+  Min circularity;
+  Max circularity;
+  Filter by inertia;
+  Min inertia ratio;
+  Max inertia ratio;
+  Filter by convexity;
+  Min Convexity;
+  Max Convexity;
+  Min Repeatability"
+  "Emgu.CV.Features2D"
+  "Features2DInvoke"
+  "SimpleBlobDetectorParams"
+  "#include \"features2d_c.h\"")
+ENDIF()
+############################### features2d code gen END ################################
+
 ############################### ml code gen START ##############################
 IF(HAVE_opencv_ml)
   CREATE_OCV_CLASS_PROPERTY( 

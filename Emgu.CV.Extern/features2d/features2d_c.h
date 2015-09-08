@@ -46,7 +46,10 @@ CVAPI(void) cveMserFeatureDetectorRelease(cv::MSER** mser);
 
 // SimpleBlobDetector
 CVAPI(cv::SimpleBlobDetector*) cveSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr);
+CVAPI(cv::SimpleBlobDetector*) cveSimpleBlobDetectorCreateWithParams(cv::Feature2D** feature2DPtr, cv::SimpleBlobDetector::Params* params);
 CVAPI(void) cveSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector);
+CVAPI(cv::SimpleBlobDetector::Params*) cveSimpleBlobDetectorParamsCreate();
+CVAPI(void) cveSimpleBlobDetectorParamsRelease(cv::SimpleBlobDetector::Params** params);
 
 // Draw keypoints.
 CVAPI(void) drawKeypoints(

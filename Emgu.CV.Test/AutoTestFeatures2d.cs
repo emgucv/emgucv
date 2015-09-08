@@ -606,5 +606,14 @@ namespace Emgu.CV.Test
          Mat descriptors2 = new Mat();
          extractor.Compute(box, kpts, descriptors2);
       }
+
+      [Test]
+      public void TestSimpleBlobDetector()
+      {
+         Mat box = EmguAssert.LoadMat("box.png");
+         SimpleBlobDetectorParams p = new SimpleBlobDetectorParams();
+         SimpleBlobDetector detector = new SimpleBlobDetector(p);
+         MKeyPoint[] keypoints = detector.Detect(box);
+      }
    }
 }
