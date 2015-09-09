@@ -2,12 +2,15 @@
 #  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(${MSBUILD_PROGRAM} MATCHES "MSBuild") 
-MESSAGE(STATUS "MSBUILD_PROGRAM: ${MSBUILD_PROGRAM}")
+#MESSAGE(STATUS "MSBUILD_EXECUTABLE_40: ${MSBUILD_EXECUTABLE_40}")
+SET(MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_40})
+
+IF(NOT ("${MSBUILD_EXECUTABLE}" STREQUAL ""))
+#MESSAGE(STATUS "MSBUILD_EXECUTABLE: ${MSBUILD_EXECUTABLE}")
 PROJECT(Emgu.CV.Document.Html)
 ADD_CUSTOM_TARGET(
    ${PROJECT_NAME}
-   COMMAND ${MSBUILD_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
+   COMMAND ${MSBUILD_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV.Cuda Emgu.CV.OCR Emgu.CV.Shape Emgu.CV.Stitching Emgu.CV.Superres Emgu.CV.VideoStab Emgu.CV.Contrib)
@@ -15,7 +18,7 @@ ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV
 PROJECT(Emgu.CV.Documentation.chm)
 ADD_CUSTOM_TARGET(
    ${PROJECT_NAME} ALL
-   COMMAND ${MSBUILD_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj /property:OutputPath=. /property:HelpFileFormat=HtmlHelp1
+   COMMAND ${MSBUILD_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj /property:OutputPath=. /property:HelpFileFormat=HtmlHelp1
    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.Util Emgu.CV Emgu.CV.UI Emgu.CV.ML Emgu.CV.Cuda Emgu.CV.OCR Emgu.CV.Shape Emgu.CV.Stitching Emgu.CV.Superres Emgu.CV.VideoStab Emgu.CV.Contrib)
@@ -28,5 +31,5 @@ INSTALL(
   )
 
 ELSE()
-MESSAGE(STATUS "MSBUILD_PROGRAM: NOT FOUND")
+MESSAGE(STATUS "MSBUILD_EXECUTABLE: NOT FOUND")
 ENDIF()

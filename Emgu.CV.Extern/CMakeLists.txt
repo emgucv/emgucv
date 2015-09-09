@@ -94,6 +94,13 @@ IF(NOT IOS)
 CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda Emgu.CV.Cuda "#include \"opencv2/core/cuda.hpp\"")
 ENDIF()
 
+MACRO(WRITE_IF_DIFFERENT fname content)
+  FILE(READ "${fname}" EXISTING_FILE_CONTENT)
+  IF(NOT ("${EXISTING_FILE_CONTENT}" STREQUAL "${content}") )
+	FILE(WRITE "${fname}" "${content}")
+  ENDIF()
+ENDMACRO()
+
 #################################################################################
 # Code Generation
 # Types:
@@ -182,8 +189,8 @@ namespace ${cs_namespace}
      [return: MarshalAs(CvInvoke.BoolMarshalType)]")
      ENDIF()
 
-     IF(${MARSHAL_TYPE} STREQUAL "val")
-     IF (${PROPERTY_TYPE} STREQUAL "cv::String") #special handling for functions that returns strings
+     IF("${MARSHAL_TYPE}" STREQUAL "val")
+     IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
      ")
@@ -233,7 +240,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
      }
      ")
      ENDIF()
-     ELSEIF(${MARSHAL_TYPE} STREQUAL "struct")
+     ELSEIF("${MARSHAL_TYPE}" STREQUAL "struct")
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
@@ -439,9 +446,9 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
    ${CS_CLASS_SOURCE}
 }")
    #MESSAGE(STATUS "-------------------- CS_CLASS_SOURCE: ${CS_CLASS_SOURCE}")
-   FILE(WRITE "${csfname}" "${CS_SOURCE}")
-   FILE(WRITE "${PROJECT_SOURCE_DIR}/${fname}.h" "${C_HEADER_SOURCE}")
-   FILE(WRITE "${PROJECT_SOURCE_DIR}/${fname}.cpp" "${C_SOURCE}")
+   WRITE_IF_DIFFERENT("${csfname}" "${CS_SOURCE}")
+   WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.h" "${C_HEADER_SOURCE}")
+   WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.cpp" "${C_SOURCE}")
 
 ENDMACRO()
 
