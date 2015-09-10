@@ -2051,7 +2051,7 @@ namespace Emgu.CV
       /// <param name="histSize">Array of histogram sizes in each dimension.</param>
       /// <param name="ranges">Array of the dims arrays of the histogram bin boundaries in each dimension.</param>
       /// <param name="accumulate">Accumulation flag. If it is set, the histogram is not cleared in the beginning when it is allocated. This feature enables you to compute a single histogram from several sets of arrays, or to update the histogram in time.</param>
-      public static void CalcHist(IInputArray images, int[] channels, IInputArray mask, IOutputArray hist, int[] histSize, float[] ranges, bool accumulate)
+      public static void CalcHist(IInputArrayOfArrays images, int[] channels, IInputArray mask, IOutputArray hist, int[] histSize, float[] ranges, bool accumulate)
       {
          using (VectorOfInt channelsVec = new VectorOfInt(channels))
          using (VectorOfInt histSizeVec = new VectorOfInt(histSize))
@@ -2078,7 +2078,7 @@ namespace Emgu.CV
       /// <param name="backProject">Destination back projection array that is a single-channel array of the same size and depth as images[0] .</param>
       /// <param name="ranges">Array of arrays of the histogram bin boundaries in each dimension.</param>
       /// <param name="scale"> Optional scale factor for the output back projection.</param>
-      public static void CalcBackProject(IInputArray images, int[] channels, IInputArray hist, IOutputArray backProject, float[] ranges, double scale = 1.0)
+      public static void CalcBackProject(IInputArrayOfArrays images, int[] channels, IInputArray hist, IOutputArray backProject, float[] ranges, double scale = 1.0)
       {
          using (VectorOfInt channelsVec = new VectorOfInt(channels))
          using (VectorOfFloat rangeVec = new VectorOfFloat(ranges))

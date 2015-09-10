@@ -199,3 +199,18 @@ void cveMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result)
    cv::Mat r = mat->cross(*m);
    cv::swap(r, *result);
 }
+
+
+void cveMatCopyDataTo(cv::Mat* mat, unsigned char* dest)
+{
+   const int* sizes = mat->size;
+   cv::Mat destMat = cv::Mat(mat->dims, mat->size, mat->type(), dest);
+   mat->copyTo(destMat);
+}
+
+void cveMatCopyDataFrom(cv::Mat* mat, unsigned char* source)
+{
+   const int* sizes = mat->size;
+   cv::Mat fromMat = cv::Mat(mat->dims, mat->size, mat->type(), source);
+   fromMat.copyTo(*mat);
+}

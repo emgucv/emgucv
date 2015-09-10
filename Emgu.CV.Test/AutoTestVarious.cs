@@ -94,6 +94,35 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestDenseHistogram2()
+      {
+         Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
+         CvInvoke.Randu(img, new MCvScalar(), new MCvScalar(255,255,255));
+         Mat hist = new Mat();
+         using (VectorOfMat vms = new VectorOfMat(img))
+         {
+            CvInvoke.CalcHist(vms, new int[] {0, 1, 2}, null, hist, new int[] {20, 20, 20},
+               new float[] {0, 255, 0, 255, 0, 255}, true);
+            byte[] bytes = hist.GetData();
+            hist.CopyDataFrom(bytes);
+         }
+      }
+
+      [Test]
+      public void TestDenseHistogram3()
+      {
+         Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
+         CvInvoke.Randu(img, new MCvScalar(), new MCvScalar(255, 255, 255));
+         Mat hist = new Mat();
+         using (VectorOfMat vms = new VectorOfMat(img))
+         {
+            CvInvoke.CalcHist(vms, new int[] { 0, 1, 2 }, null, hist, new int[] { 20, 20, 20 },
+               new float[] { 0, 255, 0, 255, 0, 255 }, true);
+            byte[] bytes = hist.GetData();
+         }
+      }
+
+      [Test]
       public void TestLookup()
       {
          double[] b = new double[4] { 0, 1, 2, 3 };
@@ -2805,9 +2834,18 @@ namespace Emgu.CV.Test
 
       }
 
+      [Test]
+      public void TestHoughLine()
+      {
+         Mat img = EmguAssert.LoadMat("box.png");
+         using (VectorOfPointF vp = new VectorOfPointF())
+         {
+            CvInvoke.HoughLines(img, vp, 10, Math.PI/30, 5);
+            PointF[] pts = vp.ToArray();
+         }
+      }
+
 #if !NETFX_CORE
-
-
       [Test]
       public void TestERFilter()
       {

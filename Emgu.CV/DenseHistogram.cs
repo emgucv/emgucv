@@ -223,25 +223,9 @@ namespace Emgu.CV
             totalDim *= _binSizes[i];
          }
          float[] result = new float[totalDim];
-         GCHandle handle = GCHandle.Alloc(result, GCHandleType.Pinned);
-         try
-         {
-            using (
-               Mat m = new Mat(this.Rows, this.Cols, this.Depth, this.NumberOfChannels, handle.AddrOfPinnedObject(),
-                  this.Step))
-            {
-               CopyTo(m);
-            }
-         }
-         finally
-         {
-            handle.Free();
-         }
+         CopyDataTo(result);
          return result;
       }
-      
-         
-      
 
       internal class DebuggerProxy
       {

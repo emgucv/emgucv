@@ -2562,7 +2562,7 @@ namespace Emgu.CV
          using (ScalarArray iaLow = new ScalarArray(low))
          using (ScalarArray iaHigh = new ScalarArray(high))
          {
-            Randu(dst, low, high);
+            Randu(dst, iaLow, iaHigh);
          }
       }
 

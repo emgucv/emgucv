@@ -94,32 +94,40 @@ namespace Emgu.CV
          {
             if (IsEmpty)
                return null;
-            byte[] data = new byte[Rows * Cols * ElementSize];
+            byte[] data = new byte[Total.ToInt32() * ElementSize];
+            /*
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            using (Mat m = new Mat(Rows, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols * ElementSize))
-            {
-               CopyTo(m);
-            }
-            handle.Free();
+            MatInvoke.cveMatCopyDataTo(this, handle.AddrOfPinnedObject());
+            handle.Free();*/
+            CopyDataTo(data);
             return data;
          }
          set
          {
-            Debug.Assert(value.Length == Rows * Cols * ElementSize, String.Format("Invalid byte length, expecting {0} but was {1}", Rows * Cols * ElementSize, value.Length));
+            /*
+            Debug.Assert(value.Length == Total.ToInt32() * ElementSize, String.Format("Invalid byte length, expecting {0} but was {1}", Total.ToInt32() * ElementSize, value.Length));
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            using (Mat m = new Mat(Rows, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols * ElementSize))
-            {
-               m.CopyTo(this);
-            }
-            handle.Free();
+            MatInvoke.cveMatCopyDataFrom(this, handle.AddrOfPinnedObject());
+            handle.Free();*/
+            CopyDataFrom(value);
          }
       }
-
-      /*
-      public void SetData(Array data)
+   
+      public void CopyDataTo<T>(T[] data)
       {
-         
-      }*/
+         Debug.Assert(Marshal.SizeOf(typeof(T)) * data.Length >= Total.ToInt32() * ElementSize, String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length) );
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         MatInvoke.cveMatCopyDataTo(this, handle.AddrOfPinnedObject());
+         handle.Free();
+      }
+
+      public void CopyDataFrom<T>(T[] data)
+      {
+         Debug.Assert(data.Length == Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length));
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         MatInvoke.cveMatCopyDataFrom(this, handle.AddrOfPinnedObject());
+         handle.Free();
+      }
 
       internal bool _needDispose;
 
@@ -1170,6 +1178,12 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cveMatCross(IntPtr mat, IntPtr m, IntPtr result);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveMatCopyDataTo(IntPtr mat, IntPtr dest);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveMatCopyDataFrom(IntPtr mat, IntPtr source);
 
    }
 }

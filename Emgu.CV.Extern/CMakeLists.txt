@@ -113,6 +113,7 @@ ENDMACRO()
 # * act1: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is a value / structure
 # * act1obj: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is an object
 # * element: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
+# * elementR: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get;}
 #################################################################################
 MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mtypes cs_func_names csptypes csp_docs cs_namespace cs_invoke_class cs_class_name)
    SET(FILE_NAME ${fname})
@@ -408,6 +409,27 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      }
      ")
      ENDIF()
+     ELSEIF("${MARSHAL_TYPE}" STREQUAL "elementR")
+     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
+     ")
+     SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}; }
+     ")
+
+     SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern ${CS_PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj);
+     ")
+     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
+     {
+        get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
+     }
+     ")
      ELSE() # for "prop" type
      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
@@ -459,18 +481,20 @@ IF(HAVE_opencv_core)
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/MatGenerated.cs"
   "cv::Mat" 
   "Mat" 
-  "isContinuous;isSubmatrix;depth;empty;channels;pop_back;push_back" 
-  "bool;bool;int;bool;int;int;cv::Mat" 
-  "val;val;val;val;val;act1;act1obj"
-  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;PopBack;PushBack" 
-  "bool;bool;CvEnum.DepthType;bool;int;int;Mat"
+  "isContinuous;isSubmatrix;depth;empty;channels;pop_back;push_back;total;dims" 
+  "bool;bool;int;bool;int;int;cv::Mat;size_t;int" 
+  "val;val;val;val;val;act1;act1obj;val;elementR"
+  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;PopBack;PushBack;Total;Dims" 
+  "bool;bool;CvEnum.DepthType;bool;int;int;Mat;IntPtr;int"
   "True if the data is continues;
   True if the matrix is a submatrix of another matrix;
   Depth type;
   True if the Mat is empty;
   Number of channels;
   The method removes one or more rows from the bottom of the matrix;
-  Adds elements to the bottom of the matrix"
+  Adds elements to the bottom of the matrix;
+  The method returns the number of array elements (a number of pixels if the array represents an image);
+  The matrix dimensionality"
   "Emgu.CV"
   "CvInvoke"
   "Mat"

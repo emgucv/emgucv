@@ -43,7 +43,7 @@ CVAPI(cv::Mat*) cveMatReshape(cv::Mat* mat, int cn, int rows);
 CVAPI(double) cveMatDot(cv::Mat* mat, cv::_InputArray* m);
 CVAPI(void) cveMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result);
 
-
-
+CVAPI(void) cveMatCopyDataTo(cv::Mat* mat, unsigned char* dest);
+CVAPI(void) cveMatCopyDataFrom(cv::Mat* mat, unsigned char* source);
 
 #endif
