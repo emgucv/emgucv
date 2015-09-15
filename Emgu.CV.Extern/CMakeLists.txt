@@ -95,9 +95,13 @@ CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" ${CMAKE_CURRENT_S
 ENDIF()
 
 MACRO(WRITE_IF_DIFFERENT fname content)
-  FILE(READ "${fname}" EXISTING_FILE_CONTENT)
-  IF(NOT ("${EXISTING_FILE_CONTENT}" STREQUAL "${content}") )
-	FILE(WRITE "${fname}" "${content}")
+  IF (EXISTS "${fname}")
+    FILE(READ "${fname}" EXISTING_FILE_CONTENT)
+    IF(NOT ("${EXISTING_FILE_CONTENT}" STREQUAL "${content}") )
+	  FILE(WRITE "${fname}" "${content}")
+    ENDIF()
+  ELSE()
+    FILE(WRITE "${fname}" "${content}")
   ENDIF()
 ENDMACRO()
 
