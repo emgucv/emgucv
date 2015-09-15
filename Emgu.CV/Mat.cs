@@ -189,6 +189,11 @@ namespace Emgu.CV
       {
       }
 
+      public Mat(int[] sizes, CvEnum.DepthType type, IntPtr data, IntPtr[] steps = null)
+         : this(MatInvoke.cveMatCreateMultiDimWithData(sizes, type, data, steps), true, true)
+      {
+      }
+
       /// <summary>
       /// Create a Mat header from existing data
       /// </summary>
@@ -1099,6 +1104,18 @@ namespace Emgu.CV
             MatInvoke.cveMatCross(Ptr, iaM, result);
          return result;
       }
+
+      public int[] SizeOfDimemsion
+      {
+         get
+         {
+            int[] sizes = new int[Dims];
+            GCHandle handle = GCHandle.Alloc(sizes, GCHandleType.Pinned);
+            MatInvoke.cveMatGetSizeOfDimension(_ptr, handle.AddrOfPinnedObject());
+            handle.Free();
+            return sizes;
+         }
+      }
    }
 
    internal static class MatInvoke
@@ -1185,6 +1202,44 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cveMatCopyDataFrom(IntPtr mat, IntPtr source);
 
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveMatGetSizeOfDimension(IntPtr mat, IntPtr sizes);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern IntPtr cveMatCreateMultiDimWithData(int ndims, IntPtr sizes, CvEnum.DepthType type, IntPtr data,
+         IntPtr steps);
+
+      internal static IntPtr cveMatCreateMultiDimWithData(int[] sizes, CvEnum.DepthType type, IntPtr data,
+         IntPtr[] steps)
+      {
+         GCHandle sizesHandle = GCHandle.Alloc(sizes, GCHandleType.Pinned);
+
+         try
+         { 
+            if (steps == null)
+            {
+               return cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data,
+                  IntPtr.Zero);
+            }
+            else
+            {
+               GCHandle stepsHandle = GCHandle.Alloc(steps, GCHandleType.Pinned);
+               try
+               {
+                  return cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data, stepsHandle.AddrOfPinnedObject());
+               }
+               finally
+               {
+                  stepsHandle.Free();
+               }
+
+            }
+         }
+         finally
+         {
+            sizesHandle.Free();
+         }
+      }
    }
 }
 

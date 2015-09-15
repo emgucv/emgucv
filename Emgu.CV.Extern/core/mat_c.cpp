@@ -108,6 +108,11 @@ cv::Mat* cveMatCreateWithData(int rows, int cols, int type, void* data, size_t s
    return new cv::Mat(rows, cols, type, data, step);
 }
 
+cv::Mat* cveMatCreateMultiDimWithData(int ndims, const int* sizes, int type, void* data, size_t* steps)
+{
+   return new cv::Mat(ndims, sizes, type, data, steps);
+}
+
 cv::Mat* cveMatCreateFromRect(cv::Mat* mat, CvRect* roi)
 {
    return new cv::Mat(*mat, *roi);
@@ -213,4 +218,10 @@ void cveMatCopyDataFrom(cv::Mat* mat, unsigned char* source)
    const int* sizes = mat->size;
    cv::Mat fromMat = cv::Mat(mat->dims, mat->size, mat->type(), source);
    fromMat.copyTo(*mat);
+}
+
+void cveMatGetSizeOfDimension(cv::Mat* mat, int* sizes)
+{
+   const int* s = mat->size;
+   memcpy(sizes, s, sizeof(int)*mat->dims);
 }

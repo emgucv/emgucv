@@ -46,4 +46,5 @@ CVAPI(void) cveMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result);
 CVAPI(void) cveMatCopyDataTo(cv::Mat* mat, unsigned char* dest);
 CVAPI(void) cveMatCopyDataFrom(cv::Mat* mat, unsigned char* source);
 
+CVAPI(void) cveMatGetSizeOfDimension(cv::Mat* mat, int* sizes);
 #endif
