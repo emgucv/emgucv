@@ -3251,15 +3251,14 @@ namespace Emgu.CV
          OclDevice defaultDevice = OclDevice.Default;
          
          StringBuilder builder = new StringBuilder();
-         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformInfo())
+         using (VectorOfOclPlatformInfo oclPlatformsInfo = OclInvoke.GetPlatformsInfo())
          {
-            if (oclPlatformInfos.Size > 0)
+            if (oclPlatformsInfo.Size > 0)
             {
-               for (int i = 0; i < oclPlatformInfos.Size; i++)
+               for (int i = 0; i < oclPlatformsInfo.Size; i++)
                {
-                  OclPlatformInfo platformInfo = oclPlatformInfos[i];
+                  OclPlatformInfo platformInfo = oclPlatformsInfo[i];
                   builder.Append(String.Format("Platform {0}: {1}{2}", i, platformInfo.ToString(), Environment.NewLine));
-
 
                   for (int j = 0; j < platformInfo.DeviceNumber; j++)
                   {
@@ -3281,7 +3280,7 @@ namespace Emgu.CV
          get
          {
             if (HaveOpenCL)
-               using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformInfo())
+               using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
                {
                   if (oclPlatformInfos.Size > 0)
                   {

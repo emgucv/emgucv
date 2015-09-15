@@ -62,8 +62,6 @@ namespace Emgu.CV
          CvInvoke.CheckLibraryLoaded();
       }
 
-   
-
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclPlatformInfoRelease(ref IntPtr platformInfo);
 
@@ -74,7 +72,7 @@ namespace Emgu.CV
       /// Get all the platform info as a vector
       /// </summary>
       /// <returns>The vector of Platfom info</returns>
-      public static Util.VectorOfOclPlatformInfo GetPlatformInfo()
+      public static Util.VectorOfOclPlatformInfo GetPlatformsInfo()
       {
          Util.VectorOfOclPlatformInfo result = new Util.VectorOfOclPlatformInfo();
          OclInvoke.oclGetPlatformsInfo(result);

@@ -46,6 +46,7 @@ CVAPI(void) oclPlatformInfoGetDevice(cv::ocl::PlatformInfo* platformInfo, cv::oc
 
 CVAPI(void) oclPlatformInfoRelease(cv::ocl::PlatformInfo** platformInfo);
 
+
 //----------------------------------------------------------------------------
 //
 //  OclDevice
