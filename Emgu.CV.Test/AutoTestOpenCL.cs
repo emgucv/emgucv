@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.CvEnum;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -24,6 +25,48 @@ namespace Emgu.CV.Test
       public void TestOclInfo()
       {
          Trace.WriteLine(CvInvoke.OclGetPlatformsSummary());
+      }
+
+      [Test]
+      public void TestOclChangeDefaultDevice()
+      {
+         
+         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformInfo())
+         {
+            if (oclPlatformInfos.Size > 0)
+            {
+               for (int i = 0; i < oclPlatformInfos.Size; i++)
+               {
+                  OclPlatformInfo platformInfo = oclPlatformInfos[i];
+
+                  for (int j = 0; j < platformInfo.DeviceNumber; j++)
+                  {
+                     OclDevice device = platformInfo.GetDevice(j);
+
+                     Trace.WriteLine(String.Format("Setting device to {0}", device.Name));
+                     //OclDevice d = new OclDevice();
+                     //d.Set(device.NativeDevicePointer);
+
+
+                     OclDevice defaultDevice = OclDevice.Default;
+                     defaultDevice.Set(device.NativeDevicePointer);
+
+                     Trace.WriteLine(String.Format("Current default device: {0}", defaultDevice.Name));
+
+                     UMat m = new UMat(2048, 2048, DepthType.Cv8U, 3);
+                     m.SetTo(new MCvScalar(100, 100, 100));
+                     CvInvoke.GaussianBlur(m, m, new Size(3, 3), 3 );
+
+                     Stopwatch watch = Stopwatch.StartNew();
+                     m.SetTo(new MCvScalar(100, 100, 100));
+                     CvInvoke.GaussianBlur(m, m, new Size(3, 3), 3);
+                     watch.Stop();
+                     Trace.WriteLine(String.Format("{0} time: {1} milliseconds", defaultDevice.Name, watch.ElapsedMilliseconds));
+                     CvInvoke.OclFinish();
+                  }
+               }
+            }
+         }
       }
 
       /*

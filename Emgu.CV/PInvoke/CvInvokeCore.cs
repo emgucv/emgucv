@@ -3248,6 +3248,8 @@ namespace Emgu.CV
       /// <returns>An OpenCL platform summary</returns>
       public static String OclGetPlatformsSummary()
       {
+         OclDevice defaultDevice = OclDevice.Default;
+         
          StringBuilder builder = new StringBuilder();
          using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformInfo())
          {
@@ -3262,7 +3264,7 @@ namespace Emgu.CV
                   for (int j = 0; j < platformInfo.DeviceNumber; j++)
                   {
                      OclDevice device = platformInfo.GetDevice(j);
-                     builder.Append(String.Format("   Device {0}: {1}{2}", j, device.ToString(), Environment.NewLine));
+                     builder.Append(String.Format("   Device {0} {2}: {1} {3}", j, device.ToString(), device.NativeDevicePointer.Equals(defaultDevice.NativeDevicePointer) ? "(Default)" : String.Empty, Environment.NewLine));
                   }
                }
             }

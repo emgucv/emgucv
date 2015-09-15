@@ -15,6 +15,8 @@ namespace Emgu.CV
    /// </summary>
    public partial class OclDevice : UnmanagedObject
    {
+      private static OclDevice _defaultDevice = new OclDevice(OclInvoke.oclDeviceGetDefault(), false);
+
       private bool _needDispose;
 
       /// <summary>
@@ -25,13 +27,24 @@ namespace Emgu.CV
       {
       }
 
+      /// <summary>
+      /// Get the default OclDevice. Do not dispose this device.
+      /// </summary>
+      public static OclDevice Default
+      {
+         get
+         {
+            return _defaultDevice;
+         }
+      }
+
       internal OclDevice(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
          _needDispose = needDispose;
       }
 
-
+      
       /// <summary>
       /// Release all the unmanaged memory associated with this OclInfo
       /// </summary>
@@ -44,6 +57,16 @@ namespace Emgu.CV
                OclInvoke.oclDeviceRelease(ref _ptr);
             }
          }
+      }
+
+      public IntPtr NativeDevicePointer
+      {
+         get { return OclInvoke.oclDeviceGetPtr(_ptr); }
+      }
+
+      public void Set(IntPtr nativeDevicePointer)
+      {
+         OclInvoke.oclDeviceSet(_ptr, nativeDevicePointer);
       }
 
       /// <summary>
@@ -101,6 +124,15 @@ namespace Emgu.CV
       internal static extern IntPtr oclDeviceCreate();
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void oclDeviceSet(IntPtr device, IntPtr p);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr oclDeviceGetDefault();
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclDeviceRelease(ref IntPtr oclDevice);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr oclDeviceGetPtr(IntPtr device);
    }
 }

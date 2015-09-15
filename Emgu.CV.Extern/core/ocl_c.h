@@ -15,7 +15,7 @@
 
 CVAPI(void) oclGetPlatformsInfo(std::vector<cv::ocl::PlatformInfo>* oclPlatforms);
 
-CVAPI(void) oclSetDevice(const cv::ocl::Device* oclInfo);
+//CVAPI(void) oclSetDevice(const cv::ocl::Device* oclInfo);
 
 CVAPI(bool) cveHaveOpenCL();
 CVAPI(bool) cveUseOpenCL();
@@ -52,8 +52,10 @@ CVAPI(void) oclPlatformInfoRelease(cv::ocl::PlatformInfo** platformInfo);
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::ocl::Device*) oclDeviceCreate();
-
+CVAPI(void) oclDeviceSet(cv::ocl::Device* device, void* p);
+CVAPI(const cv::ocl::Device*) oclDeviceGetDefault();
 CVAPI(void) oclDeviceRelease(cv::ocl::Device** device);
+CVAPI(void*) oclDeviceGetPtr(cv::ocl::Device* device);
 
 
 #endif
