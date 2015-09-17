@@ -94,4 +94,40 @@ void* oclDeviceGetPtr(cv::ocl::Device* device)
 
 
 
+//----------------------------------------------------------------------------
+//
+//  OclProgramSource
+//
+//----------------------------------------------------------------------------
+cv::ocl::ProgramSource* oclProgramSourceCreate(cv::String* source)
+{
+   return new cv::ocl::ProgramSource(*source);
+}
+void oclProgramSourceRelease(cv::ocl::ProgramSource** programSource)
+{
+   delete *programSource;
+   *programSource = 0;
+}
+const cv::String* oclProgramSourceGetSource(cv::ocl::ProgramSource* programSource)
+{
+   return &programSource->source();
+}
 
+//----------------------------------------------------------------------------
+//
+//  OclKernel
+//
+//----------------------------------------------------------------------------
+cv::ocl::Kernel* oclKernelCreateDefault()
+{
+   return new cv::ocl::Kernel();
+}
+bool oclKernelCreate(cv::ocl::Kernel* kernel, cv::String* kname, cv::ocl::ProgramSource* source, cv::String* buildOpts, cv::String* errmsg)
+{
+   return kernel->create(kname->c_str(), *source, *buildOpts, errmsg);
+}
+void oclKernelRelease(cv::ocl::Kernel** kernel)
+{
+   delete *kernel;
+   *kernel = 0;
+}

@@ -28,6 +28,54 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestOclKernel()
+      {
+         if (CvInvoke.HaveOpenCL && CvInvoke.UseOpenCL)
+         {
+
+            OclDevice defaultDevice = OclDevice.Default;
+
+            UMat umat = new UMat(256, 256, DepthType.Cv8U, 1);
+            umat.SetTo(new MCvScalar(8));
+
+            int rowsPerWI = 1;
+            int cn = 1;
+            
+            String buildOpts = String.Format("-D rowsPerWI={0} -D cn={1} -D srcT1_C1=uchar -DdstT_C1=uchar", rowsPerWI, cn);
+
+            String sourceStr = @"
+__kernel void mytest(__global const uchar * srcptr1, int srcstep1, int srcoffset1, 
+                 __global uchar *dstptr, int dststep, int dstoffset,
+                 int rows, int cols )
+{
+               int x = get_global_id(0);
+               int y0 = get_global_id(1) * rowsPerWI;
+
+               if (x < cols)
+               {
+                  int src1_index = mad24(y0, srcstep1, mad24(x, (int)sizeof(srcT1_C1) * cn, srcoffset1));
+                  int dst_index = mad24(y0, dststep, mad24(x, (int)sizeof(dstT_C1) * cn, dstoffset));
+
+                  for (int y = y0, y1 = min(rows, y0 + rowsPerWI); y < y1; ++y, src1_index += srcstep1, dst_index += dststep)
+                  {
+                     *(__global uchar*) (dstptr + dst_index)= *(srcptr1 + src1_index);
+                  }
+               }
+            }";
+
+            
+
+            using (CvString errorMsg = new CvString())
+            using (OclProgramSource ps = new OclProgramSource(sourceStr))
+            using (OclKernel kernel = new OclKernel())
+            {
+               bool success = kernel.Create("mytest", ps, buildOpts, errorMsg);
+               bool empty = kernel.Empty;
+            }
+         }
+      }
+
+      [Test]
       public void TestOclChangeDefaultDevice()
       {
          

@@ -587,12 +587,16 @@ CREATE_OCV_CLASS_PROPERTY(
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclDeviceGenerated.cs"
   "cv::ocl::Device" 
   "OclDevice" 
-  "maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion" 
-  "int;int;int;int;int;int;int;int;int;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String" 
-  "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val"
-  "MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type;Name;Version;VendorName;DriverVersion;Extensions;OpenCLVersion" 
-  "int;int;int;int;int;int;int;int;int;int;int;OclDeviceType;String;String;String;String;String;String"
-  "The maximum work group size;
+  "addressBits;linkerAvailable;compilerAvailable;available;maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion;OpenCL_C_Version" 
+  "int;bool;bool;bool;int;int;int;int;int;int;int;int;size_t;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String" 
+  "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val"
+  "AddressBits;LinkerAvailable;CompilerAvailable;Available;MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type;Name;Version;VendorName;DriverVersion;Extensions;OpenCLVersion;OpenCLCVersion" 
+  "int;bool;bool;bool;int;int;int;int;int;int;int;int;IntPtr;int;int;OclDeviceType;String;String;String;String;String;String;String"
+  "The AddressBits;
+  Indicates if the linker is available;
+  Indicates if the compiler is available;
+  Indicates if the device is available;
+  The maximum work group size;
   The max compute unit;
   The local memory size;
   The maximum memory allocation size;
@@ -609,7 +613,8 @@ CREATE_OCV_CLASS_PROPERTY(
   The device vendor name;
   The device driver version;
   The device extensions;
-  The device OpenCL version"
+  The device OpenCL version;
+  The device OpenCL C version"
   "Emgu.CV"
   "CvInvoke"
   "OclDevice"
@@ -632,6 +637,23 @@ CREATE_OCV_CLASS_PROPERTY(
   "Emgu.CV"
   "CvInvoke"
   "OclPlatformInfo"
+  "#include \"ocl_c.h\"")
+
+    CREATE_OCV_CLASS_PROPERTY( 
+  "core/ocl_kernel_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclKernelGenerated.cs"
+  "cv::ocl::Kernel" 
+  "OclKernel"
+  "empty;ptr"
+  "bool;void*"
+  "val;val"
+  "Empty;NativeKernelPtr"
+  "bool;IntPtr"
+  "Indicates if the kernel is empty;
+  The pointer to the native kernel"
+  "Emgu.CV"
+  "CvInvoke"
+  "OclKernel" 
   "#include \"ocl_c.h\"")
 
   CREATE_OCV_CLASS_PROPERTY( 

@@ -58,5 +58,24 @@ CVAPI(const cv::ocl::Device*) oclDeviceGetDefault();
 CVAPI(void) oclDeviceRelease(cv::ocl::Device** device);
 CVAPI(void*) oclDeviceGetPtr(cv::ocl::Device* device);
 
+//----------------------------------------------------------------------------
+//
+//  OclProgramSource
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::ocl::ProgramSource*) oclProgramSourceCreate(cv::String* source);
+CVAPI(void) oclProgramSourceRelease(cv::ocl::ProgramSource** programSource);
+CVAPI(const cv::String*) oclProgramSourceGetSource(cv::ocl::ProgramSource* programSource);
+
+
+
+//----------------------------------------------------------------------------
+//
+//  OclKernel
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::ocl::Kernel*) oclKernelCreateDefault();
+CVAPI(bool) oclKernelCreate(cv::ocl::Kernel* kernel, cv::String* kname, cv::ocl::ProgramSource* source, cv::String* buildOpts, cv::String* errmsg);
+CVAPI(void) oclKernelRelease(cv::ocl::Kernel** kernel);
 
 #endif
