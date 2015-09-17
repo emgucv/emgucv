@@ -5,14 +5,11 @@
     android:layout_height="wrap_content"
     android:minWidth="25px"
     android:minHeight="25px">
-    <TextView
-        android:text="OpenCL"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_width="0px"
-        android:layout_weight="1"
-        android:layout_height="match_parent" />
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/opencl_preference_toggleButton" />
+    <RadioGroup
+        android:orientation="vertical"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/opencl_preference_radio_group" />
 </LinearLayout>

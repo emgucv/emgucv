@@ -30,7 +30,7 @@ namespace AndroidExamples
       }
 
       private const String _useOpenCLKey = "use_opencl";
-
+      private const String _opencvDeviceNameKey = "opencl_device_name";
       public bool UseOpenCL
       {
          get
@@ -47,6 +47,25 @@ namespace AndroidExamples
          set
          {
             _preference.Edit().PutBoolean(_useOpenCLKey, value).Commit();
+         }
+      }
+
+      public String OpenClDeviceName
+      {
+         get
+         {
+            if (_preference.Contains(_opencvDeviceNameKey))
+            {
+               return _preference.GetString(_opencvDeviceNameKey, null);
+            }
+            else
+            {
+               return null;
+            }
+         }
+         set
+         {
+            _preference.Edit().PutString(_opencvDeviceNameKey, value).Commit();
          }
       }
    }

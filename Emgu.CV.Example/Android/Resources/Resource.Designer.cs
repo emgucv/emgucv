@@ -130,7 +130,7 @@ namespace AndroidExamples
 			public const int openCVLicenseTextView = 2131099673;
 			
 			// aapt resource value: 0x7f06001a
-			public const int opencl_preference_toggleButton = 2131099674;
+			public const int opencl_preference_radio_group = 2131099674;
 			
 			// aapt resource value: 0x7f060014
 			public const int previewImageButton = 2131099668;

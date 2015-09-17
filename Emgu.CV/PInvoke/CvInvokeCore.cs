@@ -3271,6 +3271,32 @@ namespace Emgu.CV
          }
       }
 
+      public static void OclSetDefaultDevice(String deviceName)
+      {
+
+         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
+         {
+            if (oclPlatformInfos.Size > 0)
+            {
+               for (int i = 0; i < oclPlatformInfos.Size; i++)
+               {
+                  OclPlatformInfo platformInfo = oclPlatformInfos[i];
+
+                  for (int j = 0; j < platformInfo.DeviceNumber; j++)
+                  {
+                     OclDevice device = platformInfo.GetDevice(j);
+                     if (device.Name.Equals(deviceName))
+                     {
+                        OclDevice.Default.Set(device.NativeDevicePointer);
+                        return;
+                     }
+                  }
+               }
+            }
+         }
+         throw new Exception(String.Format("OpenCL device with name '{0}' is not found.", deviceName));
+      }
+
       /// <summary>
       /// Gets a value indicating whether this device have open CL compatible gpu device.
       /// </summary>

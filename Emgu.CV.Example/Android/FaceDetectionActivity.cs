@@ -38,6 +38,13 @@ namespace AndroidExamples
          OnButtonClick += delegate
          {
             AppPreference appPreference = new AppPreference();
+            CvInvoke.UseOpenCL = appPreference.UseOpenCL;
+            String oclDeviceName = appPreference.OpenClDeviceName;
+            if (!String.IsNullOrEmpty(oclDeviceName))
+            {
+               CvInvoke.OclSetDefaultDevice(oclDeviceName);
+            }
+
             using (Image<Bgr, Byte> image = PickImage("lena.jpg"))
             {
                ISharedPreferences preference = PreferenceManager.GetDefaultSharedPreferences(ApplicationContext);
@@ -64,9 +71,11 @@ namespace AndroidExamples
                List<Rectangle> faces = new List<Rectangle>();
                List<Rectangle> eyes = new List<Rectangle>();
 
-               bool tryUseOpenCL = appPreference.UseOpenCL;
-               DetectFace.Detect(image.Mat, faceXml, eyeXml, faces, eyes, false, tryUseOpenCL, out time);
-               SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, CvInvoke.UseOpenCL ? "OpenCL" : "CPU"));
+
+               DetectFace.Detect(image.Mat, faceXml, eyeXml, faces, eyes, false, out time);
+
+               String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+               SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, computeDevice));
 
                foreach (Rectangle rect in faces)
                   image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
@@ -75,6 +84,9 @@ namespace AndroidExamples
                
                SetImageBitmap(image.ToBitmap());
             }
+
+            if (CvInvoke.UseOpenCL)
+               CvInvoke.OclFinish();
          };
       }
    }

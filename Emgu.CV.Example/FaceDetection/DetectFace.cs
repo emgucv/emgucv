@@ -19,7 +19,7 @@ namespace FaceDetection
       public static void Detect(
         Mat image, String faceFileName, String eyeFileName, 
         List<Rectangle> faces, List<Rectangle> eyes, 
-        bool tryUseCuda, bool tryUseOpenCL,
+        bool tryUseCuda,
         out long detectionTime)
       {
          Stopwatch watch;
@@ -71,12 +71,6 @@ namespace FaceDetection
          else
          #endif
          {
-            //Many opencl functions require opencl compatible gpu devices. 
-            //As of opencv 3.0-alpha, opencv will crash if opencl is enable and only opencv compatible cpu device is presented
-            //So we need to call CvInvoke.HaveOpenCLCompatibleGpuDevice instead of CvInvoke.HaveOpenCL (which also returns true on a system that only have cpu opencl devices).
-            CvInvoke.UseOpenCL = tryUseOpenCL && CvInvoke.HaveOpenCLCompatibleGpuDevice;
-
-
             //Read the HaarCascade objects
             using (CascadeClassifier face = new CascadeClassifier(faceFileName))
             using (CascadeClassifier eye = new CascadeClassifier(eyeFileName))

@@ -34,14 +34,23 @@ namespace AndroidExamples
 
          OnButtonClick += delegate
          {
+            AppPreference appPreference = new AppPreference();
+            CvInvoke.UseOpenCL = appPreference.UseOpenCL;
+            String oclDeviceName = appPreference.OpenClDeviceName;
+            if (!String.IsNullOrEmpty(oclDeviceName))
+            {
+               CvInvoke.OclSetDefaultDevice(oclDeviceName);
+            }
+
             long time;
             using (Image<Bgr, Byte> image = PickImage("pedestrian.png"))
             {
                if (image == null)
                   return;
-               Rectangle[] pedestrians = FindPedestrian.Find(image.Mat, false, true, out time);
+               Rectangle[] pedestrians = FindPedestrian.Find(image.Mat, false, out time);
 
-               SetMessage(String.Format("Detection completed with {1} in {0} milliseconds.", time, CvInvoke.UseOpenCL ? "OpenCL" : "CPU"));
+               String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+               SetMessage(String.Format("Detection completed with {1} in {0} milliseconds.", time, oclDeviceName));
                foreach (Rectangle rect in pedestrians)
                {
                   image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
