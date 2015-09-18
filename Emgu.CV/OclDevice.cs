@@ -75,7 +75,7 @@ namespace Emgu.CV
       /// <returns>A string representation of this oclDevice</returns>
       public override string ToString()
       {
-         return String.Format("{0} {1}.{2} ({3}):Version - {4}; Global memory - {5}； Local memory - {6}; Max image size - {7}x{8}", Name, DeviceVersionMajor, DeviceVersionMinor, Type, Version, GlobalMemSize, LocalMemSize, Image2DMaxWidth, Image2DMaxHeight);
+         return String.Format("{0} {1}.{2} ({3}):Version - {4}; Global memory - {5}； Local memory - {6}; Max image size - {7}x{8}; DoubleFpConfig: {9}", Name, DeviceVersionMajor, DeviceVersionMinor, Type, Version, GlobalMemSize, LocalMemSize, Image2DMaxWidth, Image2DMaxHeight, DoubleFPConfig);
       }
    }
 
@@ -114,7 +114,20 @@ namespace Emgu.CV
       /// </summary>
       All = -1 //0xFFFFFFFF
    }
-         
+
+   [Flags]
+   public enum OclFpConfig
+   {
+      Denorm = (1 << 0),
+      InfNan = (1 << 1),
+      RoundToNearest = (1 << 2),
+      RoundToZero = (1 << 3),
+      RoundToInf = (1 << 4),
+      Fma = (1 << 5),
+      SoftFloat = (1 << 6),
+      CorrectlyRoundedDivideSqrt = (1 << 7)
+   }
+
    /// <summary>
    /// Class that contains ocl functions.
    /// </summary>
