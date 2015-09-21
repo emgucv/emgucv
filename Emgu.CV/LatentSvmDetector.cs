@@ -1,3 +1,4 @@
+/*
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
@@ -138,3 +139,4 @@ namespace Emgu.CV
       internal static extern void cveLSVMGetClassNames(IntPtr detector, IntPtr classNames);
    }
 }
+*/

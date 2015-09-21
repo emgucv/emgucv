@@ -1444,8 +1444,8 @@ namespace Emgu.CV
                RangeF range = dataMat.GetValueRange();
                if (range.Max > 255.0 || range.Min < 0)
                {
-                  scale = (range.Max == range.Min) ? 0.0 : 255.0 / (range.Max - range.Min);
-                  shift = (scale == 0) ? range.Min : -range.Min * scale;
+                  scale = (Math.Abs(range.Max - range.Min) < float.Epsilon) ? 0.0 : 255.0 / (range.Max - range.Min);
+                  shift = (Math.Abs(scale) < double.Epsilon) ? range.Min : -range.Min * scale;
                }
                CvInvoke.ConvertScaleAbs(dataMat, bmpMat, scale, shift);
             }

@@ -214,7 +214,7 @@ namespace Emgu.CV
                //try to find an alternative loadDirectory path
                //The following code should handle finding the asp.NET BIN folder 
                String altLoadDirectory = Path.GetDirectoryName(asm.CodeBase);
-               if (altLoadDirectory.StartsWith(@"file:\"))
+               if (!String.IsNullOrEmpty(altLoadDirectory) && altLoadDirectory.StartsWith(@"file:\"))
                   altLoadDirectory = altLoadDirectory.Substring(6);
 
                if (!String.IsNullOrEmpty(subfolder))

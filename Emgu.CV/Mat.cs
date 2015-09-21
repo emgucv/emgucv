@@ -474,7 +474,7 @@ namespace Emgu.CV
          }
          else
          {
-            throw new Exception(String.Format("The type of data doesn't match the type of the Mat ({1}).", dt));
+            throw new Exception(String.Format("The type of data doesn't match the type of the Mat ({0}).", dt));
          }
 
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -986,32 +986,33 @@ namespace Emgu.CV
 #else
             //Saving with OpenCV fails
             //Try to save the image using .NET's Bitmap class
-            using (Bitmap bmp = Bitmap)
-            {
-               String extension = Path.GetExtension(fileName).ToLower();
-               switch (extension)
+            String extension = Path.GetExtension(fileName);
+            if (!String.IsNullOrEmpty(extension))
+               using (Bitmap bmp = Bitmap)
                {
-                  case ".jpg":
-                  case ".jpeg":
-                     bmp.Save(fileName, ImageFormat.Jpeg);
-                     break;
-                  case ".bmp":
-                     bmp.Save(fileName, ImageFormat.Bmp);
-                     break;
-                  case ".png":
-                     bmp.Save(fileName, ImageFormat.Png);
-                     break;
-                  case ".tiff":
-                  case ".tif":
-                     bmp.Save(fileName, ImageFormat.Tiff);
-                     break;
-                  case ".gif":
-                     bmp.Save(fileName, ImageFormat.Gif);
-                     break;
-                  default:
-                     throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
+                  switch (extension.ToLower())
+                  {
+                     case ".jpg":
+                     case ".jpeg":
+                        bmp.Save(fileName, ImageFormat.Jpeg);
+                        break;
+                     case ".bmp":
+                        bmp.Save(fileName, ImageFormat.Bmp);
+                        break;
+                     case ".png":
+                        bmp.Save(fileName, ImageFormat.Png);
+                        break;
+                     case ".tiff":
+                     case ".tif":
+                        bmp.Save(fileName, ImageFormat.Tiff);
+                        break;
+                     case ".gif":
+                        bmp.Save(fileName, ImageFormat.Gif);
+                        break;
+                     default:
+                        throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
+                  }
                }
-            }
 #endif
          }
       }

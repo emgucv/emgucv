@@ -2684,7 +2684,7 @@ namespace Emgu.CV.Test
             }
             //Emgu.CV.UI.ImageViewer.Show(image);
          }
-      }*/
+      }
 
       [Test]
       public void TestLatenSVM()
@@ -2716,7 +2716,7 @@ namespace Emgu.CV.Test
                   }
                }
          }
-      }
+      }*/
 
 #if !NETFX_CORE
       //TODO: Check why this fails again
