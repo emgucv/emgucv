@@ -150,7 +150,7 @@ namespace Emgu.CV.Structure
       /// <returns>True if the location of the two points are equal</returns>
       public bool Equals(MCvPoint3D32f other)
       {
-         return (Math.Abs(X - other.X) < float.Epsilon) && (Math.Abs(Y - other.Y) < float.Epsilon) && (Math.Abs(Z - other.Z) < float.Epsilon);
+         return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
       }
       #endregion
    }

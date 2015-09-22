@@ -344,7 +344,7 @@ namespace Emgu.CV
          CvEnum.OpticalflowFarnebackFlag flags)
       {
          using (Mat flow0 = new Mat(prev0.Height, prev0.Width, CvEnum.DepthType.Cv32F, 2))
-         using (Util.VectorOfMat vm = new Util.VectorOfMat(new Mat[] { flowX.Mat, flowY.Mat }))
+         using (Util.VectorOfMat vm = new Util.VectorOfMat(flowX.Mat, flowY.Mat))
          {
             if ((int)(flags & Emgu.CV.CvEnum.OpticalflowFarnebackFlag.UseInitialFlow) != 0)
             {  //use initial flow

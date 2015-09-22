@@ -35,7 +35,7 @@ namespace Emgu.CV.Reflection
                {
                   ExposableMethodAttribute att = (ExposableMethodAttribute)atts[0];
                   if (att.Exposable)
-                     yield return new KeyValuePair<String, MethodInfo>(att.Category, mi as MethodInfo);
+                     yield return new KeyValuePair<String, MethodInfo>(att.Category, mi);
                }
             }
          }
@@ -48,9 +48,8 @@ namespace Emgu.CV.Reflection
       /// <returns>The color type of the image</returns>
       public static Type GetTypeOfColor(IImage image)
       {
-         Type baseType =  Toolbox.GetBaseType(image.GetType(), "Image`2");
-         if (baseType == null)
-            baseType = Toolbox.GetBaseType(image.GetType(), "CudaImage`2");
+         Type baseType =  Toolbox.GetBaseType(image.GetType(), "Image`2") ??
+                          Toolbox.GetBaseType(image.GetType(), "CudaImage`2");
 
          if (baseType != null)
             return baseType.GetGenericArguments()[0];
@@ -73,9 +72,8 @@ namespace Emgu.CV.Reflection
       /// <returns>The depth type of the image</returns>
       public static Type GetTypeOfDepth(IImage image)
       {
-         Type baseType = Toolbox.GetBaseType(image.GetType(), "Image`2");
-         if (baseType == null)
-            baseType = Toolbox.GetBaseType(image.GetType(), "CudaImage`2");
+         Type baseType = Toolbox.GetBaseType(image.GetType(), "Image`2") ??
+                         Toolbox.GetBaseType(image.GetType(), "CudaImage`2");
 
          if (baseType != null)
             return baseType.GetGenericArguments()[1];

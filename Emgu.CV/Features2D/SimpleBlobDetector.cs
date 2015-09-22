@@ -45,11 +45,17 @@ namespace Emgu.CV.Features2D
 
    public partial class SimpleBlobDetectorParams : UnmanagedObject
    {
+      /// <summary>
+      /// Create parameters for simple blob detector and use default values.
+      /// </summary>
       public SimpleBlobDetectorParams()
       {
          _ptr = CvInvoke.cveSimpleBlobDetectorParamsCreate();
       }
 
+      /// <summary>
+      /// Release all the unmanaged memory associated with this simple blob detector parameter.
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)

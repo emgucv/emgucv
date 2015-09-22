@@ -113,6 +113,11 @@ namespace Emgu.CV
          }
       }
    
+      /// <summary>
+      /// Copy data from this Mat to the managed array
+      /// </summary>
+      /// <typeparam name="T">The type of managed data array</typeparam>
+      /// <param name="data">The managed array where data will be copied to.</param>
       public void CopyDataTo<T>(T[] data)
       {
          Debug.Assert(Marshal.SizeOf(typeof(T)) * data.Length >= Total.ToInt32() * ElementSize, String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length) );
@@ -121,6 +126,11 @@ namespace Emgu.CV
          handle.Free();
       }
 
+      /// <summary>
+      /// Copy data from managed array to this Mat
+      /// </summary>
+      /// <typeparam name="T">The type of managed data array</typeparam>
+      /// <param name="data">The managed array where data will be copied from</param>
       public void CopyDataFrom<T>(T[] data)
       {
          Debug.Assert(data.Length == Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length));
@@ -189,6 +199,13 @@ namespace Emgu.CV
       {
       }
 
+      /// <summary>
+      /// Create multi-dimension mat using existing data.
+      /// </summary>
+      /// <param name="sizes">The sizes of each dimension</param>
+      /// <param name="type">The type of data</param>
+      /// <param name="data">The pointer to the unmanaged data</param>
+      /// <param name="steps">The steps</param>
       public Mat(int[] sizes, CvEnum.DepthType type, IntPtr data, IntPtr[] steps = null)
          : this(MatInvoke.cveMatCreateMultiDimWithData(sizes, type, data, steps), true, true)
       {
@@ -1106,14 +1123,23 @@ namespace Emgu.CV
          return result;
       }
 
+      /// <summary>
+      /// Get an array of the size of the dimensions. e.g. if the mat is 9x10x11, the array of {9, 10, 11} will be returned.
+      /// </summary>
       public int[] SizeOfDimemsion
       {
          get
          {
             int[] sizes = new int[Dims];
             GCHandle handle = GCHandle.Alloc(sizes, GCHandleType.Pinned);
-            MatInvoke.cveMatGetSizeOfDimension(_ptr, handle.AddrOfPinnedObject());
-            handle.Free();
+            try
+            {
+               MatInvoke.cveMatGetSizeOfDimension(_ptr, handle.AddrOfPinnedObject());
+            }
+            finally
+            {
+               handle.Free();
+            } 
             return sizes;
          }
       }

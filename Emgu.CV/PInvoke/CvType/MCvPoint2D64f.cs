@@ -88,7 +88,7 @@ namespace Emgu.CV.Structure
       /// <returns>True if the two points equals</returns>
       public bool Equals(MCvPoint2D64f other)
       {
-         return X == other.X && Y == other.Y;
+         return X.Equals(other.X) && Y.Equals(other.Y);
       }
 
       #endregion

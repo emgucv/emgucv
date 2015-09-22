@@ -127,7 +127,7 @@ namespace Emgu.CV.Util
                int writeCount = index * _elementSize;
                Marshal.Copy(ptr, byteBuffer, 0, writeCount);
                bufferStream.Write(byteBuffer, 0, writeCount);
-               index = 0;
+               //index = 0;
             }
          }
       }

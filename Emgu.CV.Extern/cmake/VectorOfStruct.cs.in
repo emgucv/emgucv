@@ -31,7 +31,7 @@ namespace ${NAMESPACE_CS}
    , ISerializable
 #endif
    {
-      private bool _needDispose;
+      private readonly bool _needDispose;
    
       static VectorOf${VECTOR_NAME}()
       {

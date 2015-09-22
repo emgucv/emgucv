@@ -598,7 +598,7 @@ namespace Emgu.CV
          using (VectorOfPointF vpf = new VectorOfPointF(points))
          using (VectorOfPointF hull = new VectorOfPointF())
          {
-            CvInvoke.ConvexHull(vpf, hull, clockwise, true);
+            CvInvoke.ConvexHull(vpf, hull, clockwise);
             return hull.ToArray();
          }
       }
@@ -1403,7 +1403,7 @@ namespace Emgu.CV
             //}
          }
 
-         System.Drawing.Imaging.PixelFormat format = System.Drawing.Imaging.PixelFormat.Undefined;
+         System.Drawing.Imaging.PixelFormat format;  //= System.Drawing.Imaging.PixelFormat.Undefined;
 
          if (srcColorType == typeof(Gray)) // if this is a gray scale image
          {
@@ -1444,8 +1444,8 @@ namespace Emgu.CV
                RangeF range = dataMat.GetValueRange();
                if (range.Max > 255.0 || range.Min < 0)
                {
-                  scale = (Math.Abs(range.Max - range.Min) < float.Epsilon) ? 0.0 : 255.0 / (range.Max - range.Min);
-                  shift = (Math.Abs(scale) < double.Epsilon) ? range.Min : -range.Min * scale;
+                  scale = range.Max.Equals(range.Min) ? 0.0 : 255.0 / (range.Max - range.Min);
+                  shift = scale.Equals(0) ? range.Min : -range.Min * scale;
                }
                CvInvoke.ConvertScaleAbs(dataMat, bmpMat, scale, shift);
             }

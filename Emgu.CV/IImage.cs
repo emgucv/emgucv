@@ -13,7 +13,7 @@ using UIKit;
 
 namespace Emgu.CV
 {
-   internal static class IImageExtensions
+   internal static class ImageExtensions
    {
       /// <summary>
       /// Apply converter and compute result for each channel of the image, for single channel image, apply converter directly, for multiple channel image, make a copy of each channel to a temperary image and apply the convertor

@@ -20,7 +20,7 @@ namespace ${NAMESPACE_CS}
    /// </summary>
    public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, IInputOutputArray
    {
-      private bool _needDispose;
+      private readonly bool _needDispose;
    
       static VectorOf${VECTOR_NAME}()
       {

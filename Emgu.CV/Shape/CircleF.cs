@@ -54,7 +54,7 @@ namespace Emgu.CV.Structure
       /// <returns>true if the two boxes equals</returns>
       public bool Equals(CircleF circle2)
       {
-         return Center.Equals(circle2.Center) && Radius == circle2.Radius;
+         return Center.Equals(circle2.Center) && Radius.Equals(circle2.Radius);
       }
    }
 }

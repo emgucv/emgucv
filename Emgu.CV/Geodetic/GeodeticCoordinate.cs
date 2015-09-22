@@ -131,9 +131,9 @@ namespace Emgu.CV.Geodetic
       public bool Equals(GeodeticCoordinate other)
       {
          return
-            Latitude == other.Latitude
-            && Longitude == other.Longitude
-            && Altitude == other.Altitude;
+            Latitude.Equals(other.Latitude)
+            && Longitude.Equals(other.Longitude)
+            && Altitude.Equals(other.Altitude);
       }
       #endregion
 

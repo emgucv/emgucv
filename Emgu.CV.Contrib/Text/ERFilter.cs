@@ -174,20 +174,31 @@ namespace Emgu.CV.Text
          using (InputArray iaImage = image.GetInputArray())
             CvERFilterRun(_ptr, iaImage, regions);
       }
-
+      
+      /// <summary>
+      /// The grouping method
+      /// </summary>
       public enum GroupingMethod
       {
+         /// <summary>
+         /// Only perform grouping horizontally.
+         /// </summary>
          OrientationHoriz,
+         /// <summary>
+         /// Perform grouping in any orientation.
+         /// </summary>
          OrientationAny
       }
 
       /// <summary>
       /// Find groups of Extremal Regions that are organized as text blocks.
       /// </summary>
+      /// <param name="image">The image where ER grouping is to be perform on</param>
       /// <param name="channels">Array of single channel images from which the regions were extracted</param>
       /// <param name="erstats">Vector of ER’s retrieved from the ERFilter algorithm from each channel</param>
       /// <param name="groupingTrainedFileName">The XML or YAML file with the classifier model (e.g. trained_classifier_erGrouping.xml)</param>
       /// <param name="minProbability">The minimum probability for accepting a group.</param>
+      /// <param name="groupMethods">The grouping methods</param>
       /// <returns>The output of the algorithm that indicates the text regions</returns>
       public static System.Drawing.Rectangle[] ERGrouping(IInputArray image, IInputArrayOfArrays channels, VectorOfERStat[] erstats, GroupingMethod groupMethods = GroupingMethod.OrientationHoriz, String groupingTrainedFileName = null, float minProbability = 0.5f)
       {

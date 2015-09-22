@@ -3271,6 +3271,10 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Set the default opencl device
+      /// </summary>
+      /// <param name="deviceName">The name of the opencl device</param>
       public static void OclSetDefaultDevice(String deviceName)
       {
 

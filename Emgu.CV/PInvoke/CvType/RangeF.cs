@@ -56,7 +56,7 @@ namespace Emgu.CV.Structure
       /// <returns>True if the two RangeF equals</returns>
       public bool Equals(RangeF other)
       {
-         return Min == other.Min && Max == other.Max;
+         return Min.Equals(other.Min) && Max.Equals(other.Max);
       }
       #endregion
    }

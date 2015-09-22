@@ -44,7 +44,6 @@ namespace Emgu.CV
          _needDispose = needDispose;
       }
 
-      
       /// <summary>
       /// Release all the unmanaged memory associated with this OclInfo
       /// </summary>
@@ -59,11 +58,18 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Get the native device pointer
+      /// </summary>
       public IntPtr NativeDevicePointer
       {
          get { return OclInvoke.oclDeviceGetPtr(_ptr); }
       }
 
+      /// <summary>
+      /// Set the native device pointer
+      /// </summary>
+      /// <param name="nativeDevicePointer"></param>
       public void Set(IntPtr nativeDevicePointer)
       {
          OclInvoke.oclDeviceSet(_ptr, nativeDevicePointer);
@@ -115,21 +121,48 @@ namespace Emgu.CV
       All = -1 //0xFFFFFFFF
    }
 
+   /// <summary>
+   /// Floating point configuration
+   /// </summary>
    [Flags]
    public enum OclFpConfig
    {
+      /// <summary>
+      /// Denorm
+      /// </summary>
       Denorm = (1 << 0),
+      /// <summary>
+      /// inf, nan
+      /// </summary>
       InfNan = (1 << 1),
+      /// <summary>
+      /// round to nearest
+      /// </summary>
       RoundToNearest = (1 << 2),
+      /// <summary>
+      /// round to zero
+      /// </summary>
       RoundToZero = (1 << 3),
+      /// <summary>
+      /// round to infinite
+      /// </summary>
       RoundToInf = (1 << 4),
+      /// <summary>
+      /// FMA
+      /// </summary>
       Fma = (1 << 5),
+      /// <summary>
+      /// soft float
+      /// </summary>
       SoftFloat = (1 << 6),
+      /// <summary>
+      /// Correctly rounded divide sqrt
+      /// </summary>
       CorrectlyRoundedDivideSqrt = (1 << 7)
    }
 
    /// <summary>
-   /// Class that contains ocl functions.
+   /// Class that contains ocl functions
    /// </summary>
    public static partial class OclInvoke
    {

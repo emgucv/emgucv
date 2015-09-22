@@ -2474,8 +2474,8 @@ namespace Emgu.CV
                      double scale = 1.0, shift = 0.0;
                      if (max > 255.0 || min < 0)
                      {
-                        scale = (Math.Abs(max - min) < double.Epsilon) ? 0.0 : 255.0 / (max - min);
-                        shift = (Math.Abs(scale) < double.Epsilon) ? min : -min * scale;
+                        scale = (max.Equals(min)) ? 0.0 : 255.0 / (max - min);
+                        shift = (scale.Equals(0)) ? min : -min * scale;
                      }
 
                      CvInvoke.ConvertScaleAbs(srcImage, this, scale, shift);
@@ -2553,8 +2553,8 @@ namespace Emgu.CV
                      double scale = 1.0, shift = 0.0;
                      if (max > 255.0 || min < 0)
                      {
-                        scale = (Math.Abs(max - min) < double.Epsilon) ? 0.0 : 255.0 / (max - min);
-                        shift = (Math.Abs(scale) < double.Epsilon) ? min : -min * scale;
+                        scale = max.Equals(min) ? 0.0 : 255.0 / (max - min);
+                        shift = scale.Equals(0) ? min : -min * scale;
                      }
 
                      CvInvoke.ConvertScaleAbs(srcImage, this, scale, shift);

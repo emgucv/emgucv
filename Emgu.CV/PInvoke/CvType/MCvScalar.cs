@@ -117,10 +117,10 @@ namespace Emgu.CV.Structure
       /// <returns>true if the two MCvScalar equals</returns>
       public bool Equals(MCvScalar other)
       {
-         return V0 == other.V0 
-            && V1 == other.V1 
-            && V2 == other.V2 
-            && V3 == other.V3;
+         return V0.Equals(other.V0)
+            && V1.Equals(other.V1)
+            && V2.Equals(other.V2)
+            && V3.Equals(other.V3);
       }
       #endregion
    }

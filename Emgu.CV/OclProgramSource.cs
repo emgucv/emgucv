@@ -15,9 +15,8 @@ namespace Emgu.CV
       private CvString _programSource;
       public OclProgramSource(String source)
       {
-         CvString cs = new CvString(source);
-         
-         _ptr = OclInvoke.oclProgramSourceCreate(cs);
+         _programSource = new CvString(source);
+         _ptr = OclInvoke.oclProgramSourceCreate(_programSource);
          
       }
 
