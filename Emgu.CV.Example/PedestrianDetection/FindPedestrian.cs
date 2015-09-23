@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 using System.Drawing;
 using System.Diagnostics;
 using Emgu.CV.Util;
-#if !(IOS || NETFX_CORE)
+#if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Cuda;
 #endif
 
@@ -29,7 +29,7 @@ namespace PedestrianDetection
          Stopwatch watch;
          Rectangle[] regions;
 
-#if !(IOS || NETFX_CORE)
+#if !(__IOS__ || NETFX_CORE)
          //check if there is a compatible Cuda device to run pedestrian detection
          if (tryUseCuda && CudaInvoke.HasCuda)
          {  //this is the Cuda version

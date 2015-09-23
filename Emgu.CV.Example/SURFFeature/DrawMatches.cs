@@ -11,7 +11,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-#if !IOS
+#if !__IOS__
 using Emgu.CV.Cuda;
 #endif
 using Emgu.CV.XFeatures2D;
@@ -32,7 +32,7 @@ namespace SURFFeatureExample
          modelKeyPoints = new VectorOfKeyPoint();
          observedKeyPoints = new VectorOfKeyPoint();
 
-         #if !IOS
+         #if !__IOS__
          if ( CudaInvoke.HasCuda)
          {
             CudaSURF surfCuda = new CudaSURF((float) hessianThresh);

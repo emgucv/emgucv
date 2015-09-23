@@ -55,7 +55,8 @@
     </When>
 	
 	<!-- Windows phone 8.1 (ARM) -->
-	<When Condition="('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='ARM')">
+	<When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='ARM') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='ARM'))">
+
     <ItemGroup>  
     <Content Include="$(OpenCVBinaryDir)\arm_phone\cvextern.dll">
       <Link>cvextern.dll</Link>
@@ -65,7 +66,7 @@
     </When>  
 
     <!-- Windows phone 8.1 (x86) -->
-	<When Condition="('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='x86')">
+	<When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='x86') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='x86'))">
     <ItemGroup>  
     <Content Include="$(OpenCVBinaryDir)\x86_phone\cvextern.dll">
       <Link>cvextern.dll</Link>
@@ -75,7 +76,9 @@
     </When>  	
 	
 	<!-- IOS -->
-	<When Condition="('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')">
+	<When Condition="('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR
+	'$(Platform)'=='iPhone' OR
+	'$(Platform)'=='iPhoneSimulator')">
   	<ItemGroup>
     <ObjcBindingNativeLibrary Include="$(MSBuildThisFileDirectory)\PInvoke\iOS\libemgucv.a" />
     </ItemGroup>

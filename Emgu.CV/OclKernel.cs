@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
 
 namespace Emgu.CV
 {

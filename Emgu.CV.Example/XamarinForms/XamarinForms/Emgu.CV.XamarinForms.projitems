@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Emgu.CV.XamarinForms</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AboutPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.xaml.cs">
+      <DependentUpon>ButtonTextImagePage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\PlanarSubdivision\DrawSubdivision.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\FaceDetection\DetectFace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\PedestrianDetection\FindPedestrian.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FaceDetectionPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HelloWorldPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PedestrianDetectionPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlanarSubdivisionPage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)GettingStarted.Xamarin" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
