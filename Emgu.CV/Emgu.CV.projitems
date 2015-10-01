@@ -9,7 +9,7 @@
     <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-	    <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CameraCalibration\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Capture\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features2D\*.cs" />
@@ -26,117 +26,109 @@
     <Compile Include="$(MSBuildThisFileDirectory)Shape\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvType\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Windows.Store\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)PInvoke\Android\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Android\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\System.Drawing\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\iOS\ImageiOS.cs" />
   </ItemGroup>
   <PropertyGroup>
-  <OpenCVBinaryDir>$(MSBuildThisFileDirectory)..\bin</OpenCVBinaryDir>
+    <OpenCVBinaryDir>$(MSBuildThisFileDirectory)..\bin</OpenCVBinaryDir>
+    <EmguCVDir>$(MSBuildThisFileDirectory)</EmguCVDir>
   </PropertyGroup>
   <Choose>
-	<!-- Windows store 8.1 (64bit) -->
+    <!-- Windows store 8.1 (64bit) -->
     <When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x64')">
-    <ItemGroup>  
-    <Content Include="$(OpenCVBinaryDir)\x64_store\cvextern.dll">
-      <Link>cvextern.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-	</ItemGroup>
-    </When>  
-	
-	<!-- Windows store 8.1 (32bit) -->
-	<When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86')">
-    <ItemGroup>  
-    <Content Include="$(OpenCVBinaryDir)\x86_store\cvextern.dll">
-      <Link>cvextern.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-	</ItemGroup>
+      <ItemGroup>
+        <Content Include="$(OpenCVBinaryDir)\x64_store\cvextern.dll">
+          <Link>cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
     </When>
-	
-	<!-- Windows phone 8.1 (ARM) -->
-	<When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='ARM') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='ARM'))">
-
-    <ItemGroup>  
-    <Content Include="$(OpenCVBinaryDir)\arm_phone\cvextern.dll">
-      <Link>cvextern.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-	</ItemGroup>
-    </When>  
-
+    <!-- Windows store 8.1 (32bit) -->
+    <When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86')">
+      <ItemGroup>
+        <Content Include="$(OpenCVBinaryDir)\x86_store\cvextern.dll">
+          <Link>cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
+    <!-- Windows phone 8.1 (ARM) -->
+    <When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='ARM') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='ARM'))">
+      <ItemGroup>
+        <Content Include="$(OpenCVBinaryDir)\arm_phone\cvextern.dll">
+          <Link>cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
     <!-- Windows phone 8.1 (x86) -->
-	<When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='x86') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='x86'))">
-    <ItemGroup>  
-    <Content Include="$(OpenCVBinaryDir)\x86_phone\cvextern.dll">
-      <Link>cvextern.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-	</ItemGroup>
-    </When>  	
-	
-	<!-- IOS -->
-	<When Condition="('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR
-	'$(Platform)'=='iPhone' OR
-	'$(Platform)'=='iPhoneSimulator')">
-  	<ItemGroup>
-    <ObjcBindingNativeLibrary Include="$(MSBuildThisFileDirectory)\PInvoke\iOS\libemgucv.a" />
-    </ItemGroup>
-	    <ItemGroup>  
-    <Compile Include="$(MSBuildThisFileDirectory)\PInvoke\iOS\libemgucv.linkwith.cs">
-      <DependentUpon>libemgucv.a</DependentUpon>
-    </Compile>
-	</ItemGroup>
-    </When>  	
-
-    <!-- Android -->
-	<When Condition="('$(AndroidSupportedAbis)'!='')">
-	<!-- armeabi -->
-    <ItemGroup Condition="$(AndroidSupportedAbis.Contains('armeabi%3')) OR $(AndroidSupportedAbis.EndsWith('armeabi'))"> 
-      <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(MSBuildThisFileDirectory)..\libs\armeabi\libcvextern.so">
-        <Link>lib\armeabi\libcvextern.so</Link>
-      </EmbeddedNativeLibrary>
-	  <AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(MSBuildThisFileDirectory)..\libs\armeabi\libcvextern.so">
-        <Link>lib\armeabi\libcvextern.so</Link>
-      </AndroidNativeLibrary>
-	</ItemGroup>
-	<!-- armeabi-v7a -->
-	<ItemGroup Condition="$(AndroidSupportedAbis.Contains('armeabi-v7a')) OR $(AndroidSupportedAbis.EndsWith('armeabi-v7a'))"> 
-	  <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(MSBuildThisFileDirectory)..\libs\armeabi-v7a\libcvextern.so">
-      <Link>lib\armeabi-v7a\libcvextern.so</Link>
-      </EmbeddedNativeLibrary>
-	  <AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(MSBuildThisFileDirectory)..\libs\armeabi-v7a\libcvextern.so">
-        <Link>lib\armeabi-v7a\libcvextern.so</Link>
-      </AndroidNativeLibrary>
-	</ItemGroup>
-	<!-- arm64-v8a -->
-	<ItemGroup Condition="$(AndroidSupportedAbis.Contains('arm64-v8a%3')) OR $(AndroidSupportedAbis.EndsWith('arm64-v8a'))"> 
-    <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(MSBuildThisFileDirectory)..\libs\arm64-v8a\libcvextern.so">
-      <Link>lib\arm64-v8a\libcvextern.so</Link>
-    </EmbeddedNativeLibrary>
-	<AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(MSBuildThisFileDirectory)..\libs\arm64-v8a\libcvextern.so">
-        <Link>lib\arm64-v8a\libcvextern.so</Link>
-      </AndroidNativeLibrary>
-	</ItemGroup>
-	<!-- x86 -->
-	<ItemGroup Condition="$(AndroidSupportedAbis.Contains('x86%3')) OR $(AndroidSupportedAbis.EndsWith('x86'))"> 
-    <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(MSBuildThisFileDirectory)..\libs\x86\libcvextern.so">
-      <Link>lib\x86\libcvextern.so</Link>
-    </EmbeddedNativeLibrary>
-	<AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(MSBuildThisFileDirectory)..\libs\x86\libcvextern.so">
-        <Link>lib\x86\libcvextern.so</Link>
-      </AndroidNativeLibrary>
-	</ItemGroup>
-	<!-- armeabi-v7a -->
-	<ItemGroup Condition="$(AndroidSupportedAbis.Contains('x86_64%3')) OR $(AndroidSupportedAbis.EndsWith('x86_64'))"> 
-    <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(MSBuildThisFileDirectory)..\libs\x86_64\libcvextern.so">
-      <Link>lib\x86_64\libcvextern.so</Link>
-    </EmbeddedNativeLibrary>
-	<AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(MSBuildThisFileDirectory)..\libs\x86_64\libcvextern.so">
-        <Link>lib\x86_64\libcvextern.so</Link>
-      </AndroidNativeLibrary>
-	</ItemGroup>
+    <When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='x86') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='x86'))">
+      <ItemGroup>
+        <Content Include="$(OpenCVBinaryDir)\x86_phone\cvextern.dll">
+          <Link>cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
     </When>
-  	
+    <!-- IOS -->
+    <When Condition="('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR&#xA;	'$(Platform)'=='iPhone' OR&#xA;	'$(Platform)'=='iPhoneSimulator')">
+      <ItemGroup>
+        <ObjcBindingNativeLibrary Include="$(EmguCVDir)PInvoke\iOS\libemgucv.a" />
+      </ItemGroup>
+      <ItemGroup>
+        <Compile Include="$(EmguCVDir)PInvoke\iOS\libemgucv.linkwith.cs">
+          <DependentUpon>libemgucv.a</DependentUpon>
+        </Compile>
+      </ItemGroup>
+    </When>
+    <!-- Android -->
+    <When Condition="('$(AndroidSupportedAbis)'!='')">
+      <!-- armeabi -->
+      <ItemGroup Condition="$(AndroidSupportedAbis.Contains('armeabi%3')) OR $(AndroidSupportedAbis.EndsWith('armeabi'))">
+        <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(EmguCVDir)..\libs\armeabi\libcvextern.so">
+          <Link>lib\armeabi\libcvextern.so</Link>
+        </EmbeddedNativeLibrary>
+        <AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(EmguCVDir)..\libs\armeabi\libcvextern.so">
+          <Link>lib\armeabi\libcvextern.so</Link>
+        </AndroidNativeLibrary>
+      </ItemGroup>
+      <!-- armeabi-v7a -->
+      <ItemGroup Condition="$(AndroidSupportedAbis.Contains('armeabi-v7a')) OR $(AndroidSupportedAbis.EndsWith('armeabi-v7a'))">
+        <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(EmguCVDir)..\libs\armeabi-v7a\libcvextern.so">
+          <Link>lib\armeabi-v7a\libcvextern.so</Link>
+        </EmbeddedNativeLibrary>
+        <AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(EmguCVDir)..\libs\armeabi-v7a\libcvextern.so">
+          <Link>lib\armeabi-v7a\libcvextern.so</Link>
+        </AndroidNativeLibrary>
+      </ItemGroup>
+      <!-- arm64-v8a -->
+      <ItemGroup Condition="$(AndroidSupportedAbis.Contains('arm64-v8a%3')) OR $(AndroidSupportedAbis.EndsWith('arm64-v8a'))">
+        <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(EmguCVDir)..\libs\arm64-v8a\libcvextern.so">
+          <Link>lib\arm64-v8a\libcvextern.so</Link>
+        </EmbeddedNativeLibrary>
+        <AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(EmguCVDir)..\libs\arm64-v8a\libcvextern.so">
+          <Link>lib\arm64-v8a\libcvextern.so</Link>
+        </AndroidNativeLibrary>
+      </ItemGroup>
+      <!-- x86 -->
+      <ItemGroup Condition="$(AndroidSupportedAbis.Contains('x86%3')) OR $(AndroidSupportedAbis.EndsWith('x86'))">
+        <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(EmguCVDir)..\libs\x86\libcvextern.so">
+          <Link>lib\x86\libcvextern.so</Link>
+        </EmbeddedNativeLibrary>
+        <AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(EmguCVDir)..\libs\x86\libcvextern.so">
+          <Link>lib\x86\libcvextern.so</Link>
+        </AndroidNativeLibrary>
+      </ItemGroup>
+      <!-- armeabi-v7a -->
+      <ItemGroup Condition="$(AndroidSupportedAbis.Contains('x86_64%3')) OR $(AndroidSupportedAbis.EndsWith('x86_64'))">
+        <EmbeddedNativeLibrary Condition="'$(AndroidApplication)'==''" Include="$(EmguCVDir)..\libs\x86_64\libcvextern.so">
+          <Link>lib\x86_64\libcvextern.so</Link>
+        </EmbeddedNativeLibrary>
+        <AndroidNativeLibrary Condition="'$(AndroidApplication)'=='True'" Include="$(EmguCVDir)..\libs\x86_64\libcvextern.so">
+          <Link>lib\x86_64\libcvextern.so</Link>
+        </AndroidNativeLibrary>
+      </ItemGroup>
+    </When>
   </Choose>
 </Project>
