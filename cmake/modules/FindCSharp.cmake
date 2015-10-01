@@ -13,13 +13,22 @@
 # Modified by canming to find .NET on Windows
 # copyright (c) 2009 - 2012 Canming Huang support@emgu.com
 
-IF(WIN32)
-FIND_PROGRAM (CSC_EXECUTABLE_20 csc
+#IF(WIN32)
+FIND_PROGRAM (CSC_EXECUTABLE_20 
+NAMES csc gmcs
+PATHS
 $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
-"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727")
-FIND_PROGRAM (MSBUILD_EXECUTABLE_20 msbuild
+"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
+/Library/Frameworks/Mono.framework/Commands/
+)
+
+FIND_PROGRAM (MSBUILD_EXECUTABLE_20 
+NAMES msbuild xbuild
+PATHS
 $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
-"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727")
+"C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
+/Library/Frameworks/Mono.framework/Commands/
+)
 IF(CSC_EXECUTABLE_20)
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_20})
 SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_20})
@@ -47,16 +56,24 @@ FIND_FILE (CSC_MSCORLIB_35 mscorlib.dll
 "C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v3.5/Profile/Client/"
 )
 
-FIND_PROGRAM (CSC_EXECUTABLE_40 csc 
+FIND_PROGRAM (CSC_EXECUTABLE_40 
+NAMES csc mcs dmcs
+PATHS
 $ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
 "C:/Microsoft.NET/Framework64/v4.0.30319/"
 $ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
-"C:/Microsoft.NET/Framework/v4.0.30319/")
-FIND_PROGRAM (MSBUILD_EXECUTABLE_40 msbuild 
+"C:/Microsoft.NET/Framework/v4.0.30319/"
+/Library/Frameworks/Mono.framework/Commands/)
+
+FIND_PROGRAM (MSBUILD_EXECUTABLE_40 
+NAMES msbuild xbuild 
+PATHS
 $ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
 "C:/Microsoft.NET/Framework64/v4.0.30319/"
 $ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
-"C:/Microsoft.NET/Framework/v4.0.30319/")
+"C:/Microsoft.NET/Framework/v4.0.30319/"
+/Library/Frameworks/Mono.framework/Commands/)
+
 IF(CSC_EXECUTABLE_40)
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_40})
 SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_40})
@@ -75,10 +92,10 @@ ENDIF()
 IF(CSC_EXECUTABLE_40 AND CSC_PREFERRED_VERSION MATCHES "4.0")
 SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_40})
 ENDIF()
-ELSE(WIN32)
-FIND_PROGRAM (CSC_EXECUTABLE mcs)
-FIND_PROGRAM (MSBUILD_EXECUTABLE xbuild)
-ENDIF(WIN32)
+#ELSE(WIN32)
+#FIND_PROGRAM (CSC_EXECUTABLE mcs)
+#FIND_PROGRAM (MSBUILD_EXECUTABLE xbuild)
+#ENDIF(WIN32)
 
 FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil 
 "$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/Bin" 
@@ -86,7 +103,9 @@ FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil
 "C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
 "C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin" 
 /usr/lib/mono/2.0
-/usr/bin)
+/usr/bin
+/Library/Frameworks/Mono.framework/Commands/
+)
 
 FIND_PROGRAM (AL_EXECUTABLE al
 "C:/Program Files/Microsoft SDKs/Windows/v7.0/bin"
@@ -102,7 +121,9 @@ FIND_PROGRAM (AL_EXECUTABLE al
 $ENV{windir}/Microsoft.NET/Framework/v3.5
 $ENV{windir}/Microsoft.NET/Framework/v2.0.50727
 /usr/lib/mono/2.0
-/usr/bin)
+/usr/bin
+/Library/Frameworks/Mono.framework/Commands/
+)
 
 FIND_PROGRAM (RESGEN_EXECUTABLE resgen
 "C:/Program Files/Microsoft SDKs/Windows/v7.0/bin"
@@ -115,7 +136,9 @@ FIND_PROGRAM (RESGEN_EXECUTABLE resgen
 "$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/Bin" 
 "$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/Bin"
 "$ENV{programfiles}/Microsoft Visual Studio 8/SDK/v2.0/Bin"
-/usr/bin)
+/usr/bin
+/Library/Frameworks/Mono.framework/Commands/
+)
   
 SET (CSharp_FOUND FALSE)
 IF (CSC_EXECUTABLE AND AL_EXECUTABLE AND RESGEN_EXECUTABLE AND MSBUILD_EXECUTABLE)
@@ -125,19 +148,29 @@ ENDIF ()
 IF (NOT CSharp_FIND_QUIETLY)
    IF (CSC_EXECUTABLE)
 	MESSAGE(STATUS "Found csc: ${CSC_EXECUTABLE}")
+   ELSE()
+        MESSAGE(STATUS "Could not find csc")
    ENDIF (CSC_EXECUTABLE)
    IF (GACUTIL_EXECUTABLE)
 	MESSAGE(STATUS "Found gacutil: ${GACUTIL_EXECUTABLE}")
+   ELSE()
+        MESSAGE(STATUS "Could not find gacutil")
    ENDIF (GACUTIL_EXECUTABLE)
    IF (AL_EXECUTABLE)
    	MESSAGE(STATUS "Found al: ${AL_EXECUTABLE}")
+   ELSE()
+        MESSAGE(STATUS "Could not find al")
    ENDIF (AL_EXECUTABLE)
    IF (RESGEN_EXECUTABLE)
 	MESSAGE(STATUS "Found resgen: ${RESGEN_EXECUTABLE}")
+   ELSE()
+        MESSAGE(STATUS "Could not find resgen")
    ENDIF(RESGEN_EXECUTABLE)
    IF (MSBUILD_EXECUTABLE)
     MESSAGE(STATUS "Found msbuild: ${MSBUILD_EXECUTABLE}")
-   ENDIF(MSBUILD_EXECUTABLE)
+   ELSE()
+        MESSAGE(STATUS "Could not find msbuild")
+   ENDIF()
 ENDIF (NOT CSharp_FIND_QUIETLY)
 
 IF (CSharp_FOUND)
