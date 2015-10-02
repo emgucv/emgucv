@@ -648,6 +648,17 @@ namespace Emgu.CV
          UMatInvoke.cveUMatCopyDataFrom(this, handle.AddrOfPinnedObject());
          handle.Free();
       }
+
+      /// <summary>
+      /// Computes the dot product of two mats
+      /// </summary>
+      /// <param name="mat">The matrix to compute dot product with</param>
+      /// <returns>The dot product</returns>
+      public double Dot(IInputArray mat)
+      {
+         using (InputArray iaMat = mat.GetInputArray())
+            return UMatInvoke.cveUMatDot(Ptr, iaMat);
+      }
    }
 
    internal static class UMatInvoke
@@ -703,6 +714,9 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cveUMatCopyDataFrom(IntPtr mat, IntPtr source);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static double cveUMatDot(IntPtr mat, IntPtr m);
    }
 }
 

@@ -49,8 +49,7 @@ void cveUMatCopyTo(cv::UMat* mat, cv::_OutputArray* m, cv::_InputArray* mask)
 {
    if (mask)
    {
-      CV_Error(0, "This is not implemented");
-      //mat->copyTo(*m, *mask);
+      mat->copyTo(*m, *mask);
    }
    else
       mat->copyTo(*m);
@@ -99,4 +98,9 @@ void cveUMatCopyDataFrom(cv::UMat* mat, unsigned char* source)
    const int* sizes = mat->size;
    cv::Mat fromMat = cv::Mat(mat->dims, mat->size, mat->type(), source);
    fromMat.copyTo(*mat);
+}
+
+double cveUMatDot(cv::UMat* mat, cv::_InputArray* m)
+{
+   return mat->dot(*m);
 }

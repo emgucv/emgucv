@@ -30,4 +30,5 @@ CVAPI(cv::UMat*) cveUMatReshape(cv::UMat* mat, int cn, int rows);
 CVAPI(void) cveUMatCopyDataTo(cv::UMat* mat, unsigned char* dest);
 CVAPI(void) cveUMatCopyDataFrom(cv::UMat* mat, unsigned char* source);
 
+CVAPI(double) cveUMatDot(cv::UMat* mat, cv::_InputArray* m);
 #endif
