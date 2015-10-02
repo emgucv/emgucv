@@ -6,9 +6,9 @@
 
 #include "umat_c.h"
 
-cv::UMat* cveUMatCreate()
+cv::UMat* cveUMatCreate(cv::UMatUsageFlags usage)
 {
-   return new cv::UMat();
+   return new cv::UMat(usage);
 }
 
 void cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator)
@@ -25,9 +25,9 @@ void cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, Mat
       mat->allocator = *oclAllocator;
    }
 }
-void cveUMatCreateData(cv::UMat* mat, int row, int cols, int type)
+void cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, cv::UMatUsageFlags flags)
 {
-   mat->create(row, cols, type);
+   mat->create(row, cols, type, flags);
 }
 cv::UMat* cveUMatCreateFromROI(cv::UMat* mat, CvRect* roi)
 {
@@ -85,4 +85,18 @@ cv::UMat* cveUMatReshape(cv::UMat* mat, int cn, int rows)
    cv::UMat m = mat->reshape(cn, rows);
    cv::swap(m, *result);
    return result;
+}
+
+void cveUMatCopyDataTo(cv::UMat* mat, unsigned char* dest)
+{
+   const int* sizes = mat->size;
+   cv::Mat destMat = cv::Mat(mat->dims, mat->size, mat->type(), dest);
+   mat->copyTo(destMat);
+}
+
+void cveUMatCopyDataFrom(cv::UMat* mat, unsigned char* source)
+{
+   const int* sizes = mat->size;
+   cv::Mat fromMat = cv::Mat(mat->dims, mat->size, mat->type(), source);
+   fromMat.copyTo(*mat);
 }

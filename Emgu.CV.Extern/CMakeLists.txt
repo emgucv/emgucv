@@ -509,16 +509,18 @@ IF(HAVE_opencv_core)
   "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/UMatGenerated.cs"
   "cv::UMat" 
   "UMat" 
-  "isContinuous;isSubmatrix;depth;empty;channels" 
-  "bool;bool;int;bool;int" 
-  "val;val;val;val;val"
-  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels" 
-  "bool;bool;CvEnum.DepthType;bool;int"
+  "isContinuous;isSubmatrix;depth;empty;channels;total;dims" 
+  "bool;bool;int;bool;int;size_t;int" 
+  "val;val;val;val;val;val;elementR"
+  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;Total;Dims" 
+  "bool;bool;CvEnum.DepthType;bool;int;IntPtr;int"
   "True if the data is continues;
   True if the matrix is a submatrix of another matrix;
   Depth type;
   True if the matrix is empty;
-  Number of channels"
+  Number of channels;
+  The method returns the number of array elements (a number of pixels if the array represents an image);
+  The matrix dimensionality"
   "Emgu.CV"
   "CvInvoke"
   "UMat"
@@ -561,26 +563,6 @@ CREATE_OCV_CLASS_PROPERTY(
   "CvInvoke"
   "OutputArray"
   "#include \"core_c_extra.h\"")
-
-  CREATE_OCV_CLASS_PROPERTY( 
-  "core/umat_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/UMatGenerated.cs"
-  "cv::UMat" 
-  "UMat" 
-  "isContinuous;isSubmatrix;depth;empty;channels" 
-  "bool;bool;int;bool;int" 
-  "val;val;val;val;val"
-  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels" 
-  "bool;bool;CvEnum.DepthType;bool;int"
-  "True if the data is continues;
-  True if the matrix is a submatrix of another matrix;
-  Depth type;
-  True if the matrix is empty;
-  Number of channels"
-  "Emgu.CV"
-  "CvInvoke"
-  "UMat"
-  "#include \"umat_c.h\"")
 
   CREATE_OCV_CLASS_PROPERTY( 
   "core/ocl_device_property" 

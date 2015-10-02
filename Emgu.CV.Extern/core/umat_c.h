@@ -13,9 +13,9 @@
 #include "emgu_c.h"
 #include "mat_c.h"
 
-CVAPI(cv::UMat*) cveUMatCreate();
+CVAPI(cv::UMat*) cveUMatCreate(cv::UMatUsageFlags flags);
 CVAPI(void) cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator);
-CVAPI(void) cveUMatCreateData(cv::UMat* mat, int row, int cols, int type);
+CVAPI(void) cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, cv::UMatUsageFlags flags);
 CVAPI(cv::UMat*) cveUMatCreateFromROI(cv::UMat* mat, CvRect* roi);
 CVAPI(void) cveUMatRelease(cv::UMat** mat);
 CVAPI(emgu::size) cveUMatGetSize(cv::UMat* mat);
@@ -26,5 +26,8 @@ CVAPI(void) cveUMatSetTo(cv::UMat* mat, cv::_InputArray* value, cv::_InputArray*
 CVAPI(cv::Mat*) cveUMatGetMat(cv::UMat* mat, int access);
 CVAPI(void) cveUMatConvertTo( cv::UMat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta );
 CVAPI(cv::UMat*) cveUMatReshape(cv::UMat* mat, int cn, int rows);
+
+CVAPI(void) cveUMatCopyDataTo(cv::UMat* mat, unsigned char* dest);
+CVAPI(void) cveUMatCopyDataFrom(cv::UMat* mat, unsigned char* source);
 
 #endif

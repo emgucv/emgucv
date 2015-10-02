@@ -105,11 +105,32 @@ namespace Emgu.CV.Test
                new float[] {0, 255, 0, 255, 0, 255}, true);
             byte[] bytes = hist.GetData();
             hist.CopyDataFrom(bytes);
+
+            float[] bins = new float[20*20*20];
+            hist.CopyDataTo(bins);
          }
       }
 
       [Test]
       public void TestDenseHistogram3()
+      {
+         UMat img = new UMat(400, 400, DepthType.Cv8U, 3);
+         CvInvoke.Randu(img, new MCvScalar(), new MCvScalar(255, 255, 255));
+         UMat hist = new UMat();
+         using (VectorOfUMat vms = new VectorOfUMat(img))
+         {
+            CvInvoke.CalcHist(vms, new int[] { 0, 1, 2 }, null, hist, new int[] { 20, 20, 20 },
+               new float[] { 0, 255, 0, 255, 0, 255 }, true);
+            byte[] bytes = hist.Bytes;
+            hist.CopyDataFrom(bytes);
+
+            float[] bins = new float[20 * 20 * 20];
+            hist.CopyDataTo(bins);
+         }
+      }
+
+      [Test]
+      public void TestDenseHistogram4()
       {
          Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
          CvInvoke.Randu(img, new MCvScalar(), new MCvScalar(255, 255, 255));

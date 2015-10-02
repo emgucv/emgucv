@@ -77,30 +77,44 @@ namespace Emgu.CV
       #endregion
 #endif
 
-      private byte[] Bytes
+      /// <summary>
+      /// Allocation usage.
+      /// </summary>
+      public enum Usage
+      {
+         /// <summary>
+         /// Default
+         /// </summary>
+         Default = 0,
+
+         /// <summary>
+         /// Buffer allocation policy is platform and usage specific 
+         /// </summary>
+         AllocateHostMemory = 1 << 0,
+         /// <summary>
+         /// Buffer allocation policy is platform and usage specific 
+         /// </summary>
+         AllocateDeviceMemory = 1 << 1,
+         /// <summary>
+         /// Buffer allocation policy is platform and usage specific 
+         /// It is not equal to: AllocateHostMemory | AllocateDeviceMemory
+         /// </summary>
+         AllocateSharedMemory = 1 << 2
+      }
+
+      public byte[] Bytes
       {
          get
          {
             if (IsEmpty)
                return null;
-            byte[] data = new byte[Rows* Cols * ElementSize];
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            using (Mat m = new Mat(Rows, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols*ElementSize))
-            {
-               CopyTo(m);
-            }
-            handle.Free();
+            byte[] data = new byte[Total.ToInt32() * ElementSize];
+            CopyDataTo(data);
             return data;
          }
          set
          {
-            Debug.Assert(value.Length == Rows * Cols* ElementSize, String.Format("Invalid byte length, expecting {0} but was {1}", Rows * Cols * ElementSize, value.Length));
-            GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            using (Mat m = new Mat(Rows, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols * ElementSize))
-            {
-               m.CopyTo(this);
-            }
-            handle.Free();
+            CopyDataFrom(value);
          }
       }
 
@@ -131,10 +145,10 @@ namespace Emgu.CV
       /// <param name="cols">Number of columns in a 2D array.</param>
       /// <param name="type">Mat element type</param>
       /// <param name="channels">Number of channels</param>
-      public UMat(int rows, int cols, CvEnum.DepthType type, int channels)
+      public UMat(int rows, int cols, CvEnum.DepthType type, int channels, Usage usage = Usage.Default)
          : this()
       {
-         Create(rows, cols, type, channels);
+         Create(rows, cols, type, channels, usage);
       }
 
       /// <summary>
@@ -143,8 +157,8 @@ namespace Emgu.CV
       /// <param name="size">Size of the UMat</param>
       /// <param name="type">Mat element type</param>
       /// <param name="channels">Number of channels</param>
-      public UMat(Size size, CvEnum.DepthType type, int channels)
-         : this(size.Height, size.Width, type, channels)
+      public UMat(Size size, CvEnum.DepthType type, int channels, Usage usage = Usage.Default)
+         : this(size.Height, size.Width, type, channels, usage)
       {
 
       }
@@ -166,9 +180,9 @@ namespace Emgu.CV
       /// <param name="cols">New number of columns.</param>
       /// <param name="type">New matrix element depth type.</param>
       /// <param name="channels">New matrix number of channels</param>
-      public void Create(int rows, int cols, CvEnum.DepthType type, int channels)
+      public void Create(int rows, int cols, CvEnum.DepthType type, int channels, Usage usage = Usage.Default)
       {
-         UMatInvoke.cveUMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels));
+         UMatInvoke.cveUMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels), usage);
       }
 
       /// <summary>
@@ -227,6 +241,7 @@ namespace Emgu.CV
             UMatInvoke.cveUMatCopyTo(this, oaM, iaMask);
       }
 
+      /*
       /// <summary>
       /// Copies the values of the UMat to <paramref name="data"/>.
       /// </summary>
@@ -240,7 +255,7 @@ namespace Emgu.CV
 
          using (Mat.MatWithHandle m = Mat.PrepareArrayForCopy(Depth, Size, NumberOfChannels, data))
             CopyTo(m);
-      }
+      }*/
 
       /// <summary>
       /// Sets all or some of the array elements to the specified value.
@@ -607,6 +622,32 @@ namespace Emgu.CV
                return CvInvoke.CountNonZero(reshaped) == 0;
          }
       }
+
+      /// <summary>
+      /// Copy data from this Mat to the managed array
+      /// </summary>
+      /// <typeparam name="T">The type of managed data array</typeparam>
+      /// <param name="data">The managed array where data will be copied to.</param>
+      public void CopyDataTo<T>(T[] data)
+      {
+         Debug.Assert(Marshal.SizeOf(typeof(T)) * data.Length >= Total.ToInt32() * ElementSize, String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length));
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         UMatInvoke.cveUMatCopyDataTo(this, handle.AddrOfPinnedObject());
+         handle.Free();
+      }
+
+      /// <summary>
+      /// Copy data from managed array to this Mat
+      /// </summary>
+      /// <typeparam name="T">The type of managed data array</typeparam>
+      /// <param name="data">The managed array where data will be copied from</param>
+      public void CopyDataFrom<T>(T[] data)
+      {
+         Debug.Assert(data.Length == Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length));
+         GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+         UMatInvoke.cveUMatCopyDataFrom(this, handle.AddrOfPinnedObject());
+         handle.Free();
+      }
    }
 
    internal static class UMatInvoke
@@ -637,7 +678,7 @@ namespace Emgu.CV
       internal extern static int cveUMatGetElementSize(IntPtr mat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveUMatCreateData(IntPtr mat, int row, int cols, int type);
+      internal extern static void cveUMatCreateData(IntPtr mat, int row, int cols, int type, UMat.Usage flags);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveUMatCreateFromROI(IntPtr mat, ref Rectangle roi);
@@ -656,6 +697,12 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveUMatReshape(IntPtr mat, int cn, int rows);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveUMatCopyDataTo(IntPtr mat, IntPtr dest);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveUMatCopyDataFrom(IntPtr mat, IntPtr source);
    }
 }
 

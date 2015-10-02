@@ -22,6 +22,7 @@ CVAPI(cv::Mat*) cveMatCreate();
 CVAPI(cv::MatAllocator*) cveMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr);
 CVAPI(void) cveMatCreateData(cv::Mat* mat, int row, int cols, int type);
 CVAPI(cv::Mat*) cveMatCreateWithData(int rows, int cols, int type, void* data, size_t step);
+CVAPI(cv::Mat*) cveMatCreateMultiDimWithData(int ndims, const int* sizes, int type, void* data, size_t* steps);
 CVAPI(cv::Mat*) cveMatCreateFromRect(cv::Mat* mat, CvRect* roi);
 
 CVAPI(void) cveMatRelease(cv::Mat** mat);
