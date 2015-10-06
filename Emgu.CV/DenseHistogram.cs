@@ -223,7 +223,7 @@ namespace Emgu.CV
             totalDim *= _binSizes[i];
          }
          float[] result = new float[totalDim];
-         CopyDataTo(result);
+         CopyTo(result);
          return result;
       }
 

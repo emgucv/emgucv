@@ -1264,14 +1264,13 @@ namespace Emgu.CV.Test
             tracker.Predict();
 
             #region draw the state, prediction and the measurement
-            //Matrix<float> correctedState = new Matrix<float>(1, 1);
-            //Matrix<float> predictedState = new Matrix<float>(1, 1);
-            float[,] correctedState = new float[2,1];
-            float[,] predictedState = new float[2,1];
+
+            float[] correctedState = new float[2];
+            float[] predictedState = new float[2];
             tracker.StatePost.CopyTo(correctedState);
             tracker.StatePre.CopyTo(predictedState);
-            PointF statePoint = angleToPoint(correctedState[0, 0]);
-            PointF predictPoint = angleToPoint(predictedState[0, 0]);
+            PointF statePoint = angleToPoint(correctedState[0]);
+            PointF predictPoint = angleToPoint(predictedState[0]);
             PointF measurementPoint = angleToPoint(measurement[0, 0]);
 
             img.SetZero(); //clear the image

@@ -104,10 +104,10 @@ namespace Emgu.CV.Test
             CvInvoke.CalcHist(vms, new int[] {0, 1, 2}, null, hist, new int[] {20, 20, 20},
                new float[] {0, 255, 0, 255, 0, 255}, true);
             byte[] bytes = hist.GetData();
-            hist.CopyDataFrom(bytes);
+            hist.SetTo(bytes);
 
             float[] bins = new float[20*20*20];
-            hist.CopyDataTo(bins);
+            hist.CopyTo(bins);
          }
       }
 
@@ -122,10 +122,10 @@ namespace Emgu.CV.Test
             CvInvoke.CalcHist(vms, new int[] { 0, 1, 2 }, null, hist, new int[] { 20, 20, 20 },
                new float[] { 0, 255, 0, 255, 0, 255 }, true);
             byte[] bytes = hist.Bytes;
-            hist.CopyDataFrom(bytes);
+            hist.SetTo(bytes);
 
             float[] bins = new float[20 * 20 * 20];
-            hist.CopyDataTo(bins);
+            hist.CopyTo(bins);
          }
       }
 

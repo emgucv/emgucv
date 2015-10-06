@@ -54,6 +54,20 @@ namespace Emgu.CV.Test
          }
       }
 
+      [Test]
+      public void TestUMatConvert()
+      {
+         using (UMat image = new UMat(10, 10, DepthType.Cv8U, 3))
+         {
+            image.SetTo(new MCvScalar(3, 4, 5));
+            using (Image<Bgr, byte> imageDataSameColorSameDepth = image.ToImage<Bgr, byte>())
+            using (Image<Gray, byte> imageDataDifferentColorSameDepth = image.ToImage<Gray, byte>())
+            using (Image<Bgr, float> imageDataSameColorDifferentDepth = image.ToImage<Bgr, float>())
+            {
+            }
+         }
+      }
+
 #if !NETFX_CORE
       [TestAttribute]
       public void TestRuntimeSerialize()

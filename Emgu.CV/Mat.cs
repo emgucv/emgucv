@@ -99,7 +99,7 @@ namespace Emgu.CV
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             MatInvoke.cveMatCopyDataTo(this, handle.AddrOfPinnedObject());
             handle.Free();*/
-            CopyDataTo(data);
+            CopyTo(data);
             return data;
          }
          set
@@ -109,7 +109,7 @@ namespace Emgu.CV
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
             MatInvoke.cveMatCopyDataFrom(this, handle.AddrOfPinnedObject());
             handle.Free();*/
-            CopyDataFrom(value);
+            SetTo(value);
          }
       }
    
@@ -118,7 +118,7 @@ namespace Emgu.CV
       /// </summary>
       /// <typeparam name="T">The type of managed data array</typeparam>
       /// <param name="data">The managed array where data will be copied to.</param>
-      public void CopyDataTo<T>(T[] data)
+      public void CopyTo<T>(T[] data)
       {
          Debug.Assert(Marshal.SizeOf(typeof(T)) * data.Length >= Total.ToInt32() * ElementSize, String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length) );
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -131,7 +131,7 @@ namespace Emgu.CV
       /// </summary>
       /// <typeparam name="T">The type of managed data array</typeparam>
       /// <param name="data">The managed array where data will be copied from</param>
-      public void CopyDataFrom<T>(T[] data)
+      public void SetTo<T>(T[] data)
       {
          Debug.Assert(data.Length == Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length));
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -406,6 +406,7 @@ namespace Emgu.CV
          }
       }
 
+      /*
       internal static MatWithHandle PrepareArrayForCopy(DepthType dt, Size s, int channels, Array data)
       {
          int dimension = data.Rank;
@@ -511,7 +512,7 @@ namespace Emgu.CV
 
          using (MatWithHandle m = PrepareArrayForCopy(Depth, Size, NumberOfChannels, data))
             CopyTo(m);
-      }
+      }*/
 
       /// <summary>
       /// Converts an array to another data type with optional scaling.
@@ -873,6 +874,7 @@ namespace Emgu.CV
          
       }
 
+      /*
       /// <summary>
       /// Copies the values of the <paramref name="data"/> to Mat.
       /// </summary>
@@ -905,7 +907,7 @@ namespace Emgu.CV
 
          using (MatWithHandle m = PrepareArrayForCopy(Depth, Size, NumberOfChannels, data))
             m.CopyTo(this);
-      }
+      }*/
 
       /// <summary>
       /// Set the mat to the specific value
