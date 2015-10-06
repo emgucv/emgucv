@@ -1,5 +1,5 @@
 ﻿using WindowsPhoneApp.Common;
-using Emgu.CV.Windows.Phone.App.Data;
+using Emgu.CV.WindowsPhone.App.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 
-namespace Emgu.CV.Windows.Phone.App
+namespace Emgu.CV.WindowsPhone.App
 {
    /// <summary>
    /// A page that displays a grouped collection of items.

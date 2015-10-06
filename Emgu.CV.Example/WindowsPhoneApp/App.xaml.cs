@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Hub Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
-namespace Emgu.CV.Windows.Phone.App
+namespace Emgu.CV.WindowsPhone.App
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.

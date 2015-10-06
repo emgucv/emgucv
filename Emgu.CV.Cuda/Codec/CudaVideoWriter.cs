@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
+//using System.Runtime.Remoting.Messaging;
 using System.Text;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;

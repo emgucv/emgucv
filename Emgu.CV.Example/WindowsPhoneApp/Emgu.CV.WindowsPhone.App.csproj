@@ -7,7 +7,7 @@
     <ProjectGuid>{C8B17BAC-54E4-49FE-BC3F-AD2EFB55C4B4}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.Windows.Phone.App</RootNamespace>
+    <RootNamespace>Emgu.CV.WindowsPhone.App</RootNamespace>
     <AssemblyName>EmguCVDemoApp</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
@@ -206,28 +206,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.Windows.Phone.csproj">
-      <Project>{66827755-4d68-4b7c-a3eb-1e13d6a583c7}</Project>
-      <Name>Emgu.CV.Contrib.Windows.Phone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.ML\Emgu.CV.ML.Windows.Phone.csproj">
-      <Project>{a2b69a83-3ad3-4b3a-9f95-853ba8fbee70}</Project>
-      <Name>Emgu.CV.ML.Windows.Phone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.Windows.Phone.csproj">
-      <Project>{346caaf6-8d64-48a4-a8df-a2ab06874003}</Project>
-      <Name>Emgu.CV.Stitching.Windows.Phone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV\Emgu.CV.Windows.Phone.csproj">
-      <Project>{914d1fef-0744-451d-8df7-d53e888bd94c}</Project>
-      <Name>Emgu.CV.Windows.Phone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.Util\Emgu.Util.Windows.Phone.csproj">
-      <Project>{e239ac5a-82f4-491e-a3c5-03cb3b0352d2}</Project>
-      <Name>Emgu.Util.Windows.Phone</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <SDKReference Include="Microsoft.VCLibs, Version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Phone</Name>
     </SDKReference>
@@ -235,6 +213,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

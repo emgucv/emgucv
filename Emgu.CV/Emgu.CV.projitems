@@ -45,7 +45,7 @@
       </ItemGroup>
     </When>
     <!-- Windows store 8.1 (32bit) -->
-    <When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86')">
+    <When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86') AND '$(IsTargetingWindowsPhonePlatform)'!='True'">
       <ItemGroup>
         <Content Include="$(OpenCVBinaryDir)\x86_store\cvextern.dll">
           <Link>cvextern.dll</Link>

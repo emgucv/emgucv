@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="Emgu.CV.Windows.Phone.App.App"
+    x:Class="Emgu.CV.WindowsPhone.App.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Emgu.CV.Windows.Phone.App">
+    xmlns:local="using:Emgu.CV.WindowsPhone.App">
 
     <Application.Resources>
         <ResourceDictionary>

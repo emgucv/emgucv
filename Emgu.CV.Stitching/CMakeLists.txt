@@ -32,15 +32,6 @@ COMPONENT emgucv_binary)
 IF(WIN32 OR APPLE)
 
 IF(NETFX_CORE)
-  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-    SET(CSPROJ_FILE "${PROJECT_NAME}.Windows.Phone.csproj")
-  ELSE()
-    SET(CSPROJ_FILE "${PROJECT_NAME}.Windows.Store.csproj")
-  ENDIF()	
-ELSE()
-  SET(CSPROJ_FILE "${PROJECT_NAME}.csproj")
-ENDIF()
-
 INSTALL(
   DIRECTORY
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -48,7 +39,23 @@ INSTALL(
     COMPONENT emgucv_source
   FILES_MATCHING 
   PATTERN "*.cs"
-  PATTERN "${CSPROJ_FILE}"
+  PATTERN "*.shproj"
+  PATTERN "*.projitems"
+  PATTERN "*.resx"
+  PATTERN ".svn" EXCLUDE
+  PATTERN "obj" EXCLUDE
+  PATTERN "CMakeFiles" EXCLUDE
+  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+)
+ELSE()
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  DESTINATION .
+    COMPONENT emgucv_source
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "${PROJECT_NAME}.csproj"
   PATTERN "*.resx"
   PATTERN ".svn" EXCLUDE
   PATTERN "obj" EXCLUDE
@@ -57,6 +64,9 @@ INSTALL(
   PATTERN "*Android*" EXCLUDE
   PATTERN "*iOS*" EXCLUDE
 )
+ENDIF()
+
+
 ENDIF()
 
 ENDIF()

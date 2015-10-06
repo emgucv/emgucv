@@ -27,7 +27,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.ApplicationModel.Core;
 
-namespace Emgu.CV.Windows.Phone.App
+namespace Emgu.CV.WindowsPhone.App
 {
    /// <summary>
    /// An empty page that can be used on its own or navigated to within a Frame.

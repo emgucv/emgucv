@@ -49,11 +49,6 @@ INSTALL(
 IF(WIN32 OR APPLE)
 
 IF(NETFX_CORE)
-  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-    SET(CSPROJ_FILE "${PROJECT_NAME}.Windows.Phone.csproj")
-  ELSE()
-    SET(CSPROJ_FILE "${PROJECT_NAME}.Windows.Store.csproj")
-  ENDIF()	
   INSTALL(
 	  DIRECTORY
 	  ${CMAKE_CURRENT_SOURCE_DIR}
@@ -61,19 +56,17 @@ IF(NETFX_CORE)
 		COMPONENT emgucv_source
 	  FILES_MATCHING 
 	  PATTERN "*.cs"
-	  PATTERN "${CSPROJ_FILE}"
+	  PATTERN "*.shproj"
+	  PATTERN "*.projitems"
 	  PATTERN "*.resx"
 	  PATTERN "README.txt"
 	  PATTERN ".svn" EXCLUDE
 	  PATTERN "obj" EXCLUDE
 	  PATTERN "CMakeFiles" EXCLUDE
 	  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-	  PATTERN "*Android*" EXCLUDE
-	  PATTERN "*iOS*" EXCLUDE
 	  PATTERN "*Unity*" EXCLUDE
 	)
 ELSE()
-  SET(CSPROJ_FILE "${PROJECT_NAME}.csproj")
   INSTALL(
 	  DIRECTORY
 	  ${CMAKE_CURRENT_SOURCE_DIR}
@@ -81,7 +74,7 @@ ELSE()
 		COMPONENT emgucv_source
 	  FILES_MATCHING 
 	  PATTERN "*.cs"
-	  PATTERN "${CSPROJ_FILE}"
+	  PATTERN "${PROJECT_NAME}.csproj"
 	  PATTERN "*.resx"
 	  PATTERN "README.txt"
 	  PATTERN ".svn" EXCLUDE
@@ -92,11 +85,8 @@ ELSE()
 	  PATTERN "*iOS*" EXCLUDE
 	  PATTERN "*Unity*" EXCLUDE
 	  PATTERN "*System.Drawing*" EXCLUDE
-	  PATTERN "*Windows.Store*" EXCLUDE
 	)
 ENDIF()
-  
-
 ENDIF()
 
 ENDIF()

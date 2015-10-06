@@ -1,5 +1,5 @@
 ﻿using WindowsPhoneApp.Common;
-using Emgu.CV.Windows.Phone.App.Data;
+using Emgu.CV.WindowsPhone.App.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Hub Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
-namespace Emgu.CV.Windows.Phone.App
+namespace Emgu.CV.WindowsPhone.App
 {
     public sealed partial class SectionPage : Page
     {

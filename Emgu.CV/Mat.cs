@@ -120,7 +120,14 @@ namespace Emgu.CV
       /// <param name="data">The managed array where data will be copied to.</param>
       public void CopyTo<T>(T[] data)
       {
-         Debug.Assert(Marshal.SizeOf(typeof(T)) * data.Length >= Total.ToInt32() * ElementSize, String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length) );
+         Debug.Assert(
+#if NETFX_CORE
+            Marshal.SizeOf<T>()
+#else
+            Marshal.SizeOf(typeof(T)) 
+#endif
+            * data.Length >= Total.ToInt32() * ElementSize, 
+            String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length) );
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          MatInvoke.cveMatCopyDataTo(this, handle.AddrOfPinnedObject());
          handle.Free();
@@ -764,7 +771,7 @@ namespace Emgu.CV
             }
          }
       }
-#elif !( NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
       /// such that the image data is <b>shared</b> with Bitmap. 
@@ -980,7 +987,7 @@ namespace Emgu.CV
 
          if (e != null)
          {
-#if __IOS__ || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#if __IOS__ || NETFX_CORE || (UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
             throw e;
 #elif __ANDROID__
             FileInfo fileInfo = new FileInfo(fileName);

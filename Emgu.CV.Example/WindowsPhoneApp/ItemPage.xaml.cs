@@ -5,7 +5,7 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using WindowsPhoneApp.Common;
-using Emgu.CV.Windows.Phone.App.Data;
+using Emgu.CV.WindowsPhone.App.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +28,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
-namespace Emgu.CV.Windows.Phone.App
+namespace Emgu.CV.WindowsPhone.App
 {
     /// <summary>
     /// A page that displays details for a single item within a group.
@@ -120,7 +120,7 @@ namespace Emgu.CV.Windows.Phone.App
               List<Rectangle> eyes = new List<Rectangle>();
               long detectionTime;
               FaceDetection.DetectFace.Detect(img, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml",
-                 faces, eyes, false, false, out detectionTime);
+                 faces, eyes, false, out detectionTime);
 
               foreach (Rectangle face in faces)
                  CvInvoke.Rectangle(img, face, new Bgr(0, 0, 255).MCvScalar, 2);
@@ -134,7 +134,7 @@ namespace Emgu.CV.Windows.Phone.App
               Mat gray = new Mat();
               CvInvoke.CvtColor(img, gray, ColorConversion.Bgr2Gray);
               long detectionTime;
-              Rectangle[] pedestrians = PedestrianDetection.FindPedestrian.Find(gray, false, false, out detectionTime);
+              Rectangle[] pedestrians = PedestrianDetection.FindPedestrian.Find(gray, false, out detectionTime);
               foreach (Rectangle pedestrian in pedestrians)
               {
                  CvInvoke.Rectangle(img, pedestrian, new MCvScalar(0, 0, 255) );
