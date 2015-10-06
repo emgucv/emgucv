@@ -109,12 +109,12 @@ namespace Emgu.CV
             if (IsEmpty)
                return null;
             byte[] data = new byte[Total.ToInt32() * ElementSize];
-            CopyDataTo(data);
+            CopyTo(data);
             return data;
          }
          set
          {
-            CopyDataFrom(value);
+            SetTo(value);
          }
       }
 
@@ -280,6 +280,7 @@ namespace Emgu.CV
             SetTo(ia, mask);
       }
 
+      /*
       /// <summary>
       /// Copies the values of the <paramref name="data"/> to Mat.
       /// </summary>
@@ -314,7 +315,7 @@ namespace Emgu.CV
 
          using (Mat.MatWithHandle m = Mat.PrepareArrayForCopy(Depth, Size, NumberOfChannels, data))
             m.CopyTo(this);
-      }
+      }*/
 
       /// <summary>
       /// Return the Mat representation of the UMat
@@ -398,33 +399,11 @@ namespace Emgu.CV
          {
             //different depth, same color
             Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
-            if (numberOfChannels == 1)
-            {
-               using (Image<Gray, TDepth> tmp = this.ToImage<Gray, TDepth>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (numberOfChannels == 3)
-            {
-               using (Image<Bgr, TDepth> tmp = this.ToImage<Bgr, TDepth>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (numberOfChannels == 4)
-            {
-               using (Image<Bgra, TDepth> tmp = this.ToImage<Bgra, TDepth>())
-                  result.ConvertFrom(tmp);
-            }
-            else
-            {
-               throw new Exception("Unsupported conversion");
-            }
-            return result;
-         }
-         else if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension != numberOfChannels)
-         {
-            //same depth, different color
-            Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
-
             CvEnum.DepthType depth = Depth;
+            Mat resultMat = result.Mat;
+            this.ConvertTo(resultMat, resultMat.Depth);
+
+            /*
             if (depth == CvEnum.DepthType.Cv8U)
             {
                using (Image<TColor, Byte> tmp = this.ToImage<TColor, Byte>())
@@ -463,8 +442,46 @@ namespace Emgu.CV
             else
             {
                throw new Exception("Unsupported conversion");
-            }
+            }*/
             return result;
+         }
+         else if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension != numberOfChannels)
+         {
+            //same depth, different color
+            Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
+            Type t = numberOfChannels == 1
+               ? typeof (Gray)
+               : numberOfChannels == 3
+                  ? typeof (Bgr)
+                  : numberOfChannels == 4
+                     ? typeof (Bgra)
+                     : null;
+            if (t == null)
+               throw new Exception("Unsupported conversion");
+            CvInvoke.CvtColor(this, result, t, typeof(TColor) );
+            /*
+            if (numberOfChannels == 1)
+            {
+               using (Image<Gray, TDepth> tmp = this.ToImage<Gray, TDepth>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (numberOfChannels == 3)
+            {
+               using (Image<Bgr, TDepth> tmp = this.ToImage<Bgr, TDepth>())
+                  result.ConvertFrom(tmp);
+            }
+            else if (numberOfChannels == 4)
+            {
+               using (Image<Bgra, TDepth> tmp = this.ToImage<Bgra, TDepth>())
+                  result.ConvertFrom(tmp);
+            }
+            else
+            {
+               throw new Exception("Unsupported conversion");
+            }*/
+            return result;
+
+            
          }
          else
          {
@@ -529,7 +546,7 @@ namespace Emgu.CV
       public void ConvertTo(IOutputArray m, CvEnum.DepthType rtype, double alpha = 1.0, double beta = 0.0)
       {
          using (OutputArray oaM = m.GetOutputArray())
-         UMatInvoke.cveUMatConvertTo(Ptr, oaM, rtype, alpha, beta);
+            UMatInvoke.cveUMatConvertTo(Ptr, oaM, rtype, alpha, beta);
       }
 
       /*
@@ -556,7 +573,7 @@ namespace Emgu.CV
          UMat[] mats = new UMat[NumberOfChannels];
          for (int i = 0; i < mats.Length; i++)
          {
-            mats[i] = new UMat(Rows, Cols, Depth, NumberOfChannels);
+            mats[i] = new UMat();
          }
          using (VectorOfUMat vm = new VectorOfUMat(mats))
          {
@@ -615,10 +632,10 @@ namespace Emgu.CV
          if (!(Size.Equals(other.Size) && NumberOfChannels == other.NumberOfChannels && Depth == other.Depth))
             return false;
 
-         using (Mat cmpResult = new Mat())
+         using (UMat cmpResult = new UMat())
          {
             CvInvoke.Compare(this, other, cmpResult, CmpType.NotEqual);
-            using (Mat reshaped = cmpResult.Reshape(1))
+            using (UMat reshaped = cmpResult.Reshape(1))
                return CvInvoke.CountNonZero(reshaped) == 0;
          }
       }
@@ -628,7 +645,7 @@ namespace Emgu.CV
       /// </summary>
       /// <typeparam name="T">The type of managed data array</typeparam>
       /// <param name="data">The managed array where data will be copied to.</param>
-      public void CopyDataTo<T>(T[] data)
+      public void CopyTo<T>(T[] data)
       {
          Debug.Assert(Marshal.SizeOf(typeof(T)) * data.Length >= Total.ToInt32() * ElementSize, String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length));
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -641,7 +658,7 @@ namespace Emgu.CV
       /// </summary>
       /// <typeparam name="T">The type of managed data array</typeparam>
       /// <param name="data">The managed array where data will be copied from</param>
-      public void CopyDataFrom<T>(T[] data)
+      public void SetTo<T>(T[] data)
       {
          Debug.Assert(data.Length == Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length));
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
