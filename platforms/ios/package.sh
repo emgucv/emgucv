@@ -26,6 +26,7 @@ cp -r ../../tmp/Emgu.CV.Shape ios-package/Emgu.CV.Shape
 cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
 cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
 cp -f ../../Emgu.CV.OCR/*.cs ios-package/Emgu.CV.OCR/
+cp -r ../../tmp/Emgu.CV.World ios-package/Emgu.CV.World
 
 mkdir -p ios-package/Solution/iOS
 cp ../../tmp/Solution/iOS/Emgu.CV.iOS.sln ios-package/Solution/iOS/Emgu.CV.iOS.sln
@@ -55,13 +56,17 @@ cp ../../opencv/data/haarcascades/haarcascade_eye.xml ios-package/opencv/data/ha
 cp ../../opencv/data/haarcascades/haarcascade_frontalface_default.xml ios-package/opencv/data/haarcascades/haarcascade_frontalface_default.xml
 cp ../../CommonAssemblyInfo.cs ios-package
 find ./ios-package -type f -name CMakeList* -exec rm '{}' \;
-find ./ios-package -type f -name *Android* -exec rm '{}' \;
-find ./ios-package -type f -name *Windows.Store* -exec rm '{}' \;
-find ./ios-package -type f -name *Windows.Phone* -exec rm '{}' \;
+#find ./ios-package -type f -name *Android* -exec rm '{}' \;
+#find ./ios-package -type f -name *Windows.Store* -exec rm '{}' \;
+#find ./ios-package -type f -name *Windows.Phone* -exec rm '{}' \;
 cd ios-package
 rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.Cuda/Emgu.CV.Cuda.csproj Emgu.CV.OCR/Emgu.CV.OCR.csproj Emgu.Util/Emgu.Util.csproj Emgu.CV.Stitching/Emgu.CV.Stitching.csproj Emgu.CV.Contrib/Emgu.CV.Contrib.csproj Emgu.CV.Shape/Emgu.CV.Shape.csproj
 #find . -regex  '.*[^S].csproj' -exec rm '{}' \;
 cd ..
+
+/Library/Frameworks/Mono.framework/Commands/xbuild /p:Configuration=Release ../../Emgu.CV.World/Emgu.CV.World.IOS.csproj
+mkdir -p ios-package/bin
+cp ../../Emgu.CV.World/bin/Release/Emgu.CV.World.IOS.dll ios-package/bin
 
 gitversion=$(git log --oneline | wc -l | tr -d " ")
 zip -r libemgucv-ios-unified-$gitversion ios-package

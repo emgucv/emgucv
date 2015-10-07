@@ -41,7 +41,7 @@ namespace Emgu.CV.Example.MonoTouch
                         "haarcascade_eye.xml",
                         faces,
                         eyes, 
-                        false, false,
+                        false,
                         out processingTime
                );
                foreach (Rectangle face in faces)

@@ -31,7 +31,7 @@ namespace Emgu.CV.Example.MonoTouch
             using (Image<Bgr, byte> image = new Image<Bgr, byte>("pedestrian.png"))
             {
                Rectangle[] pedestrians = FindPedestrian.Find(
-                        image.Mat, false, false,
+                        image.Mat, false, 
                         out processingTime
                );
                foreach (Rectangle rect in pedestrians)
