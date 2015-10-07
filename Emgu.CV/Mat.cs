@@ -127,7 +127,13 @@ namespace Emgu.CV
             Marshal.SizeOf(typeof(T)) 
 #endif
             * data.Length >= Total.ToInt32() * ElementSize, 
-            String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length) );
+            String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize /
+#if NETFX_CORE
+            Marshal.SizeOf<T>()
+#else
+            Marshal.SizeOf(typeof(T))
+#endif
+            , data.Length) );
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          MatInvoke.cveMatCopyDataTo(this, handle.AddrOfPinnedObject());
          handle.Free();
@@ -140,7 +146,19 @@ namespace Emgu.CV
       /// <param name="data">The managed array where data will be copied from</param>
       public void SetTo<T>(T[] data)
       {
-         Debug.Assert(data.Length == Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize / Marshal.SizeOf(typeof(T)), data.Length));
+         Debug.Assert(data.Length == Total.ToInt32() * ElementSize /
+#if NETFX_CORE
+            Marshal.SizeOf<T>()
+#else
+            Marshal.SizeOf(typeof(T))
+#endif
+            , String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize /
+#if NETFX_CORE
+            Marshal.SizeOf<T>()
+#else
+            Marshal.SizeOf(typeof(T))
+#endif
+            , data.Length));
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          MatInvoke.cveMatCopyDataFrom(this, handle.AddrOfPinnedObject());
          handle.Free();

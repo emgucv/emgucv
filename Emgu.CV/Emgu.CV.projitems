@@ -48,13 +48,16 @@
       </PropertyGroup>
     </When>
     <!-- Windows store 8.1 (32bit) -->
-    <When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86') AND '$(IsTargetingWindowsPhonePlatform)'!='True'">
+    <When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86') AND '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectGuid)'!='{C8B17BAC-54E4-49FE-BC3F-AD2EFB55C4B4}'">
       <ItemGroup>
         <Content Include="$(OpenCVBinaryDir)\x86_store\cvextern.dll">
           <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
+	  <PropertyGroup>
+        <EmguCVLinkTarget>Windows Store 8.1 (32bit)</EmguCVLinkTarget>
+      </PropertyGroup>
     </When>
     <!-- Windows phone 8.1 (ARM) -->
     <When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='ARM') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='ARM'))">
@@ -64,6 +67,9 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
+	  <PropertyGroup>
+        <EmguCVLinkTarget>Windows Phone 8.1 (ARM)</EmguCVLinkTarget>
+      </PropertyGroup>
     </When>
     <!-- Windows phone 8.1 (x86) -->
     <When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='x86') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='x86'))">
@@ -73,6 +79,9 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
+	  <PropertyGroup>
+        <EmguCVLinkTarget>Windows Phone 8.1 (x86)</EmguCVLinkTarget>
+      </PropertyGroup>
     </When>
     <!-- IOS -->
     <!-- IOS library project -->
