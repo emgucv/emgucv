@@ -1,3 +1,9 @@
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
+#if __IOS__
+
 using System;
 using ObjCRuntime;
 
@@ -8,3 +14,5 @@ using ObjCRuntime;
    Frameworks="Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO", 
    LinkerFlags = "-stdlib=libstdc++ -ObjC -lc++", 
    IsCxx=true)]
+
+#endif

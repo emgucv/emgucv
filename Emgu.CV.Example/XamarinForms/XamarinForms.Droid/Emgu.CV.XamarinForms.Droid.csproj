@@ -22,7 +22,7 @@
     <MandroidI18n />
     <JavaMaximumHeapSize />
     <JavaOptions />
-    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -100,6 +100,9 @@
     </AndroidAsset>
     <AndroidAsset Include="..\..\FaceDetection\lena.jpg">
       <Link>Assets\lena.jpg</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\PedestrianDetection\pedestrian.png">
+      <Link>Assets\pedestrian.png</Link>
     </AndroidAsset>
     <Content Include="Properties\AndroidManifest.xml" />
   </ItemGroup>

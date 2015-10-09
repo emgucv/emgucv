@@ -575,7 +575,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CvInvokeEntryPoints.cs.in ${CMA
 # ----------------------------------------------------------------------------
 #  Build the managed dlls of Emgu CV
 # ----------------------------------------------------------------------------
-IF(NOT (ANDROID OR IOS)) 
+IF(NOT IOS) 
 ADD_SUBDIRECTORY(Emgu.Util)
 ADD_SUBDIRECTORY(Emgu.CV)
 ADD_SUBDIRECTORY(Emgu.CV.UI)
@@ -584,114 +584,53 @@ ADD_SUBDIRECTORY(Emgu.CV.Example)
 ADD_SUBDIRECTORY(Emgu.UI)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
 ADD_SUBDIRECTORY(Emgu.CV.Cuda)
-ADD_SUBDIRECTORY(Emgu.CV.OCR)
+IF (EMGU_CV_WITH_TESSERACT)
+  ADD_SUBDIRECTORY(Emgu.CV.OCR)
+ENDIF()
 ADD_SUBDIRECTORY(Emgu.CV.Stitching)
 ADD_SUBDIRECTORY(Emgu.CV.VideoStab)
 #ADD_SUBDIRECTORY(Emgu.CV.OpenCL)
 ADD_SUBDIRECTORY(Emgu.CV.Superres)
 ADD_SUBDIRECTORY(Emgu.CV.Shape)
 ADD_SUBDIRECTORY(Emgu.CV.Contrib)
-IF(NOT NETFX_CORE)
+IF(NOT (NETFX_CORE OR ANDROID))
   ADD_SUBDIRECTORY(Emgu.CV.UI.GL)
 ENDIF()
 ENDIF()
 
 IF (ANDROID)
   SET(CPACK_GENERATOR ZIP)
-  SET(ANDROID_SOURCE_FOLDERS Emgu.Util Emgu.CV Emgu.CV.Contrib Emgu.CV.ML Emgu.CV.Cuda Emgu.CV.Stitching Emgu.CV.VideoStab Emgu.CV.Superres Emgu.CV.Shape)
-  IF(EMGU_CV_WITH_TESSERACT)
-    LIST(APPEND ANDROID_SOURCE_FOLDERS Emgu.CV.OCR)
-    INSTALL(
-      DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.OCR/tessdata"
-	  DESTINATION Emgu.CV.OCR
-      COMPONENT main
-      FILES_MATCHING 
-      PATTERN "*eng.*"
-    )
-  ENDIF()
-  FOREACH(ANDROID_SOURCE_FOLDER ${ANDROID_SOURCE_FOLDERS})
-  INSTALL(
-  DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/${ANDROID_SOURCE_FOLDER}"
-  DESTINATION .
-  COMPONENT main
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "*.Android.csproj"
-  PATTERN "*.txt"
-  PATTERN "*.xml"
-  PATTERN "*.resx"
-  PATTERN "CMakeLists.txt" EXCLUDE
-  PATTERN ".git" EXCLUDE
-  )
-  ENDFOREACH()
   
-  INSTALL(
-  DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/Android"
-  DESTINATION Emgu.CV.Example
-  COMPONENT main
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "*.csproj"
-  PATTERN "*.axml"
-  PATTERN "*.xml"
-  PATTERN "*.txt"
-  PATTERN "*.png"
-  PATTERN "*.dll"
-  PATTERN ".git" EXCLUDE
-  )
-  INSTALL(
-    FILES
-    "Emgu.CV.Example/PlanarSubdivision/DrawSubdivision.cs"
-    DESTINATION "Emgu.CV.Example/PlanarSubdivision"
-    COMPONENT main
-    )
-  INSTALL(
-    FILES
-    "Emgu.CV.Example/FaceDetection/DetectFace.cs"
-	"Emgu.CV.Example/FaceDetection/lena.jpg"
-    DESTINATION "Emgu.CV.Example/FaceDetection"
-    COMPONENT main
-    )
-  INSTALL(
-    FILES
-    "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
-    #"${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
-	"${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
-    DESTINATION "opencv/data/haarcascades"
-    COMPONENT main
-    )
-  INSTALL(
-    FILES
-    "Emgu.CV.Example/SURFFeature/DrawMatches.cs"
-	"Emgu.CV.Example/SURFFeature/box.png"
-	"Emgu.CV.Example/SURFFeature/box_in_scene.png"
-    DESTINATION "Emgu.CV.Example/SURFFeature"
-    COMPONENT main
-    )
-  INSTALL(
-    FILES
-    "Emgu.CV.Example/PedestrianDetection/FindPedestrian.cs"
-	"Emgu.CV.Example/PedestrianDetection/pedestrian.png"
-    DESTINATION "Emgu.CV.Example/PedestrianDetection"
-    COMPONENT main
-    )
-  INSTALL(
-    FILES
-    "Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs"
-	"Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg"
-    DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
-    COMPONENT main
-    )
-  INSTALL(
-    FILES
-    "Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs"
-	"Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png"
-	"Emgu.CV.Example/TrafficSignRecognition/stop-sign.jpg"
-    DESTINATION "Emgu.CV.Example/TrafficSignRecognition"
-    COMPONENT main
-    )
+#  SET(ANDROID_SOURCE_FOLDERS Emgu.CV.Contrib Emgu.CV.ML Emgu.CV.Cuda Emgu.CV.Stitching Emgu.CV.VideoStab Emgu.CV.Superres Emgu.CV.Shape)
+#  IF(EMGU_CV_WITH_TESSERACT)
+#    LIST(APPEND ANDROID_SOURCE_FOLDERS Emgu.CV.OCR)
+#    INSTALL(
+#      DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.OCR/tessdata"
+#	  DESTINATION Emgu.CV.OCR
+#      COMPONENT main
+#      FILES_MATCHING 
+#      PATTERN "*eng.*"
+#    )
+#  ENDIF()
+#  FOREACH(ANDROID_SOURCE_FOLDER ${ANDROID_SOURCE_FOLDERS})
+#  INSTALL(
+#  DIRECTORY
+#  "${CMAKE_CURRENT_SOURCE_DIR}/${ANDROID_SOURCE_FOLDER}"
+#  DESTINATION .
+#  COMPONENT main
+#  FILES_MATCHING 
+#  PATTERN "*.cs"
+#  PATTERN "*.projitems"
+#  PATTERN "*.shproj"
+#  PATTERN "*.txt"
+#  PATTERN "*.xml"
+#  PATTERN "*.resx"
+#  PATTERN "CMakeLists.txt" EXCLUDE
+#  PATTERN ".git" EXCLUDE
+#  )
+#  ENDFOREACH()
+  
+
   INSTALL(
     FILES
     "Solution/Android/Emgu.CV.Android.sln"

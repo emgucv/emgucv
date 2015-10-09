@@ -2,8 +2,74 @@
 #  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(EMGU_CV_EXAMPLE_BUILD AND (NOT ANDROID))
+IF(EMGU_CV_EXAMPLE_BUILD)
   IF(NETFX_CORE)
+  ELSEIF(ANDROID)
+    INSTALL(
+  DIRECTORY
+  "${CMAKE_CURRENT_SOURCE_DIR}/Android"
+  DESTINATION Emgu.CV.Example
+  COMPONENT main
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "*.csproj"
+  PATTERN "*.axml"
+  PATTERN "*.xml"
+  PATTERN "*.txt"
+  PATTERN "*.png"
+  PATTERN "*.dll"
+  PATTERN ".git" EXCLUDE
+  )
+  INSTALL(
+    FILES
+    "PlanarSubdivision/DrawSubdivision.cs"
+    DESTINATION "Emgu.CV.Example/PlanarSubdivision"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "FaceDetection/DetectFace.cs"
+	"FaceDetection/lena.jpg"
+    DESTINATION "Emgu.CV.Example/FaceDetection"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
+	"${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
+    DESTINATION "opencv/data/haarcascades"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "SURFFeature/DrawMatches.cs"
+	"SURFFeature/box.png"
+	"SURFFeature/box_in_scene.png"
+    DESTINATION "Emgu.CV.Example/SURFFeature"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "PedestrianDetection/FindPedestrian.cs"
+	"PedestrianDetection/pedestrian.png"
+    DESTINATION "Emgu.CV.Example/PedestrianDetection"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs"
+	"Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg"
+    DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
+    COMPONENT main
+    )
+  INSTALL(
+    FILES
+    "Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs"
+	"Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png"
+	"Emgu.CV.Example/TrafficSignRecognition/stop-sign.jpg"
+    DESTINATION "Emgu.CV.Example/TrafficSignRecognition"
+    COMPONENT main
+    )
   ELSE()
     SET(EMGU_CV_REFERENCE 
     -r:System.Xml.dll 
