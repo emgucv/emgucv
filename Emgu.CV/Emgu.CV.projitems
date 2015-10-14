@@ -36,7 +36,7 @@
   </PropertyGroup>
   <Choose>
     <!-- Windows store 8.1 (64bit) -->
-    <When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x64')">
+    <When Condition="'$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x64' AND  '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectTypeGuids)'!='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
 	<PropertyGroup>
         <EmguCVLinkTarget>Windows Store 8.1 (64bit)</EmguCVLinkTarget>
 		<EmguCVNativeFile>$(OpenCVBinaryDir)\x64_store\cvextern.dll</EmguCVNativeFile>
@@ -50,7 +50,7 @@
       </ItemGroup>
     </When>
     <!-- Windows store 8.1 (32bit) -->
-    <When Condition="('$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86') AND '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectGuid)'!='{C8B17BAC-54E4-49FE-BC3F-AD2EFB55C4B4}'">
+    <When Condition="'$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86' AND  '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectTypeGuids)'!='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
 		<PropertyGroup>
         <EmguCVLinkTarget>Windows Store 8.1 (32bit)</EmguCVLinkTarget>
 		<EmguCVNativeFile>$(OpenCVBinaryDir)\x86_store\cvextern.dll</EmguCVNativeFile>
@@ -64,7 +64,7 @@
       </ItemGroup>
     </When>
     <!-- Windows phone 8.1 (ARM) -->
-    <When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='ARM') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='ARM'))">
+    <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')AND '$(Platform)'=='ARM'">
 	<PropertyGroup>
         <EmguCVLinkTarget>Windows Phone 8.1 (ARM)</EmguCVLinkTarget>
 		<EmguCVNativeFile>$(OpenCVBinaryDir)\arm_phone\cvextern.dll</EmguCVNativeFile>
@@ -78,7 +78,8 @@
       </ItemGroup>
     </When>
     <!-- Windows phone 8.1 (x86) -->
-    <When Condition="(('$(TargetFrameworkVersion)'=='v8.1' AND '$(TargetFrameworkIdentifier)'=='WindowsPhone' AND '$(Platform)'=='x86') OR ('$(TargetPlatformVersion)'=='8.1' AND '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' AND '$(Platform)'=='x86'))">
+    <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')
+	AND '$(Platform)'=='x86'">
 	<PropertyGroup>
         <EmguCVLinkTarget>Windows Phone 8.1 (x86)</EmguCVLinkTarget>
 		<EmguCVNativeFile>$(OpenCVBinaryDir)\x86_phone\cvextern.dll</EmguCVNativeFile>
@@ -191,7 +192,8 @@
     </When>
   </Choose>
  <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
-        <Message Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
+        <Error Condition="'$(EmguCVLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please send a bug report to support@emgu.com"  />
+        <Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
 		<Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
   </Target>
 </Project>

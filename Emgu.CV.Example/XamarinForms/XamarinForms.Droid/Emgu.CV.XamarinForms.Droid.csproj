@@ -62,20 +62,23 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization" />
     <Reference Include="Xamarin.Android.Support.v4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Solution\Android\packages\Xamarin.Android.Support.v4.21.0.3.0\lib\MonoAndroid10\Xamarin.Android.Support.v4.dll</HintPath>
+      <HintPath>..\..\..\nugetpackages\Xamarin.Android.Support.v4.21.0.3.0\lib\MonoAndroid10\Xamarin.Android.Support.v4.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Solution\Android\packages\Xamarin.Forms.1.3.3.6323\lib\MonoAndroid10\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.1.3.3.6323\lib\MonoAndroid10\Xamarin.Forms.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform.Android, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Solution\Android\packages\Xamarin.Forms.1.3.3.6323\lib\MonoAndroid10\Xamarin.Forms.Platform.Android.dll</HintPath>
+      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.1.3.3.6323\lib\MonoAndroid10\Xamarin.Forms.Platform.Android.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Solution\Android\packages\Xamarin.Forms.1.3.3.6323\lib\MonoAndroid10\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.1.3.3.6323\lib\MonoAndroid10\Xamarin.Forms.Xaml.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Mobile">
+      <HintPath>..\..\..\Solution\CrossPlatform\Components\xamarin.mobile-0.6.3\lib\android\Xamarin.Mobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +108,12 @@
       <Link>Assets\pedestrian.png</Link>
     </AndroidAsset>
     <Content Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <XamarinComponentReference Include="xamarin.mobile">
+      <Visible>False</Visible>
+      <Version>0.6.3</Version>
+    </XamarinComponentReference>
   </ItemGroup>
   <Import Project="..\Emgu.CV.XamarinForms\Emgu.CV.XamarinForms.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.XamarinForms\Emgu.CV.XamarinForms.projitems')" />
   <Import Project="..\..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />

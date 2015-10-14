@@ -99,7 +99,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="Xamarin.Mobile, Version=0.6.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Solution\Android\Components\xamarin.mobile-0.6.3\lib\android\Xamarin.Mobile.dll</HintPath>
+      <HintPath>..\..\Components\xamarin.mobile-0.6.3\lib\android\Xamarin.Mobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
