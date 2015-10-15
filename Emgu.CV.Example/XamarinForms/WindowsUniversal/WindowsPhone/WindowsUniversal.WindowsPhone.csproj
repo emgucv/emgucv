@@ -15,8 +15,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SynthesizeLinkMetadata>true</SynthesizeLinkMetadata>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>a027dc1c</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -126,34 +125,31 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Xamarin.Forms.Core, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6446\lib\wpa81\Xamarin.Forms.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6446\lib\wpa81\Xamarin.Forms.Platform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform.WinRT, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6446\lib\wpa81\Xamarin.Forms.Platform.WinRT.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform.WinRT.Phone, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6446\lib\wpa81\Xamarin.Forms.Platform.WinRT.Phone.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Xaml, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6446\lib\wpa81\Xamarin.Forms.Xaml.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <SDKReference Include="Microsoft.VCLibs, Version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Phone</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Xamarin.Forms.Core, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6447\lib\wpa81\Xamarin.Forms.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6447\lib\wpa81\Xamarin.Forms.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform.WinRT, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6447\lib\wpa81\Xamarin.Forms.Platform.WinRT.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform.WinRT.Phone, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6447\lib\wpa81\Xamarin.Forms.Platform.WinRT.Phone.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Xaml, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6447\lib\wpa81\Xamarin.Forms.Xaml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
@@ -169,12 +165,12 @@
   <Import Project="..\..\..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
   <Import Project="..\..\..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6446\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6446\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
+  <Import Project="..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6447\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6447\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6446\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6446\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6447\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\nugetpackages\Xamarin.Forms.1.5.0.6447\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

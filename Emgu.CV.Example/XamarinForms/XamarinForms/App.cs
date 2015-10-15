@@ -83,7 +83,19 @@ namespace Emgu.CV.XamarinForms
 		   {
 		      MainPage.Navigation.PushAsync(new PedestrianDetectionPage());
 		   };
+
+        
 		}
+
+	   public Page CurrentPage
+	   {
+	      get
+	      {
+	         NavigationPage np = MainPage as NavigationPage;
+	         return np.CurrentPage;
+	      }
+	   }
+
 
       protected override void OnStart ()
 		{

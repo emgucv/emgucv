@@ -32,8 +32,10 @@ namespace AndroidExamples
       {
          base.OnCreate(bundle);
 
-         OnButtonClick += delegate
+         OnImagePicked += (sender, image) =>
          {
+            if (image == null)
+               return;
             AppPreference appPreference = new AppPreference();
             CvInvoke.UseOpenCL = appPreference.UseOpenCL;
             String oclDeviceName = appPreference.OpenClDeviceName;
@@ -43,21 +45,23 @@ namespace AndroidExamples
             }
 
             long time;
-            using (Image<Bgr, Byte> image = PickImage("pedestrian.png"))
+
+            Rectangle[] pedestrians = FindPedestrian.Find(image.Mat, false, out time);
+
+            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+            SetMessage(String.Format("Detection completed with {1} in {0} milliseconds.", time, computeDevice));
+            foreach (Rectangle rect in pedestrians)
             {
-               if (image == null)
-                  return;
-               Rectangle[] pedestrians = FindPedestrian.Find(image.Mat, false, out time);
-
-               String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
-               SetMessage(String.Format("Detection completed with {1} in {0} milliseconds.", time, computeDevice));
-               foreach (Rectangle rect in pedestrians)
-               {
-                  image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
-               }
-
-               SetImageBitmap(image.ToBitmap());
+               image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
             }
+
+            SetImageBitmap(image.ToBitmap());
+            image.Dispose();
+         };
+
+         OnButtonClick += (sender, args) =>
+         {
+            PickImage("pedestrian.png");
          };
       }
    }

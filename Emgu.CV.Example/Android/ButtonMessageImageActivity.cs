@@ -54,7 +54,11 @@ namespace AndroidExamples
             return image;
       }*/
 
-      public Image<Bgr, Byte> PickImage(String defaultImageName)
+      protected event EventHandler<Image<Bgr, Byte>> OnImagePicked;
+
+      private const int _pickImageRequestCode = 1000;
+    
+      public void PickImage(String defaultImageName)
       {
          if (_mediaPicker == null)
          {
@@ -63,16 +67,29 @@ namespace AndroidExamples
          String negative = _mediaPicker.IsCameraAvailable ? "Camera" : "Cancel";
          int result = GetUserResponse(this, "Use Image from", "Default", "Photo Library", negative);
          if (result > 0)
-            return new Image<Bgr, byte>(Assets, defaultImageName);
+         {
+            OnImagePicked(this, new Image<Bgr, byte>(Assets, defaultImageName));
+         }
          else if (result == 0)
          {
-            return GetImageFromTask(_mediaPicker.PickPhotoAsync(), 800, 800);
+            Intent intent = _mediaPicker.GetPickPhotoUI();
+            StartActivityForResult(intent, _pickImageRequestCode);
          }
          else if (_mediaPicker.IsCameraAvailable)
          {
-            return GetImageFromTask(_mediaPicker.TakePhotoAsync(new StoreCameraMediaOptions()), 800, 800);
+            Intent intent = _mediaPicker.GetTakePhotoUI(new StoreCameraMediaOptions());
+            StartActivityForResult(intent, _pickImageRequestCode);
          }
-         return null;
+      }
+
+      protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+      {
+         if (resultCode != Result.Canceled && requestCode == _pickImageRequestCode && OnImagePicked != null)
+         {
+            Image<Bgr, Byte> image = GetImageFromTask(data.GetMediaFileExtraAsync(this), 800, 800);
+            OnImagePicked(this, image);
+         }
+         base.OnActivityResult(requestCode, resultCode, data);
       }
 
       private static int GetUserResponse(Activity activity, String title, String positive, string neutral, string negative)

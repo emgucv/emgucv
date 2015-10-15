@@ -35,8 +35,11 @@ namespace AndroidExamples
       {
          base.OnCreate(bundle);
 
-         OnButtonClick += delegate
+         OnImagePicked += (sender, image) =>
          {
+            if (image == null)
+               return;
+
             AppPreference appPreference = new AppPreference();
             CvInvoke.UseOpenCL = appPreference.UseOpenCL;
             String oclDeviceName = appPreference.OpenClDeviceName;
@@ -45,48 +48,52 @@ namespace AndroidExamples
                CvInvoke.OclSetDefaultDevice(oclDeviceName);
             }
 
-            using (Image<Bgr, Byte> image = PickImage("lena.jpg"))
+
+            ISharedPreferences preference = PreferenceManager.GetDefaultSharedPreferences(ApplicationContext);
+            String appVersion = PackageManager.GetPackageInfo(PackageName, Android.Content.PM.PackageInfoFlags.Activities).VersionName;
+            if (!preference.Contains("cascade-data-version") || !preference.GetString("cascade-data-version", null).Equals(appVersion)
+               || !(preference.Contains("cascade-eye-data-path") || preference.Contains("cascade-face-data-path")))
             {
-               ISharedPreferences preference = PreferenceManager.GetDefaultSharedPreferences(ApplicationContext);
-               String appVersion = PackageManager.GetPackageInfo(PackageName, Android.Content.PM.PackageInfoFlags.Activities).VersionName;
-               if (!preference.Contains("cascade-data-version") || !preference.GetString("cascade-data-version", null).Equals(appVersion)
-                  || !(preference.Contains("cascade-eye-data-path") || preference.Contains("cascade-face-data-path")))
-               {
-                  AndroidFileAsset.OverwriteMethod overwriteMethod = AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;
+               AndroidFileAsset.OverwriteMethod overwriteMethod = AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;
 
-                  FileInfo eyeFile = AndroidFileAsset.WritePermanantFileAsset(this, "haarcascade_eye.xml", "cascade", overwriteMethod);
-                  FileInfo faceFile = AndroidFileAsset.WritePermanantFileAsset(this, "haarcascade_frontalface_default.xml", "cascade", overwriteMethod);
+               FileInfo eyeFile = AndroidFileAsset.WritePermanantFileAsset(this, "haarcascade_eye.xml", "cascade", overwriteMethod);
+               FileInfo faceFile = AndroidFileAsset.WritePermanantFileAsset(this, "haarcascade_frontalface_default.xml", "cascade", overwriteMethod);
 
-                  //save tesseract data path
-                  ISharedPreferencesEditor editor = preference.Edit();
-                  editor.PutString("cascade-data-version", appVersion);
-                  editor.PutString("cascade-eye-data-path", eyeFile.FullName);
-                  editor.PutString("cascade-face-data-path", faceFile.FullName);
-                  editor.Commit();
-               }
-
-               string eyeXml = preference.GetString("cascade-eye-data-path", null);
-               string faceXml = preference.GetString("cascade-face-data-path", null);
-               long time;
-               List<Rectangle> faces = new List<Rectangle>();
-               List<Rectangle> eyes = new List<Rectangle>();
-
-
-               DetectFace.Detect(image.Mat, faceXml, eyeXml, faces, eyes, false, out time);
-
-               String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
-               SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, computeDevice));
-
-               foreach (Rectangle rect in faces)
-                  image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
-               foreach (Rectangle rect in eyes)
-                  image.Draw(rect, new Bgr(System.Drawing.Color.Blue), 2);
-               
-               SetImageBitmap(image.ToBitmap());
+               //save tesseract data path
+               ISharedPreferencesEditor editor = preference.Edit();
+               editor.PutString("cascade-data-version", appVersion);
+               editor.PutString("cascade-eye-data-path", eyeFile.FullName);
+               editor.PutString("cascade-face-data-path", faceFile.FullName);
+               editor.Commit();
             }
+
+            string eyeXml = preference.GetString("cascade-eye-data-path", null);
+            string faceXml = preference.GetString("cascade-face-data-path", null);
+            long time;
+            List<Rectangle> faces = new List<Rectangle>();
+            List<Rectangle> eyes = new List<Rectangle>();
+
+
+            DetectFace.Detect(image.Mat, faceXml, eyeXml, faces, eyes, false, out time);
+
+            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+            SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, computeDevice));
+
+            foreach (Rectangle rect in faces)
+               image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
+            foreach (Rectangle rect in eyes)
+               image.Draw(rect, new Bgr(System.Drawing.Color.Blue), 2);
+
+            SetImageBitmap(image.ToBitmap());
+            image.Dispose();
 
             if (CvInvoke.UseOpenCL)
                CvInvoke.OclFinish();
+         };
+
+         OnButtonClick += (sender, args) =>
+         {
+            PickImage("lena.jpg");
          };
       }
    }

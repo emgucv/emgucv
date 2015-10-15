@@ -25,37 +25,44 @@ namespace Emgu.CV.XamarinForms
       {
          var button = this.GetButton();
          button.Text = "Perform Pedestrian Detection";
+         
+         OnImageLoaded += async (sender, image) =>
+         {
+            GetLabel().Text = "please wait...";
+            SetImage(null);
+
+            Task<Tuple<Mat, long>> t = new Task<Tuple<Mat, long>>(
+               () =>
+               {
+                  long time;
+                  
+
+                  if (image == null)
+                     return new Tuple<Mat, long>(null, 0);
+                  Rectangle[] pedestrians = FindPedestrian.Find(image, false, out time);
+
+                  foreach (Rectangle rect in pedestrians)
+                  {
+                     CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255), 2);
+                  }
+
+                  return new Tuple<Mat, long>(image, time);
+               });
+
+            t.Start();
+            var result = await t;
+            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+            GetLabel().Text = String.Format("Detection completed with {1} in {0} milliseconds.", t.Result.Item2,
+               computeDevice);
+            SetImage(t.Result.Item1);
+         };
+
          button.Clicked += OnButtonClicked;
       }
 
-      private async void OnButtonClicked(object sender, EventArgs e)
+      private void OnButtonClicked(object sender, EventArgs e)
       {
-         GetLabel().Text = "please wait...";
-         SetImage(null);
-
-         Task<Tuple<Mat, long>> t = new Task<Tuple<Mat, long>>(
-            () =>
-            {
-               long time;
-               Mat image = LoadImage("pedestrian.png");
-
-               if (image == null)
-                  return new Tuple<Mat, long>(null, 0);
-               Rectangle[] pedestrians = FindPedestrian.Find(image, false, out time);
-
-               foreach (Rectangle rect in pedestrians)
-               {
-                  CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255), 2);
-               }
-
-               return new Tuple<Mat, long>(image, time);
-            });
-
-         t.Start();
-         var result = await t;
-         String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
-         GetLabel().Text = String.Format("Detection completed with {1} in {0} milliseconds.", t.Result.Item2, computeDevice);
-         SetImage(t.Result.Item1);
+         LoadImage("pedestrian.png");
       }
    }
 }

@@ -151,8 +151,8 @@ namespace Emgu.CV
       private double _centerY;
       private double _distorCoeff;
 
-      private Matrix<float> _mapX;
-      private Matrix<float> _mapY;
+      private Mat _mapX;
+      private Mat _mapY;
 
       private Size _size;
 
@@ -193,16 +193,24 @@ namespace Emgu.CV
 
          if (_mapX == null || _mapY == null)
          {
-            IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
+            Mat intrinsicMat = new Mat(new Size(3,3),DepthType.Cv64F, 1);
             int centerY = (int)(_size.Width * _centerY);
             int centerX = (int)(_size.Height * _centerX);
-            CvInvoke.SetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
-            p.IntrinsicMatrix.Data[0, 2] = centerY;
-            p.IntrinsicMatrix.Data[1, 2] = centerX;
-            p.IntrinsicMatrix.Data[2, 2] = 1;
-            p.DistortionCoeffs.Data[0, 0] = _distorCoeff / (_size.Width * _size.Height);
+            double[] intrinsicVal = new double[9]
+            {
+               1, 0, centerY,
+               0, 1, centerX,
+               0, 0, 1
+            };
+            intrinsicMat.SetTo(intrinsicVal);
 
-            p.InitUndistortMap(_size.Width, _size.Height, out _mapX, out _mapY);
+            Mat distortionMat = new Mat(new Size(1, 5), DepthType.Cv64F, 1 );
+            double[] distortionVal = new double[5]
+            {
+               _distorCoeff/(_size.Width*_size.Height), 0, 0, 0, 0
+            };
+            distortionMat.SetTo(distortionVal);
+            CvInvoke.InitUndistortRectifyMap(intrinsicMat, distortionMat, null, intrinsicMat, _size, CvEnum.DepthType.Cv32F, _mapX, _mapY);
          }
 
          CvInvoke.Remap(sourceImage, destImage, _mapX, _mapY, Emgu.CV.CvEnum.Inter.Linear);

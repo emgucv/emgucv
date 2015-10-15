@@ -97,9 +97,8 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xamarin.Mobile, Version=0.6.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\xamarin.mobile-0.6.3\lib\android\Xamarin.Mobile.dll</HintPath>
+    <Reference Include="Xamarin.Mobile">
+      <HintPath>..\..\Components\xamarin.mobile-0.7.7\lib\android\Xamarin.Mobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -242,10 +241,9 @@
   <ItemGroup>
     <XamarinComponentReference Include="xamarin.mobile">
       <Visible>False</Visible>
-      <Version>0.6.3</Version>
+      <Version>0.7.7</Version>
     </XamarinComponentReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
   <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
   <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />

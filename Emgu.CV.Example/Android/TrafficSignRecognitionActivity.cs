@@ -36,10 +36,9 @@ namespace AndroidExamples
       {
          base.OnCreate(bundle);
 
-         OnButtonClick += delegate 
-         { 
+         OnImagePicked += (sender, image) =>
+         {
             using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>(Assets, "stop-sign-model.png"))
-            using (Image<Bgr, Byte> image = PickImage("stop-sign.jpg"))
             {             
                if (image == null)
                   return;
@@ -58,7 +57,13 @@ namespace AndroidExamples
                   image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
 
                SetImageBitmap(image.ToBitmap());
+               image.Dispose();
             }
+         };
+
+         OnButtonClick += (sender, args) =>
+         {
+            PickImage("stop-sign.jpg");
          };
       }
    }

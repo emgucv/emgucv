@@ -180,7 +180,7 @@ namespace LicensePlateRecognition
                         new PointF(box.Size.Width - 1, 0), 
                         new PointF(box.Size.Width - 1, box.Size.Height - 1)};
                      
-                     using (Mat rot = CameraCalibration.GetAffineTransform(srcCorners, destCorners))
+                     using (Mat rot = CvInvoke.GetAffineTransform(srcCorners, destCorners))
                      {
                         CvInvoke.WarpAffine(gray, tmp1, rot, Size.Round(box.Size));           
                      }
