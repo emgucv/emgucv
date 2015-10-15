@@ -640,6 +640,8 @@ IF (ANDROID)
   INSTALL(
     FILES
     "Solution/Android/Emgu.CV.Android.sln"
+	"Solution/Android/nuget.config"
+	"Solution/Android/components.config"
     DESTINATION "Solution/Android"
     COMPONENT main
     )
@@ -938,6 +940,8 @@ IF(NETFX_CORE)
 	PATTERN "Windows.Phone/.nuget/NuGet.exe"
 	PATTERN "Windows.Phone/.nuget/NuGet.targets"
 	PATTERN "Windows.Phone/packages/repositories.config"
+	PATTERN "Windows.Phone/nuget.config"
+	PATTERN "Windows.Phone/components.config"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
     )
@@ -986,6 +990,12 @@ IF(NETFX_CORE)
     COMPONENT emgucv_source
     FILES_MATCHING 
     PATTERN "Emgu.CV.Windows.Store.sln"
+	PATTERN "Windows.Store/nuget.config"
+	PATTERN "Windows.Store/components.config"
+	PATTERN "Windows.Store/.nuget/NuGet.Config"
+	PATTERN "Windows.Store/.nuget/NuGet.exe"
+	PATTERN "Windows.Store/.nuget/NuGet.targets"
+	PATTERN "Windows.Store/packages/repositories.config"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
   )  
@@ -996,10 +1006,6 @@ IF(NETFX_CORE)
     COMPONENT emgucv_example_source
     FILES_MATCHING 
     PATTERN "Emgu.CV.Example.Windows.Store.sln"
-    PATTERN "Windows.Store/.nuget/NuGet.Config"
-	PATTERN "Windows.Store/.nuget/NuGet.exe"
-	PATTERN "Windows.Store/.nuget/NuGet.targets"
-	PATTERN "Windows.Store/packages/repositories.config"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
     )

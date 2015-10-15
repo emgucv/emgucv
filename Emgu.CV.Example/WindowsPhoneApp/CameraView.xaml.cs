@@ -51,7 +51,7 @@ namespace Emgu.CV.WindowsPhone.App
 
       private CameraPreviewImageSource _cameraPreviewImageSource;
       private WriteableBitmap _writeableBitmap;
-      private FilterEffect _effect;
+      //private FilterEffect _effect;
       private WriteableBitmapRenderer _writeableBitmapRenderer;
 
       /// <summary>
@@ -80,13 +80,20 @@ namespace Emgu.CV.WindowsPhone.App
             _writeableBitmap = bitmap;
 
             // Create a filter effect to be used with the source (e.g. used to correct rotation)
-            _effect = new FilterEffect(_cameraPreviewImageSource);
-            _effect.Filters = new IFilter[] { new RotationFilter(90.0) };
-            _writeableBitmapRenderer = new WriteableBitmapRenderer(_effect, _writeableBitmap);
+            //_effect = new FilterEffect(_cameraPreviewImageSource);
+            //_effect.Filters = new IFilter[] { new RotationFilter(90.0) };
+            //_writeableBitmapRenderer = new WriteableBitmapRenderer(_effect, _writeableBitmap);
+
+            RotationEffect rotation = new RotationEffect(_cameraPreviewImageSource, 90);
+
+            _writeableBitmapRenderer = new WriteableBitmapRenderer(rotation, _writeableBitmap);
+            //_writeableBitmapRenderer.Source = new EffectList() { _cameraPreviewImageSource, rotation };
+            //_writeableBitmapRenderer.WriteableBitmap = _writeableBitmap;
 
             ImageView.Source = _writeableBitmap;
 
             // Attach preview frame delegate
+            
             _cameraPreviewImageSource.PreviewFrameAvailable += OnPreviewFrameAvailable;
          }
          else
@@ -104,7 +111,7 @@ namespace Emgu.CV.WindowsPhone.App
 
       private bool _isRendering = false;
       private byte[] _buffer;
-      private async void OnPreviewFrameAvailable(IImageSize imageSize)
+      private async void OnPreviewFrameAvailable(IAsyncImageResource imageResource)
       {
          if (!_isRendering)
          {
@@ -129,7 +136,7 @@ namespace Emgu.CV.WindowsPhone.App
                      using (Mat gray = new Mat())
                      using (Mat canny = new Mat())
                      {
-                        CvInvoke.CvtColor(m, gray, ColorConversion.Bgr2Gray);
+                        CvInvoke.CvtColor(m, gray, ColorConversion.Bgra2Gray);
                         CvInvoke.Canny(gray, canny, 40, 60);
                         
                         CvInvoke.CvtColor(canny, m, ColorConversion.Gray2Bgra);
