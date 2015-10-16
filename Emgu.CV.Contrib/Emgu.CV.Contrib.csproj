@@ -57,11 +57,12 @@
     <Compile Include="Face\*.cs" />
     <Compile Include="Text\*.cs" />
     <Compile Include="BgSegm\*.cs" />
+	<Compile Include="XImgproc\*.cs" />
+    <Compile Include="XPhoto\*.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XPhoto\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.csproj">
@@ -77,6 +78,7 @@
       <Name>Emgu.Util</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
