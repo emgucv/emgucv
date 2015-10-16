@@ -513,27 +513,31 @@ __kernel void mytest(__global const uchar * srcptr1, int srcstep1, int srcoffset
             VectorOfKeyPoint kpts = new VectorOfKeyPoint();
             gpuSurf.DownloadKeypoints(gpuKpts, kpts);
          
-      }
+      }*/
 
       [Test]
-      public void TestGpuPyr()
+      public void TestOclPyr()
       {
-         if (!OclInvoke.HasOpenCL)
+         if (!CvInvoke.HaveOpenCL)
             return;
 
          Image<Gray, Byte> img = new Image<Gray, byte>(640, 480);
+         //add some randome noise to the image
          img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
          Image<Gray, Byte> down = img.PyrDown();
+
+         //Emgu.CV.UI.ImageViewer.Show(down);
+
          Image<Gray, Byte> up = down.PyrUp();
 
-         OclImage<Gray, Byte> gImg = new OclImage<Gray, byte>(img);
-         OclImage<Gray, Byte> gDown = new OclImage<Gray, byte>(gImg.Size.Width >> 1, gImg.Size.Height >> 1);
-         OclImage<Gray, Byte> gUp = new OclImage<Gray, byte>(img.Size);
-         OclInvoke.PyrDown(gImg, gDown);
-         OclInvoke.PyrUp(gDown, gUp);
+         UMat gImg = img.ToUMat();
+         UMat gDown = new UMat();
+         UMat gUp = new UMat();
+         CvInvoke.PyrDown(gImg, gDown);
+         CvInvoke.PyrUp(gDown, gUp);
 
-         CvInvoke.AbsDiff(down, gDown.ToImage(), down);
-         CvInvoke.AbsDiff(up, gUp.ToImage(), up);
+         CvInvoke.AbsDiff(down, gDown.ToImage<Gray, Byte>(), down);
+         CvInvoke.AbsDiff(up, gUp.ToImage<Gray, Byte>(), up);
          double[] minVals, maxVals;
          Point[] minLocs, maxLocs;
          down.MinMax(out minVals, out maxVals, out minLocs, out maxLocs);
@@ -556,7 +560,7 @@ __kernel void mytest(__global const uchar * srcptr1, int srcstep1, int srcoffset
          Trace.WriteLine(String.Format("Max diff: {0}", maxVal));
          Assert.LessOrEqual(maxVal, 1.0);
       }
-
+      /*
       [Test]
       public void TestMatchTemplate()
       {

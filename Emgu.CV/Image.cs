@@ -930,7 +930,7 @@ namespace Emgu.CV
         /// <param name="hierarchy">Optional information about hierarchy. It is only needed if you want to draw only some of the contours</param>
         /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
         public void Draw(
-         IInputArray contours,
+         IInputArrayOfArrays contours,
          int contourIdx,
          TColor color,
          int thickness = 1,

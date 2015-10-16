@@ -6,10 +6,15 @@
 using System.Runtime.InteropServices;
 using System.Drawing;
 
-namespace Emgu.CV
+namespace Emgu.CV.XPhoto
 {
-   public static partial class CvInvoke
+   public static partial class XPhotoInvoke
    {
+      static XPhotoInvoke()
+      {
+         CvInvoke.CheckLibraryLoaded();
+      }
+
       /// <summary>
       /// The function implements different algorithm of automatic white balance, i.e. it tries to map image’s white color to perceptual white (this can be violated due to specific illumination or camera settings).
       /// </summary>
@@ -25,7 +30,7 @@ namespace Emgu.CV
          cveBalanceWhite(src, dst, algorithmType, inputMin, inputMax, outputMin, outputMax);  
       }
 
-      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveBalanceWhite(IntPtr src, IntPtr dst, CvEnum.WhiteBalanceMethod algorithmType, float inputMin, float inputMax, float outputMin, float outputMax);
 
       /// <summary>
@@ -40,7 +45,7 @@ namespace Emgu.CV
          cveDctDenoising(src, dst, sigma, psize);
       }
 
-      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDctDenoising(IntPtr src, IntPtr dst, double sigma, int psize);
 
    }

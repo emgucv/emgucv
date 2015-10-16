@@ -2144,7 +2144,7 @@ namespace Emgu.CV
       /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrieved in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
       public static void DrawContours(
          IInputOutputArray image,
-         IInputArray contours,
+         IInputArrayOfArrays contours,
          int contourIdx,
          MCvScalar color,
          int thickness = 1,

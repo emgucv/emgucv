@@ -296,36 +296,49 @@ namespace Emgu.CV.Test
          int sizeRect = Marshal.SizeOf(typeof(Rectangle));
          EmguAssert.IsTrue(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)) == s2);
       }
-      /*
+      
       [Test]
       public void TestConvexityDefacts()
       {
-         Image<Gray, Byte> image = new Image<Gray, byte>(300, 300);
+         Image<Bgr, Byte> image = new Image<Bgr, byte>(300, 300);
          Point[] polyline = new Point[] {
             new Point(10, 10),
             new Point(10, 250),
             new Point(100, 100),
             new Point(250, 250),
             new Point(250, 10)};
-
-         using (MemStorage stor = new MemStorage())
+         using (VectorOfPoint vp = new VectorOfPoint(polyline))
+         using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint(vp))
+         using (VectorOfInt convexHull = new VectorOfInt())
+         using (Mat convexityDefect = new Mat())
          {
-            Seq<Point> contour = new Seq<Point>(stor);
-            contour.PushMulti(polyline, Emgu.CV.CvEnum.BackOrFront.Front);
-            image.Draw(contour, new Gray(255), 1);
-            Seq<MCvConvexityDefect> defactSeq =
-               contour.GetConvexityDefacts(
-                  stor,
-                  Emgu.CV.CvEnum.PageOrientation.Clockwise);
-            MCvConvexityDefect[] defacts = defactSeq.ToArray();
-            EmguAssert.IsTrue(1 == defacts.Length);
-            EmguAssert.IsTrue(new Point(100, 100).Equals(defacts [0].DepthPoint));
+            //Draw the contour in white thick line
+            CvInvoke.DrawContours(image, contours, -1, new MCvScalar(255, 255, 255), 3);
+            CvInvoke.ConvexHull(vp, convexHull);
+            CvInvoke.ConvexityDefects(vp, convexHull, convexityDefect);
 
-            EmguAssert.IsTrue(contour.InContour(new PointF(90, 90)) > 0);
-            EmguAssert.IsTrue(contour.InContour(new PointF(300, 300)) < 0);
-            EmguAssert.IsTrue(contour.InContour(new PointF(10, 10)) == 0);
+            //convexity defect is a four channel mat, when k rows and 1 cols, where k = the number of convexity defects. 
+            if (!convexityDefect.IsEmpty)
+            {
+               //Data from Mat are not directly readable so we convert it to Matrix<>
+               Matrix<int> m = new Matrix<int>(convexityDefect.Rows, convexityDefect.Cols,
+                  convexityDefect.NumberOfChannels);
+               convexityDefect.CopyTo(m);
+
+               for (int i = 0; i < m.Rows; i++)
+               {
+                  int startIdx = m.Data[i, 0];
+                  int endIdx = m.Data[i, 1];
+                  Point startPoint = polyline[startIdx];
+                  Point endPoint = polyline[endIdx];
+                  //draw  a line connecting the convexity defect start point and end point in thin red line
+                  CvInvoke.Line(image, startPoint, endPoint, new MCvScalar(0, 0, 255));
+               }
+            }
+
+            //Emgu.CV.UI.ImageViewer.Show(image);
          }
-      }*/
+      }
 
       [Test]
       public void TestException()
