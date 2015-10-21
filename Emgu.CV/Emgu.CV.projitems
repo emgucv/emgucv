@@ -190,10 +190,26 @@
         </AndroidNativeLibrary>
       </ItemGroup>
     </When>
+	<!-- Windows Form Application -->
+    <When Condition="'$(EmguCVLinkTarget)'=='' AND (
+	'$(TargetFrameworkVersion)'=='v2.0' OR
+	'$(TargetFrameworkVersion)'=='v3.0' OR
+	'$(TargetFrameworkVersion)'=='v3.5' OR
+	'$(TargetFrameworkVersion)'=='v4.0' OR
+	'$(TargetFrameworkVersion)'=='v4.5' OR
+	'$(TargetFrameworkVersion)'=='v4.5.1' OR
+	'$(TargetFrameworkVersion)'=='v4.5.2' OR
+	'$(TargetFrameworkVersion)'=='v4.6'
+	)">
+      <PropertyGroup>
+	    <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
+	  </PropertyGroup>
+    </When>
   </Choose>
  <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
         <Error Condition="'$(EmguCVLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please send a bug report to support@emgu.com"  />
-        <Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
+		<Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
+		<Message Condition="'$(EmguCVLinkTarget)'=='WindowsForms'" Text="Emgu CV is not set to deploy native files in Windows forms project, please make sure the unmanaged dlls are deployed with your executable." Importance="High" />
 		<Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
   </Target>
 </Project>

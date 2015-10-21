@@ -33,6 +33,17 @@ namespace Emgu.CV.XPhoto
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveBalanceWhite(IntPtr src, IntPtr dst, CvEnum.WhiteBalanceMethod algorithmType, float inputMin, float inputMax, float outputMin, float outputMax);
 
+
+      public static void AutowbGrayworld(IInputArray src, IOutputArray dst, float thresh = 0.5f)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveAutowbGrayworld(iaSrc, oaDst, thresh);
+      }
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveAutowbGrayworld(IntPtr src, IntPtr dst, float thresh);
+
       /// <summary>
       /// The function implements simple dct-based denoising, link: http://www.ipol.im/pub/art/2011/ys-dct/.
       /// </summary>
@@ -48,5 +59,17 @@ namespace Emgu.CV.XPhoto
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDctDenoising(IntPtr src, IntPtr dst, double sigma, int psize);
 
+      public enum InpaintType
+      {
+         Shiftmap = 0
+      }
+
+      public static void Inpaint(Mat src, Mat mask, Mat dst, InpaintType algorithmType)
+      {
+         cveXInpaint(src, mask, dst, algorithmType);
+      }
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveXInpaint(IntPtr src, IntPtr mask, IntPtr dst, InpaintType algorithmType);
    }
 }

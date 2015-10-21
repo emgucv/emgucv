@@ -257,8 +257,34 @@ namespace Emgu.CV
       public Mat(String fileName, CvEnum.LoadImageType loadType)
          : this(MatInvoke.cveMatCreate(), true, false)
       {
+
          using (CvString s = new CvString(fileName))
+         {
             CvInvoke.cveImread(s, loadType, this);
+
+            if (this.IsEmpty) //failed to load in the first attempt
+            {
+#if !NETFX_CORE
+               if (File.Exists(fileName))
+               {
+                  //try again to see if this is a Unicode issue in the file name. 
+                  //Work around for Open CV ticket:
+                  //https://github.com/Itseez/opencv/issues/4292
+                  //https://github.com/Itseez/opencv/issues/4866
+
+                  byte[] raw = File.ReadAllBytes(fileName);
+                  CvInvoke.Imdecode(raw, loadType, this);
+
+                  if (IsEmpty)
+                     throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
+               }
+               else
+               {
+                  throw new ArgumentException(String.Format("File {0} do not exist", fileName));
+               }
+#endif
+            }
+         }
       }
 
       /// <summary>

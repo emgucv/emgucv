@@ -16,5 +16,9 @@ CVAPI(void) cveBalanceWhite(const cv::Mat* src, cv::Mat* dst, const int algorith
    const float inputMin, const float inputMax,
    const float outputMin, const float outputMax);
 
+CVAPI(void) cveAutowbGrayworld(cv::_InputArray* src, cv::_OutputArray* dst, float thresh);
+
 CVAPI(void) cveDctDenoising(const cv::Mat* src, cv::Mat* dst, const double sigma, const int psize);
+
+CVAPI(void) cveXInpaint(const cv::Mat* src, const cv::Mat* mask, cv::Mat* dst, const int algorithmType);
 #endif

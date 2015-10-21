@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.Util.TypeEnum;
 
 namespace Emgu.CV
 {
@@ -52,7 +53,31 @@ namespace Emgu.CV
                vec.Push(parameters);
             using (CvString s = new CvString(filename))
             using (InputArray iaImage = image.GetInputArray())
-               return cveImwrite(s, iaImage, vec);
+            {
+#if !(__IOS__ || __ANDROID__ || NETFX_CORE)
+               bool containsUnicode = (s.Length != filename.Length);
+               if (containsUnicode &&
+                   (Emgu.Util.Platform.OperationSystem != OS.MacOSX) &&
+                   (Emgu.Util.Platform.OperationSystem != OS.Linux))
+               {
+                  //Handle unicode in Windows platform
+                  //Work around for Open CV ticket:
+                  //https://github.com/Itseez/opencv/issues/4292
+                  //https://github.com/Itseez/opencv/issues/4866     
+                  System.IO.FileInfo fi = new System.IO.FileInfo(filename);
+
+                  using (VectorOfByte vb = new VectorOfByte())
+                  {
+                     CvInvoke.Imencode(fi.Extension, image, vb, parameters);
+                     byte[] arr = vb.ToArray();
+                     System.IO.File.WriteAllBytes(filename, arr);
+                     return true;
+                  }
+               }
+               else
+#endif
+                  return cveImwrite(s, iaImage, vec);
+            }
          }
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

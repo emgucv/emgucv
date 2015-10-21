@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 using System;
@@ -20,7 +20,7 @@ using Emgu.CV.Flann;
 using Emgu.CV.Stitching;
 using Emgu.CV.Text;
 using Emgu.CV.Structure;
-#if !(IOS || NETFX_CORE)
+#if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Cuda;
 using Emgu.CV.Tiff;
 #endif
@@ -2878,6 +2878,30 @@ namespace Emgu.CV.Test
             PointF[] pts = vp.ToArray();
          }
       }
+
+#if !(__ANDROID__ || __IOS__ || NETFX_CORE)
+      [Test]
+      public void TestUnicodeImgFileIO()
+      {
+         Mat m = EmguAssert.LoadMat("lena.jpg");
+         EmguAssert.IsTrue( CvInvoke.Imwrite("测试.jpg", m) );
+         Bitmap bmp = new Bitmap("测试.jpg");
+         UMat m2 = new Image<Bgr, Byte>(bmp).ToUMat();
+         Mat m3 = EmguAssert.LoadMat("测试.jpg");
+         //Emgu.CV.UI.ImageViewer.Show(m2);
+      }
+
+      [Test]
+      public void TestUnicodeCvString()
+      {
+         String target = "测试.jpg";
+         using (CvString s = new CvString(target))
+         {
+            String s2 = s.ToString();
+            EmguAssert.IsTrue(s2.Equals(target));
+         }
+      }
+#endif
 
 #if !NETFX_CORE
       [Test]

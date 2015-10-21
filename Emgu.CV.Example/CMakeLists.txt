@@ -76,13 +76,9 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     -r:System.Drawing.dll 
     -r:System.Data.dll 
     -r:System.Windows.Forms.dll
-    -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.dll" 
-    -r:"${LIBRARY_OUTPUT_PATH}/Emgu.Util.dll" 
+    -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.World.dll" 
     -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll")
   
-    SET (EMGU_CV_CUDA_REFERENCE -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.Cuda.dll")
-    SET (EMGU_CV_CONTRIB_REFERENCE -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.Contrib.dll")
-	
     add_subdirectory(HelloWorld)
     add_subdirectory(CameraCapture)
     add_subdirectory(PlanarSubdivision)

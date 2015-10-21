@@ -146,16 +146,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">
-      <Project>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</Project>
-      <Name>Emgu.CV</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.Util\Emgu.Util.csproj">
-      <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
-      <Name>Emgu.Util</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="HistogramBox.resx">
       <DependentUpon>HistogramBox.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -261,6 +251,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.World\Emgu.CV.World.csproj">
+      <Project>{3f5d7c08-96ba-4037-bb24-afa2c336e260}</Project>
+      <Name>Emgu.CV.World</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
