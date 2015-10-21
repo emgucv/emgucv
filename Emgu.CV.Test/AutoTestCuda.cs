@@ -756,6 +756,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestCudaVideoReadWrite()
       {
@@ -770,7 +771,7 @@ namespace Emgu.CV.Test
             }
 
          }
-      }
+      }*/
 
       /*
       [Test]

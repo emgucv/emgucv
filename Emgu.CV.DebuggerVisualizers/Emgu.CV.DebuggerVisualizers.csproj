@@ -78,13 +78,9 @@
       <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>
       <Name>Emgu.CV.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">
-      <Project>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</Project>
-      <Name>Emgu.CV</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.Util\Emgu.Util.csproj">
-      <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
-      <Name>Emgu.Util</Name>
+    <ProjectReference Include="..\Emgu.CV.World\Emgu.CV.World.csproj">
+      <Project>{3f5d7c08-96ba-4037-bb24-afa2c336e260}</Project>
+      <Name>Emgu.CV.World</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

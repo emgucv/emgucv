@@ -39,13 +39,11 @@ namespace FaceDetection
          //The cuda cascade classifier doesn't seem to be able to load "haarcascade_frontalface_default.xml" file in this release
          //disabling CUDA module for now
          bool tryUseCuda = false;
-         bool tryUseOpenCL = true;
 
          DetectFace.Detect(
            image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", 
            faces, eyes,
            tryUseCuda,
-           tryUseOpenCL,
            out detectionTime);
 
          foreach (Rectangle face in faces)
@@ -57,7 +55,7 @@ namespace FaceDetection
          ImageViewer.Show(image, String.Format(
             "Completed face and eye detection using {0} in {1} milliseconds", 
             (tryUseCuda && CudaInvoke.HasCuda) ? "GPU"
-            : (tryUseOpenCL && CvInvoke.HaveOpenCLCompatibleGpuDevice) ? "OpenCL" 
+            : CvInvoke.UseOpenCL ? "OpenCL" 
             : "CPU",
             detectionTime));
       }

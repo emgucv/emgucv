@@ -203,7 +203,7 @@ namespace Emgu.CV.UI
       protected override void OnPaint(PaintEventArgs pe)
       {
          if (IsDisposed) return;
-         if (Image != null          //image is set
+         if (this.Image != null          //image is set
             &&          //either pan or zoom
             (_zoomScale != 1.0 ||
             (horizontalScrollBar.Visible && horizontalScrollBar.Value != 0) ||
@@ -212,7 +212,7 @@ namespace Emgu.CV.UI
             if (pe.Graphics.InterpolationMode != _interpolationMode)
                pe.Graphics.InterpolationMode = _interpolationMode;
 
-            using (Matrix transform = pe.Graphics.Transform)
+            using (System.Drawing.Drawing2D.Matrix transform = pe.Graphics.Transform)
             {
                if (_zoomScale != 1.0)
                   transform.Scale((float)_zoomScale, (float)_zoomScale, MatrixOrder.Append);
@@ -238,15 +238,15 @@ namespace Emgu.CV.UI
          horizontalScrollBar.Visible = false;
          verticalScrollBar.Visible = false;
 
-         if (Image == null) return;
+         if (this.Image == null) return;
 
          // If the image is wider than the PictureBox, show the HScrollBar.
          horizontalScrollBar.Visible =
-            (int)(Image.Size.Width * _zoomScale) > ClientSize.Width;
+            (int)(this.Image.Size.Width * _zoomScale) > ClientSize.Width;
 
          // If the image is taller than the PictureBox, show the VScrollBar.
          verticalScrollBar.Visible =
-            (int)(Image.Size.Height * _zoomScale) > ClientSize.Height;
+            (int)(this.Image.Size.Height * _zoomScale) > ClientSize.Height;
 
          #endregion
 
@@ -254,7 +254,7 @@ namespace Emgu.CV.UI
          if (horizontalScrollBar.Visible)
          {  // If the offset does not make the Maximum less than zero, set its value.            
             horizontalScrollBar.Maximum =
-               Image.Size.Width -
+               this.Image.Size.Width -
                (int)(Math.Max(0, ClientSize.Width - (verticalScrollBar.Visible ? verticalScrollBar.Width : 0)) / _zoomScale);
          }
          else
@@ -267,7 +267,7 @@ namespace Emgu.CV.UI
          if (verticalScrollBar.Visible)
          {  // If the offset does not make the Maximum less than zero, set its value.            
             verticalScrollBar.Maximum =
-               Image.Size.Height -
+               this.Image.Size.Height -
                (int)(Math.Max(0, ClientSize.Height - (horizontalScrollBar.Visible ? horizontalScrollBar.Height : 0)) / _zoomScale);
          }
          else
@@ -453,20 +453,20 @@ namespace Emgu.CV.UI
       public void SetZoomScale(double zoomScale, Point fixPoint)
       {
          if (
-            Image != null &&
+            this.Image != null &&
             _zoomScale != zoomScale //the scale has been changed
             && //and, the scale is not too small
             !(zoomScale < _zoomScale &&
-               (Image.Size.Width * zoomScale < 2.0
-               || Image.Size.Height * zoomScale < 2.0))
+               (this.Image.Size.Width * zoomScale < 2.0
+               || this.Image.Size.Height * zoomScale < 2.0))
             && //and, the scale is not too big
             !(zoomScale > _zoomScale &&
                (GetViewSize().Width < zoomScale * 2
                || GetViewSize().Height < zoomScale * 2)))
          {
             //constrain the coordinate to be within valide range
-            fixPoint.X = Math.Min(fixPoint.X, (int)(Image.Size.Width * _zoomScale));
-            fixPoint.Y = Math.Min(fixPoint.Y, (int)(Image.Size.Height * _zoomScale));
+            fixPoint.X = Math.Min(fixPoint.X, (int)(this.Image.Size.Width * _zoomScale));
+            fixPoint.Y = Math.Min(fixPoint.Y, (int)(this.Image.Size.Height * _zoomScale));
 
             int shiftX = (int)(fixPoint.X * (zoomScale - _zoomScale) / zoomScale / _zoomScale);
             int shiftY = (int)(fixPoint.Y * (zoomScale - _zoomScale) / zoomScale / _zoomScale);

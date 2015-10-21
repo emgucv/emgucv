@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>4dd55b73-84d6-4227-8669-5de88eb49a78</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Emgu.CV.UI.GL</Import_RootNamespace>
+  </PropertyGroup>
+ <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)GeometricChange.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLImageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)GLImageViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)GLImageViewer.Designer.cs">
+      <DependentUpon>GLImageViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ImageBufferFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Report.cs" />
+  </ItemGroup>
+</Project>

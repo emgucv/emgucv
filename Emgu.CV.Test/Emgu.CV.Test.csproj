@@ -57,6 +57,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Emgu.CV.UI.GL\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Compatibility, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Emgu.CV.UI.GL\OpenTK.Compatibility.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Emgu.CV.UI.GL\OpenTK.GLControl.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -68,9 +80,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>\usr\lib\mono\gac\System.Runtime.Serialization\3.0.0.0__b77a5c561934e089\System.Runtime.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="ZedGraph, Version=5.1.5.28844, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\3rdParty\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
@@ -191,60 +208,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV.Contrib\Emgu.CV.Contrib.csproj">
-      <Project>{787d75d2-fe4d-4739-b9a5-2fb2617a42cc}</Project>
-      <Name>Emgu.CV.Contrib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.Cuda\Emgu.CV.Cuda.csproj">
-      <Project>{8728cb1f-f193-4f75-aea9-221aa85a3e80}</Project>
-      <Name>Emgu.CV.Cuda</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.ML\Emgu.CV.ML.csproj">
-      <Project>{0E89EA04-C88C-410E-9A5A-9CBB8C42A027}</Project>
-      <Name>Emgu.CV.ML</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.OCR\Emgu.CV.OCR.csproj">
-      <Project>{FDA79B5F-80C6-41FA-A1D6-82DE69DBB4A1}</Project>
-      <Name>Emgu.CV.OCR</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.Shape\Emgu.CV.Shape.csproj">
-      <Project>{61b5a667-1bf5-4580-ad09-07d6d7ad7e3d}</Project>
-      <Name>Emgu.CV.Shape</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.Stitching\Emgu.CV.Stitching.csproj">
-      <Project>{D9C9B824-2B7A-48C0-A7D3-484410288CD2}</Project>
-      <Name>Emgu.CV.Stitching</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.Superres\Emgu.CV.Superres.csproj">
-      <Project>{806ec1b0-95d0-402b-a9f3-2d3de78dc807}</Project>
-      <Name>Emgu.CV.Superres</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.UI.GL\Emgu.CV.UI.GL.csproj">
-      <Project>{d9bae1f0-2bc8-4697-ae26-88f7a74d1aaa}</Project>
-      <Name>Emgu.CV.UI.GL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.UI\Emgu.CV.UI.csproj">
-      <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>
-      <Name>Emgu.CV.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.csproj">
-      <Project>{91A08B78-2FA0-4887-8975-486CE5FC74B3}</Project>
-      <Name>Emgu.CV.VideoStab</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV\Emgu.CV.csproj">
-      <Project>{9A1A77FE-F01B-495E-87B7-4B16E4F8C908}</Project>
-      <Name>Emgu.CV</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.UI\Emgu.UI.csproj">
-      <Project>{48D846E6-61A2-4B9C-83B1-DB73F977A626}</Project>
-      <Name>Emgu.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.Util\Emgu.Util.csproj">
-      <Project>{7C2C5325-8235-4A24-9C67-6BD79A4679E2}</Project>
-      <Name>Emgu.Util</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
@@ -270,6 +233,18 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <Import Project="..\Emgu.CV.UI.GL\Emgu.CV.UI.GL.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Superres\Emgu.CV.Superres.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Shape\Emgu.CV.Shape.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.ML\Emgu.CV.ML.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.UI\Emgu.CV.UI.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+  <Import Project="..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

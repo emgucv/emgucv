@@ -138,6 +138,15 @@ MACRO(SET_CS_TARGET_FRAMEWORK)
   ADD_CS_FRAMEWORK_REFERENCES("${version}" "${FRAMEWORK_REFERENCES}")
 ENDMACRO(SET_CS_TARGET_FRAMEWORK)
 
+MACRO(BUILD_CSPROJ target csproj_file)
+    ADD_CUSTOM_TARGET (
+      ${target})
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${csproj_file}
+      COMMENT "Building ${target}")
+ENDMACRO()
+
 MACRO(COMPILE_CS target target_type source)
 IF(${target_type} STREQUAL "library")
   GET_CS_LIBRARY_TARGET_DIR()
