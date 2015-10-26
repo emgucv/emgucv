@@ -226,9 +226,9 @@ void cveHoughLinesP(cv::_InputArray* image, cv::_OutputArray* lines, double rho,
    cv::HoughLinesP(*image, *lines, rho, theta, threshold, minLineLength, maxGap);
 }
 
-void cveMatchTemplate(cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result, int method)
+void cveMatchTemplate(cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result, int method, cv::_InputArray* mask)
 {
-   cv::matchTemplate(*image, *templ, *result, method);
+   cv::matchTemplate(*image, *templ, *result, method, mask ? *mask : (cv::InputArray) cv::noArray());
 }
 void cveCornerSubPix(cv::_InputArray* image, cv::_InputOutputArray* corners, CvSize* winSize, CvSize* zeroZone, CvTermCriteria* criteria)
 {

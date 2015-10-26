@@ -1732,19 +1732,22 @@ namespace Emgu.CV
          IInputArray image,
          IInputArray templ,
          IOutputArray result,
-         CvEnum.TemplateMatchingType method)
+         CvEnum.TemplateMatchingType method,
+         IInputArray mask = null)
       {
          using (InputArray iaImage = image.GetInputArray())
          using (InputArray iaTempl = templ.GetInputArray())
          using (OutputArray oaResult = result.GetOutputArray())
-            cveMatchTemplate(iaImage, iaTempl, oaResult, method);
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            cveMatchTemplate(iaImage, iaTempl, oaResult, method, iaMask);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveMatchTemplate(
           IntPtr image,
           IntPtr templ,
           IntPtr result,
-          CvEnum.TemplateMatchingType method);
+          CvEnum.TemplateMatchingType method, 
+          IntPtr mask);
 
       /// <summary>
       /// Compares two shapes. The 3 implemented methods all use Hu moments
