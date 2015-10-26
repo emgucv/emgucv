@@ -247,6 +247,19 @@
       <Name>Emgu.CV.World</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\Emgu.CV.UI.GL\Emgu.CV.UI.GL.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Superres\Emgu.CV.Superres.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Shape\Emgu.CV.Shape.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.ML\Emgu.CV.ML.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.UI\Emgu.CV.UI.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+  <Import Project="..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
+
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
