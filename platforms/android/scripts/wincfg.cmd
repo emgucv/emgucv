@@ -6,8 +6,13 @@ SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
 
 :: variables required for android-opencv build ::
 SET ANDROID_SDK=C:\Android\android-sdk
-SET ANT_DIR=C:\apache-ant-1.9.2
-SET JAVA_HOME=C:\Program Files (x86)\Java\jdk1.6.0_39
+SET ANT_DIR="%VS140COMNTOOLS%..\..\Apps\apache-ant-1.9.3"
+
+@ECHO OFF &SETLOCAL 
+FOR /F "tokens=2*" %%a IN ('REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Development Kit\1.7" /v JavaHome') DO set "JavaHome17=%%b"
+::ECHO Java Home 17: %JavaHome17%
+
+SET JAVA_HOME=%JavaHome17%
 
 :: configuration options ::
 :::: general ARM-V7 settings
