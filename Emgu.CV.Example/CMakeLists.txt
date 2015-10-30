@@ -57,16 +57,16 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     )
   INSTALL(
     FILES
-    "Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs"
-	"Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg"
+    "LicensePlateRecognition/LicensePlateDetector.cs"
+	"LicensePlateRecognition/license-plate.jpg"
     DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
     COMPONENT main
     )
   INSTALL(
     FILES
-    "Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs"
-	"Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png"
-	"Emgu.CV.Example/TrafficSignRecognition/stop-sign.jpg"
+    "TrafficSignRecognition/StopSignDetector.cs"
+	"TrafficSignRecognition/stop-sign-model.png"
+	"TrafficSignRecognition/stop-sign.jpg"
     DESTINATION "Emgu.CV.Example/TrafficSignRecognition"
     COMPONENT main
     )
