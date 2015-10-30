@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 cd ../..
 rm -rf tmp
 git archive --format=tar --prefix=tmp/ HEAD | tar xf -

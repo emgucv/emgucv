@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 cd ..
 cd opencv
 git clean -d -fx "" 

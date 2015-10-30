@@ -1,3 +1,7 @@
+pushd %~p0
+
+cd ..\..\..
+
 @ECHO OFF
 
 :: enable command extensions
@@ -94,3 +98,5 @@ ECHO. & ECHO Compiling Android project...
 :end
 POPD
 ENDLOCAL
+
+popd
