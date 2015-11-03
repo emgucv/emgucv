@@ -151,28 +151,34 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <Choose>
-    <When Condition=" '$(Platform)'=='x64' ">
-      <ItemGroup>
-        <Content Include="..\..\bin\x64\cvextern.dll">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-    <When Condition=" '$(Platform)'=='x86' ">
-      <ItemGroup>
-        <Content Include="..\..\bin\x86\cvextern.dll">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-  </Choose>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="..\..\Emgu.CV.Example\Stitching\stitch1.jpg">
+      <Link>stitch1.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.Example\Stitching\stitch2.jpg">
+      <Link>stitch2.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.Example\Stitching\stitch3.jpg">
+      <Link>stitch3.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Emgu.CV.Example\Stitching\stitch4.jpg">
+      <Link>stitch4.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\aloeL.jpg">
+      <Link>aloeL.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\aloeR.jpg">
+      <Link>aloeR.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\opencv\samples\data\letter-recognition.data">
       <Link>letter-recognition.data</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

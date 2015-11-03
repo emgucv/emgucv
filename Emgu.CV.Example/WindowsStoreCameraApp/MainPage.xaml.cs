@@ -59,7 +59,7 @@ namespace WindowsStoreCameraApp
 
       private CameraPreviewImageSource _cameraPreviewImageSource;
       private WriteableBitmap _writeableBitmap;
-      private FilterEffect _effect;
+      //private FilterEffect _effect;
       private WriteableBitmapRenderer _writeableBitmapRenderer;
 
       /// <summary>
@@ -89,8 +89,9 @@ namespace WindowsStoreCameraApp
             _writeableBitmap = bitmap;
 
             // Create a filter effect to be used with the source (no filters yet)
-            _effect = new FilterEffect(_cameraPreviewImageSource);
-            _writeableBitmapRenderer = new WriteableBitmapRenderer(_effect, _writeableBitmap);
+            //_effect = new FilterEffect(_cameraPreviewImageSource);
+            //_writeableBitmapRenderer = new WriteableBitmapRenderer(_effect, _writeableBitmap);
+            _writeableBitmapRenderer = new WriteableBitmapRenderer(_cameraPreviewImageSource, _writeableBitmap);
 
             ImageView.Source = _writeableBitmap;
 
@@ -113,9 +114,9 @@ namespace WindowsStoreCameraApp
 
       private bool _isRendering = false;
       private byte[] _buffer;
-      private async void OnPreviewFrameAvailable(IImageSize imageSize)
+      private async void OnPreviewFrameAvailable(IAsyncImageResource imageResource)
       {
-         if (!_isRendering)
+         if (!_isRendering && (imageResource != null))
          {
             _isRendering = true;
             await _writeableBitmapRenderer.RenderAsync();

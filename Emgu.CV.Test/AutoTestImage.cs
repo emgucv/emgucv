@@ -700,8 +700,12 @@ namespace Emgu.CV.Test
             dataHandle.Free();
          }
       }
-         
+       
+#if NETFX_CORE      
+      [Microsoft.VisualStudio.TestPlatform.UnitTestFramework.AppContainer.UITestMethod]
+#else
       [TestAttribute]
+#endif
       public void TestBitmapConversion()
       {
 

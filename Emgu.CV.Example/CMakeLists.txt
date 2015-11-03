@@ -21,6 +21,27 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   PATTERN ".git" EXCLUDE
   )
   INSTALL(
+  DIRECTORY
+  "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms"
+  DESTINATION Emgu.CV.Example
+  COMPONENT main
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "*.csproj"
+  PATTERN "*.config"
+  PATTERN "*.shproj"
+  PATTERN "*.Xamarin"
+  PATTERN "*.projitems"
+  PATTERN "*.axml"
+  PATTERN "*.xml"
+  PATTERN "*.txt"
+  PATTERN "*.png"
+  PATTERN "*.dll"
+  PATTERN ".git" EXCLUDE
+  PATTERN "WindowsUniversal" EXCLUDE
+  PATTERN "XamarinForms.iOS" EXCLUDE
+  )
+  INSTALL(
     FILES
     "PlanarSubdivision/DrawSubdivision.cs"
     DESTINATION "Emgu.CV.Example/PlanarSubdivision"

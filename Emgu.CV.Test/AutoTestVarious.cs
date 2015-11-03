@@ -2872,9 +2872,11 @@ namespace Emgu.CV.Test
       public void TestHoughLine()
       {
          Mat img = EmguAssert.LoadMat("box.png");
+         using (Mat imgGray = new Mat())
          using (VectorOfPointF vp = new VectorOfPointF())
          {
-            CvInvoke.HoughLines(img, vp, 10, Math.PI/30, 5);
+            CvInvoke.CvtColor(img, imgGray, ColorConversion.Bgr2Gray);
+            CvInvoke.HoughLines(imgGray, vp, 10, Math.PI/30, 5);
             PointF[] pts = vp.ToArray();
          }
       }
