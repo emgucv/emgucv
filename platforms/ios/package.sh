@@ -62,7 +62,7 @@ find ./ios-package -type f -name CMakeList* -exec rm '{}' \;
 #find ./ios-package -type f -name *Windows.Store* -exec rm '{}' \;
 #find ./ios-package -type f -name *Windows.Phone* -exec rm '{}' \;
 cd ios-package
-rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.Cuda/Emgu.CV.Cuda.csproj Emgu.CV.OCR/Emgu.CV.OCR.csproj Emgu.Util/Emgu.Util.csproj Emgu.CV.Stitching/Emgu.CV.Stitching.csproj Emgu.CV.Contrib/Emgu.CV.Contrib.csproj Emgu.CV.Shape/Emgu.CV.Shape.csproj
+#rm Emgu.CV/Emgu.CV.csproj Emgu.CV.ML/Emgu.CV.ML.csproj Emgu.CV.Cuda/Emgu.CV.Cuda.csproj Emgu.CV.OCR/Emgu.CV.OCR.csproj Emgu.Util/Emgu.Util.csproj Emgu.CV.Stitching/Emgu.CV.Stitching.csproj Emgu.CV.Contrib/Emgu.CV.Contrib.csproj Emgu.CV.Shape/Emgu.CV.Shape.csproj
 #find . -regex  '.*[^S].csproj' -exec rm '{}' \;
 cd ..
 
