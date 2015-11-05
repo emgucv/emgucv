@@ -3,7 +3,7 @@
 cd ../../bin
 rm *.dylib
 cd ..
-make
+make cvextern
 cd platforms/osx
 rm -rf emgucv.bundle
 mkdir emgucv.bundle
