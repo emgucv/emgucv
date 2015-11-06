@@ -14,14 +14,14 @@ namespace Emgu.CV.ML.Structure
       /// <summary>
       /// Minimum value
       /// </summary>
-      public double min_val;
+      public double MinVal;
       /// <summary>
       /// Maximum value
       /// </summary>
-      public double max_val;
+      public double MaxVal;
       /// <summary>
       /// step
       /// </summary>
-      public double step;
+      public double Step;
    }
 }
