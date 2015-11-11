@@ -14,7 +14,19 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
 using Emgu.CV.XFeatures2D;
+
+
+#if VS_TEST
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+#elif NETFX_CORE
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+#else
 using NUnit.Framework;
+#endif
 
 namespace Emgu.CV.Test
 {
@@ -548,7 +560,8 @@ __kernel void mytest(__global const uchar * srcptr1, int srcstep1, int srcoffset
                maxVal = maxVals[i];
          }
          Trace.WriteLine(String.Format("Max diff: {0}", maxVal));
-         Assert.LessOrEqual(maxVal, 1.0);
+         EmguAssert.IsTrue(maxVal <= 1.0);
+         //Assert.LessOrEqual(maxVal, 1.0);
 
          up.MinMax(out minVals, out maxVals, out minLocs, out maxLocs);
          maxVal = 0.0;
@@ -558,7 +571,8 @@ __kernel void mytest(__global const uchar * srcptr1, int srcstep1, int srcoffset
                maxVal = maxVals[i];
          }
          Trace.WriteLine(String.Format("Max diff: {0}", maxVal));
-         Assert.LessOrEqual(maxVal, 1.0);
+         EmguAssert.IsTrue(maxVal <= 1.0);
+         //Assert.LessOrEqual(maxVal, 1.0);
       }
       /*
       [Test]

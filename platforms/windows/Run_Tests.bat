@@ -1,0 +1,56 @@
+REM @echo off
+pushd %~p0
+
+IF "%1%"=="64" ECHO "Running 64bit tests" 
+IF NOT "%1%"=="64" ECHO "Running 32 bit tests"
+
+IF "%1%"=="64" SET PLATFORM=x64
+IF NOT "%1%"=="64" SET PLATFORM=x86
+
+REM Find Visual Studio or Msbuild
+SET VS2005="%VS80COMNTOOLS%..\IDE\devenv.com"
+SET VS2008="%VS90COMNTOOLS%..\IDE\devenv.com"
+SET VS2010="%VS100COMNTOOLS%..\IDE\devenv.com"
+SET VS2012="%VS110COMNTOOLS%..\IDE\devenv.com"
+SET VS2013="%VS120COMNTOOLS%..\IDE\devenv.com"
+SET VS2015="%VS140COMNTOOLS%..\IDE\devenv.com"
+SET MSBUILD35="%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe"
+
+IF EXIST %MSBUILD35% SET DEVENV=%MSBUILD35%
+IF EXIST %VS2005% SET DEVENV=%VS2005% 
+IF EXIST %VS2008% SET DEVENV=%VS2008%
+IF EXIST %VS2010% SET DEVENV=%VS2010%
+IF EXIST %VS2012% SET DEVENV=%VS2012%
+IF EXIST %VS2013% SET DEVENV=%VS2013%
+IF EXIST %VS2015% SET DEVENV=%VS2015%
+
+SET TEST2005="%VS80COMNTOOLS%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+SET TEST2008="%VS90COMNTOOLS%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+SET TEST2010="%VS100COMNTOOLS%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+SET TEST2012="%VS110COMNTOOLS%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+SET TEST2013="%VS120COMNTOOLS%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+SET TEST2015="%VS140COMNTOOLS%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+
+IF EXIST %TEST2005% SET MSTEST=%TEST2005% 
+IF EXIST %TEST2008% SET MSTEST=%TEST2008%
+IF EXIST %TEST2010% SET MSTEST=%TEST2010%
+IF EXIST %TEST2012% SET MSTEST=%TEST2012%
+IF EXIST %TEST2013% SET MSTEST=%TEST2013%
+IF EXIST %TEST2015% SET MSTEST=%TEST2015%
+
+
+:SET_BUILD_TYPE
+IF %DEVENV%==%MSBUILD35% SET BUILD_TYPE=/property:Configuration=Release
+IF %DEVENV%==%VS2005% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%VS2008% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%VS2010% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%VS2012% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%VS2013% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%VS2015% SET BUILD_TYPE=/Build Release
+
+cd ..\..
+
+call %DEVENV% %BUILD_TYPE% Solution\VS2013-2015\Emgu.CV.Test.sln
+call %MSTEST% bin\Emgu.CV.Test.dll /Platform:%PLATFORM%
+:END
+popd

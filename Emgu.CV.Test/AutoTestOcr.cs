@@ -10,12 +10,15 @@ using System.Text;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
 
-#if NETFX_CORE
+#if VS_TEST
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+#elif NETFX_CORE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
 #else
-//using Emgu.CV.UI.GLView;
 using NUnit.Framework;
 #endif
 

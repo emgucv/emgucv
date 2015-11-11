@@ -22,13 +22,17 @@ using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-#if NETFX_CORE
-using Windows.UI.Xaml.Media.Imaging;
+#if VS_TEST
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+#elif NETFX_CORE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using System.Runtime.InteropServices.WindowsRuntime;
 using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
 using Trace = System.Diagnostics.Debug;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Runtime.InteropServices.WindowsRuntime;
 #else
 using NUnit.Framework;
 #endif

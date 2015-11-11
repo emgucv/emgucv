@@ -264,10 +264,11 @@ GOTO RUN_CMAKE
 %CMAKE% %CMAKE_CONF_FLAGS%
 
 :BUILD
-IF "%7%"=="build" ^
-call %DEVENV% %BUILD_TYPE% emgucv.sln %BUILD_PROJECT% 
+IF NOT "%7%"=="build" GOTO END
 
-IF "%7%"=="build" IF "%5%"=="htmldoc" ^
+call %DEVENV% %BUILD_TYPE% emgucv.sln %BUILD_PROJECT% 
+IF "%5%"=="htmldoc" ^
 call %DEVENV% %BUILD_TYPE% emgucv.sln Emgu.CV.Document.Html 
+
 :END
 popd
