@@ -61,6 +61,7 @@ namespace Emgu.CV.Test
             CvInvoke.UseOpenCL = true;
             Trace.WriteLine("Testing with OpenCL");
             test();
+            CvInvoke.OclFinish();
          }
       }
 

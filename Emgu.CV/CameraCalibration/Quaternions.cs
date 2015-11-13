@@ -243,7 +243,11 @@ namespace Emgu.CV
       /// <returns>True if two quaternions equals, false otherwise</returns>
       public bool Equals(Quaternions other)
       {
-         return W.Equals(other.W) && X.Equals(other.X) && Y.Equals(other.Y)&& Z.Equals(other.Z);
+         return 
+            Math.Abs(W - other.W) < double.Epsilon 
+            && Math.Abs(X - other.X) < double.Epsilon 
+            && Math.Abs(Y - other.Y) < double.Epsilon 
+            && Math.Abs(Z - other.Z) < double.Epsilon;
       }
 
       #endregion

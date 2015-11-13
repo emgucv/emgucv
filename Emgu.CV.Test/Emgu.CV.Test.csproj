@@ -245,18 +245,45 @@
       <Name>Emgu.CV.World</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\Emgu.CV.UI.GL\Emgu.CV.UI.GL.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.Superres\Emgu.CV.Superres.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.Shape\Emgu.CV.Shape.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.ML\Emgu.CV.ML.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.UI\Emgu.CV.UI.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
-  <Import Project="..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="..\Emgu.CV.OCR\tessdata\eng.cube.bigrams">
+      <Link>tessdata\eng.cube.bigrams</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Emgu.CV.OCR\tessdata\eng.cube.fold">
+      <Link>tessdata\eng.cube.fold</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Emgu.CV.OCR\tessdata\eng.cube.lm">
+      <Link>tessdata\eng.cube.lm</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Emgu.CV.OCR\tessdata\eng.cube.nn">
+      <Link>tessdata\eng.cube.nn</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Emgu.CV.OCR\tessdata\eng.cube.params">
+      <Link>tessdata\eng.cube.params</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Emgu.CV.OCR\tessdata\eng.cube.size">
+      <Link>tessdata\eng.cube.size</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Emgu.CV.OCR\tessdata\eng.cube.word-freq">
+      <Link>tessdata\eng.cube.word-freq</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Emgu.CV.OCR\tessdata\eng.tesseract_cube.nn">
+      <Link>tessdata\eng.tesseract_cube.nn</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Emgu.CV.OCR\tessdata\eng.traineddata">
+      <Link>tessdata\eng.traineddata</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

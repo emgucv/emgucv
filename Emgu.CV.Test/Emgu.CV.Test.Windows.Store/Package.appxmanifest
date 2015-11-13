@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="94500536-3c8f-4c69-8886-fa24fcc55182" Publisher="CN=CANMING" Version="1.1.0.2" />
+  <Identity Name="94500536-3c8f-4c69-8886-fa24fcc55182" Publisher="CN=CANMING" Version="1.1.0.1" />
   <Properties>
     <DisplayName>Emgu.CV.Test.Windows.Store</DisplayName>
     <PublisherDisplayName>CANMING</PublisherDisplayName>

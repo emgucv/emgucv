@@ -2877,10 +2877,14 @@ namespace Emgu.CV.Test
       public void TestHoughLine()
       {
          Mat img = EmguAssert.LoadMat("box.png");
+         
          using (Mat imgGray = new Mat())
          using (VectorOfPointF vp = new VectorOfPointF())
          {
-            CvInvoke.CvtColor(img, imgGray, ColorConversion.Bgr2Gray);
+            if (img.NumberOfChannels == 1)
+               img.CopyTo(imgGray);
+            else
+               CvInvoke.CvtColor(img, imgGray, ColorConversion.Bgr2Gray);
             CvInvoke.HoughLines(imgGray, vp, 10, Math.PI/30, 5);
             PointF[] pts = vp.ToArray();
          }
