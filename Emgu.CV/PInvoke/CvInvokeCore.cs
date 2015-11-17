@@ -3248,6 +3248,9 @@ namespace Emgu.CV
       /// <returns>An OpenCL platform summary</returns>
       public static String OclGetPlatformsSummary()
       {
+         if (!HaveOpenCL)
+            return "OpenCL not available.";
+
          OclDevice defaultDevice = OclDevice.Default;
          
          StringBuilder builder = new StringBuilder();

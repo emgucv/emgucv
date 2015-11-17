@@ -414,50 +414,6 @@ namespace Emgu.CV
          modules.RemoveAll(String.IsNullOrEmpty);
 
          _libraryLoaded = DefaultLoadUnmanagedModules(modules.ToArray());
-         /*
-         _libraryLoaded = true;
-#if __ANDROID__ || (UNITY_ANDROID && !UNITY_EDITOR)
-		 
-         System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-         FileInfo file = new FileInfo(asm.Location);
-         DirectoryInfo directory = file.Directory;
-
-#if (UNITY_ANDROID && !UNITY_EDITOR)
-         UnityEngine.AndroidJavaObject jo = new UnityEngine.AndroidJavaObject("java.lang.System");
-#endif
-         foreach (String module in modules)
-         {
-            //IntPtr handle = Emgu.Util.Toolbox.LoadLibrary(module);
-            //Debug.WriteLine(string.Format(handle == IntPtr.Zero ? "Failed to load {0}." : "Loaded {0}.", module));
-            try
-            {
-			
-               Console.WriteLine(string.Format("Trying to load {0}.", module));
-#if __ANDROID__
-               Java.Lang.JavaSystem.LoadLibrary(module);
-#else //(UNITY_ANDROID && !UNITY_EDITOR)
-
-               jo.CallStatic("loadLibrary", module); 
-#endif
-               Console.WriteLine(string.Format("Loaded {0}.", module));
-            }
-            catch (Exception e)
-            {
-               _libraryLoaded = false; 
-               Console.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
-            }
-         }
-#elif __IOS__ || UNITY_IPHONE || NETFX_CORE
-#else
-         if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
-         {
-            String formatString = GetModuleFormatString();
-            for (int i = 0; i < modules.Count; ++i)
-               modules[i] = String.Format(formatString, modules[i]);
-
-            _libraryLoaded &= LoadUnmanagedModules(null, modules.ToArray());
-         }
-#endif*/
 
 #if !UNITY_IPHONE
          //Use the custom error handler
@@ -465,34 +421,7 @@ namespace Emgu.CV
 #endif
       }
 
-      /*
-      private static void LoadLibrary(string libraryName, string errorMessage)
-      {
-         errorMessage = String.Format(errorMessage, libraryName);
-         try
-         {
-            IntPtr handle = Emgu.Util.Toolbox.LoadLibrary(libraryName);
-            if (handle == IntPtr.Zero)
-               throw new DllNotFoundException(errorMessage);
-         }
-         catch (Exception e)
-         {
-            throw new DllNotFoundException(errorMessage, e);
-         }
-      }*/
-
       #region CV MACROS
-      /*
-      /// <summary>
-      /// This function performs the same as MakeType macro
-      /// </summary>
-      /// <param name="depth">The type of depth</param>
-      /// <param name="cn">The number of channels</param>
-      /// <returns></returns>
-      public static int MakeType(int depth, int cn)
-      {
-         return ((depth) + (((cn) - 1) << 3));
-      }*/
 
       /// <summary>
       /// Get the corresponding depth type
@@ -575,24 +504,6 @@ namespace Emgu.CV
          return (((int)depth) & ((1 << shift) - 1)) + (((channels) - 1) << shift);
       }
 
-      /*
-      private static int _CV_DepthType(int flag)
-      {
-         return flag & ((1 << 3) - 1);
-      }
-      private static int _CV_MAT_TYPE(int type)
-      {
-         return type & ((1 << 3) * 64 - 1);
-      }
-
-      private static int _CV_MAT_CN(int flag)
-      {
-         return ((((flag) & ((64 - 1) << 3)) >> 3) + 1);
-      }
-      private static int _CV_ELEM_SIZE(int type)
-      {
-         return (_CV_MAT_CN(type) << ((((4 / 4 + 1) * 16384 | 0x3a50) >> _CV_DepthType(type) * 2) & 3));
-      }
 
       /// <summary>
       /// Generate 4-character code of codec used to compress the frames. For example, CV_FOURCC('P','I','M','1') is MPEG-1 codec, CV_FOURCC('M','J','P','G') is motion-jpeg codec etc.

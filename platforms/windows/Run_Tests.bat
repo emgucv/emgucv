@@ -31,11 +31,11 @@ IF EXIST %TEST2015% SET MSTEST=%TEST2015%
 
 
 :SET_BUILD_TYPE
-IF %DEVENV%==%MSBUILD35% SET BUILD_TYPE=/property:Configuration=Release
-IF %DEVENV%==%MSBUILD40% SET BUILD_TYPE=/property:Configuration=Release
-IF %DEVENV%==%VS2012% SET BUILD_TYPE=/Build Release
-IF %DEVENV%==%VS2013% SET BUILD_TYPE=/Build Release
-IF %DEVENV%==%VS2015% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%MSBUILD35% SET BUILD_TYPE=/property:Configuration=Debug
+IF %DEVENV%==%MSBUILD40% SET BUILD_TYPE=/property:Configuration=Debug
+IF %DEVENV%==%VS2012% SET BUILD_TYPE=/Build Debug
+IF %DEVENV%==%VS2013% SET BUILD_TYPE=/Build Debug
+IF %DEVENV%==%VS2015% SET BUILD_TYPE=/Build Debug
 
 cd ..\..
 

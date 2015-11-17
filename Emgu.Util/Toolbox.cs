@@ -462,7 +462,10 @@ namespace Emgu.Util
 
                   System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception(error);
                   System.Diagnostics.Debug.WriteLine(String.Format("LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
-
+                  if (error == 5)
+                  {
+                     System.Diagnostics.Debug.WriteLine(String.Format("Please check if the current user has execute permission for file: {0} ", dllname));
+                  }
                }
                return handler;
             } //else

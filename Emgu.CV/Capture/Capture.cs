@@ -276,9 +276,11 @@ namespace Emgu.CV
                if (_grabState == GrabState.Pause)
                {
                   _pauseEvent.WaitOne();
-               } else if (!Grab())
+               } else if (IntPtr.Zero.Equals(_ptr) || !Grab())
                {
-                  //no more frames to grab, this is the end of the stream. We should stop.
+                  //capture has been released, or
+                  //no more frames to grab, this is the end of the stream. 
+                  //We should stop.
                   _grabState = GrabState.Stopping;
                }
             }
