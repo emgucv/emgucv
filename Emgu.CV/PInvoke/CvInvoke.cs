@@ -504,7 +504,7 @@ namespace Emgu.CV
          return (((int)depth) & ((1 << shift) - 1)) + (((channels) - 1) << shift);
       }
 
-
+      /*
       /// <summary>
       /// Generate 4-character code of codec used to compress the frames. For example, CV_FOURCC('P','I','M','1') is MPEG-1 codec, CV_FOURCC('M','J','P','G') is motion-jpeg codec etc.
       /// </summary>

@@ -39,6 +39,7 @@ IF %DEVENV%==%VS2015% SET BUILD_TYPE=/Build Debug
 
 cd ..\..
 
+call %DEVENV% %BUILD_TYPE% Solution\VS2013-2015\Emgu.CV.Example.sln
 call %DEVENV% %BUILD_TYPE% Solution\VS2013-2015\Emgu.CV.Test.sln
 call %MSTEST% bin\Emgu.CV.Test.dll /Platform:%PLATFORM%
 :END
