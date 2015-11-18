@@ -39,7 +39,7 @@
     <When Condition="'$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x64' AND  '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectTypeGuids)'!='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
 	<PropertyGroup>
         <EmguCVLinkTarget>Windows Store 8.1 (64bit)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\x64_store\cvextern.dll</EmguCVNativeFile>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1_x64\cvextern.dll</EmguCVNativeFile>
 		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
       </PropertyGroup>
       <ItemGroup>
@@ -53,7 +53,7 @@
     <When Condition="'$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86' AND  '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectTypeGuids)'!='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
 		<PropertyGroup>
         <EmguCVLinkTarget>Windows Store 8.1 (32bit)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\x86_store\cvextern.dll</EmguCVNativeFile>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1_x86\cvextern.dll</EmguCVNativeFile>
 		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
       </PropertyGroup>
       <ItemGroup>
@@ -67,7 +67,7 @@
     <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')AND '$(Platform)'=='ARM'">
 	<PropertyGroup>
         <EmguCVLinkTarget>Windows Phone 8.1 (ARM)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\arm_phone\cvextern.dll</EmguCVNativeFile>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1_arm\cvextern.dll</EmguCVNativeFile>
 		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
       </PropertyGroup>
       <ItemGroup>
@@ -82,7 +82,7 @@
 	AND '$(Platform)'=='x86'">
 	<PropertyGroup>
         <EmguCVLinkTarget>Windows Phone 8.1 (x86)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\x86_phone\cvextern.dll</EmguCVNativeFile>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1_x86\cvextern.dll</EmguCVNativeFile>
 		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
       </PropertyGroup>
       <ItemGroup>

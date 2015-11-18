@@ -1,6 +1,6 @@
 //NEED to have separate macro file for leptonica and tessearact. 
 //Some macro definition, such as CopyFile will conflict with tesseract.
-#define getpid() GetCurrentProcessId(void)
+#define getpid() GetCurrentProcessId()
 #define getcwd(A,B) NULL
 #define GetProcessTimes(A,B,C,D,E) ((void)0)
 #define FindFirstFileA(A,B) INVALID_HANDLE_VALUE
@@ -8,4 +8,6 @@
 #define CopyFile(A,B,C) 0
 #define GetTempPath(A,B) B[0]=0
 #define GetFileAttributes(A) INVALID_FILE_ATTRIBUTES
-#define system(A) -1
+
+#include <process.h>
+//#define system(A) -1

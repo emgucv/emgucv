@@ -23,7 +23,7 @@ IF(NETFX_CORE)
 	IF("8.1" STREQUAL "${CMAKE_SYSTEM_VERSION}")
 		add_definitions(-FI"${LEPTON_DIR}/../windows_runtime_macro_81.h")
 	ELSEIF("10.0" STREQUAL "${CMAKE_SYSTEM_VERSION}")
-		add_definitions(-FI-FI"${LEPTON_DIR}/../windows_runtime_macro_100.h")
+		add_definitions(-FI"${LEPTON_DIR}/../windows_runtime_macro_100.h")
 	ENDIF()
  
  add_definitions(-sdl- -UUNICODE -U_UNICODE )

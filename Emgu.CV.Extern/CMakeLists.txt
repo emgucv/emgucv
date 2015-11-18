@@ -1428,6 +1428,12 @@ IF(MSVC)
   ADD_DEFINITIONS(-wd4251 -D_CRT_SECURE_NO_WARNINGS)
 ENDIF()
 
+if(NETFX_CORE)
+  if(CMAKE_SYSTEM_VERSION MATCHES 10.0)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /ZW")
+  endif()
+endif()
+
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
   ${ZLIB_LIBRARY} 
