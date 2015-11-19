@@ -1,1 +1,1 @@
-call Build_Binary_x86.bat 32 nogpu WindowsPhoneDevice81
+call Build_Binary_x86.bat ARM nogpu WindowsPhone81
