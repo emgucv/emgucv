@@ -2,7 +2,8 @@ REM @echo off
 pushd %~p0
 cd ..\..
 IF "%1%"=="64" ECHO "BUILDING 64bit solution" 
-IF NOT "%1%"=="64" ECHO "BUILDING 32bit solution"
+IF "%1%"=="ARM" ECHO "BUILDING ARM solution"
+IF "%1%"=="32" ECHO "BUILDING 32bit solution"
 
 SET NETFX_CORE=""
 IF "%3%"=="WindowsPhone81" SET NETFX_CORE="TRUE" 
