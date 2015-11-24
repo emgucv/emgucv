@@ -9,7 +9,7 @@
 # --------------------------------------------------------
 
 PROJECT(emgucv)
-CMAKE_MINIMUM_REQUIRED(VERSION 3.4.0)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.1)
 
 SET(OPENCV_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv)
 

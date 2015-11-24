@@ -182,9 +182,7 @@ SET INTEL_DIR=%ICPP_COMPILER16%bin
 SET INTEL_ENV=%INTEL_DIR%\iclvars.bat
 SET INTEL_ICL=%INTEL_DIR%\ia32\icl.exe
 IF "%OS_MODE%"==" Win64" SET INTEL_ICL=%INTEL_DIR%\intel64\icl.exe
-SET INTEL_TBB=%ICPP_COMPILER15%tbb\include
-REM IF "%OS_MODE%"==" Win64" SET INTEL_IPP=%ICPP_COMPILER15%redist\intel64\ipp
-REM SET ICPROJCONVERT=%PROGRAMFILES_DIR_X86%\Common Files\Intel\shared files\ia32\Bin\ICProjConvert121.exe
+SET INTEL_TBB=%ICPP_COMPILER16%tbb\include
 
 REM initiate the compiler enviroment
 @echo on
