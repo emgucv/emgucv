@@ -75,8 +75,6 @@ __kernel void mytest(__global const uchar * srcptr1, int srcstep1, int srcoffset
                }
             }";
 
-            
-
             using (CvString errorMsg = new CvString())
             using (OclProgramSource ps = new OclProgramSource(sourceStr))
             using (OclKernel kernel = new OclKernel())
@@ -90,55 +88,58 @@ __kernel void mytest(__global const uchar * srcptr1, int srcstep1, int srcoffset
       [Test]
       public void TestOclChangeDefaultDevice()
       {
-         
-         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
+         if (CvInvoke.HaveOpenCL && CvInvoke.UseOpenCL)
          {
-            if (oclPlatformInfos.Size > 0)
+            using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
             {
-               for (int i = 0; i < oclPlatformInfos.Size; i++)
+               if (oclPlatformInfos.Size > 0)
                {
-                  OclPlatformInfo platformInfo = oclPlatformInfos[i];
-
-                  for (int j = 0; j < platformInfo.DeviceNumber; j++)
+                  for (int i = 0; i < oclPlatformInfos.Size; i++)
                   {
-                     OclDevice device = platformInfo.GetDevice(j);
+                     OclPlatformInfo platformInfo = oclPlatformInfos[i];
 
-                     Trace.WriteLine(String.Format("{0}Setting device to {1}", Environment.NewLine, device.Name));
-                     //OclDevice d = new OclDevice();
-                     //d.Set(device.NativeDevicePointer);
+                     for (int j = 0; j < platformInfo.DeviceNumber; j++)
+                     {
+                        OclDevice device = platformInfo.GetDevice(j);
+
+                        Trace.WriteLine(String.Format("{0}Setting device to {1}", Environment.NewLine, device.Name));
+                        //OclDevice d = new OclDevice();
+                        //d.Set(device.NativeDevicePointer);
 
 
-                     OclDevice defaultDevice = OclDevice.Default;
-                     defaultDevice.Set(device.NativeDevicePointer);
+                        OclDevice defaultDevice = OclDevice.Default;
+                        defaultDevice.Set(device.NativeDevicePointer);
 
-                     Trace.WriteLine(String.Format("Current OpenCL default device: {0}", defaultDevice.Name));
+                        Trace.WriteLine(String.Format("Current OpenCL default device: {0}", defaultDevice.Name));
 
-                     UMat m = new UMat(2048, 2048, DepthType.Cv8U, 3);
-                     m.SetTo(new MCvScalar(100, 100, 100));
-                     CvInvoke.GaussianBlur(m, m, new Size(3, 3), 3 );
+                        UMat m = new UMat(2048, 2048, DepthType.Cv8U, 3);
+                        m.SetTo(new MCvScalar(100, 100, 100));
+                        CvInvoke.GaussianBlur(m, m, new Size(3, 3), 3);
 
-                     Stopwatch watch = Stopwatch.StartNew();
-                     m.SetTo(new MCvScalar(100, 100, 100));
-                     CvInvoke.GaussianBlur(m, m, new Size(3, 3), 3);
-                     watch.Stop();
-                     Trace.WriteLine(String.Format("Device '{0}' time: {1} milliseconds", defaultDevice.Name, watch.ElapsedMilliseconds));
-                     CvInvoke.OclFinish();
+                        Stopwatch watch = Stopwatch.StartNew();
+                        m.SetTo(new MCvScalar(100, 100, 100));
+                        CvInvoke.GaussianBlur(m, m, new Size(3, 3), 3);
+                        watch.Stop();
+                        Trace.WriteLine(String.Format("Device '{0}' time: {1} milliseconds", defaultDevice.Name,
+                           watch.ElapsedMilliseconds));
+                        CvInvoke.OclFinish();
+                     }
                   }
                }
+
+               Trace.WriteLine(Environment.NewLine + "Disable OpenCL");
+               CvInvoke.UseOpenCL = false;
+               UMat m2 = new UMat(2048, 2048, DepthType.Cv8U, 3);
+               m2.SetTo(new MCvScalar(100, 100, 100));
+               CvInvoke.GaussianBlur(m2, m2, new Size(3, 3), 3);
+
+               Stopwatch watch2 = Stopwatch.StartNew();
+               m2.SetTo(new MCvScalar(100, 100, 100));
+               CvInvoke.GaussianBlur(m2, m2, new Size(3, 3), 3);
+               watch2.Stop();
+               Trace.WriteLine(String.Format("CPU time: {0} milliseconds", watch2.ElapsedMilliseconds));
+               CvInvoke.UseOpenCL = true;
             }
-
-            Trace.WriteLine(Environment.NewLine  + "Disable OpenCL");
-            CvInvoke.UseOpenCL = false;
-            UMat m2 = new UMat(2048, 2048, DepthType.Cv8U, 3);
-            m2.SetTo(new MCvScalar(100, 100, 100));
-            CvInvoke.GaussianBlur(m2, m2, new Size(3, 3), 3);
-
-            Stopwatch watch2 = Stopwatch.StartNew();
-            m2.SetTo(new MCvScalar(100, 100, 100));
-            CvInvoke.GaussianBlur(m2, m2, new Size(3, 3), 3);
-            watch2.Stop();
-            Trace.WriteLine(String.Format("CPU time: {0} milliseconds", watch2.ElapsedMilliseconds));
-            CvInvoke.UseOpenCL = true;
          }
       }
 
