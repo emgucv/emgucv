@@ -14,7 +14,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="WindowsUniversal.Windows.App">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="WindowsUniversal81.Windows.App">
       <m2:VisualElements DisplayName="Emgu CV for Xamarin Forms" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Emgu CV for Xamarin Forms" ForegroundText="light" BackgroundColor="#464646">
         <m2:SplashScreen Image="Assets\SplashScreen.png" />
       </m2:VisualElements>

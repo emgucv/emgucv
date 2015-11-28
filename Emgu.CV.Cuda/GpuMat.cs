@@ -36,7 +36,7 @@ namespace Emgu.CV.Cuda
       /// Create an empty GpuMat
       /// </summary>
       public GpuMat()
-         :this(CudaInvoke.gpuMatCreateDefault(), true)
+         : this(CudaInvoke.gpuMatCreateDefault(), true)
       {
       }
 
@@ -52,7 +52,7 @@ namespace Emgu.CV.Cuda
          : this(
             continuous ?
             CudaInvoke.gpuMatCreateContinuous(rows, cols, CvInvoke.MakeType(depthType, channels))
-            : CudaInvoke.gpuMatCreateDefault(), 
+            : CudaInvoke.gpuMatCreateDefault(),
          true)
       {
          if (!continuous)
@@ -128,8 +128,8 @@ namespace Emgu.CV.Cuda
       /// </summary>
       public InputArray GetInputArray()
       {
-            return new InputArray( CudaInvoke.cveInputArrayFromGpuMat(_ptr));
-       }
+         return new InputArray(CudaInvoke.cveInputArrayFromGpuMat(_ptr));
+      }
 
       /// <summary>
       /// Pointer to the OutputArray
@@ -154,7 +154,7 @@ namespace Emgu.CV.Cuda
       public void Upload(IInputArray arr)
       {
          using (InputArray iaArr = arr.GetInputArray())
-         CudaInvoke.gpuMatUpload(_ptr, iaArr);
+            CudaInvoke.gpuMatUpload(_ptr, iaArr);
       }
 
       /// <summary>
@@ -165,7 +165,7 @@ namespace Emgu.CV.Cuda
       {
          //Debug.Assert(arr.Size.Equals(Size), "Destination CvArray size does not match source GpuMat size");
          using (OutputArray oaArr = arr.GetOutputArray())
-         CudaInvoke.gpuMatDownload(_ptr, oaArr);
+            CudaInvoke.gpuMatDownload(_ptr, oaArr);
       }
 
       public Mat ToMat()
@@ -193,7 +193,7 @@ namespace Emgu.CV.Cuda
       public void SetTo(MCvScalar value, IInputArray mask = null, Stream stream = null)
       {
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-         CudaInvoke.gpuMatSetTo(Ptr, ref value, iaMask, stream);
+            CudaInvoke.gpuMatSetTo(Ptr, ref value, iaMask, stream);
       }
 
       /// <summary>
@@ -206,7 +206,7 @@ namespace Emgu.CV.Cuda
       {
          using (OutputArray oaDst = dst.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-         CudaInvoke.gpuMatCopyTo(Ptr, oaDst, iaMask, stream);
+            CudaInvoke.gpuMatCopyTo(Ptr, oaDst, iaMask, stream);
       }
 
 
@@ -224,7 +224,7 @@ namespace Emgu.CV.Cuda
       public void ConvertTo(IOutputArray dst, CvEnum.DepthType rtype, double scale = 1.0, double shift = 0, Stream stream = null)
       {
          using (OutputArray oaDst = dst.GetOutputArray())
-         CudaInvoke.gpuMatConvertTo(Ptr, oaDst, rtype, scale, shift, stream);
+            CudaInvoke.gpuMatConvertTo(Ptr, oaDst, rtype, scale, shift, stream);
       }
 
       /// <summary>
@@ -297,12 +297,13 @@ namespace Emgu.CV.Cuda
          {
             if (!other.IsEmpty)
                return false;
-         } else if (other.IsEmpty)
+         }
+         else if (other.IsEmpty)
          {
             return false;
          }
 
-         if (NumberOfChannels != other.NumberOfChannels || Size != other.Size || Type != other.Type ) return false;
+         if (NumberOfChannels != other.NumberOfChannels || Size != other.Size || Type != other.Type) return false;
 
          Size s = Size;
          using (GpuMat xor = new GpuMat())
@@ -331,7 +332,7 @@ namespace Emgu.CV.Cuda
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void MergeFrom(GpuMat[] gpuMats, Stream stream = null)
       {
-         
+
          //If single channel, perform a copy
          if (gpuMats.Length == 1)
          {
@@ -366,17 +367,17 @@ namespace Emgu.CV.Cuda
          else
          {
             //handle multiple channels
-            
+
             Size size = Size;
-            
+
             for (int i = 0; i < gpuMats.Length; i++)
             {
-               GpuMat m = gpuMats[i];
+               gpuMats[i].Create(size.Height, size.Width, Depth, 1);
             }
-            
+
             using (VectorOfGpuMat vm = new VectorOfGpuMat(gpuMats))
-            CudaInvoke.Split(this, vm, stream);
-            
+               CudaInvoke.Split(this, vm, stream);
+
          }
       }
 
@@ -395,7 +396,7 @@ namespace Emgu.CV.Cuda
          Size size = Size;
          for (int i = 0; i < result.Length; i++)
          {
-            result[i] = new GpuMat(size.Height, size.Width, Depth, 1);
+            result[i] = new GpuMat();
          }
 
          SplitInto(result, stream);
@@ -507,7 +508,7 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr gpuMatCreateDefault();
 
-      
+
       /// <summary>
       /// Convert a CvArr to a GpuMat
       /// </summary>
@@ -553,7 +554,7 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr gpuMatCreateContinuous(int rows, int cols, int type);
 
- 
+
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void gpuMatSetTo(IntPtr mat, ref MCvScalar value, IntPtr mask, IntPtr stream);
 
@@ -583,7 +584,7 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void gpuMatCopyTo(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
 
-            /// <summary>
+      /// <summary>
       /// This function has several different purposes and thus has several synonyms. It copies one GpuMat to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
       /// dst(I)=src(I)*scale + (shift,shift,...)
       /// All the channels of multi-channel GpuMats are processed independently.

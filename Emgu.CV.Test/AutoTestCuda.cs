@@ -747,9 +747,29 @@ namespace Emgu.CV.Test
             opticalflow.Calc(prevGpu, currGpu, flowGpu);
 
             flowGpu.Download(flow);
-         }
-         
+         }  
       }
+
+
+      [Test]
+      public void TestCudaBroxOpticalFlow()
+      {
+         if (!CudaInvoke.HasCuda)
+            return;
+         Image<Gray, Byte> prevImg, currImg;
+         AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
+         Mat flow = new Mat();
+         CudaBroxOpticalFlow opticalflow = new CudaBroxOpticalFlow();
+         using (CudaImage<Gray, float> prevGpu = new CudaImage<Gray, float>(prevImg.Convert<Gray, float>()))
+         using (CudaImage<Gray, float> currGpu = new CudaImage<Gray, float>(currImg.Convert<Gray, float>()))
+         using (GpuMat flowGpu = new GpuMat())
+         {
+            opticalflow.Calc(prevGpu, currGpu, flowGpu);
+
+            flowGpu.Download(flow);
+         }
+      }
+
 
       [Test]
       public void TestBilaterialFilter()

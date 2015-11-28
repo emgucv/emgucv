@@ -2830,6 +2830,8 @@ namespace Emgu.CV.Test
          capture1.Dispose();
          capture2.Dispose();
       }
+
+      /*
 #if !(__IOS__ || __ANDROID__)
       [Test]
       public void TestGLImageView()
@@ -2838,6 +2840,7 @@ namespace Emgu.CV.Test
          //viewer.ShowDialog();
       }
 #endif
+      */
 #endif
       [Test]
       public void TestCvString()

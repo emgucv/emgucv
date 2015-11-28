@@ -7,8 +7,8 @@
     <ProjectGuid>{2244B20E-EAFB-45B5-A074-DEC9F292512D}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WindowsUniversal</RootNamespace>
-    <AssemblyName>WindowsUniversal.Windows</AssemblyName>
+    <RootNamespace>WindowsUniversal81</RootNamespace>
+    <AssemblyName>WindowsUniversal81.Windows</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>

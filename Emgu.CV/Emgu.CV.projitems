@@ -35,6 +35,49 @@
     <EmguCVDir>$(MSBuildThisFileDirectory)</EmguCVDir>
   </PropertyGroup>
   <Choose>
+    <!-- Windows 10 UAP (64bit) -->
+    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x64'">
+	<PropertyGroup>
+        <EmguCVLinkTarget>Windows 10 UAP (64bit)</EmguCVLinkTarget>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\windows10_x64\cvextern.dll</EmguCVNativeFile>
+		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+      </PropertyGroup>
+      <ItemGroup>
+        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
+          <Link>cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
+    <!-- Windows 10 UAP (32bit) -->
+    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x86'">
+		<PropertyGroup>
+        <EmguCVLinkTarget>Windows 10 UAP (32bit)</EmguCVLinkTarget>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\windows10_x86\cvextern.dll</EmguCVNativeFile>
+		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+      </PropertyGroup>
+      <ItemGroup>
+        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
+          <Link>cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
+    <!-- Windows 10 UAP (ARM) -->
+    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM'">
+	<PropertyGroup>
+        <EmguCVLinkTarget>Windows 10 UAP (ARM)</EmguCVLinkTarget>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\windows10_arm\cvextern.dll</EmguCVNativeFile>
+		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+      </PropertyGroup>
+      <ItemGroup>
+        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
+          <Link>cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
+  
     <!-- Windows store 8.1 (64bit) -->
     <When Condition="'$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x64' AND  '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectTypeGuids)'!='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
 	<PropertyGroup>

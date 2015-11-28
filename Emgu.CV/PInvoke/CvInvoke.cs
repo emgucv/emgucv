@@ -222,8 +222,8 @@ namespace Emgu.CV
 
                if (!Directory.Exists(altLoadDirectory))
                {
-			   FileInfo file = new FileInfo(asm.Location);
-               DirectoryInfo directory = file.Directory;
+                  FileInfo file = new FileInfo(asm.Location);
+                  DirectoryInfo directory = file.Directory;
 #if UNITY_EDITOR_WIN
               if (directory.Parent != null && directory.Parent.Parent != null)
                   {
