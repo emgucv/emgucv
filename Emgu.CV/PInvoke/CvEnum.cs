@@ -3697,5 +3697,42 @@ namespace Emgu.CV.CvEnum
       /// Grayworld
       /// </summary>
       Grayworld = 1
-   };
+   }
+
+   /// <summary>
+   /// Connected components algorithm output formats
+   /// </summary>
+   public enum ConnectecComponentsTypes
+   {
+      /// <summary>
+      /// The leftmost (x) coordinate which is the inclusive start of the bounding box in the horizontal direction.
+      /// </summary>
+      Left = 0,
+
+      /// <summary>
+      /// The topmost (y) coordinate which is the inclusive start of the bounding box in the vertical direction.
+      /// </summary>
+      Top,
+
+      /// <summary>
+      /// The horizontal size of the bounding box.
+      /// </summary>
+      Width,
+
+      /// <summary>
+      /// The vertical size of the bounding box.
+      /// </summary>
+      Height,
+
+      /// <summary>
+      /// The total area (in pixels) of the connected component.
+      /// </summary>
+      Area,
+
+      /// <summary>
+      /// 
+      /// </summary>
+      Max
+
+   }
 }

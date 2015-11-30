@@ -2812,5 +2812,49 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveRectangle(IntPtr img, ref Rectangle rect, ref MCvScalar color, int thickness, CvEnum.LineType lineType, int shift);
 
+      /// <summary>
+      /// Computes the connected components labeled image of boolean image
+      /// </summary>
+      /// <param name="image">The boolean image</param>
+      /// <param name="labels">The connected components labeled image of boolean image</param>
+      /// <param name="connectivity">4 or 8 way connectivity</param>
+      /// <param name="labelType">Specifies the output label image type, an important consideration based on the total number of labels or alternatively the total number of pixels in the source image</param>
+      /// <returns>N, the total number of labels [0, N-1] where 0 represents the background label.</returns>
+      public static int ConnectedComponents(IInputArray image, IOutputArray labels, CvEnum.LineType connectivity = LineType.EightConnected, DepthType labelType = DepthType.Cv32S)
+      {
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaLabels = labels.GetOutputArray())
+         {
+            return cveConnectedComponents(iaImage, oaLabels, connectivity, labelType);
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cveConnectedComponents(IntPtr image, IntPtr labels, CvEnum.LineType connectivity, DepthType labelType);
+
+      /// <summary>
+      /// Computes the connected components labeled image of boolean image
+      /// </summary>
+      /// <param name="image">The boolean image</param>
+      /// <param name="labels">The connected components labeled image of boolean image</param>
+      /// <param name="stats"></param>
+      /// <param name="centroids""></param>
+      /// <param name="connectivity">4 or 8 way connectivity</param>
+      /// <param name="labelType">Specifies the output label image type, an important consideration based on the total number of labels or alternatively the total number of pixels in the source image</param>
+      /// <returns>N, the total number of labels [0, N-1] where 0 represents the background label.</returns>
+      public static int ConnectedComponentsWithStats(IInputArray image, IOutputArray labels, IOutputArray stats,
+         IOutputArray centroids, CvEnum.LineType connectivity = LineType.EightConnected, DepthType labelType = DepthType.Cv32S)
+      {
+         using (InputArray iaImage = image.GetInputArray())
+         using (OutputArray oaLabels = labels.GetOutputArray())
+         using (OutputArray oaStats = stats.GetOutputArray())
+         using (OutputArray oaCentroids = centroids.GetOutputArray())
+         {
+            return cveConnectedComponentsWithStats(iaImage, oaLabels, oaStats, oaCentroids, connectivity, labelType);
+         }
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cveConnectedComponentsWithStats(IntPtr image, IntPtr labels, IntPtr stats, IntPtr centroids, CvEnum.LineType connectivity, DepthType type);
+
    }
 }
