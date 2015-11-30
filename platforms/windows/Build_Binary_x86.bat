@@ -79,7 +79,6 @@ SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DBUILD_opencv_adas:BOOL=FALSE ^
 -DBUILD_opencv_bioinspired:BOOL=FALSE ^
 -DBUILD_opencv_saliency:BOOL=FALSE ^
--DBUILD_opencv_waldboost_detector:BOOL=FALSE ^
 -DBUILD_opencv_python2:BOOL=FALSE ^
 -DEMGU_ENABLE_SSE:BOOL=TRUE ^
 -DCMAKE_INSTALL_PREFIX:String="%TEMP%" ^
