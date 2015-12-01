@@ -1044,6 +1044,25 @@ namespace Emgu.CV.Test
          CvInvoke.Dft(complexImage, dft, Emgu.CV.CvEnum.DxtType.Forward, 0);
       }
 
+
+      [TestAttribute]
+      public void TestImageDFTUmat()
+      {
+         Image<Gray, float> image = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
+
+         UMat complexImage = new UMat(image.Size, DepthType.Cv32F, 2);
+         complexImage.SetTo(new MCvScalar(0, 0));
+         CvInvoke.InsertChannel(image, complexImage, 0);
+
+         UMat dft = new UMat();
+
+         CvInvoke.Dft(complexImage, dft, Emgu.CV.CvEnum.DxtType.Forward, 0);
+
+         UMat[] tmp = dft.Split();
+         
+         EmguAssert.IsTrue(!tmp[0].IsEmpty);
+      }
+
       [TestAttribute]
       public void TestEqualizeHist()
       {

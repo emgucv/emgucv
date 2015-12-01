@@ -1109,9 +1109,11 @@ namespace Emgu.CV
       public Mat[] Split()
       {
          Mat[] mats = new Mat[NumberOfChannels];
+         Size s = this.Size;
+         DepthType d = this.Depth;
          for (int i = 0; i < mats.Length; i++)
          {
-            mats[i] = new Mat(Rows, Cols, Depth, 1);
+            mats[i] = new Mat(s, d, 1);
          }
          using (VectorOfMat vm = new VectorOfMat(mats))
          {

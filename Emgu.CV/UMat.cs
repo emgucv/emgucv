@@ -571,9 +571,11 @@ namespace Emgu.CV
       public UMat[] Split()
       {
          UMat[] mats = new UMat[NumberOfChannels];
+         Size s = this.Size;
+         DepthType d = this.Depth;
          for (int i = 0; i < mats.Length; i++)
          {
-            mats[i] = new UMat();
+            mats[i] = new UMat(s, d, 1);
          }
          using (VectorOfUMat vm = new VectorOfUMat(mats))
          {

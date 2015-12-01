@@ -2836,8 +2836,8 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="image">The boolean image</param>
       /// <param name="labels">The connected components labeled image of boolean image</param>
-      /// <param name="stats"></param>
-      /// <param name="centroids""></param>
+      /// <param name="stats">Statistics output for each label, including the background label, see below for available statistics. Statistics are accessed via stats(label, COLUMN) where COLUMN is one of cv::ConnectedComponentsTypes. The data type is CV_32S</param>
+      /// <param name="centroids">Centroid output for each label, including the background label. Centroids are accessed via centroids(label, 0) for x and centroids(label, 1) for y. The data type CV_64F.</param>
       /// <param name="connectivity">4 or 8 way connectivity</param>
       /// <param name="labelType">Specifies the output label image type, an important consideration based on the total number of labels or alternatively the total number of pixels in the source image</param>
       /// <returns>N, the total number of labels [0, N-1] where 0 represents the background label.</returns>
