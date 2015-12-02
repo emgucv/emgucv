@@ -554,3 +554,12 @@ void cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result)
 {
    *result = cvMaxRect(rect1, rect2);
 }
+
+int cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int type)
+{
+   return cv::connectedComponents(*image, *labels, connectivity, type);
+}
+int cveConnectedComponentsWithStats(cv::_InputArray* image, cv::_OutputArray* labels, cv::_OutputArray* stats, cv::_OutputArray* centroids, int connectivity, int type)
+{
+   return cv::connectedComponentsWithStats(*image, *labels, *stats, *centroids, connectivity, type);
+}

@@ -170,4 +170,7 @@ CVAPI(double) cveGetCentralMoment(CvMoments* moments, int xOrder, int yOrder);
 CVAPI(double) cveGetNormalizedCentralMoment(CvMoments* moments, int xOrder, int yOrder);
 
 CVAPI(void) cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result);
+
+CVAPI(int) cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int type);
+CVAPI(int) cveConnectedComponentsWithStats(cv::_InputArray* image, cv::_OutputArray* labels, cv::_OutputArray* stats, cv::_OutputArray* centroids, int connectivity, int type);
 #endif
