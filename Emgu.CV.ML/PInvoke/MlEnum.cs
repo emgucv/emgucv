@@ -6,10 +6,6 @@ using System;
 
 namespace Emgu.CV.ML.MlEnum
 {
-
-
-
-
    /// <summary>
    /// The flags for the neural network training function
    /// </summary>

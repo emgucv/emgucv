@@ -17,12 +17,12 @@ public class HelloTexture : MonoBehaviour
    void Start()
    {      
       Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
-
+      img.SetTo(new MCvScalar());
       String openclStr = "None";
       if (CvInvoke.HaveOpenCL)
       {
          //StringBuilder builder = new StringBuilder();
-         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformInfo())
+         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
          {
             if (oclPlatformInfos.Size > 0)
             {

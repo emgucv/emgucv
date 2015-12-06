@@ -20,7 +20,7 @@ public class FaceDetection : MonoBehaviour
       Texture2D lenaTexture = Resources.Load<Texture2D>("lena");    
 
       //updateTextureWithString("load lena ok");
-      Mat img = new Mat();
+      UMat img = new UMat();
       TextureConvert.Texture2dToOutputArray(lenaTexture, img);
       CvInvoke.Flip(img, img, FlipType.Vertical);
 
@@ -45,7 +45,7 @@ public class FaceDetection : MonoBehaviour
 
       
       using (CascadeClassifier classifier = new CascadeClassifier(filePath))
-      using (Mat gray = new Mat())
+      using (UMat gray = new UMat())
       {
          CvInvoke.CvtColor(img, gray, ColorConversion.Bgr2Gray);
          //updateTextureWithString("classifier create ok");
@@ -74,7 +74,8 @@ public class FaceDetection : MonoBehaviour
       Texture2D texture = TextureConvert.InputArrayToTexture2D(img, FlipType.Vertical);
 
       this.GetComponent<GUITexture>().texture = texture;
-      this.GetComponent<GUITexture>().pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);
+      Size s = img.Size;
+      this.GetComponent<GUITexture>().pixelInset = new Rect(-s.Width / 2, -s.Height / 2, s.Width, s.Height);
    }
 
    private void updateTextureWithString(String text)

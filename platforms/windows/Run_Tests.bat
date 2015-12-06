@@ -29,7 +29,6 @@ IF EXIST %TEST2012% SET MSTEST=%TEST2012%
 IF EXIST %TEST2013% SET MSTEST=%TEST2013%
 IF EXIST %TEST2015% SET MSTEST=%TEST2015%
 
-
 :SET_BUILD_TYPE
 IF %DEVENV%==%MSBUILD35% SET BUILD_TYPE=/property:Configuration=Debug
 IF %DEVENV%==%MSBUILD40% SET BUILD_TYPE=/property:Configuration=Debug
@@ -39,8 +38,23 @@ IF %DEVENV%==%VS2015% SET BUILD_TYPE=/Build Debug
 
 cd ..\..
 
+IF "%2"=="" GOTO TEST_INPLACE
+
+:TEST_PACKAGE
+rm -rf tmp
+mkdir tmp
+unzip "%2" -d tmp
+call %DEVENV% %BUILD_TYPE% tmp\Solution\VS2013-2015\Emgu.CV.Example.sln
+
+call %DEVENV% %BUILD_TYPE% Solution\VS2013-2015\Emgu.CV.Test.sln
+cp bin/Emgu.CV.Test.dll tmp/bin
+call %MSTEST% tmp\bin\Emgu.CV.Test.dll /Platform:%PLATFORM%
+GOTO END
+
+:TEST_INPLACE
 call %DEVENV% %BUILD_TYPE% Solution\VS2013-2015\Emgu.CV.Example.sln
 call %DEVENV% %BUILD_TYPE% Solution\VS2013-2015\Emgu.CV.Test.sln
 call %MSTEST% bin\Emgu.CV.Test.dll /Platform:%PLATFORM%
+
 :END
 popd

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: dc81f73a333c08346b79043beccf8c34
-timeCreated: 1430843602
+guid: b14bd07168ef2294d8a3b36fd87d58ea
+timeCreated: 1449512709
 licenseType: Pro
 PluginImporter:
   serializedVersion: 1
@@ -16,33 +16,25 @@ PluginImporter:
       enabled: 0
       settings: {}
     Editor:
-      enabled: 1
+      enabled: 0
       settings:
-        CPU: x86_64
+        CPU: AnyCPU
         DefaultValueInitialized: true
-        OS: Windows
+        OS: AnyOS
     Linux:
-      enabled: 1
+      enabled: 0
       settings:
-        CPU: None
+        CPU: x86
     Linux64:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: x86_64
-    LinuxUniversal:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
     OSXIntel:
-      enabled: 1
-      settings:
-        CPU: None
-    OSXIntel64:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
-    OSXUniversal:
-      enabled: 1
+    OSXIntel64:
+      enabled: 0
       settings:
         CPU: AnyCPU
     SamsungTV:
@@ -58,18 +50,18 @@ PluginImporter:
     Win:
       enabled: 0
       settings:
-        CPU: None
-    Win64:
-      enabled: 1
-      settings:
         CPU: AnyCPU
-    WindowsStoreApps:
+    Win64:
       enabled: 0
       settings:
         CPU: AnyCPU
+    WindowsStoreApps:
+      enabled: 1
+      settings:
+        CPU: X86
         DontProcess: False
         PlaceholderPath: 
-        SDK: AnySDK
+        SDK: UWP
     iOS:
       enabled: 0
       settings:

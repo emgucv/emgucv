@@ -44,7 +44,7 @@ cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 
 cp ../Emgu.CV.ML/*.cs Assets/Emgu.CV/Emgu.CV.ML/
 mkdir Assets\Emgu.CV\Emgu.CV.ML\PInvoke 
-xcopy ..\Emgu.CV.ML\PInvoke Assets\Emgu.CV\Emgu.CV.ML\ /s /e /Y
+xcopy ..\Emgu.CV.ML\PInvoke Assets\Emgu.CV\Emgu.CV.ML\PInvoke /s /e /Y
 
 REM cp -r ../Emgu.CV.Cuda/*.cs Assets/Emgu.CV/Emgu.CV.Cuda/
 REM mkdir Assets\Emgu.CV\Emgu.CV.Cuda\Bgsegm

@@ -76,7 +76,6 @@ SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DBUILD_TESTS:BOOL=FALSE ^
 -DBUILD_opencv_apps:BOOL=FALSE ^
 -DBUILD_opencv_dpm:BOOL=FALSE ^
--DBUILD_opencv_adas:BOOL=FALSE ^
 -DBUILD_opencv_bioinspired:BOOL=FALSE ^
 -DBUILD_opencv_saliency:BOOL=FALSE ^
 -DBUILD_opencv_python2:BOOL=FALSE ^

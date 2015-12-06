@@ -10,7 +10,12 @@ FILE(GLOB_RECURSE SRC_CV_TEST RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
 LIST(APPEND SRC_CV_TEST ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
 #Remove android or ios specific files
-FILE(GLOB_RECURSE SRC_CV_TEST_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "Class1.cs" "Emgu.CV.Test.Android/*.cs" "Emgu.CV.Test.iOS/*.cs" )
+FILE(GLOB_RECURSE SRC_CV_TEST_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
+"Class1.cs" 
+"Emgu.CV.Test.Android/*.cs" "Emgu.CV.Test.Android/Resources/*.cs" "Emgu.CV.Test.Android/Properties/*.cs" 
+"Emgu.CV.Test.iOS/*.cs"
+"Emgu.CV.Test.Windows.Phone/Properties/*.cs" 
+"Emgu.CV.Test.Windows.Store/Properties/*.cs")
 LIST(REMOVE_ITEM SRC_CV_TEST ${SRC_CV_TEST_EXCLUDES})
 
 #copy the test data for this example
@@ -20,13 +25,13 @@ LIST(APPEND
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/data/haarcascades/haarcascade_frontalface_alt2.xml
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/data/haarcascades/haarcascade_eye.xml
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/left01.jpg
-	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/board.png
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/board.jpg
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/box.png
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/box_in_scene.png
     ${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/lena.jpg
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/stuff.jpg
-	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/aloeL.bmp
-	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/aloeR.bmp
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/aloeL.jpg
+	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/aloeR.jpg
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/tree.avi
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv_contrib/modules/text/samples/scenetext01.jpg
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/letter-recognition.data

@@ -23,6 +23,7 @@ cp Assets/Emgu.CV/Emgu.CV/VideoSurveillance/*.cs ../Emgu.CV/VideoSurveillance
 
 cp Assets/Emgu.CV/Emgu.CV.ML/*.cs ../Emgu.CV.ML 
 cp Assets/Emgu.CV/Emgu.CV.ML/PInvoke/*.cs ../Emgu.CV.ML/PInvoke 
+cp Assets/Emgu.CV/Emgu.CV.ML/PInvoke/CvType/*.cs ../Emgu.CV.ML/PInvoke/CvType 
 
 cp Assets/Emgu.CV/Emgu.CV.Contrib/*.cs ../Emgu.CV.Contrib 
 cp Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm/*.cs ../Emgu.CV.Contrib/BgSegm/  

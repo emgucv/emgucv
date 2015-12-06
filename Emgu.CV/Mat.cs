@@ -429,9 +429,9 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Copy the data in this cv::Mat to a CvArray
+      /// Copy the data in this cv::Mat to an output array
       /// </summary>
-      /// <param name="m">The input array to copy to</param>
+      /// <param name="m">The output array to copy to</param>
       /// <param name="mask">Operation mask. Its non-zero elements indicate which matrix elements need to be copied.</param>
       public void CopyTo(IOutputArray m, IInputArray mask = null)
       {
