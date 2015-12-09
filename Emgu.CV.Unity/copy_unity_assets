@@ -67,6 +67,10 @@ mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Text
 cp -r ../Emgu.CV.Contrib/Text Assets/Emgu.CV/Emgu.CV.Contrib/ 
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/XFeatures2D
 cp -r ../Emgu.CV.Contrib/XFeatures2D Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/XPhoto
+cp -r ../Emgu.CV.Contrib/XPhoto Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/XImgproc
+cp -r ../Emgu.CV.Contrib/XImgproc Assets/Emgu.CV/Emgu.CV.Contrib/
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/
 

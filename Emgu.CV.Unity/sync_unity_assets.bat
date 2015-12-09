@@ -30,6 +30,8 @@ cp Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm/*.cs ../Emgu.CV.Contrib/BgSegm/
 cp Assets/Emgu.CV/Emgu.CV.Contrib/Face/*.cs ../Emgu.CV.Contrib/Face 
 cp Assets/Emgu.CV/Emgu.CV.Contrib/Text/*.cs ../Emgu.CV.Contrib/Text 
 cp Assets/Emgu.CV/Emgu.CV.Contrib/XFeatures2D/*.cs ../Emgu.CV.Contrib/XFeatures2D 
+cp Assets/Emgu.CV/Emgu.CV.Contrib/XPhoto/*.cs ../Emgu.CV.Contrib/XPhoto 
+cp Assets/Emgu.CV/Emgu.CV.Contrib/XImgproc/*.cs ../Emgu.CV.Contrib/XImgproc 
 
 cp -r Assets/Emgu.CV/Emgu.CV.OCR/*.cs ../Emgu.CV.OCR 
 

@@ -33,6 +33,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   PATTERN "*.Xamarin"
   PATTERN "*.projitems"
   PATTERN "*.axml"
+  PATTERN "*.xaml"
   PATTERN "*.xml"
   PATTERN "*.txt"
   PATTERN "*.png"

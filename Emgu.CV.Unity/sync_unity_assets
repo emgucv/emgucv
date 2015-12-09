@@ -28,10 +28,10 @@ cp -r Assets/Emgu.CV/Emgu.CV.ML/PInvoke/CvType/*.cs ../Emgu.CV.ML/PInvoke/CvType
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/*.cs ../Emgu.CV.Contrib 
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm/*.cs ../Emgu.CV.Contrib/BgSegm  
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/Face/*.cs ../Emgu.CV.Contrib/Face 
-
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/Text/*.cs ../Emgu.CV.Contrib/Text 
-
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/XFeatures2D/*.cs ../Emgu.CV.Contrib/XFeatures2D 
+cp -r Assets/Emgu.CV/Emgu.CV.Contrib/XPhoto/*.cs ../Emgu.CV.Contrib/XPhoto 
+cp -r Assets/Emgu.CV/Emgu.CV.Contrib/XImgproc/*.cs ../Emgu.CV.Contrib/XImgproc 
 
 cp -r Assets/Emgu.CV/Emgu.CV.OCR/*.cs ../Emgu.CV.OCR 
 

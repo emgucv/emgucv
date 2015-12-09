@@ -31,7 +31,9 @@ cp -f ../../Emgu.CV.OCR/*.cs ios-package/Emgu.CV.OCR/
 cp -r ../../tmp/Emgu.CV.World ios-package/Emgu.CV.World
 
 mkdir -p ios-package/Solution/iOS
-cp ../../tmp/Solution/iOS/Emgu.CV.iOS.sln ios-package/Solution/iOS/Emgu.CV.iOS.sln
+cp ../../tmp/Solution/iOS/Emgu.CV.iOS.sln ios-package/Solution/iOS/
+cp ../../tmp/Solution/iOS/nuget.config ios-package/Solution/iOS/
+cp ../../tmp/Solution/iOS/components.config ios-package/Solution/iOS/
 
 mkdir -p ios-package/Emgu.CV.Example/SURFFeature
 mkdir -p ios-package/Emgu.CV.Example/PlanarSubdivision
@@ -39,6 +41,9 @@ mkdir -p ios-package/Emgu.CV.Example/LicensePlateRecognition
 mkdir -p ios-package/Emgu.CV.Example/PedestrianDetection
 mkdir -p ios-package/Emgu.CV.Example/TrafficSignRecognition
 mkdir -p ios-package/Emgu.CV.Example/FaceDetection
+mkdir -p ios-package/Emgu.CV.Example/XamarinForms/XamarinForms
+mkdir -p ios-package/Emgu.CV.Example/XamarinForms/XamarinForms.iOS
+
 mkdir -p ios-package/opencv/data/haarcascades
 cp -r ../../tmp/Emgu.CV.Example/iOS ios-package/Emgu.CV.Example/iOS
 cp ../../tmp/Emgu.CV.Example/SURFFeature/box.png ios-package/Emgu.CV.Example/SURFFeature/box.png
@@ -54,6 +59,8 @@ cp ../../tmp/Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png ios-pack
 cp ../../tmp/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs ios-package/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs
 cp ../../tmp/Emgu.CV.Example/FaceDetection/lena.jpg ios-package/Emgu.CV.Example/FaceDetection/lena.jpg
 cp ../../tmp/Emgu.CV.Example/FaceDetection/DetectFace.cs ios-package/Emgu.CV.Example/FaceDetection/DetectFace.cs
+cp -r ../../tmp/Emgu.CV.Example/XamarinForms/XamarinForms/* ios-package/Emgu.CV.Example/XamarinForms/XamarinForms/
+cp -r ../../tmp/Emgu.CV.Example/XamarinForms/XamarinForms.iOS/* ios-package/Emgu.CV.Example/XamarinForms/XamarinForms.iOS/
 cp ../../opencv/data/haarcascades/haarcascade_eye.xml ios-package/opencv/data/haarcascades/haarcascade_eye.xml
 cp ../../opencv/data/haarcascades/haarcascade_frontalface_default.xml ios-package/opencv/data/haarcascades/haarcascade_frontalface_default.xml
 cp ../../CommonAssemblyInfo.cs ios-package
@@ -71,4 +78,7 @@ mkdir -p ios-package/bin
 cp ../../Emgu.CV.World/bin/Release/Emgu.CV.World.IOS.dll ios-package/bin
 
 gitversion=$(git log --oneline | wc -l | tr -d " ")
-zip -r libemgucv-ios-unified-$gitversion ios-package
+cd ios-package
+zip -r libemgucv-ios-unified-$gitversion *
+mv *.zip ../
+cd ..
