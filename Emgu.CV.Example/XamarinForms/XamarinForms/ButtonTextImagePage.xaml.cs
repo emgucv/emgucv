@@ -111,7 +111,7 @@ namespace Emgu.CV.XamarinForms
 
 	   public event EventHandler<Mat> OnImageLoaded; 
 
-      public void SetImage(Emgu.CV.Mat image)
+      public void SetImage(IInputArray image)
 	   {
 	      if (image == null)
 	      {
