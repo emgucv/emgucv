@@ -4501,6 +4501,8 @@ namespace Emgu.CV
       {
          get
          {
+            return CvInvoke.cvGetSize(_ptr);
+            /*
             //TODO: this override should not be necessary if cvGetSize is working correctly, need to check when this will be fixed.
             MIplImage iplImage = MIplImage;
             if (iplImage.Roi != IntPtr.Zero)
@@ -4510,7 +4512,7 @@ namespace Emgu.CV
             else
             {
                return new Size(iplImage.Width, iplImage.Height);
-            }
+            }*/
          }
       }
    }

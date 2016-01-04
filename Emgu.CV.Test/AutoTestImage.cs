@@ -137,8 +137,20 @@ namespace Emgu.CV.Test
       [TestAttribute]
       public void TestIplImageSize()
       {
-         //EmguAssert.IsTrue(Marshal.SizeOf(typeof(MIplImage)) == 144);
-         //EmguAssert.IsTrue(Marshal.SizeOf(typeof(Size)) == 8);
+         IntPtr img = CvInvoke.cvCreateImageHeader(new Size(10, 10), IplDepth.IplDepth_8U, 1);
+         MIplImage iplImg = (MIplImage) Marshal.PtrToStructure(img, typeof (MIplImage));
+
+         CvInvoke.cvReleaseImageHeader(ref img);
+         int sizeMIplImage = Marshal.SizeOf(typeof (MIplImage));
+         CvStructSizes sizes = CvInvoke.GetCvStructSizes();
+         int sizeIplImage = sizes.IplImage;
+         EmguAssert.IsTrue(sizeMIplImage == iplImg.NSize);
+         EmguAssert.IsTrue(sizeMIplImage == sizeIplImage);
+      }
+
+      [TestAttribute]
+      public void TestImageSize()
+      {
          Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
          Size s = img.Size;
          int tmp = s.Width + s.Height;
