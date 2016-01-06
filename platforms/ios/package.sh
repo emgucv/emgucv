@@ -76,9 +76,10 @@ cd ..
 /Library/Frameworks/Mono.framework/Commands/xbuild /p:Configuration=Release ../../Emgu.CV.World/Emgu.CV.World.IOS.csproj
 mkdir -p ios-package/bin
 cp ../../Emgu.CV.World/bin/Release/Emgu.CV.World.IOS.dll ios-package/bin
-
-gitversion=$(git log --oneline | wc -l | tr -d " ")
+cp ../../Emgu.CV.License.txt ios-package
+#gitversion=$(git log --oneline | wc -l | tr -d " ")
+emgucvversion=${cat emgucv.version.txt)
 cd ios-package
-zip -r libemgucv-ios-unified-$gitversion *
+zip -r libemgucv-ios-unified-$emgucvversion *
 mv *.zip ../
 cd ..

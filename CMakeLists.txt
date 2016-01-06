@@ -297,6 +297,8 @@ ELSE()
   SET(CPACK_PACKAGE_FILE_NAME "lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 ENDIF()
 
+FILE(WRITE "emgucv.version.txt" "${CPACK_PACKAGE_VERSION}")
+
 #IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Commercial.License.txt")
 #  SET(LICENSE_FILE_NAME "Emgu.CV.Commercial.License.txt")
 #ELSE()
@@ -431,7 +433,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CommonAssemblyInfo.cs.in ${CMAK
 #  Generate readme file for Emgu CV project
 # ----------------------------------------------------------------------------
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/README.txt.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt)
-INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt" DESTINATION "." COMPONENT main)
+INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt" DESTINATION "." COMPONENT libs)
 
 # ----------------------------------------------------------------------------
 #  Generate CvInvokeEntryPoints.cs file for Emgu CV project
@@ -587,25 +589,25 @@ MACRO(CREATE_IMPORT_CSPROJ platforms folders dest_folders msbuild_import_file_na
   FILE(WRITE ${msbuild_import_file_name} ${MSBUILD_IMPORT})
 ENDMACRO()
 
-SET(CSPROJ_IMPORT_NAME "import.csproj")
-SET(CSPROJ_IMPORT_FULL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${CSPROJ_IMPORT_NAME}")
-IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-  CREATE_IMPORT_CSPROJ("ARM;x86" "arm_phone;x86_phone" ".;." "${CSPROJ_IMPORT_FULL_PATH}")
-  INSTALL(
-    FILES
-	"${CSPROJ_IMPORT_FULL_PATH}"
-    DESTINATION .
-    COMPONENT main
-    )
-ELSEIF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore")
-  CREATE_IMPORT_CSPROJ("x64;x86" "x64;x86" ".;." "${CSPROJ_IMPORT_FULL_PATH}")
-  INSTALL(
-    FILES
-    "${CSPROJ_IMPORT_FULL_PATH}"
-    DESTINATION .
-    COMPONENT main
-    )
-ENDIF()
+#SET(CSPROJ_IMPORT_NAME "import.csproj")
+#SET(CSPROJ_IMPORT_FULL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${CSPROJ_IMPORT_NAME}")
+#IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+#  CREATE_IMPORT_CSPROJ("ARM;x86" "arm_phone;x86_phone" ".;." "${CSPROJ_IMPORT_FULL_PATH}")
+#  INSTALL(
+#    FILES
+#	"${CSPROJ_IMPORT_FULL_PATH}"
+#    DESTINATION .
+#    COMPONENT main
+#    )
+#ELSEIF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore")
+#  CREATE_IMPORT_CSPROJ("x64;x86" "x64;x86" ".;." "${CSPROJ_IMPORT_FULL_PATH}")
+#  INSTALL(
+#    FILES
+#    "${CSPROJ_IMPORT_FULL_PATH}"
+#    DESTINATION .
+#    COMPONENT main
+#    )
+#ENDIF()
 
 GET_TARGET_PROPERTY(CVEXTERN_OUTPUT_NAME cvextern OUTPUT_NAME)
 LIST(APPEND OPENCV_LIBRARY_OUTPUT_NAMES ${CVEXTERN_OUTPUT_NAME})
@@ -705,7 +707,7 @@ IF (ANDROID)
 	"Solution/Android/nuget.config"
 	"Solution/Android/components.config"
     DESTINATION "Solution/Android"
-    COMPONENT main
+    COMPONENT libs
     )
   INSTALL(
     FILES
@@ -713,13 +715,13 @@ IF (ANDROID)
 	"Emgu.CV.snk"
 	"${LICENSE_FILE_NAME}"
     DESTINATION .
-    COMPONENT main
+    COMPONENT libs
     )
   INSTALL(
     FILES
     "opencv/LICENSE"
     DESTINATION "opencv"
-    COMPONENT main
+    COMPONENT libs
     )
 ELSEIF (WIN32)
   IF(NETFX_CORE)
@@ -1100,6 +1102,7 @@ ELSE(NETFX_CORE) #WIN32 and not NETFX_CORE
 	PATTERN "iOS" EXCLUDE
 	PATTERN "Windows.Phone" EXCLUDE
 	PATTERN "Windows.Store" EXCLUDE
+	PATTERN "CrossPlatform" EXCLUDE
   )
   INSTALL(
     DIRECTORY
@@ -1123,6 +1126,7 @@ ELSE(NETFX_CORE) #WIN32 and not NETFX_CORE
 	PATTERN "iOS" EXCLUDE
 	PATTERN "Windows.Phone" EXCLUDE
 	PATTERN "Windows.Store" EXCLUDE
+	PATTERN "CrossPlatform" EXCLUDE
     )
 	
   # ----------------------------------------------------------------------------
@@ -1184,7 +1188,7 @@ INSTALL(
 # ----------------------------------------------------------------------------
 
 set(CPACK_COMPONENTS_ALL 
-  main #opencv components 
+  libs #opencv components 
   emgucv_binary 
   emgucv_source
   emgucv_example_source
@@ -1261,9 +1265,9 @@ set(CPACK_COMPONENT_MAIN_DISPLAY_NAME "OpenCV Library ${EMGUCV_ARCH}")
 set(CPACK_COMPONENT_MAIN_REQUIRED ON)
 set(CPACK_COMPONENT_EMGUCV_BINARY_DISPLAY_NAME "Emgu CV (${EMGUCV_ARCH} Binary)")
 set(CPACK_COMPONENT_EMGUCV_BINARY_REQUIRED ON)
-set(CPACK_COMPONENT_EMGUCV_BINARY_DEPENDS main)
+set(CPACK_COMPONENT_EMGUCV_BINARY_DEPENDS libs)
 set(CPACK_COMPONENT_EMGUCV_SOURCE_DISPLAY_NAME "Emgu CV (Source)")
-set(CPACK_COMPONENT_EMGUCV_SOURCE_DEPENDS main)
+set(CPACK_COMPONENT_EMGUCV_SOURCE_DEPENDS libs)
 set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DISPLAY_NAME "Emgu CV Examples (Source)")
 set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
 
