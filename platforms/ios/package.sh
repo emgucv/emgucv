@@ -78,8 +78,8 @@ mkdir -p ios-package/bin
 cp ../../Emgu.CV.World/bin/Release/Emgu.CV.World.IOS.dll ios-package/bin
 cp ../../Emgu.CV.License.txt ios-package
 #gitversion=$(git log --oneline | wc -l | tr -d " ")
-emgucvversion=${cat emgucv.version.txt)
+emgucvversion=$(cat ../../emgucv.version.txt)
 cd ios-package
-zip -r libemgucv-ios-unified-$emgucvversion *
+zip -r libemgucv-ios-unified-$emgucvversion.zip *
 mv *.zip ../
 cd ..
