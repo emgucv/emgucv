@@ -535,59 +535,58 @@ SET(ENTRYPOINT_MODULES_STRING "public static List<String> OpenCVModuleList = new
       };
 ")
 
-MACRO(CREATE_IMPORT_CSPROJ platforms folders dest_folders msbuild_import_file_name)
-  SET (MSBUILD_IMPORT "<?xml version=\"1.0\" encoding=\"utf-8\"?>
-<Project ToolsVersion=\"12.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">
-  <PropertyGroup>
-  <OpenCVBinaryDir>..\\..\\bin</OpenCVBinaryDir>
-  </PropertyGroup>
-  <Choose>
-  ")
-  SET(PLATFORM_NAMES ${platforms})
-  SET(FOLDER_NAMES ${folders})
-  SET(DEST_FOLDER_NAMES ${dest_folders})
-  LIST(LENGTH PLATFORM_NAMES PROPERTY_COUNT)
-  
-  MESSAGE(STATUS "platforms: ${PLATFORM_NAMES}")
-  MESSAGE(STATUS "folders: ${FOLDER_NAMES}")
-  math(EXPR idx "${PROPERTY_COUNT} - 1")
-  MESSAGE(STATUS "idx: ${idx}")
-  FOREACH(val RANGE ${idx})
-    MESSAGE(STATUS "val: ${val}")
-    LIST(GET PLATFORM_NAMES ${val} PLATFORM_NAME)
-    LIST(GET FOLDER_NAMES ${val} FOLDER_NAME)
-	LIST(GET DEST_FOLDER_NAMES ${val} DEST_FOLDER_NAME)
-    MESSAGE(STATUS "PLATFORM_NAME: ${PLATFORM_NAME}")
-	MESSAGE(STATUS "FOLDER_NAME: ${FOLDER_NAME}")
-    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}  <When Condition=\" '$(Platform)'=='${PLATFORM_NAME}' \">
-  <ItemGroup>")  
-  SET(DEST_SUBFOLDER_PATH "${DEST_FOLDER_NAME}\\\\")
-  IF("${DEST_FOLDER_NAME}" STREQUAL ".")
-    SET(DEST_SUBFOLDER_PATH "")
-  ENDIF()
-  FOREACH(OPENCV_LIBRARY_OUTPUT_NAME ${OPENCV_LIBRARY_OUTPUT_NAMES})
-    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
-  <Content Include=\"\$(OpenCVBinaryDir)\\${FOLDER_NAME}\\${OPENCV_LIBRARY_OUTPUT_NAME}.dll\">
-    <Link>${DEST_SUBFOLDER_PATH}${OPENCV_LIBRARY_OUTPUT_NAME}.dll</Link>
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>")
-  ENDFOREACH()
-	
-	SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}  
-  <Content Include=\"\$(OpenCVBinaryDir)\\${FOLDER_NAME}\\cvextern.dll\">
-    <Link>${DEST_SUBFOLDER_PATH}cvextern.dll</Link>
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-	</ItemGroup>
-  </When>")
-  ENDFOREACH()
-  SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}
-  </Choose>
-</Project>
-") 
-  #SET(MSBUILD_IMPORT_FILENAME ${CMAKE_CURRENT_SOURCE_DIR}/import.csproj)
-  FILE(WRITE ${msbuild_import_file_name} ${MSBUILD_IMPORT})
-ENDMACRO()
+#MACRO(CREATE_IMPORT_CSPROJ platforms folders dest_folders msbuild_import_file_name)
+#  SET (MSBUILD_IMPORT "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+#<Project ToolsVersion=\"12.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">
+#3  <PropertyGroup>
+#  <OpenCVBinaryDir>..\\..\\bin</OpenCVBinaryDir>
+#  </PropertyGroup>
+#  <Choose>
+#  ")
+#  SET(PLATFORM_NAMES ${platforms})
+#  SET(FOLDER_NAMES ${folders})
+#  SET(DEST_FOLDER_NAMES ${dest_folders})
+#  LIST(LENGTH PLATFORM_NAMES PROPERTY_COUNT)
+#  
+#  MESSAGE(STATUS "platforms: ${PLATFORM_NAMES}")
+#  MESSAGE(STATUS "folders: ${FOLDER_NAMES}")
+#  math(EXPR idx "${PROPERTY_COUNT} - 1")
+#  MESSAGE(STATUS "idx: ${idx}")
+#  FOREACH(val RANGE ${idx})
+#    MESSAGE(STATUS "val: ${val}")
+#    LIST(GET PLATFORM_NAMES ${val} PLATFORM_NAME)
+#    LIST(GET FOLDER_NAMES ${val} FOLDER_NAME)
+#	LIST(GET DEST_FOLDER_NAMES ${val} DEST_FOLDER_NAME)
+#    MESSAGE(STATUS "PLATFORM_NAME: ${PLATFORM_NAME}")
+#	MESSAGE(STATUS "FOLDER_NAME: ${FOLDER_NAME}")
+#    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}  <When Condition=\" '$(Platform)'=='${PLATFORM_NAME}' \">
+#  <ItemGroup>")  
+#  SET(DEST_SUBFOLDER_PATH "${DEST_FOLDER_NAME}\\\\")
+#  IF("${DEST_FOLDER_NAME}" STREQUAL ".")
+#    SET(DEST_SUBFOLDER_PATH "")
+#  ENDIF()
+#  FOREACH(OPENCV_LIBRARY_OUTPUT_NAME ${OPENCV_LIBRARY_OUTPUT_NAMES})
+#    SET (MSBUILD_IMPORT "${MSBUILD_IMPORT} 
+#  <Content Include=\"\$(OpenCVBinaryDir)\\${FOLDER_NAME}\\${OPENCV_LIBRARY_OUTPUT_NAME}.dll\">
+#    <Link>${DEST_SUBFOLDER_PATH}${OPENCV_LIBRARY_OUTPUT_NAME}.dll</Link>
+#    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+#  </Content>")
+#  ENDFOREACH()
+#	
+#	SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}  
+#  <Content Include=\"\$(OpenCVBinaryDir)\\${FOLDER_NAME}\\cvextern.dll\">
+#    <Link>${DEST_SUBFOLDER_PATH}cvextern.dll</Link>
+#    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+#  </Content>
+#	</ItemGroup>
+#  </When>")
+#  ENDFOREACH()
+#  SET (MSBUILD_IMPORT "${MSBUILD_IMPORT}
+#  </Choose>
+#</Project>
+#") 
+#  FILE(WRITE ${msbuild_import_file_name} ${MSBUILD_IMPORT})
+#ENDMACRO()
 
 #SET(CSPROJ_IMPORT_NAME "import.csproj")
 #SET(CSPROJ_IMPORT_FULL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${CSPROJ_IMPORT_NAME}")

@@ -163,29 +163,29 @@
       </PropertyGroup>
     </When>
     <!-- Android -->
-    <When Condition="('$(AndroidSupportedAbis)'!='')">
+    <When Condition="('$(AndroidSupportedAbis)'!='') OR '$(ProjectTypeGuids)'=='{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
 	  <PropertyGroup>
-        <EmguCVLinkTarget Condition="'$(AndroidApplication)'=='True'">Xamarin Android App</EmguCVLinkTarget>
-		<EmguCVLinkTarget Condition="'$(AndroidApplication)'!='True'">Xamarin Android Library</EmguCVLinkTarget>
+        <EmguCVLinkTarget Condition="('$(AndroidApplication)'=='True' OR '$(AndroidApplication)'=='true')">Xamarin Android App</EmguCVLinkTarget>
+		<EmguCVLinkTarget Condition="!('$(AndroidApplication)'=='True' OR '$(AndroidApplication)'=='true')">Xamarin Android Library</EmguCVLinkTarget>
 		
 		<EmguCVNativeArmeabi>$(EmguCVDir)..\libs\armeabi\libcvextern.so</EmguCVNativeArmeabi>
-		<EmguCVBuildAndroidArmeabi Condition="$(AndroidSupportedAbis.Contains('armeabi%3')) OR $(AndroidSupportedAbis.EndsWith('armeabi'))">True</EmguCVBuildAndroidArmeabi>
+		<EmguCVBuildAndroidArmeabi Condition="$(AndroidSupportedAbis.Contains('armeabi%3')) OR $(AndroidSupportedAbis.EndsWith('armeabi')) OR '$(AndroidSupportedAbis)'==''">True</EmguCVBuildAndroidArmeabi>
 		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND !Exists('$(EmguCVNativeArmeabi)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi is targeted, but file $(EmguCVNativeArmeabi) is missing.</EmguCVErrorMessage>
 		
 		<EmguCVNativeArmeabiv7a>$(EmguCVDir)..\libs\armeabi-v7a\libcvextern.so</EmguCVNativeArmeabiv7a>
-		<EmguCVBuildAndroidArmeabiv7a Condition="$(AndroidSupportedAbis.Contains('armeabi-v7a')) OR $(AndroidSupportedAbis.EndsWith('armeabi-v7a'))">True</EmguCVBuildAndroidArmeabiv7a>
+		<EmguCVBuildAndroidArmeabiv7a Condition="$(AndroidSupportedAbis.Contains('armeabi-v7a')) OR $(AndroidSupportedAbis.EndsWith('armeabi-v7a')) OR '$(AndroidSupportedAbis)'==''">True</EmguCVBuildAndroidArmeabiv7a>
 		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND !Exists('$(EmguCVNativeArmeabiv7a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi-v7a is targeted, but file $(EmguCVNativeArmeabiv7a) is missing.</EmguCVErrorMessage>
 		
-		<EmguCVNativeArm64v8a>$(EmguCVDir)..\libs\armeabi-v7a\libcvextern.so</EmguCVNativeArm64v8a>
-		<EmguCVBuildAndroidArm64v8a Condition="$(AndroidSupportedAbis.Contains('arm64-v8a%3')) OR $(AndroidSupportedAbis.EndsWith('arm64-v8a'))">True</EmguCVBuildAndroidArm64v8a>
+		<EmguCVNativeArm64v8a>$(EmguCVDir)..\libs\arm64-v8a\libcvextern.so</EmguCVNativeArm64v8a>
+		<EmguCVBuildAndroidArm64v8a Condition="$(AndroidSupportedAbis.Contains('arm64-v8a%3')) OR $(AndroidSupportedAbis.EndsWith('arm64-v8a')) OR '$(AndroidSupportedAbis)'==''">True</EmguCVBuildAndroidArm64v8a>
 		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND !Exists('$(EmguCVNativeArm64v8a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Arm64-v8a is targeted, but file $(EmguCVNativeArm64v8a) is missing.</EmguCVErrorMessage>
 		
 		<EmguCVNativex86>$(EmguCVDir)..\libs\x86\libcvextern.so</EmguCVNativex86>
-		<EmguCVBuildAndroidx86 Condition="$(AndroidSupportedAbis.Contains('x86%3')) OR $(AndroidSupportedAbis.EndsWith('x86'))">True</EmguCVBuildAndroidx86>
+		<EmguCVBuildAndroidx86 Condition="$(AndroidSupportedAbis.Contains('x86%3')) OR $(AndroidSupportedAbis.EndsWith('x86')) OR '$(AndroidSupportedAbis)'==''">True</EmguCVBuildAndroidx86>
 		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidx86)'=='True' AND !Exists('$(EmguCVNativex86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86 is targeted, but file $(EmguCVNativex86) is missing.</EmguCVErrorMessage>
 		
 		<EmguCVNativex8664>$(EmguCVDir)..\libs\x86_64\libcvextern.so</EmguCVNativex8664>
-		<EmguCVBuildAndroidx8664 Condition="$(AndroidSupportedAbis.Contains('x86_64%3')) OR $(AndroidSupportedAbis.EndsWith('x86_64'))">True</EmguCVBuildAndroidx8664>
+		<EmguCVBuildAndroidx8664 Condition="$(AndroidSupportedAbis.Contains('x86_64%3')) OR $(AndroidSupportedAbis.EndsWith('x86_64')) OR '$(AndroidSupportedAbis)'==''">True</EmguCVBuildAndroidx8664>
 		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND !Exists('$(EmguCVNativex8664)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86_64 is targeted, but file $(EmguCVNativex8664) is missing.</EmguCVErrorMessage>
       </PropertyGroup>
       <!-- armeabi -->
