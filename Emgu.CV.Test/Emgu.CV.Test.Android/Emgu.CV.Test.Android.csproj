@@ -173,31 +173,31 @@
     <AndroidAsset Include="..\stitch4.jpg">
       <Link>Assets\stitch4.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.traineddata">
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
       <Link>tessdata\eng.traineddata</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.tesseract_cube.nn">
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.tesseract_cube.nn">
       <Link>tessdata\eng.tesseract_cube.nn</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.word-freq">
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.word-freq">
       <Link>tessdata\eng.cube.word-freq</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.size">
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.size">
       <Link>tessdata\eng.cube.size</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.params">
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.params">
       <Link>tessdata\eng.cube.params</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.nn">
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.nn">
       <Link>tessdata\eng.cube.nn</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.lm">
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.lm">
       <Link>tessdata\eng.cube.lm</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.fold">
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.fold">
       <Link>tessdata\eng.cube.fold</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.bigrams">
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.bigrams">
       <Link>tessdata\eng.cube.bigrams</Link>
     </AndroidAsset>
   </ItemGroup>

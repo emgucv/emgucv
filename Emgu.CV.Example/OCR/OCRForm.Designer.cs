@@ -38,10 +38,10 @@
          this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.loadLanguageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-         this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.ocrTextBox = new System.Windows.Forms.TextBox();
          this.openImageFileDialog = new System.Windows.Forms.OpenFileDialog();
          this.openLanguageFileDialog = new System.Windows.Forms.OpenFileDialog();
+         this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.Panel2.SuspendLayout();
          this.splitContainer1.SuspendLayout();
@@ -152,15 +152,6 @@
          this.splitContainer2.SplitterDistance = 465;
          this.splitContainer2.TabIndex = 0;
          // 
-         // imageBox1
-         // 
-         this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.imageBox1.Location = new System.Drawing.Point(0, 0);
-         this.imageBox1.Name = "imageBox1";
-         this.imageBox1.Size = new System.Drawing.Size(465, 504);
-         this.imageBox1.TabIndex = 2;
-         this.imageBox1.TabStop = false;
-         // 
          // ocrTextBox
          // 
          this.ocrTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -180,7 +171,16 @@
          // openLanguageFileDialog
          // 
          this.openLanguageFileDialog.DefaultExt = "traineddata";
-         this.openLanguageFileDialog.Filter = "\"tesseract language file|*.traineddata|All files|*.*\"";
+         this.openLanguageFileDialog.Filter = "tesseract language file|*.traineddata|All files|*.*";
+         // 
+         // imageBox1
+         // 
+         this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.imageBox1.Location = new System.Drawing.Point(0, 0);
+         this.imageBox1.Name = "imageBox1";
+         this.imageBox1.Size = new System.Drawing.Size(465, 504);
+         this.imageBox1.TabIndex = 2;
+         this.imageBox1.TabStop = false;
          // 
          // OCRForm
          // 

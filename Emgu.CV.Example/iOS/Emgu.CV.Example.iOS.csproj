@@ -160,31 +160,31 @@
     <Content Include="..\PedestrianDetection\pedestrian.png">
       <Link>pedestrian.png</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.bigrams">
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.bigrams">
       <Link>tessdata\eng.cube.bigrams</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.fold">
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.fold">
       <Link>tessdata\eng.cube.fold</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.lm">
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.lm">
       <Link>tessdata\eng.cube.lm</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.nn">
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.nn">
       <Link>tessdata\eng.cube.nn</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.params">
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.params">
       <Link>tessdata\eng.cube.params</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.size">
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.size">
       <Link>tessdata\eng.cube.size</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.cube.word-freq">
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.word-freq">
       <Link>tessdata\eng.cube.word-freq</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.tesseract_cube.nn">
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.tesseract_cube.nn">
       <Link>tessdata\eng.tesseract_cube.nn</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.OCR\tessdata\eng.traineddata">
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
       <Link>tessdata\eng.traineddata</Link>
     </Content>
     <Content Include="..\LicensePlateRecognition\license-plate.jpg">

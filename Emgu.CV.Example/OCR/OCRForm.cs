@@ -21,8 +21,28 @@ namespace OCR
       public OCRForm()
       {
          InitializeComponent();
-         _ocr = new Tesseract("", "eng", OcrEngineMode.TesseractCubeCombined);
-         languageNameLabel.Text = "eng : tesseract + cube";
+         InitOcr("", "eng", OcrEngineMode.TesseractCubeCombined);
+        
+      }
+
+      private void InitOcr(String path, String lang, OcrEngineMode mode)
+      {
+         try
+         {
+            if (_ocr != null)
+            {
+               _ocr.Dispose();
+               _ocr = null;
+            }
+            _ocr = new Tesseract(path, lang, mode);
+            languageNameLabel.Text = String.Format("{0} : {1}", lang, mode.ToString());
+         }
+         catch (Exception e)
+         {
+            _ocr = null;
+            MessageBox.Show(e.Message, "Failed to initialize tesseract OCR engine", MessageBoxButtons.OK);
+            languageNameLabel.Text = "Failed to initialize tesseract OCR engine";
+         }
       }
 
       private void loadImageButton_Click(object sender, EventArgs e)
@@ -59,12 +79,12 @@ namespace OCR
       private void loadLanguageToolStripMenuItem_Click(object sender, EventArgs e)
       {
          if (openLanguageFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-         {
-            _ocr.Dispose();
+         {            
             string path = Path.GetDirectoryName(openLanguageFileDialog.FileName);
             string lang =  Path.GetFileNameWithoutExtension(openLanguageFileDialog.FileName).Split('.')[0];
-            _ocr = new Tesseract(path, lang, OcrEngineMode.Default);
-            languageNameLabel.Text = String.Format("{0} : tesseract", lang);
+
+            InitOcr(path, lang, OcrEngineMode.Default);
+            
          }
       }
    }

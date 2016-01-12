@@ -206,7 +206,12 @@ namespace Emgu.CV.OCR
          /*if (!IsEngineModeSupported(mode))
             throw new ArgumentException(String.Format("The Ocr engine mode {0} is not supported in tesseract v{1}", mode, Version));*/
          int initResult = OcrInvoke.TessBaseAPIInit(_ptr, dataPath, language, mode);
-         if (initResult != 0) throw new ArgumentException(String.Format("Unable to create ocr model using Path {0} and language {1}.", dataPath, language));
+         if (initResult != 0)
+         {
+            if (dataPath.Equals(String.Empty))
+               dataPath = Path.GetFullPath(".");
+            throw new ArgumentException(String.Format("Unable to create ocr model using Path '{0}' and language '{1}'.", dataPath, language));
+         }
       }
 
       /// <summary>
