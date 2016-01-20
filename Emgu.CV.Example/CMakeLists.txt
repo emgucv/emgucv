@@ -4,6 +4,187 @@
 
 IF(EMGU_CV_EXAMPLE_BUILD)
   IF(NETFX_CORE)
+	  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+	    # ----------------------------------------------------------------------------
+		#  The example files
+		# ----------------------------------------------------------------------------
+
+		INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/WindowsPhoneApp/"
+		DESTINATION Emgu.CV.Example/WindowsPhoneApp/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "*.cs"
+		PATTERN "Common/*.xaml"
+		PATTERN "Common/*.txt"
+		PATTERN "Common/*.cs"
+		PATTERN "DataModel/*.json"
+		PATTERN "DataModel/*.cs"
+		PATTERN "Strings/en-US/*.resw"
+		PATTERN "*.csproj"
+		PATTERN "*.appxmanifest"
+		PATTERN "*.xaml"
+		PATTERN "*.xml"
+		PATTERN "packages.config"
+		PATTERN "Assets/*.png"  
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "bin" EXCLUDE
+		PATTERN "Android" EXCLUDE
+		PATTERN "iOS" EXCLUDE
+		PATTERN "Windows.Store" EXCLUDE
+		PATTERN "VS2013-2015" EXCLUDE
+		PATTERN "CrossPlatform" EXCLUDE
+		)
+		INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/FaceDetection/"
+		DESTINATION Emgu.CV.Example/FaceDetection/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "DetectFace.cs" 
+		PATTERN "lena.jpg"  
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "bin" EXCLUDE
+		PATTERN "Android" EXCLUDE
+		PATTERN "iOS" EXCLUDE
+		PATTERN "Windows.Store" EXCLUDE
+		PATTERN "VS2013-2015" EXCLUDE
+		PATTERN "CrossPlatform" EXCLUDE
+		)
+		INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/PlanarSubdivision/"
+		DESTINATION Emgu.CV.Example/PlanarSubdivision/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "DrawSubdivision.cs" 
+		PATTERN "PedestrianDetection/FindPedestrian.cs" 
+		PATTERN "PedestrianDetection/pedestrian.png" 
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "bin" EXCLUDE
+		)
+		INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/PedestrianDetection/"
+		DESTINATION Emgu.CV.Example/PedestrianDetection/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "FindPedestrian.cs" 
+		PATTERN "pedestrian.png" 
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "bin" EXCLUDE
+		)
+		INSTALL(
+		DIRECTORY
+		${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/
+		DESTINATION Emgu.CV.Example/XamarinForms
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "*.cs"
+		PATTERN "*.csproj"
+		PATTERN "*.config"
+		PATTERN "*.shproj"
+		PATTERN "*.Xamarin"
+		PATTERN "*.projitems"
+		PATTERN "*.axml"
+		PATTERN "*.xaml"
+		PATTERN "*.xml"
+		PATTERN "*.txt"
+		PATTERN "*.png"
+		PATTERN "*.dll"
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "XamarinForms.Droid" EXCLUDE
+		PATTERN "WindowsUniversal/*" EXCLUDE
+		PATTERN "WindowsUniversal81/Windows" EXCLUDE
+		PATTERN "XamarinForms.iOS" EXCLUDE
+		)
+	  ELSE() #windows store
+		# ----------------------------------------------------------------------------
+		#  The example files
+		# ----------------------------------------------------------------------------
+		INSTALL(
+		DIRECTORY
+		${CMAKE_CURRENT_SOURCE_DIR}/WindowsStoreCameraApp/
+		DESTINATION Emgu.CV.Example/WindowsStoreCameraApp
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "*.cs"
+		PATTERN "Properties/*.cs"
+		PATTERN "Common/*.xaml"
+		PATTERN "*.csproj"
+		PATTERN "*.appxmanifest"
+		PATTERN "*.xaml"
+		PATTERN "packages.config"
+		PATTERN "Assets/*.png"  
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		)
+		INSTALL(
+		DIRECTORY
+		${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/
+		DESTINATION Emgu.CV.Example/XamarinForms
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "*.cs"
+		PATTERN "*.csproj"
+		PATTERN "*.config"
+		PATTERN "*.shproj"
+		PATTERN "*.Xamarin"
+		PATTERN "*.projitems"
+		PATTERN "*.axml"
+		PATTERN "*.xaml"
+		PATTERN "*.xml"
+		PATTERN "*.txt"
+		PATTERN "*.png"
+		PATTERN "*.dll"
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "XamarinForms.Droid" EXCLUDE
+		PATTERN "WindowsPhone" EXCLUDE
+		PATTERN "XamarinForms.iOS" EXCLUDE
+		)
+	  ENDIF()
   ELSEIF(ANDROID)
     INSTALL(
   DIRECTORY

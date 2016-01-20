@@ -969,16 +969,6 @@ INSTALL(
 
 IF(NETFX_CORE)    
   IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-#    INSTALL(
-#    DIRECTORY
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Solution
-#    DESTINATION .
-#    COMPONENT emgucv_source
-#    FILES_MATCHING 
-#    PATTERN "Emgu.CV.Windows.Phone.sln"
-#    PATTERN ".git" EXCLUDE
-#    PATTERN "bin" EXCLUDE
-#  )  
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Solution
@@ -994,44 +984,12 @@ IF(NETFX_CORE)
 	PATTERN "Windows.Phone/components.config"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
+	PATTERN "Android" EXCLUDE
+	PATTERN "iOS" EXCLUDE
+	PATTERN "Windows.Store" EXCLUDE
+	PATTERN "VS2013-2015" EXCLUDE
+	PATTERN "CrossPlatform" EXCLUDE
     )
-	
-  # ----------------------------------------------------------------------------
-  #  The example files
-  # ----------------------------------------------------------------------------
-  INSTALL(
-    DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
-    DESTINATION .
-    COMPONENT emgucv_example_source
-    FILES_MATCHING 
-    PATTERN "WindowsPhoneApp/*.cs"
-	PATTERN "WindowsPhoneApp/Properties/*.cs"
-	PATTERN "WindowsPhoneApp/Common/*.xaml"
-    PATTERN "WindowsPhoneApp/Common/*.txt"
-	PATTERN "WindowsPhoneApp/Common/*.cs"
-	PATTERN "WindowsPhoneApp/DataModel/*.json"
-	PATTERN "WindowsPhoneApp/DataModel/*.cs"
-    PATTERN "WindowsPhoneApp/Strings/en-US/*.resw"
-    PATTERN "WindowsPhoneApp/*.csproj"
-    PATTERN "WindowsPhoneApp/*.appxmanifest"
-    PATTERN "WindowsPhoneApp/*.xaml"
-	PATTERN "WindowsPhoneApp/*.xml"
-	PATTERN "WindowsPhoneApp/packages.config"
-    PATTERN "WindowsPhoneApp/Assets/*.png"  
-	PATTERN "FaceDetection/DetectFace.cs" 
-    PATTERN "FaceDetection/lena.jpg" 
-	PATTERN "PlanarSubdivision/DrawSubdivision.cs" 
-	PATTERN "PedestrianDetection/FindPedestrian.cs" 
-	PATTERN "PedestrianDetection/pedestrian.png" 
-    PATTERN ".git" EXCLUDE
-    PATTERN "obj" EXCLUDE
-    PATTERN "CMake*" EXCLUDE
-    PATTERN "Release" EXCLUDE
-    PATTERN "Debug" EXCLUDE
-	PATTERN "RelWithDebInfo" EXCLUDE
-    PATTERN "*.dir" EXCLUDE
-  )
   ELSE() #Windows Store
   INSTALL(
     DIRECTORY
@@ -1048,6 +1006,11 @@ IF(NETFX_CORE)
 	PATTERN "Windows.Store/packages/repositories.config"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
+	PATTERN "Android" EXCLUDE
+	PATTERN "iOS" EXCLUDE
+	PATTERN "Windows.Phone" EXCLUDE
+	PATTERN "VS2013-2015" EXCLUDE
+	PATTERN "CrossPlatform" EXCLUDE
   )  
   INSTALL(
     DIRECTORY
@@ -1058,35 +1021,14 @@ IF(NETFX_CORE)
     PATTERN "Emgu.CV.Example.Windows.Store.sln"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
+	PATTERN "Android" EXCLUDE
+	PATTERN "iOS" EXCLUDE
+	PATTERN "Windows.Phone" EXCLUDE
+	PATTERN "VS2013-2015" EXCLUDE
+	PATTERN "CrossPlatform" EXCLUDE
     )
-	
-  # ----------------------------------------------------------------------------
-  #  The example files
-  # ----------------------------------------------------------------------------
-  INSTALL(
-    DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
-    DESTINATION .
-    COMPONENT emgucv_example_source
-    FILES_MATCHING 
-    PATTERN "WindowsStoreCameraApp/*.cs"
-	PATTERN "WindowsStoreCameraApp/Properties/*.cs"
-	PATTERN "WindowsStoreCameraApp/Common/*.xaml"
-    PATTERN "WindowsStoreCameraApp/*.csproj"
-    PATTERN "WindowsStoreCameraApp/*.appxmanifest"
-    PATTERN "WindowsStoreCameraApp/*.xaml"
-	PATTERN "WindowsStoreCameraApp/packages.config"
-    PATTERN "WindowsStoreCameraApp/Assets/*.png"  
-    PATTERN ".git" EXCLUDE
-    PATTERN "obj" EXCLUDE
-    PATTERN "CMake*" EXCLUDE
-    PATTERN "Release" EXCLUDE
-    PATTERN "Debug" EXCLUDE
-	PATTERN "RelWithDebInfo" EXCLUDE
-    PATTERN "*.dir" EXCLUDE
-  )
   ENDIF()
-ELSE(NETFX_CORE) #WIN32 and not NETFX_CORE
+ELSE() #WIN32 and not NETFX_CORE
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Solution

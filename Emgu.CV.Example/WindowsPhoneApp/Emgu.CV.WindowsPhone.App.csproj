@@ -106,7 +106,6 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <Import Project="..\..\import.csproj" />
   <ItemGroup>
     <Compile Include="..\FaceDetection\DetectFace.cs">
       <Link>DetectFace.cs</Link>

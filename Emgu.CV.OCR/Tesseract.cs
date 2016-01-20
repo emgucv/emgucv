@@ -208,8 +208,10 @@ namespace Emgu.CV.OCR
          int initResult = OcrInvoke.TessBaseAPIInit(_ptr, dataPath, language, mode);
          if (initResult != 0)
          {
+#if !NETFX_CORE
             if (dataPath.Equals(String.Empty))
                dataPath = Path.GetFullPath(".");
+#endif
             throw new ArgumentException(String.Format("Unable to create ocr model using Path '{0}' and language '{1}'.", dataPath, language));
          }
       }
