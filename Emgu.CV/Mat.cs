@@ -18,7 +18,7 @@ using Bitmap = Android.Graphics.Bitmap;
 #elif __IOS__
 using UIKit;
 using CoreGraphics;
-#elif NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
+#elif NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -264,7 +264,7 @@ namespace Emgu.CV
 
             if (this.IsEmpty) //failed to load in the first attempt
             {
-#if !NETFX_CORE
+#if !( NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR )
                if (File.Exists(fileName))
                {
                   //try again to see if this is a Unicode issue in the file name. 
@@ -815,7 +815,7 @@ namespace Emgu.CV
             }
          }
       }
-#elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
+#elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
       /// such that the image data is <b>shared</b> with Bitmap. 

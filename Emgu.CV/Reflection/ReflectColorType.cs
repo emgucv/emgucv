@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 
-#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#if UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 using UnityEngine;
 #elif NETFX_CORE
 using Windows.UI;

@@ -623,6 +623,8 @@ if(WIN32 AND WITH_FFMPEG)
   MESSAGE(STATUS "OPENCV_FFMPEG_OUTPUT_NAME: ${OPENCV_FFMPEG_OUTPUT_NAME}")
   LIST(APPEND OPENCV_LIBRARY_OUTPUT_NAMES ${OPENCV_FFMPEG_OUTPUT_NAME})
 endif()
+
+
 IF(TARGET_ARCH_64)
   SET(UNMANAGED_CODE_BITNESS "64")
 ELSE()
@@ -788,6 +790,17 @@ ELSEIF (WIN32)
 
   
   IF(NOT NETFX_CORE)
+  
+  if(WITH_FFMPEG)
+  
+  INSTALL(
+    FILES
+    "${UNMANAGED_LIBRARY_OUTPUT_PATH}/${OPENCV_FFMPEG_OUTPUT_NAME}.dll"
+    DESTINATION "bin/${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/"
+    COMPONENT libs
+    )
+	endif()
+
     # ----------------------------------------------------------------------------
     #  Install Debugger Visualizer
     # ----------------------------------------------------------------------------

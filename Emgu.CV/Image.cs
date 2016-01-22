@@ -11,7 +11,7 @@ using Emgu.CV.CvEnum;
 using Bitmap = Android.Graphics.Bitmap;
 #elif __IOS__
 using UIKit;
-#elif NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#elif NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -244,7 +244,7 @@ namespace Emgu.CV
       }
 #endif
 
-#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
       /// <summary>
       /// Obtain the image from the specific Bitmap
@@ -2618,7 +2618,7 @@ namespace Emgu.CV
       }
       #endregion
 
-#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
       //#region Conversion with Bitmap
       /// <summary>

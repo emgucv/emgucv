@@ -68,7 +68,7 @@ namespace Emgu.CV
    /// </summary>
    public interface IImage : IDisposable, ICloneable, IInputOutputArray
    {
-#if NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#if NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #elif __IOS__ 
       /// <summary>
       /// Convert this image to UIImage

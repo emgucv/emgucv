@@ -4,7 +4,7 @@
 
 using System;
 
-#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#if UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 using UnityEngine;
 #elif NETFX_CORE
 using Windows.UI;
@@ -19,7 +19,7 @@ namespace Emgu.CV
    {
       public DisplayColorAttribute(int blue, int green, int red)
       {
-#if ( UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#if UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
          _displayColor = new Color(red/255.0f, green/255.0f, blue/255.0f, 1.0f);
 #elif NETFX_CORE
          _displayColor = Color.FromArgb(255, (byte)red, (byte)green, (byte) blue);

@@ -4,7 +4,9 @@
 using System;
 using System.Text;
 using System.Xml;
+#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
 using System.Xml.Linq;
+#endif
 using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -18,7 +20,8 @@ namespace Emgu.Util
    /// </summary>
    public static class Toolbox
    {
-      #region xml serilization and deserialization
+#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
+#region xml serilization and deserialization
       /// <summary>
       /// Convert an object to an xml document
       /// </summary>
@@ -102,8 +105,8 @@ namespace Emgu.Util
          using (StringReader stringReader = new StringReader(xmlString))
             return (T) (new XmlSerializer(typeof(T))).Deserialize(stringReader);
       }
-      #endregion
-
+#endregion
+#endif
       /*
       /// <summary>
       /// Read a text file to an array of string, each row are separated using by the input separator
@@ -203,7 +206,7 @@ namespace Emgu.Util
       }
 #endif
 
-      #region memory copy
+#region memory copy
       /// <summary>
       /// Convert some generic vector to vector of Bytes
       /// </summary>
@@ -212,7 +215,7 @@ namespace Emgu.Util
       /// <returns>the byte vector</returns>
       public static Byte[] ToBytes<TData>(TData[] data)
       {
-#if NETFX_CORE 
+#if NETFX_CORE
          int size = Marshal.SizeOf<TData>() * data.Length;
 #else
          int size = Marshal.SizeOf(typeof(TData)) * data.Length;
@@ -422,7 +425,7 @@ namespace Emgu.Util
       public static extern void memcpy(IntPtr dest, IntPtr src, int len);
 #endif
        */
-      #endregion
+#endregion
 
       /// <summary>
       /// Maps the specified executable module into the address space of the calling process.
