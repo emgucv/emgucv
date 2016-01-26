@@ -219,3 +219,56 @@ void cveSolvePnPRansac(cv::_InputArray* objectPoints, cv::_InputArray* imagePoin
 {
    cv::solvePnPRansac(*objectPoints, *imagePoints, *cameraMatrix, distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(), *rvec, *tvec, useExtrinsicGuess, iterationsCount, reprojectionError, minInliersCount, inliers ? *inliers : (cv::OutputArray) cv::noArray(), flags);
 }
+
+/* Fisheye calibration */
+void cveFisheyeProjectPoints(cv::_InputArray* objectPoints, cv::_OutputArray* imagePoints, cv::_InputArray* rvec, cv::_InputArray* tvec,
+   cv::_InputArray* K, cv::_InputArray* D, double alpha, cv::_OutputArray* jacobian)
+{
+   cv::fisheye::projectPoints(*objectPoints, *imagePoints, *rvec, *tvec, *K, *D, alpha, jacobian ? *jacobian : (cv::OutputArray) cv::noArray());
+}
+
+void cveFisheyeDistortPoints(cv::_InputArray* undistored, cv::_OutputArray* distorted, cv::_InputArray* K, cv::_InputArray* D, double alpha)
+{
+   cv::fisheye::distortPoints(*undistored, *distorted, *K, *D, alpha);
+}
+
+void cveFisheyeUndistorPoints(cv::_InputArray* distorted, cv::_OutputArray* undistorted, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P)
+{
+   cv::fisheye::undistortPoints(*distorted, *undistorted, *K, *D, R ? *R : (cv::InputArray) cv::noArray(), P ? *P : (cv::InputArray) cv::noArray());
+}
+
+void cveFisheyeInitUndistorRectifyMap(cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P, CvSize* size, int m1Type, cv::_OutputArray* map1, cv::_OutputArray* map2)
+{
+   cv::fisheye::initUndistortRectifyMap(*K, *D, *R, *P, *size, m1Type, *map1, *map2);
+}
+
+void cveFisheyeUndistorImage(cv::_InputArray* distorted, cv::_OutputArray* undistored, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* Knew, CvSize* newSize)
+{
+   cv::fisheye::undistortImage(*distorted, *undistored, *K, *D, Knew ? *Knew : (cv::InputArray) cv::noArray(), *newSize);
+}
+
+void cveFisheyeEstimateNewCameraMatrixForUndistorRectify(cv::_InputArray* K, cv::_InputArray* D, CvSize* imageSize, cv::_InputArray* R, cv::_OutputArray* P, double balance, CvSize* newSize, double fovScale)
+{
+   cv::fisheye::estimateNewCameraMatrixForUndistortRectify(*K, *D, *imageSize, *R, *P, balance, *newSize, fovScale);
+}
+
+void cveFisheyeSteteoRectify(cv::_InputArray* K1, cv::_InputArray*D1, cv::_InputArray* K2, cv::_InputArray* D2, CvSize* imageSize,
+   cv::_InputArray* R, cv::_InputArray* tvec, cv::_OutputArray* R1, cv::_OutputArray* R2, cv::_OutputArray* P1, cv::_OutputArray* P2, cv::_OutputArray* Q, int flags,
+   CvSize* newImageSize, double balance, double fovScale)
+{
+   cv::fisheye::stereoRectify(*K1, *D1, *K2, *D2, *imageSize, *R, *tvec, *R1, *R2, *P1, *P2, *Q, flags, *newImageSize, balance, fovScale);
+}
+
+void cveFisheyeCalibrate(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, CvSize* imageSize,
+   cv::_InputOutputArray* K, cv::_InputOutputArray* D, cv::_OutputArray* rvecs, cv::_OutputArray* tvecs, int flags,
+   CvTermCriteria* criteria)
+{
+   cv::fisheye::calibrate(*objectPoints, *imagePoints, *imageSize, *K, *D, *rvecs, *tvecs, flags, *criteria);
+}
+
+void cveFisheyeStereoCalibrate(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints1,
+   cv::_InputArray* imagePoints2, cv::_InputOutputArray* K1, cv::_InputOutputArray* D1, cv::_InputOutputArray* K2, cv::_InputOutputArray* D2,
+   CvSize* imageSize, cv::_OutputArray* R, cv::_OutputArray* T, int flags, CvTermCriteria* criteria)
+{
+   cv::fisheye::stereoCalibrate(*objectPoints, *imagePoints1, *imagePoints2, *K1, *D1, *K2, *D2, *imageSize, *R, *T, flags, *criteria);
+}
