@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2015 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
 IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
@@ -119,8 +119,9 @@ INSTALL(
   DESTINATION .
     COMPONENT emgucv_source
   FILES_MATCHING 
-	PATTERN "*.Android.proj"
+	PATTERN "*.Android.csproj"
 	PATTERN "*.cs"
+	PATTERN "tessdata"
     PATTERN "*.resx"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
