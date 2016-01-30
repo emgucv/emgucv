@@ -1,6 +1,10 @@
 pushd %~p0
 
 call remove_from_path PATH "C:\Program Files (x86)\Git\bin;"
+call remove_from_path PATH "C:\Anaconda2;"
+call remove_from_path PATH "C:\Anaconda2\MinGW\bin;"
+call remove_from_path PATH "C:\Anaconda2\Scripts;"
+call remove_from_path PATH "C:\Anaconda2\Library\bin;"
 
 cd ..\..\..
 cp -f opencv\platforms\android\android.toolchain.cmake android.toolchain.cmake
