@@ -96,7 +96,24 @@ ENDIF()
 IF(WIN32 OR APPLE OR ANDROID)
 IF(NETFX_CORE)
 IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-ELSE() #Windows Store
+#Windows Phone
+INSTALL(
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  DESTINATION .
+    COMPONENT emgucv_source
+  FILES_MATCHING 
+	PATTERN "*.Phone81.csproj"
+	PATTERN "tessdata/*"
+	PATTERN "*.cs"
+    PATTERN "*.resx"
+    PATTERN ".svn" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "CMakeFiles" EXCLUDE
+    PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+    )
+ELSE() 
+#Windows Store
 INSTALL(
   DIRECTORY
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -104,6 +121,7 @@ INSTALL(
     COMPONENT emgucv_source
   FILES_MATCHING 
 	PATTERN "*.Store.csproj"
+	PATTERN "tessdata/*"
 	PATTERN "*.cs"
     PATTERN "*.resx"
     PATTERN ".svn" EXCLUDE
@@ -129,6 +147,7 @@ INSTALL(
     PATTERN "${PROJECT_NAME}.dir" EXCLUDE
     )
 ELSE()
+#APPLE
 INSTALL(
   DIRECTORY
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -136,6 +155,7 @@ INSTALL(
     COMPONENT emgucv_source
   FILES_MATCHING 
     PATTERN "${PROJECT_NAME}.csproj"
+	PATTERN "tessdata/*"
     PATTERN "AssemblyInfo.cs"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
