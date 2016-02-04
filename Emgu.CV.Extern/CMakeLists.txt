@@ -1342,8 +1342,8 @@ ELSE()
   SET(TIFF_LIBRARY "")
 ENDIF()
 
-IF(WIN32)
-#always build from source on windows
+IF(WIN32 OR APPLE)
+#always build from source on windows / Mac
   MESSAGE(STATUS "Building zlib from source")
   ADD_DEPENDENCIES(${the_target} zlib)
   SET(ZLIB_INCLUDE_DIR "${OPENCV_SUBFOLDER}/3rdparty/zlib")
