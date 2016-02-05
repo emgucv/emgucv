@@ -961,9 +961,9 @@ file(GLOB extern_hdrs "${PROJECT_SOURCE_DIR}/*.h*")
 source_group("Src_extern" FILES ${extern_srcs})
 source_group("Include_extern" FILES ${extern_hdrs})
 
-IF(IOS)
-  LIST(APPEND extern_srcs "ios/divmodsi4.c")
-ENDIF()
+#IF(IOS)
+#  LIST(APPEND extern_srcs "ios/divmodsi4.c")
+#ENDIF()
 
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
   #MESSAGE("Retriveing source folder for project :  opencv_${CVEXTERN_OPTIONAL_DEP}")

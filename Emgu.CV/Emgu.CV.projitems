@@ -142,12 +142,14 @@
         <EmguCVLinkTarget>Xamarin iOS Native Binding Library</EmguCVLinkTarget>
 		<EmguCVNativeFile>$(EmguCVDir)PInvoke\iOS\libemgucv.a</EmguCVNativeFile>
 		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+		<EmguCVLinkWithFile>$(EmguCVDir)PInvoke\iOS\libemgucv.linkwith.cs</EmguCVLinkWithFile>
+		<EmguCVErrorMessage Condition="!Exists('$(EmguCVLinkWithFile)')"> This package do not contain necessary file for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVLinkWithFile) </EmguCVErrorMessage>
       </PropertyGroup>
       <ItemGroup>
         <ObjcBindingNativeLibrary Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')"/>
       </ItemGroup>
       <ItemGroup>
-        <Compile Include="$(EmguCVDir)PInvoke\iOS\libemgucv.linkwith.cs" Condition="Exists('$(EmguCVNativeFile)')">
+        <Compile Include="$(EmguCVLinkWithFile)" Condition="Exists('$(EmguCVLinkWithFile)')">
           <DependentUpon>libemgucv.a</DependentUpon>
         </Compile>
       </ItemGroup>
