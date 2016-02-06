@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-./build.sh $* -DWITH_PNG:BOOL=FALSE -DCMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++" -DCMAKE_EXE_LINKER_FLAGS="-std=c++11 -stdlib=libc++" 
+./build.sh $* -DWITH_PNG:BOOL=FALSE -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD="c++11" -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY="libc++" 
