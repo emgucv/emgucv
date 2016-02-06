@@ -21,11 +21,12 @@ namespace VideoSurveilance
 {
    public partial class VideoSurveilance : Form
    {
-      //private static MCvFont _font = new MCvFont(Emgu.CV.CvEnum.FontType.HersheyPlain, 1.0, 1.0);
+      
       private static Capture _cameraCapture;
       
       private static BackgroundSubtractor _fgDetector;
       private static Emgu.CV.Cvb.CvBlobDetector _blobDetector;
+      private static Emgu.CV.Cvb.CvTracks _tracker;
 
       public VideoSurveilance()
       {
@@ -47,7 +48,7 @@ namespace VideoSurveilance
 
          _fgDetector = new Emgu.CV.VideoSurveillance.BackgroundSubtractorMOG2();
          _blobDetector = new CvBlobDetector();
-         //_tracker = new BlobTrackerAuto<Bgr>();
+         _tracker = new CvTracks();
 
          Application.Idle += ProcessFrame;
       }
@@ -62,18 +63,20 @@ namespace VideoSurveilance
          #region use the BG/FG detector to find the forground mask
          Mat forgroundMask = new Mat();
          _fgDetector.Apply(smoothedFrame, forgroundMask);
-         
          #endregion
+
          CvBlobs blobs = new CvBlobs();
          _blobDetector.Detect(forgroundMask.ToImage<Gray, byte>(), blobs);
          blobs.FilterByArea(100, int.MaxValue);
-         //_tracker.Process(smoothedFrame, forgroundMask);
 
-         foreach (var pair in blobs)
+         float scale = (frame.Width + frame.Width)/2.0f;
+         _tracker.Update(blobs, 0.01 * scale, 5, 5);
+        
+         foreach (var pair in _tracker)
          {
-            CvBlob b = pair.Value;
+            CvTrack b = pair.Value;
             CvInvoke.Rectangle(frame, b.BoundingBox, new MCvScalar(255.0, 255.0, 255.0), 2);
-            //CvInvoke.PutText(frame,  blob.ID.ToString(), Point.Round(blob.Center), FontFace.HersheyPlain, 1.0, new MCvScalar(255.0, 255.0, 255.0));
+            CvInvoke.PutText(frame,  b.Id.ToString(), new Point((int)Math.Round(b.Centroid.X), (int)Math.Round(b.Centroid.Y)), FontFace.HersheyPlain, 1.0, new MCvScalar(255.0, 255.0, 255.0));
          }
 
          imageBox1.Image = frame;
