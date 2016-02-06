@@ -1,14 +1,5 @@
 ==================================================================
-To compile the source and(or) examples, follow the instructions below for your specific IDE: 
 
-1. Visual Studio 2005
-Solution files are located in 'Solution\VS2005_MonoDevelop' folder
+For Windows desktop development, Visual Studio Solution files are located in 'Solution\VS2013-2015' folder.
 
-2. Visual Studio 2008
-Solution files are located in 'Solution\VS2008' folder
-
-2. Visual Studio 2010-12
-Solution files are located in 'Solution\VS2010_12' folder
-
-3. MonoDevelop
-Solution files are located in 'Solution\VS2005_MonoDevelop' folder
+For Linux, you can use Monodevelop to open the Solution files.
