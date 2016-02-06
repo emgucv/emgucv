@@ -64,6 +64,8 @@ cp -r ../../tmp/Emgu.CV.Example/XamarinForms/XamarinForms.iOS/* ios-package/Emgu
 cp ../../opencv/data/haarcascades/haarcascade_eye.xml ios-package/opencv/data/haarcascades/haarcascade_eye.xml
 cp ../../opencv/data/haarcascades/haarcascade_frontalface_default.xml ios-package/opencv/data/haarcascades/haarcascade_frontalface_default.xml
 cp ../../CommonAssemblyInfo.cs ios-package
+cp ../../tmp/components.config ios-package
+cp ../../tmp/nuget.config ios-package
 find ./ios-package -type f -name CMakeList* -exec rm '{}' \;
 #find ./ios-package -type f -name *Android* -exec rm '{}' \;
 #find ./ios-package -type f -name *Windows.Store* -exec rm '{}' \;

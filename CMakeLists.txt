@@ -980,6 +980,14 @@ INSTALL(
   PATTERN "${PROJECT_NAME}.dir" EXCLUDE
   )
 
+INSTALL(
+    FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/nuget.config
+	${CMAKE_CURRENT_SOURCE_DIR}/components.config
+    DESTINATION .
+    COMPONENT emgucv_source
+  )
+  
 IF(NETFX_CORE)    
   IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
   INSTALL(
@@ -993,8 +1001,6 @@ IF(NETFX_CORE)
 	PATTERN "Windows.Phone/.nuget/NuGet.exe"
 	PATTERN "Windows.Phone/.nuget/NuGet.targets"
 	PATTERN "Windows.Phone/packages/repositories.config"
-	PATTERN "Windows.Phone/nuget.config"
-	PATTERN "Windows.Phone/components.config"
     PATTERN ".git" EXCLUDE
     PATTERN "bin" EXCLUDE
 	PATTERN "Android" EXCLUDE
@@ -1011,8 +1017,6 @@ IF(NETFX_CORE)
     COMPONENT emgucv_source
     FILES_MATCHING 
     PATTERN "Emgu.CV.Windows.Store.sln"
-	PATTERN "Windows.Store/nuget.config"
-	PATTERN "Windows.Store/components.config"
 	PATTERN "Windows.Store/.nuget/NuGet.Config"
 	PATTERN "Windows.Store/.nuget/NuGet.exe"
 	PATTERN "Windows.Store/.nuget/NuGet.targets"
