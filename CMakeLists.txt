@@ -700,18 +700,17 @@ IF (ANDROID)
 #  PATTERN ".git" EXCLUDE
 #  )
 #  ENDFOREACH()
-  
 
   INSTALL(
     FILES
     "Solution/Android/Emgu.CV.Android.sln"
-	"Solution/Android/nuget.config"
-	"Solution/Android/components.config"
     DESTINATION "Solution/Android"
     COMPONENT libs
     )
   INSTALL(
     FILES
+	"nuget.config"
+	"components.config"
     "CommonAssemblyInfo.cs" 
 	"Emgu.CV.snk"
 	"${LICENSE_FILE_NAME}"
