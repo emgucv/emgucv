@@ -4,7 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="7e4b1acc-2790-4999-8736-0cdfe1e8e8bf" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>WindowsUniversal.WindowsPhone</DisplayName>
-    <PublisherDisplayName>CANMING</PublisherDisplayName>
+    <PublisherDisplayName>EMGU Corporation</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>

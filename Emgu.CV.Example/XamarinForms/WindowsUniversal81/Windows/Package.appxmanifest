@@ -3,7 +3,7 @@
   <Identity Name="29efe617-634e-441c-a8af-bcd34163fd71" Publisher="CN=CANMING" Version="1.2.0.0" />
   <Properties>
     <DisplayName>WindowsUniversal.Windows</DisplayName>
-    <PublisherDisplayName>CANMING</PublisherDisplayName>
+    <PublisherDisplayName>EMGU Corporation</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
