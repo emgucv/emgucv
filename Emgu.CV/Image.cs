@@ -4061,14 +4061,22 @@ namespace Emgu.CV
       /// <returns>Count the non Zero elements for each channel</returns>
       public int[] CountNonzero()
       {
-         return
-             ForEachChannel<int>(delegate(IntPtr channel, int channelNumber)
-             {
-                using (Mat m = CvInvoke.CvArrToMat(channel))
-                {
-                   return CvInvoke.CountNonZero(m);
-                }
-             });
+         using (Mat m = CvInvoke.CvArrToMat(this))
+         {
+            if (NumberOfChannels == 1)
+               return new int[] { CvInvoke.CountNonZero(m) };
+            else
+            {
+               int[] result = new int[NumberOfChannels];
+               using (Mat tmp = new Mat())
+                  for (int i = 0; i < result.Length; i++)
+                  {
+                     CvInvoke.ExtractChannel(m, tmp, i);
+                     result[i] = CvInvoke.CountNonZero(tmp);
+                  }
+               return result;
+            }
+         }
       }
 
       /// <summary>

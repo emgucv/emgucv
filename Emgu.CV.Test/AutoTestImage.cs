@@ -1768,6 +1768,13 @@ namespace Emgu.CV.Test
       }
 
       [TestAttribute]
+      public void TestCountZero()
+      {
+         var image = new Image<Bgra, Byte>(100, 100);
+         int[] count = image.CountNonzero();
+      }
+
+      [TestAttribute]
       public void TestMorphologyClosing()
       {
          //draw some blobs
