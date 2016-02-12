@@ -4,45 +4,8 @@
 
 IF(EMGU_CV_EXAMPLE_BUILD)
   IF(NETFX_CORE)
-	  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-	    # ----------------------------------------------------------------------------
-		#  The example files
-		# ----------------------------------------------------------------------------
-
-		INSTALL(
-		DIRECTORY
-		"${CMAKE_CURRENT_SOURCE_DIR}/WindowsPhoneApp/"
-		DESTINATION Emgu.CV.Example/WindowsPhoneApp/
-		COMPONENT emgucv_example_source
-		FILES_MATCHING 
-		PATTERN "*.cs"
-		PATTERN "Common/*.xaml"
-		PATTERN "Common/*.txt"
-		PATTERN "Common/*.cs"
-		PATTERN "DataModel/*.json"
-		PATTERN "DataModel/*.cs"
-		PATTERN "Strings/en-US/*.resw"
-		PATTERN "*.csproj"
-		PATTERN "*.appxmanifest"
-		PATTERN "*.xaml"
-		PATTERN "*.xml"
-		PATTERN "packages.config"
-		PATTERN "Assets/*.png"  
-		PATTERN ".git" EXCLUDE
-		PATTERN "obj" EXCLUDE
-		PATTERN "CMake*" EXCLUDE
-		PATTERN "Release" EXCLUDE
-		PATTERN "Debug" EXCLUDE
-		PATTERN "RelWithDebInfo" EXCLUDE
-		PATTERN "*.dir" EXCLUDE
-		PATTERN "bin" EXCLUDE
-		PATTERN "Android" EXCLUDE
-		PATTERN "iOS" EXCLUDE
-		PATTERN "Windows.Store" EXCLUDE
-		PATTERN "VS2013-2015" EXCLUDE
-		PATTERN "CrossPlatform" EXCLUDE
-		)
-		INSTALL(
+  
+  		INSTALL(
 		DIRECTORY
 		"${CMAKE_CURRENT_SOURCE_DIR}/FaceDetection/"
 		DESTINATION Emgu.CV.Example/FaceDetection/
@@ -98,6 +61,44 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 		PATTERN "RelWithDebInfo" EXCLUDE
 		PATTERN "*.dir" EXCLUDE
 		PATTERN "bin" EXCLUDE
+		)
+	  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+	    # ----------------------------------------------------------------------------
+		#  The example files
+		# ----------------------------------------------------------------------------
+
+		INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/WindowsPhoneApp/"
+		DESTINATION Emgu.CV.Example/WindowsPhoneApp/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "*.cs"
+		PATTERN "Common/*.xaml"
+		PATTERN "Common/*.txt"
+		PATTERN "Common/*.cs"
+		PATTERN "DataModel/*.json"
+		PATTERN "DataModel/*.cs"
+		PATTERN "Strings/en-US/*.resw"
+		PATTERN "*.csproj"
+		PATTERN "*.appxmanifest"
+		PATTERN "*.xaml"
+		PATTERN "*.xml"
+		PATTERN "packages.config"
+		PATTERN "Assets/*.png"  
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "bin" EXCLUDE
+		PATTERN "Android" EXCLUDE
+		PATTERN "iOS" EXCLUDE
+		PATTERN "Windows.Store" EXCLUDE
+		PATTERN "VS2013-2015" EXCLUDE
+		PATTERN "CrossPlatform" EXCLUDE
 		)
 		INSTALL(
 		DIRECTORY
