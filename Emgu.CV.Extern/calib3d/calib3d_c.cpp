@@ -215,9 +215,21 @@ bool cveSolvePnP(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv
    return cv::solvePnP(*objectPoints, *imagePoints, *cameraMatrix, *distCoeffs, *rvec, *tvec, useExtrinsicGuess, flags);
 }
 
-void cveSolvePnPRansac(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_OutputArray* rvec, cv::_OutputArray* tvec, bool useExtrinsicGuess, int iterationsCount, float reprojectionError, int minInliersCount, cv::_OutputArray* inliers, int flags )
+void cveSolvePnPRansac(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_OutputArray* rvec, cv::_OutputArray* tvec, bool useExtrinsicGuess, int iterationsCount, float reprojectionError, double confident, cv::_OutputArray* inliers, int flags )
 {
-   cv::solvePnPRansac(*objectPoints, *imagePoints, *cameraMatrix, distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(), *rvec, *tvec, useExtrinsicGuess, iterationsCount, reprojectionError, minInliersCount, inliers ? *inliers : (cv::OutputArray) cv::noArray(), flags);
+   cv::solvePnPRansac(
+      *objectPoints, 
+      *imagePoints, 
+      *cameraMatrix, 
+      distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(), 
+      *rvec, 
+      *tvec, 
+      useExtrinsicGuess, 
+      iterationsCount, 
+      reprojectionError, 
+      confident, 
+      inliers ? *inliers : (cv::OutputArray) cv::noArray(), 
+      flags);
 }
 
 /* Fisheye calibration */

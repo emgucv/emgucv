@@ -416,13 +416,13 @@ namespace Emgu.CV.Test
       {
          Byte[] data = GetBytesFromFile(EmguAssert.GetFile("lena.jpg"));
          Mat imgJpg = new Mat();
-         CvInvoke.Imdecode(data, LoadImageType.Color, imgJpg);
+         CvInvoke.Imdecode(data, ImreadModes.Color, imgJpg);
          
          //Emgu.CV.UI.ImageViewer.Show(imgJpg);
 
          Mat imgPng = new Mat();
          data = GetBytesFromFile(EmguAssert.GetFile("pedestrian.png"));
-         CvInvoke.Imdecode(data, LoadImageType.Color, imgPng);
+         CvInvoke.Imdecode(data, ImreadModes.Color, imgPng);
          //Emgu.CV.UI.ImageViewer.Show(imgPng);
       }
 

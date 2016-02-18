@@ -3196,6 +3196,30 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveVConcat(IntPtr src1, IntPtr src2, IntPtr dst);
 
+      /// <summary>
+      /// Swaps two matrices
+      /// </summary>
+      /// <param name="m1">The Mat to be swapped</param>
+      /// <param name="m2">The Mat to be swapped</param>
+      public static void Swap(Mat m1, Mat m2)
+      {
+         cveSwapMat(m1, m2);
+      }
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void cveSwapMat(IntPtr mat1, IntPtr mat2);
+
+      /// <summary>
+      /// Swaps two matrices
+      /// </summary>
+      /// <param name="m1">The UMat to be swapped</param>
+      /// <param name="m2">The UMat to be swapped</param>
+      public static void Swap(UMat m1, UMat m2)
+      {
+         cveSwapUMat(m1, m2);
+      }
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private extern static void cveSwapUMat(IntPtr mat1, IntPtr mat2);
+
       #region OpenCL
 
       /// <summary>

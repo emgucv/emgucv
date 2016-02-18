@@ -104,8 +104,6 @@ namespace Emgu.CV.Test
 
             byte[] rawData =  bytes.ToArray();
          }
-
-
       }
 
 #if !NETFX_CORE

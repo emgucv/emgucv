@@ -1657,33 +1657,118 @@ namespace Emgu.CV.CvEnum
    /// cvLoadImage type
    /// </summary>
    [Flags]
-   public enum LoadImageType
+   public enum ImreadModes
    {
       /// <summary>
-      /// 8bit, color or not 
+      /// If set, return the loaded image as is (with alpha channel, otherwise it gets cropped).
       /// </summary>
       Unchanged = -1,
 
       /// <summary>
-      /// 8bit, gray
+      /// If set, always convert image to the single channel grayscale image.
       /// </summary>
       Grayscale = 0,
 
       /// <summary>
-      /// ?, color
+      /// If set, always convert image to the 3 channel BGR color image.
       /// </summary>
       Color = 1,
 
       /// <summary>
-      /// any depth, ?
+      /// If set, return 16-bit/32-bit image when the input has the corresponding depth, otherwise convert it to 8-bit.
       /// </summary>
       AnyDepth = 2,
 
       /// <summary>
-      /// ?, any color
+      /// If set, the image is read in any possible color format.
       /// </summary>
       AnyColor = 4,
+
+      /// <summary>
+      /// If set, use the gdal driver for loading the image.
+      /// </summary>
+      LoadGdal = 8,
+
+      /// <summary>
+      /// If set, always convert image to the single channel grayscale image and the image size reduced 1/2.
+      /// </summary>
+      ReducedGrayscale2 = 16,
+
+      /// <summary>
+      /// If set, always convert image to the 3 channel BGR color image and the image size reduced 1/2.
+      /// </summary>
+      ReducedColor2 = 17,
+
+      /// <summary>
+      /// If set, always convert image to the single channel grayscale image and the image size reduced 1/4.
+      /// </summary>
+      ReducedGrayscale4 = 32,
+
+      /// <summary>
+      /// If set, always convert image to the 3 channel BGR color image and the image size reduced 1/4.
+      /// </summary>
+      ReducedColor4 = 33,
+
+      /// <summary>
+      /// If set, always convert image to the single channel grayscale image and the image size reduced 1/8.
+      /// </summary>
+      ReducedGrayscale8 = 64,
+
+      /// <summary>
+      /// If set, always convert image to the 3 channel BGR color image and the image size reduced 1/8.
+      /// </summary>
+      ReducedColor8 = 65  
    }
+
+   [Flags]
+   public enum ImwriteFlags
+   {
+      /// <summary>
+      /// For JPEG, it can be a quality from 0 to 100 (the higher is the better). Default value is 95.
+      /// </summary>
+      JpegQuality = 1,
+      /// <summary>
+      /// Enable JPEG features, 0 or 1, default is False.
+      /// </summary>
+      JpegProgressive = 2,
+      /// <summary>
+      /// Enable JPEG features, 0 or 1, default is False.
+      /// </summary>
+      JpegOptimize = 3,
+      /// <summary>
+      /// JPEG restart interval, 0 - 65535, default is 0 - no restart.
+      /// </summary>
+      JpegRstInterval = 4,
+      /// <summary>
+      /// Separate luma quality level, 0 - 100, default is 0 - don't use.
+      /// </summary>
+      JpegLumaQuality = 5,
+      /// <summary>
+      /// Separate chroma quality level, 0 - 100, default is 0 - don't use.
+      /// </summary>
+      JpegChromaQuality = 6,
+      /// <summary>
+      /// For PNG, it can be the compression level from 0 to 9. A higher value means a smaller size and longer compression time. Default value is 3.
+      /// </summary>
+      PngCompression = 16,
+      /// <summary>
+      /// One of cv::ImwritePNGFlags, default is IMWRITE_PNG_STRATEGY_DEFAULT.
+      /// </summary>
+      PngStrategy = 17,
+      /// <summary>
+      /// Binary level PNG, 0 or 1, default is 0.
+      /// </summary>
+      PngBilevel = 18,
+      /// <summary>
+      /// For PPM, PGM, or PBM, it can be a binary format flag, 0 or 1. Default value is 1.
+      /// </summary>
+      PxmBinary = 32,
+      /// <summary>
+      /// For WEBP, it can be a quality from 1 to 100 (the higher is the better). By default (without any parameter) and for quality above 100 the lossless compression is used.
+      /// </summary>
+      WebpQuality = 64 
+   };
+
 
    /// <summary>
    /// OpenCV depth type
@@ -1723,22 +1808,6 @@ namespace Emgu.CV.CvEnum
       /// </summary>
       Cv64F = 6
    }
-
-   /*
-   /// <summary>
-   /// CV RAND TYPE
-   /// </summary>
-   public enum RandType
-   {
-      /// <summary>
-      /// Uniform distribution
-      /// </summary>
-      Uni = 0,
-      /// <summary>
-      /// Normal distribution
-      /// </summary>
-      Normal = 1
-   }*/
 
    /// <summary>
    /// contour retrieval mode

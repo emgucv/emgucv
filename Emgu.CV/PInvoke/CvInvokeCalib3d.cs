@@ -549,13 +549,13 @@ namespace Emgu.CV
       /// <param name="useExtrinsicGuess">If true, the function uses the provided rvec and tvec values as initial approximations of the rotation and translation vectors, respectively, and further optimizes them.</param>
       /// <param name="iterationsCount">Number of iterations.</param>
       /// <param name="reprojectionError">Inlier threshold value used by the RANSAC procedure. The parameter value is the maximum allowed distance between the observed and computed point projections to consider it an inlier.</param>
-      /// <param name="minInliersCount">Number of inliers. If the algorithm at some stage finds more inliers than minInliersCount, it finishes.</param>
+      /// <param name="confident">The probability that the algorithm produces a useful result.</param>
       /// <param name="inliers">Output vector that contains indices of inliers in objectPoints and imagePoints .</param>
       /// <param name="flags">Method for solving a PnP problem </param>
       public static void SolvePnPRansac(
          IInputArray objectPoints, IInputArray imagePoints, IInputArray cameraMatrix, IInputArray distCoeffs,
          IOutputArray rvec, IOutputArray tvec,
-         bool useExtrinsicGuess, int iterationsCount, float reprojectionError, int minInliersCount,
+         bool useExtrinsicGuess, int iterationsCount, float reprojectionError, double confident,
          IOutputArray inliers, CvEnum.SolvePnpMethod flags)
       {
          using (InputArray iaObjectPoints = objectPoints.GetInputArray())
@@ -568,7 +568,7 @@ namespace Emgu.CV
             cveSolvePnPRansac(
                iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs,
                oaRotationVector, oaTranslationVector,
-               useExtrinsicGuess, iterationsCount, reprojectionError, minInliersCount,
+               useExtrinsicGuess, iterationsCount, reprojectionError, confident,
                oaInliers, flags);
       }
 
@@ -577,7 +577,7 @@ namespace Emgu.CV
          IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs,
          IntPtr rvec, IntPtr tvec,
          [MarshalAs(CvInvoke.BoolMarshalType)] bool useExtrinsicGuess,
-         int iterationsCount, float reprojectionError, int minInliersCount,
+         int iterationsCount, float reprojectionError, double confident,
          IntPtr inliers, CvEnum.SolvePnpMethod flags);
 
 

@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
@@ -27,7 +28,7 @@ namespace Emgu.CV
       /// <param name="filename">The name of the file to be loaded</param>
       /// <param name="loadType">The image loading type</param>
       /// <returns>The loaded image</returns>
-      public static Mat Imread(String filename, CvEnum.LoadImageType loadType)
+      public static Mat Imread(String filename, CvEnum.ImreadModes loadType)
       {
          return new Mat(filename, loadType);
       }
@@ -35,8 +36,47 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveImread(
          IntPtr filename,
-         CvEnum.LoadImageType loadType,
+         CvEnum.ImreadModes loadType,
          IntPtr result);
+
+      /// <summary>
+      /// The function imreadmulti loads a multi-page image from the specified file into a vector of Mat objects.
+      /// </summary>
+      /// <param name="filename">Name of file to be loaded.</param>
+      /// <param name="flags">Read flags</param>
+      /// <returns>Null if the reading fails, otherwise, an array of Mat from the file</returns>
+      public static Mat[] Imreadmulti(String filename, CvEnum.ImreadModes flags = ImreadModes.AnyColor)
+      {
+         using (VectorOfMat vm = new VectorOfMat())
+            using (CvString strFilename = new CvString(filename))
+         {
+            if (!cveImreadmulti(strFilename, vm, flags))
+               return null;
+            Mat[] result = new Mat[vm.Size];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+               Mat m = new Mat();
+               CvInvoke.Swap(m, vm[i]);
+               result[i] = m;
+            }
+            return result;
+         }
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool cveImreadmulti(IntPtr filename, IntPtr mats, CvEnum.ImreadModes flags);
+
+      private static void PushParameters(VectorOfInt vec, KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
+      {
+         if (parameters == null || parameters.Length == 0)
+            return;
+         foreach (KeyValuePair<CvEnum.ImwriteFlags, int> p in parameters)
+         {
+            vec.Push(new int[] {(int) p.Key, p.Value});
+         }
+      }
 
       /// <summary>
       /// Saves the image to the specified file. The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format
@@ -45,12 +85,12 @@ namespace Emgu.CV
       /// <param name="image">The image to be saved</param>
       /// <param name="parameters">The parameters</param>
       /// <returns>true if success</returns>
-      public static bool Imwrite(String filename, IInputArray image, params int[] parameters)
+      public static bool Imwrite(String filename, IInputArray image, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
       {
          using (Util.VectorOfInt vec = new Util.VectorOfInt())
          {
-            if (parameters.Length > 0)
-               vec.Push(parameters);
+            PushParameters(vec, parameters);
+            
             using (CvString s = new CvString(filename))
             using (InputArray iaImage = image.GetInputArray())
             {
@@ -90,7 +130,7 @@ namespace Emgu.CV
       /// <param name="buf">The buffer</param>
       /// <param name="loadType">The image loading type</param>
       /// <param name="dst">The output placeholder for the decoded matrix.</param>
-      public static void Imdecode(byte[] buf, CvEnum.LoadImageType loadType, Mat dst)
+      public static void Imdecode(byte[] buf, CvEnum.ImreadModes loadType, Mat dst)
       {
          using (VectorOfByte vb = new VectorOfByte(buf))
          {
@@ -104,13 +144,13 @@ namespace Emgu.CV
       /// <param name="buf">The buffer</param>
       /// <param name="loadType">The image loading type</param>
       /// <param name="dst">The output placeholder for the decoded matrix.</param>
-      public static void Imdecode(IInputArray buf, CvEnum.LoadImageType loadType, Mat dst)
+      public static void Imdecode(IInputArray buf, CvEnum.ImreadModes loadType, Mat dst)
       {
          using (InputArray iaBuffer = buf.GetInputArray())
             cveImdecode(iaBuffer, loadType, dst);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveImdecode(IntPtr buf, CvEnum.LoadImageType loadType, IntPtr dst);
+      private static extern void cveImdecode(IntPtr buf, CvEnum.ImreadModes loadType, IntPtr dst);
 
       /// <summary>
       /// encode image and store the result as a byte vector.
@@ -119,13 +159,12 @@ namespace Emgu.CV
       /// <param name="image">The image</param>
       /// <param name="buf">Output buffer resized to fit the compressed image.</param>
       /// <param name="parameters">The pointer to the array of intergers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
-      public static void Imencode(String ext, IInputArray image, VectorOfByte buf, params int[] parameters)
+      public static void Imencode(String ext, IInputArray image, VectorOfByte buf, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
       {
          using (CvString extStr = new CvString(ext))
          using (VectorOfInt p = new VectorOfInt())
          {
-            if (parameters.Length > 0)
-               p.Push(parameters);
+            PushParameters(p, parameters);
             using (InputArray iaImage = image.GetInputArray())
                cveImencode(extStr, iaImage, buf, p);
          }

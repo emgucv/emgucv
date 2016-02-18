@@ -2372,10 +2372,17 @@ namespace Emgu.CV.Test
 
             Mat image = new Mat();
 
-            CvInvoke.Imdecode(data, LoadImageType.Color, image);
+            CvInvoke.Imdecode(data, ImreadModes.Color, image);
             //Emgu.CV.UI.ImageViewer.Show(image);
          }
       }
+
+      [TestAttribute]
+      public void TestImreadmulti()
+      {
+         Mat[] mats = CvInvoke.Imreadmulti(EmguAssert.GetFile("multipage.tif"));
+      }
+
 #endif
 
       [Test]
@@ -2758,14 +2765,35 @@ namespace Emgu.CV.Test
       }*/
 
 #if !NETFX_CORE
+      [Test]
+      public void TestFileCaptureNonAscii()
+      {
+         String fileName = EmguAssert.GetFile("tree.avi");
+         String newName = fileName.Replace("tree.avi", "树.avi");
+         File.Copy(fileName, newName, true);
+         Capture capture = new Capture(EmguAssert.GetFile(newName));
+         int counter = 0;
+         using (Mat m = new Mat())
+         while (capture.Grab())
+         {
+            capture.Retrieve(m);
+            counter++;
+         }
+
+         Trace.WriteLine(String.Format("{0} frames found in file {1}", counter, newName));
+      }
+      
       //TODO: Check why this fails again
       [Test]
       public void TestFileCapturePause()
       {
          
          int totalFrames1 = 0;
+         String fileName = EmguAssert.GetFile("tree.avi");
+         String fileName2 = fileName.Replace("tree.avi", "tree2.avi");
+         File.Copy(fileName, fileName2, true);
 
-         Capture capture1 = new Capture(EmguAssert.GetFile("tree.avi"));
+         Capture capture1 = new Capture(fileName);
         
          //capture one will continute capturing all the frames.
          EventHandler captureHandle1 = delegate
@@ -2779,8 +2807,11 @@ namespace Emgu.CV.Test
          capture1.Start();
 
          System.Threading.Thread.Sleep(2);
+
+
+
          int totalFrames2 = 0;
-         Capture capture2 = new Capture(EmguAssert.GetFile("tree.avi"));
+         Capture capture2 = new Capture(fileName2);
          int counter = 0;
          //capture 2 will capture 2 frames, pause for 1 seconds, then continute;
          EventHandler captureHandle = delegate

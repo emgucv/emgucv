@@ -225,3 +225,9 @@ void cveMatGetSizeOfDimension(cv::Mat* mat, int* sizes)
    const int* s = mat->size;
    memcpy(sizes, s, sizeof(int)*mat->dims);
 }
+
+
+void cveSwapMat(cv::Mat* mat1, cv::Mat* mat2)
+{
+   cv::swap(*mat1, *mat2);
+}

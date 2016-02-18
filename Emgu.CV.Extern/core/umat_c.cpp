@@ -104,3 +104,8 @@ double cveUMatDot(cv::UMat* mat, cv::_InputArray* m)
 {
    return mat->dot(*m);
 }
+
+void cveSwapUMat(cv::UMat* mat1, cv::UMat* mat2)
+{
+   cv::swap(*mat1, *mat2);
+}

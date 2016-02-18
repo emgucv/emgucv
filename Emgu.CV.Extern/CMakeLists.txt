@@ -110,10 +110,10 @@ ENDMACRO()
 # Types:
 #
 # * val: [c++] {obj}.${PROPERTY_NAME}() [C#] {obj}.${CS_FUNCTION_NAME} {get;}
-# * struct: [c++] {obj}.Get${PROPERTY_NAME}(); {obj}.Set${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
-# * propW: [c++] {obj}.Set${PROPERTY_NAME}(val); [C#] {obj}.Set${CS_FUNCTION_NAME}(val)
-# * propR: [c++] {obj}.Get${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME} {get;} 
-# * prop: [c++] {obj}.Set${PROPERTY_NAME}(val); & {obj}.Get${PROPERTY_NAME}();; [C#] {obj}.${CS_FUNCTION_NAME} {get;}
+# * struct: [c++] {obj}.get${PROPERTY_NAME}(); {obj}.set${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
+# * propW: [c++] {obj}.set${PROPERTY_NAME}(val); [C#] {obj}.Set${CS_FUNCTION_NAME}(val)
+# * propR: [c++] {obj}.get${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME} {get;} 
+# * prop: [c++] {obj}.set${PROPERTY_NAME}(val); & {obj}.get${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
 # * act1: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is a value / structure
 # * act1obj: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is an object
 # * element: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
@@ -938,6 +938,30 @@ IF(HAVE_opencv_video)
   "#include \"video_c.h\"")
 ENDIF()
 ############################### video code gen END ################################
+
+############################### cudaimgproc code gen START ##############################
+IF(HAVE_opencv_cudaimgproc)
+    CREATE_OCV_CLASS_PROPERTY( 
+  "cudaimgproc/cuda_hough_lines_detector_property" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Imgproc/CudaHoughLinesDetectorGenerated.cs"
+  "cv::cuda::HoughLinesDetector" 
+  "CudaHoughLinesDetector" 
+  "Rho;Theta;Threshold;DoSort;MaxLines" 
+  "float;float;int;bool;int" 
+  "prop;prop;prop;Prop;Prop"
+  "Rho;Theta;Threshold;DoSort;MaxLines" 
+  "float;float;int;bool;int"
+  "Distance resolution of the accumulator in pixels;
+  Angle resolution of the accumulator in radians;
+  Accumulator threshold parameter. Only those lines are returned that get enough;
+  Performs lines sort by votes;
+  Maximum number of output lines"
+  "Emgu.CV.Cuda"
+  "CudaInvoke"
+  "CudaHoughLinesDetector"
+  "#include \"opencv2/cudaimgproc.hpp\"")
+ENDIF()
+############################### video code gen START ##############################
 
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)

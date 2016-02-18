@@ -14,6 +14,7 @@
 CVAPI(bool) cveImwrite(cv::String* filename, cv::_InputArray* img, const std::vector<int>* params);
 
 CVAPI(void) cveImread(cv::String* fileName, int flags, cv::Mat* result);
+CVAPI(bool) cveImreadmulti(const cv::String* filename, std::vector<cv::Mat>* mats, int flags);
 
 CVAPI(void) cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst);
 CVAPI(void) cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params);

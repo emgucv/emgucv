@@ -33,7 +33,7 @@ namespace Emgu.CV
          using (MemoryStream ms = new MemoryStream())
          {
             imageStream.CopyTo(ms);
-            CvInvoke.Imdecode(ms.ToArray(), LoadImageType.AnyColor | LoadImageType.AnyDepth, this);
+            CvInvoke.Imdecode(ms.ToArray(), ImreadModes.AnyColor | ImreadModes.AnyDepth, this);
          }
       }
 

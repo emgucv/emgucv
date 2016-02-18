@@ -721,7 +721,7 @@ namespace Emgu.CV.Test
 
       public static void TestImageViewMat()
       {
-         Mat m = CvInvoke.Imread(EmguAssert.GetFile("box.png"), LoadImageType.AnyColor);
+         Mat m = CvInvoke.Imread(EmguAssert.GetFile("box.png"), ImreadModes.AnyColor);
          Mat m2 = new Mat();
          CvInvoke.CvtColor(m, m2, ColorConversion.Gray2Rgb);
          Mat m3 = new Mat();

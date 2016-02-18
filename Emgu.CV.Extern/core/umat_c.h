@@ -31,4 +31,6 @@ CVAPI(void) cveUMatCopyDataTo(cv::UMat* mat, unsigned char* dest);
 CVAPI(void) cveUMatCopyDataFrom(cv::UMat* mat, unsigned char* source);
 
 CVAPI(double) cveUMatDot(cv::UMat* mat, cv::_InputArray* m);
+
+CVAPI(void) cveSwapUMat(cv::UMat* mat1, cv::UMat* mat2);
 #endif

@@ -107,7 +107,7 @@ namespace Emgu.CV
       public Image(String fileName)
       {
 #if NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
-         using (Mat m = CvInvoke.Imread(fileName, LoadImageType.AnyColor | LoadImageType.AnyDepth))
+         using (Mat m = CvInvoke.Imread(fileName, ImreadModes.AnyColor | ImreadModes.AnyDepth))
          {
             if (m.IsEmpty)
                throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", fileName));
@@ -235,7 +235,7 @@ namespace Emgu.CV
       /// <param name="file"></param>
       private void LoadImageUsingOpenCV(FileInfo file)
       {
-         using (Mat m = CvInvoke.Imread(file.FullName, CvEnum.LoadImageType.AnyColor | CvEnum.LoadImageType.AnyDepth))
+         using (Mat m = CvInvoke.Imread(file.FullName, CvEnum.ImreadModes.AnyColor | CvEnum.ImreadModes.AnyDepth))
          {
             if (m.IsEmpty)
                throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", file.FullName));
@@ -4474,7 +4474,7 @@ namespace Emgu.CV
          if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(byte))
          {
             Image<TColor, TDepth> result = new Image<TColor, TDepth>();
-            result._ptr = CvInvoke.cvDecodeImage(rawData, CvEnum.LoadImageType.Color);
+            result._ptr = CvInvoke.cvDecodeImage(rawData, CvEnum.ImreadModes.Color);
             if (result._ptr == IntPtr.Zero)
                throw new Exception("Unable to decode image data.");
             result._imageDataReleaseMode = ImageDataReleaseMode.ReleaseIplImage;
@@ -4497,7 +4497,7 @@ namespace Emgu.CV
       {
          using (VectorOfByte buf = new VectorOfByte())
          {
-            CvInvoke.Imencode(".jpg", this, buf, quality);
+            CvInvoke.Imencode(".jpg", this, buf, new KeyValuePair<ImwriteFlags, int>(ImwriteFlags.JpegQuality, quality));
             return buf.ToArray();
          }
       }

@@ -141,7 +141,7 @@ namespace Emgu.CV
             byte[] data = new byte[stream.Size];
             await stream.AsStreamForRead().ReadAsync(data, 0, data.Length);
             Mat result = new Mat();
-            CvInvoke.Imdecode(data, LoadImageType.Color, result);
+            CvInvoke.Imdecode(data, ImreadModes.Color, result);
             return result;
          }
       }

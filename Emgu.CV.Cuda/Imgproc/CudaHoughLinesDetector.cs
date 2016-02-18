@@ -15,7 +15,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Base class for lines detector algorithm.
    /// </summary>
-   public class CudaHoughLinesDetector : UnmanagedObject
+   public partial class CudaHoughLinesDetector : UnmanagedObject
    {
       /// <summary>
       /// Create a hough lines detector

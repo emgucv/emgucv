@@ -48,4 +48,6 @@ CVAPI(void) cveMatCopyDataTo(cv::Mat* mat, unsigned char* dest);
 CVAPI(void) cveMatCopyDataFrom(cv::Mat* mat, unsigned char* source);
 
 CVAPI(void) cveMatGetSizeOfDimension(cv::Mat* mat, int* sizes);
+
+CVAPI(void) cveSwapMat(cv::Mat* mat1, cv::Mat* mat2);
 #endif

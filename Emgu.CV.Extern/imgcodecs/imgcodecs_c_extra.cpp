@@ -17,6 +17,11 @@ void cveImread(cv::String* fileName, int flags, cv::Mat* result)
    cv::swap(*result, m);
 }
 
+bool cveImreadmulti(const cv::String* filename, std::vector<cv::Mat>* mats, int flags)
+{
+   return cv::imreadmulti(*filename, *mats, flags);
+}
+
 void cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst)
 {
    cv::imdecode(*buf, flags, dst);

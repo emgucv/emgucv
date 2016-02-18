@@ -110,7 +110,7 @@ namespace Emgu.CV.Test
 
       public static Mat LoadMat(string name)
       {
-         return CvInvoke.Imread(name, LoadImageType.AnyColor | LoadImageType.AnyDepth);
+         return CvInvoke.Imread(name, ImreadModes.AnyColor | ImreadModes.AnyDepth);
       }
 #endif
 

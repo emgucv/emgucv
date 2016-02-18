@@ -254,7 +254,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="fileName">The name of the file</param>
       /// <param name="loadType">File loading method</param>
-      public Mat(String fileName, CvEnum.LoadImageType loadType)
+      public Mat(String fileName, CvEnum.ImreadModes loadType)
          : this(MatInvoke.cveMatCreate(), true, false)
       {
 
@@ -1251,7 +1251,7 @@ namespace Emgu.CV
       internal extern static IntPtr cvMatCreateFromFile(
          [MarshalAs(CvInvoke.StringMarshalType)]
          String fileName,
-         CvEnum.LoadImageType flag
+         CvEnum.ImreadModes flag
          );
       */
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
