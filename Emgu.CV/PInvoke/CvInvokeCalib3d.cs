@@ -1115,7 +1115,7 @@ namespace Emgu.CV
       /// Distorts 2D points using fisheye model.
       /// </summary>
       /// <param name="undistored">Array of object points, 1xN/Nx1 2-channel (or vector&lt;Point2f&gt; ), where N is the number of points in the view.</param>
-      /// <param name="distorted">	Output array of image points, 1xN/Nx1 2-channel, or vector&lt;Point2f&ht; .</param>
+      /// <param name="distorted">	Output array of image points, 1xN/Nx1 2-channel, or vector&lt;Point2f&gt; .</param>
       /// <param name="K">Camera matrix</param>
       /// <param name="D">Input vector of distortion coefficients (k1,k2,k3,k4).</param>
       /// <param name="alpha">The skew coefficient.</param>
@@ -1135,7 +1135,7 @@ namespace Emgu.CV
       /// Transforms an image to compensate for fisheye lens distortion.
       /// </summary>
       /// <param name="distorted">Array of object points, 1xN/Nx1 2-channel (or vector&lt;Point2f&gt; ), where N is the number of points in the view.</param>
-      /// <param name="undistorted">Output array of image points, 1xN/Nx1 2-channel, or vector&ly;Point2f&gt;.</param>
+      /// <param name="undistorted">Output array of image points, 1xN/Nx1 2-channel, or vector&lt;Point2f&gt;.</param>
       /// <param name="K">Camera matrix</param>
       /// <param name="D">Input vector of distortion coefficients (k1,k2,k3,k4).</param>
       /// <param name="R">Rectification transformation in the object space: 3x3 1-channel, or vector: 3x1/1x3 1-channel or 1x1 3-channel</param>

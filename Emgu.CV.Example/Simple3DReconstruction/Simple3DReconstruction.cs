@@ -32,8 +32,8 @@ namespace Simlpe3DReconstruction
       public Simple3DReconstruction()
       {
          InitializeComponent();
-         _left = CvInvoke.Imread("imL.png", LoadImageType.Color);
-         _right = CvInvoke.Imread("imR.png", LoadImageType.Color);
+         _left = CvInvoke.Imread("imL.png", ImreadModes.Color);
+         _right = CvInvoke.Imread("imR.png", ImreadModes.Color);
          Mat disparityMap = new Mat();
 
          Stopwatch watch = Stopwatch.StartNew();

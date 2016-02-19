@@ -31,7 +31,7 @@ namespace FaceDetection
 
       static void Run()
       {
-         Mat image = new Mat("lena.jpg", LoadImageType.Color); //Read the files as an 8-bit Bgr image  
+         Mat image = new Mat("lena.jpg", ImreadModes.Color); //Read the files as an 8-bit Bgr image  
          long detectionTime;
          List<Rectangle> faces = new List<Rectangle>();
          List<Rectangle> eyes = new List<Rectangle>();

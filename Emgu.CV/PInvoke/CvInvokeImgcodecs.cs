@@ -28,7 +28,7 @@ namespace Emgu.CV
       /// <param name="filename">The name of the file to be loaded</param>
       /// <param name="loadType">The image loading type</param>
       /// <returns>The loaded image</returns>
-      public static Mat Imread(String filename, CvEnum.ImreadModes loadType)
+      public static Mat Imread(String filename, CvEnum.ImreadModes loadType = ImreadModes.Color)
       {
          return new Mat(filename, loadType);
       }

@@ -8,6 +8,7 @@ Imports Emgu.Util
 Imports System.Windows.Forms
 Imports System.Drawing
 Imports System.Runtime.InteropServices
+Imports Emgu.CV.CvEnum
 
 Module Module1
 
@@ -15,7 +16,7 @@ Module Module1
 
       'Load the image from file
       Dim img As Mat
-      img = CvInvoke.Imread("lena.jpg", CvEnum.LoadImageType.Color)
+      img = CvInvoke.Imread("lena.jpg")
 
       'Load the object detector
       Dim faceDetector As New CascadeClassifier("haarcascade_frontalface_default.xml")

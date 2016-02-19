@@ -27,6 +27,9 @@ namespace Emgu.CV.OCR
          _ptr = ptr;
       }
 
+      /// <summary>
+      /// Returns orientation for the block the iterator points to. 
+      /// </summary>
       public Orientation Orientation
       {
          get
@@ -45,6 +48,11 @@ namespace Emgu.CV.OCR
          }
       }
 
+      /// <summary>
+      /// Returns the baseline of the current object at the given level. The baseline is the line that passes through (x1, y1) and (x2, y2). WARNING: with vertical text, baselines may be vertical! Returns null if there is no baseline at the current position.
+      /// </summary>
+      /// <param name="level">Page iterator level</param>
+      /// <returns>The baseline of the current object at the given level</returns>
       public LineSegment2D? GetBaseLine(PageIteratorLevel level)
       {
          int x1 = 0;
@@ -59,43 +67,103 @@ namespace Emgu.CV.OCR
             return new LineSegment2D(new Point(x1, y1), new Point(x2, y2) );
       }
 
+      /// <summary>
+      /// Release the page iterator
+      /// </summary>
       protected override void DisposeObject()
       {
          OcrInvoke.TessPageIteratorRelease(ref _ptr);
       }
    }
 
+   /// <summary>
+   /// The orientation
+   /// </summary>
    public struct Orientation
    {
+      /// <summary>
+      /// Page orientation
+      /// </summary>
       public PageOrientation PageOrientation;
+      /// <summary>
+      /// Writing direction
+      /// </summary>
       public WritingDirection WritingDirection;
+      /// <summary>
+      /// Textline order
+      /// </summary>
       public TextlineOrder TextlineOrder;
+
+      /// <summary>
+      /// after rotating the block so the text orientation is upright, how many radians does one have to rotate the block anti-clockwise for it to be level? -Pi/4 &lt;= deskew_angle &lt;= Pi/4
+      /// </summary>
       public float DeskewAngle;
    }
 
+   /// <summary>
+   /// Page orientation
+   /// </summary>
    public enum PageOrientation
    {
+      /// <summary>
+      /// Up
+      /// </summary>
       Up = 0,
+      /// <summary>
+      /// Right
+      /// </summary>
       Right = 1,
+      /// <summary>
+      /// Down
+      /// </summary>
       Down = 2,
+      /// <summary>
+      /// Left
+      /// </summary>
       Left = 3,
    }
 
+   /// <summary>
+   /// Writing direction
+   /// </summary>
    public enum WritingDirection
    {
+      /// <summary>
+      /// Left to right
+      /// </summary>
       LeftToRight = 0,
+      /// <summary>
+      /// Right to left
+      /// </summary>
       RightToLeft = 1,
+      /// <summary>
+      /// Top to bottom
+      /// </summary>
       TopToBottom = 2,
    }
 
+   /// <summary>
+   /// Textline order
+   /// </summary>
    public enum TextlineOrder
    {
+      /// <summary>
+      /// Left to right
+      /// </summary>
       LeftToRight = 0,
+      /// <summary>
+      /// Right to left
+      /// </summary>
       RightToLeft = 1,
+      /// <summary>
+      /// Top to bottom
+      /// </summary>
       TopToBottom = 2,
-
    }
 
+   /// <summary>
+   /// Page iterator level
+   /// </summary>
    public enum PageIteratorLevel
    {
       /// <summary>

@@ -138,12 +138,12 @@ MACRO(SET_CS_TARGET_FRAMEWORK)
   ADD_CS_FRAMEWORK_REFERENCES("${version}" "${FRAMEWORK_REFERENCES}")
 ENDMACRO(SET_CS_TARGET_FRAMEWORK)
 
-MACRO(BUILD_CSPROJ target csproj_file)
+MACRO(BUILD_CSPROJ target csproj_file extra_flags)
     ADD_CUSTOM_TARGET (
       ${target})
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
-      COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${csproj_file}
+      COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}
       COMMENT "Building ${target}")
 ENDMACRO()
 

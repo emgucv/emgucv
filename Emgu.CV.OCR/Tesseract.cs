@@ -319,6 +319,11 @@ namespace Emgu.CV.OCR
          public Rectangle Region;
       }
 
+      /// <summary>
+      /// Runs page layout analysis in the mode set by SetPageSegMode. May optionally be called prior to Recognize to get access to just the page layout results. Returns an iterator to the results. Returns NULL on error or an empty page. The returned iterator must be deleted after use. WARNING! This class points to data held within the TessBaseAPI class, and therefore can only be used while the TessBaseAPI class still exists and has not been subjected to a call of Init, SetImage, Recognize, Clear, End DetectOS, or anything else that changes the internal PAGE_RES.
+      /// </summary>
+      /// <param name="mergeSimilarWords"></param>
+      /// <returns></returns>
       public PageIterator AnalyseLayout(bool mergeSimilarWords = false)
       {
          return  new PageIterator(OcrInvoke.TessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords));

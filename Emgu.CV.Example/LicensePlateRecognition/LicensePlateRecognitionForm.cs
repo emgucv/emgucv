@@ -27,7 +27,7 @@ namespace LicensePlateRecognition
       {
          InitializeComponent();
          _licensePlateDetector = new LicensePlateDetector("");
-         Mat m = new Mat("license-plate.jpg", LoadImageType.AnyColor);
+         Mat m = new Mat("license-plate.jpg");
          UMat um = m.ToUMat(AccessType.ReadWrite);
          imageBox1.Image = um;
          ProcessImage(m);
@@ -94,7 +94,7 @@ namespace LicensePlateRecognition
             Mat img;
             try
             {
-               img = CvInvoke.Imread(openFileDialog1.FileName, LoadImageType.Color);
+               img = CvInvoke.Imread(openFileDialog1.FileName);
 
             }
             catch

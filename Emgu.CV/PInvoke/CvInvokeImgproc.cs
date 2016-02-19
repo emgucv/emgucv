@@ -1728,6 +1728,7 @@ namespace Emgu.CV
       /// <param name="templ">Searched template; must be not greater than the source image and the same data type as the image</param>
       /// <param name="result">A map of comparison results; single-channel 32-bit floating-point. If image is WxH and templ is wxh then result must be W-w+1xH-h+1.</param>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
+      /// <param name="mask">Mask of searched template. It must have the same datatype and size with templ. It is not set by default.</param>
       public static void MatchTemplate(
          IInputArray image,
          IInputArray templ,

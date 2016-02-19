@@ -26,7 +26,7 @@ namespace TrafficSignRecognition
          InitializeComponent();
          using (Image<Bgr, Byte> stopSignModel = new Image<Bgr, Byte>("stop-sign-model.png"))
          {
-            Mat image = CvInvoke.Imread("stop-sign.jpg", LoadImageType.Color);
+            Mat image = CvInvoke.Imread("stop-sign.jpg");
 
             _stopSignDetector = new StopSignDetector(stopSignModel);
             ProcessImage(image);
@@ -87,11 +87,11 @@ namespace TrafficSignRecognition
             Mat img;
             try
             {
-               img = CvInvoke.Imread(openFileDialog1.FileName, LoadImageType.Color);
+               img = CvInvoke.Imread(openFileDialog1.FileName);
             }
             catch
             {
-               MessageBox.Show("Invalide file format");
+               MessageBox.Show("Invalid file format");
                return;
             }
 

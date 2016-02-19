@@ -34,7 +34,7 @@ namespace Emgu.CV.XamarinForms
       public async void LoadImage(String imageName)
       {
 #if NETFX_CORE
-         Mat m = CvInvoke.Imread(imageName, LoadImageType.AnyColor);
+         Mat m = CvInvoke.Imread(imageName, ImreadModes.AnyColor);
          InvokeOnImageLoaded(m);
 #else
          if (_mediaPicker == null)
@@ -55,7 +55,7 @@ namespace Emgu.CV.XamarinForms
 #if __ANDROID__
             InvokeOnImageLoaded(new Mat(Forms.Context.Assets, imageName));
 #else
-            Mat m = CvInvoke.Imread(imageName, LoadImageType.AnyColor);
+            Mat m = CvInvoke.Imread(imageName, ImreadModes.AnyColor);
             InvokeOnImageLoaded(m);
 #endif
 
@@ -75,7 +75,7 @@ namespace Emgu.CV.XamarinForms
               s.CopyTo(ms);
                byte[] data = ms.ToArray();
                Mat m = new Mat();
-               CvInvoke.Imdecode(data, LoadImageType.Color, m );
+               CvInvoke.Imdecode(data, ImreadModes.Color, m );
                InvokeOnImageLoaded(m);
             }
 #endif
@@ -95,7 +95,7 @@ namespace Emgu.CV.XamarinForms
                s.CopyTo(ms);
                byte[] data = ms.ToArray();
                Mat m = new Mat();
-               CvInvoke.Imdecode(data, LoadImageType.Color, m);
+               CvInvoke.Imdecode(data, ImreadModes.Color, m);
                InvokeOnImageLoaded(m);
             }
 #endif
@@ -103,7 +103,7 @@ namespace Emgu.CV.XamarinForms
 #endif
       }
 
-	   public void InvokeOnImageLoaded(Mat image)
+      public void InvokeOnImageLoaded(Mat image)
 	   {
 	      if (OnImageLoaded != null)
 	         OnImageLoaded(this, image);

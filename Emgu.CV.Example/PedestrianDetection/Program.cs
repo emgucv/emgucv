@@ -27,7 +27,7 @@ namespace PedestrianDetection
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
 
-         using (Mat image = new Mat("pedestrian.png", LoadImageType.Color))
+         using (Mat image = new Mat("pedestrian.png"))
          {
             bool tryUseCuda = true;
             long processingTime;
