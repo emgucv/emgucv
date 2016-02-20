@@ -180,9 +180,7 @@ namespace OCR
                   List<Tesseract.Character> allChars = new List<Tesseract.Character>();
                   String allText = String.Empty;
                   foreach (Rectangle rect in regions)
-                  {
-                     //CvInvoke.Rectangle(imageColor, rect, new Bgr(0, 0, 255).MCvScalar, 2);
-                    
+                  {  
                      using (Mat region = new Mat(image, rect))
                      {
                         _ocr.Recognize(region);
@@ -199,9 +197,7 @@ namespace OCR
                         allChars.AddRange(characters);
        
                         allText += _ocr.GetText() + Environment.NewLine;
-                        //String text = _ocr.GetText();
-                        
-                        
+
                      }
                   }
 

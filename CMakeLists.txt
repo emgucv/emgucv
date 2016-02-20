@@ -12,6 +12,7 @@ PROJECT(emgucv)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.1)
 
 SET(OPENCV_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv)
+SET(OPENCV_CONTRIB_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv_contrib)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 IF (NOT ANDROID)
@@ -1165,6 +1166,14 @@ INSTALL(
   DESTINATION opencv/data/haarcascades
   COMPONENT emgucv_example_source
   )
+INSTALL(
+  FILES
+  "${OPENCV_CONTRIB_SUBFOLDER}/modules/text/samples/trained_classifierNM1.xml"
+  "${OPENCV_CONTRIB_SUBFOLDER}/modules/text/samples/trained_classifierNM2.xml"
+  "${OPENCV_CONTRIB_SUBFOLDER}/modules/text/samples/trained_classifier_erGrouping.xml"
+  DESTINATION opencv_contrib/modules/text/samples/
+  COMPONENT emgucv_example_source
+  ) 
 
 # ----------------------------------------------------------------------------
 #  Build the package
@@ -1369,6 +1378,15 @@ INSTALL(
   COMPONENT emgucv_example_source
   )
 
+INSTALL(
+  FILES
+  "${OPENCV_CONTRIB_SUBFOLDER}/modules/text/samples/trained_classifierNM1.xml"
+  "${OPENCV_CONTRIB_SUBFOLDER}/modules/text/samples/trained_classifierNM2.xml"
+  "${OPENCV_CONTRIB_SUBFOLDER}/modules/text/samples/trained_classifier_erGrouping.xml"
+  DESTINATION opencv_contrib/modules/text/samples/
+  COMPONENT emgucv_example_source
+  )
+  
 
 # ----------------------------------------------------------------------------
 #  Generate required common assembly file for Emgu CV project
