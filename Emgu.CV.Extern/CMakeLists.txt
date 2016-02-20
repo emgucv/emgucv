@@ -10,44 +10,44 @@ INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
 
 MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder namespace_cs)
-   SET(VECTOR_NAME ${vname})
-   SET(VECTOR_ELEMENT ${velement})
-   SET(VECTOR_ELEMENT_CS ${velement_cs})
-   SET(NAMESPACE_CS ${namespace_cs})
-   SET(IS_VECTOR_OF_VECTOR false)
-
-   SET(VECTOR_ADDITIONAL_INCLUDE "")
-   SET(VECTOR_ADDITIONAL_CODE "")
-
-   SET(extra_macro_args ${ARGN})
-   # Did we get any optional args?
-   LIST(LENGTH extra_macro_args num_extra_args)
-   IF (${num_extra_args} GREATER 0)
-      list(GET extra_macro_args 0 additional_c_header)
-      SET(VECTOR_ADDITIONAL_INCLUDE ${additional_c_header})
-   ENDIF()
-   IF (${num_extra_args} GREATER 1)
-      list(GET extra_macro_args 1 additional_c_code)
-      SET(VECTOR_ADDITIONAL_CODE ${additional_c_code})
-   ENDIF()
-
-   if (${element_type} STREQUAL "struct")
-     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
-     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
-     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfStruct.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
-   ELSEIF(${element_type} STREQUAL "vector")
-     SET(VECTOR_ELEMENT_CS ${vname})
-     SET(ELEMENT_OF_ELEMENT ${velement_cs})
-     SET(IS_VECTOR_OF_VECTOR true)
-     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
-     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
-     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
-     #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfVector.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}Extra.cs)
-   ELSE()
-     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
-     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
-     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
-   ENDIF()
+  SET(VECTOR_NAME ${vname})
+  SET(VECTOR_ELEMENT ${velement})
+  SET(VECTOR_ELEMENT_CS ${velement_cs})
+  SET(NAMESPACE_CS ${namespace_cs})
+  SET(IS_VECTOR_OF_VECTOR false)
+  
+  SET(VECTOR_ADDITIONAL_INCLUDE "")
+  SET(VECTOR_ADDITIONAL_CODE "")
+  
+  SET(extra_macro_args ${ARGN})
+  # Did we get any optional args?
+  LIST(LENGTH extra_macro_args num_extra_args)
+  IF (${num_extra_args} GREATER 0)
+    list(GET extra_macro_args 0 additional_c_header)
+    SET(VECTOR_ADDITIONAL_INCLUDE ${additional_c_header})
+  ENDIF()
+  IF (${num_extra_args} GREATER 1)
+    list(GET extra_macro_args 1 additional_c_code)
+    SET(VECTOR_ADDITIONAL_CODE ${additional_c_code})
+  ENDIF()
+  
+  if (${element_type} STREQUAL "struct")
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfStruct.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
+  ELSEIF(${element_type} STREQUAL "vector")
+    SET(VECTOR_ELEMENT_CS ${vname})
+    SET(ELEMENT_OF_ELEMENT ${velement_cs})
+    SET(IS_VECTOR_OF_VECTOR true)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
+    #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfVector.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}Extra.cs)
+  ELSE()
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfObject_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfObject.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
+  ENDIF()
 ENDMACRO()
 
 CREATE_VECTOR_CS("Byte" "unsigned char" "byte" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
@@ -91,14 +91,14 @@ CREATE_VECTOR_CS("VectorOfDMatch" "std::vector< cv::DMatch >" "MDMatch" "vector"
 
 CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "OclPlatformInfo" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/core/ocl.hpp\"")
 IF(NOT IOS)
-CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda Emgu.CV.Cuda "#include \"opencv2/core/cuda.hpp\"")
+  CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda Emgu.CV.Cuda "#include \"opencv2/core/cuda.hpp\"")
 ENDIF()
 
 MACRO(WRITE_IF_DIFFERENT fname content)
   IF (EXISTS "${fname}")
     FILE(READ "${fname}" EXISTING_FILE_CONTENT)
     IF(NOT ("${EXISTING_FILE_CONTENT}" STREQUAL "${content}") )
-	  FILE(WRITE "${fname}" "${content}")
+      FILE(WRITE "${fname}" "${content}")
     ENDIF()
   ELSE()
     FILE(WRITE "${fname}" "${content}")
@@ -120,33 +120,33 @@ ENDMACRO()
 # * elementR: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get;}
 #################################################################################
 MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mtypes cs_func_names csptypes csp_docs cs_namespace cs_invoke_class cs_class_name)
-   SET(FILE_NAME ${fname})
-   SET(CLASS_NAME_FULL ${cname_full})
-   SET(CLASS_NAME ${cname})
-   SET(PROPERTY_NAMES ${pnames})
-   SET(PROPERTY_TYPES ${ptypes})
-   SET(CS_FUNCTION_NAMES ${cs_func_names})
-   SET(MARSHAL_TYPES ${mtypes})
-   SET(CS_PROPERTY_TYPES ${csptypes})
-   SET(CS_PROPERTY_DOCS ${csp_docs})
-   SET(HEADER_ADDITIONAL_INCLUDE "")
-   SET(SOURCE_ADDITIONAL_CODE "")
-
-   SET(extra_macro_args ${ARGN})
-   # Did we get any optional args?
-   LIST(LENGTH extra_macro_args num_extra_args)
-   IF (${num_extra_args} GREATER 0)
-      list(GET extra_macro_args 0 additional_c_header)
-      SET(HEADER_ADDITIONAL_INCLUDE ${additional_c_header})
-   ENDIF()
-   IF (${num_extra_args} GREATER 1)
-      list(GET extra_macro_args 1 additional_c_code)
-      SET(SOURCE_ADDITIONAL_CODE ${additional_c_code})
-   ENDIF()
-   #MESSAGE(STATUS "-------------------- PROPERTY_NAMES: ${PROPERTY_NAMES}")
-   SET(C_HEADER_SOURCE "${HEADER_ADDITIONAL_INCLUDE}")
-   SET(C_SOURCE "${SOURCE_ADDITIONAL_CODE} #include \"${fname}.h\"")
-   SET(CS_SOURCE "//----------------------------------------------------------------------------
+  SET(FILE_NAME ${fname})
+  SET(CLASS_NAME_FULL ${cname_full})
+  SET(CLASS_NAME ${cname})
+  SET(PROPERTY_NAMES ${pnames})
+  SET(PROPERTY_TYPES ${ptypes})
+  SET(CS_FUNCTION_NAMES ${cs_func_names})
+  SET(MARSHAL_TYPES ${mtypes})
+  SET(CS_PROPERTY_TYPES ${csptypes})
+  SET(CS_PROPERTY_DOCS ${csp_docs})
+  SET(HEADER_ADDITIONAL_INCLUDE "")
+  SET(SOURCE_ADDITIONAL_CODE "")
+  
+  SET(extra_macro_args ${ARGN})
+  # Did we get any optional args?
+  LIST(LENGTH extra_macro_args num_extra_args)
+  IF (${num_extra_args} GREATER 0)
+    list(GET extra_macro_args 0 additional_c_header)
+    SET(HEADER_ADDITIONAL_INCLUDE ${additional_c_header})
+  ENDIF()
+  IF (${num_extra_args} GREATER 1)
+    list(GET extra_macro_args 1 additional_c_code)
+    SET(SOURCE_ADDITIONAL_CODE ${additional_c_code})
+  ENDIF()
+  #MESSAGE(STATUS "-------------------- PROPERTY_NAMES: ${PROPERTY_NAMES}")
+  SET(C_HEADER_SOURCE "${HEADER_ADDITIONAL_INCLUDE}")
+  SET(C_SOURCE "${SOURCE_ADDITIONAL_CODE} #include \"${fname}.h\"")
+  SET(CS_SOURCE "//----------------------------------------------------------------------------
 //  This file is automatically generated, do not modify.      
 //----------------------------------------------------------------------------
 
@@ -161,53 +161,53 @@ namespace ${cs_namespace}
    public static partial class ${cs_invoke_class}
    {
 ")
-   SET(CS_CLASS_SOURCE "public partial class ${cs_class_name}
+  SET(CS_CLASS_SOURCE "public partial class ${cs_class_name}
    {
 ")
-   LIST(LENGTH PROPERTY_NAMES PROPERTY_COUNT)
-   math(EXPR idx "${PROPERTY_COUNT} - 1")
-   FOREACH(ival RANGE ${idx})
-     #MESSAGE(STATUS "-------------------- PROPERTY_NAMES: ${PROPERTY_NAMES}")
-     #MESSAGE(STATUS "-------------------- PROPERTY_TYPES: ${PROPERTY_TYPES}")
-     #MESSAGE(STATUS "-------------------- val: ${ival}")
-     LIST(GET PROPERTY_NAMES ${ival} PROPERTY_NAME)
-     
-     #STRING(SUBSTRING "${PROPERTY_NAME}" 1 -1 PROPERTY_NAME_PART2)
-     #STRING(SUBSTRING "${PROPERTY_NAME}" 0 1 PROPERTY_NAME_PART1)
-     #STRING(TOUPPER "${PROPERTY_NAME_PART1}" PROPERTY_NAME_PART1)
-     #SET(CS_PROPERTY_NAME "${PROPERTY_NAME_PART1}${PROPERTY_NAME_PART2}")
-
-     LIST(GET PROPERTY_TYPES ${ival} PROPERTY_TYPE)
-     LIST(GET MARSHAL_TYPES ${ival} MARSHAL_TYPE)
-     LIST(GET CS_PROPERTY_TYPES ${ival} CS_PROPERTY_TYPE)
-     LIST(GET CS_PROPERTY_DOCS ${ival} CS_DOCUMENTATION )
-     STRING(STRIP "${CS_DOCUMENTATION}" CS_DOCUMENTATION )
-
-     LIST(GET CS_FUNCTION_NAMES ${ival} CS_FUNCTION_NAME)
-
-     SET(MARSHAL_IN "")
-     SET(MARSHAL_RETURN "")
-     IF("${CS_PROPERTY_TYPE}" STREQUAL "bool")
-       SET(MARSHAL_IN "
+  LIST(LENGTH PROPERTY_NAMES PROPERTY_COUNT)
+  math(EXPR idx "${PROPERTY_COUNT} - 1")
+  FOREACH(ival RANGE ${idx})
+    #MESSAGE(STATUS "-------------------- PROPERTY_NAMES: ${PROPERTY_NAMES}")
+    #MESSAGE(STATUS "-------------------- PROPERTY_TYPES: ${PROPERTY_TYPES}")
+    #MESSAGE(STATUS "-------------------- val: ${ival}")
+    LIST(GET PROPERTY_NAMES ${ival} PROPERTY_NAME)
+    
+    #STRING(SUBSTRING "${PROPERTY_NAME}" 1 -1 PROPERTY_NAME_PART2)
+    #STRING(SUBSTRING "${PROPERTY_NAME}" 0 1 PROPERTY_NAME_PART1)
+    #STRING(TOUPPER "${PROPERTY_NAME_PART1}" PROPERTY_NAME_PART1)
+    #SET(CS_PROPERTY_NAME "${PROPERTY_NAME_PART1}${PROPERTY_NAME_PART2}")
+    
+    LIST(GET PROPERTY_TYPES ${ival} PROPERTY_TYPE)
+    LIST(GET MARSHAL_TYPES ${ival} MARSHAL_TYPE)
+    LIST(GET CS_PROPERTY_TYPES ${ival} CS_PROPERTY_TYPE)
+    LIST(GET CS_PROPERTY_DOCS ${ival} CS_DOCUMENTATION )
+    STRING(STRIP "${CS_DOCUMENTATION}" CS_DOCUMENTATION )
+    
+    LIST(GET CS_FUNCTION_NAMES ${ival} CS_FUNCTION_NAME)
+    
+    SET(MARSHAL_IN "")
+    SET(MARSHAL_RETURN "")
+    IF("${CS_PROPERTY_TYPE}" STREQUAL "bool")
+      SET(MARSHAL_IN "
         [MarshalAs(CvInvoke.BoolMarshalType)]")
-       SET(MARSHAL_RETURN "
+      SET(MARSHAL_RETURN "
      [return: MarshalAs(CvInvoke.BoolMarshalType)]")
-     ENDIF()
-
-     IF("${MARSHAL_TYPE}" STREQUAL "val")
-     IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+    ENDIF()
+    
+    IF("${MARSHAL_TYPE}" STREQUAL "val")
+      IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
+	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
      ")
-     SET(C_SOURCE "${C_SOURCE}
+	SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}(); }   
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+	
+	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
      internal static extern void cve${CLASS_NAME}${CS_FUNCTION_NAME}(IntPtr obj, IntPtr str);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+	SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -223,19 +223,19 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* st
         } 
      }
      ")
-     ELSE()
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+      ELSE()
+	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
      ")
-     SET(C_SOURCE "${C_SOURCE}
+	SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}(); }   
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+	
+	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
      internal static extern ${CS_PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(IntPtr obj);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+	SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -244,24 +244,24 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
         get { return ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); } 
      }
      ")
-     ENDIF()
-     ELSEIF("${MARSHAL_TYPE}" STREQUAL "struct")
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+      ENDIF()
+    ELSEIF("${MARSHAL_TYPE}" STREQUAL "struct")
+      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
      ")
-     SET(C_SOURCE "${C_SOURCE}
+      SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { ${PROPERTY_TYPE} p = obj->get${PROPERTY_NAME}(); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); }
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { obj->set${PROPERTY_NAME}( *value ); }     
      ")
-     SET(CS_SOURCE "${CS_SOURCE}
+      SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
      internal static extern void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj, ref ${CS_PROPERTY_TYPE} val);
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
      internal static extern void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(IntPtr obj, ref ${CS_PROPERTY_TYPE} val);
      ")
-
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+      
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -271,21 +271,21 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, ref value); }
      }
      ")
-     ELSEIF(${MARSHAL_TYPE} STREQUAL "propW")
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+    ELSEIF(${MARSHAL_TYPE} STREQUAL "propW")
+      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
-     SET(C_SOURCE "${C_SOURCE}
+      SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->set${PROPERTY_NAME}( value ); }     
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+      
+      SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
      internal static extern void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(
         IntPtr obj, ${MARSHAL_IN} 
         ${CS_PROPERTY_TYPE} val);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -294,21 +294,21 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
-     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1")
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+    ELSEIF(${MARSHAL_TYPE} STREQUAL "act1")
+      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
-     SET(C_SOURCE "${C_SOURCE}
+      SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->${PROPERTY_NAME}( value ); }     
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+      
+      SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
      internal static extern void cve${CLASS_NAME}${CS_FUNCTION_NAME}(
         IntPtr obj, ${MARSHAL_IN} 
         ${CS_PROPERTY_TYPE} val);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -317,21 +317,21 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
         ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
-     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1obj")
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+    ELSEIF(${MARSHAL_TYPE} STREQUAL "act1obj")
+      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
      ")
-     SET(C_SOURCE "${C_SOURCE}
+      SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { obj->${PROPERTY_NAME}( *value ); }     
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+      
+      SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
      internal static extern void cve${CLASS_NAME}${CS_FUNCTION_NAME}(
         IntPtr obj, ${MARSHAL_IN} 
         IntPtr val);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -340,20 +340,20 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
         ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
-     ELSEIF(${MARSHAL_TYPE} STREQUAL "propR")
-     
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+    ELSEIF(${MARSHAL_TYPE} STREQUAL "propR")
+      
+      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
      ")
-     SET(C_SOURCE "${C_SOURCE}
+      SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->get${PROPERTY_NAME}(); }   
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+      
+      SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
      internal static extern ${CS_PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
     /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -362,20 +362,20 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
         get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
      }
      ")
-     ELSEIF("${MARSHAL_TYPE}" STREQUAL "element")
-     IF (${PROPERTY_TYPE} STREQUAL "cv::Mat") #special handling for functions that returns Mats
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+    ELSEIF("${MARSHAL_TYPE}" STREQUAL "element")
+      IF (${PROPERTY_TYPE} STREQUAL "cv::Mat") #special handling for functions that returns Mats
+	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}*) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
      ")
-     SET(C_SOURCE "${C_SOURCE}
+	SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return &(obj->${PROPERTY_NAME}); }
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+	
+	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
      internal static extern IntPtr cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+	SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -384,17 +384,17 @@ ${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj
         get { return new ${CS_PROPERTY_TYPE}( ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr), false); } 
      }
      ")
-     ELSE()
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+      ELSE()
+	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
-     SET(C_SOURCE "${C_SOURCE}
+	SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}; }
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->${PROPERTY_NAME} = value; }     
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+	
+	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
      internal static extern ${CS_PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj);
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -402,7 +402,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         IntPtr obj, ${MARSHAL_IN} 
         ${CS_PROPERTY_TYPE} val);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+	SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -412,20 +412,20 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); }
      }
      ")
-     ENDIF()
-     ELSEIF("${MARSHAL_TYPE}" STREQUAL "elementR")
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+      ENDIF()
+    ELSEIF("${MARSHAL_TYPE}" STREQUAL "elementR")
+      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
      ")
-     SET(C_SOURCE "${C_SOURCE}
+      SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}; }
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+      
+      SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
      internal static extern ${CS_PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -434,17 +434,17 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
         get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
      }
      ")
-     ELSE() # for "prop" type
-     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+    ELSE() # for "prop" type
+      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
-     SET(C_SOURCE "${C_SOURCE}
+      SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->get${PROPERTY_NAME}(); }
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->set${PROPERTY_NAME}( value ); }     
      ")
-
-     SET(CS_SOURCE "${CS_SOURCE}
+      
+      SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
      internal static extern ${CS_PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj);
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -452,7 +452,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         IntPtr obj, ${MARSHAL_IN} 
         ${CS_PROPERTY_TYPE} val);
      ")
-     SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -462,35 +462,35 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); }
      }
      ")
-     ENDIF()
-   ENDFOREACH()
-   SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+    ENDIF()
+  ENDFOREACH()
+  SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
    }")
-   SET(CS_SOURCE "${CS_SOURCE}
+  SET(CS_SOURCE "${CS_SOURCE}
    }
 
    ${CS_CLASS_SOURCE}
 }")
-   #MESSAGE(STATUS "-------------------- CS_CLASS_SOURCE: ${CS_CLASS_SOURCE}")
-   WRITE_IF_DIFFERENT("${csfname}" "${CS_SOURCE}")
-   WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.h" "${C_HEADER_SOURCE}")
-   WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.cpp" "${C_SOURCE}")
-
+  #MESSAGE(STATUS "-------------------- CS_CLASS_SOURCE: ${CS_CLASS_SOURCE}")
+  WRITE_IF_DIFFERENT("${csfname}" "${CS_SOURCE}")
+  WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.h" "${C_HEADER_SOURCE}")
+  WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.cpp" "${C_SOURCE}")
+  
 ENDMACRO()
 
 ############################### core code gen START ##############################
 IF(HAVE_opencv_core)
   CREATE_OCV_CLASS_PROPERTY( 
-  "core/mat_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/MatGenerated.cs"
-  "cv::Mat" 
-  "Mat" 
-  "isContinuous;isSubmatrix;depth;empty;channels;pop_back;push_back;total;dims" 
-  "bool;bool;int;bool;int;int;cv::Mat;size_t;int" 
-  "val;val;val;val;val;act1;act1obj;val;elementR"
-  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;PopBack;PushBack;Total;Dims" 
-  "bool;bool;CvEnum.DepthType;bool;int;int;Mat;IntPtr;int"
-  "True if the data is continues;
+    "core/mat_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/MatGenerated.cs"
+    "cv::Mat" 
+    "Mat" 
+    "isContinuous;isSubmatrix;depth;empty;channels;pop_back;push_back;total;dims" 
+    "bool;bool;int;bool;int;int;cv::Mat;size_t;int" 
+    "val;val;val;val;val;act1;act1obj;val;elementR"
+    "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;PopBack;PushBack;Total;Dims" 
+    "bool;bool;CvEnum.DepthType;bool;int;int;Mat;IntPtr;int"
+    "True if the data is continues;
   True if the matrix is a submatrix of another matrix;
   Depth type;
   True if the Mat is empty;
@@ -499,82 +499,82 @@ IF(HAVE_opencv_core)
   Adds elements to the bottom of the matrix;
   The method returns the number of array elements (a number of pixels if the array represents an image);
   The matrix dimensionality"
-  "Emgu.CV"
-  "CvInvoke"
-  "Mat"
-  "#include \"mat_c.h\"")
-
+    "Emgu.CV"
+    "CvInvoke"
+    "Mat"
+    "#include \"mat_c.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "core/umat_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/UMatGenerated.cs"
-  "cv::UMat" 
-  "UMat" 
-  "isContinuous;isSubmatrix;depth;empty;channels;total;dims" 
-  "bool;bool;int;bool;int;size_t;int" 
-  "val;val;val;val;val;val;elementR"
-  "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;Total;Dims" 
-  "bool;bool;CvEnum.DepthType;bool;int;IntPtr;int"
-  "True if the data is continues;
+    "core/umat_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/UMatGenerated.cs"
+    "cv::UMat" 
+    "UMat" 
+    "isContinuous;isSubmatrix;depth;empty;channels;total;dims" 
+    "bool;bool;int;bool;int;size_t;int" 
+    "val;val;val;val;val;val;elementR"
+    "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;Total;Dims" 
+    "bool;bool;CvEnum.DepthType;bool;int;IntPtr;int"
+    "True if the data is continues;
   True if the matrix is a submatrix of another matrix;
   Depth type;
   True if the matrix is empty;
   Number of channels;
   The method returns the number of array elements (a number of pixels if the array represents an image);
   The matrix dimensionality"
-  "Emgu.CV"
-  "CvInvoke"
-  "UMat"
-  "#include \"umat_c.h\"")
-
-CREATE_OCV_CLASS_PROPERTY( 
-  "core/input_array_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/InputArrayGenerated.cs"
-  "cv::_InputArray" 
-  "InputArray" 
-  "isMat;isUMat;isMatVector;isUMatVector;isMatx" 
-  "bool;bool;bool;bool;bool" 
-  "val;val;val;val;val"
-  "IsMat;IsUMat;IsMatVector;IsUMatVector;IsMatx" 
-  "bool;bool;bool;bool;bool"
-  "True if the input array is a Mat;
+    "Emgu.CV"
+    "CvInvoke"
+    "UMat"
+    "#include \"umat_c.h\"")
+  
+  CREATE_OCV_CLASS_PROPERTY( 
+    "core/input_array_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/InputArrayGenerated.cs"
+    "cv::_InputArray" 
+    "InputArray" 
+    "isMat;isUMat;isMatVector;isUMatVector;isMatx" 
+    "bool;bool;bool;bool;bool" 
+    "val;val;val;val;val"
+    "IsMat;IsUMat;IsMatVector;IsUMatVector;IsMatx" 
+    "bool;bool;bool;bool;bool"
+    "True if the input array is a Mat;
   True if the input array is an UMat;
   True if the input array is a vector of Mat;
   True if the input array is a vector of UMat;
   True if the input array is a Matx"
-  "Emgu.CV"
-  "CvInvoke"
-  "InputArray"
-  "#include \"core_c_extra.h\"")
-
+    "Emgu.CV"
+    "CvInvoke"
+    "InputArray"
+    "#include \"core_c_extra.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "core/output_array_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/OutputArrayGenerated.cs"
-  "cv::_OutputArray" 
-  "OutputArray" 
-  "fixedSize;fixedType;needed" 
-  "bool;bool;bool" 
-  "val;val;val"
-  "FixedSize;FixedType;Needed" 
-  "bool;bool;bool"
-  "True if the output array is fixed size;
+    "core/output_array_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/OutputArrayGenerated.cs"
+    "cv::_OutputArray" 
+    "OutputArray" 
+    "fixedSize;fixedType;needed" 
+    "bool;bool;bool" 
+    "val;val;val"
+    "FixedSize;FixedType;Needed" 
+    "bool;bool;bool"
+    "True if the output array is fixed size;
   True if the output array is fixed type;
   True if the output array is needed"
-  "Emgu.CV"
-  "CvInvoke"
-  "OutputArray"
-  "#include \"core_c_extra.h\"")
-
+    "Emgu.CV"
+    "CvInvoke"
+    "OutputArray"
+    "#include \"core_c_extra.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "core/ocl_device_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclDeviceGenerated.cs"
-  "cv::ocl::Device" 
-  "OclDevice" 
-  "isNVidia;isIntel;isAMD;addressBits;linkerAvailable;compilerAvailable;available;maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;halfFPConfig;singleFPConfig;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion;OpenCL_C_Version" 
-  "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;int;int;int;bool;size_t;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String" 
-  "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val"
-  "IsNVidia;IsIntel;IsAMD;AddressBits;LinkerAvailable;CompilerAvailable;Available;MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;HalfFPConfig;SingleFPConfig;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type;Name;Version;VendorName;DriverVersion;Extensions;OpenCLVersion;OpenCLCVersion" 
-  "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;OclFpConfig;OclFpConfig;OclFpConfig;bool;IntPtr;int;int;OclDeviceType;String;String;String;String;String;String;String"
-  "Indicates if this is an NVidia device;
+    "core/ocl_device_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclDeviceGenerated.cs"
+    "cv::ocl::Device" 
+    "OclDevice" 
+    "isNVidia;isIntel;isAMD;addressBits;linkerAvailable;compilerAvailable;available;maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;halfFPConfig;singleFPConfig;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion;OpenCL_C_Version" 
+    "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;int;int;int;bool;size_t;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String" 
+    "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val"
+    "IsNVidia;IsIntel;IsAMD;AddressBits;LinkerAvailable;CompilerAvailable;Available;MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;HalfFPConfig;SingleFPConfig;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type;Name;Version;VendorName;DriverVersion;Extensions;OpenCLVersion;OpenCLCVersion" 
+    "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;OclFpConfig;OclFpConfig;OclFpConfig;bool;IntPtr;int;int;OclDeviceType;String;String;String;String;String;String;String"
+    "Indicates if this is an NVidia device;
   Indicates if this is an Intel device;
   Indicates if this is an AMD device;
   The AddressBits;
@@ -602,81 +602,81 @@ CREATE_OCV_CLASS_PROPERTY(
   The device extensions;
   The device OpenCL version;
   The device OpenCL C version"
-  "Emgu.CV"
-  "CvInvoke"
-  "OclDevice"
-  "#include \"ocl_c.h\"")
-
-    CREATE_OCV_CLASS_PROPERTY( 
-  "core/ocl_platform_info_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclPlatformInfoGenerated.cs"
-  "cv::ocl::PlatformInfo" 
-  "OclPlatformInfo" 
-  "name;version;vendor;deviceNumber" 
-  "cv::String;cv::String;cv::String;int" 
-  "val;val;val;val"
-  "Name;Version;Vendor;DeviceNumber" 
-  "String;String;String;int"
-  "The platform name;
+    "Emgu.CV"
+    "CvInvoke"
+    "OclDevice"
+    "#include \"ocl_c.h\"")
+  
+  CREATE_OCV_CLASS_PROPERTY( 
+    "core/ocl_platform_info_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclPlatformInfoGenerated.cs"
+    "cv::ocl::PlatformInfo" 
+    "OclPlatformInfo" 
+    "name;version;vendor;deviceNumber" 
+    "cv::String;cv::String;cv::String;int" 
+    "val;val;val;val"
+    "Name;Version;Vendor;DeviceNumber" 
+    "String;String;String;int"
+    "The platform name;
   The platform version;
   The platform vendor;
   The number of devices"
-  "Emgu.CV"
-  "CvInvoke"
-  "OclPlatformInfo"
-  "#include \"ocl_c.h\"")
-
-    CREATE_OCV_CLASS_PROPERTY( 
-  "core/ocl_kernel_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclKernelGenerated.cs"
-  "cv::ocl::Kernel" 
-  "OclKernel"
-  "empty;ptr"
-  "bool;void*"
-  "val;val"
-  "Empty;NativeKernelPtr"
-  "bool;IntPtr"
-  "Indicates if the kernel is empty;
-  The pointer to the native kernel"
-  "Emgu.CV"
-  "CvInvoke"
-  "OclKernel" 
-  "#include \"ocl_c.h\"")
-
+    "Emgu.CV"
+    "CvInvoke"
+    "OclPlatformInfo"
+    "#include \"ocl_c.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "core/gpumat_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/GpuMatGenerated.cs"
-  "cv::cuda::GpuMat" 
-  "GpuMat" 
-  "isContinuous;depth;empty;channels" 
-  "bool;int;bool;int" 
-  "val;val;val;val"
-  "IsContinuous;Depth;IsEmpty;NumberOfChannels" 
-  "bool;CvEnum.DepthType;bool;int"
-  "True if the data is continues;
+    "core/ocl_kernel_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclKernelGenerated.cs"
+    "cv::ocl::Kernel" 
+    "OclKernel"
+    "empty;ptr"
+    "bool;void*"
+    "val;val"
+    "Empty;NativeKernelPtr"
+    "bool;IntPtr"
+    "Indicates if the kernel is empty;
+  The pointer to the native kernel"
+    "Emgu.CV"
+    "CvInvoke"
+    "OclKernel" 
+    "#include \"ocl_c.h\"")
+  
+  CREATE_OCV_CLASS_PROPERTY( 
+    "core/gpumat_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/GpuMatGenerated.cs"
+    "cv::cuda::GpuMat" 
+    "GpuMat" 
+    "isContinuous;depth;empty;channels" 
+    "bool;int;bool;int" 
+    "val;val;val;val"
+    "IsContinuous;Depth;IsEmpty;NumberOfChannels" 
+    "bool;CvEnum.DepthType;bool;int"
+    "True if the data is continues;
   Depth type;
   True if the matrix is empty;
   Number of channels"
-  "Emgu.CV.Cuda"
-  "CudaInvoke"
-  "GpuMat"
-  "#include \"opencv2/core/cuda.hpp\"")
+    "Emgu.CV.Cuda"
+    "CudaInvoke"
+    "GpuMat"
+    "#include \"opencv2/core/cuda.hpp\"")
 ENDIF()
 ############################### core code gen END ################################
 
 ############################### features2d code gen START ##############################
 IF(HAVE_opencv_features2d)
   CREATE_OCV_CLASS_PROPERTY( 
-  "features2d/SimpleBlobDetector_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/SimpleBlobDetectorParamsGenerated.cs"
-  "cv::SimpleBlobDetector::Params" 
-  "SimpleBlobDetectorParams" 
-  "thresholdStep;minThreshold;maxThreshold;minDistBetweenBlobs;filterByColor;blobColor;filterByArea;minArea;maxArea;filterByCircularity;minCircularity;maxCircularity;filterByInertia;minInertiaRatio;maxInertiaRatio;filterByConvexity;minConvexity;maxConvexity;minRepeatability" 
-  "float;float;float;float;bool;uchar;bool;float;float;bool;float;float;bool;float;float;bool;float;float;size_t" 
-  "element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element"
-  "ThresholdStep;MinThreshold;MaxThreshold;MinDistBetweenBlobs;FilterByColor;blobColor;FilterByArea;MinArea;MaxArea;FilterByCircularity;MinCircularity;MaxCircularity;FilterByInertia;MinInertiaRatio;MaxInertiaRatio;FilterByConvexity;MinConvexity;MaxConvexity;MinRepeatability" 
-  "float;float;float;float;bool;Byte;bool;float;float;bool;float;float;bool;float;float;bool;float;float;IntPtr"
-  "Threshold step;
+    "features2d/SimpleBlobDetector_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/SimpleBlobDetectorParamsGenerated.cs"
+    "cv::SimpleBlobDetector::Params" 
+    "SimpleBlobDetectorParams" 
+    "thresholdStep;minThreshold;maxThreshold;minDistBetweenBlobs;filterByColor;blobColor;filterByArea;minArea;maxArea;filterByCircularity;minCircularity;maxCircularity;filterByInertia;minInertiaRatio;maxInertiaRatio;filterByConvexity;minConvexity;maxConvexity;minRepeatability" 
+    "float;float;float;float;bool;uchar;bool;float;float;bool;float;float;bool;float;float;bool;float;float;size_t" 
+    "element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element"
+    "ThresholdStep;MinThreshold;MaxThreshold;MinDistBetweenBlobs;FilterByColor;blobColor;FilterByArea;MinArea;MaxArea;FilterByCircularity;MinCircularity;MaxCircularity;FilterByInertia;MinInertiaRatio;MaxInertiaRatio;FilterByConvexity;MinConvexity;MaxConvexity;MinRepeatability" 
+    "float;float;float;float;bool;Byte;bool;float;float;bool;float;float;bool;float;float;bool;float;float;IntPtr"
+    "Threshold step;
   Min threshold;
   Max threshold;
   Min dist between blobs;
@@ -695,44 +695,44 @@ IF(HAVE_opencv_features2d)
   Min Convexity;
   Max Convexity;
   Min Repeatability"
-  "Emgu.CV.Features2D"
-  "Features2DInvoke"
-  "SimpleBlobDetectorParams"
-  "#include \"features2d_c.h\"")
+    "Emgu.CV.Features2D"
+    "Features2DInvoke"
+    "SimpleBlobDetectorParams"
+    "#include \"features2d_c.h\"")
 ENDIF()
 ############################### features2d code gen END ################################
 
 ############################### ml code gen START ##############################
 IF(HAVE_opencv_ml)
   CREATE_OCV_CLASS_PROPERTY( 
-  "ml/em_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/EMGenerated.cs"
-  "cv::ml::EM" 
-  "EM" 
-  "ClustersNumber;CovarianceMatrixType;TermCriteria" 
-  "int;int;CvTermCriteria" 
-  "prop;prop;struct"
-  "ClustersNumber;CovarianceMatrixType;TermCriteria" 
-  "int;EM.CovarianMatrixType;MCvTermCriteria"
-  "The number of mixtures;
+    "ml/em_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/EMGenerated.cs"
+    "cv::ml::EM" 
+    "EM" 
+    "ClustersNumber;CovarianceMatrixType;TermCriteria" 
+    "int;int;CvTermCriteria" 
+    "prop;prop;struct"
+    "ClustersNumber;CovarianceMatrixType;TermCriteria" 
+    "int;EM.CovarianMatrixType;MCvTermCriteria"
+    "The number of mixtures;
   The type of the mixture covariation matrices;
   Termination criteria of the procedure. EM algorithm stops either after a certain number of iterations (term_crit.num_iter), or when the parameters change too little (no more than term_crit.epsilon) from iteration to iteration"
-  "Emgu.CV.ML"
-  "MlInvoke"
-  "EM"
-  "#include \"ml_c.h\"")
-
+    "Emgu.CV.ML"
+    "MlInvoke"
+    "EM"
+    "#include \"ml_c.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "ml/svm_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/SVMGenerated.cs"
-  "cv::ml::SVM" 
-  "SVM" 
-  "Type;Gamma;Coef0;Degree;C;Nu;P;Kernel;TermCriteria;KernelType" 
-  "int;double;double;double;double;double;double;int;CvTermCriteria;int" 
-  "prop;prop;prop;prop;prop;prop;prop;propW;struct;propR"
-  "Type;Gamma;Coef0;Degree;C;Nu;P;Kernel;TermCriteria;KernelType" 
-  "SVM.SvmType;double;double;double;double;double;double;SVM.SvmKernelType;MCvTermCriteria;SVM.SvmKernelType"
-  "Type of a SVM formulation;
+    "ml/svm_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/SVMGenerated.cs"
+    "cv::ml::SVM" 
+    "SVM" 
+    "Type;Gamma;Coef0;Degree;C;Nu;P;Kernel;TermCriteria;KernelType" 
+    "int;double;double;double;double;double;double;int;CvTermCriteria;int" 
+    "prop;prop;prop;prop;prop;prop;prop;propW;struct;propR"
+    "Type;Gamma;Coef0;Degree;C;Nu;P;Kernel;TermCriteria;KernelType" 
+    "SVM.SvmType;double;double;double;double;double;double;SVM.SvmKernelType;MCvTermCriteria;SVM.SvmKernelType"
+    "Type of a SVM formulation;
   Parameter gamma of a kernel function;
   Parameter coef0 of a kernel function;
   Parameter degree of a kernel function;
@@ -742,41 +742,41 @@ IF(HAVE_opencv_ml)
   Initialize with one of predefined kernels;
   Termination criteria of the iterative SVM training procedure which solves a partial case of constrained quadratic optimization problem;
   Type of a SVM kernel"
-  "Emgu.CV.ML"
-  "MlInvoke"
-  "SVM"
-  "#include \"ml_c.h\"")
-
+    "Emgu.CV.ML"
+    "MlInvoke"
+    "SVM"
+    "#include \"ml_c.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "ml/knearest_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/KNearestGenerated.cs"
-  "cv::ml::KNearest" 
-  "KNearest" 
-  "DefaultK;IsClassifier;Emax;AlgorithmType" 
-  "int;bool;int;int" 
-  "prop;prop;prop;prop"
-  "DefaultK;IsClassifier;Emax;AlgorithmType" 
-  "int;bool;int;int"
-  "Default number of neighbors to use in predict method;
+    "ml/knearest_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/KNearestGenerated.cs"
+    "cv::ml::KNearest" 
+    "KNearest" 
+    "DefaultK;IsClassifier;Emax;AlgorithmType" 
+    "int;bool;int;int" 
+    "prop;prop;prop;prop"
+    "DefaultK;IsClassifier;Emax;AlgorithmType" 
+    "int;bool;int;int"
+    "Default number of neighbors to use in predict method;
   Whether classification or regression model should be trained;
   Parameter for KDTree implementation;
   Algorithm type"
-  "Emgu.CV.ML"
-  "MlInvoke"
-  "KNearest"
-  "#include \"ml_c.h\"")
-
+    "Emgu.CV.ML"
+    "MlInvoke"
+    "KNearest"
+    "#include \"ml_c.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "ml/ann_mlp_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/ANN_MLPGenerated.cs"
-  "cv::ml::ANN_MLP" 
-  "ANN_MLP" 
-  "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax" 
-  "CvTermCriteria;double;double;double;double;double;double;double" 
-  "struct;prop;prop;prop;prop;prop;prop;prop"
-  "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax" 
-  "MCvTermCriteria;double;double;double;double;double;double;double"
-  "Termination criteria of the training algorithm;
+    "ml/ann_mlp_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/ANN_MLPGenerated.cs"
+    "cv::ml::ANN_MLP" 
+    "ANN_MLP" 
+    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax" 
+    "CvTermCriteria;double;double;double;double;double;double;double" 
+    "struct;prop;prop;prop;prop;prop;prop;prop"
+    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax" 
+    "MCvTermCriteria;double;double;double;double;double;double;double"
+    "Termination criteria of the training algorithm;
   BPROP: Strength of the weight gradient term;
   BPROP: Strength of the momentum term (the difference between weights on the 2 previous iterations);
   RPROP: Initial value Delta_0 of update-values Delta_{ij};
@@ -784,43 +784,43 @@ IF(HAVE_opencv_ml)
   RPROP: Decrease factor;
   RPROP: Update-values lower limit;
   RPROP: Update-values upper limit"
-  "Emgu.CV.ML"
-  "MlInvoke"
-  "ANN_MLP"
-  "#include \"ml_c.h\"")
-
+    "Emgu.CV.ML"
+    "MlInvoke"
+    "ANN_MLP"
+    "#include \"ml_c.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "ml/logistic_regression_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/LogisticRegressionGenerated.cs"
-  "cv::ml::LogisticRegression" 
-  "LogisticRegression" 
-  "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
-  "double;int;int;int;int;CvTermCriteria" 
-  "prop;prop;prop;prop;prop;struct"
-  "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
-  "double;int;LogisticRegression.RegularizationMethod;LogisticRegression.TrainType;int;MCvTermCriteria;"
-  "Learning rate;
+    "ml/logistic_regression_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/LogisticRegressionGenerated.cs"
+    "cv::ml::LogisticRegression" 
+    "LogisticRegression" 
+    "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
+    "double;int;int;int;int;CvTermCriteria" 
+    "prop;prop;prop;prop;prop;struct"
+    "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
+    "double;int;LogisticRegression.RegularizationMethod;LogisticRegression.TrainType;int;MCvTermCriteria;"
+    "Learning rate;
   Number of iterations;
   Kind of regularization to be applied;
   Kind of training method to be applied;
   Specifies the number of training samples taken in each step of Mini-Batch Gradient Descent;
   Termination criteria of the algorithm"
-  "Emgu.CV.ML"
-  "MlInvoke"
-  "LogisticRegression"
-  "#include \"ml_c.h\"")
-
+    "Emgu.CV.ML"
+    "MlInvoke"
+    "LogisticRegression"
+    "#include \"ml_c.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "ml/rtrees_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/RTreesGenerated.cs"
-  "cv::ml::RTrees" 
-  "RTrees" 
-  "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy;CalculateVarImportance;ActiveVarCount;TermCriteria" 
-  "int;int;int;int;bool;bool;bool;float;bool;int;CvTermCriteria" 
-  "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;struct"
-  "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy;CalculateVarImportance;ActiveVarCount;TermCriteria" 
-  "int;int;int;int;bool;bool;bool;float;bool;int;MCvTermCriteria"
-  "Cluster possible values of a categorical variable into K less than or equals maxCategories clusters to find a suboptimal split;
+    "ml/rtrees_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/RTreesGenerated.cs"
+    "cv::ml::RTrees" 
+    "RTrees" 
+    "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy;CalculateVarImportance;ActiveVarCount;TermCriteria" 
+    "int;int;int;int;bool;bool;bool;float;bool;int;CvTermCriteria" 
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;struct"
+    "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy;CalculateVarImportance;ActiveVarCount;TermCriteria" 
+    "int;int;int;int;bool;bool;bool;float;bool;int;MCvTermCriteria"
+    "Cluster possible values of a categorical variable into K less than or equals maxCategories clusters to find a suboptimal split;
   The maximum possible depth of the tree;
   If the number of samples in a node is less than this parameter then the node will not be split;
   If CVFolds greater than 1 then algorithms prunes the built decision tree using K-fold;
@@ -831,22 +831,22 @@ IF(HAVE_opencv_ml)
   If true then variable importance will be calculated;
   The size of the randomly selected subset of features at each tree node and that are used to find the best split(s);
   The termination criteria that specifies when the training algorithm stops"
-  "Emgu.CV.ML"
-  "MlInvoke"
-  "RTrees"
-  "#include \"ml_c.h\"")
-
+    "Emgu.CV.ML"
+    "MlInvoke"
+    "RTrees"
+    "#include \"ml_c.h\"")
+  
   CREATE_OCV_CLASS_PROPERTY( 
-  "ml/dtree_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/DTreesGenerated.cs"
-  "cv::ml::DTrees" 
-  "DTrees" 
-  "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
-  "int;int;int;int;bool;bool;bool;float" 
-  "prop;prop;prop;prop;prop;prop;prop;prop"
-  "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
-  "int;int;int;int;bool;bool;bool;float"
-  "Cluster possible values of a categorical variable into K less than or equals maxCategories clusters to find a suboptimal split;
+    "ml/dtree_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/DTreesGenerated.cs"
+    "cv::ml::DTrees" 
+    "DTrees" 
+    "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
+    "int;int;int;int;bool;bool;bool;float" 
+    "prop;prop;prop;prop;prop;prop;prop;prop"
+    "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
+    "int;int;int;int;bool;bool;bool;float"
+    "Cluster possible values of a categorical variable into K less than or equals maxCategories clusters to find a suboptimal split;
   The maximum possible depth of the tree;
   If the number of samples in a node is less than this parameter then the node will not be split;
   If CVFolds greater than 1 then algorithms prunes the built decision tree using K-fold;
@@ -854,22 +854,22 @@ IF(HAVE_opencv_ml)
   If true then a pruning will be harsher;
   If true then pruned branches are physically removed from the tree;
   Termination criteria for regression trees"
-  "Emgu.CV.ML"
-  "MlInvoke"
-  "DTrees"
-  "#include \"ml_c.h\"")
-
-    CREATE_OCV_CLASS_PROPERTY( 
-  "ml/boost_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/BoostGenerated.cs"
-  "cv::ml::Boost" 
-  "Boost" 
-  "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
-  "int;int;int;int;bool;bool;bool;float" 
-  "prop;prop;prop;prop;prop;prop;prop;prop"
-  "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
-  "int;int;int;int;bool;bool;bool;float"
-  "Cluster possible values of a categorical variable into K less than or equals maxCategories clusters to find a suboptimal split;
+    "Emgu.CV.ML"
+    "MlInvoke"
+    "DTrees"
+    "#include \"ml_c.h\"")
+  
+  CREATE_OCV_CLASS_PROPERTY( 
+    "ml/boost_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/BoostGenerated.cs"
+    "cv::ml::Boost" 
+    "Boost" 
+    "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
+    "int;int;int;int;bool;bool;bool;float" 
+    "prop;prop;prop;prop;prop;prop;prop;prop"
+    "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
+    "int;int;int;int;bool;bool;bool;float"
+    "Cluster possible values of a categorical variable into K less than or equals maxCategories clusters to find a suboptimal split;
   The maximum possible depth of the tree;
   If the number of samples in a node is less than this parameter then the node will not be split;
   If CVFolds greater than 1 then algorithms prunes the built decision tree using K-fold;
@@ -877,26 +877,26 @@ IF(HAVE_opencv_ml)
   If true then a pruning will be harsher;
   If true then pruned branches are physically removed from the tree;
   Termination criteria for regression trees"
-  "Emgu.CV.ML"
-  "MlInvoke"
-  "Boost"
-  "#include \"ml_c.h\"")
+    "Emgu.CV.ML"
+    "MlInvoke"
+    "Boost"
+    "#include \"ml_c.h\"")
 ENDIF()
 ############################### ml code gen END ################################
 
 ############################### video code gen START ##############################
 IF(HAVE_opencv_video)
-    CREATE_OCV_CLASS_PROPERTY( 
-  "video/dual_tvl1_opticalflow_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/DualTVL1OpticalFlowGenerated.cs"
-  "cv::DualTVL1OpticalFlow" 
-  "DualTVL1OpticalFlow" 
-  "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
-  "double;double;double;double;int;int;double;int;int;bool;double;int" 
-  "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
-  "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
-  "double;double;double;double;int;int;double;int;int;bool;double;int"
-  "Time step of the numerical scheme;
+  CREATE_OCV_CLASS_PROPERTY( 
+    "video/dual_tvl1_opticalflow_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/DualTVL1OpticalFlowGenerated.cs"
+    "cv::DualTVL1OpticalFlow" 
+    "DualTVL1OpticalFlow" 
+    "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
+    "double;double;double;double;int;int;double;int;int;bool;double;int" 
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
+    "double;double;double;double;int;int;double;int;int;bool;double;int"
+    "Time step of the numerical scheme;
   Weight parameter for the data term, attachment parameter;
   Weight parameter for (u - v)^2, tightness parameter;
   Coefficient for additional illumination variation term;
@@ -908,21 +908,21 @@ IF(HAVE_opencv_video)
   Use initial flow;
   Step between scales (less than 1);
   Median filter kernel size (1 = no filter) (3 or 5)"
-  "Emgu.CV"
-  "CvInvoke"
-  "DualTVL1OpticalFlow"
-  "#include \"video_c.h\"")
-
-      CREATE_OCV_CLASS_PROPERTY( 
-  "video/kalmanfilter_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/KalmanFilterGenerated.cs"
-  "cv::KalmanFilter" 
-  "KalmanFilter"  "statePre;statePost;transitionMatrix;controlMatrix;measurementMatrix;processNoiseCov;measurementNoiseCov;errorCovPre;gain;errorCovPost" 
-  "cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat" 
-  "element;element;element;element;element;element;element;element;element;element"
-  "StatePre;StatePost;TransitionMatrix;ControlMatrix;MeasurementMatrix;ProcessNoiseCov;MeasurementNoiseCov;ErrorCovPre;Gain;ErrorCovPost" 
-  "Mat;Mat;Mat;Mat;Mat;Mat;Mat;Mat;Mat;Mat"
-  "Predicted state (x'(k)): x(k)=A*x(k-1)+B*u(k);
+    "Emgu.CV"
+    "CvInvoke"
+    "DualTVL1OpticalFlow"
+    "#include \"video_c.h\"")
+  
+  CREATE_OCV_CLASS_PROPERTY( 
+    "video/kalmanfilter_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/KalmanFilterGenerated.cs"
+    "cv::KalmanFilter" 
+    "KalmanFilter"  "statePre;statePost;transitionMatrix;controlMatrix;measurementMatrix;processNoiseCov;measurementNoiseCov;errorCovPre;gain;errorCovPost" 
+    "cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat" 
+    "element;element;element;element;element;element;element;element;element;element"
+    "StatePre;StatePost;TransitionMatrix;ControlMatrix;MeasurementMatrix;ProcessNoiseCov;MeasurementNoiseCov;ErrorCovPre;Gain;ErrorCovPost" 
+    "Mat;Mat;Mat;Mat;Mat;Mat;Mat;Mat;Mat;Mat"
+    "Predicted state (x'(k)): x(k)=A*x(k-1)+B*u(k);
   Corrected state (x(k)): x(k)=x'(k)+K(k)*(z(k)-H*x'(k));
   State transition matrix (A);
   Control matrix (B) (not used if there is no control);
@@ -932,46 +932,46 @@ IF(HAVE_opencv_video)
   priori error estimate covariance matrix (P'(k)): P'(k)=A*P(k-1)*At + Q);
   Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R);
   posteriori error estimate covariance matrix (P(k)): P(k)=(I-K(k)*H)*P'(k)"
-  "Emgu.CV"
-  "CvInvoke"
-  "KalmanFilter"
-  "#include \"video_c.h\"")
+    "Emgu.CV"
+    "CvInvoke"
+    "KalmanFilter"
+    "#include \"video_c.h\"")
 ENDIF()
 ############################### video code gen END ################################
 
 ############################### cudaimgproc code gen START ##############################
 IF(HAVE_opencv_cudaimgproc)
-    CREATE_OCV_CLASS_PROPERTY( 
-  "cudaimgproc/cuda_hough_lines_detector_property" 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Imgproc/CudaHoughLinesDetectorGenerated.cs"
-  "cv::cuda::HoughLinesDetector" 
-  "CudaHoughLinesDetector" 
-  "Rho;Theta;Threshold;DoSort;MaxLines" 
-  "float;float;int;bool;int" 
-  "prop;prop;prop;Prop;Prop"
-  "Rho;Theta;Threshold;DoSort;MaxLines" 
-  "float;float;int;bool;int"
-  "Distance resolution of the accumulator in pixels;
+  CREATE_OCV_CLASS_PROPERTY( 
+    "cudaimgproc/cuda_hough_lines_detector_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Imgproc/CudaHoughLinesDetectorGenerated.cs"
+    "cv::cuda::HoughLinesDetector" 
+    "CudaHoughLinesDetector" 
+    "Rho;Theta;Threshold;DoSort;MaxLines" 
+    "float;float;int;bool;int" 
+    "prop;prop;prop;Prop;Prop"
+    "Rho;Theta;Threshold;DoSort;MaxLines" 
+    "float;float;int;bool;int"
+    "Distance resolution of the accumulator in pixels;
   Angle resolution of the accumulator in radians;
   Accumulator threshold parameter. Only those lines are returned that get enough;
   Performs lines sort by votes;
   Maximum number of output lines"
-  "Emgu.CV.Cuda"
-  "CudaInvoke"
-  "CudaHoughLinesDetector"
-  "#include \"opencv2/cudaimgproc.hpp\"")
+    "Emgu.CV.Cuda"
+    "CudaInvoke"
+    "CudaHoughLinesDetector"
+    "#include \"opencv2/cudaimgproc.hpp\"")
 ENDIF()
 ############################### video code gen START ##############################
 
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
-FIND_PACKAGE( OpenMP REQUIRED)
-if(OPENMP_FOUND)
-  MESSAGE("Compiling cvextern with OPENMP")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-endif()
+  FIND_PACKAGE( OpenMP REQUIRED)
+  if(OPENMP_FOUND)
+    MESSAGE("Compiling cvextern with OPENMP")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+  endif()
 ENDIF()
 ############################### OPENMP END ################################
 
@@ -996,13 +996,13 @@ FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
     INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
   ENDIF()
   #MESSAGE("Included:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
-
+  
   SET(CVEXTERN_OPTIONAL_DIR "${PROJECT_SOURCE_DIR}/${CVEXTERN_OPTIONAL_DEP}")
   IF(EXISTS "${CVEXTERN_OPTIONAL_DIR}" AND IS_DIRECTORY "${CVEXTERN_OPTIONAL_DIR}")
     
     INCLUDE_DIRECTORIES("${CVEXTERN_OPTIONAL_DIR}")
     file(GLOB_RECURSE ${CVEXTERN_OPTIONAL_DEP}_extern_srcs "${CVEXTERN_OPTIONAL_DEP}/*.cpp")
-	 #MESSAGE("srcs: ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs}")
+    #MESSAGE("srcs: ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs}")
     file(GLOB_RECURSE ${CVEXTERN_OPTIONAL_DEP}_extern_hdrs "${CVEXTERN_OPTIONAL_DEP}/*.h*")
     source_group("Src_${CVEXTERN_OPTIONAL_DEP}" FILES ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs})
     source_group("Include_${CVEXTERN_OPTIONAL_DEP}" FILES ${${CVEXTERN_OPTIONAL_DEP}_extern_hdrs})
@@ -1036,26 +1036,26 @@ if (WITH_TBB AND TBB_INCLUDE_DIRS AND TBB_LIB_DIR)
   link_directories(${TBB_LIB_DIR})
   
   IF(WIN32)
-  SET(TBB_BINARY_FILE_DIR "${TBB_INCLUDE_DIRS}/../../redist")
-  IF(TARGET_ARCH_64)
-    SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/intel64_win/tbb")
-  ELSE()
-    SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/ia32_win/tbb")
-  ENDIF()
-  
-  if(MSVC10)
-	SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc10")
-  elseif(MSVC11)
-	SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc11")
-  elseif(MSVC12)
-	SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc12")
-  elseif(MSVC14)
-    SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc14")
-  endif()
-
-  #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES tbb)
-  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${TBB_BINARY_FILE_DIR}/tbb.dll")
-   
+    SET(TBB_BINARY_FILE_DIR "${TBB_INCLUDE_DIRS}/../../redist")
+    IF(TARGET_ARCH_64)
+      SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/intel64_win/tbb")
+    ELSE()
+      SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/ia32_win/tbb")
+    ENDIF()
+    
+    if(MSVC10)
+      SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc10")
+    elseif(MSVC11)
+      SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc11")
+    elseif(MSVC12)
+      SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc12")
+    elseif(MSVC14)
+      SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/vc14")
+    endif()
+    
+    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES tbb)
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${TBB_BINARY_FILE_DIR}/tbb.dll")
+    
   ENDIF()
 endif()
 
@@ -1119,7 +1119,7 @@ IF(ANDROID)
         "${LEPT_ROOT_DIR}/src" 
         "${PROJECT_SOURCE_DIR}/tesseract")
       #SET(TESSERACT_PROJECTS libleptonica tesseract_ccutil tesseract_viewer tesseract_cutil tesseract_opencl tesseract_ccstruct tesseract_dict tesseract_classify tesseract_wordrec tesseract_neural_networks tesseract_textord tesseract_cube tesseract_api tesseract_ccmain)
-	  SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_cube tesseract_textord tesseract_neural_networks tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
+      SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_cube tesseract_textord tesseract_neural_networks tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
     ENDIF()
   ENDIF()
 ELSE() #ELSEIF(WIN32 OR APPLE)
@@ -1135,7 +1135,7 @@ ELSE() #ELSEIF(WIN32 OR APPLE)
         "${LEPT_ROOT_DIR}/src" 
         "${PROJECT_SOURCE_DIR}/tesseract")
       #SET(TESSERACT_PROJECTS libleptonica tesseract_ccutil tesseract_viewer tesseract_cutil tesseract_opencl tesseract_ccstruct tesseract_dict tesseract_classify tesseract_wordrec tesseract_neural_networks tesseract_textord tesseract_cube tesseract_api tesseract_ccmain)
-	  SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_cube tesseract_textord tesseract_neural_networks tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
+      SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_cube tesseract_textord tesseract_neural_networks tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
     ENDIF()
     ADD_DEFINITIONS(-D__MSW32__)
   ENDIF()
@@ -1190,68 +1190,68 @@ IF(WIN32 AND WITH_CUDA)
     file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_major REGEX "#define NPP_VERSION_MAJOR.*")
     file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_minor REGEX "#define NPP_VERSION_MINOR.*")
     file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_build REGEX "#define NPP_VERSION_BUILD.*")
-
+    
     string( REGEX REPLACE "#define NPP_VERSION_MAJOR[ \t]+|//.*" "" npp_major ${npp_major})
     string( REGEX REPLACE "#define NPP_VERSION_MINOR[ \t]+|//.*" "" npp_minor ${npp_minor})
     string( REGEX REPLACE "#define NPP_VERSION_BUILD[ \t]+|//.*" "" npp_build ${npp_build})
-
+    
     string( REGEX MATCH "[0-9]+" npp_major ${npp_major} ) 
     string( REGEX MATCH "[0-9]+" npp_minor ${npp_minor} ) 
     string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
   endif()
-
+  
   SET(CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_TOOLKIT_ROOT_DIR})
   #replace any potential backslash in the path with slash
   #STRING(REGEX REPLACE "\\\\" "/" CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_NPP_LIBRARY_ROOT_DIR}) 
-
+  
   IF(TARGET_ARCH_64) 
     SET(CUDA_POSTFIX 64)
   else()
     SET(CUDA_POSTFIX 32)
   ENDIF()
-
+  
   IF ((${npp_major} GREATER 5) OR ((${npp_major} STREQUAL "5") AND (${npp_minor} GREATER 0)))
-  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS 
-    "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-    "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppi${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-    "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npps${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-    "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-    )
-  #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
-  #  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
-  #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
-
-  #IF(WITH_NVCUVID)
-  #  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
-  #ENDIF()
-
-  IF(WITH_CUFFT)
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
-    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}) 
-  ENDIF()
-
-  IF(WITH_CUBLAS)
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
-    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor})
-  ENDIF()  
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS 
+      "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
+      "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppi${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
+      "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npps${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
+      "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
+      )
+    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
+    #  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
+    #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
+    
+    #IF(WITH_NVCUVID)
+    #  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+    #ENDIF()
+    
+    IF(WITH_CUFFT)
+      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+      #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}) 
+    ENDIF()
+    
+    IF(WITH_CUBLAS)
+      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+      #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor})
+    ENDIF()  
   ELSE()  
-  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS 
-    "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
-    "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
-    )
-  #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
-  #  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
-  #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
-
-  IF(WITH_CUFFT)
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
-    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}) 
-  ENDIF()
-
-  IF(WITH_CUBLAS)
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
-    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
-  ENDIF()
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS 
+      "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
+      "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
+      )
+    #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES 
+    #  npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build} 
+    #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
+    
+    IF(WITH_CUFFT)
+      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+      #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}) 
+    ENDIF()
+    
+    IF(WITH_CUBLAS)
+      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+      #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
+    ENDIF()
   ENDIF()
 ENDIF()
 
@@ -1321,14 +1321,14 @@ ENDIF()
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   FOREACH(CVEXTERN_DEPENDENCY_DLL ${CVEXTERN_DEPENDENCY_DLLS})
     LIST(APPEND CVEXTERN_DEPENDENCY_DLL_DEPLOY_COMMAND COMMAND ${CMAKE_COMMAND} -E copy "${CVEXTERN_DEPENDENCY_DLL}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-	GET_FILENAME_COMPONENT(CVEXTERN_DEPENDENCT_DLL_NAME ${CVEXTERN_DEPENDENCY_DLL} NAME_WE)
-	LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES ${CVEXTERN_DEPENDENCT_DLL_NAME})
+    GET_FILENAME_COMPONENT(CVEXTERN_DEPENDENCT_DLL_NAME ${CVEXTERN_DEPENDENCY_DLL} NAME_WE)
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES ${CVEXTERN_DEPENDENCT_DLL_NAME})
   ENDFOREACH()
   
   #Promote this to parent scope such that cpack will know what dlls to be included in the package
   #MESSAGE("**************CVEXTERN_DEPENDENCY_DLL_NAMES: ${CVEXTERN_DEPENDENCY_DLL_NAMES}")
   SET(CVEXTERN_DEPENDENCY_DLL_NAMES ${CVEXTERN_DEPENDENCY_DLL_NAMES} PARENT_SCOPE)
-
+  
   ADD_CUSTOM_COMMAND(
     TARGET ${the_target}
     POST_BUILD
@@ -1338,20 +1338,20 @@ ENDIF()
 
 # For dynamic link numbering convenions
 set_target_properties(${the_target} PROPERTIES
-    OUTPUT_NAME "${the_target}"
-    )
+  OUTPUT_NAME "${the_target}"
+  )
 
 # Additional target properties
 set_target_properties(${the_target} PROPERTIES
-	DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
-	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
-	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
-	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
-	DEFINE_SYMBOL "CVAPI_EXPORTS"
-	)
+  DEBUG_POSTFIX "${OPENCV_DEBUG_POSTFIX}"
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
+  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
+  DEFINE_SYMBOL "CVAPI_EXPORTS"
+  )
 
 if(ENABLE_SOLUTION_FOLDERS)
-    set_target_properties(${the_target} PROPERTIES FOLDER "emgu")
+  set_target_properties(${the_target} PROPERTIES FOLDER "emgu")
 endif() 
 
 IF (WITH_TIFF)
@@ -1374,23 +1374,23 @@ ELSE()
 ENDIF()
 
 IF(WIN32 OR APPLE)
-#always build from source on windows / Mac
+  #always build from source on windows / Mac
   MESSAGE(STATUS "Building zlib from source")
   ADD_DEPENDENCIES(${the_target} zlib)
   SET(ZLIB_INCLUDE_DIR "${OPENCV_SUBFOLDER}/3rdparty/zlib")
   SET(ZLIB_LIBRARY "zlib")
   INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
 ELSE()
-FIND_PACKAGE(ZLIB)
-IF(ZLIB_FOUND)
-  MESSAGE(STATUS "CVEXTERN: ZLIB found.")
-ELSE()
-  MESSAGE(STATUS "CVEXTERN: ZLIB not found, building from source")
-  ADD_DEPENDENCIES(${the_target} zlib)
-  SET(ZLIB_INCLUDE_DIR "${OPENCV_SUBFOLDER}/3rdparty/zlib")
-  SET(ZLIB_LIBRARY "zlib")
-ENDIF()
-INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
+  FIND_PACKAGE(ZLIB)
+  IF(ZLIB_FOUND)
+    MESSAGE(STATUS "CVEXTERN: ZLIB found.")
+  ELSE()
+    MESSAGE(STATUS "CVEXTERN: ZLIB not found, building from source")
+    ADD_DEPENDENCIES(${the_target} zlib)
+    SET(ZLIB_INCLUDE_DIR "${OPENCV_SUBFOLDER}/3rdparty/zlib")
+    SET(ZLIB_LIBRARY "zlib")
+  ENDIF()
+  INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
 ENDIF()
 
 IF (ANDROID OR APPLE)
@@ -1414,7 +1414,7 @@ IF(EMGU_CV_WITH_TIFF)
     # ----------------------------------------------------------------------------
     SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libgeotiff/libgeotiff-1.4.0")
     ADD_SUBDIRECTORY(libgeotiff)
-	#MESSAGE(STATUS "CURRENT Binary DIR: ${CMAKE_CURRENT_BINARY_DIR}")
+    #MESSAGE(STATUS "CURRENT Binary DIR: ${CMAKE_CURRENT_BINARY_DIR}")
     SET(GEOTIFF_INCLUDE_DIR ${TIFF_INCLUDE_DIR} ${LIBGEOTIFF_DIR} "${LIBGEOTIFF_DIR}/libxtiff")
     SET(GEOTIFF_LIBRARY geotiff_archive xtiff)
   ENDIF()
@@ -1424,8 +1424,8 @@ ENDIF()
 
 ADD_DEPENDENCIES(${the_target} 
   ${OPENCL_PROJ}
-# ${ZLIB_LIBRARY} 
-#  xtiff
+  # ${ZLIB_LIBRARY} 
+  #  xtiff
   ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${CVBLOB_LIBRARY} )
 
 #IF(WITH_CUDA)
@@ -1442,18 +1442,18 @@ IF(EMGU_CV_WITH_TESSERACT)
     ADD_DEPENDENCIES(${TESSERACT_PROJECTS})
   ENDIF()
 ENDIF()
-  
+
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
-#  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
-#  MESSAGE("Included:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
-    ADD_DEPENDENCIES(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
-    target_link_libraries(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
+  #  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+  #  MESSAGE("Included:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+  ADD_DEPENDENCIES(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
+  target_link_libraries(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
 ENDFOREACH()
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
   IF(MSVC AND (NOT CV_ICC) AND (NOT TARGET_ARCH_64)) 
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")        ## Optimization
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")        ## Optimization
   ENDIF()
 ENDIF()
 
@@ -1475,13 +1475,13 @@ endif()
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
   ${ZLIB_LIBRARY} 
-#  xtiff 
+  #  xtiff 
   ${CVBLOB_LIBRARY})
 
 #IF(EMGU_CV_WITH_TESSERACT)
 #  ADD_DEPENDENCIES(${TESSERACT_PROJECTS})
 #ENDIF()
-  
+
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
