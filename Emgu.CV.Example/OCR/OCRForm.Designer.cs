@@ -38,10 +38,11 @@
          this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.loadLanguageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+         this.imageBox1 = new Emgu.CV.UI.ImageBox();
          this.ocrTextBox = new System.Windows.Forms.TextBox();
          this.openImageFileDialog = new System.Windows.Forms.OpenFileDialog();
          this.openLanguageFileDialog = new System.Windows.Forms.OpenFileDialog();
-         this.imageBox1 = new Emgu.CV.UI.ImageBox();
+         this.ocrOptionsComboBox = new System.Windows.Forms.ComboBox();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.Panel2.SuspendLayout();
          this.splitContainer1.SuspendLayout();
@@ -54,17 +55,19 @@
          // 
          // fileNameTextBox
          // 
-         this.fileNameTextBox.Location = new System.Drawing.Point(67, 27);
+         this.fileNameTextBox.Location = new System.Drawing.Point(100, 42);
+         this.fileNameTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
          this.fileNameTextBox.Name = "fileNameTextBox";
          this.fileNameTextBox.ReadOnly = true;
-         this.fileNameTextBox.Size = new System.Drawing.Size(519, 20);
+         this.fileNameTextBox.Size = new System.Drawing.Size(776, 26);
          this.fileNameTextBox.TabIndex = 1;
          // 
          // loadImageButton
          // 
-         this.loadImageButton.Location = new System.Drawing.Point(610, 24);
+         this.loadImageButton.Location = new System.Drawing.Point(915, 37);
+         this.loadImageButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
          this.loadImageButton.Name = "loadImageButton";
-         this.loadImageButton.Size = new System.Drawing.Size(75, 23);
+         this.loadImageButton.Size = new System.Drawing.Size(112, 35);
          this.loadImageButton.TabIndex = 2;
          this.loadImageButton.Text = "Load Image";
          this.loadImageButton.UseVisualStyleBackColor = true;
@@ -74,11 +77,13 @@
          // 
          this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
          this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+         this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
          this.splitContainer1.Name = "splitContainer1";
          this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
          // 
          // splitContainer1.Panel1
          // 
+         this.splitContainer1.Panel1.Controls.Add(this.ocrOptionsComboBox);
          this.splitContainer1.Panel1.Controls.Add(this.languageNameLabel);
          this.splitContainer1.Panel1.Controls.Add(this.label1);
          this.splitContainer1.Panel1.Controls.Add(this.fileNameTextBox);
@@ -88,35 +93,40 @@
          // splitContainer1.Panel2
          // 
          this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-         this.splitContainer1.Size = new System.Drawing.Size(929, 609);
-         this.splitContainer1.SplitterDistance = 101;
+         this.splitContainer1.Size = new System.Drawing.Size(1525, 937);
+         this.splitContainer1.SplitterDistance = 155;
+         this.splitContainer1.SplitterWidth = 6;
          this.splitContainer1.TabIndex = 3;
          // 
          // languageNameLabel
          // 
          this.languageNameLabel.AutoSize = true;
-         this.languageNameLabel.Location = new System.Drawing.Point(98, 70);
+         this.languageNameLabel.Location = new System.Drawing.Point(147, 108);
+         this.languageNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
          this.languageNameLabel.Name = "languageNameLabel";
-         this.languageNameLabel.Size = new System.Drawing.Size(88, 13);
+         this.languageNameLabel.Size = new System.Drawing.Size(129, 20);
          this.languageNameLabel.TabIndex = 5;
          this.languageNameLabel.Text = "{language name}";
          // 
          // label1
          // 
          this.label1.AutoSize = true;
-         this.label1.Location = new System.Drawing.Point(33, 70);
+         this.label1.Location = new System.Drawing.Point(50, 108);
+         this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
          this.label1.Name = "label1";
-         this.label1.Size = new System.Drawing.Size(58, 13);
+         this.label1.Size = new System.Drawing.Size(85, 20);
          this.label1.TabIndex = 4;
          this.label1.Text = "Language:";
          // 
          // menuStrip1
          // 
+         this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
          this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
          this.menuStrip1.Location = new System.Drawing.Point(0, 0);
          this.menuStrip1.Name = "menuStrip1";
-         this.menuStrip1.Size = new System.Drawing.Size(929, 24);
+         this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+         this.menuStrip1.Size = new System.Drawing.Size(1525, 35);
          this.menuStrip1.TabIndex = 3;
          this.menuStrip1.Text = "menuStrip1";
          // 
@@ -125,13 +135,13 @@
          this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadLanguageToolStripMenuItem});
          this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-         this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+         this.fileToolStripMenuItem.Size = new System.Drawing.Size(50, 29);
          this.fileToolStripMenuItem.Text = "File";
          // 
          // loadLanguageToolStripMenuItem
          // 
          this.loadLanguageToolStripMenuItem.Name = "loadLanguageToolStripMenuItem";
-         this.loadLanguageToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+         this.loadLanguageToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
          this.loadLanguageToolStripMenuItem.Text = "Load Language";
          this.loadLanguageToolStripMenuItem.Click += new System.EventHandler(this.loadLanguageToolStripMenuItem_Click);
          // 
@@ -139,6 +149,7 @@
          // 
          this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
          this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+         this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
          this.splitContainer2.Name = "splitContainer2";
          // 
          // splitContainer2.Panel1
@@ -148,19 +159,31 @@
          // splitContainer2.Panel2
          // 
          this.splitContainer2.Panel2.Controls.Add(this.ocrTextBox);
-         this.splitContainer2.Size = new System.Drawing.Size(929, 504);
-         this.splitContainer2.SplitterDistance = 465;
+         this.splitContainer2.Size = new System.Drawing.Size(1525, 776);
+         this.splitContainer2.SplitterDistance = 763;
+         this.splitContainer2.SplitterWidth = 6;
          this.splitContainer2.TabIndex = 0;
+         // 
+         // imageBox1
+         // 
+         this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.imageBox1.Location = new System.Drawing.Point(0, 0);
+         this.imageBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+         this.imageBox1.Name = "imageBox1";
+         this.imageBox1.Size = new System.Drawing.Size(763, 776);
+         this.imageBox1.TabIndex = 2;
+         this.imageBox1.TabStop = false;
          // 
          // ocrTextBox
          // 
          this.ocrTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
          this.ocrTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
          this.ocrTextBox.Location = new System.Drawing.Point(0, 0);
+         this.ocrTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
          this.ocrTextBox.Multiline = true;
          this.ocrTextBox.Name = "ocrTextBox";
          this.ocrTextBox.ReadOnly = true;
-         this.ocrTextBox.Size = new System.Drawing.Size(460, 504);
+         this.ocrTextBox.Size = new System.Drawing.Size(756, 776);
          this.ocrTextBox.TabIndex = 0;
          this.ocrTextBox.WordWrap = false;
          // 
@@ -173,22 +196,25 @@
          this.openLanguageFileDialog.DefaultExt = "traineddata";
          this.openLanguageFileDialog.Filter = "tesseract language file|*.traineddata|All files|*.*";
          // 
-         // imageBox1
+         // ocrOptionsComboBox
          // 
-         this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.imageBox1.Location = new System.Drawing.Point(0, 0);
-         this.imageBox1.Name = "imageBox1";
-         this.imageBox1.Size = new System.Drawing.Size(465, 504);
-         this.imageBox1.TabIndex = 2;
-         this.imageBox1.TabStop = false;
+         this.ocrOptionsComboBox.FormattingEnabled = true;
+         this.ocrOptionsComboBox.Items.AddRange(new object[] {
+            "Full Page OCR",
+            "Text Region Detection"});
+         this.ocrOptionsComboBox.Location = new System.Drawing.Point(594, 100);
+         this.ocrOptionsComboBox.Name = "ocrOptionsComboBox";
+         this.ocrOptionsComboBox.Size = new System.Drawing.Size(269, 28);
+         this.ocrOptionsComboBox.TabIndex = 6;
          // 
          // OCRForm
          // 
-         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+         this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(929, 609);
+         this.ClientSize = new System.Drawing.Size(1525, 937);
          this.Controls.Add(this.splitContainer1);
          this.MainMenuStrip = this.menuStrip1;
+         this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
          this.Name = "OCRForm";
          this.Text = "Form1";
          this.splitContainer1.Panel1.ResumeLayout(false);
@@ -221,6 +247,7 @@
       private System.Windows.Forms.Label label1;
       private System.Windows.Forms.ToolStripMenuItem loadLanguageToolStripMenuItem;
       private System.Windows.Forms.OpenFileDialog openLanguageFileDialog;
+      private System.Windows.Forms.ComboBox ocrOptionsComboBox;
    }
 }
 

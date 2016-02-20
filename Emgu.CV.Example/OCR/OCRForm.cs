@@ -22,7 +22,7 @@ namespace OCR
       {
          InitializeComponent();
          InitOcr("", "eng", OcrEngineMode.TesseractCubeCombined);
-        
+         ocrOptionsComboBox.SelectedIndex = 0;
       }
 
       private void InitOcr(String path, String lang, OcrEngineMode mode)

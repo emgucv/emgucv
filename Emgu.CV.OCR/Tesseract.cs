@@ -53,6 +53,11 @@ namespace Emgu.CV.OCR
          _ptr = OcrInvoke.TessBaseAPICreate();
       }
 
+      /// <summary>
+      /// Get the OpenCL device pointer
+      /// </summary>
+      /// <param name="device">Pointer to the opencl device</param>
+      /// <returns></returns>
       public int GetOpenCLDevice(ref IntPtr device)
       {
          return OcrInvoke.TessBaseAPIGetOpenCLDevice(_ptr, ref device);
@@ -221,13 +226,13 @@ namespace Emgu.CV.OCR
       /// </summary>
       protected override void DisposeObject()
       {
-         OcrInvoke.TessBaseAPIRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            OcrInvoke.TessBaseAPIRelease(ref _ptr);
       }
 
       /// <summary>
       /// Set the image for optical character recognition
       /// </summary>
-      
       /// <param name="image">The image where detection took place</param>
       public void Recognize(IInputArray image)
       {
