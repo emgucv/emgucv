@@ -32,6 +32,7 @@
          this.fileNameTextBox = new System.Windows.Forms.TextBox();
          this.loadImageButton = new System.Windows.Forms.Button();
          this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+         this.ocrOptionsComboBox = new System.Windows.Forms.ComboBox();
          this.languageNameLabel = new System.Windows.Forms.Label();
          this.label1 = new System.Windows.Forms.Label();
          this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -42,7 +43,6 @@
          this.ocrTextBox = new System.Windows.Forms.TextBox();
          this.openImageFileDialog = new System.Windows.Forms.OpenFileDialog();
          this.openLanguageFileDialog = new System.Windows.Forms.OpenFileDialog();
-         this.ocrOptionsComboBox = new System.Windows.Forms.ComboBox();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.Panel2.SuspendLayout();
          this.splitContainer1.SuspendLayout();
@@ -98,10 +98,21 @@
          this.splitContainer1.SplitterWidth = 6;
          this.splitContainer1.TabIndex = 3;
          // 
+         // ocrOptionsComboBox
+         // 
+         this.ocrOptionsComboBox.FormattingEnabled = true;
+         this.ocrOptionsComboBox.Items.AddRange(new object[] {
+            "Full Page OCR",
+            "Text Region Detection"});
+         this.ocrOptionsComboBox.Location = new System.Drawing.Point(100, 100);
+         this.ocrOptionsComboBox.Name = "ocrOptionsComboBox";
+         this.ocrOptionsComboBox.Size = new System.Drawing.Size(269, 28);
+         this.ocrOptionsComboBox.TabIndex = 6;
+         // 
          // languageNameLabel
          // 
          this.languageNameLabel.AutoSize = true;
-         this.languageNameLabel.Location = new System.Drawing.Point(147, 108);
+         this.languageNameLabel.Location = new System.Drawing.Point(519, 108);
          this.languageNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
          this.languageNameLabel.Name = "languageNameLabel";
          this.languageNameLabel.Size = new System.Drawing.Size(129, 20);
@@ -111,7 +122,7 @@
          // label1
          // 
          this.label1.AutoSize = true;
-         this.label1.Location = new System.Drawing.Point(50, 108);
+         this.label1.Location = new System.Drawing.Point(426, 108);
          this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
          this.label1.Name = "label1";
          this.label1.Size = new System.Drawing.Size(85, 20);
@@ -195,17 +206,6 @@
          // 
          this.openLanguageFileDialog.DefaultExt = "traineddata";
          this.openLanguageFileDialog.Filter = "tesseract language file|*.traineddata|All files|*.*";
-         // 
-         // ocrOptionsComboBox
-         // 
-         this.ocrOptionsComboBox.FormattingEnabled = true;
-         this.ocrOptionsComboBox.Items.AddRange(new object[] {
-            "Full Page OCR",
-            "Text Region Detection"});
-         this.ocrOptionsComboBox.Location = new System.Drawing.Point(594, 100);
-         this.ocrOptionsComboBox.Name = "ocrOptionsComboBox";
-         this.ocrOptionsComboBox.Size = new System.Drawing.Size(269, 28);
-         this.ocrOptionsComboBox.TabIndex = 6;
          // 
          // OCRForm
          // 
