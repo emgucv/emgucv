@@ -13,7 +13,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Face\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BgSegm\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)XImgproc\*.cs" />
+	 <Compile Include="$(MSBuildThisFileDirectory)XImgproc\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XPhoto\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
   </ItemGroup>
 </Project>

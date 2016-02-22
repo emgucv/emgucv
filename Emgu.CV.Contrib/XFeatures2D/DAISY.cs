@@ -50,14 +50,17 @@ namespace Emgu.CV.XFeatures2D
          /// Will not do any normalization (default)
          /// </summary>
          None = 100,
+
          /// <summary>
          /// Histograms are normalized independently for L2 norm equal to 1.0
          /// </summary>
          Partial = 101,
+
          /// <summary>
          /// Descriptors are normalized for L2 norm equal to 1.0
          /// </summary>
          Full = 102,
+
          /// <summary>
          /// Descriptors are normalized for L2 norm equal to 1.0 but no individual one is bigger than 0.154 as in SIFT
          /// </summary>
@@ -76,15 +79,18 @@ namespace Emgu.CV.XFeatures2D
          base.DisposeObject();
       }
    }
+}
 
+namespace Emgu.CV
+{
    public static partial class ContribInvoke
    {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveDAISYCreate(
          float radius, int qRadius, int qTheta,
-         int qHist, DAISY.NormalizationType norm, IntPtr H,
-         bool interpolation, bool useOrientation, 
+         int qHist, XFeatures2D.DAISY.NormalizationType norm, IntPtr H,
+         bool interpolation, bool useOrientation,
          ref IntPtr daisy);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

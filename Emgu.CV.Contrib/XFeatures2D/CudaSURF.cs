@@ -32,12 +32,13 @@ namespace Emgu.CV.XFeatures2D
       public CudaSURF(
          float hessianThreshold = 100.0f,
          int nOctaves = 4,
-         int nOctaveLayers = 2, 
+         int nOctaveLayers = 2,
          bool extended = true,
          float featuresRatio = 0.01f,
          bool upright = false)
       {
-         _ptr = ContribInvoke.cudaSURFDetectorCreate(hessianThreshold, nOctaves, nOctaveLayers, extended, featuresRatio, upright);
+         _ptr = ContribInvoke.cudaSURFDetectorCreate(hessianThreshold, nOctaves, nOctaveLayers, extended, featuresRatio,
+            upright);
       }
 
       /// <summary>
@@ -112,10 +113,7 @@ namespace Emgu.CV.XFeatures2D
       /// </summary>
       public int DescriptorSize
       {
-         get
-         {
-            return ContribInvoke.cudaSURFDetectorGetDescriptorSize(_ptr);
-         }
+         get { return ContribInvoke.cudaSURFDetectorGetDescriptorSize(_ptr); }
       }
 
       /// <summary>
@@ -126,7 +124,10 @@ namespace Emgu.CV.XFeatures2D
          ContribInvoke.cudaSURFDetectorRelease(ref _ptr);
       }
    }
+}
 
+namespace Emgu.CV
+{
    public static partial class ContribInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

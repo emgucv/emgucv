@@ -262,6 +262,8 @@ IF(WIN32)
     SET(ANDROID_LABEL "${ANDROID_LABEL}_x86_64")
   ENDIF()
   
+  CHECK_BINARY_EXIST("bin" "Emgu.CV.World*" HAVE_PREBUILD_EMGU_CV_WORLD)
+  
   IF("${ANDROID_LABEL}" STREQUAL "_arm64-v8a_armeabi_armeabi-v7a_x86_x86_64")
     SET(ANDROID_LABEL "-android")
   ELSEIF(NOT ("${ANDROID_LABEL}" STREQUAL ""))
@@ -402,6 +404,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   cudev  
   text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
   stitching latentsvm line_descriptor tracking
+  dnn
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})

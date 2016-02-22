@@ -32,7 +32,8 @@ namespace Emgu.CV.XFeatures2D
          double contrastThreshold = 0.04, double edgeThreshold = 10.0,
          double sigma = 1.6)
       {
-         _ptr = ContribInvoke.cveSIFTCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma, ref _feature2D);
+         _ptr = ContribInvoke.cveSIFTCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma,
+            ref _feature2D);
       }
 
       /// <summary>
@@ -45,7 +46,10 @@ namespace Emgu.CV.XFeatures2D
          base.DisposeObject();
       }
    }
+}
 
+namespace Emgu.CV
+{
    public static partial class ContribInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

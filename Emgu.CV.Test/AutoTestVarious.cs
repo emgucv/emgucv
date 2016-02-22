@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Dnn;
 using Emgu.CV.Features2D;
 using Emgu.CV.Flann;
 using Emgu.CV.Stitching;
@@ -2922,6 +2923,21 @@ namespace Emgu.CV.Test
             CvInvoke.HoughLines(imgGray, vp, 10, Math.PI/30, 5);
             PointF[] pts = vp.ToArray();
          }
+      }
+
+      [Test]
+      public void TestDnn()
+      {
+         Dnn.Net net = new Dnn.Net();
+         using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("bvlc_googlenet.prototxt", "bvlc_googlenet.caffemodel"))
+            importer.PopulateNet(net);
+           
+         Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
+         CvInvoke.Resize(img, img, new Size(224, 224));
+         Dnn.Blob inputBlob = new Dnn.Blob(img);
+         net.SetBlob(".data", inputBlob);
+         net.Forward();
+         
       }
 
 #if !(__ANDROID__ || __IOS__ || NETFX_CORE)

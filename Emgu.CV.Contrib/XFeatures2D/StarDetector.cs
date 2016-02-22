@@ -38,9 +38,11 @@ namespace Emgu.CV.XFeatures2D
       /// <param name="suppressNonmaxSize">
       ///
       /// </param>
-      public StarDetector(int maxSize = 45, int responseThreshold = 30, int lineThresholdProjected = 10, int lineThresholdBinarized = 8, int suppressNonmaxSize = 5)
+      public StarDetector(int maxSize = 45, int responseThreshold = 30, int lineThresholdProjected = 10,
+         int lineThresholdBinarized = 8, int suppressNonmaxSize = 5)
       {
-         _ptr = ContribInvoke.cveStarDetectorCreate(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize, ref _feature2D);
+         _ptr = ContribInvoke.cveStarDetectorCreate(maxSize, responseThreshold, lineThresholdProjected,
+            lineThresholdBinarized, suppressNonmaxSize, ref _feature2D);
       }
 
       /// <summary>
@@ -52,10 +54,11 @@ namespace Emgu.CV.XFeatures2D
             ContribInvoke.cveStarDetectorRelease(ref _ptr);
          base.DisposeObject();
       }
-
-
    }
+}
 
+namespace Emgu.CV
+{
    public static partial class ContribInvoke
    {
 

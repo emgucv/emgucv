@@ -144,7 +144,7 @@ namespace Emgu.CV.Text
       }
    }
 
-   #if !NETFX_CORE
+#if !NETFX_CORE
    /// <summary>
    /// Base class for 1st and 2nd stages of Neumann and Matas scene text detection algorithm
    /// </summary>
@@ -161,7 +161,7 @@ namespace Emgu.CV.Text
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            CvERFilterRelease(ref _ptr);
+            ContribInvoke.CvERFilterRelease(ref _ptr);
       }
 
       /// <summary>
@@ -172,9 +172,9 @@ namespace Emgu.CV.Text
       public void Run(IInputArray image, VectorOfERStat regions)
       {
          using (InputArray iaImage = image.GetInputArray())
-            CvERFilterRun(_ptr, iaImage, regions);
+            ContribInvoke.CvERFilterRun(_ptr, iaImage, regions);
       }
-      
+
       /// <summary>
       /// The grouping method
       /// </summary>
@@ -216,7 +216,7 @@ namespace Emgu.CV.Text
          using (CvString s = (groupingTrainedFileName == null ? new CvString() : new CvString(groupingTrainedFileName)))
          {
             GCHandle erstatsHandle = GCHandle.Alloc(erstatPtrs, GCHandleType.Pinned);
-            CvERGrouping(
+            ContribInvoke.CvERGrouping(
                iaImage, iaChannels,
                erstatsHandle.AddrOfPinnedObject(), erstatPtrs.Length,
                regionGroups, groupsBoxes,
@@ -227,20 +227,6 @@ namespace Emgu.CV.Text
             return groupsBoxes.ToArray();
          }
       }
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvERFilterRelease(ref IntPtr filter);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvERFilterRun(IntPtr filter, IntPtr image, IntPtr regions);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvERGrouping(
-         IntPtr image, IntPtr channels, 
-         IntPtr regions, int count,
-         IntPtr groups, IntPtr groupRects,
-         GroupingMethod method, IntPtr fileName, float minProbability);
-
    }
 
    /// <summary>
@@ -268,19 +254,10 @@ namespace Emgu.CV.Text
          float minProbabilityDiff = 0.1f)
       {
          using (CvString s = new CvString(classifierFileName))
-            _ptr = CvERFilterNM1Create(s, thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
+            _ptr = ContribInvoke.CvERFilterNM1Create(s, thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
       }
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvERFilterNM1Create(
-         IntPtr classifier,
-         int thresholdDelta,
-         float minArea,
-         float maxArea,
-         float minProbability,
-         [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool nonMaxSuppression,
-         float minProbabilityDiff);
+
    }
 
    /// <summary>
@@ -296,13 +273,46 @@ namespace Emgu.CV.Text
       public ERFilterNM2(String classifierFileName, float minProbability = 0.3f)
       {
          using (CvString s = new CvString(classifierFileName))
-            _ptr = CvERFilterNM2Create(s, minProbability);
+            _ptr = ContribInvoke.CvERFilterNM2Create(s, minProbability);
       }
+
+
+   }
+#endif
+}
+
+namespace Emgu.CV
+{
+
+   public static partial class ContribInvoke
+   {
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void CvERFilterRelease(ref IntPtr filter);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void CvERFilterRun(IntPtr filter, IntPtr image, IntPtr regions);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void CvERGrouping(
+         IntPtr image, IntPtr channels,
+         IntPtr regions, int count,
+         IntPtr groups, IntPtr groupRects,
+         ERFilter.GroupingMethod method, IntPtr fileName, float minProbability);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr CvERFilterNM1Create(
+         IntPtr classifier,
+         int thresholdDelta,
+         float minArea,
+         float maxArea,
+         float minProbability,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool nonMaxSuppression,
+         float minProbabilityDiff);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvERFilterNM2Create(
          IntPtr classifier,
          float minProbability);
    }
-   #endif
 }

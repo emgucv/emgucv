@@ -28,9 +28,10 @@ namespace Emgu.CV.BgSegm
       /// <param name="nMixtures">The maximum number of gaussian mixtures.</param>
       /// <param name="backgroundRatio">Background ratio</param>
       /// <param name="noiseSigma">Noise strength (standard deviation of the brightness or each color channel). 0 means some automatic value.</param>
-      public BackgroundSubtractorMOG(int history = 200, int nMixtures = 5, double backgroundRatio = 0.7, double noiseSigma = 0)
+      public BackgroundSubtractorMOG(int history = 200, int nMixtures = 5, double backgroundRatio = 0.7,
+         double noiseSigma = 0)
       {
-         _ptr = CvBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma);
+         _ptr = ContribInvoke.CvBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma);
       }
 
       /// <summary>
@@ -38,9 +39,15 @@ namespace Emgu.CV.BgSegm
       /// </summary>
       protected override void DisposeObject()
       {
-         CvBackgroundSubtractorMOGRelease(ref _ptr);
+         ContribInvoke.CvBackgroundSubtractorMOGRelease(ref _ptr);
       }
+   }
+}
 
+namespace Emgu.CV
+{
+   public static partial class ContribInvoke
+   {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma);
 

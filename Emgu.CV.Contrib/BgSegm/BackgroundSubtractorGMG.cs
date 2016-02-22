@@ -26,7 +26,7 @@ namespace Emgu.CV.BgSegm
       /// <param name="decisionThreshold">Threshold value, above which it is marked foreground, else background.</param>
       public BackgroundSubtractorGMG(int initializationFrames, double decisionThreshold)
       {
-         _ptr = CvBackgroundSubtractorGMGCreate(initializationFrames, decisionThreshold);
+         _ptr = Emgu.CV.ContribInvoke.CvBackgroundSubtractorGMGCreate(initializationFrames, decisionThreshold);
       }
 
       /// <summary>
@@ -34,9 +34,16 @@ namespace Emgu.CV.BgSegm
       /// </summary>
       protected override void DisposeObject()
       {
-         CvBackgroundSubtractorGMGRelease(ref _ptr);
+         Emgu.CV.ContribInvoke.CvBackgroundSubtractorGMGRelease(ref _ptr);
       }
 
+   }
+}
+
+namespace Emgu.CV
+{
+   public static partial class ContribInvoke
+   {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr CvBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold);
 

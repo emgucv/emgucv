@@ -45,7 +45,10 @@ namespace Emgu.CV.XFeatures2D
          base.DisposeObject();
       }
    }
+}
 
+namespace Emgu.CV
+{
    public static partial class ContribInvoke
    {
 

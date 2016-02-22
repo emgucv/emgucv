@@ -48,16 +48,19 @@ namespace Emgu.CV.XFeatures2D
          base.DisposeObject();
       }
    }
+}
 
+namespace Emgu.CV
+{
    public static partial class ContribInvoke
    {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveLATCHCreate(
-         int bytes, 
+         int bytes,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool rotationInvariance, 
-         int halfSsdSize, 
+         bool rotationInvariance,
+         int halfSsdSize,
          ref IntPtr extractor);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

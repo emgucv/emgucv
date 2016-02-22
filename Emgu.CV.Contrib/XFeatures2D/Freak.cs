@@ -35,9 +35,11 @@ namespace Emgu.CV.XFeatures2D
       /// <param name="scaleNormalized">Enable scale normalization</param>
       /// <param name="patternScale">Scaling of the description pattern</param>
       /// <param name="nOctaves">Number of octaves covered by the detected keypoints.</param>
-      public Freak(bool orientationNormalized = true, bool scaleNormalized = true, float patternScale = 22.0f, int nOctaves = 4)
+      public Freak(bool orientationNormalized = true, bool scaleNormalized = true, float patternScale = 22.0f,
+         int nOctaves = 4)
       {
-         _ptr = ContribInvoke.cveFreakCreate(orientationNormalized, scaleNormalized, patternScale, nOctaves, ref _feature2D);
+         _ptr = ContribInvoke.cveFreakCreate(orientationNormalized, scaleNormalized, patternScale, nOctaves,
+            ref _feature2D);
       }
 
       /// <summary>
@@ -50,7 +52,10 @@ namespace Emgu.CV.XFeatures2D
          base.DisposeObject();
       }
    }
+}
 
+namespace Emgu.CV
+{
    public static partial class ContribInvoke
    {
 

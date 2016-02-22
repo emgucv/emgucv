@@ -129,6 +129,14 @@
       <Link>left01.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\opencv_contrib\modules\dnn\samples\space_shuttle.jpg">
+      <Link>space_shuttle.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\opencv_contrib\modules\dnn\samples\synset_words.txt">
+      <Link>synset_words.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\opencv_contrib\modules\text\samples\trained_classifierNM1.xml">
       <Link>trained_classifierNM1.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -285,6 +293,13 @@
     </None>
     <None Include="..\Emgu.CV.World\tessdata\eng.traineddata">
       <Link>tessdata\eng.traineddata</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\opencv_contrib\modules\dnn\samples\bvlc_googlenet.prototxt">
+      <Link>bvlc_googlenet.prototxt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="bvlc_googlenet.caffemodel">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

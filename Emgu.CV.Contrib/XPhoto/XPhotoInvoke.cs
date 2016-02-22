@@ -33,7 +33,14 @@ namespace Emgu.CV.XPhoto
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveBalanceWhite(IntPtr src, IntPtr dst, CvEnum.WhiteBalanceMethod algorithmType, float inputMin, float inputMax, float outputMin, float outputMax);
 
-
+      /// <summary>
+      /// Implements a simple grayworld white balance algorithm.
+      /// The function autowbGrayworld scales the values of pixels based on a gray-world assumption which states that the average of all channels should result in a gray image.
+      /// This function adds a modification which thresholds pixels based on their saturation value and only uses pixels below the provided threshold in finding average pixel values.
+      /// </summary>
+      /// <param name="src">Input array.</param>
+      /// <param name="dst">Output array of the same size and type as src.</param>
+      /// <param name="thresh">Maximum saturation for a pixel to be included in the gray-world assumption.</param>
       public static void AutowbGrayworld(IInputArray src, IOutputArray dst, float thresh = 0.5f)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -64,6 +71,13 @@ namespace Emgu.CV.XPhoto
          Shiftmap = 0
       }
 
+      /// <summary>
+      /// The function implements different single-image inpainting algorithms
+      /// </summary>
+      /// <param name="src">source image, it could be of any type and any number of channels from 1 to 4. In case of 3- and 4-channels images the function expect them in CIELab colorspace or similar one, where first color component shows intensity, while second and third shows colors. Nonetheless you can try any colorspaces.</param>
+      /// <param name="mask">mask (CV_8UC1), where non-zero pixels indicate valid image area, while zero pixels indicate area to be inpainted</param>
+      /// <param name="dst">destination image</param>
+      /// <param name="algorithmType">algoritm type</param>
       public static void Inpaint(Mat src, Mat mask, Mat dst, InpaintType algorithmType)
       {
          cveXInpaint(src, mask, dst, algorithmType);

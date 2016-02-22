@@ -40,7 +40,8 @@ namespace Emgu.CV.XFeatures2D
       /// False means that detector computes orientation of each feature. 
       /// True means that the orientation is not computed (which is much, much faster). 
       /// For example, if you match images from a stereo pair, or do image stitching, the matched features likely have very similar angles, and you can speed up feature extraction by setting upright=true.</param>
-      public SURF(double hessianThresh, int nOctaves = 4, int nOctaveLayers = 2, bool extended = true, bool upright = false)
+      public SURF(double hessianThresh, int nOctaves = 4, int nOctaveLayers = 2, bool extended = true,
+         bool upright = false)
       {
          _ptr = ContribInvoke.cveSURFCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _feature2D);
       }
@@ -54,8 +55,12 @@ namespace Emgu.CV.XFeatures2D
             ContribInvoke.cveSURFRelease(ref _ptr);
          base.DisposeObject();
       }
-   }
 
+   }
+}
+
+namespace Emgu.CV
+{
    /// <summary>
    /// This class wraps the functional calls to the opencv contrib modules
    /// </summary>
@@ -68,11 +73,11 @@ namespace Emgu.CV.XFeatures2D
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveSURFCreate(
-         double hessianThresh, int nOctaves, int nOctaveLayers, 
+         double hessianThresh, int nOctaves, int nOctaveLayers,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool extended, 
+         bool extended,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool upright, 
+         bool upright,
          ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
