@@ -46,7 +46,7 @@ namespace Emgu.CV
                byte[] jpgBytes = texture.EncodeToJPG();
                using (Mat tmp = new Mat())
                {
-                  CvInvoke.Imdecode(jpgBytes, LoadImageType.AnyColor, tmp);
+				  CvInvoke.Imdecode(jpgBytes, ImreadModes.AnyColor, tmp);
                   result.ConvertFrom(tmp);
                }
             }
@@ -130,7 +130,7 @@ namespace Emgu.CV
                byte[] jpgBytes = texture.EncodeToJPG();
                using (Mat tmp = new Mat())
                {
-                  CvInvoke.Imdecode(jpgBytes, LoadImageType.AnyColor, tmp);
+                  CvInvoke.Imdecode(jpgBytes, ImreadModes.AnyColor, tmp);
                   tmp.CopyTo(result);
                }
             }
