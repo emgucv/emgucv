@@ -11,7 +11,6 @@ using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Emgu.CV.Dnn
 {

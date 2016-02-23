@@ -16,5 +16,6 @@
 	 <Compile Include="$(MSBuildThisFileDirectory)XImgproc\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XPhoto\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tracking\*.cs" />
   </ItemGroup>
 </Project>

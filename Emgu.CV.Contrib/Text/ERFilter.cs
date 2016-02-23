@@ -281,6 +281,7 @@ namespace Emgu.CV.Text
 #endif
 }
 
+#if !NETFX_CORE
 namespace Emgu.CV
 {
 
@@ -316,3 +317,4 @@ namespace Emgu.CV
          float minProbability);
    }
 }
+#endif
