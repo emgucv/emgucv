@@ -403,7 +403,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   videostab shape
   cudev  
   text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
-  stitching latentsvm line_descriptor tracking
+  stitching latentsvm line_descriptor tracking plot
   dnn
   )
 

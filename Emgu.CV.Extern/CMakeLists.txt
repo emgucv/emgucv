@@ -961,7 +961,31 @@ IF(HAVE_opencv_cudaimgproc)
     "CudaHoughLinesDetector"
     "#include \"opencv2/cudaimgproc.hpp\"")
 ENDIF()
-############################### video code gen START ##############################
+############################### cudaimgproc code gen END ##############################
+
+############################### plot code gen START ##############################
+IF(HAVE_opencv_plot)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "plot/plot2d_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Plot/Plot2dGenerated.cs"
+    "cv::plot::Plot2d" 
+    "Plot2d" 
+    "MinX;MinY;MaxX;MaxY;PlotLineWidth" 
+    "double;double;double;double;int" 
+    "propW;propW;propW;propW;propW"
+    "MinX;MinY;MaxX;MaxY;PlotLineWidth" 
+    "double;double;double;double;int"
+    "Min X;
+    Min Y;
+    Max X;
+    Max Y;
+    Plot line width"
+    "Emgu.CV.Plot"
+    "PlotInvoke"
+    "Plot2d"
+    "#include \"opencv2/plot.hpp\"")
+ENDIF()
+############################### plot code gen END ##############################
 
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
