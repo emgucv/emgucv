@@ -43,10 +43,10 @@ namespace AndroidExamples
             StartActivity(typeof(PlanarSubdivisionActivity));
          };
 
-         Button surfFeatureButton = FindViewById<Button>(Resource.Id.GotoSURFFeaturesButton);
-         surfFeatureButton.Click += delegate 
+         Button featureMatchingButton = FindViewById<Button>(Resource.Id.GotoSURFFeaturesButton);
+         featureMatchingButton.Click += delegate 
          {
-            StartActivity(typeof(SURFFeatureActivity));
+            StartActivity(typeof(FeatureMatchingActivity));
          };
 
          Button pedestrianDetectionButton = FindViewById<Button>(Resource.Id.GotoPedestrianDetectionButton);

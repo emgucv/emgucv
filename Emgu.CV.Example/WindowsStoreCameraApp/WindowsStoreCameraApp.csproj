@@ -152,8 +152,12 @@
     <None Include="Help\Lumia Imaging SDK.chm" />
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.World\Emgu.CV.World.Store81.csproj">
+      <Project>{31ee2bff-87aa-440f-9f3d-9524900b704d}</Project>
+      <Name>Emgu.CV.World.Store81</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

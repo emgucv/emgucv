@@ -53,15 +53,15 @@ namespace Emgu.CV.Example.MonoTouch
             };
             examplesSection.Add(faceDetectionElement);
 
-            StyledStringElement surfFeatureElement = new StyledStringElement("SURF Feature");
-            surfFeatureElement.Tapped += () => 
+            StyledStringElement featureMatchingElement = new StyledStringElement("Feature Matching");
+            featureMatchingElement.Tapped += () => 
             {
                 NavigationController.PushViewController(
-                    new SURFFeatureDialogViewController(),
+                    new FeatureMatchingDialogViewController(),
                     true
                 );
             };
-            examplesSection.Add(surfFeatureElement);
+            examplesSection.Add(featureMatchingElement);
 
             StyledStringElement pedestrianDetectionElement = new StyledStringElement("Pedestrian Detection");
             pedestrianDetectionElement.Tapped += () => 

@@ -123,10 +123,10 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="ExamplesDialogViewController.cs" />
     <Compile Include="HelloWorldUIViewController.cs" />
-    <Compile Include="..\SURFFeature\DrawMatches.cs">
+    <Compile Include="..\FeatureMatching\DrawMatches.cs">
       <Link>DrawMatches.cs</Link>
     </Compile>
-    <Compile Include="SURFFeatureDialogViewController.cs" />
+    <Compile Include="FeatureMatchingDialogViewController.cs" />
     <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
       <Link>FindPedestrian.cs</Link>
     </Compile>
@@ -151,10 +151,10 @@
     <Compile Include="PedestrianDetectionDialogViewController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\SURFFeature\box.png">
+    <Content Include="..\FeatureMatching\box.png">
       <Link>box.png</Link>
     </Content>
-    <Content Include="..\SURFFeature\box_in_scene.png">
+    <Content Include="..\FeatureMatching\box_in_scene.png">
       <Link>box_in_scene.png</Link>
     </Content>
     <Content Include="..\PedestrianDetection\pedestrian.png">

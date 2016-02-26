@@ -9,13 +9,14 @@
     <ProjectGuid>{31EE2BFF-87AA-440F-9F3D-9524900B704D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Emgu.CV.World.Store</RootNamespace>
+    <RootNamespace>Emgu.CV.World</RootNamespace>
     <AssemblyName>Emgu.CV.World.Store81</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
-    <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -27,7 +28,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-	<AssemblyName>Emgu.CV.World.Store81.x64</AssemblyName>
+    <AssemblyName>Emgu.CV.World.Store81.x64</AssemblyName>
     <DocumentationFile>..\bin\Emgu.CV.World.Store81.x64.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
@@ -40,7 +41,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-	<AssemblyName>Emgu.CV.World.Store81.x64</AssemblyName>
+    <AssemblyName>Emgu.CV.World.Store81.x64</AssemblyName>
     <DocumentationFile>..\bin\Emgu.CV.World.Store81.x64.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -53,7 +54,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-	<AssemblyName>Emgu.CV.World.Store81.x86</AssemblyName>
+    <AssemblyName>Emgu.CV.World.Store81.x86</AssemblyName>
     <DocumentationFile>..\bin\Emgu.CV.World.Store81.x86.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
@@ -66,7 +67,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-	<AssemblyName>Emgu.CV.World.Store81.x86</AssemblyName>
+    <AssemblyName>Emgu.CV.World.Store81.x86</AssemblyName>
     <DocumentationFile>..\bin\Emgu.CV.World.Store81.x86.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>

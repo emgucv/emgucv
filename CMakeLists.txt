@@ -404,7 +404,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   cudev  
   text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
   stitching latentsvm line_descriptor tracking plot
-  dnn
+  dnn aruco
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})

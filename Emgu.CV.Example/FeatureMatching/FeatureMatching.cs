@@ -16,7 +16,7 @@ using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.Cuda;
 
-namespace SURFFeatureExample
+namespace FeatureMatchingExample
 {
    static class Program
    {
@@ -33,7 +33,7 @@ namespace SURFFeatureExample
          using (Mat observedImage = CvInvoke.Imread("box_in_scene.png", ImreadModes.Grayscale))
          {
             Mat result = DrawMatches.Draw(modelImage, observedImage, out matchTime);
-            ImageViewer.Show(result, String.Format("Matched using {0} in {1} milliseconds", CudaInvoke.HasCuda ? "GPU" : "CPU", matchTime));
+            ImageViewer.Show(result, String.Format("Matched in {0} milliseconds", matchTime));
          }
       }
    }

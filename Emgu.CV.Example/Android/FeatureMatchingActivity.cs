@@ -16,15 +16,15 @@ using Android.Graphics;
 using Emgu.CV;
 using Emgu.CV.Util;
 using Emgu.CV.Structure;
-using SURFFeatureExample;
+using FeatureMatchingExample;
 
 namespace AndroidExamples
 {
    [Activity(Label = "SURF Feature")]
-   public class SURFFeatureActivity : ButtonMessageImageActivity
+   public class FeatureMatchingActivity : ButtonMessageImageActivity
    {
-      public SURFFeatureActivity()
-         : base("Match SURF Features")
+      public FeatureMatchingActivity()
+         : base("Feature Matching")
       {
       }
 

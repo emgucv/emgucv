@@ -117,7 +117,7 @@
     <Compile Include="..\PlanarSubdivision\DrawSubdivision.cs">
       <Link>DrawSubdivision.cs</Link>
     </Compile>
-    <Compile Include="..\SURFFeature\DrawMatches.cs">
+    <Compile Include="..\FeatureMatching\DrawMatches.cs">
       <Link>DrawMatches.cs</Link>
     </Compile>
     <Compile Include="..\TrafficSignRecognition\StopSignDetector.cs">
@@ -139,7 +139,7 @@
     <Compile Include="FaceDetectionActivity.cs" />
     <Compile Include="PedestrianDetectionActivity.cs" />
     <Compile Include="PlanarSubdivisionActivity.cs" />
-    <Compile Include="SURFFeatureActivity.cs" />
+    <Compile Include="FeatureMatchingActivity.cs" />
     <Compile Include="AndroidExamplesActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -195,10 +195,10 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\SURFFeature\box.png">
+    <AndroidAsset Include="..\FeatureMatching\box.png">
       <Link>Assets\box.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\SURFFeature\box_in_scene.png">
+    <AndroidAsset Include="..\FeatureMatching\box_in_scene.png">
       <Link>Assets\box_in_scene.png</Link>
     </AndroidAsset>
   </ItemGroup>

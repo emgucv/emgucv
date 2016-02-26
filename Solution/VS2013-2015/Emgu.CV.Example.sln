@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\Emgu.CV.Example\HelloWorld\HelloWorld.csproj", "{28682DB8-9662-452D-A5AD-646EA7BC8AD0}"
 EndProject
@@ -18,8 +18,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanarSubdivision", "..\..\Emgu.CV.Example\PlanarSubdivision\PlanarSubdivision.csproj", "{4220DDC1-A966-4BB3-BD36-5A0110819E84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeDetection", "..\..\Emgu.CV.Example\ShapeDetection\ShapeDetection.csproj", "{F42D1B92-5722-41F4-B8F1-98185CD09D87}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SURFFeature", "..\..\Emgu.CV.Example\SURFFeature\SURFFeature.csproj", "{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicensePlateRecognition", "..\..\Emgu.CV.Example\LicensePlateRecognition\LicensePlateRecognition.csproj", "{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}"
 EndProject
@@ -65,6 +63,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.VideoStab", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.UI", "..\..\Emgu.CV.UI\Emgu.CV.UI.csproj", "{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureMatching", "..\..\Emgu.CV.Example\FeatureMatching\FeatureMatching.csproj", "{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{1c41f1cc-b8a8-4e72-8167-0e1a42edf843}*SharedItemsImports = 13
@@ -72,15 +72,15 @@ Global
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.Util\Emgu.Util.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.Superres\Emgu.CV.Superres.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV\Emgu.CV.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV.Superres\Emgu.CV.Superres.projitems*{32b4cfe5-094f-4ae5-a7bc-132c2c9566fe}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
@@ -143,12 +143,6 @@ Global
 		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Release|x86.ActiveCfg = Release|Any CPU
-		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Debug|x86.ActiveCfg = Release|Any CPU
-		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|x86.ActiveCfg = Release|Any CPU
 		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|x86.ActiveCfg = Release|Any CPU
@@ -225,6 +219,14 @@ Global
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.ActiveCfg = Release|Any CPU
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.Build.0 = Release|Any CPU
+		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Debug|x86.Build.0 = Debug|Any CPU
+		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|x86.ActiveCfg = Release|Any CPU
+		{56AFFD9E-A27E-43BA-AAB5-8FEED098384D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

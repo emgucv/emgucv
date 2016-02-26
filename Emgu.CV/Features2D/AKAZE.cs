@@ -32,11 +32,11 @@ namespace Emgu.CV.Features2D
          /// </summary>
          Kaze = 3,
          /// <summary>
-         /// The MLDB upright
+         /// Modified-Local Difference Binary (M-LDB), upright
          /// </summary>
          MldbUpright = 4,
          /// <summary>
-         /// The MLDB
+         /// Modified-Local Difference Binary (M-LDB)
          /// </summary>
          Mldb = 5
       }
@@ -48,15 +48,15 @@ namespace Emgu.CV.Features2D
       /// <param name="descriptorSize">Size of the descriptor in bits. 0 -> Full size</param>
       /// <param name="descriptorChannels">Number of channels in the descriptor (1, 2, 3)</param>
       /// <param name="threshold">Detector response threshold to accept point</param>
-      /// <param name="sublevels"> Default number of sublevels per scale level</param>
-      /// <param name="octaves">Maximum octave evolution of the image</param>
+      /// <param name="nOctaveLayers"> Default number of sublevels per scale level</param>
+      /// <param name="nOctaves">Maximum octave evolution of the image</param>
       /// <param name="diffusivity">Diffusivity type</param>
       public AKAZE(DescriptorType descriptorType = DescriptorType.Mldb, int descriptorSize = 0, int descriptorChannels = 3,
-         float threshold = 0.001f, int octaves = 4, int sublevels = 4, KAZE.Diffusivity diffusivity = KAZE.Diffusivity.PmG2)
+         float threshold = 0.001f, int nOctaves = 4, int nOctaveLayers = 4, KAZE.Diffusivity diffusivity = KAZE.Diffusivity.PmG2)
       {
          _ptr = CvInvoke.cveAKAZEDetectorCreate(
             descriptorType, descriptorSize, descriptorChannels, 
-            threshold, octaves, sublevels, diffusivity,
+            threshold, nOctaves, nOctaveLayers, diffusivity,
             ref _feature2D);
       }
 
@@ -80,7 +80,7 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveAKAZEDetectorCreate(
          AKAZE.DescriptorType descriptorType, int descriptorSize, int descriptorChannels,
-         float threshold, int octaves, int sublevels, KAZE.Diffusivity diffusivity,
+         float threshold, int octaves, int nOctaveLayers, KAZE.Diffusivity diffusivity,
          ref IntPtr feature2D);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
