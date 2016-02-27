@@ -23,5 +23,11 @@ namespace Emgu.CV
       OutputArray GetOutputArray();
    }
 
+   /// <summary>
+   /// OutputArrayOfArrays
+   /// </summary>
+   public interface IOutputArrayOfArrays : IOutputArray
+   {
 
+   }
 }
