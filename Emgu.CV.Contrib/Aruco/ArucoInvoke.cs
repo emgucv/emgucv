@@ -11,6 +11,7 @@ using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
+using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Aruco
 {
@@ -65,6 +66,40 @@ namespace Emgu.CV.Aruco
       }
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveArucoDrawAxis(IntPtr image, IntPtr cameraMatrix, IntPtr distCoeffs, IntPtr rvec, IntPtr tvec, float length);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveArucoRefineDetectedMarkers(
+         IntPtr image, IntPtr board, IntPtr detectedCorners,
+         IntPtr detectedIds, IntPtr rejectedCorners,
+         IntPtr cameraMatrix, IntPtr distCoeffs,
+         float minRepDistance, float errorCorrectionRate, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool checkAllOrders,
+         IntPtr ecoveredIdxs, ref DetectorParameters parameters);
+
+      public static void RefineDetectedMarkers(
+         IInputArray image, IBoard board, IInputOutputArray detectedCorners,
+         IInputOutputArray detectedIds, IInputOutputArray rejectedCorners,
+         IInputArray cameraMatrix, IInputArray distCoeffs,
+         float minRepDistance, float errorCorrectionRate,
+         bool checkAllOrders,
+         IOutputArray recoveredIdxs, DetectorParameters parameters)
+      {
+         using (InputArray iaImage = image.GetInputArray())
+         using (InputOutputArray ioaDetectedCorners = detectedCorners.GetInputOutputArray())
+         using (InputOutputArray ioaDetectedIds = detectedIds.GetInputOutputArray())
+         using (InputOutputArray ioaRejectedCorners = rejectedCorners.GetInputOutputArray())
+         using (InputArray iaCameraMatrix = cameraMatrix == null ? InputArray.GetEmpty() : cameraMatrix.GetInputArray())
+         using (InputArray iaDistCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+         using (
+            OutputArray oaRecovervedIdx = recoveredIdxs == null
+               ? OutputArray.GetEmpty()
+               : recoveredIdxs.GetOutputArray())
+         {
+            cveArucoRefineDetectedMarkers(iaImage, board.BoardPtr, ioaDetectedCorners, ioaDetectedIds, ioaRejectedCorners,
+               iaCameraMatrix, iaDistCoeffs, minRepDistance, errorCorrectionRate, checkAllOrders, oaRecovervedIdx, ref parameters);
+         }
+      }
 
    }
 }

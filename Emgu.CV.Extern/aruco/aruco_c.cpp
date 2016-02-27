@@ -31,11 +31,12 @@ void cveArucoDetectMarkers(
 
 cv::aruco::GridBoard* cveArucoGridBoardCreate(
    int markersX, int markersY, float markerLength, float markerSeparation,
-   cv::aruco::Dictionary* dictionary)
+   cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr)
 {
    cv::aruco::GridBoard gridBoard = cv::aruco::GridBoard::create(markersX, markersY, markerLength, markerSeparation, *dictionary);
    cv::Ptr<cv::aruco::GridBoard> ptr = cv::makePtr<cv::aruco::GridBoard>(gridBoard);
    ptr.addref();
+   *boardPtr = dynamic_cast<cv::aruco::Board*>(ptr.get());
    return ptr.get();
 }
 

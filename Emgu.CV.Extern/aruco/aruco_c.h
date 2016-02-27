@@ -25,7 +25,7 @@ CVAPI(void) cveArucoDetectMarkers(
 
 CVAPI(cv::aruco::GridBoard*) cveArucoGridBoardCreate(
    int markersX, int markersY, float markerLength, float markerSeparation,
-   cv::aruco::Dictionary* dictionary);
+   cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr);
 
 CVAPI(void) cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard);
 

@@ -14,20 +14,34 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Aruco
 {
-   public class GridBoard : UnmanagedObject
+   public interface IBoard
    {
+      IntPtr BoardPtr { get; }
+   }
+
+   public class GridBoard : UnmanagedObject, IBoard
+   {
+      private IntPtr _boardPtr;
+
       public GridBoard(int markersX, int markersY, float markerLength, float markerSeparation,
          Dictionary dictionary)
       {
-         _ptr = ArucoInvoke.cveArucoGridBoardCreate(markersX, markersY, markerLength, markerSeparation, dictionary);
+         _ptr = ArucoInvoke.cveArucoGridBoardCreate(markersX, markersY, markerLength, markerSeparation, dictionary, ref _boardPtr);
       }
+
+      
 
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
             ArucoInvoke.cveArucoGridBoardRelease(ref _ptr);
-
+         if (_boardPtr != IntPtr.Zero)
+         {
+            _boardPtr = _	;
+         }
       }
+
+      public IntPtr BoardPtr { get { return _boardPtr;} }
    }
 
 
@@ -37,7 +51,7 @@ namespace Emgu.CV.Aruco
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveArucoGridBoardCreate(
          int markersX, int markersY, float markerLength, float markerSeparation,
-         IntPtr dictionary);
+         IntPtr dictionary, ref IntPtr boardPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveArucoGridBoardRelease(ref IntPtr gridBoard);
