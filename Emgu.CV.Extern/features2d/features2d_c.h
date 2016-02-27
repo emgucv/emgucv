@@ -125,4 +125,8 @@ CVAPI(cv::AKAZE*) cveAKAZEDetectorCreate(
   cv::Feature2D** feature2D);
 CVAPI(void) cveAKAZEDetectorRelease(cv::AKAZE** detector);
 
+//Agast
+CVAPI(cv::AgastFeatureDetector*) cveAgastFeatureDetectorCreate(int threshold, bool nonmaxSuppression,int type, cv::Feature2D** feature2D);
+CVAPI(void) cveAgastFeatureDetectorRelease(cv::AgastFeatureDetector** detector);
+
 #endif

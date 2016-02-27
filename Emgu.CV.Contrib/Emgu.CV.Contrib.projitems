@@ -18,5 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tracking\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plot\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Aruco\*.cs" />
   </ItemGroup>
 </Project>

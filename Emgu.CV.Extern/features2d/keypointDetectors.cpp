@@ -404,3 +404,17 @@ void cveAKAZEDetectorRelease(cv::AKAZE** detector)
    delete *detector;
    *detector = 0;
 }
+
+
+//Agast
+cv::AgastFeatureDetector* cveAgastFeatureDetectorCreate(int threshold, bool nonmaxSuppression, int type, cv::Feature2D** feature2D)
+{
+   cv::Ptr<cv::AgastFeatureDetector> agastPtr = cv::AgastFeatureDetector::create(threshold, nonmaxSuppression, type);
+   agastPtr.addref();
+   return agastPtr.get();
+}
+void cveAgastFeatureDetectorRelease(cv::AgastFeatureDetector** detector)
+{
+   delete *detector;
+   *detector = 0;
+}
