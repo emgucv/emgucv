@@ -49,4 +49,5 @@ CVAPI(cv::_OutputArray*) cvOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${
 
 CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec);
 
+CVAPI(int) VectorOf${VECTOR_NAME}SizeOfItemInBytes();
 #endif

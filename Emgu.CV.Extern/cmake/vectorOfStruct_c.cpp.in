@@ -81,3 +81,8 @@ cv::_InputOutputArray* cvInputOutputArrayFromVectorOf${VECTOR_NAME}(std::vector<
 {
    return new cv::_InputOutputArray(*vec);
 }
+
+int VectorOf${VECTOR_NAME}SizeOfItemInBytes()
+{
+   return sizeof(${VECTOR_ELEMENT});
+}

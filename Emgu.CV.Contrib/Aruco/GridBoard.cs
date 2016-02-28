@@ -29,16 +29,12 @@ namespace Emgu.CV.Aruco
          _ptr = ArucoInvoke.cveArucoGridBoardCreate(markersX, markersY, markerLength, markerSeparation, dictionary, ref _boardPtr);
       }
 
-      
-
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
             ArucoInvoke.cveArucoGridBoardRelease(ref _ptr);
-         if (_boardPtr != IntPtr.Zero)
-         {
-            _boardPtr = _	;
-         }
+
+         _boardPtr = IntPtr.Zero;
       }
 
       public IntPtr BoardPtr { get { return _boardPtr;} }
