@@ -19,5 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Tracking\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plot\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Aruco\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fuzzy\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LineDescriptor\*.cs" />
   </ItemGroup>
 </Project>

@@ -12,5 +12,6 @@
 #include "opencv2/line_descriptor.hpp"
 
 CVAPI(cv::line_descriptor::BinaryDescriptor*) cveLineDescriptorBinaryDescriptorCreate();
+CVAPI(void) cveBinaryDescriptorDetect(cv::line_descriptor::BinaryDescriptor* descriptor, cv::Mat* image, std::vector<cv::line_descriptor::KeyLine>* keypoints, cv::Mat* mask);
 CVAPI(void) cveLineDescriptorBinaryDescriptoyRelease(cv::line_descriptor::BinaryDescriptor** descriptor);
 #endif
