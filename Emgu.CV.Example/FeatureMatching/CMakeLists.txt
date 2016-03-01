@@ -2,10 +2,10 @@
 #  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-PROJECT(Example.SURFFeature)
+PROJECT(Example.FeatureMatching)
 
-FILE(GLOB_RECURSE SRC_Example_SURFFeature RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
-LIST(APPEND SRC_Example_SURFFeature ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
+FILE(GLOB_RECURSE SRC_Example_FeatureMatching RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
+LIST(APPEND SRC_Example_FeatureMatching ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo.cs)
 
 #IF(TARGET_ARCH_64)
 #  LIST(APPEND CS_FLAGS -platform:x64)
@@ -19,7 +19,7 @@ LIST(APPEND CS_FLAGS ${EMGU_CV_REFERENCE} )
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/box.png)
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/box_in_scene.png)
 
-COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_SURFFeature}" ALL)
+COMPILE_CS(${PROJECT_NAME} "winexe" "${SRC_Example_FeatureMatching}" ALL)
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World Emgu.CV.UI )
 
