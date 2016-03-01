@@ -21,7 +21,7 @@ cv::cudacodec::VideoWriter* cudaVideoWriterCreate(cv::String* fileName, CvSize* 
 void cudaVideoWriterRelease(cv::cudacodec::VideoWriter** writer)
 {
    delete *writer;
-   *writer = nullptr;
+   *writer = 0;
 }
 void cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputArray* frame, bool lastFrame)
 {
@@ -43,7 +43,7 @@ cv::cudacodec::VideoReader* cudaVideoReaderCreate(cv::String* fileName)
 void cudaVideoReaderRelease(cv::cudacodec::VideoReader** reader)
 {
    delete *reader;
-   *reader = nullptr;
+   *reader = 0;
 }
 bool cudaVideoReaderNextFrame(cv::cudacodec::VideoReader* reader, cv::_OutputArray* frame)
 {

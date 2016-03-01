@@ -47,7 +47,7 @@ void cveCudaFeature2dAsyncDetectAsync(
    cv::_InputArray* mask,
    cv::cuda::Stream* stream)
 {
-   feature2d->detectAsync(*image, *keypoints, mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+  feature2d->detectAsync(*image, *keypoints, mask ? *mask : (cv::InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cveCudaFeature2dAsyncComputeAsync(
@@ -69,7 +69,7 @@ void cveCudaFeature2dAsyncDetectAndComputeAsync(
    bool useProvidedKeypoints,
    cv::cuda::Stream* stream)
 {
-   feature2d->detectAndComputeAsync(*image, mask ? *mask : cv::noArray(), *keypoints, *descriptors, useProvidedKeypoints, stream ? *stream : cv::cuda::Stream::Null());
+  feature2d->detectAndComputeAsync(*image, mask ? *mask : (cv::InputArray) cv::noArray(), *keypoints, *descriptors, useProvidedKeypoints, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cveCudaFeature2dAsyncConvert(

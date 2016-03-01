@@ -146,7 +146,7 @@ cv::cuda::CornersDetector* cudaGoodFeaturesToTrackDetectorCreate(int srcType, in
 }
 void cudaCornersDetectorDetect(cv::cuda::CornersDetector* detector, cv::_InputArray* image, cv::_OutputArray* corners, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-   detector->detect(*image, *corners, mask ? *mask : cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+  detector->detect(*image, *corners, mask ? *mask : (cv::InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 void cudaCornersDetectorRelease(cv::cuda::CornersDetector** detector)
 {
