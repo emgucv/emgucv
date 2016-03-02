@@ -250,9 +250,9 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     )
   INSTALL(
     FILES
-    "SURFFeature/DrawMatches.cs"
-	"SURFFeature/box.png"
-	"SURFFeature/box_in_scene.png"
+    "FeatureMatching/DrawMatches.cs"
+	"FeatureMatching/box.png"
+	"FeatureMatching/box_in_scene.png"
     DESTINATION "Emgu.CV.Example/FeatureMatching"
     COMPONENT main
     )

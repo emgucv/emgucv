@@ -1,0 +1,21 @@
+%YAML 1.2
+---
+summary: Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.
+getting-started: GettingStarted.md
+details: Details.md
+screenshots: 
+  - screenshots/screenshot1.png
+license: License.md
+icons: 
+  - emgucv_v3_128x128.png
+  - emgucv_v3_512x512.png
+publisher: Emgu Corporation
+name: emgucv_v3
+id: emgucv_v3
+samples: 
+  iOS Sample: ../samples/AwesomeSample/AwesomeSample.sln
+publisher-url: http://www.emgu.com
+libraries: 
+  ios: ../lib/ios/Awesome.dll
+version: "3.1"
+...
