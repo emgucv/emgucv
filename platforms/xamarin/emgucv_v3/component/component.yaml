@@ -15,7 +15,12 @@ id: emgucv_v3
 samples: 
   iOS Sample: ../samples/AwesomeSample/AwesomeSample.sln
 publisher-url: http://www.emgu.com
+packages: 
+  android:
+build:
+  - src/Solution/Android/Emgu.CV.Android.sln 
+  - src/Solution/iOS/Emgu.CV.iOS.sln
 libraries: 
-  ios: ../lib/ios/Awesome.dll
+  ios-unified: ../lib/ios/Awesome.dll
 version: "3.1"
 ...

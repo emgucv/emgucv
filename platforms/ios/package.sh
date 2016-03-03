@@ -32,10 +32,11 @@ cp -r ../../tmp/Emgu.CV.World ios-package/Emgu.CV.World
 
 mkdir -p ios-package/Solution/iOS
 cp ../../tmp/Solution/iOS/Emgu.CV.iOS.sln ios-package/Solution/iOS/
+cp ../../tmp/Solution/iOS/Emgu.CV.iOS.Example.sln ios-package/Solution/iOS/
 cp ../../tmp/Solution/iOS/nuget.config ios-package/Solution/iOS/
 cp ../../tmp/Solution/iOS/components.config ios-package/Solution/iOS/
 
-mkdir -p ios-package/Emgu.CV.Example/SURFFeature
+mkdir -p ios-package/Emgu.CV.Example/FeatureMatching
 mkdir -p ios-package/Emgu.CV.Example/PlanarSubdivision
 mkdir -p ios-package/Emgu.CV.Example/LicensePlateRecognition
 mkdir -p ios-package/Emgu.CV.Example/PedestrianDetection
@@ -46,9 +47,9 @@ mkdir -p ios-package/Emgu.CV.Example/XamarinForms/XamarinForms.iOS
 
 mkdir -p ios-package/opencv/data/haarcascades
 cp -r ../../tmp/Emgu.CV.Example/iOS ios-package/Emgu.CV.Example/iOS
-cp ../../tmp/Emgu.CV.Example/SURFFeature/box.png ios-package/Emgu.CV.Example/SURFFeature/box.png
-cp ../../tmp/Emgu.CV.Example/SURFFeature/box_in_scene.png ios-package/Emgu.CV.Example/SURFFeature/box_in_scene.png
-cp ../../tmp/Emgu.CV.Example/SURFFeature/DrawMatches.cs ios-package/Emgu.CV.Example/SURFFeature/DrawMatches.cs
+cp ../../tmp/Emgu.CV.Example/FeatureMatching/box.png ios-package/Emgu.CV.Example/FeatureMatching/box.png
+cp ../../tmp/Emgu.CV.Example/FeatureMatching/box_in_scene.png ios-package/Emgu.CV.Example/FeatureMatching/box_in_scene.png
+cp ../../tmp/Emgu.CV.Example/FeatureMatching/DrawMatches.cs ios-package/Emgu.CV.Example/FeatureMatching/DrawMatches.cs
 cp ../../tmp/Emgu.CV.Example/PlanarSubdivision/DrawSubdivision.cs ios-package/Emgu.CV.Example/PlanarSubdivision/DrawSubdivision.cs
 cp ../../tmp/Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg ios-package/Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg
 cp ../../tmp/Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs ios-package/Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs

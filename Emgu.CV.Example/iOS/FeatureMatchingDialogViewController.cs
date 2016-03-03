@@ -12,7 +12,7 @@ using Emgu.CV.Structure;
 using MonoTouch.Dialog;
 using Foundation;
 using UIKit;
-using SURFFeatureExample;
+using FeatureMatchingExample;
 
 namespace Emgu.CV.Example.MonoTouch
 {
@@ -32,8 +32,8 @@ namespace Emgu.CV.Example.MonoTouch
          {
             long processingTime;
             Size frameSize = FrameSize;
-            using (Mat modelImage = CvInvoke.Imread("box.png", Emgu.CV.CvEnum.LoadImageType.Grayscale))
-            using (Mat observedImage = CvInvoke.Imread("box_in_scene.png", Emgu.CV.CvEnum.LoadImageType.Grayscale))
+            using (Mat modelImage = CvInvoke.Imread("box.png", Emgu.CV.CvEnum.ImreadModes.Grayscale))
+            using (Mat observedImage = CvInvoke.Imread("box_in_scene.png", Emgu.CV.CvEnum.ImreadModes.Grayscale))
             using (Mat image = DrawMatches.Draw(modelImage, observedImage, out processingTime))
             using (Mat resized = new Mat())
             {

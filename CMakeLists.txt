@@ -732,6 +732,7 @@ IF (ANDROID)
   
   INSTALL(
     FILES
+    "Solution/Android/Emgu.CV.Android.Example.sln"
     "Solution/Android/Emgu.CV.Android.sln"
     DESTINATION "Solution/Android"
     COMPONENT libs

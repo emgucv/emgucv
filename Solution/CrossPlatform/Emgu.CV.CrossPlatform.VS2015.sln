@@ -17,9 +17,9 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.XamarinForms", "..\..\Emgu.CV.Example\XamarinForms\XamarinForms\Emgu.CV.XamarinForms.shproj", "{F2A5CE86-0B21-40D2-AD3F-BB2D1D716CFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.XamarinForms.iOS", "..\..\Emgu.CV.Example\XamarinForms\XamarinForms.iOS\Emgu.CV.XamarinForms.iOS.csproj", "{91878104-EE4C-475C-841E-54C725EB2865}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.XamarinForms.iOS", "..\..\Emgu.CV.Example\XamarinForms\iOS\Emgu.CV.XamarinForms.iOS.csproj", "{91878104-EE4C-475C-841E-54C725EB2865}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.XamarinForms.Droid", "..\..\Emgu.CV.Example\XamarinForms\XamarinForms.Droid\Emgu.CV.XamarinForms.Droid.csproj", "{590BDC36-C47D-45B4-A24A-F907DF9922F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.XamarinForms.Droid", "..\..\Emgu.CV.Example\XamarinForms\Android\Emgu.CV.XamarinForms.Droid.csproj", "{590BDC36-C47D-45B4-A24A-F907DF9922F5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsUniversal81", "WindowsUniversal81", "{572494CE-FDCD-47E8-B931-ED51A878A7D9}"
 EndProject
