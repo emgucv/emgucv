@@ -35,6 +35,13 @@ cv::cuda::Filter* cudaCreateLinearFilter(int srcType, int dstType, cv::_InputArr
    return ptr.get();
 }
 
+cv::cuda::Filter* cudaCreateBoxFilter(int srcType, int dstType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue)
+{
+   cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createBoxFilter(srcType, dstType, *ksize, *anchor, borderMode, *borderValue);
+   ptr.addref();
+   return ptr.get();
+}
+
 cv::cuda::Filter* cudaCreateBoxMaxFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue)
 {
    cv::Size s(ksize->width, ksize->height);

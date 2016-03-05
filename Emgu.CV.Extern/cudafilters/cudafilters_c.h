@@ -23,6 +23,8 @@ CVAPI(cv::cuda::Filter*) cudaCreateLaplacianFilter(int srcType, int dstType, int
 
 CVAPI(cv::cuda::Filter*) cudaCreateLinearFilter(int srcType, int dstType, cv::_InputArray* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue);
 
+CVAPI(cv::cuda::Filter*) cudaCreateBoxFilter(int srcType, int dstType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue);
+
 CVAPI(cv::cuda::Filter*) cudaCreateBoxMaxFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue);
 
 CVAPI(cv::cuda::Filter*) cudaCreateBoxMinFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue);

@@ -19,9 +19,19 @@ void cudaCvtColor(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dcn
    cv::cuda::cvtColor(*src, *dst, code, dcn, stream ? *stream : cv::cuda::Stream::Null());
 }
 
+void cudaDemosaicing(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dcn, cv::cuda::Stream* stream)
+{
+   cv::cuda::demosaicing(*src, *dst, code, dcn, stream ? *stream : cv::cuda::Stream::Null());
+}
+
 void cudaSwapChannels(cv::_InputOutputArray* image, const int* dstOrder, cv::cuda::Stream* stream)
 {
    cv::cuda::swapChannels(*image, dstOrder, stream ? *stream : cv::cuda::Stream::Null());
+}
+
+void cudaAlphaComp(cv::_InputArray* img1, cv::_InputArray* img2, cv::_OutputArray* dst, int alphaOp, cv::cuda::Stream* stream)
+{
+   cv::cuda::alphaComp(*img1, *img2, *dst, alphaOp, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr,
@@ -37,9 +47,9 @@ void cudaMeanShiftProc(cv::_InputArray* src, cv::_OutputArray* dstr, cv::_Output
 }
 
 void cudaMeanShiftSegmentation(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr, int minsize,
-                                 CvTermCriteria* criteria)
+   CvTermCriteria* criteria, cv::cuda::Stream* stream)
 {
-   cv::cuda::meanShiftSegmentation(*src, *dst, sp, sr, minsize, *criteria);
+   cv::cuda::meanShiftSegmentation(*src, *dst, sp, sr, minsize, *criteria, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cudaCalcHist(cv::_InputArray* src, cv::_OutputArray* hist, cv::cuda::Stream* stream)
