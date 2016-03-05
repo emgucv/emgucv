@@ -12,7 +12,7 @@ cv::line_descriptor::BinaryDescriptor* cveLineDescriptorBinaryDescriptorCreate()
    ptr.addref();
    return ptr.get();
 }
-void cveBinaryDescriptorDetect(cv::line_descriptor::BinaryDescriptor* descriptor, cv::Mat* image, std::vector<cv::line_descriptor::KeyLine>* keypoints, cv::Mat* mask)
+void cveLineDescriptorBinaryDescriptorDetect(cv::line_descriptor::BinaryDescriptor* descriptor, cv::Mat* image, std::vector<cv::line_descriptor::KeyLine>* keypoints, cv::Mat* mask)
 {
    descriptor->detect(*image, *keypoints, mask ? *mask : cv::Mat());
 }
@@ -21,7 +21,7 @@ void cveLineDescriptorBinaryDescriptorCompute(cv::line_descriptor::BinaryDescrip
    descriptor->compute(*image, *keylines, *descriptors, returnFloatDescr);
 }
 
-void cveLineDescriptorBinaryDescriptoyRelease(cv::line_descriptor::BinaryDescriptor** descriptor)
+void cveLineDescriptorBinaryDescriptorRelease(cv::line_descriptor::BinaryDescriptor** descriptor)
 {
    delete * descriptor;
    *descriptor = 0;

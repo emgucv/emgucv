@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Example.iOS", "..\..\Emgu.CV.Example\iOS\Emgu.CV.Example.iOS.csproj", "{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Ad-Hoc|iPhone = Ad-Hoc|iPhone
+		Ad-Hoc|iPhoneSimulator = Ad-Hoc|iPhoneSimulator
+		AppStore|iPhone = AppStore|iPhone
+		AppStore|iPhoneSimulator = AppStore|iPhoneSimulator
+		Debug|iPhone = Debug|iPhone
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|iPhone = Release|iPhone
+		Release|iPhoneSimulator = Release|iPhoneSimulator
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Ad-Hoc|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Ad-Hoc|iPhoneSimulator.Build.0 = Ad-Hoc|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.AppStore|iPhoneSimulator.ActiveCfg = AppStore|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.AppStore|iPhoneSimulator.Build.0 = AppStore|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhone.Build.0 = Debug|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhone.ActiveCfg = Release|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhone.Build.0 = Release|iPhone
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = None
+		$1.ResourceNamePolicy = FileFormatDefault
+		$0.TextStylePolicy = $2
+		$2.TabWidth = 3
+		$2.IndentWidth = 3
+		$2.inheritsSet = VisualStudio
+		$2.inheritsScope = text/plain
+		$2.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $3
+		$3.IndentSwitchBody = True
+		$3.AnonymousMethodBraceStyle = NextLine
+		$3.PropertyBraceStyle = NextLine
+		$3.PropertyGetBraceStyle = NextLine
+		$3.PropertySetBraceStyle = NextLine
+		$3.EventBraceStyle = NextLine
+		$3.EventAddBraceStyle = NextLine
+		$3.EventRemoveBraceStyle = NextLine
+		$3.StatementBraceStyle = NextLine
+		$3.ArrayInitializerBraceStyle = NextLine
+		$3.BeforeMethodDeclarationParentheses = False
+		$3.BeforeMethodCallParentheses = False
+		$3.BeforeConstructorDeclarationParentheses = False
+		$3.BeforeDelegateDeclarationParentheses = False
+		$3.NewParentheses = False
+		$3.inheritsSet = Mono
+		$3.inheritsScope = text/x-csharp
+		$3.scope = text/x-csharp
+	EndGlobalSection
+EndGlobal

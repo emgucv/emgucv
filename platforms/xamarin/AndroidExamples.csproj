@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{543E1066-E02A-4078-AFA4-AD00B7168780}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AndroidExamples</RootNamespace>
+    <AssemblyName>Emgu.CV.Example</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidApplication>true</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidStoreUncompressedFileExtensions>.size%3b.traineddata</AndroidStoreUncompressedFileExtensions>
+    <MandroidI18n />
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <TargetFrameworkVersion>v2.3</TargetFrameworkVersion>
+    <JavaMaximumHeapSize />
+    <JavaOptions />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidLinkSkip />
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <BundleAssemblies>False</BundleAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Emgu.CV.World.Android">
+      <HintPath>..\..\..\lib\android\Emgu.CV.World.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="OpenTK-1.0" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Xamarin.Mobile">
+      <HintPath>..\..\..\..\..\..\..\Components\xamarin.mobile-0.7.7\lib\android\Xamarin.Mobile.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\FaceDetection\DetectFace.cs">
+      <Link>DetectFace.cs</Link>
+    </Compile>
+    <Compile Include="..\LicensePlateRecognition\LicensePlateDetector.cs">
+      <Link>LicensePlateDetector.cs</Link>
+    </Compile>
+    <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
+      <Link>FindPedestrian.cs</Link>
+    </Compile>
+    <Compile Include="..\PlanarSubdivision\DrawSubdivision.cs">
+      <Link>DrawSubdivision.cs</Link>
+    </Compile>
+    <Compile Include="..\FeatureMatching\DrawMatches.cs">
+      <Link>DrawMatches.cs</Link>
+    </Compile>
+    <Compile Include="..\TrafficSignRecognition\StopSignDetector.cs">
+      <Link>StopSignDetector.cs</Link>
+    </Compile>
+    <Compile Include="AppPreference.cs" />
+    <Compile Include="ButtonMessageImageActivity.cs" />
+    <Compile Include="CameraPreview.cs" />
+    <Compile Include="CameraPreviewActivity.cs" />
+    <Compile Include="ImageBufferFactory.cs" />
+    <Compile Include="ImageFilter.cs" />
+    <Compile Include="LicenseDialogPreference.cs" />
+    <Compile Include="LicensePlateRecognitionActivity.cs" />
+    <Compile Include="OpenCLDialogPreference.cs" />
+    <Compile Include="ProcessedCameraPreview.cs" />
+    <Compile Include="Report.cs" />
+    <Compile Include="SettingActivity.cs" />
+    <Compile Include="TrafficSignRecognitionActivity.cs" />
+    <Compile Include="FaceDetectionActivity.cs" />
+    <Compile Include="PedestrianDetectionActivity.cs" />
+    <Compile Include="PlanarSubdivisionActivity.cs" />
+    <Compile Include="FeatureMatchingActivity.cs" />
+    <Compile Include="AndroidExamplesActivity.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.bigrams">
+      <Link>Assets\tessdata\eng.cube.bigrams</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.fold">
+      <Link>Assets\tessdata\eng.cube.fold</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.lm">
+      <Link>Assets\tessdata\eng.cube.lm</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.nn">
+      <Link>Assets\tessdata\eng.cube.nn</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.params">
+      <Link>Assets\tessdata\eng.cube.params</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.size">
+      <Link>Assets\tessdata\eng.cube.size</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.word-freq">
+      <Link>Assets\tessdata\eng.cube.word-freq</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.tesseract_cube.nn">
+      <Link>Assets\tessdata\eng.tesseract_cube.nn</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
+      <Link>Assets\tessdata\eng.traineddata</Link>
+    </AndroidAsset>
+    <AndroidResource Include="..\..\opencv\LICENSE">
+      <Link>Resources\Raw\LICENSE</Link>
+    </AndroidResource>
+    <None Include="Resources\AboutResources.txt" />
+    <None Include="Assets\AboutAssets.txt" />
+    <AndroidResource Include="Resources\Layout\PlanarSubdivision.axml" />
+    <AndroidResource Include="Resources\Layout\CameraPreviewLayout.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\Setting.axml" />
+    <AndroidResource Include="Resources\Layout\LicenseDisplay.axml" />
+    <AndroidResource Include="Resources\Layout\about_us.axml" />
+    <AndroidResource Include="Resources\Layout\opencl_preference.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Layout\AndroidExamples.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\FeatureMatching\box.png">
+      <Link>Assets\box.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\FeatureMatching\box_in_scene.png">
+      <Link>Assets\box_in_scene.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\PedestrianDetection\pedestrian.png">
+      <Link>Assets\pedestrian.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
+      <Link>Assets\haarcascade_eye.xml</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
+      <Link>Assets\haarcascade_frontalface_default.xml</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\FaceDetection\lena.jpg">
+      <Link>Assets\lena.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\TrafficSignRecognition\stop-sign-model.png">
+      <Link>Assets\stop-sign-model.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\TrafficSignRecognition\stop-sign.jpg">
+      <Link>Assets\stop-sign.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\LicensePlateRecognition\license-plate.jpg">
+      <Link>Assets\license-plate.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AndroidManifest.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-ldpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\Drawable\ic_launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <XamarinComponentReference Include="xamarin.mobile">
+      <Visible>False</Visible>
+      <Version>0.7.7</Version>
+    </XamarinComponentReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+     Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

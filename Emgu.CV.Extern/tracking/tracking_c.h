@@ -16,7 +16,7 @@ CVAPI(bool) cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundin
 CVAPI(bool) cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
 CVAPI(void) cveTrackerRelease(cv::Tracker** tracker);
 
-CVAPI(cv::MultiTracker*) cveMultiTrackerInit(cv::String* trackerType);
+CVAPI(cv::MultiTracker*) cveMultiTrackerCreate(cv::String* trackerType);
 CVAPI(bool) cveMultiTrackerAdd(cv::MultiTracker* tracker, cv::Mat* image, CvRect* boundingBox);
 CVAPI(bool) cveMultiTrackerAddType(cv::MultiTracker* tracker, cv::String* trackerType, cv::Mat* image, CvRect* boundingBox);
 CVAPI(bool) cveMultiTrackerUpdate(cv::MultiTracker* tracker, cv::Mat* image, std::vector<CvRect>* boundingBox);

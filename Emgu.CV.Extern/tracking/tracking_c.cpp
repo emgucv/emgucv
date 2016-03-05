@@ -29,7 +29,7 @@ void cveTrackerRelease(cv::Tracker** tracker)
    *tracker = 0;
 }
 
-cv::MultiTracker* cveMultiTrackerInit(cv::String* trackerType)
+cv::MultiTracker* cveMultiTrackerCreate(cv::String* trackerType)
 {
    return new cv::MultiTracker(*trackerType);
 }

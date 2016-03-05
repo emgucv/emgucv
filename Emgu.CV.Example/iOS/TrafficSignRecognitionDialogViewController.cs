@@ -30,7 +30,7 @@ namespace Emgu.CV.Example.MonoTouch
          delegate
          {
             using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>("stop-sign-model.png"))
-            using (Mat image = CvInvoke.Imread("stop-sign.jpg", Emgu.CV.CvEnum.LoadImageType.AnyColor))
+            using (Mat image = CvInvoke.Imread("stop-sign.jpg", Emgu.CV.CvEnum.ImreadModes.AnyColor))
             {
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 

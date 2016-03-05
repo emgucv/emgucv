@@ -41,7 +41,7 @@ mkdir -p ios-package/Emgu.CV.Example/PedestrianDetection
 mkdir -p ios-package/Emgu.CV.Example/TrafficSignRecognition
 mkdir -p ios-package/Emgu.CV.Example/FaceDetection
 mkdir -p ios-package/Emgu.CV.Example/XamarinForms/XamarinForms
-mkdir -p ios-package/Emgu.CV.Example/XamarinForms/XamarinForms.iOS
+mkdir -p ios-package/Emgu.CV.Example/XamarinForms/iOS
 
 mkdir -p ios-package/opencv/data/haarcascades
 cp -r ../../tmp/Emgu.CV.Example/iOS ios-package/Emgu.CV.Example/iOS
@@ -59,7 +59,7 @@ cp ../../tmp/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs ios-pack
 cp ../../tmp/Emgu.CV.Example/FaceDetection/lena.jpg ios-package/Emgu.CV.Example/FaceDetection/lena.jpg
 cp ../../tmp/Emgu.CV.Example/FaceDetection/DetectFace.cs ios-package/Emgu.CV.Example/FaceDetection/DetectFace.cs
 cp -r ../../tmp/Emgu.CV.Example/XamarinForms/XamarinForms/* ios-package/Emgu.CV.Example/XamarinForms/XamarinForms/
-cp -r ../../tmp/Emgu.CV.Example/XamarinForms/XamarinForms.iOS/* ios-package/Emgu.CV.Example/XamarinForms/XamarinForms.iOS/
+cp -r ../../tmp/Emgu.CV.Example/XamarinForms/iOS/* ios-package/Emgu.CV.Example/XamarinForms/iOS/
 cp ../../opencv/data/haarcascades/haarcascade_eye.xml ios-package/opencv/data/haarcascades/haarcascade_eye.xml
 cp ../../opencv/data/haarcascades/haarcascade_frontalface_default.xml ios-package/opencv/data/haarcascades/haarcascade_frontalface_default.xml
 cp ../../CommonAssemblyInfo.cs ios-package
@@ -76,7 +76,8 @@ cd ..
 
 /Library/Frameworks/Mono.framework/Commands/xbuild /p:Configuration=Release ../../Emgu.CV.World/Emgu.CV.World.IOS.csproj
 mkdir -p ios-package/bin
-cp ../../Emgu.CV.World/bin/Release/Emgu.CV.World.IOS.dll ios-package/bin
+cp ../../Emgu.CV.World/bin/Emgu.CV.World.IOS.dll ios-package/bin
+cp ../../Emgu.CV.World/bin/Emgu.CV.World.IOS.XML ios-package/bin
 cp ../../Emgu.CV.License.txt ios-package
 #gitversion=$(git log --oneline | wc -l | tr -d " ")
 emgucvversion=$(cat ../../emgucv.version.txt)

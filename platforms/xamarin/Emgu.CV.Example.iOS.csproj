@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <ProjectGuid>{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}</ProjectGuid>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Emgu.CV.Example</RootNamespace>
+    <AssemblyName>EmguCVExampleiOS</AssemblyName>
+    <TargetFrameworkIdentifier>Xamarin.iOS</TargetFrameworkIdentifier>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <MtouchDebug>True</MtouchDebug>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>i386, x86_64</MtouchArch>
+    <MtouchLink>None</MtouchLink>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>i386, x86_64</MtouchArch>
+    <MtouchSdkVersion>6.0</MtouchSdkVersion>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\iPhone\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchDebug>True</MtouchDebug>
+    <MtouchLink>None</MtouchLink>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <IpaPackageName>
+    </IpaPackageName>
+    <MtouchProfiling>true</MtouchProfiling>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\iPhone\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchUseLlvm>True</MtouchUseLlvm>
+    <MtouchExtraArgs>-nosymbolstrip </MtouchExtraArgs>
+    <IpaPackageName>
+    </IpaPackageName>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\iPhone\Ad-Hoc</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <BuildIpa>True</BuildIpa>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\iPhone\AppStore</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Emgu.CV.World.IOS">
+      <HintPath>..\..\..\lib\ios\Emgu.CV.World.IOS.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="MonoTouch.Dialog-1" />
+    <Reference Include="Xamarin.iOS" />
+    <Reference Include="OpenTK-1.0" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AppDelegate.cs" />
+    <Compile Include="ExamplesDialogViewController.cs" />
+    <Compile Include="HelloWorldUIViewController.cs" />
+    <Compile Include="..\FeatureMatching\DrawMatches.cs">
+      <Link>DrawMatches.cs</Link>
+    </Compile>
+    <Compile Include="FeatureMatchingDialogViewController.cs" />
+    <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
+      <Link>FindPedestrian.cs</Link>
+    </Compile>
+    <Compile Include="..\LicensePlateRecognition\LicensePlateDetector.cs">
+      <Link>LicensePlateDetector.cs</Link>
+    </Compile>
+    <Compile Include="LicensePlateRecognitionDialogViewController.cs" />
+    <Compile Include="PlanarSubdivisionDialogViewController.cs" />
+    <Compile Include="..\PlanarSubdivision\DrawSubdivision.cs">
+      <Link>DrawSubdivision.cs</Link>
+    </Compile>
+    <Compile Include="..\TrafficSignRecognition\StopSignDetector.cs">
+      <Link>StopSignDetector.cs</Link>
+    </Compile>
+    <Compile Include="TrafficSignRecognitionDialogViewController.cs" />
+    <Compile Include="FaceDetectionDialogViewController.cs" />
+    <Compile Include="..\FaceDetection\DetectFace.cs">
+      <Link>DetectFace.cs</Link>
+    </Compile>
+    <Compile Include="ButtonMessageImageDialogViewController.cs" />
+    <Compile Include="CameraDialogViewController.cs" />
+    <Compile Include="PedestrianDetectionDialogViewController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\FeatureMatching\box.png">
+      <Link>box.png</Link>
+    </Content>
+    <Content Include="..\FeatureMatching\box_in_scene.png">
+      <Link>box_in_scene.png</Link>
+    </Content>
+    <Content Include="..\PedestrianDetection\pedestrian.png">
+      <Link>pedestrian.png</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.bigrams">
+      <Link>tessdata\eng.cube.bigrams</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.fold">
+      <Link>tessdata\eng.cube.fold</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.lm">
+      <Link>tessdata\eng.cube.lm</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.nn">
+      <Link>tessdata\eng.cube.nn</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.params">
+      <Link>tessdata\eng.cube.params</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.size">
+      <Link>tessdata\eng.cube.size</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.word-freq">
+      <Link>tessdata\eng.cube.word-freq</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.tesseract_cube.nn">
+      <Link>tessdata\eng.tesseract_cube.nn</Link>
+    </Content>
+    <Content Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
+      <Link>tessdata\eng.traineddata</Link>
+    </Content>
+    <Content Include="..\LicensePlateRecognition\license-plate.jpg">
+      <Link>license-plate.jpg</Link>
+    </Content>
+    <Content Include="..\TrafficSignRecognition\stop-sign.jpg">
+      <Link>stop-sign.jpg</Link>
+    </Content>
+    <Content Include="..\TrafficSignRecognition\stop-sign-model.png">
+      <Link>stop-sign-model.png</Link>
+    </Content>
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
+      <Link>haarcascade_eye.xml</Link>
+    </Content>
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
+      <Link>haarcascade_frontalface_default.xml</Link>
+    </Content>
+    <Content Include="..\FaceDetection\lena.jpg">
+      <Link>lena.jpg</Link>
+    </Content>
+    <Content Include="AppIcons\appIcon_72x72.png" />
+    <Content Include="AppIcons\appIcon_114x114.png" />
+    <Content Include="AppIcons\appIcon_144x144.png" />
+    <Content Include="AppIcons\appIcon_57x57.png" />
+    <Content Include="AppIcons\iTunesArtwork_512x512.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+</Project>

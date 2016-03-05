@@ -16,9 +16,9 @@ using FeatureMatchingExample;
 
 namespace Emgu.CV.Example.MonoTouch
 {
-   public class SURFFeatureDialogViewController : ButtonMessageImageDialogViewController
+   public class FeatureMatchingDialogViewController : ButtonMessageImageDialogViewController
    {
-      public SURFFeatureDialogViewController()
+      public FeatureMatchingDialogViewController()
          : base()
       {
       }
