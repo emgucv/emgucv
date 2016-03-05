@@ -17,10 +17,8 @@ samples:
 publisher-url: http://www.emgu.com
 packages: 
   android:
-build:
-  - src/Solution/Android/Emgu.CV.Android.sln 
-  - src/Solution/iOS/Emgu.CV.iOS.sln
 libraries: 
-  ios-unified: ../lib/ios/Awesome.dll
+  ios-unified: ../lib/ios/Emgu.CV.World.iOS.dll
+  android: ../lib/android/Emgu.CV.World.Android.dll
 version: "3.1"
 ...

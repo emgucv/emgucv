@@ -100,6 +100,23 @@ namespace OCR
                {
                   _ocr.Recognize(image);
                   Tesseract.Character[] characters = _ocr.GetCharacters();
+                  if (characters.Length == 0)
+                  {
+                     Mat imgGrey = new Mat();
+                     CvInvoke.CvtColor(image, imgGrey, ColorConversion.Bgr2Gray);
+                     Mat imgThresholded = new Mat();
+                     CvInvoke.Threshold(imgGrey, imgThresholded,65, 255, ThresholdType.Binary);
+                     _ocr.Recognize(imgThresholded);
+                     characters = _ocr.GetCharacters();
+                     imageColor = imgThresholded;
+                     if (characters.Length == 0)
+                     {
+                        CvInvoke.Threshold(image, imgThresholded, 190, 255, ThresholdType.Binary);
+                        _ocr.Recognize(imgThresholded);
+                        characters = _ocr.GetCharacters();
+                        imageColor = imgThresholded;
+                     }
+                  }
                   foreach (Tesseract.Character c in characters)
                   {
                      CvInvoke.Rectangle(imageColor, c.Region, drawCharColor.MCvScalar);

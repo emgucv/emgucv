@@ -33,8 +33,6 @@ cp -r ../../tmp/Emgu.CV.World ios-package/Emgu.CV.World
 mkdir -p ios-package/Solution/iOS
 cp ../../tmp/Solution/iOS/Emgu.CV.iOS.sln ios-package/Solution/iOS/
 cp ../../tmp/Solution/iOS/Emgu.CV.iOS.Example.sln ios-package/Solution/iOS/
-cp ../../tmp/Solution/iOS/nuget.config ios-package/Solution/iOS/
-cp ../../tmp/Solution/iOS/components.config ios-package/Solution/iOS/
 
 mkdir -p ios-package/Emgu.CV.Example/FeatureMatching
 mkdir -p ios-package/Emgu.CV.Example/PlanarSubdivision

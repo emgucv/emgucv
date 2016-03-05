@@ -153,11 +153,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="OCRForm.resx">
-      <DependentUpon>OCRForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="..\..\opencv_contrib\modules\text\samples\trained_classifierNM1.xml">
       <Link>trained_classifierNM1.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
