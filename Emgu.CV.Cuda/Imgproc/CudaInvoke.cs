@@ -11,7 +11,6 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using System.IO;
-using System.IO.Pipes;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda

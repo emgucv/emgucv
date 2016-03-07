@@ -102,6 +102,9 @@ namespace Emgu.CV
          AllocateSharedMemory = 1 << 2
       }
 
+      /// <summary>
+      /// Get or Set the raw image data
+      /// </summary>
       public byte[] Bytes
       {
          get
@@ -145,6 +148,7 @@ namespace Emgu.CV
       /// <param name="cols">Number of columns in a 2D array.</param>
       /// <param name="type">Mat element type</param>
       /// <param name="channels">Number of channels</param>
+      /// <param name="usage">Allocation Usage</param>
       public UMat(int rows, int cols, CvEnum.DepthType type, int channels, Usage usage = Usage.Default)
          : this()
       {
@@ -157,6 +161,7 @@ namespace Emgu.CV
       /// <param name="size">Size of the UMat</param>
       /// <param name="type">Mat element type</param>
       /// <param name="channels">Number of channels</param>
+      /// <param name="usage">Allocation Usage</param>
       public UMat(Size size, CvEnum.DepthType type, int channels, Usage usage = Usage.Default)
          : this(size.Height, size.Width, type, channels, usage)
       {
@@ -180,6 +185,7 @@ namespace Emgu.CV
       /// <param name="cols">New number of columns.</param>
       /// <param name="type">New matrix element depth type.</param>
       /// <param name="channels">New matrix number of channels</param>
+      /// <param name="usage">Allocation Usage</param>
       public void Create(int rows, int cols, CvEnum.DepthType type, int channels, Usage usage = Usage.Default)
       {
          UMatInvoke.cveUMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels), usage);
