@@ -148,24 +148,26 @@ namespace Emgu.CV.Cuda
       }
 
       /// <summary>
-      /// Performs blocking upload data to GpuMat
+      /// Upload data to GpuMat
       /// </summary>
       /// <param name="arr">The CvArray to be uploaded to GpuMat</param>
-      public void Upload(IInputArray arr)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>     
+      public void Upload(IInputArray arr, Stream stream = null)
       {
          using (InputArray iaArr = arr.GetInputArray())
-            CudaInvoke.gpuMatUpload(_ptr, iaArr);
+            CudaInvoke.gpuMatUpload(_ptr, iaArr, stream);
       }
 
       /// <summary>
-      /// Downloads data from device to host memory. Blocking calls
+      /// Downloads data from device to host memory. 
       /// </summary>
       /// <param name="arr">The destination CvArray where the GpuMat data will be downloaded to.</param>
-      public void Download(IOutputArray arr)
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>     
+      public void Download(IOutputArray arr, Stream stream = null)
       {
          //Debug.Assert(arr.Size.Equals(Size), "Destination CvArray size does not match source GpuMat size");
          using (OutputArray oaArr = arr.GetOutputArray())
-            CudaInvoke.gpuMatDownload(_ptr, oaArr);
+            CudaInvoke.gpuMatDownload(_ptr, oaArr, stream);
       }
 
       public Mat ToMat()
@@ -189,7 +191,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="value">Fill value</param>
       /// <param name="mask">Operation mask, 8-bit single channel GpuMat; specifies elements of destination GpuMat to be changed. Can be IntPtr.Zero if not used</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>     
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>     
       public void SetTo(MCvScalar value, IInputArray mask = null, Stream stream = null)
       {
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
@@ -201,7 +203,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="dst">The output array to be copied to</param>
       /// <param name="mask">The optional mask, use IntPtr.Zero if not needed.</param>
-      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void CopyTo(IOutputArray dst, IInputArray mask = null, Stream stream = null)
       {
          using (OutputArray oaDst = dst.GetOutputArray())
@@ -218,6 +220,7 @@ namespace Emgu.CV.Cuda
       /// In case of scale=1, shift=0 no prescaling is done. This is a specially optimized case and it has the appropriate convertTo synonym.
       /// </summary>
       /// <param name="dst">Destination GpuMat</param>
+      /// <param name="rtype">Result type</param>
       /// <param name="scale">Scale factor</param>
       /// <param name="shift">Value added to the scaled source GpuMat elements</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
@@ -466,7 +469,7 @@ namespace Emgu.CV.Cuda
 #else
             Array.
 #endif
-            ConvertAll(Split(null), (m) => (IImage) m);
+            ConvertAll(Split(null), (m) => (IImage)m);
       }
 
       public void Save(string fileName)
@@ -564,7 +567,7 @@ namespace Emgu.CV.Cuda
       /// <param name="gpuMat">The destination gpuMat</param>
       /// <param name="arr">The CvArray to be uploaded to GPU</param>
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void gpuMatUpload(IntPtr gpuMat, IntPtr arr);
+      internal static extern void gpuMatUpload(IntPtr gpuMat, IntPtr arr, IntPtr stream);
 
       /// <summary>
       /// Downloads data from device to host memory. Blocking calls.
@@ -572,7 +575,7 @@ namespace Emgu.CV.Cuda
       /// <param name="gpuMat">The source GpuMat</param>
       /// <param name="arr">The CvArray where data will be downloaded to</param>
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void gpuMatDownload(IntPtr gpuMat, IntPtr arr);
+      internal static extern void gpuMatDownload(IntPtr gpuMat, IntPtr arr, IntPtr stream);
 
       /// <summary>
       /// Copy the source GpuMat to destination GpuMat, using an optional mask.
