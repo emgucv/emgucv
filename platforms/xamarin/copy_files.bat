@@ -5,6 +5,8 @@ cd platforms
 cd xamarin
 cd emgucv_v3
 cd component
+mkdir -p lib/ios
+mkdir -p lib/android
 rm -rf samples
 mkdir samples
 cd samples
