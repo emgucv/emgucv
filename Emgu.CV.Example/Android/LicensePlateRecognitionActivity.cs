@@ -87,7 +87,7 @@ namespace AndroidExamples
             foreach (RotatedRect box in licenseBoxList)
             {
                Rectangle rect = box.MinAreaRect();
-               image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
+               CvInvoke.Rectangle(image, rect, new Bgr(System.Drawing.Color.Red).MCvScalar, 2);
             }
 
             SetImageBitmap(image.ToBitmap());

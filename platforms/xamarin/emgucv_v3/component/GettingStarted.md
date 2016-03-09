@@ -1,1 +1,1 @@
-# Getting Started with emgucv_v3
+# Getting Started with Emgu CV V3.0

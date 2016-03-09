@@ -107,7 +107,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Emgu.CV.World.IOS">
-      <HintPath>..\..\..\lib\ios\Emgu.CV.World.IOS.dll</HintPath>
+      <HintPath>..\..\..\..\lib\ios\Emgu.CV.World.IOS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -126,87 +126,86 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="ExamplesDialogViewController.cs" />
     <Compile Include="HelloWorldUIViewController.cs" />
-    <Compile Include="..\FeatureMatching\DrawMatches.cs">
-      <Link>DrawMatches.cs</Link>
+    <Compile Include="DrawMatches.cs">
+      
     </Compile>
     <Compile Include="FeatureMatchingDialogViewController.cs" />
-    <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
-      <Link>FindPedestrian.cs</Link>
+    <Compile Include="FindPedestrian.cs">
+      
     </Compile>
-    <Compile Include="..\LicensePlateRecognition\LicensePlateDetector.cs">
-      <Link>LicensePlateDetector.cs</Link>
+    <Compile Include="LicensePlateDetector.cs">
+      
     </Compile>
     <Compile Include="LicensePlateRecognitionDialogViewController.cs" />
     <Compile Include="PlanarSubdivisionDialogViewController.cs" />
-    <Compile Include="..\PlanarSubdivision\DrawSubdivision.cs">
-      <Link>DrawSubdivision.cs</Link>
+    <Compile Include="DrawSubdivision.cs">
+      
     </Compile>
-    <Compile Include="..\TrafficSignRecognition\StopSignDetector.cs">
-      <Link>StopSignDetector.cs</Link>
+    <Compile Include="StopSignDetector.cs">
+      
     </Compile>
     <Compile Include="TrafficSignRecognitionDialogViewController.cs" />
     <Compile Include="FaceDetectionDialogViewController.cs" />
-    <Compile Include="..\FaceDetection\DetectFace.cs">
-      <Link>DetectFace.cs</Link>
+    <Compile Include="DetectFace.cs">
+      
     </Compile>
     <Compile Include="ButtonMessageImageDialogViewController.cs" />
     <Compile Include="CameraDialogViewController.cs" />
     <Compile Include="PedestrianDetectionDialogViewController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\FeatureMatching\box.png">
-      <Link>box.png</Link>
+    <Content Include="box.png">
+      
     </Content>
-    <Content Include="..\FeatureMatching\box_in_scene.png">
-      <Link>box_in_scene.png</Link>
+    <Content Include="box_in_scene.png">
+      
     </Content>
-    <Content Include="..\PedestrianDetection\pedestrian.png">
-      <Link>pedestrian.png</Link>
+    <Content Include="pedestrian.png">
+      
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.bigrams">
+    <Content Include="tessdata\eng.cube.bigrams">
       <Link>tessdata\eng.cube.bigrams</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.fold">
+    <Content Include="tessdata\eng.cube.fold">
       <Link>tessdata\eng.cube.fold</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.lm">
+    <Content Include="tessdata\eng.cube.lm">
       <Link>tessdata\eng.cube.lm</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.nn">
+    <Content Include="tessdata\eng.cube.nn">
       <Link>tessdata\eng.cube.nn</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.params">
+    <Content Include="tessdata\eng.cube.params">
       <Link>tessdata\eng.cube.params</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.size">
+    <Content Include="tessdata\eng.cube.size">
       <Link>tessdata\eng.cube.size</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.word-freq">
+    <Content Include="tessdata\eng.cube.word-freq">
       <Link>tessdata\eng.cube.word-freq</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.tesseract_cube.nn">
+    <Content Include="tessdata\eng.tesseract_cube.nn">
       <Link>tessdata\eng.tesseract_cube.nn</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
+    <Content Include="tessdata\eng.traineddata">
       <Link>tessdata\eng.traineddata</Link>
     </Content>
-    <Content Include="..\LicensePlateRecognition\license-plate.jpg">
-      <Link>license-plate.jpg</Link>
+    <Content Include="license-plate.jpg">
+      
     </Content>
-    <Content Include="..\TrafficSignRecognition\stop-sign.jpg">
-      <Link>stop-sign.jpg</Link>
+    <Content Include="stop-sign.jpg">
+      
     </Content>
-    <Content Include="..\TrafficSignRecognition\stop-sign-model.png">
-      <Link>stop-sign-model.png</Link>
+    <Content Include="stop-sign-model.png">
+      
     </Content>
-    <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
-      <Link>haarcascade_eye.xml</Link>
+    <Content Include="haarcascade_eye.xml">
     </Content>
-    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
-      <Link>haarcascade_frontalface_default.xml</Link>
+    <Content Include="haarcascade_frontalface_default.xml">
+      
     </Content>
-    <Content Include="..\FaceDetection\lena.jpg">
-      <Link>lena.jpg</Link>
+    <Content Include="lena.jpg">
+      
     </Content>
     <Content Include="AppIcons\appIcon_72x72.png" />
     <Content Include="AppIcons\appIcon_114x114.png" />

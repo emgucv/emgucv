@@ -26,7 +26,7 @@ namespace Emgu.CV.XamarinForms
          var button = this.GetButton();
          button.Text = "Perform Pedestrian Detection";
          
-         OnImageLoaded += async (sender, image) =>
+         OnImagesLoaded += async (sender, image) =>
          {
             GetLabel().Text = "please wait...";
             SetImage(null);
@@ -39,14 +39,14 @@ namespace Emgu.CV.XamarinForms
 
                   if (image == null)
                      return new Tuple<Mat, long>(null, 0);
-                  Rectangle[] pedestrians = FindPedestrian.Find(image, false, out time);
+                  Rectangle[] pedestrians = FindPedestrian.Find(image[0], false, out time);
 
                   foreach (Rectangle rect in pedestrians)
                   {
-                     CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255), 2);
+                     CvInvoke.Rectangle(image[0], rect, new MCvScalar(0, 0, 255), 2);
                   }
 
-                  return new Tuple<Mat, long>(image, time);
+                  return new Tuple<Mat, long>(image[0], time);
                });
 
             t.Start();
@@ -62,7 +62,7 @@ namespace Emgu.CV.XamarinForms
 
       private void OnButtonClicked(object sender, EventArgs e)
       {
-         LoadImage("pedestrian.png");
+         LoadImages(new String[] { "pedestrian.png" });
       }
    }
 }

@@ -37,7 +37,7 @@ namespace AndroidExamples
          {
             int maxValue = 600, pointCount = 30;
 
-            SetImageBitmap(DrawSubdivision.Draw(maxValue, pointCount).Bitmap);
+            SetImageBitmap(DrawSubdivision.Draw(maxValue, pointCount).ToBitmap());
          };
       }
    }

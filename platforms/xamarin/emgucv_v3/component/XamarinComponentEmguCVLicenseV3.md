@@ -1,40 +1,38 @@
-Version 3.0
-
+Emgu CV Commercial License Version 3.0
+========================================
 THIS DOCUMENT IS A LEGAL AGREEMENT (the "License Agreement") BETWEEN EMGU Corporation ("We," "Us") AND YOU OR THE ORGANIZATION ON WHOSE BEHALF YOU ARE UNDERTAKING THE LICENSE DESCRIBED BELOW ("You") IN RELATION TO THE EMGU CV SOFTWARE (THE "Software"), IN BOTH SOURCE AND OBJECT CODE FORM, AND/OR ALL RELATED MATERIALS. BY DOWNLOADING, INSTALLING, COPYING OR OTHERWISE USING THE SOFTWARE, YOU ACCEPT THE FOLLOWING TERMS AND CONDITIONS. IF YOU DO NOT AGREE WITH ANY OF THE TERMS OR CONDITIONS OF THIS LICENSE AGREEMENT, DO NOT PROCEED WITH THE DOWNLOADING, COPYING, INSTALLATION OR ANY OTHER USE OF THE SOFTWARE OR ANY PORTION THEREOF. THE SOFTWARE IS PROTECTED BY UNITED STATES COPYRIGHT LAWS AND INTERNATIONAL COPYRIGHT LAWS, AS WELL AS OTHER INTELLECTUAL PROPERTY LAWS AND TREATIES. THE SOFTWARE IS LICENSED, NOT SOLD.
 
 THIS LICENSE AGREEMENT DESCRIBES YOUR RIGHTS WITH RESPECT TO THE SOFTWARE AND ITS COMPONENTS.
 
 We, EMGU Corporation, grant You a non-exclusive, non-transferable license to the Software solely as set forth in sections 1(a), 1(b) or 1(c), as applicable, and subject to the terms and conditions of this License Agreement.
 
-1. OWNERSHIP, LICENSE GRANT
+###1. OWNERSHIP, LICENSE GRANT
 
 This is a license agreement and not an agreement for sale. We reserve ownership of all intellectual property rights inherent in or relating to the Software, which include, but are not limited to, all copyright, patent rights, all rights in relation to registered and unregistered trademarks (including service marks), confidential information (including trade secrets and know-how) and all rights other than those expressly granted by this Agreement.
 
-a. Developer License: 
-   
+#### a. Developer License: 
 Subject to the payment of the fee required for a Commercial Developer License and subject to the terms and conditions of this License Agreement, We grant to You a revocable, non-transferable and non-exclusive license 
 (i) for a single developer within Your organization to install and use the Software on any workstations used exclusively by such developer and 
 (ii) for You to install and use the Software in unlimited clients, solely in connection with distribution of the Software in accordance with sections 3 and 4 below. This license is not sub-licensable except as explicitly set forth herein.
 
-b. Workgroup License:
-
+#### b. Workgroup License:
 Subject to the payment of the fee required for a Commercial Developer License and subject to the terms and conditions of this License Agreement, We grant to You a revocable, non-transferable and non-exclusive license 
 (i) for up to twenty five (25) developers within Your organization to install and use the Software on any workstations used exclusively by such developers and 
 (ii) for You to install and use the Software in unlimited clients, solely in connection with distribution of the Software in accordance with sections 3 and 4 below. This license is not sub-licensable except as explicitly set forth herein.
 
-c. Enterprise License:
-
+#### c. Enterprise License:
 Subject to the payment of the fee required for a Commercial Developer License and subject to the terms and conditions of this License Agreement, We grant to You a revocable, non-transferable and non-exclusive license 
 (i) for up to one hundred (100) developers within Your organization to install and use the Software on any workstations used exclusively by such developers and 
 (ii) for You to install and use the Software in unlimited clients, solely in connection with distribution of the Software in accordance with sections 3 and 4 below. This license is not sub-licensable except as explicitly set forth herein.
 
-License a), b) or c) only cover the usage on the source and binary part implemented by Emgu Corporation, and do not cover any non-Emgu implemented library. Usage of Open CV binary is govern by BSD license, usage of ZedGraph is covered by LGPL license, Tesseract OCR is covered by Apache 2.0 license. Some algorithms implemented by OpenCV, such as SIFT, SURF and haar-cascade are patented in the U.S. It is your responsibility to check whether the algorithms you used are patented in your country and contact the patent owner if you want to use them in your commercial software. Open CV also use FFmpeg, which is under its own license. If you use video encoder and decoder in Open CV, it is likely that you are using FFmpeg components. Legal information regarding FFmpeg can be found at http://www.ffmpeg.org/legal.html. It is your responsibility to obey the license terms of the above 3rd party libraries.
+#### d. License Coverage:
+License a), b) or c) only cover the usage on the source and binary part implemented by Emgu Corporation, and do not cover any non-Emgu implemented library. Usage of Open CV binary is govern by BSD license, Tesseract OCR is covered by Apache 2.0 license. Some algorithms implemented by OpenCV, such as SIFT, SURF and haar-cascade are patented in the U.S. It is your responsibility to check whether the algorithms you used are patented in your country and contact the patent owner if you want to use them in your commercial software. It is your responsibility to obey the license terms of the above 3rd party libraries.
 
-2. PERMITTED USES, SOURCE CODE, MODIFICATIONS
+###2. PERMITTED USES, SOURCE CODE, MODIFICATIONS
 
 We provide You with source code so that You can create Modifications of the original Software, where Modification means: a) any addition to or deletion from the contents of a file included in the original Software or previous Modifications created by You, or b) any new file that contains any part of the original Software or previous Modifications.  While You retain all rights to any original work authored by You as part of the Modifications, We continue to own all copyright and other intellectual property rights in the Software.
 
-3. DISTRIBUTION
+###3. DISTRIBUTION
 
 You may distribute the Software in any applications, frameworks, or elements that you develop using the Software in accordance with this License Agreement, provided that such distribution does not violate the restrictions set forth in section 4 of this agreement.  You must not remove, obscure or interfere with any copyright, acknowledgment, attribution, trademark, warning or disclaimer statement affixed to, incorporated in or otherwise applied in connection with the Software.
 
@@ -42,7 +40,7 @@ You are required to ensure that the Software is not reused by or with any applic
 
 You will not owe EMGU Corporation any royalties for Your distribution of the Software in accordance with this License Agreement.
 
-4. PROHIBITED USES
+###4. PROHIBITED USES
 
 You may not, without prior written consent of EMGU Corporation, redistribute the Software or Modifications other than by including the Software or a portion thereof within Your own product, which must have substantially different functionality than the Software or Modifications and must not allow any third party to use the Software or Modifications, or any portions thereof, for software development purposes. You are explicitly not allowed to redistribute the Software or Modifications as part of any product that can be described as a development toolkit or library or is intended for use by software developers and not end-users. You are not allowed to redistribute any part of the Software documentation.
 
@@ -50,19 +48,19 @@ You may not: a) use any part of the Software or Modifications or Your knowledge 
 
 UNDER NO CIRCUMSTANCES MAY YOU USE THE SOFTWARE (INCLUDING WITHOUT LIMITATION THE SOURCE CODE THEREOF) AS THE BASIS FOR OR IN CONNECTION WITH A PRODUCT THAT CONTAINS THE SAME, OR SUBSTANTIALLY THE SAME, FUNCTIONALITY AS THE SOFTWARE.
 
-5. TERMINATION
+###5. TERMINATION
 
 This License Agreement and Your right to use the Software and Modifications will terminate immediately without notice if You fail to comply with the terms and conditions of this License Agreement. Upon termination, You agree to immediately cease using and destroy the Software or Modifications, including all accompanying documents.  The provisions of sections 4, 5, 6, 7, and 8 will survive any termination of this License Agreement.
 
-6. DISCLAIMER OF WARRANTIES
+###6. DISCLAIMER OF WARRANTIES
 
 TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, EMGU CORPORATION AND ITS SUPPLIERS DISCLAIM ALL WARRANTIES AND CONDITIONS, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT, WITH REGARD TO THE SOFTWARE. EMGU CORPORATION DOES NOT GUARANTEE THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED OR ERROR-FREE, AND YOU ACKNOWLEDGE THAT IT IS NOT TECHNICALLY PRACTICABLE FOR EMGU CORPORATION TO DO SO.
 
-7. LIMITATION OF LIABILITIES
+###7. LIMITATION OF LIABILITIES
 
 TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL EMGU CORPORATION OR ITS SUPPLIERS BE LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES WHATSOEVER (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION OR ANY OTHER PECUNIARY LAW) ARISING OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF EMGU CORPORATION HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. IN ANY CASE, EMGU CORPORATION'S ENTIRE LIABILITY UNDER ANY PROVISION OF THIS LICENSE AGREEMENT SHALL BE LIMITED TO THE GREATER OF THE AMOUNT ACTUALLY PAID BY YOU FOR THE SOFTWARE OR FIVE ($5.00) DOLLARS (USD).
 
-8. MISCELLANEOUS
+###8. MISCELLANEOUS
 
 The license granted herein applies only to the version of the Software downloaded or installed in connection with the terms of this Agreement. Any previous or subsequent license granted to You for use of the Software shall be governed by the terms and conditions of the agreement entered in connection with downloading or installation of that version of the Software. 
 
@@ -81,3 +79,66 @@ If any provision in this License Agreement shall be determined to be invalid, su
 This License Agreement may be modified only by a written instrument signed by an authorized representative of each party. 
 
 If the Software or any related documentation is licensed to the U.S. government or any agency thereof, it will be deemed to be "commercial computer software" or "commercial computer software documentation," pursuant to SFAR Section 227.7202 and FAR Section 12.212.  Any use of the Software or related documentation by the U.S. government will be governed solely by the terms of this License Agreement.
+
+OPEN CV License
+===============
+By downloading, copying, installing or using the software you agree to this license.
+If you do not agree to this license, do not download, install,
+copy or use the software.
+
+
+                          License Agreement
+               For Open Source Computer Vision Library
+                       (3-clause BSD License)
+
+Copyright (C) 2000-2015, Intel Corporation, all rights reserved.
+Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
+Copyright (C) 2009-2015, NVIDIA Corporation, all rights reserved.
+Copyright (C) 2010-2013, Advanced Micro Devices, Inc., all rights reserved.
+Copyright (C) 2015, OpenCV Foundation, all rights reserved.
+Copyright (C) 2015, Itseez Inc., all rights reserved.
+Third party copyrights are property of their respective owners.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+  * Neither the names of the copyright holders nor the names of the contributors
+    may be used to endorse or promote products derived from this software
+    without specific prior written permission.
+
+This software is provided by the copyright holders and contributors "as is" and
+any express or implied warranties, including, but not limited to, the implied
+warranties of merchantability and fitness for a particular purpose are disclaimed.
+In no event shall copyright holders or contributors be liable for any direct,
+indirect, incidental, special, exemplary, or consequential damages
+(including, but not limited to, procurement of substitute goods or services;
+loss of use, data, or profits; or business interruption) however caused
+and on any theory of liability, whether in contract, strict liability,
+or tort (including negligence or otherwise) arising in any way out of
+the use of this software, even if advised of the possibility of such damage.
+
+TESSERACT OCR License
+=====================
+This package contains the Tesseract Open Source OCR Engine.
+Originally developed at Hewlett-Packard Laboratories Bristol and
+at Hewlett-Packard Co, Greeley Colorado, all the Tesseract OCR code
+in this distribution is now licensed under the Apache License:
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.

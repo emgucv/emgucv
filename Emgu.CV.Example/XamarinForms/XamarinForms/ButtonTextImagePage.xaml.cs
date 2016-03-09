@@ -31,11 +31,13 @@ namespace Emgu.CV.XamarinForms
       public const int PickImageRequestCode = 1000;
 #endif
 
-      public async void LoadImage(String imageName)
+      public virtual async void LoadImages(String[] imageNames, String[] labels = null)
       {
 #if NETFX_CORE
-         Mat m = CvInvoke.Imread(imageName, ImreadModes.AnyColor);
-         InvokeOnImageLoaded(m);
+         Mat[] mats = new Mat[imageNames.Length];
+         for (int i = 0; i < mats.Length; i++)
+            mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.AnyColor);
+         InvokeOnImagesLoaded(mats);
 #else
          if (_mediaPicker == null)
          {
@@ -46,17 +48,24 @@ namespace Emgu.CV.XamarinForms
 #endif
          }
          
+         Mat[] mats = new Mat[imageNames.Length];
+         for (int i = 0; i < mats.Length; i++)
+         {
+         String pickImgString = "Use Image from";
+         if (labels != null && labels.Length > i)
+            pickImgString = labels[i];
          var action = await (_mediaPicker.IsCameraAvailable? 
-            DisplayActionSheet("Use Image from", "Cancel", null, "Default", "Photo Library", "Camera") 
-            : DisplayActionSheet("Use Image from", "Cancel", null, "Default", "Photo Library")); 
+            DisplayActionSheet(pickImgString, "Cancel", null, "Default", "Photo Library", "Camera") 
+            : DisplayActionSheet(pickImgString, "Cancel", null, "Default", "Photo Library")); 
 
          if (action.Equals("Default"))
          {
 #if __ANDROID__
-            InvokeOnImageLoaded(new Mat(Forms.Context.Assets, imageName));
+            mats[i] = new Mat(Forms.Context.Assets, imageNames[i]) ;
+            
 #else
-            Mat m = CvInvoke.Imread(imageName, ImreadModes.AnyColor);
-            InvokeOnImageLoaded(m);
+            mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.AnyColor);
+            
 #endif
 
          }
@@ -67,6 +76,11 @@ namespace Emgu.CV.XamarinForms
             Android.App.Activity activity = Forms.Context as Android.App.Activity;
             activity.StartActivityForResult(intent, PickImageRequestCode);
             //once the image was picked, the MainActivity.OnActivityResult function will handle the remaining work flow
+         Task t = new Task( () =>
+            {_waitHandle.WaitOne();});
+         t.Start();
+         await t;
+            mats[i] = MatHandle; 
 #else
             var file = await _mediaPicker.PickPhotoAsync();
             using (Stream s = file.GetStream())
@@ -76,7 +90,8 @@ namespace Emgu.CV.XamarinForms
                byte[] data = ms.ToArray();
                Mat m = new Mat();
                CvInvoke.Imdecode(data, ImreadModes.Color, m );
-               InvokeOnImageLoaded(m);
+               mats[i] = m;      
+         
             }
 #endif
          }
@@ -87,6 +102,11 @@ namespace Emgu.CV.XamarinForms
             Android.App.Activity activity = Forms.Context as Android.App.Activity;
             activity.StartActivityForResult(intent, PickImageRequestCode);
             //once the image was picked, the MainActivity.OnActivityResult function will handle the remaining work flow
+        Task t = new Task( () =>
+            {_waitHandle.WaitOne();});
+         t.Start();
+         await t;
+            mats[i] = MatHandle; 
 #else
             var file = await _mediaPicker.TakePhotoAsync(new StoreCameraMediaOptions());
             using (Stream s = file.GetStream())
@@ -96,20 +116,32 @@ namespace Emgu.CV.XamarinForms
                byte[] data = ms.ToArray();
                Mat m = new Mat();
                CvInvoke.Imdecode(data, ImreadModes.Color, m);
-               InvokeOnImageLoaded(m);
+               mats[i] = m;
+               
             }
 #endif
          }
+}
+         InvokeOnImagesLoaded(mats);
 #endif
       }
 
-      public void InvokeOnImageLoaded(Mat image)
+#if __ANDROID__
+      private readonly System.Threading.EventWaitHandle _waitHandle = new System.Threading.AutoResetEvent(false);
+      public void Continute()
+      {
+         _waitHandle.Set();
+      }
+      public Mat MatHandle;
+#endif
+
+      public void InvokeOnImagesLoaded(Mat[] images)
 	   {
-	      if (OnImageLoaded != null)
-	         OnImageLoaded(this, image);
+	      if (OnImagesLoaded != null)
+	         OnImagesLoaded(this, images);
 	   }
 
-	   public event EventHandler<Mat> OnImageLoaded; 
+	   public event EventHandler<Mat[]> OnImagesLoaded; 
 
       public void SetImage(IInputArray image)
 	   {

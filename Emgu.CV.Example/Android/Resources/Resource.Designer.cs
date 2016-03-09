@@ -90,6 +90,9 @@ namespace AndroidExamples
 			// aapt resource value: 0x7f060007
 			public const int GotoFaceDetectionButton = 2131099655;
 			
+			// aapt resource value: 0x7f060008
+			public const int GotoFeatureMatchingButton = 2131099656;
+			
 			// aapt resource value: 0x7f06000a
 			public const int GotoLicensePlateRecognitionButton = 2131099658;
 			
@@ -98,9 +101,6 @@ namespace AndroidExamples
 			
 			// aapt resource value: 0x7f060006
 			public const int GotoPlanarSubdivisionButton = 2131099654;
-			
-			// aapt resource value: 0x7f060008
-			public const int GotoSURFFeaturesButton = 2131099656;
 			
 			// aapt resource value: 0x7f06000b
 			public const int GotoTrafficSignRecognitionButton = 2131099659;
@@ -219,6 +219,9 @@ namespace AndroidExamples
 			// aapt resource value: 0x7f050004
 			public const int FaceDetection = 2131034116;
 			
+			// aapt resource value: 0x7f050000
+			public const int FeatureMatching = 2131034112;
+			
 			// aapt resource value: 0x7f050005
 			public const int HelloWorld = 2131034117;
 			
@@ -230,9 +233,6 @@ namespace AndroidExamples
 			
 			// aapt resource value: 0x7f050002
 			public const int RedrawSubdivision = 2131034114;
-			
-			// aapt resource value: 0x7f050000
-			public const int SURFFeatures = 2131034112;
 			
 			// aapt resource value: 0x7f050006
 			public const int TrafficSignRecognition = 2131034118;

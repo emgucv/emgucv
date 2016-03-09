@@ -37,7 +37,7 @@ namespace Emgu.CV.XamarinForms
          button.Text = "Perform Face Detection";
          button.Clicked += OnButtonClicked;
 
-         OnImageLoaded += async (sender, image) =>
+         OnImagesLoaded += async (sender, image) =>
          {
             GetLabel().Text = "Please wait...";
             SetImage(null);
@@ -54,15 +54,14 @@ namespace Emgu.CV.XamarinForms
                   List<Rectangle> faces = new List<Rectangle>();
                   List<Rectangle> eyes = new List<Rectangle>();
 
-
-                  DetectFace.Detect(image, faceFile, eyeFile, faces, eyes, false, out time);
+                  DetectFace.Detect(image[0], faceFile, eyeFile, faces, eyes, false, out time);
 
                   foreach (Rectangle rect in faces)
-                     CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255), 2);
+                     CvInvoke.Rectangle(image[0], rect, new MCvScalar(0, 0, 255), 2);
                   foreach (Rectangle rect in eyes)
-                     CvInvoke.Rectangle(image, rect, new MCvScalar(255, 0, 0), 2);
+                     CvInvoke.Rectangle(image[0], rect, new MCvScalar(255, 0, 0), 2);
 
-                  return new Tuple<Mat, long>(image, time);
+                  return new Tuple<Mat, long>(image[0], time);
                });
             t.Start();
 
@@ -75,7 +74,7 @@ namespace Emgu.CV.XamarinForms
 
       private void OnButtonClicked(Object sender, EventArgs args)
       {
-         LoadImage("lena.jpg");
+         LoadImages(new string[] { "lena.jpg" });
       }
 
       bool CheckCascadeFile(String face, String eye, out String faceFile, out String eyeFile)

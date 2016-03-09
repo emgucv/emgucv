@@ -48,13 +48,13 @@ namespace AndroidExamples
                List<Mat> stopSignList = new List<Mat>();
                List<Rectangle> stopSignBoxList = new List<Rectangle>();
                StopSignDetector detector = new StopSignDetector(stopSignModel);
-               detector.DetectStopSign(image.Mat, stopSignList, stopSignBoxList);
+               detector.DetectStopSign(image, stopSignList, stopSignBoxList);
 
                watch.Stop(); //stop the timer
                SetMessage(String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds));
 
                foreach (Rectangle rect in stopSignBoxList)
-                  image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
+                  CvInvoke.Rectangle(image, rect, new Bgr(System.Drawing.Color.Red).MCvScalar, 2);  
 
                SetImageBitmap(image.ToBitmap());
                image.Dispose();

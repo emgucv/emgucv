@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <string name="SURFFeatures">SURF Features</string>
+   <string name="FeatureMatching">Feature Matching</string>
    <string name="PlanarSubdivision">Planar Subdivision</string>
    <string name="RedrawSubdivision">Redraw Subdivision</string>
    <string name="PedestrianDetection">Pedestrian Detection</string>

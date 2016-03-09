@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Emgu.CV.World.Android">
-      <HintPath>..\..\..\lib\android\Emgu.CV.World.Android.dll</HintPath>
+      <HintPath>..\..\..\..\lib\android\Emgu.CV.World.Android.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
@@ -63,26 +63,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
+    <Compile Include="CommonAssemblyInfo.cs">
     </Compile>
-    <Compile Include="..\FaceDetection\DetectFace.cs">
-      <Link>DetectFace.cs</Link>
+    <Compile Include="DetectFace.cs">
     </Compile>
-    <Compile Include="..\LicensePlateRecognition\LicensePlateDetector.cs">
-      <Link>LicensePlateDetector.cs</Link>
+    <Compile Include="LicensePlateDetector.cs">
     </Compile>
-    <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
-      <Link>FindPedestrian.cs</Link>
+    <Compile Include="FindPedestrian.cs">
     </Compile>
-    <Compile Include="..\PlanarSubdivision\DrawSubdivision.cs">
-      <Link>DrawSubdivision.cs</Link>
+    <Compile Include="DrawSubdivision.cs">
     </Compile>
-    <Compile Include="..\FeatureMatching\DrawMatches.cs">
-      <Link>DrawMatches.cs</Link>
+    <Compile Include="DrawMatches.cs">
     </Compile>
-    <Compile Include="..\TrafficSignRecognition\StopSignDetector.cs">
-      <Link>StopSignDetector.cs</Link>
+    <Compile Include="StopSignDetector.cs">
     </Compile>
     <Compile Include="AppPreference.cs" />
     <Compile Include="ButtonMessageImageActivity.cs" />
@@ -106,35 +99,25 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.bigrams">
-      <Link>Assets\tessdata\eng.cube.bigrams</Link>
+    <AndroidAsset Include="Assets\tessdata\eng.cube.bigrams">
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.fold">
-      <Link>Assets\tessdata\eng.cube.fold</Link>
+    <AndroidAsset Include="Assets\tessdata\eng.cube.fold">
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.lm">
-      <Link>Assets\tessdata\eng.cube.lm</Link>
+    <AndroidAsset Include="Assets\tessdata\eng.cube.lm">
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.nn">
-      <Link>Assets\tessdata\eng.cube.nn</Link>
+    <AndroidAsset Include="Assets\tessdata\eng.cube.nn">
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.params">
-      <Link>Assets\tessdata\eng.cube.params</Link>
+    <AndroidAsset Include="Assets\tessdata\eng.cube.params">
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.size">
-      <Link>Assets\tessdata\eng.cube.size</Link>
+    <AndroidAsset Include="Assets\tessdata\eng.cube.size">
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.cube.word-freq">
-      <Link>Assets\tessdata\eng.cube.word-freq</Link>
+    <AndroidAsset Include="Assets\tessdata\eng.cube.word-freq">
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.tesseract_cube.nn">
-      <Link>Assets\tessdata\eng.tesseract_cube.nn</Link>
+    <AndroidAsset Include="Assets\tessdata\eng.tesseract_cube.nn">
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
-      <Link>Assets\tessdata\eng.traineddata</Link>
+    <AndroidAsset Include="Assets\tessdata\eng.traineddata">
     </AndroidAsset>
-    <AndroidResource Include="..\..\opencv\LICENSE">
-      <Link>Resources\Raw\LICENSE</Link>
+    <AndroidResource Include="Resources\Raw\LICENSE">
     </AndroidResource>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -156,40 +139,31 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\FeatureMatching\box.png">
-      <Link>Assets\box.png</Link>
+    <AndroidAsset Include="Assets\box.png">
     </AndroidAsset>
-    <AndroidAsset Include="..\FeatureMatching\box_in_scene.png">
-      <Link>Assets\box_in_scene.png</Link>
+    <AndroidAsset Include="Assets\box_in_scene.png">
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\PedestrianDetection\pedestrian.png">
-      <Link>Assets\pedestrian.png</Link>
+    <AndroidAsset Include="Assets\pedestrian.png">
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
-      <Link>Assets\haarcascade_eye.xml</Link>
+    <AndroidAsset Include="Assets\haarcascade_eye.xml">
     </AndroidAsset>
-    <AndroidAsset Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
-      <Link>Assets\haarcascade_frontalface_default.xml</Link>
+    <AndroidAsset Include="Assets\haarcascade_frontalface_default.xml">
     </AndroidAsset>
-    <AndroidAsset Include="..\FaceDetection\lena.jpg">
-      <Link>Assets\lena.jpg</Link>
+    <AndroidAsset Include="Assets\lena.jpg">
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\TrafficSignRecognition\stop-sign-model.png">
-      <Link>Assets\stop-sign-model.png</Link>
+    <AndroidAsset Include="Assets\stop-sign-model.png">
     </AndroidAsset>
-    <AndroidAsset Include="..\TrafficSignRecognition\stop-sign.jpg">
-      <Link>Assets\stop-sign.jpg</Link>
+    <AndroidAsset Include="Assets\stop-sign.jpg">
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\LicensePlateRecognition\license-plate.jpg">
-      <Link>Assets\license-plate.jpg</Link>
+    <AndroidAsset Include="Assets\license-plate.jpg">
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>

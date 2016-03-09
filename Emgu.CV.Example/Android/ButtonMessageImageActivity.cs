@@ -54,7 +54,7 @@ namespace AndroidExamples
             return image;
       }*/
 
-      protected event EventHandler<Image<Bgr, Byte>> OnImagePicked;
+      protected event EventHandler<Mat> OnImagePicked;
 
       private const int _pickImageRequestCode = 1000;
     
@@ -68,7 +68,7 @@ namespace AndroidExamples
          int result = GetUserResponse(this, "Use Image from", "Default", "Photo Library", negative);
          if (result > 0)
          {
-            OnImagePicked(this, new Image<Bgr, byte>(Assets, defaultImageName));
+            OnImagePicked(this, new Mat(Assets, defaultImageName));
          }
          else if (result == 0)
          {
@@ -86,7 +86,7 @@ namespace AndroidExamples
       {
          if (resultCode != Result.Canceled && requestCode == _pickImageRequestCode && OnImagePicked != null)
          {
-            Image<Bgr, Byte> image = GetImageFromTask(data.GetMediaFileExtraAsync(this), 800, 800);
+            Mat image = GetImageFromTask(data.GetMediaFileExtraAsync(this), 800, 800);
             OnImagePicked(this, image);
          }
          base.OnActivityResult(requestCode, resultCode, data);
@@ -109,7 +109,7 @@ namespace AndroidExamples
          return value;
       }
 
-      private static Image<Bgr, Byte> GetImageFromTask(Task<MediaFile> task, int maxWidth, int maxHeight)
+      private static Mat GetImageFromTask(Task<MediaFile> task, int maxWidth, int maxHeight)
       {
          MediaFile file = GetResultFromTask(task);
          if (file == null)
@@ -135,7 +135,7 @@ namespace AndroidExamples
          {
             if (bmp.Width <= maxWidth && bmp.Height <= maxHeight && rotation == 0)
             {
-               return new Image<Bgr, byte>(bmp);
+               return new Mat(bmp);
             }
             else
             {
@@ -151,7 +151,7 @@ namespace AndroidExamples
 
                   using (Bitmap scaled = Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
                   {
-                     return new Image<Bgr, byte>(scaled);
+                     return new Mat(scaled);
                   }
                }
             }

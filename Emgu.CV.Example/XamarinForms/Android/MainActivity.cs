@@ -40,7 +40,10 @@ namespace Emgu.CV.XamarinForms.Droid
             if (p != null)
             {
                Image<Bgr, Byte> image = GetImageFromTask(data.GetMediaFileExtraAsync(this), 800, 800);
-               p.InvokeOnImageLoaded(image.Mat);
+               p.MatHandle = new Mat();
+               image.Mat.CopyTo(p.MatHandle);
+               p.Continute();
+               //p.InvokeOnImagesLoaded(new Mat[] {image.Mat});
             }
          }
          base.OnActivityResult(requestCode, resultCode, data);

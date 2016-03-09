@@ -115,7 +115,7 @@
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
-    <ItemGroup>
+  <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable-ldpi\ic_launcher.png" />
     <AndroidResource Include="Resources\drawable-mdpi\ic_launcher.png" />
@@ -133,6 +133,12 @@
     </AndroidAsset>
     <AndroidAsset Include="..\..\PedestrianDetection\pedestrian.png">
       <Link>Assets\pedestrian.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\FeatureMatching\box.png">
+      <Link>Assets\box.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\FeatureMatching\box_in_scene.png">
+      <Link>Assets\box_in_scene.png</Link>
     </AndroidAsset>
     <Content Include="Properties\AndroidManifest.xml" />
   </ItemGroup>

@@ -18,10 +18,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\PlanarSubdivision\DrawSubdivision.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\FaceDetection\DetectFace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\PedestrianDetection\FindPedestrian.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)FaceDetectionPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\FeatureMatching\DrawMatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HelloWorldPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FaceDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PedestrianDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlanarSubdivisionPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FeatureMatchingPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)GettingStarted.Xamarin" />

@@ -24,6 +24,9 @@ namespace Emgu.CV.XamarinForms
          Button faceDetectionButton = new Button();
 		   faceDetectionButton.Text = "Face Detection";
 
+         Button featureDetectionButton = new Button();
+		   featureDetectionButton.Text = "Feature Matching";
+
          Button pedestrianDetectionButton = new Button();
 		   pedestrianDetectionButton.Text = "Pedestrian Detection";
 
@@ -39,6 +42,7 @@ namespace Emgu.CV.XamarinForms
 		               helloWorldButton,
 		               planarSubdivisionButton,
 		               faceDetectionButton,
+                     featureDetectionButton,
                      pedestrianDetectionButton
 		            }
 		         }
@@ -84,6 +88,10 @@ namespace Emgu.CV.XamarinForms
 		      MainPage.Navigation.PushAsync(new PedestrianDetectionPage());
 		   };
 
+         featureDetectionButton.Clicked += (sender, args) =>
+         {
+            MainPage.Navigation.PushAsync(new FeatureMatchingPage());
+         };
         
 		}
 

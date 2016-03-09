@@ -74,16 +74,17 @@ namespace AndroidExamples
             List<Rectangle> eyes = new List<Rectangle>();
 
 
-            DetectFace.Detect(image.Mat, faceXml, eyeXml, faces, eyes, false, out time);
+            DetectFace.Detect(image, faceXml, eyeXml, faces, eyes, false, out time);
 
             String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
             SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, computeDevice));
 
             foreach (Rectangle rect in faces)
-               image.Draw(rect, new Bgr(System.Drawing.Color.Red), 2);
+               CvInvoke.Rectangle(image, rect, new Bgr(System.Drawing.Color.Red).MCvScalar, 2);
+               
             foreach (Rectangle rect in eyes)
-               image.Draw(rect, new Bgr(System.Drawing.Color.Blue), 2);
-
+               CvInvoke.Rectangle(image, rect, new Bgr(System.Drawing.Color.Blue).MCvScalar, 2);
+               
             SetImageBitmap(image.ToBitmap());
             image.Dispose();
 

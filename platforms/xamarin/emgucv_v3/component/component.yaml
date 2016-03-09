@@ -5,7 +5,7 @@ getting-started: GettingStarted.md
 details: Details.md
 screenshots: 
   - screenshots/screenshot1.png
-license: License.md
+license: XamarinComponentEmguCVLicenseV3.md
 no_build: true
 icons: 
   - emgucv-v3_128x128.png
@@ -15,9 +15,9 @@ name: emgucv v3
 id: emgucv-v3
 samples: 
   - name: "iOS Unified API Samples"
-    path: samples/Solution/iOS/Emgu.CV.iOS.Example.sln
+    path: samples/ios/Emgu.CV.iOS.Example.sln
   - name: "Android Samples"
-    path: samples/Solution/Android/Emgu.CV.Android.Example.sln
+    path: samples/android/Emgu.CV.Android.Example.sln
 publisher-url: http://www.emgu.com
 libraries: 
   ios-unified: lib/ios/Emgu.CV.World.iOS.dll
