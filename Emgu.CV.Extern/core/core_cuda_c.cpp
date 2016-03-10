@@ -205,7 +205,7 @@ int gpuMatGetDepth(cv::cuda::GpuMat* gpuMat)
 
 void gpuMatUpload(cv::cuda::GpuMat* gpuMat, cv::_InputArray* arr, cv::cuda::Stream* stream)
 {
-   if (*stream)
+   if (stream)
       gpuMat->upload(*arr, *stream);
    else
       gpuMat->upload(*arr);
@@ -213,7 +213,7 @@ void gpuMatUpload(cv::cuda::GpuMat* gpuMat, cv::_InputArray* arr, cv::cuda::Stre
 
 void gpuMatDownload(cv::cuda::GpuMat* gpuMat, cv::_OutputArray* arr, cv::cuda::Stream* stream)
 {
-   if (*stream)
+   if (stream)
       gpuMat->download(*arr, *stream);
    else
       gpuMat->download(*arr);

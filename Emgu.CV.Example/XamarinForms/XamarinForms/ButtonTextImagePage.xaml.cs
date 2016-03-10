@@ -76,10 +76,12 @@ namespace Emgu.CV.XamarinForms
             Android.App.Activity activity = Forms.Context as Android.App.Activity;
             activity.StartActivityForResult(intent, PickImageRequestCode);
             //once the image was picked, the MainActivity.OnActivityResult function will handle the remaining work flow
-         Task t = new Task( () =>
-            {_waitHandle.WaitOne();});
-         t.Start();
-         await t;
+            Task t = new Task( () =>
+               {_waitHandle.WaitOne();});
+            t.Start();
+            await t;
+            if (MatHandle == null) //Cancelled
+               return;
             mats[i] = MatHandle; 
 #else
             var file = await _mediaPicker.PickPhotoAsync();
@@ -102,10 +104,12 @@ namespace Emgu.CV.XamarinForms
             Android.App.Activity activity = Forms.Context as Android.App.Activity;
             activity.StartActivityForResult(intent, PickImageRequestCode);
             //once the image was picked, the MainActivity.OnActivityResult function will handle the remaining work flow
-        Task t = new Task( () =>
-            {_waitHandle.WaitOne();});
-         t.Start();
-         await t;
+           Task t = new Task( () =>
+               {_waitHandle.WaitOne();});
+            t.Start();
+            await t;
+            if (MatHandle == null) //Cancelled
+               return;
             mats[i] = MatHandle; 
 #else
             var file = await _mediaPicker.TakePhotoAsync(new StoreCameraMediaOptions());

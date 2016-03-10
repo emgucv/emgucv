@@ -21,10 +21,14 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>5.1.1</string>
+	<string>6.0</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.emgu.cv.test</string>
 	<key>CFBundleDisplayName</key>
 	<string>Emgu CV Test</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleVersion</key>
+	<string></string>
 </dict>
 </plist>

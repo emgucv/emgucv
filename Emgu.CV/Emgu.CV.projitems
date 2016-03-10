@@ -29,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Android\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\System.Drawing\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\iOS\ImageiOS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PInvoke\iOS\MatiOS.cs" />
   </ItemGroup>
   <PropertyGroup>
     <OpenCVBinaryDir>$(MSBuildThisFileDirectory)..\bin</OpenCVBinaryDir>

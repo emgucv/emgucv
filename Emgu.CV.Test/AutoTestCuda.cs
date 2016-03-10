@@ -750,6 +750,36 @@ namespace Emgu.CV.Test
          }  
       }
 
+      [Test]
+      public void TestCudaUploadDownload()
+      {
+         if (!CudaInvoke.HasCuda)
+            return;
+
+         Mat m = new Mat(new Size(480, 320), DepthType.Cv8U, 3);
+         CvInvoke.Randu(m, new MCvScalar(), new MCvScalar(255, 255, 255) );
+
+         #region test for async download & upload
+         Stream stream = new Stream();
+         GpuMat gm1 = new GpuMat();
+         gm1.Upload(m, stream);
+
+         Mat m2 = new Mat();
+         gm1.Download(m2, stream);
+
+         stream.WaitForCompletion();
+         EmguAssert.IsTrue(m.Equals(m2));
+         #endregion
+
+         #region test for blocking download & upload
+         GpuMat gm2 = new GpuMat();
+         gm2.Upload(m);
+         Mat m3 = new Mat();
+         gm2.Download(m3);
+         EmguAssert.IsTrue(m.Equals(m3));
+         #endregion
+      }
+
 
       [Test]
       public void TestCudaBroxOpticalFlow()

@@ -34,16 +34,22 @@ namespace Emgu.CV.XamarinForms.Droid
 
       protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
       {
-         if (resultCode != Result.Canceled && requestCode == ButtonTextImagePage.PickImageRequestCode)
+         if (requestCode == ButtonTextImagePage.PickImageRequestCode)
          {
             var p = _app.CurrentPage as ButtonTextImagePage;
             if (p != null)
             {
-               Image<Bgr, Byte> image = GetImageFromTask(data.GetMediaFileExtraAsync(this), 800, 800);
-               p.MatHandle = new Mat();
-               image.Mat.CopyTo(p.MatHandle);
-               p.Continute();
-               //p.InvokeOnImagesLoaded(new Mat[] {image.Mat});
+               if (resultCode != Result.Canceled)
+               {
+                  p.MatHandle = GetImageFromTask(data.GetMediaFileExtraAsync(this), 800, 800);
+                  p.Continute();
+               }
+               else
+               {
+                  //cancelled
+                  p.MatHandle = null;
+                  p.Continute();
+               }
             }
          }
          base.OnActivityResult(requestCode, resultCode, data);
@@ -62,7 +68,7 @@ namespace Emgu.CV.XamarinForms.Droid
          return null;
       }
 
-      private static Image<Bgr, Byte> GetImageFromTask(Task<MediaFile> task, int maxWidth, int maxHeight)
+      private static Mat GetImageFromTask(Task<MediaFile> task, int maxWidth, int maxHeight)
       {
          MediaFile file = GetResultFromTask(task);
          if (file == null)
@@ -88,7 +94,7 @@ namespace Emgu.CV.XamarinForms.Droid
          {
             if (bmp.Width <= maxWidth && bmp.Height <= maxHeight && rotation == 0)
             {
-               return new Image<Bgr, byte>(bmp);
+               return new Mat(bmp);
             }
             else
             {
@@ -104,7 +110,7 @@ namespace Emgu.CV.XamarinForms.Droid
 
                   using (Bitmap scaled = Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
                   {
-                     return new Image<Bgr, byte>(scaled);
+                     return new Mat(scaled);
                   }
                }
             }

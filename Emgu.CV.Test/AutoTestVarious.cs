@@ -15,13 +15,13 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Dnn;
 using Emgu.CV.Features2D;
 using Emgu.CV.Flann;
 using Emgu.CV.Stitching;
 using Emgu.CV.Text;
 using Emgu.CV.Structure;
 #if !(__IOS__ || NETFX_CORE)
+using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
 using Emgu.CV.Tiff;
 #endif
@@ -2925,6 +2925,7 @@ namespace Emgu.CV.Test
          }
       }
 
+#if !(__IOS__ || NETFX_CORE)
       [Test]
       public void TestDnn()
       {
@@ -2939,6 +2940,7 @@ namespace Emgu.CV.Test
          net.Forward();
          
       }
+#endif
 
 #if !(__ANDROID__ || __IOS__ || NETFX_CORE)
       [Test]
