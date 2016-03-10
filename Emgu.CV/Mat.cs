@@ -787,34 +787,7 @@ namespace Emgu.CV
          }
       }
 
-#if __ANDROID__
-#elif __IOS__
-      public UIImage ToUIImage()
-      {
-         //if 4 channels, assume the color space is RGBA
-         if (NumberOfChannels == 4 && this.Depth == Emgu.CV.CvEnum.DepthType.Cv8U)
-         {
-            Size s = this.Size;
-            using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
-            using (CGBitmapContext context = new CGBitmapContext(
-               DataPointer,
-               s.Width, s.Height,
-               8,
-               s.Width * 4,
-               cspace,
-               CGImageAlphaInfo.PremultipliedLast))
-            using (CGImage cgImage =  context.ToImage())
-            {
-               return UIImage.FromImage(cgImage);
-            }
-         } else
-         {
-            using (Image<Rgba, Byte> tmp = ToImage<Rgba, Byte>())
-            {
-               return tmp.ToUIImage();
-            }
-         }
-      }
+#if __ANDROID__ || __IOS__
 #elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap

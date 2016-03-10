@@ -27,6 +27,7 @@ cp -f ../../Emgu.CV.Cuda/*.cs ios-package/Emgu.CV.Cuda/
 cp -r ../../tmp/Emgu.CV.Shape ios-package/Emgu.CV.Shape
 cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
 cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
+cp -f ../../Emgu.CV.Contrib/LineDescriptor/VectorOf*.cs ios-package/Emgu.CV.Contrib/LineDescriptor
 cp -f ../../Emgu.CV.OCR/*.cs ios-package/Emgu.CV.OCR/
 cp -r ../../tmp/Emgu.CV.World ios-package/Emgu.CV.World
 
