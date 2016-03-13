@@ -735,7 +735,7 @@ IF (ANDROID)
     "Solution/Android/Emgu.CV.Android.Example.sln"
     "Solution/Android/Emgu.CV.Android.sln"
     DESTINATION "Solution/Android"
-    COMPONENT libs
+    COMPONENT emgucv_source
     )
   INSTALL(
     FILES
@@ -745,7 +745,7 @@ IF (ANDROID)
     "Emgu.CV.snk"
     "${LICENSE_FILE_NAME}"
     DESTINATION .
-    COMPONENT libs
+    COMPONENT emgucv_source
     )
   INSTALL(
     FILES

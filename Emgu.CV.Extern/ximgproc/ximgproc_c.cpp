@@ -30,3 +30,73 @@ void cveFastGlobalSmootherFilter(cv::_InputArray* guide, cv::_InputArray* src, c
 {
    cv::ximgproc::fastGlobalSmootherFilter(*guide, *src, *dst, lambda, sigmaColor, lambdaAttenuation, numIter);
 }
+
+void cveNiBlackThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double maxValue, int type, int blockSize, double delta)
+{
+   cv::ximgproc::niBlackThreshold(*src, *dst, maxValue, type, blockSize, delta);
+}
+
+cv::ximgproc::DTFilter* cveCreateDTFilter(cv::_InputArray* guide, double sigmaSpatial, double sigmaColor, int mode, int numIters)
+{
+   cv::Ptr<cv::ximgproc::DTFilter> ptr = cv::ximgproc::createDTFilter(*guide, sigmaSpatial, sigmaColor, mode, numIters);
+   ptr.addref();
+   return ptr.get();
+}
+
+void cveDTFilterFilter(cv::ximgproc::DTFilter* filter, cv::_InputArray* src, cv::_OutputArray* dst, int dDepth)
+{
+   filter->filter(*src, *dst, dDepth);
+}
+void cveDTFilterRelease(cv::ximgproc::DTFilter** filter)
+{
+   delete *filter;
+   *filter = 0;
+}
+
+
+cv::ximgproc::StructuredEdgeDetection* cveStructuredEdgeDetectionCreate(cv::String* model, cv::ximgproc::RFFeatureGetter* howToGetFeatures)
+{
+   cv::Ptr<cv::ximgproc::StructuredEdgeDetection> ptr = cv::ximgproc::createStructuredEdgeDetection(*model, howToGetFeatures);
+   ptr.addref();
+   return ptr.get();
+}
+void cveStructuredEdgeDetectionDetectEdges(cv::ximgproc::StructuredEdgeDetection* detection, cv::Mat* src, cv::Mat* dst)
+{
+   detection->detectEdges(*src, *dst);
+}
+void cveStructuredEdgeDetectionRelease(cv::ximgproc::StructuredEdgeDetection** detection)
+{
+   delete *detection;
+   *detection = 0;
+}
+
+cv::ximgproc::SuperpixelSEEDS* cveSuperpixelSEEDSCreate(
+   int imageWidth, int imageHeight, int imageChannels,
+   int numSuperpixels, int numLevels, int prior,
+   int histogramBins, bool doubleStep)
+{
+   cv::Ptr<cv::ximgproc::SuperpixelSEEDS> ptr = cv::ximgproc::createSuperpixelSEEDS(imageWidth, imageHeight, imageChannels, numSuperpixels, numLevels, prior, histogramBins, doubleStep);
+   ptr.addref();
+   return ptr.get();
+}
+int cveSuperpixelSEEDSGetNumberOfSuperpixels(cv::ximgproc::SuperpixelSEEDS* seeds)
+{
+   return seeds->getNumberOfSuperpixels();
+}
+void cveSuperpixelSEEDSGetLabels(cv::ximgproc::SuperpixelSEEDS* seeds, cv::_OutputArray* labelsOut)
+{
+   seeds->getLabels(*labelsOut);
+}
+void cveSuperpixelSEEDSGetLabelContourMask(cv::ximgproc::SuperpixelSEEDS* seeds, cv::_OutputArray* image, bool thickLine)
+{
+   seeds->getLabelContourMask(*image, thickLine);
+}
+void cveSuperpixelSEEDSIterate(cv::ximgproc::SuperpixelSEEDS* seeds, cv::_InputArray* img, int numIterations)
+{
+   seeds->iterate(*img, numIterations);
+}
+void cveSuperpixelSEEDSRelease(cv::ximgproc::SuperpixelSEEDS** seeds)
+{
+   delete *seeds;
+   *seeds = 0;
+}

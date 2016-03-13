@@ -88,5 +88,18 @@ namespace Emgu.CV.XImgproc
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDtFilter(IntPtr guide, IntPtr src, IntPtr dst, double sigmaSpatial, double sigmaColor, int mode, int numIters);
 
+
+      public static void NiBlackThreshold(IInputArray src, IOutputArray dst, double maxValue, int type, int blockSize,
+         double delta)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+         {
+            cveNiBlackThreshold(iaSrc, oaDst, maxValue, type, blockSize, delta);
+         }
+      }
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveNiBlackThreshold(IntPtr src, IntPtr dst, double maxValue, int type, int blockSize, double delta);
+
    }
 }

@@ -34,9 +34,9 @@ PROJECT(Emgu.CV.OCR)
 
 #ENDIF()
 
-INSTALL(FILES 
-${TESSDATA}
-DESTINATION bin/tessdata COMPONENT emgucv_binary)
+#INSTALL(FILES 
+#${TESSDATA}
+#DESTINATION bin/tessdata COMPONENT emgucv_binary)
 
 IF(WIN32 OR APPLE OR ANDROID)
 #IF(NETFX_CORE OR ANDROID)
@@ -50,7 +50,7 @@ INSTALL(
   PATTERN "*.shproj"
   PATTERN "*.projitems"
   PATTERN "*.resx"
-  PATTERN "tessdata/eng.*"
+  #PATTERN "tessdata/eng.*"
   PATTERN ".svn" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "CMakeFiles" EXCLUDE
