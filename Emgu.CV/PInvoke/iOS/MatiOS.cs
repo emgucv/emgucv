@@ -15,6 +15,10 @@ namespace Emgu.CV
 {
    public partial class Mat
    {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from CGImage
+      /// </summary>
+      /// <param name="cgImage">The CGImage.</param>
       public Mat(CGImage cgImage)
          : this()
       {
@@ -35,28 +39,36 @@ namespace Emgu.CV
              cspace,
              CGImageAlphaInfo.PremultipliedLast))
                context.DrawImage(rect, cgImage);
-CvInvoke.CvtColor(m, this, ColorConversion.Rgba2Bgr);
+            CvInvoke.CvtColor(m, this, ColorConversion.Rgba2Bgr);
          } 
       }
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from UIImage
+      /// </summary>
+      /// <param name="uiImage">The UIImage.</param>
       public Mat(UIImage uiImage)
          : this (uiImage.CGImage)
       {
       }
 
-      private CGImage RgbaByteMatToCGImage(Mat bgraByte)
+      private static CGImage RgbaByteMatToCGImage(Mat bgraByte)
       {
          using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
          using (CGBitmapContext context = new CGBitmapContext(
             bgraByte.DataPointer,
-            Width, Height,
+            bgraByte.Width, bgraByte.Height,
             8,
-            Width*4,
+            bgraByte.Width*4,
             cspace,
             CGImageAlphaInfo.PremultipliedLast))
             return context.ToImage();
       }
 
+      /// <summary>
+      /// Converts to UIImage.
+      /// </summary>
+      /// <returns>The UIImage.</returns>
       public UIImage ToUIImage()
       {
          using (CGImage tmp = ToCGImage())
@@ -64,6 +76,11 @@ CvInvoke.CvtColor(m, this, ColorConversion.Rgba2Bgr);
             return UIImage.FromImage(tmp);
          }
       }
+
+      /// <summary>
+      /// Converts to CGImage
+      /// </summary>
+      /// <returns>The CGImage.</returns>
       public CGImage ToCGImage()
       {
          int nchannels = NumberOfChannels;
@@ -89,7 +106,7 @@ CvInvoke.CvtColor(m, this, ColorConversion.Rgba2Bgr);
             using (Mat tmp = new Mat())
             {
                CvInvoke.CvtColor(this, tmp, ColorConversion.Gray2Rgba);
-               return RgbaByteMatToCGImage();
+               return RgbaByteMatToCGImage(tmp);
             }
          } else
          {
