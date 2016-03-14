@@ -43,7 +43,7 @@ namespace AndroidExamples
             StartActivity(typeof(PlanarSubdivisionActivity));
          };
 
-         Button featureMatchingButton = FindViewById<Button>(Resource.Id.GotoSURFFeaturesButton);
+         Button featureMatchingButton = FindViewById<Button>(Resource.Id.GotoFeatureMatchingButton);
          featureMatchingButton.Click += delegate 
          {
             StartActivity(typeof(FeatureMatchingActivity));
