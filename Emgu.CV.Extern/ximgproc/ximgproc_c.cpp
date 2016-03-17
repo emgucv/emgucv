@@ -100,3 +100,20 @@ void cveSuperpixelSEEDSRelease(cv::ximgproc::SuperpixelSEEDS** seeds)
    delete *seeds;
    *seeds = 0;
 }
+
+
+cv::ximgproc::segmentation::GraphSegmentation* cveGraphSegmentationCreate(double sigma, float k, int minSize)
+{
+   cv::Ptr<cv::ximgproc::segmentation::GraphSegmentation> ptr = cv::ximgproc::segmentation::createGraphSegmentation(sigma, k, minSize);
+   ptr.addref();
+   return ptr.get();
+}
+void cveGraphSegmentationProcessImage(cv::ximgproc::segmentation::GraphSegmentation* segmentation, cv::_InputArray* src, cv::_OutputArray* dst)
+{
+   segmentation->processImage(*src, *dst);
+}
+void cveGraphSegmentationRelease(cv::ximgproc::segmentation::GraphSegmentation** segmentation)
+{
+   delete *segmentation;
+   *segmentation = 0;
+}
