@@ -36,7 +36,7 @@ void cveNiBlackThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double max
    cv::ximgproc::niBlackThreshold(*src, *dst, maxValue, type, blockSize, delta);
 }
 
-cv::ximgproc::DTFilter* cveCreateDTFilter(cv::_InputArray* guide, double sigmaSpatial, double sigmaColor, int mode, int numIters)
+cv::ximgproc::DTFilter* cveDTFilterCreate(cv::_InputArray* guide, double sigmaSpatial, double sigmaColor, int mode, int numIters)
 {
    cv::Ptr<cv::ximgproc::DTFilter> ptr = cv::ximgproc::createDTFilter(*guide, sigmaSpatial, sigmaColor, mode, numIters);
    ptr.addref();
@@ -51,6 +51,18 @@ void cveDTFilterRelease(cv::ximgproc::DTFilter** filter)
 {
    delete *filter;
    *filter = 0;
+}
+
+cv::ximgproc::RFFeatureGetter* cveRFFeatureGetterCreate()
+{
+   cv::Ptr<cv::ximgproc::RFFeatureGetter> ptr = cv::ximgproc::createRFFeatureGetter();
+   ptr.addref();
+   return ptr.get();
+}
+void cveRFFeatureGetterRelease(cv::ximgproc::RFFeatureGetter** getter)
+{
+   delete *getter;
+   *getter = 0;
 }
 
 

@@ -1,3 +1,7 @@
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
 using System.IO;
 using Emgu.CV.CvEnum;
 using UnityEngine;
