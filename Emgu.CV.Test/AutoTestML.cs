@@ -326,8 +326,9 @@ namespace Emgu.CV.Test
             }
             handler.Free();
 
+            
+            Mat supportVec = model.GetSupportVectors();
             /*
-            int c = model.GetSupportVectorCount();
             for (int i = 0; i < c; i++)
             {
                float[] v = model.GetSupportVector(i);
