@@ -276,6 +276,7 @@ void cveANN_MLPSetTrainMethod(cv::ml::ANN_MLP* model, int method, double param1,
 
 void cveANN_MLPSetActivationFunction(cv::ml::ANN_MLP* model, int type, double param1, double param2)
 {
+   model->setActivationFunction(type, param1, param2);
 }
 void cveANN_MLPRelease(cv::ml::ANN_MLP** model)
 {
