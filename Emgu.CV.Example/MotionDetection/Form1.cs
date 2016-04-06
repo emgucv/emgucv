@@ -82,6 +82,7 @@ namespace MotionDetection
 
          //create the motion image 
          Mat motionImage = new Mat(motionMask.Size.Height, motionMask.Size.Width, DepthType.Cv8U, 3);
+         motionImage.SetTo(new MCvScalar(0));
          //display the motion pixels in blue (first channel)
          //motionImage[0] = motionMask;
          CvInvoke.InsertChannel(motionMask, motionImage, 0);

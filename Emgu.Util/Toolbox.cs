@@ -105,8 +105,23 @@ namespace Emgu.Util
          using (StringReader stringReader = new StringReader(xmlString))
             return (T) (new XmlSerializer(typeof(T))).Deserialize(stringReader);
       }
-#endregion
+      #endregion
 #endif
+
+      /// <summary>
+      /// Similar to Marshal.SizeOf function
+      /// </summary>
+      /// <typeparam name="T">The type</typeparam>
+      /// <returns>The size of T in bytes</returns>
+      public static int SizeOf<T>()
+      {
+#if NETFX_CORE
+         return Marshal.SizeOf<T>();
+#else
+         return Marshal.SizeOf(typeof(T));
+#endif
+      }
+
       /*
       /// <summary>
       /// Read a text file to an array of string, each row are separated using by the input separator

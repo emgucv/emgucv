@@ -25,11 +25,8 @@ namespace Emgu.CV.Cvb
       private uint[,] _data;
       private GCHandle _dataHandle;
 
-#if NETFX_CORE 
-      private static int _sizeOfUInt32 = Marshal.SizeOf<UInt32>();
-#else
-      private static int _sizeOfUInt32 = Marshal.SizeOf(typeof(UInt32));
-#endif
+      private static int _sizeOfUInt32 = Toolbox.SizeOf<UInt32>();
+
       /// <summary>
       /// Detect blobs from input image.
       /// </summary>
