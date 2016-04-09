@@ -101,5 +101,13 @@ namespace Emgu.CV.XImgproc
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveNiBlackThreshold(IntPtr src, IntPtr dst, double maxValue, int type, int blockSize, double delta);
 
+      public static void CovarianceEstimation(IInputArray src, IOutputArray dst, int windowRows, int windowCols)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cveCovarianceEstimation(iaSrc, oaDst, windowRows, windowCols);
+      }
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveCovarianceEstimation(IntPtr src, IntPtr dst, int windowRows, int windowCols);
    }
 }

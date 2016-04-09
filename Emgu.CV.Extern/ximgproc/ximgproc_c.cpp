@@ -36,6 +36,11 @@ void cveNiBlackThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double max
    cv::ximgproc::niBlackThreshold(*src, *dst, maxValue, type, blockSize, delta);
 }
 
+void cveCovarianceEstimation(cv::_InputArray* src, cv::_OutputArray* dst, int windowRows, int windowCols)
+{
+   cv::ximgproc::covarianceEstimation(*src, *dst, windowRows, windowCols);
+}
+
 cv::ximgproc::DTFilter* cveDTFilterCreate(cv::_InputArray* guide, double sigmaSpatial, double sigmaColor, int mode, int numIters)
 {
    cv::Ptr<cv::ximgproc::DTFilter> ptr = cv::ximgproc::createDTFilter(*guide, sigmaSpatial, sigmaColor, mode, numIters);
@@ -111,6 +116,72 @@ void cveSuperpixelSEEDSRelease(cv::ximgproc::SuperpixelSEEDS** seeds)
 {
    delete *seeds;
    *seeds = 0;
+}
+
+
+cv::ximgproc::SuperpixelLSC* cveSuperpixelLSCCreate(cv::_InputArray* image, int regionSize, float ratio)
+{
+   cv::Ptr<cv::ximgproc::SuperpixelLSC> ptr = cv::ximgproc::createSuperpixelLSC(*image, regionSize, ratio);
+   ptr.addref();
+   return ptr.get();
+}
+int cveSuperixelLSCGetNumberOfSuperpixels(cv::ximgproc::SuperpixelLSC* lsc)
+{
+   return lsc->getNumberOfSuperpixels();
+}
+void cveSuperixelLSCIterate(cv::ximgproc::SuperpixelLSC* lsc, int numIterations)
+{
+   lsc->iterate(numIterations);
+}
+void cveSuperixelLSCGetLabels(cv::ximgproc::SuperpixelLSC* lsc, cv::_OutputArray* labelsOut)
+{
+   lsc->getLabels(*labelsOut);
+}
+void cveSuperixelLSCGetLabelContourMask(cv::ximgproc::SuperpixelLSC* lsc, cv::_OutputArray* image, bool thickLine)
+{
+   lsc->getLabelContourMask(*image, thickLine);
+}
+void cveSuperixelLSCEnforceLabelConnectivity(cv::ximgproc::SuperpixelLSC* lsc, int minElementSize)
+{
+   lsc->enforceLabelConnectivity(minElementSize);
+}
+void cveSuperpixelLSCRelease(cv::ximgproc::SuperpixelLSC** lsc)
+{
+   delete *lsc;
+   *lsc = 0;
+}
+
+
+cv::ximgproc::SuperpixelSLIC* cveSuperpixelSLICCreate(cv::_InputArray* image, int algorithm, int regionSize, float ruler)
+{
+   cv::Ptr<cv::ximgproc::SuperpixelSLIC> ptr = cv::ximgproc::createSuperpixelSLIC(*image, regionSize, ruler);
+   ptr.addref();
+   return ptr.get();
+}
+int cveSuperpixelSLICGetNumberOfSuperpixels(cv::ximgproc::SuperpixelSLIC* slic)
+{
+   return slic->getNumberOfSuperpixels();
+}
+void cveSuperpixelSLICIterate(cv::ximgproc::SuperpixelSLIC* slic, int numIterations)
+{
+   slic->iterate(numIterations);
+}
+void cveSuperpixelSLICGetLabels(cv::ximgproc::SuperpixelSLIC* slic, cv::_OutputArray* labelsOut)
+{
+   slic->getLabels(*labelsOut);
+}
+void cveSuperpixelSLICGetLabelContourMask(cv::ximgproc::SuperpixelSLIC* slic, cv::_OutputArray* image, bool thickLine)
+{
+   slic->getLabelContourMask(*image, thickLine);
+}
+void cveSuperpixelSLICEnforceLabelConnectivity(cv::ximgproc::SuperpixelSLIC* slic, int minElementSize)
+{
+   slic->enforceLabelConnectivity(minElementSize);
+}
+void cveSuperpixelSLICRelease(cv::ximgproc::SuperpixelSLIC** slic)
+{
+   delete *slic;
+   *slic = 0;
 }
 
 
