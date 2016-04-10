@@ -1720,6 +1720,9 @@ namespace Emgu.CV.CvEnum
       ReducedColor8 = 65  
    }
 
+   /// <summary>
+   /// Flags for Imwrite function
+   /// </summary>
    [Flags]
    public enum ImwriteFlags
    {

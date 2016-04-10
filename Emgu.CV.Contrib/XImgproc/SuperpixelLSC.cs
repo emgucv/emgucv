@@ -11,14 +11,14 @@ using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-
-
 namespace Emgu.CV.Ximgproc
 {
-
+   /// <summary>
+   /// Class implementing the LSC (Linear Spectral Clustering) superpixels algorithm described in "Zhengqin Li and Jiansheng Chen. Superpixel segmentation using linear spectral clustering. June 2015."
+   /// </summary>
+   /// <remarks>LSC (Linear Spectral Clustering) produces compact and uniform superpixels with low computational costs. Basically, a normalized cuts formulation of the superpixel segmentation is adopted based on a similarity metric that measures the color similarity and space proximity between image pixels. LSC is of linear computational complexity and high memory efficiency and is able to preserve global properties of images</remarks>
    public class SupperpixelLSC : UnmanagedObject
    {
-
 
       public SupperpixelLSC(IInputArray image, int regionSize, float ratio)
       {
@@ -26,13 +26,19 @@ namespace Emgu.CV.Ximgproc
             _ptr = XimgprocInvoke.cveSuperpixelLSCCreate(iaImage, regionSize, ratio);
       }
 
-
+      /// <summary>
+      /// Calculates the actual amount of superpixels on a given segmentation computed and stored in SuperpixelLSC object
+      /// </summary>
       public int NumberOfSuperpixels
       {
          get { return XimgprocInvoke.cveSuperpixelLSCGetNumberOfSuperpixels(_ptr); }
       }
 
-
+      /// <summary>
+      /// Returns the segmentation labeling of the image.
+      /// Each label represents a superpixel, and each pixel is assigned to one superpixel label.
+      /// </summary>
+      /// <param name="labels">A CV_32SC1 integer array containing the labels of the superpixel segmentation. The labels are in the range [0, NumberOfSuperpixels].</param>
       public void GetLabels(IOutputArray labels)
       {
          using (OutputArray oaLabels = labels.GetOutputArray())
@@ -46,10 +52,13 @@ namespace Emgu.CV.Ximgproc
             XimgprocInvoke.cveSuperpixelSLICGetLabelContourMask(_ptr, oaImage, thickLine);
       }
 
-
+      /// <summary>
+      /// Calculates the superpixel segmentation on a given image with the initialized parameters in the SuperpixelLSC object.
+      /// This function can be called again without the need of initializing the algorithm with createSuperpixelLSC(). This save the computational cost of allocating memory for all the structures of the algorithm.
+      /// </summary>
+      /// <param name="numIterations">Number of iterations. Higher number improves the result.</param>
       public void Iterate(int numIterations = 10)
       {
-
          XimgprocInvoke.cveSuperpixelLSCIterate(_ptr, numIterations);
       }
 
@@ -65,14 +74,10 @@ namespace Emgu.CV.Ximgproc
       }
    }
 
-
-
    public static partial class XimgprocInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveSuperpixelLSCCreate(IntPtr image, int regionSize, float ratio);
-
-
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int cveSuperpixelLSCGetNumberOfSuperpixels(IntPtr lsc);

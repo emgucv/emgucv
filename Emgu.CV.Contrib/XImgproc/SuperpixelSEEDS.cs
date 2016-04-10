@@ -75,7 +75,7 @@ namespace Emgu.CV.Ximgproc
       /// Calculates the superpixel segmentation on a given image with the initialized parameters in the SuperpixelSEEDS object.
       /// </summary>
       /// <remarks>This function can be called again for other images without the need of initializing the algorithm with createSuperpixelSEEDS(). This save the computational cost of allocating memory for all the structures of the algorithm.</remarks>
-      /// <param name="img">Input image. Supported formats: CV_8U, CV_16U, CV_32F. Image size & number of channels must match with the initialized image size & channels with the function createSuperpixelSEEDS(). It should be in HSV or Lab color space. Lab is a bit better, but also slower.</param>
+      /// <param name="img">Input image. Supported formats: CV_8U, CV_16U, CV_32F. Image size &amp; number of channels must match with the initialized image size &amp; channels with the function createSuperpixelSEEDS(). It should be in HSV or Lab color space. Lab is a bit better, but also slower.</param>
       /// <param name="numIterations">Number of pixel level iterations. Higher number improves the result.</param>
       public void Iterate(IInputArray img, int numIterations = 4)
       {

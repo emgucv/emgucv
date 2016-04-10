@@ -14,15 +14,32 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Aruco
 {
+   /// <summary>
+   /// Board of markers
+   /// </summary>
    public interface IBoard
    {
+      /// <summary>
+      /// Pointer to native IBoard
+      /// </summary>
       IntPtr BoardPtr { get; }
    }
 
+   /// <summary>
+   /// Planar board with grid arrangement of markers More common type of board. All markers are placed in the same plane in a grid arrangment.
+   /// </summary>
    public class GridBoard : UnmanagedObject, IBoard
    {
       private IntPtr _boardPtr;
 
+      /// <summary>
+      /// Create a GridBoard object.
+      /// </summary>
+      /// <param name="markersX">number of markers in X direction</param>
+      /// <param name="markersY">number of markers in Y direction</param>
+      /// <param name="markerLength">marker side length (normally in meters)</param>
+      /// <param name="markerSeparation">separation between two markers (same unit than markerLenght)</param>
+      /// <param name="dictionary">dictionary of markers indicating the type of markers. The first markersX*markersY markers in the dictionary are used.</param>
       public GridBoard(int markersX, int markersY, float markerLength, float markerSeparation,
          Dictionary dictionary)
       {
@@ -37,6 +54,9 @@ namespace Emgu.CV.Aruco
          _boardPtr = IntPtr.Zero;
       }
 
+      /// <summary>
+      /// Pointer to native IBoard
+      /// </summary>
       public IntPtr BoardPtr { get { return _boardPtr;} }
    }
 

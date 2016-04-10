@@ -38,6 +38,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">Input image</param>
       /// <param name="edges">Image to store the edges found by the function</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       public void Detect(IInputArray src, IOutputArray edges, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())

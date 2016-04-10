@@ -29,6 +29,13 @@ void cveArucoDetectMarkers(
    cv::aruco::detectMarkers(*image, *dictionary, *corners, *ids, *parameters, rejectedImgPoints ? *rejectedImgPoints : (cv::OutputArrayOfArrays) cv::noArray());
 }
 
+void cveArucoEstimatePoseSingleMarkers(cv::_InputArray* corners, float markerLength,
+   cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
+   cv::_OutputArray* rvecs, cv::_OutputArray* tvecs)
+{
+   cv::aruco::estimatePoseSingleMarkers(*corners, markerLength, *cameraMatrix, *distCoeffs, *rvecs, *tvecs);
+}
+
 cv::aruco::GridBoard* cveArucoGridBoardCreate(
    int markersX, int markersY, float markerLength, float markerSeparation,
    cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr)

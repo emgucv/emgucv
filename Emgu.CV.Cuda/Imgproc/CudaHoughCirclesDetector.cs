@@ -37,6 +37,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="image">8-bit, single-channel grayscale input image.</param>
       /// <param name="circles">Output vector of found circles. Each vector is encoded as a 3-element floating-point vector.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void Detect(IInputArray image, IOutputArray circles, Stream stream = null)
       {
          using (InputArray iaImage = image.GetInputArray())

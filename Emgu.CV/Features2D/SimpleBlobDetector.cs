@@ -39,10 +39,11 @@ namespace Emgu.CV.Features2D
 
          base.DisposeObject();
       }
-
-
    }
 
+   /// <summary>
+   /// Parameters for the simple blob detector
+   /// </summary>
    public partial class SimpleBlobDetectorParams : UnmanagedObject
    {
       /// <summary>

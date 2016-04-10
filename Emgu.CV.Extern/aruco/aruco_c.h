@@ -23,6 +23,10 @@ CVAPI(void) cveArucoDetectMarkers(
    cv::_OutputArray* ids, cv::aruco::DetectorParameters* parameters,
    cv::_OutputArray* rejectedImgPoints);
 
+CVAPI(void) cveArucoEstimatePoseSingleMarkers(cv::_InputArray* corners, float markerLength,
+   cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
+   cv::_OutputArray* rvecs, cv::_OutputArray* tvecs);
+
 CVAPI(cv::aruco::GridBoard*) cveArucoGridBoardCreate(
    int markersX, int markersY, float markerLength, float markerSeparation,
    cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr);

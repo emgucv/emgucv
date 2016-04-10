@@ -18,11 +18,26 @@ namespace Emgu.CV.Features2D
    /// </summary>
    public class AgastFeatureDetector : Feature2D
    {
+      /// <summary>
+      /// Agast feature type
+      /// </summary>
       public enum Type
       {
+         /// <summary>
+         /// AGAST_5_8
+         /// </summary>
          AGAST_5_8 = 0,
+         /// <summary>
+         /// AGAST_7_12d
+         /// </summary>
          AGAST_7_12d = 1,
+         /// <summary>
+         /// AGAST_7_12s
+         /// </summary>
          AGAST_7_12s = 2,
+         /// <summary>
+         /// OAST_9_16
+         /// </summary>
          OAST_9_16 = 3,
       }
 

@@ -566,6 +566,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="gpuMat">The destination gpuMat</param>
       /// <param name="arr">The CvArray to be uploaded to GPU</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void gpuMatUpload(IntPtr gpuMat, IntPtr arr, IntPtr stream);
 
@@ -574,6 +575,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="gpuMat">The source GpuMat</param>
       /// <param name="arr">The CvArray where data will be downloaded to</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void gpuMatDownload(IntPtr gpuMat, IntPtr arr, IntPtr stream);
 

@@ -741,7 +741,7 @@ namespace Emgu.CV.Cuda
       /// <summary>
       /// Counts non-zero array elements
       /// </summary>
-      /// <param name="src">The GpuMat</param>
+      /// <param name="src">Single-channel source image.</param>
       /// <returns>The number of non-zero GpuMat elements</returns>
       public static int CountNonZero(IInputArray src)
       {
@@ -751,6 +751,12 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern int cudaCountNonZero1(IntPtr src);
 
+      /// <summary>
+      /// Counts non-zero array elements
+      /// </summary>
+      /// <param name="src">Single-channel source image.</param>
+      /// <param name="dst">A Gpu mat to hold the result</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       public static void CountNonZero(IInputArray src, IOutputArray dst, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
