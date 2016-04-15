@@ -36,7 +36,7 @@ namespace ${NAMESPACE_CS}
       static VectorOf${VECTOR_NAME}()
       {
          CvInvoke.CheckLibraryLoaded();
-         Debug.Assert(Marshal.SizeOf(typeof(${VECTOR_ELEMENT_CS})) == SizeOfItemInBytes, "Size do not match");
+         Debug.Assert(Emgu.Util.Toolbox.SizeOf<${VECTOR_ELEMENT_CS}>() == SizeOfItemInBytes, "Size do not match");
       }
 
 #if !NETFX_CORE

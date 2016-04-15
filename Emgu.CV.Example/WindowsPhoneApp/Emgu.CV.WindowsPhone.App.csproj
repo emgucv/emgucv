@@ -209,10 +209,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\..\nugetpackages\LumiaImagingSDK.Win81.3.0.593\build\wpa81\LumiaImagingSDK.Win81.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\nugetpackages\LumiaImagingSDK.Win81.3.0.593\build\wpa81\LumiaImagingSDK.Win81.targets'))" />
   </Target>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="..\..\nugetpackages\LumiaImagingSDK.Win81.3.0.593\build\wpa81\LumiaImagingSDK.Win81.targets" Condition="Exists('..\..\nugetpackages\LumiaImagingSDK.Win81.3.0.593\build\wpa81\LumiaImagingSDK.Win81.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
