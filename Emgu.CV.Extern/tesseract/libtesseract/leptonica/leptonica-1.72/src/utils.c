@@ -1966,7 +1966,7 @@ l_uint32  attributes;
         mkdir("/tmp/leptonica", 0777);
     newpath = genPathname(dir, NULL);
     ret = mkdir(newpath, 0777);
-#elif WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
+#elif WINAPI_FAMILY_APP
     ret = -1;
 #else
         /* Make sure the tmp directory exists */
@@ -2050,7 +2050,7 @@ char    *newpath;
         FREE(fullname);
     }
     ret = remove(dir);
-#elif WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
+#elif WINAPI_FAMILY_APP
     ret = -1;
 #else
     for (i = 0; i < nfiles; i++) {
@@ -2237,7 +2237,7 @@ l_int32  ret;
 
 #ifndef _WIN32
     ret = remove(filepath);
-#elif WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
+#elif WINAPI_FAMILY_APP
     ret = -1;
 #else
         /* Set attributes to allow deletion of read-only files */
