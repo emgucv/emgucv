@@ -7,39 +7,41 @@
 #include "video_c.h"
 
 //BackgroundSubtractorMOG2
-cv::BackgroundSubtractorMOG2* CvBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection)
+cv::BackgroundSubtractorMOG2* cveBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection)
 {
    cv::Ptr<cv::BackgroundSubtractorMOG2> ptr =  cv::createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
    ptr.addref();
    return ptr.get();
-   //return new cv::BackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
 }
 
-void CvBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor)
+void cveBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor)
 {
    delete *bgSubtractor;
    *bgSubtractor = 0;
 }
 
 //BackgroundSubtractor
-void CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate)
+void cveBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate)
 {
    //cv::Mat imgMat = cv::cvarrToMat(image);
    //cv::Mat fgMat = cv::cvarrToMat(fgmask);
    bgSubtractor->apply(*image, *fgmask, learningRate);
 }
 
-
+void cveBackgroundSubtractorGetBackgroundImage(cv::BackgroundSubtractor* bgSubtractor, cv::_OutputArray* backgroundImage)
+{
+   bgSubtractor->getBackgroundImage(*backgroundImage);
+}
 
 //BackgroundSubtractorKNN
-cv::BackgroundSubtractorKNN* CvBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows)
+cv::BackgroundSubtractorKNN* cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows)
 {
    cv::Ptr<cv::BackgroundSubtractorKNN> ptr = cv::createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows);
   
    ptr.addref();
    return ptr.get();
 }
-void CvBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor)
+void cveBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor)
 {
    delete *bgSubtractor;
    *bgSubtractor = 0;

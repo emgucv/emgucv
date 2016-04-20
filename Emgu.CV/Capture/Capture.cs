@@ -358,21 +358,18 @@ namespace Emgu.CV
       /// <param name="channel">The channel to retrieve image</param>
       /// <returns>True if the frame can be retrieved</returns>
       public virtual bool Retrieve(IOutputArray image, int channel = 0)
-      {      
-         if (FlipType == CvEnum.FlipType.None)
+      {
+         using (OutputArray oaImage = image.GetOutputArray())
          {
-            using (OutputArray oaImage = image.GetOutputArray())
-               return CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, channel);
-         }
-         else
-         {
-            using (Mat tmp = new Mat())
-            using (OutputArray oaTmp = tmp.GetOutputArray())
+            if (FlipType == CvEnum.FlipType.None)
             {
-               bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaTmp, channel);
-
+               return CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, channel);
+            }
+            else
+            {
+               bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, channel);
                if (success)
-                  CvInvoke.Flip(tmp, image, FlipType);
+                  CvInvoke.Flip(image, image, FlipType);
                return success;
             }
          }

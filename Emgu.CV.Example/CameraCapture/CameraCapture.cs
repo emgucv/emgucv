@@ -20,6 +20,11 @@ namespace CameraCapture
    {
       private Capture _capture = null;
       private bool _captureInProgress;
+      private Mat _frame;
+      private Mat _grayFrame;
+      private Mat _smallGrayFrame;
+      private Mat _smoothedGrayFrame;
+      private Mat _cannyFrame;
 
       public CameraCapture()
       {
@@ -34,30 +39,30 @@ namespace CameraCapture
          {
             MessageBox.Show(excpt.Message);
          }
+         _frame = new Mat();
+         _grayFrame = new Mat();
+         _smallGrayFrame = new Mat();
+         _smoothedGrayFrame = new Mat();
+         _cannyFrame = new Mat();
       }
 
       private void ProcessFrame(object sender, EventArgs arg)
       {
-         Mat frame = new Mat();
-         _capture.Retrieve(frame, 0);
-         Mat grayFrame = new Mat();
-         CvInvoke.CvtColor(frame, grayFrame, ColorConversion.Bgr2Gray);
-         Mat smallGrayFrame = new Mat();
-         CvInvoke.PyrDown(grayFrame, smallGrayFrame);
-         Mat smoothedGrayFrame = new Mat();
-         CvInvoke.PyrUp(smallGrayFrame, smoothedGrayFrame);
          
-         //Image<Gray, Byte> smallGrayFrame = grayFrame.PyrDown();
-         //Image<Gray, Byte> smoothedGrayFrame = smallGrayFrame.PyrUp();
-         Mat cannyFrame = new Mat();
-         CvInvoke.Canny(smoothedGrayFrame, cannyFrame, 100, 60);
-
-         //Image<Gray, Byte> cannyFrame = smoothedGrayFrame.Canny(100, 60);
-
-         captureImageBox.Image = frame;
-         grayscaleImageBox.Image = grayFrame;
-         smoothedGrayscaleImageBox.Image = smoothedGrayFrame;
-         cannyImageBox.Image = cannyFrame;
+         _capture.Retrieve(_frame, 0);
+         
+         CvInvoke.CvtColor(_frame, _grayFrame, ColorConversion.Bgr2Gray);
+         
+         CvInvoke.PyrDown(_grayFrame, _smallGrayFrame);
+         
+         CvInvoke.PyrUp(_smallGrayFrame, _smoothedGrayFrame);
+         
+         CvInvoke.Canny(_smoothedGrayFrame, _cannyFrame, 100, 60);
+         
+         captureImageBox.Image = _frame;
+         grayscaleImageBox.Image = _grayFrame;
+         smoothedGrayscaleImageBox.Image = _smoothedGrayFrame;
+         cannyImageBox.Image = _cannyFrame;
       }
 
       private void captureButtonClick(object sender, EventArgs e)

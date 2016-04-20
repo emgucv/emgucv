@@ -31,7 +31,18 @@ namespace Emgu.CV.VideoSurveillance
       {
          using (InputArray iaImage = image.GetInputArray())
          using (OutputArray oaFgMask = fgMask.GetOutputArray())
-            CvInvoke.CvBackgroundSubtractorUpdate(_ptr, iaImage, oaFgMask, learningRate);
+            CvInvoke.cveBackgroundSubtractorUpdate(_ptr, iaImage, oaFgMask, learningRate);
+      }
+
+      /// <summary>
+      /// Computes a background image.
+      /// </summary>
+      /// <param name="backgroundImage">The output background image</param>
+      /// <remarks> Sometimes the background image can be very blurry, as it contain the average background statistics.</remarks>
+      public void GetBackgroundImage(IOutputArray backgroundImage)
+      {
+         using (OutputArray oaBackgroundImage = backgroundImage.GetOutputArray())
+            CvInvoke.cveBackgroundSubtractorGetBackgroundImage(_ptr, oaBackgroundImage);
       }
    }
 }
@@ -41,6 +52,9 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvBackgroundSubtractorUpdate(IntPtr bgSubstractor, IntPtr image, IntPtr fgmask, double learningRate);
+      internal static extern void cveBackgroundSubtractorUpdate(IntPtr bgSubstractor, IntPtr image, IntPtr fgmask, double learningRate);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveBackgroundSubtractorGetBackgroundImage(IntPtr bgSubtractor, IntPtr backgroundImage);
    }
 }

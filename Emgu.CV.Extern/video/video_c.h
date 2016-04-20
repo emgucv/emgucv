@@ -12,19 +12,17 @@
 #include "opencv2/video/video.hpp"
 
 //BackgroundSubtractorMOG2
-CVAPI(cv::BackgroundSubtractorMOG2*) CvBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection);
-CVAPI(void) CvBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor);
+CVAPI(cv::BackgroundSubtractorMOG2*) cveBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection);
+CVAPI(void) cveBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor);
 
 //BackgroundSubtractor
-CVAPI(void) CvBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate);
-
+CVAPI(void) cveBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate);
+CVAPI(void) cveBackgroundSubtractorGetBackgroundImage(cv::BackgroundSubtractor* bgSubtractor, cv::_OutputArray* backgroundImage);
 
 
 //BackgroundSubtractorKNN
-CVAPI(cv::BackgroundSubtractorKNN*) CvBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows);
-CVAPI(void) CvBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor);
-
-
+CVAPI(cv::BackgroundSubtractorKNN*) cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows);
+CVAPI(void) cveBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor);
 
 CVAPI(cv::DualTVL1OpticalFlow*) cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm);
 CVAPI(void) cveDualTVL1OpticalFlowRelease(cv::DualTVL1OpticalFlow** flow);

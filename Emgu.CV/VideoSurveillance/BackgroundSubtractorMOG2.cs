@@ -8,6 +8,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.VisualStyles;
 
 namespace Emgu.CV.VideoSurveillance
 {
@@ -28,7 +29,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="shadowDetection">If true, the algorithm will detect shadows and mark them. It decreases the speed a bit, so if you do not need this feature, set the parameter to false.</param>
       public BackgroundSubtractorMOG2(int history = 500, float varThreshold = 16, bool shadowDetection = true)
       {
-         _ptr = CvBackgroundSubtractorMOG2Create(history, varThreshold, shadowDetection);
+         _ptr = cveBackgroundSubtractorMOG2Create(history, varThreshold, shadowDetection);
       }
 
       /// <summary>
@@ -36,17 +37,18 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvBackgroundSubtractorMOG2Release(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            cveBackgroundSubtractorMOG2Release(ref _ptr);
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvBackgroundSubtractorMOG2Create(
+      internal static extern IntPtr cveBackgroundSubtractorMOG2Create(
          int history,
          float varThreshold,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool bShadowDetection);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvBackgroundSubtractorMOG2Release(ref IntPtr bgSubstractor);
+      internal static extern void cveBackgroundSubtractorMOG2Release(ref IntPtr bgSubstractor);
    }
 }

@@ -24,7 +24,7 @@ namespace Emgu.CV.VideoSurveillance
       /// <param name="detectShadows">If true, the algorithm will detect shadows and mark them. It decreases the speed a bit, so if you do not need this feature, set the parameter to false.</param>
       public BackgroundSubtractorKNN(int history, double dist2Threshold, bool detectShadows)
       {
-         _ptr = CvBackgroundSubtractorKNNCreate(history, dist2Threshold, detectShadows);
+         _ptr = cveBackgroundSubtractorKNNCreate(history, dist2Threshold, detectShadows);
       }
 
       /// <summary>
@@ -32,17 +32,18 @@ namespace Emgu.CV.VideoSurveillance
       /// </summary>
       protected override void DisposeObject()
       {
-         CvBackgroundSubtractorKNNRelease(ref _ptr);
+         if (_ptr != IntPtr.Zero)
+            cveBackgroundSubtractorKNNRelease(ref _ptr);
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvBackgroundSubtractorKNNCreate(
+      internal static extern IntPtr cveBackgroundSubtractorKNNCreate(
          int history,
          double dist2Threshold,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool detectShadows);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvBackgroundSubtractorKNNRelease(ref IntPtr bgSubstractor);
+      internal static extern void cveBackgroundSubtractorKNNRelease(ref IntPtr bgSubstractor);
    }
 }
