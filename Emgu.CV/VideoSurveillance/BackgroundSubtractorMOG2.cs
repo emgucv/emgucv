@@ -8,7 +8,6 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.VisualStyles;
 
 namespace Emgu.CV.VideoSurveillance
 {

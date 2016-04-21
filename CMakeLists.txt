@@ -834,8 +834,7 @@ ELSEIF (WIN32)
     #  Install Debugger Visualizer
     # ----------------------------------------------------------------------------
     SET(DEBUGER_VISUALIZER_FILES 
-      "Emgu.Util"
-      "Emgu.CV"
+      "Emgu.CV.World"
       "Emgu.CV.UI"
       "ZedGraph")
     SET(DEBUGGER_VISUALIZER_UNMANAGED_FILES
