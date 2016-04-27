@@ -125,23 +125,23 @@ cv::ximgproc::SuperpixelLSC* cveSuperpixelLSCCreate(cv::_InputArray* image, int 
    ptr.addref();
    return ptr.get();
 }
-int cveSuperixelLSCGetNumberOfSuperpixels(cv::ximgproc::SuperpixelLSC* lsc)
+int cveSuperpixelLSCGetNumberOfSuperpixels(cv::ximgproc::SuperpixelLSC* lsc)
 {
    return lsc->getNumberOfSuperpixels();
 }
-void cveSuperixelLSCIterate(cv::ximgproc::SuperpixelLSC* lsc, int numIterations)
+void cveSuperpixelLSCIterate(cv::ximgproc::SuperpixelLSC* lsc, int numIterations)
 {
    lsc->iterate(numIterations);
 }
-void cveSuperixelLSCGetLabels(cv::ximgproc::SuperpixelLSC* lsc, cv::_OutputArray* labelsOut)
+void cveSuperpixelLSCGetLabels(cv::ximgproc::SuperpixelLSC* lsc, cv::_OutputArray* labelsOut)
 {
    lsc->getLabels(*labelsOut);
 }
-void cveSuperixelLSCGetLabelContourMask(cv::ximgproc::SuperpixelLSC* lsc, cv::_OutputArray* image, bool thickLine)
+void cveSuperpixelLSCGetLabelContourMask(cv::ximgproc::SuperpixelLSC* lsc, cv::_OutputArray* image, bool thickLine)
 {
    lsc->getLabelContourMask(*image, thickLine);
 }
-void cveSuperixelLSCEnforceLabelConnectivity(cv::ximgproc::SuperpixelLSC* lsc, int minElementSize)
+void cveSuperpixelLSCEnforceLabelConnectivity(cv::ximgproc::SuperpixelLSC* lsc, int minElementSize)
 {
    lsc->enforceLabelConnectivity(minElementSize);
 }
