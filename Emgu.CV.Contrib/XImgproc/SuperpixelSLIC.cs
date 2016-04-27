@@ -75,7 +75,7 @@ namespace Emgu.CV.Ximgproc
 
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveSuperixelSLICEnforceLabelConnectivity(IntPtr slic, int minElementSize);
+      internal static extern void cveSuperpixelSLICEnforceLabelConnectivity(IntPtr slic, int minElementSize);
 
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
