@@ -535,16 +535,17 @@ IF(HAVE_opencv_core)
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/InputArrayGenerated.cs"
     "cv::_InputArray" 
     "InputArray" 
-    "isMat;isUMat;isMatVector;isUMatVector;isMatx" 
-    "bool;bool;bool;bool;bool" 
-    "val;val;val;val;val"
-    "IsMat;IsUMat;IsMatVector;IsUMatVector;IsMatx" 
-    "bool;bool;bool;bool;bool"
+    "isMat;isUMat;isMatVector;isUMatVector;isMatx;kind" 
+    "bool;bool;bool;bool;bool;int" 
+    "val;val;val;val;val;val"
+    "IsMat;IsUMat;IsMatVector;IsUMatVector;IsMatx;Kind" 
+    "bool;bool;bool;bool;bool;InputArray.Type"
     "True if the input array is a Mat;
   True if the input array is an UMat;
   True if the input array is a vector of Mat;
   True if the input array is a vector of UMat;
-  True if the input array is a Matx"
+  True if the input array is a Matx;
+  The type of the input array"
     "Emgu.CV"
     "CvInvoke"
     "InputArray"

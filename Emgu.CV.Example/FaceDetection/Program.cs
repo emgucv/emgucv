@@ -29,21 +29,24 @@ namespace FaceDetection
          Run();
       }
 
+
+
       static void Run()
       {
-         Mat image = new Mat("lena.jpg", ImreadModes.Color); //Read the files as an 8-bit Bgr image  
+         IImage image;
+
+         //Read the files as an 8-bit Bgr image  
+
+         image = new UMat("lena.jpg", ImreadModes.Color); //UMat version
+         //image = new Mat("lena.jpg", ImreadModes.Color); //CPU version
+
          long detectionTime;
          List<Rectangle> faces = new List<Rectangle>();
          List<Rectangle> eyes = new List<Rectangle>();
 
-         //The cuda cascade classifier doesn't seem to be able to load "haarcascade_frontalface_default.xml" file in this release
-         //disabling CUDA module for now
-         bool tryUseCuda = false;
-
          DetectFace.Detect(
            image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", 
            faces, eyes,
-           tryUseCuda,
            out detectionTime);
 
          foreach (Rectangle face in faces)
@@ -52,10 +55,11 @@ namespace FaceDetection
             CvInvoke.Rectangle(image, eye, new Bgr(Color.Blue).MCvScalar, 2);
 
          //display the image 
+         using (InputArray iaImage = image.GetInputArray())
          ImageViewer.Show(image, String.Format(
             "Completed face and eye detection using {0} in {1} milliseconds", 
-            (tryUseCuda && CudaInvoke.HasCuda) ? "GPU"
-            : CvInvoke.UseOpenCL ? "OpenCL" 
+            (iaImage.Kind == InputArray.Type.CudaGpuMat && CudaInvoke.HasCuda) ? "CUDA" :
+            (iaImage.IsUMat && CvInvoke.UseOpenCL) ? "OpenCL" 
             : "CPU",
             detectionTime));
       }

@@ -91,6 +91,12 @@ cv::_InputArray* cveInputArrayFromUMat(cv::UMat* mat)
 {
    return new cv::_InputArray(*mat);
 }
+
+int cveInputArrayGetDims(cv::_InputArray* ia, int i)
+{
+   return ia->dims(i);
+}
+
 void cveInputArrayGetSize(cv::_InputArray* ia, CvSize* size, int idx)
 {
    cv::Size s = ia->size(idx);
@@ -123,6 +129,19 @@ void cveInputArrayGetUMat(cv::_InputArray* ia, int idx, cv::UMat* umat)
 {
    cv::UMat m = ia->getUMat(idx);
    cv::swap(m, *umat);
+}
+void cveInputArrayGetGpuMat(cv::_InputArray* ia, cv::cuda::GpuMat* gpuMat)
+{
+   cv::cuda::GpuMat m = ia->getGpuMat();
+   cv::swap(m, *gpuMat);
+}
+
+void cveInputArrayCopyTo(cv::_InputArray* ia, cv::_OutputArray* arr, cv::_InputArray* mask)
+{
+   if (mask)
+      ia->copyTo(*arr, *mask);
+   else
+      ia->copyTo(*arr);
 }
 
 

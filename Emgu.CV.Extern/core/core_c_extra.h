@@ -8,6 +8,8 @@
 #ifndef EMGU_CORE_C_H
 #define EMGU_CORE_C_H
 
+#include "opencv2/core.hpp"
+#include "opencv2/core/cuda.hpp"
 #include "opencv2/core/core_c.h"
 #include "emgu_c.h"
 
@@ -33,6 +35,7 @@ CVAPI(cv::_InputArray*) cveInputArrayFromScalar(cv::Scalar* scalar);
 CVAPI(cv::_InputArray*) cveInputArrayFromMat(cv::Mat* mat);
 CVAPI(cv::_InputArray*) cveInputArrayFromGpuMat(cv::cuda::GpuMat* mat);
 CVAPI(cv::_InputArray*) cveInputArrayFromUMat(cv::UMat* mat);
+CVAPI(int) cveInputArrayGetDims(cv::_InputArray* ia, int i);
 CVAPI(void) cveInputArrayGetSize(cv::_InputArray* ia, CvSize* size, int idx);
 CVAPI(int) cveInputArrayGetDepth(cv::_InputArray* ia, int idx);
 CVAPI(int) cveInputArrayGetChannels(cv::_InputArray* ia, int idx);
@@ -41,6 +44,8 @@ CVAPI(void) cveInputArrayRelease(cv::_InputArray** arr);
 
 CVAPI(void) cveInputArrayGetMat(cv::_InputArray* ia, int idx, cv::Mat* mat);
 CVAPI(void) cveInputArrayGetUMat(cv::_InputArray* ia, int idx, cv::UMat* umat);
+CVAPI(void) cveInputArrayGetGpuMat(cv::_InputArray* ia, cv::cuda::GpuMat* gpuMat);
+CVAPI(void) cveInputArrayCopyTo(cv::_InputArray* ia, cv::_OutputArray* arr, cv::_InputArray* mask);
 
 CVAPI(cv::_OutputArray*) cveOutputArrayFromMat(cv::Mat* mat);
 CVAPI(cv::_OutputArray*) cveOutputArrayFromGpuMat(cv::cuda::GpuMat* mat);

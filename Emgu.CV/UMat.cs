@@ -191,6 +191,15 @@ namespace Emgu.CV
          UMatInvoke.cveUMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels), usage);
       }
 
+      public UMat(String fileName, ImreadModes loadType)
+         : this()
+      {
+         using (Mat tmp = new Mat(fileName, loadType))
+         {
+            tmp.CopyTo(this);
+         }
+      }
+
       /// <summary>
       /// The size of this matrix
       /// </summary>

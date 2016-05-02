@@ -5,6 +5,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Emgu.CV.Cuda;
 using Emgu.CV.CvEnum;
 using Emgu.Util;
 
@@ -15,6 +16,29 @@ namespace Emgu.CV
    /// </summary>
    public partial class InputArray : UnmanagedObject
    {
+      [Flags]
+      public enum Type {
+         KindShift = 16,
+         FixedType = 0x8000 << KindShift,
+         FixedSize = 0x4000 << KindShift,
+         KindMask = 31 << KindShift,
+
+         None = 0 << KindShift,
+         Mat = 1 << KindShift,
+         Matx = 2 << KindShift,
+         StdVector = 3 << KindShift,
+         StdVectorVector = 4 << KindShift,
+         StdVectorMat = 5 << KindShift,
+         Expr = 6 << KindShift,
+         OpenglBuffer = 7 << KindShift,
+         CudaHostMem = 8 << KindShift,
+         CudaGpuMat = 9 << KindShift,
+         UMat = 10 << KindShift,
+         StdVectorUMat = 11 << KindShift,
+         StdBoolVector = 12 << KindShift,
+         StdVectorCudaGpuMat = 13 << KindShift
+      }
+
       internal InputArray()
       {        
       }
@@ -63,6 +87,13 @@ namespace Emgu.CV
          return m;
       }
 
+      public Cuda.GpuMat GetGpuMat()
+      {
+         Cuda.GpuMat m = new Cuda.GpuMat();
+         CvInvoke.cveInputArrayGetGpuMat(Ptr, m);
+         return m;
+      }
+
       /// <summary>
       /// Get the size of the input array
       /// </summary>
@@ -99,6 +130,11 @@ namespace Emgu.CV
          return CvInvoke.cveInputArrayGetDepth(_ptr, idx);
       }
 
+      public int GetDims(int i = -1)
+      {
+         return CvInvoke.cveInputArrayGetDims(_ptr, i);
+      }
+
       /// <summary>
       /// Get the number of channels
       /// </summary>
@@ -109,6 +145,15 @@ namespace Emgu.CV
          if (_ptr == IntPtr.Zero)
             return 0;
          return CvInvoke.cveInputArrayGetChannels(_ptr, idx);
+      }
+
+      public void CopyTo(IOutputArray arr, IInputArray mask = null)
+      {
+         using (OutputArray oaArr = arr.GetOutputArray())
+         using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         {
+            CvInvoke.cveInputArrayCopyTo(_ptr, oaArr, iaMask);
+         }
       }
 
       /// <summary>
@@ -128,7 +173,10 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="arr">Pointer to the input array</param>
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveInputArrayRelease(ref IntPtr arr);
+      internal static extern void cveInputArrayRelease(ref IntPtr arr);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int cveInputArrayGetDims(IntPtr ia, int idx);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveInputArrayGetSize(IntPtr ia, ref System.Drawing.Size size, int idx);
@@ -148,5 +196,11 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveInputArrayGetUMat(IntPtr ia, int idx, IntPtr umat);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveInputArrayGetGpuMat(IntPtr ia, IntPtr gpumat);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveInputArrayCopyTo(IntPtr ia, IntPtr arr, IntPtr mask);
    }
 }
