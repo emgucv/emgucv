@@ -74,7 +74,7 @@ namespace AndroidExamples
             List<Rectangle> eyes = new List<Rectangle>();
 
 
-            DetectFace.Detect(image, faceXml, eyeXml, faces, eyes, false, out time);
+            DetectFace.Detect(image, faceXml, eyeXml, faces, eyes, out time);
 
             String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
             SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, computeDevice));

@@ -5,7 +5,9 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+#if !(__IOS__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
 using Emgu.CV.Cuda;
+#endif
 using Emgu.CV.CvEnum;
 using Emgu.Util;
 
@@ -17,7 +19,8 @@ namespace Emgu.CV
    public partial class InputArray : UnmanagedObject
    {
       [Flags]
-      public enum Type {
+      public enum Type
+      {
          KindShift = 16,
          FixedType = 0x8000 << KindShift,
          FixedSize = 0x4000 << KindShift,
@@ -40,7 +43,7 @@ namespace Emgu.CV
       }
 
       internal InputArray()
-      {        
+      {
       }
 
       /// <summary>
@@ -87,12 +90,16 @@ namespace Emgu.CV
          return m;
       }
 
+#if !(__IOS__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
+
+
       public Cuda.GpuMat GetGpuMat()
       {
          Cuda.GpuMat m = new Cuda.GpuMat();
          CvInvoke.cveInputArrayGetGpuMat(Ptr, m);
          return m;
       }
+#endif
 
       /// <summary>
       /// Get the size of the input array

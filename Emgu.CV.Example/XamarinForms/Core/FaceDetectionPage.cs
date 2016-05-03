@@ -54,7 +54,8 @@ namespace Emgu.CV.XamarinForms
                   List<Rectangle> faces = new List<Rectangle>();
                   List<Rectangle> eyes = new List<Rectangle>();
 
-                  DetectFace.Detect(image[0], faceFile, eyeFile, faces, eyes, false, out time);
+                  using (UMat img = image[0].ToUMat(AccessType.ReadWrite))
+                     DetectFace.Detect(img, faceFile, eyeFile, faces, eyes, out time);
 
                   foreach (Rectangle rect in faces)
                      CvInvoke.Rectangle(image[0], rect, new MCvScalar(0, 0, 255), 2);

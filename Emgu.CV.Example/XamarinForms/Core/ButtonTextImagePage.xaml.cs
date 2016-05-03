@@ -36,7 +36,7 @@ namespace Emgu.CV.XamarinForms
 #if NETFX_CORE
          Mat[] mats = new Mat[imageNames.Length];
          for (int i = 0; i < mats.Length; i++)
-            mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.AnyColor);
+            mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
          InvokeOnImagesLoaded(mats);
 #else
          if (_mediaPicker == null)

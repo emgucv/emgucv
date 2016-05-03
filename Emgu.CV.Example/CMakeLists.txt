@@ -127,7 +127,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 		PATTERN "RelWithDebInfo" EXCLUDE
 		PATTERN "*.dir" EXCLUDE
 		PATTERN "XamarinForms.Droid" EXCLUDE
-		PATTERN "WindowsUniversal/*" EXCLUDE
+		#PATTERN "WindowsUniversal/*" EXCLUDE
 		PATTERN "WindowsUniversal81/Windows" EXCLUDE
 		PATTERN "XamarinForms.iOS" EXCLUDE
 		)

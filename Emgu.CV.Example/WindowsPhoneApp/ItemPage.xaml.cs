@@ -120,7 +120,7 @@ namespace Emgu.CV.WindowsPhone.App
               List<Rectangle> eyes = new List<Rectangle>();
               long detectionTime;
               FaceDetection.DetectFace.Detect(img, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml",
-                 faces, eyes, false, out detectionTime);
+                 faces, eyes, out detectionTime);
 
               foreach (Rectangle face in faces)
                  CvInvoke.Rectangle(img, face, new Bgr(0, 0, 255).MCvScalar, 2);

@@ -273,7 +273,7 @@
 		<Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
 		<Message Condition="'$(EmguCVLinkTarget)'=='WindowsForms'" Text="Emgu CV is not set to deploy native files in Windows forms project, please make sure the unmanaged dlls are deployed with your executable." Importance="High" />
 		<Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
-      <Message Text="Adding $(EmguCVDeployMessage) binary" Condition="'$(EmguCVDeployMessage)'!=''" Importance="High" />
+      <Message Text="Compiling with $(EmguCVDeployMessage)binary" Condition="'$(EmguCVDeployMessage)'!=''" Importance="High" />
       <Message Text="No native binary is deployed." Condition="'$(EmguCVDeployMessage)'==''" Importance="High" />
   </Target>
 </Project>
