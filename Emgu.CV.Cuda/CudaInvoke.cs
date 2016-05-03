@@ -1171,6 +1171,55 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaDft(IntPtr src, IntPtr dst, ref Size dftSize, CvEnum.DxtType flags, IntPtr stream);
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="src1">First spectrum.</param>
+      /// <param name="src2">Second spectrum with the same size and type.</param>
+      /// <param name="dst">Destination spectrum.</param>
+      /// <param name="flags">Mock parameter used for CPU/CUDA interfaces similarity, simply add a 0 value.</param>
+      /// <param name="scale">Scale constant.</param>
+      /// <param name="conjB">Optional flag to specify if the second spectrum needs to be conjugated before the multiplication.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
+      public static void MulAndScaleSpectrums(IInputArray src1, IInputArray src2, IOutputArray dst, int flags, float scale, bool conjB = false, Stream stream = null)
+      {
+         using (InputArray iaSrc1 = src1.GetInputArray())
+         using (InputArray iaSrc2 = src2.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cudaMulAndScaleSpectrums(iaSrc1, iaSrc2, oaDst, flags, scale, conjB, stream);
+      }
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaMulAndScaleSpectrums(
+         IntPtr src1, IntPtr src2, IntPtr dst, int flags, float scale, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool conjB, 
+         IntPtr stream);
+
+      /// <summary>
+      /// Performs a per-element multiplication of two Fourier spectrums.
+      /// </summary>
+      /// <param name="src1">First spectrum.</param>
+      /// <param name="src2">Second spectrum with the same size and type.</param>
+      /// <param name="dst">Destination spectrum.</param>
+      /// <param name="flags">Mock parameter used for CPU/CUDA interfaces similarity.</param>
+      /// <param name="conjB">Optional flag to specify if the second spectrum needs to be conjugated before the multiplication.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
+      public static void MulSpectrums(IInputArray src1, IInputArray src2, IOutputArray dst, int flags, 
+         bool conjB = false, Stream stream = null)
+      {
+         using (InputArray iaSrc1 = src1.GetInputArray())
+         using (InputArray iaSrc2 = src2.GetInputArray())
+         using (OutputArray oaDst = dst.GetOutputArray())
+            cudaMulSpectrums(iaSrc1, iaSrc2, oaDst, flags, conjB, stream);
+      }
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cudaMulSpectrums(IntPtr src1, IntPtr src2, IntPtr dst, int flags,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool conjB, 
+         IntPtr stream);
+
       /*
       /// <summary>
       /// Draw the optical flow needle map

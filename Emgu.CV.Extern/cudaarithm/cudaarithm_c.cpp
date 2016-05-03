@@ -248,6 +248,16 @@ void cudaDft(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dftSize, int f
    cv::cuda::dft(*src, *dst, *dftSize, flags | (dst->channels() == 1 ? cv::DFT_REAL_OUTPUT : 0), stream ? *stream : cv::cuda::Stream::Null());
 }
 
+void cudaMulAndScaleSpectrums(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags, float scale, bool conjB, cv::cuda::Stream* stream)
+{
+   cv::cuda::mulAndScaleSpectrums(*src1, *src2, *dst, flags, scale, conjB, stream ? *stream : cv::cuda::Stream::Null());
+}
+
+void cudaMulSpectrums(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags, bool conjB, cv::cuda::Stream* stream)
+{
+   cv::cuda::mulSpectrums(*src1, *src2, *dst, flags, conjB, stream ? *stream : cv::cuda::Stream::Null());
+}
+
 void cudaFlip(cv::_InputArray* src, cv::_OutputArray* dst, int flipcode, cv::cuda::Stream* stream)
 {
    cv::cuda::flip(*src, *dst, flipcode, stream ? *stream : cv::cuda::Stream::Null());
