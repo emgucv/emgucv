@@ -2925,6 +2925,46 @@ namespace Emgu.CV.Test
          }
       }
 
+      [Test]
+      public void TestConvecityDefect()
+      {
+         Mat frame = EmguAssert.LoadMat("lena.jpg");
+         using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
+         using (Image<Gray, byte> canny = frame.ToImage<Gray, byte>())
+         {
+            IOutputArray hierarchy = null;
+            CvInvoke.FindContours(canny, contours, hierarchy, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+
+            for (int i = 0; i < contours.Size; i++)
+            {
+               CvInvoke.ApproxPolyDP(contours[i], contours[i], 5, false);
+               using (VectorOfInt hull = new VectorOfInt())
+               using (Mat defects = new Mat())
+               using (VectorOfPoint c = contours[i])
+               {
+                  CvInvoke.ConvexHull(c, hull, false, false);
+                  CvInvoke.ConvexityDefects(c, hull, defects);
+                  if (!defects.IsEmpty)
+                  {
+                     using (Matrix<int> value = new Matrix<int>(defects.Rows, defects.Cols, defects.NumberOfChannels))
+                     {
+                        defects.CopyTo(value);
+                        //you can iterate through the defect here:
+                        for (int j = 0; j < value.Rows; j++)
+                        {
+                           int startIdx = value.Data[j, 0];
+                           int endIdx = value.Data[j, 1];
+                           int farthestPtIdx = value.Data[j, 2];
+                           double fixPtDepth = value.Data[j, 3]/256.0;
+                           
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+
 #if !(__IOS__ || NETFX_CORE)
       [Test]
       public void TestDnn()

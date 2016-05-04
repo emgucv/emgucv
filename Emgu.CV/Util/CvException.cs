@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 
 namespace Emgu.CV.Util
 {
@@ -93,6 +94,8 @@ namespace Emgu.CV.Util
          _errMsg = errMsg;
          _fileName = fileName;
          _line = line;
+
+         Debug.WriteLine(String.Format("Open CV error at file {0}, line {1}, function {2}: {3}", fileName, line, funcName, errMsg));
       }
    }
 }

@@ -160,7 +160,7 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 	  DESTINATION .
 	  COMPONENT emgucv_source
 	  FILES_MATCHING 
-	  PATTERN "*.Store.csproj"
+	  PATTERN "*.Store81.csproj"
 	  PATTERN "tessdata/*"
 	  PATTERN "*.cs"
 	  PATTERN "*.resx"
