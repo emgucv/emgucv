@@ -21,11 +21,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 		PATTERN "RelWithDebInfo" EXCLUDE
 		PATTERN "*.dir" EXCLUDE
 		PATTERN "bin" EXCLUDE
-		PATTERN "Android" EXCLUDE
-		PATTERN "iOS" EXCLUDE
-		PATTERN "Windows.Store" EXCLUDE
-		PATTERN "VS2013-2015" EXCLUDE
-		PATTERN "CrossPlatform" EXCLUDE
 		)
 		INSTALL(
 		DIRECTORY
@@ -53,6 +48,24 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 		FILES_MATCHING 
 		PATTERN "FindPedestrian.cs" 
 		PATTERN "pedestrian.png" 
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "bin" EXCLUDE
+		)
+      INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/FeatureMatching/"
+		DESTINATION Emgu.CV.Example/FeatureMatching/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "DrawMatches.cs" 
+		PATTERN "box.png"  
+      PATTERN "box_in_scene.png"  
 		PATTERN ".git" EXCLUDE
 		PATTERN "obj" EXCLUDE
 		PATTERN "CMake*" EXCLUDE
