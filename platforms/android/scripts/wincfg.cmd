@@ -2,6 +2,7 @@
 :: Note: all pathes should be specified without tailing slashes!
 IF EXIST "C:\android-ndk-r10e" SET ANDROID_NDK=C:\android-ndk-r10e
 IF EXIST "C:\android-ndk-r11" SET ANDROID_NDK=C:\android-ndk-r11
+IF EXIST "C:\android-ndk-r11" SET ANDROID_NDK=C:\android-ndk-r11c
 SET CMAKE_EXE=C:\Program Files (x86)\CMake\bin\cmake.exe
 SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
 

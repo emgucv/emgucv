@@ -17,12 +17,12 @@ namespace Emgu.CV.VideoStab
    /// </summary>
    public abstract class FrameSource : UnmanagedObject
    {
-      private Capture.CaptureModuleType _captureSource;
+      private VideoCapture.CaptureModuleType _captureSource;
 
       /// <summary>
       /// Get or Set the capture type
       /// </summary>
-      public Capture.CaptureModuleType CaptureSource
+      public VideoCapture.CaptureModuleType CaptureSource
       {
          get
          {

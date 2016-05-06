@@ -26,7 +26,7 @@ namespace Emgu.CV.VideoStab
       /// <param name="baseFrameSource">The capture object to be stabilized. Should not be a camera stream.</param>
       public TwoPassStabilizer(FrameSource baseFrameSource)
       {
-         if (baseFrameSource.CaptureSource == Capture.CaptureModuleType.Camera)
+         if (baseFrameSource.CaptureSource == VideoCapture.CaptureModuleType.Camera)
          {
             throw new ArgumentException("Two pass stabilizer cannot process camera stream");
          }

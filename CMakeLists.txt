@@ -152,11 +152,9 @@ IF(ANDROID)
 ENDIF()
 FILE(MAKE_DIRECTORY ${UNMANAGED_LIBRARY_OUTPUT_PATH})
 
-IF(WIN32)
   SET(UNMANAGED_DLL_EXTRA)
-  
   MACRO(CHECK_BINARY_EXIST folder pattern property_name)
-    IF("${UNMANAGED_LIBRARY_OUTPUT_PATH}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/${folder}")
+     IF("${UNMANAGED_LIBRARY_OUTPUT_PATH}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/${folder}")
       SET(${property_name} ON)
     ELSE()
       FILE(GLOB DLL_LIST "${CMAKE_CURRENT_SOURCE_DIR}/${folder}/${pattern}")
@@ -176,7 +174,8 @@ IF(WIN32)
       ENDIF()
     ENDIF()
   ENDMACRO()
-  
+
+IF(WIN32)
   CHECK_BINARY_EXIST("bin/x86" "*.dll" HAVE_WINDESKTOP_X86)
   CHECK_BINARY_EXIST("bin/x64" "*.dll" HAVE_WINDESKTOP_X64)
   IF(HAVE_WINDESKTOP_X86 AND HAVE_WINDESKTOP_X64)
@@ -249,7 +248,9 @@ IF(WIN32)
   IF(HAVE_IOS)
     SET(IOS_LABEL "-ios")
   ENDIF()
-  
+    
+ENDIF()
+
   CHECK_BINARY_EXIST("libs/arm64-v8a" "*.so" HAVE_ANDROID_ARM64_V8A)
   
   CHECK_BINARY_EXIST("libs/armeabi" "*.so" HAVE_ANDROID_ARMEABI)
@@ -280,9 +281,6 @@ IF(WIN32)
   ELSEIF(NOT ("${ANDROID_LABEL}" STREQUAL ""))
     SET(ANDROID_LABEL "-android${ANDROID_LABEL}")
   ENDIF()
-  
-  
-ENDIF()
 
 # ----------------------------------------------------------------------------
 #  Setup Package information

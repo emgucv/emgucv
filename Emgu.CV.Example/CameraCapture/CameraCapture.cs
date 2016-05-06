@@ -18,7 +18,7 @@ namespace CameraCapture
 {
    public partial class CameraCapture : Form
    {
-      private Capture _capture = null;
+      private VideoCapture _capture = null;
       private bool _captureInProgress;
       private Mat _frame;
       private Mat _grayFrame;
@@ -32,7 +32,7 @@ namespace CameraCapture
          CvInvoke.UseOpenCL = false;
          try
          {
-            _capture = new Capture();
+            _capture = new VideoCapture();
             _capture.ImageGrabbed += ProcessFrame;
          }
          catch (NullReferenceException excpt)
@@ -48,21 +48,23 @@ namespace CameraCapture
 
       private void ProcessFrame(object sender, EventArgs arg)
       {
-         
-         _capture.Retrieve(_frame, 0);
-         
-         CvInvoke.CvtColor(_frame, _grayFrame, ColorConversion.Bgr2Gray);
-         
-         CvInvoke.PyrDown(_grayFrame, _smallGrayFrame);
-         
-         CvInvoke.PyrUp(_smallGrayFrame, _smoothedGrayFrame);
-         
-         CvInvoke.Canny(_smoothedGrayFrame, _cannyFrame, 100, 60);
-         
-         captureImageBox.Image = _frame;
-         grayscaleImageBox.Image = _grayFrame;
-         smoothedGrayscaleImageBox.Image = _smoothedGrayFrame;
-         cannyImageBox.Image = _cannyFrame;
+         if (_capture != null && _capture.Ptr != IntPtr.Zero)
+         {
+            _capture.Retrieve(_frame, 0);
+
+            CvInvoke.CvtColor(_frame, _grayFrame, ColorConversion.Bgr2Gray);
+
+            CvInvoke.PyrDown(_grayFrame, _smallGrayFrame);
+
+            CvInvoke.PyrUp(_smallGrayFrame, _smoothedGrayFrame);
+
+            CvInvoke.Canny(_smoothedGrayFrame, _cannyFrame, 100, 60);
+
+            captureImageBox.Image = _frame;
+            grayscaleImageBox.Image = _grayFrame;
+            smoothedGrayscaleImageBox.Image = _smoothedGrayFrame;
+            cannyImageBox.Image = _cannyFrame;
+         }
       }
 
       private void captureButtonClick(object sender, EventArgs e)

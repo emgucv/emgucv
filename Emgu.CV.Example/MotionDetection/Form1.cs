@@ -20,7 +20,7 @@ namespace MotionDetection
 {
    public partial class Form1 : Form
    {
-      private Capture _capture;
+      private VideoCapture _capture;
       private MotionHistory _motionHistory;
       private BackgroundSubtractor _forgroundDetector;
 
@@ -33,7 +33,7 @@ namespace MotionDetection
          {
             try
             {
-               _capture = new Capture();
+               _capture = new VideoCapture();
             }
             catch (NullReferenceException excpt)
             {   //show errors if there is any

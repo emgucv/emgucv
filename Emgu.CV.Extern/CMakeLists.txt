@@ -75,8 +75,8 @@ IF(HAVE_opencv_line_descriptor)
   CREATE_VECTOR_CS("KeyLine" "cv::line_descriptor::KeyLine" "MKeyLine" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/LineDescriptor Emgu.CV.LineDescriptor "#include \"opencv2/line_descriptor.hpp\"")
 ENDIF()
 
-IF(HAVE_opencv_highgui)
-  CREATE_VECTOR_CS("ColorPoint" "ColorPoint" "ColorPoint" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"highgui_c_extra.h\"")
+IF(HAVE_opencv_videoio)
+  CREATE_VECTOR_CS("ColorPoint" "ColorPoint" "ColorPoint" "struct" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"videoio_c_extra.h\"")
 ENDIF()
 
 IF(EMGU_CV_WITH_TESSERACT)
@@ -943,6 +943,28 @@ IF(HAVE_opencv_video)
     "#include \"video_c.h\"")
 ENDIF()
 ############################### video code gen END ################################
+
+############################### videoio code gen START ##############################
+IF(HAVE_opencv_videoio)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "videoio/video_capture_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Capture/VideoCaptureGenerated.cs"
+    "cv::VideoCapture" 
+    "VideoCapture" 
+    "isOpened" 
+    "bool" 
+    "val"
+    "IsOpened" 
+    "bool"
+    "True if the camera is opened"
+    "Emgu.CV"
+    "CvInvoke"
+    "VideoCapture"
+    "#include \"videoio_c_extra.h\"")
+  
+ENDIF()
+############################### video code gen END ################################
+
 
 ############################### cudaimgproc code gen START ##############################
 IF(HAVE_opencv_cudaimgproc)

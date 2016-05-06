@@ -21,7 +21,7 @@ namespace Emgu.CV.VideoStab
       /// Create a Capture frame source
       /// </summary>
       /// <param name="capture">The capture object that will be converted to a FrameSource</param>
-      public CaptureFrameSource(Capture capture)
+      public CaptureFrameSource(VideoCapture capture)
       {
          _ptr = VideoStabInvoke.VideostabCaptureFrameSourceCreate(capture, ref FrameSourcePtr);
          CaptureSource = capture.CaptureSource;

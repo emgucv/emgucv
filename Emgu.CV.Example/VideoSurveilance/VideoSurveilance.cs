@@ -22,7 +22,7 @@ namespace VideoSurveilance
    public partial class VideoSurveilance : Form
    {
       
-      private static Capture _cameraCapture;
+      private static VideoCapture _cameraCapture;
       
       private static BackgroundSubtractor _fgDetector;
       private static Emgu.CV.Cvb.CvBlobDetector _blobDetector;
@@ -38,7 +38,7 @@ namespace VideoSurveilance
       {
          try
          {
-            _cameraCapture = new Capture();
+            _cameraCapture = new VideoCapture();
          }
          catch (Exception e)
          {

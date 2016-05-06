@@ -18,7 +18,7 @@ namespace Emgu.CV
    /// Kinect Camera capture
    /// </summary>
    public class KinectCapture
-      : Capture
+      : VideoCapture
    {
       /// <summary>
       /// Camera output mode

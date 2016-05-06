@@ -75,29 +75,19 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 		PATTERN "*.dir" EXCLUDE
 		PATTERN "bin" EXCLUDE
 		)
-	  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-	    # ----------------------------------------------------------------------------
-		#  The example files
-		# ----------------------------------------------------------------------------
-
-		INSTALL(
+      INSTALL(
 		DIRECTORY
-		"${CMAKE_CURRENT_SOURCE_DIR}/WindowsPhoneApp/"
-		DESTINATION Emgu.CV.Example/WindowsPhoneApp/
+		"${CMAKE_CURRENT_SOURCE_DIR}/RealtimeCamera.UWP/"
+		DESTINATION Emgu.CV.Example/RealtimeCamera.UWP/
 		COMPONENT emgucv_example_source
 		FILES_MATCHING 
 		PATTERN "*.cs"
-		PATTERN "Common/*.xaml"
-		PATTERN "Common/*.txt"
-		PATTERN "Common/*.cs"
-		PATTERN "DataModel/*.json"
-		PATTERN "DataModel/*.cs"
-		PATTERN "Strings/en-US/*.resw"
+		PATTERN "Properties/*"
 		PATTERN "*.csproj"
 		PATTERN "*.appxmanifest"
 		PATTERN "*.xaml"
-		PATTERN "*.xml"
-		PATTERN "packages.config"
+		PATTERN "*.json"
+		PATTERN "*.pfx"
 		PATTERN "Assets/*.png"  
 		PATTERN ".git" EXCLUDE
 		PATTERN "obj" EXCLUDE
@@ -107,12 +97,11 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 		PATTERN "RelWithDebInfo" EXCLUDE
 		PATTERN "*.dir" EXCLUDE
 		PATTERN "bin" EXCLUDE
-		PATTERN "Android" EXCLUDE
-		PATTERN "iOS" EXCLUDE
-		PATTERN "Windows.Store" EXCLUDE
-		PATTERN "VS2013-2015" EXCLUDE
-		PATTERN "CrossPlatform" EXCLUDE
 		)
+	  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+	    # ----------------------------------------------------------------------------
+		#  The example files
+		# ----------------------------------------------------------------------------
 		INSTALL(
 		DIRECTORY
 		${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/
@@ -148,28 +137,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 		# ----------------------------------------------------------------------------
 		#  The example files
 		# ----------------------------------------------------------------------------
-		INSTALL(
-		DIRECTORY
-		${CMAKE_CURRENT_SOURCE_DIR}/WindowsStoreCameraApp/
-		DESTINATION Emgu.CV.Example/WindowsStoreCameraApp
-		COMPONENT emgucv_example_source
-		FILES_MATCHING 
-		PATTERN "*.cs"
-		PATTERN "Properties/*.cs"
-		PATTERN "Common/*.xaml"
-		PATTERN "*.csproj"
-		PATTERN "*.appxmanifest"
-		PATTERN "*.xaml"
-		PATTERN "packages.config"
-		PATTERN "Assets/*.png"  
-		PATTERN ".git" EXCLUDE
-		PATTERN "obj" EXCLUDE
-		PATTERN "CMake*" EXCLUDE
-		PATTERN "Release" EXCLUDE
-		PATTERN "Debug" EXCLUDE
-		PATTERN "RelWithDebInfo" EXCLUDE
-		PATTERN "*.dir" EXCLUDE
-		)
 		INSTALL(
 		DIRECTORY
 		${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/
