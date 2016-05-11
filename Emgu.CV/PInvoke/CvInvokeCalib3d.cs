@@ -1040,6 +1040,9 @@ namespace Emgu.CV
    public static class Fisheye
    {
 
+      /// <summary>
+      /// Fisheye calibration flag.
+      /// </summary>
       public enum CalibrationFlag
       {
          /// <summary>

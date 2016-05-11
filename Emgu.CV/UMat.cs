@@ -191,6 +191,11 @@ namespace Emgu.CV
          UMatInvoke.cveUMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels), usage);
       }
 
+      /// <summary>
+      /// Read a UMat from file.
+      /// </summary>
+      /// <param name="fileName">The name of the file</param>
+      /// <param name="loadType">The read mode</param>
       public UMat(String fileName, ImreadModes loadType)
          : this()
       {

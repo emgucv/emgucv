@@ -24,6 +24,8 @@ namespace Emgu.CV.Cuda
       /// <summary>
       /// Create a Cuda Harris Corner detector
       /// </summary>
+      /// <param name="srcDepth">The depth of the source image</param>
+      /// <param name="srcChannels">The number of channels in the source image</param>
       /// <param name="blockSize">Neighborhood size </param>
       /// <param name="kSize"></param>
       /// <param name="k">Harris detector free parameter.</param>

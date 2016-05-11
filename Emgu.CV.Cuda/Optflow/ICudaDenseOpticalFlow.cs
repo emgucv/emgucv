@@ -11,13 +11,27 @@ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
+   /// <summary>
+   /// Cuda Dense Optical flow
+   /// </summary>
    public interface ICudaDenseOpticalFlow
    {
+      /// <summary>
+      /// Pointer to cv::cuda::denseOpticalFlow
+      /// </summary>
       IntPtr DenseOpticalFlowPtr { get; }
    }
 
    public static partial class CudaInvoke
    {
+      /// <summary>
+      /// Calculates a dense optical flow.
+      /// </summary>
+      /// <param name="denseFlow">The dense optical flow object</param>
+      /// <param name="i0">first input image.</param>
+      /// <param name="i1">second input image of the same size and the same type as <paramref name="i0"/>.</param>
+      /// <param name="flow">computed flow image that has the same size as I0 and type CV_32FC2.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Calc(this ICudaDenseOpticalFlow denseFlow, IInputArray i0, IInputArray i1, IInputOutputArray flow, Stream stream = null)
       {
          using (InputArray iaI0 = i0.GetInputArray())

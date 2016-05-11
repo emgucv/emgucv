@@ -53,7 +53,7 @@ namespace Emgu.CV.Test
 
       public void TestCapture()
       {
-         Capture capture = new Capture("abc.efg");
+         VideoCapture capture = new VideoCapture("abc.efg");
          Mat image = capture.QueryFrame();
       }
 
@@ -427,7 +427,7 @@ namespace Emgu.CV.Test
       public void CameraTest()
       {
          using (ImageViewer viewer = new ImageViewer()) //create an image viewer
-         using (Capture capture = new Capture()) //create a camera captue
+         using (VideoCapture capture = new VideoCapture()) //create a camera captue
          {
             capture.ImageGrabbed += delegate(object sender, EventArgs e)
             {  //run this until application closed (close button click on image viewer)
@@ -469,7 +469,7 @@ namespace Emgu.CV.Test
       public void CameraTest3()
       {
          ImageViewer viewer = new ImageViewer();
-         using (Capture capture = new Capture())
+         using (VideoCapture capture = new VideoCapture())
          {
             Application.Idle += delegate(object sender, EventArgs e)
             {
@@ -586,7 +586,7 @@ namespace Emgu.CV.Test
 
       public void TestPlayVideo()
       {
-         Capture capture = new Capture("car.avi");
+         VideoCapture capture = new VideoCapture("car.avi");
          ImageViewer viewer = new ImageViewer(null);
           
          Application.Idle += delegate(Object sender, EventArgs e)
@@ -629,7 +629,7 @@ namespace Emgu.CV.Test
       public static void TestOnePassVideoStabilizer()
       {
          ImageViewer viewer = new ImageViewer();
-         using (Capture capture = new Capture("tree.avi"))
+         using (VideoCapture capture = new VideoCapture("tree.avi"))
          using (CaptureFrameSource frameSource = new CaptureFrameSource(capture))
          using (OnePassStabilizer stabilizer = new OnePassStabilizer(frameSource))
          {
@@ -655,7 +655,7 @@ namespace Emgu.CV.Test
       public static void TestTwoPassVideoStabilizer()
       {
          ImageViewer viewer = new ImageViewer();
-         using (Capture capture = new Capture("tree.avi"))
+         using (VideoCapture capture = new VideoCapture("tree.avi"))
          using (GaussianMotionFilter motionFilter = new GaussianMotionFilter(15, -1.0f))
          //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
          //using (Features2D.SURF detector = new Features2D.SURF(500, false))
@@ -733,7 +733,7 @@ namespace Emgu.CV.Test
       public static void TestCaptureFrameSource()
       {
          ImageViewer viewer = new ImageViewer();
-         using (Capture capture = new Capture())
+         using (VideoCapture capture = new VideoCapture())
          using (CaptureFrameSource frameSource = new CaptureFrameSource(capture))
          {
             Application.Idle += delegate(object sender, EventArgs e)
@@ -1076,7 +1076,7 @@ namespace Emgu.CV.Test
          //MCvFont font = new MCvFont(Emgu.CV.CvEnum.FontFace.HersheySimplex, 0.5, 0.5);
          using (CvTracks tracks = new CvTracks())
          using (ImageViewer viewer = new ImageViewer())
-         using (Capture capture = new Capture())
+         using (VideoCapture capture = new VideoCapture())
          using (Mat fgMask = new Mat())
          {
             //BGStatModel<Bgr> bgModel = new BGStatModel<Bgr>(capture.QueryFrame(), Emgu.CV.CvEnum.BG_STAT_TYPE.GAUSSIAN_BG_MODEL);
@@ -1168,7 +1168,7 @@ namespace Emgu.CV.Test
             return;
 
          const int MAX_CORNERS = 500;
-         Capture c = new Capture();
+         VideoCapture c = new VideoCapture();
          ImageViewer viewer = new ImageViewer();
          GpuMat oldImage = null;
          GpuMat currentImage = null;

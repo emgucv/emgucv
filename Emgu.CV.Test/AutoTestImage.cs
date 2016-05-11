@@ -1686,7 +1686,7 @@ namespace Emgu.CV.Test
          MCvPoint2D64f pt = CvInvoke.PhaseCorrelate(image1, image2, null, out response);
       }
 
-      /*
+      
       [TestAttribute]
       public void TestColorMap()
       {
@@ -1694,7 +1694,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
          CvInvoke.ApplyColorMap(image, result, CvEnum.ColorMapType.Hot);
          //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
-      }*/
+      }
 
       [TestAttribute]
       public void TestClahe()

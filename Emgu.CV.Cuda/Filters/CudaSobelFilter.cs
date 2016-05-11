@@ -23,6 +23,10 @@ namespace Emgu.CV.Cuda
       /// <summary>
       /// Create a Sobel filter.
       /// </summary>
+      /// <param name="srcDepth">The depth of the source image</param>
+      /// <param name="srcChannels">The number of channels of the source image</param>
+      /// <param name="dstDepth">The depth of the destination image</param>
+      /// <param name="dstChannels">The number of channels of the the destination image</param>
       /// <param name="dx">Order of the derivative x</param>
       /// <param name="dy">Order of the derivative y</param>
       /// <param name="ksize">Size of the extended Sobel kernel</param>

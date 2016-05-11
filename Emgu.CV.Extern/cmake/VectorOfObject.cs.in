@@ -35,7 +35,7 @@ namespace ${NAMESPACE_CS}
       {
       }
 	  
-	  internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
+	   internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
          _needDispose = needDispose;
@@ -50,16 +50,16 @@ namespace ${NAMESPACE_CS}
       {
       }
 	  
-	  /// <summary>
+	   /// <summary>
       /// Create an standard vector of ${VECTOR_NAME} with the initial values
       /// </summary>
       /// <param name="values">The initial values</param>
-	  public VectorOf${VECTOR_NAME}(params ${VECTOR_ELEMENT_CS}[] values)
+	   public VectorOf${VECTOR_NAME}(params ${VECTOR_ELEMENT_CS}[] values)
 	     : this()
-	  {
+	   {
          foreach(${VECTOR_ELEMENT_CS} v in values)
             Push(v);
-	  }
+	   }
 
       /// <summary>
       /// Get the size of the vector
@@ -80,7 +80,7 @@ namespace ${NAMESPACE_CS}
          VectorOf${VECTOR_NAME}Clear(_ptr);
       }
 	  
-	  /// <summary>
+	   /// <summary>
       /// Push a value into the standard vector
       /// </summary>
       /// <param name="value">The value to be pushed to the vector</param>
@@ -99,7 +99,7 @@ namespace ${NAMESPACE_CS}
             Push(value);
       }
 	  
-	  /// <summary>
+	   /// <summary>
       /// Get the item in the specific index
       /// </summary>
       /// <param name="index">The index</param>
@@ -123,7 +123,7 @@ namespace ${NAMESPACE_CS}
             VectorOf${VECTOR_NAME}Release(ref _ptr);
       }
 
-	  /// <summary>
+	   /// <summary>
       /// Get the pointer to cv::_InputArray
       /// </summary>
       public InputArray GetInputArray()
@@ -139,14 +139,17 @@ namespace ${NAMESPACE_CS}
          return new OutputArray( cvOutputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
       }
 
-	  /// <summary>
+	   /// <summary>
       /// Get the pointer to cv::_InputOutputArray
       /// </summary>
       public InputOutputArray GetInputOutputArray()
       {
          return new InputOutputArray( cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
       }     
-               
+      
+      /// <summary>
+      /// The size of the item in this Vector, counted as size in bytes.
+      /// </summary>
       public static int SizeOfItemInBytes
       {
          get { return VectorOf${VECTOR_NAME}SizeOfItemInBytes(); }
@@ -170,7 +173,7 @@ namespace ${NAMESPACE_CS}
          }
       }
 	  
-	  /// <summary>
+	   /// <summary>
       /// Convert the standard vector to arrays of int
       /// </summary>
       /// <returns>Arrays of int</returns>

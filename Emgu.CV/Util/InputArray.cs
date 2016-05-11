@@ -18,27 +18,84 @@ namespace Emgu.CV
    /// </summary>
    public partial class InputArray : UnmanagedObject
    {
+      /// <summary>
+      /// Input array type
+      /// </summary>
       [Flags]
       public enum Type
       {
+         /// <summary>
+         /// kind shift
+         /// </summary>
          KindShift = 16,
+         /// <summary>
+         /// Fixed type
+         /// </summary>
          FixedType = 0x8000 << KindShift,
+         /// <summary>
+         /// Fixed size
+         /// </summary>
          FixedSize = 0x4000 << KindShift,
+         /// <summary>
+         /// Kind mask
+         /// </summary>
          KindMask = 31 << KindShift,
 
+         /// <summary>
+         /// None
+         /// </summary>
          None = 0 << KindShift,
+         /// <summary>
+         /// Mat
+         /// </summary>
          Mat = 1 << KindShift,
+         /// <summary>
+         /// Matx
+         /// </summary>
          Matx = 2 << KindShift,
+         /// <summary>
+         /// StdVector
+         /// </summary>
          StdVector = 3 << KindShift,
+         /// <summary>
+         /// StdVectorVector
+         /// </summary>
          StdVectorVector = 4 << KindShift,
+         /// <summary>
+         /// StdVectorMat
+         /// </summary>
          StdVectorMat = 5 << KindShift,
+         /// <summary>
+         /// Expr
+         /// </summary>
          Expr = 6 << KindShift,
+         /// <summary>
+         /// Opengl buffer
+         /// </summary>
          OpenglBuffer = 7 << KindShift,
+         /// <summary>
+         /// Cuda Host Mem
+         /// </summary>
          CudaHostMem = 8 << KindShift,
+         /// <summary>
+         /// Cuda GpuMat
+         /// </summary>
          CudaGpuMat = 9 << KindShift,
+         /// <summary>
+         /// UMat
+         /// </summary>
          UMat = 10 << KindShift,
+         /// <summary>
+         /// StdVectorUMat
+         /// </summary>
          StdVectorUMat = 11 << KindShift,
+         /// <summary>
+         /// StdBoolVector
+         /// </summary>
          StdBoolVector = 12 << KindShift,
+         /// <summary>
+         /// StdVectorCudaGpuMat
+         /// </summary>
          StdVectorCudaGpuMat = 13 << KindShift
       }
 

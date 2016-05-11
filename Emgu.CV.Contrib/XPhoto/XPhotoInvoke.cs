@@ -8,6 +8,9 @@ using System.Drawing;
 
 namespace Emgu.CV.XPhoto
 {
+   /// <summary>
+   /// Class that contains entry points for the XPhoto module.
+   /// </summary>
    public static partial class XPhotoInvoke
    {
       static XPhotoInvoke()
@@ -66,8 +69,14 @@ namespace Emgu.CV.XPhoto
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDctDenoising(IntPtr src, IntPtr dst, double sigma, int psize);
 
+      /// <summary>
+      /// Inpaint type
+      /// </summary>
       public enum InpaintType
       {
+         /// <summary>
+         /// Shift map
+         /// </summary>
          Shiftmap = 0
       }
 

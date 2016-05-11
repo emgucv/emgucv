@@ -2772,7 +2772,7 @@ namespace Emgu.CV.Test
          String fileName = EmguAssert.GetFile("tree.avi");
          String newName = fileName.Replace("tree.avi", "树.avi");
          File.Copy(fileName, newName, true);
-         Capture capture = new Capture(EmguAssert.GetFile(newName));
+         VideoCapture capture = new VideoCapture(EmguAssert.GetFile(newName));
          int counter = 0;
          using (Mat m = new Mat())
          while (capture.Grab())
@@ -2794,7 +2794,7 @@ namespace Emgu.CV.Test
          String fileName2 = fileName.Replace("tree.avi", "tree2.avi");
          File.Copy(fileName, fileName2, true);
 
-         Capture capture1 = new Capture(fileName);
+         VideoCapture capture1 = new VideoCapture(fileName);
         
          //capture one will continute capturing all the frames.
          EventHandler captureHandle1 = delegate
@@ -2812,7 +2812,7 @@ namespace Emgu.CV.Test
 
 
          int totalFrames2 = 0;
-         Capture capture2 = new Capture(fileName2);
+         VideoCapture capture2 = new VideoCapture(fileName2);
          int counter = 0;
          //capture 2 will capture 2 frames, pause for 1 seconds, then continute;
          EventHandler captureHandle = delegate

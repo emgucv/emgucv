@@ -139,6 +139,7 @@ namespace Emgu.CV.Cuda
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The destination GpuMat</param>
       /// <param name="code">The color conversion code</param>
+      /// <param name="dcn">Number of channels in the destination image. If the parameter is 0, the number of the channels is derived automatically from src and the code .</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void CvtColor(IInputArray src, IOutputArray dst, CvEnum.ColorConversion code, int dcn = 0, Stream stream = null)
       {

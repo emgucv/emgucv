@@ -375,6 +375,10 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Similar to the C++ implementation of cv::Capture >> Mat
+      /// </summary>
+      /// <param name="m">The matrix the image will be read into.</param>
       public void Read(Mat m)
       {
          CvInvoke.cveVideoCaptureReadToMat(Ptr, m);

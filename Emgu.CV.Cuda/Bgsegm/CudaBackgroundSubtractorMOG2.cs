@@ -30,12 +30,13 @@ namespace Emgu.CV.Cuda
       /// Updates the background model
       /// </summary>
       /// <param name="frame">Next video frame.</param>
+      /// <param name="fgmask">The output forground mask</param>
       /// <param name="learningRate">The learning rate, use -1.0f for default value.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public void Update(IInputArray frame, double learningRate, IOutputArray forgroundMask, Stream stream = null)
+      public void Update(IInputArray frame,  IOutputArray fgmask, double learningRate, Stream stream = null)
       {
          using (InputArray iaFrame = frame.GetInputArray())
-         using (OutputArray oaForgroundMask = forgroundMask.GetOutputArray())
+         using (OutputArray oaForgroundMask = fgmask.GetOutputArray())
             CudaInvoke.cudaBackgroundSubtractorMOG2Apply(_ptr, iaFrame, oaForgroundMask, learningRate, stream);
       }
 

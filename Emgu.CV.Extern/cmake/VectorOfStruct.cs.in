@@ -51,7 +51,7 @@ namespace ${NAMESPACE_CS}
          Push((${VECTOR_ELEMENT_CS}[])info.GetValue("${VECTOR_NAME}Array", typeof(${VECTOR_ELEMENT_CS}[])));
       }
 	  
-	  /// <summary>
+	   /// <summary>
       /// A function used for runtime serialization of the object
       /// </summary>
       /// <param name="info">Serialization info</param>
@@ -70,7 +70,7 @@ namespace ${NAMESPACE_CS}
       {
       }
 	  
-	  internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
+	   internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
          _needDispose = needDispose;
@@ -85,11 +85,11 @@ namespace ${NAMESPACE_CS}
       {
       }
 	  
-	  /// <summary>
+	   /// <summary>
       /// Create an standard vector of ${VECTOR_NAME} with the initial values
       /// </summary>
       /// <param name="values">The initial values</param>
-	  public VectorOf${VECTOR_NAME}(${VECTOR_ELEMENT_CS}[] values)
+	   public VectorOf${VECTOR_NAME}(${VECTOR_ELEMENT_CS}[] values)
          :this()
       {
          Push(values);
@@ -109,7 +109,7 @@ namespace ${NAMESPACE_CS}
          }
       }
 	  
-	  /// <summary>
+	   /// <summary>
       /// Convert the standard vector to an array of ${VECTOR_NAME}
       /// </summary>
       /// <returns>An array of ${VECTOR_NAME}</returns>
@@ -155,7 +155,7 @@ namespace ${NAMESPACE_CS}
          }
       }
 	  
-	  /// <summary>
+	   /// <summary>
       /// Get the item in the specific index
       /// </summary>
       /// <param name="index">The index</param>
@@ -179,7 +179,7 @@ namespace ${NAMESPACE_CS}
             VectorOf${VECTOR_NAME}Release(ref _ptr);
       }
 
-	  /// <summary>
+	   /// <summary>
       /// Get the pointer to cv::_InputArray
       /// </summary>
       public InputArray GetInputArray()
@@ -187,7 +187,7 @@ namespace ${NAMESPACE_CS}
          return new InputArray( cvInputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
       }
 	  
-	  /// <summary>
+	   /// <summary>
       /// Get the pointer to cv::_OutputArray
       /// </summary>
       public OutputArray GetOutputArray()
@@ -195,7 +195,7 @@ namespace ${NAMESPACE_CS}
          return new OutputArray( cvOutputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
       }
 
-	  /// <summary>
+	   /// <summary>
       /// Get the pointer to cv::_InputOutputArray
       /// </summary>
       public InputOutputArray GetInputOutputArray()
@@ -203,9 +203,12 @@ namespace ${NAMESPACE_CS}
          return new InputOutputArray( cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
       }
       
+      /// <summary>
+      /// The size of the item in this Vector, counted as size in bytes.
+      /// </summary>
       public static int SizeOfItemInBytes
       {
-         get {return VectorOf${VECTOR_NAME}SizeOfItemInBytes(); }
+         get { return VectorOf${VECTOR_NAME}SizeOfItemInBytes(); }
       }
 	  
       internal class DebuggerProxy

@@ -68,6 +68,7 @@ namespace Emgu.CV.Cuda
       /// Create a GpuMat from the specific pointer
       /// </summary>
       /// <param name="ptr">Pointer to the unmanaged gpuMat</param>
+      /// <param name="needDispose">True if we need to call Release function to <paramref name="ptr"/> during object disposal</param>
       internal GpuMat(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
@@ -170,6 +171,10 @@ namespace Emgu.CV.Cuda
             CudaInvoke.gpuMatDownload(_ptr, oaArr, stream);
       }
 
+      /// <summary>
+      /// Convert the GpuMat to Mat
+      /// </summary>
+      /// <returns>The Mat that contains the same data as this GpuMat</returns>
       public Mat ToMat()
       {
          Mat m = new Mat();
@@ -210,7 +215,6 @@ namespace Emgu.CV.Cuda
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             CudaInvoke.gpuMatCopyTo(Ptr, oaDst, iaMask, stream);
       }
-
 
       /// <summary>
       /// This function has several different purposes and thus has several synonyms. It copies one GpuMat to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
@@ -472,12 +476,19 @@ namespace Emgu.CV.Cuda
             ConvertAll(Split(null), (m) => (IImage)m);
       }
 
+      /// <summary>
+      /// Save the GpuMat to a file
+      /// </summary>
+      /// <param name="fileName">The file name</param>
       public void Save(string fileName)
       {
          CvInvoke.Imwrite(fileName, this);
-
       }
 
+      /// <summary>
+      /// Make a clone of the GpuMat
+      /// </summary>
+      /// <returns>A clone of the GPU Mat</returns>
       public object Clone()
       {
          GpuMat clone = new GpuMat();
@@ -540,6 +551,7 @@ namespace Emgu.CV.Cuda
       /// <summary>
       /// Create a GpuMat of the specified size
       /// </summary>
+      /// <param name="mat">Pointer to the native cv::Mat</param>
       /// <param name="rows">The number of rows (height)</param>
       /// <param name="cols">The number of columns (width)</param>
       /// <param name="type">The type of GpuMat</param>
@@ -598,6 +610,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">Source GpuMat</param>
       /// <param name="dst">Destination GpuMat</param>
+      /// <param name="rtype">The depth type of the destination GpuMat</param>
       /// <param name="scale">Scale factor</param>
       /// <param name="shift">Value added to the scaled source GpuMat elements</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>      
