@@ -36,13 +36,13 @@
     <EmguCVDir>$(MSBuildThisFileDirectory)</EmguCVDir>
   </PropertyGroup>
   <Choose>
-    <!-- Windows 10 UAP (64bit) -->
+    <!-- Windows 10 UWP (64bit) -->
     <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x64'">
 	<PropertyGroup>
-        <EmguCVLinkTarget>Windows 10 UAP (64bit)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\windows10_x64\cvextern.dll</EmguCVNativeFile>
+        <EmguCVLinkTarget>Windows 10 UWP (64bit)</EmguCVLinkTarget>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\UWP_x64\cvextern.dll</EmguCVNativeFile>
 		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)windows10_x64 </EmguCVDeployMessage>
+      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_x64 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
@@ -51,13 +51,13 @@
         </Content>
       </ItemGroup>
     </When>
-    <!-- Windows 10 UAP (32bit) -->
+    <!-- Windows 10 UWP (32bit) -->
     <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x86'">
 		<PropertyGroup>
-        <EmguCVLinkTarget>Windows 10 UAP (32bit)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\windows10_x86\cvextern.dll</EmguCVNativeFile>
+        <EmguCVLinkTarget>Windows 10 UWP (32bit)</EmguCVLinkTarget>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\UWP_x86\cvextern.dll</EmguCVNativeFile>
 		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)windows10_x86 </EmguCVDeployMessage>
+      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_x86 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
@@ -66,13 +66,13 @@
         </Content>
       </ItemGroup>
     </When>
-    <!-- Windows 10 UAP (ARM) -->
+    <!-- Windows 10 UWP (ARM) -->
     <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM'">
 	<PropertyGroup>
-        <EmguCVLinkTarget>Windows 10 UAP (ARM)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\windows10_arm\cvextern.dll</EmguCVNativeFile>
+        <EmguCVLinkTarget>Windows 10 UWP (ARM)</EmguCVLinkTarget>
+		<EmguCVNativeFile>$(OpenCVBinaryDir)\UWP_arm\cvextern.dll</EmguCVNativeFile>
 		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)windows10_arm </EmguCVDeployMessage>
+      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_arm </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
