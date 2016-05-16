@@ -3034,6 +3034,13 @@ namespace Emgu.CV.Test
       }
 #endif
 
+      [Test]
+      public void TestGetTextSize()
+      {
+         int baseline = 0; 
+         Size s = CvInvoke.GetTextSize("Hello world", FontFace.HersheyPlain, 16, 1, ref baseline);
+      }
+
 #if !NETFX_CORE
       [Test]
       public void TestERFilter()

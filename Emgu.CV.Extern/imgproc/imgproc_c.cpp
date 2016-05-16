@@ -485,6 +485,12 @@ void cvePutText(cv::_InputOutputArray* img, cv::String* text, CvPoint* org, int 
    cv::putText(*img, *text, *org, fontFace, fontScale, *color, thickness, lineType, bottomLeftOrigin);
 }
 
+void cveGetTextSize(cv::String* text, int fontFace, double fontScale, int thickness, int* baseLine, CvSize* size)
+{
+   cv::Size s = cv::getTextSize(*text, fontFace, fontScale, thickness, baseLine);
+   *size = s;
+}
+
 void cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift)
 {
    cv::fillConvexPoly(*img, *points, *color, lineType, shift);

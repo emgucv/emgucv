@@ -2257,21 +2257,25 @@ namespace Emgu.CV
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool bottomLeftOrigin);
 
-      /*
       /// <summary>
-      /// Calculates the binding rectangle for the given text string when a specified font is used
+      /// Calculates the width and height of a text string.
       /// </summary>
-      /// <param name="textString">Input string</param>
-      /// <param name="font">The font structure</param>
-      /// <param name="textSize">Resultant size of the text string. Height of the text does not include the height of character parts that are below the baseline</param>
-      /// <param name="baseline">y-coordinate of the baseline relatively to the bottom-most text point</param>
-      [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void cvGetTextSize(
-         [MarshalAs(CvInvoke.StringMarshalType)] 
-         String textString, 
-         ref MCvFont font, 
-         ref Size textSize, 
-         ref int baseline);*/
+      /// <param name="text">Input text string.</param>
+      /// <param name="fontFace">Font to use</param>
+      /// <param name="fontScale">Font scale factor that is multiplied by the font-specific base size.</param>
+      /// <param name="thickness">Thickness of lines used to render the text. </param>
+      /// <param name="baseLine">Y-coordinate of the baseline relative to the bottom-most text point.</param>
+      /// <returns>The size of a box that contains the specified text.</returns>
+      public static Size GetTextSize(String text, CvEnum.FontFace fontFace, double fontScale, int thickness, ref int baseLine)
+      {
+         Size s = new Size();
+         using (CvString textStr = new CvString(text))
+            cveGetTextSize(textStr, fontFace, fontScale, thickness, ref baseLine, ref s);
+         return s;
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveGetTextSize(IntPtr text, CvEnum.FontFace fontFace, double fontScale, int thickness, ref int baseLine, ref Size size);
+
       #endregion
 
       /*
