@@ -131,3 +131,72 @@ void oclKernelRelease(cv::ocl::Kernel** kernel)
    delete *kernel;
    *kernel = 0;
 }
+int oclKernelSetImage2D(cv::ocl::Kernel* kernel, int i, cv::ocl::Image2D* image2D)
+{
+   return kernel->set(i, *image2D);
+}
+int oclKernelSetUMat(cv::ocl::Kernel* kernel, int i, cv::UMat* umat)
+{
+   return kernel->set(i, *umat);
+}
+int oclKernelSet(cv::ocl::Kernel* kernel, int i, void* value, int size)
+{
+   return kernel->set(i, value, static_cast<size_t>(size));
+}
+int oclKernelSetKernelArg(cv::ocl::Kernel* kernel, int i, cv::ocl::KernelArg* kernelArg)
+{
+   return kernel->set(i, *kernelArg);
+}
+bool oclKernelRun(cv::ocl::Kernel* kernel, int dims, size_t* globalsize, size_t* localsize, bool sync, cv::ocl::Queue* q)
+{
+   return kernel->run(dims, globalsize, localsize, sync, q ? *q : cv::ocl::Queue());
+}
+//----------------------------------------------------------------------------
+//
+//  OclImage2D
+//
+//----------------------------------------------------------------------------
+cv::ocl::Image2D* oclImage2DFromUMat(cv::UMat* src, bool norm, bool alias)
+{
+   cv::ocl::Image2D* img2d = new cv::ocl::Image2D(*src, norm, alias);
+   return img2d;
+}
+void oclImage2DRelease(cv::ocl::Image2D** image2D)
+{
+   delete *image2D;
+   *image2D = 0;
+}
+
+//----------------------------------------------------------------------------
+//
+//  OclKernelArg
+//
+//----------------------------------------------------------------------------
+cv::ocl::KernelArg* oclKernelArgCreate(int flags, cv::UMat* m, int wscale, int iwscale, const void* obj, size_t sz)
+{
+   return new cv::ocl::KernelArg(flags, m, wscale, iwscale, obj, sz);
+}
+void oclKernelArgRelease(cv::ocl::KernelArg** k)
+{
+   delete *k;
+   *k = 0;
+}
+
+//----------------------------------------------------------------------------
+//
+//  OclQueue
+//
+//----------------------------------------------------------------------------
+cv::ocl::Queue* oclQueueCreate()
+{
+   return new cv::ocl::Queue();
+}
+void oclQueueFinish(cv::ocl::Queue* queue)
+{
+   queue->finish();
+}
+void oclQueueRelease(cv::ocl::Queue** queue)
+{
+   delete *queue;
+   *queue = 0;
+}

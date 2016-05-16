@@ -174,10 +174,10 @@ void cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask)
    mat->setTo(*value, mask ? *mask : (cv::InputArray) cv::noArray());
 }
 
-cv::UMat* cvMatGetUMat(cv::Mat* mat, int access)
+cv::UMat* cvMatGetUMat(cv::Mat* mat, int access, cv::UMatUsageFlags usageFlags)
 {
    cv::UMat* result = new cv::UMat();
-   cv::UMat tmp = mat->getUMat(access);
+   cv::UMat tmp = mat->getUMat(access, usageFlags);
    cv::swap(*result, tmp);
    return result;
 }

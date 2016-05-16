@@ -199,6 +199,7 @@ namespace Emgu.CV.Cuda
       /// <param name="c">The sum of the two matrix</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use null if not needed</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      /// <param name="depthType">Optional depth of the output array.</param>
       public static void Add(IInputArray a, IInputArray b, IOutputArray c, IInputArray mask = null, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
@@ -218,6 +219,7 @@ namespace Emgu.CV.Cuda
       /// <param name="c">The result of a - b</param>
       /// <param name="mask">The optional mask that is used to select a subarray. Use null if not needed</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      /// <param name="depthType">Optional depth of the output array.</param>
       public static void Subtract(IInputArray a, IInputArray b, IOutputArray c, IInputArray mask = null, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
@@ -237,6 +239,7 @@ namespace Emgu.CV.Cuda
       /// <param name="c">The element-wise multiplication of the two GpuMat</param>
       /// <param name="scale">The scale</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      /// <param name="depthType">Optional depth of the output array.</param>
       public static void Multiply(IInputArray a, IInputArray b, IOutputArray c, double scale = 1.0, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
@@ -255,6 +258,7 @@ namespace Emgu.CV.Cuda
       /// <param name="c">The element-wise quotient of the two GpuMat</param>
       /// <param name="scale">The scale</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      /// <param name="depthType">Optional depth of the output array.</param>
       public static void Divide(IInputArray a, IInputArray b, IOutputArray c, double scale = 1.0, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaA = a.GetInputArray())
@@ -275,6 +279,7 @@ namespace Emgu.CV.Cuda
       /// <param name="gamma">The constant to be added</param>
       /// <param name="dst">The result</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      /// <param name="depthType">Optional depth of the output array.</param>
       public static void AddWeighted(IInputArray src1, double alpha, IInputArray src2, double beta, double gamma, IOutputArray dst, DepthType depthType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaSrc1 = src1.GetInputArray())
@@ -588,7 +593,14 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaMinMaxLoc(IntPtr gpuMat, ref double minVal, ref double maxVal, ref Point minLoc, ref Point maxLoc, IntPtr mask);
 
-
+      /// <summary>
+      /// Finds global minimum and maximum matrix elements and returns their values with locations.
+      /// </summary>
+      /// <param name="src">Single-channel source image.</param>
+      /// <param name="minMaxVals">The output min and max values</param>
+      /// <param name="loc">The ouput min and max locations</param>
+      /// <param name="mask">Optional mask to select a sub-matrix.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       public static void FindMinMaxLoc(IInputArray src, IOutputArray minMaxVals, IOutputArray loc,
          IInputArray mask = null, Stream stream = null)
       {
@@ -664,6 +676,13 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cudaNorm2(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NormType normType);
 
+      /// <summary>
+      /// Returns the norm of a matrix.
+      /// </summary>
+      /// <param name="src">Source matrix. Any matrices except 64F are supported.</param>
+      /// <param name="normType">Norm type. NORM_L1 , NORM_L2 , and NORM_INF are supported for now.</param>
+      /// <param name="mask">optional operation mask; it must have the same size as src1 and CV_8UC1 type.</param>
+      /// <returns>The norm of a matrix</returns>
       public static double Norm(IInputArray src, Emgu.CV.CvEnum.NormType normType, IInputArray mask = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -766,7 +785,17 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaCountNonZero2(IntPtr src, IntPtr dst, IntPtr stream);
 
-
+      /// <summary>
+      /// Normalizes the norm or value range of an array.
+      /// </summary>
+      /// <param name="src">Input array.</param>
+      /// <param name="dst">Output array of the same size as src .</param>
+      /// <param name="alpha">Norm value to normalize to or the lower range boundary in case of the range normalization.</param>
+      /// <param name="beta">Upper range boundary in case of the range normalization; it is not used for the norm normalization.</param>
+      /// <param name="normType">Normalization type ( NORM_MINMAX , NORM_L2 , NORM_L1 or NORM_INF ).</param>
+      /// <param name="depthType">Optional depth of the output array.</param>
+      /// <param name="mask">Optional operation mask.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       public static void Normalize(IInputArray src, IOutputArray dst, double alpha, double beta, NormType normType,
          CvEnum.DepthType depthType, IInputArray mask = null, Stream stream = null)
       {
@@ -785,10 +814,11 @@ namespace Emgu.CV.Cuda
       /// Reduces GpuMat to a vector by treating the GpuMat rows/columns as a set of 1D vectors and performing the specified operation on the vectors until a single row/column is obtained. 
       /// </summary>
       /// <param name="mtx">The input GpuMat</param>
-      /// <param name="vec">The destination GpuMat. Must be preallocated 1 x n matrix and have the same number of channels as the input GpuMat</param>
-      /// <param name="dim">The dimension index along which the matrix is reduce.</param>
+      /// <param name="vec">Destination vector. Its size and type is defined by dim and dtype parameters</param>
+      /// <param name="dim">Dimension index along which the matrix is reduced. 0 means that the matrix is reduced to a single row. 1 means that the matrix is reduced to a single column.</param>
       /// <param name="reduceOp">The reduction operation type</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>      
+      /// <param name="dType">Optional depth of the output array.</param>
       public static void Reduce(IInputArray mtx, IOutputArray vec, CvEnum.ReduceDimension dim, CvEnum.ReduceType reduceOp, DepthType dType = DepthType.Default, Stream stream = null)
       {
          using (InputArray iaMtx = mtx.GetInputArray())

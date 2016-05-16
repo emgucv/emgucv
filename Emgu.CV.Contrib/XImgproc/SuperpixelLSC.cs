@@ -45,7 +45,11 @@ namespace Emgu.CV.Ximgproc
             XimgprocInvoke.cveSuperpixelLSCGetLabels(_ptr, oaLabels);
       }
 
-
+      /// <summary>
+      /// Returns the mask of the superpixel segmentation stored in SuperpixelLSC object.
+      /// </summary>
+      /// <param name="image">Return: CV_8U1 image mask where -1 indicates that the pixel is a superpixel border, and 0 otherwise.</param>
+      /// <param name="thickLine">If false, the border is only one pixel wide, otherwise all pixels at the border are masked.</param>
       public void GetLabelContourMask(IOutputArray image, bool thickLine = true)
       {
          using (OutputArray oaImage = image.GetOutputArray())

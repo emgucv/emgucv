@@ -154,8 +154,16 @@ namespace Emgu.CV.XImgproc
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDtFilter(IntPtr guide, IntPtr src, IntPtr dst, double sigmaSpatial, double sigmaColor, DtFilterType mode, int numIters);
 
-
-      public static void NiBlackThreshold(IInputArray src, IOutputArray dst, double maxValue, int type, int blockSize,
+      /// <summary>
+      /// Niblack threshold
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="dst">The output result</param>
+      /// <param name="type">Threshold type</param>
+      /// <param name="blockSize">Block size</param>
+      /// <param name="delta">delta</param>
+      /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
+      public static void NiBlackThreshold(IInputArray src, IOutputArray dst, double maxValue, ThresholdType type, int blockSize,
          double delta)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -165,7 +173,7 @@ namespace Emgu.CV.XImgproc
          }
       }
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveNiBlackThreshold(IntPtr src, IntPtr dst, double maxValue, int type, int blockSize, double delta);
+      private static extern void cveNiBlackThreshold(IntPtr src, IntPtr dst, double maxValue, ThresholdType type, int blockSize, double delta);
 
       /// <summary>
       /// Computes the estimated covariance matrix of an image using the sliding window forumlation.

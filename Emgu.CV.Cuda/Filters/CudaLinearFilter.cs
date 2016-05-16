@@ -27,6 +27,10 @@ namespace Emgu.CV.Cuda
       /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
       /// <param name="borderType">Border type. Use REFLECT101 as default.</param>
       /// <param name="borderValue">The border value</param>
+      /// <param name="srcDepth">The depth type of the source image</param>
+      /// <param name="srcChannels">The number of channels in the source image</param>
+      /// <param name="dstDepth">The depth type of the dest image</param>
+      /// <param name="dstChannels">The number of channels in the dest image</param>
       public CudaLinearFilter(
          DepthType srcDepth, int srcChannels,
          DepthType dstDepth, int dstChannels,

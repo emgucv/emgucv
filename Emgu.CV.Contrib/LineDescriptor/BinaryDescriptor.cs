@@ -19,6 +19,9 @@ namespace Emgu.CV.LineDescriptor
    /// </summary>
    public class BinaryDescriptor : UnmanagedObject
    {
+      /// <summary>
+      /// Default constructor
+      /// </summary>
       public BinaryDescriptor()
       {
          _ptr = LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorCreate();
@@ -47,6 +50,9 @@ namespace Emgu.CV.LineDescriptor
          LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorCompute(_ptr, image, keylines, descriptors, returnFloatDescr);
       }
 
+      /// <summary>
+      /// Release unmanaged memory associated with this binary descriptor
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
@@ -54,6 +60,9 @@ namespace Emgu.CV.LineDescriptor
       }
    }
 
+   /// <summary>
+   /// Entry points for LineDescriptor module
+   /// </summary>
    public static partial class LineDescriptorInvoke
    {
       static LineDescriptorInvoke()

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Emgu.Util;
 using System.Runtime.InteropServices;
@@ -49,6 +50,71 @@ namespace Emgu.CV
          if (_ptr != IntPtr.Zero)
             OclInvoke.oclKernelRelease(ref _ptr);
       }
+
+      public int Set(int i, OclImage2D image2d)
+      {
+         return OclInvoke.oclKernelSetImage2D(_ptr, i, image2d);
+      }
+
+      public int Set(int i, UMat umat)
+      {
+         return OclInvoke.oclKernelSetUMat(_ptr, i, umat);
+      }
+
+      private int _sizeOfInt = Toolbox.SizeOf<int>();
+      public int Set(int i, ref int value)
+      {
+         return OclInvoke.oclKernelSetInt(_ptr, i, ref value, _sizeOfInt);
+      }
+
+      private static int _sizeOfFloat = Toolbox.SizeOf<float>();
+      public int Set(int i, ref float value)
+      {
+         return OclInvoke.oclKernelSetFloat(_ptr, i, ref value, _sizeOfFloat);
+      }
+
+      private static int _sizeOfDouble = Toolbox.SizeOf<double>();
+      public int Set(int i, ref double value)
+      {
+         return OclInvoke.oclKernelSetDouble(_ptr, i, ref value, _sizeOfDouble);
+      }
+
+      public int Set(int i, OclKernelArg kernelArg)
+      {
+         return OclInvoke.oclKernelSetKernelArg(_ptr, i, kernelArg);
+      }
+
+      public int Set(int i, IntPtr data, int size)
+      {
+         return OclInvoke.oclKernelSet(_ptr, i, data, size);
+      }
+
+      public bool Run(IntPtr[] globalsize, IntPtr[] localsize, bool sync, OclQueue q = null)
+      {
+         Debug.Assert(localsize == null || globalsize.Length == localsize.Length, "The dimension of global size do not match the dimension of local size.");
+         GCHandle gHandle = GCHandle.Alloc(globalsize, GCHandleType.Pinned);
+         GCHandle lHandle;
+         
+         if (localsize != null)
+            lHandle = GCHandle.Alloc(localsize, GCHandleType.Pinned);
+         else
+         {
+            lHandle = new GCHandle();
+         }
+         try
+         {
+            return OclInvoke.oclKernelRun(
+               _ptr, globalsize.Length, gHandle.AddrOfPinnedObject(),     
+               localsize == null ? IntPtr.Zero : lHandle.AddrOfPinnedObject(), sync, q);
+         }
+         finally
+         {
+            gHandle.Free();
+            if (localsize != null)
+               lHandle.Free();
+         }
+         
+      }
    }
 
    /// <summary>
@@ -65,5 +131,32 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclKernelRelease(ref IntPtr oclKernel);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int oclKernelSetImage2D(IntPtr kernel, int i, IntPtr image2D);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int oclKernelSetUMat(IntPtr kernel, int i, IntPtr umat);
+
+      [DllImport(CvInvoke.ExternLibrary, EntryPoint = "oclKernelSet", CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int oclKernelSetFloat(IntPtr kernel, int i, ref float value, int size);
+      [DllImport(CvInvoke.ExternLibrary, EntryPoint = "oclKernelSet", CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int oclKernelSetInt(IntPtr kernel, int i, ref int value, int size);
+      [DllImport(CvInvoke.ExternLibrary, EntryPoint = "oclKernelSet", CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int oclKernelSetDouble(IntPtr kernel, int i, ref double value, int size);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int oclKernelSet(IntPtr kernel, int i, IntPtr value, int size);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int oclKernelSetKernelArg(IntPtr kernel, int i, IntPtr kernelArg);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool oclKernelRun(
+         IntPtr kernel, int dims, IntPtr globalsize, IntPtr localsize, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool sync, 
+         IntPtr q);
+
    }
 }

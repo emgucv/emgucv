@@ -53,16 +53,34 @@ namespace Emgu.CV.LineDescriptor
       /// Lines's extremes in original image 
       /// </summary>
       public float StartPointX;
+      /// <summary>
+      /// Lines's extremes in original image 
+      /// </summary>
       public float StartPointY;
+      /// <summary>
+      /// Lines's extremes in original image 
+      /// </summary>
       public float EndPointX;
+      /// <summary>
+      /// Lines's extremes in original image 
+      /// </summary>
       public float EndPointY;
 
       /// <summary>
       /// Line's extremes in image it was extracted from
       /// </summary>
       public float SPointInOctaveX;
+      /// <summary>
+      /// Line's extremes in image it was extracted from
+      /// </summary>
       public float SPointInOctaveY;
+      /// <summary>
+      /// Line's extremes in image it was extracted from
+      /// </summary>
       public float EPointInOctaveX;
+      /// <summary>
+      /// Line's extremes in image it was extracted from
+      /// </summary>
       public float EPointInOctaveY;
 
       /// <summary>

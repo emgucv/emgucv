@@ -148,8 +148,10 @@ namespace Emgu.CV
       }
 
 #if !(__IOS__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
-
-
+      /// <summary>
+      /// Get the GpuMat from the input array
+      /// </summary>
+      /// <returns>The GpuMat</returns>
       public Cuda.GpuMat GetGpuMat()
       {
          Cuda.GpuMat m = new Cuda.GpuMat();

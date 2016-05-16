@@ -87,3 +87,9 @@ double cveArucoCalibrateCameraAruco(
       *cameraMatrix, *distCoeffs, rvecs ? *rvecs : (cv::OutputArrayOfArrays) cv::noArray(),
       tvecs ? *tvecs : (cv::OutputArrayOfArrays) cv::noArray(), flags, *criteria);
 }
+
+void cveArucoDetectorParametersGetDefault(cv::aruco::DetectorParameters* parameters)
+{
+   cv::aruco::DetectorParameters p;
+   memcpy(parameters, &p, sizeof(cv::aruco::DetectorParameters));
+}

@@ -104,6 +104,9 @@ namespace Emgu.CV.Aruco
          DictArucoOriginal
       };
 
+      /// <summary>
+      /// Release the unmanaged resource
+      /// </summary>
       protected override void DisposeObject()
       {
          //no need to release any object here.

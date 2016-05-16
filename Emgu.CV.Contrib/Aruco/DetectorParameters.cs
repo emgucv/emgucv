@@ -99,5 +99,16 @@ namespace Emgu.CV.Aruco
       /// error correction rate respect to the maximun error correction capability for each dictionary. (default 0.6).
       /// </summary>
       public double ErrorCorrectionRate;
+
+      /// <summary>
+      /// Get the detector parameters with default values
+      /// </summary>
+      /// <returns>The default detector parameters</returns>
+      public static DetectorParameters GetDefault()
+      {
+         DetectorParameters p = new DetectorParameters();
+         ArucoInvoke.cveArucoDetectorParametersGetDefault(ref p);
+         return p;
+      }
    }
 }

@@ -38,11 +38,11 @@
   <Choose>
     <!-- Windows 10 UWP (64bit) -->
     <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x64'">
-	<PropertyGroup>
+      <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (64bit)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\UWP_x64\cvextern.dll</EmguCVNativeFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_x64 </EmguCVDeployMessage>
+        <EmguCVNativeFile>$(OpenCVBinaryDir)\UWP_x64\cvextern.dll</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_x64 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
@@ -53,11 +53,11 @@
     </When>
     <!-- Windows 10 UWP (32bit) -->
     <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x86'">
-		<PropertyGroup>
+      <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (32bit)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\UWP_x86\cvextern.dll</EmguCVNativeFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_x86 </EmguCVDeployMessage>
+        <EmguCVNativeFile>$(OpenCVBinaryDir)\UWP_x86\cvextern.dll</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_x86 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
@@ -68,11 +68,11 @@
     </When>
     <!-- Windows 10 UWP (ARM) -->
     <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM'">
-	<PropertyGroup>
+      <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (ARM)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\UWP_arm\cvextern.dll</EmguCVNativeFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_arm </EmguCVDeployMessage>
+        <EmguCVNativeFile>$(OpenCVBinaryDir)\UWP_arm\cvextern.dll</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_arm </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
@@ -81,14 +81,13 @@
         </Content>
       </ItemGroup>
     </When>
-  
     <!-- Windows store 8.1 (64bit) -->
     <When Condition="'$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x64' AND  '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectTypeGuids)'!='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
-	<PropertyGroup>
+      <PropertyGroup>
         <EmguCVLinkTarget>Windows Store 8.1 (64bit)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1_x64\cvextern.dll</EmguCVNativeFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)store81_x64 </EmguCVDeployMessage>
+        <EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1_x64\cvextern.dll</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)store81_x64 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
@@ -99,11 +98,11 @@
     </When>
     <!-- Windows store 8.1 (32bit) -->
     <When Condition="'$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86' AND  '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectTypeGuids)'!='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
-		<PropertyGroup>
+      <PropertyGroup>
         <EmguCVLinkTarget>Windows Store 8.1 (32bit)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1_x86\cvextern.dll</EmguCVNativeFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)store81_x86 </EmguCVDeployMessage>
+        <EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1_x86\cvextern.dll</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)store81_x86 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
@@ -114,11 +113,11 @@
     </When>
     <!-- Windows phone 8.1 (ARM) -->
     <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')AND '$(Platform)'=='ARM'">
-	<PropertyGroup>
+      <PropertyGroup>
         <EmguCVLinkTarget>Windows Phone 8.1 (ARM)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1_arm\cvextern.dll</EmguCVNativeFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)phone81_arm </EmguCVDeployMessage>
+        <EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1_arm\cvextern.dll</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)phone81_arm </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
@@ -128,13 +127,12 @@
       </ItemGroup>
     </When>
     <!-- Windows phone 8.1 (x86) -->
-    <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')
-	AND '$(Platform)'=='x86'">
-	<PropertyGroup>
+    <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')&#xD;&#xA;	AND '$(Platform)'=='x86'">
+      <PropertyGroup>
         <EmguCVLinkTarget>Windows Phone 8.1 (x86)</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1_x86\cvextern.dll</EmguCVNativeFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)phone81_x86 </EmguCVDeployMessage>
+        <EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1_x86\cvextern.dll</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)phone81_x86 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
@@ -146,16 +144,16 @@
     <!-- IOS -->
     <!-- IOS library project -->
     <When Condition="(('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(Platform)'=='iPhone' OR '$(Platform)'=='iPhoneSimulator') AND '$(OutputType)' != 'Exe')">
-	  <PropertyGroup>
+      <PropertyGroup>
         <EmguCVLinkTarget>Xamarin iOS Native Binding Library</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(EmguCVDir)PInvoke\iOS\libemgucv.a</EmguCVNativeFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
-		<EmguCVLinkWithFile>$(EmguCVDir)PInvoke\iOS\libemgucv.linkwith.cs</EmguCVLinkWithFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVLinkWithFile)')"> This package do not contain necessary file for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVLinkWithFile) </EmguCVErrorMessage>
+        <EmguCVNativeFile>$(EmguCVDir)PInvoke\iOS\libemgucv.a</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
+        <EmguCVLinkWithFile>$(EmguCVDir)PInvoke\iOS\libemgucv.linkwith.cs</EmguCVLinkWithFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVLinkWithFile)')"> This package do not contain necessary file for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVLinkWithFile) </EmguCVErrorMessage>
       </PropertyGroup>
       <ItemGroup>
-        <ObjcBindingNativeLibrary Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')"/>
+        <ObjcBindingNativeLibrary Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')" />
       </ItemGroup>
       <ItemGroup>
         <Compile Include="$(EmguCVLinkWithFile)" Condition="Exists('$(EmguCVLinkWithFile)')">
@@ -164,47 +162,41 @@
       </ItemGroup>
     </When>
     <!-- IOS application (Note: do not work for Xamarin iOS for Visual Studio) -->
-	<When Condition="(('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(Platform)'=='iPhone' OR '$(Platform)'=='iPhoneSimulator') AND '$(OutputType)' == 'Exe')">
+    <When Condition="(('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(Platform)'=='iPhone' OR '$(Platform)'=='iPhoneSimulator') AND '$(OutputType)' == 'Exe')">
       <PropertyGroup>
-	    <EmguCVErrorMessage Condition="'$(BuildingInsideVisualStudio)'=='True'"> Direct reference of Emgu CV for Xamarin iOS is only available with Xamarin Studio on Mac. When using Emgu CV in Visual Studio with Xamarin iOS plug in, please add the Emgu.CV.iOS.World reference instead.</EmguCVErrorMessage>
-	    <EmguCVLinkTarget>Xamarin iOS App</EmguCVLinkTarget>
-		<EmguCVNativeFile>$(EmguCVDir)PInvoke\iOS\libemgucv.a</EmguCVNativeFile>
-		<EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-      <MtouchExtraArgs>$(MtouchExtraArgs) -cxx -gcc_flags "-L$(EmguCVDir)PInvoke\iOS\ -lemgucv -framework Foundation -framework Accelerate -framework CoreFoundation -framework CoreGraphics -framework AssetsLibrary -framework AVFoundation -framework CoreImage -framework CoreMedia -framework CoreVideo -framework QuartzCore -framework ImageIO"</MtouchExtraArgs>
-      <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
+        <EmguCVErrorMessage Condition="'$(BuildingInsideVisualStudio)'=='True'"> Direct reference of Emgu CV for Xamarin iOS is only available with Xamarin Studio on Mac. When using Emgu CV in Visual Studio with Xamarin iOS plug in, please add the Emgu.CV.iOS.World reference instead.</EmguCVErrorMessage>
+        <EmguCVLinkTarget>Xamarin iOS App</EmguCVLinkTarget>
+        <EmguCVNativeFile>$(EmguCVDir)PInvoke\iOS\libemgucv.a</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <MtouchExtraArgs>$(MtouchExtraArgs) -cxx -gcc_flags "-L$(EmguCVDir)PInvoke\iOS\ -lemgucv -framework Foundation -framework Accelerate -framework CoreFoundation -framework CoreGraphics -framework AssetsLibrary -framework AVFoundation -framework CoreImage -framework CoreMedia -framework CoreVideo -framework QuartzCore -framework ImageIO"</MtouchExtraArgs>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
       </PropertyGroup>
     </When>
     <!-- Android -->
     <When Condition="('$(AndroidSupportedAbis)'!='') OR '$(ProjectTypeGuids)'=='{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
-	  <PropertyGroup>
+      <PropertyGroup>
         <EmguCVLinkTarget Condition="('$(AndroidApplication)'=='True' OR '$(AndroidApplication)'=='true')">Xamarin Android App</EmguCVLinkTarget>
-		<EmguCVLinkTarget Condition="!('$(AndroidApplication)'=='True' OR '$(AndroidApplication)'=='true')">Xamarin Android Library</EmguCVLinkTarget>
-		
-		<EmguCVNativeArmeabi>$(EmguCVDir)..\libs\armeabi\libcvextern.so</EmguCVNativeArmeabi>
-		<EmguCVBuildAndroidArmeabi Condition="$(AndroidSupportedAbis.Contains('armeabi%3')) OR $(AndroidSupportedAbis.EndsWith('armeabi')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='armeabi')">True</EmguCVBuildAndroidArmeabi>
-		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND !Exists('$(EmguCVNativeArmeabi)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi is targeted, but file $(EmguCVNativeArmeabi) is missing.</EmguCVErrorMessage>
-		<EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND Exists('$(EmguCVNativeArmeabi)')">$(EmguCVDeployMessage)armeabi </EmguCVDeployMessage>
-      
-		<EmguCVNativeArmeabiv7a>$(EmguCVDir)..\libs\armeabi-v7a\libcvextern.so</EmguCVNativeArmeabiv7a>
-		<EmguCVBuildAndroidArmeabiv7a Condition="$(AndroidSupportedAbis.Contains('armeabi-v7a')) OR $(AndroidSupportedAbis.EndsWith('armeabi-v7a')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='armeabi-v7a')">True</EmguCVBuildAndroidArmeabiv7a>
-		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND !Exists('$(EmguCVNativeArmeabiv7a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi-v7a is targeted, but file $(EmguCVNativeArmeabiv7a) is missing.</EmguCVErrorMessage>
-		<EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND Exists('$(EmguCVNativeArmeabiv7a)')">$(EmguCVDeployMessage)armeabi-v7a </EmguCVDeployMessage>
-      
-		<EmguCVNativeArm64v8a>$(EmguCVDir)..\libs\arm64-v8a\libcvextern.so</EmguCVNativeArm64v8a>
-		<EmguCVBuildAndroidArm64v8a Condition="$(AndroidSupportedAbis.Contains('arm64-v8a%3')) OR $(AndroidSupportedAbis.EndsWith('arm64-v8a')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU')  OR ('$(Platform)'=='arm64-v8a')">True</EmguCVBuildAndroidArm64v8a>
-		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND !Exists('$(EmguCVNativeArm64v8a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Arm64-v8a is targeted, but file $(EmguCVNativeArm64v8a) is missing.</EmguCVErrorMessage>
-		<EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND Exists('$(EmguCVNativeArm64v8a)')">$(EmguCVDeployMessage)arm64-v8a </EmguCVDeployMessage>
-      
-		<EmguCVNativex86>$(EmguCVDir)..\libs\x86\libcvextern.so</EmguCVNativex86>
-		<EmguCVBuildAndroidx86 Condition="$(AndroidSupportedAbis.Contains('x86%3')) OR $(AndroidSupportedAbis.EndsWith('x86')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='x86')">True</EmguCVBuildAndroidx86>
-		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidx86)'=='True' AND !Exists('$(EmguCVNativex86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86 is targeted, but file $(EmguCVNativex86) is missing.</EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidx86)'=='True' AND Exists('$(EmguCVNativex86)')">$(EmguCVDeployMessage)x86 </EmguCVDeployMessage>
-		
-		<EmguCVNativex8664>$(EmguCVDir)..\libs\x86_64\libcvextern.so</EmguCVNativex8664>
-		<EmguCVBuildAndroidx8664 Condition="$(AndroidSupportedAbis.Contains('x86_64%3')) OR $(AndroidSupportedAbis.EndsWith('x86_64')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='x86_64')">True</EmguCVBuildAndroidx8664>
-		<EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND !Exists('$(EmguCVNativex8664)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86_64 is targeted, but file $(EmguCVNativex8664) is missing.</EmguCVErrorMessage>
-      <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND Exists('$(EmguCVNativex8664)')">$(EmguCVDeployMessage)x86_64 </EmguCVDeployMessage>
-      
+        <EmguCVLinkTarget Condition="!('$(AndroidApplication)'=='True' OR '$(AndroidApplication)'=='true')">Xamarin Android Library</EmguCVLinkTarget>
+        <EmguCVNativeArmeabi>$(EmguCVDir)..\libs\armeabi\libcvextern.so</EmguCVNativeArmeabi>
+        <EmguCVBuildAndroidArmeabi Condition="$(AndroidSupportedAbis.Contains('armeabi%3')) OR $(AndroidSupportedAbis.EndsWith('armeabi')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='armeabi')">True</EmguCVBuildAndroidArmeabi>
+        <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND !Exists('$(EmguCVNativeArmeabi)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi is targeted, but file $(EmguCVNativeArmeabi) is missing.</EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND Exists('$(EmguCVNativeArmeabi)')">$(EmguCVDeployMessage)armeabi </EmguCVDeployMessage>
+        <EmguCVNativeArmeabiv7a>$(EmguCVDir)..\libs\armeabi-v7a\libcvextern.so</EmguCVNativeArmeabiv7a>
+        <EmguCVBuildAndroidArmeabiv7a Condition="$(AndroidSupportedAbis.Contains('armeabi-v7a')) OR $(AndroidSupportedAbis.EndsWith('armeabi-v7a')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='armeabi-v7a')">True</EmguCVBuildAndroidArmeabiv7a>
+        <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND !Exists('$(EmguCVNativeArmeabiv7a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi-v7a is targeted, but file $(EmguCVNativeArmeabiv7a) is missing.</EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND Exists('$(EmguCVNativeArmeabiv7a)')">$(EmguCVDeployMessage)armeabi-v7a </EmguCVDeployMessage>
+        <EmguCVNativeArm64v8a>$(EmguCVDir)..\libs\arm64-v8a\libcvextern.so</EmguCVNativeArm64v8a>
+        <EmguCVBuildAndroidArm64v8a Condition="$(AndroidSupportedAbis.Contains('arm64-v8a%3')) OR $(AndroidSupportedAbis.EndsWith('arm64-v8a')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU')  OR ('$(Platform)'=='arm64-v8a')">True</EmguCVBuildAndroidArm64v8a>
+        <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND !Exists('$(EmguCVNativeArm64v8a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Arm64-v8a is targeted, but file $(EmguCVNativeArm64v8a) is missing.</EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND Exists('$(EmguCVNativeArm64v8a)')">$(EmguCVDeployMessage)arm64-v8a </EmguCVDeployMessage>
+        <EmguCVNativex86>$(EmguCVDir)..\libs\x86\libcvextern.so</EmguCVNativex86>
+        <EmguCVBuildAndroidx86 Condition="$(AndroidSupportedAbis.Contains('x86%3')) OR $(AndroidSupportedAbis.EndsWith('x86')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='x86')">True</EmguCVBuildAndroidx86>
+        <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidx86)'=='True' AND !Exists('$(EmguCVNativex86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86 is targeted, but file $(EmguCVNativex86) is missing.</EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidx86)'=='True' AND Exists('$(EmguCVNativex86)')">$(EmguCVDeployMessage)x86 </EmguCVDeployMessage>
+        <EmguCVNativex8664>$(EmguCVDir)..\libs\x86_64\libcvextern.so</EmguCVNativex8664>
+        <EmguCVBuildAndroidx8664 Condition="$(AndroidSupportedAbis.Contains('x86_64%3')) OR $(AndroidSupportedAbis.EndsWith('x86_64')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='x86_64')">True</EmguCVBuildAndroidx8664>
+        <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND !Exists('$(EmguCVNativex8664)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86_64 is targeted, but file $(EmguCVNativex8664) is missing.</EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND Exists('$(EmguCVNativex8664)')">$(EmguCVDeployMessage)x86_64 </EmguCVDeployMessage>
       </PropertyGroup>
       <!-- armeabi -->
       <ItemGroup Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND Exists('$(EmguCVNativeArmeabi)')">
@@ -252,7 +244,7 @@
         </AndroidNativeLibrary>
       </ItemGroup>
     </When>
-	<!-- Windows Form Application -->
+    <!-- Windows Form Application -->
     <When Condition="'$(EmguCVLinkTarget)'=='' AND (
 	'$(TargetFrameworkVersion)'=='v2.0' OR
 	'$(TargetFrameworkVersion)'=='v3.0' OR
@@ -264,16 +256,16 @@
 	'$(TargetFrameworkVersion)'=='v4.6'
 	)">
       <PropertyGroup>
-	    <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
-	  </PropertyGroup>
+        <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
+      </PropertyGroup>
     </When>
   </Choose>
- <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
-        <Error Condition="'$(EmguCVLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please send a bug report to support@emgu.com"  />
-		<Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
-		<Message Condition="'$(EmguCVLinkTarget)'=='WindowsForms'" Text="Emgu CV is not set to deploy native files in Windows forms project, please make sure the unmanaged dlls are deployed with your executable." Importance="High" />
-		<Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
-      <Message Text="Compiling with $(EmguCVDeployMessage)binary" Condition="'$(EmguCVDeployMessage)'!=''" Importance="High" />
-      <Message Text="No native binary is deployed." Condition="'$(EmguCVDeployMessage)'==''" Importance="High" />
+  <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(EmguCVLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please send a bug report to support@emgu.com" />
+    <Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
+    <Message Condition="'$(EmguCVLinkTarget)'=='WindowsForms'" Text="Emgu CV is not set to deploy native files in Windows forms project, please make sure the unmanaged dlls are deployed with your executable." Importance="High" />
+    <Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
+    <Message Text="Compiling with $(EmguCVDeployMessage)binary" Condition="'$(EmguCVDeployMessage)'!=''" Importance="High" />
+    <Message Text="No native binary is deployed." Condition="'$(EmguCVDeployMessage)'==''" Importance="High" />
   </Target>
 </Project>

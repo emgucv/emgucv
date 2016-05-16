@@ -50,4 +50,5 @@ CVAPI(double) cveArucoCalibrateCameraAruco(
    cv::_OutputArray* rvecs, cv::_OutputArray* tvecs, int flags,
    CvTermCriteria* criteria);
 
+CVAPI(void) cveArucoDetectorParametersGetDefault(cv::aruco::DetectorParameters* parameters);
 #endif

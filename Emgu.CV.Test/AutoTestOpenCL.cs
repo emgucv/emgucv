@@ -47,40 +47,55 @@ namespace Emgu.CV.Test
 
             OclDevice defaultDevice = OclDevice.Default;
 
-            UMat umat = new UMat(256, 256, DepthType.Cv8U, 1);
-            umat.SetTo(new MCvScalar(8));
-
-            int rowsPerWI = 1;
-            int cn = 1;
+            Mat img = EmguAssert.LoadMat("lena.jpg");
+            Mat imgGray = new Mat();
+            CvInvoke.CvtColor(img, imgGray, ColorConversion.Bgr2Gray);
+            Mat imgFloat = new Mat();
+            imgGray.ConvertTo(imgFloat, DepthType.Cv32F, 1.0/255);
+            UMat umat = imgFloat.GetUMat(AccessType.Read, UMat.Usage.AllocateDeviceMemory);
+            UMat umatDst = new UMat();
+            umatDst.Create(umat.Rows, umat.Cols, DepthType.Cv32F, umat.NumberOfChannels, UMat.Usage.AllocateDeviceMemory);
             
-            String buildOpts = String.Format("-D rowsPerWI={0} -D cn={1} -D srcT1_C1=uchar -DdstT_C1=uchar", rowsPerWI, cn);
-
+            String buildOpts = "-D dstT=float";
+    
             String sourceStr = @"
-__kernel void mytest(__global const uchar * srcptr1, int srcstep1, int srcoffset1, 
-                 __global uchar *dstptr, int dststep, int dstoffset,
-                 int rows, int cols )
+__constant sampler_t samplerLN = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_LINEAR;
+__kernel void shift(const image2d_t src, float shift_x, float shift_y, __global uchar* dst, int dst_step, int dst_offset, int dst_rows, int dst_cols)
 {
-               int x = get_global_id(0);
-               int y0 = get_global_id(1) * rowsPerWI;
-
-               if (x < cols)
-               {
-                  int src1_index = mad24(y0, srcstep1, mad24(x, (int)sizeof(srcT1_C1) * cn, srcoffset1));
-                  int dst_index = mad24(y0, dststep, mad24(x, (int)sizeof(dstT_C1) * cn, dstoffset));
-
-                  for (int y = y0, y1 = min(rows, y0 + rowsPerWI); y < y1; ++y, src1_index += srcstep1, dst_index += dststep)
-                  {
-                     *(__global uchar*) (dstptr + dst_index)= *(srcptr1 + src1_index);
-                  }
-               }
-            }";
+   int x = get_global_id(0);
+   int y = get_global_id(1);
+   if (x >= dst_cols) return;
+   int dst_index = mad24(y, dst_step, mad24(x, (int)sizeof(dstT), dst_offset));
+   __global dstT *dstf = (__global dstT *)(dst + dst_index);
+   float2 coord = (float2)((float)x+0.5f+shift_x, (float)y+0.5f+shift_y);
+   dstf[0] = (dstT)read_imagef(src, samplerLN, coord).x;
+}";
 
             using (CvString errorMsg = new CvString())
             using (OclProgramSource ps = new OclProgramSource(sourceStr))
             using (OclKernel kernel = new OclKernel())
+            using (OclImage2D image2d = new OclImage2D(umat))
+            using (OclKernelArg ka = new OclKernelArg(OclKernelArg.Flags.ReadWrite, umatDst))
             {
-               bool success = kernel.Create("mytest", ps, buildOpts, errorMsg);
-               bool empty = kernel.Empty;
+               float shiftX = 100.5f;
+               float shiftY = -50.0f;
+
+               bool success = kernel.Create("shift", ps, buildOpts, errorMsg);
+               EmguAssert.IsTrue(success, errorMsg.ToString());
+               int idx = 0;
+               idx = kernel.Set(idx, image2d);
+               idx = kernel.Set(idx, ref shiftX);
+               idx = kernel.Set(idx, ref shiftY);
+               idx = kernel.Set(idx, ka);
+               IntPtr[] globalThreads = new IntPtr[] {new IntPtr(umat.Cols), new IntPtr(umat.Rows), new IntPtr(1) };
+               success = kernel.Run(globalThreads, null, true);
+               EmguAssert.IsTrue(success, "Failed to run the kernel");
+               using (Mat matDst = umatDst.ToMat(AccessType.Read))
+               using (Mat saveMat = new Mat())
+               {
+                  matDst.ConvertTo(saveMat, DepthType.Cv8U, 255.0);
+                  saveMat.Save("tmp.jpg");
+               }
             }
          }
       }

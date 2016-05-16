@@ -110,7 +110,7 @@ namespace Emgu.CV.Test
          TestOpenCL(delegate
                   {
                      UMat uresult = new UMat();
-                     using (UMat um = img.ToUMat(AccessType.ReadWrite))
+                     using (UMat um = img.GetUMat(AccessType.ReadWrite))
                      {
                         Stopwatch watch = Stopwatch.StartNew();
                         CvInvoke.Sobel(img, uresult, CvEnum.DepthType.Cv8U, 1, 0, -1, 1.0, 0.0, CvEnum.BorderType.Default);

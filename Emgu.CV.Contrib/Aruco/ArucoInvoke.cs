@@ -15,7 +15,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Aruco
 {
-
+   /// <summary>
+   /// Entry points for the cv::aruco functions.
+   /// </summary>
    public static partial class ArucoInvoke
    {
       static ArucoInvoke()
@@ -26,7 +28,7 @@ namespace Emgu.CV.Aruco
       /// <summary>
       /// Draw a canonical marker image.
       /// </summary>
-      /// <param name="dictionary">dictionary of markers indicating the type of markers</param>
+      /// <param name="dict">dictionary of markers indicating the type of markers</param>
       /// <param name="id">identifier of the marker that will be returned. It has to be a valid id in the specified dictionary.</param>
       /// <param name="sidePixels">size of the image in pixels</param>
       /// <param name="img">output image with the marker</param>
@@ -120,8 +122,21 @@ namespace Emgu.CV.Aruco
          IntPtr cameraMatrix, IntPtr distCoeffs,
          IntPtr rvecs, IntPtr tvecs);
 
-      
-
+      /// <summary>
+      /// Refind not detected markers based on the already detected and the board layout.
+      /// </summary>
+      /// <param name="image">Input image</param>
+      /// <param name="board">Layout of markers in the board.</param>
+      /// <param name="detectedCorners">Vector of already detected marker corners.</param>
+      /// <param name="detectedIds">Vector of already detected marker identifiers.</param>
+      /// <param name="rejectedCorners">Vector of rejected candidates during the marker detection process</param>
+      /// <param name="cameraMatrix">Optional input 3x3 floating-point camera matrix </param>
+      /// <param name="distCoeffs">Optional vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6],[s1,s2,s3,s4]]) of 4, 5, 8 or 12 elements</param>
+      /// <param name="minRepDistance">Minimum distance between the corners of the rejected candidate and the reprojected marker in order to consider it as a correspondence.</param>
+      /// <param name="errorCorrectionRate">Rate of allowed erroneous bits respect to the error correction capability of the used dictionary. -1 ignores the error correction step.</param>
+      /// <param name="checkAllOrders">Consider the four posible corner orders in the rejectedCorners array. If it set to false, only the provided corner order is considered (default true).</param>
+      /// <param name="recoveredIdxs"></param>
+      /// <param name="parameters"></param>
       public static void RefineDetectedMarkers(
          IInputArray image, IBoard board, IInputOutputArray detectedCorners,
          IInputOutputArray detectedIds, IInputOutputArray rejectedCorners,
@@ -154,5 +169,8 @@ namespace Emgu.CV.Aruco
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool checkAllOrders,
          IntPtr ecoveredIdxs, ref DetectorParameters parameters);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveArucoDetectorParametersGetDefault(ref DetectorParameters parameters);
    }
 }

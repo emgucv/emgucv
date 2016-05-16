@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -2978,6 +2979,33 @@ namespace Emgu.CV.Test
          Dnn.Blob inputBlob = new Dnn.Blob(img);
          net.SetBlob(".data", inputBlob);
          net.Forward();
+         Dnn.Blob probBlob = net.GetBlob("prob");
+         int classId;
+         double classProb;
+         GetMaxClass(probBlob, out classId, out classProb);
+         String[] classNames = ReadClassNames("synset_words.txt");
+
+#if !NETFX_CORE
+         Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
+#endif
+
+      }
+
+      private static String[] ReadClassNames(String fileName)
+      {
+         return File.ReadAllLines(fileName);
+      }
+
+      /* Find best class for the blob (i. e. class with maximal probability) */
+      private static void GetMaxClass(Blob probBlob, out int classId, out double classProb)
+      {
+         Mat matRef = probBlob.MatRef();
+         Mat probMat = matRef.Reshape(1, 1); //reshape the blob to 1x1000 matrix
+         Point minLoc = new Point(), maxLoc = new Point();
+         double minVal = 0, maxVal = 0;
+         CvInvoke.MinMaxLoc(probMat, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+         classId = maxLoc.X;
+         classProb = maxVal;
          
       }
 #endif

@@ -61,3 +61,24 @@ void cveDnnBlobRelease(cv::dnn::Blob** blob)
    delete *blob;
    *blob = 0;
 }
+
+int cveDnnBlobDims(cv::dnn::Blob* blob)
+{
+   return blob->dims();
+}
+int cveDnnBlobChannels(cv::dnn::Blob* blob)
+{
+   return blob->channels();
+}
+int cveDnnBlobCols(cv::dnn::Blob* blob)
+{
+   return blob->cols();
+}
+int cveDnnBlobNum(cv::dnn::Blob* blob)
+{
+   return blob->num();
+}
+int cveDnnBlobRows(cv::dnn::Blob* blob)
+{
+   return blob->rows();
+}

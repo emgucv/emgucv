@@ -46,6 +46,9 @@ namespace Emgu.CV.Aruco
          _ptr = ArucoInvoke.cveArucoGridBoardCreate(markersX, markersY, markerLength, markerSeparation, dictionary, ref _boardPtr);
       }
 
+      /// <summary>
+      /// Release the unmanage resource associated with this GridBoard
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
@@ -60,8 +63,7 @@ namespace Emgu.CV.Aruco
       public IntPtr BoardPtr { get { return _boardPtr;} }
    }
 
-
-
+   
    public static partial class ArucoInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

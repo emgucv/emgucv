@@ -301,10 +301,11 @@ namespace Emgu.CV
       /// Convert this Mat to UMat
       /// </summary>
       /// <param name="access">Access type</param>
+      /// <param name="usageFlags">Usage flags</param>
       /// <returns>The UMat</returns>
-      public UMat ToUMat(CvEnum.AccessType access)
+      public UMat GetUMat(CvEnum.AccessType access, UMat.Usage usageFlags = UMat.Usage.Default)
       {
-         return new UMat(MatInvoke.cvMatGetUMat(Ptr, access), true);
+         return new UMat(MatInvoke.cvMatGetUMat(Ptr, access, usageFlags), true);
       }
 
       /// <summary>
@@ -1228,7 +1229,7 @@ namespace Emgu.CV
          );
       */
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvMatGetUMat(IntPtr mat, CvEnum.AccessType access);
+      internal extern static IntPtr cvMatGetUMat(IntPtr mat, CvEnum.AccessType access, UMat.Usage usageFlags);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cvMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);

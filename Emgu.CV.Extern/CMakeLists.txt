@@ -963,8 +963,7 @@ IF(HAVE_opencv_videoio)
     "#include \"videoio_c_extra.h\"")
   
 ENDIF()
-############################### video code gen END ################################
-
+############################### videoio code gen END ################################
 
 ############################### cudaimgproc code gen START ##############################
 IF(HAVE_opencv_cudaimgproc)
