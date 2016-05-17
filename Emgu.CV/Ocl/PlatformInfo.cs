@@ -6,18 +6,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
+using Emgu.CV;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Ocl
 {
    /// <summary>
    /// This class contains ocl platform information
    /// </summary>
-   public partial class OclPlatformInfo : UnmanagedObject
+   public partial class PlatformInfo : UnmanagedObject
    {
       private bool _needDispose;
 
-      internal OclPlatformInfo(IntPtr ptr, bool needDispose)
+      internal PlatformInfo(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
          _needDispose = needDispose;
@@ -37,9 +38,9 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="d">The index of the ocl device</param>
       /// <returns>The ocl device with the specific index</returns>
-      public OclDevice GetDevice(int d)
+      public Device GetDevice(int d)
       {
-         OclDevice device = new OclDevice();
+         Device device = new Device();
          OclInvoke.oclPlatformInfoGetDevice(Ptr, device, d);
          return device;
       }

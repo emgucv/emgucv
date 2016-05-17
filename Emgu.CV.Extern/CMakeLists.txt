@@ -93,7 +93,7 @@ CREATE_VECTOR_CS("VectorOfPoint3D32F" "std::vector< cv::Point3f >" "MCvPoint3D32
 CREATE_VECTOR_CS("VectorOfInt" "std::vector< int >" "int" "vector" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 CREATE_VECTOR_CS("VectorOfDMatch" "std::vector< cv::DMatch >" "MDMatch" "vector" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util)
 
-CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "OclPlatformInfo" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/core/ocl.hpp\"")
+CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "Ocl.PlatformInfo" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util Emgu.CV.Util "#include \"opencv2/core/ocl.hpp\"")
 IF(NOT IOS)
   CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" ${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda Emgu.CV.Cuda "#include \"opencv2/core/cuda.hpp\"")
 ENDIF()
@@ -571,9 +571,9 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_device_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclDeviceGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/DeviceGenerated.cs"
     "cv::ocl::Device" 
-    "OclDevice" 
+    "Device" 
     "isNVidia;isIntel;isAMD;addressBits;linkerAvailable;compilerAvailable;available;maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;halfFPConfig;singleFPConfig;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion;OpenCL_C_Version" 
     "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;int;int;int;bool;size_t;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String" 
     "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val"
@@ -607,16 +607,16 @@ IF(HAVE_opencv_core)
   The device extensions;
   The device OpenCL version;
   The device OpenCL C version"
-    "Emgu.CV"
-    "CvInvoke"
-    "OclDevice"
+    "Emgu.CV.Ocl"
+    "OclInvoke"
+    "Device"
     "#include \"ocl_c.h\"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_platform_info_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclPlatformInfoGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/PlatformInfoGenerated.cs"
     "cv::ocl::PlatformInfo" 
-    "OclPlatformInfo" 
+    "PlatformInfo" 
     "name;version;vendor;deviceNumber" 
     "cv::String;cv::String;cv::String;int" 
     "val;val;val;val"
@@ -626,14 +626,14 @@ IF(HAVE_opencv_core)
   The platform version;
   The platform vendor;
   The number of devices"
-    "Emgu.CV"
-    "CvInvoke"
-    "OclPlatformInfo"
+    "Emgu.CV.Ocl"
+    "OclInvoke"
+    "PlatformInfo"
     "#include \"ocl_c.h\"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_kernel_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/OclKernelGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/KernelGenerated.cs"
     "cv::ocl::Kernel" 
     "OclKernel"
     "empty;ptr"
@@ -643,9 +643,9 @@ IF(HAVE_opencv_core)
     "bool;IntPtr"
     "Indicates if the kernel is empty;
   The pointer to the native kernel"
-    "Emgu.CV"
-    "CvInvoke"
-    "OclKernel" 
+    "Emgu.CV.Ocl"
+    "OclInvoke"
+    "Kernel" 
     "#include \"ocl_c.h\"")
   
   CREATE_OCV_CLASS_PROPERTY( 

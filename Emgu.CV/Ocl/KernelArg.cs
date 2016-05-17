@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
+using Emgu.CV;
 using System.Runtime.InteropServices;
 
-
-namespace Emgu.CV
+namespace Emgu.CV.Ocl
 {
-    public class OclKernelArg : UnmanagedObject
+    public class KernelArg : UnmanagedObject
     {
       /// <summary>
       /// KernelArg flags
@@ -49,7 +49,7 @@ namespace Emgu.CV
          NoSize = 256
       }
 
-       public OclKernelArg(Flags flags, UMat m, int wscale = 1, int iwscale = 1, IntPtr obj = new IntPtr(), IntPtr sz = new IntPtr())
+       public KernelArg(Flags flags, UMat m, int wscale = 1, int iwscale = 1, IntPtr obj = new IntPtr(), IntPtr sz = new IntPtr())
        {
           _ptr = OclInvoke.oclKernelArgCreate(flags, m, wscale, iwscale, obj, sz);
        }
@@ -67,7 +67,7 @@ namespace Emgu.CV
    public static partial class OclInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr oclKernelArgCreate(OclKernelArg.Flags flags, IntPtr m, int wscale, int iwscale, IntPtr obj, IntPtr sz);
+      internal static extern IntPtr oclKernelArgCreate(KernelArg.Flags flags, IntPtr m, int wscale, int iwscale, IntPtr obj, IntPtr sz);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void oclKernelArgRelease(ref IntPtr k);

@@ -200,3 +200,10 @@ void oclQueueRelease(cv::ocl::Queue** queue)
    delete *queue;
    *queue = 0;
 }
+
+
+void oclTypeToString(int type, cv::String* str)
+{
+   const char* s = cv::ocl::typeToStr(type);
+   *str = s;
+}

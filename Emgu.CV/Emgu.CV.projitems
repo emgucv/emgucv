@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tiff\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ocl\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VideoSurveillance\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Cvb\*.cs" />

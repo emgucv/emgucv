@@ -26,8 +26,8 @@ namespace FeatureMatchingExample
          modelKeyPoints = new VectorOfKeyPoint();
          observedKeyPoints = new VectorOfKeyPoint();
 
-         using (UMat uModelImage = modelImage.ToUMat(AccessType.Read))
-         using (UMat uObservedImage = observedImage.ToUMat(AccessType.Read))
+         using (UMat uModelImage = modelImage.GetUMat(AccessType.Read))
+         using (UMat uObservedImage = observedImage.GetUMat(AccessType.Read))
          {
             KAZE featureDetector = new KAZE();
 

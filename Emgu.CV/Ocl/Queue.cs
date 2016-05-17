@@ -6,33 +6,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.Util;
+using Emgu.CV;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Ocl
 {
-   public class OclProgramSource : UnmanagedObject
+   public class Queue : UnmanagedObject
    {
-      private CvString _programSource;
-      public OclProgramSource(String source)
+      public Queue()
       {
-         _programSource = new CvString(source);
-         _ptr = OclInvoke.oclProgramSourceCreate(_programSource);
-         
+         _ptr = OclInvoke.oclQueueCreate();
       }
 
-      public String Source
+      public void Finish()
       {
-         get
-         {
-            using (CvString s = new CvString(OclInvoke.oclProgramSourceGetSource(_ptr), false))
-               return s.ToString();
-         }
+         OclInvoke.oclQueueFinish(_ptr);
       }
 
       protected override void DisposeObject()
       {
-         OclInvoke.oclProgramSourceRelease(ref _ptr);
-         _programSource.Dispose();
+         if (_ptr != IntPtr.Zero)
+            OclInvoke.oclQueueRelease(ref _ptr);
       }
    }
 
@@ -42,12 +36,12 @@ namespace Emgu.CV
    public static partial class OclInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr oclProgramSourceCreate(IntPtr source);
+      internal static extern IntPtr oclQueueCreate();
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void oclProgramSourceRelease(ref IntPtr oclProgramSource);
+      internal static extern IntPtr oclQueueFinish(IntPtr queue);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr oclProgramSourceGetSource(IntPtr programSource);
+      internal static extern void oclQueueRelease(ref IntPtr queue);
    }
 }

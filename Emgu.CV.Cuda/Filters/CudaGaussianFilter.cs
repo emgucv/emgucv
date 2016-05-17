@@ -28,6 +28,10 @@ namespace Emgu.CV.Cuda
       /// <param name="sigma2">In case of non-square Gaussian kernel the parameter may be used to specify a different (from param3) sigma in the vertical direction. Use 0 for default</param>
       /// <param name="rowBorderType">The row border type.</param>
       /// <param name="columnBorderType">The column border type.</param>
+      /// <param name="srcDepth">The depth type of the source image</param>
+      /// <param name="srcChannels">The number of channels in the source image</param>
+      /// <param name="dstDepth">The depth type of the destination image</param>
+      /// <param name="dstChannels">The number of channels in the destination image</param>
       public CudaGaussianFilter(
          DepthType srcDepth, int srcChannels,
          DepthType dstDepth, int dstChannels,

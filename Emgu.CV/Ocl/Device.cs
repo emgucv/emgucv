@@ -5,24 +5,25 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.CV;
 using Emgu.Util;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV
+namespace Emgu.CV.Ocl
 {
    /// <summary>
    /// This class contains ocl runtime information
    /// </summary>
-   public partial class OclDevice : UnmanagedObject
+   public partial class Device : UnmanagedObject
    {
-      private static OclDevice _defaultDevice = new OclDevice(OclInvoke.oclDeviceGetDefault(), false);
+      private static Device _defaultDevice = new Device(OclInvoke.oclDeviceGetDefault(), false);
 
       private bool _needDispose;
 
       /// <summary>
       /// Create a empty OclDevice object
       /// </summary>
-      public OclDevice()
+      public Device()
          : this(OclInvoke.oclDeviceCreate(), true)
       {
       }
@@ -30,7 +31,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the default OclDevice. Do not dispose this device.
       /// </summary>
-      public static OclDevice Default
+      public static Device Default
       {
          get
          {
@@ -38,7 +39,7 @@ namespace Emgu.CV
          }
       }
 
-      internal OclDevice(IntPtr ptr, bool needDispose)
+      internal Device(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
          _needDispose = needDispose;
@@ -89,7 +90,7 @@ namespace Emgu.CV
    /// <summary>
    /// Ocl Device Type
    /// </summary>
-   public enum OclDeviceType
+   public enum DeviceType
    {
       /// <summary>
       /// Default
@@ -125,7 +126,7 @@ namespace Emgu.CV
    /// Floating point configuration
    /// </summary>
    [Flags]
-   public enum OclFpConfig
+   public enum FpConfig
    {
       /// <summary>
       /// Denorm

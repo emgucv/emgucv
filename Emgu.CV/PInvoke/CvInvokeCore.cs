@@ -3279,21 +3279,21 @@ namespace Emgu.CV
          if (!HaveOpenCL)
             return "OpenCL not available.";
 
-         OclDevice defaultDevice = OclDevice.Default;
+         Ocl.Device defaultDevice = Ocl.Device.Default;
          
          StringBuilder builder = new StringBuilder();
-         using (VectorOfOclPlatformInfo oclPlatformsInfo = OclInvoke.GetPlatformsInfo())
+         using (VectorOfOclPlatformInfo oclPlatformsInfo = Ocl.OclInvoke.GetPlatformsInfo())
          {
             if (oclPlatformsInfo.Size > 0)
             {
                for (int i = 0; i < oclPlatformsInfo.Size; i++)
                {
-                  OclPlatformInfo platformInfo = oclPlatformsInfo[i];
+                  Ocl.PlatformInfo platformInfo = oclPlatformsInfo[i];
                   builder.Append(String.Format("Platform {0}: {1}{2}", i, platformInfo.ToString(), Environment.NewLine));
 
                   for (int j = 0; j < platformInfo.DeviceNumber; j++)
                   {
-                     OclDevice device = platformInfo.GetDevice(j);
+                     Ocl.Device device = platformInfo.GetDevice(j);
                      builder.Append(String.Format("   Device {0} {2}: {1} {3}", j, device.ToString(), device.NativeDevicePointer.Equals(defaultDevice.NativeDevicePointer) ? "(Default)" : String.Empty, Environment.NewLine));
                   }
                }
@@ -3309,20 +3309,20 @@ namespace Emgu.CV
       public static void OclSetDefaultDevice(String deviceName)
       {
 
-         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
+         using (VectorOfOclPlatformInfo oclPlatformInfos = Ocl.OclInvoke.GetPlatformsInfo())
          {
             if (oclPlatformInfos.Size > 0)
             {
                for (int i = 0; i < oclPlatformInfos.Size; i++)
                {
-                  OclPlatformInfo platformInfo = oclPlatformInfos[i];
+                  Ocl.PlatformInfo platformInfo = oclPlatformInfos[i];
 
                   for (int j = 0; j < platformInfo.DeviceNumber; j++)
                   {
-                     OclDevice device = platformInfo.GetDevice(j);
+                     Ocl.Device device = platformInfo.GetDevice(j);
                      if (device.Name.Equals(deviceName))
                      {
-                        OclDevice.Default.Set(device.NativeDevicePointer);
+                        Ocl.Device.Default.Set(device.NativeDevicePointer);
                         return;
                      }
                   }
@@ -3341,18 +3341,18 @@ namespace Emgu.CV
          get
          {
             if (HaveOpenCL)
-               using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
+               using (VectorOfOclPlatformInfo oclPlatformInfos = Ocl.OclInvoke.GetPlatformsInfo())
                {
                   if (oclPlatformInfos.Size > 0)
                   {
                      for (int i = 0; i < oclPlatformInfos.Size; i++)
                      {
-                        OclPlatformInfo platformInfo = oclPlatformInfos[i];
+                        Ocl.PlatformInfo platformInfo = oclPlatformInfos[i];
 
                         for (int j = 0; j < platformInfo.DeviceNumber; j++)
                         {
-                           OclDevice device = platformInfo.GetDevice(j);
-                           if (device.Type == OclDeviceType.Gpu)
+                           Ocl.Device device = platformInfo.GetDevice(j);
+                           if (device.Type == Ocl.DeviceType.Gpu)
                               return true;
                         }
                      }

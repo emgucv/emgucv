@@ -29,9 +29,21 @@ namespace PedestrianDetection
 
          using (Mat image = new Mat("pedestrian.png"))
          {
-            bool tryUseCuda = true;
+            
             long processingTime;
-            Rectangle[] results = FindPedestrian.Find(image, tryUseCuda, out processingTime);
+            Rectangle[] results;
+
+            if (CudaInvoke.HasCuda)
+            {
+               using (GpuMat gpuMat = new GpuMat(image))
+                  results = FindPedestrian.Find(gpuMat, out processingTime);
+            }
+            else
+            {
+               using (UMat uImage = image.GetUMat(AccessType.ReadWrite))
+                  results = FindPedestrian.Find(uImage, out processingTime);
+            }
+            
             foreach (Rectangle rect in results)
             {
                CvInvoke.Rectangle(image, rect, new Bgr(Color.Red).MCvScalar);
@@ -39,7 +51,7 @@ namespace PedestrianDetection
             ImageViewer.Show(
                image,
                String.Format("Pedestrian detection using {0} in {1} milliseconds.",
-                  (tryUseCuda && CudaInvoke.HasCuda) ? "GPU" : 
+                  CudaInvoke.HasCuda ? "GPU" : 
                   CvInvoke.UseOpenCL ? "OpenCL":
                   "CPU",
                   processingTime));

@@ -25,6 +25,8 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="method">Specifies the way the template must be compared with image regions </param>
       /// <param name="blockSize">The block size</param>
+      /// <param name="depthType">The depth type of the image that will be used in the template matching</param>
+      /// <param name="channels">The number of channels of the image that will be used in the template matching</param>
       public CudaTemplateMatching(DepthType depthType, int channels, CvEnum.TemplateMatchingType method, Size blockSize = new Size())
       {
          _ptr = CudaInvoke.cudaTemplateMatchingCreate(CvInvoke.MakeType(depthType, channels), method, ref blockSize);

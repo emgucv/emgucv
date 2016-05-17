@@ -340,7 +340,7 @@ namespace Emgu.CV
       /// <summary>
       /// Return the Mat representation of the UMat
       /// </summary>
-      public Mat ToMat(CvEnum.AccessType access)
+      public Mat GetMat(CvEnum.AccessType access)
       {
          return new Mat(UMatInvoke.cveUMatGetMat(_ptr, access), true, false);
       }
@@ -536,7 +536,7 @@ namespace Emgu.CV
       {
          get 
          {
-            using (Mat tmp = ToMat(CvEnum.AccessType.Read))
+            using (Mat tmp = GetMat(CvEnum.AccessType.Read))
             {
                return tmp.Bitmap;
             }
@@ -620,7 +620,7 @@ namespace Emgu.CV
       /// <remarks>The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format.</remarks>
       public void Save(string fileName)
       {
-         using (Mat tmp = ToMat(CvEnum.AccessType.Read))
+         using (Mat tmp = GetMat(CvEnum.AccessType.Read))
          {
             tmp.Save(fileName);
          }

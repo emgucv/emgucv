@@ -27,6 +27,10 @@ namespace Emgu.CV.Cuda
       /// <param name="scale">Optional scale. Use 1.0 for default</param>
       /// <param name="borderType">The border type.</param>
       /// <param name="borderValue">The border value.</param>
+      /// <param name="srcDepth">The depth type of the source image</param>
+      /// <param name="srcChannels">The number of channels in the source image</param>
+      /// <param name="dstDepth">The depth type of the destination image</param>
+      /// <param name="dstChannels">The number of channels in the destination image</param>
       public CudaLaplacianFilter(
          DepthType srcDepth, int srcChannels,
          DepthType dstDepth, int dstChannels,

@@ -6,20 +6,22 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Emgu.CV;
 using Emgu.Util;
 using System.Runtime.InteropServices;
+using Emgu.CV.CvEnum;
 
-namespace Emgu.CV
+namespace Emgu.CV.Ocl
 {
    /// <summary>
    /// An opencl kernel
    /// </summary>
-   public partial class OclKernel : UnmanagedObject
+   public partial class Kernel : UnmanagedObject
    {
       /// <summary>
       /// Create an opencl kernel
       /// </summary>
-      public OclKernel()
+      public Kernel()
       {
          _ptr = OclInvoke.oclKernelCreateDefault();
       }
@@ -32,7 +34,7 @@ namespace Emgu.CV
       /// <param name="buildOps">The build options</param>
       /// <param name="errMsg">Option error message container that can be passed to this function</param>
       /// <returns>True if the kernel can be created</returns>
-      public bool Create(String kernelName, OclProgramSource programSource, String buildOps = null, CvString errMsg = null)
+      public bool Create(String kernelName, ProgramSource programSource, String buildOps = null, CvString errMsg = null)
       {
          using (CvString cs = new CvString(kernelName))
          using (CvString buildOptStr = new CvString(buildOps))
@@ -56,7 +58,7 @@ namespace Emgu.CV
       /// <param name="i">The index of the parameter</param>
       /// <param name="image2d">The ocl image</param>
       /// <returns>The next index value to be set</returns>
-      public int Set(int i, OclImage2D image2d)
+      public int Set(int i, Image2D image2d)
       {
          return OclInvoke.oclKernelSetImage2D(_ptr, i, image2d);
       }
@@ -115,7 +117,7 @@ namespace Emgu.CV
       /// <param name="i">The index of the parameter</param>
       /// <param name="kernelArg">The kernel arg</param>
       /// <returns>The next index value to be set</returns>
-      public int Set(int i, OclKernelArg kernelArg)
+      public int Set(int i, KernelArg kernelArg)
       {
          return OclInvoke.oclKernelSetKernelArg(_ptr, i, kernelArg);
       }
@@ -132,7 +134,7 @@ namespace Emgu.CV
          return OclInvoke.oclKernelSet(_ptr, i, data, size);
       }
 
-      public bool Run(IntPtr[] globalsize, IntPtr[] localsize, bool sync, OclQueue q = null)
+      public bool Run(IntPtr[] globalsize, IntPtr[] localsize, bool sync, Queue q = null)
       {
          Debug.Assert(localsize == null || globalsize.Length == localsize.Length, "The dimension of global size do not match the dimension of local size.");
          GCHandle gHandle = GCHandle.Alloc(globalsize, GCHandleType.Pinned);
@@ -201,5 +203,16 @@ namespace Emgu.CV
          bool sync, 
          IntPtr q);
 
+      public static String TypeToString(DepthType depthType, int channels = 1)
+      {
+         using (CvString str = new CvString())
+         {
+            oclTypeToString(CvInvoke.MakeType(depthType, channels), str);
+            return str.ToString();
+         }
+      }
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void oclTypeToString(int type, IntPtr str);
    }
 }

@@ -28,7 +28,7 @@ namespace LicensePlateRecognition
          InitializeComponent();
          _licensePlateDetector = new LicensePlateDetector("");
          Mat m = new Mat("license-plate.jpg");
-         UMat um = m.ToUMat(AccessType.ReadWrite);
+         UMat um = m.GetUMat(AccessType.ReadWrite);
          imageBox1.Image = um;
          ProcessImage(m);
       }
@@ -103,7 +103,7 @@ namespace LicensePlateRecognition
                return;
             }
 
-            UMat uImg = img.ToUMat(AccessType.ReadWrite);
+            UMat uImg = img.GetUMat(AccessType.ReadWrite);
             ProcessImage(uImg);
          }
       }
