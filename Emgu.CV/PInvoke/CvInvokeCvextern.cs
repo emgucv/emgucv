@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using System.Drawing;
+using Emgu.Util;
 
 namespace Emgu.CV
 {
@@ -148,11 +149,9 @@ namespace Emgu.CV
          int result;
 
          estimate = new Matrix<double>(3, 4);
-#if NETFX_CORE
-         int sizeOfPoint3D32f = Marshal.SizeOf<MCvPoint3D32f>();
-#else
-         int sizeOfPoint3D32f = Marshal.SizeOf(typeof (MCvPoint3D32f));
-#endif
+
+         int sizeOfPoint3D32f = Toolbox.SizeOf<MCvPoint3D64f>();
+
          using (
             Matrix<float> srcMat = new Matrix<float>(1, src.Length, 3, srcHandle.AddrOfPinnedObject(),
                sizeOfPoint3D32f * src.Length))

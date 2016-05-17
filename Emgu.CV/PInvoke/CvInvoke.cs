@@ -529,38 +529,20 @@ namespace Emgu.CV
 
          CvStructSizes sizes = CvInvoke.GetCvStructSizes();
 
-#if NETFX_CORE
-         sane &= (sizes.CvBox2D == Marshal.SizeOf<RotatedRect>());
-         sane &= (sizes.CvContour == Marshal.SizeOf<MCvContour>());
-         //sane &= (sizes.CvHistogram == Marshal.SizeOf(typeof(MCvHistogram)));
-         sane &= (sizes.CvMat == Marshal.SizeOf<MCvMat>());
-         sane &= (sizes.CvMatND == Marshal.SizeOf<MCvMatND>());
-         sane &= (sizes.CvPoint == Marshal.SizeOf<System.Drawing.Point>());
-         sane &= (sizes.CvPoint2D32f == Marshal.SizeOf<System.Drawing.PointF>());
-         sane &= (sizes.CvPoint3D32f == Marshal.SizeOf<MCvPoint3D32f>());
-         sane &= (sizes.CvRect == Marshal.SizeOf<System.Drawing.Rectangle>());
-         sane &= (sizes.CvScalar == Marshal.SizeOf<MCvScalar>());
-         sane &= (sizes.CvSeq == Marshal.SizeOf<MCvSeq>());
-         sane &= (sizes.CvSize == Marshal.SizeOf<System.Drawing.Size>());
-         sane &= (sizes.CvSize2D32f == Marshal.SizeOf<System.Drawing.SizeF>());
-         sane &= (sizes.CvTermCriteria == Marshal.SizeOf<MCvTermCriteria>());
-
-#else
-         sane &= (sizes.CvBox2D == Marshal.SizeOf(typeof(RotatedRect)));
-         sane &= (sizes.CvContour == Marshal.SizeOf(typeof(MCvContour)));
-         //sane &= (sizes.CvHistogram == Marshal.SizeOf(typeof(MCvHistogram)));
-         sane &= (sizes.CvMat == Marshal.SizeOf(typeof(MCvMat)));
-         sane &= (sizes.CvMatND == Marshal.SizeOf(typeof(MCvMatND)));
-         sane &= (sizes.CvPoint == Marshal.SizeOf(typeof(System.Drawing.Point)));
-         sane &= (sizes.CvPoint2D32f == Marshal.SizeOf(typeof(System.Drawing.PointF)));
-         sane &= (sizes.CvPoint3D32f == Marshal.SizeOf(typeof(MCvPoint3D32f)));
-         sane &= (sizes.CvRect == Marshal.SizeOf(typeof(System.Drawing.Rectangle)));
-         sane &= (sizes.CvScalar == Marshal.SizeOf(typeof(MCvScalar)));
-         sane &= (sizes.CvSeq == Marshal.SizeOf(typeof(MCvSeq)));
-         sane &= (sizes.CvSize == Marshal.SizeOf(typeof(System.Drawing.Size)));
-         sane &= (sizes.CvSize2D32f == Marshal.SizeOf(typeof(System.Drawing.SizeF)));
-         sane &= (sizes.CvTermCriteria == Marshal.SizeOf(typeof(MCvTermCriteria)));
-#endif
+         sane &= (sizes.CvBox2D == Toolbox.SizeOf<RotatedRect>());
+         sane &= (sizes.CvContour == Toolbox.SizeOf<MCvContour>());
+         //sane &= (sizes.CvHistogram == Toolbox.SizeOf(typeof(MCvHistogram)));
+         sane &= (sizes.CvMat == Toolbox.SizeOf<MCvMat>());
+         sane &= (sizes.CvMatND == Toolbox.SizeOf<MCvMatND>());
+         sane &= (sizes.CvPoint == Toolbox.SizeOf<System.Drawing.Point>());
+         sane &= (sizes.CvPoint2D32f == Toolbox.SizeOf<System.Drawing.PointF>());
+         sane &= (sizes.CvPoint3D32f == Toolbox.SizeOf<MCvPoint3D32f>());
+         sane &= (sizes.CvRect == Toolbox.SizeOf<System.Drawing.Rectangle>());
+         sane &= (sizes.CvScalar == Toolbox.SizeOf<MCvScalar>());
+         sane &= (sizes.CvSeq == Toolbox.SizeOf<MCvSeq>());
+         sane &= (sizes.CvSize == Toolbox.SizeOf<System.Drawing.Size>());
+         sane &= (sizes.CvSize2D32f == Toolbox.SizeOf<System.Drawing.SizeF>());
+         sane &= (sizes.CvTermCriteria == Toolbox.SizeOf<MCvTermCriteria>());
 
          return sane;
       }

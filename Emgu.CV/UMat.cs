@@ -670,19 +670,8 @@ namespace Emgu.CV
       public void CopyTo<T>(T[] data)
       {
          Debug.Assert(
-#if NETFX_CORE
-            Marshal.SizeOf<T>()
-#else
-            Marshal.SizeOf(typeof(T))
-#endif
-            * data.Length >= Total.ToInt32() * ElementSize, 
-            String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize /
-#if NETFX_CORE
-            Marshal.SizeOf<T>()
-#else
-            Marshal.SizeOf(typeof(T))
-#endif
-            , data.Length));
+            Toolbox.SizeOf<T>() * data.Length >= Total.ToInt32() * ElementSize, 
+            String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), data.Length));
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          UMatInvoke.cveUMatCopyDataTo(this, handle.AddrOfPinnedObject());
          handle.Free();
@@ -697,19 +686,7 @@ namespace Emgu.CV
       {
 
          Debug.Assert(
-            data.Length == Total.ToInt32() * ElementSize /
-#if NETFX_CORE
-            Marshal.SizeOf<T>()
-#else
-            Marshal.SizeOf(typeof(T))
-#endif
-            , String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize /
-#if NETFX_CORE
-            Marshal.SizeOf<T>()
-#else
-            Marshal.SizeOf(typeof(T))
-#endif
-            , data.Length));
+            data.Length == Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), data.Length));
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          UMatInvoke.cveUMatCopyDataFrom(this, handle.AddrOfPinnedObject());
          handle.Free();

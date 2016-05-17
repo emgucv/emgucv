@@ -34,12 +34,8 @@ namespace Emgu.CV
       /// <summary>
       /// The size of the elements in the CvArray, it is the cached value of Marshal.SizeOf(typeof(TDepth)).
       /// </summary>
-#if NETFX_CORE 
-      private static readonly int _sizeOfElement = Marshal.SizeOf<TDepth>();
-#else
-      private static readonly int _sizeOfElement = Marshal.SizeOf(typeof(TDepth));
-#endif
-
+      private static readonly int _sizeOfElement = Toolbox.SizeOf<TDepth>();
+      
       /// <summary>
       /// The pinned GCHandle to _array;
       /// </summary>

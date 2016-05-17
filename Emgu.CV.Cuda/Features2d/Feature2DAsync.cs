@@ -26,6 +26,9 @@ namespace Emgu.CV.Cuda
       IntPtr Feature2DAsyncPtr { get; }
    }
 
+   /// <summary>
+   /// Class that contains extension methods for Feature2DAsync
+   /// </summary>
    public static class Feature2DAsyncExtension
    {
 

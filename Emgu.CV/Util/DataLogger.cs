@@ -107,11 +107,8 @@ namespace Emgu.CV.Util
             Marshal.FreeHGlobal(unmanagedData);
          } else
          {
-#if NETFX_CORE
-            IntPtr unmanagedData = Marshal.AllocHGlobal(Marshal.SizeOf<T>());
-#else
-            IntPtr unmanagedData = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
-#endif
+            IntPtr unmanagedData = Marshal.AllocHGlobal(Toolbox.SizeOf<T>());
+
             Marshal.StructureToPtr(data, unmanagedData, false);
             _logger.Log(unmanagedData, logLevel);
             Marshal.FreeHGlobal(unmanagedData);

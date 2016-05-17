@@ -32,6 +32,8 @@ namespace Emgu.CV.Cuda
       /// <param name="WTK_A">How many random points are used to produce each cell of the descriptor (2, 3, 4 ...).</param>
       /// <param name="scoreType">Type of the score to use.</param>
       /// <param name="patchSize">Patch size.</param>
+      /// <param name="blurForDescriptor">Blur for descriptor</param>
+      /// <param name="fastThreshold">Fast threshold</param>
       public CudaORBDetector(
          int numberOfFeatures = 500, 
          float scaleFactor = 1.2f, 

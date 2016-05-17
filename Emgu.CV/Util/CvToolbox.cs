@@ -246,11 +246,7 @@ namespace Emgu.CV.Util
       {
          int size;
          if (bytesToCopy < 0)
-#if NETFX_CORE 
-         size = Marshal.SizeOf<TData>() * src.Length;
-#else
-         size = Marshal.SizeOf(typeof(TData)) * src.Length;
-#endif
+            size = Emgu.Util.Toolbox.SizeOf<TData>() * src.Length;
          else
             size = bytesToCopy;
 
@@ -285,11 +281,8 @@ namespace Emgu.CV.Util
       /// <param name="dest">Pointer to the destination unmanaged memory</param>
       public static void CopyMatrix<D>(IntPtr src, D[][] dest)
       {
-#if NETFX_CORE 
-         int datasize = Marshal.SizeOf<D>();
-#else
-         int datasize = Marshal.SizeOf(typeof(D));
-#endif
+         int datasize = Emgu.Util.Toolbox.SizeOf<D>();
+
          int step = datasize * dest[0].Length;
          long current = src.ToInt64();
 

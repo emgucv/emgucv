@@ -21,7 +21,6 @@ namespace Emgu.CV
       /// </summary>
       public OclKernel()
       {
-
          _ptr = OclInvoke.oclKernelCreateDefault();
       }
 
@@ -51,39 +50,83 @@ namespace Emgu.CV
             OclInvoke.oclKernelRelease(ref _ptr);
       }
 
+      /// <summary>
+      /// Set the parameters for the kernel
+      /// </summary>
+      /// <param name="i">The index of the parameter</param>
+      /// <param name="image2d">The ocl image</param>
+      /// <returns>The next index value to be set</returns>
       public int Set(int i, OclImage2D image2d)
       {
          return OclInvoke.oclKernelSetImage2D(_ptr, i, image2d);
       }
 
+      /// <summary>
+      /// Set the parameters for the kernel
+      /// </summary>
+      /// <param name="i">The index of the parameter</param>
+      /// <param name="umat">The umat</param>
+      /// <returns>The next index value to be set</returns>
       public int Set(int i, UMat umat)
       {
          return OclInvoke.oclKernelSetUMat(_ptr, i, umat);
       }
 
-      private int _sizeOfInt = Toolbox.SizeOf<int>();
+      /// <summary>
+      /// Set the parameters for the kernel
+      /// </summary>
+      /// <param name="i">The index of the parameter</param>
+      /// <param name="value">The value</param>
+      /// <returns>The next index value to be set</returns>
       public int Set(int i, ref int value)
       {
          return OclInvoke.oclKernelSetInt(_ptr, i, ref value, _sizeOfInt);
       }
+      private static int _sizeOfInt = Toolbox.SizeOf<int>();
 
-      private static int _sizeOfFloat = Toolbox.SizeOf<float>();
+      /// <summary>
+      /// Set the parameters for the kernel
+      /// </summary>
+      /// <param name="i">The index of the parameter</param>
+      /// <param name="value">The value</param>
+      /// <returns>The next index value to be set</returns>
       public int Set(int i, ref float value)
       {
          return OclInvoke.oclKernelSetFloat(_ptr, i, ref value, _sizeOfFloat);
       }
+      private static int _sizeOfFloat = Toolbox.SizeOf<float>();
 
-      private static int _sizeOfDouble = Toolbox.SizeOf<double>();
+      /// <summary>
+      /// Set the parameters for the kernel
+      /// </summary>
+      /// <param name="i">The index of the parameter</param>
+      /// <param name="value">The value</param>
+      /// <returns>The next index value to be set</returns>
       public int Set(int i, ref double value)
       {
          return OclInvoke.oclKernelSetDouble(_ptr, i, ref value, _sizeOfDouble);
       }
+      private static int _sizeOfDouble = Toolbox.SizeOf<double>();
 
+
+      /// <summary>
+      /// Set the parameters for the kernel
+      /// </summary>
+      /// <param name="i">The index of the parameter</param>
+      /// <param name="kernelArg">The kernel arg</param>
+      /// <returns>The next index value to be set</returns>
       public int Set(int i, OclKernelArg kernelArg)
       {
          return OclInvoke.oclKernelSetKernelArg(_ptr, i, kernelArg);
       }
 
+      /// <summary>
+      /// Set the parameters for the kernel
+      /// </summary>
+      /// <param name="i">The index of the parameter</param>
+      /// <param name="data">The data</param>
+      /// <param name="size">The size of the data in number of bytes</param>
+      /// <returns>The next index value to be set</returns>
       public int Set(int i, IntPtr data, int size)
       {
          return OclInvoke.oclKernelSet(_ptr, i, data, size);

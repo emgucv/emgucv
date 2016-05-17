@@ -5,6 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.Util
 {
@@ -125,33 +126,18 @@ namespace Emgu.CV.Util
 
       static StructSize()
       {
-#if NETFX_CORE
-         _PointF = Marshal.SizeOf<System.Drawing.PointF>();
-         _RangF = Marshal.SizeOf<RangeF>();
-         _MCvMat = Marshal.SizeOf<MCvMat>();
-         _MCvSeq = Marshal.SizeOf<MCvSeq>();
-         _MCvContour = Marshal.SizeOf<MCvContour>();
-         _MIplImage = Marshal.SizeOf<MIplImage>();
-         _MCvSeqBlock = Marshal.SizeOf<MCvSeqBlock>();
-         _MCvPoint3D32f = Marshal.SizeOf<MCvPoint3D32f>();
-         _MCvMatND = Marshal.SizeOf<MCvMatND>();
-         _MCvPoint2D64f = Marshal.SizeOf<MCvPoint2D64f>();
-         //_MCvHistogram = Marshal.SizeOf(typeof(MCvHistogram));
-         _MCvBlob = Marshal.SizeOf<MCvBlob>();
-#else
-         _PointF = Marshal.SizeOf(typeof(System.Drawing.PointF));
-         _RangF = Marshal.SizeOf(typeof(RangeF));
-         _MCvMat = Marshal.SizeOf(typeof(MCvMat));
-         _MCvSeq = Marshal.SizeOf(typeof(MCvSeq));
-         _MCvContour = Marshal.SizeOf(typeof(MCvContour));
-         _MIplImage = Marshal.SizeOf(typeof(MIplImage));
-         _MCvSeqBlock = Marshal.SizeOf(typeof(MCvSeqBlock));
-         _MCvPoint3D32f = Marshal.SizeOf(typeof(MCvPoint3D32f));
-         _MCvMatND = Marshal.SizeOf(typeof(MCvMatND));
-         _MCvPoint2D64f = Marshal.SizeOf(typeof(MCvPoint2D64f));
-         //_MCvHistogram = Marshal.SizeOf(typeof(MCvHistogram));
-         _MCvBlob = Marshal.SizeOf(typeof(MCvBlob));
-#endif
+         _PointF = Toolbox.SizeOf<System.Drawing.PointF>();
+         _RangF = Toolbox.SizeOf<RangeF>();
+         _MCvMat = Toolbox.SizeOf<MCvMat>();
+         _MCvSeq = Toolbox.SizeOf<MCvSeq>();
+         _MCvContour = Toolbox.SizeOf<MCvContour>();
+         _MIplImage = Toolbox.SizeOf<MIplImage>();
+         _MCvSeqBlock = Toolbox.SizeOf<MCvSeqBlock>();
+         _MCvPoint3D32f = Toolbox.SizeOf<MCvPoint3D32f>();
+         _MCvMatND = Toolbox.SizeOf<MCvMatND>();
+         _MCvPoint2D64f = Toolbox.SizeOf<MCvPoint2D64f>();
+         //_MCvHistogram = Toolbox.SizeOf(typeof(MCvHistogram));
+         _MCvBlob = Toolbox.SizeOf<MCvBlob>();
       }
    }
 }
