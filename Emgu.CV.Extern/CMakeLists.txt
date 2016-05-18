@@ -578,7 +578,7 @@ IF(HAVE_opencv_core)
     "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;int;int;int;bool;size_t;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String" 
     "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val"
     "IsNVidia;IsIntel;IsAMD;AddressBits;LinkerAvailable;CompilerAvailable;Available;MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;HalfFPConfig;SingleFPConfig;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type;Name;Version;VendorName;DriverVersion;Extensions;OpenCLVersion;OpenCLCVersion" 
-    "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;OclFpConfig;OclFpConfig;OclFpConfig;bool;IntPtr;int;int;OclDeviceType;String;String;String;String;String;String;String"
+    "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;FpConfig;FpConfig;FpConfig;bool;IntPtr;int;int;DeviceType;String;String;String;String;String;String;String"
     "Indicates if this is an NVidia device;
   Indicates if this is an Intel device;
   Indicates if this is an AMD device;

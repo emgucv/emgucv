@@ -41,7 +41,7 @@ mkdir -p ios-package/Emgu.CV.Example/LicensePlateRecognition
 mkdir -p ios-package/Emgu.CV.Example/PedestrianDetection
 mkdir -p ios-package/Emgu.CV.Example/TrafficSignRecognition
 mkdir -p ios-package/Emgu.CV.Example/FaceDetection
-mkdir -p ios-package/Emgu.CV.Example/XamarinForms/XamarinForms
+mkdir -p ios-package/Emgu.CV.Example/XamarinForms/Core
 mkdir -p ios-package/Emgu.CV.Example/XamarinForms/iOS
 
 mkdir -p ios-package/opencv/data/haarcascades
@@ -59,7 +59,7 @@ cp ../../tmp/Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png ios-pack
 cp ../../tmp/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs ios-package/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs
 cp ../../tmp/Emgu.CV.Example/FaceDetection/lena.jpg ios-package/Emgu.CV.Example/FaceDetection/lena.jpg
 cp ../../tmp/Emgu.CV.Example/FaceDetection/DetectFace.cs ios-package/Emgu.CV.Example/FaceDetection/DetectFace.cs
-cp -r ../../tmp/Emgu.CV.Example/XamarinForms/XamarinForms/* ios-package/Emgu.CV.Example/XamarinForms/XamarinForms/
+cp -r ../../tmp/Emgu.CV.Example/XamarinForms/Core/* ios-package/Emgu.CV.Example/XamarinForms/Core/
 cp -r ../../tmp/Emgu.CV.Example/XamarinForms/iOS/* ios-package/Emgu.CV.Example/XamarinForms/iOS/
 cp ../../opencv/data/haarcascades/haarcascade_eye.xml ios-package/opencv/data/haarcascades/haarcascade_eye.xml
 cp ../../opencv/data/haarcascades/haarcascade_frontalface_default.xml ios-package/opencv/data/haarcascades/haarcascade_frontalface_default.xml
