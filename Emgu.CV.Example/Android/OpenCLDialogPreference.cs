@@ -60,20 +60,20 @@ namespace AndroidExamples
          String selectedDeviceName = preference.OpenClDeviceName;
          if (selectedDeviceName == null && CvInvoke.HaveOpenCL && preference.UseOpenCL)
          {
-            selectedDeviceName = OclDevice.Default.Name;
+            selectedDeviceName = Emgu.CV.Ocl.Device.Default.Name;
          }
          //int counter = 1;
-         using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
+         using (VectorOfOclPlatformInfo oclPlatformInfos = Emgu.CV.Ocl.OclInvoke.GetPlatformsInfo())
          {
             if (oclPlatformInfos.Size > 0)
             {
                for (int i = 0; i < oclPlatformInfos.Size; i++)
                {
-                  OclPlatformInfo platformInfo = oclPlatformInfos[i];
+                  Emgu.CV.Ocl.PlatformInfo platformInfo = oclPlatformInfos[i];
 
                   for (int j = 0; j < platformInfo.DeviceNumber; j++)
                   {
-                     OclDevice device = platformInfo.GetDevice(j);
+                     Emgu.CV.Ocl.Device device = platformInfo.GetDevice(j);
                      RadioButton deviceButton = new RadioButton(this.Context);
                      deviceButton.Text = "OpenCL: " + device.Name;
 

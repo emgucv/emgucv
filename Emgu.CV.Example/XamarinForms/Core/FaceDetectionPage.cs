@@ -54,7 +54,7 @@ namespace Emgu.CV.XamarinForms
                   List<Rectangle> faces = new List<Rectangle>();
                   List<Rectangle> eyes = new List<Rectangle>();
 
-                  using (UMat img = image[0].ToUMat(AccessType.ReadWrite))
+                  using (UMat img = image[0].GetUMat(AccessType.ReadWrite))
                      DetectFace.Detect(img, faceFile, eyeFile, faces, eyes, out time);
 
                   foreach (Rectangle rect in faces)
@@ -68,7 +68,7 @@ namespace Emgu.CV.XamarinForms
 
             var result = await t;
             SetImage(t.Result.Item1);
-            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
             GetLabel().Text = String.Format("Detected with {1} in {0} milliseconds.", t.Result.Item2, computeDevice);
          };
       }

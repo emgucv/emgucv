@@ -55,7 +55,7 @@ namespace Emgu.CV.XamarinForms
                img.Dispose();
             
             SetImage(t.Result.Item1);
-            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
             GetLabel().Text = String.Format("Detected with {1} in {0} milliseconds.", t.Result.Item2, computeDevice);
          };
       }

@@ -51,7 +51,7 @@ namespace AndroidExamples
             {
                SetImageBitmap(result.ToBitmap(Bitmap.Config.Rgb565));
 
-               String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+               String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Emgu.CV.Ocl.Device.Default.Name : "CPU";
                SetMessage(String.Format("Matched with '{0}' in {1} milliseconds.", computeDevice, time));
             }
          };

@@ -39,7 +39,7 @@ namespace Emgu.CV.XamarinForms
 
                   if (image == null)
                      return new Tuple<Mat, long>(null, 0);
-                  Rectangle[] pedestrians = FindPedestrian.Find(image[0], false, out time);
+                  Rectangle[] pedestrians = FindPedestrian.Find(image[0], out time);
 
                   foreach (Rectangle rect in pedestrians)
                   {
@@ -51,7 +51,7 @@ namespace Emgu.CV.XamarinForms
 
             t.Start();
             var result = await t;
-            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
             GetLabel().Text = String.Format("Detection completed with {1} in {0} milliseconds.", t.Result.Item2,
                computeDevice);
             SetImage(t.Result.Item1);

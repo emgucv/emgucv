@@ -16,6 +16,7 @@ using Emgu.CV.Structure;
 using Emgu.Util;
 using System.Drawing;
 using Android.Graphics;
+using Emgu.CV.CvEnum;
 using PedestrianDetection;
 
 namespace AndroidExamples
@@ -45,15 +46,15 @@ namespace AndroidExamples
             }
 
             long time;
+            Rectangle[] pedestrians;
+            using (UMat umat = image.GetUMat(AccessType.ReadWrite))
+               pedestrians = FindPedestrian.Find(image, out time);
 
-            Rectangle[] pedestrians = FindPedestrian.Find(image, false, out time);
-
-            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Emgu.CV.Ocl.Device.Default.Name : "CPU";
             SetMessage(String.Format("Detection completed with {1} in {0} milliseconds.", time, computeDevice));
             foreach (Rectangle rect in pedestrians)
             {
                CvInvoke.Rectangle(image, rect, new Bgr(System.Drawing.Color.Red).MCvScalar, 2);
-               
             }
 
             SetImageBitmap(image.ToBitmap());

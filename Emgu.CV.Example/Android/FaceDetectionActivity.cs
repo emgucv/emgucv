@@ -76,7 +76,7 @@ namespace AndroidExamples
 
             DetectFace.Detect(image, faceXml, eyeXml, faces, eyes, out time);
 
-            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + OclDevice.Default.Name : "CPU";
+            String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Emgu.CV.Ocl.Device.Default.Name : "CPU";
             SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, computeDevice));
 
             foreach (Rectangle rect in faces)
