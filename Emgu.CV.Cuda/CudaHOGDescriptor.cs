@@ -91,6 +91,12 @@ namespace Emgu.CV.Cuda
          }
       }*/
 
+      /// <summary>
+      /// Performs object detection with a multi-scale window.
+      /// </summary>
+      /// <param name="image">Source image.</param>
+      /// <param name="objects">Detected objects boundaries.</param>
+      /// <param name="confident">Optional output array for confidences.</param>
       public void DetectMultiScale(IInputArray image, VectorOfRect objects, VectorOfDouble confident = null)
       {
          using (InputArray iaImage = image.GetInputArray())
@@ -107,18 +113,27 @@ namespace Emgu.CV.Cuda
          CudaInvoke.cudaHOGRelease(ref _ptr);
       }
 
+      /// <summary>
+      /// Gaussian smoothing window parameter.
+      /// </summary>
       public double WinSigma
       {
          get { return CudaInvoke.cudaHOGGetWinSigma(_ptr); }
          set { CudaInvoke.cudaHOGSetWinSigma(_ptr, value); }
       }
 
+      /// <summary>
+      /// Maximum number of detection window increases.
+      /// </summary>
       public int NumLevels
       {
          get { return CudaInvoke.cudaHOGGetNumLevels(_ptr); }
          set { CudaInvoke.cudaHOGSetNumLevels(_ptr, value);}
       }
 
+      /// <summary>
+      /// Coefficient to regulate the similarity threshold. When detected, some objects can be covered by many rectangles. 0 means not to perform grouping. See groupRectangles.
+      /// </summary>
       public int GroupThreshold
       {
          get { return CudaInvoke.cudaHOGGetGroupThreshold(_ptr); }
@@ -128,18 +143,27 @@ namespace Emgu.CV.Cuda
          }
       }
 
+      /// <summary>
+      /// Threshold for the distance between features and SVM classifying plane. Usually it is 0 and should be specfied in the detector coefficients (as the last free coefficient). But if the free coefficient is omitted (which is allowed), you can specify it manually here.
+      /// </summary>
       public double HitThreshold
       {
          get { return CudaInvoke.cudaHOGGetHitThreshold(_ptr); }
          set { CudaInvoke.cudaHOGSetHitThreshold(_ptr, value);}
       }
 
+      /// <summary>
+      /// Coefficient of the detection window increase.
+      /// </summary>
       public double ScaleFactor
       {
          get { return CudaInvoke.cudaHOGGetScaleFactor(_ptr); }
          set {  CudaInvoke.cudaHOGSetScaleFactor(_ptr, value);}
       }
 
+      /// <summary>
+      /// Flag to specify whether the gamma correction preprocessing is required or not.
+      /// </summary>
       public bool GammaCorrection
       {
          get { return CudaInvoke.cudaHOGGetGammaCorrection(_ptr); }

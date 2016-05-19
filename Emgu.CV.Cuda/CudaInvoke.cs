@@ -352,6 +352,12 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaSqrt(IntPtr src, IntPtr dst, IntPtr stream);
 
+      /// <summary>
+      /// Transposes a matrix.
+      /// </summary>
+      /// <param name="src">Source matrix. 1-, 4-, 8-byte element sizes are supported for now.</param>
+      /// <param name="dst">Destination matrix.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Transpose(IInputArray src, IOutputArray dst, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -388,6 +394,9 @@ namespace Emgu.CV.Cuda
       /// <param name="dst">The destination image.</param>
       /// <param name="interpolation">The interpolation type. Supports INTER_NEAREST, INTER_LINEAR.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      /// <param name="fx">Scale factor along the horizontal axis. If it is zero, it is computed as: (double)dsize.width/src.cols</param>
+      /// <param name="fy">Scale factor along the vertical axis. If it is zero, it is computed as: (double)dsize.height/src.rows</param>
+      /// <param name="dsize">Destination image size. If it is zero, it is computed as: dsize = Size(round(fx* src.cols), round(fy* src.rows)). Either dsize or both fx and fy must be non-zero.</param>
       public static void Resize(IInputArray src, IOutputArray dst, Size dsize, double fx = 0, double fy = 0, CvEnum.Inter interpolation = Inter.Linear, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -692,6 +701,14 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern double cudaNorm1(IntPtr src1, Emgu.CV.CvEnum.NormType normType, IntPtr mask);
 
+      /// <summary>
+      /// Returns the norm of a matrix.
+      /// </summary>
+      /// <param name="src">Source matrix. Any matrices except 64F are supported.</param>
+      /// <param name="dst">The GpuMat to store the result</param>
+      /// <param name="normType">Norm type. NORM_L1 , NORM_L2 , and NORM_INF are supported for now.</param>
+      /// <param name="mask">optional operation mask; it must have the same size as src1 and CV_8UC1 type.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void CalcNorm(IInputArray src, IOutputArray dst, NormType normType = NormType.L2, IInputArray mask = null,
          Stream stream = null)
       {
@@ -703,6 +720,14 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaCalcNorm(IntPtr src, IntPtr dst, NormType normType, IntPtr mask, IntPtr stream);
 
+      /// <summary>
+      /// Returns the difference of two matrices.
+      /// </summary>
+      /// <param name="src1">Source matrix. Any matrices except 64F are supported.</param>
+      /// <param name="src2">Second source matrix (if any) with the same size and type as src1.</param>
+      /// <param name="dst">The GpuMat where the result will be stored in</param>
+      /// <param name="normType">Norm type. NORM_L1 , NORM_L2 , and NORM_INF are supported for now.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void CalcNormDiff(IInputArray src1, IInputArray src2, IOutputArray dst, NormType normType = NormType.L2,
          Stream stream = null)
       {
@@ -714,7 +739,12 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaCalcNormDiff(IntPtr src1, IntPtr src2, IntPtr dst, NormType normType, IntPtr stream);
 
-
+      /// <summary>
+      /// Returns the sum of absolute values for matrix elements.
+      /// </summary>
+      /// <param name="src">Source image of any depth except for CV_64F.</param>
+      /// <param name="mask">optional operation mask; it must have the same size as src and CV_8UC1 type.</param>
+      /// <returns>The sum of absolute values for matrix elements.</returns>
       public static MCvScalar AbsSum(IInputArray src, IInputArray mask = null)
       {
          MCvScalar result = new MCvScalar();
@@ -726,6 +756,13 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaAbsSum(IntPtr src, ref MCvScalar sum, IntPtr mask);
 
+      /// <summary>
+      /// Returns the sum of absolute values for matrix elements.
+      /// </summary>
+      /// <param name="src">Source image of any depth except for CV_64F.</param>
+      /// <param name="dst">The GpuMat where the result will be stored.</param>
+      /// <param name="mask">optional operation mask; it must have the same size as src1 and CV_8UC1 type.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void CalcAbsSum(IInputArray src, IOutputArray dst, IInputArray mask = null, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -736,6 +773,12 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaCalcAbsSum(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
 
+      /// <summary>
+      /// Returns the squared sum of matrix elements.
+      /// </summary>
+      /// <param name="src">Source image of any depth except for CV_64F.</param>
+      /// <param name="mask">optional operation mask; it must have the same size as src1 and CV_8UC1 type.</param>
+      /// <returns>The squared sum of matrix elements.</returns>
       public static MCvScalar SqrSum(IInputArray src, IInputArray mask = null)
       {
          MCvScalar result = new MCvScalar();
@@ -747,6 +790,13 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaSqrSum(IntPtr src, ref MCvScalar sqrSum, IntPtr mask);
 
+      /// <summary>
+      /// Returns the squared sum of matrix elements.
+      /// </summary>
+      /// <param name="src">Source image of any depth except for CV_64F.</param>
+      /// <param name="dst">The GpuMat where the result will be stored</param>
+      /// <param name="mask">optional operation mask; it must have the same size as src1 and CV_8UC1 type.</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void CalcSqrSum(IInputArray src, IOutputArray dst, IInputArray mask = null, Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -1053,6 +1103,7 @@ namespace Emgu.CV.Cuda
       /// <param name="borderMode">The border mode, use BORDER_TYPE.CONSTANT for default.</param>
       /// <param name="borderValue">The border value, use new MCvScalar() for default.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      /// <param name="dSize">The size of the destination image</param>
       public static void WarpAffine(IInputArray src, IOutputArray dst, IInputArray M, Size dSize, CvEnum.Inter flags = Inter.Linear, CvEnum.BorderType borderMode = BorderType.Constant, MCvScalar borderValue = new MCvScalar(), Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -1073,6 +1124,7 @@ namespace Emgu.CV.Cuda
       /// <param name="borderMode">The border mode, use BORDER_TYPE.CONSTANT for default.</param>
       /// <param name="borderValue">The border value, use new MCvScalar() for default.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+      /// <param name="dSize">The size of the destination image</param>
       public static void WarpPerspective(IInputArray src, IOutputArray dst, IInputArray M, Size dSize, CvEnum.Inter flags = Inter.Linear, CvEnum.BorderType borderMode = BorderType.Constant, MCvScalar borderValue = new MCvScalar(), Stream stream = null)
       {
          using (InputArray iaSrc = src.GetInputArray())
@@ -1113,6 +1165,7 @@ namespace Emgu.CV.Cuda
       /// <param name="angle">Angle of rotation in degrees</param>
       /// <param name="xShift">Shift along the horizontal axis</param>
       /// <param name="yShift">Shift along the verticle axis</param>
+      /// <param name="dSize">The size of the destination image</param>
       /// <param name="interpolation">Interpolation method. Only INTER_NEAREST, INTER_LINEAR, and INTER_CUBIC are supported.</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public static void Rotate(IInputArray src, IOutputArray dst, Size dSize, double angle, double xShift = 0, double yShift = 0, CvEnum.Inter interpolation = Inter.Linear, Stream stream = null)
@@ -1190,6 +1243,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="src">The source GpuMat</param>
       /// <param name="dst">The resulting GpuMat of the DST, must be pre-allocated and continious. If single channel, the result is real. If double channel, the result is complex</param>
+      /// <param name="dftSize">Size of a discrete Fourier transform.</param>
       /// <param name="flags">DFT flags</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>  
       public static void Dft(IInputArray src, IOutputArray dst, Size dftSize, CvEnum.DxtType flags = DxtType.Forward, Stream stream = null)
@@ -1202,7 +1256,7 @@ namespace Emgu.CV.Cuda
       private static extern void cudaDft(IntPtr src, IntPtr dst, ref Size dftSize, CvEnum.DxtType flags, IntPtr stream);
 
       /// <summary>
-      /// 
+      /// Performs a per-element multiplication of two Fourier spectrums and scales the result.
       /// </summary>
       /// <param name="src1">First spectrum.</param>
       /// <param name="src2">Second spectrum with the same size and type.</param>

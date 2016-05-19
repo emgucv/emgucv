@@ -73,7 +73,7 @@ cv::Mat* cveUMatGetMat(cv::UMat* mat, int access)
    return result;
 }
 
-void cveUMatConvertTo(  cv::UMat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta )
+void cveUMatConvertTo(cv::UMat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta )
 {
    mat->convertTo(*out, rtype, alpha, beta);
 }
@@ -88,14 +88,14 @@ cv::UMat* cveUMatReshape(cv::UMat* mat, int cn, int rows)
 
 void cveUMatCopyDataTo(cv::UMat* mat, unsigned char* dest)
 {
-   const int* sizes = mat->size;
+   //const int* sizes = mat->size;
    cv::Mat destMat = cv::Mat(mat->dims, mat->size, mat->type(), dest);
    mat->copyTo(destMat);
 }
 
 void cveUMatCopyDataFrom(cv::UMat* mat, unsigned char* source)
 {
-   const int* sizes = mat->size;
+   //const int* sizes = mat->size;
    cv::Mat fromMat = cv::Mat(mat->dims, mat->size, mat->type(), source);
    fromMat.copyTo(*mat);
 }

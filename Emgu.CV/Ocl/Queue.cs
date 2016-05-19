@@ -11,18 +11,30 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Ocl
 {
+   /// <summary>
+   /// An OpenCL Queue
+   /// </summary>
    public class Queue : UnmanagedObject
    {
+      /// <summary>
+      /// OpenCL queue
+      /// </summary>
       public Queue()
       {
          _ptr = OclInvoke.oclQueueCreate();
       }
 
+      /// <summary>
+      /// Wait for the queue to finish
+      /// </summary>
       public void Finish()
       {
          OclInvoke.oclQueueFinish(_ptr);
       }
 
+      /// <summary>
+      /// Release the unmanaged memory associated with this object.
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)

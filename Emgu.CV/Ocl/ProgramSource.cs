@@ -11,9 +11,17 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Ocl
 {
+   /// <summary>
+   /// Open CL kernel program source code
+   /// </summary>
    public class ProgramSource : UnmanagedObject
    {
       private CvString _programSource;
+
+      /// <summary>
+      /// Create OpenCL program source code
+      /// </summary>
+      /// <param name="source">The source code</param>
       public ProgramSource(String source)
       {
          _programSource = new CvString(source);
@@ -21,6 +29,9 @@ namespace Emgu.CV.Ocl
          
       }
 
+      /// <summary>
+      /// Get the source code as String
+      /// </summary>
       public String Source
       {
          get
@@ -29,7 +40,10 @@ namespace Emgu.CV.Ocl
                return s.ToString();
          }
       }
-
+      
+      /// <summary>
+      /// Release the unmanaged memory associated with this object
+      /// </summary>
       protected override void DisposeObject()
       {
          OclInvoke.oclProgramSourceRelease(ref _ptr);

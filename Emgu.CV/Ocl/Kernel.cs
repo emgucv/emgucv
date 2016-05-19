@@ -134,6 +134,14 @@ namespace Emgu.CV.Ocl
          return OclInvoke.oclKernelSet(_ptr, i, data, size);
       }
 
+      /// <summary>
+      /// Execute the kernel
+      /// </summary>
+      /// <param name="globalsize">The global size</param>
+      /// <param name="localsize">The local size</param>
+      /// <param name="sync">If true, the code is run synchronously (blocking)</param>
+      /// <param name="q">Optional Opencl queue</param>
+      /// <returns>True if the execution is sucessful</returns>
       public bool Run(IntPtr[] globalsize, IntPtr[] localsize, bool sync, Queue q = null)
       {
          Debug.Assert(localsize == null || globalsize.Length == localsize.Length, "The dimension of global size do not match the dimension of local size.");

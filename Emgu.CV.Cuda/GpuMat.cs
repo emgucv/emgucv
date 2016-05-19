@@ -59,6 +59,13 @@ namespace Emgu.CV.Cuda
             Create(rows, cols, depthType, channels);
       }
 
+      /// <summary>
+      /// allocates new GpuMat data unless the GpuMat already has specified size and type
+      /// </summary>
+      /// <param name="rows">The number of rows</param>
+      /// <param name="cols">The number of cols</param>
+      /// <param name="depthType">The depth type</param>
+      /// <param name="channels">The number of channels.</param>
       public void Create(int rows, int cols, DepthType depthType, int channels)
       {
          CudaInvoke.gpuMatCreate(Ptr, rows, cols, CvInvoke.MakeType(depthType, channels));
@@ -641,6 +648,7 @@ namespace Emgu.CV.Cuda
       /// Create a GpuMat from the unmanaged pointer
       /// </summary>
       /// <param name="ptr">The unmanaged pointer to the GpuMat</param>
+      /// <param name="needDispose""></param>
       internal GpuMat(IntPtr ptr, bool needDispose)
          : base(ptr, needDispose)
       {

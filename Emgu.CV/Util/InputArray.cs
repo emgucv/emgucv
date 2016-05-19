@@ -196,6 +196,11 @@ namespace Emgu.CV
          return CvInvoke.cveInputArrayGetDepth(_ptr, idx);
       }
 
+      /// <summary>
+      /// Get the number of dimensions
+      /// </summary>
+      /// <param name="i">The optional index</param>
+      /// <returns>The dimensions</returns>
       public int GetDims(int i = -1)
       {
          return CvInvoke.cveInputArrayGetDims(_ptr, i);
@@ -213,6 +218,11 @@ namespace Emgu.CV
          return CvInvoke.cveInputArrayGetChannels(_ptr, idx);
       }
 
+      /// <summary>
+      /// Copy this Input array to another.
+      /// </summary>
+      /// <param name="arr">The destination array.</param>
+      /// <param name="mask">The optional mask.</param>
       public void CopyTo(IOutputArray arr, IInputArray mask = null)
       {
          using (OutputArray oaArr = arr.GetOutputArray())

@@ -27,6 +27,8 @@ namespace Emgu.CV.Cuda
       /// <param name="anchor">The center of the kernel. User (-1, -1) for the default kernel center.</param>
       /// <param name="borderType">The border type.</param>
       /// <param name="borderValue">The border value.</param>
+      /// <param name="srcDepth">The depth type of the source image</param>
+      /// <param name="srcChannels">The number of channels of the source image</param>
       public CudaBoxMaxFilter(DepthType srcDepth, int srcChannels, Size ksize, Point anchor, CvEnum.BorderType borderType = BorderType.Default, MCvScalar borderValue = new MCvScalar())
       {
          _ptr = CudaInvoke.cudaCreateBoxMaxFilter(CvInvoke.MakeType(srcDepth, srcChannels), ref ksize, ref anchor, borderType, ref borderValue);

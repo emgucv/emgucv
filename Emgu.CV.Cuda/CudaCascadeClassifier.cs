@@ -39,10 +39,11 @@ namespace Emgu.CV.Cuda
       }
 
       /// <summary>
-      /// Finds rectangular regions in the given image that are likely to contain objects the cascade has been trained for and returns those regions as a sequence of rectangles.
+      /// Detects objects of different sizes in the input image.
       /// </summary>
-      /// <param name="image">The image where search will take place</param>
-      /// <returns>An array of regions for the detected objects</returns>
+      /// <param name="image">Matrix of type CV_8U containing an image where objects should be detected.</param>
+      /// <param name="objects">Buffer to store detected objects (rectangles).</param>
+      /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
       public void DetectMultiScale(IInputArray image, IOutputArray objects, Stream stream = null)
       {
          using (InputArray iaImage = image.GetInputArray())
@@ -51,6 +52,11 @@ namespace Emgu.CV.Cuda
                stream == null ? IntPtr.Zero : stream.Ptr);
       }
 
+      /// <summary>
+      /// Converts objects array from internal representation to standard vector.
+      /// </summary>
+      /// <param name="objects">Objects array in internal representation.</param>
+      /// <returns>Resulting array.</returns>
       public Rectangle[] Convert(IOutputArray objects)
       {
          using (OutputArray oaObjects = objects.GetOutputArray())
@@ -71,6 +77,9 @@ namespace Emgu.CV.Cuda
             _buffer.Dispose();
       }
 
+      /// <summary>
+      /// Parameter specifying how much the image size is reduced at each image scale.
+      /// </summary>
       public double ScaleFactor
       {
          get { return CudaInvoke.cudaCascadeClassifierGetScaleFactor(_ptr); }
@@ -80,12 +89,18 @@ namespace Emgu.CV.Cuda
          }
       }
 
+      /// <summary>
+      /// Parameter specifying how many neighbors each candidate rectangle should have to retain it.
+      /// </summary>
       public int MinNeighbors
       {
          get { return CudaInvoke.cudaCascadeClassifierGetMinNeighbors(_ptr); }
          set {  CudaInvoke.cudaCascadeClassifierSetMinNeighbors(_ptr, value);}
       }
 
+      /// <summary>
+      /// Minimum possible object size. Objects smaller than that are ignored.
+      /// </summary>
       public Size MinObjectSize
       {
          get

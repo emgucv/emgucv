@@ -12,20 +12,37 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
 
-
 namespace Emgu.CV.LineDescriptor
 {
+   /// <summary>
+   /// The lines extraction methodology described in the following is mainly based on: R Grompone Von Gioi, Jeremie Jakubowicz, Jean-Michel Morel, and Gregory Randall. Lsd: A fast line segment detector with a false detection control. IEEE Transactions on Pattern Analysis and Machine Intelligence, 32(4):722–732, 2010.
+   /// </summary>
    public class LSDDetector : UnmanagedObject
    {
+      /// <summary>
+      /// Default constructor
+      /// </summary>
       public LSDDetector()
       {
          _ptr = LineDescriptorInvoke.cveLineDescriptorLSDDetectorCreate();
       }
 
+      /// <summary>
+      /// Detect lines inside an image.
+      /// </summary>
+      /// <param name="image">	input image</param>
+      /// <param name="keylines">vector that will store extracted lines for one or more images</param>
+      /// <param name="scale">scale factor used in pyramids generation</param>
+      /// <param name="numOctaves">number of octaves inside pyramid</param>
+      /// <param name="mask">	mask matrix to detect only KeyLines of interest</param>
       public void Detect(Mat image, VectorOfKeyLine keylines, int scale, int numOctaves, Mat mask = null)
       {
          LineDescriptorInvoke.cveLineDescriptorLSDDetectorDetect(_ptr, image, keylines, scale, numOctaves, mask);
       }
+
+      /// <summary>
+      /// Release the unmanaged memory associated with this object.
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)

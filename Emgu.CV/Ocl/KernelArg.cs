@@ -11,8 +11,11 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Ocl
 {
-    public class KernelArg : UnmanagedObject
-    {
+   /// <summary>
+   /// OpenCL kernel arg
+   /// </summary>
+   public class KernelArg : UnmanagedObject
+   {
       /// <summary>
       /// KernelArg flags
       /// </summary>
@@ -49,17 +52,29 @@ namespace Emgu.CV.Ocl
          NoSize = 256
       }
 
-       public KernelArg(Flags flags, UMat m, int wscale = 1, int iwscale = 1, IntPtr obj = new IntPtr(), IntPtr sz = new IntPtr())
-       {
-          _ptr = OclInvoke.oclKernelArgCreate(flags, m, wscale, iwscale, obj, sz);
-       }
+      /// <summary>
+      /// Create the OCL kernel arg
+      /// </summary>
+      /// <param name="flags">The flags</param>
+      /// <param name="m">The UMat</param>
+      /// <param name="wscale">wscale</param>
+      /// <param name="iwscale">iwscale</param>
+      /// <param name="obj">obj</param>
+      /// <param name="sz">sz</param>
+      public KernelArg(Flags flags, UMat m, int wscale = 1, int iwscale = 1, IntPtr obj = new IntPtr(), IntPtr sz = new IntPtr())
+      {
+         _ptr = OclInvoke.oclKernelArgCreate(flags, m, wscale, iwscale, obj, sz);
+      }
 
-       protected override void DisposeObject()
-       {
+      /// <summary>
+      /// Release the unmanaged memory associated with this object
+      /// </summary>
+      protected override void DisposeObject()
+      {
          if (_ptr != IntPtr.Zero)
             OclInvoke.oclKernelArgRelease(ref _ptr);
-       }
-    }
+      }
+   }
 
    /// <summary>
    /// Class that contains ocl functions.
