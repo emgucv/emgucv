@@ -31,6 +31,8 @@ CVAPI(cv::aruco::GridBoard*) cveArucoGridBoardCreate(
    int markersX, int markersY, float markerLength, float markerSeparation,
    cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr);
 
+CVAPI(void) cveArucoGridBoardDraw(cv::aruco::GridBoard* gridBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits);
+
 CVAPI(void) cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard);
 
 CVAPI(void) cveArucoRefineDetectedMarkers(
@@ -42,7 +44,7 @@ CVAPI(void) cveArucoRefineDetectedMarkers(
 
 CVAPI(void) cveArucoDrawDetectedMarkers(
    cv::_InputOutputArray* image, cv::_InputArray* corners,
-   cv::_InputArray* ids, CvScalar borderColor);
+   cv::_InputArray* ids, CvScalar* borderColor);
 
 CVAPI(double) cveArucoCalibrateCameraAruco(
    cv::_InputArray* corners, cv::_InputArray* ids, cv::_InputArray* counter, cv::aruco::Board* board,

@@ -418,6 +418,9 @@ namespace Emgu.CV.Cuda
       }
 
 #if !(__IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
+      /// <summary>
+      /// Get the Bitmap from this GpuMat
+      /// </summary>
       public Bitmap Bitmap
       {
          get
@@ -648,7 +651,7 @@ namespace Emgu.CV.Cuda
       /// Create a GpuMat from the unmanaged pointer
       /// </summary>
       /// <param name="ptr">The unmanaged pointer to the GpuMat</param>
-      /// <param name="needDispose""></param>
+      /// <param name="needDispose">If true, will call the release function on the <paramref name="ptr"/></param>
       internal GpuMat(IntPtr ptr, bool needDispose)
          : base(ptr, needDispose)
       {

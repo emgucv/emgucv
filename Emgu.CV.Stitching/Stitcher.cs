@@ -42,6 +42,10 @@ namespace Emgu.CV.Stitching
          return StitchingInvoke.CvStitcherStitch(_ptr, iaImages, oaPano);
       }
 
+      /// <summary>
+      /// Set the features finder for this stitcher.
+      /// </summary>
+      /// <param name="finder">The features finder</param>
       public void SetFeaturesFinder(FeaturesFinder finder)
       {
          StitchingInvoke.CvStitcherSetFeaturesFinder(_ptr, finder.Ptr);

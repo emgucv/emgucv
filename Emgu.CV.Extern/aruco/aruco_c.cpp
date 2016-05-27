@@ -47,6 +47,11 @@ cv::aruco::GridBoard* cveArucoGridBoardCreate(
    return ptr.get();
 }
 
+void cveArucoGridBoardDraw(cv::aruco::GridBoard* gridBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits)
+{
+   gridBoard->draw(*outSize, *img, marginSize, borderBits);
+}
+
 void cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard)
 {
    delete * gridBoard;
@@ -72,9 +77,9 @@ void cveArucoRefineDetectedMarkers(
 
 void cveArucoDrawDetectedMarkers(
    cv::_InputOutputArray* image, cv::_InputArray* corners,
-   cv::_InputArray* ids, CvScalar borderColor)
+   cv::_InputArray* ids, CvScalar* borderColor)
 {
-   cv::aruco::drawDetectedMarkers(*image, *corners, ids ? *ids : static_cast<cv::InputArray>(cv::noArray()), borderColor);
+   cv::aruco::drawDetectedMarkers(*image, *corners, ids ? *ids : static_cast<cv::InputArray>(cv::noArray()), *borderColor);
 }
 
 double cveArucoCalibrateCameraAruco(

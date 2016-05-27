@@ -15,6 +15,9 @@ using System.Drawing;
 
 namespace Emgu.CV.LineDescriptor
 {
+   /// <summary>
+   /// A class to represent a line.
+   /// </summary>
    public struct MKeyLine
    {
       /// <summary>

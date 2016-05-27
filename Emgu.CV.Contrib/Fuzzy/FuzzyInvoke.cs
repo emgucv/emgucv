@@ -29,7 +29,13 @@ namespace Emgu.CV.Fuzzy
       /// </summary>
       public enum Function
       {
+         /// <summary>
+         /// Linear
+         /// </summary>
          Linear = 1,
+         /// <summary>
+         /// Sinus
+         /// </summary>
          Sinus = 2
       }
 

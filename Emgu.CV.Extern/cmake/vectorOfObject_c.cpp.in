@@ -31,9 +31,14 @@ void VectorOf${VECTOR_NAME}Push(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_EL
    v->push_back(*value);
 }
 
-void VectorOf${VECTOR_NAME}PushMulti(std::vector< ${VECTOR_ELEMENT} >* v,  ${VECTOR_ELEMENT}* values, int count)
-{
-   VectorPushMulti< ${VECTOR_ELEMENT} >(v, values, count);
+//void VectorOf${VECTOR_NAME}PushMulti(std::vector< ${VECTOR_ELEMENT} >* v,  ${VECTOR_ELEMENT}* values, int count)
+//{
+//   VectorPushMulti< ${VECTOR_ELEMENT} >(v, values, count);
+//}
+
+void VectorOf${VECTOR_NAME}PushVector(std::vector< ${VECTOR_ELEMENT} >* v, std::vector< ${VECTOR_ELEMENT} >* other)
+{  
+   v->insert(v->end(), other->begin(), other->end());
 }
 
 void VectorOf${VECTOR_NAME}Clear(std::vector< ${VECTOR_ELEMENT} >* v)

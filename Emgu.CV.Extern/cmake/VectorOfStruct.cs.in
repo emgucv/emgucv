@@ -108,6 +108,15 @@ namespace ${NAMESPACE_CS}
             handle.Free();
          }
       }
+      
+      /// <summary>
+      /// Push multiple values from the other vector into this vector
+      /// </summary>
+      /// <param name="other">The other vector, from which the values will be pushed to the current vector</param>
+      public void Push(VectorOf${VECTOR_NAME} other)
+      {
+         VectorOf${VECTOR_NAME}PushVector(_ptr, other);
+      }
 	  
 	   /// <summary>
       /// Convert the standard vector to an array of ${VECTOR_NAME}
@@ -247,6 +256,9 @@ namespace ${NAMESPACE_CS}
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void VectorOf${VECTOR_NAME}PushMulti(IntPtr v, IntPtr values, int count);
 
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void VectorOf${VECTOR_NAME}PushVector(IntPtr ptr, IntPtr otherPtr);
+      
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void VectorOf${VECTOR_NAME}Clear(IntPtr v);
 

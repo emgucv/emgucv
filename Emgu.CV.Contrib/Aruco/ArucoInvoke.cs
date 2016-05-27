@@ -11,6 +11,7 @@ using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
+using System.Drawing;
 using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Aruco
@@ -132,11 +133,11 @@ namespace Emgu.CV.Aruco
       /// <param name="rejectedCorners">Vector of rejected candidates during the marker detection process</param>
       /// <param name="cameraMatrix">Optional input 3x3 floating-point camera matrix </param>
       /// <param name="distCoeffs">Optional vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6],[s1,s2,s3,s4]]) of 4, 5, 8 or 12 elements</param>
-      /// <param name="minRepDistance">Minimum distance between the corners of the rejected candidate and the reprojected marker in order to consider it as a correspondence.</param>
-      /// <param name="errorCorrectionRate">Rate of allowed erroneous bits respect to the error correction capability of the used dictionary. -1 ignores the error correction step.</param>
+      /// <param name="minRepDistance">Minimum distance between the corners of the rejected candidate and the reprojected marker in order to consider it as a correspondence. (default 10)</param>
+      /// <param name="errorCorrectionRate">Rate of allowed erroneous bits respect to the error correction capability of the used dictionary. -1 ignores the error correction step. (default 3)</param>
       /// <param name="checkAllOrders">Consider the four posible corner orders in the rejectedCorners array. If it set to false, only the provided corner order is considered (default true).</param>
-      /// <param name="recoveredIdxs"></param>
-      /// <param name="parameters"></param>
+      /// <param name="recoveredIdxs">Optional array to returns the indexes of the recovered candidates in the original rejectedCorners array.</param>
+      /// <param name="parameters">marker detection parameters</param>
       public static void RefineDetectedMarkers(
          IInputArray image, IBoard board, IInputOutputArray detectedCorners,
          IInputOutputArray detectedIds, IInputOutputArray rejectedCorners,
@@ -172,5 +173,69 @@ namespace Emgu.CV.Aruco
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveArucoDetectorParametersGetDefault(ref DetectorParameters parameters);
+
+      /// <summary>
+      /// Draw detected markers in image.
+      /// </summary>
+      /// <param name="image">Input/output image. It must have 1 or 3 channels. The number of channels is not altered.</param>
+      /// <param name="corners">Positions of marker corners on input image. (e.g std::vector&lt;std::vector&lt;cv::Point2f&gt; &gt; ). For N detected markers, the dimensions of this array should be Nx4. The order of the corners should be clockwise.</param>
+      /// <param name="ids">Vector of identifiers for markers in markersCorners . Optional, if not provided, ids are not painted.</param>
+      /// <param name="borderColor">Volor of marker borders. Rest of colors (text color and first corner color) are calculated based on this one to improve visualization.</param>
+      public static void DrawDetectedMarkers(
+         IInputOutputArray image, IInputArray corners, IInputArray ids,
+         MCvScalar borderColor)
+      {
+         using (InputOutputArray ioaImage = image.GetInputOutputArray())
+         using (InputArray iaCorners = corners.GetInputArray())
+         using (InputArray iaIds = ids.GetInputArray())
+         {
+            cveArucoDrawDetectedMarkers(ioaImage, iaCorners, iaIds, ref borderColor);
+         }
+      }
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveArucoDrawDetectedMarkers(
+         IntPtr image, IntPtr corners,
+         IntPtr ids, ref MCvScalar borderColor);
+
+      /// <summary>
+      /// Calibrate a camera using aruco markers.
+      /// </summary>
+      /// <param name="corners">Vector of detected marker corners in all frames. The corners should have the same format returned by detectMarkers</param>
+      /// <param name="ids">List of identifiers for each marker in corners</param>
+      /// <param name="counter">Number of markers in each frame so that corners and ids can be split</param>
+      /// <param name="board">Marker Board layout</param>
+      /// <param name="imageSize">Size of the image used only to initialize the intrinsic camera matrix.</param>
+      /// <param name="cameraMatrix">Output 3x3 floating-point camera matrix. </param>
+      /// <param name="distCoeffs">Output vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6],[s1,s2,s3,s4]]) of 4, 5, 8 or 12 elements</param>
+      /// <param name="rvecs">Output vector of rotation vectors (see Rodrigues ) estimated for each board view (e.g. std::vector&lt;cv::Mat&gt;>). That is, each k-th rotation vector together with the corresponding k-th translation vector (see the next output parameter description) brings the board pattern from the model coordinate space (in which object points are specified) to the world coordinate space, that is, a real position of the board pattern in the k-th pattern view (k=0.. M -1).</param>
+      /// <param name="tvecs">Output vector of translation vectors estimated for each pattern view.</param>
+      /// <param name="flags">Flags Different flags for the calibration process</param>
+      /// <param name="criteria">Termination criteria for the iterative optimization algorithm.</param>
+      /// <returns>The final re-projection error.</returns>
+      public static  double CalibrateCameraAruco(
+         IInputArray corners, IInputArray ids, IInputArray counter, IBoard board, Size imageSize,
+         IInputOutputArray cameraMatrix, IInputOutputArray distCoeffs, IOutputArray rvecs, IOutputArray tvecs,
+         CalibType flags, MCvTermCriteria criteria)
+      {
+         using (InputArray iaCorners = corners.GetInputArray())
+         using (InputArray iaIds = ids.GetInputArray())
+         using (InputArray iaCounter = counter.GetInputArray())
+         using (InputOutputArray ioaCameraMatrix = cameraMatrix.GetInputOutputArray())
+         using (InputOutputArray ioaDistCoeffs = distCoeffs.GetInputOutputArray())
+         using (OutputArray oaRvecs = rvecs == null ? OutputArray.GetEmpty() : rvecs.GetOutputArray())
+         using (OutputArray oaTvecs = tvecs == null ? OutputArray.GetEmpty() : tvecs.GetOutputArray())
+         {
+            return cveArucoCalibrateCameraAruco(iaCorners, iaIds, iaCounter, board.BoardPtr, ref imageSize,
+               ioaCameraMatrix, ioaDistCoeffs, oaRvecs, oaTvecs, flags, ref criteria);
+         }
+      }
+      
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern double cveArucoCalibrateCameraAruco(
+         IntPtr corners, IntPtr ids, IntPtr counter, IntPtr board,
+         ref Size imageSize, IntPtr cameraMatrix, IntPtr distCoeffs,
+         IntPtr rvecs, IntPtr tvecs, CalibType flags,
+         ref MCvTermCriteria criteria);
    }
 }

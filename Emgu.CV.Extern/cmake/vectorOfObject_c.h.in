@@ -29,7 +29,9 @@ CVAPI(int) VectorOf${VECTOR_NAME}GetSize(std::vector< ${VECTOR_ELEMENT} >* v);
 
 CVAPI(void) VectorOf${VECTOR_NAME}Push(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_ELEMENT}* value);
 
-CVAPI(void) VectorOf${VECTOR_NAME}PushMulti(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_ELEMENT}* values, int count);
+//CVAPI(void) VectorOf${VECTOR_NAME}PushMulti(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_ELEMENT}* values, int count);
+
+CVAPI(void) VectorOf${VECTOR_NAME}PushVector(std::vector< ${VECTOR_ELEMENT} >* v, std::vector< ${VECTOR_ELEMENT} >* other);
 
 CVAPI(void) VectorOf${VECTOR_NAME}Clear(std::vector< ${VECTOR_ELEMENT} >* v);
 

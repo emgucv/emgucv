@@ -36,6 +36,11 @@ void VectorOf${VECTOR_NAME}PushMulti(std::vector< ${VECTOR_ELEMENT} >* v,  ${VEC
    VectorPushMulti< ${VECTOR_ELEMENT} >(v, values, count);
 }
 
+void VectorOf${VECTOR_NAME}PushVector(std::vector< ${VECTOR_ELEMENT} >* v, std::vector< ${VECTOR_ELEMENT} >* other)
+{  
+   VectorOf${VECTOR_NAME}PushMulti(v,  &(*other)[0], other->size());
+}
+
 void VectorOf${VECTOR_NAME}Clear(std::vector< ${VECTOR_ELEMENT} >* v)
 {
    v->clear();

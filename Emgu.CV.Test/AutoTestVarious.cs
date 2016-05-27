@@ -15,12 +15,14 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Emgu.CV;
+using Emgu.CV.Aruco;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Flann;
 using Emgu.CV.Stitching;
 using Emgu.CV.Text;
 using Emgu.CV.Structure;
+
 #if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
@@ -3039,6 +3041,26 @@ namespace Emgu.CV.Test
       {
          int baseline = 0; 
          Size s = CvInvoke.GetTextSize("Hello world", FontFace.HersheyPlain, 16, 1, ref baseline);
+      }
+
+      [Test]
+      public void TestArucoCreateBoard()
+      {
+         Size imageSize = new Size();
+         int markersX = 4;
+         int markersY = 4;
+         int markersLength = 80;
+         int markersSeparation = 30;
+         int margins = markersSeparation;
+         imageSize.Width = markersX*(markersLength + markersSeparation) - markersSeparation + 2*margins;
+         imageSize.Height = markersY*(markersLength + markersSeparation) - markersSeparation + 2*margins;
+         int borderBits = 1;
+
+         Aruco.Dictionary dictionary = new Dictionary(Dictionary.PredefinedDictionaryName.Dict4X4_100);
+         Aruco.GridBoard board = new GridBoard(markersX, markersY, markersLength, markersSeparation, dictionary);
+         Mat boardImage = new Mat();
+         board.Draw(imageSize, boardImage, margins, borderBits);
+         CvInvoke.Imwrite("board.png", boardImage);
       }
 
 #if !NETFX_CORE

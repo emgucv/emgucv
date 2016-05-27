@@ -16,7 +16,9 @@ namespace Emgu.CV.Cuda
    /// </summary>
    public abstract class DescriptorMatcher : UnmanagedObject, IAlgorithm
    {
-
+      /// <summary>
+      /// Pointer to the native cv::Algorithm
+      /// </summary>
       protected IntPtr _algorithmPtr;
 
       /// <summary>
@@ -26,6 +28,8 @@ namespace Emgu.CV.Cuda
       /// <param name="k">Number of nearest neighbors to search for</param>
       /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
       /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
+      /// <param name="compactResult">Parameter used when the mask (or masks) is not empty. If compactResult is false, the matches vector has the same size as queryDescriptors rows. If compactResult is true, the matches vector does not contain matches for fully masked-out query descriptors.</param>
+      /// <param name="trainDescriptors">Train set of descriptors. This set is not added to the train descriptors collection stored in the class object.</param>
       public void KnnMatch(IInputArray queryDescriptors, IInputArray trainDescriptors, VectorOfVectorOfDMatch matches, int k, IInputArray mask = null, bool compactResult = false)
       {
          using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())

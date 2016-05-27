@@ -17,10 +17,15 @@ namespace Emgu.CV.Ximgproc
    /// Class implementing the LSC (Linear Spectral Clustering) superpixels algorithm described in "Zhengqin Li and Jiansheng Chen. Superpixel segmentation using linear spectral clustering. June 2015."
    /// </summary>
    /// <remarks>LSC (Linear Spectral Clustering) produces compact and uniform superpixels with low computational costs. Basically, a normalized cuts formulation of the superpixel segmentation is adopted based on a similarity metric that measures the color similarity and space proximity between image pixels. LSC is of linear computational complexity and high memory efficiency and is able to preserve global properties of images</remarks>
-   public class SupperpixelLSC : UnmanagedObject
+   public class SuperpixelLSC : UnmanagedObject
    {
-
-      public SupperpixelLSC(IInputArray image, int regionSize, float ratio)
+      /// <summary>
+      /// The function initializes a SuperpixelLSC object for the input image. 
+      /// </summary>
+      /// <param name="image">Image to segment</param>
+      /// <param name="regionSize">Chooses an average superpixel size measured in pixels</param>
+      /// <param name="ratio">Chooses the enforcement of superpixel compactness factor of superpixel</param>
+      public SuperpixelLSC(IInputArray image, int regionSize, float ratio)
       {
          using (InputArray iaImage = image.GetInputArray())
             _ptr = XimgprocInvoke.cveSuperpixelLSCCreate(iaImage, regionSize, ratio);

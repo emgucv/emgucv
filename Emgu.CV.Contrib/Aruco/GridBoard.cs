@@ -11,6 +11,7 @@ using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Emgu.CV.Aruco
 {
@@ -47,6 +48,19 @@ namespace Emgu.CV.Aruco
       }
 
       /// <summary>
+      /// Draw a GridBoard.
+      /// </summary>
+      /// <param name="outSize">size of the output image in pixels.</param>
+      /// <param name="img">output image with the board. The size of this image will be outSize and the board will be on the center, keeping the board proportions.</param>
+      /// <param name="margindSize">minimum margins (in pixels) of the board in the output image</param>
+      /// <param name="borderBits">width of the marker borders.</param>
+      public void Draw(Size outSize, IOutputArray img, int margindSize = 0, int borderBits = 1)
+      {
+         using (OutputArray oaImg = img.GetOutputArray())
+            ArucoInvoke.cveArucoGridBoardDraw(_ptr, ref outSize, oaImg, margindSize, borderBits);
+      }
+
+      /// <summary>
       /// Release the unmanage resource associated with this GridBoard
       /// </summary>
       protected override void DisposeObject()
@@ -73,5 +87,8 @@ namespace Emgu.CV.Aruco
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveArucoGridBoardRelease(ref IntPtr gridBoard);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveArucoGridBoardDraw(IntPtr gridBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);
    }
 }

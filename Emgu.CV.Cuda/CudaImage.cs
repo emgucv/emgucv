@@ -39,6 +39,7 @@ namespace Emgu.CV.Cuda
       /// Create the CudaImage from the unmanaged pointer.
       /// </summary>
       /// <param name="ptr">The unmanaged pointer to the GpuMat. It is the user's responsibility that the Color type and depth matches between the managed class and unmanaged pointer.</param>
+      /// <param name="needDispose">if true, unpon object disposal, we will cann the release function on the unmanaged <paramref name="ptr"/></param>
       internal CudaImage(IntPtr ptr, bool needDispose)
          : base(ptr, needDispose)
       {

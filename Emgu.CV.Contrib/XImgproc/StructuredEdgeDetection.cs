@@ -39,6 +39,9 @@ namespace Emgu.CV.Ximgproc
          XimgprocInvoke.cveStructuredEdgeDetectionDetectEdges(_ptr, src, dst);
       }
 
+      /// <summary>
+      /// Release the unmanaged memory associated with this object.
+      /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)

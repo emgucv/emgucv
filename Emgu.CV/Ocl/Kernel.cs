@@ -211,6 +211,12 @@ namespace Emgu.CV.Ocl
          bool sync, 
          IntPtr q);
 
+      /// <summary>
+      /// Convert the DepthType to a string that represent the OpenCL value type.
+      /// </summary>
+      /// <param name="depthType">The depth type</param>
+      /// <param name="channels">The number of channels</param>
+      /// <returns>A string the repsent the OpenCL value type</returns>
       public static String TypeToString(DepthType depthType, int channels = 1)
       {
          using (CvString str = new CvString())
