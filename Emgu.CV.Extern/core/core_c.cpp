@@ -917,3 +917,8 @@ void cvePCABackProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputA
 {
    cv::PCABackProject(*data, *mean, *eigenvectors, *result);
 }
+
+void cveGetRangeAll(cv::Range* range)
+{
+   *range = cv::Range::all();
+}

@@ -274,6 +274,17 @@ namespace Emgu.CV
       }
 
       /// <summary>
+      /// Create a mat header for the specific ROI
+      /// </summary>
+      /// <param name="mat">The mat where the new Mat header will share data from</param>
+      /// <param name="rowRange">The region of interest</param>
+      /// <param name="colRange">The region of interest</param>
+      public Mat(Mat mat, Range rowRange, Range colRange)
+         : this(MatInvoke.cveMatCreateFromRange(mat.Ptr, ref rowRange, ref colRange), true, true)
+      {
+      }
+
+      /// <summary>
       /// Convert this Mat to UMat
       /// </summary>
       /// <param name="access">Access type</param>
@@ -359,7 +370,7 @@ namespace Emgu.CV
 
                byte[] data = new byte[Cols * ElementSize];
                GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-               using (Mat matRow = GetRow(row))
+               using (Mat matRow = Row(row))
                using (Mat m = new Mat(1, Cols, Depth, NumberOfChannels, handle.AddrOfPinnedObject(), Cols * ElementSize))
                {
                   matRow.CopyTo(m);
@@ -948,13 +959,23 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Create a Mat object with data pointed towards the specific row of the original matrix
+      /// Creates a matrix header for the specified matrix row.
       /// </summary>
-      /// <param name="i">The row number</param>
-      /// <returns>A Mat object with data pointed towards the specific row of the original matrix</returns>
-      public Mat GetRow(int i)
+      /// <param name="y">A 0-based row index.</param>
+      /// <returns>A matrix header for the specified matrix row.</returns>
+      public Mat Row(int y)
       {
-         return new Mat(this, new Rectangle(new Point(0, i), new Size(this.Size.Width, 1)));
+         return new Mat(this, new Range(y, y+1), Range.All);
+      }
+
+      /// <summary>
+      /// Creates a matrix header for the specified matrix column.
+      /// </summary>
+      /// <param name="x">A 0-based column index.</param>
+      /// <returns>A matrix header for the specified matrix column.</returns>
+      public Mat Col(int x)
+      {
+         return new Mat(this, Range.All, new Range(x, x+1));
       }
 
       /// <summary>
@@ -1196,6 +1217,10 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveMatCreateFromRect(IntPtr mat, ref Rectangle roi);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cveMatCreateFromRange(IntPtr mat, ref Range rowRange, ref Range colRange);
+
       /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvMatCreateFromFile(

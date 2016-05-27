@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -543,7 +544,7 @@ namespace Emgu.CV
          sane &= (sizes.CvSize == Toolbox.SizeOf<System.Drawing.Size>());
          sane &= (sizes.CvSize2D32f == Toolbox.SizeOf<System.Drawing.SizeF>());
          sane &= (sizes.CvTermCriteria == Toolbox.SizeOf<MCvTermCriteria>());
-
+         sane &= 2*Toolbox.SizeOf<int>() == Toolbox.SizeOf<Range>();
          return sane;
       }
    }

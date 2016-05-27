@@ -81,7 +81,7 @@ namespace Emgu.CV.Test
       }
 
       [Test]
-      public void TestGetRow()
+      public void TestGetRowCol()
       {
          Mat m = new Mat(new Size(2, 2), DepthType.Cv64F, 1);
          double[] value = new double[]
@@ -91,12 +91,17 @@ namespace Emgu.CV.Test
          };
          m.SetTo(value);
 
-         Mat secondRow = m.GetRow(1);
+         Mat secondRow = m.Row(1);
          double[] secondRowValue = new double[2];
          secondRow.CopyTo(secondRowValue);
-         EmguAssert.IsTrue(value[3] == secondRowValue[0]);
-         EmguAssert.IsTrue(value[4] == secondRowValue[1]);
-         
+         EmguAssert.IsTrue(value[2] == secondRowValue[0]);
+         EmguAssert.IsTrue(value[3] == secondRowValue[1]);
+
+         Mat secondCol = m.Col(1);
+         double[] secondColValue = new double[2];
+         secondCol.CopyTo(secondColValue);
+         EmguAssert.IsTrue(value[1] == secondColValue[0]);
+         EmguAssert.IsTrue(value[3] == secondColValue[1]);
       }
 
       [TestAttribute]

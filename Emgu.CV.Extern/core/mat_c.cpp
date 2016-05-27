@@ -118,6 +118,11 @@ cv::Mat* cveMatCreateFromRect(cv::Mat* mat, CvRect* roi)
    return new cv::Mat(*mat, *roi);
 }
 
+cv::Mat* cveMatCreateFromRange(cv::Mat* mat, cv::Range* rowRange, cv::Range* colRange)
+{
+   return new cv::Mat(*mat, *rowRange, *colRange);
+}
+
 void cveMatRelease(cv::Mat** mat)
 {
    delete *mat;
@@ -225,7 +230,6 @@ void cveMatGetSizeOfDimension(cv::Mat* mat, int* sizes)
    const int* s = mat->size;
    memcpy(sizes, s, sizeof(int)*mat->dims);
 }
-
 
 void cveSwapMat(cv::Mat* mat1, cv::Mat* mat2)
 {

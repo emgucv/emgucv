@@ -174,7 +174,18 @@ namespace Emgu.CV
       /// <param name="parent">The parent Umat</param>
       /// <param name="roi">The region of interest</param>
       public UMat(UMat parent, Rectangle roi)
-        : this(UMatInvoke.cveUMatCreateFromROI(parent.Ptr, ref roi), true)
+        : this(UMatInvoke.cveUMatCreateFromRect(parent.Ptr, ref roi), true)
+      {
+      }
+
+      /// <summary>
+      /// Create a umat header for the specific ROI
+      /// </summary>
+      /// <param name="umat">The umat where the new UMat header will share data from</param>
+      /// <param name="rowRange">The region of interest</param>
+      /// <param name="colRange">The region of interest</param>
+      public UMat(UMat umat, Range rowRange, Range colRange)
+         : this(UMatInvoke.cveUMatCreateFromRange(umat.Ptr, ref rowRange, ref colRange), true)
       {
       }
 
@@ -702,6 +713,26 @@ namespace Emgu.CV
          using (InputArray iaMat = mat.GetInputArray())
             return UMatInvoke.cveUMatDot(Ptr, iaMat);
       }
+
+      /// <summary>
+      /// Creates a matrix header for the specified matrix row.
+      /// </summary>
+      /// <param name="y">A 0-based row index.</param>
+      /// <returns>A matrix header for the specified matrix row.</returns>
+      public UMat Row(int y)
+      {
+         return new UMat(this, new Range(y, y + 1), Range.All);
+      }
+
+      /// <summary>
+      /// Creates a matrix header for the specified matrix column.
+      /// </summary>
+      /// <param name="x">A 0-based column index.</param>
+      /// <returns>A matrix header for the specified matrix column.</returns>
+      public UMat Col(int x)
+      {
+         return new UMat(this, Range.All, new Range(x, x + 1));
+      }
    }
 
    internal static class UMatInvoke
@@ -735,7 +766,10 @@ namespace Emgu.CV
       internal extern static void cveUMatCreateData(IntPtr mat, int row, int cols, int type, UMat.Usage flags);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveUMatCreateFromROI(IntPtr mat, ref Rectangle roi);
+      internal extern static IntPtr cveUMatCreateFromRect(IntPtr mat, ref Rectangle roi);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cveUMatCreateFromRange(IntPtr mat, ref Range rowRange, ref Range colRange);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cveUMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
@@ -760,6 +794,8 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static double cveUMatDot(IntPtr mat, IntPtr m);
+
+
    }
 }
 

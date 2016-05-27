@@ -106,6 +106,5 @@ CVAPI(cv::ocl::Queue*) oclQueueCreate();
 CVAPI(void) oclQueueFinish(cv::ocl::Queue* queue);
 CVAPI(void) oclQueueRelease(cv::ocl::Queue** queue);
 
-
 CVAPI(void) oclTypeToString(int type, cv::String* str);
 #endif

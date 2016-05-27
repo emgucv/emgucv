@@ -3364,6 +3364,9 @@ namespace Emgu.CV
 
       #endregion
 
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cveGetRangeAll(ref Range range);
+
       #region Clustering
       /// <summary>
       /// Implements k-means algorithm that finds centers of cluster_count clusters and groups the input samples around the clusters. On output labels(i) contains a cluster index for sample stored in the i-th row of samples matrix

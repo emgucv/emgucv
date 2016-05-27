@@ -16,7 +16,8 @@
 CVAPI(cv::UMat*) cveUMatCreate(cv::UMatUsageFlags flags);
 CVAPI(void) cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator);
 CVAPI(void) cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, cv::UMatUsageFlags flags);
-CVAPI(cv::UMat*) cveUMatCreateFromROI(cv::UMat* mat, CvRect* roi);
+CVAPI(cv::UMat*) cveUMatCreateFromRect(cv::UMat* mat, CvRect* roi);
+CVAPI(cv::UMat*) cveUMatCreateFromRange(cv::UMat* mat, cv::Range* rowRange, cv::Range* colRange);
 CVAPI(void) cveUMatRelease(cv::UMat** mat);
 CVAPI(emgu::size) cveUMatGetSize(cv::UMat* mat);
 CVAPI(void) cveUMatCopyTo(cv::UMat* mat, cv::_OutputArray* m, cv::_InputArray* mask);

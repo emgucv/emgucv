@@ -29,9 +29,13 @@ void cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, cv::UMatUsage
 {
    mat->create(row, cols, type, flags);
 }
-cv::UMat* cveUMatCreateFromROI(cv::UMat* mat, CvRect* roi)
+cv::UMat* cveUMatCreateFromRect(cv::UMat* mat, CvRect* roi)
 {
    return new cv::UMat(*mat, *roi);
+}
+cv::UMat* cveUMatCreateFromRange(cv::UMat* umat, cv::Range* rowRange, cv::Range* colRange)
+{
+   return new cv::UMat(*umat, *rowRange, *colRange);
 }
 void cveUMatRelease(cv::UMat** mat)
 {

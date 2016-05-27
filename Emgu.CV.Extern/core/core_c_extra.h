@@ -256,4 +256,6 @@ CVAPI(void) cvePCACompute1(cv::_InputArray* data, cv::_InputOutputArray* mean, c
 CVAPI(void) cvePCACompute2(cv::_InputArray* data, cv::_InputOutputArray* mean, cv::_OutputArray* eigenvectors, double retainedVariance);
 CVAPI(void) cvePCAProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputArray* eigenvectors, cv::_OutputArray* result);
 CVAPI(void) cvePCABackProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputArray* eigenvectors, cv::_OutputArray* result);
+ 
+CVAPI(void) cveGetRangeAll(cv::Range* range);
 #endif
