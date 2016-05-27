@@ -80,6 +80,25 @@ namespace Emgu.CV.Test
          //so be really careful when performing the above operations.
       }
 
+      [Test]
+      public void TestGetRow()
+      {
+         Mat m = new Mat(new Size(2, 2), DepthType.Cv64F, 1);
+         double[] value = new double[]
+         {
+            1, 2, 
+            3, 4
+         };
+         m.SetTo(value);
+
+         Mat secondRow = m.GetRow(1);
+         double[] secondRowValue = new double[2];
+         secondRow.CopyTo(secondRowValue);
+         EmguAssert.IsTrue(value[3] == secondRowValue[0]);
+         EmguAssert.IsTrue(value[4] == secondRowValue[1]);
+         
+      }
+
       [TestAttribute]
       public void TestMatToFileStorage()
       {

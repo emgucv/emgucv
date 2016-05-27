@@ -954,7 +954,7 @@ namespace Emgu.CV
       /// <returns>A Mat object with data pointed towards the specific row of the original matrix</returns>
       public Mat GetRow(int i)
       {
-         return new Mat(this, new Rectangle(new Point(i, 0), new Size(this.Size.Width, 1)));
+         return new Mat(this, new Rectangle(new Point(0, i), new Size(this.Size.Width, 1)));
       }
 
       /// <summary>
