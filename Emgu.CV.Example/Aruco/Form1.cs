@@ -159,8 +159,8 @@ namespace Aruco
                      ArucoInvoke.EstimatePoseSingleMarkers(corners, markersLength, _cameraMatrix, _distCoeffs, rvecs, tvecs);
                      for (int i = 0; i < ids.Size; i++)
                      {
-                        using (Mat rvecMat = rvecs.GetRow(i))
-                        using (Mat tvecMat = tvecs.GetRow(i))
+                        using (Mat rvecMat = rvecs.Row(i))
+                        using (Mat tvecMat = tvecs.Row(i))
                         using (VectorOfDouble rvec = new VectorOfDouble())
                         using (VectorOfDouble tvec = new VectorOfDouble())
                         {
