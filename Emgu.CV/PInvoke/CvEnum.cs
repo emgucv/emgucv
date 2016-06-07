@@ -3753,7 +3753,15 @@ namespace Emgu.CV.CvEnum
       /// <summary>
       /// X.S. Gao, X.-R. Hou, J. Tang, H.-F. Chang; "Complete Solution Classification for the Perspective-Three-Point Problem"
       /// </summary>
-      P3P = 2
+      P3P = 2,
+      /// <summary>
+      /// A Direct Least-Squares (DLS) Method for PnP
+      /// </summary>
+      Dls = 3,
+      /// <summary>
+      /// Exhaustive Linearization for Robust Camera Pose and Focal Length Estimation
+      /// </summary>
+      UPnP = 4
    }
 
    /// <summary>

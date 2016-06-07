@@ -552,7 +552,7 @@ namespace Emgu.CV
       /// <param name="confident">The probability that the algorithm produces a useful result.</param>
       /// <param name="inliers">Output vector that contains indices of inliers in objectPoints and imagePoints .</param>
       /// <param name="flags">Method for solving a PnP problem </param>
-      public static void SolvePnPRansac(
+      public static bool SolvePnPRansac(
          IInputArray objectPoints, IInputArray imagePoints, IInputArray cameraMatrix, IInputArray distCoeffs,
          IOutputArray rvec, IOutputArray tvec,
          bool useExtrinsicGuess, int iterationsCount, float reprojectionError, double confident,
@@ -565,7 +565,7 @@ namespace Emgu.CV
          using (OutputArray oaRotationVector = rvec.GetOutputArray())
          using (OutputArray oaTranslationVector = tvec.GetOutputArray())
          using (OutputArray oaInliers = inliers == null ? OutputArray.GetEmpty() : inliers.GetOutputArray())
-            cveSolvePnPRansac(
+            return cveSolvePnPRansac(
                iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs,
                oaRotationVector, oaTranslationVector,
                useExtrinsicGuess, iterationsCount, reprojectionError, confident,
@@ -573,7 +573,8 @@ namespace Emgu.CV
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveSolvePnPRansac(
+      [return:MarshalAs(CvInvoke.BoolMarshalType)]
+      private static extern bool cveSolvePnPRansac(
          IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs,
          IntPtr rvec, IntPtr tvec,
          [MarshalAs(CvInvoke.BoolMarshalType)] bool useExtrinsicGuess,
