@@ -139,7 +139,7 @@ namespace Emgu.CV.Cuda
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
       /// <returns>Pointer to the GpuMat</returns>
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetRegion")]
-      public static extern IntPtr GetRegion(IntPtr gpuMat, ref MCvSlice rowRange, ref MCvSlice colRange);
+      public static extern IntPtr GetRegion(IntPtr gpuMat, ref Range rowRange, ref Range colRange);
 
       /// <summary>
       /// Resize the GpuMat

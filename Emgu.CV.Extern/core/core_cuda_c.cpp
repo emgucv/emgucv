@@ -158,9 +158,9 @@ bool gpuMatIsContinuous(cv::cuda::GpuMat* gpuMat)
    return gpuMat->isContinuous();
 }
 
-cv::cuda::GpuMat* gpuMatGetRegion(cv::cuda::GpuMat* other, CvSlice* rowRange, CvSlice* colRange)
+cv::cuda::GpuMat* gpuMatGetRegion(cv::cuda::GpuMat* other, cv::Range* rowRange, cv::Range* colRange)
 {
-   return new cv::cuda::GpuMat(*other, cv::Range(*rowRange), cv::Range(*colRange));
+   return new cv::cuda::GpuMat(*other, *rowRange, *colRange);
 }
 
 void gpuMatRelease(cv::cuda::GpuMat** mat)

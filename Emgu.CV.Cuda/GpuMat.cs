@@ -96,9 +96,9 @@ namespace Emgu.CV.Cuda
       /// Create a GpuMat from the specific region of <paramref name="mat"/>. The data is shared between the two GpuMat
       /// </summary>
       /// <param name="mat">The matrix where the region is extracted from</param>
-      /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
-      /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
-      public GpuMat(GpuMat mat, MCvSlice rowRange, MCvSlice colRange)
+      /// <param name="colRange">The column range.</param>
+      /// <param name="rowRange">The row range.</param>
+      public GpuMat(GpuMat mat, Range rowRange, Range colRange)
          : this(CudaInvoke.GetRegion(mat, ref rowRange, ref colRange), true)
       {
       }

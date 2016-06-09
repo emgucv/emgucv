@@ -80,7 +80,7 @@ CVAPI(cv::cuda::GpuMat*) gpuMatCreateContinuous(int rows, int cols, int type);
 
 CVAPI(bool) gpuMatIsContinuous(cv::cuda::GpuMat* gpuMat);
 
-CVAPI(cv::cuda::GpuMat*) gpuMatGetRegion(cv::cuda::GpuMat* other, CvSlice* rowRange, CvSlice* colRange);
+CVAPI(cv::cuda::GpuMat*) gpuMatGetRegion(cv::cuda::GpuMat* other, cv::Range* rowRange, cv::Range* colRange);
 
 CVAPI(void) gpuMatRelease(cv::cuda::GpuMat** mat);
 
