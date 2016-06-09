@@ -55,6 +55,19 @@ namespace Emgu.CV.Test
       }
 
       [TestAttribute]
+      public void TestMatToArr()
+      {
+         
+         Mat mat = new Mat(new Size(320, 240), DepthType.Cv32F, 1);
+
+         Matrix<float> m = new Matrix<float>(mat.Rows, mat.Cols, mat.NumberOfChannels);
+         mat.CopyTo(m);
+
+         EmguAssert.IsTrue(m.Mat.Depth == DepthType.Cv32F);
+         EmguAssert.IsTrue(mat.Depth == DepthType.Cv32F);
+      }
+
+      [TestAttribute]
       public void TestMatEquals()
       {
          Mat m1 = new Mat(640, 320, DepthType.Cv8U, 3);

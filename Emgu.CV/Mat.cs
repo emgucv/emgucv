@@ -688,26 +688,6 @@ namespace Emgu.CV
             //different depth, same color
             Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
             ConvertTo(result, CvInvoke.GetDepthType(typeof(TDepth)));
-            /*
-            if (numberOfChannels == 1)
-            {
-               using (Image<Gray, TDepth> tmp = this.ToImage<Gray, TDepth>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (numberOfChannels == 3)
-            {
-               using (Image<Bgr, TDepth> tmp = this.ToImage<Bgr, TDepth>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (numberOfChannels == 4)
-            {
-               using (Image<Bgra, TDepth> tmp = this.ToImage<Bgra, TDepth>())
-                  result.ConvertFrom(tmp);
-            }
-            else
-            {
-               throw new Exception("Unsupported conversion");
-            }*/
             return result;
          }
          else if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension != numberOfChannels)
@@ -720,47 +700,7 @@ namespace Emgu.CV
                numberOfChannels == 3 ? typeof(Bgr) :
                typeof(Bgra),
                typeof(TColor));
-            /*
-            CvEnum.DepthType depth = Depth;
-            if (depth == CvEnum.DepthType.Cv8U)
-            {
-               using (Image<TColor, Byte> tmp = this.ToImage<TColor, Byte>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (depth == CvEnum.DepthType.Cv8S)
-            {
-               using (Image<TColor, SByte> tmp = this.ToImage<TColor, SByte>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (depth == CvEnum.DepthType.Cv16U)
-            {
-               using (Image<TColor, UInt16> tmp = this.ToImage<TColor, UInt16>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (depth == CvEnum.DepthType.Cv16S)
-            {
-               using (Image<TColor, Int16> tmp = this.ToImage<TColor, Int16>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (depth == CvEnum.DepthType.Cv32S)
-            {
-               using (Image<TColor, Int32> tmp = this.ToImage<TColor, Int32>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (depth == CvEnum.DepthType.Cv32F)
-            {
-               using (Image<TColor, float> tmp = this.ToImage<TColor, float>())
-                  result.ConvertFrom(tmp);
-            }
-            else if (depth == CvEnum.DepthType.Cv64F)
-            {
-               using (Image<TColor, double> tmp = this.ToImage<TColor, double>())
-                  result.ConvertFrom(tmp);
-            }
-            else
-            {
-               throw new Exception("Unsupported conversion");
-            }*/
+            
             return result;
          }
          else
