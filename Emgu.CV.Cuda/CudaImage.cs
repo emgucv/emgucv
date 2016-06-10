@@ -90,7 +90,7 @@ namespace Emgu.CV.Cuda
       /// <param name="image">The CudaImage where the region is extracted from</param>
       /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
       /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
-      public CudaImage(CudaImage<TColor, TDepth> image, MCvSlice rowRange, MCvSlice colRange)
+      public CudaImage(CudaImage<TColor, TDepth> image, Range rowRange, Range colRange)
          :this(CudaInvoke.GetRegion(image, ref rowRange, ref colRange), true)
       {
       }
@@ -281,7 +281,7 @@ namespace Emgu.CV.Cuda
       /// <remarks>The parent CudaImage should never be released before the returned CudaImage that represent the subregion</remarks>
       public new CudaImage<TColor, TDepth> RowRange(int start, int end)
       {
-         return new CudaImage<TColor, TDepth>(this, new MCvSlice(start, end), MCvSlice.WholeSeq);
+         return new CudaImage<TColor, TDepth>(this, new Range(start, end), Range.All);
       }
 
       /// <summary>
@@ -304,7 +304,7 @@ namespace Emgu.CV.Cuda
       /// <remarks>The parent CudaImage should never be released before the returned CudaImage that represent the subregion</remarks>
       public new CudaImage<TColor, TDepth> ColRange(int start, int end)
       {
-         return new CudaImage<TColor, TDepth>(this, MCvSlice.WholeSeq, new MCvSlice(start, end));
+         return new CudaImage<TColor, TDepth>(this, Range.All, new Range(start, end));
       }
 
       #region IImage Members

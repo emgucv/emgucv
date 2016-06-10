@@ -274,7 +274,7 @@ namespace Emgu.CV.Cuda
       /// <remarks>The parent GpuMat should never be released before the returned GpuMat that represent the subregion</remarks>
       public GpuMat RowRange(int start, int end)
       {
-         return new GpuMat(this, new MCvSlice(start, end), MCvSlice.WholeSeq);
+         return new GpuMat(this, new Range(start, end), Range.All);
       }
 
       /// <summary>
@@ -297,7 +297,7 @@ namespace Emgu.CV.Cuda
       /// <remarks>The parent GpuMat should never be released before the returned GpuMat that represent the subregion</remarks>
       public GpuMat ColRange(int start, int end)
       {
-         return new GpuMat(this, MCvSlice.WholeSeq, new MCvSlice(start, end));
+         return new GpuMat(this, Range.All, new Range(start, end));
       }
 
       /// <summary>

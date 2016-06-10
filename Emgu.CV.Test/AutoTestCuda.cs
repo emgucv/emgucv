@@ -103,7 +103,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> img1 = new Image<Gray, byte>(1200, 640);
             img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
             using (GpuMat gpuImg1 = new GpuMat(img1))
-            using (GpuMat mat = new GpuMat(gpuImg1, new MCvSlice(0, 1), MCvSlice.WholeSeq))
+            using (GpuMat mat = new GpuMat(gpuImg1, new Range(0, 1), Range.All))
             {
                Size s = mat.Size;
             }
