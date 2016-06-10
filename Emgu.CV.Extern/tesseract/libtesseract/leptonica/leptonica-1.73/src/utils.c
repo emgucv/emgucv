@@ -1976,6 +1976,8 @@ l_uint32  attributes;
        /* Make sure the tmp directory exists */
 #ifndef _WIN32
     ret = mkdir(dir, 0777);
+#elif WINAPI_FAMILY_APP
+    ret = -1;    
 #else
     attributes = GetFileAttributes(dir);
     if (attributes == INVALID_FILE_ATTRIBUTES)
@@ -2062,6 +2064,8 @@ char    *newpath;
     }
 #ifndef _WIN32
     ret = rmdir(dir);
+#elif WINAPI_FAMILY_APP
+    ret = -1;    
 #else
     newpath = genPathname(dir, NULL);
     remove(newpath);
@@ -2241,6 +2245,8 @@ l_int32  ret;
 
 #ifndef _WIN32
     ret = remove(filepath);
+#elif WINAPI_FAMILY_APP
+    ret = -1;    
 #else
         /* Set attributes to allow deletion of read-only files */
     SetFileAttributes(filepath, FILE_ATTRIBUTE_NORMAL);
@@ -2318,6 +2324,8 @@ l_int32  ret;
     ret = fileCopy(srcpath, newpath);
     if (!ret)
         remove(srcpath);
+#elif WINAPI_FAMILY_APP   
+    ret = 1;        
 #else
     ret = MoveFileEx(srcpath, newpath,
                      MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING) ? 0 : 1;
@@ -3459,7 +3467,7 @@ l_uint64  limit, ratio;
         return 0;
     }
 
-    limit = sqrt(n);
+    limit = sqrt((double)n);
     for (div = 3; div < limit; div += 2) {
        ratio = n / div;
        if (ratio * div == n) {
