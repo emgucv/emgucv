@@ -13,6 +13,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
+using Emgu.CV.Ocl;
 
 public class HelloTexture : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class HelloTexture : MonoBehaviour
          {
             if (oclPlatformInfos.Size > 0)
             {
-               OclPlatformInfo platformInfo = oclPlatformInfos[0];
+               PlatformInfo platformInfo = oclPlatformInfos[0];
                openclStr = platformInfo.ToString();
             }
          }

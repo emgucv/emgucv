@@ -2532,6 +2532,75 @@ namespace Emgu.CV.Test
       }
 
       [Test]
+      public void TestStitching3()
+      {
+         Mat[] images = new Mat[4];
+
+         images[0] = EmguAssert.LoadMat("stitch1.jpg");
+         images[1] = EmguAssert.LoadMat("lena.jpg");
+         images[2] = EmguAssert.LoadMat("license-plate.jpg");
+         images[3] = EmguAssert.LoadMat("pedestrian.png");
+
+         using (Stitcher stitcher = new Stitcher(false))
+         //using (OrbFeaturesFinder finder = new OrbFeaturesFinder(new Size(3, 1)))
+         {
+            //stitcher.SetFeaturesFinder(finder);
+            Mat result = new Mat();
+            using (VectorOfMat vm = new VectorOfMat())
+            {
+               vm.Push(images);
+               stitcher.Stitch(vm, result);
+            }
+            //Emgu.CV.UI.ImageViewer.Show(result);
+         }
+      }
+
+      [Test]
+      public void TestStitching4()
+      {
+         Mat[] images = new Mat[1];
+
+         images[0] = EmguAssert.LoadMat("stitch1.jpg");
+         
+
+         using (Stitcher stitcher = new Stitcher(false))
+         //using (OrbFeaturesFinder finder = new OrbFeaturesFinder(new Size(3, 1)))
+         {
+            //stitcher.SetFeaturesFinder(finder);
+            Mat result = new Mat();
+            using (VectorOfMat vm = new VectorOfMat())
+            {
+               vm.Push(images);
+               stitcher.Stitch(vm, result);
+            }
+            //Emgu.CV.UI.ImageViewer.Show(result);
+         }
+      }
+
+      /*
+      [Test]
+      public void TestStitching5()
+      {
+         Mat[] images = new Mat[2];
+
+         images[0] = new Mat();
+         images[1] = new Mat();
+
+         using (Stitcher stitcher = new Stitcher(false))
+         //using (OrbFeaturesFinder finder = new OrbFeaturesFinder(new Size(3, 1)))
+         {
+            //stitcher.SetFeaturesFinder(finder);
+            Mat result = new Mat();
+            using (VectorOfMat vm = new VectorOfMat())
+            {
+               vm.Push(images);
+               stitcher.Stitch(vm, result);
+            }
+            //Emgu.CV.UI.ImageViewer.Show(result);
+         }
+      }*/
+
+      [Test]
       public void TestEstimateAffine3D()
       {
          Random r = new Random();
