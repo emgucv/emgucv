@@ -2333,23 +2333,24 @@ namespace Emgu.CV.Test
       }
 
 #if !ANDROID
-      /*
+      
       [Test]
       public void TestCaptureFromFile()
       {
-         using (Capture capture = new Capture(EmguAssert.GetFile( "tree.avi")))
-         using (VideoWriter writer = new VideoWriter("tree_invert.avi", 10, capture.Width, capture.Height, true))
+         using (VideoCapture capture = new VideoCapture(EmguAssert.GetFile( "tree.avi")))
+         using (VideoWriter writer = new VideoWriter("tree_invert.avi", 10, new Size(capture.Width, capture.Height), true))
          {
-            while (capture.Grab())
+            int maxCount = 10;
+            Mat img = new Mat();
+            while (capture.Grab() && maxCount > 0)
             {
-               using (Image<Bgr, Byte> img = capture.RetrieveBgrFrame(0))
-               {
-                  img._Not();
-                  writer.WriteFrame(img);
-               }
+               capture.Retrieve(img);
+               CvInvoke.BitwiseNot(img, img);
+               writer.Write(img);
+               maxCount--;
             }
          }
-      }*/
+      }
 #endif
 
       [Test]
