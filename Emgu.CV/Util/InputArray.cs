@@ -5,9 +5,6 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
-#if !(__IOS__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
-using Emgu.CV.Cuda;
-#endif
 using Emgu.CV.CvEnum;
 using Emgu.Util;
 
@@ -147,19 +144,6 @@ namespace Emgu.CV
          return m;
       }
 
-#if !(__IOS__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
-      /// <summary>
-      /// Get the GpuMat from the input array
-      /// </summary>
-      /// <returns>The GpuMat</returns>
-      public Cuda.GpuMat GetGpuMat()
-      {
-         Cuda.GpuMat m = new Cuda.GpuMat();
-         CvInvoke.cveInputArrayGetGpuMat(Ptr, m);
-         return m;
-      }
-#endif
-
       /// <summary>
       /// Get the size of the input array
       /// </summary>
@@ -272,9 +256,6 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveInputArrayGetUMat(IntPtr ia, int idx, IntPtr umat);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveInputArrayGetGpuMat(IntPtr ia, IntPtr gpumat);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveInputArrayCopyTo(IntPtr ia, IntPtr arr, IntPtr mask);
