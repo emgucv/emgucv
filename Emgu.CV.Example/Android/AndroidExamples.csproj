@@ -22,47 +22,8 @@
     <JavaMaximumHeapSize />
     <JavaOptions />
   </PropertyGroup>
-  <Choose>
-    <When Condition="Exists('..\..\libs\armeabi-v7a\libcvextern.so')">
-      <PropertyGroup>
-        <HasArmeabiV7a>armeabi-v7a%3b</HasArmeabiV7a>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <HasArmeabiV7a>
-        </HasArmeabiV7a>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
-  <Choose>
-    <When Condition="Exists('..\..\libs\armeabi\libcvextern.so')">
-      <PropertyGroup>
-        <HasArmeabi>armeabi%3b</HasArmeabi>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <HasArmeabi>
-        </HasArmeabi>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
-  <Choose>
-    <When Condition="Exists('..\..\libs\x86\libcvextern.so')">
-      <PropertyGroup>
-        <HasX86>x86%3b</HasX86>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <HasX86>
-        </HasX86>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
   <PropertyGroup>
-    <AndroidSupportedAbis>armeabi-v7a</AndroidSupportedAbis>
+       <AndroidSupportedAbis>armeabi,armeabi-v7a,x86,x86_64,arm64-v8a</AndroidSupportedAbis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
