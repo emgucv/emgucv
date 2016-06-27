@@ -157,6 +157,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 		PATTERN "*.txt"
 		PATTERN "*.png"
 		PATTERN "*.dll"
+      PATTERN "*.json"
 		PATTERN ".git" EXCLUDE
 		PATTERN "obj" EXCLUDE
 		PATTERN "CMake*" EXCLUDE
@@ -203,6 +204,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   PATTERN "*.txt"
   PATTERN "*.png"
   PATTERN "*.dll"
+  PATTERN "*.json"
   PATTERN ".git" EXCLUDE
   PATTERN "Debug" EXCLUDE
   PATTERN "Release" EXCLUDE
