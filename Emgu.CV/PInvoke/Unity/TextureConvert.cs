@@ -18,6 +18,14 @@ namespace Emgu.CV
 {
    public static class TextureConvert
    {
+      /// <summary>
+      /// Convert Texture2d object to Image Object
+      /// </summary>
+      /// <typeparam name="TColor">The color type of the Image</typeparam>
+      /// <typeparam name="TDepth">The depth type of the Image</typeparam>
+      /// <param name="texture">The unity Texture2D</param>
+      /// <param name="flipType">The optional flip when performing the conversion</param>
+      /// <returns>The resulting Image object</returns>
       public static Image<TColor, TDepth> Texture2dToImage<TColor, TDepth>(Texture2D texture, Emgu.CV.CvEnum.FlipType flipType = FlipType.Vertical)
          where TColor : struct, IColor
          where TDepth : new()
@@ -38,15 +46,12 @@ namespace Emgu.CV
          }
          catch (Exception excpt)
          {
-            if (texture.format == TextureFormat.ARGB32 ||
-                texture.format == TextureFormat.RGBA32 ||
-                texture.format == TextureFormat.RGB24 ||
-                texture.format == TextureFormat.Alpha8)
+            if (texture.format == TextureFormat.ARGB32 || texture.format == TextureFormat.RGB24)
             {
                byte[] jpgBytes = texture.EncodeToJPG();
                using (Mat tmp = new Mat())
                {
-				  CvInvoke.Imdecode(jpgBytes, ImreadModes.AnyColor, tmp);
+                  CvInvoke.Imdecode(jpgBytes, ImreadModes.AnyColor, tmp);
                   result.ConvertFrom(tmp);
                }
             }
@@ -60,13 +65,21 @@ namespace Emgu.CV
          return result;
       }
 
+      /// <summary>
+      /// Convert Image to Texture2D
+      /// </summary>
+      /// <typeparam name="TColor">The color type of the image</typeparam>
+      /// <typeparam name="TDepth">The depth of the image</typeparam>
+      /// <param name="image">The image object to be converted</param>
+      /// <param name="flipType">The optional flip when performing the convertion</param>
+      /// <returns>The Unity Texture2D object</returns>
       public static Texture2D ImageToTexture2D<TColor, TDepth>(Image<TColor, TDepth> image, Emgu.CV.CvEnum.FlipType flipType = FlipType.Vertical)
          where TColor : struct, IColor
          where TDepth : new()
       {
          Size size = image.Size;
 
-         if (typeof(TColor) == typeof(Rgb) && typeof(TDepth) == typeof(Byte))
+         if (typeof(TColor) == typeof(Rgb) && typeof(TDepth) == typeof(Byte) && SystemInfo.SupportsTextureFormat(TextureFormat.RGB24))
          {
             Texture2D texture = new Texture2D(size.Width, size.Height, TextureFormat.RGB24, false);
             byte[] data = new byte[size.Width * size.Height * 3];
@@ -82,7 +95,7 @@ namespace Emgu.CV
             texture.Apply();
             return texture;
          }
-         else //if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(Byte))
+         else if (SystemInfo.SupportsTextureFormat(TextureFormat.RGBA32))
          {
             Texture2D texture = new Texture2D(size.Width, size.Height, TextureFormat.RGBA32, false);
             byte[] data = new byte[size.Width * size.Height * 4];
@@ -99,33 +112,35 @@ namespace Emgu.CV
             texture.Apply();
             return texture;
          }
-
-         //return null;
+         else
+         {
+            throw new Exception("TextureFormat of RGBA32 is not supported on this device");
+         }
       }
 
+      /// <summary>
+      /// Convert Texture2d to OutputArray
+      /// </summary>
+      /// <param name="texture">The unity Texture2D object</param>
+      /// <param name="result">The output array where the results will be written to</param>
       public static void Texture2dToOutputArray(Texture2D texture, IOutputArray result)
       {
          int width = texture.width;
          int height = texture.height;
          try
          {
-            
             Color32[] colors = texture.GetPixels32();
             GCHandle handle = GCHandle.Alloc(colors, GCHandleType.Pinned);
-            //result.Create(height, width, DepthType.Cv8U, 4);
+
             using (Mat rgba = new Mat(height, width, DepthType.Cv8U, 4, handle.AddrOfPinnedObject(), width * 4))
             {
                rgba.CopyTo(result);
-               //result.ConvertFrom(rgba);
             }
             handle.Free();
          }
          catch (Exception excpt)
          {
-            if (texture.format == TextureFormat.ARGB32 ||
-                texture.format == TextureFormat.RGBA32 ||
-                texture.format == TextureFormat.RGB24 ||
-                texture.format == TextureFormat.Alpha8)
+            if (texture.format == TextureFormat.ARGB32 || texture.format == TextureFormat.RGB24)
             {
                byte[] jpgBytes = texture.EncodeToJPG();
                using (Mat tmp = new Mat())
@@ -151,16 +166,16 @@ namespace Emgu.CV
       public static Texture2D InputArrayToTexture2D(IInputArray image, Emgu.CV.CvEnum.FlipType flipType = FlipType.Vertical, byte[] buffer = null)
       {
          using (InputArray iaImage = image.GetInputArray())
-         using (Mat m = iaImage.GetMat())
          {
-            Size size = m.Size;
+            Size size = iaImage.GetSize();
 
-            if (m.NumberOfChannels == 3 && m.Depth == DepthType.Cv8U)
+            if (iaImage.GetChannels() == 3 && iaImage.GetDepth() == DepthType.Cv8U && SystemInfo.SupportsTextureFormat(TextureFormat.RGB24))
             {
+               //assuming 3 channel image is of BGR color
                Texture2D texture = new Texture2D(size.Width, size.Height, TextureFormat.RGB24, false);
 
                byte[] data;
-               int bufferLength = size.Width*size.Height*3;
+               int bufferLength = size.Width * size.Height * 3;
                if (buffer != null)
                {
                   if (buffer.Length < bufferLength)
@@ -174,7 +189,7 @@ namespace Emgu.CV
                   Image<Rgb, byte> rgb = new Image<Rgb, byte>(size.Width, size.Height, size.Width * 3,
                      dataHandle.AddrOfPinnedObject()))
                {
-                  rgb.ConvertFrom(m);
+                  rgb.ConvertFrom(image);
                   if (flipType != FlipType.None)
                      CvInvoke.Flip(rgb, rgb, flipType);
                }
@@ -183,7 +198,7 @@ namespace Emgu.CV
                texture.Apply();
                return texture;
             }
-            else //if (m.NumberOfChannels == 4 && m.Depth == DepthType.Cv8U)
+            else if (SystemInfo.SupportsTextureFormat(TextureFormat.RGBA32))
             {
                Texture2D texture = new Texture2D(size.Width, size.Height, TextureFormat.RGBA32, false);
                byte[] data;
@@ -191,7 +206,10 @@ namespace Emgu.CV
                if (buffer != null)
                {
                   if (buffer.Length < bufferLength)
-                     throw new ArgumentException(String.Format("Buffer size ({0}) is not big enough for the RGBA32 texture, width * height * 4 = {1} is required.", buffer.Length, bufferLength));
+                     throw new ArgumentException(
+                        String.Format(
+                           "Buffer size ({0}) is not big enough for the RGBA32 texture, width * height * 4 = {1} is required.",
+                           buffer.Length, bufferLength));
                   data = buffer;
                }
                else
@@ -201,7 +219,7 @@ namespace Emgu.CV
                   Image<Rgba, byte> rgba = new Image<Rgba, byte>(size.Width, size.Height, size.Width * 4,
                      dataHandle.AddrOfPinnedObject()))
                {
-                  rgba.ConvertFrom(m);
+                  rgba.ConvertFrom(image);
                   if (flipType != FlipType.None)
                      CvInvoke.Flip(rgba, rgba, flipType);
                }
@@ -210,6 +228,10 @@ namespace Emgu.CV
 
                texture.Apply();
                return texture;
+            }
+            else
+            {
+               throw new Exception("TextureFormat of RGBA32 is not supported on this device");
             }
          }
       }

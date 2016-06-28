@@ -2320,42 +2320,39 @@ namespace Emgu.CV
          IntPtr seq,
          IntPtr block);
       */
-      internal static void MinMax(IImage arr, out double[] minValues, out double[] maxValues, out Point[] minLocations, out Point[] maxLocations)
+      internal static void MinMax(IInputArray arr, out double[] minValues, out double[] maxValues, out Point[] minLocations, out Point[] maxLocations)
       {
-         int numberOfChannels = arr.NumberOfChannels;
-         minValues = new double[numberOfChannels];
-         maxValues = new double[numberOfChannels];
-         minLocations = new Point[numberOfChannels];
-         maxLocations = new Point[numberOfChannels];
-
-         double minVal = 0, maxVal = 0;
-         Point minLoc = new Point(), maxLoc = new Point();
-         //int[] minIdx = new int[2], maxIdx = new int[2];
-         if (numberOfChannels == 1)
+         using (InputArray iaArr = arr.GetInputArray())
          {
-            CvInvoke.MinMaxLoc(arr, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
-            minValues[0] = minVal; maxValues[0] = maxVal;
-            //minLoc.X = minIdx[1]; minLoc.Y = minIdx[0];
-            //maxLoc.X = maxIdx[1]; maxLoc.Y = maxIdx[0];
-            minLocations[0] = minLoc; maxLocations[0] = maxLoc;
+            int numberOfChannels = iaArr.GetChannels();
+            minValues = new double[numberOfChannels];
+            maxValues = new double[numberOfChannels];
+            minLocations = new Point[numberOfChannels];
+            maxLocations = new Point[numberOfChannels];
 
-         }
-         else
-         {
-            IImage[] channels = arr.Split();
-            try
+            double minVal = 0, maxVal = 0;
+            Point minLoc = new Point(), maxLoc = new Point();
+            //int[] minIdx = new int[2], maxIdx = new int[2];
+            if (numberOfChannels == 1)
             {
-               for (int i = 0; i < channels.Length; i++)
-               {
-                  CvInvoke.MinMaxLoc(channels[i], ref minVal, ref maxVal, ref minLoc, ref maxLoc, null);
-                  minValues[i] = minVal; maxValues[i] = maxVal;
-                  minLocations[i] = minLoc; maxLocations[i] = maxLoc;
-               }
+               CvInvoke.MinMaxLoc(arr, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+               minValues[0] = minVal;
+               maxValues[0] = maxVal;
+               minLocations[0] = minLoc;
+               maxLocations[0] = maxLoc;
             }
-            finally
+            else
             {
-               for (int i = 0; i < channels.Length; i++)
-                  channels[i].Dispose();
+               using (Mat channel = new Mat())
+                  for (int i = 0; i < numberOfChannels; i++)
+                  {
+                     CvInvoke.ExtractChannel(arr, channel, i);
+                     CvInvoke.MinMaxLoc(channel, ref minVal, ref maxVal, ref minLoc, ref maxLoc, null);
+                     minValues[i] = minVal;
+                     maxValues[i] = maxVal;
+                     minLocations[i] = minLoc;
+                     maxLocations[i] = maxLoc;
+                  }
             }
          }
       }

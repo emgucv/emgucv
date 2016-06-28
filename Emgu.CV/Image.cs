@@ -2514,88 +2514,106 @@ namespace Emgu.CV
       /// Convert the source image to the current image, if the size are different, the current image will be a resized version of the srcImage. 
       /// </summary>
       /// <param name="srcImage">The sourceImage</param>
-      public void ConvertFrom(Mat srcImage)
+      public void ConvertFrom(IInputArray srcImage)
       {
-         if (!Size.Equals(srcImage.Size))
-         {  //if the size of the source image do not match the size of the current image
-            using (Mat tmp = new Mat())
-            {
-               CvInvoke.Resize(srcImage, tmp, this.Size);
-               ConvertFrom(tmp);
-               return;
-            }
-         }
-
-         if (NumberOfChannels == srcImage.NumberOfChannels)
+         using (InputArray iaSrcImage = srcImage.GetInputArray())
          {
-            #region same color
-            if (CvInvoke.GetDepthType( typeof(TDepth)) == srcImage.Depth )
-            {   //same depth
-               srcImage.CopyTo(this);
-            }
-            else
+            Size srcImageSize = iaSrcImage.GetSize();
+            if (!Size.Equals(srcImageSize))
             {
-               //different depth
-               //int channelCount = NumberOfChannels;
-               {
-                  if (typeof(TDepth) == typeof(Byte) && DepthType.Cv8U != CvInvoke.GetDepthType( typeof(Byte)))
-                  {
-                     double[] minVal, maxVal;
-                     Point[] minLoc, maxLoc;
-                     srcImage.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
-                     double min = minVal[0];
-                     double max = maxVal[0];
-                     for (int i = 1; i < minVal.Length; i++)
-                     {
-                        min = Math.Min(min, minVal[i]);
-                        max = Math.Max(max, maxVal[i]);
-                     }
-                     double scale = 1.0, shift = 0.0;
-                     if (max > 255.0 || min < 0)
-                     {
-                        scale = max.Equals(min) ? 0.0 : 255.0 / (max - min);
-                        shift = scale.Equals(0) ? min : -min * scale;
-                     }
-
-                     CvInvoke.ConvertScaleAbs(srcImage, this, scale, shift);
-                  }
-                  else
-                  {
-                     srcImage.ConvertTo(this, this.Mat.Depth, 1.0, 0.0);
-                     //CvInvoke.cvConvertScale(srcImage, this, 1.0, 0.0);
-                  }
-               }
-            }
-            #endregion
-         }
-         else
-         {
-            int srcChannels = srcImage.NumberOfChannels;
-            if (!(srcChannels == 1 || srcChannels == 3 || srcChannels ==4))
-               throw new Exception("Color conversion not suppported");
-            Type srcColorType =
-               srcImage.NumberOfChannels == 1
-                  ? typeof (Gray)
-                  : srcImage.NumberOfChannels == 3
-                     ? typeof (Bgr)
-                     : typeof (Bgra);
-               
-            #region different color
-            if (CvInvoke.GetDepthType( typeof(TDepth) ) == srcImage.Depth)
-            {   //same depth
-               CvInvoke.CvtColor(srcImage, this, srcColorType, typeof(TColor));
-            }
-            else
-            {   //different depth
-               //using (Image<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
+               //if the size of the source image do not match the size of the current image
                using (Mat tmp = new Mat())
                {
-                  srcImage.ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth)));
-                  //srcImage.Mat.ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth), 
-                  CvInvoke.CvtColor(tmp, this, srcColorType, typeof(TColor));
+                  CvInvoke.Resize(srcImage, tmp, this.Size);
+                  ConvertFrom(tmp);
+                  return;
                }
             }
-            #endregion
+
+            int srcImageNumberOfChannels = iaSrcImage.GetChannels();
+            if (NumberOfChannels == srcImageNumberOfChannels)
+            {
+               #region same color
+
+               DepthType srcImageDepth = iaSrcImage.GetDepth();
+               if (CvInvoke.GetDepthType(typeof(TDepth)) == srcImageDepth)
+               {
+                  //same depth
+                  iaSrcImage.CopyTo(this);
+                  //srcImage.CopyTo(this);
+               }
+               else
+               {
+                  //different depth
+                  //int channelCount = NumberOfChannels;
+                  {
+                     if (typeof(TDepth) == typeof(Byte) && DepthType.Cv8U != CvInvoke.GetDepthType(typeof(Byte)))
+                     {
+                        double[] minVal, maxVal;
+                        Point[] minLoc, maxLoc;
+                        CvInvoke.MinMax(srcImage, out minVal, out maxVal, out minLoc, out maxLoc);
+
+                        double min = minVal[0];
+                        double max = maxVal[0];
+                        for (int i = 1; i < minVal.Length; i++)
+                        {
+                           min = Math.Min(min, minVal[i]);
+                           max = Math.Max(max, maxVal[i]);
+                        }
+                        double scale = 1.0, shift = 0.0;
+                        if (max > 255.0 || min < 0)
+                        {
+                           scale = max.Equals(min) ? 0.0 : 255.0/(max - min);
+                           shift = scale.Equals(0) ? min : -min*scale;
+                        }
+
+                        CvInvoke.ConvertScaleAbs(srcImage, this, scale, shift);
+                     }
+                     else
+                     {
+                        using (Mat srcMat = iaSrcImage.GetMat())
+                        {
+                           srcMat.ConvertTo(this, this.Mat.Depth, 1.0, 0.0);
+                        }
+                     }
+                  }
+               }
+
+               #endregion
+            }
+            else
+            {
+               if (!(srcImageNumberOfChannels == 1 || srcImageNumberOfChannels == 3 || srcImageNumberOfChannels == 4))
+                  throw new Exception("Color conversion not suppported");
+               Type srcColorType =
+                  srcImageNumberOfChannels == 1
+                     ? typeof(Gray)
+                     : srcImageNumberOfChannels == 3
+                        ? typeof(Bgr)
+                        : typeof(Bgra);
+
+               #region different color
+               DepthType srcImageDepth = iaSrcImage.GetDepth();
+               if (CvInvoke.GetDepthType(typeof(TDepth)) == srcImageDepth)
+               {
+                  //same depth
+                  CvInvoke.CvtColor(srcImage, this, srcColorType, typeof(TColor));
+               }
+               else
+               {
+                  //different depth
+                  //using (Image<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
+                  using (Mat tmp = new Mat())
+                  using (Mat srcMat = iaSrcImage.GetMat())
+                  {
+                     srcMat.ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth)));
+                     //srcImage.Mat.ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth), 
+                     CvInvoke.CvtColor(tmp, this, srcColorType, typeof(TColor));
+                  }
+               }
+
+               #endregion
+            }
          }
       }
 

@@ -33,7 +33,6 @@ namespace Emgu.CV
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveInputArrayGetGpuMat(IntPtr ia, IntPtr gpumat);
-
    }
 }
-#if !(__IOS__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
+#endif
