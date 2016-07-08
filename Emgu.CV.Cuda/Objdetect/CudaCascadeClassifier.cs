@@ -20,9 +20,8 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Cascade Classifier for object detection using Cuda
    /// </summary>
-   public class CudaCascadeClassifier : UnmanagedObject
+   public partial class CudaCascadeClassifier : UnmanagedObject
    {
-      private GpuMat _buffer;
 
       /// <summary>
       /// Create a Cuda cascade classifier using the specific file
@@ -35,7 +34,15 @@ namespace Emgu.CV.Cuda
 #endif
          using (CvString s = new CvString(fileName))
             _ptr = CudaInvoke.cudaCascadeClassifierCreate(s);
-         _buffer = new GpuMat(1, 100, DepthType.Cv32S, 4);
+      }
+
+      /// <summary>
+      /// Create a Cuda cascade classifier using the specific file storage
+      /// </summary>
+      /// <param name="fs">The file storage to create the classifier from</param>
+      public CudaCascadeClassifier(FileStorage fs)
+      {
+         _ptr = CudaInvoke.cudaCascadeClassifierCreateFromFileStorage(fs);
       }
 
       /// <summary>
@@ -72,54 +79,19 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.cudaCascadeClassifierRelease(ref _ptr);
-         if (_buffer != null)
-            _buffer.Dispose();
+         if (_ptr != IntPtr.Zero)
+            CudaInvoke.cudaCascadeClassifierRelease(ref _ptr);
       }
 
-      /// <summary>
-      /// Parameter specifying how much the image size is reduced at each image scale.
-      /// </summary>
-      public double ScaleFactor
-      {
-         get { return CudaInvoke.cudaCascadeClassifierGetScaleFactor(_ptr); }
-         set
-         {
-            CudaInvoke.cudaCascadeClassifierSetScaleFactor(_ptr, value);
-         }
-      }
-
-      /// <summary>
-      /// Parameter specifying how many neighbors each candidate rectangle should have to retain it.
-      /// </summary>
-      public int MinNeighbors
-      {
-         get { return CudaInvoke.cudaCascadeClassifierGetMinNeighbors(_ptr); }
-         set {  CudaInvoke.cudaCascadeClassifierSetMinNeighbors(_ptr, value);}
-      }
-
-      /// <summary>
-      /// Minimum possible object size. Objects smaller than that are ignored.
-      /// </summary>
-      public Size MinObjectSize
-      {
-         get
-         {
-            Size s = new Size();
-            CudaInvoke.cudaCascadeClassifierGetMinObjectSize(_ptr, ref s);
-            return s;
-         }
-         set
-         {
-            CudaInvoke.cudaCascadeClassifierSetMinObjectSize(_ptr, ref value);
-         }
-      }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cudaCascadeClassifierCreate(IntPtr filename);
+
+      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static IntPtr cudaCascadeClassifierCreateFromFileStorage(IntPtr filestorage);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaCascadeClassifierRelease(ref IntPtr classified);
@@ -130,22 +102,5 @@ namespace Emgu.CV.Cuda
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaCascadeClassifierConvert(IntPtr classifier, IntPtr gpuObjects, IntPtr objects);
 
-           [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static double cudaCascadeClassifierGetScaleFactor(IntPtr classifier);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaCascadeClassifierSetScaleFactor(IntPtr classifier, double scaleFactor);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static int cudaCascadeClassifierGetMinNeighbors(IntPtr classifier);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaCascadeClassifierSetMinNeighbors(IntPtr classifier, int minNeighbours);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaCascadeClassifierGetMinObjectSize(IntPtr classifier, ref Size minObjectSize);
-
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cudaCascadeClassifierSetMinObjectSize(IntPtr classifier, ref Size minObjectSize);
    }
 }

@@ -22,12 +22,15 @@
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::CascadeClassifier*) cudaCascadeClassifierCreate(cv::String* filename);
 
+CVAPI(cv::cuda::CascadeClassifier*) cudaCascadeClassifierCreateFromFileStorage(cv::FileStorage* filestorage);
+
 CVAPI(void) cudaCascadeClassifierRelease(cv::cuda::CascadeClassifier** classifier);
 
 CVAPI(void) cudaCascadeClassifierDetectMultiScale(cv::cuda::CascadeClassifier* classifier, cv::_InputArray* image, cv::_OutputArray* objects, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaCascadeClassifierConvert(cv::cuda::CascadeClassifier* classifier, cv::_OutputArray* gpuObjects, std::vector<cv::Rect>* objects);
 
+/*
 CVAPI(double) cudaCascadeClassifierGetScaleFactor(cv::cuda::CascadeClassifier* classifier);
 
 CVAPI(void) cudaCascadeClassifierSetScaleFactor(cv::cuda::CascadeClassifier* classifier, double scaleFactor);
@@ -35,7 +38,7 @@ CVAPI(void) cudaCascadeClassifierSetScaleFactor(cv::cuda::CascadeClassifier* cla
 CVAPI(int) cudaCascadeClassifierGetMinNeighbors(cv::cuda::CascadeClassifier* classifier);
 
 CVAPI(void) cudaCascadeClassifierSetMinNeighbors(cv::cuda::CascadeClassifier* classifier, int minNeighbours);
-
+*/
 CVAPI(void) cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, emgu::size* minObjectSize);
 
 CVAPI(void) cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* classifier, emgu::size* minObjectSize);
@@ -64,6 +67,7 @@ CVAPI(void) cudaHOGDetectMultiScale(
    std::vector<cv::Rect>* foundLocations,
    std::vector<double>* confidents);
 
+/*
 CVAPI(double) cudaHOGGetWinSigma(cv::cuda::HOG* descriptor);
 CVAPI(void) cudaHOGSetWinSigma(cv::cuda::HOG* descriptor, double winSigma);
 
@@ -87,4 +91,5 @@ CVAPI(void) cudaHOGSetGammaCorrection(cv::cuda::HOG* descriptor, bool gammaCorre
 
 CVAPI(double) cudaHOGGetL2HysThreshold(cv::cuda::HOG* descriptor);
 CVAPI(void) cudaHOGSetL2HysThreshold(cv::cuda::HOG* descriptor, double l2HysThreshold);
+*/
 #endif

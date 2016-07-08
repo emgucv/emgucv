@@ -13,6 +13,13 @@ cv::cuda::CascadeClassifier* cudaCascadeClassifierCreate(cv::String* filename)
    return ptr.get();
 }
 
+cv::cuda::CascadeClassifier* cudaCascadeClassifierCreateFromFileStorage(cv::FileStorage* filestorage)
+{
+   cv::Ptr<cv::cuda::CascadeClassifier> ptr = cv::cuda::CascadeClassifier::create(*filestorage);
+   ptr.addref();
+   return ptr.get();
+}
+
 void cudaCascadeClassifierRelease(cv::cuda::CascadeClassifier** classifier)
 {
    delete *classifier;
@@ -28,6 +35,7 @@ void cudaCascadeClassifierConvert(cv::cuda::CascadeClassifier* classifier, cv::_
 {
    classifier->convert(*gpuObjects, *objects);
 }
+/*
 
 double cudaCascadeClassifierGetScaleFactor(cv::cuda::CascadeClassifier* classifier)
 {
@@ -47,7 +55,7 @@ int cudaCascadeClassifierGetMinNeighbors(cv::cuda::CascadeClassifier* classifier
 void cudaCascadeClassifierSetMinNeighbors(cv::cuda::CascadeClassifier* classifier, int minNeighbours)
 {
    classifier->setMinNeighbors(minNeighbours); 
-}
+}*/
 
 void cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, emgu::size* minObjectSize)
 {

@@ -48,6 +48,7 @@ void cudaHOGDetectMultiScale(
    descriptor->detectMultiScale(*img, *foundLocations, confidents);
 }
 
+/*
 double cudaHOGGetWinSigma(cv::cuda::HOG* descriptor)
 {
    return descriptor->getWinSigma();
@@ -129,4 +130,4 @@ double cudaHOGGetL2HysThreshold(cv::cuda::HOG* descriptor)
 void cudaHOGSetL2HysThreshold(cv::cuda::HOG* descriptor, double l2HysThreshold)
 {
    descriptor->setL2HysThreshold(l2HysThreshold);
-}
+} */

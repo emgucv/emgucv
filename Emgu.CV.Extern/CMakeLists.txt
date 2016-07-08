@@ -275,6 +275,27 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, ref value); }
      }
      ")
+     ELSEIF("${MARSHAL_TYPE}" STREQUAL "structR")
+      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);
+     ")
+      SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { ${PROPERTY_TYPE} p = obj->get${PROPERTY_NAME}(); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); }
+     ")
+      SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+     internal static extern void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj, ref ${CS_PROPERTY_TYPE} val);     
+     ")
+      
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
+     {
+        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); return v; } 
+     }
+     ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "propW")
       SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
@@ -988,6 +1009,57 @@ IF(HAVE_opencv_cudaimgproc)
     "#include \"opencv2/cudaimgproc.hpp\"")
 ENDIF()
 ############################### cudaimgproc code gen END ##############################
+
+############################### cudaobjdetect code gen START ##############################
+IF(HAVE_opencv_cudaobjdetect)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "cudaobjdetect/cuda_hog_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaHOGGenerated.cs"
+    "cv::cuda::HOG" 
+    "CudaHOG"
+    "GammaCorrection;WinSigma;NumLevels;GroupThreshold;HitThreshold;ScaleFactor;L2HysThreshold;DescriptorFormat;DescriptorSize;WinStride;BlockHistogramSize" 
+    "bool;double;int;int;double;double;double;int;size_t;CvSize;size_t" 
+    "prop;prop;prop;prop;prop;prop;prop;propR;propR;struct;propR"
+    "GammaCorrection;WinSigma;NumLevels;GroupThreshold;HitThreshold;ScaleFactor;L2HysThreshold;DescriptorFormat;DescriptorSize;WinStride;BlockHistogramSize" 
+    "bool;double;int;int;double;double;double;CudaHOG.DescrFormat;IntPtr;System.Drawing.Size;IntPtr"
+    "Flag to specify whether the gamma correction preprocessing is required or not;
+    Gaussian smoothing window parameter;
+    Maximum number of detection window increases;
+    Coefficient to regulate the similarity threshold. When detected, some objects can be covered by many rectangles. 0 means not to perform grouping. See groupRectangles.;
+    Threshold for the distance between features and SVM classifying plane. Usually it is 0 and should be specfied in the detector coefficients (as the last free coefficient). But if the free coefficient is omitted (which is allowed), you can specify it manually here.;
+    Coefficient of the detection window increase.;
+    L2-Hys normalization method shrinkage.;
+    The descriptor format;
+    Returns the number of coefficients required for the classification.;
+    Window stride. It must be a multiple of block stride.;
+    Returns the block histogram size."
+    "Emgu.CV.Cuda"
+    "CudaInvoke"
+    "CudaHOG"
+    "#include \"opencv2/cudaobjdetect.hpp\"")
+  CREATE_OCV_CLASS_PROPERTY( 
+    "cudaobjdetect/cuda_cascade_classifier_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaCascadeClassifierGenerated.cs"
+    "cv::cuda::CascadeClassifier" 
+    "CudaCascadeClassifier"
+    "ScaleFactor;MinNeighbors;MaxNumObjects;FindLargestObject;MaxObjectSize;MinObjectSize;ClassifierSize" 
+    "double;int;int;bool;CvSize;CvSize;CvSize" 
+    "prop;prop;prop;prop;struct;struct;structR"
+    "ScaleFactor;MinNeighbors;MaxNumObjects;FindLargestObject;MaxObjectSize;MinObjectSize;ClassifierSize" 
+    "double;int;int;bool;System.Drawing.Size;System.Drawing.Size;System.Drawing.Size"
+    "Parameter specifying how much the image size is reduced at each image scale;
+  Parameter specifying how many neighbors each candidate rectangle should have to retain it;
+  The maximum number of objects;
+  If true, only return the largest object;
+  The maximum object size;
+  The minimum object size;
+  The classifier size"
+    "Emgu.CV.Cuda"
+    "CudaInvoke"
+    "CudaCascadeClassifier"
+    "#include \"opencv2/cudaobjdetect.hpp\"")
+ENDIF()
+############################### cudaobjdetect code gen END ##############################
 
 ############################### plot code gen START ##############################
 IF(HAVE_opencv_plot)

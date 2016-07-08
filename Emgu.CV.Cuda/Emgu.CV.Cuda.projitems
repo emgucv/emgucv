@@ -16,5 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Optflow\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features2d\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stereo\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objdetect\*.cs" />
   </ItemGroup>
 </Project>
