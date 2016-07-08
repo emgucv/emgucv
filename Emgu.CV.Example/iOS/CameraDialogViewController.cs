@@ -129,7 +129,7 @@ bool SetupCaptureSession ()
             using (CVPixelBuffer pixelBuffer = sampleBuffer.GetImageBuffer () as CVPixelBuffer)
             {
                // Lock the base address
-               pixelBuffer.Lock (0);
+               pixelBuffer.Lock (CVPixelBufferLock.ReadOnly);
                // Get the number of bytes per row for the pixel buffer
                IntPtr baseAddress = pixelBuffer.BaseAddress;
                int bytesPerRow = (int)pixelBuffer.BytesPerRow;
@@ -148,7 +148,7 @@ bool SetupCaptureSession ()
                      new Bgr(255, 0, 0));
                   //CvInvoke.cvCvtColor(bgr2, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);
                   UIImage result = bgr2.ToUIImage();
-                  pixelBuffer.Unlock(0);
+                  pixelBuffer.Unlock(CVPixelBufferLock.ReadOnly);
                   return result;
                }
 
