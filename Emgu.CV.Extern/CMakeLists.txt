@@ -1011,7 +1011,7 @@ ENDIF()
 ############################### cudaimgproc code gen END ##############################
 
 ############################### cudaobjdetect code gen START ##############################
-IF(HAVE_opencv_cudaobjdetect)
+#IF(HAVE_opencv_cudaobjdetect)
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaobjdetect/cuda_hog_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaHOGGenerated.cs"
@@ -1058,7 +1058,7 @@ IF(HAVE_opencv_cudaobjdetect)
     "CudaInvoke"
     "CudaCascadeClassifier"
     "#include \"opencv2/cudaobjdetect.hpp\"")
-ENDIF()
+#ENDIF()
 ############################### cudaobjdetect code gen END ##############################
 
 ############################### plot code gen START ##############################
