@@ -62,6 +62,12 @@ bool SetupCaptureSession ()
 
          // create a device input and attach it to the session
          var captureDevice = AVCaptureDevice.DefaultDeviceWithMediaType (AVMediaType.Video);
+         if (captureDevice == null) {
+            Image<Bgr, Byte> img = new Image<Bgr, byte> (512, 512, new Bgr (255, 255, 255));
+            CvInvoke.PutText (img, "Capture device not found.", new Point (10, 200), CvEnum.FontFace.HersheyComplex, 1, new MCvScalar (), 2);
+            ImageView.Image = img.ToUIImage();
+            return false;
+         }
          var input = AVCaptureDeviceInput.FromDevice (captureDevice);
          if (input == null){
             Console.WriteLine ("No input device");
