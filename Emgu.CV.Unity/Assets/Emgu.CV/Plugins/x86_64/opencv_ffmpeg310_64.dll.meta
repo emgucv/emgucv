@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 2582740b6dc68454e963e4dddfd92068
-timeCreated: 1430870997
+guid: dbf340dbd69a646e6a7a6b60a21361ea
+timeCreated: 1468346752
 licenseType: Pro
 PluginImporter:
   serializedVersion: 1
@@ -16,48 +16,43 @@ PluginImporter:
       enabled: 0
       settings: {}
     Editor:
-      enabled: 0
+      enabled: 1
       settings:
-        CPU: AnyCPU
+        CPU: x86_64
         DefaultValueInitialized: true
-        OS: AnyOS
+        OS: Windows
     Linux:
       enabled: 0
       settings:
-        CPU: x86
+        CPU: None
     Linux64:
+      enabled: 1
+      settings:
+        CPU: x86_64
+    LinuxUniversal:
       enabled: 0
       settings:
         CPU: x86_64
     OSXIntel:
       enabled: 0
       settings:
-        CPU: AnyCPU
+        CPU: None
     OSXIntel64:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: AnyCPU
-    WP8:
+    OSXUniversal:
       enabled: 0
       settings:
-        CPU: AnyCPU
-        DontProcess: False
-        PlaceholderPath: 
+        CPU: x86_64
     Win:
       enabled: 0
       settings:
-        CPU: AnyCPU
+        CPU: None
     Win64:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-    WindowsStoreApps:
       enabled: 1
       settings:
-        CPU: ARM
-        DontProcess: False
-        PlaceholderPath: 
-        SDK: PhoneSDK81
+        CPU: AnyCPU
     iOS:
       enabled: 0
       settings:

@@ -61,13 +61,24 @@ REM xcopy ..\Emgu.CV.Cuda\Optflow Assets\Emgu.CV\Emgu.CV.Cuda\ /s /e /Y
 REM mkdir Assets\Emgu.CV\Emgu.CV.Cuda\Stereo
 REM xcopy ..\Emgu.CV.Cuda\Stereo Assets\Emgu.CV\Emgu.CV.Cuda\ /s /e /Y
 
-cp -r ../Emgu.CV.Contrib/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Aruco
+cp -r ../Emgu.CV.Contrib/Aruco/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Aruco
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\BgSegm
 cp -r ../Emgu.CV.Contrib/BgSegm/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Dnn
+cp -r ../Emgu.CV.Contrib/Dnn/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Dnn
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Face
 cp -r ../Emgu.CV.Contrib/Face/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Face
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Fuzzy
+cp -r ../Emgu.CV.Contrib/Fuzzy/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Fuzzy
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\LineDescriptor
+cp -r ../Emgu.CV.Contrib/LineDescriptor/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/LineDescriptor
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Plot
+cp -r ../Emgu.CV.Contrib/Plot/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Plot
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Text
-cp -r ../Emgu.CV.Contrib/Text/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Text 
+cp -r ../Emgu.CV.Contrib/Text/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Text
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Tracking
+cp -r ../Emgu.CV.Contrib/Tracking/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Tracking 
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D
 cp -r ../Emgu.CV.Contrib/XFeatures2D/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/XFeatures2D
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XPhoto

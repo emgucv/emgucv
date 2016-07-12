@@ -59,13 +59,25 @@ cp -r ../Emgu.CV.ML/PInvoke/CvType/*.cs Assets/Emgu.CV/Emgu.CV.ML/PInvoke/CvType
 #mkdir Assets/Emgu.CV/Emgu.CV.Cuda/Stereo
 #cp -r ../Emgu.CV.Cuda/Stereo Assets/Emgu.CV/Emgu.CV.Cuda/ 
 
-cp -r ../Emgu.CV.Contrib/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/
+
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Aruco
+cp -r ../Emgu.CV.Contrib/Aruco Assets/Emgu.CV/Emgu.CV.Contrib/ 
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm
 cp -r ../Emgu.CV.Contrib/BgSegm Assets/Emgu.CV/Emgu.CV.Contrib/ 
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Dnn
+cp -r ../Emgu.CV.Contrib/Dnn Assets/Emgu.CV/Emgu.CV.Contrib/ 
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Face
 cp -r ../Emgu.CV.Contrib/Face Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Fuzzy
+cp -r ../Emgu.CV.Contrib/Fuzzy Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/LineDescriptor
+cp -r ../Emgu.CV.Contrib/LineDescriptor Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Plot
+cp -r ../Emgu.CV.Contrib/Plot Assets/Emgu.CV/Emgu.CV.Contrib/
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Text
-cp -r ../Emgu.CV.Contrib/Text Assets/Emgu.CV/Emgu.CV.Contrib/ 
+cp -r ../Emgu.CV.Contrib/Text Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Tracking
+cp -r ../Emgu.CV.Contrib/Tracking Assets/Emgu.CV/Emgu.CV.Contrib/ 
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/XFeatures2D
 cp -r ../Emgu.CV.Contrib/XFeatures2D Assets/Emgu.CV/Emgu.CV.Contrib/
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/XPhoto
