@@ -234,6 +234,26 @@ namespace Emgu.CV
          : this(MatInvoke.cveMatCreate(), true, false)
       {
 
+         FileInfo fi = new FileInfo(fileName);
+         if (!fi.Exists)
+         {
+            throw new ArgumentException(String.Format("File {0} do not exist", fileName));
+         }
+
+         String extension = fi.Extension.ToLower();
+#if __IOS__
+         //Open CV's libpng doesn't seem to be able to handle png in iOS
+         //Use UIImage to load png
+         if (extension.Equals(".png"))
+         {
+            using (UIImage tmp = UIImage.FromFile(fileName))
+            {
+               ConvertFromCGImage(tmp.CGImage);
+            }
+            return;
+         }
+#endif
+
          using (CvString s = new CvString(fileName))
          {
             CvInvoke.cveImread(s, loadType, this);
@@ -241,8 +261,6 @@ namespace Emgu.CV
             if (this.IsEmpty) //failed to load in the first attempt
             {
 #if !( NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR )
-               if (File.Exists(fileName))
-               {
                   //try again to see if this is a Unicode issue in the file name. 
                   //Work around for Open CV ticket:
                   //https://github.com/Itseez/opencv/issues/4292
@@ -251,12 +269,17 @@ namespace Emgu.CV
                   byte[] raw = File.ReadAllBytes(fileName);
                   CvInvoke.Imdecode(raw, loadType, this);
 
-                  if (IsEmpty)
-                     throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
-               }
-               else
+               if (IsEmpty)
                {
-                  throw new ArgumentException(String.Format("File {0} do not exist", fileName));
+#if __IOS__
+                  //try again to load with UIImage
+                  using (UIImage tmp = UIImage.FromFile(fileName))
+                  {
+                     ConvertFromCGImage(tmp.CGImage);
+                  }
+#else
+                  throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
+#endif
                }
 #endif
             }

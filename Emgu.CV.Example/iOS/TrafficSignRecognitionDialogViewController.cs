@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ using Foundation;
 using UIKit;
 using TrafficSignRecognition;
 
-namespace Emgu.CV.Example.MonoTouch
+namespace Example.iOS
 {
    public class TrafficSignRecognitionDialogViewController : ButtonMessageImageDialogViewController
    {
@@ -29,8 +30,8 @@ namespace Emgu.CV.Example.MonoTouch
          OnButtonClick +=
          delegate
          {
-            using (Image<Bgr, byte> stopSignModel = new Image<Bgr, byte>("stop-sign-model.png"))
-            using (Mat image = CvInvoke.Imread("stop-sign.jpg", Emgu.CV.CvEnum.ImreadModes.AnyColor))
+            using (Mat stopSignModel = new Mat("stop-sign-model.png"))
+            using (Mat image = new Mat("stop-sign.jpg"))
             {
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
@@ -45,8 +46,9 @@ namespace Emgu.CV.Example.MonoTouch
                   CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255), 2);
                }
                Size frameSize = FrameSize;
-               using (Image<Bgr, byte> resized = image.ToImage<Bgr, Byte>().Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.Inter.Cubic, true))
+               using (Mat resized = new Mat())
                {
+                  CvInvoke.ResizeForFrame(image, resized, frameSize);
                   MessageText = String.Format("Detection time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
                   SetImage(resized);
                }

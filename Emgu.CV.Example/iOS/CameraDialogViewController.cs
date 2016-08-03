@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Emgu.CV.CvEnum;
 using MonoTouch.Dialog;
 using Foundation;
 using AVFoundation;
@@ -20,7 +22,7 @@ using CoreMedia;
 using CoreGraphics;
 using CoreFoundation;
 
-namespace Emgu.CV.Example.MonoTouch
+namespace Example.iOS
 {
     public class CameraDialogViewController : DialogViewController
     {
@@ -64,7 +66,14 @@ bool SetupCaptureSession ()
          var captureDevice = AVCaptureDevice.DefaultDeviceWithMediaType (AVMediaType.Video);
          if (captureDevice == null) {
             Image<Bgr, Byte> img = new Image<Bgr, byte> (512, 512, new Bgr (255, 255, 255));
-            CvInvoke.PutText (img, "Capture device not found.", new Point (10, 200), CvEnum.FontFace.HersheyComplex, 1, new MCvScalar (), 2);
+            CvInvoke.PutText (
+               img, 
+               "Capture device not found.", 
+               new Point (10, 200), 
+               FontFace.HersheyComplex, 
+               1, 
+               new MCvScalar (), 
+               2);
             ImageView.Image = img.ToUIImage();
             return false;
          }
@@ -149,7 +158,7 @@ bool SetupCaptureSession ()
                   bgr2.Draw(
                      string.Format("{0} x {1}", width, height),
                      new Point(20, 20), 
-                     CvEnum.FontFace.HersheySimplex,
+                     FontFace.HersheySimplex,
                      1.0,
                      new Bgr(255, 0, 0));
                   //CvInvoke.cvCvtColor(bgr2, bgra, Emgu.CV.CvEnum.COLOR_CONVERSION.CV_BGR2BGRA);

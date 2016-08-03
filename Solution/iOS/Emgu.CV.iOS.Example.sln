@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Example.iOS", "..\..\Emgu.CV.Example\iOS\Emgu.CV.Example.iOS.csproj", "{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}"
 EndProject
@@ -19,7 +19,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Stitching", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.World.IOS", "..\..\Emgu.CV.World\Emgu.CV.World.IOS.csproj", "{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.XamarinForms", "..\..\Emgu.CV.Example\XamarinForms\XamarinForms\Emgu.CV.XamarinForms.shproj", "{F2A5CE86-0B21-40D2-AD3F-BB2D1D716CFE}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.XamarinForms", "..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.shproj", "{F2A5CE86-0B21-40D2-AD3F-BB2D1D716CFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.XamarinForms.iOS", "..\..\Emgu.CV.Example\XamarinForms\iOS\Emgu.CV.XamarinForms.iOS.csproj", "{91878104-EE4C-475C-841E-54C725EB2865}"
 EndProject
@@ -27,22 +27,22 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.ML", "..\..\Emgu.CV
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{1c41f1cc-b8a8-4e72-8167-0e1a42edf843}*SharedItemsImports = 13
-		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
-		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
-		..\..\Emgu.CV.Example\XamarinForms\XamarinForms\Emgu.CV.XamarinForms.projitems*{91878104-ee4c-475c-841e-54c725eb2865}*SharedItemsImports = 4
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
-		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.Util\Emgu.Util.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.Example\XamarinForms\XamarinForms\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0d0c868d-23d6-46f7-a3e0-5f595c84939c}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
+		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
+		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
+		..\..\Emgu.CV\Emgu.CV.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
+		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{1c41f1cc-b8a8-4e72-8167-0e1a42edf843}*SharedItemsImports = 13
 		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f3bc3e1-3b59-48ab-959a-71844b9ad9be}*SharedItemsImports = 13
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
+		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{91878104-ee4c-475c-841e-54c725eb2865}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|iPhone = Ad-Hoc|iPhone

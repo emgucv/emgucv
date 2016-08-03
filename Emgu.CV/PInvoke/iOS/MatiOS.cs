@@ -27,15 +27,16 @@ namespace Emgu.CV
 
       private void ConvertFromCGImage(CGImage cgImage)
       {
-         using (Mat m = new Mat(new Size((int)cgImage.Width, (int)cgImage.Height), DepthType.Cv8U, 4))
+         Size sz = new Size((int) cgImage.Width, (int) cgImage.Height);
+         using (Mat m = new Mat(sz, DepthType.Cv8U, 4))
          {
             RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
             using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
             using (CGBitmapContext context = new CGBitmapContext(
-            m.DataPointer,             
-             Width, Height,
+             m.DataPointer,             
+             sz.Width, sz.Height,
              8,
-             Width * 4,
+             sz.Width * 4,
              cspace,
              CGImageAlphaInfo.PremultipliedLast))
                context.DrawImage(rect, cgImage);

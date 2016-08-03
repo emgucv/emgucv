@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,7 +13,7 @@ using Foundation;
 using UIKit;
 using PlanarSubdivisionExample;
 
-namespace Emgu.CV.Example.MonoTouch
+namespace Example.iOS
 {
     public class PlanarSubdivisionDialogViewController : DialogViewController
     {

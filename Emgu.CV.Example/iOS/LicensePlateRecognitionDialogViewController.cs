@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,9 +15,9 @@ using Foundation;
 using UIKit;
 using LicensePlateRecognition;
 
-namespace Emgu.CV.Example.MonoTouch
+namespace Example.iOS
 {
-   public class LicensePlateRecognitionDialogViewController :DialogViewController
+   public class LicensePlateRecognitionDialogViewController : DialogViewController
    {
       public LicensePlateRecognitionDialogViewController()
          : base(new RootElement(""), true)
@@ -50,7 +51,7 @@ namespace Emgu.CV.Example.MonoTouch
          root.Add(new Section()
                  { new StyledStringElement("Process", delegate {
 
-            using (Image<Bgr, Byte> image = new Image<Bgr, Byte>("license-plate.jpg"))
+            using (Image<Bgr, Byte> image = new Image<Bgr, byte>( "license-plate.jpg"))
             {
                LicensePlateDetector detector = new LicensePlateDetector(".");
                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
@@ -76,11 +77,13 @@ namespace Emgu.CV.Example.MonoTouch
                licenseElement.GetImmediateRootElement().Reload(licenseElement, UITableViewRowAnimation.Automatic);
                foreach (RotatedRect box in licenseBoxList)
                {
+                          
                   image.Draw(box, new Bgr(Color.Red), 2);
                }
-                  Size frameSize = FrameSize;
-               using (Image<Bgr, byte> resized = image.Resize( frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.Inter.Cubic, true))
+               Size frameSize = FrameSize;
+               using (Mat resized = new Mat())
                   {
+                     CvInvoke.ResizeForFrame(image, resized, frameSize);
                      imageView.Image = resized.ToUIImage();
                      imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
                   }
@@ -89,9 +92,9 @@ namespace Emgu.CV.Example.MonoTouch
             }
          }
          )});
-         root.Add(new Section("Recognition Time") {messageElement});
-         root.Add(new Section("License Plate") { licenseElement});
-         root.Add(new Section() {imageView});
+         root.Add(new Section("Recognition Time") { messageElement });
+         root.Add(new Section("License Plate") { licenseElement });
+         root.Add(new Section() { imageView });
       }
    }
 }

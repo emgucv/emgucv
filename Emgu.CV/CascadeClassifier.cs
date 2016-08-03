@@ -32,7 +32,7 @@ namespace Emgu.CV
 #if !NETFX_CORE
          FileInfo file = new FileInfo(fileName);
          if (!file.Exists)
-            throw new FileNotFoundException("File '{0}' not found", file.FullName);
+            throw new FileNotFoundException(String.Format("File '{0}' not found", fileName));
 #endif
          using (CvString s = new CvString(fileName))
             _ptr = CvInvoke.cveCascadeClassifierCreateFromFile(s);

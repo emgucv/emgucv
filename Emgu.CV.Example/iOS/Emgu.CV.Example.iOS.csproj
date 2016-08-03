@@ -6,7 +6,7 @@
     <ProjectGuid>{C4696473-1D0F-44C5-8A7B-0F7E9FD50595}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Emgu.CV.Example</RootNamespace>
+    <RootNamespace>Example.iOS</RootNamespace>
     <AssemblyName>EmguCVExampleiOS</AssemblyName>
     <TargetFrameworkIdentifier>Xamarin.iOS</TargetFrameworkIdentifier>
   </PropertyGroup>

@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,7 +15,7 @@ using Foundation;
 using UIKit;
 using FeatureMatchingExample;
 
-namespace Emgu.CV.Example.MonoTouch
+namespace Example.iOS
 {
    public class FeatureMatchingDialogViewController : ButtonMessageImageDialogViewController
    {

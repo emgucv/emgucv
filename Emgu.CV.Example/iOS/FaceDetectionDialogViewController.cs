@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ using Foundation;
 using UIKit;
 using FaceDetection;
 
-namespace Emgu.CV.Example.MonoTouch
+namespace Example.iOS
 {
    public class FaceDetectionDialogViewController : ButtonMessageImageDialogViewController
    {
@@ -41,7 +42,6 @@ namespace Emgu.CV.Example.MonoTouch
                         "haarcascade_eye.xml",
                         faces,
                         eyes, 
-                        false,
                         out processingTime
                );
                foreach (Rectangle face in faces)
