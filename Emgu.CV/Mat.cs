@@ -233,7 +233,7 @@ namespace Emgu.CV
       public Mat(String fileName, CvEnum.ImreadModes loadType = ImreadModes.Color)
          : this(MatInvoke.cveMatCreate(), true, false)
       {
-
+#if !NETFX_CORE
          FileInfo fi = new FileInfo(fileName);
          if (!fi.Exists)
          {
@@ -252,6 +252,7 @@ namespace Emgu.CV
             }
             return;
          }
+#endif
 #endif
 
          using (CvString s = new CvString(fileName))
