@@ -43,7 +43,7 @@ namespace AndroidExamples
 
          RadioButton checkedButton = null;
          RadioButton cpuButton = new RadioButton(this.Context);
-         cpuButton.Text = "CPU";
+         cpuButton.Text = "CPU (no OpenCL)";
 
          _openCLRadioGroup.AddView(cpuButton);
          //int selectedIdx = -1;
@@ -57,44 +57,46 @@ namespace AndroidExamples
             //Toast.MakeText(this.Context, "cpu clicked", ToastLength.Short).Show();
          };
 
+
          String selectedDeviceName = preference.OpenClDeviceName;
          if (selectedDeviceName == null && CvInvoke.HaveOpenCL && preference.UseOpenCL)
          {
             selectedDeviceName = Emgu.CV.Ocl.Device.Default.Name;
          }
-         //int counter = 1;
-         using (VectorOfOclPlatformInfo oclPlatformInfos = Emgu.CV.Ocl.OclInvoke.GetPlatformsInfo())
-         {
-            if (oclPlatformInfos.Size > 0)
+
+         if (CvInvoke.HaveOpenCL)
+            using (VectorOfOclPlatformInfo oclPlatformInfos = Emgu.CV.Ocl.OclInvoke.GetPlatformsInfo())
             {
-               for (int i = 0; i < oclPlatformInfos.Size; i++)
+               if (oclPlatformInfos.Size > 0)
                {
-                  Emgu.CV.Ocl.PlatformInfo platformInfo = oclPlatformInfos[i];
-
-                  for (int j = 0; j < platformInfo.DeviceNumber; j++)
+                  for (int i = 0; i < oclPlatformInfos.Size; i++)
                   {
-                     Emgu.CV.Ocl.Device device = platformInfo.GetDevice(j);
-                     RadioButton deviceButton = new RadioButton(this.Context);
-                     deviceButton.Text = "OpenCL: " + device.Name;
+                     Emgu.CV.Ocl.PlatformInfo platformInfo = oclPlatformInfos[i];
 
-                     if (preference.UseOpenCL == true && device.Name.Equals(selectedDeviceName))
+                     for (int j = 0; j < platformInfo.DeviceNumber; j++)
                      {
-                        checkedButton = deviceButton;
-                     }
-                     _openCLRadioGroup.AddView(deviceButton);
+                        Emgu.CV.Ocl.Device device = platformInfo.GetDevice(j);
+                        RadioButton deviceButton = new RadioButton(this.Context);
+                        deviceButton.Text = "OpenCL: " + device.Name;
 
-                     //counter++;
-                     deviceButton.Click += (sender, args) =>
-                     {
-                        preference.UseOpenCL = true;
-                        preference.OpenClDeviceName = device.Name;
+                        if (preference.UseOpenCL == true && device.Name.Equals(selectedDeviceName))
+                        {
+                           checkedButton = deviceButton;
+                        }
+                        _openCLRadioGroup.AddView(deviceButton);
+
+                        //counter++;
+                        deviceButton.Click += (sender, args) =>
+                        {
+                           preference.UseOpenCL = true;
+                           preference.OpenClDeviceName = device.Name;
                         //Toast.MakeText(this.Context, device.Name + " clicked", ToastLength.Short).Show();
                      };
 
+                     }
                   }
                }
             }
-         }
          if (checkedButton != null)
             _openCLRadioGroup.Check(checkedButton.Id);
          //_openCLRadioGroup.in

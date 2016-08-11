@@ -11,7 +11,7 @@ icons:
   - emgucv-v3_128x128.png
   - emgucv-v3_512x512.png
 publisher: Emgu Corporation
-name: emgucv v3
+name: Emgu CV V3
 id: emgucv-v3
 samples: 
   - name: "iOS Unified API Samples"
@@ -22,5 +22,5 @@ publisher-url: http://www.emgu.com
 libraries: 
   ios-unified: lib/ios/Emgu.CV.World.iOS.dll
   android: lib/android/Emgu.CV.World.Android.dll
-version: "3.1"
+version: "3.1.1"
 

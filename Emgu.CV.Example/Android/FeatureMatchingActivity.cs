@@ -20,7 +20,7 @@ using FeatureMatchingExample;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "SURF Feature")]
+   [Activity(Label = "Feature Matching")]
    public class FeatureMatchingActivity : ButtonMessageImageActivity
    {
       public FeatureMatchingActivity()
@@ -45,9 +45,9 @@ namespace AndroidExamples
             }
 
             long time;
-            using (Image<Gray, Byte> box = new Image<Gray, byte>(Assets, "box.png"))
-            using (Image<Gray, Byte> boxInScene = new Image<Gray, byte>(Assets, "box_in_scene.png"))
-            using (Mat result = DrawMatches.Draw(box.Mat, boxInScene.Mat, out time))
+            using (Mat box = new Mat(Assets, "box.png"))
+            using (Mat boxInScene = new Mat(Assets, "box_in_scene.png"))
+            using (Mat result = DrawMatches.Draw(box, boxInScene, out time))
             {
                SetImageBitmap(result.ToBitmap(Bitmap.Config.Rgb565));
 
