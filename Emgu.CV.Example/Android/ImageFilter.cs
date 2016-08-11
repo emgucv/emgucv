@@ -210,6 +210,8 @@ namespace Emgu.CV
                _distorCoeff/(_size.Width*_size.Height), 0, 0, 0, 0
             };
             distortionMat.SetTo(distortionVal);
+            _mapX = new Mat();
+            _mapY = new Mat();
             CvInvoke.InitUndistortRectifyMap(intrinsicMat, distortionMat, null, intrinsicMat, _size, CvEnum.DepthType.Cv32F, _mapX, _mapY);
          }
 
