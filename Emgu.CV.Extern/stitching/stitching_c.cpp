@@ -6,27 +6,29 @@
 
 #include "stitching_c.h"
 
-cv::StitcherWrapper* CvStitcherCreateDefault(bool tryUseGpu)
+cv::Stitcher* CvStitcherCreateDefault(bool tryUseGpu)
 {
-   return new cv::StitcherWrapper(tryUseGpu);
+   cv::Ptr<cv::Stitcher> p = cv::createStitcher(tryUseGpu);
+   p.addref();
+   return p.get();
 }
 
-void CvStitcherRelease(cv::StitcherWrapper** stitcherWrapper)
+void CvStitcherRelease(cv::Stitcher** stitcher)
 {
-   delete *stitcherWrapper;
-   *stitcherWrapper = 0;
+   delete *stitcher;
+   *stitcher = 0;
 }
 
-void CvStitcherSetFeaturesFinder(cv::StitcherWrapper* stitcherWrapper, cv::detail::FeaturesFinder* finder)
+void CvStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder)
 {
    cv::Ptr<cv::detail::FeaturesFinder> p(finder);
    p.addref();
-   stitcherWrapper->stitcher.setFeaturesFinder(p);
+   stitcher->setFeaturesFinder(p);
 }
 
-bool CvStitcherStitch(cv::StitcherWrapper* stitcherWrapper, cv::_InputArray* images, cv::_OutputArray* pano)
+int CvStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano)
 {
-   return stitcherWrapper->stitcher.stitch(*images, *pano) == cv::Stitcher::OK;
+   return stitcher->stitch(*images, *pano);
 }
 
 #ifdef HAVE_OPENCV_NONFREE

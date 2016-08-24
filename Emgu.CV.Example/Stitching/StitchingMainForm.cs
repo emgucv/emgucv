@@ -56,8 +56,14 @@ namespace Stitching
                   {
                      Mat result = new Mat();
                      vm.Push(sourceImages);
-                     stitcher.Stitch(vm, result);
-                     resultImageBox.Image = result;
+                     Stitcher.Status stitchStatus = stitcher.Stitch(vm, result);
+                     if (stitchStatus == Stitcher.Status.Ok)
+                        resultImageBox.Image = result;
+                     else
+                     {
+                        MessageBox.Show(this, String.Format("Stiching Error: {0}", stitchStatus));
+                        resultImageBox.Image = null;
+                     }
                   }
                }
             }

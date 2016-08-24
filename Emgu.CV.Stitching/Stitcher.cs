@@ -21,6 +21,29 @@ namespace Emgu.CV.Stitching
    public class Stitcher : UnmanagedObject
    {
       /// <summary>
+      /// The stitcher statis
+      /// </summary>
+      public enum Status
+      {
+         /// <summary>
+         /// Ok.
+         /// </summary>
+         Ok = 0,
+         /// <summary>
+         /// Error, need more images.
+         /// </summary>
+         ErrNeedMoreImgs = 1,
+         /// <summary>
+         /// Error, homography estimateion failed.
+         /// </summary>
+         ErrHomographyEstFail = 2,
+         /// <summary>
+         /// Error, camera parameters adjustment failed.
+         /// </summary>
+         ErrCameraParamsAdjustFail = 3
+      }
+
+      /// <summary>
       /// Creates a stitcher with the default parameters.
       /// </summary>
       /// <param name="tryUseGpu">If true, the stitcher will try to use GPU for processing when available</param>
@@ -34,12 +57,12 @@ namespace Emgu.CV.Stitching
       /// </summary>
       /// <param name="images">The input images. This can be, for example, a VectorOfMat</param>
       /// <param name="pano">The panoramic image</param>
-      /// <returns>true if successful</returns>
-      public bool Stitch(IInputArray images, IOutputArray pano)
+      /// <returns>The stitching status</returns>
+      public Status Stitch(IInputArray images, IOutputArray pano)
       {
          using (InputArray iaImages = images.GetInputArray())
          using (OutputArray oaPano = pano.GetOutputArray())
-         return StitchingInvoke.CvStitcherStitch(_ptr, iaImages, oaPano);
+            return StitchingInvoke.CvStitcherStitch(_ptr, iaImages, oaPano);
       }
 
       /// <summary>
@@ -80,8 +103,7 @@ namespace Emgu.CV.Stitching
          );
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal static extern bool CvStitcherStitch(IntPtr stitcherWrapper, IntPtr images, IntPtr pano);
+      internal static extern Stitcher.Status CvStitcherStitch(IntPtr stitcherWrapper, IntPtr images, IntPtr pano);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void CvStitcherSetFeaturesFinder(IntPtr stitcherWrapper, IntPtr finder);

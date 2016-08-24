@@ -11,6 +11,7 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/stitching.hpp"
 
+/*
 namespace cv {
 
    class CV_EXPORTS StitcherWrapper 
@@ -23,17 +24,17 @@ namespace cv {
 
       Stitcher stitcher;
    };
-}
+}*/
 
 
 
-CVAPI(cv::StitcherWrapper*) CvStitcherCreateDefault(bool tryUseGpu);
+CVAPI(cv::Stitcher*) CvStitcherCreateDefault(bool tryUseGpu);
 
-CVAPI(void) CvStitcherRelease(cv::StitcherWrapper** stitcherWrapper);
+CVAPI(void) CvStitcherRelease(cv::Stitcher** stitcher);
 
-CVAPI(void) CvStitcherSetFeaturesFinder(cv::StitcherWrapper* stitcherWrapper, cv::detail::FeaturesFinder* finder);
+CVAPI(void) CvStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder);
 
-CVAPI(bool) CvStitcherStitch(cv::StitcherWrapper* stitcherWrapper, cv::_InputArray* images, cv::_OutputArray* pano);
+CVAPI(int) CvStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
 
 #ifdef HAVE_OPENCV_NONFREE
 CVAPI(cv::detail::SurfFeaturesFinder*) cveSurfFeaturesFinderCreate(
