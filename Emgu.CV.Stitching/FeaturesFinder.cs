@@ -133,7 +133,7 @@ namespace Emgu.CV.Stitching
       }
    }
 
-   internal static partial class StitchingInvoke
+   public static partial class StitchingInvoke
    {
       /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -18,7 +18,7 @@ namespace Emgu.CV.Stitching
    /// <summary>
    /// Image Stitching.
    /// </summary>
-   public class Stitcher : UnmanagedObject
+   public partial class Stitcher : UnmanagedObject
    {
       /// <summary>
       /// The stitcher statis
@@ -49,7 +49,7 @@ namespace Emgu.CV.Stitching
       /// <param name="tryUseGpu">If true, the stitcher will try to use GPU for processing when available</param>
       public Stitcher(bool tryUseGpu)
       {
-         _ptr = StitchingInvoke.CvStitcherCreateDefault(tryUseGpu);
+         _ptr = StitchingInvoke.cveStitcherCreateDefault(tryUseGpu);
       }
 
       /// <summary>
@@ -62,7 +62,7 @@ namespace Emgu.CV.Stitching
       {
          using (InputArray iaImages = images.GetInputArray())
          using (OutputArray oaPano = pano.GetOutputArray())
-            return StitchingInvoke.CvStitcherStitch(_ptr, iaImages, oaPano);
+            return StitchingInvoke.cveStitcherStitch(_ptr, iaImages, oaPano);
       }
 
       /// <summary>
@@ -71,7 +71,7 @@ namespace Emgu.CV.Stitching
       /// <param name="finder">The features finder</param>
       public void SetFeaturesFinder(FeaturesFinder finder)
       {
-         StitchingInvoke.CvStitcherSetFeaturesFinder(_ptr, finder.Ptr);
+         StitchingInvoke.cveStitcherSetFeaturesFinder(_ptr, finder.Ptr);
       }
 
       /// <summary>
@@ -79,11 +79,11 @@ namespace Emgu.CV.Stitching
       /// </summary>
       protected override void DisposeObject()
       {
-         StitchingInvoke.CvStitcherRelease(ref _ptr);
+         StitchingInvoke.cveStitcherRelease(ref _ptr);
       }
    }
 
-   internal static partial class StitchingInvoke
+   public static partial class StitchingInvoke
    {
       
       static StitchingInvoke()
@@ -97,18 +97,18 @@ namespace Emgu.CV.Stitching
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr CvStitcherCreateDefault(
+      internal static extern IntPtr cveStitcherCreateDefault(
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool tryUseGpu
          );
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern Stitcher.Status CvStitcherStitch(IntPtr stitcherWrapper, IntPtr images, IntPtr pano);
+      internal static extern Stitcher.Status cveStitcherStitch(IntPtr stitcherWrapper, IntPtr images, IntPtr pano);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvStitcherSetFeaturesFinder(IntPtr stitcherWrapper, IntPtr finder);
+      internal static extern void cveStitcherSetFeaturesFinder(IntPtr stitcherWrapper, IntPtr finder);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvStitcherRelease(ref IntPtr stitcherWrapper);
+      internal static extern void cveStitcherRelease(ref IntPtr stitcherWrapper);
    }
 }

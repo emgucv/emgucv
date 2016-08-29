@@ -986,6 +986,28 @@ IF(HAVE_opencv_videoio)
 ENDIF()
 ############################### videoio code gen END ################################
 
+############################### stitching code gen START ##############################
+IF(HAVE_opencv_stitching)
+   CREATE_OCV_CLASS_PROPERTY( 
+    "stitching/stitching_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Stitching/StitcherGenerated.cs"
+    "cv::Stitcher" 
+    "Stitcher" 
+    "workScale" 
+    "double" 
+    "val"
+    "WorkScale" 
+    "double"
+    "The work scale"
+    "Emgu.CV.Stitching"
+    "StitchingInvoke"
+    "Stitcher"
+    "#include \"stitching_c.h\"")
+  
+ENDIF()
+############################### stitching code gen END ################################
+
+
 ############################### cudaimgproc code gen START ##############################
 IF(HAVE_opencv_cudaimgproc)
   CREATE_OCV_CLASS_PROPERTY( 
@@ -1107,10 +1129,6 @@ file(GLOB extern_hdrs "${PROJECT_SOURCE_DIR}/*.h*")
 source_group("Src_extern" FILES ${extern_srcs})
 source_group("Include_extern" FILES ${extern_hdrs})
 
-#IF(IOS)
-#  LIST(APPEND extern_srcs "ios/divmodsi4.c")
-#ENDIF()
-
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
   #MESSAGE("Retriveing source folder for project :  opencv_${CVEXTERN_OPTIONAL_DEP}")
   #GET_TARGET_PROPERTY(OPENCV_MODULE_SOURCE_DIR opencv_${CVEXTERN_OPTIONAL_DEP} PROJECT_SOURCE_DIR)
@@ -1132,6 +1150,8 @@ FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
     LIST(APPEND extern_hdrs ${${CVEXTERN_OPTIONAL_DEP}_extern_hdrs})
   ENDIF()
 ENDFOREACH()
+
+
 
 IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})

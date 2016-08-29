@@ -3,6 +3,237 @@
 # --------------------------------------------------------
 
 IF(EMGU_CV_EXAMPLE_BUILD)
+  #XamarinForms.Core 
+  IF (HAVE_ANDROID OR HAVE_IOS OR HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64 OR HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM OR HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM) 
+     INSTALL(
+     DIRECTORY
+     "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/Core/"
+     DESTINATION Emgu.CV.Example/XamarinForms/Core/
+     COMPONENT emgucv_example_source
+     FILES_MATCHING 
+     PATTERN "*.cs"
+     PATTERN "*.csproj"
+     PATTERN "*.config"
+     PATTERN "*.shproj"
+     PATTERN "*.Xamarin"
+     PATTERN "*.projitems"
+     PATTERN "*.axml"
+     PATTERN "*.xaml"
+     PATTERN "*.xml"
+     PATTERN "*.txt"
+     PATTERN "*.png"
+     PATTERN "*.dll"
+     PATTERN "*.json"
+     PATTERN ".git" EXCLUDE
+     PATTERN "Debug" EXCLUDE
+     PATTERN "Release" EXCLUDE  
+     )
+  ENDIF()
+  
+  IF(HAVE_ANDROID)
+    INSTALL(
+  DIRECTORY
+  "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/Android/"
+  DESTINATION Emgu.CV.Example/XamarinForms/Android/
+  COMPONENT emgucv_example_source
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "*.csproj"
+  PATTERN "*.config"
+  PATTERN "*.shproj"
+  PATTERN "*.Xamarin"
+  PATTERN "*.projitems"
+  PATTERN "*.axml"
+  PATTERN "*.xaml"
+  PATTERN "*.xml"
+  PATTERN "*.txt"
+  PATTERN "*.png"
+  PATTERN "*.dll"
+  PATTERN "*.json"
+  PATTERN ".git" EXCLUDE
+  PATTERN "Debug" EXCLUDE
+  PATTERN "Release" EXCLUDE  
+  )
+  
+      INSTALL(
+  DIRECTORY
+  "${CMAKE_CURRENT_SOURCE_DIR}/Android/"
+  DESTINATION Emgu.CV.Example/Android/
+  COMPONENT emgucv_example_source
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "*.csproj"
+  PATTERN "*.axml"
+  PATTERN "*.xml"
+  PATTERN "*.txt"
+  PATTERN "*.png"
+  PATTERN "*.dll"
+  PATTERN ".git" EXCLUDE
+  )
+  ENDIF()
+  
+  IF(HAVE_IOS)
+         INSTALL(
+  DIRECTORY
+  "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/iOS/"
+  DESTINATION Emgu.CV.Example/XamarinForms/iOS/
+  COMPONENT emgucv_example_source
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "*.csproj"
+  PATTERN "*.config"
+  PATTERN "*.shproj"
+  PATTERN "*.Xamarin"
+  PATTERN "*.projitems"
+  PATTERN "*.axml"
+  PATTERN "*.xaml"
+  PATTERN "*.xml"
+  PATTERN "*.txt"
+  PATTERN "*.png"
+  PATTERN "*.dll"
+  PATTERN "*.json"
+  PATTERN ".git" EXCLUDE
+  PATTERN "Debug" EXCLUDE
+  PATTERN "Release" EXCLUDE  
+  )
+  
+      INSTALL(
+  DIRECTORY
+  "${CMAKE_CURRENT_SOURCE_DIR}/iOS/"
+  DESTINATION Emgu.CV.Example/iOS/
+  COMPONENT emgucv_example_source
+  FILES_MATCHING 
+  PATTERN "*.cs"
+  PATTERN "*.csproj"
+  PATTERN "*.axml"
+  PATTERN "*.xml"
+  PATTERN "*.txt"
+  PATTERN "*.png"
+  PATTERN "*.dll"
+  PATTERN ".git" EXCLUDE
+  PATTERN "bin" EXCLUDE
+  PATTERN "obj" EXCLUDE
+  )
+  ENDIF()
+  
+  IF(HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM)
+     INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/RealtimeCamera.UWP/"
+		DESTINATION Emgu.CV.Example/RealtimeCamera.UWP/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "*.cs"
+		PATTERN "Properties/*"
+		PATTERN "*.csproj"
+		PATTERN "*.appxmanifest"
+		PATTERN "*.xaml"
+		PATTERN "*.json"
+		PATTERN "*.pfx"
+		PATTERN "Assets/*.png"  
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "bin" EXCLUDE
+		)
+  ENDIF()
+  
+  IF(HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64 OR HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM)
+     INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WindowsUniversal81/Shared/"
+		DESTINATION Emgu.CV.Example/XamarinForms/WindowsUniversal81/Shared/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "*.cs"
+		PATTERN "Properties/*"
+		PATTERN "*.projitems"
+		PATTERN "*.shproj"
+		PATTERN "*.xaml"
+		PATTERN "*.json"
+		PATTERN "*.pfx"  
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		PATTERN "bin" EXCLUDE
+		)
+      
+      IF(HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64)
+         		# ----------------------------------------------------------------------------
+		#  The example files
+		# ----------------------------------------------------------------------------
+		INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WindowsUniversal81/Windows/"
+		DESTINATION Emgu.CV.Example/XamarinForms/WindowsUniversal81/Windows/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "*.cs"
+		PATTERN "*.csproj"
+		PATTERN "*.config"
+		PATTERN "*.shproj"
+		PATTERN "*.Xamarin"
+		PATTERN "*.appxmanifest"
+		PATTERN "*.projitems"
+		PATTERN "*.axml"
+		PATTERN "*.xaml"
+		PATTERN "*.xml"
+		PATTERN "*.txt"
+		PATTERN "*.png"
+		PATTERN "*.dll"
+      PATTERN "*.json"
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		)
+      ENDIF()
+      IF(HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM)
+         		# ----------------------------------------------------------------------------
+		#  The example files
+		# ----------------------------------------------------------------------------
+		INSTALL(
+		DIRECTORY
+		"${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WindowsUniversal81/WindowsPhone/"
+		DESTINATION Emgu.CV.Example/XamarinForms/WindowsUniversal81/WindowsPhone/
+		COMPONENT emgucv_example_source
+		FILES_MATCHING 
+		PATTERN "*.cs"
+		PATTERN "*.csproj"
+		PATTERN "*.config"
+		PATTERN "*.shproj"
+		PATTERN "*.Xamarin"
+		PATTERN "*.appxmanifest"
+		PATTERN "*.projitems"
+		PATTERN "*.axml"
+		PATTERN "*.xaml"
+		PATTERN "*.xml"
+		PATTERN "*.txt"
+		PATTERN "*.png"
+		PATTERN "*.dll"
+      PATTERN "*.json"
+		PATTERN ".git" EXCLUDE
+		PATTERN "obj" EXCLUDE
+		PATTERN "CMake*" EXCLUDE
+		PATTERN "Release" EXCLUDE
+		PATTERN "Debug" EXCLUDE
+		PATTERN "RelWithDebInfo" EXCLUDE
+		PATTERN "*.dir" EXCLUDE
+		)
+      ENDIF()
+  ENDIF()
+  
   IF(NETFX_CORE)
   
   		INSTALL(
@@ -75,161 +306,29 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 		PATTERN "*.dir" EXCLUDE
 		PATTERN "bin" EXCLUDE
 		)
-      INSTALL(
-		DIRECTORY
-		"${CMAKE_CURRENT_SOURCE_DIR}/RealtimeCamera.UWP/"
-		DESTINATION Emgu.CV.Example/RealtimeCamera.UWP/
-		COMPONENT emgucv_example_source
-		FILES_MATCHING 
-		PATTERN "*.cs"
-		PATTERN "Properties/*"
-		PATTERN "*.csproj"
-		PATTERN "*.appxmanifest"
-		PATTERN "*.xaml"
-		PATTERN "*.json"
-		PATTERN "*.pfx"
-		PATTERN "Assets/*.png"  
-		PATTERN ".git" EXCLUDE
-		PATTERN "obj" EXCLUDE
-		PATTERN "CMake*" EXCLUDE
-		PATTERN "Release" EXCLUDE
-		PATTERN "Debug" EXCLUDE
-		PATTERN "RelWithDebInfo" EXCLUDE
-		PATTERN "*.dir" EXCLUDE
-		PATTERN "bin" EXCLUDE
-		)
-	  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-	    # ----------------------------------------------------------------------------
-		#  The example files
-		# ----------------------------------------------------------------------------
-		INSTALL(
-		DIRECTORY
-		${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/
-		DESTINATION Emgu.CV.Example/XamarinForms
-		COMPONENT emgucv_example_source
-		FILES_MATCHING 
-		PATTERN "*.cs"
-		PATTERN "*.csproj"
-		PATTERN "*.config"
-		PATTERN "*.shproj"
-		PATTERN "*.Xamarin"
-		PATTERN "*.appxmanifest"
-		PATTERN "*.projitems"
-		PATTERN "*.axml"
-		PATTERN "*.xaml"
-		PATTERN "*.xml"
-		PATTERN "*.txt"
-		PATTERN "*.png"
-		PATTERN "*.dll"
-      PATTERN "*.json"
-		PATTERN ".git" EXCLUDE
-		PATTERN "obj" EXCLUDE
-		PATTERN "CMake*" EXCLUDE
-		PATTERN "Release" EXCLUDE
-		PATTERN "Debug" EXCLUDE
-		PATTERN "RelWithDebInfo" EXCLUDE
-		PATTERN "*.dir" EXCLUDE
-		PATTERN "XamarinForms.Droid" EXCLUDE
-		#PATTERN "WindowsUniversal/*" EXCLUDE
-		PATTERN "WindowsUniversal81/Windows" EXCLUDE
-		PATTERN "XamarinForms.iOS" EXCLUDE
-		)
-	  ELSE() #windows store
-		# ----------------------------------------------------------------------------
-		#  The example files
-		# ----------------------------------------------------------------------------
-		INSTALL(
-		DIRECTORY
-		${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/
-		DESTINATION Emgu.CV.Example/XamarinForms
-		COMPONENT emgucv_example_source
-		FILES_MATCHING 
-		PATTERN "*.cs"
-		PATTERN "*.csproj"
-		PATTERN "*.config"
-		PATTERN "*.shproj"
-		PATTERN "*.Xamarin"
-		PATTERN "*.appxmanifest"
-		PATTERN "*.projitems"
-		PATTERN "*.axml"
-		PATTERN "*.xaml"
-		PATTERN "*.xml"
-		PATTERN "*.txt"
-		PATTERN "*.png"
-		PATTERN "*.dll"
-      PATTERN "*.json"
-		PATTERN ".git" EXCLUDE
-		PATTERN "obj" EXCLUDE
-		PATTERN "CMake*" EXCLUDE
-		PATTERN "Release" EXCLUDE
-		PATTERN "Debug" EXCLUDE
-		PATTERN "RelWithDebInfo" EXCLUDE
-		PATTERN "*.dir" EXCLUDE
-		PATTERN "XamarinForms.Droid" EXCLUDE
-		PATTERN "WindowsPhone" EXCLUDE
-		PATTERN "XamarinForms.iOS" EXCLUDE
-		)
-	  ENDIF()
+
   ELSEIF(ANDROID)
-    INSTALL(
-  DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/Android"
-  DESTINATION Emgu.CV.Example
-  COMPONENT main
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "*.csproj"
-  PATTERN "*.axml"
-  PATTERN "*.xml"
-  PATTERN "*.txt"
-  PATTERN "*.png"
-  PATTERN "*.dll"
-  PATTERN ".git" EXCLUDE
-  )
-  INSTALL(
-  DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms"
-  DESTINATION Emgu.CV.Example
-  COMPONENT main
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "*.csproj"
-  PATTERN "*.config"
-  PATTERN "*.shproj"
-  PATTERN "*.Xamarin"
-  PATTERN "*.projitems"
-  PATTERN "*.axml"
-  PATTERN "*.xaml"
-  PATTERN "*.xml"
-  PATTERN "*.txt"
-  PATTERN "*.png"
-  PATTERN "*.dll"
-  PATTERN "*.json"
-  PATTERN ".git" EXCLUDE
-  PATTERN "Debug" EXCLUDE
-  PATTERN "Release" EXCLUDE
-  PATTERN "WindowsUniversal" EXCLUDE
-  PATTERN "XamarinForms.iOS" EXCLUDE
-  )
+
+
   INSTALL(
     FILES
     "PlanarSubdivision/DrawSubdivision.cs"
     DESTINATION "Emgu.CV.Example/PlanarSubdivision"
-    COMPONENT main
+    COMPONENT emgucv_example_source
     )
   INSTALL(
     FILES
     "FaceDetection/DetectFace.cs"
 	"FaceDetection/lena.jpg"
     DESTINATION "Emgu.CV.Example/FaceDetection"
-    COMPONENT main
+    COMPONENT emgucv_example_source
     )
   INSTALL(
     FILES
     "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
 	"${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
     DESTINATION "opencv/data/haarcascades"
-    COMPONENT main
+    COMPONENT emgucv_example_source
     )
   INSTALL(
     FILES
@@ -237,21 +336,21 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 	"FeatureMatching/box.png"
 	"FeatureMatching/box_in_scene.png"
     DESTINATION "Emgu.CV.Example/FeatureMatching"
-    COMPONENT main
+    COMPONENT emgucv_example_source
     )
   INSTALL(
     FILES
     "PedestrianDetection/FindPedestrian.cs"
 	"PedestrianDetection/pedestrian.png"
     DESTINATION "Emgu.CV.Example/PedestrianDetection"
-    COMPONENT main
+    COMPONENT emgucv_example_source
     )
   INSTALL(
     FILES
     "LicensePlateRecognition/LicensePlateDetector.cs"
 	"LicensePlateRecognition/license-plate.jpg"
     DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
-    COMPONENT main
+    COMPONENT emgucv_example_source
     )
   INSTALL(
     FILES
@@ -259,7 +358,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 	"TrafficSignRecognition/stop-sign-model.png"
 	"TrafficSignRecognition/stop-sign.jpg"
     DESTINATION "Emgu.CV.Example/TrafficSignRecognition"
-    COMPONENT main
+    COMPONENT emgucv_example_source
     )
   ELSE()
     SET(EMGU_CV_REFERENCE 

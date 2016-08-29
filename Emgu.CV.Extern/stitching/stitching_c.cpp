@@ -6,27 +6,27 @@
 
 #include "stitching_c.h"
 
-cv::Stitcher* CvStitcherCreateDefault(bool tryUseGpu)
+cv::Stitcher* cveStitcherCreateDefault(bool tryUseGpu)
 {
    cv::Ptr<cv::Stitcher> p = cv::createStitcher(tryUseGpu);
    p.addref();
    return p.get();
 }
 
-void CvStitcherRelease(cv::Stitcher** stitcher)
+void cveStitcherRelease(cv::Stitcher** stitcher)
 {
    delete *stitcher;
    *stitcher = 0;
 }
 
-void CvStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder)
+void cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder)
 {
    cv::Ptr<cv::detail::FeaturesFinder> p(finder);
    p.addref();
    stitcher->setFeaturesFinder(p);
 }
 
-int CvStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano)
+int cveStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano)
 {
    return stitcher->stitch(*images, *pano);
 }

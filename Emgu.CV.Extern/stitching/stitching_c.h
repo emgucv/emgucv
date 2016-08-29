@@ -28,13 +28,13 @@ namespace cv {
 
 
 
-CVAPI(cv::Stitcher*) CvStitcherCreateDefault(bool tryUseGpu);
+CVAPI(cv::Stitcher*) cveStitcherCreateDefault(bool tryUseGpu);
 
-CVAPI(void) CvStitcherRelease(cv::Stitcher** stitcher);
+CVAPI(void) cveStitcherRelease(cv::Stitcher** stitcher);
 
-CVAPI(void) CvStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder);
+CVAPI(void) cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder);
 
-CVAPI(int) CvStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
+CVAPI(int) cveStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
 
 #ifdef HAVE_OPENCV_NONFREE
 CVAPI(cv::detail::SurfFeaturesFinder*) cveSurfFeaturesFinderCreate(
