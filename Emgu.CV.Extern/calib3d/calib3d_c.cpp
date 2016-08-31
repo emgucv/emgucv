@@ -116,6 +116,11 @@ bool cveFindChessboardCorners(cv::_InputArray* image, CvSize* patternSize, cv::_
    return cv::findChessboardCorners(*image, *patternSize, *corners, flags);
 }
 
+bool cveFind4QuadCornerSubpix(cv::_InputArray* image, cv::_InputOutputArray* corners, CvSize* regionSize)
+{
+   return cv::find4QuadCornerSubpix(*image, *corners, *regionSize);
+}
+
 bool cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, CvSize* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold)
 {
    return cv::stereoRectifyUncalibrated(*points1, *points2, *f, *imgSize, *h1, *h2, threshold);
@@ -164,6 +169,11 @@ void cveConvertPointsToHomogeneous(cv::_InputArray* src, cv::_OutputArray* dst)
 void cveConvertPointsFromHomogeneous(cv::_InputArray* src, cv::_OutputArray* dst)
 {
    cv::convertPointsFromHomogeneous(*src, *dst);
+}
+
+void cveFindEssentialMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* cameraMatrix, int method, double prob, double threshold, cv::_OutputArray* mask)
+{
+   cv::findEssentialMat(*points1, *points2, *cameraMatrix, method, prob, threshold, mask ? *mask : (cv::OutputArray) cv::noArray());
 }
 
 void cveFindFundamentalMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_OutputArray* dst, int method, double param1, double param2, cv::_OutputArray* mask)

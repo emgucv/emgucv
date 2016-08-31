@@ -100,6 +100,31 @@ namespace Emgu.CV
       private static extern void cveRodrigues(IntPtr src, IntPtr dst, IntPtr jacobian);
 
       #region Epipolar Geometry, Stereo Correspondence
+      /// <summary>
+      /// Calculates an essential matrix from the corresponding points in two images.
+      /// </summary>
+      /// <param name="points1">Array of N (N &gt;= 5) 2D points from the first image. The point coordinates should be floating-point (single or double precision).</param>
+      /// <param name="points2">Array of the second image points of the same size and format as points1</param>
+      /// <param name="cameraMatrix">Camera matrix K=[[fx 0 cx][0 fy cy][0 0 1]]. Note that this function assumes that points1 and points2 are feature points from cameras with the same camera matrix.</param>
+      /// <param name="method">Method for computing a fundamental matrix. RANSAC for the RANSAC algorithm. LMEDS for the LMedS algorithm</param>
+      /// <param name="prob">Parameter used for the RANSAC or LMedS methods only. It specifies a desirable level of confidence (probability) that the estimated matrix is correct.</param>
+      /// <param name="threshold">Parameter used for RANSAC. It is the maximum distance from a point to an epipolar line in pixels, beyond which the point is considered an outlier and is not used for computing the final fundamental matrix. It can be set to something like 1-3, depending on the accuracy of the point localization, image resolution, and the image noise.</param>
+      /// <param name="mask">Output array of N elements, every element of which is set to 0 for outliers and to 1 for the other points. The array is computed only in the RANSAC and LMedS methods.</param>
+      public static void FindEssentialMat(IInputArray points1, IInputArray points2, IInputArray cameraMatrix,
+         CvEnum.FmType method = CvEnum.FmType.Ransac, double prob = 0.999, double threshold = 1.0,
+         IOutputArray mask = null)
+      {
+         using (InputArray iaPoints1 = points1.GetInputArray())
+         using (InputArray iaPoints2 = points2.GetInputArray())
+         using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+         using (OutputArray oaMask = mask == null ? OutputArray.GetEmpty() : mask.GetOutputArray())
+         {
+            cveFindEssentialMat(iaPoints1, iaPoints2, iaCameraMatrix, method, prob, threshold, oaMask);
+         }
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveFindEssentialMat(IntPtr points1, IntPtr points2, IntPtr cameraMatrix, CvEnum.FmType method, double prob, double threshold, IntPtr mask);
 
       /// <summary>
       /// Calculates fundamental matrix using one of four methods listed above and returns the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. 
@@ -819,6 +844,26 @@ namespace Emgu.CV
          ref Rectangle validPixRoi2
          );
 
+      /// <summary>
+      /// Finds subpixel-accurate positions of the chessboard corners
+      /// </summary>
+      /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>
+      /// <param name="corners">Pointer to the output array of corners(PointF) detected</param>
+      /// <param name="regionSize">region size</param>
+      /// <returns>True if successfull</returns>
+      public static bool Find4QuadCornerSubpix(IInputArray image, IInputOutputArray corners, Size regionSize)
+      {
+         using (InputArray iaImage = image.GetInputArray())
+         using (InputOutputArray ioaCorners = corners.GetInputOutputArray())
+         {
+            return cveFind4QuadCornerSubpix(iaImage, ioaCorners, ref regionSize);
+         }
+      }
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      private static extern bool cveFind4QuadCornerSubpix(IntPtr image, IntPtr corners, ref Size regionSize);
+
 
       /// <summary>
       /// Attempts to determine whether the input image is a view of the chessboard pattern and locate internal chessboard corners
@@ -838,6 +883,7 @@ namespace Emgu.CV
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
       private static extern bool cveFindChessboardCorners(IntPtr image, ref Size patternSize, IntPtr corners,
          CvEnum.CalibCbType flags);
 
@@ -958,7 +1004,7 @@ namespace Emgu.CV
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cveTriangulatePoints(IntPtr projMat1, IntPtr projMat2, IntPtr projPoints1,
+      private static extern void cveTriangulatePoints(IntPtr projMat1, IntPtr projMat2, IntPtr projPoints1,
          IntPtr projPoints2, IntPtr points4D);
 
       /// <summary>
@@ -981,40 +1027,40 @@ namespace Emgu.CV
       }
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private extern static void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1,
+      private static extern void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1,
          IntPtr newPoints2);
 
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveFisheyeProjectPoints(IntPtr objectPoints, IntPtr imagePoints, IntPtr rvec,
+      internal static extern void cveFisheyeProjectPoints(IntPtr objectPoints, IntPtr imagePoints, IntPtr rvec,
          IntPtr tvec,
          IntPtr K, IntPtr D, double alpha, IntPtr jacobian);
 
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveFisheyeDistortPoints(IntPtr undistored, IntPtr distorted, IntPtr K, IntPtr D,
+      internal static extern void cveFisheyeDistortPoints(IntPtr undistored, IntPtr distorted, IntPtr K, IntPtr D,
          double alpha);
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveFisheyeUndistorPoints(IntPtr distorted, IntPtr undistorted, IntPtr K, IntPtr D,
+      internal static extern void cveFisheyeUndistorPoints(IntPtr distorted, IntPtr undistorted, IntPtr K, IntPtr D,
          IntPtr R, IntPtr P);
 
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveFisheyeInitUndistorRectifyMap(IntPtr K, IntPtr D, IntPtr R, IntPtr P, ref Size size,
+      internal static extern void cveFisheyeInitUndistorRectifyMap(IntPtr K, IntPtr D, IntPtr R, IntPtr P, ref Size size,
          DepthType m1Type, IntPtr map1, IntPtr map2);
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveFisheyeUndistorImage(IntPtr distorted, IntPtr undistored, IntPtr K, IntPtr D,
+      internal static extern void cveFisheyeUndistorImage(IntPtr distorted, IntPtr undistored, IntPtr K, IntPtr D,
          IntPtr Knew, ref Size newSize);
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveFisheyeEstimateNewCameraMatrixForUndistorRectify(
+      internal static extern void cveFisheyeEstimateNewCameraMatrixForUndistorRectify(
          IntPtr K, IntPtr D,
          ref Size imageSize, IntPtr R, IntPtr P, double balance, ref Size newSize, double fovScale);
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveFisheyeSteteoRectify(
+      internal static extern void cveFisheyeSteteoRectify(
          IntPtr K1, IntPtr D1, IntPtr K2,
          IntPtr D2, ref Size imageSize,
          IntPtr R, IntPtr tvec, IntPtr R1, IntPtr R2, IntPtr P1,
@@ -1023,13 +1069,13 @@ namespace Emgu.CV
 
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveFisheyeCalibrate(
+      internal static extern void cveFisheyeCalibrate(
          IntPtr objectPoints, IntPtr imagePoints, ref Size imageSize,
          IntPtr K, IntPtr D, IntPtr rvecs, IntPtr tvecs, int flags,
          ref MCvTermCriteria criteria);
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveFisheyeStereoCalibrate(
+      internal static extern void cveFisheyeStereoCalibrate(
          IntPtr objectPoints, IntPtr imagePoints1,
          IntPtr imagePoints2, IntPtr K1, IntPtr D1, IntPtr K2, IntPtr D2,
          ref Size imageSize, IntPtr R, IntPtr T, int flags, ref MCvTermCriteria criteria);
