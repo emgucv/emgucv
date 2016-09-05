@@ -14,3 +14,6 @@
 [submodule "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git"]
 	path = Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git
 	url = git://git.code.sf.net/p/emgucv/tesseract-ocr-git
+[submodule "vtk"]
+	path = vtk
+	url = https://gitlab.kitware.com/vtk/vtk.git

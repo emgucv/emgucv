@@ -2,6 +2,11 @@ REM go to the folder of the current script
 pushd %~p0
 
 cd ..
+
+cd vtk
+git clean -d -fx ""
+cd ..
+
 cd opencv
 git clean -d -fx "" 
 cd ..

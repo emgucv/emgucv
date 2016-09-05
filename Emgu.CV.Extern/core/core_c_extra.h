@@ -12,6 +12,7 @@
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/core_c.h"
 #include "emgu_c.h"
+#include "opencv2/core/affine.hpp"
 
 CVAPI(CvErrorCallback) cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata);
 CVAPI(int)  cveGetErrMode();
@@ -258,4 +259,10 @@ CVAPI(void) cvePCAProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_Inp
 CVAPI(void) cvePCABackProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputArray* eigenvectors, cv::_OutputArray* result);
  
 CVAPI(void) cveGetRangeAll(cv::Range* range);
+
+
+CVAPI(cv::Affine3d*) cveAffine3dCreate();
+CVAPI(cv::Affine3d*) cveAffine3dRotate(cv::Affine3d* affine, double r0, double r1, double r2);
+CVAPI(void) cveAffineGetValues(cv::Affine3d* affine, double* values); 
+CVAPI(void) cveAffine3dRelease(cv::Affine3d** affine);
 #endif

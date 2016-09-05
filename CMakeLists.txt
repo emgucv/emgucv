@@ -11,6 +11,13 @@
 PROJECT(emgucv)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.1)
 
+IF(WIN32 AND NOT (NETFX_CORE))
+   SET(BUILD_SHARED_LIBS_CACHE ${BUILD_SHARED_LIBS})
+   SET(BUILD_SHARED_LIBS OFF)
+   ADD_SUBDIRECTORY(vtk) # always build vtk as static library
+   SET(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_CACHE})
+ENDIF()
+
 SET(OPENCV_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv)
 SET(OPENCV_CONTRIB_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv_contrib)
 
@@ -507,7 +514,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   cudev  
   text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
   stitching latentsvm line_descriptor tracking plot
-  dnn aruco fuzzy
+  dnn aruco fuzzy viz
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
