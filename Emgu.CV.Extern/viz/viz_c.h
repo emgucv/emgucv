@@ -13,6 +13,9 @@
 
 CVAPI(cv::viz::Viz3d*) cveViz3dCreate(cv::String* s);
 CVAPI(void) cveViz3dShowWidget(cv::viz::Viz3d* viz, cv::String* id, cv::viz::Widget* widget);
+
+CVAPI(void) cveViz3dSetBackgroundMeshLab(cv::viz::Viz3d* viz);
+
 CVAPI(void) cveViz3dSpin(cv::viz::Viz3d* viz);
 CVAPI(void) cveViz3dRelease(cv::viz::Viz3d** viz);
 
@@ -22,6 +25,8 @@ CVAPI(void) cveWTextRelease(cv::viz::WText** text);
 CVAPI(cv::viz::WCoordinateSystem*) cveWCoordinateSystemCreate(double scale, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
 CVAPI(void) cveWCoordinateSystemRelease(cv::viz::WCoordinateSystem** system);
 
-
+CVAPI(cv::viz::WCloud*) cveWCloudCreateWithColorArray(cv::_InputArray* cloud, cv::_InputArray* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(cv::viz::WCloud*) cveWCloudCreateWithColor(cv::_InputArray* cloud, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(void) cveWCloudRelease(cv::viz::WCloud** cloud);
 
 #endif

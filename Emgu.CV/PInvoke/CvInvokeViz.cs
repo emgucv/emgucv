@@ -57,6 +57,45 @@ namespace Emgu.CV
       IntPtr GetWidget2D { get; }
    }
 
+   public class WCloud : UnmanagedObject, IWidget3D
+   {
+      private IntPtr _widgetPtr;
+      private IntPtr _widget3dPtr;
+
+      public WCloud(IInputArray cloud, IInputArray color)
+      {
+         using (InputArray iaCloud = cloud.GetInputArray())
+         using (InputArray iaColor = color.GetInputArray())
+            CvInvoke.cveWCloudCreateWithColorArray(iaCloud, iaColor, ref _widget3dPtr, ref _widgetPtr);
+      }
+
+      public WCloud(IInputArray cloud, MCvScalar color)
+      {
+         using (InputArray iaCloud = cloud.GetInputArray())
+            CvInvoke.cveWCloudCreateWithColor(iaCloud, ref color, ref _widget3dPtr, ref _widgetPtr);
+      }
+
+      public IntPtr GetWidget3D
+      {
+         get { return _widget3dPtr; }
+      }
+
+      public IntPtr GetWidget
+      {
+         get { return _widgetPtr; }
+      }
+
+      protected override void DisposeObject()
+      {
+         if (IntPtr.Zero != _ptr)
+         {
+            CvInvoke.cveWCloudRelease(ref _ptr);
+            _widgetPtr = IntPtr.Zero;
+            _widget3dPtr = IntPtr.Zero;
+         }
+      }
+   }
+
    public class WText :  UnmanagedObject, IWidget2D
    {
       private IntPtr _widgetPtr;
@@ -113,6 +152,11 @@ namespace Emgu.CV
          get { return _widgetPtr; }
       }
 
+      public void SetBackgroundMeshLab()
+      {
+         CvInvoke.cveViz3dSetBackgroundMeshLab(_ptr);
+      }
+
       /// <summary>
       /// Release the unmanaged memory associated with this Viz3d object
       /// </summary>
@@ -137,6 +181,9 @@ namespace Emgu.CV
       internal static extern void cveViz3dSpin(IntPtr viz);
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveViz3dSetBackgroundMeshLab(IntPtr viz);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveViz3dRelease(ref IntPtr viz);
 
 
@@ -151,5 +198,13 @@ namespace Emgu.CV
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveWCoordinateSystemRelease(ref IntPtr system);
+
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveWCloudCreateWithColorArray(IntPtr cloud, IntPtr color, ref IntPtr widget3d, ref IntPtr widget);
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveWCloudCreateWithColor(IntPtr cloud, ref MCvScalar color, ref IntPtr widget3d, ref IntPtr widget);
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveWCloudRelease(ref IntPtr cloud);
    }
 }

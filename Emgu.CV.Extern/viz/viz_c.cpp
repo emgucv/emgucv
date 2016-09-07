@@ -15,6 +15,10 @@ void cveViz3dShowWidget(cv::viz::Viz3d* viz, cv::String* id, cv::viz::Widget* wi
 {
    viz->showWidget(*id, *widget);
 }
+void cveViz3dSetBackgroundMeshLab(cv::viz::Viz3d* viz)
+{
+   viz->setBackgroundMeshLab();
+}
 void cveViz3dSpin(cv::viz::Viz3d* viz)
 {
    viz->spin();
@@ -50,4 +54,25 @@ void cveWCoordinateSystemRelease(cv::viz::WCoordinateSystem** system)
 {
    delete *system;
    *system = 0;
+}
+
+cv::viz::WCloud* cveWCloudCreateWithColorArray(cv::_InputArray* cloud, cv::_InputArray* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
+{
+   cv::viz::WCloud* wcloud = new cv::viz::WCloud(*cloud, *color);
+   *widget3d = dynamic_cast<cv::viz::Widget3D*>(wcloud);
+   *widget = dynamic_cast<cv::viz::Widget*>(wcloud);
+   return wcloud;
+}
+cv::viz::WCloud* cveWCloudCreateWithColor(cv::_InputArray* cloud, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
+{
+   cv::viz::Color c = cv::viz::Color(*color);
+   cv::viz::WCloud* wcloud = new cv::viz::WCloud(*cloud, c);
+   *widget3d = dynamic_cast<cv::viz::Widget3D*>(wcloud);
+   *widget = dynamic_cast<cv::viz::Widget*>(wcloud);
+   return wcloud;
+}
+void cveWCloudRelease(cv::viz::WCloud** cloud)
+{
+   delete *cloud;
+   *cloud = 0;
 }

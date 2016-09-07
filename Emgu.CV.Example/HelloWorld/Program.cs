@@ -13,10 +13,7 @@ namespace HelloWorld
    {
       static void Main(string[] args)
       {
-         Emgu.CV.Viz3d v = new Emgu.CV.Viz3d("hello");
-         WText wtext = new WText("Hello", new System.Drawing.Point(20, 20), 20, new MCvScalar(255, 255, 255));
-         v.ShowWidget("text", wtext);
-         v.Spin();
+
 
          String win1 = "Test Window"; //The name of the window
          CvInvoke.NamedWindow(win1); //Create the window using the specific name

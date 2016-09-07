@@ -64,27 +64,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ZedGraph.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK">
-      <HintPath>..\..\lib\3rdParty\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK.GLControl">
-      <HintPath>..\..\lib\3rdParty\OpenTK.GLControl.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs" />
-    <Compile Include="Simple3DReconstruction.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Simple3DReconstruction.Designer.cs">
-      <DependentUpon>Simple3DReconstruction.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Simple3DReconstruction.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Simple3DReconstruction.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
