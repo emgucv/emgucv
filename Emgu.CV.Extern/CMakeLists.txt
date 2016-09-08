@@ -1492,6 +1492,10 @@ set_target_properties(${the_target} PROPERTIES
   DEFINE_SYMBOL "CVAPI_EXPORTS"
   )
 
+#if (NOT (WIN32 OR ANDROID OR IOS))
+#  set_target_properties(${the_target} PROPERTIES LINK_FLAGS "-fPIC")
+#endif()  
+
 if(ENABLE_SOLUTION_FOLDERS)
   set_target_properties(${the_target} PROPERTIES FOLDER "emgu")
 endif() 
