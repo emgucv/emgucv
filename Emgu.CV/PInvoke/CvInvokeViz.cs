@@ -1,8 +1,9 @@
 ﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+#if ! (NETFX_CORE || __ANDROID__ || __IOS__ || UNITY_IOS || UNITY_ANDROID )
 
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using Emgu.Util;
@@ -208,3 +209,4 @@ namespace Emgu.CV
       internal static extern void cveWCloudRelease(ref IntPtr cloud);
    }
 }
+#endif
