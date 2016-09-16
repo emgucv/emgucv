@@ -12,11 +12,13 @@
 #include "opencv2/viz.hpp"
 
 CVAPI(cv::viz::Viz3d*) cveViz3dCreate(cv::String* s);
-CVAPI(void) cveViz3dShowWidget(cv::viz::Viz3d* viz, cv::String* id, cv::viz::Widget* widget);
-
+CVAPI(void) cveViz3dShowWidget(cv::viz::Viz3d* viz, cv::String* id, cv::viz::Widget* widget, cv::Affine3d* pose);
+CVAPI(void) cveViz3dSetWidgetPose(cv::viz::Viz3d* viz, cv::String* id, cv::Affine3d* pose);
 CVAPI(void) cveViz3dSetBackgroundMeshLab(cv::viz::Viz3d* viz);
 
 CVAPI(void) cveViz3dSpin(cv::viz::Viz3d* viz);
+CVAPI(void) cveViz3dSpinOnce(cv::viz::Viz3d* viz, int time, bool forceRedraw);
+CVAPI(bool) cveViz3dWasStopped(cv::viz::Viz3d* viz);
 CVAPI(void) cveViz3dRelease(cv::viz::Viz3d** viz);
 
 CVAPI(cv::viz::WText*) cveWTextCreate(cv::String* text, CvPoint* pos, int fontSize, CvScalar* color, cv::viz::Widget2D** widget2D, cv::viz::Widget** widget);

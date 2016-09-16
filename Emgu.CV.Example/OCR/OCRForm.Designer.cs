@@ -40,9 +40,11 @@
          this.loadLanguageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.splitContainer2 = new System.Windows.Forms.SplitContainer();
          this.imageBox1 = new Emgu.CV.UI.ImageBox();
-         this.ocrTextBox = new System.Windows.Forms.TextBox();
          this.openImageFileDialog = new System.Windows.Forms.OpenFileDialog();
          this.openLanguageFileDialog = new System.Windows.Forms.OpenFileDialog();
+         this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+         this.ocrTextBox = new System.Windows.Forms.TextBox();
+         this.hocrTextBox = new System.Windows.Forms.TextBox();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.Panel2.SuspendLayout();
          this.splitContainer1.SuspendLayout();
@@ -51,6 +53,9 @@
          this.splitContainer2.Panel2.SuspendLayout();
          this.splitContainer2.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
+         this.splitContainer3.Panel1.SuspendLayout();
+         this.splitContainer3.Panel2.SuspendLayout();
+         this.splitContainer3.SuspendLayout();
          this.SuspendLayout();
          // 
          // fileNameTextBox
@@ -169,7 +174,7 @@
          // 
          // splitContainer2.Panel2
          // 
-         this.splitContainer2.Panel2.Controls.Add(this.ocrTextBox);
+         this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
          this.splitContainer2.Size = new System.Drawing.Size(1525, 776);
          this.splitContainer2.SplitterDistance = 763;
          this.splitContainer2.SplitterWidth = 6;
@@ -185,6 +190,32 @@
          this.imageBox1.TabIndex = 2;
          this.imageBox1.TabStop = false;
          // 
+         // openImageFileDialog
+         // 
+         this.openImageFileDialog.FileName = "openFileDialog1";
+         // 
+         // openLanguageFileDialog
+         // 
+         this.openLanguageFileDialog.DefaultExt = "traineddata";
+         this.openLanguageFileDialog.Filter = "tesseract language file|*.traineddata|All files|*.*";
+         // 
+         // splitContainer3
+         // 
+         this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+         this.splitContainer3.Name = "splitContainer3";
+         // 
+         // splitContainer3.Panel1
+         // 
+         this.splitContainer3.Panel1.Controls.Add(this.ocrTextBox);
+         // 
+         // splitContainer3.Panel2
+         // 
+         this.splitContainer3.Panel2.Controls.Add(this.hocrTextBox);
+         this.splitContainer3.Size = new System.Drawing.Size(756, 776);
+         this.splitContainer3.SplitterDistance = 397;
+         this.splitContainer3.TabIndex = 0;
+         // 
          // ocrTextBox
          // 
          this.ocrTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -194,18 +225,22 @@
          this.ocrTextBox.Multiline = true;
          this.ocrTextBox.Name = "ocrTextBox";
          this.ocrTextBox.ReadOnly = true;
-         this.ocrTextBox.Size = new System.Drawing.Size(756, 776);
-         this.ocrTextBox.TabIndex = 0;
+         this.ocrTextBox.Size = new System.Drawing.Size(397, 776);
+         this.ocrTextBox.TabIndex = 1;
          this.ocrTextBox.WordWrap = false;
          // 
-         // openImageFileDialog
+         // hocrTextBox
          // 
-         this.openImageFileDialog.FileName = "openFileDialog1";
-         // 
-         // openLanguageFileDialog
-         // 
-         this.openLanguageFileDialog.DefaultExt = "traineddata";
-         this.openLanguageFileDialog.Filter = "tesseract language file|*.traineddata|All files|*.*";
+         this.hocrTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+         this.hocrTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.hocrTextBox.Location = new System.Drawing.Point(0, 0);
+         this.hocrTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+         this.hocrTextBox.Multiline = true;
+         this.hocrTextBox.Name = "hocrTextBox";
+         this.hocrTextBox.ReadOnly = true;
+         this.hocrTextBox.Size = new System.Drawing.Size(355, 776);
+         this.hocrTextBox.TabIndex = 2;
+         this.hocrTextBox.WordWrap = false;
          // 
          // OCRForm
          // 
@@ -225,9 +260,13 @@
          this.menuStrip1.PerformLayout();
          this.splitContainer2.Panel1.ResumeLayout(false);
          this.splitContainer2.Panel2.ResumeLayout(false);
-         this.splitContainer2.Panel2.PerformLayout();
          this.splitContainer2.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
+         this.splitContainer3.Panel1.ResumeLayout(false);
+         this.splitContainer3.Panel1.PerformLayout();
+         this.splitContainer3.Panel2.ResumeLayout(false);
+         this.splitContainer3.Panel2.PerformLayout();
+         this.splitContainer3.ResumeLayout(false);
          this.ResumeLayout(false);
 
       }
@@ -239,7 +278,6 @@
       private System.Windows.Forms.SplitContainer splitContainer1;
       private System.Windows.Forms.SplitContainer splitContainer2;
       private Emgu.CV.UI.ImageBox imageBox1;
-      private System.Windows.Forms.TextBox ocrTextBox;
       private System.Windows.Forms.OpenFileDialog openImageFileDialog;
       private System.Windows.Forms.MenuStrip menuStrip1;
       private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -248,6 +286,9 @@
       private System.Windows.Forms.ToolStripMenuItem loadLanguageToolStripMenuItem;
       private System.Windows.Forms.OpenFileDialog openLanguageFileDialog;
       private System.Windows.Forms.ComboBox ocrOptionsComboBox;
+      private System.Windows.Forms.SplitContainer splitContainer3;
+      private System.Windows.Forms.TextBox ocrTextBox;
+      private System.Windows.Forms.TextBox hocrTextBox;
    }
 }
 

@@ -22,15 +22,33 @@ namespace Emgu.CV
          }
       }
 
-      public void ShowWidget(String id, IWidget widget)
+      public void ShowWidget(String id, IWidget widget, Affine3d pose = null)
       {
          using (CvString cvsId = new CvString(id))
-            CvInvoke.cveViz3dShowWidget(_ptr, cvsId, widget.GetWidget);
+            CvInvoke.cveViz3dShowWidget(_ptr, cvsId, widget.GetWidget, pose);
       }
+
+      public void SetWidgetPose(String id, Affine3d pose)
+      {
+         using (CvString cvsId = new CvString(id))
+            CvInvoke.cveViz3dSetWidgetPose(_ptr, cvsId, pose);
+      }
+
 
       public void Spin()
       {
          CvInvoke.cveViz3dSpin(_ptr);
+      }
+
+      public void SpinOnce(int time = 1, bool forceRedraw = false)
+      {
+         CvInvoke.cveViz3dSpinOnce(_ptr, time, forceRedraw);
+      }
+
+      public bool WasStopped
+      {
+         get { return CvInvoke.cveViz3dWasStopped(_ptr); }
+         
       }
 
       /// <summary>
@@ -176,10 +194,24 @@ namespace Emgu.CV
       internal static extern IntPtr cveViz3dCreate(IntPtr s);
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveViz3dShowWidget(IntPtr viz, IntPtr id, IntPtr widget);
+      internal static extern void cveViz3dShowWidget(IntPtr viz, IntPtr id, IntPtr widget, IntPtr pose);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveViz3dSetWidgetPose(IntPtr viz, IntPtr id, IntPtr pose);
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveViz3dSpin(IntPtr viz);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveViz3dSpinOnce(
+         IntPtr viz, 
+         int time, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool forceRedraw);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool cveViz3dWasStopped(IntPtr viz);
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveViz3dSetBackgroundMeshLab(IntPtr viz);

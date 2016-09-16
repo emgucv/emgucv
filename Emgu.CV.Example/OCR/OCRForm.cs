@@ -84,6 +84,7 @@ namespace OCR
             fileNameTextBox.Text = openImageFileDialog.FileName;
             imageBox1.Image = null;
             ocrTextBox.Text = String.Empty;
+            hocrTextBox.Text = String.Empty;
 
             Bgr drawCharColor = new Bgr(Color.Blue);
             try
@@ -126,6 +127,8 @@ namespace OCR
 
                   String text = _ocr.GetText();
                   ocrTextBox.Text = text;
+                  String hocrText = _ocr.GetHOCRText();
+                  hocrTextBox.Text = hocrText;
                }
                else
                {

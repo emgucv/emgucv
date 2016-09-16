@@ -262,7 +262,9 @@ CVAPI(void) cveGetRangeAll(cv::Range* range);
 
 
 CVAPI(cv::Affine3d*) cveAffine3dCreate();
+CVAPI(cv::Affine3d*) cveAffine3dGetIdentity();
 CVAPI(cv::Affine3d*) cveAffine3dRotate(cv::Affine3d* affine, double r0, double r1, double r2);
-CVAPI(void) cveAffineGetValues(cv::Affine3d* affine, double* values); 
+CVAPI(cv::Affine3d*) cveAffine3dTranslate(cv::Affine3d* affine, double t0, double t1, double t2);
+CVAPI(void) cveAffine3dGetValues(cv::Affine3d* affine, double* values); 
 CVAPI(void) cveAffine3dRelease(cv::Affine3d** affine);
 #endif

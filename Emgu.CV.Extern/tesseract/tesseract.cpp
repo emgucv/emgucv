@@ -56,6 +56,15 @@ void TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vect
    delete[] result;
 }
 
+void TessBaseAPIGetHOCRText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
+{
+   char* result = ocr->GetHOCRText(pageNumber);
+   size_t length = strlen(result);
+   vectorOfByte->resize(length);
+   memcpy(&(*vectorOfByte)[0], result, length);
+   delete[] result;
+}
+
 void TessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<unsigned char>* charSeq, std::vector<TesseractResult>* resultSeq)
 {
    if (ocr == NULL)

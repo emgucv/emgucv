@@ -262,13 +262,32 @@ namespace Emgu.CV.OCR
          using (Util.VectorOfByte bytes = new Util.VectorOfByte())
          {
             OcrInvoke.TessBaseAPIGetUTF8Text(_ptr, bytes);
-#if NETFX_CORE
-            byte[] bArr = bytes.ToArray();
-            return _utf8.GetString(bArr, 0, bArr.Length).Replace("\n", Environment.NewLine);
-#else
-            return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
-#endif
+            return UtfByteVectorToString(bytes);
          }
+      }
+
+      /// <summary>
+      /// Make a HTML-formatted string with hOCR markup from the internal data structures.
+      /// </summary>
+      /// <param name="pageNumber">pageNumber is 0-based but will appear in the output as 1-based.</param>
+      /// <returns>A HTML-formatted string with hOCR markup from the internal data structures.</returns>
+      public String GetHOCRText(int pageNumber = 0)
+      {
+         using (Util.VectorOfByte bytes = new Util.VectorOfByte())
+         {
+            OcrInvoke.TessBaseAPIGetHOCRText(_ptr, pageNumber, bytes);
+            return UtfByteVectorToString(bytes);
+         }
+      }
+
+      private String UtfByteVectorToString(VectorOfByte bytes)
+      {
+#if NETFX_CORE
+         byte[] bArr = bytes.ToArray();
+         return _utf8.GetString(bArr, 0, bArr.Length).Replace("\n", Environment.NewLine);
+#else
+         return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
+#endif
       }
 
       /// <summary>

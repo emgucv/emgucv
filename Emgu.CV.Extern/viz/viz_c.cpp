@@ -11,9 +11,13 @@ cv::viz::Viz3d* cveViz3dCreate(cv::String* s)
    cv::viz::Viz3d* viz3d = new cv::viz::Viz3d(*s);
    return viz3d;
 }
-void cveViz3dShowWidget(cv::viz::Viz3d* viz, cv::String* id, cv::viz::Widget* widget)
+void cveViz3dShowWidget(cv::viz::Viz3d* viz, cv::String* id, cv::viz::Widget* widget, cv::Affine3d* pose)
 {
-   viz->showWidget(*id, *widget);
+   viz->showWidget(*id, *widget, pose ? *pose : cv::Affine3d::Identity());
+}
+void cveViz3dSetWidgetPose(cv::viz::Viz3d* viz, cv::String* id, cv::Affine3d* pose)
+{
+   viz->setWidgetPose(*id, *pose);
 }
 void cveViz3dSetBackgroundMeshLab(cv::viz::Viz3d* viz)
 {
@@ -22,6 +26,14 @@ void cveViz3dSetBackgroundMeshLab(cv::viz::Viz3d* viz)
 void cveViz3dSpin(cv::viz::Viz3d* viz)
 {
    viz->spin();
+}
+void cveViz3dSpinOnce(cv::viz::Viz3d* viz, int time, bool forceRedraw)
+{
+   viz->spinOnce(time, forceRedraw);
+}
+bool cveViz3dWasStopped(cv::viz::Viz3d* viz)
+{
+   return viz->wasStopped();
 }
 void cveViz3dRelease(cv::viz::Viz3d** viz)
 {
