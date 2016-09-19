@@ -91,5 +91,7 @@ CVAPI(bool) TessPageIteratorGetBaseLine(
    tesseract::PageIteratorLevel level,
    int* x1, int* y1, int* x2, int* y2);
 
+CVAPI(int) TessBaseAPIIsValidWord(EmguTesseract* ocr, char* word);
+
 CVAPI(Pix*) leptCreatePixFromMat(cv::Mat* m);
 #endif

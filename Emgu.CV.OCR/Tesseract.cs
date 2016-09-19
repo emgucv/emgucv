@@ -144,6 +144,11 @@ namespace Emgu.CV.OCR
          return true;
       }*/
 
+      public int IsValidWord(String word)
+      {
+         return OcrInvoke.TessBaseAPIIsValidWord(_ptr, word);
+      }
+
       /// <summary>
       /// Gets or sets the page seg mode.
       /// </summary>

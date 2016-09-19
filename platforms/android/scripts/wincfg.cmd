@@ -6,9 +6,9 @@ IF EXIST "C:\android-ndk-r11c" SET ANDROID_NDK=C:\android-ndk-r11c
 IF EXIST "C:\android-ndk-r12b" SET ANDROID_NDK=C:\android-ndk-r12b
 
 
-IF EXIST "%programfiles(x86)%\CMake 2.8\bin\cmake.exe" SET CMAKE_EXE="%programfiles(x86)%\CMake 2.8\bin\cmake.exe"
-IF EXIST "%programfiles(x86)%\CMake\bin\cmake.exe" SET CMAKE_EXE="%programfiles(x86)%\CMake\bin\cmake.exe"
-IF EXIST "%programfiles%\CMake\bin\cmake.exe" SET CMAKE_EXE="%programfiles%\CMake\bin\cmake.exe"
+IF EXIST "%programfiles(x86)%\CMake 2.8\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake 2.8\bin\cmake.exe
+IF EXIST "%programfiles(x86)%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake\bin\cmake.exe
+IF EXIST "%programfiles%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles%\CMake\bin\cmake.exe
 
 SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
 
@@ -25,7 +25,7 @@ FOR /F "tokens=2*" %%a IN ('REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java
 
 IF NOT "" == "%JavaHome17%" SET JAVA_HOME=%JavaHome17%
 IF NOT "" == "%JavaHome18%" set JAVA_HOME=%JavaHome18%
-
+ECHO Java Home: %JAVA_HOME%
 :: configuration options ::
 :::: general ARM-V7 settings
 :: SET ANDROID_ABI=armeabi-v7a

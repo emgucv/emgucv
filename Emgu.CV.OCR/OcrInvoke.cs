@@ -82,6 +82,12 @@ namespace Emgu.CV.OCR
          IntPtr ocr,
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool mergeSimilarWords);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern int TessBaseAPIIsValidWord(
+         IntPtr ocr, 
+         [MarshalAs(CvInvoke.StringMarshalType)]
+         String word);
       #endregion
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -96,6 +102,7 @@ namespace Emgu.CV.OCR
          IntPtr iterator,
          PageIteratorLevel level,
          ref int x1, ref int y1, ref int x2, ref int y2);
+
 
    }
 }

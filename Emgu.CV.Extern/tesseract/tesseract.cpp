@@ -158,6 +158,11 @@ void TessPageIteratorRelease(tesseract::PageIterator** iterator)
    *iterator = 0;
 }
 
+int TessBaseAPIIsValidWord(EmguTesseract* ocr, char* word)
+{
+   return ocr->IsValidWord(word);
+}
+
 Pix* leptCreatePixFromMat(cv::Mat* m)
 {
    const unsigned char* imagedata = m->data;

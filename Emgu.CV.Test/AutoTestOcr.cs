@@ -132,6 +132,8 @@ namespace Emgu.CV.Test
       {
          using (Tesseract ocr = GetTesseract())
          {
+            int isValid1 = ocr.IsValidWord("1123");
+            int isValid2 = ocr.IsValidWord("hello");
          }
       }
    }
