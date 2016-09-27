@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.WPF
 {
@@ -41,6 +42,28 @@ namespace Emgu.CV.WPF
 
             DeleteObject(ptr); //release the HBitmap
             return bs;
+         }
+      }
+
+      public static Mat ToMat(BitmapSource source)
+      {
+
+         if (source.Format == PixelFormats.Bgra32)
+         {
+            Mat result = new Mat();
+            result.Create(source.PixelHeight, source.PixelWidth, DepthType.Cv8U, 4);
+            source.CopyPixels(Int32Rect.Empty, result.DataPointer, result.Step*result.Rows, result.Step);
+            return result;
+         } else if (source.Format == PixelFormats.Bgr24)
+         {
+            Mat result = new Mat();
+            result.Create(source.PixelHeight, source.PixelWidth, DepthType.Cv8U, 3);
+            source.CopyPixels(Int32Rect.Empty, result.DataPointer, result.Step * result.Rows, result.Step);
+            return result;
+         }
+         else
+         {
+            throw new Exception(String.Format("Convertion from BitmapSource of format {0} is not supported.", source.Format));
          }
       }
    }
