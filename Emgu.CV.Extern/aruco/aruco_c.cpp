@@ -58,6 +58,27 @@ void cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard)
    *gridBoard = 0;
 }
 
+cv::aruco::CharucoBoard* cveCharucoBoardCreate(
+   int squaresX, int squaresY, float squareLength, float markerLength,
+   cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr)
+{
+   cv::aruco::CharucoBoard charucoBoard = cv::aruco::CharucoBoard::create(squaresX, squaresY, squareLength, markerLength, *dictionary);
+   cv::Ptr<cv::aruco::CharucoBoard> ptr = cv::makePtr<cv::aruco::CharucoBoard>(charucoBoard);
+   ptr.addref();
+   *boardPtr = dynamic_cast<cv::aruco::Board*>(ptr.get());
+   return ptr.get();
+}
+void cveCharucoBoardDraw(cv::aruco::CharucoBoard* charucoBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits)
+{
+   charucoBoard->draw(*outSize, *img, marginSize, borderBits);
+}
+void cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard)
+{
+   delete *charucoBoard;
+   *charucoBoard = 0;
+}
+
+
 
 void cveArucoRefineDetectedMarkers(
    cv::_InputArray* image, cv::aruco::Board* board, cv::_InputOutputArray* detectedCorners,

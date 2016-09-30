@@ -21,7 +21,12 @@ namespace Emgu.CV.Stitching
       /// <summary>
       /// Pointer to the unmanaged FeaturesFinder object
       /// </summary>
-      protected IntPtr FeaturesFinderPtr;
+      protected IntPtr _featuresFinderPtr;
+
+      public IntPtr FeaturesFinderPtr
+      {
+         get { return _featuresFinderPtr; }
+      }
    }
 
    /*
@@ -121,7 +126,7 @@ namespace Emgu.CV.Stitching
       {
          _ptr = StitchingInvoke.cveOrbFeaturesFinderCreate(
             ref gridSize, nFeature, scaleFactor, nLevels,
-            ref FeaturesFinderPtr);
+            ref _featuresFinderPtr);
       }
 
       /// <summary>

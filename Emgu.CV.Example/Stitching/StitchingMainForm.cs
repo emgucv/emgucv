@@ -32,7 +32,7 @@ namespace Stitching
          {
             sourceImageDataGridView.Rows.Clear();
 
-            Image<Bgr, Byte>[] sourceImages = new Image<Bgr, byte>[dlg.FileNames.Length];
+            Image<Bgr, byte>[] sourceImages = new Image<Bgr, byte>[dlg.FileNames.Length];
             
             for (int i = 0; i < sourceImages.Length; i++)
             {
@@ -48,9 +48,7 @@ namespace Stitching
             }
             try
             {
-               //using (Stitcher stitcher = new Stitcher(true))
-               //CUDA bruteforce matcher seems to cause issue in this release, not using CUDA for matching for this reason
-               using (Stitcher stitcher = new Stitcher(false))
+               using (Stitcher stitcher = new Stitcher(true))
                {
                   using (VectorOfMat vm = new VectorOfMat())
                   {

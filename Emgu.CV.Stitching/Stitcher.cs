@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -44,6 +45,21 @@ namespace Emgu.CV.Stitching
       }
 
       /// <summary>
+      /// Wave correction kind
+      /// </summary>
+      public enum WaveCorrectionType
+      {
+         /// <summary>
+         /// horizontal
+         /// </summary>
+         Horiz,
+         /// <summary>
+         /// Vertical
+         /// </summary>
+         Vert
+      }
+
+      /// <summary>
       /// Creates a stitcher with the default parameters.
       /// </summary>
       /// <param name="tryUseGpu">If true, the stitcher will try to use GPU for processing when available</param>
@@ -71,7 +87,16 @@ namespace Emgu.CV.Stitching
       /// <param name="finder">The features finder</param>
       public void SetFeaturesFinder(FeaturesFinder finder)
       {
-         StitchingInvoke.cveStitcherSetFeaturesFinder(_ptr, finder.Ptr);
+         StitchingInvoke.cveStitcherSetFeaturesFinder(_ptr, finder.FeaturesFinderPtr);
+      }
+
+      /// <summary>
+      /// Set the warper creator for this stitcher.
+      /// </summary>
+      /// <param name="warperCreator">The warper creator</param>
+      public void SetWarper(WarperCreator warperCreator)
+      {
+         StitchingInvoke.cveStitcherSetWarper(_ptr, warperCreator.WarperCreatorPtr);
       }
 
       /// <summary>
@@ -81,11 +106,47 @@ namespace Emgu.CV.Stitching
       {
          StitchingInvoke.cveStitcherRelease(ref _ptr);
       }
+
+      public bool WaveCorrection
+      {
+         get { return StitchingInvoke.cveStitcherGetWaveCorrection(_ptr); }
+         set { StitchingInvoke.cveStitcherSetWaveCorrection(_ptr, value); }
+      }
+
+      public WaveCorrectionType WaveCorrectionKind
+      {
+         get { return StitchingInvoke.cveStitcherGetWaveCorrectionKind(_ptr); }
+         set { StitchingInvoke.cveStitcherSetWaveCorrectionKind(_ptr, value); }
+      }
+
+      public double PanoConfidenceThresh
+      {
+         get { return StitchingInvoke.cveStitcherGetPanoConfidenceThresh(_ptr); }
+         set { StitchingInvoke.cveStitcherSetPanoConfidenceThresh(_ptr, value); }
+      }
+
+      public double CompositingResol
+      {
+         get { return StitchingInvoke.cveStitcherGetCompositingResol(_ptr); }
+         set { StitchingInvoke.cveStitcherSetCompositingResol(_ptr, value); }
+      }
+
+      public double SeamEstimationResol
+      {
+         get { return StitchingInvoke.cveStitcherGetSeamEstimationResol(_ptr); }
+         set { StitchingInvoke.cveStitcherSetSeamEstimationResol(_ptr, value); }
+      }
+
+      public double RegistrationResol
+      {
+         get { return StitchingInvoke.cveStitcherGetRegistrationResol(_ptr); }
+         set { StitchingInvoke.cveStitcherSetRegistrationResol(_ptr, value); }
+      }
    }
 
    public static partial class StitchingInvoke
    {
-      
+
       static StitchingInvoke()
       {
 #if !(__IOS__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN || NETFX_CORE)
@@ -109,6 +170,44 @@ namespace Emgu.CV.Stitching
       internal static extern void cveStitcherSetFeaturesFinder(IntPtr stitcherWrapper, IntPtr finder);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveStitcherSetWarper(IntPtr stitcher, IntPtr creator);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveStitcherRelease(ref IntPtr stitcherWrapper);
+
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveStitcherSetWaveCorrection(
+         IntPtr stitcher,
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool flag);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool cveStitcherGetWaveCorrection(IntPtr stitcher);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveStitcherSetWaveCorrectionKind(IntPtr stitcher, Stitcher.WaveCorrectionType kind);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern Stitcher.WaveCorrectionType cveStitcherGetWaveCorrectionKind(IntPtr stitcher);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveStitcherSetPanoConfidenceThresh(IntPtr stitcher, double confThresh);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern double cveStitcherGetPanoConfidenceThresh(IntPtr stitcher);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveStitcherSetCompositingResol(IntPtr stitcher, double resolMpx);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern double cveStitcherGetCompositingResol(IntPtr stitcher);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+
+      internal static extern void cveStitcherSetSeamEstimationResol(IntPtr stitcher, double resolMpx);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern double cveStitcherGetSeamEstimationResol(IntPtr stitcher);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveStitcherSetRegistrationResol(IntPtr stitcher, double resolMpx);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern double cveStitcherGetRegistrationResol(IntPtr stitcher);
    }
 }
