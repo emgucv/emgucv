@@ -22,5 +22,5 @@ publisher-url: http://www.emgu.com
 libraries: 
   ios-unified: lib/ios/Emgu.CV.World.iOS.dll
   android: lib/android/Emgu.CV.World.Android.dll
-version: "3.1.1"
+version: "3.1.2"
 
