@@ -14,6 +14,7 @@
 CVAPI(cv::viz::Viz3d*) cveViz3dCreate(cv::String* s);
 CVAPI(void) cveViz3dShowWidget(cv::viz::Viz3d* viz, cv::String* id, cv::viz::Widget* widget, cv::Affine3d* pose);
 CVAPI(void) cveViz3dSetWidgetPose(cv::viz::Viz3d* viz, cv::String* id, cv::Affine3d* pose);
+CVAPI(void) cveViz3dRemoveWidget(cv::viz::Viz3d* viz, cv::String* id);
 CVAPI(void) cveViz3dSetBackgroundMeshLab(cv::viz::Viz3d* viz);
 
 CVAPI(void) cveViz3dSpin(cv::viz::Viz3d* viz);

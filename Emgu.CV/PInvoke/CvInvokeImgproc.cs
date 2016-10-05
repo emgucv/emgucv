@@ -67,6 +67,14 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveResize(IntPtr src, IntPtr dst, ref Size dsize, double fx, double fy, CvEnum.Inter interpolation);
 
+      /// <summary>
+      /// Resize an image such that it fits in a given frame
+      /// </summary>
+      /// <param name="src">The source image</param>
+      /// <param name="dst">The result image</param>
+      /// <param name="frameSize">The size of the frame</param>
+      /// <param name="interpolationMethod">The interpolation method</param>
+      /// <param name="scaleDownOnly">If true, it will not try to scale up the image to fit the frame</param>
       public static void ResizeForFrame(IInputArray src, IOutputArray dst, Size frameSize, Inter interpolationMethod = Inter.Linear, bool scaleDownOnly = true)
       {
          using (InputArray iaImage = src.GetInputArray())
@@ -75,7 +83,6 @@ namespace Emgu.CV
             if (scaleDownOnly == true && sz.Width <= frameSize.Width && sz.Height <= frameSize.Height )
             {
                iaImage.CopyTo(dst);
-               
             }
             Size newSize = ComputeScalePreservingSize(iaImage.GetSize(), frameSize);
             CvInvoke.Resize(src, dst, newSize, 0, 0, interpolationMethod);

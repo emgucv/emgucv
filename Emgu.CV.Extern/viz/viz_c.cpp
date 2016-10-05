@@ -19,6 +19,10 @@ void cveViz3dSetWidgetPose(cv::viz::Viz3d* viz, cv::String* id, cv::Affine3d* po
 {
    viz->setWidgetPose(*id, *pose);
 }
+void cveViz3dRemoveWidget(cv::viz::Viz3d* viz, cv::String* id)
+{
+   viz->removeWidget(*id);
+}
 void cveViz3dSetBackgroundMeshLab(cv::viz::Viz3d* viz)
 {
    viz->setBackgroundMeshLab();

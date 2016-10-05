@@ -72,8 +72,8 @@ CVAPI(void) cveOrbFeaturesFinderRelease(cv::detail::OrbFeaturesFinder** finder);
 CVAPI(void) cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox);
 CVAPI(void) cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* src, cv::_InputArray* K, cv::_InputArray* R, int interpMode, int borderMode, cv::_OutputArray* dst, CvPoint* corner);
 
-CVAPI(cv::detail::PlaneWarper*) cvePlanWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cvePlanWarperRelease(cv::detail::PlaneWarper** warper);
+CVAPI(cv::detail::PlaneWarper*) cvePlaneWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cvePlaneWarperRelease(cv::detail::PlaneWarper** warper);
 
 CVAPI(cv::detail::CylindricalWarper*) cveCylindricalWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
 CVAPI(void) cveCylindricalWarperRelease(cv::detail::CylindricalWarper** warper);
