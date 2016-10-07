@@ -88,7 +88,7 @@ CVAPI(cv::detail::StereographicWarper*) cveStereographicWarperCreate(float scale
 CVAPI(void) cveStereographicWarperRelease(cv::detail::StereographicWarper** warper);
 
 CVAPI(cv::detail::CompressedRectilinearWarper*) cveCompressedRectilinearWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveCompressedRectilinearWarperrRelease(cv::detail::CompressedRectilinearWarper** warper);
+CVAPI(void) cveCompressedRectilinearWarperRelease(cv::detail::CompressedRectilinearWarper** warper);
 
 CVAPI(cv::detail::PaniniWarper*) cvePaniniWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
 CVAPI(void) cvePaniniWarperRelease(cv::detail::PaniniWarper** warper);
