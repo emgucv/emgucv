@@ -1007,6 +1007,35 @@ IF(HAVE_opencv_stitching)
 ENDIF()
 ############################### stitching code gen END ################################
 
+############################### shape code gen START ##############################
+IF(HAVE_opencv_shape)
+   CREATE_OCV_CLASS_PROPERTY( 
+    "shape/ShapeContextDistanceExtractor_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Shape/ShapeContextDistanceExtractorGenerated.cs"
+    "cv::ShapeContextDistanceExtractor" 
+    "ShapeContextDistanceExtractor" 
+    "Iterations;AngularBins;RadialBins;InnerRadius;OuterRadius;RotationInvariant;ShapeContextWeight;ImageAppearanceWeight;BendingEnergyWeight;StdDev" 
+    "int;int;int;float;float;bool;float;float;float;float" 
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "Iterations;AngularBins;RadialBins;InnerRadius;OuterRadius;RotationInvariant;ShapeContextWeight;ImageAppearanceWeight;BendingEnergyWeight;StdDev" 
+    "int;int;int;float;float;bool;float;float;float;float"
+    "The number of iterations;
+    The number of angular bins in the shape context descriptor.;
+    The number of radial bins in the shape context descriptor.;
+    The value of the inner radius.;
+    The value of the outer radius.;
+    Rotation Invariant;
+    The weight of the shape context distance in the final distance value.;
+    The weight of the appearance cost in the final distance value.;
+    The weight of the Bending Energy in the final distance value.;
+    Standard Deviation."
+    "Emgu.CV.Shape"
+    "ShapeInvoke"
+    "ShapeContextDistanceExtractor"
+    "#include \"shape_c.h\"")
+  
+ENDIF()
+############################### shape code gen END ################################
 
 ############################### cudaimgproc code gen START ##############################
 IF(HAVE_opencv_cudaimgproc)

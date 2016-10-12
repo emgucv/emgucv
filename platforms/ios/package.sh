@@ -36,6 +36,7 @@ cp -r ../../tmp/Emgu.CV.Cuda ios-package/Emgu.CV.Cuda
 cp -f ../../Emgu.CV.Cuda/*.cs ios-package/Emgu.CV.Cuda/
 
 cp -r ../../tmp/Emgu.CV.Shape ios-package/Emgu.CV.Shape
+cp -f ../../Emgu.CV.Shape/*.cs ios-package/Emgu.CV.Shape/
 
 cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
 cp -f ../../Emgu.CV.Contrib/Plot/VectorOf*.cs ios-package/Emgu.CV.Contrib/Plot

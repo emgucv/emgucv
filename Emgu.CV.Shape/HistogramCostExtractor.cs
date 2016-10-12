@@ -30,8 +30,6 @@ namespace Emgu.CV.Shape
             ShapeInvoke.cvHistogramCostExtractorRelease(ref _ptr);
          }
       }
-
-
    }
 
    /// <summary>

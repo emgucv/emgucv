@@ -41,35 +41,43 @@ void cvHistogramCostExtractorRelease(cv::HistogramCostExtractor** extractor)
 }
 
 
-cv::ShapeTransformer* cvThinPlateSplineShapeTransformerCreate(double regularizationParameter)
+cv::ThinPlateSplineShapeTransformer* cvThinPlateSplineShapeTransformerCreate(double regularizationParameter, cv::ShapeTransformer** transformer)
 {
-   cv::Ptr<cv::ShapeTransformer> ptr = cv::createThinPlateSplineShapeTransformer(regularizationParameter);
+   cv::Ptr<cv::ThinPlateSplineShapeTransformer> ptr = cv::createThinPlateSplineShapeTransformer(regularizationParameter);
    ptr.addref();
+   *transformer = dynamic_cast<cv::ShapeTransformer*>(ptr.get());
    return ptr.get();
 }
 
-cv::ShapeTransformer* cvAffineTransformerCreate(bool fullAffine)
+cv::AffineTransformer* cvAffineTransformerCreate(bool fullAffine, cv::ShapeTransformer** transformer)
 {
-   cv::Ptr<cv::ShapeTransformer> ptr = cv::createThinPlateSplineShapeTransformer(fullAffine);
+   cv::Ptr<cv::AffineTransformer> ptr = cv::createAffineTransformer(fullAffine);
    ptr.addref();
+   *transformer = dynamic_cast<cv::ShapeTransformer*>(ptr.get());
    return ptr.get();
 }
 
-void cvShapeTransformerRelease(cv::ShapeTransformer** transformer)
+void cvThinPlateSplineShapeTransformerRelease(cv::ThinPlateSplineShapeTransformer** transformer)
+{
+   delete * transformer;
+   *transformer = 0;
+}
+
+void cvAffineTransformerRelease(cv::AffineTransformer** transformer)
 {
    delete * transformer;
    *transformer = 0;
 }
 
 
-float cvShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, std::vector<cv::Point>* contour1, std::vector<cv::Point>* contour2)
+float cvShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, cv::_InputArray* contour1, cv::_InputArray* contour2)
 {
    return extractor->computeDistance(*contour1, *contour2);
 }
 
 cv::ShapeContextDistanceExtractor* cvShapeContextDistanceExtractorCreate(
    int nAngularBins, int nRadialBins, float innerRadius, float outerRadius, int iterations,
-   cv::HistogramCostExtractor* comparer, cv::ShapeTransformer* transformer)
+   cv::HistogramCostExtractor* comparer, cv::ShapeTransformer* transformer, cv::ShapeDistanceExtractor** e)
 {
    cv::Ptr<cv::HistogramCostExtractor> comparerPtr(comparer);
    comparerPtr.addref();
@@ -77,6 +85,7 @@ cv::ShapeContextDistanceExtractor* cvShapeContextDistanceExtractorCreate(
    transformerPtr.addref();
    cv::Ptr<cv::ShapeContextDistanceExtractor> ptr = cv::createShapeContextDistanceExtractor(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparerPtr, transformerPtr);
    ptr.addref();
+   *e = dynamic_cast<cv::ShapeDistanceExtractor*>(ptr.get());
    return ptr.get();
 }
 
@@ -86,11 +95,11 @@ void cvShapeContextDistanceExtractorRelease(cv::ShapeContextDistanceExtractor** 
    *extractor = 0;
 }
 
-
-cv::HausdorffDistanceExtractor* cvHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp)
+cv::HausdorffDistanceExtractor* cvHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp, cv::ShapeDistanceExtractor** e)
 {
    cv::Ptr<cv::HausdorffDistanceExtractor> ptr = cv::createHausdorffDistanceExtractor(distanceFlag, rankProp);
    ptr.addref();
+   *e = dynamic_cast<cv::ShapeDistanceExtractor*>(ptr.get());
    return ptr.get();
 }
 void cvHausdorffDistanceExtractorRelease(cv::HausdorffDistanceExtractor** extractor)

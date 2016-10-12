@@ -17,8 +17,38 @@ namespace Emgu.CV.Shape
    /// <summary>
    /// Abstract base class for shape transformation algorithms.
    /// </summary>
-   public abstract class ShapeTransformer : UnmanagedObject
+   public interface IShapeTransformer
    {
+      /// <summary>
+      /// Get the pointer to the unmanaged shape transformer
+      /// </summary>
+      IntPtr ShapeTransformerPtr { get; }
+   }
+
+   /// <summary>
+   /// Definition of the transformation ocupied in the paper “Principal Warps: Thin-Plate Splines and Decomposition of Deformations”, by F.L. Bookstein (PAMI 1989).
+   /// </summary>
+   public class ThinPlateSplineShapeTransformer : UnmanagedObject, IShapeTransformer
+   {
+      private IntPtr _shapeTransformerPtr;
+
+      /// <summary>
+      /// Create a thin plate spline shape transformer
+      /// </summary>
+      /// <param name="regularizationParameter">The regularization parameter for relaxing the exact interpolation requirements of the TPS algorithm.</param>
+      public ThinPlateSplineShapeTransformer(double regularizationParameter = 0)
+      {
+         _ptr = ShapeInvoke.cvThinPlateSplineShapeTransformerCreate(regularizationParameter, ref _shapeTransformerPtr);
+      }
+
+      public IntPtr ShapeTransformerPtr
+      {
+         get
+         {
+            return _shapeTransformerPtr;
+         }
+      }
+
       /// <summary>
       /// Release the unmanaged memory associated with this ShapeTransformer object
       /// </summary>
@@ -26,52 +56,58 @@ namespace Emgu.CV.Shape
       {
          if (_ptr != IntPtr.Zero)
          {
-            ShapeInvoke.cvShapeTransformerRelease(ref _ptr);
+            ShapeInvoke.cvThinPlateSplineShapeTransformerRelease(ref _ptr);
+            _shapeTransformerPtr = IntPtr.Zero;
          }
-      }
-   }
-
-   /// <summary>
-   /// Definition of the transformation ocupied in the paper “Principal Warps: Thin-Plate Splines and Decomposition of Deformations”, by F.L. Bookstein (PAMI 1989).
-   /// </summary>
-   public class ThinPlateSplineShapeTransformer : ShapeTransformer
-   {
-      /// <summary>
-      /// Create a thin plate spline shape transformer
-      /// </summary>
-      /// <param name="regularizationParameter">The regularization parameter for relaxing the exact interpolation requirements of the TPS algorithm.</param>
-      public ThinPlateSplineShapeTransformer(double regularizationParameter = 0)
-      {
-         _ptr = ShapeInvoke.cvThinPlateSplineShapeTransformerCreate(regularizationParameter);
       }
    }
 
    /// <summary>
    /// Wrapper class for the OpenCV Affine Transformation algorithm.
    /// </summary>
-   public class AffineTransformer : ShapeTransformer
+   public class AffineTransformer : UnmanagedObject, IShapeTransformer
    {
+      private IntPtr _shapeTransformerPtr;
+
       /// <summary>
       /// Create an affine transformer
       /// </summary>
       /// <param name="fullAffine">Full affine</param>
       public AffineTransformer(bool fullAffine)
       {
-         _ptr = ShapeInvoke.cvAffineTransformerCreate(fullAffine);
+         _ptr = ShapeInvoke.cvAffineTransformerCreate(fullAffine, ref _shapeTransformerPtr);
       }
+
+      /// <summary>
+      /// Release the unmanaged memory associated with this ShapeTransformer object
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         if (_ptr != IntPtr.Zero)
+         {
+            ShapeInvoke.cvAffineTransformerRelease(ref _ptr);
+            _shapeTransformerPtr = IntPtr.Zero;
+         }
+      }
+
+      public IntPtr ShapeTransformerPtr { get { return _shapeTransformerPtr;} }
    }
 
    public static partial class ShapeInvoke
    {
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cvShapeTransformerRelease(ref IntPtr transformer);
 
+      
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cvAffineTransformerCreate(
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool fullAffine);
+         bool fullAffine, ref IntPtr transformer);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvAffineTransformerRelease(ref IntPtr transformer);
+
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cvThinPlateSplineShapeTransformerCreate(double regularizationParameter);
+      internal extern static IntPtr cvThinPlateSplineShapeTransformerCreate(double regularizationParameter, ref IntPtr transformer);
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal extern static void cvThinPlateSplineShapeTransformerRelease(ref IntPtr transformer);
    }
 }
