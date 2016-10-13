@@ -24,7 +24,7 @@ CVAPI(void) cvHistogramCostExtractorRelease(cv::HistogramCostExtractor** extract
 CVAPI(cv::ThinPlateSplineShapeTransformer*) cvThinPlateSplineShapeTransformerCreate(double regularizationParameter, cv::ShapeTransformer** shapeTransformer);
 CVAPI(void) cvThinPlateSplineShapeTransformerRelease(cv::ThinPlateSplineShapeTransformer** transformer);
 CVAPI(cv::AffineTransformer*) cvAffineTransformerCreate(bool fullAffine, cv::ShapeTransformer** transformer);
-CVAPI(void) cvAffineTransformerRelease(cv::ShapeTransformer** transformer);
+CVAPI(void) cvAffineTransformerRelease(cv::AffineTransformer** transformer);
 
 
 CVAPI(float) cvShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, cv::_InputArray* contour1, cv::_InputArray* contour2);
