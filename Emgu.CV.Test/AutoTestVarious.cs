@@ -2399,6 +2399,22 @@ namespace Emgu.CV.Test
          }
       }
 
+      [Test]
+      public void TestImdecodeGray()
+      {
+         
+         using (FileStream fs = File.OpenRead(EmguAssert.GetFile("lena.jpg")))
+         {
+            byte[] data = new byte[fs.Length];
+            fs.Read(data, 0, (int)fs.Length);
+
+            Mat image = new Mat();
+
+            CvInvoke.Imdecode(data, ImreadModes.Grayscale, image);
+            EmguAssert.IsTrue(image.NumberOfChannels == 1);
+         }
+      }
+
       [TestAttribute]
       public void TestImreadmulti()
       {
