@@ -141,14 +141,14 @@ void cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* 
    *corner = warper->warp(*src, *K, *R, interpMode, borderMode, *dst);
 }
 
-cv::detail::PlaneWarper* cvePlanWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::PlaneWarper* cvePlaneWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
 {
    cv::detail::PlaneWarper* ptr = new cv::detail::PlaneWarper(scale);
    *creator = dynamic_cast<cv::WarperCreator*>(ptr);
    *rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
    return ptr;
 }
-void cvePlanWarperRelease(cv::detail::PlaneWarper** warper)
+void cvePlaneWarperRelease(cv::detail::PlaneWarper** warper)
 {
    delete *warper;
    *warper = 0;

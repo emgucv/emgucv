@@ -107,36 +107,54 @@ namespace Emgu.CV.Stitching
          StitchingInvoke.cveStitcherRelease(ref _ptr);
       }
 
+      /// <summary>
+      /// Get or Set a flag to indicate if the stitcher should apply wave correction
+      /// </summary>
       public bool WaveCorrection
       {
          get { return StitchingInvoke.cveStitcherGetWaveCorrection(_ptr); }
          set { StitchingInvoke.cveStitcherSetWaveCorrection(_ptr, value); }
       }
 
+      /// <summary>
+      /// The wave correction type.
+      /// </summary>
       public WaveCorrectionType WaveCorrectionKind
       {
          get { return StitchingInvoke.cveStitcherGetWaveCorrectionKind(_ptr); }
          set { StitchingInvoke.cveStitcherSetWaveCorrectionKind(_ptr, value); }
       }
 
+/// <summary>
+/// Get or set the pano confidence threshold
+/// </summary>
       public double PanoConfidenceThresh
       {
          get { return StitchingInvoke.cveStitcherGetPanoConfidenceThresh(_ptr); }
          set { StitchingInvoke.cveStitcherSetPanoConfidenceThresh(_ptr, value); }
       }
 
+      /// <summary>
+      /// Get or Set the compositing resolution
+      /// </summary>
       public double CompositingResol
       {
          get { return StitchingInvoke.cveStitcherGetCompositingResol(_ptr); }
          set { StitchingInvoke.cveStitcherSetCompositingResol(_ptr, value); }
       }
 
+      /// <summary>
+      /// Get or Set the seam estimation resolution
+      /// </summary>
       public double SeamEstimationResol
       {
          get { return StitchingInvoke.cveStitcherGetSeamEstimationResol(_ptr); }
          set { StitchingInvoke.cveStitcherSetSeamEstimationResol(_ptr, value); }
       }
 
+      /// <summary>
+      /// Get or set the registration resolution
+      /// </summary>
       public double RegistrationResol
       {
          get { return StitchingInvoke.cveStitcherGetRegistrationResol(_ptr); }

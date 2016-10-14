@@ -122,8 +122,9 @@ namespace Emgu.CV
       }
 
       /// <summary> 
-      /// Create a matrix using the specific <paramref>data</paramref>
+      /// Create a matrix using the specific data. 
       /// </summary>
+      /// <remarks>The data will be used as the Matrix data storage. You need to make sure that the data object live as long as this Matrix object</remarks>
       public Matrix(TDepth[,] data)
       {
          Data = data;

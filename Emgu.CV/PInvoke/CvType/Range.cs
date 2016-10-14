@@ -23,6 +23,9 @@ namespace Emgu.CV.Structure
 
       private static Range _all = new Range();
 
+      /// <summary>
+      /// return the full range.
+      /// </summary>
       public static Range All
       {
          get { return _all; }

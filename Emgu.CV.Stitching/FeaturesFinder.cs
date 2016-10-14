@@ -23,6 +23,9 @@ namespace Emgu.CV.Stitching
       /// </summary>
       protected IntPtr _featuresFinderPtr;
 
+      /// <summary>
+      /// Get the pointer to the unmanaged FeaturesFinder object
+      /// </summary>
       public IntPtr FeaturesFinderPtr
       {
          get { return _featuresFinderPtr; }
@@ -138,6 +141,9 @@ namespace Emgu.CV.Stitching
       }
    }
 
+   /// <summary>
+   /// This class wraps the functional calls to the opencv_stitching module
+   /// </summary>
    public static partial class StitchingInvoke
    {
       /*

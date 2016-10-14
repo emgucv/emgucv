@@ -144,6 +144,11 @@ namespace Emgu.CV.OCR
          return true;
       }*/
 
+      /// <summary>
+      /// Check whether a word is valid according to Tesseract's language model
+      /// </summary>
+      /// <param name="word">The word to be checked.</param>
+      /// <returns>0 if the word is invalid, non-zero if valid</returns>
       public int IsValidWord(String word)
       {
          return OcrInvoke.TessBaseAPIIsValidWord(_ptr, word);

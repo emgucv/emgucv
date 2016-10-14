@@ -19,6 +19,7 @@ using Emgu.CV.Aruco;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Flann;
+using Emgu.CV.Shape;
 using Emgu.CV.Stitching;
 using Emgu.CV.Text;
 using Emgu.CV.Structure;
@@ -388,6 +389,22 @@ namespace Emgu.CV.Test
             translationVector, 
             cameraMatrix, 
             distortionCoeff);
+      }
+
+      [Test]
+      public void TestShapeDistanceExtractor()
+      {
+         using (HistogramCostExtractor comparer = new ChiHistogramCostExtractor())
+         using (ThinPlateSplineShapeTransformer transformer = new ThinPlateSplineShapeTransformer())
+         using (ShapeContextDistanceExtractor extractor = new ShapeContextDistanceExtractor(comparer, transformer))
+         using (HausdorffDistanceExtractor extractor2 = new HausdorffDistanceExtractor())
+         {
+            Point[] shape1 = new Point[] { new Point(0, 0), new Point(480, 0), new Point(480, 360), new Point(0, 360) };
+            Point[] shape2 = new Point[] { new Point(0, 0), new Point(480, 0), new Point(500, 240), new Point(480, 360), new Point(0, 360) };
+
+            float distance2 = extractor2.ComputeDistance(shape1, shape2);
+            float distance = extractor.ComputeDistance(shape1, shape2);
+         }
       }
 
       /*
@@ -2379,6 +2396,22 @@ namespace Emgu.CV.Test
 
             CvInvoke.Imdecode(data, ImreadModes.Color, image);
             //Emgu.CV.UI.ImageViewer.Show(image);
+         }
+      }
+
+      [Test]
+      public void TestImdecodeGray()
+      {
+         
+         using (FileStream fs = File.OpenRead(EmguAssert.GetFile("lena.jpg")))
+         {
+            byte[] data = new byte[fs.Length];
+            fs.Read(data, 0, (int)fs.Length);
+
+            Mat image = new Mat();
+
+            CvInvoke.Imdecode(data, ImreadModes.Grayscale, image);
+            EmguAssert.IsTrue(image.NumberOfChannels == 1);
          }
       }
 

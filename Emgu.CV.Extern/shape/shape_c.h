@@ -21,20 +21,20 @@ CVAPI(cv::HistogramCostExtractor*) cvEMDL1HistogramCostExtractorCreate(int nDumm
 
 CVAPI(void) cvHistogramCostExtractorRelease(cv::HistogramCostExtractor** extractor);
 
-CVAPI(cv::ShapeTransformer*) cvThinPlateSplineShapeTransformerCreate(double regularizationParameter);
+CVAPI(cv::ThinPlateSplineShapeTransformer*) cvThinPlateSplineShapeTransformerCreate(double regularizationParameter, cv::ShapeTransformer** shapeTransformer);
+CVAPI(void) cvThinPlateSplineShapeTransformerRelease(cv::ThinPlateSplineShapeTransformer** transformer);
+CVAPI(cv::AffineTransformer*) cvAffineTransformerCreate(bool fullAffine, cv::ShapeTransformer** transformer);
+CVAPI(void) cvAffineTransformerRelease(cv::AffineTransformer** transformer);
 
-CVAPI(cv::ShapeTransformer*) cvAffineTransformerCreate(bool fullAffine);
 
-CVAPI(void) cvShapeTransformerRelease(cv::ShapeTransformer** transformer);
-
-CVAPI(float) cvShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, std::vector<cv::Point>* contour1, std::vector<cv::Point>* contour2);
+CVAPI(float) cvShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, cv::_InputArray* contour1, cv::_InputArray* contour2);
 
 CVAPI(cv::ShapeContextDistanceExtractor*) cvShapeContextDistanceExtractorCreate(
    int nAngularBins, int nRadialBins, float innerRadius, float outerRadius, int iterations,
-   cv::HistogramCostExtractor* comparer, cv::ShapeTransformer* transformer);
+   cv::HistogramCostExtractor* comparer, cv::ShapeTransformer* transformer, cv::ShapeDistanceExtractor** e);
 CVAPI(void) cvShapeContextDistanceExtractorRelease(cv::ShapeContextDistanceExtractor** extractor);
 
-CVAPI(cv::HausdorffDistanceExtractor*) cvHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp);
+CVAPI(cv::HausdorffDistanceExtractor*) cvHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp, cv::ShapeDistanceExtractor** e);
 CVAPI(void) cvHausdorffDistanceExtractorRelease(cv::HausdorffDistanceExtractor** extractor);
 
 #endif
