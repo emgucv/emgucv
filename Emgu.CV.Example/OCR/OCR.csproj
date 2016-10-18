@@ -153,6 +153,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\opencv\samples\data\imageTextN.png">
+      <Link>imageTextN.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\opencv_contrib\modules\text\samples\trained_classifierNM1.xml">
       <Link>trained_classifierNM1.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -165,11 +169,6 @@
       <Link>trained_classifier_erGrouping.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="OCRForm.resx">
-      <DependentUpon>OCRForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
