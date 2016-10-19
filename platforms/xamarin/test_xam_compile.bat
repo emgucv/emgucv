@@ -26,12 +26,12 @@ REM IF NOT "%3%"=="WindowsStore10" GOTO SET_BUILD_TYPE
 :SET_BUILD_TYPE
 IF %DEVENV%=="%MSBUILD35%" SET BUILD_TYPE=/property:Configuration=Release
 IF %DEVENV%=="%MSBUILD40%" SET BUILD_TYPE=/property:Configuration=Release
-IF %DEVENV%==%VS2005% SET BUILD_TYPE=/Build Release
-IF %DEVENV%==%VS2008% SET BUILD_TYPE=/Build Release
-IF %DEVENV%==%VS2010% SET BUILD_TYPE=/Build Release
-IF %DEVENV%==%VS2012% SET BUILD_TYPE=/Build Release
-IF %DEVENV%==%VS2013% SET BUILD_TYPE=/Build Release
-IF %DEVENV%==%VS2015% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%VS2005% SET BUILD_TYPE=/Build "Release|Any CPU"
+IF %DEVENV%==%VS2008% SET BUILD_TYPE=/Build "Release|Any CPU"
+IF %DEVENV%==%VS2010% SET BUILD_TYPE=/Build "Release|Any CPU"
+IF %DEVENV%==%VS2012% SET BUILD_TYPE=/Build "Release|Any CPU"
+IF %DEVENV%==%VS2013% SET BUILD_TYPE=/Build "Release|Any CPU"
+IF %DEVENV%==%VS2015% SET BUILD_TYPE=/Build "Release|Any CPU"
 
 IF %DEVENV%=="%MSBUILD35%" SET CMAKE_CONF="Visual Studio 12 2005%OS_MODE%"
 IF %DEVENV%=="%MSBUILD40%" SET CMAKE_CONF="Visual Studio 12 2005%OS_MODE%"
@@ -49,4 +49,5 @@ cd tmp
 unzip %XAM_FILE_NAME%.zip
 cd emgucv*\samples\Emgu.CV.Android.Example
 ..\..\..\..\xamarin-component.exe restore Emgu.CV.Android.Example.sln
-call %DEVENV% %BUILD_TYPE% Emgu.CV.Android.Example.sln /project AndroidExamples
+call %DEVENV% %BUILD_TYPE% Emgu.CV.Android.Example.sln /project AndroidExamples 
+cd ..\..\..\..

@@ -42,40 +42,36 @@ cd ..
 
 mkdir android
 cd android
-mkdir Emgu.CV.Example
-cd Emgu.CV.Example
-mkdir Android
-cd Android
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/Android/* .
-cp -rf ../../../../../../../../tmp/Emgu.CV.World/tessdata Assets/
-cp -rf ../../../../../../../../opencv/data/haarcascades/haarcascade_eye.xml Assets/
-cp -rf ../../../../../../../../opencv/data/haarcascades/haarcascade_frontalface_default.xml Assets/
+cp -rf ../../../../../../tmp/components.config .
+cp -rf ../../../../../../tmp/nuget.config .
+cp -rf ../../../../../../tmp/Emgu.CV.Example/Android/* .
+cp -rf ../../../../../../tmp/Emgu.CV.World/tessdata Assets/
+cp -rf ../../../../../../opencv/data/haarcascades/haarcascade_eye.xml Assets/
+cp -rf ../../../../../../opencv/data/haarcascades/haarcascade_frontalface_default.xml Assets/
 c:\cygwin64\bin\mkdir.exe -p Resources/Raw
-cp -rf ../../../../../../../../opencv/LICENSE Resources/Raw/
-cp -rf ../../../../../../../../CommonAssemblyInfo.cs .
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/FeatureMatching/box.png Assets/
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/FeatureMatching/box_in_scene.png Assets/
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/FeatureMatching/DrawMatches.cs .
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/PedestrianDetection/pedestrian.png Assets/
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/PedestrianDetection/FindPedestrian.cs .
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/PlanarSubdivision/DrawSubdivision.cs .
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs .
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/TrafficSignRecognition/stop-sign.jpg Assets/
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png Assets/
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/FaceDetection/DetectFace.cs .
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/FaceDetection/lena.jpg Assets/
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg Assets/
-cp -rf ../../../../../../../../tmp/Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs .
+cp -rf ../../../../../../opencv/LICENSE Resources/Raw/
+cp -rf ../../../../../../CommonAssemblyInfo.cs .
+cp -rf ../../../../../../tmp/Emgu.CV.Example/FeatureMatching/box.png Assets/
+cp -rf ../../../../../../tmp/Emgu.CV.Example/FeatureMatching/box_in_scene.png Assets/
+cp -rf ../../../../../../tmp/Emgu.CV.Example/FeatureMatching/DrawMatches.cs .
+cp -rf ../../../../../../tmp/Emgu.CV.Example/PedestrianDetection/pedestrian.png Assets/
+cp -rf ../../../../../../tmp/Emgu.CV.Example/PedestrianDetection/FindPedestrian.cs .
+cp -rf ../../../../../../tmp/Emgu.CV.Example/PlanarSubdivision/DrawSubdivision.cs .
+cp -rf ../../../../../../tmp/Emgu.CV.Example/TrafficSignRecognition/StopSignDetector.cs .
+cp -rf ../../../../../../tmp/Emgu.CV.Example/TrafficSignRecognition/stop-sign.jpg Assets/
+cp -rf ../../../../../../tmp/Emgu.CV.Example/TrafficSignRecognition/stop-sign-model.png Assets/
+cp -rf ../../../../../../tmp/Emgu.CV.Example/FaceDetection/DetectFace.cs .
+cp -rf ../../../../../../tmp/Emgu.CV.Example/FaceDetection/lena.jpg Assets/
+cp -rf ../../../../../../tmp/Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg Assets/
+cp -rf ../../../../../../tmp/Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs .
 
-cd ..
-cd ..
 cd ..
 
 
 cp ../../../Emgu.CV.iOS.Example.sln ios/
 cp ../../../Emgu.CV.Example.iOS.csproj ios/Emgu.CV.Example/iOS/
 cp ../../../Emgu.CV.Android.Example.sln android/
-cp ../../../AndroidExamples.csproj android/Emgu.CV.Example/Android/
+cp ../../../AndroidExamples.csproj android/
 
 cd ..
 cd ..
