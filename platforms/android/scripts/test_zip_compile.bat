@@ -55,8 +55,10 @@ SET ZIP_FILE_NAME=%1%
 cp %ZIP_FILE_NAME% tmp/
 cd tmp
 unzip %ZIP_FILE_NAME%
-cd Solution\VS2013-2015
-call %DEVENV% %BUILD_TYPE% Emgu.CV.Example.sln 
+cd Solution\Android
+..\..\..\NuGet.exe restore Emgu.CV.Android.Example.sln
+..\..\..\xamarin-component restore Emgu.CV.Android.Example.sln 
+call %DEVENV% %BUILD_TYPE% Emgu.CV.Android.Example.sln 
 cd ..\..\..
 
 :END
