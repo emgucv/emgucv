@@ -20,6 +20,9 @@ namespace Emgu.CV.Shape
    /// </summary>
    public abstract class ShapeDistanceExtractor : UnmanagedObject
    {
+      /// <summary>
+      /// Pointer to the unmanaged ShapeDistanceExtractor
+      /// </summary>
       protected IntPtr _shapeDistanceExtractorPtr;
 
       /// <summary>
@@ -50,6 +53,9 @@ namespace Emgu.CV.Shape
             return ShapeInvoke.cvShapeDistanceExtractorComputeDistance(_shapeDistanceExtractorPtr, iaContour1, iaContour2);
       }
 
+      /// <summary>
+      /// Release all memory associated with this ShapeDistanceExtractor
+      /// </summary>
       protected override void DisposeObject()
       {
          _shapeDistanceExtractorPtr = IntPtr.Zero;

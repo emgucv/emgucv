@@ -41,6 +41,10 @@ namespace Emgu.CV
             CvInvoke.cveViz3dShowWidget(_ptr, cvsId, widget.GetWidget, pose);
       }
 
+      /// <summary>
+      /// Removes a widget from the window.
+      /// </summary>
+      /// <param name="id">The id of the widget that will be removed.</param>
       public void RemoveWidget(String id)
       {
          using (CvString cvsId = new CvString(id))
