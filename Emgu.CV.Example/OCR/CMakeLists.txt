@@ -17,7 +17,6 @@ LIST(APPEND SRC_Example_OCR ${CMAKE_CURRENT_SOURCE_DIR}/../../CommonAssemblyInfo
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/../../opencv_contrib/modules/text/samples/trained_classifierNM1.xml)
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/../../opencv_contrib/modules/text/samples/trained_classifierNM2.xml)
 ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/../../opencv_contrib/modules/text/samples/trained_classifier_erGrouping.xml)
-ADD_CS_FILE_TO_DEPLOY(${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/samples/data/imageTextN.png)
 
 LIST(APPEND CS_FLAGS ${EMGU_CV_REFERENCE})
 

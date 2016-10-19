@@ -49,14 +49,14 @@ IF %DEVENV%==%VS2012% SET CMAKE_CONF="Visual Studio 11%OS_MODE%"
 IF %DEVENV%==%VS2013% SET CMAKE_CONF="Visual Studio 12%OS_MODE%"
 IF %DEVENV%==%VS2015% SET CMAKE_CONF="Visual Studio 14%OS_MODE%"
 
+IF EXIST tmp rm -rf tmp
 mkdir tmp
-SET XAM_FILE_NAME=%1%
-cp %XAM_FILE_NAME% "tmp/%XAM_FILE_NAME%.zip"
+SET ZIP_FILE_NAME=%1%
+cp %ZIP_FILE_NAME% tmp/
 cd tmp
-unzip %XAM_FILE_NAME%.zip
-cd emgucv*\samples\Emgu.CV.Android.Example
-..\..\xamarin-component.exe restore Emgu.CV.Android.Example.sln
-call %DEVENV% %BUILD_TYPE% Emgu.CV.Android.Example.sln /project AndroidExamples 
-cd ..\..\..\..
+unzip %ZIP_FILE_NAME%
+cd Solution\VS2013-2015
+call %DEVENV% %BUILD_TYPE% Emgu.CV.Example.sln 
+cd ..\..\..
 
 :END

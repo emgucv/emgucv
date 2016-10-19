@@ -27,12 +27,19 @@ namespace OCR
          InitializeComponent();
          InitOcr("", "eng", OcrEngineMode.TesseractCubeCombined);
          ocrOptionsComboBox.SelectedIndex = 0;
-         FileInfo f = new FileInfo("imageTextN.png");
-         if (f.Exists)
-         {
-            fileNameTextBox.Text = f.FullName;
-            ProcessFile();
-         }
+
+         Mat img = new Mat(200, 400, DepthType.Cv8U, 3); //Create a 3 channel image of 400x200
+         img.SetTo(new Bgr(255, 0, 0).MCvScalar); // set it to Blue color
+
+         //Draw "Hello, world." on the image using the specific font
+         CvInvoke.PutText(
+            img,
+            "Hello, world",
+            new System.Drawing.Point(10, 80),
+            FontFace.HersheyComplex,
+            1.0,
+            new Bgr(0, 255, 0).MCvScalar);
+         OcrImage(img);
       }
 
       private void InitOcr(String path, String lang, OcrEngineMode mode)
@@ -86,13 +93,10 @@ namespace OCR
             (int)newWidth, (int)newHeight);
       }
 
-      private static String OcrImage(Tesseract ocr, String filename, OCRMode mode, Mat imageColor)
+      private static String OcrImage(Tesseract ocr, Mat image, OCRMode mode, Mat imageColor)
       {
          Bgr drawCharColor = new Bgr(Color.Blue);
-
-         Mat image = new Mat(filename, ImreadModes.AnyColor);
-
-
+         
          if (image.NumberOfChannels == 1)
             CvInvoke.CvtColor(image, imageColor, ColorConversion.Gray2Bgr);
          else
@@ -235,16 +239,17 @@ namespace OCR
 
       }
 
-      private void ProcessFile()
+      private void OcrImage(Mat source)
       {
          imageBox1.Image = null;
          ocrTextBox.Text = String.Empty;
          hocrTextBox.Text = String.Empty;
          try
          {
-            Mat imageColor = new Mat();
-            String ocredText = OcrImage(_ocr, fileNameTextBox.Text, Mode, imageColor);
-            imageBox1.Image = imageColor;
+            
+            Mat result = new Mat();
+            String ocredText = OcrImage(_ocr, source, Mode, result);
+            imageBox1.Image = result;
             ocrTextBox.Text = ocredText;
             if (Mode == OCRMode.FullPage)
             {
@@ -263,8 +268,8 @@ namespace OCR
          if (openImageFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
          {
             fileNameTextBox.Text = openImageFileDialog.FileName;
-
-            ProcessFile();
+            Mat source = new Mat(fileNameTextBox.Text);
+            OcrImage(source);
          }
       }
 
