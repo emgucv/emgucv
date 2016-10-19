@@ -618,7 +618,7 @@ namespace Emgu.CV
       /// </summary>
       public InputArray GetInputArray()
       {
-         return new InputArray(MatInvoke.cveInputArrayFromMat(_ptr));
+         return new InputArray(MatInvoke.cveInputArrayFromMat(_ptr), this);
       }
 
       /// <summary>
@@ -626,7 +626,7 @@ namespace Emgu.CV
       /// </summary>
       public OutputArray GetOutputArray()
       {
-         return new OutputArray(MatInvoke.cveOutputArrayFromMat(_ptr));
+         return new OutputArray(MatInvoke.cveOutputArrayFromMat(_ptr), this);
       }
 
       /// <summary>
@@ -634,7 +634,7 @@ namespace Emgu.CV
       /// </summary>
       public InputOutputArray GetInputOutputArray()
       {
-         return new InputOutputArray(MatInvoke.cveInputOutputArrayFromMat(_ptr));
+         return new InputOutputArray(MatInvoke.cveInputOutputArrayFromMat(_ptr), this);
       }
 
 

@@ -136,7 +136,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       public InputArray GetInputArray()
       {
-         return new InputArray(CudaInvoke.cveInputArrayFromGpuMat(_ptr));
+         return new InputArray(CudaInvoke.cveInputArrayFromGpuMat(_ptr), this);
       }
 
       /// <summary>
@@ -144,7 +144,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       public OutputArray GetOutputArray()
       {
-         return new OutputArray(CudaInvoke.cveOutputArrayFromGpuMat(_ptr));
+         return new OutputArray(CudaInvoke.cveOutputArrayFromGpuMat(_ptr), this);
       }
 
       /// <summary>
@@ -152,7 +152,7 @@ namespace Emgu.CV.Cuda
       /// </summary>
       public InputOutputArray GetInputOutputArray()
       {
-         return new InputOutputArray(CudaInvoke.cveInputOutputArrayFromGpuMat(_ptr));
+         return new InputOutputArray(CudaInvoke.cveInputOutputArrayFromGpuMat(_ptr), this);
       }
 
       /// <summary>

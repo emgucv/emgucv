@@ -100,13 +100,17 @@ namespace Emgu.CV
       {
       }
 
+      private object _parent;
+
       /// <summary>
       /// Create a Input array from an existing unmanaged inputArray pointer
       /// </summary>
       /// <param name="inputArrayPtr">The unmanaged pointer the the InputArray</param>
-      public InputArray(IntPtr inputArrayPtr)
+      /// <param name="parent">The parent object to keep reference to</param>
+      public InputArray(IntPtr inputArrayPtr, object parent)
       {
          _ptr = inputArrayPtr;
+         _parent = parent;
       }
 
       private static InputArray _empty = new InputArray();

@@ -32,7 +32,7 @@ namespace Emgu.CV
 , ISerializable
 #endif
    {
-      #if !NETFX_CORE
+#if !NETFX_CORE
       #region Implement ISerializable interface
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
@@ -54,9 +54,9 @@ namespace Emgu.CV
       {
          int rows = (int)info.GetValue("Rows", typeof(int));
          int cols = (int)info.GetValue("Cols", typeof(int));
-         int depthType = (int) info.GetValue("DepthType", typeof (int));
+         int depthType = (int)info.GetValue("DepthType", typeof(int));
          int numberOfChannels = (int)info.GetValue("NumberOfChannels", typeof(int));
-         Create(rows, cols, (DepthType) depthType, numberOfChannels );
+         Create(rows, cols, (DepthType)depthType, numberOfChannels);
          Bytes = (Byte[])info.GetValue("Bytes", typeof(Byte[]));
       }
 
@@ -71,7 +71,7 @@ namespace Emgu.CV
          info.AddValue("Cols", Cols);
          info.AddValue("DepthType", (int)Depth);
          info.AddValue("NumberOfChannels", NumberOfChannels);
-         info.AddValue("Bytes", Bytes);  
+         info.AddValue("Bytes", Bytes);
       }
 
       #endregion
@@ -376,7 +376,7 @@ namespace Emgu.CV
       /// </summary>
       public InputArray GetInputArray()
       {
-         return new InputArray(UMatInvoke.cveInputArrayFromUMat(_ptr));
+         return new InputArray(UMatInvoke.cveInputArrayFromUMat(_ptr), this);
       }
 
       /// <summary>
@@ -384,7 +384,7 @@ namespace Emgu.CV
       /// </summary>
       public OutputArray GetOutputArray()
       {
-         return new OutputArray( UMatInvoke.cveOutputArrayFromUMat(_ptr) );
+         return new OutputArray(UMatInvoke.cveOutputArrayFromUMat(_ptr), this);
       }
 
       /// <summary>
@@ -392,7 +392,7 @@ namespace Emgu.CV
       /// </summary>
       public InputOutputArray GetInputOutputArray()
       {
-         return new InputOutputArray( UMatInvoke.cveInputOutputArrayFromUMat(_ptr) );
+         return new InputOutputArray(UMatInvoke.cveInputOutputArrayFromUMat(_ptr), this);
       }
 
       /// <summary>
@@ -481,15 +481,15 @@ namespace Emgu.CV
             //same depth, different color
             Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
             Type t = numberOfChannels == 1
-               ? typeof (Gray)
+               ? typeof(Gray)
                : numberOfChannels == 3
-                  ? typeof (Bgr)
+                  ? typeof(Bgr)
                   : numberOfChannels == 4
-                     ? typeof (Bgra)
+                     ? typeof(Bgra)
                      : null;
             if (t == null)
                throw new Exception("Unsupported conversion");
-            CvInvoke.CvtColor(this, result, t, typeof(TColor) );
+            CvInvoke.CvtColor(this, result, t, typeof(TColor));
             /*
             if (numberOfChannels == 1)
             {
@@ -512,7 +512,7 @@ namespace Emgu.CV
             }*/
             return result;
 
-            
+
          }
          else
          {
@@ -526,7 +526,7 @@ namespace Emgu.CV
          }
       }
 
-      #if __IOS__
+#if __IOS__
       public UIImage ToUIImage()
       {
          using (Image<Rgba, Byte> tmp = ToImage<Rgba, Byte>())
@@ -534,7 +534,7 @@ namespace Emgu.CV
                return tmp.ToUIImage();
             }
       }
-#elif ! ( NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR )
+#elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
       /// <summary>
       /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
       /// such that the image data is <b>shared</b> with Bitmap. 
@@ -545,7 +545,7 @@ namespace Emgu.CV
       /// </summary>
       public Bitmap Bitmap
       {
-         get 
+         get
          {
             using (Mat tmp = GetMat(CvEnum.AccessType.Read))
             {
@@ -553,7 +553,7 @@ namespace Emgu.CV
             }
          }
       }
-      #endif
+#endif
 
       /// <summary>
       /// Returns the min / max location and values for the image
@@ -681,7 +681,7 @@ namespace Emgu.CV
       public void CopyTo<T>(T[] data)
       {
          Debug.Assert(
-            Toolbox.SizeOf<T>() * data.Length >= Total.ToInt32() * ElementSize, 
+            Toolbox.SizeOf<T>() * data.Length >= Total.ToInt32() * ElementSize,
             String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), data.Length));
          GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
          UMatInvoke.cveUMatCopyDataTo(this, handle.AddrOfPinnedObject());
