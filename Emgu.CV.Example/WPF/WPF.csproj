@@ -124,12 +124,8 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.World\Emgu.CV.World.csproj">
-      <Project>{3f5d7c08-96ba-4037-bb24-afa2c336e260}</Project>
-      <Name>Emgu.CV.World</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
