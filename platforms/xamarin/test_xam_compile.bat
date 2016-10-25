@@ -55,7 +55,7 @@ cp %XAM_FILE_NAME% "tmp/%XAM_FILE_NAME%.zip"
 cd tmp
 unzip %XAM_FILE_NAME%.zip
 cd emgucv*\samples\Emgu.CV.Android.Example
-..\..\xamarin-component.exe restore Emgu.CV.Android.Example.sln
+..\..\..\..\xamarin-component.exe restore Emgu.CV.Android.Example.sln
 call %DEVENV% %BUILD_TYPE% Emgu.CV.Android.Example.sln /project AndroidExamples 
 cd ..\..\..\..
 

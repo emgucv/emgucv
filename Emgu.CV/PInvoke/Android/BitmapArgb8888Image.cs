@@ -51,6 +51,9 @@ namespace Emgu.CV
          MapDataToImage(bmp.Width, bmp.Height, bmp.RowBytes, _bmp.LockPixels());
       }
 
+      /// <summary>
+      /// Release the managed resources associated with this object
+      /// </summary>
       protected override void ReleaseManagedResources()
       {
          base.ReleaseManagedResources();
@@ -59,10 +62,16 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// An Image that shares data with the Bitmap
+   /// </summary>
    public class BitmapRgb565Image : Image<Bgr565, Byte>
    {
       private Bitmap _bmp;
 
+      /// <summary>
+      /// Get the Bitmap object
+      /// </summary>
       public override Bitmap Bitmap
       {
          get
@@ -71,6 +80,10 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Create an image that shares data  with the Bitmap
+      /// </summary>
+      /// <param name="bmp">The bitmap object to create the image from</param>
       public BitmapRgb565Image(Bitmap bmp)
       {
          if (!bmp.GetConfig().Equals(Bitmap.Config.Rgb565))
@@ -79,6 +92,9 @@ namespace Emgu.CV
          MapDataToImage(bmp.Width, bmp.Height, bmp.RowBytes, _bmp.LockPixels());
       }
 
+      /// <summary>
+      /// Release the memory associated with this Image object
+      /// </summary>
       protected override void ReleaseManagedResources()
       {
          base.ReleaseManagedResources();
