@@ -69,7 +69,6 @@ void cvAffineTransformerRelease(cv::AffineTransformer** transformer)
    *transformer = 0;
 }
 
-
 float cvShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, cv::_InputArray* contour1, cv::_InputArray* contour2)
 {
    return extractor->computeDistance(*contour1, *contour2);

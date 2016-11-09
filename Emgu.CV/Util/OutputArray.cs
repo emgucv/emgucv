@@ -22,8 +22,9 @@ namespace Emgu.CV
       /// Create an OutputArray from an existing unmanaged outputArray pointer
       /// </summary>
       /// <param name="outputArrayPtr">The pointer to the unmanaged outputArray</param>
-      public OutputArray(IntPtr outputArrayPtr)
-         : base(outputArrayPtr)
+      /// <param name="parent">The parent object to keep reference to</param>
+      public OutputArray(IntPtr outputArrayPtr, object parent)
+         : base(outputArrayPtr, parent)
       {
          
       }

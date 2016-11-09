@@ -142,6 +142,11 @@ namespace Emgu.CV
 
       internal bool _needDispose;
 
+      /// <summary>
+      /// An option parent object to keep reference to
+      /// </summary>
+      internal object _parent;
+
       internal Mat(IntPtr ptr, bool needDispose, bool useCustomMemAllocator = false)
       {
          _ptr = ptr;
@@ -618,7 +623,7 @@ namespace Emgu.CV
       /// </summary>
       public InputArray GetInputArray()
       {
-         return new InputArray(MatInvoke.cveInputArrayFromMat(_ptr));
+         return new InputArray(MatInvoke.cveInputArrayFromMat(_ptr), this);
       }
 
       /// <summary>
@@ -626,7 +631,7 @@ namespace Emgu.CV
       /// </summary>
       public OutputArray GetOutputArray()
       {
-         return new OutputArray(MatInvoke.cveOutputArrayFromMat(_ptr));
+         return new OutputArray(MatInvoke.cveOutputArrayFromMat(_ptr), this);
       }
 
       /// <summary>
@@ -634,7 +639,7 @@ namespace Emgu.CV
       /// </summary>
       public InputOutputArray GetInputOutputArray()
       {
-         return new InputOutputArray(MatInvoke.cveInputOutputArrayFromMat(_ptr));
+         return new InputOutputArray(MatInvoke.cveInputOutputArrayFromMat(_ptr), this);
       }
 
 

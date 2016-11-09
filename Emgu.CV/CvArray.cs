@@ -670,6 +670,7 @@ namespace Emgu.CV
                )
             {
                _cvMat = CvInvoke.CvArrToMat(Ptr);
+               _cvMat._parent = this;
             } 
             return _cvMat;
          }

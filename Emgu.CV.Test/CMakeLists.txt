@@ -35,8 +35,14 @@ LIST(APPEND
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/tree.avi
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv_contrib/modules/text/samples/scenetext01.jpg
 	${CMAKE_CURRENT_SOURCE_DIR}/../opencv/samples/data/letter-recognition.data
-	${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll
+	${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll   
 	)
+IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/bvlc_googlenet.caffemodel)
+   LIST(APPEND SRC_CV_DATA ${CMAKE_CURRENT_SOURCE_DIR}/bvlc_googlenet.caffemodel)
+ELSE()
+   MESSAGE(WARNING "WARNING: File ${CMAKE_CURRENT_SOURCE_DIR}/bvlc_googlenet.caffemodel not found, testing for DNN model will fail.")
+ENDIF()
+
 FOREACH(FILE ${SRC_CV_TEST_DATA})
 	ADD_CS_FILE_TO_DEPLOY(${FILE})
 ENDFOREACH()

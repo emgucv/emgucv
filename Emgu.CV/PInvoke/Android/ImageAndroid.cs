@@ -28,6 +28,11 @@ namespace Emgu.CV
       where TColor : struct, IColor
       where TDepth : new()
    {
+      /// <summary>
+      /// Read image file from Assets
+      /// </summary>
+      /// <param name="assets">The Asset manager</param>
+      /// <param name="fileName">The name of the file</param>
       public Image(AssetManager assets, String fileName)
       {
          using (Stream imageStream = assets.Open(fileName))
@@ -35,6 +40,11 @@ namespace Emgu.CV
             Bitmap = imageBmp;
       }
 
+      /// <summary>
+      /// Convert Image object to Bitmap
+      /// </summary>
+      /// <param name="config">The Bitmap Config</param>
+      /// <returns>The Bitmap</returns>
       public Bitmap ToBitmap(Bitmap.Config config)
       {
          System.Drawing.Size size = Size;

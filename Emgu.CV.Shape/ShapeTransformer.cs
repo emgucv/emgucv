@@ -41,6 +41,9 @@ namespace Emgu.CV.Shape
          _ptr = ShapeInvoke.cvThinPlateSplineShapeTransformerCreate(regularizationParameter, ref _shapeTransformerPtr);
       }
 
+      /// <summary>
+      /// Get the pointer the the native ShapeTransformer
+      /// </summary>
       public IntPtr ShapeTransformerPtr
       {
          get
@@ -90,6 +93,9 @@ namespace Emgu.CV.Shape
          }
       }
 
+      /// <summary>
+      /// Get the pointer to the native ShapeTransformer
+      /// </summary>
       public IntPtr ShapeTransformerPtr { get { return _shapeTransformerPtr;} }
    }
 

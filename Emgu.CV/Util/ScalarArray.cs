@@ -96,10 +96,10 @@ namespace Emgu.CV
       public InputArray GetInputArray()
       {
          if (_dataType == DataType.Scalar)
-            return new InputArray(cveInputArrayFromScalar(_ptr));
+            return new InputArray(cveInputArrayFromScalar(_ptr), this);
          else if (_dataType == DataType.Double)
          {
-            return new InputArray(cveInputArrayFromDouble(_ptr));
+            return new InputArray(cveInputArrayFromDouble(_ptr), this);
          }
          else
          {

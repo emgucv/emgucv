@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Emgu.CV.World.Android">
-      <HintPath>..\..\..\..\lib\android\Emgu.CV.World.Android.dll</HintPath>
+      <HintPath>..\..\lib\android\Emgu.CV.World.Android.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
@@ -59,7 +59,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="Xamarin.Mobile">
-      <HintPath>..\..\Components\xamarin.mobile-0.7.7\lib\android\Xamarin.Mobile.dll</HintPath>
+      <HintPath>Components\xamarin.mobile-0.7.7\lib\android\Xamarin.Mobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

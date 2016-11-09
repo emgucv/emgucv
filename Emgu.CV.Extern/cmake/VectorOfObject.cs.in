@@ -136,7 +136,7 @@ namespace ${NAMESPACE_CS}
       /// </summary>
       public InputArray GetInputArray()
       {
-        return new InputArray( cvInputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
+        return new InputArray( cvInputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }
 	  
       /// <summary>
@@ -144,7 +144,7 @@ namespace ${NAMESPACE_CS}
       /// </summary>
       public OutputArray GetOutputArray()
       {
-         return new OutputArray( cvOutputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
+         return new OutputArray( cvOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }
 
 	   /// <summary>
@@ -152,7 +152,7 @@ namespace ${NAMESPACE_CS}
       /// </summary>
       public InputOutputArray GetInputOutputArray()
       {
-         return new InputOutputArray( cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr) );
+         return new InputOutputArray( cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }     
       
       /// <summary>

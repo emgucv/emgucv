@@ -97,9 +97,18 @@ ENDIF()
 #FIND_PROGRAM (MSBUILD_EXECUTABLE xbuild)
 #ENDIF(WIN32)
 
+SET (PROGRAM_FILES_X86_ENV_STR "programfiles(x86)")
+
 FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil 
-"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/Bin" 
-"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/Bin"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6.1 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.0A/bin/NETFX 4.0 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v7.1A/Bin"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v7.0/Bin" 
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v7.0A/Bin"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v6.0/Bin" 
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v6.0A/Bin"
 "C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
 "C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin" 
 /usr/lib/mono/2.0
@@ -108,16 +117,21 @@ FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil
 )
 
 FIND_PROGRAM (AL_EXECUTABLE al
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6.1 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.0A/bin/NETFX 4.0 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v7.1A/Bin"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v7.0/Bin" 
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v7.0A/Bin"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v6.0/Bin" 
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v6.0A/Bin"
 "C:/Program Files/Microsoft SDKs/Windows/v7.0/bin"
 "C:/Program Files/Microsoft SDKs/Windows/v7.0A/bin"
 "C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
 "C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin"
 "C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
 "C:/Windows/Microsoft.NET/Framework/v3.5" 
-"$ENV{programfiles}/Microsoft SDKs/Windows/v7.0/Bin" 
-"$ENV{programfiles}/Microsoft SDKs/Windows/v7.0A/Bin"
-"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/Bin" 
-"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/Bin"
 $ENV{windir}/Microsoft.NET/Framework/v3.5
 $ENV{windir}/Microsoft.NET/Framework/v2.0.50727
 /usr/lib/mono/2.0
@@ -126,16 +140,21 @@ $ENV{windir}/Microsoft.NET/Framework/v2.0.50727
 )
 
 FIND_PROGRAM (RESGEN_EXECUTABLE resgen
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6.1 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.0A/bin/NETFX 4.0 Tools"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v7.1A/Bin"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v7.0/Bin" 
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v7.0A/Bin"
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v6.0/Bin" 
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v6.0A/Bin"
+"$ENV{programfiles}/Microsoft Visual Studio 8/SDK/v2.0/Bin"
 "C:/Program Files/Microsoft SDKs/Windows/v7.0/bin"
 "C:/Program Files/Microsoft SDKs/Windows/v7.0A/bin"
 "C:/Program Files/Microsoft SDKs/Windows/v6.0/bin" 
 "C:/Program Files/Microsoft SDKs/Windows/v6.0A/bin"
 "C:/Program Files/Microsoft Visual Studio 8/SDK/v2.0/Bin"
-"$ENV{programfiles}/Microsoft SDKs/Windows/v7.0/Bin" 
-"$ENV{programfiles}/Microsoft SDKs/Windows/v7.0A/Bin"
-"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0/Bin" 
-"$ENV{programfiles}/Microsoft SDKs/Windows/v6.0A/Bin"
-"$ENV{programfiles}/Microsoft Visual Studio 8/SDK/v2.0/Bin"
 /usr/bin
 /Library/Frameworks/Mono.framework/Commands/
 )

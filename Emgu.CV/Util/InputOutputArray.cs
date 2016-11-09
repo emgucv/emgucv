@@ -22,10 +22,10 @@ namespace Emgu.CV
       /// Create an InputOutputArray from an existing unmanaged inputOutputArray pointer
       /// </summary>
       /// <param name="inputOutputArrayPtr">The pointer to the existing inputOutputArray</param>
-      public InputOutputArray(IntPtr inputOutputArrayPtr)
-         : base(inputOutputArrayPtr)
+      /// <param name="parent">The parent object to keep reference to</param>
+      public InputOutputArray(IntPtr inputOutputArrayPtr, object parent)
+         : base(inputOutputArrayPtr, parent)
       {
-         _ptr = inputOutputArrayPtr;
       }
 
       private static InputOutputArray _empty = new InputOutputArray();

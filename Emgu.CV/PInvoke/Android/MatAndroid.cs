@@ -26,23 +26,36 @@ namespace Emgu.CV
 {
    public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray, IImage
    {
+      /// <summary>
+      /// Create a Mat from an Android Bitmap
+      /// </summary>
+      /// <param name="bmp">The android Bitmap</param>
       public Mat(Bitmap bmp)
          : this()
       {
          this.Bitmap = bmp;
       }
 
-      public Mat(AssetManager assets, String fileName)
+      /// <summary>
+      /// Read an image file from Android Asset
+      /// </summary>
+      /// <param name="assets">The asset manager</param>
+      /// <param name="fileName">The name of the file</param>
+      /// <param name="mode">The read mode</param>
+      public Mat(AssetManager assets, String fileName, ImreadModes mode = ImreadModes.AnyColor | ImreadModes.AnyDepth)
          : this()
       {
          using (Stream imageStream = assets.Open(fileName))
          using (MemoryStream ms = new MemoryStream())
          {
             imageStream.CopyTo(ms);
-            CvInvoke.Imdecode(ms.ToArray(), ImreadModes.AnyColor | ImreadModes.AnyDepth, this);
+            CvInvoke.Imdecode(ms.ToArray(), mode, this);
          }
       }
 
+      /// <summary>
+      /// Convert a Bitmap to and from this Mat
+      /// </summary>
       public Bitmap Bitmap
       {
          get { return ToBitmap(Android.Graphics.Bitmap.Config.Argb8888); }

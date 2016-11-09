@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebDynamicImage", "..\..\Emgu.CV.Example\WebDynamicImage\", "{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -95,26 +95,28 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aruco", "..\..\Emgu.CV.Exam
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{1c41f1cc-b8a8-4e72-8167-0e1a42edf843}*SharedItemsImports = 13
-		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0d0c868d-23d6-46f7-a3e0-5f595c84939c}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{1c41f1cc-b8a8-4e72-8167-0e1a42edf843}*SharedItemsImports = 13
+		..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems*{31227f37-5594-4c29-92a2-4ae729d3878d}*SharedItemsImports = 13
+		..\..\Emgu.CV.Superres\Emgu.CV.Superres.projitems*{32b4cfe5-094f-4ae5-a7bc-132c2c9566fe}*SharedItemsImports = 13
+		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f3bc3e1-3b59-48ab-959a-71844b9ad9be}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.Util\Emgu.Util.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.Superres\Emgu.CV.Superres.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV.Superres\Emgu.CV.Superres.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
-		..\..\Emgu.CV.Superres\Emgu.CV.Superres.projitems*{32b4cfe5-094f-4ae5-a7bc-132c2c9566fe}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
-		..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems*{31227f37-5594-4c29-92a2-4ae729d3878d}*SharedItemsImports = 13
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0d0c868d-23d6-46f7-a3e0-5f595c84939c}*SharedItemsImports = 13
-		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f3bc3e1-3b59-48ab-959a-71844b9ad9be}*SharedItemsImports = 13
+		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.projitems*{b1d43be6-af83-41e5-990e-3e163ce42c79}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{b1d43be6-af83-41e5-990e-3e163ce42c79}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
