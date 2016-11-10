@@ -24,7 +24,7 @@ namespace Emgu.CV.Dnn
       /// </summary>
       public Net()
       {
-         _ptr = ContribInvoke.cveDnnNetCreate();
+         _ptr = DnnInvoke.cveDnnNetCreate();
       }
 
       /// <summary>
@@ -35,7 +35,7 @@ namespace Emgu.CV.Dnn
       public void SetBlob(String outputName, Blob blob)
       {
          using (CvString outputNameStr = new CvString(outputName))
-            ContribInvoke.cveDnnNetSetBlob(_ptr, outputNameStr, blob);
+            DnnInvoke.cveDnnNetSetBlob(_ptr, outputNameStr, blob);
       }
 
       /// <summary>
@@ -47,7 +47,7 @@ namespace Emgu.CV.Dnn
       {
          using (CvString outputNameStr = new CvString(outputName))
          {
-            return new Blob(ContribInvoke.cveDnnNetGetBlob(_ptr, outputNameStr));
+            return new Blob(DnnInvoke.cveDnnNetGetBlob(_ptr, outputNameStr));
          }
       }
 
@@ -56,7 +56,7 @@ namespace Emgu.CV.Dnn
       /// </summary>
       public void Forward()
       {
-         ContribInvoke.cveDnnNetForward(_ptr);
+         DnnInvoke.cveDnnNetForward(_ptr);
       }
 
       /// <summary>
@@ -66,15 +66,12 @@ namespace Emgu.CV.Dnn
       {
          if (_ptr != IntPtr.Zero)
          {
-            ContribInvoke.cveDnnNetRelease(ref _ptr);
+            DnnInvoke.cveDnnNetRelease(ref _ptr);
          }
       }
    }
-}
 
-namespace Emgu.CV
-{
-   public static partial class ContribInvoke
+   public static partial class DnnInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveDnnNetCreate();

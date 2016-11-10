@@ -36,7 +36,7 @@ namespace Emgu.CV.Dnn
          using (CvString prototxtStr = new CvString(prototxt))
          using (CvString caffeModelStr = new CvString(caffeModel))
          {
-            IntPtr result = ContribInvoke.cveDnnCreateCaffeImporter(prototxtStr, caffeModelStr);
+            IntPtr result = DnnInvoke.cveDnnCreateCaffeImporter(prototxtStr, caffeModelStr);
             return result == IntPtr.Zero ? null : new Importer(result);
          }
       }
@@ -47,7 +47,7 @@ namespace Emgu.CV.Dnn
       /// <param name="net">The net model</param>
       public void PopulateNet(Net net)
       {
-         ContribInvoke.cveDnnImporterPopulateNet(_ptr, net);
+         DnnInvoke.cveDnnImporterPopulateNet(_ptr, net);
       }
 
       /// <summary>
@@ -57,15 +57,12 @@ namespace Emgu.CV.Dnn
       {
          if (_ptr != IntPtr.Zero)
          {
-            ContribInvoke.cveDnnImporterRelease(ref _ptr);
+            DnnInvoke.cveDnnImporterRelease(ref _ptr);
          }
       }
    }
-}
 
-namespace Emgu.CV
-{
-   public static partial class ContribInvoke
+   public static partial class DnnInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveDnnCreateCaffeImporter(IntPtr prototxt, IntPtr caffeModel);
@@ -73,6 +70,9 @@ namespace Emgu.CV
       internal static extern void cveDnnImporterRelease(ref IntPtr importer);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveDnnImporterPopulateNet(IntPtr importer, IntPtr net);
+
+      [DllImport(CvInvoke.ExternLibrary, EntryPoint = "cveDnnInitModule", CallingConvention = CvInvoke.CvCallingConvention)]
+      public static extern void DnnInitModule();
    }
 }
 #endif

@@ -11,6 +11,8 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/dnn/dnn.hpp"
 
+CVAPI(void) cveDnnInitModule();
+
 CVAPI(cv::dnn::Importer*) cveDnnCreateCaffeImporter(cv::String* prototxt, cv::String* caffeModel);
 CVAPI(void) cveDnnImporterRelease(cv::dnn::Importer** importer);
 CVAPI(void) cveDnnImporterPopulateNet(cv::dnn::Importer* importer, cv::dnn::Net* net);

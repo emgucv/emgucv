@@ -6,6 +6,11 @@
 
 #include "dnn_c.h"
 
+void cveDnnInitModule()
+{
+   cv::dnn::initModule();
+}
+
 cv::dnn::Importer* cveDnnCreateCaffeImporter(cv::String* prototxt, cv::String* caffeModel)
 {
    cv::Ptr<cv::dnn::Importer> ptr = cv::dnn::createCaffeImporter(*prototxt, *caffeModel);

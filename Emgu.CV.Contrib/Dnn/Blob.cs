@@ -33,7 +33,7 @@ namespace Emgu.CV.Dnn
       public Blob(IInputArray image, int dstCn = -1)
       {
          using (InputArray iaImage = image.GetInputArray())
-            _ptr = ContribInvoke.cveDnnBlobCreateFromInputArray(iaImage, dstCn);
+            _ptr = DnnInvoke.cveDnnBlobCreateFromInputArray(iaImage, dstCn);
       }
 
       /// <summary>
@@ -43,7 +43,7 @@ namespace Emgu.CV.Dnn
       public Mat MatRef()
       {
          Mat m = new Mat();
-         ContribInvoke.cveDnnBlobMatRef(_ptr, m);
+         DnnInvoke.cveDnnBlobMatRef(_ptr, m);
          return m;
       }
 
@@ -54,7 +54,7 @@ namespace Emgu.CV.Dnn
       {
          if (_ptr != IntPtr.Zero)
          {
-            ContribInvoke.cveDnnBlobRelease(ref _ptr);
+            DnnInvoke.cveDnnBlobRelease(ref _ptr);
          }
       }
 
@@ -63,7 +63,7 @@ namespace Emgu.CV.Dnn
       /// </summary>
       public int Dims
       {
-         get { return ContribInvoke.cveDnnBlobDims(_ptr); }
+         get { return DnnInvoke.cveDnnBlobDims(_ptr); }
       }
 
       /// <summary>
@@ -71,7 +71,7 @@ namespace Emgu.CV.Dnn
       /// </summary>
       public int Channels
       {
-         get { return ContribInvoke.cveDnnBlobChannels(_ptr); }
+         get { return DnnInvoke.cveDnnBlobChannels(_ptr); }
       }
 
       /// <summary>
@@ -79,7 +79,7 @@ namespace Emgu.CV.Dnn
       /// </summary>
       public int Cols
       {
-         get { return ContribInvoke.cveDnnBlobCols(_ptr); }
+         get { return DnnInvoke.cveDnnBlobCols(_ptr); }
       }
 
       /// <summary>
@@ -87,7 +87,7 @@ namespace Emgu.CV.Dnn
       /// </summary>
       public int Num
       {
-         get { return ContribInvoke.cveDnnBlobNum(_ptr); }
+         get { return DnnInvoke.cveDnnBlobNum(_ptr); }
       }
 
       /// <summary>
@@ -95,14 +95,11 @@ namespace Emgu.CV.Dnn
       /// </summary>
       public int Rows
       {
-         get { return ContribInvoke.cveDnnBlobRows(_ptr); }
+         get { return DnnInvoke.cveDnnBlobRows(_ptr); }
       }
    }
-}
 
-namespace Emgu.CV
-{
-   public static partial class ContribInvoke
+   public static partial class DnnInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveDnnBlobCreateFromInputArray(IntPtr image, int dstCn);
