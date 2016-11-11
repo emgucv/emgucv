@@ -110,12 +110,21 @@ cv::MergeMertens* cveCreateMergeMertens(float contrast_weight, float saturation_
    return res.get();
 }
 
-void cveMergeRobertsonRelease(cv::MergeRobertson** merge)
+void cveMergeMertensRelease(cv::MergeMertens** merge)
 {
    delete *merge;
    *merge = 0;
 }
-void cveMergeMertensRelease(cv::MergeMertens** merge)
+
+cv::MergeRobertson* cveCreateMergeRobertson(cv::MergeExposures** merge)
+{
+   cv::Ptr<cv::MergeRobertson> res = cv::createMergeRobertson();
+   res.addref();
+   *merge = dynamic_cast<cv::MergeExposures*>(res.get());
+   return res.get();
+}
+
+void cveMergeRobertsonRelease(cv::MergeRobertson** merge)
 {
    delete *merge;
    *merge = 0;

@@ -238,7 +238,22 @@ namespace Emgu.CV.Test
          EmguAssert.IsTrue(diff.Norm < 1.0e-8);
       }
 
-      
+#if !(NETFX_CORE || __ANDROID__ || __IOS__ || UNITY_IOS || UNITY_ANDROID)
+      [Test]
+      public void TestViz()
+      {
+         Viz3d viz = new Viz3d("show_simple_widgets");
+         viz.SetBackgroundMeshLab();
+         WCoordinateSystem coor = new WCoordinateSystem();
+         viz.ShowWidget("coos", coor);
+         WCube cube = new WCube(new MCvPoint3D64f(-.5, -.5, -.5), new MCvPoint3D64f(.5, .5, .5), true, new MCvScalar(255, 255, 255) );
+         viz.ShowWidget("cube", cube);
+         WCube cube0 = new WCube(new MCvPoint3D64f(-1, -1, -1), new MCvPoint3D64f(-.5, -.5, -.5), false, new MCvScalar(123, 45, 200) );
+         viz.ShowWidget("cub0", cube0);
+         //viz.Spin();
+      }
+#endif
+
       [Test]
       public void TestContour()
       {

@@ -265,7 +265,7 @@ namespace Emgu.CV
       /// Constructs a WCoordinateSystem.
       /// </summary>
       /// <param name="scale">Determines the size of the axes.</param>
-      public WCoordinateSystem(double scale)
+      public WCoordinateSystem(double scale = 1.0)
       {
          _ptr = CvInvoke.cveWCoordinateSystemCreate(scale, ref _widget3dPtr, ref _widgetPtr);
       }
@@ -287,12 +287,214 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release the unmanaged memory associated with this Viz3d object
+      /// Release the unmanaged memory associated with this WCoordinateSysyem object
       /// </summary>
       protected override void DisposeObject()
       {
          if (!IntPtr.Zero.Equals(_ptr))
             CvInvoke.cveWCoordinateSystemRelease(ref _ptr);
+         _widgetPtr = IntPtr.Zero;
+         _widget3dPtr = IntPtr.Zero;
+      }
+   }
+
+   
+   public class WCube : UnmanagedObject, IWidget3D
+   {
+      private IntPtr _widgetPtr;
+      private IntPtr _widget3dPtr;
+
+      public WCube(MCvPoint3D64f minPoint, MCvPoint3D64f maxPoint, bool wireFrame, MCvScalar color)
+      {
+         _ptr = CvInvoke.cveWCubeCreate(ref minPoint, ref maxPoint, wireFrame, ref color, ref _widget3dPtr, ref _widgetPtr);
+      }
+
+      /// <summary>
+      /// Get the pointer to the Widget3D obj
+      /// </summary>
+      public IntPtr GetWidget3D
+      {
+         get { return _widget3dPtr; }
+      }
+
+      /// <summary>
+      /// Get the pointer to the Widget obj
+      /// </summary>
+      public IntPtr GetWidget
+      {
+         get { return _widgetPtr; }
+      }
+
+      /// <summary>
+      /// Release the unmanaged memory associated with this WCube object
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         if (!IntPtr.Zero.Equals(_ptr))
+            CvInvoke.cveWCubeRelease(ref _ptr);
+         _widgetPtr = IntPtr.Zero;
+         _widget3dPtr = IntPtr.Zero;
+      }
+   }
+
+   public class WCylinder : UnmanagedObject, IWidget3D
+   {
+      private IntPtr _widgetPtr;
+      private IntPtr _widget3dPtr;
+
+      public WCylinder(ref MCvPoint3D64f axisPoint1, ref MCvPoint3D64f axisPoint2, double radius, int numsides, ref MCvScalar color)
+      {
+         _ptr = CvInvoke.cveWCylinderCreate(ref axisPoint1, ref axisPoint2, radius, numsides, ref color, ref _widget3dPtr, ref _widgetPtr);
+      }
+
+      /// <summary>
+      /// Get the pointer to the Widget3D obj
+      /// </summary>
+      public IntPtr GetWidget3D
+      {
+         get { return _widget3dPtr; }
+      }
+
+      /// <summary>
+      /// Get the pointer to the Widget obj
+      /// </summary>
+      public IntPtr GetWidget
+      {
+         get { return _widgetPtr; }
+      }
+
+      /// <summary>
+      /// Release the unmanaged memory associated with this WCylinder object
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         if (!IntPtr.Zero.Equals(_ptr))
+            CvInvoke.cveWCylinderRelease(ref _ptr);
+         _widgetPtr = IntPtr.Zero;
+         _widget3dPtr = IntPtr.Zero;
+      }
+   }
+
+   public class WCircle : UnmanagedObject, IWidget3D
+   {
+      private IntPtr _widgetPtr;
+      private IntPtr _widget3dPtr;
+
+      public WCircle(double radius, double thickness, MCvScalar color)
+      {
+         _ptr = CvInvoke.cveWCircleCreateAtOrigin(radius, thickness, ref color, ref _widget3dPtr, ref _widgetPtr);
+      }
+
+      public WCircle(double radius, MCvPoint3D64f center, MCvPoint3D64f normal, double thickness, MCvScalar color)
+      {
+         _ptr = CvInvoke.cveWCircleCreate(radius, ref center, ref normal, thickness, ref color, ref _widget3dPtr, ref _widgetPtr);
+      }
+
+      /// <summary>
+      /// Get the pointer to the Widget3D obj
+      /// </summary>
+      public IntPtr GetWidget3D
+      {
+         get { return _widget3dPtr; }
+      }
+
+      /// <summary>
+      /// Get the pointer to the Widget obj
+      /// </summary>
+      public IntPtr GetWidget
+      {
+         get { return _widgetPtr; }
+      }
+
+      /// <summary>
+      /// Release the unmanaged memory associated with this WCircle object
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         if (!IntPtr.Zero.Equals(_ptr))
+            CvInvoke.cveWCircleRelease(ref _ptr);
+         _widgetPtr = IntPtr.Zero;
+         _widget3dPtr = IntPtr.Zero;
+      }
+   }
+
+   public class WCone : UnmanagedObject, IWidget3D
+   {
+      private IntPtr _widgetPtr;
+      private IntPtr _widget3dPtr;
+
+      public WCone(double length, double radius, int resolution, MCvScalar color)
+      {
+         _ptr = CvInvoke.cveWConeCreateAtOrigin(length, radius, resolution, ref color, ref _widget3dPtr, ref _widgetPtr);
+      }
+
+      public WCone(double radius, MCvPoint3D64f center, MCvPoint3D64f tip, int resolution, MCvScalar color)
+      {
+         _ptr = CvInvoke.cveWConeCreate(radius, ref center, ref tip, resolution, ref color, ref _widget3dPtr, ref _widgetPtr);
+      }
+
+      /// <summary>
+      /// Get the pointer to the Widget3D obj
+      /// </summary>
+      public IntPtr GetWidget3D
+      {
+         get { return _widget3dPtr; }
+      }
+
+      /// <summary>
+      /// Get the pointer to the Widget obj
+      /// </summary>
+      public IntPtr GetWidget
+      {
+         get { return _widgetPtr; }
+      }
+
+      /// <summary>
+      /// Release the unmanaged memory associated with this WCone object
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         if (!IntPtr.Zero.Equals(_ptr))
+            CvInvoke.cveWConeRelease(ref _ptr);
+         _widgetPtr = IntPtr.Zero;
+         _widget3dPtr = IntPtr.Zero;
+      }
+   }
+
+   public class WArrow : UnmanagedObject, IWidget3D
+   {
+      private IntPtr _widgetPtr;
+      private IntPtr _widget3dPtr;
+
+      public WArrow(MCvPoint3D64f pt1, MCvPoint3D64f pt2, double thickness, MCvScalar color)
+      {
+         _ptr = CvInvoke.cveWArrowCreate(ref pt1, ref pt2, thickness, ref color, ref _widget3dPtr, ref _widgetPtr);
+      }
+      
+
+      /// <summary>
+      /// Get the pointer to the Widget3D obj
+      /// </summary>
+      public IntPtr GetWidget3D
+      {
+         get { return _widget3dPtr; }
+      }
+
+      /// <summary>
+      /// Get the pointer to the Widget obj
+      /// </summary>
+      public IntPtr GetWidget
+      {
+         get { return _widgetPtr; }
+      }
+
+      /// <summary>
+      /// Release the unmanaged memory associated with this WArrow object
+      /// </summary>
+      protected override void DisposeObject()
+      {
+         if (!IntPtr.Zero.Equals(_ptr))
+            CvInvoke.cveWArrowRelease(ref _ptr);
          _widgetPtr = IntPtr.Zero;
          _widget3dPtr = IntPtr.Zero;
       }
@@ -345,13 +547,75 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveWCoordinateSystemRelease(ref IntPtr system);
 
-
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveWCloudCreateWithColorArray(IntPtr cloud, IntPtr color, ref IntPtr widget3d, ref IntPtr widget);
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveWCloudCreateWithColor(IntPtr cloud, ref MCvScalar color, ref IntPtr widget3d, ref IntPtr widget);
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveWCloudRelease(ref IntPtr cloud);
+
+      public static Mat ReadCloud(String file, IOutputArray colors = null, IOutputArray normals = null)
+      {
+         using (CvString cs = new CvString(file))
+         using (OutputArray oaColors = colors == null ? OutputArray.GetEmpty() : colors.GetOutputArray())
+         using (OutputArray oaNormals = normals == null ? OutputArray.GetEmpty() : normals.GetOutputArray())
+         {
+            Mat cloud = new Mat();
+            cveReadCloud(cs, cloud, oaColors, oaNormals);
+            return cloud;
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveReadCloud(IntPtr file, IntPtr cloud, IntPtr colors, IntPtr normals);
+
+      public static void WriteCloud(String file, IInputArray cloud, IInputArray colors = null, IInputArray normals = null)
+      {
+         using (CvString cs = new CvString(file))
+         using (InputArray iaCloud = cloud.GetInputArray())
+         using (InputArray iaColors = colors == null ? InputArray.GetEmpty() : colors.GetInputArray())
+         using (InputArray iaNormals = normals == null ? InputArray.GetEmpty() : normals.GetInputArray())
+         {
+            cveWriteCloud(cs, iaCloud, iaColors, iaNormals);
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveWriteCloud(IntPtr file, IntPtr cloud, IntPtr colors, IntPtr normals);
+
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveWCubeCreate(
+         ref MCvPoint3D64f minPoint, ref MCvPoint3D64f maxPoint, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool wireFrame, ref MCvScalar color, 
+         ref IntPtr widget3d, ref IntPtr widget);
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveWCubeRelease(ref IntPtr cube);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveWCylinderCreate(ref MCvPoint3D64f axisPoint1, ref MCvPoint3D64f axisPoint2, double radius, int numsides, ref MCvScalar color, ref IntPtr widget3d, ref IntPtr widget);
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveWCylinderRelease(ref IntPtr cylinder);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveWCircleCreateAtOrigin(double radius, double thickness, ref MCvScalar color, ref IntPtr widget3d, ref IntPtr widget);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveWCircleCreate(double radius, ref MCvPoint3D64f center, ref MCvPoint3D64f normal, double thickness, ref MCvScalar color, ref IntPtr widget3d, ref IntPtr widget);
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveWCircleRelease(ref IntPtr circle);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveWConeCreateAtOrigin(double length, double radius, int resolution, ref MCvScalar color, ref IntPtr widget3d, ref IntPtr widget);
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveWConeCreate(double radius, ref MCvPoint3D64f center, ref MCvPoint3D64f tip, int resolution, ref MCvScalar color, ref IntPtr widget3d, ref IntPtr widget);
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveWConeRelease(ref IntPtr cone);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveWArrowCreate(ref MCvPoint3D64f pt1, ref MCvPoint3D64f pt2, double thickness, ref MCvScalar color, ref IntPtr widget3d, ref IntPtr widget);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveWArrowRelease(ref IntPtr arrow);
    }
 }
 #endif

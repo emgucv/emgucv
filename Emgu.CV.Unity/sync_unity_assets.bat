@@ -8,6 +8,8 @@ cp Assets/Emgu.CV/Emgu.CV/Features2D/*.cs ../Emgu.CV/Features2D
 cp Assets/Emgu.CV/Emgu.CV/Flann/*.cs ../Emgu.CV/Flann 
 cp Assets/Emgu.CV/Emgu.CV/Geodetic/*.cs ../Emgu.CV/Geodetic 
 cp Assets/Emgu.CV/Emgu.CV/Ocl/*.cs ../Emgu.CV/Ocl 
+cp Assets/Emgu.CV/Emgu.CV/Photo/*.cs ../Emgu.CV/Photo 
+cp Assets/Emgu.CV/Emgu.CV/Viz/*.cs ../Emgu.CV/Viz 
 
 cp Assets/Emgu.CV/Emgu.CV/PInvoke/*.cs ../Emgu.CV/PInvoke  
 cp Assets/Emgu.CV/Emgu.CV/PInvoke/CvType/*.cs ../Emgu.CV/PInvoke/CvType
