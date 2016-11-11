@@ -6,6 +6,7 @@ using System;
 using Emgu.Util;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 
 namespace Emgu.CV
 {
@@ -86,6 +87,40 @@ namespace Emgu.CV
          else*/ 
          CvInvoke.cveVideoWriterRelease(ref _ptr);
       }
+
+      public bool IsOpened
+      {
+         get { return _ptr != IntPtr.Zero && CvInvoke.cveVideoWriterIsOpened(_ptr); }
+      }
+
+      public bool Set(WriterProperty prop, double value)
+      {
+         return CvInvoke.cveVideoWriterSet(_ptr, prop, value);
+      }
+
+      public double Get(WriterProperty prop)
+      {
+         return CvInvoke.cveVideoWriterGet(_ptr, prop);
+      }
+
+      /// <summary>
+      /// The VideoWriter property
+      /// </summary>
+      public enum WriterProperty
+      {
+         /// <summary>
+         /// Current quality (0..100%) of the encoded videostream. Can be adjusted dynamically in some codecs.
+         /// </summary>
+         Quality,
+         /// <summary>
+         /// (Read-only): Size of just encoded video frame. Note that the encoding order may be different from representation order.
+         /// </summary>
+         Framebytes,
+         /// <summary>
+         /// Number of stripes for parallel encoding. -1 for auto detection.
+         /// </summary>
+         NStripes
+      }
    }
 
    public partial class CvInvoke
@@ -126,5 +161,16 @@ namespace Emgu.CV
 
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int cveVideoWriterFourcc(char c1, char c2, char c3, char c4);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool cveVideoWriterIsOpened(IntPtr writer);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      [return: MarshalAs(CvInvoke.BoolMarshalType)]
+      internal static extern bool cveVideoWriterSet(IntPtr writer, VideoWriter.WriterProperty propId, double value);
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern double cveVideoWriterGet(IntPtr writer, VideoWriter.WriterProperty propId);
    }
 }

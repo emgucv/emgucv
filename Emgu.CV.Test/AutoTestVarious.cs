@@ -268,7 +268,6 @@ namespace Emgu.CV.Test
             PointF pOut = new PointF(80, 100);
 
             using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint() )
-            
             {
                CvInvoke.FindContours(img, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
                using (VectorOfPoint firstContour = contours[0])
@@ -2192,9 +2191,7 @@ namespace Emgu.CV.Test
 
          return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
       }
-#endif
-
-      /*
+      
       [Test]
       public void TestVideoWriter()
       {
@@ -2210,23 +2207,27 @@ namespace Emgu.CV.Test
             images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
          }
 
-         using (VideoWriter writer = new VideoWriter(fileName, CvInvoke.CV_FOURCC('M', 'J', 'P', 'G'), 5, width, height, true))
-         //using (VideoWriter writer = new VideoWriter(fileName, -1, 5, width, height, true))
+         //bool loadSuccess = CvInvoke.LoadUnmanagedModules(null, "opencv_ffmpeg310_64.dll");
+         //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('H', '2', '6', '4'), 5, new Size(width, height), true))
+         using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('M', 'J', 'P', 'G'), 5, new Size(width, height), true))
+         //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('X', '2', '6', '4'), 5, new Size(width, height), true))
+         //using (VideoWriter writer = new VideoWriter(fileName, -1, 5, new Size( width, height ), true))
          {
+            EmguAssert.IsTrue(writer.IsOpened);
             for (int i = 0; i < numberOfFrames; i++)
             {
-               writer.WriteFrame(images[i]);
+               writer.Write(images[i].Mat);
             }
          }
 
          FileInfo fi = new FileInfo(fileName);
-         EmguAssert.IsTrue(fi.Length != 0);
+         EmguAssert.IsTrue(fi.Length != 0, "File should not be empty");
 
-         using (Capture capture = new Capture(fileName))
+         using (VideoCapture capture = new VideoCapture(fileName))
          {
-            Image<Bgr, Byte> img2 = capture.QueryFrame();
+            Mat img2 = capture.QueryFrame();
             int count = 0;
-            while (img2 != null)
+            while (img2 != null && !img2.IsEmpty)
             {
                EmguAssert.IsTrue(img2.Width == width);
                EmguAssert.IsTrue(img2.Height == height);
@@ -2237,7 +2238,8 @@ namespace Emgu.CV.Test
             EmguAssert.IsTrue(numberOfFrames == count);
          }
          File.Delete(fi.FullName);
-      }*/
+      }
+#endif
 
       /*
 #if !ANDROID

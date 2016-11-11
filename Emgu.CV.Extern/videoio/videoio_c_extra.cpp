@@ -111,6 +111,21 @@ void cveVideoWriterRelease(cv::VideoWriter** writer)
    delete *writer;
    *writer = 0;
 }
+bool cveVideoWriterIsOpened(cv::VideoWriter* writer)
+{
+   return writer->isOpened();
+}
+bool cveVideoWriterSet(cv::VideoWriter* writer, int propId, double value)
+{
+   return writer->set(propId, value);
+}
+double cveVideoWriterGet(cv::VideoWriter* writer, int propId)
+{
+   return writer->get(propId);
+}
+
+
+
 void cveVideoWriterWrite(cv::VideoWriter* writer, cv::Mat* image)
 {
    writer->write(*image);
