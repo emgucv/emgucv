@@ -15,7 +15,7 @@ namespace Emgu.CV
    /// <summary>
    /// The base class for camera response calibration algorithms.
    /// </summary>
-   public abstract class CalibrateCRF
+   public abstract class CalibrateCRF : UnmanagedObject
    {
       /// <summary>
       /// The pointer the the calibrateCRF object
@@ -37,6 +37,46 @@ namespace Emgu.CV
             CvInvoke.cveCalibrateCRFProcess(_calibrateCRFPtr, iaSrc, oaDst, iaTimes);
          }
       }
+
+      protected override void DisposeObject()
+      {
+         _calibrateCRFPtr = IntPtr.Zero;
+      }
+   }
+
+   public class CalibrateDebevec : CalibrateCRF
+   {
+      public CalibrateDebevec(int samples, float lambda, bool random)
+      {
+         _ptr = CvInvoke.cveCalibrateDebevecCreate(samples, lambda, random, ref _calibrateCRFPtr);
+      }
+
+
+      protected override void DisposeObject()
+      {
+         if (IntPtr.Zero != _ptr)
+         {
+            CvInvoke.cveCalibrateDebevecRelease(ref _ptr);
+         }
+         base.DisposeObject();
+      }
+   }
+
+   public class CalibrateRobertson : CalibrateCRF
+   {
+      public CalibrateRobertson(int maxIter, float threshold)
+      {
+         _ptr = CvInvoke.cveCalibrateRobertsonCreate(maxIter, threshold, ref _calibrateCRFPtr);
+      }
+
+      protected override void DisposeObject()
+      {
+         if (IntPtr.Zero != _ptr)
+         {
+            CvInvoke.cveCalibrateRobertsonRelease(ref _ptr);
+         }
+         base.DisposeObject();
+      }
    }
 
    public static partial class CvInvoke
@@ -44,5 +84,22 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveCalibrateCRFProcess(
          IntPtr calibrateCRF, IntPtr src, IntPtr dst, IntPtr times);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveCalibrateDebevecCreate(
+         int samples, 
+         float lambda, 
+         [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool random, 
+         ref IntPtr calibrateCRF);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveCalibrateDebevecRelease(ref IntPtr calibrateDebevec);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr cveCalibrateRobertsonCreate(int maxIter, float threshold, ref IntPtr calibrateCRF);
+
+      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern void cveCalibrateRobertsonRelease(ref IntPtr calibrateRobertson);
    }
 }

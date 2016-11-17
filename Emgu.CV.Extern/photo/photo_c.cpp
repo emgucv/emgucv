@@ -65,20 +65,30 @@ void cveCalibrateCRFProcess(cv::CalibrateCRF* calibrateCRF, cv::_InputArray* src
    calibrateCRF->process(*src, *dst, *times);
 }
 
-cv::CalibrateDebevec* cveCreateCalibrateDebevec(int samples, float lambda, bool random, cv::CalibrateCRF** calibrateCRF)
+cv::CalibrateDebevec* cveCalibrateDebevecCreate(int samples, float lambda, bool random, cv::CalibrateCRF** calibrateCRF)
 {
    cv::Ptr<cv::CalibrateDebevec> res = cv::createCalibrateDebevec(samples, lambda, random);
    res.addref();
    *calibrateCRF = dynamic_cast<cv::CalibrateCRF*>(res.get());
    return res.get();
 }
-
-cv::CalibrateRobertson* cveCreateCalibrateRobertson(int max_iter, float threshold, cv::CalibrateCRF** calibrateCRF)
+void cveCalibrateDebevecRelease(cv::CalibrateDebevec** calibrateDebevec)
 {
-   cv::Ptr<cv::CalibrateRobertson> res = cv::createCalibrateRobertson(max_iter, threshold);
+   delete *calibrateDebevec;
+   *calibrateDebevec = 0;
+}
+
+cv::CalibrateRobertson* cveCalibrateRobertsonCreate(int maxIter, float threshold, cv::CalibrateCRF** calibrateCRF)
+{
+   cv::Ptr<cv::CalibrateRobertson> res = cv::createCalibrateRobertson(maxIter, threshold);
    res.addref();
    *calibrateCRF = dynamic_cast<cv::CalibrateCRF*>(res.get());
    return res.get();
+}
+void cveCalibrateRobertsonRelease(cv::CalibrateRobertson** calibrateRobertson)
+{
+   delete *calibrateRobertson;
+   calibrateRobertson = 0;
 }
 
 void cveMergeExposuresProcess(
@@ -89,7 +99,7 @@ void cveMergeExposuresProcess(
    mergeExposures->process(*src, *dst, *times, *response);
 }
 
-cv::MergeDebevec* cveCreateMergeDebevec(cv::MergeExposures** merge)
+cv::MergeDebevec* cveMergeDebevecCreate(cv::MergeExposures** merge)
 {
    cv::Ptr<cv::MergeDebevec> res = cv::createMergeDebevec();
    res.addref();
@@ -102,9 +112,9 @@ void cveMergeDebevecRelease(cv::MergeDebevec** merge)
    *merge = 0;
 }
 
-cv::MergeMertens* cveCreateMergeMertens(float contrast_weight, float saturation_weight, float exposure_weight, cv::MergeExposures** merge)
+cv::MergeMertens* cveMergeMertensCreate(float contrastWeight, float saturationWeight, float exposureWeight, cv::MergeExposures** merge)
 {
-   cv::Ptr<cv::MergeMertens> res = cv::createMergeMertens(contrast_weight, saturation_weight, exposure_weight);
+   cv::Ptr<cv::MergeMertens> res = cv::createMergeMertens(contrastWeight, saturationWeight, exposureWeight);
    res.addref();
    *merge = dynamic_cast<cv::MergeExposures*>(res.get());
    return res.get();
@@ -116,7 +126,7 @@ void cveMergeMertensRelease(cv::MergeMertens** merge)
    *merge = 0;
 }
 
-cv::MergeRobertson* cveCreateMergeRobertson(cv::MergeExposures** merge)
+cv::MergeRobertson* cveMergeRobertsonCreate(cv::MergeExposures** merge)
 {
    cv::Ptr<cv::MergeRobertson> res = cv::createMergeRobertson();
    res.addref();
