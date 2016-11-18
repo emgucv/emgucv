@@ -196,5 +196,31 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveTextureFlattening(IntPtr src, IntPtr mask, IntPtr dst, float lowThreshold, float highThreshold, int kernelSize);
 
+
+      public static void Decolor(IInputArray src, IOutputArray grayscale, IOutputArray colorBoost)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaGrayscale = grayscale.GetOutputArray())
+         using (OutputArray oaColorBoost = colorBoost.GetOutputArray())
+         {
+            
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveDecolor(IntPtr src, IntPtr grayscale, IntPtr colorBoost);
+
+      public static void SeamlessClone(IInputArray src, IInputArray dst, IInputArray mask, Point p, IOutputArray blend,
+         int flags)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaDst = dst.GetInputArray())
+         using (InputArray iaMask = mask.GetInputArray())
+         using (OutputArray oaBlend = blend.GetOutputArray())
+         {
+            cveSeamlessClone(iaSrc, iaDst, iaMask, ref p, oaBlend, flags);
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveSeamlessClone(IntPtr src, IntPtr dst, IntPtr mask, ref Point, IntPtr blend, int flags);
    }
 }

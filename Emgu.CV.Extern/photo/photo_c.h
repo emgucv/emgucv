@@ -35,6 +35,9 @@ CVAPI(void) cveIlluminationChange(cv::_InputArray* src, cv::_InputArray* mask, c
 
 CVAPI(void) cveTextureFlattening(cv::_InputArray* src, cv::_InputArray* mask, cv::_OutputArray* dst, float lowThreshold, float highThreshold, int kernelSize);
 
+CVAPI(void) cveDecolor(cv::_InputArray* src, cv::_OutputArray* grayscale, cv::_OutputArray* colorBoost);
+
+CVAPI(void) cveSeamlessClone(cv::_InputArray* src, cv::_InputArray* dst, cv::_InputArray* mask, CvPoint* p, cv::_OutputArray* blend, int flags);
 
 CVAPI(void) cveCalibrateCRFProcess(cv::CalibrateCRF* calibrateCRF, cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* times);
 
@@ -59,4 +62,20 @@ CVAPI(cv::MergeRobertson*) cveMergeRobertsonCreate(cv::MergeExposures** merge);
 CVAPI(void) cveMergeRobertsonRelease(cv::MergeRobertson** merge);
 
 CVAPI(void) cveDenoiseTVL1(const std::vector< cv::Mat >* observations, cv::Mat* result, double lambda, int niters);
+
+CVAPI(void) cveTonemapProcess(cv::Tonemap* tonemap, cv::_InputArray* src, cv::_OutputArray* dst);
+CVAPI(cv::Tonemap*) cveTonemapCreate(float gamma);
+CVAPI(void) cveTonemapRelease(cv::Tonemap** tonemap);
+
+CVAPI(cv::TonemapDrago*) cveTonemapDragoCreate(float gamma, float saturation, float bias, cv::Tonemap** tonemap);
+CVAPI(void) cveTonemapDragoRelease(cv::TonemapDrago** tonemap);
+
+CVAPI(cv::TonemapDurand*) cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, cv::Tonemap** tonemap);
+CVAPI(void) cveTonemapDurandRelease(cv::TonemapDurand** tonemap);
+
+CVAPI(cv::TonemapReinhard*) cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, cv::Tonemap** tonemap);
+CVAPI(void) cveTonemapReinhardRelease(cv::TonemapReinhard** tonemap);
+
+CVAPI(cv::TonemapMantiuk*) cveTonemapMantiukCreate(float gamma, float scale, float saturation, cv::Tonemap** tonemap);
+CVAPI(void) cveTonemapMantiukRelease(cv::TonemapMantiuk** tonemap);
 #endif

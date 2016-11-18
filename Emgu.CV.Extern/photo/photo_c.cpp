@@ -60,6 +60,16 @@ void cveTextureFlattening(cv::_InputArray* src, cv::_InputArray* mask, cv::_Outp
    cv::textureFlattening(*src, mask ? *mask : (cv::InputArray) cv::noArray(), *dst, lowThreshold, highThreshold, kernelSize);
 }
 
+void cveDecolor(cv::_InputArray* src, cv::_OutputArray* grayscale, cv::_OutputArray* colorBoost)
+{
+   cv::decolor(*src, *grayscale, *colorBoost);
+}
+
+void cveSeamlessClone(cv::_InputArray* src, cv::_InputArray* dst, cv::_InputArray* mask, CvPoint* p, cv::_OutputArray* blend, int flags)
+{
+   cv::seamlessClone(*src, *dst, *mask, *p, *blend, flags);
+}
+
 void cveCalibrateCRFProcess(cv::CalibrateCRF* calibrateCRF, cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* times)
 {
    calibrateCRF->process(*src, *dst, *times);
@@ -143,4 +153,70 @@ void cveMergeRobertsonRelease(cv::MergeRobertson** merge)
 void cveDenoiseTVL1(const std::vector< cv::Mat >* observations, cv::Mat* result, double lambda, int niters)
 {
    cv::denoise_TVL1(*observations, *result, lambda, niters);
+}
+
+void cveTonemapProcess(cv::Tonemap* tonemap, cv::_InputArray* src, cv::_OutputArray* dst)
+{
+   tonemap->process(*src, *dst);
+}
+cv::Tonemap* cveTonemapCreate(float gamma)
+{
+   cv::Ptr<cv::Tonemap> tonemap = cv::createTonemap(gamma);
+}
+void cveTonemapRelease(cv::Tonemap** tonemap)
+{
+   delete *tonemap;
+   *tonemap = 0;
+}
+
+cv::TonemapDrago* cveTonemapDragoCreate(float gamma, float saturation, float bias, cv::Tonemap** tonemap)
+{
+   cv::Ptr<cv::TonemapDrago> t = cv::createTonemapDrago(gamma, saturation, bias);
+   t.addref();
+   *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+   return t.get();
+}
+void cveTonemapDragoRelease(cv::TonemapDrago** tonemap)
+{
+   delete *tonemap;
+   *tonemap = 0;
+}
+
+cv::TonemapDurand* cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, cv::Tonemap** tonemap)
+{
+   cv::Ptr<cv::TonemapDurand> t = cv::createTonemapDurand(gamma, contrast, saturation, sigmaSpace, sigmaColor);
+   t.addref();
+   *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+   return t.get();
+}
+void cveTonemapDurandRelease(cv::TonemapDurand** tonemap)
+{
+   delete *tonemap;
+   *tonemap = 0;
+}
+
+cv::TonemapReinhard* cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, cv::Tonemap** tonemap)
+{
+   cv::Ptr<cv::TonemapReinhard> t = cv::createTonemapReinhard(gamma, intensity, lightAdapt, colorAdapt);
+   t.addref();
+   *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+   return t.get();
+}
+void cveTonemapReinhardRelease(cv::TonemapReinhard** tonemap)
+{
+   delete *tonemap;
+   *tonemap = 0;
+}
+
+cv::TonemapMantiuk* cveTonemapMantiukCreate(float gamma, float scale, float saturation, cv::Tonemap** tonemap)
+{
+   cv::Ptr<cv::TonemapMantiuk> t = cv::createTonemapMantiuk(gamma, scale, saturation);
+   t.addref();
+   *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+   return t.get();
+}
+void cveTonemapMantiukRelease(cv::TonemapMantiuk** tonemap)
+{
+   delete *tonemap;
+   *tonemap = 0;
 }
