@@ -221,6 +221,6 @@ namespace Emgu.CV
          }
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      private static extern void cveSeamlessClone(IntPtr src, IntPtr dst, IntPtr mask, ref Point, IntPtr blend, int flags);
+      private static extern void cveSeamlessClone(IntPtr src, IntPtr dst, IntPtr mask, ref Point p, IntPtr blend, int flags);
    }
 }
