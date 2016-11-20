@@ -162,6 +162,8 @@ void cveTonemapProcess(cv::Tonemap* tonemap, cv::_InputArray* src, cv::_OutputAr
 cv::Tonemap* cveTonemapCreate(float gamma)
 {
    cv::Ptr<cv::Tonemap> tonemap = cv::createTonemap(gamma);
+   tonemap.addref();
+   return tonemap.get();
 }
 void cveTonemapRelease(cv::Tonemap** tonemap)
 {
