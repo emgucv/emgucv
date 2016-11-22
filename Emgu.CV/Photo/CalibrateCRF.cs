@@ -38,6 +38,9 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Reset the pointer that points to the CalibrateCRF object.
+      /// </summary>
       protected override void DisposeObject()
       {
          _calibrateCRFPtr = IntPtr.Zero;
@@ -51,7 +54,9 @@ namespace Emgu.CV
          _ptr = CvInvoke.cveCalibrateDebevecCreate(samples, lambda, random, ref _calibrateCRFPtr);
       }
 
-
+      /// <summary>
+      /// Release the unmanaged memory associated with this CalibrateCRF object
+      /// </summary>
       protected override void DisposeObject()
       {
          if (IntPtr.Zero != _ptr)
@@ -62,13 +67,24 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// Inverse camera response function is extracted for each brightness value by minimizing an objective function as linear system. This algorithm uses all image pixels.
+   /// </summary>
    public class CalibrateRobertson : CalibrateCRF
    {
+      /// <summary>
+      /// Creates CalibrateRobertson object.
+      /// </summary>
+      /// <param name="maxIter">maximal number of Gauss-Seidel solver iterations.</param>
+      /// <param name="threshold">get difference between results of two successive steps of the minimization.</param>
       public CalibrateRobertson(int maxIter, float threshold)
       {
          _ptr = CvInvoke.cveCalibrateRobertsonCreate(maxIter, threshold, ref _calibrateCRFPtr);
       }
 
+      /// <summary>
+      /// Release the unmanaged memory associated with this CalibrateCRF object
+      /// </summary>
       protected override void DisposeObject()
       {
          if (IntPtr.Zero != _ptr)

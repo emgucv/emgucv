@@ -48,6 +48,9 @@ namespace Emgu.CV
 
    public class MergeDebevec : MergeExposures
    {
+      /// <summary>
+      /// Creates MergeDebevec object.
+      /// </summary>
       public MergeDebevec()
       {
          _ptr = CvInvoke.cveMergeDebevecCreate(ref _mergeExposuresPtr);
@@ -64,9 +67,21 @@ namespace Emgu.CV
       }
    }
 
+
+   /// <summary>
+   /// Pixels are weighted using contrast, saturation and well-exposedness measures, than images are combined using laplacian pyramids.
+   /// The resulting image weight is constructed as weighted average of contrast, saturation and well-exposedness measures.
+   /// The resulting image doesn't require tonemapping and can be converted to 8-bit image by multiplying by 255, but it's recommended to apply gamma correction and/or linear tonemapping.
+   /// </summary>
    public class MergeMertens : MergeExposures
    {
-      public MergeMertens(float contrastWeight, float saturationWeight, float exposureWeight)
+      /// <summary>
+      /// Creates MergeMertens object.
+      /// </summary>
+      /// <param name="contrastWeight">contrast measure weight.</param>
+      /// <param name="saturationWeight">saturation measure weight</param>
+      /// <param name="exposureWeight">well-exposedness measure weight</param>
+      public MergeMertens(float contrastWeight = 1.0f, float saturationWeight=1.0f, float exposureWeight=0.0f)
       {
          _ptr = CvInvoke.cveMergeMertensCreate(contrastWeight, saturationWeight, exposureWeight, ref _mergeExposuresPtr);
       }
@@ -82,8 +97,14 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// The resulting HDR image is calculated as weighted average of the exposures considering exposure values and camera response
+   /// </summary>
    public class MergeRobertson : MergeExposures
    {
+      /// <summary>
+      /// Creates MergeRobertson object.
+      /// </summary>
       public MergeRobertson()
       {
          _ptr = CvInvoke.cveMergeRobertsonCreate(ref _mergeExposuresPtr);

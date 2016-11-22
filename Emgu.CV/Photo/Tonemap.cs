@@ -12,7 +12,10 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
-   
+
+   /// <summary>
+   /// Base class for tonemapping algorithms - tools that are used to map HDR image to 8-bit range.
+   /// </summary>
    public class Tonemap : UnmanagedObject
    {
       /// <summary>
@@ -26,8 +29,12 @@ namespace Emgu.CV
       protected Tonemap()
       {
       }
-      
-      public Tonemap(float gamma)
+
+      /// <summary>
+      /// Creates simple linear mapper with gamma correction.
+      /// </summary>
+      /// <param name="gamma">positive value for gamma correction. Gamma value of 1.0 implies no correction, gamma equal to 2.2f is suitable for most displays. Generally gamma &gt; 1 brightens the image and gamma &lt; 1 darkens it.</param>
+      public Tonemap(float gamma=1.0f)
       {
          _ptr = CvInvoke.cveTonemapCreate(gamma);
          _tonemapPtr = _ptr;
@@ -52,9 +59,19 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// Adaptive logarithmic mapping is a fast global tonemapping algorithm that scales the image in logarithmic domain.
+   /// Since it's a global operator the same function is applied to all the pixels, it is controlled by the bias parameter.
+   /// </summary>
    public class TonemapDrago : Tonemap
    {
-      public TonemapDrago(float gamma, float saturation, float bias)
+      /// <summary>
+      /// Creates TonemapDrago object.
+      /// </summary>
+      /// <param name="gamma">gamma value for gamma correction.</param>
+      /// <param name="saturation">positive saturation enhancement value. 1.0 preserves saturation, values greater than 1 increase saturation and values less than 1 decrease it.</param>
+      /// <param name="bias">	value for bias function in [0, 1] range. Values from 0.7 to 0.9 usually give best results, default value is 0.85.</param>
+      public TonemapDrago(float gamma=1.0f, float saturation = 1.0f, float bias=0.85f)
       {
          _ptr = CvInvoke.cveTonemapDragoCreate(gamma, saturation, bias, ref _tonemapPtr);
       }
@@ -70,9 +87,21 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// This algorithm decomposes image into two layers: base layer and detail layer using bilateral filter and compresses contrast of the base layer thus preserving all the details.
+   /// This implementation uses regular bilateral filter from opencv.
+   /// </summary>
    public class TonemapDurand : Tonemap
    {
-      public TonemapDurand(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor)
+      /// <summary>
+      /// Creates TonemapDurand object.
+      /// </summary>
+      /// <param name="gamma">gamma value for gamma correction. </param>
+      /// <param name="contrast">resulting contrast on logarithmic scale, i. e. log(max / min), where max and min are maximum and minimum luminance values of the resulting image.</param>
+      /// <param name="saturation">saturation enhancement value. </param>
+      /// <param name="sigmaSpace">bilateral filter sigma in color space</param>
+      /// <param name="sigmaColor">bilateral filter sigma in coordinate space</param>
+      public TonemapDurand(float gamma=1.0f, float contrast=4.0f, float saturation=1.0f, float sigmaSpace=2.0f, float sigmaColor=2.0f)
       {
          _ptr = CvInvoke.cveTonemapDurandCreate(gamma, contrast, saturation, sigmaSpace, sigmaColor, ref _tonemapPtr);
       }
@@ -88,9 +117,20 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// This is a global tonemapping operator that models human visual system.
+   /// Mapping function is controlled by adaptation parameter, that is computed using light adaptation and color adaptation.
+   /// </summary>
    public class TonemapReinhard : Tonemap
    {
-      public TonemapReinhard(float gamma, float intensity, float lightAdapt, float colorAdapt)
+      /// <summary>
+      /// Creates TonemapReinhard object.
+      /// </summary>
+      /// <param name="gamma">gamma value for gamma correction</param>
+      /// <param name="intensity">result intensity in [-8, 8] range. Greater intensity produces brighter results.</param>
+      /// <param name="lightAdapt">light adaptation in [0, 1] range. If 1 adaptation is based only on pixel value, if 0 it's global, otherwise it's a weighted mean of this two cases.</param>
+      /// <param name="colorAdapt">chromatic adaptation in [0, 1] range. If 1 channels are treated independently, if 0 adaptation level is the same for each channel.</param>
+      public TonemapReinhard(float gamma=1.0f, float intensity=0.0f, float lightAdapt=1.0f, float colorAdapt=0.0f)
       {
          _ptr = CvInvoke.cveTonemapReinhardCreate(gamma, intensity, lightAdapt, colorAdapt, ref _tonemapPtr);
       }
@@ -106,9 +146,18 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// This algorithm transforms image to contrast using gradients on all levels of gaussian pyramid, transforms contrast values to HVS response and scales the response. After this the image is reconstructed from new contrast values.
+   /// </summary>
    public class TonemapMantiuk : Tonemap
    {
-      public TonemapMantiuk(float gamma, float scale, float saturation)
+      /// <summary>
+      /// Creates TonemapMantiuk object
+      /// </summary>
+      /// <param name="gamma">gamma value for gamma correction.</param>
+      /// <param name="scale">contrast scale factor. HVS response is multiplied by this parameter, thus compressing dynamic range. Values from 0.6 to 0.9 produce best results.</param>
+      /// <param name="saturation">saturation enhancement value.</param>
+      public TonemapMantiuk(float gamma=1.0f, float scale=0.7f, float saturation=1.0f)
       {
          _ptr = CvInvoke.cveTonemapMantiukCreate(gamma, scale, saturation, ref _tonemapPtr);
       }
