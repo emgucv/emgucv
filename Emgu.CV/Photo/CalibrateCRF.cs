@@ -18,7 +18,7 @@ namespace Emgu.CV
    public abstract class CalibrateCRF : UnmanagedObject
    {
       /// <summary>
-      /// The pointer the the calibrateCRF object
+      /// The pointer to the calibrateCRF object
       /// </summary>
       protected IntPtr _calibrateCRFPtr;
 
@@ -47,9 +47,18 @@ namespace Emgu.CV
       }
    }
 
+   /// <summary>
+   /// Inverse camera response function is extracted for each brightness value by minimizing an objective function as linear system. Objective function is constructed using pixel values on the same position in all images, extra term is added to make the result smoother.
+   /// </summary>
    public class CalibrateDebevec : CalibrateCRF
    {
-      public CalibrateDebevec(int samples, float lambda, bool random)
+      /// <summary>
+      /// Creates CalibrateDebevec object.
+      /// </summary>
+      /// <param name="samples">Number of pixel locations to use</param>
+      /// <param name="lambda">Smoothness term weight. Greater values produce smoother results, but can alter the response.</param>
+      /// <param name="random">If true sample pixel locations are chosen at random, otherwise the form a rectangular grid.</param>
+      public CalibrateDebevec(int samples = 70, float lambda = 10.0f, bool random = false)
       {
          _ptr = CvInvoke.cveCalibrateDebevecCreate(samples, lambda, random, ref _calibrateCRFPtr);
       }
@@ -77,7 +86,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="maxIter">maximal number of Gauss-Seidel solver iterations.</param>
       /// <param name="threshold">get difference between results of two successive steps of the minimization.</param>
-      public CalibrateRobertson(int maxIter, float threshold)
+      public CalibrateRobertson(int maxIter = 30, float threshold = 0.01f)
       {
          _ptr = CvInvoke.cveCalibrateRobertsonCreate(maxIter, threshold, ref _calibrateCRFPtr);
       }

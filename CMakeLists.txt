@@ -1073,7 +1073,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
 	PATTERN "Android" EXCLUDE
 	PATTERN "iOS" EXCLUDE
 	PATTERN "Windows.Store" EXCLUDE
-	PATTERN "VS2013-2015" EXCLUDE
+	PATTERN "Windows.Desktop" EXCLUDE
 	PATTERN "CrossPlatform" EXCLUDE
 	)
    ENDIF()
@@ -1093,7 +1093,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
 	PATTERN "Android" EXCLUDE
 	PATTERN "iOS" EXCLUDE
 	PATTERN "Windows.Phone" EXCLUDE
-	PATTERN "VS2013-2015" EXCLUDE
+	PATTERN "Windows.Desktop" EXCLUDE
 	PATTERN "CrossPlatform" EXCLUDE
 	)  
       INSTALL(
@@ -1108,7 +1108,7 @@ uninstallDebuggerVisualizer4${vs_version}Done:
 	PATTERN "Android" EXCLUDE
 	PATTERN "iOS" EXCLUDE
 	PATTERN "Windows.Phone" EXCLUDE
-	PATTERN "VS2013-2015" EXCLUDE
+	PATTERN "Windows.Desktop" EXCLUDE
 	PATTERN "CrossPlatform" EXCLUDE
 	)
    ENDIF()
@@ -1266,9 +1266,9 @@ uninstallDebuggerVisualizer4${vs_version}Done:
   # ----------------------------------------------------------------------------
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\" ")
   
-  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2013 - 2015 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\VS2013-2015\\\\Emgu.CV.Example.sln\\\" ")	
+  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2013 - 2017 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\Windows.Desktop\\\\Emgu.CV.Example.sln\\\" ")	
   
-  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2013 - 2015 Examples.lnk\\\" ")
+  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2013 - 2017 Examples.lnk\\\" ")
   
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\nRMDir  \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\" ")
   
