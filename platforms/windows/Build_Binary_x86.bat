@@ -148,6 +148,7 @@ REM Find cuda. Use latest Cuda release for 64 bit and Cuda 6.5 for 32bit
 REM We cannot use latest Cuda release for 32 bit because the 32bit version of npp has been depreciated from Cuda 7
 IF "%OS_MODE%"==" Win64" (
 SET CUDA_SDK_DIR=%CUDA_PATH%
+IF NOT EXIST %CUDA_SDK_DIR% SET CUDA_SDK_DIR=%CUDA_PATH_V8_0%
 ) ELSE (
 SET CUDA_SDK_DIR=%CUDA_PATH_V6_5%
 )
