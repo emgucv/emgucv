@@ -298,12 +298,21 @@ namespace Emgu.CV
         }
     }
 
-
+    /// <summary>
+    /// This 3D Widget defines a cube.
+    /// </summary>
     public class WCube : UnmanagedObject, IWidget3D
     {
         private IntPtr _widgetPtr;
         private IntPtr _widget3dPtr;
 
+        /// <summary>
+        /// Constructs a WCube.
+        /// </summary>
+        /// <param name="minPoint">Specifies minimum point of the bounding box.</param>
+        /// <param name="maxPoint">Specifies maximum point of the bounding box.</param>
+        /// <param name="wireFrame">If true, cube is represented as wireframe.</param>
+        /// <param name="color">Color of the cube.</param>
         public WCube(MCvPoint3D64f minPoint, MCvPoint3D64f maxPoint, bool wireFrame, MCvScalar color)
         {
             _ptr = CvInvoke.cveWCubeCreate(ref minPoint, ref maxPoint, wireFrame, ref color, ref _widget3dPtr, ref _widgetPtr);
@@ -337,12 +346,23 @@ namespace Emgu.CV
         }
     }
 
+    /// <summary>
+    /// This 3D Widget defines a cylinder.
+    /// </summary>
     public class WCylinder : UnmanagedObject, IWidget3D
     {
         private IntPtr _widgetPtr;
         private IntPtr _widget3dPtr;
 
-        public WCylinder(ref MCvPoint3D64f axisPoint1, ref MCvPoint3D64f axisPoint2, double radius, int numsides, ref MCvScalar color)
+        /// <summary>
+        /// Constructs a WCylinder.
+        /// </summary>
+        /// <param name="axisPoint1">A point1 on the axis of the cylinder.</param>
+        /// <param name="axisPoint2">A point2 on the axis of the cylinder.</param>
+        /// <param name="radius">Radius of the cylinder.</param>
+        /// <param name="numsides">Resolution of the cylinder.</param>
+        /// <param name="color">Color of the cylinder.</param>
+        public WCylinder(ref MCvPoint3D64f axisPoint1, MCvPoint3D64f axisPoint2, double radius, int numsides, MCvScalar color)
         {
             _ptr = CvInvoke.cveWCylinderCreate(ref axisPoint1, ref axisPoint2, radius, numsides, ref color, ref _widget3dPtr, ref _widgetPtr);
         }
@@ -375,16 +395,33 @@ namespace Emgu.CV
         }
     }
 
+    /// <summary>
+    /// This 3D Widget defines a circle.
+    /// </summary>
     public class WCircle : UnmanagedObject, IWidget3D
     {
         private IntPtr _widgetPtr;
         private IntPtr _widget3dPtr;
 
+        /// <summary>
+        /// Constructs default planar circle centred at origin with plane normal along z-axis.
+        /// </summary>
+        /// <param name="radius">Radius of the circle.</param>
+        /// <param name="thickness">Thickness of the circle.</param>
+        /// <param name="color">Color of the circle.</param>
         public WCircle(double radius, double thickness, MCvScalar color)
         {
             _ptr = CvInvoke.cveWCircleCreateAtOrigin(radius, thickness, ref color, ref _widget3dPtr, ref _widgetPtr);
         }
 
+        /// <summary>
+        /// Constructs repositioned planar circle.
+        /// </summary>
+        /// <param name="radius">Radius of the circle.</param>
+        /// <param name="center">Center of the circle.</param>
+        /// <param name="normal">Normal of the plane in which the circle lies.</param>
+        /// <param name="thickness">Thickness of the circle.</param>
+        /// <param name="color">Color of the circle.</param>
         public WCircle(double radius, MCvPoint3D64f center, MCvPoint3D64f normal, double thickness, MCvScalar color)
         {
             _ptr = CvInvoke.cveWCircleCreate(radius, ref center, ref normal, thickness, ref color, ref _widget3dPtr, ref _widgetPtr);
@@ -418,16 +455,34 @@ namespace Emgu.CV
         }
     }
 
+    /// <summary>
+    /// This 3D Widget defines a cone.
+    /// </summary>
     public class WCone : UnmanagedObject, IWidget3D
     {
         private IntPtr _widgetPtr;
         private IntPtr _widget3dPtr;
 
+        /// <summary>
+        /// Constructs default cone oriented along x-axis with center of its base located at origin.
+        /// </summary>
+        /// <param name="length">Length of the cone.</param>
+        /// <param name="radius">Radius of the cone.</param>
+        /// <param name="resolution">Resolution of the cone.</param>
+        /// <param name="color">Color of the cone.</param>
         public WCone(double length, double radius, int resolution, MCvScalar color)
         {
             _ptr = CvInvoke.cveWConeCreateAtOrigin(length, radius, resolution, ref color, ref _widget3dPtr, ref _widgetPtr);
         }
 
+        /// <summary>
+        /// Constructs repositioned planar cone.
+        /// </summary>
+        /// <param name="radius">Radius of the cone.</param>
+        /// <param name="center">Center of the cone base.</param>
+        /// <param name="tip">Tip of the cone.</param>
+        /// <param name="resolution">Resolution of the cone.</param>
+        /// <param name="color">Color of the cone.</param>
         public WCone(double radius, MCvPoint3D64f center, MCvPoint3D64f tip, int resolution, MCvScalar color)
         {
             _ptr = CvInvoke.cveWConeCreate(radius, ref center, ref tip, resolution, ref color, ref _widget3dPtr, ref _widgetPtr);
@@ -461,11 +516,21 @@ namespace Emgu.CV
         }
     }
 
+    /// <summary>
+    /// This 3D Widget defines an arrow.
+    /// </summary>
     public class WArrow : UnmanagedObject, IWidget3D
     {
         private IntPtr _widgetPtr;
         private IntPtr _widget3dPtr;
 
+        /// <summary>
+        /// Constructs an WArrow.
+        /// </summary>
+        /// <param name="pt1">Start point of the arrow.</param>
+        /// <param name="pt2">End point of the arrow.</param>
+        /// <param name="thickness">Thickness of the arrow. Thickness of arrow head is also adjusted accordingly.</param>
+        /// <param name="color">Color of the arrow.</param>
         public WArrow(MCvPoint3D64f pt1, MCvPoint3D64f pt2, double thickness, MCvScalar color)
         {
             _ptr = CvInvoke.cveWArrowCreate(ref pt1, ref pt2, thickness, ref color, ref _widget3dPtr, ref _widgetPtr);
@@ -575,6 +640,13 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveReadCloud(IntPtr file, IntPtr cloud, IntPtr colors, IntPtr normals);
 
+        /// <summary>
+        /// Write point cloud to file
+        /// </summary>
+        /// <param name="file">The point cloud file name</param>
+        /// <param name="cloud">The point cloud</param>
+        /// <param name="colors">The color</param>
+        /// <param name="normals">The normals</param>
         public static void WriteCloud(String file, IInputArray cloud, IInputArray colors = null, IInputArray normals = null)
         {
             using (CvString cs = new CvString(file))

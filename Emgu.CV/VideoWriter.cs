@@ -66,11 +66,11 @@ namespace Emgu.CV
         /// <summary>
         /// Generate 4-character code of codec used to compress the frames. For example, CV_FOURCC('P','I','M','1') is MPEG-1 codec, CV_FOURCC('M','J','P','G') is motion-jpeg codec etc.
         /// </summary>
-        /// <param name="c1"></param>
-        /// <param name="c2"></param>
-        /// <param name="c3"></param>
-        /// <param name="c4"></param>
-        /// <returns></returns>
+        /// <param name="c1">C1</param>
+        /// <param name="c2">C2</param>
+        /// <param name="c3">C3</param>
+        /// <param name="c4">C4</param>
+        /// <returns>The integer value calculated from the four cc code</returns>
         public static int Fourcc(char c1, char c2, char c3, char c4)
         {
             return CvInvoke.cveVideoWriterFourcc(c1, c2, c3, c4);

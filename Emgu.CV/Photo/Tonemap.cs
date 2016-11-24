@@ -54,6 +54,9 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this Tonemap
+        /// </summary>
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
@@ -81,6 +84,9 @@ namespace Emgu.CV
             _ptr = CvInvoke.cveTonemapDragoCreate(gamma, saturation, bias, ref _tonemapPtr);
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this TonemapDrago
+        /// </summary>
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
@@ -111,6 +117,9 @@ namespace Emgu.CV
             _ptr = CvInvoke.cveTonemapDurandCreate(gamma, contrast, saturation, sigmaSpace, sigmaColor, ref _tonemapPtr);
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this TonemapDurand
+        /// </summary>
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
@@ -140,6 +149,9 @@ namespace Emgu.CV
             _ptr = CvInvoke.cveTonemapReinhardCreate(gamma, intensity, lightAdapt, colorAdapt, ref _tonemapPtr);
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this TonemapReinhard
+        /// </summary>
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
@@ -167,6 +179,9 @@ namespace Emgu.CV
             _ptr = CvInvoke.cveTonemapMantiukCreate(gamma, scale, saturation, ref _tonemapPtr);
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this TonemapMantiuk
+        /// </summary>
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
