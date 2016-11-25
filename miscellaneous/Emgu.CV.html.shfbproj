@@ -40,7 +40,7 @@
     <FooterText>For questions and discussions please visit http://www.emgu.com/forum</FooterText>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\Solution\VS2013-2015\Emgu.CV.sln" />
+      <DocumentationSource sourceFile="..\Solution\Windows.Desktop\Emgu.CV.sln" />
     </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="True">Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. The wrapper can be compiled in Mono and run on Windows, Linux, Mac OS X, iPhone, iPad and Android devices.</NamespaceSummaryItem>
