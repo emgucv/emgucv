@@ -26,8 +26,12 @@ namespace Emgu.CV
         /// <summary>
         /// Default constructor that creates empty Tonemap
         /// </summary>
-        protected Tonemap()
+        /// <param name="ptr">The pointer to the unmanaged object</param>
+        /// <param name="tonemapPtr">The pointer to the tonemap object</param>
+        protected Tonemap(IntPtr ptr, IntPtr tonemapPtr)
         {
+            _ptr = ptr;
+            _tonemapPtr = tonemapPtr;
         }
 
         /// <summary>
@@ -80,6 +84,7 @@ namespace Emgu.CV
         /// <param name="saturation">positive saturation enhancement value. 1.0 preserves saturation, values greater than 1 increase saturation and values less than 1 decrease it.</param>
         /// <param name="bias">	value for bias function in [0, 1] range. Values from 0.7 to 0.9 usually give best results, default value is 0.85.</param>
         public TonemapDrago(float gamma = 1.0f, float saturation = 1.0f, float bias = 0.85f)
+            :base(IntPtr.Zero, IntPtr.Zero)
         {
             _ptr = CvInvoke.cveTonemapDragoCreate(gamma, saturation, bias, ref _tonemapPtr);
         }
@@ -113,6 +118,7 @@ namespace Emgu.CV
         /// <param name="sigmaSpace">bilateral filter sigma in color space</param>
         /// <param name="sigmaColor">bilateral filter sigma in coordinate space</param>
         public TonemapDurand(float gamma = 1.0f, float contrast = 4.0f, float saturation = 1.0f, float sigmaSpace = 2.0f, float sigmaColor = 2.0f)
+            : base(IntPtr.Zero, IntPtr.Zero)
         {
             _ptr = CvInvoke.cveTonemapDurandCreate(gamma, contrast, saturation, sigmaSpace, sigmaColor, ref _tonemapPtr);
         }
@@ -145,6 +151,7 @@ namespace Emgu.CV
         /// <param name="lightAdapt">light adaptation in [0, 1] range. If 1 adaptation is based only on pixel value, if 0 it's global, otherwise it's a weighted mean of this two cases.</param>
         /// <param name="colorAdapt">chromatic adaptation in [0, 1] range. If 1 channels are treated independently, if 0 adaptation level is the same for each channel.</param>
         public TonemapReinhard(float gamma = 1.0f, float intensity = 0.0f, float lightAdapt = 1.0f, float colorAdapt = 0.0f)
+            : base(IntPtr.Zero, IntPtr.Zero)
         {
             _ptr = CvInvoke.cveTonemapReinhardCreate(gamma, intensity, lightAdapt, colorAdapt, ref _tonemapPtr);
         }
@@ -175,6 +182,7 @@ namespace Emgu.CV
         /// <param name="scale">contrast scale factor. HVS response is multiplied by this parameter, thus compressing dynamic range. Values from 0.6 to 0.9 produce best results.</param>
         /// <param name="saturation">saturation enhancement value.</param>
         public TonemapMantiuk(float gamma = 1.0f, float scale = 0.7f, float saturation = 1.0f)
+            : base(IntPtr.Zero, IntPtr.Zero)
         {
             _ptr = CvInvoke.cveTonemapMantiukCreate(gamma, scale, saturation, ref _tonemapPtr);
         }
