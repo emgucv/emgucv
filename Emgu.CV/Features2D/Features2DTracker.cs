@@ -162,9 +162,9 @@ namespace Emgu.CV.Features2D
                mask.CopyTo(m);
                for (int i = 0; i < mArr.Length; i++)
                {
-                  if (maskData[i] != 0 && (mArr[i][0].Distance / mArr[i][1].Distance) <= uniquenessThreshold)
+                  if (maskData[i] != 0 && (mArr[i][0].Distance / mArr[i][1].Distance) > uniquenessThreshold)
                   {
-                     maskData[i] = (byte)255;
+                     maskData[i] = (byte)0;
                   }
                }
 
