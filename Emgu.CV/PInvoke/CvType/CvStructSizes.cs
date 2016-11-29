@@ -58,14 +58,7 @@ namespace Emgu.CV.Structure
       /// The size of CvTermCriteria
       /// </summary>
       public int CvTermCriteria;
-      /// <summary>
-      /// The size of CvSeq
-      /// </summary>
-      public int CvSeq;
-      /// <summary>
-      /// The size of CvContour
-      /// </summary>
-      public int CvContour;
+
       /// <summary>
       /// The size of IplImage
       /// </summary>

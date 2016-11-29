@@ -34,7 +34,7 @@ namespace Emgu.CV.Tracking
       /// Initialize the tracker with a know bounding box that surrounding the target.
       /// </summary>
       /// <param name="image">The initial frame</param>
-      /// <param name="boundingBox">The initial boundig box</param>
+      /// <param name="boundingBox">The initial bounding box</param>
       /// <returns></returns>
       public bool Init(Mat image, Rectangle boundingBox)
       {
@@ -45,7 +45,7 @@ namespace Emgu.CV.Tracking
       /// Update the tracker, find the new most likely bounding box for the target.
       /// </summary>
       /// <param name="image">The current frame</param>
-      /// <param name="boundingBox">The boundig box that represent the new target location, if true was returned, not modified otherwise</param>
+      /// <param name="boundingBox">The bounding box that represent the new target location, if true was returned, not modified otherwise</param>
       /// <returns>True means that target was located and false means that tracker cannot locate target in current frame. Note, that latter does not imply that tracker has failed, maybe target is indeed missing from the frame (say, out of sight)</returns>
       public bool Update(Mat image, out Rectangle boundingBox)
       {

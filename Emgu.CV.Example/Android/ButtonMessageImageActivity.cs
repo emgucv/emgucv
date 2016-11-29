@@ -179,21 +179,21 @@ namespace AndroidExamples
          _clickButton = new Button(this);
          _clickButton.Text = _buttonText;
          _clickButton.LayoutParameters = new ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.FillParent,
+            ViewGroup.LayoutParams.MatchParent,
             ViewGroup.LayoutParams.WrapContent);
 
          _messageText = new TextView(this);
-         _messageText.SetTextAppearance(this, Android.Resource.Attribute.TextAppearanceSmall);
+         _messageText.SetTextAppearance(Android.Resource.Attribute.TextAppearanceSmall);
          _imageView = new ImageView(this);
          _imageView.LayoutParameters = new ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.FillParent,
+            ViewGroup.LayoutParams.MatchParent,
             ViewGroup.LayoutParams.MatchParent);
 
          LinearLayout layout = new LinearLayout(this);
          layout.Orientation = Orientation.Vertical;
          layout.LayoutParameters = new ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.FillParent,
-            ViewGroup.LayoutParams.FillParent);
+            ViewGroup.LayoutParams.MatchParent,
+            ViewGroup.LayoutParams.MatchParent);
 
          layout.AddView(_clickButton);
          layout.AddView(_messageText);

@@ -13,7 +13,7 @@ cv::cuda::Filter* cudaCreateSobelFilter(int srcType, int dstType,  int dx, int d
    return ptr.get();
 }
 
-cv::cuda::Filter* cudaCreateGaussianFilter(int srcType, int dstType, emgu::size* ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType)
+cv::cuda::Filter* cudaCreateGaussianFilter(int srcType, int dstType, CvSize* ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType)
 {
    cv::Size s(ksize->width, ksize->height);
    cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createGaussianFilter(srcType, dstType, s, sigma1, sigma2, rowBorderType, columnBorderType); 
@@ -42,7 +42,7 @@ cv::cuda::Filter* cudaCreateBoxFilter(int srcType, int dstType, CvSize* ksize, C
    return ptr.get();
 }
 
-cv::cuda::Filter* cudaCreateBoxMaxFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue)
+cv::cuda::Filter* cudaCreateBoxMaxFilter( int srcType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue)
 {
    cv::Size s(ksize->width, ksize->height);
    cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createBoxMaxFilter(srcType, s, *anchor, borderMode, *borderValue);
@@ -50,7 +50,7 @@ cv::cuda::Filter* cudaCreateBoxMaxFilter( int srcType, emgu::size* ksize, CvPoin
    return ptr.get();
 }
 
-cv::cuda::Filter* cudaCreateBoxMinFilter( int srcType, emgu::size* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue)
+cv::cuda::Filter* cudaCreateBoxMinFilter( int srcType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue)
 {
    cv::Size s(ksize->width, ksize->height);
    cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createBoxMinFilter(srcType, s, *anchor, borderMode, *borderValue);

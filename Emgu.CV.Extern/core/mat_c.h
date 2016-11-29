@@ -27,7 +27,7 @@ CVAPI(cv::Mat*) cveMatCreateFromRect(cv::Mat* mat, CvRect* roi);
 CVAPI(cv::Mat*) cveMatCreateFromRange(cv::Mat* mat, cv::Range* rowRange, cv::Range* colRange);
  
 CVAPI(void) cveMatRelease(cv::Mat** mat);
-CVAPI(emgu::size) cveMatGetSize(cv::Mat* mat);
+CVAPI(void) cveMatGetSize(cv::Mat* mat, CvSize* size);
 CVAPI(void) cveMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask);
 CVAPI(cv::Mat*) cveArrToMat(CvArr* cvArray, bool copyData, bool allowND, int coiMode);
 CVAPI(IplImage*) cveMatToIplImage(cv::Mat* mat);

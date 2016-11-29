@@ -11,7 +11,7 @@ CvErrorCallback cveRedirectError(CvErrorCallback error_handler, void* userdata, 
    return cvRedirectError(error_handler, userdata, prev_userdata);
 }
 
-int  cveGetErrMode()
+int cveGetErrMode()
 {
    return cvGetErrMode();
 }

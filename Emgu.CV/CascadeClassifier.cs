@@ -18,15 +18,15 @@ namespace Emgu.CV
    {
 
       /// <summary>
-      /// A dummy constructor that mainly aimed for those who would like to inherite this class
+      /// Create a cascade classifier
       /// </summary>
       public CascadeClassifier()
       {
          _ptr = CvInvoke.cveCascadeClassifierCreate();
       }
 
-      ///<summary> Create a CascadeClassifier from the specific file</summary>
-      ///<param name="fileName"> The name of the file that contains the CascadeClassifier</param>
+      ///<summary>Create a CascadeClassifier from the specific file</summary>
+      ///<param name="fileName">The name of the file that contains the CascadeClassifier</param>
       public CascadeClassifier(String fileName)
       {
 #if !NETFX_CORE

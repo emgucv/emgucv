@@ -13,10 +13,10 @@ void cudaHOGGetDefaultPeopleDetector(cv::cuda::HOG* descriptor, cv::Mat* detecto
 }
 
 cv::cuda::HOG* cudaHOGCreate(
-   emgu::size* winSize, 
-   emgu::size* blockSize, 
-   emgu::size* blockStride,
-   emgu::size* cellSize, 
+   CvSize* winSize, 
+   CvSize* blockSize, 
+   CvSize* blockStride,
+   CvSize* cellSize, 
    int nbins)
 {
    cv::Size _winSize(winSize->width, winSize->height);
@@ -99,14 +99,14 @@ void cudaHOGSetScaleFactor(cv::cuda::HOG* descriptor, double scaleFactor)
    descriptor->setScaleFactor(scaleFactor);
 }
 
-void cudaHOGGetWinStride(cv::cuda::HOG* descriptor, emgu::size* winStride)
+void cudaHOGGetWinStride(cv::cuda::HOG* descriptor, CvSize* winStride)
 {
    CvSize s = descriptor->getWinStride();
    winStride->width = s.width;
    winStride->height = s.height;
 }
 
-void cudaHOGSetWinStride(cv::cuda::HOG* descriptor, emgu::size* winStride)
+void cudaHOGSetWinStride(cv::cuda::HOG* descriptor, CvSize* winStride)
 {
    CvSize s = cvSize(winStride->width, winStride->height);
    descriptor->setWinStride(s); 

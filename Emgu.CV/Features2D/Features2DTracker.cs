@@ -34,7 +34,7 @@ namespace Emgu.CV.Features2D
             VectorOfKeyPoint keypoints,
             IInputOutputArray outImage,
             Bgr color,
-            Features2DToolbox.KeypointDrawType type)
+            Features2DToolbox.KeypointDrawType type = KeypointDrawType.Default)
          {
             MCvScalar c = color.MCvScalar;
             using (InputArray iaImage = image.GetInputArray())

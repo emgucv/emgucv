@@ -18,12 +18,9 @@ void cveGetCvStructSizes(emgu::cvStructSizes* sizes)
    sizes->CvBox2D = sizeof(CvBox2D);
    sizes->CvMat = sizeof(CvMat);
    sizes->CvMatND = sizeof(CvMatND);
-   //sizes->CvHistogram = sizeof(CvHistogram);
    sizes->CvTermCriteria = sizeof(CvTermCriteria);
-   sizes->CvSeq = sizeof(CvSeq);
-   sizes->CvContour = sizeof(CvContour);
    sizes->IplImage = sizeof(IplImage);
-   //sizes->ERStat = sizeof(cv::text::ERStat);   
+   
 }
 
 void testDrawLine(IplImage* img, int startX, int startY, int endX, int endY, CvScalar c)

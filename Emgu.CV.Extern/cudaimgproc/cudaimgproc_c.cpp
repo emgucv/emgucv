@@ -105,7 +105,7 @@ void cudaCornernessCriteriaRelease(cv::cuda::CornernessCriteria** detector)
 //  CudaCLAHE
 //
 //----------------------------------------------------------------------------
-cv::cuda::CLAHE* cudaCLAHECreate(double clipLimit, emgu::size* tileGridSize)
+cv::cuda::CLAHE* cudaCLAHECreate(double clipLimit, CvSize* tileGridSize)
 {
    cv::Size s(tileGridSize->width, tileGridSize->height);
    cv::Ptr<cv::cuda::CLAHE> ptr = cv::cuda::createCLAHE(clipLimit, s);
@@ -169,7 +169,7 @@ void cudaCornersDetectorRelease(cv::cuda::CornersDetector** detector)
 //  GpuTemplateMatching
 //
 //----------------------------------------------------------------------------
-cv::cuda::TemplateMatching* cudaTemplateMatchingCreate(int srcType, int method, emgu::size* blockSize)
+cv::cuda::TemplateMatching* cudaTemplateMatchingCreate(int srcType, int method, CvSize* blockSize)
 {
    cv::Size s(blockSize->width, blockSize->height);
 	cv::Ptr<cv::cuda::TemplateMatching> ptr = cv::cuda::createTemplateMatching(srcType, method, s);

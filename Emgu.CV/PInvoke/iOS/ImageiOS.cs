@@ -17,12 +17,18 @@ namespace Emgu.CV
       where TColor : struct, IColor
       where TDepth : new()
    {
+      /// <summary>
+      /// Creating an Image from the CGImage
+      /// </summary>
       public Image(CGImage cgImage)
          : this( (int) cgImage.Width, (int) cgImage.Height)
       {
          ConvertFromCGImage(cgImage);
       }
 
+      /// <summary>
+      /// Copy the data from the CGImage to the current Image object
+      /// </summary>
       private void ConvertFromCGImage(CGImage cgImage)
       {
          //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
@@ -45,11 +51,17 @@ namespace Emgu.CV
          }
       }
 
+      /// <summary>
+      /// Creating an Image from the UIImage
+      /// </summary>
       public Image(UIImage uiImage)
          : this (uiImage.CGImage)
       {
       }
 
+      /// <summary>
+      /// Convert this Image object to UIImage
+      /// </summary>
       public UIImage ToUIImage()
       {
          //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
