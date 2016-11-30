@@ -44,16 +44,16 @@ IF "%2"=="" GOTO TEST_INPLACE
 rm -rf tmp
 mkdir tmp
 unzip "%2" -d tmp
-call %DEVENV% %BUILD_TYPE% tmp\Solution\VS2013-2015\Emgu.CV.Example.sln
+call %DEVENV% %BUILD_TYPE% tmp\Solution\Windows.Desktop\Emgu.CV.Example.sln
 
-call %DEVENV% %BUILD_TYPE% Solution\VS2013-2015\Emgu.CV.Test.sln
+call %DEVENV% %BUILD_TYPE% Solution\Windows.Desktop\Emgu.CV.Test.sln
 cp bin/Emgu.CV.Test.dll tmp/bin
 call %MSTEST% tmp\bin\Emgu.CV.Test.dll /Platform:%PLATFORM%
 GOTO END
 
 :TEST_INPLACE
-call %DEVENV% %BUILD_TYPE% Solution\VS2013-2015\Emgu.CV.Example.sln
-call %DEVENV% %BUILD_TYPE% Solution\VS2013-2015\Emgu.CV.Test.sln
+call %DEVENV% %BUILD_TYPE% Solution\Windows.Desktop\Emgu.CV.Example.sln
+call %DEVENV% %BUILD_TYPE% Solution\Windows.Desktop\Emgu.CV.Test.sln
 call %MSTEST% bin\Emgu.CV.Test.dll /Platform:%PLATFORM%
 
 :END

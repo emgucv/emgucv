@@ -39,7 +39,7 @@ cp -r ../../tmp/Emgu.CV.Shape ios-package/Emgu.CV.Shape
 cp -f ../../Emgu.CV.Shape/*.cs ios-package/Emgu.CV.Shape/
 
 cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
-cp -f ../../Emgu.CV.Contrib/Plot/VectorOf*.cs ios-package/Emgu.CV.Contrib/Plot
+cp -f ../../Emgu.CV.Contrib/Plot/*.cs ios-package/Emgu.CV.Contrib/Plot
 cp -f ../../Emgu.CV.Contrib/LineDescriptor/VectorOf*.cs ios-package/Emgu.CV.Contrib/LineDescriptor
 cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
 

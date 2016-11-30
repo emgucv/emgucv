@@ -454,7 +454,7 @@ namespace Emgu.CV.Test
                 //calculate the different of the value in f mat with 290
                 CvInvoke.AbsDiff(f, sa, absDiff);
                 int nonZeroCount = CvInvoke.CountNonZero(absDiff);
-                Console.WriteLine(String.Format("number of elements that is not 290: {0}", nonZeroCount));
+                //Console.WriteLine(String.Format("number of elements that is not 290: {0}", nonZeroCount));
             }
         }
 
