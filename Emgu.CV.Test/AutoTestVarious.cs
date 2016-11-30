@@ -315,10 +315,10 @@ namespace Emgu.CV.Test
             }*/
          }
 
-         int s1 = Marshal.SizeOf(typeof(MCvSeq));
-         int s2 = Marshal.SizeOf(typeof(MCvContour));
-         int sizeRect = Marshal.SizeOf(typeof(Rectangle));
-         EmguAssert.IsTrue(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)) == s2);
+         //int s1 = Marshal.SizeOf(typeof(MCvSeq));
+         //int s2 = Marshal.SizeOf(typeof(MCvContour));
+         //int sizeRect = Marshal.SizeOf(typeof(Rectangle));
+         //EmguAssert.IsTrue(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)) == s2);
       }
       
       [Test]
