@@ -92,6 +92,8 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   PATTERN "*.png"
   PATTERN "*.dll"
   PATTERN "*.json"
+  PATTERN "*.plist"
+  PATTERN "iTunesArtwork*"
   PATTERN ".git" EXCLUDE
   PATTERN "Debug" EXCLUDE
   PATTERN "Release" EXCLUDE  
@@ -110,6 +112,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   PATTERN "*.txt"
   PATTERN "*.png"
   PATTERN "*.dll"
+  PATTERN "*.plist"
   PATTERN ".git" EXCLUDE
   PATTERN "bin" EXCLUDE
   PATTERN "obj" EXCLUDE

@@ -75,14 +75,14 @@ namespace AndroidExamples
 			// aapt resource value: 0x7f060002
 			public const int AboutUsWebsiteTextView = 2131099650;
 			
-			// aapt resource value: 0x7f060018
-			public const int CameraPreiewRelativeLayout = 2131099672;
+			// aapt resource value: 0x7f06001b
+			public const int CameraPreiewRelativeLayout = 2131099675;
 			
-			// aapt resource value: 0x7f060010
-			public const int CameraPreviewCaptureImageButton = 2131099664;
+			// aapt resource value: 0x7f060013
+			public const int CameraPreviewCaptureImageButton = 2131099667;
 			
-			// aapt resource value: 0x7f06000f
-			public const int CameraPreviewSwitchCameraImageButton = 2131099663;
+			// aapt resource value: 0x7f060012
+			public const int CameraPreviewSwitchCameraImageButton = 2131099666;
 			
 			// aapt resource value: 0x7f06000c
 			public const int GotoCameraButton = 2131099660;
@@ -105,50 +105,59 @@ namespace AndroidExamples
 			// aapt resource value: 0x7f06000b
 			public const int GotoTrafficSignRecognitionButton = 2131099659;
 			
-			// aapt resource value: 0x7f06001c
-			public const int MyImage = 2131099676;
+			// aapt resource value: 0x7f06001f
+			public const int MyImage = 2131099679;
 			
-			// aapt resource value: 0x7f06001d
-			public const int PlanarSubdivisionImageView = 2131099677;
+			// aapt resource value: 0x7f060020
+			public const int PlanarSubdivisionImageView = 2131099680;
 			
-			// aapt resource value: 0x7f06001b
-			public const int RedrawSubdivisionButton = 2131099675;
-			
-			// aapt resource value: 0x7f060015
-			public const int cannyImageButton = 2131099669;
-			
-			// aapt resource value: 0x7f060011
-			public const int capturedImageButton = 2131099665;
-			
-			// aapt resource value: 0x7f060016
-			public const int colorMapImageButton = 2131099670;
-			
-			// aapt resource value: 0x7f060017
-			public const int distorImageButton = 2131099671;
-			
-			// aapt resource value: 0x7f060019
-			public const int openCVLicenseTextView = 2131099673;
-			
-			// aapt resource value: 0x7f06001a
-			public const int opencl_preference_radio_group = 2131099674;
-			
-			// aapt resource value: 0x7f060014
-			public const int previewImageButton = 2131099668;
+			// aapt resource value: 0x7f06001e
+			public const int RedrawSubdivisionButton = 2131099678;
 			
 			// aapt resource value: 0x7f06000d
-			public const int relativeLayout1 = 2131099661;
+			public const int button_message_image_layout_button = 2131099661;
 			
-			// aapt resource value: 0x7f060012
-			public const int relativeLayout2 = 2131099666;
+			// aapt resource value: 0x7f06000f
+			public const int button_message_image_layout_image = 2131099663;
 			
-			// aapt resource value: 0x7f060013
-			public const int relativeLayout3 = 2131099667;
+			// aapt resource value: 0x7f06000e
+			public const int button_message_image_layout_message = 2131099662;
+			
+			// aapt resource value: 0x7f060018
+			public const int cannyImageButton = 2131099672;
+			
+			// aapt resource value: 0x7f060014
+			public const int capturedImageButton = 2131099668;
+			
+			// aapt resource value: 0x7f060019
+			public const int colorMapImageButton = 2131099673;
+			
+			// aapt resource value: 0x7f06001a
+			public const int distorImageButton = 2131099674;
+			
+			// aapt resource value: 0x7f06001c
+			public const int openCVLicenseTextView = 2131099676;
+			
+			// aapt resource value: 0x7f06001d
+			public const int opencl_preference_radio_group = 2131099677;
+			
+			// aapt resource value: 0x7f060017
+			public const int previewImageButton = 2131099671;
+			
+			// aapt resource value: 0x7f060010
+			public const int relativeLayout1 = 2131099664;
+			
+			// aapt resource value: 0x7f060015
+			public const int relativeLayout2 = 2131099669;
+			
+			// aapt resource value: 0x7f060016
+			public const int relativeLayout3 = 2131099670;
 			
 			// aapt resource value: 0x7f060000
 			public const int textView1 = 2131099648;
 			
-			// aapt resource value: 0x7f06000e
-			public const int toolbarLayout = 2131099662;
+			// aapt resource value: 0x7f060011
+			public const int toolbarLayout = 2131099665;
 			
 			static Id()
 			{
@@ -170,19 +179,22 @@ namespace AndroidExamples
 			public const int AndroidExamples = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int CameraPreviewLayout = 2130903042;
+			public const int button_message_image_layout = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int LicenseDisplay = 2130903043;
+			public const int CameraPreviewLayout = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int opencl_preference = 2130903044;
+			public const int LicenseDisplay = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int PlanarSubdivision = 2130903045;
+			public const int opencl_preference = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int Setting = 2130903046;
+			public const int PlanarSubdivision = 2130903046;
+			
+			// aapt resource value: 0x7f030007
+			public const int Setting = 2130903047;
 			
 			static Layout()
 			{
