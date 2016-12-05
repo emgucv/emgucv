@@ -2,6 +2,8 @@
 #  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
+IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
+
 PROJECT(Example.HelloWorld)
 
 FILE(GLOB_RECURSE SRC_Example_HelloWorld RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
@@ -20,3 +22,5 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World Emgu.CV.UI)
 
 INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.${CS_EXECUTABLE_EXTENSION} DESTINATION bin COMPONENT emgucv_example_binary)
+
+ENDIF()
