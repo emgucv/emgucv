@@ -261,16 +261,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       ENDIF()
   ENDIF()
   
-  SET(EMGU_CV_REFERENCE 
-    -r:System.Xml.dll 
-    -r:System.Drawing.dll 
-    -r:System.Data.dll 
-    -r:System.Windows.Forms.dll
-    -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.World.dll" 
-    -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll")
-  add_subdirectory(HelloWorld)
-  
-  
   IF(NETFX_CORE)
   
   		INSTALL(
@@ -398,9 +388,15 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     COMPONENT emgucv_example_source
     )
   ELSE()
+    SET(EMGU_CV_REFERENCE 
+    -r:System.Xml.dll 
+    -r:System.Drawing.dll 
+    -r:System.Data.dll 
+    -r:System.Windows.Forms.dll
+    -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.World.dll" 
+    -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll")
     
-  
-    
+    add_subdirectory(HelloWorld)
     add_subdirectory(CameraCapture)
     add_subdirectory(PlanarSubdivision)
     add_subdirectory(ShapeDetection)
