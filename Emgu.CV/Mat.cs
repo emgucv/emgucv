@@ -16,7 +16,9 @@ using System.IO;
 #if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
 #elif __IOS__
+using CoreGraphics;
 using UIKit;
+#elif __UNIFIED__
 using CoreGraphics;
 #elif NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
@@ -246,14 +248,15 @@ namespace Emgu.CV
             }
 
             String extension = fi.Extension.ToLower();
-#if __IOS__
+#if __UNIFIED__
          //Open CV's libpng doesn't seem to be able to handle png in iOS
-         //Use UIImage to load png
+         //Use CGImage to load png
          if (extension.Equals(".png"))
          {
-            using (UIImage tmp = UIImage.FromFile(fileName))
+            using (CGDataProvider provider = new CGDataProvider(fileName))
+            using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
             {
-               ConvertFromCGImage(tmp.CGImage);
+               ConvertFromCGImage(tmp);
             }
             return;
          }
@@ -746,7 +749,7 @@ namespace Emgu.CV
             }
         }
 
-#if __ANDROID__ || __IOS__
+#if __ANDROID__ || __UNIFIED__
 #elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
@@ -975,7 +978,7 @@ namespace Emgu.CV
 
             if (e != null)
             {
-#if __IOS__ || NETFX_CORE || (UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
+#if __UNIFIED__ || NETFX_CORE || (UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
             throw e;
 #elif __ANDROID__
             FileInfo fileInfo = new FileInfo(fileName);
