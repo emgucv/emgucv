@@ -129,7 +129,7 @@
       </ItemGroup>
     </When>
     <!-- Windows phone 8.1 (x86) -->
-    <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')&#xD;&#xA;	AND '$(Platform)'=='x86'">
+    <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}') AND '$(Platform)'=='x86'">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows Phone 8.1 (x86)</EmguCVLinkTarget>
         <EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1_x86\cvextern.dll</EmguCVNativeFile>
@@ -163,6 +163,22 @@
         </Compile>
       </ItemGroup>
     </When>
+    <!-- Xamarin.Mac application (Note: do not work for Xamarin iOS for Visual Studio) -->
+    <When Condition="'$(TargetFrameworkIdentifier)'=='Xamarin.Mac'">
+      <PropertyGroup>
+        <EmguCVLinkTarget>Xamarin.Mac</EmguCVLinkTarget>
+        <EmguCVNativeFile>$(EmguCVDir)\..\bin\libcvextern.dylib</EmguCVNativeFile>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Mac Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)mac </EmguCVDeployMessage>
+      </PropertyGroup>
+    <ItemGroup>
+    <NativeReference Include="$(EmguCVNativeFile)">
+      <Kind>Dynamic</Kind>
+      <SmartLink>False</SmartLink>
+    </NativeReference>
+    </ItemGroup>
+    </When>
+
     <!-- IOS application (Note: do not work for Xamarin iOS for Visual Studio) -->
     <When Condition="(('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(Platform)'=='iPhone' OR '$(Platform)'=='iPhoneSimulator') AND '$(OutputType)' == 'Exe')">
       <PropertyGroup>
@@ -247,17 +263,7 @@
       </ItemGroup>
     </When>
     <!-- Windows Form Application -->
-    <When Condition="'$(EmguCVLinkTarget)'=='' AND (
-	'$(TargetFrameworkVersion)'=='v2.0' OR
-	'$(TargetFrameworkVersion)'=='v3.0' OR
-	'$(TargetFrameworkVersion)'=='v3.5' OR
-	'$(TargetFrameworkVersion)'=='v4.0' OR
-	'$(TargetFrameworkVersion)'=='v4.5' OR
-	'$(TargetFrameworkVersion)'=='v4.5.1' OR
-	'$(TargetFrameworkVersion)'=='v4.5.2' OR
-	'$(TargetFrameworkVersion)'=='v4.6' OR
-   '$(TargetFrameworkVersion)'=='v4.6.1'
-	)">
+    <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFrameworkVersion)'=='v2.0' OR '$(TargetFrameworkVersion)'=='v3.0' OR '$(TargetFrameworkVersion)'=='v3.5' OR '$(TargetFrameworkVersion)'=='v4.0' OR '$(TargetFrameworkVersion)'=='v4.5' OR '$(TargetFrameworkVersion)'=='v4.5.1' OR '$(TargetFrameworkVersion)'=='v4.5.2' OR '$(TargetFrameworkVersion)'=='v4.6' OR '$(TargetFrameworkVersion)'=='v4.6.1')">
       <PropertyGroup>
         <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
       </PropertyGroup>

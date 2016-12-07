@@ -205,6 +205,7 @@ namespace Emgu.CV
                AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
                ConvertFromCGImage(tmp.CGImage);
             }
+#elif __UNIFIED__
 #else
             //give Bitmap a try
             //and if it cannot load the image, exception will be thrown

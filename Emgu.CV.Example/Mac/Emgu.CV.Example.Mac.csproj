@@ -9,14 +9,14 @@
     <RootNamespace>Emgu.CV.Example.Mac</RootNamespace>
     <AssemblyName>Emgu CV</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>..\..\bin</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,7 +33,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>..\..\bin</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <EnableCodeSigning>true</EnableCodeSigning>
@@ -43,13 +43,17 @@
     <IncludeMonoRuntime>true</IncludeMonoRuntime>
     <UseSGen>true</UseSGen>
     <UseRefCounting>true</UseRefCounting>
-    <LinkMode>SdkOnly</LinkMode>
+    <LinkMode>None</LinkMode>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="OpenTK" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -83,5 +87,7 @@
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
+  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\..\Emgu.Util\Emgu.Util.projitems')" />
+  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV\Emgu.CV.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>

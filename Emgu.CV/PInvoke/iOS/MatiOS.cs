@@ -11,6 +11,8 @@ using CoreGraphics;
 using Emgu.CV.CvEnum;
 #if __IOS__
 using UIKit;
+#else
+using AppKit;
 #endif
 
 namespace Emgu.CV
@@ -102,8 +104,12 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="uiImage">The UIImage.</param>
       public Mat(UIImage uiImage)
-         : this (uiImage.CGImage)
+         : this ()
       {
+		using(CGImage cgImage = uiImage.CGImage)
+		{
+		ConvertFromCGImage(cgImage);
+		}
       }
 
       /// <summary>
@@ -115,6 +121,31 @@ namespace Emgu.CV
          using (CGImage tmp = ToCGImage())
          {
             return UIImage.FromImage(tmp);
+         }
+      }
+#else
+	  /// <summary>
+      /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from NSImage
+      /// </summary>
+      /// <param name="uiImage">The NSImage.</param>
+      public Mat(NSImage nsImage)
+         : this ()
+      {
+			using(CGImage cgImage = nsImage.CGImage)
+			{
+				ConvertFromCGImage(cgImage);
+			}
+      }
+
+      /// <summary>
+      /// Converts to NSImage.
+      /// </summary>
+      /// <returns>The NSImage.</returns>
+      public NSImage ToNSImage()
+      {
+         using (CGImage tmp = ToCGImage())
+         {
+				return new NSImage(tmp, new CGSize(tmp.Width, tmp.Height));
          }
       }
 #endif
