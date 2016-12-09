@@ -444,7 +444,7 @@ namespace Emgu.CV.UI
 
                       if (paramList == null) break; //user click cancel on the input dialog
 
-                      //create an operation from the specific methodInfo and parameterlist
+                      //create an operation from the specific methodInfo and parameter list
                       Operation operation = new Operation(methodInfoRef, paramList);
                       try
                       {
