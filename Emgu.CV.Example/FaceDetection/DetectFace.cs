@@ -88,7 +88,7 @@ namespace FaceDetection
 
                      //Detect the faces  from the gray scale image and store the locations as rectangle
                      //The first dimensional is the channel
-                     //The second dimension is the index of the rectangle in the specific channel
+                     //The second dimension is the index of the rectangle in the specific channel                     
                      Rectangle[] facesDetected = face.DetectMultiScale(
                         ugray,
                         1.1,

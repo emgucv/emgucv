@@ -49,6 +49,11 @@ namespace Emgu.CV.Features2D
       {
          get { return DescriptorMatcherInvoke.CvDescriptorMatcherGetAlgorithm(_ptr); }
       }
+
+       protected override void DisposeObject()
+       {
+           _descriptorMatcherPtr = IntPtr.Zero;
+       }
    }
 
    internal static partial class DescriptorMatcherInvoke

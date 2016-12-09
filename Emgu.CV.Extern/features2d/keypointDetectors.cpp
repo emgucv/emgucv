@@ -185,7 +185,7 @@ cv::Algorithm* CvDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher)
    return dynamic_cast<cv::Algorithm*>( matcher );
 }
 
-cv::BFMatcher* cveBFMatcherCreate(cv::DescriptorMatcher** m, int distanceType, bool crossCheck)
+cv::BFMatcher* cveBFMatcherCreate(int distanceType, bool crossCheck, cv::DescriptorMatcher** m)
 {
    cv::BFMatcher* matcher = new cv::BFMatcher(distanceType, crossCheck);
    *m = dynamic_cast< cv::DescriptorMatcher* > (matcher);
@@ -196,6 +196,19 @@ void cveBFMatcherRelease(cv::BFMatcher** matcher)
 {
    delete *matcher;
    *matcher = 0;
+}
+
+//FlannBasedMatcher
+cv::FlannBasedMatcher* cveFlannBasedMatcherCreate(cv::flann::IndexParams* indexParams, cv::flann::SearchParams* searchParams, cv::DescriptorMatcher** m)
+{
+	cv::FlannBasedMatcher* matcher = new cv::FlannBasedMatcher(indexParams, searchParams);
+	*m = dynamic_cast<cv::DescriptorMatcher*>(matcher);
+	return matcher;
+}
+void cveFlannBasedMatcherRelease(cv::FlannBasedMatcher** matcher)
+{
+	delete *matcher;
+	*matcher = 0;
 }
 
 //2D tracker
