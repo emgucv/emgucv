@@ -1,0 +1,21 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Example.Mac", "..\..\Emgu.CV.Example\Mac\Emgu.CV.Example.Mac.csproj", "{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.Util", "..\..\Emgu.Util\Emgu.Util.shproj", "{98561642-5EC3-4244-BAF9-6876D9BA5527}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Emgu.CV.shproj", "{12D024EE-D0A5-4BBC-B7C0-7B18CF1AB262}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|x86.ActiveCfg = Debug|x86
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|x86.Build.0 = Debug|x86
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|x86.ActiveCfg = Release|x86
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+EndGlobal

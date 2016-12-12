@@ -215,6 +215,12 @@ IF(IOS)
 ENDIF()
 CHECK_BINARY_EXIST("Emgu.CV/PInvoke/iOS" "libemgucv.a" HAVE_IOS ${IS_IOS_BUILD})
 
+SET(IS_OSX_BUILD OFF)
+IF(APPLE AND (NOT IOS))
+   SET(IS_OSX_BUILD ON)
+ENDIF()
+CHECK_BINARY_EXIST("bin" "libemgucv.dylib" HAVE_OSX ${IS_OSX_BUILD})
+
 SET(IS_ANDROID_ARM64_V8A_BUILD OFF)
 IF(ANDROID AND ("${ANDROID_ABI}" STREQUAL "arm64-v8a"))
    SET(IS_ANDROID_ARM64_V8A_BUILD ON)
@@ -370,7 +376,11 @@ IF(WIN32)
   IF(HAVE_IOS)
     SET(IOS_LABEL "-ios")
   ENDIF()
-    
+  
+  SET(OSX_LABEL "")
+  IF(HAVE_OSX)
+    SET(OSX_LABEL "-osx")
+  ENDIF()	
 ENDIF()
 
      
@@ -403,15 +413,15 @@ ENDIF()
 #  Setup Package information
 # ----------------------------------------------------------------------------
 SET(PACKAGE "${PROJECT_NAME}")
-SET(CPACK_PACKAGE_CONTACT "Canming Huang <support@emgu.com>")
+SET(CPACK_PACKAGE_CONTACT "Emgu CV SUPPORT <support@emgu.com>")
 SET(PACKAGE_BUGREPORT "${CPACK_PACKAGE_CONTACT}")
 SET(PACKAGE_NAME "${PROJECT_NAME}")
 
 #SET(CPACK_PACKAGE_NAME "${PACKAGE_NAME}")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
 
-SET(CPACK_PACKAGE_NAME "${PACKAGE_NAME}${IOS_LABEL}${ANDROID_LABEL}${WINDOWS_LABEL}")
-IF("${CPACK_PACKAGE_NAME}" STREQUAL "${PACKAGE_NAME}-ios-android-windows")
+SET(CPACK_PACKAGE_NAME "${PACKAGE_NAME}${IOS_LABEL}${ANDROID_LABEL}${WINDOWS_LABEL}${OSX_LABEL}")
+IF("${CPACK_PACKAGE_NAME}" STREQUAL "${PACKAGE_NAME}-ios-android-windows-osx")
   SET(CPACK_PACKAGE_NAME "${PACKAGE_NAME}-pro")
 ENDIF()
 
@@ -421,9 +431,9 @@ ENDIF()
 #   STRING(LENGTH "${CPACK_PACKAGE_NAME}" PACKAGE_NAME_LENGTH)
 #ENDIF()
 
-IF (APPLE)
-  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-osx")
-ENDIF()
+#IF (APPLE)
+#  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-osx")
+#ENDIF()
 
 IF(WITH_CUDA)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-cuda")
@@ -746,7 +756,6 @@ IF(NOT IOS)
   ENDIF()
   ADD_SUBDIRECTORY(Emgu.CV.Stitching)
   ADD_SUBDIRECTORY(Emgu.CV.VideoStab)
-  #ADD_SUBDIRECTORY(Emgu.CV.OpenCL)
   ADD_SUBDIRECTORY(Emgu.CV.Superres)
   ADD_SUBDIRECTORY(Emgu.CV.Shape)
   ADD_SUBDIRECTORY(Emgu.CV.Contrib)
@@ -782,20 +791,37 @@ IF(HAVE_IOS)
     )
 ENDIF()
 
-IF (ANDROID)
-  SET(CPACK_GENERATOR ZIP)
-  
+IF(HAVE_OSX)
+   INSTALL(
+    FILES
+    "Solution/Mac/Emgu.CV.Mac.Example.sln"
+    "Solution/Mac/Emgu.CV.Mac.sln"
+    DESTINATION "Solution/Mac"
+    COMPONENT emgucv_example_source
+    )
+  IF (NOT IS_OSX_BUILD)
   INSTALL(
     FILES
-    "nuget.config"
-    "components.config"
-    "CommonAssemblyInfo.cs" 
-    "Emgu.CV.snk"
-    "${LICENSE_FILE_NAME}"
+    "bin/libemgucv.dylib"
+    DESTINATION "bin"
+    COMPONENT emgucv_binary
+    )
+  ENDIF()
+ENDIF()
+
+INSTALL(
+    FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
+    "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}"
+	"${CMAKE_CURRENT_SOURCE_DIR}/nuget.config"
+    "${CMAKE_CURRENT_SOURCE_DIR}/components.config"
     DESTINATION .
     COMPONENT emgucv_source
-    )
-
+  )
+	
+IF (ANDROID)
+  SET(CPACK_GENERATOR ZIP)
 ELSEIF (WIN32)
   IF(NETFX_CORE)
     SET(CPACK_GENERATOR ZIP)
@@ -1007,15 +1033,6 @@ ELSEIF (WIN32)
   #  The source files
   # ----------------------------------------------------------------------------
   INSTALL(
-    FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.snk"
-    "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
-    "${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}"
-    DESTINATION .
-    COMPONENT emgucv_source
-    )
-  
-  INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
     DESTINATION .
@@ -1031,14 +1048,6 @@ ELSEIF (WIN32)
     PATTERN "${PROJECT_NAME}.dir" EXCLUDE
     )
   
-  INSTALL(
-    FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/nuget.config
-    ${CMAKE_CURRENT_SOURCE_DIR}/components.config
-    DESTINATION .
-    COMPONENT emgucv_source
-    )
-    
    #WINDOWS PHONE81 solution files
    IF(HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM)
       INSTALL(
@@ -1177,6 +1186,7 @@ ELSEIF (WIN32)
       PATTERN "*.dir" EXCLUDE
       PATTERN "Android" EXCLUDE
       PATTERN "iOS" EXCLUDE
+	  PATTERN "Mac" EXCLUDE
       PATTERN "WindowsStore" EXCLUDE
       PATTERN "WindowsPhoneApp" EXCLUDE
       PATTERN "WindowsStoreCameraApp" EXCLUDE

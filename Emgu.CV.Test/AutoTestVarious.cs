@@ -1294,7 +1294,7 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
 
-         Flann.KdTreeIndexParamses p = new KdTreeIndexParamses(4);
+         Flann.KdTreeIndexParams p = new KdTreeIndexParams(4);
          Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), p);
 
          float[][] features2 = new float[1][];
@@ -1315,7 +1315,7 @@ namespace Emgu.CV.Test
          for (int i = 0; i < features.Length; i++)
             features[i] = new float[] { (float) i };
 
-         Flann.CompositeIndexParamses p = new CompositeIndexParamses(4, 32, 11, Emgu.CV.Flann.CenterInitType.Random, 0.2f);
+         Flann.CompositeIndexParams p = new CompositeIndexParams(4, 32, 11, Emgu.CV.Flann.CenterInitType.Random, 0.2f);
          Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), p);
 
          float[][] features2 = new float[1][];
