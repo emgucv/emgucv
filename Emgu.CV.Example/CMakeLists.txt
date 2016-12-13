@@ -118,6 +118,28 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "obj" EXCLUDE
       )
   ENDIF()
+  IF(HAVE_OSX)
+    INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/Mac/"
+      DESTINATION Emgu.CV.Example/Mac/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.axml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.plist"
+      PATTERN "*.json"
+      PATTERN "*.storyboard"
+      PATTERN ".git" EXCLUDE
+      PATTERN "bin" EXCLUDE
+      PATTERN "obj" EXCLUDE
+      )
+  ENDIF()
   
   IF(HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM)
     INSTALL(
@@ -261,8 +283,13 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     ENDIF()
   ENDIF()
   
-  IF(NETFX_CORE)
-    
+  IF (HAVE_ANDROID OR HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64 OR HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM OR HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM) 
+    INSTALL(
+      FILES
+      "PlanarSubdivision/DrawSubdivision.cs"
+      DESTINATION "Emgu.CV.Example/PlanarSubdivision"
+      COMPONENT emgucv_example_source
+      )
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/FaceDetection/"
@@ -271,41 +298,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       FILES_MATCHING 
       PATTERN "DetectFace.cs" 
       PATTERN "lena.jpg"  
-      PATTERN ".git" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMake*" EXCLUDE
-      PATTERN "Release" EXCLUDE
-      PATTERN "Debug" EXCLUDE
-      PATTERN "RelWithDebInfo" EXCLUDE
-      PATTERN "*.dir" EXCLUDE
-      PATTERN "bin" EXCLUDE
-      )
-    INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/PlanarSubdivision/"
-      DESTINATION Emgu.CV.Example/PlanarSubdivision/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "DrawSubdivision.cs" 
-      PATTERN "PedestrianDetection/FindPedestrian.cs" 
-      PATTERN "PedestrianDetection/pedestrian.png" 
-      PATTERN ".git" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMake*" EXCLUDE
-      PATTERN "Release" EXCLUDE
-      PATTERN "Debug" EXCLUDE
-      PATTERN "RelWithDebInfo" EXCLUDE
-      PATTERN "*.dir" EXCLUDE
-      PATTERN "bin" EXCLUDE
-      )
-    INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/PedestrianDetection/"
-      DESTINATION Emgu.CV.Example/PedestrianDetection/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "FindPedestrian.cs" 
-      PATTERN "pedestrian.png" 
       PATTERN ".git" EXCLUDE
       PATTERN "obj" EXCLUDE
       PATTERN "CMake*" EXCLUDE
@@ -333,43 +325,31 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.dir" EXCLUDE
       PATTERN "bin" EXCLUDE
       )
-    
-  ELSEIF(ANDROID)
-    
-    
     INSTALL(
-      FILES
-      "PlanarSubdivision/DrawSubdivision.cs"
-      DESTINATION "Emgu.CV.Example/PlanarSubdivision"
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/PedestrianDetection/"
+      DESTINATION Emgu.CV.Example/PedestrianDetection/
       COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "FindPedestrian.cs" 
+      PATTERN "pedestrian.png" 
+      PATTERN ".git" EXCLUDE
+      PATTERN "obj" EXCLUDE
+      PATTERN "CMake*" EXCLUDE
+      PATTERN "Release" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "RelWithDebInfo" EXCLUDE
+      PATTERN "*.dir" EXCLUDE
+      PATTERN "bin" EXCLUDE
       )
-    INSTALL(
-      FILES
-      "FaceDetection/DetectFace.cs"
-      "FaceDetection/lena.jpg"
-      DESTINATION "Emgu.CV.Example/FaceDetection"
-      COMPONENT emgucv_example_source
-      )
+  ENDIF()
+
+  IF(HAVE_ANDROID)    
     INSTALL(
       FILES
       "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
       "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
       DESTINATION "opencv/data/haarcascades"
-      COMPONENT emgucv_example_source
-      )
-    INSTALL(
-      FILES
-      "FeatureMatching/DrawMatches.cs"
-      "FeatureMatching/box.png"
-      "FeatureMatching/box_in_scene.png"
-      DESTINATION "Emgu.CV.Example/FeatureMatching"
-      COMPONENT emgucv_example_source
-      )
-    INSTALL(
-      FILES
-      "PedestrianDetection/FindPedestrian.cs"
-      "PedestrianDetection/pedestrian.png"
-      DESTINATION "Emgu.CV.Example/PedestrianDetection"
       COMPONENT emgucv_example_source
       )
     INSTALL(
@@ -387,7 +367,9 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       DESTINATION "Emgu.CV.Example/TrafficSignRecognition"
       COMPONENT emgucv_example_source
       )
-  ELSE()
+  ENDIF()
+
+  IF(NOT (NETFX_CORE OR ANDROID OR (APPLE AND (NOT IOS))))
     SET(EMGU_CV_REFERENCE 
       -r:System.Xml.dll 
       -r:System.Drawing.dll 
