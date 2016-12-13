@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Drawing;
 
 using ObjCRuntime;
 using Foundation;
-using UIKit;
+//using UIKit;
 
 namespace Emgu.CV.World
 {
