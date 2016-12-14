@@ -15,13 +15,14 @@ namespace Emgu.CV.Features2D
     {
         public FlannBasedMatcher(IIndexParams indexParams, SearchParams search)
         {
-            _ptr = CvInvoke.cveFlannBasedMatcherCreate(indexParams.IndexParamPtr, search, ref _descriptorMatcherPtr);
+            _ptr = CvInvoke.cveFlannBasedMatcherCreate(indexParams.IndexParamPtr, search.Ptr, ref _descriptorMatcherPtr);
         }
 
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
                 CvInvoke.cveFlannBasedMatcherRelease(ref _ptr);
+            base.DisposeObject();
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Emgu.CV.Flann
         /// Initializes a new instance of the <see cref="KdTreeIndexParams"/> class.
         /// </summary>
         /// <param name="trees">The number of parallel kd-trees to use. Good values are in the range [1..16]</param>
-        public KdTreeIndexParams(int trees)
+        public KdTreeIndexParams(int trees = 4)
         {
             _ptr = CvInvoke.cveKDTreeIndexParamsCreate(ref _indexParamPtr, trees);
         }
@@ -204,7 +204,7 @@ namespace Emgu.CV.Flann
         /// <param name="buildWeight">Specifies the importance of the index build time reported to the nearest-neighbor search time. In some applications it’s acceptable for the index build step to take a long time if the subsequent searches in the index can be performed very fast. In other applications it’s required that the index be build as fast as possible even if that leads to slightly longer search times.</param>
         /// <param name="memoryWeight">Is used to specify the trade off between time (index build time and search time) and memory used by the index. A value less than 1 gives more importance to the time spent and a value greater than 1 gives more importance to the memory usage.</param>
         /// <param name="sampleFraction">Is a number between 0 and 1 indicating what fraction of the dataset to use in the automatic parameter configuration algorithm. Running the algorithm on the full dataset gives the most accurate results, but for very large datasets can take longer than desired. In such case using just a fraction of the data helps speeding up this algorithm while still giving good approximations of the optimum parameters.</param>
-        public AutotunedIndexParams(float targetPrecision = 0.9f, float buildWeight = 0.01f, float memoryWeight = 0, float sampleFraction = 0.1f)
+        public AutotunedIndexParams(float targetPrecision = 0.8f, float buildWeight = 0.01f, float memoryWeight = 0, float sampleFraction = 0.1f)
         {
             _ptr = CvInvoke.cveAutotunedIndexParamsCreate(ref _indexParamPtr, targetPrecision, buildWeight, memoryWeight, sampleFraction);
         }
@@ -343,9 +343,10 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveSearchParamsCreate(
-           ref IntPtr ip, int checks, float eps,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool sorted);
+            ref IntPtr ip, int checks, float eps,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool sorted);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveSearchParamsRelease(ref IntPtr p);
     }
