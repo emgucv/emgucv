@@ -201,8 +201,8 @@ void cveBFMatcherRelease(cv::BFMatcher** matcher)
 //FlannBasedMatcher
 cv::FlannBasedMatcher* cveFlannBasedMatcherCreate(cv::flann::IndexParams* indexParams, cv::flann::SearchParams* searchParams, cv::DescriptorMatcher** m)
 {
-	cv::Ptr<cv::flann::IndexParams> ip = cv::makePtr<cv::flann::IndexParams>(indexParams);
-	cv::Ptr<cv::flann::IndexParams> sp = cv::makePtr<cv::flann::IndexParams>(searchParams);
+	cv::Ptr<cv::flann::IndexParams> ip = indexParams;
+	cv::Ptr<cv::flann::SearchParams> sp = searchParams;
 	ip.addref(); //add reference such that the matcher's destructor will not release the indexParams
 	sp.addref(); //add reference such that the matcher's destructor will not release the searchParams
 	cv::FlannBasedMatcher* matcher = new cv::FlannBasedMatcher(ip, sp);
