@@ -129,6 +129,8 @@ namespace Emgu.CV.UI
                     _imageType = typeof(CvArray<>);
                 else if (IsSubTypeOf(imgType, typeof(Mat)))
                     _imageType = typeof(Mat);
+                else if (IsSubTypeOf(imgType, typeof(UMat)))
+                    _imageType = typeof(UMat);
                 else
                 {
                     _imageType = null;

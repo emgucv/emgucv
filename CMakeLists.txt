@@ -1064,6 +1064,7 @@ ELSEIF (WIN32)
       PATTERN "Windows.Store" EXCLUDE
       PATTERN "Windows.Desktop" EXCLUDE
       PATTERN "CrossPlatform" EXCLUDE
+	  PATTERN "Mac" EXCLUDE
       )
   ENDIF()
   
@@ -1084,6 +1085,7 @@ ELSEIF (WIN32)
       PATTERN "Windows.Phone" EXCLUDE
       PATTERN "Windows.Desktop" EXCLUDE
       PATTERN "CrossPlatform" EXCLUDE
+	  PATTERN "Mac" EXCLUDE
       )  
     INSTALL(
       DIRECTORY
@@ -1099,6 +1101,7 @@ ELSEIF (WIN32)
       PATTERN "Windows.Phone" EXCLUDE
       PATTERN "Windows.Desktop" EXCLUDE
       PATTERN "CrossPlatform" EXCLUDE
+	  PATTERN "Mac" EXCLUDE
       )
   ENDIF()
   
@@ -1119,6 +1122,7 @@ ELSEIF (WIN32)
       PATTERN "Windows.Phone" EXCLUDE
       PATTERN "Windows.Store" EXCLUDE
       PATTERN "CrossPlatform" EXCLUDE
+	  PATTERN "Mac" EXCLUDE
       )
     INSTALL(
       DIRECTORY
@@ -1143,6 +1147,7 @@ ELSEIF (WIN32)
       PATTERN "Windows.Phone" EXCLUDE
       PATTERN "Windows.Store" EXCLUDE
       PATTERN "CrossPlatform" EXCLUDE
+	  PATTERN "Mac" EXCLUDE
       )
     
     # ----------------------------------------------------------------------------

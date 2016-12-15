@@ -11,13 +11,24 @@ using Emgu.Util;
 
 namespace Emgu.CV.Features2D
 {
+    /// <summary>
+    /// This matcher trains flann::Index_ on a train descriptor collection and calls its nearest search methods to find the best matches. So, this matcher may be faster when matching a large train collection than the brute force matcher. 
+    /// </summary>
     public class FlannBasedMatcher : DescriptorMatcher
     {
+        /// <summary>
+        /// Create a Flann based matcher.
+        /// </summary>
+        /// <param name="indexParams">The type of index parameters</param>
+        /// <param name="search">The search parameters</param>
         public FlannBasedMatcher(IIndexParams indexParams, SearchParams search)
         {
             _ptr = CvInvoke.cveFlannBasedMatcherCreate(indexParams.IndexParamPtr, search.Ptr, ref _descriptorMatcherPtr);
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this Flann based matcher.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)

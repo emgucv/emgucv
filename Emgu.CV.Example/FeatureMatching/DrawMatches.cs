@@ -42,7 +42,9 @@ namespace FeatureMatchingExample
                 Mat observedDescriptors = new Mat();
                 featureDetector.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
 
-                using (Emgu.CV.Flann.LinearIndexParams ip = new Emgu.CV.Flann.LinearIndexParams()) // bruteforce
+                // Bruteforce, slower but more accurate
+                // You can use KDTree for faster matching with slight loss in accuracy
+                using (Emgu.CV.Flann.LinearIndexParams ip = new Emgu.CV.Flann.LinearIndexParams()) 
                 using (Emgu.CV.Flann.SearchParams sp = new SearchParams())
                 using (DescriptorMatcher matcher = new FlannBasedMatcher(ip, sp))
                 {
