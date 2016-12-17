@@ -178,6 +178,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.xaml"
       PATTERN "*.json"
       PATTERN "*.pfx"
+	  PATTERN "*.config"
       PATTERN "Assets/*.png"  
       PATTERN ".git" EXCLUDE
       PATTERN "obj" EXCLUDE
