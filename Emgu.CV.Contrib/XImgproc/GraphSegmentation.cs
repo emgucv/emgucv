@@ -12,7 +12,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 
 
-namespace Emgu.CV.Ximgproc
+namespace Emgu.CV.XImgproc
 {
    /// <summary>
    /// Graph Based Segmentation Algorithm. The class implements the algorithm described in Pedro F Felzenszwalb and Daniel P Huttenlocher. Efficient graph-based image segmentation. volume 59, pages 167–181. Springer, 2004.
@@ -27,7 +27,7 @@ namespace Emgu.CV.Ximgproc
       /// <param name="minSize">The minimum size of segments</param>
       public GraphSegmentation(double sigma = 0.5, float k = 300, int minSize = 100)
       {
-         _ptr = XimgprocInvoke.cveGraphSegmentationCreate(sigma, k, minSize);
+         _ptr = XImgprocInvoke.cveGraphSegmentationCreate(sigma, k, minSize);
       }
 
       /// <summary>
@@ -39,7 +39,7 @@ namespace Emgu.CV.Ximgproc
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
-            XimgprocInvoke.cveGraphSegmentationProcessImage(_ptr, iaSrc, oaDst);
+            XImgprocInvoke.cveGraphSegmentationProcessImage(_ptr, iaSrc, oaDst);
       }
 
       /// <summary>
@@ -49,13 +49,13 @@ namespace Emgu.CV.Ximgproc
       {
          if (_ptr != IntPtr.Zero)
          {
-            XimgprocInvoke.cveGraphSegmentationRelease(ref _ptr);
+            XImgprocInvoke.cveGraphSegmentationRelease(ref _ptr);
          }
       }
    }
 
 
-   public static partial class XimgprocInvoke
+   public static partial class XImgprocInvoke
    {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

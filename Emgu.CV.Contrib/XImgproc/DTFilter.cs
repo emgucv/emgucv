@@ -13,7 +13,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 
 
-namespace Emgu.CV.Ximgproc
+namespace Emgu.CV.XImgproc
 {
    /// <summary>
    /// Interface for realizations of Domain Transform filter.
@@ -50,7 +50,7 @@ namespace Emgu.CV.Ximgproc
       public DTFilter(IInputArray guide, double sigmaSpatial, double sigmaColor, Mode mode = Mode.NC, int numIters = 3)
       {
          using (InputArray iaGuide = guide.GetInputArray())
-            _ptr = XimgprocInvoke.cveDTFilterCreate( iaGuide, sigmaSpatial, sigmaColor, mode, numIters);
+            _ptr = XImgprocInvoke.cveDTFilterCreate( iaGuide, sigmaSpatial, sigmaColor, mode, numIters);
       }
 
       /// <summary>
@@ -64,7 +64,7 @@ namespace Emgu.CV.Ximgproc
          using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             {
-               XimgprocInvoke.cveDTFilterFilter(_ptr, iaSrc, oaDst, dDepth);
+               XImgprocInvoke.cveDTFilterFilter(_ptr, iaSrc, oaDst, dDepth);
             }
          
       }
@@ -76,13 +76,13 @@ namespace Emgu.CV.Ximgproc
       {
          if (_ptr != IntPtr.Zero)
          {
-            XimgprocInvoke.cveDTFilterRelease(ref _ptr);
+            XImgprocInvoke.cveDTFilterRelease(ref _ptr);
          }
       }
    }
 
 
-   public static partial class XimgprocInvoke
+   public static partial class XImgprocInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveDTFilterCreate(IntPtr guide, double sigmaSpatial, double sigmaColor, DTFilter.Mode mode, int numIters);
