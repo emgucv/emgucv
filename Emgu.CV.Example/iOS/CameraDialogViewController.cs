@@ -46,66 +46,107 @@ namespace Example.iOS
          root.Add (new Section() { ImageView});
 
 
-         if (!SetupCaptureSession ())
-         {
-         }
-            //AddSubview (new UILabel (new RectangleF (20, 20, 200, 60)) { Text = "No input device" });
-
+         CheckVideoPermissionAndStart();
 
       }
 
-bool SetupCaptureSession ()
-      {
-         // configure the capture session for low resolution, change this if your code
-         // can cope with more data or volume
-         session = new AVCaptureSession () {
-            SessionPreset = AVCaptureSession.PresetMedium
-         };
-
-         // create a device input and attach it to the session
-         var captureDevice = AVCaptureDevice.DefaultDeviceWithMediaType (AVMediaType.Video);
-         if (captureDevice == null) {
-            Image<Bgr, Byte> img = new Image<Bgr, byte> (512, 512, new Bgr (255, 255, 255));
-            CvInvoke.PutText (
-               img, 
-               "Capture device not found.", 
-               new Point (10, 200), 
-               FontFace.HersheyComplex, 
-               1, 
-               new MCvScalar (), 
+        private void RenderImageMessage(String message)
+        {
+            Image<Bgr, Byte> img = new Image<Bgr, byte>(512, 512, new Bgr(255, 255, 255));
+            CvInvoke.PutText(
+               img,
+               message,
+               new Point(10, 200),
+               FontFace.HersheyComplex,
+               1,
+               new MCvScalar(),
                2);
             ImageView.Image = img.ToUIImage();
-            return false;
-         }
-         var input = AVCaptureDeviceInput.FromDevice (captureDevice);
-         if (input == null){
-            Console.WriteLine ("No input device");
-            return false;
-         }
-         session.AddInput (input);
+        }
 
-         // create a VideoDataOutput and add it to the sesion
-         AVVideoSettingsUncompressed settingUncomp = new AVVideoSettingsUncompressed();
-         settingUncomp.PixelFormatType = CVPixelFormatType.CV32BGRA;
-         var output = new AVCaptureVideoDataOutput () {
-            UncompressedVideoSetting = settingUncomp,
+        private void CheckVideoPermissionAndStart()
+        {
+            AVFoundation.AVAuthorizationStatus authorizationStatus = AVCaptureDevice.GetAuthorizationStatus(AVMediaType.Video);
+            switch (authorizationStatus)
+            {
+                case AVAuthorizationStatus.NotDetermined:
+                    AVCaptureDevice.RequestAccessForMediaType(AVMediaType.Video, delegate (bool granted)
+                    {
+                        if (granted)
+                        {
+                            SetupCaptureSession();
+                        }
+                        else
+                        {
+                            RenderImageMessage("Please grant Video Capture permission");
+                        }
+                    });
+                    break;
+                case AVAuthorizationStatus.Authorized:
+                    SetupCaptureSession();
+                    break;
+                case AVAuthorizationStatus.Denied:
+                case AVAuthorizationStatus.Restricted:
+                    RenderImageMessage("Please grant Video Capture permission");
+                    break;
+                default:
 
-            // If you want to cap the frame rate at a given speed, in this sample: 15 frames per second
-            //MinFrameDuration = new CMTime (1, 15)
-         };
-        
+                    break;
+                    //do nothing
+            }
+        }
 
-         // configure the output
-         queue = new DispatchQueue ("myQueue");
-         outputRecorder = new OutputRecorder (ImageView);
-         output.SetSampleBufferDelegateQueue(outputRecorder, queue);
-         session.AddOutput (output);
+        private void SetupCaptureSession()
+        {
+            // configure the capture session for low resolution, change this if your code
+            // can cope with more data or volume
+            session = new AVCaptureSession()
+            {
+                SessionPreset = AVCaptureSession.PresetMedium
+            };
 
-         session.StartRunning ();
-         return true;
-      }
 
-      public class OutputRecorder : AVCaptureVideoDataOutputSampleBufferDelegate 
+
+            // create a device input and attach it to the session
+            var captureDevice = AVCaptureDevice.DefaultDeviceWithMediaType(AVMediaType.Video);
+            if (captureDevice == null)
+            {
+                RenderImageMessage("Capture device not found.");
+
+                return;
+            }
+            var input = AVCaptureDeviceInput.FromDevice(captureDevice);
+            if (input == null)
+            {
+                RenderImageMessage("No input device");
+
+                return;
+            }
+            session.AddInput(input);
+
+            // create a VideoDataOutput and add it to the sesion
+            AVVideoSettingsUncompressed settingUncomp = new AVVideoSettingsUncompressed();
+            settingUncomp.PixelFormatType = CVPixelFormatType.CV32BGRA;
+            var output = new AVCaptureVideoDataOutput()
+            {
+                UncompressedVideoSetting = settingUncomp,
+
+                // If you want to cap the frame rate at a given speed, in this sample: 15 frames per second
+                //MinFrameDuration = new CMTime (1, 15)
+            };
+
+
+            // configure the output
+            queue = new DispatchQueue("myQueue");
+            outputRecorder = new OutputRecorder(ImageView);
+            output.SetSampleBufferDelegateQueue(outputRecorder, queue);
+            session.AddOutput(output);
+
+            session.StartRunning();
+
+        }
+
+        public class OutputRecorder : AVCaptureVideoDataOutputSampleBufferDelegate 
       { 
          private UIImageView _imageView;
          public OutputRecorder(UIImageView imageView)

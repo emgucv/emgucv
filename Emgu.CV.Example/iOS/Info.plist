@@ -34,5 +34,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>CFBundleName</key>
+	<string>EMGU CV</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs access to the camera to take photos</string>
 </dict>
 </plist>
