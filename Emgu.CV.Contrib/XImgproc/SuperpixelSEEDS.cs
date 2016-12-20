@@ -12,7 +12,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 
 
-namespace Emgu.CV.Ximgproc
+namespace Emgu.CV.XImgproc
 {
    /// <summary>
    /// Class implementing the SEEDS (Superpixels Extracted via Energy-Driven Sampling) superpixels algorithm described in Michael Van den Bergh, Xavier Boix, Gemma Roig, Benjamin de Capitani, and Luc Van Gool. Seeds: Superpixels extracted via energy-driven sampling. In Computer Vision–ECCV 2012, pages 13–26. Springer, 2012.
@@ -35,7 +35,7 @@ namespace Emgu.CV.Ximgproc
          int histogramBins,
          bool doubleStep)
       {
-         _ptr = XimgprocInvoke.cveSuperpixelSEEDSCreate(
+         _ptr = XImgprocInvoke.cveSuperpixelSEEDSCreate(
             imageWidth, imageHeight, imageChannels,
             numSuperpixels, numLevels, prior,
             histogramBins, doubleStep);
@@ -46,7 +46,7 @@ namespace Emgu.CV.Ximgproc
       /// </summary>
       public int NumberOfSuperpixels
       {
-         get { return XimgprocInvoke.cveSuperpixelSEEDSGetNumberOfSuperpixels(_ptr); }
+         get { return XImgprocInvoke.cveSuperpixelSEEDSGetNumberOfSuperpixels(_ptr); }
       }
 
       /// <summary>
@@ -57,7 +57,7 @@ namespace Emgu.CV.Ximgproc
       public void GetLabels(IOutputArray labels)
       {
          using (OutputArray oaLabels = labels.GetOutputArray())
-            XimgprocInvoke.cveSuperpixelSEEDSGetLabels(_ptr, oaLabels);
+            XImgprocInvoke.cveSuperpixelSEEDSGetLabels(_ptr, oaLabels);
       }
 
       /// <summary>
@@ -68,7 +68,7 @@ namespace Emgu.CV.Ximgproc
       public void GetLabelContourMask(IOutputArray image, bool thickLine = false)
       {
          using (OutputArray oaImage = image.GetOutputArray())
-            XimgprocInvoke.cveSuperpixelSEEDSGetLabelContourMask(_ptr, oaImage, thickLine);
+            XImgprocInvoke.cveSuperpixelSEEDSGetLabelContourMask(_ptr, oaImage, thickLine);
       }
 
       /// <summary>
@@ -80,7 +80,7 @@ namespace Emgu.CV.Ximgproc
       public void Iterate(IInputArray img, int numIterations = 4)
       {
          using (InputArray iaImg = img.GetInputArray())
-            XimgprocInvoke.cveSuperpixelSEEDSIterate(_ptr, iaImg, numIterations);
+            XImgprocInvoke.cveSuperpixelSEEDSIterate(_ptr, iaImg, numIterations);
       }
 
       /// <summary>
@@ -90,13 +90,13 @@ namespace Emgu.CV.Ximgproc
       {
          if (_ptr != IntPtr.Zero)
          {
-            XimgprocInvoke.cveSuperpixelSEEDSRelease(ref _ptr);
+            XImgprocInvoke.cveSuperpixelSEEDSRelease(ref _ptr);
          }
       }
    }
 
 
-   public static partial class XimgprocInvoke
+   public static partial class XImgprocInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveSuperpixelSEEDSCreate(

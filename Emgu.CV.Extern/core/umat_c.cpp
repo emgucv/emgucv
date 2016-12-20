@@ -42,12 +42,10 @@ void cveUMatRelease(cv::UMat** mat)
    delete *mat;
    *mat = 0;
 }
-emgu::size cveUMatGetSize(cv::UMat* mat)
+void cveUMatGetSize(cv::UMat* mat, CvSize* s)
 {
-   emgu::size s;
-   s.width = mat->cols;
-   s.height = mat->rows;
-   return s;
+   s->width = mat->cols;
+   s->height = mat->rows;
 }
 void cveUMatCopyTo(cv::UMat* mat, cv::_OutputArray* m, cv::_InputArray* mask)
 {

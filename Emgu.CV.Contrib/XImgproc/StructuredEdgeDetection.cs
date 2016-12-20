@@ -11,7 +11,7 @@ using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Ximgproc
+namespace Emgu.CV.XImgproc
 {
    /// <summary>
    /// Class implementing edge detection algorithm from Piotr Dollár and C Lawrence Zitnick. Structured forests for fast edge detection. In Computer Vision (ICCV), 2013 IEEE International Conference on, pages 1841–1848. IEEE, 2013.
@@ -26,7 +26,7 @@ namespace Emgu.CV.Ximgproc
       public StructuredEdgeDetection(String model, RFFeatureGetter howToGetFeatures)
       {
          using (CvString sModel = new CvString(model))
-            _ptr = XimgprocInvoke.cveStructuredEdgeDetectionCreate(sModel, howToGetFeatures);
+            _ptr = XImgprocInvoke.cveStructuredEdgeDetectionCreate(sModel, howToGetFeatures);
       }
 
       /// <summary>
@@ -36,7 +36,7 @@ namespace Emgu.CV.Ximgproc
       /// <param name="dst">destination image (grayscale, float, in [0;1]) where edges are drawn</param>
       public void DetectEdges(Mat src, Mat dst)
       {
-         XimgprocInvoke.cveStructuredEdgeDetectionDetectEdges(_ptr, src, dst);
+         XImgprocInvoke.cveStructuredEdgeDetectionDetectEdges(_ptr, src, dst);
       }
 
       /// <summary>
@@ -46,7 +46,7 @@ namespace Emgu.CV.Ximgproc
       {
          if (_ptr != IntPtr.Zero)
          {
-            XimgprocInvoke.cveStructuredEdgeDetectionRelease(ref _ptr);
+            XImgprocInvoke.cveStructuredEdgeDetectionRelease(ref _ptr);
          }
       }
    }
@@ -61,7 +61,7 @@ namespace Emgu.CV.Ximgproc
       /// </summary>
       public RFFeatureGetter()
       {
-         _ptr = XimgprocInvoke.cveRFFeatureGetterCreate();
+         _ptr = XImgprocInvoke.cveRFFeatureGetterCreate();
       }
 
       /// <summary>
@@ -71,15 +71,15 @@ namespace Emgu.CV.Ximgproc
       {
          if (_ptr != IntPtr.Zero)
          {
-            XimgprocInvoke.cveRFFeatureGetterRelease(ref _ptr);
+            XImgprocInvoke.cveRFFeatureGetterRelease(ref _ptr);
          }
       }
    }
 
    /// <summary>
-   /// Library to invoke Ximgproc functions
+   /// Library to invoke XImgproc functions
    /// </summary>
-   public static partial class XimgprocInvoke
+   public static partial class XImgprocInvoke
    {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

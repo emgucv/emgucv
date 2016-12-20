@@ -531,8 +531,6 @@ namespace Emgu.CV
          CvStructSizes sizes = CvInvoke.GetCvStructSizes();
 
          sane &= (sizes.CvBox2D == Toolbox.SizeOf<RotatedRect>());
-         sane &= (sizes.CvContour == Toolbox.SizeOf<MCvContour>());
-         //sane &= (sizes.CvHistogram == Toolbox.SizeOf(typeof(MCvHistogram)));
          sane &= (sizes.CvMat == Toolbox.SizeOf<MCvMat>());
          sane &= (sizes.CvMatND == Toolbox.SizeOf<MCvMatND>());
          sane &= (sizes.CvPoint == Toolbox.SizeOf<System.Drawing.Point>());
@@ -540,7 +538,6 @@ namespace Emgu.CV
          sane &= (sizes.CvPoint3D32f == Toolbox.SizeOf<MCvPoint3D32f>());
          sane &= (sizes.CvRect == Toolbox.SizeOf<System.Drawing.Rectangle>());
          sane &= (sizes.CvScalar == Toolbox.SizeOf<MCvScalar>());
-         sane &= (sizes.CvSeq == Toolbox.SizeOf<MCvSeq>());
          sane &= (sizes.CvSize == Toolbox.SizeOf<System.Drawing.Size>());
          sane &= (sizes.CvSize2D32f == Toolbox.SizeOf<System.Drawing.SizeF>());
          sane &= (sizes.CvTermCriteria == Toolbox.SizeOf<MCvTermCriteria>());

@@ -22,13 +22,13 @@ namespace Emgu.CV
    /// <summary> 
    /// Capture images from either camera or video file. 
    /// </summary>
-#if (__ANDROID__ || __IOS__ || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ))
+#if (__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE )
 #else
    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 #endif
    public partial class VideoCapture :
        UnmanagedObject,
-#if (__ANDROID__ || __IOS__ || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ))
+#if (__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE )
 #else
  IDuplexCapture,
 #endif
@@ -458,7 +458,7 @@ namespace Emgu.CV
             }
         }*/
 
-#if (__ANDROID__ || __IOS__ || NETFX_CORE || ( UNITY_ANDROID || UNITY_IPHONE ))
+#if (__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE )
 #else
       /// <summary>
       /// Query a frame duplexly over WCF

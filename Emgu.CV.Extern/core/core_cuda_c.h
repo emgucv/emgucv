@@ -86,7 +86,7 @@ CVAPI(void) gpuMatRelease(cv::cuda::GpuMat** mat);
 
 CVAPI(cv::cuda::GpuMat*) gpuMatCreateFromInputArray(cv::_InputArray* arr);
 
-CVAPI(emgu::size) gpuMatGetSize(cv::cuda::GpuMat* gpuMat);
+CVAPI(void) gpuMatGetSize(cv::cuda::GpuMat* gpuMat, CvSize* size);
 
 CVAPI(bool) gpuMatIsEmpty(cv::cuda::GpuMat* gpuMat);
 

@@ -61,7 +61,7 @@ CVAPI(void) cudaCornernessCriteriaRelease(cv::cuda::CornernessCriteria** detecto
 //  CudaCLAHE
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::CLAHE*) cudaCLAHECreate(double clipLimit, emgu::size* tileGridSize);
+CVAPI(cv::cuda::CLAHE*) cudaCLAHECreate(double clipLimit, CvSize* tileGridSize);
 CVAPI(void) cudaCLAHEApply(cv::cuda::CLAHE* clahe, cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* stream);
 CVAPI(void) cudaCLAHERelease(cv::cuda::CLAHE** clahe);
 
@@ -91,7 +91,7 @@ CVAPI(void) cudaCornersDetectorRelease(cv::cuda::CornersDetector** detector);
 //  CudaTemplateMatching
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::TemplateMatching*) cudaTemplateMatchingCreate(int srcType, int method, emgu::size* blockSize);
+CVAPI(cv::cuda::TemplateMatching*) cudaTemplateMatchingCreate(int srcType, int method, CvSize* blockSize);
 CVAPI(void) cudaTemplateMatchingRelease(cv::cuda::TemplateMatching** tm);
 CVAPI(void) cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result, cv::cuda::Stream* stream);
 

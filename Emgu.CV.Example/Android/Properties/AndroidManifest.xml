@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="com.emgu.cv.examples" android:versionCode="3" android:versionName="3.1.0">
-	<uses-sdk />
+	<uses-sdk android:minSdkVersion="21" />
 	<application android:label="Emgu CV Examples" android:icon="@drawable/ic_launcher"></application>
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.INTERNET" />

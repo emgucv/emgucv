@@ -11,7 +11,7 @@ using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Ximgproc
+namespace Emgu.CV.XImgproc
 {
    /// <summary>
    /// Class implementing the LSC (Linear Spectral Clustering) superpixels algorithm described in "Zhengqin Li and Jiansheng Chen. Superpixel segmentation using linear spectral clustering. June 2015."
@@ -28,7 +28,7 @@ namespace Emgu.CV.Ximgproc
       public SuperpixelLSC(IInputArray image, int regionSize, float ratio)
       {
          using (InputArray iaImage = image.GetInputArray())
-            _ptr = XimgprocInvoke.cveSuperpixelLSCCreate(iaImage, regionSize, ratio);
+            _ptr = XImgprocInvoke.cveSuperpixelLSCCreate(iaImage, regionSize, ratio);
       }
 
       /// <summary>
@@ -36,7 +36,7 @@ namespace Emgu.CV.Ximgproc
       /// </summary>
       public int NumberOfSuperpixels
       {
-         get { return XimgprocInvoke.cveSuperpixelLSCGetNumberOfSuperpixels(_ptr); }
+         get { return XImgprocInvoke.cveSuperpixelLSCGetNumberOfSuperpixels(_ptr); }
       }
 
       /// <summary>
@@ -47,7 +47,7 @@ namespace Emgu.CV.Ximgproc
       public void GetLabels(IOutputArray labels)
       {
          using (OutputArray oaLabels = labels.GetOutputArray())
-            XimgprocInvoke.cveSuperpixelLSCGetLabels(_ptr, oaLabels);
+            XImgprocInvoke.cveSuperpixelLSCGetLabels(_ptr, oaLabels);
       }
 
       /// <summary>
@@ -58,7 +58,7 @@ namespace Emgu.CV.Ximgproc
       public void GetLabelContourMask(IOutputArray image, bool thickLine = true)
       {
          using (OutputArray oaImage = image.GetOutputArray())
-            XimgprocInvoke.cveSuperpixelSLICGetLabelContourMask(_ptr, oaImage, thickLine);
+            XImgprocInvoke.cveSuperpixelSLICGetLabelContourMask(_ptr, oaImage, thickLine);
       }
 
       /// <summary>
@@ -68,7 +68,7 @@ namespace Emgu.CV.Ximgproc
       /// <param name="numIterations">Number of iterations. Higher number improves the result.</param>
       public void Iterate(int numIterations = 10)
       {
-         XimgprocInvoke.cveSuperpixelLSCIterate(_ptr, numIterations);
+         XImgprocInvoke.cveSuperpixelLSCIterate(_ptr, numIterations);
       }
 
       /// <summary>
@@ -78,12 +78,12 @@ namespace Emgu.CV.Ximgproc
       {
          if (_ptr != IntPtr.Zero)
          {
-            XimgprocInvoke.cveSuperpixelLSCRelease(ref _ptr);
+            XImgprocInvoke.cveSuperpixelLSCRelease(ref _ptr);
          }
       }
    }
 
-   public static partial class XimgprocInvoke
+   public static partial class XImgprocInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveSuperpixelLSCCreate(IntPtr image, int regionSize, float ratio);

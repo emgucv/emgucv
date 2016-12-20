@@ -77,6 +77,7 @@ namespace Emgu.CV
       /// The UIImage
       /// </returns>
       UIImage ToUIImage();
+		#elif __UNIFIED__
 #else
       /// <summary>
       /// Convert this image into Bitmap, when available, data is shared with this image.

@@ -84,9 +84,12 @@ CVAPI(void) CvDescriptorMatcherRadiusMatch(cv::DescriptorMatcher* matcher, const
                    const CvMat* mask);*/
 
 //BruteForceMatcher
-CVAPI(cv::BFMatcher*) cveBFMatcherCreate(cv::DescriptorMatcher** m, int distanceType, bool crossCheck);
+CVAPI(cv::BFMatcher*) cveBFMatcherCreate(int distanceType, bool crossCheck, cv::DescriptorMatcher** m);
 CVAPI(void) cveBFMatcherRelease(cv::BFMatcher** matcher);
 
+//FlannBasedMatcher
+CVAPI(cv::FlannBasedMatcher*) cveFlannBasedMatcherCreate(cv::flann::IndexParams* indexParams, cv::flann::SearchParams* searchParams, cv::DescriptorMatcher** m);
+CVAPI(void) cveFlannBasedMatcherRelease(cv::FlannBasedMatcher** matcher);
 
 //2D Tracker
 CVAPI(int) voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double scaleIncrement, int rotationBins);

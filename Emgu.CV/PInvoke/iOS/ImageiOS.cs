@@ -2,13 +2,15 @@
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if __IOS__
+#if __UNIFIED__
 using System;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using CoreGraphics;
+#if __IOS__
 using UIKit;
+#endif
 
 namespace Emgu.CV
 {
@@ -17,12 +19,18 @@ namespace Emgu.CV
       where TColor : struct, IColor
       where TDepth : new()
    {
+      /// <summary>
+      /// Creating an Image from the CGImage
+      /// </summary>
       public Image(CGImage cgImage)
          : this( (int) cgImage.Width, (int) cgImage.Height)
       {
          ConvertFromCGImage(cgImage);
       }
 
+      /// <summary>
+      /// Copy the data from the CGImage to the current Image object
+      /// </summary>
       private void ConvertFromCGImage(CGImage cgImage)
       {
          //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
@@ -45,12 +53,10 @@ namespace Emgu.CV
          }
       }
 
-      public Image(UIImage uiImage)
-         : this (uiImage.CGImage)
-      {
-      }
-
-      public UIImage ToUIImage()
+      /// <summary>
+      /// Convert this Image object to CGImage
+      /// </summary>
+      public CGImage ToCGImage()
       {
          //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
          if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(Byte))
@@ -63,18 +69,44 @@ namespace Emgu.CV
          		Width * 4,
                cspace,
          		CGImageAlphaInfo.PremultipliedLast))
-            using (CGImage cgImage =  context.ToImage())
+
             {
-               return UIImage.FromImage(cgImage);
+                CGImage cgImage = context.ToImage();
+                return cgImage;
             }
          } else
          {
             using (Image<Rgba, Byte> tmp = Convert<Rgba, Byte>())
             {
-               return tmp.ToUIImage();
+               return tmp.ToCGImage();
             }
          }
       }
+
+#if __IOS__
+      /// <summary>
+      /// Creating an Image from the UIImage
+      /// </summary>
+      public Image(UIImage uiImage)
+         : this( (int) uiImage.Size.Width, (int) uiImage.Size.Height)
+      {
+          using (CGImage cgImage = uiImage.CGImage)
+          {
+              ConvertFromCGImage(cgImage);
+          }
+      }
+
+      /// <summary>
+      /// Convert this Image object to UIImage
+      /// </summary>
+      public UIImage ToUIImage()
+      {
+          using (CGImage cgImage = ToCGImage())
+          {
+              return UIImage.FromImage(cgImage);
+          }
+      }
+#endif
    }
 }
 

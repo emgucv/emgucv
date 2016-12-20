@@ -1486,8 +1486,12 @@ IF(IOS)
   add_library(${the_target} STATIC ${extern_srcs} ${extern_hdrs} )
 ELSE()
   add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} )
+  IF (APPLE)
+    set_target_properties(${the_target} PROPERTIES MACOSX_RPATH ON)    
+    #SET(DYLIBBUNDLER_PATH "${PROJECT_SOURCE_DIR}/../platform/osx/dylibbundler")
+    #MESSAGE(STATUS "DYLIBBUNDLER_PATH: ${DYLIBBUNDLER_PATH}")
+  ENDIF()
 ENDIF()  
-
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
   FOREACH(CVEXTERN_DEPENDENCY_DLL ${CVEXTERN_DEPENDENCY_DLLS})

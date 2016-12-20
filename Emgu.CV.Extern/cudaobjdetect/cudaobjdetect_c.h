@@ -39,9 +39,9 @@ CVAPI(int) cudaCascadeClassifierGetMinNeighbors(cv::cuda::CascadeClassifier* cla
 
 CVAPI(void) cudaCascadeClassifierSetMinNeighbors(cv::cuda::CascadeClassifier* classifier, int minNeighbours);
 */
-CVAPI(void) cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, emgu::size* minObjectSize);
+CVAPI(void) cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, CvSize* minObjectSize);
 
-CVAPI(void) cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* classifier, emgu::size* minObjectSize);
+CVAPI(void) cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* classifier, CvSize* minObjectSize);
 
 //----------------------------------------------------------------------------
 //
@@ -51,10 +51,10 @@ CVAPI(void) cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* c
 CVAPI(void) cudaHOGGetDefaultPeopleDetector(cv::cuda::HOG* descriptor, cv::Mat* detector);
 
 CVAPI(cv::cuda::HOG*) cudaHOGCreate(
-   emgu::size* winSize,
-   emgu::size* blockSize,
-   emgu::size* blockStride,
-   emgu::size* cellSize,
+   CvSize* winSize,
+   CvSize* blockSize,
+   CvSize* blockStride,
+   CvSize* cellSize,
    int nbins);
 
 CVAPI(void) cudaHOGSetSVMDetector(cv::cuda::HOG* descriptor, cv::_InputArray* detector);
@@ -83,8 +83,8 @@ CVAPI(void) cudaHOGSetHitThreshold(cv::cuda::HOG* descriptor, double hitThreshol
 CVAPI(double) cudaHOGGetScaleFactor(cv::cuda::HOG* descriptor);
 CVAPI(void) cudaHOGSetScaleFactor(cv::cuda::HOG* descriptor, double scaleFactor); 
 
-CVAPI(void) cudaHOGGetWinStride(cv::cuda::HOG* descriptor, emgu::size* winStride);
-CVAPI(void) cudaHOGSetWinStride(cv::cuda::HOG* descriptor, emgu::size* winStride);
+CVAPI(void) cudaHOGGetWinStride(cv::cuda::HOG* descriptor, CvSize* winStride);
+CVAPI(void) cudaHOGSetWinStride(cv::cuda::HOG* descriptor, CvSize* winStride);
 
 CVAPI(bool) cudaHOGGetGammaCorrection(cv::cuda::HOG* descriptor);
 CVAPI(void) cudaHOGSetGammaCorrection(cv::cuda::HOG* descriptor, bool gammaCorrection);

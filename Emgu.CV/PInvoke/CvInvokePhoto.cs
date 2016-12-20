@@ -31,7 +31,7 @@ namespace Emgu.CV
       /// <summary>
       /// Perform image denoising using Non-local Means Denoising algorithm: 
       /// http://www.ipol.im/pub/algo/bcm_non_local_means_denoising/ 
-      /// with several computational optimizations. Noise expected to be a gaussian white noise.
+      /// with several computational optimizations. Noise expected to be a Gaussian white noise.
       /// </summary>
       /// <param name="src">Input 8-bit 1-channel, 2-channel or 3-channel image.</param>
       /// <param name="dst">Output image with the same size and type as src.</param>
@@ -50,7 +50,7 @@ namespace Emgu.CV
       /// <summary>
       /// Perform image denoising using Non-local Means Denoising algorithm (modified for color image): 
       /// http://www.ipol.im/pub/algo/bcm_non_local_means_denoising/ 
-      /// with several computational optimizations. Noise expected to be a gaussian white noise.
+      /// with several computational optimizations. Noise expected to be a Gaussian white noise.
       /// The function converts image to CIELAB colorspace and then separately denoise L and AB components with given h parameters using fastNlMeansDenoising function.
       /// </summary>
       /// <param name="src">Input 8-bit 1-channel, 2-channel or 3-channel image.</param>
@@ -196,5 +196,45 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveTextureFlattening(IntPtr src, IntPtr mask, IntPtr dst, float lowThreshold, float highThreshold, int kernelSize);
 
+      /// <summary>
+      /// Transforms a color image to a grayscale image. It is a basic tool in digital printing, stylized black-and-white photograph rendering, and in many single channel image processing applications 
+      /// </summary>
+      /// <param name="src">Input 8-bit 3-channel image.</param>
+      /// <param name="grayscale">Output 8-bit 1-channel image.</param>
+      /// <param name="colorBoost">Output 8-bit 3-channel image.</param>
+      public static void Decolor(IInputArray src, IOutputArray grayscale, IOutputArray colorBoost)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (OutputArray oaGrayscale = grayscale.GetOutputArray())
+         using (OutputArray oaColorBoost = colorBoost.GetOutputArray())
+         {
+            cveDecolor(iaSrc, oaGrayscale, oaColorBoost);
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveDecolor(IntPtr src, IntPtr grayscale, IntPtr colorBoost);
+
+      /// <summary>
+      /// Image editing tasks concern either global changes (color/intensity corrections, filters, deformations) or local changes concerned to a selection. Here we are interested in achieving local changes, ones that are restricted to a region manually selected (ROI), in a seamless and effortless manner. The extent of the changes ranges from slight distortions to complete replacement by novel content 
+      /// </summary>
+      /// <param name="src">Input 8-bit 3-channel image.</param>
+      /// <param name="dst">Input 8-bit 3-channel image.</param>
+      /// <param name="mask">Input 8-bit 1 or 3-channel image.</param>
+      /// <param name="p">Point in dst image where object is placed.</param>
+      /// <param name="blend">Output image with the same size and type as dst.</param>
+      /// <param name="flags">Cloning method</param>
+      public static void SeamlessClone(IInputArray src, IInputArray dst, IInputArray mask, Point p, IOutputArray blend,
+         CvEnum.CloningMethod flags)
+      {
+         using (InputArray iaSrc = src.GetInputArray())
+         using (InputArray iaDst = dst.GetInputArray())
+         using (InputArray iaMask = mask.GetInputArray())
+         using (OutputArray oaBlend = blend.GetOutputArray())
+         {
+            cveSeamlessClone(iaSrc, iaDst, iaMask, ref p, oaBlend, flags);
+         }
+      }
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern void cveSeamlessClone(IntPtr src, IntPtr dst, IntPtr mask, ref Point p, IntPtr blend, CvEnum.CloningMethod flags);
    }
 }

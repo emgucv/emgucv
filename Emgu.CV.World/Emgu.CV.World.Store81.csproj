@@ -88,11 +88,8 @@
   <Import Project="..\Emgu.CV\Emgu.CV.projitems" Label="Shared" Condition="Exists('..\Emgu.CV\Emgu.CV.projitems')" />
   <Import Project="..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\Emgu.Util\Emgu.Util.projitems')" />
   <Import Project="..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems')" />
-  <Import Project="..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems')" />
   <Import Project="..\Emgu.CV.ML\Emgu.CV.ML.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.ML\Emgu.CV.ML.projitems')" />
   <Import Project="..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.OCR\Emgu.CV.OCR.projitems')" />
-  <Import Project="..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.OCR\Emgu.CV.OCR.projitems')" />
-  <Import Project="..\Emgu.CV.ML\Emgu.CV.ML.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.ML\Emgu.CV.ML.projitems')" />
   <Import Project="..\Emgu.CV.Shape\Emgu.CV.Shape.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.Shape\Emgu.CV.Shape.projitems')" />
   <Import Project="..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />

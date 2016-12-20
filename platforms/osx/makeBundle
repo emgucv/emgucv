@@ -10,6 +10,6 @@ mkdir emgucv.bundle
 mkdir emgucv.bundle/Contents
 mkdir emgucv.bundle/Contents/MacOS
 mkdir emgucv.bundle/Contents/Resources
-./dylibbundler -od -b -p '@loader_path/' -x ../../bin/libcvextern.dylib -d emgucv.bundle/Contents/MacOS
+cp ../../bin/libcvextern.dylib emgucv.bundle/Contents/MacOS/
 cp Info.plist emgucv.bundle/Contents/
 cp icons.icns emgucv.bundle/Contents/Resources/

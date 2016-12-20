@@ -10,7 +10,10 @@ using Emgu.CV.CvEnum;
 #if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
 #elif __IOS__
+using CoreGraphics;
 using UIKit;
+#elif __UNIFIED__
+using CoreGraphics;
 #elif NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
@@ -123,15 +126,16 @@ namespace Emgu.CV
          }
 
          String extension = fi.Extension.ToLower();
-#if __IOS__
+#if __UNIFIED__
          //Open CV's libpng doesn't seem to be able to handle png in iOS
-         //Use UIImage to load png
+         //Use CGImage to load png
          if (extension.Equals(".png"))
          {
-            using (UIImage tmp = UIImage.FromFile(fileName))
+            using (CGDataProvider provider = new CGDataProvider(fileName))
+            using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
             {
-               AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
-               ConvertFromCGImage(tmp.CGImage);
+               AllocateData((int)tmp.Height, (int)tmp.Width, NumberOfChannels);
+               ConvertFromCGImage(tmp);
             }
             return;
          }
@@ -201,6 +205,7 @@ namespace Emgu.CV
                AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
                ConvertFromCGImage(tmp.CGImage);
             }
+#elif __UNIFIED__
 #else
             //give Bitmap a try
             //and if it cannot load the image, exception will be thrown
@@ -210,7 +215,7 @@ namespace Emgu.CV
 #endif
       }
 
-#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
 #else
       /// <summary>
       /// Load the specific file using Bitmap
@@ -244,7 +249,7 @@ namespace Emgu.CV
       }
 #endif
 
-#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
       /// <summary>
       /// Obtain the image from the specific Bitmap
@@ -2636,7 +2641,7 @@ namespace Emgu.CV
       }
       #endregion
 
-#if __IOS__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
       //#region Conversion with Bitmap
       /// <summary>

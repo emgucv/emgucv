@@ -2,14 +2,18 @@
 //  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if __IOS__
+#if __UNIFIED__
 using System;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using CoreGraphics;
 using Emgu.CV.CvEnum;
+#if __IOS__
 using UIKit;
+#else
+using AppKit;
+#endif
 
 namespace Emgu.CV
 {
@@ -44,15 +48,6 @@ namespace Emgu.CV
          } 
       }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from UIImage
-      /// </summary>
-      /// <param name="uiImage">The UIImage.</param>
-      public Mat(UIImage uiImage)
-         : this (uiImage.CGImage)
-      {
-      }
-
       private static CGImage RgbaByteMatToCGImage(Mat bgraByte)
       {
          using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
@@ -64,18 +59,6 @@ namespace Emgu.CV
             cspace,
             CGImageAlphaInfo.PremultipliedLast))
             return context.ToImage();
-      }
-
-      /// <summary>
-      /// Converts to UIImage.
-      /// </summary>
-      /// <returns>The UIImage.</returns>
-      public UIImage ToUIImage()
-      {
-         using (CGImage tmp = ToCGImage())
-         {
-            return UIImage.FromImage(tmp);
-         }
       }
 
       /// <summary>
@@ -94,7 +77,7 @@ namespace Emgu.CV
                CvInvoke.CvtColor(this, tmp, ColorConversion.Bgra2Rgba);
                return RgbaByteMatToCGImage(tmp);
             }
-         }else if (nchannels == 3 && d == DepthType.Cv8U)
+         } else if (nchannels == 3 && d == DepthType.Cv8U)
          {
            //bgr
             using (Mat tmp = new Mat())
@@ -114,6 +97,59 @@ namespace Emgu.CV
             throw new Exception(String.Format("Converting from Mat of {0} channels {1} to CGImage is not supported. Please convert Mat to 3 channel Bgr image of Byte before calling this function.", nchannels, d));
          }
       }
+
+#if __IOS__
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from UIImage
+      /// </summary>
+      /// <param name="uiImage">The UIImage.</param>
+      public Mat(UIImage uiImage)
+         : this ()
+      {
+		using(CGImage cgImage = uiImage.CGImage)
+		{
+		ConvertFromCGImage(cgImage);
+		}
+      }
+
+      /// <summary>
+      /// Converts to UIImage.
+      /// </summary>
+      /// <returns>The UIImage.</returns>
+      public UIImage ToUIImage()
+      {
+         using (CGImage tmp = ToCGImage())
+         {
+            return UIImage.FromImage(tmp);
+         }
+      }
+#else
+	  /// <summary>
+      /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from NSImage
+      /// </summary>
+      /// <param name="uiImage">The NSImage.</param>
+      public Mat(NSImage nsImage)
+         : this ()
+      {
+			using(CGImage cgImage = nsImage.CGImage)
+			{
+				ConvertFromCGImage(cgImage);
+			}
+      }
+
+      /// <summary>
+      /// Converts to NSImage.
+      /// </summary>
+      /// <returns>The NSImage.</returns>
+      public NSImage ToNSImage()
+      {
+         using (CGImage tmp = ToCGImage())
+         {
+				return new NSImage(tmp, new CGSize(tmp.Width, tmp.Height));
+         }
+      }
+#endif
+
    }
 }
 

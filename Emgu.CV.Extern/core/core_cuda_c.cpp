@@ -174,13 +174,9 @@ cv::cuda::GpuMat* gpuMatCreateFromInputArray(cv::_InputArray* arr)
    return new cv::cuda::GpuMat(*arr);
 }
 
-emgu::size gpuMatGetSize(cv::cuda::GpuMat* gpuMat)
+void gpuMatGetSize(cv::cuda::GpuMat* gpuMat, CvSize* size)
 {
-   cv::Size s = gpuMat->size();
-   emgu::size result;
-   result.width = s.width;
-   result.height = s.height;
-   return result;
+   *size = gpuMat->size();
 }
 
 bool gpuMatIsEmpty(cv::cuda::GpuMat* gpuMat)

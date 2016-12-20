@@ -24,7 +24,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Display the histograms of the specific image
       /// </summary>
-      /// <param name="image">The image to retrieve hostigram from</param>
+      /// <param name="image">The image to retrieve histogram from</param>
       public static void Show(IImage image)
       {
          Show(image, 256);
@@ -33,8 +33,8 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Display the histograms of the specific image
       /// </summary>
-      /// <param name="image">The image to retrieve hostigram from</param>
-      /// <param name="numberOfBins">The numebr of bins in the histogram</param>
+      /// <param name="image">The image to retrieve histogram from</param>
+      /// <param name="numberOfBins">The number of bins in the histogram</param>
       public static void Show(IImage image, int numberOfBins)
       {
          HistogramViewer viewer = new HistogramViewer();

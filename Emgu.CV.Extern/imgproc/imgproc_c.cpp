@@ -27,7 +27,7 @@ void cveFilter2D( cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* 
     cv::filter2D( *src, *dst, dst->depth(), *kernel, *anchor, delta, borderType );
 }
 
-void cveCLAHE(cv::_InputArray* src, double clipLimit, emgu::size* tileGridSize, cv::_OutputArray* dst)
+void cveCLAHE(cv::_InputArray* src, double clipLimit, CvSize* tileGridSize, cv::_OutputArray* dst)
 {
    cv::Size s(tileGridSize->width, tileGridSize->height);
    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(clipLimit, s);
@@ -35,7 +35,7 @@ void cveCLAHE(cv::_InputArray* src, double clipLimit, emgu::size* tileGridSize, 
 }
 
 /*
-void cveAdaptiveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, emgu::size* ksize, double sigmaSpace, double maxSigmaColor, CvPoint* anchor, int borderType)
+void cveAdaptiveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize, double sigmaSpace, double maxSigmaColor, CvPoint* anchor, int borderType)
 {
    cv::Size s(ksize->width, ksize->height);
    cv::adaptiveBilateralFilter(*src, *dst, s, sigmaSpace, maxSigmaColor, *anchor, borderType);
@@ -50,7 +50,7 @@ void cveDilate(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* ker
 {
    cv::dilate(*src, *dst, kernel ? * kernel : (cv::InputArray) cv::noArray(), *anchor, iterations, borderType, *borderValue);
 }
-void cveGetStructuringElement(cv::Mat* mat, int shape, emgu::size* ksize, CvPoint* anchor)
+void cveGetStructuringElement(cv::Mat* mat, int shape, CvSize* ksize, CvPoint* anchor)
 {
    cv::Size s(ksize->width, ksize->height);
    cv::Mat res = cv::getStructuringElement(shape, s, *anchor);
@@ -71,12 +71,12 @@ void cveLaplacian(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, int k
    cv::Laplacian(*src, *dst, ddepth, ksize, scale, delta, borderType);
 }
 
-void cvePyrUp(cv::_InputArray* src, cv::_OutputArray* dst, emgu::size* size, int borderType)
+void cvePyrUp(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* size, int borderType)
 {
    cv::Size s(size->width, size->height);
    cv::pyrUp(*src, *dst, s, borderType);
 }
-void cvePyrDown(cv::_InputArray* src, cv::_OutputArray* dst, emgu::size* size, int borderType)
+void cvePyrDown(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* size, int borderType)
 {
    cv::Size s(size->width, size->height);
    cv::pyrDown(*src, *dst, s, borderType);

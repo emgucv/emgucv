@@ -128,12 +128,10 @@ void cveMatRelease(cv::Mat** mat)
    delete *mat;
    *mat = 0;
 }
-emgu::size cveMatGetSize(cv::Mat* mat)
+void cveMatGetSize(cv::Mat* mat, CvSize* size)
 {
-   emgu::size s;
-   s.width = mat->cols;
-   s.height = mat->rows;
-   return s;
+   size->width = mat->cols;
+   size->height = mat->rows;
 }
 void cveMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask)
 {

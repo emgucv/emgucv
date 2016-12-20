@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Emgu.CV.shproj", "{12D024EE-D0A5-4BBC-B7C0-7B18CF1AB262}"
 EndProject
@@ -31,35 +31,35 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtimeCamera", "..\..\Emg
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\..\Emgu.Util\Emgu.Util.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0d0c868d-23d6-46f7-a3e0-5f595c84939c}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
+		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{1c41f1cc-b8a8-4e72-8167-0e1a42edf843}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
+		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
+		..\..\Emgu.CV.Example\XamarinForms\WindowsUniversal81\Shared\WindowsUniversal.Shared.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
+		..\..\Emgu.CV\Emgu.CV.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
-		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{1c41f1cc-b8a8-4e72-8167-0e1a42edf843}*SharedItemsImports = 13
-		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
-		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Example\XamarinForms\WindowsUniversal81\Shared\WindowsUniversal.Shared.projitems*{c96d5f57-7cb8-4de8-bfdd-a5c8e1697e03}*SharedItemsImports = 13
-		..\..\Emgu.Util\Emgu.Util.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
-		..\..\Emgu.CV.Example\XamarinForms\WindowsUniversal81\Shared\WindowsUniversal.Shared.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
-		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
-		..\..\Emgu.Util\Emgu.Util.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
-		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
+		..\..\Emgu.CV\Emgu.CV.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
-		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
+		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
-		..\..\Emgu.Util\Emgu.Util.projitems*{b9d1a8f2-4c4a-444b-8a20-c9f4133573e4}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{b9d1a8f2-4c4a-444b-8a20-c9f4133573e4}*SharedItemsImports = 4
-		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0d0c868d-23d6-46f7-a3e0-5f595c84939c}*SharedItemsImports = 13
+		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
+		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
+		..\..\Emgu.CV\Emgu.CV.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
 		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f3bc3e1-3b59-48ab-959a-71844b9ad9be}*SharedItemsImports = 13
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
+		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.projitems*{b9d1a8f2-4c4a-444b-8a20-c9f4133573e4}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{b9d1a8f2-4c4a-444b-8a20-c9f4133573e4}*SharedItemsImports = 4
+		..\..\Emgu.CV.Example\XamarinForms\WindowsUniversal81\Shared\WindowsUniversal.Shared.projitems*{c96d5f57-7cb8-4de8-bfdd-a5c8e1697e03}*SharedItemsImports = 13
+		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM

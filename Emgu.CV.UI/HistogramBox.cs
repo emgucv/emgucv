@@ -134,7 +134,8 @@ namespace Emgu.CV.UI
          Mat[] channels = new Mat[image.NumberOfChannels];
          Type imageType; 
          if ((imageType = Toolbox.GetBaseType(image.GetType(), "Image`2")) != null 
-            || (imageType = Toolbox.GetBaseType(image.GetType(), "Mat")) != null)
+            || (imageType = Toolbox.GetBaseType(image.GetType(), "Mat")) != null
+            || (imageType = Toolbox.GetBaseType(image.GetType(), "UMat")) != null)
          {
             for (int i = 0; i < image.NumberOfChannels; i++)
             {
@@ -183,6 +184,9 @@ namespace Emgu.CV.UI
             if (image is Mat)
             {
                typeOfDepth = CvInvoke.GetDepthType(((Mat)image).Depth);
+            } else if (image is UMat)
+            {
+               typeOfDepth = CvInvoke.GetDepthType(((UMat)image).Depth);
             }
             else
             {

@@ -31,6 +31,8 @@ cp -r ../Emgu.CV/Features2D Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Flann Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Geodetic Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Ocl Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Photo Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Viz Assets/Emgu.CV/Emgu.CV/
 mkdir Assets\Emgu.CV\Emgu.CV\PInvoke
 xcopy ..\Emgu.CV\PInvoke Assets\Emgu.CV\Emgu.CV\PInvoke\ /s /e /Y
 cp -r ../Emgu.CV/Reflection Assets/Emgu.CV/Emgu.CV/

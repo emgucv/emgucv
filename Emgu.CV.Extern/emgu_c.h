@@ -15,12 +15,13 @@
 
 namespace emgu
 {
+/*
    struct size
    {
       int width;
       int height;
    };
-
+*/
    struct cvStructSizes
    {
       int CvPoint;
@@ -35,8 +36,8 @@ namespace emgu
       int CvMatND;
       //int CvHistogram;
       int CvTermCriteria;
-      int CvSeq;
-      int CvContour;
+      //int CvSeq;
+      //int CvContour;
       int IplImage;
       //int ERStat;
    };

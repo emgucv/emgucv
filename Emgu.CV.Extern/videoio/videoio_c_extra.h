@@ -52,6 +52,9 @@ CVAPI(void) cveWinrtOnVisibilityChanged(bool visible);
 #endif
 
 CVAPI(cv::VideoWriter*) cveVideoWriterCreate(cv::String* filename, int fourcc, double fps, CvSize* frameSize, bool isColor);
+CVAPI(bool) cveVideoWriterIsOpened(cv::VideoWriter* writer);
+CVAPI(bool) cveVideoWriterSet(cv::VideoWriter* writer, int propId, double value);
+CVAPI(double) cveVideoWriterGet(cv::VideoWriter* writer, int propId);
 CVAPI(void) cveVideoWriterRelease(cv::VideoWriter** writer);
 CVAPI(void) cveVideoWriterWrite(cv::VideoWriter* writer, cv::Mat* image);
 CVAPI(int) cveVideoWriterFourcc(char c1, char c2, char c3, char c4);
