@@ -52,9 +52,9 @@ void cveDnnNetRelease(cv::dnn::Net** net)
 }
 
 
-cv::dnn::Blob* cveDnnBlobCreateFromInputArray(cv::_InputArray* image, int dstCn)
+cv::dnn::Blob* cveDnnBlobCreateFromInputArray(cv::_InputArray* image)
 {
-   return new cv::dnn::Blob(*image, dstCn);
+   return new cv::dnn::Blob(*image);
 }
 void cveDnnBlobMatRef(cv::dnn::Blob* blob, cv::Mat* outMat)
 {

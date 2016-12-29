@@ -8,15 +8,21 @@
 #ifndef EMGU_XPHOTO_C_H
 #define EMGU_XPHOTO_C_H
 
-//#include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/core/core_c.h"
 #include "opencv2/xphoto.hpp"
 
-CVAPI(void) cveBalanceWhite(const cv::Mat* src, cv::Mat* dst, const int algorithmType,
-   const float inputMin, const float inputMax,
-   const float outputMin, const float outputMax);
+CVAPI(void) cveWhiteBalancerBalanceWhite(cv::xphoto::WhiteBalancer* whiteBalancer, cv::_InputArray* src, cv::_OutputArray* dst);
 
-CVAPI(void) cveAutowbGrayworld(cv::_InputArray* src, cv::_OutputArray* dst, float thresh);
+CVAPI(cv::xphoto::SimpleWB*) cveSimpleWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer);
+CVAPI(void) cveSimpleWBRelease(cv::xphoto::SimpleWB** whiteBalancer);
+
+CVAPI(cv::xphoto::GrayworldWB*) cveGrayworldWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer);
+CVAPI(void) cveGrayworldWBRelease(cv::xphoto::GrayworldWB** whiteBalancer);
+
+CVAPI(cv::xphoto::LearningBasedWB*) cveLearningBasedWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer);
+CVAPI(void) cveLearningBasedWBRelease(cv::xphoto::LearningBasedWB** whiteBalancer);
+
+
 
 CVAPI(void) cveDctDenoising(const cv::Mat* src, cv::Mat* dst, const double sigma, const int psize);
 

@@ -6,16 +6,49 @@
 
 #include "xphoto_c.h"
 
-void cveBalanceWhite(const cv::Mat* src, cv::Mat* dst, const int algorithmType,
-   const float inputMin, const float inputMax,
-   const float outputMin, const float outputMax)
+void cveWhiteBalancerBalanceWhite(cv::xphoto::WhiteBalancer* whiteBalancer, cv::_InputArray* src, cv::_OutputArray* dst)
 {
-   cv::xphoto::balanceWhite(*src, *dst, algorithmType, inputMin, inputMax, outputMin, outputMax);
+	whiteBalancer->balanceWhite(*src, *dst);
 }
 
-void cveAutowbGrayworld(cv::_InputArray* src, cv::_OutputArray* dst, float thresh)
+cv::xphoto::SimpleWB* cveSimpleWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer)
 {
-   cv::xphoto::autowbGrayworld(*src, *dst, thresh);
+	cv::Ptr<cv::xphoto::SimpleWB> ptr = cv::xphoto::createSimpleWB();
+	ptr.addref();
+	*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
+	return ptr.get();
+}
+void cveSimpleWBRelease(cv::xphoto::SimpleWB** whiteBalancer)
+{
+	delete *whiteBalancer;
+	*whiteBalancer = 0;
+}
+
+cv::xphoto::GrayworldWB* cveGrayworldWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer)
+{
+	cv::Ptr<cv::xphoto::GrayworldWB> ptr = cv::xphoto::createGrayworldWB();
+	ptr.addref();
+	*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
+	return ptr.get();
+}
+void cveGrayworldWBRelease(cv::xphoto::GrayworldWB** whiteBalancer)
+{
+	delete *whiteBalancer;
+	*whiteBalancer = 0;
+}
+
+cv::xphoto::LearningBasedWB* cveLearningBasedWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer)
+{
+	cv::Ptr<cv::xphoto::LearningBasedWB> ptr = cv::xphoto::createLearningBasedWB();
+	ptr.addref();
+	*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
+	return ptr.get();
+}
+
+void cveLearningBasedWBRelease(cv::xphoto::LearningBasedWB** whiteBalancer)
+{
+	delete *whiteBalancer;
+	*whiteBalancer = 0;
 }
 
 void cveDctDenoising(const cv::Mat* src, cv::Mat* dst, const double sigma, const int psize)

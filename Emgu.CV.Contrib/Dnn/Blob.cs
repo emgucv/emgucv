@@ -29,11 +29,11 @@ namespace Emgu.CV.Dnn
         /// Constucts 4-dimensional blob (so-called batch) from image or array of images.
         /// </summary>
         /// <param name="image">2-dimensional multi-channel or 3-dimensional single-channel image (or array of images)</param>
-        /// <param name="dstCn">specify size of second axis of ouptut blob</param>
-        public Blob(IInputArray image, int dstCn = -1)
+        
+        public Blob(IInputArray image)
         {
             using (InputArray iaImage = image.GetInputArray())
-                _ptr = DnnInvoke.cveDnnBlobCreateFromInputArray(iaImage, dstCn);
+                _ptr = DnnInvoke.cveDnnBlobCreateFromInputArray(iaImage);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace Emgu.CV.Dnn
     public static partial class DnnInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveDnnBlobCreateFromInputArray(IntPtr image, int dstCn);
+        internal static extern IntPtr cveDnnBlobCreateFromInputArray(IntPtr image);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnBlobMatRef(IntPtr blob, IntPtr outMat);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

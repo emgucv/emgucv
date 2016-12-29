@@ -3765,21 +3765,6 @@ namespace Emgu.CV.CvEnum
    }
 
    /// <summary>
-   /// White balance algorithms
-   /// </summary>
-   public enum WhiteBalanceMethod
-   {
-      /// <summary>
-      /// Simple
-      /// </summary>
-      Simple = 0,
-      /// <summary>
-      /// Grayworld
-      /// </summary>
-      Grayworld = 1
-   }
-
-   /// <summary>
    /// Seamless clone method
    /// </summary>
    public enum CloningMethod

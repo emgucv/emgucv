@@ -23,7 +23,7 @@ CVAPI(cv::dnn::Blob*) cveDnnNetGetBlob(cv::dnn::Net* net, cv::String* outputName
 CVAPI(void) cveDnnNetForward(cv::dnn::Net* net);
 CVAPI(void) cveDnnNetRelease(cv::dnn::Net** net);
 
-CVAPI(cv::dnn::Blob*) cveDnnBlobCreateFromInputArray(cv::_InputArray* image, int dstCn);
+CVAPI(cv::dnn::Blob*) cveDnnBlobCreateFromInputArray(cv::_InputArray* image);
 CVAPI(void) cveDnnBlobMatRef(cv::dnn::Blob* blob, cv::Mat* outMat);
 CVAPI(void) cveDnnBlobRelease(cv::dnn::Blob** blob); 
 CVAPI(int) cveDnnBlobDims(cv::dnn::Blob* blob);
