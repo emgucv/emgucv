@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2016 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 #if ! (NETFX_CORE || __ANDROID__ || __IOS__ || UNITY_IOS || UNITY_ANDROID )
 
