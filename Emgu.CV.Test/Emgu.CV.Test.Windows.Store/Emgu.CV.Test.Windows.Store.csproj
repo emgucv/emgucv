@@ -185,38 +185,6 @@
       <Link>letter-recognition.data</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.bigrams">
-      <Link>tessdata\eng.cube.bigrams</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.fold">
-      <Link>tessdata\eng.cube.fold</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.lm">
-      <Link>tessdata\eng.cube.lm</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.nn">
-      <Link>tessdata\eng.cube.nn</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.params">
-      <Link>tessdata\eng.cube.params</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.size">
-      <Link>tessdata\eng.cube.size</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.word-freq">
-      <Link>tessdata\eng.cube.word-freq</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.tesseract_cube.nn">
-      <Link>tessdata\eng.tesseract_cube.nn</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
       <Link>tessdata\eng.traineddata</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

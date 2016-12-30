@@ -9,6 +9,10 @@ PROJECT(libleptonica)
 #ENDIF()
 
 SET(LEPTON_DIR ${LEPT_ROOT_DIR})
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${LEPT_ROOT_DIR}/cmake")
+set(AUTOCONFIG_SRC ${LEPT_ROOT_DIR}/config_auto.h.in)
+set(AUTOCONFIG ${LEPT_ROOT_DIR}/src/config_auto.h)
+include(Configure)
  
 file(GLOB lepton_srcs "${LEPTON_DIR}/src/*.c")
 file(GLOB lepton_srcs_excludes "${LEPTON_DIR}/src/freetype.c" "${LEPTON_DIR}/src/endiantest.c" "${LEPTON_DIR}/src/xtractprotos.c" "${LEPTON_DIR}/src/leptwin.c"  )

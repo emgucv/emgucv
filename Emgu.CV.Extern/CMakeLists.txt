@@ -1275,7 +1275,7 @@ ENDIF()
 
 ############################### TESSERACT START ########################
 SET(TESSERACT_OCR_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr.git")
-SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/leptonica-1.73")
+SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/leptonica-1.74")
 
 IF(ANDROID)
   IF(EMGU_CV_WITH_TESSERACT)

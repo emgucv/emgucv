@@ -36,7 +36,7 @@ namespace LicensePlateRecognition
       public LicensePlateDetector(String dataPath)
       {
          //create OCR engine
-         _ocr = new Tesseract(dataPath, "eng", OcrEngineMode.TesseractCubeCombined);
+         _ocr = new Tesseract(dataPath, "eng", OcrEngineMode.TesseractLstmCombined);
          _ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
       }
 

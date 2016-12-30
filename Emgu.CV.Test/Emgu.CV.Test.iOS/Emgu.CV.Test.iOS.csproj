@@ -159,30 +159,6 @@
     <Content Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
       <Link>tessdata\eng.traineddata</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.tesseract_cube.nn">
-      <Link>tessdata\eng.tesseract_cube.nn</Link>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.word-freq">
-      <Link>tessdata\eng.cube.word-freq</Link>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.size">
-      <Link>tessdata\eng.cube.size</Link>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.params">
-      <Link>tessdata\eng.cube.params</Link>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.nn">
-      <Link>tessdata\eng.cube.nn</Link>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.lm">
-      <Link>tessdata\eng.cube.lm</Link>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.fold">
-      <Link>tessdata\eng.cube.fold</Link>
-    </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.cube.bigrams">
-      <Link>tessdata\eng.cube.bigrams</Link>
-    </Content>
     <Content Include="..\..\Emgu.CV.Example\LicensePlateRecognition\license-plate.jpg">
       <Link>license-plate.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

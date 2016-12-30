@@ -85,8 +85,8 @@ endif()
 
 set(APPLE_UNIVERSAL_BUILD "defined (__APPLE_CC__)")
 configure_file(
-    ${PROJECT_SOURCE_DIR}/src/endianness.h.in
-    ${PROJECT_BINARY_DIR}/src/endianness.h
+    ${LEPTON_DIR}/src/endianness.h.in
+    ${LEPTON_DIR}/src/endianness.h
     @ONLY)
 
 if (GIF_FOUND)
