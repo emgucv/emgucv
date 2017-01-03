@@ -46,7 +46,7 @@ IF (ANDROID)
 	add_definitions(-DANDROID_BUILD)
 	#MESSAGE("Leptonica HAVE_FMEMOPEN: ${HAVE_FMEMOPEN}")
 	#remove_definitions(-DHAVE_FMEMOPEN)
-ELSEIF(IOS)
+ELSEIF(IOS OR APPLE)
 	add_definitions(-DOS_IOS)
 ENDIF()
 
