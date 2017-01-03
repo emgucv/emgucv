@@ -42,6 +42,14 @@ IF (MSVC)
   add_definitions(-W0)
 ENDIF()
 
+IF (ANDROID)
+	add_definitions(-DANDROID_BUILD)
+	#MESSAGE("Leptonica HAVE_FMEMOPEN: ${HAVE_FMEMOPEN}")
+	#remove_definitions(-DHAVE_FMEMOPEN)
+ELSEIF(IOS)
+	add_definitions(-DOS_IOS)
+ENDIF()
+
 add_library(${the_target} STATIC ${lepton_srcs} ${lepton_hdrs})
 
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
