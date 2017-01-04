@@ -1,19 +1,20 @@
 [submodule "Emgu.CV.Extern/cvblob/libcvblob"]
 	path = Emgu.CV.Extern/cvblob/libcvblob
-	url = git://git.code.sf.net/p/emgucv/cvblob
+	url = https://github.com/emgucv/cvblob.git
 [submodule "opencv"]
 	path = opencv
-	url = git://git.code.sf.net/p/emgucv/opencv
+	url = https://github.com/emgucv/opencv.git
 	ignore = dirty
 [submodule "opencv_contrib"]
 	path = opencv_contrib
-	url = git://git.code.sf.net/p/emgucv/opencv_contrib
+	url = https://github.com/emgucv/opencv_contrib.git
 [submodule "opencv_extra"]
 	path = opencv_extra
-	url = https://github.com/Itseez/opencv_extra.git
+	url = https://github.com/opencv/opencv_extra.git
 [submodule "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git"]
 	path = Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git
-	url = git://git.code.sf.net/p/emgucv/tesseract-ocr-git
+	url = https://github.com/emgucv/tesseract.git
 [submodule "vtk"]
 	path = vtk
 	url = https://github.com/Kitware/VTK.git
+	ignore = dirty
