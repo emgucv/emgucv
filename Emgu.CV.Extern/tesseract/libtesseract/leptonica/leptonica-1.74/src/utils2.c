@@ -2936,6 +2936,8 @@ char  dirname[240];
     close(fd);
     return pattern;
 }
+#elif (defined WINAPI_FAMILY) && WINAPI_FAMILY==WINAPI_FAMILY_APP
+	return (char *)ERROR_PTR("makeTempFilename failed", procName, NULL);
 #else
 {
     char  fname[MAX_PATH];
