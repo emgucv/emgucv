@@ -11,7 +11,7 @@ cd ../..
 if [ "$1" != "simulator" ]; then    
 
     rm -f CMakeCache.txt
-    platforms/ios/configure-device_xcode.sh $*
+    platforms/ios/configure-device_xcode.sh -DIOS_ARCH="armv7s" $*
     rm -rf platforms/ios/armv7s bin/Release opencv/3rdparty/lib/Release 
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
     mkdir -p platforms/ios/armv7s 
@@ -24,7 +24,7 @@ if [ "$1" != "simulator" ]; then
     cd ../../..
     
     rm -f CMakeCache.txt
-    platforms/ios/configure-device_xcode.sh $*
+    platforms/ios/configure-device_xcode.sh -DIOS_ARCH="armv7" $*
     rm -rf platforms/ios/armv7 bin/Release opencv/3rdparty/lib/Release
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
     mkdir -p platforms/ios/armv7 
@@ -37,7 +37,7 @@ if [ "$1" != "simulator" ]; then
     cd ../../..
 
     rm -f CMakeCache.txt
-    platforms/ios/configure-device_xcode.sh $*
+    platforms/ios/configure-device_xcode.sh -DIOS_ARCH="arm64" $*
     rm -rf platforms/ios/arm64 bin/Release opencv/3rdparty/lib/Release
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="arm64" -target ALL_BUILD clean build
     mkdir -p platforms/ios/arm64 
@@ -53,9 +53,9 @@ fi
 
 rm -f CMakeCache.txt
 if [ "$1" == "simulator" ]; then    
-  platforms/ios/configure-simulator_xcode.sh ${@:2}
+  platforms/ios/configure-simulator_xcode.sh -DIOS_ARCH="i386" ${@:2}
 else
-  platforms/ios/configure-simulator_xcode.sh $*
+  platforms/ios/configure-simulator_xcode.sh -DIOS_ARCH="i386" $*
 fi
 rm -rf platforms/ios/i386 bin/Release opencv/3rdparty/lib/Release
 xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="i386" -target ALL_BUILD clean build
@@ -70,9 +70,9 @@ cd ../../..
 
 rm -f CMakeCache.txt
 if [ "$1" == "simulator" ]; then    
-  platforms/ios/configure-simulator_xcode.sh ${@:2}
+  platforms/ios/configure-simulator_xcode.sh -DIOS_ARCH="x86_64" ${@:2}
 else
-  platforms/ios/configure-simulator_xcode.sh $*
+  platforms/ios/configure-simulator_xcode.sh -DIOS_ARCH="x86_64" $*
 fi
 rm -rf platforms/ios/x86_64 bin/Release opencv/3rdparty/lib/Release
 xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="x86_64" -target ALL_BUILD clean build
