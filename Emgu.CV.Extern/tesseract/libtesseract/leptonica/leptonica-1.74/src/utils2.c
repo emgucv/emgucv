@@ -2218,6 +2218,8 @@ l_int32  ret;
         remove(realpath);
         LEPT_FREE(realpath);
     }
+#elif	(defined WINAPI_FAMILY) && (defined WINAPI_PARTITION_APP)
+	ret = -1;
 #else
     srcpath = genPathname(dir, srctail);
     LEPT_FREE(dir);
@@ -2936,7 +2938,7 @@ char  dirname[240];
     close(fd);
     return pattern;
 }
-#elif (defined WINAPI_FAMILY) && WINAPI_FAMILY==WINAPI_FAMILY_APP
+#elif (defined WINAPI_FAMILY) && (defined WINAPI_PARTITION_APP)
 	return (char *)ERROR_PTR("makeTempFilename failed", procName, NULL);
 #else
 {
