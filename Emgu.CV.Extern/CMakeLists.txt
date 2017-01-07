@@ -1136,6 +1136,65 @@ IF(HAVE_opencv_plot)
 ENDIF()
 ############################### plot code gen END ##############################
 
+############################### xphoto code gen START ##############################
+IF(HAVE_opencv_xphoto)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "xphoto/simplewb_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/SimpleWBGenerated.cs"
+    "cv::xphoto::SimpleWB" 
+    "SimpleWB" 
+    "InputMin;InputMax;OutputMin;OutputMax;P" 
+    "float;float;float;float;float" 
+    "prop;prop;prop;prop;prop"
+    "InputMin;InputMax;OutputMin;OutputMax;P" 
+    "float;float;float;float;float"
+    "Input image range minimum value;
+	Input image range maximum value;
+	Output image range minimum value;
+	Output image range maximum value;
+	Percent of top/bottom values to ignore"
+    "Emgu.CV.XPhoto"
+    "XPhotoInvoke"
+    "SimpleWB"
+    "#include \"opencv2/xphoto.hpp\"")
+	
+  CREATE_OCV_CLASS_PROPERTY( 
+    "xphoto/grayworldwb_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/GrayworldWBGenerated.cs"
+    "cv::xphoto::GrayworldWB" 
+    "GrayworldWB" 
+    "SaturationThreshold" 
+    "float" 
+    "prop"
+    "SaturationThreshold" 
+    "float"
+    "Maximum saturation for a pixel to be included in the gray-world assumption"
+    "Emgu.CV.XPhoto"
+    "XPhotoInvoke"
+    "GrayworldWB"
+    "#include \"opencv2/xphoto.hpp\"")
+
+	CREATE_OCV_CLASS_PROPERTY( 
+    "xphoto/learningbasedwb_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/LearningBasedWBGenerated.cs"
+    "cv::xphoto::GrayworldWB" 
+    "LearningBasedWB" 
+    "RangeMaxVal;SaturationThreshold;HistBinNum" 
+    "int;float;int" 
+    "prop;prop;prop"
+    "RangeMaxVal;SaturationThreshold;HistBinNum" 
+    "int;float;int"
+    "Maximum possible value of the input image (e.g. 255 for 8 bit images, 4095 for 12 bit images);
+	Threshold that is used to determine saturated pixels, i.e. pixels where at least one of the channels exceeds saturation_threshold x range_max_val are ignored.;
+	Defines the size of one dimension of a three-dimensional RGB histogram that is used internally by the algorithm. It often makes sense to increase the number of bins for images with higher bit depth (e.g. 256 bins for a 12 bit image).
+	"
+    "Emgu.CV.XPhoto"
+    "XPhotoInvoke"
+    "LearningBasedWB"
+    "#include \"opencv2/xphoto.hpp\"")
+ENDIF()
+############################### xphoto code gen END ##############################
+
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
   FIND_PACKAGE( OpenMP REQUIRED)

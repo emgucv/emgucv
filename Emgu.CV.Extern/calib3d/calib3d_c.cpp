@@ -242,6 +242,26 @@ bool cveSolvePnPRansac(cv::_InputArray* objectPoints, cv::_InputArray* imagePoin
       flags);
 }
 
+void cveGetOptimalNewCameraMatrix(
+	cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
+	CvSize* imageSize, double alpha, CvSize* newImgSize,
+	CvRect* validPixROI,
+	bool centerPrincipalPoint,
+	cv::Mat* newCameraMatrix)
+{
+	cv::Rect r;
+	cv::Mat m = cv::getOptimalNewCameraMatrix(*cameraMatrix, distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(),
+		*imageSize, alpha, *imageSize, &r, centerPrincipalPoint);
+	if (validPixROI)
+	{
+		validPixROI->x = r.x;
+		validPixROI->y = r.y;
+		validPixROI->width = r.width;
+		validPixROI->height = r.height;
+	}
+	cv::swap(m, *newCameraMatrix);
+}
+
 /* Fisheye calibration */
 void cveFisheyeProjectPoints(cv::_InputArray* objectPoints, cv::_OutputArray* imagePoints, cv::_InputArray* rvec, cv::_InputArray* tvec,
    cv::_InputArray* K, cv::_InputArray* D, double alpha, cv::_OutputArray* jacobian)
