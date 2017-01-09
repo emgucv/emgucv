@@ -1,4 +1,9 @@
-﻿using AppKit;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
+
+using AppKit;
 
 namespace Emgu.CV.Example.Mac
 {

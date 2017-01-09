@@ -86,10 +86,42 @@
     <Compile Include="..\PlanarSubdivision\DrawSubdivision.cs">
       <Link>DrawSubdivision.cs</Link>
     </Compile>
+    <Compile Include="..\FaceDetection\DetectFace.cs">
+      <Link>DetectFace.cs</Link>
+    </Compile>
+    <Compile Include="..\FeatureMatching\DrawMatches.cs">
+      <Link>DrawMatches.cs</Link>
+    </Compile>
+    <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
+      <Link>FindPedestrian.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
+      <Link>haarcascade_eye.xml</Link>
+    </Content>
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
+      <Link>haarcascade_frontalface_default.xml</Link>
+    </Content>
+    <Content Include="..\FaceDetection\lena.jpg">
+      <Link>lena.jpg</Link>
+    </Content>
+    <Content Include="..\FeatureMatching\box_in_scene.png">
+      <Link>box_in_scene.png</Link>
+    </Content>
+    <Content Include="..\FeatureMatching\box.png">
+      <Link>box.png</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\PedestrianDetection\pedestrian.png">
+      <Link>pedestrian.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems')" />
   <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\..\Emgu.Util\Emgu.Util.projitems')" />
   <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV\Emgu.CV.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />

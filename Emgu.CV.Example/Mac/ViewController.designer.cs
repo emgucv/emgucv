@@ -21,8 +21,20 @@ namespace Emgu.CV.Example.Mac
 		[Outlet]
 		AppKit.NSTextField messageLabel { get; set; }
 
+		[Outlet]
+		AppKit.NSButton pedestrianDetectionClicked { get; set; }
+
+		[Action ("faceDetectionClicked:")]
+		partial void faceDetectionClicked (Foundation.NSObject sender);
+
+		[Action ("featureMatchingClicked:")]
+		partial void featureMatchingClicked (Foundation.NSObject sender);
+
 		[Action ("helloWorldClicked:")]
 		partial void helloWorldClicked (Foundation.NSObject sender);
+
+		[Action ("pedestrianDetectionClicked:")]
+		partial void pedestrianDetectionClicked (Foundation.NSObject sender);
 
 		[Action ("plannarSubdivisionClicked:")]
 		partial void plannarSubdivisionClicked (Foundation.NSObject sender);
@@ -42,6 +54,11 @@ namespace Emgu.CV.Example.Mac
 			if (messageLabel != null) {
 				messageLabel.Dispose ();
 				messageLabel = null;
+			}
+
+			if (pedestrianDetectionClicked != null) {
+				pedestrianDetectionClicked.Dispose ();
+				pedestrianDetectionClicked = null;
 			}
 		}
 	}
