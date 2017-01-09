@@ -1177,7 +1177,7 @@ IF(HAVE_opencv_xphoto)
 	CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/learningbasedwb_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/LearningBasedWBGenerated.cs"
-    "cv::xphoto::GrayworldWB" 
+    "cv::xphoto::LearningBasedWB" 
     "LearningBasedWB" 
     "RangeMaxVal;SaturationThreshold;HistBinNum" 
     "int;float;int" 
