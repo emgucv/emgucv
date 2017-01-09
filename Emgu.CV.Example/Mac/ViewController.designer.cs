@@ -13,13 +13,35 @@ namespace Emgu.CV.Example.Mac
 	partial class ViewController
 	{
 		[Outlet]
+		AppKit.NSButton helloWorldButton { get; set; }
+
+		[Outlet]
 		AppKit.NSImageView mainImageView { get; set; }
+
+		[Outlet]
+		AppKit.NSTextField messageLabel { get; set; }
+
+		[Action ("helloWorldClicked:")]
+		partial void helloWorldClicked (Foundation.NSObject sender);
+
+		[Action ("plannarSubdivisionClicked:")]
+		partial void plannarSubdivisionClicked (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (helloWorldButton != null) {
+				helloWorldButton.Dispose ();
+				helloWorldButton = null;
+			}
+
 			if (mainImageView != null) {
 				mainImageView.Dispose ();
 				mainImageView = null;
+			}
+
+			if (messageLabel != null) {
+				messageLabel.Dispose ();
+				messageLabel = null;
 			}
 		}
 	}
