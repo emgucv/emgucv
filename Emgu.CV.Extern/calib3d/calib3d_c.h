@@ -96,6 +96,13 @@ CVAPI(bool) cveSolvePnP(cv::_InputArray* objectPoints, cv::_InputArray* imagePoi
 
 CVAPI(bool) cveSolvePnPRansac(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_OutputArray* rvec, cv::_OutputArray* tvec, bool useExtrinsicGuess, int iterationsCount, float reprojectionError, double confident, cv::_OutputArray* inliers, int flags );
 
+CVAPI(void) cveGetOptimalNewCameraMatrix(
+	cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
+	CvSize* imageSize, double alpha, CvSize* newImgSize,
+	CvRect* validPixROI,
+	bool centerPrincipalPoint, 
+	cv::Mat* newCameraMatrix);
+
 /* Fisheye calibration */
 CVAPI(void) cveFisheyeProjectPoints(cv::_InputArray* objectPoints, cv::_OutputArray* imagePoints, cv::_InputArray* rvec, cv::_InputArray* tvec,
    cv::_InputArray* K, cv::_InputArray* D, double alpha, cv::_OutputArray* jacobian);

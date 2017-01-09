@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 if [ ! -f cmake ]
 then 
@@ -75,7 +76,7 @@ else
   platforms/ios/configure-simulator_xcode.sh -DIOS_ARCH="x86_64" $*
 fi
 rm -rf platforms/ios/x86_64 bin/Release opencv/3rdparty/lib/Release
-xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="x86_64" -target ALL_BUILD clean build
+xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="x86_64" -target ALL_BUILD clean build
 mkdir -p platforms/ios/x86_64
 #cp -r lib/Release/* ios/x86_64/
 cp -r bin/Release/* platforms/ios/x86_64/
