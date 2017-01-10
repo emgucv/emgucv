@@ -270,6 +270,12 @@
         <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
       </PropertyGroup>
     </When>
+	<!-- Windows Form Application -->
+	<When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netstandard1.4')">
+      <PropertyGroup>
+        <EmguCVLinkTarget>DotNetCore</EmguCVLinkTarget>
+      </PropertyGroup>
+    </When>
   </Choose>
   <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Error Condition="'$(EmguCVLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please use the pre-compiled Emgu.CV.World dll or send a bug report to support@emgu.com" />
