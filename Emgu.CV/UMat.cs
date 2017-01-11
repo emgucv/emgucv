@@ -529,16 +529,6 @@ namespace Emgu.CV
         }
 
 #if __IOS__
-      /// <summary>
-      /// Convert this UMat to UIImage
-      /// </summary>
-      public UIImage ToUIImage()
-      {
-         using (Image<Rgba, Byte> tmp = ToImage<Rgba, Byte>())
-            {
-               return tmp.ToUIImage();
-            }
-      }
 #elif !(__UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
