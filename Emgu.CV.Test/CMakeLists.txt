@@ -17,6 +17,12 @@ FILE(GLOB_RECURSE SRC_CV_TEST_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 "Emgu.CV.Test.Windows.Phone/Properties/*.cs" 
 "Emgu.CV.Test.Windows.Store/Properties/*.cs")
 LIST(REMOVE_ITEM SRC_CV_TEST ${SRC_CV_TEST_EXCLUDES})
+IF (NOT EMGU_CV_WITH_TESSERACT)
+  FILE(GLOB_RECURSE SRC_TESSERACT_TEST RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    "AutoTestOCR.cs" 
+    "AutoTestOpenCL.cs")
+  LIST(REMOVE_ITEM SRC_CV_TEST ${SRC_TESSERACT_TEST})
+ENDIF()  
 
 #copy the test data for this example
 FILE(GLOB_RECURSE SRC_CV_TEST_DATA RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.jpg" "*.png" "*.gif" "*.data" "*.bmp" "*.xml" "*.avi")
