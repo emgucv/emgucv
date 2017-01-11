@@ -12,6 +12,7 @@ cd ../..
 if [ "$1" != "simulator" ]; then    
 
     rm -f CMakeCache.txt
+    rm -rf CMakeFiles CMakeScripts
     platforms/ios/configure-device_xcode.sh -DIOS_ARCH="armv7s" $*
     rm -rf platforms/ios/armv7s bin/Release opencv/3rdparty/lib/Release 
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
@@ -25,6 +26,7 @@ if [ "$1" != "simulator" ]; then
     cd ../../..
     
     rm -f CMakeCache.txt
+    rm -rf CMakeFiles CMakeScripts
     platforms/ios/configure-device_xcode.sh -DIOS_ARCH="armv7" $*
     rm -rf platforms/ios/armv7 bin/Release opencv/3rdparty/lib/Release
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
@@ -38,6 +40,7 @@ if [ "$1" != "simulator" ]; then
     cd ../../..
 
     rm -f CMakeCache.txt
+    rm -rf CMakeFiles CMakeScripts
     platforms/ios/configure-device_xcode.sh -DIOS_ARCH="arm64" $*
     rm -rf platforms/ios/arm64 bin/Release opencv/3rdparty/lib/Release
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="arm64" -target ALL_BUILD clean build
@@ -53,6 +56,7 @@ if [ "$1" != "simulator" ]; then
 fi
 
 rm -f CMakeCache.txt
+rm -rf CMakeFiles CMakeScripts
 if [ "$1" == "simulator" ]; then    
   platforms/ios/configure-simulator_xcode.sh -DIOS_ARCH="i386" ${@:2}
 else
@@ -70,6 +74,7 @@ libtool -static -o libemgucv_i386.a *.a
 cd ../../..
 
 rm -f CMakeCache.txt
+rm -rf CMakeFiles CMakeScripts
 if [ "$1" == "simulator" ]; then    
   platforms/ios/configure-simulator_xcode.sh -DIOS_ARCH="x86_64" ${@:2}
 else
