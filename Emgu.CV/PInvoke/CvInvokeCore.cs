@@ -156,7 +156,7 @@ namespace Emgu.CV
          int status, IntPtr funcName, IntPtr errMsg, IntPtr fileName, int line, IntPtr userData);
 
 
-#if UNITY_IPHONE
+#if UNITY_IOS
       /// <summary>
       /// Returns the current error status - the value set with the last cvSetErrStatus call. Note, that in Leaf mode the program terminates immediately after error occurred, so to always get control after the function call, one should call cvSetErrMode and set Parent or Silent error mode.
       /// </summary>
@@ -3100,7 +3100,7 @@ namespace Emgu.CV
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveCheckArr")]
       public static extern int cvCheckArr(IntPtr arr, CvEnum.CheckType flags, double minVal, double maxVal);
       
-#if !UNITY_IPHONE
+#if !UNITY_IOS
       /// <summary>
       /// Return the current number of threads that are used by parallelized (via OpenMP) OpenCV functions.
       /// </summary>

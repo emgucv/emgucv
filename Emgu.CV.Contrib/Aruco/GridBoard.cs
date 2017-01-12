@@ -61,7 +61,7 @@ namespace Emgu.CV.Aruco
       }
 
       /// <summary>
-      /// Release the unmanage resource associated with this GridBoard
+      /// Release the unmanaged resource associated with this GridBoard
       /// </summary>
       protected override void DisposeObject()
       {
@@ -117,7 +117,7 @@ namespace Emgu.CV.Aruco
       }
 
       /// <summary>
-      /// Release the unmanage resource associated with this ChArUco board
+      /// Release the unmanaged resource associated with this ChArUco board
       /// </summary>
       protected override void DisposeObject()
       {

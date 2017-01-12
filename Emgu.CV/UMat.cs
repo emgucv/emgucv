@@ -529,7 +529,7 @@ namespace Emgu.CV
         }
 
 #if __IOS__
-#elif !(__UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
+#elif !(__UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
         /// such that the image data is <b>shared</b> with Bitmap. 

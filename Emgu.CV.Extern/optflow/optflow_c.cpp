@@ -5,6 +5,7 @@
 //----------------------------------------------------------------------------
 
 #include "optflow_c.h"
+#include <memory>
 
 void cveUpdateMotionHistory(cv::_InputArray* silhouette, cv::_InputOutputArray* mhi, double timestamp, double duration)
 {
@@ -23,3 +24,33 @@ void cveSegmentMotion(cv::_InputArray* mhi, cv::_OutputArray* segmask, std::vect
    cv::motempl::segmentMotion(*mhi, *segmask, *boundingRects, timestamp, segThresh);
 }
 
+cv::DenseOpticalFlow* cveOptFlowDeepFlowCreate(cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::DenseOpticalFlow> ptr = cv::optflow::createOptFlow_DeepFlow();
+	ptr.addref();
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
+	return ptr.get();
+}
+
+cv::optflow::DISOpticalFlow* cveDISOpticalFlowCreate(int preset, cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::optflow::DISOpticalFlow> ptr = cv::optflow::createOptFlow_DIS(preset);
+	ptr.addref();
+	*denseFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
+	return ptr.get();
+}
+
+void cveDISOpticalFlowRelease(cv::optflow::DISOpticalFlow** flow)
+{
+	delete *flow;
+	*flow = 0;
+}
+
+cv::DenseOpticalFlow* cveOptFlowPCAFlowCreate(cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::DenseOpticalFlow> ptr = cv::optflow::createOptFlow_PCAFlow();
+	ptr.addref();
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
+	return ptr.get();
+}

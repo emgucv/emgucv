@@ -4,7 +4,7 @@
 
 //#define TEST_CAPTURE
 using System;
-#if !( UNITY_ANDROID || UNITY_IPHONE )
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
 using System.ServiceModel;
 #endif
 using System.Runtime.InteropServices;
@@ -19,17 +19,15 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
-   /// <summary> 
-   /// Capture images from either camera or video file. 
-   /// </summary>
-#if (__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE )
-#else
+    /// <summary> 
+    /// Capture images from either camera or video file. 
+    /// </summary>
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 #endif
-   public partial class VideoCapture :
+    public partial class VideoCapture :
        UnmanagedObject,
-#if (__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE )
-#else
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
  IDuplexCapture,
 #endif
  ICapture
@@ -428,38 +426,37 @@ namespace Emgu.CV
          return null;
          
       }
-      #endregion
+        #endregion
 
-      /*
-        ///<summary> Capture Bgr image frame with timestamp</summary>
-        ///<returns> A timestamped Bgr image frame</returns>
-        public TimedImage<Bgr, Byte> QueryTimedFrame()
-        {
-            IntPtr img = CvInvoke.cvQueryFrame(_ptr);
-            TimedImage<Bgr, Byte> res = new TimedImage<Bgr, Byte>(Width, Height);
+        /*
+          ///<summary> Capture Bgr image frame with timestamp</summary>
+          ///<returns> A timestamped Bgr image frame</returns>
+          public TimedImage<Bgr, Byte> QueryTimedFrame()
+          {
+              IntPtr img = CvInvoke.cvQueryFrame(_ptr);
+              TimedImage<Bgr, Byte> res = new TimedImage<Bgr, Byte>(Width, Height);
 
-            res.Timestamp = System.DateTime.Now;
+              res.Timestamp = System.DateTime.Now;
 
-            if (FlipType == Emgu.CV.CvEnum.FLIP.None)
-            {
-                CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
-                return res;
-            }
-            else
-            {
-                //code = 0 indicates vertical flip only
-                int code = 0;
-                //code = -1 indicates vertical and horizontal flip
-                if (FlipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
-                //code = 1 indicates horizontal flip only
-                else if (FlipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
-                CvInvoke.cvFlip(img, res.Ptr, code);
-                return res;
-            }
-        }*/
+              if (FlipType == Emgu.CV.CvEnum.FLIP.None)
+              {
+                  CvInvoke.cvCopy(img, res.Ptr, IntPtr.Zero);
+                  return res;
+              }
+              else
+              {
+                  //code = 0 indicates vertical flip only
+                  int code = 0;
+                  //code = -1 indicates vertical and horizontal flip
+                  if (FlipType == (Emgu.CV.CvEnum.FLIP.HORIZONTAL | Emgu.CV.CvEnum.FLIP.VERTICAL)) code = -1;
+                  //code = 1 indicates horizontal flip only
+                  else if (FlipType == Emgu.CV.CvEnum.FLIP.HORIZONTAL) code = 1;
+                  CvInvoke.cvFlip(img, res.Ptr, code);
+                  return res;
+              }
+          }*/
 
-#if (__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE )
-#else
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
       /// <summary>
       /// Query a frame duplexly over WCF
       /// </summary>
@@ -485,11 +482,11 @@ namespace Emgu.CV
       }
 #endif
 
-      
-   }
+
+    }
 
 
-   partial class CvInvoke
+    partial class CvInvoke
    {
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveVideoCaptureReadToMat(IntPtr capture, IntPtr mat);

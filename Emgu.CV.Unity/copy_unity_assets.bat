@@ -4,16 +4,10 @@ rm -rf Emgu.Util
 mkdir Emgu.Util
 rm -rf Emgu.CV
 mkdir Emgu.CV
-rm -rf Emgu.CV.ML
-mkdir Emgu.CV.ML
 rm -rf Emgu.CV.Contrib
 mkdir Emgu.CV.Contrib
 rm -rf Emgu.CV.OCR
 mkdir Emgu.CV.OCR
-rm -rf Emgu.CV.Stitching
-mkdir Emgu.CV.Stitching
-rm -rf Emgu.CV.Shape
-mkdir Emgu.CV.Shape
 cd ..
 cd ..
 
@@ -30,24 +24,27 @@ cp -r ../Emgu.CV/Cvb Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Features2D Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Flann Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Geodetic Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Ml Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Ocl Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Optflow Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Photo Assets/Emgu.CV/Emgu.CV/
-cp -r ../Emgu.CV/Viz Assets/Emgu.CV/Emgu.CV/
 mkdir Assets\Emgu.CV\Emgu.CV\PInvoke
 xcopy ..\Emgu.CV\PInvoke Assets\Emgu.CV\Emgu.CV\PInvoke\ /s /e /Y
-cp -r ../Emgu.CV/Reflection Assets/Emgu.CV/Emgu.CV/
 rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/iOS
-REM rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Windows.Store
 rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Android
 cp -r ../Emgu.CV/PointAndLine Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Reflection Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Shape Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Stitching Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Superres Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Video Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Videostab Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
+REM rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Windows.Store
 REM cp -r ../Emgu.CV/Tiff Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Util Assets/Emgu.CV/Emgu.CV/
-cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 
-cp ../Emgu.CV.ML/*.cs Assets/Emgu.CV/Emgu.CV.ML/
-mkdir Assets\Emgu.CV\Emgu.CV.ML\PInvoke 
-xcopy ..\Emgu.CV.ML\PInvoke Assets\Emgu.CV\Emgu.CV.ML\PInvoke /s /e /Y
+REM cp -r ../Emgu.CV/Viz Assets/Emgu.CV/Emgu.CV/
 
 REM cp -r ../Emgu.CV.Cuda/*.cs Assets/Emgu.CV/Emgu.CV.Cuda/
 REM mkdir Assets\Emgu.CV\Emgu.CV.Cuda\Bgsegm
@@ -83,13 +80,11 @@ mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Tracking
 cp -r ../Emgu.CV.Contrib/Tracking/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Tracking 
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XFeatures2D
 cp -r ../Emgu.CV.Contrib/XFeatures2D/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/XFeatures2D
-mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XPhoto
-cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/XPhoto
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XImgproc
 cp -r ../Emgu.CV.Contrib/XImgproc/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/XImgproc
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XPhoto
+cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/XPhoto
+
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/
 
-cp -r ../Emgu.CV.Stitching/*.cs Assets/Emgu.CV/Emgu.CV.Stitching/
-
-cp -r ../Emgu.CV.Shape/*.cs Assets/Emgu.CV/Emgu.CV.Shape/

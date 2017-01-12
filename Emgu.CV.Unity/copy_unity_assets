@@ -4,12 +4,10 @@ cd Assets
 cd Emgu.CV
 mkdir Emgu.Util
 mkdir Emgu.CV
-mkdir Emgu.CV.ML
+
 #mkdir Emgu.CV.Cuda
 mkdir Emgu.CV.Contrib
 mkdir Emgu.CV.OCR
-mkdir Emgu.CV.Stitching
-mkdir Emgu.CV.Shape
 cd ..
 cd ..
 
@@ -26,9 +24,13 @@ cp -r ../Emgu.CV/Cvb Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Features2D Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Flann Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Geodetic Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Ml Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Ocl Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Optflow Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Photo Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Viz Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Video Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Optflow Assets/Emgu.CV/Emgu.CV/
 mkdir Assets/Emgu.CV/Emgu.CV/PInvoke
 cp -r ../Emgu.CV/PInvoke Assets/Emgu.CV/Emgu.CV 
 cp -r ../Emgu.CV/Reflection Assets/Emgu.CV/Emgu.CV/
@@ -37,15 +39,14 @@ rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/iOS
 rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Android
 cp -r ../Emgu.CV/PointAndLine Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Shape Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Stitching Assets/Emgu.CV/Emgu.CV
+cp -r ../Emgu.CV/Superres Assets/Emgu.CV/Emgu.CV
 #cp -r ../Emgu.CV/Tiff Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Util Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Video Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/VideoStab Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 
-cp -r ../Emgu.CV.ML/*.cs Assets/Emgu.CV/Emgu.CV.ML/
-mkdir Assets/Emgu.CV/Emgu.CV.ML/PInvoke 
-cp -r ../Emgu.CV.ML/PInvoke/*.cs Assets/Emgu.CV/Emgu.CV.ML/PInvoke/
-mkdir Assets/Emgu.CV/Emgu.CV.ML/PInvoke/CvType 
-cp -r ../Emgu.CV.ML/PInvoke/CvType/*.cs Assets/Emgu.CV/Emgu.CV.ML/PInvoke/CvType/
 
 #cp -r ../Emgu.CV.Cuda/*.cs Assets/Emgu.CV/Emgu.CV.Cuda/
 #mkdir Assets/Emgu.CV/Emgu.CV.Cuda/Bgsegm
@@ -89,9 +90,6 @@ cp -r ../Emgu.CV.Contrib/XImgproc Assets/Emgu.CV/Emgu.CV.Contrib/
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/
 
-cp -r ../Emgu.CV.Stitching/*.cs Assets/Emgu.CV/Emgu.CV.Stitching/
-
-cp -r ../Emgu.CV.Shape/*.cs Assets/Emgu.CV/Emgu.CV.Shape/
 
 cd Assets
 mkdir -p Plugins

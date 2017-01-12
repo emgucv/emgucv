@@ -3,34 +3,34 @@
 //----------------------------------------------------------------------------
 
 using System;
-#if !WINDOWS_PHONE_APP
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
 using System.ServiceModel;
 #endif
 
 namespace Emgu.CV
 {
-   ///<summary>
-   ///The interface to request a duplex image capture
-   ///</summary>
-#if !WINDOWS_PHONE_APP
+    ///<summary>
+    ///The interface to request a duplex image capture
+    ///</summary>
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
    [ServiceContract(CallbackContract = typeof(IDuplexCaptureCallback))]
 #endif
-   public interface IDuplexCapture
+    public interface IDuplexCapture
    {
-      /// <summary>
-      /// Request a frame from server
-      /// </summary>
-#if !WINDOWS_PHONE_APP
+        /// <summary>
+        /// Request a frame from server
+        /// </summary>
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
       [OperationContract(IsOneWay = true)]
 #endif
-      void DuplexQueryFrame();
+        void DuplexQueryFrame();
 
-      /// <summary>
-      /// Request a frame from server which is half width and half height
-      /// </summary>
-#if !WINDOWS_PHONE_APP
+        /// <summary>
+        /// Request a frame from server which is half width and half height
+        /// </summary>
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
       [OperationContract(IsOneWay = true)]
 #endif
-      void DuplexQuerySmallFrame();
+        void DuplexQuerySmallFrame();
    }
 }

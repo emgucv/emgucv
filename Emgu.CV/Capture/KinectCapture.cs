@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
-
+/*
 #if !(__UNIFIED__ || __ANDROID__ || NETFX_CORE)
 
 using Emgu.CV.Util;
@@ -188,29 +188,7 @@ namespace Emgu.CV
             CvInvoke.OpenniGetColorPoints(Ptr, vcp, mask);
             return vcp.ToArray();
          }
-         /*
-         MCvPoint3D32f[] positions = RetrievePointCloudMap();
-         if (positions == null)
-            yield break;
-
-         using (Image<Bgr, Byte> image = RetrieveBgrFrame())
-         using (Image<Gray, Byte> validDepthMap = RetrieveValidDepthMap())
-         {
-            int imageWidth = image.Width;
-            int imageHeight = image.Height;
-            Byte[] mask = validDepthMap.Bytes;
-
-            int i = 0;
-            for (int h = 0; h < imageHeight; h++)
-               for (int w = 0; w < imageWidth; w++, i++)
-                  if (mask[i] != 0)
-                  {
-                     ColorPoint cp = new ColorPoint();
-                     cp.Color = new Bgr(image.Data[h, w, 0], image.Data[h, w, 1], image.Data[h, w, 2]);
-                     cp.Position = positions[i];
-                     yield return cp;
-                  }
-         }*/
+         
       }
 
       /// <summary>
@@ -228,17 +206,7 @@ namespace Emgu.CV
          return baseline / f * minDistance;
       }
 
-      /*
-      /// <summary>
-      /// Get the unmanaged OpenNI Context from the capture.
-      /// </summary>
-      /// <returns>Pointer to the OpenNI context</returns>
-      /// <remarks>This function required the opencv_highgui module patched by EMGU CV, otherwise it will throw entry point not found exception.</remarks>
-      public IntPtr GetOpenNIContext()
-      {
-         return CvInvoke.cvGetOpenniCaptureContext(Ptr);
-      }
-      */
+     
 
    }
 
@@ -248,10 +216,9 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void OpenniGetColorPoints(IntPtr capture, IntPtr points /* sequence of ColorPoint */, IntPtr mask);
-      /*
-      [DllImport(CvInvoke.OpencvHighguiLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cvGetOpenniCaptureContext(IntPtr capture);*/
+     
    }
    
 }
 #endif
+*/

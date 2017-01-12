@@ -68,10 +68,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
 		..\..\Emgu.CV\Emgu.CV.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -89,12 +86,7 @@ Global
 		..\..\Emgu.Util\Emgu.Util.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.Superres\Emgu.CV.Superres.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
-		..\..\Emgu.CV.VideoStab\Emgu.CV.VideoStab.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV\Emgu.CV.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{543e1066-e02a-4078-afa4-ad00b7168780}*SharedItemsImports = 4

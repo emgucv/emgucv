@@ -732,7 +732,7 @@ ENDIF()
 IF(HAVE_opencv_ml)
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/em_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/EMGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/EMGenerated.cs"
     "cv::ml::EM" 
     "EM" 
     "ClustersNumber;CovarianceMatrixType;TermCriteria" 
@@ -750,7 +750,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svm_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/SVMGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/SVMGenerated.cs"
     "cv::ml::SVM" 
     "SVM" 
     "Type;Gamma;Coef0;Degree;C;Nu;P;Kernel;TermCriteria;KernelType" 
@@ -775,7 +775,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/knearest_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/KNearestGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/KNearestGenerated.cs"
     "cv::ml::KNearest" 
     "KNearest" 
     "DefaultK;IsClassifier;Emax;AlgorithmType" 
@@ -794,7 +794,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/ann_mlp_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/ANN_MLPGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/ANN_MLPGenerated.cs"
     "cv::ml::ANN_MLP" 
     "ANN_MLP" 
     "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax" 
@@ -817,7 +817,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/logistic_regression_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/LogisticRegressionGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/LogisticRegressionGenerated.cs"
     "cv::ml::LogisticRegression" 
     "LogisticRegression" 
     "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
@@ -838,7 +838,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/rtrees_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/RTreesGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/RTreesGenerated.cs"
     "cv::ml::RTrees" 
     "RTrees" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy;CalculateVarImportance;ActiveVarCount;TermCriteria" 
@@ -864,7 +864,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/dtree_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/DTreesGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/DTreesGenerated.cs"
     "cv::ml::DTrees" 
     "DTrees" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
@@ -887,7 +887,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/boost_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.ML/BoostGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/BoostGenerated.cs"
     "cv::ml::Boost" 
     "Boost" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
@@ -914,7 +914,7 @@ ENDIF()
 IF(HAVE_opencv_video)
   CREATE_OCV_CLASS_PROPERTY( 
     "video/dual_tvl1_opticalflow_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/DualTVL1OpticalFlowGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/DualTVL1OpticalFlowGenerated.cs"
     "cv::DualTVL1OpticalFlow" 
     "DualTVL1OpticalFlow" 
     "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
@@ -941,7 +941,7 @@ IF(HAVE_opencv_video)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "video/kalmanfilter_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/KalmanFilterGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/KalmanFilterGenerated.cs"
     "cv::KalmanFilter" 
     "KalmanFilter"  "statePre;statePost;transitionMatrix;controlMatrix;measurementMatrix;processNoiseCov;measurementNoiseCov;errorCovPre;gain;errorCovPost" 
     "cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat" 
@@ -986,11 +986,43 @@ IF(HAVE_opencv_videoio)
 ENDIF()
 ############################### videoio code gen END ################################
 
+############################### optflow code gen START ##############################
+IF(HAVE_opencv_optflow)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "optflow/disopticalflow_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/DISOpticalFlowGenerated.cs"
+    "cv::optflow::DISOpticalFlow" 
+    "DISOpticalFlow" 
+    "FinestScale;PatchSize;PatchStride;GradientDescentIterations;VariationalRefinementIterations;VariationalRefinementAlpha;VariationalRefinementDelta;VariationalRefinementGamma;UseMeanNormalization;UseSpatialPropagation" 
+    "int;int;int;int;int;float;float;float;bool;bool" 
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "FinestScale;PatchSize;PatchStride;GradientDescentIterations;VariationalRefinementIterations;VariationalRefinementAlpha;VariationalRefinementDelta;VariationalRefinementGamma;UseMeanNormalization;UseSpatialPropagation" 
+    "int;int;int;int;int;float;float;float;bool;bool"
+    "Finest level of the Gaussian pyramid on which the flow is computed (zero level corresponds to the original image resolution). The final flow is obtained by bilinear upscaling.;
+	Size of an image patch for matching (in pixels). Normally, default 8x8 patches work well enough in most cases.;
+	Stride between neighbor patches. Must be less than patch size. Lower values correspond to higher flow quality.;
+	Maximum number of gradient descent iterations in the patch inverse search stage. Higher values may improve quality in some cases.;
+	Number of fixed point iterations of variational refinement per scale. Set to zero to disable variational refinement completely. Higher values will typically result in more smooth and high-quality flow.;
+	Weight of the smoothness term;
+	Weight of the color constancy term;
+	Weight of the gradient constancy term;
+	Whether to use mean-normalization of patches when computing patch distance. It is turned on by default as it typically provides a noticeable quality boost because of increased robustness to illumination variations. Turn it off if you are certain that your sequence doesn't contain any changes in illumination.;
+	Whether to use spatial propagation of good optical flow vectors. This option is turned on by default, as it tends to work better on average and can sometimes help recover from major errors introduced by the coarse-to-fine scheme employed by the DIS optical flow algorithm. Turning this option off can make the output flow field a bit smoother, however."
+    "Emgu.CV"
+    "CvInvoke"
+    "DISOpticalFlow"
+    "#include \"optflow_c.h\"")
+  
+ENDIF()
+############################### optflow code gen END ################################
+
+
+
 ############################### stitching code gen START ##############################
 IF(HAVE_opencv_stitching)
    CREATE_OCV_CLASS_PROPERTY( 
     "stitching/stitching_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Stitching/StitcherGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Stitching/StitcherGenerated.cs"
     "cv::Stitcher" 
     "Stitcher" 
     "workScale" 
@@ -1011,7 +1043,7 @@ ENDIF()
 IF(HAVE_opencv_shape)
    CREATE_OCV_CLASS_PROPERTY( 
     "shape/ShapeContextDistanceExtractor_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Shape/ShapeContextDistanceExtractorGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Shape/ShapeContextDistanceExtractorGenerated.cs"
     "cv::ShapeContextDistanceExtractor" 
     "ShapeContextDistanceExtractor" 
     "Iterations;AngularBins;RadialBins;InnerRadius;OuterRadius;RotationInvariant;ShapeContextWeight;ImageAppearanceWeight;BendingEnergyWeight;StdDev" 

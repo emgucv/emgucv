@@ -5,7 +5,7 @@
 using System;
 using Emgu.CV;
 
-#if UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 using UnityEngine;
 #elif NETFX_CORE
 using Windows.UI;
@@ -41,7 +41,7 @@ namespace Emgu.CV.Structure
       /// <param name="winColor">System.Drawing.Color</param>
       public Bgr(Color winColor)
       {
-#if UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
          _scalar = new MCvScalar(winColor.b * 255.0, winColor.g * 255.0, winColor.r * 255.0);
 #else
          _scalar = new MCvScalar(winColor.B, winColor.G, winColor.R);

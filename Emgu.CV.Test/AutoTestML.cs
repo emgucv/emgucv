@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.CvEnum;
 using Emgu.CV.ML;
-using Emgu.CV.ML.Structure;
 using Emgu.CV.Structure;
 using Emgu.CV;
 

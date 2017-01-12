@@ -17,13 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.World.Store81", "..
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.shproj", "{11E54A7E-778D-466C-A176-71E150976AC1}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.ML", "..\..\Emgu.CV.ML\Emgu.CV.ML.shproj", "{3F3BC3E1-3B59-48AB-959A-71844B9AD9BE}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.shproj", "{7BC723CB-1678-415F-A65F-4027F8758A6F}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Shape", "..\..\Emgu.CV.Shape\Emgu.CV.Shape.shproj", "{1C41F1CC-B8A8-4E72-8167-0E1A42EDF843}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Stitching", "..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.shproj", "{0D0C868D-23D6-46F7-A3E0-5F595C84939C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UWP", "..\..\Emgu.CV.Example\XamarinForms\UWP\UWP.csproj", "{2A63A8EE-515F-4280-A178-FB58633CEDA1}"
 EndProject
@@ -31,10 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtimeCamera", "..\..\Emg
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{0d0c868d-23d6-46f7-a3e0-5f595c84939c}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{1c41f1cc-b8a8-4e72-8167-0e1a42edf843}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
 		..\..\Emgu.CV.Example\XamarinForms\WindowsUniversal81\Shared\WindowsUniversal.Shared.projitems*{2244b20e-eafb-45b5-a074-dec9f292512d}*SharedItemsImports = 4
@@ -47,13 +39,9 @@ Global
 		..\..\Emgu.CV\Emgu.CV.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
-		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
-		..\..\Emgu.CV.Shape\Emgu.CV.Shape.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
 		..\..\Emgu.CV\Emgu.CV.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{31ee2bff-87aa-440f-9f3d-9524900b704d}*SharedItemsImports = 4
-		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{3f3bc3e1-3b59-48ab-959a-71844b9ad9be}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{b9d1a8f2-4c4a-444b-8a20-c9f4133573e4}*SharedItemsImports = 4

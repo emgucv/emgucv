@@ -20,7 +20,7 @@ using CoreGraphics;
 using UIKit;
 #elif __UNIFIED__
 using CoreGraphics;
-#elif NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#elif NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -269,7 +269,7 @@ namespace Emgu.CV
 
                 if (this.IsEmpty) //failed to load in the first attempt
                 {
-#if !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
+#if !(NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
                     //try again to see if this is a Unicode issue in the file name. 
                     //Work around for Open CV ticket:
                     //https://github.com/Itseez/opencv/issues/4292
@@ -750,7 +750,7 @@ namespace Emgu.CV
         }
 
 #if __ANDROID__ || __UNIFIED__
-#elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
+#elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
         /// such that the image data is <b>shared</b> with Bitmap. 
@@ -978,7 +978,7 @@ namespace Emgu.CV
 
             if (e != null)
             {
-#if __UNIFIED__ || NETFX_CORE || (UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
+#if __UNIFIED__ || NETFX_CORE || (UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO)
             throw e;
 #elif __ANDROID__
             FileInfo fileInfo = new FileInfo(fileName);

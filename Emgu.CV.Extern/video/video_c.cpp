@@ -66,7 +66,11 @@ void cveDenseOpticalFlowCalc(cv::DenseOpticalFlow* dof, cv::_InputArray* i0, cv:
 {
    dof->calc(*i0, *i1, *flow);
 }
-
+void cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow)
+{
+	delete *flow;
+	*flow = 0;
+}
 void cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags)
 {
    cv::calcOpticalFlowFarneback(*prev, *next, *flow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);

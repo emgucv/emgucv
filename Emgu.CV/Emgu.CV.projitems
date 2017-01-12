@@ -26,7 +26,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Photo\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Viz\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PointAndLine\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Video\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Optflow\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Shape\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Stitching\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Superres\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Videostab\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Ml\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvType\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Windows.Store\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Android\*.cs" />

@@ -13,6 +13,11 @@ cp -f ../../Emgu.CV/*.cs ios-package/Emgu.CV/
 cp -f ../../Emgu.CV/Capture/*.cs ios-package/Emgu.CV/Capture
 cp -f ../../Emgu.CV/Features2D/*.cs ios-package/Emgu.CV/Features2D
 cp -f ../../Emgu.CV/Ocl/*.cs ios-package/Emgu.CV/Ocl
+cp -f ../../Emgu.CV/Ml/*.cs ios-package/Emgu.CV/Ml
+cp -f ../../Emgu.CV/Optflow/*.cs ios-package/Emgu.CV/Optflow
+cp -f ../../Emgu.CV/Shape/*.cs ios-package/Emgu.CV/Shape
+cp -f ../../Emgu.CV/Stitching/*.cs ios-package/Emgu.CV/Stitching
+cp -f ../../Emgu.CV/Video/*.cs ios-package/Emgu.CV/Video
 cp -f ../../Emgu.CV/PInvoke/CvInvokeEntryPoints.cs ios-package/Emgu.CV/PInvoke
 cp -f ../../Emgu.CV/PInvoke/iOS/libemgucv.a ios-package/Emgu.CV/PInvoke/iOS
 cp -f ../../Emgu.CV/Util/*.cs ios-package/Emgu.CV/Util
@@ -21,28 +26,19 @@ rm -rf ios-package/Emgu.CV/PInvoke/System.Drawing
 rm -rf ios-package/Emgu.CV/PInvoke/Windows.Store
 rm -rf ios-package/Emgu.CV/PInvoke/Unity
 
-
-cp -r ../../tmp/Emgu.CV.ML ios-package/Emgu.CV.ML
-cp -f ../../Emgu.CV.ML/*.cs ios-package/Emgu.CV.ML
-
 cp -r ../../tmp/Emgu.CV.OCR ios-package/Emgu.CV.OCR
 cp -f ../../Emgu.CV.OCR/*.cs ios-package/Emgu.CV.OCR
-
-cp -r ../../tmp/Emgu.CV.Stitching ios-package/Emgu.CV.Stitching
-cp -r ../../Emgu.CV.Stitching/*.cs ios-package/Emgu.CV.Stitching
 
 cp -r ../../tmp/Emgu.Util ios-package/Emgu.Util
 
 cp -r ../../tmp/Emgu.CV.Cuda ios-package/Emgu.CV.Cuda
 cp -f ../../Emgu.CV.Cuda/*.cs ios-package/Emgu.CV.Cuda/
 
-cp -r ../../tmp/Emgu.CV.Shape ios-package/Emgu.CV.Shape
-cp -f ../../Emgu.CV.Shape/*.cs ios-package/Emgu.CV.Shape/
-
 cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
 cp -f ../../Emgu.CV.Contrib/Plot/*.cs ios-package/Emgu.CV.Contrib/Plot
 cp -f ../../Emgu.CV.Contrib/LineDescriptor/VectorOf*.cs ios-package/Emgu.CV.Contrib/LineDescriptor
 cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
+cp -f ../../Emgu.CV.Contrib/XPhoto/*.cs ios-package/Emgu.CV.Contrib/XPhoto
 
 cp -r ../../tmp/Emgu.CV.World ios-package/Emgu.CV.World
 

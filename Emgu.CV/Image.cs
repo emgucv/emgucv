@@ -14,7 +14,7 @@ using CoreGraphics;
 using UIKit;
 #elif __UNIFIED__
 using CoreGraphics;
-#elif NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#elif NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -109,7 +109,7 @@ namespace Emgu.CV
       /// <param name="fileName">the name of the file that contains the image</param>
       public Image(String fileName)
       {
-#if NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#if NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
          using (Mat m = CvInvoke.Imread(fileName, ImreadModes.AnyColor | ImreadModes.AnyDepth))
          {
             if (m.IsEmpty)
@@ -215,7 +215,7 @@ namespace Emgu.CV
 #endif
       }
 
-#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO
+#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
 #else
       /// <summary>
       /// Load the specific file using Bitmap
@@ -249,7 +249,7 @@ namespace Emgu.CV
       }
 #endif
 
-#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
       /// <summary>
       /// Obtain the image from the specific Bitmap
@@ -703,7 +703,7 @@ namespace Emgu.CV
 
       #endregion
 
-#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO)
       #region Drawing functions
       ///<summary> Draw an Rectangle of the specific color and thickness </summary>
       ///<param name="rect"> The rectangle to be drawn</param>
@@ -2386,7 +2386,7 @@ namespace Emgu.CV
          }
       }
 
-#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO)
       ///<summary>
       /// Convert the image to log polar, simulating the human foveal vision
       /// </summary>
@@ -2641,7 +2641,7 @@ namespace Emgu.CV
       }
       #endregion
 
-#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
       //#region Conversion with Bitmap
       /// <summary>

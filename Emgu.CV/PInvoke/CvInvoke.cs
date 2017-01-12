@@ -392,7 +392,7 @@ namespace Emgu.CV
                Console.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
             }
          }
-#elif __IOS__ || UNITY_IPHONE || NETFX_CORE
+#elif __IOS__ || UNITY_IOS || NETFX_CORE
 #else
          if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {
@@ -416,7 +416,7 @@ namespace Emgu.CV
 
          _libraryLoaded = DefaultLoadUnmanagedModules(modules.ToArray());
 
-#if !UNITY_IPHONE
+#if !UNITY_IOS
          //Use the custom error handler
          RedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
 #endif

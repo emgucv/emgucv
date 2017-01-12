@@ -3,28 +3,28 @@
 //----------------------------------------------------------------------------
 
 using System;
-#if !WINDOWS_PHONE_APP
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
 using System.ServiceModel;
 #endif
 using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
-   ///<summary>
-   ///The interface for DuplexCaptureCallback
-   ///</summary>
-#if !WINDOWS_PHONE_APP
+    ///<summary>
+    ///The interface for DuplexCaptureCallback
+    ///</summary>
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
    [ServiceContract]
 #endif
-   public interface IDuplexCaptureCallback
+    public interface IDuplexCaptureCallback
    {
-      ///<summary>
-      ///Function to call when an image is received
-      ///</summary>
-      ///<param name="img">The image received</param>
-#if !WINDOWS_PHONE_APP
+        ///<summary>
+        ///Function to call when an image is received
+        ///</summary>
+        ///<param name="img">The image received</param>
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
       [OperationContract(IsOneWay = true)]
 #endif
-      void ReceiveFrame(Mat img);
+        void ReceiveFrame(Mat img);
    }
 }
