@@ -215,7 +215,7 @@ namespace Emgu.CV
    {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void OpenniGetColorPoints(IntPtr capture, IntPtr points /* sequence of ColorPoint */, IntPtr mask);
+      internal static extern void OpenniGetColorPoints(IntPtr capture, IntPtr points, IntPtr mask);
      
    }
    
