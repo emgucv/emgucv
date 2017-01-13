@@ -205,3 +205,8 @@ void cveGraphSegmentationRelease(cv::ximgproc::segmentation::GraphSegmentation**
    delete *segmentation;
    *segmentation = 0;
 }
+
+void cveWeightedMedianFilter(cv::_InputArray* joint, cv::_InputArray* src, cv::_OutputArray* dst, int r, double sigma, cv::ximgproc::WMFWeightType weightType, cv::Mat* mask)
+{
+	cv::ximgproc::weightedMedianFilter(*joint, *src, *dst, r, sigma,  weightType, mask ? *mask : cv::Mat());
+}

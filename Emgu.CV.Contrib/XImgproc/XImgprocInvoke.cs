@@ -28,6 +28,34 @@ namespace Emgu.CV.XImgproc
         RF,
     }
 
+    public enum WMFWeightType
+    {
+        /// <summary>
+        /// exp(-|I1-I2|^2/(2*sigma^2))
+        /// </summary>
+        EXP,
+        /// <summary>
+        /// (|I1-I2|+sigma)^-1
+        /// </summary>
+        IV1,
+        /// <summary>
+        /// (|I1-I2|^2+sigma^2)^-1
+        /// </summary>
+        IV2,
+        /// <summary>
+        /// dot(I1,I2)/(|I1|*|I2|)
+        /// </summary>
+        COS,
+        /// <summary>
+        /// (min(r1,r2)+min(g1,g2)+min(b1,b2))/(max(r1,r2)+max(g1,g2)+max(b1,b2))
+        /// </summary>
+        JAC,
+        /// <summary>
+        /// unweighted
+        /// </summary>
+        OFF
+    }
+
     /// <summary>
     /// Extended Image Processing
     /// </summary>
@@ -202,5 +230,22 @@ namespace Emgu.CV.XImgproc
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveCovarianceEstimation(IntPtr src, IntPtr dst, int windowRows, int windowCols);
+
+
+
+        public static void WeightedMedianFilter(IInputArray joint, IInputArray src, IOutputArray dst, int r,
+            double sigma, WMFWeightType weightType, Mat mask = null)
+        {
+            using (InputArray iaJoint = joint.GetInputArray())
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                
+                cveWeightedMedianFilter(iaJoint, iaSrc, oaDst, r, sigma, weightType, mask == null ? IntPtr.Zero : mask);
+            }
+
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveWeightedMedianFilter(IntPtr joint, IntPtr src, IntPtr dst, int r, double sigma, WMFWeightType weightType, IntPtr mask);
     }
 }

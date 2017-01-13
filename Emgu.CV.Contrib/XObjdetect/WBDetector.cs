@@ -14,7 +14,7 @@ namespace Emgu.CV.XObjdetect
     public abstract class WBDetector : UnmanagedObject
     {
         
-        public void WBDetector()
+        public WBDetector()
         {
             _ptr = XObjdetectInvoke.cveWBDetectorCreate();
         }

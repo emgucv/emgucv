@@ -65,6 +65,7 @@ namespace Emgu.CV.Test
             Emgu.CV.UI.ImageViewer.Show(m);
         }
 
+        /*
         public void TestKinect()
         {
             using (KinectCapture capture = new KinectCapture(KinectCapture.DeviceType.Kinect, KinectCapture.ImageGeneratorOutputMode.Vga30Hz))
@@ -81,7 +82,7 @@ namespace Emgu.CV.Test
 
                 viewer.ShowDialog();
             }
-        }
+        }*/
 
         public void CreateUnityIcons()
         {

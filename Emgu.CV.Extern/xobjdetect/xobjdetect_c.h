@@ -15,6 +15,7 @@ CVAPI(cv::xobjdetect::WBDetector*) cveWBDetectorCreate();
 CVAPI(void) cveWBDetectorRead(cv::xobjdetect::WBDetector* detector, cv::FileNode* node);
 CVAPI(void) cveWBDetectorWrite(cv::xobjdetect::WBDetector* detector, cv::FileStorage* fs);
 CVAPI(void) cveWBDetectorTrain(cv::xobjdetect::WBDetector* detector, cv::String* posSamples, cv::String* negImgs);
+CVAPI(void) cveWBDetectorDetect(cv::xobjdetect::WBDetector* detector, cv::Mat* img, std::vector<cv::Rect>* bboxes, std::vector<double>* confidences);
 CVAPI(void) cveWBDetectorRelease(cv::xobjdetect::WBDetector** detector);
 
 #endif
