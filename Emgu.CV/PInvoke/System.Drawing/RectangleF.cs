@@ -152,20 +152,20 @@ namespace System.Drawing
          float right = Math.Min(Right, other.Right);
          if (right < left)
          {
-            X = 0; Y = 0; Width = 0; Height = 0;
+            //X = 0; Y = 0; Width = 0; Height = 0;
             return RectangleF.Empty;
          }
 
          float top = Math.Max(Top, other.Top);
-         float bottom = Math.Max(Bottom, other.Bottom);
+         float bottom = Math.Min(Bottom, other.Bottom);
 
          if (bottom < top)
          {
-            X = 0; Y = 0; Width = 0; Height = 0;
+            //X = 0; Y = 0; Width = 0; Height = 0;
             return RectangleF.Empty;
          }
 
-         return new RectangleF(left, top, right - left + 1, bottom - top + 1);
+         return new RectangleF(left, top, right - left, bottom - top);
       }
 
       public bool Equals(RectangleF other)
