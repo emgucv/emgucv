@@ -2247,7 +2247,7 @@ namespace Emgu.CV.Test
             }
 
             FileInfo fi = new FileInfo(fileName);
-            EmguAssert.IsTrue(fi.Length != 0, "File should not be empty");
+            EmguAssert.IsTrue(fi.Exists && fi.Length != 0, "File should not be empty");
 
             using (VideoCapture capture = new VideoCapture(fileName))
             {

@@ -21,5 +21,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Aruco\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fuzzy\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LineDescriptor\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)XObjdetect\*.cs" />
   </ItemGroup>
 </Project>
