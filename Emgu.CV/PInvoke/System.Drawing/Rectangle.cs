@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if (NETFX_CORE || UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN) 
+#if (NETFX_CORE || UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) 
 
 using System.Runtime.InteropServices;
 
@@ -167,20 +167,20 @@ namespace System.Drawing
          int right = Math.Min(Right, other.Right);
          if (right < left)
          {
-            X = 0; Y = 0; Width = 0; Height = 0;
+            //X = 0; Y = 0; Width = 0; Height = 0;
             return Rectangle.Empty;
          }
 
          int top = Math.Max(Top, other.Top);
-         int bottom = Math.Max(Bottom, other.Bottom);
+         int bottom = Math.Min(Bottom, other.Bottom);
 
          if (bottom < top)
          {
-            X = 0; Y = 0; Width = 0; Height = 0;
+            //X = 0; Y = 0; Width = 0; Height = 0;
             return Rectangle.Empty;
          }
 
-         return new Rectangle(left, top, right - left + 1, bottom - top + 1);
+         return new Rectangle(left, top, right - left, bottom - top);
       }
    }
 }
