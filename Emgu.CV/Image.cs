@@ -703,7 +703,7 @@ namespace Emgu.CV
 
       #endregion
 
-#if !(UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO)
+
       #region Drawing functions
       ///<summary> Draw an Rectangle of the specific color and thickness </summary>
       ///<param name="rect"> The rectangle to be drawn</param>
@@ -826,7 +826,7 @@ namespace Emgu.CV
       /// <param name="pts">An array of polylines each represented by an array of points</param>
       /// <param name="isClosed">if true, the last line segment is defined by the last point of the array and the first point of the array</param>
       /// <param name="color">the color used for drawing</param>
-      /// <param name="thickness">the thinkness of the line</param>
+      /// <param name="thickness">the thickness of the line</param>
       /// <param name="lineType">Line type</param>
       /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
       public void DrawPolyline(Point[][] pts, bool isClosed, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
@@ -893,36 +893,6 @@ namespace Emgu.CV
              bottomLeftOrigin);
         }
 
-      /*
-        /// <summary>
-        /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
-        /// </summary>
-        /// <param name="c">Pointer to the contour</param>
-        /// <param name="color">Color of the contour</param>
-        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
-        public void Draw(Seq<Point> c, TColor color, int thickness)
-        {
-            Draw(c, color, color, 0, thickness, Point.Empty);
-        }
-
-        /// <summary>
-        /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
-        /// </summary>
-        /// <param name="c">Pointer to the first contour</param>
-        /// <param name="externalColor">Color of the external contours</param>
-        /// <param name="holeColor">Color of internal contours (holes). </param>
-        /// <param name="maxLevel">
-        /// Maximal level for drawn contours.
-        /// If 0, only contour is drawn.
-        /// If 1, the contour and all contours after it on the same level are drawn.
-        /// If 2, all contours after and all contours one level below the contours are drawn, etc. If the value is negative, the function does not draw the contours following after contour but draws child contours of contour up to abs(maxLevel)-1 level
-        /// </param>
-        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative, the contour interiors are drawn</param>
-        public void Draw(Seq<Point> c, TColor externalColor, TColor holeColor, int maxLevel, int thickness)
-        {
-            Draw(c, externalColor, holeColor, maxLevel, thickness, Point.Empty);
-        }*/
-
         /// <summary>
         /// Draws contour outlines in the image if thickness&gt;=0 or fills area bounded by the contours if thickness&lt;0
         /// </summary>
@@ -933,7 +903,7 @@ namespace Emgu.CV
         /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative the contour interiors are drawn</param>
         /// <param name="lineType">Type of the contour segments</param>
         /// <param name="hierarchy">Optional information about hierarchy. It is only needed if you want to draw only some of the contours</param>
-        /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
+        /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrieved in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
         public void Draw(
          IInputArrayOfArrays contours,
          int contourIdx,
@@ -963,7 +933,7 @@ namespace Emgu.CV
         /// <param name="color">Color of the contours </param>
         /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative the contour interiors are drawn</param>
         /// <param name="lineType">Type of the contour segments</param>
-        /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrived in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
+        /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrieved in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
       public void Draw(
          Point[] contours,
          TColor color,
@@ -979,7 +949,6 @@ namespace Emgu.CV
          }
       }
       #endregion
-#endif
 
       #region Hough line and circles
         ///<summary>
