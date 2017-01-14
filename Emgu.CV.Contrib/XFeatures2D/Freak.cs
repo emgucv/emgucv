@@ -43,7 +43,7 @@ namespace Emgu.CV.XFeatures2D
       }
 
       /// <summary>
-      /// Release all the unmanaged resource associated with BRIEF
+      /// Release all the unmanaged resource associated with FREAK
       /// </summary>
       protected override void DisposeObject()
       {

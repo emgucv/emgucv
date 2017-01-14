@@ -54,4 +54,15 @@ CVAPI(cv::xfeatures2d::DAISY*) cveDAISYCreate(float radius, int qRadius, int qTh
    bool interpolation, bool useOrientation, cv::Feature2D** extractor);
 CVAPI(void) cveDAISYRelease(cv::xfeatures2d::DAISY** daisy);
 
+//BoostDesc
+CVAPI(cv::xfeatures2d::BoostDesc*) cveBoostDescCreate(int desc,	bool useScaleOrientation, float scalefactor, cv::Feature2D** feature2D);
+CVAPI(void) cveBoostDescRelease(cv::xfeatures2d::BoostDesc** extractor);
+
+//VGG
+CVAPI(cv::xfeatures2d::VGG*) cveVGGCreate(
+	int desc, float isigma, bool imgNormalize, bool useScaleOrientation,
+	float scaleFactor, bool dscNormalize, cv::Feature2D** feature2D);
+CVAPI(void) cveVGGRelease(cv::xfeatures2d::VGG** extractor);
+
+
 #endif

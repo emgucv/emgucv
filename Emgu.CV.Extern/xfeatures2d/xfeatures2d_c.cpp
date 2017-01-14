@@ -146,3 +146,33 @@ void cveDAISYRelease(cv::xfeatures2d::DAISY** daisy)
    delete* daisy;
    *daisy = 0;
 }
+
+//BoostDesc
+cv::xfeatures2d::BoostDesc* cveBoostDescCreate(int desc, bool useScaleOrientation, float scalefactor, cv::Feature2D** feature2D)
+{
+	cv::Ptr<cv::xfeatures2d::BoostDesc> ptr = cv::xfeatures2d::BoostDesc::create(desc, useScaleOrientation, scalefactor);
+	ptr.addref();
+	*feature2D = dynamic_cast<cv::xfeatures2d::BoostDesc*>(ptr.get());
+	return ptr.get();
+}
+void cveBoostDescRelease(cv::xfeatures2d::BoostDesc** extractor)
+{
+	delete *extractor;
+	*extractor = 0;
+}
+
+//VGG
+cv::xfeatures2d::VGG* cveVGGCreate(
+	int desc, float isigma, bool imgNormalize, bool useScaleOrientation,
+	float scaleFactor, bool dscNormalize, cv::Feature2D** feature2D)
+{
+	cv::Ptr<cv::xfeatures2d::VGG> ptr = cv::xfeatures2d::VGG::create(desc, isigma, imgNormalize, useScaleOrientation, scaleFactor, dscNormalize);
+	ptr.addref();
+	*feature2D = dynamic_cast<cv::xfeatures2d::VGG*>(ptr.get());
+	return ptr.get();
+}
+void cveVGGRelease(cv::xfeatures2d::VGG** extractor)
+{
+	delete *extractor;
+	*extractor = 0;
+}
