@@ -10,6 +10,7 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/face/facerec.hpp"
+#include "opencv2/face/bif.hpp"
 
 //FaceRecognizer
 CVAPI(cv::face::FaceRecognizer*) CvEigenFaceRecognizerCreate(int numComponents, double threshold);   
@@ -22,4 +23,7 @@ CVAPI(void) CvFaceRecognizerSave(cv::face::FaceRecognizer* recognizer, cv::Strin
 CVAPI(void) CvFaceRecognizerLoad(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
 CVAPI(void) CvFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer);
 
+CVAPI(cv::face::BIF*) cveBIFCreate(int numBands, int numRotations);
+CVAPI(void) cveBIFCompute(cv::face::BIF* bif, cv::_InputArray* image, cv::_OutputArray* features);
+CVAPI(void) cveBIFRelease(cv::face::BIF** bif);
 #endif

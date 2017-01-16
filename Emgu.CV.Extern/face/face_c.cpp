@@ -63,3 +63,18 @@ void CvFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer)
    *recognizer = 0;
 }
 
+cv::face::BIF* cveBIFCreate(int numBands, int numRotations)
+{
+	cv::Ptr<cv::face::BIF> ptr = cv::face::createBIF(numBands, numRotations);
+	ptr.addref();
+	return ptr.get();
+}
+void cveBIFCompute(cv::face::BIF* bif, cv::_InputArray* image, cv::_OutputArray* features)
+{
+	bif->compute(*image, *features);
+}
+void cveBIFRelease(cv::face::BIF** bif)
+{
+	delete *bif;
+	*bif = 0;
+}
