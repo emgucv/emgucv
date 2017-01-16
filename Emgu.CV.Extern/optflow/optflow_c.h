@@ -22,4 +22,7 @@ CVAPI(cv::optflow::DISOpticalFlow*) cveDISOpticalFlowCreate(int preset, cv::Dens
 CVAPI(void) cveDISOpticalFlowRelease(cv::optflow::DISOpticalFlow** flow);
 
 CVAPI(cv::DenseOpticalFlow*) cveOptFlowPCAFlowCreate(cv::Algorithm** algorithm);
+
+CVAPI(cv::optflow::VariationalRefinement*) cveVariationalRefinementCreate(cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm);
+CVAPI(void) cveVariationalRefinementRelease(cv::optflow::VariationalRefinement** flow);
 #endif

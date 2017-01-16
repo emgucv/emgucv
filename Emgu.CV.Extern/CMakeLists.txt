@@ -1012,6 +1012,27 @@ IF(HAVE_opencv_optflow)
     "CvInvoke"
     "DISOpticalFlow"
     "#include \"optflow_c.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "optflow/variational_refinement_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/VariationalRefinementGenerated.cs"
+    "cv::optflow::VariationalRefinement" 
+    "VariationalRefinement" 
+    "FixedPointIterations;SorIterations;Omega;Alpha;Delta;Gamma" 
+    "int;int;float;float;float;float" 
+    "prop;prop;prop;prop;prop;prop"
+    "FixedPointIterations;SorIterations;Omega;Alpha;Delta;Gamma" 
+    "int;int;float;float;float;float"
+    "Number of outer (fixed-point) iterations in the minimization procedure.;
+	Number of inner successive over-relaxation (SOR) iterations in the minimization procedure to solve the respective linear system.;
+	Relaxation factor in SOR;
+	Weight of the smoothness term;
+	Weight of the color constancy term;
+	Weight of the gradient constancy term"
+    "Emgu.CV"
+    "CvInvoke"
+    "VariationalRefinement"
+    "#include \"optflow_c.h\"")
   
 ENDIF()
 ############################### optflow code gen END ################################

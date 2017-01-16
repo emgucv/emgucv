@@ -54,3 +54,18 @@ cv::DenseOpticalFlow* cveOptFlowPCAFlowCreate(cv::Algorithm** algorithm)
 	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
 	return ptr.get();
 }
+
+
+cv::optflow::VariationalRefinement* cveVariationalRefinementCreate(cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::optflow::VariationalRefinement> ptr = cv::optflow::createVariationalFlowRefinement();
+	ptr.addref();
+	*denseFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
+	return ptr.get();
+}
+void cveVariationalRefinementRelease(cv::optflow::VariationalRefinement** flow)
+{
+	delete *flow;
+	*flow = 0;
+}
