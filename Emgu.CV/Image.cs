@@ -4237,15 +4237,35 @@ namespace Emgu.CV
          return res;
       }
 
-      /// <summary>
-      /// Save this image to the specific file. 
-      /// </summary>
-      /// <param name="fileName">The name of the file to be saved to</param>
-      /// <remarks>The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format.</remarks>
-      public override void Save(String fileName)
-      {
-         Mat.Save(fileName);
-      }
+       /// <summary>
+       /// Save this image to the specific file. 
+       /// </summary>
+       /// <param name="fileName">The name of the file to be saved to</param>
+       /// <remarks>The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format.</remarks>
+       public override void Save(String fileName)
+       {
+
+           if (NumberOfChannels == 3 && typeof(TColor) != typeof(Bgr))
+           {
+               using (Mat tmp = new Mat())
+               {
+                   CvInvoke.CvtColor(this, tmp, typeof(TColor), typeof(Bgr));
+                   tmp.Save(fileName);
+               }
+           }
+           else if (NumberOfChannels == 4 && typeof(TColor) != typeof(Bgra))
+           {
+               using (Mat tmp = new Mat())
+               {
+                   CvInvoke.CvtColor(this, tmp, typeof(TColor), typeof(Bgra));
+                   tmp.Save(fileName);
+               }
+           }
+           else
+           {
+               Mat.Save(fileName);
+           }
+       }
 
       /// <summary>
       /// The algorithm inplace normalizes brightness and increases contrast of the image.
