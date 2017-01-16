@@ -210,3 +210,57 @@ void cveWeightedMedianFilter(cv::_InputArray* joint, cv::_InputArray* src, cv::_
 {
 	cv::ximgproc::weightedMedianFilter(*joint, *src, *dst, r, sigma,  weightType, mask ? *mask : cv::Mat());
 }
+
+
+cv::ximgproc::segmentation::SelectiveSearchSegmentation* cveSelectiveSearchSegmentationCreate()
+{
+	cv::Ptr<cv::ximgproc::segmentation::SelectiveSearchSegmentation> ptr = cv::ximgproc::segmentation::createSelectiveSearchSegmentation();
+	ptr.addref();
+	return ptr.get();
+}
+void cveSelectiveSearchSegmentationSetBaseImage(cv::ximgproc::segmentation::SelectiveSearchSegmentation* segmentation, cv::_InputArray* image)
+{
+	segmentation->setBaseImage(*image);
+}
+void cveSelectiveSearchSegmentationSwitchToSingleStrategy(cv::ximgproc::segmentation::SelectiveSearchSegmentation* segmentation, int k, float sigma)
+{
+	segmentation->switchToSingleStrategy(k, sigma);
+}
+void cveSelectiveSearchSegmentationSwitchToSelectiveSearchFast(cv::ximgproc::segmentation::SelectiveSearchSegmentation* segmentation, int baseK, int incK, float sigma)
+{
+	segmentation->switchToSelectiveSearchFast(baseK, incK, sigma);
+}
+void cveSelectiveSearchSegmentationSwitchToSelectiveSearchQuality(cv::ximgproc::segmentation::SelectiveSearchSegmentation* segmentation, int baseK, int incK, float sigma)
+{
+	segmentation->switchToSelectiveSearchQuality(baseK, incK, sigma);
+}
+void cveSelectiveSearchSegmentationAddImage(cv::ximgproc::segmentation::SelectiveSearchSegmentation* segmentation, cv::_InputArray* img)
+{
+	segmentation->addImage(*img);
+}
+void cveSelectiveSearchSegmentationProcess(cv::ximgproc::segmentation::SelectiveSearchSegmentation* segmentation, std::vector<cv::Rect>* rects)
+{
+	segmentation->process(*rects);
+}
+void cveSelectiveSearchSegmentationRelease(cv::ximgproc::segmentation::SelectiveSearchSegmentation** segmentation)
+{
+	delete *segmentation;
+	*segmentation = 0;
+}
+
+void cveGradientPaillouY(cv::_InputArray* op, cv::_OutputArray* dst, double alpha, double omega)
+{
+	cv::ximgproc::GradientPaillouY(*op, *dst, alpha, omega);
+}
+void cveGradientPaillouX(cv::_InputArray* op, cv::_OutputArray* dst, double alpha, double omega)
+{
+	cv::ximgproc::GradientPaillouX(*op, *dst, alpha, omega);
+}
+void cveGradientDericheY(cv::_InputArray* op, cv::_OutputArray* dst, double alphaDerive, double alphaMean)
+{
+	cv::ximgproc::GradientDericheY(*op, *dst, alphaDerive, alphaMean);
+}
+void cveGradientDericheX(cv::_InputArray* op, cv::_OutputArray* dst, double alphaDerive, double alphaMean)
+{
+	cv::ximgproc::GradientDericheX(*op, *dst, alphaDerive, alphaMean);
+}

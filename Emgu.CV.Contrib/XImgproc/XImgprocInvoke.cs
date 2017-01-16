@@ -247,5 +247,41 @@ namespace Emgu.CV.XImgproc
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveWeightedMedianFilter(IntPtr joint, IntPtr src, IntPtr dst, int r, double sigma, WMFWeightType weightType, IntPtr mask);
+
+        public static void GradientPaillouY(IInputArray op, IOutputArray dst, double alpha, double omega)
+        {
+            using (InputArray iaOp = op.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveGradientPaillouY(iaOp, oaDst, alpha, omega);
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveGradientPaillouY(IntPtr op, IntPtr dst, double alpha, double omega);
+
+        public static void GradientPaillouX(IInputArray op, IOutputArray dst, double alpha, double omega)
+        {
+            using (InputArray iaOp = op.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveGradientPaillouX(iaOp, oaDst, alpha, omega);
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveGradientPaillouX(IntPtr op, IntPtr dst, double alpha, double omega);
+
+        public static void GradientDericheY(IInputArray op, IOutputArray dst, double alphaDerive, double alphaMean)
+        {
+            using (InputArray iaOp = op.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveGradientDericheY(iaOp, oaDst, alphaDerive, alphaMean);
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveGradientDericheY(IntPtr op, IntPtr dst, double alphaDerive, double alphaMean);
+
+        public static void GradientDericheX(IInputArray op, IOutputArray dst, double alphaDerive, double alphaMean)
+        {
+            using (InputArray iaOp = op.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveGradientDericheX(iaOp, oaDst, alphaDerive, alphaMean);
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveGradientDericheX(IntPtr op, IntPtr dst, double alphaDerive, double alphaMean);
     }
 }

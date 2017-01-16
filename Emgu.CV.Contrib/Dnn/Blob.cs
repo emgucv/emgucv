@@ -26,7 +26,7 @@ namespace Emgu.CV.Dnn
         }
 
         /// <summary>
-        /// Constucts 4-dimensional blob (so-called batch) from image or array of images.
+        /// Constructs 4-dimensional blob (so-called batch) from image or array of images.
         /// </summary>
         /// <param name="image">2-dimensional multi-channel or 3-dimensional single-channel image (or array of images)</param>
         
