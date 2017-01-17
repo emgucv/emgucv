@@ -197,5 +197,89 @@ namespace Emgu.CV.XPhoto
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveXInpaint(IntPtr src, IntPtr mask, IntPtr dst, InpaintType algorithmType);
+
+
+        public static void Bm3dDenoising(
+            IInputArray src,
+            IInputOutputArray dstStep1,
+            IOutputArray dstStep2,
+            float h,
+            int templateWindowSize,
+            int searchWindowSize,
+            int blockMatchingStep1,
+            int blockMatchingStep2,
+            int groupSize,
+            int slidingStep,
+            float beta,
+            int normType,
+            int step,
+            int transformType)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (InputOutputArray ioaDstStep1 = dstStep1.GetInputOutputArray())
+            using (OutputArray oaStep2 = dstStep2.GetOutputArray())
+            {
+                cveBm3dDenoising1(iaSrc, ioaDstStep1, oaStep2,
+                    h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
+                    groupSize, slidingStep, beta, normType, step, transformType);
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveBm3dDenoising1(
+            IntPtr src,
+            IntPtr dstStep1,
+            IntPtr dstStep2,
+            float h,
+            int templateWindowSize,
+            int searchWindowSize,
+            int blockMatchingStep1,
+            int blockMatchingStep2,
+            int groupSize,
+            int slidingStep,
+            float beta,
+            int normType,
+            int step,
+            int transformType);
+
+
+        public static void Bm3dDenoising(
+            IInputArray src,
+            IOutputArray dst,
+            float h,
+            int templateWindowSize,
+            int searchWindowSize,
+            int blockMatchingStep1,
+            int blockMatchingStep2,
+            int groupSize,
+            int slidingStep,
+            float beta,
+            int normType,
+            int step,
+            int transformType)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveBm3dDenoising2(iaSrc, oaDst,
+                    h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
+                    groupSize, slidingStep, beta, normType, step, transformType);
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveBm3dDenoising2(
+            IntPtr src,
+            IntPtr dst,
+            float h,
+            int templateWindowSize,
+            int searchWindowSize,
+            int blockMatchingStep1,
+            int blockMatchingStep2,
+            int groupSize,
+            int slidingStep,
+            float beta,
+            int normType,
+            int step,
+            int transformType);
     }
 }

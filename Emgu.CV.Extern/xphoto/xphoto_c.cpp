@@ -60,3 +60,45 @@ void cveXInpaint(const cv::Mat* src, const cv::Mat* mask, cv::Mat* dst, const in
 {
    cv::xphoto::inpaint(*src, *mask, *dst, algorithmType);
 }
+
+void cveBm3dDenoising1(
+	cv::_InputArray* src,
+	cv::_InputOutputArray* dstStep1,
+	cv::_OutputArray* dstStep2,
+	float h,
+	int templateWindowSize,
+	int searchWindowSize,
+	int blockMatchingStep1,
+	int blockMatchingStep2,
+	int groupSize,
+	int slidingStep,
+	float beta,
+	int normType,
+	int step,
+	int transformType)
+{
+	cv::xphoto::bm3dDenoising(
+		*src, *dstStep1, *dstStep2,
+		h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
+		groupSize, slidingStep, beta, normType, step, transformType);
+}
+
+void cveBm3dDenoising2(
+	cv::_InputArray* src,
+	cv::_OutputArray* dst,
+	float h,
+	int templateWindowSize,
+	int searchWindowSize,
+	int blockMatchingStep1,
+	int blockMatchingStep2,
+	int groupSize,
+	int slidingStep,
+	float beta,
+	int normType,
+	int step,
+	int transformType)
+{
+	cv::xphoto::bm3dDenoising(
+		*src, *dst, h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
+		groupSize, slidingStep, beta, normType, step, transformType);
+}
