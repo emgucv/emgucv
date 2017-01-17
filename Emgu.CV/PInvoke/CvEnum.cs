@@ -2959,6 +2959,7 @@ namespace Emgu.CV.CvEnum
         BothCallback = 3
     }
 
+    /*
     /// <summary>
     /// CvNextEdgeType
     /// </summary>
@@ -2996,7 +2997,7 @@ namespace Emgu.CV.CvEnum
         /// previous around the right facet (reversed eDnext) 
         /// </summary>
         PrevAroundRight = 0x02
-    }
+    }*/
 
 
     /// <summary>
@@ -3248,87 +3249,6 @@ namespace Emgu.CV.CvEnum
         Append = 2
     }
 
-    /*
-    /// <summary>
-    /// The type of blob detector
-    /// </summary>
-    public enum BlobDetectorType
-    {
-       /// <summary>
-       /// Simple blob detector
-       /// </summary>
-       Simple,
-       /// <summary>
-       /// Conected Component blob detector
-       /// </summary>
-       CC
-    }
-
-    /// <summary>
-    /// MCvBlobTrackerParamMS profile
-    /// </summary>
-    public enum BlobtrackerMsProfile
-    {
-       /// <summary>
-       /// EPANECHNIKOV
-       /// </summary>
-       Epanechnikov = 0,
-       /// <summary>
-       /// DoG
-       /// </summary>
-       Dog = 1
-    }
-
-    /// <summary>
-    /// The types of blob trakcer
-    /// </summary>
-    public enum BlobTrackerType
-    {
-       /// <summary>
-       /// Simple blob tracker based on connected component tracking
-       /// </summary>
-       CC,
-       /// <summary>
-       /// Connected component tracking and mean-shift particle filter collion-resolver
-       /// </summary>
-       CCMSPF,
-       /// <summary>
-       /// Blob tracker that integrates meanshift and connected components
-       /// </summary>
-       MSFG,
-       /// <summary>
-       /// Blob tracker that integrates meanshift and connected components
-       /// </summary>
-       MSFGS,
-       /// <summary>
-       /// Meanshift without connected-components
-       /// </summary>
-       MS,
-       /// <summary>
-       /// Particle filtering via Bhattacharya coefficient, which is roughly the dot-product of two probability densities.
-       /// </summary>
-       MSPF,
-    }
-
-    /// <summary>
-    /// The type of blob post process module
-    /// </summary>
-    public enum BlobPostProcessType
-    {
-       /// <summary>
-       /// Kalman 
-       /// </summary>
-       Kalman,
-       /// <summary>
-       /// TimeAverRect
-       /// </summary>
-       TimeAverRect,
-       /// <summary>
-       /// TimeAverExp
-       /// </summary>
-       TimeAverExp
-    }*/
-
     /// <summary>
     /// Histogram comparison method
     /// </summary>
@@ -3359,41 +3279,6 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         ChisqrAlt = 4
     }
-
-    /*
-    /// <summary>
-    /// The type of BGStatModel
-    /// </summary>
-    public enum BgStatType
-    {
-       /// <summary>
-       /// 
-       /// </summary>
-       FgdStatModel,
-       /// <summary>
-       /// Gaussian background model
-       /// </summary>
-       GaussianBgModel
-    }
-
-    /// <summary>
-    /// Type of foreground detector
-    /// </summary>
-    public enum ForgroundDetectorType
-    {
-       /// <summary>
-       /// Latest and greatest algorithm
-       /// </summary>
-       Fgd = 0,
-       /// <summary>
-       /// "Mixture of Gaussians", older algorithm
-       /// </summary>
-       Mog = 1,
-       /// <summary>
-       ///  A simplified version of FGD
-       /// </summary>
-       FgdSimple = 2
-    }*/
 
     /// <summary>
     /// The available flags for Farneback optical flow computation

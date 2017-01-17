@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: dbf340dbd69a646e6a7a6b60a21361ea
-timeCreated: 1468346752
+guid: 07587fb2a8239994a8da589e00555d2f
+timeCreated: 1484672799
 licenseType: Pro
 PluginImporter:
   serializedVersion: 1
@@ -8,19 +8,14 @@ PluginImporter:
   executionOrder: {}
   isPreloaded: 0
   platformData:
-    Android:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
     Any:
-      enabled: 0
+      enabled: 1
       settings: {}
     Editor:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: x86_64
         DefaultValueInitialized: true
-        OS: Windows
     Linux:
       enabled: 0
       settings:
@@ -30,7 +25,7 @@ PluginImporter:
       settings:
         CPU: x86_64
     LinuxUniversal:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: x86_64
     OSXIntel:
@@ -53,11 +48,6 @@ PluginImporter:
       enabled: 1
       settings:
         CPU: AnyCPU
-    iOS:
-      enabled: 0
-      settings:
-        CompileFlags: 
-        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

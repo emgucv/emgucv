@@ -19,6 +19,7 @@ cp -r ../Emgu.Util/*.cs Assets/Emgu.CV/Emgu.Util/
 
 cp -r ../Emgu.CV/*.cs Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/CameraCalibration Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Capture Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Color Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Cvb Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Features2D Assets/Emgu.CV/Emgu.CV/

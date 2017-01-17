@@ -40,7 +40,7 @@ public class Ocr : MonoBehaviour
 #endif
       }
 
-      _ocr = new Tesseract(outputPath, "eng", OcrEngineMode.TesseractCubeCombined);
+      _ocr = new Tesseract(outputPath, "eng", OcrEngineMode.TesseractLstmCombined);
 
       Debug.Log("OCR engine loaded.");
 

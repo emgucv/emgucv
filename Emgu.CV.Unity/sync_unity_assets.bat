@@ -1,7 +1,7 @@
 cp Assets/Emgu.CV/Emgu.Util/*.cs ../Emgu.Util/
 
 cp Assets/Emgu.CV/Emgu.CV/*.cs ../Emgu.CV/
-cp Assets/Emgu.CV/Emgu.CV/CameraCalibration/*.cs ../Emgu.CV/CameraCalibration
+cp Assets/Emgu.CV/Emgu.CV/Capture/*.cs ../Emgu.CV/Capture
 cp Assets/Emgu.CV/Emgu.CV/Color/*.cs ../Emgu.CV/Color 
 cp Assets/Emgu.CV/Emgu.CV/Cvb/*.cs ../Emgu.CV/Cvb 
 cp Assets/Emgu.CV/Emgu.CV/Features2D/*.cs ../Emgu.CV/Features2D 
