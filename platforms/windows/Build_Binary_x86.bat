@@ -222,6 +222,14 @@ SET INTEL_ICL=%INTEL_DIR%\ia32\icl.exe
 IF "%OS_MODE%"==" Win64" SET INTEL_ICL=%INTEL_DIR%\intel64\icl.exe
 SET INTEL_TBB=%ICPP_COMPILER17%tbb\include
 
+SET TBB_ARCH=ia32
+IF "%OS_MODE%"==" Win64" SET TBB_ARCH=intel64
+SET TBB_DEV_ENV=""
+IF %DEVENV%==%VS2012% SET TBB_DEV_ENV=vs2012
+IF %DEVENV%==%VS2013% SET TBB_DEV_ENV=vs2013
+IF %DEVENV%==%VS2015% SET TBB_DEV_ENV=vs2015
+call "%ICPP_COMPILER17%tbb\bin\tbbvars.bat" %TBB_ARCH% %TBB_DEV_ENV%
+
 REM initiate the compiler enviroment
 @echo on
 

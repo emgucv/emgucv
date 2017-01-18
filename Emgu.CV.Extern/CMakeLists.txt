@@ -1012,7 +1012,7 @@ IF(HAVE_opencv_optflow)
     "CvInvoke"
     "DISOpticalFlow"
     "#include \"optflow_c.h\"")
-
+  
   CREATE_OCV_CLASS_PROPERTY( 
     "optflow/variational_refinement_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/VariationalRefinementGenerated.cs"
@@ -1312,14 +1312,14 @@ ENDIF()
 ############################### IPP END ################################
 
 ############################### TBB START ##############################
-if (WITH_TBB AND TBB_INCLUDE_DIRS AND TBB_LIB_DIR)
+if (WITH_TBB AND TBB_ENV_INCLUDE AND TBB_ENV_LIB)
   MESSAGE(STATUS "CVEXTERN: using TBB")
   add_definitions(-DHAVE_TBB)
-  include_directories(${TBB_INCLUDE_DIRS})
-  link_directories(${TBB_LIB_DIR})
+  include_directories(${TBB_ENV_INCLUDE})
+  link_directories(${TBB_ENV_LIB})
   
   IF(WIN32)
-    SET(TBB_BINARY_FILE_DIR "${TBB_INCLUDE_DIRS}/../../redist")
+    SET(TBB_BINARY_FILE_DIR "${TBB_ENV_INCLUDE}/../../redist")
     IF(TARGET_ARCH_64)
       SET(TBB_BINARY_FILE_DIR "${TBB_BINARY_FILE_DIR}/intel64_win/tbb")
     ELSE()
@@ -1343,9 +1343,9 @@ if (WITH_TBB AND TBB_INCLUDE_DIRS AND TBB_LIB_DIR)
 endif()
 
 IF(WITH_TBB)
-  IF (NOT TBB_INCLUDE_DIRS)
+  IF (NOT TBB_ENV_INCLUDE)
     MESSAGE(STATUS "Cannot find TBB_INCLUDE_DIRS")
-  ELSEIF (NOT TBB_LIB_DIR)
+  ELSEIF (NOT TBB_ENV_LIB)
     MESSAGE(STATUS "Cannot find TBB_LIB_DIR")
   ELSE()
     MESSAGE(STATUS "tbb dll: ${TBB_BINARY_FILE_DIR}/tbb.dll")
