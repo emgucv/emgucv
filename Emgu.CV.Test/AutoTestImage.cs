@@ -1776,9 +1776,21 @@ namespace Emgu.CV.Test
                 0, 125, 255,   0, 125, 255,   0, 125, 255,   0, 125, 255,
                 0, 125, 255,   0, 125, 255,   0, 125, 255,   0, 125, 255,
             };
+#if NETFX_CORE
+            using (VectorOfByte vb = new VectorOfByte())
+                using (Image<Bgr, Byte> imgBgr = img.Convert<Bgr, Byte>())
+            {
+
+                CvInvoke.Imencode(".png", img, vb);
+                Mat m2 = new Mat();
+                CvInvoke.Imdecode(vb, ImreadModes.AnyColor, m2);
+                Assert.IsTrue(m2.Equals(imgBgr.Mat));
+            }
+#else
             img.Save("out.png");
             Image<Rgb, Byte> img2 = new Image<Rgb, byte>(EmguAssert.GetFile("out.png"));
             Assert.IsTrue(img.Equals(img2));
+#endif
         }
 
         [TestAttribute]
