@@ -115,7 +115,7 @@ MESSAGE(STATUS "Building for ${EMGUCV_ARCH}")
 
 IF(WIN32 AND CV_ICC)
   #  SET(CV_ICC_ADDITIONAL_FLAGS_RELEASE "/O3 /QaxCORE-AVX2,AVX,SSE4.1,SSE3 /Qparallel /Qopt-report:1 /Qopt-report-phase:vec /Qopt-report-phase:par /Qopt-report-file:stderr /Qipo /Qunroll-aggressive")
-  SET(CV_ICC_ADDITIONAL_FLAGS_RELEASE "/O3 /QaxCORE-AVX2,AVX,SSE4.1,SSE3 /Qparallel /Qopt-report:1 /Qopt-report-phase:vec /Qopt-report-phase:par /Qipo /Qunroll-aggressive")
+  SET(CV_ICC_ADDITIONAL_FLAGS_RELEASE "/O3 /QaxCORE-AVX2,AVX,SSE4.1,SSE3 /Qparallel /Qopt-report:1 /Qopt-report-phase:vec /Qopt-report-phase:par /Qipo /Quse-intel-optimized-headers /Qrestrict /Ot")
   STRING(REGEX REPLACE "/O2" ${CV_ICC_ADDITIONAL_FLAGS_RELEASE} CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
   STRING(REGEX REPLACE "/O2" ${CV_ICC_ADDITIONAL_FLAGS_RELEASE} CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
   SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:\"libcmt\"")
