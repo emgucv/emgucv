@@ -214,7 +214,7 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Saturation
         /// </summary>
-        Staturation = 12,
+        Saturation = 12,
         /// <summary>
         /// Hue
         /// </summary>
