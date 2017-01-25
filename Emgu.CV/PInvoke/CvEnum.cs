@@ -316,6 +316,23 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Settings = 37,
         /// <summary>
+        /// Buffer size
+        /// </summary>
+        Buffersuze = 38,
+        /// <summary>
+        /// Auto focus
+        /// </summary>
+        Autofocus = 39,
+        /// <summary>
+        /// Sar num
+        /// </summary>
+        SarNum = 40,
+        /// <summary>
+        /// Sar den
+        /// </summary>
+        SarDen = 41,
+
+        /// <summary>
         /// property for highgui class CvCapture_Android only
         /// </summary>
         Autograb = 1024,
@@ -327,18 +344,23 @@ namespace Emgu.CV.CvEnum
         /// readonly, tricky property, returns cpnst char* indeed
         /// </summary>
         PreviewFormat = 1026,
+
         /// <summary>
-        /// OpenNI map generators
+        /// OpenNI depth generator
         /// </summary>
         OpenniDepthGenerator = 1 << 31,
         /// <summary>
-        /// OpenNI map generators
+        /// OpenNI image generator
         /// </summary>
         OpenniImageGenerator = 1 << 30,
         /// <summary>
+        /// OpenNI IR generator
+        /// </summary>
+        OpenniIRGenerator = 1 << 29,
+        /// <summary>
         /// OpenNI map generators
         /// </summary>
-        OpenniGeneratorsMask = OpenniDepthGenerator + OpenniImageGenerator,
+        OpenniGeneratorsMask = OpenniDepthGenerator + OpenniImageGenerator + OpenniIRGenerator,
 
         /// <summary>
         /// Properties of cameras available through OpenNI interfaces
@@ -388,6 +410,14 @@ namespace Emgu.CV.CvEnum
         /// Generator present
         /// </summary>
         OpenniGeneratorPresent = 109,
+        /// <summary>
+        /// OpenNI2 Sync
+        /// </summary>
+        Openni2Sync = 110,
+        /// <summary>
+        /// OpenNI2 Mirror
+        /// </summary>
+        Openni2Mirror = 111,
 
         /// <summary>
         /// Openni image generator present
@@ -397,6 +427,10 @@ namespace Emgu.CV.CvEnum
         /// Image generator output mode
         /// </summary>
         OpenniImageGeneratorOutputMode = OpenniImageGenerator + OpenniOutputMode,
+        /// <summary>
+        /// Depth generator present
+        /// </summary>
+        OpenniDepthGeneratorPresent = OpenniDepthGenerator + OpenniGeneratorPresent,
         /// <summary>
         /// Depth generator baseline, in mm.
         /// </summary>
@@ -413,15 +447,44 @@ namespace Emgu.CV.CvEnum
         /// Openni generator registration on
         /// </summary>
         OpenniDepthGeneratorRegistrationOn = OpenniDepthGeneratorRegistration,
-
+        /// <summary>
+        /// Openni IR generator present
+        /// </summary>
+        OpenniIRGeneratorPresent=OpenniIRGenerator + OpenniGeneratorPresent,
+        
         /// <summary>
         /// Properties of cameras available through GStreamer interface. Default is 1
         /// </summary>
         GstreamerQueueLength = 200,
+
         /// <summary>
         /// Ip for enable multicast master mode. 0 for disable multicast
         /// </summary>
         PvapiMulticastip = 300,
+        /// <summary>
+        /// FrameStartTriggerMode: Determines how a frame is initiated
+        /// </summary>
+        PvapiFrameStartTriggerMode = 301,
+        /// <summary>
+        /// Horizontal sub-sampling of the image
+        /// </summary>
+        PvapiDecimationHorizontal = 302,
+        /// <summary>
+        /// Vertical sub-sampling of the image
+        /// </summary>
+        PvapiDecimationVertical = 303,
+        /// <summary>
+        /// Horizontal binning factor
+        /// </summary>
+        PvapiBinningX = 304,
+        /// <summary>
+        /// Vertical binning factor
+        /// </summary>
+        PvapiBinningY = 305,
+        /// <summary>
+        /// Pixel format
+        /// </summary>
+        PvapiPixelFormat = 306, 
 
         /// <summary>
         /// Change image resolution by binning or skipping.
@@ -507,6 +570,525 @@ namespace Emgu.CV.CvEnum
         /// Image capture timeout in milliseconds
         /// </summary>
         XiTimeout = 420,
+        /// <summary>
+        /// Exposure time in microseconds
+        /// </summary>
+        XiExposure = 421,
+        /// <summary>
+        /// Sets the number of times of exposure in one frame.
+        /// </summary>
+        XiExposureBurstCount = 422,
+        /// <summary>
+        /// Gain selector for parameter Gain allows to select different type of gains.
+        /// </summary>
+        XiGainSelector = 423,
+        /// <summary>
+        /// Gain in dB
+        /// </summary>
+        XiGain = 424,
+        /// <summary>
+        /// Change image downsampling type.
+        /// </summary> 
+        XiDownsamplingType = 426, 
+        /// <summary>
+        /// Binning engine selector.
+        /// </summary>
+        XiBinningSelector = 427,
+        /// <summary>
+        /// Vertical Binning - number of vertical photo-sensitive cells to combine together.
+        /// </summary>
+        XiBinningVertical = 428,
+        /// <summary>
+        /// Horizontal Binning - number of horizontal photo-sensitive cells to combine together.
+        /// </summary>
+        XiBinningHorizontal = 429,
+        /// <summary>
+        /// Binning pattern type.
+        /// </summary>
+        XiBinningPattern = 430,
+        /// <summary>
+        /// Decimation engine selector.
+        /// </summary>
+        XiDecimationSelector = 431,
+        /// <summary>
+        /// Vertical Decimation - vertical sub-sampling of the image - reduces the vertical resolution of the image by the specified vertical decimation factor.
+        /// </summary>
+        XiDecimationVertical = 432,
+        /// <summary>
+        /// Horizontal Decimation - horizontal sub-sampling of the image - reduces the horizontal resolution of the image by the specified vertical decimation factor.
+        /// </summary>
+        XiDecimationHorizontal = 433,
+        /// <summary>
+        /// Decimation pattern type.
+        /// </summary>
+        XiDecimationPattern = 434,
+
+        /// <summary>
+        /// Selects which test pattern generator is controlled by the TestPattern feature.
+        /// </summary>
+        XiTestPatternGeneratorSelector = 587,
+        /// <summary>
+        /// Selects which test pattern type is generated by the selected generator.
+        /// </summary>
+        XiTestPattern = 588,
+
+        /// <summary>
+        /// Output data format.
+        /// </summary>
+        XiImageDataFormat = 435,
+        /// <summary>
+        /// Change sensor shutter type(CMOS sensor).
+        /// </summary>
+        XiShutterType = 436,
+        /// <summary>
+        /// Number of taps
+        /// </summary>
+        XiSensorTaps = 437,
+        /// <summary>
+        /// Automatic exposure/gain ROI offset X
+        /// </summary>
+        XiAeagRoiOffsetX = 439,
+        /// <summary>
+        /// Automatic exposure/gain ROI offset Y
+        /// </summary>
+        XiAeagRoiOffsetY = 440,
+        /// <summary>
+        /// Automatic exposure/gain ROI Width
+        /// </summary>
+        XiAeagRoiWidth = 441,
+        /// <summary>
+        /// Automatic exposure/gain ROI Height
+        /// </summary>
+        XiAeagRoiHeight = 442,
+        /// <summary>
+        /// Correction of bad pixels
+        /// </summary>
+        XiBpc = 445,
+        /// <summary>
+        /// White balance red coefficient
+        /// </summary>
+        XiWbKr = 448,
+        /// <summary>
+        /// White balance green coefficient
+        /// </summary>
+        XiWbKg = 449,
+        /// <summary>
+        /// White balance blue coefficient
+        /// </summary>
+        XiWbKb = 450,
+        /// <summary>
+        /// Width of the Image provided by the device (in pixels).
+        /// </summary>
+        XiWidth = 451,
+        /// <summary>
+        /// Height of the Image provided by the device (in pixels).
+        /// </summary>
+        XiHeight = 452,
+        /// <summary>
+        /// Selects Region in Multiple ROI which parameters are set by width, height, ... ,region mode
+        /// </summary>
+        XiRegionSelector = 589,
+        /// <summary>
+        /// Activates/deactivates Region selected by Region Selector
+        /// </summary>
+        XiRegionMode = 595,
+        /// <summary>
+        /// Set/get bandwidth(datarate)(in Megabits)
+        /// </summary>
+        XiLimitBandwidth = 459,
+        /// <summary>
+        /// Sensor output data bit depth.
+        /// </summary>
+        XiSensorDataBitDepth = 460,
+        /// <summary>
+        /// Device output data bit depth.
+        /// </summary>
+        XiOutputDataBitDepth = 461,
+        /// <summary>
+        /// bitdepth of data returned by function xiGetImage
+        /// </summary>
+        XiImageDataBitDepth = 462,
+        /// <summary>
+        /// Device output data packing (or grouping) enabled. Packing could be enabled if output_data_bit_depth > 8 and packing capability is available.
+        /// </summary>
+        XiOutputDataPacking = 463,
+        /// <summary>
+        /// Data packing type. Some cameras supports only specific packing type.
+        /// </summary>
+        XiOutputDataPackingType = 464,
+        /// <summary>
+        /// Returns 1 for cameras that support cooling.
+        /// </summary>
+        XiIsCooled = 465,
+        /// <summary>
+        /// Start camera cooling.
+        /// </summary>
+        XiCooling = 466,
+        /// <summary>
+        /// Set sensor target temperature for cooling.
+        /// </summary>
+        XiTargetTemp = 467,
+        /// <summary>
+        /// Camera sensor temperature
+        /// </summary>
+        XiChipTemp = 468,
+        /// <summary>
+        /// Camera housing temperature
+        /// </summary>
+        XiHousTemp = 469,
+        /// <summary>
+        /// Camera housing back side temperature
+        /// </summary>
+        XiHousBackSideTemp = 590,
+        /// <summary>
+        /// Camera sensor board temperature
+        /// </summary>
+        XiSensorBoardTemp = 596,
+        /// <summary>
+        /// Mode of color management system.
+        /// </summary>
+        XiCms = 470,
+        /// <summary>
+        /// Enable applying of CMS profiles to xiGetImage (see XI_PRM_INPUT_CMS_PROFILE, XI_PRM_OUTPUT_CMS_PROFILE).
+        /// </summary>
+        XiApplyCms = 471,
+        /// <summary>
+        /// Returns 1 for color cameras.
+        /// </summary>
+        XiImageIsColor = 474,
+        /// <summary>
+        /// Returns color filter array type of RAW data.
+        /// </summary>
+        XiColorFilterArray = 475,
+        /// <summary>
+        /// Luminosity gamma
+        /// </summary>
+        XiGammay = 476,
+        /// <summary>
+        /// Chromaticity gamma
+        /// </summary>
+        XiGammac = 477,
+        /// <summary>
+        /// Sharpness Strength
+        /// </summary>
+        XiSharpness = 478,
+        /// <summary>
+        /// Color Correction Matrix element [0][0]
+        /// </summary>
+        XiCcMatrix00 = 479,
+        /// <summary>
+        /// Color Correction Matrix element [0][1]
+        /// </summary>
+        XiCcMatrix01 = 480,
+        /// <summary>
+        /// Color Correction Matrix element [0][2]
+        /// </summary>
+        XiCcMatrix02 = 481,
+        /// <summary>
+        /// Color Correction Matrix element [0][3]
+        /// </summary>
+        XiCcMatrix03 = 482,
+        /// <summary>
+        /// Color Correction Matrix element [1][0]
+        /// </summary>
+        XiCcMatrix10 = 483,
+        /// <summary>
+        /// Color Correction Matrix element [1][1]
+        /// </summary>
+        XiCcMatrix11 = 484,
+        /// <summary>
+        /// Color Correction Matrix element [1][2]
+        /// </summary>
+        XiCcMatrix12 = 485,
+        /// <summary>
+        /// Color Correction Matrix element [1][3]
+        /// </summary>
+        XiCcMatrix13 = 486,
+        /// <summary>
+        /// Color Correction Matrix element [2][0]
+        /// </summary>
+        XiCcMatrix20 = 487,
+        /// <summary>
+        /// Color Correction Matrix element [2][1]
+        /// </summary>
+        XiCcMatrix21 = 488,
+        /// <summary>
+        /// Color Correction Matrix element [2][2]
+        /// </summary>
+        XiCcMatrix22 = 489,
+        /// <summary>
+        /// Color Correction Matrix element [2][3]
+        /// </summary>
+        XiCcMatrix23 = 490,
+        /// <summary>
+        /// Color Correction Matrix element [3][0]
+        /// </summary>
+        XiCcMatrix30 = 491,
+        /// <summary>
+        /// Color Correction Matrix element [3][1]
+        /// </summary>
+        XiCcMatrix31 = 492,
+        /// <summary>
+        /// Color Correction Matrix element [3][2]
+        /// </summary>
+        XiCcMatrix32 = 493,
+        /// <summary>
+        /// Color Correction Matrix element [3][3]
+        /// </summary>
+        XiCcMatrix33 = 494,
+        /// <summary>
+        /// Set default Color Correction Matrix
+        /// </summary>
+        XiDefaultCcMatrix = 495,
+        /// <summary>
+        /// Selects the type of trigger.
+        /// </summary>
+        XiTrgSelector = 498,
+        /// <summary>
+        /// Sets number of frames acquired by burst. This burst is used only if trigger is set to FrameBurstStart
+        /// </summary>
+        XiAcqFrameBurstCount = 499,
+        /// <summary>
+        /// Enable/Disable debounce to selected GPI
+        /// </summary>
+        XiDebounceEn = 507,
+        /// <summary>
+        /// Debounce time (x * 10us)
+        /// </summary>
+        XiDebounceT0 = 508,
+        /// <summary>
+        /// Debounce time (x * 10us)
+        /// </summary>
+        XiDebounceT1 = 509,
+        /// <summary>
+        /// Debounce polarity (pol = 1 t0 - falling edge, t1 - rising edge)
+        /// </summary>
+        XiDebouncePol = 510,
+        /// <summary>
+        /// Status of lens control interface. This shall be set to XI_ON before any Lens operations.
+        /// </summary>
+        XiLensMode = 511,
+        /// <summary>
+        /// Current lens aperture value in stops. Examples: 2.8, 4, 5.6, 8, 11
+        /// </summary>
+        XiLensApertureValue = 512,
+        /// <summary>
+        /// Lens current focus movement value to be used by XI_PRM_LENS_FOCUS_MOVE in motor steps.
+        /// </summary>
+        XiLensFocusMovementValue = 513,
+        /// <summary>
+        /// Moves lens focus motor by steps set in XI_PRM_LENS_FOCUS_MOVEMENT_VALUE.
+        /// </summary>
+        XiLensFocusMove = 514,
+        /// <summary>
+        /// Lens focus distance in cm.
+        /// </summary>
+        XiLensFocusDistance = 515,
+        /// <summary>
+        /// Lens focal distance in mm.
+        /// </summary>
+        XiLensFocalLength = 516,
+        /// <summary>
+        /// Selects the current feature which is accessible by XI_PRM_LENS_FEATURE.
+        /// </summary>
+        XiLensFeatureSelector = 517,
+        /// <summary>
+        /// Allows access to lens feature value currently selected by XI_PRM_LENS_FEATURE_SELECTOR.
+        /// </summary>
+        XiLensFeature = 518,
+        /// <summary>
+        /// Return device model id
+        /// </summary>
+        XiDeviceModelId = 521,
+        /// <summary>
+        /// Return device serial number
+        /// </summary>
+        XiDeviceSn = 522,
+        /// <summary>
+        /// The alpha channel of RGB32 output image format.
+        /// </summary>
+        XiImageDataFormatRgb32Alpha = 529,
+        /// <summary>
+        /// Buffer size in bytes sufficient for output image returned by xiGetImage
+        /// </summary>
+        XiImagePayloadSize = 530,
+        /// <summary>
+        /// Current format of pixels on transport layer.
+        /// </summary>
+        XiTransportPixelFormat = 531,
+        /// <summary>
+        /// Sensor clock frequency in Hz.
+        /// </summary>
+        XiSensorClockFreqHz = 532,
+        /// <summary>
+        /// Sensor clock frequency index. Sensor with selected frequencies have possibility to set the frequency only by this index.
+        /// </summary>
+        XiSensorClockFreqIndex = 533,
+        /// <summary>
+        /// Number of output channels from sensor used for data transfer.
+        /// </summary>
+        XiSensorOutputChannelCount = 534,
+        /// <summary>
+        /// Define framerate in Hz
+        /// </summary>
+        XiFramerate = 535,
+        /// <summary>
+        /// Select counter
+        /// </summary>
+        XiCounterSelector = 536,
+        /// <summary>
+        /// Counter status
+        /// </summary>
+        XiCounterValue = 537,
+        /// <summary>
+        /// Type of sensor frames timing.
+        /// </summary>
+        XiAcqTimingMode = 538,
+        /// <summary>
+        /// Calculate and return available interface bandwidth(int Megabits)
+        /// </summary>
+        XiAvailableBandwidth = 539,
+        /// <summary>
+        /// Data move policy
+        /// </summary>
+        XiBufferPolicy = 540,
+        /// <summary>
+        /// Activates LUT.
+        /// </summary>
+        XiLutEn = 541,
+        /// <summary>
+        /// Control the index (offset) of the coefficient to access in the LUT.
+        /// </summary>
+        XiLutIndex = 542,
+        /// <summary>
+        /// Value at entry LUTIndex of the LUT
+        /// </summary>
+        XiLutValue = 543,
+        /// <summary>
+        /// Specifies the delay in microseconds (us) to apply after the trigger reception before activating it.
+        /// </summary>
+        XiTrgDelay = 544,
+        /// <summary>
+        /// Defines how time stamp reset engine will be armed
+        /// </summary>
+        XiTsRstMode = 545,
+        /// <summary>
+        /// Defines which source will be used for timestamp reset. Writing this parameter will trigger settings of engine (arming)
+        /// </summary>
+        XiTsRstSource = 546,
+        /// <summary>
+        /// Returns 1 if camera connected and works properly.
+        /// </summary>
+        XiIsDeviceExist = 547,
+        /// <summary>
+        /// Acquisition buffer size in buffer_size_unit. Default bytes.
+        /// </summary>
+        XiAcqBufferSize = 548,
+        /// <summary>
+        /// Acquisition buffer size unit in bytes. Default 1. E.g. Value 1024 means that buffer_size is in KiBytes
+        /// </summary>
+        XiAcqBufferSizeUnit = 549,
+        /// <summary>
+        /// Acquisition transport buffer size in bytes
+        /// </summary>
+        XiAcqTransportBufferSize = 550,
+        /// <summary>
+        /// Queue of field/frame buffers
+        /// </summary>
+        XiBuffersQueueSize = 551,
+        /// <summary>
+        /// Number of buffers to commit to low level
+        /// </summary>
+        XiAcqTransportBufferCommit = 552,
+        /// <summary>
+        /// GetImage returns most recent frame
+        /// </summary>
+        XiRecentFrame = 553,
+        /// <summary>
+        /// Resets the camera to default state.
+        /// </summary>
+        XiDeviceReset = 554,
+        /// <summary>
+        /// Correction of column FPN
+        /// </summary>
+        XiColumnFpnCorrection = 555,
+        /// <summary>
+        /// Correction of row FPN
+        /// </summary>
+        XiRowFpnCorrection = 591,
+        /// <summary>
+        /// Current sensor mode. Allows to select sensor mode by one integer. Setting of this parameter affects: image dimensions and downsampling.
+        /// </summary>
+        XiSensorMode = 558,
+        /// <summary>
+        /// Enable High Dynamic Range feature.
+        /// </summary>
+        XiHdr = 559,
+        /// <summary>
+        /// The number of kneepoints in the PWLR.
+        /// </summary>
+        XiHdrKneepointCount = 560,
+        /// <summary>
+        /// position of first kneepoint(in % of XI_PRM_EXPOSURE)
+        /// </summary>
+        XiHdrT1 = 561,
+        /// <summary>
+        /// position of second kneepoint (in % of XI_PRM_EXPOSURE)
+        /// </summary>
+        XiHdrT2 = 562,
+        /// <summary>
+        /// value of first kneepoint (% of sensor saturation)
+        /// </summary>
+        XiKneepoint1 = 563,
+        /// <summary>
+        /// value of second kneepoint (% of sensor saturation)
+        /// </summary>
+        XiKneepoint2 = 564,
+        /// <summary>
+        /// Last image black level counts. Can be used for Offline processing to recall it.
+        /// </summary>
+        XiImageBlackLevel = 565,
+        /// <summary>
+        /// Returns hardware revision number.
+        /// </summary>
+        XiHwRevision = 571,
+        /// <summary>
+        /// Set debug level
+        /// </summary>
+        XiDebugLevel = 572,
+        /// <summary>
+        /// Automatic bandwidth calculation,
+        /// </summary>
+        XiAutoBandwidthCalculation = 573,
+        /// <summary>
+        /// File number.
+        /// </summary>
+        XiFfsFileId = 594,
+        /// <summary>
+        /// Size of file.
+        /// </summary>
+        XiFfsFileSize = 580,
+        /// <summary>
+        /// Size of free camera FFS.
+        /// </summary>
+        XiFreeFfsSize = 581,
+        /// <summary>
+        /// Size of used camera FFS.
+        /// </summary>
+        XiUsedFfsSize = 582,
+        /// <summary>
+        /// Setting of key enables file operations on some cameras.
+        /// </summary>
+        XiFfsAccessKey = 583,
+        /// <summary>
+        /// Selects the current feature which is accessible by XI_PRM_SENSOR_FEATURE_VALUE.
+        /// </summary>
+        XiSensorFeatureSelector = 585,
+        /// <summary>
+        /// Allows access to sensor feature value currently selected by XI_PRM_SENSOR_FEATURE_SELECTOR.
+        /// </summary>
+        XiSensorFeatureValue = 586, 
+
 
         /// <summary>
         /// Android flash mode
@@ -540,6 +1122,14 @@ namespace Emgu.CV.CvEnum
         /// Android focus distance far
         /// </summary>
         AndroidFocusDistanceFar = 8008,
+        /// <summary>
+        /// Android expose lock
+        /// </summary>
+        AndroidExposeLock = 8009,
+        /// <summary>
+        /// Android white balalce lock
+        /// </summary>
+        AndroidWhitebalanceLock = 8010,
 
         /// <summary>
         /// iOS device focus
@@ -590,7 +1180,49 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Smartek Giganetix Ethernet Vision: frame sens height
         /// </summary>
-        GigaFrameSensHeigh = 10006
+        GigaFrameSensHeigh = 10006,
+
+        /// <summary>
+        /// Intelperc Profile Count
+        /// </summary>
+        IntelpercProfileCount = 11001,
+        /// <summary>
+        /// Intelperc Profile Idx
+        /// </summary>
+        IntelpercProfileIdx = 11002,
+        /// <summary>
+        /// Intelperc Depth Low Confidence Value
+        /// </summary>
+        IntelpercDepthLowConfidenceValue = 11003,
+        /// <summary>
+        /// Intelperc Depth Saturation Value
+        /// </summary>
+        IntelpercDepthSaturationValue = 11004,
+        /// <summary>
+        /// Intelperc Depth Confidence Threshold
+        /// </summary>
+        IntelpercDepthConfidenceThreshold = 11005,
+        /// <summary>
+        /// Intelperc Depth Focal Length Horz
+        /// </summary>
+        IntelpercDepthFocalLengthHorz = 11006,
+        /// <summary>
+        /// Intelperc Depth Focal Length Vert
+        /// </summary>
+        IntelpercDepthFocalLengthVert = 11007,
+
+        /// <summary>
+        /// Intelperc Depth Generator
+        /// </summary>
+        IntelpercDepthGenerator = 1 << 29,
+        /// <summary>
+        /// Intelperc Image Generator
+        /// </summary>
+        IntelpercImageGenerator = 1 << 28,
+        /// <summary>
+        /// Intelperc Generators Mask
+        /// </summary>
+        IntelpercGeneratorsMask = IntelpercDepthGenerator + IntelpercImageGenerator
 
     }
 
