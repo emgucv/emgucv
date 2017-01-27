@@ -1127,7 +1127,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         AndroidExposeLock = 8009,
         /// <summary>
-        /// Android white balalce lock
+        /// Android white balance lock
         /// </summary>
         AndroidWhitebalanceLock = 8010,
 

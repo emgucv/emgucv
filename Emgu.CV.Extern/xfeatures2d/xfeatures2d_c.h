@@ -64,5 +64,26 @@ CVAPI(cv::xfeatures2d::VGG*) cveVGGCreate(
 	float scaleFactor, bool dscNormalize, cv::Feature2D** feature2D);
 CVAPI(void) cveVGGRelease(cv::xfeatures2d::VGG** extractor);
 
+CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate(int initSampleCount,	int initSeedCount,	int pointDistribution);
+CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate2(std::vector<cv::Point2f>* initSamplingPoints, int initSeedCount);
+CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate3(std::vector<cv::Point2f>* initSamplingPoints, std::vector<int>* initClusterSeedIndexes);
+CVAPI(void) cvePCTSignaturesRelease(cv::xfeatures2d::PCTSignatures** pct);
+CVAPI(void) cvePCTComputeSignature(cv::xfeatures2d::PCTSignatures* pct, cv::_InputArray* image,cv::_OutputArray* signature);
+CVAPI(void) cvePCTDrawSignature(cv::_InputArray* source, cv::_InputArray* signature, cv::_OutputArray* result, float radiusToShorterSideRatio, int borderThickness);
+
+CVAPI(cv::xfeatures2d::PCTSignaturesSQFD*) cvePCTSignaturesSQFDCreate(
+	int distanceFunction,
+	int similarityFunction,
+	float similarityParameter);
+CVAPI(float) cvePCTSignaturesSQFDComputeQuadraticFormDistance(
+	cv::xfeatures2d::PCTSignaturesSQFD* sqfd,
+	cv::_InputArray* signature0,
+	cv::_InputArray* signature1);
+CVAPI(void) cvePCTSignaturesSQFDComputeQuadraticFormDistances(
+	cv::xfeatures2d::PCTSignaturesSQFD* sqfd,
+	cv::Mat* sourceSignature,
+	std::vector<cv::Mat>* imageSignatures,
+	std::vector<float>* distances);
+CVAPI(void) cvePCTSignaturesSQFDRelease(cv::xfeatures2d::PCTSignaturesSQFD** sqfd);
 
 #endif

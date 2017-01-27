@@ -152,7 +152,7 @@ cv::xfeatures2d::BoostDesc* cveBoostDescCreate(int desc, bool useScaleOrientatio
 {
 	cv::Ptr<cv::xfeatures2d::BoostDesc> ptr = cv::xfeatures2d::BoostDesc::create(desc, useScaleOrientation, scalefactor);
 	ptr.addref();
-	*feature2D = dynamic_cast<cv::xfeatures2d::BoostDesc*>(ptr.get());
+	*feature2D = dynamic_cast<cv::Feature2D*>(ptr.get());
 	return ptr.get();
 }
 void cveBoostDescRelease(cv::xfeatures2d::BoostDesc** extractor)
@@ -168,11 +168,73 @@ cv::xfeatures2d::VGG* cveVGGCreate(
 {
 	cv::Ptr<cv::xfeatures2d::VGG> ptr = cv::xfeatures2d::VGG::create(desc, isigma, imgNormalize, useScaleOrientation, scaleFactor, dscNormalize);
 	ptr.addref();
-	*feature2D = dynamic_cast<cv::xfeatures2d::VGG*>(ptr.get());
+	*feature2D = dynamic_cast<cv::Feature2D*>(ptr.get());
 	return ptr.get();
 }
 void cveVGGRelease(cv::xfeatures2d::VGG** extractor)
 {
 	delete *extractor;
 	*extractor = 0;
+}
+
+cv::xfeatures2d::PCTSignatures* cvePCTSignaturesCreate(int initSampleCount, int initSeedCount, int pointDistribution)
+{
+	cv::Ptr<cv::xfeatures2d::PCTSignatures> ptr = cv::xfeatures2d::PCTSignatures::create(initSampleCount, initSeedCount, pointDistribution);
+	ptr.addref();
+	return ptr.get();
+}
+cv::xfeatures2d::PCTSignatures* cvePCTSignaturesCreate2(std::vector<cv::Point2f>* initSamplingPoints, int initSeedCount)
+{
+	cv::Ptr<cv::xfeatures2d::PCTSignatures> ptr = cv::xfeatures2d::PCTSignatures::create(*initSamplingPoints, initSeedCount);
+	ptr.addref();
+	return ptr.get();
+}
+cv::xfeatures2d::PCTSignatures* cvePCTSignaturesCreate3(std::vector<cv::Point2f>* initSamplingPoints, std::vector<int>* initClusterSeedIndexes)
+{
+	cv::Ptr<cv::xfeatures2d::PCTSignatures> ptr = cv::xfeatures2d::PCTSignatures::create(*initSamplingPoints, *initClusterSeedIndexes);
+	ptr.addref();
+	return ptr.get();
+}
+void cvePCTSignaturesRelease(cv::xfeatures2d::PCTSignatures** pct)
+{
+	delete *pct;
+	*pct = 0;
+}
+void cvePCTComputeSignature(cv::xfeatures2d::PCTSignatures* pct, cv::_InputArray* image, cv::_OutputArray* signature)
+{
+	pct->computeSignature(*image, *signature);
+}
+void cvePCTDrawSignature(cv::_InputArray* source, cv::_InputArray* signature, cv::_OutputArray* result, float radiusToShorterSideRatio, int borderThickness)
+{
+	cv::xfeatures2d::PCTSignatures::drawSignature(*source, *signature, *result, radiusToShorterSideRatio, borderThickness);
+}
+
+cv::xfeatures2d::PCTSignaturesSQFD* cvePCTSignaturesSQFDCreate(
+	int distanceFunction,
+	int similarityFunction,
+	float similarityParameter)
+{
+	cv::Ptr<cv::xfeatures2d::PCTSignaturesSQFD> ptr = cv::xfeatures2d::PCTSignaturesSQFD::create(distanceFunction, similarityFunction, similarityParameter);
+	ptr.addref();
+	return ptr.get();
+}
+float cvePCTSignaturesSQFDComputeQuadraticFormDistance(
+	cv::xfeatures2d::PCTSignaturesSQFD* sqfd,
+	cv::_InputArray* signature0,
+	cv::_InputArray* signature1)
+{
+	return sqfd->computeQuadraticFormDistance(*signature0, *signature1);
+}
+void cvePCTSignaturesSQFDComputeQuadraticFormDistances(
+	cv::xfeatures2d::PCTSignaturesSQFD* sqfd,
+	cv::Mat* sourceSignature,
+	std::vector<cv::Mat>* imageSignatures,
+	std::vector<float>* distances)
+{
+	sqfd->computeQuadraticFormDistances(*sourceSignature, *imageSignatures, *distances);
+}
+void cvePCTSignaturesSQFDRelease(cv::xfeatures2d::PCTSignaturesSQFD** sqfd)
+{
+	delete *sqfd;
+	*sqfd = 0;
 }
