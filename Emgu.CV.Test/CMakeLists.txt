@@ -14,6 +14,7 @@ FILE(GLOB_RECURSE SRC_CV_TEST_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 "Class1.cs" 
 "Emgu.CV.Test.Android/*.cs" "Emgu.CV.Test.Android/Resources/*.cs" "Emgu.CV.Test.Android/Properties/*.cs" 
 "Emgu.CV.Test.iOS/*.cs"
+"Emgu.CV.Test.UWP/*.cs"
 "Emgu.CV.Test.Windows.Phone/Properties/*.cs" 
 "Emgu.CV.Test.Windows.Store/Properties/*.cs")
 LIST(REMOVE_ITEM SRC_CV_TEST ${SRC_CV_TEST_EXCLUDES})
