@@ -24,7 +24,7 @@ namespace Emgu.CV.XFeatures2D
             bool imgNormalize, bool useScaleOrientation,
             float scaleFactor, bool dscNormalize)
         {
-            _ptr = ContribInvoke.cveVGGCreate(desc, isigma, imgNormalize, useScaleOrientation, scaleFactor, dscNormalize,
+            _ptr = XFeatures2DInvoke.cveVGGCreate(desc, isigma, imgNormalize, useScaleOrientation, scaleFactor, dscNormalize,
                 ref _feature2D);
         }
 
@@ -34,15 +34,12 @@ namespace Emgu.CV.XFeatures2D
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ContribInvoke.cveVGGRelease(ref _ptr);
+                XFeatures2DInvoke.cveVGGRelease(ref _ptr);
             base.DisposeObject();
         }
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class ContribInvoke
+    public static partial class XFeatures2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveVGGCreate(

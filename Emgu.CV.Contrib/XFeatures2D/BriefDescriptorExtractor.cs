@@ -15,41 +15,37 @@ using Emgu.CV.Features2D;
 
 namespace Emgu.CV.XFeatures2D
 {
-   /// <summary>
-   /// BRIEF Descriptor
-   /// </summary>
-   public class BriefDescriptorExtractor : Feature2D
-   {
-      /// <summary>
-      /// Create a BRIEF descriptor extractor.
-      /// </summary>
-      /// <param name="descriptorSize">The size of descriptor. It can be equal 16, 32 or 64 bytes.</param>
-      public BriefDescriptorExtractor(int descriptorSize = 32)
-      {
-         _ptr = Emgu.CV.ContribInvoke.cveBriefDescriptorExtractorCreate(descriptorSize, ref _feature2D);
-      }
+    /// <summary>
+    /// BRIEF Descriptor
+    /// </summary>
+    public class BriefDescriptorExtractor : Feature2D
+    {
+        /// <summary>
+        /// Create a BRIEF descriptor extractor.
+        /// </summary>
+        /// <param name="descriptorSize">The size of descriptor. It can be equal 16, 32 or 64 bytes.</param>
+        public BriefDescriptorExtractor(int descriptorSize = 32)
+        {
+            _ptr = XFeatures2DInvoke.cveBriefDescriptorExtractorCreate(descriptorSize, ref _feature2D);
+        }
 
-      /// <summary>
-      /// Release all the unmanaged resource associated with BRIEF
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         if (_ptr != IntPtr.Zero)
-            Emgu.CV.ContribInvoke.cveBriefDescriptorExtractorRelease(ref _ptr);
-         base.DisposeObject();
-      }
-   }
-}
+        /// <summary>
+        /// Release all the unmanaged resource associated with BRIEF
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+                XFeatures2DInvoke.cveBriefDescriptorExtractorRelease(ref _ptr);
+            base.DisposeObject();
+        }
+    }
 
-namespace Emgu.CV
-{
+    public static partial class XFeatures2DInvoke
+    {
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static IntPtr cveBriefDescriptorExtractorCreate(int descriptorSize, ref IntPtr feature2D);
 
-   public static partial class ContribInvoke
-   {
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveBriefDescriptorExtractorCreate(int descriptorSize, ref IntPtr feature2D);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveBriefDescriptorExtractorRelease(ref IntPtr extractor);
-   }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveBriefDescriptorExtractorRelease(ref IntPtr extractor);
+    }
 }

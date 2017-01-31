@@ -16,42 +16,43 @@ using Emgu.CV.Features2D;
 
 namespace Emgu.CV.XFeatures2D
 {
- 
-   public class BoostDesc : Feature2D
-   {
-       public BoostDesc(int desc, bool useScaleOrientation, float scalefactor)
-       {
-           _ptr = ContribInvoke.cveBoostDescCreate(desc, useScaleOrientation, scalefactor, ref _feature2D);
-       }
 
-      /// <summary>
-      /// Release all the unmanaged resource associated with BRIEF
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         if (_ptr != IntPtr.Zero)
-            ContribInvoke.cveBoostDescRelease(ref _ptr);
-         base.DisposeObject();
-      }
-   }
-}
+    public class BoostDesc : Feature2D
+    {
+        public BoostDesc(int desc, bool useScaleOrientation, float scalefactor)
+        {
+            _ptr = XFeatures2DInvoke.cveBoostDescCreate(desc, useScaleOrientation, scalefactor, ref _feature2D);
+        }
 
-namespace Emgu.CV
-{
-   public static partial class ContribInvoke
-   {
+        /// <summary>
+        /// Release all the unmanaged resource associated with BRIEF
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+                XFeatures2DInvoke.cveBoostDescRelease(ref _ptr);
+            base.DisposeObject();
+        }
+    }
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveBoostDescCreate(
-          int desc,
-          [MarshalAs(CvInvoke.BoolMarshalType)]
-          bool useScaleOrientation, 
-          float scalefactor, 
-          ref IntPtr feature2D);
+    public static partial class XFeatures2DInvoke
+    {
+        static XFeatures2DInvoke()
+        {
+            CvInvoke.CheckLibraryLoaded();
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static IntPtr cveBoostDescCreate(
+            int desc,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+          bool useScaleOrientation,
+            float scalefactor,
+            ref IntPtr feature2D);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveBoostDescRelease(ref IntPtr extractor);
-   }
+        internal extern static void cveBoostDescRelease(ref IntPtr extractor);
+    }
 }
 

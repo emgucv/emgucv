@@ -1037,7 +1037,39 @@ IF(HAVE_opencv_optflow)
 ENDIF()
 ############################### optflow code gen END ################################
 
-
+############################### xfeatures2d code gen START ##############################
+IF(HAVE_opencv_xfeatures2d)
+   CREATE_OCV_CLASS_PROPERTY( 
+    "xfeatures2d/pct_compute_signature_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XFeatures2D/PCTComputeSignatureGenerated.cs"
+    "cv::xfeatures2d::PCTSignatures" 
+    "PCTSignatures" 
+    "GrayscaleBits;WindowRadius;WeightX;WeightY;WeightL;WeightA;WeightB;WeightEntropy;IterationCount;MaxClustersCount;ClusterMinSize;JoiningDistance;DropThreshold;DistanceFunction" 
+    "int;int;float;float;float;float;float;float;int;int;int;float;float;int" 
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "GrayscaleBits;WindowRadius;WeightX;WeightY;WeightL;WeightA;WeightB;WeightEntropy;IterationCount;MaxClustersCount;ClusterMinSize;JoiningDistance;DropThreshold;DistanceFunction" 
+    "int;int;float;float;float;float;float;float;int;int;int;float;float;float"
+    "Color resolution of the greyscale bitmap represented in allocated bits (i.e., value 4 means that 16 shades of grey are used). The greyscale bitmap is used for computing contrast and entropy values.;
+	Size of the texture sampling window used to compute contrast and entropy. (center of the window is always in the pixel selected by x,y coordinates of the corresponding feature sample).;
+	Weights (multiplicative constants) that linearly stretch individual axes of the feature space. (x,y = position. L,a,b = color in CIE Lab space. c = contrast. e = entropy);
+	Weights (multiplicative constants) that linearly stretch individual axes of the feature space. (x,y = position. L,a,b = color in CIE Lab space. c = contrast. e = entropy);
+	Weights (multiplicative constants) that linearly stretch individual axes of the feature space. (x,y = position. L,a,b = color in CIE Lab space. c = contrast. e = entropy);
+	Weights (multiplicative constants) that linearly stretch individual axes of the feature space. (x,y = position. L,a,b = color in CIE Lab space. c = contrast. e = entropy);
+	Weights (multiplicative constants) that linearly stretch individual axes of the feature space. (x,y = position. L,a,b = color in CIE Lab space. c = contrast. e = entropy);
+	Weights (multiplicative constants) that linearly stretch individual axes of the feature space. (x,y = position. L,a,b = color in CIE Lab space. c = contrast. e = entropy);
+	Number of iterations of the k-means clustering. We use fixed number of iterations, since the modified clustering is pruning clusters (not iteratively refining k clusters).;
+	Maximal number of generated clusters. If the number is exceeded, the clusters are sorted by their weights and the smallest clusters are cropped.;
+	This parameter multiplied by the index of iteration gives lower limit for cluster size. Clusters containing fewer points than specified by the limit have their centroid dismissed and points are reassigned.;
+	Threshold euclidean distance between two centroids. If two cluster centers are closer than this distance, one of the centroid is dismissed and points are reassigned.;
+	Remove centroids in k-means whose weight is lesser or equal to given threshold.;
+	Distance function selector used for measuring distance between two points in k-means."
+    "Emgu.CV.XFeatures2D"
+    "XFeatures2DInvoke"
+    "PCTSignatures"
+    "#include \"xfeatures2d_c.h\"")
+  
+ENDIF()
+############################### xfeatures2d code gen END ################################
 
 ############################### stitching code gen START ##############################
 IF(HAVE_opencv_stitching)

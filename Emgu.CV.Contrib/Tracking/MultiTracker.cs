@@ -82,6 +82,11 @@ namespace Emgu.CV
 {
    public static partial class ContribInvoke
    {
+       static ContribInvoke()
+       {
+           CvInvoke.CheckLibraryLoaded();
+       }
+
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveMultiTrackerCreate(IntPtr trackerType);
 

@@ -24,14 +24,14 @@ namespace Emgu.CV.XFeatures2D
             int similarityFunction,
             float similarityParameter)
         {
-            _ptr = ContribInvoke.cvePCTSignaturesSQFDCreate(distanceFunction, similarityFunction, similarityParameter);
+            _ptr = XFeatures2DInvoke.cvePCTSignaturesSQFDCreate(distanceFunction, similarityFunction, similarityParameter);
         }
 
         public float ComputeQuadraticFormDistance(IInputArray signature0, IInputArray signature1)
         {
             using (InputArray iaSignature0 = signature0.GetInputArray())
             using (InputArray iaSignature1 = signature1.GetInputArray())
-                return ContribInvoke.cvePCTSignaturesSQFDComputeQuadraticFormDistance(_ptr, iaSignature0, iaSignature1);
+                return XFeatures2DInvoke.cvePCTSignaturesSQFDComputeQuadraticFormDistance(_ptr, iaSignature0, iaSignature1);
         }
 
         public void ComputeQuadraticFormDistances(
@@ -39,21 +39,17 @@ namespace Emgu.CV.XFeatures2D
             VectorOfMat imageSignatures,
             VectorOfFloat distances)
         {
-            ContribInvoke.cvePCTSignaturesSQFDComputeQuadraticFormDistances(_ptr, sourceSignature, imageSignatures,
+            XFeatures2DInvoke.cvePCTSignaturesSQFDComputeQuadraticFormDistances(_ptr, sourceSignature, imageSignatures,
                 distances);
         }
 
         protected override void DisposeObject()
         {
-            ContribInvoke.cvePCTSignaturesRelease(ref _ptr);
+            XFeatures2DInvoke.cvePCTSignaturesRelease(ref _ptr);
         }
-        
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class ContribInvoke
+    public static partial class XFeatures2DInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
