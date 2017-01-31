@@ -45,3 +45,24 @@ void cveCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier
    size->width = s.width;
    size->height = s.height;
 }
+
+void cveGroupRectangles1(std::vector< cv::Rect >* rectList, int groupThreshold, double eps)
+{
+	cv::groupRectangles(*rectList, groupThreshold, eps);
+}
+void cveGroupRectangles2(std::vector<cv::Rect>* rectList, std::vector<int>* weights, int groupThreshold, double eps)
+{
+	cv::groupRectangles(*rectList, *weights, groupThreshold, eps);
+}
+void cveGroupRectangles3(std::vector<cv::Rect>* rectList, int groupThreshold, double eps, std::vector<int>* weights, std::vector<double>* levelWeights)
+{
+	cv::groupRectangles(*rectList, groupThreshold, eps, weights, levelWeights);
+}
+void cveGroupRectangles4(std::vector<cv::Rect>* rectList, std::vector<int>* rejectLevels, std::vector<double>* levelWeights, int groupThreshold, double eps)
+{
+	cv::groupRectangles(*rectList, *rejectLevels, *levelWeights, groupThreshold, eps);
+}
+void cveGroupRectanglesMeanshift(std::vector<cv::Rect>* rectList, std::vector<double>* foundWeights, std::vector<double>* foundScales, double detectThreshold, CvSize* winDetSize)
+{
+	cv::groupRectangles_meanshift(*rectList, *foundWeights, *foundScales, detectThreshold, *winDetSize);
+}
