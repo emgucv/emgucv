@@ -264,3 +264,9 @@ void cveGradientDericheX(cv::_InputArray* op, cv::_OutputArray* dst, double alph
 {
 	cv::ximgproc::GradientDericheX(*op, *dst, alphaDerive, alphaMean);
 }
+
+
+void cveThinning(cv::_InputArray* src, cv::_OutputArray* dst, int thinningType)
+{
+	cv::ximgproc::thinning(*src, *dst, thinningType);
+}

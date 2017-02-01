@@ -85,4 +85,7 @@ CVAPI(void) cveGradientPaillouY(cv::_InputArray* op, cv::_OutputArray* dst, doub
 CVAPI(void) cveGradientPaillouX(cv::_InputArray* op, cv::_OutputArray* dst, double alpha, double omega);
 CVAPI(void) cveGradientDericheY(cv::_InputArray* op, cv::_OutputArray* dst, double alphaDerive, double alphaMean);
 CVAPI(void) cveGradientDericheX(cv::_InputArray* op, cv::_OutputArray* dst, double alphaDerive, double alphaMean);
+
+
+CVAPI(void) cveThinning(cv::_InputArray* src, cv::_OutputArray* dst, int thinningType);
 #endif

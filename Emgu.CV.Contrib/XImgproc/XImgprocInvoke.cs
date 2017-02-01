@@ -60,6 +60,21 @@ namespace Emgu.CV.XImgproc
     }
 
     /// <summary>
+    /// Thinning type
+    /// </summary>
+    public enum ThinningTypes
+    {
+        /// <summary>
+        /// Thinning technique of Zhang-Suen
+        /// </summary>
+        ZhangSuen = 0,
+        /// <summary>
+        /// Thinning technique of Guo-Hall
+        /// </summary>
+        GuoHall = 1  
+    };
+
+    /// <summary>
     /// Extended Image Processing
     /// </summary>
     public static partial class XImgprocInvoke
@@ -338,5 +353,21 @@ namespace Emgu.CV.XImgproc
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGradientDericheX(IntPtr op, IntPtr dst, double alphaDerive, double alphaMean);
+
+        /// <summary>
+        /// Applies a binary blob thinning operation, to achieve a skeletization of the input image. 
+        /// The function transforms a binary blob image into a skeletized form using the technique of Zhang-Suen.
+        /// </summary>
+        /// <param name="src">Source 8-bit single-channel image, containing binary blobs, with blobs having 255 pixel values.</param>
+        /// <param name="dst">Destination image of the same size and the same type as src. The function can work in-place.</param>
+        /// <param name="thinningType">Value that defines which thinning algorithm should be used.</param>
+        public static void Thinning(IInputArray src, IOutputArray dst, ThinningTypes thinningType)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveThinning(iaSrc, oaDst, thinningType);
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveThinning(IntPtr src, IntPtr dst, ThinningTypes thinningType);
     }
 }
