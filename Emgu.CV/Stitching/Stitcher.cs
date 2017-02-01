@@ -57,12 +57,39 @@ namespace Emgu.CV.Stitching
         }
 
         /// <summary>
+        /// Stitch mode
+        /// </summary>
+        public enum Mode
+        {
+            /// <summary>
+            /// Mode for creating photo panoramas. Expects images under perspective transformation and projects resulting pano to sphere.
+            /// </summary>
+            Panorama = 0,
+
+            /// <summary>
+            /// Mode for composing scans. Expects images under affine transformation does not compensate exposure by default.
+            /// </summary>
+            Scans = 1,
+
+        };
+
+        /// <summary>
         /// Creates a stitcher with the default parameters.
         /// </summary>
         /// <param name="tryUseGpu">If true, the stitcher will try to use GPU for processing when available</param>
         public Stitcher(bool tryUseGpu)
         {
             _ptr = StitchingInvoke.cveStitcherCreateDefault(tryUseGpu);
+        }
+
+        /// <summary>
+        /// Creates a Stitcher configured in one of the stitching modes.
+        /// </summary>
+        /// <param name="mode">Scenario for stitcher operation. This is usually determined by source of images to stitch and their transformation. </param>
+        /// <param name="tryUseGpu">If true, the stitcher will try to use GPU for processing when available</param>
+        public Stitcher(Mode mode, bool tryUseGpu)
+        {
+            _ptr = StitchingInvoke.cveStitcherCreate(mode, tryUseGpu);
         }
 
         /// <summary>
@@ -169,8 +196,15 @@ namespace Emgu.CV.Stitching
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveStitcherCreateDefault(
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool tryUseGpu
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool tryUseGpu
+           );
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveStitcherCreate(
+            Stitcher.Mode model,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool tryUseGpu
            );
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -188,9 +222,9 @@ namespace Emgu.CV.Stitching
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetWaveCorrection(
-           IntPtr stitcher,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool flag);
+            IntPtr stitcher,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool flag);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveStitcherGetWaveCorrection(IntPtr stitcher);

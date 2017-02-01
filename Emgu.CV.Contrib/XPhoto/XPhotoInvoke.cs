@@ -16,7 +16,7 @@ namespace Emgu.CV.XPhoto
     public enum TransformTypes
     {
         /// <summary>
-        /// Haar transformation
+        /// Un-normalized Haar transform
         /// </summary>
         Haar = 0
     }

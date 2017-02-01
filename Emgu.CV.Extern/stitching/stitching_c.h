@@ -29,6 +29,7 @@ namespace cv {
 
 
 CVAPI(cv::Stitcher*) cveStitcherCreateDefault(bool tryUseGpu);
+CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, bool tryUseGpu);
 
 CVAPI(void) cveStitcherRelease(cv::Stitcher** stitcher);
 

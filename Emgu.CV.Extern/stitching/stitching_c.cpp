@@ -13,6 +13,13 @@ cv::Stitcher* cveStitcherCreateDefault(bool tryUseGpu)
    return p.get();
 }
 
+cv::Stitcher* cveStitcherCreate(int mode, bool tryUseGpu)
+{
+	cv::Ptr<cv::Stitcher> ptr = cv::Stitcher::create(static_cast<cv::Stitcher::Mode>(mode), tryUseGpu);
+	ptr.addref();
+	return ptr.get();
+}
+
 void cveStitcherRelease(cv::Stitcher** stitcher)
 {
    delete *stitcher;
