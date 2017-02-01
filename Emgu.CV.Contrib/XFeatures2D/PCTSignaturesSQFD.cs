@@ -27,12 +27,33 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         public enum DistanceFunction
         {
+            /// <summary>
+            /// L0_25
+            /// </summary>
             L0_25,
+            /// <summary>
+            /// L0_5
+            /// </summary>
             L0_5,
+            /// <summary>
+            /// L1
+            /// </summary>
             L1,
+            /// <summary>
+            /// L2
+            /// </summary>
             L2,
+            /// <summary>
+            /// L2 squared
+            /// </summary>
             L2SQUARED,
+            /// <summary>
+            /// L5
+            /// </summary>
             L5,
+            /// <summary>
+            /// L infinity
+            /// </summary>
             L_INFINITY
         }
 
@@ -50,7 +71,7 @@ namespace Emgu.CV.XFeatures2D
             /// </summary>
             Gaussian,
             /// <summary>
-            /// \frac{1}{\alpha + d(c_i, c_j)}
+            /// 1 / (\alpha + d(c_i, c_j))
             /// </summary>
             Heuristic
         }

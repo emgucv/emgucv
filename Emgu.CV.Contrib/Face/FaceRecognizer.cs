@@ -190,7 +190,6 @@ namespace Emgu.CV.Face
          }
       }
 
-
    }
 }
 

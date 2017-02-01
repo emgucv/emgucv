@@ -16,10 +16,61 @@ using Emgu.CV.Features2D;
 
 namespace Emgu.CV.XFeatures2D
 {
-
+    /// <summary>
+    /// Class implementing BoostDesc (Learning Image Descriptors with Boosting).
+    /// </summary>
+    /// <remarks>
+    /// See: 
+    /// V. Lepetit T. Trzcinski, M. Christoudias and P. Fua. Boosting Binary Keypoint Descriptors. In Computer Vision and Pattern Recognition, 2013.
+    /// M. Christoudias T. Trzcinski and V. Lepetit. Learning Image Descriptors with Boosting. submitted to IEEE Transactions on Pattern Analysis and Machine Intelligence (PAMI), 2013.
+    /// </remarks>
     public class BoostDesc : Feature2D
     {
-        public BoostDesc(int desc, bool useScaleOrientation, float scalefactor)
+        /// <summary>
+        /// The type of descriptor
+        /// </summary>
+        public enum DescriptorType
+        {
+            /// <summary>
+            /// BGM is the base descriptor where each binary dimension is computed as the output of a single weak learner.
+            /// </summary>
+            Bgm = 100,
+            /// <summary>
+            /// BGM_HARD refers to same BGM but use different type of gradient binning. In the BGM_HARD that use ASSIGN_HARD binning type the gradient is assigned to the nearest orientation bin.
+            /// </summary>
+            BgmHard = 101,
+            /// <summary>
+            /// BGM_BILINEAR refers to same BGM but use different type of gradient binning. In the BGM_BILINEAR that use ASSIGN_BILINEAR binning type the gradient is assigned to the two neighbouring bins.
+            /// </summary>
+            BgmBilinear = 102,
+            /// <summary>
+            /// LBGM (alias FP-Boost) is the floating point extension where each dimension is computed as a linear combination of the weak learner responses.
+            /// </summary>
+            Lbgm = 200,
+            /// <summary>
+            /// BINBOOST and subvariants are the binary extensions of LBGM where each bit is computed as a thresholded linear combination of a set of weak learners.
+            /// </summary>
+            Binboost64 = 300,
+            /// <summary>
+            /// BINBOOST and subvariants are the binary extensions of LBGM where each bit is computed as a thresholded linear combination of a set of weak learners.
+            /// </summary>
+            Binboost128 = 301,
+            /// <summary>
+            /// BINBOOST and subvariants are the binary extensions of LBGM where each bit is computed as a thresholded linear combination of a set of weak learners.
+            /// </summary>
+            Binboost256 = 302
+        }
+
+        /// <summary>
+        /// Create an instance of Boost Descriptor
+        /// </summary>
+        /// <param name="desc">type of descriptor to use</param>
+        /// <param name="useScaleOrientation">sample patterns using keypoints orientation</param>
+        /// <param name="scalefactor">adjust the sampling window of detected keypoints 6.25f is default and fits for KAZE, SURF detected keypoints window ratio 6.75f should be the scale for SIFT detected keypoints window ratio 5.00f should be the scale for AKAZE, MSD, AGAST, FAST, BRISK keypoints window ratio 0.75f should be the scale for ORB keypoints ratio 1.50f was the default in original implementation</param>
+        public BoostDesc(
+            DescriptorType desc = DescriptorType.Binboost256, 
+            bool useScaleOrientation = true, 
+            float scalefactor = 6.25f)
         {
             _ptr = XFeatures2DInvoke.cveBoostDescCreate(desc, useScaleOrientation, scalefactor, ref _feature2D);
         }
@@ -43,8 +94,8 @@ namespace Emgu.CV.XFeatures2D
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveBoostDescCreate(
-            int desc,
+        internal static extern IntPtr cveBoostDescCreate(
+            BoostDesc.DescriptorType desc,
             [MarshalAs(CvInvoke.BoolMarshalType)]
           bool useScaleOrientation,
             float scalefactor,
@@ -52,7 +103,7 @@ namespace Emgu.CV.XFeatures2D
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBoostDescRelease(ref IntPtr extractor);
+        internal static extern void cveBoostDescRelease(ref IntPtr extractor);
     }
 }
 

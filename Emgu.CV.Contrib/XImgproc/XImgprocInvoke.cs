@@ -28,32 +28,35 @@ namespace Emgu.CV.XImgproc
         RF,
     }
 
+    /// <summary>
+    /// Weight type
+    /// </summary>
     public enum WMFWeightType
     {
         /// <summary>
         /// exp(-|I1-I2|^2/(2*sigma^2))
         /// </summary>
-        EXP,
+        Exp,
         /// <summary>
         /// (|I1-I2|+sigma)^-1
         /// </summary>
-        IV1,
+        Iv1,
         /// <summary>
         /// (|I1-I2|^2+sigma^2)^-1
         /// </summary>
-        IV2,
+        Iv2,
         /// <summary>
         /// dot(I1,I2)/(|I1|*|I2|)
         /// </summary>
-        COS,
+        Cos,
         /// <summary>
         /// (min(r1,r2)+min(g1,g2)+min(b1,b2))/(max(r1,r2)+max(g1,g2)+max(b1,b2))
         /// </summary>
-        JAC,
+        Jac,
         /// <summary>
         /// unweighted
         /// </summary>
-        OFF
+        Off
     }
 
     /// <summary>
@@ -89,8 +92,19 @@ namespace Emgu.CV.XImgproc
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveJointBilateralFilter(IntPtr joint, IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpace, CvEnum.BorderType borderType);
 
-
-        public static void BilateralTextureFilter(IInputArray src, IOutputArray dst, int fr = 3, int numIter = 1,
+        /// <summary>
+        /// Applies the bilateral texture filter to an image. It performs structure-preserving texture filter. 
+        /// </summary>
+        /// <param name="src">Source image whose depth is 8-bit UINT or 32-bit FLOAT</param>
+        /// <param name="dst">Destination image of the same size and type as src.</param>
+        /// <param name="fr">Radius of kernel to be used for filtering. It should be positive integer</param>
+        /// <param name="numIter">Number of iterations of algorithm, It should be positive integer</param>
+        /// <param name="sigmaAlpha">Controls the sharpness of the weight transition from edges to smooth/texture regions, where a bigger value means sharper transition. When the value is negative, it is automatically calculated.</param>
+        /// <param name="sigmaAvg">Range blur parameter for texture blurring. Larger value makes result to be more blurred. When the value is negative, it is automatically calculated as described in the paper.</param>
+        /// <remarks>For more details about this filter see: Hojin Cho, Hyunjoon Lee, Henry Kang, and Seungyong Lee. Bilateral texture filtering. ACM Transactions on Graphics, 33(4):128:1–128:8, July 2014.</remarks>
+        public static void BilateralTextureFilter(
+            IInputArray src, IOutputArray dst, 
+            int fr = 3, int numIter = 1,
             double sigmaAlpha = -1.0, double sigmaAvg = -1.0)
         {
             using (InputArray iaSrc = src.GetInputArray())
@@ -244,7 +258,7 @@ namespace Emgu.CV.XImgproc
         /// <param name="mask">A 0-1 mask that has the same size with I. This mask is used to ignore the effect of some pixels. If the pixel value on mask is 0, the pixel will be ignored when maintaining the joint-histogram. This is useful for applications like optical flow occlusion handling.</param>
         /// <remarks>For more details about this implementation, please see: Qi Zhang, Li Xu, and Jiaya Jia. 100+ times faster weighted median filter (wmf). In Computer Vision and Pattern Recognition (CVPR), 2014 IEEE Conference on, pages 2830–2837. IEEE, 2014.</remarks>
         public static void WeightedMedianFilter(IInputArray joint, IInputArray src, IOutputArray dst, int r,
-            double sigma = 25.5, WMFWeightType weightType = WMFWeightType.EXP, Mat mask = null)
+            double sigma = 25.5, WMFWeightType weightType = WMFWeightType.Exp, Mat mask = null)
         {
             using (InputArray iaJoint = joint.GetInputArray())
             using (InputArray iaSrc = src.GetInputArray())

@@ -10,31 +10,65 @@ using Emgu.Util;
 
 namespace Emgu.CV.XObjdetect
 {
-    
-    public abstract class WBDetector : UnmanagedObject
+    /// <summary>
+    /// WaldBoost detector.
+    /// </summary>
+    public class WBDetector : UnmanagedObject
     {
-        
+        /// <summary>
+        /// Create instance of WBDetector.
+        /// </summary>
         public WBDetector()
         {
             _ptr = XObjdetectInvoke.cveWBDetectorCreate();
         }
 
+        /// <summary>
+        /// Read detector from FileNode.
+        /// </summary>
+        /// <param name="node">FileNode for input</param>
         public void Read(FileNode node)
         {
             XObjdetectInvoke.cveWBDetectorRead(_ptr, node);
         }
 
+        /// <summary>
+        /// Write detector to FileStorage.
+        /// </summary>
+        /// <param name="fs">FileStorage for output</param>
         public void Write(FileStorage fs)
         {
             XObjdetectInvoke.cveWBDetectorWrite(_ptr, fs);
         }
 
+        /// <summary>
+        /// Train WaldBoost detector.
+        /// </summary>
+        /// <param name="posSamples">Path to directory with cropped positive samples</param>
+        /// <param name="negImgs">Path to directory with negative (background) images</param>
+        public void Train(String posSamples, String negImgs)
+        {
+            using (CvString csPosSamples = new CvString(posSamples))
+            using (CvString csNegImgs = new CvString(negImgs))
+            {
+                XObjdetectInvoke.cveWBDetectorTrain(_ptr, csPosSamples, csNegImgs);
+            }
+        }
 
+        /// <summary>
+        /// Detect objects on image using WaldBoost detector.
+        /// </summary>
+        /// <param name="image">Input image for detection</param>
+        /// <param name="bboxes">Bounding boxes coordinates output vector</param>
+        /// <param name="confidences">Confidence values for bounding boxes output vector</param>
         public void Detect(Mat image, VectorOfRect bboxes, VectorOfDouble confidences)
         {
             XObjdetectInvoke.cveWBDetectorDetect(_ptr, image, bboxes, confidences);
         }
 
+        /// <summary>
+        /// Release all the unmanaged memory associated with this WBDetector.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)

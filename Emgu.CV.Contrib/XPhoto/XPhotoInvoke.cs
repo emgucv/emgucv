@@ -5,10 +5,43 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using Emgu.CV.CvEnum;
 using Emgu.Util;
 
 namespace Emgu.CV.XPhoto
 {
+    /// <summary>
+    /// BM3D denoising transform types
+    /// </summary>
+    public enum TransformTypes
+    {
+        /// <summary>
+        /// Haar transformation
+        /// </summary>
+        Haar = 0
+    }
+
+    /// <summary>
+    /// BM3D steps
+    /// </summary>
+    public enum Bm3dSteps
+    {
+        /// <summary>
+        /// Execute all steps of the algorithm 
+        /// </summary>
+        All = 0,
+
+        /// <summary>
+        /// Execute only first step of the algorithm 
+        /// </summary>
+        Step1 = 1,
+
+        /// <summary>
+        /// Execute only second step of the algorithm
+        /// </summary>
+        Step2 = 2
+    }
+
     /// <summary>
     /// The base class for auto white balance algorithms.
     /// </summary>
@@ -198,22 +231,39 @@ namespace Emgu.CV.XPhoto
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveXInpaint(IntPtr src, IntPtr mask, IntPtr dst, InpaintType algorithmType);
 
-
+        /// <summary>
+        /// Performs image denoising using the Block-Matching and 3D-filtering algorithm with several computational optimizations. Noise expected to be a gaussian white noise.
+        /// </summary>
+        /// <param name="src">Input 8-bit or 16-bit 1-channel image.</param>
+        /// <param name="dstStep1">Output image of the first step of BM3D with the same size and type as src.</param>
+        /// <param name="dstStep2">Output image of the second step of BM3D with the same size and type as src.</param>
+        /// <param name="h">Parameter regulating filter strength. Big h value perfectly removes noise but also removes image details, smaller h value preserves details but also preserves some noise.</param>
+        /// <param name="templateWindowSize">Size in pixels of the template patch that is used for block-matching. Should be power of 2.</param>
+        /// <param name="searchWindowSize">Size in pixels of the window that is used to perform block-matching. Affect performance linearly: greater searchWindowsSize - greater denoising time. Must be larger than templateWindowSize.</param>
+        /// <param name="blockMatchingStep1">Block matching threshold for the first step of BM3D (hard thresholding), i.e. maximum distance for which two blocks are considered similar. Value expressed in euclidean distance.</param>
+        /// <param name="blockMatchingStep2">Block matching threshold for the second step of BM3D (Wiener filtering), i.e. maximum distance for which two blocks are considered similar. Value expressed in euclidean distance.</param>
+        /// <param name="groupSize">Maximum size of the 3D group for collaborative filtering.</param>
+        /// <param name="slidingStep">Sliding step to process every next reference block.</param>
+        /// <param name="beta">Kaiser window parameter that affects the sidelobe attenuation of the transform of the window. Kaiser window is used in order to reduce border effects. To prevent usage of the window, set beta to zero.</param>
+        /// <param name="normType">Norm used to calculate distance between blocks. L2 is slower than L1 but yields more accurate results.</param>
+        /// <param name="step">Step of BM3D to be executed. Possible variants are: step 1, step 2, both steps.</param>
+        /// <param name="transformType">	Type of the orthogonal transform used in collaborative filtering step. Currently only Haar transform is supported.</param>
+        /// <remarks> <c href="http://www.cs.tut.fi/~foi/GCF-BM3D/BM3D_TIP_2007.pdf"/>   </remarks>
         public static void Bm3dDenoising(
             IInputArray src,
             IInputOutputArray dstStep1,
             IOutputArray dstStep2,
-            float h,
-            int templateWindowSize,
-            int searchWindowSize,
-            int blockMatchingStep1,
-            int blockMatchingStep2,
-            int groupSize,
-            int slidingStep,
-            float beta,
-            int normType,
-            int step,
-            int transformType)
+            float h = 1,
+            int templateWindowSize = 4,
+            int searchWindowSize = 16,
+            int blockMatchingStep1 = 2500,
+            int blockMatchingStep2 = 400,
+            int groupSize = 8,
+            int slidingStep = 1,
+            float beta = 2.0f,
+            NormType normType = NormType.L2,
+            Bm3dSteps step = Bm3dSteps.All,
+            TransformTypes transformType = TransformTypes.Haar)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (InputOutputArray ioaDstStep1 = dstStep1.GetInputOutputArray())
@@ -237,28 +287,43 @@ namespace Emgu.CV.XPhoto
             int groupSize,
             int slidingStep,
             float beta,
-            int normType,
-            int step,
-            int transformType);
+            NormType normType,
+            Bm3dSteps step,
+            TransformTypes transformType);
 
-
+        /// <summary>
+        /// Performs image denoising using the Block-Matching and 3D-filtering algorithm with several computational optimizations. Noise expected to be a gaussian white noise.
+        /// </summary>
+        /// <param name="src">Input 8-bit or 16-bit 1-channel image.</param>
+        /// <param name="dst">Output image with the same size and type as src.</param>
+        /// <param name="h">Parameter regulating filter strength. Big h value perfectly removes noise but also removes image details, smaller h value preserves details but also preserves some noise.</param>
+        /// <param name="templateWindowSize">Size in pixels of the template patch that is used for block-matching. Should be power of 2.</param>
+        /// <param name="searchWindowSize">Size in pixels of the window that is used to perform block-matching. Affect performance linearly: greater searchWindowsSize - greater denoising time. Must be larger than templateWindowSize.</param>
+        /// <param name="blockMatchingStep1">Block matching threshold for the first step of BM3D (hard thresholding), i.e. maximum distance for which two blocks are considered similar. Value expressed in euclidean distance.</param>
+        /// <param name="blockMatchingStep2">Block matching threshold for the second step of BM3D (Wiener filtering), i.e. maximum distance for which two blocks are considered similar. Value expressed in euclidean distance.</param>
+        /// <param name="groupSize">Maximum size of the 3D group for collaborative filtering.</param>
+        /// <param name="slidingStep">Sliding step to process every next reference block.</param>
+        /// <param name="beta">Kaiser window parameter that affects the sidelobe attenuation of the transform of the window. Kaiser window is used in order to reduce border effects. To prevent usage of the window, set beta to zero.</param>
+        /// <param name="normType">Norm used to calculate distance between blocks. L2 is slower than L1 but yields more accurate results.</param>
+        /// <param name="step">Step of BM3D to be executed. Allowed are only BM3D_STEP1 and BM3D_STEPALL. BM3D_STEP2 is not allowed as it requires basic estimate to be present.</param>
+        /// <param name="transformType">Type of the orthogonal transform used in collaborative filtering step. Currently only Haar transform is supported.</param>
+        /// <remarks> <c href="http://www.cs.tut.fi/~foi/GCF-BM3D/BM3D_TIP_2007.pdf"/> </remarks>
         public static void Bm3dDenoising(
             IInputArray src,
             IOutputArray dst,
-            float h,
-            int templateWindowSize,
-            int searchWindowSize,
-            int blockMatchingStep1,
-            int blockMatchingStep2,
-            int groupSize,
-            int slidingStep,
-            float beta,
-            int normType,
-            int step,
-            int transformType)
+            float h = 1,
+            int templateWindowSize = 4,
+            int searchWindowSize = 16,
+            int blockMatchingStep1 = 2500,
+            int blockMatchingStep2 = 400,
+            int groupSize = 8,
+            int slidingStep = 1,
+            float beta = 2.0f,
+            NormType normType = NormType.L2,
+            Bm3dSteps step = Bm3dSteps.All,
+            TransformTypes transformType = TransformTypes.Haar)
         {
             using (InputArray iaSrc = src.GetInputArray())
-
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveBm3dDenoising2(iaSrc, oaDst,
@@ -278,8 +343,8 @@ namespace Emgu.CV.XPhoto
             int groupSize,
             int slidingStep,
             float beta,
-            int normType,
-            int step,
-            int transformType);
+            NormType normType,
+            Bm3dSteps step,
+            TransformTypes transformType);
     }
 }
