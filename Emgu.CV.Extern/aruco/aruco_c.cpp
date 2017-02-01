@@ -6,16 +6,44 @@
 
 #include "aruco_c.h"
 
-cv::aruco::Dictionary const* cveArucoGetPredefinedDictionary(int name)
+cv::aruco::Dictionary* cveArucoGetPredefinedDictionary(int name)
 {
    return cv::aruco::getPredefinedDictionary(static_cast<cv::aruco::PREDEFINED_DICTIONARY_NAME>(name)).get();
+}
+
+cv::aruco::Dictionary* cveArucoDictionaryCreate1(int nMarkers, int markerSize)
+{
+	cv::Ptr<cv::aruco::Dictionary> ptr = cv::aruco::Dictionary::create(nMarkers, markerSize);
+	ptr.addref();
+	return ptr.get();
+}
+cv::aruco::Dictionary* cveArucoDictionaryCreate2(int nMarkers, int markerSize, cv::aruco::Dictionary* baseDictionary)
+{
+	cv::Ptr<cv::aruco::Dictionary> baseDict;
+	if (baseDictionary)
+	{
+		baseDict = cv::makePtr<cv::aruco::Dictionary>(baseDictionary);
+		baseDict.addref();
+	} else
+	{
+		baseDict = cv::makePtr<cv::aruco::Dictionary>();
+	}
+
+	cv::Ptr<cv::aruco::Dictionary> ptr = cv::aruco::Dictionary::create(nMarkers, markerSize, baseDict);
+	ptr.addref();
+	return ptr.get();
+}
+void cveArucoDictionaryRelease(cv::aruco::Dictionary** dict)
+{
+	delete *dict;
+	*dict = 0;
 }
 
 void cveArucoDrawMarker(cv::aruco::Dictionary* dictionary, int id, int sidePixels, cv::_OutputArray* img, int borderBits)
 {
 	cv::Ptr<cv::aruco::Dictionary> arucoDict = cv::makePtr<cv::aruco::Dictionary>(dictionary);
 	arucoDict.addref();
-   cv::aruco::drawMarker(arucoDict, id, sidePixels, *img, borderBits);
+    cv::aruco::drawMarker(arucoDict, id, sidePixels, *img, borderBits);
 }
 
 void cveArucoDrawAxis(cv::_InputOutputArray* image, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* rvec, cv::_InputArray* tvec, float length)

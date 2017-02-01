@@ -13,7 +13,10 @@
 #include "opencv2/aruco/charuco.hpp"
 
 
-CVAPI(cv::aruco::Dictionary const*) cveArucoGetPredefinedDictionary(int name);
+CVAPI(cv::aruco::Dictionary*) cveArucoGetPredefinedDictionary(int name);
+CVAPI(cv::aruco::Dictionary*) cveArucoDictionaryCreate1(int nMarkers, int markerSize);
+CVAPI(cv::aruco::Dictionary*) cveArucoDictionaryCreate2(int nMarkers, int markerSize, cv::aruco::Dictionary* baseDictionary);
+CVAPI(void) cveArucoDictionaryRelease(cv::aruco::Dictionary** dict);
 
 CVAPI(void) cveArucoDrawMarker(cv::aruco::Dictionary* dictionary, int id, int sidePixels, cv::_OutputArray* img, int borderBits);
 
