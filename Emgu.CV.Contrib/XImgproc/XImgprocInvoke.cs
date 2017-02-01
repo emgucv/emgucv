@@ -232,22 +232,39 @@ namespace Emgu.CV.XImgproc
         private static extern void cveCovarianceEstimation(IntPtr src, IntPtr dst, int windowRows, int windowCols);
 
 
-
+        /// <summary>
+        /// Applies weighted median filter to an image.
+        /// </summary>
+        /// <param name="joint">Joint 8-bit, 1-channel or 3-channel image.</param>
+        /// <param name="src">Source 8-bit or floating-point, 1-channel or 3-channel image.</param>
+        /// <param name="dst">Destination image.</param>
+        /// <param name="r">Radius of filtering kernel, should be a positive integer.</param>
+        /// <param name="sigma">Filter range standard deviation for the joint image.</param>
+        /// <param name="weightType">The type of weight definition</param>
+        /// <param name="mask">A 0-1 mask that has the same size with I. This mask is used to ignore the effect of some pixels. If the pixel value on mask is 0, the pixel will be ignored when maintaining the joint-histogram. This is useful for applications like optical flow occlusion handling.</param>
+        /// <remarks>For more details about this implementation, please see: Qi Zhang, Li Xu, and Jiaya Jia. 100+ times faster weighted median filter (wmf). In Computer Vision and Pattern Recognition (CVPR), 2014 IEEE Conference on, pages 2830–2837. IEEE, 2014.</remarks>
         public static void WeightedMedianFilter(IInputArray joint, IInputArray src, IOutputArray dst, int r,
-            double sigma, WMFWeightType weightType, Mat mask = null)
+            double sigma = 25.5, WMFWeightType weightType = WMFWeightType.EXP, Mat mask = null)
         {
             using (InputArray iaJoint = joint.GetInputArray())
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             {
-                
+
                 cveWeightedMedianFilter(iaJoint, iaSrc, oaDst, r, sigma, weightType, mask == null ? IntPtr.Zero : mask);
             }
-
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveWeightedMedianFilter(IntPtr joint, IntPtr src, IntPtr dst, int r, double sigma, WMFWeightType weightType, IntPtr mask);
 
+        /// <summary>
+        /// Applies Paillou filter to an image.
+        /// </summary>
+        /// <param name="op">Source 8-bit or 16bit image, 1-channel or 3-channel image.</param>
+        /// <param name="dst">result CV_32F image with same number of channel than op.</param>
+        /// <param name="alpha">see paper</param>
+        /// <param name="omega">see paper</param>
+        /// <remarks>For more details about this implementation, please see: Philippe Paillou. Detecting step edges in noisy sar images: a new linear operator. IEEE transactions on geoscience and remote sensing, 35(1):191–196, 1997.</remarks>
         public static void GradientPaillouY(IInputArray op, IOutputArray dst, double alpha, double omega)
         {
             using (InputArray iaOp = op.GetInputArray())
@@ -257,6 +274,14 @@ namespace Emgu.CV.XImgproc
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGradientPaillouY(IntPtr op, IntPtr dst, double alpha, double omega);
 
+        /// <summary>
+        /// Applies Paillou filter to an image.
+        /// </summary>
+        /// <param name="op">Source 8-bit or 16bit image, 1-channel or 3-channel image.</param>
+        /// <param name="dst">result CV_32F image with same number of channel than op.</param>
+        /// <param name="alpha">see paper</param>
+        /// <param name="omega">see paper</param>
+        /// <remarks>For more details about this implementation, please see: Philippe Paillou. Detecting step edges in noisy sar images: a new linear operator. IEEE transactions on geoscience and remote sensing, 35(1):191–196, 1997.</remarks>
         public static void GradientPaillouX(IInputArray op, IOutputArray dst, double alpha, double omega)
         {
             using (InputArray iaOp = op.GetInputArray())
@@ -266,6 +291,14 @@ namespace Emgu.CV.XImgproc
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGradientPaillouX(IntPtr op, IntPtr dst, double alpha, double omega);
 
+        /// <summary>
+        /// Applies Y Deriche filter to an image.
+        /// </summary>
+        /// <param name="op">Source 8-bit or 16bit image, 1-channel or 3-channel image.</param>
+        /// <param name="dst">result CV_32FC image with same number of channel than _op.</param>
+        /// <param name="alphaDerive">see paper</param>
+        /// <param name="alphaMean">see paper</param>
+        /// <remarks>For more details about this implementation, please see <see href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.476.5736&amp;rep=rep1&amp;type=pdf">here</see> </remarks>
         public static void GradientDericheY(IInputArray op, IOutputArray dst, double alphaDerive, double alphaMean)
         {
             using (InputArray iaOp = op.GetInputArray())
@@ -275,6 +308,14 @@ namespace Emgu.CV.XImgproc
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGradientDericheY(IntPtr op, IntPtr dst, double alphaDerive, double alphaMean);
 
+        /// <summary>
+        /// Applies X Deriche filter to an image.
+        /// </summary>
+        /// <param name="op">Source 8-bit or 16bit image, 1-channel or 3-channel image.</param>
+        /// <param name="dst">result CV_32FC image with same number of channel than _op.</param>
+        /// <param name="alphaDerive">see paper</param>
+        /// <param name="alphaMean">see paper</param>
+        /// <remarks>For more details about this implementation, please see http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.476.5736&amp;rep=rep1&amp;type=pdf </remarks>
         public static void GradientDericheX(IInputArray op, IOutputArray dst, double alphaDerive, double alphaMean)
         {
             using (InputArray iaOp = op.GetInputArray())

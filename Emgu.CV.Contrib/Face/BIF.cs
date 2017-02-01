@@ -13,14 +13,26 @@ using Emgu.Util;
 
 namespace Emgu.CV.Face
 {
-    
+    /// <summary>
+    /// Implementation of bio-inspired features (BIF) from the paper: Guo, Guodong, et al. "Human age estimation using bio-inspired features." Computer Vision and Pattern Recognition, 2009. CVPR 2009.
+    /// </summary>
     public class BIF : UnmanagedObject
     {
+        /// <summary>
+        /// Create an instance of bio-inspired features
+        /// </summary>
+        /// <param name="numBands">The number of filter bands used for computing BIF.</param>
+        /// <param name="numRotations">The number of image rotations.</param>
         public BIF(int numBands, int numRotations)
         {
             _ptr = ContribInvoke.cveBIFCreate(numBands, numRotations);
         }
 
+        /// <summary>
+        /// Computes features by input image.
+        /// </summary>
+        /// <param name="image">Input image (CV_32FC1)</param>
+        /// <param name="features">Feature vector (CV_32FC1)</param>
         public void Compute(IInputArray image, IOutputArray features)
         {
             using (InputArray iaImage = image.GetInputArray())
@@ -35,8 +47,6 @@ namespace Emgu.CV.Face
         {
             ContribInvoke.cveBIFRelease(ref _ptr);
         }
-
-
     }
 }
 

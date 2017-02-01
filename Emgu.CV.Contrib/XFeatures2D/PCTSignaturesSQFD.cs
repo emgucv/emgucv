@@ -16,17 +16,65 @@ using Emgu.CV.Features2D;
 
 namespace Emgu.CV.XFeatures2D
 {
-
+    /// <summary>
+    /// Class implementing Signature Quadratic Form Distance (SQFD).
+    /// </summary>
+    /// <remarks>See also: Christian Beecks, Merih Seran Uysal, Thomas Seidl. Signature quadratic form distance. In Proceedings of the ACM International Conference on Image and Video Retrieval, pages 438-445. ACM, 2010.</remarks>
     public partial class PCTSignaturesSQFD : UnmanagedObject
     {
+        /// <summary>
+        /// Lp distance function selector.       
+        /// </summary>
+        public enum DistanceFunction
+        {
+            L0_25,
+            L0_5,
+            L1,
+            L2,
+            L2SQUARED,
+            L5,
+            L_INFINITY
+        }
+
+        /// <summary>
+        ///Similarity function selector.
+        /// </summary>
+        public enum SimilarityFunction
+        {
+            /// <summary>
+            /// -d(c_i, c_j)
+            /// </summary>
+            Minus,
+            /// <summary>
+            /// e^{ -\alpha * d^2(c_i, c_j)}
+            /// </summary>
+            Gaussian,
+            /// <summary>
+            /// \frac{1}{\alpha + d(c_i, c_j)}
+            /// </summary>
+            Heuristic
+        }
+
+        /// <summary>
+        /// Creates the algorithm instance using selected distance function, similarity function and similarity function parameter.
+        /// </summary>
+        /// <param name="distanceFunction">Distance function selector.</param>
+        /// <param name="similarityFunction">Similarity function selector.</param>
+        /// <param name="similarityParameter">Parameter of the similarity function.</param>
         public PCTSignaturesSQFD(
-            int distanceFunction,
-            int similarityFunction,
-            float similarityParameter)
+            DistanceFunction distanceFunction = DistanceFunction.L2,
+            SimilarityFunction similarityFunction = SimilarityFunction.Heuristic,
+            float similarityParameter = 1.0f)
         {
             _ptr = XFeatures2DInvoke.cvePCTSignaturesSQFDCreate(distanceFunction, similarityFunction, similarityParameter);
         }
 
+        /// <summary>
+        /// Computes Signature Quadratic Form Distance of two signatures.
+        /// </summary>
+        /// <param name="signature0">The first signature.</param>
+        /// <param name="signature1">The second signature.</param>
+        /// <returns>The Signature Quadratic Form Distance of two signatures</returns>
         public float ComputeQuadraticFormDistance(IInputArray signature0, IInputArray signature1)
         {
             using (InputArray iaSignature0 = signature0.GetInputArray())
@@ -34,6 +82,12 @@ namespace Emgu.CV.XFeatures2D
                 return XFeatures2DInvoke.cvePCTSignaturesSQFDComputeQuadraticFormDistance(_ptr, iaSignature0, iaSignature1);
         }
 
+        /// <summary>
+        /// Computes Signature Quadratic Form Distance between the reference signature and each of the other image signatures.
+        /// </summary>
+        /// <param name="sourceSignature">The signature to measure distance of other signatures from.</param>
+        /// <param name="imageSignatures">Vector of signatures to measure distance from the source signature.</param>
+        /// <param name="distances">Output vector of measured distances.</param>
         public void ComputeQuadraticFormDistances(
             Mat sourceSignature,
             VectorOfMat imageSignatures,
@@ -43,6 +97,9 @@ namespace Emgu.CV.XFeatures2D
                 distances);
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this PCTSignaturesSQFD object
+        /// </summary>
         protected override void DisposeObject()
         {
             XFeatures2DInvoke.cvePCTSignaturesRelease(ref _ptr);
@@ -54,8 +111,8 @@ namespace Emgu.CV.XFeatures2D
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cvePCTSignaturesSQFDCreate(
-            int distanceFunction,
-            int similarityFunction,
+            PCTSignaturesSQFD.DistanceFunction distanceFunction,
+            PCTSignaturesSQFD.SimilarityFunction similarityFunction,
             float similarityParameter);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static float cvePCTSignaturesSQFDComputeQuadraticFormDistance(

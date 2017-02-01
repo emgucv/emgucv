@@ -1048,7 +1048,7 @@ IF(HAVE_opencv_xfeatures2d)
     "int;int;float;float;float;float;float;float;int;int;int;float;float;int" 
     "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
     "GrayscaleBits;WindowRadius;WeightX;WeightY;WeightL;WeightA;WeightB;WeightEntropy;IterationCount;MaxClustersCount;ClusterMinSize;JoiningDistance;DropThreshold;DistanceFunction" 
-    "int;int;float;float;float;float;float;float;int;int;int;float;float;float"
+    "int;int;float;float;float;float;float;float;int;int;int;float;float;PCTSignatures.PointDistributionType"
     "Color resolution of the greyscale bitmap represented in allocated bits (i.e., value 4 means that 16 shades of grey are used). The greyscale bitmap is used for computing contrast and entropy values.;
 	Size of the texture sampling window used to compute contrast and entropy. (center of the window is always in the pixel selected by x,y coordinates of the corresponding feature sample).;
 	Weights (multiplicative constants) that linearly stretch individual axes of the feature space. (x,y = position. L,a,b = color in CIE Lab space. c = contrast. e = entropy);

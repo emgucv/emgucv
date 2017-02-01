@@ -63,7 +63,14 @@ namespace Emgu.CV
             _denseFlowPtr = IntPtr.Zero;
         }
 
+        /// <summary>
+        /// Pointer to cv::Algorithm
+        /// </summary>
         public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
+
+        /// <summary>
+        /// Pointer to native cv::DenseOpticalFlow
+        /// </summary>
         public IntPtr DenseOpticalFlowPtr { get { return _denseFlowPtr; } }
     }
 
