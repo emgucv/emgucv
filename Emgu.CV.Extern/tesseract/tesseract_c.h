@@ -62,9 +62,10 @@ CVAPI(int) TessBaseAPIInit(EmguTesseract* ocr, const char* dataPath, const char*
 
 CVAPI(void) TessBaseAPIRelease(EmguTesseract** ocr);
 
-//CVAPI(void) TessBaseAPIRecognizeImage(EmguTesseract* ocr, IplImage* image);
+CVAPI(int) TessBaseAPIRecognize(EmguTesseract* ocr);
 
-CVAPI(void) TessBaseAPIRecognizeArray(EmguTesseract* ocr, cv::_InputArray* mat);
+CVAPI(void) TessBaseAPISetImage(EmguTesseract* ocr, cv::_InputArray* mat);
+CVAPI(void) TessBaseAPISetImagePix(EmguTesseract* ocr, Pix* pix);
 
 CVAPI(void) TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte);
 
@@ -93,5 +94,9 @@ CVAPI(bool) TessPageIteratorGetBaseLine(
 
 CVAPI(int) TessBaseAPIIsValidWord(EmguTesseract* ocr, char* word);
 
+CVAPI(int) TessBaseAPIGetOem(EmguTesseract* ocr);
+
 CVAPI(Pix*) leptCreatePixFromMat(cv::Mat* m);
+CVAPI(void) leptPixDestroy(Pix** pix);
+
 #endif

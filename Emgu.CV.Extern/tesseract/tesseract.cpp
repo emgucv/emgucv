@@ -31,20 +31,20 @@ void TessBaseAPIRelease(EmguTesseract** ocr)
    delete *ocr;
 }
 
-/*
-void TessBaseAPIRecognizeImage(EmguTesseract* ocr, IplImage* image)
+int TessBaseAPIRecognize(EmguTesseract* ocr)
 {
-   ocr->SetImage( (const unsigned char*)image->imageData, image->width, image->height, image->nChannels, image->widthStep);
-   if (ocr->Recognize(NULL) != 0)
-      CV_Error(CV_StsError, "Tesseract engine: Recognize Failed");
-}*/
+	return ocr->Recognize(NULL);
+}
 
-void TessBaseAPIRecognizeArray(EmguTesseract* ocr, cv::_InputArray* mat)
+void TessBaseAPISetImage(EmguTesseract* ocr, cv::_InputArray* mat)
 {
    cv::Mat m = mat->getMat();
-   ocr->SetImage((const unsigned char*) m.data, m.size().width, m.size().height, m.channels(), m.step);
-   if (ocr->Recognize(NULL) != 0)
-      CV_Error(CV_StsError, "Tesseract engine: Recognize Failed");
+   ocr->SetImage(static_cast<const unsigned char*>(m.data), m.size().width, m.size().height, m.elemSize(), m.step);
+}
+
+void TessBaseAPISetImagePix(EmguTesseract* ocr, Pix* pix)
+{
+	ocr -> SetImage(pix);
 }
 
 void TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
@@ -118,7 +118,6 @@ bool TessBaseAPISetVariable(EmguTesseract* ocr, const char* varName, const char*
    return ocr->SetVariable(varName, value);
 }
 
-
 void TessBaseAPISetPageSegMode(EmguTesseract* ocr, tesseract::PageSegMode mode)
 {
    ocr->SetPageSegMode(mode);
@@ -161,6 +160,11 @@ void TessPageIteratorRelease(tesseract::PageIterator** iterator)
 int TessBaseAPIIsValidWord(EmguTesseract* ocr, char* word)
 {
    return ocr->IsValidWord(word);
+}
+
+int TessBaseAPIGetOem(EmguTesseract* ocr)
+{
+	return ocr->oem();
 }
 
 Pix* leptCreatePixFromMat(cv::Mat* m)
@@ -223,4 +227,10 @@ Pix* leptCreatePixFromMat(cv::Mat* m)
    }
    pixSetYRes(pix, 300);
    return pix;
+}
+
+void leptPixDestroy(Pix** pix)
+{
+	pixDestroy(pix);
+	*pix = 0;
 }

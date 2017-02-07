@@ -260,10 +260,29 @@ namespace Emgu.CV.OCR
         /// Set the image for optical character recognition
         /// </summary>
         /// <param name="image">The image where detection took place</param>
-        public void Recognize(IInputArray image)
+        public void SetImage(IInputArray image)
         {
             using (InputArray iaImage = image.GetInputArray())
-                OcrInvoke.TessBaseAPIRecognizeArray(_ptr, iaImage);
+                OcrInvoke.TessBaseAPISetImage(_ptr, iaImage);
+        }
+
+        /// <summary>
+        /// Set the image for optical character recognition
+        /// </summary>
+        /// <param name="image">The image where detection took place</param>
+        public void SetImage(Pix image)
+        {
+            OcrInvoke.TessBaseAPISetImagePix(_ptr, image);
+        }
+
+        /// <summary>
+        /// Recognize the image from SetAndThresholdImage, generating Tesseract
+        /// internal structures.
+        /// </summary>
+        /// <returns>Returns 0 on success.</returns>
+        public int Recognize()
+        {
+            return OcrInvoke.TessBaseAPIRecognize(_ptr);
         }
 
         /// <summary>
@@ -309,8 +328,8 @@ namespace Emgu.CV.OCR
         private String UtfByteVectorToString(VectorOfByte bytes)
         {
 #if NETFX_CORE
-         byte[] bArr = bytes.ToArray();
-         return _utf8.GetString(bArr, 0, bArr.Length).Replace("\n", Environment.NewLine);
+            byte[] bArr = bytes.ToArray();
+            return _utf8.GetString(bArr, 0, bArr.Length).Replace("\n", Environment.NewLine);
 #else
             return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
 #endif
@@ -325,8 +344,6 @@ namespace Emgu.CV.OCR
             using (VectorOfByte textSeq = new VectorOfByte())
             using (VectorOfTesseractResult results = new VectorOfTesseractResult())
             {
-                //Seq<byte> textSeq = new Seq<byte>(stor);
-                //Seq<TesseractResult> results = new Seq<TesseractResult>(stor);
                 OcrInvoke.TessBaseAPIExtractResult(_ptr, textSeq, results);
 
                 byte[] bytes = textSeq.ToArray();
@@ -378,10 +395,18 @@ namespace Emgu.CV.OCR
         {
             return new PageIterator(OcrInvoke.TessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords));
         }
+
+        /// <summary>
+        /// Get the OCR Engine Mode
+        /// </summary>
+        public OcrEngineMode Oem
+        {
+            get { return OcrInvoke.TessBaseAPIGetOem(_ptr); }
+        }
     }
 
     /// <summary>
-    /// When Tesseract/Cube is initialized we can choose to instantiate/load/run
+    /// When Tesseract/LSTM is initialized we can choose to instantiate/load/run
     /// only the Tesseract part, only the Cube part or both along with the combiner.
     /// The preference of which engine to use is stored in tessedit_ocr_engine_mode.
     /// </summary>
@@ -479,6 +504,6 @@ namespace Emgu.CV.OCR
         /// Number of enum entries.
         /// </summary>
         Count
-    };
+    }
 }
 
