@@ -81,6 +81,15 @@ cv::MSER* cveMserGetFeatureDetector(
    return mserPtr.get();
 }
 
+void cveMserDetectRegions(
+	cv::MSER* mserPtr,
+	cv::_InputArray* image,
+	std::vector< std::vector<cv::Point> >* msers,
+	std::vector< cv::Rect >* bboxes)
+{
+	mserPtr->detectRegions(*image, *msers, *bboxes);
+}
+
 void cveMserFeatureDetectorRelease(cv::MSER** detector)
 {
    delete *detector;

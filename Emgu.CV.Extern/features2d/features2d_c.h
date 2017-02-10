@@ -41,6 +41,11 @@ CVAPI(cv::MSER*) cveMserGetFeatureDetector(
    double minMargin, 
    int edgeBlurSize,
    cv::Feature2D** feature2D);
+CVAPI(void) cveMserDetectRegions(
+	cv::MSER* mserPtr,
+	cv::_InputArray* image,
+	std::vector< std::vector<cv::Point> >* msers,
+	std::vector< cv::Rect >* bboxes);
 CVAPI(void) cveMserFeatureDetectorRelease(cv::MSER** mser);
 
 
