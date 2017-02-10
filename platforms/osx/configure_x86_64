@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+configure x86_64
