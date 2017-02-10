@@ -14,6 +14,7 @@
 CVAPI(void) cveDnnInitModule();
 
 CVAPI(cv::dnn::Importer*) cveDnnCreateCaffeImporter(cv::String* prototxt, cv::String* caffeModel);
+CVAPI(cv::dnn::Importer*) cveDnnCreateTensorflowImporter(cv::String* model);
 CVAPI(void) cveDnnImporterRelease(cv::dnn::Importer** importer);
 CVAPI(void) cveDnnImporterPopulateNet(cv::dnn::Importer* importer, cv::dnn::Net* net);
 

@@ -42,6 +42,21 @@ namespace Emgu.CV.Dnn
         }
 
         /// <summary>
+        /// Creates the importer of TensorFlow framework network.
+        /// </summary>
+        /// <param name="model">Path to the .pb file with binary protobuf description of the network architecture.</param>
+        /// <returns>The created importer, NULL in failure cases.</returns>
+        public static Importer CreateTensorflowImporter(String model)
+        {
+            
+            using (CvString modelStr = new CvString(model))
+            {
+                IntPtr result = DnnInvoke.cveDnnCreateTensorflowImporter(modelStr);
+                return result == IntPtr.Zero ? null : new Importer(result);
+            }
+        }
+
+        /// <summary>
         /// Adds loaded layers into the <paramref name="net"/> and sets connetions between them.
         /// </summary>
         /// <param name="net">The net model</param>
@@ -66,6 +81,10 @@ namespace Emgu.CV.Dnn
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDnnCreateCaffeImporter(IntPtr prototxt, IntPtr caffeModel);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDnnCreateTensorflowImporter(IntPtr model);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnImporterRelease(ref IntPtr importer);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

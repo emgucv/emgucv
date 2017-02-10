@@ -17,6 +17,13 @@ cv::dnn::Importer* cveDnnCreateCaffeImporter(cv::String* prototxt, cv::String* c
    ptr.addref();
    return ptr.get();
 }
+cv::dnn::Importer* cveDnnCreateTensorflowImporter(cv::String* model)
+{
+	cv::Ptr<cv::dnn::Importer> ptr = cv::dnn::createTensorflowImporter(*model);
+	ptr.addref();
+	return ptr.get();
+}
+
 void cveDnnImporterRelease(cv::dnn::Importer** importer)
 {
    delete *importer;
