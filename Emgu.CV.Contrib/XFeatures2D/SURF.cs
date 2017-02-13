@@ -59,7 +59,7 @@ namespace Emgu.CV.XFeatures2D
     }
 
     /// <summary>
-    /// This class wraps the functional calls to the opencv contrib modules
+    /// This class wraps the functional calls to the OpenCV XFeatures2D modules
     /// </summary>
     public static partial class XFeatures2DInvoke
     {

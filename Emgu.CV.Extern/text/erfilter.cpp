@@ -7,7 +7,7 @@
 #include "text_c.h"
 
 //ERFilter
-cv::text::ERFilter* CvERFilterNM1Create(
+cv::text::ERFilter* cveERFilterNM1Create(
    cv::String* classifier, 
    int thresholdDelta, 
    float minArea,
@@ -20,24 +20,24 @@ cv::text::ERFilter* CvERFilterNM1Create(
    filter.addref();
    return filter.get();
 }
-cv::text::ERFilter* CvERFilterNM2Create(cv::String* classifier, float minProbability)
+cv::text::ERFilter* cveERFilterNM2Create(cv::String* classifier, float minProbability)
 {
    cv::Ptr<cv::text::ERFilter> filter = cv::text::createERFilterNM2(cv::text::loadClassifierNM2(*classifier), minProbability);
    filter.addref();
    return filter.get();
 
 }
-void CvERFilterRelease(cv::text::ERFilter** filter)
+void cveERFilterRelease(cv::text::ERFilter** filter)
 {
    delete *filter;
    *filter = 0;
 }
-void CvERFilterRun(cv::text::ERFilter* filter, cv::_InputArray* image, std::vector<cv::text::ERStat>* regions)
+void cveERFilterRun(cv::text::ERFilter* filter, cv::_InputArray* image, std::vector<cv::text::ERStat>* regions)
 {
    filter->run(*image, *regions);
 }
 
-void CvERGrouping(
+void cveERGrouping(
    cv::_InputArray* image, cv::_InputArray* channels, 
    std::vector<cv::text::ERStat>** regions, int count, 
    std::vector< std::vector<cv::Vec2i> >* groups, std::vector<cv::Rect>* group_rects, 
@@ -51,4 +51,12 @@ void CvERGrouping(
    
    cv::text::erGrouping(*image, *channels, statVecs, *groups, *group_rects, method, *fileName, minProbability);
 
+}
+
+void cveMSERsToERStats(
+	cv::_InputArray* image,
+	std::vector< std::vector< cv::Point > >* contours,
+	std::vector< std::vector< cv::text::ERStat> >* regions)
+{
+	cv::text::MSERsToERStats(*image, *contours, *regions);
 }
