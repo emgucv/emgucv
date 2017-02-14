@@ -121,8 +121,8 @@ namespace Emgu.CV.Text
         /// <summary>
         /// If or not the regions is a local maxima of the probability
         /// </summary>
-        //[MarshalAs(UnmanagedType.U1)]
-        public Byte LocalMaxima;
+        [MarshalAs(CvInvoke.BoolMarshalType)]
+        public bool LocalMaxima;
 
         /// <summary>
         /// Pointer to the ERStat that is the max probability ancestor
@@ -143,5 +143,4 @@ namespace Emgu.CV.Text
             return new System.Drawing.Point(Pixel % imageWidth, Pixel / imageWidth);
         }
     }
-
 }

@@ -8,6 +8,7 @@
 #ifndef EMGU_TESSERACT_C_H
 #define EMGU_TESSERACT_C_H
 
+
 #if (_MSC_VER >= 1200)          
 typedef __int64 INT64;
 typedef unsigned __int64 UINT64;
@@ -18,6 +19,7 @@ typedef unsigned __int64 UINT64;
 #include "stdio.h"
 #include "baseapi.h"
 #include "allheaders.h"
+#include "renderer.h"
 
 class EmguTesseract: public tesseract::TessBaseAPI
 {
@@ -58,7 +60,7 @@ CVAPI(const char*) TesseractGetVersion();
 
 CVAPI(EmguTesseract*) TessBaseAPICreate();
 
-CVAPI(int) TessBaseAPIInit(EmguTesseract* ocr, const char* dataPath, const char* language, int mode);
+CVAPI(int) TessBaseAPIInit(EmguTesseract* ocr, cv::String* dataPath, cv::String* language, int mode);
 
 CVAPI(void) TessBaseAPIRelease(EmguTesseract** ocr);
 
@@ -71,7 +73,21 @@ CVAPI(void) TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char
 
 CVAPI(void) TessBaseAPIGetHOCRText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte);
 
+CVAPI(void) TessBaseAPIGetTSVText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte);
+CVAPI(void) TessBaseAPIGetBoxText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte);
+CVAPI(void) TessBaseAPIGetUNLVText(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte);
+CVAPI(void) TessBaseAPIGetOsdText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte);
+
 CVAPI(void) TessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<unsigned char>* charSeq, std::vector<TesseractResult>* resultSeq);
+
+CVAPI(bool) TessBaseAPIProcessPage(
+	EmguTesseract* ocr,
+	Pix* pix, 
+	int pageIndex, 
+	cv::String* filename, 
+	cv::String* retryConfig,
+	int timeoutMillisec,
+	tesseract::TessResultRenderer* renderer);
 
 CVAPI(bool) TessBaseAPISetVariable(EmguTesseract* ocr, const char* varName, const char* value);
 
@@ -95,6 +111,10 @@ CVAPI(bool) TessPageIteratorGetBaseLine(
 CVAPI(int) TessBaseAPIIsValidWord(EmguTesseract* ocr, char* word);
 
 CVAPI(int) TessBaseAPIGetOem(EmguTesseract* ocr);
+
+
+CVAPI(tesseract::TessPDFRenderer*) TessPDFRendererCreate(cv::String* outputbase, cv::String* datadir, bool textonly, tesseract::TessResultRenderer** resultRenderer);
+CVAPI(void) TessPDFRendererRelease(tesseract::TessPDFRenderer** renderer);
 
 CVAPI(Pix*) leptCreatePixFromMat(cv::Mat* m);
 CVAPI(void) leptPixDestroy(Pix** pix);

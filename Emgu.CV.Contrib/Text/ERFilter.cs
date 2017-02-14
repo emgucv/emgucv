@@ -150,6 +150,23 @@ namespace Emgu.CV.Text
     }
 
     /// <summary>
+    /// computeNMChannels operation modes
+    /// </summary>
+    public enum ERFilterNMMode
+    {
+        /// <summary>
+        /// A combination of red (R), green (G), blue (B), lightness (L), and gradient
+        /// magnitude (Grad).
+        /// </summary>
+        RGBLGrad,
+        /// <summary>
+        /// In N&M algorithm, the combination of intensity (I), hue (H), saturation (S), and gradient magnitude
+        /// channels (Grad) are used in order to obtain high localization recall. 
+        /// </summary>
+        IHSGrad
+    }
+
+    /// <summary>
     /// This class wraps the functional calls to the OpenCV Text modules
     /// </summary>
     public static partial class TextInvoke
@@ -188,6 +205,12 @@ namespace Emgu.CV.Text
            IntPtr classifier,
            float minProbability);
 
+        /// <summary>
+        /// Converts MSER contours (vector of point) to ERStat regions.
+        /// </summary>
+        /// <param name="image">Source image CV_8UC1 from which the MSERs where extracted.</param>
+        /// <param name="contours">Input vector with all the contours (vector of Point).</param>
+        /// <param name="regions">Output where the ERStat regions are stored.</param>
         public static void MSERsToERStats(
             IInputArray image,
             VectorOfVectorOfPoint contours,
@@ -204,6 +227,24 @@ namespace Emgu.CV.Text
             IntPtr image,
             IntPtr contours,
             IntPtr regions);
+
+        /// <summary>
+        /// Compute the different channels to be processed independently in the N&M algorithm.
+        /// </summary>
+        /// <param name="src">Source image. Must be RGB CV_8UC3.</param>
+        /// <param name="channels">Output vector of Mat where computed channels are stored.</param>
+        /// <param name="mode">Mode of operation</param>
+        public static void ComputeNMChannels(IInputArray src, IOutputArrayOfArrays channels, ERFilterNMMode mode = ERFilterNMMode.RGBLGrad)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaChannels = channels.GetOutputArray())
+            {
+                cveComputeNMChannels(iaSrc, oaChannels, mode);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveComputeNMChannels(IntPtr src, IntPtr channels, ERFilterNMMode mode);
     }
 
 }

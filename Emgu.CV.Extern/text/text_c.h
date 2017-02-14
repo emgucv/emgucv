@@ -35,4 +35,6 @@ CVAPI(void) cveMSERsToERStats(
 	cv::_InputArray* image, 
 	std::vector< std::vector< cv::Point > >* contours,
 	std::vector< std::vector< cv::text::ERStat> >* regions);
+
+CVAPI(void) cveComputeNMChannels(cv::_InputArray* src, cv::_OutputArray* channels, int mode);
 #endif

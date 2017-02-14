@@ -32,7 +32,6 @@ namespace Emgu.CV.Test
         {
             using (Tesseract ocr = GetTesseract())
             using (Image<Gray, Byte> img = new Image<Gray, byte>(480, 200))
-
             {
 
                 ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
@@ -46,7 +45,6 @@ namespace Emgu.CV.Test
                 //ocr.Recognize(img);
                 using (Image<Gray, Byte> rotatedImg = img.Rotate(10, new Gray(), false))
                 {
-
 
                     ocr.PageSegMode = PageSegMode.AutoOsd;
                     ocr.SetImage(rotatedImg);
@@ -62,13 +60,25 @@ namespace Emgu.CV.Test
                         }
                     }
 
+                    
+                    String messageOcr = ocr.GetUTF8Text().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
+                    //EmguAssert.AreEqual(message, messageOcr,
+                    //   String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
 
-                    /*
-                    String messageOcr = ocr.GetText().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
-                    EmguAssert.AreEqual(message, messageOcr,
-                       String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
+                    Tesseract.Character[] results = ocr.GetCharacters();
 
-                    Tesseract.Character[] results = ocr.GetCharacters();*/
+                    String s1 = ocr.GetBoxText();
+                    //String s2 = ocr.GetOsdText();
+                    String s3 = ocr.GetTSVText();
+                    String s4 = ocr.GetUNLVText();
+
+                    using (PDFRenderer pdfRenderer = new PDFRenderer("abc.pdf", "./", false))
+                    using (Pix imgPix = new Pix(img.Mat))
+                    {
+                        ocr.ProcessPage(imgPix, 1, "img", null, 100000, pdfRenderer);
+                    }
+
+
                 }
             }
         }
@@ -87,7 +97,7 @@ namespace Emgu.CV.Test
                 ocr.SetImage(img);
                 ocr.Recognize();
 
-                String messageOcr = ocr.GetText().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
+                String messageOcr = ocr.GetUTF8Text().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
                 EmguAssert.AreEqual(message, messageOcr, String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
 
                 Tesseract.Character[] results = ocr.GetCharacters();
@@ -125,7 +135,7 @@ namespace Emgu.CV.Test
          String path = System.IO.Path.Combine(a0.DirectoryName, "..") + System.IO.Path.DirectorySeparatorChar;
          return new Tesseract(path, "eng", OcrEngineMode.TesseractLstmCombined);
 #else
-            return new Tesseract("./", "eng", OcrEngineMode.TesseractLstmCombined);
+            return new Tesseract("./", "eng", OcrEngineMode.TesseractOnly);
 #endif
         }
 

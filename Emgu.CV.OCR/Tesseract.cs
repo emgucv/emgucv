@@ -236,14 +236,20 @@ namespace Emgu.CV.OCR
 
             /*if (!IsEngineModeSupported(mode))
                throw new ArgumentException(String.Format("The Ocr engine mode {0} is not supported in tesseract v{1}", mode, Version));*/
-            int initResult = OcrInvoke.TessBaseAPIInit(_ptr, dataPath, language, mode);
-            if (initResult != 0)
+            using (CvString csDataPath = new CvString(dataPath))
+            using (CvString csLanguage = new CvString(language))
             {
+                int initResult = OcrInvoke.TessBaseAPIInit(_ptr, csDataPath, csLanguage, mode);
+                if (initResult != 0)
+                {
 #if !NETFX_CORE
-                if (dataPath.Equals(String.Empty))
-                    dataPath = Path.GetFullPath(".");
+                    if (dataPath.Equals(String.Empty))
+                        dataPath = Path.GetFullPath(".");
 #endif
-                throw new ArgumentException(String.Format("Unable to create ocr model using Path '{0}' and language '{1}'.", dataPath, language));
+                    throw new ArgumentException(
+                        String.Format("Unable to create ocr model using Path '{0}' and language '{1}'.", dataPath,
+                            language));
+                }
             }
         }
 
@@ -302,11 +308,67 @@ namespace Emgu.CV.OCR
         /// Get all the text in the image
         /// </summary>
         /// <returns>All the text in the image</returns>
-        public string GetText()
+        public string GetUTF8Text()
         {
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
                 OcrInvoke.TessBaseAPIGetUTF8Text(_ptr, bytes);
+                return UtfByteVectorToString(bytes);
+            }
+        }
+
+        /// <summary>
+        /// Make a TSV-formatted string from the internal data structures.
+        /// </summary>
+        /// <param name="pageNumber">pageNumber is 0-based but will appear in the output as 1-based.</param>
+        /// <returns>A TSV-formatted string from the internal data structures.</returns>
+        public String GetTSVText(int pageNumber = 0)
+        {
+            using (Util.VectorOfByte bytes = new Util.VectorOfByte())
+            {
+                OcrInvoke.TessBaseAPIGetTSVText(_ptr, pageNumber, bytes);
+                return UtfByteVectorToString(bytes);
+            }
+        }
+
+        /// <summary>
+        /// The recognized text is returned as coded in the same format as a box file used in training.
+        /// </summary>
+        /// <param name="pageNumber">pageNumber is 0-based but will appear in the output as 1-based.</param>
+        /// <returns>The recognized text is returned as coded in the same format as a box file used in training.</returns>
+        public String GetBoxText(int pageNumber = 0)
+        {
+            using (Util.VectorOfByte bytes = new Util.VectorOfByte())
+            {
+                OcrInvoke.TessBaseAPIGetBoxText(_ptr, pageNumber, bytes);
+                return UtfByteVectorToString(bytes);
+            }
+        }
+
+        /// <summary>
+        /// The recognized text is returned coded as UNLV format Latin-1 with specific reject and suspect codes
+        /// </summary>
+        /// <param name="pageNumber">pageNumber is 0-based but will appear in the output as 1-based.</param>
+        /// <returns>The recognized text is returned coded as UNLV format Latin-1 with specific reject and suspect codes</returns>
+        public String GetUNLVText(int pageNumber = 0)
+        {
+            using (Util.VectorOfByte bytes = new Util.VectorOfByte())
+            {
+                OcrInvoke.TessBaseAPIGetUNLVText(_ptr, bytes);
+                return UtfByteVectorToString(bytes);
+            }
+        }
+
+        /// <summary>
+        /// The recognized text
+        /// </summary>
+        /// <param name="pageNumber">pageNumber is 0-based but will appear in the output as 1-based.</param>
+        /// <returns>The recognized text</returns>
+        public String GetOsdText(int pageNumber = 0)
+        {
+            using (Util.VectorOfByte bytes = new Util.VectorOfByte())
+            {
+                OcrInvoke.TessBaseAPIGetOsdText(_ptr, pageNumber, bytes);
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -384,6 +446,28 @@ namespace Emgu.CV.OCR
             /// The region where the character is detected.
             /// </summary>
             public Rectangle Region;
+        }
+
+        public bool ProcessPage(
+            Pix pix,
+            int pageIndex,
+            String filename,
+            String retryConfig,
+            int timeoutMillisec,
+            ITessResultRenderer renderer)
+        {
+            using (CvString csFileName = new CvString(filename))
+            using (CvString csRetryConfig = new CvString(retryConfig))
+            {
+                return OcrInvoke.TessBaseAPIProcessPage(
+                    _ptr, 
+                    pix, 
+                    pageIndex, 
+                    csFileName, 
+                    csRetryConfig, 
+                    timeoutMillisec,
+                    renderer.TessResultRendererPtr);
+            }
         }
 
         /// <summary>

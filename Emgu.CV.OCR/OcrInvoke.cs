@@ -18,7 +18,7 @@ namespace Emgu.CV.OCR
     /// <summary>
     /// Library to invoke Tesseract OCR functions
     /// </summary>
-    public static class OcrInvoke
+    public static partial class OcrInvoke
     {
         static OcrInvoke()
         {
@@ -32,12 +32,10 @@ namespace Emgu.CV.OCR
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int TessBaseAPIInit(
-           IntPtr ocr,
-           [MarshalAs(CvInvoke.StringMarshalType)]
-         String dataPath,
-           [MarshalAs(CvInvoke.StringMarshalType)]
-         String language,
-           OcrEngineMode mode);
+            IntPtr ocr,
+            IntPtr dataPath,
+            IntPtr language,
+            OcrEngineMode mode);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void TessBaseAPIRelease(ref IntPtr ocr);
@@ -57,16 +55,39 @@ namespace Emgu.CV.OCR
         internal static extern void TessBaseAPIGetHOCRText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void TessBaseAPIGetTSVText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void TessBaseAPIGetBoxText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void TessBaseAPIGetUNLVText(IntPtr ocr, IntPtr vectorOfByte);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void TessBaseAPIGetOsdText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void TessBaseAPIExtractResult(IntPtr ocr, IntPtr charSeq, IntPtr resultSeq);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool TessBaseAPIProcessPage(
+            IntPtr ocr,
+            IntPtr pix,
+            int pageIndex,
+            IntPtr filename,
+            IntPtr retryConfig,
+            int timeoutMillisec,
+            IntPtr renderer);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool TessBaseAPISetVariable(
-           IntPtr ocr,
-           [MarshalAs(CvInvoke.StringMarshalType)]
-         String varName,
-           [MarshalAs(CvInvoke.StringMarshalType)]
-         String value);
+            IntPtr ocr,
+            [MarshalAs(CvInvoke.StringMarshalType)]
+            String varName,
+            [MarshalAs(CvInvoke.StringMarshalType)]
+            String value);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr TesseractGetVersion();
@@ -82,15 +103,15 @@ namespace Emgu.CV.OCR
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr TessBaseAPIAnalyseLayout(
-           IntPtr ocr,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool mergeSimilarWords);
+            IntPtr ocr,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool mergeSimilarWords);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int TessBaseAPIIsValidWord(
-           IntPtr ocr,
-           [MarshalAs(CvInvoke.StringMarshalType)]
-         String word);
+            IntPtr ocr,
+            [MarshalAs(CvInvoke.StringMarshalType)]
+            String word);
         #endregion
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -112,11 +133,6 @@ namespace Emgu.CV.OCR
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int TessBaseAPIRecognize(IntPtr ocr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr leptCreatePixFromMat(IntPtr m);
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void leptPixDestroy(ref IntPtr pix);
     }
 }
 

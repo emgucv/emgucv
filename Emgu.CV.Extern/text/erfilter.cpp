@@ -60,3 +60,8 @@ void cveMSERsToERStats(
 {
 	cv::text::MSERsToERStats(*image, *contours, *regions);
 }
+
+void cveComputeNMChannels(cv::_InputArray* src, cv::_OutputArray* channels, int mode)
+{
+	cv::text::computeNMChannels(*src, *channels, mode);
+}

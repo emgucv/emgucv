@@ -21,9 +21,9 @@ EmguTesseract* TessBaseAPICreate()
    return ocr;
 }
 
-int TessBaseAPIInit(EmguTesseract* ocr, const char* dataPath, const char* language, int mode)
+int TessBaseAPIInit(EmguTesseract* ocr, cv::String* dataPath, cv::String* language, int mode)
 { 
-   return ocr->Init(dataPath, language, (tesseract::OcrEngineMode) mode);
+   return ocr->Init(dataPath->c_str(), language->c_str(), (tesseract::OcrEngineMode) mode);
 }
 
 void TessBaseAPIRelease(EmguTesseract** ocr)
@@ -64,6 +64,40 @@ void TessBaseAPIGetHOCRText(EmguTesseract* ocr, int pageNumber, std::vector<unsi
    memcpy(&(*vectorOfByte)[0], result, length);
    delete[] result;
 }
+
+void TessBaseAPIGetTSVText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
+{
+	char* result = ocr->GetTSVText(pageNumber);
+	size_t length = strlen(result);
+	vectorOfByte->resize(length);
+	memcpy(&(*vectorOfByte)[0], result, length);
+	delete[] result;
+}
+void TessBaseAPIGetBoxText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
+{
+	char* result = ocr->GetBoxText(pageNumber);
+	size_t length = strlen(result);
+	vectorOfByte->resize(length);
+	memcpy(&(*vectorOfByte)[0], result, length);
+	delete[] result;
+}
+void TessBaseAPIGetUNLVText(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
+{
+	char* result = ocr->GetUNLVText();
+	size_t length = strlen(result);
+	vectorOfByte->resize(length);
+	memcpy(&(*vectorOfByte)[0], result, length);
+	delete[] result;
+}
+void TessBaseAPIGetOsdText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
+{
+	char* result = ocr->GetOsdText(pageNumber);
+	size_t length = strlen(result);
+	vectorOfByte->resize(length);
+	memcpy(&(*vectorOfByte)[0], result, length);
+	delete[] result;
+}
+
 
 void TessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<unsigned char>* charSeq, std::vector<TesseractResult>* resultSeq)
 {
@@ -111,6 +145,18 @@ void TessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<unsigned char>* ch
    delete[] y0;
    delete[] x1;
    delete[] y1;
+}
+
+bool TessBaseAPIProcessPage(
+	EmguTesseract* ocr,
+	Pix* pix,
+	int pageIndex,
+	cv::String* filename,
+	cv::String* retryConfig,
+	int timeoutMillisec,
+	tesseract::TessResultRenderer* renderer)
+{
+	return ocr->ProcessPage(pix, pageIndex, filename->c_str(), retryConfig->empty() ? 0: retryConfig->c_str(), timeoutMillisec, renderer);
 }
 
 bool TessBaseAPISetVariable(EmguTesseract* ocr, const char* varName, const char* value)
@@ -165,6 +211,18 @@ int TessBaseAPIIsValidWord(EmguTesseract* ocr, char* word)
 int TessBaseAPIGetOem(EmguTesseract* ocr)
 {
 	return ocr->oem();
+}
+
+tesseract::TessPDFRenderer* TessPDFRendererCreate(cv::String* outputbase, cv::String* datadir, bool textonly, tesseract::TessResultRenderer** resultRenderer)
+{
+	tesseract::TessPDFRenderer* renderer = new tesseract::TessPDFRenderer(outputbase->c_str(), datadir->c_str(), textonly);
+	*resultRenderer = static_cast<tesseract::TessResultRenderer*>(renderer);
+	return renderer;
+}
+void TessPDFRendererRelease(tesseract::TessPDFRenderer** renderer)
+{
+	delete *renderer;
+	*renderer = 0;
 }
 
 Pix* leptCreatePixFromMat(cv::Mat* m)

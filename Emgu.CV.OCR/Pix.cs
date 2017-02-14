@@ -23,6 +23,7 @@ namespace Emgu.CV.OCR
         {
             _ptr = OcrInvoke.leptCreatePixFromMat(mat);
         }
+
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
@@ -30,5 +31,14 @@ namespace Emgu.CV.OCR
                 OcrInvoke.leptPixDestroy(ref _ptr);
             }
         }
+    }
+
+    public static partial class OcrInvoke
+    {
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr leptCreatePixFromMat(IntPtr m);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void leptPixDestroy(ref IntPtr pix);
     }
 }
