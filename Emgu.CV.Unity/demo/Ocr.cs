@@ -23,7 +23,7 @@ public class Ocr : MonoBehaviour
    // Use this for initialization
    void Start()
    {
-      String[] names = new string[] {"eng.cube.bigrams", "eng.cube.fold", "eng.cube.lm", "eng.cube.nn", "eng.cube.params", "eng.cube.size", "eng.cube.word-freq", "eng.tesseract_cube.nn", "eng.traineddata"};
+      String[] names = new string[] {"eng.traineddata"};
       String outputPath = Path.Combine(Application.persistentDataPath, "tessdata");
       if (!Directory.Exists(outputPath))
          Directory.CreateDirectory(outputPath);
@@ -49,8 +49,8 @@ public class Ocr : MonoBehaviour
       String message = "Hello, World";
       CvInvoke.PutText(img, message, new Point(50, 100), Emgu.CV.CvEnum.FontFace.HersheySimplex, 1.0, new MCvScalar(255, 255, 255));
 
-      _ocr.Recognize(img);
-
+      _ocr.SetImage(img);
+      _ocr.Recognize();
 
       Tesseract.Character[] characters = _ocr.GetCharacters();
       foreach (Tesseract.Character c in characters)
@@ -58,7 +58,7 @@ public class Ocr : MonoBehaviour
          CvInvoke.Rectangle(img, c.Region, new MCvScalar(255, 0, 0));
       }
 
-      String messageOcr = _ocr.GetText().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text   
+      String messageOcr = _ocr.GetUTF8Text().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text   
       Debug.Log("Detected text: "+ message);
 
       Texture2D texture = TextureConvert.InputArrayToTexture2D(img, FlipType.Vertical);

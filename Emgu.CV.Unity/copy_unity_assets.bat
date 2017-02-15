@@ -87,6 +87,9 @@ mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XObjdetect
 cp -r ../Emgu.CV.Contrib/XObjdetect/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/XObjdetect
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\XPhoto
 cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/XPhoto
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Bioinspired
+cp -r ../Emgu.CV.Contrib/Bioinspired/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Bioinspired
+
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/
 

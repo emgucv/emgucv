@@ -132,7 +132,7 @@ namespace OCR
                     CvInvoke.Rectangle(imageColor, c.Region, drawCharColor.MCvScalar);
                 }
 
-                return ocr.GetText();
+                return ocr.GetUTF8Text();
 
             }
             else
@@ -223,7 +223,7 @@ namespace OCR
                         }
                         allChars.AddRange(characters);
 
-                        allText += ocr.GetText() + Environment.NewLine;
+                        allText += ocr.GetUTF8Text() + Environment.NewLine;
 
                     }
                 }

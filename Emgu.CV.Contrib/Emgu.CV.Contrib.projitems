@@ -22,5 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Fuzzy\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LineDescriptor\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)XObjdetect\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Bioinspired\*.cs" />
   </ItemGroup>
 </Project>

@@ -36,7 +36,7 @@
             Tesseract ocr = new Tesseract(appDataPath, "eng", OcrEngineMode.TesseractLstmCombined);
             ocr.SetImage(img);
             ocr.Recognize();
-            String result = ocr.GetText();
+            String result = ocr.GetUTF8Text();
             Response.Write(String.Format("Text recognized: {0}", result));
         }
     }

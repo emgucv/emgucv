@@ -40,7 +40,7 @@ cp Assets/Emgu.CV/Emgu.CV.Contrib/XFeatures2D/*.cs ../Emgu.CV.Contrib/XFeatures2
 cp Assets/Emgu.CV/Emgu.CV.Contrib/XImgproc/*.cs ../Emgu.CV.Contrib/XImgproc 
 cp Assets/Emgu.CV/Emgu.CV.Contrib/XObjdetect/*.cs ../Emgu.CV.Contrib/XObjdetect 
 cp Assets/Emgu.CV/Emgu.CV.Contrib/XPhoto/*.cs ../Emgu.CV.Contrib/XPhoto 
-
+cp Assets/Emgu.CV/Emgu.CV.Contrib/Bioinspired/*.cs ../Emgu.CV.Contrib/Bioinspired 
 
 cp -r Assets/Emgu.CV/Emgu.CV.OCR/*.cs ../Emgu.CV.OCR 
 

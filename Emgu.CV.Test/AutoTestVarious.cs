@@ -22,6 +22,7 @@ using Emgu.CV.Shape;
 using Emgu.CV.Stitching;
 using Emgu.CV.Text;
 using Emgu.CV.Structure;
+using Emgu.CV.Bioinspired;
 
 #if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Dnn;
@@ -1151,7 +1152,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> prevImg, currImg;
             OpticalFlowImage(out prevImg, out currImg);
             Mat flow = new Mat();
-            
+
             using (Emgu.CV.OpticalFlowPCAFlow pcaFlow = new OpticalFlowPCAFlow())
             {
                 pcaFlow.Calc(prevImg, currImg, flow);
@@ -2551,6 +2552,35 @@ namespace Emgu.CV.Test
         }*/
 
         [Test]
+        public void TestRetina()
+        {
+
+            Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
+            using (Retina retina = new Retina(
+                new Size(image.Width, image.Height), 
+                true,
+                Retina.ColorSamplingMethod.ColorBayer, false, 1.0, 10.0))
+            {
+                Retina.RetinaParameters p = retina.Parameters;
+                Retina.IplMagnoParameters iplP = p.IplMagno;
+                float oldval = iplP.ParasolCellsK;
+                iplP.ParasolCellsK += 0.01f;
+                iplP.NormaliseOutput = false;
+                p.IplMagno = iplP;
+                retina.Parameters = p;
+                float newval = retina.Parameters.IplMagno.ParasolCellsK;
+
+                Assert.AreEqual(newval, oldval + 0.01f);
+
+                retina.Run(image);
+                Mat out1 = new Mat();
+                Mat out2 = new Mat();
+                retina.GetMagno(out1);
+                retina.GetParvo(out2);
+            }
+        }
+
+        [Test]
         public void TestPyrMeanshiftSegmentation()
         {
             Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
@@ -2984,10 +3014,10 @@ namespace Emgu.CV.Test
                 {
                     System.Threading.ThreadPool.QueueUserWorkItem(delegate
                     {
-                         Trace.WriteLine("Sleep for 1 sec");
-                         System.Threading.Thread.Sleep(1000);
-                         capture2.Start();
-                     });
+                        Trace.WriteLine("Sleep for 1 sec");
+                        System.Threading.Thread.Sleep(1000);
+                        capture2.Start();
+                    });
                 }
 
             };

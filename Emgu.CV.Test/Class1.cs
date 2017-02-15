@@ -1338,15 +1338,16 @@ namespace Emgu.CV.Test
 
         //TODO: Fix this
         /*
+        [Test]
         public void VideoRetina()
         {
            ImageViewer v = new ImageViewer();
 
-           using (Capture capture = new Capture(0))
-           using (Retina retina = new Retina(new Size(capture.Width, capture.Height), true, Retina.ColorSamplingMethod.ColorBayer, false, 1.0, 10.0))
+           using (VideoCapture capture = new VideoCapture(0))
+           using (Bioinspired.Retina retina = new Bioinspired.Retina(new Size(capture.Width, capture.Height), true, Retina.ColorSamplingMethod.ColorBayer, false, 1.0, 10.0))
            {
-              Retina.RetinaParameters p = retina.Parameters;
-              Retina.IplMagnoParameters iplP = p.IplMagno;
+              Bioinspired.Retina.RetinaParameters p = retina.Parameters;
+              Bioinspired.Retina.IplMagnoParameters iplP = p.IplMagno;
               float oldval = iplP.ParasolCells_k;
               iplP.ParasolCells_k += 0.01f;
               iplP.NormaliseOutput = false;
@@ -1368,7 +1369,7 @@ namespace Emgu.CV.Test
 
            }
         }
-
+        
         public void TestStereo()
         {
            using (ImageViewer v = new ImageViewer())
