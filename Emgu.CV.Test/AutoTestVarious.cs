@@ -1988,6 +1988,7 @@ namespace Emgu.CV.Test
             }
         }
 
+        /*
         [Test]
         public void TestHOGTrain64x128()
         {
@@ -2023,7 +2024,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        /*
+        
         [Test]
         public void TestOctTree()
         {
@@ -3145,37 +3146,6 @@ namespace Emgu.CV.Test
         }
 
 #if !(__IOS__ || NETFX_CORE)
-        [Test]
-        public void TestDnn()
-        {
-            Dnn.Net net = new Dnn.Net();
-            String googleNetFile = "bvlc_googlenet.caffemodel";
-            if (!File.Exists(googleNetFile))
-            {
-                //Download the bvlc googlenet file
-                String googleNetUrl = "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel";
-                System.Net.WebClient downloadClient = new System.Net.WebClient();
-                downloadClient.DownloadFile(googleNetUrl, googleNetFile);
-            }
-            using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("bvlc_googlenet.prototxt", googleNetFile))
-                importer.PopulateNet(net);
-
-            Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
-            CvInvoke.Resize(img, img, new Size(224, 224));
-            Dnn.Blob inputBlob = new Dnn.Blob(img);
-            net.SetBlob(".data", inputBlob);
-            net.Forward();
-            Dnn.Blob probBlob = net.GetBlob("prob");
-            int classId;
-            double classProb;
-            GetMaxClass(probBlob, out classId, out classProb);
-            String[] classNames = ReadClassNames("synset_words.txt");
-
-#if !NETFX_CORE
-            Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
-#endif
-
-        }
 
         private static String[] ReadClassNames(String fileName)
         {
@@ -3193,6 +3163,47 @@ namespace Emgu.CV.Test
             classId = maxLoc.X;
             classProb = maxVal;
 
+        }
+
+        [Test]
+        public void TestDnn()
+        {
+            //bool oclMode = CvInvoke.UseOpenCL;
+            //CvInvoke.UseOpenCL = false;       //need to turn off OpenCL due to a bug in DNN opencl implementation.
+                 
+            Dnn.Net net = new Dnn.Net();
+            String googleNetFile = "bvlc_googlenet.caffemodel";
+            if (!File.Exists(googleNetFile))
+            {
+                
+                //Download the bvlc googlenet file
+                String googleNetUrl = "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel";
+                Trace.WriteLine("downloading file from:" + googleNetUrl +" to: " + googleNetFile);
+                System.Net.WebClient downloadClient = new System.Net.WebClient();
+                downloadClient.DownloadFile(googleNetUrl, googleNetFile);
+            }
+            using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("bvlc_googlenet.prototxt", googleNetFile))
+                importer.PopulateNet(net);
+
+            Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
+            Mat tmp = new Mat(); //buffer
+            //Resize the image for GoogleNet input (224x224)
+            CvInvoke.Resize(img, tmp, new Size(224, 224));
+            
+            Dnn.Blob inputBlob = new Dnn.Blob();
+            inputBlob.BatchFromImages(tmp);
+            net.SetBlob(".data", inputBlob);
+            net.Forward();
+            Dnn.Blob probBlob = net.GetBlob("prob");
+            int classId;
+            double classProb;
+            GetMaxClass(probBlob, out classId, out classProb);
+            String[] classNames = ReadClassNames("synset_words.txt");
+
+#if !NETFX_CORE
+            Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
+#endif
+            //CvInvoke.UseOpenCL = oclMode;
         }
 #endif
 

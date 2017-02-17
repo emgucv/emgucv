@@ -29,11 +29,15 @@ namespace Emgu.CV.Dnn
         /// Constructs 4-dimensional blob (so-called batch) from image or array of images.
         /// </summary>
         /// <param name="image">2-dimensional multi-channel or 3-dimensional single-channel image (or array of images)</param>
-        
         public Blob(IInputArray image)
         {
             using (InputArray iaImage = image.GetInputArray())
                 _ptr = DnnInvoke.cveDnnBlobCreateFromInputArray(iaImage);
+        }
+
+        public Blob()
+        {
+            _ptr = DnnInvoke.cveDnnBlobCreate();
         }
 
         /// <summary>
@@ -97,6 +101,12 @@ namespace Emgu.CV.Dnn
         {
             get { return DnnInvoke.cveDnnBlobRows(_ptr); }
         }
+
+        public void BatchFromImages(IInputArray image, int dstCn = -1)
+        {
+            using (InputArray iaImage = image.GetInputArray())
+            DnnInvoke.cveDnnBlobBatchFromImages(_ptr, iaImage, dstCn);
+        }
     }
 
     /// <summary>
@@ -105,11 +115,19 @@ namespace Emgu.CV.Dnn
     public static partial class DnnInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDnnBlobCreate();
+
+        
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDnnBlobCreateFromInputArray(IntPtr image);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnBlobMatRef(IntPtr blob, IntPtr outMat);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnBlobRelease(ref IntPtr blob);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnBlobBatchFromImages(IntPtr blob, IntPtr image, int dstCn);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int cveDnnBlobDims(IntPtr blob);

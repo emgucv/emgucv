@@ -38,6 +38,7 @@ cv::dnn::Net* cveDnnNetCreate()
 {
    return new cv::dnn::Net();
 }
+
 void cveDnnNetSetBlob(cv::dnn::Net* net, cv::String* outputName, cv::dnn::Blob* blob)
 {
    net->setBlob(*outputName, *blob);
@@ -59,9 +60,17 @@ void cveDnnNetRelease(cv::dnn::Net** net)
 }
 
 
+cv::dnn::Blob* cveDnnBlobCreate()
+{
+	return new cv::dnn::Blob();
+}
 cv::dnn::Blob* cveDnnBlobCreateFromInputArray(cv::_InputArray* image)
 {
    return new cv::dnn::Blob(*image);
+}
+void cveDnnBlobBatchFromImages(cv::dnn::Blob* blob, cv::_InputArray* image, int dstCn)
+{
+	blob->batchFromImages(*image, dstCn);
 }
 void cveDnnBlobMatRef(cv::dnn::Blob* blob, cv::Mat* outMat)
 {
