@@ -9,6 +9,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Em
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.shproj", "{7B22BB32-C867-45A7-AC53-5BDA820DB91C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSX", "..\..\Emgu.CV.Example\XamarinForms\Mac\OSX.csproj", "{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -19,5 +21,9 @@ Global
 		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|x86.Build.0 = Debug|x86
 		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|x86.ActiveCfg = Release|x86
 		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|x86.Build.0 = Release|x86
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|x86.ActiveCfg = Debug|x86
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|x86.Build.0 = Debug|x86
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|x86.ActiveCfg = Release|x86
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 EndGlobal
