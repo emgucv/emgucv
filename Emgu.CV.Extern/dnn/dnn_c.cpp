@@ -103,3 +103,15 @@ int cveDnnBlobRows(cv::dnn::Blob* blob)
 {
    return blob->rows();
 }
+int cveDnnBlobType(cv::dnn::Blob* blob)
+{
+	return blob->type();
+}
+int cveDnnBlobElemSize(cv::dnn::Blob* blob)
+{
+	return blob->elemSize();
+}
+uchar * cveDnnBlobGetPtr(cv::dnn::Blob* blob, int n, int cn, int row, int col)
+{
+	return blob->ptr(n, cn, row, col);
+}

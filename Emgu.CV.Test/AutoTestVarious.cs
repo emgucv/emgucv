@@ -3162,20 +3162,54 @@ namespace Emgu.CV.Test
             CvInvoke.MinMaxLoc(probMat, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
             classId = maxLoc.X;
             classProb = maxVal;
+        }
+
+        [Test]
+        public void TestDnnFcn8sHeavyPascal()
+        {
+
+            Dnn.Net net = new Dnn.Net();
+            String caffeModelFile = "fcn8s-heavy-pascal.caffemodel";
+            if (!File.Exists(caffeModelFile))
+            {
+                //Download the bvlc googlenet file
+                String CaffeModelUrl = "http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel";
+                Trace.WriteLine("downloading file from:" + CaffeModelUrl + " to: " + caffeModelFile);
+                System.Net.WebClient downloadClient = new System.Net.WebClient();
+                downloadClient.DownloadFile(CaffeModelUrl, caffeModelFile);
+            }
+            using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("fcn8s-heavy-pascal.prototxt", caffeModelFile))
+                importer.PopulateNet(net);
+
+            Mat img = EmguAssert.LoadMat("rgb.jpg");
+            //FCN accepts 500x500 RGB-images
+            CvInvoke.Resize(img, img, new Size(500, 500));
+
+            Dnn.Blob inputBlob = new Dnn.Blob();
+            inputBlob.BatchFromImages(img);
+            net.SetBlob(".data", inputBlob);
+            net.Forward();
+            Dnn.Blob probBlob = net.GetBlob("score");
+            using (Mat blobData = probBlob.MatRef())
+            {
+                //should be a 1 x 21 x 500 x 500 Mat, where 21 is the number of classes.
+
+            }
+
+            //#if !NETFX_CORE
+            //Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
+            //#endif
 
         }
 
         [Test]
-        public void TestDnn()
+        public void TestDnnBvlcGoogleNet()
         {
-            //bool oclMode = CvInvoke.UseOpenCL;
-            //CvInvoke.UseOpenCL = false;       //need to turn off OpenCL due to a bug in DNN opencl implementation.
                  
             Dnn.Net net = new Dnn.Net();
             String googleNetFile = "bvlc_googlenet.caffemodel";
             if (!File.Exists(googleNetFile))
             {
-                
                 //Download the bvlc googlenet file
                 String googleNetUrl = "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel";
                 Trace.WriteLine("downloading file from:" + googleNetUrl +" to: " + googleNetFile);
@@ -3186,12 +3220,11 @@ namespace Emgu.CV.Test
                 importer.PopulateNet(net);
 
             Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
-            Mat tmp = new Mat(); //buffer
-            //Resize the image for GoogleNet input (224x224)
-            CvInvoke.Resize(img, tmp, new Size(224, 224));
+            
+            CvInvoke.Resize(img, img, new Size(224, 224));
             
             Dnn.Blob inputBlob = new Dnn.Blob();
-            inputBlob.BatchFromImages(tmp);
+            inputBlob.BatchFromImages(img);
             net.SetBlob(".data", inputBlob);
             net.Forward();
             Dnn.Blob probBlob = net.GetBlob("prob");
@@ -3200,10 +3233,52 @@ namespace Emgu.CV.Test
             GetMaxClass(probBlob, out classId, out classProb);
             String[] classNames = ReadClassNames("synset_words.txt");
 
-#if !NETFX_CORE
+//#if !NETFX_CORE
             Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
-#endif
-            //CvInvoke.UseOpenCL = oclMode;
+//#endif
+            
+        }
+
+        [Test]
+        public void TestDnnTensorFlow()
+        {
+
+            Dnn.Net net = new Dnn.Net();
+            String tensorFlowFile = "tensorflow_inception_graph.pb";
+            if (!File.Exists(tensorFlowFile))
+            {
+                //Download the tensorflow file
+                String inceptionFile = "inception5h.zip";
+                String googleNetUrl = "https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip";
+                Trace.WriteLine("downloading file from:" + googleNetUrl + " to: " + inceptionFile);
+                System.Net.WebClient downloadClient = new System.Net.WebClient();
+                downloadClient.DownloadFile(googleNetUrl, inceptionFile);
+
+                System.IO.Compression.ZipFile.ExtractToDirectory(inceptionFile, ".");
+            }
+            
+            using (Dnn.Importer importer = Dnn.Importer.CreateTensorflowImporter(tensorFlowFile))
+                importer.PopulateNet(net);
+            
+            Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
+
+            CvInvoke.Resize(img, img, new Size(224, 224));
+            CvInvoke.CvtColor(img, img, ColorConversion.Bgr2Rgb);
+
+            Dnn.Blob inputBlob = new Dnn.Blob();
+            inputBlob.BatchFromImages(img);
+            net.SetBlob(".input", inputBlob);
+            net.Forward();
+            Dnn.Blob probBlob = net.GetBlob("softmax2");
+            int classId;
+            double classProb;
+            GetMaxClass(probBlob, out classId, out classProb);
+            String[] classNames = ReadClassNames("imagenet_comp_graph_label_strings.txt");
+
+            //#if !NETFX_CORE
+            Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
+            //#endif
+            
         }
 #endif
 

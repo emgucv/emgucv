@@ -95,17 +95,33 @@ namespace Emgu.CV.Dnn
         }
 
         /// <summary>
-        /// Returns size of the thrid axis blob. 
+        /// Returns size of the third axis blob. 
         /// </summary>
         public int Rows
         {
             get { return DnnInvoke.cveDnnBlobRows(_ptr); }
         }
 
+        
+        public int ElemSize
+        {
+            get { return DnnInvoke.cveDnnBlobElemSize(_ptr); }
+        }
+
+        public CvEnum.DepthType Type
+        {
+            get { return DnnInvoke.cveDnnBlobType(_ptr); }
+        }
+
         public void BatchFromImages(IInputArray image, int dstCn = -1)
         {
             using (InputArray iaImage = image.GetInputArray())
             DnnInvoke.cveDnnBlobBatchFromImages(_ptr, iaImage, dstCn);
+        }
+
+        public IntPtr GetPtr(int n = 0, int cn = 0, int row = 0, int col = 0)
+        {
+            return DnnInvoke.cveDnnBlobGetPtr(_ptr, n, cn, row, col);
         }
     }
 
@@ -116,9 +132,7 @@ namespace Emgu.CV.Dnn
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDnnBlobCreate();
-
         
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDnnBlobCreateFromInputArray(IntPtr image);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -139,6 +153,13 @@ namespace Emgu.CV.Dnn
         internal static extern int cveDnnBlobNum(IntPtr blob);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int cveDnnBlobRows(IntPtr blob);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern CvEnum.DepthType cveDnnBlobType(IntPtr blob);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveDnnBlobElemSize(IntPtr blob);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDnnBlobGetPtr(IntPtr blob, int n, int cn, int row, int col);
     }
 }
 
