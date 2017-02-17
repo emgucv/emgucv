@@ -3149,7 +3149,15 @@ namespace Emgu.CV.Test
         public void TestDnn()
         {
             Dnn.Net net = new Dnn.Net();
-            using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("bvlc_googlenet.prototxt", "bvlc_googlenet.caffemodel"))
+            String googleNetFile = "bvlc_googlenet.caffemodel";
+            if (!File.Exists(googleNetFile))
+            {
+                //Download the bvlc googlenet file
+                String googleNetUrl = "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel";
+                System.Net.WebClient downloadClient = new System.Net.WebClient();
+                downloadClient.DownloadFile(googleNetUrl, googleNetFile);
+            }
+            using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("bvlc_googlenet.prototxt", googleNetFile))
                 importer.PopulateNet(net);
 
             Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
