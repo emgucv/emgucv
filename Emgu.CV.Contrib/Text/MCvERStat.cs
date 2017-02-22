@@ -18,6 +18,9 @@ namespace Emgu.CV.Text
     /// An ER is a 4-connected set of pixels with all its grey-level values smaller than the values in its outer boundary. 
     /// A class-specific ER is selected (using a classifier) from all the ER’s in the component tree of the image.
     /// </summary>
+#if !NETFX_CORE
+    [Serializable]
+#endif
     [StructLayout(LayoutKind.Sequential)]
     public struct MCvERStat
     {
@@ -43,6 +46,7 @@ namespace Emgu.CV.Text
         /// Euler number
         /// </summary>
         public int Euler;
+
         /// <summary>
         /// Bounding box
         /// </summary>
@@ -68,10 +72,15 @@ namespace Emgu.CV.Text
         /// Order 2 central moments to construct the covariance matrix
         /// </summary>
         public double CentralMoments2;
+
+        /// <summary>
+        /// Pointer owner to horizontal crossings
+        /// </summary>
+        public IntPtr CrossingsOwner;
         /// <summary>
         /// Pointer to horizontal crossings
         /// </summary>
-        public IntPtr Crossings;
+        public IntPtr CrossingsStored;
 
         /// <summary>
         /// Median of the crossings at three different height levels
@@ -118,11 +127,16 @@ namespace Emgu.CV.Text
         /// </summary>
         public IntPtr PrevPtr;
 
+        private byte _localMaxima;
+
         /// <summary>
         /// If or not the regions is a local maxima of the probability
         /// </summary>
-        [MarshalAs(CvInvoke.BoolMarshalType)]
-        public bool LocalMaxima;
+        public bool LocalMaxima
+        {
+            get { return _localMaxima != 0; }
+            set { _localMaxima = value ? (byte) 1 : (byte) 0; }
+        }
 
         /// <summary>
         /// Pointer to the ERStat that is the max probability ancestor

@@ -4,13 +4,18 @@
 
 using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Structure
 {
-   /// <summary>
-   /// A 2D cross
-   /// </summary>
-   public struct Cross2DF 
+    /// <summary>
+    /// A 2D cross
+    /// </summary>
+#if !NETFX_CORE
+    [Serializable]
+#endif
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Cross2DF 
    {
       private PointF _center;
       private SizeF _size;

@@ -9,9 +9,12 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Structure
 {
-   ///<summary> A circle </summary>
-   [StructLayout(LayoutKind.Sequential)]  
-   public struct CircleF : IEquatable<CircleF>
+    ///<summary> A circle </summary>
+#if !NETFX_CORE
+    [Serializable]
+#endif
+    [StructLayout(LayoutKind.Sequential)]
+    public struct CircleF : IEquatable<CircleF>
    {
       private PointF _center;
 

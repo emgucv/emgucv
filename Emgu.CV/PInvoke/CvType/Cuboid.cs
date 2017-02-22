@@ -5,13 +5,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Structure
 {
-   /// <summary>
-   /// A solid resembling a cube, with the rectangular faces not all equal; a rectangular parallelepiped.
-   /// </summary>
-   public struct Cuboid
+    /// <summary>
+    /// A solid resembling a cube, with the rectangular faces not all equal; a rectangular parallelepiped.
+    /// </summary>
+#if !NETFX_CORE
+    [Serializable]
+#endif
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Cuboid
    {
       /// <summary>
       /// The coordinate of the upper corner

@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -3167,7 +3168,6 @@ namespace Emgu.CV.Test
         [Test]
         public void TestDnnFcn8sHeavyPascal()
         {
-
             Dnn.Net net = new Dnn.Net();
             String caffeModelFile = "fcn8s-heavy-pascal.caffemodel";
             if (!File.Exists(caffeModelFile))
@@ -3190,11 +3190,36 @@ namespace Emgu.CV.Test
             net.SetBlob(".data", inputBlob);
             net.Forward();
             Dnn.Blob probBlob = net.GetBlob("score");
-            using (Mat blobData = probBlob.MatRef())
-            {
-                //should be a 1 x 21 x 500 x 500 Mat, where 21 is the number of classes.
+            IntPtr dataPtr = probBlob.GetPtr();
 
-            }
+            int channles = probBlob.Channels;
+            int rows = probBlob.Rows;
+            int cols = probBlob.Cols;
+            //should be a 1 x 21 x 500 x 500 Mat, where 21 is the number of classes.
+            float[,,] labels = new float[probBlob.Channels,probBlob.Rows,probBlob.Cols];
+            GCHandle handle = GCHandle.Alloc(labels, GCHandleType.Pinned);
+            Emgu.CV.Util.CvToolbox.Memcpy(dataPtr, handle.AddrOfPinnedObject(), sizeof(float) * probBlob.Channels * probBlob.Rows * probBlob.Cols);
+            handle.Free();
+            //Marshal.Copy(dataPtr, labels, 0, labels.Length);
+            byte[] imageData = new byte[3 * rows * cols];
+            for (int r = 0; r < rows; r++)
+                for (int c = 0; c < cols; c++)
+                {
+                    int l = 0;
+                    float maxScore = 0;
+                    for (int n = 0; n < channles; n++)
+                    {
+                        if (maxScore < labels[n, rows, cols])
+                        {
+                            maxScore = labels[n, rows, cols];
+                            l = n;
+                        }
+                        int idx = 3 * (r * cols + c);
+                        imageData[idx] = (byte)l;
+                        imageData[idx + 1] = (byte)l;
+                        imageData[idx + 2] = (byte)l;
+                    }
+                }
 
             //#if !NETFX_CORE
             //Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
@@ -3306,6 +3331,7 @@ namespace Emgu.CV.Test
         }
 #endif
 
+
         [Test]
         public void TestGetTextSize()
         {
@@ -3334,6 +3360,18 @@ namespace Emgu.CV.Test
         }
 
 #if !NETFX_CORE
+
+        [Test]
+        public void TestVectorOfCvERStat()
+        {
+            //CvInvoke.CheckLibraryLoaded();
+            int sizeOfElement = Emgu.Util.Toolbox.SizeOf<MCvERStat>();
+            using (VectorOfERStat v = new VectorOfERStat())
+            {
+
+            }
+        }
+
         [Test]
         public void TestERFilter()
         {
@@ -3365,6 +3403,8 @@ namespace Emgu.CV.Test
                 }
 
                 VectorOfERStat[] regionVecs = new VectorOfERStat[channels.Length];
+
+                
                 for (int i = 0; i < regionVecs.Length; i++)
                     regionVecs[i] = new VectorOfERStat();
 
@@ -3384,6 +3424,15 @@ namespace Emgu.CV.Test
                     using (VectorOfUMat vm = new VectorOfUMat(channels))
                     {
                         Rectangle[] regions = ERFilter.ERGrouping(image, vm, regionVecs, ERFilter.GroupingMethod.OrientationHoriz, EmguAssert.GetFile("trained_classifier_erGrouping.xml"), 0.5f);
+
+                        /*
+                        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            formatter.Serialize(ms, regionVecs);
+
+                            VectorOfERStat rv2 = formatter.Deserialize(ms) as VectorOfERStat;
+                        }*/
 
                         foreach (Rectangle rect in regions)
                             image.Draw(rect, new Bgr(0, 0, 255), 2);
