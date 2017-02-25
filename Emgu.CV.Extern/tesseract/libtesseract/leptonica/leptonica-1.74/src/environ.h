@@ -98,8 +98,8 @@ typedef uintptr_t l_uintptr_t;
  */
 #if !defined(HAVE_CONFIG_H) && !defined(ANDROID_BUILD) && !defined(OS_IOS)
 #define  HAVE_LIBJPEG     0
-#define  HAVE_LIBTIFF     0
-#define  HAVE_LIBPNG      0
+//#define  HAVE_LIBTIFF     0
+//#define  HAVE_LIBPNG      0
 #define  HAVE_LIBZ        0
 #define  HAVE_LIBGIF      0
 #define  HAVE_LIBUNGIF    0

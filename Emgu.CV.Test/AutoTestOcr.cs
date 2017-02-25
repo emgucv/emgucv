@@ -75,7 +75,8 @@ namespace Emgu.CV.Test
                     using (PDFRenderer pdfRenderer = new PDFRenderer("abc.pdf", "./", false))
                     using (Pix imgPix = new Pix(img.Mat))
                     {
-                        ocr.ProcessPage(imgPix, 1, "img", null, 100000, pdfRenderer);
+                        bool success =ocr.ProcessPage(imgPix, 1, "img", null, 100000, pdfRenderer);
+                        EmguAssert.IsTrue(success, "failed to export pdf");
                     }
 
 

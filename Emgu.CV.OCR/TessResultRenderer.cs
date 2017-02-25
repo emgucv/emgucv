@@ -17,8 +17,14 @@ using System.Diagnostics;
 
 namespace Emgu.CV.OCR
 {
+    /// <summary>
+    /// Interface to the TesseractResultRender
+    /// </summary>
     public interface ITessResultRenderer
     {
+        /// <summary>
+        /// Pointer to the unmanaged TessResultRendered
+        /// </summary>
         IntPtr TessResultRendererPtr { get; }
     }
 
@@ -35,12 +41,19 @@ namespace Emgu.CV.OCR
             }
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this Renderer
+        /// </summary>
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
                 OcrInvoke.TessPDFRendererRelease(ref _ptr);
+            _tessResultRendererPtr = IntPtr.Zero;
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged TessResultRendered
+        /// </summary>
         public IntPtr TessResultRendererPtr
         {
             get

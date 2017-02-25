@@ -25,7 +25,7 @@ namespace OCR
         public OCRForm()
         {
             InitializeComponent();
-            InitOcr("", "eng", OcrEngineMode.TesseractOnly);
+            InitOcr("", "eng", OcrEngineMode.TesseractLstmCombined);
             ocrOptionsComboBox.SelectedIndex = 0;
 
             Mat img = new Mat(200, 400, DepthType.Cv8U, 3); //Create a 3 channel image of 400x200

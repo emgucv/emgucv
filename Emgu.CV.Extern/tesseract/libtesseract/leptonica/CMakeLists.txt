@@ -50,6 +50,21 @@ ELSEIF(IOS OR APPLE)
 	add_definitions(-DOS_IOS)
 ENDIF()
 
+MESSAGE(STATUS "leptonica HAVE_LIBPNG: ${BUILD_PNG}")
+if(BUILD_PNG)
+  add_definitions(-DHAVE_LIBPNG)
+  #add_definitions(${PNG_DEFINITIONS})
+  include_directories(${OPENCV_SUBFOLDER}/3rdparty/libpng)
+endif()
+
+MESSAGE(STATUS "leptonica HAVE_LIBTIFF: ${BUILD_TIFF}")
+if(BUILD_TIFF)
+  add_definitions(-DHAVE_LIBTIFF)
+  #add_definitions(${PNG_DEFINITIONS})
+  include_directories(${OPENCV_SUBFOLDER}/3rdparty/libtiff)
+endif()
+
+
 add_library(${the_target} STATIC ${lepton_srcs} ${lepton_hdrs})
 
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
