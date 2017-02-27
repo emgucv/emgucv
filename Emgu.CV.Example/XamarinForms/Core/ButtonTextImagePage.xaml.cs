@@ -158,7 +158,7 @@ namespace Emgu.CV.XamarinForms
 	      {
 	         CvInvoke.Imencode(".jpg", image, vb);
 	         byte[] rawData = vb.ToArray();
-	            this.DisplayImage.Source = ImageSource.FromStream(() => new MemoryStream(rawData));
+	         this.DisplayImage.Source = ImageSource.FromStream(() => new MemoryStream(rawData));
 	      }
 	   }
 

@@ -172,6 +172,17 @@ namespace AndroidExamples
             return null;
         }
 
+        protected void SetProgressMessage(String message)
+        {
+            if (_progress != null)
+            {
+                RunOnUiThread(() =>
+                {
+                    _progress.SetMessage(message);
+                });
+            }
+        }
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -195,10 +206,10 @@ namespace AndroidExamples
 
                     ThreadPool.QueueUserWorkItem(delegate
                  {
-                      try
-                      {
-                          OnButtonClick(sender, e);
-                      }
+                     try
+                     {
+                         OnButtonClick(sender, e);
+                     }
 #if !DEBUG
                   catch (Exception excpt)
                   {
@@ -217,11 +228,11 @@ namespace AndroidExamples
                      });
                   }
 #endif
-                   finally
-                      {
-                          RunOnUiThread(_progress.Hide);
-                      }
-                  }
+                     finally
+                     {
+                         RunOnUiThread(_progress.Hide);
+                     }
+                 }
                  );
                 }
             };

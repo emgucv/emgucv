@@ -101,7 +101,7 @@ namespace Emgu.CV.XamarinForms
 
          eyeFile = preference.GetString("cascade-eye-data-path", null);
          faceFile = preference.GetString("cascade-face-data-path", null);
-         return true;
+         return File.Exists(eyeFile) && File.Exists(faceFile);
 #else
          faceFile = face;
          eyeFile = eye;

@@ -160,9 +160,6 @@
     <Content Include="..\PedestrianDetection\pedestrian.png">
       <Link>pedestrian.png</Link>
     </Content>
-    <Content Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
-      <Link>tessdata\eng.traineddata</Link>
-    </Content>
     <Content Include="..\LicensePlateRecognition\license-plate.jpg">
       <Link>license-plate.jpg</Link>
     </Content>

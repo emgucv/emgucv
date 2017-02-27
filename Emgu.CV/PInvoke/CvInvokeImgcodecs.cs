@@ -158,7 +158,7 @@ namespace Emgu.CV
       /// <param name="ext">The image format</param>
       /// <param name="image">The image</param>
       /// <param name="buf">Output buffer resized to fit the compressed image.</param>
-      /// <param name="parameters">The pointer to the array of intergers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
+      /// <param name="parameters">The pointer to the array of integers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
       public static void Imencode(String ext, IInputArray image, VectorOfByte buf, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
       {
          using (CvString extStr = new CvString(ext))

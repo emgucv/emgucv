@@ -18,7 +18,7 @@
     <AndroidStoreUncompressedFileExtensions>.size%3b.traineddata</AndroidStoreUncompressedFileExtensions>
     <MandroidI18n />
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
-    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <JavaMaximumHeapSize />
     <JavaOptions />
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
@@ -118,9 +118,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
-      <Link>Assets\tessdata\eng.traineddata</Link>
-    </AndroidAsset>
     <AndroidResource Include="..\..\opencv\LICENSE">
       <Link>Resources\Raw\LICENSE</Link>
     </AndroidResource>

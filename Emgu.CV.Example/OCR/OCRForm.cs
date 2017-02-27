@@ -42,6 +42,29 @@ namespace OCR
             OcrImage(img);
         }
 
+        private static void TesseractDownloadLangFile(String folder, String lang)
+        {
+            String subfolderName = "tessdata";
+            String folderName = System.IO.Path.Combine(folder, subfolderName);
+            if (!System.IO.Directory.Exists(folderName))
+            {
+                System.IO.Directory.CreateDirectory(folderName);
+            }
+            String dest = System.IO.Path.Combine(folderName, String.Format("{0}.traineddata", lang));
+            if (!System.IO.File.Exists(dest))
+                using (System.Net.WebClient webclient = new System.Net.WebClient())
+                {
+                    String source =
+                        String.Format("https://github.com/tesseract-ocr/tessdata/blob/4592b8d453889181e01982d22328b5846765eaad/{0}.traineddata?raw=true", lang);
+
+                    Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
+                    webclient.DownloadFile(source, dest);
+                    Console.WriteLine(String.Format("Download completed"));
+                }
+        }
+
+        
+
         private void InitOcr(String path, String lang, OcrEngineMode mode)
         {
             try
@@ -51,7 +74,18 @@ namespace OCR
                     _ocr.Dispose();
                     _ocr = null;
                 }
-                _ocr = new Tesseract(path, lang, mode);
+
+                if (String.IsNullOrEmpty(path))
+                    path = ".";
+                
+                TesseractDownloadLangFile(path, lang);
+                TesseractDownloadLangFile(path, "osd"); //script orientation detection
+                String pathFinal = path.Length == 0 || path.Substring(path.Length - 1, 1).Equals(Path.DirectorySeparatorChar.ToString())
+                    ? path
+                    : String.Format("{0}{1}", path, System.IO.Path.DirectorySeparatorChar);
+                    
+                _ocr = new Tesseract(pathFinal, lang, mode);
+                
                 languageNameLabel.Text = String.Format("{0} : {1}", lang, mode.ToString());
             }
             catch (Exception e)

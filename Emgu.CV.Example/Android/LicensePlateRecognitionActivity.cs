@@ -23,83 +23,105 @@ using System.IO;
 
 namespace AndroidExamples
 {
-   [Activity(Label = "License Plate Recognition")]
-   public class LicensePlateRecognitionActivity : ButtonMessageImageActivity
-   {
-      public LicensePlateRecognitionActivity()
-         : base("Detect License Plate")
-      {
-      }
+    [Activity(Label = "License Plate Recognition")]
+    public class LicensePlateRecognitionActivity : ButtonMessageImageActivity
+    {
+        public LicensePlateRecognitionActivity()
+           : base("Detect License Plate")
+        {
+        }
 
-      protected override void OnCreate(Bundle bundle)
-      {
-         base.OnCreate(bundle);
-
-         OnImagePicked += (sender, image) =>
-         {
-            if (image == null)
-               return;
-
-            ISharedPreferences preference = PreferenceManager.GetDefaultSharedPreferences(ApplicationContext);
-            String appVersion = PackageManager.GetPackageInfo(PackageName, Android.Content.PM.PackageInfoFlags.Activities).VersionName;
-            if (!preference.Contains("tesseract-data-version") || !preference.GetString("tesseract-data-version", null).Equals(appVersion)
-               || !preference.Contains("tesseract-data-path"))
+        private static void TesseractDownloadLangFile(String folder, String lang)
+        {
+            String subfolderName = "tessdata";
+            String folderName = System.IO.Path.Combine(folder, subfolderName);
+            if (!System.IO.Directory.Exists(folderName))
             {
-               AndroidFileAsset.OverwriteMethod overwriteMethod = AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;
-
-               FileInfo a8 = AndroidFileAsset.WritePermanantFileAsset(this, "tessdata/eng.traineddata", "tmp", overwriteMethod);
-               FileInfo a0 = AndroidFileAsset.WritePermanantFileAsset(this, "tessdata/eng.cube.bigrams", "tmp", overwriteMethod);
-               FileInfo a1 = AndroidFileAsset.WritePermanantFileAsset(this, "tessdata/eng.cube.fold", "tmp", overwriteMethod);
-               FileInfo a2 = AndroidFileAsset.WritePermanantFileAsset(this, "tessdata/eng.cube.lm", "tmp", overwriteMethod);
-               FileInfo a3 = AndroidFileAsset.WritePermanantFileAsset(this, "tessdata/eng.cube.nn", "tmp", overwriteMethod);
-               FileInfo a4 = AndroidFileAsset.WritePermanantFileAsset(this, "tessdata/eng.cube.params", "tmp", overwriteMethod);
-               FileInfo a5 = AndroidFileAsset.WritePermanantFileAsset(this, "tessdata/eng.cube.size", "tmp", overwriteMethod);
-               FileInfo a6 = AndroidFileAsset.WritePermanantFileAsset(this, "tessdata/eng.cube.word-freq", "tmp", overwriteMethod);
-               FileInfo a7 = AndroidFileAsset.WritePermanantFileAsset(this, "tessdata/eng.tesseract_cube.nn", "tmp", overwriteMethod);
-
-               //save tesseract data path
-               ISharedPreferencesEditor editor = preference.Edit();
-               editor.PutString("tesseract-data-version", appVersion);
-               editor.PutString("tesseract-data-path", System.IO.Path.Combine(a0.DirectoryName, "..") + System.IO.Path.DirectorySeparatorChar);
-               editor.Commit();
+                System.IO.Directory.CreateDirectory(folderName);
             }
+            String dest = System.IO.Path.Combine(folderName, String.Format("{0}.traineddata", lang));
+            if (!System.IO.File.Exists(dest))
+                using (System.Net.WebClient webclient = new System.Net.WebClient())
+                {
+                    String source =
+                        String.Format("https://github.com/tesseract-ocr/tessdata/blob/4592b8d453889181e01982d22328b5846765eaad/{0}.traineddata?raw=true", lang);
 
-            LicensePlateDetector detector = new LicensePlateDetector(preference.GetString("tesseract-data-path", null));
-            Stopwatch watch = Stopwatch.StartNew(); // time the detection process
+                    Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
+                    webclient.DownloadFile(source, dest);
+                    Console.WriteLine(String.Format("Download completed"));
+                }
+        }
 
-            List<IInputOutputArray> licensePlateImagesList = new List<IInputOutputArray>();
-            List<IInputOutputArray> filteredLicensePlateImagesList = new List<IInputOutputArray>();
-            List<RotatedRect> licenseBoxList = new List<RotatedRect>();
-            List<string> words = detector.DetectLicensePlate(
-               image,
-               licensePlateImagesList,
-               filteredLicensePlateImagesList,
-               licenseBoxList);
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
 
-            watch.Stop(); //stop the timer
-
-            StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("{0} milli-seconds. ", watch.Elapsed.TotalMilliseconds));
-            foreach (String w in words)
-               builder.AppendFormat("{0} ", w);
-            SetMessage(builder.ToString());
-
-            foreach (RotatedRect box in licenseBoxList)
+            OnImagePicked += (sender, image) =>
             {
-               Rectangle rect = box.MinAreaRect();
-               CvInvoke.Rectangle(image, rect, new Bgr(System.Drawing.Color.Red).MCvScalar, 2);
-            }
+                if (image == null)
+                    return;
 
-            SetImageBitmap(image.ToBitmap());
-            image.Dispose();
-         };
+                String path = this.FilesDir.AbsolutePath;
+
+                try
+                {
+                    SetProgressMessage("Checking Tesseract Lang files...");
+                    TesseractDownloadLangFile(path, "eng");
+                    TesseractDownloadLangFile(path, "osd");
+                    SetProgressMessage("Please wait ...");
+                }
+                catch (System.Net.WebException e)
+                {
+                    SetMessage("Unable to download tesseract language file from Internet, please check your Internet connection.");
+                    Console.WriteLine(e);
+                    return;
+                }
+                catch (Exception e)
+                {
+                    SetMessage(e.ToString());
+                    Console.WriteLine(e);
+                    return;
+                }
 
 
-         OnButtonClick += delegate
-         {
-            PickImage("license-plate.jpg");
+                LicensePlateDetector detector = new LicensePlateDetector(path + System.IO.Path.DirectorySeparatorChar);
 
-         };
-      }
-   }
+
+                Stopwatch watch = Stopwatch.StartNew(); // time the detection process
+
+                List<IInputOutputArray> licensePlateImagesList = new List<IInputOutputArray>();
+                List<IInputOutputArray> filteredLicensePlateImagesList = new List<IInputOutputArray>();
+                List<RotatedRect> licenseBoxList = new List<RotatedRect>();
+                List<string> words = detector.DetectLicensePlate(
+                image,
+                licensePlateImagesList,
+                filteredLicensePlateImagesList,
+                licenseBoxList);
+
+                watch.Stop(); //stop the timer
+
+                StringBuilder builder = new StringBuilder();
+                builder.Append(String.Format("{0} milli-seconds. ", watch.Elapsed.TotalMilliseconds));
+                foreach (String w in words)
+                    builder.AppendFormat("{0} ", w);
+                SetMessage(builder.ToString());
+
+                foreach (RotatedRect box in licenseBoxList)
+                {
+                    Rectangle rect = box.MinAreaRect();
+                    CvInvoke.Rectangle(image, rect, new Bgr(System.Drawing.Color.Red).MCvScalar, 2);
+                }
+
+                SetImageBitmap(image.ToBitmap());
+                image.Dispose();
+            };
+
+
+            OnButtonClick += delegate
+            {
+                PickImage("license-plate.jpg");
+
+            };
+        }
+    }
 }
