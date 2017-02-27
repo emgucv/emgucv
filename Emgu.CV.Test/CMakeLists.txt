@@ -15,6 +15,8 @@ FILE(GLOB_RECURSE SRC_CV_TEST_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 "Emgu.CV.Test.Android/*.cs" "Emgu.CV.Test.Android/Resources/*.cs" "Emgu.CV.Test.Android/Properties/*.cs" 
 "Emgu.CV.Test.iOS/*.cs"
 "Emgu.CV.Test.UWP/*.cs"
+"Emgu.CV.Test/obj/Debug/*.cs"
+"Emgu.CV.Test/obj/Release/*.cs"
 "Emgu.CV.Test.Windows.Phone/Properties/*.cs" 
 "Emgu.CV.Test.Windows.Store/Properties/*.cs")
 LIST(REMOVE_ITEM SRC_CV_TEST ${SRC_CV_TEST_EXCLUDES})
@@ -54,9 +56,12 @@ FOREACH(FILE ${SRC_CV_TEST_DATA})
 	ADD_CS_FILE_TO_DEPLOY(${FILE})
 ENDFOREACH()
 
-SET_CS_TARGET_FRAMEWORK(${CSC_TARGET_FRAMEWORK})
+
+SET_CS_TARGET_FRAMEWORK("4.0")
 ADD_CS_REFERENCES("${LIBRARY_OUTPUT_PATH}/Emgu.CV.World.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll;${LIBRARY_OUTPUT_PATH}/Emgu.UI.dll;${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.GL.dll;${CMAKE_CURRENT_SOURCE_DIR}/../lib/nunit.framework.dll")
-ADD_CS_FRAMEWORK_REFERENCES("${CSC_TARGET_FRAMEWORK}" "System.Windows.Forms.dll")
+ADD_CS_FRAMEWORK_REFERENCES("4.0" "System.Windows.Forms.dll")
+ADD_CS_FRAMEWORK_REFERENCES("4.0" "System.IO.Compression.dll")
+ADD_CS_FRAMEWORK_REFERENCES("4.0" "System.IO.Compression.FileSystem.dll")
 COMPILE_CS(${PROJECT_NAME} "library" "${SRC_CV_TEST}")
 
 if(ENABLE_SOLUTION_FOLDERS)
