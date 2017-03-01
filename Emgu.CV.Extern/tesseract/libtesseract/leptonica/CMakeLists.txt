@@ -50,12 +50,14 @@ ELSEIF(IOS OR APPLE)
 	add_definitions(-DOS_IOS)
 ENDIF()
 
-MESSAGE(STATUS "leptonica HAVE_LIBJPEG: ${BUILD_JPEG}")
-if(BUILD_PNG)
-  add_definitions(-DHAVE_LIBJPEG)
-  include_directories(${OPENCV_SUBFOLDER}/3rdparty/libjpeg)
+if (NOT ANDROID)
+	MESSAGE(STATUS "leptonica HAVE_LIBJPEG: ${BUILD_JPEG}")
+	if(BUILD_JPEG)
+	  add_definitions(-DHAVE_LIBJPEG)
+	  include_directories(${OPENCV_SUBFOLDER}/3rdparty/libjpeg)
+	endif()
 endif()
-
+	
 MESSAGE(STATUS "leptonica HAVE_LIBPNG: ${BUILD_PNG}")
 if(BUILD_PNG)
   add_definitions(-DHAVE_LIBPNG)
@@ -68,6 +70,7 @@ if(BUILD_TIFF)
   add_definitions(-DHAVE_LIBTIFF)
   #add_definitions(${PNG_DEFINITIONS})
   include_directories(${OPENCV_SUBFOLDER}/3rdparty/libtiff)
+  include_directories(${CMAKE_BINARY_DIR}/opencv/3rdparty/libtiff)
 endif()
 
 
