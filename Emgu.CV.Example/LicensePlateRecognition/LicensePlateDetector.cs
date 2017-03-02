@@ -205,6 +205,9 @@ namespace LicensePlateRecognition
                             {
                                 _ocr.SetImage(tmp);
                                 _ocr.Recognize();
+
+                                strBuilder.Append(_ocr.GetUTF8Text());
+                                /*
                                 words = _ocr.GetCharacters();
 
                                 if (words.Length == 0) continue;
@@ -212,7 +215,7 @@ namespace LicensePlateRecognition
                                 for (int i = 0; i < words.Length; i++)
                                 {
                                     strBuilder.Append(words[i].Text);
-                                }
+                                }*/
                             }
 
                             licenses.Add(strBuilder.ToString());
