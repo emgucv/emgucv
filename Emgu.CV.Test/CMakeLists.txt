@@ -9,17 +9,18 @@ PROJECT(Emgu.CV.Test)
 FILE(GLOB_RECURSE SRC_CV_TEST RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cs")
 LIST(APPEND SRC_CV_TEST ${CMAKE_CURRENT_SOURCE_DIR}/../CommonAssemblyInfo.cs)
 
-#Remove android or ios specific files
+#Remove android or ios specific files, or windows temporary generated files.
 FILE(GLOB_RECURSE SRC_CV_TEST_EXCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
 "Class1.cs" 
 "Emgu.CV.Test.Android/*.cs" "Emgu.CV.Test.Android/Resources/*.cs" "Emgu.CV.Test.Android/Properties/*.cs" 
 "Emgu.CV.Test.iOS/*.cs"
 "Emgu.CV.Test.UWP/*.cs"
-"Emgu.CV.Test/obj/Debug/*.cs"
-"Emgu.CV.Test/obj/Release/*.cs"
+"obj/Debug/*.cs"
+"obj/Release/*.cs"
 "Emgu.CV.Test.Windows.Phone/Properties/*.cs" 
 "Emgu.CV.Test.Windows.Store/Properties/*.cs")
 LIST(REMOVE_ITEM SRC_CV_TEST ${SRC_CV_TEST_EXCLUDES})
+
 IF (NOT EMGU_CV_WITH_TESSERACT)
   FILE(GLOB_RECURSE SRC_TESSERACT_TEST RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     "AutoTestOcr.cs" 

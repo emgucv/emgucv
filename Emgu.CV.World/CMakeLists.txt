@@ -127,7 +127,6 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 	  COMPONENT emgucv_source
 	  FILES_MATCHING 
 	  
-	  PATTERN "tessdata/*"
 	  PATTERN "*.cs"
 	  PATTERN "*.resx"
 	  PATTERN ".svn" EXCLUDE

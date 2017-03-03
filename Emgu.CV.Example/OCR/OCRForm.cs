@@ -63,8 +63,6 @@ namespace OCR
                 }
         }
 
-        
-
         private void InitOcr(String path, String lang, OcrEngineMode mode)
         {
             try
