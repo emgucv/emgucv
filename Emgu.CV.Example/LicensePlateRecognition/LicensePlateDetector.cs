@@ -175,10 +175,10 @@ namespace LicensePlateRecognition
                             PointF[] srcCorners = box.GetVertices();
 
                             PointF[] destCorners = new PointF[] {
-                        new PointF(0, box.Size.Height - 1),
-                        new PointF(0, 0),
-                        new PointF(box.Size.Width - 1, 0),
-                        new PointF(box.Size.Width - 1, box.Size.Height - 1)};
+                                new PointF(0, box.Size.Height - 1),
+                                new PointF(0, 0),
+                                new PointF(box.Size.Width - 1, 0),
+                                new PointF(box.Size.Width - 1, box.Size.Height - 1)};
 
                             using (Mat rot = CvInvoke.GetAffineTransform(srcCorners, destCorners))
                             {
@@ -192,7 +192,7 @@ namespace LicensePlateRecognition
                             CvInvoke.Resize(tmp1, tmp2, newSize, 0, 0, Inter.Cubic);
 
                             //removes some pixels from the edge
-                            int edgePixelSize = 2;
+                            int edgePixelSize = 3;
                             Rectangle newRoi = new Rectangle(new Point(edgePixelSize, edgePixelSize),
                                tmp2.Size - new Size(2 * edgePixelSize, 2 * edgePixelSize));
                             UMat plate = new UMat(tmp2, newRoi);
@@ -250,11 +250,10 @@ namespace LicensePlateRecognition
                 CvInvoke.FindContours(plateCanny, contours, null, RetrType.External, ChainApproxMethod.ChainApproxSimple);
 
                 int count = contours.Size;
-                for (int i = 1; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     using (VectorOfPoint contour = contours[i])
                     {
-
                         Rectangle rect = CvInvoke.BoundingRectangle(contour);
                         if (rect.Height > (plateSize.Height >> 1))
                         {

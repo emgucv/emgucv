@@ -137,11 +137,11 @@ void TessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<unsigned char>* ch
 		tr.region.width = x1[i] - x0[i];
 		tr.region.height = y1[i] - y0[i];
 		resultSeq->push_back(tr);
-		//cvSeqPush(resultSeq, &tr);
 	}
+
+	charSeq->resize(totalTextLength);
 	if (n > 0)
 	{
-		charSeq->resize(totalTextLength);
 		memcpy(&(*charSeq)[0], text, totalTextLength);
 	}
 
