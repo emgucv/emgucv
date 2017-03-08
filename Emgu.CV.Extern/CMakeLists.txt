@@ -1801,6 +1801,18 @@ if(NETFX_CORE)
   endif()
 endif()
 
+if(BUILD_PNG)
+  target_link_libraries(${the_target} libpng)
+endif()
+
+if(BUILD_TIFF)
+  target_link_libraries(${the_target} libtiff)
+endif()
+
+if(BUILD_JPEG)
+  target_link_libraries(${the_target} libjpeg)
+endif()
+
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
   ${ZLIB_LIBRARY} 
@@ -1820,7 +1832,7 @@ ENDIF()
 #  target_link_libraries(${the_target} ippdc_l)
 #ENDIF()  
 
-IF(TESSERACT_OPENCL)
+IF(EMGU_CV_WITH_TESSERACT AND TESSERACT_OPENCL)
   #SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${OPENCV_SUBFOLDER}/cmake/")
   #include(${OPENCV_SUBFOLDER}/cmake/OpenCVDetectOpenCL.cmake)
   #MESSAGE(STATUS "OPENCVL_LIBRARIES: ${OPENCV_LIBRARIES}")
