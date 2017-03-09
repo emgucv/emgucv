@@ -123,7 +123,7 @@ namespace Emgu.CV
         public void CopyTo<T>(T[] data)
         {
             Debug.Assert(Toolbox.SizeOf<T>() * data.Length >= Total.ToInt32() * ElementSize,
-               String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), data.Length));
+               String.Format("Insufficient data size, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), data.Length));
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             MatInvoke.cveMatCopyDataTo(this, handle.AddrOfPinnedObject());
             handle.Free();
