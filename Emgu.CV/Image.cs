@@ -88,6 +88,10 @@ namespace Emgu.CV
         internal void MapDataToImage(int width, int height, int stride, IntPtr scan0)
         {
             _ptr = CvInvoke.cvCreateImageHeader(new Size(width, height), CvDepth, NumberOfChannels);
+
+            _imageDataReleaseMode = ImageDataReleaseMode.ReleaseHeaderOnly;
+            GC.AddMemoryPressure(StructSize.MIplImage);
+
             MIplImage iplImage = MIplImage;
             iplImage.ImageData = scan0;
             iplImage.WidthStep = stride;
