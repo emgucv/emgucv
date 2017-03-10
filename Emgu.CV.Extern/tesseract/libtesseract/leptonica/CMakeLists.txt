@@ -50,7 +50,7 @@ ELSEIF(IOS OR APPLE)
 	add_definitions(-DOS_IOS)
 ENDIF()
 
-if (NOT ANDROID)
+if (NOT (ANDROID OR APPLE))
 	MESSAGE(STATUS "leptonica HAVE_LIBJPEG: ${BUILD_JPEG}")
 	if(BUILD_JPEG)
 	  add_definitions(-DHAVE_LIBJPEG)
