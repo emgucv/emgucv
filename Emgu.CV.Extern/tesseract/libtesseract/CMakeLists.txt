@@ -129,7 +129,7 @@ IF(MSVC)
 
   IF(TESSERACT_OPENCL)
     add_definitions(-DUSE_OPENCL)
-    include_directories("${OPENCV_SUBFOLDER}/3rdparty/libtiff")
+    #include_directories("${OPENCV_SUBFOLDER}/3rdparty/libtiff")
     include_directories("${CMAKE_SOURCE_DIR}/lib/opencl-icd-1.2.11.0/icd/inc")
   ENDIF()
   include_directories("${TESSERACT_DIR}/vs2010/include")
