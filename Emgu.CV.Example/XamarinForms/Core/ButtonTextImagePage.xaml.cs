@@ -18,9 +18,12 @@ namespace Emgu.CV.XamarinForms
 {
 	public partial class ButtonTextImagePage : ContentPage
 	{
-		public ButtonTextImagePage ()
+		public ButtonTextImagePage()
 		{
+#if __UNIFIED__ && !__IOS__ //Xamarin Mac
+#else
 			InitializeComponent ();
+#endif
 		}
 
 #if __ANDROID__ || __IOS__
@@ -33,7 +36,7 @@ namespace Emgu.CV.XamarinForms
 
       public virtual async void LoadImages(String[] imageNames, String[] labels = null)
       {
-#if NETFX_CORE
+#if NETFX_CORE || (__UNIFIED__ && !__IOS__) //NETFX or Xamarin Mac
          Mat[] mats = new Mat[imageNames.Length];
          for (int i = 0; i < mats.Length; i++)
             mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
@@ -152,7 +155,7 @@ namespace Emgu.CV.XamarinForms
 	      if (image == null)
 	      {
 	         this.DisplayImage.Source = null;
-	         return;
+	         //return;
 	      }
 	      using (VectorOfByte vb = new VectorOfByte())
 	      {
@@ -164,12 +167,14 @@ namespace Emgu.CV.XamarinForms
 
 	   public Label GetLabel()
 	   {
-	      return MessageLabel;
+			//return null;
+	      return this.MessageLabel;
 	   }
 
 	   public Button GetButton()
 	   {
-	      return TopButton;
+			//return null;
+	      return this.TopButton;
 	   }
 	}
 }
