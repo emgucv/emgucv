@@ -2,7 +2,6 @@
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-
 using Emgu.CV.Util;
 using System;
 using System.Collections.Generic;
@@ -17,13 +16,23 @@ using System.Diagnostics;
 
 namespace Emgu.CV.OCR
 {
+    /// <summary>
+    /// Leptonica Pix image structure
+    /// </summary>
     public class Pix : UnmanagedObject
     {
+        /// <summary>
+        /// Create a Pix object by coping data from Mat
+        /// </summary>
+        /// <param name="mat">The Mat to create the Pix object from</param>
         public Pix(Mat mat)
         {
             _ptr = OcrInvoke.leptCreatePixFromMat(mat);
         }
 
+        /// <summary>
+        /// Release all the unmanaged memory associated with this Pix
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)

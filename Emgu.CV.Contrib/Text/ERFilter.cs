@@ -160,7 +160,7 @@ namespace Emgu.CV.Text
         /// </summary>
         RGBLGrad,
         /// <summary>
-        /// In N&M algorithm, the combination of intensity (I), hue (H), saturation (S), and gradient magnitude
+        /// In N&amp;M algorithm, the combination of intensity (I), hue (H), saturation (S), and gradient magnitude
         /// channels (Grad) are used in order to obtain high localization recall. 
         /// </summary>
         IHSGrad
@@ -229,7 +229,7 @@ namespace Emgu.CV.Text
             IntPtr regions);
 
         /// <summary>
-        /// Compute the different channels to be processed independently in the N&M algorithm.
+        /// Compute the different channels to be processed independently in the N&amp;M algorithm.
         /// </summary>
         /// <param name="src">Source image. Must be RGB CV_8UC3.</param>
         /// <param name="channels">Output vector of Mat where computed channels are stored.</param>

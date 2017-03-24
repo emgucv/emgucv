@@ -448,6 +448,16 @@ namespace Emgu.CV.OCR
             public Rectangle Region;
         }
 
+        /// <summary>
+        /// Turn a single image into symbolic text.
+        /// </summary>
+        /// <param name="pix">The pix is the image processed.</param>
+        /// <param name="pageIndex">Metadata used by side-effect processes, such as reading a box file or formatting as hOCR.</param>
+        /// <param name="filename">Metadata used by side-effect processes, such as reading a box file or formatting as hOCR.</param>
+        /// <param name="retryConfig">retryConfig is useful for debugging. If not NULL, you can fall back to an alternate configuration if a page fails for some reason.</param>
+        /// <param name="timeoutMillisec">terminates processing if any single page takes too long. Set to 0 for unlimited time.</param>
+        /// <param name="renderer">Responible for creating the output. For example, use the TessTextRenderer if you want plaintext output, or the TessPDFRender to produce searchable PDF.</param>
+        /// <returns>Returns true if successful, false on error.</returns>
         public bool ProcessPage(
             Pix pix,
             int pageIndex,

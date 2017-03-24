@@ -35,6 +35,9 @@ namespace Emgu.CV.Dnn
                 _ptr = DnnInvoke.cveDnnBlobCreateFromInputArray(iaImage);
         }
 
+        /// <summary>
+        /// Create an empty Blob
+        /// </summary>
         public Blob()
         {
             _ptr = DnnInvoke.cveDnnBlobCreate();
@@ -102,23 +105,41 @@ namespace Emgu.CV.Dnn
             get { return DnnInvoke.cveDnnBlobRows(_ptr); }
         }
 
-        
+        /// <summary>
+        /// Returns size of single element in bytes.
+        /// </summary>
         public int ElemSize
         {
             get { return DnnInvoke.cveDnnBlobElemSize(_ptr); }
         }
 
+        /// <summary>
+        /// Returns type of the blob.
+        /// </summary>
         public CvEnum.DepthType Type
         {
             get { return DnnInvoke.cveDnnBlobType(_ptr); }
         }
 
+        /// <summary>
+        ///  Constructs 4-dimensional blob (so-called batch) from image or array of images.
+        /// </summary>
+        /// <param name="image">2-dimensional multi-channel or 3-dimensional single-channel image (or array of such images)</param>
+        /// <param name="dstCn">specifies size of second axis of output blob</param>
         public void BatchFromImages(IInputArray image, int dstCn = -1)
         {
             using (InputArray iaImage = image.GetInputArray())
             DnnInvoke.cveDnnBlobBatchFromImages(_ptr, iaImage, dstCn);
         }
 
+        /// <summary>
+        /// Returns pointer to the blob element with the specified position, stored in CPU memory.
+        /// </summary>
+        /// <param name="n">correspond to the first axis</param>
+        /// <param name="cn">correspond to the second axis</param>
+        /// <param name="row">correspond to the 3rd axis</param>
+        /// <param name="col">correspond to the 4th axis</param>
+        /// <returns></returns>
         public IntPtr GetPtr(int n = 0, int cn = 0, int row = 0, int col = 0)
         {
             return DnnInvoke.cveDnnBlobGetPtr(_ptr, n, cn, row, col);

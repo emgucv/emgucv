@@ -258,6 +258,9 @@ namespace Emgu.CV.Bioinspired
         }
     }
 
+    /// <summary>
+    /// Entry points to the Open CV bioinspired module
+    /// </summary>
     public static partial class BioinspiredInvoke
     {
         static BioinspiredInvoke()

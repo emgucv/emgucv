@@ -28,10 +28,19 @@ namespace Emgu.CV.OCR
         IntPtr TessResultRendererPtr { get; }
     }
 
+    /// <summary>
+    /// Renders tesseract output into searchable PDF
+    /// </summary>
     public class PDFRenderer : UnmanagedObject, ITessResultRenderer
     {
         private IntPtr _tessResultRendererPtr;
 
+        /// <summary>
+        /// Create a PDF renderer
+        /// </summary>
+        /// <param name="outputBase"></param>
+        /// <param name="dataDir">dataDir is the location of the TESSDATA. We need it because we load a custom PDF font from this location.</param>
+        /// <param name="textOnly"></param>
         public PDFRenderer(String outputBase, String dataDir, bool textOnly)
         {
             using (CvString csOutputBase = new CvString(outputBase))
