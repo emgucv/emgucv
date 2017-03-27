@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 7f605394133ffa34bb8c61346d32dd3f
-timeCreated: 1484672800
+guid: d35fdac8af584cd42b6f12069b84af12
+timeCreated: 1490626926
 licenseType: Pro
 PluginImporter:
   serializedVersion: 1
@@ -25,24 +25,24 @@ PluginImporter:
         Exclude OSXIntel64: 0
         Exclude OSXUniversal: 0
         Exclude WebGL: 1
-        Exclude Win: 0
-        Exclude Win64: 1
+        Exclude Win: 1
+        Exclude Win64: 0
         Exclude WindowsStoreApps: 1
         Exclude iOS: 1
     Editor:
       enabled: 1
       settings:
-        CPU: x86
+        CPU: x86_64
         DefaultValueInitialized: true
         OS: Windows
     Linux:
       enabled: 1
       settings:
-        CPU: x86
+        CPU: None
     Linux64:
       enabled: 1
       settings:
-        CPU: None
+        CPU: x86_64
     LinuxUniversal:
       enabled: 1
       settings:
@@ -50,26 +50,23 @@ PluginImporter:
     OSXIntel:
       enabled: 1
       settings:
-        CPU: AnyCPU
+        CPU: None
     OSXIntel64:
       enabled: 1
       settings:
-        CPU: None
+        CPU: AnyCPU
     OSXUniversal:
       enabled: 1
       settings:
         CPU: AnyCPU
-    WebGL:
-      enabled: 0
-      settings: {}
     Win:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
-    Win64:
       enabled: 0
       settings:
         CPU: None
+    Win64:
+      enabled: 1
+      settings:
+        CPU: AnyCPU
     WindowsStoreApps:
       enabled: 0
       settings:

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 7f605394133ffa34bb8c61346d32dd3f
-timeCreated: 1484672800
+guid: 482bc8b6b83359d489889d194149bc09
+timeCreated: 1490626926
 licenseType: Pro
 PluginImporter:
   serializedVersion: 1
@@ -59,9 +59,6 @@ PluginImporter:
       enabled: 1
       settings:
         CPU: AnyCPU
-    WebGL:
-      enabled: 0
-      settings: {}
     Win:
       enabled: 1
       settings:
