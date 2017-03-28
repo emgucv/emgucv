@@ -17,7 +17,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
 
-#if NETFX_CORE
+#if NETFX_CORE && (!UNITY_EDITOR) 
 using System.Threading.Tasks;
 using System.Net.Http;
 #else
@@ -29,7 +29,7 @@ public class Ocr : MonoBehaviour
 {
     private Tesseract _ocr;
 
-#if NETFX_CORE
+#if NETFX_CORE && (!UNITY_EDITOR)
     public static async Task DownloadAsync(Uri requestUri, string filename)
     {
         if (filename == null)
@@ -48,7 +48,6 @@ public class Ocr : MonoBehaviour
             }
         }
     }
-
 
     private static void TesseractDownloadLangFile(String folder, String lang)
     {
@@ -96,7 +95,7 @@ public class Ocr : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-#if !NETFX_CORE
+#if !( NETFX_CORE && (!UNITY_EDITOR) )
         //Warning: The following code is used to get around a https certification issue for downloading tesseract language files from Github
         //Do not use this code in a production environment. Please make sure you understand the security implication from the following code before using it
         ServicePointManager.ServerCertificateValidationCallback += delegate (object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslPolicyErrors) {
