@@ -3,8 +3,8 @@
     "Microsoft.ApplicationInsights": "2.2.0",
     "Microsoft.ApplicationInsights.PersistenceChannel": "1.2.3",
     "Microsoft.ApplicationInsights.WindowsApps": "1.1.1",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
-    "Xamarin.Forms": "2.3.3.180"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.1",
+    "Xamarin.Forms": "2.3.3.193"
   },
   "frameworks": {
     "uap10.0": {}
