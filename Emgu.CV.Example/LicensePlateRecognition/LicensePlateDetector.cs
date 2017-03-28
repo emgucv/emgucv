@@ -37,7 +37,14 @@ namespace LicensePlateRecognition
         public LicensePlateDetector(String dataPath)
         {
             //create OCR engine
+#if __IOS__
+            //LSTM mode requires the native binary to be build with libtiff
+            //Open CV's iOS build disables libtiff in the build process
+            //For iOS, we will use TessractOnly mode
+            InitOcr(dataPath, "eng", OcrEngineMode.TesseractOnly);
+#else
             InitOcr(dataPath, "eng", OcrEngineMode.TesseractLstmCombined);
+#endif
             _ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
         }
 
