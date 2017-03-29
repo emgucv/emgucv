@@ -3360,6 +3360,16 @@ namespace Emgu.CV.Test
             CvInvoke.Imwrite("board.png", boardImage);
         }
 
+        [Test]
+        public void TestNiBlack()
+        {
+            Mat m = EmguAssert.LoadMat("lena.jpg");
+            Mat gray = new Mat();
+            CvInvoke.CvtColor(m, gray, ColorConversion.Bgr2Gray);
+            Mat result = new Mat();
+            XImgproc.XImgprocInvoke.NiBlackThreshold(gray, result, 120, ThresholdType.Binary, 7, 0.5);
+            
+        }
 #if !NETFX_CORE
 
         [Test]
