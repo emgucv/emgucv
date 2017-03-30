@@ -922,77 +922,107 @@ ELSEIF (WIN32)
       MACRO(INSTALL_DEBUGER_VISUALIZER vs_version vs_description hklm_key)
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND "installDebuggerVisualizer4${vs_version}:
 	ClearErrors
+    Var /GLOBAL ${vs_version}_INSTALL_FOLDER ")
+	
+	IF("${vs_version}" STREQUAL "VS2017")
+	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND 
+	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
+    ReadRegStr \\\$R1 HKLM '${hklm_key}' '15.0'
+    StrCpy $${vs_version}_INSTALL_FOLDER '\\\$R1Common7\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
+	ELSE()
+	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND 
+	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
 	ReadRegStr \\\$R1 HKLM '${hklm_key}' 'InstallDir'
+	StrCpy $${vs_version}_INSTALL_FOLDER '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
+	ENDIF()
+	
+	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND 
+	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
 	IfErrors installDebuggerVisualizer4${vs_version}Done
 	MessageBox MB_YESNO 'Install Debugger Visualizer for ${vs_description}?' IDNO installDebuggerVisualizer4${vs_version}Done")
+	
 	FOREACH (file ${DEBUGER_VISUALIZER_FILES})
 	  SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\${file}.dll' '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
+	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\${file}.dll' '$${vs_version}_INSTALL_FOLDER'")
 	ENDFOREACH()
 	
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	  "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	CreateDirectory '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}'")
+	CreateDirectory '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}'")
 	FOREACH (file ${DEBUGGER_VISUALIZER_UNMANAGED_FILES})
 	  SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}${file}.dll' '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}'")
+	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}${file}.dll' '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}'")
 	ENDFOREACH()
 	
 	#IF(DEFINED UNIVERSAL_BUILD)
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	  "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	CreateDirectory '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\x86\\\\'")
+	CreateDirectory '$${vs_version}_INSTALL_FOLDERx86\\\\'")
 	FOREACH (file ${UNMANAGED_DLL_32BIT})
 	  GET_FILENAME_COMPONENT(UNMANAGED_FILE_NAME_TO_DEPLOY ${file} NAME)
 	  MESSAGE(STATUS "Adding ${UNMANAGED_FILE_NAME_TO_DEPLOY} to debuger visualizer for ${vs_description}")
 	  SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\x86\\\\${UNMANAGED_FILE_NAME_TO_DEPLOY}' '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\x86\\\\'")
+	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\x86\\\\${UNMANAGED_FILE_NAME_TO_DEPLOY}' '$${vs_version}_INSTALL_FOLDERx86\\\\'")
 	ENDFOREACH()
 	#ENDIF()
 	
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	  "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.${vs_version}.dll' '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\'
+	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.${vs_version}.dll' '$${vs_version}_INSTALL_FOLDER'
 	installDebuggerVisualizer4${vs_version}Done:")
 	
       ENDMACRO()
       
       MACRO(UNINSTALL_DEBUGER_VISUALIZER vs_version hklm_key)
 	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND "uninstallDebuggerVisualizer4${vs_version}:
-	ClearErrors
-	ReadRegStr \\\$R1 HKLM '${hklm_key}' 'InstallDir'
+	ClearErrors")
+	
+	IF("${vs_version}" STREQUAL "VS2017")
+	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
+	"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND} 
+	ReadRegStr \\\$R1 HKLM '${hklm_key}' '15.0'
+	StrCpy $${vs_version}_INSTALL_FOLDER '\\\$R1Common7\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
+	ELSE()
+	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
+	"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
+    ReadRegStr \\\$R1 HKLM '${hklm_key}' 'InstallDir'
+    StrCpy $${vs_version}_INSTALL_FOLDER '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
+	ENDIF()
+	
+	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
+	"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
 	IfErrors uninstallDebuggerVisualizer4${vs_version}Done")
 	FOREACH (file ${DEBUGER_VISUALIZER_FILES})
 	  SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
-	Delete '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\${file}.dll'")
+	Delete '$${vs_version}_INSTALL_FOLDER${file}.dll'")
 	ENDFOREACH()
 	FOREACH (file ${DEBUGGER_VISUALIZER_UNMANAGED_FILES})
 	  SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
-	Delete '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}${file}.dll'")
+	Delete '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_FILES_SUBFOLDER}${file}.dll'")
 	ENDFOREACH()
 	#IF(DEFINED UNIVERSAL_BUILD)
 	FOREACH (file ${UNMANAGED_DLL_32BIT})
 	  GET_FILENAME_COMPONENT(UNMANAGED_FILE_NAME_TO_DEPLOY ${file} NAME)
 	  SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
-	Delete '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\x86\\\\${UNMANAGED_FILE_NAME_TO_DEPLOY}'")
+	Delete '$${vs_version}_INSTALL_FOLDERx86\\\\${UNMANAGED_FILE_NAME_TO_DEPLOY}'")
 	ENDFOREACH()
 	#ENDIF()
 	
 	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
 	  "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
-	Delete '\\\$R1..\\\\Packages\\\\Debugger\\\\Visualizers\\\\Emgu.CV.DebuggerVisualizers.${vs_version}.dll'
+	Delete '$${vs_version}_INSTALL_FOLDEREmgu.CV.DebuggerVisualizers.${vs_version}.dll'
 	uninstallDebuggerVisualizer4${vs_version}Done:
 	")
       ENDMACRO()
       
-      #  INSTALL_DEBUGER_VISUALIZER("VS2008" "Visual Studio 2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
-      #  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
+      #INSTALL_DEBUGER_VISUALIZER("VS2008" "Visual Studio 2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
+      #SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
       
       #INSTALL_DEBUGER_VISUALIZER("VS2010" "Visual Studio 2010" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\10.0")
       #SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
@@ -1006,11 +1036,11 @@ ELSEIF (WIN32)
       INSTALL_DEBUGER_VISUALIZER("VS2015" "Visual Studio 2015" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\14.0")
       SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
       
-	  INSTALL_DEBUGER_VISUALIZER("VS2017" "Visual Studio 2017" "SOFTWARE\\\\\\\\WOW6432NODE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\SxS\\\\\\\\VS7\\\\\\\\15.0")
+	  INSTALL_DEBUGER_VISUALIZER("VS2017" "Visual Studio 2017" "SOFTWARE\\\\\\\\WOW6432NODE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\SxS\\\\\\\\VS7")
       SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
 	  
-      #  UNINSTALL_DEBUGER_VISUALIZER("VS2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
-      #  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
+      #UNINSTALL_DEBUGER_VISUALIZER("VS2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
+      #SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
       
       #UNINSTALL_DEBUGER_VISUALIZER("VS2010" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\10.0")
       #SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
@@ -1024,7 +1054,7 @@ ELSEIF (WIN32)
       UNINSTALL_DEBUGER_VISUALIZER("VS2015" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\14.0")
       SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
 	  
-	  UNINSTALL_DEBUGER_VISUALIZER("VS2017" "SOFTWARE\\\\\\\\WOW6432NODE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\SxS\\\\\\\\VS7\\\\\\\\15.0")
+	  UNINSTALL_DEBUGER_VISUALIZER("VS2017" "SOFTWARE\\\\\\\\WOW6432NODE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\SxS\\\\\\\\VS7")
       SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
     ELSE()
       MESSAGE(STATUS "x86 binary not found, will not deploy debugger visualizer")
@@ -1093,7 +1123,7 @@ ELSEIF (WIN32)
       DIRECTORY
       ${CMAKE_CURRENT_SOURCE_DIR}/Solution
       DESTINATION .
-      COMPONENT emgucv_example_source
+      COMPONENT emgucv_source
       FILES_MATCHING 
       PATTERN "Emgu.CV.Windows.Store.sln"
       PATTERN "Windows.Store/packages/repositories.config"
@@ -1130,7 +1160,7 @@ ELSEIF (WIN32)
       DIRECTORY
       ${CMAKE_CURRENT_SOURCE_DIR}/Solution
       DESTINATION .
-      COMPONENT emgucv_example_source
+      COMPONENT emgucv_source
       FILES_MATCHING 
       PATTERN "Emgu.CV.sln"
       PATTERN "Emgu.CV.DebuggerVisualizers.sln"

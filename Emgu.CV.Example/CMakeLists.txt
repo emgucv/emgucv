@@ -69,6 +69,8 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.png"
       PATTERN "*.dll"
       PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
       )
   ENDIF()
   
