@@ -114,24 +114,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\tessdata\eng.cube.bigrams">
-    </AndroidAsset>
-    <AndroidAsset Include="Assets\tessdata\eng.cube.fold">
-    </AndroidAsset>
-    <AndroidAsset Include="Assets\tessdata\eng.cube.lm">
-    </AndroidAsset>
-    <AndroidAsset Include="Assets\tessdata\eng.cube.nn">
-    </AndroidAsset>
-    <AndroidAsset Include="Assets\tessdata\eng.cube.params">
-    </AndroidAsset>
-    <AndroidAsset Include="Assets\tessdata\eng.cube.size">
-    </AndroidAsset>
-    <AndroidAsset Include="Assets\tessdata\eng.cube.word-freq">
-    </AndroidAsset>
-    <AndroidAsset Include="Assets\tessdata\eng.tesseract_cube.nn">
-    </AndroidAsset>
-    <AndroidAsset Include="Assets\tessdata\eng.traineddata">
-    </AndroidAsset>
     <AndroidResource Include="Resources\Raw\LICENSE">
     </AndroidResource>
     <None Include="Resources\AboutResources.txt" />

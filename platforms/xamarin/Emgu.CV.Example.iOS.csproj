@@ -163,33 +163,6 @@
     <Content Include="pedestrian.png">
       
     </Content>
-    <Content Include="tessdata\eng.cube.bigrams">
-      <Link>tessdata\eng.cube.bigrams</Link>
-    </Content>
-    <Content Include="tessdata\eng.cube.fold">
-      <Link>tessdata\eng.cube.fold</Link>
-    </Content>
-    <Content Include="tessdata\eng.cube.lm">
-      <Link>tessdata\eng.cube.lm</Link>
-    </Content>
-    <Content Include="tessdata\eng.cube.nn">
-      <Link>tessdata\eng.cube.nn</Link>
-    </Content>
-    <Content Include="tessdata\eng.cube.params">
-      <Link>tessdata\eng.cube.params</Link>
-    </Content>
-    <Content Include="tessdata\eng.cube.size">
-      <Link>tessdata\eng.cube.size</Link>
-    </Content>
-    <Content Include="tessdata\eng.cube.word-freq">
-      <Link>tessdata\eng.cube.word-freq</Link>
-    </Content>
-    <Content Include="tessdata\eng.tesseract_cube.nn">
-      <Link>tessdata\eng.tesseract_cube.nn</Link>
-    </Content>
-    <Content Include="tessdata\eng.traineddata">
-      <Link>tessdata\eng.traineddata</Link>
-    </Content>
     <Content Include="license-plate.jpg">
       
     </Content>

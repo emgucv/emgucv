@@ -17,7 +17,6 @@ cd Emgu.CV.Example
 mkdir iOS
 cd iOS
 cp -rf ../../../../../../../../tmp/Emgu.CV.Example/iOS/* .
-cp -rf ../../../../../../../../tmp/Emgu.CV.World/tessdata .
 cp -rf ../../../../../../../../opencv/data/haarcascades/haarcascade_eye.xml .
 cp -rf ../../../../../../../../opencv/data/haarcascades/haarcascade_frontalface_default.xml .
 cp -rf ../../../../../../../../opencv/LICENSE .
@@ -45,7 +44,6 @@ cd android
 cp -rf ../../../../../../tmp/components.config .
 cp -rf ../../../../../../tmp/nuget.config .
 cp -rf ../../../../../../tmp/Emgu.CV.Example/Android/* .
-cp -rf ../../../../../../tmp/Emgu.CV.World/tessdata Assets/
 cp -rf ../../../../../../opencv/data/haarcascades/haarcascade_eye.xml Assets/
 cp -rf ../../../../../../opencv/data/haarcascades/haarcascade_frontalface_default.xml Assets/
 c:\cygwin64\bin\mkdir.exe -p Resources/Raw
