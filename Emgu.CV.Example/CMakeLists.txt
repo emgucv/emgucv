@@ -378,6 +378,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       -r:System.Drawing.dll 
       -r:System.Data.dll 
       -r:System.Windows.Forms.dll
+	  -r:System.ServiceModel.dll
       -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.World.dll" 
       -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll")
     
