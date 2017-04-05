@@ -336,8 +336,10 @@ namespace Emgu.CV
             else if (_grabState == GrabState.Stopped || _grabState == GrabState.Stopping)
             {
                 _grabState = GrabState.Running;
-#if NETFX_CORE
-                ThreadPool.RunAsync(delegate { Run(eh); });
+#if NETFX_CORE 
+                ThreadPool.RunAsync(delegate { Run(); });
+#elif !WITH_SERVICE_MODEL
+                ThreadPool.QueueUserWorkItem(delegate { Run(); });
 #else
                 ThreadPool.QueueUserWorkItem(delegate { Run(eh); });
 #endif
