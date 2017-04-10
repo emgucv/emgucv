@@ -82,7 +82,11 @@
 #include <string.h>
 #include "allheaders.h"
 
-    /*   Special flag for pixWrite().  The default for both unix and     */
+#if WINAPI_FAMILY_APP
+#include <process.h>
+#endif
+
+/*   Special flag for pixWrite().  The default for both unix and     */
     /*   windows is to use whatever filename is given, as opposed to     */
     /*   insuring the filename extension matches the image compression.  */
 #define  WRITE_AS_NAMED    1

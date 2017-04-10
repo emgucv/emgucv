@@ -2326,7 +2326,12 @@ l_int32  ret;
     LEPT_FREE(srctail);
 
         /* Overwrite any existing file at 'newpath' */
+#if WINAPI_FAMILY_APP
+	ret = -1;
+#else
     ret = CopyFile(srcpath, newpath, FALSE) ? 0 : 1;
+#endif
+
 #endif   /* !_WIN32 */
 
     LEPT_FREE(srcpath);
@@ -2727,8 +2732,12 @@ l_int32  dirlen, namelen, size;
 
         /* Handle the case where we start from the current directory */
     if (!dir || dir[0] == '\0') {
+#if WINAPI_FAMILY_APP
+		return (char *)ERROR_PTR("no current dir found", procName, NULL);
+#else
         if ((cdir = getcwd(NULL, 0)) == NULL)
             return (char *)ERROR_PTR("no current dir found", procName, NULL);
+#endif
     } else {
         cdir = stringNew(dir);
     }
@@ -2759,8 +2768,15 @@ l_int32  dirlen, namelen, size;
             /* Start with the temp dir */
         l_int32 tmpdirlen;
 #ifdef _WIN32
-        char tmpdir[MAX_PATH];
+		char tmpdir[MAX_PATH];
+#if WINAPI_FAMILY_APP
+		LPWSTR tmpdirw;
+		GetTempPathW(sizeof(tmpdir), tmpdirw);  /* get the windows temp dir */
+		wcstombs(tmpdir, tmpdirw, MAX_PATH);
+#else
         GetTempPath(sizeof(tmpdir), tmpdir);  /* get the windows temp dir */
+#endif
+
         tmpdirlen = strlen(tmpdir);
         if (tmpdirlen > 0 && tmpdir[tmpdirlen - 1] == '\\') {
             tmpdir[tmpdirlen - 1] = '\0';  /* trim the trailing '\' */

@@ -377,6 +377,9 @@ gplotSetScaling(GPLOT   *gplot,
 l_int32
 gplotMakeOutput(GPLOT  *gplot)
 {
+#if WINAPI_FAMILY_APP
+	return ERROR_INT("gplot not defined", procName, 1);
+#else
 char     buf[L_BUF_SIZE];
 char    *cmdname;
 l_int32  ignore;
@@ -399,6 +402,7 @@ l_int32  ignore;
     ignore = system(buf);  /* gnuplot || wgnuplot */
     LEPT_FREE(cmdname);
     return 0;
+#endif
 }
 
 
