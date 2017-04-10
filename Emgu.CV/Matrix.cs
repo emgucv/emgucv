@@ -299,6 +299,8 @@ namespace Emgu.CV
       /// Convert this matrix to different depth
       /// </summary>
       /// <typeparam name="TOtherDepth">The depth type to convert to</typeparam>
+      /// <param name="scale">the scaling factor to apply during conversion (defaults to 1.0 -- no scaling)</param>
+      /// <param name="shift">the shift factor to apply during conversion (defaults to 0.0 -- no shifting)</param>
       /// <returns>Matrix of different depth</returns>
       public Matrix<TOtherDepth> Convert<TOtherDepth>(double scale = 1.0, double shift = 0.0)  
          where TOtherDepth : new ()
