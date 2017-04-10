@@ -11,7 +11,7 @@
 
 <%
     Response.Clear();
-
+    CvInvoke.CheckLibraryLoaded();
     NameValueCollection nvc = Request.Form;
 
     //If you want this web page to perform ocr on an image, post the image file to this webpage
