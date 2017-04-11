@@ -7,5 +7,6 @@
 #define getenv(A) NULL
 #define CopyFile(A,B,C) 0
 #define GetTempPath(A,B) B[0]=0
+#define GetTempPathW(A,B) B[0]=0
 #define GetFileAttributes(A) INVALID_FILE_ATTRIBUTES
 #define system(A) -1
