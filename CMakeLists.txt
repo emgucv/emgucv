@@ -814,7 +814,7 @@ IF(HAVE_OSX)
   IF (NOT IS_OSX_BUILD)
     INSTALL(
       FILES
-      "bin/libemgucv.dylib"
+      "bin/libcvextern.dylib"
       DESTINATION "bin"
       COMPONENT emgucv_binary
       )
