@@ -37,10 +37,12 @@ namespace LicensePlateRecognition
         public LicensePlateDetector(String dataPath)
         {
             //create OCR engine
-#if __IOS__
+#if __IOS__ || __ANDROID__
             //LSTM mode requires the native binary to be build with libtiff
             //Open CV's iOS build disables libtiff in the build process
             //For iOS, we will use TessractOnly mode
+            //Android build is also having issues with the LSTM engine
+            //For Android, we will also use Tesseract Only mode.
             InitOcr(dataPath, "eng", OcrEngineMode.TesseractOnly);
 #else
             InitOcr(dataPath, "eng", OcrEngineMode.TesseractLstmCombined);

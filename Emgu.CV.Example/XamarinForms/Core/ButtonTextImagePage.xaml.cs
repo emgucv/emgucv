@@ -155,7 +155,7 @@ namespace Emgu.CV.XamarinForms
 	      if (image == null)
 	      {
 	         this.DisplayImage.Source = null;
-	         //return;
+	         return;
 	      }
 	      using (VectorOfByte vb = new VectorOfByte())
 	      {
