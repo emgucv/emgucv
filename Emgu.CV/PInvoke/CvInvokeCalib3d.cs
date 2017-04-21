@@ -300,6 +300,33 @@ namespace Emgu.CV
             IntPtr newCameraMatrix);
 
         /// <summary>
+        /// Finds an initial camera matrix from 3D-2D point correspondences.
+        /// </summary>
+        /// <param name="objectPoints">Vector of vectors of the calibration pattern points in the calibration pattern coordinate space.</param>
+        /// <param name="imagePoints">Vector of vectors of the projections of the calibration pattern points.</param>
+        /// <param name="imageSize">Image size in pixels used to initialize the principal point.</param>
+        /// <param name="aspectRatio">If it is zero or negative, both fx and fy are estimated independently. Otherwise, fx=fy*aspectRatio.</param>
+        /// <returns>An initial camera matrix for the camera calibration process.</returns>
+        /// <remarks>Currently, the function only supports planar calibration patterns, which are patterns where each object point has z-coordinate =0.</remarks>
+        public static Mat InitCameraMatrix2D(IInputArrayOfArrays objectPoints, IInputArrayOfArrays imagePoints, Size imageSize,
+            double aspectRatio = 1.0)
+        {
+            Mat m = new Mat();
+            using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+            using (InputArray iaImagePoints = imagePoints.GetInputArray())
+                cveInitCameraMatrix2D(iaObjectPoints, iaImagePoints, ref imageSize, aspectRatio, m );
+            return m;
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveInitCameraMatrix2D(
+            IntPtr objectPoints,
+            IntPtr imagePoints,
+            ref Size imageSize,
+            double aspectRatio,
+            IntPtr cameraMatrix);
+
+        /// <summary>
         /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. 
         /// Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. 
         /// The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. 

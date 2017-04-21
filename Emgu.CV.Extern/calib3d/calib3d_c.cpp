@@ -262,6 +262,17 @@ void cveGetOptimalNewCameraMatrix(
 	cv::swap(m, *newCameraMatrix);
 }
 
+void cveInitCameraMatrix2D(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints,
+	CvSize* imageSize,
+	double aspectRatio,
+	cv::Mat* cameraMatrix)
+{
+	cv::Mat m = cv::initCameraMatrix2D(*objectPoints, *imagePoints, *imageSize, aspectRatio);
+	cv::swap(m, *cameraMatrix);
+}
+
 /* Fisheye calibration */
 void cveFisheyeProjectPoints(cv::_InputArray* objectPoints, cv::_OutputArray* imagePoints, cv::_InputArray* rvec, cv::_InputArray* tvec,
    cv::_InputArray* K, cv::_InputArray* D, double alpha, cv::_OutputArray* jacobian)

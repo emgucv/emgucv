@@ -103,6 +103,13 @@ CVAPI(void) cveGetOptimalNewCameraMatrix(
 	bool centerPrincipalPoint, 
 	cv::Mat* newCameraMatrix);
 
+CVAPI(void) cveInitCameraMatrix2D(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints,
+	CvSize* imageSize, 
+	double aspectRatio, 
+	cv::Mat* cameraMatrix);
+
 /* Fisheye calibration */
 CVAPI(void) cveFisheyeProjectPoints(cv::_InputArray* objectPoints, cv::_OutputArray* imagePoints, cv::_InputArray* rvec, cv::_InputArray* tvec,
    cv::_InputArray* K, cv::_InputArray* D, double alpha, cv::_OutputArray* jacobian);
