@@ -96,6 +96,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.json"
       PATTERN "*.plist"
       PATTERN "iTunesArtwork*"
+	  PATTERN "*.storyboard"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
       PATTERN "Release" EXCLUDE  
