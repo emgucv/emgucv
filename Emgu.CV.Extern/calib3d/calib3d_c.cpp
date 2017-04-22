@@ -111,6 +111,11 @@ void cveDrawChessboardCorners(cv::_InputOutputArray* image, CvSize* patternSize,
    cv::drawChessboardCorners(*image, *patternSize, *corners, patternWasFound);
 }
 
+void cveFilterSpeckles(cv::_InputOutputArray* img, double newVal, int maxSpeckleSize, double maxDiff, cv::_InputOutputArray* buf)
+{
+	cv::filterSpeckles(*img, newVal, maxSpeckleSize, maxDiff, buf ? *buf : (cv::_InputOutputArray) cv::noArray());
+}
+
 bool cveFindChessboardCorners(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* corners, int flags)
 {
    return cv::findChessboardCorners(*image, *patternSize, *corners, flags);

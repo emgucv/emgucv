@@ -949,6 +949,25 @@ namespace Emgu.CV
         private static extern bool cveFindChessboardCorners(IntPtr image, ref Size patternSize, IntPtr corners,
            CvEnum.CalibCbType flags);
 
+        /// <summary>
+        /// Filters off small noise blobs (speckles) in the disparity map.
+        /// </summary>
+        /// <param name="img">The input 16-bit signed disparity image</param>
+        /// <param name="newVal">The disparity value used to paint-off the speckles</param>
+        /// <param name="maxSpeckleSize">The maximum speckle size to consider it a speckle. Larger blobs are not affected by the algorithm</param>
+        /// <param name="maxDiff">Maximum difference between neighbor disparity pixels to put them into the same blob. Note that since StereoBM, StereoSGBM and may be other algorithms return a fixed-point disparity map, where disparity values are multiplied by 16, this scale factor should be taken into account when specifying this parameter value.</param>
+        /// <param name="buf">The optional temporary buffer to avoid memory allocation within the function.</param>
+        public static void FilterSpeckles(IInputOutputArray img, double newVal, int maxSpeckleSize, double maxDiff, IInputOutputArray buf = null)
+        {
+            using (InputOutputArray ioaImg = img.GetInputOutputArray())
+            using (InputOutputArray ioaBuf = buf == null ? InputOutputArray.GetEmpty() : buf.GetInputOutputArray())
+            {
+                cveFilterSpeckles(ioaImg, newVal, maxSpeckleSize, maxDiff, ioaBuf);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveFilterSpeckles(IntPtr img, double newVal, int maxSpeckleSize, double maxDiff, IntPtr buf);
 
         /// <summary>
         /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (pattern_was_found=0) or the colored corners connected with lines when the board was found (pattern_was_found != 0). 
