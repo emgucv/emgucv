@@ -3431,7 +3431,7 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// intrinsic_matrix contains valid initial values of fx, fy, cx, cy that are optimized further. Otherwise, (cx, cy) is initially set to the image center (image_size is used here), and focal distances are computed in some least-squares fashion
         /// </summary>
-        UserIntrinsicGuess = 0x00001,
+        UseIntrinsicGuess = 0x00001,
         /// <summary>
         /// The optimization procedure consider only one of fx and fy as independent variable and keeps the aspect ratio fx/fy the same as it was set initially in intrinsic_matrix. In this case the actual initial values of (fx, fy) are either taken from the matrix (when CV_CALIB_USE_INTRINSIC_GUESS is set) or estimated somehow (in the latter case fx, fy may be set to arbitrary values, only their ratio is used)
         /// </summary>
