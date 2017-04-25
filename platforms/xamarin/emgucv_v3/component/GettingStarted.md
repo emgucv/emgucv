@@ -1,4 +1,4 @@
-## Getting Started with Emgu CV V3.1
+## Getting Started with Emgu CV V3.2
 
 ### The demo version only supports the following platforms: 
 * Android (x86) 

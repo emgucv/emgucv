@@ -7,6 +7,7 @@ IF EXIST "C:\android-ndk-r12b" SET ANDROID_NDK=C:\android-ndk-r12b
 IF EXIST "C:\android-ndk-r13" SET ANDROID_NDK=C:\android-ndk-r13
 IF EXIST "C:\android-ndk-r13b" SET ANDROID_NDK=C:\android-ndk-r13b
 IF EXIST "C:\android-ndk-r14" SET ANDROID_NDK=C:\android-ndk-r14
+IF EXIST "C:\android-ndk-r14b" SET ANDROID_NDK=C:\android-ndk-r14b
 
 
 IF EXIST "%programfiles(x86)%\CMake 2.8\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake 2.8\bin\cmake.exe
