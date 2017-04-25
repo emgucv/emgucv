@@ -13,6 +13,8 @@ IF EXIST "C:\android-ndk-r14b" SET ANDROID_NDK=C:\android-ndk-r14b
 IF EXIST "%programfiles(x86)%\CMake 2.8\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake 2.8\bin\cmake.exe
 IF EXIST "%programfiles(x86)%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake\bin\cmake.exe
 IF EXIST "%programfiles%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles%\CMake\bin\cmake.exe
+IF EXIST "%programw6432%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programw6432%\CMake\bin\cmake.exe
+
 
 SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
 
@@ -48,3 +50,8 @@ SET BUILD_DIR=build_%1
 
 :::: other options
 ::SET ANDROID_NATIVE_API_LEVEL=8   &:: android-3 is enough for native part of OpenCV but android-8 is required for Java API
+
+ECHO CMAKE_EXE: %CMAKE_EXE%
+ECHO MAKE_EXE: %MAKE_EXE%
+ECHO ANDROID_SDK: %ANDROID_SDK%
+ECHO ANDROID_NDK: %ANDROID_NDK%
