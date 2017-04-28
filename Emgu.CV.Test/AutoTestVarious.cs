@@ -3230,14 +3230,14 @@ namespace Emgu.CV.Test
         [Test]
         public void TestDnnBvlcGoogleNet()
         {
-                 
+
             Dnn.Net net = new Dnn.Net();
             String googleNetFile = "bvlc_googlenet.caffemodel";
             if (!File.Exists(googleNetFile))
             {
                 //Download the bvlc googlenet file
                 String googleNetUrl = "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel";
-                Trace.WriteLine("downloading file from:" + googleNetUrl +" to: " + googleNetFile);
+                Trace.WriteLine("downloading file from:" + googleNetUrl + " to: " + googleNetFile);
                 System.Net.WebClient downloadClient = new System.Net.WebClient();
                 downloadClient.DownloadFile(googleNetUrl, googleNetFile);
             }
@@ -3245,9 +3245,9 @@ namespace Emgu.CV.Test
                 importer.PopulateNet(net);
 
             Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
-            
+
             CvInvoke.Resize(img, img, new Size(224, 224));
-            
+
             Dnn.Blob inputBlob = new Dnn.Blob();
             inputBlob.BatchFromImages(img);
             net.SetBlob(".data", inputBlob);
@@ -3260,10 +3260,86 @@ namespace Emgu.CV.Test
 
 //#if !NETFX_CORE
             Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
-//#endif
-            
+            //#endif
+
         }
 
+        private static void CheckAndDownloadFile(String fileName)
+        {
+            String emguS3Base = "https://s3.amazonaws.com/emgu-public/";
+            if (!File.Exists(fileName))
+            {
+                //Download the ssd file    
+                String fileUrl = emguS3Base + fileName;
+                Trace.WriteLine("downloading file from:" + fileUrl + " to: " + fileName);
+                System.Net.WebClient downloadClient = new System.Net.WebClient();
+                downloadClient.DownloadFile(fileUrl, fileName);
+            }
+        }
+
+        [Test]
+        public void TestDnnSSD()
+        {
+
+            Dnn.Net net = new Dnn.Net();
+            int imgDim = 300;
+
+            String ssdFile = "VGG_VOC0712_SSD_300x300_iter_120000.caffemodel";
+            String ssdProtoFile = "VGG_VOC0712_SSD_300x300_iter_120000.prototxt";
+            CheckAndDownloadFile(ssdFile);
+            CheckAndDownloadFile(ssdProtoFile);
+
+            using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter(ssdProtoFile, ssdFile))
+                importer.PopulateNet(net);
+
+            Mat img = EmguAssert.LoadMat("rgb.jpg");
+            Mat resized = new Mat();
+            CvInvoke.Resize(img, resized, new Size(imgDim, imgDim));
+            Mat preprocessedFrame = new Mat();
+            resized.ConvertTo(preprocessedFrame, DepthType.Cv32F);
+            using (ScalarArray sa = new ScalarArray(new MCvScalar(104, 117, 123)))
+                CvInvoke.Subtract(preprocessedFrame, sa, preprocessedFrame);
+
+
+            Dnn.Blob inputBlob = new Dnn.Blob();
+            inputBlob.BatchFromImages(preprocessedFrame);
+            net.SetBlob(".data", inputBlob); //set the network input
+            
+            
+            net.Forward(); //compute output
+            Dnn.Blob detection = net.GetBlob("detection_out");
+
+            float confidenceThreshold = 0.5f;
+
+            using (Mat tmp = detection.MatRef())
+            {
+                int[] dim = tmp.SizeOfDimemsion;
+                int step = dim[3] * sizeof(float);
+                IntPtr start = tmp.DataPointer;
+                for (int i = 0; i < dim[2]; i++)
+                {
+                    float[] values = new float[dim[3]];
+                    Marshal.Copy(new IntPtr(start.ToInt64() + step * i), values, 0, dim[3]);
+                    float confident = values[2];
+
+                    if (confident > confidenceThreshold)
+                    {
+                        float objectClass = values[1];
+
+                        float xLeftBottom = values[3] * img.Cols;
+                        float yLeftBottom = values[4] * img.Rows;
+                        float xRightTop = values[5] * img.Cols;
+                        float yRightTop = values[6] * img.Rows;
+                        RectangleF objectRegion = new RectangleF(xLeftBottom, yLeftBottom, xRightTop - xLeftBottom, yRightTop - yLeftBottom);
+
+                        CvInvoke.Rectangle(img, Rectangle.Round(objectRegion), new MCvScalar(0, 255, 0) );
+                    }
+                }
+                //Mat detectionMat = new Mat(dim[2], dim[3], DepthType.Cv32F, 1, tmp.DataPointer, dim[3]*sizeof(float)); 
+            }
+            CvInvoke.Imwrite("rgb_ssd_result.jpg", img);
+
+        }
 
         [Test]
         public void TestDnnTensorFlow()
