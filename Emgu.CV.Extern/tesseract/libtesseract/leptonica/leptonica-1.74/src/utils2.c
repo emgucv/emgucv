@@ -2770,8 +2770,8 @@ l_int32  dirlen, namelen, size;
 #ifdef _WIN32
 		char tmpdir[MAX_PATH];
 #if WINAPI_FAMILY_APP
-		LPWSTR tmpdirw;
-		GetTempPathW(sizeof(tmpdir), tmpdirw);  /* get the windows temp dir */
+		wchar_t tmpdirw[MAX_PATH];
+		GetTempPathW(MAX_PATH, tmpdirw);  /* get the windows temp dir */
 		wcstombs(tmpdir, tmpdirw, MAX_PATH);
 #else
         GetTempPath(sizeof(tmpdir), tmpdir);  /* get the windows temp dir */
