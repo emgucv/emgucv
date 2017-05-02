@@ -20,7 +20,9 @@ DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vecto
 	for (auto it = classNames->begin(); it != classNames->end(); ++it)
 		classes.push_back(std::string(it->c_str(), it->size()));
 
-	return cv::dpm::DPMDetector::create(files, classes).get();
+	cv::Ptr<DPMDetector> dpm = DPMDetector::create(files, classes);
+	dpm.addref();
+	return dpm.get();
 }
 
 void cveDPMDetectorDetect(DPMDetector* dpm, cv::Mat* image, std::vector<CvRect>* rects, std::vector<float>* scores, std::vector<int>* classIds)
