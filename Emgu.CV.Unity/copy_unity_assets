@@ -70,6 +70,8 @@ mkdir Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm
 cp -r ../Emgu.CV.Contrib/BgSegm Assets/Emgu.CV/Emgu.CV.Contrib/ 
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Dnn
 cp -r ../Emgu.CV.Contrib/Dnn Assets/Emgu.CV/Emgu.CV.Contrib/ 
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Dpm
+cp -r ../Emgu.CV.Contrib/Dpm Assets/Emgu.CV/Emgu.CV.Contrib/ 
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Face
 cp -r ../Emgu.CV.Contrib/Face Assets/Emgu.CV/Emgu.CV.Contrib/
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Fuzzy

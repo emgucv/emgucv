@@ -67,6 +67,8 @@ mkdir Assets\Emgu.CV\Emgu.CV.Contrib\BgSegm
 cp -r ../Emgu.CV.Contrib/BgSegm/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Dnn
 cp -r ../Emgu.CV.Contrib/Dnn/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Dnn
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Dpm
+cp -r ../Emgu.CV.Contrib/Dnn/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Dpm
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Face
 cp -r ../Emgu.CV.Contrib/Face/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Face
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Fuzzy

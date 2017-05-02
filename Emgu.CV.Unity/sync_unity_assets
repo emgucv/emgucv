@@ -32,6 +32,7 @@ cp -r Assets/Emgu.CV/Emgu.CV/VideoSurveillance/*.cs ../Emgu.CV/VideoSurveillance
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/Aruco/*.cs ../Emgu.CV.Contrib/Aruco  
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm/*.cs ../Emgu.CV.Contrib/BgSegm  
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/Dnn/*.cs ../Emgu.CV.Contrib/Dnn  
+cp -r Assets/Emgu.CV/Emgu.CV.Contrib/Dpm/*.cs ../Emgu.CV.Contrib/Dpm  
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/Face/*.cs ../Emgu.CV.Contrib/Face 
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/Fuzzy/*.cs ../Emgu.CV.Contrib/Fuzzy
 cp -r Assets/Emgu.CV/Emgu.CV.Contrib/LineDescriptor/*.cs ../Emgu.CV.Contrib/LineDescriptor    
