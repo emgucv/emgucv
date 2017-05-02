@@ -9,6 +9,7 @@
     <Import_RootNamespace>Emgu.CV.Contrib</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Dpm\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XFeatures2D\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Face\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\*.cs" />
