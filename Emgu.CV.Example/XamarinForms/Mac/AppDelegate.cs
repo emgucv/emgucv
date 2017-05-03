@@ -23,13 +23,14 @@ namespace OSX
 				Console.WriteLine(args.Exception.ToString());
 			};
 
+
 			var style = NSWindowStyle.Closable | NSWindowStyle.Resizable | NSWindowStyle.Titled;
 
 			var rect = new CoreGraphics.CGRect(200, 1000, 1024, 768);
 			//var rect = NSWindow.FrameRectFor(NSScreen.MainScreen.Frame, style);
 			_window = new NSWindow(rect, style, NSBackingStore.Buffered, false);
 			_window.Title = "Emgu CV Xamarin Forms for Mac";
-			_window.TitleVisibility = NSWindowTitleVisibility.Hidden;
+			//_window.TitleVisibility = NSWindowTitleVisibility.Hidden;
 		}
 
 		public override NSWindow MainWindow

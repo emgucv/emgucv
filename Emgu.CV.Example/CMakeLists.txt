@@ -4,7 +4,7 @@
 
 IF(EMGU_CV_EXAMPLE_BUILD)
   #XamarinForms.Core 
-  IF (HAVE_ANDROID OR HAVE_IOS OR HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64 OR HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM OR HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM) 
+  IF (HAVE_ANDROID OR HAVE_IOS OR HAVE_OSX OR HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64 OR HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM OR HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM) 
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/Core/"
@@ -141,6 +141,31 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN ".git" EXCLUDE
       PATTERN "bin" EXCLUDE
       PATTERN "obj" EXCLUDE
+      )
+
+    INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/Mac/"
+      DESTINATION Emgu.CV.Example/XamarinForms/Mac/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.Xamarin"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN "*.plist"
+      PATTERN "iTunesArtwork*"
+      PATTERN "*.storyboard"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE
       )
   ENDIF()
   

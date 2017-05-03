@@ -115,69 +115,53 @@ namespace Emgu.CV.Example.Mac
 
 		private VideoCapture _capture = null;
 		private Mat _frame = null;
-		private bool _capturing = false;
+		private bool _captureInProgress = false;
 
-		void StartCameraCaptureLoop()
+		private void ProcessFrame(object sender, EventArgs arg)
 		{
-							//proper clean up first.
-				if (_capture != null && !_capture.IsOpened)
-				{
-					_capture.Dispose();
-					_capture = null;
-				}
-
-				if (_capture == null)
-				{
-					_capture = new VideoCapture();
-					if (_capture == null || !_capture.IsOpened)
-					{
-					InvokeOnMainThread(() =>
-				{
-					messageLabel.StringValue = "unable to create capture";
-				});
-						_capture = null;
-						return;
-					}
-				}
-
-			if (_frame == null)
-				_frame = new Mat();
-
-			_capturing = true;
-			while (_capturing && _capture != null && _capture.IsOpened && _frame != null )
+			if (_capture != null && _capture.Ptr != IntPtr.Zero)
 			{
-				_capture.Grab();
-				_capture.Retrieve(_frame);
+				_capture.Retrieve(_frame, 0);
 				var nsImage = _frame.ToNSImage();
-				InvokeOnMainThread(()=>
+				InvokeOnMainThread(() =>
 				{
 					mainImageView.Image = nsImage;
 				});
 			}
-			if (_capture != null)
-				_capture.Dispose();
-			
-			_capturing = false;
-		}
-
-		void StopCameraCaptureLoop()
-		{
-			_capturing = false;
 		}
 
 		void RunCameraCapture()
 		{
-			if (_capturing == false)
+			if (_capture == null)
 			{
-				
+				_capture = new VideoCapture();
+				if (_capture == null || !_capture.IsOpened)
+				{
+					InvokeOnMainThread(() =>
+					{
+						messageLabel.StringValue = "unable to create capture";
+					});
+					_capture = null;
+					return;
+				}
+				_capture.ImageGrabbed += ProcessFrame;
+				_frame = new Mat();
 
-				System.Threading.ThreadPool.QueueUserWorkItem(
-					(state) => { StartCameraCaptureLoop(); });
+			}
+			if (_captureInProgress)
+			{  //stop the capture
+			   //captureButton.Text = "Start Capture";
+				_capture.Pause();
 			}
 			else
 			{
-				StopCameraCaptureLoop();
+				//start the capture
+				//captureButton.Text = "Stop";
+				_capture.Start();
 			}
+
+			_captureInProgress = !_captureInProgress;
+
 		}
 
 		public override NSObject RepresentedObject
