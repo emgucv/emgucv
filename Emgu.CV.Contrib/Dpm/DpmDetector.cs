@@ -3,7 +3,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Emgu.Util;
 
@@ -14,10 +13,6 @@ namespace Emgu.CV.Dpm
     /// </summary>
     public class DpmDetector : UnmanagedObject
     {
-        Util.VectorOfRect _rects = new Util.VectorOfRect();
-        Util.VectorOfFloat _scores = new Util.VectorOfFloat();
-        Util.VectorOfInt _classIds = new Util.VectorOfInt();
-
         /// <summary>
         /// create a new dpm detector with the specified files and classes
         /// </summary>
@@ -26,12 +21,17 @@ namespace Emgu.CV.Dpm
         /// <returns></returns>
         public static DpmDetector Create(string[] files, string[] classes)
         {
-            var cfiles = files.Select(s => new CvString(s)).ToArray();
-            var cclasses = classes.Select(s => new CvString(s)).ToArray();
+            CvString[] cfiles = new CvString[files.Length];
+            for (int i = 0; i < files.Length; i++)
+                cfiles[i] = new CvString(files[i]);
+
+            CvString[] cclasses = new CvString[classes.Length];
+            for (int i = 0; i < classes.Length; i++)
+                cclasses[i] = new CvString(classes[i]);
 
             IntPtr dpm;
-            using(var vfiles = new Util.VectorOfCvString(cfiles))
-            using(var vclasses = new Util.VectorOfCvString(cclasses))
+            using (var vfiles = new Util.VectorOfCvString(cfiles))
+            using (var vclasses = new Util.VectorOfCvString(cclasses))
                 dpm = DpmInvoke.cveDPMDetectorCreate(vfiles, vclasses);
 
             foreach (var c in cfiles)
@@ -63,8 +63,8 @@ namespace Emgu.CV.Dpm
                 {
                     DpmInvoke.cveDPMDetectorGetClassNames(_ptr, names);
 
-                    var nsize = names.Size;
-                    var @out = new string[nsize];
+                    int nsize = names.Size;
+                    string[] @out = new string[nsize];
                     for (var i = 0; i < nsize; i++)
                         @out[i] = names[i].ToString();
                     return @out;
@@ -77,27 +77,23 @@ namespace Emgu.CV.Dpm
         /// </summary>
         public int ClassCount { get { return (int)DpmInvoke.cveDPMDetectorGetClassCount(_ptr).ToUInt32(); } }
 
-
-
         /// <summary>
         /// Perform detection on the image
         /// </summary>
         /// <returns></returns>
         public ObjectDetection[] Detect(Mat mat)
         {
-            _rects.Clear();
-            _scores.Clear();
-            _classIds.Clear();
-
-            DpmInvoke.cveDPMDetectorDetect(_ptr, mat, _rects, _scores, _classIds);
-
-            var detections = new ObjectDetection[_rects.Size];
-            for (var i = 0; i < detections.Length; i++)
-                detections[i] = new ObjectDetection(_rects[i], _scores[i], _classIds[i]);
-
-            return detections;
+            using (Util.VectorOfRect rects = new Util.VectorOfRect())
+            using (Util.VectorOfFloat scores = new Util.VectorOfFloat())
+            using (Util.VectorOfInt classIds = new Util.VectorOfInt())
+            {
+                DpmInvoke.cveDPMDetectorDetect(_ptr, mat, rects, scores, classIds);
+                ObjectDetection[] detections = new ObjectDetection[rects.Size];
+                for (var i = 0; i < detections.Length; i++)
+                    detections[i] = new ObjectDetection(rects[i], scores[i], classIds[i]);
+                return detections;
+            }
         }
-
 
         /// <summary>
         /// Dispose
@@ -107,9 +103,6 @@ namespace Emgu.CV.Dpm
             if (_ptr != IntPtr.Zero)
             {
                 DpmInvoke.cveDPMDetectorRelease(ref _ptr);
-                _rects.Dispose();
-                _scores.Dispose();
-                _classIds.Dispose();
             }
         }
     }
