@@ -24,7 +24,7 @@ using Emgu.CV.Stitching;
 using Emgu.CV.Text;
 using Emgu.CV.Structure;
 using Emgu.CV.Bioinspired;
-
+using Emgu.CV.Dpm;
 #if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
@@ -3434,6 +3434,15 @@ namespace Emgu.CV.Test
             Mat boardImage = new Mat();
             board.Draw(imageSize, boardImage, margins, borderBits);
             CvInvoke.Imwrite("board.png", boardImage);
+        }
+
+        [Test]
+        public void TestDPM()
+        {
+            Mat m = EmguAssert.LoadMat("pedestrian.png");
+            DpmDetector detector = DpmDetector.Create(new String[] {"inriaperson.xml"}, new string[] {"person"});
+            ObjectDetection[] result = detector.Detect(m);
+
         }
 
         [Test]
