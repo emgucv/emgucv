@@ -9,19 +9,63 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Em
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.shproj", "{7B22BB32-C867-45A7-AC53-5BDA820DB91C}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.XamarinForms", "..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.shproj", "{F2A5CE86-0B21-40D2-AD3F-BB2D1D716CFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSX", "..\..\Emgu.CV.Example\XamarinForms\Mac\OSX.csproj", "{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
+		Debug|x64 = Debug|x64
+		Debug|ARM = Debug|ARM
+		Debug|iPhone = Debug|iPhone
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|x64 = Release|x64
+		Release|ARM = Release|ARM
+		Release|iPhone = Release|iPhone
+		Release|iPhoneSimulator = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|x86.ActiveCfg = Debug|x86
 		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|x86.Build.0 = Debug|x86
 		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|x86.ActiveCfg = Release|x86
 		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|x86.Build.0 = Release|x86
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|x64.ActiveCfg = Debug|x64
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|x64.Build.0 = Debug|x64
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|ARM.ActiveCfg = Debug|ARM
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|ARM.Build.0 = Debug|ARM
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|iPhone.Build.0 = Debug|iPhone
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|x64.ActiveCfg = Release|x64
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|x64.Build.0 = Release|x64
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|ARM.ActiveCfg = Release|ARM
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|ARM.Build.0 = Release|ARM
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|iPhone.ActiveCfg = Release|iPhone
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|iPhone.Build.0 = Release|iPhone
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{748EAF28-FF61-4BA3-89E5-6DFEBD63FAAD}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|x86.ActiveCfg = Debug|x86
 		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|x86.Build.0 = Debug|x86
 		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|x86.ActiveCfg = Release|x86
 		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|x86.Build.0 = Release|x86
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|x64.ActiveCfg = Debug|x64
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|x64.Build.0 = Debug|x64
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|ARM.ActiveCfg = Debug|ARM
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|ARM.Build.0 = Debug|ARM
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|iPhone.Build.0 = Debug|iPhone
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|x64.ActiveCfg = Release|x64
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|x64.Build.0 = Release|x64
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|ARM.ActiveCfg = Release|ARM
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|ARM.Build.0 = Release|ARM
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|iPhone.ActiveCfg = Release|iPhone
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|iPhone.Build.0 = Release|iPhone
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
 EndGlobal

@@ -18,12 +18,10 @@ namespace Emgu.CV.XamarinForms
 {
 	public partial class ButtonTextImagePage : ContentPage
 	{
+
 		public ButtonTextImagePage()
 		{
-#if __UNIFIED__ && !__IOS__ //Xamarin Mac
-#else
 			InitializeComponent ();
-#endif
 		}
 
 #if __ANDROID__ || __IOS__

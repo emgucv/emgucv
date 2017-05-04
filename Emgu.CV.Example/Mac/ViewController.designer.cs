@@ -21,6 +21,9 @@ namespace Emgu.CV.Example.Mac
 		[Outlet]
 		AppKit.NSTextField messageLabel { get; set; }
 
+		[Action ("CameraCaptureClicked:")]
+		partial void CameraCaptureClicked (Foundation.NSObject sender);
+
 		[Action ("faceDetectionClicked:")]
 		partial void faceDetectionClicked (Foundation.NSObject sender);
 

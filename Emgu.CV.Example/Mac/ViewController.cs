@@ -111,7 +111,56 @@ namespace Emgu.CV.Example.Mac
 				}
 				mainImageView.Image = image.ToNSImage();
 			}
+		}
 
+		private VideoCapture _capture = null;
+		private Mat _frame = null;
+		private bool _captureInProgress = false;
+
+		private void ProcessFrame(object sender, EventArgs arg)
+		{
+			if (_capture != null && _capture.Ptr != IntPtr.Zero)
+			{
+				_capture.Retrieve(_frame, 0);
+				var nsImage = _frame.ToNSImage();
+				InvokeOnMainThread(() =>
+				{
+					mainImageView.Image = nsImage;
+				});
+			}
+		}
+
+		void RunCameraCapture()
+		{
+			if (_capture == null)
+			{
+				_capture = new VideoCapture();
+				if (_capture == null || !_capture.IsOpened)
+				{
+					InvokeOnMainThread(() =>
+					{
+						messageLabel.StringValue = "unable to create capture";
+					});
+					_capture = null;
+					return;
+				}
+				_capture.ImageGrabbed += ProcessFrame;
+				_frame = new Mat();
+
+			}
+			if (_captureInProgress)
+			{  //stop the capture
+			   //captureButton.Text = "Start Capture";
+				_capture.Pause();
+			}
+			else
+			{
+				//start the capture
+				//captureButton.Text = "Stop";
+				_capture.Start();
+			}
+
+			_captureInProgress = !_captureInProgress;
 
 		}
 
@@ -151,6 +200,11 @@ namespace Emgu.CV.Example.Mac
 		partial void pedestrianDetectionClicked(Foundation.NSObject sender)
 		{
 			RunPedestrianDetection();
+		}
+
+		partial void CameraCaptureClicked(NSObject sender)
+		{
+			RunCameraCapture();
 		}
 	}
 }

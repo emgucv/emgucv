@@ -17,7 +17,9 @@ namespace Emgu.CV.XamarinForms
        public HelloWorldPage()
           : base()
        {
-          this.GetButton().Opacity = 0;
+			var button = this.GetButton();
+			if (button != null)
+				button.Opacity = 0;
          Mat img = new Mat(200, 400, DepthType.Cv8U, 3); //Create a 3 channel image of 400x200
          img.SetTo(new Bgr(255, 0, 0).MCvScalar); // set it to Blue color
 
