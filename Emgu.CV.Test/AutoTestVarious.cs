@@ -3277,6 +3277,8 @@ namespace Emgu.CV.Test
             }
         }
 
+
+
         [Test]
         public void TestDnnSSD()
         {
@@ -3310,6 +3312,12 @@ namespace Emgu.CV.Test
             Dnn.Blob detection = net.GetBlob("detection_out");
 
             float confidenceThreshold = 0.5f;
+            String[] labelsLines = File.ReadAllLines("pascal-classes.txt");
+            String[] labels = new String[labelsLines.Length];
+            for (int i = 0; i < labels.Length; i++)
+            {
+                labels[i] = labelsLines[i].Split(' ')[0].Trim();
+            }
 
             using (Mat tmp = detection.MatRef())
             {
@@ -3333,6 +3341,7 @@ namespace Emgu.CV.Test
                         RectangleF objectRegion = new RectangleF(xLeftBottom, yLeftBottom, xRightTop - xLeftBottom, yRightTop - yLeftBottom);
 
                         CvInvoke.Rectangle(img, Rectangle.Round(objectRegion), new MCvScalar(0, 255, 0) );
+                        CvInvoke.PutText(img, labels[(int) objectClass], Point.Round( objectRegion.Location), FontFace.HersheyPlain, 1.0, new MCvScalar(0, 0, 255));
                     }
                 }
                 //Mat detectionMat = new Mat(dim[2], dim[3], DepthType.Cv32F, 1, tmp.DataPointer, dim[3]*sizeof(float)); 
