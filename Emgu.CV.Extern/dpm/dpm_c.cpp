@@ -11,13 +11,13 @@ using cv::dpm::DPMDetector;
 
 DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vector<cv::String>* classNames)
 {
-	auto files = std::vector<std::string>(filenames->size());
-	auto classes = std::vector<std::string>(classNames->size());
+	std::vector<std::basic_string<char>> files = std::vector<std::string>(filenames->size());
+	std::vector<std::basic_string<char>> classes = std::vector<std::string>(classNames->size());
 
-	for (auto it = filenames->begin(); it != filenames->end(); ++it)
+	for (std::vector<cv::String>::iterator it = filenames->begin(); it != filenames->end(); ++it)
 		files.push_back(std::string(it->c_str(), it->size()));
 
-	for (auto it = classNames->begin(); it != classNames->end(); ++it)
+	for (std::vector<cv::String>::iterator it = classNames->begin(); it != classNames->end(); ++it)
 		classes.push_back(std::string(it->c_str(), it->size()));
 
 	cv::Ptr<DPMDetector> dpm = DPMDetector::create(files, classes);
@@ -27,7 +27,7 @@ DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vecto
 
 void cveDPMDetectorDetect(DPMDetector* dpm, cv::Mat* image, std::vector<CvRect>* rects, std::vector<float>* scores, std::vector<int>* classIds)
 {
-	auto dobjects = std::vector<DPMDetector::ObjectDetection>();
+	std::vector<DPMDetector::ObjectDetection> dobjects = std::vector<DPMDetector::ObjectDetection>();
 	dpm->detect(*image, dobjects);
 
 	for (auto it = dobjects.begin(); it != dobjects.end(); ++it)
@@ -45,9 +45,9 @@ size_t cveDPMDetectorGetClassCount(DPMDetector* dpm)
 
 void cveDPMDetectorGetClassNames(DPMDetector* dpm, std::vector<cv::String>* names)
 {
-	auto classnames = dpm->getClassNames();
+	std::vector<std::string> classnames = dpm->getClassNames();
 
-	for (auto it = classnames.begin(); it != classnames.end(); ++it)
+	for (std::vector<std::string>::iterator it = classnames.begin(); it != classnames.end(); ++it)
 		names->push_back(cv::String(*it));
 }
 
