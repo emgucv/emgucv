@@ -276,7 +276,7 @@
         <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
       </PropertyGroup>
     </When>
-	<!-- Windows Form Application -->
+	<!-- DotNetCore Application -->
 	<When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netstandard1.4')">
       <PropertyGroup>
         <EmguCVLinkTarget>DotNetCore</EmguCVLinkTarget>
