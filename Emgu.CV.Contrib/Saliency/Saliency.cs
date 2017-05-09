@@ -181,7 +181,9 @@ namespace Emgu.CV.Saliency
         public VectorOfFloat GetObjectnessValues()
         {
             //pretty sure that the vector<float> is owned by the saliency object, so we shouldn't dispose it.
-            return new VectorOfFloat(SaliencyInvoke.cveSaliencyGetObjectnessValues(_ptr), false);
+            VectorOfFloat vector = new VectorOfFloat();
+            SaliencyInvoke.cveSaliencyGetObjectnessValues(_ptr, vector);
+            return vector;
         }
 
         /// <summary>
@@ -244,7 +246,7 @@ namespace Emgu.CV.Saliency
         internal static extern void cveSaliencyMotionSetImageSize(IntPtr binWang2014, int width, int height);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSaliencyGetObjectnessValues(IntPtr bing);
+        internal static extern void cveSaliencyGetObjectnessValues(IntPtr bing, IntPtr vectorOfFloat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSaliencySetTrainingPath(IntPtr bing, IntPtr trainingPath);
