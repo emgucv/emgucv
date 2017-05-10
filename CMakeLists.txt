@@ -1304,7 +1304,7 @@ ELSEIF (WIN32)
   # ----------------------------------------------------------------------------
   LIST(APPEND CPACK_NSIS_MENU_LINKS "http://www.emgu.com" "Emgu CV wiki")
   LIST(APPEND CPACK_NSIS_MENU_LINKS "http://www.emgu.com/forum" "Emgu CV Discussion Forums")
-  LIST(APPEND CPACK_NSIS_MENU_LINKS "http://www.emgu.com/bugs/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=&product=Emgu+CV&long_desc_type=substring&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&deadlinefrom=&deadlineto=&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&emailassigned_to1=1&emailtype1=substring&email1=&emailassigned_to2=1&emailreporter2=1&emailcc2=1&emailtype2=substring&email2=&bugidtype=include&bug_id=&chfieldfrom=&chfieldto=Now&chfieldvalue=&cmdtype=doit&order=Reuse+same+sort+as+last+time&field0-0-0=noop&type0-0-0=noop&value0-0-0=" "Emgu CV Bug Tracking")
+  LIST(APPEND CPACK_NSIS_MENU_LINKS "https://github.com/emgucv/emgucv/issues" "Emgu CV Bug Tracking")
   
   # ----------------------------------------------------------------------------
   #  Add menu link for Visual Studio solutions 
