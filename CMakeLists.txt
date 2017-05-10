@@ -562,6 +562,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   stitching latentsvm line_descriptor tracking plot
   dnn aruco fuzzy viz bioinspired
   dpm
+  saliency
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
