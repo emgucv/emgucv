@@ -18,7 +18,6 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="srcPoints">Point coordinates in the original plane</param>
         /// <param name="dstPoints">Point coordinates in the destination plane</param>
-        /// <param name="homography">The output homography matrix</param>
         /// <param name="method">FindHomography method</param>
         /// <param name="ransacReprojThreshold">
         /// The maximum allowed reprojection error to treat a point pair as an inlier. 
@@ -27,10 +26,9 @@ namespace Emgu.CV
         /// </param>
         /// <param name="mask">Optional output mask set by a robust method ( CV_RANSAC or CV_LMEDS ). Note that the input mask values are ignored.</param>
         /// <returns>The 3x3 homography matrix if found. Null if not found.</returns>
-        public static void FindHomography(
+        public static Mat FindHomography(
            PointF[] srcPoints,
            PointF[] dstPoints,
-           IOutputArray homography,
            CvEnum.HomographyMethod method,
            double ransacReprojThreshold = 3,
            IOutputArray mask = null)
@@ -44,7 +42,7 @@ namespace Emgu.CV
                 using (
                    Mat dstPointMatrix = new Mat(dstPoints.Length, 2, DepthType.Cv32F, 1, dstHandle.AddrOfPinnedObject(), 8))
                 {
-                    CvInvoke.FindHomography(srcPointMatrix, dstPointMatrix, homography, method, ransacReprojThreshold, mask);
+                    return CvInvoke.FindHomography(srcPointMatrix, dstPointMatrix, method, ransacReprojThreshold, mask);
                 }
             }
             finally
@@ -62,20 +60,21 @@ namespace Emgu.CV
         /// <param name="method">The type of the method</param>
         /// <param name="ransacReprojThreshold">The maximum allowed re-projection error to treat a point pair as an inlier. The parameter is only used in RANSAC-based homography estimation. E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3</param>
         /// <param name="mask">The optional output mask set by a robust method (RANSAC or LMEDS). </param>
-        /// <param name="homography">Output 3x3 homography matrix. Homography matrix is determined up to a scale, thus it is normalized to make h33=1</param>
-        public static void FindHomography(
+        /// <returns>Output 3x3 homography matrix. Homography matrix is determined up to a scale, thus it is normalized to make h33=1</returns>
+        public static Mat FindHomography(
            IInputArray srcPoints,
            IInputArray dstPoints,
-           IOutputArray homography,
            CvEnum.HomographyMethod method = CvEnum.HomographyMethod.Default,
            double ransacReprojThreshold = 3,
            IOutputArray mask = null)
         {
+            Mat homography = new Mat();
             using (InputArray iaSrcPoints = srcPoints.GetInputArray())
             using (InputArray iaDstPoints = dstPoints.GetInputArray())
             using (OutputArray oaHomography = homography.GetOutputArray())
             using (OutputArray oaMask = mask == null ? OutputArray.GetEmpty() : mask.GetOutputArray())
                 cveFindHomography(iaSrcPoints, iaDstPoints, oaHomography, method, ransacReprojThreshold, oaMask);
+            return homography;
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -110,7 +109,8 @@ namespace Emgu.CV
         /// <param name="prob">Parameter used for the RANSAC or LMedS methods only. It specifies a desirable level of confidence (probability) that the estimated matrix is correct.</param>
         /// <param name="threshold">Parameter used for RANSAC. It is the maximum distance from a point to an epipolar line in pixels, beyond which the point is considered an outlier and is not used for computing the final fundamental matrix. It can be set to something like 1-3, depending on the accuracy of the point localization, image resolution, and the image noise.</param>
         /// <param name="mask">Output array of N elements, every element of which is set to 0 for outliers and to 1 for the other points. The array is computed only in the RANSAC and LMedS methods.</param>
-        public static void FindEssentialMat(IInputArray points1, IInputArray points2, IInputArray cameraMatrix,
+        /// <returns>The essential mat</returns>
+        public static Mat FindEssentialMat(IInputArray points1, IInputArray points2, IInputArray cameraMatrix,
            CvEnum.FmType method = CvEnum.FmType.Ransac, double prob = 0.999, double threshold = 1.0,
            IOutputArray mask = null)
         {
@@ -119,12 +119,14 @@ namespace Emgu.CV
             using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
             using (OutputArray oaMask = mask == null ? OutputArray.GetEmpty() : mask.GetOutputArray())
             {
-                cveFindEssentialMat(iaPoints1, iaPoints2, iaCameraMatrix, method, prob, threshold, oaMask);
+                Mat essentialMat = new Mat();
+                cveFindEssentialMat(iaPoints1, iaPoints2, iaCameraMatrix, method, prob, threshold, oaMask, essentialMat);
+                return essentialMat;
             }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveFindEssentialMat(IntPtr points1, IntPtr points2, IntPtr cameraMatrix, CvEnum.FmType method, double prob, double threshold, IntPtr mask);
+        private static extern void cveFindEssentialMat(IntPtr points1, IntPtr points2, IntPtr cameraMatrix, CvEnum.FmType method, double prob, double threshold, IntPtr mask, IntPtr essentialMat);
 
         /// <summary>
         /// Calculates fundamental matrix using one of four methods listed above and returns the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. 
@@ -135,15 +137,17 @@ namespace Emgu.CV
         /// <param name="param1">Parameter used for RANSAC. It is the maximum distance from a point to an epipolar line in pixels, beyond which the point is considered an outlier and is not used for computing the final fundamental matrix. It can be set to something like 1-3, depending on the accuracy of the point localization, image resolution, and the image noise.</param>
         /// <param name="param2">Parameter used for the RANSAC or LMedS methods only. It specifies a desirable level of confidence (probability) that the estimated matrix is correct.</param>
         /// <param name="mask">The optional pointer to output array of N elements, every element of which is set to 0 for outliers and to 1 for the "inliers", i.e. points that comply well with the estimated epipolar geometry. The array is computed only in RANSAC and LMedS methods. For other methods it is set to all 1.</param>
-        /// <param name="f">The calculated fundamental matrix</param>
-        public static void FindFundamentalMat(IInputArray points1, IInputArray points2, IOutputArray f,
+        /// <returns>The calculated fundamental matrix </returns>
+        public static Mat FindFundamentalMat(IInputArray points1, IInputArray points2, 
            CvEnum.FmType method = CvEnum.FmType.Ransac, double param1 = 3, double param2 = 0.99, IOutputArray mask = null)
         {
+            Mat f = new Mat();
             using (InputArray iaPoints1 = points1.GetInputArray())
             using (InputArray iaPoints2 = points2.GetInputArray())
             using (OutputArray oaF = f.GetOutputArray())
             using (OutputArray oaMask = mask == null ? OutputArray.GetEmpty() : mask.GetOutputArray())
                 cveFindFundamentalMat(iaPoints1, iaPoints2, oaF, method, param1, param2, oaMask);
+            return f;
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -176,9 +176,10 @@ void cveConvertPointsFromHomogeneous(cv::_InputArray* src, cv::_OutputArray* dst
    cv::convertPointsFromHomogeneous(*src, *dst);
 }
 
-void cveFindEssentialMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* cameraMatrix, int method, double prob, double threshold, cv::_OutputArray* mask)
+void cveFindEssentialMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* cameraMatrix, int method, double prob, double threshold, cv::_OutputArray* mask, cv::Mat* essentialMat)
 {
-   cv::findEssentialMat(*points1, *points2, *cameraMatrix, method, prob, threshold, mask ? *mask : (cv::OutputArray) cv::noArray());
+   cv::Mat res = cv::findEssentialMat(*points1, *points2, *cameraMatrix, method, prob, threshold, mask ? *mask : (cv::OutputArray) cv::noArray());
+   cv::swap(res, *essentialMat);
 }
 
 void cveFindFundamentalMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_OutputArray* dst, int method, double param1, double param2, cv::_OutputArray* mask)
