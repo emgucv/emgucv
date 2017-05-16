@@ -138,6 +138,28 @@ void cveOrbFeaturesFinderRelease(cv::detail::OrbFeaturesFinder** finder)
    *finder = 0;
 }
 
+cv::detail::AKAZEFeaturesFinder* cveAKAZEFeaturesFinderCreate(
+	int descriptorType,
+	int descriptorSize,
+	int descriptorChannels,
+	float threshold,
+	int nOctaves,
+	int nOctaveLayers,
+	int diffusivity,
+	cv::detail::FeaturesFinder** f)
+{
+	cv::detail::AKAZEFeaturesFinder* finder = new cv::detail::AKAZEFeaturesFinder(
+		descriptorType, descriptorSize, descriptorChannels, threshold, nOctaves, nOctaveLayers, diffusivity
+	);
+	*f = dynamic_cast<cv::detail::FeaturesFinder*>(finder);
+	return finder;
+}
+void cveAKAZEFeaturesFinderRelease(cv::detail::AKAZEFeaturesFinder** finder)
+{
+	delete *finder;
+	*finder = 0;
+}
+
 
 void cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox)
 {
