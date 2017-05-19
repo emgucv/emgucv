@@ -137,10 +137,11 @@ namespace OCR
 
             if (mode == OCRMode.FullPage)
             {
-
+                
                 ocr.SetImage(imageColor);
 
-                int recResult = ocr.Recognize();
+                if (ocr.Recognize() != 0)
+                    throw new Exception("Failed to recognizer image");
                 Tesseract.Character[] characters = ocr.GetCharacters();
                 if (characters.Length == 0)
                 {
@@ -243,6 +244,8 @@ namespace OCR
                     using (Mat region = new Mat(image, rect))
                     {
                         ocr.SetImage(region);
+                        if (ocr.Recognize() != 0)
+                            throw new Exception("Failed to recognize image");
                         Tesseract.Character[] characters = ocr.GetCharacters();
 
                         //convert the coordinates from the local region to global
