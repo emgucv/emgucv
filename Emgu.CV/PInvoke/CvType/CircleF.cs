@@ -37,9 +37,11 @@ namespace Emgu.CV.Structure
          set { _center = value; }
       }
 
-      ///<summary> The radius of the circle </summary>
-      [XmlAttribute("Radius")]
-      public float Radius { get { return _radius; } set { _radius = value; } }
+        ///<summary> The radius of the circle </summary>
+#if !NETCOREAPP1_1
+        [XmlAttribute("Radius")]
+#endif
+        public float Radius { get { return _radius; } set { _radius = value; } }
 
       ///<summary> The area of the circle </summary>
       public double Area

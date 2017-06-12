@@ -12,19 +12,19 @@ namespace Emgu.CV
     /// <summary>
     /// A (3x1) Rodrigues rotation vector. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis. 
     /// </summary>
-#if !NETFX_CORE
-   [Serializable]
+#if !(NETFX_CORE || NETCOREAPP1_1)
+    [Serializable]
 #endif
     public class RotationVector3D : Matrix<double>
     {
 
-#if !NETFX_CORE
-      /// <summary>
-      /// Constructor used to deserialize 3D rotation vector
-      /// </summary>
-      /// <param name="info">The serialization info</param>
-      /// <param name="context">The streaming context</param>
-      public RotationVector3D(SerializationInfo info, StreamingContext context)
+#if !(NETFX_CORE || NETCOREAPP1_1)
+        /// <summary>
+        /// Constructor used to deserialize 3D rotation vector
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        public RotationVector3D(SerializationInfo info, StreamingContext context)
          : base(info, context)
       {
       }
@@ -52,7 +52,9 @@ namespace Emgu.CV
         /// <summary>
         /// Get or Set the (3x3) rotation matrix represented by this rotation vector.
         /// </summary>
+#if !NETCOREAPP1_1
         [XmlIgnore]
+#endif
         public Mat RotationMatrix
         {
             get

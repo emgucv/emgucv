@@ -277,7 +277,7 @@
       </PropertyGroup>
     </When>
 	<!-- DotNetCore Application -->
-	<When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netstandard1.4')">
+	<When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netcoreapp1.1')">
       <PropertyGroup>
         <EmguCVLinkTarget>DotNetCore</EmguCVLinkTarget>
       </PropertyGroup>

@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+
+  <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
+
+  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
+
+  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
+
+</Project>
