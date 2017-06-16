@@ -100,7 +100,7 @@ else
 fi
 
 mkdir -p Emgu.CV/PInvoke/iOS
-cp -f platforms/ios/universal/libemgucv.a Emgu.CV/PInvoke/iOS
+cp -f platforms/ios/universal/libemgucv.a libs/iOS/libcvextern.a
 
 cd platforms/ios
 

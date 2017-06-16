@@ -192,9 +192,9 @@
       <PropertyGroup>
         <EmguCVErrorMessage Condition="'$(BuildingInsideVisualStudio)'=='True'"> Direct reference of Emgu CV for Xamarin iOS is only available with Xamarin Studio on Mac. When using Emgu CV in Visual Studio with Xamarin iOS plug in, please add the Emgu.CV.iOS.World reference instead.</EmguCVErrorMessage>
         <EmguCVLinkTarget>Xamarin iOS App</EmguCVLinkTarget>
-        <EmguCVNativeFile>$(EmguCVDir)PInvoke\iOS\libemgucv.a</EmguCVNativeFile>
+        <EmguCVNativeFile>$(EmguCVDir)..\libs\iOS\libcvextern.a</EmguCVNativeFile>
         <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-        <MtouchExtraArgs>$(MtouchExtraArgs) -cxx -gcc_flags "-L$(EmguCVDir)PInvoke\iOS\ -lemgucv -framework Foundation -framework Accelerate -framework CoreFoundation -framework CoreGraphics -framework AssetsLibrary -framework AVFoundation -framework CoreImage -framework CoreMedia -framework CoreVideo -framework QuartzCore -framework ImageIO"</MtouchExtraArgs>
+        <MtouchExtraArgs>$(MtouchExtraArgs) -cxx -gcc_flags "-L$(EmguCVDir)..\lib\iOS\ -lcvextern -framework Foundation -framework Accelerate -framework CoreFoundation -framework CoreGraphics -framework AssetsLibrary -framework AVFoundation -framework CoreImage -framework CoreMedia -framework CoreVideo -framework QuartzCore -framework ImageIO"</MtouchExtraArgs>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
       </PropertyGroup>
     </When>
@@ -272,9 +272,29 @@
     </When>
     <!-- Windows Form Application -->
     <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFrameworkVersion)'=='v2.0' OR '$(TargetFrameworkVersion)'=='v3.0' OR '$(TargetFrameworkVersion)'=='v3.5' OR '$(TargetFrameworkVersion)'=='v4.0' OR '$(TargetFrameworkVersion)'=='v4.5' OR '$(TargetFrameworkVersion)'=='v4.5.1' OR '$(TargetFrameworkVersion)'=='v4.5.2' OR '$(TargetFrameworkVersion)'=='v4.6' OR '$(TargetFrameworkVersion)'=='v4.6.1')">
-      <PropertyGroup>
+	  <PropertyGroup>
         <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
+        <EmguBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguBuildX64>
+        <EmguNativeFileX64>$(EmguCVDir)..\libs\x64\cvextern.dll</EmguNativeFileX64>
+		<EmguCVErrorMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguNativeFileX64)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X64 is targeted, but file $(EmguNativeFileX64) is missing.</EmguCVErrorMessage>
+		<EmguBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguBuildX86>
+        <EmguNativeFileX86>$(EmguCVDir)..\libs\x86\cvextern.dll</EmguNativeFileX86>
+        <EmguCVErrorMessage Condition="'$(EmguBuildX86)'=='True' AND !Exists('$(EmguNativeFileX86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X86 is targeted, but file $(EmguNativeFileX86) is missing.</EmguCVErrorMessage>
+		<EmguCVDeployMessage Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">$(EmguCVDeployMessage)x86 </EmguCVDeployMessage>
+        <EmguCVDeployMessage Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">$(EmguCVDeployMessage)x64 </EmguCVDeployMessage>
       </PropertyGroup>
+      <ItemGroup Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">
+        <Content Include="$(EmguCVDir)..\libs\x64\*.dll">
+          <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+	  <ItemGroup Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">
+        <Content Include="$(EmguCVDir)..\libs\x86\*.dll">
+          <Link>x86\%(RecursiveDir)%(Filename)%(Extension)</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
     </When>
 	<!-- DotNetCore Application -->
 	<When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netcoreapp1.1')">
@@ -286,7 +306,6 @@
   <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Error Condition="'$(EmguCVLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please use the pre-compiled Emgu.CV.World dll or send a bug report to support@emgu.com" />
     <Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
-    <Message Condition="'$(EmguCVLinkTarget)'=='WindowsForms'" Text="Emgu CV shared project is not set to deploy native files for Windows forms project, please make sure the unmanaged dlls are deployed with your executable." Importance="High" />
     <Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
     <Message Text="Compiling with $(EmguCVDeployMessage)binary" Condition="'$(EmguCVDeployMessage)'!=''" Importance="High" />
     <Message Text="No native binary is deployed by the Emgu.CV shared project." Condition="'$(EmguCVDeployMessage)'==''" Importance="High" />

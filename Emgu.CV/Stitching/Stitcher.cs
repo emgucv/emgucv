@@ -186,6 +186,9 @@ namespace Emgu.CV.Stitching
         }
     }
 
+    /// <summary>
+    /// Entry points to the Open CV Stitching module.
+    /// </summary>
     public static partial class StitchingInvoke
     {
 

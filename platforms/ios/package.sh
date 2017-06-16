@@ -7,7 +7,10 @@ git archive --format=tar --prefix=tmp/ HEAD | tar xf -
 cd platforms/ios
 
 rm -rf ios-package
-mkdir ios-package
+
+mkdir ios-package/libs/iOS
+cp -f ../../libs/iOS/libemgucv.a ios-package/libs/iOS
+
 cp -r ../../tmp/Emgu.CV ios-package/Emgu.CV
 cp -f ../../Emgu.CV/*.cs ios-package/Emgu.CV/
 cp -f ../../Emgu.CV/Capture/*.cs ios-package/Emgu.CV/Capture
@@ -19,7 +22,6 @@ cp -f ../../Emgu.CV/Shape/*.cs ios-package/Emgu.CV/Shape
 cp -f ../../Emgu.CV/Stitching/*.cs ios-package/Emgu.CV/Stitching
 cp -f ../../Emgu.CV/Video/*.cs ios-package/Emgu.CV/Video
 cp -f ../../Emgu.CV/PInvoke/CvInvokeEntryPoints.cs ios-package/Emgu.CV/PInvoke
-cp -f ../../Emgu.CV/PInvoke/iOS/libemgucv.a ios-package/Emgu.CV/PInvoke/iOS
 cp -f ../../Emgu.CV/Util/*.cs ios-package/Emgu.CV/Util
 rm -rf ios-package/Emgu.CV/PInvoke/Android
 rm -rf ios-package/Emgu.CV/PInvoke/System.Drawing
