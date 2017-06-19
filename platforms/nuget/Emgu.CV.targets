@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+      <PropertyGroup>
+        <EmguLinkTarget>WindowsForms</EmguLinkTarget>
+        <EmguBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguBuildX64>
+		<EmguBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguBuildX86>
+        <EmguNativeFileX64>$(MSBuildThisFileDirectory)\x64\cvextern.dll</EmguNativeFileX64>
+		<EmguNativeFileX86>$(MSBuildThisFileDirectory)\x86\cvextern.dll</EmguNativeFileX86>
+		<EmguErrorMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguNativeFileX86)')">This package do not contain necessary binary for $(EmguLinkTarget). X86 is targeted, but file $(EmguNativeFileX86) is missing.</EmguErrorMessage>
+        <EmguDeployMessage Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">$(EmguDeployMessage)x86 </EmguDeployMessage>
+        <EmguErrorMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguNativeFileX64)')">This package do not contain necessary binary for $(EmguLinkTarget). X64 is targeted, but file $(EmguNativeFileX64) is missing.</EmguErrorMessage>
+        <EmguDeployMessage Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">$(EmguDeployMessage)x64 </EmguDeployMessage>
+      </PropertyGroup>
+      <ItemGroup Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">
+        <Content Include="$(MSBuildThisFileDirectory)\x64\*.dll">
+          <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+	  <ItemGroup Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">
+        <Content Include="$(MSBuildThisFileDirectory)\x86\*.dll">
+          <Link>x86\%(RecursiveDir)%(Filename)%(Extension)</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+	    <Target Name="EmguPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(EmguLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please use the pre-compiled Emgu.CV.World dll or send a bug report to support@emgu.com" />
+    <Message Condition="'$(EmguLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguLinkTarget)" Importance="High" />
+    <Error Text="'$(EmguErrorMessage)'" Condition="'$(EmguErrorMessage)'!=''" />
+    <Message Text="Compiling with $(EmguDeployMessage)binary" Condition="'$(EmguDeployMessage)'!=''" Importance="High" />
+    <Message Text="No native binary is deployed by the Emgu.CV shared project." Condition="'$(EmguDeployMessage)'==''" Importance="High" />
+  </Target>
+</Project>

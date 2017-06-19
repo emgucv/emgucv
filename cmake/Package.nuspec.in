@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Emgu.CV</id>
+    <version>${CPACK_PACKAGE_VERSION}</version>
+    <authors>Emgu Corporation</authors>
+    <owners>Emgu Corporation</owners>
+    <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
+    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. The wrapper can be compiled by Visual Studio, Xamarin Studio and Unity, it can run on Windows, Linux, Mac OS X, iOS, Android and Windows Phone.</description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>opencv emgu emgucv ai</tags>
+  </metadata>
+  <files>
+    <file src="..\..\libs\x64\*.dll" target="build\x64" />
+	<file src="Emgu.CV.targets" target="build" />
+    <file src="..\..\libs\Emgu.CV.World.dll" target="libs" />
+	<file src="..\..\libs\Emgu.CV.World.XML" target="libs" />
+  </files>
+</package>
