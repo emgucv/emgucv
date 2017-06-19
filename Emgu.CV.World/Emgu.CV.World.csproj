@@ -17,20 +17,20 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\libs\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Emgu.CV.World.XML</DocumentationFile>
+    <DocumentationFile>..\libs\Emgu.CV.World.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\libs\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Emgu.CV.World.XML</DocumentationFile>
+    <DocumentationFile>..\libs\Emgu.CV.World.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -39,20 +39,20 @@
     <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|iPhone'">
-    <OutputPath>..\bin\</OutputPath>
-    <DocumentationFile>..\bin\Emgu.CV.World.XML</DocumentationFile>
+    <OutputPath>..\libs\</OutputPath>
+    <DocumentationFile>..\libs\Emgu.CV.World.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator'">
-    <OutputPath>..\bin\</OutputPath>
-    <DocumentationFile>..\bin\Emgu.CV.World.XML</DocumentationFile>
+    <OutputPath>..\libs\</OutputPath>
+    <DocumentationFile>..\libs\Emgu.CV.World.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|iPhone'">
-    <OutputPath>..\bin\</OutputPath>
-    <DocumentationFile>..\bin\Emgu.CV.World.XML</DocumentationFile>
+    <OutputPath>..\libs\</OutputPath>
+    <DocumentationFile>..\libs\Emgu.CV.World.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator'">
-    <OutputPath>..\bin\</OutputPath>
-    <DocumentationFile>..\bin\Emgu.CV.World.XML</DocumentationFile>
+    <OutputPath>..\libs\</OutputPath>
+    <DocumentationFile>..\libs\Emgu.CV.World.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\Emgu.CV.snk" />

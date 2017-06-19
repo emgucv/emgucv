@@ -41,7 +41,7 @@ xcopy libemgucv-android-arm64-v8a libemgucv-android /E /Y
 cd libemgucv-android
 mv bin libs
 xcopy sdk\native\libs libs /E /Y
-rm -rf sdk\native libs\armeabi\libopencv_androidcamera.a libs\armeabi-v7a\libopencv_androidcamera.a libs\x86\libopencv_androidcamera.a 
+rm -rf sdk\native libs\android\armeabi\libopencv_androidcamera.a libs\android\armeabi-v7a\libopencv_androidcamera.a libs\android\x86\libopencv_androidcamera.a 
 cd ..
 rm -rf libemgucv-android.zip
 zip -r libemgucv-android libemgucv-android

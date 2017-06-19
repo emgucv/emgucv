@@ -99,7 +99,7 @@ else
     lipo -create -output platforms/ios/universal/libemgucv.a platforms/ios/armv7/libemgucv_armv7.a platforms/ios/armv7s/libemgucv_armv7s.a platforms/ios/arm64/libemgucv_arm64.a platforms/ios/i386/libemgucv_i386.a  platforms/ios/x86_64/libemgucv_x86_64.a
 fi
 
-mkdir -p Emgu.CV/PInvoke/iOS
+mkdir -p libs/iOS
 cp -f platforms/ios/universal/libemgucv.a libs/iOS/libcvextern.a
 
 cd platforms/ios

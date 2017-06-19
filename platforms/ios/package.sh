@@ -9,7 +9,7 @@ cd platforms/ios
 rm -rf ios-package
 
 mkdir ios-package/libs/iOS
-cp -f ../../libs/iOS/libemgucv.a ios-package/libs/iOS
+cp -f ../../libs/iOS/libcvextern.a ios-package/libs/iOS
 
 cp -r ../../tmp/Emgu.CV ios-package/Emgu.CV
 cp -f ../../Emgu.CV/*.cs ios-package/Emgu.CV/
