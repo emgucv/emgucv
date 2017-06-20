@@ -4,12 +4,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
@@ -17,7 +19,10 @@ using Android.Views;
 using Android.Widget;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Xamarin.Media;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
+using Plugin.Permissions;
+
 
 namespace AndroidExamples
 {
@@ -27,18 +32,19 @@ namespace AndroidExamples
         private TextView _messageText;
         private ImageView _imageView;
         private String _buttonText;
+
         private ProgressDialog _progress;
         //private Image<Bgr, Byte> _defaultImage;
-        private MediaPicker _mediaPicker;
 
         public ButtonMessageImageActivity(String buttonText)
-           : base()
+            : base()
         {
             _buttonText = buttonText;
 
             //dummy code to load the opencv libraries
             bool loaded = CvInvoke.CheckLibraryLoaded();
             //CvInvoke.CV_FOURCC('m', 'j', 'p', 'g');
+
         }
 
         /*
@@ -56,43 +62,84 @@ namespace AndroidExamples
 
         protected event EventHandler<Mat> OnImagePicked;
 
-        private const int _pickImageRequestCode = 1000;
-
-        public void PickImage(String defaultImageName)
+        public async void PickImage(String defaultImageName)
         {
-            if (_mediaPicker == null)
+            await CrossMedia.Current.Initialize();
+            String pickImgString = "Use Image from";
+
+            bool haveCameraOption =
+                (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported);
+            bool havePickImgOption =
+                CrossMedia.Current.IsPickVideoSupported;
+
+            String action;
+            if (haveCameraOption & havePickImgOption)
             {
-                _mediaPicker = new MediaPicker(this);
+                int result = GetUserResponse(this, "Use Image from", "Default", "Photo Library", "Camera");
+                if (result == 1)
+                    action = "Default";
+                else if (result == 0)
+                    action = "Photo Library";
+                else
+                {
+                    action = "Camera";
+                }
+
             }
-            String negative = _mediaPicker.IsCameraAvailable ? "Camera" : "Cancel";
-            int result = GetUserResponse(this, "Use Image from", "Default", "Photo Library", negative);
-            if (result > 0)
+            else if (havePickImgOption)
             {
-                OnImagePicked(this, new Mat(Assets, defaultImageName));
+                int result = GetUserResponse(this, "Use Image from", "Default", "Photo Library", "Cancel");
+
+                if (result == 1)
+                    action = "Default";
+                else if (result == 0)
+                    action = "Photo Library";
+                else
+                {
+                    action = null;
+                }
             }
-            else if (result == 0)
+            else
             {
-                Intent intent = _mediaPicker.GetPickPhotoUI();
-                StartActivityForResult(intent, _pickImageRequestCode);
+                action = "Default";
             }
-            else if (_mediaPicker.IsCameraAvailable)
+
+
+            if (action.Equals("Default"))
             {
-                Intent intent = _mediaPicker.GetTakePhotoUI(new StoreCameraMediaOptions());
-                StartActivityForResult(intent, _pickImageRequestCode);
+#if __ANDROID__
+                Mat m = new Mat(this.Assets, defaultImageName);
+#else
+                Mat m = CvInvoke.Imread(defaultImageName);            
+#endif
+                OnImagePicked(this, m);
+            }
+            else if (action.Equals("Photo Library"))
+            {
+                var photoResult = await CrossMedia.Current.PickPhotoAsync();
+                if (photoResult == null) //cancelled
+                    return;
+                Mat m = CvInvoke.Imread(photoResult.Path);
+                //mats[i] = photoResult.Path;
+                OnImagePicked(this, m);
+            }
+            else if (action.Equals("Camera"))
+            {
+                var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                {
+                    Directory = "Emgu",
+                    Name = $"{DateTime.UtcNow}.jpg"
+                };
+                var takePhotoResult = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
+                if (takePhotoResult == null) //cancelled
+                    return;
+                Mat m = new Mat(takePhotoResult.Path);
+                OnImagePicked(this, m);
             }
         }
 
-        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
-        {
-            if (resultCode != Result.Canceled && requestCode == _pickImageRequestCode && OnImagePicked != null)
-            {
-                Mat image = GetImageFromTask(data.GetMediaFileExtraAsync(this), 800, 800);
-                OnImagePicked(this, image);
-            }
-            base.OnActivityResult(requestCode, resultCode, data);
-        }
-
-        private static int GetUserResponse(Activity activity, String title, String positive, string neutral, string negative)
+        private static int GetUserResponse(Activity activity, String title, String positive, string neutral,
+            string negative)
         {
             AutoResetEvent e = new AutoResetEvent(false);
             int value = 0;
@@ -100,9 +147,21 @@ namespace AndroidExamples
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.SetTitle(title);
-                builder.SetPositiveButton(positive, (s, er) => { value = 1; e.Set(); });
-                builder.SetNeutralButton(neutral, (s, er) => { value = 0; e.Set(); });
-                builder.SetNegativeButton(negative, (s, er) => { value = -1; e.Set(); });
+                builder.SetPositiveButton(positive, (s, er) =>
+                {
+                    value = 1;
+                    e.Set();
+                });
+                builder.SetNeutralButton(neutral, (s, er) =>
+                {
+                    value = 0;
+                    e.Set();
+                });
+                builder.SetNegativeButton(negative, (s, er) =>
+                {
+                    value = -1;
+                    e.Set();
+                });
                 builder.Show();
             });
             e.WaitOne();
@@ -159,7 +218,7 @@ namespace AndroidExamples
         }
 
         private static TResult GetResultFromTask<TResult>(Task<TResult> task)
-           where TResult : class
+            where TResult : class
         {
             if (task == null)
                 return null;
@@ -205,11 +264,11 @@ namespace AndroidExamples
                     _progress.Show();
 
                     ThreadPool.QueueUserWorkItem(delegate
-                 {
-                     try
-                     {
-                         OnButtonClick(sender, e);
-                     }
+                        {
+                            try
+                            {
+                                OnButtonClick(sender, e);
+                            }
 #if !DEBUG
                   catch (Exception excpt)
                   {
@@ -228,12 +287,12 @@ namespace AndroidExamples
                      });
                   }
 #endif
-                     finally
-                     {
-                         RunOnUiThread(_progress.Hide);
-                     }
-                 }
-                 );
+                            finally
+                            {
+                                RunOnUiThread(_progress.Hide);
+                            }
+                        }
+                    );
                 }
             };
         }
@@ -248,6 +307,13 @@ namespace AndroidExamples
         public void SetImageBitmap(Bitmap image)
         {
             RunOnUiThread(() => { _imageView.SetImageBitmap(image); });
+        }
+
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
+            Permission[] grantResults)
+        {
+            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }
