@@ -21,9 +21,7 @@ Global
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
-		..\..\Emgu.CV.ML\Emgu.CV.ML.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
-		..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
 		..\..\Emgu.CV\Emgu.CV.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{34ff2e5e-dee0-4f6d-9a7a-855e8f7e1077}*SharedItemsImports = 4
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13

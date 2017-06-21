@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\FeatureMatching\DrawMatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HelloWorldPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FaceDetectionPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OcrPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PedestrianDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlanarSubdivisionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureMatchingPage.cs" />

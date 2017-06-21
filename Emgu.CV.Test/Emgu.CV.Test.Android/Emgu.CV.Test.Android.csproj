@@ -67,6 +67,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -173,9 +175,6 @@
     <AndroidAsset Include="..\stitch4.jpg">
       <Link>Assets\stitch4.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\Emgu.CV.World\tessdata\eng.traineddata">
-      <Link>tessdata\eng.traineddata</Link>
-    </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -202,16 +201,6 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\opencv_contrib\modules\latentsvm\testdata\latentsvm\models_VOC2007_cascade\cat.xml">
-      <Link>Assets\cat.xml</Link>
-    </AndroidAsset>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="..\..\opencv_contrib\modules\latentsvm\testdata\latentsvm\cat.png">
-      <Link>Assets\cat.png</Link>
-    </AndroidAsset>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="..\..\opencv_contrib\modules\text\samples\trained_classifierNM1.xml">
       <Link>Assets\trained_classifierNM1.xml</Link>
     </AndroidAsset>
@@ -221,9 +210,7 @@
   </ItemGroup>
   <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
   <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.CV.ML\Emgu.CV.ML.projitems" Label="Shared" />
   <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
   <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
   <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.CV.Stitching\Emgu.CV.Stitching.projitems" Label="Shared" />
 </Project>
