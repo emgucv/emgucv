@@ -172,7 +172,7 @@
       </ItemGroup>
     </When>
     <!-- Xamarin.Mac application (Note: do not work for Xamarin iOS for Visual Studio) -->
-    <When Condition="'$(TargetFrameworkIdentifier)'=='Xamarin.Mac'">
+    <When Condition="'$(TargetFrameworkIdentifier)'=='Xamarin.Mac' OR '$(ProjectTypeGuids)'=='{810C163F-4746-4721-8B8E-88A3673A62EA};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
       <PropertyGroup>
         <EmguCVLinkTarget>Xamarin.Mac</EmguCVLinkTarget>
         <EmguCVNativeFile>$(OpenCVBinaryDir)\osx\libcvextern.dylib</EmguCVNativeFile>

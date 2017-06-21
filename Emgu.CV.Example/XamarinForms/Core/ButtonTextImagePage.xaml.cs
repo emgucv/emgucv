@@ -11,6 +11,7 @@ using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 #if NETFX_CORE || (__UNIFIED__ && !__IOS__) //NETFX or Xamarin Mac
+#else
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 #endif
