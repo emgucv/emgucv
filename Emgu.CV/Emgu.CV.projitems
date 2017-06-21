@@ -156,10 +156,10 @@
     <When Condition="(('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(Platform)'=='iPhone' OR '$(Platform)'=='iPhoneSimulator') AND '$(OutputType)' != 'Exe')">
       <PropertyGroup>
         <EmguCVLinkTarget>Xamarin iOS Native Binding Library</EmguCVLinkTarget>
-        <EmguCVNativeFile>$(OpenCVBinaryDir)\iOS\libemgucv.a</EmguCVNativeFile>
+        <EmguCVNativeFile>$(OpenCVBinaryDir)\iOS\libcvextern.a</EmguCVNativeFile>
         <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
-        <EmguCVLinkWithFile>$(EmguCVDir)PInvoke\iOS\libemgucv.linkwith.cs</EmguCVLinkWithFile>
+        <EmguCVLinkWithFile>$(EmguCVDir)PInvoke\iOS\libcvextern.linkwith.cs</EmguCVLinkWithFile>
         <EmguCVErrorMessage Condition="!Exists('$(EmguCVLinkWithFile)')"> This package do not contain necessary file for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVLinkWithFile) </EmguCVErrorMessage>
       </PropertyGroup>
       <ItemGroup>
@@ -167,7 +167,7 @@
       </ItemGroup>
       <ItemGroup>
         <Compile Include="$(EmguCVLinkWithFile)" Condition="Exists('$(EmguCVLinkWithFile)')">
-          <DependentUpon>libemgucv.a</DependentUpon>
+          <DependentUpon>libcvextern.a</DependentUpon>
         </Compile>
       </ItemGroup>
     </When>
