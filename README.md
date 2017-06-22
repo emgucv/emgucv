@@ -4,3 +4,6 @@ Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.
 
 Build instructions can be found here:
 http://www.emgu.com/wiki/index.php/Download_And_Installation#Building_from_Git
+
+Open Source releases can be found here:
+https://sourceforge.net/projects/emgucv/files/emgucv/
