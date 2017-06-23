@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(EMGU_CV_BUILD)
+IF(EMGU_CV_BUILD AND NOT APPLE)
 
 PROJECT(Emgu.CV.UI.GL)
 MESSAGE(STATUS "Configuring Emgu.CV.UI.GL")
@@ -29,7 +29,7 @@ INSTALL(
   DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
   COMPONENT emgucv_binary)
 
-IF(WIN32 OR APPLE)
+IF(WIN32)
 
 #IF(NETFX_CORE)
 #  SET(CSPROJ_FILE "${PROJECT_NAME}.Windows.Store.csproj")
