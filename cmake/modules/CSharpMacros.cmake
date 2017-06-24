@@ -173,9 +173,7 @@ ENDIF(${target_type} STREQUAL "library")
     MAKE_PROPER_FILE_LIST("${source}")
     FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_name})
 
-    ADD_CUSTOM_TARGET (
-      ${target} ${ARGV3}
-      SOURCES ${source})
+
   
     #Make sure the destination folder exist
     LIST(APPEND
@@ -347,13 +345,18 @@ ENDIF(${target_type} STREQUAL "library")
 	FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${target}_SourceList.rsp  ${TMP})
 	
     ADD_CUSTOM_COMMAND (
-      TARGET ${target}
-      ${CS_PREBUILD_COMMAND}	   
+	  OUTPUT "${target_name}"
+      ${CS_PREBUILD_COMMAND}	
       COMMAND ${CSC_EXECUTABLE} ${CS_COMMANDLINE_FLAGS} ${NETFX_EXTRA_FLAGS} @${target}_SourceList.rsp
 	  ${CS_POSTBUILD_COMMAND}
       DEPENDS ${source}
       COMMENT "Building ${relative_path}")
 
+	ADD_CUSTOM_TARGET (
+      ${target} ${ARGV3}
+      SOURCES ${source}
+	  DEPENDS "${target_name}")
+	  
     SET(relative_path "")
     SET(proper_file_list "")
     SET(CS_FLAGS "")
