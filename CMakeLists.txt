@@ -620,6 +620,27 @@ TODAY() #set the variable CURRENT_YEAR
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CommonAssemblyInfo.cs.in ${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs)
 
 # ----------------------------------------------------------------------------
+#  Generate neget packaging file for Emgu CV project
+# ----------------------------------------------------------------------------
+SET(EMGUCV_NUGET_FILE_LIST "")
+IF(HAVE_WINDESKTOP_X86)
+	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x86\\*.dll\" target=\"build\\x86\" />")
+ENDIF()
+IF(HAVE_WINDESKTOP_X64)
+	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x64\\*.dll\" target=\"build\\x64\" />")
+ENDIF()
+IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
+	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
+	<file src=\"Emgu.CV.targets\" target=\"build\" />
+    <file src=\"..\\..\\libs\\Emgu.CV.World.dll\" target=\"lib\\net35\" />
+	<file src=\"..\\..\\libs\\Emgu.CV.World.XML\" target=\"lib\\net35\" />
+	<file src=\"..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net35\" />
+	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net35\" />")
+ENDIF()
+    
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Package.nuspec)
+
+# ----------------------------------------------------------------------------
 #  Generate readme file for Emgu CV project
 # ----------------------------------------------------------------------------
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/README.txt.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt)
@@ -782,7 +803,7 @@ IF(NOT IOS)
   ADD_SUBDIRECTORY(Emgu.CV.World)
 ENDIF()
 
-IF(WIN32 AND HAVE_WINDESKTOP_X86 AND HAVE_WINDESKTOP_X64)
+IF(WIN32)
   ADD_SUBDIRECTORY(platforms/nuget)
 ENDIF()
 
