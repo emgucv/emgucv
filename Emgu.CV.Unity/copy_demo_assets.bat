@@ -1,7 +1,7 @@
 rm -rf Assets/Emgu.CV/Emgu.CV.Demo
-mkdir Assets\Emgu.CV\Emgu.CV.Demo
-mkdir Assets\Emgu.CV\Emgu.CV.Demo\Resources
-mkdir Assets\Emgu.CV\Emgu.CV.Demo\Resources\tessdata
+REM mkdir Assets\Emgu.CV\Emgu.CV.Demo
+mkdir -p Assets\Emgu.CV\Emgu.CV.Demo\Resources
+REM mkdir Assets\Emgu.CV\Emgu.CV.Demo\Resources\tessdata
 
 cp ../opencv/samples/data/lena.jpg Assets/Emgu.CV/Emgu.CV.Demo/Resources
 cp ../Emgu.CV.Test/stitch*.jpg Assets/Emgu.CV/Emgu.CV.Demo/Resources/
