@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Emgu.CV</id>
-	<title>Emgu CV</title>
+    <id>${EMGUCV_NUGET_ID}</id>
+	<title>${EMGUCV_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>Emgu Corporation</authors>
     <owners>Emgu Corporation</owners>
