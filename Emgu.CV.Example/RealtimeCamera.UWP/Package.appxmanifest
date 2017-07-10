@@ -3,8 +3,8 @@
   <Identity Name="be6590a5-8b08-4a76-9b94-61405f7f8926" Publisher="CN=canming" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="be6590a5-8b08-4a76-9b94-61405f7f8926" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>App1</DisplayName>
-    <PublisherDisplayName>canming</PublisherDisplayName>
+    <DisplayName>Emgu CV UWP Realtime Camera</DisplayName>
+    <PublisherDisplayName>Emgu Corporation</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>

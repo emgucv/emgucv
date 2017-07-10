@@ -41,6 +41,8 @@ cp -r ../Emgu.CV/Superres Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Video Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Videostab Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
+cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Emgu.CV/
+
 REM rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Windows.Store
 REM cp -r ../Emgu.CV/Tiff Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Util Assets/Emgu.CV/Emgu.CV/
@@ -65,8 +67,7 @@ mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Aruco
 cp -r ../Emgu.CV.Contrib/Aruco/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Aruco
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\BgSegm
 cp -r ../Emgu.CV.Contrib/BgSegm/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm
-mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Dnn
-cp -r ../Emgu.CV.Contrib/Dnn/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Dnn
+
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Dpm
 cp -r ../Emgu.CV.Contrib/Dpm/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Dpm
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Face

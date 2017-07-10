@@ -47,7 +47,7 @@ cp -r ../Emgu.CV/Util Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Video Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/VideoStab Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
-
+cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Emgu.CV/ 
 
 #cp -r ../Emgu.CV.Cuda/*.cs Assets/Emgu.CV/Emgu.CV.Cuda/
 #mkdir Assets/Emgu.CV/Emgu.CV.Cuda/Bgsegm
@@ -63,13 +63,10 @@ cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 #mkdir Assets/Emgu.CV/Emgu.CV.Cuda/Stereo
 #cp -r ../Emgu.CV.Cuda/Stereo Assets/Emgu.CV/Emgu.CV.Cuda/ 
 
-
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Aruco
 cp -r ../Emgu.CV.Contrib/Aruco Assets/Emgu.CV/Emgu.CV.Contrib/ 
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm
 cp -r ../Emgu.CV.Contrib/BgSegm Assets/Emgu.CV/Emgu.CV.Contrib/ 
-mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Dnn
-cp -r ../Emgu.CV.Contrib/Dnn Assets/Emgu.CV/Emgu.CV.Contrib/ 
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Dpm
 cp -r ../Emgu.CV.Contrib/Dpm Assets/Emgu.CV/Emgu.CV.Contrib/ 
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Face

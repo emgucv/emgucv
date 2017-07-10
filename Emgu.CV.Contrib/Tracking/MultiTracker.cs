@@ -25,11 +25,11 @@ namespace Emgu.CV.Tracking
         /// <summary>
         /// Constructor. In the case of trackerType is given, it will be set as the default algorithm for all trackers.
         /// </summary>
-        /// <param name="trackerType">The name of the tracker algorithm to be used</param>
-        public MultiTracker(String trackerType)
+
+        public MultiTracker()
         {
-            using (CvString trackerTypeStr = new CvString(trackerType))
-                _ptr = ContribInvoke.cveMultiTrackerCreate(trackerTypeStr);
+
+            _ptr = ContribInvoke.cveMultiTrackerCreate();
         }
 
         /// <summary>
@@ -38,22 +38,9 @@ namespace Emgu.CV.Tracking
         /// <param name="image">Tnput image</param>
         /// <param name="boundingBox">A rectangle represents ROI of the tracked object</param>
         /// <returns>True if sucessfully added</returns>
-        public bool Add(Mat image, Rectangle boundingBox)
+        public bool Add(Tracker tracker, Mat image, Rectangle boundingBox)
         {
-            return ContribInvoke.cveMultiTrackerAdd(_ptr, image, ref boundingBox);
-        }
-
-        /// <summary>
-        /// Add a new object to be tracked
-        /// </summary>
-        /// <param name="trackerType">The name of the tracker algorithm to be used</param>
-        /// <param name="image">Input image</param>
-        /// <param name="boundingBox">S rectangle represents ROI of the tracked object</param>
-        /// <returns>True if sucessfully added</returns>
-        public bool Add(String trackerType, Mat image, Rectangle boundingBox)
-        {
-            using (CvString trackerTypeStr = new CvString(trackerType))
-                return ContribInvoke.cveMultiTrackerAddType(_ptr, trackerTypeStr, image, ref boundingBox);
+            return ContribInvoke.cveMultiTrackerAdd(_ptr, tracker, image, ref boundingBox);
         }
 
         /// <summary>
@@ -91,16 +78,17 @@ namespace Emgu.CV
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMultiTrackerCreate(IntPtr trackerType);
+        internal static extern IntPtr cveMultiTrackerCreate();
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool cveMultiTrackerAdd(IntPtr tracker, IntPtr image, ref Rectangle boundingBox);
+        internal static extern bool cveMultiTrackerAdd(IntPtr multiTracker, IntPtr tracker, IntPtr image, ref Rectangle boundingBox);
 
+        /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveMultiTrackerAddType(IntPtr tracker, IntPtr trackerType, IntPtr image, ref Rectangle boundingBox);
-
+        */
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveMultiTrackerUpdate(IntPtr tracker, IntPtr image, IntPtr boundingBox);

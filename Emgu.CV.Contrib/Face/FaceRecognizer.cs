@@ -81,20 +81,20 @@ namespace Emgu.CV.Face
       /// Save the FaceRecognizer to a file
       /// </summary>
       /// <param name="fileName">The file name to be saved to</param>
-      public void Save(String fileName)
+      public void Write(String fileName)
       {
          using (CvString s = new CvString(fileName))
-            ContribInvoke.CvFaceRecognizerSave(_ptr, s);
+            ContribInvoke.CvFaceRecognizerWrite(_ptr, s);
       }
 
       /// <summary>
       /// Load the FaceRecognizer from the file
       /// </summary>
       /// <param name="fileName">The file where the FaceRecognizer will be loaded from</param>
-      public void Load(String fileName)
+      public void Read(String fileName)
       {
          using (CvString s = new CvString(fileName))
-            ContribInvoke.CvFaceRecognizerLoad(_ptr, s);
+            ContribInvoke.CvFaceRecognizerRead(_ptr, s);
       }
 
       /// <summary>
@@ -204,11 +204,11 @@ namespace Emgu.CV
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void CvFaceRecognizerPredict(IntPtr recognizer, IntPtr image, ref int label, ref double distance);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFaceRecognizerSave(
+      internal extern static void CvFaceRecognizerWrite(
          IntPtr recognizer,
          IntPtr fileName);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvFaceRecognizerLoad(
+      internal extern static void CvFaceRecognizerRead(
          IntPtr recognizer,
          IntPtr fileName);
 

@@ -10,7 +10,7 @@ cv::UMat* cveUMatCreate(cv::UMatUsageFlags usage)
 {
    return new cv::UMat(usage);
 }
-
+/*
 void cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator)
 {
    *matAllocator = emguMatAllocatorCreate(allocator, deallocator, allocateDataActionPtr, freeDataActionPtr);
@@ -24,7 +24,7 @@ void cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, Mat
    {
       mat->allocator = *oclAllocator;
    }
-}
+}*/
 void cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, cv::UMatUsageFlags flags)
 {
    mat->create(row, cols, type, flags);

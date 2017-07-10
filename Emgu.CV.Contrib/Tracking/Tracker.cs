@@ -20,8 +20,11 @@ namespace Emgu.CV.Tracking
    /// <summary>
    /// Long-term tracker
    /// </summary>
-   public class Tracker : UnmanagedObject
+   public abstract class Tracker : UnmanagedObject
    {
+        
+       private IntPtr _trackerPtr;
+        /*
       /// <summary>
       /// Creates a tracker by its name.
       /// </summary>
@@ -30,7 +33,7 @@ namespace Emgu.CV.Tracking
       {
          using (CvString trackerTypeStr = new CvString(trackerType))
             _ptr = ContribInvoke.cveTrackerCreate(trackerTypeStr);
-      }
+      }*/
 
       /// <summary>
       /// Initialize the tracker with a know bounding box that surrounding the target.
@@ -40,7 +43,7 @@ namespace Emgu.CV.Tracking
       /// <returns></returns>
       public bool Init(Mat image, Rectangle boundingBox)
       {
-         return ContribInvoke.cveTrackerInit(_ptr, image, ref boundingBox);
+         return ContribInvoke.cveTrackerInit(_trackerPtr, image, ref boundingBox);
       }
 
       /// <summary>
@@ -52,16 +55,20 @@ namespace Emgu.CV.Tracking
       public bool Update(Mat image, out Rectangle boundingBox)
       {
          boundingBox = new Rectangle();
-         return ContribInvoke.cveTrackerUpdate(_ptr, image, ref boundingBox);
+         return ContribInvoke.cveTrackerUpdate(_trackerPtr, image, ref boundingBox);
       }
 
+        
       /// <summary>
       /// Release the unmanaged memory associated with this tracker
       /// </summary>
       protected override void DisposeObject()
       {
-         if (_ptr != IntPtr.Zero)
-            ContribInvoke.cveTrackerRelease(ref _ptr);
+            _trackerPtr = IntPtr.Zero;
+          
+          /*
+       if (_ptr != IntPtr.Zero)
+          ContribInvoke.cveTrackerRelease(ref _ptr);*/
       }
    }
 }

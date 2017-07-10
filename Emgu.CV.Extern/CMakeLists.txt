@@ -8,6 +8,7 @@ project(cvextern)
 
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
+INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/opencv/3rdparty/zlib")
 
 MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder namespace_cs)
   SET(VECTOR_NAME ${vname})

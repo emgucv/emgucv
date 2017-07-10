@@ -20,15 +20,16 @@ namespace Emgu.CV.Dnn
        static DnnInvoke()
        {
           CvInvoke.CheckLibraryLoaded();
-          InitModule();
+          //InitModule();
        }
 
+        /*
       /// <summary>
       /// Initialize dnn module and built-in layers.
       /// </summary>
       /// <remarks>This function automatically called on most of OpenCV builds</remarks>
       [DllImport(CvInvoke.ExternLibrary, EntryPoint = "cveDnnInitModule", CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void InitModule();
+      public static extern void InitModule();*/
    }
 }
 

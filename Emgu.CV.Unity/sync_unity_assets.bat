@@ -26,10 +26,10 @@ cp Assets/Emgu.CV/Emgu.CV/Video/*.cs ../Emgu.CV/Video
 cp Assets/Emgu.CV/Emgu.CV/Videostab/*.cs ../Emgu.CV/Videostab
 cp Assets/Emgu.CV/Emgu.CV/VideoSurveillance/*.cs ../Emgu.CV/VideoSurveillance 
 #cp Assets/Emgu.CV/Emgu.CV/Viz/*.cs ../Emgu.CV/Viz 
+cp Assets/Emgu.CV/Emgu.CV/Dnn/*.cs ../Emgu.CV/Dnn
 
 cp Assets/Emgu.CV/Emgu.CV.Contrib/Aruco/*.cs ../Emgu.CV.Contrib/Aruco/  
-cp Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm/*.cs ../Emgu.CV.Contrib/BgSegm/  
-cp Assets/Emgu.CV/Emgu.CV.Contrib/Dnn/*.cs ../Emgu.CV.Contrib/Dnn/  
+cp Assets/Emgu.CV/Emgu.CV.Contrib/BgSegm/*.cs ../Emgu.CV.Contrib/BgSegm/    
 cp Assets/Emgu.CV/Emgu.CV.Contrib/Dpm/*.cs ../Emgu.CV.Contrib/Dpm/  
 cp Assets/Emgu.CV/Emgu.CV.Contrib/Face/*.cs ../Emgu.CV.Contrib/Face/ 
 cp Assets/Emgu.CV/Emgu.CV.Contrib/Fuzzy/*.cs ../Emgu.CV.Contrib/Fuzzy/  

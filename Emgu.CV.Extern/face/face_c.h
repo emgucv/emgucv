@@ -19,8 +19,8 @@ CVAPI(cv::face::FaceRecognizer*) CvLBPHFaceRecognizerCreate(int radius, int neig
 CVAPI(void) CvFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
 CVAPI(void) CvFaceRecognizerUpdate(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
 CVAPI(void) CvFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* distance);
-CVAPI(void) CvFaceRecognizerSave(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
-CVAPI(void) CvFaceRecognizerLoad(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
+CVAPI(void) CvFaceRecognizerWrite(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
+CVAPI(void) CvFaceRecognizerRead(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
 CVAPI(void) CvFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer);
 
 CVAPI(cv::face::BIF*) cveBIFCreate(int numBands, int numRotations);

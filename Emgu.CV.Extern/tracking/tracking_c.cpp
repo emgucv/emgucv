@@ -6,12 +6,13 @@
 
 #include "tracking_c.h"
 
+/*
 cv::Tracker* cveTrackerCreate(cv::String* trackerType)
 {
    cv::Ptr<cv::Tracker> tracker = cv::Tracker::create(*trackerType);
    tracker.addref(); 
    return tracker.get();
-}
+}*/
 bool cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
 {
    return tracker->init(*image, *boundingBox);
@@ -29,18 +30,15 @@ void cveTrackerRelease(cv::Tracker** tracker)
    *tracker = 0;
 }
 
-cv::MultiTracker* cveMultiTrackerCreate(cv::String* trackerType)
+cv::MultiTracker* cveMultiTrackerCreate()
 {
-   return new cv::MultiTracker(*trackerType);
+   return new cv::MultiTracker();
 }
-bool cveMultiTrackerAdd(cv::MultiTracker* tracker, cv::Mat* image, CvRect* boundingBox)
+bool cveMultiTrackerAdd(cv::MultiTracker* multiTracker, cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
 {
-   return tracker->add(*image, *boundingBox);
+   return multiTracker->add(tracker, *image, *boundingBox);
 }
-bool cveMultiTrackerAddType(cv::MultiTracker* tracker, cv::String* trackerType, cv::Mat* image, CvRect* boundingBox)
-{
-   return tracker->add(*trackerType, *image, *boundingBox);
-}
+
 bool cveMultiTrackerUpdate(cv::MultiTracker* tracker, cv::Mat* image, std::vector<CvRect>* boundingBox)
 {
    std::vector<cv::Rect2d> bb;

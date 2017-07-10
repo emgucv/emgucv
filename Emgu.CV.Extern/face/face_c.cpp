@@ -9,21 +9,21 @@
 //FaceRecognizer
 cv::face::FaceRecognizer* CvEigenFaceRecognizerCreate(int numComponents, double threshold)
 {
-   cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::createEigenFaceRecognizer(numComponents, threshold);
+   cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::EigenFaceRecognizer::create(numComponents, threshold);
    ptr.addref();
    return ptr.get();
 }
     
 cv::face::FaceRecognizer* CvFisherFaceRecognizerCreate(int numComponents, double threshold)
 {
-   cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::createFisherFaceRecognizer(numComponents, threshold);
+   cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::FisherFaceRecognizer::create(numComponents, threshold);
    ptr.addref();
    return ptr.get();
 }
     
 cv::face::FaceRecognizer* CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold)
 {
-   cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::createLBPHFaceRecognizer(radius, neighbors, gridX, gridY, threshold);
+   cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::LBPHFaceRecognizer::create(radius, neighbors, gridX, gridY, threshold);
    ptr.addref();
    return ptr.get();
 }
@@ -38,14 +38,14 @@ void CvFaceRecognizerUpdate(cv::face::FaceRecognizer* recognizer, cv::_InputArra
    recognizer->update(*images, *labels);
 }
 
-void CvFaceRecognizerSave(cv::face::FaceRecognizer* recognizer, cv::String* fileName)
+void CvFaceRecognizerWrite(cv::face::FaceRecognizer* recognizer, cv::String* fileName)
 {
-   recognizer->save(*fileName);
+   recognizer->write(*fileName);
 }
 
-void CvFaceRecognizerLoad(cv::face::FaceRecognizer* recognizer, cv::String* fileName)
+void CvFaceRecognizerRead(cv::face::FaceRecognizer* recognizer, cv::String* fileName)
 {
-   recognizer->load(*fileName);
+   recognizer->read(*fileName);
 }
 
 void CvFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* dist)
@@ -65,7 +65,7 @@ void CvFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer)
 
 cv::face::BIF* cveBIFCreate(int numBands, int numRotations)
 {
-	cv::Ptr<cv::face::BIF> ptr = cv::face::createBIF(numBands, numRotations);
+	cv::Ptr<cv::face::BIF> ptr = cv::face::BIF::create(numBands, numRotations);
 	ptr.addref();
 	return ptr.get();
 }
