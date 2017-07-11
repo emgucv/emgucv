@@ -24,10 +24,52 @@ bool cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
    *boundingBox = box;
    return result;
 }
+/*
 void cveTrackerRelease(cv::Tracker** tracker)
 {
    delete *tracker;
    *tracker = 0;
+}
+*/
+
+cv::TrackerBoosting* cveTrackerBoostingCreate(int numClassifiers, float samplerOverlap, float samplerSearchFactor, int iterationInit, int featureSetNumFeatures, cv::Tracker** tracker)
+{
+	cv::TrackerBoosting::Params p;
+	p.numClassifiers = numClassifiers;
+	p.samplerOverlap = samplerOverlap;
+	p.samplerSearchFactor = samplerSearchFactor;
+	p.iterationInit = iterationInit;
+	p.featureSetNumFeatures = featureSetNumFeatures;
+	cv::Ptr<cv::TrackerBoosting> ptr = cv::TrackerBoosting::create(p);
+	ptr.addref();
+	*tracker = static_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+}
+void cveTrackerBoostingRelease(cv::TrackerBoosting** tracker)
+{
+	delete *tracker;
+	*tracker = 0;
+}
+
+cv::TrackerMedianFlow* cveTrackerMedianFlowCreate(int pointsInGrid, CvSize* winSize, int maxLevel, CvTermCriteria* termCriteria, CvSize* winSizeNCC, double maxMedianLengthOfDisplacementDifference, cv::Tracker** tracker)
+{
+	cv::TrackerMedianFlow::Params p;
+	p.pointsInGrid = pointsInGrid;
+	p.winSize = *winSize;
+	p.maxLevel = maxLevel;
+	p.termCriteria = *termCriteria;
+	p.winSizeNCC = *winSizeNCC;
+	p.maxMedianLengthOfDisplacementDifference = maxMedianLengthOfDisplacementDifference;
+
+	cv::Ptr<cv::TrackerMedianFlow> ptr = cv::TrackerMedianFlow::create(p);
+	ptr.addref();
+	*tracker = static_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+}
+void cveTrackerMedianFlowRelease(cv::TrackerMedianFlow** tracker)
+{
+	delete* tracker;
+	*tracker = 0;
 }
 
 cv::MultiTracker* cveMultiTrackerCreate()

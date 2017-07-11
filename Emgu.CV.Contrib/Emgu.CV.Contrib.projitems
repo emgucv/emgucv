@@ -17,7 +17,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)BgSegm\*.cs" />
 	 <Compile Include="$(MSBuildThisFileDirectory)XImgproc\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XPhoto\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tracking\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plot\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Aruco\*.cs" />

@@ -33,6 +33,7 @@
 	<Compile Include="$(MSBuildThisFileDirectory)Superres\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Videostab\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Ml\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvType\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Windows.Store\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Android\*.cs" />
