@@ -42,9 +42,9 @@ namespace Emgu.CV.Tracking
     public class TrackerMedianFlow : Tracker
     {
 
-        public TrackerMedianFlow(Params parameters)
+        public TrackerMedianFlow(int pointsInGrid, Size winSize, int maxLevel, MCvTermCriteria termCriteria, Size winSizeNCC, double maxMedianLengthOfDisplacementDifference)
         {
-            ContribInvoke.cveTrackerMedianFlowCreate(ref parameters, ref _trackerPtr);
+            ContribInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr);
         }
 
         protected override void DisposeObject()
@@ -117,7 +117,7 @@ namespace Emgu.CV
         //internal static extern void cveTrackerRelease(ref IntPtr tracker);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTrackerMedianFlowCreate(int pointsInGrid, ref Size winSize, int maxLevel, ref CvTermCriteria termCriteria, ref Size winSizeNCC, double maxMedianLengthOfDisplacementDifference, ref IntPtr tracker);
+        internal static extern IntPtr cveTrackerMedianFlowCreate(int pointsInGrid, ref Size winSize, int maxLevel, ref MCvTermCriteria termCriteria, ref Size winSizeNCC, double maxMedianLengthOfDisplacementDifference, ref IntPtr tracker);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTrackerMedianFlowRelease(ref IntPtr tracker);
