@@ -72,6 +72,36 @@ void cveTrackerMedianFlowRelease(cv::TrackerMedianFlow** tracker)
 	*tracker = 0;
 }
 
+cv::TrackerMIL* cveTrackerMILCreate(
+	float samplerInitInRadius,
+	int samplerInitMaxNegNum,
+	float samplerSearchWinSize,
+	float samplerTrackInRadius,
+	int samplerTrackMaxPosNum,
+	int samplerTrackMaxNegNum,
+	int featureSetNumFeatures,
+	cv::Tracker** tracker)
+{
+	cv::TrackerMIL::Params p;
+	p.samplerInitInRadius = samplerInitInRadius;
+	p.samplerInitMaxNegNum = samplerInitMaxNegNum;
+	p.samplerSearchWinSize = samplerSearchWinSize;
+	p.samplerTrackInRadius = samplerTrackInRadius;
+	p.samplerTrackMaxPosNum = samplerTrackMaxPosNum;
+	p.samplerTrackMaxNegNum = samplerTrackMaxNegNum;
+	p.featureSetNumFeatures = featureSetNumFeatures;
+	
+	cv::Ptr<cv::TrackerMIL> ptr = cv::TrackerMIL::create(p);
+	ptr.addref();
+	*tracker = static_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+}
+void cveTrackerMILRelease(cv::TrackerMIL** tracker)
+{
+	delete *tracker;
+	*tracker = 0;
+}
+
 cv::MultiTracker* cveMultiTrackerCreate()
 {
    return new cv::MultiTracker();

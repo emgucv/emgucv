@@ -12,25 +12,53 @@ using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Emgu.CV.Dnn
 {
     public static partial class DnnInvoke
     {
-       static DnnInvoke()
-       {
-          CvInvoke.CheckLibraryLoaded();
-          //InitModule();
-       }
+        static DnnInvoke()
+        {
+            CvInvoke.CheckLibraryLoaded();
+        }
 
-        /*
-      /// <summary>
-      /// Initialize dnn module and built-in layers.
-      /// </summary>
-      /// <remarks>This function automatically called on most of OpenCV builds</remarks>
-      [DllImport(CvInvoke.ExternLibrary, EntryPoint = "cveDnnInitModule", CallingConvention = CvInvoke.CvCallingConvention)]
-      public static extern void InitModule();*/
-   }
+        public static Mat BlobFromImage(Mat image, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true)
+        {
+            Mat blob = new Mat();
+            cveDnnBlobFromImage(image, scaleFactor, ref size, ref mean, swapRB, blob);
+            return blob;
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDnnBlobFromImage(
+            IntPtr image,
+            double scalefactor,
+            ref Size size,
+            ref MCvScalar mean,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool swapRB,
+            IntPtr blob);
+
+        public static Mat BlobFromImages(Mat[] images, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true)
+        {
+            Mat blob = new Mat();
+            using (VectorOfMat vm = new VectorOfMat(images))
+            {
+                cveDnnBlobFromImages(vm, scaleFactor, ref size, ref mean, swapRB, blob);
+            }
+            return blob;
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDnnBlobFromImages(
+            IntPtr images,
+            double scalefactor,
+            ref Size size,
+            ref MCvScalar mean,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool swapRB,
+            IntPtr blob);
+    }
 }
 
 #endif

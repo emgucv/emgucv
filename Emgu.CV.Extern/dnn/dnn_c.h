@@ -24,6 +24,23 @@ CVAPI(void) cveDnnNetSetInput(cv::dnn::Net* net, cv::Mat* blob, cv::String* name
 CVAPI(void) cveDnnNetForward(cv::dnn::Net* net, cv::String* outputName, cv::Mat* output);
 CVAPI(void) cveDnnNetRelease(cv::dnn::Net** net);
 
+
+CVAPI(void) cveDnnBlobFromImage(
+	cv::Mat* image, 
+	double scalefactor, 
+	CvSize* size,
+	CvScalar* mean, 
+	bool swapRB, 
+	cv::Mat* blob);
+
+CVAPI(void) cveDnnBlobFromImages(
+	std::vector<cv::Mat>* images, 
+	double scalefactor,
+	CvSize* size, 
+	CvScalar* mean, 
+	bool swapRB,
+	cv::Mat* blob);
+
 /*
 CVAPI(cv::dnn::Blob*) cveDnnBlobCreate();
 CVAPI(cv::dnn::Blob*) cveDnnBlobCreateFromInputArray(cv::_InputArray* image);

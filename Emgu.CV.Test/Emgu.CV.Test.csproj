@@ -134,19 +134,19 @@
       <Link>left01.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv_contrib\modules\dnn\samples\pascal-classes.txt">
+    <Content Include="..\opencv\samples\data\dnn\pascal-classes.txt">
       <Link>pascal-classes.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv_contrib\modules\dnn\samples\rgb.jpg">
+    <Content Include="..\opencv\samples\data\dnn\rgb.jpg">
       <Link>rgb.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv_contrib\modules\dnn\samples\space_shuttle.jpg">
+    <Content Include="..\opencv\modules\dnn\tutorials\images\space_shuttle.jpg">
       <Link>space_shuttle.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv_contrib\modules\dnn\samples\synset_words.txt">
+    <Content Include="..\opencv\samples\data\dnn\synset_words.txt">
       <Link>synset_words.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -276,11 +276,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="..\opencv_contrib\modules\dnn\samples\bvlc_googlenet.prototxt">
+    <None Include="..\opencv\samples\data\dnn\bvlc_googlenet.prototxt">
       <Link>bvlc_googlenet.prototxt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\opencv_contrib\modules\dnn\samples\fcn8s-heavy-pascal.prototxt">
+    <None Include="..\opencv\samples\data\dnn\fcn8s-heavy-pascal.prototxt">
       <Link>fcn8s-heavy-pascal.prototxt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

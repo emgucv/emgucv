@@ -122,3 +122,27 @@ uchar * cveDnnBlobGetPtr(cv::dnn::Blob* blob, int n, int cn, int row, int col)
 {
 	return blob->ptr(n, cn, row, col);
 }*/
+
+void cveDnnBlobFromImage(
+	cv::Mat* image,
+	double scalefactor,
+	CvSize* size,
+	CvScalar* mean,
+	bool swapRB,
+	cv::Mat* blob)
+{
+	cv::Mat b = cv::dnn::blobFromImage(*image, scalefactor, *size, *mean, swapRB);
+	cv::swap(*blob, b);
+}
+
+void cveDnnBlobFromImages(
+	std::vector<cv::Mat>* images,
+	double scalefactor,
+	CvSize* size,
+	CvScalar* mean,
+	bool swapRB,
+	cv::Mat* blob)
+{
+	cv::Mat b = cv::dnn::blobFromImages(*images, scalefactor, *size, *mean, swapRB);
+	cv::swap(*blob, b);
+}

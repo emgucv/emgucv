@@ -763,6 +763,8 @@ namespace Emgu.CV
         {
             get
             {
+                if (Dims > 3)
+                    return null;
                 int channels = NumberOfChannels;
                 Size s = this.Size;
                 Type colorType;

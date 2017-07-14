@@ -22,6 +22,17 @@ CVAPI(void) cveTrackerBoostingRelease(cv::TrackerBoosting** tracker);
 CVAPI(cv::TrackerMedianFlow*) cveTrackerMedianFlowCreate(int pointsInGrid, CvSize* winSize, int maxLevel, CvTermCriteria* termCriteria, CvSize* winSizeNCC, double maxMedianLengthOfDisplacementDifference, cv::Tracker** tracker);
 CVAPI(void) cveTrackerMedianFlowRelease(cv::TrackerMedianFlow** tracker);
 
+CVAPI(cv::TrackerMIL*) cveTrackerMILCreate(
+	float samplerInitInRadius,
+	int samplerInitMaxNegNum,
+	float samplerSearchWinSize,
+	float samplerTrackInRadius,
+	int samplerTrackMaxPosNum,
+	int samplerTrackMaxNegNum,
+	int featureSetNumFeatures,
+	cv::Tracker** tracker);
+CVAPI(void) cveTrackerMILRelease(cv::TrackerMIL** tracker);
+
 CVAPI(cv::MultiTracker*) cveMultiTrackerCreate();
 CVAPI(bool) cveMultiTrackerAdd(cv::MultiTracker* multiTracker, cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
 CVAPI(bool) cveMultiTrackerUpdate(cv::MultiTracker* tracker, cv::Mat* image, std::vector<CvRect>* boundingBox);

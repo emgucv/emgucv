@@ -3154,10 +3154,10 @@ namespace Emgu.CV.Test
         }
 
         /* Find best class for the blob (i. e. class with maximal probability) */
-        private static void GetMaxClass(Blob probBlob, out int classId, out double classProb)
+        private static void GetMaxClass(Mat probBlob, out int classId, out double classProb)
         {
-            Mat matRef = probBlob.MatRef();
-            Mat probMat = matRef.Reshape(1, 1); //reshape the blob to 1x1000 matrix
+            //Mat matRef = probBlob.MatRef();
+            Mat probMat = probBlob.Reshape(1, 1); //reshape the blob to 1x1000 matrix
             Point minLoc = new Point(), maxLoc = new Point();
             double minVal = 0, maxVal = 0;
             CvInvoke.MinMaxLoc(probMat, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
@@ -3185,20 +3185,18 @@ namespace Emgu.CV.Test
             //FCN accepts 500x500 RGB-images
             CvInvoke.Resize(img, img, new Size(500, 500));
 
-            Dnn.Blob inputBlob = new Dnn.Blob();
-            inputBlob.BatchFromImages(img);
-            net.SetBlob(".data", inputBlob);
-            net.Forward();
-            Dnn.Blob probBlob = net.GetBlob("score");
-            IntPtr dataPtr = probBlob.GetPtr();
+            Mat inputBlob = DnnInvoke.BlobFromImage(img);
+            net.SetInput(inputBlob, "data");
+            Mat probBlob = net.Forward("score");
+            IntPtr dataPtr = probBlob.DataPointer;
 
-            int channles = probBlob.Channels;
-            int rows = probBlob.Rows;
-            int cols = probBlob.Cols;
+            int channels = probBlob.SizeOfDimemsion[1];
+            int rows = probBlob.SizeOfDimemsion[2];
+            int cols = probBlob.SizeOfDimemsion[3];
             //should be a 1 x 21 x 500 x 500 Mat, where 21 is the number of classes.
-            float[,,] labels = new float[probBlob.Channels,probBlob.Rows,probBlob.Cols];
+            float[,,] labels = new float[channels,rows,cols];
             GCHandle handle = GCHandle.Alloc(labels, GCHandleType.Pinned);
-            Emgu.CV.Util.CvToolbox.Memcpy(dataPtr, handle.AddrOfPinnedObject(), sizeof(float) * probBlob.Channels * probBlob.Rows * probBlob.Cols);
+            Emgu.CV.Util.CvToolbox.Memcpy(dataPtr, handle.AddrOfPinnedObject(), sizeof(float) * probBlob.NumberOfChannels * probBlob.Rows * probBlob.Cols);
             handle.Free();
             //Marshal.Copy(dataPtr, labels, 0, labels.Length);
             byte[] imageData = new byte[3 * rows * cols];
@@ -3207,11 +3205,11 @@ namespace Emgu.CV.Test
                 {
                     int l = 0;
                     float maxScore = 0;
-                    for (int n = 0; n < channles; n++)
+                    for (int n = 0; n < channels; n++)
                     {
-                        if (maxScore < labels[n, rows, cols])
+                        if (maxScore < labels[n, r, c])
                         {
-                            maxScore = labels[n, rows, cols];
+                            maxScore = labels[n, r, c];
                             l = n;
                         }
                         int idx = 3 * (r * cols + c);
@@ -3221,9 +3219,9 @@ namespace Emgu.CV.Test
                     }
                 }
 
-            //#if !NETFX_CORE
+            #if !NETFX_CORE
             //Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
-            //#endif
+            #endif
 
         }
 
@@ -3248,11 +3246,10 @@ namespace Emgu.CV.Test
 
             CvInvoke.Resize(img, img, new Size(224, 224));
 
-            Dnn.Blob inputBlob = new Dnn.Blob();
-            inputBlob.BatchFromImages(img);
-            net.SetBlob(".data", inputBlob);
-            net.Forward();
-            Dnn.Blob probBlob = net.GetBlob("prob");
+            Mat inputBlob = DnnInvoke.BlobFromImage(img);
+            net.SetInput(inputBlob, "data");
+            Mat probBlob = net.Forward("prob");
+
             int classId;
             double classProb;
             GetMaxClass(probBlob, out classId, out classProb);
@@ -3302,7 +3299,7 @@ namespace Emgu.CV.Test
             using (ScalarArray sa = new ScalarArray(new MCvScalar(104, 117, 123)))
                 CvInvoke.Subtract(preprocessedFrame, sa, preprocessedFrame);
 
-
+            /*
             Dnn.Blob inputBlob = new Dnn.Blob();
             inputBlob.BatchFromImages(preprocessedFrame);
             net.SetBlob(".data", inputBlob); //set the network input
@@ -3310,6 +3307,10 @@ namespace Emgu.CV.Test
             
             net.Forward(); //compute output
             Dnn.Blob detection = net.GetBlob("detection_out");
+            */
+            Mat inputBlob = DnnInvoke.BlobFromImage(preprocessedFrame);
+            net.SetInput(inputBlob, "data");
+            Mat detection = net.Forward("detection_out");
 
             float confidenceThreshold = 0.5f;
             String[] labelsLines = File.ReadAllLines("pascal-classes.txt");
@@ -3319,11 +3320,11 @@ namespace Emgu.CV.Test
                 labels[i] = labelsLines[i].Split(' ')[0].Trim();
             }
 
-            using (Mat tmp = detection.MatRef())
+            //using (Mat tmp = detection.MatRef())
             {
-                int[] dim = tmp.SizeOfDimemsion;
+                int[] dim = detection.SizeOfDimemsion;
                 int step = dim[3] * sizeof(float);
-                IntPtr start = tmp.DataPointer;
+                IntPtr start = detection.DataPointer;
                 for (int i = 0; i < dim[2]; i++)
                 {
                     float[] values = new float[dim[3]];
@@ -3376,11 +3377,16 @@ namespace Emgu.CV.Test
             CvInvoke.Resize(img, img, new Size(224, 224));
             CvInvoke.CvtColor(img, img, ColorConversion.Bgr2Rgb);
 
+            Mat inputBlob = DnnInvoke.BlobFromImage(img);
+            net.SetInput(inputBlob, "input");
+            Mat probBlob = net.Forward("softmax2");
+            /*
             Dnn.Blob inputBlob = new Dnn.Blob();
             inputBlob.BatchFromImages(img);
             net.SetBlob(".input", inputBlob);
             net.Forward();
             Dnn.Blob probBlob = net.GetBlob("softmax2");
+            */
             int classId;
             double classProb;
             GetMaxClass(probBlob, out classId, out classProb);
