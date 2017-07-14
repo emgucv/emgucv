@@ -43,7 +43,7 @@ namespace Emgu.CV
         /// <param name="fps">frame rate per second</param>
         /// <param name="size">the size of the frame</param>
         /// <param name="isColor">true if this is a color video, false otherwise</param>
-        public VideoWriter(String fileName, int compressionCode, int fps, System.Drawing.Size size, bool isColor)
+        public VideoWriter(String fileName, int compressionCode, double fps, System.Drawing.Size size, bool isColor)
         {
             using (CvString s = new CvString(fileName))
                 _ptr = /*CvToolbox.HasFFMPEG?
