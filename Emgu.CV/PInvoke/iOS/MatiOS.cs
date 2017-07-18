@@ -29,7 +29,7 @@ namespace Emgu.CV
 			ConvertFromCGImage(cgImage);
 		}
 
-		private void ConvertFromCGImage(CGImage cgImage)
+		private void ConvertFromCGImage(CGImage cgImage, ImreadModes modes = ImreadModes.AnyColor)
 		{
 			Size sz = new Size((int)cgImage.Width, (int)cgImage.Height);
 			using (Mat m = new Mat(sz, DepthType.Cv8U, 4))
@@ -44,7 +44,35 @@ namespace Emgu.CV
 				 cspace,
 				 CGImageAlphaInfo.PremultipliedLast))
 					context.DrawImage(rect, cgImage);
-				CvInvoke.CvtColor(m, this, ColorConversion.Rgba2Bgr);
+			    if (modes == ImreadModes.Grayscale)
+			    {
+                    CvInvoke.CvtColor(m, this, ColorConversion.Rgba2Gray);
+			    } else if (modes == ImreadModes.AnyColor)
+			    {
+			        CvInvoke.CvtColor(m, this, ColorConversion.Rgba2Bgra);
+			    } else if (modes == ImreadModes.ReducedColor2)
+			    {
+			        using (Mat tmp = new Mat())
+			        {
+			            CvInvoke.PyrDown(m, tmp);
+			            CvInvoke.CvtColor(tmp, this, ColorConversion.Rgba2Bgr);
+			        }
+			    } else if (modes == ImreadModes.ReducedGrayscale2)
+			    {
+			        using (Mat tmp = new Mat())
+			        {
+			            CvInvoke.PyrDown(m, tmp);
+			            CvInvoke.CvtColor(tmp, this, ColorConversion.Rgba2Gray);
+			        }
+                }
+                else if (modes == ImreadModes.ReducedColor4 || modes == ImreadModes.ReducedColor8 || modes == ImreadModes.ReducedGrayscale4 || modes == ImreadModes.ReducedGrayscale8 || modes == ImreadModes.LoadGdal)
+			    {
+			        throw  new NotImplementedException(String.Format("Conversion from PNG using mode {0} is not supported", modes));
+			    }
+			    else
+			    {
+			        CvInvoke.CvtColor(m, this, ColorConversion.Rgba2Bgr);
+                }
 			}
 		}
 

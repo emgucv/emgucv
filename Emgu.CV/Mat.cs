@@ -256,7 +256,7 @@ namespace Emgu.CV
             using (CGDataProvider provider = new CGDataProvider(fileName))
             using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
             {
-               ConvertFromCGImage(tmp);
+               ConvertFromCGImage(tmp, loadType);
             }
             return;
          }
