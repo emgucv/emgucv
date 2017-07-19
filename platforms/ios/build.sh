@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-rm cmake
 if [ ! -f cmake ]
 then 
   ln -s ../../opencv/platforms/ios/cmake cmake
