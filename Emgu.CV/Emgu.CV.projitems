@@ -277,10 +277,10 @@
         <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
         <EmguBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguBuildX64>
         <EmguNativeFileX64>$(OpenCVBinaryDir)\x64\cvextern.dll</EmguNativeFileX64>
-		<EmguCVErrorMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguNativeFileX64)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X64 is targeted, but file $(EmguNativeFileX64) is missing.</EmguCVErrorMessage>
+		<EmguCVWarningMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguNativeFileX64)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X64 is targeted, but file $(EmguNativeFileX64) is missing.</EmguCVWarningMessage>
 		<EmguBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguBuildX86>
         <EmguNativeFileX86>$(OpenCVBinaryDir)\x86\cvextern.dll</EmguNativeFileX86>
-        <EmguCVErrorMessage Condition="'$(EmguBuildX86)'=='True' AND !Exists('$(EmguNativeFileX86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X86 is targeted, but file $(EmguNativeFileX86) is missing.</EmguCVErrorMessage>
+        <EmguCVWarningMessage Condition="'$(EmguBuildX86)'=='True' AND !Exists('$(EmguNativeFileX86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X86 is targeted, but file $(EmguNativeFileX86) is missing.</EmguCVWarningMessage>
 		<EmguCVDeployMessage Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">$(EmguCVDeployMessage)x86 </EmguCVDeployMessage>
         <EmguCVDeployMessage Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">$(EmguCVDeployMessage)x64 </EmguCVDeployMessage>
       </PropertyGroup>
@@ -308,6 +308,7 @@
     <Error Condition="'$(EmguCVLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please use the pre-compiled Emgu.CV.World dll or send a bug report to support@emgu.com" />
     <Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
     <Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
+	<Warning Text="'$(EmguCVWarningMessage)'" Condition="'$(EmguCVWarningMessage)'!=''" />
     <Message Text="Compiling with $(EmguCVDeployMessage)binary" Condition="'$(EmguCVDeployMessage)'!=''" Importance="High" />
     <Message Text="No native binary is deployed by the Emgu.CV shared project." Condition="'$(EmguCVDeployMessage)'==''" Importance="High" />
   </Target>
