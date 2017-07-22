@@ -321,5 +321,8 @@ call %DEVENV% %BUILD_TYPE% emgucv.sln %BUILD_PROJECT%
 IF "%5%"=="htmldoc" ^
 call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.Document.Html 
 
+IF "%8%"=="nuget" ^
+call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.nuget 
+
 :END
 popd
