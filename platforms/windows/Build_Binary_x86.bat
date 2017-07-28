@@ -1,7 +1,8 @@
 REM @echo off
 pushd %~p0
-mkdir build
-cd build
+cd ..\..
+mkdir b
+cd b
 REM cd ..\..
 IF "%1%"=="64" ECHO "BUILDING 64bit solution" 
 IF "%1%"=="ARM" ECHO "BUILDING ARM solution"
@@ -82,7 +83,7 @@ IF %DEVENV%==%VS2017% SET CMAKE_CONF="Visual Studio 15%OS_MODE%"
 
 SET IPP_BUILD_FLAGS=-DWITH_IPP:BOOL=FALSE 
 
-SET OPENCV_EXTRA_MODULES_DIR="%cd%\..\..\..\opencv_contrib\modules" 
+SET OPENCV_EXTRA_MODULES_DIR="%cd%\..\opencv_contrib\modules" 
 REM Setup common flags
 SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DBUILD_DOCS:BOOL=FALSE ^
@@ -312,7 +313,7 @@ GOTO RUN_CMAKE
 
 @echo on
 :RUN_CMAKE
-%CMAKE% %CMAKE_CONF_FLAGS% ..\..\..\
+%CMAKE% %CMAKE_CONF_FLAGS% ..\
 
 :BUILD
 IF NOT "%7%"=="build" GOTO END
