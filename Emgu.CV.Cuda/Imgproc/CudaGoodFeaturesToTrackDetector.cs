@@ -33,7 +33,7 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaImage = image.GetInputArray())
          using (OutputArray oaCorners = corners.GetOutputArray())
-         using (InputArray iaMask = (mask == null ? mask.GetInputArray() : InputArray.GetEmpty()))
+         using (InputArray iaMask = (mask != null ? mask.GetInputArray() : InputArray.GetEmpty()))
             CudaInvoke.cudaCornersDetectorDetect(_ptr, iaImage, oaCorners, iaMask, stream);
       }
 
