@@ -389,12 +389,12 @@ namespace Emgu.CV.OCR
 
         private String UtfByteVectorToString(VectorOfByte bytes)
         {
-#if NETFX_CORE
+//#if NETFX_CORE
             byte[] bArr = bytes.ToArray();
             return _utf8.GetString(bArr, 0, bArr.Length).Replace("\n", Environment.NewLine);
-#else
-            return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
-#endif
+//#else
+//            return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
+//#endif
         }
 
         /// <summary>
