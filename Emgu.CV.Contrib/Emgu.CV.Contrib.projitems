@@ -24,5 +24,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)LineDescriptor\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)XObjdetect\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Bioinspired\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)DnnModern\*.cs" />
   </ItemGroup>
 </Project>

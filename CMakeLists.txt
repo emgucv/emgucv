@@ -567,6 +567,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   dnn aruco fuzzy viz bioinspired
   dpm
   saliency
+  dnn_modern
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
