@@ -1147,6 +1147,15 @@ ELSEIF (WIN32)
   IF(EMGU_CV_DOCUMENTATION_BUILD)
     ADD_SUBDIRECTORY(miscellaneous)
   ENDIF()
+
+  # ----------------------------------------------------------------------------
+  #  Set if we should sign the managed assembly
+  # ----------------------------------------------------------------------------  
+  IF (WIN32)
+	SET(EMGU_SIGN_ASSEMBLY OFF CACHE BOOL "If enabled, we will sign the managed assembly")
+  ELSE()
+	SET(EMGU_SIGN_ASSEMBLY ON CACHE BOOL "If enabled, we will sign the managed assembly")
+  ENDIF()
   
   # ----------------------------------------------------------------------------
   #  Build the extra components of Emgu CV
