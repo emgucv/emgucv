@@ -8,7 +8,9 @@
 
 cv::aruco::Dictionary* cveArucoGetPredefinedDictionary(int name)
 {
-   return cv::aruco::getPredefinedDictionary(static_cast<cv::aruco::PREDEFINED_DICTIONARY_NAME>(name)).get();
+	cv::Ptr<cv::aruco::Dictionary> ptr = cv::aruco::getPredefinedDictionary(static_cast<cv::aruco::PREDEFINED_DICTIONARY_NAME>(name));
+	ptr.addref();
+	return ptr.get();
 }
 
 cv::aruco::Dictionary* cveArucoDictionaryCreate1(int nMarkers, int markerSize)
