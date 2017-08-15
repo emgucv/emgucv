@@ -72,7 +72,7 @@ namespace Emgu.CV.Aruco
       /// </summary>
       public int CornerRefinementMaxIterations;
       /// <summary>
-      /// minimum error for the stop cristeria of the corner refinement process (default: 0.1)
+      /// minimum error for the stop criteria of the corner refinement process (default: 0.1)
       /// </summary>
       public double CornerRefinementMinAccuracy;
       /// <summary>

@@ -124,7 +124,7 @@ namespace Emgu.CV.Aruco
          IntPtr rvecs, IntPtr tvecs);
 
       /// <summary>
-      /// Refind not detected markers based on the already detected and the board layout.
+      /// Refine not detected markers based on the already detected and the board layout.
       /// </summary>
       /// <param name="image">Input image</param>
       /// <param name="board">Layout of markers in the board.</param>
@@ -180,7 +180,7 @@ namespace Emgu.CV.Aruco
       /// <param name="image">Input/output image. It must have 1 or 3 channels. The number of channels is not altered.</param>
       /// <param name="corners">Positions of marker corners on input image. (e.g std::vector&lt;std::vector&lt;cv::Point2f&gt; &gt; ). For N detected markers, the dimensions of this array should be Nx4. The order of the corners should be clockwise.</param>
       /// <param name="ids">Vector of identifiers for markers in markersCorners . Optional, if not provided, ids are not painted.</param>
-      /// <param name="borderColor">Volor of marker borders. Rest of colors (text color and first corner color) are calculated based on this one to improve visualization.</param>
+      /// <param name="borderColor">Color of marker borders. Rest of colors (text color and first corner color) are calculated based on this one to improve visualization.</param>
       public static void DrawDetectedMarkers(
          IInputOutputArray image, IInputArray corners, IInputArray ids,
          MCvScalar borderColor)
