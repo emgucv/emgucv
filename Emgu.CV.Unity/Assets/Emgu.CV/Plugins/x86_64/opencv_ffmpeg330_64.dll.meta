@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 7f605394133ffa34bb8c61346d32dd3f
-timeCreated: 1484672800
+guid: d8c74e3c470d849faade02215a5316e4
+timeCreated: 1502992494
 licenseType: Pro
 PluginImporter:
   serializedVersion: 2
@@ -24,18 +24,10 @@ PluginImporter:
           Exclude OSXIntel64: 0
           Exclude OSXUniversal: 0
           Exclude WebGL: 1
-          Exclude Win: 0
-          Exclude Win64: 1
+          Exclude Win: 1
+          Exclude Win64: 0
           Exclude WindowsStoreApps: 1
           Exclude iOS: 1
-    data:
-      first:
-        '': Editor
-      second:
-        enabled: 0
-        settings:
-          CPU: x86
-          OS: Windows
     data:
       first:
         Android: Android
@@ -48,63 +40,44 @@ PluginImporter:
         Any: 
       second:
         enabled: 0
-        settings:
-          Exclude Android: 1
-          Exclude Editor: 0
-          Exclude Linux: 0
-          Exclude Linux64: 0
-          Exclude LinuxUniversal: 0
-          Exclude OSXIntel: 0
-          Exclude OSXIntel64: 0
-          Exclude OSXUniversal: 0
-          Exclude WebGL: 1
-          Exclude Win: 0
-          Exclude Win64: 1
-          Exclude WindowsStoreApps: 1
-          Exclude iOS: 1
+        settings: {}
     data:
       first:
         Editor: Editor
       second:
         enabled: 1
         settings:
-          CPU: x86
+          CPU: x86_64
           DefaultValueInitialized: true
           OS: Windows
     data:
       first:
-        Facebook: WebGL
+        Facebook: Win
       second:
         enabled: 0
-        settings: {}
+        settings:
+          CPU: None
     data:
       first:
-        Facebook: Win
+        Facebook: Win64
       second:
         enabled: 1
         settings:
           CPU: AnyCPU
     data:
       first:
-        Facebook: Win64
-      second:
-        enabled: 0
-        settings:
-          CPU: None
-    data:
-      first:
         Standalone: Linux
       second:
         enabled: 1
         settings:
-          CPU: x86
+          CPU: None
     data:
       first:
         Standalone: Linux64
       second:
         enabled: 1
         settings:
-          CPU: None
+          CPU: x86_64
     data:
       first:
         Standalone: LinuxUniversal
@@ -118,14 +91,14 @@ PluginImporter:
       second:
         enabled: 1
         settings:
-          CPU: AnyCPU
+          CPU: None
     data:
       first:
         Standalone: OSXIntel64
       second:
         enabled: 1
         settings:
-          CPU: None
+          CPU: AnyCPU
     data:
       first:
         Standalone: OSXUniversal
@@ -137,22 +110,16 @@ PluginImporter:
       first:
         Standalone: Win
       second:
-        enabled: 1
-        settings:
-          CPU: AnyCPU
-    data:
-      first:
-        Standalone: Win64
-      second:
         enabled: 0
         settings:
           CPU: None
     data:
       first:
-        WebGL: WebGL
+        Standalone: Win64
       second:
-        enabled: 0
-        settings: {}
+        enabled: 1
+        settings:
+          CPU: AnyCPU
     data:
       first:
         Windows Store Apps: WindowsStoreApps
