@@ -7,14 +7,14 @@ cd emgucv_v3
 cd component
 c:\cygwin64\bin\mkdir.exe -p lib/ios
 c:\cygwin64\bin\mkdir.exe -p lib/android
-rm -rf samples
-mkdir samples
+REM rm -rf samples
+REM mkdir samples
 cd samples
-mkdir ios
+REM mkdir ios
 cd ios
-mkdir Emgu.CV.Example
+REM mkdir Emgu.CV.Example
 cd Emgu.CV.Example
-mkdir iOS
+REM mkdir iOS
 cd iOS
 cp -rf ../../../../../../../../tmp/Emgu.CV.Example/iOS/* .
 cp -rf ../../../../../../../../opencv/data/haarcascades/haarcascade_eye.xml .
@@ -39,7 +39,7 @@ cd ..
 cd ..
 cd ..
 
-mkdir android
+REM mkdir android
 cd android
 cp -rf ../../../../../../tmp/components.config .
 cp -rf ../../../../../../tmp/nuget.config .
@@ -66,10 +66,10 @@ cp -rf ../../../../../../tmp/Emgu.CV.Example/LicensePlateRecognition/LicensePlat
 cd ..
 
 
-cp ../../../Emgu.CV.iOS.Example.sln ios/
-cp ../../../Emgu.CV.Example.iOS.csproj ios/Emgu.CV.Example/iOS/
-cp ../../../Emgu.CV.Android.Example.sln android/
-cp ../../../AndroidExamples.csproj android/
+REM cp ../../../Emgu.CV.iOS.Example.sln ios/
+REM cp ../../../Emgu.CV.Example.iOS.csproj ios/Emgu.CV.Example/iOS/
+REM cp ../../../Emgu.CV.Android.Example.sln android/
+REM cp ../../../AndroidExamples.csproj android/
 
 cd ..
 cd ..
