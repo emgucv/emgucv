@@ -219,7 +219,13 @@ namespace Emgu.CV.Util
          using (PinnedArray<Byte> buffer = new PinnedArray<byte>(_elementSize))
          {
             return (stream.Read(buffer.Array, 0, _elementSize) > 0) ?
-               (T)Marshal.PtrToStructure(buffer.AddrOfPinnedObject(), typeof(T)) :
+#if NETSTANDARD1_4
+               Marshal.PtrToStructure<T>(buffer.AddrOfPinnedObject())
+#else
+               (T)Marshal.PtrToStructure(buffer.AddrOfPinnedObject(), typeof(T))
+#endif
+               :
+
                new T();
          }
       }
@@ -255,7 +261,7 @@ namespace Emgu.CV.Util
          }
       }
       
-                #region IEnumerable<T> Members
+#region IEnumerable<T> Members
       /// <summary>
       /// Get the data in this storage
       /// </summary>
@@ -295,14 +301,14 @@ namespace Emgu.CV.Util
       }
 #endregion
       
-                #region IEnumerable Members
+#region IEnumerable Members
 
       System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
       {
          return GetEnumerator();
       }
 
-                #endregion
+#endregion
 #endif
-        }
+   }
 }
