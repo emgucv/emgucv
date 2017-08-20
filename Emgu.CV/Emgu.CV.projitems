@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Flann\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geodetic\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PInvoke\System.Runtime.Serialization\Serialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tiff\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ocl\*.cs" />
@@ -26,14 +27,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Photo\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Viz\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PointAndLine\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Video\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Optflow\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Video\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Optflow\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Shape\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Stitching\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Superres\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Videostab\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Ml\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stitching\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Superres\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videostab\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ml\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvType\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Windows.Store\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Android\*.cs" />
@@ -180,14 +181,13 @@
         <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Mac Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)mac </EmguCVDeployMessage>
       </PropertyGroup>
-    <ItemGroup>
-    <NativeReference Include="$(EmguCVNativeFile)">
-      <Kind>Dynamic</Kind>
-      <SmartLink>False</SmartLink>
-    </NativeReference>
-    </ItemGroup>
+      <ItemGroup>
+        <NativeReference Include="$(EmguCVNativeFile)">
+          <Kind>Dynamic</Kind>
+          <SmartLink>False</SmartLink>
+        </NativeReference>
+      </ItemGroup>
     </When>
-
     <!-- IOS application (Note: do not work for Xamarin iOS for Visual Studio) -->
     <When Condition="(('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(Platform)'=='iPhone' OR '$(Platform)'=='iPhoneSimulator') AND '$(OutputType)' == 'Exe')">
       <PropertyGroup>
@@ -273,15 +273,15 @@
     </When>
     <!-- Windows Form Application -->
     <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFrameworkVersion)'=='v2.0' OR '$(TargetFrameworkVersion)'=='v3.0' OR '$(TargetFrameworkVersion)'=='v3.5' OR '$(TargetFrameworkVersion)'=='v4.0' OR '$(TargetFrameworkVersion)'=='v4.5' OR '$(TargetFrameworkVersion)'=='v4.5.1' OR '$(TargetFrameworkVersion)'=='v4.5.2' OR '$(TargetFrameworkVersion)'=='v4.6' OR '$(TargetFrameworkVersion)'=='v4.6.1')">
-	  <PropertyGroup>
+      <PropertyGroup>
         <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
         <EmguBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguBuildX64>
         <EmguNativeFileX64>$(OpenCVBinaryDir)\x64\cvextern.dll</EmguNativeFileX64>
-		<EmguCVWarningMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguNativeFileX64)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X64 is targeted, but file $(EmguNativeFileX64) is missing.</EmguCVWarningMessage>
-		<EmguBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguBuildX86>
+        <EmguCVWarningMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguNativeFileX64)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X64 is targeted, but file $(EmguNativeFileX64) is missing.</EmguCVWarningMessage>
+        <EmguBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguBuildX86>
         <EmguNativeFileX86>$(OpenCVBinaryDir)\x86\cvextern.dll</EmguNativeFileX86>
         <EmguCVWarningMessage Condition="'$(EmguBuildX86)'=='True' AND !Exists('$(EmguNativeFileX86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X86 is targeted, but file $(EmguNativeFileX86) is missing.</EmguCVWarningMessage>
-		<EmguCVDeployMessage Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">$(EmguCVDeployMessage)x86 </EmguCVDeployMessage>
+        <EmguCVDeployMessage Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">$(EmguCVDeployMessage)x86 </EmguCVDeployMessage>
         <EmguCVDeployMessage Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">$(EmguCVDeployMessage)x64 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">
@@ -290,17 +290,22 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
-	  <ItemGroup Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">
+      <ItemGroup Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">
         <Content Include="$(OpenCVBinaryDir)\x86\*.dll">
           <Link>x86\%(RecursiveDir)%(Filename)%(Extension)</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
     </When>
-	<!-- DotNetCore Application -->
-	<When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netcoreapp1.1')">
+    <!-- DotNetCore Application -->
+    <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netcoreapp1.1')">
       <PropertyGroup>
         <EmguCVLinkTarget>DotNetCore</EmguCVLinkTarget>
+      </PropertyGroup>
+    </When>
+	<When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netstandard1.4')">
+      <PropertyGroup>
+        <EmguCVLinkTarget>NetStandard</EmguCVLinkTarget>
       </PropertyGroup>
     </When>
   </Choose>
@@ -308,7 +313,7 @@
     <Error Condition="'$(EmguCVLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please use the pre-compiled Emgu.CV.World dll or send a bug report to support@emgu.com" />
     <Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
     <Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
-	<Warning Text="'$(EmguCVWarningMessage)'" Condition="'$(EmguCVWarningMessage)'!=''" />
+    <Warning Text="'$(EmguCVWarningMessage)'" Condition="'$(EmguCVWarningMessage)'!=''" />
     <Message Text="Compiling with $(EmguCVDeployMessage)binary" Condition="'$(EmguCVDeployMessage)'!=''" Importance="High" />
     <Message Text="No native binary is deployed by the Emgu.CV shared project." Condition="'$(EmguCVDeployMessage)'==''" Importance="High" />
   </Target>
