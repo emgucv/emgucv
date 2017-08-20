@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(__IOS__ || UNITY_IPHONE || NETFX_CORE)
+#if !(__IOS__ || UNITY_IPHONE || NETFX_CORE || NET_STANDARD1_4)
 using System;
 using System.Collections.Generic;
 using System.Text;

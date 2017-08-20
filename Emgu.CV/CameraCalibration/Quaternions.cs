@@ -14,7 +14,7 @@ namespace Emgu.CV
    /// <summary>
    /// A unit quaternions that defines rotation in 3D
    /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NET_STANDARD1_4)
    [Serializable]
 #endif
    public struct Quaternions : IEquatable<Quaternions>

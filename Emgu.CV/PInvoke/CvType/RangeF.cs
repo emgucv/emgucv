@@ -10,7 +10,7 @@ namespace Emgu.CV.Structure
     /// <summary>
     /// The range use to setup the histogram
     /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NET_STANDARD1_4)
     [Serializable]
 #endif
     [StructLayout(LayoutKind.Sequential)]

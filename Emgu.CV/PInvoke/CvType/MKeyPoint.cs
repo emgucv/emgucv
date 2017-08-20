@@ -14,7 +14,7 @@ namespace Emgu.CV.Structure
     /// <summary>
     /// OpenCV's KeyPoint class
     /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NET_STANDARD1_4)
     [Serializable]
 #endif
     [StructLayout(LayoutKind.Sequential)]

@@ -16,7 +16,7 @@ namespace Emgu.CV
    /// A Matrix is a wrapper to cvMat of OpenCV. 
    /// </summary>
    /// <typeparam name="TDepth">Depth of this matrix (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NET_STANDARD1_4)
    [Serializable]
 #endif
    public class Matrix<TDepth> : CvArray<TDepth>, ICloneable, IEquatable<Matrix<TDepth>>  
@@ -225,7 +225,7 @@ namespace Emgu.CV
       {
          get
          {
-#if NETFX_CORE 
+#if NETFX_CORE || NET_STANDARD1_4 
             return Marshal.PtrToStructure<MCvMat>(Ptr);
 #else
             return (MCvMat)Marshal.PtrToStructure(Ptr, typeof(MCvMat));
@@ -725,7 +725,7 @@ namespace Emgu.CV
       }
       #endregion
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NET_STANDARD1_4)
       #region Implement ISerializable interface
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
