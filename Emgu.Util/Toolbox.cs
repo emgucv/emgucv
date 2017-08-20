@@ -453,7 +453,7 @@ namespace Emgu.Util
           const int loadLibrarySearchDllLoadDir = 0x00000100;
           const int loadLibrarySearchDefaultDirs = 0x00001000;
           return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
-#elif NETFX_CORE || NETSTANDARD1_4
+#elif NETFX_CORE
          IntPtr handler = LoadPackagedLibrary(dllname, 0);
 
          if (handler == IntPtr.Zero)
@@ -495,8 +495,7 @@ namespace Emgu.Util
 #endif
       }
 
-#if !(NETFX_CORE || NETSTANDARD1_4)
-
+#if !NETFX_CORE
       [DllImport("Kernel32.dll", SetLastError = true)]
       private static extern IntPtr LoadLibraryEx(
          [MarshalAs(UnmanagedType.LPStr)]
