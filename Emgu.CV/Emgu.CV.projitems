@@ -303,7 +303,8 @@
         <EmguCVLinkTarget>DotNetCore</EmguCVLinkTarget>
       </PropertyGroup>
     </When>
-	<When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netstandard1.4')">
+    <!-- NetStandard -->
+    <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netstandard1.4')">
       <PropertyGroup>
         <EmguCVLinkTarget>NetStandard</EmguCVLinkTarget>
       </PropertyGroup>
