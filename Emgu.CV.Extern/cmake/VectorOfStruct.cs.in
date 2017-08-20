@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-#if !(NETFX_CORE || NETCOREAPP1_1)
+#if !(NETFX_CORE || NETCOREAPP1_1 || NET_STANDARD1_4)
 using System.Runtime.Serialization;
 #endif
 
@@ -22,12 +22,12 @@ namespace ${NAMESPACE_CS}
    /// <summary>
    /// Wrapped class of the C++ standard vector of ${VECTOR_NAME}.
    /// </summary>
-#if !(NETFX_CORE || NETCOREAPP1_1)
+#if !(NETFX_CORE || NETCOREAPP1_1 || NET_STANDARD1_4)
    [Serializable]
    [DebuggerTypeProxy(typeof(VectorOf${VECTOR_NAME}.DebuggerProxy))]
 #endif
    public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, IInputOutputArray
-#if !(NETFX_CORE || NETCOREAPP1_1)
+#if !(NETFX_CORE || NETCOREAPP1_1 || NET_STANDARD1_4)
    , ISerializable
 #endif
    {
@@ -39,7 +39,7 @@ namespace ${NAMESPACE_CS}
          Debug.Assert(Emgu.Util.Toolbox.SizeOf<${VECTOR_ELEMENT_CS}>() == SizeOfItemInBytes, "Size do not match");
       }
 
-#if !(NETFX_CORE || NETCOREAPP1_1)
+#if !(NETFX_CORE || NETCOREAPP1_1 || NET_STANDARD1_4)
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
       /// </summary>
