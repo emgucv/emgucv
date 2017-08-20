@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-#if !(NETFX_CORE || NETCOREAPP1_1 || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETCOREAPP1_1 || NETSTANDARD1_4)
 using System.Runtime.Serialization;
 #endif
 
