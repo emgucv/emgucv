@@ -316,7 +316,7 @@ namespace Emgu.CV.Cuda
       }*/
 #elif __UNIFIED__ //Xamarin Mac
       
-#elif !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#elif !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
         /// <summary>
         /// convert the current CudaImage to its equivalent Bitmap representation
         /// </summary>
@@ -349,12 +349,12 @@ namespace Emgu.CV.Cuda
       #endregion
 
       #region ICloneable Members
-
+#if !NETSTANDARD1_4
       object ICloneable.Clone()
       {
          return Clone(null);
       }
-
+#endif
       #endregion
    }
 }

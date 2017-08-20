@@ -4167,12 +4167,12 @@ namespace Emgu.CV
 #endregion
 
 #region ICloneable Members
-
+#if !NETSTANDARD1_4
         object ICloneable.Clone()
         {
             return Clone();
         }
-
+#endif
 #endregion
 
         /// <summary>
