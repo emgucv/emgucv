@@ -380,6 +380,7 @@ namespace Emgu.CV
          FileInfo file = new FileInfo(asm.Location);
          DirectoryInfo directory = file.Directory;
 
+
 #if (UNITY_ANDROID && !UNITY_EDITOR)
          UnityEngine.AndroidJavaObject jo = new UnityEngine.AndroidJavaObject("java.lang.System");
 #endif
@@ -405,7 +406,7 @@ namespace Emgu.CV
                Console.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
             }
          }
-#elif __IOS__ || UNITY_IOS || NETFX_CORE || NETSTANDARD1_4
+#elif __IOS__ || UNITY_IOS || NETFX_CORE
 #else
          if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {
