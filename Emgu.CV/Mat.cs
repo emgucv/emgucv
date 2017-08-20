@@ -1080,10 +1080,12 @@ namespace Emgu.CV
             return result;
         }
 
+#if !NETSTANDARD1_4
         object ICloneable.Clone()
         {
             return this.Clone();
         }
+#endif
 
         /// <summary>
         /// Compares two Mats and check if they are equal

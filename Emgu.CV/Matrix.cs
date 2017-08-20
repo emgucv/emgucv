@@ -19,7 +19,10 @@ namespace Emgu.CV
 #if !(NETFX_CORE || NETSTANDARD1_4)
    [Serializable]
 #endif
-   public class Matrix<TDepth> : CvArray<TDepth>, ICloneable, IEquatable<Matrix<TDepth>>  
+   public class Matrix<TDepth> : CvArray<TDepth>, IEquatable<Matrix<TDepth>>
+#if !NETSTANDARD1_4
+        ,ICloneable
+#endif
       where TDepth : new()
    {
       private TDepth[,] _array;
@@ -833,14 +836,14 @@ namespace Emgu.CV
 
       #endregion
 
-      #region ICloneable Members
-
+#region ICloneable Members
+#if !NETSTANDARD1_4
       object ICloneable.Clone()
       {
          return Clone();
       }
-
-      #endregion
+#endif
+#endregion
 
       ///<summary> 
       /// Get the size of the array

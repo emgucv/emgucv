@@ -643,10 +643,12 @@ namespace Emgu.CV
             return m;
         }
 
+#if !NETSTANDARD1_4
         object ICloneable.Clone()
         {
             return Clone();
         }
+#endif
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
