@@ -21,13 +21,16 @@ namespace Emgu.CV
       {
 #if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
          _displayColor = new Color(red/255.0f, green/255.0f, blue/255.0f, 1.0f);
+#elif NETSTANDARD1_4
+         DisplayColor = new Structure.Bgr(blue, green, red);
 #elif NETFX_CORE
          _displayColor = Color.FromArgb(255, (byte)red, (byte)green, (byte) blue);
 #else
          _displayColor = Color.FromArgb(red, green, blue);
 #endif
-      }
+        }
 
+#if !NETSTANDARD1_4
       private Color _displayColor;
 
       public Color DisplayColor
@@ -35,5 +38,8 @@ namespace Emgu.CV
          get { return _displayColor; }
          set { _displayColor = value; }
       }
-   }
+#else
+      public Structure.Bgr DisplayColor { get; set; }
+#endif
+    }
 }
