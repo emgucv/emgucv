@@ -11,7 +11,7 @@ namespace Emgu.CV.Structure
     /// <summary>
     /// A 2D cross
     /// </summary>
-#if !(NETFX_CORE || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     [StructLayout(LayoutKind.Sequential)]

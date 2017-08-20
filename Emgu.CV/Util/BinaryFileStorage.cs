@@ -236,13 +236,13 @@ namespace Emgu.CV.Util
 
          int bufferSize = _elementSize * subsampleRate;
          using (FileStream stream = _fileInfo.OpenRead())
-#if !NET_STANDARD1_4
+#if !NETSTANDARD1_4
          using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize))
 #endif
          using (PinnedArray<Byte> buffer = new PinnedArray<byte>(bufferSize))
          using (PinnedArray<T> structure = new PinnedArray<T>(subsampleRate))
          {
-#if NET_STANDARD1_4
+#if NETSTANDARD1_4
             var bufferStream = stream;
 #endif
             IntPtr structAddr = structure.AddrOfPinnedObject();
@@ -272,12 +272,12 @@ namespace Emgu.CV.Util
          Byte[] buffer = new byte[_elementSize * elementsInTrunk];
 
          using (FileStream stream = _fileInfo.OpenRead())
-#if !NET_STANDARD1_4
+#if !NETSTANDARD1_4
          using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize))
 #endif
          using (PinnedArray<T> structures = new PinnedArray<T>(elementsInTrunk))
          {
-#if NET_STANDARD1_4
+#if NETSTANDARD1_4
             var bufferStream = stream;
 #endif
             IntPtr structAddr = structures.AddrOfPinnedObject();

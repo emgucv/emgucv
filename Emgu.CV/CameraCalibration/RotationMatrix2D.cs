@@ -14,14 +14,14 @@ namespace Emgu.CV
     /// <summary>
     /// A (2x3) 2D rotation matrix. This Matrix defines an Affine Transform
     /// </summary>
-#if !(NETFX_CORE || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     public class RotationMatrix2D : Mat
     {
 
         /*
-  #if !(NETFX_CORE || NET_STANDARD1_4)
+  #if !(NETFX_CORE || NETSTANDARD1_4)
         /// <summary>
         /// Constructor used to deserialize 2D rotation matrix
         /// </summary>

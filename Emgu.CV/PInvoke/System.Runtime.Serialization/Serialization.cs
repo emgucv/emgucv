@@ -1,4 +1,4 @@
-﻿#if NET_STANDARD1_4
+﻿#if NETSTANDARD1_4
 namespace System.Runtime.Serialization
 {
 }

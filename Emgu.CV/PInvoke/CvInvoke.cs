@@ -337,7 +337,7 @@ namespace Emgu.CV
 #endif
          }
 
-#if !(NETFX_CORE || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETSTANDARD1_4)
          Environment.CurrentDirectory = oldDir;
 #endif
          return success;
@@ -405,7 +405,7 @@ namespace Emgu.CV
                Console.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
             }
          }
-#elif __IOS__ || UNITY_IOS || NETFX_CORE || NET_STANDARD1_4
+#elif __IOS__ || UNITY_IOS || NETFX_CORE || NETSTANDARD1_4
 #else
          if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
          {

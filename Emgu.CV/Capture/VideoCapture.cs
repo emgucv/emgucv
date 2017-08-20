@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || NET_STANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
 #define WITH_SERVICE_MODEL
 #endif
 
@@ -18,7 +18,7 @@ using System.Threading;
 #if NETFX_CORE
 using Windows.System.Threading;
 #endif
-#if NET_STANDARD1_4 || NETFX_CORE
+#if NETSTANDARD1_4 || NETFX_CORE
 using System.Threading.Tasks;
 #endif
 using Emgu.Util;
@@ -311,7 +311,7 @@ namespace Emgu.CV
 
         private static void Wait(int millisecond)
         {
-#if NETFX_CORE || NET_STANDARD1_4
+#if NETFX_CORE || NETSTANDARD1_4
          Task t = Task.Delay(millisecond);
          t.Wait();
 #else
@@ -339,7 +339,7 @@ namespace Emgu.CV
             {
                 _grabState = GrabState.Running;
 
-#if NET_STANDARD1_4
+#if NETSTANDARD1_4
                 Task t = new Task(Run);
                 t.Start();
 #elif NETFX_CORE

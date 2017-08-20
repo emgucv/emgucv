@@ -20,7 +20,7 @@ namespace Emgu.Util
    /// </summary>
    public static class Toolbox
    {
-#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || NET_STANDARD1_4)
+#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || NETSTANDARD1_4)
         #region xml serilization and deserialization
       /// <summary>
       /// Convert an object to an xml document
@@ -115,7 +115,7 @@ namespace Emgu.Util
         /// <returns>The size of T in bytes</returns>
         public static int SizeOf<T>()
       {
-#if NETFX_CORE || NET_STANDARD1_4
+#if NETFX_CORE || NETSTANDARD1_4
          return Marshal.SizeOf<T>();
 #else
          return Marshal.SizeOf(typeof(T));
@@ -161,7 +161,7 @@ namespace Emgu.Util
          [MarshalAs(UnmanagedType.LPStr)]
          String fileName,
          int dwFlags);
-#elif NETFX_CORE || NET_STANDARD1_4
+#elif NETFX_CORE || NETSTANDARD1_4
       [DllImport("Kernel32.dll", SetLastError = true)]
       private static extern IntPtr LoadPackagedLibrary(
          [MarshalAs(UnmanagedType.LPStr)]
@@ -230,7 +230,7 @@ namespace Emgu.Util
       /// <returns>the byte vector</returns>
       public static Byte[] ToBytes<TData>(TData[] data)
       {
-#if NETFX_CORE || NET_STANDARD1_4
+#if NETFX_CORE || NETSTANDARD1_4
          int size = Marshal.SizeOf<TData>() * data.Length;
 #else
          int size = Marshal.SizeOf(typeof(TData)) * data.Length;
@@ -453,7 +453,7 @@ namespace Emgu.Util
           const int loadLibrarySearchDllLoadDir = 0x00000100;
           const int loadLibrarySearchDefaultDirs = 0x00001000;
           return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
-#elif NETFX_CORE || NET_STANDARD1_4
+#elif NETFX_CORE || NETSTANDARD1_4
          IntPtr handler = LoadPackagedLibrary(dllname, 0);
 
          if (handler == IntPtr.Zero)
@@ -495,7 +495,7 @@ namespace Emgu.Util
 #endif
       }
 
-#if !(NETFX_CORE || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETSTANDARD1_4)
 
       [DllImport("Kernel32.dll", SetLastError = true)]
       private static extern IntPtr LoadLibraryEx(

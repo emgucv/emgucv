@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV.Structure
 {
     ///<summary> A circle </summary>
-#if !(NETFX_CORE || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     [StructLayout(LayoutKind.Sequential)]
@@ -38,7 +38,7 @@ namespace Emgu.CV.Structure
       }
 
         ///<summary> The radius of the circle </summary>
-#if !(NET_STANDARD1_4 || NETCOREAPP1_1)
+#if !(NETSTANDARD1_4 || NETCOREAPP1_1)
         [XmlAttribute("Radius")]
 #endif
         public float Radius { get { return _radius; } set { _radius = value; } }

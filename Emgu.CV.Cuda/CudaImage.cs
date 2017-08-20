@@ -316,7 +316,7 @@ namespace Emgu.CV.Cuda
       }*/
 #elif __UNIFIED__ //Xamarin Mac
       
-#elif !(NETFX_CORE || NET_STANDARD1_4 || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
+#elif !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
         /// <summary>
         /// convert the current CudaImage to its equivalent Bitmap representation
         /// </summary>

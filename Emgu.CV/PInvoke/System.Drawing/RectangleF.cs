@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if (NETFX_CORE || NET_STANDARD1_4 || UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if (NETFX_CORE || NETSTANDARD1_4 || UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
 using System;
 using System.Runtime.InteropServices;
 
@@ -11,7 +11,7 @@ namespace System.Drawing
    /// <summary>
    /// Managed structure equivalent to CvRect
    /// </summary>
-#if !(NETFX_CORE || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETSTANDARD1_4)
    [Serializable]
 #endif
    [StructLayout(LayoutKind.Sequential)]

@@ -15,7 +15,7 @@ namespace Emgu.CV
    ///<summary> 
    /// A Uniform Multi-dimensional Dense Histogram 
    ///</summary>
-#if !(NETFX_CORE || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETSTANDARD1_4)
    [DebuggerTypeProxy(typeof(DenseHistogram.DebuggerProxy))]
 #endif
    public class DenseHistogram : Mat

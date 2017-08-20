@@ -78,7 +78,7 @@ namespace Emgu.CV.Structure
       /// <summary>
       /// Offset of roi
       /// </summary>
-#if NETFX_CORE || NET_STANDARD1_4 
+#if NETFX_CORE || NETSTANDARD1_4 
       public static readonly int TypeOffset = (int)Marshal.OffsetOf<MCvMat>("Type");
 #else
       public static readonly int TypeOffset = (int)Marshal.OffsetOf(typeof(MCvMat), "Type");
