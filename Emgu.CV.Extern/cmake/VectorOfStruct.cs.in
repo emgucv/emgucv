@@ -22,7 +22,7 @@ namespace ${NAMESPACE_CS}
    /// <summary>
    /// Wrapped class of the C++ standard vector of ${VECTOR_NAME}.
    /// </summary>
-#if !(NETFX_CORE || NETCOREAPP1_1 || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETCOREAPP1_1 || NETSTANDARD1_4)
    [Serializable]
    [DebuggerTypeProxy(typeof(VectorOf${VECTOR_NAME}.DebuggerProxy))]
 #endif
@@ -39,7 +39,7 @@ namespace ${NAMESPACE_CS}
          Debug.Assert(Emgu.Util.Toolbox.SizeOf<${VECTOR_ELEMENT_CS}>() == SizeOfItemInBytes, "Size do not match");
       }
 
-#if !(NETFX_CORE || NETCOREAPP1_1 || NET_STANDARD1_4)
+#if !(NETFX_CORE || NETCOREAPP1_1 || NETSTANDARD1_4)
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
       /// </summary>

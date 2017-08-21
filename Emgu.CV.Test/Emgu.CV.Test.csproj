@@ -142,7 +142,7 @@
       <Link>rgb.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\modules\dnn\tutorials\images\space_shuttle.jpg">
+    <Content Include="..\opencv_extra\testdata\dnn\space_shuttle.jpg">
       <Link>space_shuttle.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
