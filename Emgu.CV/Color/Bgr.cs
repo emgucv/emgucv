@@ -35,6 +35,7 @@ namespace Emgu.CV.Structure
          _scalar = new MCvScalar(blue, green, red);
       }
 
+#if !NETSTANDARD1_4
       /// <summary>
       /// Create a Bgr color using the System.Drawing.Color
       /// </summary>
@@ -47,6 +48,7 @@ namespace Emgu.CV.Structure
          _scalar = new MCvScalar(winColor.B, winColor.G, winColor.R);
 #endif
       }
+#endif
 
       ///<summary> Get or set the intensity of the blue color channel </summary>
       [DisplayColor(255, 0, 0)]
@@ -60,7 +62,7 @@ namespace Emgu.CV.Structure
       [DisplayColor(0, 0, 255)]
       public double Red { get { return _scalar.V2; } set { _scalar.V2 = value; } }
 
-      #region IEquatable<Bgr> Members
+#region IEquatable<Bgr> Members
       /// <summary>
       /// Return true if the two color equals
       /// </summary>
@@ -71,9 +73,9 @@ namespace Emgu.CV.Structure
          return MCvScalar.Equals(other.MCvScalar);
       }
 
-      #endregion
+#endregion
 
-      #region IColor Members
+#region IColor Members
       /// <summary>
       /// Get the dimension of this color
       /// </summary>
@@ -96,7 +98,7 @@ namespace Emgu.CV.Structure
             _scalar = value;
          }
       }
-      #endregion
+#endregion
 
       /// <summary>
       /// Represent this color as a String

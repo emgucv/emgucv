@@ -94,7 +94,7 @@ namespace Emgu.CV
             using (CvString s = new CvString(filename))
             using (InputArray iaImage = image.GetInputArray())
             {
-#if !(__IOS__ || __ANDROID__ || NETFX_CORE)
+#if !(__IOS__ || __ANDROID__ || NETFX_CORE || NETSTANDARD1_4)
                bool containsUnicode = (s.Length != filename.Length);
                if (containsUnicode &&
                    (Emgu.Util.Platform.OperationSystem != OS.MacOSX) &&

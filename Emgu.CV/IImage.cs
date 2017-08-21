@@ -66,10 +66,13 @@ namespace Emgu.CV
    /// <summary>
    /// IImage interface
    /// </summary>
-   public interface IImage : IDisposable, ICloneable, IInputOutputArray
-   {
-#if NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
-#elif __IOS__ 
+   public interface IImage : IDisposable, IInputOutputArray
+#if !NETSTANDARD1_4
+        ,ICloneable
+#endif
+    {
+#if NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#elif __IOS__
       /// <summary>
       /// Convert this image to UIImage
       /// </summary>
@@ -77,7 +80,7 @@ namespace Emgu.CV
       /// The UIImage
       /// </returns>
       UIImage ToUIImage();
-		#elif __UNIFIED__
+#elif __UNIFIED__
 #else
       /// <summary>
       /// Convert this image into Bitmap, when available, data is shared with this image.

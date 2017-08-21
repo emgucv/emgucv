@@ -38,11 +38,12 @@ namespace Emgu.CV.Structure
          //TODO: implement this
       }
 
-      /// <summary>
-      /// Create a Bgr565 color using the System.Drawing.Color
-      /// </summary>
-      /// <param name="winColor">System.Drawing.Color</param>
-      public Bgr565(Color winColor)
+#if !NETSTANDARD1_4
+        /// <summary>
+        /// Create a Bgr565 color using the System.Drawing.Color
+        /// </summary>
+        /// <param name="winColor">System.Drawing.Color</param>
+        public Bgr565(Color winColor)
 #if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
          : this(winColor.r * 255.0, winColor.g * 255.0, winColor.b * 255.0)
 #else
@@ -50,7 +51,8 @@ namespace Emgu.CV.Structure
 #endif
       {
       }
-      
+#endif
+        
       ///<summary> Get or set the intensity of the red color channel </summary>
       [DisplayColor(0, 0, 255)]
       public double Red { get { return _scalar.V0; } set { _scalar.V0 = value; } }
@@ -63,7 +65,7 @@ namespace Emgu.CV.Structure
       [DisplayColor(255, 0, 0)]
       public double Blue { get { return _scalar.V2; } set { _scalar.V2 = value; } }
       
-      #region IEquatable<Rgb> Members
+#region IEquatable<Rgb> Members
       /// <summary>
       /// Return true if the two color equals
       /// </summary>
@@ -74,9 +76,9 @@ namespace Emgu.CV.Structure
          return MCvScalar.Equals(other.MCvScalar);
       }
 
-      #endregion
+#endregion
 
-      #region IColor Members
+#region IColor Members
       /// <summary>
       /// Get the dimension of this color
       /// </summary>
@@ -99,7 +101,7 @@ namespace Emgu.CV.Structure
             _scalar = value;
          }
       }
-      #endregion
+#endregion
 
       /// <summary>
       /// Represent this color as a String

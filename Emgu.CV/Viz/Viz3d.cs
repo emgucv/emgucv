@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
-#if ! (NETFX_CORE || __ANDROID__ || __IOS__ || UNITY_IOS || UNITY_ANDROID )
+#if ! (NETFX_CORE || NETSTANDARD1_4 || __ANDROID__ || __IOS__ || UNITY_IOS || UNITY_ANDROID )
 
 using System;
 using System.Runtime.InteropServices;

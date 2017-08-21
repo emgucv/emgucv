@@ -12,7 +12,7 @@ namespace Emgu.CV.Structure
     /// <summary>
     /// A solid resembling a cube, with the rectangular faces not all equal; a rectangular parallelepiped.
     /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     [StructLayout(LayoutKind.Sequential)]

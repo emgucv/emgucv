@@ -102,8 +102,13 @@ namespace Emgu.CV.Util
 #else
          using (PinnedArray<T> buffer = new PinnedArray<T>(elementsInTrunk))
          using (FileStream stream = _fileInfo.Open(FileMode.Append, FileAccess.Write))
+#if !NETSTANDARD1_4
          using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize))
-         {
+#endif
+            {
+#endif
+#if NETSTANDARD1_4
+            var bufferStream = stream;
 #endif
             IntPtr ptr = buffer.AddrOfPinnedObject();
             foreach (T s in samples)
@@ -214,7 +219,13 @@ namespace Emgu.CV.Util
          using (PinnedArray<Byte> buffer = new PinnedArray<byte>(_elementSize))
          {
             return (stream.Read(buffer.Array, 0, _elementSize) > 0) ?
-               (T)Marshal.PtrToStructure(buffer.AddrOfPinnedObject(), typeof(T)) :
+#if NETSTANDARD1_4
+               Marshal.PtrToStructure<T>(buffer.AddrOfPinnedObject())
+#else
+               (T)Marshal.PtrToStructure(buffer.AddrOfPinnedObject(), typeof(T))
+#endif
+               :
+
                new T();
          }
       }
@@ -231,10 +242,15 @@ namespace Emgu.CV.Util
 
          int bufferSize = _elementSize * subsampleRate;
          using (FileStream stream = _fileInfo.OpenRead())
+#if !NETSTANDARD1_4
          using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize))
+#endif
          using (PinnedArray<Byte> buffer = new PinnedArray<byte>(bufferSize))
          using (PinnedArray<T> structure = new PinnedArray<T>(subsampleRate))
          {
+#if NETSTANDARD1_4
+            var bufferStream = stream;
+#endif
             IntPtr structAddr = structure.AddrOfPinnedObject();
             IntPtr addr = buffer.AddrOfPinnedObject();
             while (bufferStream.Read(buffer.Array, 0, bufferSize) > 0)
@@ -245,7 +261,7 @@ namespace Emgu.CV.Util
          }
       }
       
-      #region IEnumerable<T> Members
+#region IEnumerable<T> Members
       /// <summary>
       /// Get the data in this storage
       /// </summary>
@@ -262,9 +278,14 @@ namespace Emgu.CV.Util
          Byte[] buffer = new byte[_elementSize * elementsInTrunk];
 
          using (FileStream stream = _fileInfo.OpenRead())
+#if !NETSTANDARD1_4
          using (BufferedStream bufferStream = new BufferedStream(stream, _trunkSize))
+#endif
          using (PinnedArray<T> structures = new PinnedArray<T>(elementsInTrunk))
          {
+#if NETSTANDARD1_4
+            var bufferStream = stream;
+#endif
             IntPtr structAddr = structures.AddrOfPinnedObject();
             int bytesRead;
             while ((bytesRead = bufferStream.Read(buffer, 0, buffer.Length)) > 0)
@@ -278,16 +299,16 @@ namespace Emgu.CV.Util
             }
          }
       }
-      #endregion
+#endregion
       
-      #region IEnumerable Members
+#region IEnumerable Members
 
       System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
       {
          return GetEnumerator();
       }
 
-      #endregion
+#endregion
 #endif
    }
 }

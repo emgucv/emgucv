@@ -422,7 +422,7 @@ namespace Emgu.CV.Cuda
             return result;
         }
 
-#if !(__UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
+#if !(__UNIFIED__ || NETSTANDARD1_4 || NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
         /// <summary>
         /// Get the Bitmap from this GpuMat
         /// </summary>
@@ -483,7 +483,7 @@ namespace Emgu.CV.Cuda
         IImage[] IImage.Split()
         {
             return
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
             Extensions.
 #else
             Array.

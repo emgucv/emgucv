@@ -24,15 +24,15 @@ namespace Emgu.CV
     /// The equivalent of cv::Mat, should only be used if you know what you are doing.
     /// In most case you should use the Matrix class instead
     /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     public partial class UMat : MatDataAllocator, IImage, IEquatable<UMat>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
 , ISerializable
 #endif
     {
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
         #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
@@ -529,7 +529,7 @@ namespace Emgu.CV
         }
 
 #if __IOS__
-#elif !(__UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
+#elif !(__UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
         /// such that the image data is <b>shared</b> with Bitmap. 
@@ -643,10 +643,12 @@ namespace Emgu.CV
             return m;
         }
 
+#if !NETSTANDARD1_4
         object ICloneable.Clone()
         {
             return Clone();
         }
+#endif
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.

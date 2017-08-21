@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
 namespace System
 {
    public delegate TOutput Converter<TInput, TOutput>(TInput input);

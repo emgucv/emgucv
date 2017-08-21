@@ -5,7 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
 using System.Security.Permissions;
 #endif
 using System.Runtime.Serialization;
@@ -18,7 +18,7 @@ namespace Emgu.CV
    /// A MatND is a wrapper to cvMatND of OpenCV. 
    /// </summary>
    /// <typeparam name="TDepth">The type of depth</typeparam>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
    [Serializable]
 #endif
    public class MatND<TDepth> : CvArray<TDepth>, IEquatable<MatND<TDepth>> where TDepth : new()
@@ -34,7 +34,7 @@ namespace Emgu.CV
          ManagedArray = Array.CreateInstance(typeof(TDepth), sizes);
       }
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
       /// <summary>
       /// Constructor used to deserialize runtime serialized object
       /// </summary>
@@ -138,7 +138,7 @@ namespace Emgu.CV
          _array = null;
       }
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
       #region ISerializable Members
       /// <summary>
       /// A function used for runtime serialization of the object
@@ -193,7 +193,7 @@ namespace Emgu.CV
       {
          get
          {
-#if NETFX_CORE 
+#if NETFX_CORE || NETSTANDARD1_4 
             return Marshal.PtrToStructure<MCvMatND>(_ptr);
 #else
             return (MCvMatND)Marshal.PtrToStructure(_ptr, typeof(MCvMatND));

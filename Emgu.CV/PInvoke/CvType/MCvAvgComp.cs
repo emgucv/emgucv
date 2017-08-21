@@ -11,7 +11,7 @@ namespace Emgu.CV.Structure
     /// <summary>
     /// Result of cvHaarDetectObjects
     /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     [StructLayout(LayoutKind.Sequential)]

@@ -16,7 +16,7 @@ namespace Emgu.CV
    /// <summary>
    /// The Affine3 matrix, double precision. 
    /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
    [DebuggerTypeProxy(typeof(Affine3d.DebuggerProxy))]
 #endif
    public class Affine3d : UnmanagedObject

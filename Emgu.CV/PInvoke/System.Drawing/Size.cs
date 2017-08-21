@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace System.Drawing
 {
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
    [Serializable]
 #endif
    [StructLayout(LayoutKind.Sequential)]

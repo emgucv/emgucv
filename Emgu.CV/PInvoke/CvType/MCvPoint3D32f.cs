@@ -10,7 +10,7 @@ namespace Emgu.CV.Structure
     /// <summary>
     /// Managed Structure equivalent to CvPoint3D32f
     /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     [StructLayout(LayoutKind.Sequential)]

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 
-#if __ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __ANDROID__ || __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -24,7 +24,7 @@ namespace Emgu.CV.Util
    /// </summary>
    public static class CvToolbox
    {
-#if __ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __ANDROID__ || __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
       #region Color Pallette
       /// <summary>
@@ -318,7 +318,7 @@ namespace Emgu.CV.Util
 
       private static String GetConversionCodenameFromType(Type colorType)
       {
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
 
          if (colorType == typeof(Bgr))
             return "BGR";

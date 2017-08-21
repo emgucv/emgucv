@@ -5,7 +5,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.Serialization;
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
 using System.Security.Permissions;
 #endif
 using Emgu.CV;
@@ -19,7 +19,7 @@ namespace Emgu.CV
    /// </summary>
    /// <typeparam name="TColor">The color of this map</typeparam>
    /// <typeparam name="TDepth">The depth of this map</typeparam>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
    [Serializable]
 #endif
    public class Map<TColor, TDepth> : Image<TColor, TDepth>
@@ -245,7 +245,7 @@ namespace Emgu.CV
       public override void Draw(IConvexPolygonF polygon, TColor color, int thickness)
       {
          Point[] pts =
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
             Extensions.
 #else
             Array.
@@ -286,7 +286,7 @@ namespace Emgu.CV
       public void DrawPolyline(PointF[] pts, bool isClosed, TColor color, int thickness)
       {
          base.DrawPolyline(
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
             Extensions.
 #else
             Array.
@@ -298,7 +298,7 @@ namespace Emgu.CV
       }
 #endif
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
       #region Implement ISerializable interface
       /// <summary>
       /// Constructor used to deserialize runtime serialized object

@@ -3,7 +3,7 @@
 //----------------------------------------------------------------------------
 
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
 using System;
 using System.Collections.Generic;
 using System.Reflection;

@@ -35,11 +35,12 @@ namespace Emgu.CV.Structure
          _scalar = new MCvScalar(red, green, blue);
       }
 
-      /// <summary>
-      /// Create a Rgb color using the System.Drawing.Color
-      /// </summary>
-      /// <param name="winColor">System.Drawing.Color</param>
-      public Rgb(Color winColor)
+#if !NETSTANDARD1_4
+        /// <summary>
+        /// Create a Rgb color using the System.Drawing.Color
+        /// </summary>
+        /// <param name="winColor">System.Drawing.Color</param>
+        public Rgb(Color winColor)
 #if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
          : this(winColor.r * 255.0, winColor.g * 255.0, winColor.b * 255.0)
 #else
@@ -47,9 +48,10 @@ namespace Emgu.CV.Structure
 #endif
       {
       }
+#endif
 
-      ///<summary> Get or set the intensity of the red color channel </summary>
-      [DisplayColor(0, 0, 255)]
+        ///<summary> Get or set the intensity of the red color channel </summary>
+        [DisplayColor(0, 0, 255)]
       public double Red { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 
       ///<summary> Get or set the intensity of the green color channel </summary>

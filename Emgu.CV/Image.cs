@@ -14,7 +14,7 @@ using CoreGraphics;
 using UIKit;
 #elif __UNIFIED__
 using CoreGraphics;
-#elif NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#elif NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -22,7 +22,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
 using System.Security.Permissions;
 #endif
 using Emgu.CV.Features2D;
@@ -38,7 +38,7 @@ namespace Emgu.CV
     /// </summary>
     /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz, Ycc, Rgb or Rbga)</typeparam>
     /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     public partial class Image<TColor, TDepth>
@@ -113,7 +113,7 @@ namespace Emgu.CV
         /// <param name="fileName">the name of the file that contains the image</param>
         public Image(String fileName)
         {
-#if NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
+#if NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
             using (Mat m = CvInvoke.Imread(fileName, ImreadModes.AnyColor | ImreadModes.AnyDepth))
             {
                 if (m.IsEmpty)
@@ -219,7 +219,7 @@ namespace Emgu.CV
 #endif
         }
 
-#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
+#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
 #else
       /// <summary>
       /// Load the specific file using Bitmap
@@ -237,7 +237,7 @@ namespace Emgu.CV
       }
 #endif
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
         /// <summary>
         /// Load the specific file using OpenCV
         /// </summary>
@@ -253,7 +253,7 @@ namespace Emgu.CV
         }
 #endif
 
-#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
       /// <summary>
       /// Obtain the image from the specific Bitmap
@@ -388,7 +388,7 @@ namespace Emgu.CV
         }
         #endregion
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
         #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
@@ -434,7 +434,7 @@ namespace Emgu.CV
         {
             get
             {
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
             return Marshal.PtrToStructure<MIplImage>(Ptr);
 #else
                 return (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
@@ -791,7 +791,7 @@ namespace Emgu.CV
         public virtual void Draw(IConvexPolygonF polygon, TColor color, int thickness)
         {
             Point[] vertices =
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
             Extensions.
 #else
             Array.
@@ -1103,7 +1103,7 @@ namespace Emgu.CV
         /// <param name="widthStep">The width step required to jump to the next row</param>
         protected static void RoiParam(IntPtr ptr, out Int64 start, out int rows, out int elementCount, out int byteWidth, out int widthStep)
         {
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
            MIplImage ipl = Marshal.PtrToStructure<MIplImage>(ptr);
 #else
             MIplImage ipl = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
@@ -2458,7 +2458,7 @@ namespace Emgu.CV
         }
 #endregion
 
-#if __UNIFIED__ || NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
       //#region Conversion with Bitmap
       /// <summary>
@@ -4155,7 +4155,7 @@ namespace Emgu.CV
         IImage[] IImage.Split()
         {
             return
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
             Extensions.
 #else
             Array.
@@ -4167,12 +4167,12 @@ namespace Emgu.CV
 #endregion
 
 #region ICloneable Members
-
+#if !NETSTANDARD1_4
         object ICloneable.Clone()
         {
             return Clone();
         }
-
+#endif
 #endregion
 
         /// <summary>
@@ -4246,7 +4246,7 @@ namespace Emgu.CV
         /// <param name="iplImage">The pointer to the iplImage</param>
         private void LoadImageFromIplImagePtr(IntPtr iplImage)
         {
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
          MIplImage mptr = Marshal.PtrToStructure<MIplImage>(iplImage);
 #else
             MIplImage mptr = (MIplImage)Marshal.PtrToStructure(iplImage, typeof(MIplImage));
@@ -4355,7 +4355,7 @@ namespace Emgu.CV
         /// <summary>
         /// Offset of roi
         /// </summary>
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_4
       public static readonly int RoiOffset = (int)Marshal.OffsetOf<MIplImage>("Roi");
 #else
         public static readonly int RoiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "Roi");

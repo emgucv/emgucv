@@ -13,7 +13,7 @@ namespace Emgu.CV
    /// <summary>
    /// Intrinsic camera parameters
    /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
    [Serializable]
 #endif
    [Obsolete("This class will be removed in the next release, please use separate camera matrix and distortion coefficient with the CvInvoke function instead.")]

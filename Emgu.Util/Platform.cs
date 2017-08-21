@@ -15,7 +15,7 @@ namespace Emgu.Util
       private static readonly OS _os;
       private static readonly ClrType _runtime;
 
-#if !(__IOS__ || UNITY_IPHONE || __ANDROID__ || UNITY_ANDROID || WINDOWS_PHONE_APP || NETFX_CORE)
+#if !(__IOS__ || UNITY_IPHONE || __ANDROID__ || UNITY_ANDROID || WINDOWS_PHONE_APP || NETFX_CORE || NETSTANDARD1_4)
       [DllImport("c")]
       private static extern int uname(IntPtr buffer);
 #endif
@@ -34,8 +34,23 @@ namespace Emgu.Util
 #elif NETFX_CORE
          _os = OS.Windows;
          _runtime = ClrType.NetFxCore;
+#elif NETSTANDARD1_4
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            _os = OS.Windows;
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+            _os = OS.Linux;
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            _os = OS.MacOSX;
+        } else {
+            //unknown
+        }
+        //how???
+        _runtime = ClrType.NetFxCore;
 #else
-         PlatformID pid = Environment.OSVersion.Platform;
+            PlatformID pid = Environment.OSVersion.Platform;
          if (pid == PlatformID.MacOSX)
          {
             //This never works, it is a bug in Mono
@@ -73,7 +88,7 @@ namespace Emgu.Util
          }
          _runtime = (Type.GetType("System.MonoType", false) != null) ? ClrType.Mono : ClrType.DotNet;
 #endif
-      }
+        }
 
       /// <summary>
       /// Get the type of the current operating system
@@ -82,6 +97,7 @@ namespace Emgu.Util
       {
          get
          {
+
             return _os;
          }
       }

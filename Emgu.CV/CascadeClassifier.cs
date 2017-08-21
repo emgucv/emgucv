@@ -29,7 +29,7 @@ namespace Emgu.CV
       ///<param name="fileName">The name of the file that contains the CascadeClassifier</param>
       public CascadeClassifier(String fileName)
       {
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
          FileInfo file = new FileInfo(fileName);
          if (!file.Exists)
             throw new FileNotFoundException(String.Format("File '{0}' not found", fileName));

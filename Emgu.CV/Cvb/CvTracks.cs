@@ -116,7 +116,7 @@ namespace Emgu.CV.Cvb
          }
          else
          {
-#if NETFX_CORE 
+#if NETFX_CORE || NETSTANDARD1_4 
             track = Marshal.PtrToStructure<CvTrack>(trackPtr);
 #else
             track = (CvTrack)Marshal.PtrToStructure(trackPtr, typeof(CvTrack));

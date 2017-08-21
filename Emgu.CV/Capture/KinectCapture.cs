@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 /*
-#if !(__UNIFIED__ || __ANDROID__ || NETFX_CORE)
+#if !(__UNIFIED__ || __ANDROID__ || NETFX_CORE || NETSTANDARD1_4)
 
 using Emgu.CV.Util;
 using System;

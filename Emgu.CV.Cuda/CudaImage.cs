@@ -307,7 +307,7 @@ namespace Emgu.CV.Cuda
          return new CudaImage<TColor, TDepth>(this, Range.All, new Range(start, end));
       }
 
-      #region IImage Members
+        #region IImage Members
 #if __IOS__
       /*
       public UIKit.UIImage ToUIImage()
@@ -316,11 +316,11 @@ namespace Emgu.CV.Cuda
       }*/
 #elif __UNIFIED__ //Xamarin Mac
       
-#elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO )
-      /// <summary>
-      /// convert the current CudaImage to its equivalent Bitmap representation
-      /// </summary>
-      public new Bitmap Bitmap
+#elif !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO)
+        /// <summary>
+        /// convert the current CudaImage to its equivalent Bitmap representation
+        /// </summary>
+        public new Bitmap Bitmap
       {
          get
          {
@@ -349,12 +349,12 @@ namespace Emgu.CV.Cuda
       #endregion
 
       #region ICloneable Members
-
+#if !NETSTANDARD1_4
       object ICloneable.Clone()
       {
          return Clone(null);
       }
-
+#endif
       #endregion
    }
 }

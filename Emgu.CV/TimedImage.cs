@@ -9,7 +9,7 @@ namespace Emgu.CV
    /// <summary> 
    /// The Image which contains time stamp which specified what time this image is created 
    /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
    [Serializable]
 #endif
    public class TimedImage<TColor, TDepth> 

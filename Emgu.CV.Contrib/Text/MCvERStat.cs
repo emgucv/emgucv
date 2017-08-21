@@ -18,7 +18,7 @@ namespace Emgu.CV.Text
     /// An ER is a 4-connected set of pixels with all its grey-level values smaller than the values in its outer boundary. 
     /// A class-specific ER is selected (using a classifier) from all the ER’s in the component tree of the image.
     /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     [StructLayout(LayoutKind.Sequential)]

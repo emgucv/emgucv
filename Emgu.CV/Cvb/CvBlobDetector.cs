@@ -121,7 +121,7 @@ namespace Emgu.CV.Cvb
       /// <returns>The binary mask for the specific blobs</returns>
       public Image<Gray, Byte> DrawBlobsMask(CvBlobs blobs)
       {
-#if NETFX_CORE 
+#if NETFX_CORE || NETSTANDARD1_4 
          MIplImage img = Marshal.PtrToStructure<MIplImage>(Ptr);
 #else
          MIplImage img = (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));

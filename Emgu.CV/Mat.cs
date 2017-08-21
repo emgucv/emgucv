@@ -20,7 +20,7 @@ using CoreGraphics;
 using UIKit;
 #elif __UNIFIED__
 using CoreGraphics;
-#elif NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#elif NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -30,16 +30,16 @@ namespace Emgu.CV
     /// <summary>
     /// The equivalent of cv::Mat
     /// </summary>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
 #endif
     public partial class Mat : MatDataAllocator, IImage, IEquatable<Mat>
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
 , ISerializable
 #endif
     {
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
         #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
@@ -240,7 +240,7 @@ namespace Emgu.CV
         public Mat(String fileName, CvEnum.ImreadModes loadType = ImreadModes.Color)
            : this(MatInvoke.cveMatCreate(), true, false)
         {
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
             FileInfo fi = new FileInfo(fileName);
             if (!fi.Exists)
             {
@@ -269,7 +269,7 @@ namespace Emgu.CV
 
                 if (this.IsEmpty) //failed to load in the first attempt
                 {
-#if !(NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
+#if !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
                     //try again to see if this is a Unicode issue in the file name. 
                     //Work around for Open CV ticket:
                     //https://github.com/Itseez/opencv/issues/4292
@@ -750,7 +750,7 @@ namespace Emgu.CV
         }
 
 #if __ANDROID__ || __UNIFIED__
-#elif !(NETFX_CORE || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
+#elif !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
         /// such that the image data is <b>shared</b> with Bitmap. 
@@ -980,7 +980,7 @@ namespace Emgu.CV
 
             if (e != null)
             {
-#if __UNIFIED__ || NETFX_CORE || (UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO)
+#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || (UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO)
             throw e;
 #elif __ANDROID__
             FileInfo fileInfo = new FileInfo(fileName);
@@ -1080,10 +1080,12 @@ namespace Emgu.CV
             return result;
         }
 
+#if !NETSTANDARD1_4
         object ICloneable.Clone()
         {
             return this.Clone();
         }
+#endif
 
         /// <summary>
         /// Compares two Mats and check if they are equal

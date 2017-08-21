@@ -20,7 +20,7 @@ namespace Emgu.CV.Reflection
    /// </summary>
    public static class ReflectColorType
    {
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
       /// <summary>
       /// Get the display color for each channel
       /// </summary>

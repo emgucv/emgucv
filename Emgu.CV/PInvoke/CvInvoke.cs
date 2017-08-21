@@ -116,7 +116,7 @@ namespace Emgu.CV
 
          List<String> loadableFiles = t.Result;
 #else
-         if (loadDirectory == null)
+            if (loadDirectory == null)
          {
             String subfolder = String.Empty;
 #if UNITY_EDITOR_WIN
@@ -129,12 +129,14 @@ namespace Emgu.CV
             }
 #endif
 
-            /*
-            else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
-            {
-               subfolder = "..";
-            }*/
-
+                /*
+                else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
+                {
+                   subfolder = "..";
+                }*/
+#if NETSTANDARD1_4
+             loadDirectory = new DirectoryInfo(".").FullName;
+#else
             System.Reflection.Assembly asm = typeof (CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
             if ((String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location)) && AppDomain.CurrentDomain.BaseDirectory != null)
             {
@@ -189,10 +191,20 @@ namespace Emgu.CV
             DirectoryInfo directory = file.Directory;
             loadDirectory = directory.FullName;
             */
+#endif
+             if (!String.IsNullOrEmpty(subfolder))
+             {
+                 var temp = Path.Combine(loadDirectory, subfolder);
+                 if (Directory.Exists(temp))
+                 {
+                     loadDirectory = temp;
+                 }
+                 else
+                 {
+                     loadDirectory = Path.Combine(Path.GetFullPath("."), subfolder);
+                 }
+             }
 
-            if (!String.IsNullOrEmpty(subfolder))
-               loadDirectory = Path.Combine(loadDirectory, subfolder);
-            
 #if (UNITY_STANDALONE_WIN && !UNITY_EDITOR_WIN)
 				FileInfo file = new FileInfo(asm.Location);
 				DirectoryInfo directory = file.Directory;
@@ -208,7 +220,7 @@ namespace Emgu.CV
                   return false;
                }
             }
-#elif __ANDROID__ || UNITY_ANDROID
+#elif __ANDROID__ || UNITY_ANDROID || NETSTANDARD1_4
 #else
             if (!Directory.Exists(loadDirectory))
             {
@@ -273,14 +285,15 @@ namespace Emgu.CV
                   loadDirectory = altLoadDirectory;
             }
 #endif
-         }
-         
+            }
+#if !(NETSTANDARD1_4)
          String oldDir = Environment.CurrentDirectory;
          if (!String.IsNullOrEmpty(loadDirectory) && Directory.Exists(loadDirectory))
             Environment.CurrentDirectory = loadDirectory;
 #endif
+#endif
 
-         System.Diagnostics.Debug.WriteLine(String.Format("Loading open cv binary from {0}", loadDirectory));
+            System.Diagnostics.Debug.WriteLine(String.Format("Loading open cv binary from {0}", loadDirectory));
          bool success = true;
 
          string prefix = string.Empty;
@@ -324,7 +337,7 @@ namespace Emgu.CV
 #endif
          }
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
          Environment.CurrentDirectory = oldDir;
 #endif
          return success;
@@ -366,6 +379,7 @@ namespace Emgu.CV
          System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
          FileInfo file = new FileInfo(asm.Location);
          DirectoryInfo directory = file.Directory;
+
 
 #if (UNITY_ANDROID && !UNITY_EDITOR)
          UnityEngine.AndroidJavaObject jo = new UnityEngine.AndroidJavaObject("java.lang.System");

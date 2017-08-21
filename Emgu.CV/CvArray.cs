@@ -8,7 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
 using System.Security.Permissions;
 #endif
 using System.Xml.Serialization;
@@ -25,7 +25,7 @@ namespace Emgu.CV
    ///<typeparam name="TDepth">The type of elements in this CvArray</typeparam> 
    public abstract class CvArray<TDepth> : 
       UnmanagedObject, IXmlSerializable, IInputOutputArray
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
       , ISerializable
 #endif
       where TDepth : new()
@@ -149,7 +149,7 @@ namespace Emgu.CV
             }
             else
             {  //this is Image<TColor, TDepth>
-#if NETFX_CORE 
+#if NETFX_CORE || NETSTANDARD1_4 
                MIplImage iplImage = Marshal.PtrToStructure<MIplImage>(Ptr);
 #else
                MIplImage iplImage = (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
@@ -619,7 +619,7 @@ namespace Emgu.CV
       }
       #endregion
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || NETSTANDARD1_4)
       #region ISerializable Members
       /// <summary>
       /// A function used for runtime serialization of the object

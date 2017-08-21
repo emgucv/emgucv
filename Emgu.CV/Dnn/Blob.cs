@@ -3,7 +3,7 @@
 //----------------------------------------------------------------------------
 
 /*
-#if !(__IOS__ || UNITY_IPHONE || NETFX_CORE)
+#if !(__IOS__ || UNITY_IPHONE || NETFX_CORE || NETSTANDARD1_4)
 using System;
 using System.Collections.Generic;
 using System.Text;
