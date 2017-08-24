@@ -296,7 +296,7 @@ __pycache__/
 VectorOf*.cs
 CvInvokeEntryPoints.cs
 /platforms/nuget/Package.nuspec
-/Emgu.CV.Extern/tesseract/libtesseract/leptonica/leptonica-1.74
+/Emgu.CV.Extern/tesseract/libtesseract/leptonica/leptonica-*
 /platforms/xamarin/emgucv_v3/component/component.yaml
 /Emgu.CV/README.txt
 
