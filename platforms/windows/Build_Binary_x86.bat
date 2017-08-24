@@ -66,11 +66,6 @@ REM Make VS2015 to our favourite DEVENV
 REM We may default to VS2017 once CUDA 9 supports VS2017
 IF EXIST %VS2015% SET DEVENV=%VS2015%
 
-REM For windows phone or store 81 build we should use VS2015
-IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
-IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
-
-
 :SET_BUILD_TYPE
 IF %DEVENV%=="%MSBUILD35%" SET BUILD_TYPE=/property:Configuration=Release
 IF %DEVENV%=="%MSBUILD40%" SET BUILD_TYPE=/property:Configuration=Release
