@@ -316,6 +316,6 @@
     <Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
     <Warning Text="'$(EmguCVWarningMessage)'" Condition="'$(EmguCVWarningMessage)'!=''" />
     <Message Text="Compiling with $(EmguCVDeployMessage)binary" Condition="'$(EmguCVDeployMessage)'!=''" Importance="High" />
-    <Message Text="No native binary is deployed by the Emgu.CV shared project." Condition="'$(EmguCVDeployMessage)'==''" Importance="High" />
+    <Message Text="WARNING: No native binary is being deployed by the Emgu.CV shared project. Please remember to copy the native binary to the folder of your final executable, or there will be a PInvoke runtime exception during application execution." Condition="'$(EmguCVDeployMessage)'==''" Importance="High" />
   </Target>
 </Project>

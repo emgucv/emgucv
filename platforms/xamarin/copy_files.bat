@@ -35,6 +35,8 @@ cp -rf ../../../../../../../../tmp/Emgu.CV.Example/FaceDetection/lena.jpg .
 cp -rf ../../../../../../../../tmp/Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg .
 cp -rf ../../../../../../../../tmp/Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs .
 
+git checkout Emgu.CV.Example.iOS.csproj
+
 cd ..
 cd ..
 cd ..
@@ -62,6 +64,8 @@ cp -rf ../../../../../../tmp/Emgu.CV.Example/FaceDetection/DetectFace.cs .
 cp -rf ../../../../../../tmp/Emgu.CV.Example/FaceDetection/lena.jpg Assets/
 cp -rf ../../../../../../tmp/Emgu.CV.Example/LicensePlateRecognition/license-plate.jpg Assets/
 cp -rf ../../../../../../tmp/Emgu.CV.Example/LicensePlateRecognition/LicensePlateDetector.cs .
+
+git checkout AndroidExamples.csproj
 
 cd ..
 
