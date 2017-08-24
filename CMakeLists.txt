@@ -898,8 +898,8 @@ IF(HAVE_OSX)
   IF (NOT IS_OSX_BUILD)
     INSTALL(
       FILES
-      "lib/osx/libcvextern.dylib"
-      DESTINATION "lib/osx"
+      "libs/osx/libcvextern.dylib"
+      DESTINATION "libs/osx"
       COMPONENT emgucv_binary
       )
   ENDIF()

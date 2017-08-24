@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+
+  <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
+
+  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
+
+  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
+
+  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
