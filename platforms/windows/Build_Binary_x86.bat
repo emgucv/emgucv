@@ -37,7 +37,11 @@ SET VS2010="%VS100COMNTOOLS%..\IDE\devenv.com"
 SET VS2012="%VS110COMNTOOLS%..\IDE\devenv.com"
 SET VS2013="%VS120COMNTOOLS%..\IDE\devenv.com"
 SET VS2015="%VS140COMNTOOLS%..\IDE\devenv.com"
-SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com"
+SET VS2017_C="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com"
+SET VS2017_P="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com"
+SET VS2017_E="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com"
+REM the following requires vcsvars scripts cmds from visual studio 2017 installation to be called
+SET VS2017="%VS150COMNTOOLS%..\IDE\devenv.com"
 
 IF EXIST "%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe
 IF EXIST "%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe
@@ -50,16 +54,23 @@ IF EXIST %VS2008% SET DEVENV=%VS2008%
 IF EXIST %VS2010% SET DEVENV=%VS2010%
 IF "%4%"=="openni" GOTO SET_BUILD_TYPE
 IF EXIST %VS2012% SET DEVENV=%VS2012%
-
 IF EXIST %VS2013% SET DEVENV=%VS2013%
+
 IF EXIST %VS2015% SET DEVENV=%VS2015%
 
-REM IF NOT "%3%"=="WindowsStore10" GOTO SET_BUILD_TYPE
-REM IF EXIST %VS2017% SET DEVENV=%VS2017%
+REM CUDA 8.5 only support VS2015, if we target GPU we will stop checking for newer version of Visual Studio
+IF "%2%"=="gpu" GOTO SET_BUILD_TYPE
 
-REM IF "%2%"=="gpu" GOTO SET_BUILD_TYPE
+REM For windows phone or store 81 build we should use VS2015
+IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
+IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
 
-
+REM Only use VS2017 if there are no other suitable Visual Studio installation
+IF EXIST %DEVENV% GOTO SET_BUILD_TYPE
+IF EXIST %VS2017_C% SET DEVENV=%VS2017_C%
+IF EXIST %VS2017_P% SET DEVENV=%VS2017_P%
+IF EXIST %VS2017_E% SET DEVENV=%VS2017_E%
+IF EXIST %VS2017% SET DEVENV=%VS2017%
 
 :SET_BUILD_TYPE
 IF %DEVENV%=="%MSBUILD35%" SET BUILD_TYPE=/property:Configuration=Release
@@ -70,6 +81,7 @@ IF %DEVENV%==%VS2010% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2012% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2013% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2015% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%VS2017% SET BUILD_TYPE=/Build Release
 
 IF %DEVENV%=="%MSBUILD35%" SET CMAKE_CONF="Visual Studio 12 2005%OS_MODE%"
 IF %DEVENV%=="%MSBUILD40%" SET CMAKE_CONF="Visual Studio 12 2005%OS_MODE%"
