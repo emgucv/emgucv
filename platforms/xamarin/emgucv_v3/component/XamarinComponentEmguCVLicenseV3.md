@@ -1,4 +1,4 @@
-Emgu CV Commercial License Version 3.0
+Emgu CV Commercial License Version 3.0 (v2)
 ========================================
 THIS DOCUMENT IS A LEGAL AGREEMENT (the "License Agreement") BETWEEN EMGU Corporation ("We," "Us") AND YOU OR THE ORGANIZATION ON WHOSE BEHALF YOU ARE UNDERTAKING THE LICENSE DESCRIBED BELOW ("You") IN RELATION TO THE EMGU CV SOFTWARE (THE "Software"), IN BOTH SOURCE AND OBJECT CODE FORM, AND/OR ALL RELATED MATERIALS. BY DOWNLOADING, INSTALLING, COPYING OR OTHERWISE USING THE SOFTWARE, YOU ACCEPT THE FOLLOWING TERMS AND CONDITIONS. IF YOU DO NOT AGREE WITH ANY OF THE TERMS OR CONDITIONS OF THIS LICENSE AGREEMENT, DO NOT PROCEED WITH THE DOWNLOADING, COPYING, INSTALLATION OR ANY OTHER USE OF THE SOFTWARE OR ANY PORTION THEREOF. THE SOFTWARE IS PROTECTED BY UNITED STATES COPYRIGHT LAWS AND INTERNATIONAL COPYRIGHT LAWS, AS WELL AS OTHER INTELLECTUAL PROPERTY LAWS AND TREATIES. THE SOFTWARE IS LICENSED, NOT SOLD.
 
@@ -15,18 +15,8 @@ Subject to the payment of the fee required for a Commercial Developer License an
 (i) for a single developer within Your organization to install and use the Software on any workstations used exclusively by such developer and 
 (ii) for You to install and use the Software in unlimited clients, solely in connection with distribution of the Software in accordance with sections 3 and 4 below. This license is not sub-licensable except as explicitly set forth herein.
 
-#### b. Workgroup License:
-Subject to the payment of the fee required for a Commercial Developer License and subject to the terms and conditions of this License Agreement, We grant to You a revocable, non-transferable and non-exclusive license 
-(i) for up to twenty five (25) developers within Your organization to install and use the Software on any workstations used exclusively by such developers and 
-(ii) for You to install and use the Software in unlimited clients, solely in connection with distribution of the Software in accordance with sections 3 and 4 below. This license is not sub-licensable except as explicitly set forth herein.
-
-#### c. Enterprise License:
-Subject to the payment of the fee required for a Commercial Developer License and subject to the terms and conditions of this License Agreement, We grant to You a revocable, non-transferable and non-exclusive license 
-(i) for up to one hundred (100) developers within Your organization to install and use the Software on any workstations used exclusively by such developers and 
-(ii) for You to install and use the Software in unlimited clients, solely in connection with distribution of the Software in accordance with sections 3 and 4 below. This license is not sub-licensable except as explicitly set forth herein.
-
 #### d. License Coverage:
-License a), b) or c) only cover the usage on the source and binary part implemented by Emgu Corporation, and do not cover any non-Emgu implemented library. Usage of Open CV binary is govern by BSD license, Tesseract OCR is covered by Apache 2.0 license. Some algorithms implemented by OpenCV, such as SIFT, SURF and haar-cascade are patented in the U.S. It is your responsibility to check whether the algorithms you used are patented in your country and contact the patent owner if you want to use them in your commercial software. It is your responsibility to obey the license terms of the above 3rd party libraries.
+License a) only cover the usage on the source and binary part implemented by Emgu Corporation, and do not cover any non-Emgu implemented library. Usage of Open CV binary is govern by BSD license, Tesseract OCR is covered by Apache 2.0 license. Some algorithms implemented by OpenCV, such as SIFT, SURF and haar-cascade are patented in the U.S. It is your responsibility to check whether the algorithms you used are patented in your country and contact the patent owner if you want to use them in your commercial software. It is your responsibility to obey the license terms of the above 3rd party libraries.
 
 ###2. PERMITTED USES, SOURCE CODE, MODIFICATIONS
 
