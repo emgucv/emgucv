@@ -265,7 +265,7 @@ namespace Emgu.CV
       /// <returns>A matrix of the same size with all elements equals 0</returns>
       public Matrix<TDepth> CopyBlank()
       {
-         return new Matrix<TDepth>(Rows, Cols);
+         return new Matrix<TDepth>(Rows, Cols, NumberOfChannels);
       }
 
       /// <summary>
