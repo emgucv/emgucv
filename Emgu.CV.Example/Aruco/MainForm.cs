@@ -18,16 +18,27 @@ using Emgu.CV.Util;
 
 namespace Aruco
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
+
+
+            _detectorParameters = DetectorParameters.GetDefault();
 
             try
             {
                 _capture = new VideoCapture();
-                _capture.ImageGrabbed += ProcessFrame;
+                if (!_capture.IsOpened)
+                {
+                    _capture = null;
+                    throw new NullReferenceException("Unable to open video capture");
+                }
+                else
+                {
+                    _capture.ImageGrabbed += ProcessFrame;
+                }
             }
             catch (NullReferenceException excpt)
             {
@@ -127,24 +138,26 @@ namespace Aruco
         private VectorOfInt _markerCounterPerFrame = new VectorOfInt();
         private Size _imageSize = Size.Empty;
 
+        private DetectorParameters _detectorParameters;
+
         private void ProcessFrame(object sender, EventArgs arg)
         {
             if (_capture != null && _capture.Ptr != IntPtr.Zero)
             {
                 _capture.Retrieve(_frame, 0);
+                _frame.CopyTo(_frameCopy);
 
                 //cameraImageBox.Image = _frame;
-
                 using (VectorOfInt ids = new VectorOfInt())
                 using (VectorOfVectorOfPointF corners = new VectorOfVectorOfPointF())
                 using (VectorOfVectorOfPointF rejected = new VectorOfVectorOfPointF())
                 {
-                    DetectorParameters p = DetectorParameters.GetDefault();
-                    ArucoInvoke.DetectMarkers(_frame, ArucoDictionary, corners, ids, p, rejected);
-                    ArucoInvoke.RefineDetectedMarkers(_frame, ArucoBoard, corners, ids, rejected, null, null, 10, 3, true, null, p);
-                    _frame.CopyTo(_frameCopy);
+                    //DetectorParameters p = DetectorParameters.GetDefault();
+                    ArucoInvoke.DetectMarkers(_frameCopy, ArucoDictionary, corners, ids, _detectorParameters, rejected);
+                    
                     if (ids.Size > 0)
                     {
+                        ArucoInvoke.RefineDetectedMarkers(_frameCopy, ArucoBoard, corners, ids, rejected, null, null, 10, 3, true, null, _detectorParameters);
                         //cameraButton.Text = "Calibrate camera";
                         this.Invoke((Action)delegate
                        {
@@ -195,8 +208,12 @@ namespace Aruco
 
                         //cameraButton.Text = "Stop Capture";
                     }
-                    cameraImageBox.Image = _frameCopy;
+                    cameraImageBox.Image = _frameCopy.Clone();
                 }
+            }
+            else
+            {
+                UpdateMessage("VideoCapture was not created");
             }
         }
 
