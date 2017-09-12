@@ -21,7 +21,7 @@ namespace Emgu.CV.ML
       /// </summary>
       public KNearest()
       {
-         _ptr = MlInvoke.CvKNearestCreate(ref _statModelPtr, ref _algorithmPtr);
+         _ptr = MlInvoke.cveKNearestCreate(ref _statModelPtr, ref _algorithmPtr);
       }
 
       /// <summary>
@@ -29,7 +29,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvKNearestRelease(ref _ptr);
+         MlInvoke.cveKNearestRelease(ref _ptr);
          _statModelPtr = IntPtr.Zero;
          _algorithmPtr = IntPtr.Zero;
       }

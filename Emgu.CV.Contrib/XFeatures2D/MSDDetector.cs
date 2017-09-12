@@ -43,7 +43,7 @@ namespace Emgu.CV.XFeatures2D
                 m_patch_radius, m_search_area_radius, m_nms_radius,
                 m_nms_scale_radius, m_th_saliency, m_kNN,
                 m_scale_factor, m_n_scales, m_compute_orientation,
-                ref _feature2DPtr);
+                ref _feature2D);
         }
 
         /// <summary>

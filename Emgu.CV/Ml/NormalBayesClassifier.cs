@@ -20,7 +20,7 @@ namespace Emgu.CV.ML
       /// </summary>
       public NormalBayesClassifier()
       {
-         _ptr = MlInvoke.CvNormalBayesClassifierDefaultCreate(ref _statModelPtr, ref _algorithmPtr);
+         _ptr = MlInvoke.cveNormalBayesClassifierDefaultCreate(ref _statModelPtr, ref _algorithmPtr);
       }
 
       /*
@@ -45,7 +45,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvNormalBayesClassifierRelease(ref _ptr);
+         MlInvoke.cveNormalBayesClassifierRelease(ref _ptr);
          _statModelPtr = IntPtr.Zero;
          _algorithmPtr = IntPtr.Zero;
       }

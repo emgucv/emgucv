@@ -27,16 +27,16 @@ CVAPI(cv::ml::TrainData*) cveTrainDataCreate(
 CVAPI(void) cveTrainDataRelease(cv::ml::TrainData** data);
 
 //CvNormalBayesClassifier
-CVAPI(cv::ml::NormalBayesClassifier*) CvNormalBayesClassifierDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
-CVAPI(void) CvNormalBayesClassifierRelease(cv::ml::NormalBayesClassifier** classifier);
+CVAPI(cv::ml::NormalBayesClassifier*) cveNormalBayesClassifierDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
+CVAPI(void) cveNormalBayesClassifierRelease(cv::ml::NormalBayesClassifier** classifier);
 
 //KNearest
-CVAPI(cv::ml::KNearest*) CvKNearestCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
-CVAPI(void) CvKNearestRelease(cv::ml::KNearest** classifier);
+CVAPI(cv::ml::KNearest*) cveKNearestCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
+CVAPI(void) cveKNearestRelease(cv::ml::KNearest** classifier);
 
 //EM
-CVAPI(cv::ml::EM*) CvEMDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
-CVAPI(void) CvEMTrainE(
+CVAPI(cv::ml::EM*) cveEMDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
+CVAPI(void) cveEMTrainE(
    cv::ml::EM* model,
    cv::_InputArray* samples,
    cv::_InputArray* means0,
@@ -46,7 +46,7 @@ CVAPI(void) CvEMTrainE(
    cv::_OutputArray* labels,
    cv::_OutputArray* probs,
    cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
-CVAPI(void) CvEMTrainM(
+CVAPI(void) cveEMTrainM(
    cv::ml::EM* model,
    cv::_InputArray* samples,
    cv::_InputArray* probs0,
@@ -54,15 +54,15 @@ CVAPI(void) CvEMTrainM(
    cv::_OutputArray* labels,
    cv::_OutputArray* probs,
    cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
-CVAPI(void) CvEMPredict(cv::ml::EM* model, cv::_InputArray* sample, CvPoint2D64f* result, cv::_OutputArray* probs);
+CVAPI(void) cveEMPredict(cv::ml::EM* model, cv::_InputArray* sample, CvPoint2D64f* result, cv::_OutputArray* probs);
 
-CVAPI(void) CvEMRelease(cv::ml::EM** model);
+CVAPI(void) cveEMRelease(cv::ml::EM** model);
 
 
 //SVM
-CVAPI(cv::ml::SVM*) CvSVMDefaultCreate(cv::ml::StatModel** model, cv::Algorithm** algorithm);
+CVAPI(cv::ml::SVM*) cveSVMDefaultCreate(cv::ml::StatModel** model, cv::Algorithm** algorithm);
 
-CVAPI(bool) CvSVMTrainAuto(
+CVAPI(bool) cveSVMTrainAuto(
    cv::ml::SVM* model, cv::ml::TrainData* trainData, int kFold,
    cv::ml::ParamGrid* CGrid,
    cv::ml::ParamGrid* gammaGrid,
@@ -72,9 +72,9 @@ CVAPI(bool) CvSVMTrainAuto(
    cv::ml::ParamGrid* degreeGrid,
    bool balanced);
 
-CVAPI(void) CvSVMGetDefaultGrid(int gridType, cv::ml::ParamGrid* grid);
-CVAPI(void) CvSVMRelease(cv::ml::SVM** model);
-CVAPI(void) CvSVMGetSupportVectors(cv::ml::SVM* model, cv::Mat* supportVectors);
+CVAPI(void) cveSVMGetDefaultGrid(int gridType, cv::ml::ParamGrid* grid);
+CVAPI(void) cveSVMRelease(cv::ml::SVM** model);
+CVAPI(void) cveSVMGetSupportVectors(cv::ml::SVM* model, cv::Mat* supportVectors);
 
 //ANN_MLP
 CVAPI(cv::ml::ANN_MLP*) cveANN_MLPCreate(cv::ml::StatModel** model, cv::Algorithm** algorithm);
@@ -99,4 +99,8 @@ CVAPI(void) cveBoostRelease(cv::ml::Boost** model);
 CVAPI(cv::ml::LogisticRegression*) cveLogisticRegressionCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
 CVAPI(void) cveLogisticRegressionRelease(cv::ml::LogisticRegression** model);
 
+//SVMSGD
+CVAPI(cv::ml::SVMSGD*) cveSVMSGDDefaultCreate(cv::ml::StatModel** model, cv::Algorithm** algorithm);
+CVAPI(void) cveSVMSGDRelease(cv::ml::SVMSGD** model);
+CVAPI(void) cveSVMSGDSetOptimalParameters(cv::ml::SVMSGD* model, int svmsgdType, int marginType);
 #endif

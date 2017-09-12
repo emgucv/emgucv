@@ -128,10 +128,7 @@ namespace Emgu.CV.ML
             /// </summary>
             Degree = 5
         }
-
-
-
-
+        
         private IntPtr _statModelPtr;
         private IntPtr _algorithmPtr;
 
@@ -140,7 +137,7 @@ namespace Emgu.CV.ML
         /// </summary>
         public SVM()
         {
-            _ptr = MlInvoke.CvSVMDefaultCreate(ref _statModelPtr, ref _algorithmPtr);
+            _ptr = MlInvoke.cveSVMDefaultCreate(ref _statModelPtr, ref _algorithmPtr);
         }
 
         /// <summary>
@@ -148,7 +145,7 @@ namespace Emgu.CV.ML
         /// </summary>
         protected override void DisposeObject()
         {
-            MlInvoke.CvSVMRelease(ref _ptr);
+            MlInvoke.cveSVMRelease(ref _ptr);
             _statModelPtr = IntPtr.Zero;
             _algorithmPtr = IntPtr.Zero;
         }
@@ -163,7 +160,7 @@ namespace Emgu.CV.ML
         public static MCvParamGrid GetDefaultGrid(SVM.ParamType type)
         {
             MCvParamGrid grid = new MCvParamGrid();
-            MlInvoke.CvSVMGetDefaultGrid(type, ref grid);
+            MlInvoke.cveSVMGetDefaultGrid(type, ref grid);
             return grid;
         }
 
@@ -212,7 +209,7 @@ namespace Emgu.CV.ML
            MCvParamGrid degreeGrid,
            bool balanced = false)
         {
-            return MlInvoke.CvSVMTrainAuto(
+            return MlInvoke.cveSVMTrainAuto(
                Ptr,
                trainData.Ptr,
                kFold,
@@ -232,7 +229,7 @@ namespace Emgu.CV.ML
         public Mat GetSupportVectors()
         {
             Mat m = new Mat();
-            MlInvoke.CvSVMGetSupportVectors(_ptr, m);
+            MlInvoke.cveSVMGetSupportVectors(_ptr, m);
             return m;
         }
 

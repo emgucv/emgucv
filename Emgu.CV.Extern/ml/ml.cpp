@@ -57,7 +57,7 @@ void cveTrainDataRelease(cv::ml::TrainData** data)
 }
 
 //CvNormalBayesClassifier
-cv::ml::NormalBayesClassifier* CvNormalBayesClassifierDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
+cv::ml::NormalBayesClassifier* cveNormalBayesClassifierDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
 { 
    cv::Ptr<cv::ml::NormalBayesClassifier> ptr = cv::ml::NormalBayesClassifier::create();
    ptr.addref();
@@ -71,7 +71,7 @@ cv::ml::NormalBayesClassifier* CvNormalBayesClassifierCreate( CvMat* _train_data
 { 
    return new cv::ml::NormalBayesClassifier(_train_data, _responses, _var_idx, _sample_idx); 
 }*/
-void CvNormalBayesClassifierRelease(cv::ml::NormalBayesClassifier** classifier) 
+void cveNormalBayesClassifierRelease(cv::ml::NormalBayesClassifier** classifier) 
 { 
    delete *classifier; 
    *classifier = 0; 
@@ -84,7 +84,7 @@ float CvNormalBayesClassifierPredict(cv::ml::NormalBayesClassifier* classifier, 
 { return classifier->predict(_samples, results); }
 */
 //KNearest
-cv::ml::KNearest* CvKNearestCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
+cv::ml::KNearest* cveKNearestCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm) 
 { 
    //cv::ml::KNearest::Params p(defaultK, isClassifier);
    cv::Ptr<cv::ml::KNearest> ptr = cv::ml::KNearest::create();
@@ -94,7 +94,7 @@ cv::ml::KNearest* CvKNearestCreate(cv::ml::StatModel** statModel, cv::Algorithm*
    *algorithm = dynamic_cast< cv::Algorithm* >( r );
    return r;
 }
-void CvKNearestRelease(cv::ml::KNearest** classifier) 
+void cveKNearestRelease(cv::ml::KNearest** classifier) 
 { 
    delete *classifier; 
    *classifier = 0; 
@@ -113,7 +113,7 @@ float CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int k, CvMa
 */
 //EM
 
-cv::ml::EM* CvEMDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
+cv::ml::EM* cveEMDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
 { 
    cv::Ptr<cv::ml::EM> ptr = cv::ml::EM::create();
    ptr.addref();
@@ -122,7 +122,7 @@ cv::ml::EM* CvEMDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** alg
    *algorithm = dynamic_cast<cv::Algorithm*>( em );
    return em;
 }
-void CvEMTrainE(
+void cveEMTrainE(
    cv::ml::EM* model,
    cv::_InputArray* samples,
    cv::_InputArray* means0,
@@ -144,7 +144,7 @@ void CvEMTrainE(
    
    
 }
-void CvEMTrainM(
+void cveEMTrainM(
    cv::ml::EM* model,
    cv::_InputArray* samples,
    cv::_InputArray* probs0,
@@ -160,13 +160,13 @@ void CvEMTrainM(
       labels ? *labels : (cv::OutputArray) cv::noArray(),
       probs ? *probs : (cv::OutputArray) cv::noArray());
 }
-void CvEMPredict(cv::ml::EM* model, cv::_InputArray* sample, CvPoint2D64f* result, cv::_OutputArray* probs)  
+void cveEMPredict(cv::ml::EM* model, cv::_InputArray* sample, CvPoint2D64f* result, cv::_OutputArray* probs)  
 { 
    cv::Vec2d vec = model->predict(*sample, probs ? *probs : (cv::OutputArray) cv::noArray());
    result->x = vec(0);
    result->y = vec(1);
 }
-void CvEMRelease(cv::ml::EM** model) 
+void cveEMRelease(cv::ml::EM** model) 
 { 
    delete *model;  
    *model = 0;
@@ -197,7 +197,7 @@ void CvSVMParamsRelease(cv::ml::SVM::Params** p)
    *p = 0;
 }*/
 
-cv::ml::SVM* CvSVMDefaultCreate(cv::ml::StatModel** model, cv::Algorithm** algorithm) 
+cv::ml::SVM* cveSVMDefaultCreate(cv::ml::StatModel** model, cv::Algorithm** algorithm) 
 { 
    cv::Ptr<cv::ml::SVM> ptr = cv::ml::SVM::create();
    ptr.addref();
@@ -207,7 +207,7 @@ cv::ml::SVM* CvSVMDefaultCreate(cv::ml::StatModel** model, cv::Algorithm** algor
    return svm;
 }
 
-bool CvSVMTrainAuto(
+bool cveSVMTrainAuto(
    cv::ml::SVM* model, cv::ml::TrainData* trainData, int kFold,
    cv::ml::ParamGrid* CGrid,
    cv::ml::ParamGrid* gammaGrid,
@@ -225,18 +225,18 @@ bool CvSVMTrainAuto(
       balanced); 
 }
 
-void CvSVMGetDefaultGrid(int gridType, cv::ml::ParamGrid* grid)
+void cveSVMGetDefaultGrid(int gridType, cv::ml::ParamGrid* grid)
 {  
    cv::ml::ParamGrid defaultGrid = cv::ml::SVM::getDefaultGrid(gridType);
    memcpy(grid, &defaultGrid, sizeof(cv::ml::ParamGrid));
 }
-void CvSVMRelease(cv::ml::SVM** model) 
+void cveSVMRelease(cv::ml::SVM** model) 
 { 
    delete *model; 
    *model = 0; 
 }
 
-CVAPI(void) CvSVMGetSupportVectors(cv::ml::SVM* model, cv::Mat* supportVectors)
+CVAPI(void) cveSVMGetSupportVectors(cv::ml::SVM* model, cv::Mat* supportVectors)
 {
    model->getSupportVectors().copyTo(*supportVectors);
 }
@@ -440,4 +440,26 @@ void cveLogisticRegressionRelease(cv::ml::LogisticRegression** model)
 {
    delete *model;
    *model = 0;
+}
+
+//SVMSGD
+cv::ml::SVMSGD* cveSVMSGDDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::ml::SVMSGD> ptr = cv::ml::SVMSGD::create();
+	ptr.addref();
+	cv::ml::SVMSGD* model = ptr.get();
+	*statModel = dynamic_cast<cv::ml::StatModel*>(model);
+	*algorithm = dynamic_cast<cv::Algorithm*>(model);
+	return model;
+}
+
+void cveSVMSGDRelease(cv::ml::SVMSGD** model)
+{
+	delete *model;
+	*model = 0;
+}
+
+void cveSVMSGDSetOptimalParameters(cv::ml::SVMSGD* model, int svmsgdType, int marginType)
+{
+	model->setOptimalParameters(svmsgdType, marginType);
 }

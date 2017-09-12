@@ -774,6 +774,27 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "SVM"
     "#include \"ml_c.h\"")
+	
+  CREATE_OCV_CLASS_PROPERTY( 
+    "ml/svmsgd_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/SVMSGDGenerated.cs"
+    "cv::ml::SVMSGD" 
+    "SVMSGD" 
+    "SvmsgdType;MarginType;MarginRegularization;InitialStepSize;StepDecreasingPower;TermCriteria" 
+    "int;int;float;float;float;CvTermCriteria" 
+    "prop;prop;prop;prop;prop;struct"
+    "Type;Margin;MarginRegularization;InitialStepSize;StepDecreasingPower;TermCriteria" 
+    "SVMSGD.SvmsgdType;SVMSGD.MarginType;float;float;float;MCvTermCriteria"
+    "Algorithm type;
+	Margin type;
+	marginRegularization of a SVMSGD optimization problem;
+	initialStepSize of a SVMSGD optimization problem;
+	stepDecreasingPower of a SVMSGD optimization problem;
+	Termination criteria of the training algorithm."
+    "Emgu.CV.ML"
+    "MlInvoke"
+    "SVMSGD"
+    "#include \"ml_c.h\"")	
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/knearest_property" 

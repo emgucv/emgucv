@@ -47,7 +47,7 @@ namespace Emgu.CV.ML
       /// </summary>
      public EM()
       {
-         _ptr = MlInvoke.CvEMDefaultCreate(ref _statModel, ref _algorithm);
+         _ptr = MlInvoke.cveEMDefaultCreate(ref _statModel, ref _algorithm);
       }
 
      /// <summary>
@@ -77,7 +77,7 @@ namespace Emgu.CV.ML
          using (OutputArray oaLabels = labels == null ? OutputArray.GetEmpty() : labels.GetOutputArray())
          using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
          {
-            MlInvoke.CvEMTrainE(_ptr, iaSamples, iaMeans0, iaCovs0, iaWeights, oaLogLikelihood, oaLabels,
+            MlInvoke.cveEMTrainE(_ptr, iaSamples, iaMeans0, iaCovs0, iaWeights, oaLogLikelihood, oaLabels,
                oaProbs, ref _statModel, ref _algorithm);  
          }
       }
@@ -106,7 +106,7 @@ namespace Emgu.CV.ML
          using (OutputArray oaLabels = labels == null ? OutputArray.GetEmpty() : labels.GetOutputArray())
          using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
          {
-            MlInvoke.CvEMTrainM(_ptr, iaSamples, iaProbs0, oaLogLikelihood, oaLabels, oaProbs, ref _statModel, ref _algorithm);
+            MlInvoke.cveEMTrainM(_ptr, iaSamples, iaProbs0, oaLogLikelihood, oaLabels, oaProbs, ref _statModel, ref _algorithm);
             
          }
       }
@@ -122,7 +122,7 @@ namespace Emgu.CV.ML
          MCvPoint2D64f result = new MCvPoint2D64f();
          using (InputArray iaSamples = samples.GetInputArray())
          using (OutputArray oaProbs = probs == null ? OutputArray.GetEmpty() : probs.GetOutputArray())
-            MlInvoke.CvEMPredict(
+            MlInvoke.cveEMPredict(
               _ptr,
               iaSamples,
               ref result,
@@ -135,7 +135,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.CvEMRelease(ref _ptr);
+         MlInvoke.cveEMRelease(ref _ptr);
          _statModel = IntPtr.Zero;
          _algorithm = IntPtr.Zero;
       }
