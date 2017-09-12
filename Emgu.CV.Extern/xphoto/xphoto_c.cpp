@@ -51,6 +51,11 @@ void cveLearningBasedWBRelease(cv::xphoto::LearningBasedWB** whiteBalancer)
 	*whiteBalancer = 0;
 }
 
+void cveApplyChannelGains(cv::_InputArray* src, cv::_OutputArray* dst, float gainB, float gainG, float gainR)
+{
+	cv::xphoto::applyChannelGains(*src, *dst, gainB, gainG, gainR);
+}
+
 void cveDctDenoising(const cv::Mat* src, cv::Mat* dst, const double sigma, const int psize)
 {
    cv::xphoto::dctDenoising(*src, *dst, sigma, psize);

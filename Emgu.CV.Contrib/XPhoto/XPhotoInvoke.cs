@@ -231,6 +231,26 @@ namespace Emgu.CV.XPhoto
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveXInpaint(IntPtr src, IntPtr mask, IntPtr dst, InpaintType algorithmType);
 
+
+        /// <summary>
+        /// Implements an efficient fixed-point approximation for applying channel gains, which is the last step of multiple white balance algorithms.
+        /// </summary>
+        /// <param name="src">Input three-channel image in the BGR color space (either CV_8UC3 or CV_16UC3)</param>
+        /// <param name="dst">Output image of the same size and type as src.</param>
+        /// <param name="gainB">Gain for the B channel</param>
+        /// <param name="gainG">Gain for the G channel</param>
+        /// <param name="gainR">Gain for the R channel</param>
+        public static void ApplyChannelGains(IInputArray src, IOutputArray dst, float gainB, float gainG, float gainR)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveApplyChannelGains(iaSrc, oaDst, gainB, gainG, gainR);
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveApplyChannelGains(IntPtr src, IntPtr dst, float gainB, float gainG, float gainR);
+
         /// <summary>
         /// Performs image denoising using the Block-Matching and 3D-filtering algorithm with several computational optimizations. Noise expected to be a gaussian white noise.
         /// </summary>

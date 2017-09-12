@@ -22,7 +22,7 @@ CVAPI(void) cveGrayworldWBRelease(cv::xphoto::GrayworldWB** whiteBalancer);
 CVAPI(cv::xphoto::LearningBasedWB*) cveLearningBasedWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer);
 CVAPI(void) cveLearningBasedWBRelease(cv::xphoto::LearningBasedWB** whiteBalancer);
 
-
+CVAPI(void) cveApplyChannelGains(cv::_InputArray* src, cv::_OutputArray* dst, float gainB, float gainG, float gainR);
 
 CVAPI(void) cveDctDenoising(const cv::Mat* src, cv::Mat* dst, const double sigma, const int psize);
 
