@@ -31,6 +31,11 @@ void cveBilateralTextureFilter(cv::_InputArray* src, cv::_OutputArray* dst, int 
 	cv::ximgproc::bilateralTextureFilter(*src, *dst, fr, numIter, sigmaAlpha, sigmaAvg);
 }
 
+void cveRollingGuidanceFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d, double sigmaColor, double sigmaSpace, int numOfIter, int borderType)
+{
+	cv::ximgproc::rollingGuidanceFilter(*src, *dst, d, sigmaColor, sigmaSpace, numOfIter, borderType);
+}
+
 void cveFastGlobalSmootherFilter(cv::_InputArray* guide, cv::_InputArray* src, cv::_OutputArray* dst, double lambda, double sigmaColor, double lambdaAttenuation, int numIter)
 {
    cv::ximgproc::fastGlobalSmootherFilter(*guide, *src, *dst, lambda, sigmaColor, lambdaAttenuation, numIter);
@@ -269,4 +274,9 @@ void cveGradientDericheX(cv::_InputArray* op, cv::_OutputArray* dst, double alph
 void cveThinning(cv::_InputArray* src, cv::_OutputArray* dst, int thinningType)
 {
 	cv::ximgproc::thinning(*src, *dst, thinningType);
+}
+
+void cveAnisotropicDiffusion(cv::_InputArray* src, cv::_OutputArray* dst, float alpha, float K, int niters)
+{
+	cv::ximgproc::anisotropicDiffusion(*src, *dst, alpha, K, niters);
 }

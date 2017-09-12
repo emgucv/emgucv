@@ -132,6 +132,30 @@ namespace Emgu.CV.XImgproc
         private static extern void cveBilateralTextureFilter(IntPtr src, IntPtr dst, int fr, int numIter, double sigmaAlpha, double sigmaAvg);
 
         /// <summary>
+        /// Applies the rolling guidance filter to an image
+        /// </summary>
+        /// <param name="src">Source 8-bit or floating-point, 1-channel or 3-channel image.</param>
+        /// <param name="dst">Destination image of the same size and type as src.</param>
+        /// <param name="d">Diameter of each pixel neighborhood that is used during filtering. If it is non-positive, it is computed from sigmaSpace .</param>
+        /// <param name="sigmaColor">Filter sigma in the color space. A larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace ) will be mixed together, resulting in larger areas of semi-equal color.</param>
+        /// <param name="sigmaSpace">Filter sigma in the coordinate space. A larger value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see sigmaColor ). When d>0 , it specifies the neighborhood size regardless of sigmaSpace . Otherwise, d is proportional to sigmaSpace .</param>
+        /// <param name="numOfIter">Number of iterations of joint edge-preserving filtering applied on the source image.</param>
+        /// <param name="borderType">Border type</param>
+        public static void RollingGuidanceFilter(
+            IInputArray src, IOutputArray dst, int d = -1, double sigmaColor = 25,
+            double sigmaSpace = 3, int numOfIter = 4, CvEnum.BorderType borderType = BorderType.Default)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveRollingGuidanceFilter(iaSrc, oaDst, d, sigmaColor, sigmaSpace, numOfIter, borderType);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveRollingGuidanceFilter(IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpace, int numOfIter, CvEnum.BorderType borderType);
+
+        /// <summary>
         /// Simple one-line Fast Global Smoother filter call.
         /// </summary>
         /// <param name="guide">image serving as guide for filtering. It should have 8-bit depth and either 1 or 3 channels.</param>
@@ -369,5 +393,23 @@ namespace Emgu.CV.XImgproc
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveThinning(IntPtr src, IntPtr dst, ThinningTypes thinningType);
+
+        /// <summary>
+        /// Performs anisotropic diffusion on an image.
+        /// </summary>
+        /// <param name="src">Grayscale Source image.</param>
+        /// <param name="dst">Destination image of the same size and the same number of channels as src .</param>
+        /// <param name="alpha">The amount of time to step forward by on each iteration (normally, it's between 0 and 1).</param>
+        /// <param name="K">sensitivity to the edges</param>
+        /// <param name="niters">The number of iterations</param>
+        public static void AnisotropicDiffusion(IInputArray src, IOutputArray dst, float alpha, float K, int niters)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveAnisotropicDiffusion(iaSrc, oaDst, alpha, K, niters);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveAnisotropicDiffusion(IntPtr src, IntPtr dst, float alpha, float K, int niters);
     }
 }
