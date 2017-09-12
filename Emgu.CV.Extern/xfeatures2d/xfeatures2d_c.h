@@ -58,6 +58,12 @@ CVAPI(void) cveDAISYRelease(cv::xfeatures2d::DAISY** daisy);
 CVAPI(cv::xfeatures2d::BoostDesc*) cveBoostDescCreate(int desc,	bool useScaleOrientation, float scalefactor, cv::Feature2D** feature2D);
 CVAPI(void) cveBoostDescRelease(cv::xfeatures2d::BoostDesc** extractor);
 
+//MSD
+CVAPI(cv::xfeatures2d::MSDDetector*) cveMSDDetectorCreate(int m_patch_radius, int m_search_area_radius,
+	int m_nms_radius, int m_nms_scale_radius, float m_th_saliency, int m_kNN,
+	float m_scale_factor, int m_n_scales, bool m_compute_orientation, cv::Feature2D** feature2D);
+CVAPI(void) cveMSDDetectorRelease(cv::xfeatures2d::MSDDetector** detector);
+
 //VGG
 CVAPI(cv::xfeatures2d::VGG*) cveVGGCreate(
 	int desc, float isigma, bool imgNormalize, bool useScaleOrientation,

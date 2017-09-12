@@ -161,6 +161,24 @@ void cveBoostDescRelease(cv::xfeatures2d::BoostDesc** extractor)
 	*extractor = 0;
 }
 
+//MSD
+cv::xfeatures2d::MSDDetector* cveMSDDetectorCreate(int m_patch_radius, int m_search_area_radius,
+	int m_nms_radius, int m_nms_scale_radius, float m_th_saliency, int m_kNN,
+	float m_scale_factor, int m_n_scales, bool m_compute_orientation, cv::Feature2D** feature2D)
+{
+	cv::Ptr<cv::xfeatures2d::MSDDetector> ptr = cv::xfeatures2d::MSDDetector::create(
+		m_patch_radius, m_search_area_radius, m_nms_radius, m_nms_scale_radius, m_th_saliency,
+		m_kNN, m_scale_factor, m_n_scales, m_compute_orientation);
+	ptr.addref();
+	*feature2D = dynamic_cast<cv::Feature2D*>(ptr.get());
+	return ptr.get();
+}
+void cveMSDDetectorRelease(cv::xfeatures2d::MSDDetector** detector)
+{
+	delete *detector;
+	*detector = 0;
+}
+
 //VGG
 cv::xfeatures2d::VGG* cveVGGCreate(
 	int desc, float isigma, bool imgNormalize, bool useScaleOrientation,
