@@ -91,6 +91,10 @@ mkdir Assets/Emgu.CV/Emgu.CV.Contrib/XPhoto
 cp -r ../Emgu.CV.Contrib/XPhoto Assets/Emgu.CV/Emgu.CV.Contrib/
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/Bioinspired
 cp -r ../Emgu.CV.Contrib/Bioinspired Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/DnnModern
+cp -r ../Emgu.CV.Contrib/DnnModern Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/ImgHash
+cp -r ../Emgu.CV.Contrib/ImgHash Assets/Emgu.CV/Emgu.CV.Contrib/
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/
 

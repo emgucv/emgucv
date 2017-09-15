@@ -25,5 +25,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)XObjdetect\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Bioinspired\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)DnnModern\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)ImgHash\*.cs" />
   </ItemGroup>
 </Project>

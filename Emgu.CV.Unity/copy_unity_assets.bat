@@ -94,6 +94,8 @@ mkdir Assets\Emgu.CV\Emgu.CV.Contrib\Bioinspired
 cp -r ../Emgu.CV.Contrib/Bioinspired/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/Bioinspired
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\DnnModern
 cp -r ../Emgu.CV.Contrib/DnnModern/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/DnnModern
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\ImgHash
+cp -r ../Emgu.CV.Contrib/ImgHash/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/ImgHash
 
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/
