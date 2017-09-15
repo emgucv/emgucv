@@ -17,10 +17,14 @@ using System.Drawing;
 
 namespace Emgu.CV.Tracking
 {
+    /// <summary>
+    /// This is a real-time object tracking based on a novel on-line version of the AdaBoost algorithm. 
+    /// The classifier uses the surrounding background as negative examples in update step to avoid the drifting problem.
+    /// </summary>
     public class TrackerBoosting : Tracker
     {
         /// <summary>
-        /// 
+        /// Create a Boosting Tracker
         /// </summary>
         /// <param name="numClassifiers">The number of classifiers to use in a OnlineBoosting algorithm</param>
         /// <param name="samplerOverlap">Search region parameters to use in a OnlineBoosting algorithm</param>
@@ -32,18 +36,29 @@ namespace Emgu.CV.Tracking
             ContribInvoke.cveTrackerBoostingCreate(numClassifiers, samplerOverlap, samplerSearchFactor, iterationInit, featureSetNumFeatures, ref _trackerPtr);
         }
 
+        /// <summary>
+        /// Release all the unmanaged memory associated with this Boosting Tracker
+        /// </summary>
         protected override void DisposeObject()
         {
+            if (IntPtr.Zero != _ptr)
+                ContribInvoke.cveTrackerBoostingRelease(ref _ptr);
             base.DisposeObject();
-            ContribInvoke.cveTrackerBoostingRelease(ref _ptr);
+            
         }
     }
 
+    /// <summary>
+    /// Median Flow tracker implementation.
+    /// The tracker is suitable for very smooth and predictable movements when object is visible throughout
+    /// the whole sequence.It's quite and accurate for this type of problems (in particular, it was shown
+    /// by authors to outperform MIL). During the implementation period the code at
+    /// http://www.aonsquared.co.uk/node/5, the courtesy of the author Arthur Amarra, was used for the
+    /// reference purpose.
+    /// </summary>
     public class TrackerMedianFlow : Tracker
     {
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary>Create a median flow tracker</summary>
         /// <param name="pointsInGrid">Points in grid, use 10 for default.</param>
         /// <param name="winSize">Win size, use (3, 3) for default</param>
         /// <param name="maxLevel">Max level, use 5 for default.</param>
@@ -55,17 +70,26 @@ namespace Emgu.CV.Tracking
             ContribInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr);
         }
 
+        /// <summary>
+        /// Release the unmanaged resources associated with this tracker
+        /// </summary>
         protected override void DisposeObject()
         {
+            if (IntPtr.Zero == _ptr)
+                ContribInvoke.cveTrackerMedianFlowRelease(ref _ptr);
             base.DisposeObject();
-            ContribInvoke.cveTrackerMedianFlowRelease(ref _ptr);
         }
     }
 
+    /// <summary>
+    /// The MIL algorithm trains a classifier in an online manner to separate the object from the background.
+    /// Multiple Instance Learning avoids the drift problem for a robust tracking.
+    /// Original code can be found here http://vision.ucsd.edu/~bbabenko/project_miltrack.shtml
+    /// </summary>
     public class TrackerMIL : Tracker
     {
         /// <summary>
-        /// 
+        /// Creates a MIL Tracker
         /// </summary>
         /// <param name="samplerInitInRadius">radius for gathering positive instances during init</param>
         /// <param name="samplerInitMaxNegNum">negative samples to use during init</param>
@@ -93,10 +117,14 @@ namespace Emgu.CV.Tracking
             featureSetNumFeatures, ref _trackerPtr);
         }
 
+        /// <summary>
+        /// Release all the unmanaged memory associated with this tracker
+        /// </summary>
         protected override void DisposeObject()
         {
+            if (IntPtr.Zero != _ptr)
+                ContribInvoke.cveTrackerMILRelease(ref _ptr);
             base.DisposeObject();
-            ContribInvoke.cveTrackerMILRelease(ref _ptr);
         }
     }
 
@@ -105,7 +133,9 @@ namespace Emgu.CV.Tracking
     /// </summary>
     public abstract class Tracker : UnmanagedObject
     {
-
+        /// <summary>
+        /// The native pointer to the tracker
+        /// </summary>
         protected IntPtr _trackerPtr;
 
         /// <summary>

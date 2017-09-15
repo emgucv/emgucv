@@ -15,8 +15,14 @@ using Emgu.Util;
 
 namespace Emgu.CV.ImgHash
 {
+    /// <summary>
+    /// Image hash based on color moments.
+    /// </summary>
     public class ColorMomentHash : ImgHashBase
     {
+        /// <summary>
+        /// Create a Color Moment Hash object
+        /// </summary>
         public ColorMomentHash()
         {
             _ptr = ImgHashInvoke.cveColorMomentHashCreate(ref _imgHashBase);

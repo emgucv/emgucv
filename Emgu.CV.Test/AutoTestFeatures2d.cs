@@ -11,7 +11,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
-//using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using Emgu.CV;
 using Emgu.CV.CvEnum;

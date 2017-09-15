@@ -11,7 +11,6 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.ML
 {
-
     /// <summary>
     /// Support Vector Machine 
     /// </summary>
@@ -32,8 +31,7 @@ namespace Emgu.CV.ML
             /// </summary>
             Asgd 
         }
-
-
+        
         /// <summary>
         /// Margin type
         /// </summary>
@@ -60,6 +58,11 @@ namespace Emgu.CV.ML
             _ptr = MlInvoke.cveSVMSGDDefaultCreate(ref _statModelPtr, ref _algorithmPtr);
         }
 
+        /// <summary>
+        /// Set the optimal parameters for the given model type
+        /// </summary>
+        /// <param name="svmsgdType">SVMSGD type</param>
+        /// <param name="marginType">Margin type</param>
         public void SetOptimalParameters(
             Emgu.CV.ML.SVMSGD.SvmsgdType svmsgdType,
             Emgu.CV.ML.SVMSGD.MarginType marginType)
@@ -68,7 +71,7 @@ namespace Emgu.CV.ML
         }
 
         /// <summary>
-        /// Release all the memory associated with the SVM
+        /// Release all the memory associated with the SVMSGD model
         /// </summary>
         protected override void DisposeObject()
         {

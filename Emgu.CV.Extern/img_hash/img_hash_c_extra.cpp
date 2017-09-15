@@ -12,7 +12,7 @@ void cveImgHashBaseCompute(cv::img_hash::ImgHashBase* imgHash, cv::_InputArray* 
 }
 double cveImgHashBaseCompare(cv::img_hash::ImgHashBase* imgHash, cv::_InputArray* hashOne, cv::_InputArray* hashTwo)
 {
-	imgHash->compare(*hashOne, *hashTwo);
+	return imgHash->compare(*hashOne, *hashTwo);
 }
 
 //AverageHash

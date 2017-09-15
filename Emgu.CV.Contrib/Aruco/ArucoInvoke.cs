@@ -17,7 +17,7 @@ using Emgu.CV.CvEnum;
 namespace Emgu.CV.Aruco
 {
    /// <summary>
-   /// Entry points for the cv::aruco functions.
+   /// Entry points for the Aruco module.
    /// </summary>
    public static partial class ArucoInvoke
    {

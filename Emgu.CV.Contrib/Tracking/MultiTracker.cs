@@ -35,9 +35,10 @@ namespace Emgu.CV.Tracking
         /// <summary>
         /// Add a new object to be tracked. The defaultAlgorithm will be used the newly added tracker.
         /// </summary>
-        /// <param name="image">Tnput image</param>
+        /// <param name="tracker">The tracker to use for tracking the image</param>
+        /// <param name="image">Input image</param>
         /// <param name="boundingBox">A rectangle represents ROI of the tracked object</param>
-        /// <returns>True if sucessfully added</returns>
+        /// <returns>True if successfully added</returns>
         public bool Add(Tracker tracker, Mat image, Rectangle boundingBox)
         {
             return ContribInvoke.cveMultiTrackerAdd(_ptr, tracker, image, ref boundingBox);
