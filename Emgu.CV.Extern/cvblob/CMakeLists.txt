@@ -25,15 +25,15 @@ INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
 
 ############################### CVBLOB START ########################
-file(GLOB CVBLOB_SRCS "libcvblob/cvBlob/*.cpp")
-file(GLOB CVBLOB_HDRS "libcvblob/cvBlob/*.h*")
+file(GLOB CVBLOB_SRCS "${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/*.cpp")
+file(GLOB CVBLOB_HDRS "${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/*.h*")
 
-LIST(APPEND cvblob_srcs ${CVBLOB_SRCS})
-LIST(APPEND cvblob_hdrs ${CVBLOB_HDRS})
+#LIST(APPEND cvblob_srcs ${CVBLOB_SRCS})
+#LIST(APPEND cvblob_hdrs ${CVBLOB_HDRS})
 ############################### CVBLOB END ##########################
 
-source_group("Src" FILES ${cvblob_srcs})
-source_group("Include" FILES ${cvblob_hdrs})
+source_group("Src" FILES ${CVBLOB_SRCS})
+source_group("Include" FILES ${CVBLOB_HDRS})
 set(the_target ${PROJECT_NAME})
 
 IF(ENABLE_WINRT_MODE)
@@ -42,7 +42,7 @@ IF(ENABLE_WINRT_MODE)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 ENDIF()
 
-add_library(${the_target} STATIC ${cvblob_srcs} ${cvblob_hdrs})
+add_library(${the_target} STATIC ${CVBLOB_SRCS} ${CVBLOB_HDRS})
 
 if (NOT WIN32)
   set_target_properties(${the_target} PROPERTIES COMPILE_FLAGS "-fPIC")

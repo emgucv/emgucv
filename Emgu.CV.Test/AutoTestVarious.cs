@@ -25,6 +25,7 @@ using Emgu.CV.Text;
 using Emgu.CV.Structure;
 using Emgu.CV.Bioinspired;
 using Emgu.CV.Dpm;
+using Emgu.CV.ImgHash;
 #if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
@@ -3470,6 +3471,54 @@ namespace Emgu.CV.Test
             XImgproc.XImgprocInvoke.NiBlackThreshold(gray, result, 120, ThresholdType.Binary, 7, 0.5);
             
         }
+
+        private static double CompareHash(ImgHashBase imgHash, Mat m1, Mat m2)
+        {
+            Mat hash1 = new Mat();
+            Mat hash2 = new Mat();
+            imgHash.Compute(m1, hash1);
+            imgHash.Compute(m2, hash2);
+            return imgHash.Compare(hash1, hash2);
+        }
+
+        [Test]
+        public void TestHash()
+        {
+            Mat m1 = EmguAssert.LoadMat("lena.jpg");
+            Mat m2 = new Mat();
+            CvInvoke.GaussianBlur(m1, m2, new Size(3, 3), 1);
+
+            using (AverageHash averageHash = new AverageHash())
+            {
+                double diff = CompareHash(averageHash, m1, m2);
+            }
+
+            using (BlockMeanHash bmh = new BlockMeanHash())
+            {
+                double diff = CompareHash(bmh, m1, m2);
+            }
+
+            using (ColorMomentHash cmh = new ColorMomentHash())
+            {
+                double diff = CompareHash(cmh, m1, m2);
+            }
+
+            using (MarrHildrethHash cmh = new MarrHildrethHash())
+            {
+                double diff = CompareHash(cmh, m1, m2);
+            }
+
+            using (PHash cmh = new PHash())
+            {
+                double diff = CompareHash(cmh, m1, m2);
+            }
+
+            using (RadialVarianceHash cmh = new RadialVarianceHash())
+            {
+                double diff = CompareHash(cmh, m1, m2);
+            }
+        }
+
 #if !NETFX_CORE
 
         [Test]
