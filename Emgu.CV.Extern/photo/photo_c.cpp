@@ -70,6 +70,11 @@ void cveSeamlessClone(cv::_InputArray* src, cv::_InputArray* dst, cv::_InputArra
    cv::seamlessClone(*src, *dst, *mask, *p, *blend, flags);
 }
 
+void cveDenoiseTVL1(const std::vector< cv::Mat >* observations, cv::Mat* result, double lambda, int niters)
+{
+	cv::denoise_TVL1(*observations, *result, lambda, niters);
+}
+
 void cveCalibrateCRFProcess(cv::CalibrateCRF* calibrateCRF, cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* times)
 {
    calibrateCRF->process(*src, *dst, *times);
@@ -150,10 +155,7 @@ void cveMergeRobertsonRelease(cv::MergeRobertson** merge)
    *merge = 0;
 }
 
-void cveDenoiseTVL1(const std::vector< cv::Mat >* observations, cv::Mat* result, double lambda, int niters)
-{
-   cv::denoise_TVL1(*observations, *result, lambda, niters);
-}
+
 
 void cveTonemapProcess(cv::Tonemap* tonemap, cv::_InputArray* src, cv::_OutputArray* dst)
 {
@@ -221,4 +223,23 @@ void cveTonemapMantiukRelease(cv::TonemapMantiuk** tonemap)
 {
    delete *tonemap;
    *tonemap = 0;
+}
+
+void cveAlignExposuresProcess(cv::AlignExposures* alignExposures, cv::_InputArray* src, std::vector<cv::Mat>* dst, cv::_InputArray* times, cv::_InputArray* response)
+{
+	alignExposures->process(*src, *dst, *times, *response);
+}
+
+
+cv::AlignMTB* cveAlignMTBCreate(int maxBits, int excludeRange, bool cut, cv::AlignExposures** alignExposures)
+{
+	cv::Ptr<cv::AlignMTB> a = cv::createAlignMTB(maxBits, excludeRange, cut);
+	a.addref();
+	*alignExposures = dynamic_cast<cv::AlignExposures*>(a.get());
+	return a.get();
+}
+void cveAlignMTBRelease(cv::AlignMTB** alignExposures)
+{
+	delete *alignExposures;
+	*alignExposures = 0;
 }
