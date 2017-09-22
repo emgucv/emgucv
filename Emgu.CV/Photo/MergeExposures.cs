@@ -96,6 +96,22 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Merges images.
+        /// </summary>
+        /// <param name="src">Vector of input images</param>
+        /// <param name="dst">Result image</param>
+        public void Process(IInputArray src, IOutputArray dst)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            using (InputArray iaTimes = InputArray.GetEmpty())
+            using (InputArray iaResponse = InputArray.GetEmpty())
+            {
+                CvInvoke.cveMergeExposuresProcess(_mergeExposuresPtr, iaSrc, oaDst, iaTimes, iaResponse);
+            }
+        }
+
+        /// <summary>
         /// Release the unmanaged memory associated with this MergeMertens object
         /// </summary>
         protected override void DisposeObject()

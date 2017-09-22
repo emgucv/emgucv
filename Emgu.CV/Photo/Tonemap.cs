@@ -16,7 +16,7 @@ namespace Emgu.CV
     /// <summary>
     /// Base class for tonemapping algorithms - tools that are used to map HDR image to 8-bit range.
     /// </summary>
-    public class Tonemap : UnmanagedObject
+    public partial class Tonemap : UnmanagedObject
     {
         /// <summary>
         /// The pointer to the unmanaged Tonemap object
@@ -75,7 +75,7 @@ namespace Emgu.CV
     /// Adaptive logarithmic mapping is a fast global tonemapping algorithm that scales the image in logarithmic domain.
     /// Since it's a global operator the same function is applied to all the pixels, it is controlled by the bias parameter.
     /// </summary>
-    public class TonemapDrago : Tonemap
+    public partial class TonemapDrago : Tonemap
     {
         /// <summary>
         /// Creates TonemapDrago object.
@@ -107,7 +107,7 @@ namespace Emgu.CV
     /// This algorithm decomposes image into two layers: base layer and detail layer using bilateral filter and compresses contrast of the base layer thus preserving all the details.
     /// This implementation uses regular bilateral filter from opencv.
     /// </summary>
-    public class TonemapDurand : Tonemap
+    public partial class TonemapDurand : Tonemap
     {
         /// <summary>
         /// Creates TonemapDurand object.
@@ -141,7 +141,7 @@ namespace Emgu.CV
     /// This is a global tonemapping operator that models human visual system.
     /// Mapping function is controlled by adaptation parameter, that is computed using light adaptation and color adaptation.
     /// </summary>
-    public class TonemapReinhard : Tonemap
+    public partial class TonemapReinhard : Tonemap
     {
         /// <summary>
         /// Creates TonemapReinhard object.
@@ -173,7 +173,7 @@ namespace Emgu.CV
     /// <summary>
     /// This algorithm transforms image to contrast using gradients on all levels of gaussian pyramid, transforms contrast values to HVS response and scales the response. After this the image is reconstructed from new contrast values.
     /// </summary>
-    public class TonemapMantiuk : Tonemap
+    public partial class TonemapMantiuk : Tonemap
     {
         /// <summary>
         /// Creates TonemapMantiuk object

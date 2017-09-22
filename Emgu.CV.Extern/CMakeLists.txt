@@ -1060,6 +1060,98 @@ IF(HAVE_opencv_optflow)
 ENDIF()
 ############################### optflow code gen END ################################
 
+############################### photo code gen START ##############################
+IF(HAVE_opencv_photo)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "photo/Tonemap_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapGenerated.cs"
+    "cv::Tonemap" 
+    "Tonemap" 
+    "Gamma" 
+    "float" 
+    "prop"
+    "Gamma" 
+    "float"
+    "Positive value for gamma correction. Gamma value of 1.0 implies no correction, gamma equal to 2.2f is suitable for most displays."
+    "Emgu.CV"
+    "CvInvoke"
+    "Tonemap"
+    "#include \"opencv2/photo.hpp\"")
+		
+  CREATE_OCV_CLASS_PROPERTY( 
+    "photo/TonemapDurand_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapDragoGenerated.cs"
+    "cv::TonemapDurand" 
+    "TonemapDurand" 
+    "Saturation;Contrast;SigmaSpace;SigmaColor" 
+    "float;float;float;float" 
+    "prop;prop;prop;prop"
+    "Saturation;Contrast;SigmaSpace;SigmaColor" 
+    "float;float;float;float"
+    "Positive saturation enhancement value. 1.0 preserves saturation, values greater than 1 increase saturation and values less than 1 decrease it.;
+	Resulting contrast on logarithmic scale, i. e. log(max / min), where max and min are maximum and minimum luminance values of the resulting image.;
+	Bilateral filter sigma in color space;
+	bilateral filter sigma in coordinate space"
+    "Emgu.CV"
+    "CvInvoke"
+    "TonemapDurand"
+    "#include \"opencv2/photo.hpp\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "photo/TonemapReinhard_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapReinhardGenerated.cs"
+    "cv::TonemapReinhard" 
+    "TonemapReinhard" 
+    "Intensity;LightAdaptation;ColorAdaptation" 
+    "float;float;float" 
+    "prop;prop;prop"
+    "Intensity;LightAdaptation;ColorAdaptation" 
+    "float;float;float"
+    "Result intensity in [-8, 8] range. Greater intensity produces brighter results.;
+	Light adaptation in [0, 1] range. If 1 adaptation is based only on pixel value, if 0 it is global, otherwise it is a weighted mean of this two cases.;
+	chromatic adaptation in [0, 1] range. If 1 channels are treated independently, if 0 adaptation level is the same for each channel."
+    "Emgu.CV"
+    "CvInvoke"
+    "TonemapReinhard"
+    "#include \"opencv2/photo.hpp\"")	
+	
+  CREATE_OCV_CLASS_PROPERTY( 
+    "photo/TonemapDrago_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapDurandGenerated.cs"
+    "cv::TonemapDrago" 
+    "TonemapDrago" 
+    "Saturation;Bias" 
+    "float;float" 
+    "prop;prop"
+    "Saturation;Bias" 
+    "float;float"
+    "Positive saturation enhancement value. 1.0 preserves saturation, values greater than 1 increase saturation and values less than 1 decrease it.;
+	Value for bias function in [0, 1] range. Values from 0.7 to 0.9 usually give best results, default value is 0.85."
+    "Emgu.CV"
+    "CvInvoke"
+    "TonemapDrago"
+    "#include \"opencv2/photo.hpp\"")		
+	
+  CREATE_OCV_CLASS_PROPERTY( 
+    "photo/TonemapMantiuk_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapMantiukGenerated.cs"
+    "cv::TonemapMantiuk" 
+    "TonemapMantiuk" 
+    "Saturation;Scale" 
+    "float;float" 
+    "prop;prop"
+    "Saturation;Scale" 
+    "float;float"
+    "Saturation enhancement value.;
+	Contrast scale factor. HVS response is multiplied by this parameter, thus compressing dynamic range. Values from 0.6 to 0.9 produce best results."
+    "Emgu.CV"
+    "CvInvoke"
+    "TonemapMantiuk"
+    "#include \"opencv2/photo.hpp\"")	
+ENDIF()
+############################### photo code gen END ##############################
+
+
 ############################### xfeatures2d code gen START ##############################
 IF(HAVE_opencv_xfeatures2d)
    CREATE_OCV_CLASS_PROPERTY( 
