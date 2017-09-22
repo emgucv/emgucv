@@ -377,7 +377,14 @@ gplotSetScaling(GPLOT   *gplot,
 l_int32
 gplotMakeOutput(GPLOT  *gplot)
 {
-#if WINAPI_FAMILY_APP
+#if __APPLE__
+    #include "TargetConditionals.h"
+    #if TARGET_IPHONE_SIMULATOR
+        return ERROR_INT("gplot not defined", procName, 1);
+    #elif TARGET_OS_IPHONE
+        return ERROR_INT("gplot not defined", procName, 1);
+    #endif
+#elif WINAPI_FAMILY_APP
 	return ERROR_INT("gplot not defined", procName, 1);
 #else
 char     buf[L_BUF_SIZE];
