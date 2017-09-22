@@ -2,8 +2,6 @@
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(__IOS__ || UNITY_IPHONE || NETFX_CORE)
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +29,12 @@ namespace Emgu.CV.Tracking
         /// <param name="samplerSearchFactor">search region parameters to use in a OnlineBoosting algorithm</param>
         /// <param name="iterationInit">The initial iterations</param>
         /// <param name="featureSetNumFeatures">Number of features, a good value would be 10*numClassifiers + iterationInit</param>
-        public TrackerBoosting(int numClassifiers = 100, float samplerOverlap = 0.99f, float samplerSearchFactor = 1.8f, int iterationInit = 50, int featureSetNumFeatures = 100*10+50)
+        public TrackerBoosting(
+            int numClassifiers = 100, 
+            float samplerOverlap = 0.99f, 
+            float samplerSearchFactor = 1.8f, 
+            int iterationInit = 50, 
+            int featureSetNumFeatures = 100*10+50)
         {
             ContribInvoke.cveTrackerBoostingCreate(numClassifiers, samplerOverlap, samplerSearchFactor, iterationInit, featureSetNumFeatures, ref _trackerPtr);
         }
@@ -100,21 +103,21 @@ namespace Emgu.CV.Tracking
         /// <param name="featureSetNumFeatures">features</param>
         public TrackerMIL(
             float samplerInitInRadius,
-        int samplerInitMaxNegNum,  
-        float samplerSearchWinSize,  
-        float samplerTrackInRadius,  
-        int samplerTrackMaxPosNum,  
-        int samplerTrackMaxNegNum,  
-        int featureSetNumFeatures)  
+            int samplerInitMaxNegNum,  
+            float samplerSearchWinSize,  
+            float samplerTrackInRadius,  
+            int samplerTrackMaxPosNum,  
+            int samplerTrackMaxNegNum,  
+            int featureSetNumFeatures)  
         {
             ContribInvoke.cveTrackerMILCreate(
                 samplerInitInRadius,
-            samplerInitMaxNegNum,
-            samplerSearchWinSize,
-            samplerTrackInRadius,
-            samplerTrackMaxPosNum,
-            samplerTrackMaxNegNum,
-            featureSetNumFeatures, ref _trackerPtr);
+                samplerInitMaxNegNum,
+                samplerSearchWinSize,
+                samplerTrackInRadius,
+                samplerTrackMaxPosNum,
+                samplerTrackMaxNegNum,
+                featureSetNumFeatures, ref _trackerPtr);
         }
 
         /// <summary>
@@ -124,6 +127,60 @@ namespace Emgu.CV.Tracking
         {
             if (IntPtr.Zero != _ptr)
                 ContribInvoke.cveTrackerMILRelease(ref _ptr);
+            base.DisposeObject();
+        }
+    }
+
+    public class TrackerTLD : Tracker
+    {
+        public TrackerTLD()
+        {
+            _ptr = ContribInvoke.cveTrackerTLDCreate(ref _trackerPtr);
+        }
+
+        /// <summary>
+        /// Release the unmanaged resources associated with this tracker
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (IntPtr.Zero == _ptr)
+                ContribInvoke.cveTrackerTLDRelease(ref _ptr);
+            base.DisposeObject();
+        }
+    }
+
+    public class TrackerKCF : Tracker
+    {
+        public TrackerKCF()
+        {
+            _ptr = ContribInvoke.cveTrackerKCFCreate(ref _trackerPtr);
+        }
+
+        /// <summary>
+        /// Release the unmanaged resources associated with this tracker
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (IntPtr.Zero == _ptr)
+                ContribInvoke.cveTrackerKCFRelease(ref _ptr);
+            base.DisposeObject();
+        }
+    }
+
+    public class TrackerGOTURN : Tracker
+    {
+        public TrackerGOTURN()
+        {
+            _ptr = ContribInvoke.cveTrackerGOTURNCreate(ref _trackerPtr);
+        }
+
+        /// <summary>
+        /// Release the unmanaged resources associated with this tracker
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (IntPtr.Zero == _ptr)
+                ContribInvoke.cveTrackerGOTURNRelease(ref _ptr);
             base.DisposeObject();
         }
     }
@@ -216,7 +273,20 @@ namespace Emgu.CV
             ref IntPtr tracker);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTrackerMILRelease(ref IntPtr tracker);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerTLDCreate(ref IntPtr tracker);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerTLDRelease(ref IntPtr tracker);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerKCFCreate(ref IntPtr tracker);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerKCFRelease(ref IntPtr tracker);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerGOTURNCreate(ref IntPtr tracker);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerGOTURNRelease(ref IntPtr tracker);
     }
 }
-
-#endif

@@ -42,7 +42,7 @@ cv::TrackerBoosting* cveTrackerBoostingCreate(int numClassifiers, float samplerO
 	p.featureSetNumFeatures = featureSetNumFeatures;
 	cv::Ptr<cv::TrackerBoosting> ptr = cv::TrackerBoosting::create(p);
 	ptr.addref();
-	*tracker = static_cast<cv::Tracker*>(ptr.get());
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
 void cveTrackerBoostingRelease(cv::TrackerBoosting** tracker)
@@ -63,7 +63,7 @@ cv::TrackerMedianFlow* cveTrackerMedianFlowCreate(int pointsInGrid, CvSize* winS
 
 	cv::Ptr<cv::TrackerMedianFlow> ptr = cv::TrackerMedianFlow::create(p);
 	ptr.addref();
-	*tracker = static_cast<cv::Tracker*>(ptr.get());
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
 void cveTrackerMedianFlowRelease(cv::TrackerMedianFlow** tracker)
@@ -93,10 +93,49 @@ cv::TrackerMIL* cveTrackerMILCreate(
 	
 	cv::Ptr<cv::TrackerMIL> ptr = cv::TrackerMIL::create(p);
 	ptr.addref();
-	*tracker = static_cast<cv::Tracker*>(ptr.get());
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
 void cveTrackerMILRelease(cv::TrackerMIL** tracker)
+{
+	delete *tracker;
+	*tracker = 0;
+}
+
+cv::TrackerTLD* cveTrackerTLDCreate(cv::Tracker** tracker)
+{
+	cv::Ptr<cv::TrackerTLD> ptr = cv::TrackerTLD::create();
+	ptr.addref();
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+}
+void cveTrackerTLDRelease(cv::TrackerTLD** tracker)
+{
+	delete *tracker;
+	*tracker = 0;
+}
+
+cv::TrackerKCF* cveTrackerKCFCreate(cv::Tracker** tracker)
+{
+	cv::Ptr<cv::TrackerKCF> ptr = cv::TrackerKCF::create();
+	ptr.addref();
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+}
+void cveTrackerKCFRelease(cv::TrackerKCF** tracker)
+{
+	delete *tracker;
+	*tracker = 0;
+}
+
+cv::TrackerGOTURN* cveTrackerGOTURNCreate(cv::Tracker** tracker)
+{
+	cv::Ptr<cv::TrackerGOTURN> ptr = cv::TrackerGOTURN::create();
+	ptr.addref();
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+}
+void cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker)
 {
 	delete *tracker;
 	*tracker = 0;

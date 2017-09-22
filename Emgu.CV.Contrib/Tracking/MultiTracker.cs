@@ -2,8 +2,6 @@
 //  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(__IOS__ || UNITY_IPHONE || NETFX_CORE)
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -98,5 +96,3 @@ namespace Emgu.CV
         internal static extern void cveMultiTrackerRelease(ref IntPtr tracker);
     }
 }
-
-#endif
