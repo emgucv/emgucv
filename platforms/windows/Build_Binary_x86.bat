@@ -38,7 +38,7 @@ SET VS2012="%VS110COMNTOOLS%..\IDE\devenv.com"
 SET VS2013="%VS120COMNTOOLS%..\IDE\devenv.com"
 SET VS2015="%VS140COMNTOOLS%..\IDE\devenv.com"
 
-SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com"
+IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com" SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com"
 IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com" SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com"
 IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com" SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com"
 IF EXIST "%VS150COMNTOOLS%..\IDE\devenv.com" SET VS2017 = "%VS150COMNTOOLS%..\IDE\devenv.com"
@@ -55,20 +55,16 @@ IF EXIST %VS2010% SET DEVENV=%VS2010%
 IF "%4%"=="openni" GOTO SET_BUILD_TYPE
 IF EXIST %VS2012% SET DEVENV=%VS2012%
 IF EXIST %VS2013% SET DEVENV=%VS2013%
-
 IF EXIST %VS2015% SET DEVENV=%VS2015%
 
 REM CUDA 8.5 only support VS2015, if we target GPU we will stop checking for newer version of Visual Studio
 IF "%2%"=="gpu" GOTO SET_BUILD_TYPE
 
-REM For windows phone or store 81 build we should use VS2015
-IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
-IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
-
-REM Only check for VS2017 if there are no other suitable Visual Studio installation
-REM We may default to VS2017 once CUDA 9 supports VS2017
-IF EXIST %DEVENV% GOTO SET_BUILD_TYPE
 IF EXIST %VS2017% SET DEVENV=%VS2017%
+
+REM Make VS2015 to our favourite DEVENV
+REM We may default to VS2017 once CUDA 9 supports VS2017
+IF EXIST %VS2015% SET DEVENV=%VS2015%
 
 :SET_BUILD_TYPE
 IF %DEVENV%=="%MSBUILD35%" SET BUILD_TYPE=/property:Configuration=Release
