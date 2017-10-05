@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\nugetpackages\Xamarin.Forms.2.4.0.266-pre1\build\netstandard1.0\Xamarin.Forms.props" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.2.4.0.266-pre1\build\netstandard1.0\Xamarin.Forms.props')" />
+  <Import Project="..\..\..\nugetpackages\Xamarin.Forms.2.4.0.282\build\netstandard1.0\Xamarin.Forms.props" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.2.4.0.282\build\netstandard1.0\Xamarin.Forms.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -112,16 +112,16 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="OpenTK" />
     <Reference Include="Xamarin.Forms.Core">
-      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.2.4.0.266-pre1\lib\Xamarin.Mac\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.2.4.0.282\lib\Xamarin.Mac\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform">
-      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.2.4.0.266-pre1\lib\Xamarin.Mac\Xamarin.Forms.Platform.dll</HintPath>
+      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.2.4.0.282\lib\Xamarin.Mac\Xamarin.Forms.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform.macOS">
-      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.2.4.0.266-pre1\lib\Xamarin.Mac\Xamarin.Forms.Platform.macOS.dll</HintPath>
+      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.2.4.0.282\lib\Xamarin.Mac\Xamarin.Forms.Platform.macOS.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml">
-      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.2.4.0.266-pre1\lib\Xamarin.Mac\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.2.4.0.282\lib\Xamarin.Mac\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -190,5 +190,5 @@
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" Condition="Exists('..\Core\Emgu.CV.XamarinForms.projitems')" />
   <Import Project="..\..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.Util\Emgu.Util.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
-  <Import Project="..\..\..\nugetpackages\Xamarin.Forms.2.4.0.266-pre1\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.2.4.0.266-pre1\build\netstandard1.0\Xamarin.Forms.targets')" />
+  <Import Project="..\..\..\nugetpackages\Xamarin.Forms.2.4.0.282\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.2.4.0.282\build\netstandard1.0\Xamarin.Forms.targets')" />
 </Project>

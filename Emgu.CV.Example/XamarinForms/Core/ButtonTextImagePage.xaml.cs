@@ -29,10 +29,10 @@ namespace Emgu.CV.XamarinForms
         public virtual async void LoadImages(String[] imageNames, String[] labels = null)
         {
 #if NETFX_CORE || (__UNIFIED__ && !__IOS__) //NETFX or Xamarin Mac
-         Mat[] mats = new Mat[imageNames.Length];
-         for (int i = 0; i < mats.Length; i++)
-            mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
-         InvokeOnImagesLoaded(mats);
+            Mat[] mats = new Mat[imageNames.Length];
+            for (int i = 0; i < mats.Length; i++)
+                mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
+            InvokeOnImagesLoaded(mats);
 #else
 
             Mat[] mats = new Mat[imageNames.Length];
@@ -155,6 +155,11 @@ namespace Emgu.CV.XamarinForms
                 CvInvoke.Imencode(".jpg", image, vb);
                 byte[] rawData = vb.ToArray();
                 this.DisplayImage.Source = ImageSource.FromStream(() => new MemoryStream(rawData));
+
+#if __MACOS__
+                using (InputArray iaImage = image.GetInputArray())
+                    this.DisplayImage.HeightRequest = iaImage.GetSize().Height;
+#endif
             }
         }
 
@@ -169,5 +174,6 @@ namespace Emgu.CV.XamarinForms
             //return null;
             return this.TopButton;
         }
+
     }
 }
