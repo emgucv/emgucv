@@ -99,6 +99,9 @@
 
 #include <string.h>
 #include "allheaders.h"
+#ifdef __APPLE__
+#include "TargetConditions.h"
+#endif
 
 static const l_int32  L_BUF_SIZE = 512;
 
@@ -377,14 +380,7 @@ gplotSetScaling(GPLOT   *gplot,
 l_int32
 gplotMakeOutput(GPLOT  *gplot)
 {
-#if __APPLE__
-    #include "TargetConditionals.h"
-    #if TARGET_IPHONE_SIMULATOR
-        return ERROR_INT("gplot not defined", procName, 1);
-    #elif TARGET_OS_IPHONE
-        return ERROR_INT("gplot not defined", procName, 1);
-    #endif
-#elif WINAPI_FAMILY_APP
+#if WINAPI_FAMILY_APP || TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 	return ERROR_INT("gplot not defined", procName, 1);
 #else
 char     buf[L_BUF_SIZE];

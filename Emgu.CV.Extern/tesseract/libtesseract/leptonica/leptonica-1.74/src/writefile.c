@@ -86,6 +86,11 @@
 #include <process.h>
 #endif
 
+#ifdef __APPLE__
+#include "TargetConditions.h"
+#endif
+
+
 /*   Special flag for pixWrite().  The default for both unix and     */
     /*   windows is to use whatever filename is given, as opposed to     */
     /*   insuring the filename extension matches the image compression.  */
@@ -930,7 +935,9 @@ char            fullpath[_MAX_PATH];
     }
     tempname = genPathname(buffer, NULL);
 
-#ifndef _WIN32
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+	return 1;
+#elif ! defined( _WIN32 )
 
         /* Unix */
     if (var_DISPLAY_PROG == L_DISPLAY_WITH_XZGV) {

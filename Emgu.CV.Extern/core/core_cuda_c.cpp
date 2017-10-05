@@ -38,7 +38,7 @@ int cudaGetDevice()
 
 cv::cuda::DeviceInfo* cudaDeviceInfoCreate(int* deviceId)
 {
-   if (deviceId < 0)
+   if (*deviceId < 0)
       *deviceId = cv::cuda::getDevice();
 
    return new cv::cuda::DeviceInfo(*deviceId);
