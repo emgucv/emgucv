@@ -100,7 +100,7 @@
 #include <string.h>
 #include "allheaders.h"
 #ifdef __APPLE__
-#include "TargetConditions.h"
+#include "TargetConditionals.h"
 #endif
 
 static const l_int32  L_BUF_SIZE = 512;

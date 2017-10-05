@@ -87,7 +87,7 @@
 #endif
 
 #ifdef __APPLE__
-#include "TargetConditions.h"
+#include "TargetConditionals.h"
 #endif
 
 
