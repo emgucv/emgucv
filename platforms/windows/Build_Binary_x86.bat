@@ -41,6 +41,7 @@ SET VS2015="%VS140COMNTOOLS%..\IDE\devenv.com"
 SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com"
 IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com" SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com"
 IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com" SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com"
+IF EXIST "%VS2017INSTALLDIR%\Common7\IDE\devenv.com" SET VS2017="%VS2017INSTALLDIR%\Common7\IDE\devenv.com"
 IF EXIST "%VS150COMNTOOLS%..\IDE\devenv.com" SET VS2017 = "%VS150COMNTOOLS%..\IDE\devenv.com"
 
 IF EXIST "%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe
@@ -55,7 +56,6 @@ IF EXIST %VS2010% SET DEVENV=%VS2010%
 IF "%4%"=="openni" GOTO SET_BUILD_TYPE
 IF EXIST %VS2012% SET DEVENV=%VS2012%
 IF EXIST %VS2013% SET DEVENV=%VS2013%
-
 IF EXIST %VS2015% SET DEVENV=%VS2015%
 
 REM CUDA 8.5 only support VS2015, if we target GPU we will stop checking for newer version of Visual Studio
@@ -68,7 +68,9 @@ IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
 REM Only check for VS2017 if there are no other suitable Visual Studio installation
 REM We may default to VS2017 once CUDA 9 supports VS2017
 IF EXIST %DEVENV% GOTO SET_BUILD_TYPE
+
 IF EXIST %VS2017% SET DEVENV=%VS2017%
+REM CUDA 9 only support VS2017, if we target GPU we will stop checking for newer version of Visual Studio
 
 :SET_BUILD_TYPE
 IF %DEVENV%=="%MSBUILD35%" SET BUILD_TYPE=/property:Configuration=Release
@@ -187,6 +189,9 @@ SET CUDA_64_MODE=-DCUDA_64_BIT_DEVICE_CODE:BOOL=FALSE
 GOTO END_GPU_ARCH
 
 :WITH_GPU_64
+REM If you are using CUDA 9 with Open CV 3.3 release you will need to create an nppi.lib file with instructions from here:
+REM https://stackoverflow.com/questions/45525377/installing-opencv-3-3-0-with-contrib-modules-using-cmake-cuda-9-0-rc-and-visual
+
 SET CUDA_SDK_DIR=%CUDA_PATH%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V8_0%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V7_5%
@@ -199,6 +204,7 @@ IF NOT "%8%"=="" GOTO GPU_ARCH_BIN_SPECIFIED
 SET CUDA_ARCH_BIN_OPTION=""
 IF EXIST "%CUDA_SDK_DIR%" SET CUDA_ARCH_BIN_OPTION="2.0 2.1(2.0) 3.0 3.5 3.7 5.0 5.2"
 IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V8_0%" SET CUDA_ARCH_BIN_OPTION="2.0 2.1(2.0) 3.0 3.5 3.7 5.0 5.2 6.0 6.1"
+IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V9_0%" SET CUDA_ARCH_BIN_OPTION="3.0 3.5 3.7 5.0 5.2 6.0 6.1 7.0"
 GOTO END_GPU_ARCH_BIN
 
 :GPU_ARCH_BIN_SPECIFIED
