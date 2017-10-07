@@ -59,7 +59,7 @@ IF EXIST %VS2013% SET DEVENV=%VS2013%
 IF EXIST %VS2015% SET DEVENV=%VS2015%
 
 REM CUDA 8.5 only support VS2015, if we target GPU we will stop checking for newer version of Visual Studio
-IF "%2%"=="gpu" GOTO SET_BUILD_TYPE
+REM IF "%2%"=="gpu" GOTO SET_BUILD_TYPE
 
 REM For windows phone or store 81 build we should use VS2015
 IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
@@ -67,7 +67,7 @@ IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
 
 REM Only check for VS2017 if there are no other suitable Visual Studio installation
 REM We may default to VS2017 once CUDA 9 supports VS2017
-IF EXIST %DEVENV% GOTO SET_BUILD_TYPE
+REM IF EXIST %DEVENV% GOTO SET_BUILD_TYPE
 
 IF EXIST %VS2017% SET DEVENV=%VS2017%
 REM CUDA 9 only support VS2017, if we target GPU we will stop checking for newer version of Visual Studio
@@ -178,6 +178,7 @@ IF %DEVENV%==%VS2010% SET CUDA_HOST_COMPILER=%VS100COMNTOOLS%..\..\VC\bin\cl.exe
 IF %DEVENV%==%VS2012% SET CUDA_HOST_COMPILER=%VS110COMNTOOLS%..\..\VC\bin\cl.exe
 IF %DEVENV%==%VS2013% SET CUDA_HOST_COMPILER=%VS120COMNTOOLS%..\..\VC\bin\cl.exe
 IF %DEVENV%==%VS2015% SET CUDA_HOST_COMPILER=%VS140COMNTOOLS%..\..\VC\bin\cl.exe
+IF %DEVENV%==%VS2017% SET CUDA_HOST_COMPILER=%VS2017INSTALLDIR%\VC\Tools\MSVC\14.11.25503\bin\Hostx64\x64\cl.exe
 
 REM Find cuda. Use latest Cuda release for 64 bit and Cuda 6.5 for 32bit
 REM We cannot use latest Cuda release for 32 bit because the 32bit version of npp has been depreciated from Cuda 7
