@@ -11,8 +11,6 @@
 		<string>AppIcons/appIcon_114x114.png</string>
 		<string>AppIcons/appIcon_57x57.png</string>
 	</array>
-	<key>MinimumOSVersion</key>
-	<string>6.0</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
@@ -38,5 +36,7 @@
 	<string>EMGU CV</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs access to the camera to take photos</string>
+	<key>MinimumOSVersion</key>
+	<string>7.0</string>
 </dict>
 </plist>

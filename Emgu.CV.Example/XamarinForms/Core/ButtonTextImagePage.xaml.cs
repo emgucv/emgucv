@@ -67,35 +67,34 @@ namespace Emgu.CV.XamarinForms
                     mats[i] = new Mat(Forms.Context.Assets, imageNames[i]);
 
 #else
-            mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.AnyColor);
+                    mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.AnyColor);
 #endif
 
                 }
                 else if (action.Equals("Photo Library"))
                 {
-#if __ANDROID__
+#if __ANDROID__ || __IOS__
                     var photoResult = await CrossMedia.Current.PickPhotoAsync();
                     if (photoResult == null) //cancelled
                         return;
                     mats[i] = CvInvoke.Imread(photoResult.Path);
 
 #else
-            var file = await _mediaPicker.PickPhotoAsync();
-            using (Stream s = file.GetStream())
-            using (MemoryStream ms = new MemoryStream())
-            {
-              s.CopyTo(ms);
-               byte[] data = ms.ToArray();
-               Mat m = new Mat();
-               CvInvoke.Imdecode(data, ImreadModes.Color, m );
-               mats[i] = m;      
-         
-            }
+                    var file = await CrossMedia.Current.PickPhotoAsync();
+                    using (Stream s = file.GetStream())
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                       s.CopyTo(ms);
+                       byte[] data = ms.ToArray();
+                       Mat m = new Mat();
+                       CvInvoke.Imdecode(data, ImreadModes.Color, m );
+                       mats[i] = m;              
+                    }
 #endif
                 }
                 else if (action.Equals("Camera"))
                 {
-#if __ANDROID__
+#if __ANDROID__ || __IOS__
                     var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
                     {
                         Directory = "Emgu",
@@ -108,17 +107,17 @@ namespace Emgu.CV.XamarinForms
 
                     mats[i] = CvInvoke.Imread(takePhotoResult.Path);
 #else
-            var file = await _mediaPicker.TakePhotoAsync(new StoreCameraMediaOptions());
-            using (Stream s = file.GetStream())
-            using (MemoryStream ms = new MemoryStream())
-            {
-               s.CopyTo(ms);
-               byte[] data = ms.ToArray();
-               Mat m = new Mat();
-               CvInvoke.Imdecode(data, ImreadModes.Color, m);
-               mats[i] = m;
+                    var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions());
+                    using (Stream s = file.GetStream())
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                       s.CopyTo(ms);
+                       byte[] data = ms.ToArray();
+                       Mat m = new Mat();
+                       CvInvoke.Imdecode(data, ImreadModes.Color, m);
+                       mats[i] = m;
                
-            }
+                    }
 #endif
                 }
             }

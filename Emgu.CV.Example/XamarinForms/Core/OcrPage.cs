@@ -102,7 +102,7 @@ namespace Emgu.CV.XamarinForms
 
         private void OnButtonClicked(Object sender, EventArgs args)
         {
-            LoadImages(new string[] { "lena.jpg" });
+            LoadImages(new string[] { "test_image.png" });
         }
 
     }
