@@ -1,7 +1,6 @@
 REM @echo off
 pushd %~p0
 
-
 IF "%1%"=="" GOTO SET_ANY_CPU_BUILD
 :SET_CUSTOME_BUILD
 SET TARGETARCH=%1%
@@ -52,12 +51,12 @@ IF %DEVENV%==%VS2017% SET BUILD_TYPE=/Rebuild "Release|%TARGETARCH%"
 
 cd ..\..\..
 
-IF "%2"=="" GOTO TEST_INPLACE
+IF "%2%"=="" GOTO TEST_INPLACE
 
 :TEST_PACKAGE
 rm -rf tmp
 mkdir tmp
-unzip "%2" -d tmp
+unzip "%2%" -d tmp
 call %DEVENV% %BUILD_TYPE% tmp\Solution\Android\Emgu.CV.Android.sln
 
 GOTO END
