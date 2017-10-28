@@ -97,10 +97,12 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new FeatureMatchingPage());
             };
 
+#if !NETFX_CORE
             ocrButton.Clicked += (sender, args) =>
             {
                 MainPage.Navigation.PushAsync(new OcrPage());
             };
+#endif
         }
 
         public Page CurrentPage
