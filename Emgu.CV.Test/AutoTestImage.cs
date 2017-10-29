@@ -676,12 +676,16 @@ namespace Emgu.CV.Test
             //Emgu.CV.UI.ImageViewer.Show(absDiff.Convert<Gray, byte>());
             EmguAssert.IsTrue(laplace.Equals(convoluted));
 
+
+            Image<Bgr, Byte> imageBgr = new Image<Bgr, Byte>(300, 400);
+            imageBgr.SetRandNormal(new MCvScalar(0,0,0), new MCvScalar(255, 255, 255) );
+            Image<Bgr, float> imageBgrConv =  imageBgr.Convolution(kernel);
             /*
             try
             {
                Matrix<float> kernel1D = new Matrix<float>(new float[] { 1.0f, -2.0f, 1.0f });
                Image<Gray, float> result = new Image<Gray, float>(image.Width, image.Height);
-               CvInvoke.cvFilter2D(image, result, kernel1D, new MCvPoint(0, 1));
+               CvInvoke.Filter2D(image, result, kernel1D, new MCvPoint(0, 1));
             }
             catch (Exception e)
             {

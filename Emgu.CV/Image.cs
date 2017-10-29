@@ -3649,34 +3649,45 @@ namespace Emgu.CV
         ///Performs a convolution using the specific <paramref name="kernel"/> 
         ///</summary>
         ///<param name="kernel">The convolution kernel</param>
+        /// <param name="delta">The optional value added to the filtered pixels before storing them in dst</param>
+        /// <param name="borderType">The pixel extrapolation method.</param>
         ///<returns>The result of the convolution</returns>
-        public Image<TColor, Single> Convolution(ConvolutionKernelF kernel)
+        public Image<TColor, Single> Convolution(ConvolutionKernelF kernel, double delta = 0,
+            Emgu.CV.CvEnum.BorderType borderType = CvEnum.BorderType.Default)
         {
             Image<TColor, Single> floatImage =
                (typeof(TDepth) == typeof(Single)) ?
                this as Image<TColor, Single>
                : Convert<TColor, Single>();
+            try
+            {
+                Size s = Size;
+                Image<TColor, Single> res = new Image<TColor, Single>(s);
+                int numberOfChannels = NumberOfChannels;
+                if (numberOfChannels == 1)
+                    CvInvoke.Filter2D(floatImage, res, kernel, kernel.Center, delta, borderType);
+                else
+                {
+                    using (Mat m1 = new Mat(s, DepthType.Cv32F, 1))
+                    using (Mat m2 = new Mat(s, DepthType.Cv32F, 1))
+                    {
+                        for (int i = 0; i < numberOfChannels; i++)
+                        {
+                            CvInvoke.ExtractChannel(floatImage, m1, i);
+                            CvInvoke.Filter2D(m1, m2, kernel, kernel.Center, delta, borderType);
+                            CvInvoke.InsertChannel(m2, res, i);
+                        }
+                    }
+                }
+                return res;
+            }
+            finally
+            {
 
-            Image<TColor, Single> res = new Image<TColor, Single>(Size);
-            ForEachDuplicateChannel(
-               delegate (IImage srcFloat, IImage dest, int channel)
-               {
-
-                   //perform the convolution operation
-                   CvInvoke.Filter2D(
-                       srcFloat,
-                       dest,
-                       kernel,
-                       kernel.Center,
-                       0);
-
-               },
-               res);
-
-            if (!object.ReferenceEquals(floatImage, this))
-                floatImage.Dispose();
-
-            return res;
+                if (!object.ReferenceEquals(floatImage, this))
+                    floatImage.Dispose();
+            }
+            
         }
 
         /// <summary>
