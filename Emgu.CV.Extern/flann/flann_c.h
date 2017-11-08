@@ -39,9 +39,9 @@ CVAPI(void) cveSearchParamsRelease( cv::flann::SearchParams** p);
 
 CVAPI(cv::flann::Index*) cveFlannIndexCreate(cv::_InputArray* features, cv::flann::IndexParams* p);
 
-CVAPI(void) CvFlannIndexKnnSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, int knn, int checks);
+CVAPI(void) CvFlannIndexKnnSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, int knn, int checks, float eps, bool sorted);
 
-CVAPI(int) CvFlannIndexRadiusSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, float radius, int maxResults, int checks);
+CVAPI(int) CvFlannIndexRadiusSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, float radius, int maxResults, int checks, float eps, bool sorted);
 
 CVAPI(void) CvFlannIndexRelease(cv::flann::Index** index);
 

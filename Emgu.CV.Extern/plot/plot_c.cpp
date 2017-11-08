@@ -6,19 +6,19 @@
 
 #include "plot_c.h"
 
-cv::plot::Plot2d* cvePlot2dCreateFromX(cv::Mat* data)
+cv::plot::Plot2d* cvePlot2dCreateFrom(cv::_InputArray* data)
 {
-   cv::Ptr<cv::plot::Plot2d> plot = cv::plot::createPlot2d(*data);
+   cv::Ptr<cv::plot::Plot2d> plot = cv::plot::Plot2d::create(*data);
    plot.addref();
    return plot.get();
 }
-cv::plot::Plot2d* cvePlot2dCreateFromXY(cv::Mat* dataX, cv::Mat* dataY)
+cv::plot::Plot2d* cvePlot2dCreateFromXY(cv::_InputArray* dataX, cv::_InputArray* dataY)
 {
-   cv::Ptr<cv::plot::Plot2d> plot = cv::plot::createPlot2d(*dataX, *dataY);
+   cv::Ptr<cv::plot::Plot2d> plot = cv::plot::Plot2d::create(*dataX, *dataY);
    plot.addref();
    return plot.get();
 }
-void cvePlot2dRender(cv::plot::Plot2d* plot, cv::Mat* result)
+void cvePlot2dRender(cv::plot::Plot2d* plot, cv::_OutputArray* result)
 {
    plot->render(*result);
 }

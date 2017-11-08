@@ -1336,6 +1336,27 @@ IF(HAVE_opencv_plot)
 ENDIF()
 ############################### plot code gen END ##############################
 
+############################### saliency code gen START ##############################
+IF(HAVE_opencv_saliency)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "saliency/ObjectnessBING_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/ObjectnessBINGGenerated.cs"
+    "cv::saliency::ObjectnessBING" 
+    "ObjectnessBING" 
+    "W;NSS" 
+    "int;int" 
+    "prop;prop"
+    "W;NSS" 
+    "int;int"
+    "W;
+    NSS"
+    "Emgu.CV.Saliency"
+    "SaliencyInvoke"
+    "ObjectnessBING"
+    "#include \"opencv2/saliency.hpp\"")
+ENDIF()
+############################### plot code gen END ##############################
+
 ############################### xphoto code gen START ##############################
 IF(HAVE_opencv_xphoto)
   CREATE_OCV_CLASS_PROPERTY( 

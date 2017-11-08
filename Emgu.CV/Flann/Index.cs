@@ -63,12 +63,12 @@ namespace Emgu.CV.Flann
       /// time. If automatic configuration was used when the index was created, the number of
       /// checks required to achieve the specified precision was also computed, in which case
       /// this parameter is ignored </param>
-      public void KnnSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, int knn, int checks)
+      public void KnnSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, int knn, int checks = 32, float eps = 0, bool sorted = true)
       {
          using (InputArray iaQueries = queries.GetInputArray())
          using (OutputArray oaIndices = indices.GetOutputArray())
          using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
-         CvFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks);
+            CvFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks, eps, sorted);
       }
 
       /// <summary>
@@ -85,12 +85,12 @@ namespace Emgu.CV.Flann
       /// checks required to achieve the specified precision was also computed, in which case
       /// this parameter is ignored </param>
       /// <returns>The number of points in the search radius</returns>
-      public int RadiusSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, float radius, int maxResults, int checks)
+      public int RadiusSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, float radius, int maxResults, int checks = 32, float eps = 0, bool sorted = true)
       {
          using (InputArray iaQueries = queries.GetInputArray())
          using (OutputArray oaIndicies = indices.GetOutputArray())
          using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
-         return CvFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks);
+            return CvFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks, eps, sorted);
       }
 
       /// <summary>
@@ -115,10 +115,29 @@ namespace Emgu.CV.Flann
       internal static extern void CvFlannIndexRelease(ref IntPtr index);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void CvFlannIndexKnnSearch(IntPtr index, IntPtr queries, IntPtr indices, IntPtr dists, int knn, int checks);
+      internal static extern void CvFlannIndexKnnSearch(
+          IntPtr index, 
+          IntPtr queries, 
+          IntPtr indices, 
+          IntPtr dists, 
+          int knn, 
+          int checks, 
+          float eps, 
+          [MarshalAs(UnmanagedType.Bool)]
+          bool sorted);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern int CvFlannIndexRadiusSearch(IntPtr index, IntPtr queries, IntPtr indices, IntPtr dists, float radius, int maxResults, int checks);
+      internal static extern int CvFlannIndexRadiusSearch(
+          IntPtr index, 
+          IntPtr queries, 
+          IntPtr indices, 
+          IntPtr dists, 
+          float radius, 
+          int maxResults, 
+          int checks, 
+          float eps, 
+          [MarshalAs(UnmanagedType.Bool)]
+          bool sorted);
    }
 }
 

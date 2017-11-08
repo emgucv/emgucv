@@ -8,160 +8,182 @@ using System.Text;
 namespace Emgu.CV.Saliency
 {
     /// <summary>
-    /// Base abstract class for Saliency algorithms:
+    /// Base interface for Saliency algorithms:
     /// </summary>
-    public class Saliency : UnmanagedObject, IAlgorithm
+    public interface ISaliency : IAlgorithm
     {
-        /// <summary>
-        /// pointer to the saliency object
-        /// </summary>
-        public IntPtr AlgorithmPtr { get; private set; }
-
-        /// <summary>
-        /// Creates a specialized saliency algorithm by its name.
-        /// </summary>
-        /// <param name="saliencyType"></param>
-        protected Saliency(string saliencyType)
-        {
-            using (CvString saliencyTypeStr = new CvString(saliencyType))
-            {
-                _ptr = SaliencyInvoke.cveSaliencyCreate(saliencyTypeStr);
-            }
-
-            AlgorithmPtr = SaliencyInvoke.cveSaliencyGetAlgorithm(_ptr);
-        }
-
-        /// <summary>
-        /// Performs all the operations, according to the specific algorithm created, to obtain the saliency map.
-        /// </summary>
-        /// <param name="image"></param>
-        /// <param name="saliencyMap"></param>
-        /// <returns></returns>
-        public bool Compute(Mat image, IOutputArray saliencyMap)
-        {
-            using (var ia = image.GetInputArray())
-            using (var oa = saliencyMap.GetOutputArray())
-            {
-                return SaliencyInvoke.cveSaliencyComputeSaliency(_ptr, ia, oa);
-            }
-        }
-
-        /// <summary>
-        /// dispose
-        /// </summary>
-        protected override void DisposeObject()
-        {
-            if (_ptr != IntPtr.Zero)
-                SaliencyInvoke.cveSaliencyRelease(ref _ptr);
-        }
+        IntPtr SaliencyPtr { get; }
     }
 
-    /// <summary>
-    /// reflects how likely an image window covers an object of any category
-    /// </summary>
-    public abstract class Objectness : Saliency
+    public interface IStaticSaliency : ISaliency
     {
-        /// <summary>
-        /// constructor
-        /// </summary>
-        /// <param name="saliencyType"></param>
-        protected Objectness(string saliencyType) : base(saliencyType) { }
+        IntPtr StaticSaliencyPtr { get; }
     }
 
-    /// <summary>
-    /// detect salient objects over time (hence also over frame)
-    /// </summary>
-    public abstract class MotionSaliency : Saliency
+    public interface IMotionSaliency : ISaliency
     {
-        /// <summary>
-        /// constructor
-        /// </summary>
-        /// <param name="saliencyType"></param>
-        protected MotionSaliency(string saliencyType) : base(saliencyType) { }
+        IntPtr MotionSaliencyPtr { get; }
     }
 
-    /// <summary>
-    /// detect salient objects in a non dynamic scenarios.
-    /// </summary>
-    public abstract class StaticSaliency : Saliency
+    public interface IObjectness : ISaliency
     {
-        /// <summary>
-        /// constructor
-        /// </summary>
-        /// <param name="saliencyType"></param>
-        protected StaticSaliency(string saliencyType) : base(saliencyType) { }
-
-        /// <summary>
-        /// perform a binary map of given saliency map
-        /// </summary>
-        /// <param name="saliencyMap">the saliency map obtained through one of the specialized algorithms</param>
-        /// <param name="binaryMap">the binary map</param>
-        /// <returns></returns>
-        public bool ComputeBinaryMap(Mat saliencyMap, Mat binaryMap)
-        {
-            return SaliencyInvoke.cveSaliencyStaticComputeBinaryMap(_ptr, saliencyMap, binaryMap);
-        }
+        IntPtr ObjectnessPtr { get;  }
     }
 
     /// <summary>
     /// simulate the behavior of pre-attentive visual search
     /// </summary>
-    public class SpectralResidualSaliency : StaticSaliency
+    public class StaticSaliencySpectralResidual :  UnmanagedObject, IStaticSaliency
     {
+        private  IntPtr _staticSaliencyPtr;
+        private IntPtr _saliencyPtr;
+        private IntPtr _algorithmPtr;
+
         /// <summary>
         /// constructor
         /// </summary>
-        public SpectralResidualSaliency() : base("SPECTRAL_RESIDUAL")
+        public StaticSaliencySpectralResidual()
         {
+            _ptr = SaliencyInvoke.cveStaticSaliencySpectralResidualCreate(ref _staticSaliencyPtr, ref _saliencyPtr,
+                ref _algorithmPtr);
+        }
+
+
+        public IntPtr StaticSaliencyPtr => _staticSaliencyPtr;
+
+        public IntPtr SaliencyPtr => _saliencyPtr;
+
+        public IntPtr AlgorithmPtr => _algorithmPtr;
+
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                SaliencyInvoke.cveStaticSaliencySpectralResidualRelease(ref _ptr);
+            }
+            _staticSaliencyPtr = IntPtr.Zero;
+            _saliencyPtr = IntPtr.Zero;
+            _algorithmPtr=IntPtr.Zero;
+            
         }
     }
 
-    /// <summary>
-    /// This method calculates saliency based on center-surround differences
-    /// </summary>
-    public class FineGrainedSaliency : StaticSaliency
+    public class StaticSaliencyFineGrained : UnmanagedObject, IStaticSaliency
     {
+        private IntPtr _staticSaliencyPtr;
+        private IntPtr _saliencyPtr;
+        private IntPtr _algorithmPtr;
+
         /// <summary>
         /// constructor
         /// </summary>
-        public FineGrainedSaliency() : base("FINE_GRAINED")
+        public StaticSaliencyFineGrained()
         {
+            _ptr = SaliencyInvoke.cveStaticSaliencyFineGrainedCreate(ref _staticSaliencyPtr, ref _saliencyPtr,
+                ref _algorithmPtr);
+        }
+
+
+        public IntPtr StaticSaliencyPtr => _staticSaliencyPtr;
+
+        public IntPtr SaliencyPtr => _saliencyPtr;
+
+        public IntPtr AlgorithmPtr => _algorithmPtr;
+
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                SaliencyInvoke.cveStaticSaliencyFineGrainedRelease(ref _ptr);
+            }
+            _staticSaliencyPtr = IntPtr.Zero;
+            _saliencyPtr = IntPtr.Zero;
+            _algorithmPtr = IntPtr.Zero;
+
         }
     }
 
-    /// <summary>
-    /// the Fast Self-tuning Background Subtraction Algorithm
-    /// </summary>
-    public class BinWangApr2014Saliency : MotionSaliency
+    public class MotionSaliencyBinWangApr2014 : UnmanagedObject, IMotionSaliency
     {
+        private IntPtr _motionSaliencyPtr;
+        private IntPtr _saliencyPtr;
+        private IntPtr _algorithmPtr;
+
         /// <summary>
         /// constructor
         /// </summary>
-        public BinWangApr2014Saliency() : base("BinWangApr2014")
+        public MotionSaliencyBinWangApr2014()
         {
+            _ptr = SaliencyInvoke.cveMotionSaliencyBinWangApr2014Create(ref _motionSaliencyPtr, ref _saliencyPtr,
+                ref _algorithmPtr);
+        }
 
+
+        public IntPtr MotionSaliencyPtr => _motionSaliencyPtr;
+
+        public IntPtr SaliencyPtr => _saliencyPtr;
+
+        public IntPtr AlgorithmPtr => _algorithmPtr;
+
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                SaliencyInvoke.cveMotionSaliencyBinWangApr2014Release(ref _ptr);
+            }
+            _motionSaliencyPtr = IntPtr.Zero;
+            _saliencyPtr = IntPtr.Zero;
+            _algorithmPtr = IntPtr.Zero;
+
+        }
+    }
+
+    public partial class ObjectnessBING : UnmanagedObject, IObjectness
+    {
+        private IntPtr _objectnessPtr;
+        private IntPtr _saliencyPtr;
+        private IntPtr _algorithmPtr;
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        public ObjectnessBING()
+        {
+            _ptr = SaliencyInvoke.cveMotionSaliencyBinWangApr2014Create(ref _objectnessPtr, ref _saliencyPtr,
+                ref _algorithmPtr);
+        }
+
+        public IntPtr ObjectnessPtr => _objectnessPtr;
+
+        public IntPtr SaliencyPtr => _saliencyPtr;
+
+        public IntPtr AlgorithmPtr => _algorithmPtr;
+
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                SaliencyInvoke.cveMotionSaliencyBinWangApr2014Release(ref _ptr);
+            }
+            _objectnessPtr = IntPtr.Zero;
+            _saliencyPtr = IntPtr.Zero;
+            _algorithmPtr = IntPtr.Zero;
         }
 
         /// <summary>
-        /// This function allows the correct initialization of all data structures that will be used by the algorithm. 
+        /// Return the list of the rectangles' objectness value,. 
         /// </summary>
         /// <returns></returns>
-        public bool Init()
+        public VectorOfFloat GetObjectnessValues()
         {
-            return SaliencyInvoke.cveSaliencyMotionInit(_ptr);
-        }
-
-        /// <summary>
-        /// set the correct size (taken from the input image) in the corresponding variables that will be used to size the data structures of the algorithm. 
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        public void SetImageSize(int width, int height)
-        {
-            SaliencyInvoke.cveSaliencyMotionSetImageSize(_ptr, width, height);
+            //pretty sure that the vector<float> is owned by the saliency object, so we shouldn't dispose it.
+            VectorOfFloat vector = new VectorOfFloat();
+            SaliencyInvoke.cveObjectnessBINGGetObjectnessValues(_ptr, vector);
+            return vector;
         }
     }
 
+    /*
     /// <summary>
     /// Objectness algorithms based on [3] [3] Cheng, Ming-Ming, et al. "BING: Binarized normed gradients for objectness estimation at 300fps." IEEE CVPR. 2014
     /// </summary>
@@ -212,12 +234,12 @@ namespace Emgu.CV.Saliency
                 SaliencyInvoke.cveSaliencySetTrainingPath(_ptr, trainingPathStr);
             }
         }
-    }
+    }*/
 
     /// <summary>
     /// Provide interfaces to the Open CV Saliency functions
     /// </summary>
-    public static class SaliencyInvoke
+    public static partial class SaliencyInvoke
     {
         static SaliencyInvoke()
         {
@@ -225,15 +247,47 @@ namespace Emgu.CV.Saliency
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSaliencyCreate(IntPtr saliencyType);
+        internal static extern IntPtr cveStaticSaliencySpectralResidualCreate(ref IntPtr staticSaliency, ref IntPtr saliency, ref IntPtr algorithm);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveStaticSaliencySpectralResidualRelease(ref IntPtr saliency);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveSaliencyRelease(ref IntPtr saliency);
+        internal static extern IntPtr cveStaticSaliencyFineGrainedCreate(ref IntPtr staticSaliency, ref IntPtr saliency, ref IntPtr algorithm);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveStaticSaliencyFineGrainedRelease(ref IntPtr saliency);
 
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveMotionSaliencyBinWangApr2014Create(ref IntPtr motionSaliency, ref IntPtr saliency, ref IntPtr algorithm);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveMotionSaliencyBinWangApr2014Release(ref IntPtr saliency);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveObjectnessBINGCreate(ref IntPtr objectnessSaliency, ref IntPtr saliency, ref IntPtr algorithm);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveObjectnessBINGRelease(ref IntPtr saliency);
+
+        public static bool Compute(this ISaliency saliency, IInputArray image, IOutputArray saliencyMap)
+        {
+            using (var ia = image.GetInputArray())
+            using (var oa = saliencyMap.GetOutputArray())
+            {
+                return cveSaliencyComputeSaliency(saliency.SaliencyPtr, ia, oa);
+            }
+        }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveSaliencyComputeSaliency(IntPtr saliency, IntPtr image, IntPtr saliencyMap);
 
+        /// <summary>
+        /// Derform a binary map of given saliency map
+        /// </summary>
+        /// <param name="saliencyMap">the saliency map obtained through one of the specialized algorithms</param>
+        /// <param name="binaryMap">the binary map</param>
+        /// <returns></returns>
+        public static bool ComputeBinaryMap(this IStaticSaliency saliency, Mat saliencyMap, Mat binaryMap)
+        {
+            return cveSaliencyStaticComputeBinaryMap(saliency.StaticSaliencyPtr, saliencyMap, binaryMap);
+        }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveSaliencyStaticComputeBinaryMap(IntPtr staticSaliency, IntPtr saliencyMap, IntPtr binaryMap);
@@ -242,16 +296,19 @@ namespace Emgu.CV.Saliency
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveSaliencyMotionInit(IntPtr binWang2014);
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveSaliencyMotionSetImageSize(IntPtr binWang2014, int width, int height);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveSaliencyGetObjectnessValues(IntPtr bing, IntPtr vectorOfFloat);
+        internal static extern void cveObjectnessBINGGetObjectnessValues(IntPtr bing, IntPtr vectorOfFloat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSaliencySetTrainingPath(IntPtr bing, IntPtr trainingPath);
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSaliencyGetAlgorithm(IntPtr saliency);
+        /*[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveSaliencyGetAlgorithm(IntPtr saliency);*/
+
+
+        
+
+
     }
 }

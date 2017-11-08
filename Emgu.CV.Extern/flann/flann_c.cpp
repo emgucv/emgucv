@@ -107,15 +107,15 @@ cv::flann::Index* cveFlannIndexCreate(cv::_InputArray* features, cv::flann::Inde
    return new cv::flann::Index(*features, *p);
 }
 
-void CvFlannIndexKnnSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, int knn, int checks)
+void CvFlannIndexKnnSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, int knn, int checks, float eps, bool sorted)
 {
-   cv::flann::SearchParams p = cv::flann::SearchParams(checks);
+   cv::flann::SearchParams p(checks, eps, sorted);
    index->knnSearch(*queries, *indices, *dists, knn, p);
 }
 
-int CvFlannIndexRadiusSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, float radius, int maxResults, int checks)
+int CvFlannIndexRadiusSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, float radius, int maxResults, int checks, float eps, bool sorted)
 {
-   cv::flann::SearchParams p = cv::flann::SearchParams(checks);
+   cv::flann::SearchParams p(checks, eps, sorted);
    return index->radiusSearch(*queries, *indices, *dists, radius, maxResults, p);
 }
 

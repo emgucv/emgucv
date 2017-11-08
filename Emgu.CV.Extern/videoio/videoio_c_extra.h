@@ -26,6 +26,15 @@ struct ColorPoint
    unsigned char red;
 };
 
+namespace cv {
+	namespace traits {
+		template<>
+		struct Depth < ColorPoint > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< ColorPoint > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(ColorPoint)) }; };
+	}
+}
+
 CVAPI(void) OpenniGetColorPoints(
                                  CvCapture* capture, // must be an openni capture
                                  std::vector<ColorPoint>* points, // sequence of ColorPoint

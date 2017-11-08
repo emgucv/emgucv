@@ -56,6 +56,15 @@ struct TesseractResult
    CvRect region;
 };
 
+namespace cv {
+	namespace traits {
+		template<>
+		struct Depth < TesseractResult > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< TesseractResult > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(TesseractResult)) }; };
+	}
+}
+
 CVAPI(const char*) TesseractGetVersion();
 
 CVAPI(EmguTesseract*) TessBaseAPICreate();
