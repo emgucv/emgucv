@@ -71,9 +71,9 @@ bool cveSaliencyComputeSaliency(cv::saliency::Saliency* saliency, cv::_InputArra
 	return saliency->computeSaliency(*image, *saliencyMap);
 }
 
-bool cveSaliencyStaticComputeBinaryMap(cv::saliency::Saliency* saliency, cv::Mat* saliencyMap, cv::Mat* binaryMap)
+bool cveStaticSaliencyComputeBinaryMap(cv::saliency::StaticSaliency* saliency, cv::_InputArray* saliencyMap, cv::_OutputArray* binaryMap)
 {
-	return dynamic_cast<cv::saliency::StaticSaliency*>(saliency)->computeBinaryMap(*saliencyMap, *binaryMap);
+	return saliency->computeBinaryMap(*saliencyMap, *binaryMap);
 }
 
 bool cveSaliencyMotionInit(cv::saliency::Saliency* saliency)
@@ -95,9 +95,9 @@ void cveObjectnessBINGGetObjectnessValues(cv::saliency::ObjectnessBING* saliency
 		values->push_back(*it);
 }
 
-void cveSaliencySetTrainingPath(cv::saliency::Saliency* saliency, cv::String* trainingPath)
+void cveObjectnessBINGSetTrainingPath(cv::saliency::ObjectnessBING* saliency, cv::String* trainingPath)
 {
-	dynamic_cast<cv::saliency::ObjectnessBING*>(saliency)->setTrainingPath(*trainingPath);
+	saliency->setTrainingPath(*trainingPath);
 }
 /*
 cv::Algorithm* cveSaliencyGetAlgorithm(cv::saliency::Saliency* saliency)

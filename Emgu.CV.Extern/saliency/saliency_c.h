@@ -26,12 +26,12 @@ CVAPI(void) cveObjectnessBINGRelease(cv::saliency::ObjectnessBING** saliency);
 
 CVAPI(bool) cveSaliencyComputeSaliency(cv::saliency::Saliency* saliency, cv::_InputArray* image, cv::_OutputArray* saliencyMap);
 
-CVAPI(bool) cveSaliencyStaticComputeBinaryMap(cv::saliency::Saliency* saliency, cv::Mat* saliencyMap, cv::Mat* binaryMap);
+CVAPI(bool) cveStaticSaliencyComputeBinaryMap(cv::saliency::StaticSaliency* saliency, cv::_InputArray* saliencyMap, cv::_OutputArray* binaryMap);
 
 CVAPI(bool) cveSaliencyMotionInit(cv::saliency::Saliency* saliency);
 CVAPI(void) cveSaliencyMotionSetImageSize(cv::saliency::Saliency* saliency, int width, int height);
 
-CVAPI(void) cveSaliencySetTrainingPath(cv::saliency::Saliency* saliency, cv::String* trainingPath);
+CVAPI(void) cveObjectnessBINGSetTrainingPath(cv::saliency::ObjectnessBING* saliency, cv::String* trainingPath);
 
 CVAPI(void) cveObjectnessBINGGetObjectnessValues(cv::saliency::ObjectnessBING* saliency, std::vector<float>* values);
 

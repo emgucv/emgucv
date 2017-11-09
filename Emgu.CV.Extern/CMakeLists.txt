@@ -321,6 +321,29 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
+	ELSEIF(${MARSHAL_TYPE} STREQUAL "act")
+	  SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);     
+     ")
+      SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}(); }     
+     ")
+      
+      SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+	 ${MARSHAL_RETURN} 
+     internal static extern ${CS_PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(
+        IntPtr obj);
+     ")
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}( )
+     {
+        return ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); 
+     }
+     ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1")
       SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
@@ -1338,6 +1361,24 @@ ENDIF()
 
 ############################### saliency code gen START ##############################
 IF(HAVE_opencv_saliency)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "saliency/MotionSaliencyBinWangApr2014_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/MotionSaliencyBinWangApr2014Generated.cs"
+    "cv::saliency::MotionSaliencyBinWangApr2014" 
+    "MotionSaliencyBinWangApr2014" 
+    "ImageWidth;ImageHeight;init" 
+    "int;int;bool" 
+    "prop;prop;act"
+    "ImageWidth;ImageHeight;Init" 
+    "int;int;bool"
+    "Image width;
+    Image height;
+	This function allows the correct initialization of all data structures that will be used by the algorithm.
+	"
+    "Emgu.CV.Saliency"
+    "SaliencyInvoke"
+    "MotionSaliencyBinWangApr2014"
+    "#include \"opencv2/saliency.hpp\"")
   CREATE_OCV_CLASS_PROPERTY( 
     "saliency/ObjectnessBING_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/ObjectnessBINGGenerated.cs"

@@ -103,7 +103,7 @@ namespace Emgu.CV.Saliency
         }
     }
 
-    public class MotionSaliencyBinWangApr2014 : UnmanagedObject, IMotionSaliency
+    public partial class MotionSaliencyBinWangApr2014 : UnmanagedObject, IMotionSaliency
     {
         private IntPtr _motionSaliencyPtr;
         private IntPtr _saliencyPtr;
@@ -138,6 +138,9 @@ namespace Emgu.CV.Saliency
         }
     }
 
+    /// <summary>
+    /// Objectness algorithms based on [3] [3] Cheng, Ming-Ming, et al. "BING: Binarized normed gradients for objectness estimation at 300fps." IEEE CVPR. 2014
+    /// </summary>
     public partial class ObjectnessBING : UnmanagedObject, IObjectness
     {
         private IntPtr _objectnessPtr;
@@ -181,47 +184,6 @@ namespace Emgu.CV.Saliency
             SaliencyInvoke.cveObjectnessBINGGetObjectnessValues(_ptr, vector);
             return vector;
         }
-    }
-
-    /*
-    /// <summary>
-    /// Objectness algorithms based on [3] [3] Cheng, Ming-Ming, et al. "BING: Binarized normed gradients for objectness estimation at 300fps." IEEE CVPR. 2014
-    /// </summary>
-    public class ObjectnessBing : Objectness
-    {
-        /// <summary>
-        /// constructor
-        /// </summary>
-        public ObjectnessBing() : base("BING")
-        {
-        }
-
-        /// <summary>
-        /// Return the list of the rectangles' objectness value,. 
-        /// </summary>
-        /// <returns></returns>
-        public VectorOfFloat GetObjectnessValues()
-        {
-            //pretty sure that the vector<float> is owned by the saliency object, so we shouldn't dispose it.
-            VectorOfFloat vector = new VectorOfFloat();
-            SaliencyInvoke.cveSaliencyGetObjectnessValues(_ptr, vector);
-            return vector;
-        }
-
-        /// <summary>
-        /// Performs all the operations and calls all internal functions necessary for the accomplishment of the Binarized normed gradients algorithm. 
-        /// </summary>
-        /// <param name="image"></param>
-        /// <param name="boxes"></param>
-        /// <returns></returns>
-        public bool Compute(Mat image, VectorOfRect boxes)
-        {
-            using (var ia = image.GetInputArray())
-            using (var oa = boxes.GetOutputArray())
-            {
-                return SaliencyInvoke.cveSaliencyComputeSaliency(_ptr, ia, oa);
-            }
-        }
 
         /// <summary>
         /// set the correct path from which the algorithm will load the trained model. 
@@ -231,10 +193,10 @@ namespace Emgu.CV.Saliency
         {
             using (CvString trainingPathStr = new CvString(trainingPath))
             {
-                SaliencyInvoke.cveSaliencySetTrainingPath(_ptr, trainingPathStr);
+                SaliencyInvoke.cveObjectnessBINGSetTrainingPath(_ptr, trainingPathStr);
             }
         }
-    }*/
+    }
 
     /// <summary>
     /// Provide interfaces to the Open CV Saliency functions
@@ -279,36 +241,27 @@ namespace Emgu.CV.Saliency
         internal static extern bool cveSaliencyComputeSaliency(IntPtr saliency, IntPtr image, IntPtr saliencyMap);
 
         /// <summary>
-        /// Derform a binary map of given saliency map
+        /// Perform a binary map of given saliency map
         /// </summary>
         /// <param name="saliencyMap">the saliency map obtained through one of the specialized algorithms</param>
         /// <param name="binaryMap">the binary map</param>
         /// <returns></returns>
-        public static bool ComputeBinaryMap(this IStaticSaliency saliency, Mat saliencyMap, Mat binaryMap)
+        public static bool ComputeBinaryMap(this IStaticSaliency saliency, IInputArray saliencyMap, IOutputArray binaryMap)
         {
-            return cveSaliencyStaticComputeBinaryMap(saliency.StaticSaliencyPtr, saliencyMap, binaryMap);
+            using (InputArray iaSaliencyMap = saliencyMap.GetInputArray())
+            using (OutputArray oaBinaryMap = binaryMap.GetOutputArray())
+                return cveStaticSaliencyComputeBinaryMap(saliency.StaticSaliencyPtr, iaSaliencyMap, oaBinaryMap);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool cveSaliencyStaticComputeBinaryMap(IntPtr staticSaliency, IntPtr saliencyMap, IntPtr binaryMap);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool cveSaliencyMotionInit(IntPtr binWang2014);
+        internal static extern bool cveStaticSaliencyComputeBinaryMap(IntPtr staticSaliency, IntPtr saliencyMap, IntPtr binaryMap);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveObjectnessBINGGetObjectnessValues(IntPtr bing, IntPtr vectorOfFloat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveSaliencySetTrainingPath(IntPtr bing, IntPtr trainingPath);
-
-        /*[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSaliencyGetAlgorithm(IntPtr saliency);*/
-
-
+        internal static extern void cveObjectnessBINGSetTrainingPath(IntPtr bing, IntPtr trainingPath);
         
-
-
     }
 }
