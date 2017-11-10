@@ -871,21 +871,44 @@ namespace Emgu.CV.Test
         [Test]
         public void TestGEMM()
         {
-            Mat a = new Mat(3, 3, DepthType.Cv32F, 1);
-            Mat b = new Mat(3, 3, DepthType.Cv32F, 1);
-            Mat c = new Mat(3, 3, DepthType.Cv32F, 1);
-            Mat d = new Mat(3, 3, DepthType.Cv32F, 1);
-            GpuMat ga = new GpuMat();
-            GpuMat gb = new GpuMat();
-            GpuMat gc = new GpuMat();
-            GpuMat gd = new GpuMat();
-            ga.Upload(a);
-            gb.Upload(b);
-            gc.Upload(c);
-            gd.Upload(d);
+            if (CudaInvoke.HasCuda)
+            {
+                Mat a = new Mat(3, 3, DepthType.Cv32F, 1);
+                Mat b = new Mat(3, 3, DepthType.Cv32F, 1);
+                Mat c = new Mat(3, 3, DepthType.Cv32F, 1);
+                Mat d = new Mat(3, 3, DepthType.Cv32F, 1);
+                GpuMat ga = new GpuMat();
+                GpuMat gb = new GpuMat();
+                GpuMat gc = new GpuMat();
+                GpuMat gd = new GpuMat();
+                ga.Upload(a);
+                gb.Upload(b);
+                gc.Upload(c);
+                gd.Upload(d);
 
-            CvInvoke.Gemm(a, b, 1.0, c, 0.0, d);       
-            CudaInvoke.Gemm(ga, gb, 1.0, gc, 0.0, gd);
+                CvInvoke.Gemm(a, b, 1.0, c, 0.0, d);
+                CudaInvoke.Gemm(ga, gb, 1.0, gc, 0.0, gd);
+            }
+        }
+
+        [Test]
+        public void TestHughCircle()
+        {
+            if (CudaInvoke.HasCuda)
+            {
+                Mat m = new Mat(480, 480, DepthType.Cv8U, 1);
+                m.SetTo(new MCvScalar(0));
+                CvInvoke.Circle(m, new Point(240, 240), 100, new MCvScalar(255), 10);
+                GpuMat gm = new GpuMat();
+                gm.Upload(m);
+                using (CudaHoughCirclesDetector detector = new CudaHoughCirclesDetector(1, 10, 120, 30, 10, 400))
+                using (GpuMat circles = new GpuMat())
+                
+                {
+                    detector.Detect(gm, circles);
+
+                }
+            }
         }
 
         [Test]
