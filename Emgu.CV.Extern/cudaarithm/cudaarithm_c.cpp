@@ -156,19 +156,18 @@ void cudaMax(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst
    cv::cuda::max(*src1, *src2, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaGemm(const cv::cuda::GpuMat* src1, const cv::cuda::GpuMat* src2, double alpha, 
-                const cv::cuda::GpuMat* src3, double beta, cv::cuda::GpuMat* dst, int flags, cv::cuda::Stream* stream)
+void cudaGemm(cv::_InputArray* src1, cv::_InputArray* src2, double alpha,
+	cv::_InputArray* src3, double beta, cv::_OutputArray* dst, int flags, cv::cuda::Stream* stream)
 {
-   cv::cuda::GpuMat src3Mat = src3 ? *src3 : cv::cuda::GpuMat();
-   cv::cuda::gemm(*src1, *src2, alpha, src3Mat, beta, *dst, flags, stream ? *stream : cv::cuda::Stream::Null());
+   cv::cuda::gemm(*src1, *src2, alpha, *src3, beta, *dst, flags, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaLShift(const cv::cuda::GpuMat* a, CvScalar* scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
+void cudaLShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream)
 {
 	cv::cuda::lshift(*a, *scale, *c, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void cudaRShift(const cv::cuda::GpuMat* a, CvScalar* scale, cv::cuda::GpuMat* c, cv::cuda::Stream* stream)
+void cudaRShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream)
 {
 	cv::cuda::rshift(*a, *scale, *c, stream ? *stream : cv::cuda::Stream::Null());
 }
