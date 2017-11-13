@@ -15,6 +15,7 @@ using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
 using Emgu.CV.XFeatures2D;
+using System.Runtime.InteropServices;
 
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -898,15 +899,23 @@ namespace Emgu.CV.Test
             {
                 Mat m = new Mat(480, 480, DepthType.Cv8U, 1);
                 m.SetTo(new MCvScalar(0));
-                CvInvoke.Circle(m, new Point(240, 240), 100, new MCvScalar(255), 10);
+                CvInvoke.Circle(m, new Point(240, 240), 100, new MCvScalar(150), 10);
                 GpuMat gm = new GpuMat();
                 gm.Upload(m);
-                using (CudaHoughCirclesDetector detector = new CudaHoughCirclesDetector(1, 10, 120, 30, 10, 400))
-                using (GpuMat circles = new GpuMat())
-                
+                using (CudaHoughCirclesDetector detector = new CudaHoughCirclesDetector(1, 30, 120, 30, 10, 400))
+                using (GpuMat circlesGpu = new GpuMat())
+                using (Mat circlesMat = new Mat())
                 {
-                    detector.Detect(gm, circles);
-
+                    detector.Detect(gm, circlesGpu);
+                    circlesGpu.Download(circlesMat);
+                    CircleF[] circles = new CircleF[circlesMat.Cols];
+                    GCHandle circlesHandle = GCHandle.Alloc(circles, GCHandleType.Pinned);
+                    Emgu.CV.Util.CvToolbox.Memcpy(circlesHandle.AddrOfPinnedObject(), circlesMat.DataPointer, Marshal.SizeOf(typeof(CircleF)) * circles.Length);
+                    circlesHandle.Free();
+                    foreach (var circle in circles)
+                    {
+                        CvInvoke.Circle(m, Point.Round(circle.Center), (int)circle.Radius, new MCvScalar(255));
+                    }
                 }
             }
         }

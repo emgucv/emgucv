@@ -29,10 +29,19 @@ cd ..
 
 cd tesseract
 cd libtesseract
+
 cd tesseract-ocr.git
 git clean -d -fx "" 
 cd ..
-cd .. 
+
+cd leptonica
+cd leptonica.git
+git clean -d -fx ""
+cd ..
+cd ..
+
+cd ..
+ 
 cd ..
 
 cd ..
