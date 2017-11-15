@@ -655,6 +655,11 @@ CHECK_LICENSE_TYPE()
 # ----------------------------------------------------------------------------
 #  Generate neget packaging file for Emgu CV project
 # ----------------------------------------------------------------------------
+SET(EMGUCV_NUGET_ID "EMGU.CV")
+IF(WITH_CUDA)
+	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CUDA")
+ENDIF()
+
 SET(EMGUCV_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
 	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x86\\*.dll\" target=\"build\\x86\" />")
@@ -664,16 +669,13 @@ IF(HAVE_WINDESKTOP_X64)
 ENDIF()
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-	<file src=\"Emgu.CV.targets\" target=\"build\" />
+	<file src=\"Emgu.CV.targets\" target=\"build\\${EMGUCV_NUGET_ID}.targets\" />
     <file src=\"..\\..\\libs\\Emgu.CV.World.dll\" target=\"lib\\net35\" />
 	<file src=\"..\\..\\libs\\Emgu.CV.World.XML\" target=\"lib\\net35\" />
 	<file src=\"..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net35\" />
 	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net35\" />")
 ENDIF()
-SET(EMGUCV_NUGET_ID "EMGU.CV")
-IF(WITH_CUDA)
-	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CUDA")
-ENDIF()
+
 SET(EMGUCV_NUGET_TITLE_ARCH "")
 IF(HAVE_WINDESKTOP_X86)
  SET(EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH} x86")
