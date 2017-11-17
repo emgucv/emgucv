@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.emgu.cv.xamarin" android:installLocation="auto" android:versionCode="${EMGUCV_GITVERSION}" android:versionName="${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}">
+	<uses-sdk android:minSdkVersion="21" />
+	<application android:label="Emgu CV Demo"></application>
+</manifest>
