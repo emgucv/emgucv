@@ -924,6 +924,41 @@ namespace Emgu.CV
                 MatInvoke.cvMatSetTo(Ptr, iaValue, iaMask);
         }
 
+        public static Mat Eye(int rows, int cols, CvEnum.DepthType type, int channels)
+        {
+            Mat m = new Mat();
+            MatInvoke.cveMatEye(rows, cols, CvInvoke.MakeType(type, channels), m.Ptr);
+            return m;
+        }
+
+        public Mat Diag(int d = 0)
+        {
+            Mat m = new Mat();
+            MatInvoke.cveMatDiag(Ptr, d, m);
+            return m;
+        }
+
+        public Mat T()
+        {
+            Mat m = new Mat();
+            MatInvoke.cveMatT(Ptr, m);
+            return m;
+        }
+
+        public static Mat Zeros(int rows, int cols, CvEnum.DepthType type, int channels)
+        {
+            Mat m = new Mat();
+            MatInvoke.cveMatZeros(rows, cols, CvInvoke.MakeType(type, channels), m.Ptr);
+            return m;
+        }
+
+        public static Mat Ones(int rows, int cols, CvEnum.DepthType type, int channels)
+        {
+            Mat m = new Mat();
+            MatInvoke.cveMatOnes(rows, cols, CvInvoke.MakeType(type, channels), m.Ptr);
+            return m;
+        }
+
         /// <summary>
         /// Returns the min / max location and values for the image
         /// </summary>
@@ -1277,6 +1312,21 @@ namespace Emgu.CV
                 sizesHandle.Free();
             }
         }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveMatEye(int rows, int cols, int type, IntPtr m);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveMatDiag(IntPtr src, int d, IntPtr dst);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveMatT(IntPtr src, IntPtr dst);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveMatZeros(int rows, int cols, int type, IntPtr dst);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveMatOnes(int rows, int cols, int type, IntPtr dst);
+
     }
 }
 

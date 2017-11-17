@@ -51,4 +51,11 @@ CVAPI(void) cveMatCopyDataFrom(cv::Mat* mat, unsigned char* source);
 CVAPI(void) cveMatGetSizeOfDimension(cv::Mat* mat, int* sizes);
 
 CVAPI(void) cveSwapMat(cv::Mat* mat1, cv::Mat* mat2);
+
+CVAPI(void) cveMatEye(int rows, int cols, int type, cv::Mat* m);
+CVAPI(void) cveMatDiag(cv::Mat* src, int d, cv::Mat* dst);
+CVAPI(void) cveMatT(cv::Mat* src, cv::Mat* dst);
+CVAPI(void) cveMatZeros(int rows, int cols, int type, cv::Mat* dst);
+CVAPI(void) cveMatOnes(int rows, int cols, int type, cv::Mat* dst);
+
 #endif

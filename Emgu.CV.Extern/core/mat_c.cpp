@@ -233,3 +233,29 @@ void cveSwapMat(cv::Mat* mat1, cv::Mat* mat2)
 {
    cv::swap(*mat1, *mat2);
 }
+
+void cveMatEye(int rows, int cols, int type, cv::Mat* m)
+{
+	cv::Mat e = cv::Mat::eye(rows, cols, type);
+	cv::swap(e, *m);
+}
+void cveMatDiag(cv::Mat* src, int d, cv::Mat* dst)
+{
+	cv::Mat diag = src->diag(d);
+	cv::swap(diag, *dst);
+}
+void cveMatT(cv::Mat* src, cv::Mat* dst)
+{
+	cv::Mat t = src->t();
+	cv::swap(t, *dst);
+}
+void cveMatZeros(int rows, int cols, int type, cv::Mat* dst)
+{
+	cv::Mat z = cv::Mat::zeros(rows, cols, type);
+	cv::swap(z, *dst);
+}
+void cveMatOnes(int rows, int cols, int type, cv::Mat* dst)
+{
+	cv::Mat z = cv::Mat::ones(rows, cols, type);
+	cv::swap(z, *dst);
+}
