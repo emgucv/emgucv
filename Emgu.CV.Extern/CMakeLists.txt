@@ -1703,6 +1703,8 @@ IF(WIN32 AND WITH_CUDA)
     SET(CUDA_POSTFIX 32)
   ENDIF()
   
+  SET(CVEXTERN_CUDA_DEPENDENCY_DLLS)
+  
   IF ((${npp_major} GREATER 5) OR ((${npp_major} STREQUAL "5") AND (${npp_minor} GREATER 0)))
 	SET(CUDA_NPP_DLLS 
 	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
@@ -1720,11 +1722,11 @@ IF(WIN32 AND WITH_CUDA)
       "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npps${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
 	FOREACH(CUDA_NPP_DLL ${CUDA_NPP_DLLS})
 	  IF(EXISTS "${CUDA_NPP_DLL}")
-		LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_NPP_DLL}")
+		LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_NPP_DLL}")
 	  ENDIF()
     ENDFOREACH()
 	
-	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS
+	LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS
       "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
       )
     #LIST(APPEND CVEXTERN_DEPENDENCY_DLLS
@@ -1743,16 +1745,16 @@ IF(WIN32 AND WITH_CUDA)
     #ENDIF()
     
     IF(WITH_CUFFT)
-      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+      LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
       #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}) 
     ENDIF()
     
     IF(WITH_CUBLAS)
-      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+      LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
       #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor})
     ENDIF()  
   ELSE()  
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS 
+    LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS 
       "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
       "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
       )
@@ -1761,15 +1763,17 @@ IF(WIN32 AND WITH_CUDA)
     #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
     
     IF(WITH_CUFFT)
-      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+      LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
       #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}) 
     ENDIF()
     
     IF(WITH_CUBLAS)
-      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+      LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
       #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
     ENDIF()
   ENDIF()
+  
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${CVEXTERN_CUDA_DEPENDENCY_DLLS})
 ENDIF()
 
 #IF(ANDROID OR IOS)
@@ -1832,7 +1836,7 @@ IF(IOS)
   add_library(${the_target} STATIC ${extern_srcs} ${extern_hdrs} )
 ELSEIF(WIN32)
   #add the version information for windows binary
-  add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} ${CMAKE_CURRENT_SOURCE_DIR}/version.rc )
+  add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} ${PROJECT_SOURCE_DIR}/version.rc )
 ELSE()
   add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} )
   IF (APPLE)
@@ -1858,6 +1862,12 @@ IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
     POST_BUILD
     ${CVEXTERN_DEPENDENCY_DLL_DEPLOY_COMMAND}
     COMMENT "Copying ${CVEXTERN_DEPENDENCY_DLLS} to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+ENDIF()
+
+IF(DEFINED CVEXTERN_CUDA_DEPENDENCY_DLLS)
+  #Promote this to parent scope such that cpack will know what cuda dlls to be included in the package
+  #MESSAGE("**************CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES: ${CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES}")
+  SET(CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES ${CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES} PARENT_SCOPE)
 ENDIF()
 
 # For dynamic link numbering convenions

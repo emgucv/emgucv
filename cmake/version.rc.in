@@ -20,10 +20,10 @@ BEGIN
         BEGIN
             VALUE "CompanyName",      "${CPACK_PACKAGE_VENDOR}"
             VALUE "FileDescription",  "Native Open CV binary for Emgu CV"
-            VALUE "FileVersion",      "${CPACK_PACKAGE_VERSION}"
+            VALUE "FileVersion",      VER_FILEVERSION_STR
             VALUE "LegalCopyright",   "Copyright ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}"
             VALUE "ProductName",      "Emgu CV"
-            VALUE "ProductVersion",   "${CPACK_PACKAGE_VERSION}"
+            VALUE "ProductVersion",   VER_PRODUCTVERSION_STR
         END
     END
 
