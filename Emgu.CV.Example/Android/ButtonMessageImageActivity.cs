@@ -309,6 +309,36 @@ namespace AndroidExamples
             RunOnUiThread(() => { _imageView.SetImageBitmap(image); });
         }
 
+        private Bitmap[] _renderBuffer = new Bitmap[2];
+        private int _renderBufferIdx = 0;
+
+        public void SetImage(Mat image)
+        {
+            RunOnUiThread(() =>
+            {
+                if (_renderBuffer[_renderBufferIdx] == null)
+                {
+                    _renderBuffer[_renderBufferIdx] = image.ToBitmap();
+                }
+                else
+                {
+                    Bitmap buffer = _renderBuffer[_renderBufferIdx];
+                    if (buffer.Width != image.Width || buffer.Height != image.Height)
+                    {
+                        buffer.Dispose();
+                        _renderBuffer[_renderBufferIdx] = image.ToBitmap();
+                    }
+                    else
+                    {
+                        image.ToBitmap(buffer);
+                    }
+
+                }
+
+                _imageView.SetImageBitmap(_renderBuffer[_renderBufferIdx]);
+            });
+        }
+
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
             Permission[] grantResults)
