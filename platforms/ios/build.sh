@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
-if [ ! -f cmake ]
+if [ ! -L cmake ]
 then 
-  ln -s ../../opencv/platforms/ios/cmake cmake
+  ln -s ${PWD}/../../opencv/platforms/ios/cmake cmake
+fi
+
+if [ ! -L ../../platforms/scripts ]
+then 
+  ln -s ${PWD}/../../opencv/platforms/scripts ../../platforms/scripts
 fi
 
 cd ../..
