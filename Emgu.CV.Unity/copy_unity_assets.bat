@@ -40,7 +40,6 @@ cp -r ../Emgu.CV/Stitching Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Superres Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Video Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Videostab Assets/Emgu.CV/Emgu.CV/
-cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Emgu.CV/
 
 REM rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Windows.Store

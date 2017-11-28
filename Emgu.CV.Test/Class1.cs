@@ -23,7 +23,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
-using Emgu.CV.VideoSurveillance;
+
 //using Emgu.UI;
 using Emgu.Util;
 using Emgu.CV.VideoStab;

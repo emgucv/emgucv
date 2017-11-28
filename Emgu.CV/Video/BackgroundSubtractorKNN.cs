@@ -9,7 +9,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
-namespace Emgu.CV.VideoSurveillance
+namespace Emgu.CV
 {
    /// <summary>
    /// K-nearest neighbors - based Background/Foreground Segmentation Algorithm.

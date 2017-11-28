@@ -9,7 +9,7 @@ using Emgu.CV.Structure;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Emgu.CV.VideoSurveillance
+namespace Emgu.CV
 {
    /// <summary>
    /// The class implements the following algorithm:

@@ -32,7 +32,6 @@ using Emgu.CV.Cuda;
 using Emgu.CV.Tiff;
 #endif
 using Emgu.CV.Util;
-using Emgu.CV.VideoSurveillance;
 using Emgu.CV.XFeatures2D;
 //using Emgu.CV.Softcascade;
 using Emgu.Util;

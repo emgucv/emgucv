@@ -15,7 +15,6 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
 #if !__IOS__
 using Emgu.CV.Tiff;

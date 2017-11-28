@@ -46,7 +46,6 @@ cp -r ../Emgu.CV/Superres Assets/Emgu.CV/Emgu.CV
 cp -r ../Emgu.CV/Util Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Video Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/VideoStab Assets/Emgu.CV/Emgu.CV/
-cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Emgu.CV/ 
 
 #cp -r ../Emgu.CV.Cuda/*.cs Assets/Emgu.CV/Emgu.CV.Cuda/

@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
-using Emgu.CV.VideoSurveillance;
 
 namespace Emgu.CV.BgSegm
 {

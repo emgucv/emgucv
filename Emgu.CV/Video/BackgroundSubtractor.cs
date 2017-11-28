@@ -9,7 +9,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
-namespace Emgu.CV.VideoSurveillance
+namespace Emgu.CV
 {
     /// <summary>
     /// An abstract class that can be use the perform background / foreground detection.
