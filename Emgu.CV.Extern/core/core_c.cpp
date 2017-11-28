@@ -508,73 +508,26 @@ void cveAlgorithmWrite(cv::Algorithm* algorithm, cv::FileStorage* storage)
    algorithm->write(*storage);
 }
 
-/*
-int cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name)
+void cveAlgorithmSave(cv::Algorithm* algorithm, cv::String* filename)
 {
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-   return algorithm->getInt(*name);
-}
-void cveAlgorithmSetInt(cv::Algorithm* algorithm, cv::String* name, int value)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-   return algorithm->setInt(*name, value);
-}
-double cveAlgorithmGetDouble(cv::Algorithm* algorithm, cv::String* name)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-
-   return algorithm->getDouble(*name);
-}
-void cveAlgorithmSetDouble(cv::Algorithm* algorithm, cv::String* name, double value)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-
-   return algorithm->setDouble(*name, value);
-}
-void cveAlgorithmGetString(cv::Algorithm* algorithm, cv::String* name, cv::String* result)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-
-   *result = algorithm->getString(*name);
-}
-void cveAlgorithmSetString(cv::Algorithm* algorithm, cv::String* name, cv::String* value)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-
-   algorithm->setString(*name, *value);
+	algorithm->save(*filename);
 }
 
-void cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* names, std::vector< int >* types, std::vector<cv::String>* help)
+void cveAlgorithmClear(cv::Algorithm* algorithm)
 {
-   if (algorithm->info() == 0)
-      return;
-   algorithm->getParams(*names);
-   types->clear();
-   help->clear();
-   for (std::vector<cv::String>::iterator it = names->begin(); it != names->end(); ++it)
-   {
-      types->push_back(algorithm->paramType(*it));
-      help->push_back(algorithm->paramHelp(*it));
-   }
+	algorithm->clear();
 }
 
-void cveAlgorithmGetParamNames(cv::Algorithm* algorithm, std::vector<cv::String>* names)
+bool cveAlgorithmEmpty(cv::Algorithm* algorithm)
 {
-   if (algorithm->info() == 0)
-      return;
-   algorithm->getParams(*names);
+	return algorithm->empty();
 }
 
-void cveAlgorithmGetList(std::vector< cv::String >* names)
+void cveAlgorithmGetDefaultName(cv::Algorithm* algorithm, cv::String* defaultName)
 {
-   cv::Algorithm::getList( *names );
-}*/
+	cv::String name = algorithm->getDefaultName();
+	*defaultName = name;
+}
 
 bool cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2)
 {
@@ -633,6 +586,10 @@ void cveFileStorageWriteDouble(cv::FileStorage* fs, cv::String* name, double val
 void cveFileStorageWriteString(cv::FileStorage* fs, cv::String* name, cv::String* value)
 {
    cv::write(*fs, *name, *value);
+}
+void cveFileStorageInsertString(cv::FileStorage* fs, cv::String* value)
+{
+	(*fs) << *value;
 }
 
 cv::FileNode* cveFileStorageRoot(cv::FileStorage* fs, int streamIdx)

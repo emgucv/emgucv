@@ -148,23 +148,11 @@ CVAPI(bool) cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_O
 //Algorithm 
 CVAPI(void) cveAlgorithmRead(cv::Algorithm* algorithm, cv::FileNode* node);
 CVAPI(void) cveAlgorithmWrite(cv::Algorithm* algorithm, cv::FileStorage* storage);
+CVAPI(void) cveAlgorithmSave(cv::Algorithm* algorithm, cv::String* filename);
+CVAPI(void) cveAlgorithmClear(cv::Algorithm* algorithm);
+CVAPI(bool) cveAlgorithmEmpty(cv::Algorithm* algorithm);
+CVAPI(void) cveAlgorithmGetDefaultName(cv::Algorithm* algorithm, cv::String* defaultName);
 
-/*
-CVAPI(int) cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name);
-CVAPI(void) cveAlgorithmSetInt(cv::Algorithm* algorithm, cv::String* name, int value);
-
-CVAPI(double) cveAlgorithmGetDouble(cv::Algorithm* algorithm, cv::String* name);
-CVAPI(void) cveAlgorithmSetDouble(cv::Algorithm* algorithm, cv::String* name, double value);
-
-CVAPI(void) cveAlgorithmGetString(cv::Algorithm* algorithm, cv::String* name, cv::String* result);
-CVAPI(void) cveAlgorithmSetString(cv::Algorithm* algorithm, cv::String* name, cv::String* value);
-
-CVAPI(void) cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* names, std::vector< int >* types, std::vector<cv::String>* help);
-
-CVAPI(void) cveAlgorithmGetParamNames(cv::Algorithm* algorithm, std::vector<cv::String>* names);
-
-CVAPI(void) cveAlgorithmGetList(std::vector< cv::String >* names);
-*/
 CVAPI(bool) cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2);
 
 CVAPI(void) cveRandn(cv::_InputOutputArray* dst, cv::_InputArray* mean, cv::_InputArray* stddev);
@@ -181,6 +169,7 @@ CVAPI(void) cveFileStorageWriteInt(cv::FileStorage* fs, cv::String* name, int va
 CVAPI(void) cveFileStorageWriteFloat(cv::FileStorage* fs, cv::String* name, float value);
 CVAPI(void) cveFileStorageWriteDouble(cv::FileStorage* fs, cv::String* name, double value);
 CVAPI(void) cveFileStorageWriteString(cv::FileStorage* fs, cv::String* name, cv::String* value);
+CVAPI(void) cveFileStorageInsertString(cv::FileStorage* fs, cv::String* value);
 
 CVAPI(cv::FileNode*) cveFileStorageRoot(cv::FileStorage* fs, int streamIdx);
 CVAPI(cv::FileNode*) cveFileStorageGetFirstTopLevelNode(cv::FileStorage* fs);

@@ -25,16 +25,7 @@ namespace Emgu.CV.ML
    /// </summary>
    public static class StatModelExtensions
    {
-      /// <summary>
-      /// Save the statistic model to file
-      /// </summary>
-      /// <param name="model">The StatModel</param>
-      /// <param name="fileName">The file name where this StatModel will be saved</param>
-      public static void Save(this IStatModel model, String fileName)
-      {
-         using (CvString fs = new CvString(fileName))
-            MlInvoke.StatModelSave(model.StatModelPtr, fs);
-      }
+
 
       /// <summary>
       /// Trains the statistical model.
@@ -82,23 +73,6 @@ namespace Emgu.CV.ML
          }
       }
 
-      /*
-      /// <summary>
-      /// Load the statistic model from file
-      /// </summary>
-      /// <param name="fileName">The file to load the model from</param>
-      public void Load(String fileName)
-      {
-         using (CvString fs = new CvString(fileName))
-         MlInvoke.StatModelLoad(_ptr, fs);
-      }*/
 
-      /// <summary>
-      /// Clear the statistic model
-      /// </summary>
-      public static void Clear(this IStatModel model)
-      {
-         MlInvoke.StatModelClear(model.StatModelPtr);
-      }
    }
 }

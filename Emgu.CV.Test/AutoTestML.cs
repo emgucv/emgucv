@@ -71,8 +71,7 @@ namespace Emgu.CV.Test
                 knn.IsClassifier = true;
                 knn.Train(trainData, MlEnum.DataLayoutType.RowSample, trainClasses);
                 //ParamDef[] defs =  knn.GetParams();
-                //TODO: find out when knn.save will be implemented
-                //knn.Save("knn.xml");
+
 
                 for (int i = 0; i < img.Height; i++)
                 {
@@ -115,6 +114,18 @@ namespace Emgu.CV.Test
                     KNearest knn2 = new KNearest();
                     knn2.Read(fs.GetRoot());
                 }
+
+                String knnModelStr2 = knn.SaveToString();
+                KNearest knn3 = new KNearest();
+                knn3.LoadFromString(knnModelStr2);
+
+#if !NETFX_CORE
+                String fileName = "knnModel.xml";
+                //String fileName = Path.Combine(Path.GetTempPath(), "svmModel.xml");
+                knn.Save(fileName);
+                String text = File.ReadAllText(fileName);
+                
+#endif
             }
 
             // display the original training samples

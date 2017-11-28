@@ -23,31 +23,6 @@ namespace Emgu.CV.ML
         }
 
         #region CvStatModel
-        /// <summary>
-        /// Save the statistic model to the specific file
-        /// </summary>
-        /// <param name="statModel">The statistic model to save</param>
-        /// <param name="fileName">The file name to save to</param>
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void StatModelSave(IntPtr statModel, IntPtr fileName);
-
-        /*
-        /// <summary>
-        /// Load the statistic model from the specific file
-        /// </summary>
-        /// <param name="statModel">The statistic model to save</param>
-        /// <param name="fileName">The file name to load from</param>
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void StatModelLoad(IntPtr statModel, String fileName);
-        */
-        /// <summary>
-        /// Clear the statistic model
-        /// </summary>
-        /// <param name="statModel">The model to be cleared</param>
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void StatModelClear(IntPtr statModel);
-
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool StatModelTrain(IntPtr model, IntPtr samples, DataLayoutType layout, IntPtr responses);
