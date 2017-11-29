@@ -14,7 +14,7 @@ namespace Emgu.CV
    /// <summary>
    /// K-nearest neighbors - based Background/Foreground Segmentation Algorithm.
    /// </summary>
-   public class BackgroundSubtractorKNN : BackgroundSubtractor
+   public partial class BackgroundSubtractorKNN : BackgroundSubtractor
    {
       /// <summary>
       /// Create a K-nearest neighbors - based Background/Foreground Segmentation Algorithm.

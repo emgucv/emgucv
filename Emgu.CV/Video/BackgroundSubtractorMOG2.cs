@@ -18,7 +18,7 @@ namespace Emgu.CV
    /// International Conference Pattern Recognition, UK, August, 2004.
    /// http://www.zoranz.net/Publications/zivkovic2004ICPR.pdf
    /// </summary>
-   public class BackgroundSubtractorMOG2 : BackgroundSubtractor
+   public partial class BackgroundSubtractorMOG2 : BackgroundSubtractor
    {
       /// <summary>
       /// Create an "Improved adaptive Gaussian mixture model for background subtraction".

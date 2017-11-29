@@ -1230,6 +1230,59 @@ IF(HAVE_opencv_stitching)
 ENDIF()
 ############################### stitching code gen END ################################
 
+############################### video code gen START ##############################
+IF(HAVE_opencv_video)
+   CREATE_OCV_CLASS_PROPERTY( 
+    "video/BackgroundSubtractorKNN_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/BackgroundSubtractorKNNGenerated.cs"
+    "cv::BackgroundSubtractorKNN" 
+    "BackgroundSubtractorKNN" 
+    "History;NSamples;Dist2Threshold;kNNSamples;DetectShadows;ShadowValue;ShadowThreshold" 
+    "int;int;double;int;bool;int;double" 
+    "prop;prop;prop;prop;prop;prop;prop"
+    "History;NSamples;Dist2Threshold;KNNSamples;DetectShadows;ShadowValue;ShadowThreshold" 
+    "int;int;double;int;bool;int;double"
+    "The number of last frames that affect the background model;
+	The number of data samples in the background model;
+	The threshold on the squared distance between the pixel and the sample to decide whether a pixel is close to a data sample.;
+	The number of neighbours, the k in the kNN. K is the number of samples that need to be within dist2Threshold in order to decide that pixel is matching the kNN background model.;
+	If true, the algorithm detects shadows and marks them.;
+	Shadow value is the value used to mark shadows in the foreground mask. Default value is 127. Value 0 in the mask always means background, 255 means foreground.;
+	A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel is more than twice darker then it is not shadow."
+    "Emgu.CV"
+    "CvInvoke"
+    "BackgroundSubtractorKNN"
+    "#include \"video_c.h\"")
+  
+   CREATE_OCV_CLASS_PROPERTY( 
+    "video/BackgroundSubtractorMOG2_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/BackgroundSubtractorMOG2Generated.cs"
+    "cv::BackgroundSubtractorMOG2" 
+    "BackgroundSubtractorMOG2" 
+    "History;DetectShadows;ShadowValue;ShadowThreshold;NMixtures;BackgroundRatio;VarThreshold;VarThresholdGen;VarInit;VarMin;VarMax;ComplexityReductionThreshold" 
+    "int;bool;int;double;int;double;double;double;double;double;double;double" 
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "History;DetectShadows;ShadowValue;ShadowThreshold;NMixtures;BackgroundRatio;VarThreshold;VarThresholdGen;VarInit;VarMin;VarMax;ComplexityReductionThreshold" 
+    "int;bool;int;double;int;double;double;double;double;double;double;double"
+    "The number of last frames that affect the background model;
+	If true, the algorithm detects shadows and marks them.;
+	Shadow value is the value used to mark shadows in the foreground mask. Default value is 127. Value 0 in the mask always means background, 255 means foreground.;
+	A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel is more than twice darker then it is not shadow.;
+	The number of gaussian components in the background model;
+	If a foreground pixel keeps semi-constant value for about backgroundRatio * history frames, it's considered background and added to the model as a center of a new component. It corresponds to TB parameter in the paper.;
+	The main threshold on the squared Mahalanobis distance to decide if the sample is well described by the background model or not. Related to Cthr from the paper.;
+	The variance threshold for the pixel-model match used for new mixture component generation. Threshold for the squared Mahalanobis distance that helps decide when a sample is close to the existing components (corresponds to Tg in the paper). If a pixel is not close to any component, it is considered foreground or added as a new component. 3 sigma =%gt; Tg=3*3=9 is default. A smaller Tg value generates more components. A higher Tg value may result in a small number of components but they can grow too large.;
+	The initial variance of each gaussian component;
+	The minimum variance;
+	The maximum variance;
+	the complexity reduction threshold. This parameter defines the number of samples needed to accept to prove the component exists. CT=0.05 is a default value for all the samples. By setting CT=0 you get an algorithm very similar to the standard Stauffer &amp; Grimson algorithm."
+    "Emgu.CV"
+    "CvInvoke"
+    "BackgroundSubtractorMOG2"
+    "#include \"video_c.h\"")
+ENDIF()
+############################### video code gen END ################################
+
 ############################### shape code gen START ##############################
 IF(HAVE_opencv_shape)
    CREATE_OCV_CLASS_PROPERTY( 

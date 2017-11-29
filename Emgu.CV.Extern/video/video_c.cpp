@@ -62,15 +62,80 @@ void cveDualTVL1OpticalFlowRelease(cv::DualTVL1OpticalFlow** flow)
    delete *flow;
    *flow = 0;
 }
+
+cv::FarnebackOpticalFlow* cveFarnebackOpticalFlowCreate(
+	int numLevels,
+	double pyrScale,
+	bool fastPyramids,
+	int winSize,
+	int numIters,
+	int polyN,
+	double polySigma,
+	int flags,
+	cv::DenseOpticalFlow** denseOpticalFlow, 
+	cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::FarnebackOpticalFlow> dof = cv::FarnebackOpticalFlow::create(
+	numLevels, pyrScale, fastPyramids, winSize, numIters, polyN, polySigma, flags
+	);
+	dof.addref();
+	cv::FarnebackOpticalFlow* ptr = dof.get();
+	*denseOpticalFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr);
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+	return ptr;
+}
+void cveFarnebackOpticalFlowRelease(cv::FarnebackOpticalFlow** flow)
+{
+	delete *flow;
+	*flow = 0;
+}
+
+
 void cveDenseOpticalFlowCalc(cv::DenseOpticalFlow* dof, cv::_InputArray* i0, cv::_InputArray* i1, cv::_InputOutputArray* flow)
 {
    dof->calc(*i0, *i1, *flow);
 }
+
+void cveSparseOpticalFlowCalc(
+	cv::SparseOpticalFlow* sof,
+	cv::_InputArray* prevImg, cv::_InputArray* nextImg,
+	cv::_InputArray* prevPts, cv::_InputOutputArray* nextPts,
+	cv::_OutputArray* status,
+	cv::_OutputArray* err)
+{
+	sof->calc(*prevImg, *nextImg, *prevPts, *nextPts, *status, err ? *err : dynamic_cast<cv::OutputArray>( cv::noArray() ) );
+}
+
+cv::SparsePyrLKOpticalFlow* cveSparsePyrLKOpticalFlowCreate(
+	CvSize* winSize,
+	int maxLevel,
+	CvTermCriteria* crit,
+	int flags,
+	double minEigThreshold,
+	cv::SparseOpticalFlow** sparseOpticalFlow,
+	cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::SparsePyrLKOpticalFlow> sof = cv::SparsePyrLKOpticalFlow::create(
+		*winSize, maxLevel, *crit, flags, minEigThreshold
+	);
+	sof.addref();
+	cv::SparsePyrLKOpticalFlow* ptr = sof.get();
+	*sparseOpticalFlow = dynamic_cast<cv::SparseOpticalFlow*>(ptr);
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+	return ptr;
+}
+void cveSparsePyrLKOpticalFlowRelease(cv::SparsePyrLKOpticalFlow** flow)
+{
+	delete *flow;
+	*flow = 0;
+}
+
 void cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow)
 {
 	delete *flow;
 	*flow = 0;
 }
+
 void cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags)
 {
    cv::calcOpticalFlowFarneback(*prev, *next, *flow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
