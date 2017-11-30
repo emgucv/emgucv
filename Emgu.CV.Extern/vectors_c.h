@@ -13,7 +13,11 @@
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/objdetect/objdetect_c.h"
+
+#ifdef HAVE_OPENCV_TEXT
 #include "opencv2/text/erfilter.hpp"
+#endif
+
 #include "opencv2/line_descriptor.hpp"
 #include "opencv2/core/ocl.hpp"
 
@@ -29,10 +33,12 @@ namespace cv {
 		template<>
 		struct Type< cv::DMatch > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::DMatch)) }; };
 
+#ifdef HAVE_OPENCV_TEXT
 		template<>
 		struct Depth < cv::text::ERStat > { enum { value = Depth<uchar>::value }; };
 		template<>
 		struct Type< cv::text::ERStat > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::text::ERStat)) }; };
+#endif
 
 		template<>
 		struct Depth < cv::line_descriptor::KeyLine > { enum { value = Depth<uchar>::value }; };
