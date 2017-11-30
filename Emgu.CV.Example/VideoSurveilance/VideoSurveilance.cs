@@ -15,7 +15,6 @@ using Emgu.CV.Cvb;
 using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using Emgu.CV.VideoSurveillance;
 
 namespace VideoSurveilance
 {
@@ -46,7 +45,7 @@ namespace VideoSurveilance
             return;
          }
 
-         _fgDetector = new Emgu.CV.VideoSurveillance.BackgroundSubtractorMOG2();
+         _fgDetector = new BackgroundSubtractorMOG2();
          _blobDetector = new CvBlobDetector();
          _tracker = new CvTracks();
 
