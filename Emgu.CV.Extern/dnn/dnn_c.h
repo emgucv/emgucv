@@ -11,19 +11,24 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/dnn/dnn.hpp"
 
-//CVAPI(void) cveDnnInitModule();
+CVAPI(void) cveDnnInitModule();
 
-CVAPI(cv::dnn::Importer*) cveDnnCreateCaffeImporter(cv::String* prototxt, cv::String* caffeModel);
-CVAPI(cv::dnn::Importer*) cveDnnCreateTensorflowImporter(cv::String* model);
-CVAPI(void) cveDnnImporterRelease(cv::dnn::Importer** importer);
-CVAPI(void) cveDnnImporterPopulateNet(cv::dnn::Importer* importer, cv::dnn::Net* net);
+//CVAPI(cv::dnn::Importer*) cveDnnCreateCaffeImporter(cv::String* prototxt, cv::String* caffeModel);
+//CVAPI(cv::dnn::Importer*) cveDnnCreateTensorflowImporter(cv::String* model);
+//CVAPI(void) cveDnnImporterRelease(cv::dnn::Importer** importer);
+//CVAPI(void) cveDnnImporterPopulateNet(cv::dnn::Importer* importer, cv::dnn::Net* net);
+
+CVAPI(cv::dnn::Net*) cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetModel);
+CVAPI(cv::dnn::Net*) cveReadNetFromCaffe(cv::String* prototxt, cv::String* caffeModel);
+CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow(cv::String* model, cv::String* config);
 
 CVAPI(cv::dnn::Net*) cveDnnNetCreate();
 CVAPI(void) cveDnnNetSetInput(cv::dnn::Net* net, cv::Mat* blob, cv::String* name);
 //CVAPI(cv::dnn::Blob*) cveDnnNetGetBlob(cv::dnn::Net* net, cv::String* outputName);
 CVAPI(void) cveDnnNetForward(cv::dnn::Net* net, cv::String* outputName, cv::Mat* output);
 CVAPI(void) cveDnnNetRelease(cv::dnn::Net** net);
-
+CVAPI(bool) cveDnnNetEmpty(cv::dnn::Net* net);
+CVAPI(std::vector<cv::String>*) cveDnnNetGetLayerNames(cv::dnn::Net* net);
 
 CVAPI(void) cveDnnBlobFromImage(
 	cv::Mat* image, 

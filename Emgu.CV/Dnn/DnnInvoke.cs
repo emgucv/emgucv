@@ -78,6 +78,40 @@ namespace Emgu.CV.Dnn
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool swapRB,
             IntPtr blob);
+
+        public static Net ReadNetFromDarknet(String cfgFile, String darknetModel = null)
+        {
+            using (CvString cfgFileStr = new CvString(cfgFile))
+            using (CvString darknetModelStr = darknetModel == null ? new CvString() : new CvString(darknetModel))
+            {
+                return new Net(cveReadNetFromDarknet(cfgFileStr, darknetModelStr));
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromDarknet(IntPtr cfgFile, IntPtr darknetModel);
+
+
+        public static Net ReadNetFromCaffe(String prototxt, String caffeModel = null)
+        {
+            using (CvString prototxtStr = new CvString(prototxt))
+            using (CvString caffeModelStr = caffeModel == null ? new CvString() : new CvString(caffeModel))
+            {
+                return new Net(cveReadNetFromCaffe(prototxtStr, caffeModelStr));
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromCaffe(IntPtr prototxt, IntPtr caffeModel);
+
+        public static Net ReadNetFromTensorflow(String model, String config = null)
+        {
+            using (CvString modelStr = new CvString(model))
+            using (CvString configStr = config == null ? new CvString() : new CvString(config))
+            {
+                return new Net(cveReadNetFromTensorflow(modelStr, configStr));
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromTensorflow(IntPtr model, IntPtr config);
     }
 }
 

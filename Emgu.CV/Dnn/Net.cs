@@ -27,6 +27,11 @@ namespace Emgu.CV.Dnn
             _ptr = DnnInvoke.cveDnnNetCreate();
         }
 
+        internal Net(IntPtr ptr)
+        {
+            _ptr = ptr;
+        }
+
         /// <summary>
         /// Sets the new value for the layer output blob.
         /// </summary>
@@ -77,6 +82,22 @@ namespace Emgu.CV.Dnn
                 DnnInvoke.cveDnnNetRelease(ref _ptr);
             }
         }
+
+        public bool Empty
+        {
+            get { return DnnInvoke.cveDnnNetEmpty(_ptr); }
+        }
+
+        public String[] LayerNames
+        {
+            get
+            {
+                using (VectorOfCvString vs = new VectorOfCvString(DnnInvoke.cveDnnNetGetLayerNames(_ptr), true))
+                {
+                    return vs.ToArray();
+                }
+            }
+        }
     }
 
     public static partial class DnnInvoke
@@ -91,6 +112,12 @@ namespace Emgu.CV.Dnn
         internal static extern void cveDnnNetForward(IntPtr net, IntPtr outputName, IntPtr output);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetRelease(ref IntPtr net);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern  bool cveDnnNetEmpty(IntPtr net);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDnnNetGetLayerNames(IntPtr net);
     }
 }
 #endif

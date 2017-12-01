@@ -3168,7 +3168,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestDnnFcn8sHeavyPascal()
         {
-            Dnn.Net net = new Dnn.Net();
+            //Dnn.Net net = new Dnn.Net();
             String caffeModelFile = "fcn8s-heavy-pascal.caffemodel";
             if (!File.Exists(caffeModelFile))
             {
@@ -3178,8 +3178,9 @@ namespace Emgu.CV.Test
                 System.Net.WebClient downloadClient = new System.Net.WebClient();
                 downloadClient.DownloadFile(CaffeModelUrl, caffeModelFile);
             }
-            using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("fcn8s-heavy-pascal.prototxt", caffeModelFile))
-                importer.PopulateNet(net);
+            Dnn.Net net = DnnInvoke.ReadNetFromCaffe("fcn8s-heavy-pascal.prototxt", caffeModelFile);
+            //using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("fcn8s-heavy-pascal.prototxt", caffeModelFile))
+            //    importer.PopulateNet(net);
 
             Mat img = EmguAssert.LoadMat("rgb.jpg");
             //FCN accepts 500x500 RGB-images
@@ -3229,7 +3230,7 @@ namespace Emgu.CV.Test
         public void TestDnnBvlcGoogleNet()
         {
 
-            Dnn.Net net = new Dnn.Net();
+            //Dnn.Net net = new Dnn.Net();
             String googleNetFile = "bvlc_googlenet.caffemodel";
             if (!File.Exists(googleNetFile))
             {
@@ -3239,8 +3240,9 @@ namespace Emgu.CV.Test
                 System.Net.WebClient downloadClient = new System.Net.WebClient();
                 downloadClient.DownloadFile(googleNetUrl, googleNetFile);
             }
-            using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("bvlc_googlenet.prototxt", googleNetFile))
-                importer.PopulateNet(net);
+            //using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("bvlc_googlenet.prototxt", googleNetFile))
+            //    importer.PopulateNet(net);
+            Dnn.Net net = DnnInvoke.ReadNetFromCaffe("bvlc_googlenet.prototxt", googleNetFile);
 
             Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
 
@@ -3280,7 +3282,7 @@ namespace Emgu.CV.Test
         public void TestDnnSSD()
         {
 
-            Dnn.Net net = new Dnn.Net();
+            //Dnn.Net net = new Dnn.Net();
             int imgDim = 300;
 
             String ssdFile = "VGG_VOC0712_SSD_300x300_iter_120000.caffemodel";
@@ -3288,8 +3290,9 @@ namespace Emgu.CV.Test
             CheckAndDownloadFile(ssdFile);
             CheckAndDownloadFile(ssdProtoFile);
 
-            using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter(ssdProtoFile, ssdFile))
-                importer.PopulateNet(net);
+            //using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter(ssdProtoFile, ssdFile))
+            //    importer.PopulateNet(net);
+            Dnn.Net net = DnnInvoke.ReadNetFromCaffe(ssdProtoFile, ssdFile);
 
             Mat img = EmguAssert.LoadMat("rgb.jpg");
             Mat resized = new Mat();
@@ -3355,7 +3358,7 @@ namespace Emgu.CV.Test
         public void TestDnnTensorFlow()
         {
 
-            Dnn.Net net = new Dnn.Net();
+            //Dnn.Net net = new Dnn.Net();
             String tensorFlowFile = "tensorflow_inception_graph.pb";
             if (!File.Exists(tensorFlowFile))
             {
@@ -3369,8 +3372,9 @@ namespace Emgu.CV.Test
                 System.IO.Compression.ZipFile.ExtractToDirectory(inceptionFile, ".");
             }
 
-            using (Dnn.Importer importer = Dnn.Importer.CreateTensorflowImporter(tensorFlowFile))
-                importer.PopulateNet(net);
+            Dnn.Net net = DnnInvoke.ReadNetFromTensorflow(tensorFlowFile);
+            //using (Dnn.Importer importer = Dnn.Importer.CreateTensorflowImporter(tensorFlowFile))
+            //    importer.PopulateNet(net);
 
             Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
 

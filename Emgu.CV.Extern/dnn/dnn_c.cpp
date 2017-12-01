@@ -11,7 +11,7 @@ void cveDnnInitModule()
 {
    cv::dnn::initModule();
 }
-*/
+
 cv::dnn::Importer* cveDnnCreateCaffeImporter(cv::String* prototxt, cv::String* caffeModel)
 {
    cv::Ptr<cv::dnn::Importer> ptr = cv::dnn::createCaffeImporter(*prototxt, *caffeModel);
@@ -33,6 +33,23 @@ void cveDnnImporterRelease(cv::dnn::Importer** importer)
 void cveDnnImporterPopulateNet(cv::dnn::Importer* importer, cv::dnn::Net* net)
 {
    importer->populateNet(*net);
+}
+*/
+cv::dnn::Net* cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetModel)
+{
+	cv::dnn::Net net = cv::dnn::readNetFromDarknet(*cfgFile, *darknetModel);
+	return new cv::dnn::Net(net);
+}
+
+cv::dnn::Net* cveReadNetFromCaffe(cv::String* prototxt, cv::String* caffeModel)
+{
+	cv::dnn::Net net = cv::dnn::readNetFromCaffe(*prototxt, *caffeModel);
+	return new cv::dnn::Net(net);
+}
+cv::dnn::Net* cveReadNetFromTensorflow(cv::String* model, cv::String* config)
+{
+	cv::dnn::Net net = cv::dnn::readNetFromTensorflow(*model, *config);
+	return new cv::dnn::Net(net);
 }
 
 cv::dnn::Net* cveDnnNetCreate()
@@ -64,6 +81,14 @@ void cveDnnNetRelease(cv::dnn::Net** net)
 {
    delete *net;
    *net = 0;
+}
+bool cveDnnNetEmpty(cv::dnn::Net* net)
+{
+	return net->empty();
+}
+std::vector<cv::String>* cveDnnNetGetLayerNames(cv::dnn::Net* net)
+{
+	return new std::vector<cv::String>(net->getLayerNames());
 }
 
 /*
