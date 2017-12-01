@@ -178,6 +178,18 @@ namespace Emgu.CV.XImgproc
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFastGlobalSmootherFilter(IntPtr guide, IntPtr src, IntPtr dst, double lambda, double sigmaColor, double lambdaAttenuation, int numIter);
 
+
+        public static void L0Smooth(IInputArray src, IOutputArray dst, double lambda = 0.02, double kappa = 2)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveL0Smooth(iaSrc, oaDst, lambda, kappa);
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveL0Smooth(IntPtr src, IntPtr dst, double lambda, double kappa);
+
         /// <summary>
         /// Simple one-line Adaptive Manifold Filter call.
         /// </summary>

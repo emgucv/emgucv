@@ -20,8 +20,6 @@ namespace Emgu.CV.BgSegm
     /// </summary>
     public class BackgroundSubtractorMOG : UnmanagedObject, IBackgroundSubtractor
     {
-
-
         private IntPtr _algorithmPtr;
         private IntPtr _backgroundSubtractorPtr;
         public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
@@ -37,7 +35,7 @@ namespace Emgu.CV.BgSegm
         public BackgroundSubtractorMOG(int history = 200, int nMixtures = 5, double backgroundRatio = 0.7,
          double noiseSigma = 0)
         {
-            _ptr = ContribInvoke.CvBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr);
+            _ptr = ContribInvoke.cveBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr);
         }
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace Emgu.CV.BgSegm
         {
             if (IntPtr.Zero != _ptr)
             {
-                ContribInvoke.CvBackgroundSubtractorMOGRelease(ref _ptr);
+                ContribInvoke.cveBackgroundSubtractorMOGRelease(ref _ptr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
@@ -60,9 +58,9 @@ namespace Emgu.CV
     public static partial class ContribInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma, ref IntPtr bgSubtractor, ref IntPtr algorithm);
+        internal static extern IntPtr cveBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma, ref IntPtr bgSubtractor, ref IntPtr algorithm);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void CvBackgroundSubtractorMOGRelease(ref IntPtr bgSubstractor);
+        internal static extern void cveBackgroundSubtractorMOGRelease(ref IntPtr bgSubstractor);
     }
 }

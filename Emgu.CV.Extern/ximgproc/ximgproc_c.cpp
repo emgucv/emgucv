@@ -41,6 +41,11 @@ void cveFastGlobalSmootherFilter(cv::_InputArray* guide, cv::_InputArray* src, c
    cv::ximgproc::fastGlobalSmootherFilter(*guide, *src, *dst, lambda, sigmaColor, lambdaAttenuation, numIter);
 }
 
+void cveL0Smooth(cv::_InputArray* src, cv::_OutputArray* dst, double lambda, double kappa)
+{
+	cv::ximgproc::l0Smooth(*src, *dst, lambda, kappa);
+}
+
 void cveNiBlackThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double maxValue, int type, int blockSize, double delta)
 {
    cv::ximgproc::niBlackThreshold(*src, *dst, maxValue, type, blockSize, delta);
