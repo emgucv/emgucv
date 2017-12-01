@@ -29,8 +29,8 @@ namespace Emgu.CV.BgSegm
                 useHistory,
                 maxPixelStability,
                 isParallel,
-                ref bgSubtractor,
-                ref algorithm);
+                ref _backgroundSubtractorPtr,
+                ref _algorithmPtr);
         }
 
         /// <summary>

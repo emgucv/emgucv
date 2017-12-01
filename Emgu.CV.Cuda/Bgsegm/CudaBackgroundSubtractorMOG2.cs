@@ -62,7 +62,7 @@ namespace Emgu.CV.Cuda
            int history,
            double varThreshold,
            [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool detectShadows,
+           bool detectShadows,
            ref IntPtr bgSubtractor,
            ref IntPtr algorithm);
 
