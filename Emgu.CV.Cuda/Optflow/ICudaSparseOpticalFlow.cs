@@ -14,7 +14,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Interface to provide access to the cuda::SparseOpticalFlow class.
    /// </summary>
-   public interface ICudaSparseOpticalFlow
+   public interface ICudaSparseOpticalFlow : IAlgorithm
    {
       /// <summary>
       /// Pointer the the native cuda::sparseOpticalFlow object.

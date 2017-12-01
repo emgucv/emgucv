@@ -14,7 +14,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Cuda Dense Optical flow
    /// </summary>
-   public interface ICudaDenseOpticalFlow
+   public interface ICudaDenseOpticalFlow : IAlgorithm
    {
       /// <summary>
       /// Pointer to cv::cuda::denseOpticalFlow

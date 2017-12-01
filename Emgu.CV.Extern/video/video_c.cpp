@@ -7,11 +7,14 @@
 #include "video_c.h"
 
 //BackgroundSubtractorMOG2
-cv::BackgroundSubtractorMOG2* cveBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection)
+cv::BackgroundSubtractorMOG2* cveBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm)
 {
    cv::Ptr<cv::BackgroundSubtractorMOG2> ptr =  cv::createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
    ptr.addref();
-   return ptr.get();
+   cv::BackgroundSubtractorMOG2* bs = ptr.get();
+   *bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+   *algorithm = dynamic_cast<cv::Algorithm*>(bs);
+   return bs;
 }
 
 void cveBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor)
@@ -34,12 +37,16 @@ void cveBackgroundSubtractorGetBackgroundImage(cv::BackgroundSubtractor* bgSubtr
 }
 
 //BackgroundSubtractorKNN
-cv::BackgroundSubtractorKNN* cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows)
+cv::BackgroundSubtractorKNN* cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm)
 {
    cv::Ptr<cv::BackgroundSubtractorKNN> ptr = cv::createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows);
   
    ptr.addref();
-   return ptr.get();
+
+   cv::BackgroundSubtractorKNN* bs = ptr.get();
+   *bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+   *algorithm = dynamic_cast<cv::Algorithm*>(bs);
+   return bs;
 }
 void cveBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor)
 {

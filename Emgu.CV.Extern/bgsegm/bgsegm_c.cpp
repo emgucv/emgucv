@@ -7,12 +7,14 @@
 #include "bgsegm_c.h"
 
 //BackgroundSubtractorMOG
-cv::bgsegm::BackgroundSubtractorMOG* CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma)
+cv::bgsegm::BackgroundSubtractorMOG* CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm)
 {
    cv::Ptr<cv::bgsegm::BackgroundSubtractorMOG> ptr = cv::bgsegm::createBackgroundSubtractorMOG(history, nmixtures, backgroundRatio, noiseSigma);
-  
    ptr.addref();
-   return ptr.get();
+   cv::bgsegm::BackgroundSubtractorMOG* bs = ptr.get();
+   *bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+   *algorithm = dynamic_cast<cv::Algorithm*>(bs);
+   return bs;
 }
 
 void CvBackgroundSubtractorMOGRelease(cv::bgsegm::BackgroundSubtractorMOG** bgSubtractor)
@@ -22,12 +24,14 @@ void CvBackgroundSubtractorMOGRelease(cv::bgsegm::BackgroundSubtractorMOG** bgSu
 }
 
 //BackgroundSubtractorGMG
-cv::bgsegm::BackgroundSubtractorGMG* CvBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold)
+cv::bgsegm::BackgroundSubtractorGMG* CvBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm)
 {
    cv::Ptr<cv::bgsegm::BackgroundSubtractorGMG> ptr = cv::bgsegm::createBackgroundSubtractorGMG(initializationFrames, decisionThreshold);
-  
    ptr.addref();
-   return ptr.get();
+   cv::bgsegm::BackgroundSubtractorGMG* bs = ptr.get();
+   *bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+   *algorithm = dynamic_cast<cv::Algorithm*>(bs);
+   return bs;
 }
 void CvBackgroundSubtractorGMGRelease(cv::bgsegm::BackgroundSubtractorGMG** bgSubtractor)
 {

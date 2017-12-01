@@ -11,27 +11,27 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
-    /// <summary>
-    /// An abstract class that can be use the perform background / foreground detection.
-    /// </summary>
-    public abstract class BackgroundSubtractor : UnmanagedObject
+    public interface IBackgroundSubtractor : IAlgorithm
     {
-        static BackgroundSubtractor()
-        {
-            CvInvoke.CheckLibraryLoaded();
-        }
+        IntPtr BackgroundSubtractorPtr { get; }
+    }
 
+    /// <summary>
+    /// A static class that provide extension methods to backgroundSubtractor
+    /// </summary>
+    public static class BackgroundSubtractorExtension
+    {
         /// <summary>
         /// Update the background model
         /// </summary>
         /// <param name="image">The image that is used to update the background model</param>
         /// <param name="learningRate">Use -1 for default</param>
         /// <param name="fgMask">The output foreground mask</param>
-        public void Apply(IInputArray image, IOutputArray fgMask, double learningRate = -1)
+        public static void Apply(this IBackgroundSubtractor substractor, IInputArray image, IOutputArray fgMask, double learningRate = -1)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaFgMask = fgMask.GetOutputArray())
-                CvInvoke.cveBackgroundSubtractorUpdate(_ptr, iaImage, oaFgMask, learningRate);
+                CvInvoke.cveBackgroundSubtractorUpdate(substractor.BackgroundSubtractorPtr, iaImage, oaFgMask, learningRate);
         }
 
         /// <summary>
@@ -39,10 +39,10 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="backgroundImage">The output background image</param>
         /// <remarks> Sometimes the background image can be very blurry, as it contain the average background statistics.</remarks>
-        public void GetBackgroundImage(IOutputArray backgroundImage)
+        public static void GetBackgroundImage(this IBackgroundSubtractor substractor, IOutputArray backgroundImage)
         {
             using (OutputArray oaBackgroundImage = backgroundImage.GetOutputArray())
-                CvInvoke.cveBackgroundSubtractorGetBackgroundImage(_ptr, oaBackgroundImage);
+                CvInvoke.cveBackgroundSubtractorGetBackgroundImage(substractor.BackgroundSubtractorPtr, oaBackgroundImage);
         }
     }
 }

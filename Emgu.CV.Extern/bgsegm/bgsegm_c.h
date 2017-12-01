@@ -12,10 +12,10 @@
 #include "opencv2/bgsegm.hpp"
 
 //BackgroundSubtractorMOG
-CVAPI(cv::bgsegm::BackgroundSubtractorMOG*) CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma);
+CVAPI(cv::bgsegm::BackgroundSubtractorMOG*) CvBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm);
 CVAPI(void) CvBackgroundSubtractorMOGRelease(cv::bgsegm::BackgroundSubtractorMOG** bgSubtractor);
 
 //BackgroundSubtractorGMG
-CVAPI(cv::bgsegm::BackgroundSubtractorGMG*) CvBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold);
+CVAPI(cv::bgsegm::BackgroundSubtractorGMG*) CvBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm);
 CVAPI(void) CvBackgroundSubtractorGMGRelease(cv::bgsegm::BackgroundSubtractorGMG** bgSubtractor);
 #endif

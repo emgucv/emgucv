@@ -921,6 +921,29 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestCudaHoughCircle()
+        {
+            if (CudaInvoke.HasCuda)
+            {
+                Mat m = new Mat(480, 480, DepthType.Cv8U, 1);
+                m.SetTo(new MCvScalar(0));
+                CvInvoke.Circle(m, new Point(240, 240), 100, new MCvScalar(150), 10);
+                GpuMat gm = new GpuMat();
+                gm.Upload(m);
+                using (CudaHoughCirclesDetector detector = new CudaHoughCirclesDetector(1, 30, 120, 30, 10, 400))
+                {
+                    CircleF[] circles = detector.Detect(gm);
+                    foreach (var circle in circles)
+                    {
+                        CvInvoke.Circle(m, Point.Round(circle.Center), (int)circle.Radius, new MCvScalar(255));
+                    }
+                }
+
+            }
+
+        }
+
+        [Test]
         public void TestBruteForceHammingDistance()
         {
             if (CudaInvoke.HasCuda)
