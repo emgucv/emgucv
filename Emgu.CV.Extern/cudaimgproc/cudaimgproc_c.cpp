@@ -89,6 +89,13 @@ cv::cuda::CornernessCriteria* cudaCreateHarrisCorner(int srcType, int blockSize,
    return ptr.get();
 }
 
+cv::cuda::CornernessCriteria* cudaCreateMinEigenValCorner(int srcType, int blockSize, int ksize, int borderType)
+{
+	cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createMinEigenValCorner(srcType, blockSize, ksize, borderType);
+	ptr.addref();
+	return ptr.get();
+}
+
 void cudaCornernessCriteriaCompute(cv::cuda::CornernessCriteria* detector, cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
    detector->compute( *src, *dst, stream ? *stream : cv::cuda::Stream::Null());
