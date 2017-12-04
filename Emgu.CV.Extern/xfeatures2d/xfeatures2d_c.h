@@ -92,4 +92,12 @@ CVAPI(void) cvePCTSignaturesSQFDComputeQuadraticFormDistances(
 	std::vector<float>* distances);
 CVAPI(void) cvePCTSignaturesSQFDRelease(cv::xfeatures2d::PCTSignaturesSQFD** sqfd);
 
+//HarrisLaplaceFeatureDetector
+CVAPI(cv::xfeatures2d::HarrisLaplaceFeatureDetector*) cveHarrisLaplaceFeatureDetectorCreate(
+	int numOctaves,
+	float corn_thresh,
+	float DOG_thresh,
+	int maxCorners,
+	int num_layers);
+CVAPI(void) cveHarrisLaplaceFeatureDetectorRelease(cv::xfeatures2d::HarrisLaplaceFeatureDetector** sqfd);
 #endif

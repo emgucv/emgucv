@@ -256,3 +256,20 @@ void cvePCTSignaturesSQFDRelease(cv::xfeatures2d::PCTSignaturesSQFD** sqfd)
 	delete *sqfd;
 	*sqfd = 0;
 }
+
+cv::xfeatures2d::HarrisLaplaceFeatureDetector* cveHarrisLaplaceFeatureDetectorCreate(
+	int numOctaves,
+	float corn_thresh,
+	float DOG_thresh,
+	int maxCorners,
+	int num_layers)
+{
+	cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector> ptr = cv::xfeatures2d::HarrisLaplaceFeatureDetector::create(numOctaves, corn_thresh, DOG_thresh, maxCorners, num_layers);
+	ptr.addref();
+	return ptr.get();
+}
+void cveHarrisLaplaceFeatureDetectorRelease(cv::xfeatures2d::HarrisLaplaceFeatureDetector** detector)
+{
+	delete *detector;
+	*detector = 0;
+}
