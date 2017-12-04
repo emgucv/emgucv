@@ -575,6 +575,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   saliency
   dnn_modern
   img_hash
+  phase_unwrapping
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})

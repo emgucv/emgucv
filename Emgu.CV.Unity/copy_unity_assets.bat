@@ -95,6 +95,8 @@ mkdir Assets\Emgu.CV\Emgu.CV.Contrib\DnnModern
 cp -r ../Emgu.CV.Contrib/DnnModern/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/DnnModern
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\ImgHash
 cp -r ../Emgu.CV.Contrib/ImgHash/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/ImgHash
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\PhaseUnwrapping
+cp -r ../Emgu.CV.Contrib/PhaseUnwrapping/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/PhaseUnwrapping
 
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/
