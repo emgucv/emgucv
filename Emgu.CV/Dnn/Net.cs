@@ -17,7 +17,7 @@ namespace Emgu.CV.Dnn
     /// <summary>
     /// This class allows to create and manipulate comprehensive artificial neural networks.
     /// </summary>
-    public class Net : UnmanagedObject
+    public partial class Net : UnmanagedObject
     {
         /// <summary>
         /// Default constructor.

@@ -99,5 +99,5 @@ CVAPI(cv::xfeatures2d::HarrisLaplaceFeatureDetector*) cveHarrisLaplaceFeatureDet
 	float DOG_thresh,
 	int maxCorners,
 	int num_layers);
-CVAPI(void) cveHarrisLaplaceFeatureDetectorRelease(cv::xfeatures2d::HarrisLaplaceFeatureDetector** sqfd);
+CVAPI(void) cveHarrisLaplaceFeatureDetectorRelease(cv::xfeatures2d::HarrisLaplaceFeatureDetector** detector);
 #endif

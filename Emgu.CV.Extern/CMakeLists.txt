@@ -1510,6 +1510,30 @@ IF(HAVE_opencv_xphoto)
 ENDIF()
 ############################### xphoto code gen END ##############################
 
+
+############################### dnn code gen START ##############################
+IF(HAVE_opencv_dnn)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "dnn/net_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/NetGenerated.cs"
+    "cv::dnn::Net" 
+    "Net" 
+    "PreferableBackend;PreferableTarget;enableFusion" 
+    "int;int;bool" 
+    "propW;propW;act1"
+    "PreferableBackend;PreferableTarget;EnableFusion" 
+    "int;int;bool"
+    "Ask network to use specific computation backend where it supported.;
+	Ask network to make computations on specific target device.;
+	Enables or disables layer fusion in the network."
+    "Emgu.CV.Dnn"
+    "DnnInvoke"
+    "Net"
+    "#include \"opencv2/dnn.hpp\"")
+
+ENDIF()
+############################### dnn code gen END ##############################
+
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
   FIND_PACKAGE( OpenMP REQUIRED)
