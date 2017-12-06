@@ -347,5 +347,8 @@ call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.Document.Html
 IF "%8%"=="nuget" ^
 call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.nuget 
 
+IF "%8%"=="nuget" IF "%2%"=="gpu" ^
+call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.CUDA.nuget 
+
 :END
 popd

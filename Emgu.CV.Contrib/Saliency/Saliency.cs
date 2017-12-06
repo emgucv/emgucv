@@ -49,11 +49,20 @@ namespace Emgu.CV.Saliency
         }
 
 
-        public IntPtr StaticSaliencyPtr => _staticSaliencyPtr;
+        public IntPtr StaticSaliencyPtr
+        {
+          get { return _staticSaliencyPtr; }
+        }
 
-        public IntPtr SaliencyPtr => _saliencyPtr;
+        public IntPtr SaliencyPtr
+        {
+            get { return _saliencyPtr; }
+        }
 
-        public IntPtr AlgorithmPtr => _algorithmPtr;
+        public IntPtr AlgorithmPtr
+        {
+            get { return _algorithmPtr; }
+        }
 
         protected override void DisposeObject()
         {
@@ -84,11 +93,20 @@ namespace Emgu.CV.Saliency
         }
 
 
-        public IntPtr StaticSaliencyPtr => _staticSaliencyPtr;
+        public IntPtr StaticSaliencyPtr
+        {
+            get { return _staticSaliencyPtr; }
+        }
 
-        public IntPtr SaliencyPtr => _saliencyPtr;
+        public IntPtr SaliencyPtr
+        {
+            get { return _saliencyPtr; }
+        }
 
-        public IntPtr AlgorithmPtr => _algorithmPtr;
+        public IntPtr AlgorithmPtr
+        {
+            get { return _algorithmPtr; }
+        }
 
         protected override void DisposeObject()
         {
@@ -119,11 +137,20 @@ namespace Emgu.CV.Saliency
         }
 
 
-        public IntPtr MotionSaliencyPtr => _motionSaliencyPtr;
+        public IntPtr MotionSaliencyPtr
+        {
+            get { return _motionSaliencyPtr; }
+        }
 
-        public IntPtr SaliencyPtr => _saliencyPtr;
+        public IntPtr SaliencyPtr
+        {
+            get { return _saliencyPtr; }
+        }
 
-        public IntPtr AlgorithmPtr => _algorithmPtr;
+        public IntPtr AlgorithmPtr
+        {
+            get { return _algorithmPtr; }
+        }
 
         protected override void DisposeObject()
         {
@@ -156,11 +183,20 @@ namespace Emgu.CV.Saliency
                 ref _algorithmPtr);
         }
 
-        public IntPtr ObjectnessPtr => _objectnessPtr;
+        public IntPtr ObjectnessPtr
+        {
+            get { return _objectnessPtr; }
+        }
 
-        public IntPtr SaliencyPtr => _saliencyPtr;
+        public IntPtr SaliencyPtr
+        {
+            get { return _saliencyPtr; }
+        }
 
-        public IntPtr AlgorithmPtr => _algorithmPtr;
+        public IntPtr AlgorithmPtr
+        {
+            get { return _algorithmPtr; }
+        }
 
         protected override void DisposeObject()
         {

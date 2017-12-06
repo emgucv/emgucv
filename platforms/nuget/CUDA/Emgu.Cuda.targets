@@ -4,12 +4,12 @@
         <EmguLinkTarget>WindowsForms</EmguLinkTarget>
 		<EmguBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguBuildX86>
         <EmguBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguBuildX64>
-		<EmguNativeFileX64>$(MSBuildThisFileDirectory)\x64\cudart64_90.dll</EmguNativeFileX64>
-		<EmguErrorMessage Condition="'$(EmguBuildX86)'=='True'">X86 or AnyCPU is targeted, but this CUDA package do not support 32-bit</EmguErrorMessage>
-        <EmguDeployMessage Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">$(EmguDeployMessage)x64 </EmguDeployMessage>
-        <EmguErrorMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguNativeFileX64)')">This package do not contain necessary binary for $(EmguLinkTarget). X64 is targeted, but file $(EmguNativeFileX64) is missing.</EmguErrorMessage>
+		<EmguCudaNativeFileX64>$(MSBuildThisFileDirectory)\x64\cudart64_90.dll</EmguCudaNativeFileX64>
+		<EmguCudaErrorMessage Condition="'$(EmguBuildX86)'=='True'">X86 or AnyCPU is targeted, but this CUDA package do not support 32-bit</EmguCudaErrorMessage>
+        <EmguCudaDeployMessage Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguCudaNativeFileX64)')">$(EmguCudaDeployMessage)x64 </EmguCudaDeployMessage>
+        <EmguCudaErrorMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguCudaNativeFileX64)')">This package do not contain necessary binary for $(EmguLinkTarget). X64 is targeted, but file $(EmguCudaNativeFileX64) is missing.</EmguCudaErrorMessage>
       </PropertyGroup>
-      <ItemGroup Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">
+      <ItemGroup Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguCudaNativeFileX64)')">
         <Content Include="$(MSBuildThisFileDirectory)\x64\*.dll">
           <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -18,8 +18,8 @@
 	    <Target Name="EmguPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Error Condition="'$(EmguLinkTarget)'==''" Text="Emgu Cuda is not able to detect the project type, please send a bug report to support@emgu.com" />
     <Message Condition="'$(EmguLinkTarget)'!=''" Text="Emgu Cuda shared project compiling against $(EmguLinkTarget)" Importance="High" />
-    <Error Text="'$(EmguErrorMessage)'" Condition="'$(EmguErrorMessage)'!=''" />
-    <Message Text="Compiling with $(EmguDeployMessage)binary" Condition="'$(EmguDeployMessage)'!=''" Importance="High" />
-    <Message Text="No native binary is deployed by the Emgu Cuda package." Condition="'$(EmguDeployMessage)'==''" Importance="High" />
+    <Error Text="'$(EmguCudaErrorMessage)'" Condition="'$(EmguCudaErrorMessage)'!=''" />
+    <Message Text="Compiling with $(EmguCudaDeployMessage)binary" Condition="'$(EmguCudaDeployMessage)'!=''" Importance="High" />
+    <Message Text="No native binary is deployed by the Emgu Cuda package." Condition="'$(EmguCudaDeployMessage)'==''" Importance="High" />
   </Target>
 </Project>

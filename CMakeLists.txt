@@ -663,10 +663,10 @@ ENDIF()
 
 SET(EMGUCV_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
-	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x86\\*.dll\" target=\"build\\x86\" />")
+	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\libs\\x64\\cu*.dll;..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x86\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X64)
-	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x64\\*.dll\" target=\"build\\x64\" />")
+	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\libs\\x64\\cu*.dll;..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
@@ -691,11 +691,29 @@ SET(EMGUCV_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_NUGET_TITLE}" EMGUCV_NUGET_TITLE)
 
 IF ("${LICENSE_TYPE}" EQUAL "Commercial")
+	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
 ENDIF()
 
+SET(EMGUCV_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"5.1.5\" />")
+
 IF(WITH_CUDA)
+	
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} with CUDA support")
+
+	SET(EMGU_CUDA_NUGET_ID "${EMGUCV_NUGET_ID}.DEPENDENCY")
+	SET(EMGU_CUDA_NUGET_TITLE "Native x64 CUDA dependency for EMGU CV")
+	SET(EMGU_CUDA_VERSION "${CUDA_VERSION}")
+	SET(EMGU_CUDA_NUGET_FILE_LIST "<file src=\"Emgu.Cuda.targets\" target=\"build\\${EMGU_CUDA_NUGET_ID}.targets\" />")
+	
+	SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} <dependency id=\"${EMGU_CUDA_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />")
+	
+	IF(HAVE_WINDESKTOP_X64)
+		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/")
+		SET(EMGU_CUDA_NUGET_FILE_LIST "${EMGU_CUDA_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" target=\"build\\x64\" /> <file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" /> <file src=\"EULA.txt\" target=\"content\\net35\\CUDA_EULA.txt\" />")
+		
+	ENDIF()
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Cuda.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/Package.nuspec)
 ENDIF()
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Package.nuspec)

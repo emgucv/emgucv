@@ -4,8 +4,8 @@
     <id>${EMGUCV_NUGET_ID}</id>
 	<title>${EMGUCV_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
-    <authors>Emgu Corporation</authors>
-    <owners>Emgu Corporation</owners>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <licenseUrl>${EMGUCV_LICENSE_URL}</licenseUrl>
     <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
 	<iconUrl>http://www.emgu.com/wiki/files/EmguCVLogo.gif</iconUrl>
@@ -16,9 +16,9 @@
 http://www.emgu.com/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/Index.html    	        
     </releaseNotes>
     <dependencies>
-        <dependency id="ZedGraph" version="5.1.5" />
+		${EMGUCV_NUGET_DEPENDENCY}
     </dependencies>
-    <copyright>Copyright 2017</copyright>
+    <copyright>${CURRENT_YEAR} ${CPACK_PACKAGE_VENDOR}, All Rights Reserved.</copyright>
     <tags>opencv emgu emgucv ai image</tags>
   </metadata>
   <files>
