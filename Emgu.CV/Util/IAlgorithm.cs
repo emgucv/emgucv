@@ -12,7 +12,7 @@ using Emgu.CV.Util;
 namespace Emgu.CV
 {
     /// <summary>
-    /// This is the algorithm class
+    /// Interface to the algorithm class
     /// </summary>
     public interface IAlgorithm
     {

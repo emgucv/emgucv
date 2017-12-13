@@ -11,8 +11,14 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// Interface to the BackgroundSubtractor class
+    /// </summary>
     public interface IBackgroundSubtractor : IAlgorithm
     {
+        /// <summary>
+        /// Pointer to the native BackgroundSubstractor object
+        /// </summary>
         IntPtr BackgroundSubtractorPtr { get; }
     }
 

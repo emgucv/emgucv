@@ -21,7 +21,7 @@ namespace MotionDetection
    {
       private VideoCapture _capture;
       private MotionHistory _motionHistory;
-      private BackgroundSubtractor _forgroundDetector;
+      private IBackgroundSubtractor _forgroundDetector;
 
       public Form1()
       {
