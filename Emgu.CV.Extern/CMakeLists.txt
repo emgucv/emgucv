@@ -843,11 +843,11 @@ IF(HAVE_opencv_ml)
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/ANN_MLPGenerated.cs"
     "cv::ml::ANN_MLP" 
     "ANN_MLP" 
-    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax" 
-    "CvTermCriteria;double;double;double;double;double;double;double" 
-    "struct;prop;prop;prop;prop;prop;prop;prop"
-    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax" 
-    "MCvTermCriteria;double;double;double;double;double;double;double"
+    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax;AnnealInitialT;AnnealFinalT;AnnealCoolingRatio;AnnealItePerStep" 
+    "CvTermCriteria;double;double;double;double;double;double;double;double;double;double;int" 
+    "struct;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax;AnnealInitialT;AnnealFinalT;AnnealCoolingRatio;AnnealItePerStep" 
+    "MCvTermCriteria;double;double;double;double;double;double;double;double;double;double;int"
     "Termination criteria of the training algorithm;
   BPROP: Strength of the weight gradient term;
   BPROP: Strength of the momentum term (the difference between weights on the 2 previous iterations);
@@ -855,7 +855,11 @@ IF(HAVE_opencv_ml)
   RPROP: Increase factor;
   RPROP: Decrease factor;
   RPROP: Update-values lower limit;
-  RPROP: Update-values upper limit"
+  RPROP: Update-values upper limit;
+  ANNEAL: Update initial temperature.;
+  ANNEAL: Update final temperature.;
+  ANNEAL: Update cooling ratio.;
+  ANNEAL: Update iteration per step."
     "Emgu.CV.ML"
     "MlInvoke"
     "ANN_MLP"
