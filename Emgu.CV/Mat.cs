@@ -924,6 +924,14 @@ namespace Emgu.CV
                 MatInvoke.cvMatSetTo(Ptr, iaValue, iaMask);
         }
 
+        /// <summary>
+        /// Returns an identity matrix of the specified size and type.
+        /// </summary>
+        /// <param name="rows">Number of rows.</param>
+        /// <param name="cols">Number of columns.</param>
+        /// <param name="type">Mat element type</param>
+        /// <param name="channels">Number of channels</param>
+        /// <returns>An identity matrix of the specified size and type.</returns>
         public static Mat Eye(int rows, int cols, CvEnum.DepthType type, int channels)
         {
             Mat m = new Mat();
@@ -931,6 +939,11 @@ namespace Emgu.CV
             return m;
         }
 
+        /// <summary>
+        /// Extracts a diagonal from a matrix. The method makes a new header for the specified matrix diagonal. The new matrix is represented as a single-column matrix. Similarly to Mat::row and Mat::col, this is an O(1) operation.
+        /// </summary>
+        /// <param name="d">Index of the diagonal, with the following values: d=0 is the main diagonal; d &lt; 0 is a diagonal from the lower half. For example, d=-1 means the diagonal is set immediately below the main one; d &gt; 0 is a diagonal from the upper half. For example, d=1 means the diagonal is set immediately above the main one.</param>
+        /// <returns>A diagonal from a matrix</returns>
         public Mat Diag(int d = 0)
         {
             Mat m = new Mat();
@@ -938,6 +951,10 @@ namespace Emgu.CV
             return m;
         }
 
+        /// <summary>
+        /// Transposes a matrix.
+        /// </summary>
+        /// <returns>The transposes of the matrix.</returns>
         public Mat T()
         {
             Mat m = new Mat();
@@ -945,6 +962,14 @@ namespace Emgu.CV
             return m;
         }
 
+        /// <summary>
+        /// Returns a zero array of the specified size and type.
+        /// </summary>
+        /// <param name="rows">Number of rows.</param>
+        /// <param name="cols">Number of columns.</param>
+        /// <param name="type">Mat element type</param>
+        /// <param name="channels">Number of channels</param>
+        /// <returns>A zero array of the specified size and type.</returns>
         public static Mat Zeros(int rows, int cols, CvEnum.DepthType type, int channels)
         {
             Mat m = new Mat();
@@ -952,6 +977,14 @@ namespace Emgu.CV
             return m;
         }
 
+        /// <summary>
+        /// Returns an array of all 1's of the specified size and type.
+        /// </summary>
+        /// <param name="rows">Number of rows.</param>
+        /// <param name="cols">Number of columns.</param>
+        /// <param name="type">Mat element type</param>
+        /// <param name="channels">Number of channels</param>
+        /// <returns>An array of all 1's of the specified size and type.</returns>
         public static Mat Ones(int rows, int cols, CvEnum.DepthType type, int channels)
         {
             Mat m = new Mat();
