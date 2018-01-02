@@ -2253,9 +2253,13 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Area = 3,
         /// <summary>
-        /// LANCZOS 4
+        /// Lanczos interpolation over 8x8 neighborhood
         /// </summary>
-        Lanczos4 = 4
+        Lanczos4 = 4,
+        /// <summary>
+        /// Bit exact bilinear interpolation
+        /// </summary>
+        LinearExact = 5,
     }
 
     /// <summary>
