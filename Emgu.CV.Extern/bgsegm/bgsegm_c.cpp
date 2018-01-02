@@ -60,3 +60,40 @@ void cveBackgroundSubtractorCNTRelease(cv::bgsegm::BackgroundSubtractorCNT** bgS
 	delete *bgSubtractor;
 	*bgSubtractor = 0;
 }
+
+
+//BackgroundSubtractorGSOC
+cv::bgsegm::BackgroundSubtractorGSOC* cveBackgroundSubtractorGSOCCreate(
+	int mc, int nSamples, float replaceRate, float propagationRate, int hitsThreshold, float alpha, float beta, float blinkingSupressionDecay, float blinkingSupressionMultiplier, float noiseRemovalThresholdFacBG, float noiseRemovalThresholdFacFG,
+	cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::bgsegm::BackgroundSubtractorGSOC> ptr = cv::bgsegm::createBackgroundSubtractorGSOC(mc, nSamples, replaceRate, propagationRate, hitsThreshold, alpha, beta, blinkingSupressionDecay, blinkingSupressionMultiplier, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG);
+	ptr.addref();
+	cv::bgsegm::BackgroundSubtractorGSOC* bs = ptr.get();
+	*bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+	*algorithm = dynamic_cast<cv::Algorithm*>(bs);
+	return bs;
+}
+void cveBackgroundSubtractorGSOCRelease(cv::bgsegm::BackgroundSubtractorGSOC** bgSubtractor)
+{
+	delete *bgSubtractor;
+	*bgSubtractor = 0;
+}
+
+//BackgroundSubtractorLSBP
+cv::bgsegm::BackgroundSubtractorLSBP* cveBackgroundSubtractorLSBPCreate(
+	int mc, int nSamples, int LSBPRadius, float tlower, float tupper, float tinc, float tdec, float rscale, float rincdec, float noiseRemovalThresholdFacBG, float noiseRemovalThresholdFacFG, int LSBPthreshold, int minCount,
+	cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::bgsegm::BackgroundSubtractorLSBP> ptr = cv::bgsegm::createBackgroundSubtractorLSBP(mc, nSamples, LSBPRadius, tlower, tupper, tinc, tdec, rscale, rincdec, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, LSBPthreshold, minCount);
+	ptr.addref();
+	cv::bgsegm::BackgroundSubtractorLSBP* bs = ptr.get();
+	*bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+	*algorithm = dynamic_cast<cv::Algorithm*>(bs);
+	return bs;
+}
+void cveBackgroundSubtractorLSBPRelease(cv::bgsegm::BackgroundSubtractorLSBP** bgSubtractor)
+{
+	delete *bgSubtractor;
+	*bgSubtractor = 0;
+}
