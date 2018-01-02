@@ -23,7 +23,7 @@ namespace VideoSurveilance
       
       private static VideoCapture _cameraCapture;
       
-      private static BackgroundSubtractor _fgDetector;
+      private static IBackgroundSubtractor _fgDetector;
       private static Emgu.CV.Cvb.CvBlobDetector _blobDetector;
       private static Emgu.CV.Cvb.CvTracks _tracker;
 
