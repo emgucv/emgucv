@@ -8,25 +8,46 @@ using System.Text;
 namespace Emgu.CV.Saliency
 {
     /// <summary>
-    /// Base interface for Saliency algorithms:
+    /// Base interface for Saliency algorithms
     /// </summary>
     public interface ISaliency : IAlgorithm
     {
+        /// <summary>
+        /// Pointer to the unmanaged Saliency object
+        /// </summary>
         IntPtr SaliencyPtr { get; }
     }
 
+    /// <summary>
+    /// Base interface for StaticSaliency algorithms
+    /// </summary>
     public interface IStaticSaliency : ISaliency
     {
+        /// <summary>
+        /// Pointer to the unmanaged StaticSaliency object
+        /// </summary>
         IntPtr StaticSaliencyPtr { get; }
     }
 
+    /// <summary>
+    /// Base interface for MotionSaliency algorithms
+    /// </summary>
     public interface IMotionSaliency : ISaliency
     {
+        /// <summary>
+        /// Pointer to the unmanaged MotionSaliency object
+        /// </summary>
         IntPtr MotionSaliencyPtr { get; }
     }
 
+    /// <summary>
+    /// Base interface for Objectness algorithms
+    /// </summary>
     public interface IObjectness : ISaliency
     {
+        /// <summary>
+        /// Pointer to the unmanaged Objectness object
+        /// </summary>
         IntPtr ObjectnessPtr { get;  }
     }
 
@@ -48,22 +69,33 @@ namespace Emgu.CV.Saliency
                 ref _algorithmPtr);
         }
 
-
+        /// <summary>
+        /// Pointer to the unmanaged StaticSaliency object
+        /// </summary>
         public IntPtr StaticSaliencyPtr
         {
           get { return _staticSaliencyPtr; }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Saliency object
+        /// </summary>
         public IntPtr SaliencyPtr
         {
             get { return _saliencyPtr; }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr
         {
             get { return _algorithmPtr; }
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this object
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
@@ -77,6 +109,11 @@ namespace Emgu.CV.Saliency
         }
     }
 
+    /// <summary>
+    /// The Fine Grained Saliency approach from 
+    /// Sebastian Montabone and Alvaro Soto. Human detection using a mobile platform and novel features derived from a visual saliency mechanism. In Image and Vision Computing, Vol. 28 Issue 3, pages 391–402. Elsevier, 2010.
+    /// </summary>
+    /// <remarks>This method calculates saliency based on center-surround differences. High resolution saliency maps are generated in real time by using integral images.</remarks>
     public class StaticSaliencyFineGrained : UnmanagedObject, IStaticSaliency
     {
         private IntPtr _staticSaliencyPtr;
@@ -92,22 +129,33 @@ namespace Emgu.CV.Saliency
                 ref _algorithmPtr);
         }
 
-
+        /// <summary>
+        /// Pointer to the unmanaged StaticSaliency object
+        /// </summary>
         public IntPtr StaticSaliencyPtr
         {
             get { return _staticSaliencyPtr; }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Saliency object
+        /// </summary>
         public IntPtr SaliencyPtr
         {
             get { return _saliencyPtr; }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr
         {
             get { return _algorithmPtr; }
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this object
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
@@ -136,22 +184,33 @@ namespace Emgu.CV.Saliency
                 ref _algorithmPtr);
         }
 
-
+        /// <summary>
+        /// Pointer to the unmanaged MotionSaliency object
+        /// </summary>
         public IntPtr MotionSaliencyPtr
         {
             get { return _motionSaliencyPtr; }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Saliency object
+        /// </summary>
         public IntPtr SaliencyPtr
         {
             get { return _saliencyPtr; }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr
         {
             get { return _algorithmPtr; }
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this object
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
@@ -183,21 +242,33 @@ namespace Emgu.CV.Saliency
                 ref _algorithmPtr);
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Objectness object
+        /// </summary>
         public IntPtr ObjectnessPtr
         {
             get { return _objectnessPtr; }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Saliency object
+        /// </summary>
         public IntPtr SaliencyPtr
         {
             get { return _saliencyPtr; }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr
         {
             get { return _algorithmPtr; }
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this object
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
@@ -281,7 +352,8 @@ namespace Emgu.CV.Saliency
         /// </summary>
         /// <param name="saliencyMap">the saliency map obtained through one of the specialized algorithms</param>
         /// <param name="binaryMap">the binary map</param>
-        /// <returns></returns>
+        /// <param name="saliency">The StatucSaliency object</param>
+        /// <returns>True if the binary map is sucessfully computed</returns>
         public static bool ComputeBinaryMap(this IStaticSaliency saliency, IInputArray saliencyMap, IOutputArray binaryMap)
         {
             using (InputArray iaSaliencyMap = saliencyMap.GetInputArray())

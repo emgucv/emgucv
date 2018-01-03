@@ -18,6 +18,10 @@ namespace Emgu.CV
     {
         private IntPtr _algorithmPtr;
         private IntPtr _backgroundSubtractorPtr;
+
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
         public IntPtr BackgroundSubtractorPtr { get { return _backgroundSubtractorPtr; } }
 

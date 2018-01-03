@@ -21,7 +21,18 @@ namespace Emgu.CV.Cuda
     /// </summary>
     public class SeparableLinearFilter : CudaFilter
     {
-
+        /// <summary>
+        /// Create a SeparableLinearFilter
+        /// </summary>
+        /// <param name="srcDepth">Source array depth</param>
+        /// <param name="srcChannels">Source array channels</param>
+        /// <param name="dstDepth">Destination array depth</param>
+        /// <param name="dstChannels">Destination array channels</param>
+        /// <param name="rowKernel">Horizontal filter coefficients. Support kernels with size &lt;= 32 .</param>
+        /// <param name="columnKernel">Vertical filter coefficients. Support kernels with size &lt;= 32 .</param>
+        /// <param name="anchor">Anchor position within the kernel. Negative values mean that anchor is positioned at the aperture center.</param>
+        /// <param name="rowBorderType">Pixel extrapolation method in the vertical direction</param>
+        /// <param name="columnBorderType">Pixel extrapolation method in the horizontal direction</param>
         public SeparableLinearFilter(
             DepthType srcDepth, int srcChannels,
             DepthType dstDepth, int dstChannels,

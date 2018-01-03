@@ -32,23 +32,25 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="image">The image that is used to update the background model</param>
         /// <param name="learningRate">Use -1 for default</param>
+        /// <param name="subtractor">The background subtractor</param>
         /// <param name="fgMask">The output foreground mask</param>
-        public static void Apply(this IBackgroundSubtractor substractor, IInputArray image, IOutputArray fgMask, double learningRate = -1)
+        public static void Apply(this IBackgroundSubtractor subtractor, IInputArray image, IOutputArray fgMask, double learningRate = -1)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaFgMask = fgMask.GetOutputArray())
-                CvInvoke.cveBackgroundSubtractorUpdate(substractor.BackgroundSubtractorPtr, iaImage, oaFgMask, learningRate);
+                CvInvoke.cveBackgroundSubtractorUpdate(subtractor.BackgroundSubtractorPtr, iaImage, oaFgMask, learningRate);
         }
 
         /// <summary>
         /// Computes a background image.
         /// </summary>
         /// <param name="backgroundImage">The output background image</param>
+        /// <param name="subtractor">The background subtractor</param>
         /// <remarks> Sometimes the background image can be very blurry, as it contain the average background statistics.</remarks>
-        public static void GetBackgroundImage(this IBackgroundSubtractor substractor, IOutputArray backgroundImage)
+        public static void GetBackgroundImage(this IBackgroundSubtractor subtractor, IOutputArray backgroundImage)
         {
             using (OutputArray oaBackgroundImage = backgroundImage.GetOutputArray())
-                CvInvoke.cveBackgroundSubtractorGetBackgroundImage(substractor.BackgroundSubtractorPtr, oaBackgroundImage);
+                CvInvoke.cveBackgroundSubtractorGetBackgroundImage(subtractor.BackgroundSubtractorPtr, oaBackgroundImage);
         }
     }
 }

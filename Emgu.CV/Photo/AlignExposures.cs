@@ -12,6 +12,9 @@ using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// The base class for algorithms that align images of the same scene with different exposures
+    /// </summary>
     public abstract class AlignExposures : UnmanagedObject
     {
         /// <summary>
@@ -19,6 +22,13 @@ namespace Emgu.CV
         /// </summary>
         protected IntPtr _alignExposuresPtr;
 
+        /// <summary>
+        /// Aligns images.
+        /// </summary>
+        /// <param name="src">vector of input images</param>
+        /// <param name="dst">vector of aligned images</param>
+        /// <param name="times">vector of exposure time values for each image</param>
+        /// <param name="response">256x1 matrix with inverse camera response function for each pixel value, it should have the same number of channels as images.</param>
         public void Process(IInputArrayOfArrays src, VectorOfMat dst, IInputArray times, IInputArray response)
         {
             using (InputArray iaSrc = src.GetInputArray())
@@ -38,9 +48,18 @@ namespace Emgu.CV
         }
     }
 
+    /// <summary>
+    /// This algorithm converts images to median threshold bitmaps (1 for pixels brighter than median luminance and 0 otherwise) and than aligns the resulting bitmaps using bit operations.
+    /// </summary>
     public class AlignMTB : AlignExposures
     {
-        public AlignMTB(int maxBits, int excludeRange, bool cut)
+        /// <summary>
+        /// Create an AlignMTB object
+        /// </summary>
+        /// <param name="maxBits">logarithm to the base 2 of maximal shift in each dimension. Values of 5 and 6 are usually good enough (31 and 63 pixels shift respectively).</param>
+        /// <param name="excludeRange">range for exclusion bitmap that is constructed to suppress noise around the median value.</param>
+        /// <param name="cut">if true cuts images, otherwise fills the new regions with zeros.</param>
+        public AlignMTB(int maxBits = 6, int excludeRange = 4, bool cut = true)
         {
             _ptr = CvInvoke.cveAlignMTBCreate(maxBits, excludeRange, cut, ref _alignExposuresPtr);
         }
