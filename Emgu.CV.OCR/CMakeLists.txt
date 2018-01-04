@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
 IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND EMGU_CV_WITH_TESSERACT)
