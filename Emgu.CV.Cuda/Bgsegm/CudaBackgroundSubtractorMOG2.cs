@@ -17,6 +17,18 @@ namespace Emgu.CV.Cuda
     /// </summary>
     public class CudaBackgroundSubtractorMOG2 : UnmanagedObject, IBackgroundSubtractor
     {
+        private IntPtr _algorithmPtr;
+        private IntPtr _backgroundSubtractorPtr;
+
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
+        public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
+
+        /// <summary>
+        /// Pointer to the unmanaged BackgroundSubtractor object
+        /// </summary>
+        public IntPtr BackgroundSubtractorPtr { get { return _backgroundSubtractorPtr; } }
 
         /// <summary>
         /// Create a Gaussian Mixture-based Background/Foreground Segmentation model
@@ -48,11 +60,6 @@ namespace Emgu.CV.Cuda
             CudaInvoke.cudaBackgroundSubtractorMOG2Release(ref _ptr);
         }
 
-
-        private IntPtr _algorithmPtr;
-        private IntPtr _backgroundSubtractorPtr;
-        public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
-        public IntPtr BackgroundSubtractorPtr { get { return _backgroundSubtractorPtr; } }
     }
 
     public static partial class CudaInvoke

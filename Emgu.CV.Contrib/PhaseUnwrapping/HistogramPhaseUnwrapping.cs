@@ -31,6 +31,9 @@ namespace Emgu.CV.PhaseUnwrapping
                 nbrOfLargeBins);
         }
 
+        /// <summary>
+        /// Release the unmanaged resources assocuated with the HistogramPhaseUnwrapping
+        /// </summary>
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
@@ -57,36 +60,38 @@ namespace Emgu.CV.PhaseUnwrapping
         }
     }
 
+    /// <summary>
+    /// Provide interfaces to the Open CV PhaseUnwrapping functions
+    /// </summary>
+    public static partial class PhaseUnwrappingInvoke
+    {
+        static PhaseUnwrappingInvoke()
+        {
+            CvInvoke.CheckLibraryLoaded();
+        }
 
-   public static partial class PhaseUnwrappingInvoke
-   {
-      static PhaseUnwrappingInvoke()
-      {
-         CvInvoke.CheckLibraryLoaded();
-      }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveHistogramPhaseUnwrappingCreate(
+            int width,
+            int height,
+            float histThresh,
+            int nbrOfSmallBins,
+            int nbrOfLargeBins);
 
-       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-       internal static extern IntPtr cveHistogramPhaseUnwrappingCreate(
-           int width,
-           int height,
-           float histThresh,
-           int nbrOfSmallBins,
-           int nbrOfLargeBins);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveHistogramPhaseUnwrappingRelease(ref IntPtr phaseUnwrapping);
 
-       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-       internal static extern void cveHistogramPhaseUnwrappingRelease(ref IntPtr phaseUnwrapping);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveHistogramPhaseUnwrappingGetInverseReliabilityMap(
+            IntPtr phaseUnwrapping,
+            IntPtr reliabilityMap);
 
-       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-       internal static extern void cveHistogramPhaseUnwrappingGetInverseReliabilityMap(
-           IntPtr phaseUnwrapping, 
-           IntPtr reliabilityMap);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveHistogramPhaseMapUnwrappingUnwrapPhaseMap(
+            IntPtr phaseUnwrapping,
+            IntPtr wrappedPhaseMap,
+            IntPtr unwrappedPhaseMap,
+            IntPtr shadowMask);
 
-       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-       internal static extern void cveHistogramPhaseMapUnwrappingUnwrapPhaseMap(
-           IntPtr phaseUnwrapping,
-           IntPtr wrappedPhaseMap,
-           IntPtr unwrappedPhaseMap,
-           IntPtr shadowMask);
-
-   }
+    }
 }

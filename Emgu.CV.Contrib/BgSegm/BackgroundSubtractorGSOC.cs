@@ -15,10 +15,18 @@ namespace Emgu.CV.BgSegm
     {
         private IntPtr _algorithmPtr;
         private IntPtr _backgroundSubtractorPtr;
+
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
+
+        /// <summary>
+        /// Pointer to the unmanaged BackgroundSubtractor object
+        /// </summary>
         public IntPtr BackgroundSubtractorPtr { get { return _backgroundSubtractorPtr; } }
 
-        
+
         public BackgroundSubtractorGSOC(BackgroundSubtractorLSBP.CameraMotionCompensation mc = BackgroundSubtractorLSBP.CameraMotionCompensation.None, int nSamples = 20, float replaceRate = 0.003f, float propagationRate = 0.01f, int hitsThreshold = 32, float alpha = 0.01f, float beta = 0.0022f, float blinkingSupressionDecay = 0.1f, float blinkingSupressionMultiplier = 0.1f, float noiseRemovalThresholdFacBG = 0.0004f, float noiseRemovalThresholdFacFG = 0.0008f)
         {
             _ptr = ContribInvoke.cveBackgroundSubtractorGSOCCreate(mc, nSamples, replaceRate, propagationRate, hitsThreshold, alpha, beta, blinkingSupressionDecay, blinkingSupressionMultiplier, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, ref _backgroundSubtractorPtr, ref _algorithmPtr);

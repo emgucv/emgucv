@@ -21,9 +21,17 @@ namespace Emgu.CV.BgSegm
 
         private IntPtr _algorithmPtr;
         private IntPtr _backgroundSubtractorPtr;
+
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
+
+        /// <summary>
+        /// Pointer to the unmanaged BackgroundSubtractor object
+        /// </summary>
         public IntPtr BackgroundSubtractorPtr { get { return _backgroundSubtractorPtr; } }
-        
+
         public BackgroundSubtractorLSBP(CameraMotionCompensation mc = CameraMotionCompensation.None, int nSamples = 20, int LSBPRadius = 16, float tlower = 2.0f, float tupper = 32.0f, float tinc = 1.0f, float tdec = 0.05f, float rscale = 10.0f, float rincdec = 0.005f, float noiseRemovalThresholdFacBG = 0.0004f, float noiseRemovalThresholdFacFG = 0.0008f, int LSBPthreshold = 8, int minCount = 2)
         {
             _ptr = Emgu.CV.ContribInvoke.cveBackgroundSubtractorLSBPCreate(
