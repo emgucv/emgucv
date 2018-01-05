@@ -55,11 +55,17 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged DenseOpticalFlow object
+        /// </summary>
         public IntPtr DenseOpticalFlowPtr
         {
             get { return _denseFlow; }
         }
 
+        /// <summary>
+        /// Pointer to the unamanged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr
         {
             get { return _algorithm; } 

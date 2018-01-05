@@ -169,6 +169,10 @@ namespace Emgu.CV.Saliency
         }
     }
 
+    /// <summary>
+    /// A Fast Self-tuning Background Subtraction Algorithm.
+    /// </summary>
+    /// <remarks>This background subtraction algorithm is inspired to the work of B. Wang and P. Dudek [2] [2] B. Wang and P. Dudek "A Fast Self-tuning Background Subtraction Algorithm", in proc of IEEE Workshop on Change Detection, 2014</remarks>
     public partial class MotionSaliencyBinWangApr2014 : UnmanagedObject, IMotionSaliency
     {
         private IntPtr _motionSaliencyPtr;
@@ -335,6 +339,13 @@ namespace Emgu.CV.Saliency
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveObjectnessBINGRelease(ref IntPtr saliency);
 
+        /// <summary>
+        /// Compute the saliency.
+        /// </summary>
+        /// <param name="saliency">The Saliency object</param>
+        /// <param name="image">The image.</param>
+        /// <param name="saliencyMap">The computed saliency map.</param>
+        /// <returns>true if the saliency map is computed, false otherwise</returns>
         public static bool Compute(this ISaliency saliency, IInputArray image, IOutputArray saliencyMap)
         {
             using (var ia = image.GetInputArray())

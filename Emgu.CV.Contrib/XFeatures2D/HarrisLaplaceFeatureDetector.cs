@@ -16,10 +16,19 @@ using Emgu.CV.Features2D;
 
 namespace Emgu.CV.XFeatures2D
 {
-
+    /// <summary>
+    /// Class implementing the Harris-Laplace feature detector
+    /// </summary>
     public class HarrisLaplaceFeatureDetector : Feature2D
     {
-
+        /// <summary>
+        /// Create a HarrisLaplaceFeatureDetector
+        /// </summary>
+        /// <param name="numOctaves">the number of octaves in the scale-space pyramid</param>
+        /// <param name="cornThresh">the threshold for the Harris cornerness measure</param>
+        /// <param name="DOGThresh">the threshold for the Difference-of-Gaussians scale selection</param>
+        /// <param name="maxCorners">the maximum number of corners to consider</param>
+        /// <param name="numLayers">the number of intermediate scales per octave</param>
         public HarrisLaplaceFeatureDetector(
             int numOctaves,
             float cornThresh,

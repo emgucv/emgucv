@@ -79,6 +79,12 @@ namespace Emgu.CV.Dnn
             bool swapRB,
             IntPtr blob);
 
+        /// <summary>
+        /// Reads a network model stored in Darknet model files.
+        /// </summary>
+        /// <param name="cfgFile">path to the .cfg file with text description of the network architecture.</param>
+        /// <param name="darknetModel">path to the .weights file with learned network.</param>
+        /// <returns>Network object that ready to do forward, throw an exception in failure cases.</returns>
         public static Net ReadNetFromDarknet(String cfgFile, String darknetModel = null)
         {
             using (CvString cfgFileStr = new CvString(cfgFile))
@@ -90,7 +96,12 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromDarknet(IntPtr cfgFile, IntPtr darknetModel);
 
-
+        /// <summary>
+        /// Reads a network model stored in Caffe framework's format.
+        /// </summary>
+        /// <param name="prototxt">path to the .prototxt file with text description of the network architecture.</param>
+        /// <param name="caffeModel">path to the .caffemodel file with learned network.</param>
+        /// <returns>Net object.</returns>
         public static Net ReadNetFromCaffe(String prototxt, String caffeModel = null)
         {
             using (CvString prototxtStr = new CvString(prototxt))
@@ -102,6 +113,12 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromCaffe(IntPtr prototxt, IntPtr caffeModel);
 
+        /// <summary>
+        /// Reads a network model stored in TensorFlow framework's format.
+        /// </summary>
+        /// <param name="model">path to the .pb file with binary protobuf description of the network architecture</param>
+        /// <param name="config">path to the .pbtxt file that contains text graph definition in protobuf format. Resulting Net object is built by text graph using weights from a binary one that let us make it more flexible.</param>
+        /// <returns>Net object.</returns>
         public static Net ReadNetFromTensorflow(String model, String config = null)
         {
             using (CvString modelStr = new CvString(model))

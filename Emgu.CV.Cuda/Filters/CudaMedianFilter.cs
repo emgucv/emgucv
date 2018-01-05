@@ -15,10 +15,19 @@ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
-   
-   public class MedianFilter : CudaFilter
+    /// <summary>
+    /// median filtering for each point of the source image.
+    /// </summary>
+    public class MedianFilter : CudaFilter
    {
-      public MedianFilter(DepthType srcDepth, int srcChannels, int windowSize, int partition)
+        /// <summary>
+        /// Create a median filter
+        /// </summary>
+        /// <param name="srcDepth">Type of of source image. Only 8U images are supported for now.</param>
+        /// <param name="srcChannels">Type of of source image. Only single channel images are supported for now.</param>
+        /// <param name="windowSize">Size of the kernerl used for the filtering. Uses a (windowSize x windowSize) filter.</param>
+        /// <param name="partition">Specifies the parallel granularity of the workload. This parameter should be used GPU experts when optimizing performance.</param>
+        public MedianFilter(DepthType srcDepth, int srcChannels, int windowSize, int partition = 128)
       {
          _ptr = CudaInvoke.cudaCreateMedianFilter(CvInvoke.MakeType(srcDepth, srcChannels), windowSize, partition);
       }

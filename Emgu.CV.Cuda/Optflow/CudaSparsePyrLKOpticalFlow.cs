@@ -46,11 +46,17 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged SparseOpticalFlow object
+        /// </summary>
         public IntPtr SparseOpticalFlowPtr
         {
             get { return _sparseFlow; }
         }
 
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr
         {
             get { return _algorithm; }

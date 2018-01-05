@@ -31,14 +31,36 @@ namespace Emgu.CV
     /// </summary>
     public static class SparseOpticalFlowExtensions
     {
-        
+        /// <summary>
+        /// Calculates a sparse optical flow.
+        /// </summary>
+        /// <param name="opticalFlow">The sparse optical flow</param>
+        /// <param name="prevImg">First input image.</param>
+        /// <param name="nextImg">Second input image of the same size and the same type as prevImg.</param>
+        /// <param name="prevPts">Vector of 2D points for which the flow needs to be found.</param>
+        /// <param name="nextPts">Output vector of 2D points containing the calculated new positions of input features in the second image.</param>
+        /// <param name="status">Output status vector. Each element of the vector is set to 1 if the flow for the corresponding features has been found.Otherwise, it is set to 0.</param>
+        /// <param name="error">Optional output vector that contains error response for each point (inverse confidence).</param>
         public static void Calc(
-            this IDenseOpticalFlow opticalFlow, 
-            IInputArray prevImg, IInputArray nextImg, IInputArray ptrPts, IInputOutputArray nextPts
+            this ISparseOpticalFlow opticalFlow, 
+            IInputArray prevImg, IInputArray nextImg, 
+            IInputArray prevPts, IInputOutputArray nextPts, 
+            IOutputArray status,
+            IOutputArray error = null
             )
         {
-
-            
+            using (InputArray iaPreImg = prevImg.GetInputArray())
+            using (InputArray iaNextImg = nextImg.GetInputArray())
+            using (InputArray iaPrevPts = prevPts.GetInputArray())
+            using (InputOutputArray ioaNextPts = nextPts.GetInputOutputArray())
+            using (OutputArray oaStatus = status.GetOutputArray())
+            using (OutputArray oaError = error == null ? OutputArray.GetEmpty() : error.GetOutputArray())
+                CvInvoke.cveSparseOpticalFlowCalc(
+                    opticalFlow.SparseOpticalFlowPtr,
+                    iaPreImg, iaNextImg,
+                    iaPrevPts, ioaNextPts,
+                    oaStatus, oaError
+                    );
         }
     }
 

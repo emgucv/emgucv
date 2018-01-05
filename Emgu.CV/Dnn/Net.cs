@@ -83,11 +83,17 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Returns true if there are no layers in the network.
+        /// </summary>
         public bool Empty
         {
             get { return DnnInvoke.cveDnnNetEmpty(_ptr); }
         }
 
+        /// <summary>
+        /// Return the LayerNames
+        /// </summary>
         public String[] LayerNames
         {
             get

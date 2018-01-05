@@ -15,13 +15,28 @@ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
+    /// <summary>
+    /// A vertical 1D box filter.
+    /// </summary>
     public class ColumnSumFilter : CudaFilter
     {
+        /// <summary>
+        /// Creates a vertical 1D box filter.
+        /// </summary>
+        /// <param name="srcDepth">Input image depth.</param>
+        /// <param name="srcChannels">Input image channel.</param>
+        /// <param name="dstDepth">Output image depth.</param>
+        /// <param name="dstChannels">Output image channel.</param>
+        /// <param name="ksize">Kernel size.</param>
+        /// <param name="anchor">Anchor point. The default value (-1) means that the anchor is at the kernel center.</param>
+        /// <param name="borderType">Pixel extrapolation method.</param>
+        /// <param name="borderValue">Default border value.</param>
         public ColumnSumFilter(
             DepthType srcDepth, int srcChannels, 
             DepthType dstDepth, int dstChannels, 
-            int ksize, int anchor, 
-            CvEnum.BorderType borderType = BorderType.Default, MCvScalar borderValue = new MCvScalar())
+            int ksize, int anchor = -1, 
+            CvEnum.BorderType borderType = BorderType.Default, 
+            MCvScalar borderValue = new MCvScalar())
         {
             _ptr = CudaInvoke.cudaCreateColumnSumFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), ksize, anchor, borderType, ref borderValue);
         }
