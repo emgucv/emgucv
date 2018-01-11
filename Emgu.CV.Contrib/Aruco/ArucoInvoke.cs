@@ -237,5 +237,244 @@ namespace Emgu.CV.Aruco
          ref Size imageSize, IntPtr cameraMatrix, IntPtr distCoeffs,
          IntPtr rvecs, IntPtr tvecs, CalibType flags,
          ref MCvTermCriteria criteria);
-   }
+
+        /// <summary>
+        /// Interpolate position of ChArUco board corners
+        /// </summary>
+        /// <param name="markerCorners">vector of already detected markers corners. For each marker, its four corners are provided, (e.g VectorOfVectorOfPointF ). For N detected markers, the dimensions of this array should be Nx4.The order of the corners should be clockwise.</param>
+        /// <param name="markerIds">list of identifiers for each marker in corners</param>
+        /// <param name="image">input image necesary for corner refinement. Note that markers are not detected and should be sent in corners and ids parameters.</param>
+        /// <param name="board">layout of ChArUco board.</param>
+        /// <param name="charucoCorners">interpolated chessboard corners</param>
+        /// <param name="charucoIds">interpolated chessboard corners identifiers</param>
+        /// <param name="cameraMatrix">optional 3x3 floating-point camera matrix</param>
+        /// <param name="distCoeffs">optional vector of distortion coefficients, (k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6],[s_1, s_2, s_3, s_4]]) of 4, 5, 8 or 12 elements </param>
+        /// <param name="minMarkers">number of adjacent markers that must be detected to return a charuco corner</param>
+        /// <returns>The number of interpolated corners.</returns>
+        public static int InterpolateCornersCharuco(
+            IInputArrayOfArrays markerCorners,
+            IInputArray markerIds,
+            IInputArray image,
+            CharucoBoard board,
+            IOutputArray charucoCorners,
+            IOutputArray charucoIds,
+            IInputArray cameraMatrix = null,
+            IInputArray distCoeffs = null,
+            int minMarkers = 2)
+        {
+            using (InputArray iaMarkerCorners = markerCorners.GetInputArray())
+            using (InputArray iaMarkerIds = markerIds.GetInputArray())
+            using (InputArray iaImage = image.GetInputArray())
+            using (OutputArray oaCharucoCorners = charucoCorners.GetOutputArray())
+            using (OutputArray oaCharucoIds = charucoIds.GetOutputArray())
+            using (InputArray iaCameraMatrix = cameraMatrix == null? InputArray.GetEmpty(): cameraMatrix.GetInputArray())
+            using (InputArray iaDistCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+            {
+                return cveArucoInterpolateCornersCharuco(
+                    iaMarkerCorners, iaMarkerIds, iaImage, board,
+                    oaCharucoCorners, oaCharucoIds,
+                    iaCameraMatrix, iaDistCoeffs,
+                    minMarkers);
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveArucoInterpolateCornersCharuco(
+            IntPtr markerCorners,
+            IntPtr markerIds,
+            IntPtr image,
+            IntPtr board,
+            IntPtr charucoCorners,
+            IntPtr charucoIds,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            int minMarkers);
+
+        /// <summary>
+        /// Draws a set of Charuco corners
+        /// </summary>
+        /// <param name="image">image input/output image. It must have 1 or 3 channels. The number of channels is not altered.</param>
+        /// <param name="charucoCorners">vector of detected charuco corners</param>
+        /// <param name="charucoIds">list of identifiers for each corner in charucoCorners</param>
+        /// <param name="cornerColor">color of the square surrounding each corner</param>
+        public static void DrawDetectedCornersCharuco(
+            IInputOutputArray image,
+            IInputArray charucoCorners,
+            IInputArray charucoIds,
+            MCvScalar cornerColor)
+        {
+            using (InputOutputArray ioaImage = image.GetInputOutputArray())
+            using (InputArray iaCharucoCorners = charucoCorners.GetInputArray())
+            using (InputArray iaCharucoIds = charucoIds == null ? InputArray.GetEmpty() : charucoIds.GetInputArray())
+            {
+                cveArucoDrawDetectedCornersCharuco(ioaImage, iaCharucoCorners, iaCharucoIds, ref cornerColor);
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveArucoDrawDetectedCornersCharuco(
+            IntPtr image,
+            IntPtr charucoCorners,
+            IntPtr charucoIds,
+            ref MCvScalar cornerColor);
+
+        /// <summary>
+        ///  Pose estimation for a ChArUco board given some of their corners
+        /// </summary>
+        /// <param name="charucoCorners">vector of detected charuco corners</param>
+        /// <param name="charucoIds">list of identifiers for each corner in charucoCorners</param>
+        /// <param name="board">layout of ChArUco board.</param>
+        /// <param name="cameraMatrix">input 3x3 floating-point camera matrix</param>
+        /// <param name="distCoeffs">vector of distortion coefficients, 4, 5, 8 or 12 elements</param>
+        /// <param name="rvec">Output vector (e.g. cv::Mat) corresponding to the rotation vector of the board</param>
+        /// <param name="tvec">Output vector (e.g. cv::Mat) corresponding to the translation vector of the board.</param>
+        /// <param name="useExtrinsicGuess">defines whether initial guess for rvec and  tvec will be used or not.</param>
+        /// <returns>If pose estimation is valid, returns true, else returns false.</returns>
+        public static bool EstimatePoseCharucoBoard(
+            IInputArray charucoCorners,
+            IInputArray charucoIds,
+            CharucoBoard board,
+            IInputArray cameraMatrix,
+            IInputArray distCoeffs,
+            IOutputArray rvec,
+            IOutputArray tvec,
+            bool useExtrinsicGuess = false)
+        {
+            using (InputArray iaCharucoCorners = charucoCorners.GetInputArray())
+            using (InputArray iaCharucoIds = charucoIds.GetInputArray())
+            using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+            using (InputArray iaDistCoeffs = distCoeffs.GetInputArray())
+            using (OutputArray oaRvec = rvec.GetOutputArray())
+            using (OutputArray oaTvec = tvec.GetOutputArray())
+            {
+                return cveArucoEstimatePoseCharucoBoard(
+                    iaCharucoCorners,
+                    iaCharucoIds,
+                    board,
+                    iaCameraMatrix,
+                    iaDistCoeffs,
+                    oaRvec,
+                    oaTvec,
+                    useExtrinsicGuess);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveArucoEstimatePoseCharucoBoard(
+            IntPtr charucoCorners,
+            IntPtr charucoIds,
+            IntPtr board,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            IntPtr rvec,
+            IntPtr tvec,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useExtrinsicGuess);
+
+        /// <summary>
+        /// Detect ChArUco Diamond markers
+        /// </summary>
+        /// <param name="image">input image necessary for corner subpixel.</param>
+        /// <param name="markerCorners">list of detected marker corners from detectMarkers function.</param>
+        /// <param name="markerIds">list of marker ids in markerCorners.</param>
+        /// <param name="squareMarkerLengthRate">rate between square and marker length: squareMarkerLengthRate = squareLength / markerLength.The real units are not necessary.</param>
+        /// <param name="diamondCorners">output list of detected diamond corners (4 corners per diamond). The order is the same than in marker corners: top left, top right, bottom right and bottom left. Similar format than the corners returned by detectMarkers(e.g VectorOfVectorOfPointF ).</param>
+        /// <param name="diamondIds">ids of the diamonds in diamondCorners. The id of each diamond is in fact of type Vec4i, so each diamond has 4 ids, which are the ids of the aruco markers composing the diamond.</param>
+        /// <param name="cameraMatrix">Optional camera calibration matrix.</param>
+        /// <param name="distCoeffs">Optional camera distortion coefficients.</param>
+        public static void DetectCharucoDiamond(
+            IInputArray image,
+            IInputArray markerCorners,
+            IInputArray markerIds,
+            float squareMarkerLengthRate,
+            IOutputArray diamondCorners,
+            IOutputArray diamondIds,
+            IInputArray cameraMatrix = null,
+            IInputArray distCoeffs = null)
+        {
+            using (InputArray iaImage = image.GetInputArray())
+            using (InputArray iaMarkerCorners = markerCorners.GetInputArray())
+            using (InputArray iaMarkerIds = markerIds.GetInputArray())
+            using (OutputArray oaDiamondCorners = diamondCorners.GetOutputArray())
+            using (OutputArray oaDiamondIds = diamondIds.GetOutputArray())
+            using (InputArray iaCameraMatrix = cameraMatrix == null ? InputArray.GetEmpty() : cameraMatrix.GetInputArray())
+            using (InputArray iaDistCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+            {
+                cveArucoDetectCharucoDiamond(iaImage, iaMarkerCorners, iaMarkerIds, squareMarkerLengthRate, oaDiamondCorners, oaDiamondIds, iaCameraMatrix, iaDistCoeffs);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveArucoDetectCharucoDiamond(
+            IntPtr image,
+            IntPtr markerCorners,
+            IntPtr markerIds,
+            float squareMarkerLengthRate,
+            IntPtr diamondCorners,
+            IntPtr diamondIds,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs);
+
+        /// <summary>
+        /// Draw a set of detected ChArUco Diamond markers
+        /// </summary>
+        /// <param name="image">input/output image. It must have 1 or 3 channels. The number of channels is not altered.</param>
+        /// <param name="diamondCorners">positions of diamond corners in the same format returned by detectCharucoDiamond(). (e.g VectorOfVectorOfPointF ). For N detected markers, the dimensions of this array should be Nx4. The order of the corners should be clockwise.</param>
+        /// <param name="diamondIds">vector of identifiers for diamonds in diamondCorners, in the same format returned by detectCharucoDiamond() (e.g. VectorOfMat ). Optional, if not provided, ids are not painted. </param>
+        /// <param name="borderColor">color of marker borders. Rest of colors (text color and first corner color) are calculated based on this one.</param>
+        public static void DrawDetectedDiamonds(
+            IInputOutputArray image,
+            IInputArrayOfArrays diamondCorners,
+            IInputArray diamondIds,
+            MCvScalar borderColor)
+        {
+            using (InputOutputArray ioaImage = image.GetInputOutputArray())
+            using (InputArray iaDiamondCorners = diamondCorners.GetInputArray())
+            using (InputArray iaDiamondIds = diamondIds == null? InputArray.GetEmpty() : diamondIds.GetInputArray())
+            {
+                cveArucoDrawDetectedDiamonds(ioaImage, iaDiamondCorners, iaDiamondIds, ref borderColor);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveArucoDrawDetectedDiamonds(
+            IntPtr image,
+            IntPtr diamondCorners,
+            IntPtr diamondIds,
+            ref MCvScalar borderColor);
+
+        /// <summary>
+        /// Draw a ChArUco Diamond marker
+        /// </summary>
+        /// <param name="dictionary">dictionary of markers indicating the type of markers.</param>
+        /// <param name="ids">list of 4 ids for each ArUco marker in the ChArUco marker.</param>
+        /// <param name="squareLength">size of the chessboard squares in pixels.</param>
+        /// <param name="markerLength">size of the markers in pixels.</param>
+        /// <param name="img">output image with the marker. The size of this image will be 3*squareLength + 2*marginSize.</param>
+        /// <param name="marginSize">minimum margins (in pixels) of the marker in the output image</param>
+        /// <param name="borderBits">width of the marker borders.</param>
+        public static void DrawCharucoDiamond(
+            Dictionary dictionary,
+            IInputArray ids, 
+            int squareLength,
+            int markerLength,
+            IOutputArray img,
+            int marginSize = 0,
+            int borderBits = 1)
+        {
+            using (InputArray iaIds = ids.GetInputArray())
+            using (OutputArray oaImg = img.GetOutputArray())
+                cveArucoDrawCharucoDiamond(dictionary, iaIds, squareLength, markerLength, oaImg, marginSize, borderBits);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveArucoDrawCharucoDiamond(
+            IntPtr dictionary,
+            IntPtr ids, 
+            int squareLength,
+            int markerLength,
+            IntPtr img,
+            int marginSize,
+            int borderBits);
+            
+    }
 }

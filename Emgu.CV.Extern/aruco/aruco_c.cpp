@@ -170,3 +170,103 @@ void cveArucoDetectorParametersGetDefault(cv::aruco::DetectorParameters* paramet
    cv::aruco::DetectorParameters p;
    memcpy(parameters, &p, sizeof(cv::aruco::DetectorParameters));
 }
+
+int cveArucoInterpolateCornersCharuco(
+	cv::_InputArray* markerCorners,
+	cv::_InputArray* markerIds,
+	cv::_InputArray* image,
+	cv::aruco::CharucoBoard* board,
+	cv::_OutputArray* charucoCorners,
+	cv::_OutputArray* charucoIds,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	int minMarkers)
+{
+	cv::Ptr<cv::aruco::CharucoBoard> boardPtr = board;
+	boardPtr.addref();
+	return cv::aruco::interpolateCornersCharuco(
+		*markerCorners, *markerIds, *image,
+		boardPtr,
+		*charucoCorners, *charucoIds,
+		cameraMatrix ? *cameraMatrix : (cv::InputArray) cv::noArray(),
+		distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(),
+		minMarkers);
+}
+
+void cveArucoDrawDetectedCornersCharuco(
+	cv::_InputOutputArray* image,
+	cv::_InputArray* charucoCorners,
+	cv::_InputArray* charucoIds,
+	CvScalar* cornerColor)
+{
+	cv::aruco::drawDetectedCornersCharuco(
+		*image, 
+		*charucoCorners, 
+		charucoIds ? *charucoIds : (cv::InputArray) cv::noArray(), 
+		*cornerColor);
+}
+
+bool cveArucoEstimatePoseCharucoBoard(
+	cv::_InputArray* charucoCorners,
+	cv::_InputArray* charucoIds,
+	cv::aruco::CharucoBoard* board,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvec,
+	cv::_OutputArray* tvec,
+	bool useExtrinsicGuess)
+{
+	cv::Ptr<cv::aruco::CharucoBoard> boardPtr = board;
+	boardPtr.addref();
+	return cv::aruco::estimatePoseCharucoBoard(
+		*charucoCorners,
+		*charucoIds,
+		boardPtr,
+		*cameraMatrix,
+		*distCoeffs,
+		*rvec,
+		*tvec,
+		useExtrinsicGuess);
+}
+
+void cveArucoDetectCharucoDiamond(
+	cv::_InputArray* image,
+	cv::_InputArray* markerCorners,
+	cv::_InputArray* markerIds,
+	float squareMarkerLengthRate,
+	cv::_OutputArray* diamondCorners,
+	cv::_OutputArray* diamondIds,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs)
+{
+	cv::aruco::detectCharucoDiamond(
+		*image, *markerCorners, *markerIds,
+		squareMarkerLengthRate,
+		*diamondCorners, *diamondIds,
+		cameraMatrix ? *cameraMatrix : (cv::InputArray) cv::noArray(),
+		distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray());
+}
+
+void cveArucoDrawDetectedDiamonds(
+	cv::_InputOutputArray* image,
+	cv::_InputArray* diamondCorners,
+	cv::_InputArray* diamondIds,
+	CvScalar* borderColor)
+{
+	cv::aruco::drawDetectedDiamonds(*image, *diamondCorners, *diamondIds, *borderColor);
+}
+
+void cveArucoDrawCharucoDiamond(
+	cv::aruco::Dictionary* dictionary,
+	cv::_InputArray* ids, int squareLength,
+	int markerLength,
+	cv::_OutputArray* img,
+	int marginSize,
+	int borderBits)
+{
+	cv::Ptr<cv::aruco::Dictionary> dictPtr = dictionary;
+	dictPtr.addref();
+	cv::Vec4i idsVec;
+	ids->copyTo(idsVec);
+	cv::aruco::drawCharucoDiamond(dictPtr, idsVec, squareLength, markerLength, *img, marginSize, borderBits);
+}

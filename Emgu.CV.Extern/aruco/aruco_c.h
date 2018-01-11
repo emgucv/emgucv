@@ -63,4 +63,58 @@ CVAPI(double) cveArucoCalibrateCameraAruco(
    CvTermCriteria* criteria);
 
 CVAPI(void) cveArucoDetectorParametersGetDefault(cv::aruco::DetectorParameters* parameters);
+
+CVAPI(int) cveArucoInterpolateCornersCharuco(
+	cv::_InputArray* markerCorners, 
+	cv::_InputArray* markerIds,
+	cv::_InputArray* image, 
+	cv::aruco::CharucoBoard* board,
+	cv::_OutputArray* charucoCorners, 
+	cv::_OutputArray* charucoIds,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs, 
+	int minMarkers);
+
+CVAPI(void) cveArucoDrawDetectedCornersCharuco(
+	cv::_InputOutputArray* image, 
+	cv::_InputArray* charucoCorners,
+	cv::_InputArray* charucoIds,
+	CvScalar* cornerColor);
+
+CVAPI(bool) cveArucoEstimatePoseCharucoBoard(
+	cv::_InputArray* charucoCorners, 
+	cv::_InputArray* charucoIds,
+	cv::aruco::CharucoBoard* board, 
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs, 
+	cv::_OutputArray* rvec, 
+	cv::_OutputArray* tvec,
+	bool useExtrinsicGuess);
+
+
+CVAPI(void) cveArucoDetectCharucoDiamond(
+	cv::_InputArray* image,
+	cv::_InputArray* markerCorners,
+	cv::_InputArray* markerIds,
+	float squareMarkerLengthRate,
+	cv::_OutputArray* diamondCorners,
+	cv::_OutputArray* diamondIds,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs);
+
+CVAPI(void) cveArucoDrawDetectedDiamonds(
+	cv::_InputOutputArray* image, 
+	cv::_InputArray* diamondCorners,
+	cv::_InputArray* diamondIds,
+	CvScalar* borderColor);
+
+CVAPI(void) cveArucoDrawCharucoDiamond(
+	cv::aruco::Dictionary* dictionary, 
+	cv::_InputArray* ids, 
+	int squareLength,
+	int markerLength, 
+	cv::_OutputArray* img, 
+	int marginSize,
+	int borderBits);
+
 #endif
