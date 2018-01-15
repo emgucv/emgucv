@@ -78,3 +78,35 @@ void cveBIFRelease(cv::face::BIF** bif)
 	delete *bif;
 	*bif = 0;
 }
+
+cv::face::FacemarkLBF::Params* cveFacemarkLBFParamsCreate()
+{
+	return new cv::face::FacemarkLBF::Params();
+}
+void cveFacemarkLBFParamsRelease(cv::face::FacemarkLBF::Params** params)
+{
+	delete *params;
+	*params = 0;
+}
+
+cv::face::FacemarkLBF* cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark)
+{
+	cv::Ptr<cv::face::FacemarkLBF> ptr = cv::face::FacemarkLBF::create(*parameters);
+	ptr.addref();
+	*facemark = dynamic_cast<cv::face::Facemark*>(ptr.get());
+	return ptr.get();
+}
+void cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark)
+{
+	delete *facemark;
+	*facemark = 0;
+}
+
+bool myDetector(cv::InputArray image, cv::OutputArray faces, CSharp_FaceDetector face_detector)
+{
+	return (*face_detector)(&image, &faces);
+}
+void cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector)
+{
+	facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, detector);
+}
