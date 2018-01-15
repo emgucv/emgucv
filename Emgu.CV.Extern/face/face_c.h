@@ -35,5 +35,5 @@ CVAPI(cv::face::FacemarkLBF*) cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params
 CVAPI(void) cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark);
 
 typedef bool(*CSharp_FaceDetector)(const cv::_InputArray*, const cv::_OutputArray*);
-CVAPI(void) cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector);
+CVAPI(bool) cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector);
 #endif

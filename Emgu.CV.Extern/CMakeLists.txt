@@ -2097,15 +2097,15 @@ if(NETFX_CORE)
   endif()
 endif()
 
-if(BUILD_PNG)
+if(WITH_PNG AND BUILD_PNG)
   target_link_libraries(${the_target} libpng)
 endif()
 
-if(BUILD_TIFF)
+if(WITH_TIFF AND BUILD_TIFF)
   target_link_libraries(${the_target} libtiff)
 endif()
 
-if(BUILD_JPEG)
+if(WITH_JPEG AND BUILD_JPEG)
   target_link_libraries(${the_target} libjpeg)
 endif()
 

@@ -106,7 +106,7 @@ bool myDetector(cv::InputArray image, cv::OutputArray faces, CSharp_FaceDetector
 {
 	return (*face_detector)(&image, &faces);
 }
-void cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector)
+bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector)
 {
-	facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, detector);
+	return facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, detector);
 }
