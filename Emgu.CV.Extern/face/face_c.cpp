@@ -110,3 +110,20 @@ bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetecto
 {
 	return facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, detector);
 }
+
+void cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model)
+{
+	facemark->loadModel(*model);
+}
+bool cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces)
+{
+	facemark->getFaces(*image, *faces);
+}
+bool cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_InputOutputArray* landmarks)
+{
+	facemark->fit(*image, *faces, *landmarks);
+}
+void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, CvScalar* color)
+{
+	cv::face::drawFacemarks(*image, *points, *color);
+}
