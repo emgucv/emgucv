@@ -79,6 +79,31 @@ void cveBIFRelease(cv::face::BIF** bif)
 	*bif = 0;
 }
 
+cv::face::FacemarkAAM::Params* cveFacemarkAAMParamsCreate()
+{
+	return new cv::face::FacemarkAAM::Params();
+}
+void cveFacemarkAAMParamsRelease(cv::face::FacemarkAAM::Params** params)
+{
+	delete *params;
+	*params = 0;
+}
+
+cv::face::FacemarkAAM* cveFacemarkAAMCreate(cv::face::FacemarkAAM::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::face::FacemarkAAM> ptr = cv::face::FacemarkAAM::create(*parameters);
+	ptr.addref();
+	*facemark = dynamic_cast<cv::face::Facemark*>(ptr.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
+	return ptr.get();
+}
+void cveFacemarkAAMRelease(cv::face::FacemarkAAM** facemark)
+{
+	delete *facemark;
+	*facemark = 0;
+}
+
+
 cv::face::FacemarkLBF::Params* cveFacemarkLBFParamsCreate()
 {
 	return new cv::face::FacemarkLBF::Params();
@@ -89,11 +114,12 @@ void cveFacemarkLBFParamsRelease(cv::face::FacemarkLBF::Params** params)
 	*params = 0;
 }
 
-cv::face::FacemarkLBF* cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark)
+cv::face::FacemarkLBF* cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm)
 {
 	cv::Ptr<cv::face::FacemarkLBF> ptr = cv::face::FacemarkLBF::create(*parameters);
 	ptr.addref();
 	*facemark = dynamic_cast<cv::face::Facemark*>(ptr.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
 	return ptr.get();
 }
 void cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark)
@@ -117,11 +143,11 @@ void cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model)
 }
 bool cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces)
 {
-	facemark->getFaces(*image, *faces);
+	return facemark->getFaces(*image, *faces);
 }
 bool cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_InputOutputArray* landmarks)
 {
-	facemark->fit(*image, *faces, *landmarks);
+	return facemark->fit(*image, *faces, *landmarks);
 }
 void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, CvScalar* color)
 {

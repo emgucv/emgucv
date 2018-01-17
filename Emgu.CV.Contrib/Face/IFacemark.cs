@@ -13,7 +13,7 @@ using Emgu.Util;
 
 namespace Emgu.CV.Face
 {
-    public interface IFacemark
+    public interface IFacemark : IAlgorithm
     {
 
         /// <summary>

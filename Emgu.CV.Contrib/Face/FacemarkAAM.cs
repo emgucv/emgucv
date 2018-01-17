@@ -14,7 +14,7 @@ using Emgu.Util;
 namespace Emgu.CV.Face
 {
 
-    public class FacemarkLBF : UnmanagedObject, IFacemark
+    public class FacemarkAAM : UnmanagedObject, IFacemark
     {
         private IntPtr _facemarkPtr;
         public IntPtr FacemarkPtr { get { return _facemarkPtr; } }
@@ -26,28 +26,28 @@ namespace Emgu.CV.Face
         {
             public Params()
             {
-                _ptr = Emgu.CV.ContribInvoke.cveFacemarkLBFParamsCreate();
+                _ptr = Emgu.CV.ContribInvoke.cveFacemarkAAMParamsCreate();
             }
 
             protected override void DisposeObject()
             {
                 if (_ptr != IntPtr.Zero)
                 {
-                    Emgu.CV.ContribInvoke.cveFacemarkLBFParamsRelease(ref _ptr);
+                    Emgu.CV.ContribInvoke.cveFacemarkAAMParamsRelease(ref _ptr);
                 }
             }
         }
 
-        public FacemarkLBF(Params parameters)
+        public FacemarkAAM(Params parameters)
         {
-            _ptr = Emgu.CV.ContribInvoke.cveFacemarkLBFCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
+            _ptr = Emgu.CV.ContribInvoke.cveFacemarkAAMCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
         }
 
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
             {
-                Emgu.CV.ContribInvoke.cveFacemarkLBFRelease(ref _ptr);
+                Emgu.CV.ContribInvoke.cveFacemarkAAMRelease(ref _ptr);
             }
         }
     }
@@ -58,13 +58,13 @@ namespace Emgu.CV
     public static partial class ContribInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveFacemarkLBFCreate(IntPtr parameters, ref IntPtr facemark, ref IntPtr algorithm);
+        internal extern static IntPtr cveFacemarkAAMCreate(IntPtr parameters, ref IntPtr facemark, ref IntPtr algorithm);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFacemarkLBFRelease(ref IntPtr facemark);
+        internal extern static void cveFacemarkAAMRelease(ref IntPtr facemark);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveFacemarkLBFParamsCreate();
+        internal extern static IntPtr cveFacemarkAAMParamsCreate();
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFacemarkLBFParamsRelease(ref IntPtr parameters);
+        internal extern static void cveFacemarkAAMParamsRelease(ref IntPtr parameters);
     }
 }

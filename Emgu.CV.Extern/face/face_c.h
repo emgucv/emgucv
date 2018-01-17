@@ -28,10 +28,18 @@ CVAPI(cv::face::BIF*) cveBIFCreate(int numBands, int numRotations);
 CVAPI(void) cveBIFCompute(cv::face::BIF* bif, cv::_InputArray* image, cv::_OutputArray* features);
 CVAPI(void) cveBIFRelease(cv::face::BIF** bif);
 
+
+CVAPI(cv::face::FacemarkAAM::Params*) cveFacemarkAAMParamsCreate();
+CVAPI(void) cveFacemarkAAMParamsRelease(cv::face::FacemarkAAM::Params** params);
+
+CVAPI(cv::face::FacemarkAAM*) cveFacemarkAAMCreate(cv::face::FacemarkAAM::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm);
+CVAPI(void) cveFacemarkAAMRelease(cv::face::FacemarkAAM** facemark);
+
+
 CVAPI(cv::face::FacemarkLBF::Params*) cveFacemarkLBFParamsCreate();
 CVAPI(void) cveFacemarkLBFParamsRelease(cv::face::FacemarkLBF::Params** params);
 
-CVAPI(cv::face::FacemarkLBF*) cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark);
+CVAPI(cv::face::FacemarkLBF*) cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm);
 CVAPI(void) cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark);
 
 typedef bool(*CSharp_FaceDetector)(const cv::_InputArray*, const cv::_OutputArray*);
