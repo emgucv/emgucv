@@ -128,14 +128,33 @@ void cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark)
 	*facemark = 0;
 }
 
-bool myDetector(cv::InputArray image, cv::OutputArray faces, CSharp_FaceDetector face_detector)
+typedef struct
 {
-	return (*face_detector)(&image, &faces);
+	CSharp_FaceDetector face_detector_func;
+} face_detector_pointer;
+
+bool myDetector(cv::InputArray image, cv::OutputArray faces, void* face_detector_struct)
+{
+	face_detector_pointer* fds = (face_detector_pointer*)face_detector_struct;
+	return (*(fds->face_detector_func))(&image, &faces);
+}
+bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector)
+{
+	face_detector_pointer detector_pointer;
+	detector_pointer.face_detector_func = detector;
+	return facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, &detector_pointer);
+}
+
+/*
+bool myDetector(cv::InputArray image, cv::OutputArray faces, void* face_detector)
+{
+	CSharp_FaceDetector detector = (CSharp_FaceDetector)face_detector;
+	return (*detector)(&image, &faces);
 }
 bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector)
 {
 	return facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, detector);
-}
+}*/
 
 void cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model)
 {
