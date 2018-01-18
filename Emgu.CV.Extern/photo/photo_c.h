@@ -67,19 +67,19 @@ CVAPI(void) cveMergeRobertsonRelease(cv::MergeRobertson** merge);
 
 //Tonemap
 CVAPI(void) cveTonemapProcess(cv::Tonemap* tonemap, cv::_InputArray* src, cv::_OutputArray* dst);
-CVAPI(cv::Tonemap*) cveTonemapCreate(float gamma);
+CVAPI(cv::Tonemap*) cveTonemapCreate(float gamma, cv::Algorithm** algorithm);
 CVAPI(void) cveTonemapRelease(cv::Tonemap** tonemap);
 
-CVAPI(cv::TonemapDrago*) cveTonemapDragoCreate(float gamma, float saturation, float bias, cv::Tonemap** tonemap);
+CVAPI(cv::TonemapDrago*) cveTonemapDragoCreate(float gamma, float saturation, float bias, cv::Tonemap** tonemap, cv::Algorithm** algorithm);
 CVAPI(void) cveTonemapDragoRelease(cv::TonemapDrago** tonemap);
 
-CVAPI(cv::TonemapDurand*) cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, cv::Tonemap** tonemap);
+CVAPI(cv::TonemapDurand*) cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, cv::Tonemap** tonemap, cv::Algorithm** algorithm);
 CVAPI(void) cveTonemapDurandRelease(cv::TonemapDurand** tonemap);
 
-CVAPI(cv::TonemapReinhard*) cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, cv::Tonemap** tonemap);
+CVAPI(cv::TonemapReinhard*) cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, cv::Tonemap** tonemap, cv::Algorithm** algorithm);
 CVAPI(void) cveTonemapReinhardRelease(cv::TonemapReinhard** tonemap);
 
-CVAPI(cv::TonemapMantiuk*) cveTonemapMantiukCreate(float gamma, float scale, float saturation, cv::Tonemap** tonemap);
+CVAPI(cv::TonemapMantiuk*) cveTonemapMantiukCreate(float gamma, float scale, float saturation, cv::Tonemap** tonemap, cv::Algorithm** algorithm);
 CVAPI(void) cveTonemapMantiukRelease(cv::TonemapMantiuk** tonemap);
 
 //AlignExposures
