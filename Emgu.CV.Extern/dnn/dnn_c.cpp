@@ -154,9 +154,10 @@ void cveDnnBlobFromImage(
 	CvSize* size,
 	CvScalar* mean,
 	bool swapRB,
+	bool crop,
 	cv::Mat* blob)
 {
-	cv::Mat b = cv::dnn::blobFromImage(*image, scalefactor, *size, *mean, swapRB);
+	cv::Mat b = cv::dnn::blobFromImage(*image, scalefactor, *size, *mean, swapRB, crop);
 	cv::swap(*blob, b);
 }
 
@@ -166,8 +167,9 @@ void cveDnnBlobFromImages(
 	CvSize* size,
 	CvScalar* mean,
 	bool swapRB,
+	bool crop,
 	cv::Mat* blob)
 {
-	cv::Mat b = cv::dnn::blobFromImages(*images, scalefactor, *size, *mean, swapRB);
+	cv::Mat b = cv::dnn::blobFromImages(*images, scalefactor, *size, *mean, swapRB, crop);
 	cv::swap(*blob, b);
 }

@@ -3263,20 +3263,28 @@ namespace Emgu.CV.Test
 
         }
 
-        private static void CheckAndDownloadFile(String fileName)
+        private static void CheckAndDownloadFile(String fileName, String url)
         {
-            String emguS3Base = "https://s3.amazonaws.com/emgu-public/";
+            //String emguS3Base = "https://s3.amazonaws.com/emgu-public/";
             if (!File.Exists(fileName))
             {
                 //Download the ssd file    
-                String fileUrl = emguS3Base + fileName;
+                String fileUrl = url + fileName;
                 Trace.WriteLine("downloading file from:" + fileUrl + " to: " + fileName);
                 System.Net.WebClient downloadClient = new System.Net.WebClient();
                 downloadClient.DownloadFile(fileUrl, fileName);
             }
         }
 
-
+        /*
+        private static void CheckAndDownloadSSDFaceDetector()
+        {
+            String fileName = "res10_300x300_ssd_iter_140000.caffemodel";
+            String fileUrl = "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/" + fileName;
+            Trace.WriteLine("downloading file from:" + fileUrl + " to: " + fileName);
+            System.Net.WebClient downloadClient = new System.Net.WebClient();
+            downloadClient.DownloadFile(fileUrl, fileName);
+        }*/
 
         [Test]
         public void TestDnnSSD()
@@ -3287,8 +3295,9 @@ namespace Emgu.CV.Test
 
             String ssdFile = "VGG_VOC0712_SSD_300x300_iter_120000.caffemodel";
             String ssdProtoFile = "VGG_VOC0712_SSD_300x300_iter_120000.prototxt";
-            CheckAndDownloadFile(ssdFile);
-            CheckAndDownloadFile(ssdProtoFile);
+            String emguS3Base = "https://s3.amazonaws.com/emgu-public/";
+            CheckAndDownloadFile(ssdFile, emguS3Base);
+            CheckAndDownloadFile(ssdProtoFile, emguS3Base);
 
             //using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter(ssdProtoFile, ssdFile))
             //    importer.PopulateNet(net);
@@ -3351,6 +3360,58 @@ namespace Emgu.CV.Test
                 //Mat detectionMat = new Mat(dim[2], dim[3], DepthType.Cv32F, 1, tmp.DataPointer, dim[3]*sizeof(float)); 
             }
             CvInvoke.Imwrite("rgb_ssd_result.jpg", img);
+
+        }
+
+        [Test]
+        public void TestDnnSSDFaceDetect()
+        {
+            int imgDim = 300;
+            MCvScalar meanVal = new MCvScalar(104, 177, 123);
+            String ssdFile = "res10_300x300_ssd_iter_140000.caffemodel";
+            String ssdProtoFile = "deploy.prototxt";
+
+            String fileUrl = "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/";
+            CheckAndDownloadFile(ssdFile, fileUrl);
+            
+            Dnn.Net net = DnnInvoke.ReadNetFromCaffe(ssdProtoFile, ssdFile);
+
+            Mat img = EmguAssert.LoadMat("lena.jpg");
+            
+            Mat inputBlob = DnnInvoke.BlobFromImage(img, 1.0, new Size(imgDim, imgDim), meanVal, false, false);
+            net.SetInput(inputBlob, "data");
+            Mat detection = net.Forward("detection_out");
+
+            float confidenceThreshold = 0.5f;
+
+            //using (Mat tmp = detection.MatRef())
+            {
+                int[] dim = detection.SizeOfDimemsion;
+                int step = dim[3] * sizeof(float);
+                IntPtr start = detection.DataPointer;
+                for (int i = 0; i < dim[2]; i++)
+                {
+                    float[] values = new float[dim[3]];
+                    Marshal.Copy(new IntPtr(start.ToInt64() + step * i), values, 0, dim[3]);
+                    float confident = values[2];
+
+                    if (confident > confidenceThreshold)
+                    {
+                        //float objectClass = values[1];
+
+                        float xLeftBottom = values[3] * img.Cols;
+                        float yLeftBottom = values[4] * img.Rows;
+                        float xRightTop = values[5] * img.Cols;
+                        float yRightTop = values[6] * img.Rows;
+                        RectangleF objectRegion = new RectangleF(xLeftBottom, yLeftBottom, xRightTop - xLeftBottom, yRightTop - yLeftBottom);
+
+                        CvInvoke.Rectangle(img, Rectangle.Round(objectRegion), new MCvScalar(0, 255, 0));
+                        //CvInvoke.PutText(img, labels[(int)objectClass], Point.Round(objectRegion.Location), FontFace.HersheyPlain, 1.0, new MCvScalar(0, 0, 255));
+                    }
+                }
+                //Mat detectionMat = new Mat(dim[2], dim[3], DepthType.Cv32F, 1, tmp.DataPointer, dim[3]*sizeof(float)); 
+            }
+            CvInvoke.Imwrite("rgb_ssd_facedetect.jpg", img);
 
         }
 

@@ -34,10 +34,10 @@ namespace Emgu.CV.Dnn
         /// <param name="mean">Scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>
         /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <returns>4-dimansional Mat with NCHW dimensions order.</returns>
-        public static Mat BlobFromImage(Mat image, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true)
+        public static Mat BlobFromImage(Mat image, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
         {
             Mat blob = new Mat();
-            cveDnnBlobFromImage(image, scaleFactor, ref size, ref mean, swapRB, blob);
+            cveDnnBlobFromImage(image, scaleFactor, ref size, ref mean, swapRB, crop, blob);
             return blob;
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -48,6 +48,8 @@ namespace Emgu.CV.Dnn
             ref MCvScalar mean,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool swapRB,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool crop,
             IntPtr blob);
 
         /// <summary>
@@ -57,14 +59,14 @@ namespace Emgu.CV.Dnn
         /// <param name="scaleFactor">Multiplier for images values.</param>
         /// <param name="size">Spatial size for output image</param>
         /// <param name="mean">Scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>
-        /// <param name="swapRB">	flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
+        /// <param name="swapRB">flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <returns>Input image is resized so one side after resize is equal to corresponding dimension in size and another one is equal or larger. Then, crop from the center is performed.</returns>
-        public static Mat BlobFromImages(Mat[] images, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true)
+        public static Mat BlobFromImages(Mat[] images, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
         {
             Mat blob = new Mat();
             using (VectorOfMat vm = new VectorOfMat(images))
             {
-                cveDnnBlobFromImages(vm, scaleFactor, ref size, ref mean, swapRB, blob);
+                cveDnnBlobFromImages(vm, scaleFactor, ref size, ref mean, swapRB, crop, blob);
             }
             return blob;
         }
@@ -77,6 +79,8 @@ namespace Emgu.CV.Dnn
             ref MCvScalar mean,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool swapRB,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool crop,
             IntPtr blob);
 
         /// <summary>
