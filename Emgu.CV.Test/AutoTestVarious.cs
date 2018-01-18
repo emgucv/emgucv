@@ -3384,33 +3384,56 @@ namespace Emgu.CV.Test
 
             float confidenceThreshold = 0.5f;
 
-            //using (Mat tmp = detection.MatRef())
+            List<Rectangle> faceRegions = new List<Rectangle>();
+
+            int[] dim = detection.SizeOfDimemsion;
+            int step = dim[3] * sizeof(float);
+            IntPtr start = detection.DataPointer;
+            for (int i = 0; i < dim[2]; i++)
             {
-                int[] dim = detection.SizeOfDimemsion;
-                int step = dim[3] * sizeof(float);
-                IntPtr start = detection.DataPointer;
-                for (int i = 0; i < dim[2]; i++)
+                float[] values = new float[dim[3]];
+                Marshal.Copy(new IntPtr(start.ToInt64() + step * i), values, 0, dim[3]);
+                float confident = values[2];
+
+                if (confident > confidenceThreshold)
                 {
-                    float[] values = new float[dim[3]];
-                    Marshal.Copy(new IntPtr(start.ToInt64() + step * i), values, 0, dim[3]);
-                    float confident = values[2];
-
-                    if (confident > confidenceThreshold)
-                    {
-                        //float objectClass = values[1];
-
-                        float xLeftBottom = values[3] * img.Cols;
-                        float yLeftBottom = values[4] * img.Rows;
-                        float xRightTop = values[5] * img.Cols;
-                        float yRightTop = values[6] * img.Rows;
-                        RectangleF objectRegion = new RectangleF(xLeftBottom, yLeftBottom, xRightTop - xLeftBottom, yRightTop - yLeftBottom);
-
-                        CvInvoke.Rectangle(img, Rectangle.Round(objectRegion), new MCvScalar(0, 255, 0));
-                        //CvInvoke.PutText(img, labels[(int)objectClass], Point.Round(objectRegion.Location), FontFace.HersheyPlain, 1.0, new MCvScalar(0, 0, 255));
-                    }
+                    float xLeftBottom = values[3] * img.Cols;
+                    float yLeftBottom = values[4] * img.Rows;
+                    float xRightTop = values[5] * img.Cols;
+                    float yRightTop = values[6] * img.Rows;
+                    RectangleF objectRegion = new RectangleF(xLeftBottom, yLeftBottom, xRightTop - xLeftBottom, yRightTop - yLeftBottom);
+                    Rectangle faceRegion = Rectangle.Round(objectRegion);
+                    faceRegions.Add(faceRegion);
+                    
                 }
-                //Mat detectionMat = new Mat(dim[2], dim[3], DepthType.Cv32F, 1, tmp.DataPointer, dim[3]*sizeof(float)); 
             }
+
+            String facemarkFileName = "lbfmodel.yaml";
+            String facemarkFileUrl = "https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/";
+            CheckAndDownloadFile(facemarkFileName, facemarkFileUrl);
+
+            using (Emgu.CV.Face.FacemarkLBF.Params facemarkParam = new CV.Face.FacemarkLBF.Params())
+            using (Emgu.CV.Face.FacemarkLBF facemark = new CV.Face.FacemarkLBF(facemarkParam))
+            using (VectorOfRect vr = new VectorOfRect(faceRegions.ToArray()))
+            using (VectorOfVectorOfPointF landmarks = new VectorOfVectorOfPointF())
+            {
+                facemark.LoadModel(facemarkFileName);
+                facemark.Fit(img, vr, landmarks);
+                
+                foreach (Rectangle face in faceRegions)
+                {
+                    CvInvoke.Rectangle(img, face, new MCvScalar(0, 255, 0));
+                }
+
+                int len = landmarks.Size;
+                for (int i = 0; i < landmarks.Size; i++)
+                {
+                    using (VectorOfPointF vpf = landmarks[i])
+                        Emgu.CV.ContribInvoke.DrawFacemarks(img, vpf, new MCvScalar(255, 0, 0));
+                }
+
+            }
+
             CvInvoke.Imwrite("rgb_ssd_facedetect.jpg", img);
 
         }
