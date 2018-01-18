@@ -26,6 +26,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Bioinspired;
 using Emgu.CV.Dpm;
 using Emgu.CV.ImgHash;
+using Emgu.CV.Face;
 #if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
@@ -3412,8 +3413,8 @@ namespace Emgu.CV.Test
             String facemarkFileUrl = "https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/";
             CheckAndDownloadFile(facemarkFileName, facemarkFileUrl);
 
-            using (Emgu.CV.Face.FacemarkLBF.Params facemarkParam = new CV.Face.FacemarkLBF.Params())
-            using (Emgu.CV.Face.FacemarkLBF facemark = new CV.Face.FacemarkLBF(facemarkParam))
+            using (FacemarkLBFParams facemarkParam = new CV.Face.FacemarkLBFParams())
+            using (FacemarkLBF facemark = new CV.Face.FacemarkLBF(facemarkParam))
             using (VectorOfRect vr = new VectorOfRect(faceRegions.ToArray()))
             using (VectorOfVectorOfPointF landmarks = new VectorOfVectorOfPointF())
             {
@@ -3429,7 +3430,7 @@ namespace Emgu.CV.Test
                 for (int i = 0; i < landmarks.Size; i++)
                 {
                     using (VectorOfPointF vpf = landmarks[i])
-                        Emgu.CV.ContribInvoke.DrawFacemarks(img, vpf, new MCvScalar(255, 0, 0));
+                        FaceInvoke.DrawFacemarks(img, vpf, new MCvScalar(255, 0, 0));
                 }
 
             }

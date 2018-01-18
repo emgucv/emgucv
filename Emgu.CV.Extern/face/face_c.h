@@ -14,15 +14,15 @@
 #include "opencv2/face.hpp"
 
 //FaceRecognizer
-CVAPI(cv::face::FaceRecognizer*) CvEigenFaceRecognizerCreate(int numComponents, double threshold);   
-CVAPI(cv::face::FaceRecognizer*) CvFisherFaceRecognizerCreate(int numComponents, double threshold);
-CVAPI(cv::face::FaceRecognizer*) CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold);
-CVAPI(void) CvFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
-CVAPI(void) CvFaceRecognizerUpdate(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
-CVAPI(void) CvFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* distance);
-CVAPI(void) CvFaceRecognizerWrite(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
-CVAPI(void) CvFaceRecognizerRead(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
-CVAPI(void) CvFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer);
+CVAPI(cv::face::FaceRecognizer*) cveEigenFaceRecognizerCreate(int numComponents, double threshold);   
+CVAPI(cv::face::FaceRecognizer*) cveFisherFaceRecognizerCreate(int numComponents, double threshold);
+CVAPI(cv::face::FaceRecognizer*) cveLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold);
+CVAPI(void) cveFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
+CVAPI(void) cveFaceRecognizerUpdate(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
+CVAPI(void) cveFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* distance);
+CVAPI(void) cveFaceRecognizerWrite(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
+CVAPI(void) cveFaceRecognizerRead(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
+CVAPI(void) cveFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer);
 
 CVAPI(cv::face::BIF*) cveBIFCreate(int numBands, int numRotations);
 CVAPI(void) cveBIFCompute(cv::face::BIF* bif, cv::_InputArray* image, cv::_OutputArray* features);

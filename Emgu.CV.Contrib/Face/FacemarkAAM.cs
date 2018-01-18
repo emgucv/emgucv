@@ -13,6 +13,21 @@ using Emgu.Util;
 
 namespace Emgu.CV.Face
 {
+    public partial class FacemarkAAMParams : UnmanagedObject
+    {
+        public FacemarkAAMParams()
+        {
+            _ptr = FaceInvoke.cveFacemarkAAMParamsCreate();
+        }
+
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                FaceInvoke.cveFacemarkAAMParamsRelease(ref _ptr);
+            }
+        }
+    }
 
     public class FacemarkAAM : UnmanagedObject, IFacemark
     {
@@ -22,40 +37,23 @@ namespace Emgu.CV.Face
         private IntPtr _algorithmPtr;
         public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
 
-        public class Params : UnmanagedObject
-        {
-            public Params()
-            {
-                _ptr = Emgu.CV.ContribInvoke.cveFacemarkAAMParamsCreate();
-            }
+        
 
-            protected override void DisposeObject()
-            {
-                if (_ptr != IntPtr.Zero)
-                {
-                    Emgu.CV.ContribInvoke.cveFacemarkAAMParamsRelease(ref _ptr);
-                }
-            }
-        }
-
-        public FacemarkAAM(Params parameters)
+        public FacemarkAAM(FacemarkAAMParams parameters)
         {
-            _ptr = Emgu.CV.ContribInvoke.cveFacemarkAAMCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
+            _ptr = FaceInvoke.cveFacemarkAAMCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
         }
 
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
             {
-                Emgu.CV.ContribInvoke.cveFacemarkAAMRelease(ref _ptr);
+                FaceInvoke.cveFacemarkAAMRelease(ref _ptr);
             }
         }
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class ContribInvoke
+    public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveFacemarkAAMCreate(IntPtr parameters, ref IntPtr facemark, ref IntPtr algorithm);

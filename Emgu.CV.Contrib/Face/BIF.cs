@@ -25,7 +25,7 @@ namespace Emgu.CV.Face
         /// <param name="numRotations">The number of image rotations.</param>
         public BIF(int numBands, int numRotations)
         {
-            _ptr = ContribInvoke.cveBIFCreate(numBands, numRotations);
+            _ptr = FaceInvoke.cveBIFCreate(numBands, numRotations);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Emgu.CV.Face
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaFeatures = features.GetOutputArray())
-                ContribInvoke.cveBIFCompute(_ptr, iaImage, oaFeatures);
+                FaceInvoke.cveBIFCompute(_ptr, iaImage, oaFeatures);
         }
 
         /// <summary>
@@ -45,15 +45,11 @@ namespace Emgu.CV.Face
         /// </summary>
         protected override void DisposeObject()
         {
-            ContribInvoke.cveBIFRelease(ref _ptr);
+            FaceInvoke.cveBIFRelease(ref _ptr);
         }
     }
-}
 
-namespace Emgu.CV
-{
-
-    public static partial class ContribInvoke
+    public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveBIFCreate(int numBands, int numRotations);

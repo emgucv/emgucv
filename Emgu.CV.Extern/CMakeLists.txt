@@ -1515,6 +1515,26 @@ ENDIF()
 ############################### xphoto code gen END ##############################
 
 
+############################### face code gen START ##############################
+IF(HAVE_opencv_face)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "face/facemarklbf_params_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkLBFParamsGenerated.cs"
+    "cv::face::FacemarkLBF::Params" 
+    "FacemarkLBFParams" 
+    "shape_offset" 
+    "double" 
+    "element"
+    "ShapeOffset" 
+    "double"
+    "offset for the loaded face landmark points"
+    "Emgu.CV.Face"
+    "FaceInvoke"
+    "FacemarkLBFParams"
+    "#include \"opencv2/face.hpp\"")
+ENDIF()
+############################### face code gen END ##############################
+
 ############################### dnn code gen START ##############################
 IF(HAVE_opencv_dnn)
   CREATE_OCV_CLASS_PROPERTY( 
@@ -1537,6 +1557,8 @@ IF(HAVE_opencv_dnn)
 
 ENDIF()
 ############################### dnn code gen END ##############################
+
+
 
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)

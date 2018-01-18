@@ -13,6 +13,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.Face
 {
+    /// <summary>
+    /// Interface to the Facemark class
+    /// </summary>
     public interface IFacemark : IAlgorithm
     {
 
@@ -22,12 +25,8 @@ namespace Emgu.CV.Face
         /// <returns>The pointer to the Facemark object</returns>
         IntPtr FacemarkPtr { get; }
     }
-}
 
-namespace Emgu.CV
-{
-
-    public static partial class ContribInvoke
+    public static partial class FaceInvoke
     {
         public static bool SetFaceDetector(this Emgu.CV.Face.IFacemark facemark, FaceDetectNative faceDetect)
         {

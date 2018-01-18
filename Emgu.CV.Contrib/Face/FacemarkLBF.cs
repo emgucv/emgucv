@@ -14,6 +14,22 @@ using Emgu.Util;
 namespace Emgu.CV.Face
 {
 
+    public partial class FacemarkLBFParams : UnmanagedObject
+    {
+        public FacemarkLBFParams()
+        {
+            _ptr = FaceInvoke.cveFacemarkLBFParamsCreate();
+        }
+
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                FaceInvoke.cveFacemarkLBFParamsRelease(ref _ptr);
+            }
+        }
+    }
+
     public class FacemarkLBF : UnmanagedObject, IFacemark
     {
         private IntPtr _facemarkPtr;
@@ -22,40 +38,22 @@ namespace Emgu.CV.Face
         private IntPtr _algorithmPtr;
         public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
 
-        public class Params : UnmanagedObject
+        
+        public FacemarkLBF(FacemarkLBFParams parameters)
         {
-            public Params()
-            {
-                _ptr = Emgu.CV.ContribInvoke.cveFacemarkLBFParamsCreate();
-            }
-
-            protected override void DisposeObject()
-            {
-                if (_ptr != IntPtr.Zero)
-                {
-                    Emgu.CV.ContribInvoke.cveFacemarkLBFParamsRelease(ref _ptr);
-                }
-            }
-        }
-
-        public FacemarkLBF(Params parameters)
-        {
-            _ptr = Emgu.CV.ContribInvoke.cveFacemarkLBFCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
+            _ptr = FaceInvoke.cveFacemarkLBFCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
         }
 
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
             {
-                Emgu.CV.ContribInvoke.cveFacemarkLBFRelease(ref _ptr);
+                FaceInvoke.cveFacemarkLBFRelease(ref _ptr);
             }
         }
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class ContribInvoke
+    public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveFacemarkLBFCreate(IntPtr parameters, ref IntPtr facemark, ref IntPtr algorithm);

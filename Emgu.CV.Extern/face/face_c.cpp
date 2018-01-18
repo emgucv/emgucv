@@ -7,48 +7,48 @@
 #include "face_c.h"
 
 //FaceRecognizer
-cv::face::FaceRecognizer* CvEigenFaceRecognizerCreate(int numComponents, double threshold)
+cv::face::FaceRecognizer* cveEigenFaceRecognizerCreate(int numComponents, double threshold)
 {
    cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::EigenFaceRecognizer::create(numComponents, threshold);
    ptr.addref();
    return ptr.get();
 }
     
-cv::face::FaceRecognizer* CvFisherFaceRecognizerCreate(int numComponents, double threshold)
+cv::face::FaceRecognizer* cveFisherFaceRecognizerCreate(int numComponents, double threshold)
 {
    cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::FisherFaceRecognizer::create(numComponents, threshold);
    ptr.addref();
    return ptr.get();
 }
     
-cv::face::FaceRecognizer* CvLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold)
+cv::face::FaceRecognizer* cveLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold)
 {
    cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::LBPHFaceRecognizer::create(radius, neighbors, gridX, gridY, threshold);
    ptr.addref();
    return ptr.get();
 }
 
-void CvFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels)
+void cveFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels)
 {
    recognizer->train(*images, *labels);
 }
 
-void CvFaceRecognizerUpdate(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels)
+void cveFaceRecognizerUpdate(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels)
 {
    recognizer->update(*images, *labels);
 }
 
-void CvFaceRecognizerWrite(cv::face::FaceRecognizer* recognizer, cv::String* fileName)
+void cveFaceRecognizerWrite(cv::face::FaceRecognizer* recognizer, cv::String* fileName)
 {
    recognizer->write(*fileName);
 }
 
-void CvFaceRecognizerRead(cv::face::FaceRecognizer* recognizer, cv::String* fileName)
+void cveFaceRecognizerRead(cv::face::FaceRecognizer* recognizer, cv::String* fileName)
 {
    recognizer->read(*fileName);
 }
 
-void CvFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* dist)
+void cveFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* dist)
 {
    int l = -1;
    double d = -1;
@@ -57,7 +57,7 @@ void CvFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputArr
    *dist = d;
 }
 
-void CvFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer)
+void cveFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer)
 {
    delete *recognizer;
    *recognizer = 0;
