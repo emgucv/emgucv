@@ -13,13 +13,22 @@ using Emgu.Util;
 
 namespace Emgu.CV.Face
 {
+    /// <summary>
+    /// Parameters for the FacemarkAAM model
+    /// </summary>
     public partial class FacemarkAAMParams : UnmanagedObject
     {
+        /// <summary>
+        /// Create the paramaters with the default values.
+        /// </summary>
         public FacemarkAAMParams()
         {
             _ptr = FaceInvoke.cveFacemarkAAMParamsCreate();
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this object.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
@@ -29,21 +38,38 @@ namespace Emgu.CV.Face
         }
     }
 
+
+    /// <summary>
+    /// The Facemark AMM model
+    /// </summary>
     public class FacemarkAAM : UnmanagedObject, IFacemark
     {
         private IntPtr _facemarkPtr;
+
+        /// <summary>
+        /// Pointer to the unmanaged Facemark object
+        /// </summary>
         public IntPtr FacemarkPtr { get { return _facemarkPtr; } }
 
         private IntPtr _algorithmPtr;
+
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
 
-        
-
+        /// <summary>
+        /// Create an instance of FacemarkAAM model
+        /// </summary>
+        /// <param name="parameters">The model parameters</param>
         public FacemarkAAM(FacemarkAAMParams parameters)
         {
             _ptr = FaceInvoke.cveFacemarkAAMCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
         }
 
+        /// <summary>
+        /// Release all the unmanaged memory associated with this Facemark
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)

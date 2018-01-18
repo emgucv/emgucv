@@ -39,6 +39,9 @@ CVAPI(void) cveFacemarkAAMRelease(cv::face::FacemarkAAM** facemark);
 CVAPI(cv::face::FacemarkLBF::Params*) cveFacemarkLBFParamsCreate();
 CVAPI(void) cveFacemarkLBFParamsRelease(cv::face::FacemarkLBF::Params** params);
 
+
+
+
 CVAPI(cv::face::FacemarkLBF*) cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm);
 CVAPI(void) cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark);
 
@@ -48,5 +51,8 @@ CVAPI(bool) cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_Face
 CVAPI(void) cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model);
 CVAPI(bool) cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces);
 CVAPI(bool) cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_InputOutputArray* landmarks);
+CVAPI(bool) cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* landmarks);
+CVAPI(void) cveFacemarkTraining(cv::face::Facemark* facemark);
+
 CVAPI(void) cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points,	CvScalar* color);
 #endif

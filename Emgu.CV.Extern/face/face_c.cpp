@@ -145,16 +145,6 @@ bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetecto
 	return facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, &detector_pointer);
 }
 
-/*
-bool myDetector(cv::InputArray image, cv::OutputArray faces, void* face_detector)
-{
-	CSharp_FaceDetector detector = (CSharp_FaceDetector)face_detector;
-	return (*detector)(&image, &faces);
-}
-bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector)
-{
-	return facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, detector);
-}*/
 
 void cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model)
 {
@@ -168,6 +158,16 @@ bool cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_I
 {
 	return facemark->fit(*image, *faces, *landmarks);
 }
+bool cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* landmarks)
+{
+	return facemark->addTrainingSample(*image, *landmarks);
+}
+void cveFacemarkTraining(cv::face::Facemark* facemark)
+{
+	facemark->training();
+}
+
+
 void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, CvScalar* color)
 {
 	cv::face::drawFacemarks(*image, *points, *color);

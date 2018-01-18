@@ -13,14 +13,22 @@ using Emgu.Util;
 
 namespace Emgu.CV.Face
 {
-
+    /// <summary>
+    /// Parameters for the FacemarkLBF model
+    /// </summary>
     public partial class FacemarkLBFParams : UnmanagedObject
     {
+        /// <summary>
+        /// Create the paramaters with the default values.
+        /// </summary>
         public FacemarkLBFParams()
         {
             _ptr = FaceInvoke.cveFacemarkLBFParamsCreate();
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this object.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
@@ -30,20 +38,37 @@ namespace Emgu.CV.Face
         }
     }
 
+    /// <summary>
+    /// The FacemarkLBF model
+    /// </summary>
     public class FacemarkLBF : UnmanagedObject, IFacemark
     {
         private IntPtr _facemarkPtr;
+
+        /// <summary>
+        /// Pointer to the unmanaged Facemark object
+        /// </summary>
         public IntPtr FacemarkPtr { get { return _facemarkPtr; } }
 
         private IntPtr _algorithmPtr;
+
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
 
-        
+        /// <summary>
+        /// Create an instance of the FacemarkLBF model
+        /// </summary>
+        /// <param name="parameters">The model parameters</param>
         public FacemarkLBF(FacemarkLBFParams parameters)
         {
             _ptr = FaceInvoke.cveFacemarkLBFCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
         }
 
+        /// <summary>
+        /// Release all the unmanaged memory associated with this Facemark
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)

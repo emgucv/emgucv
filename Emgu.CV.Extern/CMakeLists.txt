@@ -434,6 +434,48 @@ ${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj
         get { return new ${CS_PROPERTY_TYPE}( ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr), false); } 
      }
      ")
+
+	 ###################
+	  ELSEIF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
+	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
+     ")
+	SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}; }   
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { obj->${PROPERTY_NAME} = *str; }   
+     ")
+	
+	SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj, IntPtr str);
+	 [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(IntPtr obj, IntPtr str);
+     ")
+	SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
+     {
+        get 
+        { 
+           using (CvString s = new CvString())
+           {  
+              ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s); 
+              return s.ToString();
+           }
+        } 
+		set
+		{
+		   using (CvString s = new CvString(value))
+           {  
+              ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, s); 
+           }
+		}
+     }
+     ")
+	 ###################
       ELSE()
 	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
@@ -1522,15 +1564,48 @@ IF(HAVE_opencv_face)
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkLBFParamsGenerated.cs"
     "cv::face::FacemarkLBF::Params" 
     "FacemarkLBFParams" 
-    "shape_offset" 
-    "double" 
-    "element"
-    "ShapeOffset" 
-    "double"
-    "offset for the loaded face landmark points"
+    "shape_offset;verbose;n_landmarks;initShape_n;stages_n;tree_n;tree_depth;bagging_overlap;save_model;cascade_face;model_filename" 
+    "double;bool;int;int;int;int;int;double;bool;cv::String;cv::String" 
+    "element;element;element;element;element;element;element;element;element;element;element"
+    "ShapeOffset;Verbose;NLandmarks;InitShapeN;StagesN;TreeN;TreeDepth;BaggingOverlap;SaveModel;CascadeFace;ModelFile" 
+    "double;bool;int;int;int;int;int;double;bool;String;String"
+    "offset for the loaded face landmark points;
+	show the training print-out;
+	number of landmark points;
+	multiplier for augment the training data;
+	number of refinement stages;
+	number of tree in the model for each landmark point refinement;
+	the depth of decision tree, defines the size of feature;
+	overlap ratio for training the LBF feature;
+	flag to save the trained model or not;
+	filename of the face detector model;
+	filename where the trained model will be saved"
     "Emgu.CV.Face"
     "FaceInvoke"
     "FacemarkLBFParams"
+    "#include \"opencv2/face.hpp\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "face/facemarkaam_params_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkAAMParamsGenerated.cs"
+    "cv::face::FacemarkAAM::Params" 
+    "FacemarkAAMParams" 
+    "model_filename;m;n;n_iter;verbose;save_model;max_m;max_n" 
+    "cv::String;int;int;int;bool;bool;int;int" 
+    "element;element;element;element;element;element;element;element"
+    "ModelFile;M;N;NIter;Verbose;SaveModel;MaxM;MaxN" 
+    "String;int;int;int;bool;bool;int;int"
+    "filename where the trained model will be saved;
+	M;
+	N;
+	Number of iteration;
+	show the training print-out;
+	flag to save the trained model or not;
+	The maximum value of M;
+	The maximum value of N"
+    "Emgu.CV.Face"
+    "FaceInvoke"
+    "FacemarkAAMParams"
     "#include \"opencv2/face.hpp\"")
 ENDIF()
 ############################### face code gen END ##############################

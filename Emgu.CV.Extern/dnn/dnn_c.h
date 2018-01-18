@@ -11,12 +11,6 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/dnn/dnn.hpp"
 
-CVAPI(void) cveDnnInitModule();
-
-//CVAPI(cv::dnn::Importer*) cveDnnCreateCaffeImporter(cv::String* prototxt, cv::String* caffeModel);
-//CVAPI(cv::dnn::Importer*) cveDnnCreateTensorflowImporter(cv::String* model);
-//CVAPI(void) cveDnnImporterRelease(cv::dnn::Importer** importer);
-//CVAPI(void) cveDnnImporterPopulateNet(cv::dnn::Importer* importer, cv::dnn::Net* net);
 
 CVAPI(cv::dnn::Net*) cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetModel);
 CVAPI(cv::dnn::Net*) cveReadNetFromCaffe(cv::String* prototxt, cv::String* caffeModel);
@@ -24,7 +18,7 @@ CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow(cv::String* model, cv::String* con
 
 CVAPI(cv::dnn::Net*) cveDnnNetCreate();
 CVAPI(void) cveDnnNetSetInput(cv::dnn::Net* net, cv::Mat* blob, cv::String* name);
-//CVAPI(cv::dnn::Blob*) cveDnnNetGetBlob(cv::dnn::Net* net, cv::String* outputName);
+
 CVAPI(void) cveDnnNetForward(cv::dnn::Net* net, cv::String* outputName, cv::Mat* output);
 CVAPI(void) cveDnnNetRelease(cv::dnn::Net** net);
 CVAPI(bool) cveDnnNetEmpty(cv::dnn::Net* net);
@@ -48,18 +42,14 @@ CVAPI(void) cveDnnBlobFromImages(
 	bool crop,
 	cv::Mat* blob);
 
-/*
-CVAPI(cv::dnn::Blob*) cveDnnBlobCreate();
-CVAPI(cv::dnn::Blob*) cveDnnBlobCreateFromInputArray(cv::_InputArray* image);
-CVAPI(void) cveDnnBlobBatchFromImages(cv::dnn::Blob* blob, cv::_InputArray* image, int dstCn);
-CVAPI(void) cveDnnBlobMatRef(cv::dnn::Blob* blob, cv::Mat* outMat);
-CVAPI(void) cveDnnBlobRelease(cv::dnn::Blob** blob); 
-CVAPI(int) cveDnnBlobDims(cv::dnn::Blob* blob);
-CVAPI(int) cveDnnBlobChannels(cv::dnn::Blob* blob);
-CVAPI(int) cveDnnBlobCols(cv::dnn::Blob* blob);
-CVAPI(int) cveDnnBlobNum(cv::dnn::Blob* blob);
-CVAPI(int) cveDnnBlobRows(cv::dnn::Blob* blob);
-CVAPI(int) cveDnnBlobType(cv::dnn::Blob* blob);
-CVAPI(int) cveDnnBlobElemSize(cv::dnn::Blob* blob);
-CVAPI(uchar *) cveDnnBlobGetPtr(cv::dnn::Blob* blob, int n, int cn, int row, int col);*/
+CVAPI(void) cveDnnShrinkCaffeModel(cv::String* src, cv::String* dst);
+
+CVAPI(void) cveDnnNMSBoxes(
+	std::vector<cv::Rect>* bboxes, 
+	std::vector<float>* scores,
+	float scoreThreshold, 
+	float nmsThreshold,
+	std::vector<int>* indices,
+	float eta,
+	int topK);
 #endif
