@@ -119,6 +119,10 @@ SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 REM GPU performance test on windows cause compilation error, skipping it now
 IF "%2%"=="gpu" GOTO NO_PERFORMANCE_TEST
 
+REM Intel compiler performance test on windows cause compilation error, skipping it now
+IF "%3%"=="intel" GOTO NO_PERFORMANCE_TEST
+
+REM NETFX_CORE performance test cause compilation issue, skipping it now
 IF %NETFX_CORE%=="" GOTO WITH_PERFORMANCE_TEST
 
 :NO_PERFORMANCE_TEST
