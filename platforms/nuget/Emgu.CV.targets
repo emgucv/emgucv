@@ -23,11 +23,11 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
-	    <Target Name="EmguPackageBuildImports" BeforeTargets="PrepareForBuild">
+	    <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Error Condition="'$(EmguCvLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please use the pre-compiled Emgu.CV.World dll or send a bug report to support@emgu.com" />
-    <Message Condition="'$(EmguCvLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCvLinkTarget)" Importance="High" />
+    <Message Condition="'$(EmguCvLinkTarget)'!=''" Text="Emgu CV nuget package compiling against $(EmguCvLinkTarget)" Importance="High" />
     <Error Text="'$(EmguCvErrorMessage)'" Condition="'$(EmguCvErrorMessage)'!=''" />
-    <Message Text="Compiling Emgu CV with $(EmguCvDeployMessage)binary" Condition="'$(EmguCvDeployMessage)'!=''" Importance="High" />
+    <Message Text="Emgu CV compiling with $(EmguCvDeployMessage)binary" Condition="'$(EmguCvDeployMessage)'!=''" Importance="High" />
     <Message Text="No native binary is deployed by the Emgu CV project." Condition="'$(EmguCvDeployMessage)'==''" Importance="High" />
   </Target>
 </Project>

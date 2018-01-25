@@ -3277,21 +3277,10 @@ namespace Emgu.CV.Test
             }
         }
 
-        /*
-        private static void CheckAndDownloadSSDFaceDetector()
-        {
-            String fileName = "res10_300x300_ssd_iter_140000.caffemodel";
-            String fileUrl = "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/" + fileName;
-            Trace.WriteLine("downloading file from:" + fileUrl + " to: " + fileName);
-            System.Net.WebClient downloadClient = new System.Net.WebClient();
-            downloadClient.DownloadFile(fileUrl, fileName);
-        }*/
-
         [Test]
         public void TestDnnSSD()
         {
 
-            //Dnn.Net net = new Dnn.Net();
             int imgDim = 300;
 
             String ssdFile = "VGG_VOC0712_SSD_300x300_iter_120000.caffemodel";
@@ -3300,30 +3289,16 @@ namespace Emgu.CV.Test
             CheckAndDownloadFile(ssdFile, emguS3Base);
             CheckAndDownloadFile(ssdProtoFile, emguS3Base);
 
-            //using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter(ssdProtoFile, ssdFile))
-            //    importer.PopulateNet(net);
             Dnn.Net net = DnnInvoke.ReadNetFromCaffe(ssdProtoFile, ssdFile);
 
             Mat img = EmguAssert.LoadMat("rgb.jpg");
-            Mat resized = new Mat();
-            CvInvoke.Resize(img, resized, new Size(imgDim, imgDim));
-            Mat preprocessedFrame = new Mat();
-            resized.ConvertTo(preprocessedFrame, DepthType.Cv32F);
-            using (ScalarArray sa = new ScalarArray(new MCvScalar(104, 117, 123)))
-                CvInvoke.Subtract(preprocessedFrame, sa, preprocessedFrame);
 
-            /*
-            Dnn.Blob inputBlob = new Dnn.Blob();
-            inputBlob.BatchFromImages(preprocessedFrame);
-            net.SetBlob(".data", inputBlob); //set the network input
-            
-            
-            net.Forward(); //compute output
-            Dnn.Blob detection = net.GetBlob("detection_out");
-            */
-            Mat inputBlob = DnnInvoke.BlobFromImage(preprocessedFrame);
+            Stopwatch w = Stopwatch.StartNew();
+            Mat inputBlob = DnnInvoke.BlobFromImage(img, 1.0, new Size(imgDim, imgDim), new MCvScalar(104, 117, 123), true, false);
             net.SetInput(inputBlob, "data");
             Mat detection = net.Forward("detection_out");
+            w.Stop();
+            Trace.WriteLine(String.Format("SSD processing time: {0} milliseconds", w.ElapsedMilliseconds));
 
             float confidenceThreshold = 0.5f;
             String[] labelsLines = File.ReadAllLines("pascal-classes.txt");
@@ -3333,33 +3308,30 @@ namespace Emgu.CV.Test
                 labels[i] = labelsLines[i].Split(' ')[0].Trim();
             }
 
-            //using (Mat tmp = detection.MatRef())
+            int[] dim = detection.SizeOfDimemsion;
+            int step = dim[3] * sizeof(float);
+            IntPtr start = detection.DataPointer;
+            for (int i = 0; i < dim[2]; i++)
             {
-                int[] dim = detection.SizeOfDimemsion;
-                int step = dim[3] * sizeof(float);
-                IntPtr start = detection.DataPointer;
-                for (int i = 0; i < dim[2]; i++)
+                float[] values = new float[dim[3]];
+                Marshal.Copy(new IntPtr(start.ToInt64() + step * i), values, 0, dim[3]);
+                float confident = values[2];
+
+                if (confident > confidenceThreshold)
                 {
-                    float[] values = new float[dim[3]];
-                    Marshal.Copy(new IntPtr(start.ToInt64() + step * i), values, 0, dim[3]);
-                    float confident = values[2];
+                    float objectClass = values[1];
 
-                    if (confident > confidenceThreshold)
-                    {
-                        float objectClass = values[1];
+                    float xLeftBottom = values[3] * img.Cols;
+                    float yLeftBottom = values[4] * img.Rows;
+                    float xRightTop = values[5] * img.Cols;
+                    float yRightTop = values[6] * img.Rows;
+                    RectangleF objectRegion = new RectangleF(xLeftBottom, yLeftBottom, xRightTop - xLeftBottom, yRightTop - yLeftBottom);
 
-                        float xLeftBottom = values[3] * img.Cols;
-                        float yLeftBottom = values[4] * img.Rows;
-                        float xRightTop = values[5] * img.Cols;
-                        float yRightTop = values[6] * img.Rows;
-                        RectangleF objectRegion = new RectangleF(xLeftBottom, yLeftBottom, xRightTop - xLeftBottom, yRightTop - yLeftBottom);
-
-                        CvInvoke.Rectangle(img, Rectangle.Round(objectRegion), new MCvScalar(0, 255, 0));
-                        CvInvoke.PutText(img, labels[(int)objectClass], Point.Round(objectRegion.Location), FontFace.HersheyPlain, 1.0, new MCvScalar(0, 0, 255));
-                    }
+                    CvInvoke.Rectangle(img, Rectangle.Round(objectRegion), new MCvScalar(0, 255, 0));
+                    CvInvoke.PutText(img, labels[(int)objectClass], Point.Round(objectRegion.Location), FontFace.HersheyPlain, 1.0, new MCvScalar(0, 0, 255));
                 }
-                //Mat detectionMat = new Mat(dim[2], dim[3], DepthType.Cv32F, 1, tmp.DataPointer, dim[3]*sizeof(float)); 
             }
+
             CvInvoke.Imwrite("rgb_ssd_result.jpg", img);
 
         }
