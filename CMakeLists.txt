@@ -690,15 +690,9 @@ STRING(REPLACE "x86 x64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}"
 SET(EMGUCV_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_NUGET_TITLE}" EMGUCV_NUGET_TITLE)
 
-IF ("${LICENSE_TYPE}" EQUAL "Commercial")
-	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
-	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
-ENDIF()
-
 SET(EMGUCV_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"5.1.5\" />")
 
 IF(WITH_CUDA)
-	
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} with CUDA support")
 
 	SET(EMGU_CUDA_NUGET_ID "${EMGUCV_NUGET_ID}.DEPENDENCY")
@@ -710,15 +704,19 @@ IF(WITH_CUDA)
 	
 	IF(HAVE_WINDESKTOP_X64)
 		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/")
-		SET(EMGU_CUDA_NUGET_FILE_LIST "${EMGU_CUDA_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" target=\"build\\x64\" /> <file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" /> <file src=\"EULA.txt\" target=\"content\\net35\\CUDA_EULA.txt\" />")
-		
+		SET(EMGU_CUDA_NUGET_FILE_LIST "${EMGU_CUDA_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" target=\"build\\x64\" /> <file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" /> <file src=\"EULA.txt\" target=\"content\\net35\\CUDA_EULA.txt\" />")		
 	ENDIF()
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Cuda.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/Package.nuspec)
 ENDIF()
 
+IF ("${LICENSE_TYPE}" EQUAL "Commercial")
+	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
+	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
+ENDIF()
+
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Package.nuspec)
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Example.Android.AndroidManifest.xml.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/Android/Properties/AndroidManifest.xml)
 

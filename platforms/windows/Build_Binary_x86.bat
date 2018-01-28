@@ -38,11 +38,12 @@ SET VS2012="%VS110COMNTOOLS%..\IDE\devenv.com"
 SET VS2013="%VS120COMNTOOLS%..\IDE\devenv.com"
 SET VS2015="%VS140COMNTOOLS%..\IDE\devenv.com"
 
-SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com"
-IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com" SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com"
-IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com" SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com"
-IF EXIST "%VS2017INSTALLDIR%\Common7\IDE\devenv.com" SET VS2017="%VS2017INSTALLDIR%\Common7\IDE\devenv.com"
-IF EXIST "%VS150COMNTOOLS%..\IDE\devenv.com" SET VS2017 = "%VS150COMNTOOLS%..\IDE\devenv.com"
+SET VS2017_DIR=%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community
+IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com" SET VS2017_DIR=%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional
+IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com" SET VS2017_DIR=%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise
+IF EXIST "%VS2017INSTALLDIR%\Common7\IDE\devenv.com" SET VS2017_DIR=%VS2017INSTALLDIR%
+IF EXIST "%VS150COMNTOOLS%..\IDE\devenv.com" SET VS2017_DIR =%VS150COMNTOOLS%..\..
+SET VS2017="%VS2017_DIR%\Common7\IDE\devenv.com" 
 
 IF EXIST "%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe
 IF EXIST "%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe
@@ -182,7 +183,14 @@ IF %DEVENV%==%VS2010% SET CUDA_HOST_COMPILER=%VS100COMNTOOLS%..\..\VC\bin\cl.exe
 IF %DEVENV%==%VS2012% SET CUDA_HOST_COMPILER=%VS110COMNTOOLS%..\..\VC\bin\cl.exe
 IF %DEVENV%==%VS2013% SET CUDA_HOST_COMPILER=%VS120COMNTOOLS%..\..\VC\bin\cl.exe
 IF %DEVENV%==%VS2015% SET CUDA_HOST_COMPILER=%VS140COMNTOOLS%..\..\VC\bin\cl.exe
-IF %DEVENV%==%VS2017% SET CUDA_HOST_COMPILER=%VS2017INSTALLDIR%\VC\Tools\MSVC\14.11.25503\bin\Hostx64\x64\cl.exe
+
+
+IF NOT %DEVENV%==%VS2017% GOTO END_FIND_CL
+IF EXIST %VS2017_DIR%\VC\Tools\MSVC\14.11.25503\bin\Hostx64\x64\cl.exe SET CUDA_HOST_COMPILER=%VS2017_DIR%\VC\Tools\MSVC\14.11.25503\bin\Hostx64\x64\cl.exe
+IF EXIST %VS2017_DIR%\VC\bin\cl.exe SET CUDA_HOST_COMPILER=%VS2017_DIR%\VC\bin\cl.exe
+ 
+
+:END_FIND_CL
 
 REM Find cuda. Use latest Cuda release for 64 bit and Cuda 6.5 for 32bit
 REM We cannot use latest Cuda release for 32 bit because the 32bit version of npp has been depreciated from Cuda 7
@@ -198,6 +206,7 @@ REM If you are using CUDA 9 with Open CV 3.3 release you will need to create an 
 REM https://stackoverflow.com/questions/45525377/installing-opencv-3-3-0-with-contrib-modules-using-cmake-cuda-9-0-rc-and-visual
 
 SET CUDA_SDK_DIR=%CUDA_PATH%
+IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V9_1%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V9_0%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V8_0%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V7_5%
@@ -211,6 +220,7 @@ SET CUDA_ARCH_BIN_OPTION=""
 IF EXIST "%CUDA_SDK_DIR%" SET CUDA_ARCH_BIN_OPTION="2.0 2.1(2.0) 3.0 3.5 3.7 5.0 5.2"
 IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V8_0%" SET CUDA_ARCH_BIN_OPTION="2.0 2.1(2.0) 3.0 3.5 3.7 5.0 5.2 6.0 6.1"
 IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V9_0%" SET CUDA_ARCH_BIN_OPTION="3.0 3.5 3.7 5.0 5.2 6.0 6.1 7.0"
+IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V9_1%" SET CUDA_ARCH_BIN_OPTION="3.0 3.5 3.7 5.0 5.2 6.0 6.1 7.0"
 GOTO END_GPU_ARCH_BIN
 
 :GPU_ARCH_BIN_SPECIFIED
@@ -226,7 +236,7 @@ IF EXIST "%CUDA_SDK_DIR%" SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DCUDA_TOOLKIT_ROOT_DIR:String="%CUDA_SDK_DIR:\=/%" ^
 -DCUDA_SDK_ROOT_DIR:String="%CUDA_SDK_DIR:\=/%" ^
 -DWITH_CUBLAS:BOOL=TRUE ^
--DCUDA_HOST_COMPILER:String="%CUDA_HOST_COMPILER%" ^
+-DCUDA_HOST_COMPILER:String="%CUDA_HOST_COMPILER:\=/%" ^
 -DBUILD_SHARED_LIBS:BOOL=TRUE ^
 -DCUDA_ARCH_BIN:STRING=%CUDA_ARCH_BIN_OPTION%
 
