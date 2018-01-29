@@ -78,7 +78,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero == _ptr)
+            if (IntPtr.Zero != _ptr)
                 ContribInvoke.cveTrackerMedianFlowRelease(ref _ptr);
             base.DisposeObject();
         }
@@ -150,7 +150,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero == _ptr)
+            if (IntPtr.Zero != _ptr)
                 ContribInvoke.cveTrackerTLDRelease(ref _ptr);
             base.DisposeObject();
         }
@@ -177,7 +177,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero == _ptr)
+            if (IntPtr.Zero != _ptr)
                 ContribInvoke.cveTrackerKCFRelease(ref _ptr);
             base.DisposeObject();
         }
@@ -202,7 +202,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero == _ptr)
+            if (IntPtr.Zero != _ptr)
                 ContribInvoke.cveTrackerGOTURNRelease(ref _ptr);
             base.DisposeObject();
         }

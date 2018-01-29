@@ -93,7 +93,7 @@ namespace Emgu.CV.Shape
       /// </summary>
       protected override void DisposeObject()
       {
-         if (IntPtr.Zero == _ptr)
+         if (IntPtr.Zero != _ptr)
             ShapeInvoke.cvShapeContextDistanceExtractorRelease(ref _ptr);
          base.DisposeObject();
       }
