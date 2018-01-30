@@ -7,9 +7,9 @@
 #include "video_c.h"
 
 //BackgroundSubtractorMOG2
-cv::BackgroundSubtractorMOG2* cveBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection)
+cv::BackgroundSubtractorMOG2* cveBackgroundSubtractorMOG2Create(int history, float varThreshold, bool bShadowDetection)
 {
-   cv::Ptr<cv::BackgroundSubtractorMOG2> ptr =  cv::createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
+   cv::Ptr<cv::BackgroundSubtractorMOG2> ptr = cv::createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
    ptr.addref();
    return ptr.get();
 }
@@ -37,7 +37,7 @@ void cveBackgroundSubtractorGetBackgroundImage(cv::BackgroundSubtractor* bgSubtr
 cv::BackgroundSubtractorKNN* cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows)
 {
    cv::Ptr<cv::BackgroundSubtractorKNN> ptr = cv::createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows);
-  
+
    ptr.addref();
    return ptr.get();
 }
@@ -68,12 +68,22 @@ void cveDenseOpticalFlowCalc(cv::DenseOpticalFlow* dof, cv::_InputArray* i0, cv:
 }
 void cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow)
 {
-	delete *flow;
-	*flow = 0;
+   delete *flow;
+   *flow = 0;
 }
 void cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags)
 {
    cv::calcOpticalFlowFarneback(*prev, *next, *flow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+}
+
+int cveBuildOpticalFlowPyramid(
+   cv::_InputArray *img, cv::_OutputArray *pyramidVec,
+   CvSize* winSize, int maxLevel, int withDerivatives,
+   int pyrBorder, int derivBorder, int tryReuseInputImage)
+{
+   return cv::buildOpticalFlowPyramid(
+      *img, *pyramidVec, *winSize, maxLevel, withDerivatives != 0,
+      pyrBorder, derivBorder, tryReuseInputImage != 0);
 }
 
 void cveCalcOpticalFlowPyrLK(cv::_InputArray* prevImg, cv::_InputArray* nextImg, cv::_InputArray* prevPts, cv::_InputOutputArray* nextPts, cv::_OutputArray* status, cv::_OutputArray* err, CvSize* winSize, int maxLevel, CvTermCriteria* criteria, int flags, double minEigenThreshold)
@@ -81,7 +91,7 @@ void cveCalcOpticalFlowPyrLK(cv::_InputArray* prevImg, cv::_InputArray* nextImg,
    cv::calcOpticalFlowPyrLK(*prevImg, *nextImg, *prevPts, *nextPts, *status, *err, *winSize, maxLevel, *criteria, flags, minEigenThreshold);
 }
 
-void cveCamShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, CvBox2D* result)
+void cveCamShift(cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, CvBox2D* result)
 {
    cv::Rect rect = *window;
    cv::RotatedRect rr = cv::CamShift(*probImage, rect, *criteria);
@@ -89,7 +99,7 @@ void cveCamShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* cr
    *result = rr;
 }
 
-int cveMeanShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria )
+int cveMeanShift(cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria)
 {
    cv::Rect rect = *window;
    int result = cv::meanShift(*probImage, rect, *criteria);

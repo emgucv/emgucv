@@ -173,6 +173,45 @@ namespace Emgu.CV
       #endregion
 
       #region optical flow
+
+      /// <summary>
+      /// Builds a precomputed pyramid for optical flow.
+      /// </summary>
+      /// <param name="img">First frame, at time t</param>
+      /// <param name="pyramid">The returned pyramid (as an array of Mats in an OutputArray) </param>
+      /// <param name="winSize">Size of the search window of each pyramid level</param>
+      /// <param name="level">Maximal pyramid level number. If 0 , pyramids are not used (single level), if 1 , two levels are used, etc</param>
+      /// <param name="withDerivatives">If on, will build a the derivates as well as the Pyramid (if off, the CalcOpticalFlowPyrLK call will build derivates) </param>
+      /// <param name="pyrBorder">The border mode for pyramid layers</param>
+      /// <param name="derivBorder">The border mode for gradients</param>
+      /// <param name="tryReuseInputImage">Put ROI of input image into the pyramid if possible. You can pass false to force data copying</param>
+      public static void BuildOpticalFlowPyramid(
+            IInputArray img,
+            IOutputArray pyramid,
+            Size winSize,
+            int maxLevel,
+            bool withDerivatives = true,
+            CvEnum.BorderType pyrBorder = CvEnum.BorderType.Default,
+            CvEnum.BorderType derivBorder = CvEnum.BorderType.Constant,
+            bool tryReuseInputImage = true)
+      {
+         using (InputArray iaImg = img.GetInputArray())
+         using (OutputArray oaPyramid = pyramid.GetOutputArray())
+            cveBuildOpticalFlowPyramid(iaImg, oaPyramid, ref winSize, maxLevel, withDerivatives ? 1 : 0, (int)pyrBorder, (int)derivBorder, tryReuseInputImage ? 1 : 0);
+      }
+
+
+      [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      private static extern int cveBuildOpticalFlowPyramid(
+         IntPtr img,
+         IntPtr pyramidVec,
+         ref Size winSize,
+         int maxLevel,
+         int withDerivatives,
+         int pyrBorder,
+         int derivBorder,
+         int tryReuseInputImage);
+
       /// <summary>
       /// Calculates optical flow for a sparse feature set using iterative Lucas-Kanade method in pyramids
       /// </summary>
@@ -343,7 +382,7 @@ namespace Emgu.CV
          using (InputArray iaPrev0 = prev0.GetInputArray())
          using (InputArray iaNext0 = next0.GetInputArray())
          using (InputOutputArray ioaFlow = flow.GetInputOutputArray())
-         cveCalcOpticalFlowFarneback(iaPrev0, iaNext0, ioaFlow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+            cveCalcOpticalFlowFarneback(iaPrev0, iaNext0, ioaFlow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private extern static void cveCalcOpticalFlowFarneback(
@@ -395,7 +434,7 @@ namespace Emgu.CV
          IntPtr src,
          IntPtr dst,
          [MarshalAs(CvInvoke.BoolToIntMarshalType)]
-         bool fullAffine, 
+         bool fullAffine,
          IntPtr result);
    }
 }
