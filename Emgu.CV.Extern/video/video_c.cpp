@@ -169,6 +169,19 @@ int cveMeanShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* cr
    return result;
 }
 
+int cveBuildOpticalFlowPyramid(
+	cv::_InputArray* img,
+	cv::_OutputArray* pyramid,
+	CvSize* winSize,
+	int maxLevel,
+	bool withDerivatives,
+	int pyrBorder,
+	int derivBorder,
+	bool tryReuseInputImage)
+{
+	cv::buildOpticalFlowPyramid(*img, *pyramid, *winSize, maxLevel, withDerivatives, pyrBorder, derivBorder, tryReuseInputImage);
+}
+
 void cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool fullAffine, cv::Mat* result)
 {
    cv::Mat r = cv::estimateRigidTransform(*src, *dst, fullAffine);

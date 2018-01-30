@@ -68,6 +68,16 @@ CVAPI(void) cveCamShift( cv::_InputArray* probImage, CvRect* window, CvTermCrite
 
 CVAPI(int) cveMeanShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria );
 
+CVAPI(int) cveBuildOpticalFlowPyramid(
+	cv::_InputArray* img, 
+	cv::_OutputArray* pyramid,
+	CvSize* winSize, 
+	int maxLevel, 
+	bool withDerivatives,
+	int pyrBorder,
+	int derivBorder,
+	bool tryReuseInputImage);
+
 CVAPI(void) cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool fullAffine, cv::Mat* result);
 
 CVAPI(cv::KalmanFilter*) cveKalmanFilterCreate(int dynamParams, int measureParams, int controlParams, int type);
