@@ -336,6 +336,10 @@ bool cveCheckRange(cv::_InputArray* arr, bool quiet, CvPoint* index, double minV
    index->y = p.y;
    return result;
 }
+void cvePatchNaNs(cv::_InputOutputArray* a, double val)
+{
+	cv::patchNaNs(*a, val);
+}
 
 void cveGemm(cv::_InputArray* src1, cv::_InputArray* src2, double alpha, cv::_InputArray* src3, double beta, cv::_OutputArray* dst, int flags)
 {
@@ -400,6 +404,14 @@ double cveSolvePoly(cv::_InputArray* coeffs, cv::_OutputArray* roots, int maxIte
 void cveSolve(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags)
 {
    cv::solve(*src1, *src2, *dst, flags);
+}
+void cveSort(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
+{
+	cv::sort(*src, *dst, flags);
+}
+void cveSortIdx(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
+{
+	cv::sortIdx(*src, *dst, flags);
 }
 void cveInvert(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
 {
@@ -815,6 +827,11 @@ bool cveUseOptimized()
 void cveSetUseOptimized(bool onoff)
 {
    cv::setUseOptimized(onoff);
+}
+void cveGetBuildInformation(cv::String* buildInformation)
+{
+	cv::String bi = cv::getBuildInformation();
+	*buildInformation = bi;
 }
 
 void cveGetRawData(CvArr* arr, uchar** data, int* step, CvSize* roiSize)

@@ -132,6 +132,18 @@ namespace Emgu.CV
            double maxVal);
 
         /// <summary>
+        /// Converts NaN's to the given number
+        /// </summary>
+        /// <param name="a">The array where NaN needs to be converted</param>
+        /// <param name="val">The value to convert to</param>
+        public static void PatchNaNs(IInputOutputArray a, double val = 0)
+        {
+            using (InputOutputArray ioaA = a.GetInputOutputArray())
+                cvePatchNaNs(ioaA, val);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cvePatchNaNs(IntPtr a, double val);
+        /// <summary>
         /// Computes an optimal affine transformation between two 3D point sets.
         /// </summary>
         /// <param name="src">First input 3D point set.</param>

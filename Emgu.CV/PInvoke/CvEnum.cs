@@ -4400,4 +4400,32 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Rotate90CounterClockwise = 2, 
     }
+
+    /// <summary>
+    /// Flags for sorting
+    /// </summary>
+    [Flags]
+    public enum SortFlags
+    {
+        /// <summary>
+        /// each matrix row is sorted independently
+        /// </summary>
+        SortEveryRow = 0,
+        /// <summary>
+        /// each matrix column is sorted
+        /// independently; this flag and SortEveryRow are
+        /// mutually exclusive.
+        /// </summary>
+        SortEveryColumn = 1,
+        /// <summary>
+        /// each matrix row is sorted in the ascending order.
+        /// </summary>
+        SortAscending = 0,
+        /// <summary>
+        /// each matrix row is sorted in the 
+        /// descending order; this flag and SortAscending are also
+        /// mutually exclusive.
+        /// </summary>
+        SortDescending = 16
+    }
 }

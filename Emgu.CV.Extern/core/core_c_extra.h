@@ -113,6 +113,8 @@ CVAPI(void) cveSetIdentity(cv::_InputOutputArray* mtx, CvScalar* scalar);
 CVAPI(int) cveSolveCubic(cv::_InputArray* coeffs, cv::_OutputArray* roots);
 CVAPI(double) cveSolvePoly(cv::_InputArray* coeffs, cv::_OutputArray* roots, int maxIters);
 CVAPI(void) cveSolve(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags);
+CVAPI(void) cveSort(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
+CVAPI(void) cveSortIdx(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
 CVAPI(void) cveInvert(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
 
 CVAPI(void) cveDft(cv::_InputArray* src, cv::_OutputArray* dst, int flags, int nonzeroRows);
@@ -228,6 +230,8 @@ CVAPI(void) cveClearND(CvArr* arr, int* idx);
 
 CVAPI(bool) cveUseOptimized();
 CVAPI(void) cveSetUseOptimized(bool onoff);
+
+CVAPI(void) cveGetBuildInformation(cv::String* buildInformation);
 
 CVAPI(void) cveGetRawData(CvArr* arr, uchar** data, int* step, CvSize* roiSize);
 CVAPI(CvMat*) cveGetMat(CvArr* arr, CvMat* header, int* coi, int allowNd);

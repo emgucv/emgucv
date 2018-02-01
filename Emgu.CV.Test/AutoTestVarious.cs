@@ -195,6 +195,12 @@ namespace Emgu.CV.Test
             EmguAssert.AreEqual(45.0, Math.Atan2(direction.Y, direction.X) * 180.0 / Math.PI);
         }
 
+        [Test]
+        public void TestBuildInformation()
+        {
+            String bi = CvInvoke.BuildInformation;
+        }
+
 #if !WINDOWS_PHONE_APP
         [Test]
         public void TestXmlSerialization()

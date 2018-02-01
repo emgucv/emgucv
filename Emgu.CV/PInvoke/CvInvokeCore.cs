@@ -1081,6 +1081,41 @@ namespace Emgu.CV
            IntPtr src2,
            IntPtr dst,
            CvEnum.DecompMethod method);
+
+        /// <summary>
+        /// Sorts each matrix row or each matrix column in
+        /// ascending or descending order.So you should pass two operation flags to
+        /// get desired behaviour.
+        /// </summary>
+        /// <param name="src">input single-channel array.</param>
+        /// <param name="dst">output array of the same size and type as src.</param>
+        /// <param name="flags">operation flags</param>
+        public static void Sort(IInputArray src, IOutputArray dst, CvEnum.SortFlags flags)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveSort(iaSrc, oaDst, flags);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSort(IntPtr src, IntPtr dst, CvEnum.SortFlags flags);
+
+        /// <summary>
+        /// Sorts each matrix row or each matrix column in the
+        /// ascending or descending order.So you should pass two operation flags to
+        /// get desired behaviour. Instead of reordering the elements themselves, it
+        /// stores the indices of sorted elements in the output array.
+        /// </summary>
+        /// <param name="src">input single-channel array.</param>
+        /// <param name="dst">output integer array of the same size as src.</param>
+        /// <param name="flags">operation flags</param>
+        public static void SortIdx(IInputArray src, IOutputArray dst, CvEnum.SortFlags flags)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveSortIdx(iaSrc, oaDst, flags);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSortIdx(IntPtr src, IntPtr dst, CvEnum.SortFlags flags);
         #endregion
 
         #region Discrete Transforms
@@ -2402,6 +2437,25 @@ namespace Emgu.CV
             get { return cveUseOptimized(); }
             set { cveSetUseOptimized(value); }
         }
+
+        /// <summary>
+        /// Returns full configuration time cmake output.
+        /// Returned value is raw cmake output including version control system revision, compiler version, compiler flags, enabled modules and third party libraries, etc.Output format depends on target architecture.
+        /// </summary>
+        public static String BuildInformation
+        {
+            get
+            {
+                using (CvString bi = new CvString())
+                {
+                    cveGetBuildInformation(bi);
+                    return bi.ToString();
+                }
+
+            }
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveGetBuildInformation(IntPtr buildInformation);
 
         /// <summary>
         /// Fills the array with normally distributed random numbers.
