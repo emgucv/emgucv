@@ -128,6 +128,32 @@ void cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark)
 	*facemark = 0;
 }
 
+/*
+cv::face::FacemarkKazemi::Params* cveFacemarkKazemiParamsCreate()
+{
+	return new cv::face::FacemarkKazemi::Params();
+}
+void cveFacemarkKazemiParamsRelease(cv::face::FacemarkKazemi::Params** params)
+{
+	delete *params;
+	*params = 0;
+}
+
+cv::face::FacemarkKazemi* cveFacemarkKazemiCreate(cv::face::FacemarkKazemi::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::face::FacemarkKazemi> ptr = cv::face::FacemarkKazemi::create(*parameters);
+	ptr.addref();
+	*facemark = dynamic_cast<cv::face::Facemark*>(ptr.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
+	return ptr.get();
+}
+void cveFacemarkKazemiRelease(cv::face::FacemarkKazemi** facemark)
+{
+	delete *facemark;
+	*facemark = 0;
+}
+*/
+
 typedef struct
 {
 	CSharp_FaceDetector face_detector_func;

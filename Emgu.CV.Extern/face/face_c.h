@@ -35,15 +35,19 @@ CVAPI(void) cveFacemarkAAMParamsRelease(cv::face::FacemarkAAM::Params** params);
 CVAPI(cv::face::FacemarkAAM*) cveFacemarkAAMCreate(cv::face::FacemarkAAM::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm);
 CVAPI(void) cveFacemarkAAMRelease(cv::face::FacemarkAAM** facemark);
 
-
 CVAPI(cv::face::FacemarkLBF::Params*) cveFacemarkLBFParamsCreate();
 CVAPI(void) cveFacemarkLBFParamsRelease(cv::face::FacemarkLBF::Params** params);
 
-
-
-
 CVAPI(cv::face::FacemarkLBF*) cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm);
 CVAPI(void) cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark);
+
+/*
+CVAPI(cv::face::FacemarkKazemi::Params*) cveFacemarkKazemiParamsCreate();
+CVAPI(void) cveFacemarkKazemiParamsRelease(cv::face::FacemarkKazemi::Params** params);
+
+CVAPI(cv::face::FacemarkKazemi*) cveFacemarkKazemiCreate(cv::face::FacemarkKazemi::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm);
+CVAPI(void) cveFacemarkKazemiRelease(cv::face::FacemarkKazemi** facemark);
+*/
 
 typedef bool(*CSharp_FaceDetector)(const cv::_InputArray*, const cv::_OutputArray*);
 CVAPI(bool) cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector);
