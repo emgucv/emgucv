@@ -280,6 +280,11 @@ void cveFlip(cv::_InputArray* src, cv::_OutputArray* dst, int flipCode)
    cv::flip(*src, *dst, flipCode);
 }
 
+void cveRotate(cv::_InputArray* src, cv::_OutputArray* dst, int rotateCode)
+{
+	cv::rotate(*src, *dst, rotateCode);
+}
+
 void cveTranspose(cv::_InputArray* src, cv::_OutputArray* dst)
 {
    cv::transpose(*src, *dst);

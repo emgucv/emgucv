@@ -1609,6 +1609,20 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFlip(IntPtr src, IntPtr dst, int flipMode);
 
+        /// <summary>
+        /// Rotates a 2D array in multiples of 90 degrees.
+        /// </summary>
+        /// <param name="src">input array.</param>
+        /// <param name="dst">output array of the same type as src.  The size is the same with ROTATE_180, and the rows and cols are switched for ROTATE_90 and ROTATE_270.</param>
+        /// <param name="rotateCode">an enum to specify how to rotate the array</param>
+        public static void Rotate(IInputArray src, IOutputArray dst, RotateFlags rotateCode)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveRotate(iaSrc, oaDst, rotateCode);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveRotate(IntPtr src, IntPtr dst, RotateFlags rotateCode);
 
         #region Accessing Elements and sub-Arrays
 

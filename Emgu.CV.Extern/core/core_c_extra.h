@@ -15,7 +15,7 @@
 #include "opencv2/core/affine.hpp"
 
 CVAPI(CvErrorCallback) cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata);
-CVAPI(int)  cveGetErrMode();
+CVAPI(int) cveGetErrMode();
 CVAPI(int) cveSetErrMode(int mode);
 CVAPI(int) cveGetErrStatus();
 CVAPI(void) cveSetErrStatus(int status);
@@ -86,6 +86,7 @@ CVAPI(void) cveSqrt(cv::_InputArray* src, cv::_OutputArray* dst);
 CVAPI(void) cveCompare(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int compop);
 
 CVAPI(void) cveFlip(cv::_InputArray* src, cv::_OutputArray* dst, int flipCode);
+CVAPI(void) cveRotate(cv::_InputArray* src, cv::_OutputArray* dst, int rotateCode);
 CVAPI(void) cveTranspose(cv::_InputArray* src, cv::_OutputArray* dst);
 CVAPI(void) cveLUT(cv::_InputArray* src, cv::_InputArray* lut, cv::_OutputArray* dst);
 CVAPI(void) cveSum(cv::_InputArray* src, CvScalar* result);
