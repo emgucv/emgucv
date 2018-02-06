@@ -363,8 +363,11 @@ GOTO RUN_CMAKE
 IF NOT "%7%"=="build" GOTO END
 
 call %DEVENV% %BUILD_TYPE% emgucv.sln %BUILD_PROJECT% 
+
 IF "%5%"=="htmldoc" ^
-call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.Document.Html 
+call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.Document 
+IF "%5%"=="doc" ^
+call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.Document 
 
 IF "%8%"=="nuget" ^
 call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.nuget 
