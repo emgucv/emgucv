@@ -13,6 +13,9 @@
 	<summary>This package provides the native CUDA dependencies for ${EMGUCV_NUGET_ID}</summary>
     <description>This package provides the native CUDA dependencies for ${EMGUCV_NUGET_ID}</description>
     <releaseNotes>This is the ${EMGU_CUDA_VERSION} release of CUDA. </releaseNotes>
+	<dependencies>
+		${EMGU_CUDA_NUGET_DEPENDENCY}
+    </dependencies>
     <copyright>${CURRENT_YEAR} ${CPACK_PACKAGE_VENDOR}, All Rights Reserved.</copyright>
     <tags>emgu cuda</tags>
   </metadata>

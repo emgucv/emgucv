@@ -2048,7 +2048,7 @@ IF(DEFINED CVEXTERN_CUDA_DEPENDENCY_DLLS)
   SET(CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES ${CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES} PARENT_SCOPE)
 ENDIF()
 
-# For dynamic link numbering convenions
+# For dynamic link numbering conventions
 set_target_properties(${the_target} PROPERTIES
   OUTPUT_NAME "${the_target}"
   )

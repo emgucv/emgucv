@@ -690,23 +690,29 @@ STRING(REPLACE "x86 x64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}"
 SET(EMGUCV_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_NUGET_TITLE}" EMGUCV_NUGET_TITLE)
 
-SET(EMGUCV_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"5.1.5\" />")
+SET(EMGUCV_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"5.1.7\" />")
 
 IF(WITH_CUDA)
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} with CUDA support")
-
 	SET(EMGU_CUDA_NUGET_ID "${EMGUCV_NUGET_ID}.DEPENDENCY")
 	SET(EMGU_CUDA_NUGET_TITLE "Native x64 CUDA dependency for EMGU CV")
 	SET(EMGU_CUDA_VERSION "${CUDA_VERSION}")
+	SET(EMGU_CUFFT_VERSION "${EMGU_CUDA_VERSION}")
 	SET(EMGU_CUDA_NUGET_FILE_LIST "<file src=\"Emgu.Cuda.targets\" target=\"build\\${EMGU_CUDA_NUGET_ID}.targets\" />")
 	
 	SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} <dependency id=\"${EMGU_CUDA_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />")
-	
+	SET(EMGU_CUDA_NUGET_DEPENDENCY "<dependency id=\"EMGU.CUFFT\" version=\"[${EMGU_CUFFT_VERSION}]\" />")
 	IF(HAVE_WINDESKTOP_X64)
-		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/")
-		SET(EMGU_CUDA_NUGET_FILE_LIST "${EMGU_CUDA_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" target=\"build\\x64\" /> <file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" /> <file src=\"EULA.txt\" target=\"content\\net35\\CUDA_EULA.txt\" />")		
+		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA")
+		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft")
+		SET(EMGU_CUDA_NUGET_FILE_LIST "${EMGU_CUDA_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll\" target=\"build\\x64\" /> <file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" /> <file src=\"EULA.txt\" target=\"content\\net35\\CUDA_EULA.txt\" />")		
 	ENDIF()
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Cuda.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/Package.nuspec)
+	
+	SET(NUGET_PACKAGE_VENDOR "${CPACK_PACKAGE_VENDOR}")
+	STRING(REPLACE "." "" CUDA_VERSION_NUMERIC_ONLY "${CUDA_VERSION}")
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Cufft.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.Cufft.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft/Emgu.Cufft.targets)
 ENDIF()
 
 IF ("${LICENSE_TYPE}" EQUAL "Commercial")
