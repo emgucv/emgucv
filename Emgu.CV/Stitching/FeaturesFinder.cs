@@ -143,92 +143,92 @@ namespace Emgu.CV.Stitching
                 _featuresFinderPtr = IntPtr.Zero;
             }
         }
+    }
 
+    /// <summary>
+    /// This class wraps the functional calls to the opencv_stitching module
+    /// </summary>
+    public static partial class StitchingInvoke
+    {
+        /*
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveSurfFeaturesFinderCreate(
+           double hessThresh, int numOctaves, int numLayers,
+           int numOctavesDescr, int numLayersDescr, ref IntPtr f);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveSurfFeaturesFinderRelease(ref IntPtr finder);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveSurfFeaturesFinderGpuCreate(
+           double hessThresh, int numOctaves, int numLayers,
+           int numOctavesDescr, int numLayersDescr, ref IntPtr f);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveSurfFeaturesFinderGpuRelease(ref IntPtr finder);
+        */
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveOrbFeaturesFinderCreate(ref Size gridSize, int nfeature, float scaleFactor,
+            int nlevels, ref IntPtr f);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveOrbFeaturesFinderRelease(ref IntPtr finder);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveAKAZEFeaturesFinderCreate(
+            AKAZE.DescriptorType descriptorType,
+            int descriptorSize,
+            int descriptorChannels,
+            float threshold,
+            int nOctaves,
+            int nOctaveLayers,
+            KAZE.Diffusivity diffusivity,
+            ref IntPtr f);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveAKAZEFeaturesFinderRelease(ref IntPtr finder);
+    }
+
+    /// <summary>
+    /// AKAZE features finder.
+    /// </summary>
+    public class AKAZEFeaturesFinder : FeaturesFinder
+    {
         /// <summary>
-        /// AKAZE features finder.
+        /// Creates an AKAZE features finder
         /// </summary>
-        public class AKAZEFeaturesFinder : FeaturesFinder
+        /// <param name="descriptorType">Type of the extracted descriptor</param>
+        /// <param name="descriptorSize">Size of the descriptor in bits. 0 -> Full size</param>
+        /// <param name="descriptorChannels">Number of channels in the descriptor (1, 2, 3)</param>
+        /// <param name="threshold">Detector response threshold to accept point</param>
+        /// <param name="nOctaveLayers"> Default number of sublevels per scale level</param>
+        /// <param name="nOctaves">Maximum octave evolution of the image</param>
+        /// <param name="diffusivity">Diffusivity type</param>
+        public AKAZEFeaturesFinder(
+            AKAZE.DescriptorType descriptorType = AKAZE.DescriptorType.Mldb,
+            int descriptorSize = 0,
+            int descriptorChannels = 3,
+            float threshold = 0.001f,
+            int nOctaves = 4,
+            int nOctaveLayers = 4,
+            KAZE.Diffusivity diffusivity = KAZE.Diffusivity.PmG2)
         {
-            /// <summary>
-            /// Creates an AKAZE features finder
-            /// </summary>
-            /// <param name="descriptorType">Type of the extracted descriptor</param>
-            /// <param name="descriptorSize">Size of the descriptor in bits. 0 -> Full size</param>
-            /// <param name="descriptorChannels">Number of channels in the descriptor (1, 2, 3)</param>
-            /// <param name="threshold">Detector response threshold to accept point</param>
-            /// <param name="nOctaveLayers"> Default number of sublevels per scale level</param>
-            /// <param name="nOctaves">Maximum octave evolution of the image</param>
-            /// <param name="diffusivity">Diffusivity type</param>
-            public AKAZEFeaturesFinder(
-                AKAZE.DescriptorType descriptorType,
-                int descriptorSize,
-                int descriptorChannels,
-                float threshold,
-                int nOctaves,
-                int nOctaveLayers,
-                KAZE.Diffusivity diffusivity)
-            {
-                _ptr = StitchingInvoke.cveAKAZEFeaturesFinderCreate(
-                    descriptorType, descriptorSize, descriptorChannels, threshold, nOctaves, nOctaveLayers, diffusivity,
-                    ref _featuresFinderPtr);
-            }
-
-            /// <summary>
-            /// Release all the unmanaged memory associated with this FeaturesFinder
-            /// </summary>
-            protected override void DisposeObject()
-            {
-                if (_ptr != IntPtr.Zero)
-                {
-                    StitchingInvoke.cveAKAZEFeaturesFinderRelease(ref _ptr);
-                    _featuresFinderPtr = IntPtr.Zero;
-                }
-            }
+            _ptr = StitchingInvoke.cveAKAZEFeaturesFinderCreate(
+                descriptorType, descriptorSize, descriptorChannels, threshold, nOctaves, nOctaveLayers, diffusivity,
+                ref _featuresFinderPtr);
         }
 
         /// <summary>
-        /// This class wraps the functional calls to the opencv_stitching module
+        /// Release all the unmanaged memory associated with this FeaturesFinder
         /// </summary>
-        public static partial class StitchingInvoke
+        protected override void DisposeObject()
         {
-            /*
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal static extern IntPtr cveSurfFeaturesFinderCreate(
-               double hessThresh, int numOctaves, int numLayers,
-               int numOctavesDescr, int numLayersDescr, ref IntPtr f);
-
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal static extern void cveSurfFeaturesFinderRelease(ref IntPtr finder);
-
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal static extern IntPtr cveSurfFeaturesFinderGpuCreate(
-               double hessThresh, int numOctaves, int numLayers,
-               int numOctavesDescr, int numLayersDescr, ref IntPtr f);
-
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal static extern void cveSurfFeaturesFinderGpuRelease(ref IntPtr finder);
-            */
-
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal static extern IntPtr cveOrbFeaturesFinderCreate(ref Size gridSize, int nfeature, float scaleFactor,
-                int nlevels, ref IntPtr f);
-
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal static extern void cveOrbFeaturesFinderRelease(ref IntPtr finder);
-
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal static extern IntPtr cveAKAZEFeaturesFinderCreate(
-                AKAZE.DescriptorType descriptorType,
-                int descriptorSize,
-                int descriptorChannels,
-                float threshold,
-                int nOctaves,
-                int nOctaveLayers,
-                KAZE.Diffusivity diffusivity,
-                ref IntPtr f);
-
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal static extern void cveAKAZEFeaturesFinderRelease(ref IntPtr finder);
+            if (_ptr != IntPtr.Zero)
+            {
+                StitchingInvoke.cveAKAZEFeaturesFinderRelease(ref _ptr);
+                _featuresFinderPtr = IntPtr.Zero;
+            }
         }
     }
 }
