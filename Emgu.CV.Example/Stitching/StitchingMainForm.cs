@@ -48,7 +48,8 @@ namespace Stitching
                 }
                 try
                 {
-                    using (Stitcher stitcher = new Stitcher(true))
+                    //only use GPU if you have build the native binary from code and enabled "NON_FREE"
+                    using (Stitcher stitcher = new Stitcher(false)) 
                     using (AKAZEFeaturesFinder finder = new AKAZEFeaturesFinder())
                     {
                         stitcher.SetFeaturesFinder(finder);
