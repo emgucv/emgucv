@@ -133,13 +133,14 @@ namespace Emgu.CV
       /// <summary>
       /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from UIImage
       /// </summary>
+      /// <param name="mode">The color conversion mode. By default, it convert the UIImage to BGRA color type to preserve all the image channels.</param>
       /// <param name="uiImage">The UIImage.</param>
-      public Mat(UIImage uiImage)
+      public Mat(UIImage uiImage, ImreadModes mode = ImreadModes.AnyColor)
          : this ()
       {
 		using(CGImage cgImage = uiImage.CGImage)
 		{
-		ConvertFromCGImage(cgImage);
+		ConvertFromCGImage(cgImage, mode);
 		}
       }
 
@@ -158,13 +159,14 @@ namespace Emgu.CV
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from NSImage
 		/// </summary>
+		/// <param name="mode">The color conversion mode. By default, it convert the UIImage to BGRA color type to preserve all the image channels.</param>
 		/// <param name="uiImage">The NSImage.</param>
-		public Mat(NSImage nsImage)
+		public Mat(NSImage nsImage, ImreadModes mode = ImreadModes.AnyColor)
 		   : this()
 		{
 			using (CGImage cgImage = nsImage.CGImage)
 			{
-				ConvertFromCGImage(cgImage);
+				ConvertFromCGImage(cgImage, mode);
 			}
 		}
 
