@@ -36,7 +36,22 @@ CVAPI(void) cveTrackerMILRelease(cv::TrackerMIL** tracker);
 CVAPI(cv::TrackerTLD*) cveTrackerTLDCreate(cv::Tracker** tracker);
 CVAPI(void) cveTrackerTLDRelease(cv::TrackerTLD** tracker);
 
-CVAPI(cv::TrackerKCF*) cveTrackerKCFCreate(cv::Tracker** tracker);
+CVAPI(cv::TrackerKCF*) cveTrackerKCFCreate(
+	double detect_thresh,
+	double sigma,
+	double lambda,
+	double interp_factor,
+	double output_sigma_factor,
+	double pca_learning_rate,
+	bool resize,
+	bool split_coeff,
+	bool wrap_kernel,
+	bool compress_feature,
+	int max_patch_size,
+	int compressed_size,
+	int desc_pca,
+	int desc_npca,
+	cv::Tracker** tracker);
 CVAPI(void) cveTrackerKCFRelease(cv::TrackerKCF** tracker);
 
 CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(cv::Tracker** tracker);
