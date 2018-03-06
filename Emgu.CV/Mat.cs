@@ -284,7 +284,7 @@ namespace Emgu.CV
                   //try again to load with UIImage
                   using (UIImage tmp = UIImage.FromFile(fileName))
                   {
-                     ConvertFromCGImage(tmp.CGImage);
+                     CvInvoke.ConvertCGImageToArray(tmp.CGImage, this);
                   }
 #else
                         throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
