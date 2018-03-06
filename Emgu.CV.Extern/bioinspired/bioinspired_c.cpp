@@ -10,7 +10,7 @@
 cv::bioinspired::Retina* cveRetinaCreate(CvSize* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength)
 {
    
-   cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::createRetina(*inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+   cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::Retina::create(*inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
    ptr.addref();
    return ptr.get();
 }

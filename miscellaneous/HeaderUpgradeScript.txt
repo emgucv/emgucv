@@ -1,2 +1,2 @@
 find -name .git -prune -o -name *.png -prune -o -name *.jpg -prune -o -name *.dll -prune -o -name .gitmodules -prune -o -type f -print
-find -name .git -prune -o -name *.png -prune -o -name *.jpg -prune -o -name *.dll -prune -o -name .gitmodules -prune -o -type f -exec sed -i 's/2004-2017 by EMGU Corporation/2004-2017 by EMGU Corporation/g' {} \;
+find -name .git -prune -o -name *.png -prune -o -name *.jpg -prune -o -name *.dll -prune -o -name .gitmodules -prune -o -type f -exec sed -i 's/2004-2018 by EMGU Corporation/2004-2018 by EMGU Corporation/g' {} \;

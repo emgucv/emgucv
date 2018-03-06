@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -15,7 +15,6 @@ using Emgu.CV.Cvb;
 using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using Emgu.CV.VideoSurveillance;
 
 namespace VideoSurveilance
 {
@@ -24,7 +23,7 @@ namespace VideoSurveilance
       
       private static VideoCapture _cameraCapture;
       
-      private static BackgroundSubtractor _fgDetector;
+      private static IBackgroundSubtractor _fgDetector;
       private static Emgu.CV.Cvb.CvBlobDetector _blobDetector;
       private static Emgu.CV.Cvb.CvTracks _tracker;
 
@@ -46,7 +45,7 @@ namespace VideoSurveilance
             return;
          }
 
-         _fgDetector = new Emgu.CV.VideoSurveillance.BackgroundSubtractorMOG2();
+         _fgDetector = new BackgroundSubtractorMOG2();
          _blobDetector = new CvBlobDetector();
          _tracker = new CvTracks();
 

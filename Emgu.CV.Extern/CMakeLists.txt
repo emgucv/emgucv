@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 # 
 #  CMake file for cvextern. See root CMakeLists.txt
 #
@@ -321,6 +321,29 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
+	ELSEIF(${MARSHAL_TYPE} STREQUAL "act")
+	  SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);     
+     ")
+      SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}(); }     
+     ")
+      
+      SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+	 ${MARSHAL_RETURN} 
+     internal static extern ${CS_PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(
+        IntPtr obj);
+     ")
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}( )
+     {
+        return ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); 
+     }
+     ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1")
       SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
@@ -411,6 +434,48 @@ ${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj
         get { return new ${CS_PROPERTY_TYPE}( ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr), false); } 
      }
      ")
+
+	 ###################
+	  ELSEIF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
+	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
+     ")
+	SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}; }   
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { obj->${PROPERTY_NAME} = *str; }   
+     ")
+	
+	SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj, IntPtr str);
+	 [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(IntPtr obj, IntPtr str);
+     ")
+	SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
+     {
+        get 
+        { 
+           using (CvString s = new CvString())
+           {  
+              ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s); 
+              return s.ToString();
+           }
+        } 
+		set
+		{
+		   using (CvString s = new CvString(value))
+           {  
+              ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, s); 
+           }
+		}
+     }
+     ")
+	 ###################
       ELSE()
 	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
@@ -820,11 +885,11 @@ IF(HAVE_opencv_ml)
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/ANN_MLPGenerated.cs"
     "cv::ml::ANN_MLP" 
     "ANN_MLP" 
-    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax" 
-    "CvTermCriteria;double;double;double;double;double;double;double" 
-    "struct;prop;prop;prop;prop;prop;prop;prop"
-    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax" 
-    "MCvTermCriteria;double;double;double;double;double;double;double"
+    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax;AnnealInitialT;AnnealFinalT;AnnealCoolingRatio;AnnealItePerStep" 
+    "CvTermCriteria;double;double;double;double;double;double;double;double;double;double;int" 
+    "struct;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax;AnnealInitialT;AnnealFinalT;AnnealCoolingRatio;AnnealItePerStep" 
+    "MCvTermCriteria;double;double;double;double;double;double;double;double;double;double;int"
     "Termination criteria of the training algorithm;
   BPROP: Strength of the weight gradient term;
   BPROP: Strength of the momentum term (the difference between weights on the 2 previous iterations);
@@ -832,7 +897,11 @@ IF(HAVE_opencv_ml)
   RPROP: Increase factor;
   RPROP: Decrease factor;
   RPROP: Update-values lower limit;
-  RPROP: Update-values upper limit"
+  RPROP: Update-values upper limit;
+  ANNEAL: Update initial temperature.;
+  ANNEAL: Update final temperature.;
+  ANNEAL: Update cooling ratio.;
+  ANNEAL: Update iteration per step."
     "Emgu.CV.ML"
     "MlInvoke"
     "ANN_MLP"
@@ -1207,6 +1276,59 @@ IF(HAVE_opencv_stitching)
 ENDIF()
 ############################### stitching code gen END ################################
 
+############################### video code gen START ##############################
+IF(HAVE_opencv_video)
+   CREATE_OCV_CLASS_PROPERTY( 
+    "video/BackgroundSubtractorKNN_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/BackgroundSubtractorKNNGenerated.cs"
+    "cv::BackgroundSubtractorKNN" 
+    "BackgroundSubtractorKNN" 
+    "History;NSamples;Dist2Threshold;kNNSamples;DetectShadows;ShadowValue;ShadowThreshold" 
+    "int;int;double;int;bool;int;double" 
+    "prop;prop;prop;prop;prop;prop;prop"
+    "History;NSamples;Dist2Threshold;KNNSamples;DetectShadows;ShadowValue;ShadowThreshold" 
+    "int;int;double;int;bool;int;double"
+    "The number of last frames that affect the background model;
+	The number of data samples in the background model;
+	The threshold on the squared distance between the pixel and the sample to decide whether a pixel is close to a data sample.;
+	The number of neighbours, the k in the kNN. K is the number of samples that need to be within dist2Threshold in order to decide that pixel is matching the kNN background model.;
+	If true, the algorithm detects shadows and marks them.;
+	Shadow value is the value used to mark shadows in the foreground mask. Default value is 127. Value 0 in the mask always means background, 255 means foreground.;
+	A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel is more than twice darker then it is not shadow."
+    "Emgu.CV"
+    "CvInvoke"
+    "BackgroundSubtractorKNN"
+    "#include \"video_c.h\"")
+  
+   CREATE_OCV_CLASS_PROPERTY( 
+    "video/BackgroundSubtractorMOG2_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/BackgroundSubtractorMOG2Generated.cs"
+    "cv::BackgroundSubtractorMOG2" 
+    "BackgroundSubtractorMOG2" 
+    "History;DetectShadows;ShadowValue;ShadowThreshold;NMixtures;BackgroundRatio;VarThreshold;VarThresholdGen;VarInit;VarMin;VarMax;ComplexityReductionThreshold" 
+    "int;bool;int;double;int;double;double;double;double;double;double;double" 
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "History;DetectShadows;ShadowValue;ShadowThreshold;NMixtures;BackgroundRatio;VarThreshold;VarThresholdGen;VarInit;VarMin;VarMax;ComplexityReductionThreshold" 
+    "int;bool;int;double;int;double;double;double;double;double;double;double"
+    "The number of last frames that affect the background model;
+	If true, the algorithm detects shadows and marks them.;
+	Shadow value is the value used to mark shadows in the foreground mask. Default value is 127. Value 0 in the mask always means background, 255 means foreground.;
+	A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel is more than twice darker then it is not shadow.;
+	The number of gaussian components in the background model;
+	If a foreground pixel keeps semi-constant value for about backgroundRatio * history frames, it's considered background and added to the model as a center of a new component. It corresponds to TB parameter in the paper.;
+	The main threshold on the squared Mahalanobis distance to decide if the sample is well described by the background model or not. Related to Cthr from the paper.;
+	The variance threshold for the pixel-model match used for new mixture component generation. Threshold for the squared Mahalanobis distance that helps decide when a sample is close to the existing components (corresponds to Tg in the paper). If a pixel is not close to any component, it is considered foreground or added as a new component. 3 sigma =%gt; Tg=3*3=9 is default. A smaller Tg value generates more components. A higher Tg value may result in a small number of components but they can grow too large.;
+	The initial variance of each gaussian component;
+	The minimum variance;
+	The maximum variance;
+	the complexity reduction threshold. This parameter defines the number of samples needed to accept to prove the component exists. CT=0.05 is a default value for all the samples. By setting CT=0 you get an algorithm very similar to the standard Stauffer &amp; Grimson algorithm."
+    "Emgu.CV"
+    "CvInvoke"
+    "BackgroundSubtractorMOG2"
+    "#include \"video_c.h\"")
+ENDIF()
+############################### video code gen END ################################
+
 ############################### shape code gen START ##############################
 IF(HAVE_opencv_shape)
    CREATE_OCV_CLASS_PROPERTY( 
@@ -1336,6 +1458,45 @@ IF(HAVE_opencv_plot)
 ENDIF()
 ############################### plot code gen END ##############################
 
+############################### saliency code gen START ##############################
+IF(HAVE_opencv_saliency)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "saliency/MotionSaliencyBinWangApr2014_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/MotionSaliencyBinWangApr2014Generated.cs"
+    "cv::saliency::MotionSaliencyBinWangApr2014" 
+    "MotionSaliencyBinWangApr2014" 
+    "ImageWidth;ImageHeight;init" 
+    "int;int;bool" 
+    "prop;prop;act"
+    "ImageWidth;ImageHeight;Init" 
+    "int;int;bool"
+    "Image width;
+    Image height;
+	This function allows the correct initialization of all data structures that will be used by the algorithm.
+	"
+    "Emgu.CV.Saliency"
+    "SaliencyInvoke"
+    "MotionSaliencyBinWangApr2014"
+    "#include \"opencv2/saliency.hpp\"")
+  CREATE_OCV_CLASS_PROPERTY( 
+    "saliency/ObjectnessBING_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/ObjectnessBINGGenerated.cs"
+    "cv::saliency::ObjectnessBING" 
+    "ObjectnessBING" 
+    "W;NSS" 
+    "int;int" 
+    "prop;prop"
+    "W;NSS" 
+    "int;int"
+    "W;
+    NSS"
+    "Emgu.CV.Saliency"
+    "SaliencyInvoke"
+    "ObjectnessBING"
+    "#include \"opencv2/saliency.hpp\"")
+ENDIF()
+############################### plot code gen END ##############################
+
 ############################### xphoto code gen START ##############################
 IF(HAVE_opencv_xphoto)
   CREATE_OCV_CLASS_PROPERTY( 
@@ -1394,6 +1555,85 @@ IF(HAVE_opencv_xphoto)
     "#include \"opencv2/xphoto.hpp\"")
 ENDIF()
 ############################### xphoto code gen END ##############################
+
+
+############################### face code gen START ##############################
+IF(HAVE_opencv_face)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "face/facemarklbf_params_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkLBFParamsGenerated.cs"
+    "cv::face::FacemarkLBF::Params" 
+    "FacemarkLBFParams" 
+    "shape_offset;verbose;n_landmarks;initShape_n;stages_n;tree_n;tree_depth;bagging_overlap;save_model;cascade_face;model_filename" 
+    "double;bool;int;int;int;int;int;double;bool;cv::String;cv::String" 
+    "element;element;element;element;element;element;element;element;element;element;element"
+    "ShapeOffset;Verbose;NLandmarks;InitShapeN;StagesN;TreeN;TreeDepth;BaggingOverlap;SaveModel;CascadeFace;ModelFile" 
+    "double;bool;int;int;int;int;int;double;bool;String;String"
+    "offset for the loaded face landmark points;
+	show the training print-out;
+	number of landmark points;
+	multiplier for augment the training data;
+	number of refinement stages;
+	number of tree in the model for each landmark point refinement;
+	the depth of decision tree, defines the size of feature;
+	overlap ratio for training the LBF feature;
+	flag to save the trained model or not;
+	filename of the face detector model;
+	filename where the trained model will be saved"
+    "Emgu.CV.Face"
+    "FaceInvoke"
+    "FacemarkLBFParams"
+    "#include \"opencv2/face.hpp\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "face/facemarkaam_params_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkAAMParamsGenerated.cs"
+    "cv::face::FacemarkAAM::Params" 
+    "FacemarkAAMParams" 
+    "model_filename;m;n;n_iter;verbose;save_model;max_m;max_n" 
+    "cv::String;int;int;int;bool;bool;int;int" 
+    "element;element;element;element;element;element;element;element"
+    "ModelFile;M;N;NIter;Verbose;SaveModel;MaxM;MaxN" 
+    "String;int;int;int;bool;bool;int;int"
+    "filename where the trained model will be saved;
+	M;
+	N;
+	Number of iteration;
+	show the training print-out;
+	flag to save the trained model or not;
+	The maximum value of M;
+	The maximum value of N"
+    "Emgu.CV.Face"
+    "FaceInvoke"
+    "FacemarkAAMParams"
+    "#include \"opencv2/face.hpp\"")
+ENDIF()
+############################### face code gen END ##############################
+
+############################### dnn code gen START ##############################
+IF(HAVE_opencv_dnn)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "dnn/net_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/NetGenerated.cs"
+    "cv::dnn::Net" 
+    "Net" 
+    "PreferableBackend;PreferableTarget;enableFusion" 
+    "int;int;bool" 
+    "propW;propW;act1"
+    "PreferableBackend;PreferableTarget;EnableFusion" 
+    "int;int;bool"
+    "Ask network to use specific computation backend where it supported.;
+	Ask network to make computations on specific target device.;
+	Enables or disables layer fusion in the network."
+    "Emgu.CV.Dnn"
+    "DnnInvoke"
+    "Net"
+    "#include \"opencv2/dnn.hpp\"")
+
+ENDIF()
+############################### dnn code gen END ##############################
+
+
 
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
@@ -1504,9 +1744,9 @@ ENDIF()
 ############################### INTEL ICL START ##############################
 IF(WIN32 AND CV_ICC)
   IF(TARGET_ARCH_64)
-    SET(INTEL_ICC_REDIST_PATH "$ENV{ICPP_COMPILER17}redist/intel64_win/compiler/")
+    SET(INTEL_ICC_REDIST_PATH "$ENV{ICPP_COMPILER18}redist/intel64_win/compiler/")
   ELSE()
-    SET(INTEL_ICC_REDIST_PATH "$ENV{ICPP_COMPILER17}redist/ia32_win/compiler/")
+    SET(INTEL_ICC_REDIST_PATH "$ENV{ICPP_COMPILER18}redist/ia32_win/compiler/")
   ENDIF()
   STRING(REGEX REPLACE "\\\\" "/" INTEL_ICC_REDIST_PATH ${INTEL_ICC_REDIST_PATH})
   #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES libomp5md libmmd svml_dispmd)
@@ -1535,7 +1775,7 @@ ENDIF()
 
 ############################### TESSERACT START ########################
 SET(TESSERACT_OCR_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr.git")
-SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/leptonica-1.74")
+SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/leptonica.git")
 
 IF(ANDROID)
   IF(EMGU_CV_WITH_TESSERACT)
@@ -1641,6 +1881,8 @@ IF(WIN32 AND WITH_CUDA)
     SET(CUDA_POSTFIX 32)
   ENDIF()
   
+  SET(CVEXTERN_CUDA_DEPENDENCY_DLLS)
+  
   IF ((${npp_major} GREATER 5) OR ((${npp_major} STREQUAL "5") AND (${npp_minor} GREATER 0)))
 	SET(CUDA_NPP_DLLS 
 	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
@@ -1658,11 +1900,11 @@ IF(WIN32 AND WITH_CUDA)
       "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npps${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
 	FOREACH(CUDA_NPP_DLL ${CUDA_NPP_DLLS})
 	  IF(EXISTS "${CUDA_NPP_DLL}")
-		LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_NPP_DLL}")
+		LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_NPP_DLL}")
 	  ENDIF()
     ENDFOREACH()
 	
-	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS
+	LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS
       "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
       )
     #LIST(APPEND CVEXTERN_DEPENDENCY_DLLS
@@ -1681,16 +1923,16 @@ IF(WIN32 AND WITH_CUDA)
     #ENDIF()
     
     IF(WITH_CUFFT)
-      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+      LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
       #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}) 
     ENDIF()
     
     IF(WITH_CUBLAS)
-      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+      LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
       #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor})
     ENDIF()  
   ELSE()  
-    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS 
+    LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS 
       "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npp${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
       "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll"
       )
@@ -1699,15 +1941,17 @@ IF(WIN32 AND WITH_CUDA)
     #  cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
     
     IF(WITH_CUFFT)
-      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+      LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
       #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cufft${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}) 
     ENDIF()
     
     IF(WITH_CUBLAS)
-      LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
+      LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_TOOLKIT_ROOT_DIR}/bin/cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build}.dll")
       #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES cublas${CUDA_POSTFIX}_${npp_major}${npp_minor}_${npp_build})
     ENDIF()
   ENDIF()
+  
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${CVEXTERN_CUDA_DEPENDENCY_DLLS})
 ENDIF()
 
 #IF(ANDROID OR IOS)
@@ -1768,6 +2012,9 @@ ENDIF()
 set(the_target ${PROJECT_NAME})
 IF(IOS)
   add_library(${the_target} STATIC ${extern_srcs} ${extern_hdrs} )
+ELSEIF(WIN32)
+  #add the version information for windows binary
+  add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} ${PROJECT_SOURCE_DIR}/version.rc )
 ELSE()
   add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} )
   IF (APPLE)
@@ -1795,7 +2042,13 @@ IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
     COMMENT "Copying ${CVEXTERN_DEPENDENCY_DLLS} to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 ENDIF()
 
-# For dynamic link numbering convenions
+IF(DEFINED CVEXTERN_CUDA_DEPENDENCY_DLLS)
+  #Promote this to parent scope such that cpack will know what cuda dlls to be included in the package
+  #MESSAGE("**************CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES: ${CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES}")
+  SET(CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES ${CVEXTERN_CUDA_DEPENDENCY_DLL_NAMES} PARENT_SCOPE)
+ENDIF()
+
+# For dynamic link numbering conventions
 set_target_properties(${the_target} PROPERTIES
   OUTPUT_NAME "${the_target}"
   )
@@ -1941,15 +2194,15 @@ if(NETFX_CORE)
   endif()
 endif()
 
-if(BUILD_PNG)
+if(WITH_PNG AND BUILD_PNG)
   target_link_libraries(${the_target} libpng)
 endif()
 
-if(BUILD_TIFF)
+if(WITH_TIFF AND BUILD_TIFF)
   target_link_libraries(${the_target} libtiff)
 endif()
 
-if(BUILD_JPEG)
+if(WITH_JPEG AND BUILD_JPEG)
   target_link_libraries(${the_target} libjpeg)
 endif()
 

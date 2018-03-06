@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+      <PropertyGroup>
+        <EmguCvCudaLinkTarget>WindowsForms</EmguCvCudaLinkTarget>
+		<EmguCvCudaBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguCvCudaBuildX86>
+        <EmguCvCudaBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCvCudaBuildX64>
+		<EmguCudaNativeFileX64>$(MSBuildThisFileDirectory)\x64\cudart64_90.dll</EmguCudaNativeFileX64>
+		<EmguCudaErrorMessage Condition="'$(EmguCvCudaBuildX86)'=='True'">X86 or AnyCPU is targeted, but this CUDA package do not support 32-bit</EmguCudaErrorMessage>
+        <EmguCudaDeployMessage Condition="'$(EmguCvCudaBuildX64)'=='True' AND Exists('$(EmguCudaNativeFileX64)')">$(EmguCudaDeployMessage)x64 </EmguCudaDeployMessage>
+        <EmguCudaErrorMessage Condition="'$(EmguCvCudaBuildX64)'=='True' AND !Exists('$(EmguCudaNativeFileX64)')">This package do not contain necessary binary for $(EmguCvCudaLinkTarget). X64 is targeted, but file $(EmguCudaNativeFileX64) is missing.</EmguCudaErrorMessage>
+      </PropertyGroup>
+      <ItemGroup Condition="'$(EmguCvCudaBuildX64)'=='True' AND Exists('$(EmguCudaNativeFileX64)')">
+        <Content Include="$(MSBuildThisFileDirectory)\x64\*.dll">
+          <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+	    <Target Name="EmguCvCudaPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(EmguCvCudaLinkTarget)'==''" Text="Emgu Cuda is not able to detect the project type, please send a bug report to support@emgu.com" />
+    <Message Condition="'$(EmguCvCudaLinkTarget)'!=''" Text="Emgu Cuda shared project compiling against $(EmguCvCudaLinkTarget)" Importance="High" />
+    <Error Text="'$(EmguCudaErrorMessage)'" Condition="'$(EmguCudaErrorMessage)'!=''" />
+    <Message Text="Emgu CV CUDA dependency Compiling with $(EmguCudaDeployMessage)binary" Condition="'$(EmguCudaDeployMessage)'!=''" Importance="High" />
+    <Message Text="No native binary is deployed by the Emgu Cuda package." Condition="'$(EmguCudaDeployMessage)'==''" Importance="High" />
+  </Target>
+</Project>

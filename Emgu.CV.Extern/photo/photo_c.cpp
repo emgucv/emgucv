@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -161,10 +161,11 @@ void cveTonemapProcess(cv::Tonemap* tonemap, cv::_InputArray* src, cv::_OutputAr
 {
    tonemap->process(*src, *dst);
 }
-cv::Tonemap* cveTonemapCreate(float gamma)
+cv::Tonemap* cveTonemapCreate(float gamma, cv::Algorithm** algorithm)
 {
    cv::Ptr<cv::Tonemap> tonemap = cv::createTonemap(gamma);
    tonemap.addref();
+   *algorithm = dynamic_cast<cv::Algorithm*>(tonemap.get());
    return tonemap.get();
 }
 void cveTonemapRelease(cv::Tonemap** tonemap)
@@ -173,11 +174,12 @@ void cveTonemapRelease(cv::Tonemap** tonemap)
    *tonemap = 0;
 }
 
-cv::TonemapDrago* cveTonemapDragoCreate(float gamma, float saturation, float bias, cv::Tonemap** tonemap)
+cv::TonemapDrago* cveTonemapDragoCreate(float gamma, float saturation, float bias, cv::Tonemap** tonemap, cv::Algorithm** algorithm)
 {
    cv::Ptr<cv::TonemapDrago> t = cv::createTonemapDrago(gamma, saturation, bias);
    t.addref();
    *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+   *algorithm = dynamic_cast<cv::Algorithm*>(t.get());
    return t.get();
 }
 void cveTonemapDragoRelease(cv::TonemapDrago** tonemap)
@@ -186,11 +188,12 @@ void cveTonemapDragoRelease(cv::TonemapDrago** tonemap)
    *tonemap = 0;
 }
 
-cv::TonemapDurand* cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, cv::Tonemap** tonemap)
+cv::TonemapDurand* cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, cv::Tonemap** tonemap, cv::Algorithm** algorithm)
 {
    cv::Ptr<cv::TonemapDurand> t = cv::createTonemapDurand(gamma, contrast, saturation, sigmaSpace, sigmaColor);
    t.addref();
    *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+   *algorithm = dynamic_cast<cv::Algorithm*>(t.get());
    return t.get();
 }
 void cveTonemapDurandRelease(cv::TonemapDurand** tonemap)
@@ -199,11 +202,12 @@ void cveTonemapDurandRelease(cv::TonemapDurand** tonemap)
    *tonemap = 0;
 }
 
-cv::TonemapReinhard* cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, cv::Tonemap** tonemap)
+cv::TonemapReinhard* cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, cv::Tonemap** tonemap, cv::Algorithm** algorithm)
 {
    cv::Ptr<cv::TonemapReinhard> t = cv::createTonemapReinhard(gamma, intensity, lightAdapt, colorAdapt);
    t.addref();
    *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+   *algorithm = dynamic_cast<cv::Algorithm*>(t.get());
    return t.get();
 }
 void cveTonemapReinhardRelease(cv::TonemapReinhard** tonemap)
@@ -212,11 +216,12 @@ void cveTonemapReinhardRelease(cv::TonemapReinhard** tonemap)
    *tonemap = 0;
 }
 
-cv::TonemapMantiuk* cveTonemapMantiukCreate(float gamma, float scale, float saturation, cv::Tonemap** tonemap)
+cv::TonemapMantiuk* cveTonemapMantiukCreate(float gamma, float scale, float saturation, cv::Tonemap** tonemap, cv::Algorithm** algorithm)
 {
    cv::Ptr<cv::TonemapMantiuk> t = cv::createTonemapMantiuk(gamma, scale, saturation);
    t.addref();
    *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+   *algorithm = dynamic_cast<cv::Algorithm*>(t.get());
    return t.get();
 }
 void cveTonemapMantiukRelease(cv::TonemapMantiuk** tonemap)

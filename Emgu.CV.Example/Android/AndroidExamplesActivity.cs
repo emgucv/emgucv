@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -80,7 +80,20 @@ namespace AndroidExamples
             cameraButton.Visibility = ViewStates.Gone;
          }
 
-         Button licensePlateRecognitionButton = FindViewById<Button>(Resource.Id.GotoLicensePlateRecognitionButton);
+          Button camera2Button = FindViewById<Button>(Resource.Id.GotoCamera2Button);
+          if (Android.Hardware.Camera.NumberOfCameras > 0)
+          {
+              camera2Button.Click += delegate
+              {
+                  StartActivity(typeof(Camera2Activity));
+              };
+          }
+          else
+          {
+              camera2Button.Visibility = ViewStates.Gone;
+          }
+
+            Button licensePlateRecognitionButton = FindViewById<Button>(Resource.Id.GotoLicensePlateRecognitionButton);
          licensePlateRecognitionButton.Click += delegate
          {
             StartActivity(typeof(LicensePlateRecognitionActivity));

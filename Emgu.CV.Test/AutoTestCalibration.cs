@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -83,10 +84,18 @@ namespace Emgu.CV.Test
 
             double error = CameraCalibration.CalibrateCamera(new MCvPoint3D32f[][] { objectPts }, new PointF[][] { corners.ToArray() },
                chessboardImage.Size, intrisic, CvEnum.CalibType.Default, new MCvTermCriteria(30, 1.0e-10), out extrinsic);
+
             CvInvoke.DrawChessboardCorners(chessboardImage, patternSize, corners, patternWasFound);
             //CameraCalibration.DrawChessboardCorners(chessboardImage, patternSize, corners);
             Image<Gray, Byte> undistorted = intrisic.Undistort(chessboardImage);
             //UI.ImageViewer.Show(undistorted, String.Format("Reprojection error: {0}", error));
+
+            Mat[] rotationVectors, translationVectors;
+            CvInvoke.CalibrateCamera(new MCvPoint3D32f[][] { objectPts }, new PointF[][] { corners.ToArray() },
+                chessboardImage.Size, intrisic.IntrinsicMatrix, intrisic.DistortionCoeffs, CalibType.Default,
+                new MCvTermCriteria(30, 1.0e-10),
+                out rotationVectors, out translationVectors);
+
         }
 
         [Test]

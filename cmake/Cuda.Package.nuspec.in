@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGU_CUDA_NUGET_ID}</id>
+	<title>${EMGU_CUDA_NUGET_TITLE}</title>
+    <version>${EMGU_CUDA_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+    <licenseUrl>http://docs.nvidia.com/cuda/eula/index.html</licenseUrl>
+    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+	<iconUrl>http://www.emgu.com/wiki/files/EmguCVLogo.gif</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<summary>This package provides the native CUDA dependencies for ${EMGUCV_NUGET_ID}</summary>
+    <description>This package provides the native CUDA dependencies for ${EMGUCV_NUGET_ID}</description>
+    <releaseNotes>This is the ${EMGU_CUDA_VERSION} release of CUDA. </releaseNotes>
+	<dependencies>
+		${EMGU_CUDA_NUGET_DEPENDENCY}
+    </dependencies>
+    <copyright>${CURRENT_YEAR} ${CPACK_PACKAGE_VENDOR}, All Rights Reserved.</copyright>
+    <tags>emgu cuda</tags>
+  </metadata>
+  <files>
+    ${EMGU_CUDA_NUGET_FILE_LIST}
+  </files>
+</package>

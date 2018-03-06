@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -100,10 +100,26 @@ namespace Emgu.CV.Text
         /// </summary>
         public float NumInflexionPoints;
 
+        
+        private IntPtr _pixels;
+
         /// <summary>
-        /// Pointer to pixels
+        /// get the pixels list. 
         /// </summary>
-        public IntPtr Pixels;
+        public VectorOfInt Pixels
+        {
+            get
+            {
+                if (IntPtr.Zero == Pixels)
+                {
+                    return null;
+                }
+                else
+                {
+                    return new VectorOfInt(_pixels, false);
+                }
+            }
+        }
 
         /// <summary>
         /// Probability that the ER belongs to the class we are looking for

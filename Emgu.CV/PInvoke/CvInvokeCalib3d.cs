@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -458,10 +458,10 @@ namespace Emgu.CV
                     for (int i = 0; i < imageCount; i++)
                     {
                         rotationVectors[i] = new Mat();
-                        using (Mat matR = rotationVectors[i])
+                        using (Mat matR = rVecs[i])
                             matR.CopyTo(rotationVectors[i]);
                         translationVectors[i] = new Mat();
-                        using (Mat matT = translationVectors[i])
+                        using (Mat matT = tVecs[i])
                             matT.CopyTo(translationVectors[i]);
                     }
                 }

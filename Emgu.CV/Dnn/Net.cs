@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
-#if !(__IOS__ || UNITY_IPHONE || NETFX_CORE || NETSTANDARD1_4)
+#if !(NETFX_CORE || NETSTANDARD1_4)
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +17,7 @@ namespace Emgu.CV.Dnn
     /// <summary>
     /// This class allows to create and manipulate comprehensive artificial neural networks.
     /// </summary>
-    public class Net : UnmanagedObject
+    public partial class Net : UnmanagedObject
     {
         /// <summary>
         /// Default constructor.
@@ -25,6 +25,11 @@ namespace Emgu.CV.Dnn
         public Net()
         {
             _ptr = DnnInvoke.cveDnnNetCreate();
+        }
+
+        internal Net(IntPtr ptr)
+        {
+            _ptr = ptr;
         }
 
         /// <summary>
@@ -77,6 +82,28 @@ namespace Emgu.CV.Dnn
                 DnnInvoke.cveDnnNetRelease(ref _ptr);
             }
         }
+
+        /// <summary>
+        /// Returns true if there are no layers in the network.
+        /// </summary>
+        public bool Empty
+        {
+            get { return DnnInvoke.cveDnnNetEmpty(_ptr); }
+        }
+
+        /// <summary>
+        /// Return the LayerNames
+        /// </summary>
+        public String[] LayerNames
+        {
+            get
+            {
+                using (VectorOfCvString vs = new VectorOfCvString(DnnInvoke.cveDnnNetGetLayerNames(_ptr), true))
+                {
+                    return vs.ToArray();
+                }
+            }
+        }
     }
 
     public static partial class DnnInvoke
@@ -91,6 +118,12 @@ namespace Emgu.CV.Dnn
         internal static extern void cveDnnNetForward(IntPtr net, IntPtr outputName, IntPtr output);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetRelease(ref IntPtr net);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern  bool cveDnnNetEmpty(IntPtr net);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDnnNetGetLayerNames(IntPtr net);
     }
 }
 #endif

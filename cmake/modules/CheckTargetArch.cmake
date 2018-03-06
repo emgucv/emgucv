@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 #
 # - This is a support module for checking if the compiled target is 32/64bit
 # It define the following macro:

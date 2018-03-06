@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
 PROJECT(libleptonica)
@@ -9,7 +9,9 @@ PROJECT(libleptonica)
 #ENDIF()
 
 SET(LEPTON_DIR ${LEPT_ROOT_DIR})
+MESSAGE(STATUS "LEPTON_DIR: ${LEPTON_DIR}")
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${LEPT_ROOT_DIR}/cmake")
+
 set(AUTOCONFIG_SRC ${LEPT_ROOT_DIR}/config_auto.h.in)
 set(AUTOCONFIG ${LEPT_ROOT_DIR}/src/config_auto.h)
 include(Configure)

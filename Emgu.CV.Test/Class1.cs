@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -23,7 +23,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.Util;
-using Emgu.CV.VideoSurveillance;
+
 //using Emgu.UI;
 using Emgu.Util;
 using Emgu.CV.VideoStab;

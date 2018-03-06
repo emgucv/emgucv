@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 ﻿using System;
@@ -93,7 +93,7 @@ namespace Emgu.CV.Shape
       /// </summary>
       protected override void DisposeObject()
       {
-         if (IntPtr.Zero == _ptr)
+         if (IntPtr.Zero != _ptr)
             ShapeInvoke.cvShapeContextDistanceExtractorRelease(ref _ptr);
          base.DisposeObject();
       }

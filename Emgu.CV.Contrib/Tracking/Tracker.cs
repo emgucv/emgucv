@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -78,7 +78,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero == _ptr)
+            if (IntPtr.Zero != _ptr)
                 ContribInvoke.cveTrackerMedianFlowRelease(ref _ptr);
             base.DisposeObject();
         }
@@ -131,8 +131,15 @@ namespace Emgu.CV.Tracking
         }
     }
 
+    /// <summary>
+    /// TLD is a novel tracking framework that explicitly decomposes the long-term tracking task into tracking, learning and detection.
+    /// </summary>
+    /// <remarks>The tracker follows the object from frame to frame. The detector localizes all appearances that have been observed so far and corrects the tracker if necessary. The learning estimates detector's errors and updates it to avoid these errors in the future.</remarks>
     public class TrackerTLD : Tracker
     {
+        /// <summary>
+        /// Creates a TLD tracker
+        /// </summary>
         public TrackerTLD()
         {
             _ptr = ContribInvoke.cveTrackerTLDCreate(ref _trackerPtr);
@@ -143,7 +150,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero == _ptr)
+            if (IntPtr.Zero != _ptr)
                 ContribInvoke.cveTrackerTLDRelease(ref _ptr);
             base.DisposeObject();
         }
@@ -236,14 +243,21 @@ namespace Emgu.CV.Tracking
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero == _ptr)
+            if (IntPtr.Zero != _ptr)
                 ContribInvoke.cveTrackerKCFRelease(ref _ptr);
             base.DisposeObject();
         }
     }
 
+    /// <summary>
+    /// GOTURN is kind of trackers based on Convolutional Neural Networks (CNN). While taking all advantages of CNN trackers, GOTURN is much faster due to offline training without online fine-tuning nature. GOTURN tracker addresses the problem of single target tracking: given a bounding box label of an object in the first frame of the video, we track that object through the rest of the video. NOTE: Current method of GOTURN does not handle occlusions; however, it is fairly robust to viewpoint changes, lighting changes, and deformations. Inputs of GOTURN are two RGB patches representing Target and Search patches resized to 227x227. Outputs of GOTURN are predicted bounding box coordinates, relative to Search patch coordinate system, in format X1,Y1,X2,Y2.
+    /// </summary>
+    /// <remarks>Original paper is here: http://davheld.github.io/GOTURN/GOTURN.pdf As long as original authors implementation: https://github.com/davheld/GOTURN#train-the-tracker Implementation of training algorithm is placed in separately here due to 3d-party dependencies: https://github.com/Auron-X/GOTURN_Training_Toolkit GOTURN architecture goturn.prototxt and trained model goturn.caffemodel are accessible on opencv_extra GitHub repository.</remarks>
     public class TrackerGOTURN : Tracker
     {
+        /// <summary>
+        /// Create a GOTURN tracker
+        /// </summary>
         public TrackerGOTURN()
         {
             _ptr = ContribInvoke.cveTrackerGOTURNCreate(ref _trackerPtr);
@@ -254,7 +268,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero == _ptr)
+            if (IntPtr.Zero != _ptr)
                 ContribInvoke.cveTrackerGOTURNRelease(ref _ptr);
             base.DisposeObject();
         }

@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 ﻿using System;
@@ -14,7 +14,7 @@ namespace Emgu.CV.Cuda
    /// <summary>
    /// Interface to provide access to the cuda::SparseOpticalFlow class.
    /// </summary>
-   public interface ICudaSparseOpticalFlow
+   public interface ICudaSparseOpticalFlow : IAlgorithm
    {
       /// <summary>
       /// Pointer the the native cuda::sparseOpticalFlow object.

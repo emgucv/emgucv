@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -13,6 +13,49 @@
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/objdetect/objdetect_c.h"
+
+#ifdef HAVE_OPENCV_TEXT
+#include "opencv2/text/erfilter.hpp"
+#endif
+
+#include "opencv2/line_descriptor.hpp"
+#include "opencv2/core/ocl.hpp"
+
+namespace cv {
+	namespace traits {
+		template<>
+		struct Depth < cv::String > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< cv::String > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::String)) }; };
+
+		template<>
+		struct Depth < cv::DMatch > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< cv::DMatch > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::DMatch)) }; };
+
+#ifdef HAVE_OPENCV_TEXT
+		template<>
+		struct Depth < cv::text::ERStat > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< cv::text::ERStat > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::text::ERStat)) }; };
+#endif
+
+		template<>
+		struct Depth < cv::line_descriptor::KeyLine > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< cv::line_descriptor::KeyLine > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::line_descriptor::KeyLine)) }; };
+
+		template<>
+		struct Depth < cv::KeyPoint > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< cv::KeyPoint > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::KeyPoint)) }; };
+
+		template<>
+		struct Depth < cv::ocl::PlatformInfo > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< cv::ocl::PlatformInfo > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::ocl::PlatformInfo)) }; };
+	}
+}
 
 
 template <class dataType> 
@@ -80,4 +123,5 @@ CVAPI(void) VectorOfDataMatrixCodeFind(std::vector<CvDataMatrixCode>* v, IplImag
 
 CVAPI(void) VectorOfDataMatrixCodeDraw(std::vector<CvDataMatrixCode>* v, IplImage* image);
 */
+
 #endif

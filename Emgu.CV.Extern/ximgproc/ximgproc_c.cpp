@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -39,6 +39,11 @@ void cveRollingGuidanceFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d
 void cveFastGlobalSmootherFilter(cv::_InputArray* guide, cv::_InputArray* src, cv::_OutputArray* dst, double lambda, double sigmaColor, double lambdaAttenuation, int numIter)
 {
    cv::ximgproc::fastGlobalSmootherFilter(*guide, *src, *dst, lambda, sigmaColor, lambdaAttenuation, numIter);
+}
+
+void cveL0Smooth(cv::_InputArray* src, cv::_OutputArray* dst, double lambda, double kappa)
+{
+	cv::ximgproc::l0Smooth(*src, *dst, lambda, kappa);
 }
 
 void cveNiBlackThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double maxValue, int type, int blockSize, double delta)

@@ -40,7 +40,6 @@ cp -r ../Emgu.CV/Stitching Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Superres Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Video Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Videostab Assets/Emgu.CV/Emgu.CV/
-cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Emgu.CV/
 
 REM rm -rf Assets/Emgu.CV/Emgu.CV/PInvoke/Windows.Store
@@ -96,6 +95,8 @@ mkdir Assets\Emgu.CV\Emgu.CV.Contrib\DnnModern
 cp -r ../Emgu.CV.Contrib/DnnModern/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/DnnModern
 mkdir Assets\Emgu.CV\Emgu.CV.Contrib\ImgHash
 cp -r ../Emgu.CV.Contrib/ImgHash/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/ImgHash
+mkdir Assets\Emgu.CV\Emgu.CV.Contrib\PhaseUnwrapping
+cp -r ../Emgu.CV.Contrib/PhaseUnwrapping/*.cs Assets/Emgu.CV/Emgu.CV.Contrib/PhaseUnwrapping
 
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/

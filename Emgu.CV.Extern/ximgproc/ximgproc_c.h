@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -24,6 +24,8 @@ CVAPI(void) cveBilateralTextureFilter(cv::_InputArray* src, cv::_OutputArray* ds
 CVAPI(void) cveRollingGuidanceFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d, double sigmaColor, double sigmaSpace, int numOfIter, int borderType);
 
 CVAPI(void) cveFastGlobalSmootherFilter(cv::_InputArray* guide, cv::_InputArray* src, cv::_OutputArray* dst, double lambda, double sigmaColor, double lambdaAttenuation, int numIter);
+
+CVAPI(void) cveL0Smooth(cv::_InputArray* src, cv::_OutputArray* dst, double lambda, double kappa);
 
 CVAPI(void) cveNiBlackThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double maxValue, int type, int blockSize, double delta);
 
@@ -92,4 +94,6 @@ CVAPI(void) cveGradientDericheX(cv::_InputArray* op, cv::_OutputArray* dst, doub
 CVAPI(void) cveThinning(cv::_InputArray* src, cv::_OutputArray* dst, int thinningType);
 
 CVAPI(void) cveAnisotropicDiffusion(cv::_InputArray* src, cv::_OutputArray* dst, float alpha, float K, int niters);
+
+
 #endif

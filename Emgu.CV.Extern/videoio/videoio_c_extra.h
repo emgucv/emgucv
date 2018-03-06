@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -25,6 +25,15 @@ struct ColorPoint
    unsigned char green;
    unsigned char red;
 };
+
+namespace cv {
+	namespace traits {
+		template<>
+		struct Depth < ColorPoint > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< ColorPoint > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(ColorPoint)) }; };
+	}
+}
 
 CVAPI(void) OpenniGetColorPoints(
                                  CvCapture* capture, // must be an openni capture

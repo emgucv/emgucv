@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+
+#if !(WINDOWS_APP || WINDOWS_PHONE_APP)
 
 using System;
 using System.Collections.Generic;
@@ -248,3 +250,5 @@ namespace Emgu.CV.Text
     }
 
 }
+
+#endif

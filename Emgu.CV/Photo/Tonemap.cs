@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -16,12 +16,28 @@ namespace Emgu.CV
     /// <summary>
     /// Base class for tonemapping algorithms - tools that are used to map HDR image to 8-bit range.
     /// </summary>
-    public partial class Tonemap : UnmanagedObject
+    public partial class Tonemap : UnmanagedObject, IAlgorithm
     {
         /// <summary>
         /// The pointer to the unmanaged Tonemap object
         /// </summary>
         protected IntPtr _tonemapPtr;
+
+        /// <summary>
+        /// The pointer to the unmanaged Algorithm object
+        /// </summary>
+        protected IntPtr _algorithmPtr;
+
+        /// <summary>
+        /// The pointer to the unamanged Algorith object
+        /// </summary>
+        public IntPtr AlgorithmPtr
+        {
+            get
+            {
+                return _algorithmPtr;
+            }
+        }
 
         /// <summary>
         /// Default constructor that creates empty Tonemap
@@ -40,7 +56,7 @@ namespace Emgu.CV
         /// <param name="gamma">positive value for gamma correction. Gamma value of 1.0 implies no correction, gamma equal to 2.2f is suitable for most displays. Generally gamma &gt; 1 brightens the image and gamma &lt; 1 darkens it.</param>
         public Tonemap(float gamma = 1.0f)
         {
-            _ptr = CvInvoke.cveTonemapCreate(gamma);
+            _ptr = CvInvoke.cveTonemapCreate(gamma, ref _algorithmPtr);
             _tonemapPtr = _ptr;
         }
 
@@ -68,6 +84,7 @@ namespace Emgu.CV
                 CvInvoke.cveTonemapRelease(ref _ptr);
             }
             _tonemapPtr = IntPtr.Zero;
+            _algorithmPtr = IntPtr.Zero;
         }
     }
 
@@ -86,7 +103,7 @@ namespace Emgu.CV
         public TonemapDrago(float gamma = 1.0f, float saturation = 1.0f, float bias = 0.85f)
             :base(IntPtr.Zero, IntPtr.Zero)
         {
-            _ptr = CvInvoke.cveTonemapDragoCreate(gamma, saturation, bias, ref _tonemapPtr);
+            _ptr = CvInvoke.cveTonemapDragoCreate(gamma, saturation, bias, ref _tonemapPtr, ref _algorithmPtr);
         }
 
         /// <summary>
@@ -100,6 +117,7 @@ namespace Emgu.CV
             }
 
             _tonemapPtr = IntPtr.Zero;
+            _algorithmPtr = IntPtr.Zero;
         }
     }
 
@@ -120,7 +138,7 @@ namespace Emgu.CV
         public TonemapDurand(float gamma = 1.0f, float contrast = 4.0f, float saturation = 1.0f, float sigmaSpace = 2.0f, float sigmaColor = 2.0f)
             : base(IntPtr.Zero, IntPtr.Zero)
         {
-            _ptr = CvInvoke.cveTonemapDurandCreate(gamma, contrast, saturation, sigmaSpace, sigmaColor, ref _tonemapPtr);
+            _ptr = CvInvoke.cveTonemapDurandCreate(gamma, contrast, saturation, sigmaSpace, sigmaColor, ref _tonemapPtr, ref _algorithmPtr);
         }
 
         /// <summary>
@@ -134,6 +152,7 @@ namespace Emgu.CV
             }
 
             _tonemapPtr = IntPtr.Zero;
+            _algorithmPtr = IntPtr.Zero;
         }
     }
 
@@ -153,7 +172,7 @@ namespace Emgu.CV
         public TonemapReinhard(float gamma = 1.0f, float intensity = 0.0f, float lightAdapt = 1.0f, float colorAdapt = 0.0f)
             : base(IntPtr.Zero, IntPtr.Zero)
         {
-            _ptr = CvInvoke.cveTonemapReinhardCreate(gamma, intensity, lightAdapt, colorAdapt, ref _tonemapPtr);
+            _ptr = CvInvoke.cveTonemapReinhardCreate(gamma, intensity, lightAdapt, colorAdapt, ref _tonemapPtr, ref _algorithmPtr);
         }
 
         /// <summary>
@@ -167,6 +186,7 @@ namespace Emgu.CV
             }
 
             _tonemapPtr = IntPtr.Zero;
+            _algorithmPtr = IntPtr.Zero;
         }
     }
 
@@ -184,7 +204,7 @@ namespace Emgu.CV
         public TonemapMantiuk(float gamma = 1.0f, float scale = 0.7f, float saturation = 1.0f)
             : base(IntPtr.Zero, IntPtr.Zero)
         {
-            _ptr = CvInvoke.cveTonemapMantiukCreate(gamma, scale, saturation, ref _tonemapPtr);
+            _ptr = CvInvoke.cveTonemapMantiukCreate(gamma, scale, saturation, ref _tonemapPtr, ref _algorithmPtr);
         }
 
         /// <summary>
@@ -198,6 +218,7 @@ namespace Emgu.CV
             }
 
             _tonemapPtr = IntPtr.Zero;
+            _algorithmPtr = IntPtr.Zero;
         }
     }
 
@@ -207,29 +228,29 @@ namespace Emgu.CV
         internal static extern void cveTonemapProcess(IntPtr tonemap, IntPtr src, IntPtr dst);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTonemapCreate(float gamma);
+        internal static extern IntPtr cveTonemapCreate(float gamma, ref IntPtr algorithm);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTonemapRelease(ref IntPtr tonemap);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTonemapDragoCreate(float gamma, float saturation, float bias, ref IntPtr tonemap);
+        internal static extern IntPtr cveTonemapDragoCreate(float gamma, float saturation, float bias, ref IntPtr tonemap, ref IntPtr algorithm);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTonemapDragoRelease(ref IntPtr tonemap);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, ref IntPtr tonemap);
+        internal static extern IntPtr cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, ref IntPtr tonemap, ref IntPtr algorithm);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTonemapDurandRelease(ref IntPtr tonemap);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, ref IntPtr tonemap);
+        internal static extern IntPtr cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, ref IntPtr tonemap, ref IntPtr algorithm);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTonemapReinhardRelease(ref IntPtr tonemap);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTonemapMantiukCreate(float gamma, float scale, float saturation, ref IntPtr tonemap);
+        internal static extern IntPtr cveTonemapMantiukCreate(float gamma, float scale, float saturation, ref IntPtr tonemap, ref IntPtr algorithm);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTonemapMantiukRelease(ref IntPtr tonemap);
     }

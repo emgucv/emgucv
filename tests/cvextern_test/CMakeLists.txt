@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 #
 #  CMake file for cvextern_test. See root CMakeLists.txt
 # --------------------------------------------------------
@@ -54,6 +54,18 @@ IF(WIN32 AND WITH_CUDA)
   ENDIF()
 ENDIF()
 ############################### GPU END ################################
+
+############################### OPENMP START ##############################
+IF(WITH_OPENMP)
+  FIND_PACKAGE( OpenMP REQUIRED)
+  if(OPENMP_FOUND)
+    #MESSAGE(STATUS " -- Compiling cvextern with OPENMP")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+  endif()
+ENDIF()
+############################### OPENMP END ################################
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function")

@@ -1,25 +1,13 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
 #include "ml_c.h"
 
-//StatModel
-void StatModelSave(cv::ml::StatModel* model, cv::String* filename) 
-{ 
-   model->save(*filename); 
-}
-/*
-void StatModelLoad(cv::ml::StatModel* model, cv::String* filename) 
-{ 
-   model->load(*filename); 
-}*/
-void StatModelClear(cv::ml::StatModel* model) 
-{ 
-   model->clear(); 
-}
+
+
 bool StatModelTrain(cv::ml::StatModel* model, cv::_InputArray* samples, int layout, cv::_InputArray* responses )
 {
    return model->train(*samples, layout, *responses);

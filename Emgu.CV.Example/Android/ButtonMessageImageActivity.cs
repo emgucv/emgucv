@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -307,6 +307,36 @@ namespace AndroidExamples
         public void SetImageBitmap(Bitmap image)
         {
             RunOnUiThread(() => { _imageView.SetImageBitmap(image); });
+        }
+
+        private Bitmap[] _renderBuffer = new Bitmap[2];
+        private int _renderBufferIdx = 0;
+
+        public void SetImage(Mat image)
+        {
+            RunOnUiThread(() =>
+            {
+                if (_renderBuffer[_renderBufferIdx] == null)
+                {
+                    _renderBuffer[_renderBufferIdx] = image.ToBitmap();
+                }
+                else
+                {
+                    Bitmap buffer = _renderBuffer[_renderBufferIdx];
+                    if (buffer.Width != image.Width || buffer.Height != image.Height)
+                    {
+                        buffer.Dispose();
+                        _renderBuffer[_renderBufferIdx] = image.ToBitmap();
+                    }
+                    else
+                    {
+                        image.ToBitmap(buffer);
+                    }
+
+                }
+
+                _imageView.SetImageBitmap(_renderBuffer[_renderBufferIdx]);
+            });
         }
 
 

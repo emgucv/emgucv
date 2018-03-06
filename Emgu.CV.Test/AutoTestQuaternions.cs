@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 ﻿using System;
 using System.Collections.Generic;
@@ -15,7 +15,6 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
 #if !__IOS__
 using Emgu.CV.Tiff;

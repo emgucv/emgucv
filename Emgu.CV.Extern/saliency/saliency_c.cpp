@@ -1,19 +1,66 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
 #include "saliency_c.h"
 
-cv::saliency::Saliency* cveSaliencyCreate(cv::String* saliencyType)
+cv::saliency::StaticSaliencySpectralResidual* cveStaticSaliencySpectralResidualCreate(cv::saliency::StaticSaliency** static_saliency, cv::saliency::Saliency** saliency, cv::Algorithm** algorithm)
 {
-	cv::Ptr<cv::saliency::Saliency> saliency = cv::saliency::Saliency::create(*saliencyType);
-	saliency.addref();
-	return saliency.get();
+	cv::Ptr<cv::saliency::StaticSaliencySpectralResidual> ptr = cv::saliency::StaticSaliencySpectralResidual::create();
+	ptr.addref();
+	*static_saliency = static_cast<cv::saliency::StaticSaliency*>(ptr);
+	*saliency = static_cast<cv::saliency::Saliency*>(ptr);
+	*algorithm = static_cast<cv::Algorithm*>(ptr);
+	return ptr.get();
+}
+void cveStaticSaliencySpectralResidualRelease(cv::saliency::StaticSaliencySpectralResidual** saliency)
+{
+	delete *saliency;
+	*saliency = 0;
 }
 
-void cveSaliencyRelease(cv::saliency::Saliency** saliency)
+cv::saliency::StaticSaliencyFineGrained* cveStaticSaliencyFineGrainedCreate(cv::saliency::StaticSaliency** static_saliency, cv::saliency::Saliency** saliency, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::saliency::StaticSaliencyFineGrained> ptr = cv::saliency::StaticSaliencyFineGrained::create();
+	ptr.addref();
+	*static_saliency = static_cast<cv::saliency::StaticSaliency*>(ptr);
+	*saliency = static_cast<cv::saliency::Saliency*>(ptr);
+	*algorithm = static_cast<cv::Algorithm*>(ptr);
+	return ptr.get();
+}
+void cveStaticSaliencyFineGrainedRelease(cv::saliency::StaticSaliencyFineGrained** saliency)
+{
+	delete *saliency;
+	*saliency = 0;
+}
+
+cv::saliency::MotionSaliencyBinWangApr2014* cveMotionSaliencyBinWangApr2014Create(cv::saliency::MotionSaliency** motion_saliency, cv::saliency::Saliency** saliency, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::saliency::MotionSaliencyBinWangApr2014> ptr = cv::saliency::MotionSaliencyBinWangApr2014::create();
+	ptr.addref();
+	*motion_saliency = static_cast<cv::saliency::MotionSaliency*>(ptr);
+	*saliency = static_cast<cv::saliency::Saliency*>(ptr);
+	*algorithm = static_cast<cv::Algorithm*>(ptr);
+	return ptr.get();
+}
+void cveMotionSaliencyBinWangApr2014Release(cv::saliency::MotionSaliencyBinWangApr2014** saliency)
+{
+	delete *saliency;
+	*saliency = 0;
+}
+
+cv::saliency::ObjectnessBING* cveObjectnessBINGCreate(cv::saliency::Objectness** objectness_saliency, cv::saliency::Saliency** saliency, cv::Algorithm** algorithm)
+{
+	cv::Ptr<cv::saliency::ObjectnessBING> ptr = cv::saliency::ObjectnessBING::create();
+	ptr.addref();
+	*objectness_saliency = static_cast<cv::saliency::Objectness*>(ptr);
+	*saliency = static_cast<cv::saliency::Saliency*>(ptr);
+	*algorithm = static_cast<cv::Algorithm*>(ptr);
+	return ptr.get();
+}
+void cveObjectnessBINGRelease(cv::saliency::ObjectnessBING** saliency)
 {
 	delete *saliency;
 	*saliency = 0;
@@ -24,9 +71,9 @@ bool cveSaliencyComputeSaliency(cv::saliency::Saliency* saliency, cv::_InputArra
 	return saliency->computeSaliency(*image, *saliencyMap);
 }
 
-bool cveSaliencyStaticComputeBinaryMap(cv::saliency::Saliency* saliency, cv::Mat* saliencyMap, cv::Mat* binaryMap)
+bool cveStaticSaliencyComputeBinaryMap(cv::saliency::StaticSaliency* saliency, cv::_InputArray* saliencyMap, cv::_OutputArray* binaryMap)
 {
-	return dynamic_cast<cv::saliency::StaticSaliency*>(saliency)->computeBinaryMap(*saliencyMap, *binaryMap);
+	return saliency->computeBinaryMap(*saliencyMap, *binaryMap);
 }
 
 bool cveSaliencyMotionInit(cv::saliency::Saliency* saliency)
@@ -39,21 +86,21 @@ void cveSaliencyMotionSetImageSize(cv::saliency::Saliency* saliency, int width, 
 	dynamic_cast<cv::saliency::MotionSaliencyBinWangApr2014*>(saliency)->setImagesize(width, height);
 }
 
-void cveSaliencyGetObjectnessValues(cv::saliency::Saliency* saliency, std::vector<float>* values)
+void cveObjectnessBINGGetObjectnessValues(cv::saliency::ObjectnessBING* saliency, std::vector<float>* values)
 {
-	std::vector<float> vals = dynamic_cast<cv::saliency::ObjectnessBING*>(saliency)->getobjectnessValues();
+	std::vector<float> vals = saliency->getobjectnessValues();
 
 	values->reserve(vals.size());
 	for (std::vector<float>::iterator it = vals.begin(); it < vals.end(); ++it)
 		values->push_back(*it);
 }
 
-void cveSaliencySetTrainingPath(cv::saliency::Saliency* saliency, cv::String* trainingPath)
+void cveObjectnessBINGSetTrainingPath(cv::saliency::ObjectnessBING* saliency, cv::String* trainingPath)
 {
-	dynamic_cast<cv::saliency::ObjectnessBING*>(saliency)->setTrainingPath(*trainingPath);
+	saliency->setTrainingPath(*trainingPath);
 }
-
+/*
 cv::Algorithm* cveSaliencyGetAlgorithm(cv::saliency::Saliency* saliency)
 {
 	return dynamic_cast<cv::Algorithm*>(saliency);
-}
+}*/

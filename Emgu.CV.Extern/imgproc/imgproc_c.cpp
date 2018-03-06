@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -25,6 +25,16 @@ void cveFilter2D( cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* 
 {
     CV_Assert( src->size() == dst->size() && src->channels() == dst->channels() );
     cv::filter2D( *src, *dst, dst->depth(), *kernel, *anchor, delta, borderType );
+}
+
+void cveSepFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, cv::_InputArray* kernelX, cv::_InputArray* kernelY, CvPoint* anchor, double delta, int borderType)
+{
+	cv::sepFilter2D(*src, *dst, ddepth, *kernelX, *kernelY, *anchor, delta, borderType);
+}
+
+void cveBlendLinear(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* weights1, cv::_InputArray* weights2, cv::_OutputArray* dst)
+{
+	cv::blendLinear(*src1, *src2, *weights1, *weights2, *dst);
 }
 
 void cveCLAHE(cv::_InputArray* src, double clipLimit, CvSize* tileGridSize, cv::_OutputArray* dst)
@@ -66,6 +76,16 @@ void cveSobel(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, int dx, i
    cv::Sobel(*src, *dst, ddepth, dx, dy, ksize, scale, delta, borderType);
 }
 
+void cveSpatialGradient(cv::_InputArray* src, cv::_OutputArray* dx, cv::_OutputArray* dy, int ksize, int borderType)
+{
+	cv::spatialGradient(*src, *dx, *dy, ksize, borderType);
+}
+
+void cveScharr(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, int dx, int dy, double scale, double delta, int borderType)
+{
+	cv::Scharr(*src, *dst, ddepth, dx, dy, scale, delta, borderType);
+}
+
 void cveLaplacian(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, int ksize, double scale, double delta, int borderType)
 {
    cv::Laplacian(*src, *dst, ddepth, ksize, scale, delta, borderType);
@@ -80,6 +100,10 @@ void cvePyrDown(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* size, int b
 {
    cv::Size s(size->width, size->height);
    cv::pyrDown(*src, *dst, s, borderType);
+}
+void cveBuildPyramid(cv::_InputArray* src, cv::_OutputArray* dst, int maxlevel, int borderType)
+{
+	cv::buildPyramid(*src, *dst, maxlevel, borderType);
 }
 
 void cveCanny(cv::_InputArray* image, cv::_OutputArray* edges, double threshold1, double threshold2, int apertureSize, bool L2gradient)
@@ -326,6 +350,10 @@ bool cveIsContourConvex(cv::_InputArray* contour)
 {
    return cv::isContourConvex(*contour);
 }
+float cveIntersectConvexConvex(cv::_InputArray* p1, cv::_InputArray* p2, cv::_OutputArray* p12, bool handleNested)
+{
+	return cv::intersectConvexConvex(*p1, *p2, *p12, handleNested);
+}
 void cveBoundingRectangle(cv::_InputArray* points, CvRect* boundingRect)
 {
    cv::Rect rect = cv::boundingRect(*points);
@@ -363,6 +391,17 @@ void cveFitEllipse(cv::_InputArray* points, CvBox2D* box)
    cv::RotatedRect rect = cv::fitEllipse(*points);
    *box = rect;
 }
+void cveFitEllipseAMS(cv::_InputArray* points, CvBox2D* box)
+{
+	cv::RotatedRect rect = cv::fitEllipseAMS(*points);
+	*box = rect;
+}
+void cveFitEllipseDirect(cv::_InputArray* points, CvBox2D* box)
+{
+	cv::RotatedRect rect = cv::fitEllipseDirect(*points);
+	*box = rect;
+}
+
 void cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps)
 {
    cv::fitLine(*points, *line, distType, param, reps, aeps);
@@ -408,6 +447,10 @@ void cveMedianBlur(cv::_InputArray* src, cv::_OutputArray* dst, int ksize)
 void cveBoxFilter(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, CvSize* ksize, CvPoint* anchor, bool normailize, int borderType)
 {
    cv::boxFilter(*src, *dst, ddepth, *ksize, *anchor, normailize, borderType);
+}
+void cveSqrBoxFilter(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, CvSize* ksize, CvPoint* anchor, bool normalize, int borderType)
+{
+	cv::sqrBoxFilter(*src, *dst, ddepth, *ksize, *anchor, normalize, borderType);
 }
 void cveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d, double sigmaColor, double sigmaSpace, int borderType)
 {

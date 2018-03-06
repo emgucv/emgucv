@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -2253,9 +2253,13 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Area = 3,
         /// <summary>
-        /// LANCZOS 4
+        /// Lanczos interpolation over 8x8 neighborhood
         /// </summary>
-        Lanczos4 = 4
+        Lanczos4 = 4,
+        /// <summary>
+        /// Bit exact bilinear interpolation
+        /// </summary>
+        LinearExact = 5,
     }
 
     /// <summary>
@@ -2830,6 +2834,10 @@ namespace Emgu.CV.CvEnum
     /// </summary>
     public enum LineType
     {
+        /// <summary>
+        /// Filled
+        /// </summary>
+        Filled = -1,
         /// <summary>
         /// 8-connected
         /// </summary>
@@ -4344,7 +4352,7 @@ namespace Emgu.CV.CvEnum
     /// <summary>
     /// Connected components algorithm output formats
     /// </summary>
-    public enum ConnectecComponentsTypes
+    public enum ConnectedComponentsTypes
     {
         /// <summary>
         /// The leftmost (x) coordinate which is the inclusive start of the bounding box in the horizontal direction.
@@ -4376,5 +4384,75 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Max
 
+    }
+
+    /// <summary>
+    /// The rotation type
+    /// </summary>
+    public enum RotateFlags
+    {
+        /// <summary>
+        /// Rotate 90 degrees clockwise
+        /// </summary>
+        Rotate90Clockwise = 0,
+        /// <summary>
+        /// Rotate 180 degrees clockwise
+        /// </summary>
+        Rotate180 = 1,
+        /// <summary>
+        /// Rotate 270 degrees clockwise
+        /// </summary>
+        Rotate90CounterClockwise = 2, 
+    }
+
+    /// <summary>
+    /// Flags for sorting
+    /// </summary>
+    [Flags]
+    public enum SortFlags
+    {
+        /// <summary>
+        /// each matrix row is sorted independently
+        /// </summary>
+        SortEveryRow = 0,
+        /// <summary>
+        /// each matrix column is sorted
+        /// independently; this flag and SortEveryRow are
+        /// mutually exclusive.
+        /// </summary>
+        SortEveryColumn = 1,
+        /// <summary>
+        /// each matrix row is sorted in the ascending order.
+        /// </summary>
+        SortAscending = 0,
+        /// <summary>
+        /// each matrix row is sorted in the 
+        /// descending order; this flag and SortAscending are also
+        /// mutually exclusive.
+        /// </summary>
+        SortDescending = 16
+    }
+
+    /// <summary>
+    /// Motion type for the FindTransformECC function
+    /// </summary>
+    public enum MotionType
+    {
+        /// <summary>
+        /// sets a translational motion model; warpMatrix is 2x3 with the first 2x2 part being the unity matrix and the rest two parameters being estimated.
+        /// </summary>
+        Translation = 0,
+        /// <summary>
+        /// sets a Euclidean (rigid) transformation as motion model; three parameters are estimated; warpMatrix is 2×3.
+        /// </summary>
+        Euclidean = 1,
+        /// <summary>
+        /// sets an affine motion model (DEFAULT); six parameters are estimated; warpMatrix is 2×3.
+        /// </summary>
+        Affine = 2,
+        /// <summary>
+        /// sets a homography as a motion model; eight parameters are estimated;`warpMatrix` is 3×3.
+        /// </summary>
+        Homography = 3
     }
 }

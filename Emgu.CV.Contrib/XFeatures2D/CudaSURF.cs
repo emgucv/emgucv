@@ -1,6 +1,6 @@
 #if !(__IOS__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_METRO || UNITY_EDITOR_WIN || NETFX_CORE)
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -280,6 +280,11 @@ void cveFlip(cv::_InputArray* src, cv::_OutputArray* dst, int flipCode)
    cv::flip(*src, *dst, flipCode);
 }
 
+void cveRotate(cv::_InputArray* src, cv::_OutputArray* dst, int rotateCode)
+{
+	cv::rotate(*src, *dst, rotateCode);
+}
+
 void cveTranspose(cv::_InputArray* src, cv::_OutputArray* dst)
 {
    cv::transpose(*src, *dst);
@@ -330,6 +335,10 @@ bool cveCheckRange(cv::_InputArray* arr, bool quiet, CvPoint* index, double minV
    index->x = p.x;
    index->y = p.y;
    return result;
+}
+void cvePatchNaNs(cv::_InputOutputArray* a, double val)
+{
+	cv::patchNaNs(*a, val);
 }
 
 void cveGemm(cv::_InputArray* src1, cv::_InputArray* src2, double alpha, cv::_InputArray* src3, double beta, cv::_OutputArray* dst, int flags)
@@ -395,6 +404,14 @@ double cveSolvePoly(cv::_InputArray* coeffs, cv::_OutputArray* roots, int maxIte
 void cveSolve(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags)
 {
    cv::solve(*src1, *src2, *dst, flags);
+}
+void cveSort(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
+{
+	cv::sort(*src, *dst, flags);
+}
+void cveSortIdx(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
+{
+	cv::sortIdx(*src, *dst, flags);
 }
 void cveInvert(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
 {
@@ -508,73 +525,26 @@ void cveAlgorithmWrite(cv::Algorithm* algorithm, cv::FileStorage* storage)
    algorithm->write(*storage);
 }
 
-/*
-int cveAlgorithmGetInt(cv::Algorithm* algorithm, cv::String* name)
+void cveAlgorithmSave(cv::Algorithm* algorithm, cv::String* filename)
 {
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-   return algorithm->getInt(*name);
-}
-void cveAlgorithmSetInt(cv::Algorithm* algorithm, cv::String* name, int value)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-   return algorithm->setInt(*name, value);
-}
-double cveAlgorithmGetDouble(cv::Algorithm* algorithm, cv::String* name)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-
-   return algorithm->getDouble(*name);
-}
-void cveAlgorithmSetDouble(cv::Algorithm* algorithm, cv::String* name, double value)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-
-   return algorithm->setDouble(*name, value);
-}
-void cveAlgorithmGetString(cv::Algorithm* algorithm, cv::String* name, cv::String* result)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-
-   *result = algorithm->getString(*name);
-}
-void cveAlgorithmSetString(cv::Algorithm* algorithm, cv::String* name, cv::String* value)
-{
-   if (algorithm->info() == 0)
-      CV_Error(-1, "Algorithm info is not available");
-
-   algorithm->setString(*name, *value);
+	algorithm->save(*filename);
 }
 
-void cveAlgorithmGetParams(cv::Algorithm* algorithm, std::vector<cv::String>* names, std::vector< int >* types, std::vector<cv::String>* help)
+void cveAlgorithmClear(cv::Algorithm* algorithm)
 {
-   if (algorithm->info() == 0)
-      return;
-   algorithm->getParams(*names);
-   types->clear();
-   help->clear();
-   for (std::vector<cv::String>::iterator it = names->begin(); it != names->end(); ++it)
-   {
-      types->push_back(algorithm->paramType(*it));
-      help->push_back(algorithm->paramHelp(*it));
-   }
+	algorithm->clear();
 }
 
-void cveAlgorithmGetParamNames(cv::Algorithm* algorithm, std::vector<cv::String>* names)
+bool cveAlgorithmEmpty(cv::Algorithm* algorithm)
 {
-   if (algorithm->info() == 0)
-      return;
-   algorithm->getParams(*names);
+	return algorithm->empty();
 }
 
-void cveAlgorithmGetList(std::vector< cv::String >* names)
+void cveAlgorithmGetDefaultName(cv::Algorithm* algorithm, cv::String* defaultName)
 {
-   cv::Algorithm::getList( *names );
-}*/
+	cv::String name = algorithm->getDefaultName();
+	*defaultName = name;
+}
 
 bool cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2)
 {
@@ -633,6 +603,10 @@ void cveFileStorageWriteDouble(cv::FileStorage* fs, cv::String* name, double val
 void cveFileStorageWriteString(cv::FileStorage* fs, cv::String* name, cv::String* value)
 {
    cv::write(*fs, *name, *value);
+}
+void cveFileStorageInsertString(cv::FileStorage* fs, cv::String* value)
+{
+	(*fs) << *value;
 }
 
 cv::FileNode* cveFileStorageRoot(cv::FileStorage* fs, int streamIdx)
@@ -853,6 +827,11 @@ bool cveUseOptimized()
 void cveSetUseOptimized(bool onoff)
 {
    cv::setUseOptimized(onoff);
+}
+void cveGetBuildInformation(cv::String* buildInformation)
+{
+	cv::String bi = cv::getBuildInformation();
+	*buildInformation = bi;
 }
 
 void cveGetRawData(CvArr* arr, uchar** data, int* step, CvSize* roiSize)

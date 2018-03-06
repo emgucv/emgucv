@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -19,23 +19,6 @@ namespace Emgu.CV.Cuda
     /// </summary>
     public abstract class CudaFilter : UnmanagedObject
     {
-        /*
-        /// <summary>
-        /// The MatType for CudaImage&lt; TColor, TDepth &gt;
-        /// </summary>
-        protected static int _matType;
-
-        /// <summary>
-        /// dummy code to make sure the _matType value is setup properly
-        /// </summary>
-        static CudaFilter()
-        {
-           using (CudaImage<TColor, TDepth> tmp = new CudaImage<TColor, TDepth>(4, 4))
-           {
-              _matType = tmp.Type;
-           }
-        }*/
-
         /// <summary>
         /// Release all the unmanaged memory associated with this gpu filter
         /// </summary>

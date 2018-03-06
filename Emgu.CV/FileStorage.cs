@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -228,6 +228,17 @@ namespace Emgu.CV
             if (_ptr != IntPtr.Zero)
                 CvInvoke.cveFileStorageRelease(ref _ptr);
         }
+
+        /// <summary>
+        /// Similar to the &lt;&lt; operator in C++, we cannot have the operator overload to &lt;&lt; in C# where the second parameter is not an int. Therefore we use this function instead.
+        /// </summary>
+        /// <param name="value">The string value to insert.</param>
+        public void Insert(string value)
+        {
+            using(CvString s = new CvString(value))
+                CvInvoke.cveFileStorageInsertString(this, s);
+            
+        }
     }
 
     public static partial class CvInvoke
@@ -266,6 +277,9 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         static internal extern IntPtr cveFileStorageGetNode(IntPtr fs, IntPtr nodeName);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        static internal extern void cveFileStorageInsertString(IntPtr fs, IntPtr value);
     }
 
 }

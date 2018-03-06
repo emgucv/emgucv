@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-# Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+# Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 # 
 # Root CMake file for Emgu CV
 #
@@ -120,7 +120,7 @@ IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/O2" ${CV_ICC_ADDITIONAL_FLAGS_RELEASE} CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
   SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:\"libcmt\"")
   SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:\"libcmt\"")
-  set(EMGUCV_PLATFORM_TOOLSET "Intel C++ Compiler 17.0" CACHE STRING "Platform toolset for Visual Studio")
+  set(EMGUCV_PLATFORM_TOOLSET "Intel C++ Compiler 18.0" CACHE STRING "Platform toolset for Visual Studio")
 ENDIF()
 
 IF(WIN32 AND NOT MINGW)
@@ -575,6 +575,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   saliency
   dnn_modern
   img_hash
+  phase_unwrapping
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
@@ -629,6 +630,8 @@ INCLUDE(Today)
 TODAY() #set the variable CURRENT_YEAR
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CommonAssemblyInfo.cs.in ${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs)
 
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.rc.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Extern/version.rc)
+
 MACRO(CHECK_LICENSE_TYPE)
 	MESSAGE(STATUS " -- LICENSE FILE: ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt")
     IF (WIN32)
@@ -660,10 +663,10 @@ ENDIF()
 
 SET(EMGUCV_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
-	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x86\\*.dll\" target=\"build\\x86\" />")
+	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\libs\\x64\\cu*.dll;..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x86\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X64)
-	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x64\\*.dll\" target=\"build\\x64\" />")
+	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\libs\\x64\\cu*.dll;..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
@@ -687,17 +690,43 @@ STRING(REPLACE "x86 x64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}"
 SET(EMGUCV_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_NUGET_TITLE}" EMGUCV_NUGET_TITLE)
 
-IF ("${LICENSE_TYPE}" EQUAL "Commercial")
-	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
-ENDIF()
+SET(EMGUCV_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"5.1.7\" />")
 
 IF(WITH_CUDA)
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} with CUDA support")
+	SET(EMGU_CUDA_NUGET_ID "${EMGUCV_NUGET_ID}.DEPENDENCY")
+	SET(EMGU_CUDA_NUGET_TITLE "Native x64 CUDA dependency for EMGU CV")
+	SET(EMGU_CUDA_VERSION "${CUDA_VERSION}")
+	SET(EMGU_CUFFT_VERSION "${EMGU_CUDA_VERSION}")
+	SET(EMGU_CUDA_NUGET_FILE_LIST "<file src=\"Emgu.Cuda.targets\" target=\"build\\${EMGU_CUDA_NUGET_ID}.targets\" />")
+	
+	SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} <dependency id=\"${EMGU_CUDA_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />")
+	SET(EMGU_CUDA_NUGET_DEPENDENCY "<dependency id=\"EMGU.CUFFT\" version=\"[${EMGU_CUFFT_VERSION}]\" />")
+	IF(HAVE_WINDESKTOP_X64)
+		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA")
+		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft")
+		SET(EMGU_CUDA_NUGET_FILE_LIST "${EMGU_CUDA_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll\" target=\"build\\x64\" /> <file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" /> <file src=\"EULA.txt\" target=\"content\\net35\\CUDA_EULA.txt\" />")		
+	ENDIF()
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Cuda.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/Package.nuspec)
+	
+	SET(NUGET_PACKAGE_VENDOR "${CPACK_PACKAGE_VENDOR}")
+	STRING(REPLACE "." "" CUDA_VERSION_NUMERIC_ONLY "${CUDA_VERSION}")
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Cufft.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.Cufft.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft/Emgu.Cufft.targets)
+ENDIF()
+
+IF ("${LICENSE_TYPE}" EQUAL "Commercial")
+	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
+	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
 ENDIF()
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Package.nuspec)
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Example.Android.AndroidManifest.xml.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/Android/Properties/AndroidManifest.xml)
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/XamarinForms.Android.AndroidManifest.xml.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/XamarinForms/Android/Properties/AndroidManifest.xml)
 
 # ----------------------------------------------------------------------------
 #  Generate readme file for Emgu CV project

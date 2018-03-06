@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -177,6 +177,24 @@ namespace Emgu.CV.XImgproc
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFastGlobalSmootherFilter(IntPtr guide, IntPtr src, IntPtr dst, double lambda, double sigmaColor, double lambdaAttenuation, int numIter);
+
+        /// <summary>
+        /// Global image smoothing via L0 gradient minimization.
+        /// </summary>
+        /// <param name="src">Source image for filtering with unsigned 8-bit or signed 16-bit or floating-point depth.</param>
+        /// <param name="dst">Destination image.</param>
+        /// <param name="lambda">Parameter defining the smooth term weight.</param>
+        /// <param name="kappa">Parameter defining the increasing factor of the weight of the gradient data term.</param>
+        public static void L0Smooth(IInputArray src, IOutputArray dst, double lambda = 0.02, double kappa = 2)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveL0Smooth(iaSrc, oaDst, lambda, kappa);
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveL0Smooth(IntPtr src, IntPtr dst, double lambda, double kappa);
 
         /// <summary>
         /// Simple one-line Adaptive Manifold Filter call.

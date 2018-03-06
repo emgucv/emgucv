@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 using System;
@@ -13,7 +13,6 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
 
 namespace MotionDetection
@@ -22,7 +21,7 @@ namespace MotionDetection
    {
       private VideoCapture _capture;
       private MotionHistory _motionHistory;
-      private BackgroundSubtractor _forgroundDetector;
+      private IBackgroundSubtractor _forgroundDetector;
 
       public Form1()
       {

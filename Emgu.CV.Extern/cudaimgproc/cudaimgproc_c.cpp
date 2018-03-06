@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -87,6 +87,13 @@ cv::cuda::CornernessCriteria* cudaCreateHarrisCorner(int srcType, int blockSize,
    cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createHarrisCorner(srcType, blockSize, ksize, k, borderType);
    ptr.addref();
    return ptr.get();
+}
+
+cv::cuda::CornernessCriteria* cudaCreateMinEigenValCorner(int srcType, int blockSize, int ksize, int borderType)
+{
+	cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createMinEigenValCorner(srcType, blockSize, ksize, borderType);
+	ptr.addref();
+	return ptr.get();
 }
 
 void cudaCornernessCriteriaCompute(cv::cuda::CornernessCriteria* detector, cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -64,6 +64,54 @@ cv::cuda::Filter* cudaCreateMorphologyFilter( int op, int srcType, cv::_InputArr
    ptr.addref();
    return ptr.get();
 }
+
+cv::cuda::Filter* cudaCreateSeparableLinearFilter(
+	int srcType, int dstType, cv::_InputArray* rowKernel, cv::_InputArray* columnKernel,
+	CvPoint* anchor, int rowBorderMode, int columnBorderMode)
+{
+	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createSeparableLinearFilter(srcType, dstType, *rowKernel, *columnKernel, *anchor, rowBorderMode, columnBorderMode);
+	ptr.addref();
+	return ptr.get();
+}
+
+cv::cuda::Filter* cudaCreateDerivFilter(int srcType, int dstType, int dx, int dy,
+	int ksize, bool normalize, double scale,
+	int rowBorderMode, int columnBorderMode)
+{
+	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createDerivFilter(srcType, dstType, dx, dy, ksize, normalize, scale, rowBorderMode, columnBorderMode);
+	ptr.addref();
+	return ptr.get();
+}
+
+cv::cuda::Filter* cudaCreateScharrFilter(int srcType, int dstType, int dx, int dy,
+	double scale, int rowBorderMode, int columnBorderMode)
+{
+	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createScharrFilter(srcType, dstType, dx, dy, scale, rowBorderMode, columnBorderMode);
+	ptr.addref();
+	return ptr.get();
+}
+
+cv::cuda::Filter* cudaCreateRowSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, CvScalar* borderVal)
+{
+	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createRowSumFilter(srcType, dstType, ksize, anchor, borderMode, *borderVal );
+	ptr.addref();
+	return ptr.get();
+}
+
+cv::cuda::Filter* cudaCreateColumnSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, CvScalar* borderVal)
+{
+	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createColumnSumFilter(srcType, dstType, ksize, anchor, borderMode, *borderVal);
+	ptr.addref();
+	return ptr.get();
+}
+
+cv::cuda::Filter* cudaCreateMedianFilter(int srcType, int windowSize, int partition)
+{
+	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createMedianFilter(srcType, windowSize, partition);
+	ptr.addref();
+	return ptr.get();
+}
+
 
 //----------------------------------------------------------------------------
 //

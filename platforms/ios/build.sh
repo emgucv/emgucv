@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
-if [ ! -f cmake ]
+if [ ! -L cmake ]
 then 
-  ln -s ../../opencv/platforms/ios/cmake cmake
+  ln -s ${PWD}/../../opencv/platforms/ios/cmake cmake
+fi
+
+if [ ! -L ../../platforms/scripts ]
+then 
+  ln -s ${PWD}/../../opencv/platforms/scripts ../../platforms/scripts
 fi
 
 cd ../..
@@ -42,30 +47,30 @@ fi
 mkdir -p platforms/ios/i386
 cd platforms/ios/i386
 if [ "$1" == "simulator" ]; then    
-  ../configure-simulator_xcode.sh -DIOS_ARCH="i386" ${@:2}
+  ../configure-simulator_xcode.sh -DIOS_ARCH="i386" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:2}
 else
-  ../configure-simulator_xcode.sh -DIOS_ARCH="i386" $*
+  ../configure-simulator_xcode.sh -DIOS_ARCH="i386" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE $*
 fi
 xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="i386" -target ALL_BUILD clean build
 cp -r ../../../libs/Release/* bin/Release
 cp -r opencv/3rdparty/lib/Release/* bin/Release  
-cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/ia32/* bin/Release
-cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/ia32/* bin/Release
+#cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/ia32/* bin/Release
+#cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/ia32/* bin/Release
 libtool -static -o libemgucv_i386.a bin/Release/*.a
 cd ../../..
 
 mkdir -p platforms/ios/x86_64
 cd platforms/ios/x86_64
 if [ "$1" == "simulator" ]; then    
-  ../configure-simulator_xcode.sh -DIOS_ARCH="x86_64" ${@:2}
+  ../configure-simulator_xcode.sh -DIOS_ARCH="x86_64" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:2}
 else
-  ../configure-simulator_xcode.sh -DIOS_ARCH="x86_64" $*
+  ../configure-simulator_xcode.sh -DIOS_ARCH="x86_64" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE $*
 fi
 xcodebuild IPHONEOS_DEPLOYMENT_TARGET=6.0 WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="x86_64" -target ALL_BUILD clean build
 cp -r ../../../libs/Release/* bin/Release
 cp -r opencv/3rdparty/lib/Release/* bin/Release
-cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/intel64/* bin/Release
-cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/intel64/* bin/Release
+#cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/intel64/* bin/Release
+#cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/intel64/* bin/Release
 
 libtool -static -o libemgucv_x86_64.a bin/Release/*.a
 cd ../../..

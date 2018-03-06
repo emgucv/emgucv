@@ -42,6 +42,7 @@ cp -f ../../Emgu.CV.Contrib/LineDescriptor/VectorOf*.cs ios-package/Emgu.CV.Cont
 cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
 cp -f ../../Emgu.CV.Contrib/XPhoto/*.cs ios-package/Emgu.CV.Contrib/XPhoto
 cp -f ../../Emgu.CV.Contrib/XFeatures2D/*.cs ios-package/Emgu.CV.Contrib/XFeatures2D
+cp -f ../../Emgu.CV.Contrib/Saliency/*.cs ios-package/Emgu.CV.Contrib/Saliency
 
 cp -r ../../tmp/Emgu.CV.World ios-package/Emgu.CV.World
 

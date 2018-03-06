@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 # 
 #  CMake file for cvextern. See root CMakeLists.txt
 #
@@ -35,6 +35,11 @@ file(GLOB CVBLOB_HDRS "${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/*.h*")
 source_group("Src" FILES ${CVBLOB_SRCS})
 source_group("Include" FILES ${CVBLOB_HDRS})
 set(the_target ${PROJECT_NAME})
+
+IF (NOT (WIN32 OR ANDROID OR APPLE))
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-narrowing")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-narrowing")
+ENDIF()
 
 IF(ENABLE_WINRT_MODE)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4703")

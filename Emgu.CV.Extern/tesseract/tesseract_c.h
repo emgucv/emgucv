@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -55,6 +55,15 @@ struct TesseractResult
    float cost;
    CvRect region;
 };
+
+namespace cv {
+	namespace traits {
+		template<>
+		struct Depth < TesseractResult > { enum { value = Depth<uchar>::value }; };
+		template<>
+		struct Type< TesseractResult > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(TesseractResult)) }; };
+	}
+}
 
 CVAPI(const char*) TesseractGetVersion();
 

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-//  Copyright (C) 2004-2017 by EMGU Corporation. All rights reserved.
+//  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.
 //
 //----------------------------------------------------------------------------
 
@@ -53,6 +53,7 @@ CVAPI(void) cudaBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::CornernessCriteria*) cudaCreateHarrisCorner(int srcType, int blockSize, int ksize, double k, int borderType);
+CVAPI(cv::cuda::CornernessCriteria*) cudaCreateMinEigenValCorner(int srcType, int blockSize, int ksize, int borderType);
 CVAPI(void) cudaCornernessCriteriaCompute(cv::cuda::CornernessCriteria* detector, cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* stream);
 CVAPI(void) cudaCornernessCriteriaRelease(cv::cuda::CornernessCriteria** detector);
 

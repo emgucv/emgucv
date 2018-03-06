@@ -46,7 +46,6 @@ cp -r ../Emgu.CV/Superres Assets/Emgu.CV/Emgu.CV
 cp -r ../Emgu.CV/Util Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Video Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/VideoStab Assets/Emgu.CV/Emgu.CV/
-cp -r ../Emgu.CV/VideoSurveillance Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Emgu.CV/ 
 
 #cp -r ../Emgu.CV.Cuda/*.cs Assets/Emgu.CV/Emgu.CV.Cuda/
@@ -95,6 +94,8 @@ mkdir Assets/Emgu.CV/Emgu.CV.Contrib/DnnModern
 cp -r ../Emgu.CV.Contrib/DnnModern Assets/Emgu.CV/Emgu.CV.Contrib/
 mkdir Assets/Emgu.CV/Emgu.CV.Contrib/ImgHash
 cp -r ../Emgu.CV.Contrib/ImgHash Assets/Emgu.CV/Emgu.CV.Contrib/
+mkdir Assets/Emgu.CV/Emgu.CV.Contrib/PhaseUnwrapping
+cp -r ../Emgu.CV.Contrib/PhaseUnwrapping Assets/Emgu.CV/Emgu.CV.Contrib/
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Emgu.CV.OCR/
 
