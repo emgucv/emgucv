@@ -399,6 +399,36 @@ namespace Emgu.CV
 
         #endregion
 
+        /// <summary>
+        /// Finds the geometric transform (warp) between two images in terms of the ECC criterion
+        /// </summary>
+        /// <param name="templateImage">single-channel template image; CV_8U or CV_32F array.</param>
+        /// <param name="inputImage">single-channel input image which should be warped with the final warpMatrix in order to provide an image similar to templateImage, same type as temlateImage.</param>
+        /// <param name="warpMatrix">floating-point 2×3 or 3×3 mapping matrix (warp).</param>
+        /// <param name="motionType">Specifying the type of motion. Use Affine for default</param>
+        /// <param name="criteria">specifying the termination criteria of the ECC algorithm; criteria.epsilon defines the threshold of the increment in the correlation coefficient between two iterations (a negative criteria.epsilon makes criteria.maxcount the only termination criterion). Default values can use 50 iteration and 0.001 eps.</param>
+        /// <param name="inputMask">An optional mask to indicate valid values of inputImage.</param>
+        /// <returns>The final enhanced correlation coefficient, that is the correlation coefficient between the template image and the final warped input image.</returns>
+        public static double FindTransformECC(
+            IInputArray templateImage, IInputArray inputImage,
+            IInputOutputArray warpMatrix, CvEnum.MotionType motionType,
+            MCvTermCriteria criteria,
+            IInputArray inputMask = null)
+        {
+            using (InputArray iaTemplateImage = templateImage.GetInputArray())
+            using (InputArray iaInputImage = inputImage.GetInputArray())
+            using (InputOutputArray ioaWarpMatrix = warpMatrix.GetInputOutputArray())
+            using (InputArray iaInputMask = inputMask == null ? InputArray.GetEmpty() : inputMask.GetInputArray())
+            {
+                return cveFindTransformECC(iaTemplateImage, iaInputImage, ioaWarpMatrix, motionType, ref criteria, iaInputMask);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern double cveFindTransformECC(IntPtr templateImage, IntPtr inputImage,
+            IntPtr warpMatrix, CvEnum.MotionType motionType,
+            ref MCvTermCriteria criteria,
+            IntPtr inputMask);
 
         /// <summary>
         /// Estimate rigid transformation between 2 point sets.

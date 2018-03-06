@@ -4428,4 +4428,27 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         SortDescending = 16
     }
+
+    /// <summary>
+    /// Motion type for the FindTransformECC function
+    /// </summary>
+    public enum MotionType
+    {
+        /// <summary>
+        /// sets a translational motion model; warpMatrix is 2x3 with the first 2x2 part being the unity matrix and the rest two parameters being estimated.
+        /// </summary>
+        Translation = 0,
+        /// <summary>
+        /// sets a Euclidean (rigid) transformation as motion model; three parameters are estimated; warpMatrix is 2×3.
+        /// </summary>
+        Euclidean = 1,
+        /// <summary>
+        /// sets an affine motion model (DEFAULT); six parameters are estimated; warpMatrix is 2×3.
+        /// </summary>
+        Affine = 2,
+        /// <summary>
+        /// sets a homography as a motion model; eight parameters are estimated;`warpMatrix` is 3×3.
+        /// </summary>
+        Homography = 3
+    }
 }
