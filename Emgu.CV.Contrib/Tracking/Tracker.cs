@@ -169,15 +169,15 @@ namespace Emgu.CV.Tracking
             /// <summary>
             /// Grayscale
             /// </summary>
-            GRAY = 0,
+            GRAY = 1,
             /// <summary>
             /// Color
             /// </summary>
-            CN = 1,
+            CN = 2,
             /// <summary>
             /// Custom
             /// </summary>
-            CUSTOM = 2
+            CUSTOM = 4
         }
 
         /// <summary>
