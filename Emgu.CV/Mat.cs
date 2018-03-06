@@ -256,7 +256,7 @@ namespace Emgu.CV
             using (CGDataProvider provider = new CGDataProvider(fileName))
             using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
             {
-               ConvertFromCGImage(tmp, loadType);
+               CvInvoke.ConvertCGImageToArray(tmp, this, loadType);
             }
             return;
          }
@@ -284,7 +284,7 @@ namespace Emgu.CV
                   //try again to load with UIImage
                   using (UIImage tmp = UIImage.FromFile(fileName))
                   {
-                     ConvertFromCGImage(tmp.CGImage);
+                     CvInvoke.ConvertCGImageToArray(tmp.CGImage, this);
                   }
 #else
                         throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
