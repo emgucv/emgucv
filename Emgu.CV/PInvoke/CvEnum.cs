@@ -2835,6 +2835,10 @@ namespace Emgu.CV.CvEnum
     public enum LineType
     {
         /// <summary>
+        /// Filled
+        /// </summary>
+        Filled = -1,
+        /// <summary>
         /// 8-connected
         /// </summary>
         EightConnected = 8,
