@@ -4352,7 +4352,7 @@ namespace Emgu.CV.CvEnum
     /// <summary>
     /// Connected components algorithm output formats
     /// </summary>
-    public enum ConnectecComponentsTypes
+    public enum ConnectedComponentsTypes
     {
         /// <summary>
         /// The leftmost (x) coordinate which is the inclusive start of the bounding box in the horizontal direction.
