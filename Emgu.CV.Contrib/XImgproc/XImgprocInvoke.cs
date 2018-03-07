@@ -73,6 +73,29 @@ namespace Emgu.CV.XImgproc
         /// </summary>
         GuoHall = 1  
     };
+    
+    /// <summary>
+    /// LocalBinarizationMethods type
+    /// </summary>
+    public enum LocalBinarizationMethods
+    {
+        /// <summary>
+        /// Classic Niblack binarization.
+        /// </summary>
+        Niblack = 0,
+        /// <summary>
+        /// Sauvola's technique.
+        /// </summary>
+        Sauvola = 1,
+        /// <summary>
+        /// Wolf's technique.
+        /// </summary>
+        Wolf = 2,
+        /// <summary>
+        /// NICK's technique.
+        /// </summary>
+        NICK = 3  
+    };
 
     /// <summary>
     /// Extended Image Processing
@@ -270,11 +293,11 @@ namespace Emgu.CV.XImgproc
         /// </summary>
         /// <param name="src">The source image</param>
         /// <param name="dst">The output result</param>
-        /// <param name="type">Threshold type</param>
+        /// <param name="type">Value that defines which local binarization algorithm should be used.</param>
         /// <param name="blockSize">Block size</param>
         /// <param name="delta">delta</param>
         /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
-        public static void NiBlackThreshold(IInputArray src, IOutputArray dst, double maxValue, ThresholdType type, int blockSize,
+        public static void NiBlackThreshold(IInputArray src, IOutputArray dst, double maxValue, LocalBinarizationMethods type, int blockSize,
            double delta)
         {
             using (InputArray iaSrc = src.GetInputArray())
@@ -284,7 +307,7 @@ namespace Emgu.CV.XImgproc
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveNiBlackThreshold(IntPtr src, IntPtr dst, double maxValue, ThresholdType type, int blockSize, double delta);
+        private static extern void cveNiBlackThreshold(IntPtr src, IntPtr dst, double maxValue, LocalBinarizationMethods type, int blockSize, double delta);
 
         /// <summary>
         /// Computes the estimated covariance matrix of an image using the sliding window forumlation.
