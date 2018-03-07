@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(WINDOWS_APP || WINDOWS_PHONE_APP)
+#if !(NETFX_CORE || NETCOREAPP1_1 || NETSTANDARD1_4)
 
 using System;
 using System.Collections.Generic;

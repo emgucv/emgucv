@@ -1,19 +1,21 @@
 {
-  "version": 3,
+  "locked": false,
+  "version": 2,
   "targets": {
     "UAP,Version=v10.0.10240": {
-      "Microsoft.ApplicationInsights/2.4.0": {
+      "Microsoft.ApplicationInsights/2.5.1": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "System.Diagnostics.DiagnosticSource": "4.4.0",
-          "System.Diagnostics.StackTrace": "4.3.0"
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Net.Requests": "4.3.0"
         },
         "compile": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         },
         "runtime": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         }
       },
       "Microsoft.ApplicationInsights.PersistenceChannel/1.2.3": {
@@ -68,38 +70,22 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Net.Native.Compiler/1.7.1": {
+      "Microsoft.Net.Native.Compiler/1.7.3": {
         "type": "package",
         "dependencies": {
           "Microsoft.Net.Native.SharedLibrary-arm": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x64": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x86": "1.7.0"
-        },
-        "build": {
-          "build/Microsoft.Net.Native.Compiler.props": {},
-          "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
       "Microsoft.Net.Native.SharedLibrary-arm/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-arm.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-arm.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x64/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x64.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x64.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x86/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x86.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x86.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.NETCore/5.0.2": {
         "type": "package",
@@ -278,14 +264,14 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore": "5.0.2",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.2",
           "Microsoft.NETCore.Runtime.CoreCLR": "1.0.3",
           "Microsoft.NETCore.Targets": "1.0.2",
-          "Microsoft.Net.Native.Compiler": "1.7.1",
+          "Microsoft.Net.Native.Compiler": "1.7.3",
           "Microsoft.Win32.Primitives": "4.0.1",
           "System.Collections.NonGeneric": "4.0.1",
           "System.Collections.Specialized": "4.0.1",
@@ -300,7 +286,7 @@
           "System.Net.Sockets": "4.1.0",
           "System.Net.WebHeaderCollection": "4.0.1",
           "System.Net.WebSockets": "4.0.0",
-          "System.Net.WebSockets.Client": "4.0.0",
+          "System.Net.WebSockets.Client": "4.0.2",
           "System.Numerics.Vectors.WindowsRuntime": "4.0.1",
           "System.Reflection.Context": "4.0.1",
           "System.Runtime.InteropServices.WindowsRuntime": "4.0.1",
@@ -309,11 +295,11 @@
           "System.Runtime.Serialization.Xml": "4.1.2",
           "System.Runtime.WindowsRuntime": "4.0.11",
           "System.Runtime.WindowsRuntime.UI.Xaml": "4.0.1",
-          "System.ServiceModel.Duplex": "4.0.1",
-          "System.ServiceModel.Http": "4.1.0",
-          "System.ServiceModel.NetTcp": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
-          "System.ServiceModel.Security": "4.0.1",
+          "System.ServiceModel.Duplex": "4.0.2",
+          "System.ServiceModel.Http": "4.1.1",
+          "System.ServiceModel.NetTcp": "4.1.1",
+          "System.ServiceModel.Primitives": "4.1.1",
+          "System.ServiceModel.Security": "4.0.2",
           "System.Text.Encoding.CodePages": "4.0.1",
           "System.Threading.Overlapped": "4.0.1",
           "System.Xml.XmlDocument": "4.0.1",
@@ -1253,14 +1239,21 @@
           "lib/win8/_._": {}
         }
       },
-      "System.Net.Requests/4.0.11": {
+      "System.Net.Requests/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.IO": "4.1.0",
-          "System.Net.Primitives": "4.0.11",
-          "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Threading.Tasks": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Net.Http": "4.3.0",
+          "System.Net.Primitives": "4.3.0",
+          "System.Net.WebHeaderCollection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
         },
         "compile": {
           "ref/netcore50/System.Net.Requests.dll": {}
@@ -1293,13 +1286,13 @@
           "ref/netstandard1.3/System.Net.Sockets.dll": {}
         }
       },
-      "System.Net.WebHeaderCollection/4.0.1": {
+      "System.Net.WebHeaderCollection/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0"
+          "System.Collections": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Net.WebHeaderCollection.dll": {}
@@ -1323,10 +1316,10 @@
           "lib/netstandard1.3/System.Net.WebSockets.dll": {}
         }
       },
-      "System.Net.WebSockets.Client/4.0.0": {
+      "System.Net.WebSockets.Client/4.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.NETCore.Platforms": "1.0.2",
           "System.Collections": "4.0.11",
           "System.Diagnostics.Debug": "4.0.11",
           "System.Diagnostics.Tracing": "4.1.0",
@@ -1437,7 +1430,7 @@
           }
         }
       },
-      "System.Private.ServiceModel/4.1.0": {
+      "System.Private.ServiceModel/4.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -2067,12 +2060,12 @@
           "lib/netcore50/System.Security.Principal.dll": {}
         }
       },
-      "System.ServiceModel.Duplex/4.0.1": {
+      "System.ServiceModel.Duplex/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Threading": "4.0.11"
         },
         "compile": {
@@ -2082,15 +2075,15 @@
           "lib/netcore50/System.ServiceModel.Duplex.dll": {}
         }
       },
-      "System.ServiceModel.Http/4.1.0": {
+      "System.ServiceModel.Http/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
           "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Text.Encoding": "4.0.11"
         },
         "compile": {
@@ -2100,14 +2093,14 @@
           "lib/netcore50/System.ServiceModel.Http.dll": {}
         }
       },
-      "System.ServiceModel.NetTcp/4.1.0": {
+      "System.ServiceModel.NetTcp/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.NetTcp.dll": {}
@@ -2116,7 +2109,7 @@
           "lib/netcore50/System.ServiceModel.NetTcp.dll": {}
         }
       },
-      "System.ServiceModel.Primitives/4.1.0": {
+      "System.ServiceModel.Primitives/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -2125,7 +2118,7 @@
           "System.IO": "4.1.0",
           "System.Net.Primitives": "4.0.11",
           "System.ObjectModel": "4.0.12",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Reflection": "4.1.0",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Primitives": "4.1.1",
@@ -2143,13 +2136,13 @@
           "lib/netcore50/System.ServiceModel.Primitives.dll": {}
         }
       },
-      "System.ServiceModel.Security/4.0.1": {
+      "System.ServiceModel.Security/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.Security.dll": {}
@@ -2447,7 +2440,7 @@
           }
         }
       },
-      "Xamarin.Forms/2.4.0.18342": {
+      "Xamarin.Forms/2.5.0.280555": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -2460,26 +2453,23 @@
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.dll": {},
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
-        },
-        "build": {
-          "build/netstandard1.0/Xamarin.Forms.props": {},
-          "build/netstandard1.0/Xamarin.Forms.targets": {}
         }
       }
     },
     "UAP,Version=v10.0.10240/win10-arm": {
-      "Microsoft.ApplicationInsights/2.4.0": {
+      "Microsoft.ApplicationInsights/2.5.1": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "System.Diagnostics.DiagnosticSource": "4.4.0",
-          "System.Diagnostics.StackTrace": "4.3.0"
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Net.Requests": "4.3.0"
         },
         "compile": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         },
         "runtime": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         }
       },
       "Microsoft.ApplicationInsights.PersistenceChannel/1.2.3": {
@@ -2534,38 +2524,22 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Net.Native.Compiler/1.7.1": {
+      "Microsoft.Net.Native.Compiler/1.7.3": {
         "type": "package",
         "dependencies": {
           "Microsoft.Net.Native.SharedLibrary-arm": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x64": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x86": "1.7.0"
-        },
-        "build": {
-          "build/Microsoft.Net.Native.Compiler.props": {},
-          "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
       "Microsoft.Net.Native.SharedLibrary-arm/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-arm.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-arm.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x64/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x64.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x64.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x86/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x86.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x86.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.NETCore/5.0.2": {
         "type": "package",
@@ -2691,14 +2665,14 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore": "5.0.2",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.2",
           "Microsoft.NETCore.Runtime.CoreCLR": "1.0.3",
           "Microsoft.NETCore.Targets": "1.0.2",
-          "Microsoft.Net.Native.Compiler": "1.7.1",
+          "Microsoft.Net.Native.Compiler": "1.7.3",
           "Microsoft.Win32.Primitives": "4.0.1",
           "System.Collections.NonGeneric": "4.0.1",
           "System.Collections.Specialized": "4.0.1",
@@ -2713,7 +2687,7 @@
           "System.Net.Sockets": "4.1.0",
           "System.Net.WebHeaderCollection": "4.0.1",
           "System.Net.WebSockets": "4.0.0",
-          "System.Net.WebSockets.Client": "4.0.0",
+          "System.Net.WebSockets.Client": "4.0.2",
           "System.Numerics.Vectors.WindowsRuntime": "4.0.1",
           "System.Reflection.Context": "4.0.1",
           "System.Runtime.InteropServices.WindowsRuntime": "4.0.1",
@@ -2722,16 +2696,16 @@
           "System.Runtime.Serialization.Xml": "4.1.2",
           "System.Runtime.WindowsRuntime": "4.0.11",
           "System.Runtime.WindowsRuntime.UI.Xaml": "4.0.1",
-          "System.ServiceModel.Duplex": "4.0.1",
-          "System.ServiceModel.Http": "4.1.0",
-          "System.ServiceModel.NetTcp": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
-          "System.ServiceModel.Security": "4.0.1",
+          "System.ServiceModel.Duplex": "4.0.2",
+          "System.ServiceModel.Http": "4.1.1",
+          "System.ServiceModel.NetTcp": "4.1.1",
+          "System.ServiceModel.Primitives": "4.1.1",
+          "System.ServiceModel.Security": "4.0.2",
           "System.Text.Encoding.CodePages": "4.0.1",
           "System.Threading.Overlapped": "4.0.1",
           "System.Xml.XmlDocument": "4.0.1",
           "System.Xml.XmlSerializer": "4.0.11",
-          "runtime.win10-arm.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.1"
+          "runtime.win10-arm.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.8"
         },
         "compile": {
           "ref/netcore50/_._": {}
@@ -3181,7 +3155,7 @@
           "runtimes/win/lib/netcore50/System.Runtime.Extensions.dll": {}
         }
       },
-      "runtime.win10-arm.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "runtime.win10-arm.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "compile": {
           "ref/netstandard/_._": {}
@@ -3870,14 +3844,21 @@
           "lib/win8/_._": {}
         }
       },
-      "System.Net.Requests/4.0.11": {
+      "System.Net.Requests/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.IO": "4.1.0",
-          "System.Net.Primitives": "4.0.11",
-          "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Threading.Tasks": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Net.Http": "4.3.0",
+          "System.Net.Primitives": "4.3.0",
+          "System.Net.WebHeaderCollection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
         },
         "compile": {
           "ref/netcore50/System.Net.Requests.dll": {}
@@ -3901,13 +3882,13 @@
           "ref/netstandard1.3/System.Net.Sockets.dll": {}
         }
       },
-      "System.Net.WebHeaderCollection/4.0.1": {
+      "System.Net.WebHeaderCollection/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0"
+          "System.Collections": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Net.WebHeaderCollection.dll": {}
@@ -3931,10 +3912,10 @@
           "lib/netstandard1.3/System.Net.WebSockets.dll": {}
         }
       },
-      "System.Net.WebSockets.Client/4.0.0": {
+      "System.Net.WebSockets.Client/4.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.NETCore.Platforms": "1.0.2",
           "System.Collections": "4.0.11",
           "System.Diagnostics.Debug": "4.0.11",
           "System.Diagnostics.Tracing": "4.1.0",
@@ -4032,7 +4013,7 @@
           "lib/netstandard1.3/System.Private.DataContractSerialization.dll": {}
         }
       },
-      "System.Private.ServiceModel/4.1.0": {
+      "System.Private.ServiceModel/4.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -4592,12 +4573,12 @@
           "lib/netcore50/System.Security.Principal.dll": {}
         }
       },
-      "System.ServiceModel.Duplex/4.0.1": {
+      "System.ServiceModel.Duplex/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Threading": "4.0.11"
         },
         "compile": {
@@ -4607,15 +4588,15 @@
           "lib/netcore50/System.ServiceModel.Duplex.dll": {}
         }
       },
-      "System.ServiceModel.Http/4.1.0": {
+      "System.ServiceModel.Http/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
           "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Text.Encoding": "4.0.11"
         },
         "compile": {
@@ -4625,14 +4606,14 @@
           "lib/netcore50/System.ServiceModel.Http.dll": {}
         }
       },
-      "System.ServiceModel.NetTcp/4.1.0": {
+      "System.ServiceModel.NetTcp/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.NetTcp.dll": {}
@@ -4641,7 +4622,7 @@
           "lib/netcore50/System.ServiceModel.NetTcp.dll": {}
         }
       },
-      "System.ServiceModel.Primitives/4.1.0": {
+      "System.ServiceModel.Primitives/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -4650,7 +4631,7 @@
           "System.IO": "4.1.0",
           "System.Net.Primitives": "4.0.11",
           "System.ObjectModel": "4.0.12",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Reflection": "4.1.0",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Primitives": "4.1.1",
@@ -4668,13 +4649,13 @@
           "lib/netcore50/System.ServiceModel.Primitives.dll": {}
         }
       },
-      "System.ServiceModel.Security/4.0.1": {
+      "System.ServiceModel.Security/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.Security.dll": {}
@@ -4950,7 +4931,7 @@
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.18342": {
+      "Xamarin.Forms/2.5.0.280555": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -4963,26 +4944,23 @@
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.dll": {},
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
-        },
-        "build": {
-          "build/netstandard1.0/Xamarin.Forms.props": {},
-          "build/netstandard1.0/Xamarin.Forms.targets": {}
         }
       }
     },
     "UAP,Version=v10.0.10240/win10-arm-aot": {
-      "Microsoft.ApplicationInsights/2.4.0": {
+      "Microsoft.ApplicationInsights/2.5.1": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "System.Diagnostics.DiagnosticSource": "4.4.0",
-          "System.Diagnostics.StackTrace": "4.3.0"
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Net.Requests": "4.3.0"
         },
         "compile": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         },
         "runtime": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         }
       },
       "Microsoft.ApplicationInsights.PersistenceChannel/1.2.3": {
@@ -5037,38 +5015,22 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Net.Native.Compiler/1.7.1": {
+      "Microsoft.Net.Native.Compiler/1.7.3": {
         "type": "package",
         "dependencies": {
           "Microsoft.Net.Native.SharedLibrary-arm": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x64": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x86": "1.7.0"
-        },
-        "build": {
-          "build/Microsoft.Net.Native.Compiler.props": {},
-          "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
       "Microsoft.Net.Native.SharedLibrary-arm/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-arm.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-arm.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x64/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x64.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x64.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x86/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x86.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x86.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.NETCore/5.0.2": {
         "type": "package",
@@ -5195,14 +5157,14 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore": "5.0.2",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.2",
           "Microsoft.NETCore.Runtime.CoreCLR": "1.0.3",
           "Microsoft.NETCore.Targets": "1.0.2",
-          "Microsoft.Net.Native.Compiler": "1.7.1",
+          "Microsoft.Net.Native.Compiler": "1.7.3",
           "Microsoft.Win32.Primitives": "4.0.1",
           "System.Collections.NonGeneric": "4.0.1",
           "System.Collections.Specialized": "4.0.1",
@@ -5217,7 +5179,7 @@
           "System.Net.Sockets": "4.1.0",
           "System.Net.WebHeaderCollection": "4.0.1",
           "System.Net.WebSockets": "4.0.0",
-          "System.Net.WebSockets.Client": "4.0.0",
+          "System.Net.WebSockets.Client": "4.0.2",
           "System.Numerics.Vectors.WindowsRuntime": "4.0.1",
           "System.Reflection.Context": "4.0.1",
           "System.Runtime.InteropServices.WindowsRuntime": "4.0.1",
@@ -5226,16 +5188,16 @@
           "System.Runtime.Serialization.Xml": "4.1.2",
           "System.Runtime.WindowsRuntime": "4.0.11",
           "System.Runtime.WindowsRuntime.UI.Xaml": "4.0.1",
-          "System.ServiceModel.Duplex": "4.0.1",
-          "System.ServiceModel.Http": "4.1.0",
-          "System.ServiceModel.NetTcp": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
-          "System.ServiceModel.Security": "4.0.1",
+          "System.ServiceModel.Duplex": "4.0.2",
+          "System.ServiceModel.Http": "4.1.1",
+          "System.ServiceModel.NetTcp": "4.1.1",
+          "System.ServiceModel.Primitives": "4.1.1",
+          "System.ServiceModel.Security": "4.0.2",
           "System.Text.Encoding.CodePages": "4.0.1",
           "System.Threading.Overlapped": "4.0.1",
           "System.Xml.XmlDocument": "4.0.1",
           "System.Xml.XmlSerializer": "4.0.11",
-          "runtime.win10-arm-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.1"
+          "runtime.win10-arm-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.8"
         },
         "compile": {
           "ref/netcore50/_._": {}
@@ -5730,7 +5692,7 @@
           "runtimes/aot/lib/netcore50/System.Runtime.Extensions.dll": {}
         }
       },
-      "runtime.win10-arm-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "runtime.win10-arm-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "compile": {
           "ref/netstandard/_._": {}
@@ -5738,6 +5700,9 @@
       },
       "runtime.win10-arm-aot.runtime.native.System.IO.Compression/4.0.1": {
         "type": "package",
+        "compile": {
+          "runtimes/win10-arm-aot/lib/netcore50/_._": {}
+        },
         "runtime": {
           "runtimes/win10-arm-aot/lib/netcore50/clrcompression.dll": {}
         }
@@ -6409,14 +6374,21 @@
           "lib/win8/_._": {}
         }
       },
-      "System.Net.Requests/4.0.11": {
+      "System.Net.Requests/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.IO": "4.1.0",
-          "System.Net.Primitives": "4.0.11",
-          "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Threading.Tasks": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Net.Http": "4.3.0",
+          "System.Net.Primitives": "4.3.0",
+          "System.Net.WebHeaderCollection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
         },
         "compile": {
           "ref/netcore50/System.Net.Requests.dll": {}
@@ -6440,13 +6412,13 @@
           "ref/netstandard1.3/System.Net.Sockets.dll": {}
         }
       },
-      "System.Net.WebHeaderCollection/4.0.1": {
+      "System.Net.WebHeaderCollection/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0"
+          "System.Collections": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Net.WebHeaderCollection.dll": {}
@@ -6470,10 +6442,10 @@
           "lib/netstandard1.3/System.Net.WebSockets.dll": {}
         }
       },
-      "System.Net.WebSockets.Client/4.0.0": {
+      "System.Net.WebSockets.Client/4.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.NETCore.Platforms": "1.0.2",
           "System.Collections": "4.0.11",
           "System.Diagnostics.Debug": "4.0.11",
           "System.Diagnostics.Tracing": "4.1.0",
@@ -6571,7 +6543,7 @@
           "runtimes/aot/lib/netcore50/System.Private.DataContractSerialization.dll": {}
         }
       },
-      "System.Private.ServiceModel/4.1.0": {
+      "System.Private.ServiceModel/4.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -7131,12 +7103,12 @@
           "lib/netcore50/System.Security.Principal.dll": {}
         }
       },
-      "System.ServiceModel.Duplex/4.0.1": {
+      "System.ServiceModel.Duplex/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Threading": "4.0.11"
         },
         "compile": {
@@ -7146,15 +7118,15 @@
           "lib/netcore50/System.ServiceModel.Duplex.dll": {}
         }
       },
-      "System.ServiceModel.Http/4.1.0": {
+      "System.ServiceModel.Http/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
           "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Text.Encoding": "4.0.11"
         },
         "compile": {
@@ -7164,14 +7136,14 @@
           "lib/netcore50/System.ServiceModel.Http.dll": {}
         }
       },
-      "System.ServiceModel.NetTcp/4.1.0": {
+      "System.ServiceModel.NetTcp/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.NetTcp.dll": {}
@@ -7180,7 +7152,7 @@
           "lib/netcore50/System.ServiceModel.NetTcp.dll": {}
         }
       },
-      "System.ServiceModel.Primitives/4.1.0": {
+      "System.ServiceModel.Primitives/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -7189,7 +7161,7 @@
           "System.IO": "4.1.0",
           "System.Net.Primitives": "4.0.11",
           "System.ObjectModel": "4.0.12",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Reflection": "4.1.0",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Primitives": "4.1.1",
@@ -7207,13 +7179,13 @@
           "lib/netcore50/System.ServiceModel.Primitives.dll": {}
         }
       },
-      "System.ServiceModel.Security/4.0.1": {
+      "System.ServiceModel.Security/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.Security.dll": {}
@@ -7489,7 +7461,7 @@
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.18342": {
+      "Xamarin.Forms/2.5.0.280555": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -7502,26 +7474,23 @@
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.dll": {},
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
-        },
-        "build": {
-          "build/netstandard1.0/Xamarin.Forms.props": {},
-          "build/netstandard1.0/Xamarin.Forms.targets": {}
         }
       }
     },
     "UAP,Version=v10.0.10240/win10-x64": {
-      "Microsoft.ApplicationInsights/2.4.0": {
+      "Microsoft.ApplicationInsights/2.5.1": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "System.Diagnostics.DiagnosticSource": "4.4.0",
-          "System.Diagnostics.StackTrace": "4.3.0"
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Net.Requests": "4.3.0"
         },
         "compile": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         },
         "runtime": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         }
       },
       "Microsoft.ApplicationInsights.PersistenceChannel/1.2.3": {
@@ -7576,38 +7545,22 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Net.Native.Compiler/1.7.1": {
+      "Microsoft.Net.Native.Compiler/1.7.3": {
         "type": "package",
         "dependencies": {
           "Microsoft.Net.Native.SharedLibrary-arm": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x64": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x86": "1.7.0"
-        },
-        "build": {
-          "build/Microsoft.Net.Native.Compiler.props": {},
-          "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
       "Microsoft.Net.Native.SharedLibrary-arm/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-arm.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-arm.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x64/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x64.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x64.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x86/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x86.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x86.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.NETCore/5.0.2": {
         "type": "package",
@@ -7736,14 +7689,14 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore": "5.0.2",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.2",
           "Microsoft.NETCore.Runtime.CoreCLR": "1.0.3",
           "Microsoft.NETCore.Targets": "1.0.2",
-          "Microsoft.Net.Native.Compiler": "1.7.1",
+          "Microsoft.Net.Native.Compiler": "1.7.3",
           "Microsoft.Win32.Primitives": "4.0.1",
           "System.Collections.NonGeneric": "4.0.1",
           "System.Collections.Specialized": "4.0.1",
@@ -7758,7 +7711,7 @@
           "System.Net.Sockets": "4.1.0",
           "System.Net.WebHeaderCollection": "4.0.1",
           "System.Net.WebSockets": "4.0.0",
-          "System.Net.WebSockets.Client": "4.0.0",
+          "System.Net.WebSockets.Client": "4.0.2",
           "System.Numerics.Vectors.WindowsRuntime": "4.0.1",
           "System.Reflection.Context": "4.0.1",
           "System.Runtime.InteropServices.WindowsRuntime": "4.0.1",
@@ -7767,16 +7720,16 @@
           "System.Runtime.Serialization.Xml": "4.1.2",
           "System.Runtime.WindowsRuntime": "4.0.11",
           "System.Runtime.WindowsRuntime.UI.Xaml": "4.0.1",
-          "System.ServiceModel.Duplex": "4.0.1",
-          "System.ServiceModel.Http": "4.1.0",
-          "System.ServiceModel.NetTcp": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
-          "System.ServiceModel.Security": "4.0.1",
+          "System.ServiceModel.Duplex": "4.0.2",
+          "System.ServiceModel.Http": "4.1.1",
+          "System.ServiceModel.NetTcp": "4.1.1",
+          "System.ServiceModel.Primitives": "4.1.1",
+          "System.ServiceModel.Security": "4.0.2",
           "System.Text.Encoding.CodePages": "4.0.1",
           "System.Threading.Overlapped": "4.0.1",
           "System.Xml.XmlDocument": "4.0.1",
           "System.Xml.XmlSerializer": "4.0.11",
-          "runtime.win10-x64.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.1"
+          "runtime.win10-x64.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.8"
         },
         "compile": {
           "ref/netcore50/_._": {}
@@ -8226,7 +8179,7 @@
           "runtimes/win/lib/netcore50/System.Runtime.Extensions.dll": {}
         }
       },
-      "runtime.win10-x64.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "runtime.win10-x64.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "compile": {
           "ref/netstandard/_._": {}
@@ -8921,14 +8874,21 @@
           "lib/win8/_._": {}
         }
       },
-      "System.Net.Requests/4.0.11": {
+      "System.Net.Requests/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.IO": "4.1.0",
-          "System.Net.Primitives": "4.0.11",
-          "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Threading.Tasks": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Net.Http": "4.3.0",
+          "System.Net.Primitives": "4.3.0",
+          "System.Net.WebHeaderCollection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
         },
         "compile": {
           "ref/netcore50/System.Net.Requests.dll": {}
@@ -8952,13 +8912,13 @@
           "ref/netstandard1.3/System.Net.Sockets.dll": {}
         }
       },
-      "System.Net.WebHeaderCollection/4.0.1": {
+      "System.Net.WebHeaderCollection/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0"
+          "System.Collections": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Net.WebHeaderCollection.dll": {}
@@ -8982,10 +8942,10 @@
           "lib/netstandard1.3/System.Net.WebSockets.dll": {}
         }
       },
-      "System.Net.WebSockets.Client/4.0.0": {
+      "System.Net.WebSockets.Client/4.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.NETCore.Platforms": "1.0.2",
           "System.Collections": "4.0.11",
           "System.Diagnostics.Debug": "4.0.11",
           "System.Diagnostics.Tracing": "4.1.0",
@@ -9083,7 +9043,7 @@
           "lib/netstandard1.3/System.Private.DataContractSerialization.dll": {}
         }
       },
-      "System.Private.ServiceModel/4.1.0": {
+      "System.Private.ServiceModel/4.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -9643,12 +9603,12 @@
           "lib/netcore50/System.Security.Principal.dll": {}
         }
       },
-      "System.ServiceModel.Duplex/4.0.1": {
+      "System.ServiceModel.Duplex/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Threading": "4.0.11"
         },
         "compile": {
@@ -9658,15 +9618,15 @@
           "lib/netcore50/System.ServiceModel.Duplex.dll": {}
         }
       },
-      "System.ServiceModel.Http/4.1.0": {
+      "System.ServiceModel.Http/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
           "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Text.Encoding": "4.0.11"
         },
         "compile": {
@@ -9676,14 +9636,14 @@
           "lib/netcore50/System.ServiceModel.Http.dll": {}
         }
       },
-      "System.ServiceModel.NetTcp/4.1.0": {
+      "System.ServiceModel.NetTcp/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.NetTcp.dll": {}
@@ -9692,7 +9652,7 @@
           "lib/netcore50/System.ServiceModel.NetTcp.dll": {}
         }
       },
-      "System.ServiceModel.Primitives/4.1.0": {
+      "System.ServiceModel.Primitives/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -9701,7 +9661,7 @@
           "System.IO": "4.1.0",
           "System.Net.Primitives": "4.0.11",
           "System.ObjectModel": "4.0.12",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Reflection": "4.1.0",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Primitives": "4.1.1",
@@ -9719,13 +9679,13 @@
           "lib/netcore50/System.ServiceModel.Primitives.dll": {}
         }
       },
-      "System.ServiceModel.Security/4.0.1": {
+      "System.ServiceModel.Security/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.Security.dll": {}
@@ -10001,7 +9961,7 @@
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.18342": {
+      "Xamarin.Forms/2.5.0.280555": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -10014,26 +9974,23 @@
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.dll": {},
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
-        },
-        "build": {
-          "build/netstandard1.0/Xamarin.Forms.props": {},
-          "build/netstandard1.0/Xamarin.Forms.targets": {}
         }
       }
     },
     "UAP,Version=v10.0.10240/win10-x64-aot": {
-      "Microsoft.ApplicationInsights/2.4.0": {
+      "Microsoft.ApplicationInsights/2.5.1": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "System.Diagnostics.DiagnosticSource": "4.4.0",
-          "System.Diagnostics.StackTrace": "4.3.0"
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Net.Requests": "4.3.0"
         },
         "compile": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         },
         "runtime": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         }
       },
       "Microsoft.ApplicationInsights.PersistenceChannel/1.2.3": {
@@ -10088,38 +10045,22 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Net.Native.Compiler/1.7.1": {
+      "Microsoft.Net.Native.Compiler/1.7.3": {
         "type": "package",
         "dependencies": {
           "Microsoft.Net.Native.SharedLibrary-arm": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x64": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x86": "1.7.0"
-        },
-        "build": {
-          "build/Microsoft.Net.Native.Compiler.props": {},
-          "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
       "Microsoft.Net.Native.SharedLibrary-arm/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-arm.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-arm.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x64/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x64.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x64.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x86/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x86.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x86.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.NETCore/5.0.2": {
         "type": "package",
@@ -10249,14 +10190,14 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore": "5.0.2",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.2",
           "Microsoft.NETCore.Runtime.CoreCLR": "1.0.3",
           "Microsoft.NETCore.Targets": "1.0.2",
-          "Microsoft.Net.Native.Compiler": "1.7.1",
+          "Microsoft.Net.Native.Compiler": "1.7.3",
           "Microsoft.Win32.Primitives": "4.0.1",
           "System.Collections.NonGeneric": "4.0.1",
           "System.Collections.Specialized": "4.0.1",
@@ -10271,7 +10212,7 @@
           "System.Net.Sockets": "4.1.0",
           "System.Net.WebHeaderCollection": "4.0.1",
           "System.Net.WebSockets": "4.0.0",
-          "System.Net.WebSockets.Client": "4.0.0",
+          "System.Net.WebSockets.Client": "4.0.2",
           "System.Numerics.Vectors.WindowsRuntime": "4.0.1",
           "System.Reflection.Context": "4.0.1",
           "System.Runtime.InteropServices.WindowsRuntime": "4.0.1",
@@ -10280,16 +10221,16 @@
           "System.Runtime.Serialization.Xml": "4.1.2",
           "System.Runtime.WindowsRuntime": "4.0.11",
           "System.Runtime.WindowsRuntime.UI.Xaml": "4.0.1",
-          "System.ServiceModel.Duplex": "4.0.1",
-          "System.ServiceModel.Http": "4.1.0",
-          "System.ServiceModel.NetTcp": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
-          "System.ServiceModel.Security": "4.0.1",
+          "System.ServiceModel.Duplex": "4.0.2",
+          "System.ServiceModel.Http": "4.1.1",
+          "System.ServiceModel.NetTcp": "4.1.1",
+          "System.ServiceModel.Primitives": "4.1.1",
+          "System.ServiceModel.Security": "4.0.2",
           "System.Text.Encoding.CodePages": "4.0.1",
           "System.Threading.Overlapped": "4.0.1",
           "System.Xml.XmlDocument": "4.0.1",
           "System.Xml.XmlSerializer": "4.0.11",
-          "runtime.win10-x64-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.1"
+          "runtime.win10-x64-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.8"
         },
         "compile": {
           "ref/netcore50/_._": {}
@@ -10784,7 +10725,7 @@
           "runtimes/aot/lib/netcore50/System.Runtime.Extensions.dll": {}
         }
       },
-      "runtime.win10-x64-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "runtime.win10-x64-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "compile": {
           "ref/netstandard/_._": {}
@@ -10792,6 +10733,9 @@
       },
       "runtime.win10-x64-aot.runtime.native.System.IO.Compression/4.0.1": {
         "type": "package",
+        "compile": {
+          "runtimes/win10-x64-aot/lib/netcore50/_._": {}
+        },
         "runtime": {
           "runtimes/win10-x64-aot/lib/netcore50/clrcompression.dll": {}
         }
@@ -11469,14 +11413,21 @@
           "lib/win8/_._": {}
         }
       },
-      "System.Net.Requests/4.0.11": {
+      "System.Net.Requests/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.IO": "4.1.0",
-          "System.Net.Primitives": "4.0.11",
-          "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Threading.Tasks": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Net.Http": "4.3.0",
+          "System.Net.Primitives": "4.3.0",
+          "System.Net.WebHeaderCollection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
         },
         "compile": {
           "ref/netcore50/System.Net.Requests.dll": {}
@@ -11500,13 +11451,13 @@
           "ref/netstandard1.3/System.Net.Sockets.dll": {}
         }
       },
-      "System.Net.WebHeaderCollection/4.0.1": {
+      "System.Net.WebHeaderCollection/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0"
+          "System.Collections": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Net.WebHeaderCollection.dll": {}
@@ -11530,10 +11481,10 @@
           "lib/netstandard1.3/System.Net.WebSockets.dll": {}
         }
       },
-      "System.Net.WebSockets.Client/4.0.0": {
+      "System.Net.WebSockets.Client/4.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.NETCore.Platforms": "1.0.2",
           "System.Collections": "4.0.11",
           "System.Diagnostics.Debug": "4.0.11",
           "System.Diagnostics.Tracing": "4.1.0",
@@ -11631,7 +11582,7 @@
           "runtimes/aot/lib/netcore50/System.Private.DataContractSerialization.dll": {}
         }
       },
-      "System.Private.ServiceModel/4.1.0": {
+      "System.Private.ServiceModel/4.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -12191,12 +12142,12 @@
           "lib/netcore50/System.Security.Principal.dll": {}
         }
       },
-      "System.ServiceModel.Duplex/4.0.1": {
+      "System.ServiceModel.Duplex/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Threading": "4.0.11"
         },
         "compile": {
@@ -12206,15 +12157,15 @@
           "lib/netcore50/System.ServiceModel.Duplex.dll": {}
         }
       },
-      "System.ServiceModel.Http/4.1.0": {
+      "System.ServiceModel.Http/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
           "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Text.Encoding": "4.0.11"
         },
         "compile": {
@@ -12224,14 +12175,14 @@
           "lib/netcore50/System.ServiceModel.Http.dll": {}
         }
       },
-      "System.ServiceModel.NetTcp/4.1.0": {
+      "System.ServiceModel.NetTcp/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.NetTcp.dll": {}
@@ -12240,7 +12191,7 @@
           "lib/netcore50/System.ServiceModel.NetTcp.dll": {}
         }
       },
-      "System.ServiceModel.Primitives/4.1.0": {
+      "System.ServiceModel.Primitives/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -12249,7 +12200,7 @@
           "System.IO": "4.1.0",
           "System.Net.Primitives": "4.0.11",
           "System.ObjectModel": "4.0.12",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Reflection": "4.1.0",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Primitives": "4.1.1",
@@ -12267,13 +12218,13 @@
           "lib/netcore50/System.ServiceModel.Primitives.dll": {}
         }
       },
-      "System.ServiceModel.Security/4.0.1": {
+      "System.ServiceModel.Security/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.Security.dll": {}
@@ -12549,7 +12500,7 @@
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.18342": {
+      "Xamarin.Forms/2.5.0.280555": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -12562,26 +12513,23 @@
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.dll": {},
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
-        },
-        "build": {
-          "build/netstandard1.0/Xamarin.Forms.props": {},
-          "build/netstandard1.0/Xamarin.Forms.targets": {}
         }
       }
     },
     "UAP,Version=v10.0.10240/win10-x86": {
-      "Microsoft.ApplicationInsights/2.4.0": {
+      "Microsoft.ApplicationInsights/2.5.1": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "System.Diagnostics.DiagnosticSource": "4.4.0",
-          "System.Diagnostics.StackTrace": "4.3.0"
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Net.Requests": "4.3.0"
         },
         "compile": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         },
         "runtime": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         }
       },
       "Microsoft.ApplicationInsights.PersistenceChannel/1.2.3": {
@@ -12636,38 +12584,22 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Net.Native.Compiler/1.7.1": {
+      "Microsoft.Net.Native.Compiler/1.7.3": {
         "type": "package",
         "dependencies": {
           "Microsoft.Net.Native.SharedLibrary-arm": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x64": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x86": "1.7.0"
-        },
-        "build": {
-          "build/Microsoft.Net.Native.Compiler.props": {},
-          "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
       "Microsoft.Net.Native.SharedLibrary-arm/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-arm.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-arm.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x64/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x64.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x64.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x86/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x86.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x86.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.NETCore/5.0.2": {
         "type": "package",
@@ -12796,14 +12728,14 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore": "5.0.2",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.2",
           "Microsoft.NETCore.Runtime.CoreCLR": "1.0.3",
           "Microsoft.NETCore.Targets": "1.0.2",
-          "Microsoft.Net.Native.Compiler": "1.7.1",
+          "Microsoft.Net.Native.Compiler": "1.7.3",
           "Microsoft.Win32.Primitives": "4.0.1",
           "System.Collections.NonGeneric": "4.0.1",
           "System.Collections.Specialized": "4.0.1",
@@ -12818,7 +12750,7 @@
           "System.Net.Sockets": "4.1.0",
           "System.Net.WebHeaderCollection": "4.0.1",
           "System.Net.WebSockets": "4.0.0",
-          "System.Net.WebSockets.Client": "4.0.0",
+          "System.Net.WebSockets.Client": "4.0.2",
           "System.Numerics.Vectors.WindowsRuntime": "4.0.1",
           "System.Reflection.Context": "4.0.1",
           "System.Runtime.InteropServices.WindowsRuntime": "4.0.1",
@@ -12827,16 +12759,16 @@
           "System.Runtime.Serialization.Xml": "4.1.2",
           "System.Runtime.WindowsRuntime": "4.0.11",
           "System.Runtime.WindowsRuntime.UI.Xaml": "4.0.1",
-          "System.ServiceModel.Duplex": "4.0.1",
-          "System.ServiceModel.Http": "4.1.0",
-          "System.ServiceModel.NetTcp": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
-          "System.ServiceModel.Security": "4.0.1",
+          "System.ServiceModel.Duplex": "4.0.2",
+          "System.ServiceModel.Http": "4.1.1",
+          "System.ServiceModel.NetTcp": "4.1.1",
+          "System.ServiceModel.Primitives": "4.1.1",
+          "System.ServiceModel.Security": "4.0.2",
           "System.Text.Encoding.CodePages": "4.0.1",
           "System.Threading.Overlapped": "4.0.1",
           "System.Xml.XmlDocument": "4.0.1",
           "System.Xml.XmlSerializer": "4.0.11",
-          "runtime.win10-x86.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.1"
+          "runtime.win10-x86.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.8"
         },
         "compile": {
           "ref/netcore50/_._": {}
@@ -13286,7 +13218,7 @@
           "runtimes/win/lib/netcore50/System.Runtime.Extensions.dll": {}
         }
       },
-      "runtime.win10-x86.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "runtime.win10-x86.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "compile": {
           "ref/netstandard/_._": {}
@@ -13981,14 +13913,21 @@
           "lib/win8/_._": {}
         }
       },
-      "System.Net.Requests/4.0.11": {
+      "System.Net.Requests/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.IO": "4.1.0",
-          "System.Net.Primitives": "4.0.11",
-          "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Threading.Tasks": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Net.Http": "4.3.0",
+          "System.Net.Primitives": "4.3.0",
+          "System.Net.WebHeaderCollection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
         },
         "compile": {
           "ref/netcore50/System.Net.Requests.dll": {}
@@ -14012,13 +13951,13 @@
           "ref/netstandard1.3/System.Net.Sockets.dll": {}
         }
       },
-      "System.Net.WebHeaderCollection/4.0.1": {
+      "System.Net.WebHeaderCollection/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0"
+          "System.Collections": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Net.WebHeaderCollection.dll": {}
@@ -14042,10 +13981,10 @@
           "lib/netstandard1.3/System.Net.WebSockets.dll": {}
         }
       },
-      "System.Net.WebSockets.Client/4.0.0": {
+      "System.Net.WebSockets.Client/4.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.NETCore.Platforms": "1.0.2",
           "System.Collections": "4.0.11",
           "System.Diagnostics.Debug": "4.0.11",
           "System.Diagnostics.Tracing": "4.1.0",
@@ -14143,7 +14082,7 @@
           "lib/netstandard1.3/System.Private.DataContractSerialization.dll": {}
         }
       },
-      "System.Private.ServiceModel/4.1.0": {
+      "System.Private.ServiceModel/4.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -14703,12 +14642,12 @@
           "lib/netcore50/System.Security.Principal.dll": {}
         }
       },
-      "System.ServiceModel.Duplex/4.0.1": {
+      "System.ServiceModel.Duplex/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Threading": "4.0.11"
         },
         "compile": {
@@ -14718,15 +14657,15 @@
           "lib/netcore50/System.ServiceModel.Duplex.dll": {}
         }
       },
-      "System.ServiceModel.Http/4.1.0": {
+      "System.ServiceModel.Http/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
           "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Text.Encoding": "4.0.11"
         },
         "compile": {
@@ -14736,14 +14675,14 @@
           "lib/netcore50/System.ServiceModel.Http.dll": {}
         }
       },
-      "System.ServiceModel.NetTcp/4.1.0": {
+      "System.ServiceModel.NetTcp/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.NetTcp.dll": {}
@@ -14752,7 +14691,7 @@
           "lib/netcore50/System.ServiceModel.NetTcp.dll": {}
         }
       },
-      "System.ServiceModel.Primitives/4.1.0": {
+      "System.ServiceModel.Primitives/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -14761,7 +14700,7 @@
           "System.IO": "4.1.0",
           "System.Net.Primitives": "4.0.11",
           "System.ObjectModel": "4.0.12",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Reflection": "4.1.0",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Primitives": "4.1.1",
@@ -14779,13 +14718,13 @@
           "lib/netcore50/System.ServiceModel.Primitives.dll": {}
         }
       },
-      "System.ServiceModel.Security/4.0.1": {
+      "System.ServiceModel.Security/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.Security.dll": {}
@@ -15061,7 +15000,7 @@
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.18342": {
+      "Xamarin.Forms/2.5.0.280555": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -15074,26 +15013,23 @@
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.dll": {},
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
-        },
-        "build": {
-          "build/netstandard1.0/Xamarin.Forms.props": {},
-          "build/netstandard1.0/Xamarin.Forms.targets": {}
         }
       }
     },
     "UAP,Version=v10.0.10240/win10-x86-aot": {
-      "Microsoft.ApplicationInsights/2.4.0": {
+      "Microsoft.ApplicationInsights/2.5.1": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "System.Diagnostics.DiagnosticSource": "4.4.0",
-          "System.Diagnostics.StackTrace": "4.3.0"
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Net.Requests": "4.3.0"
         },
         "compile": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         },
         "runtime": {
-          "lib/uap10.0/Microsoft.ApplicationInsights.dll": {}
+          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
         }
       },
       "Microsoft.ApplicationInsights.PersistenceChannel/1.2.3": {
@@ -15148,38 +15084,22 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Net.Native.Compiler/1.7.1": {
+      "Microsoft.Net.Native.Compiler/1.7.3": {
         "type": "package",
         "dependencies": {
           "Microsoft.Net.Native.SharedLibrary-arm": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x64": "1.7.0",
           "Microsoft.Net.Native.SharedLibrary-x86": "1.7.0"
-        },
-        "build": {
-          "build/Microsoft.Net.Native.Compiler.props": {},
-          "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
       "Microsoft.Net.Native.SharedLibrary-arm/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-arm.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-arm.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x64/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x64.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x64.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.Net.Native.SharedLibrary-x86/1.7.0": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.Net.Native.SharedLibrary-x86.props": {},
-          "build/Microsoft.Net.Native.SharedLibrary-x86.targets": {}
-        }
+        "type": "package"
       },
       "Microsoft.NETCore/5.0.2": {
         "type": "package",
@@ -15309,14 +15229,14 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore": "5.0.2",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.2",
           "Microsoft.NETCore.Runtime.CoreCLR": "1.0.3",
           "Microsoft.NETCore.Targets": "1.0.2",
-          "Microsoft.Net.Native.Compiler": "1.7.1",
+          "Microsoft.Net.Native.Compiler": "1.7.3",
           "Microsoft.Win32.Primitives": "4.0.1",
           "System.Collections.NonGeneric": "4.0.1",
           "System.Collections.Specialized": "4.0.1",
@@ -15331,7 +15251,7 @@
           "System.Net.Sockets": "4.1.0",
           "System.Net.WebHeaderCollection": "4.0.1",
           "System.Net.WebSockets": "4.0.0",
-          "System.Net.WebSockets.Client": "4.0.0",
+          "System.Net.WebSockets.Client": "4.0.2",
           "System.Numerics.Vectors.WindowsRuntime": "4.0.1",
           "System.Reflection.Context": "4.0.1",
           "System.Runtime.InteropServices.WindowsRuntime": "4.0.1",
@@ -15340,16 +15260,16 @@
           "System.Runtime.Serialization.Xml": "4.1.2",
           "System.Runtime.WindowsRuntime": "4.0.11",
           "System.Runtime.WindowsRuntime.UI.Xaml": "4.0.1",
-          "System.ServiceModel.Duplex": "4.0.1",
-          "System.ServiceModel.Http": "4.1.0",
-          "System.ServiceModel.NetTcp": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
-          "System.ServiceModel.Security": "4.0.1",
+          "System.ServiceModel.Duplex": "4.0.2",
+          "System.ServiceModel.Http": "4.1.1",
+          "System.ServiceModel.NetTcp": "4.1.1",
+          "System.ServiceModel.Primitives": "4.1.1",
+          "System.ServiceModel.Security": "4.0.2",
           "System.Text.Encoding.CodePages": "4.0.1",
           "System.Threading.Overlapped": "4.0.1",
           "System.Xml.XmlDocument": "4.0.1",
           "System.Xml.XmlSerializer": "4.0.11",
-          "runtime.win10-x86-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.1"
+          "runtime.win10-x86-aot.Microsoft.NETCore.UniversalWindowsPlatform": "6.0.8"
         },
         "compile": {
           "ref/netcore50/_._": {}
@@ -15844,7 +15764,7 @@
           "runtimes/aot/lib/netcore50/System.Runtime.Extensions.dll": {}
         }
       },
-      "runtime.win10-x86-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
+      "runtime.win10-x86-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
         "type": "package",
         "compile": {
           "ref/netstandard/_._": {}
@@ -15852,6 +15772,9 @@
       },
       "runtime.win10-x86-aot.runtime.native.System.IO.Compression/4.0.1": {
         "type": "package",
+        "compile": {
+          "runtimes/win10-x86-aot/lib/netcore50/_._": {}
+        },
         "runtime": {
           "runtimes/win10-x86-aot/lib/netcore50/clrcompression.dll": {}
         }
@@ -16529,14 +16452,21 @@
           "lib/win8/_._": {}
         }
       },
-      "System.Net.Requests/4.0.11": {
+      "System.Net.Requests/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.IO": "4.1.0",
-          "System.Net.Primitives": "4.0.11",
-          "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Threading.Tasks": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Net.Http": "4.3.0",
+          "System.Net.Primitives": "4.3.0",
+          "System.Net.WebHeaderCollection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
         },
         "compile": {
           "ref/netcore50/System.Net.Requests.dll": {}
@@ -16560,13 +16490,13 @@
           "ref/netstandard1.3/System.Net.Sockets.dll": {}
         }
       },
-      "System.Net.WebHeaderCollection/4.0.1": {
+      "System.Net.WebHeaderCollection/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0"
+          "System.Collections": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Net.WebHeaderCollection.dll": {}
@@ -16590,10 +16520,10 @@
           "lib/netstandard1.3/System.Net.WebSockets.dll": {}
         }
       },
-      "System.Net.WebSockets.Client/4.0.0": {
+      "System.Net.WebSockets.Client/4.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.NETCore.Platforms": "1.0.2",
           "System.Collections": "4.0.11",
           "System.Diagnostics.Debug": "4.0.11",
           "System.Diagnostics.Tracing": "4.1.0",
@@ -16691,7 +16621,7 @@
           "runtimes/aot/lib/netcore50/System.Private.DataContractSerialization.dll": {}
         }
       },
-      "System.Private.ServiceModel/4.1.0": {
+      "System.Private.ServiceModel/4.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -17251,12 +17181,12 @@
           "lib/netcore50/System.Security.Principal.dll": {}
         }
       },
-      "System.ServiceModel.Duplex/4.0.1": {
+      "System.ServiceModel.Duplex/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Threading": "4.0.11"
         },
         "compile": {
@@ -17266,15 +17196,15 @@
           "lib/netcore50/System.ServiceModel.Duplex.dll": {}
         }
       },
-      "System.ServiceModel.Http/4.1.0": {
+      "System.ServiceModel.Http/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
           "System.Net.WebHeaderCollection": "4.0.1",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0",
+          "System.ServiceModel.Primitives": "4.1.1",
           "System.Text.Encoding": "4.0.11"
         },
         "compile": {
@@ -17284,14 +17214,14 @@
           "lib/netcore50/System.ServiceModel.Http.dll": {}
         }
       },
-      "System.ServiceModel.NetTcp/4.1.0": {
+      "System.ServiceModel.NetTcp/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Net.Primitives": "4.0.11",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.NetTcp.dll": {}
@@ -17300,7 +17230,7 @@
           "lib/netcore50/System.ServiceModel.NetTcp.dll": {}
         }
       },
-      "System.ServiceModel.Primitives/4.1.0": {
+      "System.ServiceModel.Primitives/4.1.1": {
         "type": "package",
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -17309,7 +17239,7 @@
           "System.IO": "4.1.0",
           "System.Net.Primitives": "4.0.11",
           "System.ObjectModel": "4.0.12",
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Reflection": "4.1.0",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Primitives": "4.1.1",
@@ -17327,13 +17257,13 @@
           "lib/netcore50/System.ServiceModel.Primitives.dll": {}
         }
       },
-      "System.ServiceModel.Security/4.0.1": {
+      "System.ServiceModel.Security/4.0.2": {
         "type": "package",
         "dependencies": {
-          "System.Private.ServiceModel": "4.1.0",
+          "System.Private.ServiceModel": "4.1.1",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Xml": "4.1.1",
-          "System.ServiceModel.Primitives": "4.1.0"
+          "System.ServiceModel.Primitives": "4.1.1"
         },
         "compile": {
           "ref/netcore50/System.ServiceModel.Security.dll": {}
@@ -17609,7 +17539,7 @@
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.18342": {
+      "Xamarin.Forms/2.5.0.280555": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -17622,32 +17552,20 @@
           "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll": {},
           "lib/uap10.0/Xamarin.Forms.Platform.dll": {},
           "lib/uap10.0/Xamarin.Forms.Xaml.dll": {}
-        },
-        "build": {
-          "build/netstandard1.0/Xamarin.Forms.props": {},
-          "build/netstandard1.0/Xamarin.Forms.targets": {}
         }
       }
     }
   },
   "libraries": {
-    "Microsoft.ApplicationInsights/2.4.0": {
-      "sha512": "4dX/zu3Psz9oM3ErU64xfOHuSxOwMxN6q5RabSkeYbX42Yn6dR/kDToqjs+txCRjrfHUxyYjfeJHu+MbCfvAsg==",
+    "Microsoft.ApplicationInsights/2.5.1": {
+      "sha512": "k9PtCkxAf5LIJo7i3VCt0R+EtvrZ+b/JPlN0GVtyOuNXZmqdCpmKxoQnOOSwReWDQNkvfF6HWvk75VCKXzf31g==",
       "type": "package",
-      "path": "microsoft.applicationinsights/2.4.0",
+      "path": "microsoft.applicationinsights/2.5.1",
       "files": [
-        "lib/net40/Microsoft.ApplicationInsights.XML",
-        "lib/net40/Microsoft.ApplicationInsights.dll",
-        "lib/net45/Microsoft.ApplicationInsights.XML",
         "lib/net45/Microsoft.ApplicationInsights.dll",
-        "lib/net46/Microsoft.ApplicationInsights.XML",
         "lib/net46/Microsoft.ApplicationInsights.dll",
-        "lib/netstandard1.3/Microsoft.ApplicationInsights.XML",
         "lib/netstandard1.3/Microsoft.ApplicationInsights.dll",
-        "lib/portable-win81+wpa81/Microsoft.ApplicationInsights.dll",
-        "lib/uap10.0/Microsoft.ApplicationInsights.dll",
-        "lib/wp8/Microsoft.ApplicationInsights.dll",
-        "microsoft.applicationinsights.2.4.0.nupkg.sha512",
+        "microsoft.applicationinsights.2.5.1.nupkg.sha512",
         "microsoft.applicationinsights.nuspec"
       ]
     },
@@ -17740,15 +17658,15 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "Microsoft.Net.Native.Compiler/1.7.1": {
-      "sha512": "P55mWSgc8zLrk2eoRxd3T3QPVXXKrqD/DypC+It8wSgZfaUl2/o31bCOR+aWq1NtxDwDnCPGNVsmo/bmgIeJtA==",
+    "Microsoft.Net.Native.Compiler/1.7.3": {
+      "sha512": "ed0kCs6Gxfw2ZGf34eqO8cwaD16Ll1FKw+jBfGevdiHqc2kTwux9yqkHwhe9WP8jzSbuZX3o4y3wMUUkz5gSeg==",
       "type": "package",
-      "path": "microsoft.net.native.compiler/1.7.1",
+      "path": "microsoft.net.native.compiler/1.7.3",
       "files": [
+        "Microsoft.Net.Native.Compiler.1.7.3.nupkg.sha512",
+        "Microsoft.Net.Native.Compiler.nuspec",
         "build/Microsoft.Net.Native.Compiler.props",
         "build/Microsoft.Net.Native.Compiler.targets",
-        "microsoft.net.native.compiler.1.7.1.nupkg.sha512",
-        "microsoft.net.native.compiler.nuspec",
         "tools/LibraryXML/Callisto.rd.xml",
         "tools/LibraryXML/GalaSoft.MvvmLight.Extras.Win8.rd.xml",
         "tools/LibraryXML/GalaSoft.MvvmLight.Win8.rd.xml",
@@ -19975,14 +19893,14 @@
         "runtime.json"
       ]
     },
-    "Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
-      "sha512": "svqEclOg2g3pmsVen1/sCCsozefwISlHQcB/Y5yxqovG6tx+LIxN0XtGH4XSieLbf5PbzVIXmHoPPrWb0QhuaA==",
+    "Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
+      "sha512": "zGyKY3y4bLAFJPIaUUl+JBysmo++bRHT7zB93dmUJNs8U1Gy1D95grF1fPydr5ipPveE3PblYpQio98LQZR9lg==",
       "type": "package",
-      "path": "microsoft.netcore.universalwindowsplatform/6.0.1",
+      "path": "microsoft.netcore.universalwindowsplatform/6.0.8",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
-        "microsoft.netcore.universalwindowsplatform.6.0.1.nupkg.sha512",
+        "microsoft.netcore.universalwindowsplatform.6.0.8.nupkg.sha512",
         "microsoft.netcore.universalwindowsplatform.nuspec",
         "ref/netcore50/_._",
         "ref/uap10.0.15138/Microsoft.CSharp.dll",
@@ -21267,15 +21185,15 @@
         "runtimes/win/lib/netstandard1.5/System.Runtime.Extensions.dll"
       ]
     },
-    "runtime.win10-arm-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
-      "sha512": "ZGShwJB9yNwHyM+w7g8int9gmurykzvy+SWv74+lCul0ddTmtI9WhXrAg3Dyub9urV7/lUtUjCjH+cSC5/5t7A==",
+    "runtime.win10-arm-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
+      "sha512": "mCcoolv8UTrTcmRktwjlPk4N+kjcoJDFEI6cH/kT72zv31Mf5HH7/H99q6lNwSF1dXZAeZbzBXJcDOKFMJoKTw==",
       "type": "package",
-      "path": "runtime.win10-arm-aot.microsoft.netcore.universalwindowsplatform/6.0.1",
+      "path": "runtime.win10-arm-aot.microsoft.netcore.universalwindowsplatform/6.0.8",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "ref/netstandard/_._",
-        "runtime.win10-arm-aot.microsoft.netcore.universalwindowsplatform.6.0.1.nupkg.sha512",
+        "runtime.win10-arm-aot.microsoft.netcore.universalwindowsplatform.6.0.8.nupkg.sha512",
         "runtime.win10-arm-aot.microsoft.netcore.universalwindowsplatform.nuspec",
         "runtimes/win10-arm-aot/lib/uap10.0.15138/Microsoft.CSharp.dll",
         "runtimes/win10-arm-aot/lib/uap10.0.15138/Microsoft.VisualBasic.dll",
@@ -21456,15 +21374,15 @@
         "runtimes/win10-arm-aot/lib/netcore50/clrcompression.dll"
       ]
     },
-    "runtime.win10-arm.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
-      "sha512": "GaE6GmyEmK2NX2PMfBJGGzLQSUWYO18LDbbCVaNJecnaa0XdBLFOouBoI8X19CcJVww62ugzwM75JjfHw60Wnw==",
+    "runtime.win10-arm.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
+      "sha512": "tbmLG9GnSm0LWKkzvzq6Ppw85Lt4EE+aRDSGoYrbbiPTkzK9fzcPOv5YqzL86WKzxWi9E9pZvVytM1uvd3bYXg==",
       "type": "package",
-      "path": "runtime.win10-arm.microsoft.netcore.universalwindowsplatform/6.0.1",
+      "path": "runtime.win10-arm.microsoft.netcore.universalwindowsplatform/6.0.8",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "ref/netstandard/_._",
-        "runtime.win10-arm.microsoft.netcore.universalwindowsplatform.6.0.1.nupkg.sha512",
+        "runtime.win10-arm.microsoft.netcore.universalwindowsplatform.6.0.8.nupkg.sha512",
         "runtime.win10-arm.microsoft.netcore.universalwindowsplatform.nuspec",
         "runtimes/win10-arm/lib/uap10.0.15138/Microsoft.CSharp.dll",
         "runtimes/win10-arm/lib/uap10.0.15138/Microsoft.VisualBasic.dll",
@@ -21632,15 +21550,15 @@
         "runtimes/win10-arm/nativeassets/uap10.0.15138/clrcompression.dll"
       ]
     },
-    "runtime.win10-x64-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
-      "sha512": "ouTXA9SGNNtKOorZBMYOCNVN8TxC4RlvaxzAU+ZRAxI00GMfoEBKjfd5FHJMtyi6+lng4yjpdUuz9h1ePgYV9Q==",
+    "runtime.win10-x64-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
+      "sha512": "QhGAy+4NIyxehEg0t0Ps+TvLDj9EHZxwqK+St3q4ggMhGCKXsv7B1g1i9OjC3GGLWW1ShEaSGJMTXf05cDO8Cg==",
       "type": "package",
-      "path": "runtime.win10-x64-aot.microsoft.netcore.universalwindowsplatform/6.0.1",
+      "path": "runtime.win10-x64-aot.microsoft.netcore.universalwindowsplatform/6.0.8",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "ref/netstandard/_._",
-        "runtime.win10-x64-aot.microsoft.netcore.universalwindowsplatform.6.0.1.nupkg.sha512",
+        "runtime.win10-x64-aot.microsoft.netcore.universalwindowsplatform.6.0.8.nupkg.sha512",
         "runtime.win10-x64-aot.microsoft.netcore.universalwindowsplatform.nuspec",
         "runtimes/win10-x64-aot/lib/uap10.0.15138/Microsoft.CSharp.dll",
         "runtimes/win10-x64-aot/lib/uap10.0.15138/Microsoft.VisualBasic.dll",
@@ -21821,15 +21739,15 @@
         "runtimes/win10-x64-aot/lib/netcore50/clrcompression.dll"
       ]
     },
-    "runtime.win10-x64.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
-      "sha512": "iq7w9LmLzJla647TOEXrghCK14zw4ImIlnyZAO+h/XoRoq3l1OSng+hRBHzusgKwhvubdKHNlZWA9j4aj2fIng==",
+    "runtime.win10-x64.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
+      "sha512": "gDKOajerneiwUinQpoVy0dEzX4QRB/oWO37vmfwTac4bSkAsrfdhA5gEeMR4y2JN0OHABLP8zjm1bOiHp4XnFQ==",
       "type": "package",
-      "path": "runtime.win10-x64.microsoft.netcore.universalwindowsplatform/6.0.1",
+      "path": "runtime.win10-x64.microsoft.netcore.universalwindowsplatform/6.0.8",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "ref/netstandard/_._",
-        "runtime.win10-x64.microsoft.netcore.universalwindowsplatform.6.0.1.nupkg.sha512",
+        "runtime.win10-x64.microsoft.netcore.universalwindowsplatform.6.0.8.nupkg.sha512",
         "runtime.win10-x64.microsoft.netcore.universalwindowsplatform.nuspec",
         "runtimes/win10-x64/lib/uap10.0.15138/Microsoft.CSharp.dll",
         "runtimes/win10-x64/lib/uap10.0.15138/Microsoft.VisualBasic.dll",
@@ -21997,15 +21915,15 @@
         "runtimes/win10-x64/nativeassets/uap10.0.15138/clrcompression.dll"
       ]
     },
-    "runtime.win10-x86-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
-      "sha512": "p4GOowv8/INpx65r/TU0OUNoBC3Qk3kbRKPAkqQ05Tf/rTg8NOLR+qxvNRlH49rsUvGb14RarUqscgwcekBOXA==",
+    "runtime.win10-x86-aot.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
+      "sha512": "qlJZm6eLTkgsb4TjIlkeCU2DkEAtJw1l0X/YzsMwTmx5yz63gSc1UBp45IrPu699kG0AY3TuUJ6fXeWk9x9iIg==",
       "type": "package",
-      "path": "runtime.win10-x86-aot.microsoft.netcore.universalwindowsplatform/6.0.1",
+      "path": "runtime.win10-x86-aot.microsoft.netcore.universalwindowsplatform/6.0.8",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "ref/netstandard/_._",
-        "runtime.win10-x86-aot.microsoft.netcore.universalwindowsplatform.6.0.1.nupkg.sha512",
+        "runtime.win10-x86-aot.microsoft.netcore.universalwindowsplatform.6.0.8.nupkg.sha512",
         "runtime.win10-x86-aot.microsoft.netcore.universalwindowsplatform.nuspec",
         "runtimes/win10-x86-aot/lib/uap10.0.15138/Microsoft.CSharp.dll",
         "runtimes/win10-x86-aot/lib/uap10.0.15138/Microsoft.VisualBasic.dll",
@@ -22186,15 +22104,15 @@
         "runtimes/win10-x86-aot/lib/netcore50/clrcompression.dll"
       ]
     },
-    "runtime.win10-x86.Microsoft.NETCore.UniversalWindowsPlatform/6.0.1": {
-      "sha512": "nT3j6rR+hZwec3IGcFE8Vsq0bURezJzpCVg9UwQ9dzDXOrZrOfJm0RzWSuC5imRphSCFzz57I73TplpXyC1PUA==",
+    "runtime.win10-x86.Microsoft.NETCore.UniversalWindowsPlatform/6.0.8": {
+      "sha512": "CHjI9Nsqvw/8nOqiCJOnXr8HT/Fpo44Ir2sUqANdH9jnxGs4u7RTcZSG1dIRyJrOvd0nHLklAVfbwu8SIkXPWg==",
       "type": "package",
-      "path": "runtime.win10-x86.microsoft.netcore.universalwindowsplatform/6.0.1",
+      "path": "runtime.win10-x86.microsoft.netcore.universalwindowsplatform/6.0.8",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "ref/netstandard/_._",
-        "runtime.win10-x86.microsoft.netcore.universalwindowsplatform.6.0.1.nupkg.sha512",
+        "runtime.win10-x86.microsoft.netcore.universalwindowsplatform.6.0.8.nupkg.sha512",
         "runtime.win10-x86.microsoft.netcore.universalwindowsplatform.nuspec",
         "runtimes/win10-x86/lib/uap10.0.15138/Microsoft.CSharp.dll",
         "runtimes/win10-x86/lib/uap10.0.15138/Microsoft.VisualBasic.dll",
@@ -24575,13 +24493,11 @@
         "system.net.primitives.nuspec"
       ]
     },
-    "System.Net.Requests/4.0.11": {
-      "sha512": "vxGt7C0cZixN+VqoSW4Yakc1Y9WknmxauDqzxgpw/FnBdz4kQNN51l4wxdXX5VY1xjqy//+G+4CvJWp1+f+y6Q==",
+    "System.Net.Requests/4.3.0": {
+      "sha512": "OZNUuAs0kDXUzm7U5NZ1ojVta5YFZmgT2yxBqsQ7Eseq5Ahz88LInGRuNLJ/NP2F8W1q7tse1pKDthj3reF5QA==",
       "type": "package",
-      "path": "system.net.requests/4.0.11",
+      "path": "system.net.requests/4.3.0",
       "files": [
-        "System.Net.Requests.4.0.11.nupkg.sha512",
-        "System.Net.Requests.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -24653,7 +24569,9 @@
         "ref/xamarinwatchos10/_._",
         "runtimes/unix/lib/netstandard1.3/System.Net.Requests.dll",
         "runtimes/win/lib/net46/_._",
-        "runtimes/win/lib/netstandard1.3/System.Net.Requests.dll"
+        "runtimes/win/lib/netstandard1.3/System.Net.Requests.dll",
+        "system.net.requests.4.3.0.nupkg.sha512",
+        "system.net.requests.nuspec"
       ]
     },
     "System.Net.Sockets/4.3.0": {
@@ -24692,13 +24610,11 @@
         "system.net.sockets.nuspec"
       ]
     },
-    "System.Net.WebHeaderCollection/4.0.1": {
-      "sha512": "XX2TIAN+wBSAIV51BU2FvvXMdstUa8b0FBSZmDWjZdwUMmggQSifpTOZ5fNH20z9ZCg2fkV1L5SsZnpO2RQDRQ==",
+    "System.Net.WebHeaderCollection/4.3.0": {
+      "sha512": "XZrXYG3c7QV/GpWeoaRC02rM6LH2JJetfVYskf35wdC/w2fFDFMphec4gmVH2dkll6abtW14u9Rt96pxd9YH2A==",
       "type": "package",
-      "path": "system.net.webheadercollection/4.0.1",
+      "path": "system.net.webheadercollection/4.3.0",
       "files": [
-        "System.Net.WebHeaderCollection.4.0.1.nupkg.sha512",
-        "System.Net.WebHeaderCollection.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -24726,7 +24642,9 @@
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._"
+        "ref/xamarinwatchos10/_._",
+        "system.net.webheadercollection.4.3.0.nupkg.sha512",
+        "system.net.webheadercollection.nuspec"
       ]
     },
     "System.Net.WebSockets/4.0.0": {
@@ -24766,13 +24684,11 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.Net.WebSockets.Client/4.0.0": {
-      "sha512": "GY5h9cn0ZVsG4ORQqMytTldrqxet2RC2CSEsgWGf4XNW5jhL5SxzcUZph03xbZsgn7K3qMr+Rq+gkbJNI+FEXg==",
+    "System.Net.WebSockets.Client/4.0.2": {
+      "sha512": "NUCcDroX4lCQXgOrzlwIZ1u9YJ0krfyF0wk0ONnyLUmcQoEiYV2/OfUPRqUwQBbpH1BlGApkLgoQUwMqb5+c1g==",
       "type": "package",
-      "path": "system.net.websockets.client/4.0.0",
+      "path": "system.net.websockets.client/4.0.2",
       "files": [
-        "System.Net.WebSockets.Client.4.0.0.nupkg.sha512",
-        "System.Net.WebSockets.Client.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -24803,7 +24719,9 @@
         "runtimes/unix/lib/netstandard1.3/System.Net.WebSockets.Client.dll",
         "runtimes/win/lib/net46/System.Net.WebSockets.Client.dll",
         "runtimes/win/lib/netcore50/System.Net.WebSockets.Client.dll",
-        "runtimes/win/lib/netstandard1.3/System.Net.WebSockets.Client.dll"
+        "runtimes/win/lib/netstandard1.3/System.Net.WebSockets.Client.dll",
+        "system.net.websockets.client.4.0.2.nupkg.sha512",
+        "system.net.websockets.client.nuspec"
       ]
     },
     "System.Numerics.Vectors/4.1.1": {
@@ -24933,19 +24851,19 @@
         "system.private.datacontractserialization.nuspec"
       ]
     },
-    "System.Private.ServiceModel/4.1.0": {
-      "sha512": "/QviVqIgta03ms7IDFALHCJOQCANZ1lILobf/OoLzdphHN40M3r6zqso2NsKvvSV7rJus+QLLWS/q33XGIybrQ==",
+    "System.Private.ServiceModel/4.1.1": {
+      "sha512": "xJyHuGt++ArcsoQkkOUuBxWdPvQa9P/YZ/L1W14gL7xh4XrcDu39Ejp7159qes6JlVvrOFZVoiCRj721hj1hnw==",
       "type": "package",
-      "path": "system.private.servicemodel/4.1.0",
+      "path": "system.private.servicemodel/4.1.1",
       "files": [
-        "System.Private.ServiceModel.4.1.0.nupkg.sha512",
-        "System.Private.ServiceModel.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "ref/netstandard/_._",
         "runtimes/unix/lib/netstandard1.3/System.Private.ServiceModel.dll",
         "runtimes/win7/lib/netcore50/System.Private.ServiceModel.dll",
-        "runtimes/win7/lib/netstandard1.3/System.Private.ServiceModel.dll"
+        "runtimes/win7/lib/netstandard1.3/System.Private.ServiceModel.dll",
+        "system.private.servicemodel.4.1.1.nupkg.sha512",
+        "system.private.servicemodel.nuspec"
       ]
     },
     "System.Private.Uri/4.3.0": {
@@ -26466,13 +26384,11 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.ServiceModel.Duplex/4.0.1": {
-      "sha512": "4I6WSQP4BiT3yG5NetAyAb626e2HlsgSzkiiqGtf4LxGpO3uFQ4eGSXsgVRnxJoDYcnDCH7q215eH/jZBMmx+w==",
+    "System.ServiceModel.Duplex/4.0.2": {
+      "sha512": "AABh0/uzAPK2zsdt7BG1Ay+h3zlEVfxO7T4Ht+Zo8LMOBirEDglT0dyvaMo2Jd6lCVqTjQIyGODdtk3g61UXDg==",
       "type": "package",
-      "path": "system.servicemodel.duplex/4.0.1",
+      "path": "system.servicemodel.duplex/4.0.2",
       "files": [
-        "System.ServiceModel.Duplex.4.0.1.nupkg.sha512",
-        "System.ServiceModel.Duplex.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/net45/_._",
@@ -26482,38 +26398,18 @@
         "lib/win8/_._",
         "ref/net45/_._",
         "ref/netcore50/System.ServiceModel.Duplex.dll",
-        "ref/netcore50/System.ServiceModel.Duplex.xml",
-        "ref/netcore50/de/System.ServiceModel.Duplex.xml",
-        "ref/netcore50/es/System.ServiceModel.Duplex.xml",
-        "ref/netcore50/fr/System.ServiceModel.Duplex.xml",
-        "ref/netcore50/it/System.ServiceModel.Duplex.xml",
-        "ref/netcore50/ja/System.ServiceModel.Duplex.xml",
-        "ref/netcore50/ko/System.ServiceModel.Duplex.xml",
-        "ref/netcore50/ru/System.ServiceModel.Duplex.xml",
-        "ref/netcore50/zh-hans/System.ServiceModel.Duplex.xml",
-        "ref/netcore50/zh-hant/System.ServiceModel.Duplex.xml",
         "ref/netstandard1.1/System.ServiceModel.Duplex.dll",
-        "ref/netstandard1.1/System.ServiceModel.Duplex.xml",
-        "ref/netstandard1.1/de/System.ServiceModel.Duplex.xml",
-        "ref/netstandard1.1/es/System.ServiceModel.Duplex.xml",
-        "ref/netstandard1.1/fr/System.ServiceModel.Duplex.xml",
-        "ref/netstandard1.1/it/System.ServiceModel.Duplex.xml",
-        "ref/netstandard1.1/ja/System.ServiceModel.Duplex.xml",
-        "ref/netstandard1.1/ko/System.ServiceModel.Duplex.xml",
-        "ref/netstandard1.1/ru/System.ServiceModel.Duplex.xml",
-        "ref/netstandard1.1/zh-hans/System.ServiceModel.Duplex.xml",
-        "ref/netstandard1.1/zh-hant/System.ServiceModel.Duplex.xml",
         "ref/portable-net45+win8/_._",
-        "ref/win8/_._"
+        "ref/win8/_._",
+        "system.servicemodel.duplex.4.0.2.nupkg.sha512",
+        "system.servicemodel.duplex.nuspec"
       ]
     },
-    "System.ServiceModel.Http/4.1.0": {
-      "sha512": "sCIV+wrA4Antjnk0+fk6rxpzQkd2bReN4UTipGv5iyPNApVv/KtAfeDMg+YIajJ7VkQD60uVBTQmy3LZrRnNOw==",
+    "System.ServiceModel.Http/4.1.1": {
+      "sha512": "Af8YqW1+/Plr+ufkvg6B9yw6kv7mOk/wO1aUWMMFJEErigoLCy7Q+mJ5dTjQFPeiLb6VaQsGlCkKD43bBQ7rvw==",
       "type": "package",
-      "path": "system.servicemodel.http/4.1.0",
+      "path": "system.servicemodel.http/4.1.1",
       "files": [
-        "System.ServiceModel.Http.4.1.0.nupkg.sha512",
-        "System.ServiceModel.Http.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -26534,65 +26430,25 @@
         "ref/net45/_._",
         "ref/net46/System.ServiceModel.Http.dll",
         "ref/netcore50/System.ServiceModel.Http.dll",
-        "ref/netcore50/System.ServiceModel.Http.xml",
-        "ref/netcore50/de/System.ServiceModel.Http.xml",
-        "ref/netcore50/es/System.ServiceModel.Http.xml",
-        "ref/netcore50/fr/System.ServiceModel.Http.xml",
-        "ref/netcore50/it/System.ServiceModel.Http.xml",
-        "ref/netcore50/ja/System.ServiceModel.Http.xml",
-        "ref/netcore50/ko/System.ServiceModel.Http.xml",
-        "ref/netcore50/ru/System.ServiceModel.Http.xml",
-        "ref/netcore50/zh-hans/System.ServiceModel.Http.xml",
-        "ref/netcore50/zh-hant/System.ServiceModel.Http.xml",
         "ref/netstandard1.0/System.ServiceModel.Http.dll",
-        "ref/netstandard1.0/System.ServiceModel.Http.xml",
-        "ref/netstandard1.0/de/System.ServiceModel.Http.xml",
-        "ref/netstandard1.0/es/System.ServiceModel.Http.xml",
-        "ref/netstandard1.0/fr/System.ServiceModel.Http.xml",
-        "ref/netstandard1.0/it/System.ServiceModel.Http.xml",
-        "ref/netstandard1.0/ja/System.ServiceModel.Http.xml",
-        "ref/netstandard1.0/ko/System.ServiceModel.Http.xml",
-        "ref/netstandard1.0/ru/System.ServiceModel.Http.xml",
-        "ref/netstandard1.0/zh-hans/System.ServiceModel.Http.xml",
-        "ref/netstandard1.0/zh-hant/System.ServiceModel.Http.xml",
         "ref/netstandard1.1/System.ServiceModel.Http.dll",
-        "ref/netstandard1.1/System.ServiceModel.Http.xml",
-        "ref/netstandard1.1/de/System.ServiceModel.Http.xml",
-        "ref/netstandard1.1/es/System.ServiceModel.Http.xml",
-        "ref/netstandard1.1/fr/System.ServiceModel.Http.xml",
-        "ref/netstandard1.1/it/System.ServiceModel.Http.xml",
-        "ref/netstandard1.1/ja/System.ServiceModel.Http.xml",
-        "ref/netstandard1.1/ko/System.ServiceModel.Http.xml",
-        "ref/netstandard1.1/ru/System.ServiceModel.Http.xml",
-        "ref/netstandard1.1/zh-hans/System.ServiceModel.Http.xml",
-        "ref/netstandard1.1/zh-hant/System.ServiceModel.Http.xml",
         "ref/netstandard1.3/System.ServiceModel.Http.dll",
-        "ref/netstandard1.3/System.ServiceModel.Http.xml",
-        "ref/netstandard1.3/de/System.ServiceModel.Http.xml",
-        "ref/netstandard1.3/es/System.ServiceModel.Http.xml",
-        "ref/netstandard1.3/fr/System.ServiceModel.Http.xml",
-        "ref/netstandard1.3/it/System.ServiceModel.Http.xml",
-        "ref/netstandard1.3/ja/System.ServiceModel.Http.xml",
-        "ref/netstandard1.3/ko/System.ServiceModel.Http.xml",
-        "ref/netstandard1.3/ru/System.ServiceModel.Http.xml",
-        "ref/netstandard1.3/zh-hans/System.ServiceModel.Http.xml",
-        "ref/netstandard1.3/zh-hant/System.ServiceModel.Http.xml",
         "ref/portable-net45+win8+wp8/_._",
         "ref/win8/_._",
         "ref/wp8/_._",
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._"
+        "ref/xamarinwatchos10/_._",
+        "system.servicemodel.http.4.1.1.nupkg.sha512",
+        "system.servicemodel.http.nuspec"
       ]
     },
-    "System.ServiceModel.NetTcp/4.1.0": {
-      "sha512": "n+Ir2B9SAd5XwAaXPIpLQsbaDcscSsyJH0ODpm5tpK8xXxmLhiPct5kujzeAiAhB37lVSetrSINdFb1Llg2ngg==",
+    "System.ServiceModel.NetTcp/4.1.1": {
+      "sha512": "ozGfn/rBUgEuulq5CCEBen3bdLFePCPzg/Rdg+QrsPflr1eYAvFKR4JGSlFO+UVs6BumLsGstO8S1LuoMMr1Dg==",
       "type": "package",
-      "path": "system.servicemodel.nettcp/4.1.0",
+      "path": "system.servicemodel.nettcp/4.1.1",
       "files": [
-        "System.ServiceModel.NetTcp.4.1.0.nupkg.sha512",
-        "System.ServiceModel.NetTcp.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/net45/_._",
@@ -26604,49 +26460,19 @@
         "ref/net45/_._",
         "ref/net46/System.ServiceModel.NetTcp.dll",
         "ref/netcore50/System.ServiceModel.NetTcp.dll",
-        "ref/netcore50/System.ServiceModel.NetTcp.xml",
-        "ref/netcore50/de/System.ServiceModel.NetTcp.xml",
-        "ref/netcore50/es/System.ServiceModel.NetTcp.xml",
-        "ref/netcore50/fr/System.ServiceModel.NetTcp.xml",
-        "ref/netcore50/it/System.ServiceModel.NetTcp.xml",
-        "ref/netcore50/ja/System.ServiceModel.NetTcp.xml",
-        "ref/netcore50/ko/System.ServiceModel.NetTcp.xml",
-        "ref/netcore50/ru/System.ServiceModel.NetTcp.xml",
-        "ref/netcore50/zh-hans/System.ServiceModel.NetTcp.xml",
-        "ref/netcore50/zh-hant/System.ServiceModel.NetTcp.xml",
         "ref/netstandard1.1/System.ServiceModel.NetTcp.dll",
-        "ref/netstandard1.1/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.1/de/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.1/es/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.1/fr/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.1/it/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.1/ja/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.1/ko/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.1/ru/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.1/zh-hans/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.1/zh-hant/System.ServiceModel.NetTcp.xml",
         "ref/netstandard1.3/System.ServiceModel.NetTcp.dll",
-        "ref/netstandard1.3/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.3/de/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.3/es/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.3/fr/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.3/it/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.3/ja/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.3/ko/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.3/ru/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.3/zh-hans/System.ServiceModel.NetTcp.xml",
-        "ref/netstandard1.3/zh-hant/System.ServiceModel.NetTcp.xml",
         "ref/portable-net45+win8/_._",
-        "ref/win8/_._"
+        "ref/win8/_._",
+        "system.servicemodel.nettcp.4.1.1.nupkg.sha512",
+        "system.servicemodel.nettcp.nuspec"
       ]
     },
-    "System.ServiceModel.Primitives/4.1.0": {
-      "sha512": "Kd65HOn/5pL9xtCUkSL8xVqpqBUYy9tsfo0qe/MTTzApY8WQ+6i4I2ts++M+m4vbOanCoEsjjUj26P6C6ilQjQ==",
+    "System.ServiceModel.Primitives/4.1.1": {
+      "sha512": "T7KBgQiQaxeTH9mIfKptvJhLKtYFm/riraVWY4OCesjgzgRjDPpFAlHXLv6dO4lNjkQLlgeAVwKKNGBgSrDkog==",
       "type": "package",
-      "path": "system.servicemodel.primitives/4.1.0",
+      "path": "system.servicemodel.primitives/4.1.1",
       "files": [
-        "System.ServiceModel.Primitives.4.1.0.nupkg.sha512",
-        "System.ServiceModel.Primitives.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -26667,65 +26493,25 @@
         "ref/net45/_._",
         "ref/net46/System.ServiceModel.Primitives.dll",
         "ref/netcore50/System.ServiceModel.Primitives.dll",
-        "ref/netcore50/System.ServiceModel.Primitives.xml",
-        "ref/netcore50/de/System.ServiceModel.Primitives.xml",
-        "ref/netcore50/es/System.ServiceModel.Primitives.xml",
-        "ref/netcore50/fr/System.ServiceModel.Primitives.xml",
-        "ref/netcore50/it/System.ServiceModel.Primitives.xml",
-        "ref/netcore50/ja/System.ServiceModel.Primitives.xml",
-        "ref/netcore50/ko/System.ServiceModel.Primitives.xml",
-        "ref/netcore50/ru/System.ServiceModel.Primitives.xml",
-        "ref/netcore50/zh-hans/System.ServiceModel.Primitives.xml",
-        "ref/netcore50/zh-hant/System.ServiceModel.Primitives.xml",
         "ref/netstandard1.0/System.ServiceModel.Primitives.dll",
-        "ref/netstandard1.0/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.0/de/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.0/es/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.0/fr/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.0/it/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.0/ja/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.0/ko/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.0/ru/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.0/zh-hans/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.0/zh-hant/System.ServiceModel.Primitives.xml",
         "ref/netstandard1.1/System.ServiceModel.Primitives.dll",
-        "ref/netstandard1.1/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.1/de/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.1/es/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.1/fr/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.1/it/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.1/ja/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.1/ko/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.1/ru/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.1/zh-hans/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.1/zh-hant/System.ServiceModel.Primitives.xml",
         "ref/netstandard1.3/System.ServiceModel.Primitives.dll",
-        "ref/netstandard1.3/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.3/de/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.3/es/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.3/fr/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.3/it/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.3/ja/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.3/ko/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.3/ru/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.3/zh-hans/System.ServiceModel.Primitives.xml",
-        "ref/netstandard1.3/zh-hant/System.ServiceModel.Primitives.xml",
         "ref/portable-net45+win8+wp8/_._",
         "ref/win8/_._",
         "ref/wp8/_._",
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._"
+        "ref/xamarinwatchos10/_._",
+        "system.servicemodel.primitives.4.1.1.nupkg.sha512",
+        "system.servicemodel.primitives.nuspec"
       ]
     },
-    "System.ServiceModel.Security/4.0.1": {
-      "sha512": "82pkDb6LMq/NHi+DVHZ7zKHMMJ7mR6rVl9TpH+p8zJhZrVYJez9vTbdMsxQhbNOngEkJKzZFveNYpaRv/3RMsg==",
+    "System.ServiceModel.Security/4.0.2": {
+      "sha512": "4oqvU/Upjl4q8bfj9oqI1dHv74nzpltvTcJAmDIxi+8KGlMnMOnzklh/BqonQHb6lAIVxYVmvAQlPo3lXv+P6w==",
       "type": "package",
-      "path": "system.servicemodel.security/4.0.1",
+      "path": "system.servicemodel.security/4.0.2",
       "files": [
-        "System.ServiceModel.Security.4.0.1.nupkg.sha512",
-        "System.ServiceModel.Security.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/net45/_._",
@@ -26736,41 +26522,13 @@
         "lib/wp8/_._",
         "ref/net45/_._",
         "ref/netcore50/System.ServiceModel.Security.dll",
-        "ref/netcore50/System.ServiceModel.Security.xml",
-        "ref/netcore50/de/System.ServiceModel.Security.xml",
-        "ref/netcore50/es/System.ServiceModel.Security.xml",
-        "ref/netcore50/fr/System.ServiceModel.Security.xml",
-        "ref/netcore50/it/System.ServiceModel.Security.xml",
-        "ref/netcore50/ja/System.ServiceModel.Security.xml",
-        "ref/netcore50/ko/System.ServiceModel.Security.xml",
-        "ref/netcore50/ru/System.ServiceModel.Security.xml",
-        "ref/netcore50/zh-hans/System.ServiceModel.Security.xml",
-        "ref/netcore50/zh-hant/System.ServiceModel.Security.xml",
         "ref/netstandard1.0/System.ServiceModel.Security.dll",
-        "ref/netstandard1.0/System.ServiceModel.Security.xml",
-        "ref/netstandard1.0/de/System.ServiceModel.Security.xml",
-        "ref/netstandard1.0/es/System.ServiceModel.Security.xml",
-        "ref/netstandard1.0/fr/System.ServiceModel.Security.xml",
-        "ref/netstandard1.0/it/System.ServiceModel.Security.xml",
-        "ref/netstandard1.0/ja/System.ServiceModel.Security.xml",
-        "ref/netstandard1.0/ko/System.ServiceModel.Security.xml",
-        "ref/netstandard1.0/ru/System.ServiceModel.Security.xml",
-        "ref/netstandard1.0/zh-hans/System.ServiceModel.Security.xml",
-        "ref/netstandard1.0/zh-hant/System.ServiceModel.Security.xml",
         "ref/netstandard1.1/System.ServiceModel.Security.dll",
-        "ref/netstandard1.1/System.ServiceModel.Security.xml",
-        "ref/netstandard1.1/de/System.ServiceModel.Security.xml",
-        "ref/netstandard1.1/es/System.ServiceModel.Security.xml",
-        "ref/netstandard1.1/fr/System.ServiceModel.Security.xml",
-        "ref/netstandard1.1/it/System.ServiceModel.Security.xml",
-        "ref/netstandard1.1/ja/System.ServiceModel.Security.xml",
-        "ref/netstandard1.1/ko/System.ServiceModel.Security.xml",
-        "ref/netstandard1.1/ru/System.ServiceModel.Security.xml",
-        "ref/netstandard1.1/zh-hans/System.ServiceModel.Security.xml",
-        "ref/netstandard1.1/zh-hant/System.ServiceModel.Security.xml",
         "ref/portable-net45+win8+wp8/_._",
         "ref/win8/_._",
-        "ref/wp8/_._"
+        "ref/wp8/_._",
+        "system.servicemodel.security.4.0.2.nupkg.sha512",
+        "system.servicemodel.security.nuspec"
       ]
     },
     "System.Text.Encoding/4.3.0": {
@@ -27597,10 +27355,10 @@
         "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll"
       ]
     },
-    "Xamarin.Forms/2.4.0.18342": {
-      "sha512": "L06B17FaKwsMfMrbAPvMeQaPj6iJ61gcc4LWUBpCsmnxVmTnbwtBN5CMKBLUWseFWKd0KRQMu2EqObxK8oMzpQ==",
+    "Xamarin.Forms/2.5.0.280555": {
+      "sha512": "JVmozDJQNKEVhN4NG5EiG2IBua0+xK9b+t1L/VUN9HeIXkc8BubZM6UnnE1CftlGt0U2+JGTQSL79uxpx0KCpQ==",
       "type": "package",
-      "path": "xamarin.forms/2.4.0.18342",
+      "path": "xamarin.forms/2.5.0.280555",
       "files": [
         "build/netstandard1.0/Mono.Cecil.Mdb.dll",
         "build/netstandard1.0/Mono.Cecil.Pdb.dll",
@@ -27726,10 +27484,10 @@
         "lib/uap10.0/Xamarin.Forms.Platform.UAP.pri",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/AutoSuggestStyle.xbf",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsCommandBarStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsEmbeddedPageWrapper.xbf",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsProgressBarStyle.xbf",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsTextBoxStyle.xbf",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/MasterDetailControlStyle.xbf",
-        "lib/uap10.0/Xamarin.Forms.Platform.UAP/PageControl.xbf",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/PageControlStyle.xbf",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/Properties/Xamarin.Forms.Platform.UAP.rd.xml",
         "lib/uap10.0/Xamarin.Forms.Platform.UAP/Resources.xbf",
@@ -27751,7 +27509,6 @@
         "lib/win81/Xamarin.Forms.Platform.WinRT.Tablet/Xamarin.Forms.Platform.WinRT.Tablet.xr.xml",
         "lib/win81/Xamarin.Forms.Platform.WinRT.dll",
         "lib/win81/Xamarin.Forms.Platform.WinRT.pri",
-        "lib/win81/Xamarin.Forms.Platform.WinRT/PageControl.xbf",
         "lib/win81/Xamarin.Forms.Platform.WinRT/StepperControl.xbf",
         "lib/win81/Xamarin.Forms.Platform.WinRT/Xamarin.Forms.Platform.WinRT.xr.xml",
         "lib/win81/Xamarin.Forms.Platform.dll",
@@ -27771,98 +27528,24 @@
         "lib/wpa81/Xamarin.Forms.Platform.WinRT.Phone/Xamarin.Forms.Platform.WinRT.Phone.xr.xml",
         "lib/wpa81/Xamarin.Forms.Platform.WinRT.dll",
         "lib/wpa81/Xamarin.Forms.Platform.WinRT.pri",
-        "lib/wpa81/Xamarin.Forms.Platform.WinRT/PageControl.xbf",
         "lib/wpa81/Xamarin.Forms.Platform.WinRT/StepperControl.xbf",
         "lib/wpa81/Xamarin.Forms.Platform.WinRT/Xamarin.Forms.Platform.WinRT.xr.xml",
         "lib/wpa81/Xamarin.Forms.Platform.dll",
         "lib/wpa81/Xamarin.Forms.Xaml.dll",
         "lib/wpa81/Xamarin.Forms.Xaml.xml",
-        "xamarin.forms.2.4.0.18342.nupkg.sha512",
+        "xamarin.forms.2.5.0.280555.nupkg.sha512",
         "xamarin.forms.nuspec"
       ]
     }
   },
   "projectFileDependencyGroups": {
     "": [
-      "Microsoft.ApplicationInsights >= 2.4.0",
+      "Microsoft.ApplicationInsights >= 2.5.1",
       "Microsoft.ApplicationInsights.PersistenceChannel >= 1.2.3",
       "Microsoft.ApplicationInsights.WindowsApps >= 1.1.1",
-      "Microsoft.NETCore.UniversalWindowsPlatform >= 6.0.1",
-      "Xamarin.Forms >= 2.4.0.18342"
+      "Microsoft.NETCore.UniversalWindowsPlatform >= 6.0.8",
+      "Xamarin.Forms >= 2.5.0.280555"
     ],
     "UAP,Version=v10.0.10240": []
-  },
-  "packageFolders": {
-    "C:\\Users\\canming\\.nuget\\packages\\": {}
-  },
-  "project": {
-    "restore": {
-      "projectUniqueName": "C:\\work\\sourceforge\\emgucv\\Emgu.CV.Example\\XamarinForms\\UWP\\UWP.csproj",
-      "projectName": "UWP",
-      "projectPath": "C:\\work\\sourceforge\\emgucv\\Emgu.CV.Example\\XamarinForms\\UWP\\UWP.csproj",
-      "projectJsonPath": "C:\\work\\sourceforge\\emgucv\\Emgu.CV.Example\\XamarinForms\\UWP\\project.json",
-      "packagesPath": "C:\\Users\\canming\\.nuget\\packages\\",
-      "outputPath": "C:\\work\\sourceforge\\emgucv\\Emgu.CV.Example\\XamarinForms\\UWP\\obj\\",
-      "projectStyle": "ProjectJson",
-      "configFilePaths": [
-        "C:\\work\\sourceforge\\emgucv\\NuGet.Config",
-        "C:\\Users\\canming\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-      ],
-      "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\work\\Nuget.Local": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://www.myget.org/F/emgucv/auth/9bfa4708-449d-4266-9bee-fbd03e7f8954/api/v3/index.json": {}
-      }
-    },
-    "dependencies": {
-      "Microsoft.ApplicationInsights": "2.4.0",
-      "Microsoft.ApplicationInsights.PersistenceChannel": "1.2.3",
-      "Microsoft.ApplicationInsights.WindowsApps": "1.1.1",
-      "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.1",
-      "Xamarin.Forms": "2.4.0.18342"
-    },
-    "frameworks": {
-      "uap10.0.10240": {}
-    },
-    "runtimes": {
-      "win10-arm": {
-        "#import": []
-      },
-      "win10-arm-aot": {
-        "#import": []
-      },
-      "win10-x64": {
-        "#import": []
-      },
-      "win10-x64-aot": {
-        "#import": []
-      },
-      "win10-x86": {
-        "#import": []
-      },
-      "win10-x86-aot": {
-        "#import": []
-      }
-    }
-  },
-  "logs": [
-    {
-      "code": "NU1608",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package version outside of dependency constraint: Microsoft.ApplicationInsights.WindowsApps 1.1.1 requires Microsoft.ApplicationInsights (= 1.2.3) but version Microsoft.ApplicationInsights 2.4.0 was resolved.",
-      "libraryId": "Microsoft.ApplicationInsights",
-      "targetGraphs": [
-        "UAP,Version=v10.0.10240",
-        "UAP,Version=v10.0.10240/win10-arm",
-        "UAP,Version=v10.0.10240/win10-arm-aot",
-        "UAP,Version=v10.0.10240/win10-x64",
-        "UAP,Version=v10.0.10240/win10-x64-aot",
-        "UAP,Version=v10.0.10240/win10-x86",
-        "UAP,Version=v10.0.10240/win10-x86-aot"
-      ]
-    }
-  ]
+  }
 }

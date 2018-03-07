@@ -46,7 +46,6 @@ Global
 		..\..\Emgu.CV.Example\XamarinForms\WindowsUniversal81\Shared\WindowsUniversal.Shared.projitems*{c96d5f57-7cb8-4de8-bfdd-a5c8e1697e03}*SharedItemsImports = 13
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{fa5df706-f8d8-4a69-b8e8-45cfc3da03f9}*SharedItemsImports = 4
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{fa5df706-f8d8-4a69-b8e8-45cfc3da03f9}*SharedItemsImports = 4
 		..\..\Emgu.CV\Emgu.CV.projitems*{fa5df706-f8d8-4a69-b8e8-45cfc3da03f9}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{fa5df706-f8d8-4a69-b8e8-45cfc3da03f9}*SharedItemsImports = 4
 	EndGlobalSection
