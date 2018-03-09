@@ -3589,8 +3589,7 @@ namespace Emgu.CV.Test
             Mat gray = new Mat();
             CvInvoke.CvtColor(m, gray, ColorConversion.Bgr2Gray);
             Mat result = new Mat();
-            XImgproc.XImgprocInvoke.NiBlackThreshold(gray, result, 120, ThresholdType.Binary, 7, 0.5);
-
+            XImgproc.XImgprocInvoke.NiBlackThreshold(gray, result, 120, XImgproc.LocalBinarizationMethods.Niblack, 7, 0.5);
         }
 
         private static double CompareHash(ImgHashBase imgHash, Mat m1, Mat m2)
