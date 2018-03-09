@@ -127,9 +127,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml.Serialization" />
     <Reference Include="Xamarin.iOS" />
-    <Reference Include="Xamarin.Mobile">
-      <HintPath>..\..\..\Components\xamarin.mobile-0.7.7\lib\ios-unified\Xamarin.Mobile.dll</HintPath>
-    </Reference>
     <Reference Include="Plugin.Permissions.Abstractions">
       <HintPath>..\..\..\nugetpackages\Plugin.Permissions.2.2.1\lib\Xamarin.iOS10\Plugin.Permissions.Abstractions.dll</HintPath>
     </Reference>
@@ -160,12 +157,6 @@
       <Project>{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}</Project>
       <Name>Emgu.CV.World.IOS</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <XamarinComponentReference Include="xamarin.mobile">
-      <Version>0.7.7</Version>
-      <Visible>False</Visible>
-    </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\opencv\data\haarcascades\haarcascade_eye.xml">

@@ -21,7 +21,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>7.0</string>
+	<string>8.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>Emgu CV XamarinForms</string>
 	<key>CFBundleIdentifier</key>
@@ -51,5 +51,7 @@
 	<string>This app needs access to the camera to take photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs access to photos.</string>
+	<key>CFBundleName</key>
+	<string>Emgu CV XamarinForms</string>
 </dict>
 </plist>

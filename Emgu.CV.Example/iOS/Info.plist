@@ -37,6 +37,8 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs access to the camera to take photos</string>
 	<key>MinimumOSVersion</key>
-	<string>7.0</string>
+	<string>8.0</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.emgu.cv.demo</string>
 </dict>
 </plist>
