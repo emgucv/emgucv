@@ -25,8 +25,16 @@ INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
 INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
 
 ############################### CVBLOB START ########################
-file(GLOB CVBLOB_SRCS "${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/*.cpp")
-file(GLOB CVBLOB_HDRS "${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/*.h*")
+#file(GLOB CVBLOB_SRCS "${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/*.cpp")
+SET( CVBLOB_SRCS 
+	"${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/cvaux.cpp"
+	"${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/cvblob.cpp"
+	"${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/cvcolor.cpp"
+	"${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/cvcontour.cpp"
+	"${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/cvlabel.cpp"
+	"${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/cvtrack.cpp")
+#file(GLOB CVBLOB_HDRS "${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/*.h*")
+SET( CVBLOB_HDRS "${PROJECT_SOURCE_DIR}/libcvblob/cvBlob/cvblob.h")
 
 #LIST(APPEND cvblob_srcs ${CVBLOB_SRCS})
 #LIST(APPEND cvblob_hdrs ${CVBLOB_HDRS})
