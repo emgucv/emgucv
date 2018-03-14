@@ -101,6 +101,7 @@ namespace LicensePlateRecognition
             catch (Exception e)
             {
                 _ocr = null;
+                throw e;
             }
         }
 
