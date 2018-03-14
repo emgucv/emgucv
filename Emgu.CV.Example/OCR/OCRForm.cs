@@ -25,6 +25,10 @@ namespace OCR
         public OCRForm()
         {
             InitializeComponent();
+
+            System.Net.ServicePointManager.Expect100Continue = true;
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
             InitOcr("", "eng", OcrEngineMode.TesseractLstmCombined);
             ocrOptionsComboBox.SelectedIndex = 0;
 
@@ -134,10 +138,8 @@ namespace OCR
             else
                 image.CopyTo(imageColor);
 
-
             if (mode == OCRMode.FullPage)
             {
-                
                 ocr.SetImage(imageColor);
 
                 if (ocr.Recognize() != 0)
