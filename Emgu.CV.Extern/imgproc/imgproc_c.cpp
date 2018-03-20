@@ -271,7 +271,7 @@ void cveInitUndistortRectifyMap(cv::_InputArray* cameraMatrix, cv::_InputArray* 
 
 void cveUndistort(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distorCoeffs, cv::_InputArray* newCameraMatrix)
 {
-   cv::undistort(*src, *dst, *cameraMatrix, *distorCoeffs, newCameraMatrix ? *cameraMatrix : (cv::InputArray) cv::noArray());
+   cv::undistort(*src, *dst, *cameraMatrix, *distorCoeffs, newCameraMatrix ? *newCameraMatrix : (cv::InputArray) cv::noArray());
 }
 
 void cveUndistortPoints(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* p)
