@@ -26,8 +26,9 @@ namespace LicensePlateRecognition
         public LicensePlateRecognitionForm()
         {
             InitializeComponent();
-            System.Net.ServicePointManager.Expect100Continue = true;
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
+            //System.Net.ServicePointManager.Expect100Continue = true;
+            //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
             _licensePlateDetector = new LicensePlateDetector("");
             Mat m = new Mat("license-plate.jpg");

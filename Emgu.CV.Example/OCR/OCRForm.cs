@@ -26,8 +26,8 @@ namespace OCR
         {
             InitializeComponent();
 
-            System.Net.ServicePointManager.Expect100Continue = true;
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            //System.Net.ServicePointManager.Expect100Continue = true;
+            //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
             InitOcr("", "eng", OcrEngineMode.TesseractLstmCombined);
             ocrOptionsComboBox.SelectedIndex = 0;
