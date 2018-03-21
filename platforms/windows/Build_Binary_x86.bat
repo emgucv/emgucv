@@ -1,4 +1,16 @@
 REM @echo off
+
+REM POSSIBLE OPTIONS: 
+REM %1%: "64", "32", "ARM"
+REM %2%: "gpu", if omitted, it will not use CUDA
+REM %3%: "intel", "WindowsPhone81", "WindowsStore81", "WindowsStore10"
+REM %4%: "nonfree", "openni"
+REM %5%: "doc", "htmldoc", this indicates if we should build the documentation
+REM %6%: "package", this indicates if we should build the ".zip" and ".exe" package
+REM %7%: "build", if set to "build", the script will also build the target
+REM %8%: "nuget", this indicates if we should build the nuget package
+REM %9%: This field if for the CUDA_ARCH_BIN_OPTION, if you want to specify manually. e.g. "6.1"
+
 pushd %~p0
 cd ..\..
 mkdir b
@@ -142,7 +154,6 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 :END_PERFORMANCE_TEST
 
 IF NOT "%4%"=="openni" GOTO END_OF_OPENNI
-
 :WITH_OPENNI
 SET OPENNI_LIB_DIR=%OPEN_NI_LIB%
 IF "%OS_MODE%"==" Win64" SET OPENNI_LIB_DIR=%OPEN_NI_LIB64%
@@ -155,6 +166,12 @@ IF EXIST "%OPENNI_LIB_DIR%" SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DOPENNI_LIB_DIR:String="%OPENNI_LIB_DIR:\=/%" ^
 -DOPENNI_PRIME_SENSOR_MODULE_BIN_DIR:String="%OPENNI_PS_BIN_DIR:\=/%"
 :END_OF_OPENNI
+
+IF NOT "%4%"=="nonfree" GOTO END_OF_NONFREE
+:WITH_NONFREE
+SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
+-DOPENCV_ENABLE_NONFREE:BOOL=TRUE 
+:END_OF_NONFREE
 
 
 IF "%5%"=="doc" ^
