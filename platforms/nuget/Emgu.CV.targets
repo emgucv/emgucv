@@ -12,16 +12,16 @@
       <EmguCvErrorMessage Condition="'$(EmguCvBuildX64)'=='True' AND !Exists('$(EmguCvNativeFileX64)')">This package do not contain necessary binary for $(EmguCvLinkTarget). X64 is targeted, but file $(EmguCvNativeFileX64) is missing.</EmguCvErrorMessage>
     </PropertyGroup>
     <ItemGroup Condition="'$(EmguCvBuildX64)'=='True' AND Exists('$(EmguCvNativeFileX64)')">
-      <Content Include="$(MSBuildThisFileDirectory)\x64\*.dll">
+      <None Include="$(MSBuildThisFileDirectory)\x64\*.dll">
         <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
+      </None>
     </ItemGroup>
     <ItemGroup Condition="'$(EmguCvBuildX86)'=='True' AND Exists('$(EmguCvNativeFileX86)')">
-      <Content Include="$(MSBuildThisFileDirectory)\x86\*.dll">
+      <None Include="$(MSBuildThisFileDirectory)\x86\*.dll">
         <Link>x86\%(RecursiveDir)%(Filename)%(Extension)</Link>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
+      </None>
     </ItemGroup>
     <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
       <Error Condition="'$(EmguCvLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please use the pre-compiled Emgu.CV.World dll or send a bug report to support@emgu.com" />
