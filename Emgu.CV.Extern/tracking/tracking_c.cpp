@@ -115,9 +115,40 @@ void cveTrackerTLDRelease(cv::TrackerTLD** tracker)
 	*tracker = 0;
 }
 
-cv::TrackerKCF* cveTrackerKCFCreate(cv::Tracker** tracker)
+cv::TrackerKCF* cveTrackerKCFCreate(
+	double detect_thresh,
+	double sigma,
+	double lambda,
+	double interp_factor,
+	double output_sigma_factor,
+	double pca_learning_rate,
+	bool resize,
+	bool split_coeff,
+	bool wrap_kernel,
+	bool compress_feature,
+	int max_patch_size,
+	int compressed_size,
+	int desc_pca,
+	int desc_npca,
+	cv::Tracker** tracker)
 {
-	cv::Ptr<cv::TrackerKCF> ptr = cv::TrackerKCF::create();
+	cv::TrackerKCF::Params p;
+	p.detect_thresh = detect_thresh;
+	p.sigma = sigma;
+	p.lambda = lambda;
+	p.interp_factor = interp_factor;
+	p.output_sigma_factor = output_sigma_factor;
+	p.pca_learning_rate = pca_learning_rate;
+	p.resize = resize;
+	p.split_coeff = split_coeff;
+	p.wrap_kernel = wrap_kernel;
+	p.compress_feature = compress_feature;
+	p.max_patch_size = max_patch_size;
+	p.compressed_size = compressed_size;
+	p.desc_pca = desc_pca;
+	p.desc_npca = desc_npca;
+
+	cv::Ptr<cv::TrackerKCF> ptr = cv::TrackerKCF::create(p);
 	ptr.addref();
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
