@@ -210,3 +210,72 @@ void cveMultiTrackerRelease(cv::MultiTracker** tracker)
    delete* tracker;
    *tracker = 0;
 }
+
+cv::TrackerCSRT* cveTrackerCSRTCreate(
+	bool use_hog,
+	bool use_color_names,
+	bool use_gray,
+	bool use_rgb,
+	bool use_channel_weights,
+	bool use_segmentation,
+	cv::String* window_function,
+	float kaiser_alpha,
+	float cheb_attenuation,
+	float template_size,
+	float gsl_sigma,
+	float hog_orientations,
+	float hog_clip,
+	float padding,
+	float filter_lr,
+	float weights_lr,
+	int num_hog_channels_used,
+	int admm_iterations,
+	int histogram_bins,
+	float histogram_lr,
+	int background_ratio,
+	int number_of_scales,
+	float scale_sigma_factor,
+	float scale_model_max_area,
+	float scale_lr,
+	float scale_step,
+	cv::Tracker** tracker)
+{
+	cv::TrackerCSRT::Params p;
+	p.use_hog = use_hog;
+	p.use_color_names = use_color_names;
+	p.use_gray = use_gray;
+	p.use_rgb = use_rgb;
+	p.use_channel_weights = use_channel_weights;
+	p.use_segmentation = use_segmentation;
+	if (window_function && !window_function->empty())
+		p.window_function = *window_function;
+	p.kaiser_alpha = kaiser_alpha;
+	p.cheb_attenuation = cheb_attenuation;
+	p.template_size = template_size;
+	p.gsl_sigma = gsl_sigma;
+	p.hog_orientations = hog_orientations;
+	p.hog_clip = hog_clip;
+	p.padding = padding;
+	p.filter_lr = filter_lr;
+	p.weights_lr = weights_lr;
+	p.num_hog_channels_used = num_hog_channels_used;
+	p.admm_iterations = admm_iterations;
+	p.histogram_bins = histogram_bins;
+	p.histogram_lr = histogram_lr;
+	p.background_ratio = background_ratio;
+	p.number_of_scales = number_of_scales;
+	p.scale_sigma_factor = scale_sigma_factor;
+	p.scale_model_max_area = scale_model_max_area;
+	p.scale_lr = scale_lr;
+	p.scale_step = scale_step;
+
+	cv::Ptr<cv::TrackerCSRT> ptr = cv::TrackerCSRT::create(p);
+	ptr.addref();
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+}
+void cveTrackerCSRTRelease(cv::TrackerCSRT** tracker)
+{
+	delete* tracker;
+	*tracker = 0;
+}

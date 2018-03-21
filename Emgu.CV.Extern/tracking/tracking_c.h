@@ -66,5 +66,34 @@ CVAPI(bool) cveMultiTrackerUpdate(cv::MultiTracker* tracker, cv::Mat* image, std
 CVAPI(void) cveMultiTrackerRelease(cv::MultiTracker** tracker);
 
 
+CVAPI(cv::TrackerCSRT*) cveTrackerCSRTCreate(
+	bool use_hog,
+	bool use_color_names,
+	bool use_gray,
+	bool use_rgb,
+	bool use_channel_weights,
+	bool use_segmentation,
+	cv::String* window_function, 
+	float kaiser_alpha,
+	float cheb_attenuation,
+	float template_size,
+	float gsl_sigma,
+	float hog_orientations,
+	float hog_clip,
+	float padding,
+	float filter_lr,
+	float weights_lr,
+	int num_hog_channels_used,
+	int admm_iterations,
+	int histogram_bins,
+	float histogram_lr,
+	int background_ratio,
+	int number_of_scales,
+	float scale_sigma_factor,
+	float scale_model_max_area,
+	float scale_lr,
+	float scale_step,
+	cv::Tracker** tracker);
+CVAPI(void) cveTrackerCSRTRelease(cv::TrackerCSRT** tracker);
 
 #endif
