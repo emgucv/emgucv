@@ -190,51 +190,51 @@ namespace Emgu.CV.Tracking
         /// <summary>
         /// Creates a KCF Tracker
         /// </summary>
-        /// <param name="detect_thresh">detection confidence threshold</param>
+        /// <param name="detectThresh">detection confidence threshold</param>
         /// <param name="sigma">gaussian kernel bandwidth</param>
         /// <param name="lambda">regularization</param>
-        /// <param name="interp_factor">linear interpolation factor for adaptation</param>
-        /// <param name="output_sigma_factor">spatial bandwidth (proportional to target)</param>
-        /// <param name="pca_learning_rate">compression learning rate</param>
+        /// <param name="interpFactor">linear interpolation factor for adaptation</param>
+        /// <param name="outputSigmaFactor">spatial bandwidth (proportional to target)</param>
+        /// <param name="pcaLearningRate">compression learning rate</param>
         /// <param name="resize">activate the resize feature to improve the processing speed</param>
-        /// <param name="split_coeff">split the training coefficients into two matrices</param>
-        /// <param name="wrap_kernel">wrap around the kernel values</param>
-        /// <param name="compress_feature">activate the pca method to compress the features</param>
-        /// <param name="max_patch_size">threshold for the ROI size</param>
-        /// <param name="compressed_size">feature size after compression</param>
-        /// <param name="desc_pca">compressed descriptors of TrackerKCF::MODE</param>
-        /// <param name="desc_npca">non-compressed descriptors of TrackerKCF::MODE</param>
+        /// <param name="splitCoeff">split the training coefficients into two matrices</param>
+        /// <param name="wrapKernel">wrap around the kernel values</param>
+        /// <param name="compressFeature">activate the pca method to compress the features</param>
+        /// <param name="maxPatchSize">threshold for the ROI size</param>
+        /// <param name="compressedSize">feature size after compression</param>
+        /// <param name="descPca">compressed descriptors of TrackerKCF::MODE</param>
+        /// <param name="descNpca">non-compressed descriptors of TrackerKCF::MODE</param>
         public TrackerKCF(
-            double detect_thresh = 0.5,
-            double sigma = 0.2,
-            double lambda = 0.01,
-            double interp_factor = 0.075,
-            double output_sigma_factor = 1.0/16.0,
-            double pca_learning_rate = 0.15,
+            float detectThresh = 0.5f,
+            float sigma = 0.2f,
+            float lambda = 0.01f,
+            float interpFactor = 0.075f,
+            float outputSigmaFactor = 1.0f/16.0f,
+            float pcaLearningRate = 0.15f,
             bool resize = true,
-            bool split_coeff = true,
-            bool wrap_kernel = false,
-            bool compress_feature = true,
-            int max_patch_size = 80*80,
-            int compressed_size = 2,
-            Mode desc_pca = Mode.CN,
-            Mode desc_npca = Mode.GRAY)
+            bool splitCoeff = true,
+            bool wrapKernel = false,
+            bool compressFeature = true,
+            int maxPatchSize = 80*80,
+            int compressedSize = 2,
+            Mode descPca = Mode.CN,
+            Mode descNpca = Mode.GRAY)
         {
             _ptr = ContribInvoke.cveTrackerKCFCreate(
-                detect_thresh,
+                detectThresh,
                 sigma,
                 lambda,
-                interp_factor,
-                output_sigma_factor,
-                pca_learning_rate,
+                interpFactor,
+                outputSigmaFactor,
+                pcaLearningRate,
                 resize,
-                split_coeff,
-                wrap_kernel,
-                compress_feature,
-                max_patch_size,
-                compressed_size,
-                (int)desc_pca,
-                (int)desc_npca,
+                splitCoeff,
+                wrapKernel,
+                compressFeature,
+                maxPatchSize,
+                compressedSize,
+                descPca,
+                descNpca,
                 ref _trackerPtr);
         }
 
@@ -273,6 +273,32 @@ namespace Emgu.CV.Tracking
             base.DisposeObject();
         }
     }
+
+    /// <summary>
+    /// MOSSE Visual Object Tracking using Adaptive Correlation Filters
+    /// </summary>
+    /// <remarks>note, that this tracker works with grayscale images, if passed bgr ones, they will get converted internally.</remarks>
+    public class TrackerMOSSE : Tracker
+    {
+        /// <summary>
+        /// Create a MOSSE tracker
+        /// </summary>
+        public TrackerMOSSE()
+        {
+            _ptr = ContribInvoke.cveTrackerMOSSECreate(ref _trackerPtr);
+        }
+
+        /// <summary>
+        /// Release the unmanaged resources associated with this tracker
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (IntPtr.Zero != _ptr)
+                ContribInvoke.cveTrackerMOSSERelease(ref _ptr);
+            base.DisposeObject();
+        }
+    }
+
 
     /// <summary>
     /// Long-term tracker
@@ -372,20 +398,24 @@ namespace Emgu.CV
         internal static extern IntPtr cveTrackerKCFCreate(ref IntPtr tracker);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveTrackerKCFCreate(
-            double detect_thresh,
-            double sigma,
-            double lambda,
-            double interp_factor,
-            double output_sigma_factor,
-            double pca_learning_rate,
+            float detect_thresh,
+            float sigma,
+            float lambda,
+            float interpFactor,
+            float outputSigmaFactor,
+            float pcaLearningRate,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
             bool resize,
-            bool split_coeff,
-            bool wrap_kernel,
-            bool compress_feature,
-            int max_patch_size,
-            int compressed_size,
-            int desc_pca,
-            int desc_npca,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool splitCoeff,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool wrapKernel,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool compressFeature,
+            int maxPatchSize,
+            int compressedSize,
+            Tracking.TrackerKCF.Mode descPca,
+            Tracking.TrackerKCF.Mode descNpca,
             ref IntPtr tracker);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTrackerKCFRelease(ref IntPtr tracker);
@@ -394,5 +424,10 @@ namespace Emgu.CV
         internal static extern IntPtr cveTrackerGOTURNCreate(ref IntPtr tracker);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTrackerGOTURNRelease(ref IntPtr tracker);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerMOSSECreate(ref IntPtr tracker);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerMOSSERelease(ref IntPtr tracker);
     }
 }

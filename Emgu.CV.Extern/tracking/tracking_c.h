@@ -37,12 +37,12 @@ CVAPI(cv::TrackerTLD*) cveTrackerTLDCreate(cv::Tracker** tracker);
 CVAPI(void) cveTrackerTLDRelease(cv::TrackerTLD** tracker);
 
 CVAPI(cv::TrackerKCF*) cveTrackerKCFCreate(
-	double detect_thresh,
-	double sigma,
-	double lambda,
-	double interp_factor,
-	double output_sigma_factor,
-	double pca_learning_rate,
+	float detect_thresh,
+	float sigma,
+	float lambda,
+	float interp_factor,
+	float output_sigma_factor,
+	float pca_learning_rate,
 	bool resize,
 	bool split_coeff,
 	bool wrap_kernel,
@@ -56,6 +56,9 @@ CVAPI(void) cveTrackerKCFRelease(cv::TrackerKCF** tracker);
 
 CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(cv::Tracker** tracker);
 CVAPI(void) cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker);
+
+CVAPI(cv::TrackerMOSSE*) cveTrackerMOSSECreate(cv::Tracker** tracker);
+CVAPI(void) cveTrackerMOSSERelease(cv::TrackerMOSSE** tracker);
 
 CVAPI(cv::MultiTracker*) cveMultiTrackerCreate();
 CVAPI(bool) cveMultiTrackerAdd(cv::MultiTracker* multiTracker, cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);

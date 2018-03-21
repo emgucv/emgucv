@@ -116,12 +116,12 @@ void cveTrackerTLDRelease(cv::TrackerTLD** tracker)
 }
 
 cv::TrackerKCF* cveTrackerKCFCreate(
-	double detect_thresh,
-	double sigma,
-	double lambda,
-	double interp_factor,
-	double output_sigma_factor,
-	double pca_learning_rate,
+	float detect_thresh,
+	float sigma,
+	float lambda,
+	float interp_factor,
+	float output_sigma_factor,
+	float pca_learning_rate,
 	bool resize,
 	bool split_coeff,
 	bool wrap_kernel,
@@ -167,6 +167,19 @@ cv::TrackerGOTURN* cveTrackerGOTURNCreate(cv::Tracker** tracker)
 	return ptr.get();
 }
 void cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker)
+{
+	delete *tracker;
+	*tracker = 0;
+}
+
+cv::TrackerMOSSE* cveTrackerMOSSECreate(cv::Tracker** tracker)
+{
+	cv::Ptr<cv::TrackerMOSSE> ptr = cv::TrackerMOSSE::create();
+	ptr.addref();
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+}
+void cveTrackerMOSSERelease(cv::TrackerMOSSE** tracker)
 {
 	delete *tracker;
 	*tracker = 0;
