@@ -59,7 +59,7 @@ namespace Emgu.CV.Cuda
                 circlesGpu.Download(circlesMat);
                 CircleF[] circles = new CircleF[circlesMat.Cols];
                 GCHandle circlesHandle = GCHandle.Alloc(circles, GCHandleType.Pinned);
-                Emgu.CV.Util.CvToolbox.Memcpy(circlesHandle.AddrOfPinnedObject(), circlesMat.DataPointer, Marshal.SizeOf(typeof(CircleF)) * circles.Length);
+                Emgu.CV.Util.CvToolbox.Memcpy(circlesHandle.AddrOfPinnedObject(), circlesMat.DataPointer, Toolbox.SizeOf<CircleF>() * circles.Length);
                 circlesHandle.Free();
                 return circles;
             }

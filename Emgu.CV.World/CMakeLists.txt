@@ -235,13 +235,14 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 	  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
 	  )
 	  
-	INSTALL(
-	  FILES 
-	  ${CMAKE_CURRENT_SOURCE_DIR}/NetStandard1_4/Emgu.CV.World.NetStandard1_4.csproj
-	  DESTINATION Emgu.CV.World/NetStandard1_4
-	  COMPONENT emgucv_source
-	  )
+	#INSTALL(
+	#  FILES 
+	#  ${CMAKE_CURRENT_SOURCE_DIR}/NetStandard1_4/Emgu.CV.World.NetStandard1_4.csproj
+	#  DESTINATION Emgu.CV.World/NetStandard1_4
+	#  COMPONENT emgucv_source
+	#  )
        ENDIF()
   ENDIF()  
   
+  ADD_SUBDIRECTORY(NetStandard1_4)
 ENDIF()
