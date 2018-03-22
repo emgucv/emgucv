@@ -5,17 +5,18 @@
 //----------------------------------------------------------------------------
 
 #include "stitching_c.h"
-
+/*
 cv::Stitcher* cveStitcherCreateDefault(bool tryUseGpu)
 {
    cv::Ptr<cv::Stitcher> p = cv::createStitcher(tryUseGpu);
    p.addref();
    return p.get();
-}
+}*/
 
 cv::Stitcher* cveStitcherCreate(int mode, bool tryUseGpu)
 {
 	cv::Ptr<cv::Stitcher> ptr = cv::Stitcher::create(static_cast<cv::Stitcher::Mode>(mode), tryUseGpu);
+	
 	ptr.addref();
 	return ptr.get();
 }
@@ -94,7 +95,7 @@ int cveStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_Outp
    return stitcher->stitch(*images, *pano);
 }
 
-#ifdef HAVE_OPENCV_NONFREE
+#ifdef OPENCV_ENABLE_NONFREE
 cv::detail::SurfFeaturesFinder* cveSurfFeaturesFinderCreate(
    double hess_thresh, int num_octaves, int num_layers,
    int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f)

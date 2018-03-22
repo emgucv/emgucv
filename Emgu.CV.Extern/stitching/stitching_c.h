@@ -27,8 +27,8 @@ namespace cv {
 }*/
 
 
+//CVAPI(cv::Stitcher*) cveStitcherCreateDefault(bool tryUseGpu);
 
-CVAPI(cv::Stitcher*) cveStitcherCreateDefault(bool tryUseGpu);
 CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, bool tryUseGpu);
 
 CVAPI(void) cveStitcherRelease(cv::Stitcher** stitcher);
@@ -52,7 +52,7 @@ CVAPI(double) cveStitcherGetRegistrationResol(cv::Stitcher* stitcher);
 
 CVAPI(int) cveStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
 
-#ifdef HAVE_OPENCV_NONFREE
+#ifdef OPENCV_ENABLE_NONFREE
 CVAPI(cv::detail::SurfFeaturesFinder*) cveSurfFeaturesFinderCreate(
    double hess_thresh, int num_octaves, int num_layers,
    int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f);

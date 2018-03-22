@@ -71,15 +71,16 @@ namespace Emgu.CV.Stitching
             /// </summary>
             Scans = 1,
 
-        };
+        }
 
         /// <summary>
         /// Creates a stitcher with the default parameters.
         /// </summary>
         /// <param name="tryUseGpu">If true, the stitcher will try to use GPU for processing when available</param>
         public Stitcher(bool tryUseGpu)
+            : this(Mode.Panorama, tryUseGpu)
         {
-            _ptr = StitchingInvoke.cveStitcherCreateDefault(tryUseGpu);
+            
         }
 
         /// <summary>
@@ -197,11 +198,12 @@ namespace Emgu.CV.Stitching
             CvInvoke.CheckLibraryLoaded();
         }
 
+        /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveStitcherCreateDefault(
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool tryUseGpu
-           );
+           );*/
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveStitcherCreate(

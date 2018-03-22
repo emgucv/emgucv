@@ -12,6 +12,7 @@ using Emgu.CV;
 using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using System.Diagnostics;
 
 namespace Stitching
 {
@@ -57,9 +58,18 @@ namespace Stitching
                         {
                             Mat result = new Mat();
                             vm.Push(sourceImages);
+
+                            Stopwatch watch = Stopwatch.StartNew();
+
+                            this.Text = "Stitching";
                             Stitcher.Status stitchStatus = stitcher.Stitch(vm, result);
+                            watch.Stop();
+
                             if (stitchStatus == Stitcher.Status.Ok)
+                            {
                                 resultImageBox.Image = result;
+                                this.Text = String.Format("Stitched in {0} milliseconds.", watch.ElapsedMilliseconds);
+                            }
                             else
                             {
                                 MessageBox.Show(this, String.Format("Stiching Error: {0}", stitchStatus));
@@ -67,6 +77,7 @@ namespace Stitching
                             }
                         }
                     }
+
                 }
                 finally
                 {
