@@ -44,6 +44,16 @@ int cveGetNumThreads()
 {
    return cv::getNumThreads();
 }
+int cveGetNumberOfCPUs()
+{
+	return cv::getNumberOfCPUs();
+}
+/*
+void cveCurrentParallelFramework(cv::String* framework)
+{
+	*framework = cv::currentParallelFramework();
+}
+*/
 
 cv::String* cveStringCreate()
 {

@@ -13,6 +13,7 @@
 #include "opencv2/core/core_c.h"
 #include "emgu_c.h"
 #include "opencv2/core/affine.hpp"
+//#include "opencv2/core/precom.hpp"
 
 CVAPI(CvErrorCallback) cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata);
 CVAPI(int) cveGetErrMode();
@@ -24,6 +25,8 @@ CVAPI(const char*) cveErrorStr(int status);
 CVAPI(int) cveGetNumThreads();
 CVAPI(void) cveSetNumThreads(int nthreads);
 CVAPI(int) cveGetThreadNum();
+CVAPI(int) cveGetNumberOfCPUs();
+//CVAPI(void) cveCurrentParallelFramework(cv::String* framework);
 
 CVAPI(cv::String*) cveStringCreate();
 CVAPI(cv::String*) cveStringCreateFromStr(const char* c);

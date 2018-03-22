@@ -22,6 +22,8 @@ INSTALL(
   COMPONENT emgucv_document
   )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+
 ELSE()
 MESSAGE(STATUS "MSBUILD_EXECUTABLE: NOT FOUND for Documentation project")
 ENDIF()

@@ -3044,25 +3044,55 @@ namespace Emgu.CV
 
 #if !UNITY_IOS
         /// <summary>
-        /// Return the current number of threads that are used by parallelized (via OpenMP) OpenCV functions.
+        /// Get or set the number of threads that are used by parallelized OpenCV functions
         /// </summary>
-        /// <returns>the current number of threads that are used by parallelized (via OpenMP) OpenCV functions</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetNumThreads")]
-        public static extern int GetNumThreads();
+        /// <remarks>When the argument is zero or negative, and at the beginning of the program, the number of threads is set to the number of processors in the system, as returned by the function omp_get_num_procs() from OpenMP runtime. </param></remarks>
+        public static int NumThreads
+        {
+            get
+            {
+                return cveGetNumThreads();
+            }
+            set
+            {
+                cveSetNumThreads(value);
+            }
+        }
 
-        /// <summary>
-        /// Sets the number of threads that are used by parallelized OpenCV functions. 
-        /// </summary>
-        /// <param name="threadsCount">The number of threads that are used by parallelized OpenCV functions. When the argument is zero or negative, and at the beginning of the program, the number of threads is set to the number of processors in the system, as returned by the function omp_get_num_procs() from OpenMP runtime. </param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetNumThreads")]
-        public static extern void SetNumThreads(int threadsCount);
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern int cveGetNumThreads();
+
+        
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSetNumThreads(int threadsCount);
 
         /// <summary>
         /// Returns the index, from 0 to cvGetNumThreads()-1, of the thread that called the function. It is a wrapper for the function omp_get_thread_num() from OpenMP runtime. The retrieved index may be used to access local-thread data inside the parallelized code fragments. 
         /// </summary>
-        /// <returns>The index, from 0 to cvGetNumThreads()-1, of the thread that called the function. It is a wrapper for the function omp_get_thread_num() from OpenMP runtime. The retrieved index may be used to access local-thread data inside the parallelized code fragments. </returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetThreadNum")]
-        public static extern int GetThreadNum();
+        public static int ThreadNum
+        {
+            get
+            {
+                return cveGetThreadNum();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern int cveGetThreadNum();
+
+        /// <summary>
+        /// Returns the number of logical CPUs available for the process.
+        /// </summary>
+        public static int NumberOfCPUs
+        {
+            get
+            {
+                return cveGetNumberOfCPUs();
+            }
+        }
+        
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern int cveGetNumberOfCPUs();
 #endif
 
         /// <summary>
