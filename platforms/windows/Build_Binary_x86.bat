@@ -3,7 +3,7 @@ REM @echo off
 REM POSSIBLE OPTIONS: 
 REM %1%: "64", "32", "ARM"
 REM %2%: "gpu", if omitted, it will not use CUDA
-REM %3%: "intel", "WindowsPhone81", "WindowsStore81", "WindowsStore10"
+REM %3%: "intel", "WindowsPhone81", "WindowsStore81", "WindowsStore10", "vs2015"
 REM %4%: "nonfree", "openni"
 REM %5%: "doc", "htmldoc", this indicates if we should build the documentation
 REM %6%: "package", this indicates if we should build the ".zip" and ".exe" package
@@ -81,6 +81,8 @@ IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
 REM Only check for VS2017 if there are no other suitable Visual Studio installation
 REM We may default to VS2017 once CUDA 9 supports VS2017
 REM IF EXIST %DEVENV% GOTO SET_BUILD_TYPE
+
+IF "%3%"=="vs2015" GOTO SET_BUILD_TYPE
 
 IF EXIST %VS2017% SET DEVENV=%VS2017%
 REM CUDA 9 only support VS2017, if we target GPU we will stop checking for newer version of Visual Studio
