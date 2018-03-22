@@ -10,10 +10,10 @@
         <EmguCufftErrorMessage Condition="'$(EmguCufftBuildX64)'=='True' AND !Exists('$(EmguCufftNativeFileX64)')">This package do not contain necessary binary for $(EmguCufftLinkTarget). X64 is targeted, but file $(EmguCufftNativeFileX64) is missing.</EmguCufftErrorMessage>
       </PropertyGroup>
       <ItemGroup Condition="'$(EmguCufftBuildX64)'=='True' AND Exists('$(EmguCufftNativeFileX64)')">
-        <Content Include="$(MSBuildThisFileDirectory)\x64\*.dll">
+        <None Include="$(MSBuildThisFileDirectory)\x64\*.dll">
           <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
+        </None>
       </ItemGroup>
 	    <Target Name="EmguCufftPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Error Condition="'$(EmguCufftLinkTarget)'==''" Text="Emgu Cufft is not able to detect the project type, please send a bug report to support@emgu.com" />

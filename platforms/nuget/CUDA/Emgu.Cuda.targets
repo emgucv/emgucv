@@ -10,10 +10,10 @@
         <EmguCudaErrorMessage Condition="'$(EmguCvCudaBuildX64)'=='True' AND !Exists('$(EmguCudaNativeFileX64)')">This package do not contain necessary binary for $(EmguCvCudaLinkTarget). X64 is targeted, but file $(EmguCudaNativeFileX64) is missing.</EmguCudaErrorMessage>
       </PropertyGroup>
       <ItemGroup Condition="'$(EmguCvCudaBuildX64)'=='True' AND Exists('$(EmguCudaNativeFileX64)')">
-        <Content Include="$(MSBuildThisFileDirectory)\x64\*.dll">
+        <None Include="$(MSBuildThisFileDirectory)\x64\*.dll">
           <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
+        </None>
       </ItemGroup>
 	    <Target Name="EmguCvCudaPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Error Condition="'$(EmguCvCudaLinkTarget)'==''" Text="Emgu Cuda is not able to detect the project type, please send a bug report to support@emgu.com" />
