@@ -3646,9 +3646,9 @@ namespace Emgu.CV.Test
             Mat blend = TestSeamlessCloneHelper(3840);
             watch.Stop();
 #if NETFX_CORE
-            Debug.WriteLine("Seamless clone complete in {0} milliseconds", watch.ElapsedMilliseconds);
+            Debug.WriteLine("Seamless clone complete in {0} milliseconds", watch.ElapsedMilliseconds.ToString());
 #else
-            Trace.WriteLine("Seamless clone complete in {0} milliseconds", watch.ElapsedMilliseconds);
+            Trace.WriteLine("Seamless clone complete in {0} milliseconds", watch.ElapsedMilliseconds.ToString());
 #endif
         }
 
