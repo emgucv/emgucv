@@ -82,12 +82,18 @@ namespace Emgu.CV.XFeatures2D
 
     public static partial class XFeatures2DInvoke
     {
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveDAISYCreate(
-           float radius, int qRadius, int qTheta,
-           int qHist, XFeatures2D.DAISY.NormalizationType norm, IntPtr H,
-           bool interpolation, bool useOrientation,
+           float radius, 
+           int qRadius, 
+           int qTheta,
+           int qHist, 
+           XFeatures2D.DAISY.NormalizationType norm, 
+           IntPtr H,
+           [MarshalAs(CvInvoke.BoolMarshalType)]
+           bool interpolation,
+           [MarshalAs(CvInvoke.BoolMarshalType)]
+           bool useOrientation,
            ref IntPtr daisy);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
