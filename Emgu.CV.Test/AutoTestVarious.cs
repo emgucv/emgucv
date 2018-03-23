@@ -3639,6 +3639,43 @@ namespace Emgu.CV.Test
             }
         }
 
+        [Test]
+        public void TestSeamlessClone()
+        {
+            Stopwatch watch = Stopwatch.StartNew();
+            Mat blend = TestSeamlessCloneHelper(3840);
+            watch.Stop();
+#if NETFX_CORE
+            Debug.WriteLine("Seamless clone complete in {0} milliseconds", watch.ElapsedMilliseconds);
+#else
+            Trace.WriteLine("Seamless clone complete in {0} milliseconds", watch.ElapsedMilliseconds);
+#endif
+        }
+
+        private static Mat TestSeamlessCloneHelper(int size)
+        {
+            // create a 3 channel dst image
+            Mat source = new Mat("lena.jpg", ImreadModes.Color);
+            Mat img1 = new Mat();
+            CvInvoke.Resize(source, img1, new System.Drawing.Size(size, size));
+            //Mat img1 = new Mat(height, width, DepthType.Cv8U, 3); 
+            //CvInvoke.Randn(img1, new MCvScalar(122, 122, 122), new MCvScalar(60, 60, 60));
+
+            // create a smaller 3 channel image
+            Mat img2 = new Mat();
+            CvInvoke.Resize(source, img2, new System.Drawing.Size(size / 2, size / 2));
+            //CvInvoke.Randn(img2, new MCvScalar(122, 122, 122), new MCvScalar(60, 60, 60));
+
+            //use a circular region as the clone mask
+            Mat mask = new Mat(img2.Size, DepthType.Cv8U, 1);
+            int radius = Math.Min(mask.Width, mask.Height) / 2;
+            CvInvoke.Circle(mask, new System.Drawing.Point(mask.Height / 2, mask.Width / 2), radius, new MCvScalar(255), -1);
+
+            Mat blend = new Mat(img1.Size, DepthType.Cv8U, 3);
+            CvInvoke.SeamlessClone(img2, img1, mask, new System.Drawing.Point(img1.Height / 2, img1.Width / 2), blend, CloningMethod.Normal);
+            return blend;
+        }
+
 #if !NETFX_CORE
 
         [Test]
