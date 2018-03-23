@@ -1744,18 +1744,15 @@ namespace Emgu.CV
            int minRadius = 0,
            int maxRadius = 0)
         {
-            using (Mat circles = new Mat())
+            using (VectorOfPoint3D32F circles = new VectorOfPoint3D32F())
             {
                 HoughCircles(image, circles, method, dp, minDist, param1, param2, minRadius, maxRadius);
-                Size s = circles.Size;
-                CircleF[] results = new CircleF[s.Width];
-                GCHandle handle = GCHandle.Alloc(results, GCHandleType.Pinned);
-                using (Mat tmp = new Mat(s.Height, s.Width, CV.CvEnum.DepthType.Cv32F, 3, handle.AddrOfPinnedObject(), sizeof(float) * 3))
+                MCvPoint3D32f[] circlePts = circles.ToArray();
+                CircleF[] results = new CircleF[circles.Size];
+                for (int i = 0; i < results.Length; i++)
                 {
-                    circles.CopyTo(tmp);
+                    results[i] = new CircleF(new PointF(circles[i].X, circles[i].Y), circles[i].Z);
                 }
-                handle.Free();
-
                 return results;
             }
         }
@@ -1854,10 +1851,10 @@ namespace Emgu.CV
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveMoments(
-           IntPtr arr,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool binaryImage,
-           ref MCvMoments moments);
+            IntPtr arr,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool binaryImage,
+            ref MCvMoments moments);
 
         /*
         /// <summary>

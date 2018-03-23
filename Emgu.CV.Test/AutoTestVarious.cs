@@ -3183,11 +3183,18 @@ namespace Emgu.CV.Test
                 String CaffeModelUrl = "http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel";
                 Trace.WriteLine("downloading file from:" + CaffeModelUrl + " to: " + caffeModelFile);
                 System.Net.WebClient downloadClient = new System.Net.WebClient();
-                downloadClient.DownloadFile(CaffeModelUrl, caffeModelFile);
+                try
+                {
+                    downloadClient.DownloadFile(CaffeModelUrl, caffeModelFile);
+                } catch
+                {
+                    //delete file in case of failed download
+                    File.Delete(caffeModelFile);
+                    throw;
+                }
             }
             Dnn.Net net = DnnInvoke.ReadNetFromCaffe("fcn8s-heavy-pascal.prototxt", caffeModelFile);
-            //using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("fcn8s-heavy-pascal.prototxt", caffeModelFile))
-            //    importer.PopulateNet(net);
+
 
             Mat img = EmguAssert.LoadMat("rgb.jpg");
             //FCN accepts 500x500 RGB-images
@@ -3245,7 +3252,15 @@ namespace Emgu.CV.Test
                 String googleNetUrl = "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel";
                 Trace.WriteLine("downloading file from:" + googleNetUrl + " to: " + googleNetFile);
                 System.Net.WebClient downloadClient = new System.Net.WebClient();
-                downloadClient.DownloadFile(googleNetUrl, googleNetFile);
+                try
+                {
+                    downloadClient.DownloadFile(googleNetUrl, googleNetFile);
+                } catch
+                {
+                    //Delete the file in case of failed download.
+                    File.Delete(googleNetFile);
+                    throw;
+                }
             }
             //using (Dnn.Importer importer = Dnn.Importer.CreateCaffeImporter("bvlc_googlenet.prototxt", googleNetFile))
             //    importer.PopulateNet(net);
@@ -3279,7 +3294,14 @@ namespace Emgu.CV.Test
                 String fileUrl = url + fileName;
                 Trace.WriteLine("downloading file from:" + fileUrl + " to: " + fileName);
                 System.Net.WebClient downloadClient = new System.Net.WebClient();
-                downloadClient.DownloadFile(fileUrl, fileName);
+                try
+                {
+                    downloadClient.DownloadFile(fileUrl, fileName);
+                } catch
+                {
+                    File.Delete(fileName);
+                    throw;
+                }
             }
         }
 

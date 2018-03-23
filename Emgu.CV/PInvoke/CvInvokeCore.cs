@@ -3046,7 +3046,7 @@ namespace Emgu.CV
         /// <summary>
         /// Get or set the number of threads that are used by parallelized OpenCV functions
         /// </summary>
-        /// <remarks>When the argument is zero or negative, and at the beginning of the program, the number of threads is set to the number of processors in the system, as returned by the function omp_get_num_procs() from OpenMP runtime. </param></remarks>
+        /// <remarks>When the argument is zero or negative, and at the beginning of the program, the number of threads is set to the number of processors in the system, as returned by the function omp_get_num_procs() from OpenMP runtime. </remarks>
         public static int NumThreads
         {
             get

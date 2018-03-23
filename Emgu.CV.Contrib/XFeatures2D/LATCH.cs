@@ -54,11 +54,11 @@ namespace Emgu.CV.XFeatures2D
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveLATCHCreate(
-           int bytes,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool rotationInvariance,
-           int halfSsdSize,
-           ref IntPtr extractor);
+            int bytes,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool rotationInvariance,
+            int halfSsdSize,
+            ref IntPtr extractor);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveLATCHRelease(ref IntPtr extractor);

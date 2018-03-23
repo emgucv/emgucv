@@ -92,7 +92,7 @@ __kernel void magnutude_filter_8u(
                float shiftX = 100.5f;
                float shiftY = -50.0f;
 
-               bool success = kernel.Create("shift", ps, buildOpts, errorMsg);
+               bool success = kernel.Create("myshift", ps, buildOpts, errorMsg);
                EmguAssert.IsTrue(success, errorMsg.ToString());
                int idx = 0;
                idx = kernel.Set(idx, image2d);
