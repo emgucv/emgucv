@@ -17,12 +17,21 @@ cv::dnn::Net* cveReadNetFromCaffe(cv::String* prototxt, cv::String* caffeModel)
 	cv::dnn::Net net = cv::dnn::readNetFromCaffe(*prototxt, *caffeModel);
 	return new cv::dnn::Net(net);
 }
+cv::dnn::Net* cveReadNetFromCaffe2(const char *bufferProto, int lenProto, const char *bufferModel, int lenModel)
+{
+	cv::dnn::Net net = cv::dnn::readNetFromCaffe(bufferProto, lenProto, bufferModel, lenModel);
+	return new cv::dnn::Net(net);
+}
 cv::dnn::Net* cveReadNetFromTensorflow(cv::String* model, cv::String* config)
 {
 	cv::dnn::Net net = cv::dnn::readNetFromTensorflow(*model, *config);
 	return new cv::dnn::Net(net);
 }
-
+cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig)
+{
+	cv::dnn::Net net = cv::dnn::readNetFromTensorflow(bufferModel, lenModel, bufferConfig, lenConfig);
+	return new cv::dnn::Net(net);
+}
 cv::dnn::Net* cveDnnNetCreate()
 {
    return new cv::dnn::Net();

@@ -105,6 +105,35 @@ namespace Emgu.CV.Dnn
         /// <summary>
         /// Reads a network model stored in Caffe framework's format.
         /// </summary>
+        /// <param name="prototxt">Buffer containing the content of the .prototxt file</param>
+        /// <param name="caffeModel">Buffer containing the content of the .caffemodel file</param>
+        /// <returns>Net object.</returns>
+        public static Net ReadNetFromCaffe(byte[] prototxt, byte[] caffeModel = null)
+        {
+            GCHandle prototxtHandle = GCHandle.Alloc(prototxt, GCHandleType.Pinned);
+            GCHandle caffeModelHandle = caffeModel == null? new GCHandle() : GCHandle.Alloc(caffeModel, GCHandleType.Pinned);
+
+            try
+            {
+                return new Net(cveReadNetFromCaffe2(
+                    prototxtHandle.AddrOfPinnedObject(), 
+                    prototxt.Length, 
+                    caffeModel == null ? IntPtr.Zero : caffeModelHandle.AddrOfPinnedObject(),
+                    caffeModel == null ? 0 : caffeModel.Length));
+            } finally
+            {
+                prototxtHandle.Free();
+                if (caffeModelHandle.IsAllocated)
+                    caffeModelHandle.Free();
+            }
+            
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromCaffe2(IntPtr bufferProto, int lenProto, IntPtr bufferModel, int lenModel);
+
+        /// <summary>
+        /// Reads a network model stored in Caffe framework's format.
+        /// </summary>
         /// <param name="prototxt">path to the .prototxt file with text description of the network architecture.</param>
         /// <param name="caffeModel">path to the .caffemodel file with learned network.</param>
         /// <returns>Net object.</returns>
@@ -118,6 +147,7 @@ namespace Emgu.CV.Dnn
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromCaffe(IntPtr prototxt, IntPtr caffeModel);
+
 
         /// <summary>
         /// Reads a network model stored in TensorFlow framework's format.
@@ -135,6 +165,37 @@ namespace Emgu.CV.Dnn
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromTensorflow(IntPtr model, IntPtr config);
+
+        /// <summary>
+        /// Reads a network model stored in TensorFlow framework's format.
+        /// </summary>
+        /// <param name="model">buffer containing the content of the pb file</param>
+        /// <param name="config">buffer containing the content of the pbtxt file</param>
+        /// <returns>Net object.</returns>
+        public static Net ReadNetFromTensorflow(byte[] model, byte[] config = null)
+        {
+            GCHandle modelHandle = GCHandle.Alloc(model, GCHandleType.Pinned);
+            GCHandle configHandle = config == null ? new GCHandle() : GCHandle.Alloc(config, GCHandleType.Pinned);
+
+            try
+            {
+                return new Net(cveReadNetFromTensorflow2(
+                    modelHandle.AddrOfPinnedObject(),
+                    model.Length,
+                    config == null ? IntPtr.Zero : configHandle.AddrOfPinnedObject(),
+                    config == null ? 0 : config.Length));
+            }
+            finally
+            {
+                modelHandle.Free();
+                if (configHandle.IsAllocated)
+                    configHandle.Free();
+            }
+
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromTensorflow2(IntPtr bufferModel, int lenModel, IntPtr bufferConfig, int lenConfig);
+
 
         /// <summary>
         /// Convert all weights of Caffe network to half precision floating point
