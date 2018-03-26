@@ -6,12 +6,14 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\libs\</OutputPath>
-    <DocumentationFile>..\..\libs\netstandard1.4\Emgu.CV.World.NetStandard1_4.xml</DocumentationFile>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DocumentationFile>..\..\libs\Emgu.CV.World.NetStandard1_4.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\libs\</OutputPath>
-    <DocumentationFile>..\..\libs\netstandard1.4\Emgu.CV.World.NetStandard1_4.xml</DocumentationFile>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DocumentationFile>..\..\libs\Emgu.CV.World.NetStandard1_4.xml</DocumentationFile>
   </PropertyGroup>
 
   <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
