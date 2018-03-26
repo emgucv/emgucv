@@ -139,12 +139,17 @@ MACRO(SET_CS_TARGET_FRAMEWORK)
 ENDMACRO(SET_CS_TARGET_FRAMEWORK)
 
 MACRO(BUILD_CSPROJ target csproj_file extra_flags)
+	SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
     ADD_CUSTOM_TARGET (
-      ${target} ${ARGV3})
+      ${target} ${ARGV3}
+	  SOURCES ${csproj_file}
+	  DEPENDS "${target_name}")
+	#MESSAGE(STATUS "ADD_CUSTOM_TARGET (${target} ${ARGV3})")
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}
       COMMENT "Building ${target}")
+	#MESSAGE(STATUS "ADD_CUSTOM_COMMAND (TARGET ${target} COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file} ")  
 ENDMACRO()
 
 MACRO(COMPILE_CS target target_type source)
