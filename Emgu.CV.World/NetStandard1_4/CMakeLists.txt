@@ -6,10 +6,10 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 
   IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
     PROJECT(Emgu.CV.World.NetStandard1_4)
-    BUILD_CSPROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.World.NetStandard1_4.csproj" "/p:OutputPath=\"${LIBRARY_OUTPUT_PATH}\"" ALL)
+    BUILD_CSPROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.World.NetStandard1_4.csproj" "/p:OutputPath=\"${LIBRARY_OUTPUT_PATH}\" /p:Platform=\"Any CPU\" /p:GenerateDocumentation=true" ALL)
     INSTALL(
       FILES 
-      ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
+      #${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
       ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll 
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)	  
