@@ -126,9 +126,9 @@ MACRO(SET_CS_TARGET_FRAMEWORK)
   ENDIF()
   
   IF("${version}" STREQUAL "3.5")
-	LIST(APPEND CS_COMMANDLINE_FLAGS -noconfig )
-	LIST(APPEND CS_FLAGS -nostdlib)
-	LIST(APPEND FRAMEWORK_REFERENCES mscorlib.dll System.dll ${FRAMEWORK_REFERENCES})
+    LIST(APPEND CS_COMMANDLINE_FLAGS -noconfig )
+    LIST(APPEND CS_FLAGS -nostdlib)
+    LIST(APPEND FRAMEWORK_REFERENCES mscorlib.dll System.dll ${FRAMEWORK_REFERENCES})
   ENDIF()
   
   IF(NOT NETFX_CORE)
@@ -139,235 +139,233 @@ MACRO(SET_CS_TARGET_FRAMEWORK)
 ENDMACRO(SET_CS_TARGET_FRAMEWORK)
 
 MACRO(BUILD_CSPROJ target csproj_file extra_flags)
-	SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
-    ADD_CUSTOM_TARGET (
-      ${target} ${ARGV3}
-	  SOURCES ${csproj_file}
-	  DEPENDS "${target_name}")
-	#MESSAGE(STATUS "ADD_CUSTOM_TARGET (${target} ${ARGV3})")
-    ADD_CUSTOM_COMMAND (
-      TARGET ${target}
-      COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}
-      COMMENT "Building ${target}")
-	#MESSAGE(STATUS "ADD_CUSTOM_COMMAND (TARGET ${target} COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file} ")  
+  #  SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
+  ADD_CUSTOM_TARGET (
+    ${target} ${ARGV3}
+    SOURCES ${csproj_file})
+  #    DEPENDS "${target_name}")
+  #MESSAGE(STATUS "ADD_CUSTOM_TARGET (${target} ${ARGV3})")
+  ADD_CUSTOM_COMMAND (
+    TARGET ${target}
+    COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}
+    COMMENT "Building ${target}")
+  #MESSAGE(STATUS "ADD_CUSTOM_COMMAND (TARGET ${target} COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file} ")  
 ENDMACRO()
 
 MACRO(COMPILE_CS target target_type source)
-IF(${target_type} STREQUAL "library")
-  GET_CS_LIBRARY_TARGET_DIR()
-  SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
-  SET(COMPILE_CS_TARGET_DIR "${CS_LIBRARY_TARGET_DIR}")
-ELSE(${target_type} STREQUAL "library")
-  IF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
-    GET_CS_EXECUTABLE_TARGET_DIR()
-    GET_CS_EXECUTABLE_EXTENSION()
-	SET(COMPILE_CS_TARGET_DIR "${CS_EXECUTABLE_TARGET_DIR}")
-    # FIXME:
-    # Seems like cmake doesn't like the ".exe" ending for custom commands.
-    # If we call it ${target}.exe, 'make' will later complain about a missing rule.
-    # mono doesn't care about endings, so temporarily add ".monoexe".
-    SET(target_name "${CS_EXECUTABLE_TARGET_DIR}/${target}.${CS_EXECUTABLE_EXTENSION}")
-  ELSE(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
-    #module
+  IF(${target_type} STREQUAL "library")
     GET_CS_LIBRARY_TARGET_DIR()
-    SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.netmodule")
-	SET(COMPILE_CS_TARGET_DIR "${CS_LIBRARY_TARGET_DIR}")
-  ENDIF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
-ENDIF(${target_type} STREQUAL "library")
-
-    MAKE_PROPER_FILE_LIST("${source}")
-    FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_name})
-
-
+    SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
+    SET(COMPILE_CS_TARGET_DIR "${CS_LIBRARY_TARGET_DIR}")
+  ELSE(${target_type} STREQUAL "library")
+    IF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
+      GET_CS_EXECUTABLE_TARGET_DIR()
+      GET_CS_EXECUTABLE_EXTENSION()
+      SET(COMPILE_CS_TARGET_DIR "${CS_EXECUTABLE_TARGET_DIR}")
+      # FIXME:
+      # Seems like cmake doesn't like the ".exe" ending for custom commands.
+      # If we call it ${target}.exe, 'make' will later complain about a missing rule.
+      # mono doesn't care about endings, so temporarily add ".monoexe".
+      SET(target_name "${CS_EXECUTABLE_TARGET_DIR}/${target}.${CS_EXECUTABLE_EXTENSION}")
+    ELSE(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
+      #module
+      GET_CS_LIBRARY_TARGET_DIR()
+      SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.netmodule")
+      SET(COMPILE_CS_TARGET_DIR "${CS_LIBRARY_TARGET_DIR}")
+    ENDIF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
+  ENDIF(${target_type} STREQUAL "library")
   
-    #Make sure the destination folder exist
-    LIST(APPEND
-	  CS_PREBUILD_COMMAND  
-      COMMAND ${CMAKE_COMMAND} -E make_directory "${COMPILE_CS_TARGET_DIR}"
-      )
-
-	#enable optimization
-	LIST(APPEND CS_FLAGS -optimize+)
-	
-	SET(NETFX_EXTRA_FLAGS)
-	IF(NETFX_CORE)
-	  IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
-	  SET(NETFX_EXTRA_FLAGS -noconfig -nostdlib+ )
-	  LIST(APPEND CS_FLAGS -d:NETFX_CORE -d:WINDOWS_PHONE_APP)
-	  SET(NETFX_CORE_REFERENCE_FOLDER "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\WindowsPhoneApp\\v8.1\\")
-	  SET(NETFX_CORE_REFERENCE_FOLDER_WINMD "C:\\Program Files (x86)\\Windows Kits\\8.1\\References\\CommonConfiguration\\Neutral\\")
-	  LIST(APPEND CS_FLAGS 
-	    -r:\"${NETFX_CORE_REFERENCE_FOLDER}Microsoft.CSharp.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}mscorlib.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Collections.Concurrent.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Collections.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.EventBasedAsync.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Core.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Contracts.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Debug.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Tools.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Tracing.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Dynamic.Runtime.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Globalization.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.IO.Compression.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.IO.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Expressions.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Parallel.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Queryable.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Http.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.NetworkInformation.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Primitives.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Requests.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Numerics.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ObjectModel.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Extensions.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Primitives.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Resources.ResourceManager.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Extensions.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.InteropServices.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.InteropServices.WindowsRuntime.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Numerics.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Json.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Primitives.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Xml.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.WindowsRuntime.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.WindowsRuntime.UI.Xaml.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Security.Principal.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Web.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.Encoding.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.Encoding.Extensions.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.RegularExpressions.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.Parallel.dll\" 
+  MAKE_PROPER_FILE_LIST("${source}")
+  FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_name})
+  
+  #Make sure the destination folder exist
+  LIST(APPEND
+    CS_PREBUILD_COMMAND  
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${COMPILE_CS_TARGET_DIR}"
+    )
+  
+  #enable optimization
+  LIST(APPEND CS_FLAGS -optimize+)
+  
+  SET(NETFX_EXTRA_FLAGS)
+  IF(NETFX_CORE)
+    IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsPhone")
+      SET(NETFX_EXTRA_FLAGS -noconfig -nostdlib+ )
+      LIST(APPEND CS_FLAGS -d:NETFX_CORE -d:WINDOWS_PHONE_APP)
+      SET(NETFX_CORE_REFERENCE_FOLDER "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\WindowsPhoneApp\\v8.1\\")
+      SET(NETFX_CORE_REFERENCE_FOLDER_WINMD "C:\\Program Files (x86)\\Windows Kits\\8.1\\References\\CommonConfiguration\\Neutral\\")
+      LIST(APPEND CS_FLAGS 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}Microsoft.CSharp.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}mscorlib.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Collections.Concurrent.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Collections.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.EventBasedAsync.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Core.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Contracts.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Debug.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Tools.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Tracing.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Dynamic.Runtime.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Globalization.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.IO.Compression.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.IO.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Expressions.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Parallel.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Queryable.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Http.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.NetworkInformation.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Primitives.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Requests.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Numerics.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ObjectModel.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Extensions.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Primitives.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Resources.ResourceManager.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Extensions.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.InteropServices.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.InteropServices.WindowsRuntime.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Numerics.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Json.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Primitives.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Xml.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.WindowsRuntime.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.WindowsRuntime.UI.Xaml.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Security.Principal.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Web.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.Encoding.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.Encoding.Extensions.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.RegularExpressions.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.Parallel.dll\" 
         -r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Timer.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Windows.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.Linq.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.ReaderWriter.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.Serialization.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.XmlSerializer.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.XDocument.dll\"
-	    -r:\"${NETFX_CORE_REFERENCE_FOLDER_WINMD}Windows.winmd\"
-		)
-	  ELSE()
-	  SET(NETFX_EXTRA_FLAGS -noconfig -nostdlib+ )
-	  LIST(APPEND CS_FLAGS -d:NETFX_CORE)
-	  SET(NETFX_CORE_REFERENCE_FOLDER "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETCore\\v4.5.1\\")
-	  SET(NETFX_CORE_REFERENCE_FOLDER_WINMD "C:\\Program Files (x86)\\Windows Kits\\8.1\\References\\CommonConfiguration\\Neutral\\")
-	  LIST(APPEND CS_FLAGS 
-	    -r:\"${NETFX_CORE_REFERENCE_FOLDER}Microsoft.CSharp.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}mscorlib.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Collections.Concurrent.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Collections.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.Annotations.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.DataAnnotations.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.EventBasedAsync.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Core.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Contracts.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Debug.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Tools.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Tracing.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Dynamic.Runtime.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Globalization.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.IO.Compression.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.IO.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Expressions.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Parallel.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Queryable.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Http.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Http.Rtc.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.NetworkInformation.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Primitives.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Requests.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Numerics.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ObjectModel.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Context.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Extensions.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Primitives.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Resources.ResourceManager.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Extensions.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.InteropServices.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.InteropServices.WindowsRuntime.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Numerics.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Json.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Primitives.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Xml.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.WindowsRuntime.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.WindowsRuntime.UI.Xaml.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Security.Principal.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Duplex.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Http.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.NetTcp.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Primitives.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Security.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Web.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.Encoding.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.Encoding.Extensions.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.RegularExpressions.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.dll\"
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.Parallel.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Windows.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.Linq.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.ReaderWriter.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.Serialization.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.XmlSerializer.dll\" 
-		-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.XDocument.dll\"
-	    -r:\"${NETFX_CORE_REFERENCE_FOLDER_WINMD}Windows.winmd\"
-		)
-	ENDIF()	
-	ENDIF()
-	
-	#set the output target
-	SET(TMP "-out:\"${target_name}\" -target:${target_type}")
-	#set the compiler flags
-	FOREACH(TMP_NAME ${CS_FLAGS})
-	  SET(TMP "${TMP} ${TMP_NAME}")
-	ENDFOREACH()
-	
-
-	#set the source files
-	FOREACH(TMP_NAME ${proper_file_list})
-	  SET(TMP "${TMP} \"${TMP_NAME}\"")
-	ENDFOREACH()
-	FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${target}_SourceList.rsp  ${TMP})
-	
-    ADD_CUSTOM_COMMAND (
-	  OUTPUT "${target_name}"
-      ${CS_PREBUILD_COMMAND}	
-      COMMAND ${CSC_EXECUTABLE} ${CS_COMMANDLINE_FLAGS} ${NETFX_EXTRA_FLAGS} @${target}_SourceList.rsp
-	  ${CS_POSTBUILD_COMMAND}
-      DEPENDS ${source}
-      COMMENT "Building ${relative_path}")
-
-	ADD_CUSTOM_TARGET (
-      ${target} ${ARGV3}
-      SOURCES ${source}
-	  DEPENDS "${target_name}")
-	  
-    SET(relative_path "")
-    SET(proper_file_list "")
-    SET(CS_FLAGS "")
-	SET(CS_COMMANDLINE_FLAGS "")
-    SET(CS_PREBUILD_COMMAND "")
-	SET(CS_POSTBUILD_COMMAND "")
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Windows.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.Linq.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.ReaderWriter.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.Serialization.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.XmlSerializer.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.XDocument.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER_WINMD}Windows.winmd\"
+	)
+    ELSE() #Not Windows Phone
+      SET(NETFX_EXTRA_FLAGS -noconfig -nostdlib+ )
+      LIST(APPEND CS_FLAGS -d:NETFX_CORE)
+      SET(NETFX_CORE_REFERENCE_FOLDER "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETCore\\v4.5.1\\")
+      SET(NETFX_CORE_REFERENCE_FOLDER_WINMD "C:\\Program Files (x86)\\Windows Kits\\8.1\\References\\CommonConfiguration\\Neutral\\")
+      LIST(APPEND CS_FLAGS 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}Microsoft.CSharp.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}mscorlib.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Collections.Concurrent.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Collections.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.Annotations.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.DataAnnotations.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ComponentModel.EventBasedAsync.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Core.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Contracts.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Debug.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Tools.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Diagnostics.Tracing.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Dynamic.Runtime.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Globalization.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.IO.Compression.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.IO.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Expressions.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Parallel.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Linq.Queryable.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Http.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Http.Rtc.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.NetworkInformation.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Primitives.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Net.Requests.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Numerics.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ObjectModel.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Context.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Extensions.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Reflection.Primitives.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Resources.ResourceManager.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Extensions.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.InteropServices.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.InteropServices.WindowsRuntime.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Numerics.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Json.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Primitives.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.Serialization.Xml.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.WindowsRuntime.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Runtime.WindowsRuntime.UI.Xaml.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Security.Principal.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Duplex.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Http.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.NetTcp.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Primitives.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Security.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.ServiceModel.Web.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.Encoding.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.Encoding.Extensions.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Text.RegularExpressions.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.Parallel.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Windows.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.Linq.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.ReaderWriter.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.Serialization.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.XmlSerializer.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.XDocument.dll\"
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER_WINMD}Windows.winmd\"
+	)
+    ENDIF()	
+  ENDIF()
+  
+  #set the output target
+  SET(TMP "-out:\"${target_name}\" -target:${target_type}")
+  #set the compiler flags
+  FOREACH(TMP_NAME ${CS_FLAGS})
+    SET(TMP "${TMP} ${TMP_NAME}")
+  ENDFOREACH()
+  
+  
+  #set the source files
+  FOREACH(TMP_NAME ${proper_file_list})
+    SET(TMP "${TMP} \"${TMP_NAME}\"")
+  ENDFOREACH()
+  FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${target}_SourceList.rsp  ${TMP})
+  
+  ADD_CUSTOM_COMMAND (
+    OUTPUT "${target_name}"
+    ${CS_PREBUILD_COMMAND}	
+    COMMAND ${CSC_EXECUTABLE} ${CS_COMMANDLINE_FLAGS} ${NETFX_EXTRA_FLAGS} @${target}_SourceList.rsp
+    ${CS_POSTBUILD_COMMAND}
+    DEPENDS ${source}
+    COMMENT "Building ${relative_path}")
+  
+  ADD_CUSTOM_TARGET (
+    ${target} ${ARGV3}
+    SOURCES ${source}
+    DEPENDS "${target_name}")
+  
+  SET(relative_path "")
+  SET(proper_file_list "")
+  SET(CS_FLAGS "")
+  SET(CS_COMMANDLINE_FLAGS "")
+  SET(CS_PREBUILD_COMMAND "")
+  SET(CS_POSTBUILD_COMMAND "")
 ENDMACRO(COMPILE_CS)
 
 MACRO(ADD_CS_PACKAGE_REFERENCES references)
