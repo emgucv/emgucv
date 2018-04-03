@@ -154,7 +154,7 @@ namespace AndroidExamples
                 _output.CopyTo(bmpOut);
             }
 
-            public void YUV_420_888_toRGBIntrinsics(int width, int height, byte[] yuv, byte dataOut)
+            public void YUV_420_888_toRGBIntrinsics(int width, int height, byte[] yuv, byte[] dataOut)
             {
                 YUV_420_888_toRGBIntrinsicsProcess(width, height, yuv);
                 _output.CopyTo(dataOut);
