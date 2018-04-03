@@ -47,14 +47,14 @@ unzip "%2" -d tmp
 call %DEVENV% %BUILD_TYPE% tmp\Solution\Windows.Desktop\Emgu.CV.Example.sln
 
 call %DEVENV% %BUILD_TYPE% Solution\Windows.Desktop\Emgu.CV.Test.sln
-cp bin/Emgu.CV.Test.dll tmp/bin
-call %MSTEST% tmp\bin\Emgu.CV.Test.dll /Platform:%PLATFORM%
+cp libs/Emgu.CV.Test.dll tmp/libs
+call %MSTEST% tmp\libs\Emgu.CV.Test.dll /Platform:%PLATFORM%
 GOTO END
 
 :TEST_INPLACE
 call %DEVENV% %BUILD_TYPE% Solution\Windows.Desktop\Emgu.CV.Example.sln
 call %DEVENV% %BUILD_TYPE% Solution\Windows.Desktop\Emgu.CV.Test.sln
-call %MSTEST% bin\Emgu.CV.Test.dll /Platform:%PLATFORM%
+call %MSTEST% libs\Emgu.CV.Test.dll /Platform:%PLATFORM%
 
 :END
 popd
