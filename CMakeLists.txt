@@ -715,6 +715,7 @@ IF(WITH_CUDA)
 	STRING(REPLACE "." "" CUDA_VERSION_NUMERIC_ONLY "${CUDA_VERSION}")
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Cufft.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.Cufft.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft/Emgu.Cufft.targets)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.Cuda.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/Emgu.Cuda.targets)
 ENDIF()
 
 IF ("${LICENSE_TYPE}" EQUAL "Commercial")

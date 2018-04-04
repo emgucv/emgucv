@@ -4,7 +4,7 @@
         <EmguCvCudaLinkTarget>WindowsForms</EmguCvCudaLinkTarget>
 		<EmguCvCudaBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguCvCudaBuildX86>
         <EmguCvCudaBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCvCudaBuildX64>
-		<EmguCudaNativeFileX64>$(MSBuildThisFileDirectory)\x64\cudart64_90.dll</EmguCudaNativeFileX64>
+		<EmguCudaNativeFileX64>$(MSBuildThisFileDirectory)\x64\cudart64_${CUDA_VERSION_NUMERIC_ONLY}.dll</EmguCudaNativeFileX64>
 		<EmguCudaErrorMessage Condition="'$(EmguCvCudaBuildX86)'=='True'">X86 or AnyCPU is targeted, but this CUDA package do not support 32-bit</EmguCudaErrorMessage>
         <EmguCudaDeployMessage Condition="'$(EmguCvCudaBuildX64)'=='True' AND Exists('$(EmguCudaNativeFileX64)')">$(EmguCudaDeployMessage)x64 </EmguCudaDeployMessage>
         <EmguCudaErrorMessage Condition="'$(EmguCvCudaBuildX64)'=='True' AND !Exists('$(EmguCudaNativeFileX64)')">This package do not contain necessary binary for $(EmguCvCudaLinkTarget). X64 is targeted, but file $(EmguCudaNativeFileX64) is missing.</EmguCudaErrorMessage>
