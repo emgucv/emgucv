@@ -65,7 +65,7 @@ SET(LIBRARY_3RDPARTY_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/3rdParty)
 #  Autodetect if we are in a GIT repository
 # ----------------------------------------------------------------------------
 FIND_PROGRAM(GIT_PATH git)
-FIND_PROGRAM(WC_PATH wc)
+FIND_PROGRAM(WC_PATH wc PATHS "c:/cygwin64/bin" "c:/cygwin/bin")
 MARK_AS_ADVANCED(force GIT_PATH WC_PATH)
 IF(GIT_PATH AND WC_PATH)
   MESSAGE(STATUS "Extracting Emgu CV git version, please wait...")
