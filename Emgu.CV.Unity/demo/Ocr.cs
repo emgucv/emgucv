@@ -16,19 +16,20 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
-
+/*
 #if NETFX_CORE && (!UNITY_EDITOR) 
 using System.Threading.Tasks;
 using System.Net.Http;
 #else
 using System.Security.Cryptography.X509Certificates;
 #endif
+*/
 using Emgu.CV.OCR;
 
 public class Ocr : MonoBehaviour
 {
     private Tesseract _ocr;
-
+    /*
 #if NETFX_CORE && (!UNITY_EDITOR)
     public static async Task DownloadAsync(Uri requestUri, string filename)
     {
@@ -49,7 +50,7 @@ public class Ocr : MonoBehaviour
         }
     }
 
-    private static void TesseractDownloadLangFile(String folder, String lang)
+    private static IEnumerator TesseractDownloadLangFile(String folder, String lang)
     {
         String subfolderName = "tessdata";
         String folderName = System.IO.Path.Combine(folder, subfolderName);
@@ -67,9 +68,10 @@ public class Ocr : MonoBehaviour
             Task t = DownloadAsync(new Uri(source), dest);
             t.Wait();
         }
+        yield return null;
     }
-#else
-    private static void TesseractDownloadLangFile(String folder, String lang)
+#else*/
+    private static IEnumerator TesseractDownloadLangFile(String folder, String lang)
     {
         String subfolderName = "tessdata";
         String folderName = System.IO.Path.Combine(folder, subfolderName);
@@ -79,22 +81,38 @@ public class Ocr : MonoBehaviour
         }
         String dest = System.IO.Path.Combine(folderName, String.Format("{0}.traineddata", lang));
 
-        if (!System.IO.File.Exists(dest) || !(new FileInfo(dest).Length > 0))
-            using (System.Net.WebClient webclient = new System.Net.WebClient())
-            {
-                String source =
-                    String.Format("https://github.com/tesseract-ocr/tessdata/blob/4592b8d453889181e01982d22328b5846765eaad/{0}.traineddata?raw=true", lang);
 
+        if (!System.IO.File.Exists(dest) || !(new FileInfo(dest).Length > 0))
+        {
+            String source =
+                String.Format("https://github.com/tesseract-ocr/tessdata/blob/4592b8d453889181e01982d22328b5846765eaad/{0}.traineddata?raw=true", lang);
+            using (UnityEngine.Networking.UnityWebRequest webclient = new UnityEngine.Networking.UnityWebRequest(source))
+            {
                 Debug.Log(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
-                webclient.DownloadFile(source, dest);
-                Debug.Log(String.Format("Download completed"));
+
+                webclient.downloadHandler = new UnityEngine.Networking.DownloadHandlerFile(dest);
+                yield return webclient.SendWebRequest();
+                if (webclient.isNetworkError || webclient.isHttpError)
+                {
+                    Debug.LogError(webclient.error);
+                }
+
+                if (!System.IO.File.Exists(dest) || !(new FileInfo(dest).Length > 0))
+                {
+                    Debug.LogError(String.Format("File {0} is empty, failed to download file.", dest));
+                }
+
+                Debug.Log("File successfully downloaded and saved to " + dest);
+                //Debug.Log(String.Format("Download completed"));
             }
+        }
     }
-#endif
+//#endif
 
     // Use this for initialization
     void Start()
     {
+        /*
 #if !( NETFX_CORE && (!UNITY_EDITOR) )
         //Warning: The following code is used to get around a https certification issue for downloading tesseract language files from Github
         //Do not use this code in a production environment. Please make sure you understand the security implication from the following code before using it
@@ -108,12 +126,24 @@ public class Ocr : MonoBehaviour
             }
             return false;
         };
-#endif
-        TesseractDownloadLangFile(Application.persistentDataPath, "eng");
-        TesseractDownloadLangFile(Application.persistentDataPath, "osd"); //script orientation detection
+#endif*/
+        //TesseractDownloadLangFile(Application.persistentDataPath, "eng");
+        //TesseractDownloadLangFile(Application.persistentDataPath, "osd"); //script orientation detection
 
+        //performOCR();
+        StartCoroutine(workflow());
+    }
 
-        _ocr = new Tesseract(Path.Combine(Application.persistentDataPath, "tessdata"), "eng", OcrEngineMode.TesseractLstmCombined);
+    private IEnumerator workflow()
+    {
+        yield return TesseractDownloadLangFile(Application.persistentDataPath, "eng");
+        yield return TesseractDownloadLangFile(Application.persistentDataPath, "osd"); //script orientation detection
+        yield return performOCR();
+    }
+
+    private IEnumerator performOCR()
+    {
+        _ocr = new Tesseract(Path.Combine(Application.persistentDataPath, "tessdata"), "eng", OcrEngineMode.TesseractOnly);
 
         Debug.Log("OCR engine loaded.");
 
@@ -138,8 +168,8 @@ public class Ocr : MonoBehaviour
 
         this.GetComponent<GUITexture>().texture = texture;
         this.GetComponent<GUITexture>().pixelInset = new Rect(-img.Width / 2, -img.Height / 2, img.Width, img.Height);
+        yield return null;
     }
-
 
     private void updateTextureWithString(String text)
     {
