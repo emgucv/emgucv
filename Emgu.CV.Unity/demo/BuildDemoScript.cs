@@ -6,45 +6,46 @@ using System.Collections;
 public class BuildDemoScript {
 
 	static void PerformOSXBuild () {
-		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTarget.StandaloneOSXUniversal);
+		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTargetGroup.Standalone, BuildTarget.StandaloneOSX);
 		string[] scenes = {"Assets/Emgu.CV/Emgu.CV.Demo/FaceDetectionScene.unity"};
-		BuildPipeline.BuildPlayer (scenes, "Builds/OSX/osx.app", BuildTarget.StandaloneOSXUniversal, BuildOptions.None);
+		BuildPipeline.BuildPlayer (scenes, "Builds/OSX/osx.app", BuildTarget.StandaloneOSX, BuildOptions.None);
 	}
 
 	static void PerformIOSBuild () {
-		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTarget.iOS);
+		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTargetGroup.iOS, BuildTarget.iOS);
 		string[] scenes = {"Assets/Emgu.CV/Emgu.CV.Demo/FaceDetectionScene.unity"};
 		BuildPipeline.BuildPlayer (scenes, "Builds/iOS", BuildTarget.iOS, BuildOptions.None);
 	}
 
 	static void PerformWinBuild () {
-		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTarget.StandaloneWindows);
+		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows);
 		string[] scenes = {"Assets/Emgu.CV/Emgu.CV.Demo/FaceDetectionScene.unity"};
 		BuildPipeline.BuildPlayer (scenes, "Builds/Win/win.exe", BuildTarget.StandaloneWindows, BuildOptions.None);
 	}
 
 	static void PerformWin64Build () {
-		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTarget.StandaloneWindows64);
+		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows64);
 		string[] scenes = {"Assets/Emgu.CV/Emgu.CV.Demo/FaceDetectionScene.unity"};
 		BuildPipeline.BuildPlayer (scenes, "Builds/Win64/win64.exe", BuildTarget.StandaloneWindows64, BuildOptions.None);
 	}
 
 	static void PerformAndroidBuild () {
-		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTarget.Android);
+		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTargetGroup.Android, BuildTarget.Android);
 		string[] scenes = {"Assets/Emgu.CV/Emgu.CV.Demo/FaceDetectionScene.unity"};
 		BuildPipeline.BuildPlayer (scenes, "Builds/Android", BuildTarget.Android, BuildOptions.None);
 	}
 
+
 	static void PerformUniversalSDK81Build () {
-		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTarget.WSAPlayer);
-		UnityEditor.EditorUserBuildSettings.wsaSDK = WSASDK.UniversalSDK81;
+		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTargetGroup.WSA, BuildTarget.WSAPlayer);
+		//UnityEditor.EditorUserBuildSettings.wsaSDK = WSASDK.UniversalSDK81;
 		string[] scenes = {"Assets/Emgu.CV/Emgu.CV.Demo/FaceDetectionScene.unity"};
 		BuildPipeline.BuildPlayer (scenes, "Builds/UniversalSDK81", BuildTarget.WSAPlayer, BuildOptions.None);
 	}
 
 	static void PerformUWPBuild () {
-		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTarget.WSAPlayer);
-		UnityEditor.EditorUserBuildSettings.wsaSDK = WSASDK.UWP;
+		EditorUserBuildSettings.SwitchActiveBuildTarget (BuildTargetGroup.WSA, BuildTarget.WSAPlayer);
+		//UnityEditor.EditorUserBuildSettings.wsaSDK = WSASDK.UWP;
 		string[] scenes = {"Assets/Emgu.CV/Emgu.CV.Demo/FaceDetectionScene.unity"};
 		BuildPipeline.BuildPlayer (scenes, "Builds/UWP", BuildTarget.WSAPlayer, BuildOptions.None);
 	}
