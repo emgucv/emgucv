@@ -6,6 +6,8 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/imgproc/types_c.h"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/photo/photo.hpp"
 
 //#include "opencv2/gpu/gpu.hpp"
 
@@ -173,6 +175,29 @@ void Test_MatchTemplate()
    cout << "Template matched expected: " << offset.x << "," << offset.y << "; computed: " << minLoc.x << "," << minLoc.y << /*"; maxLoc: " << maxLoc.x << "," <<maxLoc.y <<*/ std::endl;
 }
 
+void Test_SeamlessClone(int size)
+{
+	cv::Mat source = cv::imread("C:\\work\\sourceforge\\emgucv\\libs\\x64\\lena.jpg");
+	//cv::Mat source = cv::imread(".\\lena.jpg");
+	cv::Mat img1;
+	cv::resize(source, img1, cv::Size(size, size));
+	cv::Mat img2;
+	cv::resize(source, img2, cv::Size(size / 2, size / 2));
+	cv::Mat mask(img2.size(), CV_8UC1);
+	int rows = mask.rows;
+	int cols = mask.cols;
+	int radius = (int)( (std::min)( rows, cols ) / 2.0 );
+	cv::circle(mask, cv::Point(mask.rows / 2, mask.cols / 2), radius, cv::Scalar(255), -1);
+
+	cv::TickMeter meter;
+	cv::Mat blend(img1.size(), CV_8UC3);
+	meter.start();
+	cv::seamlessClone(img2, img1, mask, cv::Point(mask.rows / 2, mask.cols / 2), blend, cv::NORMAL_CLONE);
+	meter.stop();
+	cout << "Seamless clone time: " << meter.getTimeMilli() << " milliseconds. " << std::endl;
+	
+}
+
 int main()
 {
    char tmp;
@@ -193,8 +218,13 @@ int main()
 
 #ifdef _MSC_VER
    Test_quaternions_performance();
+   
+   Test_SeamlessClone(3840);
+
    cin >>tmp; //wait for input only if compiling with visual C++ 
 #endif
+
+
 }
 
 
