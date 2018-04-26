@@ -896,16 +896,16 @@ namespace Emgu.CV
 
         #region Math Functions
         /// <summary>
-        /// Calculates either magnitude, angle, or both of every 2d vector (x(I),y(I)):
-        /// magnitude(I)=sqrt( x(I)2+y(I)2 ),
-        /// angle(I)=atan( y(I)/x(I) )
-        /// The angles are calculated with ~0.1 degree accuracy. For (0,0) point the angle is set to 0
+        /// Calculates the magnitude and angle of 2D vectors.
+        /// magnitude(I)=sqrt( x(I)^2+y(I)^2 ),
+        /// angle(I)=atan2( y(I)/x(I) ) 
+        /// The angles are calculated with accuracy about 0.3 degrees. For the point (0,0), the angle is set to 0.
         /// </summary>
-        /// <param name="x">The array of x-coordinates </param>
-        /// <param name="y">The array of y-coordinates</param>
-        /// <param name="magnitude">The destination array of magnitudes, may be set to IntPtr.Zero if it is not needed </param>
-        /// <param name="angle">The destination array of angles, may be set to IntPtr.Zero if it is not needed. The angles are measured in radians (0..2?) or in degrees (0..360?). </param>
-        /// <param name="angleInDegrees">The flag indicating whether the angles are measured in radians or in degrees</param>
+        /// <param name="x">Array of x-coordinates; this must be a single-precision or double-precision floating-point array.</param>
+        /// <param name="y">Array of y-coordinates, that must have the same size and same type as x.</param>
+        /// <param name="magnitude">Output array of magnitudes of the same size and type as x.</param>
+        /// <param name="angle">Output array of angles that has the same size and type as x; the angles are measured in radians (from 0 to 2*Pi) or in degrees (0 to 360 degrees).</param>
+        /// <param name="angleInDegrees">A flag, indicating whether the angles are measured in radians (which is by default), or in degrees.</param>
         public static void CartToPolar(
            IInputArray x,
            IInputArray y,
@@ -916,7 +916,7 @@ namespace Emgu.CV
             using (InputArray iaX = x.GetInputArray())
             using (InputArray iaY = y.GetInputArray())
             using (OutputArray oaMagitude = magnitude.GetOutputArray())
-            using (OutputArray oaAngle = angle == null ? OutputArray.GetEmpty() : angle.GetOutputArray())
+            using (OutputArray oaAngle = angle.GetOutputArray())
                 cveCartToPolar(iaX, iaY, oaMagitude, oaAngle, angleInDegrees);
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
