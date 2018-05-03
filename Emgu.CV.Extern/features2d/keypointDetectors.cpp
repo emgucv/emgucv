@@ -177,19 +177,19 @@ void drawMatchedFeatures(
 }
 
 //DescriptorMatcher
-void CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* trainDescriptors)
+void cveDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* trainDescriptors)
 {
    matcher->add(*trainDescriptors);   
 }
 
-void CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
+void cveDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
                    std::vector< std::vector< cv::DMatch > >* matches, int k,
-                   cv::_InputArray* mask) 
+                   cv::_InputArray* mask, bool compactResult)
 {
-   matcher->knnMatch(*queryDescriptors, *matches, k, mask ? * mask : (cv::InputArray) cv::noArray(), false);
+   matcher->knnMatch(*queryDescriptors, *matches, k, mask ? * mask : (cv::InputArrayOfArrays) cv::noArray(), compactResult);
 }
 
-cv::Algorithm* CvDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher)
+cv::Algorithm* cveDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher)
 {
    return dynamic_cast<cv::Algorithm*>( matcher );
 }
@@ -206,6 +206,41 @@ void cveBFMatcherRelease(cv::BFMatcher** matcher)
    delete *matcher;
    *matcher = 0;
 }
+
+void cveDescriptorMatcherClear(cv::DescriptorMatcher* matcher)
+{
+	matcher->clear();
+}
+bool cveDescriptorMatcherEmpty(cv::DescriptorMatcher* matcher)
+{
+	return matcher->empty();
+}
+bool cveDescriptorMatcherIsMaskSupported(cv::DescriptorMatcher* matcher)
+{
+	return matcher->isMaskSupported();
+}
+void cveDescriptorMatcherTrain(cv::DescriptorMatcher* matcher)
+{
+	matcher->train();
+}
+void cveDescriptorMatcherMatch1(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	std::vector<cv::DMatch>* matches,
+	cv::_InputArray* mask)
+{
+	matcher->match(*queryDescriptors, *trainDescriptors, *matches, mask ? *mask : (cv::InputArray) cv::noArray());
+}
+void cveDescriptorMatcherMatch2(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	std::vector<cv::DMatch>* matches,
+	cv::_InputArray* masks)
+{
+	matcher->match(*queryDescriptors, *matches, masks ? *masks : (cv::InputArrayOfArrays) cv::noArray());
+}
+
 
 //FlannBasedMatcher
 cv::FlannBasedMatcher* cveFlannBasedMatcherCreate(cv::flann::IndexParams* indexParams, cv::flann::SearchParams* searchParams, cv::DescriptorMatcher** m)

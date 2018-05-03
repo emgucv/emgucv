@@ -28,11 +28,16 @@ namespace Emgu.CV.Features2D
         /// <param name="k">Number of nearest neighbors to search for</param>
         /// <param name="mask">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
         /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
-        public void KnnMatch(IInputArray queryDescriptor, VectorOfVectorOfDMatch matches, int k, IInputArray mask)
+        /// <param name="compactResult">
+        /// Parameter used when the mask (or masks) is not empty. If compactResult is
+        /// false, the matches vector has the same size as queryDescriptors rows.If compactResult is true,
+        /// the matches vector does not contain matches for fully masked-out query descriptors.
+        /// </param>
+        public void KnnMatch(IInputArray queryDescriptor, VectorOfVectorOfDMatch matches, int k, IInputArray mask = null, bool compactResult = false)
         {
             using (InputArray iaQueryDesccriptor = queryDescriptor.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                DescriptorMatcherInvoke.CvDescriptorMatcherKnnMatch(_descriptorMatcherPtr, iaQueryDesccriptor, matches, k, iaMask);
+                CvInvoke.cveDescriptorMatcherKnnMatch(_descriptorMatcherPtr, iaQueryDesccriptor, matches, k, iaMask, compactResult);
         }
 
         /// <summary>
@@ -42,12 +47,12 @@ namespace Emgu.CV.Features2D
         public void Add(IInputArray modelDescriptors)
         {
             using (InputArray iaModelDescriptors = modelDescriptors.GetInputArray())
-                DescriptorMatcherInvoke.CvDescriptorMatcherAdd(_descriptorMatcherPtr, iaModelDescriptors);
+                CvInvoke.cveDescriptorMatcherAdd(_descriptorMatcherPtr, iaModelDescriptors);
         }
 
         IntPtr IAlgorithm.AlgorithmPtr
         {
-            get { return DescriptorMatcherInvoke.CvDescriptorMatcherGetAlgorithm(_ptr); }
+            get { return CvInvoke.cveDescriptorMatcherGetAlgorithm(_ptr); }
         }
 
         /// <summary>
@@ -57,24 +62,137 @@ namespace Emgu.CV.Features2D
         {
             _descriptorMatcherPtr = IntPtr.Zero;
         }
-    }
 
-    internal static partial class DescriptorMatcherInvoke
-    {
-        static DescriptorMatcherInvoke()
+        /// <summary>
+        /// Clears the train descriptor collections.
+        /// </summary>
+        public void Clear()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.cveDescriptorMatcherClear(_descriptorMatcherPtr);
         }
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void CvDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);
+        /// <summary>
+        /// Returns true if there are no train descriptors in the both collections.
+        /// </summary>
+        public bool Empty
+        {
+            get
+            {
+                return CvInvoke.cveDescriptorMatcherEmpty(_descriptorMatcherPtr);
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the descriptor matcher supports masking permissible matches.
+        /// </summary>
+        public bool IsMaskSupported
+        {
+            get
+            {
+                return CvInvoke.cveDescriptorMatcherIsMaskSupported(_descriptorMatcherPtr);
+            }
+        }
+
+        /// <summary>
+        /// Trains a descriptor matcher (for example, the flann index). In all methods to match, the method
+        /// train() is run every time before matching.Some descriptor matchers(for example, BruteForceMatcher)
+        /// have an empty implementation of this method.Other matchers really train their inner structures (for
+        /// example, FlannBasedMatcher trains flann::Index ).
+        /// </summary>
+        public void Train()
+        {
+            CvInvoke.cveDescriptorMatcherTrain(_descriptorMatcherPtr);
+        }
+
+        /// <summary>
+        /// Finds the best match for each descriptor from a query set.
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="trainDescriptors">Train set of descriptors. This set is not added to the train descriptors collection stored in the class object.</param>
+        /// <param name="matches">If a query descriptor is masked out in mask , no match is added for this descriptor. So, matches size may be smaller than the query descriptors count.</param>
+        /// <param name="mask">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        public void Match(
+            IInputArray queryDescriptors,
+            IInputArray trainDescriptors,
+            VectorOfDMatch matches,
+            IInputArray mask = null)
+        {
+            using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
+            using(InputArray iaTrainDescriptot = trainDescriptors.GetInputArray())
+            using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
+                CvInvoke.cveDescriptorMatcherMatch1(_descriptorMatcherPtr, iaQueryDesccriptor, iaTrainDescriptot, matches, iaMask);
+            }
+        }
+
+        /// <summary>
+        /// Finds the best match for each descriptor from a query set. Train descriptors collection that was set by the Add function is used.
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="matches">If a query descriptor is masked out in mask , no match is added for this descriptor. So, matches size may be smaller than the query descriptors count.</param>
+        /// <param name="masks">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        public void Match(
+            IInputArray queryDescriptors,
+            VectorOfDMatch matches,
+            IInputArrayOfArrays masks = null
+            )
+        {
+            using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
+            using (InputArray iaMasks = masks == null ? InputArray.GetEmpty() : masks.GetInputArray())
+            {
+                CvInvoke.cveDescriptorMatcherMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, iaMasks);
+            }
+        }
+    }
+}
+namespace Emgu.CV
+{ 
+    public static partial class CvInvoke
+    {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void CvDescriptorMatcherKnnMatch(IntPtr matcher, IntPtr queryDescriptors,
-                     IntPtr matches, int k,
-                     IntPtr mask);
+        internal extern static void cveDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr CvDescriptorMatcherGetAlgorithm(IntPtr matcher);
+        internal extern static void cveDescriptorMatcherKnnMatch(
+            IntPtr matcher, 
+            IntPtr queryDescriptors,
+            IntPtr matches, 
+            int k,
+            IntPtr mask,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool compactResult);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static IntPtr cveDescriptorMatcherGetAlgorithm(IntPtr matcher);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveDescriptorMatcherClear(IntPtr matcher);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal extern static bool cveDescriptorMatcherEmpty(IntPtr matcher);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal extern static bool cveDescriptorMatcherIsMaskSupported(IntPtr matcher);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveDescriptorMatcherTrain(IntPtr matcher);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveDescriptorMatcherMatch1(
+            IntPtr matcher,
+            IntPtr queryDescriptors,
+            IntPtr trainDescriptors,
+            IntPtr matches,
+            IntPtr mask);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveDescriptorMatcherMatch2(
+            IntPtr matcher,
+            IntPtr queryDescriptors,
+            IntPtr matches,
+            IntPtr masks);
     }
 }

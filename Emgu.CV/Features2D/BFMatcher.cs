@@ -13,6 +13,7 @@ namespace Emgu.CV.Features2D
     /// <summary>
     /// The match distance type
     /// </summary>
+    [Flags]
     public enum DistanceType
     {
         /// <summary>
@@ -46,10 +47,21 @@ namespace Emgu.CV.Features2D
         /// bit count of A exclusive XOR'ed with B. 
         /// </summary>
         Hamming2 = 7, //TODO: update the documentation
-                      /*
-                      TypeMask = 7, 
-                      Relative = 8, 
-                      MinMax = 32 */
+
+        /// <summary>
+        ///  bit-mask which can be used to separate norm type from norm flags
+        /// </summary>
+        TypeMask = 7,
+
+        /// <summary>
+        /// Relative, flag
+        /// </summary>
+        Relative = 8, 
+
+        /// <summary>
+        /// MinMax, flag
+        /// </summary>
+        MinMax = 32 
     }
 
     /// <summary>

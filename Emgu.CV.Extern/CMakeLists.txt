@@ -127,8 +127,10 @@ ENDMACRO()
 # * propW: [c++] {obj}.set${PROPERTY_NAME}(val); [C#] {obj}.Set${CS_FUNCTION_NAME}(val)
 # * propR: [c++] {obj}.get${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME} {get;} 
 # * prop: [c++] {obj}.set${PROPERTY_NAME}(val); & {obj}.get${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
-# * act1: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is a value / structure
-# * act1obj: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is an object
+# * act: [c++] {obj}.${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME}(); where val is a value / structure, a single value is returned
+# * act0: [c++] {obj}.${PROPERTY_NAME}(); [C#] {obj}.${CS_FUNCTION_NAME}(); where val is a value / structure, no value is returned
+# * act1: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is a value / structure, no value is returned
+# * act1obj: [c++] {obj}.${PROPERTY_NAME}(val); [C#] {obj}.${CS_FUNCTION_NAME}(val); where val is an object, no value is returned
 # * element: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
 # * elementR: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get;}
 #################################################################################
@@ -359,6 +361,29 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}( )
      {
         return ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); 
+     }
+     ")
+	ELSEIF(${MARSHAL_TYPE} STREQUAL "act0")
+	  SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);     
+     ")
+      SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { obj->${PROPERTY_NAME}(); }     
+     ")
+      
+      SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+	 ${MARSHAL_RETURN} 
+     internal static extern void cve${CLASS_NAME}${CS_FUNCTION_NAME}(
+        IntPtr obj);
+     ")
+      SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public void ${CS_FUNCTION_NAME}( )
+     {
+        ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); 
      }
      ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1")
@@ -819,6 +844,7 @@ IF(HAVE_opencv_features2d)
     "SimpleBlobDetectorParams"
 	""
     "#include \"features2d_c.h\"")
+
 ENDIF()
 ############################### features2d code gen END ################################
 

@@ -75,13 +75,30 @@ CVAPI(void) drawMatchedFeatures(
    int flags);
 
 //DescriptorMatcher
-CVAPI(void) CvDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* trainDescriptors);
+CVAPI(void) cveDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* trainDescriptors);
 
-CVAPI(void) CvDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
+CVAPI(void) cveDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
                    std::vector< std::vector< cv::DMatch > >* matches, int k,
-                   cv::_InputArray* mask);
+                   cv::_InputArray* mask, bool compactResult);
 
-CVAPI(cv::Algorithm*) CvDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher);
+CVAPI(cv::Algorithm*) cveDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher);
+
+CVAPI(void) cveDescriptorMatcherClear(cv::DescriptorMatcher* matcher);
+CVAPI(bool) cveDescriptorMatcherEmpty(cv::DescriptorMatcher* matcher);
+CVAPI(bool) cveDescriptorMatcherIsMaskSupported(cv::DescriptorMatcher* matcher);
+CVAPI(void) cveDescriptorMatcherTrain(cv::DescriptorMatcher* matcher);
+CVAPI(void) cveDescriptorMatcherMatch1(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors, 
+	cv::_InputArray* trainDescriptors,
+	std::vector<cv::DMatch>* matches, 
+	cv::_InputArray* mask);
+CVAPI(void) cveDescriptorMatcherMatch2(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors, 
+	std::vector<cv::DMatch>* matches,
+	cv::_InputArray* masks);
+
 
 /*
 CVAPI(void) CvDescriptorMatcherRadiusMatch(cv::DescriptorMatcher* matcher, const CvMat* queryDescriptors, 
