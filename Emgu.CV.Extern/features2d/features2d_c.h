@@ -77,9 +77,22 @@ CVAPI(void) drawMatchedFeatures(
 //DescriptorMatcher
 CVAPI(void) cveDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* trainDescriptors);
 
-CVAPI(void) cveDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
-                   std::vector< std::vector< cv::DMatch > >* matches, int k,
-                   cv::_InputArray* mask, bool compactResult);
+CVAPI(void) cveDescriptorMatcherKnnMatch1(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	std::vector< std::vector< cv::DMatch > >* matches,
+	int k,
+	cv::_InputArray* mask,
+	bool compactResult);
+
+CVAPI(void) cveDescriptorMatcherKnnMatch2(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors, 
+    std::vector< std::vector< cv::DMatch > >* matches, 
+	int k,
+    cv::_InputArray* mask, 
+	bool compactResult);
 
 CVAPI(cv::Algorithm*) cveDescriptorMatcherGetAlgorithm(cv::DescriptorMatcher* matcher);
 
@@ -91,19 +104,30 @@ CVAPI(void) cveDescriptorMatcherMatch1(
 	cv::DescriptorMatcher* matcher,
 	cv::_InputArray* queryDescriptors, 
 	cv::_InputArray* trainDescriptors,
-	std::vector<cv::DMatch>* matches, 
+	std::vector< cv::DMatch >* matches, 
 	cv::_InputArray* mask);
 CVAPI(void) cveDescriptorMatcherMatch2(
 	cv::DescriptorMatcher* matcher,
 	cv::_InputArray* queryDescriptors, 
-	std::vector<cv::DMatch>* matches,
+	std::vector< cv::DMatch >* matches,
 	cv::_InputArray* masks);
 
+CVAPI(void) cveDescriptorMatcherRadiusMatch1(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	std::vector< std::vector<cv::DMatch> >* matches,
+	float maxDistance,
+	cv::_InputArray* mask,
+	bool compactResult);
+CVAPI(void) cveDescriptorMatcherRadiusMatch2(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors, 
+	std::vector< std::vector<cv::DMatch> >* matches, 
+	float maxDistance,
+	cv::_InputArray* masks, 
+	bool compactResult);
 
-/*
-CVAPI(void) CvDescriptorMatcherRadiusMatch(cv::DescriptorMatcher* matcher, const CvMat* queryDescriptors, 
-                   CvMat* trainIdx, CvMat* distance, int k,
-                   const CvMat* mask);*/
 
 //BruteForceMatcher
 CVAPI(cv::BFMatcher*) cveBFMatcherCreate(int distanceType, bool crossCheck, cv::DescriptorMatcher** m);

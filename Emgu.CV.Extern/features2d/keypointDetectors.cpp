@@ -6,8 +6,6 @@
 
 #include "features2d_c.h"
 
-
-
 //ORB
 cv::ORB* cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D)
 {
@@ -182,9 +180,25 @@ void cveDescriptorMatcherAdd(cv::DescriptorMatcher* matcher, cv::_InputArray* tr
    matcher->add(*trainDescriptors);   
 }
 
-void cveDescriptorMatcherKnnMatch(cv::DescriptorMatcher* matcher, cv::_InputArray* queryDescriptors, 
-                   std::vector< std::vector< cv::DMatch > >* matches, int k,
-                   cv::_InputArray* mask, bool compactResult)
+void cveDescriptorMatcherKnnMatch1(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	std::vector< std::vector< cv::DMatch > >* matches,
+	int k,
+	cv::_InputArray* mask,
+	bool compactResult)
+{
+	matcher->knnMatch(*queryDescriptors, *trainDescriptors, *matches, k, mask ? *mask : (cv::InputArray) cv::noArray(), compactResult);
+}
+
+void cveDescriptorMatcherKnnMatch2(
+	cv::DescriptorMatcher* matcher, 
+	cv::_InputArray* queryDescriptors, 
+    std::vector< std::vector< cv::DMatch > >* matches, 
+	int k,
+    cv::_InputArray* mask, 
+	bool compactResult)
 {
    matcher->knnMatch(*queryDescriptors, *matches, k, mask ? * mask : (cv::InputArrayOfArrays) cv::noArray(), compactResult);
 }
@@ -241,6 +255,27 @@ void cveDescriptorMatcherMatch2(
 	matcher->match(*queryDescriptors, *matches, masks ? *masks : (cv::InputArrayOfArrays) cv::noArray());
 }
 
+void cveDescriptorMatcherRadiusMatch1(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	std::vector< std::vector<cv::DMatch> >* matches,
+	float maxDistance,
+	cv::_InputArray* mask,
+	bool compactResult)
+{
+	matcher->radiusMatch(*queryDescriptors, *matches, maxDistance, mask ? *mask : (cv::InputArray) cv::noArray(), compactResult);
+}
+void cveDescriptorMatcherRadiusMatch2(
+	cv::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	std::vector< std::vector<cv::DMatch> >* matches,
+	float maxDistance,
+	cv::_InputArray* masks,
+	bool compactResult)
+{
+	matcher->radiusMatch(*queryDescriptors, *matches, maxDistance, masks ? *masks : (cv::InputArrayOfArrays) cv::noArray(), compactResult);
+}
 
 //FlannBasedMatcher
 cv::FlannBasedMatcher* cveFlannBasedMatcherCreate(cv::flann::IndexParams* indexParams, cv::flann::SearchParams* searchParams, cv::DescriptorMatcher** m)

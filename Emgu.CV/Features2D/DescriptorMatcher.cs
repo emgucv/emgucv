@@ -21,6 +21,30 @@ namespace Emgu.CV.Features2D
         /// </summary>
         protected IntPtr _descriptorMatcherPtr;
 
+
+        public void KnnMatch(
+            IInputArray queryDescriptors,
+            IInputArray trainDescriptors,
+            VectorOfVectorOfDMatch matches,
+            int k,
+            IInputArray mask = null,
+            bool compactResult = false)
+        {
+            using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
+            using (InputArray iaTrainDescriptot = trainDescriptors.GetInputArray())
+            using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
+                CvInvoke.cveDescriptorMatcherKnnMatch1(
+                    _descriptorMatcherPtr, 
+                    iaQueryDesccriptor, 
+                    iaTrainDescriptot, 
+                    matches,
+                    k,
+                    iaMask,
+                    compactResult);
+            }
+        }
+
         /// <summary>
         /// Find the k-nearest match
         /// </summary>
@@ -33,11 +57,16 @@ namespace Emgu.CV.Features2D
         /// false, the matches vector has the same size as queryDescriptors rows.If compactResult is true,
         /// the matches vector does not contain matches for fully masked-out query descriptors.
         /// </param>
-        public void KnnMatch(IInputArray queryDescriptor, VectorOfVectorOfDMatch matches, int k, IInputArray mask = null, bool compactResult = false)
+        public void KnnMatch(
+            IInputArray queryDescriptor, 
+            VectorOfVectorOfDMatch matches, 
+            int k, 
+            IInputArray mask = null, 
+            bool compactResult = false)
         {
             using (InputArray iaQueryDesccriptor = queryDescriptor.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                CvInvoke.cveDescriptorMatcherKnnMatch(_descriptorMatcherPtr, iaQueryDesccriptor, matches, k, iaMask, compactResult);
+                CvInvoke.cveDescriptorMatcherKnnMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, k, iaMask, compactResult);
         }
 
         /// <summary>
@@ -143,6 +172,53 @@ namespace Emgu.CV.Features2D
                 CvInvoke.cveDescriptorMatcherMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, iaMasks);
             }
         }
+
+        /// <summary>
+        /// For each query descriptor, finds the training descriptors not farther than the specified distance.
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="trainDescriptors">Train set of descriptors. This set is not added to the train descriptors collection stored in the class object.</param>
+        /// <param name="matches">Found matches.</param>
+        /// <param name="maxDistance">Threshold for the distance between matched descriptors. Distance means here metric distance (e.g. Hamming distance), not the distance between coordinates (which is measured in Pixels)!</param>
+        /// <param name="mask">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="compactResult">Parameter used when the mask (or masks) is not empty. If compactResult is false, the matches vector has the same size as queryDescriptors rows. If compactResult is true, the matches vector does not contain matches for fully masked-out query descriptors.</param>
+        public void RadiusMatch(
+            IInputArray queryDescriptors,
+            IInputArray trainDescriptors,
+            VectorOfVectorOfDMatch matches,
+            float maxDistance,
+            IInputArrayOfArrays mask = null,
+            bool compactResult = false)
+        {
+            using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
+            using (InputArray iaTrainDescriptot = trainDescriptors.GetInputArray())
+            using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
+                CvInvoke.cveDescriptorMatcherRadiusMatch1(_descriptorMatcherPtr, iaQueryDesccriptor, iaTrainDescriptot, matches, maxDistance, iaMask, compactResult);
+            }
+        }
+
+        /// <summary>
+        /// For each query descriptor, finds the training descriptors not farther than the specified distance.
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="matches">Found matches.</param>
+        /// <param name="maxDistance">Threshold for the distance between matched descriptors. Distance means here metric distance (e.g. Hamming distance), not the distance between coordinates (which is measured in Pixels)!</param>
+        /// <param name="masks">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="compactResult">Parameter used when the mask (or masks) is not empty. If compactResult is false, the matches vector has the same size as queryDescriptors rows. If compactResult is true, the matches vector does not contain matches for fully masked-out query descriptors.</param>
+        public void RadiusMatch(
+            IInputArray queryDescriptors,
+            VectorOfVectorOfDMatch matches,
+            float maxDistance,
+            IInputArray masks = null,
+            bool compactResult = false)
+        {
+            using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
+            using (InputArray iaMasks = masks == null ? InputArray.GetEmpty() : masks.GetInputArray())
+            {
+                CvInvoke.cveDescriptorMatcherRadiusMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, maxDistance, iaMasks, compactResult);
+            }
+        }
     }
 }
 namespace Emgu.CV
@@ -154,7 +230,18 @@ namespace Emgu.CV
         internal extern static void cveDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescriptor);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveDescriptorMatcherKnnMatch(
+        internal extern static void cveDescriptorMatcherKnnMatch1(
+            IntPtr matcher,
+            IntPtr queryDescriptors,
+            IntPtr trainDescriptors,
+            IntPtr matches,
+            int k,
+            IntPtr mask,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool compactResult);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveDescriptorMatcherKnnMatch2(
             IntPtr matcher, 
             IntPtr queryDescriptors,
             IntPtr matches, 
@@ -194,5 +281,25 @@ namespace Emgu.CV
             IntPtr queryDescriptors,
             IntPtr matches,
             IntPtr masks);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveDescriptorMatcherRadiusMatch1(
+            IntPtr matcher,
+            IntPtr queryDescriptors,
+            IntPtr trainDescriptors,
+            IntPtr matches,
+            float maxDistance,
+            IntPtr mask,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool compactResult);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveDescriptorMatcherRadiusMatch2(
+            IntPtr matcher,
+            IntPtr queryDescriptors,
+            IntPtr matches,
+            float maxDistance,
+            IntPtr masks,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool compactResult);
     }
 }
