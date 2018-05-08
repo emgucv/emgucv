@@ -147,10 +147,10 @@ namespace Emgu.CV.Features2D
             IInputArray mask = null)
         {
             using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
-            using(InputArray iaTrainDescriptot = trainDescriptors.GetInputArray())
+            using(InputArray iaTrainDescriptor = trainDescriptors.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
-                CvInvoke.cveDescriptorMatcherMatch1(_descriptorMatcherPtr, iaQueryDesccriptor, iaTrainDescriptot, matches, iaMask);
+                CvInvoke.cveDescriptorMatcherMatch1(_descriptorMatcherPtr, iaQueryDesccriptor, iaTrainDescriptor, matches, iaMask);
             }
         }
 

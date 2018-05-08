@@ -15,6 +15,7 @@ cv::cuda::DescriptorMatcher* cveCudaDescriptorMatcherCreateBFMatcher(int distTyp
    return matcher;
 }
 
+
 void cveCudaDescriptorMatcherRelease(cv::cuda::DescriptorMatcher** matcher)
 {
    delete *matcher;
@@ -26,13 +27,215 @@ void cveCudaDescriptorMatcherAdd(cv::cuda::DescriptorMatcher* matcher, const std
    matcher->add(*trainDescs);
 }
 
-void cveCudaDescriptorMatcherKnnMatch(
-   cv::cuda::DescriptorMatcher* matcher,
-   cv::_InputArray* queryDescs, cv::_InputArray* trainDescs,
-   std::vector< std::vector< cv::DMatch > >* matches,
-   int k, cv::_InputArray* masks, bool compactResult)
+bool cveCudaDescriptorMatcherIsMaskSupported(cv::cuda::DescriptorMatcher* matcher)
 {
-   matcher->knnMatch(*queryDescs, *trainDescs, *matches, k, masks ? *masks : (cv::_InputArray) cv::noArray(), compactResult);
+	return matcher->isMaskSupported();
+}
+void cveCudaDescriptorMatcherClear(cv::cuda::DescriptorMatcher* matcher)
+{
+	return matcher->clear();
+}
+bool cveCudaDescriptorMatcherEmpty(cv::cuda::DescriptorMatcher* matcher)
+{
+	return matcher->empty();
+}
+void cveCudaDescriptorMatcherTrain(cv::cuda::DescriptorMatcher* matcher)
+{
+	return matcher->train();
+}
+void cveCudaDescriptorMatcherMatch1(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	std::vector< cv::DMatch >* matches,
+	cv::_InputArray* mask)
+{
+	matcher->match(
+		*queryDescriptors, 
+		*trainDescriptors, 
+		*matches, 
+		mask ? *mask : (cv::InputArray) cv::noArray());
+}
+void cveCudaDescriptorMatcherMatch2(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	std::vector< cv::DMatch >* matches,
+	std::vector< cv::cuda::GpuMat >* masks)
+{
+	matcher->match(
+		*queryDescriptors,
+		*matches,
+		mask ? *masks : std::vector< cv::cuda::GpuMat >());
+}
+void cveCudaDescriptorMatcherMatchAsync(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_OutputArray* matches,
+	std::vector< cv::cuda::GpuMat >* masks,
+	cv::cuda::Stream* stream)
+{
+	matcher->matchAsync(
+		*queryDescriptors,
+		*matches,
+		masks ? *masks : std::vector< cv::cuda::GpuMat >(),
+		stream ? *stream : cv::cuda::Stream::Null()
+	);
+}
+void cveCudaDescriptorMatcherMatchConvert(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* gpuMatches,
+	std::vector< cv::DMatch >* matches)
+{
+	matcher->matchConvert(*gpuMatches, *matches);
+}
+
+void cveCudaDescriptorMatcherKnnMatch1(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescs, 
+	cv::_InputArray* trainDescs,
+	std::vector< std::vector< cv::DMatch > >* matches,
+	int k, 
+	cv::_InputArray* masks, 
+	bool compactResult)
+{
+	matcher->knnMatch(*queryDescs, *trainDescs, *matches, k, masks ? *masks : (cv::_InputArray) cv::noArray(), compactResult);
+}
+
+void cveCudaDescriptorMatcherKnnMatch2(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	std::vector< std::vector< cv::DMatch > >* matches,
+	int k,
+	std::vector< cv::cuda::GpuMat >* masks,
+	bool compactResult)
+{
+	matcher->knnMatch(*queryDescriptors, *matches, k, mask ? *masks : std::vector< cv::GpuMat >(), compactResult);
+}
+
+void cveCudaDescriptorMatcherKnnMatchAsync1(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	cv::_OutputArray* matches,
+	int k,
+	cv::_InputArray* mask,
+	cv::cuda::Stream* stream)
+{
+	matcher->knnMatchAsync(
+		*queryDescriptors,
+		*trainDescriptors,
+		*matches,
+		k,
+		mask ? *mask : (cv::InputArray) cv::noArray(),
+		stream ? *stream : cv::cuda::Stream::Null());
+}
+
+void cveCudaDescriptorMatcherKnnMatchAsync2(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_OutputArray* matches,
+	int k,
+	std::vector< cv::cuda::GpuMat >* masks,
+	cv::cuda::Stream* stream)
+{
+	matcher->knnMatchAsync(
+		*queryDescriptors,
+		*matches,
+		k,
+		masks ? *masks : std::vector< cv::cuda::GpuMat >(),
+		stream ? *stream : cv::cuda::Stream::Null()
+	);
+}
+
+void cveCudaDescriptorMatcherKnnMatchConvert(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* gpuMatches,
+	std::vector< std::vector< cv::DMatch > >* matches,
+	bool compactResult)
+{
+	matcher->knnMatchConvert(*gpuMatches, *matches, compactResult);
+}
+
+void cveCudaDescriptorMatcherRadiusMatch1(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	std::vector< std::vector< cv::DMatch > >* matches,
+	float maxDistance,
+	cv::_InputArray* mask,
+	bool compactResult)
+{
+	matcher->radiusMatch(
+		*queryDescriptors,
+		*trainDescriptors,
+		*matches,
+		maxDistance,
+		mask ? *mask : (cv::InputArray) cv::noArray(),
+		compactResult);
+}
+
+void cveCudaDescriptorMatcherRadiusMatch2(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	std::vector< std::vector< cv::DMatch > >* matches,
+	float maxDistance,
+	std::vector< cv::cuda::GpuMat >* masks,
+	bool compactResult)
+{
+	matcher->radiusMatch(
+		*queryDescriptors,
+		*matches,
+		maxDistance,
+		masks ? *masks : std::vector< cv::cuda::GpuMat >(),
+		compactResult);
+}
+
+void cveCudaDescriptorMatcherRadiusMatchAsync1(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	cv::_OutputArray* matches,
+	float maxDistance,
+	cv::_InputArray* mask,
+	cv::cuda::Stream* stream)
+{
+	matcher->radiusMatchAsync(
+		*queryDescriptors,
+		*trainDescriptors,
+		*matches,
+		maxDistance,
+		mask ? *mask : (cv::InputArray) cv::noArray(),
+		stream ? *stream : cv::cuda::Stream::Null()
+	);
+}
+
+void cveCudaDescriptorMatcherRadiusMatchAsync2(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_OutputArray* matches,
+	float maxDistance,
+	std::vector< cv::cuda::GpuMat >* masks,
+	cv::cuda::Stream* stream)
+{
+	matcher->radiusMatchAsync(
+		*queryDescriptors,
+		*matches,
+		maxDistance,
+		masks ? *masks : std::vector< cv::cuda::GpuMat >(),
+		stream ? *stream : cv::cuda::Stream::Null()
+	);
+}
+
+void cveCudaDescriptorMatcherRadiusMatchConvert(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* gpu_matches,
+	std::vector< std::vector< cv::DMatch > >* matches,
+	bool compactResult)
+{
+	matcher->radiusMatchConvert(
+		*gpu_matches,
+		*matches,
+		compactResult);
 }
 
 //----------------------------------------------------------------------------
