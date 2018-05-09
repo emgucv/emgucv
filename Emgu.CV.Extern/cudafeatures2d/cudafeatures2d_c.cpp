@@ -65,9 +65,26 @@ void cveCudaDescriptorMatcherMatch2(
 	matcher->match(
 		*queryDescriptors,
 		*matches,
-		mask ? *masks : std::vector< cv::cuda::GpuMat >());
+		masks ? *masks : std::vector< cv::cuda::GpuMat >());
 }
-void cveCudaDescriptorMatcherMatchAsync(
+
+void cveCudaDescriptorMatcherMatchAsync1(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	cv::_OutputArray* matches,
+	cv::_InputArray* mask,
+	cv::cuda::Stream* stream)
+{
+	matcher->matchAsync(
+		*queryDescriptors,
+		*trainDescriptors,
+		*matches,
+		mask ? *mask : (cv::InputArray) cv::noArray(),
+		stream ? *stream : cv::cuda::Stream::Null());
+}
+
+void cveCudaDescriptorMatcherMatchAsync2(
 	cv::cuda::DescriptorMatcher* matcher,
 	cv::_InputArray* queryDescriptors,
 	cv::_OutputArray* matches,
@@ -109,7 +126,12 @@ void cveCudaDescriptorMatcherKnnMatch2(
 	std::vector< cv::cuda::GpuMat >* masks,
 	bool compactResult)
 {
-	matcher->knnMatch(*queryDescriptors, *matches, k, mask ? *masks : std::vector< cv::GpuMat >(), compactResult);
+	matcher->knnMatch(
+		*queryDescriptors, 
+		*matches, 
+		k, 
+		masks ? *masks : std::vector< cv::cuda::GpuMat >(), 
+		compactResult);
 }
 
 void cveCudaDescriptorMatcherKnnMatchAsync1(

@@ -42,7 +42,15 @@ CVAPI(void) cveCudaDescriptorMatcherMatch2(
 	cv::_InputArray* queryDescriptors,
 	std::vector< cv::DMatch >* matches,
 	std::vector< cv::cuda::GpuMat >* masks);
-CVAPI(void) cveCudaDescriptorMatcherMatchAsync(
+
+CVAPI(void) cveCudaDescriptorMatcherMatchAsync1(
+	cv::cuda::DescriptorMatcher* matcher,
+	cv::_InputArray* queryDescriptors,
+	cv::_InputArray* trainDescriptors,
+	cv::_OutputArray* matches,
+	cv::_InputArray* mask,
+	cv::cuda::Stream* stream);
+CVAPI(void) cveCudaDescriptorMatcherMatchAsync2(
 	cv::cuda::DescriptorMatcher* matcher,
 	cv::_InputArray* queryDescriptors,
 	cv::_OutputArray* matches,

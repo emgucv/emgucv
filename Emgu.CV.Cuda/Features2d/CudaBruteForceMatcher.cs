@@ -31,11 +31,11 @@ namespace Emgu.CV.Cuda
         /// <param name="compactResult">Parameter used when the mask (or masks) is not empty. If compactResult is false, the matches vector has the same size as queryDescriptors rows. If compactResult is true, the matches vector does not contain matches for fully masked-out query descriptors.</param>
         /// <param name="trainDescriptors">Train set of descriptors. This set is not added to the train descriptors collection stored in the class object.</param>
         public void KnnMatch(
-            IInputArray queryDescriptors, 
-            IInputArray trainDescriptors, 
-            VectorOfVectorOfDMatch matches, 
-            int k, 
-            IInputArray mask = null, 
+            IInputArray queryDescriptors,
+            IInputArray trainDescriptors,
+            VectorOfVectorOfDMatch matches,
+            int k,
+            IInputArray mask = null,
             bool compactResult = false)
         {
             using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
@@ -63,11 +63,69 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        public void KnnMatchAsync(
+            IInputArray queryDescriptors,
+            IInputArray trainDescriptors,
+            IOutputArray matches,
+            int k,
+            IInputArray mask = null,
+            Stream stream = null)
+        {
+            using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
+            using (InputArray iaTrainDescriptors = trainDescriptors.GetInputArray())
+            using (OutputArray oaMatches = matches.GetOutputArray())
+            using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
+                CudaInvoke.cveCudaDescriptorMatcherKnnMatchAsync1(
+                    _ptr,
+                    iaQueryDescriptors,
+                    iaTrainDescriptors,
+                    oaMatches,
+                    k,
+                    iaMask,
+                    stream);
+            }
+        }
+
+        public void KnnMatchAsync(
+            IInputArray queryDescriptors,
+            IOutputArray matches,
+            int k,
+            VectorOfGpuMat masks = null,
+            Stream stream = null)
+        {
+            using (InputArray iaQueryDescriptor = queryDescriptors.GetInputArray())
+            using (OutputArray oaMatches = matches.GetOutputArray())
+            {
+                CudaInvoke.cveCudaDescriptorMatcherKnnMatchAsync2(
+                    _ptr,
+                    iaQueryDescriptor,
+                    oaMatches,
+                    k,
+                    masks == null ? IntPtr.Zero : masks.Ptr,
+                    stream);
+            }
+        }
+
+        public void KnnMatchConvert(
+            IInputArray gpuMatches,
+            VectorOfVectorOfDMatch matches,
+            bool compactResult = false)
+        {
+            using (InputArray iaGpuMatches = gpuMatches.GetInputArray())
+                CudaInvoke.cveCudaDescriptorMatcherKnnMatchConvert(
+                    _ptr,
+                    iaGpuMatches,
+                    matches,
+                    compactResult
+                    );
+        }
+
         public void Match(
             IInputArray queryDescriptors,
             IInputArray trainDescriptors,
             VectorOfDMatch matches,
-            IInputArray mask)
+            IInputArray mask = null)
         {
             using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
             using (InputArray iaTrainDescriptor = trainDescriptors.GetInputArray())
@@ -85,6 +143,153 @@ namespace Emgu.CV.Cuda
             using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
             {
                 CudaInvoke.cveCudaDescriptorMatcherMatch2(_ptr, iaQueryDesccriptor, matches, mask == null ? IntPtr.Zero : mask.Ptr);
+            }
+        }
+
+        public void MatchAsync(
+            IInputArray queryDescriptors,
+            IInputArray trainDescriptors,
+            IOutputArray matches,
+            IInputArray mask = null,
+            Stream stream = null)
+        {
+            using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
+            using (InputArray iaTrainDescriptor = trainDescriptors.GetInputArray())
+            using (OutputArray oaMatches = matches.GetOutputArray())
+            using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
+                CudaInvoke.cveCudaDescriptorMatcherMatchAsync1(
+                    _ptr,
+                    iaQueryDesccriptor,
+                    iaTrainDescriptor,
+                    oaMatches,
+                    iaMask,
+                    stream
+                    );
+            }
+        }
+
+        public void MatchAsync(
+            IInputArray queryDescriptors,
+            IOutputArray matches,
+            VectorOfGpuMat masks = null,
+            Stream stream = null)
+        {
+            using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
+            using (OutputArray oaMatches = matches.GetOutputArray())
+                CudaInvoke.cveCudaDescriptorMatcherMatchAsync2(
+                    _ptr,
+                    iaQueryDesccriptor,
+                    oaMatches,
+                    masks == null ? IntPtr.Zero : masks.Ptr,
+                    stream
+                    );
+        }
+
+        public void MatchConvert(
+            IInputArray gpuMatches,
+            VectorOfDMatch matches)
+        {
+            using (InputArray iaGpuMatches = gpuMatches.GetInputArray())
+            {
+                CudaInvoke.cveCudaDescriptorMatcherMatchConvert(
+                    _ptr,
+                    iaGpuMatches,
+                    matches);
+            }
+        }
+
+        public void RadiusMatch(
+            IInputArray queryDescriptors,
+            IInputArray trainDescriptors,
+            VectorOfVectorOfDMatch matches,
+            float maxDistance,
+            IInputArray mask = null,
+            bool compactResult = false)
+        {
+            using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
+            using (InputArray iaTrainDescriptors = trainDescriptors.GetInputArray())
+            using (InputArray iaMask = (mask == null ? InputArray.GetEmpty() : mask.GetInputArray()))
+                CudaInvoke.cveCudaDescriptorMatcherRadiusMatch1(
+                    _ptr,
+                    iaQueryDescriptors,
+                    iaTrainDescriptors,
+                    matches,
+                    maxDistance,
+                    iaMask,
+                    compactResult);
+        }
+
+        public void RadiusMatch(
+            IInputArray queryDescriptors,
+            VectorOfVectorOfDMatch matches,
+            float maxDistance,
+            VectorOfGpuMat masks = null,
+            bool compactResult = false)
+        {
+            using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
+                CudaInvoke.cveCudaDescriptorMatcherRadiusMatch2(
+                    _ptr,
+                    iaQueryDescriptors,
+                    matches,
+                    maxDistance,
+                    masks == null ? IntPtr.Zero : masks.Ptr,
+                    compactResult
+                    );
+        }
+
+        public void RadiusMatchAsync(
+            IInputArray queryDescriptors,
+            IInputArray trainDescriptors,
+            IOutputArray matches,
+            float maxDistance,
+            IInputArray mask = null,
+            Stream stream = null)
+        {
+            using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
+            using (InputArray iaTrainDescriptors = trainDescriptors.GetInputArray())
+            using (OutputArray oaMatches = matches.GetOutputArray())
+            using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+                CudaInvoke.cveCudaDescriptorMatcherRadiusMatchAsync1(
+                    _ptr,
+                    iaQueryDescriptors,
+                    iaTrainDescriptors,
+                    oaMatches,
+                    maxDistance,
+                    iaMask,
+                    stream);
+        }
+
+        public void RadiusMatchAsync(
+            IInputArray queryDescriptors,
+            IOutputArray matches,
+            float maxDistance,
+            VectorOfGpuMat masks,
+            Stream stream)
+        {
+            using (InputArray iaQueryDescriptor = queryDescriptors.GetInputArray())
+            using (OutputArray oaMatches = matches.GetOutputArray())
+                CudaInvoke.cveCudaDescriptorMatcherRadiusMatchAsync2(
+                    _ptr,
+                    iaQueryDescriptor,
+                    oaMatches,
+                    maxDistance,
+                    masks == null ? IntPtr.Zero : masks.Ptr,
+                    stream);
+        }
+
+        public void RadiusMatchConvert(
+            IInputArray gpuMatches,
+            VectorOfVectorOfDMatch matches,
+            bool compactResult)
+        {
+            using (InputArray iaGpuMatches = gpuMatches.GetInputArray())
+            {
+                CudaInvoke.cveCudaDescriptorMatcherRadiusMatchConvert(
+                    _ptr,
+                    iaGpuMatches,
+                    matches,
+                    compactResult);
             }
         }
 
@@ -199,12 +404,22 @@ namespace Emgu.CV.Cuda
             IntPtr masks);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherMatchAsync(
+        internal extern static void cveCudaDescriptorMatcherMatchAsync1(
+            IntPtr matcher,
+            IntPtr queryDescriptors,
+            IntPtr trainDescriptors,
+            IntPtr matches,
+            IntPtr mask,
+            IntPtr stream);
+
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveCudaDescriptorMatcherMatchAsync2(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr matches,
             IntPtr masks,
             IntPtr stream);
+
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveCudaDescriptorMatcherMatchConvert(
             IntPtr matcher,
@@ -242,7 +457,7 @@ namespace Emgu.CV.Cuda
             IntPtr stream);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherknnMatchAsync2(
+        internal extern static void cveCudaDescriptorMatcherKnnMatchAsync2(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr matches,
@@ -301,7 +516,7 @@ namespace Emgu.CV.Cuda
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveCudaDescriptorMatcherRadiusMatchConvert(
             IntPtr matcher,
-            IntPtr gpu_matches,
+            IntPtr gpuMatches,
             IntPtr matches,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool compactResult);
