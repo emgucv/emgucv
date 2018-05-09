@@ -41,6 +41,13 @@ void cveStitcherSetWarper(cv::Stitcher* stitcher, cv::WarperCreator* creator)
    stitcher->setWarper(p);
 }
 
+void cveStitcherSetBlender(cv::Stitcher* stitcher, cv::detail::Blender* b)
+{
+	cv::Ptr<cv::detail::Blender> blender(b);
+	blender.addref();
+	stitcher->setBlender(blender);
+}
+
 void cveStitcherSetWaveCorrection(cv::Stitcher* stitcher, bool flag)
 {
    stitcher->setWaveCorrection(flag);
@@ -299,6 +306,30 @@ void cveTransverseMercatorWarperRelease(cv::detail::TransverseMercatorWarper** w
 {
    delete *warper;
    *warper = 0;
+}
+
+cv::detail::FeatherBlender* cveFeatherBlenderCreate(float sharpness, cv::detail::Blender** blender)
+{
+	cv::detail::FeatherBlender* ptr = new cv::detail::FeatherBlender(sharpness);
+	*blender = dynamic_cast<cv::detail::Blender*>(ptr);
+	return ptr;
+}
+void cveFeatherBlenderRelease(cv::detail::FeatherBlender** blender)
+{
+	delete *blender;
+	*blender = 0;
+}
+
+cv::detail::MultiBandBlender* cveMultiBandBlenderCreate(int tryGpu, int numBands, int weightType, cv::detail::Blender** blender)
+{
+	cv::detail::MultiBandBlender* ptr = new cv::detail::MultiBandBlender(tryGpu, numBands, weightType);
+	*blender = dynamic_cast<cv::detail::Blender*>(ptr);
+	return ptr;
+}
+void cveMultiBandBlenderRelease(cv::detail::MultiBandBlender** blender)
+{
+	delete *blender;
+	*blender = 0;
 }
 
 #ifdef HAVE_OPENCV_CUDAWARPING

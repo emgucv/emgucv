@@ -37,6 +37,8 @@ CVAPI(void) cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::Fea
 
 CVAPI(void) cveStitcherSetWarper(cv::Stitcher* stitcher, cv::WarperCreator* creator);
 
+CVAPI(void) cveStitcherSetBlender(cv::Stitcher* stitcher, cv::detail::Blender* b);
+
 CVAPI(void) cveStitcherSetWaveCorrection(cv::Stitcher* stitcher, bool flag);
 CVAPI(bool) cveStitcherGetWaveCorrection(cv::Stitcher* stitcher);
 CVAPI(void) cveStitcherSetWaveCorrectionKind(cv::Stitcher* stitcher, int kind);
@@ -113,6 +115,13 @@ CVAPI(void) cveMercatorWarperRelease(cv::detail::MercatorWarper** warper);
 
 CVAPI(cv::detail::TransverseMercatorWarper*) cveTransverseMercatorWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
 CVAPI(void) cveTransverseMercatorWarperRelease(cv::detail::TransverseMercatorWarper** warper);
+
+
+CVAPI(cv::detail::FeatherBlender*) cveFeatherBlenderCreate(float sharpness, cv::detail::Blender** blender);
+CVAPI(void) cveFeatherBlenderRelease(cv::detail::FeatherBlender** blender);
+
+CVAPI(cv::detail::MultiBandBlender*) cveMultiBandBlenderCreate(int tryGpu, int numBands, int weightType, cv::detail::Blender** blender);
+CVAPI(void) cveMultiBandBlenderRelease(cv::detail::MultiBandBlender** blender);
 
 #ifdef HAVE_OPENCV_CUDAWARPING
 CVAPI(cv::detail::PlaneWarperGpu*) cvePlaneWarperGpuCreate(float scale, cv::WarperCreator** creator);

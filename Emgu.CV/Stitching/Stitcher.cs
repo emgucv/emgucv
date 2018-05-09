@@ -124,6 +124,11 @@ namespace Emgu.CV.Stitching
             StitchingInvoke.cveStitcherSetWarper(_ptr, warperCreator.WarperCreatorPtr);
         }
 
+        public void SetBlender(Blender blender)
+        {
+            StitchingInvoke.cveStitcherSetBlender(_ptr, blender.BlenderPtr);
+        }
+
         /// <summary>
         /// Release memory associated with this stitcher
         /// </summary>
@@ -220,6 +225,9 @@ namespace Emgu.CV.Stitching
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetWarper(IntPtr stitcher, IntPtr creator);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveStitcherSetBlender(IntPtr stitcher, IntPtr b);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherRelease(ref IntPtr stitcherWrapper);
