@@ -3700,6 +3700,92 @@ namespace Emgu.CV.Test
 
 #if !NETFX_CORE
 
+        public void CreateUnityIcons(String productName = null)
+        {
+            //128x128
+            Image<Bgra, Byte> imgSmall = GenerateLogo(128, 128, productName);
+
+            //200x258
+            Image<Bgra, Byte> imgMedium = GenerateLogo(200, 120, productName).ConcateVertical(new Image<Bgra, byte>(200, 138));
+
+            //860x389
+            int screenShotWidth = 400;
+            int rightPadding = 40;
+            Image<Bgra, Byte> screenShot =
+               new Image<Bgr, byte>("unity_screenshot.png").Resize(screenShotWidth, 209, Inter.Linear,
+                  true).Convert<Bgra, Byte>();
+            if (screenShot.Width < screenShotWidth)
+                screenShot = new Image<Bgra, byte>((screenShotWidth - screenShot.Width) / 2, screenShot.Height).ConcateHorizontal(screenShot);
+            Image<Bgra, Byte> imgLarge =
+               new Image<Bgra, byte>(860 - (screenShotWidth + rightPadding), 389, new Bgra(255, 255, 255, 0)).ConcateHorizontal(
+               GenerateLogo(screenShotWidth, 389 - screenShot.Height).ConcateVertical(screenShot)).ConcateHorizontal(
+               new Image<Bgra, byte>(rightPadding, 389, new Bgra(255, 255, 255, 0)));
+
+            imgSmall.Save(String.Format("Emgu{0}Logo_128x128.png", productName == null ? String.Empty : productName));
+            imgMedium.Save(String.Format("Emgu{0}Logo_200x258.png", productName == null ? String.Empty : productName));
+            imgLarge.Save(String.Format("Emgu{0}Logo_860x389.png", productName == null ? String.Empty : productName));
+
+
+            //Image<Bgra, Byte> result = imgSmall.ConcateVertical(imgMedium).ConcateVertical(imgLarge);
+            //result.Draw(new LineSegment2D(new Point(0, imgSmall.Height), new Point(result.Width, imgSmall.Height) ), new Bgra(0, 0, 0, 255), 1  );
+            //result.Draw(new LineSegment2D(new Point(0, imgSmall.Height + imgMedium.Height), new Point(result.Width, imgSmall.Height + imgMedium.Height)), new Bgra(0, 0, 0, 255), 1);
+            //ImageViewer.Show(result);
+        }
+
+        [Test]
+        public void TestGenerateLogo()
+        {
+            String productName = null;
+            Image<Bgra, Byte> logo = GenerateLogo(800, 800, productName);
+            logo.Save(String.Format("Emgu{0}Logo.png", productName == null ? String.Empty : productName));
+        }
+
+        /*
+        public void GenerateLogo(String productName = null)
+        {
+            Image<Bgra, Byte> logo = GenerateLogo(860, 389, productName);
+            logo.Save(String.Format("Emgu{0}Logo.png", productName == null ? String.Empty : productName));
+        }*/
+
+        public Image<Bgra, byte> GenerateLogo(int width, int height = -1, String productName = null)
+        {
+            int heightShift = 0;
+            int textHeight = (int)(width / 160.0 * 72.0);
+            if (height <= 0)
+                height = textHeight;
+            else
+            {
+                heightShift = Math.Max((height - textHeight) / 2, 0);
+            }
+            double scale = width / 160.0;
+            Image<Bgr, Byte> semgu = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
+            Image<Bgr, Byte> scv = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
+            //MCvFont f1 = new MCvFont(CvEnum.FontFace.HersheyTriplex, 1.5 * scale, 1.5 * scale);
+            //MCvFont f2 = new MCvFont(CvEnum.FontFace.HersheyComplex, 1.6 * scale, 2.2 * scale);
+            semgu.Draw("Emgu", Point.Round(new PointF((float)(6 * scale), (float)(50 * scale + heightShift))), CvEnum.FontFace.HersheyTriplex, 1.5 * scale, new Bgr(55, 155, 255), (int)Math.Round(1.5 * scale));
+            semgu._Dilate((int)(1 * scale));
+            if (productName != null)
+                scv.Draw(productName, Point.Round(new PointF((float)(50 * scale), (float)(60 * scale + heightShift))), CvEnum.FontFace.HersheySimplex, 1.6 * scale, new Bgr(255, 55, 255), (int)Math.Round(2.2 * scale));
+
+            scv._Dilate((int)(2 * scale));
+            Image<Bgr, Byte> logoBgr = semgu.Or(scv);
+            Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Size);
+            logoA.SetValue(255, logoBgr.Convert<Gray, Byte>());
+            logoBgr._Not();
+            logoA._Not();
+            Image<Gray, Byte>[] channels = logoBgr.Split();
+            channels = new Image<Gray, byte>[] { channels[0], channels[1], channels[2], new Image<Gray, Byte>(channels[0].Width, channels[0].Height, new Gray(255.0)) };
+            Image<Bgra, Byte> logoBgra = new Image<Bgra, byte>(channels);
+            logoBgra.SetValue(new Bgra(0.0, 0.0, 0.0, 0.0), logoA);
+            //logoBgra.Save("EmguCVLogo.png");
+            return logoBgra;
+            /*
+            Image<Bgr, Byte> bg_header = new Image<Bgr, byte>(1, 92);
+            for (int i = 0; i < 92; i++)
+               bg_header[i, 0] = new Bgr(210, 210 - i * 0.4, 210 - i * 0.9);
+            bg_header.Save("bg_header.gif");*/
+        }
+
         [Test]
         public void TestVectorOfCvERStat()
         {
