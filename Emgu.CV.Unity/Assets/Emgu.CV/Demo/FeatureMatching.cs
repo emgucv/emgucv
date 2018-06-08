@@ -14,6 +14,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
 using Emgu.CV.Ocl;
+using UnityEngine.UI;
 
 public class FeatureMatching : MonoBehaviour
 {
@@ -45,10 +46,24 @@ public class FeatureMatching : MonoBehaviour
         //CvInvoke.Imwrite("c:\\tmp\\tmp.png", outImg);
         Texture2D texture = TextureConvert.InputArrayToTexture2D(img);
 
-        this.GetComponent<GUITexture>().texture = texture;
+        RenderTexture(texture);
+        ResizeTexture(texture);
         
-        this.GetComponent<GUITexture>().pixelInset = new Rect(-texture.width / 2, -texture.height / 2, texture.width, texture.height);
+    }
 
+    private void RenderTexture(Texture2D texture)
+    {
+        Image image = this.GetComponent<Image>();
+        image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+    }
+
+    private void ResizeTexture(Texture2D texture)
+    {
+        Image image = this.GetComponent<Image>();
+        var transform = image.rectTransform;
+        transform.sizeDelta = new Vector2(texture.width, texture.height);
+        transform.position = new Vector3(-texture.width / 2, -texture.height / 2);
+        transform.anchoredPosition = new Vector2(0, 0);
     }
 
     // Update is called once per frame

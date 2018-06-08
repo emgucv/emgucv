@@ -752,7 +752,7 @@ namespace Emgu.CV
 #if __ANDROID__ || __UNIFIED__
 #elif !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
         /// <summary>
-        /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
+        /// The Get property provide a more efficient way to convert gray scale Mat of Byte, 3 channel Mat of Byte (assuming BGR color space) or 4 channel Mat of Byte (assuming Bgra color space) into Bitmap
         /// such that the image data is <b>shared</b> with Bitmap. 
         /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
         /// For other types of image this property has the same effect as ToBitmap()

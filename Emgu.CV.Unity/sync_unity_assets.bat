@@ -46,9 +46,3 @@ cp Assets/Emgu.CV/Emgu.CV.Contrib/ImgHash/*.cs ../Emgu.CV.Contrib/ImgHash
 
 cp -r Assets/Emgu.CV/Emgu.CV.OCR/*.cs ../Emgu.CV.OCR 
 
-
-cp -r Assets/Emgu.CV/Emgu.CV.Demo/*.cs demo/
-cp -r Assets/Emgu.CV/Emgu.CV.Demo/*.unity demo/
-cp -r Assets/Emgu.CV/Emgu.CV.Demo/*.unity.meta demo/
-cp -r Assets/Emgu.CV/Emgu.CV.Demo/Resources/*.jpg demo/Resources/
-cp -r Assets/Emgu.CV/Emgu.CV.Demo/Resources/*.jpg.meta demo/Resources/
