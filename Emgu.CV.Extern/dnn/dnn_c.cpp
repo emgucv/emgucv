@@ -32,6 +32,19 @@ cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, c
 	cv::dnn::Net net = cv::dnn::readNetFromTensorflow(bufferModel, lenModel, bufferConfig, lenConfig);
 	return new cv::dnn::Net(net);
 }
+
+cv::dnn::Net* cveReadNet(cv::String* model, cv::String* config, cv::String* framework)
+{
+	cv::dnn::Net net = cv::dnn::readNet(*model, *config, *framework);
+	return new cv::dnn::Net(net);
+}
+cv::dnn::Net* cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin)
+{
+	cv::dnn::Net net = cv::dnn::readNetFromModelOptimizer(*xml, *bin);
+	return new cv::dnn::Net(net);
+}
+
+
 cv::dnn::Net* cveDnnNetCreate()
 {
    return new cv::dnn::Net();
@@ -62,31 +75,34 @@ std::vector<cv::String>* cveDnnNetGetLayerNames(cv::dnn::Net* net)
 	return new std::vector<cv::String>(net->getLayerNames());
 }
 
-
 void cveDnnBlobFromImage(
-	cv::Mat* image,
+	cv::_InputArray* image,
+	cv::_OutputArray* blob,
 	double scalefactor,
 	CvSize* size,
 	CvScalar* mean,
 	bool swapRB,
-	bool crop,
-	cv::Mat* blob)
+	bool crop
+	)
 {
-	cv::Mat b = cv::dnn::blobFromImage(*image, scalefactor, *size, *mean, swapRB, crop);
-	cv::swap(*blob, b);
+	cv::dnn::blobFromImage(*image, *blob, scalefactor, *size, *mean, swapRB, crop);
 }
 
 void cveDnnBlobFromImages(
-	std::vector<cv::Mat>* images,
+	cv::_InputArray* images,
+	cv::_OutputArray* blob,
 	double scalefactor,
 	CvSize* size,
 	CvScalar* mean,
 	bool swapRB,
-	bool crop,
-	cv::Mat* blob)
+	bool crop)
 {
-	cv::Mat b = cv::dnn::blobFromImages(*images, scalefactor, *size, *mean, swapRB, crop);
-	cv::swap(*blob, b);
+	cv::dnn::blobFromImages(*images, *blob, scalefactor, *size, *mean, swapRB, crop);
+}
+
+void cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images)
+{
+	cv::dnn::imagesFromBlob(*blob, *images);
 }
 
 void cveDnnShrinkCaffeModel(cv::String* src, cv::String* dst)

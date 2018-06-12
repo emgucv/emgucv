@@ -35,23 +35,31 @@ namespace Emgu.CV.Dnn
         /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">Flag which indicates whether image will be cropped after resize or not</param>
         /// <returns>4-dimansional Mat with NCHW dimensions order.</returns>
-        public static Mat BlobFromImage(Mat image, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
+        public static Mat BlobFromImage(IInputArray image, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
         {
             Mat blob = new Mat();
-            cveDnnBlobFromImage(image, scaleFactor, ref size, ref mean, swapRB, crop, blob);
+            BlobFromImage(image,  scaleFactor, size, mean, swapRB, crop);
             return blob;
+        }
+
+        public static void BlobFromImage(IInputArray image, IOutputArray blob, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
+        {
+            using (InputArray iaImage = image.GetInputArray())
+            using (OutputArray oaBlob = blob.GetOutputArray())
+                cveDnnBlobFromImage(iaImage, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop);
+            
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDnnBlobFromImage(
             IntPtr image,
+            IntPtr blob,
             double scalefactor,
             ref Size size,
             ref MCvScalar mean,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool swapRB,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool crop,
-            IntPtr blob);
+            bool crop);
 
         /// <summary>
         /// Creates 4-dimensional blob from series of images. Optionally resizes and crops images from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels.
@@ -68,22 +76,42 @@ namespace Emgu.CV.Dnn
             Mat blob = new Mat();
             using (VectorOfMat vm = new VectorOfMat(images))
             {
-                cveDnnBlobFromImages(vm, scaleFactor, ref size, ref mean, swapRB, crop, blob);
+                BlobFromImages(vm, blob, scaleFactor, size, mean, swapRB, crop);
             }
             return blob;
+        }
+
+        public static void BlobFromImages(IInputArrayOfArrays images, IOutputArray blob, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
+        {
+            using (InputArray iaImages = images.GetInputArray())
+            using (OutputArray oaBlob = blob.GetOutputArray())
+            {
+                cveDnnBlobFromImages(iaImages, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop);
+            }
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDnnBlobFromImages(
             IntPtr images,
+            IntPtr blob,
             double scalefactor,
             ref Size size,
             ref MCvScalar mean,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool swapRB,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool crop,
-            IntPtr blob);
+            bool crop);
+
+        public static void ImagesFromBlob(Mat blob, IOutputArrayOfArrays images)
+        {
+            using (OutputArray oaImages = images.GetOutputArray())
+            {
+                cveDnnImagesFromBlob(blob, oaImages);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDnnImagesFromBlob(IntPtr blob, IntPtr images);
 
         /// <summary>
         /// Reads a network model stored in Darknet model files.
@@ -195,6 +223,29 @@ namespace Emgu.CV.Dnn
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromTensorflow2(IntPtr bufferModel, int lenModel, IntPtr bufferConfig, int lenConfig);
+
+        public static Net ReadNet(String model, String config = null, String framework = null)
+        {
+            using (CvString modelStr = new CvString(model))
+            using (CvString configStr = new CvString(config == null ? String.Empty : config))
+            using (CvString frameworkStr = new CvString(framework == null ? String.Empty : framework))
+            {
+                return new Net(cveReadNet(modelStr, configStr, frameworkStr));
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNet(IntPtr model, IntPtr config, IntPtr framework);
+
+        public static Net ReadNetFromModelOptimizer(String xml, String bin)
+        {
+            using (CvString xmlStr = new CvString(xml))
+            using (CvString binStr = new CvString(bin))
+            {
+                return new Net(cveReadNetFromModelOptimizer(xmlStr, binStr));
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromModelOptimizer(IntPtr xml, IntPtr bin);
 
 
         /// <summary>

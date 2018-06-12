@@ -4017,7 +4017,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="binary">If the flag is true, all the zero pixel values are treated as zeroes, all the others are treated as 1's</param>
         /// <returns>spatial and central moments up to the third order</returns>
-        public Moments GetMoments(bool binary)
+        public Emgu.CV.Moments GetMoments(bool binary)
         {
             return CvInvoke.Moments(this, binary);
         }

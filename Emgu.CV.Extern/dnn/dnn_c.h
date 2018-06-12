@@ -19,6 +19,8 @@ CVAPI(cv::dnn::Net*) cveReadNetFromCaffe2(const char *bufferProto, int lenProto,
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow(cv::String* model, cv::String* config);
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig);
 
+CVAPI(cv::dnn::Net*) cveReadNet(cv::String* model, cv::String* config, cv::String* framework);
+CVAPI(cv::dnn::Net*) cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin);
 
 CVAPI(cv::dnn::Net*) cveDnnNetCreate();
 CVAPI(void) cveDnnNetSetInput(cv::dnn::Net* net, cv::Mat* blob, cv::String* name);
@@ -29,22 +31,24 @@ CVAPI(bool) cveDnnNetEmpty(cv::dnn::Net* net);
 CVAPI(std::vector<cv::String>*) cveDnnNetGetLayerNames(cv::dnn::Net* net);
 
 CVAPI(void) cveDnnBlobFromImage(
-	cv::Mat* image, 
+	cv::_InputArray* image, 
+	cv::_OutputArray* blob,
 	double scalefactor, 
 	CvSize* size,
 	CvScalar* mean, 
 	bool swapRB,
-	bool crop,
-	cv::Mat* blob);
+	bool crop);
 
 CVAPI(void) cveDnnBlobFromImages(
-	std::vector<cv::Mat>* images, 
+	cv::_InputArray* images,
+	cv::_OutputArray* blob,
 	double scalefactor,
 	CvSize* size, 
 	CvScalar* mean, 
 	bool swapRB,
-	bool crop,
-	cv::Mat* blob);
+	bool crop);
+
+CVAPI(void) cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images);
 
 CVAPI(void) cveDnnShrinkCaffeModel(cv::String* src, cv::String* dst);
 
