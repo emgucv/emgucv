@@ -10,19 +10,19 @@
 cv::Tracker* cveTrackerCreate(cv::String* trackerType)
 {
    cv::Ptr<cv::Tracker> tracker = cv::Tracker::create(*trackerType);
-   tracker.addref(); 
+   tracker.addref();
    return tracker.get();
 }*/
 bool cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
 {
-   return tracker->init(*image, *boundingBox);
+	return tracker->init(*image, *boundingBox);
 }
 bool cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
 {
-   cv::Rect2d box;
-   bool result = tracker->update(*image, box);
-   *boundingBox = box;
-   return result;
+	cv::Rect2d box;
+	bool result = tracker->update(*image, box);
+	*boundingBox = box;
+	return result;
 }
 /*
 void cveTrackerRelease(cv::Tracker** tracker)
@@ -90,7 +90,7 @@ cv::TrackerMIL* cveTrackerMILCreate(
 	p.samplerTrackMaxPosNum = samplerTrackMaxPosNum;
 	p.samplerTrackMaxNegNum = samplerTrackMaxNegNum;
 	p.featureSetNumFeatures = featureSetNumFeatures;
-	
+
 	cv::Ptr<cv::TrackerMIL> ptr = cv::TrackerMIL::create(p);
 	ptr.addref();
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
@@ -187,28 +187,30 @@ void cveTrackerMOSSERelease(cv::TrackerMOSSE** tracker)
 
 cv::MultiTracker* cveMultiTrackerCreate()
 {
-   return new cv::MultiTracker();
+	return new cv::MultiTracker();
 }
-bool cveMultiTrackerAdd(cv::MultiTracker* multiTracker, cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
+bool cveMultiTrackerAdd(cv::MultiTracker* multiTracker, cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox)
 {
-   return multiTracker->add(tracker, *image, *boundingBox);
+	cv::Ptr<cv::Tracker> trackerPtr(tracker);
+	trackerPtr.addref();
+	return multiTracker->add(trackerPtr, *image, *boundingBox);
 }
 
 bool cveMultiTrackerUpdate(cv::MultiTracker* tracker, cv::Mat* image, std::vector<CvRect>* boundingBox)
 {
-   std::vector<cv::Rect2d> bb;
-   bool result = tracker->update(*image, bb);
-   boundingBox->clear();
-   for (std::vector<cv::Rect2d>::iterator it = bb.begin(); it != bb.end(); ++it)
-   {
-      boundingBox->push_back(*it);
-   }
-   return result;
+	std::vector<cv::Rect2d> bb;
+	bool result = tracker->update(*image, bb);
+	boundingBox->clear();
+	for (std::vector<cv::Rect2d>::iterator it = bb.begin(); it != bb.end(); ++it)
+	{
+		boundingBox->push_back(*it);
+	}
+	return result;
 }
 void cveMultiTrackerRelease(cv::MultiTracker** tracker)
 {
-   delete* tracker;
-   *tracker = 0;
+	delete* tracker;
+	*tracker = 0;
 }
 
 cv::TrackerCSRT* cveTrackerCSRTCreate(

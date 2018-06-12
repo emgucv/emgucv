@@ -10,6 +10,7 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/imgproc/imgproc_c.h"
 #include "opencv2/imgproc/types_c.h"
 //#include "opencv2/calib3d/calib3d.hpp"
 #include "emgu_c.h"
@@ -54,7 +55,7 @@ CVAPI(void) cveIntegral(cv::_InputArray* src, cv::_OutputArray* sum, cv::_Output
 CVAPI(int) cveFloodFill(cv::_InputOutputArray* image, cv::_InputOutputArray* mask, CvPoint* seedPoint, CvScalar* newVal, CvRect* rect, CvScalar* loDiff, CvScalar* upDiff, int flags);
 CVAPI(void) cvePyrMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, double sp, double sr, int maxLevel, CvTermCriteria* termCrit);
 
-CVAPI(void) cveMoments(cv::_InputArray* arr, bool binaryImage, CvMoments* moments);
+CVAPI(void) cveMoments(cv::_InputArray* arr, bool binaryImage, cv::Moments* moments);
 
 CVAPI(void) cveEqualizeHist(cv::_InputArray* src, cv::_OutputArray* dst);
 
@@ -173,17 +174,21 @@ CVAPI(void) cveApplyColorMap(cv::_InputArray* src, cv::_OutputArray* dst, int co
 
 CVAPI(void) cveDistanceTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_OutputArray* labels, int distanceType, int maskSize, int labelType);
 
-CVAPI(void) cveHuMoments(CvMoments* moments, cv::_OutputArray* hu);
+
 
 CVAPI(void) cveGetRectSubPix(cv::_InputArray* image, CvSize* patchSize, CvPoint2D32f* center, cv::_OutputArray* patch, int patchType);
 
 
-CVAPI(int) cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, int connectivity);
-
+//CVAPI(int) cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, int connectivity);
+CVAPI(cv::Moments*) cveMomentsCreate();
+CVAPI(void) cveMomentsRelease(cv::Moments** moments);
+CVAPI(void) cveHuMoments(cv::Moments* moments, cv::_OutputArray* hu);
+CVAPI(void) cveHuMoments2(cv::Moments* moments, double* hu);
+/*
 CVAPI(double) cveGetSpatialMoment(CvMoments* moments, int xOrder, int yOrder);
 CVAPI(double) cveGetCentralMoment(CvMoments* moments, int xOrder, int yOrder);
 CVAPI(double) cveGetNormalizedCentralMoment(CvMoments* moments, int xOrder, int yOrder);
-
+*/
 CVAPI(void) cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result);
 
 CVAPI(int) cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int type);

@@ -49,14 +49,16 @@ CVAPI(cv::face::FacemarkKazemi*) cveFacemarkKazemiCreate(cv::face::FacemarkKazem
 CVAPI(void) cveFacemarkKazemiRelease(cv::face::FacemarkKazemi** facemark);
 */
 
+/*
 typedef bool(*CSharp_FaceDetector)(const cv::_InputArray*, const cv::_OutputArray*);
 CVAPI(bool) cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector);
-
+*/
 CVAPI(void) cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model);
-CVAPI(bool) cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces);
+//CVAPI(bool) cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces);
 CVAPI(bool) cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_InputOutputArray* landmarks);
-CVAPI(bool) cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* landmarks);
-CVAPI(void) cveFacemarkTraining(cv::face::Facemark* facemark);
+
+//CVAPI(bool) cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* landmarks);
+//CVAPI(void) cveFacemarkTraining(cv::face::Facemark* facemark);
 
 CVAPI(void) cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points,	CvScalar* color);
 #endif

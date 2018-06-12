@@ -37,9 +37,10 @@ namespace Emgu.CV.Tracking
         /// <param name="image">Input image</param>
         /// <param name="boundingBox">A rectangle represents ROI of the tracked object</param>
         /// <returns>True if successfully added</returns>
-        public bool Add(Tracker tracker, Mat image, Rectangle boundingBox)
+        public bool Add(Tracker tracker, IInputArray image, Rectangle boundingBox)
         {
-            return ContribInvoke.cveMultiTrackerAdd(_ptr, tracker, image, ref boundingBox);
+            using (InputArray iaImage = image.GetInputArray())
+                return ContribInvoke.cveMultiTrackerAdd(_ptr, tracker, iaImage, ref boundingBox);
         }
 
         /// <summary>

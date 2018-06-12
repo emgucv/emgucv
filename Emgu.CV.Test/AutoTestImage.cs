@@ -478,7 +478,7 @@ namespace Emgu.CV.Test
             }
         }
 #endif
-
+        /*
         [TestAttribute]
         public void TestSampleLine()
         {
@@ -490,7 +490,7 @@ namespace Emgu.CV.Test
                 EmguAssert.IsTrue(img[i, 0].Equals(new Bgr(buffer[i, 0], buffer[i, 1], buffer[i, 2])));
 
             buffer = img.Sample(new LineSegment2D(new Point(0, 0), new Point(100, 100)), Emgu.CV.CvEnum.Connectivity.FourConnected);
-        }
+        }*/
 
         [TestAttribute]
         public void TestGetSize()
@@ -936,8 +936,8 @@ namespace Emgu.CV.Test
             Image<Gray, byte> image = new Image<Gray, byte>(100, 200);
             image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
             image.ThresholdToZero(new Gray(120));
-            MCvMoments moment = image.GetMoments(true);
-            double[] huMoment = moment.GetHuMoment();
+            Moments moment = image.GetMoments(true);
+            double[] huMoment = moment.HuMoment;
         }
 
         /*

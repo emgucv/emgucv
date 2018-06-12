@@ -172,10 +172,10 @@ void cvePyrMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, doubl
    cv::pyrMeanShiftFiltering(*src, *dst, sp, sr, maxLevel, *termCrit);
 }
 
-void cveMoments(cv::_InputArray* arr, bool binaryImage, CvMoments* moments)
+void cveMoments(cv::_InputArray* arr, bool binaryImage, cv::Moments* moments)
 {
-   CvMoments mm(cv::moments(*arr, binaryImage));
-   memcpy(moments, &mm, sizeof(CvMoments));
+	cv::Moments m = cv::moments(*arr, binaryImage);
+   memcpy(moments, &m, sizeof(cv::Moments));
 }
 void cveEqualizeHist(cv::_InputArray* src, cv::_OutputArray* dst)
 {
@@ -569,21 +569,40 @@ void cveDistanceTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_Outp
   cv::distanceTransform(*src, *dst, labels ? *labels : cv::_OutputArray(), distanceType, maskSize, labelType);
 }
 
-void cveHuMoments(CvMoments* moments, cv::_OutputArray* hu)
-{
-  cv::HuMoments(*moments, *hu);
-}
+
 
 void cveGetRectSubPix(cv::_InputArray* image, CvSize* patchSize, CvPoint2D32f* center, cv::_OutputArray* patch, int patchType)
 {
    cv::getRectSubPix(*image, *patchSize, *center, *patch, patchType);
 }
 
+/*
 int cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, int connectivity)
 {
    return cvSampleLine(_img, *pt1, *pt2, _buffer, connectivity);
+}*/
+
+cv::Moments* cveMomentsCreate()
+{
+	return new cv::Moments();
+}
+void cveMomentsRelease(cv::Moments** moments)
+{
+	delete *moments;
+	*moments = 0;
+}
+void cveHuMoments(cv::Moments* moments, cv::_OutputArray* hu)
+{
+	cv::HuMoments(*moments, *hu);
+}
+void cveHuMoments2(cv::Moments* moments, double* hu)
+{
+	double hu_m[7];
+	cv::HuMoments(*moments, hu_m);
+	memcpy(hu, hu_m, sizeof(double) * 7);
 }
 
+/*
 double cveGetSpatialMoment(CvMoments* moments, int xOrder, int yOrder)
 {
    return cvGetSpatialMoment(moments, xOrder, yOrder);
@@ -598,7 +617,7 @@ double cveGetNormalizedCentralMoment(CvMoments* moments, int xOrder, int yOrder)
 {
    return cvGetNormalizedCentralMoment(moments, xOrder, yOrder);
 }
-
+*/
 void cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result)
 {
    *result = cvMaxRect(rect1, rect2);

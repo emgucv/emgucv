@@ -61,7 +61,7 @@ CVAPI(cv::TrackerMOSSE*) cveTrackerMOSSECreate(cv::Tracker** tracker);
 CVAPI(void) cveTrackerMOSSERelease(cv::TrackerMOSSE** tracker);
 
 CVAPI(cv::MultiTracker*) cveMultiTrackerCreate();
-CVAPI(bool) cveMultiTrackerAdd(cv::MultiTracker* multiTracker, cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
+CVAPI(bool) cveMultiTrackerAdd(cv::MultiTracker* multiTracker, cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox);
 CVAPI(bool) cveMultiTrackerUpdate(cv::MultiTracker* tracker, cv::Mat* image, std::vector<CvRect>* boundingBox);
 CVAPI(void) cveMultiTrackerRelease(cv::MultiTracker** tracker);
 

@@ -1992,6 +1992,7 @@ namespace Emgu.CV
 #endregion
 
 #region Sampling, Interpolation and Geometrical Transforms
+        /*
         ///<summary> Sample the pixel values on the specific line segment </summary>
         ///<param name="line"> The line to obtain samples</param>
         ///<returns>The values on the (Eight-connected) line </returns>
@@ -2024,7 +2025,7 @@ namespace Emgu.CV
                 type);
             handle.Free();
             return data;
-        }
+        }*/
 
         /// <summary>
         /// Scale the image to the specific size 
@@ -4010,12 +4011,13 @@ namespace Emgu.CV
             return res;
         }
 
+
         /// <summary>
         /// Calculates spatial and central moments up to the third order and writes them to moments. The moments may be used then to calculate gravity center of the shape, its area, main axises and various shape characteristics including 7 Hu invariants.
         /// </summary>
         /// <param name="binary">If the flag is true, all the zero pixel values are treated as zeroes, all the others are treated as 1's</param>
         /// <returns>spatial and central moments up to the third order</returns>
-        public MCvMoments GetMoments(bool binary)
+        public Moments GetMoments(bool binary)
         {
             return CvInvoke.Moments(this, binary);
         }

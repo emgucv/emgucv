@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+/*
 using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Util;
@@ -157,3 +158,4 @@ namespace Emgu.CV.Structure
         }
     }
 }
+*/

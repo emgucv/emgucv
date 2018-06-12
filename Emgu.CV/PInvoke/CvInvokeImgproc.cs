@@ -16,6 +16,8 @@ namespace Emgu.CV
     public partial class CvInvoke
     {
         #region Sampling, Interpolation and Geometrical Transforms
+
+        /*
         /// <summary>
         /// Implements a particular case of application of line iterators. The function reads all the image points lying on the line between pt1 and pt2, including the ending points, and stores them into the buffer
         /// </summary>
@@ -27,6 +29,7 @@ namespace Emgu.CV
         /// <returns></returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSampleLine")]
         public static extern int cvSampleLine(IntPtr image, ref Point pt1, ref Point pt2, IntPtr buffer, CvEnum.Connectivity connectivity);
+        */
 
         /// <summary>
         /// Extracts pixels from src:
@@ -1842,11 +1845,11 @@ namespace Emgu.CV
         /// <param name="arr">Image (1-channel or 3-channel with COI set) or polygon (CvSeq of points or a vector of points)</param>
         /// <param name="binaryImage">(For images only) If the flag is true, all the zero pixel values are treated as zeroes, all the others are treated as 1s</param>
         /// <returns>The moment</returns>
-        public static MCvMoments Moments(IInputArray arr, bool binaryImage = false)
+        public static Moments Moments(IInputArray arr, bool binaryImage = false)
         {
-            MCvMoments m = new MCvMoments();
+            Moments m = new Moments();
             using (InputArray iaArr = arr.GetInputArray())
-                cveMoments(iaArr, binaryImage, ref m);
+                cveMoments(iaArr, binaryImage, m);
             return m;
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1854,7 +1857,7 @@ namespace Emgu.CV
             IntPtr arr,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool binaryImage,
-            ref MCvMoments moments);
+            IntPtr moments);
 
         /*
         /// <summary>
@@ -2283,6 +2286,7 @@ namespace Emgu.CV
 
         #endregion
 
+        /*
         /// <summary>
         /// Retrieves the spatial moment, which in case of image moments is defined as:
         /// M_{x_order,y_order}=sum_{x,y}(I(x,y) * x^{x_order} * y^{y_order})
@@ -2327,7 +2331,7 @@ namespace Emgu.CV
             ref MCvMoments moments,
             int xOrder,
             int yOrder);
-
+            */
         #region Accumulation of Background Statistics
         /// <summary>
         /// Adds the whole image or its selected region to accumulator sum
@@ -2402,18 +2406,7 @@ namespace Emgu.CV
         private static extern void cveAccumulateWeighted(IntPtr src, IntPtr dst, double alpha, IntPtr mask);
         #endregion
 
-        /// <summary>
-        /// Calculates seven Hu invariants
-        /// </summary>
-        /// <param name="moments">Pointer to the moment state structure</param>
-        /// <param name="hu">Pointer to Hu moments structure.</param>
-        public static void HuMoments(MCvMoments moments, IOutputArray hu)
-        {
-            using (OutputArray oaHu = hu.GetOutputArray())
-                cveHuMoments(ref moments, oaHu);
-        }
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveHuMoments(ref MCvMoments moments, IntPtr huMoments);
+
 
         /// <summary>
         /// Runs the Harris edge detector on image. Similarly to cvCornerMinEigenVal and cvCornerEigenValsAndVecs, for each pixel it calculates 2x2 gradient covariation matrix M over block_size x block_size neighborhood. Then, it stores

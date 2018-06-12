@@ -34,7 +34,7 @@ void StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer,
 {
    cv::Ptr<cv::videostab::ImageMotionEstimatorBase> ptr(motionEstimator);
    ptr.addref(); // add reference such that it won't release the motion estimator
-   stabalizer->setMotionEstimator(motionEstimator);
+   stabalizer->setMotionEstimator(ptr);
 }
 
 template<class cvstabilizer> cvstabilizer* StabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)

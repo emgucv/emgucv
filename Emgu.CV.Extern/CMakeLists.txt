@@ -804,7 +804,25 @@ IF(HAVE_opencv_core)
     "CudaInvoke"
     "GpuMat"
 	""
-    "#include \"opencv2/core/cuda.hpp\"")
+    "#include \"opencv2/core/cuda.hpp\"
+#include \"opencv2/core/types_c.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "core/moments_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/MomentsGenerated.cs"
+    "cv::Moments" 
+    "Moments" 
+    "m00;m10;m01;m20;m11;m02;m30;m21;m12;m03;mu20;mu11;mu02;mu30;mu21;mu12;mu03;nu20;nu11;nu02;nu30;nu21;nu12;nu03" 
+    "double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double" 
+    "element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element"
+    "M00;M10;M01;M20;M11;M02;M30;M21;M22;M03;Mu20;Mu11;Mu02;Mu30;Mu21;Mu12;Mu03;Nu20;Nu11;Nu02;Nu30;Nu21;Nu12;Nu03" 
+    "double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double" 
+    "M00;M10;M01;M20;M11;M02;M30;M21;M22;M03;Mu20;Mu11;Mu02;Mu30;Mu21;Mu12;Mu03;Nu20;Nu11;Nu02;Nu30;Nu21;Nu12;Nu03"
+    "Emgu.CV"
+    "CvInvoke"
+    "Moments"
+	""
+    "#include \"core_c_extra.h\"")
 ENDIF()
 ############################### core code gen END ################################
 
@@ -1213,7 +1231,8 @@ IF(HAVE_opencv_photo)
     "CvInvoke"
     "Tonemap"
 	""
-    "#include \"opencv2/photo.hpp\"")
+    "#include \"opencv2/photo.hpp\"
+#include \"opencv2/core/types_c.h\"")
 		
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapDurand_property" 
@@ -1233,7 +1252,8 @@ IF(HAVE_opencv_photo)
     "CvInvoke"
     "TonemapDurand"
 	""
-    "#include \"opencv2/photo.hpp\"")
+    "#include \"opencv2/photo.hpp\"
+#include \"opencv2/core/types_c.h\"")
 
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapReinhard_property" 
@@ -1252,7 +1272,8 @@ IF(HAVE_opencv_photo)
     "CvInvoke"
     "TonemapReinhard"
 	""
-    "#include \"opencv2/photo.hpp\"")	
+    "#include \"opencv2/photo.hpp\"
+#include \"opencv2/core/types_c.h\"")	
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapDrago_property" 
@@ -1270,7 +1291,8 @@ IF(HAVE_opencv_photo)
     "CvInvoke"
     "TonemapDrago"
 	""
-    "#include \"opencv2/photo.hpp\"")		
+    "#include \"opencv2/photo.hpp\"
+#include \"opencv2/core/types_c.h\"")		
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapMantiuk_property" 
@@ -1288,7 +1310,8 @@ IF(HAVE_opencv_photo)
     "CvInvoke"
     "TonemapMantiuk"
 	""
-    "#include \"opencv2/photo.hpp\"")	
+    "#include \"opencv2/photo.hpp\"
+#include \"opencv2/core/types_c.h\"")	
 ENDIF()
 ############################### photo code gen END ##############################
 
@@ -1532,7 +1555,8 @@ IF(HAVE_opencv_plot)
     "PlotInvoke"
     "Plot2d"
 	""
-    "#include \"opencv2/plot.hpp\"")
+    "#include \"opencv2/plot.hpp\"
+#include \"opencv2/core/types_c.h\"")
 ENDIF()
 ############################### plot code gen END ##############################
 
@@ -1556,7 +1580,8 @@ IF(HAVE_opencv_saliency)
     "SaliencyInvoke"
     "MotionSaliencyBinWangApr2014"
 	""
-    "#include \"opencv2/saliency.hpp\"")
+    "#include \"opencv2/saliency.hpp\"
+#include \"opencv2/core/types_c.h\"")
   CREATE_OCV_CLASS_PROPERTY( 
     "saliency/ObjectnessBING_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/ObjectnessBINGGenerated.cs"
@@ -1573,7 +1598,8 @@ IF(HAVE_opencv_saliency)
     "SaliencyInvoke"
     "ObjectnessBING"
 	""
-    "#include \"opencv2/saliency.hpp\"")
+    "#include \"opencv2/saliency.hpp\"
+#include \"opencv2/core/types_c.h\"")
 ENDIF()
 ############################### plot code gen END ##############################
 
@@ -1598,7 +1624,8 @@ IF(HAVE_opencv_xphoto)
     "XPhotoInvoke"
     "SimpleWB"
 	""
-    "#include \"opencv2/xphoto.hpp\"")
+    "#include \"opencv2/xphoto.hpp\"
+#include \"opencv2/core/types_c.h\"")
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/grayworldwb_property" 
@@ -1615,7 +1642,8 @@ IF(HAVE_opencv_xphoto)
     "XPhotoInvoke"
     "GrayworldWB"
 	""
-    "#include \"opencv2/xphoto.hpp\"")
+    "#include \"opencv2/xphoto.hpp\"
+#include \"opencv2/core/types_c.h\"")
 
 	CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/learningbasedwb_property" 
@@ -1635,7 +1663,8 @@ IF(HAVE_opencv_xphoto)
     "XPhotoInvoke"
     "LearningBasedWB"
 	""
-    "#include \"opencv2/xphoto.hpp\"")
+    "#include \"opencv2/xphoto.hpp\"
+#include \"opencv2/core/types_c.h\"")
 ENDIF()
 ############################### xphoto code gen END ##############################
 
@@ -1667,7 +1696,8 @@ IF(HAVE_opencv_face)
     "FaceInvoke"
     "FacemarkLBFParams"
 	""
-    "#include \"opencv2/face.hpp\"")
+    "#include \"opencv2/face.hpp\"
+#include \"opencv2/core/types_c.h\"")
 
   CREATE_OCV_CLASS_PROPERTY( 
     "face/facemarkaam_params_property" 
@@ -1691,7 +1721,8 @@ IF(HAVE_opencv_face)
     "FaceInvoke"
     "FacemarkAAMParams"
 	""
-    "#include \"opencv2/face.hpp\"")
+    "#include \"opencv2/face.hpp\"
+#include \"opencv2/core/types_c.h\"")
 ENDIF()
 ############################### face code gen END ##############################
 
@@ -1714,7 +1745,8 @@ IF(HAVE_opencv_dnn)
     "DnnInvoke"
     "Net"
 	"!(NETFX_CORE || NETCOREAPP1_1 || NETSTANDARD1_4)"
-	"#include \"opencv2/dnn.hpp\"")
+	"#include \"opencv2/dnn.hpp\"
+#include \"opencv2/core/types_c.h\"")
 
 ENDIF()
 ############################### dnn code gen END ##############################
@@ -1917,7 +1949,7 @@ ENDIF()
 ############################### TESSERACT END ##########################
 
 ############################### CVBLOB START ########################
-SET(EMGU_CV_WITH_CVBLOB ON CACHE BOOL "BUILD with CVBLOB")
+SET(EMGU_CV_WITH_CVBLOB OFF CACHE BOOL "BUILD with CVBLOB")
 MESSAGE(STATUS "WITH CVBLOB: ${EMGU_CV_WITH_CVBLOB}")
 IF(EMGU_CV_WITH_CVBLOB)
   
@@ -2289,7 +2321,7 @@ if(WITH_TIFF AND BUILD_TIFF)
 endif()
 
 if(WITH_JPEG AND BUILD_JPEG)
-  target_link_libraries(${the_target} libjpeg)
+  target_link_libraries(${the_target} libjpeg-turbo)
 endif()
 
 # Add the required libraries for linking:

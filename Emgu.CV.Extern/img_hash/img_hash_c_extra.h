@@ -8,6 +8,8 @@
 #ifndef EMGU_IMG_HASH_C_H
 #define EMGU_IMG_HASH_C_H
 
+
+#include "opencv2/core/types_c.h"
 #include "opencv2/img_hash.hpp"
 
 CVAPI(void) cveImgHashBaseCompute(cv::img_hash::ImgHashBase* imgHash, cv::_InputArray* inputArr, cv::_OutputArray* outputArr);
