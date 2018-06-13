@@ -14,6 +14,21 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Dnn
 {
+    public enum Backend
+    {
+        Default,
+        Halide,
+        InferenceEngine
+    }
+
+    public enum Target
+    {
+        Cpu,
+        OpenCL,
+        OpenCLFp16,
+        Myriad
+    }
+
     /// <summary>
     /// This class allows to create and manipulate comprehensive artificial neural networks.
     /// </summary>
@@ -83,13 +98,6 @@ namespace Emgu.CV.Dnn
             }
         }
 
-        /// <summary>
-        /// Returns true if there are no layers in the network.
-        /// </summary>
-        public bool Empty
-        {
-            get { return DnnInvoke.cveDnnNetEmpty(_ptr); }
-        }
 
         /// <summary>
         /// Return the LayerNames
@@ -119,9 +127,6 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetRelease(ref IntPtr net);
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern  bool cveDnnNetEmpty(IntPtr net);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDnnNetGetLayerNames(IntPtr net);
     }

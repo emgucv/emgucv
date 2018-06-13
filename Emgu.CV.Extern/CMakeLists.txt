@@ -1733,14 +1733,15 @@ IF(HAVE_opencv_dnn)
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/NetGenerated.cs"
     "cv::dnn::Net" 
     "Net" 
-    "PreferableBackend;PreferableTarget;enableFusion" 
-    "int;int;bool" 
-    "propW;propW;act1"
-    "PreferableBackend;PreferableTarget;EnableFusion" 
-    "int;int;bool"
+    "PreferableBackend;PreferableTarget;enableFusion;empty" 
+    "int;int;bool;bool" 
+    "propW;propW;act1;val"
+    "PreferableBackend;PreferableTarget;EnableFusion;Empty" 
+    "Backend;Target;bool;bool"
     "Ask network to use specific computation backend where it supported.;
 	Ask network to make computations on specific target device.;
-	Enables or disables layer fusion in the network."
+	Enables or disables layer fusion in the network.;
+	Returns true if there are no layers in the network. "
     "Emgu.CV.Dnn"
     "DnnInvoke"
     "Net"

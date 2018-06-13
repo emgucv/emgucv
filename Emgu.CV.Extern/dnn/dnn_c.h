@@ -27,7 +27,7 @@ CVAPI(void) cveDnnNetSetInput(cv::dnn::Net* net, cv::Mat* blob, cv::String* name
 
 CVAPI(void) cveDnnNetForward(cv::dnn::Net* net, cv::String* outputName, cv::Mat* output);
 CVAPI(void) cveDnnNetRelease(cv::dnn::Net** net);
-CVAPI(bool) cveDnnNetEmpty(cv::dnn::Net* net);
+
 CVAPI(std::vector<cv::String>*) cveDnnNetGetLayerNames(cv::dnn::Net* net);
 
 CVAPI(void) cveDnnBlobFromImage(

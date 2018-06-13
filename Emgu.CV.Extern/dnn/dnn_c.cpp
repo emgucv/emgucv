@@ -65,10 +65,6 @@ void cveDnnNetRelease(cv::dnn::Net** net)
    delete *net;
    *net = 0;
 }
-bool cveDnnNetEmpty(cv::dnn::Net* net)
-{
-	return net->empty();
-}
 
 std::vector<cv::String>* cveDnnNetGetLayerNames(cv::dnn::Net* net)
 {
