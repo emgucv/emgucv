@@ -1950,7 +1950,7 @@ ENDIF()
 ############################### TESSERACT END ##########################
 
 ############################### CVBLOB START ########################
-SET(EMGU_CV_WITH_CVBLOB OFF CACHE BOOL "BUILD with CVBLOB")
+SET(EMGU_CV_WITH_CVBLOB ON CACHE BOOL "BUILD with CVBLOB")
 MESSAGE(STATUS "WITH CVBLOB: ${EMGU_CV_WITH_CVBLOB}")
 IF(EMGU_CV_WITH_CVBLOB)
   
