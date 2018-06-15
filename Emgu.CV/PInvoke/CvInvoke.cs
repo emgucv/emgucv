@@ -14,7 +14,7 @@ using Platform = Emgu.Util.Platform;
 namespace Emgu.CV
 {
    /// <summary>
-   /// Library to invoke OpenCV functions
+   /// Class that provide access to native OpenCV functions
    /// </summary>
    public static partial class CvInvoke
    {
