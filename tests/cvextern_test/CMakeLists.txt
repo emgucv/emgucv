@@ -90,6 +90,7 @@ set_target_properties(${the_target} PROPERTIES
     OUTPUT_NAME "${the_target}"
     )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${the_target} PROPERTIES FOLDER "emgu")
 endif()
