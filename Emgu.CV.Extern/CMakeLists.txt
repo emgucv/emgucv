@@ -1477,7 +1477,8 @@ IF(HAVE_opencv_cudaimgproc)
     "CudaInvoke"
     "CudaHoughLinesDetector"
 	""
-    "#include \"opencv2/cudaimgproc.hpp\"")
+    "#include \"opencv2/cudaimgproc.hpp\"
+#include \"opencv2/core/types_c.h\"")
 ENDIF()
 ############################### cudaimgproc code gen END ##############################
 
@@ -1508,7 +1509,9 @@ ENDIF()
     "CudaInvoke"
     "CudaHOG"
 	""
-    "#include \"opencv2/cudaobjdetect.hpp\"")
+    "#include \"opencv2/cudaobjdetect.hpp\"
+#include \"opencv2/core/types_c.h\"")
+
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaobjdetect/cuda_cascade_classifier_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaCascadeClassifierGenerated.cs"
@@ -1530,7 +1533,8 @@ ENDIF()
     "CudaInvoke"
     "CudaCascadeClassifier"
 	""
-    "#include \"opencv2/cudaobjdetect.hpp\"")
+    "#include \"opencv2/cudaobjdetect.hpp\"
+#include \"opencv2/core/types_c.h\"")
 #ENDIF()
 ############################### cudaobjdetect code gen END ##############################
 
