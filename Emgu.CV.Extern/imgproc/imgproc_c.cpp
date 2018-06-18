@@ -111,6 +111,11 @@ void cveCanny(cv::_InputArray* image, cv::_OutputArray* edges, double threshold1
    cv::Canny(*image, *edges, threshold1, threshold2, apertureSize, L2gradient);
 }
 
+void cveCanny2(cv::_InputArray* dx, cv::_InputArray* dy, cv::_OutputArray* edges, double threshold1, double threshold2, bool L2gradient)
+{
+   cv::Canny(*dx, *dy, *edges, threshold1, threshold2, L2gradient);
+}
+
 void cveCornerHarris(cv::_InputArray* src, cv::_OutputArray* dst, int blockSize, int ksize, double k, int borderType)
 {
    cv::cornerHarris(*src, *dst, blockSize, ksize, k, borderType);
