@@ -1906,10 +1906,10 @@ IF(ANDROID)
     IF(TESSERACT_FOUND)
     ELSE()
       SET(TESSERACT_INCLUDE_DIRS 
-        "${TESSERACT_OCR_ROOT_DIR}/ccutil" 
-        "${TESSERACT_OCR_ROOT_DIR}/api" 
-        "${TESSERACT_OCR_ROOT_DIR}/ccmain" 
-        "${TESSERACT_OCR_ROOT_DIR}/ccstruct" 
+        "${TESSERACT_OCR_ROOT_DIR}/src/ccutil" 
+        "${TESSERACT_OCR_ROOT_DIR}/src/api" 
+        "${TESSERACT_OCR_ROOT_DIR}/src/ccmain" 
+        "${TESSERACT_OCR_ROOT_DIR}/src/ccstruct" 
         "${LEPT_ROOT_DIR}/src" 
         "${PROJECT_SOURCE_DIR}/tesseract")
       #SET(TESSERACT_PROJECTS libleptonica tesseract_ccutil tesseract_viewer tesseract_cutil tesseract_opencl tesseract_ccstruct tesseract_dict tesseract_classify tesseract_wordrec tesseract_arch tesseract_textord tesseract_lstm tesseract_api tesseract_ccmain)
@@ -1922,10 +1922,10 @@ ELSE() #ELSEIF(WIN32 OR APPLE)
     IF(TESSERACT_FOUND)
     ELSE()
       SET(TESSERACT_INCLUDE_DIRS 
-        "${TESSERACT_OCR_ROOT_DIR}/ccutil" 
-        "${TESSERACT_OCR_ROOT_DIR}/api" 
-        "${TESSERACT_OCR_ROOT_DIR}/ccmain" 
-        "${TESSERACT_OCR_ROOT_DIR}/ccstruct" 
+        "${TESSERACT_OCR_ROOT_DIR}/src/ccutil" 
+        "${TESSERACT_OCR_ROOT_DIR}/src/api" 
+        "${TESSERACT_OCR_ROOT_DIR}/src/ccmain" 
+        "${TESSERACT_OCR_ROOT_DIR}/src/ccstruct" 
         "${LEPT_ROOT_DIR}/src" 
         "${PROJECT_SOURCE_DIR}/tesseract")
       #SET(TESSERACT_PROJECTS libleptonica tesseract_ccutil tesseract_viewer tesseract_cutil tesseract_opencl tesseract_ccstruct tesseract_dict tesseract_classify tesseract_wordrec tesseract_arch tesseract_textord tesseract_lstm tesseract_api tesseract_ccmain)
