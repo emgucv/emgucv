@@ -1022,6 +1022,33 @@ namespace Emgu.CV
          bool l2Gradient);
 
         /// <summary>
+        /// Finds the edges on the input <paramref name="dx"/>, <paramref name="dy"/> and marks them in the output image edges using the Canny algorithm. The smallest of threshold1 and threshold2 is used for edge linking, the largest - to find initial segments of strong edges.
+        /// </summary>
+        /// <param name="dx">16-bit x derivative of input image</param>
+        /// <param name="dy">16-bit y derivative of input image</param>
+        /// <param name="edges">Image to store the edges found by the function</param>
+        /// <param name="threshold1">The first threshold</param>
+        /// <param name="threshold2">The second threshold.</param>
+        ///<param name="l2Gradient">a flag, indicating whether a more accurate norm should be used to calculate the image gradient magnitude ( L2gradient=true ), or whether the default norm is enough ( L2gradient=false ).</param>
+        public static void Canny(
+            IInputArray dx,
+            IInputArray dy,
+            IOutputArray edges,
+            double threshold1,
+            double threshold2,
+            bool l2Gradient = false)
+        {
+            using (InputArray iax = dx.GetInputArray())
+            using (InputArray iay = dy.GetInputArray())
+            using (OutputArray oaEdges = edges.GetOutputArray())
+                cveCanny2(iax, iay, oaEdges, threshold1, threshold2, l2Gradient);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveCanny2(IntPtr dx, IntPtr dy, IntPtr edges, double threshold1, double threshold2,
+           [MarshalAs(CvInvoke.BoolMarshalType)]
+         bool l2Gradient);
+
+        /// <summary>
         /// The function tests whether the input contour is convex or not. The contour must be simple, that is, without self-intersections. Otherwise, the function output is undefined.
         /// </summary>
         /// <param name="contour">Input vector of 2D points </param>
