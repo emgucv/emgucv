@@ -20,6 +20,9 @@ namespace Emgu.CV
     /// </summary>
     public partial class Moments : UnmanagedObject
     {
+        /// <summary>
+        /// Create an empty Moment object
+        /// </summary>
         public Moments()
         {
             _ptr = CvInvoke.cveMomentsCreate();

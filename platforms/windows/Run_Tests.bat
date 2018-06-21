@@ -44,6 +44,7 @@ IF "%2"=="" GOTO TEST_INPLACE
 rm -rf tmp
 mkdir tmp
 unzip "%2" -d tmp
+miscellaneous\nuget.exe restore tmp\Emgu.CV.Example\TFInterop\TFInterop.csproj
 call %DEVENV% %BUILD_TYPE% tmp\Solution\Windows.Desktop\Emgu.CV.Example.sln
 
 call %DEVENV% %BUILD_TYPE% Solution\Windows.Desktop\Emgu.CV.Test.sln
