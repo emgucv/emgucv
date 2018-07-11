@@ -152,7 +152,7 @@ void cveFacemarkKazemiRelease(cv::face::FacemarkKazemi** facemark)
 	delete *facemark;
 	*facemark = 0;
 }
-*/
+
 
 typedef struct
 {
@@ -170,20 +170,22 @@ bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetecto
 	detector_pointer.face_detector_func = detector;
 	return facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, &detector_pointer);
 }
-
+*/
 
 void cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model)
 {
 	facemark->loadModel(*model);
 }
+/*
 bool cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces)
 {
 	return facemark->getFaces(*image, *faces);
-}
+}*/
 bool cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_InputOutputArray* landmarks)
 {
 	return facemark->fit(*image, *faces, *landmarks);
 }
+/*
 bool cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* landmarks)
 {
 	return facemark->addTrainingSample(*image, *landmarks);
@@ -191,7 +193,7 @@ bool cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray*
 void cveFacemarkTraining(cv::face::Facemark* facemark)
 {
 	facemark->training();
-}
+}*/
 
 
 void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, CvScalar* color)

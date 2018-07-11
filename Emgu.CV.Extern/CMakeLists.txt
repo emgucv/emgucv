@@ -2263,7 +2263,7 @@ if(WITH_TIFF AND BUILD_TIFF)
 endif()
 
 if(WITH_JPEG AND BUILD_JPEG)
-  target_link_libraries(${the_target} libjpeg)
+  target_link_libraries(${the_target} libjpeg-turbo)
 endif()
 
 # Add the required libraries for linking:
