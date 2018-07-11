@@ -13,6 +13,7 @@ using ObjCRuntime;
    ForceLoad = true, 
    Frameworks="Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO", 
    LinkerFlags = "-stdlib=libc++ -ObjC -lc++", 
+   SmartLink = true,
    IsCxx=true)]
 
 #endif
