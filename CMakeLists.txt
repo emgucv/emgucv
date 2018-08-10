@@ -572,7 +572,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   cudev  
   text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
   stitching latentsvm line_descriptor tracking plot
-  dnn aruco fuzzy viz bioinspired
+  dnn dnn_objdetect aruco fuzzy viz bioinspired
   dpm
   saliency
   dnn_modern
