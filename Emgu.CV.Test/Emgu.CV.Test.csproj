@@ -134,12 +134,12 @@
       <Link>left01.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\data\dnn\pascal-classes.txt">
+    <Content Include="..\opencv\samples\data\dnn\object_detection_classes_pascal_voc.txt">
       <Link>pascal-classes.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\opencv\samples\data\dnn\rgb.jpg">
-      <Link>rgb.jpg</Link>
+    <Content Include="..\opencv_extra\testdata\dnn\street.png">
+      <Link>street.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\opencv_extra\testdata\cv\hdr\exposures\list.txt">
@@ -212,10 +212,6 @@
     </Content>
     <Content Include="..\opencv_extra\testdata\dnn\space_shuttle.jpg">
       <Link>space_shuttle.jpg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\opencv\samples\data\dnn\synset_words.txt">
-      <Link>synset_words.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\opencv_contrib\modules\dpm\samples\data\inriaperson.xml">
@@ -344,11 +340,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="..\opencv\samples\data\dnn\bvlc_googlenet.prototxt">
+    <None Include="..\opencv_extra\testdata\dnn\bvlc_googlenet.prototxt">
       <Link>bvlc_googlenet.prototxt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\opencv\samples\data\dnn\fcn8s-heavy-pascal.prototxt">
+    <None Include="..\opencv_extra\testdata\dnn\fcn8s-heavy-pascal.prototxt">
       <Link>fcn8s-heavy-pascal.prototxt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -3196,7 +3196,7 @@ namespace Emgu.CV.Test
             Dnn.Net net = DnnInvoke.ReadNetFromCaffe("fcn8s-heavy-pascal.prototxt", caffeModelFile);
 
 
-            Mat img = EmguAssert.LoadMat("rgb.jpg");
+            Mat img = EmguAssert.LoadMat("street.png");
             //FCN accepts 500x500 RGB-images
             CvInvoke.Resize(img, img, new Size(500, 500));
 
@@ -3274,6 +3274,7 @@ namespace Emgu.CV.Test
             net.SetInput(inputBlob, "data");
             Mat probBlob = net.Forward("prob");
 
+            /*
             int classId;
             double classProb;
             GetMaxClass(probBlob, out classId, out classProb);
@@ -3282,7 +3283,7 @@ namespace Emgu.CV.Test
             //#if !NETFX_CORE
             Trace.WriteLine("Best class: " + classNames[classId] + ". Probability: " + classProb);
             //#endif
-
+            */
         }
 
         private static void CheckAndDownloadFile(String fileName, String url)
