@@ -141,6 +141,16 @@ namespace Emgu.CV.Test
             }
         }
 
+        
+        [Test]
+        public void TestObjectnessBING()
+        {
+            using (Emgu.CV.Saliency.ObjectnessBING objectnessBING = new Saliency.ObjectnessBING())
+            {
+                //objectnessBING.SetTrainingPath("C:\\tmp");
+            }
+        }
+
         [Test]
         public void TestDenseHistogram4()
         {
