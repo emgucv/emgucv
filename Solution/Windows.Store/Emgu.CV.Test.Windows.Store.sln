@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Test.Windows.Store", "..\..\Emgu.CV.Test\Emgu.CV.Test.Windows.Store\Emgu.CV.Test.Windows.Store.csproj", "{4A19699C-FA59-4B27-8F3A-74B523EB73F6}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Emgu.CV.shproj", "{12D024EE-D0A5-4BBC-B7C0-7B18CF1AB262}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.shproj", "{11E54A7E-778D-466C-A176-71E150976AC1}"
@@ -21,11 +19,6 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
-		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
-		..\..\Emgu.Util\Emgu.Util.projitems*{4a19699c-fa59-4b27-8f3a-74b523eb73f6}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{7a2ab85b-0e3b-4a2c-ad89-dfbfe5c9d3a7}*SharedItemsImports = 4
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7a2ab85b-0e3b-4a2c-ad89-dfbfe5c9d3a7}*SharedItemsImports = 4
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7a2ab85b-0e3b-4a2c-ad89-dfbfe5c9d3a7}*SharedItemsImports = 4
@@ -44,24 +37,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|ARM.ActiveCfg = Debug|ARM
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|ARM.Build.0 = Debug|ARM
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|ARM.Deploy.0 = Debug|ARM
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|x64.ActiveCfg = Debug|x64
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|x64.Build.0 = Debug|x64
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|x64.Deploy.0 = Debug|x64
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|x86.ActiveCfg = Debug|x86
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|x86.Build.0 = Debug|x86
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Debug|x86.Deploy.0 = Debug|x86
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|ARM.ActiveCfg = Release|ARM
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|ARM.Build.0 = Release|ARM
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|ARM.Deploy.0 = Release|ARM
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|x64.ActiveCfg = Release|x64
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|x64.Build.0 = Release|x64
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|x64.Deploy.0 = Release|x64
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|x86.ActiveCfg = Release|x86
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|x86.Build.0 = Release|x86
-		{4A19699C-FA59-4B27-8F3A-74B523EB73F6}.Release|x86.Deploy.0 = Release|x86
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|ARM.ActiveCfg = Debug|ARM
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|ARM.Build.0 = Debug|ARM
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -83,5 +58,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D879CE8E-D919-4ED8-B65B-F5CDB5F17914}
 	EndGlobalSection
 EndGlobal
