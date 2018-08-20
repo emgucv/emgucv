@@ -9,12 +9,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.Util", "..\..\Emgu.Uti
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.XamarinForms", "..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.shproj", "{F2A5CE86-0B21-40D2-AD3F-BB2D1D716CFE}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "WindowsUniversal81.Shared", "..\..\Emgu.CV.Example\XamarinForms\WindowsUniversal81\Shared\WindowsUniversal81.Shared.shproj", "{C96D5F57-7CB8-4DE8-BFDD-A5C8E1697E03}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store81", "..\..\Emgu.CV.Example\XamarinForms\WindowsUniversal81\Windows\Store81.csproj", "{2244B20E-EAFB-45B5-A074-DEC9F292512D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.World.Store81", "..\..\Emgu.CV.World\Emgu.CV.World.Store81.csproj", "{31EE2BFF-87AA-440F-9F3D-9524900B704D}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.shproj", "{11E54A7E-778D-466C-A176-71E150976AC1}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.shproj", "{7BC723CB-1678-415F-A65F-4027F8758A6F}"
