@@ -132,8 +132,7 @@ namespace Emgu.CV.Test
         {
             StarDetector keyPointDetector = new StarDetector();
 
-            //SURF descriptorGenerator = new SURF(500, false);
-            SIFT descriptorGenerator = new SIFT();
+            AKAZE descriptorGenerator = new AKAZE();
             //ParamDef[] parameters = keyPointDetector.GetParams();
             TestFeature2DTracker(keyPointDetector, descriptorGenerator);
         }
@@ -142,7 +141,7 @@ namespace Emgu.CV.Test
         public void TestGFTTDetector()
         {
             GFTTDetector keyPointDetector = new GFTTDetector(1000, 0.01, 1, 3, false, 0.04);
-            SIFT descriptorGenerator = new SIFT();
+            AKAZE descriptorGenerator = new AKAZE();
             //ParamDef[] parameters = keyPointDetector.GetParams();
             TestFeature2DTracker(keyPointDetector, descriptorGenerator);
         }
@@ -421,7 +420,7 @@ namespace Emgu.CV.Test
                  }
               }
            }
-        }*/
+        }
 
         [Test]
         public void TestSURFDetector2()
@@ -468,16 +467,16 @@ namespace Emgu.CV.Test
             //SURFFeature[] features = box.ExtractSURF(pts, null, ref detector);
             //int count = features.Length;
 
-            /*
-            for (int i = 0; i < features1.Length; i++)
-            {
-               Assert.AreEqual(features1[i].KeyPoint.Point, features2[i].KeyPoint.Point);
-               float[] d1 = features1[i].Descriptor;
-               float[] d2 = features2[i].Descriptor;
+            
+            //for (int i = 0; i < features1.Length; i++)
+            //{
+            //   Assert.AreEqual(features1[i].KeyPoint.Point, features2[i].KeyPoint.Point);
+            //   float[] d1 = features1[i].Descriptor;
+            //   float[] d2 = features2[i].Descriptor;
 
-               for (int j = 0; j < d1.Length; j++)
-                  Assert.AreEqual(d1[j], d2[j]);
-            }*/
+            //   for (int j = 0; j < d1.Length; j++)
+            //      Assert.AreEqual(d1[j], d2[j]);
+            //}
 
             foreach (MKeyPoint kp in keypoints)
             {
@@ -485,7 +484,6 @@ namespace Emgu.CV.Test
             }
         }
 
-        /*
         [Test]
         public void TestGridAdaptedFeatureDetectorRepeatedRun()
         {

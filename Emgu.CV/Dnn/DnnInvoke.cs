@@ -129,6 +129,31 @@ namespace Emgu.CV.Dnn
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromDarknet(IntPtr cfgFile, IntPtr darknetModel);
+   
+        public static Net ReadNetFromDarknet(byte[] bufferCfg, byte[] bufferModel = null)
+        {
+            GCHandle bufferCfgHandle = GCHandle.Alloc(bufferCfg, GCHandleType.Pinned);
+            GCHandle bufferModelHandle = bufferModel == null ? new GCHandle() : GCHandle.Alloc(bufferModel, GCHandleType.Pinned);
+
+            try
+            {
+                return new Net(cveReadNetFromDarknet2(
+                    bufferCfgHandle.AddrOfPinnedObject(),
+                    bufferCfg.Length,
+                    bufferModel == null ? IntPtr.Zero : bufferModelHandle.AddrOfPinnedObject(),
+                    bufferModel == null ? 0 : bufferModel.Length));
+            }
+            finally
+            {
+                bufferCfgHandle.Free();
+                if (bufferModelHandle.IsAllocated)
+                    bufferModelHandle.Free();
+            }
+
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromDarknet2(IntPtr bufferCfg, int lenCfg, IntPtr bufferModel, int lenModel);
+
 
         /// <summary>
         /// Reads a network model stored in Caffe framework's format.

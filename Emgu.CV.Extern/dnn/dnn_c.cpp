@@ -11,6 +11,11 @@ cv::dnn::Net* cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetMode
 	cv::dnn::Net net = cv::dnn::readNetFromDarknet(*cfgFile, *darknetModel);
 	return new cv::dnn::Net(net);
 }
+cv::dnn::Net* cveReadNetFromDarknet2(const char *bufferCfg, int lenCfg, const char *bufferModel, int lenModel)
+{
+	cv::dnn::Net net = cv::dnn::readNetFromDarknet(bufferCfg, lenCfg, bufferModel, lenModel);
+	return new cv::dnn::Net(net);
+}
 
 cv::dnn::Net* cveReadNetFromCaffe(cv::String* prototxt, cv::String* caffeModel)
 {
@@ -50,15 +55,23 @@ cv::dnn::Net* cveDnnNetCreate()
    return new cv::dnn::Net();
 }
 
-void cveDnnNetSetInput(cv::dnn::Net* net, cv::Mat* blob, cv::String* name)
+void cveDnnNetSetInput(cv::dnn::Net* net, cv::_InputArray* blob, cv::String* name, double scalefactor, CvScalar* mean)
 {
-	net->setInput(*blob, name ? *name : "");
+	net->setInput(*blob, name ? *name : "", scalefactor, *mean);
 }
 
 void cveDnnNetForward(cv::dnn::Net* net, cv::String* outputName, cv::Mat* output)
 {
    cv::Mat m = net->forward(*outputName);
    cv::swap(m, *output);
+}
+void cveDnnNetForward2(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, cv::String* outputName)
+{
+	net->forward(*outputBlobs, *outputName);
+}
+void cveDnnNetForward3(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, std::vector<cv::String>* outBlobNames)
+{
+	net->forward(*outputBlobs, *outBlobNames);
 }
 void cveDnnNetRelease(cv::dnn::Net** net)
 {

@@ -52,25 +52,12 @@ namespace Emgu.CV.Dnn
         /// </summary>
         /// <param name="name">Descriptor of the updating layer output blob.</param>
         /// <param name="blob">Input blob</param>
-        public void SetInput(Mat blob, String name)
+        public void SetInput(IInputArray blob, String name = "", double scalefactor = 1.0,  MCvScalar mean = new MCvScalar())
         {
-            using (CvString outputNameStr = new CvString(name))
-                DnnInvoke.cveDnnNetSetInput(_ptr, blob, outputNameStr);
+            using (CvString nameStr = new CvString(name))
+            using (InputArray iaBlob = blob.GetInputArray())
+                DnnInvoke.cveDnnNetSetInput(_ptr, iaBlob, nameStr, scalefactor, ref mean);
         }
-
-        /*
-      /// <summary>
-      /// Returns the layer output blob.
-      /// </summary>
-      /// <param name="outputName">the descriptor of the returning layer output blob.</param>
-      /// <returns>The layer output blob.</returns>
-      public Blob GetBlob(String outputName)
-      {
-         using (CvString outputNameStr = new CvString(outputName))
-         {
-            return new Blob(DnnInvoke.cveDnnNetGetBlob(_ptr, outputNameStr));
-         }
-      }*/
 
         /// <summary>
         /// Runs forward pass for the whole network.
@@ -85,6 +72,22 @@ namespace Emgu.CV.Dnn
                 DnnInvoke.cveDnnNetForward(_ptr, outputNameStr, m);
                 return m;
             }
+        }
+
+        public void Forward(IOutputArrayOfArrays outputBlobs, String outputName)
+        {
+            using (OutputArray oaOutputBlobs = outputBlobs.GetOutputArray())
+            using (CvString outputNameStr = new CvString(outputName))
+            {
+                DnnInvoke.cveDnnNetForward2(_ptr, oaOutputBlobs, outputNameStr);
+            }
+        }
+
+        public void Forward(IOutputArrayOfArrays outputBlobs, String[] outBlobNames)
+        {
+            using (OutputArray oaOutputBlobs = outputBlobs.GetOutputArray())
+            using (VectorOfCvString vcs = new VectorOfCvString(outBlobNames))
+                DnnInvoke.cveDnnNetForward3(_ptr, oaOutputBlobs, vcs);
         }
 
         /// <summary>
@@ -118,12 +121,19 @@ namespace Emgu.CV.Dnn
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDnnNetCreate();
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDnnNetSetInput(IntPtr net, IntPtr blob, IntPtr outputName);
-        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        //internal static extern IntPtr cveDnnNetGetBlob(IntPtr net, IntPtr outputName);
+        internal static extern void cveDnnNetSetInput(IntPtr net, IntPtr blob, IntPtr name, double scalefactor, ref MCvScalar mean);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetForward(IntPtr net, IntPtr outputName, IntPtr output);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetForward2(IntPtr net, IntPtr outputBlobs, IntPtr outputName);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetForward3(IntPtr net, IntPtr outputBlobs, IntPtr outBlobNames);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetRelease(ref IntPtr net);
 
