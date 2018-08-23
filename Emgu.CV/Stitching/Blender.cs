@@ -17,6 +17,9 @@ namespace Emgu.CV.Stitching
     /// </summary>
     public abstract class Blender : UnmanagedObject
     {
+        /// <summary>
+        /// Pointer to the native Blender object.
+        /// </summary>
         protected IntPtr _blenderPtr;
 
         /// <summary>
@@ -46,7 +49,7 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a simple blender which mixes images at its borders
         /// </summary>
-        /// <param name="sharpness">Shapness</param>
+        /// <param name="sharpness">Sharpness</param>
         public FeatherBlender(float sharpness)
         {
             _ptr = StitchingInvoke.cveFeatherBlenderCreate(sharpness, ref _blenderPtr);
@@ -65,21 +68,32 @@ namespace Emgu.CV.Stitching
         }
     }
 
+    /// <summary>
+    /// Blender which uses multi-band blending algorithm
+    /// </summary>
     public class MultiBandBlender : Blender
     {
-
-        public MultiBandBlender(int tryGpu, int numBands, int weightType)
+        /// <summary>
+        /// Create a multiBandBlender
+        /// </summary>
+        /// <param name="tryGpu">If true, will try to use GPU</param>
+        /// <param name="numBands">Number of bands</param>
+        /// <param name="weightType">The weight type</param>
+        public MultiBandBlender(bool tryGpu = true, int numBands = 5, CvEnum.DepthType weightType = CvEnum.DepthType.Cv32F)
         {
-            _ptr = StitchingInvoke.cveMultiBandBlenderCreate(tryGpu, numBands, weightType, ref _blenderPtr);
+            _ptr = StitchingInvoke.cveMultiBandBlenderCreate(tryGpu ? 1 : 0, numBands, weightType, ref _blenderPtr);
         }
 
+        /// <summary>
+        /// Release all unmanaged resources associated with this blender
+        /// </summary>
         protected override void DisposeObject()
         {
-            base.DisposeObject();
             if (_ptr != IntPtr.Zero)
             {
                 StitchingInvoke.cveMultiBandBlenderRelease(ref _ptr);
             }
+            base.DisposeObject();
         }
     }
 
@@ -92,7 +106,7 @@ namespace Emgu.CV.Stitching
         internal static extern void cveFeatherBlenderRelease(ref IntPtr blender);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMultiBandBlenderCreate(int tryGpu, int numBands, int weightType, ref IntPtr blender);
+        internal static extern IntPtr cveMultiBandBlenderCreate(int tryGpu, int numBands, CvEnum.DepthType weightType, ref IntPtr blender);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveMultiBandBlenderRelease(ref IntPtr blender);
     }

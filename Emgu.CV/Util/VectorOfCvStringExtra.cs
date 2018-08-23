@@ -30,6 +30,10 @@ namespace Emgu.CV.Util
             return names;
         }
 
+        /// <summary>
+        /// Create a VectorOfCvString object from an array of String
+        /// </summary>
+        /// <param name="strings">The strings to be placed in this VectorOfCvString</param>
         public VectorOfCvString(String[] strings)
             : this()
         {

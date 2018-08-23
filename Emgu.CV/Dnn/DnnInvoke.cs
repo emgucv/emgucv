@@ -34,26 +34,44 @@ namespace Emgu.CV.Dnn
         /// <param name="mean">Scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>
         /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">Flag which indicates whether image will be cropped after resize or not</param>
-        /// <returns>4-dimansional Mat with NCHW dimensions order.</returns>
+        /// <returns>4-dimensional Mat with NCHW dimensions order.</returns>
         public static Mat BlobFromImage(IInputArray image, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
         {
             Mat blob = new Mat();
-            BlobFromImage(image,  scaleFactor, size, mean, swapRB, crop);
+            BlobFromImage(image, blob, scaleFactor, size, mean, swapRB, crop);
             return blob;
         }
 
-        public static void BlobFromImage(IInputArray image, IOutputArray blob, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
+        /// <summary>
+        /// Creates 4-dimensional blob from image. Optionally resizes and crops image from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels.
+        /// </summary>
+        /// <param name="image">Input image (with 1- or 3-channels).</param>
+        /// <param name="blob">4-dimensional output array with NCHW dimensions order.</param>
+        /// <param name="scaleFactor">Multiplier for image values.</param>
+        /// <param name="size">Spatial size for output image</param>
+        /// <param name="mean">Scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>
+        /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
+        /// <param name="crop">Flag which indicates whether image will be cropped after resize or not</param>
+        public static void BlobFromImage(
+            IInputArray image, 
+            IOutputArray blob, 
+            double scaleFactor = 1.0, 
+            Size size = new Size(), 
+            MCvScalar mean = new MCvScalar(), 
+            bool swapRB = true, 
+            bool crop = true)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaBlob = blob.GetOutputArray())
                 cveDnnBlobFromImage(iaImage, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop);
             
         }
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDnnBlobFromImage(
             IntPtr image,
             IntPtr blob,
-            double scalefactor,
+            double scaleFactor,
             ref Size size,
             ref MCvScalar mean,
             [MarshalAs(CvInvoke.BoolMarshalType)]
@@ -81,6 +99,16 @@ namespace Emgu.CV.Dnn
             return blob;
         }
 
+        /// <summary>
+        /// Creates 4-dimensional blob from series of images. Optionally resizes and crops images from center, subtract mean values, scales values by scale factor, swap Blue and Red channels.
+        /// </summary>
+        /// <param name="images">input images (all with 1-, 3- or 4-channels).</param>
+        /// <param name="blob">4-dimansional OutputArray with NCHW dimensions order.</param>
+        /// <param name="scaleFactor">multiplier for images values.</param>
+        /// <param name="size">spatial size for output image</param>
+        /// <param name="mean">scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>
+        /// <param name="swapRB">flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
+        /// <param name="crop">	flag which indicates whether image will be cropped after resize or not</param>
         public static void BlobFromImages(IInputArrayOfArrays images, IOutputArray blob, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
         {
             using (InputArray iaImages = images.GetInputArray())
@@ -102,6 +130,11 @@ namespace Emgu.CV.Dnn
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool crop);
 
+        /// <summary>
+        /// Parse a 4D blob and output the images it contains as 2D arrays through a simpler data structure (std::vector&lt;cv::Mat&gt;).
+        /// </summary>
+        /// <param name="blob">4 dimensional array (images, channels, height, width) in floating point precision (CV_32F) from which you would like to extract the images.</param>
+        /// <param name="images">Array of 2D Mat containing the images extracted from the blob in floating point precision (CV_32F). They are non normalized neither mean added. The number of returned images equals the first dimension of the blob (batch size). Every image has a number of channels equals to the second dimension of the blob (depth).</param>
         public static void ImagesFromBlob(Mat blob, IOutputArrayOfArrays images)
         {
             using (OutputArray oaImages = images.GetOutputArray())
@@ -129,7 +162,14 @@ namespace Emgu.CV.Dnn
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromDarknet(IntPtr cfgFile, IntPtr darknetModel);
-   
+
+
+        /// <summary>
+        /// Reads a network model stored in Darknet model files.
+        /// </summary>
+        /// <param name="bufferCfg">Buffer containing the content of the .cfg file with text description of the network architecture.</param>
+        /// <param name="bufferModel">Buffer containing the content of the the .weights file with learned network.</param>
+        /// <returns>Net object.</returns>
         public static Net ReadNetFromDarknet(byte[] bufferCfg, byte[] bufferModel = null)
         {
             GCHandle bufferCfgHandle = GCHandle.Alloc(bufferCfg, GCHandleType.Pinned);
@@ -249,6 +289,25 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromTensorflow2(IntPtr bufferModel, int lenModel, IntPtr bufferConfig, int lenConfig);
 
+        /// <summary>
+        /// Read deep learning network represented in one of the supported formats.
+        /// </summary>
+        /// <param name="model">
+        /// Binary file contains trained weights. The following file extensions are expected for models from different frameworks:
+        ///    *.caffemodel(Caffe, http://caffe.berkeleyvision.org/)
+        ///    *.pb (TensorFlow, https://www.tensorflow.org/)
+        ///    *.t7 | *.net (Torch, http://torch.ch/)
+        ///    *.weights (Darknet, https://pjreddie.com/darknet/)
+        ///    *.bin (DLDT, https://software.intel.com/openvino-toolkit)</param>
+        /// <param name="config">
+        /// Text file contains network configuration. It could be a file with the following extensions:
+        ///    *.prototxt(Caffe, http://caffe.berkeleyvision.org/)
+        ///    *.pbtxt (TensorFlow, https://www.tensorflow.org/)
+        ///    *.cfg (Darknet, https://pjreddie.com/darknet/)
+        ///    *.xml (DLDT, https://software.intel.com/openvino-toolkit)
+        /// </param>
+        /// <param name="framework">Explicit framework name tag to determine a format.</param>
+        /// <returns>Net object.</returns>
         public static Net ReadNet(String model, String config = null, String framework = null)
         {
             using (CvString modelStr = new CvString(model))
@@ -261,6 +320,12 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNet(IntPtr model, IntPtr config, IntPtr framework);
 
+        /// <summary>
+        /// Load a network from Intel's Model Optimizer intermediate representation.
+        /// </summary>
+        /// <param name="xml">XML configuration file with network's topology.</param>
+        /// <param name="bin">Binary file with trained weights.</param>
+        /// <returns>Net object. Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine backend.</returns>
         public static Net ReadNetFromModelOptimizer(String xml, String bin)
         {
             using (CvString xmlStr = new CvString(xml))

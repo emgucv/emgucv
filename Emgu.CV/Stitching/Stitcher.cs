@@ -124,6 +124,10 @@ namespace Emgu.CV.Stitching
             StitchingInvoke.cveStitcherSetWarper(_ptr, warperCreator.WarperCreatorPtr);
         }
 
+        /// <summary>
+        /// Set the blender for this stitcher
+        /// </summary>
+        /// <param name="blender">The blender</param>
         public void SetBlender(Blender blender)
         {
             StitchingInvoke.cveStitcherSetBlender(_ptr, blender.BlenderPtr);
