@@ -3,7 +3,7 @@ REM @echo off
 REM POSSIBLE OPTIONS: 
 REM %1%: "64", "32", "ARM"
 REM %2%: "gpu", if omitted, it will not use CUDA
-REM %3%: "intel", "WindowsPhone81", "WindowsStore81", "WindowsStore10", "vs2015"
+REM %3%: "intel_inf" "intel", "WindowsPhone81", "WindowsStore81", "WindowsStore10", "vs2015"
 REM %4%: "nonfree", "openni"
 REM %5%: "doc", "htmldoc", this indicates if we should build the documentation
 REM %6%: "package", this indicates if we should build the ".zip" and ".exe" package
@@ -136,6 +136,7 @@ IF "%2%"=="gpu" GOTO NO_PERFORMANCE_TEST
 
 REM Intel compiler performance test on windows cause compilation error, skipping it now
 IF "%3%"=="intel" GOTO NO_PERFORMANCE_TEST
+IF "%3%"=="intel_inf" GOTO NO_PERFORMANCE_TEST
 
 REM NETFX_CORE performance test cause compilation issue, skipping it now
 IF %NETFX_CORE%=="" GOTO WITH_PERFORMANCE_TEST
@@ -279,7 +280,7 @@ SET BUILD_PROJECT=
 IF "%6%"=="package" SET BUILD_PROJECT= /project PACKAGE 
 
 IF "%3%"=="intel" GOTO INTEL_COMPILER
-
+IF "%3%"=="intel_inf" GOTO INTEL_COMPILER
 :NOT_INTEL_COMPILER
 SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DWITH_IPP:BOOL=FALSE -DWITH_LAPACK:BOOL=FALSE 
 GOTO VISUAL_STUDIO
@@ -313,6 +314,27 @@ IF EXIST "%INTEL_DIR%" SET CMAKE_CONF_FLAGS=^
 -DTBB_INCLUDE_DIR:String="%INTEL_TBB:\=/%" ^
 -DCV_ICC:BOOL=TRUE ^
 %CMAKE_CONF_FLAGS%
+
+REM use OpenVINO if possible
+SET OPENVINO_DIR=
+IF EXIST "C:\Intel\computer_vision_sdk_2018.3.343" SET OPENVINO_DIR=C:\Intel\computer_vision_sdk_2018.3.343
+IF EXIST "%OPENVINO_DIR%" IF "%OS_MODE%"==" Win64" GOTO WITH_OPENVINO
+GOTO END_OF_OPENVINO
+
+IF "%3%"=="intel_inf" GOTO WITH_OPENVINO
+
+GOTO END_OF_OPENVINO
+
+:WITH_OPENVINO
+REM SET INTEL_CVSDK_DIR=%OPENVINO_DIR%\deployment_tools\inference_engine
+REM -DINF_ENGINE_RELEASE="2018030343" ^
+SET CMAKE_CONF_FLAGS=^
+-DWITH_INF_ENGINE=ON ^
+-DINF_ENGINE_INCLUDE_DIRS="%OPENVINO_DIR:\=/%/deployment_tools/inference_engine/include" ^
+-DINF_ENGINE_LIB_DIRS="%OPENVINO_DIR:\=/%/deployment_tools/inference_engine/lib/intel64" ^
+-DENABLE_CXX11=ON ^
+%CMAKE_CONF_FLAGS%
+:END_OF_OPENVINO
 
 REM IF NOT "%2%"=="gpu" GOTO END_OF_INTEL_GPU
 REM SET CUDA_HOST_COMPILER=%VS110COMNTOOLS%..\..\VC\bin

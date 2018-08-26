@@ -1969,6 +1969,28 @@ ELSE()
 ENDIF()
 ############################### CVBLOB END ##########################
 
+IF(WITH_INF_ENGINE)
+	link_directories("${INF_ENGINE_LIB_DIRS}/Release")
+	SET(INF_ENGINE_DLL_DIRS "${INF_ENGINE_LIB_DIRS}/../../bin/intel64/Release")
+	#Add the inference_engine dll
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/inference_engine.dll")
+	#Add CPU ingerence plugin and dependency
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/MKLDNNPlugin.dll")
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/mkl_tiny.dll")
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/libiomp5md.dll")
+	#Add Intel Integrated Graphics plugin and dependency
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/clDNNPlugin.dll")
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/clDNN64.dll")
+	#Add Heterogeneous plugin and dependency
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/HeteroPlugin.dll")
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/clDNN64.dll")
+	#Add Myriad plugin and dependency
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/myriadPlugin.dll")
+	#Add GNA plugin and dependency
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/GNAPlugin.dll")
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/gna.dll")
+ENDIF()
+
 ############################### GPU START ##############################
 IF(WIN32 AND WITH_CUDA)
   IF(TARGET_ARCH_64)
@@ -2373,6 +2395,10 @@ IF(EMGU_CV_WITH_TESSERACT AND TESSERACT_OPENCL)
   #include(${OPENCV_SUBFOLDER}/cmake/OpenCVDetectOpenCL.cmake)
   #MESSAGE(STATUS "OPENCVL_LIBRARIES: ${OPENCV_LIBRARIES}")
   target_link_libraries(${the_target} OpenCL)
+ENDIF()
+
+IF(WITH_INF_ENGINE)
+  target_link_libraries(${the_target} inference_engine)
 ENDIF()
 
 IF(ANDROID)
