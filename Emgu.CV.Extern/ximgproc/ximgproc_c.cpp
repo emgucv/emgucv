@@ -171,7 +171,7 @@ void cveSuperpixelLSCRelease(cv::ximgproc::SuperpixelLSC** lsc)
 
 cv::ximgproc::SuperpixelSLIC* cveSuperpixelSLICCreate(cv::_InputArray* image, int algorithm, int regionSize, float ruler)
 {
-	cv::Ptr<cv::ximgproc::SuperpixelSLIC> ptr = cv::ximgproc::createSuperpixelSLIC(*image, regionSize, ruler);
+	cv::Ptr<cv::ximgproc::SuperpixelSLIC> ptr = cv::ximgproc::createSuperpixelSLIC(*image, algorithm, regionSize, ruler);
 	ptr.addref();
 	return ptr.get();
 }
