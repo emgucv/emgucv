@@ -106,6 +106,10 @@ cv::VideoWriter* cveVideoWriterCreate(cv::String* filename, int fourcc, double f
 {
    return new cv::VideoWriter(*filename, fourcc, fps, *frameSize, isColor);
 }
+cv::VideoWriter* cveVideoWriterCreate2(cv::String* filename, int apiPreference, int fourcc, double fps, CvSize* frameSize, bool isColor)
+{
+   return new cv::VideoWriter(*filename, apiPreference, fourcc, fps, *frameSize, isColor);
+}
 void cveVideoWriterRelease(cv::VideoWriter** writer)
 {
    delete *writer;

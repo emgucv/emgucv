@@ -46,9 +46,28 @@ namespace Emgu.CV
         public VideoWriter(String fileName, int compressionCode, double fps, System.Drawing.Size size, bool isColor)
         {
             using (CvString s = new CvString(fileName))
-                _ptr = /*CvToolbox.HasFFMPEG?
-            CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, compressionCode, fps, new System.Drawing.Size(width, height), isColor):*/
-                   CvInvoke.cveVideoWriterCreate(s, compressionCode, fps, ref size, isColor);
+                _ptr = CvInvoke.cveVideoWriterCreate(s, compressionCode, fps, ref size, isColor);
+
+            if (_ptr == IntPtr.Zero)
+                throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
+        }
+
+        /// <summary>
+        /// Create a video writer using the specific information
+        /// </summary>
+        /// <param name="fileName">The name of the video file to be written to </param>
+        /// <param name="compressionCode">Compression code. Usually computed using CvInvoke.CV_FOURCC. 
+        /// On windows use -1 to open a codec selection dialog.
+        /// On Linux, use CvInvoke.CV_FOURCC('I', 'Y', 'U', 'V') for default codec for the specific file name.
+        /// </param>
+        /// <param name="fps">frame rate per second</param>
+        /// <param name="size">the size of the frame</param>
+        /// <param name="isColor">true if this is a color video, false otherwise</param>
+        /// <param name="apiPreference">Allows to specify API backends to use.</param>
+        public VideoWriter(String fileName, CvEnum.CaptureType apiPreference, int compressionCode, double fps, System.Drawing.Size size, bool isColor)
+        {
+            using (CvString s = new CvString(fileName))
+                _ptr = CvInvoke.cveVideoWriterCreate2(s, apiPreference, compressionCode, fps, ref size, isColor);
 
             if (_ptr == IntPtr.Zero)
                 throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
@@ -150,12 +169,22 @@ namespace Emgu.CV
         /// <returns>The video writer</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoWriterCreate(
-           IntPtr filename,
-           int fourcc,
-           double fps,
-           ref System.Drawing.Size frameSize,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool isColor);
+            IntPtr filename,
+            int fourcc,
+            double fps,
+            ref System.Drawing.Size frameSize,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool isColor);
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveVideoWriterCreate2(
+            IntPtr filename,
+            CvEnum.CaptureType apiPreference,
+            int fourcc,
+            double fps,
+            ref System.Drawing.Size frameSize,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool isColor);
 
         /// <summary>
         /// Finishes writing to video file and releases the structure.
