@@ -21,6 +21,8 @@ namespace AndroidExamples
             base.OnCreate();
             RegisterActivityLifecycleCallbacks(this);
             //A great place to initialize Xamarin.Insights and Dependency Services!
+
+            CrossCurrentActivity.Current.Init(this);
         }
 
         public override void OnTerminate()
@@ -31,7 +33,7 @@ namespace AndroidExamples
 
         public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
         {
-            CrossCurrentActivity.Current.Activity = activity;
+            
         }
 
         public void OnActivityDestroyed(Activity activity)
@@ -44,7 +46,7 @@ namespace AndroidExamples
 
         public void OnActivityResumed(Activity activity)
         {
-            CrossCurrentActivity.Current.Activity = activity;
+            
         }
 
         public void OnActivitySaveInstanceState(Activity activity, Bundle outState)
@@ -53,7 +55,7 @@ namespace AndroidExamples
 
         public void OnActivityStarted(Activity activity)
         {
-            CrossCurrentActivity.Current.Activity = activity;
+            
         }
 
         public void OnActivityStopped(Activity activity)

@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Android;
 
 using Emgu.CV.Structure;
 using Android.Content;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using Android.Graphics;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
+using Plugin.CurrentActivity;
 
 namespace Emgu.CV.XamarinForms.Droid
 {
@@ -28,6 +30,11 @@ namespace Emgu.CV.XamarinForms.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+
+            CrossCurrentActivity.Current.Init(this, bundle);
+
+            CheckAppPermissions();
+
             _app = new Emgu.CV.XamarinForms.App();
             LoadApplication(_app);
 
@@ -94,6 +101,29 @@ namespace Emgu.CV.XamarinForms.Droid
                     }
                 }
             }
+        }
+
+        private void CheckAppPermissions()
+        {
+            if ((int)Build.VERSION.SdkInt < 23)
+            {
+                return;
+            }
+            else
+            {
+                if (PackageManager.CheckPermission(Manifest.Permission.ReadExternalStorage, PackageName) != Permission.Granted
+                    && PackageManager.CheckPermission(Manifest.Permission.WriteExternalStorage, PackageName) != Permission.Granted
+                    && PackageManager.CheckPermission(Manifest.Permission.Camera, PackageName) != Permission.Granted)
+                {
+                    var permissions = new string[] { Manifest.Permission.ReadExternalStorage, Manifest.Permission.WriteExternalStorage, Manifest.Permission.Camera };
+                    RequestPermissions(permissions, 1);
+                }
+            }
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+        {
+            Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }
