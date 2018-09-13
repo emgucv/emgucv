@@ -39,6 +39,7 @@ namespace Example.iOS
             }
         }
 
+        /*
         private static void TesseractDownloadLangFile(String folder, String lang)
         {
             String subfolderName = "tessdata";
@@ -58,7 +59,7 @@ namespace Example.iOS
                     webclient.DownloadFile(source, dest);
                     Console.WriteLine(String.Format("Download completed"));
                 }
-        }
+        }*/
 
         public override void ViewDidLoad()
         {
@@ -70,69 +71,71 @@ namespace Example.iOS
             StringElement licenseElement = new StringElement("");
 
             root.Add(new Section()
-                 { new StyledStringElement("Process", delegate {
+                 { new StyledStringElement("Process", delegate
+                     {
+                         String path = "tessdata";
 
-            messageElement.Value = String.Format("Checking Tesseract language data...");
-            try
-            {
-                TesseractDownloadLangFile(".", "eng");
-                TesseractDownloadLangFile(".", "osd");
-            }
-            catch (System.Net.WebException webExcpt)
-            {
-                messageElement.Value =
-                    String.Format(
-                        "Failed to download Tesseract language file, please check internet connection.");
-                return;
-            }
-            catch (Exception e)
-            {
-                messageElement.Value = e.Message;
-                return;
-            }
-            messageElement.Value = String.Format("Checking Tesseract language data...");
+                    messageElement.Value = String.Format("Checking Tesseract language data...");
+                    try
+                    {
+                        LicensePlateDetector.TesseractDownloadLangFile(path, "eng");
+                        LicensePlateDetector.TesseractDownloadLangFile(path, "osd");
+                    }
+                    catch (System.Net.WebException webExcpt)
+                    {
+                        messageElement.Value =
+                            String.Format(
+                                "Failed to download Tesseract language file, please check internet connection.");
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        messageElement.Value = e.Message;
+                        return;
+                    }
+                    messageElement.Value = String.Format("Checking Tesseract language data...");
 
-            using (Image<Bgr, Byte> image = new Image<Bgr, byte>( "license-plate.jpg"))
-            {
-               LicensePlateDetector detector = new LicensePlateDetector(".");
-               Stopwatch watch = Stopwatch.StartNew(); // time the detection process
+                    using (Image<Bgr, Byte> image = new Image<Bgr, byte>( "license-plate.jpg"))
+                    {
+                       LicensePlateDetector detector = new LicensePlateDetector(path);
+                       Stopwatch watch = Stopwatch.StartNew(); // time the detection process
 
-               List<IInputOutputArray> licensePlateImagesList = new List<IInputOutputArray>();
-               List<IInputOutputArray> filteredLicensePlateImagesList = new List<IInputOutputArray>();
-               List<RotatedRect> licenseBoxList = new List<RotatedRect>();
-               List<string> words = detector.DetectLicensePlate(
-                  image,
-                  licensePlateImagesList,
-                  filteredLicensePlateImagesList,
-                  licenseBoxList);
+                       List<IInputOutputArray> licensePlateImagesList = new List<IInputOutputArray>();
+                       List<IInputOutputArray> filteredLicensePlateImagesList = new List<IInputOutputArray>();
+                       List<RotatedRect> licenseBoxList = new List<RotatedRect>();
+                       List<string> words = detector.DetectLicensePlate(
+                          image,
+                          licensePlateImagesList,
+                          filteredLicensePlateImagesList,
+                          licenseBoxList);
 
-               watch.Stop(); //stop the timer
-               messageElement.Value = String.Format("{0} milli-seconds", watch.Elapsed.TotalMilliseconds);
+                       watch.Stop(); //stop the timer
+                       messageElement.Value = String.Format("{0} milli-seconds", watch.Elapsed.TotalMilliseconds);
 
-               StringBuilder builder = new StringBuilder();
-               foreach (String w in words)
-                  builder.AppendFormat("{0} ", w);
-               licenseElement.Value = builder.ToString();
+                       StringBuilder builder = new StringBuilder();
+                       foreach (String w in words)
+                          builder.AppendFormat("{0} ", w);
+                       licenseElement.Value = builder.ToString();
 
-               messageElement.GetImmediateRootElement().Reload(messageElement, UITableViewRowAnimation.Automatic);
-               licenseElement.GetImmediateRootElement().Reload(licenseElement, UITableViewRowAnimation.Automatic);
-               foreach (RotatedRect box in licenseBoxList)
-               {
+                       messageElement.GetImmediateRootElement().Reload(messageElement, UITableViewRowAnimation.Automatic);
+                       licenseElement.GetImmediateRootElement().Reload(licenseElement, UITableViewRowAnimation.Automatic);
+                       foreach (RotatedRect box in licenseBoxList)
+                       {
 
-                  image.Draw(box, new Bgr(Color.Red), 2);
-               }
-               Size frameSize = FrameSize;
-               using (Mat resized = new Mat())
-                  {
-                     CvInvoke.ResizeForFrame(image, resized, frameSize);
-                     imageView.Image = resized.ToUIImage();
-                     imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
-                  }
-               imageView.SetNeedsDisplay();
-                  ReloadData();
-            }
-         }
-         )});
+                          image.Draw(box, new Bgr(Color.Red), 2);
+                       }
+                       Size frameSize = FrameSize;
+                       using (Mat resized = new Mat())
+                          {
+                             CvInvoke.ResizeForFrame(image, resized, frameSize);
+                             imageView.Image = resized.ToUIImage();
+                             imageView.Frame = new RectangleF(PointF.Empty, resized.Size);
+                          }
+                       imageView.SetNeedsDisplay();
+                          ReloadData();
+                    }
+                 }
+            )});
             root.Add(new Section("Recognition Time") { messageElement });
             root.Add(new Section("License Plate") { licenseElement });
             root.Add(new Section() { imageView });

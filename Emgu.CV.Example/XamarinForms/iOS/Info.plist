@@ -51,6 +51,10 @@
 	<string>This app needs access to the camera to take photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs access to photos.</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>This app needs access to microphone.</string>
+  <key>NSPhotoLibraryAddUsageDescription</key>
+  <string>This app needs access to the photo gallery.</string>
 	<key>CFBundleName</key>
 	<string>Emgu CV XamarinForms</string>
 </dict>
