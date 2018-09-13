@@ -318,6 +318,9 @@ ENDIF()
 
 #api
 PROJECT(tesseract_api)	
+file(READ "${TESSERACT_DIR}/VERSION" TESSERACT_VERSION)
+STRING(STRIP "${TESSERACT_VERSION}" TESSERACT_VERSION)
+file(WRITE "${TESSERACT_SRC_DIR}/api/config_auto.h" "#define PACKAGE_VERSION \"${TESSERACT_VERSION}\"")
 file(GLOB tesseract_api_srcs "${TESSERACT_SRC_DIR}/api/*.cpp")
 file(GLOB tesseract_api_srcs_excludes "${TESSERACT_SRC_DIR}/api/tesseractmain.cpp" "${TESSERACT_SRC_DIR}/api/capi.cpp")
 LIST(REMOVE_ITEM tesseract_api_srcs ${tesseract_api_srcs_excludes})
