@@ -247,8 +247,8 @@ namespace Emgu.CV.OCR
                         dataPath = Path.GetFullPath(".");
 #endif
                     throw new ArgumentException(
-                        String.Format("Unable to create ocr model using Path '{0}' and language '{1}'.", dataPath,
-                            language));
+                        String.Format("Unable to create ocr model using Path '{0}', language '{1}' and OcrEngineMode '{2}'.", dataPath,
+                            language, mode));
                 }
             }
         }

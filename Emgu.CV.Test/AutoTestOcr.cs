@@ -150,7 +150,19 @@ namespace Emgu.CV.Test
         {
             TesseractDownloadLangFile(".", lang);
             TesseractDownloadLangFile(".", "osd"); //script orientation detection
-            return new Tesseract("./", lang, OcrEngineMode.TesseractLstmCombined);
+
+            String loadDirectory;
+            System.Reflection.Assembly asm = typeof(CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
+            if ((String.IsNullOrEmpty(asm.Location) || !System.IO.File.Exists(asm.Location)) && AppDomain.CurrentDomain.BaseDirectory != null)
+            {
+                loadDirectory = ".";
+            }
+            else
+            {
+                loadDirectory = System.IO.Path.GetDirectoryName(asm.Location) + System.IO.Path.DirectorySeparatorChar;
+            }
+
+            return new Tesseract(loadDirectory, lang, OcrEngineMode.LstmOnly);
         }
 
         [Test]
