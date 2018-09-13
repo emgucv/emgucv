@@ -50,10 +50,9 @@ namespace LicensePlateRecognition
             _ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
         }
 
-        private static void TesseractDownloadLangFile(String folder, String lang)
+        public static void TesseractDownloadLangFile(String folder, String lang)
         {
-            String subfolderName = "tessdata";
-            String folderName = System.IO.Path.Combine(folder, subfolderName);
+            String folderName = folder;
             if (!System.IO.Directory.Exists(folderName))
             {
                 System.IO.Directory.CreateDirectory(folderName);
@@ -62,8 +61,7 @@ namespace LicensePlateRecognition
             if (!System.IO.File.Exists(dest))
                 using (System.Net.WebClient webclient = new System.Net.WebClient())
                 {
-                    String source =
-                        String.Format("https://github.com/tesseract-ocr/tessdata/blob/4592b8d453889181e01982d22328b5846765eaad/{0}.traineddata?raw=true", lang);
+                    String source = Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang);
 
                     Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
                     webclient.DownloadFile(source, dest);
@@ -82,16 +80,12 @@ namespace LicensePlateRecognition
                 }
 
                 if (String.IsNullOrEmpty(path))
-                    path = ".";
+                    path = Tesseract.DefaultTesseractDirectory;
 
                 TesseractDownloadLangFile(path, lang);
                 TesseractDownloadLangFile(path, "osd"); //script orientation detection
-                String pathFinal = path.Length == 0 ||
-                                   path.Substring(path.Length - 1, 1).Equals(Path.DirectorySeparatorChar.ToString())
-                    ? path
-                    : String.Format("{0}{1}", path, System.IO.Path.DirectorySeparatorChar);
 
-                _ocr = new Tesseract(pathFinal, lang, mode);
+                _ocr = new Tesseract(path, lang, mode);
             }
             catch (System.Net.WebException e)
             {

@@ -61,9 +61,8 @@ namespace OCR
             if (!System.IO.File.Exists(dest))
                 using (System.Net.WebClient webclient = new System.Net.WebClient())
                 {
-                    String source =
-                        String.Format("https://github.com/tesseract-ocr/tessdata/blob/4592b8d453889181e01982d22328b5846765eaad/{0}.traineddata?raw=true", lang);
-
+                    String source = Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang);
+                    
                     Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
                     webclient.DownloadFile(source, dest);
                     Console.WriteLine(String.Format("Download completed"));

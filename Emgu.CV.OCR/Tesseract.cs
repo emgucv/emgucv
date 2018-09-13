@@ -210,6 +210,16 @@ namespace Emgu.CV.OCR
         }
 
         /// <summary>
+        /// Get the url to download the tessdata file for the specific language
+        /// </summary>
+        /// <param name="lang">The 3 letter language identifier</param>
+        /// <returns>the url to download the tessdata file for the specific language</returns>
+        public static String GetLangFileUrl(string lang)
+        {
+            return String.Format("https://github.com/tesseract-ocr/tessdata/blob/590567f20dc044f6948a8e2c61afc714c360ad0e/{0}.traineddata?raw=true", lang);
+        }
+
+        /// <summary>
         /// Initialize the OCR engine using the specific dataPath and language name.
         /// </summary>
         /// <param name="dataPath">

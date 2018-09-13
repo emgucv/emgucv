@@ -30,7 +30,7 @@ namespace AndroidExamples
            : base("Detect License Plate")
         {
         }
-
+        /*
         private static void TesseractDownloadLangFile(String folder, String lang)
         {
             String subfolderName = "tessdata";
@@ -43,14 +43,13 @@ namespace AndroidExamples
             if (!System.IO.File.Exists(dest))
                 using (System.Net.WebClient webclient = new System.Net.WebClient())
                 {
-                    String source =
-                        String.Format("https://github.com/tesseract-ocr/tessdata/blob/4592b8d453889181e01982d22328b5846765eaad/{0}.traineddata?raw=true", lang);
-
+                    String source = Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang);
+                        
                     Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
                     webclient.DownloadFile(source, dest);
                     Console.WriteLine(String.Format("Download completed"));
                 }
-        }
+        }*/
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -61,13 +60,13 @@ namespace AndroidExamples
                 if (image == null)
                     return;
 
-                String path = this.FilesDir.AbsolutePath;
+                String path = System.IO.Path.Combine(this.FilesDir.AbsolutePath, "tessdata");
 
                 try
                 {
                     SetProgressMessage("Checking Tesseract Lang files...");
-                    TesseractDownloadLangFile(path, "eng");
-                    TesseractDownloadLangFile(path, "osd");
+                    LicensePlateDetector.TesseractDownloadLangFile(path, "eng");
+                    LicensePlateDetector.TesseractDownloadLangFile(path, "osd");
                     SetProgressMessage("Please wait ...");
                 }
                 catch (System.Net.WebException e)
