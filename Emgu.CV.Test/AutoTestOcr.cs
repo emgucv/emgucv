@@ -80,7 +80,6 @@ namespace Emgu.CV.Test
                         //EmguAssert.IsTrue(success, "failed to export pdf");
                     }
 
-
                 }
             }
         }
@@ -135,34 +134,21 @@ namespace Emgu.CV.Test
                 String source =
                     String.Format("https://github.com/tesseract-ocr/tessdata/blob/4592b8d453889181e01982d22328b5846765eaad/{0}.traineddata?raw=true", lang);
 
-
                 using (System.Net.WebClient webclient = new System.Net.WebClient())
                 {
                     Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
                     webclient.DownloadFile(source, dest);
                     Console.WriteLine(String.Format("Download completed"));
                 }
-
             }
         }
 
         private static Tesseract GetTesseract(String lang = "eng")
         {
-            TesseractDownloadLangFile(".", lang);
-            TesseractDownloadLangFile(".", "osd"); //script orientation detection
+            TesseractDownloadLangFile(Tesseract.DefaultTesseractDirectory, lang);
+            TesseractDownloadLangFile(Tesseract.DefaultTesseractDirectory, "osd"); //script orientation detection
 
-            String loadDirectory;
-            System.Reflection.Assembly asm = typeof(CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
-            if ((String.IsNullOrEmpty(asm.Location) || !System.IO.File.Exists(asm.Location)) && AppDomain.CurrentDomain.BaseDirectory != null)
-            {
-                loadDirectory = ".";
-            }
-            else
-            {
-                loadDirectory = System.IO.Path.GetDirectoryName(asm.Location) + System.IO.Path.DirectorySeparatorChar;
-            }
-
-            return new Tesseract(loadDirectory, lang, OcrEngineMode.LstmOnly);
+            return new Tesseract(Tesseract.DefaultTesseractDirectory, lang, OcrEngineMode.TesseractLstmCombined);
         }
 
         [Test]

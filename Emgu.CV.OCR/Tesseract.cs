@@ -54,8 +54,13 @@ namespace Emgu.CV.OCR
                 {
                     return new Version(0, 0);
                 }
-                else
+                else 
                 {
+                    if (vStr.Contains("-"))
+                    {
+                        int firstDashIdx = vStr.IndexOf('-');
+                        vStr = vStr.Substring(0, firstDashIdx);
+                    }
                     return new Version(vStr.Replace("dev", String.Empty).Replace("alpha", String.Empty));
                 }
             }
@@ -83,7 +88,7 @@ namespace Emgu.CV.OCR
         /// Create an tesseract OCR engine.
         /// </summary>
         /// <param name="dataPath">
-        /// The datapath must be the name of the parent directory of tessdata and
+        /// The datapath must be the name of the directory of tessdata and
         /// must end in / . Any name after the last / will be stripped.
         /// </param>
         /// <param name="language">
@@ -113,7 +118,7 @@ namespace Emgu.CV.OCR
         /// Create an tesseract OCR engine.
         /// </summary>
         /// <param name="dataPath">
-        /// The datapath must be the name of the parent directory of tessdata and
+        /// The datapath must be the name of the directory of tessdata and
         /// must end in / . Any name after the last / will be stripped.
         /// </param>
         /// <param name="language">
@@ -183,6 +188,28 @@ namespace Emgu.CV.OCR
         }
 
         /// <summary>
+        /// Get the default tesseract ocr directory. This should return the folder of the dll in most situations.
+        /// </summary>
+        public static String DefaultTesseractDirectory
+        {
+            get
+            {
+                String loadDirectory;
+                System.Reflection.Assembly asm = typeof(CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
+                if ((String.IsNullOrEmpty(asm.Location) || !System.IO.File.Exists(asm.Location)) && AppDomain.CurrentDomain.BaseDirectory != null)
+                {
+                    loadDirectory = ".";
+                }
+                else
+                {
+                    loadDirectory = System.IO.Path.GetDirectoryName(asm.Location);
+                }
+
+                return Path.Combine(loadDirectory, "tessdata") + System.IO.Path.DirectorySeparatorChar;
+            }
+        }
+
+        /// <summary>
         /// Initialize the OCR engine using the specific dataPath and language name.
         /// </summary>
         /// <param name="dataPath">
@@ -208,7 +235,7 @@ namespace Emgu.CV.OCR
         /// <param name="mode">OCR engine mode</param>
         public void Init(String dataPath, String language, OcrEngineMode mode)
         {
-
+/*
 #if !NETFX_CORE
             if (!(dataPath.Length > 0 && dataPath.Substring(dataPath.Length - 1).ToCharArray()[0] == System.IO.Path.DirectorySeparatorChar))
             {  //if the data path end in slash
@@ -220,7 +247,7 @@ namespace Emgu.CV.OCR
                 }
             }
 #endif
-
+*/
             /*
             if (!System.IO.Directory.Exists(System.IO.Path.Combine(dataPath, "tessdata")))
             {

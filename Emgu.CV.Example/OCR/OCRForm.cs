@@ -29,27 +29,30 @@ namespace OCR
             //System.Net.ServicePointManager.Expect100Continue = true;
             //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
-            InitOcr("", "eng", OcrEngineMode.TesseractLstmCombined);
-            ocrOptionsComboBox.SelectedIndex = 0;
+            if (InitOcr(Emgu.CV.OCR.Tesseract.DefaultTesseractDirectory, "eng", OcrEngineMode.TesseractLstmCombined))
+            {
+                ocrOptionsComboBox.SelectedIndex = 0;
 
-            Mat img = new Mat(200, 400, DepthType.Cv8U, 3); //Create a 3 channel image of 400x200
-            img.SetTo(new Bgr(255, 0, 0).MCvScalar); // set it to Blue color
+                Mat img = new Mat(200, 400, DepthType.Cv8U, 3); //Create a 3 channel image of 400x200
+                img.SetTo(new Bgr(255, 0, 0).MCvScalar); // set it to Blue color
 
-            //Draw "Hello, world." on the image using the specific font
-            CvInvoke.PutText(
-               img,
-               "Hello, world",
-               new System.Drawing.Point(10, 80),
-               FontFace.HersheyComplex,
-               1.0,
-               new Bgr(0, 255, 0).MCvScalar);
-            OcrImage(img);
+                //Draw "Hello, world." on the image using the specific font
+                CvInvoke.PutText(
+                    img,
+                    "Hello, world",
+                    new System.Drawing.Point(10, 80),
+                    FontFace.HersheyComplex,
+                    1.0,
+                    new Bgr(0, 255, 0).MCvScalar);
+                OcrImage(img);
+            }
         }
 
         private static void TesseractDownloadLangFile(String folder, String lang)
         {
-            String subfolderName = "tessdata";
-            String folderName = System.IO.Path.Combine(folder, subfolderName);
+            //String subfolderName = "tessdata";
+            //String folderName = System.IO.Path.Combine(folder, subfolderName);
+            String folderName = folder;
             if (!System.IO.Directory.Exists(folderName))
             {
                 System.IO.Directory.CreateDirectory(folderName);
@@ -67,7 +70,7 @@ namespace OCR
                 }
         }
 
-        private void InitOcr(String path, String lang, OcrEngineMode mode)
+        private bool InitOcr(String path, String lang, OcrEngineMode mode)
         {
             try
             {
@@ -78,23 +81,26 @@ namespace OCR
                 }
 
                 if (String.IsNullOrEmpty(path))
-                    path = ".";
+                    path = Emgu.CV.OCR.Tesseract.DefaultTesseractDirectory;
                 
                 TesseractDownloadLangFile(path, lang);
                 TesseractDownloadLangFile(path, "osd"); //script orientation detection
+                /*
                 String pathFinal = path.Length == 0 || path.Substring(path.Length - 1, 1).Equals(Path.DirectorySeparatorChar.ToString())
                     ? path
                     : String.Format("{0}{1}", path, System.IO.Path.DirectorySeparatorChar);
-                    
-                _ocr = new Tesseract(pathFinal, lang, mode);
+                */  
+                _ocr = new Tesseract(path, lang, mode);
                 
-                languageNameLabel.Text = String.Format("{0} : {1}", lang, mode.ToString());
+                languageNameLabel.Text = String.Format("{0} : {1} (tesseract version {2})", lang, mode.ToString(), Emgu.CV.OCR.Tesseract.VersionString);
+                return true;
             }
             catch (Exception e)
             {
                 _ocr = null;
                 MessageBox.Show(e.Message, "Failed to initialize tesseract OCR engine", MessageBoxButtons.OK);
                 languageNameLabel.Text = "Failed to initialize tesseract OCR engine";
+                return false;
             }
         }
 
