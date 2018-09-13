@@ -411,12 +411,17 @@ namespace Emgu.CV.ML
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void CvRTParamsRelease(ref IntPtr rTreesParam);
         */
+
         /// <summary>
         /// Create a default random tree
         /// </summary>
         /// <returns>Pointer to the random tree</returns>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveRTreesCreate(ref IntPtr statModel, ref IntPtr algorithm);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveRTreesGetVotes(IntPtr model, IntPtr samples, IntPtr results, DTrees.Flags flags);
+
 
         /// <summary>
         /// Release the random tree model

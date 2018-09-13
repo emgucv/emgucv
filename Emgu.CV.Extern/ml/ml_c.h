@@ -87,6 +87,7 @@ CVAPI(void) cveDTreesRelease(cv::ml::DTrees** model);
 
 //Random Tree
 CVAPI(cv::ml::RTrees*) cveRTreesCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
+CVAPI(void) cveRTreesGetVotes(cv::ml::RTrees* model, cv::_InputArray* samples, cv::_OutputArray* results, int flags);
 CVAPI(void) cveRTreesRelease(cv::ml::RTrees** model);
 
 //CvBoost

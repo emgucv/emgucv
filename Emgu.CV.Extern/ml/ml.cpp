@@ -299,6 +299,12 @@ cv::ml::RTrees* cveRTreesCreate(cv::ml::StatModel** statModel, cv::Algorithm** a
    *algorithm = dynamic_cast<cv::Algorithm*>( rtrees );
    return rtrees;
 }
+
+void cveRTreesGetVotes(cv::ml::RTrees* model, cv::_InputArray* samples, cv::_OutputArray* results, int flags)
+{
+	model->getVotes(*samples, *results, flags);
+}
+
 void cveRTreesRelease(cv::ml::RTrees** model) 
 { 
    delete *model; 
