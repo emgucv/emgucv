@@ -39,6 +39,8 @@ namespace Emgu.CV.XamarinForms
 
          OnImagesLoaded += async (sender, image) =>
          {
+            if (image == null || image [0] == null)
+               return;
             GetLabel().Text = "Please wait...";
             SetImage(null);
             Task<Tuple<Mat, long>> t = new Task<Tuple<Mat, long>>(

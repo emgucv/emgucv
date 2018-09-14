@@ -28,18 +28,26 @@ namespace Emgu.CV.XamarinForms
          
          OnImagesLoaded += async (sender, image) =>
          {
-            GetLabel().Text = "please wait...";
+            if (image == null || image [0] == null)
+               return;
+            GetLabel ().Text = "please wait...";
             SetImage(null);
 
             Task<Tuple<Mat, long>> t = new Task<Tuple<Mat, long>>(
                () =>
                {
                   long time;
-                  
-
-                  if (image == null)
-                     return new Tuple<Mat, long>(null, 0);
-                  Rectangle[] pedestrians = FindPedestrian.Find(image[0], out time);
+                  Rectangle [] pedestrians;
+                  if (image[0].NumberOfChannels == 4) 
+                  {
+                     //if the png file is loaded with alpha channel
+                     using (Mat bgr = new Mat ())
+                     {
+                        CvInvoke.CvtColor (image [0], bgr, ColorConversion.Bgra2Bgr);
+                        pedestrians = FindPedestrian.Find (bgr, out time);
+                     }
+                  } else
+                     pedestrians = FindPedestrian.Find(image[0], out time);
 
                   foreach (Rectangle rect in pedestrians)
                   {
