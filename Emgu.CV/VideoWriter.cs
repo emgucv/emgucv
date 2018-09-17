@@ -144,15 +144,15 @@ namespace Emgu.CV
             /// <summary>
             /// Current quality (0..100%) of the encoded videostream. Can be adjusted dynamically in some codecs.
             /// </summary>
-            Quality,
+            Quality = 1,
             /// <summary>
             /// (Read-only): Size of just encoded video frame. Note that the encoding order may be different from representation order.
             /// </summary>
-            Framebytes,
+            Framebytes = 2,
             /// <summary>
             /// Number of stripes for parallel encoding. -1 for auto detection.
             /// </summary>
-            NStripes
+            NStripes = 3
         }
     }
 
