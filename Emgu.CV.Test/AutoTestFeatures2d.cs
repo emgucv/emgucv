@@ -173,7 +173,7 @@ namespace Emgu.CV.Test
         public void TestMSER()
         {
             MSERDetector keyPointDetector = new MSERDetector();
-            SIFT descriptorGenerator = new SIFT();
+            AKAZE descriptorGenerator = new AKAZE();
             //ParamDef[] parameters = keyPointDetector.GetParams();
             TestFeature2DTracker(keyPointDetector, descriptorGenerator);
         }
@@ -584,7 +584,7 @@ namespace Emgu.CV.Test
         public void TestBOWKmeansTrainer()
         {
             Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
-            SURF detector = new SURF(500);
+            AKAZE detector = new AKAZE();
             VectorOfKeyPoint kpts = new VectorOfKeyPoint();
             Mat descriptors = new Mat();
             detector.DetectAndCompute(box, null, kpts, descriptors, false);

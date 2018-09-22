@@ -3808,6 +3808,19 @@ namespace Emgu.CV.Test
             }
         }
 
+        /*
+        [Test]
+        public void TestCreateImageHeader()
+        {
+            int width = 480;
+            int height = 320;
+            IntPtr iplImageHeader = CvInvoke.cvCreateImageHeader(new Size(width, height), IplDepth.IplDepth_8U, 1);
+            Size s = CvInvoke.cvGetSize(iplImageHeader);
+            CvInvoke.cvReleaseImageHeader(ref iplImageHeader);
+            Assert.AreEqual(s.Width, width);
+            Assert.AreEqual(s.Height, height);
+        }*/
+
         [Test]
         public void TestERFilter()
         {

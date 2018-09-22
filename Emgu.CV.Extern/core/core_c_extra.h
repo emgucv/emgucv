@@ -77,7 +77,7 @@ CVAPI(void) cveSubtract(cv::_InputArray* src1, cv::_InputArray* src2, cv::_Outpu
 CVAPI(void) cveDivide(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, double scale, int dtype);
 CVAPI(void) cveMultiply(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, double scale, int dtype);
 CVAPI(void) cveCountNonZero(cv::_InputArray* src);
-CVAPI(void) cveFindNonZero(cv::_InputArray* src, cv::_OutputArray* idx );
+CVAPI(void) cveFindNonZero(cv::_InputArray* src, cv::_OutputArray* idx);
 CVAPI(void) cveMin(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 CVAPI(void) cveMax(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 
@@ -215,7 +215,7 @@ CVAPI(CvMat*) cveGetSubRect(CvArr* arr, CvMat* submat, CvRect* rect);
 CVAPI(CvMat*) cveGetRows(CvArr* arr, CvMat* submat, int startRow, int endRow, int deltaRow);
 CVAPI(CvMat*) cveGetCols(CvArr* arr, CvMat* submat, int startCol, int endCol);
 
-CVAPI(void) cveGetSize(CvArr* arr, CvSize* size);
+CVAPI(void) cveGetSize(CvArr* arr, int* width, int* height);
 
 CVAPI(void) cveCopy(CvArr* src, CvArr* dst, CvArr* mask);
 CVAPI(void) cveRange(CvArr* mat, double start, double end);
@@ -255,7 +255,7 @@ CVAPI(void) cvePCACompute1(cv::_InputArray* data, cv::_InputOutputArray* mean, c
 CVAPI(void) cvePCACompute2(cv::_InputArray* data, cv::_InputOutputArray* mean, cv::_OutputArray* eigenvectors, double retainedVariance);
 CVAPI(void) cvePCAProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputArray* eigenvectors, cv::_OutputArray* result);
 CVAPI(void) cvePCABackProject(cv::_InputArray* data, cv::_InputArray* mean, cv::_InputArray* eigenvectors, cv::_OutputArray* result);
- 
+
 CVAPI(void) cveGetRangeAll(cv::Range* range);
 
 
@@ -263,6 +263,6 @@ CVAPI(cv::Affine3d*) cveAffine3dCreate();
 CVAPI(cv::Affine3d*) cveAffine3dGetIdentity();
 CVAPI(cv::Affine3d*) cveAffine3dRotate(cv::Affine3d* affine, double r0, double r1, double r2);
 CVAPI(cv::Affine3d*) cveAffine3dTranslate(cv::Affine3d* affine, double t0, double t1, double t2);
-CVAPI(void) cveAffine3dGetValues(cv::Affine3d* affine, double* values); 
+CVAPI(void) cveAffine3dGetValues(cv::Affine3d* affine, double* values);
 CVAPI(void) cveAffine3dRelease(cv::Affine3d** affine);
 #endif

@@ -4355,7 +4355,12 @@ namespace Emgu.CV
         {
             get
             {
-                return CvInvoke.cvGetSize(_ptr);
+                MIplImage iplImage = this.MIplImage;
+                if (iplImage.Roi == IntPtr.Zero)
+                    return new Size(iplImage.Width, iplImage.Height);
+                else
+                    return ROI.Size;
+                //return CvInvoke.cvGetSize(_ptr);
             }
         }
     }

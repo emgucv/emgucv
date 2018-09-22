@@ -1741,12 +1741,12 @@ namespace Emgu.CV
         /// <returns>number of rows (CvSize::height) and number of columns (CvSize::width) of the input matrix or image. In case of image the size of ROI is returned.</returns>
         public static Size cvGetSize(IntPtr arr)
         {
-            Size s = new Size();
-            cveGetSize(arr, ref s);
-            return s;
+            int width = 0, height = 0;
+            cveGetSize(arr, ref width, ref height);
+            return new Size(width, height);
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGetSize(IntPtr arr, ref Size size);
+        private static extern void cveGetSize(IntPtr arr, ref int width, ref int height);
 
         /// <summary>
         /// Draws a simple or filled circle with given center and radius. The circle is clipped by ROI rectangle.
