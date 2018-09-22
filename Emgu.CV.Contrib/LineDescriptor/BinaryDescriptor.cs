@@ -19,12 +19,14 @@ namespace Emgu.CV.LineDescriptor
    /// </summary>
    public class BinaryDescriptor : UnmanagedObject
    {
+       private IntPtr _sharedPtr;
+
       /// <summary>
       /// Default constructor
       /// </summary>
       public BinaryDescriptor()
       {
-         _ptr = LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorCreate();
+         _ptr = LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorCreate(ref _sharedPtr);
       }
 
       /// <summary>
@@ -56,7 +58,7 @@ namespace Emgu.CV.LineDescriptor
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorRelease(ref _ptr);
+            LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorRelease(ref _ptr, ref _sharedPtr);
       }
    }
 
@@ -71,7 +73,7 @@ namespace Emgu.CV.LineDescriptor
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cveLineDescriptorBinaryDescriptorCreate();
+      internal static extern IntPtr cveLineDescriptorBinaryDescriptorCreate(ref IntPtr sharedPtr);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveLineDescriptorBinaryDescriptorDetect(IntPtr descriptor, IntPtr image, IntPtr keypoints, IntPtr mask);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -83,6 +85,6 @@ namespace Emgu.CV.LineDescriptor
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool returnFloatDescr);
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveLineDescriptorBinaryDescriptorRelease(ref IntPtr descriptor);
+      internal static extern void cveLineDescriptorBinaryDescriptorRelease(ref IntPtr descriptor, ref IntPtr sharedPtr);
    }
 }

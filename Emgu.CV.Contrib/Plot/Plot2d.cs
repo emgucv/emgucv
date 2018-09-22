@@ -20,6 +20,8 @@ namespace Emgu.CV.Plot
     /// </summary>
     public partial class Plot2d : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create 2D plot from data
         /// </summary>
@@ -27,7 +29,7 @@ namespace Emgu.CV.Plot
         public Plot2d(IInputArray data)
         {
             using (InputArray iaData = data.GetInputArray())
-                _ptr = PlotInvoke.cvePlot2dCreateFrom(iaData);
+                _ptr = PlotInvoke.cvePlot2dCreateFrom(iaData, ref _sharedPtr);
         }
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace Emgu.CV.Plot
         {
             using (InputArray iaDataX = dataX.GetInputArray())
             using (InputArray iaDataY = dataY.GetInputArray())
-                _ptr = PlotInvoke.cvePlot2dCreateFromXY(iaDataX, iaDataY);
+                _ptr = PlotInvoke.cvePlot2dCreateFromXY(iaDataX, iaDataY, ref _sharedPtr);
         }
 
         /// <summary>
@@ -113,7 +115,7 @@ namespace Emgu.CV.Plot
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                PlotInvoke.cvePlot2dRelease(ref _ptr);
+                PlotInvoke.cvePlot2dRelease(ref _ptr, ref _sharedPtr);
         }
     }
 
@@ -128,16 +130,16 @@ namespace Emgu.CV.Plot
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cvePlot2dCreateFrom(IntPtr data);
+        internal static extern IntPtr cvePlot2dCreateFrom(IntPtr data, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cvePlot2dCreateFromXY(IntPtr dataX, IntPtr dataY);
+        internal static extern IntPtr cvePlot2dCreateFromXY(IntPtr dataX, IntPtr dataY, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cvePlot2dRender(IntPtr plot, IntPtr result);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cvePlot2dRelease(ref IntPtr plot);
+        internal static extern void cvePlot2dRelease(ref IntPtr plot, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cvePlot2dSetPlotLineColor(IntPtr plot, ref MCvScalar plotLineColor);

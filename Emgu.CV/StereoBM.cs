@@ -14,6 +14,7 @@ namespace Emgu.CV
    /// </summary>
    public class StereoBM : UnmanagedObject, IStereoMatcher
    {
+       private IntPtr _sharedPtr;
 
       /// <summary>
       /// Create a stereoBM object
@@ -22,7 +23,7 @@ namespace Emgu.CV
       /// <param name="numberOfDisparities">the disparity search range. For each pixel algorithm will find the best disparity from 0 (default minimum disparity) to <paramref name="numberOfDisparities"/>. The search range can then be shifted by changing the minimum disparity.</param>
       public StereoBM(int numberOfDisparities = 0, int blockSize = 21)
       {
-         _ptr = StereoMatcherExtensions.CvStereoBMCreate(numberOfDisparities, blockSize);
+         _ptr = StereoMatcherExtensions.cveStereoBMCreate(numberOfDisparities, blockSize, ref _sharedPtr);
       }
 
       /// <summary>
@@ -31,7 +32,7 @@ namespace Emgu.CV
       protected override void DisposeObject()
       {
          if(_ptr != IntPtr.Zero)
-            StereoMatcherExtensions.CvStereoMatcherRelease(ref _ptr);
+            StereoMatcherExtensions.cveStereoMatcherRelease(ref _ptr, ref _sharedPtr);
       }
 
       /// <summary>

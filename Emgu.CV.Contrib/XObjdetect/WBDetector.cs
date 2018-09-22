@@ -15,12 +15,14 @@ namespace Emgu.CV.XObjdetect
     /// </summary>
     public class WBDetector : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create instance of WBDetector.
         /// </summary>
         public WBDetector()
         {
-            _ptr = XObjdetectInvoke.cveWBDetectorCreate();
+            _ptr = XObjdetectInvoke.cveWBDetectorCreate(ref _sharedPtr);
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace Emgu.CV.XObjdetect
         {
             if (IntPtr.Zero != _ptr)
             {
-                XObjdetectInvoke.cveWBDetectorRelease(ref _ptr);
+                XObjdetectInvoke.cveWBDetectorRelease(ref _ptr, ref _sharedPtr);
             }
         }
     }
@@ -90,7 +92,7 @@ namespace Emgu.CV.XObjdetect
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveWBDetectorCreate();
+        internal static extern IntPtr cveWBDetectorCreate(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveWBDetectorRead(IntPtr detector, IntPtr node);
@@ -105,7 +107,7 @@ namespace Emgu.CV.XObjdetect
         internal static extern void cveWBDetectorDetect(IntPtr detector, IntPtr img, IntPtr bboxes, IntPtr confidences);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveWBDetectorRelease(ref IntPtr detector);
+        internal static extern void cveWBDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
 
 
         /*

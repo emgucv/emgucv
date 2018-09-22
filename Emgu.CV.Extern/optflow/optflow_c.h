@@ -16,13 +16,13 @@ CVAPI(void) cveCalcMotionGradient(cv::_InputArray* mhi, cv::_OutputArray* mask, 
 CVAPI(void) cveCalcGlobalOrientation(cv::_InputArray* orientation, cv::_InputArray* mask, cv::_InputArray* mhi, double timestamp, double duration);
 CVAPI(void) cveSegmentMotion(cv::_InputArray* mhi, cv::_OutputArray* segmask, std::vector< cv::Rect >* boundingRects, double timestamp, double segThresh);
 
-CVAPI(cv::DenseOpticalFlow*) cveOptFlowDeepFlowCreate(cv::Algorithm** algorithm);
+CVAPI(cv::DenseOpticalFlow*) cveOptFlowDeepFlowCreate(cv::Algorithm** algorithm, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr);
 
-CVAPI(cv::optflow::DISOpticalFlow*) cveDISOpticalFlowCreate(int preset, cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm);
-CVAPI(void) cveDISOpticalFlowRelease(cv::optflow::DISOpticalFlow** flow);
+CVAPI(cv::optflow::DISOpticalFlow*) cveDISOpticalFlowCreate(int preset, cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm, cv::Ptr<cv::optflow::DISOpticalFlow>** sharedPtr);
+CVAPI(void) cveDISOpticalFlowRelease(cv::optflow::DISOpticalFlow** flow, cv::Ptr<cv::optflow::DISOpticalFlow>** sharedPtr);
 
-CVAPI(cv::DenseOpticalFlow*) cveOptFlowPCAFlowCreate(cv::Algorithm** algorithm);
+CVAPI(cv::DenseOpticalFlow*) cveOptFlowPCAFlowCreate(cv::Algorithm** algorithm, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr);
 
-CVAPI(cv::optflow::VariationalRefinement*) cveVariationalRefinementCreate(cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm);
-CVAPI(void) cveVariationalRefinementRelease(cv::optflow::VariationalRefinement** flow);
+CVAPI(cv::optflow::VariationalRefinement*) cveVariationalRefinementCreate(cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm, cv::Ptr<cv::optflow::VariationalRefinement>** sharedPtr);
+CVAPI(void) cveVariationalRefinementRelease(cv::optflow::VariationalRefinement** flow, cv::Ptr<cv::optflow::VariationalRefinement>** sharedPtr);
 #endif

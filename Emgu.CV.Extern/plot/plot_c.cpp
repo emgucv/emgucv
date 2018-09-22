@@ -6,26 +6,27 @@
 
 #include "plot_c.h"
 
-cv::plot::Plot2d* cvePlot2dCreateFrom(cv::_InputArray* data)
+cv::plot::Plot2d* cvePlot2dCreateFrom(cv::_InputArray* data, cv::Ptr<cv::plot::Plot2d>** sharedPtr)
 {
    cv::Ptr<cv::plot::Plot2d> plot = cv::plot::Plot2d::create(*data);
-   plot.addref();
+   *sharedPtr = new cv::Ptr<cv::plot::Plot2d>(plot);
    return plot.get();
 }
-cv::plot::Plot2d* cvePlot2dCreateFromXY(cv::_InputArray* dataX, cv::_InputArray* dataY)
+cv::plot::Plot2d* cvePlot2dCreateFromXY(cv::_InputArray* dataX, cv::_InputArray* dataY, cv::Ptr<cv::plot::Plot2d>** sharedPtr)
 {
    cv::Ptr<cv::plot::Plot2d> plot = cv::plot::Plot2d::create(*dataX, *dataY);
-   plot.addref();
+   *sharedPtr = new cv::Ptr<cv::plot::Plot2d>(plot);
    return plot.get();
 }
 void cvePlot2dRender(cv::plot::Plot2d* plot, cv::_OutputArray* result)
 {
    plot->render(*result);
 }
-void cvePlot2dRelease(cv::plot::Plot2d** plot)
+void cvePlot2dRelease(cv::plot::Plot2d** plot, cv::Ptr<cv::plot::Plot2d>** sharedPtr)
 {
-   delete *plot;
+   delete *sharedPtr;
    *plot = 0;
+   *sharedPtr = 0;
 }
 
 void cvePlot2dSetPlotLineColor(cv::plot::Plot2d* plot, CvScalar* plotLineColor)

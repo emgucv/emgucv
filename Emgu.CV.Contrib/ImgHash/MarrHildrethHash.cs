@@ -20,6 +20,8 @@ namespace Emgu.CV.ImgHash
     /// </summary>
     public class MarrHildrethHash : ImgHashBase
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a Marr-Hildreth operator based hash.
         /// </summary>
@@ -27,7 +29,7 @@ namespace Emgu.CV.ImgHash
         /// <param name="scale">Level of scale factor</param>
         public MarrHildrethHash(float alpha = 2.0f, float scale = 1.0f)
         {
-            _ptr = ImgHashInvoke.cveMarrHildrethHashCreate(ref _imgHashBase, alpha, scale);
+            _ptr = ImgHashInvoke.cveMarrHildrethHashCreate(ref _imgHashBase, alpha, scale, ref _sharedPtr);
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace Emgu.CV.ImgHash
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ImgHashInvoke.cveMarrHildrethHashRelease(ref _ptr);
+                ImgHashInvoke.cveMarrHildrethHashRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -44,10 +46,10 @@ namespace Emgu.CV.ImgHash
     internal static partial class ImgHashInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMarrHildrethHashCreate(ref IntPtr imgHash, float alpha, float scale);
+        internal extern static IntPtr cveMarrHildrethHashCreate(ref IntPtr imgHash, float alpha, float scale, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMarrHildrethHashRelease(ref IntPtr hash);
+        internal extern static void cveMarrHildrethHashRelease(ref IntPtr hash, ref IntPtr sharedPtr);
     }
 }
 

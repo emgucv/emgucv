@@ -16,6 +16,8 @@ namespace Emgu.CV.BgSegm
     /// <remarks>More details about the algorithm can be found at: L. Guo, D. Xu, and Z. Qiang. Background subtraction using local svd binary pattern. In 2016 IEEE Conference on Computer Vision and Pattern Recognition Workshops (CVPRW), pages 1159–1167, June 2016.</remarks>
     public class BackgroundSubtractorLSBP : UnmanagedObject, IBackgroundSubtractor
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Camera Motion compensation mode
         /// </summary>
@@ -76,7 +78,7 @@ namespace Emgu.CV.BgSegm
             int minCount = 2)
         {
             _ptr = Emgu.CV.ContribInvoke.cveBackgroundSubtractorLSBPCreate(
-                mc, nSamples, LSBPRadius, tlower, tupper, tinc, tdec, rscale, rincdec, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, LSBPthreshold, minCount, ref _backgroundSubtractorPtr, ref _algorithmPtr);
+                mc, nSamples, LSBPRadius, tlower, tupper, tinc, tdec, rscale, rincdec, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, LSBPthreshold, minCount, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -86,7 +88,7 @@ namespace Emgu.CV.BgSegm
         {
             if (IntPtr.Zero != _ptr)
             {
-                Emgu.CV.ContribInvoke.cveBackgroundSubtractorLSBPRelease(ref _ptr);
+                Emgu.CV.ContribInvoke.cveBackgroundSubtractorLSBPRelease(ref _ptr, ref _sharedPtr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
@@ -101,9 +103,9 @@ namespace Emgu.CV
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBackgroundSubtractorLSBPCreate(
-            Emgu.CV.BgSegm.BackgroundSubtractorLSBP.CameraMotionCompensation mc, int nSamples, int LSBPRadius, float tlower, float tupper, float tinc, float tdec, float rscale, float rincdec, float noiseRemovalThresholdFacBG, float noiseRemovalThresholdFacFG, int LSBPthreshold, int minCount, ref IntPtr bgSubtractor, ref IntPtr algorithm);
+            Emgu.CV.BgSegm.BackgroundSubtractorLSBP.CameraMotionCompensation mc, int nSamples, int LSBPRadius, float tlower, float tupper, float tinc, float tdec, float rscale, float rincdec, float noiseRemovalThresholdFacBG, float noiseRemovalThresholdFacFG, int LSBPthreshold, int minCount, ref IntPtr bgSubtractor, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBackgroundSubtractorLSBPRelease(ref IntPtr bgSubstractor);
+        internal static extern void cveBackgroundSubtractorLSBPRelease(ref IntPtr bgSubstractor, ref IntPtr sharedPtr);
     }
 }

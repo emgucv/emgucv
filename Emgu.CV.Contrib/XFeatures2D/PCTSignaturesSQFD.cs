@@ -22,6 +22,8 @@ namespace Emgu.CV.XFeatures2D
     /// <remarks>See also: Christian Beecks, Merih Seran Uysal, Thomas Seidl. Signature quadratic form distance. In Proceedings of the ACM International Conference on Image and Video Retrieval, pages 438-445. ACM, 2010.</remarks>
     public partial class PCTSignaturesSQFD : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Lp distance function selector.       
         /// </summary>
@@ -87,7 +89,7 @@ namespace Emgu.CV.XFeatures2D
             SimilarityFunction similarityFunction = SimilarityFunction.Heuristic,
             float similarityParameter = 1.0f)
         {
-            _ptr = XFeatures2DInvoke.cvePCTSignaturesSQFDCreate(distanceFunction, similarityFunction, similarityParameter);
+            _ptr = XFeatures2DInvoke.cvePCTSignaturesSQFDCreate(distanceFunction, similarityFunction, similarityParameter, ref _sharedPtr);
         }
 
         /// <summary>
@@ -123,7 +125,7 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            XFeatures2DInvoke.cvePCTSignaturesRelease(ref _ptr);
+            XFeatures2DInvoke.cvePCTSignaturesRelease(ref _ptr, ref _sharedPtr);
         }
     }
 
@@ -134,7 +136,9 @@ namespace Emgu.CV.XFeatures2D
         internal extern static IntPtr cvePCTSignaturesSQFDCreate(
             PCTSignaturesSQFD.DistanceFunction distanceFunction,
             PCTSignaturesSQFD.SimilarityFunction similarityFunction,
-            float similarityParameter);
+            float similarityParameter, 
+            ref IntPtr sharedPtr);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static float cvePCTSignaturesSQFDComputeQuadraticFormDistance(
             IntPtr sqfd,
@@ -147,7 +151,8 @@ namespace Emgu.CV.XFeatures2D
             IntPtr sourceSignature,
             IntPtr imageSignatures,
             IntPtr distances);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvePCTSignaturesSQFDRelease(ref IntPtr sqfd);
+        internal extern static void cvePCTSignaturesSQFDRelease(ref IntPtr sqfd, ref IntPtr sharedPtr);
     }
 }

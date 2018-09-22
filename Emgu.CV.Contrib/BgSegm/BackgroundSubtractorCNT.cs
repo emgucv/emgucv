@@ -16,6 +16,8 @@ namespace Emgu.CV.BgSegm
     /// <remarks>About as fast as MOG2 on a high end system. More than twice faster than MOG2 on cheap hardware (benchmarked on Raspberry Pi3).</remarks>
     public class BackgroundSubtractorCNT : UnmanagedObject, IBackgroundSubtractor
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _algorithmPtr;
         private IntPtr _backgroundSubtractorPtr;
 
@@ -48,7 +50,8 @@ namespace Emgu.CV.BgSegm
                 maxPixelStability,
                 isParallel,
                 ref _backgroundSubtractorPtr,
-                ref _algorithmPtr);
+                ref _algorithmPtr, 
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace Emgu.CV.BgSegm
         {
             if (IntPtr.Zero != _ptr)
             {
-                ContribInvoke.cveBackgroundSubtractorCNTRelease(ref _ptr);
+                ContribInvoke.cveBackgroundSubtractorCNTRelease(ref _ptr, ref _sharedPtr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
@@ -79,9 +82,10 @@ namespace Emgu.CV
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool isParallel,
             ref IntPtr bgSubtractor,
-            ref IntPtr algorithm);
+            ref IntPtr algorithm,
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBackgroundSubtractorCNTRelease(ref IntPtr bgSubstractor);
+        internal static extern void cveBackgroundSubtractorCNTRelease(ref IntPtr bgSubstractor, ref IntPtr sharedPtr);
     }
 }

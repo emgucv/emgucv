@@ -17,6 +17,7 @@ namespace Emgu.CV
     /// <remarks>See: Thomas Brox, Andres Bruhn, Nils Papenberg, and Joachim Weickert. High accuracy optical flow estimation based on a theory for warping. In Computer Vision-ECCV 2004, pages 25–36. Springer, 2004.</remarks>
     public partial class VariationalRefinement : UnmanagedObject, IDenseOpticalFlow
     {
+        private IntPtr _sharedPtr;
         private IntPtr _denseFlowPtr;
         private IntPtr _algorithmPtr;
 
@@ -25,7 +26,7 @@ namespace Emgu.CV
         /// </summary>
         public VariationalRefinement()
         {
-            _ptr = CvInvoke.cveVariationalRefinementCreate(ref _denseFlowPtr, ref _algorithmPtr);
+            _ptr = CvInvoke.cveVariationalRefinementCreate(ref _denseFlowPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Emgu.CV
         {
             if (IntPtr.Zero != _ptr)
             {
-                CvInvoke.cveVariationalRefinementRelease(ref _ptr);
+                CvInvoke.cveVariationalRefinementRelease(ref _ptr, ref _sharedPtr);
             }
             _algorithmPtr = IntPtr.Zero;
             _denseFlowPtr = IntPtr.Zero;
@@ -55,9 +56,9 @@ namespace Emgu.CV
     public static partial class CvInvoke
     {
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveVariationalRefinementCreate(ref IntPtr denseFlow, ref IntPtr algorithm);
+        internal static extern IntPtr cveVariationalRefinementCreate(ref IntPtr denseFlow, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveVariationalRefinementRelease(ref IntPtr flow);
+        internal static extern void cveVariationalRefinementRelease(ref IntPtr flow, ref IntPtr sharedPtr);
     }
 }

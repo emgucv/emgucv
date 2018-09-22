@@ -7,17 +7,18 @@
 #include "bioinspired_c.h"
 
 //Retina
-cv::bioinspired::Retina* cveRetinaCreate(CvSize* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength)
+cv::bioinspired::Retina* cveRetinaCreate(CvSize* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength, cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
 {
    
    cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::Retina::create(*inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
-   ptr.addref();
+   *sharedPtr = new cv::Ptr<cv::bioinspired::Retina>(ptr);
    return ptr.get();
 }
-void cveRetinaRelease(cv::bioinspired::Retina** retina)
+void cveRetinaRelease(cv::bioinspired::Retina** retina, cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
 {
-   delete *retina;
+   delete *sharedPtr;
    *retina = 0;
+   *sharedPtr = 0;
 }
 void cveRetinaRun(cv::bioinspired::Retina* retina, cv::_InputArray* image)
 {

@@ -18,6 +18,8 @@ namespace Emgu.CV.Face
     /// </summary>
     public class BIF : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create an instance of bio-inspired features
         /// </summary>
@@ -25,7 +27,7 @@ namespace Emgu.CV.Face
         /// <param name="numRotations">The number of image rotations.</param>
         public BIF(int numBands, int numRotations)
         {
-            _ptr = FaceInvoke.cveBIFCreate(numBands, numRotations);
+            _ptr = FaceInvoke.cveBIFCreate(numBands, numRotations, ref _sharedPtr);
         }
 
         /// <summary>
@@ -45,19 +47,19 @@ namespace Emgu.CV.Face
         /// </summary>
         protected override void DisposeObject()
         {
-            FaceInvoke.cveBIFRelease(ref _ptr);
+            FaceInvoke.cveBIFRelease(ref _ptr, ref _sharedPtr);
         }
     }
 
     public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveBIFCreate(int numBands, int numRotations);
+        internal extern static IntPtr cveBIFCreate(int numBands, int numRotations, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveBIFCompute(IntPtr bif, IntPtr image, IntPtr features);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBIFRelease(ref IntPtr bif);
+        internal extern static void cveBIFRelease(ref IntPtr bif, ref IntPtr sharedPtr);
     }
 }

@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,11 +55,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Emgu.TF.Models, Version=1.7.0.174, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\nugetpackages\EMGU.TF.MODELS.1.7.0.174\lib\net46\Emgu.TF.Models.dll</HintPath>
+    <Reference Include="Emgu.TF.Models, Version=1.10.0.229, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\nugetpackages\EMGU.TF.MODELS.1.10.0.229\lib\net46\Emgu.TF.Models.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.TF.World, Version=1.7.0.174, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <HintPath>..\..\nugetpackages\EMGU.TF.1.7.0.174\lib\net35\Emgu.TF.World.dll</HintPath>
+    <Reference Include="Emgu.TF.World, Version=1.10.0.229, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <HintPath>..\..\nugetpackages\EMGU.TF.1.10.0.229\lib\net35\Emgu.TF.World.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -126,11 +127,11 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\nugetpackages\EMGU.TF.1.7.0.174\build\EMGU.TF.targets" Condition="Exists('..\..\nugetpackages\EMGU.TF.1.7.0.174\build\EMGU.TF.targets')" />
+  <Import Project="..\..\nugetpackages\EMGU.TF.1.10.0.229\build\EMGU.TF.targets" Condition="Exists('..\..\nugetpackages\EMGU.TF.1.10.0.229\build\EMGU.TF.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\nugetpackages\EMGU.TF.1.7.0.174\build\EMGU.TF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\nugetpackages\EMGU.TF.1.7.0.174\build\EMGU.TF.targets'))" />
+    <Error Condition="!Exists('..\..\nugetpackages\EMGU.TF.1.10.0.229\build\EMGU.TF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\nugetpackages\EMGU.TF.1.10.0.229\build\EMGU.TF.targets'))" />
   </Target>
 </Project>

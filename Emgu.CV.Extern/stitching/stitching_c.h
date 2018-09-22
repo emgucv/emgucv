@@ -29,9 +29,9 @@ namespace cv {
 
 //CVAPI(cv::Stitcher*) cveStitcherCreateDefault(bool tryUseGpu);
 
-CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, bool tryUseGpu);
+CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, bool tryUseGpu, cv::Ptr<cv::Stitcher>** sharedPtr);
 
-CVAPI(void) cveStitcherRelease(cv::Stitcher** stitcher);
+CVAPI(void) cveStitcherRelease(cv::Stitcher** stitcher, cv::Ptr<cv::Stitcher>** sharedPtr);
 
 CVAPI(void) cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder);
 

@@ -15,13 +15,13 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Text
 {
-
-
     /// <summary>
     /// Base class for 1st and 2nd stages of Neumann and Matas scene text detection algorithm
     /// </summary>
     public abstract class ERFilter : Emgu.Util.UnmanagedObject
     {
+        protected IntPtr _sharedPtr;
+
         static ERFilter()
         {
             CvInvoke.CheckLibraryLoaded();
@@ -33,7 +33,7 @@ namespace Emgu.CV.Text
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                TextInvoke.cveERFilterRelease(ref _ptr);
+                TextInvoke.cveERFilterRelease(ref _ptr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -126,9 +126,8 @@ namespace Emgu.CV.Text
            float minProbabilityDiff = 0.1f)
         {
             using (CvString s = new CvString(classifierFileName))
-                _ptr = TextInvoke.cveERFilterNM1Create(s, thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
+                _ptr = TextInvoke.cveERFilterNM1Create(s, thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff, ref _sharedPtr);
         }
-
 
     }
 
@@ -145,9 +144,8 @@ namespace Emgu.CV.Text
         public ERFilterNM2(String classifierFileName, float minProbability = 0.3f)
         {
             using (CvString s = new CvString(classifierFileName))
-                _ptr = TextInvoke.cveERFilterNM2Create(s, minProbability);
+                _ptr = TextInvoke.cveERFilterNM2Create(s, minProbability, ref _sharedPtr);
         }
-
 
     }
 
@@ -173,39 +171,43 @@ namespace Emgu.CV.Text
     /// </summary>
     public static partial class TextInvoke
     {
-
         static TextInvoke()
         {
             CvInvoke.CheckLibraryLoaded();
         }
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveERFilterRelease(ref IntPtr filter);
+        internal static extern void cveERFilterRelease(ref IntPtr filter, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveERFilterRun(IntPtr filter, IntPtr image, IntPtr regions);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveERGrouping(
-           IntPtr image, IntPtr channels,
-           IntPtr regions, int count,
-           IntPtr groups, IntPtr groupRects,
-           ERFilter.GroupingMethod method, IntPtr fileName, float minProbability);
+            IntPtr image, IntPtr channels,
+            IntPtr regions, int count,
+            IntPtr groups, IntPtr groupRects,
+            ERFilter.GroupingMethod method, 
+            IntPtr fileName, 
+            float minProbability);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveERFilterNM1Create(
-           IntPtr classifier,
-           int thresholdDelta,
-           float minArea,
-           float maxArea,
-           float minProbability,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool nonMaxSuppression,
-           float minProbabilityDiff);
+            IntPtr classifier,
+            int thresholdDelta,
+            float minArea,
+            float maxArea,
+            float minProbability,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool nonMaxSuppression,
+            float minProbabilityDiff,
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveERFilterNM2Create(
            IntPtr classifier,
-           float minProbability);
+           float minProbability,
+           ref IntPtr sharedPtr);
 
         /// <summary>
         /// Converts MSER contours (vector of point) to ERStat regions.

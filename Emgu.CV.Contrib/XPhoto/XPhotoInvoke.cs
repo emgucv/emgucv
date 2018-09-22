@@ -78,12 +78,14 @@ namespace Emgu.CV.XPhoto
     /// </summary>
     public partial class SimpleWB : WhiteBalancer
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Creates a simple white balancer
         /// </summary>
         public SimpleWB()
         {
-            _ptr = XPhotoInvoke.cveSimpleWBCreate(ref _whiteBalancerPtr);
+            _ptr = XPhotoInvoke.cveSimpleWBCreate(ref _whiteBalancerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace Emgu.CV.XPhoto
         {
             if (_ptr != IntPtr.Zero)
             {
-                XPhotoInvoke.cveSimpleWBRelease(ref _ptr);
+                XPhotoInvoke.cveSimpleWBRelease(ref _ptr, ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -110,12 +112,14 @@ namespace Emgu.CV.XPhoto
     /// </summary>
     public partial class GrayworldWB : WhiteBalancer
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Creates a gray-world white balancer
         /// </summary>
         public GrayworldWB()
         {
-            _ptr = XPhotoInvoke.cveGrayworldWBCreate(ref _whiteBalancerPtr);
+            _ptr = XPhotoInvoke.cveGrayworldWBCreate(ref _whiteBalancerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -125,7 +129,7 @@ namespace Emgu.CV.XPhoto
         {
             if (_ptr != IntPtr.Zero)
             {
-                XPhotoInvoke.cveGrayworldWBRelease(ref _ptr);
+                XPhotoInvoke.cveGrayworldWBRelease(ref _ptr, ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -141,12 +145,14 @@ namespace Emgu.CV.XPhoto
     /// </summary>
     public partial class LearningBasedWB : WhiteBalancer
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a learning based white balancer.
         /// </summary>
         public LearningBasedWB()
         {
-            _ptr = XPhotoInvoke.cveLearningBasedWBCreate(ref _whiteBalancerPtr);
+            _ptr = XPhotoInvoke.cveLearningBasedWBCreate(ref _whiteBalancerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -156,7 +162,7 @@ namespace Emgu.CV.XPhoto
         {
             if (_ptr != IntPtr.Zero)
             {
-                XPhotoInvoke.cveLearningBasedWBRelease(ref _ptr);
+                XPhotoInvoke.cveLearningBasedWBRelease(ref _ptr, ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -176,19 +182,19 @@ namespace Emgu.CV.XPhoto
         internal static extern void cveWhiteBalancerBalanceWhite(IntPtr whiteBalancer, IntPtr src, IntPtr dst);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSimpleWBCreate(ref IntPtr whiteBalancer);
+        internal static extern IntPtr cveSimpleWBCreate(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveSimpleWBRelease(ref IntPtr whiteBalancer);
+        internal static extern void cveSimpleWBRelease(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveGrayworldWBCreate(ref IntPtr whiteBalancer);
+        internal static extern IntPtr cveGrayworldWBCreate(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveGrayworldWBRelease(ref IntPtr whiteBalancer);
+        internal static extern void cveGrayworldWBRelease(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveLearningBasedWBCreate(ref IntPtr whiteBalancer);
+        internal static extern IntPtr cveLearningBasedWBCreate(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveLearningBasedWBRelease(ref IntPtr whiteBalancer);
+        internal static extern void cveLearningBasedWBRelease(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
 
         /// <summary>
         /// The function implements simple dct-based denoising, link: http://www.ipol.im/pub/art/2011/ys-dct/.

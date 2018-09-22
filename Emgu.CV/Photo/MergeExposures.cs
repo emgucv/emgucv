@@ -54,12 +54,14 @@ namespace Emgu.CV
     /// </summary>
     public class MergeDebevec : MergeExposures
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Creates MergeDebevec object.
         /// </summary>
         public MergeDebevec()
         {
-            _ptr = CvInvoke.cveMergeDebevecCreate(ref _mergeExposuresPtr);
+            _ptr = CvInvoke.cveMergeDebevecCreate(ref _mergeExposuresPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -69,7 +71,7 @@ namespace Emgu.CV
         {
             if (IntPtr.Zero != _ptr)
             {
-                CvInvoke.cveMergeDebevecRelease(ref _ptr);
+                CvInvoke.cveMergeDebevecRelease(ref _ptr, ref _sharedPtr);
             }
 
             base.DisposeObject();
@@ -84,6 +86,8 @@ namespace Emgu.CV
     /// </summary>
     public class MergeMertens : MergeExposures
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Creates MergeMertens object.
         /// </summary>
@@ -92,7 +96,7 @@ namespace Emgu.CV
         /// <param name="exposureWeight">well-exposedness measure weight</param>
         public MergeMertens(float contrastWeight = 1.0f, float saturationWeight = 1.0f, float exposureWeight = 0.0f)
         {
-            _ptr = CvInvoke.cveMergeMertensCreate(contrastWeight, saturationWeight, exposureWeight, ref _mergeExposuresPtr);
+            _ptr = CvInvoke.cveMergeMertensCreate(contrastWeight, saturationWeight, exposureWeight, ref _mergeExposuresPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -118,7 +122,7 @@ namespace Emgu.CV
         {
             if (IntPtr.Zero != _ptr)
             {
-                CvInvoke.cveMergeMertensRelease(ref _ptr);
+                CvInvoke.cveMergeMertensRelease(ref _ptr, ref _sharedPtr);
             }
 
             base.DisposeObject();
@@ -130,12 +134,14 @@ namespace Emgu.CV
     /// </summary>
     public class MergeRobertson : MergeExposures
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Creates MergeRobertson object.
         /// </summary>
         public MergeRobertson()
         {
-            _ptr = CvInvoke.cveMergeRobertsonCreate(ref _mergeExposuresPtr);
+            _ptr = CvInvoke.cveMergeRobertsonCreate(ref _mergeExposuresPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -145,7 +151,7 @@ namespace Emgu.CV
         {
             if (IntPtr.Zero != _ptr)
             {
-                CvInvoke.cveMergeRobertsonRelease(ref _ptr);
+                CvInvoke.cveMergeRobertsonRelease(ref _ptr, ref _sharedPtr);
             }
 
             base.DisposeObject();
@@ -162,20 +168,20 @@ namespace Emgu.CV
            IntPtr times, IntPtr response);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMergeDebevecCreate(ref IntPtr merge);
+        internal static extern IntPtr cveMergeDebevecCreate(ref IntPtr merge, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveMergeDebevecRelease(ref IntPtr merge);
+        internal static extern void cveMergeDebevecRelease(ref IntPtr merge, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMergeMertensCreate(float contrastWeight, float saturationWeight, float exposureWeight, ref IntPtr merge);
+        internal static extern IntPtr cveMergeMertensCreate(float contrastWeight, float saturationWeight, float exposureWeight, ref IntPtr merge, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveMergeMertensRelease(ref IntPtr merge);
+        internal static extern void cveMergeMertensRelease(ref IntPtr merge, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMergeRobertsonCreate(ref IntPtr merge);
+        internal static extern IntPtr cveMergeRobertsonCreate(ref IntPtr merge, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveMergeRobertsonRelease(ref IntPtr merge);
+        internal static extern void cveMergeRobertsonRelease(ref IntPtr merge, ref IntPtr sharedPtr);
     }
 }

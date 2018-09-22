@@ -32,7 +32,14 @@ void cveTrackerRelease(cv::Tracker** tracker)
 }
 */
 
-cv::TrackerBoosting* cveTrackerBoostingCreate(int numClassifiers, float samplerOverlap, float samplerSearchFactor, int iterationInit, int featureSetNumFeatures, cv::Tracker** tracker)
+cv::TrackerBoosting* cveTrackerBoostingCreate(
+	int numClassifiers, 
+	float samplerOverlap, 
+	float samplerSearchFactor, 
+	int iterationInit, 
+	int featureSetNumFeatures, 
+	cv::Tracker** tracker, 
+	cv::Ptr<cv::TrackerBoosting>** sharedPtr)
 {
 	cv::TrackerBoosting::Params p;
 	p.numClassifiers = numClassifiers;
@@ -41,17 +48,26 @@ cv::TrackerBoosting* cveTrackerBoostingCreate(int numClassifiers, float samplerO
 	p.iterationInit = iterationInit;
 	p.featureSetNumFeatures = featureSetNumFeatures;
 	cv::Ptr<cv::TrackerBoosting> ptr = cv::TrackerBoosting::create(p);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::TrackerBoosting>(ptr);
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
-void cveTrackerBoostingRelease(cv::TrackerBoosting** tracker)
+void cveTrackerBoostingRelease(cv::TrackerBoosting** tracker, cv::Ptr<cv::TrackerBoosting>** sharedPtr)
 {
-	delete *tracker;
+	delete *sharedPtr;
 	*tracker = 0;
+	*sharedPtr = 0;
 }
 
-cv::TrackerMedianFlow* cveTrackerMedianFlowCreate(int pointsInGrid, CvSize* winSize, int maxLevel, CvTermCriteria* termCriteria, CvSize* winSizeNCC, double maxMedianLengthOfDisplacementDifference, cv::Tracker** tracker)
+cv::TrackerMedianFlow* cveTrackerMedianFlowCreate(
+	int pointsInGrid, 
+	CvSize* winSize, 
+	int maxLevel, 
+	CvTermCriteria* termCriteria, 
+	CvSize* winSizeNCC, 
+	double maxMedianLengthOfDisplacementDifference, 
+	cv::Tracker** tracker,
+	cv::Ptr<cv::TrackerMedianFlow>** sharedPtr)
 {
 	cv::TrackerMedianFlow::Params p;
 	p.pointsInGrid = pointsInGrid;
@@ -62,14 +78,15 @@ cv::TrackerMedianFlow* cveTrackerMedianFlowCreate(int pointsInGrid, CvSize* winS
 	p.maxMedianLengthOfDisplacementDifference = maxMedianLengthOfDisplacementDifference;
 
 	cv::Ptr<cv::TrackerMedianFlow> ptr = cv::TrackerMedianFlow::create(p);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::TrackerMedianFlow>(ptr);
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
-void cveTrackerMedianFlowRelease(cv::TrackerMedianFlow** tracker)
+void cveTrackerMedianFlowRelease(cv::TrackerMedianFlow** tracker, cv::Ptr<cv::TrackerMedianFlow>** sharedPtr)
 {
-	delete* tracker;
+	delete* sharedPtr;
 	*tracker = 0;
+	*sharedPtr = 0;
 }
 
 cv::TrackerMIL* cveTrackerMILCreate(
@@ -80,7 +97,8 @@ cv::TrackerMIL* cveTrackerMILCreate(
 	int samplerTrackMaxPosNum,
 	int samplerTrackMaxNegNum,
 	int featureSetNumFeatures,
-	cv::Tracker** tracker)
+	cv::Tracker** tracker,
+	cv::Ptr<cv::TrackerMIL>** sharedPtr)
 {
 	cv::TrackerMIL::Params p;
 	p.samplerInitInRadius = samplerInitInRadius;
@@ -92,27 +110,29 @@ cv::TrackerMIL* cveTrackerMILCreate(
 	p.featureSetNumFeatures = featureSetNumFeatures;
 
 	cv::Ptr<cv::TrackerMIL> ptr = cv::TrackerMIL::create(p);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::TrackerMIL>(ptr);
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
-void cveTrackerMILRelease(cv::TrackerMIL** tracker)
+void cveTrackerMILRelease(cv::TrackerMIL** tracker, cv::Ptr<cv::TrackerMIL>** sharedPtr)
 {
-	delete *tracker;
+	delete *sharedPtr;
 	*tracker = 0;
+	*sharedPtr = 0;
 }
 
-cv::TrackerTLD* cveTrackerTLDCreate(cv::Tracker** tracker)
+cv::TrackerTLD* cveTrackerTLDCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerTLD>** sharedPtr)
 {
 	cv::Ptr<cv::TrackerTLD> ptr = cv::TrackerTLD::create();
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::TrackerTLD>(ptr);
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
-void cveTrackerTLDRelease(cv::TrackerTLD** tracker)
+void cveTrackerTLDRelease(cv::TrackerTLD** tracker, cv::Ptr<cv::TrackerTLD>** sharedPtr)
 {
-	delete *tracker;
+	delete *sharedPtr;
 	*tracker = 0;
+	*sharedPtr = 0;
 }
 
 cv::TrackerKCF* cveTrackerKCFCreate(
@@ -130,7 +150,8 @@ cv::TrackerKCF* cveTrackerKCFCreate(
 	int compressed_size,
 	int desc_pca,
 	int desc_npca,
-	cv::Tracker** tracker)
+	cv::Tracker** tracker, 
+	cv::Ptr<cv::TrackerKCF>** sharedPtr)
 {
 	cv::TrackerKCF::Params p;
 	p.detect_thresh = detect_thresh;
@@ -149,40 +170,43 @@ cv::TrackerKCF* cveTrackerKCFCreate(
 	p.desc_npca = desc_npca;
 
 	cv::Ptr<cv::TrackerKCF> ptr = cv::TrackerKCF::create(p);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::TrackerKCF>(ptr);
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
-void cveTrackerKCFRelease(cv::TrackerKCF** tracker)
+void cveTrackerKCFRelease(cv::TrackerKCF** tracker, cv::Ptr<cv::TrackerKCF>** sharedPtr)
 {
-	delete *tracker;
+	delete *sharedPtr;
 	*tracker = 0;
+	*sharedPtr = 0;
 }
 
-cv::TrackerGOTURN* cveTrackerGOTURNCreate(cv::Tracker** tracker)
+cv::TrackerGOTURN* cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
 {
 	cv::Ptr<cv::TrackerGOTURN> ptr = cv::TrackerGOTURN::create();
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::TrackerGOTURN>(ptr);
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
-void cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker)
+void cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
 {
-	delete *tracker;
+	delete *sharedPtr;
 	*tracker = 0;
+	*sharedPtr = 0;
 }
 
-cv::TrackerMOSSE* cveTrackerMOSSECreate(cv::Tracker** tracker)
+cv::TrackerMOSSE* cveTrackerMOSSECreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerMOSSE>** sharedPtr)
 {
 	cv::Ptr<cv::TrackerMOSSE> ptr = cv::TrackerMOSSE::create();
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::TrackerMOSSE>(ptr);
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
-void cveTrackerMOSSERelease(cv::TrackerMOSSE** tracker)
+void cveTrackerMOSSERelease(cv::TrackerMOSSE** tracker, cv::Ptr<cv::TrackerMOSSE>** sharedPtr)
 {
-	delete *tracker;
+	delete *sharedPtr;
 	*tracker = 0;
+	*sharedPtr = 0;
 }
 
 cv::MultiTracker* cveMultiTrackerCreate()
@@ -191,8 +215,7 @@ cv::MultiTracker* cveMultiTrackerCreate()
 }
 bool cveMultiTrackerAdd(cv::MultiTracker* multiTracker, cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox)
 {
-	cv::Ptr<cv::Tracker> trackerPtr(tracker);
-	trackerPtr.addref();
+	cv::Ptr<cv::Tracker> trackerPtr(tracker, [](cv::Tracker*) {});	
 	return multiTracker->add(trackerPtr, *image, *boundingBox);
 }
 
@@ -240,7 +263,8 @@ cv::TrackerCSRT* cveTrackerCSRTCreate(
 	float scale_model_max_area,
 	float scale_lr,
 	float scale_step,
-	cv::Tracker** tracker)
+	cv::Tracker** tracker,
+	cv::Ptr<cv::TrackerCSRT>** sharedPtr)
 {
 	cv::TrackerCSRT::Params p;
 	p.use_hog = use_hog;
@@ -272,12 +296,13 @@ cv::TrackerCSRT* cveTrackerCSRTCreate(
 	p.scale_step = scale_step;
 
 	cv::Ptr<cv::TrackerCSRT> ptr = cv::TrackerCSRT::create(p);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::TrackerCSRT>(ptr);
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 }
-void cveTrackerCSRTRelease(cv::TrackerCSRT** tracker)
+void cveTrackerCSRTRelease(cv::TrackerCSRT** tracker, cv::Ptr<cv::TrackerCSRT>** sharedPtr)
 {
-	delete* tracker;
+	delete* sharedPtr;
 	*tracker = 0;
+	*sharedPtr = 0;
 }

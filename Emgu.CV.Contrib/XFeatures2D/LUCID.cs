@@ -23,6 +23,8 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class LUCID : Feature2D
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a locally uniform comparison image descriptor.
         /// </summary>
@@ -30,7 +32,7 @@ namespace Emgu.CV.XFeatures2D
         /// <param name="blurKernel">kernel for blurring image prior to descriptor construction, where 1=3x3, 2=5x5, 3=7x7 and so forth</param>
         public LUCID(int lucidKernel = 1, int blurKernel = 2)
         {
-            _ptr = XFeatures2DInvoke.cveLUCIDCreate(lucidKernel, blurKernel, ref _feature2D);
+            _ptr = XFeatures2DInvoke.cveLUCIDCreate(lucidKernel, blurKernel, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace Emgu.CV.XFeatures2D
         {
             if (_ptr != IntPtr.Zero)
             {
-                XFeatures2DInvoke.cveLUCIDRelease(ref _ptr);
+                XFeatures2DInvoke.cveLUCIDRelease(ref _ptr, ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -50,9 +52,9 @@ namespace Emgu.CV.XFeatures2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveLUCIDCreate(int lucidKernel, int blurKernel, ref IntPtr feature2D);
+        internal extern static IntPtr cveLUCIDCreate(int lucidKernel, int blurKernel, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveLUCIDRelease(ref IntPtr extractor);
+        internal extern static void cveLUCIDRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
     }
 }

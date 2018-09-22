@@ -17,6 +17,8 @@ namespace Emgu.CV
     /// </summary>
     public partial class SparsePyrLKOpticalFlow : UnmanagedObject, ISparseOpticalFlow
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _algorithm;
         private IntPtr _sparseOpticalFlow;
 
@@ -42,7 +44,8 @@ namespace Emgu.CV
                 flags,
                 minEigThreshold,
                 ref _sparseOpticalFlow,
-                ref _algorithm);
+                ref _algorithm, 
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace Emgu.CV
         {
             if (_ptr != IntPtr.Zero)
             {
-                CvInvoke.cveSparsePyrLKOpticalFlowRelease(ref _ptr);
+                CvInvoke.cveSparsePyrLKOpticalFlowRelease(ref _ptr, ref _sharedPtr);
                 _algorithm = IntPtr.Zero;
                 _sparseOpticalFlow = IntPtr.Zero;
             }
@@ -86,9 +89,10 @@ namespace Emgu.CV
             CvEnum.LKFlowFlag flags,
             double minEigThreshold,
             ref IntPtr sparseOpticalFlow,
-            ref IntPtr algorithm);
+            ref IntPtr algorithm,
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveSparsePyrLKOpticalFlowRelease(ref IntPtr flow);
+        internal static extern void cveSparsePyrLKOpticalFlowRelease(ref IntPtr flow, ref IntPtr sharedPtr);
     }
 }

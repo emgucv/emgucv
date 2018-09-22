@@ -19,6 +19,8 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class SIFT : Feature2D
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a SIFT using the specific values
         /// </summary>
@@ -33,7 +35,7 @@ namespace Emgu.CV.XFeatures2D
            double sigma = 1.6)
         {
             _ptr = XFeatures2DInvoke.cveSIFTCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma,
-               ref _feature2D);
+               ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace Emgu.CV.XFeatures2D
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveSIFTRelease(ref _ptr);
+                XFeatures2DInvoke.cveSIFTRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -53,9 +55,9 @@ namespace Emgu.CV.XFeatures2D
         internal extern static IntPtr cveSIFTCreate(
            int nFeatures, int nOctaveLayers,
            double contrastThreshold, double edgeThreshold,
-           double sigma, ref IntPtr feature2D);
+           double sigma, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveSIFTRelease(ref IntPtr detector);
+        internal extern static void cveSIFTRelease(ref IntPtr detector, ref IntPtr sharedPtr);
     }
 }

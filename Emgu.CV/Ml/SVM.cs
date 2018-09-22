@@ -35,6 +35,8 @@ namespace Emgu.CV.ML
     /// </summary>
     public partial class SVM : UnmanagedObject, IStatModel
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Type of SVM
         /// </summary>
@@ -137,7 +139,7 @@ namespace Emgu.CV.ML
         /// </summary>
         public SVM()
         {
-            _ptr = MlInvoke.cveSVMDefaultCreate(ref _statModelPtr, ref _algorithmPtr);
+            _ptr = MlInvoke.cveSVMDefaultCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -145,9 +147,12 @@ namespace Emgu.CV.ML
         /// </summary>
         protected override void DisposeObject()
         {
-            MlInvoke.cveSVMRelease(ref _ptr);
-            _statModelPtr = IntPtr.Zero;
-            _algorithmPtr = IntPtr.Zero;
+            if (IntPtr.Zero != _ptr)
+            {
+                MlInvoke.cveSVMRelease(ref _ptr, ref _sharedPtr);
+                _statModelPtr = IntPtr.Zero;
+                _algorithmPtr = IntPtr.Zero;
+            }
         }
 
 

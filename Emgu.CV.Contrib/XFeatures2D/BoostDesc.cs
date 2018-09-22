@@ -26,6 +26,8 @@ namespace Emgu.CV.XFeatures2D
     /// </remarks>
     public class BoostDesc : Feature2D
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// The type of descriptor
         /// </summary>
@@ -72,7 +74,7 @@ namespace Emgu.CV.XFeatures2D
             bool useScaleOrientation = true, 
             float scalefactor = 6.25f)
         {
-            _ptr = XFeatures2DInvoke.cveBoostDescCreate(desc, useScaleOrientation, scalefactor, ref _feature2D);
+            _ptr = XFeatures2DInvoke.cveBoostDescCreate(desc, useScaleOrientation, scalefactor, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -81,7 +83,7 @@ namespace Emgu.CV.XFeatures2D
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveBoostDescRelease(ref _ptr);
+                XFeatures2DInvoke.cveBoostDescRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -97,13 +99,14 @@ namespace Emgu.CV.XFeatures2D
         internal static extern IntPtr cveBoostDescCreate(
             BoostDesc.DescriptorType desc,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-          bool useScaleOrientation,
+            bool useScaleOrientation,
             float scalefactor,
-            ref IntPtr feature2D);
+            ref IntPtr feature2D, 
+            ref IntPtr sharedPtr);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBoostDescRelease(ref IntPtr extractor);
+        internal static extern void cveBoostDescRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
     }
 }
 

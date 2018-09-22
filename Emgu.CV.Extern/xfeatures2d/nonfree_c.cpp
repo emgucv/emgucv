@@ -8,37 +8,40 @@
 
 //SIFTDetector
 cv::xfeatures2d::SIFT* cveSIFTCreate(
-   int nFeatures, int nOctaveLayers, 
-   double contrastThreshold, double edgeThreshold, 
-   double sigma, cv::Feature2D** feature2D)
+	int nFeatures, int nOctaveLayers,
+	double contrastThreshold, double edgeThreshold,
+	double sigma, cv::Feature2D** feature2D,
+	cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr)
 {
-   cv::Ptr<cv::xfeatures2d::SIFT> siftPtr = cv::xfeatures2d::SIFT::create(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
-   siftPtr.addref();
-   *feature2D = dynamic_cast<cv::Feature2D*>(siftPtr.get());
-   
-   return siftPtr.get();
+	cv::Ptr<cv::xfeatures2d::SIFT> siftPtr = cv::xfeatures2d::SIFT::create(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::SIFT>(siftPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(siftPtr.get());
+
+	return siftPtr.get();
 }
 
-void cveSIFTRelease(cv::xfeatures2d::SIFT** detector)
+void cveSIFTRelease(cv::xfeatures2d::SIFT** detector, cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr)
 {
-   delete *detector;
-   *detector = 0;
+	delete *sharedPtr;
+	*detector = 0;
+	*sharedPtr = 0;
 }
 
 //SURFDetector
-cv::xfeatures2d::SURF* cveSURFCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D)
+cv::xfeatures2d::SURF* cveSURFCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr)
 {
-   cv::Ptr<cv::xfeatures2d::SURF> surfPtr = cv::xfeatures2d::SURF::create(hessianThresh, nOctaves, nOctaveLayers, extended, upright);
-   surfPtr.addref();
-   *feature2D = dynamic_cast<cv::Feature2D*>(surfPtr.get());
-   
-   return surfPtr.get();
+	cv::Ptr<cv::xfeatures2d::SURF> surfPtr = cv::xfeatures2d::SURF::create(hessianThresh, nOctaves, nOctaveLayers, extended, upright);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::SURF>(surfPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(surfPtr.get());
+
+	return surfPtr.get();
 }
 
-void cveSURFRelease(cv::xfeatures2d::SURF** detector)
+void cveSURFRelease(cv::xfeatures2d::SURF** detector, cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr)
 {
-   delete *detector;
-   *detector = 0;
+	delete *sharedPtr;
+	*detector = 0;
+	*sharedPtr = 0;
 }
 
 /*

@@ -11,11 +11,11 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/superres.hpp"
 
-CVAPI(cv::superres::FrameSource*) cvSuperresCreateFrameSourceVideo(cv::String* fileName, bool useGpu);
-CVAPI(cv::superres::FrameSource*) cvSuperresCreateFrameSourceCamera(int deviceId);
-CVAPI(void) cvSuperresFrameSourceRelease(cv::superres::FrameSource** frameSource);
-CVAPI(void) cvSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv::_OutputArray* frame);
+CVAPI(cv::superres::FrameSource*) cveSuperresCreateFrameSourceVideo(cv::String* fileName, bool useGpu, cv::Ptr<cv::superres::FrameSource>** sharedPtr);
+CVAPI(cv::superres::FrameSource*) cveSuperresCreateFrameSourceCamera(int deviceId, cv::Ptr<cv::superres::FrameSource>** sharedPtr);
+CVAPI(void) cveSuperresFrameSourceRelease(cv::superres::FrameSource** frameSource, cv::Ptr<cv::superres::FrameSource>** sharedPtr);
+CVAPI(void) cveSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv::_OutputArray* frame);
 
-CVAPI(cv::superres::SuperResolution*) cvSuperResolutionCreate(int type, cv::superres::FrameSource* frameSource, cv::superres::FrameSource** frameSourceOut);
-CVAPI(void) cvSuperResolutionRelease(cv::superres::SuperResolution** superres);
+CVAPI(cv::superres::SuperResolution*) cveSuperResolutionCreate(int type, cv::superres::FrameSource* frameSource, cv::superres::FrameSource** frameSourceOut);
+CVAPI(void) cveSuperResolutionRelease(cv::superres::SuperResolution** superres);
 #endif

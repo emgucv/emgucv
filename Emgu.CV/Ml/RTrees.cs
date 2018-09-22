@@ -16,6 +16,8 @@ namespace Emgu.CV.ML
     /// </summary>
     public partial class RTrees : UnmanagedObject, IStatModel
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _statModelPtr;
         private IntPtr _algorithmPtr;
 
@@ -24,7 +26,7 @@ namespace Emgu.CV.ML
         /// </summary>
         public RTrees()
         {
-            _ptr = MlInvoke.cveRTreesCreate(ref _statModelPtr, ref _algorithmPtr);
+            _ptr = MlInvoke.cveRTreesCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -50,9 +52,11 @@ namespace Emgu.CV.ML
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                MlInvoke.cveRTreesRelease(ref _ptr);
-            _statModelPtr = IntPtr.Zero;
-            _algorithmPtr = IntPtr.Zero;
+            {
+                MlInvoke.cveRTreesRelease(ref _ptr, ref _sharedPtr);
+                _statModelPtr = IntPtr.Zero;
+                _algorithmPtr = IntPtr.Zero;
+            }
         }
 
         IntPtr IStatModel.StatModelPtr

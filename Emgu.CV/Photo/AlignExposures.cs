@@ -53,6 +53,8 @@ namespace Emgu.CV
     /// </summary>
     public class AlignMTB : AlignExposures
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create an AlignMTB object
         /// </summary>
@@ -61,7 +63,7 @@ namespace Emgu.CV
         /// <param name="cut">if true cuts images, otherwise fills the new regions with zeros.</param>
         public AlignMTB(int maxBits = 6, int excludeRange = 4, bool cut = true)
         {
-            _ptr = CvInvoke.cveAlignMTBCreate(maxBits, excludeRange, cut, ref _alignExposuresPtr);
+            _ptr = CvInvoke.cveAlignMTBCreate(maxBits, excludeRange, cut, ref _alignExposuresPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -71,7 +73,7 @@ namespace Emgu.CV
         {
             if (IntPtr.Zero != _ptr)
             {
-                CvInvoke.cveAlignMTBRelease(ref _ptr);
+                CvInvoke.cveAlignMTBRelease(ref _ptr, ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -88,9 +90,10 @@ namespace Emgu.CV
             int excludeRange,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool cut,
-            ref IntPtr alignExposures);
+            ref IntPtr alignExposures,
+            ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveAlignMTBRelease(ref IntPtr alignExposures);
+        internal static extern void cveAlignMTBRelease(ref IntPtr alignExposures, ref IntPtr sharedPtr);
 
     }
 }

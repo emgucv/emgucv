@@ -20,6 +20,8 @@ namespace Emgu.CV.PhaseUnwrapping
     /// <remarks>This algorithm belongs to the quality-guided phase unwrapping methods. First, it computes a reliability map from second differences between a pixel and its eight neighbours. Reliability values lie between 0 and 16*pi*pi. Then, this reliability map is used to compute the reliabilities of "edges". An edge is an entity defined by two pixels that are connected horizontally or vertically. Its reliability is found by adding the the reliabilities of the two pixels connected through it. Edges are sorted in a histogram based on their reliability values. This histogram is then used to unwrap pixels, starting from the highest quality pixel. </remarks>
     public class HistogramPhaseUnwrapping : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a HistogramPhaseUnwrapping instance
         /// </summary>
@@ -40,7 +42,8 @@ namespace Emgu.CV.PhaseUnwrapping
                 height,
                 histThresh,
                 nbrOfSmallBins,
-                nbrOfLargeBins);
+                nbrOfLargeBins,
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -49,7 +52,7 @@ namespace Emgu.CV.PhaseUnwrapping
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                PhaseUnwrappingInvoke.cveHistogramPhaseUnwrappingRelease(ref _ptr);
+                PhaseUnwrappingInvoke.cveHistogramPhaseUnwrappingRelease(ref _ptr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -98,10 +101,11 @@ namespace Emgu.CV.PhaseUnwrapping
             int height,
             float histThresh,
             int nbrOfSmallBins,
-            int nbrOfLargeBins);
+            int nbrOfLargeBins,
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveHistogramPhaseUnwrappingRelease(ref IntPtr phaseUnwrapping);
+        internal static extern void cveHistogramPhaseUnwrappingRelease(ref IntPtr phaseUnwrapping, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveHistogramPhaseUnwrappingGetInverseReliabilityMap(

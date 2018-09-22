@@ -16,6 +16,8 @@ namespace Emgu.CV.BgSegm
     /// </summary>
     public class BackgroundSubtractorGSOC : UnmanagedObject, IBackgroundSubtractor
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _algorithmPtr;
         private IntPtr _backgroundSubtractorPtr;
 
@@ -56,7 +58,7 @@ namespace Emgu.CV.BgSegm
             float noiseRemovalThresholdFacBG = 0.0004f, 
             float noiseRemovalThresholdFacFG = 0.0008f)
         {
-            _ptr = ContribInvoke.cveBackgroundSubtractorGSOCCreate(mc, nSamples, replaceRate, propagationRate, hitsThreshold, alpha, beta, blinkingSupressionDecay, blinkingSupressionMultiplier, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, ref _backgroundSubtractorPtr, ref _algorithmPtr);
+            _ptr = ContribInvoke.cveBackgroundSubtractorGSOCCreate(mc, nSamples, replaceRate, propagationRate, hitsThreshold, alpha, beta, blinkingSupressionDecay, blinkingSupressionMultiplier, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace Emgu.CV.BgSegm
         {
             if (IntPtr.Zero != _ptr)
             {
-                ContribInvoke.cveBackgroundSubtractorGSOCRelease(ref _ptr);
+                ContribInvoke.cveBackgroundSubtractorGSOCRelease(ref _ptr, ref _sharedPtr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
@@ -81,9 +83,9 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBackgroundSubtractorGSOCCreate(
             Emgu.CV.BgSegm.BackgroundSubtractorLSBP.CameraMotionCompensation mc, int nSamples, float replaceRate, float propagationRate, int hitsThreshold, float alpha, float beta, float blinkingSupressionDecay, float blinkingSupressionMultiplier, float noiseRemovalThresholdFacBG, float noiseRemovalThresholdFacFG,
-            ref IntPtr bgSubtractor, ref IntPtr algorithm);
+            ref IntPtr bgSubtractor, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBackgroundSubtractorGSOCRelease(ref IntPtr bgSubtractor);
+        internal static extern void cveBackgroundSubtractorGSOCRelease(ref IntPtr bgSubtractor, ref IntPtr sharedPtr);
     }
 }

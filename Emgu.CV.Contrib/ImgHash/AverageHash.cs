@@ -21,12 +21,14 @@ namespace Emgu.CV.ImgHash
     /// <remarks>This is a fast image hashing algorithm, but only work on simple case.</remarks>
     public class AverageHash : ImgHashBase
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create an average hash object.
         /// </summary>
         public AverageHash()
         {
-            _ptr = ImgHashInvoke.cveAverageHashCreate(ref _imgHashBase);
+            _ptr = ImgHashInvoke.cveAverageHashCreate(ref _imgHashBase, ref _sharedPtr);
         }
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace Emgu.CV.ImgHash
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ImgHashInvoke.cveAverageHashRelease(ref _ptr);
+                ImgHashInvoke.cveAverageHashRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -43,10 +45,10 @@ namespace Emgu.CV.ImgHash
     internal static partial class ImgHashInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveAverageHashCreate(ref IntPtr imgHash);
+        internal extern static IntPtr cveAverageHashCreate(ref IntPtr imgHash, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAverageHashRelease(ref IntPtr hash);
+        internal extern static void cveAverageHashRelease(ref IntPtr hash, ref IntPtr sharedPtr);
     }
 }
 

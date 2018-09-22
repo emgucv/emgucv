@@ -16,6 +16,8 @@ namespace Emgu.CV.Features2D
     /// </summary>
     public class MSERDetector : Feature2D
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a MSER detector using the specific parameters
         /// </summary>
@@ -42,7 +44,8 @@ namespace Emgu.CV.Features2D
                areaThreshold,
                minMargin,
                edgeBlurSize,
-               ref _feature2D);
+               ref _feature2D, 
+               ref _sharedPtr);
         }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                CvInvoke.cveMserFeatureDetectorRelease(ref _ptr);
+                CvInvoke.cveMserFeatureDetectorRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
 
@@ -84,10 +87,11 @@ namespace Emgu.CV
            double areaThreshold,
            double minMargin,
            int edgeBlurSize,
-           ref IntPtr feature2D);
+           ref IntPtr feature2D,
+           ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMserFeatureDetectorRelease(ref IntPtr detector);
+        internal extern static void cveMserFeatureDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveMserDetectRegions(

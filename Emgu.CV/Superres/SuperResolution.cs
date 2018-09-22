@@ -19,6 +19,7 @@ namespace Emgu.CV.Superres
    /// </summary>
    public class SuperResolution : FrameSource
    {
+       private IntPtr _sharedPtr;
       //private Util.Mat _frame = new Util.Mat();
       //private Image<Gray, Byte> _image;
 
@@ -45,7 +46,7 @@ namespace Emgu.CV.Superres
       public SuperResolution(SuperResolution.OpticalFlowType type, FrameSource frameSource)
          : base()
       {
-         _ptr = SuperresInvoke.cvSuperResolutionCreate(type, frameSource, ref _frameSourcePtr);
+         _ptr = SuperresInvoke.cveSuperResolutionCreate(type, frameSource, ref _frameSourcePtr, ref _sharedPtr);
       }
 
       /// <summary>
@@ -55,7 +56,7 @@ namespace Emgu.CV.Superres
       {
          if (_ptr != IntPtr.Zero)
          {
-            SuperresInvoke.cvSuperResolutionRelease(ref _ptr);
+            SuperresInvoke.cveSuperResolutionRelease(ref _ptr, ref _sharedPtr);
          }
       }
    }
@@ -64,14 +65,14 @@ namespace Emgu.CV.Superres
    {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cvSuperResolutionCreate(SuperResolution.OpticalFlowType type, IntPtr frameSource, ref IntPtr frameSourceOut);
+      internal static extern IntPtr cveSuperResolutionCreate(SuperResolution.OpticalFlowType type, IntPtr frameSource, ref IntPtr frameSourceOut, ref IntPtr sharedPtr);
 
       /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cvSuperResolutionNextFrame(IntPtr superres, IntPtr frame);
       */
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cvSuperResolutionRelease(ref IntPtr superres);
+      internal static extern void cveSuperResolutionRelease(ref IntPtr superres, ref IntPtr sharedPtr);
    }
 }
 #endif

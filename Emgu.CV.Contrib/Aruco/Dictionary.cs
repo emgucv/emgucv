@@ -19,7 +19,8 @@ namespace Emgu.CV.Aruco
     /// </summary>
     public class Dictionary : UnmanagedObject
     {
-        private bool _predefined;
+        //private bool _predefined;
+        private IntPtr _sharedPtr;
 
         /// <summary>
         /// Create a Dictionary using predefined values
@@ -27,8 +28,8 @@ namespace Emgu.CV.Aruco
         /// <param name="name">The name of the predefined dictionary</param>
         public Dictionary(PredefinedDictionaryName name)
         {
-            _predefined = true;
-            _ptr = ArucoInvoke.cveArucoGetPredefinedDictionary(name);
+            //_predefined = true;
+            _ptr = ArucoInvoke.cveArucoGetPredefinedDictionary(name, ref _sharedPtr);
         }
 
         /// <summary>
@@ -38,8 +39,8 @@ namespace Emgu.CV.Aruco
         /// <param name="markerSize">number of bits per dimension of each markers</param>
         public Dictionary(int nMarkers, int markerSize)
         {
-            _predefined = false;
-            _ptr = ArucoInvoke.cveArucoDictionaryCreate1(nMarkers, markerSize);
+            //_predefined = false;
+            _ptr = ArucoInvoke.cveArucoDictionaryCreate1(nMarkers, markerSize, ref _sharedPtr);
         }
 
         /// <summary>
@@ -50,8 +51,8 @@ namespace Emgu.CV.Aruco
         /// <param name="baseDictionary">Include the markers in this dictionary at the beginning (optional)</param>
         public Dictionary(int nMarkers, int markerSize, Dictionary baseDictionary)
         {
-            _predefined = false;
-            _ptr = ArucoInvoke.cveArucoDictionaryCreate2(nMarkers, markerSize, baseDictionary);
+            //_predefined = false;
+            _ptr = ArucoInvoke.cveArucoDictionaryCreate2(nMarkers, markerSize, baseDictionary._sharedPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -150,32 +151,23 @@ namespace Emgu.CV.Aruco
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_predefined)
-            {
-                //no need to release any object here.
-                //The dictionary is static global in C++ code
-                _ptr = IntPtr.Zero;
-            }
-            else
-            {
-                if (_ptr != IntPtr.Zero)
-                    ArucoInvoke.cveArucoDictionaryRelease(ref _ptr);
-            }
+            if (_ptr != IntPtr.Zero)
+                ArucoInvoke.cveArucoDictionaryRelease(ref _ptr, ref _sharedPtr);
         }
     }
 
     public static partial class ArucoInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveArucoGetPredefinedDictionary(Dictionary.PredefinedDictionaryName name);
+        internal static extern IntPtr cveArucoGetPredefinedDictionary(Dictionary.PredefinedDictionaryName name, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveArucoDictionaryCreate1(int nMarkers, int markerSize);
+        internal static extern IntPtr cveArucoDictionaryCreate1(int nMarkers, int markerSize, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveArucoDictionaryCreate2(int nMarkers, int markerSize, IntPtr baseDictionary);
+        internal static extern IntPtr cveArucoDictionaryCreate2(int nMarkers, int markerSize, IntPtr baseDictionary, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveArucoDictionaryRelease(ref IntPtr dict);
+        internal static extern void cveArucoDictionaryRelease(ref IntPtr dict, ref IntPtr sharedPtr);
     }
 }

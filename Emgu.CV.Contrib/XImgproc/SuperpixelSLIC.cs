@@ -19,6 +19,8 @@ namespace Emgu.CV.XImgproc
     /// </summary>
     public class SupperpixelSLIC : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// The algorithm to use
         /// </summary>
@@ -44,7 +46,7 @@ namespace Emgu.CV.XImgproc
         public SupperpixelSLIC(IInputArray image, Algorithm algorithm, int regionSize, float ruler)
         {
             using (InputArray iaImage = image.GetInputArray())
-                _ptr = XImgprocInvoke.cveSuperpixelSLICCreate(iaImage, algorithm, regionSize, ruler);
+                _ptr = XImgprocInvoke.cveSuperpixelSLICCreate(iaImage, algorithm, regionSize, ruler, ref _sharedPtr);
         }
 
         /// <summary>
@@ -87,13 +89,27 @@ namespace Emgu.CV.XImgproc
         }
 
         /// <summary>
+        /// The function merge component that is too small, assigning the previously found adjacent label
+        /// to this component.Calling this function may change the final number of superpixels.
+        /// </summary>
+        /// <param name="minElementSize">
+        /// The minimum element size in percents that should be absorbed into a bigger
+        /// superpixel.Given resulted average superpixel size valid value should be in 0-100 range, 25 means
+        /// that less then a quarter sized superpixel should be absorbed, this is default.
+        /// </param>
+        public void EnforceLabelConnectivity(int minElementSize = 25)
+        {
+            XImgprocInvoke.cveSuperpixelSLICEnforceLabelConnectivity(_ptr, minElementSize);
+        }
+
+        /// <summary>
         /// Release the unmanaged memory associated with this object.
         /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
             {
-                XImgprocInvoke.cveSuperpixelSLICRelease(ref _ptr);
+                XImgprocInvoke.cveSuperpixelSLICRelease(ref _ptr, ref _sharedPtr);
             }
         }
     }
@@ -104,9 +120,8 @@ namespace Emgu.CV.XImgproc
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSuperpixelSLICEnforceLabelConnectivity(IntPtr slic, int minElementSize);
 
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSuperpixelSLICCreate(IntPtr image, SupperpixelSLIC.Algorithm algorithm, int regionSize, float ruler);
+        internal static extern IntPtr cveSuperpixelSLICCreate(IntPtr image, SupperpixelSLIC.Algorithm algorithm, int regionSize, float ruler, ref IntPtr sharePtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int cveSuperpixelSLICGetNumberOfSuperpixels(IntPtr slic);
@@ -116,13 +131,13 @@ namespace Emgu.CV.XImgproc
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSuperpixelSLICGetLabelContourMask(
-           IntPtr slic,
-           IntPtr image,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool thickLine);
+            IntPtr slic,
+            IntPtr image,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool thickLine);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveSuperpixelSLICRelease(ref IntPtr slic);
+        internal static extern void cveSuperpixelSLICRelease(ref IntPtr slic, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSuperpixelSLICIterate(IntPtr slic, int numIterations);

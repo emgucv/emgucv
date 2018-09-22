@@ -12,63 +12,65 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
- 
-   /// <summary>
-   /// Dual TV L1 Optical Flow Algorithm.
-   /// </summary>
-   public partial class DualTVL1OpticalFlow :  UnmanagedObject, IDenseOpticalFlow
-   {
-      private IntPtr _algorithm;
-      private IntPtr _denseOpticalFlow;
 
-      /// <summary>
-      /// Create Dual TV L1 Optical Flow.
-      /// </summary>
-      public DualTVL1OpticalFlow()
-      {
-         _ptr = CvInvoke.cveDenseOpticalFlowCreateDualTVL1(ref _denseOpticalFlow, ref _algorithm);
-      }
+    /// <summary>
+    /// Dual TV L1 Optical Flow Algorithm.
+    /// </summary>
+    public partial class DualTVL1OpticalFlow : UnmanagedObject, IDenseOpticalFlow
+    {
+        private IntPtr _sharedPtr;
 
-      /// <summary>
-      /// Release the unmanaged resources
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         if (_ptr != IntPtr.Zero)
-         {
-            CvInvoke.cveDualTVL1OpticalFlowRelease(ref _ptr);
-            _algorithm = IntPtr.Zero;
-            _denseOpticalFlow = IntPtr.Zero;
-         }
-      }
+        private IntPtr _algorithm;
+        private IntPtr _denseOpticalFlow;
 
-      /// <summary>
-      /// Gets the dense optical flow pointer.
-      /// </summary>
-      /// <value>
-      /// The pointer to the dense optical flow object.
-      /// </value>
-      public IntPtr DenseOpticalFlowPtr
-      {
-         get { return _denseOpticalFlow; }
-      }
+        /// <summary>
+        /// Create Dual TV L1 Optical Flow.
+        /// </summary>
+        public DualTVL1OpticalFlow()
+        {
+            _ptr = CvInvoke.cveDenseOpticalFlowCreateDualTVL1(ref _denseOpticalFlow, ref _algorithm, ref _sharedPtr);
+        }
 
-      /// <summary>
-      /// Return the pointer to the algorithm object
-      /// </summary>
-      public IntPtr AlgorithmPtr
-      {
-         get { return _algorithm; }
-      }
-   }
+        /// <summary>
+        /// Release the unmanaged resources
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                CvInvoke.cveDualTVL1OpticalFlowRelease(ref _ptr, ref _sharedPtr);
+                _algorithm = IntPtr.Zero;
+                _denseOpticalFlow = IntPtr.Zero;
+            }
+        }
 
-   public static partial class CvInvoke
-   {
+        /// <summary>
+        /// Gets the dense optical flow pointer.
+        /// </summary>
+        /// <value>
+        /// The pointer to the dense optical flow object.
+        /// </value>
+        public IntPtr DenseOpticalFlowPtr
+        {
+            get { return _denseOpticalFlow; }
+        }
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveDualTVL1OpticalFlowRelease(ref IntPtr flow);
+        /// <summary>
+        /// Return the pointer to the algorithm object
+        /// </summary>
+        public IntPtr AlgorithmPtr
+        {
+            get { return _algorithm; }
+        }
+    }
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cveDenseOpticalFlowCreateDualTVL1(ref IntPtr denseOpticalFlow, ref IntPtr algorithm);
-   }
+    public static partial class CvInvoke
+    {
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDualTVL1OpticalFlowRelease(ref IntPtr flow, ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDenseOpticalFlowCreateDualTVL1(ref IntPtr denseOpticalFlow, ref IntPtr algorithm, ref IntPtr sharedPtr);
+    }
 }

@@ -52,6 +52,8 @@ namespace Emgu.CV
    /// </summary>
    public class CalibrateDebevec : CalibrateCRF
    {
+       private IntPtr _sharedPtr;
+
       /// <summary>
       /// Creates CalibrateDebevec object.
       /// </summary>
@@ -60,7 +62,7 @@ namespace Emgu.CV
       /// <param name="random">If true sample pixel locations are chosen at random, otherwise the form a rectangular grid.</param>
       public CalibrateDebevec(int samples = 70, float lambda = 10.0f, bool random = false)
       {
-         _ptr = CvInvoke.cveCalibrateDebevecCreate(samples, lambda, random, ref _calibrateCRFPtr);
+         _ptr = CvInvoke.cveCalibrateDebevecCreate(samples, lambda, random, ref _calibrateCRFPtr, ref _sharedPtr);
       }
 
       /// <summary>
@@ -70,7 +72,7 @@ namespace Emgu.CV
       {
          if (IntPtr.Zero != _ptr)
          {
-            CvInvoke.cveCalibrateDebevecRelease(ref _ptr);
+            CvInvoke.cveCalibrateDebevecRelease(ref _ptr, ref _sharedPtr);
          }
          base.DisposeObject();
       }
@@ -81,6 +83,8 @@ namespace Emgu.CV
    /// </summary>
    public class CalibrateRobertson : CalibrateCRF
    {
+       private IntPtr _sharedPtr;
+
       /// <summary>
       /// Creates CalibrateRobertson object.
       /// </summary>
@@ -88,7 +92,7 @@ namespace Emgu.CV
       /// <param name="threshold">get difference between results of two successive steps of the minimization.</param>
       public CalibrateRobertson(int maxIter = 30, float threshold = 0.01f)
       {
-         _ptr = CvInvoke.cveCalibrateRobertsonCreate(maxIter, threshold, ref _calibrateCRFPtr);
+         _ptr = CvInvoke.cveCalibrateRobertsonCreate(maxIter, threshold, ref _calibrateCRFPtr, ref _sharedPtr);
       }
 
       /// <summary>
@@ -98,7 +102,7 @@ namespace Emgu.CV
       {
          if (IntPtr.Zero != _ptr)
          {
-            CvInvoke.cveCalibrateRobertsonRelease(ref _ptr);
+            CvInvoke.cveCalibrateRobertsonRelease(ref _ptr, ref _sharedPtr);
          }
          base.DisposeObject();
       }
@@ -116,15 +120,16 @@ namespace Emgu.CV
          float lambda, 
          [MarshalAs(CvInvoke.BoolMarshalType)]
          bool random, 
-         ref IntPtr calibrateCRF);
+         ref IntPtr calibrateCRF, 
+         ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveCalibrateDebevecRelease(ref IntPtr calibrateDebevec);
+      internal static extern void cveCalibrateDebevecRelease(ref IntPtr calibrateDebevec, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cveCalibrateRobertsonCreate(int maxIter, float threshold, ref IntPtr calibrateCRF);
+      internal static extern IntPtr cveCalibrateRobertsonCreate(int maxIter, float threshold, ref IntPtr calibrateCRF, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveCalibrateRobertsonRelease(ref IntPtr calibrateRobertson);
+      internal static extern void cveCalibrateRobertsonRelease(ref IntPtr calibrateRobertson, ref IntPtr sharedPtr);
    }
 }

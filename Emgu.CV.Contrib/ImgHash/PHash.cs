@@ -20,12 +20,14 @@ namespace Emgu.CV.ImgHash
     /// </summary>
     public class PHash : ImgHashBase
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a PHash object
         /// </summary>
         public PHash()
         {
-            _ptr = ImgHashInvoke.cvePHashCreate(ref _imgHashBase);
+            _ptr = ImgHashInvoke.cvePHashCreate(ref _imgHashBase, ref _sharedPtr);
         }
 
         /// <summary>
@@ -34,7 +36,7 @@ namespace Emgu.CV.ImgHash
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ImgHashInvoke.cvePHashRelease(ref _ptr);
+                ImgHashInvoke.cvePHashRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -42,10 +44,10 @@ namespace Emgu.CV.ImgHash
     internal static partial class ImgHashInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvePHashCreate(ref IntPtr imgHash);
+        internal extern static IntPtr cvePHashCreate(ref IntPtr imgHash, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvePHashRelease(ref IntPtr hash);
+        internal extern static void cvePHashRelease(ref IntPtr hash, ref IntPtr sharedPtr);
     }
 }
 

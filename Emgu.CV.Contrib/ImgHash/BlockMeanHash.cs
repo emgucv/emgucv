@@ -20,6 +20,8 @@ namespace Emgu.CV.ImgHash
     /// </summary>
     public class BlockMeanHash : ImgHashBase
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Block Mean Hash mode
         /// </summary>
@@ -32,7 +34,7 @@ namespace Emgu.CV.ImgHash
             /// <summary>
             /// use block blocks(step sizes/2), generate 31*31/8 + 1 uchar hash value
             /// </summary>
-            HashMode1 = 1, 
+            HashMode1 = 1,
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace Emgu.CV.ImgHash
         /// <param name="mode">The hash mode</param>
         public BlockMeanHash(Mode mode = Mode.HashMode0)
         {
-            _ptr = ImgHashInvoke.cveBlockMeanHashCreate(ref _imgHashBase, mode);
+            _ptr = ImgHashInvoke.cveBlockMeanHashCreate(ref _imgHashBase, mode, ref _sharedPtr);
         }
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace Emgu.CV.ImgHash
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ImgHashInvoke.cveBlockMeanHashRelease(ref _ptr);
+                ImgHashInvoke.cveBlockMeanHashRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -58,10 +60,10 @@ namespace Emgu.CV.ImgHash
     internal static partial class ImgHashInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveBlockMeanHashCreate(ref IntPtr imgHash, BlockMeanHash.Mode mode);
+        internal extern static IntPtr cveBlockMeanHashCreate(ref IntPtr imgHash, BlockMeanHash.Mode mode, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBlockMeanHashRelease(ref IntPtr hash);
+        internal extern static void cveBlockMeanHashRelease(ref IntPtr hash, ref IntPtr sharedPtr);
     }
 }
 

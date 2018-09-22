@@ -16,6 +16,8 @@ namespace Emgu.CV
     /// </summary>
     public partial class BackgroundSubtractorKNN : UnmanagedObject, IBackgroundSubtractor
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _algorithmPtr;
         private IntPtr _backgroundSubtractorPtr;
 
@@ -37,7 +39,7 @@ namespace Emgu.CV
         /// <param name="detectShadows">If true, the algorithm will detect shadows and mark them. It decreases the speed a bit, so if you do not need this feature, set the parameter to false.</param>
         public BackgroundSubtractorKNN(int history, double dist2Threshold, bool detectShadows)
         {
-            _ptr = CvInvoke.cveBackgroundSubtractorKNNCreate(history, dist2Threshold, detectShadows, ref _backgroundSubtractorPtr, ref _algorithmPtr);
+            _ptr = CvInvoke.cveBackgroundSubtractorKNNCreate(history, dist2Threshold, detectShadows, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -47,13 +49,11 @@ namespace Emgu.CV
         {
             if (_ptr != IntPtr.Zero)
             {
-                CvInvoke.cveBackgroundSubtractorKNNRelease(ref _ptr);
+                CvInvoke.cveBackgroundSubtractorKNNRelease(ref _ptr, ref _sharedPtr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
         }
-        
-
     }
 
 
@@ -66,10 +66,11 @@ namespace Emgu.CV
                 [MarshalAs(CvInvoke.BoolMarshalType)]
                 bool detectShadows,
                 ref IntPtr bgSubtractor,
-                ref IntPtr algorithm);
+                ref IntPtr algorithm,
+                ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBackgroundSubtractorKNNRelease(ref IntPtr bgSubstractor);
+        internal static extern void cveBackgroundSubtractorKNNRelease(ref IntPtr bgSubstractor, ref IntPtr sharedPtr);
     }
 
 }

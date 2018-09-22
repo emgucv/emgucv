@@ -19,6 +19,8 @@ namespace Emgu.CV.Superres
    /// </summary>
    public class FrameSource : UnmanagedObject
    {
+       private IntPtr _sharedPtr;
+
       /// <summary>
       /// The pointer to the frame source
       /// </summary>
@@ -36,16 +38,16 @@ namespace Emgu.CV.Superres
          {
             try
             {
-               _ptr = SuperresInvoke.cvSuperresCreateFrameSourceVideo(s, true);
+               _ptr = SuperresInvoke.cveSuperresCreateFrameSourceVideo(s, true, ref _sharedPtr);
             }
             catch
             {
-               _ptr = SuperresInvoke.cvSuperresCreateFrameSourceVideo(s, false);
+               _ptr = SuperresInvoke.cveSuperresCreateFrameSourceVideo(s, false, ref _sharedPtr);
             }
          }
          else
          {
-            _ptr = SuperresInvoke.cvSuperresCreateFrameSourceVideo(s, false);
+            _ptr = SuperresInvoke.cveSuperresCreateFrameSourceVideo(s, false, ref _sharedPtr);
          }
 
          _frameSourcePtr = _ptr;
@@ -55,7 +57,7 @@ namespace Emgu.CV.Superres
       ///<param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
       public FrameSource(int camIndex)
       {
-         _ptr = SuperresInvoke.cvSuperresCreateFrameSourceCamera(camIndex);
+         _ptr = SuperresInvoke.cveSuperresCreateFrameSourceCamera(camIndex, ref _sharedPtr);
          _frameSourcePtr = _ptr;
       }
 
@@ -69,7 +71,7 @@ namespace Emgu.CV.Superres
       public void NextFrame(IOutputArray frame)
       {
          using (OutputArray oaFrame = frame.GetOutputArray())
-            SuperresInvoke.cvSuperresFrameSourceNextFrame(_frameSourcePtr, oaFrame);
+            SuperresInvoke.cveSuperresFrameSourceNextFrame(_frameSourcePtr, oaFrame);
 
       }
 
@@ -79,7 +81,7 @@ namespace Emgu.CV.Superres
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
-            SuperresInvoke.cvSuperresFrameSourceRelease(ref _ptr);
+            SuperresInvoke.cveSuperresFrameSourceRelease(ref _ptr, ref _sharedPtr);
       }
    }
 
@@ -91,19 +93,20 @@ namespace Emgu.CV.Superres
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cvSuperresCreateFrameSourceVideo(
+      internal static extern IntPtr cveSuperresCreateFrameSourceVideo(
          IntPtr fileName,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool useGpu);
+         bool useGpu, 
+         ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cvSuperresCreateFrameSourceCamera(int deviceId);
+      internal static extern IntPtr cveSuperresCreateFrameSourceCamera(int deviceId, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cvSuperresFrameSourceRelease(ref IntPtr frameSource);
+      internal static extern void cveSuperresFrameSourceRelease(ref IntPtr frameSource, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cvSuperresFrameSourceNextFrame(IntPtr frameSource, IntPtr frame);
+      internal static extern void cveSuperresFrameSourceNextFrame(IntPtr frameSource, IntPtr frame);
    }
 
 }

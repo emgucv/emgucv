@@ -24,6 +24,7 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public partial class PCTSignatures : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
 
         /// <summary>
         ///Point distributions supported by random point generator.
@@ -50,7 +51,7 @@ namespace Emgu.CV.XFeatures2D
         /// <param name="pointDistribution">Distribution of generated points.</param>
         public PCTSignatures(int initSampleCount = 2000, int initSeedCount = 400, PointDistributionType pointDistribution = PointDistributionType.Uniform)
         {
-            _ptr = XFeatures2DInvoke.cvePCTSignaturesCreate(initSampleCount, initSeedCount, pointDistribution);
+            _ptr = XFeatures2DInvoke.cvePCTSignaturesCreate(initSampleCount, initSeedCount, pointDistribution, ref _sharedPtr);
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace Emgu.CV.XFeatures2D
         /// <param name="initSeedCount">Number of initial clusterization seeds. Must be lower or equal to initSamplingPoints.size().</param>
         public PCTSignatures(VectorOfPointF initSamplingPoints, int initSeedCount)
         {
-            _ptr = XFeatures2DInvoke.cvePCTSignaturesCreate2(initSamplingPoints, initSeedCount);
+            _ptr = XFeatures2DInvoke.cvePCTSignaturesCreate2(initSamplingPoints, initSeedCount, ref _sharedPtr);
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace Emgu.CV.XFeatures2D
         /// <param name="initClusterSeedIndexes">Indexes of initial clusterization seeds. Its size must be lower or equal to initSamplingPoints.size().</param>
         public PCTSignatures(VectorOfPointF initSamplingPoints, VectorOfInt initClusterSeedIndexes)
         {
-            _ptr = XFeatures2DInvoke.cvePCTSignaturesCreate3(initSamplingPoints, initClusterSeedIndexes);
+            _ptr = XFeatures2DInvoke.cvePCTSignaturesCreate3(initSamplingPoints, initClusterSeedIndexes, ref _sharedPtr);
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            XFeatures2DInvoke.cvePCTSignaturesRelease(ref _ptr);
+            XFeatures2DInvoke.cvePCTSignaturesRelease(ref _ptr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -121,15 +122,15 @@ namespace Emgu.CV.XFeatures2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvePCTSignaturesCreate(int initSampleCount, int initSeedCount, PCTSignatures.PointDistributionType pointDistribution);
+        internal extern static IntPtr cvePCTSignaturesCreate(int initSampleCount, int initSeedCount, PCTSignatures.PointDistributionType pointDistribution, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvePCTSignaturesCreate2(IntPtr initSamplingPoints, int initSeedCount);
+        internal extern static IntPtr cvePCTSignaturesCreate2(IntPtr initSamplingPoints, int initSeedCount, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvePCTSignaturesCreate3(IntPtr initSamplingPoints, IntPtr initClusterSeedIndexes);
+        internal extern static IntPtr cvePCTSignaturesCreate3(IntPtr initSamplingPoints, IntPtr initClusterSeedIndexes, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvePCTSignaturesRelease(ref IntPtr pct);
+        internal extern static void cvePCTSignaturesRelease(ref IntPtr pct, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cvePCTSignaturesComputeSignature(IntPtr pct, IntPtr image, IntPtr signature);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

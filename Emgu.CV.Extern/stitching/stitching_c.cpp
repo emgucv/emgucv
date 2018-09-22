@@ -13,38 +13,36 @@ cv::Stitcher* cveStitcherCreateDefault(bool tryUseGpu)
    return p.get();
 }*/
 
-cv::Stitcher* cveStitcherCreate(int mode, bool tryUseGpu)
+cv::Stitcher* cveStitcherCreate(int mode, bool tryUseGpu, cv::Ptr<cv::Stitcher>** sharedPtr)
 {
 	cv::Ptr<cv::Stitcher> ptr = cv::Stitcher::create(static_cast<cv::Stitcher::Mode>(mode), tryUseGpu);
-	
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::Stitcher>(ptr);
+
 	return ptr.get();
 }
 
-void cveStitcherRelease(cv::Stitcher** stitcher)
+void cveStitcherRelease(cv::Stitcher** stitcher, cv::Ptr<cv::Stitcher>** sharedPtr)
 {
-   delete *stitcher;
+   delete *sharedPtr;
    *stitcher = 0;
+   *sharedPtr = 0;
 }
 
 void cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder)
 {
-   cv::Ptr<cv::detail::FeaturesFinder> p(finder);
-   p.addref();
+   cv::Ptr<cv::detail::FeaturesFinder> p(finder, [](cv::detail::FeaturesFinder*){});
    stitcher->setFeaturesFinder(p);
 }
 
 void cveStitcherSetWarper(cv::Stitcher* stitcher, cv::WarperCreator* creator)
 {
-   cv::Ptr<cv::WarperCreator> p(creator);
-   p.addref();
+   cv::Ptr<cv::WarperCreator> p(creator, [](cv::WarperCreator*){});
    stitcher->setWarper(p);
 }
 
 void cveStitcherSetBlender(cv::Stitcher* stitcher, cv::detail::Blender* b)
 {
-	cv::Ptr<cv::detail::Blender> blender(b);
-	blender.addref();
+	cv::Ptr<cv::detail::Blender> blender(b, [](cv::detail::Blender*){});
 	stitcher->setBlender(blender);
 }
 

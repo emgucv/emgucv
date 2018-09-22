@@ -24,6 +24,8 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class LATCH : Feature2D
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create LATCH descriptor extractor
         /// </summary>
@@ -33,7 +35,7 @@ namespace Emgu.CV.XFeatures2D
         /// then the half_ssd_size should be (7-1)/2 = 3.</param>
         public LATCH(int bytes = 32, bool rotationInvariance = true, int halfSsdSize = 3)
         {
-            _ptr = XFeatures2DInvoke.cveLATCHCreate(bytes, rotationInvariance, halfSsdSize, ref _feature2D);
+            _ptr = XFeatures2DInvoke.cveLATCHCreate(bytes, rotationInvariance, halfSsdSize, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace Emgu.CV.XFeatures2D
         {
             if (_ptr != IntPtr.Zero)
             {
-                XFeatures2DInvoke.cveLATCHRelease(ref _ptr);
+                XFeatures2DInvoke.cveLATCHRelease(ref _ptr, ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -58,9 +60,10 @@ namespace Emgu.CV.XFeatures2D
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool rotationInvariance,
             int halfSsdSize,
-            ref IntPtr extractor);
+            ref IntPtr extractor, 
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveLATCHRelease(ref IntPtr extractor);
+        internal extern static void cveLATCHRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
     }
 }

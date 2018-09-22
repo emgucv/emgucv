@@ -20,6 +20,8 @@ namespace Emgu.CV.BgSegm
     /// </summary>
     public class BackgroundSubtractorMOG : UnmanagedObject, IBackgroundSubtractor
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _algorithmPtr;
         private IntPtr _backgroundSubtractorPtr;
 
@@ -40,10 +42,11 @@ namespace Emgu.CV.BgSegm
         /// <param name="nMixtures">The maximum number of gaussian mixtures.</param>
         /// <param name="backgroundRatio">Background ratio</param>
         /// <param name="noiseSigma">Noise strength (standard deviation of the brightness or each color channel). 0 means some automatic value.</param>
-        public BackgroundSubtractorMOG(int history = 200, int nMixtures = 5, double backgroundRatio = 0.7,
-         double noiseSigma = 0)
+        public BackgroundSubtractorMOG(
+            int history = 200, int nMixtures = 5, double backgroundRatio = 0.7,
+            double noiseSigma = 0)
         {
-            _ptr = ContribInvoke.cveBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr);
+            _ptr = ContribInvoke.cveBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -53,7 +56,7 @@ namespace Emgu.CV.BgSegm
         {
             if (IntPtr.Zero != _ptr)
             {
-                ContribInvoke.cveBackgroundSubtractorMOGRelease(ref _ptr);
+                ContribInvoke.cveBackgroundSubtractorMOGRelease(ref _ptr, ref _sharedPtr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
@@ -66,9 +69,9 @@ namespace Emgu.CV
     public static partial class ContribInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma, ref IntPtr bgSubtractor, ref IntPtr algorithm);
+        internal static extern IntPtr cveBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma, ref IntPtr bgSubtractor, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBackgroundSubtractorMOGRelease(ref IntPtr bgSubstractor);
+        internal static extern void cveBackgroundSubtractorMOGRelease(ref IntPtr bgSubstractor, ref IntPtr sharedPtr);
     }
 }

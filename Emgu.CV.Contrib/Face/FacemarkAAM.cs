@@ -44,6 +44,8 @@ namespace Emgu.CV.Face
     /// </summary>
     public class FacemarkAAM : UnmanagedObject, IFacemark
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _facemarkPtr;
 
         /// <summary>
@@ -64,7 +66,7 @@ namespace Emgu.CV.Face
         /// <param name="parameters">The model parameters</param>
         public FacemarkAAM(FacemarkAAMParams parameters)
         {
-            _ptr = FaceInvoke.cveFacemarkAAMCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
+            _ptr = FaceInvoke.cveFacemarkAAMCreate(parameters, ref _facemarkPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -74,7 +76,7 @@ namespace Emgu.CV.Face
         {
             if (_ptr != IntPtr.Zero)
             {
-                FaceInvoke.cveFacemarkAAMRelease(ref _ptr);
+                FaceInvoke.cveFacemarkAAMRelease(ref _ptr, ref _sharedPtr);
             }
         }
     }
@@ -82,9 +84,9 @@ namespace Emgu.CV.Face
     public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveFacemarkAAMCreate(IntPtr parameters, ref IntPtr facemark, ref IntPtr algorithm);
+        internal extern static IntPtr cveFacemarkAAMCreate(IntPtr parameters, ref IntPtr facemark, ref IntPtr algorithm, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFacemarkAAMRelease(ref IntPtr facemark);
+        internal extern static void cveFacemarkAAMRelease(ref IntPtr facemark, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveFacemarkAAMParamsCreate();

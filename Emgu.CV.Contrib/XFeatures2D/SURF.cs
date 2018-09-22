@@ -16,6 +16,7 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class SURF : Feature2D
     {
+        private IntPtr _sharedPtr;
 
         /// <summary>
         /// Create a SURF detector using the specific values
@@ -43,7 +44,7 @@ namespace Emgu.CV.XFeatures2D
         public SURF(double hessianThresh, int nOctaves = 4, int nOctaveLayers = 2, bool extended = true,
            bool upright = false)
         {
-            _ptr = XFeatures2DInvoke.cveSURFCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _feature2D);
+            _ptr = XFeatures2DInvoke.cveSURFCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace Emgu.CV.XFeatures2D
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveSURFRelease(ref _ptr);
+                XFeatures2DInvoke.cveSURFRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
 
@@ -66,14 +67,15 @@ namespace Emgu.CV.XFeatures2D
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveSURFCreate(
-           double hessianThresh, int nOctaves, int nOctaveLayers,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool extended,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool upright,
-           ref IntPtr feature2D);
+            double hessianThresh, int nOctaves, int nOctaveLayers,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool extended,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool upright,
+            ref IntPtr feature2D, 
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveSURFRelease(ref IntPtr detector);
+        internal extern static void cveSURFRelease(ref IntPtr detector, ref IntPtr sharedPtr);
     }
 }

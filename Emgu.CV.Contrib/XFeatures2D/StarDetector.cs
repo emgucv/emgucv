@@ -16,6 +16,8 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class StarDetector : Feature2D
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a star detector with the specific parameters
         /// </summary>
@@ -38,11 +40,14 @@ namespace Emgu.CV.XFeatures2D
         /// <param name="suppressNonmaxSize">
         ///
         /// </param>
-        public StarDetector(int maxSize = 45, int responseThreshold = 30, int lineThresholdProjected = 10,
-           int lineThresholdBinarized = 8, int suppressNonmaxSize = 5)
+        public StarDetector(
+            int maxSize = 45, int responseThreshold = 30, int lineThresholdProjected = 10,
+            int lineThresholdBinarized = 8, int suppressNonmaxSize = 5)
         {
-            _ptr = XFeatures2DInvoke.cveStarDetectorCreate(maxSize, responseThreshold, lineThresholdProjected,
-               lineThresholdBinarized, suppressNonmaxSize, ref _feature2D);
+            _ptr = XFeatures2DInvoke.cveStarDetectorCreate(
+                maxSize, responseThreshold, lineThresholdProjected,
+                lineThresholdBinarized, suppressNonmaxSize, ref _feature2D,
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -51,7 +56,7 @@ namespace Emgu.CV.XFeatures2D
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveStarDetectorRelease(ref _ptr);
+                XFeatures2DInvoke.cveStarDetectorRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -60,9 +65,9 @@ namespace Emgu.CV.XFeatures2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, ref IntPtr feature2D);
+        internal extern static IntPtr cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveStarDetectorRelease(ref IntPtr detector);
+        internal extern static void cveStarDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
     }
 }

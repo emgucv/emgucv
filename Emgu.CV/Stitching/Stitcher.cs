@@ -18,6 +18,8 @@ namespace Emgu.CV.Stitching
     /// </summary>
     public partial class Stitcher : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// The stitcher statis
         /// </summary>
@@ -90,7 +92,7 @@ namespace Emgu.CV.Stitching
         /// <param name="tryUseGpu">If true, the stitcher will try to use GPU for processing when available</param>
         public Stitcher(Mode mode, bool tryUseGpu)
         {
-            _ptr = StitchingInvoke.cveStitcherCreate(mode, tryUseGpu);
+            _ptr = StitchingInvoke.cveStitcherCreate(mode, tryUseGpu, ref _sharedPtr);
         }
 
         /// <summary>
@@ -138,7 +140,7 @@ namespace Emgu.CV.Stitching
         /// </summary>
         protected override void DisposeObject()
         {
-            StitchingInvoke.cveStitcherRelease(ref _ptr);
+            StitchingInvoke.cveStitcherRelease(ref _ptr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -218,7 +220,8 @@ namespace Emgu.CV.Stitching
         internal static extern IntPtr cveStitcherCreate(
             Stitcher.Mode model,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool tryUseGpu
+            bool tryUseGpu,
+            ref IntPtr sharedPtr
            );
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -234,7 +237,7 @@ namespace Emgu.CV.Stitching
         internal static extern void cveStitcherSetBlender(IntPtr stitcher, IntPtr b);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveStitcherRelease(ref IntPtr stitcherWrapper);
+        internal static extern void cveStitcherRelease(ref IntPtr stitcherWrapper, ref IntPtr sharedPtr);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

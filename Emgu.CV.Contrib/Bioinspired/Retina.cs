@@ -36,6 +36,7 @@ namespace Emgu.CV.Bioinspired
     /// </summary>
     public class Retina : UnmanagedObject
     {
+        private IntPtr _sharePtr;
 
         /// <summary>
         /// Create a retina model
@@ -57,7 +58,7 @@ namespace Emgu.CV.Bioinspired
         /// <param name="samplingStrength">Only useful if param useRetinaLogSampling=true, specifies the strenght of the log scale that is applied</param>
         public Retina(Size inputSize, bool colorMode, ColorSamplingMethod colorSamplingMethod, bool useRetinaLogSampling, double reductionFactor, double samplingStrength)
         {
-            _ptr = BioinspiredInvoke.cveRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+            _ptr = BioinspiredInvoke.cveRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength, ref _sharePtr);
         }
 
         /// <summary>
@@ -126,7 +127,7 @@ namespace Emgu.CV.Bioinspired
         /// </summary>
         protected override void DisposeObject()
         {
-            BioinspiredInvoke.cveRetinaRelease(ref _ptr);
+            BioinspiredInvoke.cveRetinaRelease(ref _ptr, ref _sharePtr);
         }
 
         /// <summary>
@@ -277,7 +278,8 @@ namespace Emgu.CV.Bioinspired
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useRetinaLogSampling,
             double reductionFactor,
-            double samplingStrength);
+            double samplingStrength, 
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveRetinaRun(IntPtr retina, IntPtr image);
@@ -289,7 +291,7 @@ namespace Emgu.CV.Bioinspired
         internal static extern void cveRetinaGetMagno(IntPtr retina, IntPtr magno);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRetinaRelease(ref IntPtr retina);
+        internal static extern void cveRetinaRelease(ref IntPtr retina, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveRetinaClearBuffers(IntPtr retina);

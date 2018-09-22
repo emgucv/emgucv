@@ -21,6 +21,8 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class DAISY : Feature2D
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create DAISY descriptor extractor
         /// </summary>
@@ -38,7 +40,7 @@ namespace Emgu.CV.XFeatures2D
         {
             using (InputArray iaH = H == null ? InputArray.GetEmpty() : H.GetInputArray())
                 _ptr = XFeatures2DInvoke.cveDAISYCreate(radius, qRadius, qTheta, qHist, norm, iaH, interpolation, useOrientation,
-                   ref _feature2D);
+                   ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -74,7 +76,7 @@ namespace Emgu.CV.XFeatures2D
         {
             if (_ptr != IntPtr.Zero)
             {
-                XFeatures2DInvoke.cveDAISYRelease(ref _ptr);
+                XFeatures2DInvoke.cveDAISYRelease(ref _ptr, ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -94,9 +96,10 @@ namespace Emgu.CV.XFeatures2D
            bool interpolation,
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool useOrientation,
-           ref IntPtr daisy);
+           ref IntPtr daisy,
+           ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveDAISYRelease(ref IntPtr daisy);
+        internal extern static void cveDAISYRelease(ref IntPtr daisy, ref IntPtr shared);
     }
 }

@@ -21,12 +21,14 @@ namespace Emgu.CV.XImgproc
     /// </summary>
     public class SelectiveSearchSegmentation : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Selective search segmentation algorithm
         /// </summary>
         public SelectiveSearchSegmentation()
         {
-            _ptr = XImgprocInvoke.cveSelectiveSearchSegmentationCreate();
+            _ptr = XImgprocInvoke.cveSelectiveSearchSegmentationCreate(ref _sharedPtr);
         }
 
         /// <summary>
@@ -101,7 +103,7 @@ namespace Emgu.CV.XImgproc
         {
             if (_ptr != IntPtr.Zero)
             {
-                XImgprocInvoke.cveSelectiveSearchSegmentationRelease(ref _ptr);
+                XImgprocInvoke.cveSelectiveSearchSegmentationRelease(ref _ptr, ref _sharedPtr);
             }
         }
     }
@@ -110,7 +112,7 @@ namespace Emgu.CV.XImgproc
     public static partial class XImgprocInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSelectiveSearchSegmentationCreate();
+        internal static extern IntPtr cveSelectiveSearchSegmentationCreate(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSelectiveSearchSegmentationSetBaseImage(IntPtr segmentation, IntPtr image);
@@ -125,6 +127,6 @@ namespace Emgu.CV.XImgproc
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSelectiveSearchSegmentationProcess(IntPtr segmentation, IntPtr rects);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveSelectiveSearchSegmentationRelease(ref IntPtr segmentation);
+        internal static extern void cveSelectiveSearchSegmentationRelease(ref IntPtr segmentation, ref IntPtr sharedPtr);
     }
 }

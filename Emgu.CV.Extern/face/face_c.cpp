@@ -7,24 +7,24 @@
 #include "face_c.h"
 
 //FaceRecognizer
-cv::face::FaceRecognizer* cveEigenFaceRecognizerCreate(int numComponents, double threshold)
+cv::face::FaceRecognizer* cveEigenFaceRecognizerCreate(int numComponents, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr)
 {
    cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::EigenFaceRecognizer::create(numComponents, threshold);
-   ptr.addref();
+   *sharedPtr = new cv::Ptr<cv::face::FaceRecognizer>(ptr);
    return ptr.get();
 }
     
-cv::face::FaceRecognizer* cveFisherFaceRecognizerCreate(int numComponents, double threshold)
+cv::face::FaceRecognizer* cveFisherFaceRecognizerCreate(int numComponents, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr)
 {
    cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::FisherFaceRecognizer::create(numComponents, threshold);
-   ptr.addref();
+   *sharedPtr = new cv::Ptr<cv::face::FaceRecognizer>(ptr);
    return ptr.get();
 }
     
-cv::face::FaceRecognizer* cveLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold)
+cv::face::FaceRecognizer* cveLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr)
 {
    cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::LBPHFaceRecognizer::create(radius, neighbors, gridX, gridY, threshold);
-   ptr.addref();
+   *sharedPtr = new cv::Ptr<cv::face::FaceRecognizer>(ptr);
    return ptr.get();
 }
 
@@ -57,26 +57,28 @@ void cveFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputAr
    *dist = d;
 }
 
-void cveFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer)
+void cveFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr)
 {
-   delete *recognizer;
+   delete *sharedPtr;
    *recognizer = 0;
+   *sharedPtr = 0;
 }
 
-cv::face::BIF* cveBIFCreate(int numBands, int numRotations)
+cv::face::BIF* cveBIFCreate(int numBands, int numRotations, cv::Ptr<cv::face::BIF>** sharedPtr)
 {
 	cv::Ptr<cv::face::BIF> ptr = cv::face::BIF::create(numBands, numRotations);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::face::BIF>(ptr);
 	return ptr.get();
 }
 void cveBIFCompute(cv::face::BIF* bif, cv::_InputArray* image, cv::_OutputArray* features)
 {
 	bif->compute(*image, *features);
 }
-void cveBIFRelease(cv::face::BIF** bif)
+void cveBIFRelease(cv::face::BIF** bif, cv::Ptr<cv::face::BIF>** sharedPtr)
 {
-	delete *bif;
+	delete *sharedPtr;
 	*bif = 0;
+	*sharedPtr = 0;
 }
 
 cv::face::FacemarkAAM::Params* cveFacemarkAAMParamsCreate()
@@ -89,18 +91,19 @@ void cveFacemarkAAMParamsRelease(cv::face::FacemarkAAM::Params** params)
 	*params = 0;
 }
 
-cv::face::FacemarkAAM* cveFacemarkAAMCreate(cv::face::FacemarkAAM::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm)
+cv::face::FacemarkAAM* cveFacemarkAAMCreate(cv::face::FacemarkAAM::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm, cv::Ptr<cv::face::FacemarkAAM>** sharedPtr)
 {
 	cv::Ptr<cv::face::FacemarkAAM> ptr = cv::face::FacemarkAAM::create(*parameters);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::face::FacemarkAAM>(ptr);
 	*facemark = dynamic_cast<cv::face::Facemark*>(ptr.get());
 	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
 	return ptr.get();
 }
-void cveFacemarkAAMRelease(cv::face::FacemarkAAM** facemark)
+void cveFacemarkAAMRelease(cv::face::FacemarkAAM** facemark, cv::Ptr<cv::face::FacemarkAAM>** sharedPtr)
 {
-	delete *facemark;
+	delete *sharedPtr;
 	*facemark = 0;
+	*sharedPtr = 0;
 }
 
 
@@ -114,18 +117,19 @@ void cveFacemarkLBFParamsRelease(cv::face::FacemarkLBF::Params** params)
 	*params = 0;
 }
 
-cv::face::FacemarkLBF* cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm)
+cv::face::FacemarkLBF* cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm, cv::Ptr<cv::face::FacemarkLBF>** sharedPtr)
 {
 	cv::Ptr<cv::face::FacemarkLBF> ptr = cv::face::FacemarkLBF::create(*parameters);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::face::FacemarkLBF>(ptr);
 	*facemark = dynamic_cast<cv::face::Facemark*>(ptr.get());
 	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
 	return ptr.get();
 }
-void cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark)
+void cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark, cv::Ptr<cv::face::FacemarkLBF>** sharedPtr)
 {
-	delete *facemark;
+	delete *sharedPtr;
 	*facemark = 0;
+	*sharedPtr = 0;
 }
 
 /*

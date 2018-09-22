@@ -6,68 +6,68 @@
 
 #include "photo_c.h"
 
-void cveInpaint( cv::_InputArray* src, cv::_InputArray* inpaintMask, cv::_OutputArray* dst, double inpaintRadius, int flags )
+void cveInpaint(cv::_InputArray* src, cv::_InputArray* inpaintMask, cv::_OutputArray* dst, double inpaintRadius, int flags)
 {
-   cv::inpaint(*src, *inpaintMask, *dst, inpaintRadius, flags);
+	cv::inpaint(*src, *inpaintMask, *dst, inpaintRadius, flags);
 }
 void cveFastNlMeansDenoising(cv::_InputArray* src, cv::_OutputArray* dst, float h, int templateWindowSize, int searchWindowSize)
 {
-   cv::fastNlMeansDenoising(*src, *dst, h, templateWindowSize, searchWindowSize);
+	cv::fastNlMeansDenoising(*src, *dst, h, templateWindowSize, searchWindowSize);
 }
 
 void cveFastNlMeansDenoisingColored(cv::_InputArray* src, cv::_OutputArray* dst, float h, float hColor, int templateWindowSize, int searchWindowSize)
 {
-   cv::fastNlMeansDenoisingColored(*src, *dst, h, hColor, templateWindowSize, searchWindowSize);
+	cv::fastNlMeansDenoisingColored(*src, *dst, h, hColor, templateWindowSize, searchWindowSize);
 }
 
 void cudaNonLocalMeans(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, float h, int searchWindow, int blockSize, int borderMode, cv::cuda::Stream* stream)
 {
-   cv::cuda::nonLocalMeans(*src, *dst, h, searchWindow, blockSize, borderMode, stream ? *stream : cv::cuda::Stream::Null());
+	cv::cuda::nonLocalMeans(*src, *dst, h, searchWindow, blockSize, borderMode, stream ? *stream : cv::cuda::Stream::Null());
 }
 
 void cveEdgePreservingFilter(cv::_InputArray* src, cv::_OutputArray* dst, int flags, float sigmaS, float sigmaR)
 {
-   cv::edgePreservingFilter(*src, *dst, flags, sigmaS, sigmaR);
+	cv::edgePreservingFilter(*src, *dst, flags, sigmaS, sigmaR);
 }
 
 void cveDetailEnhance(cv::_InputArray* src, cv::_OutputArray* dst, float sigmaS, float sigmaR)
 {
-   cv::detailEnhance(*src, *dst, sigmaS, sigmaR);
+	cv::detailEnhance(*src, *dst, sigmaS, sigmaR);
 }
 
 void cvePencilSketch(cv::_InputArray* src, cv::_OutputArray* dst1, cv::_OutputArray* dst2, float sigmaS, float sigmaR, float shadeFactor)
 {
-   cv::pencilSketch(*src, *dst1, *dst2, sigmaS, sigmaR, shadeFactor);
+	cv::pencilSketch(*src, *dst1, *dst2, sigmaS, sigmaR, shadeFactor);
 }
 
 void cveStylization(cv::_InputArray* src, cv::_OutputArray* dst, float sigmaS, float sigmaR)
 {
-   cv::stylization(*src, *dst, sigmaS, sigmaR);
+	cv::stylization(*src, *dst, sigmaS, sigmaR);
 }
 
 void cveColorChange(cv::_InputArray* src, cv::_InputArray* mask, cv::_OutputArray* dst, float redMul, float greenMul, float blueMul)
 {
-   cv::colorChange(*src, mask ? *mask : (cv::InputArray) cv::noArray(), dst ? *dst : (cv::OutputArray) cv::noArray(), redMul, greenMul, blueMul);
+	cv::colorChange(*src, mask ? *mask : (cv::InputArray) cv::noArray(), dst ? *dst : (cv::OutputArray) cv::noArray(), redMul, greenMul, blueMul);
 }
 
 void cveIlluminationChange(cv::_InputArray* src, cv::_InputArray* mask, cv::_OutputArray* dst, float alpha, float beta)
 {
-   cv::illuminationChange(*src, mask ? *mask : (cv::InputArray) cv::noArray(), *dst, alpha, beta);
+	cv::illuminationChange(*src, mask ? *mask : (cv::InputArray) cv::noArray(), *dst, alpha, beta);
 }
 
 void cveTextureFlattening(cv::_InputArray* src, cv::_InputArray* mask, cv::_OutputArray* dst, float lowThreshold, float highThreshold, int kernelSize)
 {
-   cv::textureFlattening(*src, mask ? *mask : (cv::InputArray) cv::noArray(), *dst, lowThreshold, highThreshold, kernelSize);
+	cv::textureFlattening(*src, mask ? *mask : (cv::InputArray) cv::noArray(), *dst, lowThreshold, highThreshold, kernelSize);
 }
 
 void cveDecolor(cv::_InputArray* src, cv::_OutputArray* grayscale, cv::_OutputArray* colorBoost)
 {
-   cv::decolor(*src, *grayscale, *colorBoost);
+	cv::decolor(*src, *grayscale, *colorBoost);
 }
 
 void cveSeamlessClone(cv::_InputArray* src, cv::_InputArray* dst, cv::_InputArray* mask, CvPoint* p, cv::_OutputArray* blend, int flags)
 {
-   cv::seamlessClone(*src, *dst, *mask, *p, *blend, flags);
+	cv::seamlessClone(*src, *dst, *mask, *p, *blend, flags);
 }
 
 void cveDenoiseTVL1(const std::vector< cv::Mat >* observations, cv::Mat* result, double lambda, int niters)
@@ -77,157 +77,169 @@ void cveDenoiseTVL1(const std::vector< cv::Mat >* observations, cv::Mat* result,
 
 void cveCalibrateCRFProcess(cv::CalibrateCRF* calibrateCRF, cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* times)
 {
-   calibrateCRF->process(*src, *dst, *times);
+	calibrateCRF->process(*src, *dst, *times);
 }
 
-cv::CalibrateDebevec* cveCalibrateDebevecCreate(int samples, float lambda, bool random, cv::CalibrateCRF** calibrateCRF)
+cv::CalibrateDebevec* cveCalibrateDebevecCreate(int samples, float lambda, bool random, cv::CalibrateCRF** calibrateCRF, cv::Ptr<cv::CalibrateDebevec>** sharedPtr)
 {
-   cv::Ptr<cv::CalibrateDebevec> res = cv::createCalibrateDebevec(samples, lambda, random);
-   res.addref();
-   *calibrateCRF = dynamic_cast<cv::CalibrateCRF*>(res.get());
-   return res.get();
+	cv::Ptr<cv::CalibrateDebevec> res = cv::createCalibrateDebevec(samples, lambda, random);
+	*sharedPtr = new cv::Ptr<cv::CalibrateDebevec>(res);
+	*calibrateCRF = dynamic_cast<cv::CalibrateCRF*>(res.get());
+	return res.get();
 }
-void cveCalibrateDebevecRelease(cv::CalibrateDebevec** calibrateDebevec)
+void cveCalibrateDebevecRelease(cv::CalibrateDebevec** calibrateDebevec, cv::Ptr<cv::CalibrateDebevec>** sharedPtr)
 {
-   delete *calibrateDebevec;
-   *calibrateDebevec = 0;
+	delete *sharedPtr;
+	*calibrateDebevec = 0;
+	*sharedPtr = 0;
 }
 
-cv::CalibrateRobertson* cveCalibrateRobertsonCreate(int maxIter, float threshold, cv::CalibrateCRF** calibrateCRF)
+cv::CalibrateRobertson* cveCalibrateRobertsonCreate(int maxIter, float threshold, cv::CalibrateCRF** calibrateCRF, cv::Ptr<cv::CalibrateRobertson>** sharedPtr)
 {
-   cv::Ptr<cv::CalibrateRobertson> res = cv::createCalibrateRobertson(maxIter, threshold);
-   res.addref();
-   *calibrateCRF = dynamic_cast<cv::CalibrateCRF*>(res.get());
-   return res.get();
+	cv::Ptr<cv::CalibrateRobertson> res = cv::createCalibrateRobertson(maxIter, threshold);
+	*sharedPtr = new cv::Ptr<cv::CalibrateRobertson>(res);
+	*calibrateCRF = dynamic_cast<cv::CalibrateCRF*>(res.get());
+	return res.get();
 }
-void cveCalibrateRobertsonRelease(cv::CalibrateRobertson** calibrateRobertson)
+void cveCalibrateRobertsonRelease(cv::CalibrateRobertson** calibrateRobertson, cv::Ptr<cv::CalibrateRobertson>** sharedPtr)
 {
-   delete *calibrateRobertson;
-   calibrateRobertson = 0;
+	delete *sharedPtr;
+	calibrateRobertson = 0;
+	*sharedPtr = 0;
 }
 
 void cveMergeExposuresProcess(
-   cv::MergeExposures* mergeExposures, 
-   cv::_InputArray* src, cv::_OutputArray* dst,
-   cv::_InputArray* times, cv::_InputArray* response)
+	cv::MergeExposures* mergeExposures,
+	cv::_InputArray* src, cv::_OutputArray* dst,
+	cv::_InputArray* times, cv::_InputArray* response)
 {
-   mergeExposures->process(*src, *dst, *times, *response);
+	mergeExposures->process(*src, *dst, *times, *response);
 }
 
-cv::MergeDebevec* cveMergeDebevecCreate(cv::MergeExposures** merge)
+cv::MergeDebevec* cveMergeDebevecCreate(cv::MergeExposures** merge, cv::Ptr<cv::MergeDebevec>** sharedPtr)
 {
-   cv::Ptr<cv::MergeDebevec> res = cv::createMergeDebevec();
-   res.addref();
-   *merge = dynamic_cast<cv::MergeExposures*>(res.get());
-   return res.get();
+	cv::Ptr<cv::MergeDebevec> res = cv::createMergeDebevec();
+	*sharedPtr = new cv::Ptr<cv::MergeDebevec>(res);
+	*merge = dynamic_cast<cv::MergeExposures*>(res.get());
+	return res.get();
 }
-void cveMergeDebevecRelease(cv::MergeDebevec** merge)
+void cveMergeDebevecRelease(cv::MergeDebevec** merge, cv::Ptr<cv::MergeDebevec>** sharedPtr)
 {
-   delete *merge;
-   *merge = 0;
-}
-
-cv::MergeMertens* cveMergeMertensCreate(float contrastWeight, float saturationWeight, float exposureWeight, cv::MergeExposures** merge)
-{
-   cv::Ptr<cv::MergeMertens> res = cv::createMergeMertens(contrastWeight, saturationWeight, exposureWeight);
-   res.addref();
-   *merge = dynamic_cast<cv::MergeExposures*>(res.get());
-   return res.get();
+	delete *sharedPtr;
+	*merge = 0;
+	*sharedPtr = 0;
 }
 
-void cveMergeMertensRelease(cv::MergeMertens** merge)
+cv::MergeMertens* cveMergeMertensCreate(float contrastWeight, float saturationWeight, float exposureWeight, cv::MergeExposures** merge, cv::Ptr<cv::MergeMertens>** sharedPtr)
 {
-   delete *merge;
-   *merge = 0;
+	cv::Ptr<cv::MergeMertens> res = cv::createMergeMertens(contrastWeight, saturationWeight, exposureWeight);
+	*sharedPtr = new cv::Ptr<cv::MergeMertens>(res);
+	*merge = dynamic_cast<cv::MergeExposures*>(res.get());
+	return res.get();
 }
 
-cv::MergeRobertson* cveMergeRobertsonCreate(cv::MergeExposures** merge)
+void cveMergeMertensRelease(cv::MergeMertens** merge, cv::Ptr<cv::MergeMertens>** sharedPtr)
 {
-   cv::Ptr<cv::MergeRobertson> res = cv::createMergeRobertson();
-   res.addref();
-   *merge = dynamic_cast<cv::MergeExposures*>(res.get());
-   return res.get();
+	delete *sharedPtr;
+	*merge = 0;
+	*sharedPtr = 0;
 }
 
-void cveMergeRobertsonRelease(cv::MergeRobertson** merge)
+cv::MergeRobertson* cveMergeRobertsonCreate(cv::MergeExposures** merge, cv::Ptr<cv::MergeRobertson>** sharedPtr)
 {
-   delete *merge;
-   *merge = 0;
+	cv::Ptr<cv::MergeRobertson> res = cv::createMergeRobertson();
+	*sharedPtr = new cv::Ptr<cv::MergeRobertson>(res);
+	*merge = dynamic_cast<cv::MergeExposures*>(res.get());
+	return res.get();
 }
 
+void cveMergeRobertsonRelease(cv::MergeRobertson** merge, cv::Ptr<cv::MergeRobertson>** sharedPtr)
+{
+	delete *sharedPtr;
+	*merge = 0;
+	*sharedPtr = 0;
+}
 
 
 void cveTonemapProcess(cv::Tonemap* tonemap, cv::_InputArray* src, cv::_OutputArray* dst)
 {
-   tonemap->process(*src, *dst);
+	tonemap->process(*src, *dst);
 }
-cv::Tonemap* cveTonemapCreate(float gamma, cv::Algorithm** algorithm)
+cv::Tonemap* cveTonemapCreate(float gamma, cv::Algorithm** algorithm, cv::Ptr<cv::Tonemap>** sharedPtr)
 {
-   cv::Ptr<cv::Tonemap> tonemap = cv::createTonemap(gamma);
-   tonemap.addref();
-   *algorithm = dynamic_cast<cv::Algorithm*>(tonemap.get());
-   return tonemap.get();
+	cv::Ptr<cv::Tonemap> tonemap = cv::createTonemap(gamma);
+	*sharedPtr = new cv::Ptr<cv::Tonemap>(tonemap);
+	*algorithm = dynamic_cast<cv::Algorithm*>(tonemap.get());
+	return tonemap.get();
 }
-void cveTonemapRelease(cv::Tonemap** tonemap)
+void cveTonemapRelease(cv::Tonemap** tonemap, cv::Ptr<cv::Tonemap>** sharedPtr)
 {
-   delete *tonemap;
-   *tonemap = 0;
-}
-
-cv::TonemapDrago* cveTonemapDragoCreate(float gamma, float saturation, float bias, cv::Tonemap** tonemap, cv::Algorithm** algorithm)
-{
-   cv::Ptr<cv::TonemapDrago> t = cv::createTonemapDrago(gamma, saturation, bias);
-   t.addref();
-   *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
-   *algorithm = dynamic_cast<cv::Algorithm*>(t.get());
-   return t.get();
-}
-void cveTonemapDragoRelease(cv::TonemapDrago** tonemap)
-{
-   delete *tonemap;
-   *tonemap = 0;
+	delete *sharedPtr;
+	*tonemap = 0;
+	*sharedPtr = 0;
 }
 
-cv::TonemapDurand* cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, cv::Tonemap** tonemap, cv::Algorithm** algorithm)
+cv::TonemapDrago* cveTonemapDragoCreate(float gamma, float saturation, float bias, cv::Tonemap** tonemap, cv::Algorithm** algorithm, cv::Ptr<cv::TonemapDrago>** sharedPtr)
 {
-   cv::Ptr<cv::TonemapDurand> t = cv::createTonemapDurand(gamma, contrast, saturation, sigmaSpace, sigmaColor);
-   t.addref();
-   *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
-   *algorithm = dynamic_cast<cv::Algorithm*>(t.get());
-   return t.get();
+	cv::Ptr<cv::TonemapDrago> t = cv::createTonemapDrago(gamma, saturation, bias);
+	*sharedPtr = new cv::Ptr<cv::TonemapDrago>(t);
+	*tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(t.get());
+	return t.get();
 }
-void cveTonemapDurandRelease(cv::TonemapDurand** tonemap)
+void cveTonemapDragoRelease(cv::TonemapDrago** tonemap, cv::Ptr<cv::TonemapDrago>** sharedPtr)
 {
-   delete *tonemap;
-   *tonemap = 0;
-}
-
-cv::TonemapReinhard* cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, cv::Tonemap** tonemap, cv::Algorithm** algorithm)
-{
-   cv::Ptr<cv::TonemapReinhard> t = cv::createTonemapReinhard(gamma, intensity, lightAdapt, colorAdapt);
-   t.addref();
-   *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
-   *algorithm = dynamic_cast<cv::Algorithm*>(t.get());
-   return t.get();
-}
-void cveTonemapReinhardRelease(cv::TonemapReinhard** tonemap)
-{
-   delete *tonemap;
-   *tonemap = 0;
+	delete *sharedPtr;
+	*tonemap = 0;
+	*sharedPtr = 0;
 }
 
-cv::TonemapMantiuk* cveTonemapMantiukCreate(float gamma, float scale, float saturation, cv::Tonemap** tonemap, cv::Algorithm** algorithm)
+cv::TonemapDurand* cveTonemapDurandCreate(
+	float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, 
+	cv::Tonemap** tonemap, cv::Algorithm** algorithm,
+	cv::Ptr<cv::TonemapDurand>** sharedPtr)
 {
-   cv::Ptr<cv::TonemapMantiuk> t = cv::createTonemapMantiuk(gamma, scale, saturation);
-   t.addref();
-   *tonemap = dynamic_cast<cv::Tonemap*>(t.get());
-   *algorithm = dynamic_cast<cv::Algorithm*>(t.get());
-   return t.get();
+	cv::Ptr<cv::TonemapDurand> t = cv::createTonemapDurand(gamma, contrast, saturation, sigmaSpace, sigmaColor);
+	*sharedPtr = new cv::Ptr<cv::TonemapDurand>(t);
+	*tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(t.get());
+	return t.get();
 }
-void cveTonemapMantiukRelease(cv::TonemapMantiuk** tonemap)
+void cveTonemapDurandRelease(cv::TonemapDurand** tonemap, cv::Ptr<cv::TonemapDurand>** sharedPtr)
 {
-   delete *tonemap;
-   *tonemap = 0;
+	delete *sharedPtr;
+	*tonemap = 0;
+	*sharedPtr = 0;
+}
+
+cv::TonemapReinhard* cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, cv::Tonemap** tonemap, cv::Algorithm** algorithm, cv::Ptr<cv::TonemapReinhard>** sharedPtr)
+{
+	cv::Ptr<cv::TonemapReinhard> t = cv::createTonemapReinhard(gamma, intensity, lightAdapt, colorAdapt);
+	*sharedPtr = new cv::Ptr<cv::TonemapReinhard>(t);
+	*tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(t.get());
+	return t.get();
+}
+void cveTonemapReinhardRelease(cv::TonemapReinhard** tonemap, cv::Ptr<cv::TonemapReinhard>** sharedPtr)
+{
+	delete *sharedPtr;
+	*tonemap = 0;
+	*sharedPtr = 0;
+}
+
+cv::TonemapMantiuk* cveTonemapMantiukCreate(float gamma, float scale, float saturation, cv::Tonemap** tonemap, cv::Algorithm** algorithm, cv::Ptr<cv::TonemapMantiuk>** sharedPtr)
+{
+	cv::Ptr<cv::TonemapMantiuk> t = cv::createTonemapMantiuk(gamma, scale, saturation);
+	*sharedPtr = new cv::Ptr<cv::TonemapMantiuk>(t);
+	*tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(t.get());
+	return t.get();
+}
+void cveTonemapMantiukRelease(cv::TonemapMantiuk** tonemap, cv::Ptr<cv::TonemapMantiuk>** sharedPtr)
+{
+	delete *sharedPtr;
+	*tonemap = 0;
+	*sharedPtr = 0;
 }
 
 void cveAlignExposuresProcess(cv::AlignExposures* alignExposures, cv::_InputArray* src, std::vector<cv::Mat>* dst, cv::_InputArray* times, cv::_InputArray* response)
@@ -236,15 +248,16 @@ void cveAlignExposuresProcess(cv::AlignExposures* alignExposures, cv::_InputArra
 }
 
 
-cv::AlignMTB* cveAlignMTBCreate(int maxBits, int excludeRange, bool cut, cv::AlignExposures** alignExposures)
+cv::AlignMTB* cveAlignMTBCreate(int maxBits, int excludeRange, bool cut, cv::AlignExposures** alignExposures, cv::Ptr<cv::AlignMTB>** sharedPtr)
 {
 	cv::Ptr<cv::AlignMTB> a = cv::createAlignMTB(maxBits, excludeRange, cut);
-	a.addref();
+	*sharedPtr = new cv::Ptr<cv::AlignMTB>(a);
 	*alignExposures = dynamic_cast<cv::AlignExposures*>(a.get());
 	return a.get();
 }
-void cveAlignMTBRelease(cv::AlignMTB** alignExposures)
+void cveAlignMTBRelease(cv::AlignMTB** alignExposures, cv::Ptr<cv::AlignMTB>** sharedPtr)
 {
-	delete *alignExposures;
+	delete *sharedPtr;
 	*alignExposures = 0;
+	*sharedPtr = 0;
 }

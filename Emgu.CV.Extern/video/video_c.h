@@ -12,8 +12,8 @@
 #include "opencv2/video/video.hpp"
 
 //BackgroundSubtractorMOG2
-CVAPI(cv::BackgroundSubtractorMOG2*) cveBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm);
-CVAPI(void) cveBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor);
+CVAPI(cv::BackgroundSubtractorMOG2*) cveBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm, cv::Ptr<cv::BackgroundSubtractorMOG2>** sharedPtr);
+CVAPI(void) cveBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor, cv::Ptr<cv::BackgroundSubtractorMOG2>** sharedPtr);
 
 //BackgroundSubtractor
 CVAPI(void) cveBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate);
@@ -21,11 +21,11 @@ CVAPI(void) cveBackgroundSubtractorGetBackgroundImage(cv::BackgroundSubtractor* 
 
 
 //BackgroundSubtractorKNN
-CVAPI(cv::BackgroundSubtractorKNN*) cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm);
-CVAPI(void) cveBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor);
+CVAPI(cv::BackgroundSubtractorKNN*) cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm, cv::Ptr<cv::BackgroundSubtractorKNN>** sharedPtr);
+CVAPI(void) cveBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor, cv::Ptr<cv::BackgroundSubtractorKNN>** sharedPtr);
 
-CVAPI(cv::DualTVL1OpticalFlow*) cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm);
-CVAPI(void) cveDualTVL1OpticalFlowRelease(cv::DualTVL1OpticalFlow** flow);
+CVAPI(cv::DualTVL1OpticalFlow*) cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm, cv::Ptr<cv::DualTVL1OpticalFlow>** sharedPtr);
+CVAPI(void) cveDualTVL1OpticalFlowRelease(cv::DualTVL1OpticalFlow** flow, cv::Ptr<cv::DualTVL1OpticalFlow>** sharedPtr);
 
 CVAPI(cv::FarnebackOpticalFlow*) cveFarnebackOpticalFlowCreate(
 	int numLevels,
@@ -37,11 +37,12 @@ CVAPI(cv::FarnebackOpticalFlow*) cveFarnebackOpticalFlowCreate(
 	double polySigma,
 	int flags,
 	cv::DenseOpticalFlow** denseOpticalFlow,
-	cv::Algorithm** algorithm);
-CVAPI(void) cveFarnebackOpticalFlowRelease(cv::FarnebackOpticalFlow** flow);
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::FarnebackOpticalFlow>** sharedPtr);
+CVAPI(void) cveFarnebackOpticalFlowRelease(cv::FarnebackOpticalFlow** flow, cv::Ptr<cv::FarnebackOpticalFlow>** sharedPtr);
 
 CVAPI(void) cveDenseOpticalFlowCalc(cv::DenseOpticalFlow* dof, cv::_InputArray* i0, cv::_InputArray* i1, cv::_InputOutputArray* flow);
-CVAPI(void) cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow);
+CVAPI(void) cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr);
 
 CVAPI(void) cveSparseOpticalFlowCalc(
 	cv::SparseOpticalFlow* sof,  
@@ -57,8 +58,9 @@ CVAPI(cv::SparsePyrLKOpticalFlow*) cveSparsePyrLKOpticalFlowCreate(
 	int flags,
 	double minEigThreshold,
 	cv::SparseOpticalFlow** sparseOpticalFlow,
-	cv::Algorithm** algorithm);
-CVAPI(void) cveSparsePyrLKOpticalFlowRelease(cv::SparsePyrLKOpticalFlow** flow);
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::SparsePyrLKOpticalFlow>** sharedPtr);
+CVAPI(void) cveSparsePyrLKOpticalFlowRelease(cv::SparsePyrLKOpticalFlow** flow, cv::Ptr<cv::SparsePyrLKOpticalFlow>** sharedPtr);
 
 
 CVAPI(void) cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags);

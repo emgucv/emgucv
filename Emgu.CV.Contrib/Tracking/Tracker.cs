@@ -21,6 +21,8 @@ namespace Emgu.CV.Tracking
     /// </summary>
     public class TrackerBoosting : Tracker
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a Boosting Tracker
         /// </summary>
@@ -36,7 +38,7 @@ namespace Emgu.CV.Tracking
             int iterationInit = 50, 
             int featureSetNumFeatures = 100*10+50)
         {
-            ContribInvoke.cveTrackerBoostingCreate(numClassifiers, samplerOverlap, samplerSearchFactor, iterationInit, featureSetNumFeatures, ref _trackerPtr);
+            ContribInvoke.cveTrackerBoostingCreate(numClassifiers, samplerOverlap, samplerSearchFactor, iterationInit, featureSetNumFeatures, ref _trackerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerBoostingRelease(ref _ptr);
+                ContribInvoke.cveTrackerBoostingRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
             
         }
@@ -61,6 +63,8 @@ namespace Emgu.CV.Tracking
     /// </summary>
     public class TrackerMedianFlow : Tracker
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>Create a median flow tracker</summary>
         /// <param name="pointsInGrid">Points in grid, use 10 for default.</param>
         /// <param name="winSize">Win size, use (3, 3) for default</param>
@@ -70,7 +74,7 @@ namespace Emgu.CV.Tracking
         /// <param name="maxMedianLengthOfDisplacementDifference">Max median length of displacement difference</param>
         public TrackerMedianFlow(int pointsInGrid, Size winSize, int maxLevel, MCvTermCriteria termCriteria, Size winSizeNCC, double maxMedianLengthOfDisplacementDifference = 10)
         {
-            ContribInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr);
+            ContribInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -79,7 +83,7 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerMedianFlowRelease(ref _ptr);
+                ContribInvoke.cveTrackerMedianFlowRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -91,6 +95,8 @@ namespace Emgu.CV.Tracking
     /// </summary>
     public class TrackerMIL : Tracker
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Creates a MIL Tracker
         /// </summary>
@@ -117,7 +123,9 @@ namespace Emgu.CV.Tracking
                 samplerTrackInRadius,
                 samplerTrackMaxPosNum,
                 samplerTrackMaxNegNum,
-                featureSetNumFeatures, ref _trackerPtr);
+                featureSetNumFeatures, 
+                ref _trackerPtr,
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -126,7 +134,7 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerMILRelease(ref _ptr);
+                ContribInvoke.cveTrackerMILRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -137,12 +145,14 @@ namespace Emgu.CV.Tracking
     /// <remarks>The tracker follows the object from frame to frame. The detector localizes all appearances that have been observed so far and corrects the tracker if necessary. The learning estimates detector's errors and updates it to avoid these errors in the future.</remarks>
     public class TrackerTLD : Tracker
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Creates a TLD tracker
         /// </summary>
         public TrackerTLD()
         {
-            _ptr = ContribInvoke.cveTrackerTLDCreate(ref _trackerPtr);
+            _ptr = ContribInvoke.cveTrackerTLDCreate(ref _trackerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -151,7 +161,7 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerTLDRelease(ref _ptr);
+                ContribInvoke.cveTrackerTLDRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -165,6 +175,8 @@ namespace Emgu.CV.Tracking
     /// </summary>
     public class TrackerKCF : Tracker
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Feature type to be used in the tracking grayscale, colornames, compressed color-names
         /// The modes available now:
@@ -235,7 +247,8 @@ namespace Emgu.CV.Tracking
                 compressedSize,
                 descPca,
                 descNpca,
-                ref _trackerPtr);
+                ref _trackerPtr,
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -244,7 +257,7 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerKCFRelease(ref _ptr);
+                ContribInvoke.cveTrackerKCFRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -255,12 +268,14 @@ namespace Emgu.CV.Tracking
     /// <remarks>Original paper is here: http://davheld.github.io/GOTURN/GOTURN.pdf As long as original authors implementation: https://github.com/davheld/GOTURN#train-the-tracker Implementation of training algorithm is placed in separately here due to 3d-party dependencies: https://github.com/Auron-X/GOTURN_Training_Toolkit GOTURN architecture goturn.prototxt and trained model goturn.caffemodel are accessible on opencv_extra GitHub repository.</remarks>
     public class TrackerGOTURN : Tracker
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a GOTURN tracker
         /// </summary>
         public TrackerGOTURN()
         {
-            _ptr = ContribInvoke.cveTrackerGOTURNCreate(ref _trackerPtr);
+            _ptr = ContribInvoke.cveTrackerGOTURNCreate(ref _trackerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -269,7 +284,7 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerGOTURNRelease(ref _ptr);
+                ContribInvoke.cveTrackerGOTURNRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -280,12 +295,14 @@ namespace Emgu.CV.Tracking
     /// <remarks>note, that this tracker works with grayscale images, if passed bgr ones, they will get converted internally.</remarks>
     public class TrackerMOSSE : Tracker
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a MOSSE tracker
         /// </summary>
         public TrackerMOSSE()
         {
-            _ptr = ContribInvoke.cveTrackerMOSSECreate(ref _trackerPtr);
+            _ptr = ContribInvoke.cveTrackerMOSSECreate(ref _trackerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -294,12 +311,10 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerMOSSERelease(ref _ptr);
+                ContribInvoke.cveTrackerMOSSERelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
-
-
 
 
     /// <summary>
@@ -307,6 +322,8 @@ namespace Emgu.CV.Tracking
     /// </summary>
     public class TrackerCSRT : Tracker
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Creates a CSRT tracker
         /// </summary>
@@ -367,7 +384,8 @@ namespace Emgu.CV.Tracking
                     scaleModelMaxArea,
                     scaleLr,
                     scaleStep,
-                    ref _trackerPtr);
+                    ref _trackerPtr,
+                    ref _sharedPtr);
         }
 
         /// <summary>
@@ -376,7 +394,7 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerCSRTRelease(ref _ptr);
+                ContribInvoke.cveTrackerCSRTRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -446,16 +464,16 @@ namespace Emgu.CV
         //internal static extern void cveTrackerRelease(ref IntPtr tracker);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTrackerMedianFlowCreate(int pointsInGrid, ref Size winSize, int maxLevel, ref MCvTermCriteria termCriteria, ref Size winSizeNCC, double maxMedianLengthOfDisplacementDifference, ref IntPtr tracker);
+        internal static extern IntPtr cveTrackerMedianFlowCreate(int pointsInGrid, ref Size winSize, int maxLevel, ref MCvTermCriteria termCriteria, ref Size winSizeNCC, double maxMedianLengthOfDisplacementDifference, ref IntPtr tracker, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerMedianFlowRelease(ref IntPtr tracker);
+        internal static extern void cveTrackerMedianFlowRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTrackerBoostingCreate(int numClassifiers, float samplerOverlap, float samplerSearchFactor, int iterationInit, int featureSetNumFeatures, ref IntPtr tracker);
+        internal static extern IntPtr cveTrackerBoostingCreate(int numClassifiers, float samplerOverlap, float samplerSearchFactor, int iterationInit, int featureSetNumFeatures, ref IntPtr tracker, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerBoostingRelease(ref IntPtr tracker);
+        internal static extern void cveTrackerBoostingRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveTrackerMILCreate(
@@ -466,20 +484,21 @@ namespace Emgu.CV
             int samplerTrackMaxPosNum,
             int samplerTrackMaxNegNum,
             int featureSetNumFeatures,
-            ref IntPtr tracker);
+            ref IntPtr tracker,
+            ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerMILRelease(ref IntPtr tracker);
+        internal static extern void cveTrackerMILRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTrackerTLDCreate(ref IntPtr tracker);
+        internal static extern IntPtr cveTrackerTLDCreate(ref IntPtr tracker, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerTLDRelease(ref IntPtr tracker);
+        internal static extern void cveTrackerTLDRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTrackerKCFCreate(ref IntPtr tracker);
+        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        //internal static extern IntPtr cveTrackerKCFCreate(ref IntPtr tracker);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveTrackerKCFCreate(
-            float detect_thresh,
+            float detectThresh,
             float sigma,
             float lambda,
             float interpFactor,
@@ -497,19 +516,20 @@ namespace Emgu.CV
             int compressedSize,
             Tracking.TrackerKCF.Mode descPca,
             Tracking.TrackerKCF.Mode descNpca,
-            ref IntPtr tracker);
+            ref IntPtr tracker,
+            ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerKCFRelease(ref IntPtr tracker);
+        internal static extern void cveTrackerKCFRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTrackerGOTURNCreate(ref IntPtr tracker);
+        internal static extern IntPtr cveTrackerGOTURNCreate(ref IntPtr tracker, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerGOTURNRelease(ref IntPtr tracker);
+        internal static extern void cveTrackerGOTURNRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTrackerMOSSECreate(ref IntPtr tracker);
+        internal static extern IntPtr cveTrackerMOSSECreate(ref IntPtr tracker, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerMOSSERelease(ref IntPtr tracker);
+        internal static extern void cveTrackerMOSSERelease(ref IntPtr tracker, ref IntPtr sharedPTr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveTrackerCSRTCreate(
@@ -545,8 +565,9 @@ namespace Emgu.CV
             float scaleModelMaxArea,
             float scaleLr,
             float scaleStep,
-            ref IntPtr tracker);
+            ref IntPtr tracker,
+            ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerCSRTRelease(ref IntPtr tracker);
+        internal static extern void cveTrackerCSRTRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
     }
 }

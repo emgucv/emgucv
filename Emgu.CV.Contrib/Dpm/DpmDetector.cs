@@ -13,13 +13,14 @@ namespace Emgu.CV.Dpm
     /// </summary>
     public class DpmDetector : UnmanagedObject
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// create a new dpm detector with the specified files and classes
         /// </summary>
         /// <param name="files"></param>
         /// <param name="classes"></param>
-        /// <returns></returns>
-        public static DpmDetector Create(string[] files, string[] classes)
+        public DpmDetector(string[] files, string[] classes)
         {
             CvString[] cfiles = new CvString[files.Length];
             for (int i = 0; i < files.Length; i++)
@@ -32,20 +33,20 @@ namespace Emgu.CV.Dpm
             IntPtr dpm;
             using (var vfiles = new Util.VectorOfCvString(cfiles))
             using (var vclasses = new Util.VectorOfCvString(cclasses))
-                dpm = DpmInvoke.cveDPMDetectorCreate(vfiles, vclasses);
+                dpm = DpmInvoke.cveDPMDetectorCreate(vfiles, vclasses, ref _sharedPtr);
 
             foreach (var c in cfiles)
                 c.Dispose();
             foreach (var c in cclasses)
                 c.Dispose();
 
-            return new DpmDetector(dpm);
         }
 
+        /*
         private DpmDetector(IntPtr ptr)
         {
             _ptr = ptr;
-        }
+        }*/
 
         /// <summary>
         /// Is the detector empty?
@@ -102,7 +103,7 @@ namespace Emgu.CV.Dpm
         {
             if (_ptr != IntPtr.Zero)
             {
-                DpmInvoke.cveDPMDetectorRelease(ref _ptr);
+                DpmInvoke.cveDPMDetectorRelease(ref _ptr, ref _sharedPtr);
             }
         }
     }
@@ -110,7 +111,7 @@ namespace Emgu.CV.Dpm
     public static partial class DpmInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveDPMDetectorCreate(IntPtr files, IntPtr classes);
+        internal static extern IntPtr cveDPMDetectorCreate(IntPtr files, IntPtr classes, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDPMDetectorDetect(IntPtr dpm, IntPtr mat, IntPtr rects, IntPtr scores, IntPtr classIds);
@@ -126,6 +127,6 @@ namespace Emgu.CV.Dpm
         internal static extern bool cveDPMDetectorIsEmpty(IntPtr dpm);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDPMDetectorRelease(ref IntPtr dpm);
+        internal static extern void cveDPMDetectorRelease(ref IntPtr dpm, ref IntPtr sharedPtr);
     }
 }

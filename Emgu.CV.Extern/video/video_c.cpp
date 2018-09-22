@@ -7,67 +7,70 @@
 #include "video_c.h"
 
 //BackgroundSubtractorMOG2
-cv::BackgroundSubtractorMOG2* cveBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm)
+cv::BackgroundSubtractorMOG2* cveBackgroundSubtractorMOG2Create(int history, float varThreshold, bool bShadowDetection, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm, cv::Ptr<cv::BackgroundSubtractorMOG2>** sharedPtr)
 {
-   cv::Ptr<cv::BackgroundSubtractorMOG2> ptr =  cv::createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
-   ptr.addref();
-   cv::BackgroundSubtractorMOG2* bs = ptr.get();
-   *bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
-   *algorithm = dynamic_cast<cv::Algorithm*>(bs);
-   return bs;
+	cv::Ptr<cv::BackgroundSubtractorMOG2> ptr = cv::createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
+	*sharedPtr = new cv::Ptr<cv::BackgroundSubtractorMOG2>(ptr);
+	cv::BackgroundSubtractorMOG2* bs = ptr.get();
+	*bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+	*algorithm = dynamic_cast<cv::Algorithm*>(bs);
+	return bs;
 }
 
-void cveBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor)
+void cveBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor, cv::Ptr<cv::BackgroundSubtractorMOG2>** sharedPtr)
 {
-   delete *bgSubtractor;
-   *bgSubtractor = 0;
+	delete *sharedPtr;
+	*bgSubtractor = 0;
+	*sharedPtr = 0;
 }
 
 //BackgroundSubtractor
 void cveBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate)
 {
-   //cv::Mat imgMat = cv::cvarrToMat(image);
-   //cv::Mat fgMat = cv::cvarrToMat(fgmask);
-   bgSubtractor->apply(*image, *fgmask, learningRate);
+	//cv::Mat imgMat = cv::cvarrToMat(image);
+	//cv::Mat fgMat = cv::cvarrToMat(fgmask);
+	bgSubtractor->apply(*image, *fgmask, learningRate);
 }
 
 void cveBackgroundSubtractorGetBackgroundImage(cv::BackgroundSubtractor* bgSubtractor, cv::_OutputArray* backgroundImage)
 {
-   bgSubtractor->getBackgroundImage(*backgroundImage);
+	bgSubtractor->getBackgroundImage(*backgroundImage);
 }
 
 //BackgroundSubtractorKNN
-cv::BackgroundSubtractorKNN* cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm)
+cv::BackgroundSubtractorKNN* cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm, cv::Ptr<cv::BackgroundSubtractorKNN>** sharedPtr)
 {
-   cv::Ptr<cv::BackgroundSubtractorKNN> ptr = cv::createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows);
-  
-   ptr.addref();
+	cv::Ptr<cv::BackgroundSubtractorKNN> ptr = cv::createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows);
 
-   cv::BackgroundSubtractorKNN* bs = ptr.get();
-   *bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
-   *algorithm = dynamic_cast<cv::Algorithm*>(bs);
-   return bs;
+	*sharedPtr = new cv::Ptr<cv::BackgroundSubtractorKNN>(ptr);
+
+	cv::BackgroundSubtractorKNN* bs = ptr.get();
+	*bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+	*algorithm = dynamic_cast<cv::Algorithm*>(bs);
+	return bs;
 }
-void cveBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor)
+void cveBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor, cv::Ptr<cv::BackgroundSubtractorKNN>** sharedPtr)
 {
-   delete *bgSubtractor;
-   *bgSubtractor = 0;
+	delete *sharedPtr;
+	*bgSubtractor = 0;
+	*sharedPtr = 0;
 }
 
 
-cv::DualTVL1OpticalFlow* cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm)
+cv::DualTVL1OpticalFlow* cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm, cv::Ptr<cv::DualTVL1OpticalFlow>** sharedPtr)
 {
-   cv::Ptr<cv::DualTVL1OpticalFlow> dof = cv::createOptFlow_DualTVL1();
-   dof.addref();
-   cv::DualTVL1OpticalFlow* ptr = dof.get();
-   *denseOpticalFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr);
-   *algorithm = dynamic_cast<cv::Algorithm*>(ptr);
-   return ptr;
+	cv::Ptr<cv::DualTVL1OpticalFlow> dof = cv::createOptFlow_DualTVL1();
+	*sharedPtr = new cv::Ptr<cv::DualTVL1OpticalFlow>(dof);
+	cv::DualTVL1OpticalFlow* ptr = dof.get();
+	*denseOpticalFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr);
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+	return ptr;
 }
-void cveDualTVL1OpticalFlowRelease(cv::DualTVL1OpticalFlow** flow)
+void cveDualTVL1OpticalFlowRelease(cv::DualTVL1OpticalFlow** flow, cv::Ptr<cv::DualTVL1OpticalFlow>** sharedPtr)
 {
-   delete *flow;
-   *flow = 0;
+	delete *sharedPtr;
+	*flow = 0;
+	*sharedPtr = 0;
 }
 
 cv::FarnebackOpticalFlow* cveFarnebackOpticalFlowCreate(
@@ -79,28 +82,30 @@ cv::FarnebackOpticalFlow* cveFarnebackOpticalFlowCreate(
 	int polyN,
 	double polySigma,
 	int flags,
-	cv::DenseOpticalFlow** denseOpticalFlow, 
-	cv::Algorithm** algorithm)
+	cv::DenseOpticalFlow** denseOpticalFlow,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::FarnebackOpticalFlow>** sharedPtr)
 {
 	cv::Ptr<cv::FarnebackOpticalFlow> dof = cv::FarnebackOpticalFlow::create(
-	numLevels, pyrScale, fastPyramids, winSize, numIters, polyN, polySigma, flags
+		numLevels, pyrScale, fastPyramids, winSize, numIters, polyN, polySigma, flags
 	);
-	dof.addref();
+	*sharedPtr = new cv::Ptr<cv::FarnebackOpticalFlow>(dof);
 	cv::FarnebackOpticalFlow* ptr = dof.get();
 	*denseOpticalFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr);
 	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
 	return ptr;
 }
-void cveFarnebackOpticalFlowRelease(cv::FarnebackOpticalFlow** flow)
+void cveFarnebackOpticalFlowRelease(cv::FarnebackOpticalFlow** flow, cv::Ptr<cv::FarnebackOpticalFlow>** sharedPtr)
 {
-	delete *flow;
+	delete *sharedPtr;
 	*flow = 0;
+	*sharedPtr = 0;
 }
 
 
 void cveDenseOpticalFlowCalc(cv::DenseOpticalFlow* dof, cv::_InputArray* i0, cv::_InputArray* i1, cv::_InputOutputArray* flow)
 {
-   dof->calc(*i0, *i1, *flow);
+	dof->calc(*i0, *i1, *flow);
 }
 
 void cveSparseOpticalFlowCalc(
@@ -110,7 +115,7 @@ void cveSparseOpticalFlowCalc(
 	cv::_OutputArray* status,
 	cv::_OutputArray* err)
 {
-	sof->calc(*prevImg, *nextImg, *prevPts, *nextPts, *status, err ? *err : dynamic_cast<cv::OutputArray>( cv::noArray() ) );
+	sof->calc(*prevImg, *nextImg, *prevPts, *nextPts, *status, err ? *err : dynamic_cast<cv::OutputArray>(cv::noArray()));
 }
 
 cv::SparsePyrLKOpticalFlow* cveSparsePyrLKOpticalFlowCreate(
@@ -120,53 +125,56 @@ cv::SparsePyrLKOpticalFlow* cveSparsePyrLKOpticalFlowCreate(
 	int flags,
 	double minEigThreshold,
 	cv::SparseOpticalFlow** sparseOpticalFlow,
-	cv::Algorithm** algorithm)
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::SparsePyrLKOpticalFlow>** sharedPtr)
 {
 	cv::Ptr<cv::SparsePyrLKOpticalFlow> sof = cv::SparsePyrLKOpticalFlow::create(
 		*winSize, maxLevel, *crit, flags, minEigThreshold
 	);
-	sof.addref();
+	*sharedPtr = new cv::Ptr<cv::SparsePyrLKOpticalFlow>(sof);
 	cv::SparsePyrLKOpticalFlow* ptr = sof.get();
 	*sparseOpticalFlow = dynamic_cast<cv::SparseOpticalFlow*>(ptr);
 	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
 	return ptr;
 }
-void cveSparsePyrLKOpticalFlowRelease(cv::SparsePyrLKOpticalFlow** flow)
+void cveSparsePyrLKOpticalFlowRelease(cv::SparsePyrLKOpticalFlow** flow, cv::Ptr<cv::SparsePyrLKOpticalFlow>** sharedPtr)
 {
-	delete *flow;
+	delete *sharedPtr;
 	*flow = 0;
+	*sharedPtr = 0;
 }
 
-void cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow)
+void cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr)
 {
-	delete *flow;
+	delete *sharedPtr;
 	*flow = 0;
+	*sharedPtr = 0;
 }
 
 void cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags)
 {
-   cv::calcOpticalFlowFarneback(*prev, *next, *flow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+	cv::calcOpticalFlowFarneback(*prev, *next, *flow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
 }
 
 void cveCalcOpticalFlowPyrLK(cv::_InputArray* prevImg, cv::_InputArray* nextImg, cv::_InputArray* prevPts, cv::_InputOutputArray* nextPts, cv::_OutputArray* status, cv::_OutputArray* err, CvSize* winSize, int maxLevel, CvTermCriteria* criteria, int flags, double minEigenThreshold)
 {
-   cv::calcOpticalFlowPyrLK(*prevImg, *nextImg, *prevPts, *nextPts, *status, *err, *winSize, maxLevel, *criteria, flags, minEigenThreshold);
+	cv::calcOpticalFlowPyrLK(*prevImg, *nextImg, *prevPts, *nextPts, *status, *err, *winSize, maxLevel, *criteria, flags, minEigenThreshold);
 }
 
-void cveCamShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, CvBox2D* result)
+void cveCamShift(cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, CvBox2D* result)
 {
-   cv::Rect rect = *window;
-   cv::RotatedRect rr = cv::CamShift(*probImage, rect, *criteria);
-   *window = rect;
-   *result = rr;
+	cv::Rect rect = *window;
+	cv::RotatedRect rr = cv::CamShift(*probImage, rect, *criteria);
+	*window = rect;
+	*result = rr;
 }
 
-int cveMeanShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria )
+int cveMeanShift(cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria)
 {
-   cv::Rect rect = *window;
-   int result = cv::meanShift(*probImage, rect, *criteria);
-   *window = rect;
-   return result;
+	cv::Rect rect = *window;
+	int result = cv::meanShift(*probImage, rect, *criteria);
+	*window = rect;
+	return result;
 }
 
 int cveBuildOpticalFlowPyramid(
@@ -184,8 +192,8 @@ int cveBuildOpticalFlowPyramid(
 
 void cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool fullAffine, cv::Mat* result)
 {
-   cv::Mat r = cv::estimateRigidTransform(*src, *dst, fullAffine);
-   cv::swap(r, *result);
+	cv::Mat r = cv::estimateRigidTransform(*src, *dst, fullAffine);
+	cv::swap(r, *result);
 }
 
 double cveFindTransformECC(
@@ -204,21 +212,21 @@ double cveFindTransformECC(
 
 cv::KalmanFilter* cveKalmanFilterCreate(int dynamParams, int measureParams, int controlParams, int type)
 {
-   return new cv::KalmanFilter(dynamParams, measureParams, controlParams, type);
+	return new cv::KalmanFilter(dynamParams, measureParams, controlParams, type);
 }
 
 void cveKalmanFilterRelease(cv::KalmanFilter** filter)
 {
-   delete *filter;
-   *filter = 0;
+	delete *filter;
+	*filter = 0;
 }
 
 const cv::Mat* cveKalmanFilterPredict(cv::KalmanFilter* kalman, cv::Mat* control)
 {
-   return &(kalman->predict(control ? *control : cv::Mat()));
+	return &(kalman->predict(control ? *control : cv::Mat()));
 }
 
 const cv::Mat* cveKalmanFilterCorrect(cv::KalmanFilter* kalman, cv::Mat* measurement)
 {
-   return &(kalman->correct(*measurement));
+	return &(kalman->correct(*measurement));
 }

@@ -33,27 +33,28 @@ namespace Emgu.CV
          using (InputArray iaLeft = left.GetInputArray())
          using (InputArray iaRight = right.GetInputArray())
          using (OutputArray oaDisparity = disparity.GetOutputArray())
-            CvStereoMatcherCompute(matcher.StereoMatcherPtr, iaLeft, iaRight, oaDisparity);
+            cveStereoMatcherCompute(matcher.StereoMatcherPtr, iaLeft, iaRight, oaDisparity);
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvStereoMatcherCompute(IntPtr disparitySolver, IntPtr left, IntPtr right, IntPtr disparity);
+      internal extern static void cveStereoMatcherCompute(IntPtr disparitySolver, IntPtr left, IntPtr right, IntPtr disparity);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvStereoMatcherRelease(ref IntPtr matcher);
+      internal extern static void cveStereoMatcherRelease(ref IntPtr matcher, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvStereoBMCreate(int numberOfDisparities, int blockSize);
+      internal extern static IntPtr cveStereoBMCreate(int numberOfDisparities, int blockSize, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr CvStereoSGBMCreate(
+      internal extern static IntPtr cveStereoSGBMCreate(
          int minDisparity, int numDisparities, int blockSize,
          int P1, int P2, int disp12MaxDiff,
          int preFilterCap, int uniquenessRatio,
          int speckleWindowSize, int speckleRange,
-         StereoSGBM.Mode mode, ref IntPtr stereoMatcher);
+         StereoSGBM.Mode mode, ref IntPtr stereoMatcher,
+         ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void CvStereoSGBMRelease(ref IntPtr obj);
+      internal extern static void cveStereoSGBMRelease(ref IntPtr obj, ref IntPtr sharedPtr);
    }
 }

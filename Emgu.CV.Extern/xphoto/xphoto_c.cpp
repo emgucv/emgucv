@@ -11,44 +11,47 @@ void cveWhiteBalancerBalanceWhite(cv::xphoto::WhiteBalancer* whiteBalancer, cv::
 	whiteBalancer->balanceWhite(*src, *dst);
 }
 
-cv::xphoto::SimpleWB* cveSimpleWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer)
+cv::xphoto::SimpleWB* cveSimpleWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::SimpleWB>** sharedPtr)
 {
 	cv::Ptr<cv::xphoto::SimpleWB> ptr = cv::xphoto::createSimpleWB();
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xphoto::SimpleWB>(ptr);
 	*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
 	return ptr.get();
 }
-void cveSimpleWBRelease(cv::xphoto::SimpleWB** whiteBalancer)
+void cveSimpleWBRelease(cv::xphoto::SimpleWB** whiteBalancer, cv::Ptr<cv::xphoto::SimpleWB>** sharedPtr)
 {
-	delete *whiteBalancer;
+	delete *sharedPtr;
 	*whiteBalancer = 0;
+	*sharedPtr = 0;
 }
 
-cv::xphoto::GrayworldWB* cveGrayworldWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer)
+cv::xphoto::GrayworldWB* cveGrayworldWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::GrayworldWB>** sharedPtr)
 {
 	cv::Ptr<cv::xphoto::GrayworldWB> ptr = cv::xphoto::createGrayworldWB();
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xphoto::GrayworldWB>(ptr);
 	*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
 	return ptr.get();
 }
-void cveGrayworldWBRelease(cv::xphoto::GrayworldWB** whiteBalancer)
+void cveGrayworldWBRelease(cv::xphoto::GrayworldWB** whiteBalancer, cv::Ptr<cv::xphoto::GrayworldWB>** sharedPtr)
 {
-	delete *whiteBalancer;
+	delete *sharedPtr;
 	*whiteBalancer = 0;
+	*sharedPtr = 0;
 }
 
-cv::xphoto::LearningBasedWB* cveLearningBasedWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer)
+cv::xphoto::LearningBasedWB* cveLearningBasedWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::LearningBasedWB>** sharedPtr)
 {
 	cv::Ptr<cv::xphoto::LearningBasedWB> ptr = cv::xphoto::createLearningBasedWB();
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xphoto::LearningBasedWB>(ptr);
 	*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
 	return ptr.get();
 }
 
-void cveLearningBasedWBRelease(cv::xphoto::LearningBasedWB** whiteBalancer)
+void cveLearningBasedWBRelease(cv::xphoto::LearningBasedWB** whiteBalancer, cv::Ptr<cv::xphoto::LearningBasedWB>** sharedPtr)
 {
-	delete *whiteBalancer;
+	delete *sharedPtr;
 	*whiteBalancer = 0;
+	*sharedPtr = 0;
 }
 
 void cveApplyChannelGains(cv::_InputArray* src, cv::_OutputArray* dst, float gainB, float gainG, float gainR)

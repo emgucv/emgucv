@@ -14,32 +14,32 @@
 #include "opencv2/face.hpp"
 
 //FaceRecognizer
-CVAPI(cv::face::FaceRecognizer*) cveEigenFaceRecognizerCreate(int numComponents, double threshold);   
-CVAPI(cv::face::FaceRecognizer*) cveFisherFaceRecognizerCreate(int numComponents, double threshold);
-CVAPI(cv::face::FaceRecognizer*) cveLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold);
+CVAPI(cv::face::FaceRecognizer*) cveEigenFaceRecognizerCreate(int numComponents, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr);
+CVAPI(cv::face::FaceRecognizer*) cveFisherFaceRecognizerCreate(int numComponents, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr);
+CVAPI(cv::face::FaceRecognizer*) cveLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr);
 CVAPI(void) cveFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
 CVAPI(void) cveFaceRecognizerUpdate(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
 CVAPI(void) cveFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* distance);
 CVAPI(void) cveFaceRecognizerWrite(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
 CVAPI(void) cveFaceRecognizerRead(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
-CVAPI(void) cveFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer);
+CVAPI(void) cveFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr);
 
-CVAPI(cv::face::BIF*) cveBIFCreate(int numBands, int numRotations);
+CVAPI(cv::face::BIF*) cveBIFCreate(int numBands, int numRotations, cv::Ptr<cv::face::BIF>** sharedPtr);
 CVAPI(void) cveBIFCompute(cv::face::BIF* bif, cv::_InputArray* image, cv::_OutputArray* features);
-CVAPI(void) cveBIFRelease(cv::face::BIF** bif);
+CVAPI(void) cveBIFRelease(cv::face::BIF** bif, cv::Ptr<cv::face::BIF>** sharedPtr);
 
 
 CVAPI(cv::face::FacemarkAAM::Params*) cveFacemarkAAMParamsCreate();
 CVAPI(void) cveFacemarkAAMParamsRelease(cv::face::FacemarkAAM::Params** params);
 
-CVAPI(cv::face::FacemarkAAM*) cveFacemarkAAMCreate(cv::face::FacemarkAAM::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm);
-CVAPI(void) cveFacemarkAAMRelease(cv::face::FacemarkAAM** facemark);
+CVAPI(cv::face::FacemarkAAM*) cveFacemarkAAMCreate(cv::face::FacemarkAAM::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm, cv::Ptr<cv::face::FacemarkAAM>** sharedPtr);
+CVAPI(void) cveFacemarkAAMRelease(cv::face::FacemarkAAM** facemark, cv::Ptr<cv::face::FacemarkAAM>** sharedPtr);
 
 CVAPI(cv::face::FacemarkLBF::Params*) cveFacemarkLBFParamsCreate();
 CVAPI(void) cveFacemarkLBFParamsRelease(cv::face::FacemarkLBF::Params** params);
 
-CVAPI(cv::face::FacemarkLBF*) cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm);
-CVAPI(void) cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark);
+CVAPI(cv::face::FacemarkLBF*) cveFacemarkLBFCreate(cv::face::FacemarkLBF::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm, cv::Ptr<cv::face::FacemarkLBF>** sharedPtr);
+CVAPI(void) cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark, cv::Ptr<cv::face::FacemarkLBF>** sharedPtr);
 
 /*
 CVAPI(cv::face::FacemarkKazemi::Params*) cveFacemarkKazemiParamsCreate();

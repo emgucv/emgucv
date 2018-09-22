@@ -6,46 +6,36 @@
 
 #include "aruco_c.h"
 
-cv::aruco::Dictionary* cveArucoGetPredefinedDictionary(int name)
+cv::aruco::Dictionary* cveArucoGetPredefinedDictionary(int name, cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
 	cv::Ptr<cv::aruco::Dictionary> ptr = cv::aruco::getPredefinedDictionary(static_cast<cv::aruco::PREDEFINED_DICTIONARY_NAME>(name));
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
 	return ptr.get();
 }
 
-cv::aruco::Dictionary* cveArucoDictionaryCreate1(int nMarkers, int markerSize)
+cv::aruco::Dictionary* cveArucoDictionaryCreate1(int nMarkers, int markerSize, cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
 	cv::Ptr<cv::aruco::Dictionary> ptr = cv::aruco::Dictionary::create(nMarkers, markerSize);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
 	return ptr.get();
 }
-cv::aruco::Dictionary* cveArucoDictionaryCreate2(int nMarkers, int markerSize, cv::aruco::Dictionary* baseDictionary)
+cv::aruco::Dictionary* cveArucoDictionaryCreate2(int nMarkers, int markerSize, cv::Ptr<cv::aruco::Dictionary>* baseDictionary, cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-	cv::Ptr<cv::aruco::Dictionary> baseDict;
-	if (baseDictionary)
-	{
-		baseDict = cv::Ptr<cv::aruco::Dictionary>( baseDictionary );
-		baseDict.addref();
-	} else
-	{
-		baseDict = cv::makePtr<cv::aruco::Dictionary>();
-	}
-
-	cv::Ptr<cv::aruco::Dictionary> ptr = cv::aruco::Dictionary::create(nMarkers, markerSize, baseDict);
-	ptr.addref();
+	cv::Ptr<cv::aruco::Dictionary> ptr = cv::aruco::Dictionary::create(nMarkers, markerSize, baseDictionary? *baseDictionary : cv::makePtr<cv::aruco::Dictionary>());
+	*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
 	return ptr.get();
 }
-void cveArucoDictionaryRelease(cv::aruco::Dictionary** dict)
+void cveArucoDictionaryRelease(cv::aruco::Dictionary** dict, cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-	delete *dict;
+	delete *sharedPtr;
 	*dict = 0;
+	*sharedPtr = 0;
 }
 
 void cveArucoDrawMarker(cv::aruco::Dictionary* dictionary, int id, int sidePixels, cv::_OutputArray* img, int borderBits)
 {
-	cv::Ptr<cv::aruco::Dictionary> arucoDict(dictionary);
-	arucoDict.addref();
-    cv::aruco::drawMarker(arucoDict, id, sidePixels, *img, borderBits);
+	cv::Ptr<cv::aruco::Dictionary> dictPtr(dictionary, [](cv::aruco::Dictionary*) {});
+    cv::aruco::drawMarker(dictPtr, id, sidePixels, *img, borderBits);
 }
 
 void cveArucoDrawAxis(cv::_InputOutputArray* image, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* rvec, cv::_InputArray* tvec, float length)
@@ -58,11 +48,11 @@ void cveArucoDetectMarkers(
    cv::_OutputArray* ids, cv::aruco::DetectorParameters* parameters,
    cv::_OutputArray* rejectedImgPoints)
 {
-	cv::Ptr<cv::aruco::Dictionary> arucoDict(dictionary);
-	arucoDict.addref();
-	cv::Ptr<cv::aruco::DetectorParameters> arucoParam(parameters);
-	arucoParam.addref();
-    cv::aruco::detectMarkers(*image, arucoDict, *corners, *ids, arucoParam, rejectedImgPoints ? *rejectedImgPoints : (cv::OutputArrayOfArrays) cv::noArray());
+	cv::Ptr<cv::aruco::DetectorParameters> arucoParam = cv::aruco::DetectorParameters::create();
+	if (parameters)
+		memcpy(arucoParam.get(), parameters, sizeof(cv::aruco::DetectorParameters));
+	cv::Ptr<cv::aruco::Dictionary> dictPtr(dictionary, [](cv::aruco::Dictionary*) {});
+    cv::aruco::detectMarkers(*image, dictPtr, *corners, *ids, arucoParam, rejectedImgPoints ? *rejectedImgPoints : (cv::OutputArrayOfArrays) cv::noArray());
 }
 
 void cveArucoEstimatePoseSingleMarkers(cv::_InputArray* corners, float markerLength,
@@ -74,13 +64,12 @@ void cveArucoEstimatePoseSingleMarkers(cv::_InputArray* corners, float markerLen
 
 cv::aruco::GridBoard* cveArucoGridBoardCreate(
    int markersX, int markersY, float markerLength, float markerSeparation,
-   cv::aruco::Dictionary* dictionary, int firstMarker, cv::aruco::Board** boardPtr)
+   cv::aruco::Dictionary* dictionary, int firstMarker, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
 {
-	cv::Ptr<cv::aruco::Dictionary> arucoDict( dictionary );
-	arucoDict.addref();
-	cv::Ptr<cv::aruco::GridBoard> ptr = cv::aruco::GridBoard::create(markersX, markersY, markerLength, markerSeparation, arucoDict, firstMarker);
-	ptr.addref();
+	cv::Ptr<cv::aruco::Dictionary> dictPtr(dictionary, [](cv::aruco::Dictionary*) {});
+	cv::Ptr<cv::aruco::GridBoard> ptr = cv::aruco::GridBoard::create(markersX, markersY, markerLength, markerSeparation, dictPtr, firstMarker);
 	*boardPtr = dynamic_cast<cv::aruco::Board*>(ptr.get());
+	*sharedPtr = new cv::Ptr<cv::aruco::GridBoard>(ptr);
 	return ptr.get();
 }
 
@@ -89,32 +78,32 @@ void cveArucoGridBoardDraw(cv::aruco::GridBoard* gridBoard, CvSize* outSize, cv:
    gridBoard->draw(*outSize, *img, marginSize, borderBits);
 }
 
-void cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard)
+void cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard, cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
 {
-   delete * gridBoard;
+   delete *sharedPtr;
    *gridBoard = 0;
+   *sharedPtr = 0;
 }
 
 cv::aruco::CharucoBoard* cveCharucoBoardCreate(
-   int squaresX, int squaresY, float squareLength, float markerLength,
-   cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr)
+    int squaresX, int squaresY, float squareLength, float markerLength,
+	cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr)
 {
-	cv::Ptr<cv::aruco::Dictionary> dictPtr( dictionary );
-	dictPtr.addref();
+	cv::Ptr<cv::aruco::Dictionary> dictPtr(dictionary, [](cv::aruco::Dictionary*) {});
 	cv::Ptr<cv::aruco::CharucoBoard> ptr = cv::aruco::CharucoBoard::create(squaresX, squaresY, squareLength, markerLength, dictPtr);
-	
-	ptr.addref();
 	*boardPtr = dynamic_cast<cv::aruco::Board*>(ptr.get());
+	*sharedPtr = new cv::Ptr<cv::aruco::CharucoBoard>(ptr);
 	return ptr.get();
 }
 void cveCharucoBoardDraw(cv::aruco::CharucoBoard* charucoBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits)
 {
    charucoBoard->draw(*outSize, *img, marginSize, borderBits);
 }
-void cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard)
+void cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr)
 {
-   delete *charucoBoard;
+   delete *sharedPtr;
    *charucoBoard = 0;
+   *sharedPtr = 0;
 }
 
 
@@ -126,22 +115,19 @@ void cveArucoRefineDetectedMarkers(
    float minRepDistance, float errorCorrectionRate, bool checkAllOrders,
    cv::_OutputArray* recoveredIdxs, cv::aruco::DetectorParameters* parameters)
 {
-	cv::Ptr<cv::aruco::Board> boardPtr ( board );
-	boardPtr.addref();
-	cv::Ptr<cv::aruco::DetectorParameters> detectorParametersPtr = cv::aruco::DetectorParameters::create();
-	
+	cv::Ptr<cv::aruco::DetectorParameters> detectorParametersPtr = cv::aruco::DetectorParameters::create();	
 	if (parameters)
-	{
-		detectorParametersPtr = cv::Ptr<cv::aruco::DetectorParameters>( parameters );
-		detectorParametersPtr.addref();
-	}
-   cv::aruco::refineDetectedMarkers(
-      *image, boardPtr, *detectedCorners, *detectedIds, *rejectedCorners,
-      cameraMatrix ? *cameraMatrix : static_cast<cv::InputArray>(cv::noArray()),
-      distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
-      minRepDistance, errorCorrectionRate, checkAllOrders,
-      recoveredIdxs ? *recoveredIdxs : static_cast<cv::OutputArray>(cv::noArray()),
-      detectorParametersPtr);
+		memcpy(detectorParametersPtr.get(), parameters, sizeof(cv::aruco::DetectorParameters));
+
+	cv::Ptr<cv::aruco::Board> boardPtr(board, [](cv::aruco::Board*) {});
+
+	cv::aruco::refineDetectedMarkers(
+	  *image, boardPtr, *detectedCorners, *detectedIds, *rejectedCorners,
+	  cameraMatrix ? *cameraMatrix : static_cast<cv::InputArray>(cv::noArray()),
+	  distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
+	  minRepDistance, errorCorrectionRate, checkAllOrders,
+	  recoveredIdxs ? *recoveredIdxs : static_cast<cv::OutputArray>(cv::noArray()),
+	  detectorParametersPtr);
 }
 
 void cveArucoDrawDetectedMarkers(
@@ -157,10 +143,9 @@ double cveArucoCalibrateCameraAruco(
    cv::_OutputArray* rvecs, cv::_OutputArray* tvecs, int flags,
    CvTermCriteria* criteria)
 {
-	cv::Ptr<cv::aruco::Board> boardPtr ( board );
-	boardPtr.addref();
+	cv::Ptr<cv::aruco::Board> boardPtr ( board, [](cv::aruco::Board*) {});
 
-   return cv::aruco::calibrateCameraAruco(*corners, *ids, *counter, boardPtr, *imageSize,
+	return cv::aruco::calibrateCameraAruco(*corners, *ids, *counter, boardPtr, *imageSize,
       *cameraMatrix, *distCoeffs, rvecs ? *rvecs : (cv::OutputArrayOfArrays) cv::noArray(),
       tvecs ? *tvecs : (cv::OutputArrayOfArrays) cv::noArray(), flags, *criteria);
 }
@@ -182,8 +167,8 @@ int cveArucoInterpolateCornersCharuco(
 	cv::_InputArray* distCoeffs,
 	int minMarkers)
 {
-	cv::Ptr<cv::aruco::CharucoBoard> boardPtr ( board );
-	boardPtr.addref();
+	cv::Ptr<cv::aruco::CharucoBoard> boardPtr ( board, [](cv::aruco::CharucoBoard*) {} );
+
 	return cv::aruco::interpolateCornersCharuco(
 		*markerCorners, *markerIds, *image,
 		boardPtr,
@@ -216,8 +201,7 @@ bool cveArucoEstimatePoseCharucoBoard(
 	cv::_OutputArray* tvec,
 	bool useExtrinsicGuess)
 {
-	cv::Ptr<cv::aruco::CharucoBoard> boardPtr ( board );
-	boardPtr.addref();
+	cv::Ptr<cv::aruco::CharucoBoard> boardPtr ( board , [] (cv::aruco::CharucoBoard*) {} );
 	return cv::aruco::estimatePoseCharucoBoard(
 		*charucoCorners,
 		*charucoIds,
@@ -264,8 +248,7 @@ void cveArucoDrawCharucoDiamond(
 	int marginSize,
 	int borderBits)
 {
-	cv::Ptr<cv::aruco::Dictionary> dictPtr ( dictionary );
-	dictPtr.addref();
+	cv::Ptr<cv::aruco::Dictionary> dictPtr ( dictionary, [] (cv::aruco::Dictionary*) {} );
 	cv::Vec4i idsVec;
 	ids->copyTo(idsVec);
 	cv::aruco::drawCharucoDiamond(dictPtr, idsVec, squareLength, markerLength, *img, marginSize, borderBits);

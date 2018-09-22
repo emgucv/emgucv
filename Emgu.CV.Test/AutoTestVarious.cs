@@ -3610,7 +3610,7 @@ namespace Emgu.CV.Test
         public void TestDPM()
         {
             Mat m = EmguAssert.LoadMat("pedestrian.png");
-            DpmDetector detector = DpmDetector.Create(new String[] { "inriaperson.xml" }, new string[] { "person" });
+            DpmDetector detector = new DpmDetector(new String[] { "inriaperson.xml" }, new string[] { "person" });
             ObjectDetection[] result = detector.Detect(m);
 
         }

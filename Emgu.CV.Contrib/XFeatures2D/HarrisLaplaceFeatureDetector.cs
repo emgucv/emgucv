@@ -21,6 +21,8 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class HarrisLaplaceFeatureDetector : Feature2D
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a HarrisLaplaceFeatureDetector
         /// </summary>
@@ -41,7 +43,8 @@ namespace Emgu.CV.XFeatures2D
                 cornThresh,
                 DOGThresh,
                 maxCorners,
-                numLayers);
+                numLayers, 
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -50,7 +53,7 @@ namespace Emgu.CV.XFeatures2D
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveHarrisLaplaceFeatureDetectorRelease(ref _ptr);
+                XFeatures2DInvoke.cveHarrisLaplaceFeatureDetectorRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -64,10 +67,11 @@ namespace Emgu.CV.XFeatures2D
             float cornThresh,
             float DOGThresh,
             int maxCorners,
-            int numLayers);
+            int numLayers, 
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveHarrisLaplaceFeatureDetectorRelease(ref IntPtr detector);
+        internal extern static void cveHarrisLaplaceFeatureDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
     }
 }
 

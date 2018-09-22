@@ -7,23 +7,24 @@
 #include "xfeatures2d_c.h"
 
 //StarDetector
-cv::xfeatures2d::StarDetector* cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D)
+cv::xfeatures2d::StarDetector* cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr)
 {
-   cv::Ptr<cv::xfeatures2d::StarDetector> detectorPtr = cv::xfeatures2d::StarDetector::create(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
-   detectorPtr.addref();
-   *feature2D = dynamic_cast<cv::Feature2D*>(detectorPtr.get());
-   return detectorPtr.get();
+	cv::Ptr<cv::xfeatures2d::StarDetector> detectorPtr = cv::xfeatures2d::StarDetector::create(maxSize, responseThreshold, lineThresholdProjected, lineThresholdBinarized, suppressNonmaxSize);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::StarDetector>(detectorPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(detectorPtr.get());
+	return detectorPtr.get();
 }
 
-void cveStarDetectorRelease(cv::xfeatures2d::StarDetector** detector)
+void cveStarDetectorRelease(cv::xfeatures2d::StarDetector** detector, cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr)
 {
-   delete *detector;
-   *detector = 0;
+	delete *sharedPtr;
+	*detector = 0;
+	*sharedPtr = 0;
 }
 
 /*
 //GridAdaptedFeatureDetector
-cv::GridAdaptedFeatureDetector* GridAdaptedFeatureDetectorCreate(   
+cv::GridAdaptedFeatureDetector* GridAdaptedFeatureDetectorCreate(
    cv::FeatureDetector* detector,
    int maxTotalKeypoints,
    int gridRows, int gridCols)
@@ -40,27 +41,27 @@ void GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector
 }*/
 
 //FREAK
-cv::xfeatures2d::FREAK* cveFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor)
+cv::xfeatures2d::FREAK* cveFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor, cv::Ptr<cv::xfeatures2d::FREAK>** sharedPtr)
 {
-   cv::Ptr<cv::xfeatures2d::FREAK> freakPtr = cv::xfeatures2d::FREAK::create(orientationNormalized, scaleNormalized, patternScale, nOctaves);
-   freakPtr.addref();
-   *descriptorExtractor = dynamic_cast<cv::Feature2D*>( freakPtr.get());
-   return freakPtr.get();
+	cv::Ptr<cv::xfeatures2d::FREAK> freakPtr = cv::xfeatures2d::FREAK::create(orientationNormalized, scaleNormalized, patternScale, nOctaves);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::FREAK>(freakPtr);
+	*descriptorExtractor = dynamic_cast<cv::Feature2D*>(freakPtr.get());
+	return freakPtr.get();
 }
 
-void cveFreakRelease(cv::xfeatures2d::FREAK** detector)
+void cveFreakRelease(cv::xfeatures2d::FREAK** detector, cv::Ptr<cv::xfeatures2d::FREAK>** sharedPtr)
 {
-   delete * detector;
-   *detector = 0;
+	delete * detector;
+	*detector = 0;
 }
 
 //Brief
-cv::xfeatures2d::BriefDescriptorExtractor* cveBriefDescriptorExtractorCreate(int descriptorSize, cv::Feature2D** feature2D)
+cv::xfeatures2d::BriefDescriptorExtractor* cveBriefDescriptorExtractorCreate(int descriptorSize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor>** sharedPtr)
 {
-   cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor> briefPtr = cv::xfeatures2d::BriefDescriptorExtractor::create(descriptorSize);
-   briefPtr.addref();
-   *feature2D = dynamic_cast<cv::Feature2D*>(briefPtr.get());
-   return briefPtr.get();
+	cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor> briefPtr = cv::xfeatures2d::BriefDescriptorExtractor::create(descriptorSize);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor>(briefPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(briefPtr.get());
+	return briefPtr.get();
 }
 
 /*
@@ -75,19 +76,20 @@ void CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor
    cv::Mat img = cv::cvarrToMat(image);
    if (img.channels() == 1)
    {
-     extractor->compute(img, *keypoints, *descriptors);
+	 extractor->compute(img, *keypoints, *descriptors);
    } else //opponent brief
    {
-      cv::Ptr<cv::DescriptorExtractor> briefExtractor = new cv::BriefDescriptorExtractor(extractor->descriptorSize());
-      cv::OpponentColorDescriptorExtractor colorDescriptorExtractor(briefExtractor);
-      colorDescriptorExtractor.compute(img, *keypoints, *descriptors);
+	  cv::Ptr<cv::DescriptorExtractor> briefExtractor = new cv::BriefDescriptorExtractor(extractor->descriptorSize());
+	  cv::OpponentColorDescriptorExtractor colorDescriptorExtractor(briefExtractor);
+	  colorDescriptorExtractor.compute(img, *keypoints, *descriptors);
    }
 }*/
 
-void cveBriefDescriptorExtractorRelease(cv::xfeatures2d::BriefDescriptorExtractor** extractor)
+void cveBriefDescriptorExtractorRelease(cv::xfeatures2d::BriefDescriptorExtractor** extractor, cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor>** sharedPtr)
 {
-   delete *extractor;
-   *extractor = 0;
+	delete *sharedPtr;
+	*extractor = 0;
+	*sharedPtr = 0;
 }
 
 /*
@@ -104,58 +106,64 @@ void CvDenseFeatureDetectorRelease(cv::DenseFeatureDetector** detector)
 
 
 //LUCID
-cv::xfeatures2d::LUCID* cveLUCIDCreate(int lucidKernel, int blurKernel, cv::Feature2D** feature2D)
+cv::xfeatures2d::LUCID* cveLUCIDCreate(int lucidKernel, int blurKernel, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::LUCID>** sharedPtr)
 {
-   cv::Ptr<cv::xfeatures2d::LUCID> lucidPtr = cv::xfeatures2d::LUCID::create(lucidKernel, blurKernel);
-   lucidPtr.addref();
-   *feature2D = dynamic_cast<cv::Feature2D*>(lucidPtr.get());
-   return lucidPtr.get();
+	cv::Ptr<cv::xfeatures2d::LUCID> lucidPtr = cv::xfeatures2d::LUCID::create(lucidKernel, blurKernel);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::LUCID>(lucidPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(lucidPtr.get());
+	return lucidPtr.get();
 }
-void cveLUCIDRelease(cv::xfeatures2d::LUCID** lucid)
+void cveLUCIDRelease(cv::xfeatures2d::LUCID** lucid, cv::Ptr<cv::xfeatures2d::LUCID>** sharedPtr)
 {
-   delete *lucid;
-   *lucid = 0;
+	delete *sharedPtr;
+	*lucid = 0;
+	*sharedPtr = 0;
 }
 
 //LATCH
-cv::xfeatures2d::LATCH* cveLATCHCreate(int bytes, bool rotationInvariance, int halfSsdSize, cv::Feature2D** extractor)
+cv::xfeatures2d::LATCH* cveLATCHCreate(int bytes, bool rotationInvariance, int halfSsdSize, cv::Feature2D** extractor, cv::Ptr<cv::xfeatures2d::LATCH>** sharedPtr)
 {
-   cv::Ptr<cv::xfeatures2d::LATCH> latchPtr = cv::xfeatures2d::LATCH::create(bytes, rotationInvariance, halfSsdSize);
-   latchPtr.addref();
-   *extractor = dynamic_cast<cv::Feature2D*>(latchPtr.get());
-   return latchPtr.get();
+	cv::Ptr<cv::xfeatures2d::LATCH> latchPtr = cv::xfeatures2d::LATCH::create(bytes, rotationInvariance, halfSsdSize);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::LATCH>(latchPtr);
+	*extractor = dynamic_cast<cv::Feature2D*>(latchPtr.get());
+	return latchPtr.get();
 }
-void cveLATCHRelease(cv::xfeatures2d::LATCH** latch)
+void cveLATCHRelease(cv::xfeatures2d::LATCH** latch, cv::Ptr<cv::xfeatures2d::LATCH>** sharedPtr)
 {
-   delete *latch;
-   *latch = 0;
+	delete *sharedPtr;
+	*latch = 0;
+	*sharedPtr = 0;
 }
 
 //DAISY
-cv::xfeatures2d::DAISY* cveDAISYCreate(float radius, int qRadius, int qTheta,
-   int qHist, int norm, cv::_InputArray* H,
-   bool interpolation, bool useOrientation, cv::Feature2D** extractor)
+cv::xfeatures2d::DAISY* cveDAISYCreate(
+	float radius, int qRadius, int qTheta,
+	int qHist, int norm, cv::_InputArray* H,
+	bool interpolation, bool useOrientation, 
+	cv::Feature2D** extractor,
+	cv::Ptr<cv::xfeatures2d::DAISY>** sharedPtr)
 {
-   cv::Ptr<cv::xfeatures2d::DAISY> daisyPtr = cv::xfeatures2d::DAISY::create(radius, qRadius, qTheta, qHist, norm, H ? *H : (cv::_InputArray) cv::noArray(), interpolation, useOrientation);
-   daisyPtr.addref();
-   *extractor = dynamic_cast<cv::Feature2D*>(daisyPtr.get());
-   return daisyPtr.get();
+	cv::Ptr<cv::xfeatures2d::DAISY> daisyPtr = cv::xfeatures2d::DAISY::create(radius, qRadius, qTheta, qHist, norm, H ? *H : (cv::_InputArray) cv::noArray(), interpolation, useOrientation);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::DAISY>(daisyPtr);
+	*extractor = dynamic_cast<cv::Feature2D*>(daisyPtr.get());
+	return daisyPtr.get();
 }
-void cveDAISYRelease(cv::xfeatures2d::DAISY** daisy)
+void cveDAISYRelease(cv::xfeatures2d::DAISY** daisy, cv::Ptr<cv::xfeatures2d::DAISY>** sharedPtr)
 {
-   delete* daisy;
-   *daisy = 0;
+	delete* sharedPtr;
+	*daisy = 0;
+	*sharedPtr = 0;
 }
 
 //BoostDesc
-cv::xfeatures2d::BoostDesc* cveBoostDescCreate(int desc, bool useScaleOrientation, float scalefactor, cv::Feature2D** feature2D)
+cv::xfeatures2d::BoostDesc* cveBoostDescCreate(int desc, bool useScaleOrientation, float scalefactor, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr)
 {
 	cv::Ptr<cv::xfeatures2d::BoostDesc> ptr = cv::xfeatures2d::BoostDesc::create(desc, useScaleOrientation, scalefactor);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::BoostDesc>(ptr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(ptr.get());
 	return ptr.get();
 }
-void cveBoostDescRelease(cv::xfeatures2d::BoostDesc** extractor)
+void cveBoostDescRelease(cv::xfeatures2d::BoostDesc** extractor, cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr)
 {
 	delete *extractor;
 	*extractor = 0;
@@ -164,59 +172,62 @@ void cveBoostDescRelease(cv::xfeatures2d::BoostDesc** extractor)
 //MSD
 cv::xfeatures2d::MSDDetector* cveMSDDetectorCreate(int m_patch_radius, int m_search_area_radius,
 	int m_nms_radius, int m_nms_scale_radius, float m_th_saliency, int m_kNN,
-	float m_scale_factor, int m_n_scales, bool m_compute_orientation, cv::Feature2D** feature2D)
+	float m_scale_factor, int m_n_scales, bool m_compute_orientation, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr)
 {
 	cv::Ptr<cv::xfeatures2d::MSDDetector> ptr = cv::xfeatures2d::MSDDetector::create(
 		m_patch_radius, m_search_area_radius, m_nms_radius, m_nms_scale_radius, m_th_saliency,
 		m_kNN, m_scale_factor, m_n_scales, m_compute_orientation);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::MSDDetector>(ptr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(ptr.get());
 	return ptr.get();
 }
-void cveMSDDetectorRelease(cv::xfeatures2d::MSDDetector** detector)
+void cveMSDDetectorRelease(cv::xfeatures2d::MSDDetector** detector, cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr)
 {
-	delete *detector;
+	delete *sharedPtr;
 	*detector = 0;
+	*sharedPtr = 0;
 }
 
 //VGG
 cv::xfeatures2d::VGG* cveVGGCreate(
 	int desc, float isigma, bool imgNormalize, bool useScaleOrientation,
-	float scaleFactor, bool dscNormalize, cv::Feature2D** feature2D)
+	float scaleFactor, bool dscNormalize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::VGG>** sharedPtr)
 {
 	cv::Ptr<cv::xfeatures2d::VGG> ptr = cv::xfeatures2d::VGG::create(desc, isigma, imgNormalize, useScaleOrientation, scaleFactor, dscNormalize);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::VGG>(ptr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(ptr.get());
 	return ptr.get();
 }
-void cveVGGRelease(cv::xfeatures2d::VGG** extractor)
+void cveVGGRelease(cv::xfeatures2d::VGG** extractor, cv::Ptr<cv::xfeatures2d::VGG>** sharedPtr)
 {
-	delete *extractor;
+	delete *sharedPtr;
 	*extractor = 0;
+	*sharedPtr = 0;
 }
 
-cv::xfeatures2d::PCTSignatures* cvePCTSignaturesCreate(int initSampleCount, int initSeedCount, int pointDistribution)
+cv::xfeatures2d::PCTSignatures* cvePCTSignaturesCreate(int initSampleCount, int initSeedCount, int pointDistribution, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr)
 {
 	cv::Ptr<cv::xfeatures2d::PCTSignatures> ptr = cv::xfeatures2d::PCTSignatures::create(initSampleCount, initSeedCount, pointDistribution);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::PCTSignatures>(ptr);
 	return ptr.get();
 }
-cv::xfeatures2d::PCTSignatures* cvePCTSignaturesCreate2(std::vector<cv::Point2f>* initSamplingPoints, int initSeedCount)
+cv::xfeatures2d::PCTSignatures* cvePCTSignaturesCreate2(std::vector<cv::Point2f>* initSamplingPoints, int initSeedCount, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr)
 {
 	cv::Ptr<cv::xfeatures2d::PCTSignatures> ptr = cv::xfeatures2d::PCTSignatures::create(*initSamplingPoints, initSeedCount);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::PCTSignatures>(ptr);
 	return ptr.get();
 }
-cv::xfeatures2d::PCTSignatures* cvePCTSignaturesCreate3(std::vector<cv::Point2f>* initSamplingPoints, std::vector<int>* initClusterSeedIndexes)
+cv::xfeatures2d::PCTSignatures* cvePCTSignaturesCreate3(std::vector<cv::Point2f>* initSamplingPoints, std::vector<int>* initClusterSeedIndexes, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr)
 {
 	cv::Ptr<cv::xfeatures2d::PCTSignatures> ptr = cv::xfeatures2d::PCTSignatures::create(*initSamplingPoints, *initClusterSeedIndexes);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::PCTSignatures>(ptr);
 	return ptr.get();
 }
-void cvePCTSignaturesRelease(cv::xfeatures2d::PCTSignatures** pct)
+void cvePCTSignaturesRelease(cv::xfeatures2d::PCTSignatures** pct, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr)
 {
-	delete *pct;
+	delete *sharedPtr;
 	*pct = 0;
+	*sharedPtr = 0;
 }
 void cvePCTSignaturesComputeSignature(cv::xfeatures2d::PCTSignatures* pct, cv::_InputArray* image, cv::_OutputArray* signature)
 {
@@ -230,10 +241,11 @@ void cvePCTSignaturesDrawSignature(cv::_InputArray* source, cv::_InputArray* sig
 cv::xfeatures2d::PCTSignaturesSQFD* cvePCTSignaturesSQFDCreate(
 	int distanceFunction,
 	int similarityFunction,
-	float similarityParameter)
+	float similarityParameter, 
+	cv::Ptr<cv::xfeatures2d::PCTSignaturesSQFD>** sharedPtr)
 {
 	cv::Ptr<cv::xfeatures2d::PCTSignaturesSQFD> ptr = cv::xfeatures2d::PCTSignaturesSQFD::create(distanceFunction, similarityFunction, similarityParameter);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::PCTSignaturesSQFD>(ptr);
 	return ptr.get();
 }
 float cvePCTSignaturesSQFDComputeQuadraticFormDistance(
@@ -251,10 +263,11 @@ void cvePCTSignaturesSQFDComputeQuadraticFormDistances(
 {
 	sqfd->computeQuadraticFormDistances(*sourceSignature, *imageSignatures, *distances);
 }
-void cvePCTSignaturesSQFDRelease(cv::xfeatures2d::PCTSignaturesSQFD** sqfd)
+void cvePCTSignaturesSQFDRelease(cv::xfeatures2d::PCTSignaturesSQFD** sqfd, cv::Ptr<cv::xfeatures2d::PCTSignaturesSQFD>** sharedPtr)
 {
-	delete *sqfd;
+	delete *sharedPtr;
 	*sqfd = 0;
+	*sharedPtr = 0;
 }
 
 cv::xfeatures2d::HarrisLaplaceFeatureDetector* cveHarrisLaplaceFeatureDetectorCreate(
@@ -262,14 +275,16 @@ cv::xfeatures2d::HarrisLaplaceFeatureDetector* cveHarrisLaplaceFeatureDetectorCr
 	float corn_thresh,
 	float DOG_thresh,
 	int maxCorners,
-	int num_layers)
+	int num_layers, 
+	cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>** sharedPtr)
 {
 	cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector> ptr = cv::xfeatures2d::HarrisLaplaceFeatureDetector::create(numOctaves, corn_thresh, DOG_thresh, maxCorners, num_layers);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>(ptr);
 	return ptr.get();
 }
-void cveHarrisLaplaceFeatureDetectorRelease(cv::xfeatures2d::HarrisLaplaceFeatureDetector** detector)
+void cveHarrisLaplaceFeatureDetectorRelease(cv::xfeatures2d::HarrisLaplaceFeatureDetector** detector, cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>** sharedPtr)
 {
-	delete *detector;
+	delete *sharedPtr;
 	*detector = 0;
+	*sharedPtr = 0;
 }

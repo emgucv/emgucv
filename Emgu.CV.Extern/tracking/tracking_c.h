@@ -16,11 +16,11 @@ CVAPI(bool) cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundin
 CVAPI(bool) cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
 //CVAPI(void) cveTrackerRelease(cv::Tracker** tracker);
 
-CVAPI(cv::TrackerBoosting*) cveTrackerBoostingCreate(int numClassifiers, float samplerOverlap, float samplerSearchFactor, int iterationInit, int featureSetNumFeatures, cv::Tracker** tracker);
-CVAPI(void) cveTrackerBoostingRelease(cv::TrackerBoosting** tracker);
+CVAPI(cv::TrackerBoosting*) cveTrackerBoostingCreate(int numClassifiers, float samplerOverlap, float samplerSearchFactor, int iterationInit, int featureSetNumFeatures, cv::Tracker** tracker, cv::Ptr<cv::TrackerBoosting>** sharedPtr);
+CVAPI(void) cveTrackerBoostingRelease(cv::TrackerBoosting** tracker, cv::Ptr<cv::TrackerBoosting>** sharedPtr);
 
-CVAPI(cv::TrackerMedianFlow*) cveTrackerMedianFlowCreate(int pointsInGrid, CvSize* winSize, int maxLevel, CvTermCriteria* termCriteria, CvSize* winSizeNCC, double maxMedianLengthOfDisplacementDifference, cv::Tracker** tracker);
-CVAPI(void) cveTrackerMedianFlowRelease(cv::TrackerMedianFlow** tracker);
+CVAPI(cv::TrackerMedianFlow*) cveTrackerMedianFlowCreate(int pointsInGrid, CvSize* winSize, int maxLevel, CvTermCriteria* termCriteria, CvSize* winSizeNCC, double maxMedianLengthOfDisplacementDifference, cv::Tracker** tracker, cv::Ptr<cv::TrackerMedianFlow>** sharedPtr);
+CVAPI(void) cveTrackerMedianFlowRelease(cv::TrackerMedianFlow** tracker, cv::Ptr<cv::TrackerMedianFlow>** sharedPtr);
 
 CVAPI(cv::TrackerMIL*) cveTrackerMILCreate(
 	float samplerInitInRadius,
@@ -30,11 +30,12 @@ CVAPI(cv::TrackerMIL*) cveTrackerMILCreate(
 	int samplerTrackMaxPosNum,
 	int samplerTrackMaxNegNum,
 	int featureSetNumFeatures,
-	cv::Tracker** tracker);
-CVAPI(void) cveTrackerMILRelease(cv::TrackerMIL** tracker);
+	cv::Tracker** tracker, 
+	cv::Ptr<cv::TrackerMIL>** sharedPtr);
+CVAPI(void) cveTrackerMILRelease(cv::TrackerMIL** tracker, cv::Ptr<cv::TrackerMIL>** sharedPtr);
 
-CVAPI(cv::TrackerTLD*) cveTrackerTLDCreate(cv::Tracker** tracker);
-CVAPI(void) cveTrackerTLDRelease(cv::TrackerTLD** tracker);
+CVAPI(cv::TrackerTLD*) cveTrackerTLDCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerTLD>** sharedPtr);
+CVAPI(void) cveTrackerTLDRelease(cv::TrackerTLD** tracker, cv::Ptr<cv::TrackerTLD>** sharedPtr);
 
 CVAPI(cv::TrackerKCF*) cveTrackerKCFCreate(
 	float detect_thresh,
@@ -51,14 +52,15 @@ CVAPI(cv::TrackerKCF*) cveTrackerKCFCreate(
 	int compressed_size,
 	int desc_pca,
 	int desc_npca,
-	cv::Tracker** tracker);
-CVAPI(void) cveTrackerKCFRelease(cv::TrackerKCF** tracker);
+	cv::Tracker** tracker,
+	cv::Ptr<cv::TrackerKCF>** sharedPtr);
+CVAPI(void) cveTrackerKCFRelease(cv::TrackerKCF** tracker, cv::Ptr<cv::TrackerKCF>** sharedPtr);
 
-CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(cv::Tracker** tracker);
-CVAPI(void) cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker);
+CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
+CVAPI(void) cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
 
-CVAPI(cv::TrackerMOSSE*) cveTrackerMOSSECreate(cv::Tracker** tracker);
-CVAPI(void) cveTrackerMOSSERelease(cv::TrackerMOSSE** tracker);
+CVAPI(cv::TrackerMOSSE*) cveTrackerMOSSECreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerMOSSE>** sharedPtr);
+CVAPI(void) cveTrackerMOSSERelease(cv::TrackerMOSSE** tracker, cv::Ptr<cv::TrackerMOSSE>** sharedPtr);
 
 CVAPI(cv::MultiTracker*) cveMultiTrackerCreate();
 CVAPI(bool) cveMultiTrackerAdd(cv::MultiTracker* multiTracker, cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox);
@@ -93,7 +95,8 @@ CVAPI(cv::TrackerCSRT*) cveTrackerCSRTCreate(
 	float scale_model_max_area,
 	float scale_lr,
 	float scale_step,
-	cv::Tracker** tracker);
-CVAPI(void) cveTrackerCSRTRelease(cv::TrackerCSRT** tracker);
+	cv::Tracker** tracker,
+	cv::Ptr<cv::TrackerCSRT>** sharedPtr);
+CVAPI(void) cveTrackerCSRTRelease(cv::TrackerCSRT** tracker, cv::Ptr<cv::TrackerCSRT>** sharedPtr);
 
 #endif

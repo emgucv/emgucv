@@ -6,10 +6,10 @@
 
 #include "xobjdetect_c.h"
 
-cv::xobjdetect::WBDetector* cveWBDetectorCreate()
+cv::xobjdetect::WBDetector* cveWBDetectorCreate(cv::Ptr<cv::xobjdetect::WBDetector>** sharedPtr)
 {
 	cv::Ptr<cv::xobjdetect::WBDetector> ptr = cv::xobjdetect::WBDetector::create();
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::xobjdetect::WBDetector>(ptr);
 	return ptr.get();
 }
 void cveWBDetectorRead(cv::xobjdetect::WBDetector* detector, cv::FileNode* node)
@@ -28,8 +28,9 @@ void cveWBDetectorDetect(cv::xobjdetect::WBDetector* detector, cv::Mat* img, std
 {
 	detector->detect(*img, *bboxes, *confidences);
 }
-void cveWBDetectorRelease(cv::xobjdetect::WBDetector** detector)
+void cveWBDetectorRelease(cv::xobjdetect::WBDetector** detector, cv::Ptr<cv::xobjdetect::WBDetector>** sharedPtr)
 {
-	delete *detector;
+	delete *sharedPtr;
 	*detector = 0;
+	*sharedPtr = 0;
 }

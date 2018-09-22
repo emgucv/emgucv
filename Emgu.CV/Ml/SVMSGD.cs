@@ -16,6 +16,8 @@ namespace Emgu.CV.ML
     /// </summary>
     public partial class SVMSGD : UnmanagedObject, IStatModel
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// SVMSGD type.
         /// ASGD is often the preferable choice.
@@ -55,7 +57,7 @@ namespace Emgu.CV.ML
         /// </summary>
         public SVMSGD()
         {
-            _ptr = MlInvoke.cveSVMSGDDefaultCreate(ref _statModelPtr, ref _algorithmPtr);
+            _ptr = MlInvoke.cveSVMSGDDefaultCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -75,9 +77,12 @@ namespace Emgu.CV.ML
         /// </summary>
         protected override void DisposeObject()
         {
-            MlInvoke.cveSVMSGDRelease(ref _ptr);
-            _statModelPtr = IntPtr.Zero;
-            _algorithmPtr = IntPtr.Zero;
+            if (IntPtr.Zero != _ptr)
+            {
+                MlInvoke.cveSVMSGDRelease(ref _ptr, ref _sharedPtr);
+                _statModelPtr = IntPtr.Zero;
+                _algorithmPtr = IntPtr.Zero;
+            }
         }
 
         IntPtr IStatModel.StatModelPtr

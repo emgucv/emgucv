@@ -14,6 +14,8 @@ namespace Emgu.CV.ML
    /// </summary>
    public class TrainData : UnmanagedObject
    {
+       private IntPtr _sharedPtr;
+
       /// <summary>
       /// Creates training data from in-memory arrays.
       /// </summary>
@@ -37,8 +39,9 @@ namespace Emgu.CV.ML
          using (InputArray iaSampleWeight = sampleWeight == null ? InputArray.GetEmpty() : sampleWeight.GetInputArray())
          using (InputArray iaVarType = varType == null ? InputArray.GetEmpty() : varType.GetInputArray())
          {
-            _ptr = MlInvoke.cveTrainDataCreate(iaSamples, layoutType, iaResponse, iaVarIdx, iaSampleIdx, iaSampleWeight,
-               iaVarType);
+            _ptr = MlInvoke.cveTrainDataCreate(
+                iaSamples, layoutType, iaResponse, iaVarIdx, iaSampleIdx, iaSampleWeight,
+                iaVarType, ref _sharedPtr);
          }
       }
 
@@ -47,7 +50,7 @@ namespace Emgu.CV.ML
       /// </summary>
       protected override void DisposeObject()
       {
-         MlInvoke.cveTrainDataRelease(ref _ptr);
+         MlInvoke.cveTrainDataRelease(ref _ptr, ref _sharedPtr);
       }
    }
 }

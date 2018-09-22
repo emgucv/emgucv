@@ -8,7 +8,7 @@
 
 using cv::dpm::DPMDetector;
 
-DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vector<cv::String>* classNames)
+DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vector<cv::String>* classNames, cv::Ptr<cv::dpm::DPMDetector>** sharedPtr)
 {
 	std::vector< std::basic_string<char> > files = std::vector<std::string>(filenames->size());
 	std::vector< std::basic_string<char> > classes = std::vector<std::string>(classNames->size());
@@ -20,7 +20,7 @@ DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vecto
 		classes.push_back(std::string(it->c_str(), it->size()));
 
 	cv::Ptr<DPMDetector> dpm = DPMDetector::create(files, classes);
-	dpm.addref();
+	*sharedPtr = new cv::Ptr<DPMDetector>(dpm);
 	return dpm.get();
 }
 
@@ -55,8 +55,9 @@ bool cveDPMDetectorIsEmpty(DPMDetector* dpm)
 	return dpm->isEmpty();
 }
 
-void cveDPMDetectorRelease(DPMDetector** dpm)
+void cveDPMDetectorRelease(DPMDetector** dpm, cv::Ptr<cv::dpm::DPMDetector>** sharedPtr)
 {
-	delete *dpm;
+	delete *sharedPtr;
 	*dpm = 0;
+	*sharedPtr = 0;
 }

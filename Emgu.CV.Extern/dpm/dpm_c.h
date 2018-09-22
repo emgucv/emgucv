@@ -14,7 +14,7 @@
 using cv::dpm::DPMDetector;
 
 //constructor
-CVAPI(DPMDetector*) cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vector<cv::String>* classNames);
+CVAPI(DPMDetector*) cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vector<cv::String>* classNames, cv::Ptr<cv::dpm::DPMDetector>** sharedPtr);
 
 CVAPI(void) cveDPMDetectorDetect(DPMDetector* dpm, cv::Mat* image, std::vector<CvRect>* rects, std::vector<float>* scores, std::vector<int>* classIds);
 
@@ -24,5 +24,5 @@ CVAPI(void) cveDPMDetectorGetClassNames(DPMDetector* dpm, std::vector<cv::String
 
 CVAPI(bool) cveDPMDetectorIsEmpty(DPMDetector* dpm);
 
-CVAPI(void) cveDPMDetectorRelease(DPMDetector** dpm);
+CVAPI(void) cveDPMDetectorRelease(DPMDetector** dpm, cv::Ptr<cv::dpm::DPMDetector>** sharedPtr);
 #endif

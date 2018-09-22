@@ -11,7 +11,8 @@ CVAPI(cv::phase_unwrapping::HistogramPhaseUnwrapping*) cveHistogramPhaseUnwrappi
 	int height,
 	float histThresh,
 	int nbrOfSmallBins,
-	int nbrOfLargeBins)
+	int nbrOfLargeBins,
+	cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>** sharedPtr)
 {
 	cv::phase_unwrapping::HistogramPhaseUnwrapping::Params p;
 	p.width = width;
@@ -20,14 +21,15 @@ CVAPI(cv::phase_unwrapping::HistogramPhaseUnwrapping*) cveHistogramPhaseUnwrappi
 	p.nbrOfSmallBins = nbrOfSmallBins;
 	p.nbrOfLargeBins = nbrOfLargeBins;
 	cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping> unwrapping = cv::phase_unwrapping::HistogramPhaseUnwrapping::create(p);
-	unwrapping.addref();
+	*sharedPtr = new cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>(unwrapping);
 	return unwrapping.get();
 }
 
-void cveHistogramPhaseUnwrappingRelease(cv::phase_unwrapping::HistogramPhaseUnwrapping** phase_unwrapping)
+void cveHistogramPhaseUnwrappingRelease(cv::phase_unwrapping::HistogramPhaseUnwrapping** phase_unwrapping, cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>** sharedPtr)
 {
-	delete *phase_unwrapping;
+	delete *sharedPtr;
 	*phase_unwrapping = 0;
+	*sharedPtr = 0;
 }
 
 void cveHistogramPhaseUnwrappingGetInverseReliabilityMap(cv::phase_unwrapping::HistogramPhaseUnwrapping* phase_unwrapping, cv::_OutputArray* reliabilityMap)

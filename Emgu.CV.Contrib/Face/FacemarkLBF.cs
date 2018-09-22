@@ -43,6 +43,8 @@ namespace Emgu.CV.Face
     /// </summary>
     public class FacemarkLBF : UnmanagedObject, IFacemark
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _facemarkPtr;
 
         /// <summary>
@@ -63,7 +65,7 @@ namespace Emgu.CV.Face
         /// <param name="parameters">The model parameters</param>
         public FacemarkLBF(FacemarkLBFParams parameters)
         {
-            _ptr = FaceInvoke.cveFacemarkLBFCreate(parameters, ref _facemarkPtr, ref _algorithmPtr);
+            _ptr = FaceInvoke.cveFacemarkLBFCreate(parameters, ref _facemarkPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace Emgu.CV.Face
         {
             if (_ptr != IntPtr.Zero)
             {
-                FaceInvoke.cveFacemarkLBFRelease(ref _ptr);
+                FaceInvoke.cveFacemarkLBFRelease(ref _ptr, ref _sharedPtr);
             }
         }
     }
@@ -81,9 +83,9 @@ namespace Emgu.CV.Face
     public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveFacemarkLBFCreate(IntPtr parameters, ref IntPtr facemark, ref IntPtr algorithm);
+        internal extern static IntPtr cveFacemarkLBFCreate(IntPtr parameters, ref IntPtr facemark, ref IntPtr algorithm, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFacemarkLBFRelease(ref IntPtr facemark);
+        internal extern static void cveFacemarkLBFRelease(ref IntPtr facemark, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveFacemarkLBFParamsCreate();

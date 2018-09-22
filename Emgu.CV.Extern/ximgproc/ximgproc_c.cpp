@@ -56,10 +56,10 @@ void cveCovarianceEstimation(cv::_InputArray* src, cv::_OutputArray* dst, int wi
 	cv::ximgproc::covarianceEstimation(*src, *dst, windowRows, windowCols);
 }
 
-cv::ximgproc::DTFilter* cveDTFilterCreate(cv::_InputArray* guide, double sigmaSpatial, double sigmaColor, int mode, int numIters)
+cv::ximgproc::DTFilter* cveDTFilterCreate(cv::_InputArray* guide, double sigmaSpatial, double sigmaColor, int mode, int numIters, cv::Ptr<cv::ximgproc::DTFilter>** sharedPtr)
 {
 	cv::Ptr<cv::ximgproc::DTFilter> ptr = cv::ximgproc::createDTFilter(*guide, sigmaSpatial, sigmaColor, mode, numIters);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::ximgproc::DTFilter>(ptr);
 	return ptr.get();
 }
 
@@ -67,50 +67,53 @@ void cveDTFilterFilter(cv::ximgproc::DTFilter* filter, cv::_InputArray* src, cv:
 {
 	filter->filter(*src, *dst, dDepth);
 }
-void cveDTFilterRelease(cv::ximgproc::DTFilter** filter)
+void cveDTFilterRelease(cv::ximgproc::DTFilter** filter, cv::Ptr<cv::ximgproc::DTFilter>** sharedPtr)
 {
-	delete *filter;
+	delete *sharedPtr;
 	*filter = 0;
+	*sharedPtr = 0;
 }
 
-cv::ximgproc::RFFeatureGetter* cveRFFeatureGetterCreate()
+cv::ximgproc::RFFeatureGetter* cveRFFeatureGetterCreate(cv::Ptr<cv::ximgproc::RFFeatureGetter>** sharedPtr)
 {
 	cv::Ptr<cv::ximgproc::RFFeatureGetter> ptr = cv::ximgproc::createRFFeatureGetter();
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::ximgproc::RFFeatureGetter>(ptr);
 	return ptr.get();
 }
-void cveRFFeatureGetterRelease(cv::ximgproc::RFFeatureGetter** getter)
+void cveRFFeatureGetterRelease(cv::ximgproc::RFFeatureGetter** getter, cv::Ptr<cv::ximgproc::RFFeatureGetter>** sharedPtr)
 {
-	delete *getter;
+	delete *sharedPtr;
 	*getter = 0;
+	*sharedPtr = 0;
 }
 
 
-cv::ximgproc::StructuredEdgeDetection* cveStructuredEdgeDetectionCreate(cv::String* model, cv::ximgproc::RFFeatureGetter* howToGetFeatures)
+cv::ximgproc::StructuredEdgeDetection* cveStructuredEdgeDetectionCreate(cv::String* model, cv::ximgproc::RFFeatureGetter* howToGetFeatures, cv::Ptr<cv::ximgproc::StructuredEdgeDetection>** sharedPtr)
 {
-	cv::Ptr<cv::ximgproc::RFFeatureGetter> getterPtr(howToGetFeatures);
-	getterPtr.addref();
+	cv::Ptr<cv::ximgproc::RFFeatureGetter> getterPtr(howToGetFeatures, [](cv::ximgproc::RFFeatureGetter*){});
 	cv::Ptr<cv::ximgproc::StructuredEdgeDetection> ptr = cv::ximgproc::createStructuredEdgeDetection(*model, getterPtr);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::ximgproc::StructuredEdgeDetection>(ptr);
 	return ptr.get();
 }
 void cveStructuredEdgeDetectionDetectEdges(cv::ximgproc::StructuredEdgeDetection* detection, cv::Mat* src, cv::Mat* dst)
 {
 	detection->detectEdges(*src, *dst);
 }
-void cveStructuredEdgeDetectionRelease(cv::ximgproc::StructuredEdgeDetection** detection)
+void cveStructuredEdgeDetectionRelease(cv::ximgproc::StructuredEdgeDetection** detection, cv::Ptr<cv::ximgproc::StructuredEdgeDetection>** sharedPtr)
 {
-	delete *detection;
+	delete *sharedPtr;
 	*detection = 0;
+	*sharedPtr = 0;
 }
 
 cv::ximgproc::SuperpixelSEEDS* cveSuperpixelSEEDSCreate(
 	int imageWidth, int imageHeight, int imageChannels,
 	int numSuperpixels, int numLevels, int prior,
-	int histogramBins, bool doubleStep)
+	int histogramBins, bool doubleStep,
+	cv::Ptr<cv::ximgproc::SuperpixelSEEDS>** sharedPtr)
 {
 	cv::Ptr<cv::ximgproc::SuperpixelSEEDS> ptr = cv::ximgproc::createSuperpixelSEEDS(imageWidth, imageHeight, imageChannels, numSuperpixels, numLevels, prior, histogramBins, doubleStep);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::ximgproc::SuperpixelSEEDS>(ptr);
 	return ptr.get();
 }
 int cveSuperpixelSEEDSGetNumberOfSuperpixels(cv::ximgproc::SuperpixelSEEDS* seeds)
@@ -129,17 +132,18 @@ void cveSuperpixelSEEDSIterate(cv::ximgproc::SuperpixelSEEDS* seeds, cv::_InputA
 {
 	seeds->iterate(*img, numIterations);
 }
-void cveSuperpixelSEEDSRelease(cv::ximgproc::SuperpixelSEEDS** seeds)
+void cveSuperpixelSEEDSRelease(cv::ximgproc::SuperpixelSEEDS** seeds, cv::Ptr<cv::ximgproc::SuperpixelSEEDS>** sharedPtr)
 {
-	delete *seeds;
+	delete *sharedPtr;
 	*seeds = 0;
+	*sharedPtr = 0;
 }
 
 
-cv::ximgproc::SuperpixelLSC* cveSuperpixelLSCCreate(cv::_InputArray* image, int regionSize, float ratio)
+cv::ximgproc::SuperpixelLSC* cveSuperpixelLSCCreate(cv::_InputArray* image, int regionSize, float ratio, cv::Ptr<cv::ximgproc::SuperpixelLSC>** sharedPtr)
 {
 	cv::Ptr<cv::ximgproc::SuperpixelLSC> ptr = cv::ximgproc::createSuperpixelLSC(*image, regionSize, ratio);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr < cv::ximgproc::SuperpixelLSC>(ptr);
 	return ptr.get();
 }
 int cveSuperpixelLSCGetNumberOfSuperpixels(cv::ximgproc::SuperpixelLSC* lsc)
@@ -162,17 +166,18 @@ void cveSuperpixelLSCEnforceLabelConnectivity(cv::ximgproc::SuperpixelLSC* lsc, 
 {
 	lsc->enforceLabelConnectivity(minElementSize);
 }
-void cveSuperpixelLSCRelease(cv::ximgproc::SuperpixelLSC** lsc)
+void cveSuperpixelLSCRelease(cv::ximgproc::SuperpixelLSC** lsc, cv::Ptr<cv::ximgproc::SuperpixelLSC>** sharedPtr)
 {
-	delete *lsc;
+	delete *sharedPtr;
 	*lsc = 0;
+	*sharedPtr = 0;
 }
 
 
-cv::ximgproc::SuperpixelSLIC* cveSuperpixelSLICCreate(cv::_InputArray* image, int algorithm, int regionSize, float ruler)
+cv::ximgproc::SuperpixelSLIC* cveSuperpixelSLICCreate(cv::_InputArray* image, int algorithm, int regionSize, float ruler, cv::Ptr<cv::ximgproc::SuperpixelSLIC>** sharedPtr)
 {
 	cv::Ptr<cv::ximgproc::SuperpixelSLIC> ptr = cv::ximgproc::createSuperpixelSLIC(*image, algorithm, regionSize, ruler);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::ximgproc::SuperpixelSLIC>(ptr);
 	return ptr.get();
 }
 int cveSuperpixelSLICGetNumberOfSuperpixels(cv::ximgproc::SuperpixelSLIC* slic)
@@ -195,27 +200,29 @@ void cveSuperpixelSLICEnforceLabelConnectivity(cv::ximgproc::SuperpixelSLIC* sli
 {
 	slic->enforceLabelConnectivity(minElementSize);
 }
-void cveSuperpixelSLICRelease(cv::ximgproc::SuperpixelSLIC** slic)
+void cveSuperpixelSLICRelease(cv::ximgproc::SuperpixelSLIC** slic, cv::Ptr<cv::ximgproc::SuperpixelSLIC>** sharedPtr)
 {
-	delete *slic;
+	delete *sharedPtr;
 	*slic = 0;
+	*sharedPtr = 0;
 }
 
 
-cv::ximgproc::segmentation::GraphSegmentation* cveGraphSegmentationCreate(double sigma, float k, int minSize)
+cv::ximgproc::segmentation::GraphSegmentation* cveGraphSegmentationCreate(double sigma, float k, int minSize, cv::Ptr<cv::ximgproc::segmentation::GraphSegmentation>** sharedPtr)
 {
 	cv::Ptr<cv::ximgproc::segmentation::GraphSegmentation> ptr = cv::ximgproc::segmentation::createGraphSegmentation(sigma, k, minSize);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::ximgproc::segmentation::GraphSegmentation>(ptr);
 	return ptr.get();
 }
 void cveGraphSegmentationProcessImage(cv::ximgproc::segmentation::GraphSegmentation* segmentation, cv::_InputArray* src, cv::_OutputArray* dst)
 {
 	segmentation->processImage(*src, *dst);
 }
-void cveGraphSegmentationRelease(cv::ximgproc::segmentation::GraphSegmentation** segmentation)
+void cveGraphSegmentationRelease(cv::ximgproc::segmentation::GraphSegmentation** segmentation, cv::Ptr<cv::ximgproc::segmentation::GraphSegmentation>** sharedPtr)
 {
-	delete *segmentation;
+	delete *sharedPtr;
 	*segmentation = 0;
+	*sharedPtr = 0;
 }
 
 void cveWeightedMedianFilter(cv::_InputArray* joint, cv::_InputArray* src, cv::_OutputArray* dst, int r, double sigma, cv::ximgproc::WMFWeightType weightType, cv::Mat* mask)
@@ -224,10 +231,10 @@ void cveWeightedMedianFilter(cv::_InputArray* joint, cv::_InputArray* src, cv::_
 }
 
 
-cv::ximgproc::segmentation::SelectiveSearchSegmentation* cveSelectiveSearchSegmentationCreate()
+cv::ximgproc::segmentation::SelectiveSearchSegmentation* cveSelectiveSearchSegmentationCreate(cv::Ptr<cv::ximgproc::segmentation::SelectiveSearchSegmentation>** sharedPtr)
 {
 	cv::Ptr<cv::ximgproc::segmentation::SelectiveSearchSegmentation> ptr = cv::ximgproc::segmentation::createSelectiveSearchSegmentation();
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::ximgproc::segmentation::SelectiveSearchSegmentation>(ptr);
 	return ptr.get();
 }
 void cveSelectiveSearchSegmentationSetBaseImage(cv::ximgproc::segmentation::SelectiveSearchSegmentation* segmentation, cv::_InputArray* image)
@@ -254,10 +261,11 @@ void cveSelectiveSearchSegmentationProcess(cv::ximgproc::segmentation::Selective
 {
 	segmentation->process(*rects);
 }
-void cveSelectiveSearchSegmentationRelease(cv::ximgproc::segmentation::SelectiveSearchSegmentation** segmentation)
+void cveSelectiveSearchSegmentationRelease(cv::ximgproc::segmentation::SelectiveSearchSegmentation** segmentation, cv::Ptr<cv::ximgproc::segmentation::SelectiveSearchSegmentation>** sharedPtr)
 {
-	delete *segmentation;
+	delete *sharedPtr;
 	*segmentation = 0;
+	*sharedPtr = 0;
 }
 
 void cveGradientPaillouY(cv::_InputArray* op, cv::_OutputArray* dst, double alpha, double omega)

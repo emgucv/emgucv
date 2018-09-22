@@ -32,16 +32,14 @@ bool VideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, 
 
 void StabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::ImageMotionEstimatorBase* motionEstimator)
 {
-   cv::Ptr<cv::videostab::ImageMotionEstimatorBase> ptr(motionEstimator);
-   ptr.addref(); // add reference such that it won't release the motion estimator
+   cv::Ptr<cv::videostab::ImageMotionEstimatorBase> ptr(motionEstimator, [] (cv::videostab::ImageMotionEstimatorBase*){});
    stabalizer->setMotionEstimator(ptr);
 }
 
 template<class cvstabilizer> cvstabilizer* StabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
    cvstabilizer* stabilizer = new cvstabilizer();
-   cv::Ptr<cv::videostab::IFrameSource> ptr(baseFrameSource);
-   ptr.addref(); // add reference such that it won't release the CaptureFrameSource
+   cv::Ptr<cv::videostab::IFrameSource> ptr(baseFrameSource, [](cv::videostab::IFrameSource*){});
    stabilizer->setFrameSource(ptr);
    *stabilizerBase = dynamic_cast<cv::videostab::StabilizerBase*>(stabilizer);
    *frameSource = dynamic_cast<cv::videostab::IFrameSource*>(stabilizer);
@@ -51,20 +49,11 @@ template<class cvstabilizer> cvstabilizer* StabilizerCreate(cv::videostab::IFram
 cv::videostab::OnePassStabilizer* OnePassStabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
    return StabilizerCreate<cv::videostab::OnePassStabilizer>(baseFrameSource, stabilizerBase, frameSource);
-   /*
-   cv::videostab::OnePassStabilizer* stabilizer = new cv::videostab::OnePassStabilizer();
-   cv::Ptr<cv::videostab::IFrameSource> ptr(capture);
-   ptr.addref(); // add reference such that it won't release the CaptureFrameSource
-   stabilizer->setFrameSource(ptr);
-   *stabilizerBase = static_cast<cv::videostab::StabilizerBase*>(stabilizer);
-   *frameSource = static_cast<cv::videostab::IFrameSource*>(stabilizer);
-   return stabilizer;*/
 }
 
 void OnePassStabilizerSetMotionFilter(cv::videostab::OnePassStabilizer* stabilizer, cv::videostab::MotionFilterBase* motionFilter)
 {
-   cv::Ptr<cv::videostab::MotionFilterBase> ptr(motionFilter);
-   ptr.addref(); // add reference such that it won't release the motion filter
+   cv::Ptr<cv::videostab::MotionFilterBase> ptr(motionFilter, [] (cv::videostab::MotionFilterBase*){});
    stabilizer->setMotionFilter(ptr);
 }
 

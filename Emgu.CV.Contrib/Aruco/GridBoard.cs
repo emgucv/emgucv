@@ -32,7 +32,7 @@ namespace Emgu.CV.Aruco
     public class GridBoard : UnmanagedObject, IBoard
     {
         private IntPtr _boardPtr;
-
+        private IntPtr _sharedPtr;
         /// <summary>
         /// Create a GridBoard object.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Emgu.CV.Aruco
         public GridBoard(int markersX, int markersY, float markerLength, float markerSeparation,
          Dictionary dictionary, int firstMarker = 0)
         {
-            _ptr = ArucoInvoke.cveArucoGridBoardCreate(markersX, markersY, markerLength, markerSeparation, dictionary, firstMarker, ref _boardPtr);
+            _ptr = ArucoInvoke.cveArucoGridBoardCreate(markersX, markersY, markerLength, markerSeparation, dictionary, firstMarker, ref _boardPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Emgu.CV.Aruco
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ArucoInvoke.cveArucoGridBoardRelease(ref _ptr);
+                ArucoInvoke.cveArucoGridBoardRelease(ref _ptr, ref _sharedPtr);
 
             _boardPtr = IntPtr.Zero;
         }
@@ -87,6 +87,7 @@ namespace Emgu.CV.Aruco
     public class CharucoBoard : UnmanagedObject, IBoard
     {
         private IntPtr _boardPtr;
+        private IntPtr _sharedPtr;
 
         /// <summary>
         /// ChArUco board
@@ -101,7 +102,7 @@ namespace Emgu.CV.Aruco
            float squareLength, float markerLength,
            Dictionary dictionary)
         {
-            _ptr = ArucoInvoke.cveCharucoBoardCreate(squaresX, squaresY, squareLength, markerLength, dictionary, ref _boardPtr);
+            _ptr = ArucoInvoke.cveCharucoBoardCreate(squaresX, squaresY, squareLength, markerLength, dictionary, ref _boardPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -123,7 +124,7 @@ namespace Emgu.CV.Aruco
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ArucoInvoke.cveCharucoBoardRelease(ref _ptr);
+                ArucoInvoke.cveCharucoBoardRelease(ref _ptr, ref _sharedPtr);
 
             _boardPtr = IntPtr.Zero;
         }
@@ -139,10 +140,10 @@ namespace Emgu.CV.Aruco
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveArucoGridBoardCreate(
            int markersX, int markersY, float markerLength, float markerSeparation,
-           IntPtr dictionary, int firstMarker, ref IntPtr boardPtr);
+           IntPtr dictionary, int firstMarker, ref IntPtr boardPtr, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveArucoGridBoardRelease(ref IntPtr gridBoard);
+        internal static extern void cveArucoGridBoardRelease(ref IntPtr gridBoard, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoGridBoardDraw(IntPtr gridBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);
@@ -151,12 +152,12 @@ namespace Emgu.CV.Aruco
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveCharucoBoardCreate(
            int squaresX, int squaresY, float squareLength, float markerLength,
-           IntPtr dictionary, ref IntPtr boardPtr);
+           IntPtr dictionary, ref IntPtr boardPtr, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveCharucoBoardDraw(IntPtr charucoBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveCharucoBoardRelease(ref IntPtr charucoBoard);
+        internal static extern void cveCharucoBoardRelease(ref IntPtr charucoBoard, ref IntPtr sharedPtr);
     }
 }

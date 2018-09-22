@@ -19,6 +19,8 @@ namespace Emgu.CV
     /// </summary>
     public partial class DISOpticalFlow : UnmanagedObject, IDenseOpticalFlow
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Preset
         /// </summary>
@@ -47,7 +49,7 @@ namespace Emgu.CV
         /// <param name="preset">Algorithm preset</param>
         public DISOpticalFlow(Preset preset = Preset.Fast)
         {
-            _ptr = CvInvoke.cveDISOpticalFlowCreate(preset, ref _denseFlowPtr, ref _algorithmPtr);
+            _ptr = CvInvoke.cveDISOpticalFlowCreate(preset, ref _denseFlowPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace Emgu.CV
         {
             if (IntPtr.Zero != _ptr)
             {
-                CvInvoke.cveDISOpticalFlowRelease(ref _ptr);
+                CvInvoke.cveDISOpticalFlowRelease(ref _ptr, ref _sharedPtr);
             }
             _algorithmPtr = IntPtr.Zero;
             _denseFlowPtr = IntPtr.Zero;
@@ -77,9 +79,9 @@ namespace Emgu.CV
     public static partial class CvInvoke
     {
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveDISOpticalFlowCreate(DISOpticalFlow.Preset preset, ref IntPtr denseFlow, ref IntPtr algorithm);
+        internal static extern IntPtr cveDISOpticalFlowCreate(DISOpticalFlow.Preset preset, ref IntPtr denseFlow, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDISOpticalFlowRelease(ref IntPtr flow);
+        internal static extern void cveDISOpticalFlowRelease(ref IntPtr flow, ref IntPtr sharedPtr);
     }
 }

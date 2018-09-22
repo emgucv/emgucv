@@ -15,6 +15,8 @@ namespace Emgu.CV.ML
     /// </summary>
     public partial class ANN_MLP : UnmanagedObject, IStatModel
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Possible activation functions
         /// </summary>
@@ -62,7 +64,7 @@ namespace Emgu.CV.ML
         /// </summary>
         public ANN_MLP()
         {
-            _ptr = MlInvoke.cveANN_MLPCreate(ref _statModelPtr, ref _algorithmPtr);
+            _ptr = MlInvoke.cveANN_MLPCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
 
@@ -71,9 +73,12 @@ namespace Emgu.CV.ML
         /// </summary>
         protected override void DisposeObject()
         {
-            MlInvoke.cveANN_MLPRelease(ref _ptr);
-            _statModelPtr = IntPtr.Zero;
-            _algorithmPtr = IntPtr.Zero;
+            if (IntPtr.Zero != _ptr)
+            {
+                MlInvoke.cveANN_MLPRelease(ref _ptr, ref _sharedPtr);
+                _statModelPtr = IntPtr.Zero;
+                _algorithmPtr = IntPtr.Zero;
+            }
         }
 
         IntPtr IStatModel.StatModelPtr
@@ -125,14 +130,15 @@ namespace Emgu.CV.ML
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveANN_MLPCreate(
            ref IntPtr statModel,
-           ref IntPtr algorithm);
+           ref IntPtr algorithm, 
+           ref IntPtr sharedPtr);
 
         /// <summary>
         /// Release the ANN_MLP model
         /// </summary>
         /// <param name="model">The ANN_MLP model to be released</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveANN_MLPRelease(ref IntPtr model);
+        internal static extern void cveANN_MLPRelease(ref IntPtr model, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveANN_MLPSetLayerSizes(IntPtr model, IntPtr layerSizes);

@@ -18,15 +18,17 @@ namespace Emgu.CV.XImgproc
    /// </summary>
    public class StructuredEdgeDetection : UnmanagedObject
    {
+       private IntPtr _sharedPtr;
+
       /// <summary>
-      /// 
+      /// Create an edge detection algorithm.
       /// </summary>
       /// <param name="model">name of the file where the model is stored</param>
       /// <param name="howToGetFeatures">optional object inheriting from RFFeatureGetter. You need it only if you would like to train your own forest, pass NULL otherwise</param>
       public StructuredEdgeDetection(String model, RFFeatureGetter howToGetFeatures)
       {
          using (CvString sModel = new CvString(model))
-            _ptr = XImgprocInvoke.cveStructuredEdgeDetectionCreate(sModel, howToGetFeatures);
+            _ptr = XImgprocInvoke.cveStructuredEdgeDetectionCreate(sModel, howToGetFeatures, ref _sharedPtr);
       }
 
       /// <summary>
@@ -46,7 +48,7 @@ namespace Emgu.CV.XImgproc
       {
          if (_ptr != IntPtr.Zero)
          {
-            XImgprocInvoke.cveStructuredEdgeDetectionRelease(ref _ptr);
+            XImgprocInvoke.cveStructuredEdgeDetectionRelease(ref _ptr, ref _sharedPtr);
          }
       }
    }
@@ -56,12 +58,14 @@ namespace Emgu.CV.XImgproc
    /// </summary>
    public class RFFeatureGetter : UnmanagedObject
    {
+       private IntPtr _sharedPtr;
+
       /// <summary>
       /// Create a default RFFeatureGetter
       /// </summary>
       public RFFeatureGetter()
       {
-         _ptr = XImgprocInvoke.cveRFFeatureGetterCreate();
+         _ptr = XImgprocInvoke.cveRFFeatureGetterCreate(ref _sharedPtr);
       }
 
       /// <summary>
@@ -71,7 +75,7 @@ namespace Emgu.CV.XImgproc
       {
          if (_ptr != IntPtr.Zero)
          {
-            XImgprocInvoke.cveRFFeatureGetterRelease(ref _ptr);
+            XImgprocInvoke.cveRFFeatureGetterRelease(ref _ptr, ref _sharedPtr);
          }
       }
    }
@@ -83,19 +87,19 @@ namespace Emgu.CV.XImgproc
    {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cveStructuredEdgeDetectionCreate(IntPtr model, IntPtr howToGetFeatures);
+      internal static extern IntPtr cveStructuredEdgeDetectionCreate(IntPtr model, IntPtr howToGetFeatures, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveStructuredEdgeDetectionDetectEdges(IntPtr detection, IntPtr src, IntPtr dst);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveStructuredEdgeDetectionRelease(ref IntPtr detection);
+      internal static extern void cveStructuredEdgeDetectionRelease(ref IntPtr detection, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cveRFFeatureGetterCreate();
+      internal static extern IntPtr cveRFFeatureGetterCreate(ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveRFFeatureGetterRelease(ref IntPtr getter);
+      internal static extern void cveRFFeatureGetterRelease(ref IntPtr getter, ref IntPtr sharedPtr);
 
    }
 }

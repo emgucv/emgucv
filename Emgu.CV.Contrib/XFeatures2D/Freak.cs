@@ -28,6 +28,8 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class Freak : Feature2D
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create a Freak descriptor extractor.
         /// </summary>
@@ -39,7 +41,7 @@ namespace Emgu.CV.XFeatures2D
            int nOctaves = 4)
         {
             _ptr = XFeatures2DInvoke.cveFreakCreate(orientationNormalized, scaleNormalized, patternScale, nOctaves,
-               ref _feature2D);
+               ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace Emgu.CV.XFeatures2D
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveFreakRelease(ref _ptr);
+                XFeatures2DInvoke.cveFreakRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -58,16 +60,17 @@ namespace Emgu.CV.XFeatures2D
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveFreakCreate(
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool orientationNormalized,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool scaleNormalized,
-           float patternScale,
-           int nOctaves,
-           ref IntPtr feature2D);
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool orientationNormalized,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool scaleNormalized,
+            float patternScale,
+            int nOctaves,
+            ref IntPtr feature2D,
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFreakRelease(ref IntPtr extractor);
+        internal extern static void cveFreakRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
     }
 }
 

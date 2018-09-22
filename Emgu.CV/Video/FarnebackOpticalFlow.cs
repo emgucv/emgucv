@@ -17,6 +17,8 @@ namespace Emgu.CV
     /// </summary>
     public partial class FarnebackOpticalFlow : UnmanagedObject, IDenseOpticalFlow
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _algorithm;
         private IntPtr _denseOpticalFlow;
 
@@ -45,7 +47,8 @@ namespace Emgu.CV
                 numLevels,
                 pyrScale, fastPyramids, winSize, numIters, polyN, polySigma,
                 flags,
-                ref _denseOpticalFlow, ref _algorithm);
+                ref _denseOpticalFlow, ref _algorithm,
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace Emgu.CV
         {
             if (_ptr != IntPtr.Zero)
             {
-                CvInvoke.cveFarnebackOpticalFlowRelease(ref _ptr);
+                CvInvoke.cveFarnebackOpticalFlowRelease(ref _ptr, ref _sharedPtr);
                 _algorithm = IntPtr.Zero;
                 _denseOpticalFlow = IntPtr.Zero;
             }
@@ -85,7 +88,7 @@ namespace Emgu.CV
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFarnebackOpticalFlowRelease(ref IntPtr flow);
+        internal static extern void cveFarnebackOpticalFlowRelease(ref IntPtr flow, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveFarnebackOpticalFlowCreate(
@@ -99,6 +102,7 @@ namespace Emgu.CV
             double polySigma,
             CvEnum.OpticalflowFarnebackFlag flags,
             ref IntPtr denseOpticalFlow,
-            ref IntPtr algorithm);
+            ref IntPtr algorithm,
+            ref IntPtr sharedPtr);
     }
 }

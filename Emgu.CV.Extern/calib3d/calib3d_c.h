@@ -17,20 +17,20 @@ CVAPI(int)  cveEstimateAffine3D(
    double ransacThreshold, double confidence);
 
 //StereoSGBM
-CVAPI(cv::StereoSGBM*) CvStereoSGBMCreate(
+CVAPI(cv::StereoSGBM*) cveStereoSGBMCreate(
   int minDisparity, int numDisparities, int blockSize,
   int P1, int P2, int disp12MaxDiff,
   int preFilterCap, int uniquenessRatio,
   int speckleWindowSize, int speckleRange,
-  int mode, cv::StereoMatcher** stereoMatcher);
-CVAPI(void) CvStereoSGBMRelease(cv::StereoSGBM** obj);
+  int mode, cv::StereoMatcher** stereoMatcher, cv::Ptr<cv::StereoSGBM>** sharedPtr);
+CVAPI(void) cveStereoSGBMRelease(cv::StereoSGBM** obj, cv::Ptr<cv::StereoSGBM>** sharedPtr);
 
 //StereoBM
-CVAPI(cv::StereoMatcher*) CvStereoBMCreate(int mode, int numberOfDisparities); 
+CVAPI(cv::StereoMatcher*) cveStereoBMCreate(int mode, int numberOfDisparities, cv::Ptr<cv::StereoMatcher>** sharedPtr);
 
 //StereoMatcher
-CVAPI(void) CvStereoMatcherCompute(cv::StereoMatcher*  disparitySolver, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity);
-CVAPI(void) CvStereoMatcherRelease(cv::StereoMatcher** matcher);
+CVAPI(void) cveStereoMatcherCompute(cv::StereoMatcher*  disparitySolver, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity);
+CVAPI(void) cveStereoMatcherRelease(cv::StereoMatcher** matcher, cv::Ptr<cv::StereoMatcher>** sharedPtr);
 
 //2D Tracker
 CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double randsacThreshold, cv::Mat* homography);

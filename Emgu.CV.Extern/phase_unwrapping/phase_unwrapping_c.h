@@ -16,9 +16,10 @@ CVAPI(cv::phase_unwrapping::HistogramPhaseUnwrapping*) cveHistogramPhaseUnwrappi
 	int height,
 	float histThresh,
 	int nbrOfSmallBins,
-	int nbrOfLargeBins);
+	int nbrOfLargeBins,
+	cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>** sharedPtr);
 
-CVAPI(void) cveHistogramPhaseUnwrappingRelease(cv::phase_unwrapping::HistogramPhaseUnwrapping** phase_unwrapping);
+CVAPI(void) cveHistogramPhaseUnwrappingRelease(cv::phase_unwrapping::HistogramPhaseUnwrapping** phase_unwrapping, cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>** sharedPtr);
 
 CVAPI(void) cveHistogramPhaseUnwrappingGetInverseReliabilityMap(cv::phase_unwrapping::HistogramPhaseUnwrapping* phase_unwrapping, cv::_OutputArray* reliabilityMap);
 

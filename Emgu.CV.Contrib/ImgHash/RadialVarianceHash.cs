@@ -20,6 +20,8 @@ namespace Emgu.CV.ImgHash
     /// </summary>
     public class RadialVarianceHash : ImgHashBase
     {
+        private IntPtr _sharedPtr;
+
         /// <summary>
         /// Create an image hash based on Radon transform
         /// </summary>
@@ -27,7 +29,7 @@ namespace Emgu.CV.ImgHash
         /// <param name="numOfAngleLine">Number of angle line</param>
         public RadialVarianceHash(double sigma = 1, int numOfAngleLine = 180)
         {
-            _ptr = ImgHashInvoke.cveRadialVarianceHashCreate(ref _imgHashBase, sigma, numOfAngleLine);
+            _ptr = ImgHashInvoke.cveRadialVarianceHashCreate(ref _imgHashBase, sigma, numOfAngleLine, ref _sharedPtr);
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace Emgu.CV.ImgHash
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ImgHashInvoke.cveRadialVarianceHashRelease(ref _ptr);
+                ImgHashInvoke.cveRadialVarianceHashRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -44,10 +46,10 @@ namespace Emgu.CV.ImgHash
     internal static partial class ImgHashInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveRadialVarianceHashCreate(ref IntPtr imgHash, double sigma, int numOfAngleLine);
+        internal extern static IntPtr cveRadialVarianceHashCreate(ref IntPtr imgHash, double sigma, int numOfAngleLine, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveRadialVarianceHashRelease(ref IntPtr hash);
+        internal extern static void cveRadialVarianceHashRelease(ref IntPtr hash, ref IntPtr sharedPtr);
     }
 }
 

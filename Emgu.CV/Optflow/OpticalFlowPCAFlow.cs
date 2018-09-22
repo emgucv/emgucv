@@ -16,6 +16,8 @@ namespace Emgu.CV
     /// </summary>
     public class OpticalFlowPCAFlow : UnmanagedObject, IDenseOpticalFlow
     {
+        private IntPtr _sharedPtr;
+
         private IntPtr _algorithmPtr;
 
         /// <summary>
@@ -23,7 +25,7 @@ namespace Emgu.CV
         /// </summary>
         public OpticalFlowPCAFlow()
         {
-            _ptr = CvInvoke.cveOptFlowPCAFlowCreate(ref _algorithmPtr);
+            _ptr = CvInvoke.cveOptFlowPCAFlowCreate(ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -33,7 +35,7 @@ namespace Emgu.CV
         {
             if (IntPtr.Zero != _ptr)
             {
-                CvInvoke.cveDenseOpticalFlowRelease(ref _ptr);
+                CvInvoke.cveDenseOpticalFlowRelease(ref _ptr, ref _sharedPtr);
             }
             _algorithmPtr = IntPtr.Zero;
         }
@@ -52,6 +54,6 @@ namespace Emgu.CV
     public static partial class CvInvoke
     {
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveOptFlowPCAFlowCreate(ref IntPtr algorithm);
+        internal static extern IntPtr cveOptFlowPCAFlowCreate(ref IntPtr algorithm, ref IntPtr sharedPtr);
     }
 }

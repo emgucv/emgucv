@@ -13,14 +13,14 @@
 
 CVAPI(void) cveWhiteBalancerBalanceWhite(cv::xphoto::WhiteBalancer* whiteBalancer, cv::_InputArray* src, cv::_OutputArray* dst);
 
-CVAPI(cv::xphoto::SimpleWB*) cveSimpleWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer);
-CVAPI(void) cveSimpleWBRelease(cv::xphoto::SimpleWB** whiteBalancer);
+CVAPI(cv::xphoto::SimpleWB*) cveSimpleWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::SimpleWB>** sharedPtr);
+CVAPI(void) cveSimpleWBRelease(cv::xphoto::SimpleWB** whiteBalancer, cv::Ptr<cv::xphoto::SimpleWB>** sharedPtr);
 
-CVAPI(cv::xphoto::GrayworldWB*) cveGrayworldWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer);
-CVAPI(void) cveGrayworldWBRelease(cv::xphoto::GrayworldWB** whiteBalancer);
+CVAPI(cv::xphoto::GrayworldWB*) cveGrayworldWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::GrayworldWB>** sharedPtr);
+CVAPI(void) cveGrayworldWBRelease(cv::xphoto::GrayworldWB** whiteBalancer, cv::Ptr<cv::xphoto::GrayworldWB>** sharedPtr);
 
-CVAPI(cv::xphoto::LearningBasedWB*) cveLearningBasedWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer);
-CVAPI(void) cveLearningBasedWBRelease(cv::xphoto::LearningBasedWB** whiteBalancer);
+CVAPI(cv::xphoto::LearningBasedWB*) cveLearningBasedWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::LearningBasedWB>** sharedPtr);
+CVAPI(void) cveLearningBasedWBRelease(cv::xphoto::LearningBasedWB** whiteBalancer, cv::Ptr<cv::xphoto::LearningBasedWB>** sharedPtr);
 
 CVAPI(void) cveApplyChannelGains(cv::_InputArray* src, cv::_OutputArray* dst, float gainB, float gainG, float gainR);
 
