@@ -21,8 +21,8 @@
 //
 //----------------------------------------------------------------------------
 
-CVAPI(cv::cudacodec::VideoWriter*) cudaVideoWriterCreate(cv::String* fileName, CvSize* frameSize, double fps, cv::cudacodec::SurfaceFormat format);
-CVAPI(void) cudaVideoWriterRelease(cv::cudacodec::VideoWriter** writer);
+CVAPI(cv::cudacodec::VideoWriter*) cudaVideoWriterCreate(cv::String* fileName, CvSize* frameSize, double fps, cv::cudacodec::SurfaceFormat format, cv::Ptr<cv::cudacodec::VideoWriter>** sharedPtr);
+CVAPI(void) cudaVideoWriterRelease(cv::Ptr<cv::cudacodec::VideoWriter>** writer);
 CVAPI(void) cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputArray* frame, bool lastFrame);
 
 //----------------------------------------------------------------------------
@@ -31,8 +31,8 @@ CVAPI(void) cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputA
 //
 //----------------------------------------------------------------------------
 
-CVAPI(cv::cudacodec::VideoReader*) cudaVideoReaderCreate(cv::String* fileName);
-CVAPI(void) cudaVideoReaderRelease(cv::cudacodec::VideoReader** reader);
+CVAPI(cv::cudacodec::VideoReader*) cudaVideoReaderCreate(cv::String* fileName, cv::Ptr<cv::cudacodec::VideoReader>** sharedPtr);
+CVAPI(void) cudaVideoReaderRelease(cv::Ptr<cv::cudacodec::VideoReader>** reader);
 CVAPI(bool) cudaVideoReaderNextFrame(cv::cudacodec::VideoReader* reader, cv::_OutputArray* frame);
 
 

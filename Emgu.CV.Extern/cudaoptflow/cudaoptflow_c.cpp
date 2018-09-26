@@ -46,17 +46,21 @@ void cudaSparseOpticalFlowCalc(
 //
 //----------------------------------------------------------------------------
 
-cv::cuda::BroxOpticalFlow* cudaBroxOpticalFlowCreate(double alpha, double gamma, double scaleFactor, int innerIterations, int outerIterations, int solverIterations, cv::cuda::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm)
+cv::cuda::BroxOpticalFlow* cudaBroxOpticalFlowCreate(
+	double alpha, double gamma, double scaleFactor, 
+	int innerIterations, int outerIterations, int solverIterations, 
+	cv::cuda::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::BroxOpticalFlow>** sharedPtr)
 {
 	cv::Ptr<cv::cuda::BroxOpticalFlow> ptr = cv::cuda::BroxOpticalFlow::create(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::cuda::BroxOpticalFlow>(ptr);
 	cv::cuda::BroxOpticalFlow* flow = ptr.get();
 	*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
 	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
 	return flow;
 }
 
-void cudaBroxOpticalFlowRelease(cv::cuda::BroxOpticalFlow** flow)
+void cudaBroxOpticalFlowRelease(cv::Ptr<cv::cuda::BroxOpticalFlow>** flow)
 {
 	delete *flow;
 	*flow = 0;
@@ -77,7 +81,8 @@ cv::cuda::FarnebackOpticalFlow* cudaFarnebackOpticalFlowCreate(
 	double polySigma,
 	int flags,
 	cv::cuda::DenseOpticalFlow** denseFlow,
-	cv::Algorithm** algorithm)
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::FarnebackOpticalFlow>** sharedPtr)
 {
 	cv::Ptr<cv::cuda::FarnebackOpticalFlow> ptr = cv::cuda::FarnebackOpticalFlow::create(
 		numLevels,
@@ -88,7 +93,7 @@ cv::cuda::FarnebackOpticalFlow* cudaFarnebackOpticalFlowCreate(
 		polyN,
 		polySigma,
 		flags);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::cuda::FarnebackOpticalFlow>(ptr);
 	cv::cuda::FarnebackOpticalFlow* flow = ptr.get();
 	*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
 	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
@@ -96,7 +101,7 @@ cv::cuda::FarnebackOpticalFlow* cudaFarnebackOpticalFlowCreate(
 }
 
 
-void cudaFarnebackOpticalFlowRelease(cv::cuda::FarnebackOpticalFlow** flow)
+void cudaFarnebackOpticalFlowRelease(cv::Ptr<cv::cuda::FarnebackOpticalFlow>** flow)
 {
 	delete *flow;
 	*flow = 0;
@@ -111,10 +116,11 @@ cv::cuda::OpticalFlowDual_TVL1* cudaOpticalFlowDualTvl1Create(
 	double tau, double lambda, double theta, int nscales, int warps,
 	double epsilon, int iterations, double scaleStep, double gamma, bool useInitialFlow,
 	cv::cuda::DenseOpticalFlow** denseFlow,
-	cv::Algorithm** algorithm)
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::OpticalFlowDual_TVL1>** sharedPtr)
 {
 	cv::Ptr<cv::cuda::OpticalFlowDual_TVL1> ptr = cv::cuda::OpticalFlowDual_TVL1::create(tau, lambda, theta, nscales, warps, epsilon, iterations, scaleStep, gamma, useInitialFlow);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::cuda::OpticalFlowDual_TVL1>(ptr);
 	cv::cuda::OpticalFlowDual_TVL1* flow = ptr.get();
 	*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
 	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
@@ -122,7 +128,7 @@ cv::cuda::OpticalFlowDual_TVL1* cudaOpticalFlowDualTvl1Create(
 }
 
 
-void cudaOpticalFlowDualTvl1Release(cv::cuda::OpticalFlowDual_TVL1** flow)
+void cudaOpticalFlowDualTvl1Release(cv::Ptr<cv::cuda::OpticalFlowDual_TVL1>** flow)
 {
 	delete *flow;
 	*flow = 0;
@@ -133,18 +139,26 @@ void cudaOpticalFlowDualTvl1Release(cv::cuda::OpticalFlowDual_TVL1** flow)
 //  CudaDensePyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-cv::cuda::DensePyrLKOpticalFlow* cudaDensePyrLKOpticalFlowCreate(CvSize* winSize, int maxLevel, int iters, bool useInitialFlow, cv::cuda::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm)
+cv::cuda::DensePyrLKOpticalFlow* cudaDensePyrLKOpticalFlowCreate(
+	CvSize* winSize, 
+	int maxLevel, 
+	int iters, 
+	bool useInitialFlow, 
+	cv::cuda::DenseOpticalFlow** denseFlow, 
+	cv::Algorithm** algorithm, 
+	cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>** sharedPtr)
 {
 	cv::Ptr<cv::cuda::DensePyrLKOpticalFlow> ptr = cv::cuda::DensePyrLKOpticalFlow::create(*winSize, maxLevel, iters, useInitialFlow);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>(ptr);
 	cv::cuda::DensePyrLKOpticalFlow* flow = ptr.get();
 	*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
 	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
 	return flow;
 }
-void cudaDensePyrLKOpticalFlowRelease(cv::cuda::DensePyrLKOpticalFlow** flow)
+void cudaDensePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>** flow)
 {
 	delete *flow;
+	*flow = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -152,18 +166,26 @@ void cudaDensePyrLKOpticalFlowRelease(cv::cuda::DensePyrLKOpticalFlow** flow)
 //  CudaSparsePyrLKOpticalFlow
 //
 //----------------------------------------------------------------------------
-cv::cuda::SparsePyrLKOpticalFlow* cudaSparsePyrLKOpticalFlowCreate(CvSize* winSize, int maxLevel, int iters, bool useInitialFlow, cv::cuda::SparseOpticalFlow** sparseFlow, cv::Algorithm** algorithm)
+cv::cuda::SparsePyrLKOpticalFlow* cudaSparsePyrLKOpticalFlowCreate(
+	CvSize* winSize, 
+	int maxLevel, 
+	int iters, 
+	bool useInitialFlow, 
+	cv::cuda::SparseOpticalFlow** sparseFlow, 
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** sharedPtr)
 {
 	cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow> ptr = cv::cuda::SparsePyrLKOpticalFlow::create(*winSize, maxLevel, iters, useInitialFlow);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>(ptr);
 	cv::cuda::SparsePyrLKOpticalFlow* flow = ptr.get();
 	*sparseFlow = dynamic_cast<cv::cuda::SparseOpticalFlow*>(flow);
 	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
 	return flow;
 }
-void cudaDensePyrLKOpticalFlowRelease(cv::cuda::SparsePyrLKOpticalFlow** flow)
+void cudaDensePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** flow)
 {
 	delete *flow;
+	*flow = 0;
 }
 
 /*

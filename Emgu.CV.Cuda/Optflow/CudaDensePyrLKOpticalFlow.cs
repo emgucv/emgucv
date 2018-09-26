@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -14,7 +15,7 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// PyrLK optical flow
     /// </summary>
-    public class CudaDensePyrLKOpticalFlow : UnmanagedObject, ICudaDenseOpticalFlow
+    public class CudaDensePyrLKOpticalFlow : SharedPtrObject, ICudaDenseOpticalFlow
     {
         private IntPtr _denseFlow;
         private IntPtr _algorithm;
@@ -28,7 +29,7 @@ namespace Emgu.CV.Cuda
         /// <param name="useInitialFlow">Weather or not use the initial flow in the input matrix.</param>
         public CudaDensePyrLKOpticalFlow(Size winSize, int maxLevel = 3, int iters = 30, bool useInitialFlow = false)
         {
-            _ptr = CudaInvoke.cudaDensePyrLKOpticalFlowCreate(ref winSize, maxLevel, iters, useInitialFlow, ref _denseFlow, ref _algorithm);
+            _ptr = CudaInvoke.cudaDensePyrLKOpticalFlowCreate(ref winSize, maxLevel, iters, useInitialFlow, ref _denseFlow, ref _algorithm, ref _sharedPtr);
         }
 
         /// <summary>
@@ -36,9 +37,10 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                CudaInvoke.cudaDensePyrLKOpticalFlowRelease(ref _ptr);
+                CudaInvoke.cudaDensePyrLKOpticalFlowRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
                 _denseFlow = IntPtr.Zero;
                 _algorithm = IntPtr.Zero;
             }
@@ -67,9 +69,10 @@ namespace Emgu.CV.Cuda
         internal extern static IntPtr cudaDensePyrLKOpticalFlowCreate(
            ref Size winSize, int maxLevel, int iters,
            [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool useInitialFlow,
+           bool useInitialFlow,
            ref IntPtr denseFlow,
-           ref IntPtr algorithm);
+           ref IntPtr algorithm, 
+           ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cudaDensePyrLKOpticalFlowRelease(ref IntPtr flow);

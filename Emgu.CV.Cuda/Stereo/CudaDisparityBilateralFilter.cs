@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -16,7 +17,7 @@ namespace Emgu.CV.Cuda
    /// Qingxiong Yang, Liang Wang†, Narendra Ahuja
    /// http://vision.ai.uiuc.edu/~qyang6/
    /// </summary>
-   public class CudaDisparityBilateralFilter : UnmanagedObject
+   public class CudaDisparityBilateralFilter : SharedPtrObject
    {
       /// <summary>
       /// Create a GpuDisparityBilateralFilter
@@ -26,7 +27,7 @@ namespace Emgu.CV.Cuda
       /// <param name="iters">Number of iterations, use 1 as default</param>
       public CudaDisparityBilateralFilter(int ndisp = 64, int radius = 3, int iters = 1)
       {
-         _ptr = CudaInvoke.cudaDisparityBilateralFilterCreate(ndisp, radius, iters);
+         _ptr = CudaInvoke.cudaDisparityBilateralFilterCreate(ndisp, radius, iters, ref _sharedPtr);
       }
 
       /// <summary>
@@ -49,14 +50,18 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.cudaDisparityBilateralFilterRelease(ref _ptr);
+          if (IntPtr.Zero != _sharedPtr)
+          {
+              CudaInvoke.cudaDisparityBilateralFilterRelease(ref _sharedPtr);
+              _ptr = IntPtr.Zero;
+          }
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cudaDisparityBilateralFilterCreate(int ndisp, int radius, int iters);
+      internal extern static IntPtr cudaDisparityBilateralFilterCreate(int ndisp, int radius, int iters, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static void cudaDisparityBilateralFilterApply(IntPtr filter, IntPtr disparity, IntPtr image, IntPtr dst, IntPtr stream);

@@ -44,7 +44,7 @@ cv::cuda::BackgroundSubtractorMOG2* cudaBackgroundSubtractorMOG2Create(
 	cv::Ptr<cv::cuda::BackgroundSubtractorMOG2>** sharedPtr)
 {
    cv::Ptr<cv::cuda::BackgroundSubtractorMOG2> ptr = cv::cuda::createBackgroundSubtractorMOG2(history, varThreshold, detectShadows);
-   *shredPtr = 
+   *sharedPtr = new cv::Ptr<cv::cuda::BackgroundSubtractorMOG2>(ptr);
    cv::cuda::BackgroundSubtractorMOG2* bs = ptr.get();
    *bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
    *algorithm = dynamic_cast<cv::Algorithm*>(bs);

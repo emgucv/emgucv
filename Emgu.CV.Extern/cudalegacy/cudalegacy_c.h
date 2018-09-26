@@ -20,9 +20,12 @@
 //  Cuda GMG
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::BackgroundSubtractorGMG*) cudaBackgroundSubtractorGMGCreate(int initializationFrames, double decisionThreshold);
+CVAPI(cv::cuda::BackgroundSubtractorGMG*) cudaBackgroundSubtractorGMGCreate(
+	int initializationFrames,
+	double decisionThreshold,
+	cv::Ptr<cv::cuda::BackgroundSubtractorGMG>** sharedPtr);
 CVAPI(void) cudaBackgroundSubtractorGMGApply(cv::cuda::BackgroundSubtractorGMG* gmg, cv::_InputArray* frame, cv::_OutputArray* fgMask, double learningRate, cv::cuda::Stream* stream);
-CVAPI(void) cudaBackgroundSubtractorGMGRelease(cv::cuda::BackgroundSubtractorGMG** gmg);
+CVAPI(void) cudaBackgroundSubtractorGMGRelease(cv::Ptr<cv::cuda::BackgroundSubtractorGMG>** gmg);
 
 //----------------------------------------------------------------------------
 //
@@ -30,20 +33,21 @@ CVAPI(void) cudaBackgroundSubtractorGMGRelease(cv::cuda::BackgroundSubtractorGMG
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::BackgroundSubtractorFGD*) cudaBackgroundSubtractorFGDCreate(
-   int Lc,
-   int N1c,
-   int N2c,
-   int Lcc,
-   int N1cc,
-   int N2cc,
-   bool isObjWithoutHoles,
-   int performMorphing,
-   float alpha1,
-   float alpha2,
-   float alpha3,
-   float delta,
-   float T,
-   float minArea);
+	int Lc,
+	int N1c,
+	int N2c,
+	int Lcc,
+	int N1cc,
+	int N2cc,
+	bool isObjWithoutHoles,
+	int performMorphing,
+	float alpha1,
+	float alpha2,
+	float alpha3,
+	float delta,
+	float T,
+	float minArea,
+	cv::Ptr<cv::cuda::BackgroundSubtractorFGD>** sharedPtr);
 CVAPI(void) cudaBackgroundSubtractorFGDApply(cv::cuda::BackgroundSubtractorFGD* fgd, cv::_InputArray* frame, cv::_OutputArray* fgMask, double learningRate);
-CVAPI(void) cudaBackgroundSubtractorFGDRelease(cv::cuda::BackgroundSubtractorFGD** fgd);
+CVAPI(void) cudaBackgroundSubtractorFGDRelease(cv::Ptr<cv::cuda::BackgroundSubtractorFGD>** fgd);
 #endif

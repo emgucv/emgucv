@@ -113,11 +113,11 @@ CVAPI(void) cudaFlip(cv::_InputArray* src, cv::_OutputArray* dst, int flipcode, 
 
 CVAPI(void) cudaSplit(cv::_InputArray* src, std::vector< cv::cuda::GpuMat >* dst, cv::cuda::Stream* stream);
 
-CVAPI(cv::cuda::LookUpTable*) cudaLookUpTableCreate( cv::_InputArray* lut );
+CVAPI(cv::cuda::LookUpTable*) cudaLookUpTableCreate( cv::_InputArray* lut, cv::Ptr<cv::cuda::LookUpTable>** sharedPtr);
 
 CVAPI(void) cudaLookUpTableTransform(cv::cuda::LookUpTable* lut, cv::_InputArray* image, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaLookUpTableRelease(cv::cuda::LookUpTable** lut);
+CVAPI(void) cudaLookUpTableRelease(cv::Ptr<cv::cuda::LookUpTable>** lut);
 
 CVAPI(void) cudaTranspose(cv::_InputArray* src1, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 

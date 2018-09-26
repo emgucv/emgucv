@@ -5,6 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -14,7 +15,7 @@ namespace Emgu.CV.Cuda
    /// Qingxiong Yang, Liang Wang, Narendra Ahuja.
    /// http://vision.ai.uiuc.edu/~qyang6/
    /// </summary>
-   public class CudaStereoConstantSpaceBP : UnmanagedObject
+   public class CudaStereoConstantSpaceBP : SharedPtrObject
    {
       /// <summary>
       /// A Constant-Space Belief Propagation Algorithm for Stereo Matching
@@ -25,7 +26,7 @@ namespace Emgu.CV.Cuda
       /// <param name="nrPlane">The number of active disparity on the first level. Use 4 as default.</param>
       public CudaStereoConstantSpaceBP(int ndisp = 128, int iters = 8, int levels = 4, int nrPlane = 4)
       {
-         _ptr = CudaInvoke.cudaStereoConstantSpaceBPCreate(ndisp, iters, levels, nrPlane);
+         _ptr = CudaInvoke.cudaStereoConstantSpaceBPCreate(ndisp, iters, levels, nrPlane, ref _sharedPtr);
       }
 
       /// <summary>
@@ -48,14 +49,18 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         CudaInvoke.cudaStereoConstantSpaceBPRelease(ref _ptr);
+          if (IntPtr.Zero != _sharedPtr)
+          {
+              CudaInvoke.cudaStereoConstantSpaceBPRelease(ref _sharedPtr);
+              _ptr = IntPtr.Zero;
+          }
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaStereoConstantSpaceBPCreate(int ndisp, int iters, int levels, int nr_plane);
+      internal static extern IntPtr cudaStereoConstantSpaceBPCreate(int ndisp, int iters, int levels, int nr_plane, ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaStereoConstantSpaceBPFindStereoCorrespondence(IntPtr stereoBM, IntPtr left, IntPtr right, IntPtr disparity, IntPtr stream);

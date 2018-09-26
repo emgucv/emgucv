@@ -20,11 +20,11 @@
 //  CudaCascadeClassifier
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::CascadeClassifier*) cudaCascadeClassifierCreate(cv::String* filename);
+CVAPI(cv::cuda::CascadeClassifier*) cudaCascadeClassifierCreate(cv::String* filename, cv::Ptr<cv::cuda::CascadeClassifier>** sharedPtr);
 
-CVAPI(cv::cuda::CascadeClassifier*) cudaCascadeClassifierCreateFromFileStorage(cv::FileStorage* filestorage);
+CVAPI(cv::cuda::CascadeClassifier*) cudaCascadeClassifierCreateFromFileStorage(cv::FileStorage* filestorage, cv::Ptr<cv::cuda::CascadeClassifier>** sharedPtr);
 
-CVAPI(void) cudaCascadeClassifierRelease(cv::cuda::CascadeClassifier** classifier);
+CVAPI(void) cudaCascadeClassifierRelease(cv::Ptr<cv::cuda::CascadeClassifier>** classifier);
 
 CVAPI(void) cudaCascadeClassifierDetectMultiScale(cv::cuda::CascadeClassifier* classifier, cv::_InputArray* image, cv::_OutputArray* objects, cv::cuda::Stream* stream);
 
@@ -51,21 +51,22 @@ CVAPI(void) cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* c
 CVAPI(void) cudaHOGGetDefaultPeopleDetector(cv::cuda::HOG* descriptor, cv::Mat* detector);
 
 CVAPI(cv::cuda::HOG*) cudaHOGCreate(
-   CvSize* winSize,
-   CvSize* blockSize,
-   CvSize* blockStride,
-   CvSize* cellSize,
-   int nbins);
+	CvSize* winSize,
+	CvSize* blockSize,
+	CvSize* blockStride,
+	CvSize* cellSize,
+	int nbins,
+	cv::Ptr<cv::cuda::HOG>** sharedPtr);
 
 CVAPI(void) cudaHOGSetSVMDetector(cv::cuda::HOG* descriptor, cv::_InputArray* detector);
 
-CVAPI(void) cudaHOGRelease(cv::cuda::HOG** descriptor);
+CVAPI(void) cudaHOGRelease(cv::Ptr<cv::cuda::HOG>** descriptor);
 
 CVAPI(void) cudaHOGDetectMultiScale(
-   cv::cuda::HOG* descriptor, 
-   cv::_InputArray* img, 
-   std::vector<cv::Rect>* foundLocations,
-   std::vector<double>* confidents);
+	cv::cuda::HOG* descriptor,
+	cv::_InputArray* img,
+	std::vector<cv::Rect>* foundLocations,
+	std::vector<double>* confidents);
 
 /*
 CVAPI(double) cudaHOGGetWinSigma(cv::cuda::HOG* descriptor);
@@ -81,7 +82,7 @@ CVAPI(double) cudaHOGGetHitThreshold(cv::cuda::HOG* descriptor);
 CVAPI(void) cudaHOGSetHitThreshold(cv::cuda::HOG* descriptor, double hitThreshold);
 
 CVAPI(double) cudaHOGGetScaleFactor(cv::cuda::HOG* descriptor);
-CVAPI(void) cudaHOGSetScaleFactor(cv::cuda::HOG* descriptor, double scaleFactor); 
+CVAPI(void) cudaHOGSetScaleFactor(cv::cuda::HOG* descriptor, double scaleFactor);
 
 CVAPI(void) cudaHOGGetWinStride(cv::cuda::HOG* descriptor, CvSize* winStride);
 CVAPI(void) cudaHOGSetWinStride(cv::cuda::HOG* descriptor, CvSize* winStride);

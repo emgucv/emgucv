@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -13,7 +14,7 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// DualTvl1 optical flow
     /// </summary>
-    public class CudaOpticalFlowDualTvl1 : UnmanagedObject, ICudaDenseOpticalFlow
+    public class CudaOpticalFlowDualTvl1 : SharedPtrObject, ICudaDenseOpticalFlow
     {
         private IntPtr _denseFlow;
         private IntPtr _algorithm;
@@ -26,7 +27,8 @@ namespace Emgu.CV.Cuda
            double epsilon, int iterations, double scaleStep, double gamma,
            bool useInitialFlow)
         {
-            _ptr = CudaInvoke.cudaOpticalFlowDualTvl1Create(tau, lambda, theta, nscales, warps, epsilon, iterations, scaleStep, gamma, useInitialFlow, ref _denseFlow, ref _algorithm);
+            _ptr = CudaInvoke.cudaOpticalFlowDualTvl1Create(
+                tau, lambda, theta, nscales, warps, epsilon, iterations, scaleStep, gamma, useInitialFlow, ref _denseFlow, ref _algorithm, ref _sharedPtr);
         }
 
         /// <summary>
@@ -34,11 +36,12 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                CudaInvoke.cudaOpticalFlowDualTvl1Release(ref _ptr);
+                CudaInvoke.cudaOpticalFlowDualTvl1Release(ref _sharedPtr);
                 _denseFlow = IntPtr.Zero;
                 _algorithm = IntPtr.Zero;
+                _ptr = IntPtr.Zero;
             }
         }
 
@@ -65,7 +68,8 @@ namespace Emgu.CV.Cuda
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useInitialFlow,
             ref IntPtr denseFlow,
-            ref IntPtr algorithm);
+            ref IntPtr algorithm, 
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cudaOpticalFlowDualTvl1Release(ref IntPtr flow);

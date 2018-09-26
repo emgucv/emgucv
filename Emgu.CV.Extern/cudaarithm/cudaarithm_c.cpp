@@ -267,17 +267,17 @@ void cudaSplit(cv::_InputArray* src, std::vector< cv::cuda::GpuMat >* dst, cv::c
    cv::cuda::split(*src, *dst, stream? *stream : cv::cuda::Stream::Null());
 }
 
-cv::cuda::LookUpTable* cudaLookUpTableCreate( cv::_InputArray* lut )
+cv::cuda::LookUpTable* cudaLookUpTableCreate( cv::_InputArray* lut, cv::Ptr<cv::cuda::LookUpTable>** sharedPtr )
 {
    cv::Ptr<cv::cuda::LookUpTable> ptr = cv::cuda::createLookUpTable(*lut);
-   ptr.addref();
+   *sharedPtr = new cv::Ptr<cv::cuda::LookUpTable>(ptr);
    return ptr.get();
 }
 void cudaLookUpTableTransform(cv::cuda::LookUpTable* lut, cv::_InputArray* image, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
    lut->transform(*image, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
-void cudaLookUpTableRelease(cv::cuda::LookUpTable** lut)
+void cudaLookUpTableRelease(cv::Ptr<cv::cuda::LookUpTable>** lut)
 {
    delete *lut;
    *lut=0;

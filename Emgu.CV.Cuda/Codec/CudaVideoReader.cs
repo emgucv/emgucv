@@ -15,40 +15,43 @@ using Emgu.Util;
 
 namespace Emgu.CV.Cuda
 {
-   public class CudaVideoReader : UnmanagedObject
-   {
-      public CudaVideoReader(String fileName)
-      {
-         using (CvString s = new CvString(fileName))
-            _ptr = CudaInvoke.cudaVideoReaderCreate(s);
-      }
+    public class CudaVideoReader : SharedPtrObject
+    {
+        public CudaVideoReader(String fileName)
+        {
+            using (CvString s = new CvString(fileName))
+                _ptr = CudaInvoke.cudaVideoReaderCreate(s, ref _sharedPtr);
+        }
 
-      public bool NextFrame(IOutputArray frame)
-      {
-         using (OutputArray oaFrame = frame.GetOutputArray())
-         {
-            return CudaInvoke.cudaVideoReaderNextFrame(_ptr, oaFrame);
-         }
-      }
+        public bool NextFrame(IOutputArray frame)
+        {
+            using (OutputArray oaFrame = frame.GetOutputArray())
+            {
+                return CudaInvoke.cudaVideoReaderNextFrame(_ptr, oaFrame);
+            }
+        }
 
-      protected override void DisposeObject()
-      {
-         if (_ptr != IntPtr.Zero)
-            CudaInvoke.cudaVideoReaderRelease(ref _ptr);
-      }
-   }
+        protected override void DisposeObject()
+        {
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                CudaInvoke.cudaVideoReaderRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
+        }
+    }
 
-   public static partial class CudaInvoke
-   {
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaVideoReaderCreate(IntPtr fileName);
+    public static partial class CudaInvoke
+    {
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cudaVideoReaderCreate(IntPtr fileName, ref IntPtr sharedPtr);
 
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cudaVideoReaderRelease(ref IntPtr reader);
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cudaVideoReaderRelease(ref IntPtr reader);
 
 
-      [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal static extern bool cudaVideoReaderNextFrame(IntPtr reader, IntPtr frame);
-   }
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cudaVideoReaderNextFrame(IntPtr reader, IntPtr frame);
+    }
 }

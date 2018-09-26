@@ -12,13 +12,13 @@
 //
 //----------------------------------------------------------------------------
 
-cv::cudacodec::VideoWriter* cudaVideoWriterCreate(cv::String* fileName, CvSize* frameSize, double fps, cv::cudacodec::SurfaceFormat format)
+cv::cudacodec::VideoWriter* cudaVideoWriterCreate(cv::String* fileName, CvSize* frameSize, double fps, cv::cudacodec::SurfaceFormat format, cv::Ptr<cv::cudacodec::VideoWriter>** sharedPtr)
 {
    cv::Ptr<cv::cudacodec::VideoWriter> ptr = cv::cudacodec::createVideoWriter(*fileName, *frameSize, fps, format);
-   ptr.addref();
+   *sharedPtr = new cv::Ptr<cv::cudacodec::VideoWriter>(ptr);
    return ptr.get();
 }
-void cudaVideoWriterRelease(cv::cudacodec::VideoWriter** writer)
+void cudaVideoWriterRelease(cv::Ptr<cv::cudacodec::VideoWriter>** writer)
 {
    delete *writer;
    *writer = 0;
@@ -34,13 +34,13 @@ void cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputArray* f
 //
 //----------------------------------------------------------------------------
 
-cv::cudacodec::VideoReader* cudaVideoReaderCreate(cv::String* fileName)
+cv::cudacodec::VideoReader* cudaVideoReaderCreate(cv::String* fileName, cv::Ptr<cv::cudacodec::VideoReader>** sharedPtr)
 {
    cv::Ptr<cv::cudacodec::VideoReader> ptr = cv::cudacodec::createVideoReader(*fileName);
-   ptr.addref();
+   *sharedPtr = new cv::Ptr<cv::cudacodec::VideoReader>(ptr);
    return ptr.get();
 }
-void cudaVideoReaderRelease(cv::cudacodec::VideoReader** reader)
+void cudaVideoReaderRelease(cv::Ptr<cv::cudacodec::VideoReader>** reader)
 {
    delete *reader;
    *reader = 0;

@@ -6,21 +6,21 @@
 
 #include "cudaobjdetect_c.h"
 
-cv::cuda::CascadeClassifier* cudaCascadeClassifierCreate(cv::String* filename)
+cv::cuda::CascadeClassifier* cudaCascadeClassifierCreate(cv::String* filename, cv::Ptr<cv::cuda::CascadeClassifier>** sharedPtr)
 {
    cv::Ptr<cv::cuda::CascadeClassifier> ptr = cv::cuda::CascadeClassifier::create(*filename);
-   ptr.addref();
+   *sharedPtr = new cv::Ptr < cv::cuda::CascadeClassifier >(ptr);
    return ptr.get();
 }
 
-cv::cuda::CascadeClassifier* cudaCascadeClassifierCreateFromFileStorage(cv::FileStorage* filestorage)
+cv::cuda::CascadeClassifier* cudaCascadeClassifierCreateFromFileStorage(cv::FileStorage* filestorage, cv::Ptr<cv::cuda::CascadeClassifier>** sharedPtr)
 {
    cv::Ptr<cv::cuda::CascadeClassifier> ptr = cv::cuda::CascadeClassifier::create(*filestorage);
-   ptr.addref();
+   *sharedPtr = new cv::Ptr < cv::cuda::CascadeClassifier >(ptr);
    return ptr.get();
 }
 
-void cudaCascadeClassifierRelease(cv::cuda::CascadeClassifier** classifier)
+void cudaCascadeClassifierRelease(cv::Ptr<cv::cuda::CascadeClassifier>** classifier)
 {
    delete *classifier;
    *classifier = 0;

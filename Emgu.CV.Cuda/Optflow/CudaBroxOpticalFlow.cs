@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -13,7 +14,7 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// Brox optical flow
     /// </summary>
-    public class CudaBroxOpticalFlow : UnmanagedObject, ICudaDenseOpticalFlow
+    public class CudaBroxOpticalFlow : SharedPtrObject, ICudaDenseOpticalFlow
     {
         private IntPtr _denseFlow;
         private IntPtr _algorithm;
@@ -29,7 +30,7 @@ namespace Emgu.CV.Cuda
         /// <param name="solverIterations">Number of linear system solver iterations</param>
         public CudaBroxOpticalFlow(double alpha = 0.197, double gamma = 50, double scaleFactor = 0.8, int innerIterations = 5, int outerIterations = 150, int solverIterations = 10)
         {
-            _ptr = CudaInvoke.cudaBroxOpticalFlowCreate(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations, ref _denseFlow, ref _algorithm);
+            _ptr = CudaInvoke.cudaBroxOpticalFlowCreate(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations, ref _denseFlow, ref _algorithm, ref _sharedPtr);
         }
 
         /// <summary>
@@ -37,9 +38,10 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                CudaInvoke.cudaBroxOpticalFlowRelease(ref _ptr);
+                CudaInvoke.cudaBroxOpticalFlowRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
                 _denseFlow = IntPtr.Zero;
                 _algorithm = IntPtr.Zero;
             }
@@ -65,7 +67,7 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cudaBroxOpticalFlowCreate(double alpha, double gamma, double scaleFactor, int innerIterations, int outerIterations, int solverIterations, ref IntPtr denseFlow, ref IntPtr algorithm);
+        internal extern static IntPtr cudaBroxOpticalFlowCreate(double alpha, double gamma, double scaleFactor, int innerIterations, int outerIterations, int solverIterations, ref IntPtr denseFlow, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cudaBroxOpticalFlowRelease(ref IntPtr flow);

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -14,7 +15,7 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// Sparse PyrLK optical flow
     /// </summary>
-    public class CudaSparsePyrLKOpticalFlow : UnmanagedObject, ICudaSparseOpticalFlow
+    public class CudaSparsePyrLKOpticalFlow : SharedPtrObject, ICudaSparseOpticalFlow
     {
         private IntPtr _sparseFlow;
         private IntPtr _algorithm;
@@ -30,7 +31,7 @@ namespace Emgu.CV.Cuda
         {
             _ptr = CudaInvoke.cudaSparsePyrLKOpticalFlowCreate(
                 winSize, maxLevel, iters, useInitialFlow,
-                ref _sparseFlow, ref _algorithm);
+                ref _sparseFlow, ref _algorithm, ref _sharedPtr);
         }
 
         /// <summary>
@@ -38,9 +39,10 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                CudaInvoke.cudaSparsePyrLKOpticalFlowRelease(ref _ptr);
+                CudaInvoke.cudaSparsePyrLKOpticalFlowRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
                 _sparseFlow = IntPtr.Zero;
                 _algorithm = IntPtr.Zero;
             }
@@ -68,9 +70,11 @@ namespace Emgu.CV.Cuda
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cudaSparsePyrLKOpticalFlowCreate(
             Size winSize, int maxLevel, int iters,
-            [MarshalAs(CvInvoke.BoolMarshalType)] bool useInitialFlow,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useInitialFlow,
             ref IntPtr sparseFlow,
-            ref IntPtr algorithm);
+            ref IntPtr algorithm, 
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cudaSparsePyrLKOpticalFlowRelease(ref IntPtr flow);
