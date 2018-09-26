@@ -41,13 +41,13 @@ namespace Emgu.CV.Cuda
       {
          _ptr = CudaInvoke.cudaCreateGaussianFilter(
             CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
-            ref ksize, sigma1, sigma2, (int)rowBorderType, (int)columnBorderType);
+            ref ksize, sigma1, sigma2, (int)rowBorderType, (int)columnBorderType, ref _sharedPtr);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateGaussianFilter(int srcType, int dstType, ref Size ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType);
+      internal static extern IntPtr cudaCreateGaussianFilter(int srcType, int dstType, ref Size ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType, ref IntPtr sharedPtr);
    }
 }

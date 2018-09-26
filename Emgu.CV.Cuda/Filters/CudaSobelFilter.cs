@@ -40,13 +40,13 @@ namespace Emgu.CV.Cuda
          CvEnum.BorderType rowBorderType = BorderType.Default, CvEnum.BorderType columnBorderType = BorderType.NegativeOne)
       {
          _ptr = CudaInvoke.cudaCreateSobelFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
-            dx, dy, ksize, scale, rowBorderType, columnBorderType);
+            dx, dy, ksize, scale, rowBorderType, columnBorderType, ref _sharedPtr);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateSobelFilter(int srcType, int dstType, int dx, int dy, int ksize, double scale, CvEnum.BorderType rowBorderType, CvEnum.BorderType columnBorderType);
+      internal static extern IntPtr cudaCreateSobelFilter(int srcType, int dstType, int dx, int dy, int ksize, double scale, CvEnum.BorderType rowBorderType, CvEnum.BorderType columnBorderType, ref IntPtr sharedPtr);
    }
 }

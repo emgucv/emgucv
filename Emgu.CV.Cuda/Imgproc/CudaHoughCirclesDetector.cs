@@ -8,6 +8,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Cuda
@@ -15,7 +16,7 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// Base class for circles detector algorithm.
     /// </summary>
-    public class CudaHoughCirclesDetector : UnmanagedObject
+    public class CudaHoughCirclesDetector : SharedPtrObject
     {
         /// <summary>
         /// Create hough circles detector
@@ -29,7 +30,7 @@ namespace Emgu.CV.Cuda
         /// <param name="maxCircles">Maximum number of output circles.</param>
         public CudaHoughCirclesDetector(float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles = 4096)
         {
-            _ptr = CudaInvoke.cudaHoughCirclesDetectorCreate(dp, minDist, cannyThreshold, votesThreshold, minRadius, maxRadius, maxCircles);
+            _ptr = CudaInvoke.cudaHoughCirclesDetectorCreate(dp, minDist, cannyThreshold, votesThreshold, minRadius, maxRadius, maxCircles, ref _sharedPtr);
         }
 
         /// <summary>
@@ -70,14 +71,18 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            CudaInvoke.cudaHoughCirclesDetectorRelease(ref _ptr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                CudaInvoke.cudaHoughCirclesDetectorRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
     }
 
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cudaHoughCirclesDetectorCreate(float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles);
+        internal static extern IntPtr cudaHoughCirclesDetectorCreate(float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cudaHoughCirclesDetectorDetect(IntPtr detector, IntPtr src, IntPtr circles, IntPtr stream);

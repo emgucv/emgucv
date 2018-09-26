@@ -39,13 +39,13 @@ namespace Emgu.CV.Cuda
       {
          _ptr = CudaInvoke.cudaCreateLaplacianFilter(
             CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
-            ksize, scale, borderType, ref borderValue);
+            ksize, scale, borderType, ref borderValue, ref _sharedPtr);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateLaplacianFilter(int srcType, int dstType, int ksize, double scale, CvEnum.BorderType borderMode, ref MCvScalar borderValue);
+      internal static extern IntPtr cudaCreateLaplacianFilter(int srcType, int dstType, int ksize, double scale, CvEnum.BorderType borderMode, ref MCvScalar borderValue, ref IntPtr sharedPtr);
    }
 }

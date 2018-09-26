@@ -42,7 +42,7 @@ namespace Emgu.CV.Cuda
             CvEnum.BorderType rowBorderType = BorderType.Default,
             CvEnum.BorderType columnBorderType = BorderType.NegativeOne)
         {
-            _ptr = CudaInvoke.cudaCreateDerivFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), dx, dy, ksize, normalize, scale, rowBorderType, columnBorderType);
+            _ptr = CudaInvoke.cudaCreateDerivFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), dx, dy, ksize, normalize, scale, rowBorderType, columnBorderType, ref _sharedPtr);
         }
     }
 
@@ -54,8 +54,8 @@ namespace Emgu.CV.Cuda
             int dx, int dy,
             int ksize,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-          bool normalize,
+            bool normalize,
             double scale,
-            CvEnum.BorderType rowBorderMode, CvEnum.BorderType columnBorderMode);
+            CvEnum.BorderType rowBorderMode, CvEnum.BorderType columnBorderMode, ref IntPtr sharedPtr);
     }
 }

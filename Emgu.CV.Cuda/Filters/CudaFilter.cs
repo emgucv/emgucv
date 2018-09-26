@@ -17,15 +17,18 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// Base Cuda filter class
     /// </summary>
-    public abstract class CudaFilter : UnmanagedObject
+    public abstract class CudaFilter : Emgu.CV.Util.SharedPtrObject
     {
         /// <summary>
         /// Release all the unmanaged memory associated with this gpu filter
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                CudaInvoke.cudaFilterRelease(ref _ptr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                CudaInvoke.cudaFilterRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
 
         /// <summary>

@@ -41,13 +41,13 @@ namespace Emgu.CV.Cuda
          using (InputArray iaKernel = kernel.GetInputArray())
             _ptr = CudaInvoke.cudaCreateLinearFilter(
                CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels),
-               iaKernel, ref anchor, borderType, ref borderValue);
+               iaKernel, ref anchor, borderType, ref borderValue, ref _sharedPtr);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateLinearFilter(int srcType, int dstType, IntPtr kernel, ref Point anchor, CvEnum.BorderType borderMode, ref MCvScalar borderValue);
+      internal static extern IntPtr cudaCreateLinearFilter(int srcType, int dstType, IntPtr kernel, ref Point anchor, CvEnum.BorderType borderMode, ref MCvScalar borderValue, ref IntPtr sharedPtr);
    }
 }

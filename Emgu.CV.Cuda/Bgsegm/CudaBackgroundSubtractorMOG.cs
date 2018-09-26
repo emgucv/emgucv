@@ -17,7 +17,7 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// Gaussian Mixture-based Background/Foreground Segmentation Algorithm.
     /// </summary>
-    public class CudaBackgroundSubtractorMOG : UnmanagedObject, IBackgroundSubtractor
+    public class CudaBackgroundSubtractorMOG : SharedPtrObject, IBackgroundSubtractor
     {
 
         private IntPtr _algorithmPtr;
@@ -38,7 +38,7 @@ namespace Emgu.CV.Cuda
         /// </summary>
         public CudaBackgroundSubtractorMOG(int history = 200, int nMixtures = 4, double backgroundRatio = 0.7, double noiseSigma = 0)
         {
-            _ptr = CudaInvoke.cudaBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr);
+            _ptr = CudaInvoke.cudaBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -60,7 +60,11 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            CudaInvoke.cudaBackgroundSubtractorMOGRelease(ref _ptr);
+            if (IntPtr.Zero != _sharedPtr)
+            {
+                CudaInvoke.cudaBackgroundSubtractorMOGRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
 
     }
@@ -71,7 +75,8 @@ namespace Emgu.CV.Cuda
         internal static extern IntPtr cudaBackgroundSubtractorMOGCreate(
             int history, int nMixtures, double backgroundRatio, double noiseSigma,
             ref IntPtr bgSubtractor,
-            ref IntPtr algorithm);
+            ref IntPtr algorithm,
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cudaBackgroundSubtractorMOGApply(IntPtr mog, IntPtr frame, IntPtr fgMask, double learningRate, IntPtr stream);

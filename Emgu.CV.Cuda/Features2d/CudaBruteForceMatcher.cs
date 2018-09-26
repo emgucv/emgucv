@@ -14,7 +14,7 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// Descriptor matcher
     /// </summary>
-    public abstract class DescriptorMatcher : UnmanagedObject, IAlgorithm
+    public abstract class DescriptorMatcher : SharedPtrObject, IAlgorithm
     {
         /// <summary>
         /// Pointer to the native cv::Algorithm
@@ -340,7 +340,11 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            CudaInvoke.cveCudaDescriptorMatcherRelease(ref _ptr);
+            if (IntPtr.Zero != _sharedPtr)
+            {
+                CudaInvoke.cveCudaDescriptorMatcherRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
     }
 
@@ -356,7 +360,7 @@ namespace Emgu.CV.Cuda
         /// <param name="distanceType">The distance type</param>
         public CudaBFMatcher(DistanceType distanceType)
         {
-            _ptr = CudaInvoke.cveCudaDescriptorMatcherCreateBFMatcher(distanceType, ref _algorithmPtr);
+            _ptr = CudaInvoke.cveCudaDescriptorMatcherCreateBFMatcher(distanceType, ref _algorithmPtr, ref _sharedPtr);
         }
 
     }
@@ -364,11 +368,11 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveCudaDescriptorMatcherCreateBFMatcher(DistanceType distType, ref IntPtr algorithm);
+        internal extern static IntPtr cveCudaDescriptorMatcherCreateBFMatcher(DistanceType distType, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherRelease(ref IntPtr ptr);
+        internal extern static void cveCudaDescriptorMatcherRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveCudaDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescs);

@@ -33,13 +33,13 @@ namespace Emgu.CV.Cuda
       /// <param name="dstChannels">The number of channels in the destination image</param>
       public CudaBoxFilter(DepthType srcDepth, int srcChannels, DepthType dstDepth, int dstChannels, Size ksize, Point anchor, CvEnum.BorderType borderType = BorderType.Default, MCvScalar borderValue = new MCvScalar())
       {
-         _ptr = CudaInvoke.cudaCreateBoxFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), ref ksize, ref anchor, borderType, ref borderValue);
+         _ptr = CudaInvoke.cudaCreateBoxFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), ref ksize, ref anchor, borderType, ref borderValue, ref _sharedPtr);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateBoxFilter(int srcType, int dstType, ref Size ksize, ref Point anchor, CvEnum.BorderType borderMode, ref MCvScalar borderValue);
+      internal static extern IntPtr cudaCreateBoxFilter(int srcType, int dstType, ref Size ksize, ref Point anchor, CvEnum.BorderType borderMode, ref MCvScalar borderValue, ref IntPtr sharedPtr);
    }
 }

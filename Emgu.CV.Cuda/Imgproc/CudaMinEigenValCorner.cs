@@ -28,7 +28,7 @@ namespace Emgu.CV.Cuda
         /// <param name="borderType">Pixel extrapolation method. Only BORDER_REFLECT101 and BORDER_REPLICATE are supported for now.</param>
         public CudaMinEigenValCorner(DepthType srcDepth, int srcChannels, int blockSize, int kSize, CvEnum.BorderType borderType = BorderType.Reflect101)
         {
-            _ptr = CudaInvoke.cudaCreateMinEigenValCorner(CvInvoke.MakeType(srcDepth, srcChannels), blockSize, kSize, borderType);
+            _ptr = CudaInvoke.cudaCreateMinEigenValCorner(CvInvoke.MakeType(srcDepth, srcChannels), blockSize, kSize, borderType, ref _sharedPtr);
         }
     }
 
@@ -36,6 +36,6 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cudaCreateMinEigenValCorner(int srcType, int blockSize, int ksize, CvEnum.BorderType borderType);
+        internal static extern IntPtr cudaCreateMinEigenValCorner(int srcType, int blockSize, int ksize, CvEnum.BorderType borderType, ref IntPtr sharedPtr);
     }
 }

@@ -32,7 +32,7 @@ namespace Emgu.CV.Cuda
       /// <param name="borderType">Boreder type, use REFLECT101 for default</param>
       public CudaHarrisCorner(DepthType srcDepth, int srcChannels, int blockSize, int kSize, double k, CvEnum.BorderType borderType = BorderType.Default)
       {
-         _ptr = CudaInvoke.cudaCreateHarrisCorner(CvInvoke.MakeType(srcDepth, srcChannels), blockSize, kSize, k, borderType);
+         _ptr = CudaInvoke.cudaCreateHarrisCorner(CvInvoke.MakeType(srcDepth, srcChannels), blockSize, kSize, k, borderType, ref _sharedPtr);
       }
    }
 
@@ -40,6 +40,6 @@ namespace Emgu.CV.Cuda
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateHarrisCorner(int srcType, int blockSize, int ksize, double k, CvEnum.BorderType borderType);
+      internal static extern IntPtr cudaCreateHarrisCorner(int srcType, int blockSize, int ksize, double k, CvEnum.BorderType borderType, ref IntPtr sharedPtr);
    }
 }

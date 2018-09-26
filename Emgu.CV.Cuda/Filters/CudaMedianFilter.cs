@@ -29,13 +29,13 @@ namespace Emgu.CV.Cuda
         /// <param name="partition">Specifies the parallel granularity of the workload. This parameter should be used GPU experts when optimizing performance.</param>
         public MedianFilter(DepthType srcDepth, int srcChannels, int windowSize, int partition = 128)
       {
-         _ptr = CudaInvoke.cudaCreateMedianFilter(CvInvoke.MakeType(srcDepth, srcChannels), windowSize, partition);
+         _ptr = CudaInvoke.cudaCreateMedianFilter(CvInvoke.MakeType(srcDepth, srcChannels), windowSize, partition, ref _sharedPtr);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateMedianFilter(int srcType, int windowSize, int partition);
+      internal static extern IntPtr cudaCreateMedianFilter(int srcType, int windowSize, int partition, ref IntPtr sharedPtr);
    }
 }

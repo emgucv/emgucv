@@ -38,13 +38,13 @@ namespace Emgu.CV.Cuda
             CvEnum.BorderType borderType = BorderType.Default, 
             MCvScalar borderValue = new MCvScalar())
         {
-            _ptr = CudaInvoke.cudaCreateColumnSumFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), ksize, anchor, borderType, ref borderValue);
+            _ptr = CudaInvoke.cudaCreateColumnSumFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), ksize, anchor, borderType, ref borderValue, ref _sharedPtr);
         }
     }
 
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cudaCreateColumnSumFilter(int srcType, int dstType, int ksize, int anchor, CvEnum.BorderType borderMode, ref MCvScalar borderVal);
+        internal static extern IntPtr cudaCreateColumnSumFilter(int srcType, int dstType, int ksize, int anchor, CvEnum.BorderType borderMode, ref MCvScalar borderVal, ref IntPtr sharedPtr);
     }
 }

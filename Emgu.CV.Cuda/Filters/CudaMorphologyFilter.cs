@@ -32,13 +32,13 @@ namespace Emgu.CV.Cuda
       public CudaMorphologyFilter(CvEnum.MorphOp op, DepthType srcDepth, int srcChannels, IInputArray kernel, Point anchor, int iterations)
       {
          using (InputArray iaKernel = kernel.GetInputArray())
-            _ptr = CudaInvoke.cudaCreateMorphologyFilter(op, CvInvoke.MakeType(srcDepth, srcChannels), iaKernel, ref anchor, iterations);
+            _ptr = CudaInvoke.cudaCreateMorphologyFilter(op, CvInvoke.MakeType(srcDepth, srcChannels), iaKernel, ref anchor, iterations, ref _sharedPtr);
       }
    }
 
    public static partial class CudaInvoke
    {
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cudaCreateMorphologyFilter(CvEnum.MorphOp op, int srcType, IntPtr kernel, ref Point anchor, int iterations);
+      internal static extern IntPtr cudaCreateMorphologyFilter(CvEnum.MorphOp op, int srcType, IntPtr kernel, ref Point anchor, int iterations, ref IntPtr sharedPtr);
    }
 }

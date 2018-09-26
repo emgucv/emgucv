@@ -44,7 +44,7 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaRowKernel = rowKernel.GetInputArray())
             using (InputArray iaColumnKernel = columnKernel.GetInputArray())
-                _ptr = CudaInvoke.cudaCreateSeparableLinearFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), iaRowKernel, iaColumnKernel, ref anchor, rowBorderType, columnBorderType);
+                _ptr = CudaInvoke.cudaCreateSeparableLinearFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), iaRowKernel, iaColumnKernel, ref anchor, rowBorderType, columnBorderType, ref _sharedPtr);
         }
     }
 
@@ -53,6 +53,6 @@ namespace Emgu.CV.Cuda
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cudaCreateSeparableLinearFilter(
             int srcType, int dstType, IntPtr rowKernel, IntPtr columnKernel,
-            ref Point anchor, CvEnum.BorderType rowBorderMode, CvEnum.BorderType columnBorderMode);
+            ref Point anchor, CvEnum.BorderType rowBorderMode, CvEnum.BorderType columnBorderMode, ref IntPtr sharedPtr);
     }
 }

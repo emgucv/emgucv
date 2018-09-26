@@ -20,17 +20,23 @@
 //  Cuda MOG
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::BackgroundSubtractorMOG*) cudaBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm);
+CVAPI(cv::cuda::BackgroundSubtractorMOG*) cudaBackgroundSubtractorMOGCreate(
+	int history, int nmixtures, double backgroundRatio, double noiseSigma, 
+	cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::BackgroundSubtractorMOG>** sharedPtr);
 CVAPI(void) cudaBackgroundSubtractorMOGApply(cv::cuda::BackgroundSubtractorMOG* mog, cv::_InputArray* frame, cv::_OutputArray* fgMask, double learningRate, cv::cuda::Stream* stream);
-CVAPI(void) cudaBackgroundSubtractorMOGRelease(cv::cuda::BackgroundSubtractorMOG** mog);
+CVAPI(void) cudaBackgroundSubtractorMOGRelease(cv::Ptr<cv::cuda::BackgroundSubtractorMOG>** mog);
 
 //----------------------------------------------------------------------------
 //
 //  Cuda MOG2
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::BackgroundSubtractorMOG2*) cudaBackgroundSubtractorMOG2Create(int history, double varThreshold, bool detectShadows, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm);
+CVAPI(cv::cuda::BackgroundSubtractorMOG2*) cudaBackgroundSubtractorMOG2Create(
+	int history, double varThreshold, bool detectShadows, 
+	cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::BackgroundSubtractorMOG2>** sharedPtr);
 CVAPI(void) cudaBackgroundSubtractorMOG2Apply(cv::cuda::BackgroundSubtractorMOG2* mog, cv::_InputArray* frame, cv::_OutputArray* fgMask, double learningRate, cv::cuda::Stream* stream);
-CVAPI(void) cudaBackgroundSubtractorMOG2Release(cv::cuda::BackgroundSubtractorMOG2** mog);
+CVAPI(void) cudaBackgroundSubtractorMOG2Release(cv::Ptr<cv::cuda::BackgroundSubtractorMOG2>** mog);
 
 #endif

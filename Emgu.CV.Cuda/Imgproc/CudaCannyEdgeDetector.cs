@@ -11,14 +11,15 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.Util;
+using Emgu.CV.Util;
+
 
 namespace Emgu.CV.Cuda
 {
    /// <summary>
    /// Cascade Classifier for object detection using Cuda
    /// </summary>
-   public class CudaCannyEdgeDetector : UnmanagedObject
+   public class CudaCannyEdgeDetector : SharedPtrObject
    {
 
       /// <summary>
@@ -30,7 +31,7 @@ namespace Emgu.CV.Cuda
       /// <param name="L2gradient">Use false for default</param>
       public CudaCannyEdgeDetector(double lowThreshold, double highThreshold, int apertureSize = 3, bool L2gradient = false)
       {
-         _ptr = CudaInvoke.cudaCreateCannyEdgeDetector(lowThreshold, highThreshold, apertureSize, L2gradient);
+         _ptr = CudaInvoke.cudaCreateCannyEdgeDetector(lowThreshold, highThreshold, apertureSize, L2gradient, ref _sharedPtr);
       }
 
       /// <summary>
@@ -43,7 +44,7 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaEdges = edges.GetOutputArray())
-            CudaInvoke.cudaCannyEdgeDetectorDetect(_ptr, iaSrc, oaEdges, stream);
+            CudaInvoke.cudaCannyEdgeDetectorDetect(_sharedPtr, iaSrc, oaEdges, stream);
       }
 
       /// <summary>
@@ -51,8 +52,11 @@ namespace Emgu.CV.Cuda
       /// </summary>
       protected override void DisposeObject()
       {
-         if (_ptr != IntPtr.Zero)
-            CudaInvoke.cudaCannyEdgeDetectorRelease(ref _ptr);
+          if (_sharedPtr != IntPtr.Zero)
+          {
+              CudaInvoke.cudaCannyEdgeDetectorRelease(ref _sharedPtr);
+              _ptr = IntPtr.Zero;
+          }
       }
    }
 
@@ -63,7 +67,8 @@ namespace Emgu.CV.Cuda
       internal static extern IntPtr cudaCreateCannyEdgeDetector(
          double lowThreshold, double highThreshold, int apertureSize,
          [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool L2gradient);
+         bool L2gradient,
+         ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cudaCannyEdgeDetectorDetect(IntPtr detector, IntPtr src, IntPtr edges, IntPtr stream);
