@@ -34,6 +34,7 @@ using Emgu.CV.Tiff;
 #endif
 using Emgu.CV.Util;
 using Emgu.CV.XFeatures2D;
+using Emgu.CV.XImgproc;
 //using Emgu.CV.Softcascade;
 using Emgu.Util;
 
@@ -3120,6 +3121,20 @@ namespace Emgu.CV.Test
                     CvInvoke.CvtColor(img, imgGray, ColorConversion.Bgr2Gray);
                 CvInvoke.HoughLines(imgGray, vp, 10, Math.PI / 30, 5);
                 PointF[] pts = vp.ToArray();
+            }
+        }
+
+        [Test]
+        public void TestFastLineDetector()
+        {
+            using (Mat img = new Mat("box.png", ImreadModes.Grayscale))
+            using (Mat drawImg = new Mat())
+            using (FastLineDetector fld = new FastLineDetector())
+            {
+                LineSegment2DF[] lineSegments = fld.Detect(img);
+                CvInvoke.CvtColor(img, drawImg, ColorConversion.Gray2Bgr);
+                fld.DrawSegments(drawImg, lineSegments);
+                EmguAssert.IsTrue(lineSegments.Length > 0);
             }
         }
 
