@@ -38,6 +38,18 @@ cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, c
 	return new cv::dnn::Net(net);
 }
 
+cv::dnn::Net* cveReadNetFromONNX(cv::String* onnxFile)
+{
+	cv::dnn::Net net = cv::dnn::readNetFromONNX(*onnxFile);
+	return new cv::dnn::Net(net);
+}
+void cveReadTensorFromONNX(cv::String* path, cv::Mat* tensor)
+{
+	cv::Mat t = cv::dnn::readTensorFromONNX(*path);
+	cv::swap(t, *tensor);
+}
+
+
 cv::dnn::Net* cveReadNet(cv::String* model, cv::String* config, cv::String* framework)
 {
 	cv::dnn::Net net = cv::dnn::readNet(*model, *config, *framework);
@@ -117,6 +129,11 @@ void cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images)
 void cveDnnShrinkCaffeModel(cv::String* src, cv::String* dst)
 {
 	cv::dnn::shrinkCaffeModel(*src, *dst);
+}
+
+void cveDnnWriteTextGraph(cv::String* model, cv::String* output)
+{
+	cv::dnn::writeTextGraph(*model, *output);
 }
 
 void cveDnnNMSBoxes(

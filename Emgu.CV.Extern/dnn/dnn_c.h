@@ -21,6 +21,9 @@ CVAPI(cv::dnn::Net*) cveReadNetFromCaffe2(const char *bufferProto, int lenProto,
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow(cv::String* model, cv::String* config);
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig);
 
+CVAPI(cv::dnn::Net*) cveReadNetFromONNX(cv::String* onnxFile);
+CVAPI(void) cveReadTensorFromONNX(cv::String* path, cv::Mat* tensor);
+
 CVAPI(cv::dnn::Net*) cveReadNet(cv::String* model, cv::String* config, cv::String* framework);
 CVAPI(cv::dnn::Net*) cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin);
 
@@ -55,6 +58,8 @@ CVAPI(void) cveDnnBlobFromImages(
 CVAPI(void) cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images);
 
 CVAPI(void) cveDnnShrinkCaffeModel(cv::String* src, cv::String* dst);
+
+CVAPI(void) cveDnnWriteTextGraph(cv::String* model, cv::String* output);
 
 CVAPI(void) cveDnnNMSBoxes(
 	std::vector<cv::Rect>* bboxes, 

@@ -289,6 +289,28 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromTensorflow2(IntPtr bufferModel, int lenModel, IntPtr bufferConfig, int lenConfig);
 
+        public static Net ReadNetFromONNX(String onnxFile)
+        {
+            using (CvString csOnnxFile = new CvString(onnxFile))
+            {
+                return new Net(cveReadNetFromONNX(csOnnxFile));
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromONNX(IntPtr onnxFile);
+
+        public static Mat ReadTensorFromONNX(String path)
+        {
+            Mat m = new Mat();
+            using (CvString csPath = new CvString(path))
+            {
+                cveReadTensorFromONNX(csPath, m);
+            }
+            return m;
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveReadTensorFromONNX(IntPtr path, IntPtr tensor);
+
         /// <summary>
         /// Read deep learning network represented in one of the supported formats.
         /// </summary>
@@ -351,6 +373,15 @@ namespace Emgu.CV.Dnn
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDnnShrinkCaffeModel(IntPtr src, IntPtr dst);
+
+        public static void WriteTextGraph(String model, String output)
+        {
+            using (CvString csModel = new CvString(model))
+            using (CvString csOutput = new CvString(output))
+                cveDnnWriteTextGraph(csModel, csOutput);
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDnnWriteTextGraph(IntPtr model, IntPtr output);
 
         /// <summary>
         /// Performs non maximum suppression given boxes and corresponding scores.
