@@ -295,3 +295,40 @@ void cveAnisotropicDiffusion(cv::_InputArray* src, cv::_OutputArray* dst, float 
 {
 	cv::ximgproc::anisotropicDiffusion(*src, *dst, alpha, K, niters);
 }
+
+
+cv::ximgproc::FastLineDetector* cveFastLineDetectorCreate(
+	int length_threshold,
+	float distance_threshold,
+	double canny_th1,
+	double canny_th2,
+	int canny_aperture_size,
+	bool do_merge)
+{
+	cv::Ptr<cv::ximgproc::FastLineDetector> ptr =
+		cv::ximgproc::createFastLineDetector(
+			length_threshold,
+			distance_threshold,
+			canny_th1,
+			canny_th2,
+			canny_aperture_size,
+			do_merge);
+	ptr.addref();
+	return ptr.get();
+}
+
+void cveFastLineDetectorDetect(cv::ximgproc::FastLineDetector* fld, cv::_InputArray* image, cv::_OutputArray* lines)
+{
+	fld->detect(*image, *lines);
+}
+
+void cveFastLineDetectorDrawSegments(cv::ximgproc::FastLineDetector* fld, cv::_InputOutputArray* image, cv::_InputArray* lines, bool draw_arrow)
+{
+	fld->drawSegments(*image, *lines, draw_arrow);
+}
+
+void cveFastLineDetectorRelease(cv::ximgproc::FastLineDetector** fld)
+{
+	delete *fld;
+	*fld = 0;
+}

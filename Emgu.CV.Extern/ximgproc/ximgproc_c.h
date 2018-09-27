@@ -96,5 +96,15 @@ CVAPI(void) cveThinning(cv::_InputArray* src, cv::_OutputArray* dst, int thinnin
 
 CVAPI(void) cveAnisotropicDiffusion(cv::_InputArray* src, cv::_OutputArray* dst, float alpha, float K, int niters);
 
+CVAPI(cv::ximgproc::FastLineDetector*) cveFastLineDetectorCreate(
+	int length_threshold,
+	float distance_threshold,
+	double canny_th1,
+	double canny_th2,
+	int canny_aperture_size,
+	bool do_merge);
+CVAPI(void) cveFastLineDetectorDetect(cv::ximgproc::FastLineDetector* fld, cv::_InputArray* image, cv::_OutputArray* lines);
+CVAPI(void) cveFastLineDetectorDrawSegments(cv::ximgproc::FastLineDetector* fld, cv::_InputOutputArray* image, cv::_InputArray* lines, bool draw_arrow);
+CVAPI(void) cveFastLineDetectorRelease(cv::ximgproc::FastLineDetector** fld);
 
 #endif
