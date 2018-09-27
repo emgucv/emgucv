@@ -452,5 +452,13 @@ namespace Emgu.CV.XImgproc
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveAnisotropicDiffusion(IntPtr src, IntPtr dst, float alpha, float K, int niters);
+
+        public static void BrightEdges(Mat original, Mat edgeview, int contrast, int shortrange, int longrange)
+        {
+            cveBrightEdges(original, edgeview, contrast, shortrange, longrange);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveBrightEdges(IntPtr original, IntPtr edgeview, int contrast, int shortrange, int longrange);
     }
 }

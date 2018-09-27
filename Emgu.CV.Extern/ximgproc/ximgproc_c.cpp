@@ -333,3 +333,8 @@ void cveFastLineDetectorRelease(cv::Ptr<cv::ximgproc::FastLineDetector>** fld)
 	delete *fld;
 	*fld = 0;
 }
+
+void cveBrightEdges(cv::Mat* original, cv::Mat* edgeview, int contrast, int shortrange, int longrange)
+{
+	cv::ximgproc::BrightEdges(*original, *edgeview, contrast, shortrange, longrange);
+}
