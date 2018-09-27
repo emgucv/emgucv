@@ -827,6 +827,29 @@ IF(HAVE_opencv_core)
 ENDIF()
 ############################### core code gen END ################################
 
+############################### objdetect code gen START ##############################
+IF(HAVE_opencv_objdetect)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "objdetect/QRCodeDetector_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Objdetect/QRCodeDetectorGenerated.cs"
+    "cv::QRCodeDetector" 
+    "QRCodeDetector" 
+    "EpsX;EpsY" 
+    "double;double" 
+    "propW;propW"
+    "EpsX;EpsY" 
+    "double;double"
+    "EpsX;
+     EpsY"
+    "Emgu.CV"
+    "CvInvoke"
+    "QRCodeDetector"
+	""
+    "#include \"objdetect_c.h\"")
+
+ENDIF()
+############################### objdetect code gen END ################################
+
 ############################### features2d code gen START ##############################
 IF(HAVE_opencv_features2d)
   CREATE_OCV_CLASS_PROPERTY( 

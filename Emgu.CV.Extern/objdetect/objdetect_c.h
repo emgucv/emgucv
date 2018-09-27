@@ -93,4 +93,7 @@ CVAPI(void) cveGroupRectangles3(std::vector<cv::Rect>* rectList, int groupThresh
 CVAPI(void) cveGroupRectangles4(std::vector<cv::Rect>* rectList, std::vector<int>* rejectLevels, std::vector<double>* levelWeights, int groupThreshold, double eps);
 CVAPI(void) cveGroupRectanglesMeanshift(std::vector<cv::Rect>* rectList, std::vector<double>* foundWeights,	std::vector<double>* foundScales, double detectThreshold, CvSize* winDetSize);
 
+CVAPI(cv::QRCodeDetector*) cveQRCodeDetectorCreate();
+CVAPI(void) cveQRCodeDetectorRelease(cv::QRCodeDetector** detector);
+CVAPI(bool) cveQRCodeDetectorDetect(cv::QRCodeDetector* detector, cv::_InputArray* in, cv::_OutputArray* points);
 #endif
