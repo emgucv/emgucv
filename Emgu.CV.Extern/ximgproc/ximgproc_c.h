@@ -102,9 +102,10 @@ CVAPI(cv::ximgproc::FastLineDetector*) cveFastLineDetectorCreate(
 	double canny_th1,
 	double canny_th2,
 	int canny_aperture_size,
-	bool do_merge);
+	bool do_merge,
+	cv::Ptr<cv::ximgproc::FastLineDetector>** sharedPtr);
 CVAPI(void) cveFastLineDetectorDetect(cv::ximgproc::FastLineDetector* fld, cv::_InputArray* image, cv::_OutputArray* lines);
 CVAPI(void) cveFastLineDetectorDrawSegments(cv::ximgproc::FastLineDetector* fld, cv::_InputOutputArray* image, cv::_InputArray* lines, bool draw_arrow);
-CVAPI(void) cveFastLineDetectorRelease(cv::ximgproc::FastLineDetector** fld);
+CVAPI(void) cveFastLineDetectorRelease(cv::Ptr<cv::ximgproc::FastLineDetector>** fld);
 
 #endif

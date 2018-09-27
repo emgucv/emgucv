@@ -303,7 +303,8 @@ cv::ximgproc::FastLineDetector* cveFastLineDetectorCreate(
 	double canny_th1,
 	double canny_th2,
 	int canny_aperture_size,
-	bool do_merge)
+	bool do_merge,
+	cv::Ptr<cv::ximgproc::FastLineDetector>** sharedPtr)
 {
 	cv::Ptr<cv::ximgproc::FastLineDetector> ptr =
 		cv::ximgproc::createFastLineDetector(
@@ -313,7 +314,7 @@ cv::ximgproc::FastLineDetector* cveFastLineDetectorCreate(
 			canny_th2,
 			canny_aperture_size,
 			do_merge);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::ximgproc::FastLineDetector>(ptr);
 	return ptr.get();
 }
 
@@ -327,7 +328,7 @@ void cveFastLineDetectorDrawSegments(cv::ximgproc::FastLineDetector* fld, cv::_I
 	fld->drawSegments(*image, *lines, draw_arrow);
 }
 
-void cveFastLineDetectorRelease(cv::ximgproc::FastLineDetector** fld)
+void cveFastLineDetectorRelease(cv::Ptr<cv::ximgproc::FastLineDetector>** fld)
 {
 	delete *fld;
 	*fld = 0;

@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+using Emgu.CV.Util;
+
 namespace Emgu.CV.XImgproc
 {
     using System;
@@ -15,7 +17,7 @@ namespace Emgu.CV.XImgproc
     /// Class implementing the FLD (Fast Line Detector) algorithm from
     /// https://docs.opencv.org/3.4.1/df/d4c/classcv_1_1ximgproc_1_1FastLineDetector.html#details
     /// </summary>
-    public class FastLineDetector : UnmanagedObject
+    public class FastLineDetector : SharedPtrObject
     {
         /// <summary>
         /// Initializes a new instance of the FastLineDetector object.
@@ -40,7 +42,8 @@ namespace Emgu.CV.XImgproc
                 cannyThreshold1,
                 cannyThreshold2,
                 cannyApertureSize,
-                doMerge);
+                doMerge,
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -103,9 +106,10 @@ namespace Emgu.CV.XImgproc
         /// <inheritdoc />
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                XImgprocInvoke.cveFastLineDetectorRelease(ref _ptr);
+                XImgprocInvoke.cveFastLineDetectorRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
             }
         }
     }
@@ -120,14 +124,13 @@ namespace Emgu.CV.XImgproc
             double cannyThreshold2,
             int cannyApertureSize,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool doMerge);
+            bool doMerge,
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-
         internal static extern IntPtr cveFastLineDetectorDetect(IntPtr fld, IntPtr image, IntPtr lines);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-
         internal static extern IntPtr cveFastLineDetectorDrawSegments(
             IntPtr fld,
             IntPtr image,
@@ -136,7 +139,6 @@ namespace Emgu.CV.XImgproc
             bool drawArrow);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-
         internal static extern IntPtr cveFastLineDetectorRelease(ref IntPtr fld);
     }
 }
