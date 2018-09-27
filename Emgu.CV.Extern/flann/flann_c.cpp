@@ -102,9 +102,9 @@ void cveSearchParamsRelease( cv::flann::SearchParams** p)
    *p = 0;
 }
 
-cv::flann::Index* cveFlannIndexCreate(cv::_InputArray* features, cv::flann::IndexParams* p)
+cv::flann::Index* cveFlannIndexCreate(cv::_InputArray* features, cv::flann::IndexParams* p, int distType)
 {
-   return new cv::flann::Index(*features, *p);
+   return new cv::flann::Index(*features, *p, (cvflann::flann_distance_t) distType);
 }
 
 void cveFlannIndexKnnSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, int knn, int checks, float eps, bool sorted)

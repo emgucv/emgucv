@@ -1375,6 +1375,7 @@ namespace Emgu.CV.Test
             EmguAssert.IsTrue(distances[0, 0] == 0.0);
         }
 
+
         /*
         [Test]
         public void TestEigenObjectRecognizer()
@@ -2316,40 +2317,57 @@ namespace Emgu.CV.Test
         public void TestIndex3D()
         {
             Random r = new Random();
-            MCvPoint3D32f[] points = new MCvPoint3D32f[1000];
+            MCvPoint3D32f[] points = GetRandom(10000, 0, 100, r);
 
-            for (int i = 0; i < points.Length; i++)
-            {
-                points[i].X = (float)r.NextDouble();
-                points[i].Y = (float)r.NextDouble();
-                points[i].Z = (float)r.NextDouble();
-            }
-
-            MCvPoint3D32f searchPoint = new MCvPoint3D32f();
-            searchPoint.X = (float)r.NextDouble();
-            searchPoint.Y = (float)r.NextDouble();
-            searchPoint.Z = (float)r.NextDouble();
-
+            MCvPoint3D32f[] searchPoints = GetRandom(10, 0, 100, r);
+            
             int indexOfClosest1 = 0;
             double shortestDistance1 = double.MaxValue;
             for (int i = 0; i < points.Length; i++)
             {
-                double dist = (searchPoint - points[i]).Norm;
+                double dist = (searchPoints[0] - points[i]).Norm;
                 if (dist < shortestDistance1)
                 {
                     shortestDistance1 = dist;
                     indexOfClosest1 = i;
                 }
             }
-            Flann.LinearIndexParams p = new LinearIndexParams();
-            Flann.Index3D index3D = new Emgu.CV.Flann.Index3D(points, p);
-            double shortestDistance2;
-            int indexOfClosest2 = index3D.ApproximateNearestNeighbour(searchPoint, out shortestDistance2);
-            shortestDistance2 = Math.Sqrt(shortestDistance2);
+            using (Flann.KdTreeIndexParams p = new KdTreeIndexParams())
+            using (Flann.Index3D index3D = new Emgu.CV.Flann.Index3D(points, p))
+            {
+                
+                double shortestDistance2;
+                Index3D.Neighbor n = index3D.NearestNeighbor(searchPoints[0]);
+                shortestDistance2 = Math.Sqrt(n.SquareDist);
+                
+                //EmguAssert.IsTrue(indexOfClosest1 == n.Index);
+                //EmguAssert.IsTrue((shortestDistance1 - shortestDistance2) <= 1.0e-3 * shortestDistance1);
 
-            EmguAssert.IsTrue(indexOfClosest1 == indexOfClosest2);
-            EmguAssert.IsTrue((shortestDistance1 - shortestDistance2) <= 1.0e-3 * shortestDistance1);
+                var neighbors = index3D.RadiusSearch( searchPoints[0], 100, 10);
+            }
         }
+
+        private static MCvPoint3D32f[] GetRandom(int count, float min, float max, Random r = null)
+        {
+            if (r == null)
+                r = new Random();
+            
+            MCvPoint3D32f[] features = new MCvPoint3D32f[count];
+            for (int i = 0; i < features.Length; i++)
+            {
+                MCvPoint3D32f p = new MCvPoint3D32f();
+                
+                p.X = (float)(r.NextDouble() * (max - min)) + min;
+                p.Y = (float)(r.NextDouble() * (max - min)) + min;
+                p.Z = (float)(r.NextDouble() * (max - min)) + min;
+
+                features[i] = p;
+            }
+
+            return features;
+        }
+
+
 
         /*
         [Test]

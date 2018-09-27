@@ -12,28 +12,45 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Flann
 {
-   /// <summary>
-   /// Flann index
-   /// </summary>
-   public class Index : UnmanagedObject
-   {
-      static Index()
-      {
-         CvInvoke.CheckLibraryLoaded();
-      }
+    public enum DistType
+    {
+        Euclidean = 1,
+        L2 = 1,
+        Manhattan = 2,
+        L1 = 2,
+        Minkowski = 3,
+        Max = 4,
+        HistIntersect = 5,
+        Hellinger = 6,
+        ChiSquare = 7,
+        CS = 7,
+        KullbackLeibler = 8,
+        KL = 8,
+        Hamming = 9
+    }
 
-      #region constructors
+    /// <summary>
+    /// Flann index
+    /// </summary>
+    public class Index : UnmanagedObject
+    {
+        static Index()
+        {
+            CvInvoke.CheckLibraryLoaded();
+        }
 
-      /// <summary>
-      /// Create a flann index
-      /// </summary>
-      /// <param name="values">A row by row matrix of descriptors</param>
-      /// <param name="ip">The index parameter</param>
-      public Index(IInputArray values, IIndexParams ip)
-      {
-         using (InputArray iaValues = values.GetInputArray())
-            _ptr = cveFlannIndexCreate(iaValues, ip.IndexParamPtr);
-      }
+        #region constructors
+
+        /// <summary>
+        /// Create a flann index
+        /// </summary>
+        /// <param name="values">A row by row matrix of descriptors</param>
+        /// <param name="ip">The index parameter</param>
+        public Index(IInputArray values, IIndexParams ip, DistType distType = DistType.L2)
+        {
+            using (InputArray iaValues = values.GetInputArray())
+                _ptr = cveFlannIndexCreate(iaValues, ip.IndexParamPtr, distType);
+        }
 
         /*
         /// <summary>
@@ -66,82 +83,82 @@ namespace Emgu.CV.Flann
         /// <param name="eps">The search epsilon</param>
         /// <param name="sorted">If set to true, the search result is sorted</param>
         public void KnnSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, int knn, int checks = 32, float eps = 0, bool sorted = true)
-      {
-         using (InputArray iaQueries = queries.GetInputArray())
-         using (OutputArray oaIndices = indices.GetOutputArray())
-         using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
-            cveFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks, eps, sorted);
-      }
+        {
+            using (InputArray iaQueries = queries.GetInputArray())
+            using (OutputArray oaIndices = indices.GetOutputArray())
+            using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
+                cveFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks, eps, sorted);
+        }
 
-      /// <summary>
-      /// Performs a radius nearest neighbor search for multiple query points
-      /// </summary>
-      /// <param name="queries">The query points, one per row</param>
-      /// <param name="indices">Indices of the nearest neighbors found</param>
-      /// <param name="squareDistances">The square of the Eculidean distance between the neighbours</param>
-      /// <param name="radius">The search radius</param>
-      /// <param name="maxResults">The maximum number of results</param>
-      /// <param name="checks">The number of times the tree(s) in the index should be recursively traversed. A
-      /// higher value for this parameter would give better search precision, but also take more
-      /// time. If automatic configuration was used when the index was created, the number of
-      /// checks required to achieve the specified precision was also computed, in which case
-      /// this parameter is ignored </param>
-      /// <param name="eps">The search epsilon</param>
-      /// <param name="sorted">If set to true, the search result is sorted</param>
-      /// <returns>The number of points in the search radius</returns>
-      public int RadiusSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, double radius, int maxResults, int checks = 32, float eps = 0, bool sorted = true)
-      {
-         using (InputArray iaQueries = queries.GetInputArray())
-         using (OutputArray oaIndicies = indices.GetOutputArray())
-         using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
-            return cveFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks, eps, sorted);
-      }
+        /// <summary>
+        /// Performs a radius nearest neighbor search for multiple query points
+        /// </summary>
+        /// <param name="queries">The query points, one per row</param>
+        /// <param name="indices">Indices of the nearest neighbors found</param>
+        /// <param name="squareDistances">The square of the Eculidean distance between the neighbours</param>
+        /// <param name="radius">The search radius</param>
+        /// <param name="maxResults">The maximum number of results</param>
+        /// <param name="checks">The number of times the tree(s) in the index should be recursively traversed. A
+        /// higher value for this parameter would give better search precision, but also take more
+        /// time. If automatic configuration was used when the index was created, the number of
+        /// checks required to achieve the specified precision was also computed, in which case
+        /// this parameter is ignored </param>
+        /// <param name="eps">The search epsilon</param>
+        /// <param name="sorted">If set to true, the search result is sorted</param>
+        /// <returns>The number of points in the search radius</returns>
+        public int RadiusSearch(IInputArray queries, IOutputArray indices, IOutputArray squareDistances, double radius, int maxResults, int checks = 32, float eps = 0, bool sorted = true)
+        {
+            using (InputArray iaQueries = queries.GetInputArray())
+            using (OutputArray oaIndicies = indices.GetOutputArray())
+            using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
+                return cveFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks, eps, sorted);
+        }
 
-      /// <summary>
-      /// Release the unmanaged memory associated with this Flann Index
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         if (_ptr != IntPtr.Zero)
-            cveFlannIndexRelease(ref _ptr);
-      }
+        /// <summary>
+        /// Release the unmanaged memory associated with this Flann Index
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+                cveFlannIndexRelease(ref _ptr);
+        }
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cveFlannIndexCreate(IntPtr features, IntPtr ip);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveFlannIndexCreate(IntPtr features, IntPtr ip, DistType distType);
 
-      //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      //internal static extern IntPtr CvFlannIndexCreateComposite(IntPtr features, int numberOfKDTrees, int branching, int iterations, Flann.CenterInitType centersInitType, float cbIndex);
+        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        //internal static extern IntPtr CvFlannIndexCreateComposite(IntPtr features, int numberOfKDTrees, int branching, int iterations, Flann.CenterInitType centersInitType, float cbIndex);
 
-      //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      //internal static extern IntPtr CvFlannIndexCreateAutotuned(IntPtr features, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
+        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        //internal static extern IntPtr CvFlannIndexCreateAutotuned(IntPtr features, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveFlannIndexRelease(ref IntPtr index);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveFlannIndexRelease(ref IntPtr index);
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveFlannIndexKnnSearch(
-          IntPtr index, 
-          IntPtr queries, 
-          IntPtr indices, 
-          IntPtr dists, 
-          int knn, 
-          int checks, 
-          float eps, 
-          [MarshalAs(UnmanagedType.Bool)]
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveFlannIndexKnnSearch(
+            IntPtr index,
+            IntPtr queries,
+            IntPtr indices,
+            IntPtr dists,
+            int knn,
+            int checks,
+            float eps,
+            [MarshalAs(UnmanagedType.Bool)]
+            bool sorted);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveFlannIndexRadiusSearch(
+            IntPtr index,
+            IntPtr queries,
+            IntPtr indices,
+            IntPtr dists,
+            double radius,
+            int maxResults,
+            int checks,
+            float eps,
+            [MarshalAs(UnmanagedType.Bool)]
           bool sorted);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern int cveFlannIndexRadiusSearch(
-          IntPtr index, 
-          IntPtr queries, 
-          IntPtr indices, 
-          IntPtr dists, 
-          double radius, 
-          int maxResults, 
-          int checks, 
-          float eps, 
-          [MarshalAs(UnmanagedType.Bool)]
-          bool sorted);
-   }
+    }
 }
 

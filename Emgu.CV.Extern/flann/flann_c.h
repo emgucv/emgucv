@@ -37,7 +37,7 @@ CVAPI(void) cveHierarchicalClusteringIndexParamsRelease( cv::flann::Hierarchical
 CVAPI(cv::flann::SearchParams*) cveSearchParamsCreate(cv::flann::IndexParams** ip, int checks, float eps, bool sorted );
 CVAPI(void) cveSearchParamsRelease( cv::flann::SearchParams** p);
 
-CVAPI(cv::flann::Index*) cveFlannIndexCreate(cv::_InputArray* features, cv::flann::IndexParams* p);
+CVAPI(cv::flann::Index*) cveFlannIndexCreate(cv::_InputArray* features, cv::flann::IndexParams* p, int distType);
 
 CVAPI(void) cveFlannIndexKnnSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, int knn, int checks, float eps, bool sorted);
 
