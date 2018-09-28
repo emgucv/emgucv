@@ -43,8 +43,7 @@ namespace AndroidExamples
 
             //dummy code to load the opencv libraries
             bool loaded = CvInvoke.CheckLibraryLoaded();
-            //CvInvoke.CV_FOURCC('m', 'j', 'p', 'g');
-
+        
         }
 
         /*
@@ -75,7 +74,7 @@ namespace AndroidExamples
             String action;
             if (haveCameraOption & havePickImgOption)
             {
-                int result = GetUserResponse(this, "Use Image from", "Default", "Photo Library", "Camera");
+                int result = GetUserResponse(this, pickImgString, "Default", "Photo Library", "Camera");
                 if (result == 1)
                     action = "Default";
                 else if (result == 0)
@@ -88,7 +87,7 @@ namespace AndroidExamples
             }
             else if (havePickImgOption)
             {
-                int result = GetUserResponse(this, "Use Image from", "Default", "Photo Library", "Cancel");
+                int result = GetUserResponse(this, pickImgString, "Default", "Photo Library", "Cancel");
 
                 if (result == 1)
                     action = "Default";
