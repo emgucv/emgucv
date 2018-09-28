@@ -5,6 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV
@@ -16,10 +17,8 @@ namespace Emgu.CV
     /// We match blocks rather than individual pixels, thus the algorithm is called
     /// SGBM (Semi-global block matching)
     /// </summary>
-    public class StereoSGBM : UnmanagedObject, IStereoMatcher
+    public class StereoSGBM : SharedPtrObject, IStereoMatcher
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// The SGBM mode
         /// </summary>
@@ -57,18 +56,20 @@ namespace Emgu.CV
            int speckleWindowSize = 0, int speckleRange = 0,
            Mode mode = Mode.SGBM)
         {
-            _ptr = StereoMatcherExtensions.cveStereoSGBMCreate(minDisparity, numDisparities, blockSize, p1, p2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode, ref _stereoMatcherPtr, ref _sharedPtr);
+            _ptr = Calib3dInvoke.cveStereoSGBMCreate(minDisparity, numDisparities, blockSize, p1, p2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode, ref _stereoMatcherPtr, ref _sharedPtr);
         }
 
         /// <summary>
-        /// Release the unmanged memory associated with this stereo solver
+        /// Release the unmanaged memory associated with this stereo solver
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                StereoMatcherExtensions.cveStereoSGBMRelease(ref _ptr, ref _ptr);
-
-            _stereoMatcherPtr = IntPtr.Zero;
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                Calib3dInvoke.cveStereoSGBMRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+                _stereoMatcherPtr = IntPtr.Zero;
+            }
         }
 
         /// <summary>

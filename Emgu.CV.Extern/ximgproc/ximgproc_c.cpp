@@ -338,3 +338,47 @@ void cveBrightEdges(cv::Mat* original, cv::Mat* edgeview, int contrast, int shor
 {
 	cv::ximgproc::BrightEdges(*original, *edgeview, contrast, shortrange, longrange);
 }
+
+cv::ximgproc::DisparityWLSFilter* cveCreateDisparityWLSFilter(cv::StereoMatcher* matcherLeft, cv::ximgproc::DisparityFilter** disparityFilter, cv::Algorithm** algorithm, cv::Ptr<cv::ximgproc::DisparityWLSFilter>** sharedPtr)
+{
+	cv::Ptr<cv::StereoMatcher> sm = cv::Ptr<cv::StereoMatcher>(matcherLeft, [](cv::StereoMatcher*) {});
+	cv::Ptr<cv::ximgproc::DisparityWLSFilter> filter = cv::ximgproc::createDisparityWLSFilter(sm);
+	*sharedPtr = new cv::Ptr<cv::ximgproc::DisparityWLSFilter>(filter);
+	*disparityFilter = (*sharedPtr)->dynamicCast<cv::ximgproc::DisparityFilter>();
+	*algorithm = (*sharedPtr)->dynamicCast<cv::Algorithm>();
+	return (*sharedPtr)->get();
+}
+cv::StereoMatcher* cveCreateRightMatcher(cv::StereoMatcher* matcherLeft, cv::Ptr<cv::StereoMatcher>** sharedPtr)
+{
+	cv::Ptr<cv::StereoMatcher> ml = cv::Ptr<cv::StereoMatcher>(matcherLeft, [](cv::StereoMatcher*) {});
+	cv::Ptr<cv::StereoMatcher> sm = cv::ximgproc::createRightMatcher(ml);
+	*sharedPtr = new cv::Ptr<cv::StereoMatcher>(sm);
+	return (*sharedPtr)->get();
+}
+cv::ximgproc::DisparityWLSFilter* cveCreateDisparityWLSFilterGeneric(bool use_confidence, cv::ximgproc::DisparityFilter** disparityFilter, cv::Algorithm** algorithm, cv::Ptr<cv::ximgproc::DisparityWLSFilter>** sharedPtr)
+{
+	cv::Ptr<cv::ximgproc::DisparityWLSFilter> filter = cv::ximgproc::createDisparityWLSFilterGeneric(use_confidence);
+	*sharedPtr = new cv::Ptr<cv::ximgproc::DisparityWLSFilter>(filter);
+	*disparityFilter = (*sharedPtr)->dynamicCast<cv::ximgproc::DisparityFilter>();
+	*algorithm = (*sharedPtr)->dynamicCast<cv::Algorithm>();
+	return (*sharedPtr)->get();
+}
+void cveDisparityWLSFilterRelease(cv::Ptr<cv::ximgproc::DisparityWLSFilter>** sharedPtr)
+{
+	delete *sharedPtr;
+	*sharedPtr = 0;
+}
+
+void cveDisparityFilterFilter(
+	cv::ximgproc::DisparityFilter* disparityFilter,
+	cv::_InputArray* disparity_map_left, cv::_InputArray* left_view, cv::_OutputArray* filtered_disparity_map,
+	cv::_InputArray* disparity_map_right, CvRect* ROI, cv::_InputArray* right_view)
+{
+	disparityFilter->filter(
+		*disparity_map_left, 
+		*left_view, 
+		*filtered_disparity_map, 
+		disparity_map_right->empty() ? cv::Mat() : *disparity_map_right, 
+		*ROI, 
+		right_view->empty() ? cv::Mat() : *right_view);
+}

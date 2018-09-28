@@ -14,9 +14,9 @@ namespace Emgu.CV
    /// <summary>
    /// Extension methods for StereoMather
    /// </summary>
-   public static class StereoMatcherExtensions
+   public static class Calib3dInvoke
    {
-      static StereoMatcherExtensions()
+      static Calib3dInvoke()
       {
          CvInvoke.CheckLibraryLoaded();
       }
@@ -40,7 +40,7 @@ namespace Emgu.CV
       internal extern static void cveStereoMatcherCompute(IntPtr disparitySolver, IntPtr left, IntPtr right, IntPtr disparity);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveStereoMatcherRelease(ref IntPtr matcher, ref IntPtr sharedPtr);
+      internal extern static void cveStereoMatcherRelease(ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal extern static IntPtr cveStereoBMCreate(int numberOfDisparities, int blockSize, ref IntPtr sharedPtr);
@@ -55,6 +55,6 @@ namespace Emgu.CV
          ref IntPtr sharedPtr);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveStereoSGBMRelease(ref IntPtr obj, ref IntPtr sharedPtr);
+      internal extern static void cveStereoSGBMRelease(ref IntPtr sharedPtr);
    }
 }

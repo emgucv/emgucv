@@ -6,16 +6,15 @@ using System;
 using Emgu.Util;
 using Emgu.CV.Structure;
 using System.Runtime.InteropServices;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
    /// <summary>
    /// Class for computing stereo correspondence using the block matching algorithm, introduced and contributed to OpenCV by K. Konolige.
    /// </summary>
-   public class StereoBM : UnmanagedObject, IStereoMatcher
+   public class StereoBM : SharedPtrObject, IStereoMatcher
    {
-       private IntPtr _sharedPtr;
-
       /// <summary>
       /// Create a stereoBM object
       /// </summary>
@@ -23,7 +22,7 @@ namespace Emgu.CV
       /// <param name="numberOfDisparities">the disparity search range. For each pixel algorithm will find the best disparity from 0 (default minimum disparity) to <paramref name="numberOfDisparities"/>. The search range can then be shifted by changing the minimum disparity.</param>
       public StereoBM(int numberOfDisparities = 0, int blockSize = 21)
       {
-         _ptr = StereoMatcherExtensions.cveStereoBMCreate(numberOfDisparities, blockSize, ref _sharedPtr);
+         _ptr = Calib3dInvoke.cveStereoBMCreate(numberOfDisparities, blockSize, ref _sharedPtr);
       }
 
       /// <summary>
@@ -31,8 +30,11 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         if(_ptr != IntPtr.Zero)
-            StereoMatcherExtensions.cveStereoMatcherRelease(ref _ptr, ref _sharedPtr);
+          if (_sharedPtr != IntPtr.Zero)
+          {
+              Calib3dInvoke.cveStereoMatcherRelease(ref _sharedPtr);
+              _ptr = IntPtr.Zero;
+          }
       }
 
       /// <summary>

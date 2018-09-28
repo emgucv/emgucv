@@ -23,14 +23,14 @@ CVAPI(cv::StereoSGBM*) cveStereoSGBMCreate(
   int preFilterCap, int uniquenessRatio,
   int speckleWindowSize, int speckleRange,
   int mode, cv::StereoMatcher** stereoMatcher, cv::Ptr<cv::StereoSGBM>** sharedPtr);
-CVAPI(void) cveStereoSGBMRelease(cv::StereoSGBM** obj, cv::Ptr<cv::StereoSGBM>** sharedPtr);
+CVAPI(void) cveStereoSGBMRelease(cv::Ptr<cv::StereoSGBM>** sharedPtr);
 
 //StereoBM
 CVAPI(cv::StereoMatcher*) cveStereoBMCreate(int mode, int numberOfDisparities, cv::Ptr<cv::StereoMatcher>** sharedPtr);
 
 //StereoMatcher
 CVAPI(void) cveStereoMatcherCompute(cv::StereoMatcher*  disparitySolver, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity);
-CVAPI(void) cveStereoMatcherRelease(cv::StereoMatcher** matcher, cv::Ptr<cv::StereoMatcher>** sharedPtr);
+CVAPI(void) cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr);
 
 //2D Tracker
 CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double randsacThreshold, cv::Mat* homography);

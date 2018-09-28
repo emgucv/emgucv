@@ -23,10 +23,9 @@ cv::StereoSGBM* cveStereoSGBMCreate(
 	*stereoMatcher = dynamic_cast<cv::StereoMatcher*>(result);
 	return result;
 }
-void cveStereoSGBMRelease(cv::StereoSGBM** obj, cv::Ptr<cv::StereoSGBM>** sharedPtr)
+void cveStereoSGBMRelease(cv::Ptr<cv::StereoSGBM>** sharedPtr)
 {
 	delete *sharedPtr;
-	*obj = 0;
 	*sharedPtr = 0;
 }
 
@@ -43,10 +42,9 @@ void cveStereoMatcherCompute(cv::StereoMatcher*  disparitySolver, cv::_InputArra
 {
 	disparitySolver->compute(*left, *right, *disparity);
 }
-void cveStereoMatcherRelease(cv::StereoMatcher** matcher, cv::Ptr<cv::StereoMatcher>** sharedPtr)
+void cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr)
 {
 	delete *sharedPtr;
-	*matcher = 0;
 	*sharedPtr = 0;
 }
 
