@@ -64,7 +64,7 @@ namespace Emgu.CV
         /// <param name="size">the size of the frame</param>
         /// <param name="isColor">true if this is a color video, false otherwise</param>
         /// <param name="apiPreference">Allows to specify API backends to use.</param>
-        public VideoWriter(String fileName, CvEnum.CaptureType apiPreference, int compressionCode, double fps, System.Drawing.Size size, bool isColor)
+        public VideoWriter(String fileName, VideoCapture.API apiPreference, int compressionCode, double fps, System.Drawing.Size size, bool isColor)
         {
             using (CvString s = new CvString(fileName))
                 _ptr = CvInvoke.cveVideoWriterCreate2(s, apiPreference, compressionCode, fps, ref size, isColor);
@@ -179,7 +179,7 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoWriterCreate2(
             IntPtr filename,
-            CvEnum.CaptureType apiPreference,
+            VideoCapture.API apiPreference,
             int fourcc,
             double fps,
             ref System.Drawing.Size frameSize,

@@ -40,6 +40,151 @@ namespace Emgu.CV
  ICapture
     {
 
+        /// <summary>
+        /// VideoCapture API backends identifier.
+        /// </summary>
+        public enum API
+        {
+            /// <summary>
+            /// Auto detect
+            /// </summary>
+            Any = 0,
+
+            /// <summary>
+            /// Platform native
+            /// </summary>
+            Vfw = 200,
+            /// <summary>
+            /// Platform native
+            /// </summary>
+            V4L = 200,
+            /// <summary>
+            /// Platform native
+            /// </summary>
+            V4L2 = V4L,
+
+            /// <summary>
+            /// IEEE 1394 drivers
+            /// </summary>
+            Firewire = 300,
+            /// <summary>
+            /// IEEE 1394 drivers
+            /// </summary>
+            IEEE1394 = Firewire,
+            /// <summary>
+            /// IEEE 1394 drivers
+            /// </summary>
+            DC1394 = Firewire,
+            /// <summary>
+            /// IEEE 1394 drivers
+            /// </summary>
+            CMU1394 = Firewire,
+
+            /// <summary>
+            /// QuickTime
+            /// </summary>
+            QT = 500,
+
+            /// <summary>
+            /// Unicap drivers
+            /// </summary>
+            Unicap = 600,
+
+            /// <summary>
+            /// DirectShow (via videoInput)
+            /// </summary>
+            DShow = 700,
+
+            /// <summary>
+            /// PvAPI, Prosilica GigE SDK
+            /// </summary>
+            Pvapi = 800,
+
+            /// <summary>
+            /// OpenNI (for Kinect)
+            /// </summary>
+            OpenNI = 900,
+
+            /// <summary>
+            /// OpenNI (for Asus Xtion)
+            /// </summary>
+            OpenNIAsus = 910,
+
+            /// <summary>
+            /// Android
+            /// </summary>
+            Android = 1000,
+
+            /// <summary>
+            /// XIMEA Camera API
+            /// </summary>
+            XiApi = 1100,
+
+            /// <summary>
+            /// AVFoundation framework for iOS (OS X Lion will have the same API)
+            /// </summary>
+            AVFoundation = 1200,
+
+            /// <summary>
+            ///  Smartek Giganetix GigEVisionSDK
+            /// </summary>
+            Giganetix = 1300,
+
+            /// <summary>
+            /// Microsoft Media Foundation (via videoInput)
+            /// </summary>
+            Msmf = 1400,
+
+            /// <summary>
+            /// Microsoft Windows Runtime using Media Foundation
+            /// </summary>
+            Winrt = 1410,
+            /// <summary>
+            /// Intel Perceptual Computing SDK
+            /// </summary>
+            IntelPerc = 1500,
+            /// <summary>
+            /// OpenNI2 (for Kinect)
+            /// </summary>
+            Openni2 = 1600,
+            /// <summary>
+            /// OpenNI2 (for Asus Xtion and Occipital Structure sensors)
+            /// </summary>
+            Openni2Asus = 1610,
+            /// <summary>
+            /// gPhoto2 connection
+            /// </summary>
+            Gphoto2 = 1700,
+            /// <summary>
+            /// GStreamer
+            /// </summary>
+            Gstreamer = 1800,
+            /// <summary>
+            /// FFMPEG
+            /// </summary>
+            Ffmpeg = 1900,
+            /// <summary>
+            /// OpenCV Image Sequence (e.g. img_%02d.jpg)
+            /// </summary>
+            Images = 2000,
+            /// <summary>
+            /// Aravis SDK
+            /// </summary>
+            Aravis = 2100,
+            /// <summary>
+            /// Built-in OpenCV MotionJPEG codec
+            /// </summary>
+            OopencvMjpeg = 2200,
+            /// <summary>
+            /// Intel MediaSDK
+            /// </summary>
+            IntelMfx = 2300,
+            /// <summary>
+            /// XINE engine (Linux)
+            /// </summary>
+            Xine = 2400,          
+        }
+
         AutoResetEvent _pauseEvent = new AutoResetEvent(false);
 
         /// <summary>
@@ -60,11 +205,7 @@ namespace Emgu.CV
             /// Capture from file using HighGUI
             /// </summary>
             Highgui,
-            /*
-            /// <summary>
-            /// Capture from file using FFMPEG
-            /// </summary>
-            FFMPEG,*/
+            
         }
 
         private CaptureModuleType _captureModuleType;
@@ -148,30 +289,25 @@ namespace Emgu.CV
 #endregion
 
 #region constructors
+        /*
         /// <summary>
         /// Create a capture using the specific camera
         /// </summary>
         /// <param name="captureType">The capture type</param>
-        public VideoCapture(CvEnum.CaptureType captureType)
+        public VideoCapture(API captureType)
            : this((int)captureType)
         {
-        }
-
-        ///<summary> Create a capture using the default camera </summary>
-        public VideoCapture()
-           : this(0)
-        {
-        }
+        }*/
 
         ///<summary> Create a capture using the specific camera</summary>
         ///<param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
-        public VideoCapture(int camIndex)
+        public VideoCapture(int camIndex = 0, API captureApi = API.Any)
         {
             _captureModuleType = CaptureModuleType.Camera;
 
 #if TEST_CAPTURE
 #else
-            _ptr = CvInvoke.cveVideoCaptureCreateFromDevice(camIndex);
+            _ptr = CvInvoke.cveVideoCaptureCreateFromDevice(camIndex | (int)captureApi);
             if (_ptr == IntPtr.Zero)
             {
                 throw new NullReferenceException(String.Format("Error: Unable to create capture from camera {0}", camIndex));
@@ -183,7 +319,7 @@ namespace Emgu.CV
         /// Create a capture from file or a video stream
         /// </summary>
         /// <param name="fileName">The name of a file, or an url pointed to a stream.</param>
-        public VideoCapture(String fileName)
+        public VideoCapture(String fileName, API captureApi = API.Any)
         {
             using (CvString s = new CvString(fileName))
             {
@@ -196,7 +332,7 @@ namespace Emgu.CV
                 else*/
                 {
                     _captureModuleType = CaptureModuleType.Highgui;
-                    _ptr = CvInvoke.cveVideoCaptureCreateFromFile(s);
+                    _ptr = CvInvoke.cveVideoCaptureCreateFromFile(s, captureApi);
                 }
 
                 if (_ptr == IntPtr.Zero)
@@ -549,12 +685,12 @@ namespace Emgu.CV
 
         /// <summary>
         /// Allocates and initialized the CvCapture structure for reading the video stream from the specified file. 
-        ///After the allocated structure is not used any more it should be released by cvReleaseCapture function. 
+        /// After the allocated structure is not used any more it should be released by cvReleaseCapture function. 
         /// </summary>
         /// <param name="filename">Name of the video file.</param>
         /// <returns>Pointer to the capture structure.</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveVideoCaptureCreateFromFile(IntPtr filename);
+        internal static extern IntPtr cveVideoCaptureCreateFromFile(IntPtr filename, VideoCapture.API api);
 
         /// <summary>
         /// The function cvReleaseCapture releases the CvCapture structure allocated by cvCreateFileCapture or cvCreateCameraCapture

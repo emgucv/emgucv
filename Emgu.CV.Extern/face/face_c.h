@@ -26,7 +26,7 @@ CVAPI(void) cveFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer, cv::
 
 CVAPI(cv::face::BIF*) cveBIFCreate(int numBands, int numRotations, cv::Ptr<cv::face::BIF>** sharedPtr);
 CVAPI(void) cveBIFCompute(cv::face::BIF* bif, cv::_InputArray* image, cv::_OutputArray* features);
-CVAPI(void) cveBIFRelease(cv::face::BIF** bif, cv::Ptr<cv::face::BIF>** sharedPtr);
+CVAPI(void) cveBIFRelease(cv::Ptr<cv::face::BIF>** sharedPtr);
 
 
 CVAPI(cv::face::FacemarkAAM::Params*) cveFacemarkAAMParamsCreate();
