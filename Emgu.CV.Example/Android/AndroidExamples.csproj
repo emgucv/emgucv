@@ -130,6 +130,10 @@
     <Compile Include="AppPreference.cs" />
     <Compile Include="ButtonMessageImageActivity.cs" />
     <Compile Include="Camera2Activity.cs" />
+    <Compile Include="Camera2\CameraCaptureSessionCallback.cs" />
+    <Compile Include="Camera2\OnYuvImageAvailableListener.cs" />
+    <Compile Include="Camera2\RefCountedAutoCloseable.cs" />
+    <Compile Include="Camera2\YUV420Converter.cs" />
     <Compile Include="CameraPreview.cs" />
     <Compile Include="CameraPreviewActivity.cs" />
     <Compile Include="ImageBufferFactory.cs" />
