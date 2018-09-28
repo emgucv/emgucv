@@ -74,10 +74,9 @@ void cveBIFCompute(cv::face::BIF* bif, cv::_InputArray* image, cv::_OutputArray*
 {
 	bif->compute(*image, *features);
 }
-void cveBIFRelease(cv::face::BIF** bif, cv::Ptr<cv::face::BIF>** sharedPtr)
+void cveBIFRelease(cv::Ptr<cv::face::BIF>** sharedPtr)
 {
 	delete *sharedPtr;
-	*bif = 0;
 	*sharedPtr = 0;
 }
 
@@ -206,4 +205,28 @@ void cveFacemarkTraining(cv::face::Facemark* facemark)
 void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, CvScalar* color)
 {
 	cv::face::drawFacemarks(*image, *points, *color);
+}
+
+cv::face::MACE* cveMaceCreate(int imgSize, cv::Ptr<cv::face::MACE>** sharedPtr)
+{
+	cv::Ptr<cv::face::MACE> mace = cv::face::MACE::create(imgSize);
+	*sharedPtr = new cv::Ptr<cv::face::MACE>(mace);
+	return (*sharedPtr)->get();
+}
+void cveMaceSalt(cv::face::MACE* mace, cv::String* passphrase)
+{
+	mace->salt(*passphrase);
+}
+void cveMaceTrain(cv::face::MACE* mace, cv::_InputArray* images)
+{
+	mace->train(*images);
+}
+bool cveMaceSame(cv::face::MACE* mace, cv::_InputArray* query)
+{
+	return mace->same(*query);
+}
+void cveMaceRelease(cv::Ptr<cv::face::MACE>** sharedPtr)
+{
+	delete *sharedPtr;
+	*sharedPtr = 0;
 }

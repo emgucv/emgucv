@@ -16,10 +16,8 @@ namespace Emgu.CV.Face
     /// <summary>
     /// Implementation of bio-inspired features (BIF) from the paper: Guo, Guodong, et al. "Human age estimation using bio-inspired features." Computer Vision and Pattern Recognition, 2009. CVPR 2009.
     /// </summary>
-    public class BIF : UnmanagedObject
+    public class BIF : SharedPtrObject
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Create an instance of bio-inspired features
         /// </summary>
@@ -47,7 +45,11 @@ namespace Emgu.CV.Face
         /// </summary>
         protected override void DisposeObject()
         {
-            FaceInvoke.cveBIFRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                FaceInvoke.cveBIFRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
     }
 
@@ -60,6 +62,6 @@ namespace Emgu.CV.Face
         internal extern static void cveBIFCompute(IntPtr bif, IntPtr image, IntPtr features);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBIFRelease(ref IntPtr bif, ref IntPtr sharedPtr);
+        internal extern static void cveBIFRelease(ref IntPtr sharedPtr);
     }
 }

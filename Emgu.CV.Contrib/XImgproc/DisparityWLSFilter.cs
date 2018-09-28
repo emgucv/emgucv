@@ -90,7 +90,12 @@ namespace Emgu.CV.XImgproc
         internal static extern IntPtr cveCreateRightMatcher(IntPtr matcherLeft, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveCreateDisparityWLSFilterGeneric(bool useConfidence, ref IntPtr disparityFilter, ref IntPtr algorithm, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveCreateDisparityWLSFilterGeneric(
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useConfidence, 
+            ref IntPtr disparityFilter, 
+            ref IntPtr algorithm, 
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDisparityWLSFilterRelease(ref IntPtr sharedPtr);

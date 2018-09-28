@@ -11,7 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CameraCalibration\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Capture\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Videoio\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features2D\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Flann\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geodetic\*.cs" />

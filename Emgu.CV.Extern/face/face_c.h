@@ -61,4 +61,10 @@ CVAPI(bool) cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image,
 //CVAPI(void) cveFacemarkTraining(cv::face::Facemark* facemark);
 
 CVAPI(void) cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points,	CvScalar* color);
+
+CVAPI(cv::face::MACE*) cveMaceCreate(int imgSize, cv::Ptr<cv::face::MACE>** sharedPtr);
+CVAPI(void) cveMaceSalt(cv::face::MACE* mace, cv::String* passphrase);
+CVAPI(void) cveMaceTrain(cv::face::MACE* mace, cv::_InputArray* images);
+CVAPI(bool) cveMaceSame(cv::face::MACE* mace, cv::_InputArray* query);
+CVAPI(void) cveMaceRelease(cv::Ptr<cv::face::MACE>** sharedPtr);
 #endif

@@ -1167,7 +1167,7 @@ ENDIF()
 IF(HAVE_opencv_videoio)
   CREATE_OCV_CLASS_PROPERTY( 
     "videoio/video_capture_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Capture/VideoCaptureGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Videoio/VideoCaptureGenerated.cs"
     "cv::VideoCapture" 
     "VideoCapture" 
     "isOpened" 
