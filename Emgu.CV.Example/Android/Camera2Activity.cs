@@ -530,27 +530,28 @@ namespace AndroidExamples
 
 
         /// <summary>
-        /// {@link CameraDevice.StateCallback} is called when the currently active {@link CameraDevice}
+        /// CameraStateListener is called when the currently active {@link CameraDevice}
         /// changes its state.
         /// </summary>
         CameraDevice.StateCallback mStateCallback;
-        class StateCallback : CameraDevice.StateCallback
+
+        public class CameraStateListener : CameraDevice.StateCallback
         {
             Camera2Activity Activity { get; set; }
 
-            public StateCallback(Camera2Activity activity)
+            public CameraStateListener(Camera2Activity activity)
             {
                 Activity = activity;
             }
 
             public override void OnOpened(CameraDevice camera)
             {
-                
+
                 // This method is called when the camera is opened.  We start camera preview here if
                 // the TextureView displaying this has been set up.
                 lock (mCameraStateLock)
                 {
-                    
+
                     mState = STATE_OPENED;
                     mCameraOpenCloseLock.Release();
                     mCameraDevice = camera;
@@ -560,28 +561,28 @@ namespace AndroidExamples
                     {
                         CreateCameraPreviewSessionLocked();
                     }*/
-                    
-                    
+
+
                 }
             }
 
             public override void OnDisconnected(CameraDevice camera)
             {
-                
+
                 lock (mCameraStateLock)
                 {
-                    
+
                     mState = STATE_CLOSED;
                     mCameraOpenCloseLock.Release();
                     camera.Close();
                     mCameraDevice = null;
-                    
+
                 }
             }
 
             public override void OnError(CameraDevice camera, Android.Hardware.Camera2.CameraError error)
             {
-                
+
                 Log.Error(TAG, "Received camera device error: " + error);
                 lock (mCameraStateLock)
                 {
@@ -595,7 +596,7 @@ namespace AndroidExamples
                 {
                     activity.Finish();
                 }
-             }
+            }
         }
 
         /// <summary>
@@ -748,7 +749,7 @@ namespace AndroidExamples
             
             var activity = this;
             CameraManager manager = (CameraManager)activity.GetSystemService(Context.CameraService);
-            mStateCallback = new StateCallback(this);
+            mStateCallback = new CameraStateListener(this);
             try
             {
 

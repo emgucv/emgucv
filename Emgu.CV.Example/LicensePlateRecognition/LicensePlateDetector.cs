@@ -260,7 +260,7 @@ namespace LicensePlateRecognition
 
                             UMat filteredPlate = FilterPlate(plate);
 
-                            Tesseract.Character[] words;
+                            //Tesseract.Character[] words;
                             StringBuilder strBuilder = new StringBuilder();
                             using (UMat tmp = filteredPlate.Clone())
                             {

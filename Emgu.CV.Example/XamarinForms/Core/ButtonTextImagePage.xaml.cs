@@ -64,7 +64,7 @@ namespace Emgu.CV.XamarinForms
                 if (action.Equals("Default"))
                 {
 #if __ANDROID__
-                    mats[i] = new Mat(Forms.Context.Assets, imageNames[i]);
+                    mats[i] = new Mat( Android.App.Application.Context.Assets, imageNames[i]);
 
 #else
                     mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.AnyColor);
