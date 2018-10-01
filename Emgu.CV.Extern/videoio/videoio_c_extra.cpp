@@ -6,6 +6,7 @@
 
 #include "videoio_c_extra.h"
 
+
 void OpenniGetColorPoints(CvCapture* capture, std::vector<ColorPoint>* points, IplImage* maskImg)
 {
 	IplImage* pcm = cvRetrieveFrame(capture, CV_CAP_OPENNI_POINT_CLOUD_MAP); //XYZ in meters (CV_32FC3)
@@ -140,3 +141,43 @@ int cveVideoWriterFourcc(char c1, char c2, char c3, char c4)
 	return cv::VideoWriter::fourcc(c1, c2, c3, c4);
 }
 
+void cveGetBackendName(int api, cv::String* name)
+{
+	*name = cv::videoio_registry::getBackendName((cv::VideoCaptureAPIs) api);
+}
+void cveGetBackends(std::vector<int>* backends)
+{
+	std::vector<cv::VideoCaptureAPIs> b = cv::videoio_registry::getBackends();
+	backends->clear();
+	for (std::vector<cv::VideoCaptureAPIs>::iterator it = b.begin(); it != b.end(); ++it)
+	{
+		backends->push_back(static_cast<int>(*it));
+	}
+}
+void cveGetCameraBackends(std::vector<int>* backends)
+{
+	std::vector<cv::VideoCaptureAPIs> b = cv::videoio_registry::getCameraBackends();
+	backends->clear();
+	for (std::vector<cv::VideoCaptureAPIs>::iterator it = b.begin(); it != b.end(); ++it)
+	{
+		backends->push_back(static_cast<int>(*it));
+	}
+}
+void cveGetStreamBackends(std::vector<int>* backends)
+{
+	std::vector<cv::VideoCaptureAPIs> b = cv::videoio_registry::getStreamBackends();
+	backends->clear();
+	for (std::vector<cv::VideoCaptureAPIs>::iterator it = b.begin(); it != b.end(); ++it)
+	{
+		backends->push_back(static_cast<int>(*it));
+	}
+}
+void cveGetWriterBackends(std::vector<int>* backends)
+{
+	std::vector<cv::VideoCaptureAPIs> b = cv::videoio_registry::getWriterBackends();
+	backends->clear();
+	for (std::vector<cv::VideoCaptureAPIs>::iterator it = b.begin(); it != b.end(); ++it)
+	{
+		backends->push_back(static_cast<int>(*it));
+	}
+}

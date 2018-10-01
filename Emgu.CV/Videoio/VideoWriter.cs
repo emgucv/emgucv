@@ -48,7 +48,7 @@ namespace Emgu.CV
             using (CvString s = new CvString(fileName))
                 _ptr = CvInvoke.cveVideoWriterCreate(s, compressionCode, fps, ref size, isColor);
 
-            if (_ptr == IntPtr.Zero)
+            if (_ptr == IntPtr.Zero || IsOpened == false)
                 throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
         }
 
@@ -64,12 +64,12 @@ namespace Emgu.CV
         /// <param name="size">the size of the frame</param>
         /// <param name="isColor">true if this is a color video, false otherwise</param>
         /// <param name="apiPreference">Allows to specify API backends to use.</param>
-        public VideoWriter(String fileName, VideoCapture.API apiPreference, int compressionCode, double fps, System.Drawing.Size size, bool isColor)
+        public VideoWriter(String fileName, int apiPreference, int compressionCode, double fps, System.Drawing.Size size, bool isColor)
         {
             using (CvString s = new CvString(fileName))
                 _ptr = CvInvoke.cveVideoWriterCreate2(s, apiPreference, compressionCode, fps, ref size, isColor);
 
-            if (_ptr == IntPtr.Zero)
+            if (_ptr == IntPtr.Zero || IsOpened == false)
                 throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
         }
 
@@ -179,7 +179,7 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoWriterCreate2(
             IntPtr filename,
-            VideoCapture.API apiPreference,
+            int apiPreference,
             int fourcc,
             double fps,
             ref System.Drawing.Size frameSize,
@@ -215,5 +215,7 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveVideoWriterGet(IntPtr writer, VideoWriter.WriterProperty propId);
+
+
     }
 }
