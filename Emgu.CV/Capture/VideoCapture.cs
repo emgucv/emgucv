@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 #endif
 using Emgu.Util;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
@@ -512,9 +513,37 @@ namespace Emgu.CV
         }
 #endif
 
-
     }
 
+    public class Backend
+    {
+        private int _id;
+
+        public Backend(int id)
+        {
+            _id = id;
+        }
+
+        public int ID
+        {
+            get 
+            {
+                return _id;
+            }
+        }
+
+        public String Name
+        {
+            get
+            {
+                using (CvString cvs = new CvString())
+                {
+                    CvInvoke.cveGetBackendName(_id, cvs);
+                    return cvs.ToString();
+                }
+            }
+        }
+    }
 
     partial class CvInvoke
     {
@@ -603,7 +632,7 @@ namespace Emgu.CV
         /// <param name="prop">Property identifier</param>
         /// <returns>The specified property of camera or video file</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern double cveVideoCaptureGet(IntPtr capture, CvEnum.CapProp prop);
+        internal static extern double cveVideoCaptureGet(IntPtr capture, CvEnum.CapProp prop);
 
         /// <summary>
         /// Sets the specified property of video capturing
@@ -614,7 +643,96 @@ namespace Emgu.CV
         /// <returns>True on success</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
-        public static extern bool cveVideoCaptureSet(IntPtr capture, CvEnum.CapProp propertyId, double value);
+        internal static extern bool cveVideoCaptureSet(IntPtr capture, CvEnum.CapProp propertyId, double value);
 
+
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveGetBackendName(int api, IntPtr name);
+
+        public static Backend[] Backends
+        {
+            get
+            {
+                using (VectorOfInt vi = new VectorOfInt())
+                {
+                    cveGetBackends(vi);
+                    int[] ids = vi.ToArray();
+                    Backend[] backends = new Backend[ids.Length];
+                    for (int i = 0; i < ids.Length; i++)
+                    {
+                        backends[i] = new Backend(ids[i]);
+                    }
+
+                    return backends;
+                }
+            }
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveGetBackends(IntPtr backends);
+
+        public static Backend[] CameraBackends
+        {
+            get
+            {
+                using (VectorOfInt vi = new VectorOfInt())
+                {
+                    cveGetCameraBackends(vi);
+                    int[] ids = vi.ToArray();
+                    Backend[] backends = new Backend[ids.Length];
+                    for (int i = 0; i < ids.Length; i++)
+                    {
+                        backends[i] = new Backend(ids[i]);
+                    }
+
+                    return backends;
+                }
+            }
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveGetCameraBackends(IntPtr backends);
+
+        public static Backend[] StreamBackends
+        {
+            get
+            {
+                using (VectorOfInt vi = new VectorOfInt())
+                {
+                    cveGetStreamBackends(vi);
+                    int[] ids = vi.ToArray();
+                    Backend[] backends = new Backend[ids.Length];
+                    for (int i = 0; i < ids.Length; i++)
+                    {
+                        backends[i] = new Backend(ids[i]);
+                    }
+
+                    return backends;
+                }
+            }
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveGetStreamBackends(IntPtr backends);
+        
+        public static Backend[] WriterBackends
+        {
+            get
+            {
+                using (VectorOfInt vi = new VectorOfInt())
+                {
+                    cveGetWriterBackends(vi);
+                    int[] ids = vi.ToArray();
+                    Backend[] backends = new Backend[ids.Length];
+                    for (int i = 0; i < ids.Length; i++)
+                    {
+                        backends[i] = new Backend(ids[i]);
+                    }
+
+                    return backends;
+                }
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveGetWriterBackends(IntPtr backends);
     }
 }

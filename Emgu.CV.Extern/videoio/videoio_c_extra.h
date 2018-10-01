@@ -10,6 +10,7 @@
 
 #include "opencv2/videoio/videoio_c.h"
 #include "opencv2/videoio/videoio.hpp"
+#include "opencv2/videoio/registry.hpp"
 
 #if WINAPI_FAMILY
 //using namespace System;
@@ -67,5 +68,11 @@ CVAPI(double) cveVideoWriterGet(cv::VideoWriter* writer, int propId);
 CVAPI(void) cveVideoWriterRelease(cv::VideoWriter** writer);
 CVAPI(void) cveVideoWriterWrite(cv::VideoWriter* writer, cv::Mat* image);
 CVAPI(int) cveVideoWriterFourcc(char c1, char c2, char c3, char c4);
+
+CVAPI(void) cveGetBackendName(int api, cv::String* name);
+CVAPI(void) cveGetBackends(std::vector<int>* backends);
+CVAPI(void) cveGetCameraBackends(std::vector<int>* backends);
+CVAPI(void) cveGetStreamBackends(std::vector<int>* backends);
+CVAPI(void) cveGetWriterBackends(std::vector<int>* backends);
 
 #endif
