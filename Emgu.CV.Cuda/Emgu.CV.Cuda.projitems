@@ -17,7 +17,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Features2d\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stereo\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objdetect\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Codec\*.cs" />
+	<!-- Excluding the CUDA codec module, it is only compatible with cuda 6.5 and older -->
+	<!-- <Compile Include="$(MSBuildThisFileDirectory)Codec\*.cs" /> -->
 	<Compile Include="$(MSBuildThisFileDirectory)Legacy\*.cs" />
   </ItemGroup>
 </Project>
