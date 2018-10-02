@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.CvEnum;

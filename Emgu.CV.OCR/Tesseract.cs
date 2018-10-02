@@ -194,17 +194,15 @@ namespace Emgu.CV.OCR
         {
             get
             {
-                String loadDirectory;
+                String loadDirectory = ".";
+#if NETSTANDARD1_4
+#else
                 System.Reflection.Assembly asm = typeof(CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
-                if ((String.IsNullOrEmpty(asm.Location) || !System.IO.File.Exists(asm.Location)) && AppDomain.CurrentDomain.BaseDirectory != null)
-                {
-                    loadDirectory = ".";
-                }
-                else
-                {
+                if (!((String.IsNullOrEmpty(asm.Location) || !System.IO.File.Exists(asm.Location)) && AppDomain.CurrentDomain.BaseDirectory != null))
+                { 
                     loadDirectory = System.IO.Path.GetDirectoryName(asm.Location);
                 }
-
+#endif
                 return Path.Combine(loadDirectory, "tessdata") + System.IO.Path.DirectorySeparatorChar;
             }
         }
