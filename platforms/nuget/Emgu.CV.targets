@@ -24,7 +24,7 @@
       </None>
     </ItemGroup>
     <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
-      <Error Condition="'$(EmguCvLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please use the pre-compiled Emgu.CV.World dll or send a bug report to support@emgu.com" />
+      <Error Condition="'$(EmguCvLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, unloading and reloading the project may fix this problem. If you are still having difficulty, please send an email to support@emgu.com" />
       <Message Condition="'$(EmguCvLinkTarget)'!=''" Text="Emgu CV nuget package compiling against $(EmguCvLinkTarget)" Importance="High" />
       <Error Text="'$(EmguCvErrorMessage)'" Condition="'$(EmguCvErrorMessage)'!=''" />
       <Message Text="Emgu CV compiling with $(EmguCvDeployMessage)binary" Condition="'$(EmguCvDeployMessage)'!=''" Importance="High" />
