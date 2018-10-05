@@ -4125,7 +4125,11 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Blackhat
         /// </summary>
-        Blackhat = 6
+        Blackhat = 6,
+        /// <summary>
+        /// Hit or miss. Only supported for CV_8UC1 binary images.
+        /// </summary>
+        HitMiss = 7
     }
 
     /// <summary>
