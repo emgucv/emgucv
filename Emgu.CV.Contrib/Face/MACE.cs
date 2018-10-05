@@ -13,16 +13,24 @@ using Emgu.Util;
 
 namespace Emgu.CV.Face
 {
-    
+    /// <summary>
+    /// Minimum Average Correlation Energy Filter useful for authentication with (cancellable) biometrical features. (does not need many positives to train (10-50), and no negatives at all, also robust to noise/salting)
+    /// </summary>
     public class MACE : SharedPtrObject
     {
-
-        
+        /// <summary>
+        /// Create a new MACE object
+        /// </summary>
+        /// <param name="imgSize">images will get resized to this (should be an even number)</param>
         public MACE(int imgSize)
         {
             _ptr = FaceInvoke.cveMaceCreate(imgSize, ref _sharedPtr);
         }
 
+        /// <summary>
+        /// optionally encrypt images with random convolution
+        /// </summary>
+        /// <param name="passphrase">a crc64 random seed will get generated from this</param>
         public void Salt(String passphrase)
         {
             using (CvString csPassphrase = new CvString(passphrase))
@@ -31,6 +39,10 @@ namespace Emgu.CV.Face
             }
         }
 
+        /// <summary>
+        /// train it on positive features compute the mace filter: h = D(-1) * X * (X(+) * D(-1) * X)(-1) * C also calculate a minimal threshold for this class, the smallest self-similarity from the train images
+        /// </summary>
+        /// <param name="images">A VectorOfMat with the train images</param>
         public void Train(IInputArrayOfArrays images)
         {
             using (InputArray iaImages = images.GetInputArray())
@@ -39,6 +51,11 @@ namespace Emgu.CV.Face
             }
         }
 
+        /// <summary>
+        /// correlate query img and threshold to min class value
+        /// </summary>
+        /// <param name="query">a Mat with query image</param>
+        /// <returns>True if the query is the same</returns>
         public bool Same(IInputArray query)
         {
             using (InputArray iaQuery = query.GetInputArray())

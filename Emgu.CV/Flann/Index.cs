@@ -12,20 +12,62 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Flann
 {
+    /// <summary>
+    /// Distance Type
+    /// </summary>
     public enum DistType
     {
+        /// <summary>
+        /// Euclidean
+        /// </summary>
         Euclidean = 1,
+        /// <summary>
+        /// L2
+        /// </summary>
         L2 = 1,
+        /// <summary>
+        /// Manhattan
+        /// </summary>
         Manhattan = 2,
+        /// <summary>
+        /// L1
+        /// </summary>
         L1 = 2,
+        /// <summary>
+        /// Minkowski
+        /// </summary>
         Minkowski = 3,
+        /// <summary>
+        /// Max
+        /// </summary>
         Max = 4,
+        /// <summary>
+        /// HistIntersect
+        /// </summary>
         HistIntersect = 5,
+        /// <summary>
+        /// Hellinger
+        /// </summary>
         Hellinger = 6,
+        /// <summary>
+        /// ChiSquare
+        /// </summary>
         ChiSquare = 7,
+        /// <summary>
+        /// CS
+        /// </summary>
         CS = 7,
+        /// <summary>
+        /// KullbackLeibler
+        /// </summary>
         KullbackLeibler = 8,
+        /// <summary>
+        /// KL
+        /// </summary>
         KL = 8,
+        /// <summary>
+        /// Hamming
+        /// </summary>
         Hamming = 9
     }
 
@@ -34,10 +76,6 @@ namespace Emgu.CV.Flann
     /// </summary>
     public class Index : UnmanagedObject
     {
-        static Index()
-        {
-            CvInvoke.CheckLibraryLoaded();
-        }
 
         #region constructors
 
@@ -49,7 +87,7 @@ namespace Emgu.CV.Flann
         public Index(IInputArray values, IIndexParams ip, DistType distType = DistType.L2)
         {
             using (InputArray iaValues = values.GetInputArray())
-                _ptr = cveFlannIndexCreate(iaValues, ip.IndexParamPtr, distType);
+                _ptr = CvInvoke.cveFlannIndexCreate(iaValues, ip.IndexParamPtr, distType);
         }
 
         /*
@@ -87,7 +125,7 @@ namespace Emgu.CV.Flann
             using (InputArray iaQueries = queries.GetInputArray())
             using (OutputArray oaIndices = indices.GetOutputArray())
             using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
-                cveFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks, eps, sorted);
+                CvInvoke.cveFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks, eps, sorted);
         }
 
         /// <summary>
@@ -111,7 +149,7 @@ namespace Emgu.CV.Flann
             using (InputArray iaQueries = queries.GetInputArray())
             using (OutputArray oaIndicies = indices.GetOutputArray())
             using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
-                return cveFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks, eps, sorted);
+                return CvInvoke.cveFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks, eps, sorted);
         }
 
         /// <summary>
@@ -120,11 +158,19 @@ namespace Emgu.CV.Flann
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                cveFlannIndexRelease(ref _ptr);
+            {
+                CvInvoke.cveFlannIndexRelease(ref _ptr);
+            }
         }
+    }
+}
 
+namespace Emgu.CV
+{ 
+    public partial class CvInvoke
+    {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveFlannIndexCreate(IntPtr features, IntPtr ip, DistType distType);
+        internal static extern IntPtr cveFlannIndexCreate(IntPtr features, IntPtr ip, Emgu.CV.Flann.DistType distType);
 
         //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         //internal static extern IntPtr CvFlannIndexCreateComposite(IntPtr features, int numberOfKDTrees, int branching, int iterations, Flann.CenterInitType centersInitType, float cbIndex);
@@ -158,7 +204,7 @@ namespace Emgu.CV.Flann
             int checks,
             float eps,
             [MarshalAs(UnmanagedType.Bool)]
-          bool sorted);
+            bool sorted);
     }
 }
 

@@ -20,6 +20,9 @@ namespace Emgu.CV.Text
     /// </summary>
     public abstract class ERFilter : Emgu.Util.UnmanagedObject
     {
+        /// <summary>
+        /// The native pointer to the shared object.
+        /// </summary>
         protected IntPtr _sharedPtr;
 
         static ERFilter()

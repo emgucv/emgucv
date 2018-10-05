@@ -133,10 +133,6 @@ namespace Emgu.CV.ML
            ref IntPtr algorithm, 
            ref IntPtr sharedPtr);
 
-        /// <summary>
-        /// Release the ANN_MLP model
-        /// </summary>
-        /// <param name="model">The ANN_MLP model to be released</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveANN_MLPRelease(ref IntPtr model, ref IntPtr sharedPtr);
 

@@ -18,6 +18,9 @@ namespace Emgu.CV.Face
     /// </summary>
     public abstract class FaceRecognizer : UnmanagedObject
     {
+        /// <summary>
+        /// The native pointer to the shared object 
+        /// </summary>
         protected IntPtr _sharedPtr;
 
         /// <summary>

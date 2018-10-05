@@ -712,12 +712,6 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoCaptureCreateFromDevice(int index);
 
-        /// <summary>
-        /// Allocates and initialized the CvCapture structure for reading the video stream from the specified file. 
-        /// After the allocated structure is not used any more it should be released by cvReleaseCapture function. 
-        /// </summary>
-        /// <param name="filename">Name of the video file.</param>
-        /// <returns>Pointer to the capture structure.</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoCaptureCreateFromFile(IntPtr filename, VideoCapture.API api);
 
@@ -780,8 +774,6 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
         internal static extern bool cveVideoCaptureSet(IntPtr capture, CvEnum.CapProp propertyId, double value);
-
-
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGetBackendName(int api, IntPtr name);

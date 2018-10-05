@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-//using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;

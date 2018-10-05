@@ -14,22 +14,34 @@ using Emgu.Util;
 
 namespace Emgu.CV.XImgproc
 {
-
+    /// <summary>
+    /// Disparity map filter based on Weighted Least Squares filter (in form of Fast Global Smoother that is a lot faster than traditional Weighted Least Squares filter implementations) and optional use of left-right-consistency-based confidence to refine the results in half-occlusions and uniform areas.
+    /// </summary>
     public class DisparityWLSFilter : SharedPtrObject, IAlgorithm, IDisparityFilter
     {
         private IntPtr _algorithm;
         private IntPtr _disparityFilterPtr;
 
+        /// <summary>
+        /// Pointer to cv::Algorithm
+        /// </summary>
         public IntPtr AlgorithmPtr
         {
             get { return _algorithm; }
         }
 
+        /// <summary>
+        /// Pointer the the native DisparityFilter
+        /// </summary>
         public IntPtr DisparityFilterPtr
         {
             get { return _disparityFilterPtr; }
         }
 
+        /// <summary>
+        /// Creates an instance of DisparityWLSFilter and sets up all the relevant filter parameters automatically based on the matcher instance. Currently supports only StereoBM and StereoSGBM.
+        /// </summary>
+        /// <param name="matcherLeft">stereo matcher instance that will be used with the filter</param>
         public DisparityWLSFilter(IStereoMatcher matcherLeft)
         {
             _ptr = XImgprocInvoke.cveCreateDisparityWLSFilter(
@@ -39,6 +51,10 @@ namespace Emgu.CV.XImgproc
                 ref _sharedPtr);
         }
 
+        /// <summary>
+        /// Create instance of DisparityWLSFilter and execute basic initialization routines. When using this method you will need to set-up the ROI, matchers and other parameters by yourself.
+        /// </summary>
+        /// <param name="useConfidence">Filtering with confidence requires two disparity maps (for the left and right views) and is approximately two times slower. However, quality is typically significantly better.</param>
         public DisparityWLSFilter(bool useConfidence)
         {
             _ptr = XImgprocInvoke.cveCreateDisparityWLSFilterGeneric(
@@ -48,6 +64,9 @@ namespace Emgu.CV.XImgproc
                 ref _sharedPtr);
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this DisparityWLSFilter
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
@@ -58,18 +77,31 @@ namespace Emgu.CV.XImgproc
         }
     }
 
+    /// <summary>
+    /// The matcher for computing the right-view disparity map that is required in case of filtering with confidence.
+    /// </summary>
     public class RightMatcher : SharedPtrObject, IStereoMatcher
     {
+        /// <summary>
+        /// Pointer to the stereo matcher
+        /// </summary>
         public IntPtr StereoMatcherPtr
         {
             get { return _ptr; }
         }
 
+        /// <summary>
+        /// Set up the matcher for computing the right-view disparity map that is required in case of filtering with confidence.
+        /// </summary>
+        /// <param name="matcherLeft">Main stereo matcher instance that will be used with the filter</param>
         public RightMatcher(IStereoMatcher matcherLeft)
         {
             _ptr = XImgprocInvoke.cveCreateRightMatcher(matcherLeft.StereoMatcherPtr, ref _sharedPtr);
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with thie RightMatcher
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)

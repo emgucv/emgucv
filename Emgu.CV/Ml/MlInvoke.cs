@@ -46,10 +46,6 @@ namespace Emgu.CV.ML
         internal static extern void cveTrainDataRelease(ref IntPtr data, ref IntPtr sharedPtr);
 
         #region CvNormalBayesClassifier
-        /// <summary>
-        /// Create a normal bayes classifier
-        /// </summary>
-        /// <returns>The normal bayes classifier</returns>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveNormalBayesClassifierDefaultCreate(ref IntPtr statModel, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
@@ -70,10 +66,6 @@ namespace Emgu.CV.ML
            IntPtr sampleIdx);
         */
 
-        /// <summary>
-        /// Release the memory associated with the bayes classifier
-        /// </summary>
-        /// <param name="classifier">The classifier to release</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveNormalBayesClassifierRelease(ref IntPtr classifier, ref IntPtr sharedPtr);
 
@@ -111,20 +103,12 @@ namespace Emgu.CV.ML
         #endregion
 
         #region CvKNearest
-        /// <summary>
-        /// Create a KNearest classifier
-        /// </summary>
-        /// <returns>The KNearest classifier</returns>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveKNearestCreate(
            ref IntPtr statModel,
            ref IntPtr algorithm,
            ref IntPtr sharedPtr);
 
-        /// <summary>
-        /// Release the KNearest classifier
-        /// </summary>
-        /// <param name="knearest">The classifier to release</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveKNearestRelease(ref IntPtr knearest, ref IntPtr sharedPtr);
 
@@ -283,44 +267,15 @@ namespace Emgu.CV.ML
 
 
         #region CvSVM
-
-        /// <summary>
-        /// Create a default SVM model
-        /// </summary>
-        /// <returns>Pointer to the SVM model</returns>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveSVMDefaultCreate(ref IntPtr statModel, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
-        /// <summary>
-        /// Release the SVM model and all the memory associated to ir
-        /// </summary>
-        /// <param name="model">The SVM model to be released</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSVMRelease(ref IntPtr model, ref IntPtr sharedPtr);
 
-
-        /// <summary>
-        /// Get the default parameter grid for the specific SVM type
-        /// </summary>
-        /// <param name="type">The SVM type</param>
-        /// <param name="grid">The parameter grid reference, values will be filled in by the function call</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSVMGetDefaultGrid(SVM.ParamType type, ref MCvParamGrid grid);
 
-        /// <summary>
-        /// The method trains the SVM model automatically by choosing the optimal parameters C, gamma, p, nu, coef0, degree from CvSVMParams. By the optimality one mean that the cross-validation estimate of the test set error is minimal. 
-        /// </summary>
-        /// <param name="model">The SVM model</param>
-        /// <param name="trainData">The training data.</param>
-        /// <param name="kFold">Cross-validation parameter. The training set is divided into k_fold subsets, one subset being used to train the model, the others forming the test set. So, the SVM algorithm is executed k_fold times</param>
-        /// <param name="cGrid">cGrid</param>
-        /// <param name="gammaGrid">gammaGrid</param>
-        /// <param name="pGrid">pGrid</param>
-        /// <param name="nuGrid">nuGrid</param>
-        /// <param name="coefGrid">coedGrid</param>
-        /// <param name="degreeGrid">degreeGrid</param>
-        /// <param name="balanced">If true and the problem is 2-class classification then the method creates more balanced cross-validation subsets that is proportions between classes in subsets are close to such proportion in the whole train dataset.</param>
-        /// <returns></returns>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveSVMTrainAuto(
@@ -336,11 +291,6 @@ namespace Emgu.CV.ML
            [MarshalAs(CvInvoke.BoolMarshalType)]
          bool balanced);
 
-        /// <summary>
-        /// The method retrieves a given support vector
-        /// </summary>
-        /// <param name="model">The SVM model</param>
-        /// <param name="supportVectors">The output support vectors</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSVMGetSupportVectors(IntPtr model, IntPtr supportVectors);
         #endregion
@@ -373,17 +323,10 @@ namespace Emgu.CV.ML
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void CvDTreeParamsRelease(ref IntPtr dTreeParam);
         */
-        /// <summary>
-        /// Create a default decision tree
-        /// </summary>
-        /// <returns>Pointer to the decision tree</returns>
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDTreesCreate(ref IntPtr statModel, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
-        /// <summary>
-        /// Release the decision tree model
-        /// </summary>
-        /// <param name="model">The decision tree model to be released</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDTreesRelease(ref IntPtr model, ref IntPtr sharedPtr);
         #endregion
@@ -470,17 +413,10 @@ namespace Emgu.CV.ML
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void CvBoostParamsRelease(ref IntPtr bTreeParam);
         */
-        /// <summary>
-        /// Create a default boost classifier
-        /// </summary>
-        /// <returns>Pointer to the boost classifier</returns>
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBoostCreate(ref IntPtr statModel, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
-        /// <summary>
-        /// Release the boost classifier
-        /// </summary>
-        /// <param name="model">The boost classifier to be released</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveBoostRelease(ref IntPtr model, ref IntPtr sharedPtr);
         #endregion
@@ -562,18 +498,9 @@ namespace Emgu.CV.ML
         #endregion
 
         #region CvSVM
-
-        /// <summary>
-        /// Create a default SVMSGD model
-        /// </summary>
-        /// <returns>Pointer to the SVMSGD model</returns>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveSVMSGDDefaultCreate(ref IntPtr statModel, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
-        /// <summary>
-        /// Release the SVMSGD model and all the memory associated to ir
-        /// </summary>
-        /// <param name="model">The SVMSGD model to be released</param>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSVMSGDRelease(ref IntPtr model, ref IntPtr sharedPtr);
 
