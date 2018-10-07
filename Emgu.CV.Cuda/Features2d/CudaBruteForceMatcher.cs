@@ -44,6 +44,14 @@ namespace Emgu.CV.Cuda
                 CudaInvoke.cveCudaDescriptorMatcherKnnMatch1(_ptr, iaQueryDescriptors, iaTrainDescriptors, matches, k, iaMask, compactResult);
         }
 
+        /// <summary>
+        /// Find the k-nearest match
+        /// </summary>
+        /// <param name="queryDescriptors">An n x m matrix of descriptors to be query for nearest neighbors. n is the number of descriptor and m is the size of the descriptor</param>
+        /// <param name="k">Number of nearest neighbors to search for</param>
+        /// <param name="masks">Can be null if not needed. An n x 1 matrix. If 0, the query descriptor in the corresponding row will be ignored.</param>
+        /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
+        /// <param name="compactResult">Parameter used when the mask (or masks) is not empty. If compactResult is false, the matches vector has the same size as queryDescriptors rows. If compactResult is true, the matches vector does not contain matches for fully masked-out query descriptors.</param>
         public void KnnMatch(
             IInputArray queryDescriptors,
             VectorOfVectorOfDMatch matches,
@@ -63,6 +71,15 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Finds the k best matches for each descriptor from a query set (asynchronous version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="trainDescriptors">Train set of descriptors. This set is not added to the train descriptors collection stored in the class object.</param>
+        /// <param name="matches">Matches array stored in GPU memory. Internal representation is not defined. Use DescriptorMatcher::knnMatchConvert method to retrieve results in standard representation.</param>
+        /// <param name="k">Count of best matches found per each query descriptor or less if a query descriptor has less than k possible matches in total.</param>
+        /// <param name="mask">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="stream">CUDA stream.</param>
         public void KnnMatchAsync(
             IInputArray queryDescriptors,
             IInputArray trainDescriptors,
@@ -87,6 +104,14 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Finds the k best matches for each descriptor from a query set (asynchronous version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="matches">Matches array stored in GPU memory. Internal representation is not defined. Use DescriptorMatcher::knnMatchConvert method to retrieve results in standard representation.</param>
+        /// <param name="k">Count of best matches found per each query descriptor or less if a query descriptor has less than k possible matches in total.</param>
+        /// <param name="masks">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="stream">CUDA stream.</param>
         public void KnnMatchAsync(
             IInputArray queryDescriptors,
             IOutputArray matches,
@@ -107,6 +132,12 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Converts matches array from internal representation to standard matches vector.
+        /// </summary>
+        /// <param name="gpuMatches">Matches</param>
+        /// <param name="matches">Vector of DMatch objects.</param>
+        /// <param name="compactResult">Parameter used when the mask (or masks) is not empty. If compactResult is false, the matches vector has the same size as queryDescriptors rows. If compactResult is true, the matches vector does not contain matches for fully masked-out query descriptors.</param>
         public void KnnMatchConvert(
             IInputArray gpuMatches,
             VectorOfVectorOfDMatch matches,
@@ -121,6 +152,13 @@ namespace Emgu.CV.Cuda
                     );
         }
 
+        /// <summary>
+        /// Finds the best match for each descriptor from a query set (blocking version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="trainDescriptors">Train set of descriptors. This set is not added to the train descriptors collection stored in the class object.</param>
+        /// <param name="matches">Matches. If a query descriptor is masked out in mask , no match is added for this descriptor. So, matches size may be smaller than the query descriptors count.</param>
+        /// <param name="mask">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
         public void Match(
             IInputArray queryDescriptors,
             IInputArray trainDescriptors,
@@ -135,6 +173,12 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Finds the best match for each descriptor from a query set (blocking version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="matches">Matches. If a query descriptor is masked out in mask , no match is added for this descriptor. So, matches size may be smaller than the query descriptors count.</param>
+        /// <param name="mask">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
         public void Match(
             IInputArray queryDescriptors,
             VectorOfDMatch matches,
@@ -146,6 +190,14 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Finds the best match for each descriptor from a query set (asynchronous version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="trainDescriptors">Train set of descriptors. This set is not added to the train descriptors collection stored in the class object.</param>
+        /// <param name="matches">Matches array stored in GPU memory. Internal representation is not defined. Use DescriptorMatcher::matchConvert method to retrieve results in standard representation.</param>
+        /// <param name="mask">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="stream">CUDA stream.</param>
         public void MatchAsync(
             IInputArray queryDescriptors,
             IInputArray trainDescriptors,
@@ -169,6 +221,13 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Finds the best match for each descriptor from a query set (asynchronous version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="matches">Matches array stored in GPU memory. Internal representation is not defined. Use DescriptorMatcher::matchConvert method to retrieve results in standard representation.</param>
+        /// <param name="masks">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="stream">CUDA stream.</param>
         public void MatchAsync(
             IInputArray queryDescriptors,
             IOutputArray matches,
@@ -186,6 +245,11 @@ namespace Emgu.CV.Cuda
                     );
         }
 
+        /// <summary>
+        /// Converts matches array from internal representation to standard matches vector.
+        /// </summary>
+        /// <param name="gpuMatches">Matches, returned from MatchAsync.</param>
+        /// <param name="matches">Vector of DMatch objects.</param>
         public void MatchConvert(
             IInputArray gpuMatches,
             VectorOfDMatch matches)
@@ -199,6 +263,15 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// For each query descriptor, finds the training descriptors not farther than the specified distance (blocking version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="trainDescriptors">Train set of descriptors. This set is not added to the train descriptors collection stored in the class object.</param>
+        /// <param name="matches">Found matches.</param>
+        /// <param name="maxDistance">Threshold for the distance between matched descriptors. Distance means here metric distance (e.g. Hamming distance), not the distance between coordinates (which is measured in Pixels)!</param>
+        /// <param name="mask">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="compactResult">Parameter used when the mask (or masks) is not empty. If compactResult is false, the matches vector has the same size as queryDescriptors rows. If compactResult is true, the matches vector does not contain matches for fully masked-out query descriptors.</param>
         public void RadiusMatch(
             IInputArray queryDescriptors,
             IInputArray trainDescriptors,
@@ -220,6 +293,14 @@ namespace Emgu.CV.Cuda
                     compactResult);
         }
 
+        /// <summary>
+        /// For each query descriptor, finds the training descriptors not farther than the specified distance (blocking version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="matches">Found matches.</param>
+        /// <param name="maxDistance">Threshold for the distance between matched descriptors. Distance means here metric distance (e.g. Hamming distance), not the distance between coordinates (which is measured in Pixels)!</param>
+        /// <param name="masks">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="compactResult">Parameter used when the mask (or masks) is not empty. If compactResult is false, the matches vector has the same size as queryDescriptors rows. If compactResult is true, the matches vector does not contain matches for fully masked-out query descriptors.</param>
         public void RadiusMatch(
             IInputArray queryDescriptors,
             VectorOfVectorOfDMatch matches,
@@ -308,7 +389,9 @@ namespace Emgu.CV.Cuda
             get { return _algorithmPtr; }
         }
 
-
+        /// <summary>
+        /// Return True if mask is supported
+        /// </summary>
         public bool IsMaskSupported
         {
             get
@@ -317,11 +400,17 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Clear the matcher
+        /// </summary>
         public void Clear()
         {
             CudaInvoke.cveCudaDescriptorMatcherClear(_ptr);
         }
 
+        /// <summary>
+        /// Return True if the matcher is empty 
+        /// </summary>
         public bool Empty
         {
             get
@@ -330,6 +419,9 @@ namespace Emgu.CV.Cuda
             }
         }
 
+        /// <summary>
+        /// Trains a descriptor matcher.
+        /// </summary>
         public void Train()
         {
             CudaInvoke.cveCudaDescriptorMatcherTrain(_ptr);

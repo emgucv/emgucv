@@ -287,9 +287,9 @@ namespace Emgu.CV
                 return Convert.ToInt32(GetCaptureProperty(CvEnum.CapProp.FrameHeight));
             }
         }
-#endregion
+        #endregion
 
-#region constructors
+        #region constructors
         /*
         /// <summary>
         /// Create a capture using the specific camera
@@ -302,6 +302,7 @@ namespace Emgu.CV
 
         ///<summary> Create a capture using the specific camera</summary>
         ///<param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
+        ///<param name="captureApi">The preferred Capture API backends to use. Can be used to enforce a specific reader implementation if multiple are available.</param>
         public VideoCapture(int camIndex = 0, API captureApi = API.Any)
         {
             _captureModuleType = CaptureModuleType.Camera;
@@ -320,6 +321,7 @@ namespace Emgu.CV
         /// Create a capture from file or a video stream
         /// </summary>
         /// <param name="fileName">The name of a file, or an url pointed to a stream.</param>
+        ///<param name="captureApi">The preferred Capture API backends to use. Can be used to enforce a specific reader implementation if multiple are available.</param>
         public VideoCapture(String fileName, API captureApi = API.Any)
         {
             using (CvString s = new CvString(fileName))
@@ -648,18 +650,27 @@ namespace Emgu.CV
             }
         }
 #endif
-
     }
 
+    /// <summary>
+    /// The backend for video
+    /// </summary>
     public class Backend
     {
         private int _id;
 
+        /// <summary>
+        /// Create a backend given its id
+        /// </summary>
+        /// <param name="id">The id of the backend</param>
         public Backend(int id)
         {
             _id = id;
         }
 
+        /// <summary>
+        /// The ID of the backend.
+        /// </summary>
         public int ID
         {
             get 
@@ -668,6 +679,9 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// The name of the backend
+        /// </summary>
         public String Name
         {
             get
@@ -704,73 +718,31 @@ namespace Emgu.CV
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool visible);
 #endif
-        /// <summary>
-        /// Allocates and initialized the CvCapture structure for reading a video stream from the camera. Currently two camera interfaces can be used on Windows: Video for Windows (VFW) and Matrox Imaging Library (MIL); and two on Linux: V4L and FireWire (IEEE1394). 
-        /// </summary>
-        /// <param name="index">Index of the camera to be used. If there is only one camera or it does not matter what camera to use -1 may be passed</param>
-        /// <returns>Pointer to the capture structure</returns>
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoCaptureCreateFromDevice(int index);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoCaptureCreateFromFile(IntPtr filename, VideoCapture.API api);
 
-        /// <summary>
-        /// The function cvReleaseCapture releases the CvCapture structure allocated by cvCreateFileCapture or cvCreateCameraCapture
-        /// </summary>
-        /// <param name="capture">pointer to video capturing structure.</param>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveVideoCaptureRelease(ref IntPtr capture);
 
-        /// <summary>
-        /// Grabs a frame from camera or video file, decompresses and returns it. This function is just a combination of cvGrabFrame and cvRetrieveFrame in one call. 
-        /// </summary>
-        /// <param name="capture">Video capturing structure</param>
-        /// <param name="frame">The output frame</param>
-        /// <returns>true id a frame is read</returns>
-        /// <remarks>The returned image should not be released or modified by user. </remarks>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
         internal static extern bool cveVideoCaptureRead(IntPtr capture, IntPtr frame);
 
-        /// <summary>
-        /// Grab a frame
-        /// </summary>
-        /// <param name="capture">Video capturing structure</param>
-        /// <returns>True on success</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
         internal static extern bool cveVideoCaptureGrab(IntPtr capture);
 
-        /// <summary>
-        /// Get the frame grabbed with cvGrabFrame(..)
-        /// This function may apply some frame processing like frame decompression, flipping etc.
-        /// </summary>
-        /// <param name="capture">Video capturing structure</param>
-        /// <param name="image">The output image</param>
-        /// <param name="flag">The frame retrieve flag</param>
-        /// <returns>True on success</returns>
-        /// <remarks>The returned image should not be released or modified by user. </remarks>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
         internal static extern bool cveVideoCaptureRetrieve(IntPtr capture, IntPtr image, int flag);
 
-        /// <summary>
-        /// Retrieves the specified property of camera or video file
-        /// </summary>
-        /// <param name="capture">Video capturing structure</param>
-        /// <param name="prop">Property identifier</param>
-        /// <returns>The specified property of camera or video file</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveVideoCaptureGet(IntPtr capture, CvEnum.CapProp prop);
 
-        /// <summary>
-        /// Sets the specified property of video capturing
-        /// </summary>
-        /// <param name="capture">Video capturing structure</param>
-        /// <param name="propertyId">Property identifier</param>
-        /// <param name="value">Value of the property</param>
-        /// <returns>True on success</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
         internal static extern bool cveVideoCaptureSet(IntPtr capture, CvEnum.CapProp propertyId, double value);
@@ -778,6 +750,9 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGetBackendName(int api, IntPtr name);
 
+        /// <summary>
+        /// Returns list of all builtin backends
+        /// </summary>
         public static Backend[] Backends
         {
             get
@@ -799,6 +774,9 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGetBackends(IntPtr backends);
 
+        /// <summary>
+        /// Returns list of available backends which works via cv::VideoCapture(int index)
+        /// </summary>
         public static Backend[] CameraBackends
         {
             get
@@ -820,6 +798,9 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGetCameraBackends(IntPtr backends);
 
+        /// <summary>
+        /// Returns list of available backends which works via cv::VideoCapture(filename)
+        /// </summary>
         public static Backend[] StreamBackends
         {
             get
@@ -840,7 +821,10 @@ namespace Emgu.CV
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGetStreamBackends(IntPtr backends);
-        
+
+        /// <summary>
+        /// Returns list of available backends which works via cv::VideoWriter()
+        /// </summary>
         public static Backend[] WriterBackends
         {
             get

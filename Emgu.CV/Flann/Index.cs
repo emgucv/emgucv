@@ -84,6 +84,7 @@ namespace Emgu.CV.Flann
         /// </summary>
         /// <param name="values">A row by row matrix of descriptors</param>
         /// <param name="ip">The index parameter</param>
+        /// <param name="distType">The distance type</param>
         public Index(IInputArray values, IIndexParams ip, DistType distType = DistType.L2)
         {
             using (InputArray iaValues = values.GetInputArray())

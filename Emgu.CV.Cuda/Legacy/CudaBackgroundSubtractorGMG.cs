@@ -30,6 +30,7 @@ namespace Emgu.CV.Cuda
         /// </summary>
         /// <param name="frame">Next video frame.</param>
         /// <param name="learningRate">The learning rate, use -1.0f for default value.</param>
+        /// <param name="foregroundMask">The output foreground mask as an 8-bit binary image.</param>
         /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
         public void Apply(IInputArray frame, IOutputArray foregroundMask, double learningRate = -1, Stream stream = null)
         {

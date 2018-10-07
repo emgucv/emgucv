@@ -289,6 +289,11 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromTensorflow2(IntPtr bufferModel, int lenModel, IntPtr bufferConfig, int lenConfig);
 
+        /// <summary>
+        /// Reads a network model ONNX.
+        /// </summary>
+        /// <param name="onnxFile">Path to the .onnx file with text description of the network architecture.</param>
+        /// <returns>Network object that ready to do forward, throw an exception in failure cases.</returns>
         public static Net ReadNetFromONNX(String onnxFile)
         {
             using (CvString csOnnxFile = new CvString(onnxFile))
@@ -299,6 +304,11 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromONNX(IntPtr onnxFile);
 
+        /// <summary>
+        /// Creates blob from .pb file.
+        /// </summary>
+        /// <param name="path">Path to the .pb file with input tensor.</param>
+        /// <returns>The blob</returns>
         public static Mat ReadTensorFromONNX(String path)
         {
             Mat m = new Mat();
@@ -374,6 +384,11 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDnnShrinkCaffeModel(IntPtr src, IntPtr dst);
 
+        /// <summary>
+        /// Create a text representation for a binary network stored in protocol buffer format.
+        /// </summary>
+        /// <param name="model">A path to binary network.</param>
+        /// <param name="output">A path to output text file to be created.</param>
         public static void WriteTextGraph(String model, String output)
         {
             using (CvString csModel = new CvString(model))
