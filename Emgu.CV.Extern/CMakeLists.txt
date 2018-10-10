@@ -618,7 +618,7 @@ ENDMACRO()
 IF(HAVE_opencv_core)
   CREATE_OCV_CLASS_PROPERTY( 
     "core/mat_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/MatGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Mat.g.cs"
     "cv::Mat" 
     "Mat" 
     "isContinuous;isSubmatrix;depth;empty;channels;pop_back;push_back;total;dims" 
@@ -643,7 +643,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/umat_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/UMatGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/UMat.g.cs"
     "cv::UMat" 
     "UMat" 
     "isContinuous;isSubmatrix;depth;empty;channels;total;dims" 
@@ -666,7 +666,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/input_array_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/InputArrayGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/InputArray.g.cs"
     "cv::_InputArray" 
     "InputArray" 
     "isMat;isUMat;isMatVector;isUMatVector;isMatx;kind" 
@@ -688,7 +688,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/output_array_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/OutputArrayGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/OutputArray.g.cs"
     "cv::_OutputArray" 
     "OutputArray" 
     "fixedSize;fixedType;needed" 
@@ -707,7 +707,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_device_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/DeviceGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/Device.g.cs"
     "cv::ocl::Device" 
     "Device" 
     "isNVidia;isIntel;isAMD;addressBits;linkerAvailable;compilerAvailable;available;maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;halfFPConfig;singleFPConfig;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion;OpenCL_C_Version" 
@@ -751,7 +751,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_platform_info_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/PlatformInfoGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/PlatformInfo.g.cs"
     "cv::ocl::PlatformInfo" 
     "PlatformInfo" 
     "name;version;vendor;deviceNumber" 
@@ -771,7 +771,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_kernel_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/KernelGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/Kernel.g.cs"
     "cv::ocl::Kernel" 
     "OclKernel"
     "empty;ptr"
@@ -789,7 +789,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/gpumat_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/GpuMatGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/GpuMat.g.cs"
     "cv::cuda::GpuMat" 
     "GpuMat" 
     "isContinuous;depth;empty;channels" 
@@ -810,7 +810,7 @@ IF(HAVE_opencv_core)
 
   CREATE_OCV_CLASS_PROPERTY( 
     "core/moments_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/MomentsGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Moments.g.cs"
     "cv::Moments" 
     "Moments" 
     "m00;m10;m01;m20;m11;m02;m30;m21;m12;m03;mu20;mu11;mu02;mu30;mu21;mu12;mu03;nu20;nu11;nu02;nu30;nu21;nu12;nu03" 
@@ -831,7 +831,7 @@ ENDIF()
 IF(HAVE_opencv_objdetect)
   CREATE_OCV_CLASS_PROPERTY( 
     "objdetect/QRCodeDetector_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Objdetect/QRCodeDetectorGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Objdetect/QRCodeDetector.g.cs"
     "cv::QRCodeDetector" 
     "QRCodeDetector" 
     "EpsX;EpsY" 
@@ -854,7 +854,7 @@ ENDIF()
 IF(HAVE_opencv_features2d)
   CREATE_OCV_CLASS_PROPERTY( 
     "features2d/SimpleBlobDetector_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/SimpleBlobDetectorParamsGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/SimpleBlobDetectorParams.g.cs"
     "cv::SimpleBlobDetector::Params" 
     "SimpleBlobDetectorParams" 
     "thresholdStep;minThreshold;maxThreshold;minDistBetweenBlobs;filterByColor;blobColor;filterByArea;minArea;maxArea;filterByCircularity;minCircularity;maxCircularity;filterByInertia;minInertiaRatio;maxInertiaRatio;filterByConvexity;minConvexity;maxConvexity;minRepeatability" 
@@ -894,7 +894,7 @@ ENDIF()
 IF(HAVE_opencv_ml)
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/em_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/EMGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/EM.g.cs"
     "cv::ml::EM" 
     "EM" 
     "ClustersNumber;CovarianceMatrixType;TermCriteria" 
@@ -913,7 +913,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svm_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/SVMGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/SVM.g.cs"
     "cv::ml::SVM" 
     "SVM" 
     "Type;Gamma;Coef0;Degree;C;Nu;P;Kernel;TermCriteria;KernelType" 
@@ -939,7 +939,7 @@ IF(HAVE_opencv_ml)
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svmsgd_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/SVMSGDGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/SVMSGD.g.cs"
     "cv::ml::SVMSGD" 
     "SVMSGD" 
     "SvmsgdType;MarginType;MarginRegularization;InitialStepSize;StepDecreasingPower;TermCriteria" 
@@ -961,7 +961,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/knearest_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/KNearestGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/KNearest.g.cs"
     "cv::ml::KNearest" 
     "KNearest" 
     "DefaultK;IsClassifier;Emax;AlgorithmType" 
@@ -981,7 +981,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/ann_mlp_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/ANN_MLPGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/ANN_MLP.g.cs"
     "cv::ml::ANN_MLP" 
     "ANN_MLP" 
     "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax;AnnealInitialT;AnnealFinalT;AnnealCoolingRatio;AnnealItePerStep" 
@@ -1009,7 +1009,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/logistic_regression_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/LogisticRegressionGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/LogisticRegression.g.cs"
     "cv::ml::LogisticRegression" 
     "LogisticRegression" 
     "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
@@ -1031,7 +1031,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/rtrees_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/RTreesGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/RTrees.g.cs"
     "cv::ml::RTrees" 
     "RTrees" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy;CalculateVarImportance;ActiveVarCount;TermCriteria" 
@@ -1058,7 +1058,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/dtree_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/DTreesGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/DTrees.g.cs"
     "cv::ml::DTrees" 
     "DTrees" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
@@ -1082,7 +1082,7 @@ IF(HAVE_opencv_ml)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/boost_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/BoostGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/Boost.g.cs"
     "cv::ml::Boost" 
     "Boost" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
@@ -1110,7 +1110,7 @@ ENDIF()
 IF(HAVE_opencv_video)
   CREATE_OCV_CLASS_PROPERTY( 
     "video/dual_tvl1_opticalflow_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/DualTVL1OpticalFlowGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/DualTVL1OpticalFlow.g.cs"
     "cv::DualTVL1OpticalFlow" 
     "DualTVL1OpticalFlow" 
     "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
@@ -1138,7 +1138,7 @@ IF(HAVE_opencv_video)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "video/kalmanfilter_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/KalmanFilterGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/KalmanFilter.g.cs"
     "cv::KalmanFilter" 
     "KalmanFilter"  "statePre;statePost;transitionMatrix;controlMatrix;measurementMatrix;processNoiseCov;measurementNoiseCov;errorCovPre;gain;errorCovPost" 
     "cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat;cv::Mat" 
@@ -1167,7 +1167,7 @@ ENDIF()
 IF(HAVE_opencv_videoio)
   CREATE_OCV_CLASS_PROPERTY( 
     "videoio/video_capture_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Videoio/VideoCaptureGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Videoio/VideoCapture.g.cs"
     "cv::VideoCapture" 
     "VideoCapture" 
     "isOpened" 
@@ -1189,7 +1189,7 @@ ENDIF()
 IF(HAVE_opencv_optflow)
   CREATE_OCV_CLASS_PROPERTY( 
     "optflow/disopticalflow_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/DISOpticalFlowGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/DISOpticalFlow.g.cs"
     "cv::optflow::DISOpticalFlow" 
     "DISOpticalFlow" 
     "FinestScale;PatchSize;PatchStride;GradientDescentIterations;VariationalRefinementIterations;VariationalRefinementAlpha;VariationalRefinementDelta;VariationalRefinementGamma;UseMeanNormalization;UseSpatialPropagation" 
@@ -1215,7 +1215,7 @@ IF(HAVE_opencv_optflow)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "optflow/variational_refinement_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/VariationalRefinementGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/VariationalRefinement.g.cs"
     "cv::optflow::VariationalRefinement" 
     "VariationalRefinement" 
     "FixedPointIterations;SorIterations;Omega;Alpha;Delta;Gamma" 
@@ -1242,7 +1242,7 @@ ENDIF()
 IF(HAVE_opencv_photo)
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/Tonemap_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/Tonemap.g.cs"
     "cv::Tonemap" 
     "Tonemap" 
     "Gamma" 
@@ -1260,7 +1260,7 @@ IF(HAVE_opencv_photo)
 		
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapDurand_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapDragoGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapDrago.g.cs"
     "cv::TonemapDurand" 
     "TonemapDurand" 
     "Saturation;Contrast;SigmaSpace;SigmaColor" 
@@ -1281,7 +1281,7 @@ IF(HAVE_opencv_photo)
 
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapReinhard_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapReinhardGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapReinhard.g.cs"
     "cv::TonemapReinhard" 
     "TonemapReinhard" 
     "Intensity;LightAdaptation;ColorAdaptation" 
@@ -1301,7 +1301,7 @@ IF(HAVE_opencv_photo)
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapDrago_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapDurandGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapDurand.g.cs"
     "cv::TonemapDrago" 
     "TonemapDrago" 
     "Saturation;Bias" 
@@ -1320,7 +1320,7 @@ IF(HAVE_opencv_photo)
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapMantiuk_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapMantiukGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapMantiuk.g.cs"
     "cv::TonemapMantiuk" 
     "TonemapMantiuk" 
     "Saturation;Scale" 
@@ -1344,7 +1344,7 @@ ENDIF()
 IF(HAVE_opencv_xfeatures2d)
    CREATE_OCV_CLASS_PROPERTY( 
     "xfeatures2d/pct_compute_signature_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XFeatures2D/PCTComputeSignatureGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XFeatures2D/PCTComputeSignature.g.cs"
     "cv::xfeatures2d::PCTSignatures" 
     "PCTSignatures" 
     "GrayscaleBits;WindowRadius;WeightX;WeightY;WeightL;WeightA;WeightB;WeightEntropy;IterationCount;MaxClustersCount;ClusterMinSize;JoiningDistance;DropThreshold;DistanceFunction" 
@@ -1378,7 +1378,7 @@ ENDIF()
 IF(HAVE_opencv_stitching)
    CREATE_OCV_CLASS_PROPERTY( 
     "stitching/stitching_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Stitching/StitcherGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Stitching/Stitcher.g.cs"
     "cv::Stitcher" 
     "Stitcher" 
     "workScale" 
@@ -1399,7 +1399,7 @@ ENDIF()
 IF(HAVE_opencv_video)
    CREATE_OCV_CLASS_PROPERTY( 
     "video/BackgroundSubtractorKNN_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/BackgroundSubtractorKNNGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/BackgroundSubtractorKNN.g.cs"
     "cv::BackgroundSubtractorKNN" 
     "BackgroundSubtractorKNN" 
     "History;NSamples;Dist2Threshold;kNNSamples;DetectShadows;ShadowValue;ShadowThreshold" 
@@ -1422,7 +1422,7 @@ IF(HAVE_opencv_video)
   
    CREATE_OCV_CLASS_PROPERTY( 
     "video/BackgroundSubtractorMOG2_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/BackgroundSubtractorMOG2Generated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/BackgroundSubtractorMOG2.g.cs"
     "cv::BackgroundSubtractorMOG2" 
     "BackgroundSubtractorMOG2" 
     "History;DetectShadows;ShadowValue;ShadowThreshold;NMixtures;BackgroundRatio;VarThreshold;VarThresholdGen;VarInit;VarMin;VarMax;ComplexityReductionThreshold" 
@@ -1454,7 +1454,7 @@ ENDIF()
 IF(HAVE_opencv_shape)
    CREATE_OCV_CLASS_PROPERTY( 
     "shape/ShapeContextDistanceExtractor_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Shape/ShapeContextDistanceExtractorGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Shape/ShapeContextDistanceExtractor.g.cs"
     "cv::ShapeContextDistanceExtractor" 
     "ShapeContextDistanceExtractor" 
     "Iterations;AngularBins;RadialBins;InnerRadius;OuterRadius;RotationInvariant;ShapeContextWeight;ImageAppearanceWeight;BendingEnergyWeight;StdDev" 
@@ -1484,7 +1484,7 @@ ENDIF()
 IF(HAVE_opencv_cudaimgproc)
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaimgproc/cuda_hough_lines_detector_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Imgproc/CudaHoughLinesDetectorGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Imgproc/CudaHoughLinesDetector.g.cs"
     "cv::cuda::HoughLinesDetector" 
     "CudaHoughLinesDetector" 
     "Rho;Theta;Threshold;DoSort;MaxLines" 
@@ -1510,7 +1510,7 @@ ENDIF()
 #IF(HAVE_opencv_cudaobjdetect)
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaobjdetect/cuda_hog_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaHOGGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaHOG.g.cs"
     "cv::cuda::HOG" 
     "CudaHOG"
     "GammaCorrection;WinSigma;NumLevels;GroupThreshold;HitThreshold;ScaleFactor;L2HysThreshold;DescriptorFormat;DescriptorSize;WinStride;BlockHistogramSize" 
@@ -1538,7 +1538,7 @@ ENDIF()
 
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaobjdetect/cuda_cascade_classifier_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaCascadeClassifierGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaCascadeClassifier.g.cs"
     "cv::cuda::CascadeClassifier" 
     "CudaCascadeClassifier"
     "ScaleFactor;MinNeighbors;MaxNumObjects;FindLargestObject;MaxObjectSize;MinObjectSize;ClassifierSize" 
@@ -1566,7 +1566,7 @@ ENDIF()
 IF(HAVE_opencv_plot)
   CREATE_OCV_CLASS_PROPERTY( 
     "plot/plot2d_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Plot/Plot2dGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Plot/Plot2d.g.cs"
     "cv::plot::Plot2d" 
     "Plot2d" 
     "MinX;MinY;MaxX;MaxY;PlotLineWidth" 
@@ -1592,7 +1592,7 @@ ENDIF()
 IF(HAVE_opencv_saliency)
   CREATE_OCV_CLASS_PROPERTY( 
     "saliency/MotionSaliencyBinWangApr2014_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/MotionSaliencyBinWangApr2014Generated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/MotionSaliencyBinWangApr2014.g.cs"
     "cv::saliency::MotionSaliencyBinWangApr2014" 
     "MotionSaliencyBinWangApr2014" 
     "ImageWidth;ImageHeight;init" 
@@ -1612,7 +1612,7 @@ IF(HAVE_opencv_saliency)
 #include \"opencv2/core/types_c.h\"")
   CREATE_OCV_CLASS_PROPERTY( 
     "saliency/ObjectnessBING_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/ObjectnessBINGGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/ObjectnessBING.g.cs"
     "cv::saliency::ObjectnessBING" 
     "ObjectnessBING" 
     "W;NSS" 
@@ -1635,7 +1635,7 @@ ENDIF()
 IF(HAVE_opencv_xphoto)
   CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/simplewb_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/SimpleWBGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/SimpleWB.g.cs"
     "cv::xphoto::SimpleWB" 
     "SimpleWB" 
     "InputMin;InputMax;OutputMin;OutputMax;P" 
@@ -1657,7 +1657,7 @@ IF(HAVE_opencv_xphoto)
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/grayworldwb_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/GrayworldWBGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/GrayworldWB.g.cs"
     "cv::xphoto::GrayworldWB" 
     "GrayworldWB" 
     "SaturationThreshold" 
@@ -1675,7 +1675,7 @@ IF(HAVE_opencv_xphoto)
 
 	CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/learningbasedwb_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/LearningBasedWBGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/LearningBasedWB.g.cs"
     "cv::xphoto::LearningBasedWB" 
     "LearningBasedWB" 
     "RangeMaxVal;SaturationThreshold;HistBinNum" 
@@ -1701,7 +1701,7 @@ ENDIF()
 IF(HAVE_opencv_face)
   CREATE_OCV_CLASS_PROPERTY( 
     "face/facemarklbf_params_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkLBFParamsGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkLBFParams.g.cs"
     "cv::face::FacemarkLBF::Params" 
     "FacemarkLBFParams" 
     "shape_offset;verbose;n_landmarks;initShape_n;stages_n;tree_n;tree_depth;bagging_overlap;save_model;cascade_face;model_filename" 
@@ -1729,7 +1729,7 @@ IF(HAVE_opencv_face)
 
   CREATE_OCV_CLASS_PROPERTY( 
     "face/facemarkaam_params_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkAAMParamsGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkAAMParams.g.cs"
     "cv::face::FacemarkAAM::Params" 
     "FacemarkAAMParams" 
     "model_filename;m;n;n_iter;verbose;save_model;max_m;max_n" 
@@ -1758,7 +1758,7 @@ ENDIF()
 IF(HAVE_opencv_dnn)
   CREATE_OCV_CLASS_PROPERTY( 
     "dnn/net_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/NetGenerated.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Net.g.cs"
     "cv::dnn::Net" 
     "Net" 
     "PreferableBackend;PreferableTarget;enableFusion;empty" 
