@@ -425,3 +425,40 @@ void cveRidgeDetectionFilterGetRidgeFilteredImage(cv::ximgproc::RidgeDetectionFi
 {
 	ridgeDetection->getRidgeFilteredImage(*img, *out);
 }
+
+cv::ximgproc::EdgeBoxes* cveEdgeBoxesCreate(
+	float alpha,
+	float beta,
+	float eta,
+	float minScore,
+	int   maxBoxes,
+	float edgeMinMag,
+	float edgeMergeThr,
+	float clusterMinMag,
+	float maxAspectRatio,
+	float minBoxArea,
+	float gamma,
+	float kappa,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::ximgproc::EdgeBoxes>** sharedPtr)
+{
+	cv::Ptr<cv::ximgproc::EdgeBoxes> ptr = cv::ximgproc::createEdgeBoxes(
+		alpha, beta, eta, minScore, maxBoxes, edgeMinMag, edgeMergeThr, clusterMinMag, maxAspectRatio, minBoxArea, gamma, kappa);
+	*sharedPtr = new cv::Ptr<cv::ximgproc::EdgeBoxes>(ptr);
+	*algorithm = (*sharedPtr)->dynamicCast<cv::Algorithm>();
+	return (*sharedPtr)->get();
+}
+void cveEdgeBoxesGetBoundingBoxes(cv::ximgproc::EdgeBoxes* edgeBoxes, cv::_InputArray* edgeMap, cv::_InputArray* orientationMap, std::vector<cv::Rect>* boxes)
+{
+	//std::vector<cv::Rect> b;
+	//for (std::vector<CvRect>::iterator it = boxes->begin(); it != boxes->end(); it++)
+	//{
+	//	b.push_back(*it);
+	//}
+	edgeBoxes->getBoundingBoxes(*edgeMap, *orientationMap, *boxes);
+}
+void cveEdgeBoxesRelease(cv::Ptr<cv::ximgproc::EdgeBoxes>** sharedPtr)
+{
+	delete *sharedPtr;
+	*sharedPtr = 0;
+}

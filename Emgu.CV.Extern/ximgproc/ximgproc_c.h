@@ -135,4 +135,22 @@ CVAPI(cv::ximgproc::RidgeDetectionFilter*) cveRidgeDetectionFilterCreate(
 	cv::Ptr<cv::ximgproc::RidgeDetectionFilter>** sharedPtr);
 CVAPI(void) cveRidgeDetectionFilterRelease(cv::Ptr<cv::ximgproc::RidgeDetectionFilter>** sharedPtr);
 CVAPI(void) cveRidgeDetectionFilterGetRidgeFilteredImage(cv::ximgproc::RidgeDetectionFilter* ridgeDetection, cv::_InputArray* img, cv::_OutputArray* out);
+
+CVAPI(cv::ximgproc::EdgeBoxes*) cveEdgeBoxesCreate(
+	float alpha,
+	float beta,
+	float eta,
+	float minScore,
+	int   maxBoxes,
+	float edgeMinMag,
+	float edgeMergeThr,
+	float clusterMinMag,
+	float maxAspectRatio,
+	float minBoxArea,
+	float gamma,
+	float kappa,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::ximgproc::EdgeBoxes>** sharedPtr);
+CVAPI(void) cveEdgeBoxesGetBoundingBoxes(cv::ximgproc::EdgeBoxes* edgeBoxes, cv::_InputArray* edgeMap, cv::_InputArray* orientationMap, std::vector<cv::Rect>* boxes);
+CVAPI(void) cveEdgeBoxesRelease(cv::Ptr<cv::ximgproc::EdgeBoxes>** sharedPtr);
 #endif
