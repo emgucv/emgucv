@@ -95,9 +95,17 @@ cv::ximgproc::StructuredEdgeDetection* cveStructuredEdgeDetectionCreate(cv::Stri
 	*sharedPtr = new cv::Ptr<cv::ximgproc::StructuredEdgeDetection>(ptr);
 	return ptr.get();
 }
-void cveStructuredEdgeDetectionDetectEdges(cv::ximgproc::StructuredEdgeDetection* detection, cv::Mat* src, cv::Mat* dst)
+void cveStructuredEdgeDetectionDetectEdges(cv::ximgproc::StructuredEdgeDetection* detection, cv::_InputArray* src, cv::_OutputArray* dst)
 {
 	detection->detectEdges(*src, *dst);
+}
+void cveStructuredEdgeDetectionComputeOrientation(cv::ximgproc::StructuredEdgeDetection* detection, cv::_InputArray* src, cv::_OutputArray* dst)
+{
+	detection->computeOrientation(*src, *dst);
+}
+void cveStructuredEdgeDetectionEdgesNms(cv::ximgproc::StructuredEdgeDetection* detection, cv::_InputArray* edgeImage, cv::_InputArray* orientationImage, cv::_OutputArray* dst, int r, int s, float m, bool isParallel)
+{
+	detection->edgesNms(*edgeImage, *orientationImage, *dst, r, s, m, isParallel);
 }
 void cveStructuredEdgeDetectionRelease(cv::ximgproc::StructuredEdgeDetection** detection, cv::Ptr<cv::ximgproc::StructuredEdgeDetection>** sharedPtr)
 {
