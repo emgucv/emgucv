@@ -120,4 +120,17 @@ CVAPI(void) cveDisparityFilterFilter(
 	cv::_InputArray* disparity_map_right, CvRect* ROI, cv::_InputArray* right_view);
 
 
+CVAPI(cv::ximgproc::RidgeDetectionFilter*) cveRidgeDetectionFilterCreate(
+	int ddepth,
+	int dx,
+	int dy,
+	int ksize,
+	int outDtype,
+	double scale,
+	double delta,
+	int borderType,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::ximgproc::RidgeDetectionFilter>** sharedPtr);
+CVAPI(void) cveRidgeDetectionFilterRelease(cv::Ptr<cv::ximgproc::RidgeDetectionFilter>** sharedPtr);
+CVAPI(void) cveRidgeDetectionFilterGetRidgeFilteredImage(cv::ximgproc::RidgeDetectionFilter* ridgeDetection, cv::_InputArray* img, cv::_OutputArray* out);
 #endif

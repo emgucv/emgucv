@@ -382,3 +382,38 @@ void cveDisparityFilterFilter(
 		*ROI, 
 		right_view->empty() ? cv::Mat() : *right_view);
 }
+
+cv::ximgproc::RidgeDetectionFilter* cveRidgeDetectionFilterCreate(
+	int ddepth,
+	int dx,
+	int dy,
+	int ksize,
+	int outDtype,
+	double scale,
+	double delta,
+	int borderType,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::ximgproc::RidgeDetectionFilter>** sharedPtr)
+{
+	cv::Ptr<cv::ximgproc::RidgeDetectionFilter> filter = cv::ximgproc::RidgeDetectionFilter::create(
+		ddepth,
+		dx,
+		dy,
+		ksize,
+		outDtype,
+		scale,
+		delta,
+		borderType);
+	*sharedPtr = new cv::Ptr<cv::ximgproc::RidgeDetectionFilter>(filter);
+	*algorithm = (*sharedPtr)->dynamicCast<cv::Algorithm>();
+	return (*sharedPtr)->get();
+}
+void cveRidgeDetectionFilterRelease(cv::Ptr<cv::ximgproc::RidgeDetectionFilter>** sharedPtr)
+{
+	delete *sharedPtr;
+	*sharedPtr = 0;
+}
+void cveRidgeDetectionFilterGetRidgeFilteredImage(cv::ximgproc::RidgeDetectionFilter* ridgeDetection, cv::_InputArray* img, cv::_OutputArray* out)
+{
+	ridgeDetection->getRidgeFilteredImage(*img, *out);
+}

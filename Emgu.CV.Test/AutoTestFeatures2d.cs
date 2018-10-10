@@ -198,7 +198,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestFAST()
         {
-            FastDetector fast = new FastDetector(10, true);
+            FastFeatureDetector fast = new FastFeatureDetector(10, true);
             //GridAdaptedFeatureDetector fastGrid = new GridAdaptedFeatureDetector(fast, 2000, 4, 4);
             BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
             //ParamDef[] parameters = fastGrid.GetParams();
@@ -216,7 +216,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestFreak()
         {
-            FastDetector fast = new FastDetector(10, true);
+            FastFeatureDetector fast = new FastFeatureDetector(10, true);
             Freak freak = new Freak(true, true, 22.0f, 4);
             //ParamDef[] parameters = freak.GetParams();
             //int nOctaves = freak.GetInt("nbOctave");

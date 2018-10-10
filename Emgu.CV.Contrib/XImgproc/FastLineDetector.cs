@@ -3,15 +3,15 @@
 //----------------------------------------------------------------------------
 
 using Emgu.CV.Util;
+using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
+using Emgu.Util;
 
 namespace Emgu.CV.XImgproc
 {
-    using System;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
-    using Emgu.CV.CvEnum;
-    using Emgu.CV.Structure;
-    using Emgu.Util;
 
     /// <summary>
     /// Class implementing the FLD (Fast Line Detector) algorithm from
@@ -139,6 +139,6 @@ namespace Emgu.CV.XImgproc
             bool drawArrow);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveFastLineDetectorRelease(ref IntPtr fld);
+        internal static extern void cveFastLineDetectorRelease(ref IntPtr fld);
     }
 }

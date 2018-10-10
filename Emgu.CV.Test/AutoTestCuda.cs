@@ -550,7 +550,7 @@ namespace Emgu.CV.Test
             using (Image<Bgr, Byte> img = new Image<Bgr, byte>("box.png"))
             using (CudaImage<Bgr, Byte> CudaImage = new CudaImage<Bgr, byte>(img))
             using (CudaImage<Gray, Byte> grayCudaImage = CudaImage.Convert<Gray, Byte>())
-            using (CudaFastFeatureDetector featureDetector = new CudaFastFeatureDetector(10, true, FastDetector.DetectorType.Type9_16, 1000))
+            using (CudaFastFeatureDetector featureDetector = new CudaFastFeatureDetector(10, true, FastFeatureDetector.DetectorType.Type9_16, 1000))
             using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
             using (GpuMat keyPointsMat = new GpuMat())
             {
@@ -949,7 +949,7 @@ namespace Emgu.CV.Test
             if (CudaInvoke.HasCuda)
             {
                 Image<Gray, byte> box = new Image<Gray, byte>("box.png");
-                FastDetector fast = new FastDetector(100, true);
+                FastFeatureDetector fast = new FastFeatureDetector(100, true);
                 BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
 
                 #region extract features from the object image

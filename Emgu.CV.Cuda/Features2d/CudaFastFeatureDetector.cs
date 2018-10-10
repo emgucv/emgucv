@@ -16,7 +16,7 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// A FAST detector using Cuda
     /// </summary>
-    public class CudaFastFeatureDetector : FastDetector, IFeature2DAsync
+    public class CudaFastFeatureDetector : FastFeatureDetector, IFeature2DAsync
     {
         private IntPtr _sharedPtr;
 
@@ -30,7 +30,7 @@ namespace Emgu.CV.Cuda
         /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used.</param>
         /// <param name="maxNKeypoints">The maximum number of keypoints to be extracted.</param>
         /// <param name="type">The detector type</param>
-        public CudaFastFeatureDetector(int threshold = 10, bool nonmaxSupression = true, FastDetector.DetectorType type = DetectorType.Type9_16, int maxNKeypoints = 5000)
+        public CudaFastFeatureDetector(int threshold = 10, bool nonmaxSupression = true, FastFeatureDetector.DetectorType type = DetectorType.Type9_16, int maxNKeypoints = 5000)
         {
             _ptr = CudaInvoke.cveCudaFastFeatureDetectorCreate(threshold, nonmaxSupression, type, maxNKeypoints, ref _feature2D, ref _feature2DAsyncPtr, ref _sharedPtr);
         }
@@ -62,7 +62,7 @@ namespace Emgu.CV.Cuda
            int threshold,
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool nonmaxSupression,
-           FastDetector.DetectorType type,
+           FastFeatureDetector.DetectorType type,
            int maxPoints,
            ref IntPtr feature2D,
            ref IntPtr feature2DAsync, 
