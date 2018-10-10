@@ -618,7 +618,7 @@ ENDMACRO()
 IF(HAVE_opencv_core)
   CREATE_OCV_CLASS_PROPERTY( 
     "core/mat_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Mat.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/Mat.g.cs"
     "cv::Mat" 
     "Mat" 
     "isContinuous;isSubmatrix;depth;empty;channels;pop_back;push_back;total;dims" 
@@ -643,7 +643,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/umat_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/UMat.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/UMat.g.cs"
     "cv::UMat" 
     "UMat" 
     "isContinuous;isSubmatrix;depth;empty;channels;total;dims" 

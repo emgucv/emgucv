@@ -9,6 +9,7 @@
     <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Core\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CameraCalibration\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videoio\*.cs" />
