@@ -17,7 +17,7 @@ namespace Emgu.CV.Features2D
     /// See Detects corners using FAST algorithm by E. Rosten ("Machine learning for high-speed corner
     /// detection, 2006).
     /// </summary>
-    public class FastDetector : Feature2D
+    public class FastFeatureDetector : Feature2D
     {
         private IntPtr _sharedPtr;
 
@@ -47,7 +47,7 @@ namespace Emgu.CV.Features2D
         /// this pixel.</param>
         /// <param name="nonmaxSupression">Specify if non-maximum suppression should be used.</param>
         /// <param name="type">One of the three neighborhoods as defined in the paper</param>
-        public FastDetector(int threshold = 10, bool nonmaxSupression = true, DetectorType type = DetectorType.Type9_16)
+        public FastFeatureDetector(int threshold = 10, bool nonmaxSupression = true, DetectorType type = DetectorType.Type9_16)
         {
             _ptr = CvInvoke.cveFASTGetFeatureDetector(threshold, nonmaxSupression, type, ref _feature2D, ref _sharedPtr);
         }
@@ -74,7 +74,7 @@ namespace Emgu.CV
         internal extern static IntPtr cveFASTGetFeatureDetector(
             int threshold,
             [MarshalAs(CvInvoke.BoolMarshalType)] bool nonmaxSupression,
-            Features2D.FastDetector.DetectorType type,
+            Features2D.FastFeatureDetector.DetectorType type,
             ref IntPtr feature2D,
             ref IntPtr sharedPtr);
 

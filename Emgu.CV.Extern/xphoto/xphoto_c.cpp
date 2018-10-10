@@ -110,3 +110,14 @@ void cveBm3dDenoising2(
 		*src, *dst, h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
 		groupSize, slidingStep, beta, normType, step, transformType);
 }
+
+
+void cveOilPainting(
+	cv::_InputArray* src,
+	cv::_OutputArray* dst,
+	int size,
+	int dynRatio,
+	int code)
+{
+	cv::xphoto::oilPainting(*src, *dst, size, dynRatio, code);
+}

@@ -59,4 +59,11 @@ CVAPI(void) cveBm3dDenoising2(
 	int step,
 	int transformType);
 
+
+CVAPI(void) cveOilPainting(
+	cv::_InputArray* src, 
+	cv::_OutputArray* dst, 
+	int size, 
+	int dynRatio, 
+	int code);
 #endif

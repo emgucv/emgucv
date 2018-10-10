@@ -372,5 +372,30 @@ namespace Emgu.CV.XPhoto
             NormType normType,
             Bm3dSteps step,
             TransformTypes transformType);
+
+        /// <summary>
+        /// Oil Painting effect
+        /// </summary>
+        /// <param name="src">Input three-channel or one channel image (either CV_8UC3 or CV_8UC1)</param>
+        /// <param name="dst">Output image of the same size and type as src.</param>
+        /// <param name="size">Neighbouring size is 2-size+1</param>
+        /// <param name="dynRatio">Image is divided by dynRatio before histogram processing</param>
+        /// <param name="code">Color space conversion code(see ColorConversionCodes). Histogram will used only first plane</param>
+        public static void OilPainting(IInputArray src, IOutputArray dst, int size, int dynRatio, CvEnum.ColorConversion code = ColorConversion.Bgr2Gray)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveOilPainting(iaSrc, oaDst, size, dynRatio, code);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveOilPainting(
+            IntPtr src,
+            IntPtr dst,
+            int size,
+            int dynRatio,
+            CvEnum.ColorConversion code);
     }
 }
