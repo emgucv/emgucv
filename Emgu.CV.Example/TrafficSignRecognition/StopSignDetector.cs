@@ -24,13 +24,13 @@ namespace TrafficSignRecognition
       private Mat _modelDescriptors;
       private BFMatcher _modelDescriptorMatcher;
       //private Features2DTracker<float> _tracker;
-      private SURF _detector;
+      private Feature2D _detector;
 
       private VectorOfPoint _octagon;
 
       public StopSignDetector(IInputArray stopSignModel)
       {
-         _detector = new SURF(500);
+         _detector = new KAZE();
          using (Mat redMask = new Mat())
          {
             GetRedPixelMask(stopSignModel, redMask);
