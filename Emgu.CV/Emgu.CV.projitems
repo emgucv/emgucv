@@ -85,7 +85,7 @@
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (ARM)</EmguCVLinkTarget>
         <EmguCVNativeFile>$(OpenCVBinaryDir)\UWP\arm\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_arm </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
@@ -100,7 +100,7 @@
       <PropertyGroup>
         <EmguCVLinkTarget>Windows Store 8.1 (64bit)</EmguCVLinkTarget>
         <EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1\x64\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile). Emgu CV no longer supports Windows Store 8.1 targets. </EmguCVErrorMessage>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)store81_x64 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
@@ -115,7 +115,7 @@
       <PropertyGroup>
         <EmguCVLinkTarget>Windows Store 8.1 (32bit)</EmguCVLinkTarget>
         <EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1\x86\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile). Emgu CV no longer supports Windows Store 8.1 targets. </EmguCVErrorMessage>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)store81_x86 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
@@ -130,7 +130,7 @@
       <PropertyGroup>
         <EmguCVLinkTarget>Windows Phone 8.1 (ARM)</EmguCVLinkTarget>
         <EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1\arm\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget).Missing $(EmguCVNativeFile). Emgu CV no longer supports Windows Phone 8.1 targets.  </EmguCVErrorMessage>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)phone81_arm </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
@@ -145,7 +145,7 @@
       <PropertyGroup>
         <EmguCVLinkTarget>Windows Phone 8.1 (x86)</EmguCVLinkTarget>
         <EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1\x86\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Phone 8.1 Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile). Emgu CV no longer supports Windows Phone 8.1 targets. </EmguCVErrorMessage>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)phone81_x86 </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
