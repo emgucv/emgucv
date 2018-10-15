@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Ml\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Objdetect\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Imgproc\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Calib3d\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvType\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Windows.Store\*.cs" />

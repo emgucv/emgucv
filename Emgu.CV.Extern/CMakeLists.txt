@@ -810,7 +810,7 @@ IF(HAVE_opencv_core)
 
   CREATE_OCV_CLASS_PROPERTY( 
     "core/moments_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Moments.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Imgproc/Moments.g.cs"
     "cv::Moments" 
     "Moments" 
     "m00;m10;m01;m20;m11;m02;m30;m21;m12;m03;mu20;mu11;mu02;mu30;mu21;mu12;mu03;nu20;nu11;nu02;nu30;nu21;nu12;nu03" 
