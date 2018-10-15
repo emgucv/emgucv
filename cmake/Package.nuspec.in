@@ -8,6 +8,7 @@
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <licenseUrl>${EMGUCV_LICENSE_URL}</licenseUrl>
     <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+	<repository type="git" url="https://github.com/emgucv/emgucv" />
 	<iconUrl>http://www.emgu.com/wiki/files/EmguCVLogo.gif</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
 	<summary>Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.</summary>
