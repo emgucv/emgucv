@@ -331,3 +331,24 @@ void cveFisheyeStereoCalibrate(cv::_InputArray* objectPoints, cv::_InputArray* i
 {
 	cv::fisheye::stereoCalibrate(*objectPoints, *imagePoints1, *imagePoints2, *K1, *D1, *K2, *D2, *imageSize, *R, *T, flags, *criteria);
 }
+
+void cveInitUndistortRectifyMap(cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* newCameraMatrix, CvSize* size, int m1type, cv::_OutputArray* map1, cv::_OutputArray* map2)
+{
+	cv::initUndistortRectifyMap(*cameraMatrix, *distCoeffs, r ? *r : (cv::_InputArray) cv::noArray(), *newCameraMatrix, *size, m1type, *map1, map2 ? *map2 : (cv::OutputArray) cv::noArray());
+}
+
+void cveUndistort(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distorCoeffs, cv::_InputArray* newCameraMatrix)
+{
+	cv::undistort(*src, *dst, *cameraMatrix, *distorCoeffs, newCameraMatrix ? *newCameraMatrix : (cv::InputArray) cv::noArray());
+}
+
+void cveUndistortPoints(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* p)
+{
+	cv::undistortPoints(*src, *dst, *cameraMatrix, *distCoeffs, r ? *r : (cv::InputArray) cv::noArray(), p ? *p : (cv::InputArray) cv::noArray());
+}
+
+void cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, CvSize* imgsize, bool centerPrincipalPoint, cv::Mat* cm)
+{
+	cv::Mat res = cv::getDefaultNewCameraMatrix(*cameraMatrix, *imgsize, centerPrincipalPoint);
+	cv::swap(*cm, res);
+}

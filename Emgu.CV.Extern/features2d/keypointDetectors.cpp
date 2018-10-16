@@ -9,7 +9,7 @@
 //ORB
 cv::ORB* cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D, cv::Ptr<cv::ORB>** sharedPtr)
 {
-	cv::Ptr<cv::ORB> orbPtr = cv::ORB::create(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold);
+	cv::Ptr<cv::ORB> orbPtr = cv::ORB::create(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, static_cast<cv::ORB::ScoreType>( scoreType ), patchSize, fastThreshold);
 	*sharedPtr = new cv::Ptr<cv::ORB>(orbPtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(orbPtr.get());
 	return orbPtr.get();
@@ -41,7 +41,7 @@ void cveBriskRelease(cv::BRISK** detector, cv::Ptr<cv::BRISK>** sharedPtr)
 // detect corners using FAST algorithm
 cv::FastFeatureDetector* cveFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::FastFeatureDetector>** sharedPtr)
 {
-	cv::Ptr<cv::FastFeatureDetector> fastPtr = cv::FastFeatureDetector::create(threshold, nonmax_supression, type);
+	cv::Ptr<cv::FastFeatureDetector> fastPtr = cv::FastFeatureDetector::create(threshold, nonmax_supression, static_cast<cv::FastFeatureDetector::DetectorType>( type ));
 	*sharedPtr = new cv::Ptr<cv::FastFeatureDetector>(fastPtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(fastPtr.get());
 	return fastPtr.get();
@@ -139,7 +139,7 @@ void drawKeypoints(
 	const CvScalar* color,
 	int flags)
 {
-	cv::drawKeypoints(*image, *keypoints, *outImage, *color, flags);
+	cv::drawKeypoints(*image, *keypoints, *outImage, *color, static_cast<cv::DrawMatchesFlags>( flags ));
 }
 
 // Draws matches of keypints from two images on output image.
@@ -171,12 +171,12 @@ void drawMatchedFeatures(
 			matchesVec[i][1] = 0;
 		}
 		cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg,
-			*matchColor, *singlePointColor, matchesVec, flags);
+			*matchColor, *singlePointColor, matchesVec, static_cast<cv::DrawMatchesFlags>( flags ));
 	}
 	else
 	{
 		cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg,
-			*matchColor, *singlePointColor, std::vector< std::vector< char > >(), flags);
+			*matchColor, *singlePointColor, std::vector< std::vector< char > >(), static_cast<cv::DrawMatchesFlags>( flags ));
 	}
 
 }
@@ -478,7 +478,7 @@ cv::KAZE* cveKAZEDetectorCreate(
 	cv::Feature2D** feature2D,
 	cv::Ptr<cv::KAZE>** sharedPtr)
 {
-	cv::Ptr<cv::KAZE> kazePtr = cv::KAZE::create(extended, upright, threshold, octaves, sublevels, diffusivity);
+	cv::Ptr<cv::KAZE> kazePtr = cv::KAZE::create(extended, upright, threshold, octaves, sublevels, static_cast<cv::KAZE::DiffusivityType>( diffusivity ));
 	*sharedPtr = new cv::Ptr<cv::KAZE>(kazePtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(kazePtr.get());
 
@@ -499,7 +499,7 @@ cv::AKAZE* cveAKAZEDetectorCreate(
 	cv::Feature2D** feature2D,
 	cv::Ptr<cv::AKAZE>** sharedPtr)
 {
-	cv::Ptr<cv::AKAZE> akazePtr = cv::AKAZE::create(descriptorType, descriptorSize, descriptorChannels, threshold, octaves, sublevels, diffusivity);
+	cv::Ptr<cv::AKAZE> akazePtr = cv::AKAZE::create( static_cast<cv::AKAZE::DescriptorType>( descriptorType ), descriptorSize, descriptorChannels, threshold, octaves, sublevels, static_cast<cv::KAZE::DiffusivityType>( diffusivity ));
 	*sharedPtr = new cv::Ptr<cv::AKAZE>(akazePtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(akazePtr.get());
 	return akazePtr.get();
@@ -515,7 +515,7 @@ void cveAKAZEDetectorRelease(cv::AKAZE** detector, cv::Ptr<cv::AKAZE>** sharedPt
 //Agast
 cv::AgastFeatureDetector* cveAgastFeatureDetectorCreate(int threshold, bool nonmaxSuppression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::AgastFeatureDetector>** sharedPtr)
 {
-	cv::Ptr<cv::AgastFeatureDetector> agastPtr = cv::AgastFeatureDetector::create(threshold, nonmaxSuppression, type);
+	cv::Ptr<cv::AgastFeatureDetector> agastPtr = cv::AgastFeatureDetector::create(threshold, nonmaxSuppression, static_cast<cv::AgastFeatureDetector::DetectorType>( type ));
 	*sharedPtr = new cv::Ptr<cv::AgastFeatureDetector>(agastPtr);
 	return agastPtr.get();
 }

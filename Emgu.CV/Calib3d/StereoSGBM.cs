@@ -56,7 +56,7 @@ namespace Emgu.CV
            int speckleWindowSize = 0, int speckleRange = 0,
            Mode mode = Mode.SGBM)
         {
-            _ptr = Calib3dInvoke.cveStereoSGBMCreate(minDisparity, numDisparities, blockSize, p1, p2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode, ref _stereoMatcherPtr, ref _sharedPtr);
+            _ptr = CvInvoke.cveStereoSGBMCreate(minDisparity, numDisparities, blockSize, p1, p2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode, ref _stereoMatcherPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Emgu.CV
         {
             if (_sharedPtr != IntPtr.Zero)
             {
-                Calib3dInvoke.cveStereoSGBMRelease(ref _sharedPtr);
+                CvInvoke.cveStereoSGBMRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
                 _stereoMatcherPtr = IntPtr.Zero;
             }

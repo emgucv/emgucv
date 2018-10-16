@@ -15,11 +15,11 @@
 typedef uchar* (CV_CDECL *MatAllocateCallback)(int depthType, int channel, int totalInBytes, void* allocateDataActionPtr);
 typedef void (CV_CDECL *MatDeallocateCallback)(void* freeDataActionPtr);
 
-CVAPI(cv::MatAllocator*) emguMatAllocatorCreate(MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr);
-CVAPI(void) cveMatAllocatorRelease(cv::MatAllocator** allocator);
+//CVAPI(cv::MatAllocator*) emguMatAllocatorCreate(MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr);
+//CVAPI(void) cveMatAllocatorRelease(cv::MatAllocator** allocator);
 
 CVAPI(cv::Mat*) cveMatCreate();
-CVAPI(cv::MatAllocator*) cveMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr);
+//CVAPI(cv::MatAllocator*) cveMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr);
 CVAPI(void) cveMatCreateData(cv::Mat* mat, int row, int cols, int type);
 CVAPI(cv::Mat*) cveMatCreateWithData(int rows, int cols, int type, void* data, size_t step);
 CVAPI(cv::Mat*) cveMatCreateMultiDimWithData(int ndims, const int* sizes, int type, void* data, size_t* steps);

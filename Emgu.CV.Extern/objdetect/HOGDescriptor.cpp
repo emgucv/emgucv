@@ -26,7 +26,7 @@ cv::HOGDescriptor* cveHOGDescriptorCreate(
    double _L2HysThreshold, 
    bool _gammaCorrection)
 {
-   return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection);
+   return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, static_cast<cv::HOGDescriptor::HistogramNormType>( _histogramNormType ), _L2HysThreshold, _gammaCorrection);
 }
 
 void cveHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vector) 

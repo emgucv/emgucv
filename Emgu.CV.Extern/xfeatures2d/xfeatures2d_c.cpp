@@ -143,7 +143,7 @@ cv::xfeatures2d::DAISY* cveDAISYCreate(
 	cv::Feature2D** extractor,
 	cv::Ptr<cv::xfeatures2d::DAISY>** sharedPtr)
 {
-	cv::Ptr<cv::xfeatures2d::DAISY> daisyPtr = cv::xfeatures2d::DAISY::create(radius, qRadius, qTheta, qHist, norm, H ? *H : (cv::_InputArray) cv::noArray(), interpolation, useOrientation);
+	cv::Ptr<cv::xfeatures2d::DAISY> daisyPtr = cv::xfeatures2d::DAISY::create(radius, qRadius, qTheta, qHist, static_cast<cv::xfeatures2d::DAISY::NormalizationType>( norm ), H ? *H : (cv::_InputArray) cv::noArray(), interpolation, useOrientation);
 	*sharedPtr = new cv::Ptr<cv::xfeatures2d::DAISY>(daisyPtr);
 	*extractor = dynamic_cast<cv::Feature2D*>(daisyPtr.get());
 	return daisyPtr.get();

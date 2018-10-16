@@ -121,7 +121,7 @@ namespace Emgu.CV
             }
         }
 
-        private IntPtr _oclMatAllocator;
+        //private IntPtr _oclMatAllocator;
 
         private bool _needDispose;
 
@@ -366,8 +366,8 @@ namespace Emgu.CV
             if (_needDispose && _ptr != IntPtr.Zero)
                 UMatInvoke.cveUMatRelease(ref _ptr);
 
-            if (_oclMatAllocator != IntPtr.Zero)
-                MatDataAllocatorInvoke.cveMatAllocatorRelease(ref _oclMatAllocator);
+            //if (_oclMatAllocator != IntPtr.Zero)
+            //    MatDataAllocatorInvoke.cveMatAllocatorRelease(ref _oclMatAllocator);
 
             base.DisposeObject();
 

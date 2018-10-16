@@ -70,7 +70,7 @@ void cveUMatSetTo(cv::UMat* mat, cv::_InputArray* value, cv::_InputArray* mask)
 cv::Mat* cveUMatGetMat(cv::UMat* mat, int access)
 {
    cv::Mat* result = new cv::Mat();
-   cv::Mat tmp = mat->getMat(access);
+   cv::Mat tmp = mat->getMat( static_cast<cv::AccessFlag>( access ));
    cv::swap(*result, tmp);
    return result;
 }

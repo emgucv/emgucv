@@ -155,8 +155,7 @@ cv::detail::AKAZEFeaturesFinder* cveAKAZEFeaturesFinderCreate(
 	cv::detail::FeaturesFinder** f)
 {
 	cv::detail::AKAZEFeaturesFinder* finder = new cv::detail::AKAZEFeaturesFinder(
-		descriptorType, descriptorSize, descriptorChannels, threshold, nOctaves, nOctaveLayers, diffusivity
-	);
+		static_cast<cv::AKAZE::DescriptorType>( descriptorType ), descriptorSize, descriptorChannels, threshold, nOctaves, nOctaveLayers, static_cast<cv::KAZE::DiffusivityType>( diffusivity ));
 	*f = dynamic_cast<cv::detail::FeaturesFinder*>(finder);
 	return finder;
 }

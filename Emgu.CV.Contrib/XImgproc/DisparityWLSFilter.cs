@@ -106,7 +106,7 @@ namespace Emgu.CV.XImgproc
         {
             if (_sharedPtr != IntPtr.Zero)
             {
-                Calib3dInvoke.cveStereoMatcherRelease(ref _sharedPtr);
+                CvInvoke.cveStereoMatcherRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
             }
         }

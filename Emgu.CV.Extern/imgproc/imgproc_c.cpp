@@ -269,20 +269,6 @@ void cveConvertMaps(cv::_InputArray* map1, cv::_InputArray* map2, cv::_OutputArr
    cv::convertMaps(*map1, map2 ? *map2 : (cv::InputArray) cv::noArray(), *dstmap1, dstmap2 ? *dstmap2 : (cv::OutputArray) cv::noArray(), dstmap1Type, nninterpolation);
 }
 
-void cveInitUndistortRectifyMap(cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* newCameraMatrix, CvSize* size, int m1type, cv::_OutputArray* map1, cv::_OutputArray* map2)
-{
-   cv::initUndistortRectifyMap(*cameraMatrix, *distCoeffs, r ? *r : (cv::_InputArray) cv::noArray(), *newCameraMatrix, *size, m1type, *map1, map2 ? *map2 : (cv::OutputArray) cv::noArray());
-}
-
-void cveUndistort(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distorCoeffs, cv::_InputArray* newCameraMatrix)
-{
-   cv::undistort(*src, *dst, *cameraMatrix, *distorCoeffs, newCameraMatrix ? *newCameraMatrix : (cv::InputArray) cv::noArray());
-}
-
-void cveUndistortPoints(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* p)
-{
-   cv::undistortPoints(*src, *dst, *cameraMatrix, *distCoeffs, r ? *r : (cv::InputArray) cv::noArray(), p ? *p : (cv::InputArray) cv::noArray());
-}
 
 void cveGetAffineTransform(cv::_InputArray* src, cv::_InputArray* dst, cv::Mat* affine)
 {
@@ -299,12 +285,6 @@ void cveGetPerspectiveTransform(cv::_InputArray* src, cv::_InputArray* dst, cv::
 void cveInvertAffineTransform(cv::_InputArray* m, cv::_OutputArray* im)
 {
    cv::invertAffineTransform(*m, *im);
-}
-
-void cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, CvSize* imgsize, bool centerPrincipalPoint, cv::Mat* cm)
-{
-   cv::Mat res = cv::getDefaultNewCameraMatrix(*cameraMatrix, *imgsize, centerPrincipalPoint);
-   cv::swap(*cm, res);
 }
 
 void cveEMD(cv::_InputArray* signature1, cv::_InputArray* signature2, int distType, cv::_InputArray* cost, float* lowerBound, cv::_OutputArray* flow)

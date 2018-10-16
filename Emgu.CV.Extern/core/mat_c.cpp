@@ -73,7 +73,7 @@ public:
    }
 };
 
-
+/*
 cv::MatAllocator* emguMatAllocatorCreate(MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr)
 {
    return new EmguMatAllocator(allocator, deallocator, allocateDataActionPtr, freeDataActionPtr);
@@ -85,18 +85,20 @@ void cveMatAllocatorRelease(cv::MatAllocator** allocator)
       delete *allocator;
       *allocator = 0;
    }
-}
+}*/
 
 cv::Mat* cveMatCreate()
 {
    return new cv::Mat();
 }
+/*
 cv::MatAllocator* cveMatUseCustomAllocator(cv::Mat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr)
 {
    cv::MatAllocator* a = new EmguMatAllocator(allocator, deallocator, allocateDataActionPtr, freeDataActionPtr);
    mat->allocator = a;
    return a;
 }
+*/
 
 void cveMatCreateData(cv::Mat* mat, int row, int cols, int type)
 {
@@ -180,7 +182,7 @@ void cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask)
 cv::UMat* cvMatGetUMat(cv::Mat* mat, int access, cv::UMatUsageFlags usageFlags)
 {
    cv::UMat* result = new cv::UMat();
-   cv::UMat tmp = mat->getUMat(access, usageFlags);
+   cv::UMat tmp = mat->getUMat( static_cast<cv::AccessFlag>( access ), usageFlags);
    cv::swap(*result, tmp);
    return result;
 }

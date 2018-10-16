@@ -22,7 +22,7 @@ namespace Emgu.CV
       /// <param name="numberOfDisparities">the disparity search range. For each pixel algorithm will find the best disparity from 0 (default minimum disparity) to <paramref name="numberOfDisparities"/>. The search range can then be shifted by changing the minimum disparity.</param>
       public StereoBM(int numberOfDisparities = 0, int blockSize = 21)
       {
-         _ptr = Calib3dInvoke.cveStereoBMCreate(numberOfDisparities, blockSize, ref _sharedPtr);
+         _ptr = CvInvoke.cveStereoBMCreate(numberOfDisparities, blockSize, ref _sharedPtr);
       }
 
       /// <summary>
@@ -32,7 +32,7 @@ namespace Emgu.CV
       {
           if (_sharedPtr != IntPtr.Zero)
           {
-              Calib3dInvoke.cveStereoMatcherRelease(ref _sharedPtr);
+              CvInvoke.cveStereoMatcherRelease(ref _sharedPtr);
               _ptr = IntPtr.Zero;
           }
       }

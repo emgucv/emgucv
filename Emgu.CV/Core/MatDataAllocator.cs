@@ -18,7 +18,7 @@ namespace Emgu.CV
    /// </summary>
    public abstract class MatDataAllocator : UnmanagedObject
    {
-      internal IntPtr _memoryAllocator;
+      //internal IntPtr _memoryAllocator;
       private GCHandle _dataHandle;
       internal IntPtr _allocateDataActionPtr;
       internal IntPtr _freeDataActionPtr;
@@ -116,8 +116,9 @@ namespace Emgu.CV
       /// </summary>
       protected override void DisposeObject()
       {
-         if (_memoryAllocator != IntPtr.Zero)
-            MatDataAllocatorInvoke.cveMatAllocatorRelease(ref _memoryAllocator);
+          
+         //if (_memoryAllocator != IntPtr.Zero)
+         //   MatDataAllocatorInvoke.cveMatAllocatorRelease(ref _memoryAllocator);
 
          if (_allocateDataActionPtr != IntPtr.Zero)
          {
@@ -147,7 +148,7 @@ namespace Emgu.CV
       [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
       internal delegate void MatDeallocateCallback(IntPtr data);
 
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveMatAllocatorRelease(ref IntPtr allocator);
+      //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      //internal extern static void cveMatAllocatorRelease(ref IntPtr allocator);
    }
 }
