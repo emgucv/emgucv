@@ -103,10 +103,11 @@ void cveDnnBlobFromImage(
 	CvSize* size,
 	CvScalar* mean,
 	bool swapRB,
-	bool crop
+	bool crop,
+	int ddepth
 	)
 {
-	cv::dnn::blobFromImage(*image, *blob, scalefactor, *size, *mean, swapRB, crop);
+	cv::dnn::blobFromImage(*image, *blob, scalefactor, *size, *mean, swapRB, crop, ddepth);
 }
 
 void cveDnnBlobFromImages(
@@ -116,9 +117,10 @@ void cveDnnBlobFromImages(
 	CvSize* size,
 	CvScalar* mean,
 	bool swapRB,
-	bool crop)
+	bool crop,
+	int ddepth)
 {
-	cv::dnn::blobFromImages(*images, *blob, scalefactor, *size, *mean, swapRB, crop);
+	cv::dnn::blobFromImages(*images, *blob, scalefactor, *size, *mean, swapRB, crop, ddepth);
 }
 
 void cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images)

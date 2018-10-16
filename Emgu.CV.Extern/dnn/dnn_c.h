@@ -44,7 +44,8 @@ CVAPI(void) cveDnnBlobFromImage(
 	CvSize* size,
 	CvScalar* mean, 
 	bool swapRB,
-	bool crop);
+	bool crop,
+	int ddepth);
 
 CVAPI(void) cveDnnBlobFromImages(
 	cv::_InputArray* images,
@@ -53,7 +54,8 @@ CVAPI(void) cveDnnBlobFromImages(
 	CvSize* size, 
 	CvScalar* mean, 
 	bool swapRB,
-	bool crop);
+	bool crop,
+	int ddepth);
 
 CVAPI(void) cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images);
 

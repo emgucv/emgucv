@@ -34,11 +34,19 @@ namespace Emgu.CV.Dnn
         /// <param name="mean">Scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>
         /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">Flag which indicates whether image will be cropped after resize or not</param>
+        /// <param name="ddepth">Depth of output blob. Choose CV_32F or CV_8U.</param>
         /// <returns>4-dimensional Mat with NCHW dimensions order.</returns>
-        public static Mat BlobFromImage(IInputArray image, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
+        public static Mat BlobFromImage(
+            IInputArray image, 
+            double scaleFactor = 1.0, 
+            Size size = new Size(), 
+            MCvScalar mean = new MCvScalar(), 
+            bool swapRB = false, 
+            bool crop = false, 
+            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F)
         {
             Mat blob = new Mat();
-            BlobFromImage(image, blob, scaleFactor, size, mean, swapRB, crop);
+            BlobFromImage(image, blob, scaleFactor, size, mean, swapRB, crop, ddepth);
             return blob;
         }
 
@@ -52,18 +60,20 @@ namespace Emgu.CV.Dnn
         /// <param name="mean">Scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>
         /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">Flag which indicates whether image will be cropped after resize or not</param>
+        /// <param name="ddepth">Depth of output blob. Choose CV_32F or CV_8U.</param>
         public static void BlobFromImage(
             IInputArray image, 
             IOutputArray blob, 
             double scaleFactor = 1.0, 
             Size size = new Size(), 
             MCvScalar mean = new MCvScalar(), 
-            bool swapRB = true, 
-            bool crop = true)
+            bool swapRB = false, 
+            bool crop = false,
+            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaBlob = blob.GetOutputArray())
-                cveDnnBlobFromImage(iaImage, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop);
+                cveDnnBlobFromImage(iaImage, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop, ddepth);
             
         }
 
@@ -77,7 +87,8 @@ namespace Emgu.CV.Dnn
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool swapRB,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool crop);
+            bool crop,
+            CvEnum.DepthType ddepth);
 
         /// <summary>
         /// Creates 4-dimensional blob from series of images. Optionally resizes and crops images from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels.
@@ -88,13 +99,21 @@ namespace Emgu.CV.Dnn
         /// <param name="mean">Scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>
         /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">Flag which indicates whether image will be cropped after resize or not</param>
+        /// <param name="ddepth">Depth of output blob. Choose CV_32F or CV_8U.</param>
         /// <returns>Input image is resized so one side after resize is equal to corresponding dimension in size and another one is equal or larger. Then, crop from the center is performed.</returns>
-        public static Mat BlobFromImages(Mat[] images, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
+        public static Mat BlobFromImages(
+            Mat[] images, 
+            double scaleFactor = 1.0, 
+            Size size = new Size(), 
+            MCvScalar mean = new MCvScalar(), 
+            bool swapRB = false, 
+            bool crop = false,
+            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F)
         {
             Mat blob = new Mat();
             using (VectorOfMat vm = new VectorOfMat(images))
             {
-                BlobFromImages(vm, blob, scaleFactor, size, mean, swapRB, crop);
+                BlobFromImages(vm, blob, scaleFactor, size, mean, swapRB, crop, ddepth);
             }
             return blob;
         }
@@ -109,12 +128,21 @@ namespace Emgu.CV.Dnn
         /// <param name="mean">scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>
         /// <param name="swapRB">flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">	flag which indicates whether image will be cropped after resize or not</param>
-        public static void BlobFromImages(IInputArrayOfArrays images, IOutputArray blob, double scaleFactor = 1.0, Size size = new Size(), MCvScalar mean = new MCvScalar(), bool swapRB = true, bool crop = true)
+        /// <param name="ddepth">Depth of output blob. Choose CV_32F or CV_8U.</param>
+        public static void BlobFromImages(
+            IInputArrayOfArrays images, 
+            IOutputArray blob, 
+            double scaleFactor = 1.0, 
+            Size size = new Size(), 
+            MCvScalar mean = new MCvScalar(), 
+            bool swapRB = false, 
+            bool crop = false,
+            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F)
         {
             using (InputArray iaImages = images.GetInputArray())
             using (OutputArray oaBlob = blob.GetOutputArray())
             {
-                cveDnnBlobFromImages(iaImages, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop);
+                cveDnnBlobFromImages(iaImages, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop, ddepth);
             }
         }
 
@@ -128,7 +156,8 @@ namespace Emgu.CV.Dnn
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool swapRB,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool crop);
+            bool crop,
+            CvEnum.DepthType ddepth);
 
         /// <summary>
         /// Parse a 4D blob and output the images it contains as 2D arrays through a simpler data structure (std::vector&lt;cv::Mat&gt;).
