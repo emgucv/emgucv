@@ -62,6 +62,30 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return:MarshalAs(CvInvoke.BoolMarshalType)]
         internal extern static bool cveQRCodeDetectorDetect(IntPtr detector, IntPtr input, IntPtr points);
+
+        public static bool DetectQRCode(IInputArray input, VectorOfPoint points, double epsX, double epsY)
+        {
+            using (InputArray iaInput = input.GetInputArray())
+                return cveDetectQRCode(iaInput, points, epsX, epsY);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal extern static bool cveDetectQRCode(IntPtr input, IntPtr points, double epsX, double epsY);
+
+        public static bool DecodeQRCode(IInputArray input, IInputArray points, CvString decodeInfo, IOutputArray straightQRCode = null)
+        {
+            using (InputArray iaInput = input.GetInputArray())
+            using (InputArray iaPoints = points.GetInputArray())
+            using (OutputArray oaStraightQRCode = straightQRCode == null ? OutputArray.GetEmpty() : straightQRCode.GetOutputArray())
+            {
+                return cveDecodeQRCode(iaInput, iaPoints, decodeInfo, oaStraightQRCode);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal extern static bool cveDecodeQRCode(IntPtr input, IntPtr points, IntPtr decodedInfo, IntPtr straightQrcode);
     }
 
 }
