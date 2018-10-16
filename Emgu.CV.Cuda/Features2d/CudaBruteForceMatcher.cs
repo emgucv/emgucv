@@ -319,6 +319,15 @@ namespace Emgu.CV.Cuda
                     );
         }
 
+        /// <summary>
+        /// For each query descriptor, finds the training descriptors not farther than the specified distance (asynchronous version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="trainDescriptors">Train set of descriptors. This set is not added to the train descriptors collection stored in the class object.</param>
+        /// <param name="matches">Matches array stored in GPU memory. Internal representation is not defined.</param>
+        /// <param name="maxDistance">Threshold for the distance between matched descriptors. Distance means here metric distance (e.g. Hamming distance), not the distance between coordinates (which is measured in Pixels)!</param>
+        /// <param name="mask">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="stream">CUDA stream.</param>
         public void RadiusMatchAsync(
             IInputArray queryDescriptors,
             IInputArray trainDescriptors,
@@ -341,6 +350,14 @@ namespace Emgu.CV.Cuda
                     stream);
         }
 
+        /// <summary>
+        /// For each query descriptor, finds the training descriptors not farther than the specified distance (asynchronous version).
+        /// </summary>
+        /// <param name="queryDescriptors">Query set of descriptors.</param>
+        /// <param name="matches">Matches array stored in GPU memory. Internal representation is not defined.</param>
+        /// <param name="maxDistance">Threshold for the distance between matched descriptors. Distance means here metric distance (e.g. Hamming distance), not the distance between coordinates (which is measured in Pixels)!</param>
+        /// <param name="masks">Mask specifying permissible matches between an input query and train matrices of descriptors.</param>
+        /// <param name="stream">CUDA stream.</param>
         public void RadiusMatchAsync(
             IInputArray queryDescriptors,
             IOutputArray matches,
@@ -359,6 +376,12 @@ namespace Emgu.CV.Cuda
                     stream);
         }
 
+        /// <summary>
+        /// Converts matches array from internal representation to standard matches vector.
+        /// </summary>
+        /// <param name="gpuMatches">Matches, returned from DescriptorMatcher.RadiusMatchAsync.</param>
+        /// <param name="matches">Vector of DMatch objects.</param>
+        /// <param name="compactResult">Parameter used when the mask (or masks) is not empty. If compactResult is false, the matches vector has the same size as queryDescriptors rows. If compactResult is true, the matches vector does not contain matches for fully masked-out query descriptors.</param>
         public void RadiusMatchConvert(
             IInputArray gpuMatches,
             VectorOfVectorOfDMatch matches,

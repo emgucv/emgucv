@@ -2,7 +2,6 @@
 //  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-using Emgu.CV.Util;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -14,7 +13,9 @@ using Emgu.CV.Util;
 
 namespace Emgu.CV.XImgproc
 {
-    
+    /// <summary>
+    /// Class implementing EdgeBoxes algorithm from C. Lawrence Zitnick and Piotr Dollár. Edge boxes: Locating object proposals from edges. In ECCV, 2014.
+    /// </summary>
     public class EdgeBoxes : SharedPtrObject, IAlgorithm
     {
         private IntPtr _algorithm;
