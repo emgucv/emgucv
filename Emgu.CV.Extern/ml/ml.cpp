@@ -38,10 +38,9 @@ cv::ml::TrainData* cveTrainDataCreate(
 	return ptr.get();
 }
 
-void cveTrainDataRelease(cv::ml::TrainData** data, cv::Ptr<cv::ml::TrainData>** sharedPtr)
+void cveTrainDataRelease(cv::Ptr<cv::ml::TrainData>** sharedPtr)
 {
 	delete *sharedPtr;
-	*data = 0;
 	*sharedPtr = 0;
 }
 

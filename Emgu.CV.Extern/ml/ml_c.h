@@ -18,11 +18,12 @@ CVAPI(bool) StatModelTrainWithData(cv::ml::StatModel* model, cv::ml::TrainData* 
 CVAPI(float) StatModelPredict(cv::ml::StatModel* model, cv::_InputArray* samples, cv::_OutputArray* results, int flags); 
 
 CVAPI(cv::ml::TrainData*) cveTrainDataCreate(
-   cv::_InputArray* samples, int layout, cv::_InputArray* responses,
-   cv::_InputArray* varIdx, cv::_InputArray* sampleIdx,
-   cv::_InputArray* sampleWeights, cv::_InputArray* varType);
+	cv::_InputArray* samples, int layout, cv::_InputArray* responses,
+	cv::_InputArray* varIdx, cv::_InputArray* sampleIdx,
+	cv::_InputArray* sampleWeights, cv::_InputArray* varType,
+	cv::Ptr<cv::ml::TrainData>** sharedPtr);
 
-CVAPI(void) cveTrainDataRelease(cv::ml::TrainData** data);
+CVAPI(void) cveTrainDataRelease(cv::Ptr<cv::ml::TrainData>** sharedPtr);
 
 //CvNormalBayesClassifier
 CVAPI(cv::ml::NormalBayesClassifier*) cveNormalBayesClassifierDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm, cv::Ptr<cv::ml::NormalBayesClassifier>** sharedPtr);

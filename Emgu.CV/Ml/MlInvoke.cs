@@ -43,7 +43,7 @@ namespace Emgu.CV.ML
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrainDataRelease(ref IntPtr data, ref IntPtr sharedPtr);
+        internal static extern void cveTrainDataRelease(ref IntPtr sharedPtr);
 
         #region CvNormalBayesClassifier
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
