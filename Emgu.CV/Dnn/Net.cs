@@ -98,7 +98,7 @@ namespace Emgu.CV.Dnn
         /// </summary>
         /// <param name="outputName">name for layer which output is needed to get</param>
         /// <returns>blob for first output of specified layer</returns>
-        public Mat Forward(String outputName = String.Empty)
+        public Mat Forward(String outputName = "")
         {
             using (CvString outputNameStr = new CvString(outputName))
             {
@@ -113,7 +113,7 @@ namespace Emgu.CV.Dnn
         /// </summary>
         /// <param name="outputBlobs">Contains all output blobs for specified layer.</param>
         /// <param name="outputName">Name for layer which output is needed to get</param>
-        public void Forward(IOutputArrayOfArrays outputBlobs, String outputName)
+        public void Forward(IOutputArrayOfArrays outputBlobs, String outputName = "")
         {
             using (OutputArray oaOutputBlobs = outputBlobs.GetOutputArray())
             using (CvString outputNameStr = new CvString(outputName))
