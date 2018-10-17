@@ -96,6 +96,58 @@ std::vector<cv::String>* cveDnnNetGetLayerNames(cv::dnn::Net* net)
 	return new std::vector<cv::String>(net->getLayerNames());
 }
 
+int cveDnnGetLayerId(cv::dnn::Net* net, cv::String* layer)
+{
+	return net->getLayerId(*layer);
+}
+cv::dnn::Layer* cveDnnGetLayerByName(cv::dnn::Net* net, cv::String* layerName, cv::Ptr<cv::dnn::Layer>** sharedPtr)
+{
+	cv::Ptr<cv::dnn::Layer> layerPtr = net->getLayer(*layerName);
+	*sharedPtr = new cv::Ptr<cv::dnn::Layer>(layerPtr);
+	return (*sharedPtr)->get();
+}
+cv::dnn::Layer* cveDnnGetLayerById(cv::dnn::Net* net, int layerId, cv::Ptr<cv::dnn::Layer>** sharedPtr)
+{
+	cv::Ptr<cv::dnn::Layer> layerPtr = net->getLayer(layerId);
+	*sharedPtr = new cv::Ptr<cv::dnn::Layer>(layerPtr);
+	return (*sharedPtr)->get();
+}
+void cveDnnLayerRelease(cv::Ptr<cv::dnn::Layer>** layer)
+{
+	delete *layer;
+	layer = 0;
+}
+std::vector<cv::Mat>* cveDnnLayerGetBlobs(cv::dnn::Layer* layer)
+{
+	return &(layer->blobs);
+}
+
+void cveDnnNetGetUnconnectedOutLayers(cv::dnn::Net* net, std::vector<int>* layerIds)
+{
+	std::vector<int> v = net->getUnconnectedOutLayers();
+	*layerIds = v;
+	//layerIds->clear();
+
+	//layerIds->resize(v.size());
+	//memccpy(&layerIds[0], &v[0], 0, sizeof(int) * v.size());
+}
+void cveDnnNetGetUnconnectedOutLayersNames(cv::dnn::Net* net, std::vector<cv::String>* layerNames)
+{
+	std::vector<cv::String> v = net->getUnconnectedOutLayersNames();
+	*layerNames = v;
+	//layerNames->clear();
+	//for (std::vector<cv::String>::iterator it = v.begin(); it != v.end(); ++it)
+	//{
+	//	layerNames->push_back(*it);
+	//}
+}
+
+int64 cveDnnNetGetPerfProfile(cv::dnn::Net* net, std::vector<double>* timings)
+{
+	return net->getPerfProfile(*timings);
+}
+
+
 void cveDnnBlobFromImage(
 	cv::_InputArray* image,
 	cv::_OutputArray* blob,

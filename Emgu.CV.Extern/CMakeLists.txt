@@ -319,6 +319,32 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      }
      ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "propW")
+	      IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
+	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
+     ")
+	SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { obj->set${PROPERTY_NAME}(*str); }   
+     ")
+	
+	SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(IntPtr obj, IntPtr str);
+     ")
+	SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public void Set${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} s)
+     { 
+           using (CvString cvs = new CvString(s))
+           {  
+              ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, cvs); 
+           }   
+     }
+     ")
+      ELSE()
+
       SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
@@ -341,6 +367,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); 
      }
      ")
+	 ENDIF()
 	ELSEIF(${MARSHAL_TYPE} STREQUAL "act")
 	  SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);     
@@ -549,6 +576,35 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      ")
       ENDIF()
     ELSEIF("${MARSHAL_TYPE}" STREQUAL "elementR")
+	  IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
+	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);   
+     ")
+	SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}; }   
+     ")
+	
+	SET(CS_SOURCE "${CS_SOURCE}
+     [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
+     internal static extern void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj, IntPtr str);
+     ")
+	SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+     /// <summary>
+     /// ${CS_DOCUMENTATION}
+     /// </summary>
+     public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
+     {
+        get 
+        { 
+           using (CvString s = new CvString())
+           {  
+              ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s); 
+              return s.ToString();
+           }
+        }
+     }
+     ")
+	 ELSE()
       SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
      ")
@@ -569,6 +625,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
         get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
      }
      ")
+	 ENDIF()
     ELSE() # for "prop" type
       SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
@@ -1761,18 +1818,38 @@ IF(HAVE_opencv_dnn)
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Net.g.cs"
     "cv::dnn::Net" 
     "Net" 
-    "PreferableBackend;PreferableTarget;enableFusion;empty" 
-    "int;int;bool;bool" 
-    "propW;propW;act1;val"
-    "PreferableBackend;PreferableTarget;EnableFusion;Empty" 
-    "Backend;Target;bool;bool"
+    "PreferableBackend;PreferableTarget;enableFusion;empty;HalideScheduler" 
+    "int;int;bool;bool;cv::String" 
+    "propW;propW;act1;val;propW"
+    "PreferableBackend;PreferableTarget;EnableFusion;Empty;HalideScheduler" 
+    "Backend;Target;bool;bool;String"
     "Ask network to use specific computation backend where it supported.;
 	Ask network to make computations on specific target device.;
 	Enables or disables layer fusion in the network.;
-	Returns true if there are no layers in the network. "
+	Returns true if there are no layers in the network.;
+	Schedule layers that support Halide backend. Then compile them for specific target. For layers that not represented in scheduling file or if no manual scheduling used at all, automatic scheduling will be applied."
     "Emgu.CV.Dnn"
     "DnnInvoke"
     "Net"
+	"!(NETFX_CORE || NETCOREAPP1_1 || NETSTANDARD1_4)"
+	"#include \"opencv2/dnn.hpp\"
+#include \"opencv2/core/types_c.h\"")
+  CREATE_OCV_CLASS_PROPERTY( 
+    "dnn/layer_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Layer.g.cs"
+    "cv::dnn::Layer" 
+    "Layer" 
+    "name;type;preferableTarget" 
+    "cv::String;cv::String;int" 
+    "elementR;elementR;elementR"
+    "Name;Type;PreferableTarget" 
+    "String;String;Target"
+    "The name of the layer;
+	The layer type;
+	The preferable target"
+    "Emgu.CV.Dnn"
+    "DnnInvoke"
+    "Layer"
 	"!(NETFX_CORE || NETCOREAPP1_1 || NETSTANDARD1_4)"
 	"#include \"opencv2/dnn.hpp\"
 #include \"opencv2/core/types_c.h\"")

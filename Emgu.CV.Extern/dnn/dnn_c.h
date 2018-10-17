@@ -35,7 +35,19 @@ CVAPI(void) cveDnnNetForward2(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, 
 CVAPI(void) cveDnnNetForward3(cv::dnn::Net* net, cv::_OutputArray* outputBlobs,	std::vector<cv::String>* outBlobNames);
 CVAPI(void) cveDnnNetRelease(cv::dnn::Net** net);
 
+CVAPI(void) cveDnnNetGetUnconnectedOutLayers(cv::dnn::Net* net, std::vector<int>* layerIds);
+CVAPI(void) cveDnnNetGetUnconnectedOutLayersNames(cv::dnn::Net* net, std::vector<cv::String>* layerNames);
+CVAPI(int64) cveDnnNetGetPerfProfile(cv::dnn::Net* net, std::vector<double>* timings);
+
+
 CVAPI(std::vector<cv::String>*) cveDnnNetGetLayerNames(cv::dnn::Net* net);
+
+CVAPI(int) cveDnnGetLayerId(cv::dnn::Net* net, cv::String* layer);
+CVAPI(cv::dnn::Layer*) cveDnnGetLayerByName(cv::dnn::Net* net, cv::String* layerName, cv::Ptr<cv::dnn::Layer>** sharedPtr);
+CVAPI(cv::dnn::Layer*) cveDnnGetLayerById(cv::dnn::Net* net, int layerId, cv::Ptr<cv::dnn::Layer>** sharedPtr);
+CVAPI(void) cveDnnLayerRelease(cv::Ptr<cv::dnn::Layer>** layer);
+CVAPI(std::vector<cv::Mat>*) cveDnnLayerGetBlobs(cv::dnn::Layer* layer);
+
 
 CVAPI(void) cveDnnBlobFromImage(
 	cv::_InputArray* image, 

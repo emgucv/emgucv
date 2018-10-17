@@ -98,7 +98,7 @@ namespace Emgu.CV.Dnn
         /// </summary>
         /// <param name="outputName">name for layer which output is needed to get</param>
         /// <returns>blob for first output of specified layer</returns>
-        public Mat Forward(String outputName)
+        public Mat Forward(String outputName = String.Empty)
         {
             using (CvString outputNameStr = new CvString(outputName))
             {
@@ -159,6 +159,65 @@ namespace Emgu.CV.Dnn
                 }
             }
         }
+
+        public int GetLayerId(String layerName)
+        {
+            using (CvString csLayerName = new CvString(layerName))
+            {
+                return DnnInvoke.cveDnnGetLayerId(_ptr, csLayerName);
+            }
+        }
+
+        public Layer GetLayer(String layerName)
+        {
+            IntPtr sharedPtr = IntPtr.Zero;
+            IntPtr ptr;
+            using (CvString csLayerName = new CvString(layerName))
+                ptr = DnnInvoke.cveDnnGetLayerByName(_ptr, csLayerName, ref sharedPtr);
+            return new Layer(sharedPtr, ptr);
+        }
+
+        public Layer GetLayer(int layerId)
+        {
+            IntPtr sharedPtr = IntPtr.Zero;
+            IntPtr ptr = DnnInvoke.cveDnnGetLayerById(_ptr, layerId, ref sharedPtr);
+            return new Layer(sharedPtr, ptr);
+        }
+
+        public int[] UnconnectedOutLayers
+        {
+            get
+            {
+                using (VectorOfInt vi = new VectorOfInt())
+                {
+                    DnnInvoke.cveDnnNetGetUnconnectedOutLayers(_ptr, vi);
+                    return vi.ToArray();
+                }
+            }
+        }
+
+        public String[] UnconnectedOutLayersNames
+        {
+            get
+            {
+                using (VectorOfCvString vi = new VectorOfCvString())
+                {
+                    DnnInvoke.cveDnnNetGetUnconnectedOutLayersNames(_ptr, vi);
+                    return vi.ToArray();
+                }
+            }
+        }
+
+        public Int64 GetPerfProfile(VectorOfDouble timings = null)
+        {
+            if (timings != null)
+                return DnnInvoke.cveDnnNetGetPerfProfile(_ptr, timings);
+            else
+            {
+                using (VectorOfDouble vd = new VectorOfDouble())
+                    return DnnInvoke.cveDnnNetGetPerfProfile(_ptr, vd);
+            }
+        }
     }
 
     public static partial class DnnInvoke
@@ -183,6 +242,24 @@ namespace Emgu.CV.Dnn
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDnnNetGetLayerNames(IntPtr net);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveDnnGetLayerId(IntPtr net, IntPtr layer);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDnnGetLayerByName(IntPtr net, IntPtr layerName, ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDnnGetLayerById(IntPtr net, int layerId, ref IntPtr sharedPtr);
+
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetGetUnconnectedOutLayers(IntPtr net, IntPtr layerIds);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetGetUnconnectedOutLayersNames(IntPtr net, IntPtr layerNames);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern Int64 cveDnnNetGetPerfProfile(IntPtr net, IntPtr timings);
     }
 }
 #endif

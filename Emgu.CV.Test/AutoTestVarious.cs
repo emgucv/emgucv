@@ -3362,15 +3362,19 @@ namespace Emgu.CV.Test
             CheckAndDownloadFile(ssdProtoFile, emguS3Base);
 
             Dnn.Net net = DnnInvoke.ReadNetFromCaffe(ssdProtoFile, ssdFile);
+            //Layer inputLayer = net.GetLayer(0); //Layer with id = 0 is the input layer
+            int[] outputLayerIds = net.UnconnectedOutLayers;
+            Layer[] outputLayer = Array.ConvertAll(outputLayerIds, id => net.GetLayer(id));
 
+            
             Mat img = EmguAssert.LoadMat("dog416.png");
 
-            Stopwatch w = Stopwatch.StartNew();
             Mat inputBlob = DnnInvoke.BlobFromImage(img, 1.0, new Size(imgDim, imgDim), new MCvScalar(104, 117, 123), true, false);
-            net.SetInput(inputBlob, "data");
-            Mat detection = net.Forward("detection_out");
-            w.Stop();
-            Trace.WriteLine(String.Format("SSD processing time: {0} milliseconds", w.ElapsedMilliseconds));
+            net.SetInput(inputBlob);
+            Mat detection = net.Forward(outputLayer[0].Name);
+
+            Int64 ticks = net.GetPerfProfile();
+            Trace.WriteLine(String.Format("SSD processing time: {0} milliseconds", ticks / 10000));
 
             float confidenceThreshold = 0.5f;
             String[] labelsLines = File.ReadAllLines("pascal-classes.txt");
@@ -3418,7 +3422,8 @@ namespace Emgu.CV.Test
 
             String fileUrl = "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/";
             CheckAndDownloadFile(ssdFile, fileUrl);
-            
+            CheckAndDownloadFile(ssdProtoFile, fileUrl);
+
             Dnn.Net net = DnnInvoke.ReadNetFromCaffe(ssdProtoFile, ssdFile);
 
             Mat img = EmguAssert.LoadMat("lena.jpg");
