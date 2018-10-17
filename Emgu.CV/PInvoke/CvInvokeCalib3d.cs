@@ -644,10 +644,18 @@ namespace Emgu.CV
         /// <param name="inliers">Output vector that contains indices of inliers in objectPoints and imagePoints .</param>
         /// <param name="flags">Method for solving a PnP problem </param>
         public static bool SolvePnPRansac(
-           IInputArray objectPoints, IInputArray imagePoints, IInputArray cameraMatrix, IInputArray distCoeffs,
-           IOutputArray rvec, IOutputArray tvec,
-           bool useExtrinsicGuess, int iterationsCount, float reprojectionError, double confident,
-           IOutputArray inliers, CvEnum.SolvePnpMethod flags)
+           IInputArray objectPoints, 
+           IInputArray imagePoints, 
+           IInputArray cameraMatrix, 
+           IInputArray distCoeffs,
+           IOutputArray rvec, 
+           IOutputArray tvec,
+           bool useExtrinsicGuess = false, 
+           int iterationsCount = 100, 
+           float reprojectionError = 8.0f, 
+           double confident = 0.99,
+           IOutputArray inliers = null, 
+           CvEnum.SolvePnpMethod flags = SolvePnpMethod.Iterative)
         {
             using (InputArray iaObjectPoints = objectPoints.GetInputArray())
             using (InputArray iaImagePoints = imagePoints.GetInputArray())
