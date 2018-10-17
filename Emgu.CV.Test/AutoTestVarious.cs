@@ -3363,7 +3363,7 @@ namespace Emgu.CV.Test
 
             Dnn.Net net = DnnInvoke.ReadNetFromCaffe(ssdProtoFile, ssdFile);
 
-            Mat img = EmguAssert.LoadMat("rgb.jpg");
+            Mat img = EmguAssert.LoadMat("dog416.png");
 
             Stopwatch w = Stopwatch.StartNew();
             Mat inputBlob = DnnInvoke.BlobFromImage(img, 1.0, new Size(imgDim, imgDim), new MCvScalar(104, 117, 123), true, false);
@@ -3400,7 +3400,7 @@ namespace Emgu.CV.Test
                     RectangleF objectRegion = new RectangleF(xLeftBottom, yLeftBottom, xRightTop - xLeftBottom, yRightTop - yLeftBottom);
 
                     CvInvoke.Rectangle(img, Rectangle.Round(objectRegion), new MCvScalar(0, 255, 0));
-                    CvInvoke.PutText(img, labels[(int)objectClass], Point.Round(objectRegion.Location), FontFace.HersheyPlain, 1.0, new MCvScalar(0, 0, 255));
+                    CvInvoke.PutText(img, labels[(int)objectClass - 1], Point.Round(objectRegion.Location), FontFace.HersheyPlain, 1.0, new MCvScalar(0, 0, 255));
                 }
             }
 
