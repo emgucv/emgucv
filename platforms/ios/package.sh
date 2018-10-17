@@ -11,18 +11,18 @@ rm -rf ios-package
 mkdir -p ios-package/libs/iOS
 cp -f ../../libs/iOS/libcvextern.a ios-package/libs/iOS
 
-cp -r ../../tmp/Emgu.CV ios-package/Emgu.CV
-cp -f ../../Emgu.CV/*.cs ios-package/Emgu.CV/
-cp -f ../../Emgu.CV/Capture/*.cs ios-package/Emgu.CV/Capture
-cp -f ../../Emgu.CV/Features2D/*.cs ios-package/Emgu.CV/Features2D
-cp -f ../../Emgu.CV/Ocl/*.cs ios-package/Emgu.CV/Ocl
-cp -f ../../Emgu.CV/Ml/*.cs ios-package/Emgu.CV/Ml
-cp -f ../../Emgu.CV/Optflow/*.cs ios-package/Emgu.CV/Optflow
-cp -f ../../Emgu.CV/Shape/*.cs ios-package/Emgu.CV/Shape
-cp -f ../../Emgu.CV/Stitching/*.cs ios-package/Emgu.CV/Stitching
-cp -f ../../Emgu.CV/Video/*.cs ios-package/Emgu.CV/Video
-cp -f ../../Emgu.CV/PInvoke/CvInvokeEntryPoints.cs ios-package/Emgu.CV/PInvoke
-cp -f ../../Emgu.CV/Util/*.cs ios-package/Emgu.CV/Util
+cp -rf ../../tmp/Emgu.CV/* ios-package/Emgu.CV/
+#cp -f ../../Emgu.CV/*.cs ios-package/Emgu.CV/
+#cp -f ../../Emgu.CV/Capture/*.cs ios-package/Emgu.CV/Capture
+#cp -f ../../Emgu.CV/Features2D/*.cs ios-package/Emgu.CV/Features2D
+#cp -f ../../Emgu.CV/Ocl/*.cs ios-package/Emgu.CV/Ocl
+#cp -f ../../Emgu.CV/Ml/*.cs ios-package/Emgu.CV/Ml
+#cp -f ../../Emgu.CV/Optflow/*.cs ios-package/Emgu.CV/Optflow
+#cp -f ../../Emgu.CV/Shape/*.cs ios-package/Emgu.CV/Shape
+#cp -f ../../Emgu.CV/Stitching/*.cs ios-package/Emgu.CV/Stitching
+#cp -f ../../Emgu.CV/Video/*.cs ios-package/Emgu.CV/Video
+#cp -f ../../Emgu.CV/PInvoke/CvInvokeEntryPoints.cs ios-package/Emgu.CV/PInvoke
+#cp -f ../../Emgu.CV/Util/*.cs ios-package/Emgu.CV/Util
 rm -rf ios-package/Emgu.CV/PInvoke/Android
 rm -rf ios-package/Emgu.CV/PInvoke/System.Drawing
 rm -rf ios-package/Emgu.CV/PInvoke/Windows.Store
@@ -36,13 +36,13 @@ cp -r ../../tmp/Emgu.Util ios-package/Emgu.Util
 cp -r ../../tmp/Emgu.CV.Cuda ios-package/Emgu.CV.Cuda
 cp -f ../../Emgu.CV.Cuda/*.cs ios-package/Emgu.CV.Cuda/
 
-cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
-cp -f ../../Emgu.CV.Contrib/Plot/*.cs ios-package/Emgu.CV.Contrib/Plot
-cp -f ../../Emgu.CV.Contrib/LineDescriptor/VectorOf*.cs ios-package/Emgu.CV.Contrib/LineDescriptor
-cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
-cp -f ../../Emgu.CV.Contrib/XPhoto/*.cs ios-package/Emgu.CV.Contrib/XPhoto
-cp -f ../../Emgu.CV.Contrib/XFeatures2D/*.cs ios-package/Emgu.CV.Contrib/XFeatures2D
-cp -f ../../Emgu.CV.Contrib/Saliency/*.cs ios-package/Emgu.CV.Contrib/Saliency
+cp -r ../../tmp/Emgu.CV.Contrib/* ios-package/Emgu.CV.Contrib/
+#cp -f ../../Emgu.CV.Contrib/Plot/*.cs ios-package/Emgu.CV.Contrib/Plot
+#cp -f ../../Emgu.CV.Contrib/LineDescriptor/VectorOf*.cs ios-package/Emgu.CV.Contrib/LineDescriptor
+#cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
+#cp -f ../../Emgu.CV.Contrib/XPhoto/*.cs ios-package/Emgu.CV.Contrib/XPhoto
+#cp -f ../../Emgu.CV.Contrib/XFeatures2D/*.cs ios-package/Emgu.CV.Contrib/XFeatures2D
+#cp -f ../../Emgu.CV.Contrib/Saliency/*.cs ios-package/Emgu.CV.Contrib/Saliency
 
 cp -r ../../tmp/Emgu.CV.World ios-package/Emgu.CV.World
 
@@ -90,7 +90,7 @@ cd ios-package
 #find . -regex  '.*[^S].csproj' -exec rm '{}' \;
 cd ..
 
-/Library/Frameworks/Mono.framework/Commands/xbuild /p:Configuration=Release ../../Emgu.CV.World/Emgu.CV.World.IOS.csproj
+/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild /p:Configuration=Release ../../Emgu.CV.World/Emgu.CV.World.IOS.csproj
 #mkdir -p ios-package/bin
 cp ../../libs/Emgu.CV.World.IOS.dll ios-package/libs
 cp ../../libs/Emgu.CV.World.IOS.XML ios-package/libs
