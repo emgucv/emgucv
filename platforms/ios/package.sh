@@ -11,7 +11,7 @@ rm -rf ios-package
 mkdir -p ios-package/libs/iOS
 cp -f ../../libs/iOS/libcvextern.a ios-package/libs/iOS
 
-cp -rf ../../tmp/Emgu.CV/* ios-package/Emgu.CV/
+cp -r ../../tmp/Emgu.CV ios-package/Emgu.CV
 #cp -f ../../Emgu.CV/*.cs ios-package/Emgu.CV/
 #cp -f ../../Emgu.CV/Capture/*.cs ios-package/Emgu.CV/Capture
 #cp -f ../../Emgu.CV/Features2D/*.cs ios-package/Emgu.CV/Features2D
@@ -36,7 +36,7 @@ cp -r ../../tmp/Emgu.Util ios-package/Emgu.Util
 cp -r ../../tmp/Emgu.CV.Cuda ios-package/Emgu.CV.Cuda
 cp -f ../../Emgu.CV.Cuda/*.cs ios-package/Emgu.CV.Cuda/
 
-cp -r ../../tmp/Emgu.CV.Contrib/* ios-package/Emgu.CV.Contrib/
+cp -r ../../tmp/Emgu.CV.Contrib ios-package/Emgu.CV.Contrib
 #cp -f ../../Emgu.CV.Contrib/Plot/*.cs ios-package/Emgu.CV.Contrib/Plot
 #cp -f ../../Emgu.CV.Contrib/LineDescriptor/VectorOf*.cs ios-package/Emgu.CV.Contrib/LineDescriptor
 #cp -f ../../Emgu.CV.Contrib/Text/VectorOf*.cs ios-package/Emgu.CV.Contrib/Text
