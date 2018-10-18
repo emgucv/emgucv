@@ -18,7 +18,7 @@ if [ "$1" != "simulator" ]; then
     mkdir -p platforms/ios/armv7s     
     cd platforms/ios/armv7s
     ../configure-device_xcode.sh -DIOS_ARCH="armv7s" $*
-    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
+    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release  
     libtool -static -o libemgucv_armv7s.a bin/Release/*.a
@@ -27,7 +27,7 @@ if [ "$1" != "simulator" ]; then
     mkdir -p platforms/ios/armv7
     cd platforms/ios/armv7
     ../configure-device_xcode.sh -DIOS_ARCH="armv7" $*
-    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
+    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release  
     libtool -static -o libemgucv_armv7.a bin/Release/*.a
@@ -36,7 +36,7 @@ if [ "$1" != "simulator" ]; then
     mkdir -p platforms/ios/arm64
     cd platforms/ios/arm64
     ../configure-device_xcode.sh -DIOS_ARCH="arm64" $*
-    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="arm64" -target ALL_BUILD clean build
+    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="arm64" -target ALL_BUILD clean build
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release  
     libtool -static -o libemgucv_arm64.a bin/Release/*.a
