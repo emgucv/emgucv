@@ -198,7 +198,7 @@
         <EmguCVLinkTarget>Xamarin iOS App</EmguCVLinkTarget>
         <EmguCVNativeFile>$(OpenCVBinaryDir)\iOS\libcvextern.a</EmguCVNativeFile>
         <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-        <MtouchExtraArgs>$(MtouchExtraArgs) -cxx -gcc_flags "-L$(OpenCVBinaryDir)\iOS\ -lcvextern -framework Foundation -framework Accelerate -framework CoreFoundation -framework CoreGraphics -framework AssetsLibrary -framework AVFoundation -framework CoreImage -framework CoreMedia -framework CoreVideo -framework QuartzCore -framework ImageIO -framework UIKit"</MtouchExtraArgs>
+        <MtouchExtraArgs>$(MtouchExtraArgs) -cxx -gcc_flags "-L$(OpenCVBinaryDir)\iOS\ -lcvextern -force_load $(OpenCVBinaryDir)\iOS\libcvextern.a -framework Foundation -framework Accelerate -framework CoreFoundation -framework CoreGraphics -framework AssetsLibrary -framework AVFoundation -framework CoreImage -framework CoreMedia -framework CoreVideo -framework QuartzCore -framework ImageIO -framework UIKit"</MtouchExtraArgs>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
       </PropertyGroup>
     </When>
