@@ -1,0 +1,1 @@
+/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin/mtouch -sdkroot /Applications/Xcode.app   --launchsim EmguCVExampleiOS.app/ --device=:v2:runtime=com.apple.CoreSimulator.SimRuntime.iOS-12-0,devicetype=com.apple.CoreSimulator.SimDeviceType.iPhone-7 -v -v -v -v -v -v --stdout=output -stderr=error 
