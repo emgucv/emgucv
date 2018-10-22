@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+#if NONFREE
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -61,3 +63,5 @@ namespace Emgu.CV.XFeatures2D
         internal extern static void cveSIFTRelease(ref IntPtr detector, ref IntPtr sharedPtr);
     }
 }
+
+#endif

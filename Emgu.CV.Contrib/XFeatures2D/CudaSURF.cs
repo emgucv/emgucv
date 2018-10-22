@@ -3,6 +3,8 @@
 //  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+#if NONEFREE
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -164,4 +166,6 @@ namespace Emgu.CV.XFeatures2D
         internal static extern int cudaSURFDetectorGetDescriptorSize(IntPtr detector);
     }
 }
+
+#endif
 #endif
