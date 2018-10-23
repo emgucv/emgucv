@@ -32,7 +32,7 @@ namespace Emgu.CV.Stitching
         }
     }
 
-    /*
+#if NONFREE
     /// <summary>
     /// SURF features finder
     /// </summary>
@@ -111,7 +111,8 @@ namespace Emgu.CV.Stitching
        {
           StitchingInvoke.cveSurfFeaturesFinderGpuRelease(ref  _ptr);
        }
-    }*/
+    }
+#endif
 
     /// <summary>
     /// ORB features finder.
