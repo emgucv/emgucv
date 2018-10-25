@@ -1338,8 +1338,8 @@ namespace Emgu.CV
         /// <summary>
         /// Applies fixed-level thresholding to single-channel array. The function is typically used to get bi-level (binary) image out of grayscale image (cvCmpS could be also used for this purpose) or for removing a noise, i.e. filtering out pixels with too small or too large values. There are several types of thresholding the function supports that are determined by threshold_type
         /// </summary>
-        /// <param name="src">Source array (single-channel, 8-bit of 32-bit floating point). </param>
-        /// <param name="dst">Destination array; must be either the same type as src or 8-bit. </param>
+        /// <param name="src">Input array (multiple-channel, 8-bit or 32-bit floating point).</param>
+        /// <param name="dst">Output array of the same size and type and the same number of channels as src.</param>
         /// <param name="threshold">Threshold value</param>
         /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
         /// <param name="thresholdType">Thresholding type </param>
