@@ -63,6 +63,14 @@ namespace Emgu.CV
         [return:MarshalAs(CvInvoke.BoolMarshalType)]
         internal extern static bool cveQRCodeDetectorDetect(IntPtr detector, IntPtr input, IntPtr points);
 
+        /// <summary>
+        /// Detect QR code in image and return minimum area of quadrangle that describes QR code.
+        /// </summary>
+        /// <param name="input">Matrix of the type CV_8U containing an image where QR code are detected.</param>
+        /// <param name="points">Output vector of vertices of a quadrangle of minimal area that describes QR code.</param>
+        /// <param name="epsX">Epsilon neighborhood, which allows you to determine the horizontal pattern of the scheme 1:1:3:1:1 according to QR code standard.</param>
+        /// <param name="epsY">Epsilon neighborhood, which allows you to determine the vertical pattern of the scheme 1:1:3:1:1 according to QR code standard.</param>
+        /// <returns>True if QR code is found</returns>
         public static bool DetectQRCode(IInputArray input, VectorOfPoint points, double epsX, double epsY)
         {
             using (InputArray iaInput = input.GetInputArray())
@@ -73,6 +81,14 @@ namespace Emgu.CV
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal extern static bool cveDetectQRCode(IntPtr input, IntPtr points, double epsX, double epsY);
 
+        /// <summary>
+        /// Decode QR code in image and return text that is encrypted in QR code.
+        /// </summary>
+        /// <param name="input">Matrix of the type CV_8UC1 containing an image where QR code are detected.</param>
+        /// <param name="points">Input vector of vertices of a quadrangle of minimal area that describes QR code.</param>
+        /// <param name="decodeInfo">String information that is encrypted in QR code.</param>
+        /// <param name="straightQRCode">Matrix of the type CV_8UC1 containing an binary straight QR code.</param>
+        /// <returns>True if the QR code is found.</returns>
         public static bool DecodeQRCode(IInputArray input, IInputArray points, CvString decodeInfo, IOutputArray straightQRCode = null)
         {
             using (InputArray iaInput = input.GetInputArray())

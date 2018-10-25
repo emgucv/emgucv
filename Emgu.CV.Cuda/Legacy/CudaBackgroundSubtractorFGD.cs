@@ -74,6 +74,7 @@ namespace Emgu.CV.Cuda
         /// </summary>
         /// <param name="frame">Next video frame.</param>
         /// <param name="learningRate">The learning rate, use -1.0f for default value.</param>
+        /// <param name="forgroundMask">Output the current forground mask</param>
         public void Apply(IInputArray frame, IOutputArray forgroundMask, double learningRate = -1.0)
         {
             using (InputArray iaFrame = frame.GetInputArray())

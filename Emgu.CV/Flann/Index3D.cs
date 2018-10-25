@@ -81,6 +81,13 @@ namespace Emgu.CV.Flann
             return n;
         }
 
+        /// <summary>
+        /// Perform a search within the given radius
+        /// </summary>
+        /// <param name="position">The center of the search area</param>
+        /// <param name="radius">The radius of the search</param>
+        /// <param name="maxResults">The maximum number of results to return</param>
+        /// <returns>The neighbors found</returns>
         public Neighbor[] RadiusSearch(MCvPoint3D32f position, double radius, int maxResults)
         {
             _query.Data[0, 0] = position.X;

@@ -160,6 +160,11 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Converts string name of the layer to the integer identifier.
+        /// </summary>
+        /// <param name="layerName">The name of the layer</param>
+        /// <returns>The id of the layer</returns>
         public int GetLayerId(String layerName)
         {
             using (CvString csLayerName = new CvString(layerName))
@@ -168,6 +173,11 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Returns layer with specified name which the network use.
+        /// </summary>
+        /// <param name="layerName">The name of the layer</param>
+        /// <returns>Layer with specified name which the network use.</returns>
         public Layer GetLayer(String layerName)
         {
             IntPtr sharedPtr = IntPtr.Zero;
@@ -177,6 +187,11 @@ namespace Emgu.CV.Dnn
             return new Layer(sharedPtr, ptr);
         }
 
+        /// <summary>
+        /// Returns layer with specified id which the network use.
+        /// </summary>
+        /// <param name="layerId">The id of the layer</param>
+        /// <returns>Layer with specified id which the network use.</returns>
         public Layer GetLayer(int layerId)
         {
             IntPtr sharedPtr = IntPtr.Zero;
@@ -184,6 +199,9 @@ namespace Emgu.CV.Dnn
             return new Layer(sharedPtr, ptr);
         }
 
+        /// <summary>
+        /// Returns indexes of layers with unconnected outputs.
+        /// </summary>
         public int[] UnconnectedOutLayers
         {
             get
@@ -196,6 +214,9 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Returns names of layers with unconnected outputs.
+        /// </summary>
         public String[] UnconnectedOutLayersNames
         {
             get
@@ -208,6 +229,11 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Returns overall time for inference and timings (in ticks) for layers. Indexes in returned vector correspond to layers ids. Some layers can be fused with others, in this case zero ticks count will be return for that skipped layers.
+        /// </summary>
+        /// <param name="timings">Vector for tick timings for all layers.</param>
+        /// <returns>Overall ticks for model inference.</returns>
         public Int64 GetPerfProfile(VectorOfDouble timings = null)
         {
             if (timings != null)

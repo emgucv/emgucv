@@ -524,6 +524,7 @@ namespace Emgu.CV.Test
 
         }
 
+#if NONFREE
         [Test]
         public void TestCudaSURFKeypointDetection()
         {
@@ -541,6 +542,7 @@ namespace Emgu.CV.Test
                 cudaSurf.DownloadKeypoints(cudaKpts, kpts);
             }
         }
+#endif
 
         [Test]
         public void TestCudaFASTDetector()
@@ -647,7 +649,7 @@ namespace Emgu.CV.Test
             if (!CudaInvoke.HasCuda)
                 return;
 
-            #region prepare synthetic image for testing
+#region prepare synthetic image for testing
             int templWidth = 50;
             int templHeight = 50;
             Point templCenter = new Point(120, 100);
@@ -662,7 +664,7 @@ namespace Emgu.CV.Test
             img.ROI = objectLocation;
             randomObj.Copy(img, null);
             img.ROI = Rectangle.Empty;
-            #endregion
+#endregion
 
             Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TemplateMatchingType.Sqdiff);
             double[] minVal, maxVal;
@@ -760,7 +762,7 @@ namespace Emgu.CV.Test
             Mat m = new Mat(new Size(480, 320), DepthType.Cv8U, 3);
             CvInvoke.Randu(m, new MCvScalar(), new MCvScalar(255, 255, 255));
 
-            #region test for async download & upload
+#region test for async download & upload
             Stream stream = new Stream();
             GpuMat gm1 = new GpuMat();
             gm1.Upload(m, stream);
@@ -770,15 +772,15 @@ namespace Emgu.CV.Test
 
             stream.WaitForCompletion();
             EmguAssert.IsTrue(m.Equals(m2));
-            #endregion
+#endregion
 
-            #region test for blocking download & upload
+#region test for blocking download & upload
             GpuMat gm2 = new GpuMat();
             gm2.Upload(m);
             Mat m3 = new Mat();
             gm2.Download(m3);
             EmguAssert.IsTrue(m.Equals(m3));
-            #endregion
+#endregion
         }
 
 
@@ -952,7 +954,7 @@ namespace Emgu.CV.Test
                 FastFeatureDetector fast = new FastFeatureDetector(100, true);
                 BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
 
-                #region extract features from the object image
+#region extract features from the object image
                 Stopwatch stopwatch = Stopwatch.StartNew();
                 VectorOfKeyPoint modelKeypoints = new VectorOfKeyPoint();
                 fast.DetectRaw(box, modelKeypoints);
@@ -960,11 +962,11 @@ namespace Emgu.CV.Test
                 brief.Compute(box, modelKeypoints, modelDescriptors);
                 stopwatch.Stop();
                 Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-                #endregion
+#endregion
 
                 Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
 
-                #region extract features from the observed image
+#region extract features from the observed image
                 stopwatch.Reset(); stopwatch.Start();
                 VectorOfKeyPoint observedKeypoints = new VectorOfKeyPoint();
                 fast.DetectRaw(observedImage, observedKeypoints);
@@ -972,7 +974,7 @@ namespace Emgu.CV.Test
                 brief.Compute(observedImage, observedKeypoints, observedDescriptors);
                 stopwatch.Stop();
                 Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-                #endregion
+#endregion
 
                 Mat homography = null;
                 using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors)) //initialization of GPU code might took longer time.

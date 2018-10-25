@@ -20,6 +20,9 @@ namespace Emgu.CV.Shape
     /// </summary>
     public abstract class HistogramCostExtractor : UnmanagedObject
     {
+        /// <summary>
+        /// Pointer native cv::Ptr object.
+        /// </summary>
         protected IntPtr _sharedPtr;
 
         /// <summary>

@@ -13,7 +13,9 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Dnn
 {
-
+    /// <summary>
+    /// This interface class allows to build new Layers - are building blocks of networks.
+    /// </summary>
     public partial class Layer : SharedPtrObject
     {
         internal Layer(IntPtr sharedPtr, IntPtr ptr)
@@ -22,6 +24,9 @@ namespace Emgu.CV.Dnn
             _ptr = ptr;
         }
 
+        /// <summary>
+        /// List of learned parameters must be stored here to allow read them by using Net::getParam().
+        /// </summary>
         public VectorOfMat Blobs
         {
             get
@@ -30,6 +35,9 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Release the unmanaged memory associated with this Layer.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (!IntPtr.Zero.Equals(_sharedPtr))
