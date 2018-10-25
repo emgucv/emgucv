@@ -106,6 +106,11 @@ void cveCorrectMatches(cv::_InputArray* f, cv::_InputArray* points1, cv::_InputA
 	cv::correctMatches(*f, *points1, *points2, *newPoints1, *newPoints2);
 }
 
+bool cveFindChessboardCornersSB(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* corners, int flags)
+{
+	return cv::findChessboardCornersSB(*image, *patternSize, *corners, flags);
+}
+
 void cveDrawChessboardCorners(cv::_InputOutputArray* image, CvSize* patternSize, cv::_InputArray* corners, bool patternWasFound)
 {
 	cv::drawChessboardCorners(*image, *patternSize, *corners, patternWasFound);

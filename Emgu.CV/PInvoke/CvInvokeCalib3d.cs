@@ -982,6 +982,26 @@ namespace Emgu.CV
         private static extern void cveFilterSpeckles(IntPtr img, double newVal, int maxSpeckleSize, double maxDiff, IntPtr buf);
 
         /// <summary>
+        /// Finds the positions of internal corners of the chessboard using a sector based approach.
+        /// </summary>
+        /// <param name="image">Source chessboard view. It must be an 8-bit grayscale or color image.</param>
+        /// <param name="patternSize">Number of inner corners per a chessboard row and column ( patternSize = cv::Size(points_per_row,points_per_colum) = cv::Size(columns,rows) ).</param>
+        /// <param name="corners">Output array of detected corners.</param>
+        /// <param name="flags">Various operation flags</param>
+        /// <returns>True if chessboard corners found</returns>
+        public static bool FindChessboardCornersSB(IInputArray image, Size patternSize, IOutputArray corners, CvEnum.CalibCbType flags = CalibCbType.Default)
+        {
+            using (InputArray iaImage = image.GetInputArray())
+            using (OutputArray oaCorners = corners.GetOutputArray())
+            {
+                return cveFindChessboardCornersSB(iaImage, ref patternSize, oaCorners, flags);
+            }
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(BoolMarshalType)]
+        private static extern bool cveFindChessboardCornersSB(IntPtr image, ref Size patternSize, IntPtr corners, CvEnum.CalibCbType flags);
+
+        /// <summary>
         /// Draws the individual chessboard corners detected (as red circles) in case if the board was not found (pattern_was_found=0) or the colored corners connected with lines when the board was found (pattern_was_found != 0). 
         /// </summary>
         /// <param name="image">The destination image; it must be 8-bit color image</param>

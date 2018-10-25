@@ -3554,6 +3554,14 @@ namespace Emgu.CV.CvEnum
         /// If it is on, then this check is performed before the main algorithm and if a chessboard is not found, the function returns 0 instead of wasting 0.3-1s on doing the full search.
         /// </summary>
         FastCheck = 8,
+        /// <summary>
+        ///  Run an exhaustive search to improve detection rate.
+        /// </summary>
+        Exhaustive = 16,
+        /// <summary>
+        /// Up sample input image to improve sub-pixel accuracy due to aliasing effects. This should be used if an accurate camera calibration is required.
+        /// </summary>
+        Accuracy = 32
     }
 
     /// <summary>
