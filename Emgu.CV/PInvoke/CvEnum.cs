@@ -2672,7 +2672,11 @@ namespace Emgu.CV.CvEnum
         /// use Otsu algorithm to choose the optimal threshold value;
         /// combine the flag with one of the above CV_THRESH_* values 
         ///</summary>
-        Otsu = 8
+        Otsu = 8,
+        /// <summary>
+        /// Use Triangle algorithm to choose the optimal threshold value
+        /// </summary>
+        Triangle = 16
 
     }
 
