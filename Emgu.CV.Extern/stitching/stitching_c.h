@@ -31,7 +31,7 @@ namespace cv {
 
 CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, bool tryUseGpu, cv::Ptr<cv::Stitcher>** sharedPtr);
 
-CVAPI(void) cveStitcherRelease(cv::Stitcher** stitcher, cv::Ptr<cv::Stitcher>** sharedPtr);
+CVAPI(void) cveStitcherRelease(cv::Ptr<cv::Stitcher>** sharedPtr);
 
 CVAPI(void) cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder);
 
@@ -53,6 +53,11 @@ CVAPI(void) cveStitcherSetRegistrationResol(cv::Stitcher* stitcher, double resol
 CVAPI(double) cveStitcherGetRegistrationResol(cv::Stitcher* stitcher);
 
 CVAPI(int) cveStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
+
+CVAPI(int) cveStitcherEstimateTransform1(cv::Stitcher* stitcher, cv::_InputArray*  images);
+CVAPI(int) cveStitcherEstimateTransform2(cv::Stitcher* stitcher, cv::_InputArray* images, std::vector< std::vector< cv::Rect > >* rois);
+CVAPI(int) cveStitcherComposePanorama1(cv::Stitcher* stitcher, cv::_OutputArray* pano);
+CVAPI(int) cveStitcherComposePanorama2(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
 
 #ifdef OPENCV_ENABLE_NONFREE
 CVAPI(cv::detail::SurfFeaturesFinder*) cveSurfFeaturesFinderCreate(

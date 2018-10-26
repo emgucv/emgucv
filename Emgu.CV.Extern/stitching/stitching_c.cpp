@@ -21,10 +21,9 @@ cv::Stitcher* cveStitcherCreate(int mode, bool tryUseGpu, cv::Ptr<cv::Stitcher>*
 	return ptr.get();
 }
 
-void cveStitcherRelease(cv::Stitcher** stitcher, cv::Ptr<cv::Stitcher>** sharedPtr)
+void cveStitcherRelease(cv::Ptr<cv::Stitcher>** sharedPtr)
 {
    delete *sharedPtr;
-   *stitcher = 0;
    *sharedPtr = 0;
 }
 
@@ -98,6 +97,24 @@ double cveStitcherGetRegistrationResol(cv::Stitcher* stitcher)
 int cveStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano)
 {
    return stitcher->stitch(*images, *pano);
+}
+
+int cveStitcherEstimateTransform1(cv::Stitcher* stitcher, cv::_InputArray*  images)
+{
+	return stitcher->estimateTransform(*images);
+}
+int cveStitcherEstimateTransform2(cv::Stitcher* stitcher, cv::_InputArray* images, std::vector< std::vector< cv::Rect > >* rois)
+{
+	return stitcher->estimateTransform(*images, *rois);
+}
+int cveStitcherComposePanorama1(cv::Stitcher* stitcher, cv::_OutputArray* pano)
+{
+	return stitcher->composePanorama(*pano);
+}
+
+int cveStitcherComposePanorama2(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano)
+{
+	return stitcher->composePanorama(*images, *pano);
 }
 
 #ifdef OPENCV_ENABLE_NONFREE

@@ -6,20 +6,18 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+using System.Drawing;
 
 namespace Emgu.CV.Stitching
 {
     /// <summary>
     /// Image Stitching.
     /// </summary>
-    public partial class Stitcher : UnmanagedObject
+    public partial class Stitcher : SharedPtrObject
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// The stitcher statis
         /// </summary>
@@ -108,6 +106,44 @@ namespace Emgu.CV.Stitching
                 return StitchingInvoke.cveStitcherStitch(_ptr, iaImages, oaPano);
         }
 
+        public int EstimateTransform(IInputArrayOfArrays images, Rectangle[][] rois = null)
+        {
+            using (InputArray iaImages = images.GetInputArray())
+                if (rois == null)
+                {
+                    return StitchingInvoke.cveStitcherEstimateTransform1(_ptr, iaImages);
+                }
+                else
+                {
+                    using (VectorOfVectorOfRect vvr = new VectorOfVectorOfRect(rois))
+                    {
+                        return StitchingInvoke.cveStitcherEstimateTransform2(_ptr, iaImages, vvr);
+                    }
+                }
+
+        }
+
+        public int ComposePanorama(IOutputArray pano)
+        {
+            using (OutputArray oaPano = pano.GetOutputArray())
+            {
+                return StitchingInvoke.cveStitcherComposePanorama1(_ptr, oaPano);
+            }
+        }
+
+        public int ComposePanorama(IInputArrayOfArrays images, IOutputArray pano)
+        {
+            using (InputArray iaImages = images.GetInputArray())
+            using (OutputArray oaPano = pano.GetOutputArray())
+                return StitchingInvoke.cveStitcherComposePanorama2(_ptr, iaImages, oaPano);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveStitcherComposePanorama(IntPtr stitcher, IntPtr pano);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveStitcherComposePanorama(IntPtr stitcher, IntPtr images, IntPtr pano);
+
+
         /// <summary>
         /// Set the features finder for this stitcher.
         /// </summary>
@@ -133,14 +169,6 @@ namespace Emgu.CV.Stitching
         public void SetBlender(Blender blender)
         {
             StitchingInvoke.cveStitcherSetBlender(_ptr, blender.BlenderPtr);
-        }
-
-        /// <summary>
-        /// Release memory associated with this stitcher
-        /// </summary>
-        protected override void DisposeObject()
-        {
-            StitchingInvoke.cveStitcherRelease(ref _ptr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -196,6 +224,18 @@ namespace Emgu.CV.Stitching
             get { return StitchingInvoke.cveStitcherGetRegistrationResol(_ptr); }
             set { StitchingInvoke.cveStitcherSetRegistrationResol(_ptr, value); }
         }
+
+        /// <summary>
+        /// Release memory associated with this stitcher
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (_sharedPtr == IntPtr.Zero)
+            {
+                StitchingInvoke.cveStitcherRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
+        }
     }
 
     /// <summary>
@@ -237,7 +277,7 @@ namespace Emgu.CV.Stitching
         internal static extern void cveStitcherSetBlender(IntPtr stitcher, IntPtr b);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveStitcherRelease(ref IntPtr stitcherWrapper, ref IntPtr sharedPtr);
+        internal static extern void cveStitcherRelease(ref IntPtr sharedPtr);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -273,5 +313,14 @@ namespace Emgu.CV.Stitching
         internal static extern void cveStitcherSetRegistrationResol(IntPtr stitcher, double resolMpx);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveStitcherGetRegistrationResol(IntPtr stitcher);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveStitcherEstimateTransform1(IntPtr stitcher, IntPtr images);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveStitcherEstimateTransform2(IntPtr stitcher, IntPtr images, IntPtr rois);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveStitcherComposePanorama1(IntPtr stitcher, IntPtr pano);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveStitcherComposePanorama2(IntPtr stitcher, IntPtr images, IntPtr pano);
     }
 }
