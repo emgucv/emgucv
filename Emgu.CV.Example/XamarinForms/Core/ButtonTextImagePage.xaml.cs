@@ -10,8 +10,7 @@ using Emgu.CV;
 using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-#if NETFX_CORE || (__UNIFIED__ && !__IOS__) //NETFX or Xamarin Mac
-#else
+#if __IOS__ || __ANDROID__
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 #endif
@@ -28,13 +27,8 @@ namespace Emgu.CV.XamarinForms
 
         public virtual async void LoadImages(String[] imageNames, String[] labels = null)
         {
-#if NETFX_CORE || (__UNIFIED__ && !__IOS__) //NETFX or Xamarin Mac
-            Mat[] mats = new Mat[imageNames.Length];
-            for (int i = 0; i < mats.Length; i++)
-                mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
-            InvokeOnImagesLoaded(mats);
-#else
-
+#if __IOS__ || __ANDROID__
+           
             Mat[] mats = new Mat[imageNames.Length];
             for (int i = 0; i < mats.Length; i++)
             {
@@ -104,7 +98,6 @@ namespace Emgu.CV.XamarinForms
                     if (takePhotoResult == null) //cancelled
                         return;
 
-
                     mats[i] = CvInvoke.Imread(takePhotoResult.Path);
 #else
                     var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions());
@@ -121,6 +114,11 @@ namespace Emgu.CV.XamarinForms
 #endif
                 }
             }
+            InvokeOnImagesLoaded(mats);
+#else
+            Mat[] mats = new Mat[imageNames.Length];
+            for (int i = 0; i < mats.Length; i++)
+                mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
             InvokeOnImagesLoaded(mats);
 #endif
         }
