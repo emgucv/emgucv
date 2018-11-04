@@ -85,6 +85,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aruco", "..\..\Emgu.CV.Exam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFInterop", "..\..\Emgu.CV.Example\TFInterop\TFInterop.csproj", "{DDEEFE79-6BDC-4EA8-ADF6-8ECD337BD3D0}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.XamarinForms", "..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.shproj", "{F2A5CE86-0B21-40D2-AD3F-BB2D1D716CFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinForms.WPF", "..\..\Emgu.CV.Example\XamarinForms\WPF\XamarinForms.WPF.csproj", "{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -96,9 +100,11 @@ Global
 		..\..\Emgu.Util\Emgu.Util.projitems*{3f5d7c08-96ba-4037-bb24-afa2c336e260}*SharedItemsImports = 4
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
+		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{8792cf43-c2c4-4f39-8a12-99b2b8c86c91}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{b1d43be6-af83-41e5-990e-3e163ce42c79}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{b1d43be6-af83-41e5-990e-3e163ce42c79}*SharedItemsImports = 4
+		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -361,6 +367,18 @@ Global
 		{DDEEFE79-6BDC-4EA8-ADF6-8ECD337BD3D0}.Release|x64.Build.0 = Release|x64
 		{DDEEFE79-6BDC-4EA8-ADF6-8ECD337BD3D0}.Release|x86.ActiveCfg = Release|Any CPU
 		{DDEEFE79-6BDC-4EA8-ADF6-8ECD337BD3D0}.Release|x86.Build.0 = Release|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Debug|x64.Build.0 = Debug|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Debug|x86.Build.0 = Debug|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Release|x64.ActiveCfg = Release|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Release|x64.Build.0 = Release|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Release|x86.ActiveCfg = Release|Any CPU
+		{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
