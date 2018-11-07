@@ -24,6 +24,10 @@ IF EXIST %VS2012% SET DEVENV=%VS2012%
 IF EXIST %VS2013% SET DEVENV=%VS2013%
 IF EXIST %VS2015% SET DEVENV=%VS2015%
 
+SET PROGRAMFILES_DIR_X86=%programfiles(x86)%
+if NOT EXIST "%PROGRAMFILES_DIR_X86%" SET PROGRAMFILES_DIR_X86=%programfiles%
+SET PROGRAMFILES_DIR=%programfiles%
+
 SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com"
 IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com" SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com"
 IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com" SET VS2017="%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com"
