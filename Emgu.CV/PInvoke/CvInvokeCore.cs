@@ -2254,7 +2254,18 @@ namespace Emgu.CV
                 //int[] minIdx = new int[2], maxIdx = new int[2];
                 if (numberOfChannels == 1)
                 {
-                    CvInvoke.MinMaxLoc(arr, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+                    if (iaArr.IsUMat)
+                    {
+                        //Open CV's MinMaxLoc seems to have a bug in the OpenCL implementation. 
+                        //Converting UMat to Mat to force execution on CPU
+                        //TODO: Remove this UMat case handling in the future if the MinMaxLoc implementation for UMat is fixed.
+                        using (Mat m = iaArr.GetMat())
+                        {
+                            CvInvoke.MinMaxLoc(m, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+                        }
+
+                    } else
+                        CvInvoke.MinMaxLoc(arr, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
                     minValues[0] = minVal;
                     maxValues[0] = maxVal;
                     minLocations[0] = minLoc;
