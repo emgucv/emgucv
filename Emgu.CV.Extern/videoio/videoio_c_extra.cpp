@@ -42,9 +42,9 @@ void OpenniGetColorPoints(CvCapture* capture, std::vector<ColorPoint>* points, I
 	}
 }
 
-cv::VideoCapture* cveVideoCaptureCreateFromDevice(int device)
+cv::VideoCapture* cveVideoCaptureCreateFromDevice(int device, int apiPreference)
 {
-	return new cv::VideoCapture(device);
+	return new cv::VideoCapture(device, apiPreference);
 }
 
 cv::VideoCapture* cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference)

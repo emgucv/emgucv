@@ -42,7 +42,7 @@ CVAPI(void) OpenniGetColorPoints(
                                  IplImage* mask // CV_8UC1
                                  );
 
-CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device);
+CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device, int apiPreference);
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference);
 
 CVAPI(void) cveVideoCaptureRelease(cv::VideoCapture** capture);

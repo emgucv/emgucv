@@ -309,7 +309,7 @@ namespace Emgu.CV
 
 #if TEST_CAPTURE
 #else
-            _ptr = CvInvoke.cveVideoCaptureCreateFromDevice(camIndex | (int)captureApi);
+            _ptr = CvInvoke.cveVideoCaptureCreateFromDevice(camIndex, captureApi);
             if (_ptr == IntPtr.Zero)
             {
                 throw new NullReferenceException(String.Format("Error: Unable to create capture from camera {0}", camIndex));
@@ -390,6 +390,7 @@ namespace Emgu.CV
                 return false;
 
             bool grabbed = CvInvoke.cveVideoCaptureGrab(Ptr);
+
             if (grabbed && ImageGrabbed != null)
                 ImageGrabbed(this, new EventArgs());
             return grabbed;
@@ -720,7 +721,7 @@ namespace Emgu.CV
 #endif
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveVideoCaptureCreateFromDevice(int index);
+        internal static extern IntPtr cveVideoCaptureCreateFromDevice(int index, VideoCapture.API apiPreference);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoCaptureCreateFromFile(IntPtr filename, VideoCapture.API api);
