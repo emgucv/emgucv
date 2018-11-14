@@ -1166,9 +1166,9 @@ ENDIF()
 ############################### video code gen START ##############################
 IF(HAVE_opencv_video)
   CREATE_OCV_CLASS_PROPERTY( 
-    "video/dual_tvl1_opticalflow_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/DualTVL1OpticalFlow.g.cs"
-    "cv::DualTVL1OpticalFlow" 
+    "optflow/dual_tvl1_opticalflow_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/DualTVL1OpticalFlow.g.cs"
+    "cv::optflow::DualTVL1OpticalFlow" 
     "DualTVL1OpticalFlow" 
     "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
     "double;double;double;double;int;int;double;int;int;bool;double;int" 
@@ -1191,7 +1191,7 @@ IF(HAVE_opencv_video)
     "CvInvoke"
     "DualTVL1OpticalFlow"
 	""
-    "#include \"video_c.h\"")
+    "#include \"optflow_c.h\"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "video/kalmanfilter_property" 

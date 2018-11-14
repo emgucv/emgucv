@@ -24,8 +24,6 @@ CVAPI(void) cveBackgroundSubtractorGetBackgroundImage(cv::BackgroundSubtractor* 
 CVAPI(cv::BackgroundSubtractorKNN*) cveBackgroundSubtractorKNNCreate(int history, double dist2Threshold, bool detectShadows, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm, cv::Ptr<cv::BackgroundSubtractorKNN>** sharedPtr);
 CVAPI(void) cveBackgroundSubtractorKNNRelease(cv::BackgroundSubtractorKNN** bgSubtractor, cv::Ptr<cv::BackgroundSubtractorKNN>** sharedPtr);
 
-CVAPI(cv::DualTVL1OpticalFlow*) cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm, cv::Ptr<cv::DualTVL1OpticalFlow>** sharedPtr);
-CVAPI(void) cveDualTVL1OpticalFlowRelease(cv::DualTVL1OpticalFlow** flow, cv::Ptr<cv::DualTVL1OpticalFlow>** sharedPtr);
 
 CVAPI(cv::FarnebackOpticalFlow*) cveFarnebackOpticalFlowCreate(
 	int numLevels,
