@@ -18,8 +18,6 @@ CVAPI(void) cveSegmentMotion(cv::_InputArray* mhi, cv::_OutputArray* segmask, st
 
 CVAPI(cv::DenseOpticalFlow*) cveOptFlowDeepFlowCreate(cv::Algorithm** algorithm, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr);
 
-CVAPI(cv::optflow::DISOpticalFlow*) cveDISOpticalFlowCreate(int preset, cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm, cv::Ptr<cv::optflow::DISOpticalFlow>** sharedPtr);
-CVAPI(void) cveDISOpticalFlowRelease(cv::optflow::DISOpticalFlow** flow, cv::Ptr<cv::optflow::DISOpticalFlow>** sharedPtr);
 
 CVAPI(cv::DenseOpticalFlow*) cveOptFlowPCAFlowCreate(cv::Algorithm** algorithm, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr);
 
