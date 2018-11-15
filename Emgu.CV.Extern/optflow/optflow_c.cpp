@@ -44,9 +44,9 @@ cv::DenseOpticalFlow* cveOptFlowPCAFlowCreate(cv::Algorithm** algorithm, cv::Ptr
 
 cv::optflow::DualTVL1OpticalFlow* cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm, cv::Ptr<cv::optflow::DualTVL1OpticalFlow>** sharedPtr)
 {
-	cv::Ptr<cv::DualTVL1OpticalFlow> dof = cv::createOptFlow_DualTVL1();
-	*sharedPtr = new cv::Ptr<cv::DualTVL1OpticalFlow>(dof);
-	cv::DualTVL1OpticalFlow* ptr = dof.get();
+	cv::Ptr<cv::optflow::DualTVL1OpticalFlow> dof = cv::optflow::createOptFlow_DualTVL1();
+	*sharedPtr = new cv::Ptr<cv::optflow::DualTVL1OpticalFlow>(dof);
+	cv::optflow::DualTVL1OpticalFlow* ptr = dof.get();
 	*denseOpticalFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr);
 	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
 	return ptr;

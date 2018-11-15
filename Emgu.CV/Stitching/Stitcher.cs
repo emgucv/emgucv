@@ -73,24 +73,16 @@ namespace Emgu.CV.Stitching
 
         }
 
-        /// <summary>
-        /// Creates a stitcher with the default parameters.
-        /// </summary>
-        /// <param name="tryUseGpu">If true, the stitcher will try to use GPU for processing when available</param>
-        public Stitcher(bool tryUseGpu)
-            : this(Mode.Panorama, tryUseGpu)
-        {
-            
-        }
+
 
         /// <summary>
         /// Creates a Stitcher configured in one of the stitching modes.
         /// </summary>
         /// <param name="mode">Scenario for stitcher operation. This is usually determined by source of images to stitch and their transformation. </param>
-        /// <param name="tryUseGpu">If true, the stitcher will try to use GPU for processing when available</param>
-        public Stitcher(Mode mode, bool tryUseGpu)
+
+        public Stitcher(Mode mode = Mode.Panorama)
         {
-            _ptr = StitchingInvoke.cveStitcherCreate(mode, tryUseGpu, ref _sharedPtr);
+            _ptr = StitchingInvoke.cveStitcherCreate(mode, ref _sharedPtr);
         }
 
         /// <summary>
@@ -148,9 +140,9 @@ namespace Emgu.CV.Stitching
         /// Set the features finder for this stitcher.
         /// </summary>
         /// <param name="finder">The features finder</param>
-        public void SetFeaturesFinder(FeaturesFinder finder)
+        public void SetFeaturesFinder(Features2D.Feature2D finder)
         {
-            StitchingInvoke.cveStitcherSetFeaturesFinder(_ptr, finder.FeaturesFinderPtr);
+            StitchingInvoke.cveStitcherSetFeaturesFinder(_ptr, finder.Feature2DPtr);
         }
 
         /// <summary>
@@ -259,8 +251,6 @@ namespace Emgu.CV.Stitching
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveStitcherCreate(
             Stitcher.Mode model,
-            [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool tryUseGpu,
             ref IntPtr sharedPtr
            );
 

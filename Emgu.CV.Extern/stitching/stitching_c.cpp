@@ -13,9 +13,9 @@ cv::Stitcher* cveStitcherCreateDefault(bool tryUseGpu)
    return p.get();
 }*/
 
-cv::Stitcher* cveStitcherCreate(int mode, bool tryUseGpu, cv::Ptr<cv::Stitcher>** sharedPtr)
+cv::Stitcher* cveStitcherCreate(int mode, cv::Ptr<cv::Stitcher>** sharedPtr)
 {
-	cv::Ptr<cv::Stitcher> ptr = cv::Stitcher::create(static_cast<cv::Stitcher::Mode>(mode), tryUseGpu);
+	cv::Ptr<cv::Stitcher> ptr = cv::Stitcher::create(static_cast<cv::Stitcher::Mode>(mode));
 	*sharedPtr = new cv::Ptr<cv::Stitcher>(ptr);
 
 	return ptr.get();
@@ -27,9 +27,9 @@ void cveStitcherRelease(cv::Ptr<cv::Stitcher>** sharedPtr)
    *sharedPtr = 0;
 }
 
-void cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder)
+void cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::Feature2D* finder)
 {
-   cv::Ptr<cv::detail::FeaturesFinder> p(finder, [](cv::detail::FeaturesFinder*){});
+   cv::Ptr<cv::Feature2D> p(finder, [](cv::Feature2D*){});
    stitcher->setFeaturesFinder(p);
 }
 
@@ -117,6 +117,7 @@ int cveStitcherComposePanorama2(cv::Stitcher* stitcher, cv::_InputArray* images,
 	return stitcher->composePanorama(*images, *pano);
 }
 
+/*
 #ifdef OPENCV_ENABLE_NONFREE
 cv::detail::SurfFeaturesFinder* cveSurfFeaturesFinderCreate(
    double hess_thresh, int num_octaves, int num_layers,
@@ -181,7 +182,7 @@ void cveAKAZEFeaturesFinderRelease(cv::detail::AKAZEFeaturesFinder** finder)
 	delete *finder;
 	*finder = 0;
 }
-
+*/
 
 void cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox)
 {

@@ -51,7 +51,7 @@ namespace Stitching
                 {
                     //only use GPU if you have build the native binary from code and enabled "NON_FREE"
                     using (Stitcher stitcher = new Stitcher(false)) 
-                    using (AKAZEFeaturesFinder finder = new AKAZEFeaturesFinder())
+                    using (Emgu.CV.Features2D.AKAZE finder = new Emgu.CV.Features2D.AKAZE())
                     {
                         stitcher.SetFeaturesFinder(finder);
                         using (VectorOfMat vm = new VectorOfMat())

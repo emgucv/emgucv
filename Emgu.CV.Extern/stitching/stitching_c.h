@@ -29,11 +29,11 @@ namespace cv {
 
 //CVAPI(cv::Stitcher*) cveStitcherCreateDefault(bool tryUseGpu);
 
-CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, bool tryUseGpu, cv::Ptr<cv::Stitcher>** sharedPtr);
+CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, cv::Ptr<cv::Stitcher>** sharedPtr);
 
 CVAPI(void) cveStitcherRelease(cv::Ptr<cv::Stitcher>** sharedPtr);
 
-CVAPI(void) cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::detail::FeaturesFinder* finder);
+CVAPI(void) cveStitcherSetFeaturesFinder(cv::Stitcher* stitcher, cv::Feature2D* finder);
 
 CVAPI(void) cveStitcherSetWarper(cv::Stitcher* stitcher, cv::WarperCreator* creator);
 
@@ -59,6 +59,7 @@ CVAPI(int) cveStitcherEstimateTransform2(cv::Stitcher* stitcher, cv::_InputArray
 CVAPI(int) cveStitcherComposePanorama1(cv::Stitcher* stitcher, cv::_OutputArray* pano);
 CVAPI(int) cveStitcherComposePanorama2(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
 
+/*
 #ifdef OPENCV_ENABLE_NONFREE
 CVAPI(cv::detail::SurfFeaturesFinder*) cveSurfFeaturesFinderCreate(
    double hess_thresh, int num_octaves, int num_layers,
@@ -86,7 +87,7 @@ CVAPI(cv::detail::AKAZEFeaturesFinder*) cveAKAZEFeaturesFinderCreate(
 	int diffusivity, 
 	cv::detail::FeaturesFinder** f);
 CVAPI(void) cveAKAZEFeaturesFinderRelease(cv::detail::AKAZEFeaturesFinder** finder);
-
+*/
 
 CVAPI(void) cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox);
 CVAPI(void) cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* src, cv::_InputArray* K, cv::_InputArray* R, int interpMode, int borderMode, cv::_OutputArray* dst, CvPoint* corner);
