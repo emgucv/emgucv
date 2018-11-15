@@ -1165,33 +1165,7 @@ ENDIF()
 
 ############################### video code gen START ##############################
 IF(HAVE_opencv_video)
-  CREATE_OCV_CLASS_PROPERTY( 
-    "optflow/dual_tvl1_opticalflow_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/DualTVL1OpticalFlow.g.cs"
-    "cv::optflow::DualTVL1OpticalFlow" 
-    "DualTVL1OpticalFlow" 
-    "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
-    "double;double;double;double;int;int;double;int;int;bool;double;int" 
-    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
-    "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
-    "double;double;double;double;int;int;double;int;int;bool;double;int"
-    "Time step of the numerical scheme;
-  Weight parameter for the data term, attachment parameter;
-  Weight parameter for (u - v)^2, tightness parameter;
-  Coefficient for additional illumination variation term;
-  Number of scales used to create the pyramid of images;
-  Number of warpings per scale;
-  Stopping criterion threshold used in the numerical scheme, which is a trade-off between precision and running time;
-  Inner iterations (between outlier filtering) used in the numerical scheme;
-  Outer iterations (number of inner loops) used in the numerical scheme;
-  Use initial flow;
-  Step between scales (less than 1);
-  Median filter kernel size (1 = no filter) (3 or 5)"
-    "Emgu.CV"
-    "CvInvoke"
-    "DualTVL1OpticalFlow"
-	""
-    "#include \"optflow_c.h\"")
+ 
   
   CREATE_OCV_CLASS_PROPERTY( 
     "video/kalmanfilter_property" 
@@ -1215,6 +1189,28 @@ IF(HAVE_opencv_video)
     "Emgu.CV"
     "CvInvoke"
     "KalmanFilter"
+	""
+    "#include \"video_c.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "video/variational_refinement_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/VariationalRefinement.g.cs"
+    "cv::VariationalRefinement" 
+    "VariationalRefinement" 
+    "FixedPointIterations;SorIterations;Omega;Alpha;Delta;Gamma" 
+    "int;int;float;float;float;float" 
+    "prop;prop;prop;prop;prop;prop"
+    "FixedPointIterations;SorIterations;Omega;Alpha;Delta;Gamma" 
+    "int;int;float;float;float;float"
+    "Number of outer (fixed-point) iterations in the minimization procedure.;
+	Number of inner successive over-relaxation (SOR) iterations in the minimization procedure to solve the respective linear system.;
+	Relaxation factor in SOR;
+	Weight of the smoothness term;
+	Weight of the color constancy term;
+	Weight of the gradient constancy term"
+    "Emgu.CV"
+    "CvInvoke"
+    "VariationalRefinement"
 	""
     "#include \"video_c.h\"")
 ENDIF()
@@ -1244,28 +1240,34 @@ ENDIF()
 
 ############################### optflow code gen START ##############################
 IF(HAVE_opencv_optflow)
-
-  CREATE_OCV_CLASS_PROPERTY( 
-    "optflow/variational_refinement_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/VariationalRefinement.g.cs"
-    "cv::optflow::VariationalRefinement" 
-    "VariationalRefinement" 
-    "FixedPointIterations;SorIterations;Omega;Alpha;Delta;Gamma" 
-    "int;int;float;float;float;float" 
-    "prop;prop;prop;prop;prop;prop"
-    "FixedPointIterations;SorIterations;Omega;Alpha;Delta;Gamma" 
-    "int;int;float;float;float;float"
-    "Number of outer (fixed-point) iterations in the minimization procedure.;
-	Number of inner successive over-relaxation (SOR) iterations in the minimization procedure to solve the respective linear system.;
-	Relaxation factor in SOR;
-	Weight of the smoothness term;
-	Weight of the color constancy term;
-	Weight of the gradient constancy term"
+ CREATE_OCV_CLASS_PROPERTY( 
+    "optflow/dual_tvl1_opticalflow_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/DualTVL1OpticalFlow.g.cs"
+    "cv::optflow::DualTVL1OpticalFlow" 
+    "DualTVL1OpticalFlow" 
+    "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
+    "double;double;double;double;int;int;double;int;int;bool;double;int" 
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "Tau;Lambda;Theta;Gamma;ScalesNumber;WarpingsNumber;Epsilon;InnerIterations;OuterIterations;UseInitialFlow;ScaleStep;MedianFiltering" 
+    "double;double;double;double;int;int;double;int;int;bool;double;int"
+    "Time step of the numerical scheme;
+  Weight parameter for the data term, attachment parameter;
+  Weight parameter for (u - v)^2, tightness parameter;
+  Coefficient for additional illumination variation term;
+  Number of scales used to create the pyramid of images;
+  Number of warpings per scale;
+  Stopping criterion threshold used in the numerical scheme, which is a trade-off between precision and running time;
+  Inner iterations (between outlier filtering) used in the numerical scheme;
+  Outer iterations (number of inner loops) used in the numerical scheme;
+  Use initial flow;
+  Step between scales (less than 1);
+  Median filter kernel size (1 = no filter) (3 or 5)"
     "Emgu.CV"
     "CvInvoke"
-    "VariationalRefinement"
+    "DualTVL1OpticalFlow"
 	""
     "#include \"optflow_c.h\"")
+
   
 ENDIF()
 ############################### optflow code gen END ################################

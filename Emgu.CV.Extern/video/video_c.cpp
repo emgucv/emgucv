@@ -232,3 +232,19 @@ void cveDISOpticalFlowRelease(cv::DISOpticalFlow** flow, cv::Ptr<cv::DISOpticalF
 	*flow = 0;
 	*sharedPtr = 0;
 }
+
+cv::VariationalRefinement* cveVariationalRefinementCreate(cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm, cv::Ptr<cv::VariationalRefinement>** sharedPtr)
+{
+	cv::Ptr<cv::VariationalRefinement> ptr = cv::VariationalRefinement::create();
+	*sharedPtr = new cv::Ptr<cv::VariationalRefinement>(ptr);
+	*denseFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
+	return ptr.get();
+}
+
+void cveVariationalRefinementRelease(cv::VariationalRefinement** flow, cv::Ptr<cv::VariationalRefinement>** sharedPtr)
+{
+	delete *sharedPtr;
+	*flow = 0;
+	*sharedPtr = 0;
+}
