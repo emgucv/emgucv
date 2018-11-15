@@ -216,3 +216,19 @@ const cv::Mat* cveKalmanFilterCorrect(cv::KalmanFilter* kalman, cv::Mat* measure
 {
 	return &(kalman->correct(*measurement));
 }
+
+cv::DISOpticalFlow* cveDISOpticalFlowCreate(int preset, cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm, cv::Ptr<cv::DISOpticalFlow>** sharedPtr)
+{
+	cv::Ptr<cv::DISOpticalFlow> ptr = cv::DISOpticalFlow::create(preset);
+	*sharedPtr = new cv::Ptr<cv::DISOpticalFlow>(ptr);
+	*denseFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
+	return ptr.get();
+}
+
+void cveDISOpticalFlowRelease(cv::DISOpticalFlow** flow, cv::Ptr<cv::DISOpticalFlow>** sharedPtr)
+{
+	delete *sharedPtr;
+	*flow = 0;
+	*sharedPtr = 0;
+}

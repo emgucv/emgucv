@@ -22,7 +22,7 @@ public:
 
    virtual void reset() 
    { 
-      _capture->set(CV_CAP_PROP_POS_FRAMES, 0);  
+	   _capture->set(cv::VideoCaptureProperties::CAP_PROP_POS_FRAMES, 0);
    };
 
    virtual cv::Mat nextFrame()

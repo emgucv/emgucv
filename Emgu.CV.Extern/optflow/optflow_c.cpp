@@ -32,21 +32,6 @@ cv::DenseOpticalFlow* cveOptFlowDeepFlowCreate(cv::Algorithm** algorithm, cv::Pt
 	return ptr.get();
 }
 
-cv::optflow::DISOpticalFlow* cveDISOpticalFlowCreate(int preset, cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm, cv::Ptr<cv::optflow::DISOpticalFlow>** sharedPtr)
-{
-	cv::Ptr<cv::optflow::DISOpticalFlow> ptr = cv::optflow::createOptFlow_DIS(preset);
-	*sharedPtr = new cv::Ptr<cv::optflow::DISOpticalFlow>(ptr);
-	*denseFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr.get());
-	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
-	return ptr.get();
-}
-
-void cveDISOpticalFlowRelease(cv::optflow::DISOpticalFlow** flow, cv::Ptr<cv::optflow::DISOpticalFlow>** sharedPtr)
-{
-	delete *sharedPtr;
-	*flow = 0;
-	*sharedPtr = 0;
-}
 
 cv::DenseOpticalFlow* cveOptFlowPCAFlowCreate(cv::Algorithm** algorithm, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr)
 {

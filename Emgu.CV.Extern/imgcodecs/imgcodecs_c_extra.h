@@ -8,7 +8,7 @@
 #ifndef EMGU_IMGCODECS_C_H
 #define EMGU_IMGCODECS_C_H
 
-#include "opencv2/imgcodecs/imgcodecs_c.h"
+#include "opencv2/core/core_c.h"
 #include "opencv2/imgcodecs/imgcodecs.hpp"
 
 CVAPI(bool) cveImwrite(cv::String* filename, cv::_InputArray* img, const std::vector<int>* params);
