@@ -2640,7 +2640,7 @@ namespace Emgu.CV.Test
             images[2] = EmguAssert.LoadImage<Bgr, Byte>("stitch3.jpg");
             images[3] = EmguAssert.LoadImage<Bgr, Byte>("stitch4.jpg");
 
-            using (Stitcher stitcher = new Stitcher(false))
+            using (Stitcher stitcher = new Stitcher())
             {
                 Mat result = new Mat();
                 using (VectorOfMat vm = new VectorOfMat())
@@ -2662,8 +2662,8 @@ namespace Emgu.CV.Test
             images[2] = EmguAssert.LoadImage<Bgr, Byte>("stitch3.jpg");
             images[3] = EmguAssert.LoadImage<Bgr, Byte>("stitch4.jpg");
 
-            using (Stitcher stitcher = new Stitcher(false))
-            using (OrbFeaturesFinder finder = new OrbFeaturesFinder(new Size(3, 1)))
+            using (Stitcher stitcher = new Stitcher())
+            using (ORBDetector finder = new ORBDetector())
             {
                 stitcher.SetFeaturesFinder(finder);
                 Mat result = new Mat();
@@ -2686,7 +2686,7 @@ namespace Emgu.CV.Test
             images[2] = EmguAssert.LoadMat("license-plate.jpg");
             images[3] = EmguAssert.LoadMat("pedestrian.png");
 
-            using (Stitcher stitcher = new Stitcher(false))
+            using (Stitcher stitcher = new Stitcher())
             //using (OrbFeaturesFinder finder = new OrbFeaturesFinder(new Size(3, 1)))
             {
                 //stitcher.SetFeaturesFinder(finder);
@@ -2708,7 +2708,7 @@ namespace Emgu.CV.Test
             images[0] = EmguAssert.LoadMat("stitch1.jpg");
 
 
-            using (Stitcher stitcher = new Stitcher(false))
+            using (Stitcher stitcher = new Stitcher())
             //using (OrbFeaturesFinder finder = new OrbFeaturesFinder(new Size(3, 1)))
             {
                 //stitcher.SetFeaturesFinder(finder);
