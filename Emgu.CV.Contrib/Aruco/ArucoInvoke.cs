@@ -454,16 +454,18 @@ namespace Emgu.CV.Aruco
         /// <param name="borderBits">width of the marker borders.</param>
         public static void DrawCharucoDiamond(
             Dictionary dictionary,
-            IInputArray ids, 
+            int[] ids, 
             int squareLength,
             int markerLength,
             IOutputArray img,
             int marginSize = 0,
             int borderBits = 1)
         {
-            using (InputArray iaIds = ids.GetInputArray())
+            Debug.Assert(ids.Length == 4, "The ids should contain 4 interger values");
+            GCHandle handle = GCHandle.Alloc(ids, GCHandleType.Pinned);
             using (OutputArray oaImg = img.GetOutputArray())
-                cveArucoDrawCharucoDiamond(dictionary, iaIds, squareLength, markerLength, oaImg, marginSize, borderBits);
+                cveArucoDrawCharucoDiamond(dictionary, handle.AddrOfPinnedObject(), squareLength, markerLength, oaImg, marginSize, borderBits);
+            handle.Free();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

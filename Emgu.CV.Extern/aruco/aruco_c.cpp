@@ -242,14 +242,13 @@ void cveArucoDrawDetectedDiamonds(
 
 void cveArucoDrawCharucoDiamond(
 	cv::aruco::Dictionary* dictionary,
-	cv::_InputArray* ids, int squareLength,
+	int* ids, int squareLength,
 	int markerLength,
 	cv::_OutputArray* img,
 	int marginSize,
 	int borderBits)
 {
 	cv::Ptr<cv::aruco::Dictionary> dictPtr ( dictionary, [] (cv::aruco::Dictionary*) {} );
-	cv::Vec4i idsVec;
-	ids->copyTo(idsVec);
+	cv::Vec4i idsVec(ids[0], ids[1], ids[2], ids[3]);
 	cv::aruco::drawCharucoDiamond(dictPtr, idsVec, squareLength, markerLength, *img, marginSize, borderBits);
 }

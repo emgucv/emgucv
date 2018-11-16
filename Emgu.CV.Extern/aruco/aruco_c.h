@@ -110,7 +110,7 @@ CVAPI(void) cveArucoDrawDetectedDiamonds(
 
 CVAPI(void) cveArucoDrawCharucoDiamond(
 	cv::aruco::Dictionary* dictionary, 
-	cv::_InputArray* ids, 
+	int* ids, 
 	int squareLength,
 	int markerLength, 
 	cv::_OutputArray* img, 
