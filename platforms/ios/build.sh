@@ -20,7 +20,7 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release
-    cp -r platforms/ios/armv7s/opencv/lib/Release/* bin/Release
+    cp -r opencv/lib/Release/* bin/Release
     libtool -static -o libemgucv_armv7s.a bin/Release/*.a
     cd ../../..
     
@@ -30,7 +30,7 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release
-    cp -r platforms/ios/armv7/opencv/lib/Release/* bin/Release	
+    cp -r opencv/lib/Release/* bin/Release	
     libtool -static -o libemgucv_armv7.a bin/Release/*.a
     cd ../../..
 
@@ -40,7 +40,7 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="arm64" -target ALL_BUILD clean build
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release  
-    cp -r platforms/ios/arm64/opencv/lib/Release/* bin/Release
+    cp -r opencv/lib/Release/* bin/Release
     libtool -static -o libemgucv_arm64.a bin/Release/*.a
     cd ../../..
 fi
@@ -57,7 +57,7 @@ if [ "$1" != "simulator_x86_64" ]; then
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="i386" -target ALL_BUILD clean build
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release  
-    cp -r platforms/ios/i386/opencv/lib/Release/* bin/Release
+    cp -r opencv/lib/Release/* bin/Release
     #cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/ia32/* bin/Release
     #cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/ia32/* bin/Release
     libtool -static -o libemgucv_i386.a bin/Release/*.a
@@ -75,7 +75,7 @@ fi
 xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="x86_64" -target ALL_BUILD clean build
 cp -r ../../../libs/Release/* bin/Release
 cp -r opencv/3rdparty/lib/Release/* bin/Release
-cp -r platforms/ios/x86_64/opencv/lib/Release/* bin/Release
+cp -r opencv/lib/Release/* bin/Release
 #cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/intel64/* bin/Release
 #cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/intel64/* bin/Release
 
