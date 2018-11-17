@@ -107,6 +107,7 @@ int cveStitcherEstimateTransform2(cv::Stitcher* stitcher, cv::_InputArray* image
 {
 	return stitcher->estimateTransform(*images, *rois);
 }
+
 int cveStitcherComposePanorama1(cv::Stitcher* stitcher, cv::_OutputArray* pano)
 {
 	return stitcher->composePanorama(*pano);
@@ -116,73 +117,6 @@ int cveStitcherComposePanorama2(cv::Stitcher* stitcher, cv::_InputArray* images,
 {
 	return stitcher->composePanorama(*images, *pano);
 }
-
-/*
-#ifdef OPENCV_ENABLE_NONFREE
-cv::detail::SurfFeaturesFinder* cveSurfFeaturesFinderCreate(
-   double hess_thresh, int num_octaves, int num_layers,
-   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f)
-{
-   cv::detail::SurfFeaturesFinder* finder = new cv::detail::SurfFeaturesFinder(hess_thresh, num_octaves, num_layers, num_octaves_descr, num_layers_descr);
-   *f = dynamic_cast<cv::detail::FeaturesFinder*>(finder);
-   return finder;
-}
-
-void cveSurfFeaturesFinderRelease(cv::detail::SurfFeaturesFinder** finder)
-{
-   delete *finder;
-   *finder = 0;
-}
-
-cv::detail::SurfFeaturesFinderGpu* cveSurfFeaturesFinderGpuCreate(
-   double hess_thresh, int num_octaves, int num_layers,
-   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f)
-{
-   cv::detail::SurfFeaturesFinderGpu* finder = new cv::detail::SurfFeaturesFinderGpu(hess_thresh, num_octaves, num_layers, num_octaves_descr, num_layers_descr);
-   *f = dynamic_cast<cv::detail::FeaturesFinder*>(finder);
-   return finder;
-}
-
-void cveSurfFeaturesFinderGpuRelease(cv::detail::SurfFeaturesFinderGpu** finder)
-{
-   delete *finder;
-   *finder = 0;
-}
-#endif
-
-cv::detail::OrbFeaturesFinder* cveOrbFeaturesFinderCreate(CvSize* grid_size, int nfeaturea, float scaleFactor, int nlevels, cv::detail::FeaturesFinder** f)
-{
-   cv::detail::OrbFeaturesFinder* finder = new cv::detail::OrbFeaturesFinder(*grid_size, nfeaturea, scaleFactor, nlevels);
-   *f = dynamic_cast<cv::detail::FeaturesFinder*>(finder);
-   return finder;
-}
-void cveOrbFeaturesFinderRelease(cv::detail::OrbFeaturesFinder** finder)
-{
-   delete *finder;
-   *finder = 0;
-}
-
-cv::detail::AKAZEFeaturesFinder* cveAKAZEFeaturesFinderCreate(
-	int descriptorType,
-	int descriptorSize,
-	int descriptorChannels,
-	float threshold,
-	int nOctaves,
-	int nOctaveLayers,
-	int diffusivity,
-	cv::detail::FeaturesFinder** f)
-{
-	cv::detail::AKAZEFeaturesFinder* finder = new cv::detail::AKAZEFeaturesFinder(
-		static_cast<cv::AKAZE::DescriptorType>( descriptorType ), descriptorSize, descriptorChannels, threshold, nOctaves, nOctaveLayers, static_cast<cv::KAZE::DiffusivityType>( diffusivity ));
-	*f = dynamic_cast<cv::detail::FeaturesFinder*>(finder);
-	return finder;
-}
-void cveAKAZEFeaturesFinderRelease(cv::detail::AKAZEFeaturesFinder** finder)
-{
-	delete *finder;
-	*finder = 0;
-}
-*/
 
 void cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox)
 {

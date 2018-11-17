@@ -130,12 +130,6 @@ namespace Emgu.CV.Stitching
                 return StitchingInvoke.cveStitcherComposePanorama2(_ptr, iaImages, oaPano);
         }
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveStitcherComposePanorama(IntPtr stitcher, IntPtr pano);
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveStitcherComposePanorama(IntPtr stitcher, IntPtr images, IntPtr pano);
-
-
         /// <summary>
         /// Set the features finder for this stitcher.
         /// </summary>
@@ -240,13 +234,6 @@ namespace Emgu.CV.Stitching
         {
             CvInvoke.CheckLibraryLoaded();
         }
-
-        /*
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveStitcherCreateDefault(
-            [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool tryUseGpu
-           );*/
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveStitcherCreate(
