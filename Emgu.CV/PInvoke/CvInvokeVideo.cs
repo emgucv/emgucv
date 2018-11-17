@@ -430,6 +430,7 @@ namespace Emgu.CV
             ref MCvTermCriteria criteria,
             IntPtr inputMask);
 
+        /*
         /// <summary>
         /// Estimate rigid transformation between 2 point sets.
         /// </summary>
@@ -465,6 +466,6 @@ namespace Emgu.CV
            IntPtr dst,
            [MarshalAs(CvInvoke.BoolToIntMarshalType)]
          bool fullAffine,
-           IntPtr result);
+           IntPtr result);*/
     }
 }

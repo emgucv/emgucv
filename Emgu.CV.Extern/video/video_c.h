@@ -78,7 +78,7 @@ CVAPI(int) cveBuildOpticalFlowPyramid(
 	int derivBorder,
 	bool tryReuseInputImage);
 
-CVAPI(void) cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool fullAffine, cv::Mat* result);
+//CVAPI(void) cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool fullAffine, cv::Mat* result);
 
 CVAPI(double) cveFindTransformECC(cv::_InputArray* templateImage, cv::_InputArray* inputImage,
 	cv::_InputOutputArray* warpMatrix, int motionType,

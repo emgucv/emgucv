@@ -176,11 +176,12 @@ int cveBuildOpticalFlowPyramid(
 	return cv::buildOpticalFlowPyramid(*img, *pyramid, *winSize, maxLevel, withDerivatives, pyrBorder, derivBorder, tryReuseInputImage);
 }
 
+/*
 void cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool fullAffine, cv::Mat* result)
 {
 	cv::Mat r = cv::estimateRigidTransform(*src, *dst, fullAffine);
 	cv::swap(r, *result);
-}
+}*/
 
 double cveFindTransformECC(
 	cv::_InputArray* templateImage, cv::_InputArray* inputImage,
