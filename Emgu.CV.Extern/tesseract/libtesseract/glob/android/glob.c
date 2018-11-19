@@ -163,6 +163,10 @@ static int	 match(Char *, Char *, Char *);
 static void	 qprintf(const char *, Char *);
 #endif
 
+#ifndef ARG_MAX 
+#define ARG_MAX 131072
+#endif
+
 int
 glob(const char *pattern, int flags, int (*errfunc)(const char *, int), glob_t *pglob)
 {
