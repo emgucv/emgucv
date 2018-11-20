@@ -2550,7 +2550,8 @@ namespace Emgu.CV.Test
 
                 rotationMatrix.RotatePoints(corners);
 
-                Mat transformation = CvInvoke.EstimateRigidTransform(oldCorners, corners, true);
+                //Mat transformation = CvInvoke.EstimateRigidTransform(oldCorners, corners, true);
+                Mat transformation = CvInvoke.EstimateAffine2D(oldCorners, corners);
 
                 Matrix<double> delta = new Matrix<double>(transformation.Size);
                 CvInvoke.AbsDiff(rotationMatrix, transformation, delta);

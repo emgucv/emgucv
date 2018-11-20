@@ -3703,14 +3703,14 @@ namespace Emgu.CV.CvEnum
     }
 
     /// <summary>
-    /// Type of cvHomography method
+    /// Type of Robust Estimation Algorithm
     /// </summary>
-    public enum HomographyMethod
+    public enum RobustEstimationAlgorithm
     {
         /// <summary>
         /// regular method using all the point pairs
         /// </summary>
-        Default = 0,
+        AllPoints = 0,
         /// <summary>
         /// Least-Median robust method
         /// </summary>
@@ -3718,7 +3718,11 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// RANSAC-based robust method
         /// </summary>
-        Ransac = 8
+        Ransac = 8,
+        /// <summary>
+        /// RHO algorithm
+        /// </summary>
+        RHO = 16
     }
 
     /// <summary>

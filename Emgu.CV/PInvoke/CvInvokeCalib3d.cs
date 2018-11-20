@@ -29,7 +29,7 @@ namespace Emgu.CV
         public static Mat FindHomography(
            PointF[] srcPoints,
            PointF[] dstPoints,
-           CvEnum.HomographyMethod method,
+           CvEnum.RobustEstimationAlgorithm method = RobustEstimationAlgorithm.AllPoints,
            double ransacReprojThreshold = 3,
            IOutputArray mask = null)
         {
@@ -64,7 +64,7 @@ namespace Emgu.CV
         public static Mat FindHomography(
            IInputArray srcPoints,
            IInputArray dstPoints,
-           CvEnum.HomographyMethod method = CvEnum.HomographyMethod.Default,
+           CvEnum.RobustEstimationAlgorithm method = CvEnum.RobustEstimationAlgorithm.AllPoints,
            double ransacReprojThreshold = 3,
            IOutputArray mask = null)
         {
@@ -79,7 +79,7 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFindHomography(IntPtr srcPoints, IntPtr dstPoints, IntPtr homography,
-           CvEnum.HomographyMethod method, double ransacReprojThreshold, IntPtr mask);
+           CvEnum.RobustEstimationAlgorithm method, double ransacReprojThreshold, IntPtr mask);
 
         /// <summary>
         /// Converts a rotation vector to rotation matrix or vice versa. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis. 

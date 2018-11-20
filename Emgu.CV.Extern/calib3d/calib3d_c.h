@@ -145,4 +145,21 @@ CVAPI(void) cveUndistort(cv::_InputArray* src, cv::_OutputArray* dst, cv::_Input
 CVAPI(void) cveUndistortPoints(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* p);
 
 CVAPI(void) cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, CvSize* imgsize, bool centerPrincipalPoint, cv::Mat* cm);
+
+CVAPI(void) cveEstimateAffine2D(
+	cv::_InputArray* from, cv::_InputArray* to, 
+	cv::_OutputArray* inliers,
+	int method, double ransacReprojThreshold,
+	int maxIters, double confidence,
+	int refineIters, 
+	cv::Mat* affine);
+
+CVAPI(void) cveEstimateAffinePartial2D(
+	cv::_InputArray* from, cv::_InputArray* to, 
+	cv::_OutputArray* inliers,
+	int method, double ransacReprojThreshold,
+	int maxIters, double confidence,
+	int refineIters,
+	cv::Mat* affine);
+
 #endif

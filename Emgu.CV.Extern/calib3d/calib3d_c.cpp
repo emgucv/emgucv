@@ -357,3 +357,33 @@ void cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, CvSize* imgsize
 	cv::Mat res = cv::getDefaultNewCameraMatrix(*cameraMatrix, *imgsize, centerPrincipalPoint);
 	cv::swap(*cm, res);
 }
+
+void cveEstimateAffine2D(
+	cv::_InputArray* from, cv::_InputArray* to,
+	cv::_OutputArray* inliners,
+	int method, double ransacReprojThreshold,
+	int maxIters, double confidence,
+	int refineIters,
+	cv::Mat* affine)
+{
+	cv::Mat m = cv::estimateAffine2D(
+		*from, *to, 
+		inliners ? *inliners : (cv::OutputArray) cv::noArray(), 
+		method, ransacReprojThreshold, maxIters, confidence, refineIters);
+	cv::swap(m, *affine);
+}
+
+void cveEstimateAffinePartial2D(
+	cv::_InputArray* from, cv::_InputArray* to,
+	cv::_OutputArray* inliners,
+	int method, double ransacReprojThreshold,
+	int maxIters, double confidence,
+	int refineIters,
+	cv::Mat* affine)
+{
+	cv::Mat m = cv::estimateAffinePartial2D(
+		*from, *to,
+		inliners ? *inliners : (cv::OutputArray) cv::noArray(),
+		method, ransacReprojThreshold, maxIters, confidence, refineIters);
+	cv::swap(m, *affine);
+}

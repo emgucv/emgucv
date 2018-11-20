@@ -187,9 +187,87 @@ namespace Emgu.CV
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGetDefaultNewCameraMatrix(
-           IntPtr cameraMatrix, ref Size imgsize,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool centerPrincipalPoint,
-           IntPtr cm);
+            IntPtr cameraMatrix, ref Size imgsize,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool centerPrincipalPoint,
+            IntPtr cm);
+
+
+        public static Mat EstimateAffine2D(
+            PointF[] from, PointF[] to,
+            IOutputArray inliners = null,
+            CvEnum.RobustEstimationAlgorithm method = CvEnum.RobustEstimationAlgorithm.Ransac, double ransacReprojThreshold = 3,
+            int maxIters = 2000, double confidence = 0.99,
+            int refineIters = 10)
+        {
+            using(VectorOfPointF vpFrom = new VectorOfPointF(from))
+            using(VectorOfPointF vpTo = new VectorOfPointF(to))
+            {
+                return EstimateAffine2D(vpFrom, vpTo, inliners, method, ransacReprojThreshold, maxIters, confidence, refineIters);
+            }
+            
+        }
+
+        public static Mat EstimateAffine2D(
+            IInputArray from, IInputArray to, 
+            IOutputArray inliners = null, 
+            CvEnum.RobustEstimationAlgorithm method = CvEnum.RobustEstimationAlgorithm.Ransac, double ransacReprojThreshold = 3,
+            int maxIters = 2000, double confidence = 0.99,
+            int refineIters= 10)
+        {
+            Mat affine = new Mat();
+            using (InputArray iaFrom = from.GetInputArray())
+            using (InputArray iaTo = to.GetInputArray())
+            using (OutputArray oaInliners = inliners == null ? OutputArray.GetEmpty() : inliners.GetOutputArray())
+            {
+                cveEstimateAffine2D(iaFrom, iaTo, oaInliners, method, ransacReprojThreshold, maxIters, confidence, refineIters, affine);
+            }
+            return affine;
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveEstimateAffine2D(
+            IntPtr from, IntPtr to,
+            IntPtr inliners,
+            CvEnum.RobustEstimationAlgorithm method, double ransacReprojThreshold,
+            int maxIters, double confidence,
+            int refineIters,
+            IntPtr affine);
+
+        public static Mat EstimateAffinePartial2D(
+            IInputArray from, IInputArray to,
+            IOutputArray inliners,
+            CvEnum.RobustEstimationAlgorithm method, double ransacReprojThreshold,
+            int maxIters, double confidence,
+            int refineIters)
+        {
+            Mat affine = new Mat();
+            using (InputArray iaFrom = from.GetInputArray())
+            using (InputArray iaTo = to.GetInputArray())
+            using (OutputArray oaInliners = inliners == null ? OutputArray.GetEmpty() : inliners.GetOutputArray())
+            {
+                cveEstimateAffinePartial2D(
+                    iaFrom,
+                    iaTo,
+                    oaInliners,
+                    method,
+                    ransacReprojThreshold,
+                    maxIters,
+                    confidence,
+                    refineIters,
+                    affine
+                    );
+            }
+            return affine;
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveEstimateAffinePartial2D(
+            IntPtr from, IntPtr to,
+            IntPtr inliners,
+            CvEnum.RobustEstimationAlgorithm method, double ransacReprojThreshold,
+            int maxIters, double confidence,
+            int refineIters,
+            IntPtr affine);
     }
 }
