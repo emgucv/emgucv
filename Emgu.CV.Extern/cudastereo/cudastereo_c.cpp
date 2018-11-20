@@ -42,19 +42,19 @@ void cudaStereoConstantSpaceBPRelease(cv::Ptr<cv::cuda::StereoConstantSpaceBP>**
 	*stereo = 0;
 }
 
-cv::cuda::DisparityBilateralFilter* GpuDisparityBilateralFilterCreate(int ndisp, int radius, int iters, cv::Ptr<cv::cuda::DisparityBilateralFilter>** sharedPtr)
+cv::cuda::DisparityBilateralFilter* cudaDisparityBilateralFilterCreate(int ndisp, int radius, int iters, cv::Ptr<cv::cuda::DisparityBilateralFilter>** sharedPtr)
 {
 	cv::Ptr<cv::cuda::DisparityBilateralFilter> ptr = cv::cuda::createDisparityBilateralFilter(ndisp, radius, iters);
 	*sharedPtr = new cv::Ptr<cv::cuda::DisparityBilateralFilter>(ptr);
 	return ptr.get();
 }
 
-void GpuDisparityBilateralFilterApply(cv::cuda::DisparityBilateralFilter* filter, cv::_InputArray* disparity, cv::_InputArray* image, cv::_OutputArray* dst, cv::cuda::Stream* stream)
+void cudaDisparityBilateralFilterApply(cv::cuda::DisparityBilateralFilter* filter, cv::_InputArray* disparity, cv::_InputArray* image, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
 	filter->apply(*disparity, *image, *dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void GpuDisparityBilateralFilterRelease(cv::Ptr<cv::cuda::DisparityBilateralFilter>** filter)
+void cudaDisparityBilateralFilterRelease(cv::Ptr<cv::cuda::DisparityBilateralFilter>** filter)
 {
 	delete *filter;
 	*filter = 0;
