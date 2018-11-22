@@ -121,6 +121,47 @@ namespace Emgu.CV.Aruco
         public double ErrorCorrectionRate;
 
         /// <summary>
+        /// Detection of quads can be done on a lower-resolution image, improving speed at a
+        /// cost of pose accuracy and a slight decrease in detection rate.Decoding the binary payload is still
+        /// done at full resolution.
+        /// </summary>
+        public float AprilTagQuadDecimate;
+        /// <summary>
+        /// What Gaussian blur should be applied to the segmented image (used for quad detection?)
+        /// Parameter is the standard deviation in pixels.Very noisy images benefit from non-zero values(e.g. 0.8).
+        /// </summary>
+        public float AprilTagQuadSigma;
+
+        /// <summary>
+        /// reject quads containing too few pixels.
+        /// </summary>
+        public int AprilTagMinClusterPixels;
+        /// <summary>
+        /// how many corner candidates to consider when segmenting a group of pixels into a quad.
+        /// </summary>
+        public int AprilTagMaxNmaxima;
+        /// <summary>
+        /// Reject quads where pairs of edges have angles that are close to straight or close to
+        /// 180 degrees.Zero means that no quads are rejected. (In radians).
+        /// </summary>
+        public float AprilTagCriticalRad;
+        /// <summary>
+        /// When fitting lines to the contours, what is the maximum mean squared error
+        /// allowed? This is useful in rejecting contours that are far from being quad shaped; rejecting
+        /// these quads "early" saves expensive decoding processing.
+        /// </summary>
+        public float AprilTagMaxLineFitMse;
+        /// <summary>
+        /// When we build our model of black & white pixels, we add an extra check that
+        /// the white model must be(overall) brighter than the black model.How much brighter? (in pixel values, [0, 255]).
+        /// </summary>
+        public int AprilTagMinWhiteBlackDiff;
+        /// <summary>
+        /// should the thresholded image be deglitched? Only useful for very noisy images
+        /// </summary>
+        public int AprilTagDeglitch;
+
+        /// <summary>
         /// Get the detector parameters with default values
         /// </summary>
         /// <returns>The default detector parameters</returns>

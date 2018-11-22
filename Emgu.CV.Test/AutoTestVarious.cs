@@ -3628,6 +3628,8 @@ namespace Emgu.CV.Test
         [Test]
         public void TestArucoCreateBoard()
         {
+            Emgu.CV.Aruco.DetectorParameters p = DetectorParameters.GetDefault();
+
             Size imageSize = new Size();
             int markersX = 4;
             int markersY = 4;
