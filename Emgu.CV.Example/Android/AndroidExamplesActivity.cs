@@ -7,6 +7,7 @@ using Android;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Hardware.Camera2;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
@@ -33,16 +34,6 @@ namespace AndroidExamples
             CrossCurrentActivity.Current.Init(this, bundle);
 
             CheckAppPermissions();
-
-
-            /*
-            // Get our buttons from the layout resource,
-            // and attach events to it
-            Button helloWorldButton = FindViewById<Button>(Resource.Id.GotoHelloWorldButton);
-            helloWorldButton.Click += delegate
-            {
-               StartActivity(typeof(HelloWorldActivity));
-            };*/
 
             Button plannarSubdivisionButton = FindViewById<Button>(Resource.Id.GotoPlanarSubdivisionButton);
             plannarSubdivisionButton.Click += delegate
@@ -74,21 +65,17 @@ namespace AndroidExamples
                 StartActivity(typeof(TrafficSignRecognitionActivity));
             };
 
-            Button cameraButton = FindViewById<Button>(Resource.Id.GotoCameraButton);
-            if (Android.Hardware.Camera.NumberOfCameras > 0)
+            int cameraCount;
+            CameraManager manager = (CameraManager)this.GetSystemService(Context.CameraService);
+            if (manager == null)
             {
-                cameraButton.Click += delegate
-                {
-                    StartActivity(typeof(CameraPreviewActivity));
-                };
-            }
-            else
-            {
-                cameraButton.Visibility = ViewStates.Gone;
-            }
+                cameraCount = 0;
+            } else
+                cameraCount = manager.GetCameraIdList().Length;
+            
 
             Button camera2Button = FindViewById<Button>(Resource.Id.GotoCamera2Button);
-            if (Android.Hardware.Camera.NumberOfCameras > 0)
+            if (cameraCount > 0)
             {
                 camera2Button.Click += delegate
                 {

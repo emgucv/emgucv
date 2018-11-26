@@ -134,15 +134,12 @@
     <Compile Include="Camera2\OnYuvImageAvailableListener.cs" />
     <Compile Include="Camera2\RefCountedAutoCloseable.cs" />
     <Compile Include="Camera2\YUV420Converter.cs" />
-    <Compile Include="CameraPreview.cs" />
-    <Compile Include="CameraPreviewActivity.cs" />
     <Compile Include="ImageBufferFactory.cs" />
     <Compile Include="ImageFilter.cs" />
     <Compile Include="LicenseDialogPreference.cs" />
     <Compile Include="LicensePlateRecognitionActivity.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="OpenCLDialogPreference.cs" />
-    <Compile Include="ProcessedCameraPreview.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="SettingActivity.cs" />
     <Compile Include="TrafficSignRecognitionActivity.cs" />
