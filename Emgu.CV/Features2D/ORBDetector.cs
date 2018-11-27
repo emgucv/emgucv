@@ -17,7 +17,6 @@ namespace Emgu.CV.Features2D
     /// </summary>
     public class ORBDetector : Feature2D
     {
-        private IntPtr _sharedPtr;
 
         /// <summary>
         /// The score type
@@ -56,8 +55,8 @@ namespace Emgu.CV.Features2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                CvInvoke.cveOrbDetectorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                CvInvoke.cveOrbDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -72,6 +71,6 @@ namespace Emgu.CV
         internal extern static IntPtr cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, Features2D.ORBDetector.ScoreType scoreType, int patchSize, int fastThreshold, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveOrbDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal extern static void cveOrbDetectorRelease(ref IntPtr sharedPtr);
     }
 }

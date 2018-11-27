@@ -18,8 +18,6 @@ namespace Emgu.CV.Features2D
     /// </summary>
     public class AgastFeatureDetector : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Agast feature type
         /// </summary>
@@ -58,8 +56,8 @@ namespace Emgu.CV.Features2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                CvInvoke.cveAgastFeatureDetectorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                CvInvoke.cveAgastFeatureDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
@@ -81,6 +79,6 @@ namespace Emgu.CV
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAgastFeatureDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal extern static void cveAgastFeatureDetectorRelease(ref IntPtr sharedPtr);
     }
 }

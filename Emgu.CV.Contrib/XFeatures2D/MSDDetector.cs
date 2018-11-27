@@ -22,8 +22,6 @@ namespace Emgu.CV.XFeatures2D
     /// <remarks>The algorithm implements a novel interest point detector stemming from the intuition that image patches which are highly dissimilar over a relatively large extent of their surroundings hold the property of being repeatable and distinctive. This concept of "contextual self-dissimilarity" reverses the key paradigm of recent successful techniques such as the Local Self-Similarity descriptor and the Non-Local Means filter, which build upon the presence of similar - rather than dissimilar - patches. Moreover, it extends to contextual information the local self-dissimilarity notion embedded in established detectors of corner-like interest points, thereby achieving enhanced repeatability, distinctiveness and localization accuracy.</remarks>
     public class MSDDetector : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Create a MSD (Maximal Self-Dissimilarity) keypoint detector.
         /// </summary>
@@ -53,8 +51,8 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveMSDDetectorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                XFeatures2DInvoke.cveMSDDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -73,7 +71,7 @@ namespace Emgu.CV.XFeatures2D
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMSDDetectorRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal extern static void cveMSDDetectorRelease(ref IntPtr sharedPtr);
     }
 }
 

@@ -16,7 +16,6 @@ namespace Emgu.CV.Features2D
     /// </summary>
     public class SimpleBlobDetector : Feature2D
     {
-        private IntPtr _sharedPtr;
 
         /// <summary>
         /// Create a simple blob detector
@@ -36,8 +35,8 @@ namespace Emgu.CV.Features2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                CvInvoke.cveSimpleBlobDetectorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                CvInvoke.cveSimpleBlobDetectorRelease(ref _sharedPtr);
 
             base.DisposeObject();
         }
@@ -81,7 +80,7 @@ namespace Emgu.CV
         internal extern static IntPtr cveSimpleBlobDetectorCreateWithParams(ref IntPtr feature2DPtr, IntPtr parameters, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveSimpleBlobDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal extern static void cveSimpleBlobDetectorRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveSimpleBlobDetectorParamsCreate();

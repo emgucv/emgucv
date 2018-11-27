@@ -15,19 +15,19 @@
 
 //ORB
 CVAPI(cv::ORB*) cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D, cv::Ptr<cv::ORB>** sharedPtr);
-CVAPI(void) cveOrbDetectorRelease(cv::ORB** detector, cv::Ptr<cv::ORB>** sharedPtr);
+CVAPI(void) cveOrbDetectorRelease(cv::Ptr<cv::ORB>** sharedPtr);
 
 //Brisk
 CVAPI(cv::BRISK*) cveBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D, cv::Ptr<cv::BRISK>** sharedPtr);
-CVAPI(void) cveBriskRelease(cv::BRISK** detector, cv::Ptr<cv::BRISK>** sharedPtr);
+CVAPI(void) cveBriskRelease(cv::Ptr<cv::BRISK>** sharedPtr);
 
 //FAST algorithm
 CVAPI(cv::FastFeatureDetector*) cveFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::FastFeatureDetector>** sharedPtr);
-CVAPI(void) cveFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector, cv::Ptr<cv::FastFeatureDetector>** sharedPtr);
+CVAPI(void) cveFASTFeatureDetectorRelease(cv::Ptr<cv::FastFeatureDetector>** sharedPtr);
 
 //GFTT
 CVAPI(cv::GFTTDetector*) cveGFTTDetectorCreate(int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double k, cv::Feature2D** feature2D, cv::Ptr<cv::GFTTDetector>** sharedPtr);
-CVAPI(void) cveGFTTDetectorRelease(cv::GFTTDetector** detector, cv::Ptr<cv::GFTTDetector>** sharedPtr);
+CVAPI(void) cveGFTTDetectorRelease(cv::Ptr<cv::GFTTDetector>** sharedPtr);
 
 // MSER detector
 CVAPI(cv::MSER*) cveMserGetFeatureDetector(
@@ -47,13 +47,13 @@ CVAPI(void) cveMserDetectRegions(
 	cv::_InputArray* image,
 	std::vector< std::vector<cv::Point> >* msers,
 	std::vector< cv::Rect >* bboxes);
-CVAPI(void) cveMserFeatureDetectorRelease(cv::MSER** mser, cv::Ptr<cv::MSER>** sharedPtr);
+CVAPI(void) cveMserFeatureDetectorRelease(cv::Ptr<cv::MSER>** sharedPtr);
 
 
 // SimpleBlobDetector
 CVAPI(cv::SimpleBlobDetector*) cveSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr, cv::Ptr<cv::SimpleBlobDetector>** sharedPtr);
 CVAPI(cv::SimpleBlobDetector*) cveSimpleBlobDetectorCreateWithParams(cv::Feature2D** feature2DPtr, cv::SimpleBlobDetector::Params* params, cv::Ptr<cv::SimpleBlobDetector>** sharedPtr);
-CVAPI(void) cveSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector, cv::Ptr<cv::SimpleBlobDetector>** sharedPtr);
+CVAPI(void) cveSimpleBlobDetectorRelease(cv::Ptr<cv::SimpleBlobDetector>** sharedPtr);
 CVAPI(cv::SimpleBlobDetector::Params*) cveSimpleBlobDetectorParamsCreate();
 CVAPI(void) cveSimpleBlobDetectorParamsRelease(cv::SimpleBlobDetector::Params** params);
 
@@ -149,34 +149,34 @@ CVAPI(int) CvFeature2DGetDescriptorSize(cv::Feature2D* feature2D);
 CVAPI(cv::Algorithm*) CvFeature2DGetAlgorithm(cv::Feature2D* feature2D);
 
 //BowKMeansTrainer
-CVAPI(cv::BOWKMeansTrainer*) CvBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria* termcrit, int attempts, int flags);
-CVAPI(void) CvBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer);
-CVAPI(int) CvBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer);
-CVAPI(void) CvBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors);
-CVAPI(void) CvBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster);
+CVAPI(cv::BOWKMeansTrainer*) cveBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria* termcrit, int attempts, int flags);
+CVAPI(void) cveBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer);
+CVAPI(int) cveBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer);
+CVAPI(void) cveBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors);
+CVAPI(void) cveBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster);
 
 //BOWImgDescriptorExtractor
-CVAPI(cv::BOWImgDescriptorExtractor*) CvBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher);
-CVAPI(void) CvBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descriptorExtractor);
-CVAPI(void) CvBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary);
-CVAPI(void) CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor);
+CVAPI(cv::BOWImgDescriptorExtractor*) cveBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher);
+CVAPI(void) cveBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descriptorExtractor);
+CVAPI(void) cveBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary);
+CVAPI(void) cveBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor);
 
 //KAZEDetector
 CVAPI(cv::KAZE*) cveKAZEDetectorCreate(
 	bool extended, bool upright, float threshold,
 	int octaves, int sublevels, int diffusivity,
 	cv::Feature2D** feature2D, cv::Ptr<cv::KAZE>** sharedPtr);
-CVAPI(void) cveKAZEDetectorRelease(cv::KAZE** detector, cv::Ptr<cv::KAZE>** sharedPtr);
+CVAPI(void) cveKAZEDetectorRelease(cv::Ptr<cv::KAZE>** sharedPtr);
 
 //AKAZEDetector
 CVAPI(cv::AKAZE*) cveAKAZEDetectorCreate(
 	int descriptorType, int descriptorSize, int descriptorChannels,
 	float threshold, int octaves, int sublevels, int diffusivity,
 	cv::Feature2D** feature2D, cv::Ptr<cv::AKAZE>** sharedPtr);
-CVAPI(void) cveAKAZEDetectorRelease(cv::AKAZE** detector, cv::Ptr<cv::AKAZE>** sharedPtr);
+CVAPI(void) cveAKAZEDetectorRelease(cv::Ptr<cv::AKAZE>** sharedPtr);
 
 //Agast
 CVAPI(cv::AgastFeatureDetector*) cveAgastFeatureDetectorCreate(int threshold, bool nonmaxSuppression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::AgastFeatureDetector>** sharedPtr);
-CVAPI(void) cveAgastFeatureDetectorRelease(cv::AgastFeatureDetector** detector, cv::Ptr<cv::AgastFeatureDetector>** sharedPtr);
+CVAPI(void) cveAgastFeatureDetectorRelease(cv::Ptr<cv::AgastFeatureDetector>** sharedPtr);
 
 #endif

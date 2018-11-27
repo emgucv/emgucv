@@ -20,10 +20,9 @@ cv::xfeatures2d::SIFT* cveSIFTCreate(
 	return siftPtr.get();
 }
 
-void cveSIFTRelease(cv::xfeatures2d::SIFT** detector, cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr)
+void cveSIFTRelease(cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 
@@ -37,10 +36,9 @@ cv::xfeatures2d::SURF* cveSURFCreate(double hessianThresh, int nOctaves, int nOc
 	return surfPtr.get();
 }
 
-void cveSURFRelease(cv::xfeatures2d::SURF** detector, cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr)
+void cveSURFRelease(cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 

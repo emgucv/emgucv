@@ -20,8 +20,6 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class BriefDescriptorExtractor : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Create a BRIEF descriptor extractor.
         /// </summary>
@@ -36,8 +34,8 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveBriefDescriptorExtractorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                XFeatures2DInvoke.cveBriefDescriptorExtractorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -48,6 +46,6 @@ namespace Emgu.CV.XFeatures2D
         internal extern static IntPtr cveBriefDescriptorExtractorCreate(int descriptorSize, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBriefDescriptorExtractorRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal extern static void cveBriefDescriptorExtractorRelease(ref IntPtr sharedPtr);
     }
 }

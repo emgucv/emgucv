@@ -22,9 +22,8 @@ namespace Emgu.CV.XFeatures2D
     /// The algorithm is divided to a feature sampler and a clusterizer. Feature sampler produces samples at given set of coordinates. Clusterizer then produces clusters of these samples using k-means algorithm. Resulting set of clusters is the signature of the input image.
     /// A signature is an array of SIGNATURE_DIMENSION-dimensional points.Used dimensions are: weight, x, y position; lab color, contrast, entropy.
     /// </summary>
-    public partial class PCTSignatures : UnmanagedObject
+    public partial class PCTSignatures : SharedPtrObject
     {
-        private IntPtr _sharedPtr;
 
         /// <summary>
         ///Point distributions supported by random point generator.
@@ -79,7 +78,11 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            XFeatures2DInvoke.cvePCTSignaturesRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr == IntPtr.Zero)
+            {
+                XFeatures2DInvoke.cvePCTSignaturesRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
 
         /// <summary>
@@ -130,7 +133,7 @@ namespace Emgu.CV.XFeatures2D
         internal extern static IntPtr cvePCTSignaturesCreate3(IntPtr initSamplingPoints, IntPtr initClusterSeedIndexes, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvePCTSignaturesRelease(ref IntPtr pct, ref IntPtr sharedPtr);
+        internal extern static void cvePCTSignaturesRelease(ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cvePCTSignaturesComputeSignature(IntPtr pct, IntPtr image, IntPtr signature);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

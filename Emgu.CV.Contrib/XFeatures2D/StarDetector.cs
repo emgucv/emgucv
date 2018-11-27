@@ -16,7 +16,6 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class StarDetector : Feature2D
     {
-        private IntPtr _sharedPtr;
 
         /// <summary>
         /// Create a star detector with the specific parameters
@@ -55,8 +54,8 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveStarDetectorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                XFeatures2DInvoke.cveStarDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -68,6 +67,6 @@ namespace Emgu.CV.XFeatures2D
         internal extern static IntPtr cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveStarDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal extern static void cveStarDetectorRelease(ref IntPtr sharedPtr);
     }
 }

@@ -21,9 +21,7 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     /// <remarks>See: K. Simonyan, A. Vedaldi, and A. Zisserman. Learning local feature descriptors using convex optimisation. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2014.</remarks>
     public class VGG : Feature2D
-    {
-        private IntPtr _sharedPtr;
-
+    { 
         /// <summary>
         /// The VGG descriptor type
         /// </summary>
@@ -73,8 +71,8 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveVGGRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                XFeatures2DInvoke.cveVGGRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -96,7 +94,7 @@ namespace Emgu.CV.XFeatures2D
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveVGGRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal static extern void cveVGGRelease(ref IntPtr sharedPtr);
     }
 }
 

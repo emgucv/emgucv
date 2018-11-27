@@ -17,8 +17,6 @@ namespace Emgu.CV.Features2D
     /// </summary>
     public class GFTTDetector : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Create a Good Feature to Track detector
         /// </summary>
@@ -39,8 +37,8 @@ namespace Emgu.CV.Features2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                CvInvoke.cveGFTTDetectorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                CvInvoke.cveGFTTDetectorRelease(ref _sharedPtr);
 
             base.DisposeObject();
         }
@@ -66,6 +64,6 @@ namespace Emgu.CV
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveGFTTDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal extern static void cveGFTTDetectorRelease(ref IntPtr sharedPtr);
     }
 }

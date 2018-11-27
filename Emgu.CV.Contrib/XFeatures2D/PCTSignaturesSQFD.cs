@@ -20,10 +20,8 @@ namespace Emgu.CV.XFeatures2D
     /// Class implementing Signature Quadratic Form Distance (SQFD).
     /// </summary>
     /// <remarks>See also: Christian Beecks, Merih Seran Uysal, Thomas Seidl. Signature quadratic form distance. In Proceedings of the ACM International Conference on Image and Video Retrieval, pages 438-445. ACM, 2010.</remarks>
-    public partial class PCTSignaturesSQFD : UnmanagedObject
+    public partial class PCTSignaturesSQFD : SharedPtrObject
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Lp distance function selector.       
         /// </summary>
@@ -125,7 +123,11 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            XFeatures2DInvoke.cvePCTSignaturesRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                XFeatures2DInvoke.cvePCTSignaturesSQFDRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
     }
 
@@ -153,6 +155,6 @@ namespace Emgu.CV.XFeatures2D
             IntPtr distances);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvePCTSignaturesSQFDRelease(ref IntPtr sqfd, ref IntPtr sharedPtr);
+        internal extern static void cvePCTSignaturesSQFDRelease(ref IntPtr sharedPtr);
     }
 }

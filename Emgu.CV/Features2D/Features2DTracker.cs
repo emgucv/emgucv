@@ -39,7 +39,7 @@ namespace Emgu.CV.Features2D
             MCvScalar c = color.MCvScalar;
             using (InputArray iaImage = image.GetInputArray())
             using (InputOutputArray ioaOutImage = outImage.GetInputOutputArray())
-            CvInvoke.drawKeypoints(iaImage, keypoints, ioaOutImage, ref c, type);
+                CvInvoke.drawKeypoints(iaImage, keypoints, ioaOutImage, ref c, type);
          }
 
          /// <summary>

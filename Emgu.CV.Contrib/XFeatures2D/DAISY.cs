@@ -21,8 +21,6 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class DAISY : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Create DAISY descriptor extractor
         /// </summary>
@@ -74,9 +72,9 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                XFeatures2DInvoke.cveDAISYRelease(ref _ptr, ref _sharedPtr);
+                XFeatures2DInvoke.cveDAISYRelease(ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -100,6 +98,6 @@ namespace Emgu.CV.XFeatures2D
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveDAISYRelease(ref IntPtr daisy, ref IntPtr shared);
+        internal extern static void cveDAISYRelease(ref IntPtr shared);
     }
 }

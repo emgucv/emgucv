@@ -14,7 +14,7 @@
 
 //StarDetector
 CVAPI(cv::xfeatures2d::StarDetector*) cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr);
-CVAPI(void) cveStarDetectorRelease(cv::xfeatures2d::StarDetector** detector, cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr);
+CVAPI(void) cveStarDetectorRelease(cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr);
 
 /*
 //GridAdaptedFeatureDetector
@@ -27,11 +27,11 @@ CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** d
 */
 //Freak
 CVAPI(cv::xfeatures2d::FREAK*) cveFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor, cv::Ptr<cv::xfeatures2d::FREAK>** sharedPtr);
-CVAPI(void) cveFreakRelease(cv::xfeatures2d::FREAK** detector, cv::Ptr<cv::xfeatures2d::FREAK>** sharedPtr);
+CVAPI(void) cveFreakRelease(cv::Ptr<cv::xfeatures2d::FREAK>** sharedPtr);
 
 //Brief descriptor extractor
 CVAPI(cv::xfeatures2d::BriefDescriptorExtractor*) cveBriefDescriptorExtractorCreate(int descriptorSize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor>** sharedPtr);
-CVAPI(void) cveBriefDescriptorExtractorRelease(cv::xfeatures2d::BriefDescriptorExtractor** extractor, cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor>** sharedPtr);
+CVAPI(void) cveBriefDescriptorExtractorRelease(cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor>** sharedPtr);
 
 /*
 //DenseFeatureDetector
@@ -41,41 +41,41 @@ CVAPI(void) CvDenseFeatureDetectorRelease(cv::xfeatures2d::DenseFeatureDetector*
 
 //LUCID
 CVAPI(cv::xfeatures2d::LUCID*) cveLUCIDCreate(int lucidKernel, int blurKernel, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::LUCID>** sharedPtr);
-CVAPI(void) cveLUCIDRelease(cv::xfeatures2d::LUCID** lucid, cv::Ptr<cv::xfeatures2d::LUCID>** sharedPtr);
+CVAPI(void) cveLUCIDRelease(cv::Ptr<cv::xfeatures2d::LUCID>** sharedPtr);
 
 
 //LATCH
 CVAPI(cv::xfeatures2d::LATCH*) cveLATCHCreate(int bytes, bool rotationInvariance, int halfSsdSize, cv::Feature2D** extractor, cv::Ptr<cv::xfeatures2d::LATCH>** sharedPtr);
-CVAPI(void) cveLATCHRelease(cv::xfeatures2d::LATCH** lucid, cv::Ptr<cv::xfeatures2d::LATCH>** sharedPtr);
+CVAPI(void) cveLATCHRelease(cv::Ptr<cv::xfeatures2d::LATCH>** sharedPtr);
 
 //DAISY
 CVAPI(cv::xfeatures2d::DAISY*) cveDAISYCreate(
 	float radius, int qRadius, int qTheta,
-   int qHist, int norm, cv::_InputArray* H,
-   bool interpolation, bool useOrientation, 
+	int qHist, int norm, cv::_InputArray* H,
+	bool interpolation, bool useOrientation, 
 	cv::Feature2D** extractor, cv::Ptr<cv::xfeatures2d::DAISY>** sharedPtr);
-CVAPI(void) cveDAISYRelease(cv::xfeatures2d::DAISY** daisy, cv::Ptr<cv::xfeatures2d::DAISY>** sharedPtr);
+CVAPI(void) cveDAISYRelease(cv::Ptr<cv::xfeatures2d::DAISY>** sharedPtr);
 
 //BoostDesc
 CVAPI(cv::xfeatures2d::BoostDesc*) cveBoostDescCreate(int desc,	bool useScaleOrientation, float scalefactor, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr);
-CVAPI(void) cveBoostDescRelease(cv::xfeatures2d::BoostDesc** extractor, cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr);
+CVAPI(void) cveBoostDescRelease(cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr);
 
 //MSD
 CVAPI(cv::xfeatures2d::MSDDetector*) cveMSDDetectorCreate(int m_patch_radius, int m_search_area_radius,
 	int m_nms_radius, int m_nms_scale_radius, float m_th_saliency, int m_kNN,
 	float m_scale_factor, int m_n_scales, bool m_compute_orientation, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr);
-CVAPI(void) cveMSDDetectorRelease(cv::xfeatures2d::MSDDetector** detector, cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr);
+CVAPI(void) cveMSDDetectorRelease(cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr);
 
 //VGG
 CVAPI(cv::xfeatures2d::VGG*) cveVGGCreate(
 	int desc, float isigma, bool imgNormalize, bool useScaleOrientation,
 	float scaleFactor, bool dscNormalize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::VGG>** sharedPtr);
-CVAPI(void) cveVGGRelease(cv::xfeatures2d::VGG** extractor, cv::Ptr<cv::xfeatures2d::VGG>** sharedPtr);
+CVAPI(void) cveVGGRelease(cv::Ptr<cv::xfeatures2d::VGG>** sharedPtr);
 
 CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate(int initSampleCount,	int initSeedCount,	int pointDistribution, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
 CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate2(std::vector<cv::Point2f>* initSamplingPoints, int initSeedCount, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
 CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate3(std::vector<cv::Point2f>* initSamplingPoints, std::vector<int>* initClusterSeedIndexes, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
-CVAPI(void) cvePCTSignaturesRelease(cv::xfeatures2d::PCTSignatures** pct, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
+CVAPI(void) cvePCTSignaturesRelease(cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
 CVAPI(void) cvePCTSignaturesComputeSignature(cv::xfeatures2d::PCTSignatures* pct, cv::_InputArray* image,cv::_OutputArray* signature);
 CVAPI(void) cvePCTSignaturesDrawSignature(cv::_InputArray* source, cv::_InputArray* signature, cv::_OutputArray* result, float radiusToShorterSideRatio, int borderThickness);
 
@@ -93,7 +93,7 @@ CVAPI(void) cvePCTSignaturesSQFDComputeQuadraticFormDistances(
 	cv::Mat* sourceSignature,
 	std::vector<cv::Mat>* imageSignatures,
 	std::vector<float>* distances);
-CVAPI(void) cvePCTSignaturesSQFDRelease(cv::xfeatures2d::PCTSignaturesSQFD** sqfd, cv::Ptr<cv::xfeatures2d::PCTSignaturesSQFD>** sharedPtr);
+CVAPI(void) cvePCTSignaturesSQFDRelease(cv::Ptr<cv::xfeatures2d::PCTSignaturesSQFD>** sharedPtr);
 
 //HarrisLaplaceFeatureDetector
 CVAPI(cv::xfeatures2d::HarrisLaplaceFeatureDetector*) cveHarrisLaplaceFeatureDetectorCreate(
@@ -103,5 +103,5 @@ CVAPI(cv::xfeatures2d::HarrisLaplaceFeatureDetector*) cveHarrisLaplaceFeatureDet
 	int maxCorners,
 	int num_layers,
 	cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>** sharedPtr);
-CVAPI(void) cveHarrisLaplaceFeatureDetectorRelease(cv::xfeatures2d::HarrisLaplaceFeatureDetector** detector, cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>** sharedPtr);
+CVAPI(void) cveHarrisLaplaceFeatureDetectorRelease(cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>** sharedPtr);
 #endif

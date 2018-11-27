@@ -18,8 +18,6 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class SURF : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Create a SURF detector using the specific values
         /// </summary>
@@ -54,8 +52,8 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveSURFRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                XFeatures2DInvoke.cveSURFRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
@@ -78,7 +76,7 @@ namespace Emgu.CV.XFeatures2D
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveSURFRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal extern static void cveSURFRelease(ref IntPtr sharedPtr);
     }
 }
 

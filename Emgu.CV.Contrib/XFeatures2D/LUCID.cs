@@ -23,8 +23,6 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class LUCID : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Create a locally uniform comparison image descriptor.
         /// </summary>
@@ -40,9 +38,9 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                XFeatures2DInvoke.cveLUCIDRelease(ref _ptr, ref _sharedPtr);
+                XFeatures2DInvoke.cveLUCIDRelease(ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -55,6 +53,6 @@ namespace Emgu.CV.XFeatures2D
         internal extern static IntPtr cveLUCIDCreate(int lucidKernel, int blurKernel, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveLUCIDRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal extern static void cveLUCIDRelease(ref IntPtr sharedPtr);
     }
 }

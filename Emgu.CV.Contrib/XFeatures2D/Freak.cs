@@ -28,7 +28,6 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class Freak : Feature2D
     {
-        private IntPtr _sharedPtr;
 
         /// <summary>
         /// Create a Freak descriptor extractor.
@@ -49,8 +48,11 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveFreakRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                XFeatures2DInvoke.cveFreakRelease(ref _sharedPtr);
+            }
+
             base.DisposeObject();
         }
     }
@@ -70,7 +72,7 @@ namespace Emgu.CV.XFeatures2D
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFreakRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal extern static void cveFreakRelease(ref IntPtr sharedPtr);
     }
 }
 

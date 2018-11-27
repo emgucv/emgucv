@@ -26,8 +26,6 @@ namespace Emgu.CV.XFeatures2D
     /// </remarks>
     public class BoostDesc : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// The type of descriptor
         /// </summary>
@@ -82,8 +80,8 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                XFeatures2DInvoke.cveBoostDescRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                XFeatures2DInvoke.cveBoostDescRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -109,7 +107,7 @@ namespace Emgu.CV.XFeatures2D
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBoostDescRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal static extern void cveBoostDescRelease(ref IntPtr sharedPtr);
     }
 }
 

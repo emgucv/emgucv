@@ -17,11 +17,11 @@ CVAPI(cv::xfeatures2d::SIFT*) cveSIFTCreate(
    int nFeatures, int nOctaveLayers, 
    double contrastThreshold, double edgeThreshold, 
    double sigma, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr);
-CVAPI(void) cveSIFTRelease(cv::xfeatures2d::SIFT** detector, cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr);
+CVAPI(void) cveSIFTRelease(cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr);
 
 //SURFDetector
 CVAPI(cv::xfeatures2d::SURF*) cveSURFCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr);
-CVAPI(void) cveSURFRelease(cv::xfeatures2d::SURF** detector, cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr);
+CVAPI(void) cveSURFRelease(cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr);
 
 /*
 //----------------------------------------------------------------------------

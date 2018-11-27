@@ -18,7 +18,6 @@ namespace Emgu.CV.Features2D
     /// </summary>
     public class AKAZE : Feature2D
     {
-        private IntPtr _sharedPtr;
 
         /// <summary>
         /// Type of the extracted descriptor
@@ -67,8 +66,8 @@ namespace Emgu.CV.Features2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                CvInvoke.cveAKAZEDetectorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                CvInvoke.cveAKAZEDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
@@ -86,6 +85,6 @@ namespace Emgu.CV
            ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAKAZEDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal extern static void cveAKAZEDetectorRelease(ref IntPtr sharedPtr);
     }
 }

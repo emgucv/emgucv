@@ -18,8 +18,6 @@ namespace Emgu.CV.Features2D
     /// </summary>
     public class KAZE : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// The diffusivity
         /// </summary>
@@ -58,8 +56,8 @@ namespace Emgu.CV.Features2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                CvInvoke.cveKAZEDetectorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                CvInvoke.cveKAZEDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
@@ -77,11 +75,13 @@ namespace Emgu.CV
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool upright,
            float threshold,
-           int octaves, int sublevels, KAZE.Diffusivity diffusivity,
+           int octaves, 
+           int sublevels, 
+           KAZE.Diffusivity diffusivity,
            ref IntPtr feature2D, 
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveKAZEDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal extern static void cveKAZEDetectorRelease(ref IntPtr sharedPtr);
     }
 }

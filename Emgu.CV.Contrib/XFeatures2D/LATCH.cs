@@ -24,8 +24,6 @@ namespace Emgu.CV.XFeatures2D
     /// </summary>
     public class LATCH : Feature2D
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Create LATCH descriptor extractor
         /// </summary>
@@ -43,9 +41,9 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                XFeatures2DInvoke.cveLATCHRelease(ref _ptr, ref _sharedPtr);
+                XFeatures2DInvoke.cveLATCHRelease(ref _sharedPtr);
             }
             base.DisposeObject();
         }
@@ -64,6 +62,6 @@ namespace Emgu.CV.XFeatures2D
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveLATCHRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal extern static void cveLATCHRelease(ref IntPtr sharedPtr);
     }
 }

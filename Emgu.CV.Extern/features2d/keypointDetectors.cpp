@@ -15,10 +15,9 @@ cv::ORB* cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLeve
 	return orbPtr.get();
 }
 
-void cveOrbDetectorRelease(cv::ORB** detector, cv::Ptr<cv::ORB>** sharedPtr)
+void cveOrbDetectorRelease(cv::Ptr<cv::ORB>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 
@@ -31,10 +30,9 @@ cv::BRISK* cveBriskCreate(int thresh, int octaves, float patternScale, cv::Featu
 	return briskPtr.get();
 }
 
-void cveBriskRelease(cv::BRISK** detector, cv::Ptr<cv::BRISK>** sharedPtr)
+void cveBriskRelease(cv::Ptr<cv::BRISK>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 
@@ -47,10 +45,9 @@ cv::FastFeatureDetector* cveFASTGetFeatureDetector(int threshold, bool nonmax_su
 	return fastPtr.get();
 }
 
-void cveFASTFeatureDetectorRelease(cv::FastFeatureDetector** detector, cv::Ptr<cv::FastFeatureDetector>** sharedPtr)
+void cveFASTFeatureDetectorRelease(cv::Ptr<cv::FastFeatureDetector>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 
@@ -92,10 +89,9 @@ void cveMserDetectRegions(
 	mserPtr->detectRegions(*image, *msers, *bboxes);
 }
 
-void cveMserFeatureDetectorRelease(cv::MSER** detector, cv::Ptr<cv::MSER>** sharedPtr)
+void cveMserFeatureDetectorRelease(cv::Ptr<cv::MSER>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 
@@ -107,10 +103,9 @@ cv::SimpleBlobDetector* cveSimpleBlobDetectorCreate(cv::Feature2D** feature2DPtr
 	*feature2DPtr = dynamic_cast<cv::Feature2D*>(detectorPtr.get());
 	return detectorPtr.get();
 }
-void cveSimpleBlobDetectorRelease(cv::SimpleBlobDetector** detector, cv::Ptr<cv::SimpleBlobDetector>** sharedPtr)
+void cveSimpleBlobDetectorRelease(cv::Ptr<cv::SimpleBlobDetector>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 cv::SimpleBlobDetector* cveSimpleBlobDetectorCreateWithParams(cv::Feature2D** feature2DPtr, cv::SimpleBlobDetector::Params* params, cv::Ptr<cv::SimpleBlobDetector>** sharedPtr)
@@ -416,40 +411,39 @@ cv::GFTTDetector* cveGFTTDetectorCreate(int maxCorners, double qualityLevel, dou
 	*feature2D = dynamic_cast<cv::Feature2D*>(gfttPtr.get());
 	return gfttPtr.get();
 }
-void cveGFTTDetectorRelease(cv::GFTTDetector** detector, cv::Ptr<cv::GFTTDetector>** sharedPtr)
+void cveGFTTDetectorRelease(cv::Ptr<cv::GFTTDetector>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 
 
 //BowKMeansTrainer
-cv::BOWKMeansTrainer* CvBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria* termcrit, int attempts, int flags)
+cv::BOWKMeansTrainer* cveBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria* termcrit, int attempts, int flags)
 {
 	return new cv::BOWKMeansTrainer(clusterCount, *termcrit, attempts, flags);
 }
-void CvBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer)
+void cveBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer)
 {
 	delete * trainer;
 	*trainer = 0;
 }
-int CvBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer)
+int cveBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer)
 {
 	return trainer->descriptorsCount();
 }
-void CvBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors)
+void cveBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors)
 {
 	trainer->add(*descriptors);
 }
-void CvBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster)
+void cveBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster)
 {
 	cv::Mat m = trainer->cluster();
 	m.copyTo(*cluster);
 }
 
 //BOWImgDescriptorExtractor
-cv::BOWImgDescriptorExtractor* CvBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher)
+cv::BOWImgDescriptorExtractor* cveBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher)
 {
 	cv::Ptr<cv::Feature2D> extractorPtr(descriptorExtractor, [] (cv::Feature2D*) {});
 	
@@ -457,16 +451,16 @@ cv::BOWImgDescriptorExtractor* CvBOWImgDescriptorExtractorCreate(cv::Feature2D* 
 	
 	return new cv::BOWImgDescriptorExtractor(extractorPtr, matcherPtr);
 }
-void CvBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descriptorExtractor)
+void cveBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descriptorExtractor)
 {
 	delete *descriptorExtractor;
 	*descriptorExtractor = 0;
 }
-void CvBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary)
+void cveBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary)
 {
 	bowImgDescriptorExtractor->setVocabulary(*vocabulary);
 }
-void CvBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor)
+void cveBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor)
 {
 	bowImgDescriptorExtractor->compute(*image, *keypoints, *imgDescriptor);
 }
@@ -484,10 +478,9 @@ cv::KAZE* cveKAZEDetectorCreate(
 
 	return kazePtr.get();
 }
-void cveKAZEDetectorRelease(cv::KAZE** detector, cv::Ptr<cv::KAZE>** sharedPtr)
+void cveKAZEDetectorRelease(cv::Ptr<cv::KAZE>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 
@@ -504,10 +497,9 @@ cv::AKAZE* cveAKAZEDetectorCreate(
 	*feature2D = dynamic_cast<cv::Feature2D*>(akazePtr.get());
 	return akazePtr.get();
 }
-void cveAKAZEDetectorRelease(cv::AKAZE** detector, cv::Ptr<cv::AKAZE>** sharedPtr)
+void cveAKAZEDetectorRelease(cv::Ptr<cv::AKAZE>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 
@@ -519,9 +511,8 @@ cv::AgastFeatureDetector* cveAgastFeatureDetectorCreate(int threshold, bool nonm
 	*sharedPtr = new cv::Ptr<cv::AgastFeatureDetector>(agastPtr);
 	return agastPtr.get();
 }
-void cveAgastFeatureDetectorRelease(cv::AgastFeatureDetector** detector, cv::Ptr<cv::AgastFeatureDetector>** sharedPtr)
+void cveAgastFeatureDetectorRelease(cv::Ptr<cv::AgastFeatureDetector>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }

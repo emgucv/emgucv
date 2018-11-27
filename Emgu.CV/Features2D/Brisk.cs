@@ -17,7 +17,6 @@ namespace Emgu.CV.Features2D
     /// </summary>
     public class Brisk : Feature2D
     {
-        private IntPtr _sharedPtr;
 
         /// <summary>
         /// Create a BRISK keypoint detector and descriptor extractor.
@@ -35,8 +34,8 @@ namespace Emgu.CV.Features2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                CvInvoke.cveBriskRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                CvInvoke.cveBriskRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -52,6 +51,6 @@ namespace Emgu.CV
            ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBriskRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal static extern void cveBriskRelease(ref IntPtr sharedPtr);
     }
 }
