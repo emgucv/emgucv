@@ -13,16 +13,39 @@
 #include "opencv2/face/bif.hpp"
 #include "opencv2/face.hpp"
 
-//FaceRecognizer
-CVAPI(cv::face::FaceRecognizer*) cveEigenFaceRecognizerCreate(int numComponents, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr);
-CVAPI(cv::face::FaceRecognizer*) cveFisherFaceRecognizerCreate(int numComponents, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr);
-CVAPI(cv::face::FaceRecognizer*) cveLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr);
+//EigenFaceRecognizer
+CVAPI(cv::face::EigenFaceRecognizer*) cveEigenFaceRecognizerCreate(
+	int numComponents,
+	double threshold,
+	cv::face::FaceRecognizer** faceRecognizerPtr,
+	cv::face::FaceRecognizer** basicFaceRecognizerPtr,
+	cv::Ptr<cv::face::EigenFaceRecognizer>** sharedPtr);
+CVAPI(void) cveEigenFaceRecognizerRelease(cv::Ptr<cv::face::EigenFaceRecognizer>** sharedPtr);
+
+CVAPI(cv::face::FisherFaceRecognizer*) cveFisherFaceRecognizerCreate(
+	int numComponents, 
+	double threshold,
+	cv::face::FaceRecognizer** faceRecognizerPtr,
+	cv::face::FaceRecognizer** basicFaceRecognizerPtr,
+	cv::Ptr<cv::face::FisherFaceRecognizer>** sharedPtr);
+CVAPI(void) cveFisherFaceRecognizerRelease(cv::Ptr<cv::face::FisherFaceRecognizer>** sharedPtr);
+
+CVAPI(cv::face::LBPHFaceRecognizer*) cveLBPHFaceRecognizerCreate(
+	int radius, 
+	int neighbors, 
+	int gridX, 
+	int gridY, 
+	double threshold,
+	cv::face::FaceRecognizer** faceRecognizerPtr,
+	cv::Ptr<cv::face::LBPHFaceRecognizer>** sharedPtr);
+CVAPI(void) cveLBPHFaceRecognizerRelease(cv::Ptr<cv::face::LBPHFaceRecognizer>** sharedPtr);
+
 CVAPI(void) cveFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
 CVAPI(void) cveFaceRecognizerUpdate(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
 CVAPI(void) cveFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputArray* image, int* label, double* distance);
 CVAPI(void) cveFaceRecognizerWrite(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
 CVAPI(void) cveFaceRecognizerRead(cv::face::FaceRecognizer* recognizer, cv::String* fileName);
-CVAPI(void) cveFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr);
+
 
 CVAPI(cv::face::BIF*) cveBIFCreate(int numBands, int numRotations, cv::Ptr<cv::face::BIF>** sharedPtr);
 CVAPI(void) cveBIFCompute(cv::face::BIF* bif, cv::_InputArray* image, cv::_OutputArray* features);

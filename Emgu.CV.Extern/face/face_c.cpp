@@ -7,25 +7,63 @@
 #include "face_c.h"
 
 //FaceRecognizer
-cv::face::FaceRecognizer* cveEigenFaceRecognizerCreate(int numComponents, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr)
+cv::face::EigenFaceRecognizer* cveEigenFaceRecognizerCreate(
+	int numComponents, 
+	double threshold, 
+	cv::face::FaceRecognizer** faceRecognizerPtr,
+	cv::face::FaceRecognizer** basicFaceRecognizerPtr,
+	cv::Ptr<cv::face::EigenFaceRecognizer>** sharedPtr)
 {
-   cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::EigenFaceRecognizer::create(numComponents, threshold);
-   *sharedPtr = new cv::Ptr<cv::face::FaceRecognizer>(ptr);
+   cv::Ptr<cv::face::EigenFaceRecognizer> ptr = cv::face::EigenFaceRecognizer::create(numComponents, threshold);
+   *faceRecognizerPtr = dynamic_cast<cv::face::FaceRecognizer*>(ptr.get());
+   *basicFaceRecognizerPtr = dynamic_cast<cv::face::BasicFaceRecognizer*>(ptr.get());
+   *sharedPtr = new cv::Ptr<cv::face::EigenFaceRecognizer>(ptr);
    return ptr.get();
 }
-    
-cv::face::FaceRecognizer* cveFisherFaceRecognizerCreate(int numComponents, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr)
+void cveEigenFaceRecognizerRelease(cv::Ptr<cv::face::EigenFaceRecognizer>** sharedPtr)
 {
-   cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::FisherFaceRecognizer::create(numComponents, threshold);
-   *sharedPtr = new cv::Ptr<cv::face::FaceRecognizer>(ptr);
+	delete *sharedPtr;
+	*sharedPtr = 0;
+}
+
+cv::face::FisherFaceRecognizer* cveFisherFaceRecognizerCreate(
+	int numComponents,
+	double threshold,
+	cv::face::FaceRecognizer** faceRecognizerPtr,
+	cv::face::FaceRecognizer** basicFaceRecognizerPtr,
+	cv::Ptr<cv::face::FisherFaceRecognizer>** sharedPtr)
+{
+   cv::Ptr<cv::face::FisherFaceRecognizer> ptr = cv::face::FisherFaceRecognizer::create(numComponents, threshold);
+   *faceRecognizerPtr = dynamic_cast<cv::face::FaceRecognizer*>(ptr.get());
+   *basicFaceRecognizerPtr = dynamic_cast<cv::face::BasicFaceRecognizer*>(ptr.get());
+   *sharedPtr = new cv::Ptr<cv::face::FisherFaceRecognizer>(ptr);
    return ptr.get();
 }
-    
-cv::face::FaceRecognizer* cveLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr)
+
+void cveFisherFaceRecognizerRelease(cv::Ptr<cv::face::FisherFaceRecognizer>** sharedPtr)
 {
-   cv::Ptr<cv::face::FaceRecognizer> ptr = cv::face::LBPHFaceRecognizer::create(radius, neighbors, gridX, gridY, threshold);
-   *sharedPtr = new cv::Ptr<cv::face::FaceRecognizer>(ptr);
+	delete *sharedPtr;
+	*sharedPtr = 0;
+}
+    
+cv::face::LBPHFaceRecognizer* cveLBPHFaceRecognizerCreate(
+	int radius,
+	int neighbors,
+	int gridX,
+	int gridY,
+	double threshold,
+	cv::face::FaceRecognizer** faceRecognizerPtr,
+	cv::Ptr<cv::face::LBPHFaceRecognizer>** sharedPtr) 
+{
+   cv::Ptr<cv::face::LBPHFaceRecognizer> ptr = cv::face::LBPHFaceRecognizer::create(radius, neighbors, gridX, gridY, threshold);
+   *faceRecognizerPtr = dynamic_cast<cv::face::FaceRecognizer*>(ptr.get());
+   *sharedPtr = new cv::Ptr<cv::face::LBPHFaceRecognizer>(ptr);
    return ptr.get();
+}
+void cveLBPHFaceRecognizerRelease(cv::Ptr<cv::face::LBPHFaceRecognizer>** sharedPtr)
+{
+	delete *sharedPtr;
+	*sharedPtr = 0;
 }
 
 void cveFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels)
@@ -55,13 +93,6 @@ void cveFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputAr
    recognizer->predict(*image, l, d);
    *label = l;
    *dist = d;
-}
-
-void cveFaceRecognizerRelease(cv::face::FaceRecognizer** recognizer, cv::Ptr<cv::face::FaceRecognizer>** sharedPtr)
-{
-   delete *sharedPtr;
-   *recognizer = 0;
-   *sharedPtr = 0;
 }
 
 cv::face::BIF* cveBIFCreate(int numBands, int numRotations, cv::Ptr<cv::face::BIF>** sharedPtr)

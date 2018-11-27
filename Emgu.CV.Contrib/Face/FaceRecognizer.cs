@@ -16,12 +16,12 @@ namespace Emgu.CV.Face
     /// <summary>
     /// Face Recognizer
     /// </summary>
-    public abstract class FaceRecognizer : UnmanagedObject
+    public abstract class FaceRecognizer : SharedPtrObject
     {
         /// <summary>
-        /// The native pointer to the shared object 
+        /// The native pointer to the FaceRecognizer object 
         /// </summary>
-        protected IntPtr _sharedPtr;
+        protected IntPtr _faceRecognizerPtr;
 
         /// <summary>
         /// Train the face recognizer with the specific images and labels
@@ -32,7 +32,7 @@ namespace Emgu.CV.Face
         {
             using (InputArray iaImage = images.GetInputArray())
             using (InputArray iaLabels = labels.GetInputArray())
-                FaceInvoke.cveFaceRecognizerTrain(_ptr, iaImage, iaLabels);
+                FaceInvoke.cveFaceRecognizerTrain(_faceRecognizerPtr, iaImage, iaLabels);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Emgu.CV.Face
             int label = -1;
             double distance = -1;
             using (InputArray iaImage = image.GetInputArray())
-                FaceInvoke.cveFaceRecognizerPredict(_ptr, iaImage, ref label, ref distance);
+                FaceInvoke.cveFaceRecognizerPredict(_faceRecognizerPtr, iaImage, ref label, ref distance);
             return new PredictionResult() { Label = label, Distance = distance };
         }
 
@@ -89,7 +89,7 @@ namespace Emgu.CV.Face
         public void Write(String fileName)
         {
             using (CvString s = new CvString(fileName))
-                FaceInvoke.cveFaceRecognizerWrite(_ptr, s);
+                FaceInvoke.cveFaceRecognizerWrite(_faceRecognizerPtr, s);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Emgu.CV.Face
         public void Read(String fileName)
         {
             using (CvString s = new CvString(fileName))
-                FaceInvoke.cveFaceRecognizerRead(_ptr, s);
+                FaceInvoke.cveFaceRecognizerRead(_faceRecognizerPtr, s);
         }
 
         /// <summary>
@@ -107,94 +107,8 @@ namespace Emgu.CV.Face
         /// </summary>
         protected override void DisposeObject()
         {
-            FaceInvoke.cveFaceRecognizerRelease(ref _ptr, ref _sharedPtr);
+            _faceRecognizerPtr = IntPtr.Zero;
         }
-
-
-    }
-
-    /// <summary>
-    /// Eigen face recognizer
-    /// </summary>
-    public class EigenFaceRecognizer : FaceRecognizer
-    {
-        /// <summary>
-        /// Create an EigenFaceRecognizer
-        /// </summary>
-        /// <param name="numComponents">The number of components</param>
-        /// <param name="threshold">The distance threshold</param>
-        public EigenFaceRecognizer(int numComponents = 0, double threshold = double.MaxValue)
-        {
-            _ptr = FaceInvoke.cveEigenFaceRecognizerCreate(numComponents, threshold, ref _sharedPtr);
-        }
-
-    }
-
-    /// <summary>
-    /// Fisher face recognizer
-    /// </summary>
-    public class FisherFaceRecognizer : FaceRecognizer
-    {
-        /// <summary>
-        /// Create a FisherFaceRecognizer
-        /// </summary>
-        /// <param name="numComponents">The number of components</param>
-        /// <param name="threshold">The distance threshold</param>
-        public FisherFaceRecognizer(int numComponents = 0, double threshold = double.MaxValue)
-        {
-            _ptr = FaceInvoke.cveFisherFaceRecognizerCreate(numComponents, threshold, ref _sharedPtr);
-        }
-    }
-
-    /// <summary>
-    /// LBPH face recognizer
-    /// </summary>
-    public class LBPHFaceRecognizer : FaceRecognizer
-    {
-        /// <summary>
-        /// Create a LBPH face recognizer
-        /// </summary>
-        /// <param name="radius">Radius</param>
-        /// <param name="neighbors">Neighbors</param>
-        /// <param name="gridX">Grid X</param>
-        /// <param name="gridY">Grid Y</param>
-        /// <param name="threshold">The distance threshold</param>
-        public LBPHFaceRecognizer(int radius = 1, int neighbors = 8, int gridX = 8, int gridY = 8,
-           double threshold = Double.MaxValue)
-        {
-            _ptr = FaceInvoke.cveLBPHFaceRecognizerCreate(radius, neighbors, gridX, gridY, threshold, ref _sharedPtr);
-        }
-
-        /// <summary>
-        /// Updates a FaceRecognizer with given data and associated labels.
-        /// </summary>
-        /// <param name="images">The training images, that means the faces you want to learn. The data has to be given as a VectorOfMat.</param>
-        /// <param name="labels">The labels corresponding to the images</param>
-        public void Update(IInputArray images, IInputArray labels)
-        {
-            using (InputArray iaImages = images.GetInputArray())
-            using (InputArray iaLabels = labels.GetInputArray())
-                FaceInvoke.cveFaceRecognizerUpdate(_ptr, iaImages, iaLabels);
-        }
-
-        /// <summary>
-        /// Update the face recognizer with the specific images and labels
-        /// </summary>
-        /// <param name="images">The images used for updating the face recognizer</param>
-        /// <param name="labels">The labels of the images</param>
-        public void Update<TColor, TDepth>(Image<TColor, TDepth>[] images, int[] labels)
-           where TColor : struct, IColor
-           where TDepth : new()
-        {
-            Debug.Assert(images.Length == labels.Length, "The number of labels must equals the number of images");
-            using (VectorOfMat imgVec = new VectorOfMat())
-            using (VectorOfInt labelVec = new VectorOfInt(labels))
-            {
-                imgVec.Push(images);
-                Update(imgVec, labelVec);
-            }
-        }
-
     }
 
     /// <summary>
@@ -221,17 +135,6 @@ namespace Emgu.CV.Face
            IntPtr recognizer,
            IntPtr fileName);
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFaceRecognizerRelease(ref IntPtr recognizer, ref IntPtr sharedPtr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveEigenFaceRecognizerCreate(int numComponents, double threshold, ref IntPtr sharedPtr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveFisherFaceRecognizerCreate(int numComponents, double threshold, ref IntPtr sharedPtr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveLBPHFaceRecognizerCreate(int radius, int neighbors, int gridX, int gridY, double threshold, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveFaceRecognizerUpdate(IntPtr recognizer, IntPtr images, IntPtr labels);
