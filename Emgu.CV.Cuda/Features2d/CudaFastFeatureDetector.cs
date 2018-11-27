@@ -18,8 +18,6 @@ namespace Emgu.CV.Cuda
     /// </summary>
     public class CudaFastFeatureDetector : FastFeatureDetector, IFeature2DAsync
     {
-        private IntPtr _sharedPtr;
-
         private IntPtr _feature2DAsyncPtr;
 
         /// <summary>
@@ -43,10 +41,10 @@ namespace Emgu.CV.Cuda
         {
             if (_ptr != IntPtr.Zero)
             {
-                CudaInvoke.cveCudaFastFeatureDetectorRelease(ref _ptr, ref _sharedPtr);
-                _feature2D = IntPtr.Zero;
-                _feature2DAsyncPtr = IntPtr.Zero;
+                CudaInvoke.cveCudaFastFeatureDetectorRelease(ref _sharedPtr);
             }
+            _feature2DAsyncPtr = IntPtr.Zero;
+            base.DisposeObject();
         }
 
         IntPtr IFeature2DAsync.Feature2DAsyncPtr
@@ -69,7 +67,7 @@ namespace Emgu.CV.Cuda
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveCudaFastFeatureDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal static extern void cveCudaFastFeatureDetectorRelease(ref IntPtr sharedPtr);
 
     }
 }

@@ -152,7 +152,7 @@ namespace Emgu.CV.Aruco
         /// </summary>
         public float AprilTagMaxLineFitMse;
         /// <summary>
-        /// When we build our model of black & white pixels, we add an extra check that
+        /// When we build our model of black &amp; white pixels, we add an extra check that
         /// the white model must be(overall) brighter than the black model.How much brighter? (in pixel values, [0, 255]).
         /// </summary>
         public int AprilTagMinWhiteBlackDiff;

@@ -180,7 +180,7 @@ CVAPI(void) cveCudaFeature2dAsyncConvert(
 
 CVAPI(cv::cuda::FastFeatureDetector*) cveCudaFastFeatureDetectorCreate(int threshold, bool nonmaxSupression, int type, int maxPoints, cv::Feature2D** feature2D, cv::cuda::Feature2DAsync** feature2dAsync, cv::Ptr<cv::cuda::FastFeatureDetector>** sharedPtr);
 
-CVAPI(void) cveCudaFastFeatureDetectorRelease(cv::cuda::FastFeatureDetector** detector, cv::Ptr<cv::cuda::FastFeatureDetector>** sharedPtr);
+CVAPI(void) cveCudaFastFeatureDetectorRelease(cv::Ptr<cv::cuda::FastFeatureDetector>** sharedPtr);
 
 
 //----------------------------------------------------------------------------
@@ -190,6 +190,6 @@ CVAPI(void) cveCudaFastFeatureDetectorRelease(cv::cuda::FastFeatureDetector** de
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::ORB*) cveCudaORBCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, bool blurForDescriptor, cv::Feature2D** feature2D, cv::cuda::Feature2DAsync** feature2dAsync, cv::Ptr<cv::cuda::ORB>** sharedPtr);
 
-CVAPI(void) cveCudaORBRelease(cv::cuda::ORB** detector, cv::Ptr<cv::cuda::ORB>** sharedPtr);
+CVAPI(void) cveCudaORBRelease(cv::Ptr<cv::cuda::ORB>** sharedPtr);
 
 #endif

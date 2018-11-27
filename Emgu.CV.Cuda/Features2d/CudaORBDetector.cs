@@ -18,8 +18,6 @@ namespace Emgu.CV.Cuda
     /// </summary>
     public class CudaORBDetector : ORBDetector, IFeature2DAsync
     {
-        private IntPtr _sharedPtr;
-
         private IntPtr _feature2DAsyncPtr;
 
         /// <summary>
@@ -58,7 +56,10 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            CudaInvoke.cveCudaORBRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+                CudaInvoke.cveCudaORBRelease(ref _sharedPtr);
+            _feature2DAsyncPtr = IntPtr.Zero;
+            base.DisposeObject();
         }
 
         IntPtr IFeature2DAsync.Feature2DAsyncPtr
@@ -87,7 +88,7 @@ namespace Emgu.CV.Cuda
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveCudaORBRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal static extern void cveCudaORBRelease(ref IntPtr sharedPtr);
 
 
     }

@@ -11,7 +11,7 @@ cv::cuda::DescriptorMatcher* cveCudaDescriptorMatcherCreateBFMatcher(int distTyp
 	cv::Ptr<cv::cuda::DescriptorMatcher> ptr = cv::cuda::DescriptorMatcher::createBFMatcher(distType);
 	*sharedPtr = new cv::Ptr<cv::cuda::DescriptorMatcher>(ptr);
 	cv::cuda::DescriptorMatcher* matcher = ptr.get();
-	*algorithm = static_cast<cv::Algorithm*>(matcher);
+	*algorithm = dynamic_cast<cv::Algorithm*>(matcher);
 	return matcher;
 }
 
@@ -318,15 +318,14 @@ cv::cuda::FastFeatureDetector* cveCudaFastFeatureDetectorCreate(
 	cv::Ptr<cv::cuda::FastFeatureDetector> ptr = cv::cuda::FastFeatureDetector::create(threshold, nonmaxSupression, type, maxPoints);
 	*sharedPtr = new cv::Ptr<cv::cuda::FastFeatureDetector>(ptr);
 	cv::cuda::FastFeatureDetector* detector = ptr.get();
-	*feature2D = static_cast<cv::Feature2D*>(detector);
-	*feature2dAsync = static_cast<cv::cuda::Feature2DAsync*>(detector);
+	*feature2D = dynamic_cast<cv::Feature2D*>(detector);
+	*feature2dAsync = dynamic_cast<cv::cuda::Feature2DAsync*>(detector);
 	return detector;
 }
 
-void cveCudaFastFeatureDetectorRelease(cv::cuda::FastFeatureDetector** detector, cv::Ptr<cv::cuda::FastFeatureDetector>** sharedPtr)
+void cveCudaFastFeatureDetectorRelease(cv::Ptr<cv::cuda::FastFeatureDetector>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
 
@@ -343,14 +342,13 @@ cv::cuda::ORB* cveCudaORBCreate(
 	cv::Ptr<cv::cuda::ORB> ptr = cv::cuda::ORB::create(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold, blurForDescriptor);
 	*sharedPtr = new cv::Ptr<cv::cuda::ORB>(ptr);
 	cv::cuda::ORB* detector = ptr.get();
-	*feature2D = static_cast<cv::Feature2D*>(detector);
-	*feature2dAsync = static_cast<cv::cuda::Feature2DAsync*>(detector);
+	*feature2D = dynamic_cast<cv::Feature2D*>(detector);
+	*feature2dAsync = dynamic_cast<cv::cuda::Feature2DAsync*>(detector);
 	return detector;
 }
 
-void cveCudaORBRelease(cv::cuda::ORB** detector, cv::Ptr<cv::cuda::ORB>** sharedPtr)
+void cveCudaORBRelease(cv::Ptr<cv::cuda::ORB>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
 	*sharedPtr = 0;
 }
