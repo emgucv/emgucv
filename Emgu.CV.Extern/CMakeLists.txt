@@ -2506,6 +2506,11 @@ IF(WITH_INF_ENGINE)
   target_link_libraries(${the_target} inference_engine)
 ENDIF()
 
+IF (EMGU_CV_WITH_FREETYPE)
+	message(STATUS "EMGU_CV_WITH_FREETYPE")
+	target_link_libraries(${the_target} freetype harfbuzz)
+ENDIF()
+
 IF(ANDROID)
   IF(EMGU_CV_WITH_TESSERACT)
     #NOT SURE WHY THE FOLLOWING IS NEEDED, BUT SEEMS TO MAKE THE PROBLEM GOES AWAY

@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)XFeatures2D\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Face\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Freetype\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BgSegm\*.cs" />
 	 <Compile Include="$(MSBuildThisFileDirectory)XImgproc\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XPhoto\*.cs" />
