@@ -142,7 +142,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        
+
         [Test]
         public void TestObjectnessBING()
         {
@@ -1396,47 +1396,57 @@ namespace Emgu.CV.Test
               //Trace.WriteLine(rec.Recognize(img));
            }
         }
-
+        */
         [Test]
         public void TestFaceRecognizer()
         {
-           Image<Gray, Byte>[] images = new Image<Gray, byte>[20];
-           int[] labels = new int[20];
-           for (int i = 0; i < images.Length; i++)
-           {
-              images[i] = new Image<Gray, byte>(200, 200);
-              images[i].SetRandUniform(new MCvScalar(0), new MCvScalar(255));
-              labels[i] = i;
-           }
+            Image<Gray, Byte>[] images = new Image<Gray, byte>[20];
+            int[] labels = new int[20];
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i] = new Image<Gray, byte>(200, 200);
+                images[i].SetRandUniform(new MCvScalar(0), new MCvScalar(255));
+                labels[i] = i;
+            }
 
-           EigenFaceRecognizer eigen = new EigenFaceRecognizer(0, double.MaxValue);
+            Image<Gray, Byte> sample = new Image<Gray, Byte>(200, 200);
+            sample.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
 
-           eigen.Train(images, labels);
+            EigenFaceRecognizer eigen = new EigenFaceRecognizer(0, double.MaxValue);
 
-           for (int i = 0; i < images.Length; i++)
-           {
-              EmguAssert.IsTrue(eigen.Predict(images[i]).Label == i);
-           }
-           String filePath = Path.Combine(Path.GetTempPath(), "abc.xml");
-           eigen.Save(filePath);
-           eigen.Load(filePath);
+            eigen.Train(images, labels);
+            FaceRecognizer.PredictionResult result;
+            for (int i = 0; i < images.Length; i++)
+            {
+                result = eigen.Predict(images[i]);
+                EmguAssert.IsTrue(result.Label == i);
+            }
 
-           FisherFaceRecognizer fisher = new FisherFaceRecognizer(0, double.MaxValue);
-           fisher.Train(images, labels);
-           for (int i = 0; i < images.Length; i++)
-           {
-              EmguAssert.IsTrue(fisher.Predict(images[i]).Label == i);
-           }
+            result = eigen.Predict(sample);
+            Trace.WriteLine(String.Format("Eigen distance: {0}", result.Distance));
+            String filePath = Path.Combine(Path.GetTempPath(), "abc.xml");
+            //eigen.Save(filePath);
+            //eigen.Load(filePath);
 
-           LBPHFaceRecognizer lbph = new LBPHFaceRecognizer(1, 8, 8, 8, double.MaxValue);
-           lbph.Train(images, labels);
-           for (int i = 0; i < images.Length; i++)
-           {
-              EmguAssert.IsTrue(lbph.Predict(images[i]).Label == i);
-           }
+            FisherFaceRecognizer fisher = new FisherFaceRecognizer(0, double.MaxValue);
+            fisher.Train(images, labels);
+            for (int i = 0; i < images.Length; i++)
+            {
+                result = fisher.Predict(images[i]);
+                EmguAssert.IsTrue(result.Label == i);
+            }
+            result = fisher.Predict(sample);
+            Trace.WriteLine(String.Format("Fisher distance: {0}", result.Distance));
+
+            LBPHFaceRecognizer lbph = new LBPHFaceRecognizer(1, 8, 8, 8, double.MaxValue);
+            lbph.Train(images, labels);
+            for (int i = 0; i < images.Length; i++)
+            {
+                EmguAssert.IsTrue(lbph.Predict(images[i]).Label == i);
+            }
 
         }
-
+        /*
         //This took ~ 60 seconds to finishes
         [Test]
         public void TestCameraCalibration()
@@ -2321,7 +2331,7 @@ namespace Emgu.CV.Test
             MCvPoint3D32f[] points = GetRandom(10000, 0, 100, r);
 
             MCvPoint3D32f[] searchPoints = GetRandom(10, 0, 100, r);
-            
+
             int indexOfClosest1 = 0;
             double shortestDistance1 = double.MaxValue;
             for (int i = 0; i < points.Length; i++)
@@ -2336,15 +2346,15 @@ namespace Emgu.CV.Test
             using (Flann.KdTreeIndexParams p = new KdTreeIndexParams())
             using (Flann.Index3D index3D = new Emgu.CV.Flann.Index3D(points, p))
             {
-                
+
                 double shortestDistance2;
                 Index3D.Neighbor n = index3D.NearestNeighbor(searchPoints[0]);
                 shortestDistance2 = Math.Sqrt(n.SquareDist);
-                
+
                 //EmguAssert.IsTrue(indexOfClosest1 == n.Index);
                 //EmguAssert.IsTrue((shortestDistance1 - shortestDistance2) <= 1.0e-3 * shortestDistance1);
 
-                var neighbors = index3D.RadiusSearch( searchPoints[0], 100, 10);
+                var neighbors = index3D.RadiusSearch(searchPoints[0], 100, 10);
             }
         }
 
@@ -2352,12 +2362,12 @@ namespace Emgu.CV.Test
         {
             if (r == null)
                 r = new Random();
-            
+
             MCvPoint3D32f[] features = new MCvPoint3D32f[count];
             for (int i = 0; i < features.Length; i++)
             {
                 MCvPoint3D32f p = new MCvPoint3D32f();
-                
+
                 p.X = (float)(r.NextDouble() * (max - min)) + min;
                 p.Y = (float)(r.NextDouble() * (max - min)) + min;
                 p.Z = (float)(r.NextDouble() * (max - min)) + min;
@@ -3230,7 +3240,8 @@ namespace Emgu.CV.Test
                 try
                 {
                     downloadClient.DownloadFile(CaffeModelUrl, caffeModelFile);
-                } catch
+                }
+                catch
                 {
                     //delete file in case of failed download
                     File.Delete(caffeModelFile);
@@ -3299,7 +3310,8 @@ namespace Emgu.CV.Test
                 try
                 {
                     downloadClient.DownloadFile(googleNetUrl, googleNetFile);
-                } catch
+                }
+                catch
                 {
                     //Delete the file in case of failed download.
                     File.Delete(googleNetFile);
@@ -3342,7 +3354,8 @@ namespace Emgu.CV.Test
                 try
                 {
                     downloadClient.DownloadFile(fileUrl, fileName);
-                } catch
+                }
+                catch
                 {
                     File.Delete(fileName);
                     throw;
@@ -3367,7 +3380,7 @@ namespace Emgu.CV.Test
             int[] outputLayerIds = net.UnconnectedOutLayers;
             Layer[] outputLayer = Array.ConvertAll(outputLayerIds, id => net.GetLayer(id));
 
-            
+
             Mat img = EmguAssert.LoadMat("dog416.png");
 
             Mat inputBlob = DnnInvoke.BlobFromImage(img, 1.0, new Size(imgDim, imgDim), new MCvScalar(104, 117, 123), true, false);
@@ -3428,7 +3441,7 @@ namespace Emgu.CV.Test
             Dnn.Net net = DnnInvoke.ReadNetFromCaffe(ssdProtoFile, ssdFile);
 
             Mat img = EmguAssert.LoadMat("lena.jpg");
-            
+
             Mat inputBlob = DnnInvoke.BlobFromImage(img, 1.0, new Size(imgDim, imgDim), meanVal, false, false);
             net.SetInput(inputBlob, "data");
             Mat detection = net.Forward("detection_out");
@@ -3455,7 +3468,7 @@ namespace Emgu.CV.Test
                     RectangleF objectRegion = new RectangleF(xLeftBottom, yLeftBottom, xRightTop - xLeftBottom, yRightTop - yLeftBottom);
                     Rectangle faceRegion = Rectangle.Round(objectRegion);
                     faceRegions.Add(faceRegion);
-                    
+
                 }
             }
 
@@ -3470,7 +3483,7 @@ namespace Emgu.CV.Test
             {
                 facemark.LoadModel(facemarkFileName);
                 facemark.Fit(img, vr, landmarks);
-                
+
                 foreach (Rectangle face in faceRegions)
                 {
                     CvInvoke.Rectangle(img, face, new MCvScalar(0, 255, 0));
