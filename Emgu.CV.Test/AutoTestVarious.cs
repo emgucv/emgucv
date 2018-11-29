@@ -27,6 +27,8 @@ using Emgu.CV.Bioinspired;
 using Emgu.CV.Dpm;
 using Emgu.CV.ImgHash;
 using Emgu.CV.Face;
+using Emgu.CV.Freetype;
+
 #if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
@@ -3571,6 +3573,22 @@ namespace Emgu.CV.Test
             {
                 String s2 = s.ToString();
                 EmguAssert.IsTrue(s2.Equals(target));
+            }
+        }
+
+        [Test]
+        public void TestFreetype()
+        {
+            using (Mat m = new Mat(new Size(640, 480), DepthType.Cv8U, 3))
+            using (Freetype.Freetype2 freetype = new Freetype2())
+            {
+                m.SetTo(new MCvScalar(0,0,0,0));
+                freetype.LoadFontData("NotoSansCJK-Regular.ttc", 0);
+                
+                freetype.PutText(m, "测试", new Point(100, 100), 36, new MCvScalar(255,255,0), 1, LineType.EightConnected, false);
+                //CvInvoke.NamedWindow("test");
+                //CvInvoke.Imshow("test", m);
+                //CvInvoke.WaitKey();
             }
         }
 

@@ -10,6 +10,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Diagnostics;
 using System.Drawing;
+using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Freetype
 {
@@ -48,7 +49,7 @@ namespace Emgu.CV.Freetype
             int fontHeight,
             MCvScalar color,
             int thickness,
-            int lineType,
+            LineType lineType,
             bool bottomLeftOrigin
         )
         {
@@ -123,7 +124,8 @@ namespace Emgu.CV.Freetype
             int fontHeight, 
             ref MCvScalar color,
             int thickness, 
-            int lineType, 
+            LineType lineType, 
+            [MarshalAs(CvInvoke.BoolMarshalType)]
             bool bottomLeftOrigin
         );
         
