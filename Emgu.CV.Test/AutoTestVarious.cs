@@ -3647,7 +3647,24 @@ namespace Emgu.CV.Test
 
         }
 #endif
+        [Test]
+        public void TestVectorOfString()
+        {
+            String[] s = new String[100];
+            for (int i = 0; i < s.Length; i++)
+            {
+                s[i] = i.ToString();
+            }
 
+            using (VectorOfCvString vs = new VectorOfCvString(s))
+            {
+                String[] sClone = vs.ToArray();
+                for (int i = 0; i < sClone.Length; i++)
+                {
+                    EmguAssert.IsTrue(i.ToString().Equals(sClone[i]));
+                }
+            }
+        }
 
         [Test]
         public void TestGetTextSize()
