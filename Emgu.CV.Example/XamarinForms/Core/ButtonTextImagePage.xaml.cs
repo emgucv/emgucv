@@ -171,6 +171,20 @@ namespace Emgu.CV.XamarinForms
             return this.MessageLabel;
         }
 
+        public void SetMessage(String message)
+        {
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(
+                () =>
+                {
+                    Label label = GetLabel();
+                    label.Text = message;
+                    
+                    label.LineBreakMode = LineBreakMode.WordWrap;
+                    label.WidthRequest = this.Width;
+                }
+            );
+        }
+
         public Button GetButton()
         {
             //return null;

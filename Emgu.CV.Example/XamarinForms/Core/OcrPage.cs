@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 #if __ANDROID__
 using Android.App;
@@ -27,6 +28,7 @@ using Emgu.CV.OCR;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using FaceDetection;
+using Xamarin.Forms;
 
 namespace Emgu.CV.XamarinForms
 {
@@ -56,7 +58,6 @@ namespace Emgu.CV.XamarinForms
         public OcrPage()
          : base()
         {
-
             var button = this.GetButton();
             button.Text = "Perform Text Detection";
             button.Clicked += OnButtonClicked;
@@ -65,7 +66,7 @@ namespace Emgu.CV.XamarinForms
             {
                if (image == null || image [0] == null)
                   return;
-                GetLabel().Text = "Please wait...";
+                SetMessage( "Please wait..." );
                 SetImage(null);
 
                 Task<Tuple<Mat, String, long>> t = new Task<Tuple<Mat, String, long>>(
@@ -97,7 +98,13 @@ namespace Emgu.CV.XamarinForms
                 var result = await t;
                 SetImage(t.Result.Item1);
                 String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-                GetLabel().Text = t.Result.Item2;
+                string ocrResult = t.Result.Item2;
+                if (Device.RuntimePlatform.Equals("WPF"))
+                {
+                    ocrResult = ocrResult.Replace(Environment.NewLine, " ");
+                }
+
+                SetMessage(ocrResult);
             };
         }
 

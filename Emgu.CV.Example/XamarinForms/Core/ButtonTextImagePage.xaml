@@ -4,10 +4,13 @@
              x:Class="Emgu.CV.XamarinForms.ButtonTextImagePage">
 <ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness">
-            <On Platform="iOS" Value="20, 40, 20, 20"/>
-            <On Platform="Android" Value="20, 20, 20, 20"/>
-            <On Platform="WinPhone" Value="20, 20, 20, 20"/>
-            <On Platform="macOS" Value="20, 20, 20, 20"/>
+            <On.Platforms>
+                <On Platform="iOS" Value="20, 40, 20, 20"/>
+                <On Platform="Android" Value="20, 20, 20, 20"/>
+                <On Platform="WinPhone" Value="20, 20, 20, 20"/>
+                <On Platform="macOS" Value="20, 20, 20, 20"/>
+                <On Platform="WPF" Value="20, 20, 20, 20"/>
+            </On.Platforms>
         </OnPlatform>
                     
     </ContentPage.Padding>

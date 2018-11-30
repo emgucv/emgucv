@@ -41,7 +41,7 @@ namespace Emgu.CV.XamarinForms
          {
             if (image == null || image [0] == null)
                return;
-            GetLabel().Text = "Please wait...";
+            SetMessage( "Please wait..." );
             SetImage(null);
             Task<Tuple<Mat, long>> t = new Task<Tuple<Mat, long>>(
                () =>
@@ -71,7 +71,8 @@ namespace Emgu.CV.XamarinForms
             var result = await t;
             SetImage(t.Result.Item1);
             String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-            GetLabel().Text = String.Format("Detected with {1} in {0} milliseconds.", t.Result.Item2, computeDevice);
+
+            SetMessage(String.Format("Detected with {1} in {0} milliseconds.", t.Result.Item2, computeDevice));
          };
       }
 
