@@ -126,6 +126,16 @@ void Test_GpuMatCopy()
    m1.copyTo(m2);
 }*/
 
+void Test_vectorOfPoint_to_mat()
+{
+	std::vector< cv::Point3f > pts;
+	pts.push_back(cv::Point3f(0, 1, 2));
+	pts.push_back(cv::Point3f(1, 2, 3));
+	std::vector< std::vector< cv::Point3f > > vecOfVec;
+	vecOfVec.push_back(pts);
+	cv::InputArray iaPts = cv::InputArray(vecOfVec);
+	//cv::Mat m = iaPts.getMat();
+}
 
 #ifdef _MSC_VER
 void Test_quaternions_performance()
@@ -230,6 +240,7 @@ int main()
    cout << "Size of IplImage (expected 144):" << sizeof(IplImage) << std::endl;
    cout << "Size of CvScalar (expected " << sizeof(double) * 4 << "): " << sizeof(CvScalar) << std::endl;
 
+   Test_vectorOfPoint_to_mat();
 #ifdef _MSC_VER
    Test_quaternions_performance();
    

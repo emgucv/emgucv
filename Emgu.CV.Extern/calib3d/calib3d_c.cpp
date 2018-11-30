@@ -236,7 +236,19 @@ bool cveSolvePnP(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv
 	return cv::solvePnP(*objectPoints, *imagePoints, *cameraMatrix, *distCoeffs, *rvec, *tvec, useExtrinsicGuess, flags);
 }
 
-bool cveSolvePnPRansac(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_OutputArray* rvec, cv::_OutputArray* tvec, bool useExtrinsicGuess, int iterationsCount, float reprojectionError, double confident, cv::_OutputArray* inliers, int flags)
+bool cveSolvePnPRansac(
+	cv::_InputArray* objectPoints, 
+	cv::_InputArray* imagePoints, 
+	cv::_InputArray* cameraMatrix, 
+	cv::_InputArray* distCoeffs, 
+	cv::_OutputArray* rvec, 
+	cv::_OutputArray* tvec, 
+	bool useExtrinsicGuess, 
+	int iterationsCount, 
+	float reprojectionError, 
+	double confident, 
+	cv::_OutputArray* inliers, 
+	int flags)
 {
 	return cv::solvePnPRansac(
 		*objectPoints,

@@ -676,9 +676,13 @@ namespace Emgu.CV
         private static extern bool cveSolvePnPRansac(
            IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs,
            IntPtr rvec, IntPtr tvec,
-           [MarshalAs(CvInvoke.BoolMarshalType)] bool useExtrinsicGuess,
-           int iterationsCount, float reprojectionError, double confident,
-           IntPtr inliers, CvEnum.SolvePnpMethod flags);
+           [MarshalAs(CvInvoke.BoolMarshalType)]
+           bool useExtrinsicGuess,
+           int iterationsCount, 
+           float reprojectionError, 
+           double confident,
+           IntPtr inliers, 
+           CvEnum.SolvePnpMethod flags);
 
 
         /// <summary>
