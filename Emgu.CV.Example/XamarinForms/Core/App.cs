@@ -33,6 +33,9 @@ namespace Emgu.CV.XamarinForms
             Button ocrButton = new Button();
             ocrButton.Text = "OCR";
 
+            Button dnnButton = new Button();
+            dnnButton.Text = "DNN";
+
             // The root page of your application
             ContentPage page =
               new ContentPage
@@ -42,12 +45,13 @@ namespace Emgu.CV.XamarinForms
                       VerticalOptions = LayoutOptions.Start,
                       Children =
                     {
-                       helloWorldButton,
-                       planarSubdivisionButton,
-                       faceDetectionButton,
-                     featureDetectionButton,
-                     pedestrianDetectionButton,
-                     ocrButton
+                        helloWorldButton,
+                        planarSubdivisionButton,
+                        faceDetectionButton,
+                        featureDetectionButton,
+                        pedestrianDetectionButton,
+                        ocrButton,
+                        dnnButton
                     }
                   }
               };
@@ -67,8 +71,8 @@ namespace Emgu.CV.XamarinForms
                () =>
                {
                    MainPage.Navigation.PushAsync(new AboutPage());
-                //page.DisplayAlert("Emgu CV Examples", "App version: ...", "Ok");
-            }
+                   //page.DisplayAlert("Emgu CV Examples", "App version: ...", "Ok");
+               }
             );
             page.ToolbarItems.Add(aboutItem);
 
@@ -96,6 +100,8 @@ namespace Emgu.CV.XamarinForms
             {
                 MainPage.Navigation.PushAsync(new FeatureMatchingPage());
             };
+
+            dnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new DnnPage()); };
 
 #if NETFX_CORE
             ocrButton.IsVisible = false;

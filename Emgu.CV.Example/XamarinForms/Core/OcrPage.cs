@@ -37,7 +37,7 @@ namespace Emgu.CV.XamarinForms
         private Tesseract _ocr;
         private static void TesseractDownloadLangFile(String folder, String lang)
         {
-         String folderName = folder;
+            String folderName = folder;
             if (!System.IO.Directory.Exists(folderName))
             {
                 System.IO.Directory.CreateDirectory(folderName);
@@ -46,8 +46,8 @@ namespace Emgu.CV.XamarinForms
             if (!System.IO.File.Exists(dest))
                 using (System.Net.WebClient webclient = new System.Net.WebClient())
                 {
-                    String source = Emgu.CV.OCR.Tesseract.GetLangFileUrl (lang);
-                     
+                    String source = Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang);
+
                     Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
                     webclient.DownloadFile(source, dest);
                     Console.WriteLine(String.Format("Download completed"));
@@ -64,9 +64,9 @@ namespace Emgu.CV.XamarinForms
 
             OnImagesLoaded += async (sender, image) =>
             {
-               if (image == null || image [0] == null)
-                  return;
-                SetMessage( "Please wait..." );
+                if (image == null || image[0] == null)
+                    return;
+                SetMessage("Please wait...");
                 SetImage(null);
 
                 Task<Tuple<Mat, String, long>> t = new Task<Tuple<Mat, String, long>>(
@@ -83,12 +83,12 @@ namespace Emgu.CV.XamarinForms
 
                       TesseractDownloadLangFile(path, lang);
                       TesseractDownloadLangFile(path, "osd"); //script orientation detection
-                      
+
                       if (_ocr == null)
                           _ocr = new Tesseract(path, lang, OcrEngineMode.TesseractOnly);
                       _ocr.SetImage(image[0]);
                       _ocr.Recognize();
-                      //GetLabel().Text = _ocr.GetUTF8Text();
+
                       long time = 0;
 
                       return new Tuple<Mat, String, long>(image[0], _ocr.GetUTF8Text(), time);

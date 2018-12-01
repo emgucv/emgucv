@@ -385,6 +385,32 @@ namespace Emgu.CV
             }
         }
 
+        public Array GetData(bool jagged = true)
+        {
+            Type t = CvInvoke.GetDepthType(this.Depth);
+            if (t == null)
+                return null;
+            
+            Array array;
+            int byteSize = this.Total.ToInt32() * this.ElementSize;
+
+            if (jagged)
+            {
+                int[] dim = this.SizeOfDimemsion;
+                array = Array.CreateInstance(t, dim);
+            }
+            else
+            {
+                int len = byteSize / Marshal.SizeOf(t);
+                array = Array.CreateInstance(t, len);
+            }
+            
+            GCHandle handle = GCHandle.Alloc(array, GCHandleType.Pinned);
+            CvInvoke.cveMemcpy(handle.AddrOfPinnedObject(), DataPointer, byteSize);
+            handle.Free();
+            return array;
+        }
+
         /// <summary>
         /// Gets the binary data from the specific indices.
         /// </summary>
