@@ -87,6 +87,7 @@ namespace Emgu.CV.XamarinForms
                       String graphFile = DnnDownloadFile(path, "frozen_inference_graph.pb");
                       String lookupFile = DnnDownloadFile(path, "coco-labels-paper.txt");
                       String configFile = "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt";
+                      string[] labels = File.ReadAllLines(lookupFile);
                       Emgu.CV.Dnn.Net net = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(graphFile, configFile);
                       Mat blob = DnnInvoke.BlobFromImage(image[0]);
                       
@@ -103,24 +104,60 @@ namespace Emgu.CV.XamarinForms
                               int numDetections = boxesData.GetLength(2);
                               for (int i = 0; i < numDetections; i++)
                               {
+                                  
                                   float score = boxesData[0, 0, i, 2];
-                                  float left = boxesData[0, 0, i, 3] * imgSize.Width;
-                                  float top = boxesData[0, 0, i, 4] * imgSize.Height;
-                                  float right = boxesData[0, 0, i, 5] * imgSize.Width;
-                                  float bottom = boxesData[0, 0, i, 6] * imgSize.Height;
-                                  //left = Math.Max(0, Math.Min(left, imgSize.Width - 1));
-                                  //top = Math.Max(0, Math.Min(top, imgSize.Height - 1));
-                                  //right = Math.Max(0, Math.Min(right, imgSize.Width - 1));
-                                  //bottom = Math.Max(0, Math.Min(bottom, imgSize.Height - 1));
 
-                                  RectangleF rectF = new RectangleF(left, top, right - left, bottom - top);
-                                  Rectangle rect = Rectangle.Round(rectF);
-                                  Rectangle rect = Rectangle.Round(rectF);
-                                  rect.
-                                      CvInvoke.Rectangle(image[0], rect, new MCvScalar(0,0,0,0), 1);
+                                  if (score > 0.5)
+                                  {
+                                      int classId = (int)boxesData[0, 0, i, 1];
+                                      String label = labels[classId];
+
+                                      float left = boxesData[0, 0, i, 3] * imgSize.Width;
+                                      float top = boxesData[0, 0, i, 4] * imgSize.Height;
+                                      float right = boxesData[0, 0, i, 5] * imgSize.Width;
+                                      float bottom = boxesData[0, 0, i, 6] * imgSize.Height;
+
+                                      RectangleF rectF = new RectangleF(left, top, right - left, bottom - top);
+                                      Rectangle rect = Rectangle.Round(rectF);
+                                      rect.Intersect(new Rectangle(Point.Empty, imgSize));
+                                      CvInvoke.Rectangle(image[0], rect, new MCvScalar(0, 0, 0, 0), 1);
+                                      CvInvoke.PutText(image[0], label, rect.Location, FontFace.HersheyComplex, 1.0,
+                                          new MCvScalar(0, 0, 255), 2);
+
+                                      int[] masksDim = masks.SizeOfDimemsion;
+                                      using (Mat mask = new Mat(
+                                          masksDim[2],
+                                          masksDim[3],
+                                          DepthType.Cv32F,
+                                          1,
+                                          masks.DataPointer +
+                                          (i * masksDim[1] + classId ) 
+                                          * masksDim[2] * masksDim[3] * masks.ElementSize,
+                                          masksDim[3] * masks.ElementSize))
+                                      using (Mat maskLarge = new Mat())
+                                      using (Mat maskLargeInv = new Mat())
+                                      using (Mat subRegion = new Mat(image[0], rect))
+                                      using (Mat largeColor = new Mat(subRegion.Size, Emgu.CV.CvEnum.DepthType.Cv8U, 3))
+                                      {
+                                          CvInvoke.Resize(mask, maskLarge, rect.Size);
+
+                                          //give the mask at least 30% transparency
+                                          using (ScalarArray sa = new ScalarArray(0.7))
+                                              CvInvoke.Min(sa, maskLarge, maskLarge);
+
+                                          //Create the inverse mask for the original image
+                                          using (ScalarArray sa = new ScalarArray(1.0))
+                                              CvInvoke.Subtract(sa, maskLarge, maskLargeInv);
+
+                                          //The mask color
+                                          largeColor.SetTo(new Emgu.CV.Structure.MCvScalar(255, 0, 0));
+
+                                          CvInvoke.BlendLinear(largeColor, subRegion, maskLarge, maskLargeInv, subRegion);
+                                      }
+                                      
+                                  }
                               }
-                              //int numClasses = masks.SizeOfDimemsion[]
-                              //int numDetections = boxes.SizeOfDimemsion[]
+
 
                           }
                       }
