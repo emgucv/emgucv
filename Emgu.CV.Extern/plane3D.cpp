@@ -4,6 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
+/*
 #include "plane3D.h"
 
 void setPlane3D(Plane3D* plane, const CvPoint3D64f* unitNormal, const CvPoint3D64f* pointInPlane)
@@ -124,3 +125,4 @@ void computePlane3DCuboidIntersection(Plane3D* plane, CvPoint3D64f* center, CvPo
       }
    }  
 }
+*/

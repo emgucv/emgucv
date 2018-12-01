@@ -4,6 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
+/*
 #include "photo_edit.h"
 
 #define BLENDING_WITH_LOOKUP
@@ -284,11 +285,11 @@ void cvSelectiveColor(IplImage* bgr, IplImage* result, float start, float end)
    uchar* dstRow = 0;
    float coeffR = 0.299f, coeffG = 0.587f, coeffB = 0.114f;
 
-   /*
+   
    //scale start and end value such that it matches the scale of the return value of bgr2Hue
-   start = start / 60.0f;
-   end = end / 60.0f;
-   */
+   //start = start / 60.0f;
+   //end = end / 60.0f;
+   
 
    for (int i = 0; i < bgr->height; i++, bgrPtr += bgr->widthStep, dstPtr += result->widthStep)
    {
@@ -319,3 +320,4 @@ void cvSelectiveColor(IplImage* bgr, IplImage* result, float start, float end)
    }
 }
 
+*/

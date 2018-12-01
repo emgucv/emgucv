@@ -4,6 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
+/*
 #pragma once
 #ifndef EMGU_PLANE3D_H
 #define EMGU_PLANE3D_H
@@ -48,3 +49,4 @@ CVAPI(void) setEdge3D(Edge3D* edge, const CvPoint3D64f* start, const CvPoint3D64
 CVAPI(bool) computeEdge3DPlane3DIntersection(Edge3D* edge, Plane3D* plane, CvPoint3D64f* intersection);
 
 #endif
+*/

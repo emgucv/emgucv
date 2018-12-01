@@ -4,6 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
+/*
 #pragma once
 #ifndef PHOTO_EDIT_H
 #define PHOTO_EDIT_H
@@ -23,3 +24,4 @@ CVAPI(void) cvCovertBgr2Bgr_Gray(IplImage* bgr, IplImage* gray_3channel);
 CVAPI(void) cvSelectiveColor(IplImage* bgr, IplImage* result, float start, float end);
 
 #endif
+*/
