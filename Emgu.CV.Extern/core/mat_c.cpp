@@ -169,6 +169,10 @@ uchar* cveMatGetDataPointer(cv::Mat* mat)
 {
    return mat->data;
 }
+uchar* cveMatGetDataPointer2(cv::Mat* mat, int* indices)
+{
+	return mat->ptr(indices);
+}
 size_t cveMatGetStep(cv::Mat* mat)
 {
    return mat->step;

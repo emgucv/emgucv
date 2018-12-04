@@ -147,22 +147,23 @@ namespace Emgu.CV.XamarinForms
                 this.DisplayImage.Source = null;
                 return;
             }
-         using (VectorOfByte vb = new VectorOfByte ()) {
-            CvInvoke.Imencode (".jpg", image, vb);
-            byte [] rawData = vb.ToArray ();
-            this.DisplayImage.Source = ImageSource.FromStream (() => new MemoryStream (rawData));
+            using (VectorOfByte vb = new VectorOfByte())
+            {
+                CvInvoke.Imencode(".jpg", image, vb);
+                byte[] rawData = vb.ToArray();
+                this.DisplayImage.Source = ImageSource.FromStream(() => new MemoryStream(rawData));
 
-#if __MACOS__ 
+#if __MACOS__
                 using (InputArray iaImage = image.GetInputArray())
                     this.DisplayImage.HeightRequest = iaImage.GetSize().Height;
 #elif __IOS__
-            //the following is needed for iOS due to the fact that
-            //Xamarin Forms' Image object do not seems to refresh after we set the source.
-            //Forcing the focus seems to force a rendering update.
-            this.DisplayImage.Focus ();
+                //the following is needed for iOS due to the fact that
+                //Xamarin Forms' Image object do not seems to refresh after we set the source.
+                //Forcing the focus seems to force a rendering update.
+                this.DisplayImage.Focus ();
 #endif
 
-         }
+            }
         }
 
         public Label GetLabel()

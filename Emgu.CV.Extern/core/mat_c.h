@@ -35,6 +35,7 @@ CVAPI(int) cveMatGetElementSize(cv::Mat* mat);
 //CVAPI(int) cveMatGetChannels(cv::Mat* mat);
 
 CVAPI(uchar*) cveMatGetDataPointer(cv::Mat* mat);
+CVAPI(uchar*) cveMatGetDataPointer2(cv::Mat* mat, int* indices);
 CVAPI(size_t) cveMatGetStep(cv::Mat* mat);
 
 CVAPI(void) cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask);

@@ -200,7 +200,7 @@ namespace Emgu.CV.UI
 
         private void RenderIntensityForMat(Mat mat, Point location)
         {
-            byte[] raw = mat.GetData(location.Y, location.X);
+            byte[] raw = mat.GetRawData(location.Y, location.X);
 
             if (mat.Depth == DepthType.Cv8U)
             {

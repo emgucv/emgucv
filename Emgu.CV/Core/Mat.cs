@@ -32,6 +32,7 @@ namespace Emgu.CV
     /// </summary>
 #if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
+    [DebuggerTypeProxy(typeof(Mat.DebuggerProxy))]
 #endif
     public partial class Mat : MatDataAllocator, IImage, IEquatable<Mat>
 #if !(NETFX_CORE || NETSTANDARD1_4)
@@ -385,6 +386,18 @@ namespace Emgu.CV
             }
         }
 
+        public IntPtr GetDataPointer(params int[] index)
+        {
+            if (index.Length == 0)
+                return DataPointer;
+            int[] indices = new int[Dims];
+            Array.Copy(index, indices, index.Length);
+            GCHandle handle = GCHandle.Alloc(indices, GCHandleType.Pinned);
+            IntPtr result = MatInvoke.cveMatGetDataPointer2(Ptr, handle.AddrOfPinnedObject());
+            handle.Free();
+            return result;
+        }
+
         public Array GetData(bool jagged = true)
         {
             Type t = CvInvoke.GetDepthType(this.Depth);
@@ -417,7 +430,7 @@ namespace Emgu.CV
         /// <param name="indices">The indices.</param>
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException">Indices of length more than 2 is not implemented</exception>
-        public byte[] GetData(params int[] indices)
+        public byte[] GetRawData(params int[] indices)
         {
             switch (indices.Length)
             {
@@ -448,7 +461,7 @@ namespace Emgu.CV
                     return rawData;
 
                 default:
-                    throw new NotImplementedException(String.Format("GetData with indices size {0} is not implemented", indices.Length));
+                    throw new NotImplementedException(String.Format("GetRawData with indices size {0} is not implemented", indices.Length));
             }
 
         }
@@ -1243,6 +1256,21 @@ namespace Emgu.CV
                 return sizes;
             }
         }
+
+        internal class DebuggerProxy
+        {
+            private Mat _v;
+
+            public DebuggerProxy(Mat v)
+            {
+                _v = v;
+            }
+
+            public Array Data
+            {
+                get { return _v.GetData(true); }
+            }
+        }
     }
 
     internal static class MatInvoke
@@ -1275,6 +1303,10 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveMatGetDataPointer(IntPtr mat);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static IntPtr cveMatGetDataPointer2(IntPtr mat, IntPtr indices);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveMatGetStep(IntPtr mat);
 

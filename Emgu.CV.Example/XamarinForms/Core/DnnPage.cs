@@ -62,7 +62,7 @@ namespace Emgu.CV.XamarinForms
          : base()
         {
             var button = this.GetButton();
-            button.Text = "Perform Dnn Detection";
+            button.Text = "Perform Mask-rcnn Detection";
             button.Clicked += OnButtonClicked;
 
             OnImagesLoaded += async (sender, image) =>
@@ -100,7 +100,7 @@ namespace Emgu.CV.XamarinForms
                           {
                               System.Drawing.Size imgSize = image[0].Size;
                               float[,,,] boxesData = boxes.GetData(true) as float[,,,];
-                              float[,,,] masksData = masks.GetData(true) as float[,,,];
+                              //float[,,,] masksData = masks.GetData(true) as float[,,,];
                               int numDetections = boxesData.GetLength(2);
                               for (int i = 0; i < numDetections; i++)
                               {
@@ -130,9 +130,10 @@ namespace Emgu.CV.XamarinForms
                                           masksDim[3],
                                           DepthType.Cv32F,
                                           1,
-                                          masks.DataPointer +
-                                          (i * masksDim[1] + classId ) 
-                                          * masksDim[2] * masksDim[3] * masks.ElementSize,
+                                          //masks.DataPointer +
+                                          //(i * masksDim[1] + classId ) 
+                                          //* masksDim[2] * masksDim[3] * masks.ElementSize,
+                                          masks.GetDataPointer(i, classId),
                                           masksDim[3] * masks.ElementSize))
                                       using (Mat maskLarge = new Mat())
                                       using (Mat maskLargeInv = new Mat())
