@@ -33,7 +33,7 @@ IF (EMGU_CV_WITH_FREETYPE)
 
 	  #SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_BINARY_DIR}/freetype2/CMakeFiles/Export/lib/cmake/freetype")
 	  #SET(freetype_DIR "${CMAKE_BINARY_DIR}/freetype2/CMakeFiles/Export/lib/cmake/freetype")
-	  #FIND_PACKAGE(freetype)
+	  FIND_PACKAGE(freetype)
 	  SET(FREETYPE_FOUND ON)
 
 	ENDIF()
