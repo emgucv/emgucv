@@ -5,6 +5,7 @@
 #
 # ----------------------------------------------------------------------------
 project(cvextern)
+set(the_target ${PROJECT_NAME})
 
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
@@ -1907,12 +1908,14 @@ FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
   ENDIF()
 ENDFOREACH()
 
-
-
 IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 ENDIF()
+
+
+
+
 
 ############################### IPP START ##############################
 #IF(WITH_IPP)
@@ -2096,6 +2099,27 @@ IF(WITH_INF_ENGINE)
 	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${INF_ENGINE_DLL_DIRS}/gna.dll")
 ENDIF()
 
+############################# FFMPEG START ##############################
+if(WIN32 AND WITH_FFMPEG)
+  if(TARGET_ARCH_64)
+    set(FFMPEG_SUFFIX _64)
+  endif()
+  set(OPENCV_FFMPEG_OUTPUT_NAME "opencv_ffmpeg${OPENCV_VERSION_MAJOR}${OPENCV_VERSION_MINOR}${OPENCV_VERSION_PATCH}${FFMPEG_SUFFIX}")
+endif()
+
+IF(MSVC_IDE)
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${EXECUTABLE_OUTPUT_PATH}/Release/${OPENCV_FFMPEG_OUTPUT_NAME}.dll")
+	#add_custom_command(TARGET ${the_target} POST_BUILD
+    #            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${EXECUTABLE_OUTPUT_PATH}/Release/${OPENCV_FFMPEG_OUTPUT_NAME}" "${UNMANAGED_LIBRARY_OUTPUT_PATH}/${OPENCV_FFMPEG_OUTPUT_NAME}.dll"                      
+    #            COMMENT "Copying ${EXECUTABLE_OUTPUT_PATH}/Release/${OPENCV_FFMPEG_OUTPUT_NAME} to the lib directory")
+ELSEIF(MSVC AND (CMAKE_GENERATOR MATCHES "Visual"))
+	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/${OPENCV_FFMPEG_OUTPUT_NAME}.dll")
+    #add_custom_command(TARGET ${the_target} POST_BUILD
+    #                   COMMAND ${CMAKE_COMMAND} -E copy_if_different "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/${OPENCV_FFMPEG_OUTPUT_NAME}" "${UNMANAGED_LIBRARY_OUTPUT_PATH}/${OPENCV_FFMPEG_OUTPUT_NAME}.dll"
+    #                   COMMENT "Copying ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/${OPENCV_FFMPEG_OUTPUT_NAME} to the output directory")
+ENDIF()
+############################### FFMPEG END ##############################
+
 ############################### GPU START ##############################
 IF(WIN32 AND WITH_CUDA)
   IF(TARGET_ARCH_64)
@@ -2259,7 +2283,7 @@ IF(ANDROID OR APPLE)
   LIST(REMOVE_ITEM extern_hdrs ${extern_hdrs_excludes})
 ENDIF()
 
-set(the_target ${PROJECT_NAME})
+
 IF(IOS)
   add_library(${the_target} STATIC ${extern_srcs} ${extern_hdrs} )
 ELSEIF(WIN32)
