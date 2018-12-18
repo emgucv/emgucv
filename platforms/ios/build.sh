@@ -21,6 +21,8 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release
     cp -r opencv/lib/Release/* bin/Release
+    cp -r freetype2/Release-iphoneos/* bin/Release
+    cp -r harfbuzz/Release-iphoneos/* bin/Release
     libtool -static -o libemgucv_armv7s.a bin/Release/*.a
     cd ../../..
     
@@ -31,6 +33,8 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release
     cp -r opencv/lib/Release/* bin/Release	
+    cp -r freetype2/Release-iphoneos/* bin/Release
+    cp -r harfbuzz/Release-iphoneos/* bin/Release
     libtool -static -o libemgucv_armv7.a bin/Release/*.a
     cd ../../..
 
@@ -41,6 +45,8 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release  
     cp -r opencv/lib/Release/* bin/Release
+    cp -r freetype2/Release-iphoneos/* bin/Release
+    cp -r harfbuzz/Release-iphoneos/* bin/Release
     libtool -static -o libemgucv_arm64.a bin/Release/*.a
     cd ../../..
 fi
@@ -58,6 +64,8 @@ if [ "$1" != "simulator_x86_64" ]; then
     cp -r ../../../libs/Release/* bin/Release
     cp -r opencv/3rdparty/lib/Release/* bin/Release  
     cp -r opencv/lib/Release/* bin/Release
+    cp -r freetype2/Release-iphonesimulator/* bin/Release
+    cp -r harfbuzz/Release-iphonesimulator/* bin/Release
     #cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/ia32/* bin/Release
     #cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/ia32/* bin/Release
     libtool -static -o libemgucv_i386.a bin/Release/*.a
@@ -76,6 +84,8 @@ xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 WARNING_CFLAGS=-Wno-implicit-function-
 cp -r ../../../libs/Release/* bin/Release
 cp -r opencv/3rdparty/lib/Release/* bin/Release
 cp -r opencv/lib/Release/* bin/Release
+cp -r freetype2/Release-iphonesimulator/* bin/Release
+cp -r harfbuzz/Release-iphonesimulator/* bin/Release
 #cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/intel64/* bin/Release
 #cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/intel64/* bin/Release
 
