@@ -13,8 +13,15 @@ IF EXIST "C:\android-ndk-r15b" SET ANDROID_NDK=C:\android-ndk-r15b
 IF EXIST "C:\android-ndk-r15c" SET ANDROID_NDK=C:\android-ndk-r15c
 IF EXIST "C:\android-ndk-r16" SET ANDROID_NDK=C:\android-ndk-r16
 IF EXIST "C:\android-ndk-r16b" SET ANDROID_NDK=C:\android-ndk-r16b
+
+IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r10e" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r10e
+IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r11c" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r11c
+
+IF EXIST "C:\Microsoft\AndroidNDK64\android-ndk-r13b" SET ANDROID_NDK=C:\Microsoft\AndroidNDK64\android-ndk-r13b
+IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r13b" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r13b
+
 IF EXIST "C:\Microsoft\AndroidNDK64\android-ndk-r15c" SET ANDROID_NDK=C:\Microsoft\AndroidNDK64\android-ndk-r15c
-IF EXIST "C:\ProgramData\Microsoft\AndroidNDK64\android-ndk-r15c" SET ANDROID_NDK=C:\ProgramData\Microsoft\AndroidNDK64\android-ndk-r15c
+IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r15c" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r15c
 
 
 
