@@ -100,14 +100,12 @@ Global
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
-		$1.DirectoryNamespaceAssociation = None
-		$1.ResourceNamePolicy = FileFormatDefault
 		$0.TextStylePolicy = $2
 		$2.TabWidth = 3
 		$2.IndentWidth = 3
-		$2.inheritsSet = VisualStudio
-		$2.inheritsScope = text/plain
 		$2.scope = text/x-csharp
+		$2.FileWidth = 80
+		$2.TabsToSpaces = True
 		$0.CSharpFormattingPolicy = $3
 		$3.IndentSwitchBody = True
 		$3.AnonymousMethodBraceStyle = NextLine
@@ -124,8 +122,23 @@ Global
 		$3.BeforeConstructorDeclarationParentheses = False
 		$3.BeforeDelegateDeclarationParentheses = False
 		$3.NewParentheses = False
-		$3.inheritsSet = Mono
-		$3.inheritsScope = text/x-csharp
 		$3.scope = text/x-csharp
+		$3.IndentSwitchSection = False
+		$3.NewLinesForBracesInProperties = False
+		$3.NewLinesForBracesInAccessors = False
+		$3.NewLinesForBracesInAnonymousMethods = False
+		$3.NewLinesForBracesInControlBlocks = False
+		$3.NewLinesForBracesInAnonymousTypes = False
+		$3.NewLinesForBracesInObjectCollectionArrayInitializers = False
+		$3.NewLinesForBracesInLambdaExpressionBody = False
+		$3.NewLineForElse = False
+		$3.NewLineForCatch = False
+		$3.NewLineForFinally = False
+		$3.NewLineForMembersInObjectInit = False
+		$3.NewLineForMembersInAnonymousTypes = False
+		$3.NewLineForClausesInQuery = False
+		$3.SpacingAfterMethodDeclarationName = True
+		$3.SpaceAfterMethodCallName = True
+		$3.SpaceBeforeOpenSquareBracket = True
 	EndGlobalSection
 EndGlobal
