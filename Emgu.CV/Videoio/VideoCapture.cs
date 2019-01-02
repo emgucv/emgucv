@@ -485,7 +485,7 @@ namespace Emgu.CV
                 Task t = new Task(Run);
                 t.Start();
 #elif NETFX_CORE
-                ThreadPool.RunAsync(delegate { Run(); });
+                Windows.System.Threading.ThreadPool.RunAsync(delegate { Run(); });
 #elif !WITH_SERVICE_MODEL
                 ThreadPool.QueueUserWorkItem(delegate { Run(); });
 #else
