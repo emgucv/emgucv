@@ -195,7 +195,7 @@ namespace Emgu.CV.OCR
             get
             {
                 String loadDirectory = ".";
-#if NETSTANDARD1_4
+#if NETSTANDARD1_4 || NETFX_CORE
 #else
                 System.Reflection.Assembly asm = typeof(CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
                 if (!((String.IsNullOrEmpty(asm.Location) || !System.IO.File.Exists(asm.Location)) && AppDomain.CurrentDomain.BaseDirectory != null))

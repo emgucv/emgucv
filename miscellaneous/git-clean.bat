@@ -7,6 +7,14 @@ cd vtk
 git clean -d -f -x "."
 cd ..
 
+cd freetype2
+git clean -d -f -x "."
+cd ..
+
+cd harfbuzz 
+git clean -d -f -x "."
+cd ..
+
 cd opencv
 git clean -d -f -x "." 
 cd ..
