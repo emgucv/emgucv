@@ -89,6 +89,8 @@ namespace Emgu.CV.XamarinForms
                       String configFile = "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt";
                       string[] labels = File.ReadAllLines(lookupFile);
                       Emgu.CV.Dnn.Net net = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(graphFile, configFile);
+
+                      
                       Mat blob = DnnInvoke.BlobFromImage(image[0]);
                       
                       net.SetInput(blob, "image_tensor");
@@ -152,8 +154,15 @@ namespace Emgu.CV.XamarinForms
 
                                           //The mask color
                                           largeColor.SetTo(new Emgu.CV.Structure.MCvScalar(255, 0, 0));
+                                          if (subRegion.NumberOfChannels == 4) {
+                                       using (Mat bgrSubRegion = new Mat ()) {
+                                          CvInvoke.CvtColor (subRegion, bgrSubRegion, ColorConversion.Bgra2Bgr);
+                                          CvInvoke.BlendLinear (largeColor, bgrSubRegion, maskLarge, maskLargeInv, bgrSubRegion);
+                                          CvInvoke.CvtColor (bgrSubRegion, subRegion, ColorConversion.Bgr2Bgra);
+                                       }
 
-                                          CvInvoke.BlendLinear(largeColor, subRegion, maskLarge, maskLargeInv, subRegion);
+                                    } else
+                                    CvInvoke.BlendLinear(largeColor, subRegion, maskLarge, maskLargeInv, subRegion);
                                       }
                                       
                                   }
