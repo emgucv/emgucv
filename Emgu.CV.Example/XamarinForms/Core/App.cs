@@ -104,15 +104,16 @@ namespace Emgu.CV.XamarinForms
             
 
 #if NETFX_CORE
-            ocrButton.IsVisible = false;
+            //ocrButton.IsVisible = false;
             dnnButton.IsVisible = false;
 #else
             dnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new DnnPage()); };
+           
+#endif
             ocrButton.Clicked += (sender, args) =>
             {
                 MainPage.Navigation.PushAsync(new OcrPage());
             };
-#endif
         }
 
         public Page CurrentPage

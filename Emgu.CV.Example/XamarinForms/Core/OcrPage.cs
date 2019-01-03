@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2018 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !NETFX_CORE
+//#if !NETFX_CORE
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,8 @@ using System.IO;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+
+
 #if __ANDROID__
 using Android.App;
 using Android.Content;
@@ -20,6 +22,8 @@ using Android.Widget;
 using Android.OS;
 using Android.Graphics;
 using Android.Preferences;
+#elif NETFX_CORE
+using Windows.Storage;
 #endif
 
 using Emgu.CV;
@@ -74,7 +78,9 @@ namespace Emgu.CV.XamarinForms
                   {
 
                       String lang = "eng";
-#if __ANDROID__
+#if NETFX_CORE
+                      String path = System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, "tessdata");
+#elif __ANDROID__
                       String path = System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
                              Android.OS.Environment.DirectoryDownloads, "tessdata");
 #else
@@ -88,10 +94,10 @@ namespace Emgu.CV.XamarinForms
                           _ocr = new Tesseract(path, lang, OcrEngineMode.TesseractOnly);
                       _ocr.SetImage(image[0]);
                       _ocr.Recognize();
-
+                      String text = _ocr.GetUTF8Text();
                       long time = 0;
 
-                      return new Tuple<Mat, String, long>(image[0], _ocr.GetUTF8Text(), time);
+                      return new Tuple<Mat, String, long>(image[0], text, time);
                   });
                 t.Start();
 
@@ -116,4 +122,4 @@ namespace Emgu.CV.XamarinForms
     }
 }
 
-#endif
+//#endif
