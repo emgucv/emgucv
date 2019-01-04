@@ -7,4 +7,4 @@ cp ../Emgu.CV.Example/FeatureMatching/DrawMatches.cs Assets/Emgu.CV/Demo/
 
 cp ../opencv/data/haarcascades/haarcascade_frontalface_alt2.xml Assets/Emgu.CV/Demo/Resources/
 
-cp unityStoreIcons/EmguCVLogo_128x128.png Assets/Emgu.CV/Emgu.CV.Demo/EmguCVLogo.png
+cp unityStoreIcons/EmguCVLogo_128x128.png Assets/Emgu.CV/Demo/EmguCVLogo.png
