@@ -194,23 +194,7 @@ void cveTonemapDragoRelease(cv::TonemapDrago** tonemap, cv::Ptr<cv::TonemapDrago
 	*sharedPtr = 0;
 }
 
-cv::TonemapDurand* cveTonemapDurandCreate(
-	float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, 
-	cv::Tonemap** tonemap, cv::Algorithm** algorithm,
-	cv::Ptr<cv::TonemapDurand>** sharedPtr)
-{
-	cv::Ptr<cv::TonemapDurand> t = cv::createTonemapDurand(gamma, contrast, saturation, sigmaSpace, sigmaColor);
-	*sharedPtr = new cv::Ptr<cv::TonemapDurand>(t);
-	*tonemap = dynamic_cast<cv::Tonemap*>(t.get());
-	*algorithm = dynamic_cast<cv::Algorithm*>(t.get());
-	return t.get();
-}
-void cveTonemapDurandRelease(cv::TonemapDurand** tonemap, cv::Ptr<cv::TonemapDurand>** sharedPtr)
-{
-	delete *sharedPtr;
-	*tonemap = 0;
-	*sharedPtr = 0;
-}
+
 
 cv::TonemapReinhard* cveTonemapReinhardCreate(float gamma, float intensity, float lightAdapt, float colorAdapt, cv::Tonemap** tonemap, cv::Algorithm** algorithm, cv::Ptr<cv::TonemapReinhard>** sharedPtr)
 {

@@ -1293,26 +1293,6 @@ IF(HAVE_opencv_photo)
     "#include \"opencv2/photo.hpp\"
 #include \"opencv2/core/types_c.h\"")
 		
-  CREATE_OCV_CLASS_PROPERTY( 
-    "photo/TonemapDurand_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapDrago.g.cs"
-    "cv::TonemapDurand" 
-    "TonemapDurand" 
-    "Saturation;Contrast;SigmaSpace;SigmaColor" 
-    "float;float;float;float" 
-    "prop;prop;prop;prop"
-    "Saturation;Contrast;SigmaSpace;SigmaColor" 
-    "float;float;float;float"
-    "Positive saturation enhancement value. 1.0 preserves saturation, values greater than 1 increase saturation and values less than 1 decrease it.;
-	Resulting contrast on logarithmic scale, i. e. log(max / min), where max and min are maximum and minimum luminance values of the resulting image.;
-	Bilateral filter sigma in color space;
-	bilateral filter sigma in coordinate space"
-    "Emgu.CV"
-    "CvInvoke"
-    "TonemapDurand"
-	""
-    "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\"")
 
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapReinhard_property" 
@@ -1336,7 +1316,7 @@ IF(HAVE_opencv_photo)
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapDrago_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapDurand.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapDrago.g.cs"
     "cv::TonemapDrago" 
     "TonemapDrago" 
     "Saturation;Bias" 
@@ -1755,6 +1735,28 @@ IF(HAVE_opencv_xphoto)
 	""
     "#include \"opencv2/xphoto.hpp\"
 #include \"opencv2/core/types_c.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "xphoto/TonemapDurand_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/TonemapDurand.g.cs"
+    "cv::xphoto::TonemapDurand" 
+    "TonemapDurand" 
+    "Saturation;Contrast;SigmaSpace;SigmaColor" 
+    "float;float;float;float" 
+    "prop;prop;prop;prop"
+    "Saturation;Contrast;SigmaSpace;SigmaColor" 
+    "float;float;float;float"
+    "Positive saturation enhancement value. 1.0 preserves saturation, values greater than 1 increase saturation and values less than 1 decrease it.;
+	Resulting contrast on logarithmic scale, i. e. log(max / min), where max and min are maximum and minimum luminance values of the resulting image.;
+	Bilateral filter sigma in color space;
+	bilateral filter sigma in coordinate space"
+    "Emgu.CV.XPhoto"
+    "XPhotoInvoke"
+    "TonemapDurand"
+	""
+    "#include \"opencv2/xphoto.hpp\"
+#include \"opencv2/core/types_c.h\"")
+
 ENDIF()
 ############################### xphoto code gen END ##############################
 

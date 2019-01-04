@@ -121,3 +121,22 @@ void cveOilPainting(
 {
 	cv::xphoto::oilPainting(*src, *dst, size, dynRatio, code);
 }
+
+
+cv::xphoto::TonemapDurand* cveTonemapDurandCreate(
+	float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor,
+	cv::Tonemap** tonemap, cv::Algorithm** algorithm,
+	cv::Ptr<cv::xphoto::TonemapDurand>** sharedPtr)
+{
+	cv::Ptr<cv::xphoto::TonemapDurand> t = cv::xphoto::createTonemapDurand(gamma, contrast, saturation, sigmaSpace, sigmaColor);
+	*sharedPtr = new cv::Ptr<cv::xphoto::TonemapDurand>(t);
+	*tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+	*algorithm = dynamic_cast<cv::Algorithm*>(t.get());
+	return t.get();
+}
+void cveTonemapDurandRelease(cv::xphoto::TonemapDurand** tonemap, cv::Ptr<cv::xphoto::TonemapDurand>** sharedPtr)
+{
+	delete *sharedPtr;
+	*tonemap = 0;
+	*sharedPtr = 0;
+}

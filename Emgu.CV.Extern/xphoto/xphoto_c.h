@@ -66,4 +66,8 @@ CVAPI(void) cveOilPainting(
 	int size, 
 	int dynRatio, 
 	int code);
+
+CVAPI(cv::xphoto::TonemapDurand*) cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, cv::Tonemap** tonemap, cv::Algorithm** algorithm, cv::Ptr<cv::xphoto::TonemapDurand>** sharedPtr);
+CVAPI(void) cveTonemapDurandRelease(cv::xphoto::TonemapDurand** tonemap, cv::Ptr<cv::xphoto::TonemapDurand>** sharedPtr);
+
 #endif

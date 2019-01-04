@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
-namespace Emgu.CV
+namespace Emgu.CV.XPhoto
 {
 
     /// <summary>
@@ -32,7 +32,7 @@ namespace Emgu.CV
         public TonemapDurand(float gamma = 1.0f, float contrast = 4.0f, float saturation = 1.0f, float sigmaSpace = 2.0f, float sigmaColor = 2.0f)
             : base(IntPtr.Zero, IntPtr.Zero)
         {
-            _ptr = CvInvoke.cveTonemapDurandCreate(gamma, contrast, saturation, sigmaSpace, sigmaColor, ref _tonemapPtr, ref _algorithmPtr, ref _sharedPtr);
+            _ptr = XPhotoInvoke.cveTonemapDurandCreate(gamma, contrast, saturation, sigmaSpace, sigmaColor, ref _tonemapPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Emgu.CV
         {
             if (IntPtr.Zero != _ptr)
             {
-                CvInvoke.cveTonemapDurandRelease(ref _ptr, ref _sharedPtr);
+                XPhotoInvoke.cveTonemapDurandRelease(ref _ptr, ref _sharedPtr);
                 _tonemapPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
@@ -50,7 +50,7 @@ namespace Emgu.CV
     }
 
  
-    public static partial class CvInvoke
+    public static partial class XPhotoInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveTonemapDurandCreate(float gamma, float contrast, float saturation, float sigmaSpace, float sigmaColor, ref IntPtr tonemap, ref IntPtr algorithm, ref IntPtr sharedPtr);
