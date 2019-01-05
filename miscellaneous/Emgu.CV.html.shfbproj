@@ -34,14 +34,14 @@
     <CppCommentsFixup>False</CppCommentsFixup>
     <FrameworkVersion>.NET Framework 3.5</FrameworkVersion>
     <HelpTitle>Emgu CV Library Documentation</HelpTitle>
-    <CopyrightText>2018 Emgu Corporation, All Rights Reserved,</CopyrightText>
+    <CopyrightText>2019 Emgu Corporation, All Rights Reserved,</CopyrightText>
     <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
     <HeaderText>http://www.emgu.com</HeaderText>
     <FooterText>For questions and discussions please visit http://www.emgu.com/forum</FooterText>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\Solution\Windows.Desktop\Emgu.CV.sln" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\Emgu.CV.UI\Emgu.CV.UI.csproj" />
+<DocumentationSource sourceFile="..\Emgu.CV.World\Emgu.CV.World.csproj" /></DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="True">Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. The wrapper can be compiled in Mono and run on Windows, Linux, Mac OS X, iPhone, iPad and Android devices.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu" isDocumented="True">Root namespace for class and functions implemented by Emgu</NamespaceSummaryItem>
