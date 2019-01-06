@@ -1731,13 +1731,14 @@ namespace Emgu.CV.Test
             //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
         }
 
+        /*
         [TestAttribute]
         public void TestDistor()
         {
             Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
             Matrix<float> mapx, mapy;
 
-            IntrinsicCameraParameters p = new IntrinsicCameraParameters(5);
+            Mat
             int centerY = image.Width >> 1;
             int centerX = image.Height >> 1;
             CvInvoke.SetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
@@ -1751,7 +1752,7 @@ namespace Emgu.CV.Test
             Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
             CvInvoke.Remap(image, result, mapx, mapy, Emgu.CV.CvEnum.Inter.Cubic);
             //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
-        }
+        }*/
 
         [TestAttribute]
         public void TestCompare()

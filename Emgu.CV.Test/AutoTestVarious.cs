@@ -628,6 +628,7 @@ namespace Emgu.CV.Test
             }
         }
 
+        /*
         [Test]
         public void TestIntrisicParameters()
         {
@@ -645,7 +646,7 @@ namespace Emgu.CV.Test
 #endif
         }
 
-        /*
+        
         [Test]
         public void TestPOSIT()
         {
@@ -3621,7 +3622,7 @@ namespace Emgu.CV.Test
                 mergeDebevec.Process(images, hdr, times, response);
 
                 Mat ldr = new Mat();
-                TonemapDurand tonemap = new TonemapDurand(2.2f);
+                Tonemap tonemap = new Tonemap(2.2f);
                 tonemap.Process(hdr, ldr);
 
                 Mat fusion = new Mat();
