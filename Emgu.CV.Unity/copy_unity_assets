@@ -56,6 +56,7 @@ cp -r ../Emgu.CV/Superres Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 # cp -r ../Emgu.CV/Tiff Assets/Emgu.CV/Emgu.CV/
 cp -r ../Emgu.CV/Util Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Video Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+cp -r ../Emgu.CV/Videoio Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Videostab Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 
 

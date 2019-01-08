@@ -27,6 +27,7 @@ cp Assets/Emgu.CV/Emgu.CV/Superres/*.cs ../Emgu.CV/Superres
 #cp Assets/Emgu.CV/Emgu.CV/Tiff/*.cs ../Emgu.CV/Tiff 
 cp Assets/Emgu.CV/Emgu.CV/Util/*.cs ../Emgu.CV/Util 
 cp Assets/Emgu.CV/Emgu.CV/Video/*.cs ../Emgu.CV/Video
+cp Assets/Emgu.CV/Emgu.CV/Videoio/*.cs ../Emgu.CV/Videoio
 cp Assets/Emgu.CV/Emgu.CV/Videostab/*.cs ../Emgu.CV/Videostab
 #cp Assets/Emgu.CV/Emgu.CV/Viz/*.cs ../Emgu.CV/Viz 
 

@@ -26,6 +26,7 @@ cp -r Assets/Emgu.CV/Emgu.CV/Superres/*.cs ../Emgu.CV/Superres
 cp -r Assets/Emgu.CV/Emgu.CV/Util/*.cs ../Emgu.CV/Util 
 #cp -r Assets/Emgu.CV/Emgu.CV/Tiff/*.cs ../Emgu.CV/Tiff 
 cp -r Assets/Emgu.CV/Emgu.CV/Video/*.cs ../Emgu.CV/Video
+cp -r Assets/Emgu.CV/Emgu.CV/Videoio/*.cs ../Emgu.CV/Videoio
 cp -r Assets/Emgu.CV/Emgu.CV/Videostab/*.cs ../Emgu.CV/Videostab
 #cp -r Assets/Emgu.CV/Emgu.CV/Viz/*.cs ../Emgu.CV/Viz 
 
