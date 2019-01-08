@@ -82,7 +82,7 @@ cp -r ../Emgu.CV.Contrib/PhaseUnwrapping/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu
 mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\Plot
 cp -r ../Emgu.CV.Contrib/Plot/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Plot
 mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\Saliency
-cp -r ../Emgu.CV.Contrib/Plot/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Saliency
+cp -r ../Emgu.CV.Contrib/Saliency/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Saliency
 mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\Text
 cp -r ../Emgu.CV.Contrib/Text/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Text
 mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\Tracking
