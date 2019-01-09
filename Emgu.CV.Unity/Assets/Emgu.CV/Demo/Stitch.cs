@@ -33,7 +33,7 @@ public class Stitch : MonoBehaviour
             else
                 Debug.Log("Image " + i + " is " + imgs[i].NumberOfChannels + " channels " + imgs[i].Width + "x" + imgs[i].Height);
         }
-        Emgu.CV.Stitching.Stitcher stitcher = new Emgu.CV.Stitching.Stitcher(false);
+        Emgu.CV.Stitching.Stitcher stitcher = new Emgu.CV.Stitching.Stitcher();
         Mat result = new Mat();
         using (VectorOfMat vms = new VectorOfMat(imgs))
             stitcher.Stitch(vms, result);
