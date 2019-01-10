@@ -114,7 +114,7 @@
             this.Controls.Add(this.messageLabel);
             this.Controls.Add(this.pictureBox);
             this.Name = "MainForm";
-            this.Text = "Emgu CV Interop";
+            this.Text = "Emgu TF Interop";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
