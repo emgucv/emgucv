@@ -689,11 +689,12 @@ MACRO(CHECK_LICENSE_TYPE)
 	STRING(STRIP "${TMP}" TMP)
 	STRING(LENGTH "${TMP}" GPL_LICENSE_LENGTH)
 	SET (LICENSE_TYPE "OpenSource")
-	SET (EMGUCV_LICENSE_URL "https://www.gnu.org/licenses/gpl-3.0.txt")
-	IF(${GPL_LICENSE_LENGTH} EQUAL 0)
-		SET(LICENSE_TYPE "Commercial")
-		SET (EMGUCV_LICENSE_URL "http://www.emgu.com/wiki/files/Emgu.CV.Commercial.License.3.0.pdf")
-	ENDIF()
+	SET (EMGUCV_LICENSE_FILE "Emgu.CV.License.txt")
+	#SET (EMGUCV_LICENSE_URL "https://www.gnu.org/licenses/gpl-3.0.txt")
+	#IF(${GPL_LICENSE_LENGTH} EQUAL 0)
+	#	SET(LICENSE_TYPE "Commercial")
+	#	SET (EMGUCV_LICENSE_URL "http://www.emgu.com/wiki/files/Emgu.CV.Commercial.License.3.0.pdf")
+	#ENDIF()
 	
 	MESSAGE(STATUS "LICENSE_TYPE: ${LICENSE_TYPE}")
 ENDMACRO()
@@ -720,7 +721,8 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
     <file src=\"..\\..\\libs\\Emgu.CV.World.dll\" target=\"lib\\net35\" />
 	<file src=\"..\\..\\libs\\Emgu.CV.World.XML\" target=\"lib\\net35\" />
 	<file src=\"..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net35\" />
-	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net35\" />")
+	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net35\" />
+	<file src=\"..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
 SET(EMGUCV_NUGET_TITLE_ARCH "")
