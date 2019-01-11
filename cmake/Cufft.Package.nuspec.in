@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>EMGU.CUFFT</id>
-	<title>Native x64 CUDA FFT dependency</title>
+    <id>${EMGU_CUFFT_NUGET_ID}</id>
+	<title>${EMGU_CUFFT_NUGET_TITLE}</title>
     <version>${EMGU_CUFFT_VERSION}</version>
     <authors>${NUGET_PACKAGE_VENDOR}</authors>
     <owners>${NUGET_PACKAGE_VENDOR}</owners>
-    <licenseUrl>http://docs.nvidia.com/cuda/eula/index.html</licenseUrl>
+    <license type="file">CUDA_EULA.txt</license>
     <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
 	<iconUrl>http://www.emgu.com/wiki/files/EmguCVLogo.gif</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,8 +17,6 @@
     <tags>emgu cufft</tags>
   </metadata>
   <files>
-	<file src="Emgu.Cufft.targets" target="build\EMGU.CUFFT.targets" />
-    <file src="..\..\..\libs\x64\cufft*.dll" target="build\x64" />
-	<file src="EULA.txt" target="content\net35\CUFFT_EULA.txt" />
+	${EMGU_CUFFT_NUGET_FILE_LIST}
   </files>
 </package>
