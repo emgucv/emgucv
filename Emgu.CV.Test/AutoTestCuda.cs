@@ -353,8 +353,8 @@ namespace Emgu.CV.Test
             if (CudaInvoke.HasCuda)
             {
                 using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
-                using (CudaImage<Bgr, Byte> CudaImage = new CudaImage<Bgr, byte>(image))
-                using (CudaImage<Gray, Byte> gray = CudaImage.Convert<Gray, Byte>())
+                using (CudaImage<Bgr, Byte> cudaImage = new CudaImage<Bgr, byte>(image))
+                using (CudaImage<Gray, Byte> gray = cudaImage.Convert<Gray, Byte>())
                 using (CudaImage<Gray, Byte> canny = new CudaImage<Gray, byte>(gray.Size))
                 using (CudaCannyEdgeDetector detector = new CudaCannyEdgeDetector(20, 100, 3, false))
                 {

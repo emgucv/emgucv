@@ -44,7 +44,7 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaEdges = edges.GetOutputArray())
-            CudaInvoke.cudaCannyEdgeDetectorDetect(_sharedPtr, iaSrc, oaEdges, stream);
+            CudaInvoke.cudaCannyEdgeDetectorDetect(_ptr, iaSrc, oaEdges, stream);
       }
 
       /// <summary>
