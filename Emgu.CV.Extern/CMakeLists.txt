@@ -891,7 +891,7 @@ IF(HAVE_opencv_core)
     "isNamed;empty;isNone;isSeq;isMap;isInt;isReal;isString" 
     "bool;bool;bool;bool;bool;bool;bool;bool" 
     "val;val;val;val;val;val;val;val"
-    "IsNamed;IsEmpty;IsNone;IsSeq;IsMap;IsInt;IsRead;IsString" 
+    "IsNamed;IsEmpty;IsNone;IsSeq;IsMap;IsInt;IsReal;IsString" 
     "bool;bool;bool;bool;bool;bool;bool;bool"
     "Returns true if the node has a name;
 	Returns true if the node is empty;

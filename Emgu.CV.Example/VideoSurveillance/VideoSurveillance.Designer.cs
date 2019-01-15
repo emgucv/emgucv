@@ -1,6 +1,6 @@
-namespace VideoSurveilance
+namespace VideoSurveillance
 {
-   partial class VideoSurveilance
+   partial class VideoSurveillance
    {
       /// <summary>
       /// Required designer variable.

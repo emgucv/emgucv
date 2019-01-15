@@ -16,9 +16,9 @@ using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
-namespace VideoSurveilance
+namespace VideoSurveillance
 {
-   public partial class VideoSurveilance : Form
+   public partial class VideoSurveillance : Form
    {
       
       private static VideoCapture _cameraCapture;
@@ -27,7 +27,7 @@ namespace VideoSurveilance
       private static Emgu.CV.Cvb.CvBlobDetector _blobDetector;
       private static Emgu.CV.Cvb.CvTracks _tracker;
 
-      public VideoSurveilance()
+      public VideoSurveillance()
       {
          InitializeComponent();
          Run();

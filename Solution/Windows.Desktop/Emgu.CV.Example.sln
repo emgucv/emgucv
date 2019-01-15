@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeDetection", "..\..\Emg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicensePlateRecognition", "..\..\Emgu.CV.Example\LicensePlateRecognition\LicensePlateRecognition.csproj", "{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSurveilance", "..\..\Emgu.CV.Example\VideoSurveilance\VideoSurveilance.csproj", "{E8A4DE5C-BE26-445F-BEBD-8C99C80857E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSurveillance", "..\..\Emgu.CV.Example\VideoSurveillance\VideoSurveillance.csproj", "{E8A4DE5C-BE26-445F-BEBD-8C99C80857E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSignRecognition", "..\..\Emgu.CV.Example\TrafficSignRecognition\TrafficSignRecognition.csproj", "{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}"
 EndProject

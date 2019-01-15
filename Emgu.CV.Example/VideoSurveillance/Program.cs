@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Emgu.CV;
 
-namespace VideoSurveilance
+namespace VideoSurveillance
 {
    static class Program
    {
@@ -21,7 +21,7 @@ namespace VideoSurveilance
       {
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
-         Application.Run(new VideoSurveilance());
+         Application.Run(new VideoSurveillance());
       }
    }
 }
