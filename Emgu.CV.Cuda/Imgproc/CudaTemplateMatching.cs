@@ -54,7 +54,7 @@ namespace Emgu.CV.Cuda
         {
             if (_sharedPtr != IntPtr.Zero)
             {
-                CudaInvoke.cudaTemplateMatchingRelease(ref _ptr);
+                CudaInvoke.cudaTemplateMatchingRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
             }
         }
