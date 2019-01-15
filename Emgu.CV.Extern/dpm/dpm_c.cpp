@@ -21,7 +21,7 @@ DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vecto
 
 	cv::Ptr<DPMDetector> dpm = DPMDetector::create(files, classes);
 	*sharedPtr = new cv::Ptr<DPMDetector>(dpm);
-	return dpm.get();
+	return (*sharedPtr)->get();
 }
 
 void cveDPMDetectorDetect(DPMDetector* dpm, cv::Mat* image, std::vector<CvRect>* rects, std::vector<float>* scores, std::vector<int>* classIds)
@@ -55,9 +55,8 @@ bool cveDPMDetectorIsEmpty(DPMDetector* dpm)
 	return dpm->isEmpty();
 }
 
-void cveDPMDetectorRelease(DPMDetector** dpm, cv::Ptr<cv::dpm::DPMDetector>** sharedPtr)
+void cveDPMDetectorRelease(cv::Ptr<cv::dpm::DPMDetector>** sharedPtr)
 {
 	delete *sharedPtr;
-	*dpm = 0;
 	*sharedPtr = 0;
 }

@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV.Dpm
@@ -11,10 +12,8 @@ namespace Emgu.CV.Dpm
     /// <summary>
     /// A deformable parts model detector
     /// </summary>
-    public class DpmDetector : UnmanagedObject
+    public class DpmDetector : SharedPtrObject
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// create a new dpm detector with the specified files and classes
         /// </summary>
@@ -30,23 +29,20 @@ namespace Emgu.CV.Dpm
             for (int i = 0; i < classes.Length; i++)
                 cclasses[i] = new CvString(classes[i]);
 
-            IntPtr dpm;
-            using (var vfiles = new Util.VectorOfCvString(cfiles))
-            using (var vclasses = new Util.VectorOfCvString(cclasses))
-                dpm = DpmInvoke.cveDPMDetectorCreate(vfiles, vclasses, ref _sharedPtr);
-
-            foreach (var c in cfiles)
-                c.Dispose();
-            foreach (var c in cclasses)
-                c.Dispose();
-
+            try
+            {
+                using (var vfiles = new Util.VectorOfCvString(cfiles))
+                using (var vclasses = new Util.VectorOfCvString(cclasses))
+                    _ptr = DpmInvoke.cveDPMDetectorCreate(vfiles, vclasses, ref _sharedPtr);
+            }
+            finally
+            {
+                foreach (var c in cfiles)
+                    c.Dispose();
+                foreach (var c in cclasses)
+                    c.Dispose();
+            }
         }
-
-        /*
-        private DpmDetector(IntPtr ptr)
-        {
-            _ptr = ptr;
-        }*/
 
         /// <summary>
         /// Is the detector empty?
@@ -101,9 +97,10 @@ namespace Emgu.CV.Dpm
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                DpmInvoke.cveDPMDetectorRelease(ref _ptr, ref _sharedPtr);
+                DpmInvoke.cveDPMDetectorRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
             }
         }
     }
@@ -127,6 +124,6 @@ namespace Emgu.CV.Dpm
         internal static extern bool cveDPMDetectorIsEmpty(IntPtr dpm);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDPMDetectorRelease(ref IntPtr dpm, ref IntPtr sharedPtr);
+        internal static extern void cveDPMDetectorRelease(ref IntPtr sharedPtr);
     }
 }

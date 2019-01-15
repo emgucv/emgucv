@@ -24,5 +24,5 @@ CVAPI(void) cveDPMDetectorGetClassNames(DPMDetector* dpm, std::vector<cv::String
 
 CVAPI(bool) cveDPMDetectorIsEmpty(DPMDetector* dpm);
 
-CVAPI(void) cveDPMDetectorRelease(DPMDetector** dpm, cv::Ptr<cv::dpm::DPMDetector>** sharedPtr);
+CVAPI(void) cveDPMDetectorRelease(cv::Ptr<cv::dpm::DPMDetector>** sharedPtr);
 #endif
