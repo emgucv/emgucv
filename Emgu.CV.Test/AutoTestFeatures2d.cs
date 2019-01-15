@@ -132,8 +132,7 @@ namespace Emgu.CV.Test
         {
             StarDetector keyPointDetector = new StarDetector();
 
-            AKAZE descriptorGenerator = new AKAZE();
-            //ParamDef[] parameters = keyPointDetector.GetParams();
+            BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32);
             TestFeature2DTracker(keyPointDetector, descriptorGenerator);
         }
 
@@ -141,8 +140,8 @@ namespace Emgu.CV.Test
         public void TestGFTTDetector()
         {
             GFTTDetector keyPointDetector = new GFTTDetector(1000, 0.01, 1, 3, false, 0.04);
-            AKAZE descriptorGenerator = new AKAZE();
-            //ParamDef[] parameters = keyPointDetector.GetParams();
+            BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32);
+
             TestFeature2DTracker(keyPointDetector, descriptorGenerator);
         }
 
@@ -173,7 +172,7 @@ namespace Emgu.CV.Test
         public void TestMSER()
         {
             MSERDetector keyPointDetector = new MSERDetector();
-            AKAZE descriptorGenerator = new AKAZE();
+            BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32);
             //ParamDef[] parameters = keyPointDetector.GetParams();
             TestFeature2DTracker(keyPointDetector, descriptorGenerator);
         }
@@ -584,7 +583,7 @@ namespace Emgu.CV.Test
         public void TestBOWKmeansTrainer()
         {
             Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
-            AKAZE detector = new AKAZE();
+            Feature2D detector = new KAZE();
             VectorOfKeyPoint kpts = new VectorOfKeyPoint();
             Mat descriptors = new Mat();
             detector.DetectAndCompute(box, null, kpts, descriptors, false);
