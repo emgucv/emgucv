@@ -122,8 +122,9 @@ namespace Emgu.CV.Test
 
         private static void TesseractDownloadLangFile(String folder, String lang)
         {
-            String subfolderName = "tessdata";
-            String folderName = System.IO.Path.Combine(folder, subfolderName);
+            //String subfolderName = "tessdata";
+            //String folderName = System.IO.Path.Combine(folder, subfolderName);
+            String folderName = folder;
             if (!System.IO.Directory.Exists(folderName))
             {
                 System.IO.Directory.CreateDirectory(folderName);
