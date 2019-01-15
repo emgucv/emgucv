@@ -537,6 +537,12 @@ void cveAlgorithmWrite(cv::Algorithm* algorithm, cv::FileStorage* storage)
 	algorithm->write(*storage);
 }
 
+void cveAlgorithmWrite2(cv::Algorithm* algorithm, cv::FileStorage* storage, cv::String* name)
+{
+	cv::Ptr<cv::FileStorage> storagePtr(storage, [](cv::FileStorage*) {});
+	algorithm->write(storagePtr, *name);
+}
+
 void cveAlgorithmSave(cv::Algorithm* algorithm, cv::String* filename)
 {
 	algorithm->save(*filename);
@@ -652,10 +658,11 @@ int cveFileNodeGetType(cv::FileNode* node)
 {
 	return node->type();
 }
+/*
 bool cveFileNodeIsEmpty(cv::FileNode* node)
 {
 	return node->empty();
-}
+}*/
 void cveFileNodeReadString(cv::FileNode* node, cv::String* str, cv::String* defaultStr)
 {
 	cv::read(*node, *str, *defaultStr);

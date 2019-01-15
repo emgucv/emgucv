@@ -882,6 +882,30 @@ IF(HAVE_opencv_core)
     "Moments"
 	""
     "#include \"core_c_extra.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "core/file_node_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/FileNode.g.cs"
+    "cv::FileNode" 
+    "FileNode" 
+    "isNamed;empty;isNone;isSeq;isMap;isInt;isReal;isString" 
+    "bool;bool;bool;bool;bool;bool;bool;bool" 
+    "val;val;val;val;val;val;val;val"
+    "IsNamed;IsEmpty;IsNone;IsSeq;IsMap;IsInt;IsRead;IsString" 
+    "bool;bool;bool;bool;bool;bool;bool;bool"
+    "Returns true if the node has a name;
+	Returns true if the node is empty;
+	Returns true if the node is a \"none\" object;
+	Returns true if the node is a sequence;
+	Returns true if the node is a mapping;
+	Returns true if the node is an integer;
+	Returns true if the node is a floating-point number;
+	Returns true if the node is a text string"
+    "Emgu.CV"
+    "CvInvoke"
+    "FileNode"
+	""
+    "#include \"core_c_extra.h\"")
 ENDIF()
 ############################### core code gen END ################################
 

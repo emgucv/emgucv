@@ -82,7 +82,7 @@ namespace Emgu.CV.Test
 
                         // estimates the response and get the neighbors' labels
                         float response = knn.Predict(sample);
-                            //knn.FindNearest(sample, K, results, null, neighborResponses, null);
+                        //knn.FindNearest(sample, K, results, null, neighborResponses, null);
 
                         int accuracy = 0;
                         // compute the number of neighbors representing the majority
@@ -103,17 +103,12 @@ namespace Emgu.CV.Test
                 //save stat model to string
                 using (FileStorage fs = new FileStorage(".yml", FileStorage.Mode.Write | FileStorage.Mode.Memory))
                 {
-                    knn.Write(fs);
-
+                    knn.Write(fs, "knn");
                     knnModelStr = fs.ReleaseAndGetString();
                 }
 
-                //load stat model from string
-                using (FileStorage fs = new FileStorage(knnModelStr, FileStorage.Mode.Read | FileStorage.Mode.Memory))
-                {
-                    KNearest knn2 = new KNearest();
-                    knn2.Read(fs.GetRoot());
-                }
+                KNearest knn2 = new KNearest();
+                knn2.LoadFromString(knnModelStr, "knn");
 
                 String knnModelStr2 = knn.SaveToString();
                 KNearest knn3 = new KNearest();
@@ -121,10 +116,9 @@ namespace Emgu.CV.Test
 
 #if !NETFX_CORE
                 String fileName = "knnModel.xml";
-                //String fileName = Path.Combine(Path.GetTempPath(), "svmModel.xml");
                 knn.Save(fileName);
                 String text = File.ReadAllText(fileName);
-                
+
 #endif
             }
 
@@ -239,8 +233,8 @@ namespace Emgu.CV.Test
                 Matrix<int> labels = new Matrix<int>(numberOfPoints, 1);
                 Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
                 for (int i = 0; i < numberOfPoints; i++)
-                for (int j = 0; j < dimensions; j++)
-                    featuresM[i, j] = 100 * (float) r.NextDouble() - 50;
+                    for (int j = 0; j < dimensions; j++)
+                        featuresM[i, j] = 100 * (float)r.NextDouble() - 50;
 
                 em.Train(featuresM, MlEnum.DataLayoutType.RowSample, labels);
             }
@@ -427,16 +421,16 @@ namespace Emgu.CV.Test
                 #region Classify every image pixel
 
                 for (int i = 0; i < img.Height; i++)
-                for (int j = 0; j < img.Width; j++)
-                {
-                    sample.Data[0, 0] = i;
-                    sample.Data[0, 1] = j;
-                    int response = (int) classifier.Predict(sample, null);
+                    for (int j = 0; j < img.Width; j++)
+                    {
+                        sample.Data[0, 0] = i;
+                        sample.Data[0, 1] = j;
+                        int response = (int)classifier.Predict(sample, null);
 
-                    Bgr color = colors[response - 1];
+                        Bgr color = colors[response - 1];
 
-                    img[j, i] = new Bgr(color.Blue * 0.5, color.Green * 0.5, color.Red * 0.5);
-                }
+                        img[j, i] = new Bgr(color.Blue * 0.5, color.Green * 0.5, color.Red * 0.5);
+                    }
 
                 #endregion
             }
@@ -658,11 +652,11 @@ namespace Emgu.CV.Test
             Matrix<float> data, response;
             ReadLetterRecognitionData(out data, out response);
 
-            int trainingSampleCount = (int) (data.Rows * 0.8);
+            int trainingSampleCount = (int)(data.Rows * 0.8);
 
             Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
-            varType.SetValue((byte) MlEnum.VarType.Numerical); //the data is numerical
-            varType[data.Cols, 0] = (byte) MlEnum.VarType.Categorical; //the response is catagorical
+            varType.SetValue((byte)MlEnum.VarType.Numerical); //the data is numerical
+            varType[data.Cols, 0] = (byte)MlEnum.VarType.Categorical; //the response is catagorical
 
             Matrix<byte> sampleIdx = new Matrix<byte>(data.Rows, 1);
             using (Matrix<byte> sampleRows = sampleIdx.GetRows(0, trainingSampleCount, 1))
@@ -826,7 +820,7 @@ namespace Emgu.CV.Test
 
             #endregion
 
-            using (Matrix<int> layerSize = new Matrix<int>(new int[] {2, 5, 1}))
+            using (Matrix<int> layerSize = new Matrix<int>(new int[] { 2, 5, 1 }))
             using (Mat layerSizeMat = layerSize.Mat)
 
             using (TrainData td = new TrainData(trainData, MlEnum.DataLayoutType.RowSample, trainClasses))
@@ -836,7 +830,7 @@ namespace Emgu.CV.Test
                 network.SetActivationFunction(ANN_MLP.AnnMlpActivationFunction.SigmoidSym, 0, 0);
                 network.TermCriteria = new MCvTermCriteria(10, 1.0e-8);
                 network.SetTrainMethod(ANN_MLP.AnnMlpTrainMethod.Backprop, 0.1, 0.1);
-                network.Train(td, (int) Emgu.CV.ML.MlEnum.AnnMlpTrainingFlag.Default);
+                network.Train(td, (int)Emgu.CV.ML.MlEnum.AnnMlpTrainingFlag.Default);
 
 #if !NETFX_CORE
                 String fileName = Path.Combine(Path.GetTempPath(), "ann_mlp_model.xml");
@@ -867,7 +861,7 @@ namespace Emgu.CV.Test
             {
                 PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
                 img.Draw(new CircleF(p1, 2), new Bgr(255, 100, 100), -1);
-                PointF p2 = new PointF((int) trainData2[i, 0], (int) trainData2[i, 1]);
+                PointF p2 = new PointF((int)trainData2[i, 0], (int)trainData2[i, 1]);
                 img.Draw(new CircleF(p2, 2), new Bgr(100, 255, 100), -1);
             }
 
@@ -943,7 +937,7 @@ namespace Emgu.CV.Test
             float[] values = new float[sampleCount];
             for (int i = 0; i < sampleCount; i++)
             {
-                values[i] = (float) (r.NextDouble() * maxVal);
+                values[i] = (float)(r.NextDouble() * maxVal);
             }
             using (VectorOfInt labels = new VectorOfInt())
             using (VectorOfFloat vd = new VectorOfFloat(values))

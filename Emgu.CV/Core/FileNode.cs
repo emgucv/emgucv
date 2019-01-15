@@ -25,7 +25,7 @@ namespace Emgu.CV
    /// Note that file nodes are only used for navigating file storages opened for reading. When a file
    /// storage is opened for writing, no data is stored in memory after it is written.
    /// </summary>
-   public class FileNode : UnmanagedObject
+   public partial class FileNode : UnmanagedObject
    {
       /// <summary>
       /// Type of the file storage node
@@ -113,6 +113,7 @@ namespace Emgu.CV
          }
       }
 
+      /*
       /// <summary>
       /// Gets a value indicating whether this instance is empty.
       /// </summary>
@@ -123,6 +124,7 @@ namespace Emgu.CV
       {
          get { return CvInvoke.cveFileNodeIsEmpty(_ptr); }
       }
+      */
 
       /// <summary>
       /// Gets the type of the node.
@@ -198,10 +200,12 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int cveFileNodeGetType(IntPtr node);
-
+    
+      /*
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
       internal static extern bool cveFileNodeIsEmpty(IntPtr node);
+      */
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveFileNodeReadString(IntPtr node, IntPtr str, IntPtr defaultStr);

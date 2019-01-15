@@ -49,6 +49,18 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Stores algorithm parameters in a file storage
+        /// </summary>
+        /// <param name="algorithm">The algorithm.</param>
+        /// <param name="storage">The storage.</param>
+        /// <param name="name">Simplified API for language bindings</param>
+        public static void Write(this IAlgorithm algorithm, FileStorage storage, String name)
+        {
+            using (CvString csName = new CvString(name))
+                CvInvoke.cveAlgorithmWrite2(algorithm.AlgorithmPtr, storage, csName);
+        }
+
+        /// <summary>
         /// Save the algorithm to file
         /// </summary>
         /// <param name="algorithm">The algorithm</param>
@@ -156,6 +168,9 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveAlgorithmWrite(IntPtr algorithm, IntPtr storage);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveAlgorithmWrite2(IntPtr algorithm, IntPtr storage, IntPtr name);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveAlgorithmSave(IntPtr algorithm, IntPtr filename);

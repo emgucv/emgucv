@@ -155,6 +155,7 @@ CVAPI(bool) cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_O
 //Algorithm 
 CVAPI(void) cveAlgorithmRead(cv::Algorithm* algorithm, cv::FileNode* node);
 CVAPI(void) cveAlgorithmWrite(cv::Algorithm* algorithm, cv::FileStorage* storage);
+CVAPI(void) cveAlgorithmWrite2(cv::Algorithm* algorithm, cv::FileStorage* storage, cv::String* name);
 CVAPI(void) cveAlgorithmSave(cv::Algorithm* algorithm, cv::String* filename);
 CVAPI(void) cveAlgorithmClear(cv::Algorithm* algorithm);
 CVAPI(bool) cveAlgorithmEmpty(cv::Algorithm* algorithm);
@@ -183,7 +184,7 @@ CVAPI(cv::FileNode*) cveFileStorageGetFirstTopLevelNode(cv::FileStorage* fs);
 CVAPI(cv::FileNode*) cveFileStorageGetNode(cv::FileStorage* fs, cv::String* nodeName);
 
 CVAPI(int) cveFileNodeGetType(cv::FileNode* node);
-CVAPI(bool) cveFileNodeIsEmpty(cv::FileNode* node);
+//CVAPI(bool) cveFileNodeIsEmpty(cv::FileNode* node);
 CVAPI(void) cveFileNodeReadMat(cv::FileNode* node, cv::Mat* mat, cv::Mat* defaultMat);
 CVAPI(void) cveFileNodeReadString(cv::FileNode* node, cv::String* str, cv::String* defaultStr);
 CVAPI(int) cveFileNodeReadInt(cv::FileNode* node, int defaultInt);
