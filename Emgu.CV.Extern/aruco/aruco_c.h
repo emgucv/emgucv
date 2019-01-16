@@ -135,4 +135,28 @@ CVAPI(void) cveArucoDrawCharucoDiamond(
 	int marginSize,
 	int borderBits);
 
+CVAPI(void) cveArucoDrawPlanarBoard(
+	cv::aruco::Board* board, 
+	CvSize* outSize, 
+	cv::_OutputArray* img,
+	int marginSize, 
+	int borderBits);
+
+CVAPI(int) cveArucoEstimatePoseBoard(
+	cv::_InputArray* corners, 
+	cv::_InputArray* ids, 
+	cv::aruco::Board* board,
+	cv::_InputArray* cameraMatrix, 
+	cv::_InputArray* distCoeffs, 
+	cv::_OutputArray* rvec,
+	cv::_OutputArray* tvec, 
+	bool useExtrinsicGuess);
+
+CVAPI(void) cveArucoGetBoardObjectAndImagePoints(
+	cv::aruco::Board* board, 
+	cv::_InputArray* detectedCorners,
+	cv::_InputArray* detectedIds, 
+	cv::_OutputArray* objPoints, 
+	cv::_OutputArray* imgPoints);
+
 #endif

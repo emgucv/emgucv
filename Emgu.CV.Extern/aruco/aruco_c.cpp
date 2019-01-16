@@ -293,3 +293,40 @@ void cveArucoDrawCharucoDiamond(
 	cv::Vec4i idsVec(ids[0], ids[1], ids[2], ids[3]);
 	cv::aruco::drawCharucoDiamond(dictPtr, idsVec, squareLength, markerLength, *img, marginSize, borderBits);
 }
+
+void cveArucoDrawPlanarBoard(
+	cv::aruco::Board* board,
+	CvSize* outSize,
+	cv::_OutputArray* img,
+	int marginSize,
+	int borderBits)
+{
+	cv::Ptr<cv::aruco::Board> boardPtr(board, [](cv::aruco::Board* b) {});
+	cv::aruco::drawPlanarBoard(boardPtr, *outSize, *img, marginSize, borderBits);
+}
+
+
+int cveArucoEstimatePoseBoard(
+	cv::_InputArray* corners,
+	cv::_InputArray* ids,
+	cv::aruco::Board* board,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvec,
+	cv::_OutputArray* tvec,
+	bool useExtrinsicGuess)
+{
+	cv::Ptr<cv::aruco::Board> boardPtr(board, [](cv::aruco::Board* b) {});
+	return cv::aruco::estimatePoseBoard(*corners, *ids, boardPtr, *cameraMatrix, *distCoeffs, *rvec, *tvec, useExtrinsicGuess);
+}
+
+void cveArucoGetBoardObjectAndImagePoints(
+	cv::aruco::Board* board,
+	cv::_InputArray* detectedCorners,
+	cv::_InputArray* detectedIds,
+	cv::_OutputArray* objPoints,
+	cv::_OutputArray* imgPoints)
+{
+	cv::Ptr<cv::aruco::Board> boardPtr(board, [](cv::aruco::Board* b) {});
+	cv::aruco::getBoardObjectAndImagePoints(boardPtr, *detectedCorners, *detectedIds, *objPoints, *imgPoints);
+}

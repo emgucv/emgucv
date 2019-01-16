@@ -619,5 +619,116 @@ namespace Emgu.CV.Aruco
             int marginSize,
             int borderBits);
 
+        /// <summary>
+        /// Draw a planar board.
+        /// </summary>
+        /// <param name="board">Layout of the board that will be drawn. The board should be planar, z coordinate is ignored</param>
+        /// <param name="outSize">Size of the output image in pixels.</param>
+        /// <param name="img">Output image with the board. The size of this image will be outSize and the board will be on the center, keeping the board proportions.</param>
+        /// <param name="marginSize">Minimum margins (in pixels) of the board in the output image</param>
+        /// <param name="borderBits">Width of the marker borders.</param>
+        public static void DrawPlanarBoard(
+            IBoard board,
+            Size outSize,
+            IOutputArray img,
+            int marginSize = 0,
+            int borderBits = 1)
+        {
+            using (OutputArray oaImg = img.GetOutputArray())
+            {
+                cveArucoDrawPlanarBoard(board.BoardPtr, ref outSize, oaImg, marginSize, borderBits);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveArucoDrawPlanarBoard(
+            IntPtr board,
+            ref Size outSize,
+            IntPtr img,
+            int marginSize,
+            int borderBits);
+
+        /// <summary>
+        /// Pose estimation for a board of markers.
+        /// </summary>
+        /// <param name="corners">Vector of already detected markers corners. For each marker, its four corners are provided, (e.g std::vector&gt;std::vector&gt;cv::Point2f&lt; &lt; ). For N detected markers, the dimensions of this array should be Nx4. The order of the corners should be clockwise.</param>
+        /// <param name="ids">List of identifiers for each marker in corners</param>
+        /// <param name="board">Layout of markers in the board. The layout is composed by the marker identifiers and the positions of each marker corner in the board reference system.</param>
+        /// <param name="cameraMatrix">Input 3x3 floating-point camera matrix</param>
+        /// <param name="distCoeffs">Vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6],[s1,s2,s3,s4]]) of 4, 5, 8 or 12 elements</param>
+        /// <param name="rvec">Output vector (e.g. cv::Mat) corresponding to the rotation vector of the board (see cv::Rodrigues). Used as initial guess if not empty.</param>
+        /// <param name="tvec">Output vector (e.g. cv::Mat) corresponding to the translation vector of the board.</param>
+        /// <param name="useExtrinsicGuess">Defines whether initial guess for rvec and tvec will be used or not. Used as initial guess if not empty.</param>
+        /// <returns>The function returns the number of markers from the input employed for the board pose estimation. Note that returning a 0 means the pose has not been estimated.</returns>
+        public static int EstimatePoseBoard(
+            IInputArrayOfArrays corners,
+            IInputArray ids,
+            IBoard board,
+            IInputArray cameraMatrix,
+            IInputArray distCoeffs,
+            IOutputArray rvec,
+            IOutputArray tvec,
+            bool useExtrinsicGuess = false)
+        {
+            using (InputArray iaCorners = corners.GetInputArray())
+            using (InputArray iaIds = ids.GetInputArray())
+            using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+            using (InputArray iaDistCoeffs = distCoeffs.GetInputArray())
+            using (OutputArray oaRvec = rvec.GetOutputArray())
+            using (OutputArray oaTvec = tvec.GetOutputArray())
+            {
+                return cveArucoEstimatePoseBoard(iaCorners, iaIds, board.BoardPtr, iaCameraMatrix, iaDistCoeffs, oaRvec,
+                    oaTvec, useExtrinsicGuess);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveArucoEstimatePoseBoard(
+            IntPtr corners,
+            IntPtr ids,
+            IntPtr board,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            IntPtr rvec,
+            IntPtr tvec,
+            bool useExtrinsicGuess);
+
+        /// <summary>
+        /// Given a board configuration and a set of detected markers, returns the corresponding image points and object points to call solvePnP.
+        /// </summary>
+        /// <param name="board">Marker board layout.</param>
+        /// <param name="detectedCorners">List of detected marker corners of the board.</param>
+        /// <param name="detectedIds">List of identifiers for each marker.</param>
+        /// <param name="objPoints">Vector of vectors of board marker points in the board coordinate space.</param>
+        /// <param name="imgPoints">Vector of vectors of the projections of board marker corner points.</param>
+        public static void GetBoardObjectAndImagePoints(
+            IBoard board,
+            IInputArray detectedCorners,
+            IInputArray detectedIds,
+            IOutputArray objPoints,
+            IOutputArray imgPoints)
+        {
+            using (InputArray iaDetectedCorners = detectedCorners.GetInputArray())
+            using (InputArray iaDetectedIds = detectedIds.GetInputArray())
+            using (OutputArray oaObjPoints = objPoints.GetOutputArray())
+            using (OutputArray oaImgPoints = imgPoints.GetOutputArray())
+            {
+                cveArucoGetBoardObjectAndImagePoints(
+                    board.BoardPtr,
+                    iaDetectedCorners,
+                    iaDetectedIds,
+                    oaObjPoints,
+                    oaImgPoints);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveArucoGetBoardObjectAndImagePoints(
+            IntPtr board,
+            IntPtr detectedCorners,
+            IntPtr detectedIds,
+            IntPtr objPoints,
+            IntPtr imgPoints);
+            
     }
 }
