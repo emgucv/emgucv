@@ -138,16 +138,57 @@ void cveArucoDrawDetectedMarkers(
 }
 
 double cveArucoCalibrateCameraAruco(
-   cv::_InputArray* corners, cv::_InputArray* ids, cv::_InputArray* counter, cv::aruco::Board* board,
-   CvSize* imageSize, cv::_InputOutputArray* cameraMatrix, cv::_InputOutputArray* distCoeffs,
-   cv::_OutputArray* rvecs, cv::_OutputArray* tvecs, int flags,
-   CvTermCriteria* criteria)
+	cv::_InputArray* corners, cv::_InputArray* ids, cv::_InputArray* counter, cv::aruco::Board* board,
+	CvSize* imageSize, cv::_InputOutputArray* cameraMatrix, cv::_InputOutputArray* distCoeffs,
+	cv::_OutputArray* rvecs, cv::_OutputArray* tvecs,
+	cv::_OutputArray* stdDeviationsIntrinsics,
+	cv::_OutputArray* stdDeviationsExtrinsics,
+	cv::_OutputArray* perViewErrors,
+	int flags, CvTermCriteria* criteria)
 {
 	cv::Ptr<cv::aruco::Board> boardPtr ( board, [](cv::aruco::Board*) {});
 
-	return cv::aruco::calibrateCameraAruco(*corners, *ids, *counter, boardPtr, *imageSize,
-      *cameraMatrix, *distCoeffs, rvecs ? *rvecs : (cv::OutputArrayOfArrays) cv::noArray(),
-      tvecs ? *tvecs : (cv::OutputArrayOfArrays) cv::noArray(), flags, *criteria);
+	return cv::aruco::calibrateCameraAruco(
+		*corners, *ids, *counter, boardPtr, *imageSize,
+		*cameraMatrix, *distCoeffs, 
+		rvecs ? *rvecs : (cv::OutputArrayOfArrays) cv::noArray(),
+		tvecs ? *tvecs : (cv::OutputArrayOfArrays) cv::noArray(),
+		stdDeviationsIntrinsics ? *stdDeviationsIntrinsics : (cv::OutputArrayOfArrays) cv::noArray(),
+		stdDeviationsExtrinsics ? *stdDeviationsExtrinsics : (cv::OutputArrayOfArrays) cv::noArray(),
+		perViewErrors ? *perViewErrors : (cv::OutputArrayOfArrays) cv::noArray(),
+		flags, *criteria);
+}
+
+double cveArucoCalibrateCameraCharuco(
+	cv::_InputArray* charucoCorners, 
+	cv::_InputArray* charucoIds, 
+	cv::aruco::CharucoBoard* board,
+	CvSize* imageSize, 
+	cv::_InputOutputArray* cameraMatrix, 
+	cv::_InputOutputArray* distCoeffs,
+	cv::_OutputArray* rvecs, 
+	cv::_OutputArray* tvecs,
+	cv::_OutputArray* stdDeviationsIntrinsics,
+	cv::_OutputArray* stdDeviationsExtrinsics,
+	cv::_OutputArray* perViewErrors,
+	int flags, 
+	CvTermCriteria* criteria)
+{
+	cv::Ptr<cv::aruco::CharucoBoard> boardPtr(board, [](cv::aruco::CharucoBoard*) {});
+
+	return cv::aruco::calibrateCameraCharuco(
+		*charucoCorners, 
+		*charucoIds,  
+		boardPtr, 
+		*imageSize,
+		*cameraMatrix, *distCoeffs,
+		rvecs ? *rvecs : (cv::OutputArrayOfArrays) cv::noArray(),
+		tvecs ? *tvecs : (cv::OutputArrayOfArrays) cv::noArray(),
+		stdDeviationsIntrinsics ? *stdDeviationsIntrinsics : (cv::OutputArrayOfArrays) cv::noArray(),
+		stdDeviationsExtrinsics ? *stdDeviationsExtrinsics : (cv::OutputArrayOfArrays) cv::noArray(),
+		perViewErrors ? *perViewErrors : (cv::OutputArrayOfArrays) cv::noArray(),
+		flags, 
+		*criteria);
 }
 
 void cveArucoDetectorParametersGetDefault(cv::aruco::DetectorParameters* parameters)
