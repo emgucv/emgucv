@@ -65,13 +65,7 @@ void cveNormalBayesClassifierRelease(cv::ml::NormalBayesClassifier** classifier,
 	*classifier = 0;
 	*sharedPtr = 0;
 }
-/*
-bool CvNormalBayesClassifierTrain(cv::ml::NormalBayesClassifier* classifier, CvMat* _train_data, CvMat* _responses,
-   CvMat* _var_idx, CvMat* _sample_idx, bool update )
-{ return classifier->train(_train_data, _responses, _var_idx, _sample_idx, update); }
-float CvNormalBayesClassifierPredict(cv::ml::NormalBayesClassifier* classifier, CvMat* _samples, CvMat* results )
-{ return classifier->predict(_samples, results); }
-*/
+
 //KNearest
 cv::ml::KNearest* cveKNearestCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm, cv::Ptr<cv::ml::KNearest>** sharedPtr)
 {
@@ -83,24 +77,27 @@ cv::ml::KNearest* cveKNearestCreate(cv::ml::StatModel** statModel, cv::Algorithm
 	*algorithm = dynamic_cast<cv::Algorithm*>(r);
 	return r;
 }
-void cveKNearestRelease(cv::ml::KNearest** classifier, cv::Ptr<cv::ml::KNearest>** sharedPtr)
+void cveKNearestRelease(cv::Ptr<cv::ml::KNearest>** sharedPtr)
 {
 	delete *sharedPtr;
-	*classifier = 0;
 	*sharedPtr = 0;
 }
-/*
-bool CvKNearestTrain(CvKNearest* classifier, CvMat* _train_data, CvMat* _responses,
-   CvMat* _sample_idx, bool is_regression,
-   int _max_k, bool _update_base)
-{ return classifier->train(_train_data, _responses, _sample_idx, is_regression, _max_k, _update_base); }
-CvKNearest* CvKNearestCreate(CvMat* _train_data, CvMat* _responses,
-   CvMat* _sample_idx, bool _is_regression, int max_k )
-{ return new CvKNearest(_train_data, _responses, _sample_idx, _is_regression, max_k); }
-float CvKNearestFindNearest(CvKNearest* classifier, CvMat* _samples, int k, CvMat* results,
-   float** neighbors, CvMat* neighbor_responses, CvMat* dist )
-{ return classifier->find_nearest(_samples, k, results, (const float**) neighbors, neighbor_responses, dist); }
-*/
+float cveKNearestFindNearest(
+	cv::ml::KNearest* classifier,
+	cv::_InputArray* samples,
+	int k,
+	cv::_OutputArray* results,
+	cv::_OutputArray* neighborResponses,
+	cv::_OutputArray* dist)
+{
+	return classifier->findNearest(
+		*samples,
+		k,
+		*results,
+		neighborResponses ? *neighborResponses : (cv::OutputArray) cv::noArray(),
+		dist ? *dist : (cv::OutputArray) cv::noArray());
+}
+
 //EM
 
 cv::ml::EM* cveEMDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm, cv::Ptr<cv::ml::EM>** sharedPtr)

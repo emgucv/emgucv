@@ -1050,7 +1050,7 @@ IF(HAVE_opencv_ml)
     "int;bool;int;int" 
     "prop;prop;prop;prop"
     "DefaultK;IsClassifier;Emax;AlgorithmType" 
-    "int;bool;int;int"
+    "int;bool;int;KNearest.Types"
     "Default number of neighbors to use in predict method;
   Whether classification or regression model should be trained;
   Parameter for KDTree implementation;

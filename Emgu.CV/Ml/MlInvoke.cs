@@ -110,78 +110,17 @@ namespace Emgu.CV.ML
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveKNearestRelease(ref IntPtr knearest, ref IntPtr sharedPtr);
+        internal static extern void cveKNearestRelease(ref IntPtr sharedPtr);
 
-        /*
-        /// <summary>
-        /// Create the KNearest classifier using the specific traing data.
-        /// </summary>
-        /// <param name="isRegression">Specify the output variables type. It can be either categorical (isRegression=false) or ordered (isRegression=true)</param>
-        /// <param name="maxK">The number of maximum neighbors that may be passed to the method findNearest.</param>
-        /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
-        /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
-        /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
-        /// <returns>The KNearest classifier</returns>
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr CvKNearestCreate(
-           IntPtr trainData,
-           IntPtr responses,
-           IntPtr sampleIdx,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-           bool isRegression,
-           int maxK);
+        public static extern float cveKNearestFindNearest(
+            IntPtr classifier,
+            IntPtr samples,
+            int k,
+            IntPtr results,
+            IntPtr neighborResponses,
+            IntPtr dist);
 
-        /// <summary>
-        /// Update the KNearest classifier using the specific traing data.
-        /// </summary>
-        /// <param name="isRegression">Specify the output variables type. It can be either categorical (isRegression=false) or ordered (isRegression=true)</param>
-        /// <param name="maxK">The number of maximum neighbors that may be passed to the method findNearest.</param>
-        /// <param name="trainData">The training data. A 32-bit floating-point, single-channel matrix, one vector per row</param>
-        /// <param name="responses">A floating-point matrix of the corresponding output vectors, one vector per row. </param>
-        /// <param name="sampleIdx">Can be IntPtr.Zero if not needed. When specified, identifies samples of interest. It is a Matrix&gt;int&lt; of nx1</param>
-        /// <param name="classifier">The KNearest classifier to be updated</param>
-        /// <param name="updateBase">
-        /// If true, the existing classifer is updated using the new training data;
-        /// Otherwise, the classifier is trained from scratch</param>
-        /// <returns></returns>
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        public static extern bool CvKNearestTrain(
-           IntPtr classifier,
-           IntPtr trainData,
-           IntPtr responses,
-           IntPtr sampleIdx,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-           bool isRegression,
-           int maxK,
-          [MarshalAs(CvInvoke.BoolMarshalType)]
-           bool updateBase);
-
-        /// <summary>
-        /// For each input vector (which are rows of the matrix <paramref name="samples"/>) the method finds k &lt;= get_max_k() nearest neighbor. In case of regression, the predicted result will be a mean value of the particular vector's neighbor responses. In case of classification the class is determined by voting.
-        /// </summary>
-        /// <param name="classifier">The KNearest classifier</param>
-        /// <param name="samples">The sample matrix where each row is a sample</param>
-        /// <param name="k">The number of nearest neighbor to find</param>
-        /// <param name="results">
-        /// Can be IntPtr.Zero if not needed.
-        /// If regression, return a mean value of the particular vector's neighbor responses;
-        /// If classification, return the class determined by voting.
-        /// </param>
-        /// <param name="kNearestNeighbors">Should be IntPtr.Zero if not needed. Setting it to non-null values incures a performance panalty. A matrix of (k * samples.Rows) rows and (samples.Cols) columns that will be filled the data of the K nearest-neighbor for each sample</param>
-        /// <param name="neighborResponses">Should be IntPtr.Zero if not needed. The response of the neighbors. A vector of k*_samples->rows elements.</param>
-        /// <param name="dist">Should be IntPtr.Zero if not needed. The distances from the input vectors to the neighbors. A vector of k*_samples->rows elements.</param>
-        /// <returns>In case of regression, the predicted result will be a mean value of the particular vector's neighbor responses. In case of classification the class is determined by voting</returns>
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern float CvKNearestFindNearest(
-           IntPtr classifier,
-           IntPtr samples,
-           int k,
-           IntPtr results,
-           IntPtr[] kNearestNeighbors,
-           IntPtr neighborResponses,
-           IntPtr dist);
-        */
         #endregion
 
         #region CvEM

@@ -31,7 +31,14 @@ CVAPI(void) cveNormalBayesClassifierRelease(cv::ml::NormalBayesClassifier** clas
 
 //KNearest
 CVAPI(cv::ml::KNearest*) cveKNearestCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm, cv::Ptr<cv::ml::KNearest>** sharedPtr);
-CVAPI(void) cveKNearestRelease(cv::ml::KNearest** classifier, cv::Ptr<cv::ml::KNearest>** sharedPtr);
+CVAPI(void) cveKNearestRelease(cv::Ptr<cv::ml::KNearest>** sharedPtr);
+CVAPI(float) cveKNearestFindNearest(
+	cv::ml::KNearest* classifier,
+	cv::_InputArray* samples,
+	int k,
+	cv::_OutputArray* results,
+	cv::_OutputArray* neighborResponses,
+	cv::_OutputArray* dist);
 
 //EM
 CVAPI(cv::ml::EM*) cveEMDefaultCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm, cv::Ptr<cv::ml::EM>** sharedPtr);
