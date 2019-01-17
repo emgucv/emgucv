@@ -4,7 +4,7 @@
 
 IF(EMGU_CV_EXAMPLE_BUILD)
   #XamarinForms.Core 
-  IF (HAVE_ANDROID OR HAVE_IOS OR HAVE_OSX OR HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64 OR HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM OR HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM) 
+  IF (HAVE_ANDROID OR HAVE_IOS OR HAVE_OSX OR HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64 OR HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM OR HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM) 
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/Core/"
@@ -28,8 +28,38 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "Debug" EXCLUDE
       PATTERN "Release" EXCLUDE  
       )
+	INSTALL(
+      FILES
+      "${OPENCV_EXTRA_SUBFOLDER}/testdata/dnn/mask_rcnn_inception_v2_coco_2018_01_28.pbtxt"
+      DESTINATION "opencv_extra/testdata/dnn/"
+      COMPONENT emgucv_example_source
+      )
   ENDIF()
-  
+  IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
+      INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WPF/"
+      DESTINATION Emgu.CV.Example/XamarinForms/WPF/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
+  ENDIF()
   IF(HAVE_ANDROID)
     INSTALL(
       DIRECTORY
