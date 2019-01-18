@@ -23,17 +23,32 @@ namespace Emgu.CV.ML
         public enum AnnMlpActivationFunction
         {
             /// <summary>
-            /// Identity
+            /// Identity function: f(x)=x
             /// </summary>
             Identity = 0,
             /// <summary>
-            /// sigmoid symmetric
+            /// Symmetrical sigmoid: f(x)=beta*(1-e^{-alpha x})/(1+e^{-alpha x})
             /// </summary>
+            /// <remarks>If you are using the default sigmoid activation function with the default parameter values
+            /// fparam1 = 0 and fparam2 = 0 then the function used is y = 1.7159 * tanh(2/3 * x), so the output
+            /// will range from[-1.7159, 1.7159], instead of[0, 1].
+            /// </remarks>
             SigmoidSym = 1,
             /// <summary>
-            /// Gaussian
+            /// Gaussian function: f(x)=beta e^{-alpha x*x}
             /// </summary>
-            Gaussian = 2
+            Gaussian = 2,
+            /// <summary>
+            /// ReLU function: f(x)=max(0,x)
+            /// </summary>
+            Relu = 3,
+            /// <summary>
+            /// Leaky ReLU function:
+            /// for x>0, $f(x)=x;
+            /// and x&lt;=0, f(x)=alpha x 
+            /// </summary>
+            LeakyRelu = 4
+
         }
 
         /// <summary>
