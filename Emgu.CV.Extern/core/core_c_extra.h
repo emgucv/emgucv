@@ -266,4 +266,15 @@ CVAPI(cv::Affine3d*) cveAffine3dRotate(cv::Affine3d* affine, double r0, double r
 CVAPI(cv::Affine3d*) cveAffine3dTranslate(cv::Affine3d* affine, double t0, double t1, double t2);
 CVAPI(void) cveAffine3dGetValues(cv::Affine3d* affine, double* values);
 CVAPI(void) cveAffine3dRelease(cv::Affine3d** affine);
+
+CVAPI(cv::RNG*) cveRngCreate();
+CVAPI(cv::RNG*) cveRngCreateWithSeed(uint64 state);
+CVAPI(void) cvgRngFill(cv::RNG* rng, cv::_InputOutputArray* mat, int distType, cv::_InputArray* a, cv::_InputArray* b, bool saturateRange);
+CVAPI(double) cveRngGaussian(cv::RNG* rng, double sigma);
+CVAPI(unsigned) cveRngNext(cv::RNG* rng);
+CVAPI(int) cveRngUniformInt(cv::RNG* rng, int a, int b);
+CVAPI(float) cveRngUniformFloat(cv::RNG* rng, float a, float b);
+CVAPI(double) cveRngUniformDouble(cv::RNG* rng, double a, double b);
+CVAPI(void) cveRngRelease(cv::RNG** rng);
+
 #endif

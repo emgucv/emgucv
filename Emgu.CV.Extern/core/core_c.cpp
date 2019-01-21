@@ -959,3 +959,41 @@ void cveAffine3dRelease(cv::Affine3d** affine)
 	delete* affine;
 	*affine = 0;
 }
+
+cv::RNG* cveRngCreate()
+{
+	return new cv::RNG();
+}
+cv::RNG* cveRngCreateWithSeed(uint64 state)
+{
+	return new cv::RNG(state);
+}
+void cvgRngFill(cv::RNG* rng, cv::_InputOutputArray* mat, int distType, cv::_InputArray* a, cv::_InputArray* b, bool saturateRange)
+{
+	rng->fill(*mat, distType, *a, *b, saturateRange);
+}
+double cveRngGaussian(cv::RNG* rng, double sigma)
+{
+	return rng->gaussian(sigma);
+}
+unsigned cveRngNext(cv::RNG* rng)
+{
+	return rng->next();
+}
+int cveRngUniformInt(cv::RNG* rng, int a, int b)
+{
+	return rng->uniform(a, b);
+}
+float cveRngUniformFloat(cv::RNG* rng, float a, float b)
+{
+	return rng->uniform(a, b);
+}
+double cveRngUniformDouble(cv::RNG* rng, double a, double b)
+{
+	return rng->uniform(a, b);
+}
+void cveRngRelease(cv::RNG** rng)
+{
+	delete *rng;
+	*rng = 0;
+}
