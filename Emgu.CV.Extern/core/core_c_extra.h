@@ -269,7 +269,7 @@ CVAPI(void) cveAffine3dRelease(cv::Affine3d** affine);
 
 CVAPI(cv::RNG*) cveRngCreate();
 CVAPI(cv::RNG*) cveRngCreateWithSeed(uint64 state);
-CVAPI(void) cvgRngFill(cv::RNG* rng, cv::_InputOutputArray* mat, int distType, cv::_InputArray* a, cv::_InputArray* b, bool saturateRange);
+CVAPI(void) cveRngFill(cv::RNG* rng, cv::_InputOutputArray* mat, int distType, cv::_InputArray* a, cv::_InputArray* b, bool saturateRange);
 CVAPI(double) cveRngGaussian(cv::RNG* rng, double sigma);
 CVAPI(unsigned) cveRngNext(cv::RNG* rng);
 CVAPI(int) cveRngUniformInt(cv::RNG* rng, int a, int b);

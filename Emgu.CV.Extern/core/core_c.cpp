@@ -968,7 +968,7 @@ cv::RNG* cveRngCreateWithSeed(uint64 state)
 {
 	return new cv::RNG(state);
 }
-void cvgRngFill(cv::RNG* rng, cv::_InputOutputArray* mat, int distType, cv::_InputArray* a, cv::_InputArray* b, bool saturateRange)
+void cveRngFill(cv::RNG* rng, cv::_InputOutputArray* mat, int distType, cv::_InputArray* a, cv::_InputArray* b, bool saturateRange)
 {
 	rng->fill(*mat, distType, *a, *b, saturateRange);
 }

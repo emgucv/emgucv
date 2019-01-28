@@ -84,6 +84,28 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Fills arrays with random numbers.
+        /// </summary>
+        /// <param name="mat">2D or N-dimensional matrix; currently matrices with more than 4 channels are not supported by the methods, use Mat::reshape as a possible workaround.</param>
+        /// <param name="distType">distribution type</param>
+        /// <param name="a">First distribution parameter; in case of the uniform distribution, this is an inclusive lower boundary, in case of the normal distribution, this is a mean value.</param>
+        /// <param name="b">Second distribution parameter; in case of the uniform distribution, this is a non-inclusive upper boundary, in case of the normal distribution, this is a standard deviation (diagonal of the standard deviation matrix or the full standard deviation matrix).</param>
+        /// <param name="saturateRange">Pre-saturation flag; for uniform distribution only; if true, the method will first convert a and b to the acceptable value range (according to the mat datatype) and then will generate uniformly distributed random numbers within the range [saturate(a), saturate(b)), if saturateRange=false, the method will generate uniformly distributed random numbers in the original range [a, b) and then will saturate them</param>
+        public void Fill(
+            IInputOutputArray mat,
+            DistType distType,
+            MCvScalar a,
+            MCvScalar b,
+            bool saturateRange = false)
+        {
+            using (ScalarArray saA = new ScalarArray(a))
+            using (ScalarArray saB = new ScalarArray(b) )
+            {
+                Fill(mat, distType, saA, saB, saturateRange);
+            }
+        }
+
+        /// <summary>
         /// Returns the next random number sampled from the Gaussian distribution.
         /// </summary>
         /// <param name="sigma">standard deviation of the distribution.</param>

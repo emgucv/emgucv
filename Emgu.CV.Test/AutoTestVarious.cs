@@ -3725,6 +3725,17 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestRng()
+        {
+            Emgu.CV.RNG rng = new Emgu.CV.RNG();
+            Mat m = new Mat(new Size(480, 320), DepthType.Cv8U, 3);
+            rng.Fill(m, RNG.DistType.Uniform, new MCvScalar(0, 0, 0, 0), new MCvScalar(255, 255, 255, 255));
+            var data1 = m.GetData();
+            var data2 = m.GetData(false);
+            
+        }
+
+        [Test]
         public void TestHash()
         {
             Mat m1 = EmguAssert.LoadMat("lena.jpg");
