@@ -14,9 +14,18 @@ namespace Emgu.CV.ML
     /// </summary>
     public partial class KNearest : SharedPtrObject, IStatModel
     {
+        /// <summary>
+        /// The type of KNearest search
+        /// </summary>
         public enum Types
         {
+            /// <summary>
+            /// Using brute force
+            /// </summary>
             BruteForce = 1,
+            /// <summary>
+            /// Using kd tree
+            /// </summary>
             KdTree = 2
         }
 
