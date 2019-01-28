@@ -26,6 +26,7 @@ namespace Emgu.CV
     /// </summary>
 #if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
+    [DebuggerTypeProxy(typeof(UMat.DebuggerProxy))]
 #endif
     public partial class UMat : MatDataAllocator, IImage, IEquatable<UMat>
 #if !(NETFX_CORE || NETSTANDARD1_4)
@@ -729,6 +730,30 @@ namespace Emgu.CV
         public UMat Col(int x)
         {
             return new UMat(this, Range.All, new Range(x, x + 1));
+        }
+
+        public Array GetData(bool jagged = true)
+        {
+            using (InputArray iaM = this.GetInputArray())
+            using (Mat m = iaM.GetMat())
+            {
+                return m.GetData(jagged);
+            }
+        }
+
+        internal class DebuggerProxy
+        {
+            private UMat _v;
+
+            public DebuggerProxy(UMat v)
+            {
+                _v = v;
+            }
+
+            public Array Data
+            {
+                get { return _v.GetData(true); }
+            }
         }
     }
 
