@@ -3732,7 +3732,10 @@ namespace Emgu.CV.Test
             rng.Fill(m, RNG.DistType.Uniform, new MCvScalar(0, 0, 0, 0), new MCvScalar(255, 255, 255, 255));
             var data1 = m.GetData();
             var data2 = m.GetData(false);
-            
+            UMat um = new UMat(new Size(480, 320), DepthType.Cv8U, 3);
+            rng.Fill(um, RNG.DistType.Uniform, new MCvScalar(0, 0, 0, 0), new MCvScalar(255, 255, 255, 255));
+            data1 = um.GetData();
+            data2 = um.GetData(false);
         }
 
         [Test]
