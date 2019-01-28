@@ -410,7 +410,16 @@ namespace Emgu.CV
             if (jagged)
             {
                 int[] dim = this.SizeOfDimemsion;
-                array = Array.CreateInstance(t, dim);
+                int numberOfChannels = this.NumberOfChannels;
+                if (numberOfChannels == 1)
+                    array = Array.CreateInstance(t, dim);
+                else
+                {
+                    int[] newDim = new int[dim.Length + 1];
+                    Array.Copy(dim, newDim, dim.Length);
+                    newDim[newDim.Length - 1] = numberOfChannels;
+                    array = Array.CreateInstance(t, newDim);
+                }
             }
             else
             {
