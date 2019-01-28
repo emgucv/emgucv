@@ -74,6 +74,8 @@ mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\Freetype
 cp -r ../Emgu.CV.Contrib/Freetype/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Freetype
 mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\Fuzzy
 cp -r ../Emgu.CV.Contrib/Fuzzy/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Fuzzy
+mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\Hfs
+cp -r ../Emgu.CV.Contrib/Hfs/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hfs
 mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\ImgHash
 cp -r ../Emgu.CV.Contrib/ImgHash/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/ImgHash
 mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\LineDescriptor
