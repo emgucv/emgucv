@@ -386,6 +386,11 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// Get a pointer to the raw data given the specific index
+        /// </summary>
+        /// <param name="index">The index to the Mat data</param>
+        /// <returns>A pointer to the raw data given the specific index</returns>
         public IntPtr GetDataPointer(params int[] index)
         {
             if (index.Length == 0)
@@ -398,6 +403,11 @@ namespace Emgu.CV
             return result;
         }
 
+        /// <summary>
+        /// Get a copy of the data values as an array
+        /// </summary>
+        /// <param name="jagged">If true, a jagged array will returned. Otherwise it will return a regular array.</param>
+        /// <returns>a copy of the data values as an array</returns>
         public Array GetData(bool jagged = true)
         {
             Type t = CvInvoke.GetDepthType(this.Depth);

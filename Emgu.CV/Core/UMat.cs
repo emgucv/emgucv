@@ -732,6 +732,11 @@ namespace Emgu.CV
             return new UMat(this, Range.All, new Range(x, x + 1));
         }
 
+        /// <summary>
+        /// Get a copy of the data values as an array
+        /// </summary>
+        /// <param name="jagged">If true, a jagged array will returned. Otherwise it will return a regular array.</param>
+        /// <returns>a copy of the data values as an array</returns>
         public Array GetData(bool jagged = true)
         {
             using (InputArray iaM = this.GetInputArray())

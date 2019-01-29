@@ -192,12 +192,25 @@ namespace Emgu.CV
             bool centerPrincipalPoint,
             IntPtr cm);
 
-
+        /// <summary>
+        /// Computes an optimal affine transformation between two 2D point sets.
+        /// </summary>
+        /// <param name="from">First input 2D point set containing (X,Y).</param>
+        /// <param name="to">Second input 2D point set containing (x,y).</param>
+        /// <param name="inliners">Output vector indicating which points are inliers (1-inlier, 0-outlier).</param>
+        /// <param name="method">Robust method used to compute transformation. </param>
+        /// <param name="ransacReprojThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier. Applies only to RANSAC.</param>
+        /// <param name="maxIters">The maximum number of robust method iterations.</param>
+        /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
+        /// <param name="refineIters">Maximum number of iterations of refining algorithm (Levenberg-Marquardt). Passing 0 will disable refining, so the output matrix will be output of robust method.</param>
+        /// <returns>Output 2D affine transformation matrix 2×3 or empty matrix if transformation could not be estimated.</returns>
         public static Mat EstimateAffine2D(
             PointF[] from, PointF[] to,
             IOutputArray inliners = null,
-            CvEnum.RobustEstimationAlgorithm method = CvEnum.RobustEstimationAlgorithm.Ransac, double ransacReprojThreshold = 3,
-            int maxIters = 2000, double confidence = 0.99,
+            CvEnum.RobustEstimationAlgorithm method = CvEnum.RobustEstimationAlgorithm.Ransac, 
+            double ransacReprojThreshold = 3,
+            int maxIters = 2000, 
+            double confidence = 0.99,
             int refineIters = 10)
         {
             using(VectorOfPointF vpFrom = new VectorOfPointF(from))
@@ -205,14 +218,28 @@ namespace Emgu.CV
             {
                 return EstimateAffine2D(vpFrom, vpTo, inliners, method, ransacReprojThreshold, maxIters, confidence, refineIters);
             }
-            
         }
 
+        /// <summary>
+        /// Computes an optimal affine transformation between two 2D point sets.
+        /// </summary>
+        /// <param name="from">First input 2D point set containing (X,Y).</param>
+        /// <param name="to">Second input 2D point set containing (x,y).</param>
+        /// <param name="inliners">Output vector indicating which points are inliers (1-inlier, 0-outlier).</param>
+        /// <param name="method">Robust method used to compute transformation. </param>
+        /// <param name="ransacReprojThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier. Applies only to RANSAC.</param>
+        /// <param name="maxIters">The maximum number of robust method iterations.</param>
+        /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
+        /// <param name="refineIters">Maximum number of iterations of refining algorithm (Levenberg-Marquardt). Passing 0 will disable refining, so the output matrix will be output of robust method.</param>
+        /// <returns>Output 2D affine transformation matrix 2×3 or empty matrix if transformation could not be estimated.</returns>
         public static Mat EstimateAffine2D(
-            IInputArray from, IInputArray to, 
+            IInputArray from, 
+            IInputArray to, 
             IOutputArray inliners = null, 
-            CvEnum.RobustEstimationAlgorithm method = CvEnum.RobustEstimationAlgorithm.Ransac, double ransacReprojThreshold = 3,
-            int maxIters = 2000, double confidence = 0.99,
+            CvEnum.RobustEstimationAlgorithm method = CvEnum.RobustEstimationAlgorithm.Ransac, 
+            double ransacReprojThreshold = 3,
+            int maxIters = 2000, 
+            double confidence = 0.99,
             int refineIters= 10)
         {
             Mat affine = new Mat();
@@ -234,10 +261,23 @@ namespace Emgu.CV
             int refineIters,
             IntPtr affine);
 
+        /// <summary>
+        /// Computes an optimal limited affine transformation with 4 degrees of freedom between two 2D point sets.
+        /// </summary>
+        /// <param name="from">First input 2D point set.</param>
+        /// <param name="to">Second input 2D point set.</param>
+        /// <param name="inliners">Output vector indicating which points are inliers.</param>
+        /// <param name="method">Robust method used to compute transformation.</param>
+        /// <param name="ransacReprojThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier. Applies only to RANSAC.</param>
+        /// <param name="maxIters">The maximum number of robust method iterations.</param>
+        /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
+        /// <param name="refineIters">Maximum number of iterations of refining algorithm (Levenberg-Marquardt). Passing 0 will disable refining, so the output matrix will be output of robust method.</param>
+        /// <returns>Output 2D affine transformation (4 degrees of freedom) matrix 2×3 or empty matrix if transformation could not be estimated.</returns>
         public static Mat EstimateAffinePartial2D(
             IInputArray from, IInputArray to,
             IOutputArray inliners,
-            CvEnum.RobustEstimationAlgorithm method, double ransacReprojThreshold,
+            CvEnum.RobustEstimationAlgorithm method, 
+            double ransacReprojThreshold,
             int maxIters, double confidence,
             int refineIters)
         {
