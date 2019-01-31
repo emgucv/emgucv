@@ -3,7 +3,25 @@
 # --------------------------------------------------------
 
 IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
-  
+
+#MESSAGE(STATUS "HAVE_ANDROID_ALL_ARCH: ${HAVE_ANDROID_ALL_ARCH}")  
+#MESSAGE(STATUS "WIN32: ${WIN32}")  
+IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
+  PROJECT(Emgu.CV.World.Android)
+  #MESSAGE(STATUS "Adding Emgu.CV.World.Android project.")  
+  BUILD_CSPROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.World.Android.csproj" "" ALL)
+  INSTALL(
+	FILES 
+	${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Android.xml
+	${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Android.dll 
+	DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+	COMPONENT emgucv_binary)
+  ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
+  if(ENABLE_SOLUTION_FOLDERS)
+    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+  endif()
+endif()
+
   PROJECT(Emgu.CV.World)
   
   IF(ANDROID)
