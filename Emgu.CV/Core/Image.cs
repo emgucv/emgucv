@@ -3252,7 +3252,7 @@ namespace Emgu.CV
 #region Operator overload
 
         /// <summary>
-        /// Perform an elementwise AND operation on the two images
+        /// Perform an element wise AND operation on the two images
         /// </summary>
         /// <param name="img1">The first image to AND</param>
         /// <param name="img2">The second image to AND</param>
@@ -3263,7 +3263,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Perform an elementwise AND operation using an images and a color
+        /// Perform an element wise AND operation using an images and a color
         /// </summary>
         /// <param name="img1">The first image to AND</param>
         /// <param name="val">The color to AND</param>
@@ -3276,7 +3276,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Perform an elementwise AND operation using an images and a color
+        /// Perform an element wise AND operation using an images and a color
         /// </summary>
         /// <param name="img1">The first image to AND</param>
         /// <param name="val">The color to AND</param>
@@ -3289,7 +3289,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Perform an elementwise AND operation using an images and a color
+        /// Perform an element wise AND operation using an images and a color
         /// </summary>
         /// <param name="img1">The first image to AND</param>
         /// <param name="val">The color to AND</param>
@@ -3300,7 +3300,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Perform an elementwise AND operation using an images and a color
+        /// Perform an element wise AND operation using an images and a color
         /// </summary>
         /// <param name="img1">The first image to AND</param>
         /// <param name="val">The color to AND</param>
@@ -3310,7 +3310,7 @@ namespace Emgu.CV
             return img1.And(val);
         }
 
-        /// <summary> Perform an elementwise OR operation with another image and return the result</summary>
+        /// <summary> Perform an element wise OR operation with another image and return the result</summary>
         /// <param name="img1">The first image to apply bitwise OR operation</param>
         /// <param name="img2">The second image to apply bitwise OR operation</param>
         /// <returns> The result of the OR operation</returns>
@@ -3374,7 +3374,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Elementwise add <paramref name="img1"/> with <paramref name="img2"/>
+        /// Element wise add <paramref name="img1"/> with <paramref name="img2"/>
         /// </summary>
         /// <param name="img1">The first image to be added</param>
         /// <param name="img2">The second image to be added</param>
@@ -3385,7 +3385,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Elementwise add <paramref name="img1"/> with <paramref name="val"/>
+        /// Element wise add <paramref name="img1"/> with <paramref name="val"/>
         /// </summary>
         /// <param name="img1">The image to be added</param>
         /// <param name="val">The value to be added</param>
@@ -3396,7 +3396,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Elementwise add <paramref name="image"/> with <paramref name="value"/>
+        /// Element wise add <paramref name="image"/> with <paramref name="value"/>
         /// </summary>
         /// <param name="image">The image to be added</param>
         /// <param name="value">The value to be added</param>
@@ -3409,7 +3409,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Elementwise add <paramref name="image"/> with <paramref name="value"/>
+        /// Element wise add <paramref name="image"/> with <paramref name="value"/>
         /// </summary>
         /// <param name="image">The image to be added</param>
         /// <param name="value">The color to be added</param>
@@ -3420,7 +3420,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Elementwise add <paramref name="image"/> with <paramref name="value"/>
+        /// Element wise add <paramref name="image"/> with <paramref name="value"/>
         /// </summary>
         /// <param name="image">The image to be added</param>
         /// <param name="value">The color to be added</param>
@@ -3431,44 +3431,44 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Elementwise subtract another image from the current image
+        /// Element wise subtract another image from the current image
         /// </summary>
         /// <param name="image1">The image to be subtracted</param>
         /// <param name="image2">The second image to be subtracted from <paramref name="image1"/></param>
-        /// <returns> The result of elementwise subtracting img2 from <paramref name="image1"/> </returns>
+        /// <returns> The result of element wise subtracting img2 from <paramref name="image1"/> </returns>
         public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> image1, Image<TColor, TDepth> image2)
         {
             return image1.Sub(image2);
         }
 
         /// <summary>
-        /// Elementwise subtract another image from the current image
+        /// Element wise subtract another image from the current image
         /// </summary>
         /// <param name="image">The image to be subtracted</param>
         /// <param name="value">The color to be subtracted</param>
-        /// <returns> The result of elementwise subtracting <paramred name="val"/> from <paramref name="image"/> </returns>
+        /// <returns> The result of element wise subtracting <paramref name="value"/> from <paramref name="image"/> </returns>
         public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> image, TColor value)
         {
             return image.Sub(value);
         }
 
         /// <summary>
-        /// Elementwise subtract another image from the current image
+        /// Element wise subtract another image from the current image
         /// </summary>
         /// <param name="image">The image to be subtracted</param>
         /// <param name="value">The color to be subtracted</param>
-        /// <returns> <paramred name="val"/> - <paramref name="image"/> </returns>
+        /// <returns> <paramref name="value"/> - <paramref name="image"/> </returns>
         public static Image<TColor, TDepth> operator -(TColor value, Image<TColor, TDepth> image)
         {
             return image.SubR(value);
         }
 
         /// <summary>
-        /// <paramred name="val"/> - <paramref name="image"/>
+        /// <paramref name="value"/> - <paramref name="image"/>
         /// </summary>
         /// <param name="image">The image to be subtracted</param>
         /// <param name="value">The value to be subtracted</param>
-        /// <returns> <paramred name="val"/> - <paramref name="image"/> </returns>
+        /// <returns> <paramref name="value"/> - <paramref name="image"/> </returns>
         public static Image<TColor, TDepth> operator -(double value, Image<TColor, TDepth> image)
         {
             TColor color = new TColor();
@@ -3477,11 +3477,11 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Elementwise subtract another image from the current image
+        /// Element wise subtract another image from the current image
         /// </summary>
         /// <param name="image">The image to be subtracted</param>
         /// <param name="value">The value to be subtracted</param>
-        /// <returns> <paramref name="image"/> - <paramred name="val"/>   </returns>
+        /// <returns> <paramref name="image"/> - <paramref name="value"/>   </returns>
         public static Image<TColor, TDepth> operator -(Image<TColor, TDepth> image, double value)
         {
             TColor color = new TColor();

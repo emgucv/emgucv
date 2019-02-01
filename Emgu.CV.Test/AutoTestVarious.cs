@@ -3263,9 +3263,9 @@ namespace Emgu.CV.Test
             Mat probBlob = net.Forward("score");
             IntPtr dataPtr = probBlob.DataPointer;
 
-            int channels = probBlob.SizeOfDimemsion[1];
-            int rows = probBlob.SizeOfDimemsion[2];
-            int cols = probBlob.SizeOfDimemsion[3];
+            int channels = probBlob.SizeOfDimension[1];
+            int rows = probBlob.SizeOfDimension[2];
+            int cols = probBlob.SizeOfDimension[3];
             //should be a 1 x 21 x 500 x 500 Mat, where 21 is the number of classes.
             float[,,] labels = new float[channels, rows, cols];
             GCHandle handle = GCHandle.Alloc(labels, GCHandleType.Pinned);
@@ -3401,7 +3401,7 @@ namespace Emgu.CV.Test
                 labels[i] = labelsLines[i].Split(' ')[0].Trim();
             }
 
-            int[] dim = detection.SizeOfDimemsion;
+            int[] dim = detection.SizeOfDimension;
             int step = dim[3] * sizeof(float);
             IntPtr start = detection.DataPointer;
             for (int i = 0; i < dim[2]; i++)
@@ -3453,7 +3453,7 @@ namespace Emgu.CV.Test
 
             List<Rectangle> faceRegions = new List<Rectangle>();
 
-            int[] dim = detection.SizeOfDimemsion;
+            int[] dim = detection.SizeOfDimension;
             int step = dim[3] * sizeof(float);
             IntPtr start = detection.DataPointer;
             for (int i = 0; i < dim[2]; i++)
