@@ -14,6 +14,9 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Hfs
 {
+    /// <summary>
+    /// Entry points to the Open CV HFS module
+    /// </summary>
     public static partial class HfsInvoke
     {
         static HfsInvoke()
