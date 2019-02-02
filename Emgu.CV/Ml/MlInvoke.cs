@@ -113,7 +113,7 @@ namespace Emgu.CV.ML
         internal static extern void cveKNearestRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern float cveKNearestFindNearest(
+        internal static extern float cveKNearestFindNearest(
             IntPtr classifier,
             IntPtr samples,
             int k,
