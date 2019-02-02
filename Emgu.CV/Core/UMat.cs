@@ -746,6 +746,352 @@ namespace Emgu.CV
             }
         }
 
+        #region Operator overload
+
+        /// <summary>
+        /// Perform an element wise AND operation on the two mats
+        /// </summary>
+        /// <param name="mat1">The first mat to AND</param>
+        /// <param name="mat2">The second mat to AND</param>
+        /// <returns>The result of the AND operation</returns>
+        public static UMat operator &(UMat mat1, UMat mat2)
+        {
+            UMat m = new UMat();
+            CvInvoke.BitwiseAnd(mat1, mat2, m);
+            return m;
+        }
+
+        /// <summary>
+        /// Perform an element wise AND operation using a mat and a scalar
+        /// </summary>
+        /// <param name="mat1">The first image to AND</param>
+        /// <param name="val">The value to AND</param>
+        /// <returns>The result of the AND operation</returns>
+        public static UMat operator &(UMat mat1, double val)
+        {
+            using (ScalarArray saVal = new ScalarArray(val))
+            {
+                UMat m = new UMat();
+                CvInvoke.BitwiseAnd(mat1, saVal, m);
+                return m;
+            }
+        }
+
+
+        /// <summary>
+        /// Perform an element wise AND operation using a mat and a color
+        /// </summary>
+        /// <param name="mat1">The first mat to AND</param>
+        /// <param name="val">The value to AND</param>
+        /// <returns>The result of the AND operation</returns>
+        public static UMat operator &(double val, UMat mat1)
+        {
+            return mat1 & val;
+        }
+
+        /// <summary>
+        /// Perform an element wise AND operation using a mat and a scalar
+        /// </summary>
+        /// <param name="mat1">The first mat to AND</param>
+        /// <param name="val">The value to AND</param>
+        /// <returns>The result of the AND operation</returns>
+        public static UMat operator &(UMat mat1, MCvScalar val)
+        {
+            using (ScalarArray saVal = new ScalarArray(val))
+            {
+                UMat m = new UMat();
+                CvInvoke.BitwiseAnd(mat1, saVal, m);
+                return m;
+            }
+        }
+
+        /// <summary>
+        /// Perform an element wise AND operation using a mat and a scalar
+        /// </summary>
+        /// <param name="mat1">The first mat to AND</param>
+        /// <param name="val">The scalar to AND</param>
+        /// <returns>The result of the AND operation</returns>
+        public static UMat operator &(MCvScalar val, UMat mat1)
+        {
+            return mat1 & val;
+        }
+
+        /// <summary> Perform an element wise OR operation with another mat and return the result</summary>
+        /// <param name="mat1">The first mat to apply bitwise OR operation</param>
+        /// <param name="mat2">The second mat to apply bitwise OR operation</param>
+        /// <returns> The result of the OR operation</returns>
+        public static UMat operator |(UMat mat1, UMat mat2)
+        {
+            UMat m = new UMat();
+            CvInvoke.BitwiseOr(mat1, mat2, m);
+            return m;
+        }
+
+        ///<summary> 
+        /// Perform an binary OR operation with some value
+        /// </summary>
+        ///<param name="mat1">The mat to OR</param>
+        ///<param name="val"> The color to OR</param>
+        ///<returns> The result of the OR operation</returns>
+        public static UMat operator |(UMat mat1, double val)
+        {
+            using (ScalarArray saVal = new ScalarArray(val))
+            {
+                UMat m = new UMat();
+                CvInvoke.BitwiseOr(mat1, saVal, m);
+                return m;
+            }
+        }
+
+        ///<summary> 
+        /// Perform an binary OR operation with some color
+        /// </summary>
+        ///<param name="mat1">The mat to OR</param>
+        ///<param name="val"> The color to OR</param>
+        ///<returns> The result of the OR operation</returns>
+        public static UMat operator |(double val, UMat mat1)
+        {
+            return mat1 | val;
+        }
+
+        ///<summary> 
+        /// Perform an binary OR operation with some scalar
+        /// </summary>
+        ///<param name="mat1">The mat to OR</param>
+        ///<param name="val"> The value to OR</param>
+        ///<returns> The result of the OR operation</returns>
+        public static UMat operator |(UMat mat1, MCvScalar val)
+        {
+            using (ScalarArray saVal = new ScalarArray(val))
+            {
+                UMat m = new UMat();
+                CvInvoke.BitwiseOr(mat1, saVal, m);
+                return m;
+            }
+        }
+
+        ///<summary> 
+        /// Perform an binary OR operation with some scalar
+        /// </summary>
+        ///<param name="mat1">The mat to OR</param>
+        ///<param name="val"> The color to OR</param>
+        ///<returns> The result of the OR operation</returns>
+        public static UMat operator |(MCvScalar val, UMat mat1)
+        {
+            return mat1 | val;
+        }
+
+        ///<summary>Compute the complement Mat</summary>
+        ///<param name="mat">The mat to be inverted</param>
+        ///<returns>The complement image</returns>
+        public static UMat operator ~(UMat mat)
+        {
+            UMat invert = new UMat();
+            CvInvoke.BitwiseNot(mat, invert);
+            return invert;
+        }
+
+        /// <summary>
+        /// Element wise add <paramref name="mat1"/> with <paramref name="mat2"/>
+        /// </summary>
+        /// <param name="mat1">The first mat to be added</param>
+        /// <param name="mat2">The second mat to be added</param>
+        /// <returns>The sum of the two images</returns>
+        public static UMat operator +(UMat mat1, UMat mat2)
+        {
+            UMat m = new UMat();
+            CvInvoke.Add(mat1, mat2, m);
+            return m;
+        }
+
+        /// <summary>
+        /// Element wise add <paramref name="mat1"/> with <paramref name="value"/>
+        /// </summary>
+        /// <param name="mat1">The mat to be added</param>
+        /// <param name="value">The value to be added</param>
+        /// <returns>The mat plus the value</returns>
+        public static UMat operator +(double value, UMat mat1)
+        {
+            return mat1 + value;
+        }
+
+        /// <summary>
+        /// Element wise add <paramref name="mat"/> with <paramref name="value"/>
+        /// </summary>
+        /// <param name="mat">The mat to be added</param>
+        /// <param name="value">The value to be added</param>
+        /// <returns>The images plus the value</returns>
+        public static UMat operator +(UMat mat, double value)
+        {
+            using (ScalarArray saVal = new ScalarArray(value))
+            {
+                UMat m = new UMat();
+                CvInvoke.Add(mat, saVal, m);
+                return m;
+            }
+        }
+
+        /// <summary>
+        /// Element wise add <paramref name="mat"/> with <paramref name="value"/>
+        /// </summary>
+        /// <param name="mat">The mat to be added</param>
+        /// <param name="value">The value to be added</param>
+        /// <returns>The mat plus the value</returns>
+        public static UMat operator +(UMat mat, MCvScalar value)
+        {
+            using (ScalarArray saVal = new ScalarArray(value))
+            {
+                UMat m = new UMat();
+                CvInvoke.Add(mat, saVal, m);
+                return m;
+            }
+        }
+
+        /// <summary>
+        /// Element wise add <paramref name="mat"/> with <paramref name="value"/>
+        /// </summary>
+        /// <param name="mat">The mat to be added</param>
+        /// <param name="value">The color to be added</param>
+        /// <returns>The images plus the color</returns>
+        public static UMat operator +(MCvScalar value, UMat mat)
+        {
+            return mat + value;
+        }
+
+        /// <summary>
+        /// Element wise subtract another mat from the current mat
+        /// </summary>
+        /// <param name="mat1">The mat to be subtracted from.</param>
+        /// <param name="mat2">The second image to be subtracted from <paramref name="mat1"/></param>
+        /// <returns> The result of element wise subtracting img2 from <paramref name="mat1"/> </returns>
+        public static UMat operator -(UMat mat1, UMat mat2)
+        {
+            UMat m = new UMat();
+            CvInvoke.Subtract(mat1, mat2, m);
+            return m;
+        }
+
+        /// <summary>
+        /// Element wise subtract another mat from the current mat
+        /// </summary>
+        /// <param name="mat">The mat to be subtracted</param>
+        /// <param name="value">The value to be subtracted</param>
+        /// <returns> The result of element wise subtracting <paramref name="value"/> from <paramref name="mat"/> </returns>
+        public static UMat operator -(UMat mat, MCvScalar value)
+        {
+            using (ScalarArray saValue = new ScalarArray(value))
+            {
+                UMat m = new UMat();
+                CvInvoke.Subtract(mat, saValue, m);
+                return m;
+            }
+        }
+
+        /// <summary>
+        /// Element wise subtract value from the current mat
+        /// </summary>
+        /// <param name="mat">The mat to be subtracted</param>
+        /// <param name="value">The color to be subtracted</param>
+        /// <returns> <paramref name="value"/> - <paramref name="mat"/> </returns>
+        public static UMat operator -(MCvScalar value, UMat mat)
+        {
+            using (ScalarArray saValue = new ScalarArray(value))
+            {
+                UMat m = new UMat();
+                CvInvoke.Subtract(saValue, mat, m);
+                return m;
+            }
+        }
+
+        /// <summary>
+        /// <paramref name="value"/> - <paramref name="mat"/>
+        /// </summary>
+        /// <param name="mat">The mat to be subtracted</param>
+        /// <param name="value">The value to be subtracted</param>
+        /// <returns> <paramref name="value"/> - <paramref name="mat"/> </returns>
+        public static UMat operator -(double value, UMat mat)
+        {
+            using (ScalarArray saValue = new ScalarArray(value))
+            {
+                UMat m = new UMat();
+                CvInvoke.Subtract(saValue, mat, m);
+                return m;
+            }
+        }
+
+        /// <summary>
+        /// Element wise subtract value from the current mat
+        /// </summary>
+        /// <param name="mat">The mat to be subtracted</param>
+        /// <param name="value">The value to be subtracted</param>
+        /// <returns> <paramref name="mat"/> - <paramref name="value"/>   </returns>
+        public static UMat operator -(UMat mat, double value)
+        {
+            using (ScalarArray saValue = new ScalarArray(value))
+            {
+                UMat m = new UMat();
+                CvInvoke.Subtract(mat, saValue, m);
+                return m;
+            }
+        }
+
+        /// <summary>
+        ///  <paramref name="mat"/> * <paramref name="scale"/>
+        /// </summary>
+        /// <param name="mat">The mat</param>
+        /// <param name="scale">The multiplication scale</param>
+        /// <returns><paramref name="mat"/> * <paramref name="scale"/></returns>
+        public static UMat operator *(UMat mat, double scale)
+        {
+            using (ScalarArray saValue = new ScalarArray(scale))
+            {
+                UMat m = new UMat();
+                CvInvoke.Multiply(mat, saValue, m);
+                return m;
+            }
+        }
+
+        /// <summary>
+        ///   <paramref name="scale"/>*<paramref name="mat"/>
+        /// </summary>
+        /// <param name="mat">The mat</param>
+        /// <param name="scale">The multiplication scale</param>
+        /// <returns><paramref name="scale"/>*<paramref name="mat"/></returns>
+        public static UMat operator *(double scale, UMat mat)
+        {
+            return mat * scale;
+        }
+
+        /// <summary>
+        ///  <paramref name="mat"/> / <paramref name="scale"/>
+        /// </summary>
+        /// <param name="mat">The mat</param>
+        /// <param name="scale">The division scale</param>
+        /// <returns><paramref name="mat"/> / <paramref name="scale"/></returns>
+        public static UMat operator /(UMat mat, double scale)
+        {
+            return mat * (1.0 / scale);
+        }
+
+        /// <summary>
+        ///   <paramref name="scale"/> / <paramref name="mat"/>
+        /// </summary>
+        /// <param name="mat">The mat</param>
+        /// <param name="scale">The scale</param>
+        /// <returns><paramref name="scale"/> / <paramref name="mat"/></returns>
+        public static UMat operator /(double scale, UMat mat)
+        {
+            using (ScalarArray saScale = new ScalarArray(scale))
+            {
+                UMat m = new UMat();
+                CvInvoke.Divide(saScale, mat, m);
+                return m;
+            }
+        }
+
+        #endregion
+
+
         internal class DebuggerProxy
         {
             private UMat _v;
