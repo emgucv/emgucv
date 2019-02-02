@@ -54,8 +54,7 @@ CVAPI(double) cveStitcherGetRegistrationResol(cv::Stitcher* stitcher);
 
 CVAPI(int) cveStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
 
-CVAPI(int) cveStitcherEstimateTransform1(cv::Stitcher* stitcher, cv::_InputArray*  images);
-CVAPI(int) cveStitcherEstimateTransform2(cv::Stitcher* stitcher, cv::_InputArray* images, std::vector< std::vector< cv::Rect > >* rois);
+CVAPI(int) cveStitcherEstimateTransform(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_InputArray* masks);
 CVAPI(int) cveStitcherComposePanorama1(cv::Stitcher* stitcher, cv::_OutputArray* pano);
 CVAPI(int) cveStitcherComposePanorama2(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
 

@@ -99,13 +99,10 @@ int cveStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_Outp
    return stitcher->stitch(*images, *pano);
 }
 
-int cveStitcherEstimateTransform1(cv::Stitcher* stitcher, cv::_InputArray*  images)
+
+int cveStitcherEstimateTransform(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_InputArray* masks)
 {
-	return stitcher->estimateTransform(*images);
-}
-int cveStitcherEstimateTransform2(cv::Stitcher* stitcher, cv::_InputArray* images, std::vector< std::vector< cv::Rect > >* rois)
-{
-	return stitcher->estimateTransform(*images, *rois);
+	return stitcher->estimateTransform(*images, masks? *masks: (cv::InputArrayOfArrays) cv::noArray());
 }
 
 int cveStitcherComposePanorama1(cv::Stitcher* stitcher, cv::_OutputArray* pano)

@@ -73,8 +73,6 @@ namespace Emgu.CV.Stitching
 
         }
 
-
-
         /// <summary>
         /// Creates a Stitcher configured in one of the stitching modes.
         /// </summary>
@@ -98,24 +96,27 @@ namespace Emgu.CV.Stitching
                 return StitchingInvoke.cveStitcherStitch(_ptr, iaImages, oaPano);
         }
 
-        public int EstimateTransform(IInputArrayOfArrays images, Rectangle[][] rois = null)
+        /// <summary>
+        /// These functions try to match the given images and to estimate rotations of each camera.
+        /// </summary>
+        /// <param name="images">Input images.</param>
+        /// <param name="masks">Masks for each input image specifying where to look for keypoints (optional).</param>
+        /// <returns>Status code.</returns>
+        public Stitcher.Status EstimateTransform(IInputArrayOfArrays images, IInputArrayOfArrays masks = null)
         {
             using (InputArray iaImages = images.GetInputArray())
-                if (rois == null)
-                {
-                    return StitchingInvoke.cveStitcherEstimateTransform1(_ptr, iaImages);
-                }
-                else
-                {
-                    using (VectorOfVectorOfRect vvr = new VectorOfVectorOfRect(rois))
-                    {
-                        return StitchingInvoke.cveStitcherEstimateTransform2(_ptr, iaImages, vvr);
-                    }
-                }
-
+            using (InputArray iaMasks = masks == null ? InputArray.GetEmpty() : masks.GetInputArray())
+            {
+                return StitchingInvoke.cveStitcherEstimateTransform(_ptr, iaImages, iaMasks);
+            }
         }
 
-        public int ComposePanorama(IOutputArray pano)
+        /// <summary>
+        /// These functions try to match the given images and to estimate rotations of each camera.
+        /// </summary>
+        /// <param name="pano">Final pano.</param>
+        /// <returns>Status code.</returns>
+        public Stitcher.Status ComposePanorama(IOutputArray pano)
         {
             using (OutputArray oaPano = pano.GetOutputArray())
             {
@@ -123,7 +124,13 @@ namespace Emgu.CV.Stitching
             }
         }
 
-        public int ComposePanorama(IInputArrayOfArrays images, IOutputArray pano)
+        /// <summary>
+        /// These functions try to compose the given images (or images stored internally from the other function calls) into the final pano under the assumption that the image transformations were estimated before.
+        /// </summary>
+        /// <param name="images">Input images</param>
+        /// <param name="pano">Final pano.</param>
+        /// <returns>Status code.</returns>
+        public Stitcher.Status ComposePanorama(IInputArrayOfArrays images, IOutputArray pano)
         {
             using (InputArray iaImages = images.GetInputArray())
             using (OutputArray oaPano = pano.GetOutputArray())
@@ -291,13 +298,12 @@ namespace Emgu.CV.Stitching
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveStitcherGetRegistrationResol(IntPtr stitcher);
 
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveStitcherEstimateTransform1(IntPtr stitcher, IntPtr images);
+        internal static extern Stitcher.Status cveStitcherEstimateTransform(IntPtr stitcher, IntPtr images, IntPtr masks);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveStitcherEstimateTransform2(IntPtr stitcher, IntPtr images, IntPtr rois);
+        internal static extern Stitcher.Status cveStitcherComposePanorama1(IntPtr stitcher, IntPtr pano);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveStitcherComposePanorama1(IntPtr stitcher, IntPtr pano);
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveStitcherComposePanorama2(IntPtr stitcher, IntPtr images, IntPtr pano);
+        internal static extern Stitcher.Status cveStitcherComposePanorama2(IntPtr stitcher, IntPtr images, IntPtr pano);
     }
 }
