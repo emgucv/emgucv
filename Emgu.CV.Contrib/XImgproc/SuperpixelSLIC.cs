@@ -15,7 +15,7 @@ using Emgu.Util;
 namespace Emgu.CV.XImgproc
 {
     /// <summary>
-    /// Class implementing the SLIC (Simple Linear Iterative Clustering) superpixels algorithm described in Radhakrishna Achanta, Appu Shaji, Kevin Smith, Aurelien Lucchi, Pascal Fua, and Sabine Susstrunk. Slic superpixels compared to state-of-the-art superpixel methods. IEEE Trans. Pattern Anal. Mach. Intell., 34(11):2274–2282, nov 2012.
+    /// Class implementing the SLIC (Simple Linear Iterative Clustering) superpixels algorithm described in Radhakrishna Achanta, Appu Shaji, Kevin Smith, Aurelien Lucchi, Pascal Fua, and Sabine Susstrunk. Slic superpixels compared to state-of-the-art superpixel methods. IEEE Trans. Pattern Anal. Mach. Intell., 34(11):2274-2282, nov 2012.
     /// </summary>
     public class SupperpixelSLIC : UnmanagedObject
     {

@@ -15,7 +15,7 @@ using Emgu.Util;
 namespace Emgu.CV.XImgproc
 {
     /// <summary>
-    /// Graph Based Segmentation Algorithm. The class implements the algorithm described in Pedro F Felzenszwalb and Daniel P Huttenlocher. Efficient graph-based image segmentation. volume 59, pages 167–181. Springer, 2004.
+    /// Graph Based Segmentation Algorithm. The class implements the algorithm described in Pedro F Felzenszwalb and Daniel P Huttenlocher. Efficient graph-based image segmentation. volume 59, pages 167 - 181. Springer, 2004.
     /// </summary>
     public class GraphSegmentation : UnmanagedObject
     {

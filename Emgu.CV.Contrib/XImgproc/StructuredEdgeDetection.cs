@@ -14,7 +14,7 @@ using Emgu.Util;
 namespace Emgu.CV.XImgproc
 {
     /// <summary>
-    /// Class implementing edge detection algorithm from Piotr Dollár and C Lawrence Zitnick. Structured forests for fast edge detection. In Computer Vision (ICCV), 2013 IEEE International Conference on, pages 1841–1848. IEEE, 2013.
+    /// Class implementing edge detection algorithm from Piotr Dollar and C Lawrence Zitnick. Structured forests for fast edge detection. In Computer Vision (ICCV), 2013 IEEE International Conference on, pages 1841-1848. IEEE, 2013.
     /// </summary>
     public class StructuredEdgeDetection : UnmanagedObject
     {

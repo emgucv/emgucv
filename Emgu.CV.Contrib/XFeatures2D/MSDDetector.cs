@@ -17,7 +17,7 @@ using Emgu.CV.Features2D;
 namespace Emgu.CV.XFeatures2D
 {
     /// <summary>
-    /// Class implementing the MSD (Maximal Self-Dissimilarity) keypoint detector, described in "Federico Tombari and Luigi Di Stefano. Interest points via maximal self-dissimilarities. In Asian Conference on Computer Vision – ACCV 2014, 2014".
+    /// Class implementing the MSD (Maximal Self-Dissimilarity) keypoint detector, described in "Federico Tombari and Luigi Di Stefano. Interest points via maximal self-dissimilarities. In Asian Conference on Computer Vision - ACCV 2014, 2014".
     /// </summary>
     /// <remarks>The algorithm implements a novel interest point detector stemming from the intuition that image patches which are highly dissimilar over a relatively large extent of their surroundings hold the property of being repeatable and distinctive. This concept of "contextual self-dissimilarity" reverses the key paradigm of recent successful techniques such as the Local Self-Similarity descriptor and the Non-Local Means filter, which build upon the presence of similar - rather than dissimilar - patches. Moreover, it extends to contextual information the local self-dissimilarity notion embedded in established detectors of corner-like interest points, thereby achieving enhanced repeatability, distinctiveness and localization accuracy.</remarks>
     public class MSDDetector : Feature2D

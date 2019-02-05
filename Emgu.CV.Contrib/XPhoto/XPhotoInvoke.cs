@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -106,7 +106,7 @@ namespace Emgu.CV.XPhoto
     /// This algorithm scales the values of pixels based on a gray-world assumption which states that the average of all channels should result in a gray image.
     /// It adds a modification which thresholds pixels based on their saturation value and only uses pixels below the provided threshold in finding average pixel values.
     /// Saturation is calculated using the following for a 3-channel RGB image per pixel I and is in the range [0, 1]:
-    /// Saturation[I]= max(R,G,B)−min(R,G,B) / max(R,G,B)
+    /// Saturation[I]= max(R,G,B)-min(R,G,B) / max(R,G,B)
     /// A threshold of 1 means that all pixels are used to white-balance, while a threshold of 0 means no pixels are used. Lower thresholds are useful in white-balancing saturated images.
     /// Currently supports images of type CV_8UC3 and CV_16UC3.
     /// </summary>
@@ -138,7 +138,7 @@ namespace Emgu.CV.XPhoto
     /// <summary>
     /// More sophisticated learning-based automatic white balance algorithm.
     /// As GrayworldWB, this algorithm works by applying different gains to the input image channels, but their computation is a bit more involved compared to the simple gray-world assumption. 
-    /// More details about the algorithm can be found in: Dongliang Cheng, Brian Price, Scott Cohen, and Michael S Brown. Effective learning-based illuminant estimation using simple features. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 1000–1008, 2015.
+    /// More details about the algorithm can be found in: Dongliang Cheng, Brian Price, Scott Cohen, and Michael S Brown. Effective learning-based illuminant estimation using simple features. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 1000-1008, 2015.
     /// To mask out saturated pixels this function uses only pixels that satisfy the following condition:
     /// max(R,G,B) / range_max_val &lt; saturation_thresh 
     /// Currently supports images of type CV_8UC3 and CV_16UC3.

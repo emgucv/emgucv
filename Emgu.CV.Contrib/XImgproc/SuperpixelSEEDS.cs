@@ -14,7 +14,7 @@ using Emgu.Util;
 namespace Emgu.CV.XImgproc
 {
     /// <summary>
-    /// Class implementing the SEEDS (Superpixels Extracted via Energy-Driven Sampling) superpixels algorithm described in Michael Van den Bergh, Xavier Boix, Gemma Roig, Benjamin de Capitani, and Luc Van Gool. Seeds: Superpixels extracted via energy-driven sampling. In Computer Vision–ECCV 2012, pages 13–26. Springer, 2012.
+    /// Class implementing the SEEDS (Superpixels Extracted via Energy-Driven Sampling) superpixels algorithm described in Michael Van den Bergh, Xavier Boix, Gemma Roig, Benjamin de Capitani, and Luc Van Gool. Seeds: Superpixels extracted via energy-driven sampling. In Computer Vision-ECCV 2012, pages 13-26. Springer, 2012.
     /// </summary>
     public class SupperpixelSEEDS : UnmanagedObject
     {

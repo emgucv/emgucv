@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -12,9 +12,9 @@ using System.Runtime.InteropServices;
 namespace Emgu.CV
 {
     /// <summary>
-    /// This class implements variational refinement of the input flow field, i.e. it uses input flow to initialize the minimization of the following functional: E(U)=∫ΩδΨ(EI)+γΨ(EG)+αΨ(ES), where EI,EG,ES are color constancy, gradient constancy and smoothness terms respectively. Ψ(s2)=sqrt(s^2+ϵ^2) is a robust penalizer to limit the influence of outliers.
+    /// This class implements variational refinement of the input flow field.
     /// </summary>
-    /// <remarks>See: Thomas Brox, Andres Bruhn, Nils Papenberg, and Joachim Weickert. High accuracy optical flow estimation based on a theory for warping. In Computer Vision-ECCV 2004, pages 25–36. Springer, 2004.</remarks>
+    /// <remarks>See: Thomas Brox, Andres Bruhn, Nils Papenberg, and Joachim Weickert. High accuracy optical flow estimation based on a theory for warping. In Computer Vision-ECCV 2004, pages 25-36. Springer, 2004.</remarks>
     public partial class VariationalRefinement : UnmanagedObject, IDenseOpticalFlow
     {
         private IntPtr _sharedPtr;

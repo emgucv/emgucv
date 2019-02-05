@@ -47,7 +47,7 @@ namespace Emgu.CV.PhaseUnwrapping
         }
 
         /// <summary>
-        /// Release the unmanaged resources assocuated with the HistogramPhaseUnwrapping
+        /// Release the unmanaged resources associated with the HistogramPhaseUnwrapping
         /// </summary>
         protected override void DisposeObject()
         {

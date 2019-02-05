@@ -37,7 +37,7 @@ namespace Emgu.CV
         /// <param name="nbins">Number of bins.</param>
         /// <param name="winSigma">Gaussian smoothing window parameter.</param>
         /// <param name="winSize">Detection window size. Must be aligned to block size and block stride. Must match the size of the training image. Use (64, 128) for default.</param>
-        /// <param name="derivAperture"></param>
+        /// <param name="derivAperture">Deriv Aperture</param>
         public HOGDescriptor(
            Size winSize,
            Size blockSize,
@@ -133,7 +133,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// 
+        /// Computes HOG descriptors of given image.
         /// </summary>
         /// <param name="image">The image</param>
         /// <param name="winStride">Window stride. Must be a multiple of block stride. Use Size.Empty for default</param>

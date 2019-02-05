@@ -14,8 +14,7 @@ namespace Emgu.CV.XImgproc
 {
 
     /// <summary>
-    /// Class implementing the FLD (Fast Line Detector) algorithm from
-    /// https://docs.opencv.org/3.4.1/df/d4c/classcv_1_1ximgproc_1_1FastLineDetector.html#details
+    /// Class implementing the FLD (Fast Line Detector) algorithm
     /// </summary>
     public class FastLineDetector : SharedPtrObject
     {
