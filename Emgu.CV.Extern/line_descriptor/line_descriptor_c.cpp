@@ -21,11 +21,10 @@ void cveLineDescriptorBinaryDescriptorCompute(cv::line_descriptor::BinaryDescrip
 	descriptor->compute(*image, *keylines, *descriptors, returnFloatDescr);
 }
 
-void cveLineDescriptorBinaryDescriptorRelease(cv::line_descriptor::BinaryDescriptor** descriptor, cv::Ptr<cv::line_descriptor::BinaryDescriptor>** sharedPtr)
+void cveLineDescriptorBinaryDescriptorRelease(cv::Ptr<cv::line_descriptor::BinaryDescriptor>** sharedPtr)
 {
 	delete *sharedPtr;
 	*sharedPtr = 0;
-	*descriptor = 0;
 }
 
 cv::line_descriptor::LSDDetector* cveLineDescriptorLSDDetectorCreate(cv::Ptr<cv::line_descriptor::LSDDetector>** sharedPtr)
@@ -38,8 +37,8 @@ void cveLineDescriptorLSDDetectorDetect(cv::line_descriptor::LSDDetector* detect
 {
 	detector->detect(*image, *keypoints, scale, numOctaves, mask ? *mask : cv::Mat());
 }
-void cveLineDescriptorLSDDetectorRelease(cv::line_descriptor::LSDDetector** detector, cv::Ptr<cv::line_descriptor::LSDDetector>** sharedPtr)
+void cveLineDescriptorLSDDetectorRelease(cv::Ptr<cv::line_descriptor::LSDDetector>** sharedPtr)
 {
 	delete *sharedPtr;
-	*detector = 0;
+	*sharedPtr = 0;
 }

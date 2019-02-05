@@ -3583,10 +3583,10 @@ namespace Emgu.CV.Test
             using (Mat m = new Mat(new Size(640, 480), DepthType.Cv8U, 3))
             using (Freetype.Freetype2 freetype = new Freetype2())
             {
-                m.SetTo(new MCvScalar(0,0,0,0));
+                m.SetTo(new MCvScalar(0, 0, 0, 0));
                 freetype.LoadFontData("NotoSansCJK-Regular.ttc", 0);
-                
-                freetype.PutText(m, "测试", new Point(100, 100), 36, new MCvScalar(255,255,0), 1, LineType.EightConnected, false);
+
+                freetype.PutText(m, "测试", new Point(100, 100), 36, new MCvScalar(255, 255, 0), 1, LineType.EightConnected, false);
                 //CvInvoke.NamedWindow("test");
                 //CvInvoke.Imshow("test", m);
                 //CvInvoke.WaitKey();
@@ -3845,6 +3845,34 @@ namespace Emgu.CV.Test
             //result.Draw(new LineSegment2D(new Point(0, imgSmall.Height), new Point(result.Width, imgSmall.Height) ), new Bgra(0, 0, 0, 255), 1  );
             //result.Draw(new LineSegment2D(new Point(0, imgSmall.Height + imgMedium.Height), new Point(result.Width, imgSmall.Height + imgMedium.Height)), new Bgra(0, 0, 0, 255), 1);
             //ImageViewer.Show(result);
+        }
+
+        [Test]
+        public void TestLSDDetector()
+        {
+            Mat mat = EmguAssert.LoadMat("box.png");
+            using (Emgu.CV.LineDescriptor.LSDDetector lsdDetector = new LineDescriptor.LSDDetector())
+            using (Emgu.CV.LineDescriptor.VectorOfKeyLine lines = new LineDescriptor.VectorOfKeyLine())
+            using (Mat mask = Mat.Ones(mat.Rows, mat.Cols, DepthType.Cv8U, 1))
+            using (Mat output = mat.Clone())
+            {
+                if (output.NumberOfChannels == 1)
+                    CvInvoke.CvtColor(output, output, ColorConversion.Gray2Bgr);
+                for (int i = 0; i < 10; i++)
+                    lsdDetector.Detect(mat, lines, 2, 1, mask);
+
+                Emgu.CV.LineDescriptor.MKeyLine[] keylines = lines.ToArray();
+                foreach (Emgu.CV.LineDescriptor.MKeyLine line in keylines)
+                {
+                    if (line.Octave == 0)
+                        CvInvoke.Line(output,
+                            Point.Round(new PointF(line.StartPointX, line.StartPointX)),
+                            Point.Round(new PointF(line.EndPointX, line.EndPointY)),
+                            new MCvScalar(0, 0, 255, 0));
+                }
+
+                output.Save("line_detected.png");
+            }
         }
 
         [Test]

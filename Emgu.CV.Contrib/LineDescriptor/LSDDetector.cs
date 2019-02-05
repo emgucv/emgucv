@@ -17,10 +17,8 @@ namespace Emgu.CV.LineDescriptor
     /// <summary>
     /// The lines extraction methodology described in the following is mainly based on: R Grompone Von Gioi, Jeremie Jakubowicz, Jean-Michel Morel, and Gregory Randall. Lsd: A fast line segment detector with a false detection control. IEEE Transactions on Pattern Analysis and Machine Intelligence, 32(4):722-732, 2010.
     /// </summary>
-    public class LSDDetector : UnmanagedObject
+    public class LSDDetector : SharedPtrObject
     {
-        private IntPtr _sharedPtr;
-
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -47,8 +45,11 @@ namespace Emgu.CV.LineDescriptor
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                LineDescriptorInvoke.cveLineDescriptorLSDDetectorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                LineDescriptorInvoke.cveLineDescriptorLSDDetectorRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
     }
 
@@ -60,7 +61,7 @@ namespace Emgu.CV.LineDescriptor
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveLineDescriptorLSDDetectorDetect(IntPtr detector, IntPtr image, IntPtr keypoints, int scale, int numOctaves, IntPtr mask);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveLineDescriptorLSDDetectorRelease(ref IntPtr detector, ref IntPtr sharedPtr);
+        internal static extern void cveLineDescriptorLSDDetectorRelease(ref IntPtr sharedPtr);
     }
 
 }
