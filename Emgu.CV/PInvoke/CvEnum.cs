@@ -7,7 +7,7 @@ using System;
 namespace Emgu.CV.CvEnum
 {
     /// <summary>
-    /// Type for cvNorm
+    /// Type for Norm
     /// </summary>
     [Flags]
     public enum NormType
@@ -70,7 +70,7 @@ namespace Emgu.CV.CvEnum
     }
 
     /// <summary>
-    /// Type used for cvReduce function
+    /// Type used for Reduce function
     /// </summary>
     public enum ReduceType
     {
@@ -93,7 +93,7 @@ namespace Emgu.CV.CvEnum
     }
 
     /// <summary>
-    /// Type used for cvReduce function
+    /// Type used for Reduce function
     /// </summary>
     public enum ReduceDimension
     {
@@ -2195,7 +2195,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         CV_HOUGH_MULTI_SCALE = 2,*/
         /// <summary>
-        /// 
+        /// Gradient
         /// </summary>
         Gradient = 3
     }
@@ -2471,6 +2471,9 @@ namespace Emgu.CV.CvEnum
         Tree = 3
     }
 
+    /// <summary>
+    /// Sequence constants
+    /// </summary>
     internal static class SeqConst
     {
         /// <summary>
@@ -2582,15 +2585,15 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Closed = (1 << SeqConst.Shift),
         /// <summary>
-        /// 
+        /// Simple sequence
         /// </summary>
         Simple = (2 << SeqConst.Shift),
         /// <summary>
-        /// 
+        /// Convex sequence
         /// </summary>
         Convex = (4 << SeqConst.Shift),
         /// <summary>
-        /// 
+        /// Hole
         /// </summary>
         Hole = (8 << SeqConst.Shift)
     }
@@ -2601,24 +2604,24 @@ namespace Emgu.CV.CvEnum
     public enum SeqType
     {
         /// <summary>
-        /// 
+        /// Point set
         /// </summary>
         PointSet = (SeqKind.Generic | SeqEltype.Point),
         /// <summary>
-        /// 
+        /// Point 3D set
         /// </summary>
         Point3DSet = (SeqKind.Generic | SeqEltype.Point3D),
         /// <summary>
-        /// 
+        /// Polyline
         /// </summary>
         Polyline = (SeqKind.Curve | SeqEltype.Point),
         /// <summary>
-        /// 
+        /// Polygon
         /// </summary>
         Polygon = (SeqFlag.Closed | Polyline),
         //CV_SEQ_CONTOUR         =POLYGON,
         /// <summary>
-        /// 
+        /// Simple Polygon
         /// </summary>
         SimplePolygon = (SeqFlag.Simple | Polygon)
     }
@@ -2645,27 +2648,27 @@ namespace Emgu.CV.CvEnum
     public enum ThresholdType
     {
         ///<summary>
-        ///value = value > threshold ? max_value : 0
+        ///value = value &gt; threshold ? max_value : 0
         ///</summary>
         Binary = 0,
         ///<summary>
-        /// value = value > threshold ? 0 : max_value       
+        /// value = value &gt; threshold ? 0 : max_value       
         ///</summary>
         BinaryInv = 1,
         ///<summary>
-        /// value = value > threshold ? threshold : value   
+        /// value = value &gt; threshold ? threshold : value   
         ///</summary>
         Trunc = 2,
         ///<summary>
-        /// value = value > threshold ? value : 0           
+        /// value = value &gt; threshold ? value : 0           
         ///</summary>
         ToZero = 3,
         ///<summary>
-        /// value = value > threshold ? 0 : value           
+        /// value = value &gt; threshold ? 0 : value           
         ///</summary>
         ToZeroInv = 4,
         /// <summary>
-        /// 
+        /// Mask
         /// </summary>
         Mask = 7,
         ///<summary>
@@ -2912,7 +2915,7 @@ namespace Emgu.CV.CvEnum
     }
 
     /// <summary>
-    /// The types for cvMulSpectrums
+    /// The types for MulSpectrums
     /// </summary>
     [Flags]
     public enum MulSpectrumsType
@@ -2989,15 +2992,15 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         SevenPoint = 1,
         /// <summary>
-        /// for 8-point algorithm. N >= 8
+        /// for 8-point algorithm. N &gt;= 8
         /// </summary>
         EightPoint = 2,
         /// <summary>
-        /// for LMedS algorithm. N >= 8
+        /// for LMedS algorithm. N &gt;= 8
         /// </summary>
         LMedsOnly = 4,
         /// <summary>
-        /// for RANSAC algorithm. N >= 8
+        /// for RANSAC algorithm. N &gt;= 8
         /// </summary>
         RansacOnly = 8,
         /// <summary>
@@ -3016,15 +3019,15 @@ namespace Emgu.CV.CvEnum
     public enum General
     {
         /// <summary>
-        /// 
+        /// Max dim
         /// </summary>
         MaxDim = 32,
         /// <summary>
-        /// 
+        /// Seq magic val
         /// </summary>
         SeqMagicVal = 0x42990000,
         /// <summary>
-        /// 
+        /// Set magic val
         /// </summary>
         SetMagicVal = 0x42980000
     }
@@ -3035,187 +3038,187 @@ namespace Emgu.CV.CvEnum
     public enum ErrorCodes
     {
         /// <summary>
-        /// 
+        /// Ok
         /// </summary>
         StsOk = 0,
         /// <summary>
-        /// 
+        /// Back trace
         /// </summary>
         StsBacktrace = -1,
         /// <summary>
-        /// 
+        /// Error
         /// </summary>
         StsError = -2,
         /// <summary>
-        /// 
+        /// Internal
         /// </summary>
         StsInternal = -3,
         /// <summary>
-        /// 
+        /// No memory
         /// </summary>
         StsNoMem = -4,
         /// <summary>
-        /// 
+        /// Bad argument
         /// </summary>
         StsBadArg = -5,
         /// <summary>
-        /// 
+        /// Bad function
         /// </summary>
         StsBadFunc = -6,
         /// <summary>
-        /// 
+        /// No Conv
         /// </summary>
         StsNoConv = -7,
         /// <summary>
-        /// 
+        /// Auto trace
         /// </summary>
         StsAutoTrace = -8,
         /// <summary>
-        /// 
+        /// Header is Null
         /// </summary>
         HeaderIsNull = -9,
         /// <summary>
-        /// 
+        /// Bad image size
         /// </summary>
         BadImageSize = -10,
         /// <summary>
-        /// 
+        /// Bad Offset
         /// </summary>
         BadOffset = -11,
         /// <summary>
-        /// 
+        /// Bad Data pointer
         /// </summary>
         BadDataPtr = -12,
         /// <summary>
-        /// 
+        /// Bad step
         /// </summary>
         Badstep = -13,
         /// <summary>
-        /// 
+        /// Bad model or chseq
         /// </summary>
         BadModelOrChseq = -14,
         /// <summary>
-        /// 
+        /// Bad number of channels
         /// </summary>
         BadNumChannels = -15,
         /// <summary>
-        /// 
+        /// Bad number of channels 1U
         /// </summary>
         BadNumChannel1U = -16,
         /// <summary>
-        /// 
+        /// Bad depth
         /// </summary>
         BadDepth = -17,
         /// <summary>
-        /// 
+        /// Bad Alpha channel
         /// </summary>
         BadAlphaChannel = -18,
         /// <summary>
-        /// 
+        /// Bad Order
         /// </summary>
         BadOrder = -19,
         /// <summary>
-        /// 
+        /// Bad origin
         /// </summary>
         BadOrigin = -20,
         /// <summary>
-        /// 
+        /// Bad Align
         /// </summary>
         BadAlign = -21,
         /// <summary>
-        /// 
+        /// Bad callback
         /// </summary>
         BadCallback = -22,
         /// <summary>
-        /// 
+        /// Bad tile size
         /// </summary>
         BadTileSize = -23,
         /// <summary>
-        /// 
+        /// Bad COI
         /// </summary>
         BadCoi = -24,
         /// <summary>
-        /// 
+        /// Bad ROI size
         /// </summary>
         BadRoiSize = -25,
         /// <summary>
-        /// 
+        /// Mask is tiled
         /// </summary>
         MaskIsTiled = -26,
         /// <summary>
-        /// 
+        /// Null Pointer
         /// </summary>
         StsNullPtr = -27,
         /// <summary>
-        /// 
+        /// Vec length error
         /// </summary>
         StsVecLengthErr = -28,
         /// <summary>
-        /// 
+        /// Filter Structure Content Error
         /// </summary>
         StsFilterStructContenterr = -29,
         /// <summary>
-        /// 
+        /// Kernel Structure Content Error
         /// </summary>
         StsKernelStructContenterr = -30,
         /// <summary>
-        /// 
+        /// Filter Offset Error
         /// </summary>
         StsFilterOffSetErr = -31,
         /// <summary>
-        /// 
+        /// Bad Size
         /// </summary>
         StsBadSize = -201,
         /// <summary>
-        /// 
+        /// Division by zero
         /// </summary>
         StsDivByZero = -202,
         /// <summary>
-        /// 
+        /// Inplace not supported
         /// </summary>
         StsInplaceNotSupported = -203,
         /// <summary>
-        /// 
+        /// Object Not Found
         /// </summary>
         StsObjectNotFound = -204,
         /// <summary>
-        /// 
+        /// Unmatched formats
         /// </summary>
         StsUnmatchedFormats = -205,
         /// <summary>
-        /// 
+        /// Bad flag
         /// </summary>
         StsBadFlag = -206,
         /// <summary>
-        /// 
+        /// Bad point
         /// </summary>
         StsBadPoint = -207,
         /// <summary>
-        /// 
+        /// Bad mask
         /// </summary>
         StsBadMask = -208,
         /// <summary>
-        /// 
+        /// Unmatched sizes
         /// </summary>
         StsUnmatchedSizes = -209,
         /// <summary>
-        /// 
+        /// Unsupported format
         /// </summary>
         StsUnsupportedFormat = -210,
         /// <summary>
-        /// 
+        /// Out of range
         /// </summary>
         StsOutOfRange = -211,
         /// <summary>
-        /// 
+        /// Parse Error
         /// </summary>
         StsParseError = -212,
         /// <summary>
-        /// 
+        /// Not Implemented
         /// </summary>
         StsNotImplemented = -213,
         /// <summary>
-        /// 
+        /// Bad memory block
         /// </summary>
         StsBadMemBlock = -214
     }
@@ -3400,7 +3403,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         ModifyA = 1,
         /// <summary>
-        /// indicates that only a vector of singular values `w` is to be processed, while u and vt will be set to empty matrices
+        /// indicates that only a vector of singular values 'w' is to be processed, while u and vt will be set to empty matrices
         /// </summary>
         NoUV = 2,
         /// <summary>
@@ -3826,7 +3829,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Default = Reflect101,
         /// <summary>
-        /// do not look outside of ROI
+        /// Do not look outside of ROI
         /// </summary>
         Isolated = 16
     }
@@ -4170,7 +4173,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Mask = ReadWrite,
         /// <summary>
-        /// Dast
+        /// Fast
         /// </summary>
         Fast = 1 << 26
     }
@@ -4334,15 +4337,15 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Translation = 0,
         /// <summary>
-        /// sets a Euclidean (rigid) transformation as motion model; three parameters are estimated; warpMatrix is 2×3.
+        /// sets a Euclidean (rigid) transformation as motion model; three parameters are estimated; warpMatrix is 2x3.
         /// </summary>
         Euclidean = 1,
         /// <summary>
-        /// sets an affine motion model (DEFAULT); six parameters are estimated; warpMatrix is 2×3.
+        /// sets an affine motion model (DEFAULT); six parameters are estimated; warpMatrix is 2x3.
         /// </summary>
         Affine = 2,
         /// <summary>
-        /// sets a homography as a motion model; eight parameters are estimated;`warpMatrix` is 3×3.
+        /// sets a homography as a motion model; eight parameters are estimated;`warpMatrix` is 3x3.
         /// </summary>
         Homography = 3
     }

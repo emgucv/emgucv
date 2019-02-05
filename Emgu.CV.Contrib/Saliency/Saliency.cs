@@ -1,4 +1,8 @@
-﻿using Emgu.CV.Util;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
+using Emgu.CV.Util;
 using Emgu.Util;
 using System;
 using System.Collections.Generic;
