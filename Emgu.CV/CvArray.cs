@@ -88,13 +88,13 @@ namespace Emgu.CV
       }
 
       ///<summary> 
-      ///Get the width (#Cols) of the cvArray.
+      ///Get the width (Cols) of the cvArray.
       ///If ROI is set, the width of the ROI 
       ///</summary>
       public int Width { get { return Size.Width; } }
 
       ///<summary> 
-      ///Get the height (#Rows) of the cvArray.
+      ///Get the height (Rows) of the cvArray.
       ///If ROI is set, the height of the ROI 
       ///</summary> 
       public int Height { get { return Size.Height; } }
@@ -320,7 +320,7 @@ namespace Emgu.CV
       ///<summary>
       /// Copy the current array to <paramref name="destination"/>
       /// </summary>
-      /// <param name="destination"> The destination Array</param>
+      /// <param name="destination">The destination Array</param>
       public void CopyTo(CvArray<TDepth> destination)
       {
          CvInvoke.cvCopy(Ptr, destination.Ptr, IntPtr.Zero);
@@ -390,8 +390,8 @@ namespace Emgu.CV
       /// <summary>
       /// Inplace fills Array with normally distributed random numbers
       /// </summary>
-      /// <param name="mean">the mean value of random numbers</param>
-      /// <param name="std"> the standard deviation of random numbers</param>
+      /// <param name="mean">The mean value of random numbers</param>
+      /// <param name="std">The standard deviation of random numbers</param>
       [ExposableMethod(Exposable = true)]
       public void SetRandNormal(MCvScalar mean, MCvScalar std)
       {

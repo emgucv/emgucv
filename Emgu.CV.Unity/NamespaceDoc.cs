@@ -19,6 +19,13 @@ namespace Emgu
 }
 
 /// <summary>
+/// Utilities for Emgu library
+/// </summary>
+namespace Emgu.Util
+{
+}
+
+/// <summary>
 /// Wrapper of Open CV functions.
 /// </summary>
 namespace Emgu.CV
@@ -26,9 +33,30 @@ namespace Emgu.CV
 }
 
 /// <summary>
+/// Open CV Enumeration.
+/// </summary>
+namespace Emgu.CV.CvEnum
+{
+}
+
+/// <summary>
+/// Open CV Structures.
+/// </summary>
+namespace Emgu.CV.Structure
+{
+}
+
+/// <summary>
 /// Utilities for Emgu CV library
 /// </summary>
 namespace Emgu.CV.Util
+{
+}
+
+/// <summary>
+/// Open CV shape module
+/// </summary>
+namespace Emgu.CV.Shape
 {
 }
 
@@ -193,3 +221,9 @@ namespace Emgu.CV.XPhoto
 {
 }
 
+/// <summary>
+/// Open CV Flann module
+/// </summary>
+namespace Emgu.CV.Flann
+{
+}

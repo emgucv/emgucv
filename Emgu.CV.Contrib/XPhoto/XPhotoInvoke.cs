@@ -273,7 +273,7 @@ namespace Emgu.CV.XPhoto
         /// <param name="beta">Kaiser window parameter that affects the sidelobe attenuation of the transform of the window. Kaiser window is used in order to reduce border effects. To prevent usage of the window, set beta to zero.</param>
         /// <param name="normType">Norm used to calculate distance between blocks. L2 is slower than L1 but yields more accurate results.</param>
         /// <param name="step">Step of BM3D to be executed. Possible variants are: step 1, step 2, both steps.</param>
-        /// <param name="transformType">	Type of the orthogonal transform used in collaborative filtering step. Currently only Haar transform is supported.</param>
+        /// <param name="transformType">Type of the orthogonal transform used in collaborative filtering step. Currently only Haar transform is supported.</param>
         /// <remarks> <c href="http://www.cs.tut.fi/~foi/GCF-BM3D/BM3D_TIP_2007.pdf"/>   </remarks>
         public static void Bm3dDenoising(
             IInputArray src,

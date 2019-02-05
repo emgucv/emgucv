@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ namespace Emgu.CV.BgSegm
     /// <summary>
     /// Background Subtractor module based on the algorithm given in:
     /// Andrew B. Godbehere, Akihiro Matsukawa, Ken Goldberg, 
-    /// “Visual Tracking of Human Visitors under Variable-Lighting Conditions for a Responsive Audio Art Installation”, 
+    /// "Visual Tracking of Human Visitors under Variable-Lighting Conditions for a Responsive Audio Art Installation", 
     /// American Control Conference, Montreal, June 2012.
     /// </summary>
     public class BackgroundSubtractorGMG : UnmanagedObject, IBackgroundSubtractor
