@@ -107,7 +107,7 @@ namespace Emgu.CV.XamarinForms
                 string ocrResult = t.Result.Item2;
                 if (Device.RuntimePlatform.Equals("WPF"))
                 {
-                    ocrResult = ocrResult.Replace(Environment.NewLine, " ");
+                    ocrResult = ocrResult.Replace(System.Environment.NewLine, " ");
                 }
 
                 SetMessage(ocrResult);

@@ -125,8 +125,8 @@ namespace Emgu.CV.XamarinForms
                                       CvInvoke.Rectangle(image[0], rect, new MCvScalar(0, 0, 0, 0), 1);
                                       CvInvoke.PutText(image[0], label, rect.Location, FontFace.HersheyComplex, 1.0,
                                           new MCvScalar(0, 0, 255), 2);
-
-                                      int[] masksDim = masks.SizeOfDimemsion;
+                                      
+                                      int[] masksDim = masks.SizeOfDimension;
                                       using (Mat mask = new Mat(
                                           masksDim[2],
                                           masksDim[3],
