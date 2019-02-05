@@ -227,7 +227,7 @@ namespace Emgu.CV
          return result;
       }
 
-      internal class DebuggerProxy
+      internal new class DebuggerProxy
       {
          private DenseHistogram _v;
 

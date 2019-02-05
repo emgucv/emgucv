@@ -49,7 +49,7 @@ namespace Emgu.CV.XamarinForms
                 using (System.Net.WebClient webclient = new System.Net.WebClient())
                 {
                     String source = "https://github.com/emgucv/models/raw/master/mask_rcnn_inception_v2_coco_2018_01_28/" + fileName;
-                    
+
                     Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
                     webclient.DownloadFile(source, dest);
                     Console.WriteLine(String.Format("Download completed"));
@@ -76,27 +76,30 @@ namespace Emgu.CV.XamarinForms
                   () =>
                   {
 
-                      
+                      String configFile = "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt";
 #if __ANDROID__
                       String path = System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
                              Android.OS.Environment.DirectoryDownloads, "dnn_data");
+                      FileInfo configFileInfo = AndroidFileAsset.WritePermanantFileAsset(Android.App.Application.Context, configFile, "dnn_data", AndroidFileAsset.OverwriteMethod.AlwaysOverwrite);
+                      configFile = configFileInfo.FullName;
 #else
                       String path = "./dnn_data/";
+                      
 #endif
 
                       String graphFile = DnnDownloadFile(path, "frozen_inference_graph.pb");
                       String lookupFile = DnnDownloadFile(path, "coco-labels-paper.txt");
-                      String configFile = "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt";
+
                       string[] labels = File.ReadAllLines(lookupFile);
                       Emgu.CV.Dnn.Net net = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(graphFile, configFile);
 
-                      
+
                       Mat blob = DnnInvoke.BlobFromImage(image[0]);
-                      
+
                       net.SetInput(blob, "image_tensor");
                       using (VectorOfMat tensors = new VectorOfMat())
                       {
-                          net.Forward(tensors, new string[]  {"detection_out_final", "detection_masks" });
+                          net.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
                           using (Mat boxes = tensors[0])
                           using (Mat masks = tensors[1])
                           {
@@ -106,7 +109,7 @@ namespace Emgu.CV.XamarinForms
                               int numDetections = boxesData.GetLength(2);
                               for (int i = 0; i < numDetections; i++)
                               {
-                                  
+
                                   float score = boxesData[0, 0, i, 2];
 
                                   if (score > 0.5)
@@ -125,7 +128,7 @@ namespace Emgu.CV.XamarinForms
                                       CvInvoke.Rectangle(image[0], rect, new MCvScalar(0, 0, 0, 0), 1);
                                       CvInvoke.PutText(image[0], label, rect.Location, FontFace.HersheyComplex, 1.0,
                                           new MCvScalar(0, 0, 255), 2);
-                                      
+
                                       int[] masksDim = masks.SizeOfDimension;
                                       using (Mat mask = new Mat(
                                           masksDim[2],
@@ -154,17 +157,20 @@ namespace Emgu.CV.XamarinForms
 
                                           //The mask color
                                           largeColor.SetTo(new Emgu.CV.Structure.MCvScalar(255, 0, 0));
-                                          if (subRegion.NumberOfChannels == 4) {
-                                       using (Mat bgrSubRegion = new Mat ()) {
-                                          CvInvoke.CvtColor (subRegion, bgrSubRegion, ColorConversion.Bgra2Bgr);
-                                          CvInvoke.BlendLinear (largeColor, bgrSubRegion, maskLarge, maskLargeInv, bgrSubRegion);
-                                          CvInvoke.CvtColor (bgrSubRegion, subRegion, ColorConversion.Bgr2Bgra);
-                                       }
+                                          if (subRegion.NumberOfChannels == 4)
+                                          {
+                                              using (Mat bgrSubRegion = new Mat())
+                                              {
+                                                  CvInvoke.CvtColor(subRegion, bgrSubRegion, ColorConversion.Bgra2Bgr);
+                                                  CvInvoke.BlendLinear(largeColor, bgrSubRegion, maskLarge, maskLargeInv, bgrSubRegion);
+                                                  CvInvoke.CvtColor(bgrSubRegion, subRegion, ColorConversion.Bgr2Bgra);
+                                              }
 
-                                    } else
-                                    CvInvoke.BlendLinear(largeColor, subRegion, maskLarge, maskLargeInv, subRegion);
+                                          }
+                                          else
+                                              CvInvoke.BlendLinear(largeColor, subRegion, maskLarge, maskLargeInv, subRegion);
                                       }
-                                      
+
                                   }
                               }
 
@@ -180,7 +186,7 @@ namespace Emgu.CV.XamarinForms
                 var result = await t;
                 SetImage(t.Result.Item1);
                 String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-                
+
                 SetMessage(t.Result.Item2);
             };
         }

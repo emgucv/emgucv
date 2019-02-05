@@ -108,8 +108,8 @@ namespace AndroidExamples
                 Display display = WindowManager.DefaultDisplay;
                 Android.Util.DisplayMetrics metrics = new Android.Util.DisplayMetrics();
                 display.GetMetrics(metrics);
-                int width = (int)Math.Min(display.Width * 0.8, 360 * metrics.Density);
-                int height = (int)Math.Min(display.Height * 0.8, 480 * metrics.Density);
+                int width = (int)Math.Min(metrics.WidthPixels * 0.8, 360 * metrics.Density);
+                int height = (int)Math.Min(metrics.HeightPixels * 0.8, 480 * metrics.Density);
 
                 PopupWindow aboutWindow = new PopupWindow(LayoutInflater.Inflate(Resource.Layout.about_us, null, false), width, height);
                 TextView appVersionText = aboutWindow.ContentView.FindViewById<TextView>(Resource.Id.AboutUsVersionTextView);
