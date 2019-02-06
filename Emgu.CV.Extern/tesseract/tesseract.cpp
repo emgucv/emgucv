@@ -298,3 +298,8 @@ void leptPixDestroy(Pix** pix)
 	pixDestroy(pix);
 	*pix = 0;
 }
+
+char* stdSetlocale(int category, char* locale)
+{
+	return std::setlocale(category, locale);
+}

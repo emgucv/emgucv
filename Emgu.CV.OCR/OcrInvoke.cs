@@ -133,6 +133,29 @@ namespace Emgu.CV.OCR
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int TessBaseAPIRecognize(IntPtr ocr);
+
+        public enum LocaleCategory
+        {
+            All = 0,
+            Collate = 1,
+            Ctype = 2,
+            Monetary = 3,
+            Numeric = 4,
+            Time = 5
+        }
+
+        public static String SetLocale(LocaleCategory category, String locale)
+        {
+            IntPtr localePtr = Marshal.StringToHGlobalAnsi(locale);
+            IntPtr oldLocalePtr = stdSetlocale(category, localePtr);
+            Marshal.FreeHGlobal(localePtr);
+            return Marshal.PtrToStringAnsi(oldLocalePtr);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr stdSetlocale(
+            LocaleCategory category, 
+            IntPtr locale);
     }
 }
 

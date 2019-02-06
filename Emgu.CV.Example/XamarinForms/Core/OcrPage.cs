@@ -91,7 +91,12 @@ namespace Emgu.CV.XamarinForms
                       TesseractDownloadLangFile(path, "osd"); //script orientation detection
 
                       if (_ocr == null)
+                      {
+                          String oldLocale = OcrInvoke.SetLocale(OcrInvoke.LocaleCategory.All, "C");
                           _ocr = new Tesseract(path, lang, OcrEngineMode.TesseractOnly);
+                          OcrInvoke.SetLocale(OcrInvoke.LocaleCategory.All, oldLocale);
+                      }
+
                       _ocr.SetImage(image[0]);
                       _ocr.Recognize();
                       String text = _ocr.GetUTF8Text();

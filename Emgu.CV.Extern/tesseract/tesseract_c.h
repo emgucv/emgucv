@@ -20,6 +20,7 @@ typedef unsigned __int64 UINT64;
 #include "baseapi.h"
 #include "allheaders.h"
 #include "renderer.h"
+#include <clocale>
 
 class EmguTesseract: public tesseract::TessBaseAPI
 {
@@ -128,4 +129,5 @@ CVAPI(void) TessPDFRendererRelease(tesseract::TessPDFRenderer** renderer);
 CVAPI(Pix*) leptCreatePixFromMat(cv::Mat* m);
 CVAPI(void) leptPixDestroy(Pix** pix);
 
+CVAPI(char*) stdSetlocale(int category, char* locale);
 #endif
