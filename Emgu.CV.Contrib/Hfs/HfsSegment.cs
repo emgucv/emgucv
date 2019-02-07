@@ -22,10 +22,10 @@ namespace Emgu.CV.Hfs
         private IntPtr _algorithmPtr;
 
         /// <summary>
-        /// create a hfs object
+        /// Create a hfs object
         /// </summary>
-        /// <param name="height">the height of the input image</param>
-        /// <param name="width">	the width of the input image</param>
+        /// <param name="height">The height of the input image</param>
+        /// <param name="width">The width of the input image</param>
         /// <param name="segEgbThresholdI">segEgbThresholdI</param>
         /// <param name="minRegionSizeI">minRegionSizeI</param>
         /// <param name="segEgbThresholdII">segEgbThresholdII</param>
