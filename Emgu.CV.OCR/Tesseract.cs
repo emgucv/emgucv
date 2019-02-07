@@ -54,7 +54,7 @@ namespace Emgu.CV.OCR
                 {
                     return new Version(0, 0);
                 }
-                else 
+                else
                 {
                     if (vStr.Contains("-"))
                     {
@@ -69,9 +69,20 @@ namespace Emgu.CV.OCR
         /// <summary>
         /// Create a default tesseract engine. Needed to Call Init function to load language files in a later stage.
         /// </summary>
-        public Tesseract()
+        public Tesseract(bool enforceLocale = true)
         {
-            _ptr = OcrInvoke.TessBaseAPICreate();
+            Emgu.CV.OCR.LocaleGuard lg = null;
+            if (enforceLocale)
+                lg = new Emgu.CV.OCR.LocaleGuard(Emgu.CV.OCR.LocaleGuard.LocaleCategory.All, "C");
+            try
+            {
+                _ptr = OcrInvoke.TessBaseAPICreate();
+            }
+            finally
+            {
+                if (lg != null)
+                    lg.Dispose();
+            }
         }
 
         /// <summary>
@@ -84,6 +95,7 @@ namespace Emgu.CV.OCR
             return OcrInvoke.TessBaseAPIGetOpenCLDevice(_ptr, ref device);
         }
 
+        /*
         /// <summary>
         /// Create an tesseract OCR engine.
         /// </summary>
@@ -112,10 +124,10 @@ namespace Emgu.CV.OCR
            : this()
         {
             Init(dataPath, language, mode);
-        }
+        }*/
 
         /// <summary>
-        /// Create an tesseract OCR engine.
+        /// Create a Tesseract OCR engine.
         /// </summary>
         /// <param name="dataPath">
         /// The datapath must be the name of the directory of tessdata and
@@ -139,13 +151,16 @@ namespace Emgu.CV.OCR
         /// </param>
         /// <param name="mode">OCR engine mode</param>
         /// <param name="whiteList">This can be used to specify a white list for OCR. e.g. specify "1234567890" to recognize digits only. Note that the white list currently seems to only work with OcrEngineMode.OEM_TESSERACT_ONLY</param>
-        public Tesseract(String dataPath, String language, OcrEngineMode mode, String whiteList)
-           : this(dataPath, language, mode)
+        /// <param name="enforceLocale">If true, we will change the locale to "C" before initializing the tesseract engine and reverting it back once the tesseract initialiation is completer. If false, it will be the user's responsibility to set the locale to "C", otherwise an exception will be thrown. See https://github.com/tesseract-ocr/tesseract/issues/1670 </param>
+        public Tesseract(String dataPath, String language, OcrEngineMode mode, String whiteList = null, bool enforceLocale = true)
+           : this(enforceLocale)
         {
             //if (mode == OcrEngineMode. || mode == OcrEngineMode.TesseractCubeCombined)
             //    throw new ArgumentException("White list is not supported by CUBE engine");
 
-            SetVariable("tessedit_char_whitelist", whiteList);
+            Init(dataPath, language, mode);
+            if (whiteList != null)
+                SetVariable("tessedit_char_whitelist", whiteList);
         }
 
         /*
@@ -199,7 +214,7 @@ namespace Emgu.CV.OCR
 #else
                 System.Reflection.Assembly asm = typeof(CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
                 if (!((String.IsNullOrEmpty(asm.Location) || !System.IO.File.Exists(asm.Location)) && AppDomain.CurrentDomain.BaseDirectory != null))
-                { 
+                {
                     loadDirectory = System.IO.Path.GetDirectoryName(asm.Location);
                 }
 #endif
@@ -243,19 +258,19 @@ namespace Emgu.CV.OCR
         /// <param name="mode">OCR engine mode</param>
         public void Init(String dataPath, String language, OcrEngineMode mode)
         {
-/*
-#if !NETFX_CORE
-            if (!(dataPath.Length > 0 && dataPath.Substring(dataPath.Length - 1).ToCharArray()[0] == System.IO.Path.DirectorySeparatorChar))
-            {  //if the data path end in slash
-                int lastSlash = dataPath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
-                if (lastSlash != -1)
-                {
-                    //there is a directory separator, get the path up to the separator, the same way tesseract-ocr calculate the folder
-                    dataPath = dataPath.Substring(0, lastSlash + 1);
-                }
-            }
-#endif
-*/
+            /*
+            #if !NETFX_CORE
+                        if (!(dataPath.Length > 0 && dataPath.Substring(dataPath.Length - 1).ToCharArray()[0] == System.IO.Path.DirectorySeparatorChar))
+                        {  //if the data path end in slash
+                            int lastSlash = dataPath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
+                            if (lastSlash != -1)
+                            {
+                                //there is a directory separator, get the path up to the separator, the same way tesseract-ocr calculate the folder
+                                dataPath = dataPath.Substring(0, lastSlash + 1);
+                            }
+                        }
+            #endif
+            */
             /*
             if (!System.IO.Directory.Exists(System.IO.Path.Combine(dataPath, "tessdata")))
             {
@@ -271,6 +286,8 @@ namespace Emgu.CV.OCR
 
             /*if (!IsEngineModeSupported(mode))
                throw new ArgumentException(String.Format("The Ocr engine mode {0} is not supported in tesseract v{1}", mode, Version));*/
+
+
             using (CvString csDataPath = new CvString(dataPath))
             using (CvString csLanguage = new CvString(language))
             {
@@ -286,6 +303,8 @@ namespace Emgu.CV.OCR
                             language, mode));
                 }
             }
+
+
         }
 
         /// <summary>
@@ -424,12 +443,12 @@ namespace Emgu.CV.OCR
 
         private String UtfByteVectorToString(VectorOfByte bytes)
         {
-//#if NETFX_CORE
+            //#if NETFX_CORE
             byte[] bArr = bytes.ToArray();
             return _utf8.GetString(bArr, 0, bArr.Length).Replace("\n", Environment.NewLine);
-//#else
-//            return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
-//#endif
+            //#else
+            //            return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
+            //#endif
         }
 
         /// <summary>
@@ -505,11 +524,11 @@ namespace Emgu.CV.OCR
             using (CvString csRetryConfig = new CvString(retryConfig))
             {
                 return OcrInvoke.TessBaseAPIProcessPage(
-                    _ptr, 
-                    pix, 
-                    pageIndex, 
-                    csFileName, 
-                    csRetryConfig, 
+                    _ptr,
+                    pix,
+                    pageIndex,
+                    csFileName,
+                    csRetryConfig,
                     timeoutMillisec,
                     renderer.TessResultRendererPtr);
             }

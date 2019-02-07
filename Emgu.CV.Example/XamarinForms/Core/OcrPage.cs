@@ -92,9 +92,7 @@ namespace Emgu.CV.XamarinForms
 
                       if (_ocr == null)
                       {
-                          String oldLocale = OcrInvoke.SetLocale(OcrInvoke.LocaleCategory.All, "C");
                           _ocr = new Tesseract(path, lang, OcrEngineMode.TesseractOnly);
-                          OcrInvoke.SetLocale(OcrInvoke.LocaleCategory.All, oldLocale);
                       }
 
                       _ocr.SetImage(image[0]);
