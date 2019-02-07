@@ -28,7 +28,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         L2 = 4,
         /// <summary>
-        /// 
+        /// Norm mask
         /// </summary>
         NormMask = 7,
         /// <summary>
@@ -40,19 +40,19 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Diff = 16,
         /// <summary>
-        /// 
+        /// Min Max
         /// </summary>
         MinMax = 32,
         /// <summary>
-        /// 
+        /// Diff C
         /// </summary>
         DiffC = (Diff | C),
         /// <summary>
-        /// 
+        /// Diff L1
         /// </summary>
         DiffL1 = (Diff | L1),
         /// <summary>
-        /// 
+        /// Diff L2
         /// </summary>
         DiffL2 = (Diff | L2),
         /// <summary>
@@ -4274,7 +4274,7 @@ namespace Emgu.CV.CvEnum
         Area,
 
         /// <summary>
-        /// 
+        /// Max
         /// </summary>
         Max
 

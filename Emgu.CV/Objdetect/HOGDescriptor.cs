@@ -98,7 +98,7 @@ namespace Emgu.CV
         /// But if the free coefficient is omitted (which is allowed), you can specify it manually here.
         ///</param>
         /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
-        /// <param name="padding"></param>
+        /// <param name="padding">Padding</param>
         /// <param name="scale">Coefficient of the detection window increase.</param>
         /// <param name="finalThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping. Should be an integer if not using meanshift grouping. Use 2.0 for default</param>
         /// <param name="useMeanshiftGrouping">If true, it will use meanshift grouping.</param>

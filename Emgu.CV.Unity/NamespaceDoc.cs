@@ -215,6 +215,20 @@ namespace Emgu.CV.Geodetic
 }
 
 /// <summary>
+/// Open CV VideoStab module
+/// </summary>
+namespace Emgu.CV.VideoStab
+{
+}
+
+/// <summary>
+/// Open CV Stitching module
+/// </summary>
+namespace Emgu.CV.Stitching
+{
+}
+
+/// <summary>
 /// Open CV XPhoto module
 /// </summary>
 namespace Emgu.CV.XPhoto
