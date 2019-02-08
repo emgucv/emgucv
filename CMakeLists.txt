@@ -791,6 +791,23 @@ IF ("${LICENSE_TYPE}" EQUAL "Commercial")
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
 ENDIF()
 
+IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
+	SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID}-ANDROID")
+	SET(EMGUCV_ANDROID_NUGET_TITLE "EMGU CV for Android")	
+	IF ("${LICENSE_TYPE}" EQUAL "Commercial")
+	  SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_ANDROID_NUGET_ID}-CR")
+	  SET(EMGUCV_ANDROID_NUGET_TITLE "${EMGUCV_ANDROID_NUGET_TITLE} Commercial Release")	
+    ENDIF()
+	SET(EMGUCV_ANDROID_NUGET_FILE_LIST " 
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.World.Android.dll\" target=\"lib\\MonoAndroid50\" />
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.World.Android.XML\" target=\"lib\\MonoAndroid50\" />")
+	SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST} 
+	<file src=\"Emgu.CV.Android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Android/Package.nuspec)
+ENDIF()
+
+
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Package.nuspec)
 
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
