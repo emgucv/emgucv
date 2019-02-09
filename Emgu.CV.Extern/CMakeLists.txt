@@ -2615,3 +2615,16 @@ ELSE()
 ENDIF()
 
 #add_subdirectory(gpu)
+IF (IOS)
+SET(IOS_RELEASE_FOLDER "")
+IF (("${IOS_ARCH}" STREQUAL "i386") OR ("${IOS_ARCH}" STREQUAL "x86_64"))
+  SET(IOS_RELEASE_FOLDER "Release-iphonesimulator")
+ELSE()
+  SET(IOS_RELEASE_FOLDER "Release-iphoneos")
+ENDIF()
+add_custom_command(TARGET ${the_target}
+                   POST_BUILD
+                   COMMAND libtool -static -o libemgucv_${IOS_ARCH}.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a
+                   WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+                   COMMENT "linking target")
+ENDIF()

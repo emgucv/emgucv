@@ -18,36 +18,36 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     cd platforms/ios/armv7s
     ../configure-device_xcode.sh -DIOS_ARCH="armv7s" $*
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
-    cp -r ../../../libs/Release/* bin/Release
-    cp -r opencv/3rdparty/lib/Release/* bin/Release
-    cp -r opencv/lib/Release/* bin/Release
-    cp -r freetype2/Release-iphoneos/* bin/Release
-    cp -r harfbuzz/Release-iphoneos/* bin/Release
-    libtool -static -o libemgucv_armv7s.a bin/Release/*.a
+#    cp -r ../../../libs/Release/* bin/Release
+#    cp -r opencv/3rdparty/lib/Release/* bin/Release
+#    cp -r opencv/lib/Release/* bin/Release
+#    cp -r freetype2/Release-iphoneos/* bin/Release
+#    cp -r harfbuzz/Release-iphoneos/* bin/Release
+#    libtool -static -o libemgucv_armv7s.a bin/Release/*.a
     cd ../../..
     
     mkdir -p platforms/ios/armv7
     cd platforms/ios/armv7
     ../configure-device_xcode.sh -DIOS_ARCH="armv7" $*
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
-    cp -r ../../../libs/Release/* bin/Release
-    cp -r opencv/3rdparty/lib/Release/* bin/Release
-    cp -r opencv/lib/Release/* bin/Release	
-    cp -r freetype2/Release-iphoneos/* bin/Release
-    cp -r harfbuzz/Release-iphoneos/* bin/Release
-    libtool -static -o libemgucv_armv7.a bin/Release/*.a
+#    cp -r ../../../libs/Release/* bin/Release
+#    cp -r opencv/3rdparty/lib/Release/* bin/Release
+#    cp -r opencv/lib/Release/* bin/Release	
+#    cp -r freetype2/Release-iphoneos/* bin/Release
+#    cp -r harfbuzz/Release-iphoneos/* bin/Release
+#    libtool -static -o libemgucv_armv7.a bin/Release/*.a
     cd ../../..
 
     mkdir -p platforms/ios/arm64
     cd platforms/ios/arm64
     ../configure-device_xcode.sh -DIOS_ARCH="arm64" $*
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="arm64" -target ALL_BUILD clean build
-    cp -r ../../../libs/Release/* bin/Release
-    cp -r opencv/3rdparty/lib/Release/* bin/Release  
-    cp -r opencv/lib/Release/* bin/Release
-    cp -r freetype2/Release-iphoneos/* bin/Release
-    cp -r harfbuzz/Release-iphoneos/* bin/Release
-    libtool -static -o libemgucv_arm64.a bin/Release/*.a
+#    cp -r ../../../libs/Release/* bin/Release
+#    cp -r opencv/3rdparty/lib/Release/* bin/Release  
+#    cp -r opencv/lib/Release/* bin/Release
+#    cp -r freetype2/Release-iphoneos/* bin/Release
+#    cp -r harfbuzz/Release-iphoneos/* bin/Release
+#    libtool -static -o libemgucv_arm64.a bin/Release/*.a
     cd ../../..
 fi
 
@@ -61,14 +61,14 @@ if [ "$1" != "simulator_x86_64" ]; then
     ../configure-simulator_xcode.sh -DIOS_ARCH="i386" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE $*
     fi
     xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="i386" -target ALL_BUILD clean build
-    cp -r ../../../libs/Release/* bin/Release
-    cp -r opencv/3rdparty/lib/Release/* bin/Release  
-    cp -r opencv/lib/Release/* bin/Release
-    cp -r freetype2/Release-iphonesimulator/* bin/Release
-    cp -r harfbuzz/Release-iphonesimulator/* bin/Release
+#    cp -r ../../../libs/Release/* bin/Release
+#    cp -r opencv/3rdparty/lib/Release/* bin/Release  
+#    cp -r opencv/lib/Release/* bin/Release
+#    cp -r freetype2/Release-iphonesimulator/* bin/Release
+#    cp -r harfbuzz/Release-iphonesimulator/* bin/Release
     #cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/ia32/* bin/Release
     #cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/ia32/* bin/Release
-    libtool -static -o libemgucv_i386.a bin/Release/*.a
+#    libtool -static -o libemgucv_i386.a bin/Release/*.a
     cd ../../..
 fi
 
@@ -81,15 +81,15 @@ else
   ../configure-simulator_xcode.sh -DIOS_ARCH="x86_64" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE $*
 fi
 xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="x86_64" -target ALL_BUILD clean build
-cp -r ../../../libs/Release/* bin/Release
-cp -r opencv/3rdparty/lib/Release/* bin/Release
-cp -r opencv/lib/Release/* bin/Release
-cp -r freetype2/Release-iphonesimulator/* bin/Release
-cp -r harfbuzz/Release-iphonesimulator/* bin/Release
+#cp -r ../../../libs/Release/* bin/Release
+#cp -r opencv/3rdparty/lib/Release/* bin/Release
+#cp -r opencv/lib/Release/* bin/Release
+#cp -r freetype2/Release-iphonesimulator/* bin/Release
+#cp -r harfbuzz/Release-iphonesimulator/* bin/Release
 #cp -r opencv/3rdparty/ippicv/ippiw_mac/lib/intel64/* bin/Release
 #cp -r opencv/3rdparty/ippicv/ippicv_mac/lib/intel64/* bin/Release
 
-libtool -static -o libemgucv_x86_64.a bin/Release/*.a
+#libtool -static -o libemgucv_x86_64.a bin/Release/*.a
 cd ../../..
 
 rm -rf platforms/ios/universal
