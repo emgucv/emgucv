@@ -327,7 +327,7 @@ IF(IOS)
   SET(IS_IOS_I386_BUILD OFF)
   IF(IS_IOS_BUILD AND ("${IOS_ARCH}" STREQUAL "i386"))
     SET(IS_IOS_I386_BUILD ON)
-    MESSAGE(STATUS "IS_IOS_I386_BUILD: ${IS_IOS_i386_BUILD}")
+    MESSAGE(STATUS "IS_IOS_I386_BUILD: ${IS_IOS_I386_BUILD}")
   ENDIF()
   CHECK_BINARY_EXIST("libs/iOS" "libcvextern_i386.a" HAVE_IOS_I386 ${IS_IOS_I386_BUILD})
   
@@ -366,6 +366,14 @@ IF(NOT HAVE_IOS)
   IF(HAVE_IOS_I386 OR HAVE_IOS_X86_64 OR HAVE_IOS_ARMV7S OR HAVE_IOS_ARMV7 OR HAVE_IOS_ARM64)
     SET(HAVE_IOS ON) 
   ENDIF()
+ENDIF()
+
+SET(HAVE_IOS_ALL_ARCH OFF)
+IF(HAVE_IOS_I386 AND HAVE_IOS_X86_64 AND HAVE_IOS_ARMV7S AND HAVE_IOS_ARMV7 AND HAVE_IOS_ARM64)
+  SET(HAVE_IOS_ALL_ARCH ON) 
+ENDIF()
+IF(HAVE_IOS_ALL_ARCH)
+  MESSAGE(STATUS "HAVE_IOS_ALL_ARCH: ${HAVE_IOS_ALL_ARCH}")
 ENDIF()
 
 IF(HAVE_IOS)
@@ -527,13 +535,13 @@ IF(HAVE_ANDROID_X86_64)
   SET(ANDROID_LABEL "${ANDROID_LABEL}-x86_64")
 ENDIF()
 
-CHECK_BINARY_EXIST("libs" "Emgu.CV.World*" HAVE_PREBUILD_EMGU_CV_WORLD OFF)
-
 IF("${ANDROID_LABEL}" STREQUAL "-arm64-v8a-armeabi-armeabi-v7a-x86-x86_64")
   SET(ANDROID_LABEL "-android")
 ELSEIF(NOT ("${ANDROID_LABEL}" STREQUAL ""))
   SET(ANDROID_LABEL "-android${ANDROID_LABEL}")
 ENDIF()
+
+CHECK_BINARY_EXIST("libs" "Emgu.CV.World*" HAVE_PREBUILD_EMGU_CV_WORLD OFF)
 
 # ----------------------------------------------------------------------------
 #  Setup Package information
@@ -1010,7 +1018,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CvInvokeEntryPoints.cs.in ${CMA
 # ----------------------------------------------------------------------------
 #  Build the managed dlls of Emgu CV
 # ----------------------------------------------------------------------------
-IF(NOT IOS) 
+#IF(NOT IOS) 
   ADD_SUBDIRECTORY(Emgu.Util)
   ADD_SUBDIRECTORY(Emgu.CV)
   ADD_SUBDIRECTORY(Emgu.CV.UI)
@@ -1027,7 +1035,7 @@ IF(NOT IOS)
     ADD_SUBDIRECTORY(Emgu.CV.UI.GL)
   ENDIF()
   ADD_SUBDIRECTORY(Emgu.CV.World)
-ENDIF()
+#ENDIF()
 
 IF(WIN32)
   ADD_SUBDIRECTORY(platforms/nuget)
