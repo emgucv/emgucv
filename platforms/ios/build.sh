@@ -13,6 +13,8 @@ fi
 
 cd ../..
 
+mkdir -p libs/iOS
+
 if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then    
     mkdir -p platforms/ios/armv7s     
     cd platforms/ios/armv7s
@@ -92,19 +94,19 @@ xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 WARNING_CFLAGS=-Wno-implicit-function-
 #libtool -static -o libemgucv_x86_64.a bin/Release/*.a
 cd ../../..
 
-rm -rf platforms/ios/universal
-mkdir -p platforms/ios/universal
-if [ "$1" == "simulator" ]; then
+#rm -rf platforms/ios/universal
+#mkdir -p platforms/ios/universal
+#if [ "$1" == "simulator" ]; then
     #skip the first parameter
-    lipo -create -output platforms/ios/universal/libemgucv.a platforms/ios/i386/libemgucv_i386.a platforms/ios/x86_64/libemgucv_x86_64.a
-elif [ "$1" == "simulator_x86_64" ]; then
-    cp -f platforms/ios/x86_64/libemgucv_x86_64.a platforms/ios/universal/libemgucv.a 
-else
-    lipo -create -output platforms/ios/universal/libemgucv.a platforms/ios/armv7/libemgucv_armv7.a platforms/ios/armv7s/libemgucv_armv7s.a platforms/ios/arm64/libemgucv_arm64.a platforms/ios/i386/libemgucv_i386.a  platforms/ios/x86_64/libemgucv_x86_64.a
-fi
+#    lipo -create -output platforms/ios/universal/libemgucv.a platforms/ios/i386/libemgucv_i386.a platforms/ios/x86_64/libemgucv_x86_64.a
+#elif [ "$1" == "simulator_x86_64" ]; then
+#    cp -f platforms/ios/x86_64/libemgucv_x86_64.a platforms/ios/universal/libemgucv.a 
+#else
+#    lipo -create -output platforms/ios/universal/libemgucv.a platforms/ios/armv7/libemgucv_armv7.a platforms/ios/armv7s/libemgucv_armv7s.a platforms/ios/arm64/libemgucv_arm64.a platforms/ios/i386/libemgucv_i386.a  platforms/ios/x86_64/libemgucv_x86_64.a
+#fi
 
-mkdir -p libs/iOS
-cp -f platforms/ios/universal/libemgucv.a libs/iOS/libcvextern.a
+#mkdir -p libs/iOS
+#cp -f platforms/ios/universal/libemgucv.a libs/iOS/libcvextern.a
 
 cd platforms/ios
 

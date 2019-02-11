@@ -2624,7 +2624,13 @@ ELSE()
 ENDIF()
 add_custom_command(TARGET ${the_target}
                    POST_BUILD
-                   COMMAND libtool -static -o libemgucv_${IOS_ARCH}.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a
+                   COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a
                    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
                    COMMENT "linking target")
+add_custom_command(TARGET ${the_target}
+                   POST_BUILD
+                   COMMAND lipo -create -output ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern.a ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_*.a
+                   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+                   COMMENT "linking target")				   
+			   
 ENDIF()
