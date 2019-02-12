@@ -55,7 +55,7 @@ namespace Emgu.CV.Bioinspired
         /// <param name="colorSamplingMethod">Specifies which kind of color sampling will be used</param>
         /// <param name="useRetinaLogSampling">Activate retina log sampling, if true, the 2 following parameters can be used</param>
         /// <param name="reductionFactor">Only useful if param useRetinaLogSampling=true, specifies the reduction factor of the output frame (as the center (fovea) is high resolution and corners can be underscaled, then a reduction of the output is allowed without precision leak</param>
-        /// <param name="samplingStrength">Only useful if param useRetinaLogSampling=true, specifies the strenght of the log scale that is applied</param>
+        /// <param name="samplingStrength">Only useful if param useRetinaLogSampling=true, specifies the strength of the log scale that is applied</param>
         public Retina(Size inputSize, bool colorMode, ColorSamplingMethod colorSamplingMethod, bool useRetinaLogSampling, double reductionFactor, double samplingStrength)
         {
             _ptr = BioinspiredInvoke.cveRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength, ref _sharePtr);
@@ -91,7 +91,7 @@ namespace Emgu.CV.Bioinspired
         /// <summary>
         /// Accessors of the details channel of the retina (models foveal vision)
         /// </summary>
-        /// <returns>The details channel of the retina.</returns>
+        /// <param name="parvo">The details channel of the retina.</param>
         public void GetParvo(IOutputArray parvo)
         {
             if (_ptr != IntPtr.Zero)
@@ -104,7 +104,7 @@ namespace Emgu.CV.Bioinspired
         /// <summary>
         /// Accessors of the motion channel of the retina (models peripheral vision)
         /// </summary>
-        /// <returns>The motion channel of the retina.</returns>
+        /// <param name="magno">The motion channel of the retina.</param>
         public void GetMagno(IOutputArray magno)
         {
             if (_ptr != IntPtr.Zero)

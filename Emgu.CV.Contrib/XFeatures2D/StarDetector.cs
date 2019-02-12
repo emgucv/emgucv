@@ -37,7 +37,7 @@ namespace Emgu.CV.XFeatures2D
         /// Another threshold for the feature size to eliminate edges. 
         /// The larger the threshold, the more points you get.</param>
         /// <param name="suppressNonmaxSize">
-        ///
+        /// Suppress Nonmax Size
         /// </param>
         public StarDetector(
             int maxSize = 45, int responseThreshold = 30, int lineThresholdProjected = 10,

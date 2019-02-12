@@ -564,7 +564,7 @@ namespace Emgu.CV
         /// <param name="translationVector">The output 3x1 or 1x3 translation vector</param>
         /// <param name="useExtrinsicGuess">Use the input rotation and translation parameters as a guess</param>
         /// <param name="method">Method for solving a PnP problem</param>
-        /// <returns>The extrinsic parameters</returns>
+        /// <returns>True if successful</returns>
         public static bool SolvePnP(
            MCvPoint3D32f[] objectPoints,
            PointF[] imagePoints,
@@ -592,6 +592,7 @@ namespace Emgu.CV
         /// <param name="translationVector">The output 3x1 or 1x3 translation vector</param>
         /// <param name="useExtrinsicGuess">Use the input rotation and translation parameters as a guess</param>
         /// <param name="flags">Method for solving a PnP problem</param>
+        /// <returns>True if successful</returns>
         public static bool SolvePnP(
            IInputArray objectPoints,
            IInputArray imagePoints,
@@ -643,6 +644,7 @@ namespace Emgu.CV
         /// <param name="confident">The probability that the algorithm produces a useful result.</param>
         /// <param name="inliers">Output vector that contains indices of inliers in objectPoints and imagePoints .</param>
         /// <param name="flags">Method for solving a PnP problem </param>
+        /// <returns>True if successful</returns>
         public static bool SolvePnPRansac(
            IInputArray objectPoints, 
            IInputArray imagePoints, 
@@ -704,7 +706,8 @@ namespace Emgu.CV
         /// <param name="f">The optional output fundamental matrix </param>
         /// <param name="termCrit">Termination criteria for the iterative optimization algorithm</param>
         /// <param name="flags">The calibration flags</param>
-        public static void StereoCalibrate(
+        /// <returns>The final value of the re-projection error.</returns>
+        public static double StereoCalibrate(
            MCvPoint3D32f[][] objectPoints,
            PointF[][] imagePoints1,
            PointF[][] imagePoints2,
@@ -728,7 +731,7 @@ namespace Emgu.CV
             using (VectorOfVectorOfPointF imagePoints1Vec = new VectorOfVectorOfPointF(imagePoints1))
             using (VectorOfVectorOfPointF imagePoints2Vec = new VectorOfVectorOfPointF(imagePoints2))
             {
-                CvInvoke.StereoCalibrate(
+                return CvInvoke.StereoCalibrate(
                    objectPointVec,
                    imagePoints1Vec,
                    imagePoints2Vec,
@@ -765,7 +768,7 @@ namespace Emgu.CV
         /// <param name="f">The optional output fundamental matrix </param>
         /// <param name="termCrit">Termination criteria for the iterative optimization algorithm</param>
         /// <param name="flags">The calibration flags</param>
-        /// <returns></returns>
+        /// <returns>The final value of the re-projection error.</returns>
         public static double StereoCalibrate(
            IInputArray objectPoints,
            IInputArray imagePoints1,
@@ -820,7 +823,7 @@ namespace Emgu.CV
            ref MCvTermCriteria termCrit);
 
         /// <summary>
-        /// computes the rectification transformations without knowing intrinsic parameters of the cameras and their relative position in space, hence the suffix "Uncalibrated". Another related difference from cvStereoRectify is that the function outputs not the rectification transformations in the object (3D) space, but the planar perspective transformations, encoded by the homography matrices H1 and H2. The function implements the following algorithm [Hartley99]. 
+        /// Computes the rectification transformations without knowing intrinsic parameters of the cameras and their relative position in space, hence the suffix "Uncalibrated". Another related difference from cvStereoRectify is that the function outputs not the rectification transformations in the object (3D) space, but the planar perspective transformations, encoded by the homography matrices H1 and H2. The function implements the following algorithm [Hartley99]. 
         /// </summary>
         /// <remarks>
         /// Note that while the algorithm does not need to know the intrinsic parameters of the cameras, it heavily depends on the epipolar geometry. Therefore, if the camera lenses have significant distortion, it would better be corrected before computing the fundamental matrix and calling this function. For example, distortion coefficients can be estimated for each head of stereo camera separately by using cvCalibrateCamera2 and then the images can be corrected using cvUndistort2
@@ -831,10 +834,16 @@ namespace Emgu.CV
         /// <param name="imgSize">Size of the image</param>
         /// <param name="h1">The rectification homography matrices for the first images</param>
         /// <param name="h2">The rectification homography matrices for the second images</param>
-        /// <param name="threshold">If the parameter is greater than zero, then all the point pairs that do not comply the epipolar geometry well enough (that is, the points for which fabs(points2[i]T*F*points1[i])>threshold) are rejected prior to computing the homographies</param>
-        /// <returns></returns>
-        public static bool StereoRectifyUncalibrated(IInputArray points1, IInputArray points2, IInputArray f, Size imgSize,
-           IOutputArray h1, IOutputArray h2, double threshold = 5)
+        /// <param name="threshold">If the parameter is greater than zero, then all the point pairs that do not comply the epipolar geometry well enough (that is, the points for which fabs(points2[i]T*F*points1[i])&gt;threshold) are rejected prior to computing the homographies</param>
+        /// <returns>True if successful</returns>
+        public static bool StereoRectifyUncalibrated(
+            IInputArray points1, 
+            IInputArray points2, 
+            IInputArray f, 
+            Size imgSize,
+            IOutputArray h1, 
+            IOutputArray h2, 
+            double threshold = 5)
         {
             using (InputArray iaPoints1 = points1.GetInputArray())
             using (InputArray iaPoints2 = points2.GetInputArray())
@@ -928,7 +937,7 @@ namespace Emgu.CV
         /// <param name="image">Source chessboard view; it must be 8-bit grayscale or color image</param>
         /// <param name="corners">Pointer to the output array of corners(PointF) detected</param>
         /// <param name="regionSize">region size</param>
-        /// <returns>True if successfull</returns>
+        /// <returns>True if successful</returns>
         public static bool Find4QuadCornerSubpix(IInputArray image, IInputOutputArray corners, Size regionSize)
         {
             using (InputArray iaImage = image.GetInputArray())
@@ -1259,12 +1268,18 @@ namespace Emgu.CV
         /// <param name="rvec">rotation vector</param>
         /// <param name="tvec">translation vector</param>
         /// <param name="K">Camera matrix</param>
-        /// <param name="D">	Input vector of distortion coefficients (k1,k2,k3,k4).</param>
+        /// <param name="D">Input vector of distortion coefficients (k1,k2,k3,k4).</param>
         /// <param name="alpha">The skew coefficient.</param>
         /// <param name="jacobian">Optional output 2Nx15 jacobian matrix of derivatives of image points with respect to components of the focal lengths, coordinates of the principal point, distortion coefficients, rotation vector, translation vector, and the skew. In the old interface different components of the jacobian are returned via different output parameters.</param>
-        public static void ProjectPoints(IInputArray objectPoints, IOutputArray imagePoints, IInputArray rvec,
-           IInputArray tvec,
-           IInputArray K, IInputArray D, double alpha = 0, IOutputArray jacobian = null)
+        public static void ProjectPoints(
+            IInputArray objectPoints, 
+            IOutputArray imagePoints, 
+            IInputArray rvec,
+            IInputArray tvec,
+            IInputArray K, 
+            IInputArray D, 
+            double alpha = 0, 
+            IOutputArray jacobian = null)
         {
             using (InputArray iaObjectPoints = objectPoints.GetInputArray())
             using (OutputArray oaImagePoints = imagePoints.GetOutputArray())

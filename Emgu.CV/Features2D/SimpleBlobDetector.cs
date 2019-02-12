@@ -20,6 +20,7 @@ namespace Emgu.CV.Features2D
         /// <summary>
         /// Create a simple blob detector
         /// </summary>
+        /// <param name="parameters">The parameters for creating a simple blob detector</param>
         public SimpleBlobDetector(SimpleBlobDetectorParams parameters = null)
         {
             if (parameters == null)

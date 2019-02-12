@@ -107,8 +107,10 @@ namespace Emgu.CV.Cuda
       }
 
       /// <summary>
-      /// Indicates if the decive has the specific feature
+      /// Indicates if the device has the specific feature
       /// </summary>
+      /// <param name="feature">The device feature</param>
+      /// <returns>True if the feature is supported</returns>
       public bool Supports(GpuFeature feature)
       {
          return CudaInvoke.cudaDeviceInfoSupports(_ptr, feature);

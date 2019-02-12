@@ -17,18 +17,26 @@ namespace Emgu.CV.Dpm
         /// <summary>
         /// create a new dpm detector with the specified files and classes
         /// </summary>
-        /// <param name="files"></param>
-        /// <param name="classes"></param>
-        public DpmDetector(string[] files, string[] classes)
+        /// <param name="files">A set of filenames storing the trained detectors (models). Each file contains one model.</param>
+        /// <param name="classes">A set of trained models names. If it's empty then the name of each model will be constructed from the name of file containing the model. E.g. the model stored in "/home/user/cat.xml" will get the name "cat".</param>
+        public DpmDetector(string[] files, string[] classes = null)
         {
             CvString[] cfiles = new CvString[files.Length];
             for (int i = 0; i < files.Length; i++)
                 cfiles[i] = new CvString(files[i]);
 
-            CvString[] cclasses = new CvString[classes.Length];
-            for (int i = 0; i < classes.Length; i++)
-                cclasses[i] = new CvString(classes[i]);
-
+            CvString[] cclasses;
+            if (classes == null)
+            {
+                cclasses = new CvString[0];
+            }
+            else
+            {
+                cclasses = new CvString[classes.Length];
+                for (int i = 0; i < classes.Length; i++)
+                    cclasses[i] = new CvString(classes[i]);
+            }
+                
             try
             {
                 using (var vfiles = new Util.VectorOfCvString(cfiles))
@@ -45,12 +53,12 @@ namespace Emgu.CV.Dpm
         }
 
         /// <summary>
-        /// Is the detector empty?
+        /// Return true if the detector is empty
         /// </summary>
         public bool IsEmpty { get { return DpmInvoke.cveDPMDetectorIsEmpty(_ptr); } }
 
         /// <summary>
-        /// get the class names
+        /// Get the class names
         /// </summary>
         public string[] ClassNames
         {
@@ -59,12 +67,7 @@ namespace Emgu.CV.Dpm
                 using (var names = new Util.VectorOfCvString())
                 {
                     DpmInvoke.cveDPMDetectorGetClassNames(_ptr, names);
-
-                    int nsize = names.Size;
-                    string[] @out = new string[nsize];
-                    for (var i = 0; i < nsize; i++)
-                        @out[i] = names[i].ToString();
-                    return @out;
+                    return names.ToArray();
                 }
             }
         }
@@ -77,7 +80,8 @@ namespace Emgu.CV.Dpm
         /// <summary>
         /// Perform detection on the image
         /// </summary>
-        /// <returns></returns>
+        /// <param name="mat">The image for detection.</param>
+        /// <returns>The detection result</returns>
         public ObjectDetection[] Detect(Mat mat)
         {
             using (Util.VectorOfRect rects = new Util.VectorOfRect())

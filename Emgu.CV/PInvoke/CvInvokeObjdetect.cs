@@ -28,7 +28,7 @@ namespace Emgu.CV
         /// Groups the object candidate rectangles.
         /// </summary>
         /// <param name="rectList">Input/output vector of rectangles. Output vector includes retained and grouped rectangles.</param>
-        /// <param name="weights"></param>
+        /// <param name="weights">Weights</param>
         /// <param name="groupThreshold">Minimum possible number of rectangles minus 1. The threshold is used in a group of rectangles to retain it.</param>
         /// <param name="eps">Relative difference between sides of the rectangles to merge them into a group.</param>
         public static void GroupRectangles(VectorOfRect rectList, VectorOfInt weights, int groupThreshold, double eps = 0.2)

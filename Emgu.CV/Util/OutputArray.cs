@@ -35,7 +35,7 @@ namespace Emgu.CV
       /// Get an empty output array
       /// </summary>
       /// <returns>An empty output array</returns>
-      public static new OutputArray GetEmpty()
+      public new static OutputArray GetEmpty()
       {
          return _empty;
       }

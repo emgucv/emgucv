@@ -36,6 +36,10 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Create a Gaussian Mixture-based Background/Foreground Segmentation model
         /// </summary>
+        /// <param name="history">Length of the history.</param>
+        /// <param name="nMixtures">Number of Gaussian mixtures.</param>
+        /// <param name="backgroundRatio">Background ratio.</param>
+        /// <param name="noiseSigma">Noise strength (standard deviation of the brightness or each color channel). 0 means some automatic value.</param>
         public CudaBackgroundSubtractorMOG(int history = 200, int nMixtures = 4, double backgroundRatio = 0.7, double noiseSigma = 0)
         {
             _ptr = CudaInvoke.cudaBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);

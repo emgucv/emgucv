@@ -21,7 +21,23 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Create the Cuda implementation of GoodFeaturesToTrackDetector
         /// </summary>
-        public CudaGoodFeaturesToTrackDetector(DepthType srcDepth, int srcChannels, int maxCorners = 1000, double qualityLevel = 0.01, double minDistance = 0, int blockSize = 3, bool useHarrisDetector = false, double harrisK = 0.04)
+        /// <param name="srcDepth">The depth of the src image</param>
+        /// <param name="srcChannels">The number of channels in the src image</param>
+        /// <param name="maxCorners">The maximum number of channels</param>
+        /// <param name="qualityLevel">The quality level</param>
+        /// <param name="minDistance">The minimum distance</param>
+        /// <param name="blockSize">The block size</param>
+        /// <param name="useHarrisDetector">If true, use Harris detector</param>
+        /// <param name="harrisK">Harris K</param>
+        public CudaGoodFeaturesToTrackDetector(
+            DepthType srcDepth, 
+            int srcChannels, 
+            int maxCorners = 1000, 
+            double qualityLevel = 0.01, 
+            double minDistance = 0, 
+            int blockSize = 3, 
+            bool useHarrisDetector = false, 
+            double harrisK = 0.04)
         {
             _ptr = CudaInvoke.cudaGoodFeaturesToTrackDetectorCreate(CvInvoke.MakeType(srcDepth, srcChannels), maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK, ref _sharedPtr);
         }
@@ -29,6 +45,10 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Find the good features to track
         /// </summary>
+        /// <param name="image">The input image</param>
+        /// <param name="corners">The output corners</param>
+        /// <param name="mask">Optional mask</param>
+        /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
         public void Detect(IInputArray image, IOutputArray corners, IInputArray mask = null, Stream stream = null)
         {
             using (InputArray iaImage = image.GetInputArray())
@@ -54,11 +74,15 @@ namespace Emgu.CV.Cuda
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cudaGoodFeaturesToTrackDetectorCreate(
-           int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool useHarrisDetector,
-           double harrisK,
-           ref IntPtr _sharedPtr);
+            int srcType, 
+            int maxCorners, 
+            double qualityLevel, 
+            double minDistance, 
+            int blockSize,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useHarrisDetector,
+            double harrisK,
+            ref IntPtr _sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cudaCornersDetectorDetect(IntPtr detector, IntPtr image, IntPtr corners, IntPtr mask, IntPtr stream);

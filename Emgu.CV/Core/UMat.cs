@@ -354,6 +354,8 @@ namespace Emgu.CV
         /// <summary>
         /// Return the Mat representation of the UMat
         /// </summary>
+        /// <param name="access">The access type</param>
+        /// <returns>The Mat representation of the UMat</returns>
         public Mat GetMat(CvEnum.AccessType access)
         {
             return new Mat(UMatInvoke.cveUMatGetMat(_ptr, access), true, false);
@@ -377,6 +379,7 @@ namespace Emgu.CV
         /// <summary>
         /// Pointer to the InputArray
         /// </summary>
+        /// <returns>The input array</returns>
         public InputArray GetInputArray()
         {
             return new InputArray(UMatInvoke.cveInputArrayFromUMat(_ptr), this);
@@ -385,6 +388,7 @@ namespace Emgu.CV
         /// <summary>
         /// Pointer to the OutputArray
         /// </summary>
+        /// <returns>The output array</returns>
         public OutputArray GetOutputArray()
         {
             return new OutputArray(UMatInvoke.cveOutputArrayFromUMat(_ptr), this);
@@ -393,6 +397,7 @@ namespace Emgu.CV
         /// <summary>
         /// Pointer to the InputOutputArray
         /// </summary>
+        /// <returns>The input output array</returns>
         public InputOutputArray GetInputOutputArray()
         {
             return new InputOutputArray(UMatInvoke.cveInputOutputArrayFromUMat(_ptr), this);

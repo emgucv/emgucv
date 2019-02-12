@@ -85,7 +85,7 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Create a GpuMat from an CvArray of the same depth type
         /// </summary>
-        /// <param name="arr">The CvArry to be converted to GpuMat</param>
+        /// <param name="arr">The CvArray to be converted to GpuMat</param>
         public GpuMat(IInputArray arr)
            : this()
         {
@@ -126,8 +126,6 @@ namespace Emgu.CV.Cuda
             }
         }
 
-
-
         /// <summary>
         /// Get the type of the GpuMat
         /// </summary>
@@ -139,6 +137,7 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Pointer to the InputArray
         /// </summary>
+        /// <returns>The input array</returns>
         public InputArray GetInputArray()
         {
             return new InputArray(CudaInvoke.cveInputArrayFromGpuMat(_ptr), this);
@@ -147,6 +146,7 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Pointer to the OutputArray
         /// </summary>
+        /// <returns>The output array</returns>
         public OutputArray GetOutputArray()
         {
             return new OutputArray(CudaInvoke.cveOutputArrayFromGpuMat(_ptr), this);
@@ -155,6 +155,7 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Pointer to the InputOutputArray
         /// </summary>
+        /// <returns>The input output array</returns>
         public InputOutputArray GetInputOutputArray()
         {
             return new InputOutputArray(CudaInvoke.cveInputOutputArrayFromGpuMat(_ptr), this);

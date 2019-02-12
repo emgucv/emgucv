@@ -130,7 +130,7 @@ namespace Emgu.CV
         /// Returns the specified VideoWriter property.
         /// </summary>
         /// <param name="prop">Property identifier.</param>
-        /// <returns></returns>
+        /// <returns>The value of the specific property</returns>
         public double Get(WriterProperty prop)
         {
             return CvInvoke.cveVideoWriterGet(_ptr, prop);

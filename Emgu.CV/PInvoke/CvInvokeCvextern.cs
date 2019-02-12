@@ -152,7 +152,7 @@ namespace Emgu.CV
         /// <param name="inliers">Output vector indicating which points are inliers.</param>
         /// <param name="ransacThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier.</param>
         /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
-        /// <returns></returns>
+        /// <returns>The result</returns>
         public static int EstimateAffine3D(MCvPoint3D32f[] src, MCvPoint3D32f[] dst, out Matrix<double> estimate,
            out Byte[] inliers, double ransacThreshold, double confidence)
         {
@@ -191,7 +191,7 @@ namespace Emgu.CV
         /// <param name="inliers"> Output vector indicating which points are inliers.</param>
         /// <param name="ransacThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier.</param>
         /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
-        /// <returns></returns>
+        /// <returns>the result</returns>
         public static int EstimateAffine3D(IInputArray src, IInputArray dst, IOutputArray affineEstimate,
            IOutputArray inliers, double ransacThreshold = 3, double confidence = 0.99)
         {

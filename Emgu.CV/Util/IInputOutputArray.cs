@@ -20,6 +20,7 @@ namespace Emgu.CV
       /// <summary>
       /// The unmanaged pointer to the input/output array
       /// </summary>
+      /// <returns>Get the input output array</returns>
       InputOutputArray GetInputOutputArray();
    }
 

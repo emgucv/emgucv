@@ -38,7 +38,14 @@ namespace Emgu.CV.Tracking
             int iterationInit = 50, 
             int featureSetNumFeatures = 100*10+50)
         {
-            ContribInvoke.cveTrackerBoostingCreate(numClassifiers, samplerOverlap, samplerSearchFactor, iterationInit, featureSetNumFeatures, ref _trackerPtr, ref _sharedPtr);
+            ContribInvoke.cveTrackerBoostingCreate(
+                numClassifiers, 
+                samplerOverlap, 
+                samplerSearchFactor, 
+                iterationInit, 
+                featureSetNumFeatures, 
+                ref _trackerPtr, 
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -72,7 +79,13 @@ namespace Emgu.CV.Tracking
         /// <param name="termCriteria">Termination criteria, use count = 20 and eps = 0.3 for default</param>
         /// <param name="winSizeNCC">win size NCC, use (30, 30) for default</param>
         /// <param name="maxMedianLengthOfDisplacementDifference">Max median length of displacement difference</param>
-        public TrackerMedianFlow(int pointsInGrid, Size winSize, int maxLevel, MCvTermCriteria termCriteria, Size winSizeNCC, double maxMedianLengthOfDisplacementDifference = 10)
+        public TrackerMedianFlow(
+            int pointsInGrid, 
+            Size winSize, 
+            int maxLevel, 
+            MCvTermCriteria termCriteria, 
+            Size winSizeNCC, 
+            double maxMedianLengthOfDisplacementDifference = 10)
         {
             ContribInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr, ref _sharedPtr);
         }
@@ -108,13 +121,13 @@ namespace Emgu.CV.Tracking
         /// <param name="samplerTrackMaxNegNum">negative samples to use during tracking</param>
         /// <param name="featureSetNumFeatures">features</param>
         public TrackerMIL(
-            float samplerInitInRadius,
-            int samplerInitMaxNegNum,  
-            float samplerSearchWinSize,  
-            float samplerTrackInRadius,  
-            int samplerTrackMaxPosNum,  
-            int samplerTrackMaxNegNum,  
-            int featureSetNumFeatures)  
+            float samplerInitInRadius = 3.0f,
+            int samplerInitMaxNegNum = 65,  
+            float samplerSearchWinSize = 25.0f,  
+            float samplerTrackInRadius = 4.0f,  
+            int samplerTrackMaxPosNum = 100000,  
+            int samplerTrackMaxNegNum = 65,  
+            int featureSetNumFeatures = 250)  
         {
             ContribInvoke.cveTrackerMILCreate(
                 samplerInitInRadius,
@@ -169,8 +182,7 @@ namespace Emgu.CV.Tracking
     /// <summary>
     /// KCF is a novel tracking framework that utilizes properties of circulant matrix to enhance the processing speed.
     /// The original paper of KCF is available at http://home.isr.uc.pt/~henriques/circulant/index.html
-    /// as well as the matlab implementation.For more information about KCF with color-names features, please refer to
-    /// http://www.cvl.isy.liu.se/research/objrec/visualtracking/colvistrack/index.html.
+    /// as well as the matlab implementation.
     /// </summary>
     public class TrackerKCF : Tracker
     {
@@ -187,15 +199,15 @@ namespace Emgu.CV.Tracking
             /// <summary>
             /// Grayscale
             /// </summary>
-            GRAY = 1,
+            Gray = 1,
             /// <summary>
             /// Color
             /// </summary>
-            CN = 2,
+            Cn = 2,
             /// <summary>
             /// Custom
             /// </summary>
-            CUSTOM = 4
+            Custom = 4
         }
 
         /// <summary>
@@ -228,8 +240,8 @@ namespace Emgu.CV.Tracking
             bool compressFeature = true,
             int maxPatchSize = 80*80,
             int compressedSize = 2,
-            Mode descPca = Mode.CN,
-            Mode descNpca = Mode.GRAY)
+            Mode descPca = Mode.Cn,
+            Mode descNpca = Mode.Gray)
         {
             _ptr = ContribInvoke.cveTrackerKCFCreate(
                 detectThresh,
@@ -326,6 +338,32 @@ namespace Emgu.CV.Tracking
         /// <summary>
         /// Creates a CSRT tracker
         /// </summary>
+        /// <param name="useHog">Use hog</param>
+        /// <param name="useColorNames">Use color names</param>
+        /// <param name="useGray">Use Gray</param>
+        /// <param name="useRgb">Use RGB</param>
+        /// <param name="useChannelWeights">Use channel weights</param>
+        /// <param name="useSegmentation">Use segmentation</param>
+        /// <param name="windowFunction">Windows function</param>
+        /// <param name="kaiserAlpha">Kaiser alpha</param>
+        /// <param name="chebAttenuation">Cheb attenuation</param>
+        /// <param name="templateSize">Template size</param>
+        /// <param name="gslSigma">Gsl Sigma</param>
+        /// <param name="hogOrientations">Hog orientations</param>
+        /// <param name="hogClip">Hog clip</param>
+        /// <param name="padding">padding</param>
+        /// <param name="filterLr">filter Lr</param>
+        /// <param name="weightsLr">weights Lr</param>
+        /// <param name="numHogChannelsUsed">Number of hog channels used</param>
+        /// <param name="admmIterations">Admm iterations</param>
+        /// <param name="histogramBins">Histogram bins</param>
+        /// <param name="histogramLr">Histogram Lr</param>
+        /// <param name="backgroundRatio">Background ratio</param>
+        /// <param name="numberOfScales">Number of scales</param>
+        /// <param name="scaleSigmaFactor">Scale Sigma factor</param>
+        /// <param name="scaleModelMaxArea">Scale Model Max Area</param>
+        /// <param name="scaleLr">Scale Lr</param>
+        /// <param name="scaleStep">Scale step</param>
         public TrackerCSRT(             
             bool useHog = true,
             bool useColorNames = true,
@@ -413,7 +451,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         /// <param name="image">The initial frame</param>
         /// <param name="boundingBox">The initial bounding box</param>
-        /// <returns></returns>
+        /// <returns>True if successful.</returns>
         public bool Init(Mat image, Rectangle boundingBox)
         {
             return ContribInvoke.cveTrackerInit(_trackerPtr, image, ref boundingBox);
@@ -566,6 +604,7 @@ namespace Emgu.CV
             float scaleStep,
             ref IntPtr tracker,
             ref IntPtr sharedPtr);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTrackerCSRTRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
     }

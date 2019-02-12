@@ -122,7 +122,7 @@ namespace Emgu.CV.Dnn
         /// Creates 4-dimensional blob from series of images. Optionally resizes and crops images from center, subtract mean values, scales values by scale factor, swap Blue and Red channels.
         /// </summary>
         /// <param name="images">input images (all with 1-, 3- or 4-channels).</param>
-        /// <param name="blob">4-dimansional OutputArray with NCHW dimensions order.</param>
+        /// <param name="blob">4-dimensional OutputArray with NCHW dimensions order.</param>
         /// <param name="scaleFactor">multiplier for images values.</param>
         /// <param name="size">spatial size for output image</param>
         /// <param name="mean">scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.</param>

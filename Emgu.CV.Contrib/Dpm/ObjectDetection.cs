@@ -26,9 +26,9 @@ namespace Emgu.CV.Dpm
         /// <summary>
         /// create a detection
         /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="score"></param>
-        /// <param name="classId"></param>
+        /// <param name="rect">The rectangle</param>
+        /// <param name="score">The score</param>
+        /// <param name="classId">The class id</param>
         public ObjectDetection(Rectangle rect, float score, int classId)
         {
             Rect = rect;

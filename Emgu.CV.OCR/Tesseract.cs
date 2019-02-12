@@ -69,6 +69,7 @@ namespace Emgu.CV.OCR
         /// <summary>
         /// Create a default tesseract engine. Needed to Call Init function to load language files in a later stage.
         /// </summary>
+        /// <param name="enforceLocale">If true, it will enforce "C" locale during the initialization.</param>
         public Tesseract(bool enforceLocale = true)
         {
             Emgu.CV.OCR.LocaleGuard lg = null;
@@ -86,10 +87,14 @@ namespace Emgu.CV.OCR
         }
 
         /// <summary>
-        /// Get the OpenCL device pointer
+        /// If compiled with OpenCL AND an available OpenCL
+        /// device is deemed faster than serial code, then
+        /// "device" is populated with the cl_device_id
+        /// and returns sizeof(cl_device_id)
+        /// otherwise *device=nullptr and returns 0.
         /// </summary>
         /// <param name="device">Pointer to the opencl device</param>
-        /// <returns></returns>
+        /// <returns>0 if no device found. sizeof(cl_device_id) if device is found.</returns>
         public int GetOpenCLDevice(ref IntPtr device)
         {
             return OcrInvoke.TessBaseAPIGetOpenCLDevice(_ptr, ref device);
@@ -510,7 +515,7 @@ namespace Emgu.CV.OCR
         /// <param name="filename">Metadata used by side-effect processes, such as reading a box file or formatting as hOCR.</param>
         /// <param name="retryConfig">retryConfig is useful for debugging. If not NULL, you can fall back to an alternate configuration if a page fails for some reason.</param>
         /// <param name="timeoutMillisec">terminates processing if any single page takes too long. Set to 0 for unlimited time.</param>
-        /// <param name="renderer">Responible for creating the output. For example, use the TessTextRenderer if you want plaintext output, or the TessPDFRender to produce searchable PDF.</param>
+        /// <param name="renderer">Responsible for creating the output. For example, use the TessTextRenderer if you want plaintext output, or the TessPDFRender to produce searchable PDF.</param>
         /// <returns>Returns true if successful, false on error.</returns>
         public bool ProcessPage(
             Pix pix,
@@ -537,8 +542,8 @@ namespace Emgu.CV.OCR
         /// <summary>
         /// Runs page layout analysis in the mode set by SetPageSegMode. May optionally be called prior to Recognize to get access to just the page layout results. Returns an iterator to the results. Returns NULL on error or an empty page. The returned iterator must be deleted after use. WARNING! This class points to data held within the TessBaseAPI class, and therefore can only be used while the TessBaseAPI class still exists and has not been subjected to a call of Init, SetImage, Recognize, Clear, End DetectOS, or anything else that changes the internal PAGE_RES.
         /// </summary>
-        /// <param name="mergeSimilarWords"></param>
-        /// <returns></returns>
+        /// <param name="mergeSimilarWords">If true merge similar words</param>
+        /// <returns>Page iterator</returns>
         public PageIterator AnalyseLayout(bool mergeSimilarWords = false)
         {
             return new PageIterator(OcrInvoke.TessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords));

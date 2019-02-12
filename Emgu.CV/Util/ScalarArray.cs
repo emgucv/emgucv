@@ -61,7 +61,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Convert MCvSalar to InputArray
+      /// Convert MCvScalar to InputArray
       /// </summary>
       /// <param name="scalar">The MCvScalar</param>
       /// <returns>The InputArray</returns>
@@ -93,6 +93,7 @@ namespace Emgu.CV
       /// <summary>
       /// The pointer to the input array
       /// </summary>
+      /// <returns>The input array</returns>
       public InputArray GetInputArray()
       {
          if (_dataType == DataType.Scalar)
@@ -108,16 +109,16 @@ namespace Emgu.CV
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveScalarCreate(ref MCvScalar scalar);
+      internal static extern IntPtr cveScalarCreate(ref MCvScalar scalar);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveScalarRelease(ref IntPtr scalar);
+      internal static extern void cveScalarRelease(ref IntPtr scalar);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveInputArrayFromScalar(IntPtr scalar);
+      internal static extern IntPtr cveInputArrayFromScalar(IntPtr scalar);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveInputArrayFromDouble(IntPtr scalar);
+      internal static extern IntPtr cveInputArrayFromDouble(IntPtr scalar);
 
    }
 }

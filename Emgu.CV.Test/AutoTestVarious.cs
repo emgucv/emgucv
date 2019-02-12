@@ -1403,18 +1403,19 @@ namespace Emgu.CV.Test
         [Test]
         public void TestFaceRecognizer()
         {
-            Image<Gray, Byte>[] images = new Image<Gray, byte>[20];
+            Mat[] images = new Mat[20];
             int[] labels = new int[20];
             for (int i = 0; i < images.Length; i++)
             {
-                images[i] = new Image<Gray, byte>(200, 200);
-                images[i].SetRandUniform(new MCvScalar(0), new MCvScalar(255));
+                images[i] = new Mat(new Size(200, 200), DepthType.Cv8U, 1);
+                CvInvoke.Randu(images[i], new MCvScalar(0), new MCvScalar(255));
+                
                 labels[i] = i;
             }
 
-            Image<Gray, Byte> sample = new Image<Gray, Byte>(200, 200);
-            sample.SetRandUniform(new MCvScalar(0), new MCvScalar(255));
-
+            Mat sample = new Mat(new Size(200, 200), DepthType.Cv8U, 1);
+            CvInvoke.Randu(sample, new MCvScalar(0), new MCvScalar(255));
+            
             EigenFaceRecognizer eigen = new EigenFaceRecognizer(0, double.MaxValue);
 
             eigen.Train(images, labels);

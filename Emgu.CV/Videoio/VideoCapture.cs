@@ -460,17 +460,19 @@ namespace Emgu.CV
 #endif
         }
 
+
+#if WITH_SERVICE_MODEL
         /// <summary>
         /// Start the grab process in a separate thread. Once started, use the ImageGrabbed event handler and RetrieveGrayFrame/RetrieveBgrFrame to obtain the images.
         /// </summary>
-//#if WITH_SERVICE_MODEL
-//        /// <param name="eh">An exception handler. If provided, it will be used to handle exception in the capture thread.</param>
-//#endif
-        public void Start(
-#if WITH_SERVICE_MODEL
-            System.ServiceModel.Dispatcher.ExceptionHandler eh = null
+        /// <param name="eh">An exception handler. If provided, it will be used to handle exception in the capture thread.</param>
+        public void Start(System.ServiceModel.Dispatcher.ExceptionHandler eh = null)
+#else
+        /// <summary>
+        /// Start the grab process in a separate thread. Once started, use the ImageGrabbed event handler and RetrieveGrayFrame/RetrieveBgrFrame to obtain the images.
+        /// </summary>
+        public void Start()
 #endif
-        )
         {
             if (_grabState == GrabState.Pause)
             {

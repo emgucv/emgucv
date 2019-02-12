@@ -2558,14 +2558,7 @@ namespace Emgu.CV
         /// between the currently observed pixel and one of its neighbor belong to the component
         /// or seed pixel to add the pixel to component.
         /// In case of 8-bit color images it is packed value.</param>
-        /// <param name="flags">The operation flags.
-        /// Lower bits contain connectivity value, 4 (by default) or 8, used within the function.
-        /// Connectivity determines which neighbors of a pixel are considered.
-        /// Upper bits can be 0 or combination of the following flags:
-        /// CV_FLOODFILL_FIXED_RANGE - if set the difference between the current pixel and seed pixel is considered,
-        /// otherwise difference between neighbor pixels is considered (the range is floating).
-        /// CV_FLOODFILL_MASK_ONLY - if set, the function does not fill the image (new_val is ignored),
-        /// but the fills mask (that must be non-NULL in this case). </param>
+        /// <param name="flags">The operation flags. </param>
         /// <param name="mask">Operation mask,
         /// should be singe-channel 8-bit image, 2 pixels wider and 2 pixels taller than image.
         /// If not IntPtr.Zero, the function uses and updates the mask, so user takes responsibility of initializing mask content.
@@ -2574,6 +2567,7 @@ namespace Emgu.CV
         /// Note: because mask is larger than the filled image, pixel in mask that corresponds to (x,y) pixel in image will have coordinates (x+1,y+1).</param>
         /// <param name="rect">Output parameter set by the function to the minimum bounding rectangle of the repainted domain.</param>
         /// <param name="connectivity">Flood fill connectivity</param>
+        /// <returns>The area of the connected component</returns>
         public static int FloodFill(
            IInputOutputArray src,
            IInputOutputArray mask,

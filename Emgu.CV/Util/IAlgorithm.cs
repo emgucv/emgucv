@@ -93,6 +93,7 @@ namespace Emgu.CV
         /// <summary>
         /// Clear the algorithm
         /// </summary>
+        /// <param name="algorithm">The algorithm</param>
         public static void Clear(this IAlgorithm algorithm)
         {
             CvInvoke.cveAlgorithmClear(algorithm.AlgorithmPtr);

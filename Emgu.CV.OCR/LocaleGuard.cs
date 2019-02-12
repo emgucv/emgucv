@@ -25,11 +25,29 @@ namespace Emgu.CV.OCR
         /// </summary>
         public enum LocaleCategory
         {
+            /// <summary>
+            /// All
+            /// </summary>
             All = 0,
+            /// <summary>
+            /// Collate
+            /// </summary>
             Collate = 1,
+            /// <summary>
+            /// Ctype
+            /// </summary>
             Ctype = 2,
+            /// <summary>
+            /// Monetary
+            /// </summary>
             Monetary = 3,
+            /// <summary>
+            /// Numeric
+            /// </summary>
             Numeric = 4,
+            /// <summary>
+            /// Time
+            /// </summary>
             Time = 5
         }
 

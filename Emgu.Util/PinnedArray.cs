@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace Emgu.Util
 {
    /// <summary>
-   /// A Pinnned array of the specific type
+   /// A Pinned array of the specific type
    /// </summary>
    /// <typeparam name="T">The type of the array</typeparam>
    public class PinnedArray<T> : DisposableObject

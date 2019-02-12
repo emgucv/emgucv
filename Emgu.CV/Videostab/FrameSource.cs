@@ -42,7 +42,7 @@ namespace Emgu.CV.VideoStab
       /// <summary>
       /// Retrieve the next frame from the FrameSoure
       /// </summary>
-      /// <returns></returns>
+      /// <returns>The next frame</returns>
       public Mat NextFrame()
       {
          Mat frame = new Mat();

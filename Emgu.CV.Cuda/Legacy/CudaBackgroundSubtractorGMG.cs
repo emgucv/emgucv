@@ -20,6 +20,8 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Create a Background/Foreground Segmentation model
         /// </summary>
+        /// <param name="initializationFrames">The number of frames used for initialization</param>
+        /// <param name="decisionThreshold">The decision threshold</param>
         public CudaBackgroundSubtractorGMG(int initializationFrames = 120, double decisionThreshold = 0.8)
         {
             _ptr = CudaInvoke.cudaBackgroundSubtractorGMGCreate(initializationFrames, decisionThreshold, ref _sharedPtr);

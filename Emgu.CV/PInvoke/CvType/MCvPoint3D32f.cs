@@ -82,7 +82,7 @@ namespace Emgu.CV.Structure
         /// <summary>
         /// Get the normalized point
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The normalized point</returns>
         public MCvPoint3D32f GetNormalizedPoint()
         {
             float norm = (float)Norm;

@@ -44,7 +44,13 @@ namespace Emgu.CV.Features2D
         /// <summary>
         /// Create AGAST using the specific values
         /// </summary>
-        public AgastFeatureDetector(int threshold = 10, bool nonmaxSuppression = true, Type type = Type.OAST_9_16)
+        /// <param name="threshold">Threshold</param>
+        /// <param name="nonmaxSuppression">Non maximum suppression</param>
+        /// <param name="type">Type</param>
+        public AgastFeatureDetector(
+            int threshold = 10, 
+            bool nonmaxSuppression = true, 
+            Type type = Type.OAST_9_16)
         {
             _ptr = CvInvoke.cveAgastFeatureDetectorCreate(
                 threshold, nonmaxSuppression, type,

@@ -118,6 +118,7 @@ namespace Emgu.CV.ML
         /// </summary>
         /// <param name="samples">The input samples</param>
         /// <param name="probs">The prediction results, should have the same # of rows as the <paramref name="samples"/></param>
+        /// <returns>The results</returns>
         public MCvPoint2D64f Predict(IInputArray samples, IOutputArray probs = null)
         {
             MCvPoint2D64f result = new MCvPoint2D64f();

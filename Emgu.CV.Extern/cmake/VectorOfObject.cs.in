@@ -37,7 +37,7 @@ namespace ${NAMESPACE_CS}
       {
       }
 	  
-	   internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
+      internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
          _needDispose = needDispose;
@@ -52,15 +52,15 @@ namespace ${NAMESPACE_CS}
       {
       }
 	  
-	   /// <summary>
+      /// <summary>
       /// Create an standard vector of ${VECTOR_NAME} with the initial values
       /// </summary>
       /// <param name="values">The initial values</param>
-	   public VectorOf${VECTOR_NAME}(params ${VECTOR_ELEMENT_CS}[] values)
-	     : this()
-	   {
-         Push(values);
-	   }
+	  public VectorOf${VECTOR_NAME}(params ${VECTOR_ELEMENT_CS}[] values)
+	    : this()
+	  {
+        Push(values);
+	  }
 
       /// <summary>
       /// Get the size of the vector
@@ -133,9 +133,10 @@ namespace ${NAMESPACE_CS}
             VectorOf${VECTOR_NAME}Release(ref _ptr);
       }
 
-	   /// <summary>
+      /// <summary>
       /// Get the pointer to cv::_InputArray
       /// </summary>
+      /// <returns>The input array</returns>
       public InputArray GetInputArray()
       {
         return new InputArray( cvInputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
@@ -144,14 +145,16 @@ namespace ${NAMESPACE_CS}
       /// <summary>
       /// Get the pointer to cv::_OutputArray
       /// </summary>
+      /// <returns>The output array</returns>
       public OutputArray GetOutputArray()
       {
          return new OutputArray( cvOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }
 
-	   /// <summary>
+      /// <summary>
       /// Get the pointer to cv::_InputOutputArray
       /// </summary>
+      /// <returns>The input output array</returns>
       public InputOutputArray GetInputOutputArray()
       {
          return new InputOutputArray( cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );

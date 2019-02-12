@@ -32,7 +32,7 @@ namespace Emgu.CV
       /// <summary>
       /// Create a new identity matrix
       /// </summary>
-      /// <returns></returns>
+      /// <returns>The identity affine 3d matrix</returns>
       public static Affine3d Identity()
       {
          return new Affine3d(CvInvoke.cveAffine3dGetIdentity());
@@ -81,7 +81,7 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release the unmanged memory associated with this Affine3 model
+      /// Release the unmanaged memory associated with this Affine3 model
       /// </summary>
       protected override void DisposeObject()
       {

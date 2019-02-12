@@ -37,7 +37,7 @@ namespace Emgu.CV.UI
       }
 
       /// <summary>
-      /// Craete an operation using the specific method and parameters
+      /// Create an operation using the specific method and parameters
       /// </summary>
       /// <param name="mi">The method info</param>
       /// <param name="parameters">The parameters for this method</param>
@@ -89,7 +89,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Represent this operation as code
       /// </summary>
-      /// <returns></returns>
+      /// <returns>The source code</returns>
       public String ToCode(ProgrammingLanguage language)
       {
 

@@ -53,7 +53,7 @@ namespace ${NAMESPACE_CS}
          Push((${VECTOR_ELEMENT_CS}[])info.GetValue("${VECTOR_NAME}Array", typeof(${VECTOR_ELEMENT_CS}[])));
       }
 	  
-	   /// <summary>
+      /// <summary>
       /// A function used for runtime serialization of the object
       /// </summary>
       /// <param name="info">Serialization info</param>
@@ -72,7 +72,7 @@ namespace ${NAMESPACE_CS}
       {
       }
 	  
-	   internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
+      internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
          _needDispose = needDispose;
@@ -87,11 +87,11 @@ namespace ${NAMESPACE_CS}
       {
       }
 	  
-	   /// <summary>
+      /// <summary>
       /// Create an standard vector of ${VECTOR_NAME} with the initial values
       /// </summary>
       /// <param name="values">The initial values</param>
-	   public VectorOf${VECTOR_NAME}(${VECTOR_ELEMENT_CS}[] values)
+      public VectorOf${VECTOR_NAME}(${VECTOR_ELEMENT_CS}[] values)
          :this()
       {
          Push(values);
@@ -120,7 +120,7 @@ namespace ${NAMESPACE_CS}
          VectorOf${VECTOR_NAME}PushVector(_ptr, other);
       }
 	  
-	   /// <summary>
+      /// <summary>
       /// Convert the standard vector to an array of ${VECTOR_NAME}
       /// </summary>
       /// <returns>An array of ${VECTOR_NAME}</returns>
@@ -166,7 +166,7 @@ namespace ${NAMESPACE_CS}
          }
       }
 	  
-	   /// <summary>
+      /// <summary>
       /// Get the item in the specific index
       /// </summary>
       /// <param name="index">The index</param>
@@ -190,25 +190,28 @@ namespace ${NAMESPACE_CS}
             VectorOf${VECTOR_NAME}Release(ref _ptr);
       }
 
-	   /// <summary>
+      /// <summary>
       /// Get the pointer to cv::_InputArray
       /// </summary>
+      /// <returns>The input array </returns>
       public InputArray GetInputArray()
       {
          return new InputArray( cvInputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }
 	  
-	   /// <summary>
+      /// <summary>
       /// Get the pointer to cv::_OutputArray
       /// </summary>
+      /// <returns>The output array </returns>
       public OutputArray GetOutputArray()
       {
          return new OutputArray( cvOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }
 
-	   /// <summary>
+      /// <summary>
       /// Get the pointer to cv::_InputOutputArray
       /// </summary>
+      /// <returns>The input output array </returns>
       public InputOutputArray GetInputOutputArray()
       {
          return new InputOutputArray( cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );

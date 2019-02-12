@@ -57,9 +57,7 @@ namespace Emgu.CV.Face
         /// </summary>
         /// <param name="images">The images used for updating the face recognizer</param>
         /// <param name="labels">The labels of the images</param>
-        public void Update<TColor, TDepth>(Image<TColor, TDepth>[] images, int[] labels)
-           where TColor : struct, IColor
-           where TDepth : new()
+        public void Update(Mat[] images, int[] labels)
         {
             Debug.Assert(images.Length == labels.Length, "The number of labels must equals the number of images");
             using (VectorOfMat imgVec = new VectorOfMat())

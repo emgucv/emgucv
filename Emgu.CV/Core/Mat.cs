@@ -447,7 +447,7 @@ namespace Emgu.CV
         /// Gets the binary data from the specific indices.
         /// </summary>
         /// <param name="indices">The indices.</param>
-        /// <returns></returns>
+        /// <returns>The raw data in byte</returns>
         /// <exception cref="System.NotImplementedException">Indices of length more than 2 is not implemented</exception>
         public byte[] GetRawData(params int[] indices)
         {
@@ -684,6 +684,7 @@ namespace Emgu.CV
         /// <summary>
         /// Pointer to the InputArray
         /// </summary>
+        /// <returns>The input array</returns>
         public InputArray GetInputArray()
         {
             return new InputArray(MatInvoke.cveInputArrayFromMat(_ptr), this);
@@ -692,6 +693,7 @@ namespace Emgu.CV
         /// <summary>
         /// Pointer to the OutputArray
         /// </summary>
+        /// <returns>The output array</returns>
         public OutputArray GetOutputArray()
         {
             return new OutputArray(MatInvoke.cveOutputArrayFromMat(_ptr), this);
@@ -700,6 +702,7 @@ namespace Emgu.CV
         /// <summary>
         /// Pointer to the InputOutputArray
         /// </summary>
+        /// <returns>The input output array</returns>
         public InputOutputArray GetInputOutputArray()
         {
             return new InputOutputArray(MatInvoke.cveInputOutputArrayFromMat(_ptr), this);
@@ -755,6 +758,7 @@ namespace Emgu.CV
         /// </summary>
         /// <typeparam name="TColor">The type of Color</typeparam>
         /// <typeparam name="TDepth">The type of Depth</typeparam>
+        /// <param name="tryShareData">If true, we will try to see if we can create an Image object that shared the pixel memory with this Mat.</param>
         /// <returns>The image</returns>
         public Image<TColor, TDepth> ToImage<TColor, TDepth>(bool tryShareData = false)
            where TColor : struct, IColor

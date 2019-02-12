@@ -49,6 +49,7 @@ namespace Emgu.CV.XImgproc
         /// Finds lines in the input image.
         /// </summary>
         /// <param name="image">Image to detect lines in.</param>
+        /// <returns>The detected line segments</returns>
         public LineSegment2DF[] Detect(IInputArray image)
         {
             using (InputArray iaImage = image.GetInputArray())

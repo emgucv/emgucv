@@ -250,8 +250,11 @@ namespace Emgu.CV.Saliency
         /// </summary>
         public ObjectnessBING()
         {
-            _ptr = SaliencyInvoke.cveObjectnessBINGCreate(ref _objectnessPtr, ref _saliencyPtr,
-                ref _algorithmPtr, ref _sharedPtr);
+            _ptr = SaliencyInvoke.cveObjectnessBINGCreate(
+                ref _objectnessPtr, 
+                ref _saliencyPtr,
+                ref _algorithmPtr, 
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -293,21 +296,22 @@ namespace Emgu.CV.Saliency
         }
 
         /// <summary>
-        /// Return the list of the rectangles' objectness value,. 
+        /// Return the list of the rectangles' objectness value. 
         /// </summary>
-        /// <returns></returns>
-        public VectorOfFloat GetObjectnessValues()
+        /// <returns>The list of the rectangles' objectness value.</returns>
+        public float[] GetObjectnessValues()
         {
-            //pretty sure that the vector<float> is owned by the saliency object, so we shouldn't dispose it.
-            VectorOfFloat vector = new VectorOfFloat();
-            SaliencyInvoke.cveObjectnessBINGGetObjectnessValues(_ptr, vector);
-            return vector;
+            using (VectorOfFloat vector = new VectorOfFloat())
+            {
+                SaliencyInvoke.cveObjectnessBINGGetObjectnessValues(_ptr, vector);
+                return vector.ToArray();
+            }
         }
 
         /// <summary>
         /// set the correct path from which the algorithm will load the trained model. 
         /// </summary>
-        /// <param name="trainingPath"></param>
+        /// <param name="trainingPath">The training path</param>
         public void SetTrainingPath(string trainingPath)
         {
             using (CvString trainingPathStr = new CvString(trainingPath))

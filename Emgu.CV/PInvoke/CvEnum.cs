@@ -709,7 +709,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         XiImageDataBitDepth = 462,
         /// <summary>
-        /// Device output data packing (or grouping) enabled. Packing could be enabled if output_data_bit_depth > 8 and packing capability is available.
+        /// Device output data packing (or grouping) enabled. Packing could be enabled if output_data_bit_depth &gt; 8 and packing capability is available.
         /// </summary>
         XiOutputDataPacking = 463,
         /// <summary>
@@ -4345,7 +4345,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Affine = 2,
         /// <summary>
-        /// sets a homography as a motion model; eight parameters are estimated;`warpMatrix` is 3x3.
+        /// sets a homography as a motion model; eight parameters are estimated; warpMatrix is 3x3.
         /// </summary>
         Homography = 3
     }

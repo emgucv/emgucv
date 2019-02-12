@@ -33,7 +33,13 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Create a Gaussian Mixture-based Background/Foreground Segmentation model
         /// </summary>
-        public CudaBackgroundSubtractorMOG2(int history = 500, double varThreshold = 16, bool detectShadows = true)
+        /// <param name="history">Length of the history.</param>
+        /// <param name="varThreshold">Threshold on the squared Mahalanobis distance between the pixel and the model to decide whether a pixel is well described by the background model. This parameter does not affect the background update.</param>
+        /// <param name="detectShadows">If true, the algorithm will detect shadows and mark them. It decreases the speed a bit, so if you do not need this feature, set the parameter to false.</param>
+        public CudaBackgroundSubtractorMOG2(
+            int history = 500, 
+            double varThreshold = 16, 
+            bool detectShadows = true)
         {
             _ptr = CudaInvoke.cudaBackgroundSubtractorMOG2Create(history, varThreshold, detectShadows, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
         }

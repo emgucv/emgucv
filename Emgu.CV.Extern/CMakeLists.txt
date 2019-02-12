@@ -156,7 +156,7 @@ MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mty
     SET(CS_COMPILATION_CONDITION_OPEN "#if ${cs_compilation_condition}")
     SET(CS_COMPILATION_CONDITION_CLOSE "#endif")
   ENDIF()
-  
+
   SET(extra_macro_args ${ARGN})
   # Did we get any optional args?
   LIST(LENGTH extra_macro_args num_extra_args)
@@ -336,6 +336,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
+	 /// <param name=\"s\">The value</param>
      public void Set${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} s)
      { 
            using (CvString cvs = new CvString(s))
@@ -363,6 +364,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
+	 /// <param name=\"value\">The value</param>
      public void Set${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} value)
      {
         ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); 
@@ -387,6 +389,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
+     /// <returns>The result</returns>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}( )
      {
         return ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); 
@@ -433,6 +436,7 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
+	 /// <param name=\"value\">The value</param>
      public void ${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} value)
      {
         ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
@@ -456,6 +460,7 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
+     /// <param name=\"value\">The value</param>
      public void ${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} value)
      {
         ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
@@ -500,6 +505,7 @@ ${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
+	 /// <returns>The result</returns>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
         get { return new ${CS_PROPERTY_TYPE}( ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr), false); } 

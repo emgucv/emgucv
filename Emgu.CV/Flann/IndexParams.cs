@@ -237,7 +237,15 @@ namespace Emgu.CV.Flann
         /// <summary>
         /// Initializes a new instance of the <see cref="HierarchicalClusteringIndexParams"/>.
         /// </summary>
-        public HierarchicalClusteringIndexParams(int branching = 32, Flann.CenterInitType centersInit = CenterInitType.Random, int trees = 4, int leafSize = 100)
+        /// <param name="branching">branching</param>
+        /// <param name="centersInit">Center initialization method</param>
+        /// <param name="trees">Trees</param>
+        /// <param name="leafSize">Leaf Size</param>
+        public HierarchicalClusteringIndexParams(
+            int branching = 32, 
+            Flann.CenterInitType centersInit = CenterInitType.Random, 
+            int trees = 4, 
+            int leafSize = 100)
         {
             _ptr = CvInvoke.cveHierarchicalClusteringIndexParamsCreate(ref _indexParamPtr, branching, centersInit, trees, leafSize);
         }

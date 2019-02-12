@@ -190,7 +190,7 @@ namespace Emgu.CV
       /// Multiply the current Quaternions with <paramref name="quaternionsOther"/> 
       /// </summary>
       /// <param name="quaternionsOther">The other rotation</param>
-      /// <return>A composition of the two rotations</return>
+      /// <returns>A composition of the two rotations</returns>
       public Quaternions Multiply(Quaternions quaternionsOther)
       {
          Quaternions result = new Quaternions();

@@ -2997,7 +2997,9 @@ namespace Emgu.CV
 
         /// <summary> 
         /// Compute the element of a new image based on the value as well as the x and y positions of each pixel on the image
-        /// </summary> 
+        /// </summary>
+        /// <param name="converter">The function to be applied to the image pixels</param>
+        /// <returns>The result image</returns>
         public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Func<TDepth, int, int, TOtherDepth> converter)
            where TOtherDepth : new()
         {
@@ -3029,7 +3031,10 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Compute the element of the new image based on element of this image</summary> 
+        /// <summary> Compute the element of the new image based on element of this image</summary>
+        /// <typeparam name="TOtherDepth">The depth type of the result image</typeparam>
+        /// <param name="converter">The function to be applied to the image pixels</param>
+        /// <returns>The result image</returns>
         public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Converter<TDepth, TOtherDepth> converter)
            where TOtherDepth : new()
         {
@@ -3060,6 +3065,11 @@ namespace Emgu.CV
         }
 
         ///<summary> Compute the element of the new image based on the elements of the two image</summary>
+        /// <typeparam name="TDepth2">The depth type of img2</typeparam>
+        /// <typeparam name="TDepth3">The depth type of the result image</typeparam>
+        /// <param name="img2">The second image</param>
+        /// <param name="converter">The function to be applied to the image pixels</param>
+        /// <returns>The result image</returns>
         public Image<TColor, TDepth3> Convert<TDepth2, TDepth3>(Image<TColor, TDepth2> img2, Func<TDepth, TDepth2, TDepth3> converter)
            where TDepth2 : new()
            where TDepth3 : new()
@@ -3102,7 +3112,14 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Compute the element of the new image based on the elements of the three image</summary>
+        /// <summary> Compute the element of the new image based on the elements of the three image</summary>
+        /// <typeparam name="TDepth2">The depth type of img2</typeparam>
+        /// <typeparam name="TDepth3">The depth type of img3</typeparam>
+        /// <typeparam name="TDepth4">The depth type of the result image</typeparam>
+        /// <param name="img2">The second image</param>
+        /// <param name="img3">The third image</param>
+        /// <param name="converter">The function to be applied to the image pixels</param>
+        /// <returns>The result image</returns>
         public Image<TColor, TDepth4> Convert<TDepth2, TDepth3, TDepth4>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Func<TDepth, TDepth2, TDepth3, TDepth4> converter)
            where TDepth2 : new()
            where TDepth3 : new()
@@ -3155,7 +3172,16 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Compute the element of the new image based on the elements of the four image</summary>
+        /// <summary> Compute the element of the new image based on the elements of the four image</summary>
+        /// <typeparam name="TDepth2">The depth type of img2</typeparam>
+        /// <typeparam name="TDepth3">The depth type of img3</typeparam>
+        /// <typeparam name="TDepth4">The depth type of img4</typeparam>
+        /// <typeparam name="TDepth5">The depth type of the result image</typeparam>
+        /// <param name="img2">The second image</param>
+        /// <param name="img3">The third image</param>
+        /// <param name="img4">The fourth image</param>
+        /// <param name="converter">The function to be applied to the image pixels</param>
+        /// <returns>The result image</returns>
         public Image<TColor, TDepth5> Convert<TDepth2, TDepth3, TDepth4, TDepth5>(Image<TColor, TDepth2> img2, Image<TColor, TDepth3> img3, Image<TColor, TDepth4> img4, Func<TDepth, TDepth2, TDepth3, TDepth4, TDepth5> converter)
            where TDepth2 : new()
            where TDepth3 : new()
@@ -3810,6 +3836,8 @@ namespace Emgu.CV
         /// <summary> 
         /// Threshold the image such that: dst(x,y) = max_value, if src(x,y)&gt;threshold; 0, otherwise 
         /// </summary>
+        /// <param name="threshold">The threshold value</param>
+        /// <param name="maxValue">The maximum value of the pixel on the result</param>
         /// <returns>The image such that: dst(x,y) = max_value, if src(x,y)&gt;threshold; 0, otherwise </returns>
         public Image<TColor, TDepth> ThresholdBinary(TColor threshold, TColor maxValue)
         {
@@ -4332,6 +4360,7 @@ namespace Emgu.CV
         /// <summary>
         /// Get the jpeg representation of the image
         /// </summary>
+        /// <param name="quality">The jpeg quality</param>
         /// <returns>An byte array that contains the image as jpeg data</returns>
         public byte[] ToJpegData(int quality = 95)
         {

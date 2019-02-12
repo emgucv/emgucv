@@ -21,20 +21,20 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Create a Background/Foreground Segmentation model
         /// </summary>
-        /// <param name="Lc"></param>
-        /// <param name="N1c"></param>
-        /// <param name="N2c"></param>
-        /// <param name="Lcc"></param>
-        /// <param name="N1cc"></param>
-        /// <param name="N2cc"></param>
-        /// <param name="isObjWithoutHoles"></param>
-        /// <param name="performMorphing"></param>
+        /// <param name="Lc">Quantized levels per 'color' component. Power of two, typically 32, 64 or 128.</param>
+        /// <param name="N1c">Number of color vectors used to model normal background color variation at a given pixel. </param>
+        /// <param name="N2c">Used to allow the first N1c vectors to adapt over time to changing background.</param>
+        /// <param name="Lcc">Quantized levels per 'color co-occurrence' component. Power of two, typically 16, 32 or 64.</param>
+        /// <param name="N1cc">Number of color co-occurrence vectors used to model normal background color variation at a given pixel.</param>
+        /// <param name="N2cc">Used to allow the first N1cc vectors to adapt over time to changing background.</param>
+        /// <param name="isObjWithoutHoles">If TRUE we ignore holes within foreground blobs. Defaults to TRUE.</param>
+        /// <param name="performMorphing">These erase one-pixel junk blobs and merge almost-touching blobs. Default value is 1.</param>
         /// <param name="alpha1">Background reference image update parameter</param>
         /// <param name="alpha2">Stat model update parameter. 0.002f ~ 1K frame(~45sec), 0.005 ~ 18sec (if 25fps and absolutely static BG)</param>
         /// <param name="alpha3">start value for alpha parameter (to fast initiate statistic model)</param>
-        /// <param name="delta"></param>
-        /// <param name="T"></param>
-        /// <param name="minArea"></param>
+        /// <param name="delta">Affects color and color co-occurrence quantization, typically set to 2.</param>
+        /// <param name="T">T</param>
+        /// <param name="minArea">Discard foreground blobs whose bounding box is smaller than this threshold.</param>
         public CudaBackgroundSubtractorFGD(
            int Lc = 128,
            int N1c = 15,

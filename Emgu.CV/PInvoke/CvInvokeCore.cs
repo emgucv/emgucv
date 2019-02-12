@@ -220,7 +220,7 @@ namespace Emgu.CV
         /// <param name="errorHandler">The new error handler</param>
         /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
-        /// <returns></returns>
+        /// <returns>Pointer to the old error handler</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveRedirectError")]
         public static extern IntPtr RedirectError(
             CvErrorCallback errorHandler,
@@ -233,7 +233,7 @@ namespace Emgu.CV
         /// <param name="errorHandler">Pointer to the new error handler</param>
         /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
-        /// <returns></returns>
+        /// <returns>Pointer to the old error handler</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveRedirectError")]
         public static extern IntPtr RedirectError(
             IntPtr errorHandler,
@@ -244,21 +244,21 @@ namespace Emgu.CV
         /// Sets the specified error mode.
         /// </summary>
         /// <param name="errorMode">The error mode</param>
-        /// <returns></returns>
+        /// <returns>The previous error mode</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetErrMode")]
         public static extern int SetErrMode(int errorMode);
 
         /// <summary>
         /// Returns the current error mode
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The error mode</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetErrMode")]
         public static extern int GetErrMode();
 
         /// <summary>
         /// Returns the current error status - the value set with the last cvSetErrStatus call. Note, that in Leaf mode the program terminates immediately after error occurred, so to always get control after the function call, one should call cvSetErrMode and set Parent or Silent error mode.
         /// </summary>
-        /// <returns>the current error status</returns>
+        /// <returns>The current error status</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetErrStatus")]
         public static extern int GetErrStatus();
 
@@ -468,7 +468,7 @@ namespace Emgu.CV
         /// <param name="header">Output header to be filled</param>
         /// <param name="newCn">New number of channels. new_cn = 0 means that number of channels remains unchanged</param>
         /// <param name="newRows">New number of rows. new_rows = 0 means that number of rows remains unchanged unless it needs to be changed according to new_cn value. destination array to be changed</param>
-        /// <returns></returns>
+        /// <returns>The CvMat header</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveReshape")]
         public static extern IntPtr cvReshape(
            IntPtr arr,
@@ -1371,7 +1371,7 @@ namespace Emgu.CV
         /// <param name="channels">Number of channels </param>
         /// <param name="origin">IPL_ORIGIN_TL or IPL_ORIGIN_BL.</param>
         /// <param name="align">Alignment for image rows, typically 4 or 8 bytes.</param>
-        /// <returns></returns>
+        /// <returns>Pointer to the image header</returns>
         public static IntPtr cvInitImageHeader(
            IntPtr image,
            Size size,
@@ -1437,7 +1437,7 @@ namespace Emgu.CV
         /// <param name="type">Type of the matrix elements.</param>
         /// <param name="data">Optional data pointer assigned to the matrix header</param>
         /// <param name="step">Full row width in bytes of the data assigned. By default, the minimal possible step is used, i.e., no gaps is assumed between subsequent rows of the matrix.</param>
-        /// <returns></returns>
+        /// <returns>Pointer to the CvMat</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveInitMatHeader")]
         public static extern IntPtr cvInitMatHeader(
            IntPtr mat,
@@ -3358,6 +3358,7 @@ namespace Emgu.CV
         /// <param name="flags">Flags, use 0 if not sure</param>
         /// <param name="centers">Pointer to array of centers, use IntPtr.Zero if not sure</param>
         /// <param name="k">Number of clusters to split the set by.</param>
+        /// <returns>The function returns the compactness measure. The best (minimum) value is chosen and the corresponding labels and the compactness value are returned by the function. </returns>
         public static double Kmeans(
            IInputArray data,
            int k,

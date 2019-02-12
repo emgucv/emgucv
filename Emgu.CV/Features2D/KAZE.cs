@@ -44,7 +44,19 @@ namespace Emgu.CV.Features2D
         /// <summary>
         /// Create KAZE using the specific values
         /// </summary>
-        public KAZE(bool extended = false, bool upright = false, float threshold = 0.001f, int octaves = 4, int sublevels = 4, Diffusivity diffusivity = Diffusivity.PmG2)
+        /// <param name="extended">Set to enable extraction of extended (128-byte) descriptor.</param>
+        /// <param name="upright">Set to enable use of upright descriptors (non rotation-invariant).</param>
+        /// <param name="threshold">Detector response threshold to accept point</param>
+        /// <param name="octaves">Maximum octave evolution of the image</param>
+        /// <param name="sublevels">Default number of sublevels per scale level</param>
+        /// <param name="diffusivity">Diffusivity type.</param>
+        public KAZE(
+            bool extended = false, 
+            bool upright = false, 
+            float threshold = 0.001f, 
+            int octaves = 4, 
+            int sublevels = 4, 
+            Diffusivity diffusivity = Diffusivity.PmG2)
         {
             _ptr = CvInvoke.cveKAZEDetectorCreate(
                 extended, upright, threshold, octaves, sublevels, diffusivity,

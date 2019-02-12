@@ -38,9 +38,9 @@ namespace Emgu.CV.OCR
         /// <summary>
         /// Create a PDF renderer
         /// </summary>
-        /// <param name="outputBase"></param>
+        /// <param name="outputBase">Output base</param>
         /// <param name="dataDir">dataDir is the location of the TESSDATA. We need it because we load a custom PDF font from this location.</param>
-        /// <param name="textOnly"></param>
+        /// <param name="textOnly">Text only</param>
         public PDFRenderer(String outputBase, String dataDir, bool textOnly)
         {
             using (CvString csOutputBase = new CvString(outputBase))

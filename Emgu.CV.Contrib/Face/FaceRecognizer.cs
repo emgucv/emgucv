@@ -40,14 +40,12 @@ namespace Emgu.CV.Face
         /// </summary>
         /// <param name="images">The images used in the training.</param>
         /// <param name="labels">The labels of the images.</param>
-        public void Train<TColor, TDepth>(Image<TColor, TDepth>[] images, int[] labels)
-           where TColor : struct, IColor
-           where TDepth : new()
+        public void Train(Mat[] images, int[] labels)
         {
             using (VectorOfMat imgVec = new VectorOfMat())
             using (VectorOfInt labelVec = new VectorOfInt(labels))
             {
-                imgVec.Push<TDepth>(images);
+                imgVec.Push(images);
                 Train(imgVec, labelVec);
             }
         }

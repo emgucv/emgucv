@@ -174,7 +174,7 @@ namespace Emgu.CV.ML
         /// </summary>
         /// <param name="trainData">The training data.</param>
         /// <param name="kFold">Cross-validation parameter. The training set is divided into k_fold subsets, one subset being used to train the model, the others forming the test set. So, the SVM algorithm is executed k_fold times</param>
-        /// <returns></returns>
+        /// <returns>True if training is successful.</returns>
         public bool TrainAuto(
            TrainData trainData,
            int kFold = 10)
@@ -202,7 +202,7 @@ namespace Emgu.CV.ML
         /// <param name="coefGrid">grid for coeff</param>
         /// <param name="degreeGrid">grid for degree</param>
         /// <param name="balanced">If true and the problem is 2-class classification then the method creates more balanced cross-validation subsets that is proportions between classes in subsets are close to such proportion in the whole train dataset.</param>
-        /// <returns></returns>
+        /// <returns>True if training is successful.</returns>
         public bool TrainAuto(
            TrainData trainData,
            int kFold,
