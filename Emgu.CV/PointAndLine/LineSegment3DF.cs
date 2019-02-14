@@ -13,15 +13,15 @@ namespace Emgu.CV.Structure
    /// </summary>
    public struct LineSegment3DF
    {
-      ///<summary> A point on the line </summary>
+      /// <summary> A point on the line </summary>
       private MCvPoint3D32f _p1;
-      ///<summary> An other point on the line </summary>
+      /// <summary> An other point on the line </summary>
       private MCvPoint3D32f _p2;
 
-      ///<summary> A point on the line </summary>
+      /// <summary> A point on the line </summary>
       public MCvPoint3D32f P1 { get { return _p1; } set { _p1 = value; } }
 
-      ///<summary> An other point on the line </summary>
+      /// <summary> An other point on the line </summary>
       public MCvPoint3D32f P2 { get { return _p2; } set { _p2 = value; } }
 
       /// <summary> 

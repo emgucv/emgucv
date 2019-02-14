@@ -14,22 +14,22 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
-    ///<summary> The interface that is used for WCF to provide a image capture service</summary>
+    /// <summary> The interface that is used for WCF to provide a image capture service</summary>
 #if HAVE_SERVICE_MODEL
    [XmlSerializerFormat]
    [ServiceContract]
 #endif
     public interface ICapture
    {
-        ///<summary> Capture a Bgr image frame </summary>
-        ///<returns> A Bgr image frame</returns>
+        /// <summary> Capture a Bgr image frame </summary>
+        /// <returns> A Bgr image frame</returns>
 #if HAVE_SERVICE_MODEL
       [OperationContract]
 #endif
         Mat QueryFrame();
 
-        ///<summary> Capture a Bgr image frame that is half width and half heigh</summary>
-        ///<returns> A Bgr image frame that is half width and half height</returns>
+        /// <summary> Capture a Bgr image frame that is half width and half height</summary>
+        /// <returns> A Bgr image frame that is half width and half height</returns>
 #if HAVE_SERVICE_MODEL
       [OperationContract]
 #endif

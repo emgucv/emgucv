@@ -7,9 +7,9 @@ using Emgu.CV;
 
 namespace Emgu.CV.Structure
 {
-    ///<summary> 
-    ///Defines a CIE Luv color 
-    ///</summary>
+    /// <summary> 
+    /// Defines a CIE Luv color 
+    /// </summary>
     [ColorInfo(ConversionCodename = "Luv")]
     public struct Luv : IColor, IEquatable<Luv>
     {
@@ -18,10 +18,10 @@ namespace Emgu.CV.Structure
         /// </summary>
         private MCvScalar _scalar;
 
-        ///<summary> Create a CIE Lab color using the specific values</summary>
-        ///<param name="z"> The z value for this color </param>
-        ///<param name="y"> The y value for this color </param>
-        ///<param name="x"> The x value for this color </param>
+        /// <summary> Create a CIE Lab color using the specific values</summary>
+        /// <param name="z"> The z value for this color </param>
+        /// <param name="y"> The y value for this color </param>
+        /// <param name="x"> The x value for this color </param>
         public Luv(double x, double y, double z)
         {
             _scalar = new MCvScalar(x, y, z);

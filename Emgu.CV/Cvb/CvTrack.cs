@@ -89,6 +89,6 @@ namespace Emgu.CV.Cvb
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal extern static bool cvbCvTrackEquals(ref Cvb.CvTrack track1, ref Cvb.CvTrack track2);
+      internal static extern bool cvbCvTrackEquals(ref Cvb.CvTrack track1, ref Cvb.CvTrack track2);
    }
 }

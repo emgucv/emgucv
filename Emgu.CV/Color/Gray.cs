@@ -7,7 +7,7 @@ using Emgu.CV;
 
 namespace Emgu.CV.Structure
 {
-   ///<summary> Defines a Gray color </summary>
+   /// <summary> Defines a Gray color </summary>
    [ColorInfo(ConversionCodename = "Gray")]
    public struct Gray : IColor, IEquatable<Gray>
    {
@@ -16,15 +16,15 @@ namespace Emgu.CV.Structure
       /// </summary>
       private MCvScalar _scalar;
 
-      ///<summary> Create a Gray color with the given intensity</summary>
-      ///<param name="intensity"> The intensity for this color </param>
+      /// <summary> Create a Gray color with the given intensity</summary>
+      /// <param name="intensity"> The intensity for this color </param>
       public Gray(double intensity)
       {
          _scalar = new MCvScalar(intensity);
       }
 
-      ///<summary> The intensity of the gray color </summary>
-      ///<value> The intensity of the gray color</value>
+      /// <summary> The intensity of the gray color </summary>
+      /// <value> The intensity of the gray color</value>
       [DisplayColor(122, 122, 122)]
       public double Intensity { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 

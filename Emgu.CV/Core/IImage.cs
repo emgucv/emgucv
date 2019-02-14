@@ -103,20 +103,20 @@ namespace Emgu.CV
         /// <summary>
         /// Returns the min / max location and values for the image
         /// </summary>
-        ///<param name="minValues">The minimum values</param>
+        /// <param name="minValues">The minimum values</param>
         /// <param name="maxValues">The maximum values</param>
         /// <param name="minLocations">The minimum locations</param>
         /// <param name="maxLocations">The maximum locations</param>
         void MinMax(out double[] minValues, out double[] maxValues, out Point[] minLocations, out Point[] maxLocations);
 
-        ///<summary> 
+        /// <summary> 
         /// Split current IImage into an array of gray scale images where each element 
         /// in the array represent a single color channel of the original image
-        ///</summary>
-        ///<returns> 
+        /// </summary>
+        /// <returns> 
         /// An array of gray scale images where each element 
         /// in the array represent a single color channel of the original image 
-        ///</returns>
+        /// </returns>
         IImage[] Split();
 
         /// <summary>

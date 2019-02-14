@@ -23,12 +23,12 @@ namespace Emgu.CV.Structure
          set { _box2D = value; }
       }
 
-      ///<summary>
-      ///Create an ellipse with specific parameters
-      ///</summary>
-      ///<param name="center"> The center of the ellipse</param>
-      ///<param name="size"> The width and height of the ellipse</param>
-      ///<param name="angle"> The rotation angle in radian for the ellipse</param>
+      /// <summary>
+      /// Create an ellipse with specific parameters
+      /// </summary>
+      /// <param name="center"> The center of the ellipse</param>
+      /// <param name="size"> The width and height of the ellipse</param>
+      /// <param name="angle"> The rotation angle in radian for the ellipse</param>
       public Ellipse(PointF center, SizeF size, float angle)
       {
          _box2D = new RotatedRect(center, size, angle);

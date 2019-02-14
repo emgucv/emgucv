@@ -31,10 +31,10 @@ namespace Emgu.CV.Structure
         /// </summary>
         public double Epsilon;
 
-        ///<summary>
-        ///Create the termination criteria using the constrain of maximum iteration
-        ///</summary>
-        ///<param name="maxIteration">The maximum number of iteration allowed</param>
+        /// <summary>
+        /// Create the termination criteria using the constrain of maximum iteration
+        /// </summary>
+        /// <param name="maxIteration">The maximum number of iteration allowed</param>
         public MCvTermCriteria(int maxIteration)
         {
             MaxIter = maxIteration;
@@ -42,10 +42,10 @@ namespace Emgu.CV.Structure
             Type = CvEnum.TermCritType.Iter;
         }
 
-        ///<summary>
-        ///Create the termination Criteria using only the constrain of epsilon
-        ///</summary>
-        ///<param name="eps"> The epsilon value</param>
+        /// <summary>
+        /// Create the termination Criteria using only the constrain of epsilon
+        /// </summary>
+        /// <param name="eps"> The epsilon value</param>
         public MCvTermCriteria(double eps)
         {
             MaxIter = 0;

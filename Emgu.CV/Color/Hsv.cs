@@ -7,9 +7,9 @@ using Emgu.CV;
 
 namespace Emgu.CV.Structure
 {
-   ///<summary> 
-   ///Defines a HSV (Hue Satuation Value) color
-   ///</summary>
+   /// <summary> 
+   /// Defines a HSV (Hue Satuation Value) color
+   /// </summary>
    [ColorInfo(ConversionCodename = "Hsv")]
    public struct Hsv : IColor, IEquatable<Hsv>
    {
@@ -18,24 +18,24 @@ namespace Emgu.CV.Structure
       /// </summary>
       private MCvScalar _scalar;
 
-      ///<summary> Create a HSV color using the specific values</summary>
-      ///<param name="hue"> The hue value for this color ( 0 &lt; hue &lt; 180 )  </param>
-      ///<param name="satuation"> The satuation value for this color </param>
-      ///<param name="value"> The value for this color </param>
+      /// <summary> Create a HSV color using the specific values</summary>
+      /// <param name="hue"> The hue value for this color ( 0 &lt; hue &lt; 180 )  </param>
+      /// <param name="satuation"> The satuation value for this color </param>
+      /// <param name="value"> The value for this color </param>
       public Hsv(double hue, double satuation, double value)
       {
          _scalar = new MCvScalar(hue, satuation, value);
       }
 
-      ///<summary> Get or set the intensity of the hue color channel ( 0 &lt; hue &lt; 180 ) </summary>
+      /// <summary> Get or set the intensity of the hue color channel ( 0 &lt; hue &lt; 180 ) </summary>
       [DisplayColor(122, 122, 122)]
       public double Hue { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 
-      ///<summary> Get or set the intensity of the satuation color channel </summary>
+      /// <summary> Get or set the intensity of the satuation color channel </summary>
       [DisplayColor(122, 122, 122)]
       public double Satuation { get { return _scalar.V1; } set { _scalar.V1 = value; } }
 
-      ///<summary> Get or set the intensity of the value color channel </summary>
+      /// <summary> Get or set the intensity of the value color channel </summary>
       [DisplayColor(122, 122, 122)]
       public double Value { get { return _scalar.V2; } set { _scalar.V2 = value; } }
 

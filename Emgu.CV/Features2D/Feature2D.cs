@@ -45,7 +45,7 @@ namespace Emgu.CV.Features2D
 
                 if (_feature2D == IntPtr.Zero)
                     return IntPtr.Zero;
-                return Feature2DInvoke.CvFeature2DGetAlgorithm(_feature2D);
+                return Features2DInvoke.CvFeature2DGetAlgorithm(_feature2D);
             }
         }
 
@@ -62,7 +62,7 @@ namespace Emgu.CV.Features2D
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             using (OutputArray oaDescriptors = descriptors.GetOutputArray())
-                Feature2DInvoke.CvFeature2DDetectAndCompute(_ptr, iaImage, iaMask, keyPoints, oaDescriptors, useProvidedKeyPoints);
+                Features2DInvoke.CvFeature2DDetectAndCompute(_ptr, iaImage, iaMask, keyPoints, oaDescriptors, useProvidedKeyPoints);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Emgu.CV.Features2D
         {
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                Feature2DInvoke.CvFeature2DDetect(_feature2D, iaImage, keypoints.Ptr, iaMask);
+                Features2DInvoke.CvFeature2DDetect(_feature2D, iaImage, keypoints.Ptr, iaMask);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Emgu.CV.Features2D
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaDescriptors = descriptors.GetOutputArray())
-                Feature2DInvoke.CvFeature2DCompute(_feature2D, iaImage, keyPoints.Ptr, oaDescriptors);
+                Features2DInvoke.CvFeature2DCompute(_feature2D, iaImage, keyPoints.Ptr, oaDescriptors);
         }
 
         /// <summary>
@@ -126,12 +126,12 @@ namespace Emgu.CV.Features2D
             {
                 if (_feature2D == IntPtr.Zero)
                     return 0;
-                return Feature2DInvoke.CvFeature2DGetDescriptorSize(_feature2D);
+                return Features2DInvoke.CvFeature2DGetDescriptorSize(_feature2D);
             }
         }
     }
 
-    internal partial class Feature2DInvoke
+    public static partial class Features2DInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

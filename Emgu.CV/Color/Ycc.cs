@@ -7,9 +7,9 @@ using Emgu.CV;
 
 namespace Emgu.CV.Structure
 {
-    ///<summary> 
-    ///Defines a Ycc color (YCrCb JPEG)
-    ///</summary>
+    /// <summary> 
+    /// Defines a Ycc color (YCrCb JPEG)
+    /// </summary>
     [ColorInfo(ConversionCodename = "YCrCb")]
     public struct Ycc : IColor, IEquatable<Ycc>
     {
@@ -18,10 +18,10 @@ namespace Emgu.CV.Structure
         /// </summary>
         private MCvScalar _scalar;
 
-        ///<summary> Create a Ycc color using the specific values</summary>
-        ///<param name="y"> The Y value for this color </param>
-        ///<param name="cr"> The Cr value for this color </param>
-        ///<param name="cb"> The Cb value for this color </param>
+        /// <summary> Create a Ycc color using the specific values</summary>
+        /// <param name="y"> The Y value for this color </param>
+        /// <param name="cr"> The Cr value for this color </param>
+        /// <param name="cb"> The Cb value for this color </param>
         public Ycc(double y, double cr, double cb)
         {
             _scalar = new MCvScalar(y, cr, cb);

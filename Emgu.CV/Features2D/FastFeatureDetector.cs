@@ -48,7 +48,7 @@ namespace Emgu.CV.Features2D
         /// <param name="type">One of the three neighborhoods as defined in the paper</param>
         public FastFeatureDetector(int threshold = 10, bool nonmaxSupression = true, DetectorType type = DetectorType.Type9_16)
         {
-            _ptr = CvInvoke.cveFASTGetFeatureDetector(threshold, nonmaxSupression, type, ref _feature2D, ref _sharedPtr);
+            _ptr = Features2DInvoke.cveFASTGetFeatureDetector(threshold, nonmaxSupression, type, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -57,26 +57,22 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                CvInvoke.cveFASTFeatureDetectorRelease(ref _sharedPtr);
+                Features2DInvoke.cveFASTFeatureDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
     }
 
-}
-
-namespace Emgu.CV
-{
-    public static partial class CvInvoke
+    public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveFASTGetFeatureDetector(
-            int threshold,
-            [MarshalAs(CvInvoke.BoolMarshalType)]
+        int threshold,
+        [MarshalAs(CvInvoke.BoolMarshalType)]
             bool nonmaxSupression,
-            Features2D.FastFeatureDetector.DetectorType type,
-            ref IntPtr feature2D,
-            ref IntPtr sharedPtr);
+        Features2D.FastFeatureDetector.DetectorType type,
+        ref IntPtr feature2D,
+        ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveFASTFeatureDetectorRelease(ref IntPtr sharedPtr);

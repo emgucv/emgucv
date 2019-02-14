@@ -7,9 +7,9 @@ using Emgu.CV;
 
 namespace Emgu.CV.Structure
 {
-   ///<summary> 
-   ///Defines a CIE Lab color 
-   ///</summary>
+   /// <summary> 
+   /// Defines a CIE Lab color 
+   /// </summary>
    [ColorInfo(ConversionCodename = "Lab")]
    public struct Lab : IColor, IEquatable<Lab>
    {
@@ -18,24 +18,24 @@ namespace Emgu.CV.Structure
       /// </summary>
       private MCvScalar _scalar;
 
-      ///<summary> Create a CIE Lab color using the specific values</summary>
-      ///<param name="z"> The z value for this color </param>
-      ///<param name="y"> The y value for this color </param>
-      ///<param name="x"> The x value for this color </param>
+      /// <summary> Create a CIE Lab color using the specific values</summary>
+      /// <param name="z"> The z value for this color </param>
+      /// <param name="y"> The y value for this color </param>
+      /// <param name="x"> The x value for this color </param>
       public Lab(double x, double y, double z)
       {
          _scalar = new MCvScalar(x, y, z);
       }
 
-      ///<summary> Get or set the intensity of the x color channel </summary>
+      /// <summary> Get or set the intensity of the x color channel </summary>
       [DisplayColor(122, 122, 122)]
       public double X { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 
-      ///<summary> Get or set the intensity of the y color channel </summary>
+      /// <summary> Get or set the intensity of the y color channel </summary>
       [DisplayColor(122, 122, 122)]
       public double Y { get { return _scalar.V1; } set { _scalar.V1 = value; } }
 
-      ///<summary> Get or set the intensity of the z color channel </summary>
+      /// <summary> Get or set the intensity of the z color channel </summary>
       [DisplayColor(122, 122, 122)]
       public double Z { get { return _scalar.V2; } set { _scalar.V2 = value; } }
 

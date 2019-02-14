@@ -259,47 +259,5 @@ namespace Emgu.CV.Bioinspired
         }
     }
 
-    /// <summary>
-    /// Entry points to the Open CV bioinspired module
-    /// </summary>
-    public static partial class BioinspiredInvoke
-    {
-        static BioinspiredInvoke()
-        {
-            CvInvoke.CheckLibraryLoaded();
-        }
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveRetinaCreate(
-            ref Size inputSize,
-            [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool colorMode,
-            Retina.ColorSamplingMethod colorSamplingMethod,
-            [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool useRetinaLogSampling,
-            double reductionFactor,
-            double samplingStrength, 
-            ref IntPtr sharedPtr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRetinaRun(IntPtr retina, IntPtr image);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRetinaGetParvo(IntPtr retina, IntPtr parvo);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRetinaGetMagno(IntPtr retina, IntPtr magno);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRetinaRelease(ref IntPtr retina, ref IntPtr sharedPtr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRetinaClearBuffers(IntPtr retina);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRetinaGetParameters(IntPtr retina, ref Retina.RetinaParameters parameters);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRetinaSetParameters(IntPtr retina, ref Retina.RetinaParameters parameters);
-    }
 }

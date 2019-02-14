@@ -58,7 +58,7 @@ namespace Emgu.CV.Features2D
             int sublevels = 4, 
             Diffusivity diffusivity = Diffusivity.PmG2)
         {
-            _ptr = CvInvoke.cveKAZEDetectorCreate(
+            _ptr = Features2DInvoke.cveKAZEDetectorCreate(
                 extended, upright, threshold, octaves, sublevels, diffusivity,
                 ref _feature2D, ref _sharedPtr);
         }
@@ -69,16 +69,12 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                CvInvoke.cveKAZEDetectorRelease(ref _sharedPtr);
+                Features2DInvoke.cveKAZEDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
-
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class CvInvoke
+    public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveKAZEDetectorCreate(

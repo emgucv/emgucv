@@ -24,10 +24,10 @@ namespace Emgu.CV.Features2D
         public SimpleBlobDetector(SimpleBlobDetectorParams parameters = null)
         {
             if (parameters == null)
-                _ptr = CvInvoke.cveSimpleBlobDetectorCreate(ref _feature2D, ref _sharedPtr);
+                _ptr = Features2DInvoke.cveSimpleBlobDetectorCreate(ref _feature2D, ref _sharedPtr);
             else
             {
-                _ptr = CvInvoke.cveSimpleBlobDetectorCreateWithParams(ref _feature2D, parameters, ref _sharedPtr);
+                _ptr = Features2DInvoke.cveSimpleBlobDetectorCreateWithParams(ref _feature2D, parameters, ref _sharedPtr);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                CvInvoke.cveSimpleBlobDetectorRelease(ref _sharedPtr);
+                Features2DInvoke.cveSimpleBlobDetectorRelease(ref _sharedPtr);
 
             base.DisposeObject();
         }
@@ -53,7 +53,7 @@ namespace Emgu.CV.Features2D
         /// </summary>
         public SimpleBlobDetectorParams()
         {
-            _ptr = CvInvoke.cveSimpleBlobDetectorParamsCreate();
+            _ptr = Features2DInvoke.cveSimpleBlobDetectorParamsCreate();
         }
 
         /// <summary>
@@ -63,16 +63,12 @@ namespace Emgu.CV.Features2D
         {
             if (_ptr != IntPtr.Zero)
             {
-                CvInvoke.cveSimpleBlobDetectorParamsRelease(ref _ptr);
+                Features2DInvoke.cveSimpleBlobDetectorParamsRelease(ref _ptr);
             }
         }
     }
 
-}
-
-namespace Emgu.CV
-{
-    public static partial class CvInvoke
+    public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveSimpleBlobDetectorCreate(ref IntPtr feature2DPtr, ref IntPtr sharedPtr);

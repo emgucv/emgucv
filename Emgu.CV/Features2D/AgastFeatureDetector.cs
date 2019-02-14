@@ -48,11 +48,11 @@ namespace Emgu.CV.Features2D
         /// <param name="nonmaxSuppression">Non maximum suppression</param>
         /// <param name="type">Type</param>
         public AgastFeatureDetector(
-            int threshold = 10, 
-            bool nonmaxSuppression = true, 
+            int threshold = 10,
+            bool nonmaxSuppression = true,
             Type type = Type.OAST_9_16)
         {
-            _ptr = CvInvoke.cveAgastFeatureDetectorCreate(
+            _ptr = Features2DInvoke.cveAgastFeatureDetectorCreate(
                 threshold, nonmaxSuppression, type,
                 ref _feature2D, ref _sharedPtr);
         }
@@ -63,16 +63,13 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                CvInvoke.cveAgastFeatureDetectorRelease(ref _sharedPtr);
+                Features2DInvoke.cveAgastFeatureDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class CvInvoke
+    public static partial class Features2DInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -81,7 +78,7 @@ namespace Emgu.CV
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool nonmaxSuppression,
            Emgu.CV.Features2D.AgastFeatureDetector.Type type,
-           ref IntPtr feature2D, 
+           ref IntPtr feature2D,
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

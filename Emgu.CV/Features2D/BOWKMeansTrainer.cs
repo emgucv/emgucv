@@ -32,7 +32,7 @@ namespace Emgu.CV.Features2D
             int attempts = 3,
             CvEnum.KMeansInitType flags = KMeansInitType.PPCenters)
         {
-            _ptr = CvInvoke.cveBOWKMeansTrainerCreate(clusterCount, ref termcrit, attempts, flags);
+            _ptr = Features2DInvoke.cveBOWKMeansTrainerCreate(clusterCount, ref termcrit, attempts, flags);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Emgu.CV.Features2D
         {
             get
             {
-                return CvInvoke.cveBOWKMeansTrainerGetDescriptorCount(_ptr);
+                return Features2DInvoke.cveBOWKMeansTrainerGetDescriptorCount(_ptr);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Emgu.CV.Features2D
         /// <param name="descriptors">The descriptors to be added to the trainer</param>
         public void Add(Mat descriptors)
         {
-            CvInvoke.cveBOWKMeansTrainerAdd(_ptr, descriptors);
+            Features2DInvoke.cveBOWKMeansTrainerAdd(_ptr, descriptors);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Emgu.CV.Features2D
         public void Cluster(IOutputArray cluster)
         {
             using (OutputArray oaCluster = cluster.GetOutputArray())
-                CvInvoke.cveBOWKMeansTrainerCluster(_ptr, oaCluster);
+                Features2DInvoke.cveBOWKMeansTrainerCluster(_ptr, oaCluster);
         }
 
         /// <summary>
@@ -71,17 +71,12 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_ptr == IntPtr.Zero)
-                CvInvoke.cveBOWKMeansTrainerRelease(ref _ptr);
+                Features2DInvoke.cveBOWKMeansTrainerRelease(ref _ptr);
         }
 
     }
-}
 
-
-namespace Emgu.CV
-{
-
-    public static partial class CvInvoke
+    public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveBOWKMeansTrainerCreate(int clusterCount, ref MCvTermCriteria termcrit, int attempts, CvEnum.KMeansInitType flags);

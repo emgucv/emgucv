@@ -271,7 +271,7 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> The width of this capture</summary>
+        /// <summary> The width of this capture</summary>
         public int Width
         {
             get
@@ -280,7 +280,7 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> The height of this capture </summary>
+        /// <summary> The height of this capture </summary>
         public int Height
         {
             get

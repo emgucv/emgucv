@@ -31,7 +31,7 @@ namespace Emgu.CV.Features2D
       /// <param name="descriptorMatcher">Descriptor matcher that is used to find the nearest word of the trained vocabulary for each key point descriptor of the image.</param>
       public BOWImgDescriptorExtractor(Feature2D descriptorExtractor, DescriptorMatcher descriptorMatcher)
       {
-         _ptr = CvInvoke.cveBOWImgDescriptorExtractorCreate(descriptorExtractor.Feature2DPtr, descriptorMatcher);
+         _ptr = Features2DInvoke.cveBOWImgDescriptorExtractorCreate(descriptorExtractor.Feature2DPtr, descriptorMatcher);
       }
 
       /// <summary>
@@ -40,7 +40,7 @@ namespace Emgu.CV.Features2D
       /// <param name="vocabulary">The vocabulary</param>
       public void SetVocabulary(Mat vocabulary)
       {
-          CvInvoke.cveBOWImgDescriptorExtractorSetVocabulary(_ptr, vocabulary);
+          Features2DInvoke.cveBOWImgDescriptorExtractorSetVocabulary(_ptr, vocabulary);
       }
 
       /// <summary>
@@ -52,7 +52,7 @@ namespace Emgu.CV.Features2D
       public void Compute(IInputArray image, VectorOfKeyPoint keypoints, Mat imgDescriptors)
       {
          using (InputArray iaImage = image.GetInputArray())
-             CvInvoke.cveBOWImgDescriptorExtractorCompute(_ptr, iaImage, keypoints, imgDescriptors);
+             Features2DInvoke.cveBOWImgDescriptorExtractorCompute(_ptr, iaImage, keypoints, imgDescriptors);
       }
 
       /// <summary>
@@ -60,16 +60,12 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-         CvInvoke.cveBOWImgDescriptorExtractorRelease(ref _ptr);
+          Features2DInvoke.cveBOWImgDescriptorExtractorRelease(ref _ptr);
       }
    }
-}
 
-namespace Emgu.CV
-{
-
-    public static partial class CvInvoke
-    {
+   public static partial class Features2DInvoke
+   {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveBOWImgDescriptorExtractorCreate(IntPtr descriptorExtractor, IntPtr descriptorMatcher);
 

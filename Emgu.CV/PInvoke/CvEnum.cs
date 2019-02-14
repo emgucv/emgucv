@@ -4138,11 +4138,11 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Gradient = 4,
         /// <summary>
-        /// Tophat
+        /// Top hat
         /// </summary>
         Tophat = 5,
         /// <summary>
-        /// Blackhat
+        /// Black hat
         /// </summary>
         Blackhat = 6,
         /// <summary>
@@ -4333,19 +4333,19 @@ namespace Emgu.CV.CvEnum
     public enum MotionType
     {
         /// <summary>
-        /// sets a translational motion model; warpMatrix is 2x3 with the first 2x2 part being the unity matrix and the rest two parameters being estimated.
+        /// Sets a translational motion model; warpMatrix is 2x3 with the first 2x2 part being the unity matrix and the rest two parameters being estimated.
         /// </summary>
         Translation = 0,
         /// <summary>
-        /// sets a Euclidean (rigid) transformation as motion model; three parameters are estimated; warpMatrix is 2x3.
+        /// Sets a Euclidean (rigid) transformation as motion model; three parameters are estimated; warpMatrix is 2x3.
         /// </summary>
         Euclidean = 1,
         /// <summary>
-        /// sets an affine motion model (DEFAULT); six parameters are estimated; warpMatrix is 2x3.
+        /// Sets an affine motion model (DEFAULT); six parameters are estimated; warpMatrix is 2x3.
         /// </summary>
         Affine = 2,
         /// <summary>
-        /// sets a homography as a motion model; eight parameters are estimated; warpMatrix is 3x3.
+        /// Sets a homography as a motion model; eight parameters are estimated; warpMatrix is 3x3.
         /// </summary>
         Homography = 3
     }

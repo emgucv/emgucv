@@ -7,9 +7,9 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
-   ///<summary>
+   /// <summary>
    /// A color type
-   ///</summary>
+   /// </summary>
    public interface IColor
    {
       /// <summary>

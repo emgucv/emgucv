@@ -7,9 +7,9 @@ using Emgu.CV;
 
 namespace Emgu.CV.Structure
 {
-   ///<summary> 
-   ///Defines a Bgra (Blue Green Red Alpha) color
-   ///</summary>
+   /// <summary> 
+   /// Defines a Bgra (Blue Green Red Alpha) color
+   /// </summary>
    [ColorInfo(ConversionCodename = "Bgra")]
    public struct Bgra : IColor, IEquatable<Bgra>
    {
@@ -18,29 +18,29 @@ namespace Emgu.CV.Structure
       /// </summary>
       private MCvScalar _scalar;
 
-      ///<summary> Create a BGRA color using the specific values</summary>
-      ///<param name="blue"> The blue value for this color </param>
-      ///<param name="green"> The green value for this color </param>
-      ///<param name="red"> The red value for this color </param>
-      ///<param name="alpha"> The alpha value for this color</param>
+      /// <summary> Create a BGRA color using the specific values</summary>
+      /// <param name="blue"> The blue value for this color </param>
+      /// <param name="green"> The green value for this color </param>
+      /// <param name="red"> The red value for this color </param>
+      /// <param name="alpha"> The alpha value for this color</param>
       public Bgra(double blue, double green, double red, double alpha)
       {
          _scalar = new MCvScalar(blue, green, red, alpha);
       }
 
-      ///<summary> Get or set the intensity of the blue color channel </summary>
+      /// <summary> Get or set the intensity of the blue color channel </summary>
       [DisplayColor(255, 0, 0)]
       public double Blue { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 
-      ///<summary> Get or set the intensity of the green color channel </summary>
+      /// <summary> Get or set the intensity of the green color channel </summary>
       [DisplayColor(0, 255, 0)]
       public double Green { get { return _scalar.V1; } set { _scalar.V1 = value; } }
 
-      ///<summary> Get or set the intensity of the red color channel </summary>
+      /// <summary> Get or set the intensity of the red color channel </summary>
       [DisplayColor(0, 0, 255)]
       public double Red { get { return _scalar.V2; } set { _scalar.V2 = value; } }
 
-      ///<summary> Get or set the intensity of the alpha color channel </summary>
+      /// <summary> Get or set the intensity of the alpha color channel </summary>
       [DisplayColor(122, 122, 122)]
       public double Alpha { get { return _scalar.V3; } set { _scalar.V3 = value; } }
 

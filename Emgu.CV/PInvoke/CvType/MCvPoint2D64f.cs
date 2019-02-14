@@ -98,6 +98,7 @@ namespace Emgu.CV.Structure
 
         #region IInterpolatable<MCvPoint2D64f> Members
 
+        /// <inheritdoc />
         double IInterpolatable<MCvPoint2D64f>.InterpolationIndex
         {
             get { return X; }
@@ -121,6 +122,7 @@ namespace Emgu.CV.Structure
            y -= i.y;
         }*/
 
+        /// <inheritdoc />
         MCvPoint2D64f IInterpolatable<MCvPoint2D64f>.LinearInterpolate(MCvPoint2D64f other, double index)
         {
             double f1 = (other.X - index) / (other.X - this.X);

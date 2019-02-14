@@ -832,12 +832,12 @@ namespace Emgu.CV
             return m;
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Perform an binary OR operation with some value
         /// </summary>
-        ///<param name="mat1">The mat to OR</param>
-        ///<param name="val"> The color to OR</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <param name="mat1">The mat to OR</param>
+        /// <param name="val"> The color to OR</param>
+        /// <returns> The result of the OR operation</returns>
         public static UMat operator |(UMat mat1, double val)
         {
             using (ScalarArray saVal = new ScalarArray(val))
@@ -848,23 +848,23 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Perform an binary OR operation with some color
         /// </summary>
-        ///<param name="mat1">The mat to OR</param>
-        ///<param name="val"> The color to OR</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <param name="mat1">The mat to OR</param>
+        /// <param name="val"> The color to OR</param>
+        /// <returns> The result of the OR operation</returns>
         public static UMat operator |(double val, UMat mat1)
         {
             return mat1 | val;
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Perform an binary OR operation with some scalar
         /// </summary>
-        ///<param name="mat1">The mat to OR</param>
-        ///<param name="val"> The value to OR</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <param name="mat1">The mat to OR</param>
+        /// <param name="val"> The value to OR</param>
+        /// <returns> The result of the OR operation</returns>
         public static UMat operator |(UMat mat1, MCvScalar val)
         {
             using (ScalarArray saVal = new ScalarArray(val))
@@ -875,20 +875,20 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Perform an binary OR operation with some scalar
         /// </summary>
-        ///<param name="mat1">The mat to OR</param>
-        ///<param name="val"> The color to OR</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <param name="mat1">The mat to OR</param>
+        /// <param name="val"> The color to OR</param>
+        /// <returns> The result of the OR operation</returns>
         public static UMat operator |(MCvScalar val, UMat mat1)
         {
             return mat1 | val;
         }
 
-        ///<summary>Compute the complement Mat</summary>
-        ///<param name="mat">The mat to be inverted</param>
-        ///<returns>The complement image</returns>
+        /// <summary>Compute the complement Mat</summary>
+        /// <param name="mat">The mat to be inverted</param>
+        /// <returns>The complement image</returns>
         public static UMat operator ~(UMat mat)
         {
             UMat invert = new UMat();

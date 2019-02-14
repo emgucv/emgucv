@@ -56,12 +56,12 @@ namespace Emgu.CV.Features2D
         /// <summary>
         /// Relative, flag
         /// </summary>
-        Relative = 8, 
+        Relative = 8,
 
         /// <summary>
         /// MinMax, flag
         /// </summary>
-        MinMax = 32 
+        MinMax = 32
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ namespace Emgu.CV.Features2D
         /// <param name="crossCheck">Specify whether or not cross check is needed. Use false for default.</param>
         public BFMatcher(DistanceType distanceType, bool crossCheck = false)
         {
-            _ptr = CvInvoke.cveBFMatcherCreate(distanceType, crossCheck, ref _descriptorMatcherPtr);
+            _ptr = Features2DInvoke.cveBFMatcherCreate(distanceType, crossCheck, ref _descriptorMatcherPtr);
         }
 
         /// <summary>
@@ -85,23 +85,20 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                CvInvoke.cveBFMatcherRelease(ref _ptr);
+                Features2DInvoke.cveBFMatcherRelease(ref _ptr);
             base.DisposeObject();
         }
     }
-}
 
-namespace Emgu.CV
-{
 
-    public static partial class CvInvoke
+    public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveBFMatcherCreate(
-           Features2D.DistanceType distanceType,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
+               Features2D.DistanceType distanceType,
+               [MarshalAs(CvInvoke.BoolMarshalType)]
          bool crossCheck,
-           ref IntPtr dmPtr);
+               ref IntPtr dmPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveBFMatcherRelease(ref IntPtr matcher);

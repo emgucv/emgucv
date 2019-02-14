@@ -12,9 +12,9 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
-   ///<summary> 
+   /// <summary> 
    /// A Uniform Multi-dimensional Dense Histogram 
-   ///</summary>
+   /// </summary>
 #if !(NETFX_CORE || NETSTANDARD1_4)
    [DebuggerTypeProxy(typeof(DenseHistogram.DebuggerProxy))]
 #endif
@@ -134,12 +134,12 @@ namespace Emgu.CV
          } 
       }
 
-      ///<summary> 
+      /// <summary> 
       /// Backproject the histogram into a gray scale image
-      ///</summary>
-      ///<param name="srcs">Source images, all are of the same size and type</param>
-      ///<returns>Destination back projection image of the same type as the source images</returns>
-      ///<typeparam name="TDepth">The type of depth of the image</typeparam>
+      /// </summary>
+      /// <param name="srcs">Source images, all are of the same size and type</param>
+      /// <returns>Destination back projection image of the same type as the source images</returns>
+      /// <typeparam name="TDepth">The type of depth of the image</typeparam>
       public Image<Gray, TDepth> BackProject<TDepth>(Image<Gray, TDepth>[] srcs) where TDepth : new()
       {
          Debug.Assert(srcs.Length == _binSizes.Length, "Incompatible Dimension");
@@ -160,12 +160,12 @@ namespace Emgu.CV
          }
       }
 
-      ///<summary> 
+      /// <summary> 
       /// Backproject the histogram into a matrix
-      ///</summary>
-      ///<param name="srcs">Source matrices, all are of the same size and type</param>
-      ///<returns>Destination back projection matrix of the sametype as the source matrices</returns>
-      ///<typeparam name="TDepth">The type of depth of the matrix</typeparam>
+      /// </summary>
+      /// <param name="srcs">Source matrices, all are of the same size and type</param>
+      /// <returns>Destination back projection matrix of the sametype as the source matrices</returns>
+      /// <typeparam name="TDepth">The type of depth of the matrix</typeparam>
       public Matrix<TDepth> BackProject<TDepth>(Matrix<TDepth>[] srcs) where TDepth : new()
       {
          Debug.Assert(srcs.Length == _binSizes.Length, "Incompatible Dimension");

@@ -54,6 +54,13 @@ namespace Emgu.CV.Util
 }
 
 /// <summary>
+/// Type enumerations for Emgu CV Util library
+/// </summary>
+namespace Emgu.CV.Util.TypeEnum
+{
+}
+
+/// <summary>
 /// Open CV shape module
 /// </summary>
 namespace Emgu.CV.Shape
@@ -239,5 +246,33 @@ namespace Emgu.CV.XPhoto
 /// Open CV Flann module
 /// </summary>
 namespace Emgu.CV.Flann
+{
+}
+
+/// <summary>
+/// Open CV Superres module
+/// </summary>
+namespace Emgu.CV.Superres
+{
+}
+
+/// <summary>
+/// The CvBlob library
+/// </summary>
+namespace Emgu.CV.Cvb
+{
+}
+
+/// <summary>
+/// Open CL module for the Open CV library
+/// </summary>
+namespace Emgu.CV.Ocl
+{
+}
+
+/// <summary>
+/// Tesseract OCR library
+/// </summary>
+namespace Emgu.CV.OCR
 {
 }

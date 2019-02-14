@@ -56,9 +56,9 @@ namespace Emgu.CV
         private static readonly int _numberOfChannels = new TColor().Dimension;
 
         #region constructors
-        ///<summary>
-        ///Create an empty Image
-        ///</summary>
+        /// <summary>
+        /// Create an empty Image
+        /// </summary>
         protected Image()
         {
         }
@@ -268,12 +268,12 @@ namespace Emgu.CV
         }
 #endif
 
-        ///<summary>
-        ///Create a blank Image of the specified width, height and color.
-        ///</summary>
-        ///<param name="width">The width of the image</param>
-        ///<param name="height">The height of the image</param>
-        ///<param name="value">The initial color of the image</param>
+        /// <summary>
+        /// Create a blank Image of the specified width, height and color.
+        /// </summary>
+        /// <param name="width">The width of the image</param>
+        /// <param name="height">The height of the image</param>
+        /// <param name="value">The initial color of the image</param>
         public Image(int width, int height, TColor value)
            : this(width, height)
         {
@@ -283,11 +283,11 @@ namespace Emgu.CV
             //int nDiff = n2 - n1;
         }
 
-        ///<summary>
-        ///Create a blank Image of the specified width and height. 
-        ///</summary>
-        ///<param name="width">The width of the image</param>
-        ///<param name="height">The height of the image</param>
+        /// <summary>
+        /// Create a blank Image of the specified width and height. 
+        /// </summary>
+        /// <param name="width">The width of the image</param>
+        /// <param name="height">The height of the image</param>
         public Image(int width, int height)
         {
             AllocateData(height, width, NumberOfChannels);
@@ -363,10 +363,10 @@ namespace Emgu.CV
             //int nDiff = n2 - n1;
         }
 
-        ///<summary>
-        ///Create a multi-channel image from multiple gray scale images
-        ///</summary>
-        ///<param name="channels">The image channels to be merged into a single image</param>
+        /// <summary>
+        /// Create a multi-channel image from multiple gray scale images
+        /// </summary>
+        /// <param name="channels">The image channels to be merged into a single image</param>
         public Image(Image<Gray, TDepth>[] channels)
         {
             Debug.Assert(NumberOfChannels == channels.Length);
@@ -445,9 +445,9 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Get or Set the region of interest for this image. To clear the ROI, set it to System.Drawing.Rectangle.Empty
-        ///</summary>
+        /// </summary>
         public Rectangle ROI
         {
             set
@@ -533,9 +533,9 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> 
-        ///Indicates if the region of interest has been set
-        ///</summary> 
+        /// <summary> 
+        /// Indicates if the region of interest has been set
+        /// </summary> 
         public bool IsROISet
         {
             get
@@ -605,11 +605,11 @@ namespace Emgu.CV
             CvInvoke.cvCopy(Ptr, dest.Ptr, mask == null ? IntPtr.Zero : mask.Ptr);
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Make a copy of the image using a mask, if ROI is set, only copy the ROI 
         /// </summary> 
         /// <param name="mask">the mask for coping</param>
-        ///<returns> A copy of the image</returns>
+        /// <returns> A copy of the image</returns>
         public Image<TColor, TDepth> Copy(Image<Gray, Byte> mask)
         {
             Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
@@ -655,8 +655,8 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> Make a copy of the image, if ROI is set, only copy the ROI</summary>
-        ///<returns> A copy of the image</returns>
+        /// <summary> Make a copy of the image, if ROI is set, only copy the ROI</summary>
+        /// <returns> A copy of the image</returns>
         public Image<TColor, TDepth> Copy()
         {
             return Copy(null);
@@ -716,10 +716,10 @@ namespace Emgu.CV
 
 
         #region Drawing functions
-        ///<summary>Draw an Rectangle of the specific color and thickness </summary>
-        ///<param name="rect">The rectangle to be drawn</param>
-        ///<param name="color">The color of the rectangle </param>
-        ///<param name="thickness">If thickness is less than 1, the rectangle is filled up </param>
+        /// <summary>Draw an Rectangle of the specific color and thickness </summary>
+        /// <param name="rect">The rectangle to be drawn</param>
+        /// <param name="color">The color of the rectangle </param>
+        /// <param name="thickness">If thickness is less than 1, the rectangle is filled up </param>
         /// <param name="lineType">Line type</param>
         /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
         public virtual void Draw(Rectangle rect, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
@@ -727,10 +727,10 @@ namespace Emgu.CV
             CvInvoke.Rectangle(this, rect, color.MCvScalar, thickness, lineType, shift);
         }
 
-        ///<summary>Draw a 2D Cross using the specific color and thickness </summary>
-        ///<param name="cross">The 2D Cross to be drawn</param>
-        ///<param name="color">The color of the cross </param>
-        ///<param name="thickness">Must be &gt; 0 </param>
+        /// <summary>Draw a 2D Cross using the specific color and thickness </summary>
+        /// <param name="cross">The 2D Cross to be drawn</param>
+        /// <param name="color">The color of the cross </param>
+        /// <param name="thickness">Must be &gt; 0 </param>
         public void Draw(Cross2DF cross, TColor color, int thickness)
         {
             Debug.Assert(thickness > 0, "Thickness should be > 0");
@@ -741,10 +741,10 @@ namespace Emgu.CV
                 Draw(cross.Vertical, color, thickness);
             }
         }
-        ///<summary>Draw a line segment using the specific color and thickness </summary>
-        ///<param name="line">The line segment to be drawn</param>
-        ///<param name="color">The color of the line segment </param>
-        ///<param name="thickness">The thickness of the line segment </param>
+        /// <summary>Draw a line segment using the specific color and thickness </summary>
+        /// <param name="line">The line segment to be drawn</param>
+        /// <param name="color">The color of the line segment </param>
+        /// <param name="thickness">The thickness of the line segment </param>
         /// <param name="lineType">Line type</param>
         /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
         public virtual void Draw(LineSegment2DF line, TColor color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
@@ -761,10 +761,10 @@ namespace Emgu.CV
                     shift);
         }
 
-        ///<summary> Draw a line segment using the specific color and thickness </summary>
-        ///<param name="line"> The line segment to be drawn</param>
-        ///<param name="color"> The color of the line segment </param>
-        ///<param name="thickness"> The thickness of the line segment </param>
+        /// <summary> Draw a line segment using the specific color and thickness </summary>
+        /// <param name="line"> The line segment to be drawn</param>
+        /// <param name="color"> The color of the line segment </param>
+        /// <param name="thickness"> The thickness of the line segment </param>
         /// <param name="lineType">Line type</param>
         /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
         public virtual void Draw(LineSegment2D line, TColor color, int thickness, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
@@ -781,10 +781,10 @@ namespace Emgu.CV
                     shift);
         }
 
-        ///<summary> Draw a convex polygon using the specific color and thickness </summary>
-        ///<param name="polygon"> The convex polygon to be drawn</param>
-        ///<param name="color"> The color of the triangle </param>
-        ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
+        /// <summary> Draw a convex polygon using the specific color and thickness </summary>
+        /// <param name="polygon"> The convex polygon to be drawn</param>
+        /// <param name="color"> The color of the triangle </param>
+        /// <param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
         public virtual void Draw(IConvexPolygonF polygon, TColor color, int thickness)
         {
             Point[] vertices =
@@ -850,10 +850,10 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> Draw a Circle of the specific color and thickness </summary>
-        ///<param name="circle"> The circle to be drawn</param>
-        ///<param name="color"> The color of the circle </param>
-        ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
+        /// <summary> Draw a Circle of the specific color and thickness </summary>
+        /// <param name="circle"> The circle to be drawn</param>
+        /// <param name="color"> The color of the circle </param>
+        /// <param name="thickness"> If thickness is less than 1, the circle is filled up </param>
         /// <param name="lineType">Line type</param>
         /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
         public virtual void Draw(CircleF circle, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
@@ -868,10 +868,10 @@ namespace Emgu.CV
              shift);
         }
 
-        ///<summary> Draw a Ellipse of the specific color and thickness </summary>
-        ///<param name="ellipse"> The ellipse to be draw</param>
-        ///<param name="color"> The color of the ellipse </param>
-        ///<param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
+        /// <summary> Draw a Ellipse of the specific color and thickness </summary>
+        /// <param name="ellipse"> The ellipse to be draw</param>
+        /// <param name="color"> The color of the ellipse </param>
+        /// <param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
         /// <param name="lineType">Line type</param>
         /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
         public void Draw(Ellipse ellipse, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
@@ -915,14 +915,14 @@ namespace Emgu.CV
         /// <param name="hierarchy">Optional information about hierarchy. It is only needed if you want to draw only some of the contours</param>
         /// <param name="offset">Shift all the point coordinates by the specified value. It is useful in case if the contours retrieved in some image ROI and then the ROI offset needs to be taken into account during the rendering. </param>
         public void Draw(
-         IInputArrayOfArrays contours,
-         int contourIdx,
-         TColor color,
-         int thickness = 1,
-         CvEnum.LineType lineType = CvEnum.LineType.EightConnected,
-         IInputArray hierarchy = null,
-         int maxLevel = int.MaxValue,
-         Point offset = new Point())
+            IInputArrayOfArrays contours,
+            int contourIdx,
+            TColor color,
+            int thickness = 1,
+            CvEnum.LineType lineType = CvEnum.LineType.EightConnected,
+            IInputArray hierarchy = null,
+            int maxLevel = int.MaxValue,
+            Point offset = new Point())
         {
             CvInvoke.DrawContours(
           this,
@@ -962,16 +962,16 @@ namespace Emgu.CV
         #endregion
 
         #region Hough line and circles
-        ///<summary>
-        ///Apply Probabilistic Hough transform to find line segments.
-        ///The current image must be a binary image (eg. the edges as a result of the Canny edge detector)
-        ///</summary>
-        ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
-        ///<param name="thetaResolution">Angle resolution measured in radians</param>
-        ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
-        ///<param name="minLineWidth">Minimum width of a line</param>
-        ///<param name="gapBetweenLines">Minimum gap between lines</param>
-        ///<returns>The line segments detected for each of the channels</returns>
+        /// <summary>
+        /// Apply Probabilistic Hough transform to find line segments.
+        /// The current image must be a binary image (eg. the edges as a result of the Canny edge detector)
+        /// </summary>
+        /// <param name="rhoResolution">Distance resolution in pixel-related units.</param>
+        /// <param name="thetaResolution">Angle resolution measured in radians</param>
+        /// <param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
+        /// <param name="minLineWidth">Minimum width of a line</param>
+        /// <param name="gapBetweenLines">Minimum gap between lines</param>
+        /// <returns>The line segments detected for each of the channels</returns>
         public LineSegment2D[][] HoughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
         {
             return this.ForEachDuplicateChannel<LineSegment2D[]>(
@@ -981,17 +981,17 @@ namespace Emgu.CV
             });
         }
 
-        ///<summary>
+        /// <summary>
         /// Apply Canny Edge Detector follows by Probabilistic Hough transform to find line segments in the image
-        ///</summary>
-        ///<param name="cannyThreshold"> The threshhold to find initial segments of strong edges</param>
-        ///<param name="cannyThresholdLinking"> The threshold used for edge Linking</param>
-        ///<param name="rhoResolution">Distance resolution in pixel-related units.</param>
-        ///<param name="thetaResolution">Angle resolution measured in radians</param>
-        ///<param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
-        ///<param name="minLineWidth">Minimum width of a line</param>
-        ///<param name="gapBetweenLines">Minimum gap between lines</param>
-        ///<returns>The line segments detected for each of the channels</returns>
+        /// </summary>
+        /// <param name="cannyThreshold">The threshold to find initial segments of strong edges</param>
+        /// <param name="cannyThresholdLinking">The threshold used for edge Linking</param>
+        /// <param name="rhoResolution">Distance resolution in pixel-related units.</param>
+        /// <param name="thetaResolution">Angle resolution measured in radians</param>
+        /// <param name="threshold">A line is returned by the function if the corresponding accumulator value is greater than threshold</param>
+        /// <param name="minLineWidth">Minimum width of a line</param>
+        /// <param name="gapBetweenLines">Minimum gap between lines</param>
+        /// <returns>The line segments detected for each of the channels</returns>
         public LineSegment2D[][] HoughLines(double cannyThreshold, double cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
         {
             using (Image<Gray, Byte> canny = Canny(cannyThreshold, cannyThresholdLinking))
@@ -1005,17 +1005,17 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary>
-        ///First apply Canny Edge Detector on the current image,
-        ///then apply Hough transform to find circles
-        ///</summary>
-        ///<param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller).</param>
-        ///<param name="accumulatorThreshold">Accumulator threshold at the center detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first</param>
-        ///<param name="dp">Resolution of the accumulator used to detect centers of the circles. For example, if it is 1, the accumulator will have the same resolution as the input image, if it is 2 - accumulator will have twice smaller width and height, etc</param>
-        ///<param name="minRadius">Minimal radius of the circles to search for</param>
-        ///<param name="maxRadius">Maximal radius of the circles to search for</param>
-        ///<param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
-        ///<returns>The circle detected for each of the channels</returns>
+        /// <summary>
+        /// First apply Canny Edge Detector on the current image,
+        /// then apply Hough transform to find circles
+        /// </summary>
+        /// <param name="cannyThreshold">The higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller).</param>
+        /// <param name="accumulatorThreshold">Accumulator threshold at the center detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first</param>
+        /// <param name="dp">Resolution of the accumulator used to detect centers of the circles. For example, if it is 1, the accumulator will have the same resolution as the input image, if it is 2 - accumulator will have twice smaller width and height, etc</param>
+        /// <param name="minRadius">Minimal radius of the circles to search for</param>
+        /// <param name="maxRadius">Maximal radius of the circles to search for</param>
+        /// <param name="minDist">Minimum distance between centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed</param>
+        /// <returns>The circle detected for each of the channels</returns>
         public CircleF[][] HoughCircles(TColor cannyThreshold, TColor accumulatorThreshold, double dp, double minDist, int minRadius = 0, int maxRadius = 0)
         {
             double[] cannyThresh = cannyThreshold.MCvScalar.ToArray();
@@ -1216,115 +1216,28 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Find the edges on this image and marked them in the returned image.</summary>
-        ///<param name="thresh"> The threshhold to find initial segments of strong edges</param>
-        ///<param name="threshLinking"> The threshold used for edge Linking</param>
-        ///<returns> The edges found by the Canny edge detector</returns>
+        /// <summary> Find the edges on this image and marked them in the returned image.</summary>
+        /// <param name="thresh"> The threshhold to find initial segments of strong edges</param>
+        /// <param name="threshLinking"> The threshold used for edge Linking</param>
+        /// <returns> The edges found by the Canny edge detector</returns>
         [ExposableMethod(Exposable = true, Category = "Gradients, Edges")]
         public Image<Gray, Byte> Canny(double thresh, double threshLinking)
         {
             return Canny(thresh, threshLinking, 3, false);
         }
 
-        ///<summary> Find the edges on this image and marked them in the returned image.</summary>
-        ///<param name="thresh"> The threshhold to find initial segments of strong edges</param>
-        ///<param name="threshLinking"> The threshold used for edge Linking</param>
-        ///<param name="apertureSize">The aperture size, use 3 for default</param>
-        ///<param name="l2Gradient">a flag, indicating whether a more accurate norm should be used to calculate the image gradient magnitude ( L2gradient=true ), or whether the default norm is enough ( L2gradient=false ).</param>
-        ///<returns> The edges found by the Canny edge detector</returns>
+        /// <summary> Find the edges on this image and marked them in the returned image.</summary>
+        /// <param name="thresh"> The threshhold to find initial segments of strong edges</param>
+        /// <param name="threshLinking"> The threshold used for edge Linking</param>
+        /// <param name="apertureSize">The aperture size, use 3 for default</param>
+        /// <param name="l2Gradient">a flag, indicating whether a more accurate norm should be used to calculate the image gradient magnitude ( L2gradient=true ), or whether the default norm is enough ( L2gradient=false ).</param>
+        /// <returns> The edges found by the Canny edge detector</returns>
         public Image<Gray, Byte> Canny(double thresh, double threshLinking, int apertureSize, bool l2Gradient)
         {
             Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
             CvInvoke.Canny(this, res, thresh, threshLinking, apertureSize, l2Gradient);
             return res;
         }
-
-        /*
-          /// <summary>
-          /// Get the star keypoints from this image
-          /// </summary>
-          /// <param name="param">The Star Detector parameters</param>
-          /// <returns>The Star keypoints in this image</returns>
-          public MCvStarKeypoint[] GetStarKeypoints(ref MCvStarDetectorParams param)
-          {
-              using (MemStorage stor = new MemStorage())
-              {
-                  IntPtr keyPointsPtr = CvInvoke.cvGetStarKeypoints(_ptr, stor.Ptr, param);
-                  Seq<MCvStarKeypoint> keyPoints = new Seq<MCvStarKeypoint>(keyPointsPtr, stor);
-                  return keyPoints.ToArray();
-              }
-          }
-
-          /// <summary>
-          /// Finds corners with big eigenvalues in the image.
-          /// </summary>
-          /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
-          /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
-          /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
-          /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
-          /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
-          /// <returns>The good features for each channel</returns>
-          public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize)
-          {
-              return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, false, 0);
-          }
-
-          /// <summary>
-          /// Finds corners with big eigenvalues in the image.
-          /// </summary>
-          /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
-          /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
-          /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
-          /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
-          /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
-          /// <param name="k">Free parameter of Harris detector. If provided, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal. </param>
-          /// <returns>The good features for each channel</returns>
-          public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, double k)
-          {
-              return GoodFeaturesToTrack(maxFeaturesPerChannel, qualityLevel, minDistance, blockSize, true, k);
-          }
-
-
-          /// <summary>
-          /// Finds corners with big eigenvalues in the image.
-          /// </summary>
-          /// <remarks>The function first calculates the minimal eigenvalue for every source image pixel using cvCornerMinEigenVal function and stores them in eig_image. Then it performs non-maxima suppression (only local maxima in 3x3 neighborhood remain). The next step is rejecting the corners with the minimal eigenvalue less than quality_level?max(eig_image(x,y)). Finally, the function ensures that all the corners found are distanced enough one from another by considering the corners (the most strongest corners are considered first) and checking that the distance between the newly considered feature and the features considered earlier is larger than min_distance. So, the function removes the features than are too close to the stronger features</remarks>
-          /// <param name="maxFeaturesPerChannel">The maximum features to be detected per channel</param>
-          /// <param name="qualityLevel">Multiplier for the maxmin eigenvalue; specifies minimal accepted quality of image corners</param>
-          /// <param name="minDistance">Limit, specifying minimum possible distance between returned corners; Euclidian distance is used. </param>
-          /// <param name="blockSize">Size of the averaging block, passed to underlying cvCornerMinEigenVal or cvCornerHarris used by the function</param>
-          /// <param name="useHarris">If nonzero, Harris operator (cvCornerHarris) is used instead of default cvCornerMinEigenVal</param>
-          /// <param name="k">Free parameter of Harris detector; used only if use_harris = true </param>
-          /// <returns>The good features for each channel</returns>
-          public PointF[][] GoodFeaturesToTrack(int maxFeaturesPerChannel, double qualityLevel, double minDistance, int blockSize, bool useHarris, double k)
-          {
-              using (Image<Gray, Single> eigImage = new Image<Gray, float>(Width, Height))
-              using (Image<Gray, Single> tmpImage = new Image<Gray, float>(Width, Height))
-              {
-                  return ForEachDuplicateChannel<PointF[]>(
-                 delegate(IImage img, int channel)
-                  {
-                    int cornercount = maxFeaturesPerChannel;
-                    PointF[] pts = new PointF[maxFeaturesPerChannel];
-                    GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);
-                    CvInvoke.cvGoodFeaturesToTrack(
-                        img.Ptr,
-                        eigImage.Ptr,
-                        tmpImage.Ptr,
-                        handle.AddrOfPinnedObject(),
-                        ref cornercount,
-                        qualityLevel,
-                        minDistance,
-                        IntPtr.Zero,
-                        blockSize,
-                        useHarris ? 1 : 0,
-                        k);
-                    handle.Free();
-                    Array.Resize(ref pts, cornercount);
-                    return pts;
-                 });
-           }
-        }*/
 
         /// <summary>
         /// Iterates to find the sub-pixel accurate location of corners, or radial saddle points
@@ -1360,7 +1273,7 @@ namespace Emgu.CV
 
         #region Matching
         /// <summary>
-        /// The function slids through image, compares overlapped patches of size wxh with templ using the specified method and return the comparison results 
+        /// The function slides through image, compares overlapped patches of size wxh with templ using the specified method and return the comparison results 
         /// </summary>
         /// <param name="template">Searched template; must be not greater than the source image and the same data type as the image</param>
         /// <param name="method">Specifies the way the template must be compared with image regions </param>
@@ -1375,9 +1288,9 @@ namespace Emgu.CV
 
         #region Logic
         #region And Methods
-        ///<summary> Perform an elementwise AND operation with another image and return the result</summary>
-        ///<param name="img2">The second image for the AND operation</param>
-        ///<returns> The result of the AND operation</returns>
+        /// <summary> Perform an elementwise AND operation with another image and return the result</summary>
+        /// <param name="img2">The second image for the AND operation</param>
+        /// <returns> The result of the AND operation</returns>
         public Image<TColor, TDepth> And(Image<TColor, TDepth> img2)
         {
             Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
@@ -1385,12 +1298,12 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> 
-        ///Perform an elementwise AND operation with another image, using a mask, and return the result
-        ///</summary>
-        ///<param name="img2">The second image for the AND operation</param>
-        ///<param name="mask">The mask for the AND operation</param>
-        ///<returns> The result of the AND operation</returns>
+        /// <summary> 
+        /// Perform an elementwise AND operation with another image, using a mask, and return the result
+        /// </summary>
+        /// <param name="img2">The second image for the AND operation</param>
+        /// <param name="mask">The mask for the AND operation</param>
+        /// <returns> The result of the AND operation</returns>
         public Image<TColor, TDepth> And(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
         {
             Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
@@ -1398,18 +1311,18 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Perform an binary AND operation with some color</summary>
-        ///<param name="val">The color for the AND operation</param>
-        ///<returns> The result of the AND operation</returns>
+        /// <summary> Perform an binary AND operation with some color</summary>
+        /// <param name="val">The color for the AND operation</param>
+        /// <returns> The result of the AND operation</returns>
         public Image<TColor, TDepth> And(TColor val)
         {
             return And(val, null);
         }
 
-        ///<summary> Perform an binary AND operation with some color using a mask</summary>
-        ///<param name="val">The color for the AND operation</param>
-        ///<param name="mask">The mask for the AND operation</param>
-        ///<returns> The result of the AND operation</returns>
+        /// <summary> Perform an binary AND operation with some color using a mask</summary>
+        /// <param name="val">The color for the AND operation</param>
+        /// <param name="mask">The mask for the AND operation</param>
+        /// <returns> The result of the AND operation</returns>
         public Image<TColor, TDepth> And(TColor val, Image<Gray, Byte> mask)
         {
             Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
@@ -1422,17 +1335,17 @@ namespace Emgu.CV
         #endregion
 
         #region Or Methods
-        ///<summary> Perform an elementwise OR operation with another image and return the result</summary>
-        ///<param name="img2">The second image for the OR operation</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <summary> Perform an elementwise OR operation with another image and return the result</summary>
+        /// <param name="img2">The second image for the OR operation</param>
+        /// <returns> The result of the OR operation</returns>
         public Image<TColor, TDepth> Or(Image<TColor, TDepth> img2)
         {
             return Or(img2, null);
         }
-        ///<summary> Perform an elementwise OR operation with another image, using a mask, and return the result</summary>
-        ///<param name="img2">The second image for the OR operation</param>
-        ///<param name="mask">The mask for the OR operation</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <summary> Perform an elementwise OR operation with another image, using a mask, and return the result</summary>
+        /// <param name="img2">The second image for the OR operation</param>
+        /// <param name="mask">The mask for the OR operation</param>
+        /// <returns> The result of the OR operation</returns>
         public Image<TColor, TDepth> Or(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1440,18 +1353,18 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Perform an elementwise OR operation with some color</summary>
-        ///<param name="val">The value for the OR operation</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <summary> Perform an elementwise OR operation with some color</summary>
+        /// <param name="val">The value for the OR operation</param>
+        /// <returns> The result of the OR operation</returns>
         [ExposableMethod(Exposable = true, Category = "Logic")]
         public Image<TColor, TDepth> Or(TColor val)
         {
             return Or(val, null);
         }
-        ///<summary> Perform an elementwise OR operation with some color using a mask</summary>
-        ///<param name="val">The color for the OR operation</param>
-        ///<param name="mask">The mask for the OR operation</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <summary> Perform an elementwise OR operation with some color using a mask</summary>
+        /// <param name="val">The color for the OR operation</param>
+        /// <param name="mask">The mask for the OR operation</param>
+        /// <returns> The result of the OR operation</returns>
         public Image<TColor, TDepth> Or(TColor val, Image<Gray, Byte> mask)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1464,9 +1377,9 @@ namespace Emgu.CV
         #endregion
 
         #region Xor Methods
-        ///<summary> Perform an elementwise XOR operation with another image and return the result</summary>
-        ///<param name="img2">The second image for the XOR operation</param>
-        ///<returns> The result of the XOR operation</returns>
+        /// <summary> Perform an elementwise XOR operation with another image and return the result</summary>
+        /// <param name="img2">The second image for the XOR operation</param>
+        /// <returns> The result of the XOR operation</returns>
         public Image<TColor, TDepth> Xor(Image<TColor, TDepth> img2)
         {
             return Xor(img2, null);
@@ -1513,10 +1426,10 @@ namespace Emgu.CV
         }
         #endregion
 
-        ///<summary> 
-        ///Compute the complement image
-        ///</summary>
-        ///<returns> The complement image</returns>
+        /// <summary> 
+        /// Compute the complement image
+        /// </summary>
+        /// <returns> The complement image</returns>
         public Image<TColor, TDepth> Not()
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1526,9 +1439,9 @@ namespace Emgu.CV
         #endregion
 
         #region Comparison
-        ///<summary> Find the elementwise maximum value </summary>
-        ///<param name="img2">The second image for the Max operation</param>
-        ///<returns> An image where each pixel is the maximum of <i>this</i> image and the parameter image</returns>
+        /// <summary> Find the elementwise maximum value </summary>
+        /// <param name="img2">The second image for the Max operation</param>
+        /// <returns> An image where each pixel is the maximum of <i>this</i> image and the parameter image</returns>
         public Image<TColor, TDepth> Max(Image<TColor, TDepth> img2)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1536,9 +1449,9 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Find the elementwise maximum value </summary>
-        ///<param name="value">The value to compare with</param>
-        ///<returns> An image where each pixel is the maximum of <i>this</i> image and <paramref name="value"/></returns>
+        /// <summary> Find the elementwise maximum value </summary>
+        /// <param name="value">The value to compare with</param>
+        /// <returns> An image where each pixel is the maximum of <i>this</i> image and <paramref name="value"/></returns>
         public Image<TColor, TDepth> Max(double value)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1549,9 +1462,9 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Find the elementwise minimum value </summary>
-        ///<param name="img2">The second image for the Min operation</param>
-        ///<returns> An image where each pixel is the minimum of <i>this</i> image and the parameter image</returns>
+        /// <summary> Find the elementwise minimum value </summary>
+        /// <param name="img2">The second image for the Min operation</param>
+        /// <returns> An image where each pixel is the minimum of <i>this</i> image and the parameter image</returns>
         public Image<TColor, TDepth> Min(Image<TColor, TDepth> img2)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1559,9 +1472,9 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Find the elementwise minimum value </summary>
-        ///<param name="value">The value to compare with</param>
-        ///<returns> An image where each pixel is the minimum of <i>this</i> image and <paramref name="value"/></returns>
+        /// <summary> Find the elementwise minimum value </summary>
+        /// <param name="value">The value to compare with</param>
+        /// <returns> An image where each pixel is the minimum of <i>this</i> image and <paramref name="value"/></returns>
         public Image<TColor, TDepth> Min(double value)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1572,10 +1485,10 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary>Checks that image elements lie between two scalars</summary>
-        ///<param name="lower"> The inclusive lower limit of color value</param>
-        ///<param name="higher"> The inclusive upper limit of color value</param>
-        ///<returns> res[i,j] = 255 if <paramref name="lower"/> &lt;= this[i,j] &lt;= <paramref name="higher"/>, 0 otherwise</returns>
+        /// <summary>Checks that image elements lie between two scalars</summary>
+        /// <param name="lower"> The inclusive lower limit of color value</param>
+        /// <param name="higher"> The inclusive upper limit of color value</param>
+        /// <returns> res[i,j] = 255 if <paramref name="lower"/> &lt;= this[i,j] &lt;= <paramref name="higher"/>, 0 otherwise</returns>
         [ExposableMethod(Exposable = true, Category = "Logic")]
         public Image<Gray, Byte> InRange(TColor lower, TColor higher)
         {
@@ -1586,10 +1499,10 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary>Checks that image elements lie between values defined by two images of same size and type</summary>
-        ///<param name="lower"> The inclusive lower limit of color value</param>
-        ///<param name="higher"> The inclusive upper limit of color value</param>
-        ///<returns> res[i,j] = 255 if <paramref name="lower"/>[i,j] &lt;= this[i,j] &lt;= <paramref name="higher"/>[i,j], 0 otherwise</returns>
+        /// <summary>Checks that image elements lie between values defined by two images of same size and type</summary>
+        /// <param name="lower"> The inclusive lower limit of color value</param>
+        /// <param name="higher"> The inclusive upper limit of color value</param>
+        /// <returns> res[i,j] = 255 if <paramref name="lower"/>[i,j] &lt;= this[i,j] &lt;= <paramref name="higher"/>[i,j], 0 otherwise</returns>
         public Image<Gray, Byte> InRange(Image<TColor, TDepth> lower, Image<TColor, TDepth> higher)
         {
             Image<Gray, Byte> res = new Image<Gray, Byte>(Size);
@@ -1729,9 +1642,9 @@ namespace Emgu.CV
 
         #region Arithmatic
         #region Subtraction methods
-        ///<summary> Elementwise subtract another image from the current image </summary>
-        ///<param name="img2">The second image to be subtracted from the current image</param>
-        ///<returns> The result of elementwise subtracting img2 from the current image</returns>
+        /// <summary> Elementwise subtract another image from the current image </summary>
+        /// <param name="img2">The second image to be subtracted from the current image</param>
+        /// <returns> The result of elementwise subtracting img2 from the current image</returns>
         public Image<TColor, TDepth> Sub(Image<TColor, TDepth> img2)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1739,10 +1652,10 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Elementwise subtract another image from the current image, using a mask</summary>
-        ///<param name="img2">The image to be subtracted from the current image</param>
-        ///<param name="mask">The mask for the subtract operation</param>
-        ///<returns> The result of elementwise subtrating img2 from the current image, using the specific mask</returns>
+        /// <summary> Elementwise subtract another image from the current image, using a mask</summary>
+        /// <param name="img2">The image to be subtracted from the current image</param>
+        /// <param name="mask">The mask for the subtract operation</param>
+        /// <returns> The result of elementwise subtracting img2 from the current image, using the specific mask</returns>
         public Image<TColor, TDepth> Sub(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1750,9 +1663,9 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Elementwise subtract a color from the current image</summary>
-        ///<param name="val">The color value to be subtracted from the current image</param>
-        ///<returns> The result of elementwise subtracting color 'val' from the current image</returns>
+        /// <summary> Elementwise subtract a color from the current image</summary>
+        /// <param name="val">The color value to be subtracted from the current image</param>
+        /// <returns> The result of elementwise subtracting color 'val' from the current image</returns>
         [ExposableMethod(Exposable = true, Category = "Math")]
         public Image<TColor, TDepth> Sub(TColor val)
         {
@@ -1793,26 +1706,28 @@ namespace Emgu.CV
         #endregion
 
         #region Addition methods
-        ///<summary> Elementwise add another image with the current image </summary>
-        ///<param name="img2">The image to be added to the current image</param>
-        ///<returns> The result of elementwise adding img2 to the current image</returns>
+        /// <summary> Elementwise add another image with the current image </summary>
+        /// <param name="img2">The image to be added to the current image</param>
+        /// <returns> The result of elementwise adding img2 to the current image</returns>
         public Image<TColor, TDepth> Add(Image<TColor, TDepth> img2)
         {
             return Add(img2, null);
         }
-        ///<summary> Elementwise add <paramref name="img2"/> with the current image, using a mask</summary>
-        ///<param name="img2">The image to be added to the current image</param>
-        ///<param name="mask">The mask for the add operation</param>
-        ///<returns> The result of elementwise adding img2 to the current image, using the specific mask</returns>
+
+        /// <summary> Elementwise add <paramref name="img2"/> with the current image, using a mask</summary>
+        /// <param name="img2">The image to be added to the current image</param>
+        /// <param name="mask">The mask for the add operation</param>
+        /// <returns> The result of elementwise adding img2 to the current image, using the specific mask</returns>
         public Image<TColor, TDepth> Add(Image<TColor, TDepth> img2, Image<Gray, Byte> mask)
         {
             Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.Add(this, img2, res, mask, CvInvoke.GetDepthType(typeof(TDepth)));
             return res;
         }
-        ///<summary> Elementwise add a color <paramref name="val"/> to the current image</summary>
-        ///<param name="val">The color value to be added to the current image</param>
-        ///<returns> The result of elementwise adding color <paramref name="val"/> from the current image</returns>
+
+        /// <summary> Elementwise add a color <paramref name="val"/> to the current image</summary>
+        /// <param name="val">The color value to be added to the current image</param>
+        /// <returns> The result of elementwise adding color <paramref name="val"/> from the current image</returns>
         [ExposableMethod(Exposable = true, Category = "Math")]
         public Image<TColor, TDepth> Add(TColor val)
         {
@@ -1826,10 +1741,10 @@ namespace Emgu.CV
         #endregion
 
         #region Multiplication methods
-        ///<summary> Elementwise multiply another image with the current image and the <paramref name="scale"/></summary>
-        ///<param name="img2">The image to be elementwise multiplied to the current image</param>
-        ///<param name="scale">The scale to be multiplied</param>
-        ///<returns> this .* img2 * scale </returns>
+        /// <summary> Elementwise multiply another image with the current image and the <paramref name="scale"/></summary>
+        /// <param name="img2">The image to be elementwise multiplied to the current image</param>
+        /// <param name="scale">The scale to be multiplied</param>
+        /// <returns> this .* img2 * scale </returns>
         public Image<TColor, TDepth> Mul(Image<TColor, TDepth> img2, double scale)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1837,17 +1752,17 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Elementwise multiply <paramref name="img2"/> with the current image</summary>
-        ///<param name="img2">The image to be elementwise multiplied to the current image</param>
-        ///<returns> this .* img2 </returns>
+        /// <summary> Elementwise multiply <paramref name="img2"/> with the current image</summary>
+        /// <param name="img2">The image to be elementwise multiplied to the current image</param>
+        /// <returns> this .* img2 </returns>
         public Image<TColor, TDepth> Mul(Image<TColor, TDepth> img2)
         {
             return Mul(img2, 1.0);
         }
 
-        ///<summary> Elementwise multiply the current image with <paramref name="scale"/></summary>
-        ///<param name="scale">The scale to be multiplied</param>
-        ///<returns> The scaled image </returns>
+        /// <summary> Elementwise multiply the current image with <paramref name="scale"/></summary>
+        /// <param name="scale">The scale to be multiplied</param>
+        /// <returns> The scaled image </returns>
         [ExposableMethod(Exposable = true, Category = "Math")]
         public Image<TColor, TDepth> Mul(double scale)
         {
@@ -1876,14 +1791,14 @@ namespace Emgu.CV
             CvInvoke.Accumulate(img2, this, null);
         }
 
-        ///<summary> 
-        ///Return the weighted sum such that: res = this * alpha + img2 * beta + gamma
-        ///</summary>
-        ///<param name="img2">img2 in: res = this * alpha + img2 * beta + gamma </param>
-        ///<param name="alpha">alpha in: res = this * alpha + img2 * beta + gamma</param>
-        ///<param name="beta">beta in: res = this * alpha + img2 * beta + gamma</param>
-        ///<param name="gamma">gamma in: res = this * alpha + img2 * beta + gamma</param>
-        ///<returns>this * alpha + img2 * beta + gamma</returns>
+        /// <summary> 
+        /// Return the weighted sum such that: res = this * alpha + img2 * beta + gamma
+        /// </summary>
+        /// <param name="img2">img2 in: res = this * alpha + img2 * beta + gamma </param>
+        /// <param name="alpha">alpha in: res = this * alpha + img2 * beta + gamma</param>
+        /// <param name="beta">beta in: res = this * alpha + img2 * beta + gamma</param>
+        /// <param name="gamma">gamma in: res = this * alpha + img2 * beta + gamma</param>
+        /// <returns>this * alpha + img2 * beta + gamma</returns>
         public Image<TColor, TDepth> AddWeighted(Image<TColor, TDepth> img2, double alpha, double beta, double gamma)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1891,32 +1806,32 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Update Running Average. <i>this</i> = (1-alpha)*<i>this</i> + alpha*img
-        ///</summary>
-        ///<param name="img">Input image, 1- or 3-channel, Byte or Single (each channel of multi-channel image is processed independently). </param>
-        ///<param name="alpha">the weight of <paramref name="img"/></param>
+        /// </summary>
+        /// <param name="img">Input image, 1- or 3-channel, Byte or Single (each channel of multi-channel image is processed independently). </param>
+        /// <param name="alpha">the weight of <paramref name="img"/></param>
         public void AccumulateWeighted(Image<TColor, TDepth> img, double alpha)
         {
             AccumulateWeighted(img, alpha, null);
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Update Running Average. <i>this</i> = (1-alpha)*<i>this</i> + alpha*img, using the mask
-        ///</summary>
-        ///<param name="img">Input image, 1- or 3-channel, Byte or Single (each channel of multi-channel image is processed independently). </param>
-        ///<param name="alpha">The weight of <paramref name="img"/></param>
-        ///<param name="mask">The mask for the running average</param>
+        /// </summary>
+        /// <param name="img">Input image, 1- or 3-channel, Byte or Single (each channel of multi-channel image is processed independently). </param>
+        /// <param name="alpha">The weight of <paramref name="img"/></param>
+        /// <param name="mask">The mask for the running average</param>
         public void AccumulateWeighted(Image<TColor, TDepth> img, double alpha, Image<Gray, Byte> mask)
         {
             CvInvoke.AccumulateWeighted(img, this, alpha, mask);
         }
 
-        ///<summary> 
-        ///Computes absolute different between <i>this</i> image and the other image
-        ///</summary>
-        ///<param name="img2">The other image to compute absolute different with</param>
-        ///<returns> The image that contains the absolute different value</returns>
+        /// <summary> 
+        /// Computes absolute different between <i>this</i> image and the other image
+        /// </summary>
+        /// <param name="img2">The other image to compute absolute different with</param>
+        /// <returns> The image that contains the absolute different value</returns>
         public Image<TColor, TDepth> AbsDiff(Image<TColor, TDepth> img2)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -1924,11 +1839,11 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> 
-        ///Computes absolute different between <i>this</i> image and the specific color
-        ///</summary>
-        ///<param name="color">The color to compute absolute different with</param>
-        ///<returns> The image that contains the absolute different value</returns>
+        /// <summary> 
+        /// Computes absolute different between <i>this</i> image and the specific color
+        /// </summary>
+        /// <param name="color">The color to compute absolute different with</param>
+        /// <returns> The image that contains the absolute different value</returns>
         [ExposableMethod(Exposable = true, Category = "Math")]
         public Image<TColor, TDepth> AbsDiff(TColor color)
         {
@@ -2198,7 +2113,7 @@ namespace Emgu.CV
         }
 
 #if !(UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO)
-        ///<summary>
+        /// <summary>
         /// Convert the image to log polar, simulating the human foveal vision
         /// </summary>
         /// <param name="center">The transformation center, where the output precision is maximal</param>
@@ -2221,10 +2136,10 @@ namespace Emgu.CV
         #endregion
 
         #region Image color and depth conversion
-        ///<summary> Convert the current image to the specific color and depth </summary>
-        ///<typeparam name="TOtherColor"> The type of color to be converted to </typeparam>
-        ///<typeparam name="TOtherDepth"> The type of pixel depth to be converted to </typeparam>
-        ///<returns> Image of the specific color and depth </returns>
+        /// <summary> Convert the current image to the specific color and depth </summary>
+        /// <typeparam name="TOtherColor"> The type of color to be converted to </typeparam>
+        /// <typeparam name="TOtherDepth"> The type of pixel depth to be converted to </typeparam>
+        /// <returns> Image of the specific color and depth </returns>
         [ExposableMethod(
            Exposable = true,
            Category = "Conversion",
@@ -2433,11 +2348,11 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> Convert the current image to the specific depth, at the same time scale and shift the values of the pixel</summary>
-        ///<param name="scale"> The value to be multiplied with the pixel </param>
-        ///<param name="shift"> The value to be added to the pixel</param>
+        /// <summary> Convert the current image to the specific depth, at the same time scale and shift the values of the pixel</summary>
+        /// <param name="scale"> The value to be multiplied with the pixel </param>
+        /// <param name="shift"> The value to be added to the pixel</param>
         /// <typeparam name="TOtherDepth"> The type of depth to convert to</typeparam>
-        ///<returns> Image of the specific depth, val = val * scale + shift </returns>
+        /// <returns> Image of the specific depth, val = val * scale + shift </returns>
         public Image<TColor, TOtherDepth> ConvertScale<TOtherDepth>(double scale, double shift)
                     where TOtherDepth : new()
         {
@@ -2778,10 +2693,10 @@ namespace Emgu.CV
 #endif
         }
 
-        ///<summary> Create a Bitmap image of certain size</summary>
-        ///<param name="width">The width of the bitmap</param>
-        ///<param name="height"> The height of the bitmap</param>
-        ///<returns> This image in Bitmap format of the specific size</returns>
+        /// <summary> Create a Bitmap image of certain size</summary>
+        /// <param name="width">The width of the bitmap</param>
+        /// <param name="height"> The height of the bitmap</param>
+        /// <returns> This image in Bitmap format of the specific size</returns>
         public Bitmap ToBitmap(int width, int height)
         {
             using (Image<TColor, TDepth> scaledImage = Resize(width, height, CvEnum.Inter.Linear))
@@ -2790,12 +2705,12 @@ namespace Emgu.CV
 #endif
 
         #region Pyramids
-        ///<summary>
+        /// <summary>
         /// Performs downsampling step of Gaussian pyramid decomposition. 
         /// First it convolves <i>this</i> image with the specified filter and then downsamples the image 
         /// by rejecting even rows and columns.
-        ///</summary>
-        ///<returns> The downsampled image</returns>
+        /// </summary>
+        /// <returns> The downsampled image</returns>
         [ExposableMethod(Exposable = true, Category = "Pyramids")]
         public Image<TColor, TDepth> PyrDown()
         {
@@ -2804,13 +2719,13 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary>
+        /// <summary>
         /// Performs up-sampling step of Gaussian pyramid decomposition. 
         /// First it upsamples <i>this</i> image by injecting even zero rows and columns and then convolves 
         /// result with the specified filter multiplied by 4 for interpolation. 
         /// So the resulting image is four times larger than the source image.
-        ///</summary>
-        ///<returns> The upsampled image</returns>
+        /// </summary>
+        /// <returns> The upsampled image</returns>
         [ExposableMethod(Exposable = true, Category = "Pyramids")]
         public Image<TColor, TDepth> PyrUp()
         {
@@ -2838,10 +2753,10 @@ namespace Emgu.CV
         #endregion
 
         #region Special Image Transforms
-        ///<summary> Use inpaint to recover the intensity of the pixels which location defined by <paramref>mask</paramref> on <i>this</i> image </summary>
-        ///<param name="mask">The inpainting mask. Non-zero pixels indicate the area that needs to be inpainted</param>
-        ///<param name="radius">The radius of circular neighborhood of each point inpainted that is considered by the algorithm</param>
-        ///<returns> The inpainted image </returns>
+        /// <summary> Use inpaint to recover the intensity of the pixels which location defined by <paramref name="mask"/> on <i>this</i> image </summary>
+        /// <param name="mask">The inpainting mask. Non-zero pixels indicate the area that needs to be inpainted</param>
+        /// <param name="radius">The radius of circular neighborhood of each point inpainted that is considered by the algorithm</param>
+        /// <returns> The inpainted image </returns>
         public Image<TColor, TDepth> InPaint(Image<Gray, Byte> mask, double radius)
         {
             Image<TColor, TDepth> res = CopyBlank();
@@ -3064,7 +2979,7 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Compute the element of the new image based on the elements of the two image</summary>
+        /// <summary> Compute the element of the new image based on the elements of the two image</summary>
         /// <typeparam name="TDepth2">The depth type of img2</typeparam>
         /// <typeparam name="TDepth3">The depth type of the result image</typeparam>
         /// <param name="img2">The second image</param>
@@ -3339,12 +3254,12 @@ namespace Emgu.CV
             return img1.Or(img2);
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Perform an binary OR operation with some color
         /// </summary>
-        ///<param name="img1">The image to OR</param>
-        ///<param name="val"> The color to OR</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <param name="img1">The image to OR</param>
+        /// <param name="val"> The color to OR</param>
+        /// <returns> The result of the OR operation</returns>
         public static Image<TColor, TDepth> operator |(Image<TColor, TDepth> img1, double val)
         {
             TColor color = new TColor();
@@ -3352,42 +3267,42 @@ namespace Emgu.CV
             return img1.Or(color);
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Perform an binary OR operation with some color
         /// </summary>
-        ///<param name="img1">The image to OR</param>
-        ///<param name="val"> The color to OR</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <param name="img1">The image to OR</param>
+        /// <param name="val"> The color to OR</param>
+        /// <returns> The result of the OR operation</returns>
         public static Image<TColor, TDepth> operator |(double val, Image<TColor, TDepth> img1)
         {
             return img1 | val;
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Perform an binary OR operation with some color
         /// </summary>
-        ///<param name="img1">The image to OR</param>
-        ///<param name="val"> The color to OR</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <param name="img1">The image to OR</param>
+        /// <param name="val"> The color to OR</param>
+        /// <returns> The result of the OR operation</returns>
         public static Image<TColor, TDepth> operator |(Image<TColor, TDepth> img1, TColor val)
         {
             return img1.Or(val);
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Perform an binary OR operation with some color
         /// </summary>
-        ///<param name="img1">The image to OR</param>
-        ///<param name="val"> The color to OR</param>
-        ///<returns> The result of the OR operation</returns>
+        /// <param name="img1">The image to OR</param>
+        /// <param name="val"> The color to OR</param>
+        /// <returns> The result of the OR operation</returns>
         public static Image<TColor, TDepth> operator |(TColor val, Image<TColor, TDepth> img1)
         {
             return img1.Or(val);
         }
 
-        ///<summary>Compute the complement image</summary>
-        ///<param name="image">The image to be inverted</param>
-        ///<returns>The complement image</returns>
+        /// <summary>Compute the complement image</summary>
+        /// <param name="image">The image to be inverted</param>
+        /// <returns>The complement image</returns>
         public static Image<TColor, TDepth> operator ~(Image<TColor, TDepth> image)
         {
             return image.Not();
@@ -3627,20 +3542,20 @@ namespace Emgu.CV
         }
 
         #region Gaussian Smooth
-        ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>
-        ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref name="kernelSize"/> x <paramref name="kernelSize"/>)</param>
-        ///<returns> The smoothed image</returns>
+        /// <summary> Perform Gaussian Smoothing in the current image and return the result </summary>
+        /// <param name="kernelSize"> The size of the Gaussian kernel (<paramref name="kernelSize"/> x <paramref name="kernelSize"/>)</param>
+        /// <returns> The smoothed image</returns>
         public Image<TColor, TDepth> SmoothGaussian(int kernelSize)
         {
             return SmoothGaussian(kernelSize, kernelSize, 0, 0);
         }
 
-        ///<summary> Perform Gaussian Smoothing in the current image and return the result </summary>
-        ///<param name="kernelWidth"> The width of the Gaussian kernel</param>
-        ///<param name="kernelHeight"> The height of the Gaussian kernel</param>
-        ///<param name="sigma1"> The standard deviation of the Gaussian kernel in the horizontal dimension</param>
-        ///<param name="sigma2"> The standard deviation of the Gaussian kernel in the vertical dimension</param>
-        ///<returns> The smoothed image</returns>
+        /// <summary> Perform Gaussian Smoothing in the current image and return the result </summary>
+        /// <param name="kernelWidth"> The width of the Gaussian kernel</param>
+        /// <param name="kernelHeight"> The height of the Gaussian kernel</param>
+        /// <param name="sigma1"> The standard deviation of the Gaussian kernel in the horizontal dimension</param>
+        /// <param name="sigma2"> The standard deviation of the Gaussian kernel in the vertical dimension</param>
+        /// <returns> The smoothed image</returns>
         [ExposableMethod(Exposable = true, Category = "Smoothing")]
         public Image<TColor, TDepth> SmoothGaussian(int kernelWidth, int kernelHeight, double sigma1, double sigma2)
         {
@@ -3649,30 +3564,30 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Perform Gaussian Smoothing inplace for the current image </summary>
-        ///<param name="kernelSize"> The size of the Gaussian kernel (<paramref name="kernelSize"/> x <paramref name="kernelSize"/>)</param>
+        /// <summary> Perform Gaussian Smoothing inplace for the current image </summary>
+        /// <param name="kernelSize"> The size of the Gaussian kernel (<paramref name="kernelSize"/> x <paramref name="kernelSize"/>)</param>
         public void _SmoothGaussian(int kernelSize)
         {
             _SmoothGaussian(kernelSize, kernelSize, 0, 0);
         }
 
-        ///<summary> Perform Gaussian Smoothing inplace for the current image </summary>
-        ///<param name="kernelWidth"> The width of the Gaussian kernel</param>
-        ///<param name="kernelHeight"> The height of the Gaussian kernel</param>
-        ///<param name="sigma1"> The standard deviation of the Gaussian kernel in the horizontal dimension</param>
-        ///<param name="sigma2"> The standard deviation of the Gaussian kernel in the vertical dimension</param>
+        /// <summary> Perform Gaussian Smoothing inplace for the current image </summary>
+        /// <param name="kernelWidth"> The width of the Gaussian kernel</param>
+        /// <param name="kernelHeight"> The height of the Gaussian kernel</param>
+        /// <param name="sigma1"> The standard deviation of the Gaussian kernel in the horizontal dimension</param>
+        /// <param name="sigma2"> The standard deviation of the Gaussian kernel in the vertical dimension</param>
         public void _SmoothGaussian(int kernelWidth, int kernelHeight, double sigma1, double sigma2)
         {
             CvInvoke.GaussianBlur(this, this, new Size(kernelWidth, kernelHeight), sigma1, sigma2);
         }
 
-        ///<summary> 
-        ///Performs a convolution using the specific <paramref name="kernel"/> 
-        ///</summary>
-        ///<param name="kernel">The convolution kernel</param>
+        /// <summary> 
+        /// Performs a convolution using the specific <paramref name="kernel"/> 
+        /// </summary>
+        /// <param name="kernel">The convolution kernel</param>
         /// <param name="delta">The optional value added to the filtered pixels before storing them in dst</param>
         /// <param name="borderType">The pixel extrapolation method.</param>
-        ///<returns>The result of the convolution</returns>
+        /// <returns>The result of the convolution</returns>
         public Image<TColor, Single> Convolution(ConvolutionKernelF kernel, double delta = 0,
             Emgu.CV.CvEnum.BorderType borderType = CvEnum.BorderType.Default)
         {
@@ -3784,9 +3699,9 @@ namespace Emgu.CV
             return result;
         }
 
-        ///<summary> 
-        ///the base threshold method shared by public threshold functions 
-        ///</summary>
+        /// <summary> 
+        /// The base threshold method shared by public threshold functions 
+        /// </summary>
         private void ThresholdBase(Image<TColor, TDepth> dest, TColor threshold, TColor maxValue, CvEnum.ThresholdType threshType)
         {
             double[] t = threshold.MCvScalar.ToArray();
@@ -3967,9 +3882,9 @@ namespace Emgu.CV
 
         #region Image Flipping
 
-        ///<summary> Return a flipped copy of the current image</summary>
-        ///<param name="flipType">The type of the flipping</param>
-        ///<returns> The flipped copy of <i>this</i> image </returns>
+        /// <summary> Return a flipped copy of the current image</summary>
+        /// <param name="flipType">The type of the flipping</param>
+        /// <returns> The flipped copy of <i>this</i> image </returns>
         public Image<TColor, TDepth> Flip(CvEnum.FlipType flipType)
         {
             if (flipType == Emgu.CV.CvEnum.FlipType.None) return Copy();
@@ -3979,9 +3894,9 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Inplace flip the image</summary>
-        ///<param name="flipType">The type of the flipping</param>
-        ///<returns> The flipped copy of <i>this</i> image </returns>
+        /// <summary> Inplace flip the image</summary>
+        /// <param name="flipType">The type of the flipping</param>
+        /// <returns> The flipped copy of <i>this</i> image </returns>
         [ExposableMethod(Exposable = true, Category = "Transform")]
         public void _Flip(CvEnum.FlipType flipType)
         {
@@ -4090,14 +4005,14 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> 
-        ///Split current Image into an array of gray scale images where each element 
-        ///in the array represent a single color channel of the original image
-        ///</summary>
-        ///<returns> 
-        ///An array of gray scale images where each element  
-        ///in the array represent a single color channel of the original image 
-        ///</returns>
+        /// <summary> 
+        /// Split current Image into an array of gray scale images where each element 
+        /// in the array represent a single color channel of the original image
+        /// </summary>
+        /// <returns> 
+        /// An array of gray scale images where each element  
+        /// in the array represent a single color channel of the original image 
+        /// </returns>
         public Image<Gray, TDepth>[] Split()
         {
             //If single channel, return a copy
@@ -4371,9 +4286,9 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Get the size of the array
-        ///</summary>
+        /// </summary>
         public override System.Drawing.Size Size
         {
             get
@@ -4403,9 +4318,19 @@ namespace Emgu.CV
 #endif
     }
 
+    /// <summary>
+    /// Image data release mode
+    /// </summary>
     internal enum ImageDataReleaseMode
     {
+        /// <summary>
+        /// Release just the header
+        /// </summary>
         ReleaseHeaderOnly,
+
+        /// <summary>
+        /// Release the IplImage
+        /// </summary>
         ReleaseIplImage
     }
 }

@@ -26,7 +26,7 @@ namespace Emgu.CV.Features2D
         /// <param name="patternScale">Pattern scale</param>
         public Brisk(int thresh = 30, int octaves = 3, float patternScale = 1.0f)
         {
-            _ptr = CvInvoke.cveBriskCreate(thresh, octaves, patternScale, ref _feature2D, ref _sharedPtr);
+            _ptr = Features2DInvoke.cveBriskCreate(thresh, octaves, patternScale, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -35,15 +35,12 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                CvInvoke.cveBriskRelease(ref _sharedPtr);
+                Features2DInvoke.cveBriskRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class CvInvoke
+    public static partial class Features2DInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

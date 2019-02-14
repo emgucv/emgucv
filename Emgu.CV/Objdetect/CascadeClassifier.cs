@@ -25,8 +25,8 @@ namespace Emgu.CV
          _ptr = CvInvoke.cveCascadeClassifierCreate();
       }
 
-      ///<summary>Create a CascadeClassifier from the specific file</summary>
-      ///<param name="fileName">The name of the file that contains the CascadeClassifier</param>
+      /// <summary>Create a CascadeClassifier from the specific file</summary>
+      /// <param name="fileName">The name of the file that contains the CascadeClassifier</param>
       public CascadeClassifier(String fileName)
       {
 #if !(NETFX_CORE || NETSTANDARD1_4)

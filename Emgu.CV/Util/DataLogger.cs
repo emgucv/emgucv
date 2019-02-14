@@ -190,26 +190,3 @@ namespace Emgu.CV.Util
       public static volatile int TotalLoggerCount = 0;
    }
 }
-
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr DataLoggerCreate(int logLevel, int loggerId);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void DataLoggerRelease(ref IntPtr logger);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void DataLoggerRegisterCallback(
-         IntPtr logger,
-         Util.DataLoggerHelper.DataCallback messageCallback);
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void DataLoggerLog(
-         IntPtr logger,
-         IntPtr data,
-         int logLevel);
-   }
-}

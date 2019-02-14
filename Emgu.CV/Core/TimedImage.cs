@@ -21,41 +21,41 @@ namespace Emgu.CV
     {
         private DateTime _timestamp;
 
-        ///<summary>
-        ///Create a empty Image 
-        ///</summary>
+        /// <summary>
+        /// Create a empty Image 
+        /// </summary>
         protected TimedImage()
            : base()
         {
             _timestamp = DateTime.Now;
         }
 
-        ///<summary>
-        ///Create a blank Image of the specified width, height, depth and color.
-        ///</summary>
-        ///<param name="width">The width of the image</param>
-        ///<param name="height">The height of the image</param>
-        ///<param name="value">The initial color of the image</param>
+        /// <summary>
+        /// Create a blank Image of the specified width, height, depth and color.
+        /// </summary>
+        /// <param name="width">The width of the image</param>
+        /// <param name="height">The height of the image</param>
+        /// <param name="value">The initial color of the image</param>
         public TimedImage(int width, int height, TColor value)
            : base(width, height, value)
         {
             _timestamp = DateTime.Now;
         }
 
-        ///<summary>
-        ///Create an empty Image of the specified width and height
-        ///</summary>
-        ///<param name="width">The width of the image</param>
-        ///<param name="height">The height of the image</param>
+        /// <summary>
+        /// Create an empty Image of the specified width and height
+        /// </summary>
+        /// <param name="width">The width of the image</param>
+        /// <param name="height">The height of the image</param>
         public TimedImage(int width, int height)
            : base(width, height)
         {
             _timestamp = DateTime.Now;
         }
 
-        ///<summary> 
-        ///The time this image is captured
-        ///</summary>
+        /// <summary> 
+        /// The time this image is captured
+        /// </summary>
         public DateTime Timestamp
         {
             get { return _timestamp; }

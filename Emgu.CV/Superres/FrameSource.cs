@@ -53,8 +53,8 @@ namespace Emgu.CV.Superres
          _frameSourcePtr = _ptr;
       }
 
-      ///<summary> Create a framesource using the specific camera</summary>
-      ///<param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
+      /// <summary> Create a framesource using the specific camera</summary>
+      /// <param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
       public FrameSource(int camIndex)
       {
          _ptr = SuperresInvoke.cveSuperresCreateFrameSourceCamera(camIndex, ref _sharedPtr);

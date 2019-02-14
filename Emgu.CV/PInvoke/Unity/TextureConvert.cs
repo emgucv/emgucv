@@ -16,6 +16,9 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
+   /// <summary>
+   /// Convert between Texture2d object and Image Object
+   /// </summary>
    public static class TextureConvert
    {
       /// <summary>

@@ -42,7 +42,7 @@ namespace Emgu.CV.Features2D
             using (InputArray iaTrainDescriptot = trainDescriptors.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
-                CvInvoke.cveDescriptorMatcherKnnMatch1(
+                Features2DInvoke.cveDescriptorMatcherKnnMatch1(
                     _descriptorMatcherPtr, 
                     iaQueryDesccriptor, 
                     iaTrainDescriptot, 
@@ -74,7 +74,7 @@ namespace Emgu.CV.Features2D
         {
             using (InputArray iaQueryDesccriptor = queryDescriptor.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                CvInvoke.cveDescriptorMatcherKnnMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, k, iaMask, compactResult);
+                Features2DInvoke.cveDescriptorMatcherKnnMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, k, iaMask, compactResult);
         }
 
         /// <summary>
@@ -84,12 +84,12 @@ namespace Emgu.CV.Features2D
         public void Add(IInputArray modelDescriptors)
         {
             using (InputArray iaModelDescriptors = modelDescriptors.GetInputArray())
-                CvInvoke.cveDescriptorMatcherAdd(_descriptorMatcherPtr, iaModelDescriptors);
+                Features2DInvoke.cveDescriptorMatcherAdd(_descriptorMatcherPtr, iaModelDescriptors);
         }
 
         IntPtr IAlgorithm.AlgorithmPtr
         {
-            get { return CvInvoke.cveDescriptorMatcherGetAlgorithm(_ptr); }
+            get { return Features2DInvoke.cveDescriptorMatcherGetAlgorithm(_ptr); }
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace Emgu.CV.Features2D
         /// </summary>
         public void Clear()
         {
-            CvInvoke.cveDescriptorMatcherClear(_descriptorMatcherPtr);
+            Features2DInvoke.cveDescriptorMatcherClear(_descriptorMatcherPtr);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Emgu.CV.Features2D
         {
             get
             {
-                return CvInvoke.cveDescriptorMatcherEmpty(_descriptorMatcherPtr);
+                return Features2DInvoke.cveDescriptorMatcherEmpty(_descriptorMatcherPtr);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Emgu.CV.Features2D
         {
             get
             {
-                return CvInvoke.cveDescriptorMatcherIsMaskSupported(_descriptorMatcherPtr);
+                return Features2DInvoke.cveDescriptorMatcherIsMaskSupported(_descriptorMatcherPtr);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Emgu.CV.Features2D
         /// </summary>
         public void Train()
         {
-            CvInvoke.cveDescriptorMatcherTrain(_descriptorMatcherPtr);
+            Features2DInvoke.cveDescriptorMatcherTrain(_descriptorMatcherPtr);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace Emgu.CV.Features2D
             using(InputArray iaTrainDescriptor = trainDescriptors.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
-                CvInvoke.cveDescriptorMatcherMatch1(_descriptorMatcherPtr, iaQueryDesccriptor, iaTrainDescriptor, matches, iaMask);
+                Features2DInvoke.cveDescriptorMatcherMatch1(_descriptorMatcherPtr, iaQueryDesccriptor, iaTrainDescriptor, matches, iaMask);
             }
         }
 
@@ -177,7 +177,7 @@ namespace Emgu.CV.Features2D
             using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
             using (InputArray iaMasks = masks == null ? InputArray.GetEmpty() : masks.GetInputArray())
             {
-                CvInvoke.cveDescriptorMatcherMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, iaMasks);
+                Features2DInvoke.cveDescriptorMatcherMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, iaMasks);
             }
         }
 
@@ -202,7 +202,7 @@ namespace Emgu.CV.Features2D
             using (InputArray iaTrainDescriptot = trainDescriptors.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
-                CvInvoke.cveDescriptorMatcherRadiusMatch1(_descriptorMatcherPtr, iaQueryDesccriptor, iaTrainDescriptot, matches, maxDistance, iaMask, compactResult);
+                Features2DInvoke.cveDescriptorMatcherRadiusMatch1(_descriptorMatcherPtr, iaQueryDesccriptor, iaTrainDescriptot, matches, maxDistance, iaMask, compactResult);
             }
         }
 
@@ -224,14 +224,12 @@ namespace Emgu.CV.Features2D
             using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
             using (InputArray iaMasks = masks == null ? InputArray.GetEmpty() : masks.GetInputArray())
             {
-                CvInvoke.cveDescriptorMatcherRadiusMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, maxDistance, iaMasks, compactResult);
+                Features2DInvoke.cveDescriptorMatcherRadiusMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, maxDistance, iaMasks, compactResult);
             }
         }
     }
-}
-namespace Emgu.CV
-{ 
-    public static partial class CvInvoke
+
+    public static partial class Features2DInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

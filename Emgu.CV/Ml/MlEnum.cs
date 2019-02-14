@@ -13,19 +13,19 @@ namespace Emgu.CV.ML.MlEnum
    public enum AnnMlpTrainingFlag
    {
       /// <summary>
-      /// 
+      /// Default
       /// </summary>
       Default = 0,
       /// <summary>
-      /// 
+      /// Update weights
       /// </summary>
       UpdateWeights = 1, 
       /// <summary>
-      /// 
+      /// No input scale
       /// </summary>
       NoInputScale = 2, 
       /// <summary>
-      /// 
+      /// No output scale
       /// </summary>
       NoOutputScale = 4
    }

@@ -314,8 +314,8 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Returns the transpose of this matrix</summary>
-        ///<returns>The transpose of this matrix</returns>
+        /// <summary> Returns the transpose of this matrix</summary>
+        /// <returns>The transpose of this matrix</returns>
         public Matrix<TDepth> Transpose()
         {
             Matrix<TDepth> res = new Matrix<TDepth>(Cols, Rows);
@@ -536,9 +536,9 @@ namespace Emgu.CV
         }
 
         #region Addition
-        ///<summary> Elementwise add another matrix with the current matrix </summary>
-        ///<param name="mat2">The matrix to be added to the current matrix</param>
-        ///<returns> The result of elementwise adding mat2 to the current matrix</returns>
+        /// <summary> Elementwise add another matrix with the current matrix </summary>
+        /// <param name="mat2">The matrix to be added to the current matrix</param>
+        /// <returns> The result of elementwise adding mat2 to the current matrix</returns>
         public Matrix<TDepth> Add(Matrix<TDepth> mat2)
         {
             Matrix<TDepth> res = CopyBlank();
@@ -546,9 +546,9 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Elementwise add a color <paramref name="val"/> to the current matrix</summary>
-        ///<param name="val">The value to be added to the current matrix</param>
-        ///<returns> The result of elementwise adding <paramref name="val"/> from the current matrix</returns>
+        /// <summary> Elementwise add a color <paramref name="val"/> to the current matrix</summary>
+        /// <param name="val">The value to be added to the current matrix</param>
+        /// <returns> The result of elementwise adding <paramref name="val"/> from the current matrix</returns>
         public Matrix<TDepth> Add(TDepth val)
         {
             Matrix<TDepth> res = CopyBlank();
@@ -561,9 +561,9 @@ namespace Emgu.CV
         #endregion
 
         #region Subtraction
-        ///<summary> Elementwise subtract another matrix from the current matrix </summary>
-        ///<param name="mat2"> The matrix to be subtracted to the current matrix</param>
-        ///<returns> The result of elementwise subtracting mat2 from the current matrix</returns>
+        /// <summary> Elementwise subtract another matrix from the current matrix </summary>
+        /// <param name="mat2"> The matrix to be subtracted to the current matrix</param>
+        /// <returns> The result of elementwise subtracting mat2 from the current matrix</returns>
         public Matrix<TDepth> Sub(Matrix<TDepth> mat2)
         {
             Matrix<TDepth> res = CopyBlank();
@@ -571,9 +571,9 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Elementwise subtract a color <paramref name="val"/> to the current matrix</summary>
-        ///<param name="val"> The value to be subtracted from the current matrix</param>
-        ///<returns> The result of elementwise subtracting <paramref name="val"/> from the current matrix</returns>
+        /// <summary> Elementwise subtract a color <paramref name="val"/> to the current matrix</summary>
+        /// <param name="val"> The value to be subtracted from the current matrix</param>
+        /// <returns> The result of elementwise subtracting <paramref name="val"/> from the current matrix</returns>
         public Matrix<TDepth> Sub(TDepth val)
         {
             Matrix<TDepth> res = CopyBlank();
@@ -601,9 +601,9 @@ namespace Emgu.CV
         #endregion
 
         #region Multiplication
-        ///<summary> Multiply the current matrix with <paramref name="scale"/></summary>
-        ///<param name="scale">The scale to be multiplied</param>
-        ///<returns> The scaled matrix </returns>
+        /// <summary> Multiply the current matrix with <paramref name="scale"/></summary>
+        /// <param name="scale">The scale to be multiplied</param>
+        /// <returns> The scaled matrix </returns>
         public Matrix<TDepth> Mul(double scale)
         {
             Matrix<TDepth> res = CopyBlank();
@@ -611,9 +611,9 @@ namespace Emgu.CV
             return res;
         }
 
-        ///<summary> Multiply the current matrix with <paramref name="mat2"/></summary>
-        ///<param name="mat2">The matrix to be multiplied</param>
-        ///<returns> Result matrix of the multiplication </returns>
+        /// <summary> Multiply the current matrix with <paramref name="mat2"/></summary>
+        /// <param name="mat2">The matrix to be multiplied</param>
+        /// <returns> Result matrix of the multiplication </returns>
         public Matrix<TDepth> Mul(Matrix<TDepth> mat2)
         {
             Matrix<TDepth> res = new Matrix<TDepth>(Rows, mat2.Cols);
@@ -851,9 +851,9 @@ namespace Emgu.CV
 #endif
         #endregion
 
-        ///<summary> 
+        /// <summary> 
         /// Get the size of the array
-        ///</summary>
+        /// </summary>
         public override System.Drawing.Size Size
         {
             get

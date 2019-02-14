@@ -22,7 +22,7 @@ namespace Emgu.CV.Cvb
       public struct Moments
       {
          /// <summary>
-         /// Mement 00
+         /// Moment 00
          /// </summary>
          public double M00;
          /// <summary>

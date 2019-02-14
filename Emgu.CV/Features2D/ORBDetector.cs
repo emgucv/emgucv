@@ -47,7 +47,7 @@ namespace Emgu.CV.Features2D
         /// <param name="fastThreshold">FAST threshold</param>
         public ORBDetector(int numberOfFeatures = 500, float scaleFactor = 1.2f, int nLevels = 8, int edgeThreshold = 31, int firstLevel = 0, int WTK_A = 2, ScoreType scoreType = ScoreType.Harris, int patchSize = 31, int fastThreshold = 20)
         {
-            _ptr = CvInvoke.cveOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, ref _feature2D, ref _sharedPtr);
+            _ptr = Features2DInvoke.cveOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -56,15 +56,12 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                CvInvoke.cveOrbDetectorRelease(ref _sharedPtr);
+                Features2DInvoke.cveOrbDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class CvInvoke
+    public static partial class Features2DInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

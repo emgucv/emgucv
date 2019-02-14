@@ -52,10 +52,16 @@ namespace Emgu.CV.Features2D
         /// <param name="nOctaveLayers"> Default number of sublevels per scale level</param>
         /// <param name="nOctaves">Maximum octave evolution of the image</param>
         /// <param name="diffusivity">Diffusivity type</param>
-        public AKAZE(DescriptorType descriptorType = DescriptorType.Mldb, int descriptorSize = 0, int descriptorChannels = 3,
-           float threshold = 0.001f, int nOctaves = 4, int nOctaveLayers = 4, KAZE.Diffusivity diffusivity = KAZE.Diffusivity.PmG2)
+        public AKAZE(
+            DescriptorType descriptorType = DescriptorType.Mldb,
+            int descriptorSize = 0,
+            int descriptorChannels = 3,
+            float threshold = 0.001f,
+            int nOctaves = 4,
+            int nOctaveLayers = 4,
+            KAZE.Diffusivity diffusivity = KAZE.Diffusivity.PmG2)
         {
-            _ptr = CvInvoke.cveAKAZEDetectorCreate(
+            _ptr = Features2DInvoke.cveAKAZEDetectorCreate(
                descriptorType, descriptorSize, descriptorChannels,
                threshold, nOctaves, nOctaveLayers, diffusivity,
                ref _feature2D, ref _sharedPtr);
@@ -67,16 +73,13 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                CvInvoke.cveAKAZEDetectorRelease(ref _sharedPtr);
+                Features2DInvoke.cveAKAZEDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class CvInvoke
+    public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveAKAZEDetectorCreate(

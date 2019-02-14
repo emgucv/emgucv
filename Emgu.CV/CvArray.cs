@@ -19,10 +19,10 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
-    ///<summary>
-    ///Wrapped CvArr 
-    ///</summary>
-    ///<typeparam name="TDepth">The type of elements in this CvArray</typeparam> 
+    /// <summary>
+    /// Wrapped CvArr 
+    /// </summary>
+    /// <typeparam name="TDepth">The type of elements in this CvArray</typeparam> 
     public abstract class CvArray<TDepth> :
        UnmanagedObject, IXmlSerializable, IInputOutputArray
 #if !(NETFX_CORE || NETSTANDARD1_4)
@@ -69,16 +69,16 @@ namespace Emgu.CV
         }
 
         #region properties
-        ///<summary> The pointer to the internal structure </summary>
+        /// <summary> The pointer to the internal structure </summary>
         public new IntPtr Ptr
         {
             get { return _ptr; }
             set { _ptr = value; }
         }
 
-        ///<summary> 
+        /// <summary> 
         /// Get the size of the array
-        ///</summary>
+        /// </summary>
         public virtual System.Drawing.Size Size
         {
             get
@@ -87,16 +87,16 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> 
-        ///Get the width (Cols) of the cvArray.
-        ///If ROI is set, the width of the ROI 
-        ///</summary>
+        /// <summary> 
+        /// Get the width (Cols) of the cvArray.
+        /// If ROI is set, the width of the ROI 
+        /// </summary>
         public int Width { get { return Size.Width; } }
 
-        ///<summary> 
-        ///Get the height (Rows) of the cvArray.
-        ///If ROI is set, the height of the ROI 
-        ///</summary> 
+        /// <summary> 
+        /// Get the height (Rows) of the cvArray.
+        /// If ROI is set, the height of the ROI 
+        /// </summary> 
         public int Height { get { return Size.Height; } }
 
         /// <summary>
@@ -256,9 +256,9 @@ namespace Emgu.CV
             }
         }
 
-        ///<summary> 
-        ///The norm of this Array 
-        ///</summary>
+        /// <summary> 
+        /// The norm of this Array 
+        /// </summary>
         [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public double Norm
         {
@@ -317,7 +317,7 @@ namespace Emgu.CV
         #endregion
 
         #region Coping and filling
-        ///<summary>
+        /// <summary>
         /// Copy the current array to <paramref name="destination"/>
         /// </summary>
         /// <param name="destination">The destination Array</param>
@@ -326,40 +326,26 @@ namespace Emgu.CV
             CvInvoke.cvCopy(Ptr, destination.Ptr, IntPtr.Zero);
         }
 
-        ///<summary>
-        ///Set the element of the Array to <paramref name="value"/>, using the specific <paramref name="mask"/>
-        ///</summary>
-        ///<param name="value">The value to be set</param>
-        ///<param name="mask">The mask for the operation</param>
+        /// <summary>
+        /// Set the element of the Array to <paramref name="value"/>, using the specific <paramref name="mask"/>
+        /// </summary>
+        /// <param name="value">The value to be set</param>
+        /// <param name="mask">The mask for the operation</param>
         public void SetValue(MCvScalar value, CvArray<Byte> mask = null)
         {
             this.Mat.SetTo(value, mask);
             //CvInvoke.cvSet(_ptr, value, mask == null ? IntPtr.Zero : mask.Ptr);
         }
 
-        ///<summary>
-        ///Set the element of the Array to <paramref name="value"/>, using the specific <paramref name="mask"/>
-        ///</summary>
-        ///<param name="value">The value to be set</param>
-        ///<param name="mask">The mask for the operation</param>
+        /// <summary>
+        /// Set the element of the Array to <paramref name="value"/>, using the specific <paramref name="mask"/>
+        /// </summary>
+        /// <param name="value">The value to be set</param>
+        /// <param name="mask">The mask for the operation</param>
         public void SetValue(double value, CvArray<Byte> mask = null)
         {
             SetValue(new MCvScalar(value, value, value, value), mask);
         }
-
-        //private readonly static Random _randomGenerator = new Random();
-
-        /*
-        /// <summary>
-        /// Inplace fills Array with uniformly distributed random numbers
-        /// </summary>
-        /// <param name="seed">Seed for the random number generator</param>
-        /// <param name="floorValue">the inclusive lower boundary of random numbers range</param>
-        /// <param name="ceilingValue">the exclusive upper boundary of random numbers range</param>
-        public void SetRandUniform(UInt64 seed, MCvScalar floorValue, MCvScalar ceilingValue)
-        {
-           CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RandType.Uni, floorValue, ceilingValue);
-        }*/
 
         /// <summary>
         /// Inplace fills Array with uniformly distributed random numbers
@@ -372,20 +358,7 @@ namespace Emgu.CV
             using (ScalarArray saLow = new ScalarArray(floorValue))
             using (ScalarArray saHigh = new ScalarArray(ceilingValue))
                 CvInvoke.Randu(this.Mat, saLow, saHigh);
-            //SetRandUniform((UInt64)_randomGenerator.Next(), floorValue, ceilingValue);
         }
-
-        /*
-        /// <summary>
-        /// Inplace fills Array with normally distributed random numbers
-        /// </summary>
-        /// <param name="seed">Seed for the random number generator</param>
-        /// <param name="mean">the mean value of random numbers</param>
-        /// <param name="std"> the standard deviation of random numbers</param>
-        public void SetRandNormal(UInt64 seed, MCvScalar mean, MCvScalar std)
-        {
-           CvInvoke.cvRandArr(ref seed, Ptr, CvEnum.RandType.Normal, mean, std);
-        }*/
 
         /// <summary>
         /// Inplace fills Array with normally distributed random numbers
@@ -398,7 +371,6 @@ namespace Emgu.CV
             using (ScalarArray saMean = new ScalarArray(mean))
             using (ScalarArray saStd = new ScalarArray(std))
                 CvInvoke.Randn(this.Mat, saMean, saStd);
-            //SetRandNormal((UInt64)_randomGenerator.Next(), mean, std);
         }
 
         /// <summary>
@@ -416,7 +388,6 @@ namespace Emgu.CV
         public void SetZero()
         {
             this.SetValue(0);
-            //CvInvoke.cvSetZero(Ptr);
         }
 
         /// <summary>
@@ -466,10 +437,10 @@ namespace Emgu.CV
         #endregion
 
         #region Inplace Comparison
-        ///<summary>
-        ///Inplace compute the elementwise minimum value 
-        ///</summary>
-        ///<param name="value">The value to compare with</param>
+        /// <summary>
+        /// Inplace compute the elementwise minimum value 
+        /// </summary>
+        /// <param name="value">The value to compare with</param>
         [ExposableMethod(Exposable = true, Category = "Logic")]
         public void _Min(double value)
         {
@@ -528,17 +499,15 @@ namespace Emgu.CV
             CvInvoke.BitwiseOr(this, otherArray, this, null);
         }
 
-        ///<summary> 
-        ///Inplace compute the complement for all array elements
-        ///</summary>
+        /// <summary> 
+        /// Inplace compute the complement for all array elements
+        /// </summary>
         [ExposableMethod(Exposable = true, Category = "Logic")]
         public void _Not()
         {
             CvInvoke.BitwiseNot(this, this, null);
         }
-
         #endregion
-
 
         #region File IO
         /// <summary>
@@ -558,7 +527,7 @@ namespace Emgu.CV
         /// <summary>
         /// Get the xml schema
         /// </summary>
-        /// <returns>the xml schema</returns>
+        /// <returns>The xml schema</returns>
         public System.Xml.Schema.XmlSchema GetSchema()
         {
             throw new NotImplementedException("The method or operation is not implemented.");

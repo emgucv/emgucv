@@ -7,9 +7,9 @@ using Emgu.CV;
 
 namespace Emgu.CV.Structure
 {
-   ///<summary> 
-   ///Defines a Xyz color (CIE XYZ.Rec 709 with D65 white point)
-   ///</summary>
+   /// <summary> 
+   /// Defines a Xyz color (CIE XYZ.Rec 709 with D65 white point)
+   /// </summary>
    [ColorInfo(ConversionCodename = "Xyz")]
    public struct Xyz : IColor, IEquatable<Xyz>
    {
@@ -18,10 +18,10 @@ namespace Emgu.CV.Structure
       /// </summary>
       private MCvScalar _scalar;
 
-      ///<summary> Create a Xyz color using the specific values</summary>
-      ///<param name="z"> The z value for this color </param>
-      ///<param name="y"> The y value for this color </param>
-      ///<param name="x"> The x value for this color </param>
+      /// <summary> Create a Xyz color using the specific values</summary>
+      /// <param name="z"> The z value for this color </param>
+      /// <param name="y"> The y value for this color </param>
+      /// <param name="x"> The x value for this color </param>
       public Xyz(double x, double y, double z)
       {
          _scalar = new MCvScalar(x, y, z);

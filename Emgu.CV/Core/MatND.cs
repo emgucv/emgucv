@@ -114,7 +114,9 @@ namespace Emgu.CV
          return dim;
       }
 
-      ///<summary> Get the depth representation for openCV</summary>
+      /// <summary>
+      /// Get the depth representation for Open CV
+      /// </summary>
       protected static CvEnum.DepthType CvDepth
       {
          get

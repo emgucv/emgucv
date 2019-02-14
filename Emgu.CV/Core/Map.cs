@@ -172,9 +172,9 @@ namespace Emgu.CV
         }
 
 
-        ///<summary> 
+        /// <summary> 
         /// Get or Set the region of interest for this map. To clear the ROI, set it to System.Drawing.RectangleF.Empty
-        ///</summary>
+        /// </summary>
         public new RectangleF ROI
         {
             set
@@ -224,10 +224,10 @@ namespace Emgu.CV
             base.Draw(new LineSegment2DF(MapPointToImagePoint(line.P1), MapPointToImagePoint(line.P2)), color, thickness, lineType, shift);
         }
 
-        ///<summary> Draw a Circle of the specific color and thickness </summary>
-        ///<param name="circle"> The circle to be drawn</param>
-        ///<param name="color"> The color of the circle </param>
-        ///<param name="thickness"> If thickness is less than 1, the circle is filled up </param>
+        /// <summary> Draw a Circle of the specific color and thickness </summary>
+        /// <param name="circle"> The circle to be drawn</param>
+        /// <param name="color"> The color of the circle </param>
+        /// <param name="thickness"> If thickness is less than 1, the circle is filled up </param>
         /// <param name="lineType">Line type</param>
         /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
         public override void Draw(CircleF circle, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
@@ -238,10 +238,10 @@ namespace Emgu.CV
                thickness, lineType, shift);
         }
 
-        ///<summary> Draw a convex polygon of the specific color and thickness </summary>
-        ///<param name="polygon"> The convex polygon to be drawn</param>
-        ///<param name="color"> The color of the convex polygon </param>
-        ///<param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
+        /// <summary> Draw a convex polygon of the specific color and thickness </summary>
+        /// <param name="polygon"> The convex polygon to be drawn</param>
+        /// <param name="color"> The color of the convex polygon </param>
+        /// <param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
         public override void Draw(IConvexPolygonF polygon, TColor color, int thickness)
         {
             Point[] pts =
