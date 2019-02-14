@@ -353,7 +353,7 @@ namespace Emgu.CV.OCR
         /// <summary>
         /// Set the variable to the specific value.
         /// </summary>
-        /// <param name="variableName">The name of the tesseract variable. e.g. use "tessedit_char_blacklist" to black list characters and ""tessedit_char_whitelist" to white list characters. The full list of options can be found in the Tesseract OCR source code "tesseractclass.h"</param>
+        /// <param name="variableName">The name of the tesseract variable. e.g. use "tessedit_char_blacklist" to black list characters and "tessedit_char_whitelist" to white list characters. The full list of options can be found in the Tesseract OCR source code "tesseractclass.h"</param>
         /// <param name="value">The value to be set</param>
         public void SetVariable(String variableName, String value)
         {

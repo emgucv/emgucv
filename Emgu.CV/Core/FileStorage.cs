@@ -93,7 +93,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Writes the specified Mat to the node with the specific <param Name="nodeName"></param>
+        /// Writes the specified Mat to the node with the specific name.
         /// </summary>
         /// <param name="m">The Mat to be written to the file storage</param>
         /// <param name="nodeName">The name of the node.</param>
@@ -104,7 +104,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Writes the specified Mat to the node with the specific <param Name="nodeName"></param>
+        /// Writes the specified Mat to the node with the specific name
         /// </summary>
         /// <param name="value">The value to be written to the file storage</param>
         /// <param name="nodeName">The name of the node.</param>
@@ -115,7 +115,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Writes the specified Mat to the node with the specific <param Name="nodeName"></param>
+        /// Writes the specified Mat to the node with the specific name
         /// </summary>
         /// <param name="value">The value to be written to the file storage</param>
         /// <param name="nodeName">The name of the node.</param>
@@ -126,7 +126,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Writes the specified Mat to the node with the specific <param Name="nodeName"></param>
+        /// Writes the specified Mat to the node with the specific name
         /// </summary>
         /// <param name="value">The value to be written to the file storage</param>
         /// <param name="nodeName">The name of the node.</param>
@@ -137,7 +137,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Writes the specified Mat to the node with the specific <param Name="nodeName"></param>
+        /// Writes the specified Mat to the node with the specific name
         /// </summary>
         /// <param name="value">The value to be written to the file storage</param>
         /// <param name="nodeName">The name of the node.</param>
@@ -214,7 +214,7 @@ namespace Emgu.CV
         /// The <see cref="FileNode"/>.
         /// </value>
         /// <param name="nodeName">Name of the node.</param>
-        /// <returns></returns>
+        /// <returns>The file node</returns>
         public FileNode this[String nodeName]
         {
             get { return GetNode(nodeName); }

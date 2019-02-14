@@ -46,7 +46,7 @@ namespace Emgu.CV.XFeatures2D
             /// <summary>
             /// L2 squared
             /// </summary>
-            L2SQUARED,
+            L2Squared,
             /// <summary>
             /// L5
             /// </summary>
@@ -54,7 +54,7 @@ namespace Emgu.CV.XFeatures2D
             /// <summary>
             /// L infinity
             /// </summary>
-            L_INFINITY
+            LInfinity
         }
 
         /// <summary>
@@ -67,11 +67,11 @@ namespace Emgu.CV.XFeatures2D
             /// </summary>
             Minus,
             /// <summary>
-            /// e^{ -\alpha * d^2(c_i, c_j)}
+            /// e^{ -alpha * d^2(c_i, c_j)}
             /// </summary>
             Gaussian,
             /// <summary>
-            /// 1 / (\alpha + d(c_i, c_j))
+            /// 1 / (alpha + d(c_i, c_j))
             /// </summary>
             Heuristic
         }

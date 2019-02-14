@@ -32,7 +32,7 @@ namespace Emgu.CV
         /// <param name="blockSize">Block size in cells. Use (16, 16) for default.</param>
         /// <param name="cellSize">Cell size. Use (8, 8) for default.</param>
         /// <param name="blockStride">Block stride. Must be a multiple of cell size. Use (8,8) for default.</param>
-        /// <param name="gammaCorrection">Do gamma correction preprocessing or not. Use true for default.</param>
+        /// <param name="gammaCorrection">Do gamma correction preprocessing or not.</param>
         /// <param name="L2HysThreshold">L2-Hys normalization method shrinkage.</param>
         /// <param name="nbins">Number of bins.</param>
         /// <param name="winSigma">Gaussian smoothing window parameter.</param>
@@ -92,15 +92,11 @@ namespace Emgu.CV
         /// Performs object detection with increasing detection window.
         /// </summary>
         /// <param name="image">The image to search in</param>
-        /// <param name="hitThreshold">
-        /// Threshold for the distance between features and SVM classifying plane.
-        /// Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient).
-        /// But if the free coefficient is omitted (which is allowed), you can specify it manually here.
-        ///</param>
+        /// <param name="hitThreshold"> Threshold for the distance between features and SVM classifying plane. Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient). But if the free coefficient is omitted (which is allowed), you can specify it manually here.</param>
         /// <param name="winStride">Window stride. Must be a multiple of block stride.</param>
         /// <param name="padding">Padding</param>
         /// <param name="scale">Coefficient of the detection window increase.</param>
-        /// <param name="finalThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping. Should be an integer if not using meanshift grouping. Use 2.0 for default</param>
+        /// <param name="finalThreshold">After detection some objects could be covered by many rectangles. This coefficient regulates similarity threshold. 0 means don't perform grouping. Should be an integer if not using meanshift grouping. </param>
         /// <param name="useMeanshiftGrouping">If true, it will use meanshift grouping.</param>
         /// <returns>The regions where positives are found</returns>
         public MCvObjectDetection[] DetectMultiScale(

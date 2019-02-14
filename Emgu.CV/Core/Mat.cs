@@ -413,7 +413,7 @@ namespace Emgu.CV
             Type t = CvInvoke.GetDepthType(this.Depth);
             if (t == null)
                 return null;
-            
+
             Array array;
             int byteSize = this.Total.ToInt32() * this.ElementSize;
 
@@ -436,7 +436,7 @@ namespace Emgu.CV
                 int len = byteSize / Marshal.SizeOf(t);
                 array = Array.CreateInstance(t, len);
             }
-            
+
             GCHandle handle = GCHandle.Alloc(array, GCHandleType.Pinned);
             CvInvoke.cveMemcpy(handle.AddrOfPinnedObject(), DataPointer, byteSize);
             handle.Free();
@@ -1177,14 +1177,13 @@ namespace Emgu.CV
             return c;
         }
 
-        ///<summary> 
-        ///Split current Image into an array of gray scale images where each element 
-        ///in the array represent a single color channel of the original image
-        ///</summary>
-        ///<returns> 
-        ///An array of gray scale images where each element  
-        ///in the array represent a single color channel of the original image 
-        ///</returns>
+        /// <summary> 
+        /// Split current Image into an array of gray scale images where each element 
+        /// in the array represent a single color channel of the original image
+        /// </summary>
+        /// <returns> 
+        /// An array of gray scale images where each element in the array represent a single color channel of the original image 
+        /// </returns>
         public Mat[] Split()
         {
             Mat[] mats = new Mat[NumberOfChannels];
@@ -1201,6 +1200,13 @@ namespace Emgu.CV
             return mats;
         }
 
+        /// <summary> 
+        /// Split current Image into an array of gray scale images where each element 
+        /// in the array represent a single color channel of the original image
+        /// </summary>
+        /// <returns> 
+        /// An array of gray scale images where each element in the array represent a single color channel of the original image 
+        /// </returns>
         IImage[] IImage.Split()
         {
             Mat[] tmp = this.Split();
@@ -1310,7 +1316,7 @@ namespace Emgu.CV
                 return m;
             }
         }
-    
+
 
         /// <summary>
         /// Perform an element wise AND operation using a mat and a color
@@ -1548,7 +1554,7 @@ namespace Emgu.CV
             using (ScalarArray saValue = new ScalarArray(value))
             {
                 Mat m = new Mat();
-                CvInvoke.Subtract( saValue, mat,  m);
+                CvInvoke.Subtract(saValue, mat, m);
                 return m;
             }
         }

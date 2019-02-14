@@ -27,15 +27,21 @@ namespace Emgu.CV.Structure
          _scalar = new MCvScalar(x, y, z);
       }
 
-      ///<summary> Get or set the intensity of the z color channel </summary>
+      /// <summary>
+      /// Get or set the intensity of the x color channel
+      /// </summary>
       [DisplayColor(122, 122, 122)]
       public double X { get { return _scalar.V0; } set { _scalar.V0 = value; } }
 
-      ///<summary> Get or set the intensity of the y color channel </summary>
+      /// <summary>
+      /// Get or set the intensity of the y color channel
+      /// </summary>
       [DisplayColor(122, 122, 122)]
       public double Y { get { return _scalar.V1; } set { _scalar.V1 = value; } }
 
-      ///<summary> Get or set the intensity of the x color channel </summary>
+      /// <summary>
+      /// Get or set the intensity of the z color channel
+      /// </summary>
       [DisplayColor(122, 122, 122)]
       public double Z { get { return _scalar.V2; } set { _scalar.V2 = value; } }
 

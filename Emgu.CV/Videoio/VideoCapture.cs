@@ -301,9 +301,9 @@ namespace Emgu.CV
         {
         }*/
 
-        ///<summary> Create a capture using the specific camera</summary>
-        ///<param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
-        ///<param name="captureApi">The preferred Capture API backends to use. Can be used to enforce a specific reader implementation if multiple are available.</param>
+        /// <summary> Create a capture using the specific camera</summary>
+        /// <param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
+        /// <param name="captureApi">The preferred Capture API backends to use. Can be used to enforce a specific reader implementation if multiple are available.</param>
         public VideoCapture(int camIndex = 0, API captureApi = API.Any)
         {
             _captureModuleType = CaptureModuleType.Camera;
@@ -322,7 +322,7 @@ namespace Emgu.CV
         /// Create a capture from file or a video stream
         /// </summary>
         /// <param name="fileName">The name of a file, or an url pointed to a stream.</param>
-        ///<param name="captureApi">The preferred Capture API backends to use. Can be used to enforce a specific reader implementation if multiple are available.</param>
+        /// <param name="captureApi">The preferred Capture API backends to use. Can be used to enforce a specific reader implementation if multiple are available.</param>
         public VideoCapture(String fileName, API captureApi = API.Any)
         {
             using (CvString s = new CvString(fileName))

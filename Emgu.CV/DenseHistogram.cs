@@ -46,9 +46,9 @@ namespace Emgu.CV
       }
       #endregion
 
-      ///<summary> 
+      /// <summary> 
       /// Clear this histogram
-      ///</summary>
+      /// </summary>
       public void Clear()
       {
          SetTo(new MCvScalar());
