@@ -37,7 +37,7 @@ namespace Emgu.CV
                 CvInvoke.cveMomentsRelease(ref _ptr);
         }
 
-        
+        /*
         /// <summary>
         /// Calculates seven Hu invariants
         /// </summary>
@@ -61,7 +61,7 @@ namespace Emgu.CV
                 handle.Free();
                 return hu;
             }
-        }
+        }*/
 
         /// <summary>
         /// The Gravity Center of this Moment
@@ -84,12 +84,13 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveMomentsRelease(ref IntPtr moments);
 
-        
+        /*
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveHuMoments(IntPtr moments, IntPtr huMoments);
         
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveHuMoments2(IntPtr moments, IntPtr hu);
+		*/
     }
 }
 

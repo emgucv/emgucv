@@ -16,7 +16,7 @@ using System.Drawing;
 namespace Emgu.CV.Dnn
 {
     /// <summary>
-    /// Entry points to the Open CV bioinspired module
+    /// Entry points to the Open CV Dnn module
     /// </summary>
     public static partial class DnnInvoke
     {

@@ -730,7 +730,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/input_array_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/InputArray.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/InputArray.g.cs"
     "cv::_InputArray" 
     "InputArray" 
     "isMat;isUMat;isMatVector;isUMatVector;isMatx;kind" 
@@ -752,7 +752,7 @@ IF(HAVE_opencv_core)
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/output_array_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util/OutputArray.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/OutputArray.g.cs"
     "cv::_OutputArray" 
     "OutputArray" 
     "fixedSize;fixedType;needed" 
@@ -872,22 +872,7 @@ IF(HAVE_opencv_core)
     "#include \"opencv2/core/cuda.hpp\"
 #include \"opencv2/core/types_c.h\"")
 
-  CREATE_OCV_CLASS_PROPERTY( 
-    "core/moments_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Imgproc/Moments.g.cs"
-    "cv::Moments" 
-    "Moments" 
-    "m00;m10;m01;m20;m11;m02;m30;m21;m12;m03;mu20;mu11;mu02;mu30;mu21;mu12;mu03;nu20;nu11;nu02;nu30;nu21;nu12;nu03" 
-    "double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double" 
-    "element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element"
-    "M00;M10;M01;M20;M11;M02;M30;M21;M22;M03;Mu20;Mu11;Mu02;Mu30;Mu21;Mu12;Mu03;Nu20;Nu11;Nu02;Nu30;Nu21;Nu12;Nu03" 
-    "double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double" 
-    "M00;M10;M01;M20;M11;M02;M30;M21;M22;M03;Mu20;Mu11;Mu02;Mu30;Mu21;Mu12;Mu03;Nu20;Nu11;Nu02;Nu30;Nu21;Nu12;Nu03"
-    "Emgu.CV"
-    "CvInvoke"
-    "Moments"
-	""
-    "#include \"core_c_extra.h\"")
+
 
   CREATE_OCV_CLASS_PROPERTY( 
     "core/file_node_property" 
@@ -912,8 +897,33 @@ IF(HAVE_opencv_core)
     "FileNode"
 	""
     "#include \"core_c_extra.h\"")
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "core/moments_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/Moments.g.cs"
+    "cv::Moments" 
+    "Moments" 
+    "m00;m10;m01;m20;m11;m02;m30;m21;m12;m03;mu20;mu11;mu02;mu30;mu21;mu12;mu03;nu20;nu11;nu02;nu30;nu21;nu12;nu03" 
+    "double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double" 
+    "element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element"
+    "M00;M10;M01;M20;M11;M02;M30;M21;M22;M03;Mu20;Mu11;Mu02;Mu30;Mu21;Mu12;Mu03;Nu20;Nu11;Nu02;Nu30;Nu21;Nu12;Nu03" 
+    "double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double" 
+    "M00;M10;M01;M20;M11;M02;M30;M21;M22;M03;Mu20;Mu11;Mu02;Mu30;Mu21;Mu12;Mu03;Nu20;Nu11;Nu02;Nu30;Nu21;Nu12;Nu03"
+    "Emgu.CV"
+    "CvInvoke"
+    "Moments"
+	""
+    "#include \"core_c_extra.h\"")
 ENDIF()
 ############################### core code gen END ################################
+
+############################### imgproc code gen START ##############################
+IF(HAVE_opencv_imgproc)
+  
+	
+ENDIF()
+
+############################### imgproc code gen END ################################
 
 ############################### objdetect code gen START ##############################
 IF(HAVE_opencv_objdetect)

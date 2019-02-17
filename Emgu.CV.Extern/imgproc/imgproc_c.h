@@ -178,8 +178,6 @@ CVAPI(void) cveGetRectSubPix(cv::_InputArray* image, CvSize* patchSize, CvPoint2
 
 
 //CVAPI(int) cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, int connectivity);
-CVAPI(cv::Moments*) cveMomentsCreate();
-CVAPI(void) cveMomentsRelease(cv::Moments** moments);
 CVAPI(void) cveHuMoments(cv::Moments* moments, cv::_OutputArray* hu);
 CVAPI(void) cveHuMoments2(cv::Moments* moments, double* hu);
 /*

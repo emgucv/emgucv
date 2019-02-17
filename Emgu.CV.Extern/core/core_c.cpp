@@ -997,3 +997,13 @@ void cveRngRelease(cv::RNG** rng)
 	delete *rng;
 	*rng = 0;
 }
+
+cv::Moments* cveMomentsCreate()
+{
+	return new cv::Moments();
+}
+void cveMomentsRelease(cv::Moments** moments)
+{
+	delete *moments;
+	*moments = 0;
+}

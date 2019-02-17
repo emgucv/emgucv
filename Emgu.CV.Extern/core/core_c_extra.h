@@ -277,4 +277,7 @@ CVAPI(float) cveRngUniformFloat(cv::RNG* rng, float a, float b);
 CVAPI(double) cveRngUniformDouble(cv::RNG* rng, double a, double b);
 CVAPI(void) cveRngRelease(cv::RNG** rng);
 
+
+CVAPI(cv::Moments*) cveMomentsCreate();
+CVAPI(void) cveMomentsRelease(cv::Moments** moments);
 #endif

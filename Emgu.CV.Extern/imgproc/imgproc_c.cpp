@@ -567,15 +567,7 @@ int cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, i
    return cvSampleLine(_img, *pt1, *pt2, _buffer, connectivity);
 }*/
 
-cv::Moments* cveMomentsCreate()
-{
-	return new cv::Moments();
-}
-void cveMomentsRelease(cv::Moments** moments)
-{
-	delete *moments;
-	*moments = 0;
-}
+
 void cveHuMoments(cv::Moments* moments, cv::_OutputArray* hu)
 {
 	cv::HuMoments(*moments, *hu);
