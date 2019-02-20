@@ -274,9 +274,13 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="status">The error status</param>
         /// <returns>the textual description for the specified error status code.</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveErrorStr")]
-        [return: MarshalAs(CvInvoke.StringMarshalType)]
-        public static extern String ErrorStr(int status);
+        public static String ErrorStr(int status)
+        {
+            var ptr = cveErrorStr(status);
+            return ptr == IntPtr.Zero ? String.Empty : Marshal.PtrToStringAnsi(ptr);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveErrorStr(int status);
 #endif
 
         #endregion
