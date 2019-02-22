@@ -129,10 +129,10 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveViz3dSpinOnce(
-           IntPtr viz,
-           int time,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool forceRedraw);
+            IntPtr viz,
+            int time,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool forceRedraw);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]

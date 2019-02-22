@@ -2907,29 +2907,25 @@ namespace Emgu.CV
         /// Calculates seven Hu invariants
         /// </summary>
         /// <param name="hu">The output Hu moments. You can pass a Mat</param>
-        public static void HuMoments(Moment m, IOutputArray hu)
+        public static void HuMoments(Moments m, IOutputArray hu)
         {
             using (OutputArray oaHu = hu.GetOutputArray())
                 CvInvoke.cveHuMoments(m, oaHu);
         }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveHuMoments(IntPtr moments, IntPtr huMoments);
 
         /// <summary>
         /// Calculates seven Hu invariants
         /// </summary>
-        public static double[] HuMoments(Moment m)
+        public static double[] HuMoments(Moments m)
         {
-
             double[] hu = new double[7];
             GCHandle handle = GCHandle.Alloc(hu, GCHandleType.Pinned);
             CvInvoke.cveHuMoments2(m, handle.AddrOfPinnedObject());
             handle.Free();
             return hu;
-
         }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveHuMoments(IntPtr moments, IntPtr huMoments);
-
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveHuMoments2(IntPtr moments, IntPtr hu);
 

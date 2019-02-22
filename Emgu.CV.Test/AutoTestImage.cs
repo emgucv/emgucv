@@ -937,7 +937,7 @@ namespace Emgu.CV.Test
             image.SetRandUniform(new MCvScalar(), new MCvScalar(255));
             image.ThresholdToZero(new Gray(120));
             Emgu.CV.Moments moment = image.GetMoments(true);
-            double[] huMoment = moment.HuMoments;
+            double[] huMoment = CvInvoke.HuMoments(moment);
         }
 
         /*
