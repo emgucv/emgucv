@@ -3877,6 +3877,24 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestCvException()
+        {
+            try
+            {
+                // Do something to cause a CvException, canny do not work on 4 channel images, will throw CvException
+                Mat m = new Mat(new Size(480, 320), DepthType.Cv32F, 4);
+                Mat edges = new Mat();
+                CvInvoke.Canny(m, edges, 100, 80);
+            }
+            catch (CvException e)
+            {
+                string str = e.ErrorStr;
+            }
+            
+
+        }
+
+        [Test]
         public void TestGenerateLogo()
         {
             String productName = null;
