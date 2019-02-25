@@ -639,7 +639,7 @@ namespace Emgu.CV
         {
             RotatedRect ellipse = new RotatedRect();
             using (InputArray iaPoints = points.GetInputArray())
-                cveFitEllipseAMS(iaPoints, ref ellipse);
+                cveFitEllipseDirect(iaPoints, ref ellipse);
             return ellipse;
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
