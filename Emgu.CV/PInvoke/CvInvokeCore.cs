@@ -175,10 +175,10 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Returns the textual description for the specified error status code. In case of unknown status the function returns NULL pointer. 
+      /// Returns the textual description for the specified error status code.
       /// </summary>
-      /// <param name="status">The error status</param>
-      /// <returns>the textual description for the specified error status code.</returns>
+      /// <param name="status">The error status code.</param>
+      /// <returns>The textual description for the specified error status code.</returns>
       public static String ErrorStr(int status)
       {
          return String.Empty;
@@ -270,13 +270,17 @@ namespace Emgu.CV
         public static extern void SetErrStatus(CvEnum.ErrorCodes code);
 
         /// <summary>
-        /// Returns the textual description for the specified error status code. In case of unknown status the function returns NULL pointer. 
+        /// Returns the textual description for the specified error status code.
         /// </summary>
-        /// <param name="status">The error status</param>
-        /// <returns>the textual description for the specified error status code.</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveErrorStr")]
-        [return: MarshalAs(CvInvoke.StringMarshalType)]
-        public static extern String ErrorStr(int status);
+        /// <param name="status">The error status code.</param>
+        /// <returns>The textual description for the specified error status code.</returns>
+        public static String ErrorStr(int status)
+        {
+            var ptr = cveErrorStr(status);
+            return ptr == IntPtr.Zero ? String.Empty : Marshal.PtrToStringAnsi(ptr);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveErrorStr(int status);
 #endif
 
         #endregion

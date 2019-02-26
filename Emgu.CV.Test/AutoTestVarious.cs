@@ -3702,6 +3702,22 @@ namespace Emgu.CV.Test
 #if !NETFX_CORE
 
         [Test]
+        public void TestCvException()
+        {
+            try
+            {
+                // Do something to cause a CvException, canny do not work on 4 channel images, will throw CvException
+                Mat m = new Mat(new Size(480, 320), DepthType.Cv32F, 4);
+                Mat edges = new Mat();
+                CvInvoke.Canny(m, edges, 100, 80);
+            }
+            catch (CvException e)
+            {
+                string str = e.ErrorStr;
+            }
+        }
+
+        [Test]
         public void TestVectorOfCvERStat()
         {
             //CvInvoke.CheckLibraryLoaded();
