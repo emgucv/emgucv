@@ -3890,8 +3890,6 @@ namespace Emgu.CV.Test
             {
                 string str = e.ErrorStr;
             }
-            
-
         }
 
         [Test]
