@@ -175,10 +175,10 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Returns the textual description for the specified error status code. In case of unknown status the function returns NULL pointer. 
+      /// Returns the textual description for the specified error status code.
       /// </summary>
-      /// <param name="status">The error status</param>
-      /// <returns>the textual description for the specified error status code.</returns>
+      /// <param name="status">The error status code.</param>
+      /// <returns>The textual description for the specified error status code.</returns>
       public static String ErrorStr(int status)
       {
          return String.Empty;
@@ -270,10 +270,10 @@ namespace Emgu.CV
         public static extern void SetErrStatus(CvEnum.ErrorCodes code);
 
         /// <summary>
-        /// Returns the textual description for the specified error status code. In case of unknown status the function returns NULL pointer. 
+        /// Returns the textual description for the specified error status code.
         /// </summary>
-        /// <param name="status">The error status</param>
-        /// <returns>the textual description for the specified error status code.</returns>
+        /// <param name="status">The error status code.</param>
+        /// <returns>The textual description for the specified error status code.</returns>
         public static String ErrorStr(int status)
         {
             var ptr = cveErrorStr(status);
