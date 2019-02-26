@@ -22,7 +22,7 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
   endif()
 endif()
 
-IF(APPLE AND (NOT IOS)
+IF(APPLE AND (NOT IOS))
   PROJECT(Emgu.CV.World.Mac)
     #MESSAGE(STATUS "Compiles ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.World.Mac.csproj")
     BUILD_CSPROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.World.Mac.csproj" "" ALL)
