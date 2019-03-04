@@ -206,10 +206,12 @@
       <PropertyGroup>
         <EmguCVLinkTarget Condition="('$(AndroidApplication)'=='True' OR '$(AndroidApplication)'=='true')">Xamarin Android App</EmguCVLinkTarget>
         <EmguCVLinkTarget Condition="!('$(AndroidApplication)'=='True' OR '$(AndroidApplication)'=='true')">Xamarin Android Library</EmguCVLinkTarget>
-        <EmguCVNativeArmeabi>$(OpenCVBinaryDir)\android\armeabi\libcvextern.so</EmguCVNativeArmeabi>
+        <!-- 
+		<EmguCVNativeArmeabi>$(OpenCVBinaryDir)\android\armeabi\libcvextern.so</EmguCVNativeArmeabi>
         <EmguCVBuildAndroidArmeabi Condition="$(AndroidSupportedAbis.Contains('armeabi%3')) OR $(AndroidSupportedAbis.Contains('armeabi,')) OR $(AndroidSupportedAbis.Contains('armeabi;')) OR $(AndroidSupportedAbis.EndsWith('armeabi')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='armeabi')">True</EmguCVBuildAndroidArmeabi>
         <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND !Exists('$(EmguCVNativeArmeabi)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi is targeted, but file $(EmguCVNativeArmeabi) is missing.</EmguCVErrorMessage>
         <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND Exists('$(EmguCVNativeArmeabi)')">$(EmguCVDeployMessage)armeabi </EmguCVDeployMessage>
+		-->
         <EmguCVNativeArmeabiv7a>$(OpenCVBinaryDir)\android\armeabi-v7a\libcvextern.so</EmguCVNativeArmeabiv7a>
         <EmguCVBuildAndroidArmeabiv7a Condition="$(AndroidSupportedAbis.Contains('armeabi-v7a%3')) OR $(AndroidSupportedAbis.Contains('armeabi-v7a,')) OR $(AndroidSupportedAbis.Contains('armeabi-v7a;')) OR $(AndroidSupportedAbis.EndsWith('armeabi-v7a')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='armeabi-v7a')">True</EmguCVBuildAndroidArmeabiv7a>
         <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND !Exists('$(EmguCVNativeArmeabiv7a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi-v7a is targeted, but file $(EmguCVNativeArmeabiv7a) is missing.</EmguCVErrorMessage>
@@ -228,6 +230,7 @@
         <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND Exists('$(EmguCVNativex8664)')">$(EmguCVDeployMessage)x86_64 </EmguCVDeployMessage>
       </PropertyGroup>
       <!-- armeabi -->
+	  <!--
       <ItemGroup Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND Exists('$(EmguCVNativeArmeabi)')">
         <EmbeddedNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android Library'" Include="$(EmguCVNativeArmeabi)">
           <Link>lib\armeabi\libcvextern.so</Link>
@@ -236,6 +239,7 @@
           <Link>lib\armeabi\libcvextern.so</Link>
         </AndroidNativeLibrary>
       </ItemGroup>
+	  -->
       <!-- armeabi-v7a -->
       <ItemGroup Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND Exists('$(EmguCVNativeArmeabiv7a)')">
         <EmbeddedNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android Library'" Include="$(EmguCVNativeArmeabiv7a)">
