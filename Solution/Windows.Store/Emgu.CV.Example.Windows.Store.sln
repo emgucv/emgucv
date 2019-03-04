@@ -13,7 +13,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Em
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.shproj", "{7BC723CB-1678-415F-A65F-4027F8758A6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UWP", "..\..\Emgu.CV.Example\XamarinForms\UWP\UWP.csproj", "{2A63A8EE-515F-4280-A178-FB58633CEDA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinForms.UWP", "..\..\Emgu.CV.Example\XamarinForms\UWP\XamarinForms.UWP.csproj", "{2A63A8EE-515F-4280-A178-FB58633CEDA1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtimeCamera", "..\..\Emgu.CV.Example\RealtimeCamera.UWP\RealtimeCamera.csproj", "{B9D1A8F2-4C4A-444B-8A20-C9F4133573E4}"
 EndProject

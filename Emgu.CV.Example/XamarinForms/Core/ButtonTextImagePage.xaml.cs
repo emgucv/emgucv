@@ -10,7 +10,7 @@ using Emgu.CV;
 using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-#if __IOS__ || __ANDROID__
+#if __IOS__ || __ANDROID__ || NETFX_CORE
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 #endif
@@ -27,8 +27,10 @@ namespace Emgu.CV.XamarinForms
 
         public virtual async void LoadImages(String[] imageNames, String[] labels = null)
         {
-#if __IOS__ || __ANDROID__
-           
+#if __IOS__ || __ANDROID__ || NETFX_CORE
+
+            await CrossMedia.Current.Initialize();
+
             Mat[] mats = new Mat[imageNames.Length];
             for (int i = 0; i < mats.Length; i++)
             {
@@ -67,7 +69,7 @@ namespace Emgu.CV.XamarinForms
                 }
                 else if (action.Equals("Photo Library"))
                 {
-#if __ANDROID__ || __IOS__
+#if __ANDROID__ || __IOS__ || NETFX_CORE
                     var photoResult = await CrossMedia.Current.PickPhotoAsync();
                     if (photoResult == null) //cancelled
                         return;
@@ -88,7 +90,7 @@ namespace Emgu.CV.XamarinForms
                 }
                 else if (action.Equals("Camera"))
                 {
-#if __ANDROID__ || __IOS__
+#if __ANDROID__ || __IOS__ || NETFX_CORE
                     var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
                     {
                         Directory = "Emgu",
