@@ -149,6 +149,7 @@ namespace OCR
 
                 if (ocr.Recognize() != 0)
                     throw new Exception("Failed to recognizer image");
+
                 Tesseract.Character[] characters = ocr.GetCharacters();
                 if (characters.Length == 0)
                 {

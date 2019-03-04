@@ -96,7 +96,8 @@ namespace Emgu.CV.XamarinForms
                       }
 
                       _ocr.SetImage(image[0]);
-                      _ocr.Recognize();
+                      if (_ocr.Recognize() != 0)
+                          throw new Exception("Failed to recognize image");
                       String text = _ocr.GetUTF8Text();
                       long time = 0;
 

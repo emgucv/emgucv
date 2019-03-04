@@ -47,10 +47,14 @@ namespace Emgu.CV.XamarinForms
                 {
                     action = await DisplayActionSheet(pickImgString, "Cancel", null, "Default", "Photo Library",
                         "Camera");
+                    if (action == null) //user clicked outside of action sheet
+                        return;
                 }
                 else if (havePickImgOption)
                 {
                     action = await DisplayActionSheet(pickImgString, "Cancel", null, "Default", "Photo Library");
+                    if (action == null) //user clicked outside of action sheet
+                        return;
                 }
                 else
                 {
@@ -63,6 +67,8 @@ namespace Emgu.CV.XamarinForms
                     mats[i] = new Mat( Android.App.Application.Context.Assets, imageNames[i]);
 
 #else
+                    if (!File.Exists(imageNames[i]))
+                        throw new FileNotFoundException(String.Format("File {0} do not exist.", imageNames[i]));
                     mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.AnyColor);
 #endif
 
