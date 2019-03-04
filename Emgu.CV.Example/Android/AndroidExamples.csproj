@@ -19,7 +19,7 @@
     <AndroidStoreUncompressedFileExtensions>.size%3b.traineddata</AndroidStoreUncompressedFileExtensions>
     <MandroidI18n />
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
-    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <JavaMaximumHeapSize />
     <JavaOptions />
     <NuGetPackageImportStamp>
