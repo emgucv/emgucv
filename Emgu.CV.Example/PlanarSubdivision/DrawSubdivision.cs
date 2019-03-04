@@ -59,11 +59,7 @@ namespace PlanarSubdivisionExample
          //Draw the voronoi Facets
          foreach (VoronoiFacet facet in voronoiFacets)
          {
-#if NETFX_CORE
-            Point[] polyline = Extensions.ConvertAll<PointF, Point>(facet.Vertices, Point.Round);
-#else
             Point[] polyline = Array.ConvertAll<PointF, Point>(facet.Vertices, Point.Round);
-#endif
             using (VectorOfPoint vp = new VectorOfPoint(polyline))
             using (VectorOfVectorOfPoint vvp = new VectorOfVectorOfPoint(vp))
             {
@@ -82,11 +78,7 @@ namespace PlanarSubdivisionExample
          //Draw the Delaunay triangulation
          foreach (Triangle2DF triangle in delaunayTriangles)
          {
-#if NETFX_CORE
-            Point[] vertices = Extensions.ConvertAll<PointF, Point>(triangle.GetVertices(), Point.Round);
-#else
             Point[] vertices = Array.ConvertAll<PointF, Point>(triangle.GetVertices(), Point.Round);
-#endif
             using (VectorOfPoint vp = new VectorOfPoint(vertices))
             {
                CvInvoke.Polylines(img, vp, true, new Bgr(255, 255, 255).MCvScalar);

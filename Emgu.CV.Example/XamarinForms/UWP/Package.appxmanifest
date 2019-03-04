@@ -8,14 +8,14 @@
 
   <Identity
     Name="f9fcac33-94a7-4a18-a6d4-f26163b1a3e3"
-    Publisher="CN=CANMING"
+    Publisher="CN=EMGU"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="f9fcac33-94a7-4a18-a6d4-f26163b1a3e3" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>WindowsUniversal</DisplayName>
-    <PublisherDisplayName>CANMING</PublisherDisplayName>
+    <PublisherDisplayName>EMGU Corporation</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

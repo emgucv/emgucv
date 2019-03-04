@@ -18,7 +18,7 @@ namespace Simlpe3DReconstruction
    {
       static void Main(string[] args)
       {
-         MCvPoint3D32f[] _points;
+         //MCvPoint3D32f[] _points;
          Mat _left = CvInvoke.Imread("imL.png", ImreadModes.Color);
          Mat _right = CvInvoke.Imread("imR.png", ImreadModes.Color);
          Mat disparityMap = new Mat();

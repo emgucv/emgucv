@@ -788,12 +788,8 @@ namespace Emgu.CV
         public virtual void Draw(IConvexPolygonF polygon, TColor color, int thickness)
         {
             Point[] vertices =
-#if NETFX_CORE || NETSTANDARD1_4
-            Extensions.
-#else
-            Array.
-#endif
-            ConvertAll<PointF, Point>(polygon.GetVertices(), Point.Round);
+
+            Array.ConvertAll<PointF, Point>(polygon.GetVertices(), Point.Round);
 
             if (thickness > 0)
                 DrawPolyline(vertices, true, color, thickness);
@@ -4105,12 +4101,8 @@ namespace Emgu.CV
         IImage[] IImage.Split()
         {
             return
-#if NETFX_CORE || NETSTANDARD1_4
-            Extensions.
-#else
-            Array.
-#endif
-            ConvertAll<Image<Gray, TDepth>, IImage>(
+
+            Array.ConvertAll<Image<Gray, TDepth>, IImage>(
                   Split(),
                   delegate (Image<Gray, TDepth> img) { return (IImage)img; });
         }

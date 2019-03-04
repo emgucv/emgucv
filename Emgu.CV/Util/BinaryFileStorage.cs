@@ -160,7 +160,7 @@ namespace Emgu.CV.Util
             file = await ApplicationData.Current.LocalFolder.GetFileAsync(_fileInfo);
             //no exception means file exists
          }
-         catch (Exception ex)
+         catch (Exception)
          {
             //find out through exception 
             return;

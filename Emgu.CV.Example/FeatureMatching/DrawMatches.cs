@@ -109,11 +109,8 @@ namespace FeatureMatchingExample
                     };
                     pts = CvInvoke.PerspectiveTransform(pts, homography);
 
-#if NETFX_CORE
-               Point[] points = Extensions.ConvertAll<PointF, Point>(pts, Point.Round);
-#else
                     Point[] points = Array.ConvertAll<PointF, Point>(pts, Point.Round);
-#endif
+
                     using (VectorOfPoint vp = new VectorOfPoint(points))
                     {
                         CvInvoke.Polylines(result, vp, true, new MCvScalar(255, 0, 0, 255), 5);
