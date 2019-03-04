@@ -2906,7 +2906,8 @@ namespace Emgu.CV
         /// <summary>
         /// Calculates seven Hu invariants
         /// </summary>
-        /// <param name="hu">The output Hu moments. You can pass a Mat</param>
+        /// <param name="hu">The output Hu moments. e.g. a Mat can be passed here.</param>
+        /// <param name="m">The image moment</param>
         public static void HuMoments(Moments m, IOutputArray hu)
         {
             using (OutputArray oaHu = hu.GetOutputArray())
@@ -2918,6 +2919,8 @@ namespace Emgu.CV
         /// <summary>
         /// Calculates seven Hu invariants
         /// </summary>
+        /// <param name="m">The image moment</param>
+        /// <returns>The output Hu moments.</returns>
         public static double[] HuMoments(Moments m)
         {
             double[] hu = new double[7];
