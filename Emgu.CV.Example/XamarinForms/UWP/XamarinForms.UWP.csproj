@@ -7,8 +7,8 @@
     <ProjectGuid>{2A63A8EE-515F-4280-A178-FB58633CEDA1}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WindowsUniversal</RootNamespace>
-    <AssemblyName>WindowsUniversal</AssemblyName>
+    <RootNamespace>Emgu.CV</RootNamespace>
+    <AssemblyName>Emgu.CV.XamarinForms.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
