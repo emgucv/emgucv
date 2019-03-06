@@ -39,6 +39,10 @@ namespace Emgu.CV.XamarinForms
 
         private String _modelFolderName = "dnn_data";
         private String _path = null;
+        private Net _maskRcnnDetector = null;
+        private string[] _labels = null;
+        private MCvScalar[] _colors = null;
+
         private void InitPath()
         {
             if (_path == null)
@@ -51,6 +55,34 @@ namespace Emgu.CV.XamarinForms
 #else
                 _path = String.Format("./{0}/", _modelFolderName);
 #endif
+            }
+        }
+
+        private void InitDetector()
+        {
+            if (_maskRcnnDetector == null)
+            {
+                InitPath();
+
+
+                String url =
+                    "https://github.com/emgucv/models/raw/master/mask_rcnn_inception_v2_coco_2018_01_28/";
+                String graphFile = DnnDownloadFile(url, "frozen_inference_graph.pb", _path);
+                String lookupFile = DnnDownloadFile(url, "coco-labels-paper.txt", _path);
+
+                String configFile = DnnDownloadFile(
+                    "https://github.com/opencv/opencv_extra/raw/4.0.1/testdata/dnn/",
+                    "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt",
+                    _path);
+
+                _maskRcnnDetector = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(graphFile, configFile);
+                _labels = File.ReadAllLines(lookupFile);
+                _colors = new MCvScalar[_labels.Length];
+                Random r = new Random(12345);
+                for (int i = 0; i < _colors.Length; i++)
+                {
+                    _colors[i] = new MCvScalar(r.Next(256), r.Next(256), r.Next(256));
+                }
             }
         }
 
@@ -93,35 +125,18 @@ namespace Emgu.CV.XamarinForms
                 Task<Tuple<Mat, String, long>> t = new Task<Tuple<Mat, String, long>>(
                   () =>
                   {
-                      InitPath();
+                      InitDetector();
 
-
-                      String url =
-                          "https://github.com/emgucv/models/raw/master/mask_rcnn_inception_v2_coco_2018_01_28/";
-                      String graphFile = DnnDownloadFile(url, "frozen_inference_graph.pb", _path);
-                      String lookupFile = DnnDownloadFile(url, "coco-labels-paper.txt", _path);
-
-                      String configFile = DnnDownloadFile(
-                          "https://github.com/opencv/opencv_extra/raw/4.0.1/testdata/dnn/",
-                          "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt",
-                          _path);
-
-                      string[] labels = File.ReadAllLines(lookupFile);
-                      Emgu.CV.Dnn.Net net = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(graphFile, configFile);
-
-
-                      Mat blob = DnnInvoke.BlobFromImage(image[0]);
-
-                      net.SetInput(blob, "image_tensor");
+                      using (Mat blob = DnnInvoke.BlobFromImage(image[0]))
                       using (VectorOfMat tensors = new VectorOfMat())
                       {
-                          net.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
+                          _maskRcnnDetector.SetInput(blob, "image_tensor");
+                          _maskRcnnDetector.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
                           using (Mat boxes = tensors[0])
                           using (Mat masks = tensors[1])
                           {
                               System.Drawing.Size imgSize = image[0].Size;
                               float[,,,] boxesData = boxes.GetData(true) as float[,,,];
-                              //float[,,,] masksData = masks.GetData(true) as float[,,,];
                               int numDetections = boxesData.GetLength(2);
                               for (int i = 0; i < numDetections; i++)
                               {
@@ -131,8 +146,8 @@ namespace Emgu.CV.XamarinForms
                                   if (score > 0.5)
                                   {
                                       int classId = (int)boxesData[0, 0, i, 1];
-                                      String label = labels[classId];
-
+                                      String label = _labels[classId];
+                                      MCvScalar color = _colors[classId];
                                       float left = boxesData[0, 0, i, 3] * imgSize.Width;
                                       float top = boxesData[0, 0, i, 4] * imgSize.Height;
                                       float right = boxesData[0, 0, i, 5] * imgSize.Width;
@@ -151,9 +166,6 @@ namespace Emgu.CV.XamarinForms
                                           masksDim[3],
                                           DepthType.Cv32F,
                                           1,
-                                          //masks.DataPointer +
-                                          //(i * masksDim[1] + classId ) 
-                                          //* masksDim[2] * masksDim[3] * masks.ElementSize,
                                           masks.GetDataPointer(i, classId),
                                           masksDim[3] * masks.ElementSize))
                                       using (Mat maskLarge = new Mat())
@@ -172,7 +184,7 @@ namespace Emgu.CV.XamarinForms
                                               CvInvoke.Subtract(sa, maskLarge, maskLargeInv);
 
                                           //The mask color
-                                          largeColor.SetTo(new Emgu.CV.Structure.MCvScalar(255, 0, 0));
+                                          largeColor.SetTo(color);
                                           if (subRegion.NumberOfChannels == 4)
                                           {
                                               using (Mat bgrSubRegion = new Mat())

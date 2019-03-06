@@ -113,12 +113,11 @@ namespace Emgu.CV.XamarinForms
                 Task<Tuple<IInputArray, long>> t = new Task<Tuple<IInputArray, long>>(
                     () =>
                     {
-                        int imgDim = 300;
-                        MCvScalar meanVal = new MCvScalar(104, 177, 123);
-
                         InitFaceDetector();
                         InitFacemark();
 
+                        int imgDim = 300;
+                        MCvScalar meanVal = new MCvScalar(104, 177, 123);
                         Stopwatch watch = Stopwatch.StartNew();
                         Size imageSize = image[0].Size;
                         using (Mat inputBlob = DnnInvoke.BlobFromImage(
