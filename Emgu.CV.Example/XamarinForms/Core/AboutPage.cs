@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Text;
 using Xamarin.Forms;
-//using XLabs.Forms.Controls;
 
 namespace Emgu.CV.XamarinForms
 {
@@ -18,10 +19,10 @@ namespace Emgu.CV.XamarinForms
 		   String lineBreak = "<br/>";
          if (CvInvoke.HaveOpenCL)
          {
-            openclTxt = String.Format("{0}{1}Use OpenCL: {2}{3}{4}{5}",
+            openclTxt = String.Format("{0}{1}Use OpenCL: {2}{1}<textarea rows=\"5\">{3}</textarea>{1}",
                openclTxt, lineBreak,
-               CvInvoke.UseOpenCL, lineBreak,
-               CvInvoke.OclGetPlatformsSummary(), lineBreak);
+               CvInvoke.UseOpenCL, 
+               CvInvoke.OclGetPlatformsSummary());
          }
 
          Content = new StackLayout {
@@ -34,11 +35,23 @@ namespace Emgu.CV.XamarinForms
                   {
                      Html =
                      @"<html>
+<head>
+<style>body { background-color: #EEEEEE; }</style>
+<style type=""text/css"">
+textarea { width: 100 %; margin: 0; padding: 0; border - width: 0; }
+</style>
+</head>
 <body>
-<H3> Emgu CV Examples </H3>
+<H2> Emgu CV Examples </H2>
 <a href=http://www.emgu.com>Visit our website</a> <br/><br/>
-<a href=mailto:support@emgu.com>Email Support</a> <br/><br/>"
+<a href=mailto:support@emgu.com>Email Support</a> <br/><br/>
+<H4> OpenCL Info </H4>
+"
                      + openclTxt + @"
+<H4> Build Info </H4>
+<textarea rows=""30"">" 
+                     + CvInvoke.BuildInformation + @"
+</textarea>
 </body>
 </html>"
                   }
