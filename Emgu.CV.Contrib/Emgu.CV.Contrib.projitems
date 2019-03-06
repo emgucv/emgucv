@@ -10,24 +10,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Dpm\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Saliency\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Saliency\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XFeatures2D\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Face\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Freetype\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Freetype\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BgSegm\*.cs" />
-	 <Compile Include="$(MSBuildThisFileDirectory)XImgproc\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XImgproc\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XPhoto\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tracking\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plot\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Aruco\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fuzzy\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Hfs\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hfs\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LineDescriptor\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)XObjdetect\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Bioinspired\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)DnnModern\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)ImgHash\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)PhaseUnwrapping\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XObjdetect\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Bioinspired\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DnnModern\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImgHash\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PhaseUnwrapping\*.cs" />
   </ItemGroup>
 </Project>

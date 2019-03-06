@@ -45,8 +45,8 @@
   <ItemGroup>
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
   </ItemGroup>
+  <Import Project="..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" Condition="Exists('..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems')" />
   <Import Project="..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
   <Import Project="..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
   <Import Project="..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
   <Import Project="..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
