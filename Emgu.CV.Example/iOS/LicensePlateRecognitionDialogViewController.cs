@@ -81,7 +81,7 @@ namespace Example.iOS
                         LicensePlateDetector.TesseractDownloadLangFile(path, "eng");
                         LicensePlateDetector.TesseractDownloadLangFile(path, "osd");
                     }
-                    catch (System.Net.WebException webExcpt)
+                    catch (System.Net.WebException)
                     {
                         messageElement.Value =
                             String.Format(

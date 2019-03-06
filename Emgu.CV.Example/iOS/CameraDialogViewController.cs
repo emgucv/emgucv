@@ -105,10 +105,8 @@ namespace Example.iOS
                 SessionPreset = AVCaptureSession.PresetMedium
             };
 
-
-
             // create a device input and attach it to the session
-            var captureDevice = AVCaptureDevice.DefaultDeviceWithMediaType(AVMediaType.Video);
+            var captureDevice = AVCaptureDevice.GetDefaultDevice(AVMediaType.Video);
             if (captureDevice == null)
             {
                 RenderImageMessage("Capture device not found.");
