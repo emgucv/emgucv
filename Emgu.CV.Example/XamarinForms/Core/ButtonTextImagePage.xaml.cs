@@ -10,9 +10,9 @@ using Emgu.CV;
 using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-#if __IOS__ || __ANDROID__ || NETFX_CORE
+using Emgu.Util.TypeEnum;
+#if !__MACOS__
 using Plugin.Media;
-using Plugin.Media.Abstractions;
 #endif
 
 namespace Emgu.CV.XamarinForms
@@ -27,9 +27,16 @@ namespace Emgu.CV.XamarinForms
 
         public virtual async void LoadImages(String[] imageNames, String[] labels = null)
         {
-#if __IOS__ || __ANDROID__ || NETFX_CORE
+#if __MACOS__
+            Mat[] mats = new Mat[imageNames.Length];
+            for (int i = 0; i < mats.Length; i++)
+                mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
+            InvokeOnImagesLoaded(mats);
+#else
 
+#if __ANDROID__ || __IOS__
             await CrossMedia.Current.Initialize();
+#endif
 
             Mat[] mats = new Mat[imageNames.Length];
             for (int i = 0; i < mats.Length; i++)
@@ -37,10 +44,22 @@ namespace Emgu.CV.XamarinForms
                 String pickImgString = "Use Image from";
                 if (labels != null && labels.Length > i)
                     pickImgString = labels[i];
-                bool haveCameraOption =
-                    (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported);
-                bool havePickImgOption =
-                    CrossMedia.Current.IsPickVideoSupported;
+
+                bool haveCameraOption;
+                bool havePickImgOption;
+                if (Emgu.Util.Platform.OperationSystem == OS.Windows)
+                {
+                    //CrossMedia is not implemented on Windows.
+                    haveCameraOption = false;
+                    havePickImgOption = true; //We will provide our implementation of pick image option
+                }
+                else
+                {
+                    haveCameraOption =
+                        (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported);
+                    havePickImgOption =
+                        CrossMedia.Current.IsPickVideoSupported;
+                }
 
                 String action;
                 if (haveCameraOption & havePickImgOption)
@@ -75,22 +94,43 @@ namespace Emgu.CV.XamarinForms
                 }
                 else if (action.Equals("Photo Library"))
                 {
+
 #if __ANDROID__ || __IOS__ || NETFX_CORE
                     var photoResult = await CrossMedia.Current.PickPhotoAsync();
-                    if (photoResult == null) //cancelled
+                    if (photoResult == null) //canceled
                         return;
                     mats[i] = CvInvoke.Imread(photoResult.Path);
 
 #else
-                    var file = await CrossMedia.Current.PickPhotoAsync();
-                    using (Stream s = file.GetStream())
-                    using (MemoryStream ms = new MemoryStream())
+                    if (Emgu.Util.Platform.OperationSystem == OS.Windows)
                     {
-                       s.CopyTo(ms);
-                       byte[] data = ms.ToArray();
-                       Mat m = new Mat();
-                       CvInvoke.Imdecode(data, ImreadModes.Color, m );
-                       mats[i] = m;              
+                        // our implementation of pick image
+                        using (System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog())
+                        {
+                            dialog.Multiselect = false;
+                            dialog.Title = "Select an Image File";
+                            dialog.Filter = "Image | *.jpg;*.jpeg;*.png;*.bmp;*.gif | All Files | *";
+                            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            {
+                                mats[i] = CvInvoke.Imread(dialog.FileName, ImreadModes.AnyColor);
+                            }
+                            else
+                            {
+                                return; 
+                            }
+                        }
+                    } else
+                    {
+                        var file = await CrossMedia.Current.PickPhotoAsync();
+                        using (Stream s = file.GetStream())
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                           s.CopyTo(ms);
+                           byte[] data = ms.ToArray();
+                           Mat m = new Mat();
+                           CvInvoke.Imdecode(data, ImreadModes.Color, m );
+                           mats[i] = m;              
+                        }
                     }
 #endif
                 }
@@ -108,7 +148,12 @@ namespace Emgu.CV.XamarinForms
 
                     mats[i] = CvInvoke.Imread(takePhotoResult.Path);
 #else
-                    var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions());
+                    var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                    {
+                        Directory = "Emgu",
+                        Name = $"{DateTime.UtcNow}.jpg"
+                    };
+                    var file = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
                     using (Stream s = file.GetStream())
                     using (MemoryStream ms = new MemoryStream())
                     {
@@ -122,11 +167,6 @@ namespace Emgu.CV.XamarinForms
 #endif
                 }
             }
-            InvokeOnImagesLoaded(mats);
-#else
-            Mat[] mats = new Mat[imageNames.Length];
-            for (int i = 0; i < mats.Length; i++)
-                mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
             InvokeOnImagesLoaded(mats);
 #endif
         }

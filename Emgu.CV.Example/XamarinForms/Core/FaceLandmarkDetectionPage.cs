@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.IO;
 using System.Drawing;
@@ -69,6 +70,7 @@ namespace Emgu.CV.XamarinForms
                     "deploy.prototxt",
                     _path);
                 _faceDetector = DnnInvoke.ReadNetFromCaffe(ssdProtoFileLocal, ssdFileLocal);
+                
             }
         }
 
@@ -115,13 +117,14 @@ namespace Emgu.CV.XamarinForms
                         InitFaceDetector();
                         InitFacemark();
 
+                        Stopwatch watch = Stopwatch.StartNew();
                         Size imageSize = image[0].Size;
                         using (Mat inputBlob = DnnInvoke.BlobFromImage(
                             image[0],
-                            1.0, 
-                            new Size(imgDim, imgDim), 
-                            meanVal, 
-                            false, 
+                            1.0,
+                            new Size(imgDim, imgDim),
+                            meanVal,
+                            false,
                             false))
                             _faceDetector.SetInput(inputBlob, "data");
                         using (Mat detection = _faceDetector.Forward("detection_out"))
@@ -142,9 +145,9 @@ namespace Emgu.CV.XamarinForms
                                     float xRightTop = values[0, 0, i, 5] * imageSize.Width;
                                     float yRightTop = values[0, 0, i, 6] * imageSize.Height;
                                     RectangleF objectRegion = new RectangleF(
-                                        xLeftBottom, 
+                                        xLeftBottom,
                                         yLeftBottom,
-                                        xRightTop - xLeftBottom, 
+                                        xRightTop - xLeftBottom,
                                         yRightTop - yLeftBottom);
                                     Rectangle faceRegion = Rectangle.Round(objectRegion);
                                     faceRegions.Add(faceRegion);
@@ -154,7 +157,6 @@ namespace Emgu.CV.XamarinForms
                             using (VectorOfRect vr = new VectorOfRect(faceRegions.ToArray()))
                             using (VectorOfVectorOfPointF landmarks = new VectorOfVectorOfPointF())
                             {
-
                                 _facemark.Fit(image[0], vr, landmarks);
 
                                 foreach (Rectangle face in faceRegions)
@@ -170,8 +172,8 @@ namespace Emgu.CV.XamarinForms
                                 }
 
                             }
-
-                            return new Tuple<IInputArray, long>(image[0], 0);
+                            watch.Stop();
+                            return new Tuple<IInputArray, long>(image[0], watch.ElapsedMilliseconds);
                         }
                     });
                 t.Start();
@@ -180,7 +182,7 @@ namespace Emgu.CV.XamarinForms
                 SetImage(t.Result.Item1);
                 String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
 
-                SetMessage(String.Format("Detected with {1} in {0} milliseconds.", t.Result.Item2, computeDevice));
+                SetMessage(String.Format("Detected in {0} milliseconds.", t.Result.Item2));
             };
         }
 
