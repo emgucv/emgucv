@@ -111,7 +111,7 @@ namespace Emgu.CV.XamarinForms
 #if NETFX_CORE
             //ocrButton.IsVisible = false;
             dnnButton.IsVisible = false;
-            faceLandmarkDetectionButton..IsVisible = false;
+            faceLandmarkDetectionButton.IsVisible = false;
 #else
             dnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new DnnPage()); };
             faceLandmarkDetectionButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage()); };
