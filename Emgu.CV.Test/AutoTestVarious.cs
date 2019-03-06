@@ -3438,9 +3438,9 @@ namespace Emgu.CV.Test
             String ssdFile = "res10_300x300_ssd_iter_140000.caffemodel";
             String ssdProtoFile = "deploy.prototxt";
 
-            String fileUrl = "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/";
-            CheckAndDownloadFile(ssdFile, fileUrl);
-            CheckAndDownloadFile(ssdProtoFile, fileUrl);
+
+            CheckAndDownloadFile(ssdFile, "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/");
+            CheckAndDownloadFile(ssdProtoFile, "https://raw.githubusercontent.com/opencv/opencv/master/samples/dnn/face_detector/");
 
             Dnn.Net net = DnnInvoke.ReadNetFromCaffe(ssdProtoFile, ssdFile);
 

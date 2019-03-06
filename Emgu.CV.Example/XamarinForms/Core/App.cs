@@ -24,6 +24,9 @@ namespace Emgu.CV.XamarinForms
             Button faceDetectionButton = new Button();
             faceDetectionButton.Text = "Face Detection";
 
+            Button faceLandmarkDetectionButton = new Button();
+            faceLandmarkDetectionButton.Text = "Face Landmark Detection";
+
             Button featureDetectionButton = new Button();
             featureDetectionButton.Text = "Feature Matching";
 
@@ -36,6 +39,7 @@ namespace Emgu.CV.XamarinForms
             Button dnnButton = new Button();
             dnnButton.Text = "DNN";
 
+            
             // The root page of your application
             ContentPage page =
               new ContentPage
@@ -48,6 +52,7 @@ namespace Emgu.CV.XamarinForms
                         helloWorldButton,
                         planarSubdivisionButton,
                         faceDetectionButton,
+                        faceLandmarkDetectionButton,
                         featureDetectionButton,
                         pedestrianDetectionButton,
                         ocrButton,
@@ -57,7 +62,7 @@ namespace Emgu.CV.XamarinForms
               };
 
 #if NETFX_CORE
-		   String aboutIcon = "questionmark.png";
+		    String aboutIcon = "questionmark.png";
 #else
             String aboutIcon = null;
 #endif
@@ -101,14 +106,15 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new FeatureMatchingPage());
             };
 
-            
+
 
 #if NETFX_CORE
             //ocrButton.IsVisible = false;
             dnnButton.IsVisible = false;
+            faceLandmarkDetectionButton..IsVisible = false;
 #else
             dnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new DnnPage()); };
-           
+            faceLandmarkDetectionButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage()); };
 #endif
             ocrButton.Clicked += (sender, args) =>
             {

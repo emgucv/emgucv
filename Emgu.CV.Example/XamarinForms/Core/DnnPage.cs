@@ -37,7 +37,7 @@ namespace Emgu.CV.XamarinForms
     public class DnnPage : ButtonTextImagePage
     {
 
-        private static String DnnDownloadFile(String folder, String fileName)
+        public static String DnnDownloadFile(String url, String fileName, String folder)
         {
             String folderName = folder;
             if (!System.IO.Directory.Exists(folderName))
@@ -48,7 +48,7 @@ namespace Emgu.CV.XamarinForms
             if (!System.IO.File.Exists(dest))
                 using (System.Net.WebClient webclient = new System.Net.WebClient())
                 {
-                    String source = "https://github.com/emgucv/models/raw/master/mask_rcnn_inception_v2_coco_2018_01_28/" + fileName;
+                    String source = url + fileName;
 
                     Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
                     webclient.DownloadFile(source, dest);
@@ -86,9 +86,10 @@ namespace Emgu.CV.XamarinForms
                       String path = "./dnn_data/";
                       
 #endif
-
-                      String graphFile = DnnDownloadFile(path, "frozen_inference_graph.pb");
-                      String lookupFile = DnnDownloadFile(path, "coco-labels-paper.txt");
+                      String url =
+                          "https://github.com/emgucv/models/raw/master/mask_rcnn_inception_v2_coco_2018_01_28/";
+                      String graphFile = DnnDownloadFile(url, "frozen_inference_graph.pb", path);
+                      String lookupFile = DnnDownloadFile(url, "coco-labels-paper.txt", path);
 
                       string[] labels = File.ReadAllLines(lookupFile);
                       Emgu.CV.Dnn.Net net = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(graphFile, configFile);
