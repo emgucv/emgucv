@@ -217,9 +217,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\..\opencv_extra\testdata\dnn\mask_rcnn_inception_v2_coco_2018_01_28.pbtxt">
-      <Link>Assets\mask_rcnn_inception_v2_coco_2018_01_28.pbtxt</Link>
-    </AndroidAsset>
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />

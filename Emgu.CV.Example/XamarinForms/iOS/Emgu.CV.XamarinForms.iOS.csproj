@@ -177,9 +177,6 @@
     <Content Include="..\Core\dog416.png">
       <Link>dog416.png</Link>
     </Content>
-    <Content Include="..\..\..\opencv_extra\testdata\dnn\mask_rcnn_inception_v2_coco_2018_01_28.pbtxt">
-      <Link>mask_rcnn_inception_v2_coco_2018_01_28.pbtxt</Link>
-    </Content>
   </ItemGroup>
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

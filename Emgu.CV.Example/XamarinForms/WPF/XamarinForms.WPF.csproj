@@ -116,10 +116,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="..\..\..\opencv_extra\testdata\dnn\mask_rcnn_inception_v2_coco_2018_01_28.pbtxt">
-      <Link>mask_rcnn_inception_v2_coco_2018_01_28.pbtxt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -68,7 +68,7 @@ namespace Emgu.CV.XamarinForms
                     _path);
 
                 String ssdProtoFileLocal = DnnPage.DnnDownloadFile(
-                    "https://raw.githubusercontent.com/opencv/opencv/master/samples/dnn/face_detector/",
+                    "https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/",
                     "deploy.prototxt",
                     _path);
                 _faceDetector = DnnInvoke.ReadNetFromCaffe(ssdProtoFileLocal, ssdFileLocal);

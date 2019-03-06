@@ -37,6 +37,23 @@ namespace Emgu.CV.XamarinForms
     public class DnnPage : ButtonTextImagePage
     {
 
+        private String _modelFolderName = "dnn_data";
+        private String _path = null;
+        private void InitPath()
+        {
+            if (_path == null)
+            {
+#if __ANDROID__
+                _path = System.IO.Path.Combine(
+                    Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
+                    Android.OS.Environment.DirectoryDownloads, 
+                    _modelFolderName);
+#else
+                _path = String.Format("./{0}/", _modelFolderName);
+#endif
+            }
+        }
+
         public static String DnnDownloadFile(String url, String fileName, String folder)
         {
             String folderName = folder;
@@ -54,7 +71,8 @@ namespace Emgu.CV.XamarinForms
                     webclient.DownloadFile(source, dest);
                     Console.WriteLine(String.Format("Download completed"));
                 }
-            return dest;
+            FileInfo fi = new FileInfo(dest);
+            return fi.FullName;
         }
 
 
@@ -75,21 +93,18 @@ namespace Emgu.CV.XamarinForms
                 Task<Tuple<Mat, String, long>> t = new Task<Tuple<Mat, String, long>>(
                   () =>
                   {
+                      InitPath();
 
-                      String configFile = "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt";
-#if __ANDROID__
-                      String path = System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
-                             Android.OS.Environment.DirectoryDownloads, "dnn_data");
-                      FileInfo configFileInfo = AndroidFileAsset.WritePermanantFileAsset(Android.App.Application.Context, configFile, "dnn_data", AndroidFileAsset.OverwriteMethod.AlwaysOverwrite);
-                      configFile = configFileInfo.FullName;
-#else
-                      String path = "./dnn_data/";
-                      
-#endif
+
                       String url =
                           "https://github.com/emgucv/models/raw/master/mask_rcnn_inception_v2_coco_2018_01_28/";
-                      String graphFile = DnnDownloadFile(url, "frozen_inference_graph.pb", path);
-                      String lookupFile = DnnDownloadFile(url, "coco-labels-paper.txt", path);
+                      String graphFile = DnnDownloadFile(url, "frozen_inference_graph.pb", _path);
+                      String lookupFile = DnnDownloadFile(url, "coco-labels-paper.txt", _path);
+
+                      String configFile = DnnDownloadFile(
+                          "https://github.com/opencv/opencv_extra/raw/4.0.1/testdata/dnn/",
+                          "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt",
+                          _path);
 
                       string[] labels = File.ReadAllLines(lookupFile);
                       Emgu.CV.Dnn.Net net = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(graphFile, configFile);
