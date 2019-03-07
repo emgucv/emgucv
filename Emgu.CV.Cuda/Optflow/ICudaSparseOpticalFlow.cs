@@ -35,16 +35,23 @@ namespace Emgu.CV.Cuda
       /// <param name="status">Output status vector. Each element of the vector is set to 1 if the flow for the corresponding features has been found. Otherwise, it is set to 0.</param>
       /// <param name="err">Optional output vector that contains error response for each point (inverse confidence).</param>
       /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
-      public static void Calc(this ICudaSparseOpticalFlow sparseFlow, IInputArray prevImg, IInputArray nextImg, IInputArray prevPts, IInputOutputArray nextPts, IOutputArray status = null, IOutputArray err = null, Stream stream = null)
+      public static void Calc(this ICudaSparseOpticalFlow sparseFlow, IInputArray prevImg, IInputArray nextImg, IInputArray prevPts, IInputOutputArray nextPts, IOutputArray status, IOutputArray err = null, Stream stream = null)
       {
          using (InputArray iaPrevImg = prevImg.GetInputArray())
          using (InputArray iaNextImg = nextImg.GetInputArray())
          using (InputArray iaPrevPts = prevPts.GetInputArray())
          using (InputOutputArray ioaNextPts = nextPts.GetInputOutputArray())
-         using (OutputArray oaStatus = (status == null ? OutputArray.GetEmpty() : status.GetOutputArray()))
+         using (OutputArray oaStatus = status.GetOutputArray())
          using (OutputArray oaErr = (err == null ? OutputArray.GetEmpty() : err.GetOutputArray()))
-            cudaSparseOpticalFlowCalc(sparseFlow.SparseOpticalFlowPtr, iaPrevImg, iaNextImg, iaPrevPts, ioaNextPts,
-               oaStatus, oaErr, (stream == null) ? IntPtr.Zero : stream.Ptr);
+            cudaSparseOpticalFlowCalc(
+                sparseFlow.SparseOpticalFlowPtr, 
+                iaPrevImg, 
+                iaNextImg, 
+                iaPrevPts, 
+                ioaNextPts,
+                oaStatus, 
+                oaErr, 
+                (stream == null) ? IntPtr.Zero : stream.Ptr);
       }
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
