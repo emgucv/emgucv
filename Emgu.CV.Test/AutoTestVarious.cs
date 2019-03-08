@@ -2245,7 +2245,7 @@ namespace Emgu.CV.Test
         }*/
 
 #if !NETFX_CORE
-        private static String GetTempFileName()
+        public static String GetTempFileName()
         {
             string filename = Path.GetTempFileName();
 
