@@ -49,3 +49,8 @@ bool cudaVideoReaderNextFrame(cv::cudacodec::VideoReader* reader, cv::_OutputArr
 {
    return reader->nextFrame(*frame);
 }
+void cudaVideoReaderFormat(cv::cudacodec::VideoReader* reader, cv::cudacodec::FormatInfo* formatInfo)
+{
+	cv::cudacodec::FormatInfo fi = reader->format();
+	memcpy(formatInfo, &fi, sizeof(cv::cudacodec::FormatInfo));
+}
