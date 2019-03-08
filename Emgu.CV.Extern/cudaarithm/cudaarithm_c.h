@@ -123,4 +123,6 @@ CVAPI(void) cudaTranspose(cv::_InputArray* src1, cv::_OutputArray* dst, cv::cuda
 
 CVAPI(void) cudaNormalize(cv::_InputArray* src, cv::_OutputArray* dst, double alpha, double beta,
    int norm_type, int dtype, cv::_InputArray* mask, cv::cuda::Stream* stream);
+
+CVAPI(void) cudaSetGlDevice(int device);
 #endif

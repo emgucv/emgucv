@@ -91,8 +91,8 @@ namespace Emgu.CV.Cuda
             {
                 return "Has cuda: false";
             }
-
         }
+
         /// <summary>
         /// Get the number of Cuda enabled devices
         /// </summary>
@@ -1283,9 +1283,20 @@ namespace Emgu.CV.Cuda
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMulSpectrums(IntPtr src1, IntPtr src2, IntPtr dst, int flags,
            [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool conjB,
+           bool conjB,
            IntPtr stream);
 
+        /// <summary>
+        /// Sets a CUDA device and initializes it for the current thread with OpenGL interoperability.
+        /// This function should be explicitly called after OpenGL context creation and before any CUDA calls.
+        /// </summary>
+        /// <param name="device">System index of a CUDA device starting with 0.</param>
+        public static void SetGlDevice(int device = 0)
+        {
+            cudaSetGlDevice(device);
+        }
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cudaSetGlDevice(int device);
         /*
         /// <summary>
         /// Draw the optical flow needle map
