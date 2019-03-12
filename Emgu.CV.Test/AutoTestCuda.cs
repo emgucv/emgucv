@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using Emgu.CV;
 using Emgu.CV.Cuda;
@@ -742,14 +743,30 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> prevImg, currImg;
             AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
             Mat flow = new Mat();
-            CudaDensePyrLKOpticalFlow opticalflow = new CudaDensePyrLKOpticalFlow(new Size(21, 21), 3, 30, false);
+            using (CudaDensePyrLKOpticalFlow opticalflow = new CudaDensePyrLKOpticalFlow(new Size(21, 21), 3, 30, false))
+            using(CudaSparsePyrLKOpticalFlow opticalFlowSparse = new CudaSparsePyrLKOpticalFlow(new Size(21, 21)))
             using (CudaImage<Gray, Byte> prevGpu = new CudaImage<Gray, byte>(prevImg))
             using (CudaImage<Gray, byte> currGpu = new CudaImage<Gray, byte>(currImg))
             using (GpuMat flowGpu = new GpuMat())
+            using (VectorOfPointF prevPts = new VectorOfPointF())
+            using (GpuMat currPtrsGpu = new GpuMat())
+            using (GpuMat statusGpu = new GpuMat())
             {
                 opticalflow.Calc(prevGpu, currGpu, flowGpu);
 
                 flowGpu.Download(flow);
+
+                int pointsCount = 100;
+                Size s = prevGpu.Size;
+                PointF[] points = new PointF[pointsCount];
+                Random r = new Random(1234);
+                for (int i = 0; i < points.Length; i++)
+                {
+                    points[i] = new PointF(r.Next(s.Height), r.Next(s.Width));
+                }
+                prevPts.Push(points);
+                using (GpuMat prevPtsGpu = new GpuMat(prevPts))
+                    opticalFlowSparse.Calc(prevGpu, currGpu, prevPtsGpu, currPtrsGpu, statusGpu);
             }
         }
 
@@ -821,9 +838,9 @@ namespace Emgu.CV.Test
             }
         }
 
-        /*
+#if CUDACODEC
         [Test]
-        public void TestCudaVideoReadWrite()
+        public void TestCudaVideoWriter()
         {
            if (CudaInvoke.HasCuda)
            {
@@ -834,9 +851,69 @@ namespace Emgu.CV.Test
                  using (GpuMat m2 = new GpuMat(480, 640, DepthType.Cv8U, 3))
                     writer.Write(m2, true);
               }
-
            }
-        }*/
+        }
+
+        [Test]
+        public void TestCudaVideoReader()
+        {
+            int numberOfFrames = 10;
+            int width = 640;
+            int height = 480;
+            String fileName = AutoTestVarious.GetTempFileName() + ".avi";
+
+            Image<Bgr, Byte>[] images = new Image<Bgr, byte>[numberOfFrames];
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i] = new Image<Bgr, byte>(width, height);
+                images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+            }
+
+            int fourcc = VideoWriter.Fourcc('M', 'J', 'P', 'G');
+            Backend[] backends = CvInvoke.WriterBackends;
+            int backend_idx = 0; //any backend;
+            foreach (Backend be in backends)
+            {
+                if (be.Name.Equals("CV_MJPEG"))
+                {
+                    backend_idx = be.ID;
+                    break;
+                }
+            }
+
+            //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('H', '2', '6', '4'), 5, new Size(width, height), true))
+            //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('M', 'J', 'P', 'G'), 5, new Size(width, height), true))
+            //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('X', '2', '6', '4'), 5, new Size(width, height), true))
+            //using (VideoWriter writer = new VideoWriter(fileName, -1, 5, new Size( width, height ), true))
+            using (VideoWriter writer = new VideoWriter(fileName, backend_idx, fourcc, 24, new Size(width, height), true))
+            {
+                //EmguAssert.IsTrue(writer.IsOpened);
+                for (int i = 0; i < numberOfFrames; i++)
+                {
+                    writer.Write(images[i].Mat);
+                }
+            }
+
+            FileInfo fi = new FileInfo(fileName);
+            EmguAssert.IsTrue(fi.Exists && fi.Length != 0, "File should not be empty");
+
+            using (CudaVideoReader reader = new CudaVideoReader(fileName))
+            {
+                var formatInfo = reader.Format;
+                int count = 0;
+                using (GpuMat frame = new GpuMat())
+                    while (reader.NextFrame(frame))
+                    {
+                        EmguAssert.IsTrue(frame.Size.Width == width);
+                        EmguAssert.IsTrue(frame.Size.Height == height);
+
+                        count++;
+                    }
+                EmguAssert.IsTrue(numberOfFrames == count);
+            }
+            File.Delete(fi.FullName);
+        }
+#endif
 
         /*
         [Test]

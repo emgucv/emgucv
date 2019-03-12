@@ -37,9 +37,9 @@ namespace Emgu.CV
     public partial class VideoCapture :
         UnmanagedObject,
 #if WITH_SERVICE_MODEL
- IDuplexCapture,
+        IDuplexCapture,
 #endif
- ICapture
+        ICapture
     {
 
         /// <summary>
@@ -53,15 +53,15 @@ namespace Emgu.CV
             Any = 0,
 
             /// <summary>
-            /// Platform native
+            /// Video For Windows (obsolete, removed)
             /// </summary>
             Vfw = 200,
             /// <summary>
-            /// Platform native
+            /// V4L/V4L2 capturing support
             /// </summary>
             V4L = 200,
             /// <summary>
-            /// Platform native
+            /// Same as CAP_V4L
             /// </summary>
             V4L2 = V4L,
 
@@ -83,12 +83,12 @@ namespace Emgu.CV
             CMU1394 = Firewire,
 
             /// <summary>
-            /// QuickTime
+            ///  QuickTime (obsolete, removed)
             /// </summary>
             QT = 500,
 
             /// <summary>
-            /// Unicap drivers
+            /// Unicap drivers (obsolete, removed)
             /// </summary>
             Unicap = 600,
 
@@ -113,7 +113,7 @@ namespace Emgu.CV
             OpenNIAsus = 910,
 
             /// <summary>
-            /// Android
+            /// Android - not used
             /// </summary>
             Android = 1000,
 
@@ -162,7 +162,7 @@ namespace Emgu.CV
             /// </summary>
             Gstreamer = 1800,
             /// <summary>
-            /// FFMPEG
+            /// Open and record video file or stream using the FFMPEG library
             /// </summary>
             Ffmpeg = 1900,
             /// <summary>

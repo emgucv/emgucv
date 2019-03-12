@@ -30,7 +30,7 @@ namespace Emgu.CV.Cuda
         public CudaSparsePyrLKOpticalFlow(Size winSize, int maxLevel = 3, int iters = 30, bool useInitialFlow = false)
         {
             _ptr = CudaInvoke.cudaSparsePyrLKOpticalFlowCreate(
-                winSize, maxLevel, iters, useInitialFlow,
+                ref winSize, maxLevel, iters, useInitialFlow,
                 ref _sparseFlow, ref _algorithm, ref _sharedPtr);
         }
 
@@ -69,7 +69,9 @@ namespace Emgu.CV.Cuda
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cudaSparsePyrLKOpticalFlowCreate(
-            Size winSize, int maxLevel, int iters,
+            ref Size winSize, 
+            int maxLevel, 
+            int iters,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useInitialFlow,
             ref IntPtr sparseFlow,

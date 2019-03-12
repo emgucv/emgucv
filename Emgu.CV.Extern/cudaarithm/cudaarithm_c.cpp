@@ -5,6 +5,7 @@
 //----------------------------------------------------------------------------
 
 #include "cudaarithm_c.h"
+#include "opencv2/core/opengl.hpp"
 
 void cudaExp(cv::_InputArray* a, cv::_OutputArray* b, cv::cuda::Stream* stream)
 {
@@ -292,4 +293,25 @@ void cudaNormalize(cv::_InputArray* src, cv::_OutputArray* dst, double alpha, do
    int norm_type, int dtype, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    cv::cuda::normalize(*src, *dst, alpha, beta, norm_type, dtype, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null()); 
+}
+
+void cudaSetGlDevice(int device)
+{
+	cv::cuda::setGlDevice(device);
+}
+
+cv::cuda::Convolution* cudaConvolutionCreate(CvSize* userBlockSize, cv::Ptr<cv::cuda::Convolution>** sharedPtr)
+{
+	cv::Ptr<cv::cuda::Convolution> ptr = cv::cuda::createConvolution(*userBlockSize);
+	*sharedPtr = new cv::Ptr<cv::cuda::Convolution>(ptr);
+	return ptr.get();
+}
+void cudaConvolutionConvolve(cv::cuda::Convolution* convolution, cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result, bool ccorr, cv::cuda::Stream* stream)
+{
+	convolution->convolve(*image, *templ, *result, ccorr, stream ? *stream : cv::cuda::Stream::Null());
+}
+void cudaConvolutionRelease(cv::Ptr<cv::cuda::Convolution>** convolution)
+{
+	delete *convolution;
+	*convolution = 0;
 }
