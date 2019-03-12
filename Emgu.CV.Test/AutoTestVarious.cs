@@ -266,7 +266,7 @@ namespace Emgu.CV.Test
             Viz3d viz = new Viz3d("show_simple_widgets");
             viz.SetBackgroundMeshLab();
             WCoordinateSystem coor = new WCoordinateSystem();
-            viz.ShowWidget("coos", coor);
+            viz.ShowWidget("coor", coor);
             WCube cube = new WCube(new MCvPoint3D64f(-.5, -.5, -.5), new MCvPoint3D64f(.5, .5, .5), true, new MCvScalar(255, 255, 255));
             viz.ShowWidget("cube", cube);
             WCube cube0 = new WCube(new MCvPoint3D64f(-1, -1, -1), new MCvPoint3D64f(-.5, -.5, -.5), false, new MCvScalar(123, 45, 200));
