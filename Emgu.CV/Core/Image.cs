@@ -621,15 +621,20 @@ namespace Emgu.CV
         /// Make a copy of the specific ROI (Region of Interest) from the image
         /// </summary>
         /// <param name="roi">The roi to be copied</param>
-        /// <returns>The roi region on the image</returns>
+        /// <returns>The region of interest</returns>
         public Image<TColor, TDepth> Copy(Rectangle roi)
         {
+            /*
             Rectangle currentRoi = ROI; //cache the current roi
             Image<TColor, TDepth> res = new Image<TColor, TDepth>(roi.Size);
             ROI = roi;
             CvInvoke.cvCopy(Ptr, res.Ptr, IntPtr.Zero);
             ROI = currentRoi; //reset the roi
-            return res;
+            return res;*/
+            using (Image<TColor, TDepth> subrect = GetSubRect(roi))
+            {
+                return subrect.Copy();
+            }
         }
 
         /// <summary>
