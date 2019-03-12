@@ -3890,8 +3890,17 @@ namespace Emgu.CV.Test
             {
                 string str = e.ErrorStr;
             }
-            
+        }
 
+        [Test]
+        public void TestRetinaFastToneMapping()
+        {
+            Mat m = EmguAssert.LoadMat("pedestrian.png");
+            Mat result = new Mat();
+            using (Bioinspired.RetinaFastToneMapping tm = new Bioinspired.RetinaFastToneMapping(new Size(5, 5)))
+            {
+                tm.ApplyFastToneMapping(m, result);
+            }
         }
 
         [Test]

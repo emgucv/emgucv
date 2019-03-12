@@ -45,3 +45,24 @@ void cveRetinaSetParameters(cv::bioinspired::Retina* retina, cv::bioinspired::Re
 {
    retina->setup(*p);
 }
+
+
+//RetinaFastToneMapping
+cv::bioinspired::RetinaFastToneMapping* cveRetinaFastToneMappingCreate(CvSize* inputSize, cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr)
+{
+	cv::Ptr<cv::bioinspired::RetinaFastToneMapping> ptr = cv::bioinspired::RetinaFastToneMapping::create(*inputSize);
+	*sharedPtr = new cv::Ptr<cv::bioinspired::RetinaFastToneMapping>(ptr);
+	return (*sharedPtr)->get();
+}
+void cveRetinaFastToneMappingApplyFastToneMapping(
+	cv::bioinspired::RetinaFastToneMapping* toneMapping, 
+	cv::_InputArray* inputImage, 
+	cv::_OutputArray* outputToneMappedImage)
+{
+	toneMapping->applyFastToneMapping(*inputImage, *outputToneMappedImage);
+}
+void cveRetinaFastToneMappingRelease(cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr)
+{
+	delete *sharedPtr;
+	*sharedPtr = 0;
+}

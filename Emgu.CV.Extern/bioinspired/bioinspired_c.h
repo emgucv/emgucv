@@ -10,6 +10,7 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/bioinspired/retina.hpp"
+#include "opencv2/bioinspired/retinafasttonemapping.hpp"
 #include "emgu_c.h"
 
 //Retina
@@ -22,4 +23,8 @@ CVAPI(void) cveRetinaClearBuffers(cv::bioinspired::Retina* retina);
 CVAPI(void) cveRetinaGetParameters(cv::bioinspired::Retina* retina, cv::bioinspired::RetinaParameters* p);
 CVAPI(void) cveRetinaSetParameters(cv::bioinspired::Retina* retina, cv::bioinspired::RetinaParameters* p);
 
+//RetinaFastToneMapping
+CVAPI(cv::bioinspired::RetinaFastToneMapping*) cveRetinaFastToneMappingCreate(CvSize* inputSize, cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr);
+CVAPI(void) cveRetinaFastToneMappingApplyFastToneMapping(cv::bioinspired::RetinaFastToneMapping* toneMapping, cv::_InputArray* inputImage, cv::_OutputArray* outputToneMappedImage);
+CVAPI(void) cveRetinaFastToneMappingRelease(cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr);
 #endif
