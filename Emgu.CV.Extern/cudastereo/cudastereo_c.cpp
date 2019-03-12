@@ -60,3 +60,9 @@ void cudaDisparityBilateralFilterRelease(cv::Ptr<cv::cuda::DisparityBilateralFil
 	*filter = 0;
 }
 
+
+void cudaDrawColorDisp(cv::_InputArray* srcDisp, cv::_OutputArray* dstDisp, int ndisp, cv::cuda::Stream* stream)
+{
+	cv::cuda::drawColorDisp(*srcDisp, *dstDisp, ndisp, stream ? *stream : cv::cuda::Stream::Null());
+}
+

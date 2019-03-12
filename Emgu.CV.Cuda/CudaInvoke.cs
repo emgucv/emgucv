@@ -1283,8 +1283,24 @@ namespace Emgu.CV.Cuda
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMulSpectrums(IntPtr src1, IntPtr src2, IntPtr dst, int flags,
            [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool conjB,
+           bool conjB,
            IntPtr stream);
+
+        public static void DrawColorDisp(IInputArray srcDisp, IOutputArray dstDisp, int ndisp, Stream stream = null)
+        {
+            using (InputArray iaSrcDisp = srcDisp.GetInputArray())
+            using (OutputArray oaDstDisp = dstDisp.GetOutputArray())
+            {
+                cudaDrawColorDisp(iaSrcDisp, oaDstDisp, ndisp, stream);
+            }
+
+        }
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cudaDrawColorDisp(
+            IntPtr srcDisp, 
+            IntPtr dstDisp, 
+            int ndisp, 
+            IntPtr stream);
 
         /*
         /// <summary>
