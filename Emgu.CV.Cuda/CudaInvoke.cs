@@ -91,8 +91,8 @@ namespace Emgu.CV.Cuda
             {
                 return "Has cuda: false";
             }
-
         }
+
         /// <summary>
         /// Get the number of Cuda enabled devices
         /// </summary>
@@ -1286,6 +1286,17 @@ namespace Emgu.CV.Cuda
            bool conjB,
            IntPtr stream);
 
+        /// <summary>
+        /// Sets a CUDA device and initializes it for the current thread with OpenGL interoperability.
+        /// This function should be explicitly called after OpenGL context creation and before any CUDA calls.
+        /// </summary>
+        /// <param name="device">System index of a CUDA device starting with 0.</param>
+        public static void SetGlDevice(int device = 0)
+        {
+            cudaSetGlDevice(device);
+        }
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cudaSetGlDevice(int device);
         public static void DrawColorDisp(IInputArray srcDisp, IOutputArray dstDisp, int ndisp, Stream stream = null)
         {
             using (InputArray iaSrcDisp = srcDisp.GetInputArray())

@@ -172,7 +172,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         PosFrames = 1,
         /// <summary>
-        /// Position in relative units (0 - start of the file, 1 - end of the file)
+        /// Relative position of the video file: 0=start of the film, 1=end of the film.
         /// </summary>
         PosAviRatio = 2,
         /// <summary>
@@ -196,47 +196,47 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         FrameCount = 7,
         /// <summary>
-        /// Format
+        /// Format of the %Mat objects returned by VideoCapture::retrieve().
         /// </summary>
         Format = 8,
         /// <summary>
-        /// Mode
+        /// Backend-specific value indicating the current capture mode.
         /// </summary>
         Mode = 9,
         /// <summary>
-        /// Brightness
+        /// Brightness of the image (only for those cameras that support).
         /// </summary>
         Brightness = 10,
         /// <summary>
-        /// Contrast
+        /// Contrast of the image (only for cameras).
         /// </summary>
         Contrast = 11,
         /// <summary>
-        /// Saturation
+        /// Saturation of the image (only for cameras).
         /// </summary>
         Saturation = 12,
         /// <summary>
-        /// Hue
+        /// Hue of the image (only for cameras).
         /// </summary>
         Hue = 13,
         /// <summary>
-        /// Gain
+        /// Gain of the image (only for those cameras that support).
         /// </summary>
         Gain = 14,
         /// <summary>
-        /// Exposure
+        /// Exposure (only for those cameras that support).
         /// </summary>
         Exposure = 15,
         /// <summary>
-        /// Convert RGB
+        /// Boolean flags indicating whether images should be converted to RGB.
         /// </summary>
         ConvertRgb = 16,
         /// <summary>
-        /// White balance blue u
+        /// Currently unsupported.
         /// </summary>
         WhiteBalanceBlueU = 17,
         /// <summary>
-        /// Rectification
+        /// Rectification flag for stereo cameras (note: only supported by DC1394 v 2.x backend currently).
         /// </summary>
         Rectification = 18,
         /// <summary>
@@ -312,7 +312,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Iris = 36,
         /// <summary>
-        /// Settings
+        /// Pop up video/camera filter dialog (note: only supported by DSHOW backend currently. The property value is ignored)
         /// </summary>
         Settings = 37,
         /// <summary>
@@ -324,13 +324,29 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Autofocus = 39,
         /// <summary>
-        /// Sar num
+        /// Sample aspect ratio: num/den (num)
         /// </summary>
         SarNum = 40,
         /// <summary>
-        /// Sar den
+        /// Sample aspect ratio: num/den (den)
         /// </summary>
         SarDen = 41,
+        /// <summary>
+        /// Current backend (enum VideoCaptureAPIs). Read-only property
+        /// </summary>
+        Backend = 42,
+        /// <summary>
+        /// Video input or Channel Number (only for those cameras that support)
+        /// </summary>
+        Channel = 43,
+        /// <summary>
+        /// Enable/ disable auto white-balance
+        /// </summary>
+        AutoWb = 44,
+        /// <summary>
+        /// White-balance color temperature
+        /// </summary>
+        WbTemperature = 45, 
 
         /// <summary>
         /// property for highgui class CvCapture_Android only

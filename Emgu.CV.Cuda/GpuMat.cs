@@ -27,6 +27,9 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// A GpuMat, use the generic version if possible. The non generic version is good for use as buffer in stream calls.
     /// </summary>
+#if !(NETFX_CORE || NETSTANDARD1_4)
+    [DebuggerTypeProxy(typeof(GpuMat.DebuggerProxy))]
+#endif
     public partial class GpuMat : UnmanagedObject, IEquatable<GpuMat>, IImage
     {
 
@@ -195,12 +198,26 @@ namespace Emgu.CV.Cuda
             return m;
         }
 
+        /// <summary>
+        /// Get a copy of the data values as an array
+        /// </summary>
+        /// <param name="jagged">If true, a jagged array will returned. Otherwise it will return a regular array.</param>
+        /// <returns>a copy of the data values as an array</returns>
+        public Array GetData(bool jagged = true)
+        {
+            using (Mat m = new Mat())
+            {
+                Download(m);
+                return m.GetData(jagged);
+            }
+        }
+
 #if __IOS__
-      public UIImage ToUIImage()
-      {
+        public UIImage ToUIImage()
+        {
          using (Mat m = ToMat())
             return m.ToUIImage();
-      }
+        }
 #endif
 
         /// <summary>
@@ -511,7 +528,24 @@ namespace Emgu.CV.Cuda
             CopyTo(clone);
             return clone;
         }
+
+        internal class DebuggerProxy
+        {
+            private GpuMat _v;
+
+            public DebuggerProxy(GpuMat v)
+            {
+                _v = v;
+            }
+
+            public Array Data
+            {
+                get { return _v.GetData(true); }
+            }
+        }
     }
+
+
 
     public static partial class CudaInvoke
     {

@@ -131,4 +131,6 @@ CVAPI(void) cudaConvolutionConvolve(cv::cuda::Convolution* convolution, cv::_Inp
 CVAPI(void) cudaConvolutionRelease(cv::Ptr<cv::cuda::Convolution>** convolution);
 
 
+
+CVAPI(void) cudaSetGlDevice(int device);
 #endif

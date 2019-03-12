@@ -40,6 +40,12 @@ void cudaSparseOpticalFlowCalc(
 	opticalFlow->calc(*prevImg, *nextImg, *prevPts, *nextPts, status ? *status : (cv::_OutputArray) cv::noArray(), err ? *err : (cv::_OutputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 }
 
+void cudaSparsePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** flow)
+{
+	delete *flow;
+	*flow = 0;
+}
+
 //----------------------------------------------------------------------------
 //
 //  CudaBroxOpticalFlow 

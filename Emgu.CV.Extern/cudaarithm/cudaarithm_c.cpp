@@ -5,6 +5,7 @@
 //----------------------------------------------------------------------------
 
 #include "cudaarithm_c.h"
+#include "opencv2/core/opengl.hpp"
 
 void cudaExp(cv::_InputArray* a, cv::_OutputArray* b, cv::cuda::Stream* stream)
 {
@@ -292,6 +293,11 @@ void cudaNormalize(cv::_InputArray* src, cv::_OutputArray* dst, double alpha, do
    int norm_type, int dtype, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
    cv::cuda::normalize(*src, *dst, alpha, beta, norm_type, dtype, mask ? *mask : (cv::_InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null()); 
+}
+
+void cudaSetGlDevice(int device)
+{
+	cv::cuda::setGlDevice(device);
 }
 
 cv::cuda::Convolution* cudaConvolutionCreate(CvSize* userBlockSize, cv::Ptr<cv::cuda::Convolution>** sharedPtr)
