@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
+//using System.IO;
 using System.Text;
 using Emgu.CV;
 using Emgu.CV.Cuda;
