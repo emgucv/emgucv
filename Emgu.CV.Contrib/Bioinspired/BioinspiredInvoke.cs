@@ -65,6 +65,13 @@ namespace Emgu.CV.Bioinspired
             IntPtr outputToneMappedImage);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveRetinaFastToneMappingSetup(
+            IntPtr toneMapping, 
+            float photoreceptorsNeighborhoodRadius, 
+            float ganglioncellsNeighborhoodRadius, 
+            float meanLuminanceModulatorK);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveRetinaFastToneMappingRelease(ref IntPtr sharedPtr);
 
     }

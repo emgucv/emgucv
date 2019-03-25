@@ -54,6 +54,10 @@ cv::bioinspired::RetinaFastToneMapping* cveRetinaFastToneMappingCreate(CvSize* i
 	*sharedPtr = new cv::Ptr<cv::bioinspired::RetinaFastToneMapping>(ptr);
 	return (*sharedPtr)->get();
 }
+void cveRetinaFastToneMappingSetup(cv::bioinspired::RetinaFastToneMapping* toneMapping, float photoreceptorsNeighborhoodRadius, float ganglioncellsNeighborhoodRadius, float meanLuminanceModulatorK)
+{
+	toneMapping->setup(photoreceptorsNeighborhoodRadius, ganglioncellsNeighborhoodRadius, meanLuminanceModulatorK);
+}
 void cveRetinaFastToneMappingApplyFastToneMapping(
 	cv::bioinspired::RetinaFastToneMapping* toneMapping, 
 	cv::_InputArray* inputImage, 
