@@ -500,13 +500,11 @@ namespace Emgu.CV.Cuda
 
         IImage[] IImage.Split()
         {
-            return
-#if NETFX_CORE || NETSTANDARD1_4
-            Extensions.
-#else
-            Array.
-#endif
-            ConvertAll(Split(null), (m) => (IImage)m);
+            GpuMat[] channels = Split();
+            IImage[] result = new IImage[channels.Length];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = (IImage)channels[i];
+            return result;
         }
 
         /// <summary>

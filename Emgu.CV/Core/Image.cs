@@ -792,9 +792,11 @@ namespace Emgu.CV
         /// <param name="thickness"> If thickness is less than 1, the triangle is filled up </param>
         public virtual void Draw(IConvexPolygonF polygon, TColor color, int thickness)
         {
-            Point[] vertices =
+            PointF[] polygonVertices = polygon.GetVertices();
 
-            Array.ConvertAll<PointF, Point>(polygon.GetVertices(), Point.Round);
+            Point[] vertices = new Point[polygonVertices.Length];
+            for (int i = 0; i < polygonVertices.Length; i++)
+                vertices[i] = Point.Round(polygonVertices[i]);
 
             if (thickness > 0)
                 DrawPolyline(vertices, true, color, thickness);
@@ -2951,7 +2953,7 @@ namespace Emgu.CV
         /// <typeparam name="TOtherDepth">The depth type of the result image</typeparam>
         /// <param name="converter">The function to be applied to the image pixels</param>
         /// <returns>The result image</returns>
-        public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Converter<TDepth, TOtherDepth> converter)
+        public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Func<TDepth, TOtherDepth> converter)
            where TOtherDepth : new()
         {
             Image<TColor, TOtherDepth> res = new Image<TColor, TOtherDepth>(Size);
@@ -4105,11 +4107,12 @@ namespace Emgu.CV
         #region IImage
         IImage[] IImage.Split()
         {
-            return
+            Image<Gray, TDepth>[] channels = Split();
+            IImage[] result=  new IImage[channels.Length];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = (IImage) channels[i];
+            return result;
 
-            Array.ConvertAll<Image<Gray, TDepth>, IImage>(
-                  Split(),
-                  delegate (Image<Gray, TDepth> img) { return (IImage)img; });
         }
         #endregion
 
