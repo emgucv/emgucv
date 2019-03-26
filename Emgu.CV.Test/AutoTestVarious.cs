@@ -3897,10 +3897,25 @@ namespace Emgu.CV.Test
         {
             Mat m = EmguAssert.LoadMat("pedestrian.png");
             Mat result = new Mat();
-            using (Bioinspired.RetinaFastToneMapping tm = new Bioinspired.RetinaFastToneMapping(new Size(5, 5)))
+            using (Bioinspired.RetinaFastToneMapping tm = new Bioinspired.RetinaFastToneMapping(m.Size))
+            using(Mat gray = new Mat())
             {
+                CvInvoke.CvtColor(m, gray, ColorConversion.Bgr2Gray);
+                tm.Setup(3.0f, 1.0f, 1.0f);
                 tm.ApplyFastToneMapping(m, result);
             }
+            //CvInvoke.Imshow("Tone Mapping", result);
+            //CvInvoke.WaitKey();
+        }
+
+        [Test]
+        public void TestOilPainting()
+        {
+            Mat m = EmguAssert.LoadMat("pedestrian.png");
+            Mat result = new Mat();
+            Emgu.CV.XPhoto.XPhotoInvoke.OilPainting(m, result, 10, 1, ColorConversion.Bgr2Lab);
+            //CvInvoke.Imshow("oil painting", result);
+            //CvInvoke.WaitKey();
         }
 
         [Test]
