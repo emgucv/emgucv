@@ -2269,7 +2269,6 @@ namespace Emgu.CV.Test
                 images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
             }
 
-            //bool loadSuccess = CvInvoke.LoadUnmanagedModules(null, "opencv_ffmpeg310_64.dll");
             //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('H', '2', '6', '4'), 5, new Size(width, height), true))
             using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('M', 'J', 'P', 'G'), 5, new Size(width, height), true))
             //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('X', '2', '6', '4'), 5, new Size(width, height), true))
@@ -2300,6 +2299,74 @@ namespace Emgu.CV.Test
                 EmguAssert.IsTrue(numberOfFrames == count);
             }
             File.Delete(fi.FullName);
+        }
+
+        [Test]
+        public void TestVideoWriterMSMF()
+        {
+            Backend[] backends = CvInvoke.WriterBackends;
+            int backend_idx = 0; //any backend;
+            foreach (Backend be in backends)
+            {
+                if (be.Name.Equals("MSMF"))
+                {
+                    backend_idx = be.ID;
+                    break;
+                }
+            }
+
+            if (backend_idx > 0) //if MSMF back-end is found
+            {
+                int numberOfFrames = 100;
+                int width = 640;
+                int height = 480;
+                String fileName = GetTempFileName() + ".mp4";
+                //String fileName = "C:\\tmp\\out.mp4";
+                Image<Bgr, Byte>[] images = new Image<Bgr, byte>[numberOfFrames];
+                for (int i = 0; i < images.Length; i++)
+                {
+                    images[i] = new Image<Bgr, byte>(width, height);
+                    images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+                }
+
+                using (VideoWriter writer = new VideoWriter(
+                        fileName, 
+                        backend_idx,
+                        VideoWriter.Fourcc('H', '2', '6', '4'), 
+                        5, 
+                        new Size(width, height), 
+                        true))
+                {
+                    double quality = writer.Get(VideoWriter.WriterProperty.Quality);
+                    bool writeSucess = writer.Set(VideoWriter.WriterProperty.Quality, 100);
+                    EmguAssert.IsTrue(writer.IsOpened);
+                    for (int i = 0; i < numberOfFrames; i++)
+                    {
+                        writer.Write(images[i].Mat);
+                    }
+                }
+
+                FileInfo fi = new FileInfo(fileName);
+                EmguAssert.IsTrue(fi.Exists && fi.Length != 0, "File should not be empty");
+
+                using (VideoCapture capture = new VideoCapture(fileName))
+                {
+                    Mat img2 = capture.QueryFrame();
+                    int count = 0;
+                    while (img2 != null && !img2.IsEmpty)
+                    {
+                        EmguAssert.IsTrue(img2.Width == width);
+                        EmguAssert.IsTrue(img2.Height == height);
+                        //Assert.IsTrue(img2.Equals( images[count]) );
+                        img2 = capture.QueryFrame();
+                        count++;
+                    }
+
+                    EmguAssert.IsTrue(numberOfFrames == count);
+                }
+                Trace.WriteLine(String.Format("File size: {0}", fi.Length));
+                File.Delete(fi.FullName);
+            }
         }
 #endif
 

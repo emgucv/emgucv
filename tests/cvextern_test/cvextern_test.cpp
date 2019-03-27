@@ -138,6 +138,17 @@ void Test_vectorOfPoint_to_mat()
 }
 
 #ifdef _MSC_VER
+
+void Test_MSMF_VideoWriter()
+{
+	cv::Size frameSize(640, 480);
+	cv::VideoWriter writer("tmp.mp4", 1400, cv::VideoWriter::fourcc('H', '2', '6', '4'), 24, frameSize, true);
+	bool isOpen = writer.isOpened();
+	cv::Mat frame(frameSize, CV_8UC3, cv::Scalar(255, 0, 0));
+	writer.write(frame);
+	writer.release();
+}
+
 void Test_quaternions_performance()
 {
    LARGE_INTEGER begin;
@@ -245,6 +256,8 @@ int main()
    Test_quaternions_performance();
    
    Test_SeamlessClone(3840);
+
+   Test_MSMF_VideoWriter();
 
    cin >>tmp; //wait for input only if compiling with visual C++ 
 #endif
