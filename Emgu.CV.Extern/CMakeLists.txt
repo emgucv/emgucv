@@ -2156,7 +2156,7 @@ if(WIN32 AND WITH_FFMPEG)
   LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${OPENCV_FFMPEG_OUTPUT_FILE_PATH}")
   #ELSE()
   #  MESSAGE(FATAL_ERROR "Could not find Open CV FFMPEG dll, please verify if the ffmpeg dll is in '${OPENCV_FFMPEG_OUTPUT_FILE_PATH}'")
-  endif()
+  #ENDIF()
 endif()
 
 
