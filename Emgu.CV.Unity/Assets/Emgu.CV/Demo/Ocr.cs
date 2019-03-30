@@ -36,8 +36,7 @@ public class Ocr : MonoBehaviour
 
         if (!System.IO.File.Exists(dest) || !(new FileInfo(dest).Length > 0))
         {
-            String source =
-                String.Format("https://github.com/tesseract-ocr/tessdata/blob/4592b8d453889181e01982d22328b5846765eaad/{0}.traineddata?raw=true", lang);
+            String source = Tesseract.GetLangFileUrl(lang);
             using (UnityEngine.Networking.UnityWebRequest webclient = new UnityEngine.Networking.UnityWebRequest(source))
             {
                 Debug.Log(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
