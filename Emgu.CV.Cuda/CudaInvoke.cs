@@ -1297,6 +1297,14 @@ namespace Emgu.CV.Cuda
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaSetGlDevice(int device);
+
+        /// <summary>
+        /// Colors a disparity image.
+        /// </summary>
+        /// <param name="srcDisp">Input single-channel 8-bit unsigned, 16-bit signed, 32-bit signed or 32-bit floating-point disparity image. If 16-bit signed format is used, the values are assumed to have no fractional bits.</param>
+        /// <param name="dstDisp">Output disparity image. It has the same size as src_disp. The type is CV_8UC4 in BGRA format (alpha = 255).</param>
+        /// <param name="ndisp">Number of disparities.</param>
+        /// <param name="stream">Stream for the asynchronous version.</param>
         public static void DrawColorDisp(IInputArray srcDisp, IOutputArray dstDisp, int ndisp, Stream stream = null)
         {
             using (InputArray iaSrcDisp = srcDisp.GetInputArray())

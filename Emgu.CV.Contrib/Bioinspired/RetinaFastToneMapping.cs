@@ -14,13 +14,13 @@ using Emgu.CV.Util;
 namespace Emgu.CV.Bioinspired
 {
     /// <summary>
-    /// A wrapper class which allows the tone mapping algorithm of Meylan&al(2007) to be used with OpenCV.
+    /// A wrapper class which allows the tone mapping algorithm of Meylan &amp; al(2007) to be used with OpenCV.
     /// </summary>
     public class RetinaFastToneMapping : SharedPtrObject
     {
 
         /// <summary>
-        /// Create a wrapper class which allows the tone mapping algorithm of Meylan&al(2007) to be used with OpenCV.
+        /// Create a wrapper class which allows the tone mapping algorithm of Meylan &amp; al(2007) to be used with OpenCV.
         /// </summary>
         /// <param name="inputSize">The size of the images to process</param>
         public RetinaFastToneMapping(Size inputSize)
