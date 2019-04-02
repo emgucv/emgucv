@@ -90,9 +90,11 @@ namespace Emgu.CV
         /// <param name="fileName">The source file name where error is encountered</param>
         /// <param name="line">The line number in the source where error is encountered</param>
         /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
-        /// <returns></returns>
+        /// <returns>if 0, signal the process to continue</returns>
 #if __IOS__
-      [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
+        [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
+#elif UNITY_WSA && (!UNITY_EDITOR)
+        [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
         private static int CvIgnoreErrorErrorHandler(
                     int status,
@@ -115,9 +117,11 @@ namespace Emgu.CV
         /// <param name="fileName">The source file name where error is encountered</param>
         /// <param name="line">The line number in the source where error is encountered</param>
         /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
-        /// <returns></returns>
+        /// <returns>If 0, signla the process to continue</returns>
 #if __IOS__
-      [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
+        [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
+#elif UNITY_WSA && (!UNITY_EDITOR)
+        [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
         private static int CvErrorHandler(
            int status,

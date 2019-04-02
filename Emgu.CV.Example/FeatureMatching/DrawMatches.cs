@@ -109,7 +109,9 @@ namespace FeatureMatchingExample
                     };
                     pts = CvInvoke.PerspectiveTransform(pts, homography);
 
-                    Point[] points = Array.ConvertAll<PointF, Point>(pts, Point.Round);
+                    Point[] points = new Point[pts.Length];
+					for (int i = 0; i < points.Length; i++)
+						points[i] = Point.Round(pts[i]);
 
                     using (VectorOfPoint vp = new VectorOfPoint(points))
                     {

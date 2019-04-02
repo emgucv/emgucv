@@ -206,20 +206,28 @@ namespace Emgu.CV
              }
 
 #if (UNITY_STANDALONE_WIN && !UNITY_EDITOR_WIN)
-				FileInfo file = new FileInfo(asm.Location);
-				DirectoryInfo directory = file.Directory;
+            if (String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location))
+            {
+                Debug.WriteLine(String.Format("UNITY_STANDALONE_WIN: asm.Location is invalid: '{0}'", asm.Location));
+                return false;
+            }
+                
+            
+            FileInfo file = new FileInfo(asm.Location);
+            DirectoryInfo directory = file.Directory;
             if (directory.Parent != null)
             {
-               String unityAltFolder = Path.Combine(directory.Parent.FullName, "Plugins");
+                String unityAltFolder = Path.Combine(directory.Parent.FullName, "Plugins");
               
-               if (Directory.Exists(unityAltFolder))
+                if (Directory.Exists(unityAltFolder))
                   loadDirectory = unityAltFolder;
-               else
-               {
+                else
+                {
                   Debug.WriteLine("No suitable directory found to load unmanaged modules");
                   return false;
-               }
+                }
             }
+            
 #elif __ANDROID__ || UNITY_ANDROID || NETSTANDARD1_4
 #else
             if (!Directory.Exists(loadDirectory))
@@ -235,6 +243,11 @@ namespace Emgu.CV
 
                if (!Directory.Exists(altLoadDirectory))
                {
+                  if (String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location))
+                  {
+                       Debug.WriteLine(String.Format("asm.Location is invalid: '{0}'", asm.Location));
+                       return false;
+                  }
                   FileInfo file = new FileInfo(asm.Location);
                   DirectoryInfo directory = file.Directory;
 #if UNITY_EDITOR_WIN
@@ -293,7 +306,7 @@ namespace Emgu.CV
 #endif
 #endif
 
-            System.Diagnostics.Debug.WriteLine(String.Format("Loading open cv binary from {0}", loadDirectory));
+         System.Diagnostics.Debug.WriteLine(String.Format("Loading open cv binary from {0}", loadDirectory));
          bool success = true;
 
          string prefix = string.Empty;
