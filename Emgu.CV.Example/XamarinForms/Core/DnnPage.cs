@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.IO;
 using System.Drawing;
@@ -126,12 +127,17 @@ namespace Emgu.CV.XamarinForms
                   () =>
                   {
                       InitDetector();
-
+                      String msg = String.Empty;
                       using (Mat blob = DnnInvoke.BlobFromImage(image[0]))
                       using (VectorOfMat tensors = new VectorOfMat())
                       {
                           _maskRcnnDetector.SetInput(blob, "image_tensor");
+                          Stopwatch watch = Stopwatch.StartNew();
                           _maskRcnnDetector.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
+                          watch.Stop();
+                          msg = String.Format("Mask RCNN inception completed in {0} milliseconds.",
+                              watch.ElapsedMilliseconds);
+
                           using (Mat boxes = tensors[0])
                           using (Mat masks = tensors[1])
                           {
@@ -140,7 +146,6 @@ namespace Emgu.CV.XamarinForms
                               int numDetections = boxesData.GetLength(2);
                               for (int i = 0; i < numDetections; i++)
                               {
-
                                   float score = boxesData[0, 0, i, 2];
 
                                   if (score > 0.5)
@@ -207,13 +212,13 @@ namespace Emgu.CV.XamarinForms
                       }
                       long time = 0;
 
-                      return new Tuple<Mat, String, long>(image[0], null, time);
+                      return new Tuple<Mat, String, long>(image[0], msg, time);
                   });
                 t.Start();
 
                 var result = await t;
                 SetImage(t.Result.Item1);
-                String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
+                //String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
 
                 SetMessage(t.Result.Item2);
             };
