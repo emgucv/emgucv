@@ -59,8 +59,14 @@
     <Reference Include="Emgu.TF.Models, Version=1.13.1.435, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\nugetpackages\EMGU.TF.MODELS.1.13.1.435\lib\net46\Emgu.TF.Models.dll</HintPath>
     </Reference>
+    <Reference Include="Emgu.TF.Protobuf.Netstandard, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\nugetpackages\EMGU.TF.PROTOBUF.1.13.1.435\lib\netstandard1.0\Emgu.TF.Protobuf.Netstandard.dll</HintPath>
+    </Reference>
     <Reference Include="Emgu.TF.World, Version=1.13.1.435, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
       <HintPath>..\..\nugetpackages\EMGU.TF.1.13.1.435\lib\net35\Emgu.TF.World.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\..\nugetpackages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -113,12 +119,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\opencv_contrib\modules\dnn_objdetect\tutorials\images\space_shuttle.jpg">
-      <Link>space_shuttle.jpg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.UI\Emgu.CV.UI.csproj">
       <Project>{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}</Project>
       <Name>Emgu.CV.UI</Name>
@@ -127,6 +127,12 @@
       <Project>{3f5d7c08-96ba-4037-bb24-afa2c336e260}</Project>
       <Name>Emgu.CV.World</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\XamarinForms\Core\dog416.png">
+      <Link>dog416.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\nugetpackages\EMGU.TF.1.13.1.435\build\EMGU.TF.targets" Condition="Exists('..\..\nugetpackages\EMGU.TF.1.13.1.435\build\EMGU.TF.targets')" />

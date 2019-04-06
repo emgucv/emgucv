@@ -12,12 +12,14 @@ using Emgu.TF;
 using Emgu.TF.Models;
 using Emgu.CV;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Tensorflow;
 
 namespace TFInterop
 {
     public partial class MainForm : Form
     {
-        private Inception inceptionGraph;
+        private MaskRcnnInceptionV2Coco _inceptionGraph;
 
         public MainForm()
         {
@@ -29,18 +31,29 @@ namespace TFInterop
 
             DisableUI();
 
-            //Use the following code for the full inception model
-            inceptionGraph = new Inception();
-            inceptionGraph.OnDownloadProgressChanged += OnDownloadProgressChangedEventHandler;
-            inceptionGraph.OnDownloadCompleted += onDownloadCompleted;
+            SessionOptions so = new SessionOptions();
+            if (TfInvoke.IsGoogleCudaEnabled)
+            {
+                Tensorflow.ConfigProto config = new Tensorflow.ConfigProto();
+                config.GpuOptions = new Tensorflow.GPUOptions();
+                config.GpuOptions.AllowGrowth = true;
+                so.SetConfig(config.ToProtobuf());
+            }
+            _inceptionGraph = new MaskRcnnInceptionV2Coco(null, so);
 
-            inceptionGraph.Init();
+            _inceptionGraph.OnDownloadProgressChanged += OnDownloadProgressChangedEventHandler;
+            _inceptionGraph.OnDownloadCompleted += onDownloadCompleted;
+
+            _inceptionGraph.Init();
         }
 
         public void onDownloadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             EnableUI();
-            Recognize("space_shuttle.jpg");
+
+            // Image file from
+            // https://github.com/opencv/opencv_extra/blob/master/testdata/dnn/dog416.png
+            Recognize("dog416.png");
         }
 
         public void DisableUI()
@@ -96,42 +109,94 @@ namespace TFInterop
             }
         }
 
+        private bool _coldSession = true;
+
+        private Mat _renderMat;
+
         public void Recognize(Mat m)
         {
-            Tensor imageTensor = Emgu.TF.TensorConvert.ReadTensorFromMatBgr(m, 224, 224, 128.0f, 1.0f / 128.0f);
+            Tensor imageTensor = Emgu.TF.TensorConvert.ReadTensorFromMatBgr(m, Emgu.TF.DataType.Uint8);
 
-            //Uncomment the following code to use a retrained model to recognize followers, downloaded from the internet
-            //Inception inceptionGraph = new Inception(null, new string[] {"optimized_graph.pb", "output_labels.txt"}, "https://github.com/emgucv/models/raw/master/inception_flower_retrain/", "Mul", "final_result");
-            //Tensor imageTensor = ImageIO.ReadTensorFromMatBgr(fileName, 299, 299, 128.0f, 1.0f / 128.0f);
+            MaskRcnnInceptionV2Coco.RecognitionResult[] results;
+            if (_coldSession)
+            {
+                //First run of the recognition graph, here we will compile the graph and initialize the session
+                //This is expected to take much longer time than consecutive runs.
+                results = _inceptionGraph.Recognize(imageTensor);
+                _coldSession = false;
+            }
 
-            //Uncomment the following code to use a retrained model to recognize followers, if you deployed the models with the application
-            //For ".pb" and ".txt" bundled with the application, set the url to null
-            //Inception inceptionGraph = new Inception(null, new string[] {"optimized_graph.pb", "output_labels.txt"}, null, "Mul", "final_result");
-            //Tensor imageTensor = ImageIO.ReadTensorFromMatBgr(fileName, 299, 299, 128.0f, 1.0f / 128.0f);
-
+            //Here we are trying to time the execution of the graph after it is loaded
             Stopwatch sw = Stopwatch.StartNew();
-            Inception.RecognitionResult result = inceptionGraph.MostLikely(imageTensor);
-            //float[] probability = inceptionGraph.Recognize(imageTensor);
+            results = _inceptionGraph.Recognize(imageTensor);
             sw.Stop();
 
-            String resStr = String.Empty;
-
-            if (result != null)
+            foreach (var r in results)
             {
-                resStr = String.Format("Object is {0} with {1}% probability. Recognized in {2} milliseconds.", result.Label, result.Probability * 100, sw.ElapsedMilliseconds);
+                if (r.Probability > 0.5)
+                {
+                    float x1 = r.Region[0] * m.Height;
+                    float y1 = r.Region[1] * m.Width;
+                    float x2 = r.Region[2] * m.Height;
+                    float y2 = r.Region[3] * m.Width;
+                    RectangleF rectf = new RectangleF(y1, x1, y2 - y1, x2 - x1);
+                    Rectangle rect = Rectangle.Round(rectf);
+                    rect.Intersect(new Rectangle(Point.Empty, m.Size));
+
+                    if (rect.IsEmpty)
+                        continue;
+                    CvInvoke.Rectangle(m, rect, new Emgu.CV.Structure.MCvScalar(0, 0, 255), 2);
+
+                    float[,] mask = r.Mask;
+                    GCHandle handle = GCHandle.Alloc(mask, GCHandleType.Pinned);
+                    using (Mat mk = new Mat(new Size(mask.GetLength(1), mask.GetLength(0)), Emgu.CV.CvEnum.DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), mask.GetLength(1) * sizeof(float)))
+                    using (Mat subRegion = new Mat(m, rect))
+                    using (Mat maskLarge = new Mat())
+                    using (Mat maskLargeInv = new Mat())
+                    using (Mat largeColor = new Mat(subRegion.Size, Emgu.CV.CvEnum.DepthType.Cv8U, 3))
+                    {
+                        CvInvoke.Resize(mk, maskLarge, subRegion.Size);
+
+                        //give the mask at least 30% transparency
+                        using (ScalarArray sa = new ScalarArray(0.7))
+                            CvInvoke.Min(sa, maskLarge, maskLarge);
+
+                        //Create the inverse mask for the original image
+                        using (ScalarArray sa = new ScalarArray(1.0))
+                            CvInvoke.Subtract(sa, maskLarge, maskLargeInv);
+
+                        //The mask color
+                        largeColor.SetTo(new Emgu.CV.Structure.MCvScalar(255, 0, 0));
+
+                        CvInvoke.BlendLinear(largeColor, subRegion, maskLarge, maskLargeInv, subRegion);
+
+                    }
+                    handle.Free();
+
+                    CvInvoke.PutText(m, r.Label, Point.Round(rect.Location), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Emgu.CV.Structure.MCvScalar(0, 255, 0), 1);
+                }
             }
+
+            String resStr = String.Format("{0} objects detected in {1} milliseconds.", results.Length, sw.ElapsedMilliseconds);
+
+            if (_renderMat == null)
+                _renderMat = new Mat();
+            m.CopyTo(_renderMat);
+
+            Bitmap bmp = _renderMat.Bitmap;
 
             if (InvokeRequired)
             {
-                this.Invoke( (MethodInvoker)  (() =>
-                   {
-                       messageLabel.Text = resStr;
-                       pictureBox.Image = m.Bitmap;
-                   }));
-            } else
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    messageLabel.Text = resStr;
+                    pictureBox.Image = bmp;
+                }));
+            }
+            else
             {
                 messageLabel.Text = resStr;
-                pictureBox.Image = m.Bitmap;
+                pictureBox.Image = bmp;
             }
         }
 

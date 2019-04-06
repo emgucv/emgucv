@@ -13,9 +13,17 @@ namespace HelloWorld
    {
       static void Main(string[] args)
       {
+          Viz3d viz = new Viz3d("show_simple_widgets");
+          viz.SetBackgroundMeshLab();
+          WCoordinateSystem coor = new WCoordinateSystem();
+          viz.ShowWidget("coor", coor);
+          WCube cube = new WCube(new MCvPoint3D64f(-.5, -.5, -.5), new MCvPoint3D64f(.5, .5, .5), true, new MCvScalar(255, 255, 255));
+          viz.ShowWidget("cube", cube);
+          WCube cube0 = new WCube(new MCvPoint3D64f(-1, -1, -1), new MCvPoint3D64f(-.5, -.5, -.5), false, new MCvScalar(123, 45, 200));
+          viz.ShowWidget("cub0", cube0);
+          viz.Spin();
 
-
-         String win1 = "Test Window"; //The name of the window
+            String win1 = "Test Window"; //The name of the window
          CvInvoke.NamedWindow(win1); //Create the window using the specific name
 
          Mat img = new Mat(200, 400, DepthType.Cv8U, 3); //Create a 3 channel image of 400x200

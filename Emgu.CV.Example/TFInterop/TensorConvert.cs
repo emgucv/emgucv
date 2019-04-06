@@ -12,16 +12,17 @@ namespace Emgu.TF
     public static class TensorConvert
     {
         /// <summary>
-        /// Conver a 3 channel BGR Mat to a Tensor
+        /// Convert a 3 channel BGR Mat to a Tensor
         /// </summary>
         /// <param name="image">The input Emgu CV Mat</param>
         /// <param name="inputHeight">The height of the image in the output tensor, if it is -1, the height will not be changed.</param>
         /// <param name="inputWidth">The width of the image in the output tensor, if it is -1, the width will not be changed.</param>
         /// <param name="inputMean">The mean, if it is not 0, the value will be substracted from the pixel values</param>
         /// <param name="scale">The optional scale</param>
+        /// <param name="dataType">The type of the data in the tensor</param>
         /// <param name="status">The tensorflow status</param>
         /// <returns>The tensorflow tensor</returns>
-        public static Tensor ReadTensorFromMatBgr(Mat image, int inputHeight = -1, int inputWidth = -1, float inputMean = 0.0f, float scale = 1.0f, Status status = null)
+        public static Tensor ReadTensorFromMatBgr(Mat image, DataType dataType, int inputHeight = -1, int inputWidth = -1, float inputMean = 0.0f, float scale = 1.0f, Status status = null)
         {
             if (image.NumberOfChannels != 3)
             {
@@ -44,23 +45,46 @@ namespace Emgu.TF
                 using (Mat tmp = new Mat())
                 {
                     CvInvoke.Resize(image, tmp, finalSize);
-                    return ReadTensorFromMatBgrF(tmp, inputMean, scale);
+                    return ReadTensorFromMatBgr(tmp, inputMean, scale, dataType);
                 }
             }
             else
             {
-                return ReadTensorFromMatBgrF(image, inputMean, scale);
+                return ReadTensorFromMatBgr(image, inputMean, scale, dataType);
             }
         }
 
-        private static Tensor ReadTensorFromMatBgrF(Mat image, float inputMean, float scale)
+        private static Tensor ReadTensorFromMatBgr(Mat image, float inputMean, float scale, DataType type)
         {
-            Tensor t = new Tensor(DataType.Float, new int[] { 1, image.Height, image.Width, 3 });
-            using (Mat matF = new Mat(image.Size, Emgu.CV.CvEnum.DepthType.Cv32F, 3, t.DataPointer, sizeof(float) * 3 * image.Width))
+            if (type == DataType.Float)
             {
-                image.ConvertTo(matF, Emgu.CV.CvEnum.DepthType.Cv32F, scale, -inputMean * scale);
+                Tensor t = new Tensor(type, new int[] { 1, image.Height, image.Width, 3 });
+                using (Mat matF = new Mat(image.Size, Emgu.CV.CvEnum.DepthType.Cv32F, 3, t.DataPointer, sizeof(float) * 3 * image.Width))
+                {
+                    image.ConvertTo(matF, Emgu.CV.CvEnum.DepthType.Cv32F, scale, -inputMean * scale);
+                }
+                return t;
             }
-            return t;
+            else if (type == DataType.Uint8)
+            {
+                Tensor t = new Tensor(type, new int[] { 1, image.Height, image.Width, 3 });
+
+                using (Mat matB = new Mat(image.Size, Emgu.CV.CvEnum.DepthType.Cv8U, 3, t.DataPointer, sizeof(byte) * 3 * image.Width))
+                {
+                    if (scale == 1.0f && inputMean == 0)
+                    {
+                        image.CopyTo(matB);
+                    }
+                    else
+                        CvInvoke.ConvertScaleAbs(image, matB, scale, -inputMean * scale);
+                }
+                return t;
+
+            }
+            else
+            {
+                throw new Exception(String.Format("Data Type of {0} is not supported.", type));
+            }
         }
 
     }
