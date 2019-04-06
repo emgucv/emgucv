@@ -110,24 +110,15 @@ namespace TFInterop
             //Tensor imageTensor = ImageIO.ReadTensorFromMatBgr(fileName, 299, 299, 128.0f, 1.0f / 128.0f);
 
             Stopwatch sw = Stopwatch.StartNew();
-            float[] probability = inceptionGraph.Recognize(imageTensor);
+            Inception.RecognitionResult result = inceptionGraph.MostLikely(imageTensor);
+            //float[] probability = inceptionGraph.Recognize(imageTensor);
             sw.Stop();
 
             String resStr = String.Empty;
-            if (probability != null)
+
+            if (result != null)
             {
-                String[] labels = inceptionGraph.Labels;
-                float maxVal = 0;
-                int maxIdx = 0;
-                for (int i = 0; i < probability.Length; i++)
-                {
-                    if (probability[i] > maxVal)
-                    {
-                        maxVal = probability[i];
-                        maxIdx = i;
-                    }
-                }
-                resStr = String.Format("Object is {0} with {1}% probability. Recognized in {2} milliseconds.", labels[maxIdx], maxVal * 100, sw.ElapsedMilliseconds);
+                resStr = String.Format("Object is {0} with {1}% probability. Recognized in {2} milliseconds.", result.Label, result.Probability * 100, sw.ElapsedMilliseconds);
             }
 
             if (InvokeRequired)

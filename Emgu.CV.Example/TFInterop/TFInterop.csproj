@@ -56,11 +56,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Emgu.TF.Models, Version=1.12.0.342, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\nugetpackages\EMGU.TF.MODELS.1.12.0.342\lib\net46\Emgu.TF.Models.dll</HintPath>
+    <Reference Include="Emgu.TF.Models, Version=1.13.1.435, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\nugetpackages\EMGU.TF.MODELS.1.13.1.435\lib\net46\Emgu.TF.Models.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.TF.World, Version=1.12.0.342, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <HintPath>..\..\nugetpackages\EMGU.TF.1.12.0.342\lib\net35\Emgu.TF.World.dll</HintPath>
+    <Reference Include="Emgu.TF.World, Version=1.13.1.435, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <HintPath>..\..\nugetpackages\EMGU.TF.1.13.1.435\lib\net35\Emgu.TF.World.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -129,11 +129,11 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\nugetpackages\EMGU.TF.1.12.0.342\build\EMGU.TF.targets" Condition="Exists('..\..\nugetpackages\EMGU.TF.1.12.0.342\build\EMGU.TF.targets')" />
+  <Import Project="..\..\nugetpackages\EMGU.TF.1.13.1.435\build\EMGU.TF.targets" Condition="Exists('..\..\nugetpackages\EMGU.TF.1.13.1.435\build\EMGU.TF.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\nugetpackages\EMGU.TF.1.12.0.342\build\EMGU.TF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\nugetpackages\EMGU.TF.1.12.0.342\build\EMGU.TF.targets'))" />
+    <Error Condition="!Exists('..\..\nugetpackages\EMGU.TF.1.13.1.435\build\EMGU.TF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\nugetpackages\EMGU.TF.1.13.1.435\build\EMGU.TF.targets'))" />
   </Target>
 </Project>
