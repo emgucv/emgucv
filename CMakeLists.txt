@@ -1216,6 +1216,11 @@ ELSEIF (WIN32)
 	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
     ReadRegStr \\\$R1 HKLM '${hklm_key}' '15.0'
     StrCpy $${vs_version}_INSTALL_FOLDER '\\\$R1Common7\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
+	ELSEIF("${vs_version}" STREQUAL "VS2019")
+	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND 
+	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
+    ReadRegStr \\\$R1 HKLM '${hklm_key}' '16.0'
+    StrCpy $${vs_version}_INSTALL_FOLDER '\\\$R1Common7\\\\Packages\\\\Debugger\\\\Visualizers\\\\'")
 	ELSE()
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND 
 	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
@@ -1577,9 +1582,9 @@ ELSEIF (WIN32)
   # ----------------------------------------------------------------------------
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateDirectory \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\" ")
   
-  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2013 - 2017 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\Windows.Desktop\\\\Emgu.CV.Example.sln\\\" ")	
+  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Visual Studio Solution\\\\Visual Studio 2013 - 2019 Examples.lnk\\\"  \\\"$INSTDIR\\\\Solution\\\\Windows.Desktop\\\\Emgu.CV.Example.sln\\\" ")	
   
-  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2013 - 2017 Examples.lnk\\\" ")
+  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\\Visual Studio 2013 - 2019 Examples.lnk\\\" ")
   
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\nRMDir  \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\Visual Studio Solution\\\" ")
   
