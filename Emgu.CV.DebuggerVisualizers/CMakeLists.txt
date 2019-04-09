@@ -63,4 +63,10 @@ INSTALL(
   PATTERN "CMakeFiles" EXCLUDE
   PATTERN "${PROJECT_NAME}.dir" EXCLUDE
 )
+INSTALL(
+    FILES 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../miscellaneous/vswhere.exe
+    DESTINATION miscellaneous
+    COMPONENT emgucv_binary)
+  ENDIF()
 ENDIF()
