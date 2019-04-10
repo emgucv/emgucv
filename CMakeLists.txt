@@ -761,10 +761,10 @@ MACRO(CHECK_LICENSE_TYPE)
 	SET (LICENSE_TYPE "OpenSource")
 	SET (EMGUCV_LICENSE_FILE "Emgu.CV.License.txt")
 	#SET (EMGUCV_LICENSE_URL "https://www.gnu.org/licenses/gpl-3.0.txt")
-	#IF(${GPL_LICENSE_LENGTH} EQUAL 0)
-	#	SET(LICENSE_TYPE "Commercial")
-	#	SET (EMGUCV_LICENSE_URL "http://www.emgu.com/wiki/files/Emgu.CV.Commercial.License.3.0.pdf")
-	#ENDIF()
+	IF(${GPL_LICENSE_LENGTH} EQUAL 0)
+		SET(LICENSE_TYPE "Commercial")
+		#SET (EMGUCV_LICENSE_URL "http://www.emgu.com/wiki/files/Emgu.CV.Commercial.License.4.0.pdf")
+	ENDIF()
 	
 	MESSAGE(STATUS "LICENSE_TYPE: ${LICENSE_TYPE}")
 ENDMACRO()
@@ -1302,10 +1302,8 @@ ELSEIF (WIN32)
 	StrCpy $${vs_version}_INSTALL_FOLDER '\\\$1\\\\Common7\\\\Packages\\\\Debugger\\\\Visualizers\\\\'
 	goto Find_VS_Success
 	Find_VS_Failed:
-		MessageBox MB_OK 'Failed to find VS2019'
 		goto Find_VS_End
 	Find_VS_Success:
-		MessageBox MB_OK 'Found VS2019: $1'
 	Find_VS_End:
 	")	
 	ELSE()
@@ -1496,8 +1494,7 @@ ELSEIF (WIN32)
       PATTERN "bin" EXCLUDE
       PATTERN "Android" EXCLUDE
       PATTERN "iOS" EXCLUDE
-      PATTERN "Windows.Phone" EXCLUDE
-      PATTERN "Windows.Store" EXCLUDE
+      PATTERN "Windows.UWP" EXCLUDE
       PATTERN "CrossPlatform" EXCLUDE
 	  PATTERN "Mac" EXCLUDE
       )
