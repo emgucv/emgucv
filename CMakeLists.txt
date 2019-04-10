@@ -1446,8 +1446,8 @@ ELSEIF (WIN32)
       DESTINATION .
       COMPONENT emgucv_example_source
       FILES_MATCHING 
-      PATTERN "Emgu.CV.Example.Windows.Store.sln"
-	  PATTERN "Windows.Store/packages/repositories.config"
+      PATTERN "Emgu.CV.Example.Windows.UWP.sln"
+	  PATTERN "Windows.UWP/packages/repositories.config"
       PATTERN ".git" EXCLUDE
       PATTERN "bin" EXCLUDE
       PATTERN "Android" EXCLUDE
@@ -1473,8 +1473,6 @@ ELSEIF (WIN32)
       PATTERN "bin" EXCLUDE
       PATTERN "Android" EXCLUDE
       PATTERN "iOS" EXCLUDE
-      PATTERN "Windows.Phone" EXCLUDE
-      PATTERN "Windows.Store" EXCLUDE
       PATTERN "CrossPlatform" EXCLUDE
 	  PATTERN "Mac" EXCLUDE
       )
