@@ -68,5 +68,4 @@ INSTALL(
     ${CMAKE_CURRENT_SOURCE_DIR}/../miscellaneous/vswhere.exe
     DESTINATION miscellaneous
     COMPONENT emgucv_binary)
-  ENDIF()
 ENDIF()
