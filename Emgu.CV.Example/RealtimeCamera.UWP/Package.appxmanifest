@@ -28,5 +28,7 @@
     <uap:Capability Name="picturesLibrary" />
     <uap6:Capability Name="graphicsCapture" />
     <DeviceCapability Name="webcam" />
+    <DeviceCapability Name="location"/>
+    <DeviceCapability Name="microphone"/>
   </Capabilities>
 </Package>

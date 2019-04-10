@@ -63,13 +63,25 @@ namespace RealtimeCamera
                     try
                     {
                         if (_capture == null)
+                        {
                             _capture = new VideoCapture();
+                            if (!_capture.IsOpened)
+                            {
+                                //Stop the capture
+                                captureButton_Click(this, null);
+                                continue;
+                            }
+
+                        }
 
                         //Read the camera data to the mat
                         //Must use VideoCapture.Read function for UWP to read image from capture.
                         //Note that m is in 3 channel RGB color space, 
                         //our default color space is BGR for 3 channel Mat
-                        _capture.Read(m);
+                        bool grabbed = _capture.Grab();
+
+                        bool retrieved = _capture.Retrieve(m);
+                        //_capture.Read(m);
 
                         CvInvoke.WinrtImshow();
                         if (!m.IsEmpty)
@@ -103,11 +115,7 @@ namespace RealtimeCamera
                                     DepthType.Cv32F, 
                                     mapx,
                                     mapy);
-                                //p.IntrinsicMatrix.Data[0, 2] = centerY;
-                                //p.IntrinsicMatrix.Data[1, 2] = centerX;
-                                //p.IntrinsicMatrix.Data[2, 2] = 1;
-                                //p.DistortionCoeffs.Data[0, 0] = -0.000003;
-                                //p.InitUndistortMap(m.Width, m.Height, out mapx, out mapy);
+
                             }
 
               
@@ -138,11 +146,7 @@ namespace RealtimeCamera
                     }
                     catch (Exception e)
                     {
-                        CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                            async () =>
-                            {
-                                textBlock.Text = e.Message;
-                            });
+                        SetText(e.Message);
                     }
                 }
                 else
@@ -157,6 +161,16 @@ namespace RealtimeCamera
                     t.Wait();
                 }
             }
+        }
+
+        private void SetText(String msg)
+        {
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                CoreDispatcherPriority.Normal,
+                async () =>
+                {
+                    textBlock.Text = msg;
+                });
         }
 
         private bool _captureEnabled = false;
