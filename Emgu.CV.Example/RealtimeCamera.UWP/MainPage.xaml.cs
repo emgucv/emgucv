@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -45,7 +46,8 @@ namespace RealtimeCamera
 
         }
 
-        private IntrinsicCameraParameters p;
+        private Mat _cameraMatrix;
+        private Mat _distCoeffs;
         private Matrix<float> mapx, mapy;
 
         private VideoCapture _capture;
@@ -68,27 +70,50 @@ namespace RealtimeCamera
                         //Note that m is in 3 channel RGB color space, 
                         //our default color space is BGR for 3 channel Mat
                         _capture.Read(m);
-                        
+
+                        CvInvoke.WinrtImshow();
                         if (!m.IsEmpty)
                         {
-                            if (p == null)
+                            if (_cameraMatrix == null || _distCoeffs == null)
                             {
                                 //Create a dummy camera calibration matrix for testing
                                 //Use your own if you have calibrated your camera
-                                p = new IntrinsicCameraParameters(5);
+                                _cameraMatrix = new Mat(new System.Drawing.Size(3, 3), DepthType.Cv32F, 1);
+                                   
                                 int centerY = m.Width >> 1;
                                 int centerX = m.Height >> 1;
-                                CvInvoke.SetIdentity(p.IntrinsicMatrix, new MCvScalar(1.0));
-                                p.IntrinsicMatrix.Data[0, 2] = centerY;
-                                p.IntrinsicMatrix.Data[1, 2] = centerX;
-                                p.IntrinsicMatrix.Data[2, 2] = 1;
-                                p.DistortionCoeffs.Data[0, 0] = -0.000003;
-                                p.InitUndistortMap(m.Width, m.Height, out mapx, out mapy);
+                                //CvInvoke.SetIdentity(_cameraMatrix, new MCvScalar(1.0));
+                                _cameraMatrix.SetTo(new double[]
+                                {
+                                    1, 0, centerY,
+                                    0, 1, centerX,
+                                    0, 0, 1
+                                });
 
+                                _distCoeffs = new Mat(new System.Drawing.Size(5, 1), DepthType.Cv32F, 1);
+                                _distCoeffs.SetTo(new double[] { -0.000003, 0, 0, 0, 0 });
+                                mapx = new Matrix<float>(m.Height, m.Width);
+                                mapy = new Matrix<float>(m.Height, m.Width);
+                                CvInvoke.InitUndistortRectifyMap(
+                                    _cameraMatrix, 
+                                    _distCoeffs, 
+                                    null, 
+                                    _cameraMatrix, 
+                                    m.Size,
+                                    DepthType.Cv32F, 
+                                    mapx,
+                                    mapy);
+                                //p.IntrinsicMatrix.Data[0, 2] = centerY;
+                                //p.IntrinsicMatrix.Data[1, 2] = centerX;
+                                //p.IntrinsicMatrix.Data[2, 2] = 1;
+                                //p.DistortionCoeffs.Data[0, 0] = -0.000003;
+                                //p.InitUndistortMap(m.Width, m.Height, out mapx, out mapy);
                             }
 
+              
+
                             m.CopyTo(mProcessed);
-                            CvInvoke.Undistort(m, mProcessed, p.IntrinsicMatrix, p.DistortionCoeffs );
+                            CvInvoke.Undistort(m, mProcessed, _cameraMatrix, _distCoeffs );
 
                             //mProcess is in the same color space as m, which is RGB, 
                             //needed to change to BGR
@@ -98,7 +123,7 @@ namespace RealtimeCamera
                             //Can apply simple image processing to the captured image, let just invert the pixels
                             //CvInvoke.BitwiseNot(m, m);
 
-                            //render the processed image on the top imageview
+                            //render the processed image on the top image view
                             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                                 async () =>
                                 {
