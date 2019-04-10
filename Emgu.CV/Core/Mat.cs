@@ -410,6 +410,9 @@ namespace Emgu.CV
         /// <returns>a copy of the data values as an array</returns>
         public Array GetData(bool jagged = true)
         {
+            if (IsEmpty)
+                return null;
+
             Type t = CvInvoke.GetDepthType(this.Depth);
             if (t == null)
                 return null;
@@ -1642,7 +1645,10 @@ namespace Emgu.CV
 
             public Array Data
             {
-                get { return _v.GetData(true); }
+                get
+                {
+                    return _v.GetData(true);
+                }
             }
         }
     }

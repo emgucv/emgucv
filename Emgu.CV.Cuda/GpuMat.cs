@@ -205,6 +205,8 @@ namespace Emgu.CV.Cuda
         /// <returns>a copy of the data values as an array</returns>
         public Array GetData(bool jagged = true)
         {
+            if (IsEmpty)
+                return null;
             using (Mat m = new Mat())
             {
                 Download(m);
@@ -538,7 +540,10 @@ namespace Emgu.CV.Cuda
 
             public Array Data
             {
-                get { return _v.GetData(true); }
+                get
+                {
+                    return _v.GetData(true);
+                }
             }
         }
     }

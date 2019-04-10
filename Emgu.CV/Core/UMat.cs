@@ -744,6 +744,8 @@ namespace Emgu.CV
         /// <returns>a copy of the data values as an array</returns>
         public Array GetData(bool jagged = true)
         {
+            if (IsEmpty)
+                return null;
             using (InputArray iaM = this.GetInputArray())
             using (Mat m = iaM.GetMat())
             {
@@ -1108,7 +1110,10 @@ namespace Emgu.CV
 
             public Array Data
             {
-                get { return _v.GetData(true); }
+                get
+                {
+                    return _v.GetData(true);
+                }
             }
         }
     }
