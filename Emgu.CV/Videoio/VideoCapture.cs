@@ -547,7 +547,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Similar to the C++ implementation of cv::Capture >> Mat
+        /// Similar to the C++ implementation of cv::Capture &gt;&gt; Mat. It first call Grab() function follows by Retrieve()
         /// </summary>
         /// <param name="m">The matrix the image will be read into.</param>
         public void Read(Mat m)
