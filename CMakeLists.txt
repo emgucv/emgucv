@@ -773,9 +773,28 @@ CHECK_LICENSE_TYPE()
 # ----------------------------------------------------------------------------
 #  Generate neget packaging file for Emgu CV project
 # ----------------------------------------------------------------------------
-SET(EMGUCV_NUGET_ID "EMGU.CV")
+SET(EMGUCV_NUGET_ID_BASE "EMGU.CV")
+
 IF(WITH_CUDA)
-	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CUDA")
+	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-CUDA")
+	SET(EMGU_CUDA_NUGET_ID "${EMGUCV_NUGET_ID_BASE}.Native")
+	SET(EMGU_CUFFT_NUGET_ID "${EMGUCV_NUGET_ID_BASE}.CUFFT")
+ELSE()
+	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}")
+ENDIF()
+
+IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
+	SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-Android")
+ENDIF()
+
+IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
+	MESSAGE(STATUS "Configuring nuget package for Commercial release")
+	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
+	IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
+	  SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_ANDROID_NUGET_ID}-CR")
+	ENDIF()
+ELSEIF()
+	MESSAGE(STATUS "Configuring nuget package for Open Source release")
 ENDIF()
 
 SET(EMGUCV_NUGET_FILE_LIST "")
@@ -812,16 +831,12 @@ SET(EMGUCV_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"[5.1.7]\" />"
 
 IF(WITH_CUDA)
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} with CUDA support")
-	SET(EMGU_CUDA_NUGET_ID "${EMGUCV_NUGET_ID}.Native")
 	SET(EMGU_CUDA_NUGET_TITLE "Native x64 CUDA dependency for EMGU CV")
 	SET(EMGU_CUDA_NUGET_FILE_LIST "<file src=\"Emgu.Cuda.targets\" target=\"build\\${EMGU_CUDA_NUGET_ID}.targets\" />")
 	SET(EMGU_CUDA_VERSION "${CUDA_VERSION}")
-	
 	SET(EMGU_CUFFT_VERSION "${EMGU_CUDA_VERSION}")
-	SET(EMGU_CUFFT_NUGET_ID "${EMGUCV_NUGET_ID}.CUFFT")
-	SET(EMGU_CUFFT_NUGET_TITLE "Native x64 CUDA CIFFT dependency for EMGU CV")
+	SET(EMGU_CUFFT_NUGET_TITLE "Native x64 CUDA CUFFT dependency for EMGU CV")
 	SET(EMGU_CUFFT_NUGET_FILE_LIST "<file src=\"Emgu.Cufft.targets\" target=\"build\\${EMGU_CUFFT_NUGET_ID}.targets\" />")
-	
 	SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} <dependency id=\"${EMGU_CUDA_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />")
 	SET(EMGU_CUDA_NUGET_DEPENDENCY "<dependency id=\"${EMGU_CUFFT_NUGET_ID}\" version=\"[${EMGU_CUFFT_VERSION}]\" />")
 	IF(HAVE_WINDESKTOP_X64)
@@ -847,7 +862,6 @@ ENDIF()
 
 
 IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
-	SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID}-Android")
 	SET(EMGUCV_ANDROID_NUGET_TITLE "EMGU CV for Android")	
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST " 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.World.Android.dll\" target=\"lib\\MonoAndroid50\" />
@@ -861,16 +875,11 @@ ENDIF()
 SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
 
 IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
-	MESSAGE(STATUS "Configuring nuget package for Commercial release")
-	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
 	SET(EMGUCV_NUGET_SUMMARY "${EMGUCV_NUGET_SUMMARY} This is the commercial release.")
 	IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
-	  SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_ANDROID_NUGET_ID}-CR")
 	  SET(EMGUCV_ANDROID_NUGET_TITLE "${EMGUCV_ANDROID_NUGET_TITLE} Commercial Release")	
-	ENDIF()
-ELSE()
-	MESSAGE(STATUS "Configuring nuget package for Open Source release")
+	ENDIF()	
 ENDIF()
 
 #generate nuget config file for Emgu.CV 
