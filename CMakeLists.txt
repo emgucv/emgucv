@@ -845,20 +845,10 @@ IF(WITH_CUDA)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.Cuda.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/Emgu.Cuda.targets)
 ENDIF()
 
-SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
-IF ("${LICENSE_TYPE}" EQUAL "Commercial")
-	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
-	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
-	SET(EMGUCV_NUGET_SUMMARY "${EMGUCV_NUGET_SUMMARY} This is the commercial release.")
-ENDIF()
 
 IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID}-Android")
 	SET(EMGUCV_ANDROID_NUGET_TITLE "EMGU CV for Android")	
-	IF ("${LICENSE_TYPE}" EQUAL "Commercial")
-	  SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_ANDROID_NUGET_ID}-CR")
-	  SET(EMGUCV_ANDROID_NUGET_TITLE "${EMGUCV_ANDROID_NUGET_TITLE} Commercial Release")	
-    ENDIF()
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST " 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.World.Android.dll\" target=\"lib\\MonoAndroid50\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.World.Android.XML\" target=\"lib\\MonoAndroid50\" />")
@@ -868,7 +858,22 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Android/Package.nuspec)
 ENDIF()
 
+SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
 
+IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
+	MESSAGE(STATUS "Configuring nuget package for Commercial release")
+	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
+	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
+	SET(EMGUCV_NUGET_SUMMARY "${EMGUCV_NUGET_SUMMARY} This is the commercial release.")
+	IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
+	  SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_ANDROID_NUGET_ID}-CR")
+	  SET(EMGUCV_ANDROID_NUGET_TITLE "${EMGUCV_ANDROID_NUGET_TITLE} Commercial Release")	
+	ENDIF()
+ELSE()
+	MESSAGE(STATUS "Configuring nuget package for Open Source release")
+ENDIF()
+
+#generate nuget config file for Emgu.CV 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Package.nuspec)
 
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
