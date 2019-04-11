@@ -137,7 +137,8 @@ namespace Emgu.CV
         /// <param name="data">The managed array where data will be copied from</param>
         public void SetTo<T>(T[] data)
         {
-            Debug.Assert(data.Length == Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), data.Length));
+            Debug.Assert(data.Length == Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), String.Format("Invalid data length, expecting array of size {0} but got array of size {1}", Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), data.Length));
+            //Debug.Assert(CvInvoke.GetDepthType(typeof(T)) == this.Depth, String.Format("Array type {0} do not match Mat data type {1}.", typeof(T), this.Depth));
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             MatInvoke.cveMatCopyDataFrom(this, handle.AddrOfPinnedObject());
             handle.Free();

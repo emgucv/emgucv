@@ -1221,16 +1221,14 @@ ELSEIF (WIN32)
 	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
     ExecDos::exec /NOUNLOAD /TOSTACK '\\\$INSTDIR\\\\miscellaneous\\\\vswhere.exe -version [16.0,17.0) -property installationPath' '' '$EXEDIR\\\\execdos.log'
 	Pop $0 
-	StrCmp $0 0 0 Find_VS_Failed
+	StrCmp $0 0 0 Find_VS_Install_Failed
 	Pop $1
 	StrCpy $${vs_version}_INSTALL_FOLDER '\\\$1\\\\Common7\\\\Packages\\\\Debugger\\\\Visualizers\\\\'
-	goto Find_VS_Success
-	Find_VS_Failed:
-		MessageBox MB_OK 'Failed to find VS2019'
-		goto Find_VS_End
-	Find_VS_Success:
-		MessageBox MB_OK 'Found VS2019: $1'
-	Find_VS_End:
+	goto Find_VS_Install_Success
+	Find_VS_Install_Failed:
+		goto Find_VS_Install_End
+	Find_VS_Install_Success:
+	Find_VS_Install_End:
 	")	
 	ELSE()
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND 

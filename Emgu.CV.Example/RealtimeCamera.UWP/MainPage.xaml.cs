@@ -51,9 +51,10 @@ namespace RealtimeCamera
         private Matrix<float> mapx, mapy;
 
         private VideoCapture _capture;
+
         public void Process()
         {
-            Mat m = new Mat();
+            Mat m = new Mat(new System.Drawing.Size(640, 480), DepthType.Cv8U, 3);
             Mat mProcessed = new Mat();
             while (true)
             {
@@ -62,17 +63,7 @@ namespace RealtimeCamera
                 {
                     try
                     {
-                        if (_capture == null)
-                        {
-                            _capture = new VideoCapture();
-                            if (!_capture.IsOpened)
-                            {
-                                //Stop the capture
-                                captureButton_Click(this, null);
-                                continue;
-                            }
-
-                        }
+                        
 
                         //Read the camera data to the mat
                         //Must use VideoCapture.Read function for UWP to read image from capture.
@@ -95,15 +86,15 @@ namespace RealtimeCamera
                                 int centerY = m.Width >> 1;
                                 int centerX = m.Height >> 1;
                                 //CvInvoke.SetIdentity(_cameraMatrix, new MCvScalar(1.0));
-                                _cameraMatrix.SetTo(new double[]
+                                _cameraMatrix.SetTo(new float[]
                                 {
-                                    1, 0, centerY,
-                                    0, 1, centerX,
-                                    0, 0, 1
+                                    1f, 0f, (float)centerY,
+                                    0f, 1f, (float)centerX,
+                                    0f, 0f, 1f
                                 });
 
                                 _distCoeffs = new Mat(new System.Drawing.Size(5, 1), DepthType.Cv32F, 1);
-                                _distCoeffs.SetTo(new double[] { -0.000003, 0, 0, 0, 0 });
+                                _distCoeffs.SetTo(new float[] { -0.000003f, 0f, 0f, 0f, 0f });
                                 mapx = new Matrix<float>(m.Height, m.Width);
                                 mapy = new Matrix<float>(m.Height, m.Width);
                                 CvInvoke.InitUndistortRectifyMap(
@@ -181,6 +172,17 @@ namespace RealtimeCamera
 
             if (_captureEnabled)
             {
+                if (_capture == null)
+                {
+                    _capture = new VideoCapture();
+                    if (!_capture.IsOpened)
+                    {
+                        //Stop the capture
+                        captureButton_Click(this, null);
+                        _captureEnabled = !_captureEnabled;
+                        return;
+                    }
+                }
                 captureButton.Content = "Stop";
             }
             else
