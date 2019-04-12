@@ -1233,16 +1233,13 @@ ELSEIF (WIN32)
 	ELSEIF("${vs_version}" STREQUAL "VS2019")
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND 
 	"${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-    ExecDos::exec /NOUNLOAD /TOSTACK '\\\$INSTDIR\\\\miscellaneous\\\\vswhere.exe -version [16.0,17.0) -property installationPath' '' '$EXEDIR\\\\execdos.log'
+    ExecDos::exec /NOUNLOAD /TOSTACK '\\\$INSTDIR\\\\miscellaneous\\\\vswhere.exe -version [16.0,17.0) -property installationPath' ''
 	Pop $0 
-	StrCmp $0 0 0 Find_VS_Install_Failed
+	StrCmp $0 0 0 installDebuggerVisualizer4${vs_version}Done
 	Pop $1
+	;MessageBox MB_OK 'vswhere result ($1).'
+	StrCmp $1 0 installDebuggerVisualizer4${vs_version}Done 0
 	StrCpy $${vs_version}_INSTALL_FOLDER '\\\$1\\\\Common7\\\\Packages\\\\Debugger\\\\Visualizers\\\\'
-	goto Find_VS_Install_Success
-	Find_VS_Install_Failed:
-		goto Find_VS_Install_End
-	Find_VS_Install_Success:
-	Find_VS_Install_End:
 	")	
 	ELSE()
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND 
@@ -1309,14 +1306,10 @@ ELSEIF (WIN32)
 	"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
     ExecDos::exec /NOUNLOAD /TOSTACK '\\\$INSTDIR\\\\miscellaneous\\\\vswhere.exe -version [16.0,17.0) -property installationPath' '' '$EXEDIR\\\\execdos.log'
 	Pop $0 
-	StrCmp $0 0 0 Find_VS_Failed
+	StrCmp $0 0 0 uninstallDebuggerVisualizer4${vs_version}Done
 	Pop $1
+	StrCmp $1 0 uninstallDebuggerVisualizer4${vs_version}Done 0
 	StrCpy $${vs_version}_INSTALL_FOLDER '\\\$1\\\\Common7\\\\Packages\\\\Debugger\\\\Visualizers\\\\'
-	goto Find_VS_Success
-	Find_VS_Failed:
-		goto Find_VS_End
-	Find_VS_Success:
-	Find_VS_End:
 	")	
 	ELSE()
 	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
@@ -1375,7 +1368,7 @@ ELSEIF (WIN32)
 	  INSTALL_DEBUGER_VISUALIZER("VS2017" "Visual Studio 2017" "SOFTWARE\\\\\\\\WOW6432NODE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\SxS\\\\\\\\VS7")
       SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
 	  
-	  INSTALL_DEBUGER_VISUALIZER("VS2019" "Visual Studio 2019" "SOFTWARE\\\\\\\\WOW6432NODE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\SxS\\\\\\\\VS7")
+	  INSTALL_DEBUGER_VISUALIZER("VS2019" "Visual Studio 2019" "")
       SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\n${INSTALL_DEBUGER_VISUALIZER_COMMAND}")
 	  
       #UNINSTALL_DEBUGER_VISUALIZER("VS2008" "SOFTWARE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\9.0")
@@ -1396,7 +1389,7 @@ ELSEIF (WIN32)
 	  UNINSTALL_DEBUGER_VISUALIZER("VS2017" "SOFTWARE\\\\\\\\WOW6432NODE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\SxS\\\\\\\\VS7")
       SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
 	  
-	  UNINSTALL_DEBUGER_VISUALIZER("VS2019" "SOFTWARE\\\\\\\\WOW6432NODE\\\\\\\\Microsoft\\\\\\\\VisualStudio\\\\\\\\SxS\\\\\\\\VS7")
+	  UNINSTALL_DEBUGER_VISUALIZER("VS2019" "")
       SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}")
     ELSE()
       MESSAGE(STATUS "x86 binary not found, will not deploy debugger visualizer")
