@@ -16,25 +16,25 @@ using System.Diagnostics;
 
 namespace Emgu.CV.OCR
 {
-	/// <summary>
-	/// This structure is primary used for PInvoke
-	/// </summary>
-	public struct TesseractResult
-	{
-		#pragma warning disable 0649      
-      /// <summary>
-      /// The length
-      /// </summary>
-		public int Length;
-      /// <summary>
-      /// The cost
-      /// </summary>
-		public float Cost;
-      /// <summary>
-      /// The region
-      /// </summary>
-		public Rectangle Region;
-		#pragma warning restore 0649
-	}
+    /// <summary>
+    /// This structure is primary used for PInvoke
+    /// </summary>
+    public struct TesseractResult
+    {
+#pragma warning disable 0649
+        /// <summary>
+        /// The length
+        /// </summary>
+        public int Length;
+        /// <summary>
+        /// The cost
+        /// </summary>
+        public float Cost;
+        /// <summary>
+        /// The region
+        /// </summary>
+        public Rectangle Region;
+#pragma warning restore 0649
+    }
 
 }

@@ -104,7 +104,7 @@ namespace Emgu.CV.Text
         private IntPtr _pixels;
 
         /// <summary>
-        /// get the pixels list. 
+        /// Get the pixels list. 
         /// </summary>
         public VectorOfInt Pixels
         {

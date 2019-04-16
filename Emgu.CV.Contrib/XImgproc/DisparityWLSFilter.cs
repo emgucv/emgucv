@@ -31,7 +31,7 @@ namespace Emgu.CV.XImgproc
         }
 
         /// <summary>
-        /// Pointer the the native DisparityFilter
+        /// Pointer to the native DisparityFilter
         /// </summary>
         public IntPtr DisparityFilterPtr
         {
@@ -100,7 +100,7 @@ namespace Emgu.CV.XImgproc
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with thie RightMatcher
+        /// Release the unmanaged memory associated with the RightMatcher
         /// </summary>
         protected override void DisposeObject()
         {

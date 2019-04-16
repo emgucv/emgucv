@@ -48,7 +48,7 @@ namespace Emgu.CV.Aruco
         /// </summary>
         /// <param name="image">input image</param>
         /// <param name="dict">indicates the type of markers that will be searched</param>
-        /// <param name="corners">	vector of detected marker corners. For each marker, its four corners are provided, (e.g VectorOfVectorOfPointF ). For N detected markers, the dimensions of this array is Nx4. The order of the corners is clockwise.</param>
+        /// <param name="corners">Vector of detected marker corners. For each marker, its four corners are provided, (e.g VectorOfVectorOfPointF ). For N detected markers, the dimensions of this array is Nx4. The order of the corners is clockwise.</param>
         /// <param name="ids">vector of identifiers of the detected markers. The identifier is of type int (e.g. VectorOfInt). For N detected markers, the size of ids is also N. The identifiers have the same order than the markers in the imgPoints array.</param>
         /// <param name="parameters">marker detection parameters</param>
         /// <param name="rejectedImgPoints">contains the imgPoints of those squares whose inner code has not a correct codification. Useful for debugging purposes.</param>

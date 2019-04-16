@@ -42,7 +42,7 @@ namespace Emgu.CV.Text
         /// <summary>
         /// Takes image on input and returns the selected regions in a vector of ERStat only distinctive ERs which correspond to characters are selected by a sequential classifier
         /// </summary>
-        /// <param name="image">Sinle channel image CV_8UC1</param>
+        /// <param name="image">Single channel image CV_8UC1</param>
         /// <param name="regions">Output for the 1st stage and Input/Output for the 2nd. The selected Extremal Regions are stored here.</param>
         public void Run(IInputArray image, VectorOfERStat regions)
         {

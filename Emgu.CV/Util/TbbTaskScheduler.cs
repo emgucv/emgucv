@@ -32,14 +32,3 @@ namespace Emgu.CV.Util
    }
 }
 
-namespace Emgu.CV
-{
-   public static partial class CvInvoke
-   {
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr tbbTaskSchedulerInit();
-
-      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void tbbTaskSchedulerRelease(ref IntPtr scheduler);
-   }
-}

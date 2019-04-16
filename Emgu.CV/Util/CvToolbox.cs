@@ -375,14 +375,3 @@ namespace Emgu.CV.Util
     }
 }
 
-namespace Emgu.CV
-{
-    public static partial class CvInvoke
-    {
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveMemcpy(IntPtr dst, IntPtr src, int length);
-    }
-}

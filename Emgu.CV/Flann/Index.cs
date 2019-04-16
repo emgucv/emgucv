@@ -88,7 +88,7 @@ namespace Emgu.CV.Flann
         public Index(IInputArray values, IIndexParams ip, DistType distType = DistType.L2)
         {
             using (InputArray iaValues = values.GetInputArray())
-                _ptr = CvInvoke.cveFlannIndexCreate(iaValues, ip.IndexParamPtr, distType);
+                _ptr = FlannInvoke.cveFlannIndexCreate(iaValues, ip.IndexParamPtr, distType);
         }
 
         /*
@@ -126,7 +126,7 @@ namespace Emgu.CV.Flann
             using (InputArray iaQueries = queries.GetInputArray())
             using (OutputArray oaIndices = indices.GetOutputArray())
             using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
-                CvInvoke.cveFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks, eps, sorted);
+                FlannInvoke.cveFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks, eps, sorted);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Emgu.CV.Flann
             using (InputArray iaQueries = queries.GetInputArray())
             using (OutputArray oaIndicies = indices.GetOutputArray())
             using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
-                return CvInvoke.cveFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks, eps, sorted);
+                return FlannInvoke.cveFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks, eps, sorted);
         }
 
         /// <summary>
@@ -160,52 +160,9 @@ namespace Emgu.CV.Flann
         {
             if (_ptr != IntPtr.Zero)
             {
-                CvInvoke.cveFlannIndexRelease(ref _ptr);
+                FlannInvoke.cveFlannIndexRelease(ref _ptr);
             }
         }
-    }
-}
-
-namespace Emgu.CV
-{ 
-    public partial class CvInvoke
-    {
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveFlannIndexCreate(IntPtr features, IntPtr ip, Emgu.CV.Flann.DistType distType);
-
-        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        //internal static extern IntPtr CvFlannIndexCreateComposite(IntPtr features, int numberOfKDTrees, int branching, int iterations, Flann.CenterInitType centersInitType, float cbIndex);
-
-        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        //internal static extern IntPtr CvFlannIndexCreateAutotuned(IntPtr features, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFlannIndexRelease(ref IntPtr index);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFlannIndexKnnSearch(
-            IntPtr index,
-            IntPtr queries,
-            IntPtr indices,
-            IntPtr dists,
-            int knn,
-            int checks,
-            float eps,
-            [MarshalAs(UnmanagedType.Bool)]
-            bool sorted);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveFlannIndexRadiusSearch(
-            IntPtr index,
-            IntPtr queries,
-            IntPtr indices,
-            IntPtr dists,
-            double radius,
-            int maxResults,
-            int checks,
-            float eps,
-            [MarshalAs(UnmanagedType.Bool)]
-            bool sorted);
     }
 }
 

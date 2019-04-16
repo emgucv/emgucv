@@ -18,17 +18,6 @@ using System.Diagnostics;
 namespace Emgu.CV.OCR
 {
     /// <summary>
-    /// Interface to the TesseractResultRender
-    /// </summary>
-    public interface ITessResultRenderer
-    {
-        /// <summary>
-        /// Pointer to the unmanaged TessResultRendered
-        /// </summary>
-        IntPtr TessResultRendererPtr { get; }
-    }
-
-    /// <summary>
     /// Renders tesseract output into searchable PDF
     /// </summary>
     public class PDFRenderer : UnmanagedObject, ITessResultRenderer

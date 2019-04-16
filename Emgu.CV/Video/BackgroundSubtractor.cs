@@ -53,10 +53,7 @@ namespace Emgu.CV
                 CvInvoke.cveBackgroundSubtractorGetBackgroundImage(subtractor.BackgroundSubtractorPtr, oaBackgroundImage);
         }
     }
-}
 
-namespace Emgu.CV
-{
     public static partial class CvInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
