@@ -6,18 +6,18 @@ using System;
 
 namespace Emgu.CV.ML.MlEnum
 {
-   /// <summary>
-   /// Variable type
-   /// </summary>
-   public enum VarType
-   {
-      /// <summary>
-      /// Numerical or Ordered
-      /// </summary>
-      Numerical  =   0,
-      /// <summary>
-      /// Catagorical
-      /// </summary>
-      Categorical   = 1
-   }
+    /// <summary>
+    /// Variable type
+    /// </summary>
+    public enum VarType
+    {
+        /// <summary>
+        /// Numerical or Ordered
+        /// </summary>
+        Numerical = 0,
+        /// <summary>
+        /// Categorical
+        /// </summary>
+        Categorical = 1
+    }
 }

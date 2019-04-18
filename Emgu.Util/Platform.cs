@@ -43,7 +43,7 @@ namespace Emgu.Util
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            _os = OS.MacOSX;
+            _os = OS.MacOS;
         } else {
             //unknown
         }
@@ -54,7 +54,7 @@ namespace Emgu.Util
          if (pid == PlatformID.MacOSX)
          {
             //This never works, it is a bug in Mono
-            _os = OS.MacOSX;
+            _os = OS.MacOS;
          }
          else
          {
@@ -72,7 +72,7 @@ namespace Emgu.Util
                   {
                      string os = Marshal.PtrToStringAnsi(buf);
                      if (os == "Darwin")
-                        _os = OS.MacOSX;
+                        _os = OS.MacOS;
                   }
                }
                catch

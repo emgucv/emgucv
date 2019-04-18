@@ -130,7 +130,7 @@ namespace Emgu.CV
 #endif
 
                 /*
-                else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
+                else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOS)
                 {
                    subfolder = "..";
                 }*/
@@ -373,7 +373,7 @@ namespace Emgu.CV
             formatString = "{0}.dll";
          else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Linux)
             formatString = "lib{0}.so";
-         else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOSX)
+         else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOS)
             formatString = "lib{0}.dylib";
          return formatString;
 #endif
@@ -421,7 +421,7 @@ namespace Emgu.CV
          }
 #elif __IOS__ || UNITY_IOS || NETFX_CORE
 #else
-         if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOSX)
+         if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOS)
          {
             String formatString = GetModuleFormatString();
             for (int i = 0; i < modules.Length; ++i)

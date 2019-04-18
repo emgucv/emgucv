@@ -26,6 +26,13 @@ namespace Emgu.Util
 }
 
 /// <summary>
+/// Type enumerations for for Emgu Util library
+/// </summary>
+namespace Emgu.Util.TypeEnum
+{
+}
+
+/// <summary>
 /// Wrapper of Open CV functions.
 /// </summary>
 namespace Emgu.CV
@@ -92,6 +99,13 @@ namespace Emgu.CV.Hfs
 /// Open CV Machine Learning module
 /// </summary>
 namespace Emgu.CV.ML
+{
+}
+
+/// <summary>
+/// Type enumerations for Open CV Machine Learning module
+/// </summary>
+namespace Emgu.CV.ML.MlEnum
 {
 }
 

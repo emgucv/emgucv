@@ -6,43 +6,28 @@ using System;
 
 namespace Emgu.CV.ML.MlEnum
 {
-   /// <summary>
-   /// The flags for the neural network training function
-   /// </summary>
-   [Flags]
-   public enum AnnMlpTrainingFlag
-   {
-      /// <summary>
-      /// Default
-      /// </summary>
-      Default = 0,
-      /// <summary>
-      /// Update weights
-      /// </summary>
-      UpdateWeights = 1, 
-      /// <summary>
-      /// No input scale
-      /// </summary>
-      NoInputScale = 2, 
-      /// <summary>
-      /// No output scale
-      /// </summary>
-      NoOutputScale = 4
-   }
-
-   /// <summary>
-   /// The data layout type
-   /// </summary>
-   public enum DataLayoutType 
-   {
-      /// <summary>
-      /// Feature vectors are stored as cols
-      /// </summary>
-      ColSample = 1,
-      /// <summary>
-      /// Feature vectors are stored as rows
-      /// </summary>
-      RowSample =0
-   }
+    /// <summary>
+    /// The flags for the neural network training function
+    /// </summary>
+    [Flags]
+    public enum AnnMlpTrainingFlag
+    {
+        /// <summary>
+        /// Default
+        /// </summary>
+        Default = 0,
+        /// <summary>
+        /// Update weights
+        /// </summary>
+        UpdateWeights = 1,
+        /// <summary>
+        /// No input scale
+        /// </summary>
+        NoInputScale = 2,
+        /// <summary>
+        /// No output scale
+        /// </summary>
+        NoOutputScale = 4
+    }
 
 }

@@ -19,9 +19,9 @@ namespace Emgu.Util.TypeEnum
       /// </summary>
       Linux, 
       /// <summary>
-      /// Mac OSX
+      /// Mac OS
       /// </summary>
-      MacOSX,
+      MacOS,
       /// <summary>
       /// iOS devices. iPhone, iPad, iPod Touch
       /// </summary>

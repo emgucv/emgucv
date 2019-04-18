@@ -6,19 +6,19 @@ using System;
 
 namespace Emgu.CV.ML.MlEnum
 {
-   /// <summary>
-   /// The data layout type
-   /// </summary>
-   public enum DataLayoutType 
-   {
-      /// <summary>
-      /// Feature vectors are stored as cols
-      /// </summary>
-      ColSample = 1,
-      /// <summary>
-      /// Feature vectors are stored as rows
-      /// </summary>
-      RowSample =0
-   }
+    /// <summary>
+    /// The data layout type
+    /// </summary>
+    public enum DataLayoutType
+    {
+        /// <summary>
+        /// Feature vectors are stored as cols
+        /// </summary>
+        ColSample = 1,
+        /// <summary>
+        /// Feature vectors are stored as rows
+        /// </summary>
+        RowSample = 0
+    }
 
 }

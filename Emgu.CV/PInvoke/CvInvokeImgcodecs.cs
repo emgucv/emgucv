@@ -97,7 +97,7 @@ namespace Emgu.CV
 #if !(__IOS__ || __ANDROID__ || NETFX_CORE || NETSTANDARD1_4)
                bool containsUnicode = (s.Length != filename.Length);
                if (containsUnicode &&
-                   (Emgu.Util.Platform.OperationSystem != OS.MacOSX) &&
+                   (Emgu.Util.Platform.OperationSystem != OS.MacOS) &&
                    (Emgu.Util.Platform.OperationSystem != OS.Linux))
                {
                   //Handle unicode in Windows platform
