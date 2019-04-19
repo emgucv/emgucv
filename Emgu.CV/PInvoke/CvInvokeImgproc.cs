@@ -498,10 +498,10 @@ namespace Emgu.CV
         /// <param name="points">Input vector of 2D or 3D points, stored in std::vector or Mat.</param>
         /// <param name="distType">The distance used for fitting </param>
         /// <param name="param">Numerical parameter (C) for some types of distances, if 0 then some optimal value is chosen</param>
-        /// <param name="reps">Sufficient accuracy for radius (distance between the coordinate origin and the line),  0.01 would be a good default</param>
+        /// <param name="reps">Sufficient accuracy for radius (distance between the coordinate origin and the line), 0.01 would be a good default</param>
         /// <param name="aeps">Sufficient accuracy for angle, 0.01 would be a good default</param>
-        /// <param name="line">Output line parameters. In case of 2D ?tting, it should be a vector of 4 elements (like Vec4f) - (vx, vy, x0, y0), where (vx, vy) is a normalized vector collinear to the line 
-        /// and (x0, y0) is a point on the line. In case of 3D ?tting, it should be a vector of 6 elements
+        /// <param name="line">Output line parameters. In case of 2D fitting, it should be a vector of 4 elements (like Vec4f) - (vx, vy, x0, y0), where (vx, vy) is a normalized vector collinear to the line 
+        /// and (x0, y0) is a point on the line. In case of 3D fitting, it should be a vector of 6 elements
         /// (like Vec6f) - (vx, vy, vz, x0, y0, z0), where (vx, vy, vz) is a normalized vector
         /// collinear to the line and (x0, y0, z0) is a point on the line.
         /// </param>
