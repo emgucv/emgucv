@@ -15,9 +15,9 @@ namespace Emgu.CV.Dpm
     public class DpmDetector : SharedPtrObject
     {
         /// <summary>
-        /// create a new dpm detector with the specified files and classes
+        /// Create a new dpm detector with the specified files and classes
         /// </summary>
-        /// <param name="files">A set of filenames storing the trained detectors (models). Each file contains one model.</param>
+        /// <param name="files">A set of file names storing the trained detectors (models). Each file contains one model.</param>
         /// <param name="classes">A set of trained models names. If it's empty then the name of each model will be constructed from the name of file containing the model. E.g. the model stored in "/home/user/cat.xml" will get the name "cat".</param>
         public DpmDetector(string[] files, string[] classes = null)
         {
@@ -97,7 +97,7 @@ namespace Emgu.CV.Dpm
         }
 
         /// <summary>
-        /// Dispose
+        /// Dispose the unmanaged memory associated with this DPM
         /// </summary>
         protected override void DisposeObject()
         {

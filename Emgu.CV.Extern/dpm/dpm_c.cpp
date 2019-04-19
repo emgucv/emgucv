@@ -10,7 +10,7 @@ using cv::dpm::DPMDetector;
 
 DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vector<cv::String>* classNames, cv::Ptr<cv::dpm::DPMDetector>** sharedPtr)
 {
-	std::vector< std::string > files = std::vector<std::string>(filenames->size());
+	std::vector< std::string > files;
 	for (std::vector<cv::String>::iterator it = filenames->begin(); it != filenames->end(); ++it)
 		files.push_back(std::string(it->c_str(), it->size()));
 
