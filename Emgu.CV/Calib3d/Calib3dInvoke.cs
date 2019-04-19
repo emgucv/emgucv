@@ -309,5 +309,68 @@ namespace Emgu.CV
             int maxIters, double confidence,
             int refineIters,
             IntPtr affine);
+
+        /// <summary>
+        /// Computes Hand-Eye calibration
+        /// </summary>
+        /// <param name="rGripper2base">
+        /// Rotation part extracted from the homogeneous matrix that transforms a point expressed in the gripper frame to the robot base frame.
+        /// This is a vector (vector&lt;Mat&gt;) that contains the rotation matrices for all the transformations from gripper frame to robot base frame.
+        /// </param>
+        /// <param name="tGripper2base">
+        /// Translation part extracted from the homogeneous matrix that transforms a point expressed in the gripper frame to the robot base frame.
+        /// This is a vector (vector&lt;Mat&gt;) that contains the translation vectors for all the transformations from gripper frame to robot base frame.
+        /// </param>
+        /// <param name="rTarget2cam">
+        /// Rotation part extracted from the homogeneous matrix that transforms a point expressed in the target frame to the camera frame.
+        /// This is a vector (vector&lt;Mat&gt;) that contains the rotation matrices for all the transformations from calibration target frame to camera frame.
+        /// </param>
+        /// <param name="tTarget2cam">
+        /// Rotation part extracted from the homogeneous matrix that transforms a point expressed in the target frame to the camera frame.
+        /// This is a vector (vector&lt;Mat&gt;) that contains the translation vectors for all the transformations from calibration target frame to camera frame.
+        /// </param>
+        /// <param name="rCam2gripper">
+        /// Estimated rotation part extracted from the homogeneous matrix that transforms a point expressed in the camera frame to the gripper frame.
+        /// </param>
+        /// <param name="tCam2gripper">
+        /// Estimated translation part extracted from the homogeneous matrix that transforms a point expressed in the camera frame to the gripper frame.
+        /// </param>
+        /// <param name="method">One of the implemented Hand-Eye calibration method</param>
+        public static void CalibrateHandEye(
+            IInputArrayOfArrays rGripper2base,
+            IInputArrayOfArrays tGripper2base,
+            IInputArrayOfArrays rTarget2cam,
+            IInputArrayOfArrays tTarget2cam,
+            IOutputArray rCam2gripper,
+            IOutputArray tCam2gripper,
+            CvEnum.HandEyeCalibrationMethod method)
+        {
+            using (InputArray iaRGripper2Base = rGripper2base.GetInputArray())
+            using (InputArray iaTGripper2Base = rGripper2base.GetInputArray())
+            using (InputArray iaRTarget2Cam = rTarget2cam.GetInputArray())
+            using (InputArray iaTTarget2Cam = tTarget2cam.GetInputArray())
+            using (OutputArray oaRCam2Gripper = rCam2gripper.GetOutputArray())
+            using (OutputArray oaTCam2Gripper = tCam2gripper.GetOutputArray())
+            {
+                cveCalibrateHandEye(
+                    iaRGripper2Base, 
+                    iaTGripper2Base,
+                    iaRTarget2Cam,
+                    iaTTarget2Cam,
+                    oaRCam2Gripper,
+                    oaTCam2Gripper,
+                    method);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveCalibrateHandEye(
+            IntPtr rGripper2base, 
+            IntPtr tGripper2base,
+            IntPtr rTarget2cam, 
+            IntPtr tTarget2cam,
+            IntPtr rCam2gripper, 
+            IntPtr tCam2gripper,
+            CvEnum.HandEyeCalibrationMethod method);
     }
 }
