@@ -15,8 +15,6 @@ namespace Emgu.CV
       public const string ExternLibrary = "@executable_path/../Plugins/emgucv.bundle/Contents/MacOS/libcvextern.dylib";
 #elif (__IOS__ || UNITY_IPHONE) && (!UNITY_EDITOR_WIN)
       public const string ExternLibrary = "__Internal";
-//#elif (!__IOS__) && __UNIFIED__
-//      public const string ExternLibrary = "libcvextern.dylib";
 #else
       public const string ExternLibrary = "cvextern";
 #endif
@@ -29,7 +27,7 @@ namespace Emgu.CV
       /// <summary>
       /// The file name of the opencv_ffmpeg library
       /// </summary>
-      public const string OpencvFFMpegLibrary = "opencv_ffmpeg401_64";
+      public const string OpencvFFMpegLibrary = "opencv_ffmpeg410_64";
 
       
 	  
