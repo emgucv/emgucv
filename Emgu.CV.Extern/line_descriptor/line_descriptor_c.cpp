@@ -4,6 +4,8 @@
 //
 //----------------------------------------------------------------------------
 
+/*
+
 #include "line_descriptor_c.h"
 
 cv::line_descriptor::BinaryDescriptor* cveLineDescriptorBinaryDescriptorCreate(cv::Ptr<cv::line_descriptor::BinaryDescriptor>** sharedPtr)
@@ -42,3 +44,5 @@ void cveLineDescriptorLSDDetectorRelease(cv::Ptr<cv::line_descriptor::LSDDetecto
 	delete *sharedPtr;
 	*sharedPtr = 0;
 }
+
+*/

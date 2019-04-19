@@ -3915,6 +3915,7 @@ namespace Emgu.CV.Test
             //ImageViewer.Show(result);
         }
 
+        /*
         [Test]
         public void TestLSDDetector()
         {
@@ -3941,7 +3942,7 @@ namespace Emgu.CV.Test
 
                 output.Save("line_detected.png");
             }
-        }
+        }*/
 
         [Test]
         public void TestCvException()
