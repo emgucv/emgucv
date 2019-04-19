@@ -59,14 +59,37 @@ namespace Emgu.CV.CvEnum
         /// Hot
         /// </summary>
         Hot = 11,
-        /*
         /// <summary>
-        /// Mkpj1
+        /// Parula
         /// </summary>
-        Mkpj1 = 12,
+        Parula = 12,
         /// <summary>
-        /// Mpkj2
+        /// Magma
         /// </summary>
-        Mkpj2 = 13*/
+        Magma = 13,
+        /// <summary>
+        /// Inferno
+        /// </summary>
+        Inferno = 14,
+        /// <summary>
+        /// Plasma
+        /// </summary>
+        Plasma = 15,
+        /// <summary>
+        /// Viridis
+        /// </summary>
+        Viridis = 16,
+        /// <summary>
+        /// Cividis
+        /// </summary>
+        Cividis = 17,
+        /// <summary>
+        /// Twilight
+        /// </summary>
+        Twilight = 18,
+        /// <summary>
+        /// TwilightShifted
+        /// </summary>
+        TwilightShifted = 19
     }
 }
