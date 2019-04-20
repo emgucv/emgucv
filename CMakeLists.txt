@@ -683,7 +683,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   videostab shape
   cudev  
   text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
-  stitching latentsvm line_descriptor tracking plot
+  stitching latentsvm tracking plot
   dnn dnn_objdetect aruco fuzzy viz bioinspired
   dpm
   saliency
@@ -692,6 +692,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   phase_unwrapping
   freetype
   hfs
+  quality
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})

@@ -29,5 +29,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DnnModern\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ImgHash\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PhaseUnwrapping\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Quality\*.cs" />
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@
 #include "opencv2/text/erfilter.hpp"
 #endif
 
-#include "opencv2/line_descriptor.hpp"
+//#include "opencv2/line_descriptor.hpp"
 #include "opencv2/core/ocl.hpp"
 
 namespace cv {
@@ -39,10 +39,12 @@ namespace cv {
 		struct Type< cv::text::ERStat > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::text::ERStat)) }; };
 #endif
 
+		/*
 		template<>
 		struct Depth < cv::line_descriptor::KeyLine > { enum { value = Depth<uchar>::value }; };
 		template<>
 		struct Type< cv::line_descriptor::KeyLine > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(cv::line_descriptor::KeyLine)) }; };
+		*/
 
 		template<>
 		struct Depth < cv::KeyPoint > { enum { value = Depth<uchar>::value }; };

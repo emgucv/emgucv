@@ -98,6 +98,8 @@ mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\XObjdetect
 cp -r ../Emgu.CV.Contrib/XObjdetect/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XObjdetect
 mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\XPhoto
 cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto
+mkdir Assets\Emgu.CV\Assets\Scripts\Emgu.CV.Contrib\Quality
+cp -r ../Emgu.CV.Contrib/Quality/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
 
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/
