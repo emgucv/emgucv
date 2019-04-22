@@ -1905,7 +1905,27 @@ IF(HAVE_opencv_dnn)
 ENDIF()
 ############################### dnn code gen END ##############################
 
-
+############################### stereo code gen START ##############################
+IF(HAVE_opencv_stereo)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "stereo/quasi_dense_stereo_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Stereo/QuasiDenseStereo.g.cs"
+    "cv::stereo::QuasiDenseStereo" 
+    "QuasiDenseStereo" 
+    "Param" 
+    "cv::stereo::PropagationParameters" 
+    "element"
+    "Param" 
+    "QuasiDenseStereo.PropagationParameters"
+    "Parameters for the QuasiDenseStereo class"
+    "Emgu.CV.Stereo"
+    "StereoInvoke"
+    "QuasiDenseStereo"
+	""
+	"#include \"opencv2/stereo.hpp\"
+#include \"opencv2/core/types_c.h\"")
+ENDIF()
+############################### stereo code gen END ##############################
 
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)

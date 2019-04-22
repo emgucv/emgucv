@@ -40,7 +40,7 @@ CVAPI(cv::quality::QualityPSNR*) cveQualityPSNRCreate(
 
 CVAPI(void) cveQualityPSNRRelease(cv::Ptr<cv::quality::QualityPSNR>** sharedPtr);
 
-CVAPI(cv::quality::QualitySSIM*) cveQualitySSIMcreate(
+CVAPI(cv::quality::QualitySSIM*) cveQualitySSIMCreate(
 	cv::_InputArray* refImgs,
 	cv::quality::QualityBase** qualityBase,
 	cv::Algorithm** algorithm,
@@ -48,7 +48,7 @@ CVAPI(cv::quality::QualitySSIM*) cveQualitySSIMcreate(
 
 CVAPI(void) cveQualitySSIMRelease(cv::Ptr<cv::quality::QualitySSIM>** sharedPtr);
 
-CVAPI(cv::quality::QualityGMSD*) cveQualityGMSDcreate(
+CVAPI(cv::quality::QualityGMSD*) cveQualityGMSDCreate(
 	cv::_InputArray* refImgs,
 	cv::quality::QualityBase** qualityBase,
 	cv::Algorithm** algorithm,

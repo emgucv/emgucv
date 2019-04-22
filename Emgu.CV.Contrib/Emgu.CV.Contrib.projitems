@@ -30,5 +30,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ImgHash\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PhaseUnwrapping\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Quality\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Stereo\*.cs" />
   </ItemGroup>
 </Project>

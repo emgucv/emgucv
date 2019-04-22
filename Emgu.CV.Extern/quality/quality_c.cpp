@@ -79,7 +79,7 @@ void cveQualityPSNRRelease(cv::Ptr<cv::quality::QualityPSNR>** sharedPtr)
 	*sharedPtr = 0;
 }
 
-cv::quality::QualitySSIM* cveQualitySSIMcreate(
+cv::quality::QualitySSIM* cveQualitySSIMCreate(
 	cv::_InputArray* refImgs,
 	cv::quality::QualityBase** qualityBase,
 	cv::Algorithm** algorithm,
@@ -99,7 +99,7 @@ void cveQualitySSIMRelease(cv::Ptr<cv::quality::QualitySSIM>** sharedPtr)
 	*sharedPtr = 0;
 }
 
-cv::quality::QualityGMSD* cveQualityGMSDcreate(
+cv::quality::QualityGMSD* cveQualityGMSDCreate(
 	cv::_InputArray* refImgs,
 	cv::quality::QualityBase** qualityBase,
 	cv::Algorithm** algorithm,
