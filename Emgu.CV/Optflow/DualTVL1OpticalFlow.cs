@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.Util;
 
 namespace Emgu.CV
@@ -16,10 +17,8 @@ namespace Emgu.CV
     /// <summary>
     /// Dual TV L1 Optical Flow Algorithm.
     /// </summary>
-    public partial class DualTVL1OpticalFlow : UnmanagedObject, IDenseOpticalFlow
+    public partial class DualTVL1OpticalFlow : SharedPtrObject, IDenseOpticalFlow
     {
-        private IntPtr _sharedPtr;
-
         private IntPtr _algorithm;
         private IntPtr _denseOpticalFlow;
 
@@ -36,9 +35,10 @@ namespace Emgu.CV
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                CvInvoke.cveDualTVL1OpticalFlowRelease(ref _ptr, ref _sharedPtr);
+                CvInvoke.cveDualTVL1OpticalFlowRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
                 _algorithm = IntPtr.Zero;
                 _denseOpticalFlow = IntPtr.Zero;
             }
@@ -68,7 +68,7 @@ namespace Emgu.CV
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDualTVL1OpticalFlowRelease(ref IntPtr flow, ref IntPtr sharedPtr);
+        internal static extern void cveDualTVL1OpticalFlowRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDenseOpticalFlowCreateDualTVL1(ref IntPtr denseOpticalFlow, ref IntPtr algorithm, ref IntPtr sharedPtr);

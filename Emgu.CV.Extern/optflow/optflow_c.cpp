@@ -51,10 +51,9 @@ cv::optflow::DualTVL1OpticalFlow* cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpt
 	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
 	return ptr;
 }
-void cveDualTVL1OpticalFlowRelease(cv::optflow::DualTVL1OpticalFlow** flow, cv::Ptr<cv::optflow::DualTVL1OpticalFlow>** sharedPtr)
+void cveDualTVL1OpticalFlowRelease(cv::Ptr<cv::optflow::DualTVL1OpticalFlow>** sharedPtr)
 {
 	delete *sharedPtr;
-	*flow = 0;
 	*sharedPtr = 0;
 }
 

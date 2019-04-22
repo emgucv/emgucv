@@ -40,7 +40,7 @@ CVAPI(cv::FarnebackOpticalFlow*) cveFarnebackOpticalFlowCreate(
 CVAPI(void) cveFarnebackOpticalFlowRelease(cv::FarnebackOpticalFlow** flow, cv::Ptr<cv::FarnebackOpticalFlow>** sharedPtr);
 
 CVAPI(void) cveDenseOpticalFlowCalc(cv::DenseOpticalFlow* dof, cv::_InputArray* i0, cv::_InputArray* i1, cv::_InputOutputArray* flow);
-CVAPI(void) cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr);
+CVAPI(void) cveDenseOpticalFlowRelease(cv::Ptr<cv::DenseOpticalFlow>** sharedPtr);
 
 CVAPI(void) cveSparseOpticalFlowCalc(
 	cv::SparseOpticalFlow* sof,  

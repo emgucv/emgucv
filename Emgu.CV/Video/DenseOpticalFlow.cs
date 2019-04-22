@@ -53,6 +53,6 @@ namespace Emgu.CV
         internal static extern void cveDenseOpticalFlowCalc(IntPtr dof, IntPtr i0, IntPtr i1, IntPtr flow);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDenseOpticalFlowRelease(ref IntPtr dof, ref IntPtr sharedPtr);
+        internal static extern void cveDenseOpticalFlowRelease(ref IntPtr sharedPtr);
     }
 }

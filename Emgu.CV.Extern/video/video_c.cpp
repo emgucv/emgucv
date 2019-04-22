@@ -130,10 +130,9 @@ void cveSparsePyrLKOpticalFlowRelease(cv::SparsePyrLKOpticalFlow** flow, cv::Ptr
 	*sharedPtr = 0;
 }
 
-void cveDenseOpticalFlowRelease(cv::DenseOpticalFlow** flow, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr)
+void cveDenseOpticalFlowRelease(cv::Ptr<cv::DenseOpticalFlow>** sharedPtr)
 {
 	delete *sharedPtr;
-	*flow = 0;
 	*sharedPtr = 0;
 }
 

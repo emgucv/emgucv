@@ -14,10 +14,8 @@ namespace Emgu.CV
     /// <summary>
     /// DeepFlow optical flow algorithm implementation.
     /// </summary>
-    public class OptFlowDeepFlow : UnmanagedObject, IDenseOpticalFlow
+    public class OptFlowDeepFlow : SharedPtrObject, IDenseOpticalFlow
     {
-        private IntPtr _sharedPtr;
-
         private IntPtr _algorithmPtr;
 
         /// <summary>
@@ -33,11 +31,12 @@ namespace Emgu.CV
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero != _ptr)
+            if (IntPtr.Zero != _sharedPtr)
             {
-                CvInvoke.cveDenseOpticalFlowRelease(ref _ptr, ref _sharedPtr);
+                CvInvoke.cveDenseOpticalFlowRelease(ref _sharedPtr);
+                _algorithmPtr = IntPtr.Zero;
+                _ptr = IntPtr.Zero;
             }
-            _algorithmPtr = IntPtr.Zero;
         }
 
         /// <summary>
