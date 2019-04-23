@@ -1318,8 +1318,8 @@ CREATE_OCV_CLASS_PROPERTY(
     "NormSigma0;NormSigma1;SolverType;SupportRegionType;SmallWinSize;LargeWinSize;CrossSegmentationThreshold;MaxLevel;UseInitialFlow;UseIlluminationModel;UseGlobalMotionPrior;MaxIteration;MinEigenValue;GlobalMotionRansacThreshold" 
     "float;float;cv::optflow::SolverType;cv::optflow::SupportRegionType;int;int;int;int;bool;bool;bool;int;float;float" 
     "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
-    "NormSigma0;NormSigma1;SolverType;SupportRegionType;SmallWinSize;LargeWinSize;CrossSegmentationThreshold;MaxLevel;UseInitialFlow;UseIlluminationModel;UseGlobalMotionPrior;MaxIteration;MinEigenValue;GlobalMotionRansacThreshold" 
-    "float;float;Emgu.CV.DenseRLOFOpticalFlow.SolverType;Emgu.CV.DenseRLOFOpticalFlow.SupportRegionType;int;int;int;int;bool;bool;bool;int;float;float"
+    "NormSigma0;NormSigma1;Solver;SupportRegion;SmallWinSize;LargeWinSize;CrossSegmentationThreshold;MaxLevel;UseInitialFlow;UseIlluminationModel;UseGlobalMotionPrior;MaxIteration;MinEigenValue;GlobalMotionRansacThreshold" 
+    "float;float;Emgu.CV.RLOFOpticalFlowParameter.SolverType;Emgu.CV.RLOFOpticalFlowParameter.SupportRegionType;int;int;int;int;bool;bool;bool;int;float;float"
     "parameter of the shrinked Hampel norm;
 	parameter of the shrinked Hampel norm;
 	Variable specifies the iterative refinement strategy;
@@ -1333,7 +1333,7 @@ CREATE_OCV_CLASS_PROPERTY(
 	Use global motion prior initialisation. It allows to be more accurate for long-range motion. The computational complexity is slightly increased by enabling the global motion prior initialisation.;
 	Number of maximal iterations used for the iterative refinement. Lower values can reduce the runtime but also the accuracy.;
 	Threshold for the minimal eigenvalue of the gradient matrix defines when to abort the iterative refinement.;
-	To apply the global motion prior motion vectors will be computed on a regulary sampled which are the basis for Homography estimation using RANSAC. The reprojection threshold is based on n-th percentil (given by this value [0 ... 100]) of the motion vectors magnitude. "
+	To apply the global motion prior motion vectors will be computed on a regularly sampled which are the basis for Homography estimation using RANSAC. The reprojection threshold is based on n-th percentil (given by this value [0 ... 100]) of the motion vectors magnitude. "
     "Emgu.CV"
     "CvInvoke"
     "RLOFOpticalFlowParameter"

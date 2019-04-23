@@ -106,3 +106,28 @@ void cveDenseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>**
 	delete *sharedPtr;
 	*sharedPtr = 0;
 }
+
+
+cv::optflow::SparseRLOFOpticalFlow* cveSparseRLOFOpticalFlowCreate(
+	cv::optflow::RLOFOpticalFlowParameter* rlofParameter,
+	float forwardBackwardThreshold,
+	cv::SparseOpticalFlow** sparseOpticalFlow,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>** sharedPtr)
+{
+	cv::Ptr<cv::optflow::RLOFOpticalFlowParameter> pPtr(rlofParameter, [](cv::optflow::RLOFOpticalFlowParameter* p) {});
+	cv::Ptr<cv::optflow::SparseRLOFOpticalFlow> rlof = cv::optflow::SparseRLOFOpticalFlow::create(
+		pPtr,
+		forwardBackwardThreshold);
+	*sharedPtr = new cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>(rlof);
+	cv::optflow::SparseRLOFOpticalFlow* ptr = (*sharedPtr)->get();
+	*sparseOpticalFlow = dynamic_cast<cv::optflow::SparseRLOFOpticalFlow*>(ptr);
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+	return ptr;
+}
+
+void cveSparseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>** sharedPtr)
+{
+	delete *sharedPtr;
+	*sharedPtr = 0;
+}

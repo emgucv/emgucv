@@ -41,4 +41,14 @@ CVAPI(cv::optflow::DenseRLOFOpticalFlow*) cveDenseRLOFOpticalFlowCreate(
 	cv::Algorithm** algorithm, 
 	cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>** sharedPtr);
 CVAPI(void) cveDenseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>** sharedPtr);
+
+
+CVAPI(cv::optflow::SparseRLOFOpticalFlow*) cveSparseRLOFOpticalFlowCreate(
+	cv::optflow::RLOFOpticalFlowParameter* rlofParameter,
+	float forwardBackwardThreshold,
+	cv::SparseOpticalFlow** sparseOpticalFlow,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>** sharedPtr);
+
+CVAPI(void) cveSparseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>** sharedPtr);
 #endif

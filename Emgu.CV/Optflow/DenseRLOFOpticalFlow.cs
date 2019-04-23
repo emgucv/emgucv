@@ -13,33 +13,14 @@ using Emgu.Util;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// Fast dense optical flow computation based on robust local optical flow (RLOF) algorithms and sparse-to-dense interpolation scheme.
+    /// </summary>
     public partial class DenseRLOFOpticalFlow : SharedPtrObject, IDenseOpticalFlow
     {
-        public enum SolverType
-        {
-            /// <summary>
-            /// Apply standard iterative refinement
-            /// </summary>
-            Standard = 0,
-            /// <summary>
-            /// Apply optimized iterative refinement based bilinear equation solutions
-            /// </summary>
-            Bilinear = 1
-        }
-
-        public enum SupportRegionType
-        {
-            /// <summary>
-            /// Apply a constant support region
-            /// </summary>
-            Fixed = 0,
-
-            /// <summary>
-            /// Apply a adaptive support region obtained by cross-based segmentation
-            /// </summary>
-            Cross = 1
-        }
-
+        /// <summary>
+        /// Interpolation type used to compute the dense optical flow.
+        /// </summary>
         public enum InterpolationType
         {
             /// <summary>
