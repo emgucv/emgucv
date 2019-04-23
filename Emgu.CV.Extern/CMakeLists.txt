@@ -1310,7 +1310,28 @@ IF(HAVE_opencv_optflow)
 	""
     "#include \"optflow_c.h\"")
 
-  
+CREATE_OCV_CLASS_PROPERTY( 
+    "optflow/rlof_opticalflow_parameter_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/RLOFOpticalFlowParameter.g.cs"
+    "cv::optflow::RLOFOpticalFlowParameter" 
+    "RLOFOpticalFlowParameter" 
+    "NormSigma0;NormSigma1;SolverType;SupportRegionType;SmallWinSize;LargeWinSize;CrossSegmentationThreshold" 
+    "float;float;cv::optflow::SolverType;cv::optflow::SupportRegionType;int;int;int" 
+    "prop;prop;prop;prop;prop;prop;prop"
+    "NormSigma0;NormSigma1;SolverType;SupportRegionType;SmallWinSize;LargeWinSize;CrossSegmentationThreshold" 
+    "float;float;Emgu.CV.SolverType;Emgu.CV.SupportRegionType;int;int;int"
+    "parameter of the shrinked Hampel norm;
+	parameter of the shrinked Hampel norm;
+	Variable specifies the iterative refinement strategy;
+	Variable specifies the support region shape extraction or shrinking strategy;
+	Minimal window size of the support region. This parameter is only used if supportRegionType is Cross;
+	Maximal window size of the support region. If supportRegionType is Fixed this gives the exact support region size. The speed of the RLOF is related to the applied win sizes. The smaller the window size the lower is the runtime, but the more sensitive to noise is the method.;
+	Color similarity threshold used by cross-based segmentation. Only used  if supportRegionType is Cross. With the cross-bassed segmentation motion boundaries can be computed more accurately"
+    "Emgu.CV"
+    "CvInvoke"
+    "RLOFOpticalFlowParameter"
+	""
+    "#include \"optflow_c.h\"")  
 ENDIF()
 ############################### optflow code gen END ################################
 

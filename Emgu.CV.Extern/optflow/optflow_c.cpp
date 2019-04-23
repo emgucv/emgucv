@@ -57,3 +57,12 @@ void cveDualTVL1OpticalFlowRelease(cv::Ptr<cv::optflow::DualTVL1OpticalFlow>** s
 	*sharedPtr = 0;
 }
 
+cv::optflow::RLOFOpticalFlowParameter* cveRLOFOpticalFlowParameterCreate()
+{
+	return new cv::optflow::RLOFOpticalFlowParameter();
+}
+void cveRLOFOpticalFlowParameterRelease(cv::optflow::RLOFOpticalFlowParameter** p)
+{
+	delete *p;
+	*p = 0;
+}
