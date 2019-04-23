@@ -55,17 +55,30 @@ namespace Emgu.CV
         private IntPtr _algorithm;
         private IntPtr _denseOpticalFlow;
 
+        /// <summary>
+        /// Creates instance of DenseRLOFOpticalFlow
+        /// </summary>
+        /// <param name="parameter">The RLOF optical flow parameters</param>
+        /// <param name="forwardBackwardThreshold">Threshold for the forward backward confidence check. Use 1.0f for default</param>
+        /// <param name="gridStep">Size of the grid to spawn the motion vectors. Use (6, 6) for default</param>
+        /// <param name="interpType">Interpolation used to compute the dense optical flow.</param>
+        /// <param name="epicK">See Ximgproc.EdgeAwareInterpolator() K value.</param>
+        /// <param name="epicSigma">See Ximgproc.EdgeAwareInterpolator() sigma value.</param>
+        /// <param name="epicLambda">See Ximgproc.EdgeAwareInterpolator() lambda value.</param>
+        /// <param name="usePostProc">Enables Ximgproc.fastGlobalSmootherFilter</param>
+        /// <param name="fgsLambda">See Ximgproc.EdgeAwareInterpolator().</param>
+        /// <param name="fgsSigma">See Ximgproc.EdgeAwareInterpolator().</param>
         public DenseRLOFOpticalFlow(
             RLOFOpticalFlowParameter parameter,
             float forwardBackwardThreshold,
-            Size gridStep,
-            InterpolationType interpType,
-            int epicK,
-            float epicSigma,
-            float epicLambda,
-            bool usePostProc,
-            float fgsLambda,
-            float fgsSigma
+            Size gridStep, 
+            InterpolationType interpType = InterpolationType.Epic,
+            int epicK = 128,
+            float epicSigma = 0.05f,
+            float epicLambda = 999.0f,
+            bool usePostProc = true,
+            float fgsLambda = 500.0f,
+            float fgsSigma = 1.5f
             )
         {
             _ptr = CvInvoke.cveDenseRLOFOpticalFlowCreate(
