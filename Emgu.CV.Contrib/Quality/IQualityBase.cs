@@ -26,11 +26,17 @@ namespace Emgu.CV.Quality
         IntPtr QualityBasePtr { get; }
     }
 
-    public static partial class QualityBaseInvoke
+    public static partial class QualityInvoke
     {
+        /// <summary>
+        /// Compute quality score per channel with the per-channel score in each element of the result
+        /// </summary>
+        /// <param name="qualityBase">The quality base object</param>
+        /// <param name="cmpImgs">Comparison image(s), or image(s) to evaluate for no-reference quality algorithms</param>
+        /// <returns>Quality score per channel</returns>
         public static MCvScalar Compute(
             this IQualityBase qualityBase,
-            IInputArray cmpImgs)
+            IInputArrayOfArrays cmpImgs)
         {
             MCvScalar score = new MCvScalar();
             using (InputArray iaCmpImgs = cmpImgs.GetInputArray())
@@ -41,9 +47,14 @@ namespace Emgu.CV.Quality
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveQualityBaseCompute(IntPtr qualityBase, IntPtr cmpImgs, ref MCvScalar score);
 
+        /// <summary>
+        /// Returns output quality map images that were generated during computation, if supported by the algorithm.
+        /// </summary>
+        /// <param name="qualityBase">The quality base object</param>
+        /// <param name="dst">Output quality map images that were generated during computation, if supported by the algorithm.</param>
         public static void GetQualityMaps(
             this IQualityBase qualityBase,
-            IOutputArray dst)
+            IOutputArrayOfArrays dst)
         {
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveQualityBaseGetQualityMaps(qualityBase.QualityBasePtr, oaDst);

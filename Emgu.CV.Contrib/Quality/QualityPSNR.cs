@@ -13,23 +13,36 @@ using Emgu.Util;
 
 namespace Emgu.CV.Quality
 {
-
+    /// <summary>
+    /// Peak signal to noise ratio (PSNR) algorithm
+    /// </summary>
     public class QualityPSNR : SharedPtrObject, IQualityBase
     {
         private IntPtr _qualityBasePtr;
         private IntPtr _algorithmPtr;
 
+        /// <summary>
+        /// Pointer to the native QualityBase object
+        /// </summary>
         public IntPtr QualityBasePtr
         {
             get { return _qualityBasePtr; }
         }
 
+        /// <summary>
+        /// Pointer to the native algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr
         {
             get { return _algorithmPtr; }
         }
 
-        public QualityPSNR(IInputArray refImgs, double maxPixelValue = 255.0)
+        /// <summary>
+        /// Create an instance of peak signal to noise ratio (PSNR) algorithm
+        /// </summary>
+        /// <param name="refImgs">Input image(s) to use as the source for comparison</param>
+        /// <param name="maxPixelValue">maximum per-channel value for any individual pixel; eg 255 for uint8 image</param>
+        public QualityPSNR(IInputArrayOfArrays refImgs, double maxPixelValue = 255.0)
         {
             using (InputArray iaRefImgs = refImgs.GetInputArray())
                 _ptr = QualityInvoke.cveQualityPSNRCreate(
@@ -49,6 +62,8 @@ namespace Emgu.CV.Quality
             {
                 QualityInvoke.cveQualityPSNRRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
+                _algorithmPtr = IntPtr.Zero;
+                _qualityBasePtr = IntPtr.Zero;
             }
         }
 

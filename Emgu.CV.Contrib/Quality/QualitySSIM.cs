@@ -13,22 +13,34 @@ using Emgu.Util;
 
 namespace Emgu.CV.Quality
 {
-
+    /// <summary>
+    /// Structural similarity algorithm
+    /// </summary>
     public class QualitySSIM : SharedPtrObject, IQualityBase
     {
         private IntPtr _qualityBasePtr;
         private IntPtr _algorithmPtr;
 
+        /// <summary>
+        /// Pointer to the native QualityBase object
+        /// </summary>
         public IntPtr QualityBasePtr
         {
             get { return _qualityBasePtr; }
         }
 
+        /// <summary>
+        /// Pointer to the native algorithm object
+        /// </summary>
         public IntPtr AlgorithmPtr
         {
             get { return _algorithmPtr; }
         }
 
+        /// <summary>
+        /// Create an object which calculates quality via mean square error.
+        /// </summary>
+        /// <param name="refImgs">input image(s) to use as the source for comparison</param>
         public QualitySSIM(IInputArray refImgs)
         {
             using (InputArray iaRefImgs = refImgs.GetInputArray())
@@ -48,6 +60,8 @@ namespace Emgu.CV.Quality
             {
                 QualityInvoke.cveQualitySSIMRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
+                _algorithmPtr = IntPtr.Zero;
+                _qualityBasePtr = IntPtr.Zero;
             }
         }
 
