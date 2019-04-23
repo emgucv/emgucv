@@ -14,8 +14,16 @@ using System.Drawing;
 
 namespace Emgu.CV.Stereo
 {
+    /// <summary>
+    /// Class containing the methods needed for Quasi Dense Stereo computation.
+    /// </summary>
     public partial class QuasiDenseStereo : SharedPtrObject
     {
+        /// <summary>
+        /// Create a new instance containing the methods needed for Quasi Dense Stereo computation.
+        /// </summary>
+        /// <param name="monoImgSize">Image size</param>
+        /// <param name="paramFilepath">The path for the parameters</param>
         public QuasiDenseStereo(Size monoImgSize, String paramFilepath = "")
         {
             using (CvString csParamFilePath = new CvString(paramFilepath))
@@ -37,11 +45,23 @@ namespace Emgu.CV.Stereo
             }
         }
 
+        /// <summary>
+        /// Main process of the algorithm. This method computes the sparse seeds and then densifies them.
+        /// Initially input images are converted to gray-scale and then the sparseMatching method is called to obtain the sparse stereo. Finally quasiDenseMatching is called to densify the corresponding points.
+        /// </summary>
+        /// <param name="imgLeft">The left Channel of a stereo image pair.</param>
+        /// <param name="imgRight">The right Channel of a stereo image pair.</param>
+        /// <remarks>If input images are in color, the method assumes that are BGR and converts them to grayscale.</remarks>
         public void Process(Mat imgLeft, Mat imgRight)
         {
             StereoInvoke.cveQuasiDenseStereoProcess(_ptr, imgLeft, imgRight);
         }
 
+        /// <summary>
+        /// Compute and return the disparity map based on the correspondences found in the "process" method.
+        /// </summary>
+        /// <param name="disparityLvls">The level of detail in output disparity image.</param>
+        /// <returns>Mat containing a the disparity image in grayscale.</returns>
         public Mat GetDisparity(byte disparityLvls = (byte)50)
         {
             Mat disparity = new Mat();
@@ -49,6 +69,9 @@ namespace Emgu.CV.Stereo
             return disparity;
         }
 
+        /// <summary>
+        /// The propagation parameters
+        /// </summary>
         public struct PropagationParameters
         {
             /// <summary>

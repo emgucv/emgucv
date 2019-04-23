@@ -41,7 +41,7 @@ namespace Emgu.CV.Quality
         /// Create an object which calculates quality via mean square error.
         /// </summary>
         /// <param name="refImgs">input image(s) to use as the source for comparison</param>
-        public QualitySSIM(IInputArray refImgs)
+        public QualitySSIM(IInputArrayOfArrays refImgs)
         {
             using (InputArray iaRefImgs = refImgs.GetInputArray())
                 _ptr = QualityInvoke.cveQualitySSIMCreate(
