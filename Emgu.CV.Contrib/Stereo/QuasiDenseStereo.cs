@@ -54,118 +54,104 @@ namespace Emgu.CV.Stereo
             /// <summary>
             /// similarity window
             /// </summary>
-            int CorrWinSizeX;
+            public int CorrWinSizeX;
 
             /// <summary>
             /// similarity window
             /// </summary>
-            int CorrWinSizeY;
+            public int CorrWinSizeY;
 
             /// <summary>
             /// border to ignore
             /// </summary>
-            int BorderX;
+            public int BorderX;
 
             /// <summary>
             /// border to ignore
             /// </summary>
-            int BorderY;
+            public int BorderY;
 
             /// <summary>
             /// correlation threshold
             /// </summary>
-            float CorrelationThreshold;
+            public float CorrelationThreshold;
 
             /// <summary>
             /// texture threshold
             /// </summary>
-            float TextrureThreshold;
+            public float TextrureThreshold;
 
             /// <summary>
             /// neighborhood size
             /// </summary>
-            int NeighborhoodSize;
+            public int NeighborhoodSize;
 
             /// <summary>
             /// disparity gradient threshold
             /// </summary>
-            int DisparityGradient;
+            public int DisparityGradient;
 
             /// <summary>
             /// Parameters for LK flow algorithm 
             /// </summary>
-            int LkTemplateSize;
+            public int LkTemplateSize;
 
             /// <summary>
             /// Parameters for LK flow algorithm
             /// </summary>
-            int LkPyrLvl;
+            public int LkPyrLvl;
 
             /// <summary>
             /// Parameters for LK flow algorithm
             /// </summary>
-            int LkTermParam1;
+            public int LkTermParam1;
 
             /// <summary>
             /// Parameters for LK flow algorithm
             /// </summary>
-            float LkTermParam2;
+            public float LkTermParam2;
 
             /// <summary>
             /// Parameters for GFT algorithm.
             /// </summary>
-            float GftQualityThres;
+            public float GftQualityThres;
 
             /// <summary>
             /// Parameters for GFT algorithm.
             /// </summary>
-            int GftMinSeperationDist;
+            public int GftMinSeperationDist;
 
             /// <summary>
             /// Parameters for GFT algorithm.
             /// </summary>
-            int GftMaxNumFeatures;
+            public int GftMaxNumFeatures;
         }
+    }
 
-        public enum SupportRegionType
+    /// <summary>
+    /// Class that contains entry points for the Stereo module.
+    /// </summary>
+    public static partial class StereoInvoke
+    {
+        static StereoInvoke()
         {
-            /// <summary>
-            /// Apply a constant support region
-            /// </summary>
-            Fixed = 0,
-
-            /// <summary>
-            /// Apply a adaptive support region obtained by cross-based segmentation
-            /// </summary>
-            Cross = 1
+            CvInvoke.CheckLibraryLoaded();
         }
 
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static IntPtr cveQuasiDenseStereoCreate(
+            ref Size monoImgSize,
+            IntPtr paramFilepath,
+            ref IntPtr sharedPtr);
 
-        /// <summary>
-        /// Class that contains entry points for the Stereo module.
-        /// </summary>
-        public static partial class StereoInvoke
-        {
-            static StereoInvoke()
-            {
-                CvInvoke.CheckLibraryLoaded();
-            }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveQuasiDenseStereoRelease(ref IntPtr sharedPtr);
 
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal extern static IntPtr cveQuasiDenseStereoCreate(
-                ref Size monoImgSize,
-                IntPtr paramFilepath,
-                ref IntPtr sharedPtr);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveQuasiDenseStereoProcess(IntPtr stereo, IntPtr imgLeft, IntPtr imgRight);
 
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal extern static void cveQuasiDenseStereoRelease(ref IntPtr sharedPtr);
-
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal extern static void cveQuasiDenseStereoProcess(IntPtr stereo, IntPtr imgLeft, IntPtr imgRight);
-
-            [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-            internal extern static void cveQuasiDenseStereoGetDisparity(IntPtr stereo, byte disparityLvls,
-                IntPtr disparity);
-        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveQuasiDenseStereoGetDisparity(IntPtr stereo, byte disparityLvls,
+            IntPtr disparity);
     }
 }

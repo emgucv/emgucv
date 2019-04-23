@@ -11,18 +11,6 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
-    public enum SolverType
-    {
-        /// <summary>
-        /// Apply standard iterative refinement
-        /// </summary>
-        Standard = 0,
-        /// <summary>
-        /// Apply optimized iterative refinement based bilinear equation solutions
-        /// </summary>
-        Bilinear = 1
-    }
-
     public partial class RLOFOpticalFlowParameter : UnmanagedObject
     {
         

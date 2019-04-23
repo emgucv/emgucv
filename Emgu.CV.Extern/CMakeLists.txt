@@ -1315,18 +1315,25 @@ CREATE_OCV_CLASS_PROPERTY(
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/RLOFOpticalFlowParameter.g.cs"
     "cv::optflow::RLOFOpticalFlowParameter" 
     "RLOFOpticalFlowParameter" 
-    "NormSigma0;NormSigma1;SolverType;SupportRegionType;SmallWinSize;LargeWinSize;CrossSegmentationThreshold" 
-    "float;float;cv::optflow::SolverType;cv::optflow::SupportRegionType;int;int;int" 
-    "prop;prop;prop;prop;prop;prop;prop"
-    "NormSigma0;NormSigma1;SolverType;SupportRegionType;SmallWinSize;LargeWinSize;CrossSegmentationThreshold" 
-    "float;float;Emgu.CV.SolverType;Emgu.CV.SupportRegionType;int;int;int"
+    "NormSigma0;NormSigma1;SolverType;SupportRegionType;SmallWinSize;LargeWinSize;CrossSegmentationThreshold;MaxLevel;UseInitialFlow;UseIlluminationModel;UseGlobalMotionPrior;MaxIteration;MinEigenValue;GlobalMotionRansacThreshold" 
+    "float;float;cv::optflow::SolverType;cv::optflow::SupportRegionType;int;int;int;int;bool;bool;bool;int;float;float" 
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "NormSigma0;NormSigma1;SolverType;SupportRegionType;SmallWinSize;LargeWinSize;CrossSegmentationThreshold;MaxLevel;UseInitialFlow;UseIlluminationModel;UseGlobalMotionPrior;MaxIteration;MinEigenValue;GlobalMotionRansacThreshold" 
+    "float;float;Emgu.CV.DenseRLOFOpticalFlow.SolverType;Emgu.CV.DenseRLOFOpticalFlow.SupportRegionType;int;int;int;int;bool;bool;bool;int;float;float"
     "parameter of the shrinked Hampel norm;
 	parameter of the shrinked Hampel norm;
 	Variable specifies the iterative refinement strategy;
 	Variable specifies the support region shape extraction or shrinking strategy;
 	Minimal window size of the support region. This parameter is only used if supportRegionType is Cross;
 	Maximal window size of the support region. If supportRegionType is Fixed this gives the exact support region size. The speed of the RLOF is related to the applied win sizes. The smaller the window size the lower is the runtime, but the more sensitive to noise is the method.;
-	Color similarity threshold used by cross-based segmentation. Only used  if supportRegionType is Cross. With the cross-bassed segmentation motion boundaries can be computed more accurately"
+	Color similarity threshold used by cross-based segmentation. Only used  if supportRegionType is Cross. With the cross-bassed segmentation motion boundaries can be computed more accurately;
+	Maximal number of pyramid level used. The large this value is the more likely it is to obtain accurate solutions for long-range motions. The runtime is linear related to this parameter;
+	Use next point list as initial values. A good initialization can improve the algorithm accuracy and reduce the runtime by a faster convergence of the iteration refinement;
+	Use the Gennert and Negahdaripour illumination model instead of the intensity brightness constraint.;
+	Use global motion prior initialisation. It allows to be more accurate for long-range motion. The computational complexity is slightly increased by enabling the global motion prior initialisation.;
+	Number of maximal iterations used for the iterative refinement. Lower values can reduce the runtime but also the accuracy.;
+	Threshold for the minimal eigenvalue of the gradient matrix defines when to abort the iterative refinement.;
+	To apply the global motion prior motion vectors will be computed on a regulary sampled which are the basis for Homography estimation using RANSAC. The reprojection threshold is based on n-th percentil (given by this value [0 ... 100]) of the motion vectors magnitude. "
     "Emgu.CV"
     "CvInvoke"
     "RLOFOpticalFlowParameter"

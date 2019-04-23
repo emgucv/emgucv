@@ -25,4 +25,20 @@ CVAPI(void) cveDualTVL1OpticalFlowRelease(cv::Ptr<cv::optflow::DualTVL1OpticalFl
 
 CVAPI(cv::optflow::RLOFOpticalFlowParameter*) cveRLOFOpticalFlowParameterCreate();
 CVAPI(void) cveRLOFOpticalFlowParameterRelease(cv::optflow::RLOFOpticalFlowParameter** p);
+
+CVAPI(cv::optflow::DenseRLOFOpticalFlow*) cveDenseRLOFOpticalFlowCreate(
+	cv::optflow::RLOFOpticalFlowParameter* rlofParameter, 
+	float forwardBackwardThreshold,
+	CvSize* gridStep,
+	int interpType,
+	int epicK,
+	float epicSigma,
+	float epicLambda,
+	bool usePostProc,
+	float fgsLambda,
+	float fgsSigma,
+	cv::DenseOpticalFlow** denseOpticalFlow, 
+	cv::Algorithm** algorithm, 
+	cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>** sharedPtr);
+CVAPI(void) cveDenseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>** sharedPtr);
 #endif

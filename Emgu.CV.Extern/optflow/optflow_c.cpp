@@ -66,3 +66,43 @@ void cveRLOFOpticalFlowParameterRelease(cv::optflow::RLOFOpticalFlowParameter** 
 	delete *p;
 	*p = 0;
 }
+
+cv::optflow::DenseRLOFOpticalFlow* cveDenseRLOFOpticalFlowCreate(
+	cv::optflow::RLOFOpticalFlowParameter* rlofParameter,
+	float forwardBackwardThreshold,
+	CvSize* gridStep,
+	int interpType,
+	int epicK,
+	float epicSigma,
+	float epicLambda,
+	bool usePostProc,
+	float fgsLambda,
+	float fgsSigma,
+	cv::DenseOpticalFlow** denseOpticalFlow,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>** sharedPtr)
+{
+	cv::Ptr<cv::optflow::RLOFOpticalFlowParameter> pPtr(rlofParameter, [](cv::optflow::RLOFOpticalFlowParameter* p) {});
+	cv::Ptr<cv::optflow::DenseRLOFOpticalFlow> rlof = cv::optflow::DenseRLOFOpticalFlow::create(
+		pPtr,
+		forwardBackwardThreshold, 
+		*gridStep,
+	 	static_cast<cv::optflow::InterpolationType>(interpType),
+		epicK,
+		epicSigma, 
+		epicLambda, 
+		usePostProc, 
+		fgsLambda,
+		fgsSigma);
+	*sharedPtr = new cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>(rlof);
+	cv::optflow::DenseRLOFOpticalFlow* ptr = (*sharedPtr)->get();
+	*denseOpticalFlow = dynamic_cast<cv::optflow::DenseRLOFOpticalFlow*>(ptr);
+	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+	return ptr;
+
+}
+void cveDenseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>** sharedPtr)
+{
+	delete *sharedPtr;
+	*sharedPtr = 0;
+}
