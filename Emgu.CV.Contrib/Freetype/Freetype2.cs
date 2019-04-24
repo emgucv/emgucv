@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+#if !(__IOS__ || UNITY_IPHONE) 
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -174,5 +176,5 @@ namespace Emgu.CV.Freetype
             ref Size size);
             
     }
-
 }
+#endif
