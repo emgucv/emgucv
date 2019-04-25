@@ -17,4 +17,17 @@ CVAPI(void) cveDestroyWindow(cv::String* winname);
 CVAPI(void) cveDestroyAllWindows();
 CVAPI(int) cveWaitKey(int delay);
 
+CVAPI(void) cveSelectROI(
+	cv::String* windowName, 
+	cv::_InputArray* img, 
+	bool showCrosshair, 
+	bool fromCenter, 
+	CvRect* roi);
+
+CVAPI(void) cveSelectROIs(
+	cv::String* windowName,
+	cv::_InputArray* img,
+	std::vector< cv::Rect >* boundingBoxs,
+	bool showCrosshair,
+	bool fromCenter);
 #endif
