@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PedestrianDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlanarSubdivisionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureMatchingPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Viz3dPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)GettingStarted.Xamarin" />

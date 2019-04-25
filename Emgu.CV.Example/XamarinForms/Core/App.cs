@@ -39,26 +39,40 @@ namespace Emgu.CV.XamarinForms
             Button dnnButton = new Button();
             dnnButton.Text = "DNN";
 
-            
+            List<View> buttonList = new List<View>()
+            {
+                helloWorldButton,
+                planarSubdivisionButton,
+                faceDetectionButton,
+                faceLandmarkDetectionButton,
+                featureDetectionButton,
+                pedestrianDetectionButton,
+                ocrButton,
+                dnnButton
+            };
+
+#if !(NETFX_CORE || __ANDROID__ || __IOS__ || __MACOS__)
+            Button viz3dButton = new Button();
+            viz3dButton.Text = "Viz3D";
+            buttonList.Add(viz3dButton);
+            viz3dButton.Clicked += (sender, args) =>
+            {
+                MainPage.Navigation.PushAsync(new Viz3dPage());
+            };
+#endif
+
+            StackLayout buttonsLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.Start,
+            };
+            foreach (View b in buttonList)
+                buttonsLayout.Children.Add(b);
+
             // The root page of your application
             ContentPage page =
               new ContentPage
               {
-                  Content = new StackLayout
-                  {
-                      VerticalOptions = LayoutOptions.Start,
-                      Children =
-                    {
-                        helloWorldButton,
-                        planarSubdivisionButton,
-                        faceDetectionButton,
-                        faceLandmarkDetectionButton,
-                        featureDetectionButton,
-                        pedestrianDetectionButton,
-                        ocrButton,
-                        dnnButton
-                    }
-                  }
+                  Content = buttonsLayout
               };
 
 #if NETFX_CORE
