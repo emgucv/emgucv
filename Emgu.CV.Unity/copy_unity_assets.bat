@@ -21,8 +21,8 @@ cd ..
 cd ..
 cd ..
 
-cp ../opencv/LICENSE Assets/Emgu.CV/Assets/Emgu.CV/Documentation/opencv.license.txt
-cp ../Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git/COPYING Assets/Emgu.CV/Assets/Emgu.CV/Documentation/tesseract.ocr.license.txt
+cp ../opencv/LICENSE Assets/Emgu.CV/Documentation/opencv.license.txt
+cp ../Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git/COPYING Assets/Emgu.CV/Documentation/tesseract.ocr.license.txt
 
 
 cp ../Emgu.Util/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.Util/
