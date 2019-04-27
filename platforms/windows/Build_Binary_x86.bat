@@ -136,7 +136,7 @@ SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DOPENCV_EXTRA_MODULES_PATH:String="%OPENCV_EXTRA_MODULES_DIR:\=/%" 
 
 REM For Freetype, removed the "d" postfix for debug mode.
-SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
+SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DDISABLE_FORCE_DEBUG_POSTFIX:BOOL=TRUE 
 
 REM GPU performance test on windows cause compilation error, skipping it now
