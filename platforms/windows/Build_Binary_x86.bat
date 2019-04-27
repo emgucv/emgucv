@@ -50,12 +50,12 @@ SET VS2012="%VS110COMNTOOLS%..\IDE\devenv.com"
 SET VS2013="%VS120COMNTOOLS%..\IDE\devenv.com"
 SET VS2015="%VS140COMNTOOLS%..\IDE\devenv.com"
 
-SET VS2017_DIR=%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Community
-IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com" SET VS2017_DIR=%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Professional
-IF EXIST "%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.com" SET VS2017_DIR=%PROGRAMFILES_DIR_X86%\Microsoft Visual Studio\2017\Enterprise
-IF EXIST "%VS2017INSTALLDIR%\Common7\IDE\devenv.com" SET VS2017_DIR=%VS2017INSTALLDIR%
-IF EXIST "%VS150COMNTOOLS%..\IDE\devenv.com" SET VS2017_DIR =%VS150COMNTOOLS%..\..
+FOR /F "tokens=* USEBACKQ" %%F IN (`..\miscellaneous\vswhere.exe -version [15.0^,16.0^) -property installationPath`) DO SET VS2017_DIR=%%F
 SET VS2017="%VS2017_DIR%\Common7\IDE\devenv.com" 
+
+FOR /F "tokens=* USEBACKQ" %%F IN (`..\miscellaneous\vswhere.exe -version [16.0^,17.0^) -property installationPath`) DO SET VS2019_DIR=%%F
+SET VS2019="%VS2019_DIR%\Common7\IDE\devenv.com"
+
 
 IF EXIST "%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe
 IF EXIST "%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe
@@ -417,7 +417,7 @@ GOTO RUN_CMAKE
 
 @echo on
 :RUN_CMAKE
-%CMAKE% %CMAKE_CONF_FLAGS% ..\
+REM %CMAKE% %CMAKE_CONF_FLAGS% ..\
 
 :BUILD
 IF NOT "%7%"=="build" GOTO END
