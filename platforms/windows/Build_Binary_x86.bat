@@ -216,6 +216,7 @@ IF %DEVENV%==%VS2010% SET CUDA_HOST_COMPILER=%VS100COMNTOOLS%..\..\VC\bin\cl.exe
 IF %DEVENV%==%VS2012% SET CUDA_HOST_COMPILER=%VS110COMNTOOLS%..\..\VC\bin\cl.exe
 IF %DEVENV%==%VS2013% SET CUDA_HOST_COMPILER=%VS120COMNTOOLS%..\..\VC\bin\cl.exe
 IF %DEVENV%==%VS2015% SET CUDA_HOST_COMPILER=%VS140COMNTOOLS%..\..\VC\bin\cl.exe
+IF %DEVENV%==%VS2017% SET CUDA_HOST_COMPILER=%VS2017_DIR%\VC\Tools\MSVC\14.16.27023\bin\Hostx64\x64\cl.exe
 
 REM Find cuda. Use latest Cuda release for 64 bit and Cuda 6.5 for 32bit
 REM We cannot use latest Cuda release for 32 bit because the 32bit version of npp has been depreciated from Cuda 7
@@ -258,8 +259,8 @@ REM IF EXIST "%MSVC_14_11%" SET CUDA_HOST_COMPILER=%MSVC_14_11%
 REM pushd "%VS2017_DIR%\VC\Auxiliary\Build\"
 REM call vcvars64.bat -vcvars_ver=14.11  
 REM popd
-REM SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
-REM -DCUDA_HOST_COMPILER:String="%CUDA_HOST_COMPILER:\=/%" 
+SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
+-DCUDA_HOST_COMPILER:String="%CUDA_HOST_COMPILER:\=/%" 
 
 REM :END_FIND_CL
 
