@@ -1400,6 +1400,22 @@ namespace Emgu.CV.Test
            }
         }
         */
+
+        [Test]
+        public void TestSplit()
+        {
+            using (Mat m = new Mat(480, 640, DepthType.Cv8U, 3))
+            {
+                using (RNG rng = new RNG())
+                    rng.Fill(m, RNG.DistType.Uniform, new MCvScalar(), new MCvScalar(255, 255, 255));
+
+                using (VectorOfMat vm = new VectorOfMat())
+                {
+                    CvInvoke.Split(m, vm);
+                }
+            }
+        }
+
         [Test]
         public void TestFaceRecognizer()
         {
