@@ -55,6 +55,19 @@ namespace Emgu.CV.Tracking
         }
 
         /// <summary>
+        /// Returns the tracked objects, each object corresponds to one tracker algorithm.
+        /// </summary>
+        /// <returns>The tracked objects, each object corresponds to one tracker algorithm.</returns>
+        public Rectangle[] GetObjects()
+        {
+            using (VectorOfRect vr = new VectorOfRect())
+            {
+                ContribInvoke.cveMultiTrackerGetObjects(_ptr, vr);
+                return vr.ToArray();
+            }
+        }
+
+        /// <summary>
         /// Release the unmanaged memory associated with this multi-tracker.
         /// </summary>
         protected override void DisposeObject()
@@ -95,5 +108,8 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveMultiTrackerRelease(ref IntPtr tracker);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveMultiTrackerGetObjects(IntPtr tracker, IntPtr boundingBox);
     }
 }

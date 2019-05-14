@@ -236,6 +236,16 @@ void cveMultiTrackerRelease(cv::MultiTracker** tracker)
 	*tracker = 0;
 }
 
+void cveMultiTrackerGetObjects(cv::MultiTracker* tracker, std::vector<CvRect>* boundingBox)
+{
+	std::vector<cv::Rect2d> bb = tracker->getObjects();
+	boundingBox->clear();
+	for (std::vector<cv::Rect2d>::iterator it = bb.begin(); it != bb.end(); ++it)
+	{
+		boundingBox->push_back(*it);
+	}
+}
+
 cv::TrackerCSRT* cveTrackerCSRTCreate(
 	bool use_hog,
 	bool use_color_names,
