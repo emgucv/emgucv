@@ -2249,20 +2249,25 @@ IF(WIN32 AND WITH_CUDA)
   SET(CVEXTERN_CUDA_DEPENDENCY_DLLS)
   
   IF ((${npp_major} GREATER 5) OR ((${npp_major} STREQUAL "5") AND (${npp_minor} GREATER 0)))
+	IF ((${npp_major} GREATER 10) OR ((${npp_major} STREQUAL "10") AND (${npp_minor} GREATER 0)))
+	  SET(NPP_POSTFIX ${npp_major})
+	ELSE()
+	  SET(NPP_POSTFIX ${npp_major}${npp_minor})
+	ENDIF()
 	SET(CUDA_NPP_DLLS 
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-      "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppi${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppial${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppicc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppicom${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppidei${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppif${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppig${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppim${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppist${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppisu${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppitc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-      "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npps${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll")
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppc${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+      "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppi${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppial${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppicc${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppicom${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppidei${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppif${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppig${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppim${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppist${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppisu${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+	  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppitc${CUDA_POSTFIX}_${NPP_POSTFIX}.dll"
+      "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/npps${CUDA_POSTFIX}_${NPP_POSTFIX}.dll")
 	FOREACH(CUDA_NPP_DLL ${CUDA_NPP_DLLS})
 	  IF(EXISTS "${CUDA_NPP_DLL}")
 		LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_NPP_DLL}")
