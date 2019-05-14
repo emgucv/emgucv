@@ -677,7 +677,7 @@ SET(CMAKE_SOURCE_DIR ${CMAKE_OLD_SOURCE_DIR})
 
 SET (OPENCV_MODULE_NAME_CANDIDATES
   core hal imgproc video flann ml imgcodecs videoio highgui objdetect features2d calib3d
-  cudalegacy cudaarithm cudawarping cudafilters cudaimgproc cudaoptflow 
+  cudaarithm cudawarping cudafilters cudaimgproc cudalegacy cudaoptflow 
   cudastereo cudabgsegm cudafeatures2d cudacodec cudaobjdetect
   photo superres  
   videostab shape
@@ -1480,6 +1480,7 @@ ELSEIF (WIN32)
       PATTERN "iOS" EXCLUDE
       PATTERN "CrossPlatform" EXCLUDE
 	  PATTERN "Mac" EXCLUDE
+	  PATTERN "Windows.UWP" EXCLUDE
       )
     INSTALL(
       DIRECTORY
