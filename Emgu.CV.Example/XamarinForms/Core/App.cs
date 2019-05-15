@@ -52,13 +52,13 @@ namespace Emgu.CV.XamarinForms
             };
 
 #if !(NETFX_CORE || __ANDROID__ || __IOS__ || __MACOS__)
-            Button viz3dButton = new Button();
-            viz3dButton.Text = "Viz3D";
-            buttonList.Add(viz3dButton);
-            viz3dButton.Clicked += (sender, args) =>
-            {
-                MainPage.Navigation.PushAsync(new Viz3dPage());
-            };
+            //Button viz3dButton = new Button();
+            //viz3dButton.Text = "Viz3D";
+            //buttonList.Add(viz3dButton);
+            //viz3dButton.Clicked += (sender, args) =>
+            //{
+            //    MainPage.Navigation.PushAsync(new Viz3dPage());
+            //};
 #endif
 
             StackLayout buttonsLayout = new StackLayout
