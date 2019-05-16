@@ -451,6 +451,28 @@ namespace Emgu.CV.Dnn
             IntPtr indices,
             float eta,
             int topK);
+
+        public static BackendTargetPair[] GetAvailableBackends()
+        {
+            using (VectorOfInt viBackends = new VectorOfInt())
+            using (VectorOfInt viTargets = new VectorOfInt())
+            {
+                cveDNNGetAvailableBackends(viBackends, viTargets);
+                int[] backendArr = viBackends.ToArray();
+                int[] targetArr = viTargets.ToArray();
+
+                BackendTargetPair[] availableBackends = new BackendTargetPair[backendArr.Length];
+                for (int i = 0; i < backendArr.Length; i++)
+                {
+                    availableBackends[i] = new BackendTargetPair((Backend) backendArr[i], (Target) targetArr[i]);
+                }
+
+                return availableBackends;
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDNNGetAvailableBackends(IntPtr backends, IntPtr targets);
     }
 }
 

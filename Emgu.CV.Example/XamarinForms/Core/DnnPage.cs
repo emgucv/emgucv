@@ -59,24 +59,59 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
-        private void InitDetector()
+        /// <summary>
+        /// Initiate the DNN model. If needed, it will download the model from internet.
+        /// </summary>
+        /// <returns>null if successful. Otherwise, it will return the error message</returns>
+        private String InitDetector()
         {
             if (_maskRcnnDetector == null)
             {
                 InitPath();
 
-
                 String url =
                     "https://github.com/emgucv/models/raw/master/mask_rcnn_inception_v2_coco_2018_01_28/";
-                String graphFile = DnnDownloadFile(url, "frozen_inference_graph.pb", _path);
-                String lookupFile = DnnDownloadFile(url, "coco-labels-paper.txt", _path);
 
-                String configFile = DnnDownloadFile(
-                    "https://github.com/opencv/opencv_extra/raw/4.0.1/testdata/dnn/",
-                    "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt",
-                    _path);
+                String graphFile = "frozen_inference_graph.pb";
+                try
+                {
+                    graphFile = DnnDownloadFile(url, graphFile, _path);
+                }
+                catch (Exception e)
+                {
+                    return String.Format("Failed to download the file {0} from {1}: {2}", graphFile, url, e.Message);
+                }
+
+
+                String lookupFile = "coco-labels-paper.txt";
+                try
+                {
+                    lookupFile = DnnDownloadFile(url, lookupFile, _path);
+                }
+                catch (Exception e)
+                {
+                    return String.Format("Failed to download the file {0} from {1}: {2}", lookupFile, url, e.Message);
+                }
+
+                String url2 = "https://github.com/opencv/opencv_extra/raw/4.1.0/testdata/dnn/";
+                String configFile = "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt";
+                try
+                {
+                    configFile = DnnDownloadFile(
+                        url2,
+                        configFile,
+                        _path);
+                }
+                catch (Exception e)
+                {
+                    return String.Format("Failed to download the file {0} from {1}: {2}", configFile, url2, e.Message);
+                }
+                
 
                 _maskRcnnDetector = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(graphFile, configFile);
+
+                //BackendTargetPair[] availableBackends = DnnInvoke.GetAvailableBackends();
+
                 _labels = File.ReadAllLines(lookupFile);
                 _colors = new MCvScalar[_labels.Length];
                 Random r = new Random(12345);
@@ -85,6 +120,8 @@ namespace Emgu.CV.XamarinForms
                     _colors[i] = new MCvScalar(r.Next(256), r.Next(256), r.Next(256));
                 }
             }
+
+            return null;
         }
 
         public static String DnnDownloadFile(String url, String fileName, String folder)
@@ -123,10 +160,14 @@ namespace Emgu.CV.XamarinForms
                 SetMessage("Please wait...");
                 SetImage(null);
 
-                Task<Tuple<Mat, String, long>> t = new Task<Tuple<Mat, String, long>>(
+                Task<Tuple<Mat, String>> t = new Task<Tuple<Mat, String>>(
                   () =>
                   {
-                      InitDetector();
+                      String errorMessage = InitDetector();
+                      if (errorMessage != null)
+                      {
+                          return new Tuple<Mat, String>(image[0], errorMessage);
+                      }
                       String msg = String.Empty;
                       using (Mat blob = DnnInvoke.BlobFromImage(image[0]))
                       using (VectorOfMat tensors = new VectorOfMat())
@@ -135,6 +176,7 @@ namespace Emgu.CV.XamarinForms
                           Stopwatch watch = Stopwatch.StartNew();
                           _maskRcnnDetector.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
                           watch.Stop();
+                          
                           msg = String.Format("Mask RCNN inception completed in {0} milliseconds.",
                               watch.ElapsedMilliseconds);
 
@@ -210,9 +252,8 @@ namespace Emgu.CV.XamarinForms
 
                           }
                       }
-                      long time = 0;
 
-                      return new Tuple<Mat, String, long>(image[0], msg, time);
+                      return new Tuple<Mat, String>(image[0], msg);
                   });
                 t.Start();
 

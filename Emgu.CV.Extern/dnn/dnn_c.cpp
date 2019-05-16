@@ -201,3 +201,15 @@ void cveDnnNMSBoxes(
 {
 	cv::dnn::NMSBoxes(*bboxes, *scores, scoreThreshold, nmsThreshold, *indices, eta, topK);
 }
+
+void cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets)
+{
+	backends->clear();
+	targets->clear();
+	std::vector< std::pair< cv::dnn::Backend, cv::dnn::Target > > result = cv::dnn::getAvailableBackends();
+	for ( std::vector< std::pair< cv::dnn::Backend, cv::dnn::Target > >::iterator iter = result.begin(); iter != result.end(); iter++)
+	{
+		backends->push_back(iter->first);
+		targets->push_back(iter->second);
+	}
+}

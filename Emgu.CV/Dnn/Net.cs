@@ -14,54 +14,6 @@ using System.Diagnostics;
 namespace Emgu.CV.Dnn
 {
     /// <summary>
-    /// Dnn backend. 
-    /// </summary>
-    public enum Backend
-    {
-        /// <summary>
-        /// Default equals to InferenceEngine if
-        /// OpenCV is built with Intel's Inference Engine library or
-        /// Opencv otherwise.
-        /// </summary>
-        Default,
-        /// <summary>
-        /// Halide backend
-        /// </summary>
-        Halide,
-        /// <summary>
-        /// Intel's Inference Engine library
-        /// </summary>
-        InferenceEngine, 
-        /// <summary>
-        /// OpenCV's implementation
-        /// </summary>
-        OpenCV
-    }
-
-    /// <summary>
-    /// Target devices for computations.
-    /// </summary>
-    public enum Target
-    {
-        /// <summary>
-        /// CPU
-        /// </summary>
-        Cpu,
-        /// <summary>
-        /// OpenCL
-        /// </summary>
-        OpenCL,
-        /// <summary>
-        /// Will fall back to OPENCL if the hardware does not support FP16
-        /// </summary>
-        OpenCLFp16,
-        /// <summary>
-        /// Myraid
-        /// </summary>
-        Myriad
-    }
-
-    /// <summary>
     /// This class allows to create and manipulate comprehensive artificial neural networks.
     /// </summary>
     public partial class Net : UnmanagedObject
@@ -252,7 +204,7 @@ namespace Emgu.CV.Dnn
         internal static extern IntPtr cveDnnNetCreate();
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDnnNetSetInput(IntPtr net, IntPtr blob, IntPtr name, double scalefactor, ref MCvScalar mean);
+        internal static extern void cveDnnNetSetInput(IntPtr net, IntPtr blob, IntPtr name, double scaleFactor, ref MCvScalar mean);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetForward(IntPtr net, IntPtr outputName, IntPtr output);

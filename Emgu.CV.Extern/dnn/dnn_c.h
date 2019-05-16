@@ -83,4 +83,6 @@ CVAPI(void) cveDnnNMSBoxes(
 	std::vector<int>* indices,
 	float eta,
 	int topK);
+
+CVAPI(void) cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets);
 #endif
