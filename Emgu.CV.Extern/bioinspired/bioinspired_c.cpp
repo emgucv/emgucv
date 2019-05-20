@@ -14,10 +14,9 @@ cv::bioinspired::Retina* cveRetinaCreate(CvSize* inputSize, const bool colorMode
    *sharedPtr = new cv::Ptr<cv::bioinspired::Retina>(ptr);
    return ptr.get();
 }
-void cveRetinaRelease(cv::bioinspired::Retina** retina, cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
+void cveRetinaRelease( cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
 {
    delete *sharedPtr;
-   *retina = 0;
    *sharedPtr = 0;
 }
 void cveRetinaRun(cv::bioinspired::Retina* retina, cv::_InputArray* image)

@@ -44,7 +44,7 @@ namespace Emgu.CV.Bioinspired
         internal static extern void cveRetinaGetMagno(IntPtr retina, IntPtr magno);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRetinaRelease(ref IntPtr retina, ref IntPtr sharedPtr);
+        internal static extern void cveRetinaRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveRetinaClearBuffers(IntPtr retina);

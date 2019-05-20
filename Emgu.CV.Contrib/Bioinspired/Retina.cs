@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using Emgu.CV;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Bioinspired
 {
@@ -34,10 +35,8 @@ namespace Emgu.CV.Bioinspired
     /// _take a look at imagelogpolprojection.hpp to discover retina spatial log sampling which originates from Barthelemy Durette phd with Jeanny Herault. A Retina / V1 cortex projection is also proposed and originates from Jeanny's discussions.
     /// more informations in the above cited Jeanny Heraults's book.
     /// </summary>
-    public class Retina : UnmanagedObject
+    public class Retina : SharedPtrObject
     {
-        private IntPtr _sharePtr;
-
         /// <summary>
         /// Create a retina model
         /// </summary>
@@ -58,7 +57,7 @@ namespace Emgu.CV.Bioinspired
         /// <param name="samplingStrength">Only useful if param useRetinaLogSampling=true, specifies the strength of the log scale that is applied</param>
         public Retina(Size inputSize, bool colorMode, ColorSamplingMethod colorSamplingMethod, bool useRetinaLogSampling, double reductionFactor, double samplingStrength)
         {
-            _ptr = BioinspiredInvoke.cveRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength, ref _sharePtr);
+            _ptr = BioinspiredInvoke.cveRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength, ref _sharedPtr);
         }
 
         /// <summary>
@@ -127,7 +126,11 @@ namespace Emgu.CV.Bioinspired
         /// </summary>
         protected override void DisposeObject()
         {
-            BioinspiredInvoke.cveRetinaRelease(ref _ptr, ref _sharePtr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                BioinspiredInvoke.cveRetinaRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
 
         /// <summary>
