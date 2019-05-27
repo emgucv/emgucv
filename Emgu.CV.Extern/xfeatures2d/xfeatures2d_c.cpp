@@ -278,3 +278,12 @@ void cveHarrisLaplaceFeatureDetectorRelease(cv::Ptr<cv::xfeatures2d::HarrisLapla
 	delete *sharedPtr;
 	*sharedPtr = 0;
 }
+
+void cveMatchGMS(
+	CvSize* size1, CvSize* size2,
+	std::vector< cv::KeyPoint >* keypoints1, std::vector< cv::KeyPoint >* keypoints2,
+	std::vector< cv::DMatch >* matches1to2, std::vector< cv::DMatch >* matchesGMS,
+	bool withRotation, bool withScale, double thresholdFactor)
+{
+	cv::xfeatures2d::matchGMS(*size1, *size2, *keypoints1, *keypoints2, *matches1to2, *matchesGMS, withRotation, withScale, thresholdFactor);
+}

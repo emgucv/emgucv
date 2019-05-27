@@ -104,4 +104,10 @@ CVAPI(cv::xfeatures2d::HarrisLaplaceFeatureDetector*) cveHarrisLaplaceFeatureDet
 	int num_layers,
 	cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>** sharedPtr);
 CVAPI(void) cveHarrisLaplaceFeatureDetectorRelease(cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>** sharedPtr);
+
+CVAPI(void) cveMatchGMS(
+	CvSize* size1, CvSize* size2, 
+	std::vector< cv::KeyPoint >* keypoints1, std::vector< cv::KeyPoint >* keypoints2,
+	std::vector< cv::DMatch >* matches1to2, std::vector< cv::DMatch >* matchesGMS, 
+	bool withRotation, bool withScale, double thresholdFactor);
 #endif
