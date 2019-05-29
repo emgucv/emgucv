@@ -2234,6 +2234,11 @@ IF(WIN32 AND WITH_CUDA)
     string( REGEX MATCH "[0-9]+" npp_major ${npp_major} ) 
     string( REGEX MATCH "[0-9]+" npp_minor ${npp_minor} ) 
     string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
+	
+	#Also copy the values to the parent scope
+	set(npp_major "${npp_major}" PARENT_SCOPE)
+	set(npp_minor "${npp_minor}" PARENT_SCOPE)
+	set(npp_build "${npp_build}" PARENT_SCOPE)
   endif()
   
   SET(CUDA_NPP_LIBRARY_ROOT_DIR ${CUDA_TOOLKIT_ROOT_DIR})
@@ -2392,7 +2397,7 @@ IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
 	STRING(REPLACE "$(ConfigurationName)" "release" CVEXTERN_DEPENDENCY_DLL ${CVEXTERN_DEPENDENCY_DLL})
     LIST(APPEND CVEXTERN_DEPENDENCY_DLLS_RELEASE ${CVEXTERN_DEPENDENCY_DLL})
   ENDFOREACH()
-  MESSAGE(STATUS "==================> CVEXTERN_DEPENDENCY_DLLS_RELEASE: ${CVEXTERN_DEPENDENCY_DLLS_RELEASE}")
+  #MESSAGE(STATUS "==================> CVEXTERN_DEPENDENCY_DLLS_RELEASE: ${CVEXTERN_DEPENDENCY_DLLS_RELEASE}")
   INSTALL(
     FILES 
     ${CVEXTERN_DEPENDENCY_DLLS_RELEASE}

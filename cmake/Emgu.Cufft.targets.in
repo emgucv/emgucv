@@ -4,7 +4,7 @@
         <EmguCufftLinkTarget>WindowsForms</EmguCufftLinkTarget>
 		<EmguCufftBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguCufftBuildX86>
         <EmguCufftBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCufftBuildX64>
-		<EmguCufftNativeFileX64>$(MSBuildThisFileDirectory)x64\cufft64_${CUDA_VERSION_NUMERIC_ONLY}.dll</EmguCufftNativeFileX64>
+		<EmguCufftNativeFileX64>$(MSBuildThisFileDirectory)x64\cufft64_${CUFFT_POSTFIX}.dll</EmguCufftNativeFileX64>
 		<EmguCufftErrorMessage Condition="'$(EmguCufftBuildX86)'=='True'">X86 or AnyCPU is targeted, but this CUDA CUFFT package do not support 32-bit</EmguCufftErrorMessage>
         <EmguCufftDeployMessage Condition="'$(EmguCufftBuildX64)'=='True' AND Exists('$(EmguCufftNativeFileX64)')">$(EmguCufftDeployMessage)x64 </EmguCufftDeployMessage>
         <EmguCufftErrorMessage Condition="'$(EmguCufftBuildX64)'=='True' AND !Exists('$(EmguCufftNativeFileX64)')">This package do not contain necessary binary for $(EmguCufftLinkTarget). X64 is targeted, but file $(EmguCufftNativeFileX64) is missing.</EmguCufftErrorMessage>
