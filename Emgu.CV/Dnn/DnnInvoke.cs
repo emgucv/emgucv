@@ -452,6 +452,10 @@ namespace Emgu.CV.Dnn
             float eta,
             int topK);
 
+        /// <summary>
+        /// Get the list of available DNN Backends
+        /// </summary>
+        /// <returns>The available backend and target pair</returns>
         public static BackendTargetPair[] GetAvailableBackends()
         {
             using (VectorOfInt viBackends = new VectorOfInt())
