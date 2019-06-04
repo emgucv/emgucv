@@ -860,7 +860,7 @@ IF(WITH_CUDA)
 	#MESSAGE(STATUS "<<<<<<<<<<<<<<<< npp_build: ${npp_build} >>>>>>>>>>>>>>>>>>>>>> ")
 	SET(CUDA_VERSION_NUMERIC_ONLY "${npp_major}${npp_minor}")
 	
-	IF("${npp_major}${npp_minor}" STREQUAL "101") 
+	IF((${npp_major} GREATER 10) OR (("${npp_major}" STREQUAL "10") AND (${npp_minor} GREATER 0)))
 		SET(CUFFT_POSTFIX "${npp_major}")
 	ELSE()
 		SET(CUFFT_POSTFIX "${npp_major}${npp_minor}")
