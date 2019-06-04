@@ -33,7 +33,7 @@
             string appDataPath = Server.MapPath("App_Data");
             if (!appDataPath.EndsWith(Path.DirectorySeparatorChar.ToString()))
                 appDataPath += Path.DirectorySeparatorChar.ToString();
-            Tesseract ocr = new Tesseract(appDataPath, "eng", OcrEngineMode.TesseractLstmCombined);
+            Tesseract ocr = new Tesseract(appDataPath, "eng", OcrEngineMode.TesseractLstmCombined, null, true);
             ocr.SetImage(img);
             ocr.Recognize();
             String result = ocr.GetUTF8Text();
