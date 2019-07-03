@@ -17,12 +17,42 @@ using Plugin.Media;
 
 namespace Emgu.CV.XamarinForms
 {
-    public partial class ButtonTextImagePage : ContentPage
+    public class ButtonTextImagePage : Xamarin.Forms.ContentPage
     {
+        private Button _topButton = new Button();
+        public Button TopButton
+        {
+            get { return _topButton; }
+        }
+
+        private Label _messageLabel = new Label();
+        public Label MessageLabel
+        {
+            get { return _messageLabel; }
+        }
+
+        private Image _displayImage = new Image();
+
+        public Image DisplayImage
+        {
+            get { return _displayImage; }
+        }
 
         public ButtonTextImagePage()
         {
-            InitializeComponent();
+            TopButton.Text = "Click me";
+            TopButton.IsEnabled = true;
+            TopButton.HorizontalOptions = LayoutOptions.Center;
+
+            MessageLabel.Text = "";
+            MessageLabel.HorizontalOptions = LayoutOptions.Center;
+
+            StackLayout mainLayout = new StackLayout();
+            mainLayout.Children.Add(TopButton);
+            mainLayout.Children.Add(MessageLabel);
+            mainLayout.Children.Add(DisplayImage);
+            mainLayout.Padding = new Thickness( 10, 10, 10, 10);
+            Content = mainLayout;
         }
 
         public virtual async void LoadImages(String[] imageNames, String[] labels = null)
@@ -116,20 +146,21 @@ namespace Emgu.CV.XamarinForms
                             }
                             else
                             {
-                                return; 
+                                return;
                             }
                         }
-                    } else
+                    }
+                    else
                     {
                         var file = await CrossMedia.Current.PickPhotoAsync();
                         using (Stream s = file.GetStream())
                         using (MemoryStream ms = new MemoryStream())
                         {
-                           s.CopyTo(ms);
-                           byte[] data = ms.ToArray();
-                           Mat m = new Mat();
-                           CvInvoke.Imdecode(data, ImreadModes.Color, m );
-                           mats[i] = m;              
+                            s.CopyTo(ms);
+                            byte[] data = ms.ToArray();
+                            Mat m = new Mat();
+                            CvInvoke.Imdecode(data, ImreadModes.Color, m);
+                            mats[i] = m;
                         }
                     }
 #endif
@@ -157,12 +188,12 @@ namespace Emgu.CV.XamarinForms
                     using (Stream s = file.GetStream())
                     using (MemoryStream ms = new MemoryStream())
                     {
-                       s.CopyTo(ms);
-                       byte[] data = ms.ToArray();
-                       Mat m = new Mat();
-                       CvInvoke.Imdecode(data, ImreadModes.Color, m);
-                       mats[i] = m;
-               
+                        s.CopyTo(ms);
+                        byte[] data = ms.ToArray();
+                        Mat m = new Mat();
+                        CvInvoke.Imdecode(data, ImreadModes.Color, m);
+                        mats[i] = m;
+
                     }
 #endif
                 }
@@ -227,7 +258,7 @@ namespace Emgu.CV.XamarinForms
                 {
                     Label label = GetLabel();
                     label.Text = message;
-                    
+
                     label.LineBreakMode = LineBreakMode.WordWrap;
                     label.WidthRequest = this.Width;
                 }

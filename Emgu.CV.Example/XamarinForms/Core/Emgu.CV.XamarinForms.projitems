@@ -11,14 +11,11 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AboutPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.xaml.cs">
-      <DependentUpon>ButtonTextImagePage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\PlanarSubdivision\DrawSubdivision.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\FaceDetection\DetectFace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\PedestrianDetection\FindPedestrian.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\FeatureMatching\DrawMatches.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DnnPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FaceLandmarkDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HelloWorldPage.cs" />
@@ -31,11 +28,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)GettingStarted.Xamarin" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
 </Project>
