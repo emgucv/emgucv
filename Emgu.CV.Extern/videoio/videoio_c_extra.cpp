@@ -85,6 +85,11 @@ void cveVideoCaptureReadToMat(cv::VideoCapture* capture, cv::Mat* mat)
 	cv::swap(m, *mat);
 }
 
+void cveVideoCaptureGetBackendName(cv::VideoCapture* capture, cv::String* name)
+{
+	*name = capture->getBackendName();
+}
+
 #if WINAPI_FAMILY
 void cveWinrtSetFrameContainer(::Windows::UI::Xaml::Controls::Image^ image)
 {

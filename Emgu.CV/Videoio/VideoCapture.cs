@@ -555,6 +555,18 @@ namespace Emgu.CV
             CvInvoke.cveVideoCaptureReadToMat(Ptr, m);
         }
 
+        public String BackendName
+        {
+            get
+            {
+                using (CvString s = new CvString())
+                {
+                    CvInvoke.cveVideoCaptureGetBackendName(Ptr, s);
+                    return s.ToString();
+                }
+            }
+        }
+
 #region implement ICapture
         /// <summary> 
         /// Capture a Bgr image frame
@@ -750,6 +762,9 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
         internal static extern bool cveVideoCaptureSet(IntPtr capture, CvEnum.CapProp propertyId, double value);
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveVideoCaptureGetBackendName(IntPtr capture, IntPtr backendName);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGetBackendName(int api, IntPtr name);

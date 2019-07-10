@@ -51,8 +51,8 @@ CVAPI(double) cveVideoCaptureGet(cv::VideoCapture* capture, int propId);
 CVAPI(bool) cveVideoCaptureGrab(cv::VideoCapture* capture);
 CVAPI(bool) cveVideoCaptureRetrieve(cv::VideoCapture* capture, cv::_OutputArray* image, int flag);
 CVAPI(bool) cveVideoCaptureRead(cv::VideoCapture* capture, cv::_OutputArray* image);
-
 CVAPI(void) cveVideoCaptureReadToMat(cv::VideoCapture* capture, cv::Mat* mat);
+CVAPI(void) cveVideoCaptureGetBackendName(cv::VideoCapture* capture, cv::String* name);
 
 #if WINAPI_FAMILY
 CVAPI(void) cveWinrtSetFrameContainer(::Windows::UI::Xaml::Controls::Image^ image);
