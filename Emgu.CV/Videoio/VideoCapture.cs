@@ -555,6 +555,9 @@ namespace Emgu.CV
             CvInvoke.cveVideoCaptureReadToMat(Ptr, m);
         }
 
+        /// <summary>
+        /// The name of the backend used by this VideoCapture
+        /// </summary>
         public String BackendName
         {
             get
