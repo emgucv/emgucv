@@ -2183,6 +2183,40 @@ namespace Emgu.CV.Test
            }
         }*/
 
+        [Test]
+        public void TestLineIterator()
+        {
+            Mat img = EmguAssert.LoadMat("pedestrian.png");
+
+
+            Mat line = LineIterator.SampleLine(img, new Point(0, 0), new Point(img.Width, img.Height));
+            byte[,,] pixelData = line.GetData(true) as byte[,,];
+
+            LineIterator li = new LineIterator(img, new Point(0, 0), new Point(img.Width, img.Height), 8, false);
+            int count = li.Count;
+            List<Point> points = new List<Point>();
+            List<byte[]> sample = new List<byte[]>();
+            for (int i = 0; i < count; i++)
+            {
+                points.Add(li.Pos);
+                byte[] data = li.Data as byte[];
+                sample.Add(data);
+
+                //invert the pixel
+                for (int j = 0; j < data.Length; j++)
+                {
+                    data[j] = (byte) (255 - data[j]);
+                }
+
+                li.Data = data;
+                li.MoveNext();
+            }
+
+            //CvInvoke.Imshow("hello", img);
+            //CvInvoke.WaitKey();
+        }
+
+
 #if !NETFX_CORE
         [Test]
         public void TestBinaryStorage()

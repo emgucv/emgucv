@@ -948,6 +948,27 @@ IF(HAVE_opencv_objdetect)
 ENDIF()
 ############################### objdetect code gen END ################################
 
+############################### imgproc code gen START ##############################
+IF(HAVE_opencv_imgproc)
+  CREATE_OCV_CLASS_PROPERTY( 
+    "imgproc/LineIterator_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Imgproc/LineIterator.g.cs"
+    "cv::LineIterator" 
+    "LineIterator" 
+    "count" 
+    "int" 
+    "element"
+    "Count" 
+    "int"
+    "The total number of pixels in the line"
+    "Emgu.CV"
+    "CvInvoke"
+    "LineIterator"
+	""
+    "#include \"imgproc_c.h\"")
+ENDIF()
+############################### features2d code gen END ################################
+
 ############################### features2d code gen START ##############################
 IF(HAVE_opencv_features2d)
   CREATE_OCV_CLASS_PROPERTY( 

@@ -168,7 +168,8 @@ namespace Emgu.CV
         /// </summary>
         protected override void DisposeObject()
         {
-            CvInvoke.cveSubdiv2DRelease(ref _ptr);
+            if (IntPtr.Zero != _ptr)
+                CvInvoke.cveSubdiv2DRelease(ref _ptr);
         }
     }
 

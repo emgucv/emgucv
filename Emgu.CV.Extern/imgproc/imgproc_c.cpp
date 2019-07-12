@@ -485,6 +485,52 @@ int cveSubdiv2DLocate(cv::Subdiv2D* subdiv, CvPoint2D32f* pt, int* edge, int* ve
    return result;
 }
 
+//LineIterator
+cv::LineIterator* cveLineIteratorCreate(
+	cv::Mat* img,
+	CvPoint* pt1,
+	CvPoint* pt2,
+	int connectivity,
+	bool leftToRight)
+{
+	return new cv::LineIterator(*img, *pt1, *pt2, connectivity, leftToRight);
+}
+uchar* cveLineIteratorGetDataPointer(cv::LineIterator* iterator)
+{
+	return *(*iterator);
+}
+void cveLineIteratorPos(cv::LineIterator* iterator, CvPoint* pos)
+{
+	*pos = iterator->pos();
+}
+void cveLineIteratorMoveNext(cv::LineIterator* iterator)
+{
+	++(*iterator);
+}
+void cveLineIteratorRelease(cv::LineIterator** iterator)
+{
+	delete *iterator;
+	*iterator = 0;
+}
+
+void cveLineIteratorSampleLine(
+	cv::Mat* img,
+	CvPoint* pt1,
+	CvPoint* pt2,
+	int connectivity,
+	bool leftToRight,
+	cv::Mat* result)
+{
+	cv::LineIterator li(*img, *pt1, *pt2, connectivity, leftToRight);
+	result->create(li.count, 1, img->type());
+	int elemSize = img->elemSize();
+	for (int i = 0; i < li.count; ++li, i++)
+	{
+		memcpy(result->ptr(i), li.ptr, elemSize);
+	}
+}
+
+
 //Drawing
 void cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift)
 {
