@@ -694,6 +694,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   hfs
   quality
   stereo
+  surface_matching
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})

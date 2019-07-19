@@ -104,6 +104,8 @@ mkdir Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
 cp -r ../Emgu.CV.Contrib/Quality/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
 mkdir Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Stereo
 cp -r ../Emgu.CV.Contrib/Stereo/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Stereo
+mkdir Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching
+cp -r ../Emgu.CV.Contrib/SurfaceMatching/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching
 
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/

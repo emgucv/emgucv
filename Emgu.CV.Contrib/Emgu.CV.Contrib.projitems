@@ -31,5 +31,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)PhaseUnwrapping\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Quality\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Stereo\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)SurfaceMatching\*.cs" />
   </ItemGroup>
 </Project>
