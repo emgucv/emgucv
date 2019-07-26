@@ -123,13 +123,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EMGU.TF">
-      <Version>1.13.1.435</Version>
+      <Version>1.14.0.569</Version>
     </PackageReference>
     <PackageReference Include="EMGU.TF.MODELS">
-      <Version>1.13.1.435</Version>
+      <Version>1.14.0.569</Version>
     </PackageReference>
     <PackageReference Include="EMGU.TF.PROTOBUF">
-      <Version>1.13.1.435</Version>
+      <Version>1.14.0.569</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
