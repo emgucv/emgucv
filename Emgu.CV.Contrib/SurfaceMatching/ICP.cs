@@ -19,9 +19,18 @@ namespace Emgu.CV.PpfMatch3d
     /// </summary>
     public class ICP : UnmanagedObject
     {
+        /// <summary>
+        /// The sampling type
+        /// </summary>
         public enum SamplingType
         {
+            /// <summary>
+            /// Uniform
+            /// </summary>
             Uniform = 0,
+            /// <summary>
+            /// Gelfand
+            /// </summary>
             Gelfand = 1
         }
 
@@ -74,6 +83,9 @@ namespace Emgu.CV.PpfMatch3d
         }
     }
 
+    /// <summary>
+    /// Entry points to the Open CV Surface Matching module
+    /// </summary>
     public static partial class PpfMatch3dInvoke
     {
         static PpfMatch3dInvoke()
