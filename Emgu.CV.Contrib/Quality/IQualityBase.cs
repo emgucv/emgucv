@@ -52,16 +52,16 @@ namespace Emgu.CV.Quality
         /// </summary>
         /// <param name="qualityBase">The quality base object</param>
         /// <param name="dst">Output quality map images that were generated during computation, if supported by the algorithm.</param>
-        public static void GetQualityMaps(
+        public static void GetQualityMap(
             this IQualityBase qualityBase,
             IOutputArrayOfArrays dst)
         {
             using (OutputArray oaDst = dst.GetOutputArray())
-                cveQualityBaseGetQualityMaps(qualityBase.QualityBasePtr, oaDst);
+                cveQualityBaseGetQualityMap(qualityBase.QualityBasePtr, oaDst);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveQualityBaseGetQualityMaps(IntPtr qualityBase, IntPtr dst);
+        internal static extern void cveQualityBaseGetQualityMap(IntPtr qualityBase, IntPtr dst);
 
     }
 }

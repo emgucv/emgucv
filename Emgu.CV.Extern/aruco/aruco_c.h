@@ -105,8 +105,8 @@ CVAPI(bool) cveArucoEstimatePoseCharucoBoard(
 	cv::aruco::CharucoBoard* board, 
 	cv::_InputArray* cameraMatrix,
 	cv::_InputArray* distCoeffs, 
-	cv::_OutputArray* rvec, 
-	cv::_OutputArray* tvec,
+	cv::_InputOutputArray* rvec, 
+	cv::_InputOutputArray* tvec,
 	bool useExtrinsicGuess);
 
 
@@ -148,8 +148,8 @@ CVAPI(int) cveArucoEstimatePoseBoard(
 	cv::aruco::Board* board,
 	cv::_InputArray* cameraMatrix, 
 	cv::_InputArray* distCoeffs, 
-	cv::_OutputArray* rvec,
-	cv::_OutputArray* tvec, 
+	cv::_InputOutputArray* rvec,
+	cv::_InputOutputArray* tvec, 
 	bool useExtrinsicGuess);
 
 CVAPI(void) cveArucoGetBoardObjectAndImagePoints(

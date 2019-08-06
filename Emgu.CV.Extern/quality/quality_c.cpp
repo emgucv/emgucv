@@ -12,9 +12,9 @@ void cveQualityBaseCompute(cv::quality::QualityBase* qualityBase, cv::_InputArra
 	*score = s;
 }
 
-void cveQualityBaseGetQualityMaps(cv::quality::QualityBase* qualityBase, cv::_OutputArray* dst)
+void cveQualityBaseGetQualityMap(cv::quality::QualityBase* qualityBase, cv::_OutputArray* dst)
 {
-	qualityBase->getQualityMaps(*dst);
+	qualityBase->getQualityMap(*dst);
 }
 
 cv::quality::QualityMSE* cveQualityMSECreate(

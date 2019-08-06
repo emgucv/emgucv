@@ -40,7 +40,12 @@ namespace Emgu.CV.Aruco
                 cveArucoDrawMarker(dict, id, sidePixels, oaImg, borderBits);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveArucoDrawMarker(IntPtr dictionary, int id, int sidePixels, IntPtr img, int borderBits);
+        internal static extern void cveArucoDrawMarker(
+            IntPtr dictionary, 
+            int id, 
+            int sidePixels, 
+            IntPtr img, 
+            int borderBits);
 
 
         /// <summary>
@@ -163,13 +168,13 @@ namespace Emgu.CV.Aruco
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoRefineDetectedMarkers(
-           IntPtr image, IntPtr board, IntPtr detectedCorners,
-           IntPtr detectedIds, IntPtr rejectedCorners,
-           IntPtr cameraMatrix, IntPtr distCoeffs,
-           float minRepDistance, float errorCorrectionRate,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool checkAllOrders,
-           IntPtr ecoveredIdxs, ref DetectorParameters parameters);
+            IntPtr image, IntPtr board, IntPtr detectedCorners,
+            IntPtr detectedIds, IntPtr rejectedCorners,
+            IntPtr cameraMatrix, IntPtr distCoeffs,
+            float minRepDistance, float errorCorrectionRate,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool checkAllOrders,
+            IntPtr ecoveredIdxs, ref DetectorParameters parameters);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoDetectorParametersGetDefault(ref DetectorParameters parameters);
@@ -195,8 +200,10 @@ namespace Emgu.CV.Aruco
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoDrawDetectedMarkers(
-           IntPtr image, IntPtr corners,
-           IntPtr ids, ref MCvScalar borderColor);
+           IntPtr image, 
+           IntPtr corners,
+           IntPtr ids, 
+           ref MCvScalar borderColor);
 
         /// <summary>
         /// Calibrate a camera using aruco markers.
@@ -314,19 +321,19 @@ namespace Emgu.CV.Aruco
         /// <param name="criteria">Termination criteria for the iterative optimization algorithm.</param>
         /// <returns>The final re-projection error.</returns>
         public static double CalibrateCameraCharuco(
-       IInputArrayOfArrays charucoCorners,
-       IInputArrayOfArrays charucoIds,
-       CharucoBoard board,
-       Size imageSize,
-       IInputOutputArray cameraMatrix,
-       IInputOutputArray distCoeffs,
-       IOutputArray rvecs,
-       IOutputArray tvecs,
-       IOutputArray stdDeviationsIntrinsics,
-       IOutputArray stdDeviationsExtrinsics,
-       IOutputArray perViewErrors,
-       CalibType flags,
-       MCvTermCriteria criteria)
+            IInputArrayOfArrays charucoCorners,
+            IInputArrayOfArrays charucoIds,
+            CharucoBoard board,
+            Size imageSize,
+            IInputOutputArray cameraMatrix,
+            IInputOutputArray distCoeffs,
+            IOutputArray rvecs,
+            IOutputArray tvecs,
+            IOutputArray stdDeviationsIntrinsics,
+            IOutputArray stdDeviationsExtrinsics,
+            IOutputArray perViewErrors,
+            CalibType flags,
+            MCvTermCriteria criteria)
         {
             using (InputArray iaCharucoCorners = charucoCorners.GetInputArray())
             using (InputArray iaCharucoIds = charucoIds.GetInputArray())
@@ -475,16 +482,16 @@ namespace Emgu.CV.Aruco
             CharucoBoard board,
             IInputArray cameraMatrix,
             IInputArray distCoeffs,
-            IOutputArray rvec,
-            IOutputArray tvec,
+            IInputOutputArray rvec,
+            IInputOutputArray tvec,
             bool useExtrinsicGuess = false)
         {
             using (InputArray iaCharucoCorners = charucoCorners.GetInputArray())
             using (InputArray iaCharucoIds = charucoIds.GetInputArray())
             using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
             using (InputArray iaDistCoeffs = distCoeffs.GetInputArray())
-            using (OutputArray oaRvec = rvec.GetOutputArray())
-            using (OutputArray oaTvec = tvec.GetOutputArray())
+            using (InputOutputArray ioaRvec = rvec.GetInputOutputArray())
+            using (InputOutputArray ioaTvec = tvec.GetInputOutputArray())
             {
                 return cveArucoEstimatePoseCharucoBoard(
                     iaCharucoCorners,
@@ -492,8 +499,8 @@ namespace Emgu.CV.Aruco
                     board,
                     iaCameraMatrix,
                     iaDistCoeffs,
-                    oaRvec,
-                    oaTvec,
+                    ioaRvec,
+                    ioaTvec,
                     useExtrinsicGuess);
             }
         }
@@ -666,19 +673,19 @@ namespace Emgu.CV.Aruco
             IBoard board,
             IInputArray cameraMatrix,
             IInputArray distCoeffs,
-            IOutputArray rvec,
-            IOutputArray tvec,
+            IInputOutputArray rvec,
+            IInputOutputArray tvec,
             bool useExtrinsicGuess = false)
         {
             using (InputArray iaCorners = corners.GetInputArray())
             using (InputArray iaIds = ids.GetInputArray())
             using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
             using (InputArray iaDistCoeffs = distCoeffs.GetInputArray())
-            using (OutputArray oaRvec = rvec.GetOutputArray())
-            using (OutputArray oaTvec = tvec.GetOutputArray())
+            using (InputOutputArray ioaRvec = rvec.GetInputOutputArray())
+            using (InputOutputArray ioaTvec = tvec.GetInputOutputArray())
             {
-                return cveArucoEstimatePoseBoard(iaCorners, iaIds, board.BoardPtr, iaCameraMatrix, iaDistCoeffs, oaRvec,
-                    oaTvec, useExtrinsicGuess);
+                return cveArucoEstimatePoseBoard(iaCorners, iaIds, board.BoardPtr, iaCameraMatrix, iaDistCoeffs, ioaRvec,
+                    ioaTvec, useExtrinsicGuess);
             }
         }
 
@@ -691,6 +698,7 @@ namespace Emgu.CV.Aruco
             IntPtr distCoeffs,
             IntPtr rvec,
             IntPtr tvec,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useExtrinsicGuess);
 
         /// <summary>

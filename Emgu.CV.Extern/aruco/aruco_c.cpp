@@ -238,8 +238,8 @@ bool cveArucoEstimatePoseCharucoBoard(
 	cv::aruco::CharucoBoard* board,
 	cv::_InputArray* cameraMatrix,
 	cv::_InputArray* distCoeffs,
-	cv::_OutputArray* rvec,
-	cv::_OutputArray* tvec,
+	cv::_InputOutputArray* rvec,
+	cv::_InputOutputArray* tvec,
 	bool useExtrinsicGuess)
 {
 	cv::Ptr<cv::aruco::CharucoBoard> boardPtr ( board , [] (cv::aruco::CharucoBoard*) {} );
@@ -312,8 +312,8 @@ int cveArucoEstimatePoseBoard(
 	cv::aruco::Board* board,
 	cv::_InputArray* cameraMatrix,
 	cv::_InputArray* distCoeffs,
-	cv::_OutputArray* rvec,
-	cv::_OutputArray* tvec,
+	cv::_InputOutputArray* rvec,
+	cv::_InputOutputArray* tvec,
 	bool useExtrinsicGuess)
 {
 	cv::Ptr<cv::aruco::Board> boardPtr(board, [](cv::aruco::Board* b) {});
