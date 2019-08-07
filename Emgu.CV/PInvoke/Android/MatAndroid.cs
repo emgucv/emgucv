@@ -30,7 +30,7 @@ namespace Emgu.CV
         /// Create a Mat from an Android Bitmap
         /// </summary>
         /// <param name="bmp">The android Bitmap</param>
-        public Mat(Bitmap bmp)
+        public Mat(Android.Graphics.Bitmap bmp)
            : this()
         {
             this.Bitmap = bmp;
@@ -56,14 +56,14 @@ namespace Emgu.CV
         /// <summary>
         /// Convert a Bitmap to and from this Mat
         /// </summary>
-        public Bitmap Bitmap
+        public Android.Graphics.Bitmap Bitmap
         {
             get { return ToBitmap(Android.Graphics.Bitmap.Config.Argb8888); }
 
             set
             {
-                Bitmap.Config config = value.GetConfig();
-                if (config.Equals(Bitmap.Config.Argb8888))
+                Android.Graphics.Bitmap.Config config = value.GetConfig();
+                if (config.Equals(Android.Graphics.Bitmap.Config.Argb8888))
                 {
                     using (BitmapArgb8888Image bi = new BitmapArgb8888Image(value))
 
@@ -71,7 +71,7 @@ namespace Emgu.CV
                         CvInvoke.CvtColor(bi, this, ColorConversion.Rgba2Bgra);
                     }
                 }
-                else if (config.Equals(Bitmap.Config.Rgb565))
+                else if (config.Equals(Android.Graphics.Bitmap.Config.Rgb565))
                 {
 
                     Size size = new Size(value.Width, value.Height);
@@ -96,14 +96,14 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="config">The bitmap config type. If null, Argb8888 will be used</param>
         /// <returns>The Bitmap</returns>
-        public Bitmap ToBitmap(Bitmap.Config config = null)
+        public Android.Graphics.Bitmap ToBitmap(Android.Graphics.Bitmap.Config config = null)
         {
             System.Drawing.Size size = Size;
 
             if (config == null)
-                config = Bitmap.Config.Argb8888;
+                config = Android.Graphics.Bitmap.Config.Argb8888;
 
-            Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, config);
+            Android.Graphics.Bitmap result = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, config);
             ToBitmap(result);
             return result;
 
@@ -114,7 +114,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="bitmap">The bitmap, must be of the same size and has bitmap config type of either Argb888 or Rgb565</param>
         /// <returns>The Bitmap</returns>
-        public void ToBitmap(Bitmap bitmap)
+        public void ToBitmap(Android.Graphics.Bitmap bitmap)
         {
             System.Drawing.Size size = Size;
             if (!(size.Width == bitmap.Width && size.Height == bitmap.Height))
@@ -122,8 +122,8 @@ namespace Emgu.CV
                 throw new Exception("Bitmap size doesn't match the Mat size");
             }
 
-            Bitmap.Config config = bitmap.GetConfig();
-            if (config == Bitmap.Config.Argb8888)
+            Android.Graphics.Bitmap.Config config = bitmap.GetConfig();
+            if (config == Android.Graphics.Bitmap.Config.Argb8888)
             {
                 int channels = NumberOfChannels;
                 using (BitmapArgb8888Image bi = new BitmapArgb8888Image(bitmap))
@@ -151,7 +151,7 @@ namespace Emgu.CV
                 }
 
             }
-            else if (config == Bitmap.Config.Rgb565)
+            else if (config == Android.Graphics.Bitmap.Config.Rgb565)
             {
                 using (BitmapRgb565Image bi = new BitmapRgb565Image(bitmap))
                 using (Image<Bgr, Byte> tmp = ToImage<Bgr, Byte>())

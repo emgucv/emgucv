@@ -36,7 +36,7 @@ namespace Emgu.CV
       public Image(AssetManager assets, String fileName)
       {
          using (Stream imageStream = assets.Open(fileName))
-         using (Bitmap imageBmp = BitmapFactory.DecodeStream(imageStream))
+         using (Android.Graphics.Bitmap imageBmp = BitmapFactory.DecodeStream(imageStream))
             Bitmap = imageBmp;
       }
 
@@ -45,13 +45,13 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="config">The Bitmap Config</param>
       /// <returns>The Bitmap</returns>
-      public Bitmap ToBitmap(Bitmap.Config config)
+      public Android.Graphics.Bitmap ToBitmap(Android.Graphics.Bitmap.Config config)
       {
          System.Drawing.Size size = Size;
 
-         if (config == Bitmap.Config.Argb8888)
+         if (config == Android.Graphics.Bitmap.Config.Argb8888)
          {
-            Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Argb8888);
+             Android.Graphics.Bitmap result = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Argb8888);
 
             using (BitmapArgb8888Image bi = new BitmapArgb8888Image(result))
             {
@@ -60,9 +60,9 @@ namespace Emgu.CV
             }
             return result;
          }
-         else if (config == Bitmap.Config.Rgb565)
+         else if (config == Android.Graphics.Bitmap.Config.Rgb565)
          {
-            Bitmap result = Bitmap.CreateBitmap(size.Width, size.Height, Bitmap.Config.Rgb565);
+             Android.Graphics.Bitmap result = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Rgb565);
 
             using (BitmapRgb565Image bi = new BitmapRgb565Image(result))
                bi.ConvertFrom(this);
