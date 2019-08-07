@@ -38,8 +38,8 @@ CVAPI(void) cveDnnNetRelease(cv::dnn::Net** net);
 CVAPI(void) cveDnnNetGetUnconnectedOutLayers(cv::dnn::Net* net, std::vector<int>* layerIds);
 CVAPI(void) cveDnnNetGetUnconnectedOutLayersNames(cv::dnn::Net* net, std::vector<cv::String>* layerNames);
 CVAPI(int64) cveDnnNetGetPerfProfile(cv::dnn::Net* net, std::vector<double>* timings);
-
-
+CVAPI(void) cveDnnNetDump(cv::dnn::Net* net, cv::String* string);
+CVAPI(void) cveDnnNetDumpToFile(cv::dnn::Net* net, cv::String* path);
 CVAPI(std::vector<cv::String>*) cveDnnNetGetLayerNames(cv::dnn::Net* net);
 
 CVAPI(int) cveDnnGetLayerId(cv::dnn::Net* net, cv::String* layer);

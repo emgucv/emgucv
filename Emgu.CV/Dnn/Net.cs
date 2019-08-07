@@ -182,6 +182,33 @@ namespace Emgu.CV.Dnn
         }
 
         /// <summary>
+        /// Dump net to String
+        /// </summary>
+        /// <returns>
+        /// String with structure, hyperparameters, backend, target and fusion
+        /// Call method after setInput().
+        /// To see correct backend, target and fusion run after forward().
+        /// </returns>
+        public String Dump()
+        {
+            using (CvString s = new CvString())
+            {
+                DnnInvoke.cveDnnNetDump(_ptr, s);
+                return s.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Dump net structure, hyperparameters, backend, target and fusion to dot file
+        /// </summary>
+        /// <param name="path">Path to output file with .dot extension</param>
+        public void DumpToFile(String path)
+        {
+            using (CvString p = new CvString(path))
+                DnnInvoke.cveDnnNetDumpToFile(_ptr, p);
+        }
+
+        /// <summary>
         /// Returns overall time for inference and timings (in ticks) for layers. Indexes in returned vector correspond to layers ids. Some layers can be fused with others, in this case zero ticks count will be return for that skipped layers.
         /// </summary>
         /// <param name="timings">Vector for tick timings for all layers.</param>
@@ -238,6 +265,11 @@ namespace Emgu.CV.Dnn
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern Int64 cveDnnNetGetPerfProfile(IntPtr net, IntPtr timings);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetDump(IntPtr net, IntPtr dnnString);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetDumpToFile(IntPtr net, IntPtr path);
     }
 }
 #endif

@@ -3545,6 +3545,8 @@ namespace Emgu.CV.Test
 
             CvInvoke.Imwrite("rgb_ssd_result.jpg", img);
 
+            String netText = net.Dump();
+            net.DumpToFile("rgb_ssd.dot");
         }
 
         [Test]

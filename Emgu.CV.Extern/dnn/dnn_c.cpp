@@ -147,6 +147,15 @@ int64 cveDnnNetGetPerfProfile(cv::dnn::Net* net, std::vector<double>* timings)
 	return net->getPerfProfile(*timings);
 }
 
+CVAPI(void) cveDnnNetDump(cv::dnn::Net* net, cv::String* string)
+{
+	*string = net->dump();
+}
+
+void cveDnnNetDumpToFile(cv::dnn::Net* net, cv::String* path)
+{
+	net->dumpToFile(*path);
+}
 
 void cveDnnBlobFromImage(
 	cv::_InputArray* image,
