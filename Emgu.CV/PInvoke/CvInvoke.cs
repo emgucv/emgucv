@@ -324,7 +324,7 @@ namespace Emgu.CV
 
                 //handle special case for universal build
                 if (
-                   mName.StartsWith("opencv_ffmpeg")  //opencv_ffmpegvvv(_64).dll
+                   mName.StartsWith("opencv_videoio_ffmpeg")  //opencv_ffmpegvvv(_64).dll
                    && (IntPtr.Size == 4) //32bit application
                    )
                 {
