@@ -1,41 +1,47 @@
 :: variables required for OpenCV build ::
 :: Note: all pathes should be specified without tailing slashes!
-IF EXIST "C:\android-ndk-r10e" SET ANDROID_NDK=C:\android-ndk-r10e
-IF EXIST "C:\android-ndk-r11" SET ANDROID_NDK=C:\android-ndk-r11
-IF EXIST "C:\android-ndk-r11c" SET ANDROID_NDK=C:\android-ndk-r11c
-IF EXIST "C:\android-ndk-r12b" SET ANDROID_NDK=C:\android-ndk-r12b
-IF EXIST "C:\android-ndk-r13" SET ANDROID_NDK=C:\android-ndk-r13
-IF EXIST "C:\android-ndk-r13b" SET ANDROID_NDK=C:\android-ndk-r13b
-IF EXIST "C:\android-ndk-r14" SET ANDROID_NDK=C:\android-ndk-r14
-IF EXIST "C:\android-ndk-r14b" SET ANDROID_NDK=C:\android-ndk-r14b
-IF EXIST "C:\android-ndk-r15" SET ANDROID_NDK=C:\android-ndk-r15
-IF EXIST "C:\android-ndk-r15b" SET ANDROID_NDK=C:\android-ndk-r15b
-IF EXIST "C:\android-ndk-r15c" SET ANDROID_NDK=C:\android-ndk-r15c
-IF EXIST "C:\android-ndk-r16" SET ANDROID_NDK=C:\android-ndk-r16
-IF EXIST "C:\android-ndk-r16b" SET ANDROID_NDK=C:\android-ndk-r16b
 
+SET MAKE_EXE=
+SET ANDROID_NDK_PARENT_DIR=C:\android
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r10e" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r10e
 IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r10e" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r10e
+
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r11" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r11
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r11c" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r11c
 IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r11c" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r11c
 
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r12b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r12b
+
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r13" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r13
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r13b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r13b
 IF EXIST "C:\Microsoft\AndroidNDK64\android-ndk-r13b" SET ANDROID_NDK=C:\Microsoft\AndroidNDK64\android-ndk-r13b
 IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r13b" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r13b
 
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r14" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r14
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r14b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r14b
+
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r15" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r15
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r15b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r15b
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r15c" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r15c
 IF EXIST "C:\Microsoft\AndroidNDK64\android-ndk-r15c" SET ANDROID_NDK=C:\Microsoft\AndroidNDK64\android-ndk-r15c
 IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r15c" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r15c
 
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r16" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r16
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r16b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r16b
+IF EXIST "%ANDROID_NDK%" SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
 
+REM IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r18b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r18b
+
+REM IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r20" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r20
 
 IF EXIST "%programfiles(x86)%\CMake 2.8\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake 2.8\bin\cmake.exe
 IF EXIST "%programfiles(x86)%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake\bin\cmake.exe
 IF EXIST "%programfiles%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles%\CMake\bin\cmake.exe
 IF EXIST "%programw6432%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programw6432%\CMake\bin\cmake.exe
 
-
-SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
-
 :: variables required for android-opencv build ::
 IF EXIST "C:\Program Files (x86)\Android\android-sdk" SET ANDROID_SDK=C:\Program Files (x86)\Android\android-sdk
-IF EXIST "C:\Android\android-sdk" SET ANDROID_SDK=C:\Android\android-sdk
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-sdk" SET ANDROID_SDK=%ANDROID_NDK_PARENT_DIR%\android-sdk
 
 SET ANT_DIR="%VS140COMNTOOLS%..\..\Apps\apache-ant-1.9.3"
 
