@@ -589,9 +589,14 @@ void cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes,
    cv::ellipse(*img, *center, *axes, angle, startAngle, endAngle, *color, thickness, lineType, shift);
 }
 
-void cveApplyColorMap(cv::_InputArray* src, cv::_OutputArray* dst, int colorMap)
+void cveApplyColorMap1(cv::_InputArray* src, cv::_OutputArray* dst, int colorMap)
 {
    cv::applyColorMap(*src, *dst, colorMap);
+}
+
+void cveApplyColorMap2(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray userColorMap)
+{
+	cv::applyColorMap(*src, *dst, userColorMap);
 }
 
 

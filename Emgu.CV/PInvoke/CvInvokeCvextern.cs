@@ -80,23 +80,37 @@ namespace Emgu.CV
         private static extern void cveSqrt(IntPtr src, IntPtr dst);
 
         /// <summary>
-        /// Apply color map to the image
+        /// Applies a GNU Octave/MATLAB equivalent colormap on a given image.
         /// </summary>
-        /// <param name="src">
-        /// The source image.         
-        /// This function expects Image&lt;Bgr, Byte&gt; or Image&lt;Gray, Byte&gt;. If the wrong image type is given, the original image
-        /// will be returned.</param>
-        /// <param name="dst">The destination image</param>
+        /// <param name="src"> The source image, grayscale or colored of type CV_8UC1 or CV_8UC3</param>
+        /// <param name="dst"> The result is the colormapped source image</param>
         /// <param name="colorMapType">The type of color map</param>
         public static void ApplyColorMap(IInputArray src, IOutputArray dst, CvEnum.ColorMapType colorMapType)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                cveApplyColorMap(iaSrc, oaDst, colorMapType);
+                cveApplyColorMap1(iaSrc, oaDst, colorMapType);
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveApplyColorMap(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
+        private static extern void cveApplyColorMap1(IntPtr src, IntPtr dst, CvEnum.ColorMapType colorMapType);
+
+        /// <summary>
+        /// Applies a user colormap on a given image.
+        /// </summary>
+        /// <param name="src"> The source image, grayscale or colored of type CV_8UC1 or CV_8UC3. </param>
+        /// <param name="dst"> The result is the colormapped source image. </param>
+        /// <param name="userColorMap">The colormap to apply of type CV_8UC1 or CV_8UC3 and size 256</param>
+        public static void ApplyColorMap(IInputArray src, IOutputArray dst, IInputArray userColorMap)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            using (InputArray iaUserColorMap = userColorMap.GetInputArray())
+                cveApplyColorMap2(iaSrc, oaDst, iaUserColorMap);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveApplyColorMap2(IntPtr src, IntPtr dst, IntPtr userColorMap);
 
         /// <summary>
         /// Check that every array element is neither NaN nor +- inf. The functions also check that each value

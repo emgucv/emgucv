@@ -187,7 +187,8 @@ CVAPI(void) cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes
 
 
 //color map
-CVAPI(void) cveApplyColorMap(cv::_InputArray* src, cv::_OutputArray* dst, int colorMap);
+CVAPI(void) cveApplyColorMap1(cv::_InputArray* src, cv::_OutputArray* dst, int colorMap);
+CVAPI(void) cveApplyColorMap2(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray userColorMap);
 
 CVAPI(void) cveDistanceTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_OutputArray* labels, int distanceType, int maskSize, int labelType);
 
