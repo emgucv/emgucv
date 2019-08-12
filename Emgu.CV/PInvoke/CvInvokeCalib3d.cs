@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -676,8 +676,12 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveSolvePnPRansac(
-           IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs,
-           IntPtr rvec, IntPtr tvec,
+           IntPtr objectPoints, 
+           IntPtr imagePoints, 
+           IntPtr cameraMatrix, 
+           IntPtr distCoeffs,
+           IntPtr rvec, 
+           IntPtr tvec,
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool useExtrinsicGuess,
            int iterationsCount, 
@@ -686,6 +690,163 @@ namespace Emgu.CV
            IntPtr inliers, 
            CvEnum.SolvePnpMethod flags);
 
+        /// <summary>
+        /// Finds an object pose from 3 3D-2D point correspondences.
+        /// </summary>
+        /// <param name="objectPoints">Array of object points in the object coordinate space, 3x3 1-channel or 1x3/3x1 3-channel. VectorOfPoint3f can be also passed here.</param>
+        /// <param name="imagePoints">Array of corresponding image points, 3x2 1-channel or 1x3/3x1 2-channel. VectorOfPoint2f can be also passed here.</param>
+        /// <param name="cameraMatrix">Input camera matrix A=[[fx 0 0] [0 fy 0] [cx cy 1]] .</param>
+        /// <param name="distCoeffs">Input vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.</param>
+        /// <param name="rvecs">Output rotation vectors (see Rodrigues ) that, together with tvecs , brings points from the model coordinate system to the camera coordinate system. A P3P problem has up to 4 solutions.</param>
+        /// <param name="tvecs">Output translation vectors.</param>
+        /// <param name="flags">Method for solving a P3P problem: either P3P or AP3P</param>
+        /// <returns>Number of solutions</returns>
+        public static int SolveP3P(
+            IInputArray objectPoints,
+            IInputArray imagePoints,
+            IInputArray cameraMatrix,
+            IInputArray distCoeffs,
+            IOutputArrayOfArrays rvecs,
+            IOutputArrayOfArrays tvecs,
+            CvEnum.SolvePnpMethod flags)
+        {
+            using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+            using (InputArray iaImagePoints = imagePoints.GetInputArray())
+            using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+            using (InputArray iaDistortionCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+            using (OutputArray oaRotationVectors = rvecs.GetOutputArray())
+            using (OutputArray oaTranslationVectors = tvecs.GetOutputArray())
+            {
+                return cveSolveP3P(iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs, oaRotationVectors,
+                    oaTranslationVectors, flags);
+
+            }
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern int cveSolveP3P(
+            IntPtr objectPoints,
+            IntPtr imagePoints,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            IntPtr rvec,
+            IntPtr tvec,
+            CvEnum.SolvePnpMethod flags);
+
+        public static void SolvePnPRefineLM(
+            IInputArray objectPoints,
+            IInputArray imagePoints,
+            IInputArray cameraMatrix,
+            IInputArray distCoeffs,
+            IInputOutputArray rvec,
+            IInputOutputArray tvec,
+            MCvTermCriteria criteria)
+        {
+            using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+            using (InputArray iaImagePoints = imagePoints.GetInputArray())
+            using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+            using (InputArray iaDistortionCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+            using (InputOutputArray ioaRotationVector = rvec.GetInputOutputArray())
+            using (InputOutputArray ioaTranslationVector = tvec.GetInputOutputArray())
+                cveSolvePnPRefineLM(iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs, ioaRotationVector, ioaTranslationVector, ref criteria );
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSolvePnPRefineLM(
+            IntPtr objectPoints,
+            IntPtr imagePoints,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            IntPtr rvec,
+            IntPtr tvec,
+            ref MCvTermCriteria criteria);
+
+        public static void SolvePnPRefineVVS(
+            IInputArray objectPoints,
+            IInputArray imagePoints,
+            IInputArray cameraMatrix,
+            IInputArray distCoeffs,
+            IInputOutputArray rvec,
+            IInputOutputArray tvec,
+            MCvTermCriteria criteria,
+            double VVSlambda)
+        {
+            using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+            using (InputArray iaImagePoints = imagePoints.GetInputArray())
+            using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+            using (InputArray iaDistortionCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+            using (InputOutputArray ioaRotationVector = rvec.GetInputOutputArray())
+            using (InputOutputArray ioaTranslationVector = tvec.GetInputOutputArray())
+            {
+                cveSolvePnPRefineVVS(iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs, ioaRotationVector, ioaTranslationVector,
+                    ref criteria, VVSlambda);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSolvePnPRefineVVS(
+            IntPtr objectPoints,
+            IntPtr imagePoints,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            IntPtr rvec,
+            IntPtr tvec,
+            ref MCvTermCriteria criteria,
+            double VVSlambda);
+
+        public static int SolvePnPGeneric(
+            IInputArray objectPoints,
+            IInputArray imagePoints,
+            IInputArray cameraMatrix,
+            IInputArray distCoeffs,
+            IOutputArrayOfArrays rvecs,
+            IOutputArrayOfArrays tvecs,
+            bool useExtrinsicGuess = false,
+            CvEnum.SolvePnpMethod flags = SolvePnpMethod.Iterative,
+            IInputArray rvec = null, 
+            IInputArray tvec = null,
+            IOutputArray reprojectionError = null)
+        {
+            using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+            using (InputArray iaImagePoints = imagePoints.GetInputArray())
+            using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+            using (InputArray iaDistCoeffs = distCoeffs.GetInputArray())
+            using (OutputArray oaRotationVector = rvecs.GetOutputArray())
+            using (OutputArray oaTranslationVector = tvecs.GetOutputArray())
+            using (InputArray iaRvec = rvec == null ? InputArray.GetEmpty() : rvec.GetInputArray())
+            using (InputArray iaTvec = tvec == null ? InputArray.GetEmpty() : tvec.GetInputArray())
+            using (OutputArray oaReporjectionError =
+                reprojectionError == null ? OutputArray.GetEmpty() : reprojectionError.GetOutputArray())
+            {
+                return cveSolvePnPGeneric(
+                    iaObjectPoints,
+                    iaImagePoints, 
+                    iaCameraMatrix, 
+                    iaDistCoeffs,
+                    oaRotationVector,
+                    oaTranslationVector, 
+                    useExtrinsicGuess, 
+                    flags, 
+                    iaRvec,
+                    iaTvec,
+                    oaReporjectionError);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern int cveSolvePnPGeneric(
+            IntPtr objectPoints,
+            IntPtr imagePoints,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            IntPtr rvecs,
+            IntPtr tvecs,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useExtrinsicGuess,
+            CvEnum.SolvePnpMethod flags,
+            IntPtr rvec,
+            IntPtr tvec,
+            IntPtr reprojectionError);
+            
 
         /// <summary>
         /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the first camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
@@ -1422,7 +1583,7 @@ namespace Emgu.CV
         /// <param name="R2">Output 3x3 rectification transform (rotation matrix) for the second camera.</param>
         /// <param name="P1">Output 3x4 projection matrix in the new (rectified) coordinate systems for the first camera.</param>
         /// <param name="P2">Output 3x4 projection matrix in the new (rectified) coordinate systems for the second camera.</param>
-        /// <param name="Q">	Output 4�4 disparity-to-depth mapping matrix (see reprojectImageTo3D ).</param>
+        /// <param name="Q">	Output 4×4 disparity-to-depth mapping matrix (see reprojectImageTo3D ).</param>
         /// <param name="flags">Operation flags that may be zero or ZeroDisparity . If the flag is set, the function makes the principal points of each camera have the same pixel coordinates in the rectified views. And if the flag is not set, the function may still shift the images in the horizontal or vertical direction (depending on the orientation of epipolar lines) to maximize the useful image area.</param>
         /// <param name="newImageSize">New image resolution after rectification. The same size should be passed to initUndistortRectifyMap. When (0,0) is passed (default), it is set to the original imageSize . Setting it to larger value can help you preserve details in the original image, especially when there is a big radial distortion.</param>
         /// <param name="balance">Sets the new focal length in range between the min focal length and the max focal length. Balance is in range of [0, 1].</param>

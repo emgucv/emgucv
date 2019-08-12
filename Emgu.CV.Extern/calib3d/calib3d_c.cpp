@@ -265,6 +265,71 @@ bool cveSolvePnPRansac(
 		flags);
 }
 
+int cveSolveP3P(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvecs,
+	cv::_OutputArray* tvecs,
+	int flags)
+{
+	return cv::solveP3P(*objectPoints, *imagePoints, *cameraMatrix, *distCoeffs, *rvecs, *tvecs, flags);
+}
+
+void cveSolvePnPRefineLM(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_InputOutputArray* rvec,
+	cv::_InputOutputArray* tvec,
+	CvTermCriteria* criteria)
+{
+	cv::solvePnPRefineLM(*objectPoints, *imagePoints, *cameraMatrix, *distCoeffs, *rvec, *tvec, *criteria);
+}
+
+void cveSolvePnPRefineVVS(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_InputOutputArray* rvec,
+	cv::_InputOutputArray* tvec,
+	CvTermCriteria* criteria,
+	double VVSlambda)
+{
+	cv::solvePnPRefineVVS(*objectPoints, *imagePoints, *cameraMatrix, *distCoeffs, *rvec, *tvec, *criteria, VVSlambda);
+}
+
+int cveSolvePnPGeneric(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvecs,
+	cv::_OutputArray* tvecs,
+	bool useExtrinsicGuess,
+	int flags,
+	cv::_InputArray* rvec,
+	cv::_InputArray* tvec,
+	cv::_OutputArray* reprojectionError)
+{
+	return cv::solvePnPGeneric(
+		*objectPoints, 
+		*imagePoints, 
+		*cameraMatrix, 
+		*distCoeffs, 
+		*rvecs, 
+		*tvecs, 
+		useExtrinsicGuess, 
+		static_cast<cv::SolvePnPMethod>(flags), 
+		rvec ? *rvec : static_cast<cv::InputArray>(cv::noArray()), 
+		tvec ? *tvec : static_cast<cv::InputArray>(cv::noArray()), 
+		reprojectionError ? *reprojectionError: static_cast<cv::OutputArray>(cv::noArray()));
+}
+
+
 void cveGetOptimalNewCameraMatrix(
 	cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
 	CvSize* imageSize, double alpha, CvSize* newImgSize,
