@@ -81,8 +81,14 @@ namespace Emgu.CV.XamarinForms
 #if NETFX_CORE
                       String path = System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, "tessdata");
 #elif __ANDROID__
-                      String path = System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
-                             Android.OS.Environment.DirectoryDownloads, "tessdata");
+                      String path = System.IO.Path.Combine(
+                         Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
+                         Android.OS.Environment.DirectoryDownloads,
+                         "tessdata");
+#elif __IOS__
+                     String path = System.IO.Path.Combine (
+                        Environment.GetFolderPath ( Environment.SpecialFolder.MyDocuments ),
+                        "tessdata");
 #else
                       String path = "./tessdata/";
 #endif

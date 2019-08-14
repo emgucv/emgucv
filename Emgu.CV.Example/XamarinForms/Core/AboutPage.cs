@@ -25,8 +25,7 @@ namespace Emgu.CV.XamarinForms
                CvInvoke.OclGetPlatformsSummary());
          }
 
-         Content = new StackLayout {
-				Children = {
+         Content = 
                new WebView()
                {
                   WidthRequest =  1000,
@@ -38,7 +37,7 @@ namespace Emgu.CV.XamarinForms
 <head>
 <style>body { background-color: #EEEEEE; }</style>
 <style type=""text/css"">
-textarea { width: 100 %; margin: 0; padding: 0; border - width: 0; }
+textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 </style>
 </head>
 <body>
@@ -55,8 +54,8 @@ textarea { width: 100 %; margin: 0; padding: 0; border - width: 0; }
 </body>
 </html>"
                   }
-               }
-				}
+               
+				
 			};
 		}
 	}
