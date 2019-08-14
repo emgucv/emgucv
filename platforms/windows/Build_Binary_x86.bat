@@ -326,7 +326,7 @@ IF %DEVENV%==%VS2013% SET INTEL_DEV_ENV=vs2013
 IF %DEVENV%==%VS2015% SET INTEL_DEV_ENV=vs2015
 IF %DEVENV%==%VS2017% SET INTEL_DEV_ENV=vs2017
 call "%INTEL_COMPILER_DIR%tbb\bin\tbbvars.bat" %INTEL_ARCH% %INTEL_DEV_ENV%
-call "%INTEL_COMPILER_DIR%mkl\bin\mklvars.bat" %INTEL_ARCH% %INTEL_DEV_ENV%
+REM call "%INTEL_COMPILER_DIR%mkl\bin\mklvars.bat" %INTEL_ARCH% %INTEL_DEV_ENV%
 
 REM initiate the compiler enviroment
 @echo on
