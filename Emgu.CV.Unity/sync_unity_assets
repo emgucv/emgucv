@@ -51,6 +51,7 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XFeatures2D/*.cs ../Emgu.CV.
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XImgproc/*.cs ../Emgu.CV.Contrib/XImgproc 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XObjdetect/*.cs ../Emgu.CV.Contrib/XObjdetect 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto/*.cs ../Emgu.CV.Contrib/XPhoto 
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching/*.cs ../Emgu.CV.Contrib/SurfaceMatching 
 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/*.cs ../Emgu.CV.OCR 
 
