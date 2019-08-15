@@ -41,6 +41,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml.Serialization" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="System.Drawing.Common">
+      <HintPath>/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/Facades/System.Drawing.Common.dll</HintPath>      
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
