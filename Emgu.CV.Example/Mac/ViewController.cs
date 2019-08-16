@@ -57,26 +57,36 @@ namespace Emgu.CV.Example.Mac
 
 		void RunDetectFace()
 		{
-			//Read the files as an 8-bit Bgr image  
-			NSImage nsImage = NSImage.ImageNamed("lena.jpg");
-			UMat image = new UMat(nsImage); //UMat version
-											//image = new Mat("lena.jpg", ImreadModes.Color); //CPU version
+            try
+            {
+                //Read the files as an 8-bit Bgr image  
+                NSImage nsImage = NSImage.ImageNamed("lena.jpg");
+                UMat image = new UMat(nsImage); //UMat version
+                                                //image = new Mat("lena.jpg", ImreadModes.Color); //CPU version
 
-			long detectionTime;
-			List<Rectangle> faces = new List<Rectangle>();
-			List<Rectangle> eyes = new List<Rectangle>();
+                long detectionTime;
+                List<Rectangle> faces = new List<Rectangle>();
+                List<Rectangle> eyes = new List<Rectangle>();
 
-			FaceDetection.DetectFace.Detect(
-			  image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml",
-			  faces, eyes,
-			  out detectionTime);
+                FaceDetection.DetectFace.Detect(
+                  image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml",
+                  faces, eyes,
+                  out detectionTime);
 
-			foreach (Rectangle face in faces)
-				CvInvoke.Rectangle(image, face, new Bgr(Color.Red).MCvScalar, 2);
-			foreach (Rectangle eye in eyes)
-				CvInvoke.Rectangle(image, eye, new Bgr(Color.Blue).MCvScalar, 2);
+                foreach (Rectangle face in faces)
+                    CvInvoke.Rectangle(image, face, new Bgr(Color.Red).MCvScalar, 2);
+                foreach (Rectangle eye in eyes)
+                    CvInvoke.Rectangle(image, eye, new Bgr(Color.Blue).MCvScalar, 2);
 
-			mainImageView.Image = image.ToNSImage();
+                mainImageView.Image = image.ToNSImage();
+            } catch (Exception e)
+            {
+                InvokeOnMainThread(() =>
+                {
+                    messageLabel.StringValue = e.Message;
+                    messageLabel.InvalidateIntrinsicContentSize();
+                });
+            }
 		}
 
 		void RunFeatureMatching()
@@ -119,7 +129,7 @@ namespace Emgu.CV.Example.Mac
 
 		private void ProcessFrame(object sender, EventArgs arg)
 		{
-			if (_capture != null && _capture.Ptr != IntPtr.Zero)
+			if (_capture != null && _capture.Ptr != IntPtr.Zero && _capture.IsOpened)
 			{
 				_capture.Retrieve(_frame, 0);
 				var nsImage = _frame.ToNSImage();
@@ -137,11 +147,11 @@ namespace Emgu.CV.Example.Mac
 				_capture = new VideoCapture();
 				if (_capture == null || !_capture.IsOpened)
 				{
-					InvokeOnMainThread(() =>
+                    _capture = null;
+                    InvokeOnMainThread(() =>
 					{
 						messageLabel.StringValue = "unable to create capture";
 					});
-					_capture = null;
 					return;
 				}
 				_capture.ImageGrabbed += ProcessFrame;

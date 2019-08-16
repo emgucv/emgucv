@@ -151,9 +151,11 @@
   <ItemGroup>
     <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
       <Link>haarcascade_eye.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
       <Link>haarcascade_frontalface_default.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\FaceDetection\lena.jpg">
       <Link>lena.jpg</Link>
