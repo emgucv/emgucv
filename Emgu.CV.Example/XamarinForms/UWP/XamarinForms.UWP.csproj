@@ -165,7 +165,7 @@
       <Version>4.0.1.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>3.6.0.293080</Version>
+      <Version>4.1.0.673156</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />

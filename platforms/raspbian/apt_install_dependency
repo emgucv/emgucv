@@ -1,1 +1,1 @@
-sudo apt-get install build-essential monodevelop mono-mcs mono-devel libtiff5-dev libgeotiff-dev libgtk-3-dev libgstreamer1.0-dev libavcodec-dev libswscale-dev libavformat-dev libopenexr-dev libjasper-dev libdc1394-22-dev libv4l-dev libeigen3-dev cmake-curses-gui freeglut3-dev git
+sudo apt install build-essential monodevelop mono-mcs mono-devel libtiff5-dev libgeotiff-dev libgtk-3-dev libgstreamer1.0-dev libavcodec-dev libswscale-dev libavformat-dev libopenexr-dev libjasper-dev libdc1394-22-dev libv4l-dev libeigen3-dev cmake-curses-gui freeglut3-dev git
