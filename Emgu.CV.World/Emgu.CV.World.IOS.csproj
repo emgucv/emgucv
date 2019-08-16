@@ -42,7 +42,10 @@
     <Reference Include="System.Xml.Serialization" />
     <Reference Include="Xamarin.iOS" />
     <Reference Include="System.Drawing.Common">
-      <HintPath>/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/Facades/System.Drawing.Common.dll</HintPath>      
+	  <!-- HintPath for macOS -->
+      <HintPath Condition="Exists('/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/Facades/System.Drawing.Common.dll')">/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/Facades/System.Drawing.Common.dll</HintPath>
+	  <!-- HintPath for Windows -->
+	  <HintPath Condition="Exists('$(TargetFrameworkRootPath)\Xamarin.iOS\v1.0\Facades\System.Drawing.Common.dll')">$(TargetFrameworkRootPath)\Xamarin.iOS\v1.0\Facades\System.Drawing.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +62,10 @@
   <Import Project="..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
   <Import Project="..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />
+  <Target Name="BeforeBuild">
+	<Message Text="MSBuildExtensionsPath: $(MSBuildExtensionsPath)" Importance="high" />
+	<Message Text="TargetFrameworkRootPath: $(TargetFrameworkRootPath)" Importance="high" />
+  </Target>
   <Target Name="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll and $(OutputPath)$(AssemblyName).xml to ..\libs" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\libs" ContinueOnError="true" />
