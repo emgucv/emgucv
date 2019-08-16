@@ -790,6 +790,10 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-Android")
 ENDIF()
 
+IF(HAVE_IOS AND WIN32)
+	SET(EMGUCV_IOS_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-iOS")
+ENDIF()
+
 IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	MESSAGE(STATUS "Configuring nuget package for Commercial release")
 	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
@@ -885,6 +889,18 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Android/Package.nuspec)
 ENDIF()
+
+IF(HAVE_IOS AND WIN32)
+	SET(EMGUCV_IOS_NUGET_TITLE "EMGU CV for iOS")	
+	SET(EMGUCV_IOS_NUGET_FILE_LIST " 
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.World.IOS.dll\" target=\"lib\\Xamarin.iOS10\" />
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.World.IOS.XML\" target=\"lib\\Xamarin.iOS10\" />")
+	SET(EMGUCV_IOS_NUGET_FILE_LIST "${EMGUCV_IOS_NUGET_FILE_LIST} 
+	<file src=\"Emgu.CV.IOS.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/iOS.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/iOS/Package.nuspec)
+ENDIF()
+
 
 SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
 
