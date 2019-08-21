@@ -1173,7 +1173,7 @@ namespace Emgu.CV
         /// <summary>
         /// Make a clone of the current Mat
         /// </summary>
-        /// <returns>A clone fo the current Mat</returns>
+        /// <returns>A clone of the current Mat</returns>
         public Mat Clone()
         {
             Mat c = new Mat();

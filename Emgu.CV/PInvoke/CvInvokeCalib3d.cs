@@ -732,6 +732,16 @@ namespace Emgu.CV
             IntPtr tvec,
             CvEnum.SolvePnpMethod flags);
 
+        /// <summary>
+        /// Refine a pose (the translation and the rotation that transform a 3D point expressed in the object coordinate frame to the camera coordinate frame) from a 3D-2D point correspondences and starting from an initial solution
+        /// </summary>
+        /// <param name="objectPoints">Array of object points in the object coordinate space, Nx3 1-channel or 1xN/Nx1 3-channel, where N is the number of points. VectorOfPoint3f can also be passed here.</param>
+        /// <param name="imagePoints">Array of corresponding image points, Nx2 1-channel or 1xN/Nx1 2-channel, where N is the number of points. VectorOfPoint2f can also be passed here.</param>
+        /// <param name="cameraMatrix">Input camera matrix A=[[fx,0,0],[0,fy,0][cx,cy,1]].</param>
+        /// <param name="distCoeffs">Input vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.</param>
+        /// <param name="rvec">Input/Output rotation vector (see Rodrigues ) that, together with tvec, brings points from the model coordinate system to the camera coordinate system. Input values are used as an initial solution.</param>
+        /// <param name="tvec">Input/Output translation vector. Input values are used as an initial solution.</param>
+        /// <param name="criteria">Criteria when to stop the Levenberg-Marquard iterative algorithm.</param>
         public static void SolvePnPRefineLM(
             IInputArray objectPoints,
             IInputArray imagePoints,
@@ -760,6 +770,17 @@ namespace Emgu.CV
             IntPtr tvec,
             ref MCvTermCriteria criteria);
 
+        /// <summary>
+        /// Refine a pose (the translation and the rotation that transform a 3D point expressed in the object coordinate frame to the camera coordinate frame) from a 3D-2D point correspondences and starting from an initial solution.
+        /// </summary>
+        /// <param name="objectPoints">Array of object points in the object coordinate space, Nx3 1-channel or 1xN/Nx1 3-channel, where N is the number of points. VectorOfPoint3f can also be passed here.</param>
+        /// <param name="imagePoints">Array of corresponding image points, Nx2 1-channel or 1xN/Nx1 2-channel, where N is the number of points. VectorOfPoint2f can also be passed here.</param>
+        /// <param name="cameraMatrix">Input camera matrix A=[[fx,0,0],[0,fy,0][cx,cy,1]].</param>
+        /// <param name="distCoeffs">Input vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.</param>
+        /// <param name="rvec">Input/Output rotation vector (see Rodrigues ) that, together with tvec, brings points from the model coordinate system to the camera coordinate system. Input values are used as an initial solution.</param>
+        /// <param name="tvec">Input/Output translation vector. Input values are used as an initial solution.</param>
+        /// <param name="criteria">Criteria when to stop the Levenberg-Marquard iterative algorithm.</param>
+        /// <param name="VVSlambda">Gain for the virtual visual servoing control law, equivalent to the α gain in the Damped Gauss-Newton formulation.</param>
         public static void SolvePnPRefineVVS(
             IInputArray objectPoints,
             IInputArray imagePoints,
@@ -793,6 +814,21 @@ namespace Emgu.CV
             ref MCvTermCriteria criteria,
             double VVSlambda);
 
+        /// <summary>
+        /// Finds an object pose from 3D-2D point correspondences. 
+        /// </summary>
+        /// <param name="objectPoints">Array of object points in the object coordinate space, Nx3 1-channel or 1xN/Nx1 3-channel, where N is the number of points. VectorOfPoint3f can also be passed here.</param>
+        /// <param name="imagePoints">Array of corresponding image points, Nx2 1-channel or 1xN/Nx1 2-channel, where N is the number of points. VectorOfPoint2f can also be passed here.</param>
+        /// <param name="cameraMatrix">Input camera matrix A=[[fx,0,0],[0,fy,0][cx,cy,1]].</param>
+        /// <param name="distCoeffs">Input vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.</param>
+        /// <param name="rvecs">Vector of output rotation vectors (see Rodrigues ) that, together with tvecs, brings points from the model coordinate system to the camera coordinate system.</param>
+        /// <param name="tvecs">Vector of output translation vectors.</param>
+        /// <param name="useExtrinsicGuess">Parameter used for SOLVEPNP_ITERATIVE. If true, the function uses the provided rvec and tvec values as initial approximations of the rotation and translation vectors, respectively, and further optimizes them.</param>
+        /// <param name="flags">Method for solving a PnP problem</param>
+        /// <param name="rvec">Rotation vector used to initialize an iterative PnP refinement algorithm, when flag is SOLVEPNP_ITERATIVE and useExtrinsicGuess is set to true.</param>
+        /// <param name="tvec">Translation vector used to initialize an iterative PnP refinement algorithm, when flag is SOLVEPNP_ITERATIVE and useExtrinsicGuess is set to true.</param>
+        /// <param name="reprojectionError"></param>
+        /// <returns></returns>
         public static int SolvePnPGeneric(
             IInputArray objectPoints,
             IInputArray imagePoints,
