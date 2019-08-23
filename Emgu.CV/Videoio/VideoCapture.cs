@@ -176,7 +176,7 @@ namespace Emgu.CV
             /// <summary>
             /// Built-in OpenCV MotionJPEG codec
             /// </summary>
-            OopencvMjpeg = 2200,
+            OpencvMjpeg = 2200,
             /// <summary>
             /// Intel MediaSDK
             /// </summary>
