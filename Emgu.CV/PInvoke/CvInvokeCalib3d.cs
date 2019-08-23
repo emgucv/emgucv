@@ -827,7 +827,7 @@ namespace Emgu.CV
         /// <param name="flags">Method for solving a PnP problem</param>
         /// <param name="rvec">Rotation vector used to initialize an iterative PnP refinement algorithm, when flag is SOLVEPNP_ITERATIVE and useExtrinsicGuess is set to true.</param>
         /// <param name="tvec">Translation vector used to initialize an iterative PnP refinement algorithm, when flag is SOLVEPNP_ITERATIVE and useExtrinsicGuess is set to true.</param>
-        /// <param name="reprojectionError"></param>
+        /// <param name="reprojectionError">Optional vector of reprojection error, that is the RMS error between the input image points and the 3D object points projected with the estimated pose.</param>
         /// <returns></returns>
         public static int SolvePnPGeneric(
             IInputArray objectPoints,
