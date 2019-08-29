@@ -192,7 +192,7 @@
       </ItemGroup>
     </When>
     <!-- IOS application (Note: do not work for Xamarin iOS for Visual Studio) -->
-    <When Condition="(('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(Platform)'=='iPhone' OR '$(Platform)'=='iPhoneSimulator') AND '$(OutputType)' == 'Exe')">
+    <When Condition="(('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(ProjectTypeGuids)'=='{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(Platform)'=='iPhone' OR '$(Platform)'=='iPhoneSimulator') AND '$(OutputType)' == 'Exe')">
       <PropertyGroup>
         <EmguCVErrorMessage Condition="'$(OS)' == 'Windows_NT'"> Direct reference of Emgu CV for Xamarin iOS is only available with Xamarin Studio on Mac. When using Emgu CV in Visual Studio with Xamarin iOS plug in, please add the Emgu.CV.iOS.World reference instead.</EmguCVErrorMessage>
         <EmguCVLinkTarget>Xamarin iOS App</EmguCVLinkTarget>
