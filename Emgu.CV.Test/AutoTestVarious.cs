@@ -1429,6 +1429,16 @@ namespace Emgu.CV.Test
                 labels[i] = i;
             }
 
+            Mat[] images2 = new Mat[20];
+            int[] labels2 = new int[20];
+            for (int i = 0; i < images2.Length; i++)
+            {
+                images2[i] = new Mat(new Size(200, 200), DepthType.Cv8U, 1);
+                CvInvoke.Randu(images2[i], new MCvScalar(0), new MCvScalar(255));
+
+                labels2[i] = i + labels.Length;
+            }
+
             Mat sample = new Mat(new Size(200, 200), DepthType.Cv8U, 1);
             CvInvoke.Randu(sample, new MCvScalar(0), new MCvScalar(255));
             
@@ -1460,6 +1470,7 @@ namespace Emgu.CV.Test
 
             LBPHFaceRecognizer lbph = new LBPHFaceRecognizer(1, 8, 8, 8, double.MaxValue);
             lbph.Train(images, labels);
+            lbph.Update(images2, labels2);
             for (int i = 0; i < images.Length; i++)
             {
                 EmguAssert.IsTrue(lbph.Predict(images[i]).Label == i);
