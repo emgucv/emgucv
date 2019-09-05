@@ -62,33 +62,33 @@ ENDMACRO(GET_CS_EXECUTABLE_EXTENSION)
 
 MACRO(ADD_CS_FILE_TO_DEPLOY file)
   GET_CS_LIBRARY_TARGET_DIR()
-
+  
   IF ("${ARGV1}" STREQUAL "")
     SET(CS_FILE_TO_DEPLOY_DEST_PATH ${CS_LIBRARY_TARGET_DIR})
   ELSE()
     SET(CS_FILE_TO_DEPLOY_DEST_PATH "${CS_LIBRARY_TARGET_DIR}/${ARGV1}")
   ENDIF()
   LIST(APPEND
-	CS_PREBUILD_COMMAND  
+    CS_PREBUILD_COMMAND  
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ARGV0} ${CS_FILE_TO_DEPLOY_DEST_PATH})
 ENDMACRO(ADD_CS_FILE_TO_DEPLOY)
 
 MACRO(ADD_CS_DIRECTORY_TO_DEPLOY dir)
   GET_CS_LIBRARY_TARGET_DIR()
-
+  
   IF ("${ARGV1}" STREQUAL "")
     SET(CS_DIR_TO_DEPLOY_DEST_PATH ${CS_LIBRARY_TARGET_DIR})
   ELSE()
     SET(CS_DIR_TO_DEPLOY_DEST_PATH "${CS_LIBRARY_TARGET_DIR}/${ARGV1}")
   ENDIF()
   LIST(APPEND
-	CS_PREBUILD_COMMAND  
+    CS_PREBUILD_COMMAND  
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${ARGV0} ${CS_DIR_TO_DEPLOY_DEST_PATH})
 ENDMACRO(ADD_CS_DIRECTORY_TO_DEPLOY)
 
 # ----- end support macros -----
 MACRO(ADD_CS_MODULE target source)
-
+  
 ENDMACRO(ADD_CS_MODULE)
 
 MACRO(ADD_CS_REFERENCES references)
@@ -102,7 +102,7 @@ MACRO(ADD_CS_FRAMEWORK_REFERENCES ver refs)
   SET(CSC_MSCORLIB_FOLDER "")
   IF("${ver}" STREQUAL "3.5")
     GET_FILENAME_COMPONENT(CSC_MSCORLIB_FOLDER ${CSC_MSCORLIB_35} DIRECTORY)
-	SET(CSC_MSCORLIB_FOLDER "${CSC_MSCORLIB_FOLDER}/")
+    SET(CSC_MSCORLIB_FOLDER "${CSC_MSCORLIB_FOLDER}/")
   ENDIF() 
   
   FOREACH(ref ${refs})
@@ -120,7 +120,7 @@ MACRO(SET_CS_TARGET_FRAMEWORK)
   IF (${NUM_EXTRA_ARGS} GREATER 0)
     #MESSAGE(STATUS "GREATER than 0")
     LIST(GET EXTRA_MACRO_ARGS 0 version)
-	#MESSAGE(STATUS "VERSION: ${version}")
+    #MESSAGE(STATUS "VERSION: ${version}")
   ELSE()
     SET(version "")
   ENDIF()
@@ -139,25 +139,50 @@ MACRO(SET_CS_TARGET_FRAMEWORK)
 ENDMACRO(SET_CS_TARGET_FRAMEWORK)
 
 MACRO(BUILD_CSPROJ target csproj_file extra_flags)
-  #  SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
-  ADD_CUSTOM_TARGET (
-    ${target} ${ARGV3}
-    SOURCES ${csproj_file})
-  #    DEPENDS "${target_name}")
-  #MESSAGE(STATUS "ADD_CUSTOM_TARGET (${target} ${ARGV3})")
-  ADD_CUSTOM_COMMAND (
-    TARGET ${target}
-    COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}
-    COMMENT "Building ${target}")
-  #MESSAGE(STATUS "ADD_CUSTOM_COMMAND (TARGET ${target} COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file} ")  
+  ADD_CUSTOM_TARGET (${target} ${ARGV3} SOURCES ${csproj_file} )
+  
+  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build Release ${extra_flags} ${csproj_file}
+      COMMENT "Building ${target}: ${CMAKE_VS_DEVENV_COMMAND} /Build Release ${extra_flags} ${csproj_file}")
+  ELSEIF(MSBUILD_EXECUTABLE)
+    #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}")
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}
+      COMMENT "Building ${target}: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}")
+  ELSEIF (DOTNET_EXECUTABLE)
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${DOTNET_EXECUTABLE} build ${csproj_file}
+      COMMENT "Building ${target}: ${DOTNET_EXECUTABLE} build ${csproj_file}")
+  ELSE()
+    MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
+  ENDIF()
 ENDMACRO()
+
+MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
+  ADD_CUSTOM_TARGET (${target} ${ARGV3})
+  
+  IF (DOTNET_EXECUTABLE)
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND "${DOTNET_EXECUTABLE}" build "${csproj_file}"
+      COMMENT "Building ${target}")
+    #MESSAGE(STATUS " ==> ${target} Build command: ${DOTNET_EXECUTABLE} build ${csproj_file}" )
+  ELSE()
+    MESSAGE(FATAL_ERROR "DOTNET_EXECUTABLE not found!")
+  ENDIF()
+ENDMACRO()
+
 
 MACRO(COMPILE_CS target target_type source)
   IF(${target_type} STREQUAL "library")
     GET_CS_LIBRARY_TARGET_DIR()
     SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.dll")
     SET(COMPILE_CS_TARGET_DIR "${CS_LIBRARY_TARGET_DIR}")
-  ELSE(${target_type} STREQUAL "library")
+  ELSE()
     IF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
       GET_CS_EXECUTABLE_TARGET_DIR()
       GET_CS_EXECUTABLE_EXTENSION()
@@ -173,10 +198,14 @@ MACRO(COMPILE_CS target target_type source)
       SET(target_name "${CS_LIBRARY_TARGET_DIR}/${target}.netmodule")
       SET(COMPILE_CS_TARGET_DIR "${CS_LIBRARY_TARGET_DIR}")
     ENDIF(${target_type} STREQUAL "winexe" OR ${target_type} STREQUAL "exe")
-  ENDIF(${target_type} STREQUAL "library")
+  ENDIF()
   
   MAKE_PROPER_FILE_LIST("${source}")
   FILE(RELATIVE_PATH relative_path ${CMAKE_BINARY_DIR} ${target_name})
+  
+  ADD_CUSTOM_TARGET (
+    ${target} ${ARGV3}
+    SOURCES ${source})
   
   #Make sure the destination folder exist
   LIST(APPEND
@@ -348,17 +377,12 @@ MACRO(COMPILE_CS target target_type source)
   FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${target}_SourceList.rsp  ${TMP})
   
   ADD_CUSTOM_COMMAND (
-    OUTPUT "${target_name}"
-    ${CS_PREBUILD_COMMAND}	
+    TARGET ${target}
+    ${CS_PREBUILD_COMMAND}	   
     COMMAND ${CSC_EXECUTABLE} ${CS_COMMANDLINE_FLAGS} ${NETFX_EXTRA_FLAGS} @${target}_SourceList.rsp
     ${CS_POSTBUILD_COMMAND}
     DEPENDS ${source}
     COMMENT "Building ${relative_path}")
-  
-  ADD_CUSTOM_TARGET (
-    ${target} ${ARGV3}
-    SOURCES ${source}
-    DEPENDS "${target_name}")
   
   SET(relative_path "")
   SET(proper_file_list "")
@@ -376,19 +400,19 @@ ENDMACRO(ADD_CS_PACKAGE_REFERENCES references)
 
 MACRO(ADD_CS_RESOURCES resx resources)
   LIST(APPEND
-	CS_PREBUILD_COMMAND 
+    CS_PREBUILD_COMMAND 
     COMMAND ${RESGEN_EXECUTABLE} \"${resx}\" \"${resources}\"
     )
   LIST(APPEND CS_FLAGS -resource:\"${resources}\")
   LIST(APPEND
     CS_POSTBUILD_COMMAND
-	COMMAND ${CMAKE_COMMAND} -E remove \"${resources}\"
-	)
+    COMMAND ${CMAKE_COMMAND} -E remove \"${resources}\"
+    )
 ENDMACRO(ADD_CS_RESOURCES)
 
 MACRO(SIGN_ASSEMBLY key) 
   IF(EMGU_SIGN_ASSEMBLY)
-	LIST(APPEND CS_FLAGS -keyfile:\"${key}\")
+    LIST(APPEND CS_FLAGS -keyfile:\"${key}\")
   ENDIF()
 ENDMACRO(SIGN_ASSEMBLY)
 
