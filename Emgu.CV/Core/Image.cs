@@ -7,14 +7,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV.CvEnum;
-#if __ANDROID__
-using Bitmap = Android.Graphics.Bitmap;
-#elif __IOS__
+
+#if __IOS__
 using CoreGraphics;
 using UIKit;
 #elif __UNIFIED__
 using CoreGraphics;
-#elif NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#elif NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || __ANDROID__
 #else
 using System.Drawing.Imaging;
 #endif
@@ -183,11 +182,11 @@ namespace Emgu.CV
                LoadImageUsingOpenCV(fi);
             else
             {
-               using(Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(fi.FullName))
+               using(Android.Graphics.Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(fi.FullName))
                {
                   Android.Graphics.Matrix matrix = new Android.Graphics.Matrix();
                   matrix.PostRotate(rotation);
-                  using (Bitmap rotated = Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
+                  using (Android.Graphics.Bitmap rotated = Android.Graphics.Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
                   {
                      //manually disposed sooner such that memory is released.
                      bmp.Dispose();
@@ -222,23 +221,6 @@ namespace Emgu.CV
 #endif
         }
 
-#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
-#else
-        /// <summary>
-        /// Load the specific file using Bitmap
-        /// </summary>
-        /// <param name="file">The file to load</param>
-        private void LoadFileUsingBitmap(FileInfo file)
-        {
-#if __ANDROID__
-         using (Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(file.FullName))
-#else
-            using (Bitmap bmp = new Bitmap(file.FullName))
-#endif
-                Bitmap = bmp;
-
-        }
-#endif
 
 #if !(NETFX_CORE || NETSTANDARD1_4)
         /// <summary>
@@ -253,18 +235,6 @@ namespace Emgu.CV
                     throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", file.FullName));
                 LoadImageFromMat(m);
             }
-        }
-#endif
-
-#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
-#else
-        /// <summary>
-        /// Obtain the image from the specific Bitmap
-        /// </summary>
-        /// <param name="bmp">The bitmap which will be converted to the image</param>
-        public Image(Bitmap bmp)
-        {
-            Bitmap = bmp;
         }
 #endif
 
@@ -2370,8 +2340,27 @@ namespace Emgu.CV
         }
         #endregion
 
-#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || __ANDROID__
 #else
+        /// <summary>
+        /// Load the specific file using Bitmap
+        /// </summary>
+        /// <param name="file">The file to load</param>
+        private void LoadFileUsingBitmap(FileInfo file)
+        {
+            using (Bitmap bmp = new Bitmap(file.FullName))
+                Bitmap = bmp;
+        }
+
+        /// <summary>
+        /// Obtain the image from the specific Bitmap
+        /// </summary>
+        /// <param name="bmp">The bitmap which will be converted to the image</param>
+        public Image(Bitmap bmp)
+        {
+            Bitmap = bmp;
+        }
+
         //#region Conversion with Bitmap
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
@@ -2385,56 +2374,16 @@ namespace Emgu.CV
         {
             get
             {
-#if __ANDROID__
-            return ToBitmap();
-#else
                 IntPtr scan0;
                 int step;
                 Size size;
                 CvInvoke.cvGetRawData(Ptr, out scan0, out step, out size);
 
                 return CvInvoke.RawDataToBitmap(scan0, step, size, typeof(TColor), NumberOfChannels, typeof(TDepth), true);
-#endif
             }
             set
             {
-#if __ANDROID__
-                #region reallocate memory if necessary
-            Size size = new Size(value.Width, value.Height);
-            if (Ptr == IntPtr.Zero)
-            {
-               AllocateData(size.Height, size.Width, NumberOfChannels);
-            } else if (!Size.Equals(size))
-            {
-               DisposeObject();
-               AllocateData(size.Height, size.Width, NumberOfChannels);
-            }
-                #endregion
-
-            Bitmap.Config config = value.GetConfig();
-            if (config.Equals(Bitmap.Config.Argb8888))
-            {
-               using (BitmapArgb8888Image bi = new BitmapArgb8888Image(value))
-               {
-                  ConvertFrom(bi);
-               }
-            } else if (config.Equals(Bitmap.Config.Rgb565))
-            {
-               int[] values = new int[size.Width * size.Height];
-               value.GetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
-               GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
-               using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, handle.AddrOfPinnedObject()))
-               {
-                  ConvertFrom(bgra);
-               }
-               handle.Free();
-            }
-            else
-            {
-               throw new NotImplementedException(String.Format("Coping from Bitmap of {0} is not implemented", config));
-            }
-#else
-                #region reallocate memory if necessary
+        #region reallocate memory if necessary
                 Size size = value.Size;
                 if (Ptr == IntPtr.Zero)
                 {
@@ -2445,7 +2394,7 @@ namespace Emgu.CV
                     DisposeObject();
                     AllocateData(size.Height, size.Width, NumberOfChannels);
                 }
-                #endregion
+        #endregion
 
                 switch (value.PixelFormat)
                 {
@@ -2583,7 +2532,7 @@ namespace Emgu.CV
                         }
                         break;
                     default:
-                        #region Handle other image type
+        #region Handle other image type
                         /*
                                  Bitmap bgraImage = new Bitmap(value.Width, value.Height, PixelFormat.Format32bppArgb);
                                  using (Graphics g = Graphics.FromImage(bgraImage))
@@ -2606,15 +2555,13 @@ namespace Emgu.CV
 
                             ConvertFrom<Bgra, Byte>(tmp1);
                         }
-                        #endregion
+        #endregion
                         break;
                 }
-#endif
+
             }
         }
 
-#if __ANDROID__
-#else
         /// <summary>
         /// Utility function for Bitmap Set property
         /// </summary>
@@ -2631,7 +2578,6 @@ namespace Emgu.CV
 
             bmp.UnlockBits(data);
         }
-#endif
 
         /// <summary> 
         /// Convert this image into Bitmap, the pixel values are copied over to the Bitmap
@@ -2640,9 +2586,6 @@ namespace Emgu.CV
         /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
         public Bitmap ToBitmap()
         {
-#if __ANDROID__
-         return ToBitmap(Android.Graphics.Bitmap.Config.Argb8888);
-#else
             Type typeOfColor = typeof(TColor);
             Type typeofDepth = typeof(TDepth);
 
@@ -2693,7 +2636,6 @@ namespace Emgu.CV
                 using (Image<TColor, Byte> temp = Convert<TColor, Byte>())
                     return temp.ToBitmap();
             }
-#endif
         }
 
         /// <summary> Create a Bitmap image of certain size</summary>

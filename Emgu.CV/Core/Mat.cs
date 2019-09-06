@@ -815,8 +815,7 @@ namespace Emgu.CV
             }
         }
 
-#if __ANDROID__ || __UNIFIED__
-#elif !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
+#if !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || __ANDROID__ || __UNIFIED__)
         /// <summary>
         /// The Get property provide a more efficient way to convert gray scale Mat of Byte, 3 channel Mat of Byte (assuming BGR color space) or 4 channel Mat of Byte (assuming Bgra color space) into Bitmap
         /// such that the image data is <b>shared</b> with Bitmap. 
