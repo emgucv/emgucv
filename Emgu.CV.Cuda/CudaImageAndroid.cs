@@ -20,7 +20,7 @@ namespace Emgu.CV.Cuda
     /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz, Ycc, Rgb or Rbga)</typeparam>
     /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
     public partial class CudaImage<TColor, TDepth>
-       : GpuMat<TDepth>, IImage
+       : GpuMat<TDepth>
        where TColor : struct, IColor
        where TDepth : new()
     {

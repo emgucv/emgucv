@@ -30,7 +30,7 @@ namespace Emgu.CV.Cuda
 #if !(NETFX_CORE || NETSTANDARD1_4)
     [DebuggerTypeProxy(typeof(GpuMat.DebuggerProxy))]
 #endif
-    public partial class GpuMat : UnmanagedObject, IEquatable<GpuMat>, IImage
+    public partial class GpuMat : UnmanagedObject, IEquatable<GpuMat>, IInputOutputArray
     {
 
         internal bool _needDispose;
@@ -498,15 +498,6 @@ namespace Emgu.CV.Cuda
                     foreach (GpuMat mat in channels) mat.Dispose();
                 }
             }
-        }
-
-        IImage[] IImage.Split()
-        {
-            GpuMat[] channels = Split();
-            IImage[] result = new IImage[channels.Length];
-            for (int i = 0; i < result.Length; i++)
-                result[i] = (IImage)channels[i];
-            return result;
         }
 
         /// <summary>

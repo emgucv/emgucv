@@ -28,7 +28,7 @@ namespace Emgu.CV
     [Serializable]
     [DebuggerTypeProxy(typeof(UMat.DebuggerProxy))]
 #endif
-    public partial class UMat : MatDataAllocator, IImage, IEquatable<UMat>
+    public partial class UMat : MatDataAllocator, IEquatable<UMat>, IInputOutputArray
 #if !(NETFX_CORE || NETSTANDARD1_4)
 , ISerializable
 #endif
@@ -534,8 +534,8 @@ namespace Emgu.CV
             }
         }
 
-#if __IOS__
-#elif !(__UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
+
+#if !(__UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || __IOS__)
         /// <summary>
         /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
         /// such that the image data is <b>shared</b> with Bitmap. 
@@ -616,15 +616,6 @@ namespace Emgu.CV
             return mats;
         }
 
-        IImage[] IImage.Split()
-        {
-            UMat[] tmp = this.Split();
-            IImage[] result = new IImage[tmp.Length];
-            for (int i = 0; i < result.Length; i++)
-                result[i] = tmp[i];
-            return result;
-        }
-
         /// <summary>
         /// Save this image to the specific file. 
         /// </summary>
@@ -648,13 +639,6 @@ namespace Emgu.CV
             CopyTo(m);
             return m;
         }
-
-#if !NETSTANDARD1_4
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-#endif
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.

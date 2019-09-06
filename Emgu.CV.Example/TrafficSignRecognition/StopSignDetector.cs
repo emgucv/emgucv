@@ -71,23 +71,42 @@ namespace TrafficSignRecognition
          using (InputOutputArray ia = mask.GetInputOutputArray())
             useUMat = ia.IsUMat;
 
-         using (IImage hsv = useUMat ? (IImage)new UMat() : (IImage)new Mat())
-         using (IImage s = useUMat ? (IImage)new UMat() : (IImage)new Mat())
+         IInputOutputArray hsv;
+         IInputOutputArray s;
+         if (useUMat)
          {
-            CvInvoke.CvtColor(image, hsv, ColorConversion.Bgr2Hsv);
-            CvInvoke.ExtractChannel(hsv, mask, 0);
-            CvInvoke.ExtractChannel(hsv, s, 1);
+             hsv = new UMat();
+             s = new UMat();
+         }
+         else
+         {
+             hsv = new Mat();
+             s = new Mat();
+         }
 
-            //the mask for hue less than 20 or larger than 160
-            using (ScalarArray lower = new ScalarArray(20))
-            using (ScalarArray upper = new ScalarArray(160))
-               CvInvoke.InRange(mask, lower, upper, mask);
-            CvInvoke.BitwiseNot(mask, mask);
+         try
+         {
+             CvInvoke.CvtColor(image, hsv, ColorConversion.Bgr2Hsv);
+             CvInvoke.ExtractChannel(hsv, mask, 0);
+             CvInvoke.ExtractChannel(hsv, s, 1);
 
-            //s is the mask for saturation of at least 10, this is mainly used to filter out white pixels
-            CvInvoke.Threshold(s, s, 10, 255, ThresholdType.Binary);
-            CvInvoke.BitwiseAnd(mask, s, mask, null);
+             //the mask for hue less than 20 or larger than 160
+             using (ScalarArray lower = new ScalarArray(20))
+             using (ScalarArray upper = new ScalarArray(160))
+                 CvInvoke.InRange(mask, lower, upper, mask);
+             CvInvoke.BitwiseNot(mask, mask);
 
+             //s is the mask for saturation of at least 10, this is mainly used to filter out white pixels
+             CvInvoke.Threshold(s, s, 10, 255, ThresholdType.Binary);
+             CvInvoke.BitwiseAnd(mask, s, mask, null);
+         }
+         finally
+         {
+             if (useUMat)
+                 (hsv as UMat)?.Dispose();
+             else
+                 (hsv as Mat)?.Dispose();
+             
          }
       }
 

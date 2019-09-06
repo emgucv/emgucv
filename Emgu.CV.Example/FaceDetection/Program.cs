@@ -33,7 +33,7 @@ namespace FaceDetection
 
       static void Run()
       {
-         IImage image;
+         IInputOutputArray image;
 
          //Read the files as an 8-bit Bgr image  
 

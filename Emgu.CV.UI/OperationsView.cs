@@ -61,14 +61,14 @@ namespace Emgu.CV.UI
 
       private String ImageTypeToString(Type imageType)
       {
-         if (imageType == typeof(IImage))
+         if (imageType == typeof(IInputArray))
          {
             switch (_language)
             {
                case ProgrammingLanguage.CSharp:
-                  return "IImage";
+                  return "IInputArray";
                case ProgrammingLanguage.CPlusPlus:
-                  return "IImage^";
+                  return "IInputArray^";
             }
          }
 
@@ -103,11 +103,11 @@ namespace Emgu.CV.UI
          {
             case ProgrammingLanguage.CSharp:
                ops.Add(
-                  String.Format("public static IImage Function({0} image{1}){{", ImageTypeToString(imageType), currentInstanceIndex));
+                  String.Format("public static IInputArray Function({0} image{1}){{", ImageTypeToString(imageType), currentInstanceIndex));
                break;
             case ProgrammingLanguage.CPlusPlus:
                ops.Add(
-                  String.Format("public static IImage Function({0} image{1}){{", ImageTypeToString(imageType), currentInstanceIndex));
+                  String.Format("public static IInputArray Function({0} image{1}){{", ImageTypeToString(imageType), currentInstanceIndex));
                break;
          }
          
@@ -142,7 +142,7 @@ namespace Emgu.CV.UI
                break;
          }
 
-         ops[0] = ops[0].Replace("IImage", ImageTypeToString(imageType));
+         ops[0] = ops[0].Replace("IInputArray", ImageTypeToString(imageType));
          return ops;
       }
    }

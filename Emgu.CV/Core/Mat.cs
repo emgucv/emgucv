@@ -34,7 +34,7 @@ namespace Emgu.CV
     [Serializable]
     [DebuggerTypeProxy(typeof(Mat.DebuggerProxy))]
 #endif
-    public partial class Mat : MatDataAllocator, IImage, IEquatable<Mat>
+    public partial class Mat : MatDataAllocator, IEquatable<Mat>, IInputOutputArray
 #if !(NETFX_CORE || NETSTANDARD1_4)
 , ISerializable
 #endif
@@ -283,11 +283,11 @@ namespace Emgu.CV
                     if (IsEmpty)
                     {
 #if __IOS__
-                  //try again to load with UIImage
-                  using (UIImage tmp = UIImage.FromFile(fileName))
-                  {
-                     CvInvoke.ConvertCGImageToArray(tmp.CGImage, this);
-                  }
+                      //try again to load with UIImage
+                      using (UIImage tmp = UIImage.FromFile(fileName))
+                      {
+                         CvInvoke.ConvertCGImageToArray(tmp.CGImage, this);
+                      }
 #else
                         throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
 #endif
@@ -1202,29 +1202,6 @@ namespace Emgu.CV
             }
             return mats;
         }
-
-        /// <summary> 
-        /// Split current Image into an array of gray scale images where each element 
-        /// in the array represent a single color channel of the original image
-        /// </summary>
-        /// <returns> 
-        /// An array of gray scale images where each element in the array represent a single color channel of the original image 
-        /// </returns>
-        IImage[] IImage.Split()
-        {
-            Mat[] tmp = this.Split();
-            IImage[] result = new IImage[tmp.Length];
-            for (int i = 0; i < result.Length; i++)
-                result[i] = tmp[i];
-            return result;
-        }
-
-#if !NETSTANDARD1_4
-        object ICloneable.Clone()
-        {
-            return this.Clone();
-        }
-#endif
 
         /// <summary>
         /// Compares two Mats and check if they are equal

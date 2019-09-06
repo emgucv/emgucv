@@ -25,16 +25,19 @@ namespace Emgu.CV.UI
       /// Create an ImageViewer from the specific <paramref name="image"/>
       /// </summary>
       /// <param name="image">The image to be displayed in this viewer</param>
-      public ImageViewer(IImage image)
+      public ImageViewer(IInputArray image)
          : this()
       {
          if (image != null)
          {
-            Size size = image.Size;
-            size.Width += 12;
-            size.Height += 38;
-            if (!Size.Equals(size))
-               Size = size;
+             using (InputArray iaImage = image.GetInputArray())
+             {
+                 Size size = iaImage.GetSize();
+                 size.Width += 12;
+                 size.Height += 38;
+                 if (!Size.Equals(size))
+                     Size = size;
+             }
          }
          Image = image;
       }
@@ -44,7 +47,7 @@ namespace Emgu.CV.UI
       /// </summary>
       /// <param name="image">The image to be displayed</param>
       /// <param name="imageName">The name of the image</param>
-      public ImageViewer(IImage image, string imageName)
+      public ImageViewer(IInputArray image, string imageName)
          : this(image)
       {
          Text = imageName;
@@ -53,7 +56,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Get or Set the image in this ImageViewer
       /// </summary>
-      public IImage Image
+      public IInputArray Image
       {
          get
          {
@@ -80,7 +83,7 @@ namespace Emgu.CV.UI
       /// Create a ImageViewer with the specific image and show it.
       /// </summary>
       /// <param name="image">The image to be displayed in ImageViewer</param>
-      public static void Show(IImage image)
+      public static void Show(IInputArray image)
       {
          Application.Run(new ImageViewer(image));
       }
@@ -90,7 +93,7 @@ namespace Emgu.CV.UI
       /// </summary>
       /// <param name="image">The image to be displayed in ImageViewer</param>
       /// <param name="windowName">The name of the window</param>
-      public static void Show(IImage image, String windowName)
+      public static void Show(IInputArray image, String windowName)
       {
          Application.Run(new ImageViewer(image, windowName));
       }

@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 namespace Emgu.CV
 {
    public partial class Image<TColor, TDepth>
-      : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>>
+      : CvArray<TDepth>, IEquatable<Image<TColor, TDepth>>
       where TColor : struct, IColor
       where TDepth : new()
    {

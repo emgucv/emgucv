@@ -24,7 +24,7 @@ using Android.Content.Res;
 
 namespace Emgu.CV
 {
-    public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray, IImage
+    public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray
     {
         /// <summary>
         /// Create a Mat from an Android Bitmap

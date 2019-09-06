@@ -79,15 +79,17 @@ namespace Emgu.CV.UI
             return true;
         }
 
-        public void SetImage(IImage image)
+        public void SetImage(IInputArray image)
         {
-
             #region display the size of the image
             if (image != null)
             {
-                Size size = image.Size;
-                widthTextbox.Text = size.Width.ToString();
-                heightTextBox.Text = size.Height.ToString();
+                using (InputArray iaImage = image.GetInputArray())
+                {
+                    Size size = iaImage.GetSize();
+                    widthTextbox.Text = size.Width.ToString();
+                    heightTextBox.Text = size.Height.ToString();
+                }
             }
             else
             {
@@ -166,35 +168,39 @@ namespace Emgu.CV.UI
         /// <param name="location">The location of the mouse on the image</param>
         public void SetMousePositionOnImage(Point location)
         {
-            IImage img = _imageBox.DisplayedImage;
-            Size size = img.Size;
-            location.X = Math.Max(Math.Min(location.X, size.Width - 1), 0);
-            location.Y = Math.Max(Math.Min(location.Y, size.Height - 1), 0);
-
-            mousePositionTextbox.Text = location.ToString();
-
-            if (_imageType == typeof(CvArray<>))
+            IInputArray img = _imageBox.DisplayedImage;
+            using (InputArray iaImage = img.GetInputArray())
             {
-                MCvScalar scalar = CvInvoke.cvGet2D(img.Ptr, location.Y, location.X);
+                Size size = iaImage.GetSize();
+                location.X = Math.Max(Math.Min(location.X, size.Width - 1), 0);
+                location.Y = Math.Max(Math.Min(location.Y, size.Height - 1), 0);
 
-                colorIntensityTextbox.Text = BufferToString(scalar.ToArray(), img.NumberOfChannels);
-            }
-            else if (_imageType == typeof(Mat))
-            {
-                Mat mat = img as Mat;
-                RenderIntensityForMat(mat, location);
-            }
-            else if (_imageType == typeof(UMat))
-            {
-                UMat umat = img as UMat;
-                using (Mat mat = umat.GetMat(AccessType.Read))
+                mousePositionTextbox.Text = location.ToString();
+
+                if (_imageType == typeof(CvArray<>))
                 {
+                    using (Mat mat = iaImage.GetMat())
+                    {
+                        RenderIntensityForMat(mat, location);
+                    }
+                }
+                else if (_imageType == typeof(Mat))
+                {
+                    Mat mat = img as Mat;
                     RenderIntensityForMat(mat, location);
                 }
-            }
-            else
-            {
-                colorIntensityTextbox.Text = String.Empty;
+                else if (_imageType == typeof(UMat))
+                {
+                    UMat umat = img as UMat;
+                    using (Mat mat = umat.GetMat(AccessType.Read))
+                    {
+                        RenderIntensityForMat(mat, location);
+                    }
+                }
+                else
+                {
+                    colorIntensityTextbox.Text = String.Empty;
+                }
             }
         }
 
@@ -322,7 +328,7 @@ namespace Emgu.CV.UI
         {
             if (_histogramViewer != null && _histogramViewer.Visible)
             {
-                IImage image = _imageBox.DisplayedImage;
+                IInputArray image = _imageBox.DisplayedImage;
 
                 if (image != null)
                 {

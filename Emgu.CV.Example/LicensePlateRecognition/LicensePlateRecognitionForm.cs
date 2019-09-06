@@ -74,7 +74,7 @@ namespace LicensePlateRecognition
 
         }
 
-        private void AddLabelAndImage(ref Point startPoint, String labelText, IImage image)
+        private void AddLabelAndImage(ref Point startPoint, String labelText, IInputArray image)
         {
             Label label = new Label();
             panel1.Controls.Add(label);
@@ -86,10 +86,13 @@ namespace LicensePlateRecognition
 
             ImageBox box = new ImageBox();
             panel1.Controls.Add(box);
-            box.ClientSize = image.Size;
-            box.Image = image;
-            box.Location = startPoint;
-            startPoint.Y += box.Height + 10;
+            using (InputArray iaImage = image.GetInputArray())
+            {
+                box.ClientSize = iaImage.GetSize();
+                box.Image = image;
+                box.Location = startPoint;
+                startPoint.Y += box.Height + 10;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

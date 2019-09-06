@@ -65,14 +65,18 @@ namespace Emgu.CV.XamarinForms
             {
                 VerticalOptions = LayoutOptions.Start,
             };
+                
             foreach (View b in buttonList)
                 buttonsLayout.Children.Add(b);
 
             // The root page of your application
             ContentPage page =
-              new ContentPage
+              new ContentPage()
               {
-                  Content = buttonsLayout
+                  Content = new ScrollView() { 
+                      Content = buttonsLayout,
+                      
+                      }
               };
 
 #if NETFX_CORE

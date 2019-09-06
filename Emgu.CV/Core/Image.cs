@@ -41,8 +41,8 @@ namespace Emgu.CV
     [Serializable]
 #endif
     public partial class Image<TColor, TDepth>
-       : CvArray<TDepth>, IImage, IEquatable<Image<TColor, TDepth>>
-       where TColor : struct, IColor
+       : CvArray<TDepth>, IEquatable<Image<TColor, TDepth>>, IInputOutputArray
+        where TColor : struct, IColor
        where TDepth : new()
     {
         private ImageDataReleaseMode _imageDataReleaseMode;
@@ -145,9 +145,9 @@ namespace Emgu.CV
 #else
             if (
 #if __ANDROID__
-            extension.Equals(".png")
+               extension.Equals(".png")
 #else
-               //load png image with alpha channel using Bitmap. OpenCV do not seems to handle alpa channel correctly. 
+               //load png image with alpha channel using Bitmap. OpenCV do not seems to handle alpha channel correctly. 
                ((typeof(TColor) == typeof(Bgra) || typeof(TColor) == typeof(Rgba)) && typeof(TDepth) == typeof(Byte) && extension.Equals(".png"))
 #endif
             || extension.Equals(".tiff")
@@ -206,11 +206,11 @@ namespace Emgu.CV
                 catch (Exception)
                 {
 #if __IOS__
-            using (UIImage tmp = UIImage.FromFile(fileName))
-            {
-               AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
-               ConvertFromCGImage(tmp.CGImage);
-            }
+                    using (UIImage tmp = UIImage.FromFile(fileName))
+                    {
+                       AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
+                       ConvertFromCGImage(tmp.CGImage);
+                    }
 #elif __UNIFIED__
 #else
                     //give Bitmap a try
@@ -948,7 +948,7 @@ namespace Emgu.CV
         public LineSegment2D[][] HoughLinesBinary(double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
         {
             return this.ForEachDuplicateChannel<LineSegment2D[]>(
-            delegate (IImage img, int channel)
+            delegate (IInputArray img, int channel)
             {
                 return CvInvoke.HoughLinesP(this, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
             });
@@ -994,7 +994,7 @@ namespace Emgu.CV
             double[] cannyThresh = cannyThreshold.MCvScalar.ToArray();
             double[] accumulatorThresh = accumulatorThreshold.MCvScalar.ToArray();
             return this.ForEachDuplicateChannel(
-               delegate (IImage img, int channel)
+               delegate (IInputArray img, int channel)
                {
                    return CvInvoke.HoughCircles(img, CvEnum.HoughType.Gradient, dp, minDist, cannyThresh[channel], accumulatorThresh[channel], minRadius, maxRadius);
                });
@@ -1133,7 +1133,7 @@ namespace Emgu.CV
         /// <typeparam name="TOtherDepth">The type of the depth of the <paramref name="dest"/> image</typeparam>
         /// <param name="act">The function which acepts the src IntPtr, dest IntPtr and index of the channel as input</param>
         /// <param name="dest">The destination image</param>
-        private void ForEachDuplicateChannel<TOtherDepth>(Action<IImage, IImage, int> act, Image<TColor, TOtherDepth> dest)
+        private void ForEachDuplicateChannel<TOtherDepth>(Action<IInputArray, IOutputArray, int> act, Image<TColor, TOtherDepth> dest)
             where TOtherDepth : new()
         {
             if (NumberOfChannels == 1)
@@ -1226,7 +1226,7 @@ namespace Emgu.CV
            Size zeroZone,
            MCvTermCriteria criteria)
         {
-            this.ForEachDuplicateChannel(delegate (IImage img, int channel)
+            this.ForEachDuplicateChannel(delegate (IInputArray img, int channel)
                 {
                     using (VectorOfPointF vec = new VectorOfPointF())
                     {
@@ -1543,8 +1543,8 @@ namespace Emgu.CV
                 }
                 else
                 {
-                    ForEachDuplicateChannel<Byte>(
-                       delegate (IImage img1, IImage img2, int channel)
+                    this.ForEachDuplicateChannel<Byte>(
+                       delegate (IInputArray img1, IOutputArray img2, int channel)
                        {
                            CvInvoke.Compare(img1, ia, img2, comparisonType);
                        },
@@ -3636,7 +3636,7 @@ namespace Emgu.CV
             double[] p1 = param1.MCvScalar.ToArray();
             Image<TColor, TDepth> result = CopyBlank();
             ForEachDuplicateChannel<TDepth>(
-               delegate (IImage src, IImage dst, int channel)
+               delegate (IInputArray src, IOutputArray dst, int channel)
                {
                    CvInvoke.AdaptiveThreshold(src, dst, max[channel], adaptiveType, thresholdType, blockSize, p1[channel]);
                },
@@ -3652,7 +3652,7 @@ namespace Emgu.CV
             double[] t = threshold.MCvScalar.ToArray();
             double[] m = maxValue.MCvScalar.ToArray();
             ForEachDuplicateChannel<TDepth>(
-               delegate (IImage src, IImage dst, int channel)
+               delegate (IInputArray src, IOutputArray dst, int channel)
                {
                    CvInvoke.Threshold(src, dst, t[channel], m[channel], threshType);
                },
@@ -4044,27 +4044,6 @@ namespace Emgu.CV
                 }
             }
         }
-        #endregion
-
-        #region IImage
-        IImage[] IImage.Split()
-        {
-            Image<Gray, TDepth>[] channels = Split();
-            IImage[] result=  new IImage[channels.Length];
-            for (int i = 0; i < result.Length; i++)
-                result[i] = (IImage) channels[i];
-            return result;
-
-        }
-        #endregion
-
-        #region ICloneable Members
-#if !NETSTANDARD1_4
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-#endif
         #endregion
 
         /// <summary>
