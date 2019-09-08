@@ -14,33 +14,31 @@ using System.Diagnostics;
 
 namespace Emgu.CV.DebuggerVisualizers
 {
-   public sealed class ImageVisualizer : BaseImageVisualizer
-   {
-   }
+    public sealed class ImageVisualizer : BaseImageVisualizer
+    {
+    }
 
-   public sealed class MatVisualizer : BaseImageVisualizer
-   {
-   }
+    public sealed class MatVisualizer : BaseImageVisualizer
+    {
+    }
 
-   public sealed class UMatVisualizer : BaseImageVisualizer
-   {
-   }
+    public sealed class UMatVisualizer : BaseImageVisualizer
+    {
+    }
 
-   public class BaseImageVisualizer : DialogDebuggerVisualizer
-   {
-      protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
-      {
-         IImage image = objectProvider.GetObject() as IImage;
-         if (image != null)
-         {
-            using (ImageViewer viewer = new ImageViewer())
+    public class BaseImageVisualizer : DialogDebuggerVisualizer
+    {
+        protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
+        {
+            IInputArray image = objectProvider.GetObject() as IInputArray;
+            if (image != null)
             {
-               viewer.Image = image;
-               windowService.ShowDialog(viewer);
+                using (ImageViewer viewer = new ImageViewer())
+                {
+                    viewer.Image = image;
+                    windowService.ShowDialog(viewer);
+                }
             }
-         }
-      }
-   }
-
-
+        }
+    }
 }
