@@ -692,9 +692,9 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   photo superres  
   videostab shape
   cudev  
-  text face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
-  stitching latentsvm tracking plot
-  dnn dnn_objdetect aruco fuzzy viz bioinspired
+  face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
+  stitching latentsvm plot
+  dnn dnn_objdetect aruco fuzzy viz bioinspired text tracking
   dpm
   saliency
   dnn_modern
