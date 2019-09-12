@@ -792,6 +792,7 @@ IF(WITH_CUDA)
 	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-CUDA")
 	SET(EMGU_CUDA_NUGET_ID "${EMGUCV_NUGET_ID_BASE}.Native")
 	SET(EMGU_CUFFT_NUGET_ID "${EMGUCV_NUGET_ID_BASE}.CUFFT")
+	SET(EMGU_CUDNN_NUGET_ID "${EMGUCV_NUGET_ID_BASE}.CUDNN")
 ELSE()
 	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}")
 ENDIF()
@@ -857,17 +858,27 @@ IF(WITH_CUDA)
 	SET(EMGU_CUFFT_VERSION "${EMGU_CUDA_VERSION}")
 	SET(EMGU_CUFFT_NUGET_TITLE "Native x64 CUDA CUFFT dependency for EMGU CV")
 	SET(EMGU_CUFFT_NUGET_FILE_LIST "<file src=\"Emgu.Cufft.targets\" target=\"build\\${EMGU_CUFFT_NUGET_ID}.targets\" />")
+    SET(EMGU_CUDNN_VERSION "${CUDNN_MAJOR_VERSION}.${CUDNN_MINOR_VERSION}.${CUDNN_PATCH_VERSION}")
+	SET(EMGU_CUDNN_NUGET_TITLE "Native x64 CUDA DNN dependency for EMGU CV")
+	SET(EMGU_CUDNN_NUGET_FILE_LIST "<file src=\"Emgu.Cudnn.targets\" target=\"build\\${EMGU_CUDNN_NUGET_ID}.targets\" />")
 	SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} <dependency id=\"${EMGU_CUDA_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />")
 	SET(EMGU_CUDA_NUGET_DEPENDENCY "<dependency id=\"${EMGU_CUFFT_NUGET_ID}\" version=\"[${EMGU_CUFFT_VERSION}]\" />")
+	IF (WITH_CUDNN)
+		SET(EMGU_CUDA_NUGET_DEPENDENCY "${EMGU_CUDA_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />")
+	ENDIF()
 	IF(HAVE_WINDESKTOP_X64)
 		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA")
 		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft")
+		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
 		SET(EMGU_CUDA_NUGET_FILE_LIST "${EMGU_CUDA_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll\" target=\"build\\x64\" /> 
+		<file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll;..\\..\\..\\libs\\x64\\cudnn*.dll\" target=\"build\\x64\" /> 
 		<file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" /> 
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUFFT_NUGET_FILE_LIST "${EMGU_CUFFT_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cufft*.dll\" target=\"build\\x64\" />
+		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
+		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" target=\"build\\x64\" />
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 	ENDIF()
 	
@@ -889,6 +900,8 @@ IF(WITH_CUDA)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Cufft.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.Cufft.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft/Emgu.Cufft.targets)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.Cuda.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA/Emgu.Cuda.targets)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Cudnn.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.Cudnn.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn/Emgu.Cudnn.targets)
 ENDIF()
 
 

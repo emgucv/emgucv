@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGU_CUDNN_NUGET_ID}</id>
+	<title>${EMGU_CUDNN_NUGET_TITLE}</title>
+    <version>${EMGU_CUDNN_VERSION}</version>
+    <authors>${NUGET_PACKAGE_VENDOR}</authors>
+    <owners>${NUGET_PACKAGE_VENDOR}</owners>
+    <license type="file">CUDA_EULA.txt</license>
+    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+	<iconUrl>http://www.emgu.com/wiki/files/EmguCVLogo.gif</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<summary>This package provides the native CUDA DNN dependencies for EMGU software libraries</summary>
+    <description>This package provides the native CUDA DNN dependencies for EMGU software libraries</description>
+    <releaseNotes>This is the CUFFT component of CUDA ${EMGU_CUDNN_VERSION}. </releaseNotes>
+    <copyright>${NUGET_PACKAGE_VENDOR}, All Rights Reserved.</copyright>
+    <tags>emgu cudnn</tags>
+  </metadata>
+  <files>
+	${EMGU_CUDNN_NUGET_FILE_LIST}
+  </files>
+</package>

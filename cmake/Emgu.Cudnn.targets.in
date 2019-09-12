@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+      <PropertyGroup>
+        <EmguDnnLinkTarget>WindowsForms</EmguDnnLinkTarget>
+		<EmguDnnBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguDnnBuildX86>
+        <EmguDnnBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguDnnBuildX64>
+		<EmguDnnNativeFileX64>$(MSBuildThisFileDirectory)\x64\cudnn64_${EMGU_CV_DNN_FILE_VERSION}.dll</EmguDnnNativeFileX64>
+		<EmguDnnErrorMessage Condition="'$(EmguDnnBuildX86)'=='True'">X86 or AnyCPU is targeted, but this DNN package do not support 32-bit</EmguDnnErrorMessage>
+        <EmguDnnDeployMessage Condition="'$(EmguDnnBuildX64)'=='True' AND Exists('$(EmguDnnNativeFileX64)')">$(EmguCudaDeployMessage)x64 </EmguDnnDeployMessage>
+        <EmguDnnErrorMessage Condition="'$(EmguDnnBuildX64)'=='True' AND !Exists('$(EmguDnnNativeFileX64)')">This package do not contain necessary binary for $(EmguDnnLinkTarget). X64 is targeted, but file $(EmguDnnNativeFileX64) is missing.</EmguDnnErrorMessage>
+      </PropertyGroup>
+      <ItemGroup Condition="'$(EmguDnnBuildX64)'=='True' AND Exists('$(EmguDnnNativeFileX64)')">
+        <None Include="$(MSBuildThisFileDirectory)\x64\*.dll">
+          <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+      </ItemGroup>
+	    <Target Name="EmguDNNPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(EmguDnnLinkTarget)'==''" Text="Emgu DNN is not able to detect the project type, please send a bug report to support@emgu.com" />
+    <Message Condition="'$(EmguDnnLinkTarget)'!=''" Text="Emgu DNN nuget package compiling against $(EmguDnnLinkTarget)" Importance="High" />
+    <Error Text="'$(EmguDnnErrorMessage)'" Condition="'$(EmguDnnErrorMessage)'!=''" />
+    <Message Text="Emgu DNN dependency Compiling with $(EmguDnnDeployMessage)binary" Condition="'$(EmguDnnDeployMessage)'!=''" Importance="High" />
+    <Message Text="No native binary is deployed by the Emgu DNN package." Condition="'$(EmguDnnDeployMessage)'==''" Importance="High" />
+  </Target>
+</Project>
