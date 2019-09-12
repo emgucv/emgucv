@@ -460,11 +460,11 @@ call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.Document
 IF "%5%"=="doc" ^
 call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.Document 
 
-IF "%8%"=="nuget" ^
-call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.nuget 
+IF NOT "%8%"=="nuget" GOTO END
 
-IF "%8%"=="nuget" IF "%2%"=="gpu" ^
-call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.CUDA.nuget 
+call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.nuget 
+REM IF "%2%"=="gpu" ^
+REM call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.CUDA.nuget 
 
 :END
 popd
