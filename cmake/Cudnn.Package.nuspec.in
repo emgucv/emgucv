@@ -6,7 +6,7 @@
     <version>${EMGU_CUDNN_VERSION}</version>
     <authors>${NUGET_PACKAGE_VENDOR}</authors>
     <owners>${NUGET_PACKAGE_VENDOR}</owners>
-    <license type="file">CUDA_EULA.txt</license>
+    <license type="file">cuDNN_SLA.txt</license>
     <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
 	<iconUrl>http://www.emgu.com/wiki/files/EmguCVLogo.gif</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

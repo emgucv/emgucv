@@ -869,7 +869,7 @@ IF(WITH_CUDA)
 	IF(HAVE_WINDESKTOP_X64)
 		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA")
 		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft")
-		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
+		#file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
 		SET(EMGU_CUDA_NUGET_FILE_LIST "${EMGU_CUDA_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll;..\\..\\..\\libs\\x64\\cudnn*.dll\" target=\"build\\x64\" /> 
 		<file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" /> 
@@ -879,7 +879,7 @@ IF(WITH_CUDA)
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" target=\"build\\x64\" />
-		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		<file src="NVIDIA_SLA_cuDNN_Support.txt" target="cuDNN_SLA.txt" />")
 	ENDIF()
 	
 	SET(NUGET_PACKAGE_VENDOR "${CPACK_PACKAGE_VENDOR}")
