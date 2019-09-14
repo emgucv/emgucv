@@ -91,8 +91,8 @@ namespace Emgu.CV.XamarinForms
          {
             AndroidFileAsset.OverwriteMethod overwriteMethod = AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;
 
-            FileInfo eyeFileTmp = AndroidFileAsset.WritePermanantFileAsset(Android.App.Application.Context, eye, "cascade", overwriteMethod);
-            FileInfo faceFileTmp = AndroidFileAsset.WritePermanantFileAsset(Android.App.Application.Context, face, "cascade", overwriteMethod);
+            FileInfo eyeFileTmp = AndroidFileAsset.WritePermanentFileAsset(Android.App.Application.Context, eye, "cascade", overwriteMethod);
+            FileInfo faceFileTmp = AndroidFileAsset.WritePermanentFileAsset(Android.App.Application.Context, face, "cascade", overwriteMethod);
 
             //save data path
             ISharedPreferencesEditor editor = preference.Edit();

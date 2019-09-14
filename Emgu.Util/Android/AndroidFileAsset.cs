@@ -60,7 +60,7 @@ namespace Emgu.Util
         /// <param name="dstDir">The subfolder in the app's FilesDir</param>
         /// <param name="overwriteMethod">overwrite method</param>
         /// <returns>The resulting FileInfo</returns>
-        public static FileInfo WritePermanantFileAsset(Context context, String assertName, String dstDir, OverwriteMethod overwriteMethod)
+        public static FileInfo WritePermanentFileAsset(Context context, String assertName, String dstDir, OverwriteMethod overwriteMethod)
         {
             String fullPath = Path.Combine(context.FilesDir.AbsolutePath, dstDir, assertName);
 

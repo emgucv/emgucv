@@ -56,8 +56,8 @@ namespace AndroidExamples
             {
                AndroidFileAsset.OverwriteMethod overwriteMethod = AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;
 
-               FileInfo eyeFile = AndroidFileAsset.WritePermanantFileAsset(this, "haarcascade_eye.xml", "cascade", overwriteMethod);
-               FileInfo faceFile = AndroidFileAsset.WritePermanantFileAsset(this, "haarcascade_frontalface_default.xml", "cascade", overwriteMethod);
+               FileInfo eyeFile = AndroidFileAsset.WritePermanentFileAsset(this, "haarcascade_eye.xml", "cascade", overwriteMethod);
+               FileInfo faceFile = AndroidFileAsset.WritePermanentFileAsset(this, "haarcascade_frontalface_default.xml", "cascade", overwriteMethod);
 
                //save tesseract data path
                ISharedPreferencesEditor editor = preference.Edit();
