@@ -10,8 +10,7 @@ ADD_CUSTOM_TARGET(
    COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/../../../miscellaneous/nuget.exe" pack "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" -OutputDirectory "${CMAKE_CURRENT_SOURCE_DIR}/../"
    SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
 )
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI Emgu.Cufft.nuget)
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI Emgu.Cudnn.nuget)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI Emgu.Cufft.nuget Emgu.Cudnn.nuget)
 
 if(ENABLE_SOLUTION_FOLDERS)
   set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "NUGET")

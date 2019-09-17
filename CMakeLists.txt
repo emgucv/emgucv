@@ -879,7 +879,7 @@ IF(WITH_CUDA)
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" target=\"build\\x64\" />
-		<file src="NVIDIA_SLA_cuDNN_Support.txt" target="cuDNN_SLA.txt" />")
+		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 	ENDIF()
 	
 	SET(NUGET_PACKAGE_VENDOR "${CPACK_PACKAGE_VENDOR}")
