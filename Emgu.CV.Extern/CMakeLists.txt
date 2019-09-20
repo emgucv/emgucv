@@ -2241,19 +2241,44 @@ IF(WIN32 AND WITH_CUDA)
   INCLUDE_DIRECTORIES(${CUDA_TOOLKIT_ROOT_DIR}/include)
   SET(CUDA_NPP_INCLUDES ${CUDA_TOOLKIT_ROOT_DIR}/include)
   #MESSAGE("npp includes: ${CUDA_NPP_INCLUDES}")
+  IF(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
+    SET(NPP_VERSION_FILE ${CUDA_NPP_INCLUDES}/nppversion.h)
+  ELSEIF(EXISTS ${CUDA_NPP_INCLUDES}/npp.h)
+    
+  ENDIF()
+  
   if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
-    #MESSAGE("npp version header: ${CUDA_NPP_INCLUDES}/nppversion.h")
-    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_major REGEX "#define NPP_VERSION_MAJOR.*")
-    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_minor REGEX "#define NPP_VERSION_MINOR.*")
-    file( STRINGS ${CUDA_NPP_INCLUDES}/nppversion.h npp_build REGEX "#define NPP_VERSION_BUILD.*")
+    SET(NPP_VERSION_FILE ${CUDA_NPP_INCLUDES}/nppversion.h)
+    
+    file( STRINGS ${NPP_VERSION_FILE} npp_major REGEX "#define NPP_VERSION_MAJOR.*")
+    file( STRINGS ${NPP_VERSION_FILE} npp_minor REGEX "#define NPP_VERSION_MINOR.*")
+    file( STRINGS ${NPP_VERSION_FILE} npp_build REGEX "#define NPP_VERSION_BUILD.*")
     
     string( REGEX REPLACE "#define NPP_VERSION_MAJOR[ \t]+|//.*" "" npp_major ${npp_major})
     string( REGEX REPLACE "#define NPP_VERSION_MINOR[ \t]+|//.*" "" npp_minor ${npp_minor})
     string( REGEX REPLACE "#define NPP_VERSION_BUILD[ \t]+|//.*" "" npp_build ${npp_build})
+  elseif(EXISTS ${CUDA_NPP_INCLUDES}/npp.h)
+    SET(NPP_VERSION_FILE ${CUDA_NPP_INCLUDES}/npp.h)
+    file( STRINGS ${NPP_VERSION_FILE} npp_major REGEX "#define NPP_VER_MAJOR.*")
+    file( STRINGS ${NPP_VERSION_FILE} npp_minor REGEX "#define NPP_VER_MINOR.*")
+    file( STRINGS ${NPP_VERSION_FILE} npp_build REGEX "#define NPP_VER_BUILD.*")
     
+    string( REGEX REPLACE "#define NPP_VER_MAJOR[ \t]+|//.*" "" npp_major ${npp_major})
+    string( REGEX REPLACE "#define NPP_VER_MINOR[ \t]+|//.*" "" npp_minor ${npp_minor})
+    string( REGEX REPLACE "#define NPP_VER_BUILD[ \t]+|//.*" "" npp_build ${npp_build})
+  endif()
+ 
+
+  if(EXISTS ${NPP_VERSION_FILE})
+    #MESSAGE(STATUS ">>>>> npp version header: ${NPP_VERSION_FILE}")
+	
     string( REGEX MATCH "[0-9]+" npp_major ${npp_major} ) 
     string( REGEX MATCH "[0-9]+" npp_minor ${npp_minor} ) 
     string( REGEX MATCH "[0-9]+" npp_build ${npp_build} ) 	
+	
+	#MESSAGE(STATUS ">>> npp version major: ${npp_major}")
+	#MESSAGE(STATUS ">>> npp version minor: ${npp_minor}")
+	#MESSAGE(STATUS ">>> npp version build: ${npp_build}")
 	
 	#Also copy the values to the parent scope
 	set(npp_major "${npp_major}" PARENT_SCOPE)
