@@ -520,25 +520,25 @@ namespace Emgu.CV
                if (_grabState == GrabState.Running)
                 _grabState = GrabState.Stopping;
         }
-#endregion
+        #endregion
 
         /// <summary> 
-        /// Retrieve a Gray image frame after Grab()
+        /// Decodes and returns the grabbed video frame.
         /// </summary>
-        /// <param name="image">The output image</param>
-        /// <param name="channel">The channel to retrieve image</param>
-        /// <returns>True if the frame can be retrieved</returns>
-        public virtual bool Retrieve(IOutputArray image, int channel = 0)
+        /// <param name="image">The video frame is returned here. If no frames has been grabbed the image will be empty.</param>
+        /// <param name="flag">It could be a frame index or a driver specific flag</param>
+        /// <returns>False if no frames has been grabbed</returns>
+        public virtual bool Retrieve(IOutputArray image, int flag = 0)
         {
             using (OutputArray oaImage = image.GetOutputArray())
             {
                 if (FlipType == CvEnum.FlipType.None)
                 {
-                    return CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, channel);
+                    return CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, flag);
                 }
                 else
                 {
-                    bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, channel);
+                    bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, flag);
                     if (success)
                         CvInvoke.Flip(image, image, FlipType);
                     return success;
