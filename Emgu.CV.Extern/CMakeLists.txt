@@ -2240,13 +2240,24 @@ IF(WIN32 AND WITH_CUDA)
   ENDIF()
   INCLUDE_DIRECTORIES(${CUDA_TOOLKIT_ROOT_DIR}/include)
   SET(CUDA_NPP_INCLUDES ${CUDA_TOOLKIT_ROOT_DIR}/include)
-  #MESSAGE("npp includes: ${CUDA_NPP_INCLUDES}")
-  IF(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
-    SET(NPP_VERSION_FILE ${CUDA_NPP_INCLUDES}/nppversion.h)
-  ELSEIF(EXISTS ${CUDA_NPP_INCLUDES}/npp.h)
+   
+  if(EXISTS ${CUDA_NPP_INCLUDES}/cuda.h)
+    SET(CUDA_VERSION_FILE ${CUDA_NPP_INCLUDES}/cuda.h)
     
-  ENDIF()
-  
+    file( STRINGS ${CUDA_VERSION_FILE} cuda_version REGEX "#define CUDA_VERSION.*")
+	string( REGEX REPLACE "#define CUDA_VERSION[ \t]+|//.*" "" cuda_version ${cuda_version})
+	string( SUBSTRING ${cuda_version} 0 2 cuda_major)
+	string( SUBSTRING ${cuda_version} 2 2 cuda_minor)
+	string( REGEX REPLACE "[0]+|//.*" "" cuda_minor ${cuda_minor})
+	#MESSAGE(STATUS ">>> cuda version major: ${cuda_major}")
+	#MESSAGE(STATUS ">>> cuda version minor: ${cuda_minor}")
+
+	#Also copy the values to the parent scope
+	set(cuda_major "${cuda_major}" PARENT_SCOPE)
+	set(cuda_minor "${cuda_minor}" PARENT_SCOPE)
+  endif()
+    
+ 
   if(EXISTS ${CUDA_NPP_INCLUDES}/nppversion.h)
     SET(NPP_VERSION_FILE ${CUDA_NPP_INCLUDES}/nppversion.h)
     
@@ -2268,7 +2279,6 @@ IF(WIN32 AND WITH_CUDA)
     string( REGEX REPLACE "#define NPP_VER_BUILD[ \t]+|//.*" "" npp_build ${npp_build})
   endif()
  
-
   if(EXISTS ${NPP_VERSION_FILE})
     #MESSAGE(STATUS ">>>>> npp version header: ${NPP_VERSION_FILE}")
 	
@@ -2324,10 +2334,10 @@ IF(WIN32 AND WITH_CUDA)
 		LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDA_NPP_DLL}")
 	  ENDIF()
     ENDFOREACH()
+
+	FILE(GLOB CUDART_DLL_FULL_NAME "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_*.dll")
 	
-	LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS
-      "${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
-      )
+	LIST(APPEND CVEXTERN_CUDA_DEPENDENCY_DLLS "${CUDART_DLL_FULL_NAME}" )
     #LIST(APPEND CVEXTERN_DEPENDENCY_DLLS
     #  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppc${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
     #  "${CUDA_NPP_LIBRARY_ROOT_DIR}/bin/nppi${CUDA_POSTFIX}_${npp_major}${npp_minor}.dll"
