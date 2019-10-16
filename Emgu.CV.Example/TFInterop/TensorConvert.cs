@@ -17,7 +17,7 @@ namespace Emgu.TF
         /// <param name="image">The input Emgu CV Mat</param>
         /// <param name="inputHeight">The height of the image in the output tensor, if it is -1, the height will not be changed.</param>
         /// <param name="inputWidth">The width of the image in the output tensor, if it is -1, the width will not be changed.</param>
-        /// <param name="inputMean">The mean, if it is not 0, the value will be substracted from the pixel values</param>
+        /// <param name="inputMean">The mean, if it is not 0, the value will be subtracted from the pixel values</param>
         /// <param name="scale">The optional scale</param>
         /// <param name="dataType">The type of the data in the tensor</param>
         /// <param name="status">The tensorflow status</param>
@@ -71,7 +71,7 @@ namespace Emgu.TF
 
                 using (Mat matB = new Mat(image.Size, Emgu.CV.CvEnum.DepthType.Cv8U, 3, t.DataPointer, sizeof(byte) * 3 * image.Width))
                 {
-                    if (scale == 1.0f && inputMean == 0)
+                    if (scale == 1.0f && inputMean == 0.0f)
                     {
                         image.CopyTo(matB);
                     }
