@@ -279,7 +279,7 @@
       </ItemGroup>
     </When>
     <!-- Windows Form Application -->
-    <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFrameworkVersion)'=='v2.0' OR '$(TargetFrameworkVersion)'=='v3.0' OR '$(TargetFrameworkVersion)'=='v3.5' OR '$(TargetFrameworkVersion)'=='v4.0' OR '$(TargetFrameworkVersion)'=='v4.5' OR '$(TargetFrameworkVersion)'=='v4.5.1' OR '$(TargetFrameworkVersion)'=='v4.5.2' OR '$(TargetFrameworkVersion)'=='v4.6' OR '$(TargetFrameworkVersion)'=='v4.6.1' OR '$(TargetFrameworkVersion)'=='v4.6.2' OR '$(TargetFrameworkVersion)'=='v4.7' OR '$(TargetFrameworkVersion)'=='v4.7.1' OR '$(TargetFrameworkVersion)'=='v4.7.2')">
+    <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFrameworkVersion)'=='v2.0' OR '$(TargetFrameworkVersion)'=='v3.0' OR '$(TargetFrameworkVersion)'=='v3.5' OR '$(TargetFrameworkVersion)'=='v4.0' OR '$(TargetFrameworkVersion)'=='v4.5' OR '$(TargetFrameworkVersion)'=='v4.5.1' OR '$(TargetFrameworkVersion)'=='v4.5.2' OR '$(TargetFrameworkVersion)'=='v4.6' OR '$(TargetFrameworkVersion)'=='v4.6.1' OR '$(TargetFrameworkVersion)'=='v4.6.2' OR '$(TargetFrameworkVersion)'=='v4.7' OR '$(TargetFrameworkVersion)'=='v4.7.1' OR '$(TargetFrameworkVersion)'=='v4.7.2' OR '$(TargetFrameworkVersion)'=='v4.8' OR '$(TargetFramework)'=='net48' OR '$(TargetFramework)'=='net35' OR '$(TargetFramework)'=='net40')">
       <PropertyGroup>
         <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
         <EmguBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguBuildX64>
@@ -305,7 +305,7 @@
       </ItemGroup>
     </When>
     <!-- DotNetCore Application -->
-    <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netcoreapp1.1')">
+    <When Condition="'$(EmguCVLinkTarget)'=='' AND (('$(TargetFramework)'=='netcoreapp1.1') OR  ('$(TargetFramework)'=='netcoreapp3.0'))">
       <PropertyGroup>
         <EmguCVLinkTarget>DotNetCore</EmguCVLinkTarget>
       </PropertyGroup>
