@@ -11,7 +11,7 @@
     <AssemblyName>Emgu.CV.World</AssemblyName>
     <!-- <TargetFrameworkVersion>v3.5</TargetFrameworkVersion> -->
     <!-- <TargetFrameworks>netcoreapp3.0;net48</TargetFrameworks> -->
-    <TargetFrameworks>net35</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0;net35</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -67,22 +67,14 @@
   <ItemGroup>
     <None Include="..\Emgu.CV.snk" />
   </ItemGroup>
-  <!-- <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.Serialization" />
+  <ItemGroup Condition=" '$(TargetFramework)'=='net35' ">
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="ZedGraph">
       <HintPath>..\lib\3rdParty\ZedGraph.dll</HintPath>
     </Reference>
-  </ItemGroup> -->
-  <ItemGroup Condition=" '$(TargetFramework)'=='net35' ">
-    <Reference Include="System.ServiceModel" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)'=='netcoreapp3.0' ">
+    <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">

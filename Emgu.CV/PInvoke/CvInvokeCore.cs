@@ -8,6 +8,7 @@ using System.Text;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Range = Emgu.CV.Structure.Range;
 
 namespace Emgu.CV
 {

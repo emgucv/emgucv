@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
-#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_WSA || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE || NETCOREAPP1_1)
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_WSA || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE || NETCOREAPP1_1 || NETCOREAPP)
 #define HAVE_SERVICE_MODEL
 #endif
 

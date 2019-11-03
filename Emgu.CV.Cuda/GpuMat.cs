@@ -13,6 +13,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV;
 using Emgu.Util;
+using Range = Emgu.CV.Structure.Range;
 
 #if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;

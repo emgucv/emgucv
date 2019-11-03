@@ -12,6 +12,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using System.IO;
 using Emgu.Util;
+using Range = Emgu.CV.Structure.Range;
 
 namespace Emgu.CV.Cuda
 {

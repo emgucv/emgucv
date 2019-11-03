@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using Platform = Emgu.Util.Platform;
+using Range = Emgu.CV.Structure.Range;
 
 namespace Emgu.CV
 {

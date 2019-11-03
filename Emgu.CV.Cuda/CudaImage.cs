@@ -10,6 +10,7 @@ using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Range = Emgu.CV.Structure.Range;
 
 namespace Emgu.CV.Cuda
 {
