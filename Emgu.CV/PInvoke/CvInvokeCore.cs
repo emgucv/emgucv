@@ -3114,7 +3114,7 @@ namespace Emgu.CV
         #endregion
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveGetRangeAll(ref Range range);
+        internal extern static void cveGetRangeAll(ref Emgu.CV.Structure.Range range);
 
         #region Clustering
         /// <summary>

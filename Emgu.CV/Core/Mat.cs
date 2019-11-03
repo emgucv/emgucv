@@ -313,7 +313,7 @@ namespace Emgu.CV
         /// <param name="mat">The mat where the new Mat header will share data from</param>
         /// <param name="rowRange">The region of interest</param>
         /// <param name="colRange">The region of interest</param>
-        public Mat(Mat mat, Range rowRange, Range colRange)
+        public Mat(Mat mat, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
            : this(MatInvoke.cveMatCreateFromRange(mat.Ptr, ref rowRange, ref colRange), true, true)
         {
         }
@@ -1682,7 +1682,7 @@ namespace Emgu.CV
         internal extern static IntPtr cveMatCreateFromRect(IntPtr mat, ref Rectangle roi);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatCreateFromRange(IntPtr mat, ref Range rowRange, ref Range colRange);
+        internal extern static IntPtr cveMatCreateFromRange(IntPtr mat, ref Emgu.CV.Structure.Range rowRange, ref Emgu.CV.Structure.Range colRange);
 
         /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -101,7 +101,7 @@ namespace Emgu.CV.Cuda
         /// <param name="mat">The matrix where the region is extracted from</param>
         /// <param name="colRange">The column range.</param>
         /// <param name="rowRange">The row range.</param>
-        public GpuMat(GpuMat mat, Range rowRange, Range colRange)
+        public GpuMat(GpuMat mat, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
            : this(CudaInvoke.GetRegion(mat, ref rowRange, ref colRange), true)
         {
         }

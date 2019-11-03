@@ -185,7 +185,7 @@ namespace Emgu.CV
         /// <param name="umat">The umat where the new UMat header will share data from</param>
         /// <param name="rowRange">The region of interest</param>
         /// <param name="colRange">The region of interest</param>
-        public UMat(UMat umat, Range rowRange, Range colRange)
+        public UMat(UMat umat, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
            : this(UMatInvoke.cveUMatCreateFromRange(umat.Ptr, ref rowRange, ref colRange), true)
         {
         }
@@ -1136,7 +1136,7 @@ namespace Emgu.CV
         internal extern static IntPtr cveUMatCreateFromRect(IntPtr mat, ref Rectangle roi);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveUMatCreateFromRange(IntPtr mat, ref Range rowRange, ref Range colRange);
+        internal extern static IntPtr cveUMatCreateFromRange(IntPtr mat, ref Emgu.CV.Structure.Range rowRange, ref Emgu.CV.Structure.Range colRange);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveUMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);

@@ -87,7 +87,7 @@ namespace Emgu.CV.Cuda
         /// <param name="image">The CudaImage where the region is extracted from</param>
         /// <param name="colRange">The column range. Use MCvSlice.WholeSeq for all columns.</param>
         /// <param name="rowRange">The row range. Use MCvSlice.WholeSeq for all rows.</param>
-        public CudaImage(CudaImage<TColor, TDepth> image, Range rowRange, Range colRange)
+        public CudaImage(CudaImage<TColor, TDepth> image, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
            : this(CudaInvoke.GetRegion(image, ref rowRange, ref colRange), true)
         {
         }
