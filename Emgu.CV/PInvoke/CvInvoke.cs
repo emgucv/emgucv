@@ -574,7 +574,7 @@ namespace Emgu.CV
             sane &= (sizes.CvSize == Toolbox.SizeOf<System.Drawing.Size>());
             sane &= (sizes.CvSize2D32f == Toolbox.SizeOf<System.Drawing.SizeF>());
             sane &= (sizes.CvTermCriteria == Toolbox.SizeOf<MCvTermCriteria>());
-            sane &= 2 * Toolbox.SizeOf<int>() == Toolbox.SizeOf<Range>();
+            sane &= 2 * Toolbox.SizeOf<int>() == Toolbox.SizeOf<Emgu.CV.Structure.Range>();
             return sane;
         }
     }

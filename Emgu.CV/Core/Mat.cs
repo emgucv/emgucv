@@ -1076,7 +1076,7 @@ namespace Emgu.CV
         /// <returns>A matrix header for the specified matrix row.</returns>
         public Mat Row(int y)
         {
-            return new Mat(this, new Range(y, y + 1), Range.All);
+            return new Mat(this, new Emgu.CV.Structure.Range(y, y + 1), Emgu.CV.Structure.Range.All);
         }
 
         /// <summary>
@@ -1086,7 +1086,7 @@ namespace Emgu.CV
         /// <returns>A matrix header for the specified matrix column.</returns>
         public Mat Col(int x)
         {
-            return new Mat(this, Range.All, new Range(x, x + 1));
+            return new Mat(this, Emgu.CV.Structure.Range.All, new Emgu.CV.Structure.Range(x, x + 1));
         }
 
         /// <summary>
