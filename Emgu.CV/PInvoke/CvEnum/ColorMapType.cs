@@ -90,6 +90,10 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// TwilightShifted
         /// </summary>
-        TwilightShifted = 19
+        TwilightShifted = 19,
+        /// <summary>
+        /// Turbo
+        /// </summary>
+        Turbo = 20
     }
 }
