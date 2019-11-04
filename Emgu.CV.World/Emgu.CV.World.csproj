@@ -74,6 +74,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)'=='netcoreapp3.0' ">
+    <PackageReference Include="ZedGraph" Version="5.1.8" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)'=='netcoreapp3.0' ">
     <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
   </ItemGroup>
   <ItemGroup>
@@ -93,7 +96,7 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-  <Target Name="AfterBuild">
+  <Target Name="CopyStuff" AfterTargets="Build" Condition=" '$(TargetFramework)'=='net35' ">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml, $(OutputPath)ZedGraph.dll and $(OutputPath)ZedGraph.xml to ..\libs" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\libs" ContinueOnError="true" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\libs" ContinueOnError="true" />
