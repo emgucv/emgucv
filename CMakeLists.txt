@@ -828,10 +828,14 @@ ENDIF()
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.targets\" target=\"build\\${EMGUCV_NUGET_ID}.targets\" />
-    <file src=\"..\\..\\libs\\Emgu.CV.World.dll\" target=\"lib\\net35\" />
-	<file src=\"..\\..\\libs\\Emgu.CV.World.XML\" target=\"lib\\net35\" />
-	<file src=\"..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net35\" />
-	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net35\" />
+    <file src=\"..\\..\\libs\\net35\\Emgu.CV.World.dll\" target=\"lib\\net35\" />
+	<file src=\"..\\..\\libs\\net35\\Emgu.CV.World.XML\" target=\"lib\\net35\" />
+	<file src=\"..\\..\\libs\\net35\\Emgu.CV.UI.dll\" target=\"lib\\net35\" />
+	<file src=\"..\\..\\libs\\net35\\Emgu.CV.UI.XML\" target=\"lib\\net35\" />
+    <file src=\"..\\..\\libs\\netcoreapp3.0\\Emgu.CV.World.dll\" target=\"lib\\netcoreapp3.0\" />
+	<file src=\"..\\..\\libs\\netcoreapp3.0\\Emgu.CV.World.XML\" target=\"lib\\netcoreapp3.0\" />
+	<file src=\"..\\..\\libs\\netcoreapp3.0\\Emgu.CV.UI.dll\" target=\"lib\\netcoreapp3.0\" />
+	<file src=\"..\\..\\libs\\netcoreapp3.0\\Emgu.CV.UI.XML\" target=\"lib\\netcoreapp3.0\" />
 	<file src=\"..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
@@ -848,7 +852,7 @@ STRING(REPLACE "x86 x64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}"
 SET(EMGUCV_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_NUGET_TITLE}" EMGUCV_NUGET_TITLE)
 
-SET(EMGUCV_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"[5.1.7]\" />")
+SET(EMGUCV_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"[5.1.8]\" />")
 
 IF(WITH_CUDA)
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} with CUDA support")
