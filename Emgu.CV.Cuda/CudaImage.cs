@@ -283,7 +283,7 @@ namespace Emgu.CV.Cuda
         /// <remarks>The parent CudaImage should never be released before the returned CudaImage that represent the subregion</remarks>
         public new CudaImage<TColor, TDepth> RowRange(int start, int end)
         {
-            return new CudaImage<TColor, TDepth>(this, new Range(start, end), Range.All);
+            return new CudaImage<TColor, TDepth>(this, new Emgu.CV.Structure.Range(start, end), Emgu.CV.Structure.Range.All);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace Emgu.CV.Cuda
         /// <remarks>The parent CudaImage should never be released before the returned CudaImage that represent the subregion</remarks>
         public new CudaImage<TColor, TDepth> ColRange(int start, int end)
         {
-            return new CudaImage<TColor, TDepth>(this, Range.All, new Range(start, end));
+            return new CudaImage<TColor, TDepth>(this, Emgu.CV.Structure.Range.All, new Emgu.CV.Structure.Range(start, end));
         }
 
         #region IImage Members

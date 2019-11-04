@@ -708,7 +708,7 @@ namespace Emgu.CV
         /// <returns>A matrix header for the specified matrix row.</returns>
         public UMat Row(int y)
         {
-            return new UMat(this, new Range(y, y + 1), Range.All);
+            return new UMat(this, new Emgu.CV.Structure.Range(y, y + 1), Emgu.CV.Structure.Range.All);
         }
 
         /// <summary>
@@ -718,7 +718,7 @@ namespace Emgu.CV
         /// <returns>A matrix header for the specified matrix column.</returns>
         public UMat Col(int x)
         {
-            return new UMat(this, Range.All, new Range(x, x + 1));
+            return new UMat(this, Emgu.CV.Structure.Range.All, new Emgu.CV.Structure.Range(x, x + 1));
         }
 
         /// <summary>
