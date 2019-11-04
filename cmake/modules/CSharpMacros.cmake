@@ -88,7 +88,7 @@ ENDMACRO(ADD_CS_DIRECTORY_TO_DEPLOY)
 
 # ----- end support macros -----
 MACRO(ADD_CS_MODULE target source)
-  
+
 ENDMACRO(ADD_CS_MODULE)
 
 MACRO(ADD_CS_REFERENCES references)
@@ -132,35 +132,55 @@ MACRO(SET_CS_TARGET_FRAMEWORK)
   ENDIF()
   
   IF(NOT NETFX_CORE)
-    LIST(APPEND FRAMEWORK_REFERENCES  System.Core.dll System.Xml.dll System.Drawing.dll System.Data.dll System.ServiceModel.dll System.Xml.Linq.dll)
+    LIST(APPEND FRAMEWORK_REFERENCES System.Core.dll System.Xml.dll System.Drawing.dll System.Data.dll System.ServiceModel.dll System.Xml.Linq.dll)
   ENDIF()
   #MESSAGE(STATUS "FRAMEWORK reference: ver: ${version}; ref: ${FRAMEWORK_REFERENCES}")
   ADD_CS_FRAMEWORK_REFERENCES("${version}" "${FRAMEWORK_REFERENCES}")
 ENDMACRO(SET_CS_TARGET_FRAMEWORK)
 
+SET(DEFAULT_CS_CONFIG "Release" CACHE STRING "Default C# build configuration")
 MACRO(BUILD_CSPROJ target csproj_file extra_flags)
   ADD_CUSTOM_TARGET (${target} ${ARGV3} SOURCES ${csproj_file} )
   
   IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
-      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build Release ${extra_flags} ${csproj_file}
-      COMMENT "Building ${target}: ${CMAKE_VS_DEVENV_COMMAND} /Build Release ${extra_flags} ${csproj_file}")
+      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
+      COMMENT "Building ${target}")
   ELSEIF(MSBUILD_EXECUTABLE)
-    #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}")
+    #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}")
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
-      COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}
-      COMMENT "Building ${target}: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=Release ${extra_flags} ${csproj_file}")
+      COMMAND ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
+      COMMENT "Building ${target}")
   ELSEIF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
-      COMMAND ${DOTNET_EXECUTABLE} build ${csproj_file}
-      COMMENT "Building ${target}: ${DOTNET_EXECUTABLE} build ${csproj_file}")
+      COMMAND "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} "${csproj_file}"
+      COMMENT "Building ${target}")
   ELSE()
     MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
   ENDIF()
 ENDMACRO()
+
+MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
+  ADD_CUSTOM_TARGET (${target} ${ARGV4})
+  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /project ${project_name}
+      COMMENT "Building ${target}")
+  ELSEIF(MSBUILD_EXECUTABLE)
+    #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}")
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${MSBUILD_EXECUTABLE}  /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} -target:${project_name}:Build
+      COMMENT "Building ${target}")
+  ELSE()
+    MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
+  ENDIF()
+ENDMACRO()
+
 
 MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
   ADD_CUSTOM_TARGET (${target} ${ARGV3})
@@ -168,9 +188,8 @@ MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
-      COMMAND "${DOTNET_EXECUTABLE}" build "${csproj_file}"
+      COMMAND "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} ${extra_flags} "${csproj_file}"
       COMMENT "Building ${target}")
-    #MESSAGE(STATUS " ==> ${target} Build command: ${DOTNET_EXECUTABLE} build ${csproj_file}" )
   ELSE()
     MESSAGE(FATAL_ERROR "DOTNET_EXECUTABLE not found!")
   ENDIF()
@@ -274,7 +293,7 @@ MACRO(COMPILE_CS target target_type source)
 	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.dll\" 
 	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.dll\"
 	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Tasks.Parallel.dll\" 
-        -r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Timer.dll\" 
+	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Threading.Timer.dll\" 
 	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Windows.dll\" 
 	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.dll\" 
 	-r:\"${NETFX_CORE_REFERENCE_FOLDER}System.Xml.Linq.dll\" 
