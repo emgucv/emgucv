@@ -1,5 +1,7 @@
+#!/bin/sh
+cd "$(dirname "$0")"
 
-cp ../opencv/samples/data/lena.jpg Assets/Emgu.CV/Demo/Resources
+convert ../opencv/samples/data/lena.jpg Assets/Emgu.CV/Demo/Resources/lena.png
 cp ../Emgu.CV.Test/stitch* Assets/Emgu.CV/Demo/Resources
 cp ../Emgu.CV.Example/FeatureMatching/box.png Assets/Emgu.CV/Demo/Resources/
 cp ../Emgu.CV.Example/FeatureMatching/box_in_scene.png Assets/Emgu.CV/Demo/Resources/
