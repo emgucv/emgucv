@@ -309,6 +309,9 @@
       <PropertyGroup>
         <EmguCVLinkTarget>DotNetCore</EmguCVLinkTarget>
       </PropertyGroup>
+      <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
+        <PackageReference Include="System.ServiceModel.Primitives" Version="4.6.0" />
+      </ItemGroup>
     </When>
     <!-- NetStandard -->
     <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netstandard1.4')">
