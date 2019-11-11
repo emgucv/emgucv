@@ -67,13 +67,9 @@ namespace Emgu.CV
          CvInvoke.cveStringGetCStr(_ptr, ref cStr, ref size);
          Byte[] data = new byte[size];
          Marshal.Copy(cStr, data, 0, size);
-#if WINDOWS_PHONE_APP
+
          return Encoding.UTF8.GetString(data, 0, data.Length);
-#elif NETFX_CORE || NETSTANDARD1_4
-         return Encoding.UTF8.GetString(data, 0, data.Length);
-#else
-         return Encoding.UTF8.GetString(data);
-#endif
+
       }
 
       /// <summary>

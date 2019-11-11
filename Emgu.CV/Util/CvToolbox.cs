@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 
-#if __ANDROID__ || __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if __ANDROID__ || __UNIFIED__ || NETFX_CORE || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -24,58 +24,6 @@ namespace Emgu.CV.Util
     /// </summary>
     public static class CvToolbox
     {
-#if __ANDROID__ || __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
-#else
-        #region Color Pallette
-        /// <summary>
-        /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
-        /// </summary>
-        public static readonly ColorPalette GrayscalePalette = GenerateGrayscalePalette();
-
-        private static ColorPalette GenerateGrayscalePalette()
-        {
-            using (Bitmap image = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
-            {
-                ColorPalette palette = image.Palette;
-                for (int i = 0; i < 256; i++)
-                {
-                    palette.Entries[i] = Color.FromArgb(i, i, i);
-                }
-                return palette;
-            }
-        }
-
-        /// <summary>
-        /// Convert the color palette to four lookup tables
-        /// </summary>
-        /// <param name="palette">The color palette to transform</param>
-        /// <param name="bTable">Lookup table for the B channel</param>
-        /// <param name="gTable">Lookup table for the G channel</param>
-        /// <param name="rTable">Lookup table for the R channel</param>
-        /// <param name="aTable">Lookup table for the A channel</param>
-        public static void ColorPaletteToLookupTable(ColorPalette palette, out Matrix<Byte> bTable, out Matrix<Byte> gTable, out Matrix<Byte> rTable, out Matrix<Byte> aTable)
-        {
-            bTable = new Matrix<byte>(256, 1);
-            gTable = new Matrix<byte>(256, 1);
-            rTable = new Matrix<byte>(256, 1);
-            aTable = new Matrix<byte>(256, 1);
-            byte[,] bData = bTable.Data;
-            byte[,] gData = gTable.Data;
-            byte[,] rData = rTable.Data;
-            byte[,] aData = aTable.Data;
-
-            Color[] colors = palette.Entries;
-            for (int i = 0; i < colors.Length; i++)
-            {
-                Color c = colors[i];
-                bData[i, 0] = c.B;
-                gData[i, 0] = c.G;
-                rData[i, 0] = c.R;
-                aData[i, 0] = c.A;
-            }
-        }
-        #endregion
-#endif
 
         /*
         /// <summary>
@@ -319,37 +267,8 @@ namespace Emgu.CV.Util
 
         private static String GetConversionCodenameFromType(Type colorType)
         {
-#if NETFX_CORE || NETSTANDARD1_4
-
-         if (colorType == typeof(Bgr))
-            return "BGR";
-         else if (colorType == typeof(Bgra))
-            return "BGRA";
-         else if (colorType == typeof(Gray))
-            return "GRAY";
-         else if (colorType == typeof(Hls))
-            return "HLS";
-         else if (colorType == typeof(Hsv))
-            return "HSV";
-         else if (colorType == typeof(Lab))
-            return "Lab";
-         else if (colorType == typeof(Luv))
-            return "Luv";
-         else if (colorType == typeof(Rgb))
-            return "RGB";
-         else if (colorType == typeof(Rgba))
-            return "RGBA";
-         else if (colorType == typeof(Xyz))
-            return "XYZ";
-         else if (colorType == typeof(Ycc))
-            return "YCrCb";
-         else
-            throw new Exception(String.Format("Unable to get Color Conversion Codename for type {0}", colorType.ToString()));
-         
-#else
             ColorInfoAttribute info = (ColorInfoAttribute)colorType.GetCustomAttributes(typeof(ColorInfoAttribute), true)[0];
             return info.ConversionCodename;
-#endif
         }
 
         /// <summary>

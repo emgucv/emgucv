@@ -20,7 +20,7 @@ namespace Emgu.Util
     /// </summary>
     public static class Toolbox
     {
-#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || NETSTANDARD1_4)
+#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR )
         #region xml serilization and deserialization
         /// <summary>
         /// Convert an object to an xml document
@@ -115,11 +115,7 @@ namespace Emgu.Util
         /// <returns>The size of T in bytes</returns>
         public static int SizeOf<T>()
         {
-#if NETFX_CORE || NETSTANDARD1_4
-         return Marshal.SizeOf<T>();
-#else
-            return Marshal.SizeOf(typeof(T));
-#endif
+            return Marshal.SizeOf<T>();
         }
 
         /*
@@ -154,21 +150,14 @@ namespace Emgu.Util
             return c;
         }
 
-#if WINDOWS_PHONE_APP
 
-      [DllImport("PhoneAppModelHost.dll", SetLastError = true)]
-      private static extern IntPtr LoadPackagedLibrary(
-         [MarshalAs(UnmanagedType.LPStr)]
+        [DllImport("Kernel32.dll", SetLastError = true)]
+        private static extern IntPtr LoadPackagedLibrary(
+           [MarshalAs(UnmanagedType.LPStr)]
          String fileName,
-         int dwFlags);
-#elif NETFX_CORE || NETSTANDARD1_4
-      [DllImport("Kernel32.dll", SetLastError = true)]
-      private static extern IntPtr LoadPackagedLibrary(
-         [MarshalAs(UnmanagedType.LPStr)]
-         String fileName,
-         int dwFlags);
+           int dwFlags);
 
-#else
+
         /// <summary>
         /// Call a command from command line
         /// </summary>
@@ -220,7 +209,6 @@ namespace Emgu.Util
             return (baseType == null) ?
                null : GetBaseType(baseType, baseClassName);
         }
-#endif
 
         #region memory copy
         /// <summary>
@@ -231,11 +219,7 @@ namespace Emgu.Util
         /// <returns>the byte vector</returns>
         public static Byte[] ToBytes<TData>(TData[] data)
         {
-#if NETFX_CORE || NETSTANDARD1_4
-         int size = Marshal.SizeOf<TData>() * data.Length;
-#else
-            int size = Marshal.SizeOf(typeof(TData)) * data.Length;
-#endif
+            int size = Marshal.SizeOf<TData>() * data.Length;
             Byte[] res = new Byte[size];
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             Marshal.Copy(handle.AddrOfPinnedObject(), res, 0, size);
@@ -423,30 +407,25 @@ namespace Emgu.Util
            return a;
         }*/
 
-        /*
-        /// <summary>
-        /// memcpy function
-        /// </summary>
-        /// <param name="dest">the destination of memory copy</param>
-        /// <param name="src">the source of memory copy</param>
-        /// <param name="len">the number of bytes to be copied</param>
-  #if (__IOS__ || __ANDROID__ || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX) && (!UNITY_EDITOR_WIN)
-        [DllImport("c", EntryPoint = "memcpy")]
-        public static extern void memcpy(IntPtr dest, IntPtr src, int len);
-  #elif WINDOWS_PHONE_APP
-        //[DllImport("PhoneAppModelHost.dll", EntryPoint = "CopyMemory")]
-        //public static extern void memcpy(IntPtr dest, IntPtr src, int len);
 
-        public static void memcpy(IntPtr dest, IntPtr src, int len)
-        {
-           Marshal.Copy()
-        }
-  #else
-        [DllImport("kernel32.dll", EntryPoint = "CopyMemory")]
-        public static extern void memcpy(IntPtr dest, IntPtr src, int len);
-  #endif
-         */
         #endregion
+
+        /// <summary>
+        /// Find the loaded assembly with the specific assembly name
+        /// </summary>
+        /// <param name="assembleName"></param>
+        /// <returns></returns>
+        public static System.Reflection.Assembly FindAssembly(String assembleName)
+        {
+            System.Reflection.Assembly[] asms = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (System.Reflection.Assembly asm in asms)
+            {
+                if (asm.ManifestModule.Name.Equals(assembleName))
+                    return asm;
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Maps the specified executable module into the address space of the calling process.
@@ -485,10 +464,10 @@ namespace Emgu.Util
                         int error = Marshal.GetLastWin32Error();
 
                         System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception(error);
-                        System.Diagnostics.Debug.WriteLine(String.Format("LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
+                        System.Diagnostics.Trace.WriteLine(String.Format("LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
                         if (error == 5)
                         {
-                            System.Diagnostics.Debug.WriteLine(String.Format("Please check if the current user has execute permission for file: {0} ", dllname));
+                            System.Diagnostics.Trace.WriteLine(String.Format("Please check if the current user has execute permission for file: {0} ", dllname));
                         }
                     }
                     return handler;
@@ -502,18 +481,18 @@ namespace Emgu.Util
 #endif
         }
 
-#if !NETFX_CORE
+
         [DllImport("Kernel32.dll", SetLastError = true)]
         private static extern IntPtr LoadLibraryEx(
-           [MarshalAs(UnmanagedType.LPStr)]
-         String fileName,
-           IntPtr hFile,
-           int dwFlags);
+            [MarshalAs(UnmanagedType.LPStr)]
+            String fileName,
+            IntPtr hFile,
+            int dwFlags);
 
         [DllImport("dl", EntryPoint = "dlopen")]
         private static extern IntPtr Dlopen(
-           [MarshalAs(UnmanagedType.LPStr)]
-         String dllname, int mode);
+            [MarshalAs(UnmanagedType.LPStr)]
+            String dllname, int mode);
 
         /// <summary>
         /// Decrements the reference count of the loaded dynamic-link library (DLL). When the reference count reaches zero, the module is unmapped from the address space of the calling process and the handle is no longer valid
@@ -532,6 +511,6 @@ namespace Emgu.Util
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetDllDirectory(String path);
-#endif
+
     }
 }

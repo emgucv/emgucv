@@ -16,7 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Flann\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geodetic\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PInvoke\System.Runtime.Serialization\Serialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tiff\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ocl\*.cs" />
@@ -39,7 +38,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)Calib3d\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvType\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Windows.Store\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Android\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\System.Drawing\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvEnum\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\iOS\ImageiOS.cs" />
@@ -51,111 +49,6 @@
     <EmguCVDir>$(MSBuildThisFileDirectory)</EmguCVDir>
   </PropertyGroup>
   <Choose>
-    <!-- Windows 10 UWP (64bit) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x64'">
-      <PropertyGroup>
-        <EmguCVLinkTarget>Windows 10 UWP (64bit)</EmguCVLinkTarget>
-        <EmguCVNativeFile>$(OpenCVBinaryDir)\UWP\x64\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_x64 </EmguCVDeployMessage>
-      </PropertyGroup>
-      <ItemGroup>
-        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-    <!-- Windows 10 UWP (32bit) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x86'">
-      <PropertyGroup>
-        <EmguCVLinkTarget>Windows 10 UWP (32bit)</EmguCVLinkTarget>
-        <EmguCVNativeFile>$(OpenCVBinaryDir)\UWP\x86\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_x86 </EmguCVDeployMessage>
-      </PropertyGroup>
-      <ItemGroup>
-        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-    <!-- Windows 10 UWP (ARM) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM'">
-      <PropertyGroup>
-        <EmguCVLinkTarget>Windows 10 UWP (ARM)</EmguCVLinkTarget>
-        <EmguCVNativeFile>$(OpenCVBinaryDir)\UWP\arm\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)UWP_arm </EmguCVDeployMessage>
-      </PropertyGroup>
-      <ItemGroup>
-        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-    <!-- Windows store 8.1 (64bit) -->
-    <When Condition="'$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x64' AND  '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectTypeGuids)'!='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
-      <PropertyGroup>
-        <EmguCVLinkTarget>Windows Store 8.1 (64bit)</EmguCVLinkTarget>
-        <EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1\x64\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile). Emgu CV no longer supports Windows Store 8.1 targets. </EmguCVErrorMessage>
-        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)store81_x64 </EmguCVDeployMessage>
-      </PropertyGroup>
-      <ItemGroup>
-        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-    <!-- Windows store 8.1 (32bit) -->
-    <When Condition="'$(TargetPlatformVersion)'=='8.1' AND '$(Platform)'=='x86' AND  '$(IsTargetingWindowsPhonePlatform)'!='True' AND '$(ProjectTypeGuids)'!='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'">
-      <PropertyGroup>
-        <EmguCVLinkTarget>Windows Store 8.1 (32bit)</EmguCVLinkTarget>
-        <EmguCVNativeFile>$(OpenCVBinaryDir)\store8_1\x86\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile). Emgu CV no longer supports Windows Store 8.1 targets. </EmguCVErrorMessage>
-        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)store81_x86 </EmguCVDeployMessage>
-      </PropertyGroup>
-      <ItemGroup>
-        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-    <!-- Windows phone 8.1 (ARM) -->
-    <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}')AND '$(Platform)'=='ARM'">
-      <PropertyGroup>
-        <EmguCVLinkTarget>Windows Phone 8.1 (ARM)</EmguCVLinkTarget>
-        <EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1\arm\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget).Missing $(EmguCVNativeFile). Emgu CV no longer supports Windows Phone 8.1 targets.  </EmguCVErrorMessage>
-        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)phone81_arm </EmguCVDeployMessage>
-      </PropertyGroup>
-      <ItemGroup>
-        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
-    <!-- Windows phone 8.1 (x86) -->
-    <When Condition="('$(TargetFrameworkVersion)'=='v8.1' OR '$(TargetPlatformVersion)'=='8.1') AND ('$(TargetFrameworkIdentifier)'=='WindowsPhone' OR '$(TargetPlatformIdentifier)'=='WindowsPhoneApp' OR '$(ProjectTypeGuids)'=='{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}') AND '$(Platform)'=='x86'">
-      <PropertyGroup>
-        <EmguCVLinkTarget>Windows Phone 8.1 (x86)</EmguCVLinkTarget>
-        <EmguCVNativeFile>$(OpenCVBinaryDir)\phone8_1\x86\cvextern.dll</EmguCVNativeFile>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFile). Emgu CV no longer supports Windows Phone 8.1 targets. </EmguCVErrorMessage>
-        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)phone81_x86 </EmguCVDeployMessage>
-      </PropertyGroup>
-      <ItemGroup>
-        <Content Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')">
-          <Link>cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
     <!-- IOS -->
     <!-- IOS library project -->
     <When Condition="(('$(TargetFrameworkIdentifier)'=='Xamarin.iOS' OR '$(ProjectTypeGuids)'=='{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}' OR '$(Platform)'=='iPhone' OR '$(Platform)'=='iPhoneSimulator') AND '$(OutputType)' != 'Exe')">
@@ -278,32 +171,6 @@
         </AndroidNativeLibrary>
       </ItemGroup>
     </When>
-    <!-- Windows Form Application -->
-    <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFrameworkVersion)'=='v2.0' OR '$(TargetFrameworkVersion)'=='v3.0' OR '$(TargetFrameworkVersion)'=='v3.5' OR '$(TargetFrameworkVersion)'=='v4.0' OR '$(TargetFrameworkVersion)'=='v4.5' OR '$(TargetFrameworkVersion)'=='v4.5.1' OR '$(TargetFrameworkVersion)'=='v4.5.2' OR '$(TargetFrameworkVersion)'=='v4.6' OR '$(TargetFrameworkVersion)'=='v4.6.1' OR '$(TargetFrameworkVersion)'=='v4.6.2' OR '$(TargetFrameworkVersion)'=='v4.7' OR '$(TargetFrameworkVersion)'=='v4.7.1' OR '$(TargetFrameworkVersion)'=='v4.7.2')">
-      <PropertyGroup>
-        <EmguCVLinkTarget>WindowsForms</EmguCVLinkTarget>
-        <EmguBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguBuildX64>
-        <EmguNativeFileX64>$(OpenCVBinaryDir)\x64\cvextern.dll</EmguNativeFileX64>
-        <EmguCVWarningMessage Condition="'$(EmguBuildX64)'=='True' AND !Exists('$(EmguNativeFileX64)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X64 is targeted, but file $(EmguNativeFileX64) is missing.</EmguCVWarningMessage>
-        <EmguBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguBuildX86>
-        <EmguNativeFileX86>$(OpenCVBinaryDir)\x86\cvextern.dll</EmguNativeFileX86>
-        <EmguCVWarningMessage Condition="'$(EmguBuildX86)'=='True' AND !Exists('$(EmguNativeFileX86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). X86 is targeted, but file $(EmguNativeFileX86) is missing.</EmguCVWarningMessage>
-        <EmguCVDeployMessage Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">$(EmguCVDeployMessage)x86 </EmguCVDeployMessage>
-        <EmguCVDeployMessage Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">$(EmguCVDeployMessage)x64 </EmguCVDeployMessage>
-      </PropertyGroup>
-      <ItemGroup Condition="'$(EmguBuildX64)'=='True' AND Exists('$(EmguNativeFileX64)')">
-        <Content Include="$(OpenCVBinaryDir)\x64\*.dll">
-          <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-      <ItemGroup Condition="'$(EmguBuildX86)'=='True' AND Exists('$(EmguNativeFileX86)')">
-        <Content Include="$(OpenCVBinaryDir)\x86\*.dll">
-          <Link>x86\%(RecursiveDir)%(Filename)%(Extension)</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
     <!-- DotNetCore Application -->
     <When Condition="'$(EmguCVLinkTarget)'=='' AND ('$(TargetFramework)'=='netcoreapp1.1')">
       <PropertyGroup>
@@ -318,7 +185,6 @@
     </When>
   </Choose>
   <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <Error Condition="'$(EmguCVLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, please use the pre-compiled Emgu.CV.World dll or send a bug report to support@emgu.com" />
     <Message Condition="'$(EmguCVLinkTarget)'!=''" Text="Emgu CV shared project compiling against $(EmguCVLinkTarget)" Importance="High" />
     <Error Text="'$(EmguCVErrorMessage)'" Condition="'$(EmguCVErrorMessage)'!=''" />
     <Warning Text="'$(EmguCVWarningMessage)'" Condition="'$(EmguCVWarningMessage)'!=''" />

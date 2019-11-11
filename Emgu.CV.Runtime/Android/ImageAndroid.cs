@@ -2,8 +2,9 @@
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if __ANDROID__
 
+using Bitmap = Android.Graphics.Bitmap;
+#if __ANDROID__
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,12 +24,14 @@ using Android.Content.Res;
 
 namespace Emgu.CV
 {
+    /*
     public partial class Image<TColor, TDepth>
        : CvArray<TDepth>, IEquatable<Image<TColor, TDepth>>
        where TColor : struct, IColor
-       where TDepth : new()
+       where TDepth : new()*/
+    public static partial class AndroidExtension
     {
-
+        /*
         /// <summary>
         /// Obtain the image from the specific Bitmap
         /// </summary>
@@ -57,26 +60,29 @@ namespace Emgu.CV
             using (Stream imageStream = assets.Open(fileName))
             using (Android.Graphics.Bitmap imageBmp = BitmapFactory.DecodeStream(imageStream))
                 Bitmap = imageBmp;
-        }
+        }*/
 
         /// <summary> Create a Bitmap image of certain size</summary>
         /// <param name="width">The width of the bitmap</param>
         /// <param name="height"> The height of the bitmap</param>
         /// <returns> This image in Bitmap format of the specific size</returns>
-        public Android.Graphics.Bitmap ToBitmap(int width, int height)
+        public static Android.Graphics.Bitmap ToBitmap<TColor, TDepth>(this Image<TColor, TDepth> image, int width, int height)
+            where TColor : struct, IColor
+            where TDepth : new()
         {
-            using (Image<TColor, TDepth> scaledImage = Resize(width, height, CvEnum.Inter.Linear))
+            using (Image<TColor, TDepth> scaledImage = image.Resize(width, height, CvEnum.Inter.Linear))
                 return scaledImage.ToBitmap();
         }
 
         /// <summary> 
         /// Convert this image into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
-        /// <remarks> For better performance on Image&lt;Gray, Byte&gt; and Image&lt;Bgr, Byte&gt;, consider using the Bitmap property </remarks>
         /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
-        public Android.Graphics.Bitmap ToBitmap()
+        public static Android.Graphics.Bitmap ToBitmap<TColor, TDepth>(this Image<TColor, TDepth> image)
+            where TColor : struct, IColor
+            where TDepth : new()
         {
-            return ToBitmap(Android.Graphics.Bitmap.Config.Argb8888);
+            return image.ToBitmap(Android.Graphics.Bitmap.Config.Argb8888);
         }
 
         /// <summary>
@@ -84,9 +90,11 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="config">The Bitmap Config</param>
         /// <returns>The Bitmap</returns>
-        public Android.Graphics.Bitmap ToBitmap(Android.Graphics.Bitmap.Config config)
+        public static Android.Graphics.Bitmap ToBitmap<TColor, TDepth>(this Image<TColor, TDepth> image, Android.Graphics.Bitmap.Config config)
+            where TColor : struct, IColor
+            where TDepth : new()
         {
-            System.Drawing.Size size = Size;
+            System.Drawing.Size size = image.Size;
 
             if (config == Android.Graphics.Bitmap.Config.Argb8888)
             {
@@ -94,7 +102,7 @@ namespace Emgu.CV
 
                 using (BitmapArgb8888Image bi = new BitmapArgb8888Image(result))
                 {
-                    bi.ConvertFrom(this);
+                    bi.ConvertFrom(image);
                     //CvInvoke.cvSet(bi, new MCvScalar(0, 0, 255, 255), IntPtr.Zero);
                 }
                 return result;
@@ -104,7 +112,7 @@ namespace Emgu.CV
                 Android.Graphics.Bitmap result = Android.Graphics.Bitmap.CreateBitmap(size.Width, size.Height, Android.Graphics.Bitmap.Config.Rgb565);
 
                 using (BitmapRgb565Image bi = new BitmapRgb565Image(result))
-                    bi.ConvertFrom(this);
+                    bi.ConvertFrom(image);
                 return result;
             }
             else
@@ -122,51 +130,51 @@ namespace Emgu.CV
         /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
         /// The Set property convert the bitmap to this Image type.
         /// </summary>
-        public virtual Android.Graphics.Bitmap Bitmap
+        public static Image<TColor, TDepth> ImageFromBitmap<TColor, TDepth>(Bitmap bitmap)
+            where TColor : struct, IColor
+            where TDepth : new()
         {
-            get
-            {
-                return ToBitmap();
-            }
-            set
-            {
-                #region reallocate memory if necessary
-                Size size = new Size(value.Width, value.Height);
-                if (Ptr == IntPtr.Zero)
-                {
-                    AllocateData(size.Height, size.Width, NumberOfChannels);
-                }
-                else if (!Size.Equals(size))
-                {
-                    DisposeObject();
-                    AllocateData(size.Height, size.Width, NumberOfChannels);
-                }
-                #endregion
 
-                Android.Graphics.Bitmap.Config config = value.GetConfig();
-                if (config.Equals(Android.Graphics.Bitmap.Config.Argb8888))
+            #region reallocate memory if necessary
+            Size size = new Size(bitmap.Width, bitmap.Height);
+            Image<TColor, TDepth> image = new Image<TColor, TDepth>(size);
+            /*
+            if (image.Ptr == IntPtr.Zero)
+            {
+                image.AllocateData(size.Height, size.Width, image.NumberOfChannels);
+            }
+            else if (!Size.Equals(size))
+            {
+                image.DisposeObject();
+                image.AllocateData(size.Height, size.Width, image.NumberOfChannels);
+            }*/
+            #endregion
+
+            Android.Graphics.Bitmap.Config config = bitmap.GetConfig();
+            if (config.Equals(Android.Graphics.Bitmap.Config.Argb8888))
+            {
+                using (BitmapArgb8888Image bi = new BitmapArgb8888Image(bitmap))
                 {
-                    using (BitmapArgb8888Image bi = new BitmapArgb8888Image(value))
-                    {
-                        ConvertFrom(bi);
-                    }
-                }
-                else if (config.Equals(Android.Graphics.Bitmap.Config.Rgb565))
-                {
-                    int[] values = new int[size.Width * size.Height];
-                    value.GetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
-                    GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
-                    using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, handle.AddrOfPinnedObject()))
-                    {
-                        ConvertFrom(bgra);
-                    }
-                    handle.Free();
-                }
-                else
-                {
-                    throw new NotImplementedException(String.Format("Coping from Bitmap of {0} is not implemented", config));
+                    image.ConvertFrom(bi);
                 }
             }
+            else if (config.Equals(Android.Graphics.Bitmap.Config.Rgb565))
+            {
+                int[] values = new int[size.Width * size.Height];
+                bitmap.GetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
+                GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
+                using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, handle.AddrOfPinnedObject()))
+                {
+                    image.ConvertFrom(bgra);
+                }
+                handle.Free();
+            }
+            else
+            {
+                throw new NotImplementedException(String.Format("Coping from Bitmap of {0} is not implemented", config));
+            }
+
+            return image;
         }
     }
 }

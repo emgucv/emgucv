@@ -15,7 +15,7 @@ namespace Emgu.Util
       private static readonly OS _os;
       private static readonly ClrType _runtime;
 
-#if !(__IOS__ || UNITY_IPHONE || __ANDROID__ || UNITY_ANDROID || WINDOWS_PHONE_APP || NETFX_CORE || NETSTANDARD1_4)
+#if !(__IOS__ || UNITY_IPHONE || __ANDROID__ || UNITY_ANDROID || WINDOWS_PHONE_APP || NETFX_CORE || NETSTANDARD)
       [DllImport("c")]
       private static extern int uname(IntPtr buffer);
 #endif
@@ -28,13 +28,10 @@ namespace Emgu.Util
 #elif __ANDROID__ || UNITY_ANDROID
          _os = OS.Android;
          _runtime = ClrType.Mono;
-#elif WINDOWS_PHONE_APP
-         _os = OS.WindowsPhone;
-         _runtime = ClrType.NetFxCore;
 #elif NETFX_CORE
          _os = OS.Windows;
          _runtime = ClrType.NetFxCore;
-#elif NETSTANDARD1_4
+#elif NETSTANDARD
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
             _os = OS.Windows;
         }

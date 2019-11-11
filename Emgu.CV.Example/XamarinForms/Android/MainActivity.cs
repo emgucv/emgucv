@@ -80,7 +80,9 @@ namespace Emgu.CV.XamarinForms.Droid
             {
                 if (bmp.Width <= maxWidth && bmp.Height <= maxHeight && rotation == 0)
                 {
-                    return new Mat(bmp);
+                    Mat m = new Mat();
+                    m.SetBitmap(bmp);
+                    return m;
                 }
                 else
                 {
@@ -96,7 +98,7 @@ namespace Emgu.CV.XamarinForms.Droid
 
                         using (Bitmap scaled = Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
                         {
-                            return new Mat(scaled);
+                            return scaled.ToMat();
                         }
                     }
                 }

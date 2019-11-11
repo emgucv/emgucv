@@ -20,7 +20,7 @@ using CoreGraphics;
 using UIKit;
 #elif __UNIFIED__
 using CoreGraphics;
-#elif NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#elif NETFX_CORE || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -30,17 +30,10 @@ namespace Emgu.CV
     /// <summary>
     /// The equivalent of cv::Mat
     /// </summary>
-#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
     [DebuggerTypeProxy(typeof(Mat.DebuggerProxy))]
-#endif
-    public partial class Mat : MatDataAllocator, IEquatable<Mat>, IInputOutputArray
-#if !(NETFX_CORE || NETSTANDARD1_4)
-, ISerializable
-#endif
+    public partial class Mat : MatDataAllocator, IEquatable<Mat>, IInputOutputArray, ISerializable
     {
-
-#if !(NETFX_CORE || NETSTANDARD1_4)
         #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
@@ -83,7 +76,6 @@ namespace Emgu.CV
         }
 
         #endregion
-#endif
 
         /// <summary>
         /// Gets or sets the data as byte array.
@@ -242,7 +234,7 @@ namespace Emgu.CV
         public Mat(String fileName, CvEnum.ImreadModes loadType = ImreadModes.Color)
            : this(MatInvoke.cveMatCreate(), true, false)
         {
-#if !(NETFX_CORE || NETSTANDARD1_4)
+
             FileInfo fi = new FileInfo(fileName);
             if (!fi.Exists)
             {
@@ -251,18 +243,17 @@ namespace Emgu.CV
 
             String extension = fi.Extension.ToLower();
 #if __UNIFIED__
-         //Open CV's libpng doesn't seem to be able to handle png in iOS
-         //Use CGImage to load png
-         if (extension.Equals(".png"))
-         {
-            using (CGDataProvider provider = new CGDataProvider(fileName))
-            using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
-            {
-               CvInvoke.ConvertCGImageToArray(tmp, this, loadType);
-            }
-            return;
-         }
-#endif
+             //Open CV's libpng doesn't seem to be able to handle png in iOS
+             //Use CGImage to load png
+             if (extension.Equals(".png"))
+             {
+                using (CGDataProvider provider = new CGDataProvider(fileName))
+                using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
+                {
+                   CvInvoke.ConvertCGImageToArray(tmp, this, loadType);
+                }
+                return;
+             }
 #endif
 
             using (CvString s = new CvString(fileName))
@@ -271,7 +262,6 @@ namespace Emgu.CV
 
                 if (this.IsEmpty) //failed to load in the first attempt
                 {
-#if !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
                     //try again to see if this is a Unicode issue in the file name. 
                     //Work around for Open CV ticket:
                     //https://github.com/Itseez/opencv/issues/4292
@@ -283,16 +273,15 @@ namespace Emgu.CV
                     if (IsEmpty)
                     {
 #if __IOS__
-                      //try again to load with UIImage
-                      using (UIImage tmp = UIImage.FromFile(fileName))
-                      {
-                         CvInvoke.ConvertCGImageToArray(tmp.CGImage, this);
-                      }
+                        //try again to load with UIImage
+                        using (UIImage tmp = UIImage.FromFile(fileName))
+                        {
+                            CvInvoke.ConvertCGImageToArray(tmp.CGImage, this);
+                        }
 #else
                         throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
 #endif
                     }
-#endif
                 }
             }
         }
@@ -815,57 +804,6 @@ namespace Emgu.CV
             }
         }
 
-#if !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || __ANDROID__ || __UNIFIED__)
-        /// <summary>
-        /// The Get property provide a more efficient way to convert gray scale Mat of Byte, 3 channel Mat of Byte (assuming BGR color space) or 4 channel Mat of Byte (assuming Bgra color space) into Bitmap
-        /// such that the image data is <b>shared</b> with Bitmap. 
-        /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
-        /// For other types of image this property has the same effect as ToBitmap()
-        /// <b>Take extra caution not to use the Bitmap after the Mat object is disposed</b>
-        /// The Set property convert the bitmap to this Image type.
-        /// </summary>
-        public Bitmap Bitmap
-        {
-            get
-            {
-                if (Dims > 3)
-                    return null;
-                int channels = NumberOfChannels;
-                Size s = this.Size;
-                Type colorType;
-                switch (channels)
-                {
-                    case 1:
-                        colorType = typeof(Gray);
-
-                        if (s.Equals(Size.Empty))
-                            return null;
-                        if ((s.Width | 3) != 0) //handle the special case where width is not a multiple of 4
-                        {
-                            Bitmap bmp = new Bitmap(s.Width, s.Height, PixelFormat.Format8bppIndexed);
-                            bmp.Palette = CvToolbox.GrayscalePalette;
-                            BitmapData bitmapData = bmp.LockBits(new Rectangle(Point.Empty, s), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
-                            using (Mat m = new Mat(s.Height, s.Width, DepthType.Cv8U, 1, bitmapData.Scan0, bitmapData.Stride))
-                            {
-                                CopyTo(m);
-                            }
-                            bmp.UnlockBits(bitmapData);
-                            return bmp;
-                        }
-                        break;
-                    case 3:
-                        colorType = typeof(Bgr);
-                        break;
-                    case 4:
-                        colorType = typeof(Bgra);
-                        break;
-                    default:
-                        throw new Exception("Unknown color type");
-                }
-                return CvInvoke.RawDataToBitmap(DataPointer, this.Step, s, colorType, NumberOfChannels, CvInvoke.GetDepthType(Depth), true);
-            }
-        }
-#endif
 
         internal static DepthType GetDepthTypeFromArray(Array data)
         {
@@ -1113,7 +1051,7 @@ namespace Emgu.CV
 
             if (e != null)
             {
-#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || (UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO)
+#if __UNIFIED__ || NETFX_CORE || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
             throw e;
 #elif __ANDROID__
             FileInfo fileInfo = new FileInfo(fileName);

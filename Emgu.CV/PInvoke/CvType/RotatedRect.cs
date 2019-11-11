@@ -11,9 +11,7 @@ namespace Emgu.CV.Structure
     /// <summary>
     /// Managed structure equivalent to CvBox2D
     /// </summary>
-#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
-#endif
     [StructLayout(LayoutKind.Sequential)]
     public struct RotatedRect : IConvexPolygonF, IEquatable<RotatedRect>
     {

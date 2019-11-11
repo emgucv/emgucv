@@ -16,14 +16,9 @@ namespace Emgu.CV
     /// A Matrix is a wrapper to cvMat of OpenCV. 
     /// </summary>
     /// <typeparam name="TDepth">Depth of this matrix (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
-#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
-#endif
-    public class Matrix<TDepth> : CvArray<TDepth>, IEquatable<Matrix<TDepth>>
-#if !NETSTANDARD1_4
-        , ICloneable
-#endif
-      where TDepth : new()
+    public class Matrix<TDepth> : CvArray<TDepth>, IEquatable<Matrix<TDepth>>, ICloneable
+        where TDepth : new()
     {
         private TDepth[,] _array;
 
@@ -229,11 +224,7 @@ namespace Emgu.CV
         {
             get
             {
-#if NETFX_CORE || NETSTANDARD1_4
-            return Marshal.PtrToStructure<MCvMat>(Ptr);
-#else
                 return (MCvMat)Marshal.PtrToStructure(Ptr, typeof(MCvMat));
-#endif
             }
         }
 
@@ -734,7 +725,6 @@ namespace Emgu.CV
         }
         #endregion
 
-#if !(NETFX_CORE || NETSTANDARD1_4)
         #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
@@ -746,7 +736,6 @@ namespace Emgu.CV
             DeserializeObjectData(info, context);
         }
         #endregion
-#endif
 
         #region UnmanagedObject
         /// <summary>
@@ -843,12 +832,10 @@ namespace Emgu.CV
         #endregion
 
         #region ICloneable Members
-#if !NETSTANDARD1_4
         object ICloneable.Clone()
         {
             return Clone();
         }
-#endif
         #endregion
 
         /// <summary> 

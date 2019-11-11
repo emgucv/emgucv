@@ -309,38 +309,5 @@ namespace Emgu.CV.Cuda
             return new CudaImage<TColor, TDepth>(this, Emgu.CV.Structure.Range.All, new Emgu.CV.Structure.Range(start, end));
         }
 
-        #region IImage Members
-
-#if !(NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || __UNIFIED__ || __ANDROID__)
-        /// <summary>
-        /// convert the current CudaImage to its equivalent Bitmap representation
-        /// </summary>
-        public new Bitmap Bitmap
-        {
-            get
-            {
-                if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
-                {  
-                    Size s = Size;
-                    Bitmap result = new Bitmap(s.Width, s.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                    System.Drawing.Imaging.BitmapData data = result.LockBits(new Rectangle(Point.Empty, result.Size), System.Drawing.Imaging.ImageLockMode.WriteOnly, result.PixelFormat);
-                    using (Image<TColor, TDepth> tmp = new Image<TColor, TDepth>(s.Width, s.Height, data.Stride, data.Scan0))
-                    {
-                        Download(tmp);
-                    }
-                    result.UnlockBits(data);
-                    return result;
-                } else
-                    using (Image<TColor, TDepth> tmp = ToImage())
-                    {
-                        return tmp.ToBitmap();
-                    }
-            }
-        }
-#endif
-
-        #endregion
-
-
     }
 }

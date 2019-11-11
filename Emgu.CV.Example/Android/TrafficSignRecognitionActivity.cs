@@ -38,7 +38,7 @@ namespace AndroidExamples
 
          OnImagePicked += (sender, image) =>
          {
-            using (Mat stopSignModel = new Mat(Assets, "stop-sign-model.png"))
+            using (Mat stopSignModel = Assets.GetMat("stop-sign-model.png"))
             {             
                if (image == null)
                   return;

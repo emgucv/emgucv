@@ -2,8 +2,6 @@
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(NETFX_CORE || NETSTANDARD1_4)
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -110,5 +108,3 @@ namespace Emgu.CV.DnnSuperres
         internal static extern void cveDnnSuperResImplGetAlgorithm(IntPtr dnnSuperRes, IntPtr algorithm);
     }
 }
-
-#endif

@@ -11,9 +11,7 @@ namespace Emgu.CV
     /// </summary>
     /// <typeparam name="TColor">The color of this map</typeparam>
     /// <typeparam name="TDepth">The depth of this map</typeparam>
-#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
-#endif
     public class TimedImage<TColor, TDepth>
       : Image<TColor, TDepth>
       where TColor : struct, IColor

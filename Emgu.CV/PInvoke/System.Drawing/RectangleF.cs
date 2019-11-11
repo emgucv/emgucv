@@ -11,9 +11,7 @@ namespace System.Drawing
    /// <summary>
    /// Managed structure equivalent to CvRect
    /// </summary>
-#if !(NETFX_CORE || NETSTANDARD1_4)
    [Serializable]
-#endif
    [StructLayout(LayoutKind.Sequential)]
    public struct RectangleF :IEquatable<RectangleF>
    {

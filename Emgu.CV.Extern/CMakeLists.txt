@@ -1927,7 +1927,7 @@ IF(HAVE_opencv_dnn)
     "Emgu.CV.Dnn"
     "DnnInvoke"
     "Net"
-	"!(NETFX_CORE || NETCOREAPP1_1 || NETSTANDARD1_4)"
+	""
 	"#include \"opencv2/dnn.hpp\"
 #include \"opencv2/core/types_c.h\"")
   CREATE_OCV_CLASS_PROPERTY( 
@@ -1946,7 +1946,7 @@ IF(HAVE_opencv_dnn)
     "Emgu.CV.Dnn"
     "DnnInvoke"
     "Layer"
-	"!(NETFX_CORE || NETCOREAPP1_1 || NETSTANDARD1_4)"
+	""
 	"#include \"opencv2/dnn.hpp\"
 #include \"opencv2/core/types_c.h\"")
 

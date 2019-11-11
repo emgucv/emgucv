@@ -107,7 +107,7 @@ namespace AndroidExamples
             if (action.Equals("Default"))
             {
 #if __ANDROID__
-                Mat m = new Mat(this.Assets, defaultImageName);
+                Mat m = this.Assets.GetMat(defaultImageName); // new Mat(this.Assets, defaultImageName);
 #else
                 Mat m = CvInvoke.Imread(defaultImageName);            
 #endif
@@ -193,7 +193,7 @@ namespace AndroidExamples
             {
                 if (bmp.Width <= maxWidth && bmp.Height <= maxHeight && rotation == 0)
                 {
-                    return new Mat(bmp);
+                    return bmp.ToMat();
                 }
                 else
                 {
@@ -209,7 +209,7 @@ namespace AndroidExamples
 
                         using (Bitmap scaled = Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
                         {
-                            return new Mat(scaled);
+                            return scaled.ToMat();
                         }
                     }
                 }

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>cecd0983-1ca1-481a-a16c-1c0317548ad7</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVWindowsBinaryDir>$(MSBuildThisFileDirectory)..\..\libs</EmguCVWindowsBinaryDir>
+    <EmguCVWindowsDir>$(MSBuildThisFileDirectory)</EmguCVWindowsDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVWindowsBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguCVWindowsBuildX86>
+    <EmguCVWindowsNativeFileX86>$(EmguCVWindowsBinaryDir)\x86\cvextern.dll</EmguCVWindowsNativeFileX86>
+    <EmguCVWindowsErrorMessage Condition="'$(EmguCVWindowsBuildX86)'=='True' AND !Exists('$(EmguCVWindowsNativeFileX86)')">This package do not contain necessary binary for $(EmguCVWindowsLinkTarget). Windows x86 is targeted, but file $(EmguCVWindowsNativeFileX86) is missing. PInvoke may fail on Windows x86 platforms</EmguCVWindowsErrorMessage>
+    <EmguCVWindowsDeployMessage Condition="'$(EmguCVWindowsBuildX86)'=='True' AND Exists('$(EmguCVWindowsNativeFileX86)')">$(EmguCVWindowsDeployMessage)x86 </EmguCVWindowsDeployMessage>    <EmguCVWindowsLinkTarget>Windows</EmguCVWindowsLinkTarget>
+    <EmguCVWindowsBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCVWindowsBuildX64>
+    <EmguCVWindowsNativeFileX64>$(EmguCVWindowsBinaryDir)\x64\cvextern.dll</EmguCVWindowsNativeFileX64>
+    <EmguCVWindowsErrorMessage Condition="'$(EmguCVWindowsBuildX64)'=='True' AND !Exists('$(EmguCVWindowsNativeFileX64)')">This package do not contain necessary binary for $(EmguCVWindowsLinkTarget). Windows x64 is targeted, but file $(EmguCVWindowsNativeFileX64) is missing. PInvoke may fail on Windows x64 platforms</EmguCVWindowsErrorMessage>
+    <EmguCVWindowsDeployMessage Condition="'$(EmguCVWindowsBuildX64)'=='True' AND Exists('$(EmguCVWindowsNativeFileX64)')">$(EmguCVWindowsDeployMessage)x64 </EmguCVWindowsDeployMessage>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(EmguCVWindowsBuildX86)'=='True' AND Exists('$(EmguCVWindowsNativeFileX86)')">
+    <Content Include="$(EmguCVWindowsBinaryDir)\x86\*.dll">
+      <Link>x86\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup Condition="'$(EmguCVWindowsBuildX64)'=='True' AND Exists('$(EmguCVWindowsNativeFileX64)')">
+    <Content Include="$(EmguCVWindowsBinaryDir)\x64\*.dll">
+      <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Target Name="EmguCVWindowsPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Warning Text="'$(EmguCVWindowsErrorMessage)'" Condition="'$(EmguCVWindowsErrorMessage)'!=''" />
+    <Message Text="Emgu CV Compiling with $(EmguCVWindowsDeployMessage)binary" Condition="'$(EmguCVWindowsDeployMessage)'!=''" Importance="High" />
+    <Message Text="Native binary is NOT deployed by the Emgu.CV.Runtime.Windows shared project." Condition="'$(EmguCVWindowsDeployMessage)'==''" Importance="High" />
+  </Target>
+</Project>

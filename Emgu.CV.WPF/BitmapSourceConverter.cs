@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.UI;
 
 namespace Emgu.CV.WPF
 {
@@ -32,7 +33,7 @@ namespace Emgu.CV.WPF
         {
             using (InputArray ia = image.GetInputArray())
             using (Mat m = ia.GetMat())
-            using (System.Drawing.Bitmap source = m.Bitmap)
+            using (System.Drawing.Bitmap source = m.ToBitmap())
             {
                 IntPtr ptr = source.GetHbitmap(); //obtain the Hbitmap
 

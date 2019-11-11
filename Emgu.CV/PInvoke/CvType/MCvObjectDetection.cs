@@ -11,9 +11,7 @@ namespace Emgu.CV.Structure
     /// <summary>
     /// Structure contains the bounding box and confidence level for detected object
     /// </summary>
-#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
-#endif
     [StructLayout(LayoutKind.Sequential)]
     public struct MCvObjectDetection
     {

@@ -31,7 +31,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the bitmap that this object is sharing data with.
       /// </summary>
-      public override Bitmap Bitmap
+      public Bitmap Bitmap
       {
          get
          {
@@ -72,7 +72,7 @@ namespace Emgu.CV
       /// <summary>
       /// Get the Bitmap object
       /// </summary>
-      public override Bitmap Bitmap
+      public Bitmap Bitmap
       {
          get
          {

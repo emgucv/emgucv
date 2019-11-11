@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_WSA || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_WSA || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
 #define WITH_SERVICE_MODEL
 #endif
 
@@ -15,12 +15,7 @@ using System.ServiceModel;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Threading;
-#if NETFX_CORE
-using Windows.System.Threading;
-#endif
-#if NETSTANDARD1_4 || NETFX_CORE
-using System.Threading.Tasks;
-#endif
+//using System.Threading.Tasks;
 using Emgu.Util;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -184,7 +179,7 @@ namespace Emgu.CV
             /// <summary>
             /// XINE engine (Linux)
             /// </summary>
-            Xine = 2400,          
+            Xine = 2400,
         }
 
         AutoResetEvent _pauseEvent = new AutoResetEvent(false);
@@ -207,12 +202,12 @@ namespace Emgu.CV
             /// Capture from file using HighGUI
             /// </summary>
             Highgui,
-            
+
         }
 
         private CaptureModuleType _captureModuleType;
 
-#region Properties
+        #region Properties
         /// <summary>
         /// Get the type of the capture module
         /// </summary>
@@ -343,9 +338,9 @@ namespace Emgu.CV
                     throw new NullReferenceException(String.Format("Unable to create capture from {0}", fileName));
             }
         }
-#endregion
+        #endregion
 
-#region implement UnmanagedObject
+        #region implement UnmanagedObject
         /// <summary>
         /// Release the resource for this capture
         /// </summary>
@@ -358,7 +353,7 @@ namespace Emgu.CV
 
 #endif
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// Obtain the capture property
@@ -397,7 +392,7 @@ namespace Emgu.CV
             return grabbed;
         }
 
-#region Grab process
+        #region Grab process
         /// <summary>
         /// The event to be called when an image is grabbed
         /// </summary>
@@ -452,12 +447,9 @@ namespace Emgu.CV
 
         private static void Wait(int millisecond)
         {
-#if NETFX_CORE || NETSTANDARD1_4
-         Task t = Task.Delay(millisecond);
-         t.Wait();
-#else
+            //Task t = Task.Delay(millisecond);
+            //t.Wait();
             Thread.Sleep(millisecond);
-#endif
         }
 
 
@@ -484,15 +476,13 @@ namespace Emgu.CV
             {
                 _grabState = GrabState.Running;
 
-#if NETSTANDARD1_4
-                Task t = new Task(Run);
-                t.Start();
-#elif NETFX_CORE
-                Windows.System.Threading.ThreadPool.RunAsync(delegate { Run(); });
-#elif !WITH_SERVICE_MODEL
-                ThreadPool.QueueUserWorkItem(delegate { Run(); });
-#else
+//              Task t = new Task(Run);
+//              t.Start();
+
+#if WITH_SERVICE_MODEL
                 ThreadPool.QueueUserWorkItem(delegate { Run(eh); });
+#else
+                ThreadPool.QueueUserWorkItem(delegate { Run(); });
 #endif
             }
         }
@@ -570,7 +560,7 @@ namespace Emgu.CV
             }
         }
 
-#region implement ICapture
+        #region implement ICapture
         /// <summary> 
         /// Capture a Bgr image frame
         /// </summary>
@@ -614,7 +604,7 @@ namespace Emgu.CV
             return null;
 
         }
-#endregion
+        #endregion
 
         /*
           ///<summary> Capture Bgr image frame with timestamp</summary>
@@ -692,7 +682,7 @@ namespace Emgu.CV
         /// </summary>
         public int ID
         {
-            get 
+            get
             {
                 return _id;
             }
@@ -773,7 +763,7 @@ namespace Emgu.CV
         internal static extern void cveGetBackendName(int api, IntPtr name);
 
         /// <summary>
-        /// Returns list of all builtin backends
+        /// Returns list of all built-in backends
         /// </summary>
         public static Backend[] Backends
         {

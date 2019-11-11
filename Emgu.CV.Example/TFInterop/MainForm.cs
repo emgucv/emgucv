@@ -13,6 +13,7 @@ using Emgu.TF.Models;
 using Emgu.CV;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Emgu.CV.UI;
 using Tensorflow;
 
 namespace TFInterop
@@ -183,7 +184,7 @@ namespace TFInterop
                 _renderMat = new Mat();
             m.CopyTo(_renderMat);
 
-            Bitmap bmp = _renderMat.Bitmap;
+            Bitmap bmp = _renderMat.ToBitmap();
 
             if (InvokeRequired)
             {

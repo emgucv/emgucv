@@ -5,14 +5,6 @@
 using System;
 using Emgu.CV;
 
-#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
-using UnityEngine;
-#elif NETFX_CORE
-using Windows.UI;
-#else
-using System.Drawing;
-#endif
-
 namespace Emgu.CV.Structure
 {
     /// <summary> 
@@ -35,17 +27,24 @@ namespace Emgu.CV.Structure
             _scalar = new MCvScalar(red, green, blue);
         }
 
-#if !NETSTANDARD1_4
+#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
         /// <summary>
         /// Create a Rgb color using the system color
         /// </summary>
         /// <param name="winColor">color</param>
-        public Rgb(Color winColor)
-#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+        public Rgb(UnityEngine.Color winColor)
          : this(winColor.r * 255.0, winColor.g * 255.0, winColor.b * 255.0)
+        {
+        }
 #else
-         : this(winColor.R, winColor.G, winColor.B)
-#endif
+
+        /// <summary>
+        /// Create a Rgb color using the system color
+        /// </summary>
+        /// <param name="winColor">color</param>
+        public Rgb(System.Drawing.Color winColor)
+            : this(winColor.R, winColor.G, winColor.B)
+
         {
         }
 #endif

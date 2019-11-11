@@ -168,11 +168,14 @@
       <Version>4.3.0.947036</Version>
     </PackageReference>
   </ItemGroup>
-  <Import Project="..\..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
-  <Import Project="..\..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
-  <Import Project="..\..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
-  <Import Project="..\..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
+      <Project>{d24994ba-254b-4210-8781-b6324569afd3}</Project>
+      <Name>Emgu.CV.World.NetStandard</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" />
+  <Import Project="..\..\..\Emgu.CV.Runtime\UWP\Emgu.CV.Runtime.UWP.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -125,11 +125,7 @@ namespace Emgu.CV.Util
                result = (T) ((Object) Marshal.PtrToStringAnsi(e.Value));
             } else
             {
-#if NETFX_CORE || NETSTANDARD1_4
-               result = Marshal.PtrToStructure<T>(e.Value);
-#else
-               result = (T) Marshal.PtrToStructure(e.Value, typeof(T));
-#endif
+                result = Marshal.PtrToStructure<T>(e.Value);
             }
             OnDataReceived(this, new EventArgs<T>(result));
          }

@@ -224,11 +224,16 @@
       <Version>0.4.11</Version>
     </PackageReference>
   </ItemGroup>
-  <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Runtime\Android\Emgu.CV.Runtime.Android.csproj">
+      <Project>{5f102c71-65c3-4d77-ae48-29c1e75f82be}</Project>
+      <Name>Emgu.CV.Runtime.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
+      <Project>{062171bc-876a-440b-a40c-8a6a3a7f6ce6}</Project>
+      <Name>Emgu.CV.World.NetStandard</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

@@ -13,6 +13,7 @@ using Emgu.CV.Stitching;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Diagnostics;
+using Emgu.CV.UI;
 
 namespace Stitching
 {

@@ -13,7 +13,7 @@ using CoreGraphics;
 using UIKit;
 #elif __UNIFIED__
 using CoreGraphics;
-#elif NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || __ANDROID__
+#elif NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
 using System.Drawing.Imaging;
 #endif
@@ -21,9 +21,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-#if !(NETFX_CORE || NETSTANDARD1_4)
 using System.Security.Permissions;
-#endif
+
 using Emgu.CV.Features2D;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
@@ -37,13 +36,11 @@ namespace Emgu.CV
     /// </summary>
     /// <typeparam name="TColor">Color type of this image (either Gray, Bgr, Bgra, Hsv, Hls, Lab, Luv, Xyz, Ycc, Rgb or Rbga)</typeparam>
     /// <typeparam name="TDepth">Depth of this image (either Byte, SByte, Single, double, UInt16, Int16 or Int32)</typeparam>
-#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
-#endif
     public partial class Image<TColor, TDepth>
        : CvArray<TDepth>, IEquatable<Image<TColor, TDepth>>, IInputOutputArray
         where TColor : struct, IColor
-       where TDepth : new()
+        where TDepth : new()
     {
         private ImageDataReleaseMode _imageDataReleaseMode;
 
@@ -84,7 +81,14 @@ namespace Emgu.CV
             MapDataToImage(width, height, stride, scan0);
         }
 
-        internal void MapDataToImage(int width, int height, int stride, IntPtr scan0)
+        /// <summary>
+        /// Let this Image object use the specific Image data.
+        /// </summary>
+        /// <param name="width">The width of the image</param>
+        /// <param name="height">The height of the image</param>
+        /// <param name="stride">The data stride (bytes per row)</param>
+        /// <param name="scan0">The origin of the data</param>
+        protected void MapDataToImage(int width, int height, int stride, IntPtr scan0)
         {
             _ptr = CvInvoke.cvCreateImageHeader(new Size(width, height), CvDepth, NumberOfChannels);
 
@@ -106,13 +110,13 @@ namespace Emgu.CV
             _ptr = ptr;
         }
 
+#if  NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO 
         /// <summary>
         /// Read image from a file
         /// </summary>
         /// <param name="fileName">the name of the file that contains the image</param>
         public Image(String fileName)
         {
-#if NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
             using (Mat m = CvInvoke.Imread(fileName, ImreadModes.AnyColor | ImreadModes.AnyDepth))
             {
                 if (m.IsEmpty)
@@ -120,8 +124,14 @@ namespace Emgu.CV
 
                 LoadImageFromMat(m);
             }
+        }
 #else
-
+        /// <summary>
+        /// Read image from a file
+        /// </summary>
+        /// <param name="fileName">the name of the file that contains the image</param>
+        public Image(String fileName)
+        {
             FileInfo fi = new FileInfo(fileName);
             if (!fi.Exists)
             {
@@ -218,11 +228,10 @@ namespace Emgu.CV
                     LoadFileUsingBitmap(fi);
 #endif
                 }
-#endif
+
         }
+#endif
 
-
-#if !(NETFX_CORE || NETSTANDARD1_4)
         /// <summary>
         /// Load the specific file using OpenCV
         /// </summary>
@@ -236,7 +245,7 @@ namespace Emgu.CV
                 LoadImageFromMat(m);
             }
         }
-#endif
+
 
         /// <summary>
         /// Create a blank Image of the specified width, height and color.
@@ -300,7 +309,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Allocate data for the array
+        /// Re-allocate data for the array
         /// </summary>
         /// <param name="rows">The number of rows</param>
         /// <param name="cols">The number of columns</param>
@@ -359,10 +368,9 @@ namespace Emgu.CV
                 }
             }
         }
-        #endregion
+#endregion
 
-#if !(NETFX_CORE || NETSTANDARD1_4)
-        #region Implement ISerializable interface
+#region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
         /// </summary>
@@ -395,10 +403,9 @@ namespace Emgu.CV
                 info.AddValue("Roi", ROI);
             }
         }
-        #endregion
-#endif
+#endregion
 
-        #region Image Properties
+#region Image Properties
 
         /// <summary>
         /// The IplImage structure
@@ -407,11 +414,7 @@ namespace Emgu.CV
         {
             get
             {
-#if NETFX_CORE || NETSTANDARD1_4
-            return Marshal.PtrToStructure<MIplImage>(Ptr);
-#else
                 return (MIplImage)Marshal.PtrToStructure(Ptr, typeof(MIplImage));
-#endif
             }
         }
 
@@ -543,9 +546,9 @@ namespace Emgu.CV
             res.MCvScalar = CvInvoke.Sum(this);
             return res;
         }
-        #endregion
+#endregion
 
-        #region Coping and Filling
+#region Coping and Filling
         /// <summary>
         /// Set every pixel of the image to the specific color 
         /// </summary>
@@ -659,11 +662,11 @@ namespace Emgu.CV
             CvInvoke.cvSetImageCOI(Ptr, 0); //clear COI for current image
             ROI = Rectangle.Empty; // clear ROI for current image
 
-            #region create a clone of the current image with the same COI and ROI
+#region create a clone of the current image with the same COI and ROI
             Image<TColor, TDepth> res = Copy();
             CvInvoke.cvSetImageCOI(res.Ptr, coi);
             res.ROI = roi;
-            #endregion
+#endregion
 
             CvInvoke.cvSetImageCOI(Ptr, coi); //reset the COI for the current image
             ROI = roi; // reset the ROI for the current image
@@ -687,10 +690,10 @@ namespace Emgu.CV
             return subRect;
         }
 
-        #endregion
+#endregion
 
 
-        #region Drawing functions
+#region Drawing functions
         /// <summary>Draw an Rectangle of the specific color and thickness </summary>
         /// <param name="rect">The rectangle to be drawn</param>
         /// <param name="color">The color of the rectangle </param>
@@ -932,9 +935,9 @@ namespace Emgu.CV
             }
         }
 
-        #endregion
+#endregion
 
-        #region Hough line and circles
+#region Hough line and circles
         /// <summary>
         /// Apply Probabilistic Hough transform to find line segments.
         /// The current image must be a binary image (eg. the edges as a result of the Canny edge detector)
@@ -999,9 +1002,9 @@ namespace Emgu.CV
                    return CvInvoke.HoughCircles(img, CvEnum.HoughType.Gradient, dp, minDist, cannyThresh[channel], accumulatorThresh[channel], minRadius, maxRadius);
                });
         }
-        #endregion
+#endregion
 
-        #region Indexer
+#region Indexer
         /// <summary>
         /// Get or Set the specific channel of the current image.
         /// For Get operation, a copy of the specific channel is returned.
@@ -1059,9 +1062,9 @@ namespace Emgu.CV
                 this[location.Y, location.X] = value;
             }
         }
-        #endregion
+#endregion
 
-        #region utilities
+#region utilities
         /// <summary>
         /// Return parameters based on ROI
         /// </summary>
@@ -1073,11 +1076,7 @@ namespace Emgu.CV
         /// <param name="widthStep">The width step required to jump to the next row</param>
         protected static void RoiParam(IntPtr ptr, out Int64 start, out int rows, out int elementCount, out int byteWidth, out int widthStep)
         {
-#if NETFX_CORE || NETSTANDARD1_4
-           MIplImage ipl = Marshal.PtrToStructure<MIplImage>(ptr);
-#else
             MIplImage ipl = (MIplImage)Marshal.PtrToStructure(ptr, typeof(MIplImage));
-#endif
             start = ipl.ImageData.ToInt64();
             widthStep = ipl.WidthStep;
 
@@ -1152,9 +1151,9 @@ namespace Emgu.CV
                 }
             }
         }
-        #endregion
+#endregion
 
-        #region Gradient, Edges and Features
+#region Gradient, Edges and Features
         /// <summary>
         /// Calculates the image derivative by convolving the image with the appropriate kernel
         /// The Sobel operators combine Gaussian smoothing and differentiation so the result is more or less robust to the noise. Most often, the function is called with (xorder=1, yorder=0, aperture_size=3) or (xorder=0, yorder=1, aperture_size=3) to calculate first x- or y- image derivative.
@@ -1242,9 +1241,9 @@ namespace Emgu.CV
                 });
         }
 
-        #endregion
+#endregion
 
-        #region Matching
+#region Matching
         /// <summary>
         /// The function slides through image, compares overlapped patches of size wxh with templ using the specified method and return the comparison results 
         /// </summary>
@@ -1257,10 +1256,10 @@ namespace Emgu.CV
             CvInvoke.MatchTemplate(this, template, res, method);
             return res;
         }
-        #endregion
+#endregion
 
-        #region Logic
-        #region And Methods
+#region Logic
+#region And Methods
         /// <summary> Perform an elementwise AND operation with another image and return the result</summary>
         /// <param name="img2">The second image for the AND operation</param>
         /// <returns> The result of the AND operation</returns>
@@ -1305,9 +1304,9 @@ namespace Emgu.CV
             }
             return res;
         }
-        #endregion
+#endregion
 
-        #region Or Methods
+#region Or Methods
         /// <summary> Perform an elementwise OR operation with another image and return the result</summary>
         /// <param name="img2">The second image for the OR operation</param>
         /// <returns> The result of the OR operation</returns>
@@ -1347,9 +1346,9 @@ namespace Emgu.CV
             }
             return res;
         }
-        #endregion
+#endregion
 
-        #region Xor Methods
+#region Xor Methods
         /// <summary> Perform an elementwise XOR operation with another image and return the result</summary>
         /// <param name="img2">The second image for the XOR operation</param>
         /// <returns> The result of the XOR operation</returns>
@@ -1397,7 +1396,7 @@ namespace Emgu.CV
             }
             return res;
         }
-        #endregion
+#endregion
 
         /// <summary> 
         /// Compute the complement image
@@ -1409,9 +1408,9 @@ namespace Emgu.CV
             CvInvoke.BitwiseNot(this, res, null);
             return res;
         }
-        #endregion
+#endregion
 
-        #region Comparison
+#region Comparison
         /// <summary> Find the elementwise maximum value </summary>
         /// <param name="img2">The second image for the Max operation</param>
         /// <returns> An image where each pixel is the maximum of <i>this</i> image and the parameter image</returns>
@@ -1591,9 +1590,9 @@ namespace Emgu.CV
                 }
             }
         }
-        #endregion
+#endregion
 
-        #region Segmentation
+#region Segmentation
         /// <summary>
         /// Use grabcut to perform background foreground segmentation.
         /// </summary>
@@ -1611,10 +1610,10 @@ namespace Emgu.CV
             }
             return mask;
         }
-        #endregion
+#endregion
 
-        #region Arithmatic
-        #region Subtraction methods
+#region Arithmatic
+#region Subtraction methods
         /// <summary> Elementwise subtract another image from the current image </summary>
         /// <param name="img2">The second image to be subtracted from the current image</param>
         /// <returns> The result of elementwise subtracting img2 from the current image</returns>
@@ -1676,9 +1675,9 @@ namespace Emgu.CV
             }
             return res;
         }
-        #endregion
+#endregion
 
-        #region Addition methods
+#region Addition methods
         /// <summary> Elementwise add another image with the current image </summary>
         /// <param name="img2">The image to be added to the current image</param>
         /// <returns> The result of elementwise adding img2 to the current image</returns>
@@ -1711,9 +1710,9 @@ namespace Emgu.CV
             }
             return res;
         }
-        #endregion
+#endregion
 
-        #region Multiplication methods
+#region Multiplication methods
         /// <summary> Elementwise multiply another image with the current image and the <paramref name="scale"/></summary>
         /// <param name="img2">The image to be elementwise multiplied to the current image</param>
         /// <param name="scale">The scale to be multiplied</param>
@@ -1743,7 +1742,7 @@ namespace Emgu.CV
             CvInvoke.cvConvertScale(Ptr, res.Ptr, scale, 0.0);
             return res;
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Accumulate <paramref name="img2"/> to the current image using the specific mask
@@ -1827,9 +1826,9 @@ namespace Emgu.CV
             }
             return res;
         }
-        #endregion
+#endregion
 
-        #region Math Functions
+#region Math Functions
         /// <summary>
         /// Raises every element of input array to p
         /// dst(I)=src(I)^p, if p is integer
@@ -1870,9 +1869,9 @@ namespace Emgu.CV
             CvInvoke.Log(this, res);
             return res;
         }
-        #endregion
+#endregion
 
-        #region Sampling, Interpolation and Geometrical Transforms
+#region Sampling, Interpolation and Geometrical Transforms
         /*
         ///<summary> Sample the pixel values on the specific line segment </summary>
         ///<param name="line"> The line to obtain samples</param>
@@ -2106,9 +2105,9 @@ namespace Emgu.CV
             return imgPolar;
         }
 #endif
-        #endregion
+#endregion
 
-        #region Image color and depth conversion
+#region Image color and depth conversion
         /// <summary> Convert the current image to the specific color and depth </summary>
         /// <typeparam name="TOtherColor"> The type of color to be converted to </typeparam>
         /// <typeparam name="TOtherDepth"> The type of pixel depth to be converted to </typeparam>
@@ -2152,7 +2151,7 @@ namespace Emgu.CV
 
             if (typeof(TColor) == typeof(TSrcColor))
             {
-                #region same color
+#region same color
                 if (typeof(TDepth) == typeof(TSrcDepth))
                 {   //same depth
                     srcImage.Mat.CopyTo(this);
@@ -2191,11 +2190,11 @@ namespace Emgu.CV
                         }
                     }
                 }
-                #endregion
+#endregion
             }
             else
             {
-                #region different color
+#region different color
                 if (typeof(TDepth) == typeof(TSrcDepth))
                 {   //same depth
                     CvInvoke.CvtColor(srcImage, this, typeof(TSrcColor), typeof(TColor));
@@ -2209,7 +2208,7 @@ namespace Emgu.CV
                         CvInvoke.CvtColor(tmp, this, typeof(TSrcColor), typeof(TColor));
                     }
                 }
-                #endregion
+#endregion
             }
         }
 
@@ -2237,7 +2236,7 @@ namespace Emgu.CV
                 int srcImageNumberOfChannels = iaSrcImage.GetChannels();
                 if (NumberOfChannels == srcImageNumberOfChannels)
                 {
-                    #region same color
+#region same color
 
                     DepthType srcImageDepth = iaSrcImage.GetDepth();
                     if (CvInvoke.GetDepthType(typeof(TDepth)) == srcImageDepth)
@@ -2283,7 +2282,7 @@ namespace Emgu.CV
                         }
                     }
 
-                    #endregion
+#endregion
                 }
                 else
                 {
@@ -2296,7 +2295,7 @@ namespace Emgu.CV
                              ? typeof(Bgr)
                              : typeof(Bgra);
 
-                    #region different color
+#region different color
                     DepthType srcImageDepth = iaSrcImage.GetDepth();
                     if (CvInvoke.GetDepthType(typeof(TDepth)) == srcImageDepth)
                     {
@@ -2316,7 +2315,7 @@ namespace Emgu.CV
                         }
                     }
 
-                    #endregion
+#endregion
                 }
             }
         }
@@ -2338,318 +2337,9 @@ namespace Emgu.CV
 
             return res;
         }
-        #endregion
+#endregion
 
-#if __UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || __ANDROID__
-#else
-        /// <summary>
-        /// Load the specific file using Bitmap
-        /// </summary>
-        /// <param name="file">The file to load</param>
-        private void LoadFileUsingBitmap(FileInfo file)
-        {
-            using (Bitmap bmp = new Bitmap(file.FullName))
-                Bitmap = bmp;
-        }
-
-        /// <summary>
-        /// Obtain the image from the specific Bitmap
-        /// </summary>
-        /// <param name="bmp">The bitmap which will be converted to the image</param>
-        public Image(Bitmap bmp)
-        {
-            Bitmap = bmp;
-        }
-
-        //#region Conversion with Bitmap
-        /// <summary>
-        /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
-        /// such that the image data is <b>shared</b> with Bitmap. 
-        /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
-        /// For other types of image this property has the same effect as ToBitmap()
-        /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
-        /// The Set property convert the bitmap to this Image type.
-        /// </summary>
-        public virtual Bitmap Bitmap
-        {
-            get
-            {
-                IntPtr scan0;
-                int step;
-                Size size;
-                CvInvoke.cvGetRawData(Ptr, out scan0, out step, out size);
-
-                return CvInvoke.RawDataToBitmap(scan0, step, size, typeof(TColor), NumberOfChannels, typeof(TDepth), true);
-            }
-            set
-            {
-        #region reallocate memory if necessary
-                Size size = value.Size;
-                if (Ptr == IntPtr.Zero)
-                {
-                    AllocateData(size.Height, size.Width, NumberOfChannels);
-                }
-                else if (!Size.Equals(size))
-                {
-                    DisposeObject();
-                    AllocateData(size.Height, size.Width, NumberOfChannels);
-                }
-        #endregion
-
-                switch (value.PixelFormat)
-                {
-                    case PixelFormat.Format32bppRgb:
-                        if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
-                        {
-                            BitmapData data = value.LockBits(
-                               new Rectangle(Point.Empty, value.Size),
-                               ImageLockMode.ReadOnly,
-                               value.PixelFormat);
-
-                            using (Image<Bgra, Byte> mat = new Image<Bgra, Byte>(value.Width, value.Height, data.Stride, data.Scan0))
-                            {
-                                CvInvoke.MixChannels(mat, this, new[] { 0, 0, 1, 1, 2, 2 });
-                                /*
-                                for (int i = 0; i < 3; i++)
-                                {
-                                   CvInvoke.cvSetImageCOI(Ptr, i + 1);
-                                   CvInvoke.cvSetImageCOI(mat, i + 1);
-                                   CvInvoke.cvCopy(mat, Ptr, IntPtr.Zero);
-                                }
-                                CvInvoke.cvSetImageCOI(Ptr, 0);*/
-                            }
-
-                            value.UnlockBits(data);
-                        }
-                        else
-                        {
-                            using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value))
-                                ConvertFrom(tmp);
-                        }
-                        break;
-                    case PixelFormat.Format32bppArgb:
-                        if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
-                            CopyFromBitmap(value);
-                        else
-                        {
-                            BitmapData data = value.LockBits(
-                               new Rectangle(Point.Empty, value.Size),
-                               ImageLockMode.ReadOnly,
-                               value.PixelFormat);
-                            using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value.Width, value.Height, data.Stride, data.Scan0))
-                                ConvertFrom(tmp);
-                            value.UnlockBits(data);
-                        }
-                        break;
-                    case PixelFormat.Format8bppIndexed:
-                        if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
-                        {
-                            Matrix<Byte> bTable, gTable, rTable, aTable;
-                            CvToolbox.ColorPaletteToLookupTable(value.Palette, out bTable, out gTable, out rTable, out aTable);
-                            BitmapData data = value.LockBits(
-                               new Rectangle(Point.Empty, value.Size),
-                               ImageLockMode.ReadOnly,
-                               value.PixelFormat);
-                            using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(value.Width, value.Height, data.Stride, data.Scan0))
-                            {
-                                using (Mat b = new Mat())
-                                using (Mat g = new Mat())
-                                using (Mat r = new Mat())
-                                using (Mat a = new Mat())
-                                {
-                                    CvInvoke.LUT(indexValue, bTable, b);
-                                    CvInvoke.LUT(indexValue, gTable, g);
-                                    CvInvoke.LUT(indexValue, rTable, r);
-                                    CvInvoke.LUT(indexValue, aTable, a);
-                                    using (VectorOfMat mv = new VectorOfMat(new Mat[] { b, g, r, a }))
-                                    {
-                                        CvInvoke.Merge(mv, this);
-                                    }
-                                }
-                            }
-                            value.UnlockBits(data);
-                            bTable.Dispose(); gTable.Dispose(); rTable.Dispose(); aTable.Dispose();
-                        }
-                        else
-                        {
-                            using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(value))
-                                ConvertFrom(tmp);
-                        }
-                        break;
-                    case PixelFormat.Format24bppRgb:
-                        if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
-                            CopyFromBitmap(value);
-                        else
-                        {
-                            BitmapData data = value.LockBits(
-                               new Rectangle(Point.Empty, value.Size),
-                               ImageLockMode.ReadOnly,
-                               value.PixelFormat);
-                            using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(value.Width, value.Height, data.Stride, data.Scan0))
-                                ConvertFrom(tmp);
-                            value.UnlockBits(data);
-                        }
-                        break;
-                    case PixelFormat.Format1bppIndexed:
-                        if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
-                        {
-                            int rows = size.Height;
-                            int cols = size.Width;
-                            BitmapData data = value.LockBits(
-                                new Rectangle(Point.Empty, size),
-                                ImageLockMode.ReadOnly,
-                                value.PixelFormat);
-
-                            int fullByteCount = cols >> 3;
-                            int partialBitCount = cols & 7;
-
-                            int mask = 1 << 7;
-
-                            Int64 srcAddress = data.Scan0.ToInt64();
-                            Byte[,,] imagedata = Data as Byte[,,];
-
-                            Byte[] row = new byte[fullByteCount + (partialBitCount == 0 ? 0 : 1)];
-
-                            int v = 0;
-                            for (int i = 0; i < rows; i++, srcAddress += data.Stride)
-                            {
-                                Marshal.Copy((IntPtr)srcAddress, row, 0, row.Length);
-
-                                for (int j = 0; j < cols; j++, v <<= 1)
-                                {
-                                    if ((j & 7) == 0)
-                                    {  //fetch the next byte 
-                                        v = row[j >> 3];
-                                    }
-                                    imagedata[i, j, 0] = (v & mask) == 0 ? (Byte)0 : (Byte)255;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            using (Image<Gray, Byte> tmp = new Image<Gray, Byte>(value))
-                                ConvertFrom(tmp);
-                        }
-                        break;
-                    default:
-        #region Handle other image type
-                        /*
-                                 Bitmap bgraImage = new Bitmap(value.Width, value.Height, PixelFormat.Format32bppArgb);
-                                 using (Graphics g = Graphics.FromImage(bgraImage))
-                                 {
-                                    g.DrawImageUnscaled(value, 0, 0, value.Width, value.Height);
-                                 }
-                                 Bitmap = bgraImage;*/
-                        using (Image<Bgra, Byte> tmp1 = new Image<Bgra, Byte>(value.Size))
-                        {
-                            Byte[,,] data = tmp1.Data;
-                            for (int i = 0; i < value.Width; i++)
-                                for (int j = 0; j < value.Height; j++)
-                                {
-                                    Color color = value.GetPixel(i, j);
-                                    data[j, i, 0] = color.B;
-                                    data[j, i, 1] = color.G;
-                                    data[j, i, 2] = color.R;
-                                    data[j, i, 3] = color.A;
-                                }
-
-                            ConvertFrom<Bgra, Byte>(tmp1);
-                        }
-        #endregion
-                        break;
-                }
-
-            }
-        }
-
-        /// <summary>
-        /// Utility function for Bitmap Set property
-        /// </summary>
-        /// <param name="bmp"></param>
-        private void CopyFromBitmap(Bitmap bmp)
-        {
-            BitmapData data = bmp.LockBits(
-                new Rectangle(Point.Empty, bmp.Size),
-                ImageLockMode.ReadOnly,
-                bmp.PixelFormat);
-
-            using (Matrix<TDepth> mat = new Matrix<TDepth>(bmp.Height, bmp.Width, NumberOfChannels, data.Scan0, data.Stride))
-                CvInvoke.cvCopy(mat.Ptr, Ptr, IntPtr.Zero);
-
-            bmp.UnlockBits(data);
-        }
-
-        /// <summary> 
-        /// Convert this image into Bitmap, the pixel values are copied over to the Bitmap
-        /// </summary>
-        /// <remarks> For better performance on Image&lt;Gray, Byte&gt; and Image&lt;Bgr, Byte&gt;, consider using the Bitmap property </remarks>
-        /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
-        public Bitmap ToBitmap()
-        {
-            Type typeOfColor = typeof(TColor);
-            Type typeofDepth = typeof(TDepth);
-
-            PixelFormat format = PixelFormat.Undefined;
-
-            if (typeOfColor == typeof(Gray)) // if this is a gray scale image
-            {
-                format = PixelFormat.Format8bppIndexed;
-            }
-            else if (typeOfColor == typeof(Bgra)) //if this is Bgra image
-            {
-                format = PixelFormat.Format32bppArgb;
-            }
-            else if (typeOfColor == typeof(Bgr))  //if this is a Bgr Byte image
-            {
-                format = PixelFormat.Format24bppRgb;
-            }
-            else
-            {
-                using (Image<Bgr, Byte> temp = Convert<Bgr, Byte>())
-                    return temp.ToBitmap();
-            }
-
-            if (typeof(TDepth) == typeof(Byte))
-            {
-                Size size = Size;
-                Bitmap bmp = new Bitmap(size.Width, size.Height, format);
-                BitmapData data = bmp.LockBits(
-                    new Rectangle(Point.Empty, size),
-                    ImageLockMode.WriteOnly,
-                    format);
-                //using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, data.Scan0, data.Stride))
-                using (Mat mat = new Mat(size.Height, size.Width, CV.CvEnum.DepthType.Cv8U, NumberOfChannels, data.Scan0, data.Stride))
-                {
-                    this.Mat.CopyTo(mat);
-                }
-                //using (Image<TColor, Byte> m = new Image<TColor, Byte>(size.Width, size.Height, data.Stride, data.Scan0))
-                //   CvInvoke.cvCopy(Ptr, m.Ptr, IntPtr.Zero);
-
-                bmp.UnlockBits(data);
-
-                if (format == PixelFormat.Format8bppIndexed)
-                    bmp.Palette = CvToolbox.GrayscalePalette;
-                return bmp;
-            }
-            else
-            {
-                using (Image<TColor, Byte> temp = Convert<TColor, Byte>())
-                    return temp.ToBitmap();
-            }
-        }
-
-        /// <summary> Create a Bitmap image of certain size</summary>
-        /// <param name="width">The width of the bitmap</param>
-        /// <param name="height"> The height of the bitmap</param>
-        /// <returns> This image in Bitmap format of the specific size</returns>
-        public Bitmap ToBitmap(int width, int height)
-        {
-            using (Image<TColor, TDepth> scaledImage = Resize(width, height, CvEnum.Inter.Linear))
-                return scaledImage.ToBitmap();
-        }
-#endif
-
-        #region Pyramids
+#region Pyramids
         /// <summary>
         /// Performs downsampling step of Gaussian pyramid decomposition. 
         /// First it convolves <i>this</i> image with the specified filter and then downsamples the image 
@@ -2695,9 +2385,9 @@ namespace Emgu.CV
 
             return pyr;
         }
-        #endregion
+#endregion
 
-        #region Special Image Transforms
+#region Special Image Transforms
         /// <summary> Use inpaint to recover the intensity of the pixels which location defined by <paramref name="mask"/> on <i>this</i> image </summary>
         /// <param name="mask">The inpainting mask. Non-zero pixels indicate the area that needs to be inpainted</param>
         /// <param name="radius">The radius of circular neighborhood of each point inpainted that is considered by the algorithm</param>
@@ -2708,9 +2398,9 @@ namespace Emgu.CV
             CvInvoke.Inpaint(this, mask, res, radius, CvEnum.InpaintType.Telea);
             return res;
         }
-        #endregion
+#endregion
 
-        #region Morphological Operations
+#region Morphological Operations
         /// <summary>
         /// Perform advanced morphological transformations using erosion and dilation as basic operations.
         /// </summary>
@@ -2794,9 +2484,9 @@ namespace Emgu.CV
         {
             CvInvoke.Dilate(this, this, null, new Point(-1, -1), iterations, CvEnum.BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
         }
-        #endregion
+#endregion
 
-        #region generic operations
+#region generic operations
         /// <summary> 
         /// perform an generic action based on each element of the image
         /// </summary>
@@ -3101,9 +2791,9 @@ namespace Emgu.CV
 
             return res;
         }
-        #endregion
+#endregion
 
-        #region Implment UnmanagedObject
+#region Implment UnmanagedObject
         /// <summary>
         /// Release all unmanaged memory associate with the image
         /// </summary>
@@ -3127,9 +2817,9 @@ namespace Emgu.CV
 
             _array = null;
         }
-        #endregion
+#endregion
 
-        #region Operator overload
+#region Operator overload
 
         /// <summary>
         /// Perform an element wise AND operation on the two images
@@ -3429,9 +3119,9 @@ namespace Emgu.CV
             return res;
         }
 
-        #endregion
+#endregion
 
-        #region Filters
+#region Filters
         /// <summary>
         /// Summation over a pixel param1 x param2 neighborhood with subsequent scaling by 1/(param1 x param2)
         /// </summary>
@@ -3486,7 +3176,7 @@ namespace Emgu.CV
             return res;
         }
 
-        #region Gaussian Smooth
+#region Gaussian Smooth
         /// <summary> Perform Gaussian Smoothing in the current image and return the result </summary>
         /// <param name="kernelSize"> The size of the Gaussian kernel (<paramref name="kernelSize"/> x <paramref name="kernelSize"/>)</param>
         /// <returns> The smoothed image</returns>
@@ -3608,9 +3298,9 @@ namespace Emgu.CV
             titledSum = new Image<TColor, double>(Width + 1, Height + 1);
             CvInvoke.Integral(this, sum, squareSum, titledSum, CvEnum.DepthType.Cv64F);
         }
-        #endregion
+#endregion
 
-        #region Threshold methods
+#region Threshold methods
         /// <summary>
         /// Transforms grayscale image to binary image. 
         /// Threshold calculated individually for each pixel. 
@@ -3758,10 +3448,10 @@ namespace Emgu.CV
         {
             ThresholdBase(this, threshold, maxValue, CvEnum.ThresholdType.BinaryInv);
         }
-        #endregion
-        #endregion
+#endregion
+#endregion
 
-        #region Statistic
+#region Statistic
         /// <summary>
         /// Calculates the average value and standard deviation of array elements, independently for each channel
         /// </summary>
@@ -3823,9 +3513,9 @@ namespace Emgu.CV
         {
             Mat.MinMax(out minValues, out maxValues, out minLocations, out maxLocations);
         }
-        #endregion
+#endregion
 
-        #region Image Flipping
+#region Image Flipping
 
         /// <summary> Return a flipped copy of the current image</summary>
         /// <param name="flipType">The type of the flipping</param>
@@ -3853,9 +3543,9 @@ namespace Emgu.CV
                    flipType);
             }
         }
-        #endregion
+#endregion
 
-        #region various
+#region various
 
         /// <summary>
         /// Concate the current image with another image vertically.
@@ -4044,7 +3734,7 @@ namespace Emgu.CV
                 }
             }
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// This function load the image data from Mat
@@ -4117,11 +3807,7 @@ namespace Emgu.CV
         /// <param name="iplImage">The pointer to the iplImage</param>
         private void LoadImageFromIplImagePtr(IntPtr iplImage)
         {
-#if NETFX_CORE || NETSTANDARD1_4
-         MIplImage mptr = Marshal.PtrToStructure<MIplImage>(iplImage);
-#else
             MIplImage mptr = (MIplImage)Marshal.PtrToStructure(iplImage, typeof(MIplImage));
-#endif
             Size size = new Size(mptr.Width, mptr.Height);
 
             //Allocate data in managed memory
@@ -4232,11 +3918,7 @@ namespace Emgu.CV
         /// <summary>
         /// Offset of roi
         /// </summary>
-#if NETFX_CORE || NETSTANDARD1_4
-      public static readonly int RoiOffset = (int)Marshal.OffsetOf<MIplImage>("Roi");
-#else
         public static readonly int RoiOffset = (int)Marshal.OffsetOf(typeof(MIplImage), "Roi");
-#endif
     }
 
     /// <summary>

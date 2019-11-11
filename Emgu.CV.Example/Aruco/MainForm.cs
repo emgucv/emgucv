@@ -14,6 +14,7 @@ using Emgu.CV;
 using Emgu.CV.Aruco;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Emgu.CV.UI;
 using Emgu.CV.Util;
 
 namespace Aruco
@@ -93,7 +94,7 @@ namespace Aruco
 
             Mat boardImage = new Mat();
             ArucoBoard.Draw(imageSize, boardImage, margins, borderBits);
-            bmIm = boardImage.Bitmap;
+            bmIm = boardImage.ToBitmap();
             PrintImage();
 
         }

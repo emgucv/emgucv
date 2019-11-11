@@ -13,6 +13,7 @@ namespace HelloWorld
     {
         static void Main(string[] args)
         {
+            CvInvoke.CheckLibraryLoaded();
             String win1 = "Test Window"; //The name of the window
             CvInvoke.NamedWindow(win1); //Create the window using the specific name
 

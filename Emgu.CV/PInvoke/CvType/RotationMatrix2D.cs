@@ -14,26 +14,9 @@ namespace Emgu.CV
     /// <summary>
     /// A (2x3) 2D rotation matrix. This Matrix defines an Affine Transform
     /// </summary>
-#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
-#endif
     public class RotationMatrix2D : Mat
     {
-
-        /*
-  #if !(NETFX_CORE || NETSTANDARD1_4)
-        /// <summary>
-        /// Constructor used to deserialize 2D rotation matrix
-        /// </summary>
-        /// <param name="info">The serialization info</param>
-        /// <param name="context">The streaming context</param>
-        public RotationMatrix2D(SerializationInfo info, StreamingContext context)
-           : base(info, context)
-        {
-        }
-  #endif*/
-
-
         /// <summary>
         /// Create an empty (2x3) 2D rotation matrix
         /// </summary>

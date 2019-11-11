@@ -45,8 +45,8 @@ namespace AndroidExamples
             }
 
             long time;
-            using (Mat box = new Mat(Assets, "box.png"))
-            using (Mat boxInScene = new Mat(Assets, "box_in_scene.png"))
+            using (Mat box = Assets.GetMat("box.png"))
+            using (Mat boxInScene = Assets.GetMat("box_in_scene.png"))
             using (Mat result = DrawMatches.Draw(box, boxInScene, out time))
             {
                SetImageBitmap(result.ToBitmap(Bitmap.Config.Rgb565));

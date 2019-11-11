@@ -11,9 +11,7 @@ namespace Emgu.CV.Structure
     /// <summary>
     /// A 2D triangle
     /// </summary>
-#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
-#endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Triangle2DF : IConvexPolygonF, IEquatable<Triangle2DF>
     {

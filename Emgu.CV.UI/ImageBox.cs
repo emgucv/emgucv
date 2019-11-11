@@ -292,7 +292,7 @@ namespace Emgu.CV.UI
                     using (InputArray ia = _displayedImage.GetInputArray())
                     using (Mat m = ia.GetMat())
                     {
-                        base.Image = m.Bitmap;
+                        base.Image = m.ToBitmap();
                     }
 
                     if (EnablePropertyPanel)

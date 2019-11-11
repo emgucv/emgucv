@@ -24,16 +24,10 @@ namespace Emgu.CV
     /// The equivalent of cv::Mat, should only be used if you know what you are doing.
     /// In most case you should use the Matrix class instead
     /// </summary>
-#if !(NETFX_CORE || NETSTANDARD1_4)
     [Serializable]
     [DebuggerTypeProxy(typeof(UMat.DebuggerProxy))]
-#endif
-    public partial class UMat : MatDataAllocator, IEquatable<UMat>, IInputOutputArray
-#if !(NETFX_CORE || NETSTANDARD1_4)
-, ISerializable
-#endif
+    public partial class UMat : MatDataAllocator, IEquatable<UMat>, IInputOutputArray, ISerializable
     {
-#if !(NETFX_CORE || NETSTANDARD1_4)
         #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
@@ -76,7 +70,6 @@ namespace Emgu.CV
         }
 
         #endregion
-#endif
 
         /// <summary>
         /// Allocation usage.
@@ -533,28 +526,6 @@ namespace Emgu.CV
 
             }
         }
-
-
-#if !(__UNIFIED__ || NETFX_CORE || NETSTANDARD1_4 || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || __IOS__)
-        /// <summary>
-        /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
-        /// such that the image data is <b>shared</b> with Bitmap. 
-        /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
-        /// For other types of image this property has the same effect as ToBitmap()
-        /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
-        /// The Set property convert the bitmap to this Image type.
-        /// </summary>
-        public Bitmap Bitmap
-        {
-            get
-            {
-                using (Mat tmp = GetMat(CvEnum.AccessType.Read))
-                {
-                    return tmp.Bitmap;
-                }
-            }
-        }
-#endif
 
         /// <summary>
         /// Returns the min / max location and values for the image
@@ -1081,7 +1052,6 @@ namespace Emgu.CV
         }
 
         #endregion
-
 
         internal class DebuggerProxy
         {
