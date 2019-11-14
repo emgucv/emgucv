@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.props" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.props')" />
-  <Import Project="..\..\..\nugetpackages\Xamarin.Forms.4.1.0.673156\build\Xamarin.Forms.props" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.4.1.0.673156\build\Xamarin.Forms.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -95,18 +93,6 @@
       <HintPath Condition="Exists('/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/lib/mono/Xamarin.Mac/Facades/netstandard.dll')">/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/lib/mono/Xamarin.Mac/Facades/netstandard.dll</HintPath>
       <!-- HintPath for Windows -->
       <HintPath Condition="Exists('$(TargetFrameworkRootPath)\Xamarin.Mac\v2.0\Facades\netstandard.dll')">$(TargetFrameworkRootPath)\Xamarin.Mac\v2.0\Facades\netstandard.dll</HintPath>
-    </Reference>    
-    <Reference Include="Xamarin.Forms.Core">
-      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\lib\Xamarin.Mac\Xamarin.Forms.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform">
-      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\lib\Xamarin.Mac\Xamarin.Forms.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform.macOS">
-      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\lib\Xamarin.Mac\Xamarin.Forms.Platform.macOS.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Xaml">
-      <HintPath>..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\lib\Xamarin.Mac\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -163,7 +149,6 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -182,9 +167,12 @@
       <Name>Emgu.CV.World.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms">
+      <Version>4.3.0.991211</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" Condition="Exists('..\Core\Emgu.CV.XamarinForms.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
-  <Import Project="..\..\..\nugetpackages\Xamarin.Forms.4.1.0.673156\build\Xamarin.Forms.targets" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.4.1.0.673156\build\Xamarin.Forms.targets')" />
-  <Import Project="..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.targets" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.targets')" />
 </Project>
