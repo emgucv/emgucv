@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>47e541e4-abed-4399-8e52-9f27f84d93bd</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVMacBinaryDir>$(MSBuildThisFileDirectory)..\..\libs\osx</EmguCVMacBinaryDir>
+    <EmguCVMacDir>$(MSBuildThisFileDirectory)</EmguCVMacDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVMacLinkTarget>Xamarin.Mac</EmguCVMacLinkTarget>
+    <EmguCVMacNativeFile>$(EmguCVMacBinaryDir)\libcvextern.dylib</EmguCVMacNativeFile>
+    <EmguCVMacErrorMessage Condition="!Exists('$(EmguCVMacNativeFile)')">This package do not contain necessary binary for $(EmguCVMacLinkTarget). Missing $(EmguCVMacNativeFile). PInvoke may fail on Mac OS.</EmguCVMacErrorMessage>
+    <EmguCVMacDeployMessage Condition="Exists('$(EmguCVMacNativeFile)')">$(EmguCVMacDeployMessage)MacOS x64 </EmguCVMacDeployMessage>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('$(EmguCVMacNativeFile)')">
+    <Content Include="$(EmguCVMacNativeFile)">
+      <Link>libcvextern.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Target Name="EmguCVMacPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Warning Text="'$(EmguCVMacErrorMessage)'" Condition="'$(EmguCVMacErrorMessage)'!=''" />
+	<Warning Text="'$(EmguCVMacErrorMessage2)'" Condition="'$(EmguCVMacErrorMessage2)'!=''" />
+    <Message Text="Emgu.CV.Runtime.Mac Compiling with $(EmguCVMacDeployMessage)binary" Condition="'$(EmguCVMacDeployMessage)'!=''" Importance="High" />
+    <Message Text="Native binary is NOT deployed by the Emgu.CV.Runtime.Mac shared project." Condition="'$(EmguCVMacDeployMessage)'==''" Importance="High" />
+  </Target>
+</Project>

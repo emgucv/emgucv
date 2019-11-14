@@ -18,11 +18,11 @@
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Windows
-    DESTINATION Emgu.TF.Runtime
-    COMPONENT emgutf_source
+    DESTINATION Emgu.CV.Runtime
+    COMPONENT emgucv_source
     FILES_MATCHING 
-	PATTERN "Emgu.TF.Runtime.Windows.shproj"
-	PATTERN "Emgu.TF.Runtime.Windows.projitems"
+	PATTERN "Emgu.CV.Runtime.Windows.shproj"
+	PATTERN "Emgu.CV.Runtime.Windows.projitems"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "CMakeFiles" EXCLUDE
@@ -31,11 +31,11 @@
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Ubuntu
-    DESTINATION Emgu.TF.Runtime
-    COMPONENT emgutf_source
+    DESTINATION Emgu.CV.Runtime
+    COMPONENT emgucv_source
     FILES_MATCHING 
-	PATTERN "Emgu.TF.Runtime.Ubuntu.shproj"
-	PATTERN "Emgu.TF.Runtime.Ubuntu.projitems"
+	PATTERN "Emgu.CV.Runtime.Ubuntu.shproj"
+	PATTERN "Emgu.CV.Runtime.Ubuntu.projitems"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "CMakeFiles" EXCLUDE
@@ -44,22 +44,22 @@
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Raspbian
-    DESTINATION Emgu.TF.Runtime
-    COMPONENT emgutf_source
+    DESTINATION Emgu.CV.Runtime
+    COMPONENT emgucv_source
     FILES_MATCHING 
-	PATTERN "Emgu.TF.Runtime.Raspbian.shproj"
-	PATTERN "Emgu.TF.Runtime.Raspbian.projitems"
+	PATTERN "Emgu.CV.Runtime.Raspbian.shproj"
+	PATTERN "Emgu.CV.Runtime.Raspbian.projitems"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "CMakeFiles" EXCLUDE
     )
 
 IF(HAVE_ANDROID)
-  PROJECT(Emgu.TF.Runtime.Android)
+  PROJECT(Emgu.CV.Runtime.Android)
   INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Android
-    DESTINATION Emgu.TF.Runtime
-    COMPONENT emgutf_source
+    DESTINATION Emgu.CV.Runtime
+    COMPONENT emgucv_source
     FILES_MATCHING 
     PATTERN "${PROJECT_NAME}.csproj"
     PATTERN ".svn" EXCLUDE
