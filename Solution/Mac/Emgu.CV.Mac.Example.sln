@@ -14,13 +14,13 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.XamarinForms", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.XamarinForms.Mac", "..\..\Emgu.CV.Example\XamarinForms\Mac\Emgu.CV.XamarinForms.Mac.csproj", "{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.World.Mac", "..\..\Emgu.CV.World\Emgu.CV.World.Mac.csproj", "{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.shproj", "{7BC723CB-1678-415F-A65F-4027F8758A6F}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.shproj", "{11E54A7E-778D-466C-A176-71E150976AC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.World.NetStandard", "..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj", "{849EE864-97D2-46C2-B67E-FE7829D1D6D8}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Mac", "..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.shproj", "{74DB1213-249E-44DC-B193-BC5CEC981D3C}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -108,30 +108,6 @@ Global
 		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|x64.Build.0 = Release|x64
 		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|x86.ActiveCfg = Release|x86
 		{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}.Release|x86.Build.0 = Release|x86
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|ARM.Build.0 = Debug|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|iPhone.Build.0 = Debug|iPhone
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|x64.Build.0 = Debug|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Debug|x86.Build.0 = Debug|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|ARM.ActiveCfg = Release|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|ARM.Build.0 = Release|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|iPhone.ActiveCfg = Release|iPhone
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|iPhone.Build.0 = Release|iPhone
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|x64.ActiveCfg = Release|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|x64.Build.0 = Release|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|x86.ActiveCfg = Release|Any CPU
-		{17DA620B-32F9-436D-86B9-BFCAF4FB6A22}.Release|x86.Build.0 = Release|Any CPU
 		{849EE864-97D2-46C2-B67E-FE7829D1D6D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{849EE864-97D2-46C2-B67E-FE7829D1D6D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{849EE864-97D2-46C2-B67E-FE7829D1D6D8}.Debug|ARM.ActiveCfg = Debug|Any CPU

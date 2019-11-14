@@ -176,12 +176,14 @@
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
-  <Import Project="..\..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems')" />
-  <Import Project="..\..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems')" />
-  <Import Project="..\..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV\Emgu.CV.projitems')" />
-  <Import Project="..\..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems')" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
+      <Project>{849EE864-97D2-46C2-B67E-FE7829D1D6D8}</Project>
+      <Name>Emgu.CV.World.NetStandard</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" Condition="Exists('..\Core\Emgu.CV.XamarinForms.projitems')" />
-  <Import Project="..\..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.Util\Emgu.Util.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Import Project="..\..\..\nugetpackages\Xamarin.Forms.4.1.0.673156\build\Xamarin.Forms.targets" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.4.1.0.673156\build\Xamarin.Forms.targets')" />
   <Import Project="..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.targets" Condition="Exists('..\..\..\nugetpackages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.targets')" />
