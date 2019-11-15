@@ -61,7 +61,7 @@ namespace Emgu.CV.Example.Mac
             {
                 //Read the files as an 8-bit Bgr image  
                 NSImage nsImage = NSImage.ImageNamed("lena.jpg");
-                UMat image = new UMat(nsImage); //UMat version
+                UMat image = nsImage.ToUMat(); //UMat version
                                                 //image = new Mat("lena.jpg", ImreadModes.Color); //CPU version
 
                 long detectionTime;

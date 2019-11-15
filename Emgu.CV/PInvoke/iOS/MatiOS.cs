@@ -2,18 +2,15 @@
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if __UNIFIED__
+#if __IOS__
 using System;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using CoreGraphics;
 using Emgu.CV.CvEnum;
-#if __IOS__
 using UIKit;
-#else
-using AppKit;
-#endif
+
 
 namespace Emgu.CV
 {
@@ -163,31 +160,7 @@ namespace Emgu.CV
          }
       }
 #else
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from NSImage
-        /// </summary>
-        /// <param name="mode">The color conversion mode. By default, it convert the UIImage to BGRA color type to preserve all the image channels.</param>
-        /// <param name="nsImage">The NSImage.</param>
-        public Mat(NSImage nsImage, ImreadModes mode = ImreadModes.AnyColor)
-           : this()
-        {
-            using (CGImage cgImage = nsImage.CGImage)
-            {
-                CvInvoke.ConvertCGImageToArray(cgImage, this, mode);
-            }
-        }
 
-        /// <summary>
-        /// Converts to NSImage.
-        /// </summary>
-        /// <returns>The NSImage.</returns>
-        public NSImage ToNSImage()
-        {
-            using (CGImage tmp = ToCGImage())
-            {
-                return new NSImage(tmp, new CGSize(tmp.Width, tmp.Height));
-            }
-        }
 #endif
 
     }

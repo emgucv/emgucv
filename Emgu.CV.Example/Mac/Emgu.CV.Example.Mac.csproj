@@ -144,6 +144,8 @@
     <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
       <Link>FindPedestrian.cs</Link>
     </Compile>
+    <Compile Include="CGImageExtension.cs" />
+    <Compile Include="NSImageExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

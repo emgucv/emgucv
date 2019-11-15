@@ -2,15 +2,13 @@
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if __UNIFIED__
+#if __IOS__
 using System;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using CoreGraphics;
-#if __IOS__
 using UIKit;
-#endif
 
 namespace Emgu.CV
 {
@@ -83,7 +81,6 @@ namespace Emgu.CV
          }
       }
 
-#if __IOS__
       /// <summary>
       /// Creating an Image from the UIImage
       /// </summary>
@@ -106,7 +103,6 @@ namespace Emgu.CV
               return UIImage.FromImage(cgImage);
           }
       }
-#endif
    }
 }
 

@@ -30,26 +30,6 @@ namespace Emgu.CV
             CvInvoke.ConvertCGImageToArray(cgImage, this, mode);
         }
 
-        /*
-      private void ConvertFromCGImage(CGImage cgImage)
-      {
-         Size sz = new Size((int) cgImage.Width, (int) cgImage.Height);
-         using (Mat m = new Mat(sz, DepthType.Cv8U, 4))
-         {
-            RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
-            using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
-            using (CGBitmapContext context = new CGBitmapContext(
-             m.DataPointer,             
-             sz.Width, sz.Height,
-             8,
-             sz.Width * 4,
-             cspace,
-             CGImageAlphaInfo.PremultipliedLast))
-               context.DrawImage(rect, cgImage);
-            CvInvoke.CvtColor(m, this, ColorConversion.Rgba2Bgr);
-         } 
-      }*/
-
         private static CGImage RgbaByteMatToCGImage(Mat bgraByte)
         {
             using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
