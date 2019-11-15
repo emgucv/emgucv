@@ -140,7 +140,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="..\..\Emgu.CV.WPF\BitmapSourceConverter.cs">
+    <Compile Include="..\..\Emgu.CV.NativeImage\BitmapSourceExtension.cs">
       <Link>BitmapSourceConverter.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">

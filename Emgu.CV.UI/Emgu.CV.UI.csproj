@@ -113,7 +113,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitmapExtension.cs" />
+    <Compile Include="..\Emgu.CV.NativeImage\BitmapExtension.cs" />
     <Compile Include="HistogramBox.cs">
       <SubType>UserControl</SubType>
     </Compile>

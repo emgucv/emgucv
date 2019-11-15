@@ -12,9 +12,9 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.UI;
 
-namespace Emgu.CV.WPF
+namespace Emgu.CV
 {
-    public static class BitmapSourceConvert
+    public static class BitmapSourceExtension
     {
         /// <summary>
         /// Delete a GDI object
@@ -29,7 +29,7 @@ namespace Emgu.CV.WPF
         /// </summary>
         /// <param name="image">The Emgu CV Image</param>
         /// <returns>The equivalent BitmapSource</returns>
-        public static BitmapSource ToBitmapSource(IInputArray image)
+        public static BitmapSource ToBitmapSource(this IInputArray image)
         {
             using (InputArray ia = image.GetInputArray())
             using (Mat m = ia.GetMat())
@@ -48,7 +48,7 @@ namespace Emgu.CV.WPF
             }
         }
 
-        public static Mat ToMat(BitmapSource source)
+        public static Mat ToMat(this BitmapSource source)
         {
 
             if (source.Format == PixelFormats.Bgra32)

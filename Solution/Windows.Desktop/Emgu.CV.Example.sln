@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.902
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebDynamicImage", "..\..\Emgu.CV.Example\WebDynamicImage\", "{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -108,6 +108,7 @@ Global
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{e5902195-9fc7-4a96-ba4b-5afe17e13ec8}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{e8a4de5c-be26-445f-bebd-8c99c80857e1}*SharedItemsImports = 4
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{f42d1b92-5722-41f4-b8f1-98185cd09d87}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

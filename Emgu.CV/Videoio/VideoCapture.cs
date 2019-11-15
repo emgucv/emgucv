@@ -709,25 +709,6 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveVideoCaptureReadToMat(IntPtr capture, IntPtr mat);
 
-#if NETFX_CORE
-        [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
-        public delegate void WinrtMessageLoopCallback();
-
-        [DllImport(ExternLibrary, EntryPoint= "cveWinrtStartMessageLoop", CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void WinrtStartMessageLoop(WinrtMessageLoopCallback callback);
-
-        [DllImport(ExternLibrary, EntryPoint = "cveWinrtSetFrameContainer", CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void WinrtSetFrameContainer(Windows.UI.Xaml.Controls.Image image);
-
-        [DllImport(ExternLibrary, EntryPoint = "cveWinrtImshow", CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void WinrtImshow();
-
-        [DllImport(ExternLibrary, EntryPoint = "cveWinrtOnVisibilityChanged", CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void WinrtOnVisibilityChanged(
-            [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool visible);
-#endif
-
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoCaptureCreateFromDevice(int index, VideoCapture.API apiPreference);
 

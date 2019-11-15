@@ -3,18 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
@@ -38,7 +27,7 @@ namespace Emgu.CV.WPF
          image.SetTo(new Bgr(255, 255, 255).MCvScalar);
          CvInvoke.PutText(image, "Hello, world", new System.Drawing.Point(10, 50), Emgu.CV.CvEnum.FontFace.HersheyPlain, 3.0, new Bgr(255.0, 0.0, 0.0).MCvScalar);
 
-         image1.Source = BitmapSourceConvert.ToBitmapSource(image);
+         image1.Source = image.ToBitmapSource();
       }
 
    }

@@ -37,12 +37,12 @@ namespace RealtimeCamera
             textBlock.Text = String.Empty;
             Window.Current.VisibilityChanged += (sender, args) =>
             {
-                CvInvoke.WinrtOnVisibilityChanged(args.Visible);
+                WinrtInvoke.WinrtOnVisibilityChanged(args.Visible);
             };
             //render the captured image in the bottom image view
-            CvInvoke.WinrtSetFrameContainer(this.image2);
+            WinrtInvoke.WinrtSetFrameContainer(this.image2);
 
-            CvInvoke.WinrtStartMessageLoop(Process);
+            WinrtInvoke.WinrtStartMessageLoop(Process);
 
         }
 
@@ -74,7 +74,7 @@ namespace RealtimeCamera
                         bool retrieved = _capture.Retrieve(m);
                         //_capture.Read(m);
 
-                        CvInvoke.WinrtImshow();
+                        WinrtInvoke.WinrtImshow();
                         if (!m.IsEmpty)
                         {
                             if (_cameraMatrix == null || _distCoeffs == null)
@@ -132,7 +132,7 @@ namespace RealtimeCamera
 
                             //The data in the mat that is read from the camera will 
                             //be drawn to the Image control
-                            CvInvoke.WinrtImshow();
+                            WinrtInvoke.WinrtImshow();
                         }
                     }
                     catch (Exception e)
