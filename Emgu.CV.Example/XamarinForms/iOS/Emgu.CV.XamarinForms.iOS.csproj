@@ -127,12 +127,6 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Emgu.CV.World\Emgu.CV.World.IOS.csproj">
-      <Project>{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}</Project>
-      <Name>Emgu.CV.World.IOS</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="..\..\..\opencv\data\haarcascades\haarcascade_eye.xml">
       <Link>haarcascade_eye.xml</Link>
     </Content>
@@ -163,8 +157,14 @@
       <Version>4.0.1.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.3.0.947036</Version>
+      <Version>4.3.0.991211</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.World\iOS\Emgu.CV.World.IOS.csproj">
+      <Project>{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}</Project>
+      <Name>Emgu.CV.World.IOS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

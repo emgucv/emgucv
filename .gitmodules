@@ -21,6 +21,7 @@
 [submodule "Emgu.CV.Extern/tesseract/libtesseract/leptonica/leptonica.git"]
 	path = Emgu.CV.Extern/tesseract/libtesseract/leptonica/leptonica.git
 	url = https://github.com/emgucv/leptonica.git
+	ignore = dirty
 [submodule "freetype2"]
 	path = freetype2
 	url = git://git.sv.nongnu.org/freetype/freetype2.git

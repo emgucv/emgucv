@@ -31,8 +31,8 @@ namespace Emgu.CV
         /// <summary>
         /// Copy the data from the CGImage to the current Image object
         /// </summary>
-        private static void ImageFromCGImage<TColor, TDepth>(Image<TColor, TDepth> image, CGImage cgImage)
-        where TColor : struct, IColor
+        internal static void ImageFromCGImage<TColor, TDepth>(Image<TColor, TDepth> image, CGImage cgImage)
+            where TColor : struct, IColor
             where TDepth : new()
         {
             //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
@@ -89,7 +89,7 @@ namespace Emgu.CV
             }
         }
 
-        private static void ConvertCGImageToArray(CGImage cgImage, IOutputArray mat, ImreadModes modes = ImreadModes.AnyColor)
+        internal static void ConvertCGImageToArray(CGImage cgImage, IOutputArray mat, ImreadModes modes = ImreadModes.AnyColor)
         {
             Size sz = new Size((int)cgImage.Width, (int)cgImage.Height);
             using (Mat m = new Mat(sz, DepthType.Cv8U, 4))

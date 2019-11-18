@@ -148,7 +148,7 @@ namespace Emgu.CV
             using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
             {
                AllocateData((int)tmp.Height, (int)tmp.Width, NumberOfChannels);
-               ConvertFromCGImage(tmp);
+               CGImageExtension.ImageFromCGImage<TColor, TDepth> (this, tmp);
             }
             return;
          }
@@ -219,7 +219,7 @@ namespace Emgu.CV
                     using (UIImage tmp = UIImage.FromFile(fileName))
                     {
                        AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
-                       ConvertFromCGImage(tmp.CGImage);
+                       CGImageExtension.ImageFromCGImage<TColor, TDepth>(this, tmp.CGImage);
                     }
 #elif __UNIFIED__
 #else
