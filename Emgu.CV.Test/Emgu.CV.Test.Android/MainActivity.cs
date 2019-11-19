@@ -4,6 +4,7 @@ using Android.OS;
 using Xamarin.Android.NUnitLite;
 using Android.Content;
 using Android.Content.Res;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
@@ -39,18 +40,20 @@ namespace Emgu.CV.Test
          where TColor : struct, IColor
          where TDepth : new()
       {
-         return new Image<TColor, TDepth>(AssetsUtil.Assets, name);
+            //return new Image<TColor, TDepth>(AssetsUtil.Assets, name);
+            return AssetsUtil.Assets.GetImage<TColor, TDepth>(name);
       }
 
-      public static Mat LoadMat(string name)
+      public static Mat LoadMat(string name, CvEnum.ImreadModes mode = ImreadModes.AnyColor)
       {
-         return new Mat(AssetsUtil.Assets, name);
+         //return new Mat(AssetsUtil.Assets, name);
+         return AssetsUtil.Assets.GetMat(name, mode);
       }
 
       public static string LoadFile(string assetName)
       {
          AndroidFileAsset.OverwriteMethod method = AndroidFileAsset.OverwriteMethod.AlwaysOverwrite;
-         System.IO.FileInfo fi = AndroidFileAsset.WritePermanantFileAsset(Context, assetName, "assetCache", method);
+         System.IO.FileInfo fi = AndroidFileAsset.WritePermanentFileAsset(Context, assetName, "assetCache", method);
          return fi.FullName;
       }
    }

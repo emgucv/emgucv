@@ -31,36 +31,20 @@ namespace Emgu.CV
        where TDepth : new()*/
     public static partial class AndroidExtension
     {
-        /*
-        /// <summary>
-        /// Obtain the image from the specific Bitmap
-        /// </summary>
-        /// <param name="bmp">The bitmap which will be converted to the image</param>
-        public Image(Android.Graphics.Bitmap bmp)
-        {
-            Bitmap = bmp;
-        }
-        /// <summary>
-        /// Load the specific file using Bitmap
-        /// </summary>
-        /// <param name="file">The file to load</param>
-        private void LoadFileUsingBitmap(FileInfo file)
-        {
-            using (Android.Graphics.Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(file.FullName))
-                Bitmap = bmp;
-        }
-
+        
         /// <summary>
         /// Read image file from Assets
         /// </summary>
         /// <param name="assets">The Asset manager</param>
         /// <param name="fileName">The name of the file</param>
-        public Image(AssetManager assets, String fileName)
+        public static Image<TColor, TDepth> GetImage<TColor, TDepth>(this AssetManager assets, String fileName)
+            where TColor : struct, IColor
+            where TDepth : new()
         {
             using (Stream imageStream = assets.Open(fileName))
             using (Android.Graphics.Bitmap imageBmp = BitmapFactory.DecodeStream(imageStream))
-                Bitmap = imageBmp;
-        }*/
+                return imageBmp.ToImage<TColor, TDepth>();
+        }
 
         /// <summary> Create a Bitmap image of certain size</summary>
         /// <param name="width">The width of the bitmap</param>
@@ -130,7 +114,7 @@ namespace Emgu.CV
         /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
         /// The Set property convert the bitmap to this Image type.
         /// </summary>
-        public static Image<TColor, TDepth> ImageFromBitmap<TColor, TDepth>(Bitmap bitmap)
+        public static Image<TColor, TDepth> ToImage<TColor, TDepth>(this Bitmap bitmap)
             where TColor : struct, IColor
             where TDepth : new()
         {

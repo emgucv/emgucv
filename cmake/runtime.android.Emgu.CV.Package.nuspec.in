@@ -11,7 +11,7 @@
 	<repository type="git" url="https://github.com/emgucv/emgucv" />
 	<iconUrl>http://www.emgu.com/wiki/files/EmguCVLogo.gif</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-	<summary>Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.</summary>
+	<summary>Runtime package of Emgu CV for Android</summary>
     <description>Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. </description>
     <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
 http://www.emgu.com/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        

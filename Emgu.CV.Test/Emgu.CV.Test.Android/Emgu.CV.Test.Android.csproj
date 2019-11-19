@@ -17,7 +17,7 @@
     <AssemblyName>Emgu.CV.Test.Android</AssemblyName>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,14 +32,17 @@
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkSkip />
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-    <BundleAssemblies>False</BundleAssemblies>
+    <BundleAssemblies>false</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-    <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a,x86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
     <Debugger>Xamarin</Debugger>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -55,7 +58,7 @@
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <BundleAssemblies>False</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-    <AndroidSupportedAbis>armeabi,armeabi-v7a,x86,x86_64,arm64-v8a</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a,x86,x86_64,arm64-v8a</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
     <Debugger>Xamarin</Debugger>
@@ -208,9 +211,14 @@
       <Link>Assets\trained_classifierNM2.xml</Link>
     </AndroidAsset>
   </ItemGroup>
-  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
-  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Runtime\Android\Emgu.CV.Runtime.Android.csproj">
+      <Project>{5f102c71-65c3-4d77-ae48-29c1e75f82be}</Project>
+      <Name>Emgu.CV.Runtime.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
+      <Project>{2faff050-79f0-44fc-8acb-e90980d26b09}</Project>
+      <Name>Emgu.CV.World.NetStandard</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

@@ -927,7 +927,7 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.Android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
-	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Android/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/runtime.android.Emgu.CV.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/runtime.android.Emgu.CV/Package.nuspec)
 ENDIF()
 
 IF(HAVE_IOS AND WIN32)
@@ -953,7 +953,7 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 ENDIF()
 
 #generate nuget config file for Emgu.CV 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Package.nuspec)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV/Package.nuspec)
 
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
 
@@ -976,7 +976,6 @@ IF (APPLE)
 ELSE()
   SET(OPENCV_LIBRARY_OUTPUT_NAME_POSTFIX "")
 ENDIF()
-
 
 SET(OPENCV_LIBRARY_OUTPUT_NAMES )
 
@@ -1123,7 +1122,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CvInvokeEntryPoints.cs.in ${CMA
 #  ENDIF()
   ADD_SUBDIRECTORY(Emgu.CV.World)
 #ENDIF()
-
+ADD_SUBDIRECTORY(Emgu.CV.Runtime)
 IF(WIN32)
   ADD_SUBDIRECTORY(platforms/nuget)
 ENDIF()

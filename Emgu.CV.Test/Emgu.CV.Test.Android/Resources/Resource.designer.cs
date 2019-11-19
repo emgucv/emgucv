@@ -34,7 +34,6 @@ namespace Emgu.CV.Test
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultMessage = global::Emgu.CV.Test.Resource.Id.ResultMessage;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultResultState = global::Emgu.CV.Test.Resource.Id.ResultResultState;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultRunSingleMethodTest = global::Emgu.CV.Test.Resource.Id.ResultRunSingleMethodTest;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultStackTrace = global::Emgu.CV.Test.Resource.Id.ResultStackTrace;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsFailed = global::Emgu.CV.Test.Resource.Id.ResultsFailed;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsId = global::Emgu.CV.Test.Resource.Id.ResultsId;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsIgnored = global::Emgu.CV.Test.Resource.Id.ResultsIgnored;
@@ -42,6 +41,7 @@ namespace Emgu.CV.Test
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsMessage = global::Emgu.CV.Test.Resource.Id.ResultsMessage;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsPassed = global::Emgu.CV.Test.Resource.Id.ResultsPassed;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsResult = global::Emgu.CV.Test.Resource.Id.ResultsResult;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultStackTrace = global::Emgu.CV.Test.Resource.Id.ResultStackTrace;
 			global::Xamarin.Android.NUnitLite.Resource.Id.RunTestsButton = global::Emgu.CV.Test.Resource.Id.RunTestsButton;
 			global::Xamarin.Android.NUnitLite.Resource.Id.TestSuiteListView = global::Emgu.CV.Test.Resource.Id.TestSuiteListView;
 			global::Xamarin.Android.NUnitLite.Resource.Layout.options = global::Emgu.CV.Test.Resource.Layout.options;
@@ -66,8 +66,8 @@ namespace Emgu.CV.Test
 		public partial class Drawable
 		{
 			
-			// aapt resource value: 0x7f020000
-			public const int Icon = 2130837504;
+			// aapt resource value: 0x7F010000
+			public const int Icon = 2130771968;
 			
 			static Drawable()
 			{
@@ -82,59 +82,59 @@ namespace Emgu.CV.Test
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int OptionHostName = 2130968577;
+			// aapt resource value: 0x7F020000
+			public const int OptionHostName = 2130837504;
 			
-			// aapt resource value: 0x7f040002
-			public const int OptionPort = 2130968578;
+			// aapt resource value: 0x7F020001
+			public const int OptionPort = 2130837505;
 			
-			// aapt resource value: 0x7f040000
-			public const int OptionRemoteServer = 2130968576;
+			// aapt resource value: 0x7F020002
+			public const int OptionRemoteServer = 2130837506;
 			
-			// aapt resource value: 0x7f040010
-			public const int OptionsButton = 2130968592;
+			// aapt resource value: 0x7F020003
+			public const int OptionsButton = 2130837507;
 			
-			// aapt resource value: 0x7f04000b
-			public const int ResultFullName = 2130968587;
+			// aapt resource value: 0x7F020004
+			public const int ResultFullName = 2130837508;
 			
-			// aapt resource value: 0x7f04000d
-			public const int ResultMessage = 2130968589;
+			// aapt resource value: 0x7F020005
+			public const int ResultMessage = 2130837509;
 			
-			// aapt resource value: 0x7f04000c
-			public const int ResultResultState = 2130968588;
+			// aapt resource value: 0x7F020006
+			public const int ResultResultState = 2130837510;
 			
-			// aapt resource value: 0x7f04000a
-			public const int ResultRunSingleMethodTest = 2130968586;
+			// aapt resource value: 0x7F020007
+			public const int ResultRunSingleMethodTest = 2130837511;
 			
-			// aapt resource value: 0x7f04000e
-			public const int ResultStackTrace = 2130968590;
+			// aapt resource value: 0x7F020009
+			public const int ResultsFailed = 2130837513;
 			
-			// aapt resource value: 0x7f040006
-			public const int ResultsFailed = 2130968582;
+			// aapt resource value: 0x7F02000A
+			public const int ResultsId = 2130837514;
 			
-			// aapt resource value: 0x7f040003
-			public const int ResultsId = 2130968579;
+			// aapt resource value: 0x7F02000B
+			public const int ResultsIgnored = 2130837515;
 			
-			// aapt resource value: 0x7f040007
-			public const int ResultsIgnored = 2130968583;
+			// aapt resource value: 0x7F02000C
+			public const int ResultsInconclusive = 2130837516;
 			
-			// aapt resource value: 0x7f040008
-			public const int ResultsInconclusive = 2130968584;
+			// aapt resource value: 0x7F02000D
+			public const int ResultsMessage = 2130837517;
 			
-			// aapt resource value: 0x7f040009
-			public const int ResultsMessage = 2130968585;
+			// aapt resource value: 0x7F02000E
+			public const int ResultsPassed = 2130837518;
 			
-			// aapt resource value: 0x7f040005
-			public const int ResultsPassed = 2130968581;
+			// aapt resource value: 0x7F02000F
+			public const int ResultsResult = 2130837519;
 			
-			// aapt resource value: 0x7f040004
-			public const int ResultsResult = 2130968580;
+			// aapt resource value: 0x7F020008
+			public const int ResultStackTrace = 2130837512;
 			
-			// aapt resource value: 0x7f04000f
-			public const int RunTestsButton = 2130968591;
+			// aapt resource value: 0x7F020010
+			public const int RunTestsButton = 2130837520;
 			
-			// aapt resource value: 0x7f040011
-			public const int TestSuiteListView = 2130968593;
+			// aapt resource value: 0x7F020011
+			public const int TestSuiteListView = 2130837521;
 			
 			static Id()
 			{
@@ -149,16 +149,16 @@ namespace Emgu.CV.Test
 		public partial class Layout
 		{
 			
-			// aapt resource value: 0x7f030000
+			// aapt resource value: 0x7F030000
 			public const int options = 2130903040;
 			
-			// aapt resource value: 0x7f030001
+			// aapt resource value: 0x7F030001
 			public const int results = 2130903041;
 			
-			// aapt resource value: 0x7f030002
+			// aapt resource value: 0x7F030002
 			public const int test_result = 2130903042;
 			
-			// aapt resource value: 0x7f030003
+			// aapt resource value: 0x7F030003
 			public const int test_suite = 2130903043;
 			
 			static Layout()

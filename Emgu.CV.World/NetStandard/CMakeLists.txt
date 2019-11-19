@@ -29,7 +29,8 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
       PATTERN "CMakeFiles" EXCLUDE
       PATTERN "${PROJECT_NAME}.dir" EXCLUDE
       )
-    
-    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+    if(ENABLE_SOLUTION_FOLDERS)
+      set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+	endif() 
   ENDIF()
 ENDIF()
