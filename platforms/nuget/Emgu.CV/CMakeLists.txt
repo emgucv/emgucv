@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 
 IF (TARGET Emgu.CV.World.Netstandard)
-  PROJECT(Emgu.CV.runtime.windows.nuget)
+  PROJECT(Emgu.CV.nuget)
 
   ADD_CUSTOM_TARGET(
     ${PROJECT_NAME} ALL
@@ -16,8 +16,4 @@ IF (TARGET Emgu.CV.World.Netstandard)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
   endif() 
   
-  IF (WIN32 AND (HAVE_WINDESKTOP_X64_CUDA) )
-  	ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.TF.Dnn.nuget)
-  	ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.TF.Cufft.nuget)
-  ENDIF()
 ENDIF()

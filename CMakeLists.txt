@@ -508,6 +508,11 @@ CHECK_BINARY_EXIST("libs/x64" "*.dll" HAVE_WINDESKTOP_X64 ${IS_WINDESKTOP_X64_BU
     SET(WINSTORE_10_LABEL "${WINSTORE_10_LABEL}_arm")
   ENDIF()
   
+  SET(HAVE_WINSTORE_10 OFF)
+  IF(HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM)
+    SET(HAVE_WINSTORE_10 ON)
+  ENDIF()
+  
   IF("${WINSTORE_10_LABEL}" STREQUAL "_x64_x86_arm")
     SET(WINSTORE_10_LABEL "-UWP")
   ELSEIF(NOT ("${WINSTORE_10_LABEL}" STREQUAL ""))
@@ -786,23 +791,29 @@ CHECK_LICENSE_TYPE()
 # ----------------------------------------------------------------------------
 #  Generate neget packaging file for Emgu CV project
 # ----------------------------------------------------------------------------
-SET(EMGUCV_NUGET_ID_BASE "EMGU.CV")
-
+SET(EMGUCV_NUGET_ID "Emgu.CV")
+SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.windows")
+#SET(
 IF(WITH_CUDA)
-	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-CUDA")
-	SET(EMGU_CUDA_NUGET_ID "${EMGUCV_NUGET_ID_BASE}.Native")
-	SET(EMGU_CUFFT_NUGET_ID "${EMGUCV_NUGET_ID_BASE}.CUFFT")
-	SET(EMGU_CUDNN_NUGET_ID "${EMGUCV_NUGET_ID_BASE}.CUDNN")
-ELSE()
-	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}")
+	SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}.cuda")
+	#SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-CUDA")
+	#SET(EMGU_CUDA_NUGET_ID "${EMGUCV_NUGET_ID}.Native")
+	SET(EMGU_CUFFT_NUGET_ID "${EMGUCV_NUGET_ID}.cufft")
+	SET(EMGU_CUDNN_NUGET_ID "${EMGUCV_NUGET_ID}.cudnn")
+#ELSE()
+#	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}")
 ENDIF()
 
 IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
-	SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-Android")
+	SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.android")
 ENDIF()
 
 IF(HAVE_IOS AND WIN32)
-	SET(EMGUCV_IOS_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-iOS")
+	SET(EMGUCV_IOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.ios")
+ENDIF()
+
+IF(HAVE_WINSTORE_10 AND WIN32)
+	SET(EMGUCV_UWP_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.uwp")
 ENDIF()
 
 IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
@@ -814,26 +825,51 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	IF(HAVE_IOS AND WIN32)
 	  SET(EMGUCV_IOS_NUGET_ID "${EMGUCV_IOS_NUGET_ID}-CR")
 	ENDIF()
+	IF(HAVE_WINSTORE_10 AND WIN32)
+	  SET(EMGUCV_UWP_NUGET_ID "${EMGUCV_IOS_NUGET_ID}-CR")
+	ENDIF()
 ELSEIF()
 	MESSAGE(STATUS "Configuring nuget package for Open Source release")
 ENDIF()
 
-SET(EMGUCV_NUGET_FILE_LIST "")
+
+SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
-	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\libs\\x86\\cu*.dll;..\\..\\libs\\x86\\npp*.dll\" target=\"build\\x86\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\libs\\x86\\cu*.dll;..\\..\\libs\\x86\\npp*.dll\" target=\"build\\x86\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X64)
-	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\libs\\x64\\cu*.dll;..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\libs\\x64\\cu*.dll;..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
-	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.targets\" target=\"build\\${EMGUCV_NUGET_ID}.targets\" />
-    <file src=\"..\\..\\libs\\Emgu.CV.World.dll\" target=\"lib\\net35\" />
-	<file src=\"..\\..\\libs\\Emgu.CV.World.XML\" target=\"lib\\net35\" />
-	<file src=\"..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net35\" />
-	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net35\" />
+	<file src=\"..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net461\" />
+	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net461\" />
 	<file src=\"..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
+
+SET(EMGUCV_UWP_NUGET_FILE_LIST "")
+IF(HAVE_WINSTORE_10_X86)
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\x86\\*.dll\" target=\"build\\UWP\\x86\" />")
+ENDIF()
+IF(HAVE_WINSTORE_10_X64)
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\x64\\*.dll\" target=\"build\\UWP\\x64\" />")
+ENDIF()
+IF(HAVE_WINSTORE_10_ARM)
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\x64\\*.dll\" target=\"build\\UWP\\arm\" />")
+ENDIF()
+IF(HAVE_WINSTORE_10)
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} 
+	<file src=\"Emgu.CV.runtime.uwp.targets\" target=\"build\\${EMGUCV_UWP_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+ENDIF()
+
+
+SET(EMGUCV_NUGET_FILE_LIST "")
+SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
+	<file src=\"..\\..\\libs\\Emgu.CV.World.NetStandard.dll\" target=\"lib\\netstandard2.0\" />
+	<file src=\"..\\..\\libs\\Emgu.CV.World.NetStandard.xml\" target=\"lib\\netstandard2.0\" />
+	<file src=\"..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 
 SET(EMGUCV_NUGET_TITLE_ARCH "")
 IF(HAVE_WINDESKTOP_X86)
@@ -848,7 +884,7 @@ STRING(REPLACE "x86 x64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}"
 SET(EMGUCV_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_NUGET_TITLE}" EMGUCV_NUGET_TITLE)
 
-SET(EMGUCV_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"[5.1.7]\" />")
+SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "<dependency id=\"ZedGraph\" version=\"[5.1.7]\" />")
 
 IF(WITH_CUDA)
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} with CUDA support")
@@ -866,9 +902,9 @@ IF(WITH_CUDA)
 	SET(EMGU_CUDNN_NUGET_FILE_LIST "<file src=\"Emgu.Cudnn.targets\" target=\"build\\${EMGU_CUDNN_NUGET_ID}.targets\" />")
 	SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} <dependency id=\"${EMGU_CUDA_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />")
 	IF (WITH_CUDNN)
-		SET(EMGU_CUDA_NUGET_DEPENDENCY "${EMGU_CUDA_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />")
+		SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />")
 	ENDIF()
-	SET(EMGU_CUDA_NUGET_DEPENDENCY "${EMGU_CUDA_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUFFT_NUGET_ID}\" version=\"[${EMGU_CUFFT_VERSION}]\" />")
+	SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUFFT_NUGET_ID}\" version=\"[${EMGU_CUFFT_VERSION}]\" />")
 	IF(HAVE_WINDESKTOP_X64)
 		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/CUDA")
 		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cufft")
@@ -927,7 +963,7 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.Android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
-	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/runtime.android.Emgu.CV.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/runtime.android.Emgu.CV/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.android/Package.nuspec)
 ENDIF()
 
 IF(HAVE_IOS AND WIN32)
@@ -939,6 +975,10 @@ IF(HAVE_IOS AND WIN32)
 	<file src=\"Emgu.CV.IOS.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/iOS.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/iOS/Package.nuspec)
+ENDIF()
+
+IF(HAVE_WINSTORE_10)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/Package.nuspec)
 ENDIF()
 
 
@@ -1109,7 +1149,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CvInvokeEntryPoints.cs.in ${CMA
   ADD_SUBDIRECTORY(Emgu.CV)
   ADD_SUBDIRECTORY(Emgu.CV.UI)
   ADD_SUBDIRECTORY(Emgu.CV.Example)
-  ADD_SUBDIRECTORY(Emgu.UI)
+  #ADD_SUBDIRECTORY(Emgu.UI)
   ADD_SUBDIRECTORY(Emgu.CV.Test)
   ADD_SUBDIRECTORY(Emgu.CV.Cuda)
   IF (EMGU_CV_WITH_TESSERACT)
