@@ -15,7 +15,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -329,17 +329,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV.UI.GL\Emgu.CV.UI.GL.csproj">
-      <Project>{d9bae1f0-2bc8-4697-ae26-88f7a74d1aaa}</Project>
-      <Name>Emgu.CV.UI.GL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.UI\Emgu.CV.UI.csproj">
       <Project>{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}</Project>
       <Name>Emgu.CV.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.World\Emgu.CV.World.csproj">
-      <Project>{3f5d7c08-96ba-4037-bb24-afa2c336e260}</Project>
-      <Name>Emgu.CV.World</Name>
+    <ProjectReference Include="..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
+      <Project>{739ad468-29f3-48f6-8547-b1d8274d4c5a}</Project>
+      <Name>Emgu.CV.World.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

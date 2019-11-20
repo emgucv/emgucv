@@ -1,19 +1,22 @@
-# - Try to find the gmcs and gacutil
+# - Try to find the csharp compilers and utilities
 #
 # defines
 #
-# CSharp_FOUND - system has mono, mcs, gmcs and gacutil
-# GMCS_PATH - where to find 'gmcs'
-# GACUTIL_PATH - where to find 'gacutil'
+# AL_EXECUTABLE - Path to the 'al' command
+# CSC_EXECUTABLE - Path to the csharp compiler
+# DOTNET_EXECUTABLE - Path to the 'dotnet' command
+# DOTNET_FOUND - If 'dotnet' command is found
+# GACUTIL_EXECUTABLE - Path to the 'gacutil'
+# MSBUILD_EXECUTABLE - Path to 'msbuild'
 #
 # copyright (c) 2007 Arno Rehn arno@arnorehn.de
 #
 # Redistribution and use is allowed according to the terms of the GPL license.
 #
 # Modified by canming to find .NET on Windows
-# copyright (c) 2009 - 2012 Canming Huang support@emgu.com
+# copyright (c) 2009 - 2019 Canming Huang support@emgu.com
 
-#IF(WIN32)
+
 SET (PROGRAM_FILES_X86_ENV_STR "programfiles(x86)")
 
 FIND_PROGRAM (CSC_EXECUTABLE_20 
@@ -275,13 +278,15 @@ FIND_PROGRAM (RESGEN_EXECUTABLE resgen
 /Library/Frameworks/Mono.framework/Commands/
 )
 
-FIND_PROGRAM(DOTNET_EXECUTABLE dotnet)
+FIND_PROGRAM(DOTNET_EXECUTABLE dotnet
+/usr/local/share/dotnet)
+IF (DOTNET_EXECUTABLE)
+  SET (DOTNET_FOUND TRUE)
+ELSE()
+  SET (DOTNET_FOUND FALSE)
+ENDIF()  
   
 SET (CSharp_FOUND FALSE)
-IF (DOTNET_EXECUTABLE)
-  SET (CSharp_FOUND TRUE)
-ENDIF()
-
 IF (CSC_EXECUTABLE AND AL_EXECUTABLE AND RESGEN_EXECUTABLE AND MSBUILD_EXECUTABLE)
   SET (CSharp_FOUND TRUE)
 ENDIF ()
@@ -326,6 +331,6 @@ ELSE (CSharp_FOUND)
   ENDIF (CSharp_FIND_REQUIRED)
 ENDIF (CSharp_FOUND)
 
-MARK_AS_ADVANCED(CSC_EXECUTABLE AL_EXECUTABLE GACUTIL_EXECUTABLE MSBUILD_EXECUTABLE DOTNET_EXECUTABLE)
+MARK_AS_ADVANCED(CSC_EXECUTABLE AL_EXECUTABLE GACUTIL_EXECUTABLE MSBUILD_EXECUTABLE DOTNET_EXECUTABLE DOTNET_FOUND)
 
 

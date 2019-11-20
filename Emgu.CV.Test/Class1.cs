@@ -406,9 +406,7 @@ namespace Emgu.CV.Test
                     if (frame != null)
                     {
                         Bitmap bmp = frame.ToImage<Bgr, Byte>().ToBitmap();
-
-                        viewer.Image = new Image<Bgr, Byte>(bmp);
-
+                        viewer.Image = bmp.ToImage<Bgr, Byte>();
                     }
                 };
                 viewer.ShowDialog();

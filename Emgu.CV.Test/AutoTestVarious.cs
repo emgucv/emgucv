@@ -28,7 +28,7 @@ using Emgu.CV.Dpm;
 using Emgu.CV.ImgHash;
 using Emgu.CV.Face;
 using Emgu.CV.Freetype;
-
+using Emgu.CV.UI;
 #if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
@@ -853,7 +853,7 @@ namespace Emgu.CV.Test
             {
                 EmguAssert.AreEqual(System.Drawing.Imaging.PixelFormat.Format32bppArgb, bmpImage.PixelFormat);
 
-                Image<Gray, Byte> img3 = new Image<Gray, byte>(bmp);
+                Image<Gray, Byte> img3 = bmp.ToImage<Gray, byte>();
                 stopwatch.Stop();
                 Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
                 Image<Gray, Byte> diff = img.Convert<Gray, Byte>().AbsDiff(img3);
@@ -3692,7 +3692,7 @@ namespace Emgu.CV.Test
             Mat m = EmguAssert.LoadMat("lena.jpg");
             EmguAssert.IsTrue(CvInvoke.Imwrite("测试.jpg", m));
             Bitmap bmp = new Bitmap("测试.jpg");
-            UMat m2 = new Image<Bgr, Byte>(bmp).ToUMat();
+            UMat m2 = bmp.ToImage<Bgr, Byte>().ToUMat();
             Mat m3 = EmguAssert.LoadMat("测试.jpg");
             //Emgu.CV.UI.ImageViewer.Show(m2);
         }

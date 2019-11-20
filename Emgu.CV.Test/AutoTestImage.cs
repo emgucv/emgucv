@@ -638,7 +638,7 @@ namespace Emgu.CV.Test
             Image<Bgr, Single> img5 = new Image<Bgr, float>("stuff.jpg");
 
             Bitmap bmp = new Bitmap("stuff.jpg");
-            Image<Bgr, Single> img6 = new Image<Bgr, float>(bmp);
+            Image<Bgr, Single> img6 = bmp.ToImage<Bgr, float>();
 
             Image<Hsv, Single> img7 = new Image<Hsv, float>("stuff.jpg");
             Image<Hsv, Byte> img8 = new Image<Hsv, byte>("stuff.jpg");
@@ -823,7 +823,7 @@ namespace Emgu.CV.Test
                 g.Clear(Color.Blue);
 
                 Stopwatch watch = Stopwatch.StartNew();
-                Image<Bgr, Byte> image0 = new Image<Bgr, byte>(bmp0);
+                Image<Bgr, Byte> image0 = bmp0.ToImage<Bgr, byte>();
                 watch.Stop();
                 Trace.WriteLine(String.Format("Convertsion Time: {0} milliseconds", watch.ElapsedMilliseconds));
                 Image<Bgr, Byte> imageCmp0 = new Image<Bgr, byte>(image0.Size);
@@ -834,18 +834,18 @@ namespace Emgu.CV.Test
             #region test byte images
             Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
             image1.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-            Assert.IsTrue(image1.Equals(new Image<Bgr, byte>(image1.ToBitmap())));
-            Assert.IsTrue(image1.Equals(new Image<Bgr, byte>(image1.Bitmap)));
+            Assert.IsTrue(image1.Equals(image1.ToBitmap().ToImage<Bgr, byte>()));
+            Assert.IsTrue(image1.Equals(image1.AsBitmap().ToImage<Bgr, byte>()));
 
             Image<Gray, Byte> image3 = new Image<Gray, byte>(11, 7);
             image3.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-            Assert.IsTrue(image3.Equals(new Image<Gray, byte>(image3.ToBitmap())));
-            Assert.IsTrue(image3.Equals(new Image<Gray, byte>(image3.Bitmap)));
+            Assert.IsTrue(image3.Equals(image3.ToBitmap().ToImage<Gray, byte>()));
+            Assert.IsTrue(image3.Equals(image3.AsBitmap().ToImage<Gray, byte>()));
 
             Image<Bgra, Byte> image5 = new Image<Bgra, byte>(201, 401);
             image5.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0, 255.0));
-            Assert.IsTrue(image5.Equals(new Image<Bgra, byte>(image5.ToBitmap())));
-            Assert.IsTrue(image5.Equals(new Image<Bgra, byte>(image5.Bitmap)));
+            Assert.IsTrue(image5.Equals(image5.ToBitmap().ToImage<Bgra, byte>()));
+            Assert.IsTrue(image5.Equals(image5.AsBitmap().ToImage<Bgra, byte>()));
             #endregion
 
             #region test single images
@@ -859,9 +859,9 @@ namespace Emgu.CV.Test
         public void TestBitmapSharedDataWithImage()
         {
             Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 320);
-            Bitmap bmp = img.Bitmap;
+            Bitmap bmp = img.AsBitmap();
             bmp.SetPixel(0, 0, Color.Red);
-            Image<Bgr, Byte> img2 = new Image<Bgr, byte>(bmp);
+            Image<Bgr, Byte> img2 = bmp.ToImage<Bgr, byte>();
             Assert.IsTrue(img.Equals(img2));
         }
 #endif
@@ -1620,8 +1620,8 @@ namespace Emgu.CV.Test
                     int index = i;
                     threads[i] = new Thread(delegate ()
                     {
-                        Image<Gray, Byte> img = new Image<Gray, byte>(imageNames[index]);
-                        Image<Gray, Byte> bmpClone = new Image<Gray, byte>(img.Bitmap);
+                        Image<Gray, Byte> img = imageNames[index].ToImage<Gray, byte>();
+                        Image<Gray, Byte> bmpClone = img.AsBitmap().ToImage<Gray, byte>();
                     });
 
                     threads[i].Priority = ThreadPriority.Highest;
@@ -1664,7 +1664,7 @@ namespace Emgu.CV.Test
                     {
                         {
                             Image<Gray, Byte> img = new Image<Gray, byte>(imageNames[index]);
-                            Image<Gray, Byte> bmpClone = new Image<Gray, byte>(img.Bitmap);
+                            Image<Gray, Byte> bmpClone = img.AsBitmap().ToImage<Gray, byte>();
                         }
                     });
 
