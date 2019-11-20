@@ -17,19 +17,19 @@ Target = typeof(Bitmap))]
 
 namespace Emgu.CV.DebuggerVisualizers
 {
-   public sealed class BitmapVisualizer : DialogDebuggerVisualizer
-   {
-      protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
-      {
-         Bitmap image = objectProvider.GetObject() as Bitmap;
-         if (image != null)
-         {
-            using (ImageViewer viewer = new ImageViewer())
+    public sealed class BitmapVisualizer : DialogDebuggerVisualizer
+    {
+        protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
+        {
+            Bitmap image = objectProvider.GetObject() as Bitmap;
+            if (image != null)
             {
-               viewer.Image = new Image<Bgr, Byte>(image);
-               windowService.ShowDialog(viewer);
+                using (ImageViewer viewer = new ImageViewer())
+                {
+                    viewer.Image = image.ToImage<Bgr, Byte>();
+                    windowService.ShowDialog(viewer);
+                }
             }
-         }
-      }
-   }
+        }
+    }
 }
