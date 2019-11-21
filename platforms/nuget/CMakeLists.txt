@@ -6,6 +6,8 @@ ADD_SUBDIRECTORY("Cufft")
 ADD_SUBDIRECTORY("Cudnn")
 ADD_SUBDIRECTORY("CUDA")
 
+ADD_SUBDIRECTORY("Emgu.CV")
+
 ADD_SUBDIRECTORY("Emgu.CV.runtime.android")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.windows")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.uwp")

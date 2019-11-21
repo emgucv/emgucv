@@ -2024,10 +2024,6 @@ IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 ENDIF()
 
-
-
-
-
 ############################### IPP START ##############################
 #IF(WITH_IPP)
 #  include(${OPENCV_SUBFOLDER}/cmake/OpenCVFindIPP.cmake)
