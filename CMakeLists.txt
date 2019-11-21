@@ -958,10 +958,10 @@ ENDIF()
 IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	SET(EMGUCV_ANDROID_NUGET_TITLE "EMGU CV for Android")	
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST " 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.World.Android.dll\" target=\"lib\\MonoAndroid50\" />
-	<file src=\"..\\..\\..\\libs\\Emgu.CV.World.Android.XML\" target=\"lib\\MonoAndroid50\" />")
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.Runtime.Android.dll\" target=\"lib\\MonoAndroid50\" />
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.Runtime.Android.xml\" target=\"lib\\MonoAndroid50\" />")
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST} 
-	<file src=\"Emgu.CV.Android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
+	<file src=\"Emgu.CV.runtime.android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.android/Package.nuspec)
 ENDIF()
