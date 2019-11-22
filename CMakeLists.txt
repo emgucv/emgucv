@@ -849,7 +849,7 @@ IF(HAVE_WINDESKTOP_X64)
 ENDIF()
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
-	<file src=\"Emgu.CV.targets\" target=\"build\\${EMGUCV_NUGET_ID}.targets\" />
+	<file src=\"Emgu.CV.runtime.windows.targets\" target=\"build\\${EMGUCV_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net461\" />
 	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net461\" />
 	<file src=\"..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
