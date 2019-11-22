@@ -804,6 +804,10 @@ IF(WITH_CUDA)
 #	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}")
 ENDIF()
 
+IF(HAVE_OSX)
+  SET(EMGUCV_MACOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.macos")
+ENDIF()
+
 IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.android")
 ENDIF()
@@ -819,6 +823,9 @@ ENDIF()
 IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	MESSAGE(STATUS "Configuring nuget package for Commercial release")
 	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
+	IF(HAVE_OSX)
+	  SET(EMGUCV_MACOS_NUGET_ID "${EMGUCV_MACOS_NUGET_ID}-CR")
+	ENDIF()
 	IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	  SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_ANDROID_NUGET_ID}-CR")
 	ENDIF()
@@ -846,6 +853,14 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	<file src=\"..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net461\" />
 	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net461\" />
 	<file src=\"..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+ENDIF()
+
+SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
+IF(HAVE_OSX)
+	SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
+	<file src=\"Emgu.CV.runtime.macos.targets\" target=\"build\\${EMGUCV_MACOS_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+	SET(EMGUCV_MACOS_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />")
 ENDIF()
 
 SET(EMGUCV_UWP_NUGET_FILE_LIST "")
