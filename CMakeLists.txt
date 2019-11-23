@@ -740,6 +740,7 @@ ELSE()
   SET(EMGU_ENABLE_SSE ON CACHE BOOL "ENABLE SSE for Emgu CV")
 ENDIF()
 ADD_SUBDIRECTORY(Emgu.CV.Extern)
+ADD_SUBDIRECTORY(Emgu.CV.NativeImage)
 
 IF(NOT (ANDROID OR IOS OR NETFX_CORE))
   ENABLE_TESTING()
@@ -851,7 +852,7 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.windows.targets\" target=\"build\\${EMGUCV_WINDOWS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net461\" />
-	<file src=\"..\\..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net461\" />
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.UI.xml\" target=\"lib\\net461\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
@@ -1323,8 +1324,8 @@ ELSEIF (WIN32)
       SET(DEBUGER_VISUALIZER_FILES 
 	"Emgu.CV.World.Netstandard"
 	"Emgu.CV.UI"
-	"ZedGraph"
-	"Emgu.CV.DebuggerVisualizers")
+	"ZedGraph")
+	#"Emgu.CV.DebuggerVisualizers")
       #SET(DEBUGGER_VISUALIZER_UNMANAGED_FILES
 	#    "Emgu.CV.DebuggerVisualizers"
 	#${OPENCV_LIBRARY_OUTPUT_NAMES}
@@ -1413,10 +1414,10 @@ ELSEIF (WIN32)
 	#ENDIF()
 	
 	#Install the Debugger Visualizer itself
-	#SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
-	#  "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	#CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.${vs_version}.dll' '$${vs_version}_INSTALL_FOLDER'
-	#installDebuggerVisualizer4${vs_version}Done:")
+	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
+	  "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
+	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.dll' '$${vs_version}_INSTALL_FOLDER'
+	installDebuggerVisualizer4${vs_version}Done:")
 	
       ENDMACRO()
       
