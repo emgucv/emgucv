@@ -860,7 +860,10 @@ IF(HAVE_OSX)
 	SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.macos.targets\" target=\"build\\${EMGUCV_MACOS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
-	SET(EMGUCV_MACOS_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />")
+	SET(EMGUCV_MACOS_NUGET_DEPENDENCY "
+	<dependencies>
+		<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />
+	</dependencies>")
 ENDIF()
 
 SET(EMGUCV_UWP_NUGET_FILE_LIST "")
@@ -990,6 +993,10 @@ IF(HAVE_IOS AND WIN32)
 	<file src=\"Emgu.CV.IOS.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/iOS.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/iOS/Package.nuspec)
+ENDIF()
+
+IF(HAVE_OSX)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Package.nuspec)
 ENDIF()
 
 IF(HAVE_WINSTORE_10)
@@ -1181,9 +1188,9 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CvInvokeEntryPoints.cs.in ${CMA
   ADD_SUBDIRECTORY(Emgu.CV.World)
 #ENDIF()
 ADD_SUBDIRECTORY(Emgu.CV.Runtime)
-IF(WIN32)
+#IF(WIN32)
   ADD_SUBDIRECTORY(platforms/nuget)
-ENDIF()
+#ENDIF()
 
 IF(HAVE_ANDROID)
   INSTALL(
