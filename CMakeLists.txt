@@ -842,24 +842,24 @@ ENDIF()
 
 SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\libs\\x86\\cu*.dll;..\\..\\libs\\x86\\npp*.dll\" target=\"build\\x86\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\..\\libs\\x86\\cu*.dll;..\\..\\..\\libs\\x86\\npp*.dll\" target=\"build\\x86\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X64)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\libs\\x64\\cu*.dll;..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cu*.dll;..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
-	<file src=\"Emgu.CV.runtime.windows.targets\" target=\"build\\${EMGUCV_NUGET_ID}.targets\" />
-	<file src=\"..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net461\" />
-	<file src=\"..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net461\" />
-	<file src=\"..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+	<file src=\"Emgu.CV.runtime.windows.targets\" target=\"build\\${EMGUCV_WINDOWS_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net461\" />
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.UI.XML\" target=\"lib\\net461\" />
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
 SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
 IF(HAVE_OSX)
 	SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.macos.targets\" target=\"build\\${EMGUCV_MACOS_NUGET_ID}.targets\" />
-	<file src=\"..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 	SET(EMGUCV_MACOS_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />")
 ENDIF()
 
@@ -996,6 +996,9 @@ IF(HAVE_WINSTORE_10)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/Package.nuspec)
 ENDIF()
 
+IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
+ENDIF()
 
 SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
 

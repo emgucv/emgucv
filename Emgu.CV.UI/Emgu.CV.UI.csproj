@@ -301,9 +301,9 @@
   </Target>
   -->
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
-    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml and $(OutputPath)ZedGraph.dll to ..\..\libs" Importance="high" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\libs" ContinueOnError="true" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\libs" ContinueOnError="true" />
-	<Copy SourceFiles="$(OutputPath)ZedGraph.dll" DestinationFolder="..\..\libs" ContinueOnError="true" />
+    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml and $(OutputPath)ZedGraph.dll to ..\libs" Importance="high" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\libs" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\libs" ContinueOnError="true" />
+	<Copy SourceFiles="$(OutputPath)ZedGraph.dll" DestinationFolder="..\libs" ContinueOnError="true" />
   </Target>
 </Project>
