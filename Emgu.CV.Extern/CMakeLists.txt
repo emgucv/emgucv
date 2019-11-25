@@ -11,7 +11,7 @@ INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/opencv/3rdparty/zlib")
 
-MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder namespace_cs cs_compilation_condition)
+MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder namespace_cs cs_compilation_condition additional_c_header additional_c_code c_compilation_condition)
   SET(VECTOR_NAME ${vname})
   SET(VECTOR_ELEMENT ${velement})
   SET(VECTOR_ELEMENT_CS ${velement_cs})
@@ -21,23 +21,30 @@ MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder 
   SET(VECTOR_ADDITIONAL_INCLUDE "")
   SET(VECTOR_ADDITIONAL_CODE "")
   
-  SET(extra_macro_args ${ARGN})
+  #SET(extra_macro_args ${ARGN})
   # Did we get any optional args?
-  LIST(LENGTH extra_macro_args num_extra_args)
-  IF (${num_extra_args} GREATER 0)
-    list(GET extra_macro_args 0 additional_c_header)
+  #LIST(LENGTH extra_macro_args num_extra_args)
+  #IF (${num_extra_args} GREATER 0)
+  #  list(GET extra_macro_args 0 additional_c_header)
     SET(VECTOR_ADDITIONAL_INCLUDE ${additional_c_header})
-  ENDIF()
-  IF (${num_extra_args} GREATER 1)
-    list(GET extra_macro_args 1 additional_c_code)
+  #ENDIF()
+  #IF (${num_extra_args} GREATER 1)
+  #  list(GET extra_macro_args 1 additional_c_code)
     SET(VECTOR_ADDITIONAL_CODE ${additional_c_code})
-  ENDIF()
+  #ENDIF()
 
   SET(COMPILATION_CONDITION_CS_OPEN "")
   SET(COMPILATION_CONDITION_CS_CLOSE "")  
   IF (NOT ("${cs_compilation_condition}" STREQUAL ""))
 	SET(COMPILATION_CONDITION_CS_OPEN "#if ${cs_compilation_condition}")
 	SET(COMPILATION_CONDITION_CS_CLOSE "#endif")
+  ENDIF()
+
+  SET(COMPILATION_CONDITION_C_OPEN "")
+  SET(COMPILATION_CONDITION_C_CLOSE "")    
+  IF (NOT ("${c_compilation_condition}" STREQUAL ""))
+	SET(COMPILATION_CONDITION_C_OPEN "#if ${c_compilation_condition}")
+	SET(COMPILATION_CONDITION_C_CLOSE "#endif")
   ENDIF()
   
   if (${element_type} STREQUAL "struct")
@@ -59,54 +66,53 @@ MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder 
   ENDIF()
 ENDMACRO()
 
-CREATE_VECTOR_CS("Byte" "unsigned char" "byte" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("Int" "int" "int" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("Float" "float" "float" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("Double" "double" "double" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("Point" "cv::Point" "Point" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("PointF" "cv::Point2f" "PointF" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("Point3D32F" "cv::Point3f" "MCvPoint3D32f" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("Rect" "cv::Rect" "Rectangle" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("KeyPoint" "cv::KeyPoint" "MKeyPoint" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-
-CREATE_VECTOR_CS("DMatch" "cv::DMatch" "MDMatch" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("Triangle2DF" "cv::Vec6f" "Triangle2DF" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
+CREATE_VECTOR_CS("Byte" "unsigned char" "byte" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("Int" "int" "int" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "" "")
+CREATE_VECTOR_CS("Float" "float" "float" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("Double" "double" "double" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("Point" "cv::Point" "Point" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("PointF" "cv::Point2f" "PointF" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("Point3D32F" "cv::Point3f" "MCvPoint3D32f" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("Rect" "cv::Rect" "Rectangle" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("KeyPoint" "cv::KeyPoint" "MKeyPoint" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("DMatch" "cv::DMatch" "MDMatch" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("Triangle2DF" "cv::Vec6f" "Triangle2DF" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
 
 IF(HAVE_opencv_latentsvm)
-  CREATE_VECTOR_CS("ObjectDetection" "cv::lsvm::LSVMDetector::ObjectDetection" "MCvObjectDetection" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"opencv2/latentsvm.hpp\"")
+  CREATE_VECTOR_CS("ObjectDetection" "cv::lsvm::LSVMDetector::ObjectDetection" "MCvObjectDetection" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"opencv2/latentsvm.hpp\"" "" "")
 ENDIF()
 
-IF(HAVE_opencv_text)
-  CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text" Emgu.CV.Text "" "#include \"opencv2/text/erfilter.hpp\"")
-  CREATE_VECTOR_CS("VectorOfERStat" "std::vector< cv::text::ERStat >" "MCvERStat" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text" Emgu.CV.Text "" "#include \"opencv2/text/erfilter.hpp\"")
-ENDIF()
+#IF(HAVE_opencv_text)
+  CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text" Emgu.CV.Text "" "#include \"opencv2/text/erfilter.hpp\"" "" "defined(HAVE_opencv_text)")
+  CREATE_VECTOR_CS("VectorOfERStat" "std::vector< cv::text::ERStat >" "MCvERStat" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text" Emgu.CV.Text "" "#include \"opencv2/text/erfilter.hpp\"" "" "defined(HAVE_opencv_text)")
+#ENDIF()
 
 #IF(HAVE_opencv_line_descriptor)
 #  CREATE_VECTOR_CS("KeyLine" "cv::line_descriptor::KeyLine" "MKeyLine" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/LineDescriptor" Emgu.CV.LineDescriptor "" "#include \"opencv2/line_descriptor.hpp\"")
 #ENDIF()
 
 IF(HAVE_opencv_videoio)
-  CREATE_VECTOR_CS("ColorPoint" "ColorPoint" "ColorPoint" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"videoio_c_extra.h\"")
+  CREATE_VECTOR_CS("ColorPoint" "ColorPoint" "ColorPoint" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"videoio_c_extra.h\"" "" "")
 ENDIF()
 
 IF(EMGU_CV_WITH_TESSERACT)
-  CREATE_VECTOR_CS("TesseractResult" "TesseractResult" "TesseractResult" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.OCR/" Emgu.CV.OCR "" "#include \"tesseract_c.h\"")
+  CREATE_VECTOR_CS("TesseractResult" "TesseractResult" "TesseractResult" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.OCR/" Emgu.CV.OCR "" "#include \"tesseract_c.h\"" "" "")
 ENDIF()
 
-CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("CvString" "cv::String" "CvString" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
+CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("CvString" "cv::String" "CvString" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
 
-CREATE_VECTOR_CS("VectorOfPoint" "std::vector< cv::Point >" "Point" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("VectorOfPointF" "std::vector< cv::Point2f >" "PointF" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("VectorOfPoint3D32F" "std::vector< cv::Point3f >" "MCvPoint3D32f" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("VectorOfInt" "std::vector< int >" "int" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("VectorOfDMatch" "std::vector< cv::DMatch >" "MDMatch" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
-CREATE_VECTOR_CS("VectorOfRect" "std::vector< cv::Rect >" "Rectangle" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "")
+CREATE_VECTOR_CS("VectorOfPoint" "std::vector< cv::Point >" "Point" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("VectorOfPointF" "std::vector< cv::Point2f >" "PointF" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("VectorOfPoint3D32F" "std::vector< cv::Point3f >" "MCvPoint3D32f" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("VectorOfInt" "std::vector< int >" "int" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("VectorOfDMatch" "std::vector< cv::DMatch >" "MDMatch" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
+CREATE_VECTOR_CS("VectorOfRect" "std::vector< cv::Rect >" "Rectangle" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
 
-CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "Ocl.PlatformInfo" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"opencv2/core/ocl.hpp\"")
+CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "Ocl.PlatformInfo" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"opencv2/core/ocl.hpp\"" "" "")
 IF(NOT IOS)
-  CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda" Emgu.CV.Cuda "" "#include \"opencv2/core/cuda.hpp\"")
+  CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda" Emgu.CV.Cuda "" "#include \"opencv2/core/cuda.hpp\"" "" "")
 ENDIF()
 
 MACRO(WRITE_IF_DIFFERENT fname content)
@@ -136,7 +142,7 @@ ENDMACRO()
 # * element: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
 # * elementR: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get;}
 #################################################################################
-MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mtypes cs_func_names csptypes csp_docs cs_namespace cs_invoke_class cs_class_name cs_compilation_condition)
+MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mtypes cs_func_names csptypes csp_docs cs_namespace cs_invoke_class cs_class_name cs_compilation_condition header_additional_include source_additional_code c_compilation_condition)
   SET(FILE_NAME ${fname})
   SET(CLASS_NAME_FULL ${cname_full})
   SET(CLASS_NAME ${cname})
@@ -146,8 +152,8 @@ MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mty
   SET(MARSHAL_TYPES ${mtypes})
   SET(CS_PROPERTY_TYPES ${csptypes})
   SET(CS_PROPERTY_DOCS ${csp_docs})
-  SET(HEADER_ADDITIONAL_INCLUDE "")
-  SET(SOURCE_ADDITIONAL_CODE "")
+  #SET(HEADER_ADDITIONAL_INCLUDE "")
+  #SET(SOURCE_ADDITIONAL_CODE "")
   
   SET(CS_COMPILATION_CONDITION_OPEN "")
   SET(CS_COMPILATION_CONDITION_CLOSE "")
@@ -157,20 +163,28 @@ MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mty
     SET(CS_COMPILATION_CONDITION_CLOSE "#endif")
   ENDIF()
 
-  SET(extra_macro_args ${ARGN})
+  #SET(extra_macro_args ${ARGN})
   # Did we get any optional args?
-  LIST(LENGTH extra_macro_args num_extra_args)
-  IF (${num_extra_args} GREATER 0)
-    list(GET extra_macro_args 0 additional_c_header)
-    SET(HEADER_ADDITIONAL_INCLUDE ${additional_c_header})
-  ENDIF()
-  IF (${num_extra_args} GREATER 1)
-    list(GET extra_macro_args 1 additional_c_code)
-    SET(SOURCE_ADDITIONAL_CODE ${additional_c_code})
-  ENDIF()
+  #LIST(LENGTH extra_macro_args num_extra_args)
+  #IF (${num_extra_args} GREATER 0)
+  #  list(GET extra_macro_args 0 additional_c_header)
+  #  SET(HEADER_ADDITIONAL_INCLUDE ${additional_c_header})
+  #ENDIF()
+  #IF (${num_extra_args} GREATER 1)
+  #  list(GET extra_macro_args 1 additional_c_code)
+  #  SET(SOURCE_ADDITIONAL_CODE ${additional_c_code})
+  #ENDIF()
   #MESSAGE(STATUS "-------------------- PROPERTY_NAMES: ${PROPERTY_NAMES}")
-  SET(C_HEADER_SOURCE "${HEADER_ADDITIONAL_INCLUDE}")
-  SET(C_SOURCE "${SOURCE_ADDITIONAL_CODE} #include \"${fname}.h\"")
+  
+  SET(C_COMPILATION_CONDITION_OPEN "")
+  SET(C_COMPILATION_CONDITION_CLOSE "")  
+  IF (NOT ("${c_compilation_condition}" STREQUAL ""))
+	SET(C_COMPILATION_CONDITION_OPEN "#if ${c_compilation_condition}")
+	SET(C_COMPILATION_CONDITION_CLOSE "#endif")
+  ENDIF()
+  
+  SET(C_HEADER_SOURCE "${header_additional_include}")
+  SET(C_SOURCE "${source_additional_code} #include \"${fname}.h\"")
   SET(CS_SOURCE "//----------------------------------------------------------------------------
 //  This file is automatically generated, do not modify.      
 //----------------------------------------------------------------------------
@@ -671,6 +685,9 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
    ${CS_CLASS_SOURCE}
 }
 ${CS_COMPILATION_CONDITION_CLOSE}")
+  SET(C_SOURCE "${C_COMPILATION_CONDITION_OPEN} 
+  ${C_SOURCE} 
+  ${C_COMPILATION_CONDITION_OPEN}")
   #MESSAGE(STATUS "-------------------- CS_CLASS_SOURCE: ${CS_CLASS_SOURCE}")
   WRITE_IF_DIFFERENT("${csfname}" "${CS_SOURCE}")
   WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.h" "${C_HEADER_SOURCE}")
@@ -703,7 +720,9 @@ IF(HAVE_opencv_core)
     "CvInvoke"
     "Mat"
 	""
-    "#include \"mat_c.h\"")
+    "#include \"mat_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/umat_property" 
@@ -726,7 +745,9 @@ IF(HAVE_opencv_core)
     "CvInvoke"
     "UMat"
 	""
-    "#include \"umat_c.h\"")
+    "#include \"umat_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/input_array_property" 
@@ -748,7 +769,9 @@ IF(HAVE_opencv_core)
     "CvInvoke"
     "InputArray"
 	""
-    "#include \"core_c_extra.h\"")
+    "#include \"core_c_extra.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/output_array_property" 
@@ -767,7 +790,9 @@ IF(HAVE_opencv_core)
     "CvInvoke"
     "OutputArray"
 	""
-    "#include \"core_c_extra.h\"")
+    "#include \"core_c_extra.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_device_property" 
@@ -811,7 +836,9 @@ IF(HAVE_opencv_core)
     "OclInvoke"
     "Device"
 	""
-    "#include \"ocl_c.h\"")
+    "#include \"ocl_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_platform_info_property" 
@@ -831,7 +858,9 @@ IF(HAVE_opencv_core)
     "OclInvoke"
     "PlatformInfo"
 	""
-    "#include \"ocl_c.h\"")
+    "#include \"ocl_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_kernel_property" 
@@ -849,7 +878,9 @@ IF(HAVE_opencv_core)
     "OclInvoke"
     "Kernel" 
 	""
-    "#include \"ocl_c.h\"")
+    "#include \"ocl_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/gpumat_property" 
@@ -870,9 +901,9 @@ IF(HAVE_opencv_core)
     "GpuMat"
 	""
     "#include \"opencv2/core/cuda.hpp\"
-#include \"opencv2/core/types_c.h\"")
-
-
+	#include \"opencv2/core/types_c.h\""
+	""
+	"")
 
   CREATE_OCV_CLASS_PROPERTY( 
     "core/file_node_property" 
@@ -896,7 +927,9 @@ IF(HAVE_opencv_core)
     "CvInvoke"
     "FileNode"
 	""
-    "#include \"core_c_extra.h\"")
+    "#include \"core_c_extra.h\""
+	""
+	"")
 
   CREATE_OCV_CLASS_PROPERTY( 
     "core/moments_property" 
@@ -913,7 +946,9 @@ IF(HAVE_opencv_core)
     "CvInvoke"
     "Moments"
 	""
-    "#include \"core_c_extra.h\"")
+    "#include \"core_c_extra.h\""
+	""
+	"")
 ENDIF()
 ############################### core code gen END ################################
 
@@ -943,7 +978,9 @@ IF(HAVE_opencv_objdetect)
     "CvInvoke"
     "QRCodeDetector"
 	""
-    "#include \"objdetect_c.h\"")
+    "#include \"objdetect_c.h\""
+	""
+	"")
 
 ENDIF()
 ############################### objdetect code gen END ################################
@@ -965,7 +1002,9 @@ IF(HAVE_opencv_imgproc)
     "CvInvoke"
     "LineIterator"
 	""
-    "#include \"imgproc_c.h\"")
+    "#include \"imgproc_c.h\""
+	""
+	"")
 ENDIF()
 ############################### features2d code gen END ################################
 
@@ -1004,8 +1043,9 @@ IF(HAVE_opencv_features2d)
     "Features2DInvoke"
     "SimpleBlobDetectorParams"
 	""
-    "#include \"features2d_c.h\"")
-
+    "#include \"features2d_c.h\""
+	""
+	"")
 ENDIF()
 ############################### features2d code gen END ################################
 
@@ -1028,7 +1068,9 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "EM"
 	""
-    "#include \"ml_c.h\"")
+    "#include \"ml_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svm_property" 
@@ -1054,7 +1096,9 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "SVM"
 	""
-    "#include \"ml_c.h\"")
+    "#include \"ml_c.h\""
+	""
+	"")
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svmsgd_property" 
@@ -1076,7 +1120,9 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "SVMSGD"
 	""
-    "#include \"ml_c.h\"")	
+    "#include \"ml_c.h\""
+	""
+	"")	
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/knearest_property" 
@@ -1096,7 +1142,9 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "KNearest"
 	""
-    "#include \"ml_c.h\"")
+    "#include \"ml_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/ann_mlp_property" 
@@ -1124,7 +1172,9 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "ANN_MLP"
 	""
-    "#include \"ml_c.h\"")
+    "#include \"ml_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/logistic_regression_property" 
@@ -1146,7 +1196,9 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "LogisticRegression"
 	""
-    "#include \"ml_c.h\"")
+    "#include \"ml_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/rtrees_property" 
@@ -1173,7 +1225,9 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "RTrees"
 	""
-    "#include \"ml_c.h\"")
+    "#include \"ml_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/dtree_property" 
@@ -1197,7 +1251,9 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "DTrees"
 	""
-    "#include \"ml_c.h\"")
+    "#include \"ml_c.h\""
+	""
+	"")
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/boost_property" 
@@ -1221,14 +1277,14 @@ IF(HAVE_opencv_ml)
     "MlInvoke"
     "Boost"
 	""
-    "#include \"ml_c.h\"")
+    "#include \"ml_c.h\""
+	""
+	"")
 ENDIF()
 ############################### ml code gen END ################################
 
 ############################### video code gen START ##############################
 IF(HAVE_opencv_video)
- 
-  
   CREATE_OCV_CLASS_PROPERTY( 
     "video/kalmanfilter_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/KalmanFilter.g.cs"
@@ -1252,7 +1308,9 @@ IF(HAVE_opencv_video)
     "CvInvoke"
     "KalmanFilter"
 	""
-    "#include \"video_c.h\"")
+    "#include \"video_c.h\""
+	""
+	"")
 
   CREATE_OCV_CLASS_PROPERTY( 
     "video/variational_refinement_property" 
@@ -1274,7 +1332,9 @@ IF(HAVE_opencv_video)
     "CvInvoke"
     "VariationalRefinement"
 	""
-    "#include \"video_c.h\"")
+    "#include \"video_c.h\""
+	""
+	"")
 ENDIF()
 ############################### video code gen END ################################
 
@@ -1295,8 +1355,9 @@ IF(HAVE_opencv_videoio)
     "CvInvoke"
     "VideoCapture"
 	""
-    "#include \"videoio_c_extra.h\"")
-  
+    "#include \"videoio_c_extra.h\""
+	""
+	"")
 ENDIF()
 ############################### videoio code gen END ################################
 
@@ -1328,7 +1389,9 @@ IF(HAVE_opencv_optflow)
     "CvInvoke"
     "DualTVL1OpticalFlow"
 	""
-    "#include \"optflow_c.h\"")
+    "#include \"optflow_c.h\""
+	""
+	"")
 
 CREATE_OCV_CLASS_PROPERTY( 
     "optflow/rlof_opticalflow_parameter_property" 
@@ -1358,7 +1421,9 @@ CREATE_OCV_CLASS_PROPERTY(
     "CvInvoke"
     "RLOFOpticalFlowParameter"
 	""
-    "#include \"optflow_c.h\"")  
+    "#include \"optflow_c.h\""
+	""
+	"")  
 ENDIF()
 ############################### optflow code gen END ################################
 
@@ -1380,7 +1445,9 @@ IF(HAVE_opencv_photo)
     "Tonemap"
 	""
     "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 		
 
   CREATE_OCV_CLASS_PROPERTY( 
@@ -1401,7 +1468,9 @@ IF(HAVE_opencv_photo)
     "TonemapReinhard"
 	""
     "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\"")	
+#include \"opencv2/core/types_c.h\""
+	""
+	"")	
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapDrago_property" 
@@ -1420,7 +1489,9 @@ IF(HAVE_opencv_photo)
     "TonemapDrago"
 	""
     "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\"")		
+#include \"opencv2/core/types_c.h\""
+	""
+	"")		
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapMantiuk_property" 
@@ -1439,7 +1510,9 @@ IF(HAVE_opencv_photo)
     "TonemapMantiuk"
 	""
     "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\"")	
+#include \"opencv2/core/types_c.h\""
+	""
+	"")	
 ENDIF()
 ############################### photo code gen END ##############################
 
@@ -1474,7 +1547,9 @@ IF(HAVE_opencv_xfeatures2d)
     "XFeatures2DInvoke"
     "PCTSignatures"
 	""
-    "#include \"xfeatures2d_c.h\"")
+    "#include \"xfeatures2d_c.h\""
+	""
+	"")
 ENDIF()
 ############################### xfeatures2d code gen END ################################
 
@@ -1495,7 +1570,9 @@ IF(HAVE_opencv_stitching)
     "StitchingInvoke"
     "Stitcher"
 	""
-    "#include \"stitching_c.h\"")  
+    "#include \"stitching_c.h\""
+	""
+	"")  
 ENDIF()
 ############################### stitching code gen END ################################
 
@@ -1525,8 +1602,9 @@ IF(HAVE_opencv_video)
     "CvInvoke"
     "DISOpticalFlow"
 	""
-    "#include \"video_c.h\"")
-  
+    "#include \"video_c.h\""
+	""
+	"")
 
    CREATE_OCV_CLASS_PROPERTY( 
     "video/BackgroundSubtractorKNN_property" 
@@ -1549,7 +1627,9 @@ IF(HAVE_opencv_video)
     "CvInvoke"
     "BackgroundSubtractorKNN"
 	""
-    "#include \"video_c.h\"")
+    "#include \"video_c.h\""
+	""
+	"")
   
    CREATE_OCV_CLASS_PROPERTY( 
     "video/BackgroundSubtractorMOG2_property" 
@@ -1577,7 +1657,9 @@ IF(HAVE_opencv_video)
     "CvInvoke"
     "BackgroundSubtractorMOG2"
 	""
-    "#include \"video_c.h\"")
+    "#include \"video_c.h\""
+	""
+	"")
 ENDIF()
 ############################### video code gen END ################################
 
@@ -1607,7 +1689,9 @@ IF(HAVE_opencv_shape)
     "ShapeInvoke"
     "ShapeContextDistanceExtractor"
 	""
-    "#include \"shape_c.h\"")
+    "#include \"shape_c.h\""
+	""
+	"")
 ENDIF()
 ############################### shape code gen END ################################
 
@@ -1633,7 +1717,9 @@ IF(HAVE_opencv_cudaimgproc)
     "CudaHoughLinesDetector"
 	""
     "#include \"opencv2/cudaimgproc.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 ENDIF()
 ############################### cudaimgproc code gen END ##############################
 
@@ -1665,7 +1751,9 @@ ENDIF()
     "CudaHOG"
 	""
     "#include \"opencv2/cudaobjdetect.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaobjdetect/cuda_cascade_classifier_property" 
@@ -1689,7 +1777,9 @@ ENDIF()
     "CudaCascadeClassifier"
 	""
     "#include \"opencv2/cudaobjdetect.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 #ENDIF()
 ############################### cudaobjdetect code gen END ##############################
 
@@ -1715,7 +1805,9 @@ IF(HAVE_opencv_plot)
     "Plot2d"
 	""
     "#include \"opencv2/plot.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 ENDIF()
 ############################### plot code gen END ##############################
 
@@ -1740,7 +1832,9 @@ IF(HAVE_opencv_saliency)
     "MotionSaliencyBinWangApr2014"
 	""
     "#include \"opencv2/saliency.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
   CREATE_OCV_CLASS_PROPERTY( 
     "saliency/ObjectnessBING_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/ObjectnessBING.g.cs"
@@ -1758,7 +1852,9 @@ IF(HAVE_opencv_saliency)
     "ObjectnessBING"
 	""
     "#include \"opencv2/saliency.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 ENDIF()
 ############################### plot code gen END ##############################
 
@@ -1784,7 +1880,9 @@ IF(HAVE_opencv_xphoto)
     "SimpleWB"
 	""
     "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/grayworldwb_property" 
@@ -1802,7 +1900,9 @@ IF(HAVE_opencv_xphoto)
     "GrayworldWB"
 	""
     "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 
 	CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/learningbasedwb_property" 
@@ -1823,7 +1923,9 @@ IF(HAVE_opencv_xphoto)
     "LearningBasedWB"
 	""
     "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 
   CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/TonemapDurand_property" 
@@ -1844,8 +1946,9 @@ IF(HAVE_opencv_xphoto)
     "TonemapDurand"
 	""
     "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\"")
-
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 ENDIF()
 ############################### xphoto code gen END ##############################
 
@@ -1878,7 +1981,9 @@ IF(HAVE_opencv_face)
     "FacemarkLBFParams"
 	""
     "#include \"opencv2/face.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 
   CREATE_OCV_CLASS_PROPERTY( 
     "face/facemarkaam_params_property" 
@@ -1903,7 +2008,9 @@ IF(HAVE_opencv_face)
     "FacemarkAAMParams"
 	""
     "#include \"opencv2/face.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 ENDIF()
 ############################### face code gen END ##############################
 
@@ -1929,7 +2036,9 @@ IF(HAVE_opencv_dnn)
     "Net"
 	""
 	"#include \"opencv2/dnn.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
   CREATE_OCV_CLASS_PROPERTY( 
     "dnn/layer_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Layer.g.cs"
@@ -1948,8 +2057,9 @@ IF(HAVE_opencv_dnn)
     "Layer"
 	""
 	"#include \"opencv2/dnn.hpp\"
-#include \"opencv2/core/types_c.h\"")
-
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 ENDIF()
 ############################### dnn code gen END ##############################
 
@@ -1971,7 +2081,9 @@ IF(HAVE_opencv_stereo)
     "QuasiDenseStereo"
 	""
 	"#include \"opencv2/stereo.hpp\"
-#include \"opencv2/core/types_c.h\"")
+#include \"opencv2/core/types_c.h\""
+	""
+	"")
 ENDIF()
 ############################### stereo code gen END ##############################
 
@@ -2000,9 +2112,9 @@ source_group("Include_extern" FILES ${extern_hdrs})
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
   #MESSAGE("Retriveing source folder for project :  opencv_${CVEXTERN_OPTIONAL_DEP}")
   #GET_TARGET_PROPERTY(OPENCV_MODULE_SOURCE_DIR opencv_${CVEXTERN_OPTIONAL_DEP} PROJECT_SOURCE_DIR)
-  IF (HAVE_opencv_${CVEXTERN_OPTIONAL_DEP})
+  #IF (HAVE_opencv_${CVEXTERN_OPTIONAL_DEP})
     INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
-  ENDIF()
+  #ENDIF()
   #MESSAGE("Included:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
   
   SET(CVEXTERN_OPTIONAL_DIR "${PROJECT_SOURCE_DIR}/${CVEXTERN_OPTIONAL_DEP}")
