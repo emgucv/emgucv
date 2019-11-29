@@ -28,7 +28,11 @@ using Emgu.CV.Dpm;
 using Emgu.CV.ImgHash;
 using Emgu.CV.Face;
 using Emgu.CV.Freetype;
+
+#if !NETCOREAPP
 using Emgu.CV.UI;
+#endif
+
 #if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
@@ -561,7 +565,7 @@ namespace Emgu.CV.Test
            int width = 100, height = 100;
            MCvTermCriteria termCrit = new MCvTermCriteria(3, 0.001);
 
-           #region using batch method
+#region using batch method
            Image<Gray, Byte>[] imgs = Array.ConvertAll<String, Image<Gray, Byte>>(fileNames,
                delegate(String file)
            {
@@ -599,7 +603,7 @@ namespace Emgu.CV.Test
                  EmguAssert.AreEqual(i.ToString(), imgRecognizer3.Recognize(imgs[i]).Label);
               }
            }
-           #endregion
+#endregion
         }
 
         [Test]
@@ -668,13 +672,13 @@ namespace Emgu.CV.Test
 
            IntPtr posit = CvInvoke.cvCreatePOSITObject(points3D, points3D.GetLength(0));
 
-           #region caculate the image point assuming we know the rotation and translation
+#region caculate the image point assuming we know the rotation and translation
            RotationVector3D realRotVec = new RotationVector3D(new double[3] { 0.1f, 0.2f, 0.3f });
            Matrix<double> realTransVec = new Matrix<double>(new double[3] { 0.0f, 0.0f, -50.0f });
 
            float[,] imagePoint = ProjectPoints(points3D, realRotVec, realTransVec, focalLength);
            GCHandle handle1 = GCHandle.Alloc(imagePoint, GCHandleType.Pinned);
-           #endregion
+#endregion
 
            RotationVector3D rotVecGuess = new RotationVector3D(new double[3] { 0.3f, 0.1f, 0.2f });
            Matrix<double> rotMatGuess = rotVecGuess.RotationMatrix;
@@ -916,14 +920,14 @@ namespace Emgu.CV.Test
         /*
         public void TestPlanarSubdivisionHelper(int pointCount)
         {
-           #region generate random points
+#region generate random points
            PointF[] points = new PointF[pointCount];
            Random r = new Random((int) DateTime.Now.Ticks);
            for (int i = 0; i < points.Length; i++)
            {
               points[i] = new PointF((float) (r.NextDouble() * 20), (float) (r.NextDouble() * 20));
            }
-           #endregion
+#endregion
 
            Subdiv2D division;
 
@@ -1023,7 +1027,7 @@ namespace Emgu.CV.Test
             VoronoiFacet[] facets = subdiv.GetVoronoiFacets();
         }
 
-        #region Test code from Bug 36, thanks to Bart
+#region Test code from Bug 36, thanks to Bart
 
         [Test]
         public void TestPlanarSubdivision3()
@@ -1092,7 +1096,7 @@ namespace Emgu.CV.Test
 
             return points;
         }
-        #endregion
+#endregion
 
         /*
         [Test]
@@ -1116,7 +1120,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMatchTemplate()
         {
-            #region prepare synthetic image for testing
+#region prepare synthetic image for testing
             int templWidth = 50;
             int templHeight = 50;
             Point templCenter = new Point(120, 100);
@@ -1131,7 +1135,7 @@ namespace Emgu.CV.Test
             img.ROI = objectLocation;
             randomObj.Copy(img, null);
             img.ROI = Rectangle.Empty;
-            #endregion
+#endregion
 
             Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TemplateMatchingType.Sqdiff);
             double[] minVal, maxVal;
@@ -1554,14 +1558,14 @@ namespace Emgu.CV.Test
         [Test]
         public void TestConvexHull()
         {
-            #region Create some random points
+#region Create some random points
             Random r = new Random();
             PointF[] pts = new PointF[200];
             for (int i = 0; i < pts.Length; i++)
             {
                 pts[i] = new PointF((float)(100 + r.NextDouble() * 400), (float)(100 + r.NextDouble() * 400));
             }
-            #endregion
+#endregion
 
             Mat img = new Mat(600, 600, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255.0, 255.0, 255.0));
@@ -1687,7 +1691,7 @@ namespace Emgu.CV.Test
         }
 
         /*
-  #if !WINDOWS_PHONE_APP
+#if !WINDOWS_PHONE_APP
         [Test]
         public void TestExtrinsicCameraParametersRuntimeSerialize()
         {
@@ -1737,23 +1741,23 @@ namespace Emgu.CV.Test
               EmguAssert.IsTrue(param.Equals(param2));
            }
         }
-  #endif
+#endif
   */
         [Test]
         public void TestEllipseFitting()
         {
-            #region generate random points
+#region generate random points
             System.Random r = new Random();
             int sampleCount = 100;
             Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(150, 60), 90);
             PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
-            #endregion
+#endregion
 
             Stopwatch watch = Stopwatch.StartNew();
             Ellipse fittedEllipse = PointCollection.EllipseLeastSquareFitting(pts);
             watch.Stop();
 
-            #region draw the points and the fitted ellips
+#region draw the points and the fitted ellips
             Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255, 255, 255));
             foreach (PointF p in pts)
@@ -1761,7 +1765,7 @@ namespace Emgu.CV.Test
             RotatedRect rect = fittedEllipse.RotatedRect;
             rect.Angle += 90; //the detected ellipse was off by 90 degree
             CvInvoke.Ellipse(img, rect, new MCvScalar(0, 0, 255), 2);
-            #endregion
+#endregion
 
             //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
         }
@@ -1769,18 +1773,18 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMinAreaRect()
         {
-            #region generate random points
+#region generate random points
             System.Random r = new Random();
             int sampleCount = 100;
             Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(90, 60), -60);
             PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
-            #endregion
+#endregion
 
             Stopwatch watch = Stopwatch.StartNew();
             RotatedRect box = CvInvoke.MinAreaRect(pts);
             watch.Stop();
 
-            #region draw the points and the box
+#region draw the points and the box
             Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255, 255, 255));
 #if NETFX_CORE
@@ -1792,7 +1796,7 @@ namespace Emgu.CV.Test
             CvInvoke.Polylines(img, vertices, true, new MCvScalar(0, 0, 255), 1);
             foreach (PointF p in pts)
                 CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
-            #endregion
+#endregion
 
             //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
         }
@@ -1800,23 +1804,23 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMinEnclosingCircle()
         {
-            #region generate random points
+#region generate random points
             System.Random r = new Random();
             int sampleCount = 100;
             Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(90, 60), -60);
             PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
-            #endregion
+#endregion
 
             Stopwatch watch = Stopwatch.StartNew();
             CircleF circle = CvInvoke.MinEnclosingCircle(pts);
             watch.Stop();
 
-            #region draw the points and the circle
+#region draw the points and the circle
             Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255, 255, 255));
             foreach (PointF p in pts)
                 CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
-            #endregion
+#endregion
 
             //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
         }
@@ -2432,7 +2436,7 @@ namespace Emgu.CV.Test
 #endif
 
         /*
-  #if !ANDROID
+#if !ANDROID
         //took too long to test on android, disabling for now
         [Test]
         public void TestRTreeClassifier()
@@ -2453,7 +2457,7 @@ namespace Emgu.CV.Test
               EmguAssert.IsTrue(signiture.Length == classifier.NumberOfClasses);
            }
         }
-  #endif
+#endif
         */
 
         [Test]
@@ -2922,7 +2926,7 @@ namespace Emgu.CV.Test
         }
 
         /*
-  #region Test code contributed by Daniel Bell, modified by Canming
+#region Test code contributed by Daniel Bell, modified by Canming
         [Test]
         public void TestLevMarqSparse()
         {
@@ -3005,7 +3009,7 @@ namespace Emgu.CV.Test
            LevMarqSparse.BundleAdjust(points, imagePoints, visibility, cameraMatrix.ToArray(), R.ToArray(), T.ToArray(), distcoeff.ToArray(), termCrit);
 
         }
-  #endregion
+#endregion
 
         [Test]
         public void TestLatenSVM2()
@@ -3224,14 +3228,14 @@ namespace Emgu.CV.Test
         }
 
         /*
-  #if !(__IOS__ || __ANDROID__)
+#if !(__IOS__ || __ANDROID__)
         [Test]
         public void TestGLImageView()
         {
            Emgu.CV.UI.GLView.GLImageViewer viewer = new UI.GLView.GLImageViewer();
            //viewer.ShowDialog();
         }
-  #endif
+#endif
         */
 #endif
         [Test]

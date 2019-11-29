@@ -1,0 +1,257 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Emgu.CV.NativeImage\BitmapExtension.cs" Link="BitmapExtension.cs" />
+    <Compile Include="..\AutoTestCalibration.cs" Link="AutoTestCalibration.cs" />
+    <Compile Include="..\AutoTestCuda.cs" Link="AutoTestCuda.cs" />
+    <Compile Include="..\AutoTestFeatures2d.cs" Link="AutoTestFeatures2d.cs" />
+    <Compile Include="..\AutoTestImage.cs" Link="AutoTestImage.cs" />
+    <Compile Include="..\AutoTestMat.cs" Link="AutoTestMat.cs" />
+    <Compile Include="..\AutoTestMatrix.cs" Link="AutoTestMatrix.cs" />
+    <Compile Include="..\AutoTestML.cs" Link="AutoTestML.cs" />
+    <Compile Include="..\AutoTestOcr.cs" Link="AutoTestOcr.cs" />
+    <Compile Include="..\AutoTestOpenCL.cs" Link="AutoTestOpenCL.cs" />
+    <Compile Include="..\AutoTestQuaternions.cs" Link="AutoTestQuaternions.cs" />
+    <Compile Include="..\AutoTestSanity.cs" Link="AutoTestSanity.cs" />
+    <Compile Include="..\AutoTestUMat.cs" Link="AutoTestUMat.cs" />
+    <Compile Include="..\AutoTestVarious.cs" Link="AutoTestVarious.cs" />
+    <Compile Include="..\Class1.cs" Link="Class1.cs" />
+    <Compile Include="..\EmguAssert.cs" Link="EmguAssert.cs" />
+    <Compile Include="..\Face.cs" Link="Face.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.6.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Emgu.CV.Example\LicensePlateRecognition\license-plate.jpg">
+      <Link>license-plate.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
+      <Link>haarcascade_eye.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_alt2.xml">
+      <Link>haarcascade_frontalface_alt2.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\board.jpg">
+      <Link>board.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\left01.jpg">
+      <Link>left01.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\dnn\object_detection_classes_pascal_voc.txt">
+      <Link>pascal-classes.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\dnn\dog416.png">
+      <Link>dog416.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\dnn\street.png">
+      <Link>street.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\list.txt">
+      <Link>list.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial00.png">
+      <Link>memorial00.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial01.png">
+      <Link>memorial01.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial02.png">
+      <Link>memorial02.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial03.png">
+      <Link>memorial03.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial04.png">
+      <Link>memorial04.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial05.png">
+      <Link>memorial05.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial06.png">
+      <Link>memorial06.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial07.png">
+      <Link>memorial07.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial08.png">
+      <Link>memorial08.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial09.png">
+      <Link>memorial09.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial10.png">
+      <Link>memorial10.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial11.png">
+      <Link>memorial11.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial12.png">
+      <Link>memorial12.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial13.png">
+      <Link>memorial13.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial14.png">
+      <Link>memorial14.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\hdr\exposures\memorial15.png">
+      <Link>memorial15.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\dnn\space_shuttle.jpg">
+      <Link>space_shuttle.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_contrib\modules\dpm\samples\data\inriaperson.xml">
+      <Link>inriaperson.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_contrib\modules\text\samples\trained_classifierNM1.xml">
+      <Link>trained_classifierNM1.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_contrib\modules\text\samples\trained_classifierNM2.xml">
+      <Link>trained_classifierNM2.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_contrib\modules\text\samples\trained_classifier_erGrouping.xml">
+      <Link>trained_classifier_erGrouping.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\box.png">
+      <Link>box.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\box_in_scene.png">
+      <Link>box_in_scene.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\lena.jpg">
+      <Link>lena.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\aloeL.jpg">
+      <Link>aloeL.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\aloeR.jpg">
+      <Link>aloeR.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\stuff.jpg">
+      <Link>stuff.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv\samples\data\tree.avi">
+      <Link>tree.avi</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_contrib\modules\text\samples\scenetext01.jpg">
+      <Link>scenetext01.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_extra\testdata\highgui\readwrite\multipage.tif">
+      <Link>multipage.tif</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\car.avi">
+	  <Link>car.avi</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\chessBoard.jpg">
+	  <Link>chessBoard.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\circlesGrid.bmp">
+	  <Link>circlesGrid.bmp</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\pedestrian.png">
+	  <Link>pedestrian.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\qrcode.png">
+	  <Link>qrcode.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\squares.gif">
+	  <Link>squares.gif</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\stitch1.jpg">
+	  <Link>stitch1.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\stitch2.jpg">
+	  <Link>stitch2.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\stitch3.jpg">
+	  <Link>stitch3.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\stitch4.jpg">
+	  <Link>stitch4.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+	<None Include="..\..\opencv_extra\testdata\dnn\bvlc_googlenet.prototxt">
+      <Link>bvlc_googlenet.prototxt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\opencv_extra\testdata\dnn\fcn8s-heavy-pascal.prototxt">
+      <Link>fcn8s-heavy-pascal.prototxt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\opencv\samples\dnn\face_detector\deploy.prototxt">
+      <Link>deploy.prototxt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="..\NotoSansCJK-Regular.ttc">
+	  <Link>NotoSansCJK-Regular.ttc</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+	<Content Include="..\..\opencv\samples\data\letter-recognition.data">
+      <Link>letter-recognition.data</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.World\Netstandard\Emgu.CV.World.Netstandard.csproj" />
+  </ItemGroup>
+  <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
+</Project>

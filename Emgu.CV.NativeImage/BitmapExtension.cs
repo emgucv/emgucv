@@ -11,7 +11,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
-namespace Emgu.CV.UI
+namespace Emgu.CV
 {
     /// <summary>
     /// Provide extension method to convert IInputArray to and from Bitmap

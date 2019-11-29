@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+#if !NETCOREAPP
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
+
 using System.Xml;
 using System.Xml.Linq;
 using Emgu.CV;
@@ -21,12 +22,14 @@ using Emgu.CV.Cvb;
 using Emgu.CV.Cuda;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
 using Emgu.CV.Util;
-
-//using Emgu.UI;
 using Emgu.Util;
 using Emgu.CV.VideoStab;
+
+#if !NETCOREAPP
+using System.Windows.Forms;
+using Emgu.CV.UI;
+#endif
 
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -62,7 +65,9 @@ namespace Emgu.CV.Test
         {
             Mat m = new Mat(323, 241, CvEnum.DepthType.Cv8U, 3);
             m.SetTo(new MCvScalar());
+
             Emgu.CV.UI.ImageViewer.Show(m);
+
         }
 
         /*
@@ -113,7 +118,7 @@ namespace Emgu.CV.Test
         /*
         public void TestPointPerformance()
         {
-           #region test point constructors
+#region test point constructors
            int numberOfPoints = 100000;
            Stopwatch stopwatch = Stopwatch.StartNew();
            Point2D<int>[] pts = new Point2D<int>[numberOfPoints];
@@ -125,16 +130,16 @@ namespace Emgu.CV.Test
            System.Drawing.Point[] mpts = new System.Drawing.Point[numberOfPoints];
            stopwatch.Stop();
            Trace.WriteLine("System.Drawing.Point creation: " + stopwatch.ElapsedMilliseconds + " milliseconds.");
-           #endregion
+#endregion
 
-           #region System.Drawing.Point example
+#region System.Drawing.Point example
            System.Drawing.Point p1 = new System.Drawing.Point(0, 0); 
 
            System.Drawing.Point[] ptsArray = new System.Drawing.Point[1]; //structure (value type) in array are initialized, ptsArray[0] has been allocated to a default point (0,0)
            ptsArray[0] = p1; //ptsArray[0] now contains a copy of p1 (0, 0)
            p1.X = 1; //change the value on p1, now p1 is (1, 0)
            Trace.WriteLine("difference in X: " + (p1.X - ptsArray[0].X)); //ptsArray[0] returns a copy of the point (0,0)
-           #endregion
+#endregion
 
            int numberOfPointsInArray = 1000000;
            int numberOfReadyAccess = 1000;
@@ -715,11 +720,11 @@ namespace Emgu.CV.Test
            using (BGCodeBookModel<Ycc> bgmodel = new BGCodeBookModel<Ycc>())
            {
 
-              #region Set color thresholds values
+#region Set color thresholds values
               //bgmodel.MCvBGCodeBookModel.ModMin0 = bgmodel.MCvBGCodeBookModel.ModMin1 = bgmodel.MCvBGCodeBookModel.ModMin2 = 3;
               //bgmodel.MCvBGCodeBookModel.ModMax0 = bgmodel.MCvBGCodeBookModel.ModMax1 = bgmodel.MCvBGCodeBookModel.ModMax2 = 10;
               //bgmodel.MCvBGCodeBookModel.CbBounds0 = bgmodel.MCvBGCodeBookModel.CbBounds1 = bgmodel.MCvBGCodeBookModel.CbBounds2 = 10;
-              #endregion
+#endregion
 
 
               ImageViewer viewer = new ImageViewer();
@@ -1196,7 +1201,7 @@ namespace Emgu.CV.Test
 
             //Matrix<float> state = new Matrix<float>(new float[] { 0.0f, 0.0f}); //initial guess
 
-            #region initialize Kalman filter
+#region initialize Kalman filter
             KalmanFilter tracker = new KalmanFilter(2, 1, 0);
             syntheticData.TransitionMatrix.Mat.CopyTo(tracker.TransitionMatrix);
             syntheticData.MeasurementMatrix.Mat.CopyTo(tracker.MeasurementMatrix);
@@ -1205,7 +1210,7 @@ namespace Emgu.CV.Test
             syntheticData.MeasurementNoise.Mat.CopyTo(tracker.MeasurementNoiseCov);
             syntheticData.ErrorCovariancePost.Mat.CopyTo(tracker.ErrorCovPost);
             tracker.StatePost.SetTo(new float[] { 0.0f, 0.0f });
-            #endregion
+#endregion
 
             System.Converter<double, PointF> angleToPoint =
                delegate (double radianAngle)
@@ -1232,7 +1237,7 @@ namespace Emgu.CV.Test
 
                 tracker.Predict();
 
-             #region draw the state, prediction and the measurement
+#region draw the state, prediction and the measurement
 
              float[] correctedState = new float[2];
                 float[] predictedState = new float[2];
@@ -1249,7 +1254,7 @@ namespace Emgu.CV.Test
              img.Draw(new LineSegment2DF(statePoint, predictPoint), new Bgr(Color.Magenta), 1); //Draw a line between the current position and prediction of next position 
 
              //Trace.WriteLine(String.Format("Velocity: {0}", tracker.CorrectedState[1, 0]));
-             #endregion
+#endregion
 
              syntheticData.GoToNextState();
 
@@ -1335,3 +1340,5 @@ namespace Emgu.CV.Test
         }*/
     }
 }
+
+#endif
