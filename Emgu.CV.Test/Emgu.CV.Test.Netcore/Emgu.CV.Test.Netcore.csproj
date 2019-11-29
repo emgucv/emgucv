@@ -254,4 +254,5 @@
     <ProjectReference Include="..\..\Emgu.CV.World\Netstandard\Emgu.CV.World.Netstandard.csproj" />
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
+  <Import Project="..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" />
 </Project>
