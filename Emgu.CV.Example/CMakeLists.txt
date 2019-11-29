@@ -28,7 +28,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "Debug" EXCLUDE
       PATTERN "Release" EXCLUDE  
       )
-	INSTALL(
+    INSTALL(
       FILES
       "${OPENCV_EXTRA_SUBFOLDER}/testdata/dnn/mask_rcnn_inception_v2_coco_2018_01_28.pbtxt"
       DESTINATION "opencv_extra/testdata/dnn/"
@@ -36,7 +36,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       )
   ENDIF()
   IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
-      INSTALL(
+    INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WPF/"
       DESTINATION Emgu.CV.Example/XamarinForms/WPF/

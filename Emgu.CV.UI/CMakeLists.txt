@@ -3,64 +3,59 @@
 # --------------------------------------------------------
 
 IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND NOT ANDROID AND NOT NETFX_CORE AND NOT APPLE)
+  
+  IF(WIN32)
+    PROJECT(Emgu.CV.UI)
+    
+    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/Emgu.CV.Example.sln" "Emgu.CV.UI" "${EXTRA_BUILD_FLAGS}" ALL)	
+    INSTALL(
+      FILES 
+      ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
+      ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll 
+      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+      COMPONENT emgucv_binary)
+    INSTALL(
+      DIRECTORY
+      ${CMAKE_CURRENT_SOURCE_DIR}
+      DESTINATION .
+      COMPONENT emgucv_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.resx"
+      PATTERN ".svn" EXCLUDE
+      PATTERN "obj" EXCLUDE
+      PATTERN "CMakeFiles" EXCLUDE
+      PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+      )
+    
+    if(ENABLE_SOLUTION_FOLDERS)
+      set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+    endif()
+    
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World.Netstandard)
+    INSTALL(
+      FILES 
+      ${LIBRARY_OUTPUT_PATH}/ZedGraph.dll
+      ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll 
+      ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
+      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+      COMPONENT emgucv_binary)
 
-PROJECT(Emgu.CV.UI)
-
-#MESSAGE(STATUS "Configuring Emgu.CV.UI")
-
-
-    #BUILD_CSPROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.UI.csproj" "" ALL)
-	BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/Emgu.CV.Example.sln" "Emgu.CV.UI" "${EXTRA_BUILD_FLAGS}" ALL)	
-	INSTALL(
-       FILES 
-       ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
-       ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll 
-       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-       COMPONENT emgucv_binary)
-	INSTALL(
-	  DIRECTORY
-	  ${CMAKE_CURRENT_SOURCE_DIR}
-	  DESTINATION .
-		COMPONENT emgucv_source
-	  FILES_MATCHING 
-	  PATTERN "*.cs"
-	  PATTERN "*.csproj"
-	  PATTERN "*.resx"
-	  PATTERN ".svn" EXCLUDE
-	  PATTERN "obj" EXCLUDE
-	  PATTERN "CMakeFiles" EXCLUDE
-	  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-	)
-
-
-if(ENABLE_SOLUTION_FOLDERS)
-    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
-endif()
-
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World.Netstandard)
-INSTALL(
-FILES 
-${LIBRARY_OUTPUT_PATH}/ZedGraph.dll
-${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll 
-${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
-DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-COMPONENT emgucv_binary)
-
-IF(WIN32)
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  DESTINATION .
-    COMPONENT emgucv_source
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "*.csproj"
-  PATTERN "*.resx"
-  PATTERN ".svn" EXCLUDE
-  PATTERN "obj" EXCLUDE
-  PATTERN "CMakeFiles" EXCLUDE
-  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-)
-ENDIF()
-
+    INSTALL(
+      DIRECTORY
+      ${CMAKE_CURRENT_SOURCE_DIR}
+      DESTINATION .
+      COMPONENT emgucv_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.resx"
+      PATTERN ".svn" EXCLUDE
+      PATTERN "obj" EXCLUDE
+      PATTERN "CMakeFiles" EXCLUDE
+      PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+      )
+  ENDIF()
+  
 ENDIF()
