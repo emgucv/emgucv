@@ -10,7 +10,7 @@ IF (HAVE_WINSTORE_10)
     COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/../../../miscellaneous/nuget.exe" pack Package.nuspec -OutputDirectory "${CMAKE_CURRENT_SOURCE_DIR}/../"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     )
-  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World.Netstandard)
+  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World.Netstandard Emgu.CV.nuget)
   
   if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
