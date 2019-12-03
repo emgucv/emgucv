@@ -59,7 +59,7 @@ namespace Emgu.CV.Test
             String buildOpts = String.Format("-D dstT={0}", Ocl.OclInvoke.TypeToString(umat.Depth));
     
             String sourceStr = @"
-__kernel void magnutude_filter_8u(
+__kernel void magnitude_filter_8u(
        __global const uchar* src, int src_step, int src_offset,
        __global uchar* dst, int dst_step, int dst_offset, int dst_rows, int dst_cols,
        float scale)

@@ -10,7 +10,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <EmguCVMacBinaryDir>$(MSBuildThisFileDirectory)..\..\libs\osx</EmguCVMacBinaryDir>
-    <EmguCVMacDir>$(MSBuildThisFileDirectory)</EmguCVMacDir>
   </PropertyGroup>
   <PropertyGroup>
     <EmguCVMacLinkTarget>Xamarin.Mac</EmguCVMacLinkTarget>

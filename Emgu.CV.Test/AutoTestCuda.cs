@@ -12,11 +12,15 @@ using Emgu.CV;
 using Emgu.CV.Cuda;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
+
 using Emgu.CV.Util;
 using Emgu.CV.Features2D;
 using Emgu.CV.XFeatures2D;
 using System.Runtime.InteropServices;
+
+#if !NETCOREAPP
+using Emgu.CV.UI;
+#endif
 
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -105,7 +109,7 @@ namespace Emgu.CV.Test
                 Image<Gray, Byte> img1 = new Image<Gray, byte>(1200, 640);
                 img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
                 using (GpuMat gpuImg1 = new GpuMat(img1))
-                using (GpuMat mat = new GpuMat(gpuImg1, new Range(0, 1), Range.All))
+                using (GpuMat mat = new GpuMat(gpuImg1, new Emgu.CV.Structure.Range(0, 1), Emgu.CV.Structure.Range.All))
                 {
                     Size s = mat.Size;
                 }

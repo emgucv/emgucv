@@ -16,7 +16,8 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-#if !(__IOS__ || NETFX_CORE || __ANDROID__)
+
+#if !(__IOS__ || NETFX_CORE || __ANDROID__ || NETCOREAPP)
 using Emgu.CV.UI;
 #endif
 using Emgu.CV.Util;
@@ -745,7 +746,7 @@ namespace Emgu.CV.Test
       }
 #endif
 
-#if !(__IOS__ || __ANDROID__ || NETFX_CORE)
+#if !(__IOS__ || __ANDROID__ || NETFX_CORE || NETCOREAPP)
         [TestAttribute]
         public void TestImageSave()
         {

@@ -19,6 +19,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
 #else
+using System.IO;
 using NUnit.Framework;
 #endif
 
@@ -130,7 +131,7 @@ namespace Emgu.CV.Test
                 System.IO.Directory.CreateDirectory(folderName);
             }
             String dest = System.IO.Path.Combine(folderName, String.Format("{0}.traineddata", lang));
-            if (!System.IO.File.Exists(dest))
+            if ((!System.IO.File.Exists(dest)) || (new FileInfo(dest).Length == 0))
             {
                 String source = Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang);
 
