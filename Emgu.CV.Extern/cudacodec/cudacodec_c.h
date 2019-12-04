@@ -8,12 +8,42 @@
 #ifndef EMGU_CUDACODEC_C_H
 #define EMGU_CUDACODEC_C_H
 
-//#include "opencv2/cuda.hpp"
+#include "opencv2/opencv_modules.hpp"
+#include "opencv2/core/core_c.h"
+
+#if HAVE_OPENCV_CUDACODEC
+
 #include "opencv2/cudacodec.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/types_c.h"
-#include "opencv2/core/core_c.h"
 #include "emgu_c.h"
+
+#else
+static inline CV_NORETURN void throw_no_cudacodec() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Codec support"); }
+
+
+namespace cv
+{
+	namespace cudacodec
+	{
+		class VideoWriter
+		{
+		};
+
+		class VideoReader
+		{
+		};
+		
+		enum SurfaceFormat
+		{
+		};
+
+		enum FormatInfo
+		{
+		};
+	}
+}
+#endif
 
 //----------------------------------------------------------------------------
 //

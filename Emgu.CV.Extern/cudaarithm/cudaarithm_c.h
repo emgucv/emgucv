@@ -8,12 +8,33 @@
 #ifndef EMGU_CUDAARITHM_C_H
 #define EMGU_CUDAARITHM_C_H
 
-//#include "opencv2/cuda.hpp"
+#include "opencv2/opencv_modules.hpp"
+#include "opencv2/core/core_c.h"
+
+#if HAVE_OPENCV_CUDAARITHM
 #include "opencv2/cudaarithm.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/types_c.h"
 #include "opencv2/core/core_c.h"
 #include "emgu_c.h"
+#else
+
+static inline CV_NORETURN void throw_no_cudaarithm() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Arithm support"); }
+
+namespace cv
+{
+	namespace cuda
+	{
+		class LookUpTable
+		{
+		};
+		
+		class Convolution
+		{
+		};
+	}
+}
+#endif
 
 CVAPI(void) cudaExp(cv::_InputArray* a, cv::_OutputArray* b, cv::cuda::Stream* stream);
 

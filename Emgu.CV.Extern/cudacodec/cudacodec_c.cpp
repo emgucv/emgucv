@@ -14,18 +14,30 @@
 
 cv::cudacodec::VideoWriter* cudaVideoWriterCreate(cv::String* fileName, CvSize* frameSize, double fps, cv::cudacodec::SurfaceFormat format, cv::Ptr<cv::cudacodec::VideoWriter>** sharedPtr)
 {
-   cv::Ptr<cv::cudacodec::VideoWriter> ptr = cv::cudacodec::createVideoWriter(*fileName, *frameSize, fps, format);
-   *sharedPtr = new cv::Ptr<cv::cudacodec::VideoWriter>(ptr);
-   return ptr.get();
+#if HAVE_OPENCV_CUDACODEC
+	cv::Ptr<cv::cudacodec::VideoWriter> ptr = cv::cudacodec::createVideoWriter(*fileName, *frameSize, fps, format);
+	*sharedPtr = new cv::Ptr<cv::cudacodec::VideoWriter>(ptr);
+	return ptr.get();
+#else
+	throw_no_cudacodec();
+#endif
 }
 void cudaVideoWriterRelease(cv::Ptr<cv::cudacodec::VideoWriter>** writer)
 {
-   delete *writer;
-   *writer = 0;
+#if HAVE_OPENCV_CUDACODEC
+	delete* writer;
+	*writer = 0;
+#else
+	throw_no_cudacodec();
+#endif
 }
 void cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputArray* frame, bool lastFrame)
 {
-   writer->write(*frame, lastFrame);
+#if HAVE_OPENCV_CUDACODEC
+	writer->write(*frame, lastFrame);
+#else
+	throw_no_cudacodec();
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -36,21 +48,37 @@ void cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputArray* f
 
 cv::cudacodec::VideoReader* cudaVideoReaderCreate(cv::String* fileName, cv::Ptr<cv::cudacodec::VideoReader>** sharedPtr)
 {
-   cv::Ptr<cv::cudacodec::VideoReader> ptr = cv::cudacodec::createVideoReader(*fileName);
-   *sharedPtr = new cv::Ptr<cv::cudacodec::VideoReader>(ptr);
-   return ptr.get();
+#if HAVE_OPENCV_CUDACODEC
+	cv::Ptr<cv::cudacodec::VideoReader> ptr = cv::cudacodec::createVideoReader(*fileName);
+	*sharedPtr = new cv::Ptr<cv::cudacodec::VideoReader>(ptr);
+	return ptr.get();
+#else
+	throw_no_cudacodec();
+#endif
 }
 void cudaVideoReaderRelease(cv::Ptr<cv::cudacodec::VideoReader>** reader)
 {
-   delete *reader;
-   *reader = 0;
+#if HAVE_OPENCV_CUDACODEC
+	delete* reader;
+	*reader = 0;
+#else
+	throw_no_cudacodec();
+#endif
 }
 bool cudaVideoReaderNextFrame(cv::cudacodec::VideoReader* reader, cv::_OutputArray* frame)
 {
-   return reader->nextFrame(*frame);
+#if HAVE_OPENCV_CUDACODEC
+	return reader->nextFrame(*frame);
+#else
+	throw_no_cudacodec();
+#endif
 }
 void cudaVideoReaderFormat(cv::cudacodec::VideoReader* reader, cv::cudacodec::FormatInfo* formatInfo)
 {
+#if HAVE_OPENCV_CUDACODEC
 	cv::cudacodec::FormatInfo fi = reader->format();
 	memcpy(formatInfo, &fi, sizeof(cv::cudacodec::FormatInfo));
+#else
+	throw_no_cudacodec();
+#endif
 }

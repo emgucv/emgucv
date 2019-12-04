@@ -8,12 +8,12 @@
 #ifndef EMGU_CORE_C_H
 #define EMGU_CORE_C_H
 
+#include "opencv2/opencv_modules.hpp"
+#include "opencv2/core/core_c.h"
 #include "opencv2/core.hpp"
 #include "opencv2/core/cuda.hpp"
-#include "opencv2/core/core_c.h"
 #include "emgu_c.h"
 #include "opencv2/core/affine.hpp"
-//#include "opencv2/core/precom.hpp"
 
 CVAPI(CvErrorCallback) cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata);
 CVAPI(int) cveGetErrMode();

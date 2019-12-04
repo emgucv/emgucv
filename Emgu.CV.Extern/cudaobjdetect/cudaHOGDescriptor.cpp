@@ -8,8 +8,12 @@
 
 void cudaHOGGetDefaultPeopleDetector(cv::cuda::HOG* descriptor, cv::Mat* detector)
 {
+#if HAVE_OPENCV_CUDAOBJDETECT
 	cv::Mat d = descriptor->getDefaultPeopleDetector();
 	cv::swap(d, *detector);
+#else
+	throw_no_cudaobjdetect();
+#endif
 }
 
 cv::cuda::HOG* cudaHOGCreate(
@@ -20,6 +24,7 @@ cv::cuda::HOG* cudaHOGCreate(
 	int nbins,
 	cv::Ptr<cv::cuda::HOG>** sharedPtr)
 {
+#if HAVE_OPENCV_CUDAOBJDETECT
 	cv::Size _winSize(winSize->width, winSize->height);
 	cv::Size _blockSize(blockSize->width, blockSize->height);
 	cv::Size _blockStride(blockStride->width, blockStride->height);
@@ -27,17 +32,28 @@ cv::cuda::HOG* cudaHOGCreate(
 	cv::Ptr<cv::cuda::HOG> ptr = cv::cuda::HOG::create(_winSize, _blockSize, _blockStride, _cellSize, nbins);
 	*sharedPtr = new cv::Ptr<cv::cuda::HOG>(ptr);
 	return ptr.get();
+#else
+	throw_no_cudaobjdetect();
+#endif
 }
 
 void cudaHOGSetSVMDetector(cv::cuda::HOG* descriptor, cv::_InputArray* detector)
 {
+#if HAVE_OPENCV_CUDAOBJDETECT
 	descriptor->setSVMDetector(*detector);
+#else
+	throw_no_cudaobjdetect();
+#endif
 }
 
 void cudaHOGRelease(cv::Ptr<cv::cuda::HOG>** descriptor)
 {
+#if HAVE_OPENCV_CUDAOBJDETECT
 	delete *descriptor;
 	*descriptor = 0;
+#else
+	throw_no_cudaobjdetect();
+#endif
 }
 
 void cudaHOGDetectMultiScale(
@@ -46,5 +62,9 @@ void cudaHOGDetectMultiScale(
 	std::vector<cv::Rect>* foundLocations,
 	std::vector<double>* confidents)
 {
+#if HAVE_OPENCV_CUDAOBJDETECT
 	descriptor->detectMultiScale(*img, *foundLocations, confidents);
+#else
+	throw_no_cudaobjdetect();
+#endif
 }

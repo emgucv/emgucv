@@ -8,12 +8,30 @@
 #ifndef EMGU_CUDAFILTERS_C_H
 #define EMGU_CUDAFILTERS_C_H
 
-//#include "opencv2/cuda.hpp"
+#include "opencv2/opencv_modules.hpp"
+#include "opencv2/core/core_c.h"
+
+#if HAVE_OPENCV_CUDAFILTERS
+
 #include "opencv2/cudafilters.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/types_c.h"
-#include "opencv2/core/core_c.h"
 #include "emgu_c.h"
+
+#else
+static inline CV_NORETURN void throw_no_cudafilters() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Filters support"); }
+
+namespace cv
+{
+	namespace cuda
+	{
+		class Filter
+		{
+		};
+	}
+}
+
+#endif
 
 CVAPI(cv::cuda::Filter*) cudaCreateSobelFilter(int srcType, int dstType,  int dx, int dy, int ksize, double scale, int rowBorderType, int columnBorderType, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 

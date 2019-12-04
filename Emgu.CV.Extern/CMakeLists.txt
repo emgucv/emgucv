@@ -142,7 +142,15 @@ ENDMACRO()
 # * element: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get; set;}
 # * elementR: [c++] {obj}.${PROPERTY_NAME}; [C#] {obj}.${CS_FUNCTION_NAME} {get;}
 #################################################################################
-MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mtypes cs_func_names csptypes csp_docs cs_namespace cs_invoke_class cs_class_name cs_compilation_condition header_additional_include source_additional_code c_compilation_condition is_dummy)
+MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mtypes cs_func_names csptypes csp_docs cs_namespace cs_invoke_class cs_class_name cs_compilation_condition header_additional_include source_additional_code c_compilation_condition ocv_module_enabled)
+  MESSAGE(STATUS ">>>>>>>>>>>>>>>> ocv_module_enabled: ${ocv_module_enabled}")
+  IF ("${ocv_module_enabled}" STREQUAL "ON")
+	SET(IS_DUMMY OFF)
+  ELSE()
+    SET(IS_DUMMY ON)
+  ENDIF()
+  MESSAGE(STATUS ">>>>>>>>>>>>>>>> is_dummy: ${IS_DUMMY}")
+
   SET(FILE_NAME ${fname})
   SET(CLASS_NAME_FULL ${cname_full})
   SET(CLASS_NAME ${cname})
@@ -154,6 +162,8 @@ MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mty
   SET(CS_PROPERTY_DOCS ${csp_docs})
   #SET(HEADER_ADDITIONAL_INCLUDE "")
   #SET(SOURCE_ADDITIONAL_CODE "")
+  SET(DEFAULT_FUNCTION_NOT_SUPPORT_MESSAGE "This function is not implemented in the current platform")
+  SET(RAISE_FUNCTION_NOT_SUPPORT_CPP "CV_Error(cv::Error::StsBadFunc, \"${DEFAULT_FUNCTION_NOT_SUPPORT_MESSAGE}\");")
   
   SET(CS_COMPILATION_CONDITION_OPEN "")
   SET(CS_COMPILATION_CONDITION_CLOSE "")
@@ -182,8 +192,11 @@ MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mty
 	SET(C_COMPILATION_CONDITION_OPEN "#if ${c_compilation_condition}")
 	SET(C_COMPILATION_CONDITION_CLOSE "#endif")
   ENDIF()
-  
-  SET(C_HEADER_SOURCE "${header_additional_include}")
+  IF(IS_DUMMY)
+	SET(C_HEADER_SOURCE "#include \"opencv2/core/core_c.h\"")
+  ELSE()
+	SET(C_HEADER_SOURCE "${header_additional_include}")
+  ENDIF()
 
   SET(C_SOURCE "${source_additional_code} #include \"${fname}.h\"")
   
@@ -239,12 +252,21 @@ namespace ${cs_namespace}
     
     IF("${MARSHAL_TYPE}" STREQUAL "val")
       IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
-	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	  IF(IS_DUMMY)
+	  	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, cv::String* str);  
+     ")
+	    SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+     ")
+	  ELSE()
+	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
      ")
-	SET(C_SOURCE "${C_SOURCE}
+	    SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}(); }   
      ")
+	 ENDIF()
 	
 	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
@@ -267,12 +289,21 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* st
      }
      ")
       ELSE()
-	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	    IF (IS_DUMMY)
+		  SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj);  
+     ")
+	      SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+     ")
+		ELSE()
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
      ")
-	SET(C_SOURCE "${C_SOURCE}
+	      SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}(); }   
      ")
+		ENDIF()
 	
 	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
@@ -289,14 +320,26 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
      ")
       ENDIF()
     ELSEIF("${MARSHAL_TYPE}" STREQUAL "struct")
-      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	  IF(IS_DUMMY)
+	  	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);     
+     ")
+	    SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+     ")
+	  ELSE()
+	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
      ")
-      SET(C_SOURCE "${C_SOURCE}
+        SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { ${PROPERTY_TYPE} p = obj->get${PROPERTY_NAME}(); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); }
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { obj->set${PROPERTY_NAME}( *value ); }     
      ")
+	    
+	  ENDIF()
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
      internal static extern void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj, ref ${CS_PROPERTY_TYPE} val);
@@ -315,12 +358,21 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      }
      ")
      ELSEIF("${MARSHAL_TYPE}" STREQUAL "structR")
-      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	   IF(IS_DUMMY)
+	     SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);
+     ")
+         SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+     ")
+	   ELSE()
+         SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);
      ")
-      SET(C_SOURCE "${C_SOURCE}
+         SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { ${PROPERTY_TYPE} p = obj->get${PROPERTY_NAME}(); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); }
      ")
+	   ENDIF()
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
      internal static extern void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(IntPtr obj, ref ${CS_PROPERTY_TYPE} val);     
@@ -336,19 +388,28 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      }
      ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "propW")
-	      IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
-	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	  IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
+	    IF(IS_DUMMY)
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str);  
+     ")
+	      SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+     ")
+		ELSE()
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
      ")
-	SET(C_SOURCE "${C_SOURCE}
+	      SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { obj->set${PROPERTY_NAME}(*str); }   
      ")
+	    ENDIF()
 	
-	SET(CS_SOURCE "${CS_SOURCE}
+	    SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
      internal static extern void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(IntPtr obj, IntPtr str);
      ")
-	SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
+	    SET(CS_CLASS_SOURCE "${CS_CLASS_SOURCE}
      /// <summary>
      /// ${CS_DOCUMENTATION}
      /// </summary>
@@ -362,13 +423,21 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
      }
      ")
       ELSE()
-
-      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	    IF(IS_DUMMY)
+		  SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value);     
+     ")
+          SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+     ")
+		ELSE()
+          SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
-      SET(C_SOURCE "${C_SOURCE}
+          SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->set${PROPERTY_NAME}( value ); }     
      ")
+	    ENDIF()
       
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -388,12 +457,21 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      ")
 	 ENDIF()
 	ELSEIF(${MARSHAL_TYPE} STREQUAL "act")
-	  SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	  IF(IS_DUMMY)
+	  	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj);     
+     ")
+        SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+     ")
+	  ELSE()
+	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);     
      ")
-      SET(C_SOURCE "${C_SOURCE}
+        SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}(); }     
      ")
+	 ENDIF()
       
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -412,12 +490,21 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
      }
      ")
 	ELSEIF(${MARSHAL_TYPE} STREQUAL "act0")
-	  SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	  IF (IS_DUMMY)
+	  	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj);     
+     ")
+        SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+     ")
+	  ELSE()
+	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);     
      ")
-      SET(C_SOURCE "${C_SOURCE}
+        SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { obj->${PROPERTY_NAME}(); }     
      ")
+	 ENDIF()
       
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -435,12 +522,21 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { obj->${PROPE
      }
      ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1")
-      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	  IF(IS_DUMMY)
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value);     
+     ")
+        SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+     ")
+	  ELSE()
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
-      SET(C_SOURCE "${C_SOURCE}
+        SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->${PROPERTY_NAME}( value ); }     
      ")
+	 ENDIF()
       
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -459,12 +555,21 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
      }
      ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1obj")
-      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	  IF(IS_DUMMY)
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);     
+     ")
+        SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+     ")
+	  ELSE()
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
      ")
-      SET(C_SOURCE "${C_SOURCE}
+        SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { obj->${PROPERTY_NAME}( *value ); }     
      ")
+	 ENDIF()
       
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -483,13 +588,21 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
      }
      ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "propR")
-      
-      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+      IF (IS_DUMMY)
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);  
+     ")
+        SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+     ")
+	  ELSE()
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
      ")
-      SET(C_SOURCE "${C_SOURCE}
+        SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->get${PROPERTY_NAME}(); }   
      ")
+	 ENDIF()
       
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
@@ -506,12 +619,21 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
      ")
     ELSEIF("${MARSHAL_TYPE}" STREQUAL "element")
       IF (${PROPERTY_TYPE} STREQUAL "cv::Mat") #special handling for functions that returns Mats
-	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	    IF(IS_DUMMY)
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}*) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);
+     ")
+	      SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+     ")
+		ELSE()
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}*) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
      ")
-	SET(C_SOURCE "${C_SOURCE}
+	      SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return &(obj->${PROPERTY_NAME}); }
      ")
+	    ENDIF()
 	
 	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
@@ -530,14 +652,25 @@ ${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj
 
 	 ###################
 	  ELSEIF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
-	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	    IF(IS_DUMMY)
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str);  
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str);  
+     ")
+	      SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+     ")
+		ELSE()
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
      ")
-	SET(C_SOURCE "${C_SOURCE}
+	      SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}; }   
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { obj->${PROPERTY_NAME} = *str; }   
      ")
+		ENDIF()
 	
 	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
@@ -570,14 +703,25 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
      ")
 	 ###################
       ELSE()
-	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	    IF(IS_DUMMY)
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value);     
+     ")
+	      SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+     ")
+		ELSE()
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
-	SET(C_SOURCE "${C_SOURCE}
+	      SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}; }
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->${PROPERTY_NAME} = value; }     
      ")
+	    ENDIF()
 	
 	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
@@ -600,12 +744,21 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
       ENDIF()
     ELSEIF("${MARSHAL_TYPE}" STREQUAL "elementR")
 	  IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
-	SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	    IF(IS_DUMMY)
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str);   
+     ")
+	      SET(C_SOURCE "${C_SOURCE}
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+     ")
+		ELSE()
+	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);   
      ")
-	SET(C_SOURCE "${C_SOURCE}
+	      SET(C_SOURCE "${C_SOURCE}
 void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}; }   
      ")
+	    ENDIF()
 	
 	SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
@@ -628,12 +781,21 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
      }
      ")
 	 ELSE()
-      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	  IF(IS_DUMMY)
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);
+     ")
+        SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+     ")
+	  ELSE()
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
      ")
-      SET(C_SOURCE "${C_SOURCE}
+        SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}; }
      ")
+	  ENDIF()
       
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
@@ -650,14 +812,25 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
      ")
 	 ENDIF()
     ELSE() # for "prop" type
-      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+	  IF(IS_DUMMY)
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
+CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);
+CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value);     
+     ")
+        SET(C_SOURCE "${C_SOURCE}
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+     ")
+	  ELSE()
+        SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
-      SET(C_SOURCE "${C_SOURCE}
+        SET(C_SOURCE "${C_SOURCE}
 ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->get${PROPERTY_NAME}(); }
 void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->set${PROPERTY_NAME}( value ); }     
      ")
+	 ENDIF()
       
       SET(CS_SOURCE "${CS_SOURCE}
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] ${MARSHAL_RETURN}
@@ -692,11 +865,9 @@ ${CS_COMPILATION_CONDITION_CLOSE}")
   ${C_COMPILATION_CONDITION_OPEN}")
   #MESSAGE(STATUS "-------------------- CS_CLASS_SOURCE: ${CS_CLASS_SOURCE}")
   WRITE_IF_DIFFERENT("${csfname}" "${CS_SOURCE}")
-  IF (NOT IS_DUMMY)
-    WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.h" "${C_HEADER_SOURCE}")
-    WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.cpp" "${C_SOURCE}")
-  ENDIF()
-  
+  WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.h" "${C_HEADER_SOURCE}")
+  WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.cpp" "${C_SOURCE}")
+
 ENDMACRO()
 
 ############################### core code gen START ##############################
@@ -727,7 +898,7 @@ IF(HAVE_opencv_core)
     "#include \"mat_c.h\""
 	""
 	"" 
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/umat_property" 
@@ -753,7 +924,7 @@ IF(HAVE_opencv_core)
     "#include \"umat_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/input_array_property" 
@@ -778,7 +949,7 @@ IF(HAVE_opencv_core)
     "#include \"core_c_extra.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/output_array_property" 
@@ -800,7 +971,7 @@ IF(HAVE_opencv_core)
     "#include \"core_c_extra.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_device_property" 
@@ -847,7 +1018,7 @@ IF(HAVE_opencv_core)
     "#include \"ocl_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_platform_info_property" 
@@ -870,7 +1041,7 @@ IF(HAVE_opencv_core)
     "#include \"ocl_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/ocl_kernel_property" 
@@ -891,7 +1062,7 @@ IF(HAVE_opencv_core)
     "#include \"ocl_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "core/gpumat_property" 
@@ -915,7 +1086,7 @@ IF(HAVE_opencv_core)
 	#include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
 
   CREATE_OCV_CLASS_PROPERTY( 
     "core/file_node_property" 
@@ -942,7 +1113,7 @@ IF(HAVE_opencv_core)
     "#include \"core_c_extra.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
 
   CREATE_OCV_CLASS_PROPERTY( 
     "core/moments_property" 
@@ -962,7 +1133,7 @@ IF(HAVE_opencv_core)
     "#include \"core_c_extra.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_core}))
+	${HAVE_opencv_core})
 ENDIF()
 ############################### core code gen END ################################
 
@@ -995,8 +1166,7 @@ IF(HAVE_opencv_objdetect)
     "#include \"objdetect_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_objdetect}))
-
+	${HAVE_opencv_objdetect})
 ENDIF()
 ############################### objdetect code gen END ################################
 
@@ -1020,7 +1190,7 @@ IF(HAVE_opencv_imgproc)
     "#include \"imgproc_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_imgproc}))
+	${HAVE_opencv_imgproc})
 ENDIF()
 ############################### features2d code gen END ################################
 
@@ -1062,7 +1232,7 @@ IF(HAVE_opencv_features2d)
     "#include \"features2d_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_features2d}))
+	${HAVE_opencv_features2d})
 ENDIF()
 ############################### features2d code gen END ################################
 
@@ -1088,7 +1258,7 @@ IF(HAVE_opencv_ml)
     "#include \"ml_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_ml}))
+	${HAVE_opencv_ml})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svm_property" 
@@ -1117,7 +1287,7 @@ IF(HAVE_opencv_ml)
     "#include \"ml_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_ml}))
+	${HAVE_opencv_ml})
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svmsgd_property" 
@@ -1142,7 +1312,7 @@ IF(HAVE_opencv_ml)
     "#include \"ml_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_ml}))	
+	${HAVE_opencv_ml})	
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/knearest_property" 
@@ -1165,7 +1335,7 @@ IF(HAVE_opencv_ml)
     "#include \"ml_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_ml}))
+	${HAVE_opencv_ml})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/ann_mlp_property" 
@@ -1196,7 +1366,7 @@ IF(HAVE_opencv_ml)
     "#include \"ml_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_ml}))
+	${HAVE_opencv_ml})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/logistic_regression_property" 
@@ -1221,7 +1391,7 @@ IF(HAVE_opencv_ml)
     "#include \"ml_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_ml}))
+	${HAVE_opencv_ml})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/rtrees_property" 
@@ -1251,7 +1421,7 @@ IF(HAVE_opencv_ml)
     "#include \"ml_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_ml}))
+	${HAVE_opencv_ml})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/dtree_property" 
@@ -1278,7 +1448,7 @@ IF(HAVE_opencv_ml)
     "#include \"ml_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_ml}))
+	${HAVE_opencv_ml})
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/boost_property" 
@@ -1305,7 +1475,7 @@ IF(HAVE_opencv_ml)
     "#include \"ml_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_ml}))
+	${HAVE_opencv_ml})
 ENDIF()
 ############################### ml code gen END ################################
 
@@ -1337,7 +1507,7 @@ IF(HAVE_opencv_video)
     "#include \"video_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_video}))
+	${HAVE_opencv_video})
 
   CREATE_OCV_CLASS_PROPERTY( 
     "video/variational_refinement_property" 
@@ -1362,7 +1532,7 @@ IF(HAVE_opencv_video)
     "#include \"video_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_video}))
+	${HAVE_opencv_video})
 ENDIF()
 ############################### video code gen END ################################
 
@@ -1386,7 +1556,7 @@ IF(HAVE_opencv_videoio)
     "#include \"videoio_c_extra.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_videoio}))
+	${HAVE_opencv_videoio})
 ENDIF()
 ############################### videoio code gen END ################################
 
@@ -1421,7 +1591,7 @@ IF(HAVE_opencv_optflow)
     "#include \"optflow_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_optflow}))
+	${HAVE_opencv_optflow})
 
 CREATE_OCV_CLASS_PROPERTY( 
     "optflow/rlof_opticalflow_parameter_property" 
@@ -1454,7 +1624,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "#include \"optflow_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_optflow}))  
+	${HAVE_opencv_optflow})  
 ENDIF()
 ############################### optflow code gen END ################################
 
@@ -1479,9 +1649,8 @@ IF(HAVE_opencv_photo)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_photo}))
+	${HAVE_opencv_photo})
 		
-
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapReinhard_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/TonemapReinhard.g.cs"
@@ -1503,7 +1672,7 @@ IF(HAVE_opencv_photo)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_photo}))	
+	${HAVE_opencv_photo})	
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapDrago_property" 
@@ -1525,7 +1694,7 @@ IF(HAVE_opencv_photo)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_photo}))		
+	${HAVE_opencv_photo})		
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/TonemapMantiuk_property" 
@@ -1547,7 +1716,7 @@ IF(HAVE_opencv_photo)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_photo}))	
+	${HAVE_opencv_photo})	
 ENDIF()
 ############################### photo code gen END ##############################
 
@@ -1585,7 +1754,7 @@ IF(HAVE_opencv_xfeatures2d)
     "#include \"xfeatures2d_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_xfeatures2d}))
+	${HAVE_opencv_xfeatures2d})
 ENDIF()
 ############################### xfeatures2d code gen END ################################
 
@@ -1609,7 +1778,7 @@ IF(HAVE_opencv_stitching)
     "#include \"stitching_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_stitching}))  
+	${HAVE_opencv_stitching})  
 ENDIF()
 ############################### stitching code gen END ################################
 
@@ -1642,7 +1811,7 @@ IF(HAVE_opencv_video)
     "#include \"video_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_video}))
+	${HAVE_opencv_video})
 
    CREATE_OCV_CLASS_PROPERTY( 
     "video/BackgroundSubtractorKNN_property" 
@@ -1668,7 +1837,7 @@ IF(HAVE_opencv_video)
     "#include \"video_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_video}))
+	${HAVE_opencv_video})
   
    CREATE_OCV_CLASS_PROPERTY( 
     "video/BackgroundSubtractorMOG2_property" 
@@ -1699,7 +1868,7 @@ IF(HAVE_opencv_video)
     "#include \"video_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_video}))
+	${HAVE_opencv_video})
 ENDIF()
 ############################### video code gen END ################################
 
@@ -1732,7 +1901,7 @@ IF(HAVE_opencv_shape)
     "#include \"shape_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_shape}))
+	${HAVE_opencv_shape})
 ENDIF()
 ############################### shape code gen END ################################
 
@@ -1761,7 +1930,7 @@ IF(HAVE_opencv_cudaimgproc)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_cudaimgproc}))
+	${HAVE_opencv_cudaimgproc})
 ENDIF()
 ############################### cudaimgproc code gen END ##############################
 
@@ -1796,7 +1965,7 @@ ENDIF()
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_cudaobjdetect}))
+	${HAVE_opencv_cudaobjdetect})
 
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaobjdetect/cuda_cascade_classifier_property" 
@@ -1823,7 +1992,7 @@ ENDIF()
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_cudaobjdetect}))
+	${HAVE_opencv_cudaobjdetect})
 #ENDIF()
 ############################### cudaobjdetect code gen END ##############################
 
@@ -1852,7 +2021,7 @@ IF(HAVE_opencv_plot)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_plot}))
+	${HAVE_opencv_plot})
 ENDIF()
 ############################### plot code gen END ##############################
 
@@ -1880,7 +2049,7 @@ IF(HAVE_opencv_saliency)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_saliency}))
+	${HAVE_opencv_saliency})
   CREATE_OCV_CLASS_PROPERTY( 
     "saliency/ObjectnessBING_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/ObjectnessBING.g.cs"
@@ -1901,7 +2070,7 @@ IF(HAVE_opencv_saliency)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_saliency}))
+	${HAVE_opencv_saliency})
 ENDIF()
 ############################### plot code gen END ##############################
 
@@ -1930,7 +2099,7 @@ IF(HAVE_opencv_xphoto)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_xphoto}))
+	${HAVE_opencv_xphoto})
 	
   CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/grayworldwb_property" 
@@ -1951,7 +2120,7 @@ IF(HAVE_opencv_xphoto)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_xphoto}))
+	${HAVE_opencv_xphoto})
 
 	CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/learningbasedwb_property" 
@@ -1975,7 +2144,7 @@ IF(HAVE_opencv_xphoto)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_xphoto}))
+	${HAVE_opencv_xphoto})
 
   CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/TonemapDurand_property" 
@@ -1999,7 +2168,7 @@ IF(HAVE_opencv_xphoto)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_xphoto}))
+	${HAVE_opencv_xphoto})
 ENDIF()
 ############################### xphoto code gen END ##############################
 
@@ -2035,7 +2204,7 @@ IF(HAVE_opencv_face)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_face}))
+	${HAVE_opencv_face})
 
   CREATE_OCV_CLASS_PROPERTY( 
     "face/facemarkaam_params_property" 
@@ -2063,7 +2232,7 @@ IF(HAVE_opencv_face)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	(NOT ${HAVE_opencv_face}))
+	${HAVE_opencv_face})
 ENDIF()
 ############################### face code gen END ##############################
 
@@ -2092,7 +2261,7 @@ ENDIF()
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	NOT ${HAVE_opencv_dnn})
+	${HAVE_opencv_dnn})
   CREATE_OCV_CLASS_PROPERTY( 
     "dnn/layer_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Layer.g.cs"
@@ -2114,7 +2283,7 @@ ENDIF()
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	NOT ${HAVE_opencv_dnn})
+	${HAVE_opencv_dnn})
 #ENDIF()
 ############################### dnn code gen END ##############################
 
@@ -2139,7 +2308,7 @@ IF(HAVE_opencv_stereo)
 #include \"opencv2/core/types_c.h\""
 	""
 	""
-	NOT ${HAVE_opencv_stereo})
+	${HAVE_opencv_stereo})
 ENDIF()
 ############################### stereo code gen END ##############################
 
@@ -2165,13 +2334,13 @@ file(GLOB extern_hdrs "${PROJECT_SOURCE_DIR}/*.h*")
 source_group("Src_extern" FILES ${extern_srcs})
 source_group("Include_extern" FILES ${extern_hdrs})
 
-FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
-  #MESSAGE("Retriveing source folder for project :  opencv_${CVEXTERN_OPTIONAL_DEP}")
+FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAME_CANDIDATES})
+  MESSAGE("Retriveing source folder for project :  opencv_${CVEXTERN_OPTIONAL_DEP}")
   #GET_TARGET_PROPERTY(OPENCV_MODULE_SOURCE_DIR opencv_${CVEXTERN_OPTIONAL_DEP} PROJECT_SOURCE_DIR)
   #IF (HAVE_opencv_${CVEXTERN_OPTIONAL_DEP})
-    INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
+  INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
   #ENDIF()
-  #MESSAGE("Included:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
+  MESSAGE("Included:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
   
   SET(CVEXTERN_OPTIONAL_DIR "${PROJECT_SOURCE_DIR}/${CVEXTERN_OPTIONAL_DEP}")
   IF(EXISTS "${CVEXTERN_OPTIONAL_DIR}" AND IS_DIRECTORY "${CVEXTERN_OPTIONAL_DIR}")

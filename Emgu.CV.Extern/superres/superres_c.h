@@ -8,8 +8,31 @@
 #ifndef EMGU_SUPERRES_C_H
 #define EMGU_SUPERRES_C_H
 
+#include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
+
+#if HAVE_OPENCV_SUPERRES
 #include "opencv2/superres.hpp"
+#else
+
+static inline CV_NORETURN void throw_no_superres() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Superres support"); }
+
+namespace cv
+{
+	namespace superres
+	{
+		class FrameSource
+		{
+			
+		};
+
+		class SuperResolution
+		{
+			
+		};
+	}
+}
+#endif
 
 CVAPI(cv::superres::FrameSource*) cveSuperresCreateFrameSourceVideo(cv::String* fileName, bool useGpu, cv::Ptr<cv::superres::FrameSource>** sharedPtr);
 CVAPI(cv::superres::FrameSource*) cveSuperresCreateFrameSourceCamera(int deviceId, cv::Ptr<cv::superres::FrameSource>** sharedPtr);

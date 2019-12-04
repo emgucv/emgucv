@@ -8,12 +8,52 @@
 #ifndef EMGU_CUDAFEATURES2D_C_H
 #define EMGU_CUDAFEATURES2D_C_H
 
-//#include "opencv2/cuda.hpp"
+#include "opencv2/opencv_modules.hpp"
+#include "opencv2/core/core_c.h"
+
+#if HAVE_OPENCV_CUDAFEATURES2D
 #include "opencv2/cudafeatures2d.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/types_c.h"
-#include "opencv2/core/core_c.h"
 #include "emgu_c.h"
+#else
+
+static inline CV_NORETURN void throw_no_cudafeature2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Feature2d support"); }
+
+namespace cv
+{
+	namespace cuda
+	{
+		class DescriptorMatcher
+		{
+		};
+
+		class Feature2DAsync
+		{
+
+		};
+
+		class FastFeatureDetector
+		{
+			
+		};
+
+		class ORB
+		{
+			
+		};
+	}
+}
+
+namespace cv
+{
+	class Feature2D
+	{
+
+	};
+}
+
+#endif
 
 //----------------------------------------------------------------------------
 //
@@ -191,5 +231,6 @@ CVAPI(void) cveCudaFastFeatureDetectorRelease(cv::Ptr<cv::cuda::FastFeatureDetec
 CVAPI(cv::cuda::ORB*) cveCudaORBCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, bool blurForDescriptor, cv::Feature2D** feature2D, cv::cuda::Feature2DAsync** feature2dAsync, cv::Ptr<cv::cuda::ORB>** sharedPtr);
 
 CVAPI(void) cveCudaORBRelease(cv::Ptr<cv::cuda::ORB>** sharedPtr);
+
 
 #endif

@@ -8,12 +8,35 @@
 #ifndef EMGU_CUDA_C_H
 #define EMGU_CUDA_C_H
 
-//#include "opencv2/cuda.hpp"
-//#include "opencv2/core/cuda.hpp"
-//#include "opencv2/core/types_c.h"
+#include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
+
+#if HAVE_OPENCV_CUDAOBJDETECT
+
 #include "opencv2/cudaobjdetect.hpp"
 #include "emgu_c.h"
+
+#else
+
+static inline CV_NORETURN void throw_no_cudaobjdetect() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Objdetect support"); }
+
+namespace cv
+{
+	namespace cuda
+	{
+		class CascadeClassifier
+		{
+			
+		};
+
+		class HOG
+		{
+			
+		};
+	}
+}
+
+#endif
 
 //----------------------------------------------------------------------------
 //

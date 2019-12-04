@@ -8,12 +8,57 @@
 #ifndef EMGU_CUDAIMGPROC_C_H
 #define EMGU_CUDAIMGPROC_C_H
 
-//#include "opencv2/cuda.hpp"
+#include "opencv2/opencv_modules.hpp"
+#include "opencv2/core/core_c.h"
+
+#if HAVE_OPENCV_CUDAIMGPROC
+
 #include "opencv2/cudaimgproc.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/types_c.h"
-#include "opencv2/core/core_c.h"
 #include "emgu_c.h"
+
+#else
+static inline CV_NORETURN void throw_no_cudaimgproc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Imgproc support"); }
+
+namespace cv
+{
+	namespace cuda
+	{
+		class CornernessCriteria
+		{
+		};
+
+		class CLAHE
+		{
+		};
+
+		class CannyEdgeDetector
+		{
+		};
+
+		class CornersDetector
+		{
+		};
+
+		class TemplateMatching
+		{
+		};
+
+		class HoughLinesDetector
+		{
+		};
+
+		class HoughSegmentDetector
+		{
+		};
+
+		class HoughCirclesDetector
+		{
+		};
+	}
+}
+#endif
 
 CVAPI(void) cudaBlendLinear(
    cv::_InputArray* img1, cv::_InputArray* img2, 
