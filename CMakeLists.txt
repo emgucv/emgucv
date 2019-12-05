@@ -835,7 +835,7 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	  SET(EMGUCV_IOS_NUGET_ID "${EMGUCV_IOS_NUGET_ID}-CR")
 	ENDIF()
 	IF(HAVE_WINSTORE_10 AND WIN32)
-	  SET(EMGUCV_UWP_NUGET_ID "${EMGUCV_IOS_NUGET_ID}-CR")
+	  SET(EMGUCV_UWP_NUGET_ID "${EMGUCV_UWP_NUGET_ID}-CR")
 	ENDIF()
 ELSEIF()
 	MESSAGE(STATUS "Configuring nuget package for Open Source release")
@@ -976,7 +976,7 @@ ENDIF()
 
 
 IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
-	SET(EMGUCV_ANDROID_NUGET_TITLE "EMGU CV for Android")	
+	SET(EMGUCV_ANDROID_NUGET_TITLE "Emgu CV for Android Native Runtime")	
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST " 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Runtime.Android.dll\" target=\"lib\\MonoAndroid50\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.Runtime.Android.xml\" target=\"lib\\MonoAndroid50\" />")
@@ -987,7 +987,7 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 ENDIF()
 
 IF(HAVE_IOS AND WIN32)
-	SET(EMGUCV_IOS_NUGET_TITLE "EMGU CV for iOS")	
+	SET(EMGUCV_IOS_NUGET_TITLE "Emgu CV for iOS")	
 	SET(EMGUCV_IOS_NUGET_FILE_LIST " 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.World.IOS.dll\" target=\"lib\\Xamarin.iOS10\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.World.IOS.XML\" target=\"lib\\Xamarin.iOS10\" />")
@@ -1002,6 +1002,7 @@ IF(HAVE_OSX)
 ENDIF()
 
 IF(HAVE_WINSTORE_10)
+  SET(EMGUCV_UWP_NUGET_TITLE "Emgu CV for UWP Native Runtime")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/Package.nuspec)
 ENDIF()
 
@@ -1017,6 +1018,9 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	  SET(EMGUCV_ANDROID_NUGET_TITLE "${EMGUCV_ANDROID_NUGET_TITLE} Commercial Release")	
 	ENDIF()	
+	IF(HAVE_WINSTORE_10)
+	  SET(EMGUCV_UWP_NUGET_TITLE "${EMGUCV_UWP_NUGET_TITLE} Commercial Release")
+	ENDIF()
 ENDIF()
 
 #generate nuget config file for Emgu.CV 

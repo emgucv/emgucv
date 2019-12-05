@@ -4,10 +4,12 @@
       <EmguCvLinkTarget>WindowsForms</EmguCvLinkTarget>
       <EmguCvBuildUwpX86 Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x86'">True</EmguCvBuildUwpX86>
       <EmguCvBuildUwpX64 Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x64'">True</EmguCvBuildUwpX64>
-	  <EmguCvBuildUwpArm Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='arm'">True</EmguCvBuildUwpArm>
+	  <EmguCvBuildUwpArm Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM">True</EmguCvBuildUwpArm>
+	  <EmguCvBuildUwpArm64 Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM64'">True</EmguCvBuildUwpArm64>
       <EmguCVNativeFileUwpX64>$(EmguCVBinaryDir)\UWP\x64\cvextern.dll</EmguCVNativeFileUwpX64>
       <EmguCVNativeFileUwpX86>$(EmguCVBinaryDir)\UWP\x86\cvextern.dll</EmguCVNativeFileUwpX86>
 	  <EmguCVNativeFileUwpArm>$(EmguCVBinaryDir)\UWP\arm\cvextern.dll</EmguCVNativeFileUwpArm>
+	  <EmguCVNativeFileUwpArm64>$(EmguCVBinaryDir)\UWP\arm64\cvextern.dll</EmguCVNativeFileUwpArm64>
 	  <!--
       <EmguCvDeployMessage Condition="'$(EmguCvBuildUwpX86)'=='True' AND Exists('$(EmguCvNativeFileUwpX86)')">$(EmguCVDeployMessage)UWP_x86 </EmguCvDeployMessage>
       <EmguCvErrorMessage Condition="'$(EmguCvBuildUwpX86)'=='True' AND !Exists('$(EmguCvNativeFileUwpX86)')">This package do not contain necessary binary for $(EmguCvLinkTarget). UWP X86 is targeted, but file $(EmguCvNativeFileUwpX86) is missing.</EmguCvErrorMessage>
@@ -18,6 +20,20 @@
 	  -->
     </PropertyGroup>
   <Choose>
+    <!-- Windows 10 UWP (32bit) -->
+    <When Condition="$(EmguCvBuildUwpX86)">
+      <PropertyGroup>
+        <EmguCVLinkTarget>Windows 10 UWP (32bit)</EmguCVLinkTarget>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFileUwpX86)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFileUwpX86) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFileUwpX86)')">$(EmguCVDeployMessage)UWP_x86 </EmguCVDeployMessage>
+      </PropertyGroup>
+      <ItemGroup>
+        <Content Include="$(EmguCVNativeFileUwpX86)" Condition="Exists('$(EmguCVNativeFileUwpX86)')">
+          <Link>x86\cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
     <!-- Windows 10 UWP (64bit) -->
     <When Condition="$(EmguCvBuildUwpX64)">
       <PropertyGroup>
@@ -32,30 +48,30 @@
         </Content>
       </ItemGroup>
     </When>
-    <!-- Windows 10 UWP (32bit) -->
-    <When Condition="$(EmguCvBuildUwpX86)">
-      <PropertyGroup>
-        <EmguCVLinkTarget>Windows 10 UWP (32bit)</EmguCVLinkTarget>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFileUwpX86)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFileUwpX86) </EmguCVErrorMessage>
-        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFileUwpX86)')">$(EmguCVDeployMessage)UWP_x86 </EmguCVDeployMessage>
-      </PropertyGroup>
-      <ItemGroup>
-        <Content Include="$(EmguCVNativeFileUwpX86)" Condition="Exists('$(EmguCVNativeFileUwpX86)')">
-          <Link>x86\cvextern.dll</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
-    </When>
     <!-- Windows 10 UWP (ARM) -->
-    <When Condition="$(EmguCvBuildUwpX86)">
+    <When Condition="$(EmguCvBuildUwpArm)">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (ARM)</EmguCVLinkTarget>
-        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFileUwpArm)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Windows Commercial License is required. Missing $(EmguCVNativeFileUwpArm) </EmguCVErrorMessage>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFileUwpArm)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFileUwpArm) </EmguCVErrorMessage>
         <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFileUwpArm)')">$(EmguCVDeployMessage)UWP_arm </EmguCVDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFileUwpArm)" Condition="Exists('$(EmguCVNativeFileUwpArm)')">
           <Link>arm\cvextern.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
+	<!-- Windows 10 UWP (ARM) -->
+    <When Condition="$(EmguCvBuildUwpArm64)">
+      <PropertyGroup>
+        <EmguCVLinkTarget>Windows 10 UWP (ARM64)</EmguCVLinkTarget>
+        <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFileUwpArm64)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFileUwpArm64) </EmguCVErrorMessage>
+        <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFileUwpArm64)')">$(EmguCVDeployMessage)UWP_arm64 </EmguCVDeployMessage>
+      </PropertyGroup>
+      <ItemGroup>
+        <Content Include="$(EmguCVNativeFileUwpArm64)" Condition="Exists('$(EmguCVNativeFileUwpArm64)')">
+          <Link>arm64\cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
