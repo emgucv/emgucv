@@ -8,7 +8,7 @@
 
 cv::viz::Viz3d* cveViz3dCreate(cv::String* s)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Viz3d* viz3d = new cv::viz::Viz3d(*s);
 	return viz3d;
 #else
@@ -17,7 +17,7 @@ cv::viz::Viz3d* cveViz3dCreate(cv::String* s)
 }
 void cveViz3dShowWidget(cv::viz::Viz3d* viz, cv::String* id, cv::viz::Widget* widget, cv::Affine3d* pose)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	viz->showWidget(*id, *widget, pose ? *pose : cv::Affine3d::Identity());
 #else
 	throw_no_viz();
@@ -25,7 +25,7 @@ void cveViz3dShowWidget(cv::viz::Viz3d* viz, cv::String* id, cv::viz::Widget* wi
 }
 void cveViz3dSetWidgetPose(cv::viz::Viz3d* viz, cv::String* id, cv::Affine3d* pose)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	viz->setWidgetPose(*id, *pose);
 #else
 	throw_no_viz();
@@ -33,7 +33,7 @@ void cveViz3dSetWidgetPose(cv::viz::Viz3d* viz, cv::String* id, cv::Affine3d* po
 }
 void cveViz3dRemoveWidget(cv::viz::Viz3d* viz, cv::String* id)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	viz->removeWidget(*id);
 #else
 	throw_no_viz();
@@ -41,7 +41,7 @@ void cveViz3dRemoveWidget(cv::viz::Viz3d* viz, cv::String* id)
 }
 void cveViz3dSetBackgroundMeshLab(cv::viz::Viz3d* viz)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	viz->setBackgroundMeshLab();
 #else
 	throw_no_viz();
@@ -49,7 +49,7 @@ void cveViz3dSetBackgroundMeshLab(cv::viz::Viz3d* viz)
 }
 void cveViz3dSpin(cv::viz::Viz3d* viz)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	viz->spin();
 #else
 	throw_no_viz();
@@ -57,7 +57,7 @@ void cveViz3dSpin(cv::viz::Viz3d* viz)
 }
 void cveViz3dSpinOnce(cv::viz::Viz3d* viz, int time, bool forceRedraw)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	viz->spinOnce(time, forceRedraw);
 #else
 	throw_no_viz();
@@ -65,7 +65,7 @@ void cveViz3dSpinOnce(cv::viz::Viz3d* viz, int time, bool forceRedraw)
 }
 bool cveViz3dWasStopped(cv::viz::Viz3d* viz)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	return viz->wasStopped();
 #else
 	throw_no_viz();
@@ -73,7 +73,7 @@ bool cveViz3dWasStopped(cv::viz::Viz3d* viz)
 }
 void cveViz3dRelease(cv::viz::Viz3d** viz)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	delete* viz;
 	*viz = 0;
 #else
@@ -83,7 +83,7 @@ void cveViz3dRelease(cv::viz::Viz3d** viz)
 
 cv::viz::WText* cveWTextCreate(cv::String* text, CvPoint* pos, int fontSize, CvScalar* color, cv::viz::Widget2D** widget2D, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Color c = cv::viz::Color(*color);
 	cv::viz::WText* t = new cv::viz::WText(*text, *pos, fontSize, c);
 	*widget2D = dynamic_cast<cv::viz::Widget2D*>(t);
@@ -95,7 +95,7 @@ cv::viz::WText* cveWTextCreate(cv::String* text, CvPoint* pos, int fontSize, CvS
 }
 void cveWTextRelease(cv::viz::WText** text)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	delete* text;
 	*text = 0;
 #else
@@ -105,7 +105,7 @@ void cveWTextRelease(cv::viz::WText** text)
 
 cv::viz::WCoordinateSystem* cveWCoordinateSystemCreate(double scale, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::WCoordinateSystem* system = new cv::viz::WCoordinateSystem(scale);
 	*widget3d = dynamic_cast<cv::viz::Widget3D*>(system);
 	*widget = dynamic_cast<cv::viz::Widget*>(system);
@@ -116,7 +116,7 @@ cv::viz::WCoordinateSystem* cveWCoordinateSystemCreate(double scale, cv::viz::Wi
 }
 void cveWCoordinateSystemRelease(cv::viz::WCoordinateSystem** system)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	delete* system;
 	*system = 0;
 #else
@@ -126,7 +126,7 @@ void cveWCoordinateSystemRelease(cv::viz::WCoordinateSystem** system)
 
 cv::viz::WCloud* cveWCloudCreateWithColorArray(cv::_InputArray* cloud, cv::_InputArray* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::WCloud* wcloud = new cv::viz::WCloud(*cloud, *color);
 	*widget3d = dynamic_cast<cv::viz::Widget3D*>(wcloud);
 	*widget = dynamic_cast<cv::viz::Widget*>(wcloud);
@@ -137,7 +137,7 @@ cv::viz::WCloud* cveWCloudCreateWithColorArray(cv::_InputArray* cloud, cv::_Inpu
 }
 cv::viz::WCloud* cveWCloudCreateWithColor(cv::_InputArray* cloud, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Color c = cv::viz::Color(*color);
 	cv::viz::WCloud* wcloud = new cv::viz::WCloud(*cloud, c);
 	*widget3d = dynamic_cast<cv::viz::Widget3D*>(wcloud);
@@ -149,7 +149,7 @@ cv::viz::WCloud* cveWCloudCreateWithColor(cv::_InputArray* cloud, CvScalar* colo
 }
 void cveWCloudRelease(cv::viz::WCloud** cloud)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	delete* cloud;
 	*cloud = 0;
 #else
@@ -159,7 +159,7 @@ void cveWCloudRelease(cv::viz::WCloud** cloud)
 
 void cveWriteCloud(cv::String* file, cv::_InputArray* cloud, cv::_InputArray* colors, cv::_InputArray* normals, bool binary)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::writeCloud(*file, *cloud, colors ? *colors : (cv::InputArray) cv::noArray(), normals ? *normals : (cv::InputArray) cv::noArray(), binary);
 #else
 	throw_no_viz();
@@ -167,7 +167,7 @@ void cveWriteCloud(cv::String* file, cv::_InputArray* cloud, cv::_InputArray* co
 }
 void cveReadCloud(cv::String* file, cv::Mat* cloud, cv::_OutputArray* colors, cv::_OutputArray* normals)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::Mat r = cv::viz::readCloud(*file, colors ? *colors : (cv::OutputArray) cv::noArray(), normals ? *normals : (cv::OutputArray) cv::noArray());
 	cv::swap(r, *cloud);
 #else
@@ -177,7 +177,7 @@ void cveReadCloud(cv::String* file, cv::Mat* cloud, cv::_OutputArray* colors, cv
 
 cv::viz::WCube* cveWCubeCreate(CvPoint3D64f* minPoint, CvPoint3D64f* maxPoint, bool wireFrame, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Color c = cv::viz::Color(*color);
 	cv::Point3d minp = cv::Point3d(minPoint->x, minPoint->y, minPoint->z);
 	cv::Point3d maxp = cv::Point3d(maxPoint->x, maxPoint->y, maxPoint->z);
@@ -191,7 +191,7 @@ cv::viz::WCube* cveWCubeCreate(CvPoint3D64f* minPoint, CvPoint3D64f* maxPoint, b
 }
 void cveWCubeRelease(cv::viz::WCube** cube)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	delete* cube;
 	*cube = 0;
 #else
@@ -201,7 +201,7 @@ void cveWCubeRelease(cv::viz::WCube** cube)
 
 cv::viz::WCylinder* cveWCylinderCreate(CvPoint3D64f* axisPoint1, CvPoint3D64f* axisPoint2, double radius, int numsides, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Color c = cv::viz::Color(*color);
 	cv::Point3d ap1 = cv::Point3d(axisPoint1->x, axisPoint1->y, axisPoint1->z);
 	cv::Point3d ap2 = cv::Point3d(axisPoint2->x, axisPoint2->y, axisPoint2->z);
@@ -216,7 +216,7 @@ cv::viz::WCylinder* cveWCylinderCreate(CvPoint3D64f* axisPoint1, CvPoint3D64f* a
 
 void cveWCylinderRelease(cv::viz::WCylinder** cylinder)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	delete* cylinder;
 	*cylinder = 0;
 #else
@@ -226,7 +226,7 @@ void cveWCylinderRelease(cv::viz::WCylinder** cylinder)
 
 cv::viz::WCircle* cveWCircleCreateAtOrigin(double radius, double thickness, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Color c = cv::viz::Color(*color);
 	cv::viz::WCircle* circle = new cv::viz::WCircle(radius, thickness, c);
 	*widget3d = dynamic_cast<cv::viz::Widget3D*>(circle);
@@ -238,7 +238,7 @@ cv::viz::WCircle* cveWCircleCreateAtOrigin(double radius, double thickness, CvSc
 }
 cv::viz::WCircle* cveWCircleCreate(double radius, CvPoint3D64f* center, CvPoint3D64f* normal, double thickness, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Color c = cv::viz::Color(*color);
 	cv::Point3d cp = cv::Point3d(center->x, center->y, center->z);
 	cv::Point3d n = cv::Point3d(normal->x, normal->y, normal->z);
@@ -252,7 +252,7 @@ cv::viz::WCircle* cveWCircleCreate(double radius, CvPoint3D64f* center, CvPoint3
 }
 void cveWCircleRelease(cv::viz::WCircle** circle)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	delete* circle;
 	*circle = 0;
 #else
@@ -262,7 +262,7 @@ void cveWCircleRelease(cv::viz::WCircle** circle)
 
 cv::viz::WCone* cveWConeCreateAtOrigin(double length, double radius, int resolution, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Color c = cv::viz::Color(*color);
 	cv::viz::WCone* cone = new cv::viz::WCone(length, radius, resolution, c);
 	*widget3d = dynamic_cast<cv::viz::Widget3D*>(cone);
@@ -274,7 +274,7 @@ cv::viz::WCone* cveWConeCreateAtOrigin(double length, double radius, int resolut
 }
 cv::viz::WCone* cveWConeCreate(double radius, CvPoint3D64f* center, CvPoint3D64f* tip, int resolution, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Color c = cv::viz::Color(*color);
 	cv::Point3d cp = cv::Point3d(center->x, center->y, center->z);
 	cv::Point3d tp = cv::Point3d(tip->x, tip->y, tip->z);
@@ -288,7 +288,7 @@ cv::viz::WCone* cveWConeCreate(double radius, CvPoint3D64f* center, CvPoint3D64f
 }
 void cveWConeRelease(cv::viz::WCone** cone)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	delete* cone;
 	*cone = 0;
 #else
@@ -298,7 +298,7 @@ void cveWConeRelease(cv::viz::WCone** cone)
 
 cv::viz::WArrow* cveWArrowCreate(CvPoint3D64f* pt1, CvPoint3D64f* pt2, double thickness, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	cv::viz::Color c = cv::viz::Color(*color);
 	cv::Point3d p1 = cv::Point3d(pt1->x, pt1->y, pt1->z);
 	cv::Point3d p2 = cv::Point3d(pt2->x, pt2->y, pt2->z);
@@ -312,7 +312,7 @@ cv::viz::WArrow* cveWArrowCreate(CvPoint3D64f* pt1, CvPoint3D64f* pt2, double th
 }
 void cveWArrowRelease(cv::viz::WArrow** arrow)
 {
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 	delete* arrow;
 	*arrow = 0;
 #else

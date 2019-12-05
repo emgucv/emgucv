@@ -17,7 +17,7 @@ cv::text::ERFilter* cveERFilterNM1Create(
 	float minProbabilityDiff,
 	cv::Ptr<cv::text::ERFilter>** sharedPtr)
 {
-#if HAVE_OPENCV_TEXT
+#ifdef HAVE_OPENCV_TEXT
 	cv::Ptr<cv::text::ERFilter> filter = cv::text::createERFilterNM1(cv::text::loadClassifierNM1(*classifier), thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
 	*sharedPtr = new cv::Ptr<cv::text::ERFilter>(filter);
 	return filter.get();
@@ -27,7 +27,7 @@ cv::text::ERFilter* cveERFilterNM1Create(
 }
 cv::text::ERFilter* cveERFilterNM2Create(cv::String* classifier, float minProbability, cv::Ptr<cv::text::ERFilter>** sharedPtr)
 {
-#if HAVE_OPENCV_TEXT
+#ifdef HAVE_OPENCV_TEXT
 	cv::Ptr<cv::text::ERFilter> filter = cv::text::createERFilterNM2(cv::text::loadClassifierNM2(*classifier), minProbability);
 	*sharedPtr = new cv::Ptr<cv::text::ERFilter>(filter);
 	return filter.get();
@@ -37,7 +37,7 @@ cv::text::ERFilter* cveERFilterNM2Create(cv::String* classifier, float minProbab
 }
 void cveERFilterRelease(cv::text::ERFilter** filter, cv::Ptr<cv::text::ERFilter>** sharedPtr)
 {
-#if HAVE_OPENCV_TEXT
+#ifdef HAVE_OPENCV_TEXT
 	delete *sharedPtr;
 	*filter = 0;
 	*sharedPtr = 0;
@@ -47,7 +47,7 @@ void cveERFilterRelease(cv::text::ERFilter** filter, cv::Ptr<cv::text::ERFilter>
 }
 void cveERFilterRun(cv::text::ERFilter* filter, cv::_InputArray* image, std::vector<cv::text::ERStat>* regions)
 {
-#if HAVE_OPENCV_TEXT
+#ifdef HAVE_OPENCV_TEXT
 	filter->run(*image, *regions);
 #else
 	throw_no_text();
@@ -60,7 +60,7 @@ void cveERGrouping(
 	std::vector< std::vector<cv::Vec2i> >* groups, std::vector<cv::Rect>* group_rects,
 	int method, cv::String* fileName, float minProbability)
 {
-#if HAVE_OPENCV_TEXT
+#ifdef HAVE_OPENCV_TEXT
 	std::vector< std::vector< cv::text::ERStat > > statVecs;
 	for (int i = 0; i < count; i++)
 	{
@@ -78,7 +78,7 @@ void cveMSERsToERStats(
 	std::vector< std::vector< cv::Point > >* contours,
 	std::vector< std::vector< cv::text::ERStat> >* regions)
 {
-#if HAVE_OPENCV_TEXT
+#ifdef HAVE_OPENCV_TEXT
 	cv::text::MSERsToERStats(*image, *contours, *regions);
 #else
 	throw_no_text();
@@ -87,7 +87,7 @@ void cveMSERsToERStats(
 
 void cveComputeNMChannels(cv::_InputArray* src, cv::_OutputArray* channels, int mode)
 {
-#if HAVE_OPENCV_TEXT
+#ifdef HAVE_OPENCV_TEXT
 	cv::text::computeNMChannels(*src, *channels, mode);
 #else
 	throw_no_text();

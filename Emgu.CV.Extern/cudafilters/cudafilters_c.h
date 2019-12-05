@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#if HAVE_OPENCV_CUDAFILTERS
+#ifdef HAVE_OPENCV_CUDAFILTERS
 
 #include "opencv2/cudafilters.hpp"
 #include "opencv2/core/cuda.hpp"

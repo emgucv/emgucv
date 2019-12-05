@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#if HAVE_OPENCV_CUDAIMGPROC
+#ifdef HAVE_OPENCV_CUDAIMGPROC
 
 #include "opencv2/cudaimgproc.hpp"
 #include "opencv2/core/cuda.hpp"

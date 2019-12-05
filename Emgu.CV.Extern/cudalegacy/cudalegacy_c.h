@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#if HAVE_OPENCV_CUDALEGACY
+#ifdef HAVE_OPENCV_CUDALEGACY
 //#include "opencv2/cuda.hpp"
 #include "opencv2/cudalegacy.hpp"
 #include "opencv2/core/cuda.hpp"

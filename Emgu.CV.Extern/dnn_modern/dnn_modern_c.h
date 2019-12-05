@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#if HAVE_OPENCV_DNN_MODERN
+#ifdef HAVE_OPENCV_DNN_MODERN
 #include "opencv2/dnn_modern.hpp"
 #endif
 

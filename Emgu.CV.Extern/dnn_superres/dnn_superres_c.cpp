@@ -8,7 +8,7 @@
 
 cv::dnn_superres::DnnSuperResImpl* cveDnnSuperResImplCreate()
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	return new cv::dnn_superres::DnnSuperResImpl();
 #else
 	throw_no_dnn_superres();
@@ -16,7 +16,7 @@ cv::dnn_superres::DnnSuperResImpl* cveDnnSuperResImplCreate()
 }
 void cveDnnSuperResImplSetModel(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, const cv::String* algo, int scale)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	dnnSuperRes->setModel(*algo, scale);
 #else
 	throw_no_dnn_superres();
@@ -24,7 +24,7 @@ void cveDnnSuperResImplSetModel(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, 
 }
 void cveDnnSuperResImplReadModel1(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, const cv::String* path)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	dnnSuperRes->readModel(*path);
 #else
 	throw_no_dnn_superres();
@@ -32,7 +32,7 @@ void cveDnnSuperResImplReadModel1(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes
 }
 void cveDnnSuperResImplReadModel2(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, const cv::String* weights, cv::String* definition)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	dnnSuperRes->readModel(*weights, *definition);
 #else
 	throw_no_dnn_superres();
@@ -40,7 +40,7 @@ void cveDnnSuperResImplReadModel2(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes
 }
 void cveDnnSuperResImplUpsample(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, cv::_InputArray* img, cv::_OutputArray* result)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	dnnSuperRes->upsample(*img, *result);
 #else
 	throw_no_dnn_superres();
@@ -48,7 +48,7 @@ void cveDnnSuperResImplUpsample(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, 
 }
 int cveDnnSuperResImplGetScale(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	return dnnSuperRes->getScale();
 #else
 	throw_no_dnn_superres();
@@ -56,7 +56,7 @@ int cveDnnSuperResImplGetScale(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes)
 }
 void cveDnnSuperResImplGetAlgorithm(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, cv::String* algorithm)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	std::string s = dnnSuperRes->getAlgorithm();
 	*algorithm = s;
 #else
@@ -65,7 +65,7 @@ void cveDnnSuperResImplGetAlgorithm(cv::dnn_superres::DnnSuperResImpl* dnnSuperR
 }
 void cveDnnSuperResImplRelease(cv::dnn_superres::DnnSuperResImpl** dnnSuperRes)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	delete* dnnSuperRes;
 	*dnnSuperRes = 0;
 #else

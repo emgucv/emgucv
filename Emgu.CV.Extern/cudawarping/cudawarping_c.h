@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#if HAVE_OPENCV_CUDAWARPING
+#ifdef HAVE_OPENCV_CUDAWARPING
 #include "opencv2/cudaarithm.hpp"
 #include "opencv2/cudawarping.hpp"
 #include "opencv2/core/cuda.hpp"

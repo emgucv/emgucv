@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#if HAVE_OPENCV_VIZ
+#ifdef HAVE_OPENCV_VIZ
 #include "opencv2/viz.hpp"
 #else
 static inline CV_NORETURN void throw_no_viz() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Viz support"); }

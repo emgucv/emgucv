@@ -8,7 +8,7 @@
 
 cv::superres::FrameSource* cveSuperresCreateFrameSourceVideo(cv::String* fileName, bool useGpu, cv::Ptr<cv::superres::FrameSource>** sharedPtr)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	cv::Ptr<cv::superres::FrameSource> ptr = useGpu ?
 		cv::superres::createFrameSource_Video_CUDA(*fileName)
 		: cv::superres::createFrameSource_Video(*fileName);
@@ -20,7 +20,7 @@ cv::superres::FrameSource* cveSuperresCreateFrameSourceVideo(cv::String* fileNam
 }
 cv::superres::FrameSource* cveSuperresCreateFrameSourceCamera(int deviceId, cv::Ptr<cv::superres::FrameSource>** sharedPtr)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	cv::Ptr<cv::superres::FrameSource> ptr = cv::superres::createFrameSource_Camera(deviceId);
 	*sharedPtr = new cv::Ptr<cv::superres::FrameSource>(ptr);
 	return ptr.get();
@@ -30,7 +30,7 @@ cv::superres::FrameSource* cveSuperresCreateFrameSourceCamera(int deviceId, cv::
 }
 void cveSuperresFrameSourceRelease(cv::superres::FrameSource** frameSource, cv::Ptr<cv::superres::FrameSource>** sharedPtr)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	delete *sharedPtr;
 	*frameSource = 0;
 	*sharedPtr = 0;
@@ -40,7 +40,7 @@ void cveSuperresFrameSourceRelease(cv::superres::FrameSource** frameSource, cv::
 }
 void cveSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv::_OutputArray* frame)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	frameSource->nextFrame(*frame);
 #else
 	throw_no_superres();
@@ -49,7 +49,7 @@ void cveSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv:
 
 cv::superres::SuperResolution* cveSuperResolutionCreate(int type, cv::superres::FrameSource* frameSource, cv::superres::FrameSource** frameSourceOut, cv::Ptr<cv::superres::SuperResolution>** sharedPtr)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	cv::Ptr<cv::superres::SuperResolution> ptr =
 		(type == 1) ? cv::superres::createSuperResolution_BTVL1_CUDA() :
 		//((type == 2) ? cv::superres::createSuperResolution_BTVL1_OCL() :
@@ -70,7 +70,7 @@ cv::superres::SuperResolution* cveSuperResolutionCreate(int type, cv::superres::
 }
 void cveSuperResolutionRelease(cv::superres::SuperResolution** superres, cv::Ptr<cv::superres::SuperResolution>** sharedPtr)
 {
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 	delete *sharedPtr;
 	*superres = 0;
 	*sharedPtr = 0;

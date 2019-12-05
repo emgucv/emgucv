@@ -20,7 +20,7 @@ void cudaDenseOpticalFlowCalc(
 	cv::_InputOutputArray* flow,
 	cv::cuda::Stream* stream)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	opticalFlow->calc(*I0, *I1, *flow, stream ? *stream : cv::cuda::Stream::Null());
 #else
 	throw_no_cudaoptflow();
@@ -41,7 +41,7 @@ void cudaSparseOpticalFlowCalc(
 	cv::_OutputArray* err,
 	cv::cuda::Stream* stream)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	opticalFlow->calc(*prevImg, *nextImg, *prevPts, *nextPts, status ? *status : (cv::_OutputArray) cv::noArray(), err ? *err : (cv::_OutputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
 #else
 	throw_no_cudaoptflow();
@@ -50,7 +50,7 @@ void cudaSparseOpticalFlowCalc(
 
 void cudaSparsePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** flow)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	delete *flow;
 	*flow = 0;
 #else
@@ -70,7 +70,7 @@ cv::cuda::BroxOpticalFlow* cudaBroxOpticalFlowCreate(
 	cv::cuda::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::BroxOpticalFlow>** sharedPtr)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	cv::Ptr<cv::cuda::BroxOpticalFlow> ptr = cv::cuda::BroxOpticalFlow::create(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations);
 	*sharedPtr = new cv::Ptr<cv::cuda::BroxOpticalFlow>(ptr);
 	cv::cuda::BroxOpticalFlow* flow = ptr.get();
@@ -84,7 +84,7 @@ cv::cuda::BroxOpticalFlow* cudaBroxOpticalFlowCreate(
 
 void cudaBroxOpticalFlowRelease(cv::Ptr<cv::cuda::BroxOpticalFlow>** flow)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	delete *flow;
 	*flow = 0;
 #else
@@ -110,7 +110,7 @@ cv::cuda::FarnebackOpticalFlow* cudaFarnebackOpticalFlowCreate(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::FarnebackOpticalFlow>** sharedPtr)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	cv::Ptr<cv::cuda::FarnebackOpticalFlow> ptr = cv::cuda::FarnebackOpticalFlow::create(
 		numLevels,
 		pyrScale,
@@ -133,7 +133,7 @@ cv::cuda::FarnebackOpticalFlow* cudaFarnebackOpticalFlowCreate(
 
 void cudaFarnebackOpticalFlowRelease(cv::Ptr<cv::cuda::FarnebackOpticalFlow>** flow)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	delete *flow;
 	*flow = 0;
 #else
@@ -153,7 +153,7 @@ cv::cuda::OpticalFlowDual_TVL1* cudaOpticalFlowDualTvl1Create(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::OpticalFlowDual_TVL1>** sharedPtr)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	cv::Ptr<cv::cuda::OpticalFlowDual_TVL1> ptr = cv::cuda::OpticalFlowDual_TVL1::create(tau, lambda, theta, nscales, warps, epsilon, iterations, scaleStep, gamma, useInitialFlow);
 	*sharedPtr = new cv::Ptr<cv::cuda::OpticalFlowDual_TVL1>(ptr);
 	cv::cuda::OpticalFlowDual_TVL1* flow = ptr.get();
@@ -168,7 +168,7 @@ cv::cuda::OpticalFlowDual_TVL1* cudaOpticalFlowDualTvl1Create(
 
 void cudaOpticalFlowDualTvl1Release(cv::Ptr<cv::cuda::OpticalFlowDual_TVL1>** flow)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	delete *flow;
 	*flow = 0;
 #else
@@ -190,7 +190,7 @@ cv::cuda::DensePyrLKOpticalFlow* cudaDensePyrLKOpticalFlowCreate(
 	cv::Algorithm** algorithm, 
 	cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>** sharedPtr)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	cv::Ptr<cv::cuda::DensePyrLKOpticalFlow> ptr = cv::cuda::DensePyrLKOpticalFlow::create(*winSize, maxLevel, iters, useInitialFlow);
 	*sharedPtr = new cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>(ptr);
 	cv::cuda::DensePyrLKOpticalFlow* flow = ptr.get();
@@ -203,7 +203,7 @@ cv::cuda::DensePyrLKOpticalFlow* cudaDensePyrLKOpticalFlowCreate(
 }
 void cudaDensePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>** flow)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	delete *flow;
 	*flow = 0;
 #else
@@ -225,7 +225,7 @@ cv::cuda::SparsePyrLKOpticalFlow* cudaSparsePyrLKOpticalFlowCreate(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** sharedPtr)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow> ptr = cv::cuda::SparsePyrLKOpticalFlow::create(*winSize, maxLevel, iters, useInitialFlow);
 	*sharedPtr = new cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>(ptr);
 	cv::cuda::SparsePyrLKOpticalFlow* flow = ptr.get();
@@ -239,7 +239,7 @@ cv::cuda::SparsePyrLKOpticalFlow* cudaSparsePyrLKOpticalFlowCreate(
 
 void cudaDensePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** flow)
 {
-#if HAVE_OPENCV_CUDAOPTFLOW
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
 	delete *flow;
 	*flow = 0;
 #else

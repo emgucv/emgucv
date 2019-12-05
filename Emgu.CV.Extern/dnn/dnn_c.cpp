@@ -8,7 +8,7 @@
 
 cv::dnn::Net* cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetModel)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::Net net = cv::dnn::readNetFromDarknet(*cfgFile, *darknetModel);
 	return new cv::dnn::Net(net);
 #else
@@ -17,7 +17,7 @@ cv::dnn::Net* cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetMode
 }
 cv::dnn::Net* cveReadNetFromDarknet2(const char *bufferCfg, int lenCfg, const char *bufferModel, int lenModel)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::Net net = cv::dnn::readNetFromDarknet(bufferCfg, lenCfg, bufferModel, lenModel);
 	return new cv::dnn::Net(net);
 #else
@@ -27,7 +27,7 @@ cv::dnn::Net* cveReadNetFromDarknet2(const char *bufferCfg, int lenCfg, const ch
 
 cv::dnn::Net* cveReadNetFromCaffe(cv::String* prototxt, cv::String* caffeModel)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::Net net = cv::dnn::readNetFromCaffe(*prototxt, *caffeModel);
 	return new cv::dnn::Net(net);
 #else
@@ -36,7 +36,7 @@ cv::dnn::Net* cveReadNetFromCaffe(cv::String* prototxt, cv::String* caffeModel)
 }
 cv::dnn::Net* cveReadNetFromCaffe2(const char *bufferProto, int lenProto, const char *bufferModel, int lenModel)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::Net net = cv::dnn::readNetFromCaffe(bufferProto, lenProto, bufferModel, lenModel);
 	return new cv::dnn::Net(net);
 #else
@@ -45,7 +45,7 @@ cv::dnn::Net* cveReadNetFromCaffe2(const char *bufferProto, int lenProto, const 
 }
 cv::dnn::Net* cveReadNetFromTensorflow(cv::String* model, cv::String* config)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::Net net = cv::dnn::readNetFromTensorflow(*model, *config);
 	return new cv::dnn::Net(net);
 #else
@@ -54,7 +54,7 @@ cv::dnn::Net* cveReadNetFromTensorflow(cv::String* model, cv::String* config)
 }
 cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::Net net = cv::dnn::readNetFromTensorflow(bufferModel, lenModel, bufferConfig, lenConfig);
 	return new cv::dnn::Net(net);
 #else
@@ -64,7 +64,7 @@ cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, c
 
 cv::dnn::Net* cveReadNetFromONNX(cv::String* onnxFile)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::Net net = cv::dnn::readNetFromONNX(*onnxFile);
 	return new cv::dnn::Net(net);
 #else
@@ -73,7 +73,7 @@ cv::dnn::Net* cveReadNetFromONNX(cv::String* onnxFile)
 }
 void cveReadTensorFromONNX(cv::String* path, cv::Mat* tensor)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::Mat t = cv::dnn::readTensorFromONNX(*path);
 	cv::swap(t, *tensor);
 #else
@@ -84,7 +84,7 @@ void cveReadTensorFromONNX(cv::String* path, cv::Mat* tensor)
 
 cv::dnn::Net* cveReadNet(cv::String* model, cv::String* config, cv::String* framework)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::Net net = cv::dnn::readNet(*model, *config, *framework);
 	return new cv::dnn::Net(net);
 #else
@@ -93,7 +93,7 @@ cv::dnn::Net* cveReadNet(cv::String* model, cv::String* config, cv::String* fram
 }
 cv::dnn::Net* cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::Net net = cv::dnn::readNetFromModelOptimizer(*xml, *bin);
 	return new cv::dnn::Net(net);
 #else
@@ -104,7 +104,7 @@ cv::dnn::Net* cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin)
 
 cv::dnn::Net* cveDnnNetCreate()
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
    return new cv::dnn::Net();
 #else
 	throw_no_dnn();
@@ -113,7 +113,7 @@ cv::dnn::Net* cveDnnNetCreate()
 
 void cveDnnNetSetInput(cv::dnn::Net* net, cv::_InputArray* blob, cv::String* name, double scalefactor, CvScalar* mean)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	net->setInput(*blob, name ? *name : "", scalefactor, *mean);
 #else
 	throw_no_dnn();
@@ -122,7 +122,7 @@ void cveDnnNetSetInput(cv::dnn::Net* net, cv::_InputArray* blob, cv::String* nam
 
 void cveDnnNetForward(cv::dnn::Net* net, cv::String* outputName, cv::Mat* output)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
    cv::Mat m = net->forward(*outputName);
    cv::swap(m, *output);
 #else
@@ -131,7 +131,7 @@ void cveDnnNetForward(cv::dnn::Net* net, cv::String* outputName, cv::Mat* output
 }
 void cveDnnNetForward2(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, cv::String* outputName)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	net->forward(*outputBlobs, *outputName);
 #else
 	throw_no_dnn();
@@ -139,7 +139,7 @@ void cveDnnNetForward2(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, cv::Str
 }
 void cveDnnNetForward3(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, std::vector<cv::String>* outBlobNames)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	net->forward(*outputBlobs, *outBlobNames);
 #else
 	throw_no_dnn();
@@ -147,7 +147,7 @@ void cveDnnNetForward3(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, std::ve
 }
 void cveDnnNetRelease(cv::dnn::Net** net)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
    delete *net;
    *net = 0;
 #else
@@ -157,7 +157,7 @@ void cveDnnNetRelease(cv::dnn::Net** net)
 
 std::vector<cv::String>* cveDnnNetGetLayerNames(cv::dnn::Net* net)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	return new std::vector<cv::String>(net->getLayerNames());
 #else
 	throw_no_dnn();
@@ -166,7 +166,7 @@ std::vector<cv::String>* cveDnnNetGetLayerNames(cv::dnn::Net* net)
 
 int cveDnnGetLayerId(cv::dnn::Net* net, cv::String* layer)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	return net->getLayerId(*layer);
 #else
 	throw_no_dnn();
@@ -174,7 +174,7 @@ int cveDnnGetLayerId(cv::dnn::Net* net, cv::String* layer)
 }
 cv::dnn::Layer* cveDnnGetLayerByName(cv::dnn::Net* net, cv::String* layerName, cv::Ptr<cv::dnn::Layer>** sharedPtr)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::Ptr<cv::dnn::Layer> layerPtr = net->getLayer(*layerName);
 	*sharedPtr = new cv::Ptr<cv::dnn::Layer>(layerPtr);
 	return (*sharedPtr)->get();
@@ -184,7 +184,7 @@ cv::dnn::Layer* cveDnnGetLayerByName(cv::dnn::Net* net, cv::String* layerName, c
 }
 cv::dnn::Layer* cveDnnGetLayerById(cv::dnn::Net* net, int layerId, cv::Ptr<cv::dnn::Layer>** sharedPtr)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::Ptr<cv::dnn::Layer> layerPtr = net->getLayer(layerId);
 	*sharedPtr = new cv::Ptr<cv::dnn::Layer>(layerPtr);
 	return (*sharedPtr)->get();
@@ -194,7 +194,7 @@ cv::dnn::Layer* cveDnnGetLayerById(cv::dnn::Net* net, int layerId, cv::Ptr<cv::d
 }
 void cveDnnLayerRelease(cv::Ptr<cv::dnn::Layer>** layer)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	delete *layer;
 	layer = 0;
 #else
@@ -203,7 +203,7 @@ void cveDnnLayerRelease(cv::Ptr<cv::dnn::Layer>** layer)
 }
 std::vector<cv::Mat>* cveDnnLayerGetBlobs(cv::dnn::Layer* layer)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	return &(layer->blobs);
 #else
 	throw_no_dnn();
@@ -212,7 +212,7 @@ std::vector<cv::Mat>* cveDnnLayerGetBlobs(cv::dnn::Layer* layer)
 
 void cveDnnNetGetUnconnectedOutLayers(cv::dnn::Net* net, std::vector<int>* layerIds)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	std::vector<int> v = net->getUnconnectedOutLayers();
 	*layerIds = v;
 	//layerIds->clear();
@@ -225,7 +225,7 @@ void cveDnnNetGetUnconnectedOutLayers(cv::dnn::Net* net, std::vector<int>* layer
 }
 void cveDnnNetGetUnconnectedOutLayersNames(cv::dnn::Net* net, std::vector<cv::String>* layerNames)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	std::vector<cv::String> v = net->getUnconnectedOutLayersNames();
 	*layerNames = v;
 	//layerNames->clear();
@@ -240,7 +240,7 @@ void cveDnnNetGetUnconnectedOutLayersNames(cv::dnn::Net* net, std::vector<cv::St
 
 int64 cveDnnNetGetPerfProfile(cv::dnn::Net* net, std::vector<double>* timings)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	return net->getPerfProfile(*timings);
 #else
 	throw_no_dnn();
@@ -249,7 +249,7 @@ int64 cveDnnNetGetPerfProfile(cv::dnn::Net* net, std::vector<double>* timings)
 
 CVAPI(void) cveDnnNetDump(cv::dnn::Net* net, cv::String* string)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	*string = net->dump();
 #else
 	throw_no_dnn();
@@ -258,7 +258,7 @@ CVAPI(void) cveDnnNetDump(cv::dnn::Net* net, cv::String* string)
 
 void cveDnnNetDumpToFile(cv::dnn::Net* net, cv::String* path)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	net->dumpToFile(*path);
 #else
 	throw_no_dnn();
@@ -276,7 +276,7 @@ void cveDnnBlobFromImage(
 	int ddepth
 	)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::blobFromImage(*image, *blob, scalefactor, *size, *mean, swapRB, crop, ddepth);
 #else
 	throw_no_dnn();
@@ -293,7 +293,7 @@ void cveDnnBlobFromImages(
 	bool crop,
 	int ddepth)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::blobFromImages(*images, *blob, scalefactor, *size, *mean, swapRB, crop, ddepth);
 #else
 	throw_no_dnn();
@@ -302,7 +302,7 @@ void cveDnnBlobFromImages(
 
 void cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::imagesFromBlob(*blob, *images);
 #else
 	throw_no_dnn();
@@ -311,7 +311,7 @@ void cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images)
 
 void cveDnnShrinkCaffeModel(cv::String* src, cv::String* dst)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::shrinkCaffeModel(*src, *dst);
 #else
 	throw_no_dnn();
@@ -320,7 +320,7 @@ void cveDnnShrinkCaffeModel(cv::String* src, cv::String* dst)
 
 void cveDnnWriteTextGraph(cv::String* model, cv::String* output)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::writeTextGraph(*model, *output);
 #else
 	throw_no_dnn();
@@ -336,7 +336,7 @@ void cveDnnNMSBoxes(
 	float eta,
 	int topK)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::NMSBoxes(*bboxes, *scores, scoreThreshold, nmsThreshold, *indices, eta, topK);
 #else
 	throw_no_dnn();
@@ -345,7 +345,7 @@ void cveDnnNMSBoxes(
 
 void cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets)
 {
-#if HAVE_OPENCV_DNN
+#ifdef HAVE_OPENCV_DNN
 	backends->clear();
 	targets->clear();
 	std::vector< std::pair< cv::dnn::Backend, cv::dnn::Target > > result = cv::dnn::getAvailableBackends();

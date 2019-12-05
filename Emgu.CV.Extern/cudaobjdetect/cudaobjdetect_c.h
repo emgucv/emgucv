@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#if HAVE_OPENCV_CUDAOBJDETECT
+#ifdef HAVE_OPENCV_CUDAOBJDETECT
 
 #include "opencv2/cudaobjdetect.hpp"
 #include "emgu_c.h"

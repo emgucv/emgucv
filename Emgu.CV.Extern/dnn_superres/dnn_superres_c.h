@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#if HAVE_OPENCV_DNN_SUPERRES
+#ifdef HAVE_OPENCV_DNN_SUPERRES
 #include "opencv2/dnn_superres.hpp"
 #else
 static inline CV_NORETURN void throw_no_dnn_superres() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Dnn Superres support"); }

@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#if HAVE_OPENCV_TEXT
+#ifdef HAVE_OPENCV_TEXT
 #include "opencv2/text/erfilter.hpp"
 #else
 
