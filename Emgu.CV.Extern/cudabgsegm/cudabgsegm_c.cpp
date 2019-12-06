@@ -12,25 +12,38 @@
 //
 //----------------------------------------------------------------------------
 cv::cuda::BackgroundSubtractorMOG* cudaBackgroundSubtractorMOGCreate(
-	int history, int nMixtures, double backgroundRatio, double noiseSigma, 
+	int history, int nMixtures, double backgroundRatio, double noiseSigma,
 	cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::BackgroundSubtractorMOG>** sharedPtr)
 {
-   cv::Ptr<cv::cuda::BackgroundSubtractorMOG> ptr = cv::cuda::createBackgroundSubtractorMOG(history, nMixtures, backgroundRatio, noiseSigma);
-   *sharedPtr = new cv::Ptr<cv::cuda::BackgroundSubtractorMOG>(ptr);
-   cv::cuda::BackgroundSubtractorMOG* bs = ptr.get();
-   *bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
-   *algorithm = dynamic_cast<cv::Algorithm*>(bs);
-   return bs;
+#ifdef HAVE_OPENCV_CUDABGSEGM
+	cv::Ptr<cv::cuda::BackgroundSubtractorMOG> ptr = cv::cuda::createBackgroundSubtractorMOG(history, nMixtures, backgroundRatio, noiseSigma);
+	*sharedPtr = new cv::Ptr<cv::cuda::BackgroundSubtractorMOG>(ptr);
+	cv::cuda::BackgroundSubtractorMOG* bs = ptr.get();
+	*bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+	*algorithm = dynamic_cast<cv::Algorithm*>(bs);
+	return bs;
+#else
+    throw_no_cudabgsegm();
+#endif
+	
 }
 void cudaBackgroundSubtractorMOGApply(cv::cuda::BackgroundSubtractorMOG* mog, cv::_InputArray* frame, cv::_OutputArray* fgMask, double learningRate, cv::cuda::Stream* stream)
 {
-   mog->apply(*frame, *fgMask, learningRate, stream ? *stream : cv::cuda::Stream::Null());
+#ifdef HAVE_OPENCV_CUDABGSEGM
+	mog->apply(*frame, *fgMask, learningRate, stream ? *stream : cv::cuda::Stream::Null());
+#else
+    throw_no_cudabgsegm();
+#endif
 }
 void cudaBackgroundSubtractorMOGRelease(cv::Ptr<cv::cuda::BackgroundSubtractorMOG>** mog)
 {
-   delete (*mog);
-   *mog = 0;
+#ifdef HAVE_OPENCV_CUDABGSEGM
+	delete (*mog);
+	*mog = 0;
+#else
+    throw_no_cudabgsegm();
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -39,27 +52,39 @@ void cudaBackgroundSubtractorMOGRelease(cv::Ptr<cv::cuda::BackgroundSubtractorMO
 //
 //----------------------------------------------------------------------------
 cv::cuda::BackgroundSubtractorMOG2* cudaBackgroundSubtractorMOG2Create(
-	int history, double varThreshold, bool detectShadows, 
+	int history, double varThreshold, bool detectShadows,
 	cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::BackgroundSubtractorMOG2>** sharedPtr)
 {
-   cv::Ptr<cv::cuda::BackgroundSubtractorMOG2> ptr = cv::cuda::createBackgroundSubtractorMOG2(history, varThreshold, detectShadows);
-   *sharedPtr = new cv::Ptr<cv::cuda::BackgroundSubtractorMOG2>(ptr);
-   cv::cuda::BackgroundSubtractorMOG2* bs = ptr.get();
-   *bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
-   *algorithm = dynamic_cast<cv::Algorithm*>(bs);
-   return bs;
+#ifdef HAVE_OPENCV_CUDABGSEGM
+	cv::Ptr<cv::cuda::BackgroundSubtractorMOG2> ptr = cv::cuda::createBackgroundSubtractorMOG2(history, varThreshold, detectShadows);
+	*sharedPtr = new cv::Ptr<cv::cuda::BackgroundSubtractorMOG2>(ptr);
+	cv::cuda::BackgroundSubtractorMOG2* bs = ptr.get();
+	*bgSubtractor = dynamic_cast<cv::BackgroundSubtractor*>(bs);
+	*algorithm = dynamic_cast<cv::Algorithm*>(bs);
+	return bs;
+#else
+    throw_no_cudabgsegm();
+#endif
 }
 
 void cudaBackgroundSubtractorMOG2Apply(cv::cuda::BackgroundSubtractorMOG2* mog, cv::_InputArray* frame, cv::_OutputArray* fgMask, double learningRate, cv::cuda::Stream* stream)
 {
-   mog->apply(*frame, *fgMask, learningRate, stream ? *stream : cv::cuda::Stream::Null());
+#ifdef HAVE_OPENCV_CUDABGSEGM
+	mog->apply(*frame, *fgMask, learningRate, stream ? *stream : cv::cuda::Stream::Null());
+#else
+    throw_no_cudabgsegm();
+#endif
 }
 
 void cudaBackgroundSubtractorMOG2Release(cv::Ptr<cv::cuda::BackgroundSubtractorMOG2>** mog)
 {
-   delete (*mog);
-   *mog = 0;
+#ifdef HAVE_OPENCV_CUDABGSEGM
+	delete (*mog);
+	*mog = 0;
+#else
+    throw_no_cudabgsegm();
+#endif
 }
 
 /*
@@ -90,7 +115,7 @@ void cudaBackgroundSubtractorGMGRelease(cv::cuda::BackgroundSubtractorGMG** gmg)
 //  Cuda BackgroundSubtractorFGD
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::BackgroundSubtractorFGD*) cudaBackgroundSubtractorFGDCreate(    
+CVAPI(cv::cuda::BackgroundSubtractorFGD*) cudaBackgroundSubtractorFGDCreate(
    int Lc,
    int N1c,
    int N2c,
@@ -107,7 +132,7 @@ CVAPI(cv::cuda::BackgroundSubtractorFGD*) cudaBackgroundSubtractorFGDCreate(
    float minArea)
 {
    cv::cuda::FGDParams p;
-   p.Lc = Lc; 
+   p.Lc = Lc;
    p.N1c = N1c;
    p.N2c = N2c;
    p.Lcc = Lcc;
