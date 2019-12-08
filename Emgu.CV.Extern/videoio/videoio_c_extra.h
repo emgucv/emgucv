@@ -8,6 +8,10 @@
 #ifndef EMGU_HIGHGUI_C_H
 #define EMGU_HIGHGUI_C_H
 
+#include "opencv2/opencv_modules.hpp"
+#include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_VIDEOIO
 #include "opencv2/videoio/videoio_c.h"
 #include "opencv2/videoio/videoio.hpp"
 #include "opencv2/videoio/registry.hpp"
@@ -17,6 +21,26 @@
 //using namespace System::Runtime::InteropServices;
 #include "opencv2/videoio/cap_winrt.hpp"
 //#include <msclr/gcroot.h>
+#endif
+
+#else
+static inline CV_NORETURN void throw_no_videoio() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Videoio support"); }
+class CvCapture
+{	
+};
+namespace cv
+{
+	class VideoCapture
+	{
+		
+	};
+
+	class VideoWriter
+	{
+		
+	};
+}
+
 #endif
 
 struct ColorPoint
