@@ -10,28 +10,28 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\libs\</OutputPath>
+    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>..\..\libs\Emgu.CV.World.NETSTANDARD.xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>..\..\libs\</OutputPath>
+    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>..\..\libs\Emgu.CV.World.NETSTANDARD.xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\libs\</OutputPath>
+    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>..\..\libs\Emgu.CV.World.NETSTANDARD.xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>..\..\libs\</OutputPath>
+    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>..\..\libs\Emgu.CV.World.NETSTANDARD.xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
@@ -50,5 +50,9 @@
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
-
+  <Target Name="DeployBinary" AfterTargets="AfterBuild">
+    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\libs" Importance="high" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\libs" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\libs" ContinueOnError="true" />
+  </Target>
 </Project>
