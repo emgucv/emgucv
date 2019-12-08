@@ -111,9 +111,9 @@ CREATE_VECTOR_CS("VectorOfDMatch" "std::vector< cv::DMatch >" "MDMatch" "vector"
 CREATE_VECTOR_CS("VectorOfRect" "std::vector< cv::Rect >" "Rectangle" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "")
 
 CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "Ocl.PlatformInfo" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"opencv2/core/ocl.hpp\"" "" "")
-IF(NOT IOS)
-  CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda" Emgu.CV.Cuda "" "#include \"opencv2/core/cuda.hpp\"" "" "")
-ENDIF()
+
+CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda" Emgu.CV.Cuda "" "#include \"opencv2/core/cuda.hpp\"" "" "")
+
 
 MACRO(WRITE_IF_DIFFERENT fname content)
   IF (EXISTS "${fname}")
@@ -871,7 +871,7 @@ ${CS_COMPILATION_CONDITION_CLOSE}")
 ENDMACRO()
 
 ############################### core code gen START ##############################
-IF(HAVE_opencv_core)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "core/mat_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/Mat.g.cs"
@@ -1134,19 +1134,11 @@ IF(HAVE_opencv_core)
 	""
 	""
 	${HAVE_opencv_core})
-ENDIF()
+
 ############################### core code gen END ################################
 
-############################### imgproc code gen START ##############################
-IF(HAVE_opencv_imgproc)
-  
-	
-ENDIF()
-
-############################### imgproc code gen END ################################
-
 ############################### objdetect code gen START ##############################
-IF(HAVE_opencv_objdetect)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "objdetect/QRCodeDetector_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Objdetect/QRCodeDetector.g.cs"
@@ -1167,11 +1159,11 @@ IF(HAVE_opencv_objdetect)
 	""
 	""
 	${HAVE_opencv_objdetect})
-ENDIF()
+
 ############################### objdetect code gen END ################################
 
 ############################### imgproc code gen START ##############################
-IF(HAVE_opencv_imgproc)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "imgproc/LineIterator_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Imgproc/LineIterator.g.cs"
@@ -1191,11 +1183,11 @@ IF(HAVE_opencv_imgproc)
 	""
 	""
 	${HAVE_opencv_imgproc})
-ENDIF()
-############################### features2d code gen END ################################
+
+############################### imgproc code gen END ################################
 
 ############################### features2d code gen START ##############################
-IF(HAVE_opencv_features2d)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "features2d/SimpleBlobDetector_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/SimpleBlobDetectorParams.g.cs"
@@ -1233,11 +1225,11 @@ IF(HAVE_opencv_features2d)
 	""
 	""
 	${HAVE_opencv_features2d})
-ENDIF()
+
 ############################### features2d code gen END ################################
 
 ############################### ml code gen START ##############################
-IF(HAVE_opencv_ml)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/em_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/EM.g.cs"
@@ -1476,11 +1468,11 @@ IF(HAVE_opencv_ml)
 	""
 	""
 	${HAVE_opencv_ml})
-ENDIF()
+
 ############################### ml code gen END ################################
 
 ############################### video code gen START ##############################
-IF(HAVE_opencv_video)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "video/kalmanfilter_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/KalmanFilter.g.cs"
@@ -1533,11 +1525,11 @@ IF(HAVE_opencv_video)
 	""
 	""
 	${HAVE_opencv_video})
-ENDIF()
+
 ############################### video code gen END ################################
 
 ############################### videoio code gen START ##############################
-IF(HAVE_opencv_videoio)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "videoio/video_capture_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Videoio/VideoCapture.g.cs"
@@ -1557,11 +1549,11 @@ IF(HAVE_opencv_videoio)
 	""
 	""
 	${HAVE_opencv_videoio})
-ENDIF()
+
 ############################### videoio code gen END ################################
 
 ############################### optflow code gen START ##############################
-IF(HAVE_opencv_optflow)
+
  CREATE_OCV_CLASS_PROPERTY( 
     "optflow/dual_tvl1_opticalflow_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Optflow/DualTVL1OpticalFlow.g.cs"
@@ -1625,11 +1617,11 @@ CREATE_OCV_CLASS_PROPERTY(
 	""
 	""
 	${HAVE_opencv_optflow})  
-ENDIF()
+
 ############################### optflow code gen END ################################
 
 ############################### photo code gen START ##############################
-IF(HAVE_opencv_photo)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/Tonemap_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/Tonemap.g.cs"
@@ -1717,12 +1709,12 @@ IF(HAVE_opencv_photo)
 	""
 	""
 	${HAVE_opencv_photo})	
-ENDIF()
+
 ############################### photo code gen END ##############################
 
 
 ############################### xfeatures2d code gen START ##############################
-IF(HAVE_opencv_xfeatures2d)
+
    CREATE_OCV_CLASS_PROPERTY( 
     "xfeatures2d/pct_compute_signature_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XFeatures2D/PCTComputeSignature.g.cs"
@@ -1755,11 +1747,11 @@ IF(HAVE_opencv_xfeatures2d)
 	""
 	""
 	${HAVE_opencv_xfeatures2d})
-ENDIF()
+
 ############################### xfeatures2d code gen END ################################
 
 ############################### stitching code gen START ##############################
-IF(HAVE_opencv_stitching)
+
    CREATE_OCV_CLASS_PROPERTY( 
     "stitching/stitching_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Stitching/Stitcher.g.cs"
@@ -1779,11 +1771,11 @@ IF(HAVE_opencv_stitching)
 	""
 	""
 	${HAVE_opencv_stitching})  
-ENDIF()
+
 ############################### stitching code gen END ################################
 
 ############################### video code gen START ##############################
-IF(HAVE_opencv_video)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "video/disopticalflow_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/DISOpticalFlow.g.cs"
@@ -1869,11 +1861,11 @@ IF(HAVE_opencv_video)
 	""
 	""
 	${HAVE_opencv_video})
-ENDIF()
+
 ############################### video code gen END ################################
 
 ############################### shape code gen START ##############################
-IF(HAVE_opencv_shape)
+
    CREATE_OCV_CLASS_PROPERTY( 
     "shape/ShapeContextDistanceExtractor_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Shape/ShapeContextDistanceExtractor.g.cs"
@@ -1902,11 +1894,11 @@ IF(HAVE_opencv_shape)
 	""
 	""
 	${HAVE_opencv_shape})
-ENDIF()
+
 ############################### shape code gen END ################################
 
 ############################### cudaimgproc code gen START ##############################
-IF(HAVE_opencv_cudaimgproc)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaimgproc/cuda_hough_lines_detector_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Imgproc/CudaHoughLinesDetector.g.cs"
@@ -1931,11 +1923,11 @@ IF(HAVE_opencv_cudaimgproc)
 	""
 	""
 	${HAVE_opencv_cudaimgproc})
-ENDIF()
+
 ############################### cudaimgproc code gen END ##############################
 
 ############################### cudaobjdetect code gen START ##############################
-#IF(HAVE_opencv_cudaobjdetect)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaobjdetect/cuda_hog_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaHOG.g.cs"
@@ -1993,11 +1985,11 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_cudaobjdetect})
-#ENDIF()
+
 ############################### cudaobjdetect code gen END ##############################
 
 ############################### plot code gen START ##############################
-IF(HAVE_opencv_plot)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "plot/plot2d_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Plot/Plot2d.g.cs"
@@ -2022,11 +2014,11 @@ IF(HAVE_opencv_plot)
 	""
 	""
 	${HAVE_opencv_plot})
-ENDIF()
+
 ############################### plot code gen END ##############################
 
 ############################### saliency code gen START ##############################
-IF(HAVE_opencv_saliency)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "saliency/MotionSaliencyBinWangApr2014_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/MotionSaliencyBinWangApr2014.g.cs"
@@ -2071,11 +2063,11 @@ IF(HAVE_opencv_saliency)
 	""
 	""
 	${HAVE_opencv_saliency})
-ENDIF()
+
 ############################### plot code gen END ##############################
 
 ############################### xphoto code gen START ##############################
-IF(HAVE_opencv_xphoto)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/simplewb_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/SimpleWB.g.cs"
@@ -2169,12 +2161,11 @@ IF(HAVE_opencv_xphoto)
 	""
 	""
 	${HAVE_opencv_xphoto})
-ENDIF()
+
 ############################### xphoto code gen END ##############################
 
-
 ############################### face code gen START ##############################
-IF(HAVE_opencv_face)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "face/facemarklbf_params_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkLBFParams.g.cs"
@@ -2233,11 +2224,11 @@ IF(HAVE_opencv_face)
 	""
 	""
 	${HAVE_opencv_face})
-ENDIF()
+
 ############################### face code gen END ##############################
 
 ############################### dnn code gen START ##############################
-#IF(HAVE_opencv_dnn)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "dnn/net_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Net.g.cs"
@@ -2284,11 +2275,11 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_dnn})
-#ENDIF()
+
 ############################### dnn code gen END ##############################
 
 ############################### stereo code gen START ##############################
-IF(HAVE_opencv_stereo)
+
   CREATE_OCV_CLASS_PROPERTY( 
     "stereo/quasi_dense_stereo_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Stereo/QuasiDenseStereo.g.cs"
@@ -2309,7 +2300,7 @@ IF(HAVE_opencv_stereo)
 	""
 	""
 	${HAVE_opencv_stereo})
-ENDIF()
+
 ############################### stereo code gen END ##############################
 
 ############################### OPENMP START ##############################
@@ -2769,14 +2760,14 @@ ENDIF()
 ############################### OpenCL END ################################
 
 ############################### xfeatures2d START ##############################
-IF(HAVE_opencv_xfeatures2d)
+
   IF( (NOT WITH_CUDA) OR (NOT (TARGET opencv_cudaimgproc)) )
     FILE(GLOB xfeatures2d_srcs_excludes "xfeatures2d/nonfree_gpu_c.cpp")
     LIST(REMOVE_ITEM extern_srcs ${xfeatures2d_srcs_excludes})
     FILE(GLOB xfeatures2d_hdrs_excludes "xfeatures2d/nonfree_gpu_c.h")
     LIST(REMOVE_ITEM extern_hdrs ${xfeatures2d_hdrs_excludes})
   ENDIF()
-ENDIF()
+
 ############################### xfeatures2d END ################################
 
 IF(DEFINED CVEXTERN_DEPENDENCY_DLLS)
