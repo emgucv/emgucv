@@ -56,7 +56,7 @@ fi
 if [ "$1" != "simulator_x86_64" ]; then
     mkdir -p platforms/ios/i386
     cd platforms/ios/i386
-    if [ "$1" == "simulator" ]; then    
+    if [ "$1" = "simulator" ]; then    
   #skip the first parameter
     ../configure-simulator_xcode.sh -DIOS_ARCH="i386" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:2}
     else
