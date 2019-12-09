@@ -170,16 +170,30 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
       TARGET ${target}
       COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /project ${project_name}
       COMMENT "Building ${target}")
-  ELSEIF(MSBUILD_EXECUTABLE)
+  ELSEIF(VSTOOL_EXECUTABLE)      
     IF ("${project_name}" STREQUAL "")
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
-      COMMAND ${MSBUILD_EXECUTABLE}  /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
+      COMMAND ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
+      COMMAND ${VSTOOL_EXECUTABLE} build -t:Build -c:"${DEFAULT_CS_CONFIG}" ${extra_flags} ${solution_file}
       COMMENT "Building ${target}")
     ELSE()
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
-      COMMAND ${MSBUILD_EXECUTABLE}  /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${project_name}:Build
+      COMMAND ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
+      COMMAND ${VSTOOL_EXECUTABLE} build -t:Build -c:"${DEFAULT_CS_CONFIG}" ${extra_flags} ${solution_file} -p:${project_name}
+      COMMENT "Building ${target}")
+    ENDIF()
+  ELSEIF(MSBUILD_EXECUTABLE)
+    IF ("${project_name}" STREQUAL "")
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
+      COMMENT "Building ${target}")
+    ELSE()
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${project_name}:Build
       COMMENT "Building ${target}")
     ENDIF()
   ELSE()
