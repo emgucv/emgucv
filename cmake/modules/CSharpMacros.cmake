@@ -171,11 +171,17 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
       COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /project ${project_name}
       COMMENT "Building ${target}")
   ELSEIF(MSBUILD_EXECUTABLE)
-    #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}")
+    IF ("${project_name}" STREQUAL "")
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${MSBUILD_EXECUTABLE}  /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
+      COMMENT "Building ${target}")
+    ELSE()
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       COMMAND ${MSBUILD_EXECUTABLE}  /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${project_name}:Build
       COMMENT "Building ${target}")
+    ENDIF()
   ELSE()
     MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
   ENDIF()

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/zsh
 set -e
 
 if [ ! -L cmake ]
@@ -19,7 +19,7 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     mkdir -p platforms/ios/armv7s     
     cd platforms/ios/armv7s
     ../configure-device_xcode.sh -DIOS_ARCH="armv7s" $*
-    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7s" -target ALL_BUILD clean build
+    ./xcodebuild_wrapper BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -configuration Release -target package build
 #    cp -r ../../../libs/Release/* bin/Release
 #    cp -r opencv/3rdparty/lib/Release/* bin/Release
 #    cp -r opencv/lib/Release/* bin/Release
@@ -31,7 +31,7 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     mkdir -p platforms/ios/armv7
     cd platforms/ios/armv7
     ../configure-device_xcode.sh -DIOS_ARCH="armv7" $*
-    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="armv7" -target ALL_BUILD clean build
+    ./xcodebuild_wrapper BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -configuration Release -target package build
 #    cp -r ../../../libs/Release/* bin/Release
 #    cp -r opencv/3rdparty/lib/Release/* bin/Release
 #    cp -r opencv/lib/Release/* bin/Release	
@@ -43,7 +43,7 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     mkdir -p platforms/ios/arm64
     cd platforms/ios/arm64
     ../configure-device_xcode.sh -DIOS_ARCH="arm64" $*
-    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -sdk iphoneos -configuration Release ARCHS="arm64" -target ALL_BUILD clean build
+    ./xcodebuild_wrapper BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs 8 -configuration Release -target package build
 #    cp -r ../../../libs/Release/* bin/Release
 #    cp -r opencv/3rdparty/lib/Release/* bin/Release  
 #    cp -r opencv/lib/Release/* bin/Release
@@ -62,7 +62,7 @@ if [ "$1" != "simulator_x86_64" ]; then
     else
     ../configure-simulator_xcode.sh -DIOS_ARCH="i386" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE $*
     fi
-    xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="i386" -target ALL_BUILD clean build
+    ./xcodebuild_wrapper -parallelizeTargets -jobs 8 -configuration Release -target package build
 #    cp -r ../../../libs/Release/* bin/Release
 #    cp -r opencv/3rdparty/lib/Release/* bin/Release  
 #    cp -r opencv/lib/Release/* bin/Release
@@ -76,13 +76,13 @@ fi
 
 mkdir -p platforms/ios/x86_64
 cd platforms/ios/x86_64
-if [ \( "$1" == "simulator" \) -o \( "$1" == "simulator_x86_64" \) ]; then
+if [ \( "$1" = "simulator" \) -o \( "$1" = "simulator_x86_64" \) ]; then
   #skip the first parameter    
   ../configure-simulator_xcode.sh -DIOS_ARCH="x86_64" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:2}
 else
   ../configure-simulator_xcode.sh -DIOS_ARCH="x86_64" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE $*
 fi
-xcodebuild IPHONEOS_DEPLOYMENT_TARGET=8.0 WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs 8 -sdk iphonesimulator -configuration Release ARCHS="x86_64" -target ALL_BUILD clean build
+./xcodebuild_wrapper WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs 8 -configuration Release -target package build
 #cp -r ../../../libs/Release/* bin/Release
 #cp -r opencv/3rdparty/lib/Release/* bin/Release
 #cp -r opencv/lib/Release/* bin/Release
