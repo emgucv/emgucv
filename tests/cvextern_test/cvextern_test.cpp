@@ -139,6 +139,7 @@ void Test_vectorOfPoint_to_mat()
 
 #ifdef _MSC_VER
 
+#ifdef HAVE_OPENCV_VIDEOIO
 void Test_MSMF_VideoWriter()
 {
 	cv::Size frameSize(640, 480);
@@ -148,6 +149,7 @@ void Test_MSMF_VideoWriter()
 	writer.write(frame);
 	writer.release();
 }
+#endif
 
 void Test_quaternions_performance()
 {
@@ -257,7 +259,9 @@ int main()
    
    Test_SeamlessClone(3840);
 
+#ifdef HAVE_OPENCV_VIDEOIO
    Test_MSMF_VideoWriter();
+#endif
 
    cin >>tmp; //wait for input only if compiling with visual C++ 
 #endif
