@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
+IF(HAVE_IOS)
 #  IF (DOTNET_FOUND)
 #  IF (APPLE AND MSBUILD_FOUND)
 #      PROJECT(Emgu.CV.World.IOS)
@@ -34,12 +34,12 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 #  ENDIF()
   
   INSTALL(
-      DIRECTORY
-      ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION Emgu.CV.World/iOS
+      DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+      DESTINATION Emgu.CV.World
       COMPONENT emgucv_source
       FILES_MATCHING 
       PATTERN "Emgu.CV.World.IOS.csproj"
+	  PATTERN "*.cs"
       PATTERN ".svn" EXCLUDE
       PATTERN "obj" EXCLUDE
       PATTERN "CMakeFiles" EXCLUDE
