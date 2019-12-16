@@ -8,10 +8,39 @@
 #ifndef EMGU_BIOINSPIRED_C_H
 #define EMGU_BIOINSPIRED_C_H
 
+#include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_FUZZY
+
 #include "opencv2/bioinspired/retina.hpp"
 #include "opencv2/bioinspired/retinafasttonemapping.hpp"
 #include "emgu_c.h"
+
+#else
+
+static inline CV_NORETURN void throw_no_bioinspired() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Bioinspired support"); }
+
+namespace cv
+{
+	namespace  bioinspired
+	{
+		class Retina
+		{
+			
+		};
+		class RetinaParameters
+		{
+			
+		};
+		class RetinaFastToneMapping
+		{
+			
+		};
+	}
+}
+
+#endif
 
 //Retina
 CVAPI(cv::bioinspired::Retina*) cveRetinaCreate(CvSize* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength, cv::Ptr<cv::bioinspired::Retina>** sharedPtr);

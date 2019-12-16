@@ -85,7 +85,6 @@ CVAPI(cv::_InputOutputArray*) cvInputOutputArrayFromVectorOf${VECTOR_NAME}(void*
 
 CVAPI(int) VectorOf${VECTOR_NAME}SizeOfItemInBytes();
 
-
 ${COMPILATION_CONDITION_C_CLOSE}
 
 #endif

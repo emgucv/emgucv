@@ -9,63 +9,110 @@
 //Retina
 cv::bioinspired::Retina* cveRetinaCreate(CvSize* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength, cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
 {
-   
-   cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::Retina::create(*inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
-   *sharedPtr = new cv::Ptr<cv::bioinspired::Retina>(ptr);
-   return ptr.get();
+#ifdef HAVE_OPENCV_FUZZY
+	cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::Retina::create(*inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+	*sharedPtr = new cv::Ptr<cv::bioinspired::Retina>(ptr);
+	return ptr.get();
+#else
+	throw_no_bioinspired();
+#endif
 }
-void cveRetinaRelease( cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
+void cveRetinaRelease(cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
 {
-   delete *sharedPtr;
-   *sharedPtr = 0;
+#ifdef HAVE_OPENCV_FUZZY
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_bioinspired();
+#endif
 }
 void cveRetinaRun(cv::bioinspired::Retina* retina, cv::_InputArray* image)
 {
-   retina->run(*image);
+#ifdef HAVE_OPENCV_FUZZY
+	retina->run(*image);
+#else
+	throw_no_bioinspired();
+#endif
 }
 void cveRetinaGetParvo(cv::bioinspired::Retina* retina, cv::_OutputArray* parvo)
 {
-   retina->getParvo(*parvo);
+#ifdef HAVE_OPENCV_FUZZY
+	retina->getParvo(*parvo);
+#else
+	throw_no_bioinspired();
+#endif
 }
 void cveRetinaGetMagno(cv::bioinspired::Retina* retina, cv::_OutputArray* magno)
 {
-   retina->getMagno(*magno);
+#ifdef HAVE_OPENCV_FUZZY
+	retina->getMagno(*magno);
+#else
+	throw_no_bioinspired();
+#endif
 }
 void cveRetinaClearBuffers(cv::bioinspired::Retina* retina)
 {
-   retina->clearBuffers();
+#ifdef HAVE_OPENCV_FUZZY
+	retina->clearBuffers();
+#else
+	throw_no_bioinspired();
+#endif
 }
 void cveRetinaGetParameters(cv::bioinspired::Retina* retina, cv::bioinspired::RetinaParameters* p)
 {
-   cv::bioinspired::RetinaParameters result = retina->getParameters();
-   memcpy(p, &result, sizeof(cv::bioinspired::RetinaParameters));
+#ifdef HAVE_OPENCV_FUZZY
+	cv::bioinspired::RetinaParameters result = retina->getParameters();
+	memcpy(p, &result, sizeof(cv::bioinspired::RetinaParameters));
+#else
+	throw_no_bioinspired();
+#endif
 }
 void cveRetinaSetParameters(cv::bioinspired::Retina* retina, cv::bioinspired::RetinaParameters* p)
 {
-   retina->setup(*p);
+#ifdef HAVE_OPENCV_FUZZY
+	retina->setup(*p);
+#else
+	throw_no_bioinspired();
+#endif
 }
 
 
 //RetinaFastToneMapping
 cv::bioinspired::RetinaFastToneMapping* cveRetinaFastToneMappingCreate(CvSize* inputSize, cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr)
 {
+#ifdef HAVE_OPENCV_FUZZY
 	cv::Ptr<cv::bioinspired::RetinaFastToneMapping> ptr = cv::bioinspired::RetinaFastToneMapping::create(*inputSize);
 	*sharedPtr = new cv::Ptr<cv::bioinspired::RetinaFastToneMapping>(ptr);
 	return (*sharedPtr)->get();
+#else
+	throw_no_bioinspired();
+#endif
 }
 void cveRetinaFastToneMappingSetup(cv::bioinspired::RetinaFastToneMapping* toneMapping, float photoreceptorsNeighborhoodRadius, float ganglioncellsNeighborhoodRadius, float meanLuminanceModulatorK)
 {
+#ifdef HAVE_OPENCV_FUZZY
 	toneMapping->setup(photoreceptorsNeighborhoodRadius, ganglioncellsNeighborhoodRadius, meanLuminanceModulatorK);
+#else
+	throw_no_bioinspired();
+#endif
 }
 void cveRetinaFastToneMappingApplyFastToneMapping(
-	cv::bioinspired::RetinaFastToneMapping* toneMapping, 
-	cv::_InputArray* inputImage, 
+	cv::bioinspired::RetinaFastToneMapping* toneMapping,
+	cv::_InputArray* inputImage,
 	cv::_OutputArray* outputToneMappedImage)
 {
+#ifdef HAVE_OPENCV_FUZZY
 	toneMapping->applyFastToneMapping(*inputImage, *outputToneMappedImage);
+#else
+	throw_no_bioinspired();
+#endif
 }
 void cveRetinaFastToneMappingRelease(cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr)
 {
-	delete *sharedPtr;
+#ifdef HAVE_OPENCV_FUZZY
+	delete* sharedPtr;
 	*sharedPtr = 0;
+#else
+	throw_no_bioinspired();
+#endif
 }

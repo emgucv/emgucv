@@ -81,18 +81,14 @@ CREATE_VECTOR_CS("Triangle2DF" "cv::Vec6f" "Triangle2DF" "struct" "${CMAKE_CURRE
 #  CREATE_VECTOR_CS("ObjectDetection" "cv::lsvm::LSVMDetector::ObjectDetection" "MCvObjectDetection" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"opencv2/latentsvm.hpp\"" "" "1")
 #ENDIF()
 
-#IF(HAVE_opencv_text)
-  CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text" Emgu.CV.Text "" "#include \"opencv2/text/erfilter.hpp\"" "" "defined(HAVE_OPENCV_TEXT)")
-  CREATE_VECTOR_CS("VectorOfERStat" "std::vector< cv::text::ERStat >" "MCvERStat" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text" Emgu.CV.Text "" "#include \"opencv2/text/erfilter.hpp\"" "" "defined(HAVE_OPENCV_TEXT)")
-#ENDIF()
+CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text" Emgu.CV.Text "" "#include \"opencv2/text/erfilter.hpp\"" "" "defined(HAVE_OPENCV_TEXT)")
+CREATE_VECTOR_CS("VectorOfERStat" "std::vector< cv::text::ERStat >" "MCvERStat" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text" Emgu.CV.Text "" "#include \"opencv2/text/erfilter.hpp\"" "" "defined(HAVE_OPENCV_TEXT)")
 
 #IF(HAVE_opencv_line_descriptor)
 #  CREATE_VECTOR_CS("KeyLine" "cv::line_descriptor::KeyLine" "MKeyLine" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/LineDescriptor" Emgu.CV.LineDescriptor "" "#include \"opencv2/line_descriptor.hpp\"")
 #ENDIF()
 
-#IF(HAVE_opencv_videoio)
-  CREATE_VECTOR_CS("ColorPoint" "ColorPoint" "ColorPoint" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"videoio_c_extra.h\"" "" "defined(HAVE_OPENCV_VIDEOIO)")
-#ENDIF()
+CREATE_VECTOR_CS("ColorPoint" "ColorPoint" "ColorPoint" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"videoio_c_extra.h\"" "" "defined(HAVE_OPENCV_VIDEOIO)")
 
 IF(EMGU_CV_WITH_TESSERACT)
   CREATE_VECTOR_CS("TesseractResult" "TesseractResult" "TesseractResult" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.OCR/" Emgu.CV.OCR "" "#include \"tesseract_c.h\"" "" "1")
@@ -2313,7 +2309,6 @@ IF(WITH_OPENMP)
   endif()
 ENDIF()
 ############################### OPENMP END ################################
-
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")

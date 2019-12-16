@@ -8,8 +8,26 @@
 #ifndef EMGU_FREETYPE_C_H
 #define EMGU_FREETYPE_C_H
 
+#include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_FREETYPE
 #include "opencv2/freetype.hpp"
+#else
+
+static inline CV_NORETURN void throw_no_freetype() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Freetype support"); }
+
+namespace cv
+{
+	namespace freetype
+	{
+		class FreeType2
+		{
+
+		};
+	}
+}
+#endif
 
 CVAPI(cv::freetype::FreeType2*) cveFreeType2Create(cv::Algorithm** algorithmPtr, cv::Ptr<cv::freetype::FreeType2>** sharedPtr);
 CVAPI(void) cveFreeType2Release(cv::Ptr<cv::freetype::FreeType2>** sharedPtr);
