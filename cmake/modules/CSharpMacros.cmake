@@ -191,9 +191,10 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
       COMMAND ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
       COMMENT "Building ${target}")
     ELSE()
+	STRING(REGEX REPLACE "." "_" msbuild_target_name ${project_name})
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
-      COMMAND ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${project_name}:Build
+      COMMAND ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${msbuild_target_name}
       COMMENT "Building ${target}")
     ENDIF()
   ELSE()
