@@ -178,7 +178,7 @@
     <Content Include="AppIcons\iTunesArtwork_512x512.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.World\Emgu.CV.World.IOS.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.World\iOS\Emgu.CV.World.IOS.csproj">
       <Project>{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}</Project>
       <Name>Emgu.CV.World.IOS</Name>
     </ProjectReference>
