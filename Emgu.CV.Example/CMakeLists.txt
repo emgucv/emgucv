@@ -200,7 +200,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       )
   ENDIF()
   
-  IF(HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM)
+  IF(HAVE_WINSTORE_10)
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/RealtimeCamera.UWP/"
@@ -251,99 +251,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     
   ENDIF()
   
-  IF(HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64 OR HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM)
-    INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WindowsUniversal81/Shared/"
-      DESTINATION Emgu.CV.Example/XamarinForms/WindowsUniversal81/Shared/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "*.cs"
-      PATTERN "Properties/*"
-      PATTERN "*.projitems"
-      PATTERN "*.shproj"
-      PATTERN "*.xaml"
-      PATTERN "*.json"
-      PATTERN "*.pfx"  
-      PATTERN ".git" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMake*" EXCLUDE
-      PATTERN "Release" EXCLUDE
-      PATTERN "Debug" EXCLUDE
-      PATTERN "RelWithDebInfo" EXCLUDE
-      PATTERN "*.dir" EXCLUDE
-      PATTERN "bin" EXCLUDE
-      )
-    
-    IF(HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64)
-      # ----------------------------------------------------------------------------
-      #  The example files
-      # ----------------------------------------------------------------------------
-      INSTALL(
-	DIRECTORY
-	"${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WindowsUniversal81/Windows/"
-	DESTINATION Emgu.CV.Example/XamarinForms/WindowsUniversal81/Windows/
-	COMPONENT emgucv_example_source
-	FILES_MATCHING 
-	PATTERN "*.cs"
-	PATTERN "*.csproj"
-	PATTERN "*.config"
-	PATTERN "*.shproj"
-	PATTERN "*.Xamarin"
-	PATTERN "*.appxmanifest"
-	PATTERN "*.projitems"
-	PATTERN "*.axml"
-	PATTERN "*.xaml"
-	PATTERN "*.xml"
-	PATTERN "*.txt"
-	PATTERN "*.png"
-	PATTERN "*.dll"
-	PATTERN "*.json"
-	PATTERN ".git" EXCLUDE
-	PATTERN "obj" EXCLUDE
-	PATTERN "CMake*" EXCLUDE
-	PATTERN "Release" EXCLUDE
-	PATTERN "Debug" EXCLUDE
-	PATTERN "RelWithDebInfo" EXCLUDE
-	PATTERN "*.dir" EXCLUDE
-	)
-    ENDIF()
-    IF(HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM)
-      # ----------------------------------------------------------------------------
-      #  The example files
-      # ----------------------------------------------------------------------------
-      INSTALL(
-	DIRECTORY
-	"${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WindowsUniversal81/WindowsPhone/"
-	DESTINATION Emgu.CV.Example/XamarinForms/WindowsUniversal81/WindowsPhone/
-	COMPONENT emgucv_example_source
-	FILES_MATCHING 
-	PATTERN "*.cs"
-	PATTERN "*.csproj"
-	PATTERN "*.config"
-	PATTERN "*.shproj"
-	PATTERN "*.Xamarin"
-	PATTERN "*.appxmanifest"
-	PATTERN "*.projitems"
-	PATTERN "*.axml"
-	PATTERN "*.xaml"
-	PATTERN "*.xml"
-	PATTERN "*.txt"
-	PATTERN "*.png"
-	PATTERN "*.dll"
-	PATTERN "*.json"
-	PATTERN ".git" EXCLUDE
-	PATTERN "obj" EXCLUDE
-	PATTERN "CMake*" EXCLUDE
-	PATTERN "Release" EXCLUDE
-	PATTERN "Debug" EXCLUDE
-	PATTERN "RelWithDebInfo" EXCLUDE
-	PATTERN "*.dir" EXCLUDE
-	)
-    ENDIF()
-  ENDIF()
-  
-  IF (HAVE_ANDROID OR HAVE_WINSTORE_81_X86 OR HAVE_WINSTORE_81_X64 OR HAVE_WINPHONE_81_X86 OR HAVE_WINPHONE_81_ARM OR HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM) 
+  IF (HAVE_ANDROID OR HAVE_WINSTORE_10) 
     INSTALL(
       FILES
       "PlanarSubdivision/DrawSubdivision.cs"
@@ -441,16 +349,16 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     
     add_subdirectory(HelloWorld)
     add_subdirectory(CameraCapture)
-    add_subdirectory(PlanarSubdivision)
+    #add_subdirectory(PlanarSubdivision)
     add_subdirectory(ShapeDetection)
-    add_subdirectory(FeatureMatching)
+    #add_subdirectory(FeatureMatching)
     add_subdirectory(TrafficSignRecognition)
     add_subdirectory(MotionDetection)
     add_subdirectory(VideoSurveillance)
-    add_subdirectory(FaceDetection)
+    #add_subdirectory(FaceDetection)
     add_subdirectory(Webservice_Host)
     add_subdirectory(Webservice_Client)
-    add_subdirectory(PedestrianDetection)
+    #add_subdirectory(PedestrianDetection)
     add_subdirectory(LicensePlateRecognition)
     add_subdirectory(OCR)
     add_subdirectory(Aruco)
