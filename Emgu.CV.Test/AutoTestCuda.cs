@@ -590,15 +590,18 @@ namespace Emgu.CV.Test
             using (GpuMat descriptorMat = new GpuMat())
             {
                 CudaInvoke.CvtColor(cudaImage, grayCudaImage, ColorConversion.Bgr2Gray);
+
+                //Async version
                 detector.DetectAsync(grayCudaImage, keyPointMat);
                 detector.Convert(keyPointMat, kpts);
-                //detector.ComputeRaw(grayCudaImage, null, keyPointMat, descriptorMat);
-                //detector.DownloadKeypoints(keyPointMat, kpts);
-
+                
                 foreach (MKeyPoint kpt in kpts.ToArray())
                 {
                     img.Draw(new CircleF(kpt.Point, 3.0f), new Bgr(0, 255, 0), 1);
                 }
+
+                //sync version
+                detector.DetectRaw(grayCudaImage, kpts);
 
                 //ImageViewer.Show(img);
             }
