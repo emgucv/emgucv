@@ -10,8 +10,8 @@ IF(NOT ("${MSBUILD_EXECUTABLE}" STREQUAL ""))
 PROJECT(Emgu.CV.Document)
 ADD_CUSTOM_TARGET(
    ${PROJECT_NAME} ALL
-   COMMAND "${MSBUILD_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj"
-   COMMAND "${MSBUILD_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj" /property:PresentationStyle=OpenXml /property:HelpFileFormat=OpenXml
+   COMMAND "${MSBUILD_EXECUTABLE}" /p:Configuration=${DEFAULT_CS_CONFIG} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj"
+   COMMAND "${MSBUILD_EXECUTABLE}" /p:Configuration=${DEFAULT_CS_CONFIG} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj" /property:PresentationStyle=OpenXml /property:HelpFileFormat=OpenXml
    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI)
