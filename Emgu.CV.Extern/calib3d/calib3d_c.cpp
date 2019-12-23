@@ -149,8 +149,8 @@ void cveStereoRectify(
 	cv::Rect rect1, rect2;
 	cv::stereoRectify(*cameraMatrix1, *distCoeffs1, *cameraMatrix2, *distCoeffs2, *imageSize, *r, *t, *r1, *r2,
 		*p1, *p2, *q, flags, alpha, *newImageSize, &rect1, &rect2);
-	*validPixROI1 = rect1;
-	*validPixROI2 = rect2;
+	*validPixROI1 = cvRect(rect1);
+	*validPixROI2 = cvRect(rect2);
 }
 
 void cveRodrigues(cv::_InputArray* src, cv::_OutputArray* dst, cv::_OutputArray* jacobian)

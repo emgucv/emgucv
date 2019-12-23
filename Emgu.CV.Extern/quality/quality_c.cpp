@@ -9,7 +9,7 @@
 void cveQualityBaseCompute(cv::quality::QualityBase* qualityBase, cv::_InputArray* cmpImgs, CvScalar* score)
 {
 	cv::Scalar s = qualityBase->compute(*cmpImgs);
-	*score = s;
+	*score = cvScalar(s);
 }
 
 void cveQualityBaseGetQualityMap(cv::quality::QualityBase* qualityBase, cv::_OutputArray* dst)

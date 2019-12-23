@@ -30,7 +30,10 @@ int cveWaitKey(int delay)
 void cveSelectROI(cv::String* windowName, cv::_InputArray* img, bool showCrosshair, bool fromCenter, CvRect* roi)
 {
 	cv::Rect r = cv::selectROI(*windowName, *img, showCrosshair, fromCenter);
-	*roi = r;
+	roi->x = r.x;
+	roi->y = r.y;
+	roi->width = r.width;
+	roi->height = r.height;
 }
 
 void cveSelectROIs(

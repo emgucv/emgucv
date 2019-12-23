@@ -110,7 +110,8 @@ int cveInputArrayGetDims(cv::_InputArray* ia, int i)
 void cveInputArrayGetSize(cv::_InputArray* ia, CvSize* size, int idx)
 {
 	cv::Size s = ia->size(idx);
-	*size = s;
+	size->width = s.width;
+	size->height = s.height;
 }
 int cveInputArrayGetDepth(cv::_InputArray* ia, int idx)
 {

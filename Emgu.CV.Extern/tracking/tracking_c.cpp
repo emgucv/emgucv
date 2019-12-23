@@ -21,7 +21,7 @@ bool cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
 {
 	cv::Rect2d box;
 	bool result = tracker->update(*image, box);
-	*boundingBox = box;
+	*boundingBox = cvRect(box);
 	return result;
 }
 /*
@@ -226,7 +226,7 @@ bool cveMultiTrackerUpdate(cv::MultiTracker* tracker, cv::Mat* image, std::vecto
 	boundingBox->clear();
 	for (std::vector<cv::Rect2d>::iterator it = bb.begin(); it != bb.end(); ++it)
 	{
-		boundingBox->push_back(*it);
+		boundingBox->push_back(cvRect(*it));
 	}
 	return result;
 }
@@ -242,7 +242,7 @@ void cveMultiTrackerGetObjects(cv::MultiTracker* tracker, std::vector<CvRect>* b
 	boundingBox->clear();
 	for (std::vector<cv::Rect2d>::iterator it = bb.begin(); it != bb.end(); ++it)
 	{
-		boundingBox->push_back(*it);
+		boundingBox->push_back(cvRect(*it));
 	}
 }
 

@@ -117,11 +117,11 @@ int cveStitcherComposePanorama2(cv::Stitcher* stitcher, cv::_InputArray* images,
 
 void cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox)
 {
-   *boundingBox = warper->buildMaps(*srcSize, *K, *R, *xmap, *ymap);
+   *boundingBox = cvRect(warper->buildMaps(*srcSize, *K, *R, *xmap, *ymap) );
 }
 void cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* src, cv::_InputArray* K, cv::_InputArray* R, int interpMode, int borderMode, cv::_OutputArray* dst, CvPoint* corner)
 {
-   *corner = warper->warp(*src, *K, *R, interpMode, borderMode, *dst);
+   *corner = cvPoint( warper->warp(*src, *K, *R, interpMode, borderMode, *dst) );
 }
 
 cv::detail::PlaneWarper* cvePlaneWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)

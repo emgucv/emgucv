@@ -33,7 +33,7 @@ void cveDPMDetectorDetect(DPMDetector* dpm, cv::Mat* image, std::vector<CvRect>*
 
 	for (std::vector<DPMDetector::ObjectDetection>::iterator it = dobjects.begin(); it != dobjects.end(); ++it)
 	{
-		rects->push_back(it->rect);
+		rects->push_back(cvRect(it->rect));
 		scores->push_back(it->score);
 		classIds->push_back(it->classID);
 	}
