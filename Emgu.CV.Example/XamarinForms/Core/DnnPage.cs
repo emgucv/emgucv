@@ -111,10 +111,22 @@ namespace Emgu.CV.XamarinForms
                     return String.Format("Failed to download the file {0} from {1}: {2}", configFile, url2, e.Message);
                 }
                 
-
                 _maskRcnnDetector = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(graphFile, configFile);
 
-                //BackendTargetPair[] availableBackends = DnnInvoke.GetAvailableBackends();
+                
+                //prefer cuda backend if available
+                foreach (BackendTargetPair p in DnnInvoke.GetAvailableBackends())
+                { 
+                    if (p.Backend == Dnn.Backend.Cuda && p.Target == Target.Cuda)
+                    {
+                        _maskRcnnDetector.SetPreferableBackend(Dnn.Backend.Cuda);
+                        _maskRcnnDetector.SetPreferableTarget(Target.Cuda);
+                        break;
+                    }
+                }
+
+                //_maskRcnnDetector.SetPreferableBackend(Dnn.Backend.OpenCV);
+                //_maskRcnnDetector.SetPreferableTarget(Dnn.Target.Cpu);
 
                 _labels = File.ReadAllLines(lookupFile);
                 _colors = new MCvScalar[_labels.Length];
@@ -157,6 +169,16 @@ namespace Emgu.CV.XamarinForms
             button.Text = "Perform Mask-rcnn Detection";
             button.Clicked += OnButtonClicked;
 
+            BackendTargetPair[] availableBackends = Emgu.CV.Dnn.DnnInvoke.GetAvailableBackends();
+
+            StringBuilder availableBackendsStr = new StringBuilder("Available backends: "+ Environment.NewLine);
+            foreach (BackendTargetPair p in availableBackends)
+            {
+                availableBackendsStr.Append(String.Format("Backend: {0}, Target: {1}{2}", p.Backend, p.Target,
+                    Environment.NewLine));
+            }
+            SetMessage(availableBackendsStr.ToString());
+
             OnImagesLoaded += async (sender, image) =>
             {
                 if (image == null || image[0] == null)
@@ -181,7 +203,7 @@ namespace Emgu.CV.XamarinForms
                           _maskRcnnDetector.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
                           watch.Stop();
                           
-                          msg = String.Format("Mask RCNN inception completed in {0} milliseconds.",
+                          msg = String.Format("Mask RCNN inception completed in {0} milliseconds",
                               watch.ElapsedMilliseconds);
 
                           using (Mat boxes = tensors[0])
