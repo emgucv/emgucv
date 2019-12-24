@@ -162,7 +162,7 @@ void cudaCalcNormDiff(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputA
 void cudaAbsSum(cv::_InputArray* src, CvScalar* sum, cv::_InputArray* mask)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
-	*sum = cv::cuda::absSum(*src, mask ? *mask : (cv::_InputArray) cv::noArray());
+	*sum = cvScalar(cv::cuda::absSum(*src, mask ? *mask : (cv::_InputArray) cv::noArray()));
 #else
 	throw_no_cudaarithm();
 #endif
@@ -178,7 +178,7 @@ void cudaCalcAbsSum(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray
 void cudaSqrSum(cv::_InputArray* src, CvScalar* sqrSum, cv::_InputArray* mask)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
-	*sqrSum = cv::cuda::sqrSum(*src, mask ? *mask : (cv::_InputArray) cv::noArray());
+	*sqrSum = cvScalar(cv::cuda::sqrSum(*src, mask ? *mask : (cv::_InputArray) cv::noArray()));
 #else
 	throw_no_cudaarithm();
 #endif

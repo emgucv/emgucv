@@ -80,7 +80,7 @@ void cudaCascadeClassifierSetMinNeighbors(cv::cuda::CascadeClassifier* classifie
 void cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, CvSize* minObjectSize)
 {
 #ifdef HAVE_OPENCV_CUDAOBJDETECT
-   CvSize s = classifier->getMinObjectSize();
+   cv::Size s = classifier->getMinObjectSize();
    minObjectSize->width = s.width;
    minObjectSize->height = s.height;
 #else
