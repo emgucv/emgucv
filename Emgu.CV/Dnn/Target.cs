@@ -33,6 +33,22 @@ namespace Emgu.CV.Dnn
         /// <summary>
         /// Myraid
         /// </summary>
-        Myriad
+        Myriad,
+		/// <summary>
+        /// Vulkan
+        /// </summary>
+		Vulkan,
+		/// <summary>
+        /// FPGA device with CPU fallbacks using Inference Engine's Heterogeneous plugin.
+        /// </summary>
+        FPGA,
+		/// <summary>
+        /// Cuda
+        /// </summary>
+        Cuda,
+		/// <summary>
+        /// Cuda fp16
+        /// </summary>
+        CudaFp16
     }
 }
