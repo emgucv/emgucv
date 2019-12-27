@@ -65,10 +65,10 @@ void cudaVideoReaderRelease(cv::Ptr<cv::cudacodec::VideoReader>** reader)
 	throw_no_cudacodec();
 #endif
 }
-bool cudaVideoReaderNextFrame(cv::cudacodec::VideoReader* reader, cv::_OutputArray* frame)
+bool cudaVideoReaderNextFrame(cv::cudacodec::VideoReader* reader, cv::cuda::GpuMat* frame, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDACODEC
-	return reader->nextFrame(*frame);
+	return reader->nextFrame(*frame, stream ? *stream : cv::cuda::Stream::Null());
 #else
 	throw_no_cudacodec();
 #endif

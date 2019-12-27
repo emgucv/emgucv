@@ -93,7 +93,15 @@ namespace Emgu.CV.XPhoto
             /// <summary>
             /// Shift map
             /// </summary>
-            Shiftmap = 0
+            Shiftmap = 0,
+            /// <summary>
+            /// Performs Frequency Selective Reconstruction (FSR). Slower but better inpainting
+            /// </summary>
+            FsrBest = 1,
+            /// <summary>
+            /// Performs Frequency Selective Reconstruction (FSR). Faster inpainting. 
+            /// </summary>
+            FsrFast = 2
         }
 
         /// <summary>

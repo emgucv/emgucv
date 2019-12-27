@@ -35,6 +35,14 @@ namespace Emgu.CV.Dnn
         /// <summary>
         /// OpenCV's implementation
         /// </summary>
-        OpenCV
+        OpenCV,
+		/// <summary>
+        /// Vulkan based backend
+        /// </summary>
+		VkCom,
+		/// <summary>
+        /// Cuda backend
+        /// </summary>
+		Cuda
     }
 }

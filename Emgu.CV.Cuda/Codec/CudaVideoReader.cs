@@ -26,6 +26,10 @@ namespace Emgu.CV.Cuda
             JPEG,
             H264_SVC,
             H264_MVC,
+            HEVC,
+            VP8,
+            VP9,
+            NumCodecs,
             Uncompressed_YUV420 = (('I' << 24) | ('Y' << 16) | ('U' << 8) | ('V')),   //!< Y,U,V (4:2:0)
             Uncompressed_YV12 = (('Y' << 24) | ('V' << 16) | ('1' << 8) | ('2')),   //!< Y,V,U (4:2:0)
             Uncompressed_NV12 = (('N' << 24) | ('V' << 16) | ('1' << 8) | ('2')),   //!< Y,UV  (4:2:0)
@@ -38,7 +42,8 @@ namespace Emgu.CV.Cuda
             Monochrome = 0,
             YUV420,
             YUV422,
-            YUV444
+            YUV444,
+            NumFormats
         }
 
         public struct FormatInfo
@@ -55,12 +60,9 @@ namespace Emgu.CV.Cuda
                 _ptr = CudaInvoke.cudaVideoReaderCreate(s, ref _sharedPtr);
         }
 
-        public bool NextFrame(IOutputArray frame)
+        public bool NextFrame(GpuMat frame, Stream stream = null)
         {
-            using (OutputArray oaFrame = frame.GetOutputArray())
-            {
-                return CudaInvoke.cudaVideoReaderNextFrame(_ptr, oaFrame);
-            }
+            return CudaInvoke.cudaVideoReaderNextFrame(_ptr, frame, stream);
         }
 
         public FormatInfo Format
@@ -94,7 +96,7 @@ namespace Emgu.CV.Cuda
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool cudaVideoReaderNextFrame(IntPtr reader, IntPtr frame);
+        internal static extern bool cudaVideoReaderNextFrame(IntPtr reader, IntPtr frame, IntPtr stream);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cudaVideoReaderFormat(IntPtr reader, ref CudaVideoReader.FormatInfo formatInfo);
