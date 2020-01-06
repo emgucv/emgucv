@@ -137,8 +137,76 @@ void drawKeypoints(
 	cv::drawKeypoints(*image, *keypoints, *outImage, *color, static_cast<cv::DrawMatchesFlags>( flags ));
 }
 
-// Draws matches of keypints from two images on output image.
-void drawMatchedFeatures(
+// Draws matches of keypoints from two images on output image.
+void drawMatchedFeatures1(
+	cv::_InputArray* img1,
+	const std::vector<cv::KeyPoint>* keypoints1,
+	cv::_InputArray* img2,
+	const std::vector<cv::KeyPoint>* keypoints2,
+	std::vector< cv::DMatch >* matches,
+	cv::_InputOutputArray* outImg,
+	const CvScalar* matchColor,
+	const CvScalar* singlePointColor,
+	std::vector< unsigned char >* matchesMask,
+	int flags)
+{
+	if (matchesMask)
+	{
+		std::vector< char >  matchesVec;	
+		for (std::vector< unsigned char >::iterator it = matchesMask->begin(); it != matchesMask->end(); ++it)
+		{
+			matchesVec.push_back(static_cast<char>(*it));
+		}
+
+		cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg,
+			*matchColor, *singlePointColor, matchesVec, static_cast<cv::DrawMatchesFlags>(flags));
+	}
+	else
+	{
+		cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg,
+			*matchColor, *singlePointColor, std::vector< char >(), static_cast<cv::DrawMatchesFlags>(flags));
+	}
+}
+
+void drawMatchedFeatures2(
+	cv::_InputArray* img1,
+	const std::vector<cv::KeyPoint>* keypoints1,
+	cv::_InputArray* img2,
+	const std::vector<cv::KeyPoint>* keypoints2,
+	std::vector< std::vector< cv::DMatch > >* matches,
+	cv::_InputOutputArray* outImg,
+	const CvScalar* matchColor, 
+	const CvScalar* singlePointColor,
+	std::vector< std::vector< unsigned char > >* matchesMask,
+	int flags)
+{
+	if (matchesMask)
+	{
+		std::vector< std::vector< char > > matchesVec;
+		
+		for (std::vector< std::vector< unsigned char > >::iterator it = matchesMask->begin();
+			it != matchesMask->begin();
+			++it)
+		{
+			std::vector< char > charVec;
+			for (std::vector< unsigned char >::iterator it2 = it->begin(); it2 != it->end(); ++it2)
+			{
+				charVec.push_back(static_cast<char>(*it2));
+			}
+			matchesVec.push_back(charVec);
+		}
+		cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg,
+			*matchColor, *singlePointColor, matchesVec, static_cast<cv::DrawMatchesFlags>( flags ));
+	}
+	else
+	{
+		cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg,
+			*matchColor, *singlePointColor, std::vector< std::vector< char > >(), static_cast<cv::DrawMatchesFlags>( flags ));
+	}
+
+}
+
+void drawMatchedFeatures3(
 	cv::_InputArray* img1, const std::vector<cv::KeyPoint>* keypoints1,
 	cv::_InputArray* img2, const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< std::vector< cv::DMatch > >* matches,
@@ -166,12 +234,12 @@ void drawMatchedFeatures(
 			matchesVec[i][1] = 0;
 		}
 		cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg,
-			*matchColor, *singlePointColor, matchesVec, static_cast<cv::DrawMatchesFlags>( flags ));
+			*matchColor, *singlePointColor, matchesVec, static_cast<cv::DrawMatchesFlags>(flags));
 	}
 	else
 	{
 		cv::drawMatches(*img1, *keypoints1, *img2, *keypoints2, *matches, *outImg,
-			*matchColor, *singlePointColor, std::vector< std::vector< char > >(), static_cast<cv::DrawMatchesFlags>( flags ));
+			*matchColor, *singlePointColor, std::vector< std::vector< char > >(), static_cast<cv::DrawMatchesFlags>(flags));
 	}
 
 }
