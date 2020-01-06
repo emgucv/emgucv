@@ -604,6 +604,18 @@ void cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes,
 	cv::ellipse(*img, *center, *axes, angle, startAngle, endAngle, *color, thickness, lineType, shift);
 }
 
+void cveDrawMarker(
+	cv::_InputOutputArray* img,
+	CvPoint* position,
+	CvScalar* color,
+	int markerType,
+	int markerSize,
+	int thickness,
+	int lineType)
+{
+	cv::drawMarker(*img, *position, *color, markerType, markerSize, thickness, lineType);
+}
+
 void cveApplyColorMap1(cv::_InputArray* src, cv::_OutputArray* dst, int colorMap)
 {
 	cv::applyColorMap(*src, *dst, colorMap);

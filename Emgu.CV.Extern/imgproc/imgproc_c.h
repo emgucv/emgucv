@@ -12,8 +12,8 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/imgproc/imgproc_c.h"
 #include "opencv2/imgproc/types_c.h"
-//#include "opencv2/calib3d/calib3d.hpp"
 #include "emgu_c.h"
+
 CVAPI(IplImage*) cvGetImageSubRect(IplImage* image, CvRect* rect);
 
 //GrabCut
@@ -185,6 +185,14 @@ CVAPI(void) cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes
               double angle, double startAngle, double endAngle,
               const CvScalar* color, int thickness, int lineType, int shift );
 
+CVAPI(void) cveDrawMarker(
+	cv::_InputOutputArray* img, 
+	CvPoint* position, 
+	CvScalar* color,
+	int markerType, 
+	int markerSize, 
+	int thickness,
+	int lineType);
 
 //color map
 CVAPI(void) cveApplyColorMap1(cv::_InputArray* src, cv::_OutputArray* dst, int colorMap);

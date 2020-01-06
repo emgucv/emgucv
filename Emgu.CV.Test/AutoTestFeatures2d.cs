@@ -323,7 +323,7 @@ namespace Emgu.CV.Test
                     }
                     stopwatch.Stop();
                     EmguAssert.WriteLine(String.Format("Time for feature matching: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-
+                    
                     bool success = false;
                     if (homography != null)
                     {

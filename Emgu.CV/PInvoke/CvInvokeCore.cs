@@ -1618,6 +1618,31 @@ namespace Emgu.CV
             Ellipse(img, Point.Round(box.Center), axes, box.Angle, 0, 360, color, thickness, lineType, shift);
         }
 
+        public static void DrawMarker(
+            IInputOutputArray img,
+            Point position,
+            MCvScalar color,
+            CvEnum.MarkerTypes markerType,
+            int markerSize = 20,
+            int thickness = 1,
+            CvEnum.LineType lineType = LineType.EightConnected)
+        {
+            using (InputOutputArray ioImg = img.GetInputOutputArray())
+            {
+                cveDrawMarker(ioImg, ref position, ref color, markerType, markerSize, thickness, lineType);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDrawMarker(
+            IntPtr img,
+            ref Point position,
+            ref MCvScalar color,
+            CvEnum.MarkerTypes markerType,
+            int markerSize,
+            int thickness,
+            CvEnum.LineType lineType);
+
         /// <summary>
         /// Fills the destination array with values from the look-up table. Indices of the entries are taken from the source array. That is, the function processes each element of src as following:
         /// dst(I)=lut[src(I)+DELTA]
