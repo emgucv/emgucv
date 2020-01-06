@@ -11,8 +11,10 @@ ${COMPILATION_CONDITION_CS_OPEN}
 
 using System;
 using System.Drawing;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using Emgu.CV.Structure;
 
 namespace ${NAMESPACE_CS}
@@ -20,6 +22,8 @@ namespace ${NAMESPACE_CS}
    /// <summary>
    /// Wrapped class of the C++ standard vector of ${VECTOR_NAME}.
    /// </summary>
+   [Serializable]
+   [DebuggerTypeProxy(typeof(VectorOf${VECTOR_NAME}.DebuggerProxy))]
    public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, IInputOutputArray
    {
       private readonly bool _needDispose;
@@ -204,6 +208,24 @@ namespace ${NAMESPACE_CS}
          return res;
       }
 #endif
+
+      internal class DebuggerProxy
+      {
+         private VectorOf${VECTOR_NAME} _v;
+
+         public DebuggerProxy(VectorOf${VECTOR_NAME} v)
+         {
+            _v = v;
+         }
+
+#if ${IS_VECTOR_OF_VECTOR}
+         public ${ELEMENT_OF_ELEMENT}[][] Values
+         {
+            get { return _v.ToArrayOfArray(); }
+         }
+#endif
+      }
+
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOf${VECTOR_NAME}Create();
