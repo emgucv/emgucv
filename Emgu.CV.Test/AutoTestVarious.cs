@@ -2603,7 +2603,7 @@ namespace Emgu.CV.Test
             Mat m = new Mat(new Size(640, 480), DepthType.Cv8U, 3);
             m.SetTo(new MCvScalar(0,0,0));
             CvInvoke.DrawMarker(m, new Point(200, 200), new MCvScalar(255.0, 255.0, 0), MarkerTypes.Diamond);
-            
+            //Emgu.CV.UI.ImageViewer.Show(m);
         }
 
         [Test]

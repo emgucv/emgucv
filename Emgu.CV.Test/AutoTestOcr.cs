@@ -131,7 +131,7 @@ namespace Emgu.CV.Test
                 System.IO.Directory.CreateDirectory(folderName);
             }
             String dest = System.IO.Path.Combine(folderName, String.Format("{0}.traineddata", lang));
-            if ((!System.IO.File.Exists(dest)) || (new FileInfo(dest).Length == 0))
+            if ((!System.IO.File.Exists(dest)) || (new System.IO.FileInfo(dest).Length == 0))
             {
                 String source = Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang);
 
