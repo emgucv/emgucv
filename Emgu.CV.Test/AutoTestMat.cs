@@ -56,6 +56,14 @@ namespace Emgu.CV.Test
       }
 
       [TestAttribute]
+      public void TestMatToByteArray()
+      {
+          Mat m = new Mat(new Size(320, 240), DepthType.Cv8U, 3);
+          byte[] bytes = new byte[m.Total.ToInt32() * m.ElementSize];
+          m.CopyTo(bytes);
+      }
+
+        [TestAttribute]
       public void TestMatToArr()
       {
          
