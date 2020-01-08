@@ -2,8 +2,6 @@
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !NETFX_CORE
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -298,5 +296,3 @@ namespace Emgu.CV.XamarinForms
 
     }
 }
-
-#endif

@@ -10,6 +10,7 @@ using System.Text;
 
 using Xamarin.Forms;
 using Emgu.CV.Structure;
+using Emgu.Util.TypeEnum;
 
 namespace Emgu.CV.XamarinForms
 {
@@ -53,7 +54,7 @@ namespace Emgu.CV.XamarinForms
                 dnnButton
             };
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
             {
                 Button viz3dButton = new Button();
                 viz3dButton.Text = "Viz3D";
@@ -94,7 +95,7 @@ namespace Emgu.CV.XamarinForms
             {
                 VerticalOptions = LayoutOptions.Start,
             };
-                
+
             foreach (View b in buttonList)
                 buttonsLayout.Children.Add(b);
 
@@ -102,17 +103,18 @@ namespace Emgu.CV.XamarinForms
             ContentPage page =
               new ContentPage()
               {
-                  Content = new ScrollView() { 
+                  Content = new ScrollView()
+                  {
                       Content = buttonsLayout,
-                      
-                      }
+
+                  }
               };
 
-#if NETFX_CORE
-		    String aboutIcon = "questionmark.png";
-#else
-            String aboutIcon = null;
-#endif
+            String aboutIcon;
+            if (Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
+                aboutIcon = "questionmark.png";
+            else
+                aboutIcon = null;
 
             MainPage =
              new NavigationPage(
@@ -153,16 +155,18 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new FeatureMatchingPage());
             };
 
+            if (Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
+            {
+                //ocrButton.IsVisible = false;
+                dnnButton.IsVisible = false;
+                faceLandmarkDetectionButton.IsVisible = false;
+            }
+            else
+            {
+                dnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new DnnPage()); };
+                faceLandmarkDetectionButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage()); };
+            }
 
-
-#if NETFX_CORE
-            //ocrButton.IsVisible = false;
-            dnnButton.IsVisible = false;
-            faceLandmarkDetectionButton.IsVisible = false;
-#else
-            dnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new DnnPage()); };
-            faceLandmarkDetectionButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage()); };
-#endif
             ocrButton.Clicked += (sender, args) =>
             {
                 MainPage.Navigation.PushAsync(new OcrPage());

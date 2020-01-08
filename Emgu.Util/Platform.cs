@@ -7,45 +7,54 @@ using Emgu.Util.TypeEnum;
 
 namespace Emgu.Util
 {
-   /// <summary>
-   /// Provide information for the platform which is using. 
-   /// </summary>
-   public static class Platform
-   {
-      private static readonly OS _os;
-      private static readonly ClrType _runtime;
+    /// <summary>
+    /// Provide information for the platform which is using. 
+    /// </summary>
+    public static class Platform
+    {
+        private static readonly OS _os;
+        private static readonly ClrType _runtime;
 
 #if !(__IOS__ || UNITY_IPHONE || __ANDROID__ || UNITY_ANDROID || WINDOWS_PHONE_APP || NETFX_CORE || NETSTANDARD)
       [DllImport("c")]
       private static extern int uname(IntPtr buffer);
 #endif
 
-      static Platform()
-      {
+        static Platform()
+        {
 #if __IOS__ || UNITY_IPHONE
          _os = OS.IOS;
          _runtime = ClrType.Mono;
 #elif __ANDROID__ || UNITY_ANDROID
          _os = OS.Android;
          _runtime = ClrType.Mono;
-#elif NETFX_CORE
-         _os = OS.Windows;
-         _runtime = ClrType.NetFxCore;
 #elif NETSTANDARD
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-            _os = OS.Windows;
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-            _os = OS.Linux;
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            _os = OS.MacOS;
-        } else {
-            //unknown
-        }
-        //how???
-        _runtime = ClrType.NetFxCore;
+            _runtime = ClrType.DotNet;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                _os = OS.Windows;
+                if (RuntimeInformation.FrameworkDescription.StartsWith(".NET Native",
+                        StringComparison.OrdinalIgnoreCase) ||
+                    RuntimeInformation.FrameworkDescription.StartsWith(".NET Core", StringComparison.OrdinalIgnoreCase))
+                    _runtime = ClrType.NetFxCore;
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                _os = OS.Linux;
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                _os = OS.MacOS;
+            }
+            else if (Emgu.Util.Toolbox.FindAssembly("Mono.Android.dll") != null)
+            {
+                _os = OS.Android;
+                _runtime = ClrType.Mono;
+            }
+            else
+            {
+                //unknown
+            }
 #else
             PlatformID pid = Environment.OSVersion.Platform;
          if (pid == PlatformID.MacOSX)
@@ -87,27 +96,27 @@ namespace Emgu.Util
 #endif
         }
 
-      /// <summary>
-      /// Get the type of the current operating system
-      /// </summary>
-      public static OS OperationSystem
-      {
-         get
-         {
+        /// <summary>
+        /// Get the type of the current operating system
+        /// </summary>
+        public static OS OperationSystem
+        {
+            get
+            {
 
-            return _os;
-         }
-      }
+                return _os;
+            }
+        }
 
-      /// <summary>
-      /// Get the type of the current runtime environment
-      /// </summary>
-      public static ClrType ClrType
-      {
-         get
-         {
-            return _runtime;
-         }
-      }
-   }
+        /// <summary>
+        /// Get the type of the current runtime environment
+        /// </summary>
+        public static ClrType ClrType
+        {
+            get
+            {
+                return _runtime;
+            }
+        }
+    }
 }

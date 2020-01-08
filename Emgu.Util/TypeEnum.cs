@@ -29,11 +29,7 @@ namespace Emgu.Util.TypeEnum
       /// <summary>
       /// Android devices
       /// </summary>
-      Android,
-      /// <summary>
-      /// The windows phone
-      /// </summary>
-      WindowsPhone
+      Android
    }
 
    /// <summary>

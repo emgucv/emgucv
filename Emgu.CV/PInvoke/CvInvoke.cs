@@ -361,8 +361,7 @@ namespace Emgu.CV
             return "lib{0}.dylib";
 #else
             String formatString = "{0}";
-            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows
-                || Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.WindowsPhone)
+            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
                 formatString = "{0}.dll";
             else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Linux)
                 formatString = "lib{0}.so";
