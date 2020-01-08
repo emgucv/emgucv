@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using Xamarin.Forms;
@@ -52,41 +53,42 @@ namespace Emgu.CV.XamarinForms
                 dnnButton
             };
 
-#if !(NETFX_CORE || __ANDROID__ || __IOS__ || __MACOS__)
-            Button viz3dButton = new Button();
-            viz3dButton.Text = "Viz3D";
-            buttonList.Add(viz3dButton);
-            
-            viz3dButton.Clicked += (sender, args) =>
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                using (Viz3d viz = new Viz3d("show_simple_widgets"))
+                Button viz3dButton = new Button();
+                viz3dButton.Text = "Viz3D";
+
+                buttonList.Add(viz3dButton);
+
+                viz3dButton.Clicked += (sender, args) =>
                 {
-                    viz.SetBackgroundMeshLab();
-                    using (WCoordinateSystem coor = new WCoordinateSystem())
+                    using (Viz3d viz = new Viz3d("show_simple_widgets"))
                     {
-                        viz.ShowWidget("coor", coor);
-                        using (WCube cube = new WCube(
-                            new MCvPoint3D64f(-.5, -.5, -.5),
-                            new MCvPoint3D64f(.5, .5, .5),
-                            true,
-                            new MCvScalar(255, 255, 255)))
+                        viz.SetBackgroundMeshLab();
+                        using (WCoordinateSystem coor = new WCoordinateSystem())
                         {
-                            viz.ShowWidget("cube", cube);
-                            using (WCube cube0 = new WCube(
-                                new MCvPoint3D64f(-1, -1, -1),
+                            viz.ShowWidget("coor", coor);
+                            using (WCube cube = new WCube(
                                 new MCvPoint3D64f(-.5, -.5, -.5),
-                                false,
-                                new MCvScalar(123, 45, 200)))
+                                new MCvPoint3D64f(.5, .5, .5),
+                                true,
+                                new MCvScalar(255, 255, 255)))
                             {
-                                viz.ShowWidget("cub0", cube0);
-                                viz.Spin();
+                                viz.ShowWidget("cube", cube);
+                                using (WCube cube0 = new WCube(
+                                    new MCvPoint3D64f(-1, -1, -1),
+                                    new MCvPoint3D64f(-.5, -.5, -.5),
+                                    false,
+                                    new MCvScalar(123, 45, 200)))
+                                {
+                                    viz.ShowWidget("cub0", cube0);
+                                    viz.Spin();
+                                }
                             }
                         }
                     }
-                }
-            };
-            
-#endif
+                };
+            }
 
             StackLayout buttonsLayout = new StackLayout
             {
