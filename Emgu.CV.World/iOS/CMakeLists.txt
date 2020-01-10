@@ -11,13 +11,14 @@ IF(HAVE_IOS)
 #      ADD_CUSTOM_COMMAND(
 #        TARGET ${PROJECT_NAME}
 #        #COMMAND "${MSBUILD_EXECUTABLE}" Emgu.CV.iOS.sln -p:TargetFrameworkRootPath="/Library/Frameworks/Xamarin.iOS.framework/Versions/Current" -p:MSBuildExtensionsPath="/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/msbuild/iOS" -p:Configuration=Release -p:OutputPath="../libs/ios_build" -p:GeneratedSourcesDir="../libs/ios_build"
-#	#COMMAND "${MSBUILD_EXECUTABLE}" Emgu.CV.World.IOS.csproj -p:TargetFrameworkRootPath="/Library/Frameworks/Xamarin.iOS.framework/Versions/Current" -p:MSBuildExtensionsPath="/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/msbuild/iOS" -p:Configuration=Release -p:Platform=AnyCPU
-#	COMMAND "${VSTOOL_EXECUTABLE}" build -t:Build -c:"Release|iPhone" Emgu.CV.World.iOS.csproj
+#	COMMAND env -i zsh "${MSBUILD_EXECUTABLE}" Emgu.CV.World.IOS.csproj -p:Configuration=Release -p:Platform=AnyCPU
+#	#COMMAND "${VSTOOL_EXECUTABLE}" build -t:Build -c:"Release|iPhone" Emgu.CV.World.iOS.csproj
 #        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 #	#WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/iOS"
 #        COMMENT "BUILDING ${PROJECT_NAME}")
       
-      BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/iOS/Emgu.CV.iOS.sln" "" "" ALL)
+#      BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/iOS/Emgu.CV.iOS.sln" "" "" ALL)
+    BUILD_CSPROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.World.IOS.csproj" "" ALL)
 
     INSTALL(
       FILES 
