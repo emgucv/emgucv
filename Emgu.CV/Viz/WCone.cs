@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2019 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
-#if ! ( __IOS__ || UNITY_IOS || UNITY_ANDROID )
+#if ! ( UNITY_IOS || UNITY_ANDROID )
 
 using System;
 using System.Runtime.InteropServices;
