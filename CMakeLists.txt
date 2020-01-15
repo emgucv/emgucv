@@ -1485,7 +1485,8 @@ ELSEIF (WIN32)
 	
 	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
 	  "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
-	Delete '$${vs_version}_INSTALL_FOLDEREmgu.CV.DebuggerVisualizers.${vs_version}.dll'
+	#Delete '$${vs_version}_INSTALL_FOLDEREmgu.CV.DebuggerVisualizers.${vs_version}.dll'
+	Delete '$${vs_version}_INSTALL_FOLDEREmgu.CV.DebuggerVisualizers.dll'
 	uninstallDebuggerVisualizer4${vs_version}Done:
 	")
       ENDMACRO()
