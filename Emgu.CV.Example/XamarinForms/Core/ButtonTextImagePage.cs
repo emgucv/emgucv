@@ -11,7 +11,9 @@ using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util.TypeEnum;
+using Xamarin.Forms.PlatformConfiguration;
 #if !__MACOS__
+using CoreMedia;
 using Plugin.Media;
 #endif
 
@@ -55,6 +57,8 @@ namespace Emgu.CV.XamarinForms
             Content = mainLayout;
         }
 
+        public bool HasCameraOption { get; set; }
+
         public virtual async void LoadImages(String[] imageNames, String[] labels = null)
         {
 #if __MACOS__
@@ -92,10 +96,32 @@ namespace Emgu.CV.XamarinForms
                 }
 
                 String action;
+                List<String> options = new List<string>();
+                options.Add("Default");
+                if (havePickImgOption)
+                    options.Add("Photo Library");
+                if (haveCameraOption)
+                    options.Add("Photo from Camera");
+
+#if __IOS__
+                if (this.HasCameraOption && haveCameraOption)
+                    options.Add("Camera");
+#endif
+                if (options.Count == 1)
+                {
+                    action = "Default";
+                }
+                else
+                {
+                    action = await DisplayActionSheet(pickImgString, "Cancel", null, options.ToArray());
+                    if (action == null) //user clicked outside of action sheet
+                        return;
+                }
+                /*
                 if (haveCameraOption & havePickImgOption)
                 {
                     action = await DisplayActionSheet(pickImgString, "Cancel", null, "Default", "Photo Library",
-                        "Camera");
+                        "Photo from Camera");
                     if (action == null) //user clicked outside of action sheet
                         return;
                 }
@@ -108,7 +134,7 @@ namespace Emgu.CV.XamarinForms
                 else
                 {
                     action = "Default";
-                }
+                }*/
 
                 if (action.Equals("Default"))
                 {
@@ -120,7 +146,6 @@ namespace Emgu.CV.XamarinForms
                         throw new FileNotFoundException(String.Format("File {0} do not exist.", imageNames[i]));
                     mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.AnyColor);
 #endif
-
                 }
                 else if (action.Equals("Photo Library"))
                 {
@@ -165,7 +190,7 @@ namespace Emgu.CV.XamarinForms
                     }
 #endif
                 }
-                else if (action.Equals("Camera"))
+                else if (action.Equals("Photo from Camera"))
                 {
 #if __ANDROID__ || __IOS__ || NETFX_CORE
                     var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
@@ -196,6 +221,10 @@ namespace Emgu.CV.XamarinForms
 
                     }
 #endif
+                }
+                else if (action.Equals("Camera"))
+                {
+                    mats = new Mat[0];
                 }
             }
             InvokeOnImagesLoaded(mats);

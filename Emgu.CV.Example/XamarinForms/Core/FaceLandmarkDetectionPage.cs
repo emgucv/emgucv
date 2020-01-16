@@ -39,7 +39,6 @@ namespace Emgu.CV.XamarinForms
         private Net _faceDetector = null;
         private FacemarkLBF _facemark = null;
 
-
         private void InitPath()
         {
             if (_path == null)
@@ -98,9 +97,72 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
+        private void DetectAndRender(Mat image)
+        {
+            int imgDim = 300;
+            MCvScalar meanVal = new MCvScalar(104, 177, 123);
+
+            Size imageSize = image.Size;
+            using (Mat inputBlob = DnnInvoke.BlobFromImage(
+                image,
+                1.0,
+                new Size(imgDim, imgDim),
+                meanVal,
+                false,
+                false))
+                _faceDetector.SetInput(inputBlob, "data");
+            using (Mat detection = _faceDetector.Forward("detection_out"))
+            {
+                float confidenceThreshold = 0.5f;
+
+                List<Rectangle> faceRegions = new List<Rectangle>();
+
+                float[,,,] values = detection.GetData(true) as float[,,,];
+                for (int i = 0; i < values.GetLength(2); i++)
+                {
+                    float confident = values[0, 0, i, 2];
+
+                    if (confident > confidenceThreshold)
+                    {
+                        float xLeftBottom = values[0, 0, i, 3] * imageSize.Width;
+                        float yLeftBottom = values[0, 0, i, 4] * imageSize.Height;
+                        float xRightTop = values[0, 0, i, 5] * imageSize.Width;
+                        float yRightTop = values[0, 0, i, 6] * imageSize.Height;
+                        RectangleF objectRegion = new RectangleF(
+                            xLeftBottom,
+                            yLeftBottom,
+                            xRightTop - xLeftBottom,
+                            yRightTop - yLeftBottom);
+                        Rectangle faceRegion = Rectangle.Round(objectRegion);
+                        faceRegions.Add(faceRegion);
+                    }
+                }
+
+                using (VectorOfRect vr = new VectorOfRect(faceRegions.ToArray()))
+                using (VectorOfVectorOfPointF landmarks = new VectorOfVectorOfPointF())
+                {
+                    _facemark.Fit(image, vr, landmarks);
+
+                    foreach (Rectangle face in faceRegions)
+                    {
+                        CvInvoke.Rectangle(image, face, new MCvScalar(0, 255, 0));
+                    }
+
+                    int len = landmarks.Size;
+                    for (int i = 0; i < landmarks.Size; i++)
+                    {
+                        using (VectorOfPointF vpf = landmarks[i])
+                            FaceInvoke.DrawFacemarks(image, vpf, new MCvScalar(255, 0, 0));
+                    }
+
+                }
+            }
+        }
+
         public FaceLandmarkDetectionPage()
             : base()
         {
+            //HasCameraOption = true;
 
             var button = this.GetButton();
             button.Text = "Perform Face Landmark Detection";
@@ -117,67 +179,11 @@ namespace Emgu.CV.XamarinForms
                     {
                         InitFaceDetector();
                         InitFacemark();
-
-                        int imgDim = 300;
-                        MCvScalar meanVal = new MCvScalar(104, 177, 123);
                         Stopwatch watch = Stopwatch.StartNew();
-                        Size imageSize = image[0].Size;
-                        using (Mat inputBlob = DnnInvoke.BlobFromImage(
-                            image[0],
-                            1.0,
-                            new Size(imgDim, imgDim),
-                            meanVal,
-                            false,
-                            false))
-                            _faceDetector.SetInput(inputBlob, "data");
-                        using (Mat detection = _faceDetector.Forward("detection_out"))
-                        {
-                            float confidenceThreshold = 0.5f;
 
-                            List<Rectangle> faceRegions = new List<Rectangle>();
-
-                            float[,,,] values = detection.GetData(true) as float[,,,];
-                            for (int i = 0; i < values.GetLength(2); i++)
-                            {
-                                float confident = values[0, 0, i, 2];
-
-                                if (confident > confidenceThreshold)
-                                {
-                                    float xLeftBottom = values[0, 0, i, 3] * imageSize.Width;
-                                    float yLeftBottom = values[0, 0, i, 4] * imageSize.Height;
-                                    float xRightTop = values[0, 0, i, 5] * imageSize.Width;
-                                    float yRightTop = values[0, 0, i, 6] * imageSize.Height;
-                                    RectangleF objectRegion = new RectangleF(
-                                        xLeftBottom,
-                                        yLeftBottom,
-                                        xRightTop - xLeftBottom,
-                                        yRightTop - yLeftBottom);
-                                    Rectangle faceRegion = Rectangle.Round(objectRegion);
-                                    faceRegions.Add(faceRegion);
-                                }
-                            }
-
-                            using (VectorOfRect vr = new VectorOfRect(faceRegions.ToArray()))
-                            using (VectorOfVectorOfPointF landmarks = new VectorOfVectorOfPointF())
-                            {
-                                _facemark.Fit(image[0], vr, landmarks);
-
-                                foreach (Rectangle face in faceRegions)
-                                {
-                                    CvInvoke.Rectangle(image[0], face, new MCvScalar(0, 255, 0));
-                                }
-
-                                int len = landmarks.Size;
-                                for (int i = 0; i < landmarks.Size; i++)
-                                {
-                                    using (VectorOfPointF vpf = landmarks[i])
-                                        FaceInvoke.DrawFacemarks(image[0], vpf, new MCvScalar(255, 0, 0));
-                                }
-
-                            }
-                            watch.Stop();
-                            return new Tuple<IInputArray, long>(image[0], watch.ElapsedMilliseconds);
-                        }
+                        DetectAndRender(image[0]);
+                        watch.Stop();
+                        return new Tuple<IInputArray, long>(image[0], watch.ElapsedMilliseconds);
                     });
                 t.Start();
 

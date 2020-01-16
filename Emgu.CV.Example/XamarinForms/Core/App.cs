@@ -144,7 +144,7 @@ namespace Emgu.CV.XamarinForms
             {
                 MainPage.Navigation.PushAsync(new FaceDetectionPage());
             };
-
+            
             pedestrianDetectionButton.Clicked += (sender, args) =>
             {
                 MainPage.Navigation.PushAsync(new PedestrianDetectionPage());
@@ -155,9 +155,9 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new FeatureMatchingPage());
             };
 
-            if (Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
+            if (Emgu.Util.Platform.ClrType == ClrType.NetFxCore)
             {
-                //ocrButton.IsVisible = false;
+                //No DNN module for UWP apps
                 dnnButton.IsVisible = false;
                 faceLandmarkDetectionButton.IsVisible = false;
             }

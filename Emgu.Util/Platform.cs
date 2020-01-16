@@ -15,21 +15,15 @@ namespace Emgu.Util
         private static readonly OS _os;
         private static readonly ClrType _runtime;
 
-#if !(__IOS__ || UNITY_IPHONE || __ANDROID__ || UNITY_ANDROID || WINDOWS_PHONE_APP || NETFX_CORE || NETSTANDARD)
-      [DllImport("c")]
-      private static extern int uname(IntPtr buffer);
-#endif
-
         static Platform()
         {
-#if __IOS__ || UNITY_IPHONE
+#if UNITY_IPHONE
          _os = OS.IOS;
          _runtime = ClrType.Mono;
-#elif __ANDROID__ || UNITY_ANDROID
+#elif UNITY_ANDROID
          _os = OS.Android;
          _runtime = ClrType.Mono;
-#elif NETSTANDARD
-            _runtime = ClrType.DotNet;
+#else
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 _os = OS.Windows;
@@ -37,14 +31,20 @@ namespace Emgu.Util
                         StringComparison.OrdinalIgnoreCase) ||
                     RuntimeInformation.FrameworkDescription.StartsWith(".NET Core", StringComparison.OrdinalIgnoreCase))
                     _runtime = ClrType.NetFxCore;
+                else
+                {
+                    _runtime = ClrType.DotNet;
+                }
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 _os = OS.Linux;
+                _runtime = ClrType.Mono;
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 _os = OS.MacOS;
+                _runtime = ClrType.Mono;
             }
             else if (Emgu.Util.Toolbox.FindAssembly("Mono.Android.dll") != null)
             {
@@ -53,59 +53,20 @@ namespace Emgu.Util
             }
             else
             {
-                //unknown
-            }
-#else
-            PlatformID pid = Environment.OSVersion.Platform;
-         if (pid == PlatformID.MacOSX)
-         {
-            //This never works, it is a bug in Mono
-            _os = OS.MacOS;
-         }
-         else
-         {
-            int p = (int)pid;
-            _os = ((p == 4) || (p == 128)) ? OS.Linux : OS.Windows;
+                _os = OS.Unknown;
+                _runtime = ClrType.Unknown;
 
-            if (_os == OS.Linux)
-            {  //Check if the OS is Mac OSX
-               IntPtr buf = IntPtr.Zero;
-               try
-               {
-                  buf = Marshal.AllocHGlobal(8192);
-                  // This is a hacktastic way of getting sysname from uname () 
-                  if (uname(buf) == 0)
-                  {
-                     string os = Marshal.PtrToStringAnsi(buf);
-                     if (os == "Darwin")
-                        _os = OS.MacOS;
-                  }
-               }
-               catch
-               {
-                  //Some unix system may not be able to call "libc"
-                  //such as Ubuntu 13.04, we provide a safe catch here
-               }
-               finally
-               {
-                  if (buf != IntPtr.Zero) Marshal.FreeHGlobal(buf);
-               }
             }
-         }
-         _runtime = (Type.GetType("System.MonoType", false) != null) ? ClrType.Mono : ClrType.DotNet;
 #endif
         }
+
 
         /// <summary>
         /// Get the type of the current operating system
         /// </summary>
         public static OS OperationSystem
         {
-            get
-            {
-
-                return _os;
-            }
+            get { return _os; }
         }
 
         /// <summary>
@@ -113,10 +74,9 @@ namespace Emgu.Util
         /// </summary>
         public static ClrType ClrType
         {
-            get
-            {
-                return _runtime;
-            }
+            get { return _runtime; }
         }
+
     }
 }
+

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Xamarin.Forms;
 
@@ -45,10 +46,17 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 <a href=http://www.emgu.com>Visit our website</a> <br/><br/>
 <a href=mailto:support@emgu.com>Email Support</a> <br/><br/>
 <H4> OpenCL Info </H4>
-"
-                     + openclTxt + @"
+" + openclTxt + @"
+<H4> OS Description: </H4>
+" + RuntimeInformation.OSDescription + @"
+<H4> OS Architecture: </H4>
+" + RuntimeInformation.OSArchitecture + @"
+<H4> Framework Description: </H4>
+" + RuntimeInformation.FrameworkDescription + @"
+<H4> Process Architecture: </H4>
+" + RuntimeInformation.ProcessArchitecture + @"
 <H4> Build Info </H4>
-<textarea rows=""30"">" 
+<textarea rows=""30"">"
                      + CvInvoke.BuildInformation + @"
 </textarea>
 </body>

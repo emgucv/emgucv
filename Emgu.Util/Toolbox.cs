@@ -417,13 +417,19 @@ namespace Emgu.Util
         /// <returns></returns>
         public static System.Reflection.Assembly FindAssembly(String assembleName)
         {
-            System.Reflection.Assembly[] asms = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (System.Reflection.Assembly asm in asms)
+            try
             {
-                if (asm.ManifestModule.Name.Equals(assembleName))
-                    return asm;
+                System.Reflection.Assembly[] asms = AppDomain.CurrentDomain.GetAssemblies();
+                foreach (System.Reflection.Assembly asm in asms)
+                {
+                    if (asm.ManifestModule.Name.Equals(assembleName))
+                        return asm;
+                }
             }
+            catch
+            {
 
+            }
             return null;
         }
 
