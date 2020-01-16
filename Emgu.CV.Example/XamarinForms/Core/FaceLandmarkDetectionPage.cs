@@ -28,6 +28,7 @@ using Emgu.CV.Face;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+using Color = Xamarin.Forms.Color;
 
 namespace Emgu.CV.XamarinForms
 {
@@ -159,6 +160,9 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
+        private VideoCapture _capture = null;
+        private Mat _mat = null;
+
         public FaceLandmarkDetectionPage()
             : base()
         {
@@ -170,29 +174,61 @@ namespace Emgu.CV.XamarinForms
 
             OnImagesLoaded += async (sender, image) =>
             {
-                if (image == null || image[0] == null)
+                if (image == null || (image.Length > 0 && image[0] == null) )
                     return;
-                SetMessage("Please wait...");
-                SetImage(null);
-                Task<Tuple<IInputArray, long>> t = new Task<Tuple<IInputArray, long>>(
-                    () =>
+
+                if (image.Length == 0)
+                {
+                    InitFaceDetector();
+                    InitFacemark();
+                    //Handle video
+                    if (_capture == null)
                     {
-                        InitFaceDetector();
-                        InitFacemark();
-                        Stopwatch watch = Stopwatch.StartNew();
+                        _capture = new VideoCapture();
+                        _capture.ImageGrabbed += _capture_ImageGrabbed;
+                    }
 
-                        DetectAndRender(image[0]);
-                        watch.Stop();
-                        return new Tuple<IInputArray, long>(image[0], watch.ElapsedMilliseconds);
-                    });
-                t.Start();
+                    _capture.Start();
 
-                var result = await t;
-                SetImage(t.Result.Item1);
-                String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
+                }
+                else
+                {
+                    SetMessage("Please wait...");
+                    SetImage(null);
+                    Task<Tuple<IInputArray, long>> t = new Task<Tuple<IInputArray, long>>(
+                        () =>
+                        {
+                            InitFaceDetector();
+                            InitFacemark();
+                            Stopwatch watch = Stopwatch.StartNew();
 
-                SetMessage(String.Format("Detected in {0} milliseconds.", t.Result.Item2));
+                            DetectAndRender(image[0]);
+                            watch.Stop();
+                            return new Tuple<IInputArray, long>(image[0], watch.ElapsedMilliseconds);
+                        });
+                    t.Start();
+
+                    var result = await t;
+                    SetImage(t.Result.Item1);
+                    String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
+
+                    SetMessage(String.Format("Detected in {0} milliseconds.", t.Result.Item2));
+                }
             };
+        }
+
+        private void _capture_ImageGrabbed(object sender, EventArgs e)
+        {
+            if (_mat == null)
+                _mat = new Mat();
+            _capture.Retrieve(_mat);
+            Stopwatch watch = Stopwatch.StartNew();
+            DetectAndRender(_mat);
+            watch.Stop();
+            SetImage(_mat);
+            this.DisplayImage.BackgroundColor = Color.Black;
+            this.DisplayImage.IsEnabled = true;
+            SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
         }
 
         private void OnButtonClicked(Object sender, EventArgs args)

@@ -11,9 +11,8 @@ using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util.TypeEnum;
-using Xamarin.Forms.PlatformConfiguration;
+
 #if !__MACOS__
-using CoreMedia;
 using Plugin.Media;
 #endif
 
@@ -107,6 +106,11 @@ namespace Emgu.CV.XamarinForms
                 if (this.HasCameraOption && haveCameraOption)
                     options.Add("Camera");
 #endif
+                if (Emgu.Util.Platform.OperationSystem == OS.Windows && Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
+                {
+                    options.Add("Camera");
+                }
+
                 if (options.Count == 1)
                 {
                     action = "Default";
@@ -252,25 +256,29 @@ namespace Emgu.CV.XamarinForms
         {
             if (image == null)
             {
-                this.DisplayImage.Source = null;
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(
+                    () => { this.DisplayImage.Source = null; });
                 return;
             }
             using (VectorOfByte vb = new VectorOfByte())
             {
                 CvInvoke.Imencode(".jpg", image, vb);
                 byte[] rawData = vb.ToArray();
-                this.DisplayImage.Source = ImageSource.FromStream(() => new MemoryStream(rawData));
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(
+                    () =>
+                    {
+                        this.DisplayImage.Source = ImageSource.FromStream(() => new MemoryStream(rawData));
 
 #if __MACOS__
-                using (InputArray iaImage = image.GetInputArray())
-                    this.DisplayImage.HeightRequest = iaImage.GetSize().Height;
+                        using (InputArray iaImage = image.GetInputArray())
+                            this.DisplayImage.HeightRequest = iaImage.GetSize().Height;
 #elif __IOS__
-                //the following is needed for iOS due to the fact that
-                //Xamarin Forms' Image object do not seems to refresh after we set the source.
-                //Forcing the focus seems to force a rendering update.
-                this.DisplayImage.Focus ();
+                        //the following is needed for iOS due to the fact that
+                        //Xamarin Forms' Image object do not seems to refresh after we set the source.
+                        //Forcing the focus seems to force a rendering update.
+                        this.DisplayImage.Focus ();
 #endif
-
+                    });
             }
         }
 
