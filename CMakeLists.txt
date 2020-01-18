@@ -859,7 +859,7 @@ ENDIF()
 SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
 IF(HAVE_OSX)
 	SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
-	<file src=\"${EMGUCV_MACOS_NUGET_ID}.targets\" target=\"build\\${EMGUCV_MACOS_NUGET_ID}.targets\" />
+	<file src=\"Emgu.CV.runtime.macos.targets\" target=\"build\\${EMGUCV_MACOS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 	SET(EMGUCV_MACOS_NUGET_DEPENDENCY "
 	<dependencies>
