@@ -30,6 +30,19 @@
 	
   INSTALL(
     DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/UWP
+    DESTINATION Emgu.CV.Runtime
+    COMPONENT emgucv_source
+    FILES_MATCHING 
+	PATTERN "Emgu.CV.Runtime.UWP.shproj"
+	PATTERN "Emgu.CV.Runtime.UWP.projitems"
+    PATTERN ".svn" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "CMakeFiles" EXCLUDE
+    )
+	
+  INSTALL(
+    DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/Ubuntu
     DESTINATION Emgu.CV.Runtime
     COMPONENT emgucv_source
