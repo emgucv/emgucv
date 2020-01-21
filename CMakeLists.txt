@@ -879,7 +879,7 @@ IF(HAVE_WINSTORE_10_ARM)
 ENDIF()
 IF(HAVE_WINSTORE_10)
 	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} 
-	<file src=\"${EMGUCV_UWP_NUGET_ID}.targets\" target=\"build\\${EMGUCV_UWP_NUGET_ID}.targets\" />
+	<file src=\"Emgu.CV.runtime.uwp.targets\" target=\"build\\${EMGUCV_UWP_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
