@@ -169,11 +169,11 @@ namespace Emgu.CV.XamarinForms
 
             BackendTargetPair[] availableBackends = Emgu.CV.Dnn.DnnInvoke.GetAvailableBackends();
 
-            StringBuilder availableBackendsStr = new StringBuilder("Available backends: "+ Environment.NewLine);
+            StringBuilder availableBackendsStr = new StringBuilder("Available backends: "+ System.Environment.NewLine);
             foreach (BackendTargetPair p in availableBackends)
             {
                 availableBackendsStr.Append(String.Format("Backend: {0}, Target: {1}{2}", p.Backend, p.Target,
-                    Environment.NewLine));
+                    System.Environment.NewLine));
             }
             SetMessage(availableBackendsStr.ToString());
 
