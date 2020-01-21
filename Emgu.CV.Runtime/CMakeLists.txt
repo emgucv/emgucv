@@ -74,7 +74,7 @@ IF(HAVE_ANDROID)
     DESTINATION Emgu.CV.Runtime
     COMPONENT emgucv_source
     FILES_MATCHING 
-	PATTERN "${PROJECT_NAME}.cs"
+	PATTERN "*.cs"
     PATTERN "${PROJECT_NAME}.csproj"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
