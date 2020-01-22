@@ -4,7 +4,7 @@
 
 ADD_SUBDIRECTORY("Emgu.CV.runtime.windows.cuda.cufft")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.windows.cuda.dnn")
-ADD_SUBDIRECTORY("Emgu.CV.runtime.windows.cuda")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.windows.cuda.npp")
 
 ADD_SUBDIRECTORY("Emgu.CV")
 
