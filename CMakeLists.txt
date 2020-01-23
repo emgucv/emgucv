@@ -885,6 +885,10 @@ IF(HAVE_WINSTORE_10_ARM64)
 	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\arm64\\*.dll\" target=\"build\\UWP\\arm64\" />")
 ENDIF()
 IF(HAVE_WINSTORE_10)
+    SET(EMGUCV_UWP_NUGET_DEPENDENCY "
+	<dependencies>
+		<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />
+	</dependencies>")
 	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.uwp.targets\" target=\"build\\${EMGUCV_UWP_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
