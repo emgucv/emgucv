@@ -1009,6 +1009,10 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
+	SET(EMGUCV_ANDROID_NUGET_DEPENDENCY "
+	<dependencies>
+		<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />
+	</dependencies>")
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.android/Package.nuspec)
 ENDIF()
 
