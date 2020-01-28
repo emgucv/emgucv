@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b14bd07168ef2294d8a3b36fd87d58ea
+guid: 86fce4a6434147445980b2cd5a431dea
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -26,38 +26,6 @@ PluginImporter:
         Exclude WindowsStoreApps: 0
         Exclude iOS: 1
         Exclude tvOS: 1
-  - first:
-      '': Linux
-    second:
-      enabled: 0
-      settings:
-        CPU: x86
-  - first:
-      '': OSXIntel
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      '': OSXIntel64
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      '': SamsungTV
-    second:
-      enabled: 0
-      settings:
-        STV_MODEL: STANDARD_13
-  - first:
-      '': WP8
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-        DontProcess: False
-        PlaceholderPath: 
   - first:
       Android: Android
     second:

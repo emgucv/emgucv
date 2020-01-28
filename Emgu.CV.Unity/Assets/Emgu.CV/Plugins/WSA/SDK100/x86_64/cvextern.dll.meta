@@ -6,11 +6,26 @@ PluginImporter:
   iconMap: {}
   executionOrder: {}
   defineConstraints: []
-  isPreloaded: 0
+  isPreloaded: 1
   isOverridable: 0
   isExplicitlyReferenced: 0
   validateReferences: 1
   platformData:
+  - first:
+      '': Any
+    second:
+      enabled: 0
+      settings:
+        Exclude Android: 1
+        Exclude Editor: 1
+        Exclude Linux64: 1
+        Exclude OSXUniversal: 1
+        Exclude WebGL: 1
+        Exclude Win: 1
+        Exclude Win64: 1
+        Exclude WindowsStoreApps: 0
+        Exclude iOS: 1
+        Exclude tvOS: 1
   - first:
       '': Linux
     second:
@@ -48,7 +63,7 @@ PluginImporter:
     second:
       enabled: 0
       settings:
-        CPU: AnyCPU
+        CPU: ARMv7
   - first:
       Any: 
     second:
@@ -81,6 +96,12 @@ PluginImporter:
       settings:
         CPU: AnyCPU
   - first:
+      Standalone: OSXUniversal
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+  - first:
       Standalone: Win
     second:
       enabled: 0
@@ -98,14 +119,25 @@ PluginImporter:
       enabled: 1
       settings:
         CPU: X64
-        DontProcess: False
+        DontProcess: false
         PlaceholderPath: 
         SDK: UWP
+        ScriptingBackend: AnyScriptingBackend
   - first:
       iPhone: iOS
     second:
       enabled: 0
       settings:
+        AddToEmbeddedBinaries: false
+        CPU: AnyCPU
+        CompileFlags: 
+        FrameworkDependencies: 
+  - first:
+      tvOS: tvOS
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
         CompileFlags: 
         FrameworkDependencies: 
   userData: 
