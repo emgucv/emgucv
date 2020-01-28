@@ -2,7 +2,11 @@
 cd "$(dirname "$0")"
 
 convert ../opencv/samples/data/lena.jpg Assets/Emgu.CV/Demo/Resources/lena.png
-cp ../Emgu.CV.Test/stitch* Assets/Emgu.CV/Demo/Resources
+convert ../Emgu.CV.Test/stitch1.jpg Assets/Emgu.CV/Demo/Resources/stitch1.png
+convert ../Emgu.CV.Test/stitch2.jpg Assets/Emgu.CV/Demo/Resources/stitch2.png
+convert ../Emgu.CV.Test/stitch3.jpg Assets/Emgu.CV/Demo/Resources/stitch3.png
+convert ../Emgu.CV.Test/stitch4.jpg Assets/Emgu.CV/Demo/Resources/stitch4.png
+
 cp ../Emgu.CV.Example/FeatureMatching/box.png Assets/Emgu.CV/Demo/Resources/
 cp ../Emgu.CV.Example/FeatureMatching/box_in_scene.png Assets/Emgu.CV/Demo/Resources/
 cp ../Emgu.CV.Example/FeatureMatching/DrawMatches.cs Assets/Emgu.CV/Demo/
