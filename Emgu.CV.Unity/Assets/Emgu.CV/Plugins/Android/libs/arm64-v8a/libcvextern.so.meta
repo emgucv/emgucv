@@ -6,7 +6,7 @@ PluginImporter:
   iconMap: {}
   executionOrder: {}
   defineConstraints: []
-  isPreloaded: 0
+  isPreloaded: 1
   isOverridable: 0
   isExplicitlyReferenced: 0
   validateReferences: 1
@@ -22,10 +22,12 @@ PluginImporter:
         Exclude Linux64: 1
         Exclude LinuxUniversal: 1
         Exclude OSXUniversal: 1
+        Exclude WebGL: 1
         Exclude Win: 1
         Exclude Win64: 1
         Exclude WindowsStoreApps: 1
         Exclude iOS: 1
+        Exclude tvOS: 1
   - first:
       Android: Android
     second:
@@ -109,6 +111,15 @@ PluginImporter:
       enabled: 0
       settings:
         AddToEmbeddedBinaries: false
+        CPU: AnyCPU
+        CompileFlags: 
+        FrameworkDependencies: 
+  - first:
+      tvOS: tvOS
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
         CompileFlags: 
         FrameworkDependencies: 
   userData: 

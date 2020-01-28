@@ -86,7 +86,7 @@ PluginImporter:
     second:
       enabled: 1
       settings:
-        CPU: X86
+        CPU: ARM64
         DontProcess: false
         PlaceholderPath: 
         SDK: UWP
