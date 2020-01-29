@@ -18,7 +18,7 @@ namespace Emgu.CV
     /// </summary>
     public static class BitmapExtension
     {
-        #region Color Pallette
+        #region Color Palette
         /// <summary>
         /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
         /// </summary>
