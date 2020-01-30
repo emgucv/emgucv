@@ -857,6 +857,7 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	<file src=\"Emgu.CV.runtime.windows.targets\" target=\"build\\${EMGUCV_WINDOWS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.UI.dll\" target=\"lib\\net461\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.UI.xml\" target=\"lib\\net461\" />
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
@@ -864,6 +865,7 @@ SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
 IF(HAVE_OSX)
 	SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.macos.targets\" target=\"build\\${EMGUCV_MACOS_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 	SET(EMGUCV_MACOS_NUGET_DEPENDENCY "
 	<dependencies>
@@ -891,6 +893,7 @@ IF(HAVE_WINSTORE_10)
 	</dependencies>")
 	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.uwp.targets\" target=\"build\\${EMGUCV_UWP_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
@@ -899,6 +902,7 @@ SET(EMGUCV_NUGET_FILE_LIST "")
 SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.World.NetStandard.dll\" target=\"lib\\netstandard2.0\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.World.NetStandard.xml\" target=\"lib\\netstandard2.0\" />
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 
 SET(EMGUCV_NUGET_TITLE_ARCH "")
@@ -951,13 +955,16 @@ IF(WITH_CUDA)
 		#file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
 		SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "${EMGU_CUDA_NPP_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll;..\\..\\..\\libs\\x64\\cudnn*.dll\" target=\"build\\x64\" /> 
-		<file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" /> 
+		<file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />
+		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUFFT_NUGET_FILE_LIST "${EMGU_CUFFT_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cufft*.dll\" target=\"build\\x64\" />
+		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" target=\"build\\x64\" />
+		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 	ENDIF()
 	
@@ -1008,6 +1015,7 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.Runtime.Android.xml\" target=\"lib\\MonoAndroid50\" />")
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
 	SET(EMGUCV_ANDROID_NUGET_DEPENDENCY "
 	<dependencies>
@@ -1022,9 +1030,10 @@ IF(HAVE_IOS AND WIN32)
     <file src=\"..\\..\\..\\libs\\Emgu.CV.World.IOS.dll\" target=\"lib\\Xamarin.iOS10\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.World.IOS.XML\" target=\"lib\\Xamarin.iOS10\" />")
 	SET(EMGUCV_IOS_NUGET_FILE_LIST "${EMGUCV_IOS_NUGET_FILE_LIST} 
-	<file src=\"Emgu.CV.IOS.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
+	<file src=\"Emgu.CV.runtime.ios.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
-	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/iOS.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/iOS/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ios.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ios/Package.nuspec)
 ENDIF()
 
 IF(HAVE_OSX)

@@ -9,7 +9,7 @@
     <license type="file">${EMGUCV_LICENSE_FILE}</license>
     <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
 	<repository type="git" url="https://github.com/emgucv/emgucv" />
-	<iconUrl>http://www.emgu.com/wiki/files/EmguCVLogo.gif</iconUrl>
+	<icon>icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
 	<summary>Runtime package of Emgu CV for MacOS</summary>
     <description>Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. </description>

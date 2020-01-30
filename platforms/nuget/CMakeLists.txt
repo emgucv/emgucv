@@ -13,6 +13,4 @@ ADD_SUBDIRECTORY("Emgu.CV.runtime.windows")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.macos")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.uwp")
 
-IF(HAVE_IOS AND WIN32)
-  ADD_SUBDIRECTORY("iOS")
-ENDIF()
+ADD_SUBDIRECTORY("Emgu.CV.runtime.ios")

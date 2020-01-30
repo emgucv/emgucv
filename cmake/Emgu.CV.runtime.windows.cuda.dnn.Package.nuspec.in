@@ -8,7 +8,7 @@
     <owners>${NUGET_PACKAGE_VENDOR}</owners>
     <license type="file">cuDNN_SLA.txt</license>
     <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
-	<iconUrl>http://www.emgu.com/wiki/files/EmguCVLogo.gif</iconUrl>
+	<icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<summary>This package provides the native CUDA DNN dependencies for EMGU software libraries</summary>
     <description>This package provides the native CUDA DNN dependencies for EMGU software libraries</description>
