@@ -90,6 +90,7 @@ if(LEPT_USE_TIFF)
   include_directories(${CMAKE_BINARY_DIR}/opencv/3rdparty/libtiff)
 endif()
 
+include_directories(${OPENCV_SUBFOLDER}/3rdparty/zlib)
 
 add_library(${the_target} STATIC ${lepton_srcs} ${lepton_hdrs})
 
