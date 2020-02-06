@@ -2,16 +2,22 @@
 #  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(HAVE_IOS)
+IF(HAVE_IOS AND WIN32)
 
 PROJECT(Emgu.CV.runtime.ios.nuget)
+IF (APPLE)
+ADD_CUSTOM_TARGET(
+   ${PROJECT_NAME} ALL
+   COMMAND nuget pack "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" -OutputDirectory "${CMAKE_CURRENT_SOURCE_DIR}/../"
+)
+ELSE()
 ADD_CUSTOM_TARGET(
    ${PROJECT_NAME} ALL
    COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/../../../miscellaneous/nuget.exe" pack "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" -OutputDirectory "${CMAKE_CURRENT_SOURCE_DIR}/../"
 )
-
+ENDIF()
 IF(APPLE)
-  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World.iOS)
+  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World.IOS)
 ENDIF()
 
 if(ENABLE_SOLUTION_FOLDERS)
