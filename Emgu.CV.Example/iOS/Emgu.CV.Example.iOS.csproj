@@ -52,7 +52,7 @@
     <MtouchLink>None</MtouchLink>
     <MtouchI18n>
     </MtouchI18n>
-    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchArch>ARMv7s, ARM64</MtouchArch>
     <IpaPackageName>
     </IpaPackageName>
     <MtouchProfiling>true</MtouchProfiling>
@@ -65,7 +65,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchArch>ARMv7s, ARM64</MtouchArch>
     <MtouchI18n>
     </MtouchI18n>
     <MtouchUseLlvm>True</MtouchUseLlvm>
@@ -84,7 +84,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchI18n>
     </MtouchI18n>
-    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchArch>ARMv7s, ARM64</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -96,7 +96,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchI18n>
     </MtouchI18n>
-    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchArch>ARMv7s, ARM64</MtouchArch>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
