@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>dbbd96cf-83fc-41eb-83b2-3d23713e310d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVUbuntuBinaryDir>$(MSBuildThisFileDirectory)..\..\lib</EmguCVUbuntuBinaryDir>
+    <EmguCVUbuntuDir>$(MSBuildThisFileDirectory)</EmguCVUbuntuDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVUbuntuLinkTarget>Ubuntu</EmguCVUbuntuLinkTarget>
+    <EmguCVUbuntuBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCVUbuntuBuildX64>
+    <EmguCVUbuntuNativeFileX64>$(EmguCVUbuntuBinaryDir)\x64\libcvextern.so</EmguCVUbuntuNativeFileX64>
+    <EmguCVUbuntuErrorMessage Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND !Exists('$(EmguCVUbuntuNativeFileX64)')">This package do not contain necessary binary for $(EmguCVUbuntuLinkTarget). Ubuntu x64 is targeted, but file $(EmguCVUbuntuNativeFileX64) is missing. PInvoke may fail on Ubuntu x64 platforms</EmguCVUbuntuErrorMessage>
+    <EmguCVUbuntuDeployMessage Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX64)')">$(EmguCVUbuntuDeployMessage)ubuntu_x64 </EmguCVUbuntuDeployMessage>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX64)')">
+    <Content Include="$(EmguCVUbuntuBinaryDir)\x64\*.so">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+	<Content Include="$(EmguCVUbuntuBinaryDir)\x64\*.so.*">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Target Name="EmguCVUbuntuPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Warning Text="'$(EmguCVUbuntuErrorMessage)'" Condition="'$(EmguCVUbuntuErrorMessage)'!=''" />
+    <Message Text="Emgu CV Compiling with $(EmguCVUbuntuDeployMessage)binary" Condition="'$(EmguCVUbuntuDeployMessage)'!=''" Importance="High" />
+    <Message Text="Native binary is NOT deployed by the Emgu.CV.Runtime.Ubuntu shared project." Condition="'$(EmguCVUbuntuDeployMessage)'==''" Importance="High" />
+  </Target>
+</Project>

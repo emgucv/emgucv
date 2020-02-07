@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>f11da8fd-c6af-486d-80a4-4bb80fa6e1d5</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVRaspbianBinaryDir>$(MSBuildThisFileDirectory)..\..\lib</EmguCVRaspbianBinaryDir>
+    <EmguCVRaspbianDir>$(MSBuildThisFileDirectory)</EmguCVRaspbianDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVRaspbianLinkTarget>Raspbian</EmguCVRaspbianLinkTarget>
+    <EmguCVRaspbianBuildArm Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='ARM'">True</EmguCVRaspbianBuildArm>
+    <EmguCVRaspbianNativeFileArm>$(EmguCVRaspbianBinaryDir)\arm\libcvextern.so</EmguCVRaspbianNativeFileArm>
+    <EmguCVRaspbianErrorMessage Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND !Exists('$(EmguCVRaspbianNativeFileArm)')">This package do not contain necessary binary for $(EmguCVRaspbianLinkTarget). Raspbian arm is targeted, but file $(EmguCVRaspbianNativeFileArm) is missing. PInvoke may fail on Raspbian arm platforms</EmguCVRaspbianErrorMessage>
+    <EmguCVRaspbianDeployMessage Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND Exists('$(EmguCVRaspbianNativeFileArm)')">$(EmguCVRaspbianDeployMessage)Raspbian_arm </EmguCVRaspbianDeployMessage>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND Exists('$(EmguCVRaspbianNativeFileArm)')">
+    <Content Include="$(EmguCVRaspbianBinaryDir)\arm\*.so">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Target Name="EmguCVRaspbianPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Warning Text="'$(EmguCVRaspbianErrorMessage)'" Condition="'$(EmguCVRaspbianErrorMessage)'!=''" />
+    <Message Text="Emgu CV Compiling with $(EmguCVRaspbianDeployMessage)binary" Condition="'$(EmguCVRaspbianDeployMessage)'!=''" Importance="High" />
+    <Message Text="Native binary is NOT deployed by the Emgu.CV.Runtime.Raspbian shared project." Condition="'$(EmguCVRaspbianDeployMessage)'==''" Importance="High" />
+  </Target>
+</Project>
