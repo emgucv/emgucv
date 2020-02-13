@@ -144,20 +144,22 @@ SET(OPENCV_CONTRIB_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv_contrib)
 SET(OPENCV_EXTRA_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv_extra)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-#IF (NOT ANDROID)
   
-  SET(CSC_PREFERRED_VERSION "4.0")
-  IF((NOT NETFX_CORE) AND MSVC) 
-    #SET CSC 3.5 as the prefered compiler for EMGU CV
-    SET(CSC_TARGET_FRAMEWORK "3.5" CACHE STRING "C#  target framework")
-  ELSE()
-    #SET CSC 4.5 (in the .Net framework 4.0 folder) as the prefered compiler for EMGU CV
-    SET(CSC_TARGET_FRAMEWORK "" CACHE STRING "C# target framework")
-  ENDIF()
+SET(CSC_PREFERRED_VERSION "4.0")
+IF((NOT NETFX_CORE) AND MSVC) 
+  #SET CSC 3.5 as the prefered compiler for EMGU CV
+  SET(CSC_TARGET_FRAMEWORK "3.5" CACHE STRING "C#  target framework")
+ELSE()
+  #SET CSC 4.5 (in the .Net framework 4.0 folder) as the prefered compiler for EMGU CV
+  SET(CSC_TARGET_FRAMEWORK "" CACHE STRING "C# target framework")
+ENDIF()
   
-  FIND_PACKAGE(CSharp REQUIRED)
-  INCLUDE (CSharpMacros)
-#ENDIF()
+FIND_PACKAGE(CSharp REQUIRED)
+INCLUDE (CSharpMacros)
+INCLUDE (CheckPlatform)
+IF ( (IS_UBUNTU OR IS_RASPBIAN) AND NOT (DOTNET_FOUND))
+  MESSAGE(FATAL_ERROR "dotnet core is required to build Emgu CV on Ubuntu, please follow the instructions to install dotnet core on Ubuntu: https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current")  
+ENDIF()
 
 INCLUDE (CheckTargetArch)
 INCLUDE (OpenCVVersion)
@@ -195,27 +197,7 @@ ENDIF()
 # ----------------------------------------------------------------------------
 CHECK_TARGET_ARCH()
 
-IF (WIN32)
-  MESSAGE(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
-  MESSAGE(STATUS "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
-  #STRING(FIND "${CMAKE_GENERATOR}" "ARM" IS_ARM)
-  IF(TARGET_ARCH_64)
-	IF(TARGET_ARM)
-      SET(EMGUCV_ARCH arm64)
-    ELSE()
-      SET(EMGUCV_ARCH win64)
-	ENDIF()
-  ELSE()
-    IF(TARGET_ARM)
-      SET(EMGUCV_ARCH arm)
-    ELSE()
-      SET(EMGUCV_ARCH win32)
-    ENDIF()
-  ENDIF()
-ELSE(WIN32)
-  SET(EMGUCV_ARCH ${CMAKE_SYSTEM_NAME})
-ENDIF(WIN32)
-
+SET(EMGUCV_ARCH ${TARGET_ARCH_NAME})
 MESSAGE(STATUS "Building for ${EMGUCV_ARCH}")
 
 IF(WIN32 AND CV_ICC)
@@ -483,6 +465,25 @@ IF (WIN32 AND ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows") AND ("${EMGUCV_ARCH}" 
   MESSAGE(STATUS "IS_WINDESKTOP_X64_BUILD: ${IS_WINDESKTOP_X64_BUILD}")
 ENDIF()
 CHECK_BINARY_EXIST("libs/x64" "*.dll" HAVE_WINDESKTOP_X64 ${IS_WINDESKTOP_X64_BUILD})
+
+SET(IS_RASPBIAN_BUILD OFF)
+IF (IS_RASPBIAN) 
+  SET (IS_RASPBIAN_BUILD ON)
+  MESSAGE(STATUS "IS_RASPBIAN_BUILD: ${IS_RASPBIAN_BUILD}")
+ENDIF()
+CHECK_BINARY_EXIST("libs/arm" "*.so" HAVE_LINUX_ARM ${IS_RASPBIAN_BUILD})
+
+SET(IS_UBUNTU_X86_BUILD OFF)
+IF (("TARGET_ARCH_NAME" STREQUAL "ubuntu_x86")) 
+  MESSAGE(STATUS "IS_UBUNTU_X86_BUILD: ${IS_UBUNTU_X86_BUILD}")
+ENDIF()
+CHECK_BINARY_EXIST("libs/x86" "*.so" HAVE_LINUX_X86 ${IS_UBUNTU_X86_BUILD})
+
+SET(IS_UBUNTU_X64_BUILD OFF)
+IF (("TARGET_ARCH_NAME" STREQUAL "ubuntu_x64")) 
+  MESSAGE(STATUS "IS_UBUNTU_X64_BUILD: ${IS_UBUNTU_X64_BUILD}")
+ENDIF()
+CHECK_BINARY_EXIST("libs/x64" "*.so" HAVE_LINUX_X64 ${IS_UBUNTU_X64_BUILD})
  
   IF(HAVE_WINDESKTOP_X86 AND HAVE_WINDESKTOP_X64)
     SET(WINDESKTOP_LABEL "-windesktop") 
@@ -822,6 +823,14 @@ IF(HAVE_WINSTORE_10 AND WIN32)
 	SET(EMGUCV_UWP_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.uwp")
 ENDIF()
 
+IF(HAVE_LINUX_ARM)
+	SET(EMGUCV_RASPBIAN_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.raspbian")
+ENDIF()
+
+IF(HAVE_LINUX_X64 OR HAVE_LINUX_X86)
+	SET(EMGUCV_UBUNTU_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.ubuntu")
+ENDIF()
+
 IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	MESSAGE(STATUS "Configuring nuget package for Commercial release")
 	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID}-CR")
@@ -839,6 +848,12 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	ENDIF()
 	IF(HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
 	  SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}-CR")
+	ENDIF()
+	IF(HAVE_LINUX_ARM)
+	  SET(EMGUCV_RASPBIAN_NUGET_ID "${EMGUCV_RASPBIAN_NUGET_ID}-CR")
+	ENDIF()
+    IF(HAVE_LINUX_X64 OR HAVE_LINUX_X86)
+	  SET(EMGUCV_UBUNTU_NUGET_ID "${EMGUCV_UBUNTU_NUGET_ID}-CR")
 	ENDIF()
 ELSEIF()
 	MESSAGE(STATUS "Configuring nuget package for Open Source release")
@@ -897,6 +912,36 @@ IF(HAVE_WINSTORE_10)
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
+SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "")
+IF(HAVE_LINUX_ARM)
+	SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "${EMGUCV_RASPBIAN_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\arm\\*.so\" target=\"build\\arm\" />")
+    SET(EMGUCV_RASPBIAN_NUGET_DEPENDENCY "
+	<dependencies>
+		<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />
+	</dependencies>")
+	SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "${EMGUCV_RASPBIAN_NUGET_FILE_LIST} 
+	<file src=\"Emgu.CV.runtime.raspbian.targets\" target=\"build\\${EMGUCV_RASPBIAN_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+ENDIF()
+
+SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "")
+IF(HAVE_LINUX_X64)
+  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.so\" target=\"build\\x64\" />")
+ENDIF()
+IF(HAVE_LINUX_X86)
+  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.so\" target=\"build\\x86\" />")
+ENDIF()
+IF(HAVE_LINUX_X64 OR HAVE_LINUX_X86)
+    SET(EMGUCV_UBUNTU_NUGET_DEPENDENCY "
+	<dependencies>
+		<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />
+	</dependencies>")
+	SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} 
+	<file src=\"Emgu.CV.runtime.ubuntu.targets\" target=\"build\\${EMGUCV_UBUNTU_NUGET_ID}.targets\" />
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+ENDIF()
 
 SET(EMGUCV_NUGET_FILE_LIST "")
 SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
@@ -1047,6 +1092,16 @@ ENDIF()
 
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
+ENDIF()
+
+if(HAVE_LINUX_ARM)
+  SET(EMGUCV_RASPBIAN_NUGET_TITLE "Emgu CV for Raspbian Native Runtime")
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.raspbian.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.raspbian/Package.nuspec)
+ENDIF()
+
+if(HAVE_LINUX_X86 OR HAVE_LINUX_X64)
+  SET(EMGUCV_UBUNTU_NUGET_TITLE "Emgu CV for Ubuntu Native Runtime")
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Package.nuspec)
 ENDIF()
 
 SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
