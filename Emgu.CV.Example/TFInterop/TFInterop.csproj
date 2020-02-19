@@ -144,16 +144,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EMGU.TF">
-      <Version>1.15.0.787</Version>
+      <Version>2.1.0.838</Version>
     </PackageReference>
     <PackageReference Include="EMGU.TF.MODELS">
-      <Version>1.15.0.787</Version>
+      <Version>2.1.0.838</Version>
     </PackageReference>
     <PackageReference Include="EMGU.TF.PROTOBUF">
-      <Version>1.15.0.787</Version>
+      <Version>2.1.0.838</Version>
     </PackageReference>
     <PackageReference Include="Emgu.TF.runtime.windows">
-      <Version>1.15.0.787</Version>
+      <Version>2.1.0.838</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
