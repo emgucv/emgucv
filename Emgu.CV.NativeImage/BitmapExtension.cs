@@ -458,6 +458,17 @@ namespace Emgu.CV
             bmp.UnlockBits(data);
         }
 
+        /// <summary>
+        /// Provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
+        /// such that the image data is <b>shared</b> with Bitmap. 
+        /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
+        /// For other types of image this property has the same effect as ToBitmap()
+        /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
+        /// </summary>
+        /// <typeparam name="TColor">The color of the image</typeparam>
+        /// <typeparam name="TDepth">The depth of the image</typeparam>
+        /// <param name="image">The image to create Bitmap from</param>
+        /// <returns>A bitmap representation of the image. In the cases of Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt;, the image data is shared between the Bitmap and the Image object.</returns>
         public static Bitmap AsBitmap<TColor, TDepth>(this Image<TColor, TDepth> image) where
             TColor : struct, IColor
             where TDepth : new()
