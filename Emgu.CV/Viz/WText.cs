@@ -57,9 +57,11 @@ namespace Emgu.CV
         protected override void DisposeObject()
         {
             if (!IntPtr.Zero.Equals(_ptr))
-                CvInvoke.cveViz3dRelease(ref _ptr);
-            _widgetPtr = IntPtr.Zero;
-            _widget2dPtr = IntPtr.Zero;
+            {
+                CvInvoke.cveWTextRelease(ref _ptr);
+                _widgetPtr = IntPtr.Zero;
+                _widget2dPtr = IntPtr.Zero;
+            }
         }
     }
 
