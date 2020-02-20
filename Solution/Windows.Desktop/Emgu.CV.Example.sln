@@ -47,8 +47,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSurveillance", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSignRecognition", "..\..\Emgu.CV.Example\TrafficSignRecognition\TrafficSignRecognition.csproj", "{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple3DReconstruction", "..\..\Emgu.CV.Example\Simple3DReconstruction\Simple3DReconstruction.csproj", "{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageDatabase", "..\..\Emgu.CV.Example\ImageDatabase\ImageDatabase.csproj", "{47BEBAD5-35F2-45D9-A1AF-78F240DCA7FE}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FaceDetectionVB", "..\..\Emgu.CV.Example\FaceDetectionVB\FaceDetectionVB.vbproj", "{89E9015F-DECF-4774-95DA-7F7D22B0A12F}"
@@ -106,7 +104,6 @@ Global
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{b18e1566-4833-4f90-9f6a-2c026d08265c}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{b1d43be6-af83-41e5-990e-3e163ce42c79}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{ddeefe79-6bdc-4ea8-adf6-8ecd337bd3d0}*SharedItemsImports = 4
-		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{e5902195-9fc7-4a96-ba4b-5afe17e13ec8}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{e8a4de5c-be26-445f-bebd-8c99c80857e1}*SharedItemsImports = 4
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{f42d1b92-5722-41f4-b8f1-98185cd09d87}*SharedItemsImports = 4
@@ -231,17 +228,6 @@ Global
 		{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}.Release|x64.ActiveCfg = Release|x64
 		{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}.Release|x64.Build.0 = Release|x64
 		{2E4D76A0-B239-4E48-8E9C-3A936CBD1DF1}.Release|x86.ActiveCfg = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|x64.ActiveCfg = Debug|x64
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|x64.Build.0 = Debug|x64
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|x86.ActiveCfg = Debug|x86
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Debug|x86.Build.0 = Debug|x86
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|x64.ActiveCfg = Release|x64
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|x64.Build.0 = Release|x64
-		{E5902195-9FC7-4A96-BA4B-5AFE17E13EC8}.Release|x86.ActiveCfg = Release|Any CPU
 		{47BEBAD5-35F2-45D9-A1AF-78F240DCA7FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47BEBAD5-35F2-45D9-A1AF-78F240DCA7FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47BEBAD5-35F2-45D9-A1AF-78F240DCA7FE}.Debug|x64.ActiveCfg = Debug|x64

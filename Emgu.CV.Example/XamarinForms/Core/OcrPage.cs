@@ -72,12 +72,13 @@ namespace Emgu.CV.XamarinForms
                     return;
                 SetMessage("Please wait...");
                 SetImage(null);
-
+                String lang = "eng";
+                OcrEngineMode mode = OcrEngineMode.TesseractOnly;
                 Task<Tuple<Mat, String, long>> t = new Task<Tuple<Mat, String, long>>(
                   () =>
                   {
 
-                      String lang = "eng";
+
 #if NETFX_CORE
                       String path = System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, "tessdata");
 #elif __ANDROID__
@@ -119,7 +120,7 @@ namespace Emgu.CV.XamarinForms
                 {
                     ocrResult = ocrResult.Replace(System.Environment.NewLine, " ");
                 }
-
+                ocrResult = String.Format("tesseract version {2}; lang: {0}; mode: {1}{3}Text Detected:{3}{4}", lang, mode.ToString(), Emgu.CV.OCR.Tesseract.VersionString, Environment.NewLine, ocrResult);
                 SetMessage(ocrResult);
             };
         }

@@ -4,10 +4,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-
+using Emgu.CV.CvEnum;
 using Xamarin.Forms;
 using Emgu.CV.Structure;
 using Emgu.Util.TypeEnum;
@@ -25,10 +26,10 @@ namespace Emgu.CV.XamarinForms
             planarSubdivisionButton.Text = "Planar Subdivision";
 
             Button faceDetectionButton = new Button();
-            faceDetectionButton.Text = "Face Detection";
+            faceDetectionButton.Text = "Face Detection (CascadeClassifier)";
 
             Button faceLandmarkDetectionButton = new Button();
-            faceLandmarkDetectionButton.Text = "Face Landmark Detection";
+            faceLandmarkDetectionButton.Text = "Face Landmark Detection (DNN Module)";
 
             Button featureDetectionButton = new Button();
             featureDetectionButton.Text = "Feature Matching";
@@ -40,7 +41,7 @@ namespace Emgu.CV.XamarinForms
             ocrButton.Text = "OCR";
 
             Button dnnButton = new Button();
-            dnnButton.Text = "DNN";
+            dnnButton.Text = "Mask RCNN (DNN module)";
 
             List<View> buttonList = new List<View>()
             {
@@ -57,37 +58,16 @@ namespace Emgu.CV.XamarinForms
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
             {
                 Button viz3dButton = new Button();
-                viz3dButton.Text = "Viz3D";
+                viz3dButton.Text = "Simple 3D reconstruction";
 
                 buttonList.Add(viz3dButton);
 
                 viz3dButton.Clicked += (sender, args) =>
                 {
-                    using (Viz3d viz = new Viz3d("show_simple_widgets"))
-                    {
-                        viz.SetBackgroundMeshLab();
-                        using (WCoordinateSystem coor = new WCoordinateSystem())
-                        {
-                            viz.ShowWidget("coor", coor);
-                            using (WCube cube = new WCube(
-                                new MCvPoint3D64f(-.5, -.5, -.5),
-                                new MCvPoint3D64f(.5, .5, .5),
-                                true,
-                                new MCvScalar(255, 255, 255)))
-                            {
-                                viz.ShowWidget("cube", cube);
-                                using (WCube cube0 = new WCube(
-                                    new MCvPoint3D64f(-1, -1, -1),
-                                    new MCvPoint3D64f(-.5, -.5, -.5),
-                                    false,
-                                    new MCvScalar(123, 45, 200)))
-                                {
-                                    viz.ShowWidget("cub0", cube0);
-                                    viz.Spin();
-                                }
-                            }
-                        }
-                    }
+                    Mat left = CvInvoke.Imread("imL.png", ImreadModes.Color);
+                    Mat right = CvInvoke.Imread("imR.png", ImreadModes.Color);
+                    Viz3d v = Simple3DReconstruct.GetViz3d(left, right);
+                    v.Spin();
                 };
             }
 
@@ -197,5 +177,9 @@ namespace Emgu.CV.XamarinForms
         {
             // Handle when your app resumes
         }
+
+
     }
+
+
 }

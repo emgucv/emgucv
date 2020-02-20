@@ -11,10 +11,10 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AboutPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\PlanarSubdivision\DrawSubdivision.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\FaceDetection\DetectFace.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\PedestrianDetection\FindPedestrian.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\FeatureMatching\DrawMatches.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DrawSubdivision.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DetectFace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FindPedestrian.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DrawMatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DnnPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FaceLandmarkDetectionPage.cs" />
@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PedestrianDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlanarSubdivisionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureMatchingPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Simple3DReconstruct.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)GettingStarted.Xamarin" />
