@@ -125,6 +125,7 @@ namespace Emgu.CV.Cuda
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatGetRegion")]
         public static extern IntPtr GetRegion(IntPtr gpuMat, ref Emgu.CV.Structure.Range rowRange, ref Emgu.CV.Structure.Range colRange);
 
+        /*
         /// <summary>
         /// Resize the GpuMat
         /// </summary>
@@ -134,6 +135,7 @@ namespace Emgu.CV.Cuda
         /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or IntPtr.Zero to call the function synchronously (blocking).</param>     
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "gpuMatResize")]
         public static extern void GpuMatResize(IntPtr src, IntPtr dst, CvEnum.Inter interpolation, IntPtr stream);
+        */
 
         /// <summary>
         /// gpuMatReshape the src GpuMat  

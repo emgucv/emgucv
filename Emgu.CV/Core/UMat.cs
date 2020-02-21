@@ -13,9 +13,6 @@ using Emgu.CV.CvEnum;
 using Emgu.Util;
 #if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
-#elif __IOS__
-using UIKit;
-using CoreGraphics;
 #endif
 
 namespace Emgu.CV
@@ -1062,11 +1059,13 @@ namespace Emgu.CV
                 _v = v;
             }
 
-            public Array Data
+            public Mat Mat
             {
                 get
                 {
-                    return _v.GetData(true);
+                    Mat m = new Mat();
+                    _v.CopyTo(m);
+                    return m;
                 }
             }
         }

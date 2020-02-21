@@ -14,12 +14,6 @@ using Emgu.CV.Util;
 using Emgu.CV;
 using Emgu.Util;
 
-#if __IOS__
-using UIKit;
-using CoreGraphics;
-#else
-#endif
-
 namespace Emgu.CV.Cuda
 {
     /// <summary>
@@ -209,14 +203,6 @@ namespace Emgu.CV.Cuda
                 return m.GetData(jagged);
             }
         }
-
-#if __IOS__
-        public UIImage ToUIImage()
-        {
-         using (Mat m = ToMat())
-            return m.ToUIImage();
-        }
-#endif
 
         /// <summary>
         /// Copies scalar value to every selected element of the destination GpuMat:
@@ -508,13 +494,24 @@ namespace Emgu.CV.Cuda
                 _v = v;
             }
 
+            public Mat Mat
+            {
+                get
+                {
+                    Mat m = new Mat();
+                    _v.Download(m);
+                    return m;
+                }
+            }
+
+            /*
             public Array Data
             {
                 get
                 {
                     return _v.GetData(true);
                 }
-            }
+            }*/
         }
     }
 

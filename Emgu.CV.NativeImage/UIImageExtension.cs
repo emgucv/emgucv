@@ -9,6 +9,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using CoreGraphics;
+using Emgu.CV.Cuda;
 using UIKit;
 
 namespace Emgu.CV
@@ -87,7 +88,20 @@ namespace Emgu.CV
             return UIImage.FromImage (tmp);
          }
       }
-   }
+
+      /// <summary>
+      /// Converts to UIImage.
+      /// </summary>
+      /// <returns>The UIImage.</returns>
+      public static UIImage ToUIImage(this GpuMat gpuMat)
+      {
+          using (Mat tmp = new Mat())
+          {
+              gpuMat.Download(tmp);
+              return tmp.ToUIImage();
+          }
+      }
+    }
 }
 
 #endif

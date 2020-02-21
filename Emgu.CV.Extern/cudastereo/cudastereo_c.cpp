@@ -11,7 +11,7 @@ cv::cuda::StereoBM* cudaStereoBMCreate(int numDisparities, int blockSize, cv::Pt
 #ifdef HAVE_OPENCV_CUDASTEREO
 	cv::Ptr<cv::cuda::StereoBM> ptr = cv::cuda::createStereoBM(numDisparities, blockSize);
 	*sharedPtr = new cv::Ptr<cv::cuda::StereoBM>(ptr);
-	return ptr.get();
+	return (*sharedPtr)->get();
 #else
 	throw_no_cudastereo();
 #endif

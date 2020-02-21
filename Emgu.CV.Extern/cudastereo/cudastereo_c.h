@@ -44,11 +44,11 @@ namespace cv
 //  Cuda Stereo
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::StereoBM*) cudaStereoBMCreate(int numDisparities, int blockSize);
+CVAPI(cv::cuda::StereoBM*) cudaStereoBMCreate(int numDisparities, int blockSize, cv::Ptr<cv::cuda::StereoBM>** sharedPtr);
 
 CVAPI(void) cudaStereoBMFindStereoCorrespondence(cv::cuda::StereoBM* stereo, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaStereoBMRelease(cv::cuda::StereoBM** stereoBM);
+CVAPI(void) cudaStereoBMRelease(cv::Ptr<cv::cuda::StereoBM>** stereoBM);
 
 CVAPI(cv::cuda::StereoConstantSpaceBP*) cudaStereoConstantSpaceBPCreate(int ndisp, int iters, int levels, int nr_plane, cv::Ptr<cv::cuda::StereoConstantSpaceBP>** sharedPtr);
 

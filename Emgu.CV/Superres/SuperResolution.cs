@@ -2,8 +2,6 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(__IOS__ || UNITY_IOS )
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -54,9 +52,10 @@ namespace Emgu.CV.Superres
       /// </summary>
       protected override void DisposeObject()
       {
-         if (_ptr != IntPtr.Zero)
+         if (_sharedPtr != IntPtr.Zero)
          {
-            SuperresInvoke.cveSuperResolutionRelease(ref _ptr, ref _sharedPtr);
+            SuperresInvoke.cveSuperResolutionRelease( ref _sharedPtr);
+            _ptr = IntPtr.Zero;
          }
       }
    }
@@ -72,7 +71,6 @@ namespace Emgu.CV.Superres
       internal static extern void cvSuperResolutionNextFrame(IntPtr superres, IntPtr frame);
       */
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern void cveSuperResolutionRelease(ref IntPtr superres, ref IntPtr sharedPtr);
+      internal static extern void cveSuperResolutionRelease(ref IntPtr sharedPtr);
    }
 }
-#endif

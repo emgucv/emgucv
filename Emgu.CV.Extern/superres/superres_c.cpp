@@ -28,11 +28,10 @@ cv::superres::FrameSource* cveSuperresCreateFrameSourceCamera(int deviceId, cv::
 	throw_no_superres();
 #endif
 }
-void cveSuperresFrameSourceRelease(cv::superres::FrameSource** frameSource, cv::Ptr<cv::superres::FrameSource>** sharedPtr)
+void cveSuperresFrameSourceRelease(cv::Ptr<cv::superres::FrameSource>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_SUPERRES
 	delete *sharedPtr;
-	*frameSource = 0;
 	*sharedPtr = 0;
 #else
 	throw_no_superres();

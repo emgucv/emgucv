@@ -92,12 +92,7 @@ namespace Emgu.CV
                 PushParameters(vec, parameters);
 
                 using (CvString s = new CvString(filename))
-                //
                 {
-#if __IOS__
-                    using (InputArray iaImage = image.GetInputArray())
-                        return cveImwrite(s, iaImage, vec);
-#else
                     bool containsUnicode = (s.Length != filename.Length);
                     if (containsUnicode &&
                         (Emgu.Util.Platform.OperationSystem != OS.MacOS) &&
@@ -120,7 +115,6 @@ namespace Emgu.CV
                     else
                         using (InputArray iaImage = image.GetInputArray())
                             return cveImwrite(s, iaImage, vec);
-#endif
                 }
             }
         }

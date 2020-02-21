@@ -2,8 +2,6 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(__IOS__ || UNITY_IOS )
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -110,4 +108,3 @@ namespace Emgu.CV.Superres
    }
 
 }
-#endif
