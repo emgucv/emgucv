@@ -22,6 +22,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.xml"
       PATTERN "*.txt"
       PATTERN "*.png"
+	  PATTERN "*.jpg"
       PATTERN "*.dll"
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
@@ -352,7 +353,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     #add_subdirectory(PlanarSubdivision)
     add_subdirectory(ShapeDetection)
     #add_subdirectory(FeatureMatching)
-    add_subdirectory(TrafficSignRecognition)
+    #add_subdirectory(TrafficSignRecognition)
     add_subdirectory(MotionDetection)
     add_subdirectory(VideoSurveillance)
     #add_subdirectory(FaceDetection)

@@ -40,8 +40,11 @@ namespace Emgu.CV.XamarinForms
             Button ocrButton = new Button();
             ocrButton.Text = "OCR";
 
-            Button dnnButton = new Button();
-            dnnButton.Text = "Mask RCNN (DNN module)";
+            Button maskRcnnButton = new Button();
+            maskRcnnButton.Text = "Mask RCNN (DNN module)";
+
+            Button stopSignDetectionButton = new Button();
+            stopSignDetectionButton.Text = "Stop Sign Detection (DNN module)";
 
             List<View> buttonList = new List<View>()
             {
@@ -52,7 +55,8 @@ namespace Emgu.CV.XamarinForms
                 featureDetectionButton,
                 pedestrianDetectionButton,
                 ocrButton,
-                dnnButton
+                maskRcnnButton,
+                stopSignDetectionButton
             };
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
@@ -138,13 +142,21 @@ namespace Emgu.CV.XamarinForms
             if (Emgu.Util.Platform.ClrType == ClrType.NetFxCore)
             {
                 //No DNN module for UWP apps
-                dnnButton.IsVisible = false;
+                maskRcnnButton.IsVisible = false;
                 faceLandmarkDetectionButton.IsVisible = false;
+                stopSignDetectionButton.IsVisible = false;
             }
             else
             {
-                dnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new DnnPage()); };
+                maskRcnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new MaskRcnnPage()); };
                 faceLandmarkDetectionButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage()); };
+                stopSignDetectionButton.Clicked  += (sender, args) =>
+                {
+                    MaskRcnnPage stopSignDetectionPage = new MaskRcnnPage();
+                    stopSignDetectionPage.DefaultImage = "stop-sign.jpg";
+                    stopSignDetectionPage.ObjectsOfInterest = new string[] {"stop sign"};
+                    MainPage.Navigation.PushAsync(stopSignDetectionPage);
+                };
             }
 
             ocrButton.Clicked += (sender, args) =>

@@ -64,12 +64,12 @@ namespace Emgu.CV.XamarinForms
             if (_faceDetector == null)
             {
                 InitPath();
-                String ssdFileLocal = DnnPage.DnnDownloadFile(
+                String ssdFileLocal = MaskRcnnPage.DnnDownloadFile(
                     "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/",
                     "res10_300x300_ssd_iter_140000.caffemodel",
                     _path);
 
-                String ssdProtoFileLocal = DnnPage.DnnDownloadFile(
+                String ssdProtoFileLocal = MaskRcnnPage.DnnDownloadFile(
                     "https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/",
                     "deploy.prototxt",
                     _path);
@@ -85,7 +85,7 @@ namespace Emgu.CV.XamarinForms
                 InitPath();
                 String facemarkFileName = "lbfmodel.yaml";
                 String facemarkFileUrl = "https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/";
-                String facemarkFileLocal = DnnPage.DnnDownloadFile(
+                String facemarkFileLocal = MaskRcnnPage.DnnDownloadFile(
                     facemarkFileUrl,
                     facemarkFileName,
                     _path);

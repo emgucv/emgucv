@@ -16,7 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)FindPedestrian.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawMatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DnnPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MaskRcnnPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FaceLandmarkDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HelloWorldPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FaceDetectionPage.cs" />
