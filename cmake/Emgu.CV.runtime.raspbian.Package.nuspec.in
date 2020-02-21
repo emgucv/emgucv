@@ -13,8 +13,8 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
 	<summary>Runtime package of Emgu CV for Raspbian</summary>
     <description>This package contains the native runtime of Emgu CV for Raspbian</description>
-    <releaseNotes>This is the ${CPACK_PACKAGE_VERSION}${TENSORFLOW_VERSION_SUFFIX} release of Emgu TF for Raspbian. For online documentation please visit
-http://www.emgu.com/wiki/files/emgutf/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/
+    <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV for Raspbian. For online documentation please visit
+http://www.emgu.com/wiki/files/emgucv/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/
     </releaseNotes>
 	${EMGUCV_RASPBIAN_NUGET_DEPENDENCY}
     <copyright>${CURRENT_YEAR} ${CPACK_PACKAGE_VENDOR}, all rights reserved</copyright>

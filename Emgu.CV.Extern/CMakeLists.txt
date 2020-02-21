@@ -2960,7 +2960,7 @@ if(ENABLE_SOLUTION_FOLDERS)
 endif() 
 
 IF (WITH_TIFF)
-  IF (NETFX_CORE OR WIN32)
+  IF (BUILD_TIFF)
     ADD_DEPENDENCIES(${the_target} libtiff)
     SET(TIFF_INCLUDE_DIR "${OPENCV_SUBFOLDER}/3rdparty/libtiff")
     SET(TIFF_CONFIG_INCLUDE_DIR "${CMAKE_BINARY_DIR}/opencv/3rdparty/libtiff")

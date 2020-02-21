@@ -2,6 +2,8 @@
 #  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
+IF(WIN32)
+
 PROJECT(Emgu.CV.runtime.raspbian.nuget)
 IF(WIN32)
 ADD_CUSTOM_TARGET(
@@ -23,4 +25,5 @@ if(ENABLE_SOLUTION_FOLDERS)
   set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
 endif() 
 
+ENDIF()
 

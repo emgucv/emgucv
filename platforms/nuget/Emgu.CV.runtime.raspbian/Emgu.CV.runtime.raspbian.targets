@@ -7,7 +7,7 @@
       <EmguCVRaspbianDeployMessage Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND Exists('$(EmguCVRaspbianNativeFileArm)')">$(EmguCVRaspbianDeployMessage)arm </EmguCVRaspbianDeployMessage>
       <EmguCVRaspbianErrorMessage Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND !Exists('$(EmguCVRaspbianNativeFileArm)')">This package do not contain necessary binary for $(EmguCVRaspbianLinkTarget). Arm is targeted, but file $(EmguCVRaspbianNativeFileArm) is missing.</EmguCVRaspbianErrorMessage>
     </PropertyGroup>
-    <ItemGroup Condition="'$(EmguCVRaspbianBuildX64)'=='True' AND Exists('$(EmguCVRaspbianNativeFileX64)')">
+    <ItemGroup Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND Exists('$(EmguCVRaspbianNativeFileArm)')">
       <None Include="$(MSBuildThisFileDirectory)\*.so">
         <Link>arm\%(RecursiveDir)%(Filename)%(Extension)</Link>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
