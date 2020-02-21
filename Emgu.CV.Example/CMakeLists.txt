@@ -252,66 +252,66 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     
   ENDIF()
   
-  IF (HAVE_ANDROID OR HAVE_WINSTORE_10) 
-    INSTALL(
-      FILES
-      "PlanarSubdivision/DrawSubdivision.cs"
-      DESTINATION "Emgu.CV.Example/PlanarSubdivision"
-      COMPONENT emgucv_example_source
-      )
-    INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/FaceDetection/"
-      DESTINATION Emgu.CV.Example/FaceDetection/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "DetectFace.cs" 
-      PATTERN "lena.jpg"  
-      PATTERN ".git" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMake*" EXCLUDE
-      PATTERN "Release" EXCLUDE
-      PATTERN "Debug" EXCLUDE
-      PATTERN "RelWithDebInfo" EXCLUDE
-      PATTERN "*.dir" EXCLUDE
-      PATTERN "bin" EXCLUDE
-      )
-    INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/FeatureMatching/"
-      DESTINATION Emgu.CV.Example/FeatureMatching/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "DrawMatches.cs" 
-      PATTERN "box.png"  
-      PATTERN "box_in_scene.png"  
-      PATTERN ".git" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMake*" EXCLUDE
-      PATTERN "Release" EXCLUDE
-      PATTERN "Debug" EXCLUDE
-      PATTERN "RelWithDebInfo" EXCLUDE
-      PATTERN "*.dir" EXCLUDE
-      PATTERN "bin" EXCLUDE
-      )
-    INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/PedestrianDetection/"
-      DESTINATION Emgu.CV.Example/PedestrianDetection/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "FindPedestrian.cs" 
-      PATTERN "pedestrian.png" 
-      PATTERN ".git" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMake*" EXCLUDE
-      PATTERN "Release" EXCLUDE
-      PATTERN "Debug" EXCLUDE
-      PATTERN "RelWithDebInfo" EXCLUDE
-      PATTERN "*.dir" EXCLUDE
-      PATTERN "bin" EXCLUDE
-      )
-  ENDIF()
+#  IF (HAVE_ANDROID OR HAVE_WINSTORE_10) 
+#    INSTALL(
+#      FILES
+#      "PlanarSubdivision/DrawSubdivision.cs"
+#      DESTINATION "Emgu.CV.Example/PlanarSubdivision"
+#      COMPONENT emgucv_example_source
+#      )
+#    INSTALL(
+#      DIRECTORY
+#      "${CMAKE_CURRENT_SOURCE_DIR}/FaceDetection/"
+#      DESTINATION Emgu.CV.Example/FaceDetection/
+#      COMPONENT emgucv_example_source
+#      FILES_MATCHING 
+#      PATTERN "DetectFace.cs" 
+#      PATTERN "lena.jpg"  
+#      PATTERN ".git" EXCLUDE
+#      PATTERN "obj" EXCLUDE
+#      PATTERN "CMake*" EXCLUDE
+#      PATTERN "Release" EXCLUDE
+#      PATTERN "Debug" EXCLUDE
+#      PATTERN "RelWithDebInfo" EXCLUDE
+#      PATTERN "*.dir" EXCLUDE
+#      PATTERN "bin" EXCLUDE
+#      )
+#    INSTALL(
+#      DIRECTORY
+#      "${CMAKE_CURRENT_SOURCE_DIR}/FeatureMatching/"
+#      DESTINATION Emgu.CV.Example/FeatureMatching/
+#      COMPONENT emgucv_example_source
+#      FILES_MATCHING 
+#      PATTERN "DrawMatches.cs" 
+#      PATTERN "box.png"  
+#      PATTERN "box_in_scene.png"  
+#      PATTERN ".git" EXCLUDE
+#      PATTERN "obj" EXCLUDE
+#      PATTERN "CMake*" EXCLUDE
+#      PATTERN "Release" EXCLUDE
+#      PATTERN "Debug" EXCLUDE
+#      PATTERN "RelWithDebInfo" EXCLUDE
+#      PATTERN "*.dir" EXCLUDE
+#      PATTERN "bin" EXCLUDE
+#      )
+#    INSTALL(
+#      DIRECTORY
+#      "${CMAKE_CURRENT_SOURCE_DIR}/PedestrianDetection/"
+#      DESTINATION Emgu.CV.Example/PedestrianDetection/
+#      COMPONENT emgucv_example_source
+#      FILES_MATCHING 
+#      PATTERN "FindPedestrian.cs" 
+#      PATTERN "pedestrian.png" 
+#      PATTERN ".git" EXCLUDE
+#      PATTERN "obj" EXCLUDE
+#      PATTERN "CMake*" EXCLUDE
+#      PATTERN "Release" EXCLUDE
+#      PATTERN "Debug" EXCLUDE
+#      PATTERN "RelWithDebInfo" EXCLUDE
+#      PATTERN "*.dir" EXCLUDE
+#      PATTERN "bin" EXCLUDE
+#      )
+#  ENDIF()
 
   IF(HAVE_ANDROID)    
     INSTALL(
@@ -321,21 +321,21 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       DESTINATION "opencv/data/haarcascades"
       COMPONENT emgucv_example_source
       )
-    INSTALL(
-      FILES
-      "LicensePlateRecognition/LicensePlateDetector.cs"
-      "LicensePlateRecognition/license-plate.jpg"
-      DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
-      COMPONENT emgucv_example_source
-      )
-    INSTALL(
-      FILES
-      "TrafficSignRecognition/StopSignDetector.cs"
-      "TrafficSignRecognition/stop-sign-model.png"
-      "TrafficSignRecognition/stop-sign.jpg"
-      DESTINATION "Emgu.CV.Example/TrafficSignRecognition"
-      COMPONENT emgucv_example_source
-      )
+#    INSTALL(
+#      FILES
+#      "LicensePlateRecognition/LicensePlateDetector.cs"
+#      "LicensePlateRecognition/license-plate.jpg"
+#      DESTINATION "Emgu.CV.Example/LicensePlateRecognition"
+#      COMPONENT emgucv_example_source
+#      )
+#    INSTALL(
+#      FILES
+#      "TrafficSignRecognition/StopSignDetector.cs"
+#      "TrafficSignRecognition/stop-sign-model.png"
+#      "TrafficSignRecognition/stop-sign.jpg"
+#      DESTINATION "Emgu.CV.Example/TrafficSignRecognition"
+#      COMPONENT emgucv_example_source
+#      )
   ENDIF()
 
   IF(HAVE_WINDESKTOP_X86 AND HAVE_WINDESKTOP_X64)
