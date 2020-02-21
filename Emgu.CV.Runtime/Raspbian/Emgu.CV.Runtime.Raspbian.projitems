@@ -9,7 +9,7 @@
     <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <EmguCVRaspbianBinaryDir>$(MSBuildThisFileDirectory)..\..\lib</EmguCVRaspbianBinaryDir>
+    <EmguCVRaspbianBinaryDir>$(MSBuildThisFileDirectory)..\..\libs</EmguCVRaspbianBinaryDir>
     <EmguCVRaspbianDir>$(MSBuildThisFileDirectory)</EmguCVRaspbianDir>
   </PropertyGroup>
   <PropertyGroup>

@@ -9,7 +9,7 @@
     <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <EmguCVUbuntuBinaryDir>$(MSBuildThisFileDirectory)..\..\lib</EmguCVUbuntuBinaryDir>
+    <EmguCVUbuntuBinaryDir>$(MSBuildThisFileDirectory)..\..\libs</EmguCVUbuntuBinaryDir>
     <EmguCVUbuntuDir>$(MSBuildThisFileDirectory)</EmguCVUbuntuDir>
   </PropertyGroup>
   <PropertyGroup>
