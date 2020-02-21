@@ -29,6 +29,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 using Color = Xamarin.Forms.Color;
+using Environment = System.Environment;
 
 namespace Emgu.CV.XamarinForms
 {
@@ -44,14 +45,9 @@ namespace Emgu.CV.XamarinForms
         {
             if (_path == null)
             {
-#if __ANDROID__
-                _path = System.IO.Path.Combine(
-                    Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
-                    Android.OS.Environment.DirectoryDownloads, 
-                    _modelFolderName);
-#elif __IOS__
+#if __ANDROID__ ||  __IOS__
                _path = System.IO.Path.Combine (
-                 Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments),
+                 System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments),
                  _modelFolderName);
 #else
                 _path = String.Format("./{0}/", _modelFolderName);

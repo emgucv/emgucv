@@ -11,7 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 
-#ifdef HAVE_OPENCV_FUZZY
+#ifdef HAVE_OPENCV_BIOINSPIRED
 
 #include "opencv2/bioinspired/retina.hpp"
 #include "opencv2/bioinspired/retinafasttonemapping.hpp"

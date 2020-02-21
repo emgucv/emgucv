@@ -27,18 +27,10 @@ namespace Emgu.CV
     //public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray
     public static partial class AndroidExtension
     {
-
-        /*
         /// <summary>
         /// Create a Mat from an Android Bitmap
         /// </summary>
-        /// <param name="bmp">The android Bitmap</param>
-        public Mat(Android.Graphics.Bitmap bmp)
-           : this()
-        {
-            this.Bitmap = bmp;
-        }
-        */
+        /// <param name="bitmap">The android Bitmap</param>
         public static Mat ToMat(this Android.Graphics.Bitmap bitmap)
         {
             Mat m = new Mat();

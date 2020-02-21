@@ -24,11 +24,9 @@ using Android.Content.Res;
 
 namespace Emgu.CV
 {
-    /*
-    public partial class Image<TColor, TDepth>
-       : CvArray<TDepth>, IEquatable<Image<TColor, TDepth>>
-       where TColor : struct, IColor
-       where TDepth : new()*/
+    /// <summary>
+    /// Extension method for Android platform
+    /// </summary>
     public static partial class AndroidExtension
     {
         
@@ -48,7 +46,8 @@ namespace Emgu.CV
 
         /// <summary> Create a Bitmap image of certain size</summary>
         /// <param name="width">The width of the bitmap</param>
-        /// <param name="height"> The height of the bitmap</param>
+        /// <param name="height">The height of the bitmap</param>
+        /// <param name="image">The Image to convert to Bitmap</param>
         /// <returns> This image in Bitmap format of the specific size</returns>
         public static Android.Graphics.Bitmap ToBitmap<TColor, TDepth>(this Image<TColor, TDepth> image, int width, int height)
             where TColor : struct, IColor
@@ -73,6 +72,7 @@ namespace Emgu.CV
         /// Convert Image object to Bitmap
         /// </summary>
         /// <param name="config">The Bitmap Config</param>
+        /// <param name="image">The image to convert to Bitmap</param>
         /// <returns>The Bitmap</returns>
         public static Android.Graphics.Bitmap ToBitmap<TColor, TDepth>(this Image<TColor, TDepth> image, Android.Graphics.Bitmap.Config config)
             where TColor : struct, IColor

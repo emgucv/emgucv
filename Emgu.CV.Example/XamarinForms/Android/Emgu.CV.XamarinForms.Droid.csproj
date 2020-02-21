@@ -21,7 +21,7 @@
     <MandroidI18n />
     <JavaMaximumHeapSize />
     <JavaOptions />
-    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -39,6 +39,8 @@
     <EnableLLVM>false</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <AndroidSupportedAbis>
+    </AndroidSupportedAbis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -91,16 +93,16 @@
     <AndroidAsset Include="..\..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
       <Link>Assets\haarcascade_frontalface_default.xml</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\FaceDetection\lena.jpg">
+    <AndroidAsset Include="..\Core\lena.jpg">
       <Link>Assets\lena.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\PedestrianDetection\pedestrian.png">
+    <AndroidAsset Include="..\Core\pedestrian.png">
       <Link>Assets\pedestrian.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\FeatureMatching\box.png">
+    <AndroidAsset Include="..\Core\box.png">
       <Link>Assets\box.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\FeatureMatching\box_in_scene.png">
+    <AndroidAsset Include="..\Core\box_in_scene.png">
       <Link>Assets\box_in_scene.png</Link>
     </AndroidAsset>
     <None Include="Properties\AndroidManifest.xml" />

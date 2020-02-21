@@ -2,8 +2,6 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-//#if !NETFX_CORE
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,6 +31,7 @@ using Emgu.CV.Structure;
 using Emgu.Util;
 using FaceDetection;
 using Xamarin.Forms;
+using Environment = System.Environment;
 
 namespace Emgu.CV.XamarinForms
 {
@@ -81,13 +80,8 @@ namespace Emgu.CV.XamarinForms
 
 #if NETFX_CORE
                       String path = System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, "tessdata");
-#elif __ANDROID__
-                      String path = System.IO.Path.Combine(
-                         Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
-                         Android.OS.Environment.DirectoryDownloads,
-                         "tessdata");
-#elif __IOS__
-                     String path = System.IO.Path.Combine (
+#elif __ANDROID__ || __IOS__
+                      String path = System.IO.Path.Combine (
                         Environment.GetFolderPath ( Environment.SpecialFolder.MyDocuments ),
                         "tessdata");
 #else
@@ -120,7 +114,12 @@ namespace Emgu.CV.XamarinForms
                 {
                     ocrResult = ocrResult.Replace(System.Environment.NewLine, " ");
                 }
-                ocrResult = String.Format("tesseract version {2}; lang: {0}; mode: {1}{3}Text Detected:{3}{4}", lang, mode.ToString(), Emgu.CV.OCR.Tesseract.VersionString, Environment.NewLine, ocrResult);
+                ocrResult = String.Format(
+                    "tesseract version {2}; lang: {0}; mode: {1}{3}Text Detected:{3}{4}", 
+                    lang, 
+                    mode.ToString(), 
+                    Emgu.CV.OCR.Tesseract.VersionString, 
+                    System.Environment.NewLine, ocrResult);
                 SetMessage(ocrResult);
             };
         }
@@ -132,5 +131,3 @@ namespace Emgu.CV.XamarinForms
 
     }
 }
-
-//#endif
