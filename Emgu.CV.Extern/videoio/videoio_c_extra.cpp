@@ -26,7 +26,10 @@ void OpenniGetColorPoints(CvCapture* capture, std::vector<ColorPoint>* points, I
 			if (*mask)
 			{
 				memcpy(&cp.position, position, sizeof(CvPoint3D32f));
-				memcpy(&cp.red, color, 3);
+				cp.blue = *color;
+				cp.green = *(color + 1);
+				cp.red = *(color + 2);
+				//memcpy(&cp.red, color, 3);
 				points->push_back(cp);
 
 			}
@@ -36,7 +39,10 @@ void OpenniGetColorPoints(CvCapture* capture, std::vector<ColorPoint>* points, I
 		for (int i = 0; i < ptCount; i++, position++, color += 3)
 		{
 			memcpy(&cp.position, position, sizeof(CvPoint3D32f));
-			memcpy(&cp.red, color, 3);
+			cp.blue = *color;
+			cp.green = *(color + 1);
+			cp.red = *(color + 2);
+			//memcpy(&cp.red, color, 3);
 			points->push_back(cp);
 
 		}

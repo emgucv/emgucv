@@ -4,33 +4,48 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef EMGU_CV_WITH_TIFF
-
 #include "tiffio_c.h"
 
 TIFF* tiffWriterOpen(char* fileName)
 {
-   return XTIFFOpen(fileName, "w");
+#ifdef EMGU_CV_WITH_TIFF
+    return XTIFFOpen(fileName, "w");
+#else
+    throw_no_tiff();
+#endif
 }
 
 int tiffTileRowSize(TIFF* pTiff)
 {
+#ifdef EMGU_CV_WITH_TIFF
    return TIFFTileRowSize(pTiff);
+#else
+    throw_no_tiff();
+#endif
 }
 
 int tiffTileSize(TIFF* pTiff)
 {
+#ifdef EMGU_CV_WITH_TIFF
    return TIFFTileSize(pTiff);
+#else
+    throw_no_tiff();
+#endif
 }
 
 void tiffWriteImageSize(TIFF* pTiff, CvSize* imageSize)
 {
+#ifdef EMGU_CV_WITH_TIFF
    TIFFSetField(pTiff, TIFFTAG_IMAGEWIDTH, imageSize->width);
    TIFFSetField(pTiff, TIFFTAG_IMAGELENGTH, imageSize->height);
+#else
+    throw_no_tiff();
+#endif
 }
 
 void tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel)
 {
+#ifdef EMGU_CV_WITH_TIFF
    TIFFSetField(pTiff, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
    TIFFSetField(pTiff, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
    TIFFSetField(pTiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
@@ -49,10 +64,14 @@ void tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel)
       uint16 extraSampleType[] = {EXTRASAMPLE_UNASSALPHA};
       TIFFSetField(pTiff, TIFFTAG_EXTRASAMPLES, 1, extraSampleType);
    }
+#else
+    throw_no_tiff();
+#endif
 }
 
 void tiffWriteImage(TIFF* pTiff, IplImage* image)
 {
+#ifdef EMGU_CV_WITH_TIFF
    cv::Mat mat = cv::cvarrToMat(image);
    CvSize imageSize = cvSize(image->width, image->height);
    tiffWriteImageSize(pTiff, &imageSize);
@@ -63,10 +82,14 @@ void tiffWriteImage(TIFF* pTiff, IplImage* image)
       TIFFWriteScanline(pTiff, mat.ptr(row), row, 0);
    }
    //end writing image data
+#else
+    throw_no_tiff();
+#endif
 }
 
 void tiffWriteTile(TIFF* pTiff, int row, int col, IplImage* tileImage)
 {
+#ifdef EMGU_CV_WITH_TIFF
    cv::Mat tile = cv::cvarrToMat(tileImage);
    
    int bufferStride = tile.cols * tile.elemSize();
@@ -78,16 +101,24 @@ void tiffWriteTile(TIFF* pTiff, int row, int col, IplImage* tileImage)
 
    TIFFWriteTile(pTiff, buffer, col, row, 0, 0);
    free(buffer);
+#else
+    throw_no_tiff();
+#endif
 }
 
 void tiffWriteTileInfo(TIFF* pTiff, CvSize* tileSize)
 {
+#ifdef EMGU_CV_WITH_TIFF
    TIFFSetField(pTiff, TIFFTAG_TILEWIDTH, tileSize->width);
    TIFFSetField(pTiff, TIFFTAG_TILELENGTH, tileSize->height);
+#else
+    throw_no_tiff();
+#endif
 }
 
 void tiffWriteGeoTag(TIFF* pTiff, double* ModelTiepoint, double* ModelPixelScale)
 {
+#ifdef EMGU_CV_WITH_TIFF
    TIFFSetField(pTiff, GTIFF_TIEPOINTS,  6, ModelTiepoint);
    TIFFSetField(pTiff, GTIFF_PIXELSCALE, 3, ModelPixelScale);
 
@@ -98,13 +129,19 @@ void tiffWriteGeoTag(TIFF* pTiff, double* ModelTiepoint, double* ModelPixelScale
    GTIFKeySet(gTiff, GeogAngularUnitsGeoKey, TYPE_SHORT, 1, Angular_Degree);
    GTIFWriteKeys(gTiff);
    GTIFFree(gTiff);
+#else
+    throw_no_tiff();
+#endif
 }
 
 void tiffWriterClose(TIFF** pTiff)
 {
+#ifdef EMGU_CV_WITH_TIFF
    TIFFWriteDirectory(*pTiff);
    XTIFFClose(*pTiff);
    *pTiff = 0;
+#else
+    throw_no_tiff();
+#endif
 }
 
-#endif
