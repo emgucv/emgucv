@@ -116,27 +116,23 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="ExamplesDialogViewController.cs" />
     <Compile Include="HelloWorldUIViewController.cs" />
-    <Compile Include="..\FeatureMatching\DrawMatches.cs">
+    <Compile Include="..\XamarinForms\Core\DrawMatches.cs">
       <Link>DrawMatches.cs</Link>
     </Compile>
     <Compile Include="FeatureMatchingDialogViewController.cs" />
-    <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
+    <Compile Include="..\XamarinForms\Core\FindPedestrian.cs">
       <Link>FindPedestrian.cs</Link>
     </Compile>
-    <Compile Include="..\LicensePlateRecognition\LicensePlateDetector.cs">
+    <Compile Include="..\LicensePlateRecognition\\LicensePlateDetector.cs">
       <Link>LicensePlateDetector.cs</Link>
     </Compile>
     <Compile Include="LicensePlateRecognitionDialogViewController.cs" />
     <Compile Include="PlanarSubdivisionDialogViewController.cs" />
-    <Compile Include="..\PlanarSubdivision\DrawSubdivision.cs">
+    <Compile Include="..\XamarinForms\Core\DrawSubdivision.cs">
       <Link>DrawSubdivision.cs</Link>
     </Compile>
-    <Compile Include="..\TrafficSignRecognition\StopSignDetector.cs">
-      <Link>StopSignDetector.cs</Link>
-    </Compile>
-    <Compile Include="TrafficSignRecognitionDialogViewController.cs" />
     <Compile Include="FaceDetectionDialogViewController.cs" />
-    <Compile Include="..\FaceDetection\DetectFace.cs">
+    <Compile Include="..\XamarinForms\Core\DetectFace.cs">
       <Link>DetectFace.cs</Link>
     </Compile>
     <Compile Include="ButtonMessageImageDialogViewController.cs" />
@@ -144,23 +140,17 @@
     <Compile Include="PedestrianDetectionDialogViewController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\FeatureMatching\box.png">
+    <Content Include="..\XamarinForms\Core\box.png">
       <Link>box.png</Link>
     </Content>
-    <Content Include="..\FeatureMatching\box_in_scene.png">
+    <Content Include="..\XamarinForms\Core\box_in_scene.png">
       <Link>box_in_scene.png</Link>
     </Content>
-    <Content Include="..\PedestrianDetection\pedestrian.png">
+    <Content Include="..\XamarinForms\Core\pedestrian.png">
       <Link>pedestrian.png</Link>
     </Content>
     <Content Include="..\LicensePlateRecognition\license-plate.jpg">
       <Link>license-plate.jpg</Link>
-    </Content>
-    <Content Include="..\TrafficSignRecognition\stop-sign.jpg">
-      <Link>stop-sign.jpg</Link>
-    </Content>
-    <Content Include="..\TrafficSignRecognition\stop-sign-model.png">
-      <Link>stop-sign-model.png</Link>
     </Content>
     <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
       <Link>haarcascade_eye.xml</Link>
@@ -168,7 +158,7 @@
     <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
       <Link>haarcascade_frontalface_default.xml</Link>
     </Content>
-    <Content Include="..\FaceDetection\lena.jpg">
+    <Content Include="..\XamarinForms\Core\lena.jpg">
       <Link>lena.jpg</Link>
     </Content>
     <Content Include="AppIcons\appIcon_72x72.png" />

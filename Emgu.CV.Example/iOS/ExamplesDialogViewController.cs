@@ -77,6 +77,7 @@ namespace Example.iOS
             };
             examplesSection.Add(pedestrianDetectionElement);
 
+            /*
                      StyledStringElement trafficSignDetectionElement = new StyledStringElement("Stop Sign Detection");
             trafficSignDetectionElement.Tapped += () => 
             {
@@ -86,6 +87,7 @@ namespace Example.iOS
                 );
             };
             examplesSection.Add(trafficSignDetectionElement);
+            */
 
             StyledStringElement licensePlateDetectionElement = new StyledStringElement("License Plate Detection");
             licensePlateDetectionElement.Tapped += () => 
