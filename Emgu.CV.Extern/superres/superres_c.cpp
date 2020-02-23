@@ -57,8 +57,8 @@ cv::superres::SuperResolution* cveSuperResolutionCreate(int type, cv::superres::
 	cv::Ptr<cv::superres::FrameSource> fsPtr(frameSource, [](cv::superres::FrameSource*) {});
 
 	ptr->setInput(fsPtr);
-	cv::Mat tmp;
-	ptr->nextFrame(tmp);
+	//cv::Mat tmp;
+	//ptr->nextFrame(tmp);
 	*frameSourceOut = dynamic_cast<cv::superres::FrameSource*>(ptr.get());
 
 	*sharedPtr = new cv::Ptr<cv::superres::SuperResolution>(ptr);
@@ -67,11 +67,10 @@ cv::superres::SuperResolution* cveSuperResolutionCreate(int type, cv::superres::
 	throw_no_superres();
 #endif
 }
-void cveSuperResolutionRelease(cv::superres::SuperResolution** superres, cv::Ptr<cv::superres::SuperResolution>** sharedPtr)
+void cveSuperResolutionRelease(cv::Ptr<cv::superres::SuperResolution>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_SUPERRES
 	delete *sharedPtr;
-	*superres = 0;
 	*sharedPtr = 0;
 #else
 	throw_no_superres();
