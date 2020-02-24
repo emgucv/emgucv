@@ -123,7 +123,7 @@ namespace Emgu.CV
                 subfolder = IntPtr.Size == 8 ? "x86_64" : "x86";
 #elif UNITY_STANDALONE_WIN
 #else
-                if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+                if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                 {
                     subfolder = IntPtr.Size == 8 ? "x64" : "x86";
                 }
@@ -361,11 +361,11 @@ namespace Emgu.CV
             return "lib{0}.dylib";
 #else
             String formatString = "{0}";
-            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                 formatString = "{0}.dll";
-            else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Linux)
+            else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Linux)
                 formatString = "lib{0}.so";
-            else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOS)
+            else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
                 formatString = "lib{0}.dylib";
             return formatString;
 #endif

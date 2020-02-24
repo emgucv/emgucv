@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.Util;
 using Emgu.Util.TypeEnum;
 
 namespace Emgu.CV
@@ -95,8 +96,8 @@ namespace Emgu.CV
                 {
                     bool containsUnicode = (s.Length != filename.Length);
                     if (containsUnicode &&
-                        (Emgu.Util.Platform.OperationSystem != OS.MacOS) &&
-                        (Emgu.Util.Platform.OperationSystem != OS.Linux))
+                        (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.MacOS) &&
+                        (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.Linux))
                     {
                         //Handle unicode in Windows platform
                         //Work around for Open CV ticket:

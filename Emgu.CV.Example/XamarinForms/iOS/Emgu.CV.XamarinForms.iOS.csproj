@@ -145,6 +145,9 @@
     <Content Include="..\Core\pedestrian.png">
       <Link>pedestrian.png</Link>
     </Content>
+    <Content Include="..\Core\stop-sign.jpg">
+      <Link>stop-sign.jpg</Link>
+    </Content>
     <Content Include="..\Core\test_image.png">
       <Link>test_image.png</Link>
     </Content>

@@ -2058,7 +2058,8 @@ namespace Emgu.CV
                             CvInvoke.MinMaxLoc(m, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
                         }
 
-                    } else
+                    }
+                    else
                         CvInvoke.MinMaxLoc(arr, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
                     minValues[0] = minVal;
                     maxValues[0] = maxVal;
@@ -2867,7 +2868,7 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern int cveGetNumThreads();
 
-        
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSetNumThreads(int threadsCount);
 
@@ -2895,7 +2896,7 @@ namespace Emgu.CV
                 return cveGetNumberOfCPUs();
             }
         }
-        
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern int cveGetNumberOfCPUs();
 #endif
@@ -2937,9 +2938,9 @@ namespace Emgu.CV
         private extern static IntPtr cveArrToMat(
            IntPtr cvArray,
            [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool copyData,
+           bool copyData,
            [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool allowND,
+           bool allowND,
            int coiMode);
 
         /// <summary>

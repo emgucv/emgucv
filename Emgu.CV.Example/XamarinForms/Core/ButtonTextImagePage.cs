@@ -80,7 +80,7 @@ namespace Emgu.CV.XamarinForms
 
                 bool haveCameraOption;
                 bool havePickImgOption;
-                if (Emgu.Util.Platform.OperationSystem == OS.Windows)
+                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                 {
                     //CrossMedia is not implemented on Windows.
                     haveCameraOption = false;
@@ -106,7 +106,7 @@ namespace Emgu.CV.XamarinForms
                 if (this.HasCameraOption && haveCameraOption)
                     options.Add("Camera");
 #endif
-                if (Emgu.Util.Platform.OperationSystem == OS.Windows && Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
+                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows && Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
                 {
                     options.Add("Camera");
                 }

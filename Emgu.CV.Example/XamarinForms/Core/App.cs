@@ -59,7 +59,7 @@ namespace Emgu.CV.XamarinForms
                 stopSignDetectionButton
             };
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
             {
                 Button viz3dButton = new Button();
                 viz3dButton.Text = "Simple 3D reconstruction";
@@ -95,10 +95,14 @@ namespace Emgu.CV.XamarinForms
               };
 
             String aboutIcon;
-            if (Emgu.Util.Platform.ClrType != ClrType.NetFxCore)
-                aboutIcon = "questionmark.png";
-            else
+            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
+            {
                 aboutIcon = null;
+            }
+            else if (Emgu.Util.Platform.ClrType == Emgu.Util.Platform.Clr.NetFxCore)
+                aboutIcon = null; 
+            else
+                aboutIcon = "questionmark.png";
 
             MainPage =
              new NavigationPage(
@@ -139,7 +143,7 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new FeatureMatchingPage());
             };
 
-            if (Emgu.Util.Platform.ClrType == ClrType.NetFxCore)
+            if (Emgu.Util.Platform.ClrType == Emgu.Util.Platform.Clr.NetFxCore)
             {
                 //No DNN module for UWP apps
                 maskRcnnButton.IsVisible = false;

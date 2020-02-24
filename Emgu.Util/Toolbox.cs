@@ -456,7 +456,7 @@ namespace Emgu.Util
 
          return handler;
 #else
-            if (Platform.OperationSystem == TypeEnum.OS.Windows)
+            if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
             {
                 //if (Platform.ClrType == TypeEnum.ClrType.NetFxCore)
                 {

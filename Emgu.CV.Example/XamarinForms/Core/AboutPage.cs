@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.ML;
 using Xamarin.Forms;
 
 namespace Emgu.CV.XamarinForms
@@ -25,6 +26,8 @@ namespace Emgu.CV.XamarinForms
                CvInvoke.UseOpenCL, 
                CvInvoke.OclGetPlatformsSummary());
          }
+
+         String osDescription = Emgu.Util.Platform.OperationSystem.ToString();
 
          Content = 
                new WebView()
@@ -47,8 +50,8 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 <a href=mailto:support@emgu.com>Email Support</a> <br/><br/>
 <H4> OpenCL Info </H4>
 " + openclTxt + @"
-<H4> OS Description: </H4>
-" + RuntimeInformation.OSDescription + @"
+<H4> OS: </H4>
+" + osDescription + @"
 <H4> OS Architecture: </H4>
 " + RuntimeInformation.OSArchitecture + @"
 <H4> Framework Description: </H4>
