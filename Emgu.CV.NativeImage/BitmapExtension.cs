@@ -97,7 +97,7 @@ namespace Emgu.CV
 
                     return bmpGray;
                 }
-                // Mono in Linux doesn't support scan0 constructure with Format24bppRgb, use ToBitmap instead
+                // Mono in Linux doesn't support scan0 constructor with Format24bppRgb, use ToBitmap instead
                 // See https://bugzilla.novell.com/show_bug.cgi?id=363431
                 // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
                 else if (
@@ -190,11 +190,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Provide a more efficient way to convert gray scale Mat of Byte, 3 channel Mat of Byte (assuming BGR color space) or 4 channel Mat of Byte (assuming Bgra color space) into Bitmap
-        /// such that the image data is <b>shared</b> with Bitmap. 
-        /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
-        /// For other types of image this property has the same effect as ToBitmap()
-        /// <b>Take extra caution not to use the Bitmap after the Mat object is disposed</b>
+        /// Convert the mat into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
         public static Bitmap ToBitmap(this Mat mat)
         {
@@ -237,12 +233,7 @@ namespace Emgu.CV
 
 
         /// <summary>
-        /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
-        /// such that the image data is <b>shared</b> with Bitmap. 
-        /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
-        /// For other types of image this property has the same effect as ToBitmap()
-        /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
-        /// The Set property convert the bitmap to this Image type.
+        /// Convert the umat into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
         public static Bitmap ToBitmap(this UMat umat)
         {
@@ -253,7 +244,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Get the Bitmap from this GpuMat
+        /// Convert the gpuMat into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
         public static Bitmap ToBitmap(this GpuMat gpuMat)
         {
@@ -265,12 +256,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
-        /// such that the image data is <b>shared</b> with Bitmap. 
-        /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
-        /// For other types of image this property has the same effect as ToBitmap()
-        /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
-        /// The Set property convert the bitmap to this Image type.
+        /// Create an Image &lt; TColor, TDepth &gt; from Bitmap
         /// </summary>
         public static Image<TColor, TDepth> ToImage<TColor, TDepth>(this Bitmap bitmap) where
             TColor : struct, IColor
@@ -439,7 +425,7 @@ namespace Emgu.CV
 
 
         /// <summary>
-        /// Utility function for Bitmap Set property
+        /// Utility function for converting Bitmap to Image
         /// </summary>
         /// <param name="bmp">the bitmap to copy data from</param>
         /// <param name="image">The image to copy data to</param>
