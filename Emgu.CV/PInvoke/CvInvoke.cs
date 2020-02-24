@@ -396,12 +396,13 @@ namespace Emgu.CV
                    Console.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
                 }
             }
-#elif __IOS__ || UNITY_IOS
+#elif UNITY_IOS
 #else
-            System.Reflection.Assembly monoAndroidAssembly = Emgu.Util.Toolbox.FindAssembly("Mono.Android.dll");
-
-            if (monoAndroidAssembly != null)
+            if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
+                return libraryLoaded;
+            else if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
             {
+                System.Reflection.Assembly monoAndroidAssembly = Emgu.Util.Toolbox.FindAssembly("Mono.Android.dll");
                 //Running on Xamarin Android
                 Type javaSystemType = monoAndroidAssembly.GetType("Java.Lang.JavaSystem");
                 if (javaSystemType != null)
@@ -430,9 +431,7 @@ namespace Emgu.CV
                         return libraryLoaded;
                     }
                 }
-            }
-
-            if (Emgu.Util.Platform.OperationSystem != Emgu.Util.TypeEnum.OS.MacOS)
+            } else if (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.MacOS)
             {
                 String formatString = GetModuleFormatString();
                 for (int i = 0; i < modules.Length; ++i)

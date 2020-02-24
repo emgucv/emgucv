@@ -8,10 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV.CvEnum;
 
-#if __IOS__
-using CoreGraphics;
-using UIKit;
-#elif __UNIFIED__
+#if __UNIFIED__
 using CoreGraphics;
 #elif NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 #else
@@ -216,7 +213,7 @@ namespace Emgu.CV
                 catch (Exception)
                 {
 #if __IOS__
-                    using (UIImage tmp = UIImage.FromFile(fileName))
+                    using (UIKit.UIImage tmp = UIKit.UIImage.FromFile(fileName))
                     {
                        AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
                        CGImageExtension.ImageFromCGImage<TColor, TDepth>(this, tmp.CGImage);

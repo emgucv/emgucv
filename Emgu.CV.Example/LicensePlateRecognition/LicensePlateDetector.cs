@@ -37,14 +37,18 @@ namespace LicensePlateRecognition
         public LicensePlateDetector(String dataPath)
         {
             //create OCR engine
-#if __IOS__ 
-            //LSTM mode requires the native binary to be build with libtiff
-            //Open CV's iOS build disables libtiff in the build process
-            //For iOS, we will use TessractOnly mode
-            InitOcr(dataPath, "eng", OcrEngineMode.TesseractOnly);
-#else
-            InitOcr(dataPath, "eng", OcrEngineMode.TesseractLstmCombined);
-#endif
+            if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
+            {
+                //LSTM mode requires the native binary to be build with libtiff
+                //Open CV's iOS build disables libtiff in the build process
+                //For iOS, we will use TessractOnly mode
+                InitOcr(dataPath, "eng", OcrEngineMode.TesseractOnly);
+            }
+            else
+            {
+                InitOcr(dataPath, "eng", OcrEngineMode.TesseractLstmCombined);
+            }
+
             _ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
         }
 
@@ -88,7 +92,7 @@ namespace LicensePlateRecognition
             catch (System.Net.WebException e)
             {
                 _ocr = null;
-                throw  new Exception("Unable to download tesseract lang file. Please check internet connection.", e);
+                throw new Exception("Unable to download tesseract lang file. Please check internet connection.", e);
             }
             catch (Exception e)
             {
