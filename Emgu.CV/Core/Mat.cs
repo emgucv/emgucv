@@ -15,9 +15,6 @@ using System.IO;
 
 #if __ANDROID__
 using Bitmap = Android.Graphics.Bitmap;
-#elif __IOS__
-using CoreGraphics;
-using UIKit;
 #elif __UNIFIED__
 using CoreGraphics;
 #elif NETFX_CORE || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
@@ -242,19 +239,17 @@ namespace Emgu.CV
             }
 
             String extension = fi.Extension.ToLower();
-#if __UNIFIED__
-             //Open CV's libpng doesn't seem to be able to handle png in iOS
-             //Use CGImage to load png
-             if (extension.Equals(".png"))
-             {
-                using (CGDataProvider provider = new CGDataProvider(fileName))
-                using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
-                {
-                   CGImageExtension.ConvertCGImageToArray(tmp, this, loadType);
-                }
-                return;
-             }
-#endif
+
+            //Open CV's libpng doesn't seem to be able to handle png in iOS
+            //Use CGImage to load png
+            if (extension.Equals(".png") &&
+                (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS ||
+                 Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS))
+            {
+                bool success = Emgu.CV.FileReaderMat.ReadFile(fileName, this, loadType);
+                if (success)
+                    return;
+            }
 
             using (CvString s = new CvString(fileName))
             {
@@ -272,15 +267,10 @@ namespace Emgu.CV
 
                     if (IsEmpty)
                     {
-#if __IOS__
-                        //try again to load with UIImage
-                        using (UIImage tmp = UIImage.FromFile(fileName))
-                        {
-                            CGImageExtension.ConvertCGImageToArray(tmp.CGImage, this, loadType);
-                        }
-#else
-                        throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
-#endif
+                        //try again to load with Native implementation
+                        bool success = Emgu.CV.FileReaderMat.ReadFile(fileName, this, loadType);
+                        if (!success)
+                            throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
                     }
                 }
             }

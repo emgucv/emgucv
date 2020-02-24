@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Emgu.CV
     public static class BitmapExtension
     {
         #region Color Palette
+
         /// <summary>
         /// The ColorPalette of Grayscale for Bitmap Format8bppIndexed
         /// </summary>
@@ -33,6 +35,7 @@ namespace Emgu.CV
                 {
                     palette.Entries[i] = Color.FromArgb(i, i, i);
                 }
+
                 return palette;
             }
         }
@@ -45,7 +48,8 @@ namespace Emgu.CV
         /// <param name="gTable">Lookup table for the G channel</param>
         /// <param name="rTable">Lookup table for the R channel</param>
         /// <param name="aTable">Lookup table for the A channel</param>
-        public static void ColorPaletteToLookupTable(ColorPalette palette, out Matrix<Byte> bTable, out Matrix<Byte> gTable, out Matrix<Byte> rTable, out Matrix<Byte> aTable)
+        public static void ColorPaletteToLookupTable(ColorPalette palette, out Matrix<Byte> bTable,
+            out Matrix<Byte> gTable, out Matrix<Byte> rTable, out Matrix<Byte> aTable)
         {
             bTable = new Matrix<byte>(256, 1);
             gTable = new Matrix<byte>(256, 1);
@@ -66,6 +70,7 @@ namespace Emgu.CV
                 aData[i, 0] = c.A;
             }
         }
+
         #endregion
 
         /// <summary>
@@ -79,19 +84,21 @@ namespace Emgu.CV
         /// <param name="srcDepthType">The source image depth type</param>
         /// <param name="tryDataSharing">Try to create Bitmap that shares the data with the image</param>
         /// <returns>The Bitmap</returns>
-        public static Bitmap RawDataToBitmap(IntPtr scan0, int step, Size size, Type srcColorType, int numberOfChannels, Type srcDepthType, bool tryDataSharing = false)
+        public static Bitmap RawDataToBitmap(IntPtr scan0, int step, Size size, Type srcColorType, int numberOfChannels,
+            Type srcDepthType, bool tryDataSharing = false)
         {
             if (tryDataSharing)
             {
                 if (srcColorType == typeof(Gray) && srcDepthType == typeof(Byte))
-                {   //Grayscale of Bytes
+                {
+                    //Grayscale of Bytes
                     Bitmap bmpGray = new Bitmap(
                         size.Width,
                         size.Height,
                         step,
                         System.Drawing.Imaging.PixelFormat.Format8bppIndexed,
                         scan0
-                        );
+                    );
 
                     bmpGray.Palette = GrayscalePalette;
 
@@ -101,11 +108,12 @@ namespace Emgu.CV
                 // See https://bugzilla.novell.com/show_bug.cgi?id=363431
                 // TODO: check mono buzilla Bug 363431 to see when it will be fixed 
                 else if (
-                   Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows &&
-                   Emgu.Util.Platform.ClrType == Emgu.Util.TypeEnum.ClrType.DotNet &&
-                   srcColorType == typeof(Bgr) && srcDepthType == typeof(Byte)
-                   && (step & 3) == 0)
-                {   //Bgr byte    
+                    Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows &&
+                    Emgu.Util.Platform.ClrType == Emgu.Util.Platform.Clr.DotNet &&
+                    srcColorType == typeof(Bgr) && srcDepthType == typeof(Byte)
+                    && (step & 3) == 0)
+                {
+                    //Bgr byte    
                     return new Bitmap(
                         size.Width,
                         size.Height,
@@ -114,7 +122,8 @@ namespace Emgu.CV
                         scan0);
                 }
                 else if (srcColorType == typeof(Bgra) && srcDepthType == typeof(Byte))
-                {   //Bgra byte
+                {
+                    //Bgra byte
                     return new Bitmap(
                         size.Width,
                         size.Height,
@@ -135,7 +144,7 @@ namespace Emgu.CV
                 //}
             }
 
-            System.Drawing.Imaging.PixelFormat format;  //= System.Drawing.Imaging.PixelFormat.Undefined;
+            System.Drawing.Imaging.PixelFormat format; //= System.Drawing.Imaging.PixelFormat.Undefined;
 
             if (srcColorType == typeof(Gray)) // if this is a gray scale image
             {
@@ -145,13 +154,14 @@ namespace Emgu.CV
             {
                 format = System.Drawing.Imaging.PixelFormat.Format32bppArgb;
             }
-            else if (srcColorType == typeof(Bgr))  //if this is a Bgr Byte image
+            else if (srcColorType == typeof(Bgr)) //if this is a Bgr Byte image
             {
                 format = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
             }
             else
             {
-                using (Mat m = new Mat(size.Height, size.Width, CvInvoke.GetDepthType(srcDepthType), numberOfChannels, scan0, step))
+                using (Mat m = new Mat(size.Height, size.Width, CvInvoke.GetDepthType(srcDepthType), numberOfChannels,
+                    scan0, step))
                 using (Mat m2 = new Mat())
                 {
                     CvInvoke.CvtColor(m, m2, srcColorType, typeof(Bgr));
@@ -162,10 +172,12 @@ namespace Emgu.CV
             Bitmap bmp = new Bitmap(size.Width, size.Height, format);
             System.Drawing.Imaging.BitmapData data = bmp.LockBits(
                 new Rectangle(Point.Empty, size),
-                 System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                System.Drawing.Imaging.ImageLockMode.WriteOnly,
                 format);
-            using (Mat bmpMat = new Mat(size.Height, size.Width, CvEnum.DepthType.Cv8U, numberOfChannels, data.Scan0, data.Stride))
-            using (Mat dataMat = new Mat(size.Height, size.Width, CvInvoke.GetDepthType(srcDepthType), numberOfChannels, scan0, step))
+            using (Mat bmpMat = new Mat(size.Height, size.Width, CvEnum.DepthType.Cv8U, numberOfChannels, data.Scan0,
+                data.Stride))
+            using (Mat dataMat = new Mat(size.Height, size.Width, CvInvoke.GetDepthType(srcDepthType), numberOfChannels,
+                scan0, step))
             {
                 if (srcDepthType == typeof(Byte))
                     dataMat.CopyTo(bmpMat);
@@ -179,9 +191,11 @@ namespace Emgu.CV
                         scale = range.Max.Equals(range.Min) ? 0.0 : 255.0 / (range.Max - range.Min);
                         shift = scale.Equals(0) ? range.Min : -range.Min * scale;
                     }
+
                     CvInvoke.ConvertScaleAbs(dataMat, bmpMat, scale, shift);
                 }
             }
+
             bmp.UnlockBits(data);
 
             if (format == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
@@ -210,14 +224,18 @@ namespace Emgu.CV
                     {
                         Bitmap bmp = new Bitmap(s.Width, s.Height, PixelFormat.Format8bppIndexed);
                         bmp.Palette = GrayscalePalette;
-                        BitmapData bitmapData = bmp.LockBits(new Rectangle(Point.Empty, s), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
-                        using (Mat m = new Mat(s.Height, s.Width, DepthType.Cv8U, 1, bitmapData.Scan0, bitmapData.Stride))
+                        BitmapData bitmapData = bmp.LockBits(new Rectangle(Point.Empty, s), ImageLockMode.WriteOnly,
+                            PixelFormat.Format8bppIndexed);
+                        using (Mat m = new Mat(s.Height, s.Width, DepthType.Cv8U, 1, bitmapData.Scan0,
+                            bitmapData.Stride))
                         {
                             mat.CopyTo(m);
                         }
+
                         bmp.UnlockBits(bitmapData);
                         return bmp;
                     }
+
                     break;
                 case 3:
                     colorType = typeof(Bgr);
@@ -228,7 +246,9 @@ namespace Emgu.CV
                 default:
                     throw new Exception("Unknown color type");
             }
-            return RawDataToBitmap(mat.DataPointer, mat.Step, s, colorType, mat.NumberOfChannels, CvInvoke.GetDepthType(mat.Depth), true);
+
+            return RawDataToBitmap(mat.DataPointer, mat.Step, s, colorType, mat.NumberOfChannels,
+                CvInvoke.GetDepthType(mat.Depth), true);
         }
 
 
@@ -271,13 +291,14 @@ namespace Emgu.CV
                     if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
                     {
                         BitmapData data = bitmap.LockBits(
-                           new Rectangle(Point.Empty, size),
-                           ImageLockMode.ReadOnly,
-                           bitmap.PixelFormat);
+                            new Rectangle(Point.Empty, size),
+                            ImageLockMode.ReadOnly,
+                            bitmap.PixelFormat);
 
-                        using (Image<Bgra, Byte> mat = new Image<Bgra, Byte>(size.Width, size.Height, data.Stride, data.Scan0))
+                        using (Image<Bgra, Byte> mat =
+                            new Image<Bgra, Byte>(size.Width, size.Height, data.Stride, data.Scan0))
                         {
-                            CvInvoke.MixChannels(mat, image, new[] { 0, 0, 1, 1, 2, 2 });
+                            CvInvoke.MixChannels(mat, image, new[] {0, 0, 1, 1, 2, 2});
                         }
 
                         bitmap.UnlockBits(data);
@@ -287,6 +308,7 @@ namespace Emgu.CV
                         using (Image<Bgr, Byte> tmp = bitmap.ToImage<Bgr, byte>())
                             image.ConvertFrom(tmp);
                     }
+
                     break;
                 case PixelFormat.Format32bppArgb:
                     if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
@@ -294,13 +316,15 @@ namespace Emgu.CV
                     else
                     {
                         BitmapData data = bitmap.LockBits(
-                           new Rectangle(Point.Empty, size),
-                           ImageLockMode.ReadOnly,
-                           bitmap.PixelFormat);
-                        using (Image<Bgra, Byte> tmp = new Image<Bgra, byte>(size.Width, size.Height, data.Stride, data.Scan0))
+                            new Rectangle(Point.Empty, size),
+                            ImageLockMode.ReadOnly,
+                            bitmap.PixelFormat);
+                        using (Image<Bgra, Byte> tmp =
+                            new Image<Bgra, byte>(size.Width, size.Height, data.Stride, data.Scan0))
                             image.ConvertFrom(tmp);
                         bitmap.UnlockBits(data);
                     }
+
                     break;
                 case PixelFormat.Format8bppIndexed:
                     if (typeof(TColor) == typeof(Bgra) && typeof(TDepth) == typeof(Byte))
@@ -308,10 +332,11 @@ namespace Emgu.CV
                         Matrix<Byte> bTable, gTable, rTable, aTable;
                         ColorPaletteToLookupTable(bitmap.Palette, out bTable, out gTable, out rTable, out aTable);
                         BitmapData data = bitmap.LockBits(
-                           new Rectangle(Point.Empty, size),
-                           ImageLockMode.ReadOnly,
-                           bitmap.PixelFormat);
-                        using (Image<Gray, Byte> indexValue = new Image<Gray, byte>(size.Width, size.Height, data.Stride, data.Scan0))
+                            new Rectangle(Point.Empty, size),
+                            ImageLockMode.ReadOnly,
+                            bitmap.PixelFormat);
+                        using (Image<Gray, Byte> indexValue =
+                            new Image<Gray, byte>(size.Width, size.Height, data.Stride, data.Scan0))
                         {
                             using (Mat b = new Mat())
                             using (Mat g = new Mat())
@@ -322,20 +347,25 @@ namespace Emgu.CV
                                 CvInvoke.LUT(indexValue, gTable, g);
                                 CvInvoke.LUT(indexValue, rTable, r);
                                 CvInvoke.LUT(indexValue, aTable, a);
-                                using (VectorOfMat mv = new VectorOfMat(new Mat[] { b, g, r, a }))
+                                using (VectorOfMat mv = new VectorOfMat(new Mat[] {b, g, r, a}))
                                 {
                                     CvInvoke.Merge(mv, image);
                                 }
                             }
                         }
+
                         bitmap.UnlockBits(data);
-                        bTable.Dispose(); gTable.Dispose(); rTable.Dispose(); aTable.Dispose();
+                        bTable.Dispose();
+                        gTable.Dispose();
+                        rTable.Dispose();
+                        aTable.Dispose();
                     }
                     else
                     {
                         using (Image<Bgra, Byte> tmp = bitmap.ToImage<Bgra, Byte>())
                             image.ConvertFrom(tmp);
                     }
+
                     break;
                 case PixelFormat.Format24bppRgb:
                     if (typeof(TColor) == typeof(Bgr) && typeof(TDepth) == typeof(Byte))
@@ -343,13 +373,15 @@ namespace Emgu.CV
                     else
                     {
                         BitmapData data = bitmap.LockBits(
-                           new Rectangle(Point.Empty, size),
-                           ImageLockMode.ReadOnly,
-                           bitmap.PixelFormat);
-                        using (Image<Bgr, Byte> tmp = new Image<Bgr, byte>(size.Width, size.Height, data.Stride, data.Scan0))
+                            new Rectangle(Point.Empty, size),
+                            ImageLockMode.ReadOnly,
+                            bitmap.PixelFormat);
+                        using (Image<Bgr, Byte> tmp =
+                            new Image<Bgr, byte>(size.Width, size.Height, data.Stride, data.Scan0))
                             image.ConvertFrom(tmp);
                         bitmap.UnlockBits(data);
                     }
+
                     break;
                 case PixelFormat.Format1bppIndexed:
                     if (typeof(TColor) == typeof(Gray) && typeof(TDepth) == typeof(Byte))
@@ -374,15 +406,17 @@ namespace Emgu.CV
                         int v = 0;
                         for (int i = 0; i < rows; i++, srcAddress += data.Stride)
                         {
-                            Marshal.Copy((IntPtr)srcAddress, row, 0, row.Length);
+                            Marshal.Copy((IntPtr) srcAddress, row, 0, row.Length);
 
                             for (int j = 0; j < cols; j++, v <<= 1)
                             {
                                 if ((j & 7) == 0)
-                                {  //fetch the next byte 
+                                {
+                                    //fetch the next byte 
                                     v = row[j >> 3];
                                 }
-                                imagedata[i, j, 0] = (v & mask) == 0 ? (Byte)0 : (Byte)255;
+
+                                imagedata[i, j, 0] = (v & mask) == 0 ? (Byte) 0 : (Byte) 255;
                             }
                         }
                     }
@@ -391,8 +425,10 @@ namespace Emgu.CV
                         using (Image<Gray, Byte> tmp = bitmap.ToImage<Gray, Byte>())
                             image.ConvertFrom(tmp);
                     }
+
                     break;
                 default:
+
                     #region Handle other image type
 
                     //         Bitmap bgraImage = new Bitmap(value.Width, value.Height, PixelFormat.Format32bppArgb);
@@ -405,18 +441,20 @@ namespace Emgu.CV
                     {
                         Byte[,,] data = tmp1.Data;
                         for (int i = 0; i < size.Width; i++)
-                            for (int j = 0; j < size.Height; j++)
-                            {
-                                Color color = bitmap.GetPixel(i, j);
-                                data[j, i, 0] = color.B;
-                                data[j, i, 1] = color.G;
-                                data[j, i, 2] = color.R;
-                                data[j, i, 3] = color.A;
-                            }
+                        for (int j = 0; j < size.Height; j++)
+                        {
+                            Color color = bitmap.GetPixel(i, j);
+                            data[j, i, 0] = color.B;
+                            data[j, i, 1] = color.G;
+                            data[j, i, 2] = color.R;
+                            data[j, i, 3] = color.A;
+                        }
 
                         image.ConvertFrom<Bgra, Byte>(tmp1);
                     }
+
                     #endregion
+
                     break;
             }
 
@@ -438,7 +476,8 @@ namespace Emgu.CV
                 ImageLockMode.ReadOnly,
                 bmp.PixelFormat);
 
-            using (Matrix<TDepth> mat = new Matrix<TDepth>(bmp.Height, bmp.Width, image.NumberOfChannels, data.Scan0, data.Stride))
+            using (Matrix<TDepth> mat =
+                new Matrix<TDepth>(bmp.Height, bmp.Width, image.NumberOfChannels, data.Scan0, data.Stride))
                 CvInvoke.cvCopy(mat.Ptr, image.Ptr, IntPtr.Zero);
 
             bmp.UnlockBits(data);
@@ -489,7 +528,7 @@ namespace Emgu.CV
             {
                 format = PixelFormat.Format32bppArgb;
             }
-            else if (typeOfColor == typeof(Bgr))  //if this is a Bgr Byte image
+            else if (typeOfColor == typeof(Bgr)) //if this is a Bgr Byte image
             {
                 format = PixelFormat.Format24bppRgb;
             }
@@ -508,7 +547,8 @@ namespace Emgu.CV
                     ImageLockMode.WriteOnly,
                     format);
                 //using (Matrix<Byte> m = new Matrix<byte>(size.Height, size.Width, data.Scan0, data.Stride))
-                using (Mat mat = new Mat(size.Height, size.Width, CV.CvEnum.DepthType.Cv8U, image.NumberOfChannels, data.Scan0, data.Stride))
+                using (Mat mat = new Mat(size.Height, size.Width, CV.CvEnum.DepthType.Cv8U, image.NumberOfChannels,
+                    data.Scan0, data.Stride))
                 {
                     image.Mat.CopyTo(mat);
                 }
@@ -552,11 +592,14 @@ namespace Emgu.CV
             {
                 Size s = cudaImage.Size;
                 Bitmap result = new Bitmap(s.Width, s.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                System.Drawing.Imaging.BitmapData data = result.LockBits(new Rectangle(Point.Empty, result.Size), System.Drawing.Imaging.ImageLockMode.WriteOnly, result.PixelFormat);
-                using (Image<TColor, TDepth> tmp = new Image<TColor, TDepth>(s.Width, s.Height, data.Stride, data.Scan0))
+                System.Drawing.Imaging.BitmapData data = result.LockBits(new Rectangle(Point.Empty, result.Size),
+                    System.Drawing.Imaging.ImageLockMode.WriteOnly, result.PixelFormat);
+                using (Image<TColor, TDepth> tmp = new Image<TColor, TDepth>(s.Width, s.Height, data.Stride, data.Scan0)
+                )
                 {
                     cudaImage.Download(tmp);
                 }
+
                 result.UnlockBits(data);
                 return result;
             }
@@ -565,6 +608,28 @@ namespace Emgu.CV
                 {
                     return tmp.ToBitmap();
                 }
+        }
+    }
+
+    public class BitmapFileReaderMat : Emgu.CV.IFileReaderMat
+    {
+
+        public bool ReadFile(String fileName, Mat mat, CvEnum.ImreadModes loadType)
+        {
+            try
+            {
+                using (Bitmap bmp = new Bitmap(fileName))
+                using (Image<Bgr, Byte> image = bmp.ToImage<Bgr, Byte>())
+                    image.Mat.CopyTo(mat);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                //throw;
+                return false;
+            }
+
         }
     }
 }

@@ -12,6 +12,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Reflection;
+
 
 namespace Emgu.Util
 {
@@ -409,6 +411,79 @@ namespace Emgu.Util
 
 
         #endregion
+
+        private static System.Collections.Generic.Dictionary<String, AssemblyName> _assemblyNameDict = new Dictionary<String,AssemblyName>();
+        public static System.Reflection.Assembly[] LoadAllDependentAssemblies()
+        {
+            try
+            {
+                lock (_assemblyNameDict)
+                {
+                    System.Reflection.Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                    bool dirty = false;
+                    foreach (Assembly assembly in assemblies)
+                    {
+                        AssemblyName name = assembly.GetName();
+                        if (!_assemblyNameDict.ContainsKey(name.ToString()))
+                            _assemblyNameDict.Add(name.ToString(), name);
+                    }
+
+                    foreach (Assembly assembly in assemblies)
+                    {
+                        AssemblyName[] referencedAssemblyNames = assembly.GetReferencedAssemblies();
+                        foreach (AssemblyName name in referencedAssemblyNames)
+                        {
+                            if (!_assemblyNameDict.ContainsKey(name.ToString()))
+                            {
+                                try
+                                {
+                                    Assembly.Load(name);
+                                    _assemblyNameDict.Add(name.ToString(), name);
+                                    dirty = true;
+                                }
+                                catch (Exception e)
+                                {
+                                    //if failed to load, it is ok, we will continue.
+                                    Debug.WriteLine(e);
+                                }
+                            }
+                        }
+                    }
+
+                    if (dirty)
+                        return AppDomain.CurrentDomain.GetAssemblies();
+                    else
+                    {
+                        return assemblies;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+            return null;
+        }
+        public static Type[] GetIntefaceImplementationFromAssembly<T>()
+        {
+            System.Reflection.Assembly[] assemblies = LoadAllDependentAssemblies();
+            List<Type> types = new List<Type>();
+            if (assemblies != null)
+            {
+                foreach (Assembly assembly in assemblies)
+                {
+                    foreach (Type t in assembly.GetTypes())
+                    {
+                        if (typeof(T).IsAssignableFrom(t) && typeof(T) != t)
+                        {
+                            types.Add( t );
+                        }
+                    }
+                }
+            }
+
+            return types.ToArray();
+        }
 
         /// <summary>
         /// Find the loaded assembly with the specific assembly name

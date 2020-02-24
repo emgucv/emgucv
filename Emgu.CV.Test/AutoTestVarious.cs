@@ -33,11 +33,9 @@ using Emgu.CV.Freetype;
 using Emgu.CV.UI;
 #endif
 
-#if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
 using Emgu.CV.Tiff;
-#endif
 using Emgu.CV.Util;
 using Emgu.CV.XFeatures2D;
 using Emgu.CV.XImgproc;
@@ -4151,6 +4149,14 @@ namespace Emgu.CV.Test
             Assert.AreEqual(s.Width, width);
             Assert.AreEqual(s.Height, height);
         }*/
+
+        [Test]
+        public void TestFileReaderMat()
+        {
+            bool success;
+            using (Mat m = new Mat())
+                success = Emgu.CV.FileReaderMat.ReadFile("scenetext01.jpg", m, ImreadModes.AnyColor);
+        }
 
         [Test]
         public void TestERFilter()

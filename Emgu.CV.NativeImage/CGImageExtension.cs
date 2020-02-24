@@ -4,6 +4,7 @@
 
 #if __UNIFIED__
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -270,6 +271,30 @@ namespace Emgu.CV
             }
         }
 
+    }
+
+    public class CGImageFileReaderMat : Emgu.CV.IFileReaderMat
+    {
+
+        public bool ReadFile(String fileName, Mat mat, CvEnum.ImreadModes loadType)
+        {
+            try
+            {
+                using (CGDataProvider provider = new CGDataProvider(fileName))
+                using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
+                {
+                    CGImageExtension.ConvertCGImageToArray(tmp, mat, loadType);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                //throw;
+                return false;
+            }
+
+        }
     }
 }
 #endif

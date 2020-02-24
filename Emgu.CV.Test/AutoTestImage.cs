@@ -1604,7 +1604,7 @@ namespace Emgu.CV.Test
         [TestAttribute]
         public void TestMultiThreadInMemoryWithBMP()
         {
-            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
             {
                 int threadCount = 32;
 
@@ -1645,7 +1645,7 @@ namespace Emgu.CV.Test
         public void TestMultiThreadWithBMP()
         {
             //TODO: find out why this test fails on unix
-            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows)
+            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
             {
                 int threadCount = 32;
 
