@@ -40,5 +40,5 @@ CVAPI(void) cveSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSour
 CVAPI(void) cveSuperresFrameSourceRelease(cv::Ptr<cv::superres::FrameSource>** sharedPtr);
 
 CVAPI(cv::superres::SuperResolution*) cveSuperResolutionCreate(int type, cv::superres::FrameSource* frameSource, cv::superres::FrameSource** frameSourceOut, cv::Ptr<cv::superres::SuperResolution>**);
-CVAPI(void) cveSuperResolutionRelease(cv::Ptr<cv::superres::FrameSource>** sharedPtr);
+CVAPI(void) cveSuperResolutionRelease(cv::Ptr<cv::superres::SuperResolution>** sharedPtr);
 #endif
