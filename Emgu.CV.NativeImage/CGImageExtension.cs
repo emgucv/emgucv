@@ -15,7 +15,6 @@ namespace Emgu.CV
 {
     public static class CGImageExtension
     {
-
         /// <summary>
         /// Creating an Image from the CGImage
         /// </summary>
@@ -25,20 +24,21 @@ namespace Emgu.CV
 
         {
             Image<TColor, TDepth> image = new Image<TColor, TDepth>((int)cgImage.Width, (int)cgImage.Height);
-            ImageFromCGImage(image, cgImage);
+            cgImage.ToImage<TColor, TDepth>(image);
             return image;
         }
 
         /// <summary>
         /// Copy the data from the CGImage to the current Image object
         /// </summary>
-        internal static void ImageFromCGImage<TColor, TDepth>(Image<TColor, TDepth> image, CGImage cgImage)
+        internal static void ToImage<TColor, TDepth>(this CGImage cgImage, Image<TColor, TDepth> image)
             where TColor : struct, IColor
             where TDepth : new()
         {
             //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
             if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(byte))
             {
+                Debug.Assert((image.Width == (int)cgImage.Width) && (image.Height == (int)cgImage.Height), "Incompatible dimension between the CGImage and Image<,>.");
                 RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
                 using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
                 using (CGBitmapContext context = new CGBitmapContext(
@@ -64,6 +64,7 @@ namespace Emgu.CV
          where TColor : struct, IColor
             where TDepth : new()
         {
+
             //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
             if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(Byte))
             {
@@ -90,7 +91,7 @@ namespace Emgu.CV
             }
         }
 
-        internal static void ConvertCGImageToArray(CGImage cgImage, IOutputArray mat, ImreadModes modes = ImreadModes.AnyColor)
+        internal static void ToArray(this CGImage cgImage, IOutputArray mat, ImreadModes modes = ImreadModes.AnyColor)
         {
             Size sz = new Size((int)cgImage.Width, (int)cgImage.Height);
             using (Mat m = new Mat(sz, DepthType.Cv8U, 4))
@@ -148,7 +149,7 @@ namespace Emgu.CV
         public static Mat ToMat(this CGImage cgImage, ImreadModes mode = ImreadModes.AnyColor)
         {
             Mat m = new Mat();
-            ConvertCGImageToArray(cgImage, m, mode);
+            cgImage.ToArray(m, mode);
             return m;
         }
 
@@ -156,12 +157,13 @@ namespace Emgu.CV
         {
             using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
             using (CGBitmapContext context = new CGBitmapContext(
-               bgraByte.DataPointer,
-               bgraByte.Width, bgraByte.Height,
-               8,
-               bgraByte.Width * 4,
-               cspace,
-               CGImageAlphaInfo.PremultipliedLast))
+                bgraByte.DataPointer,
+                bgraByte.Width, 
+                bgraByte.Height,
+                8,
+                bgraByte.Width * 4,
+                cspace,
+                CGImageAlphaInfo.PremultipliedLast))
                 return context.ToImage();
         }
 
@@ -173,7 +175,7 @@ namespace Emgu.CV
         public static UMat ToUMat(this CGImage cgImage, ImreadModes mode = ImreadModes.AnyColor)
         {
             UMat umat = new UMat();
-            ConvertCGImageToArray(cgImage, umat, mode);
+            cgImage.ToArray(umat, mode);
             return umat;
         }
 
@@ -273,6 +275,7 @@ namespace Emgu.CV
 
     }
 
+    /*
     public class CGImageFileReaderMat : Emgu.CV.IFileReaderMat
     {
 
@@ -283,7 +286,7 @@ namespace Emgu.CV
                 using (CGDataProvider provider = new CGDataProvider(fileName))
                 using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
                 {
-                    CGImageExtension.ConvertCGImageToArray(tmp, mat, loadType);
+                    tmp.ToArray(mat, loadType);
                 }
                 return true;
             }
@@ -295,6 +298,6 @@ namespace Emgu.CV
             }
 
         }
-    }
+    }*/
 }
 #endif

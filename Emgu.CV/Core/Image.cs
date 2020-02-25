@@ -107,142 +107,32 @@ namespace Emgu.CV
             _ptr = ptr;
         }
 
-#if  NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO 
+
         /// <summary>
         /// Read image from a file
         /// </summary>
         /// <param name="fileName">the name of the file that contains the image</param>
         public Image(String fileName)
         {
-            using (Mat m = CvInvoke.Imread(fileName, ImreadModes.AnyColor | ImreadModes.AnyDepth))
+            try
             {
-                if (m.IsEmpty)
-                    throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", fileName));
-
-                LoadImageFromMat(m);
+                using (Mat m = CvInvoke.Imread(fileName, CvEnum.ImreadModes.AnyColor | CvEnum.ImreadModes.AnyDepth))
+                {
+                    if (m.IsEmpty)
+                        throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", fileName));
+                    LoadImageFromMat(m);
+                }
+            }
+            catch (TypeInitializationException e)
+            {
+                //possibly Exception in CvInvoke's static constructor.
+                throw e;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
             }
         }
-#else
-        /// <summary>
-        /// Read image from a file
-        /// </summary>
-        /// <param name="fileName">the name of the file that contains the image</param>
-        public Image(String fileName)
-        {
-            FileInfo fi = new FileInfo(fileName);
-            if (!fi.Exists)
-            {
-                throw new FileNotFoundException(String.Format("The file {0} could not be not found.", fileName), fileName);
-            }
-
-            String extension = fi.Extension.ToLower();
-#if __UNIFIED__
-         //Open CV's libpng doesn't seem to be able to handle png in iOS
-         //Use CGImage to load png
-         if (extension.Equals(".png"))
-         {
-            using (CGDataProvider provider = new CGDataProvider(fileName))
-            using (CGImage tmp = CGImage.FromPNG(provider, null, false, CGColorRenderingIntent.Default))
-            {
-               AllocateData((int)tmp.Height, (int)tmp.Width, NumberOfChannels);
-               CGImageExtension.ImageFromCGImage<TColor, TDepth> (this, tmp);
-            }
-            return;
-         }
-#else
-            if (
-#if __ANDROID__
-               extension.Equals(".png")
-#else
-               //load png image with alpha channel using Bitmap. OpenCV do not seems to handle alpha channel correctly. 
-               ((typeof(TColor) == typeof(Bgra) || typeof(TColor) == typeof(Rgba)) && typeof(TDepth) == typeof(Byte) && extension.Equals(".png"))
-#endif
-            || extension.Equals(".tiff")
-               || extension.Equals(".tif"))
-            {
-                //Open CV is unable to load the alpha channel of the png file, 
-                //It is also not able to load some tiff formatted file correctly
-                //use Bitmap to load it correctly.
-                LoadFileUsingBitmap(fi);
-            }
-            else
-#endif
-                try
-                {
-#if __ANDROID__
-            int rotation = 0;
-            Android.Media.ExifInterface exif = new Android.Media.ExifInterface(fi.FullName);
-            int orientation = exif.GetAttributeInt(Android.Media.ExifInterface.TagOrientation, int.MinValue);
-            switch (orientation)
-            {
-               case (int)Android.Media.Orientation.Rotate270:
-                  rotation = 270;
-                  break;
-               case (int)Android.Media.Orientation.Rotate180:
-                  rotation = 180;
-                  break;
-               case (int)Android.Media.Orientation.Rotate90:
-                  rotation = 90;
-                  break;
-            }
-            if (rotation == 0)
-               LoadImageUsingOpenCV(fi);
-            else
-            {
-               using(Android.Graphics.Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(fi.FullName))
-               {
-                  Android.Graphics.Matrix matrix = new Android.Graphics.Matrix();
-                  matrix.PostRotate(rotation);
-                  using (Android.Graphics.Bitmap rotated = Android.Graphics.Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
-                  {
-                     //manually disposed sooner such that memory is released.
-                     bmp.Dispose();
-                     Bitmap = rotated;
-                  }
-               }
-            }
-#else
-                    LoadImageUsingOpenCV(fi);
-#endif
-                }
-                catch (TypeInitializationException e)
-                {
-                    //possibly Exception in CvInvoke's static constructor.
-                    throw e;
-                }
-                catch (Exception)
-                {
-#if __IOS__
-                    using (UIKit.UIImage tmp = UIKit.UIImage.FromFile(fileName))
-                    {
-                       AllocateData((int)tmp.Size.Height, (int)tmp.Size.Width, NumberOfChannels);
-                       CGImageExtension.ImageFromCGImage<TColor, TDepth>(this, tmp.CGImage);
-                    }
-#elif __UNIFIED__
-#else
-                    //give Bitmap a try
-                    //and if it cannot load the image, exception will be thrown
-                    LoadFileUsingBitmap(fi);
-#endif
-                }
-
-        }
-#endif
-
-        /// <summary>
-        /// Load the specific file using OpenCV
-        /// </summary>
-        /// <param name="file">The file to load</param>
-        private void LoadImageUsingOpenCV(FileInfo file)
-        {
-            using (Mat m = CvInvoke.Imread(file.FullName, CvEnum.ImreadModes.AnyColor | CvEnum.ImreadModes.AnyDepth))
-            {
-                if (m.IsEmpty)
-                    throw new NullReferenceException(String.Format("Unable to load image from file \"{0}\".", file.FullName));
-                LoadImageFromMat(m);
-            }
-        }
-
 
         /// <summary>
         /// Create a blank Image of the specified width, height and color.

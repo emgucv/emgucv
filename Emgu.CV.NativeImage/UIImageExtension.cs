@@ -119,7 +119,7 @@ namespace Emgu.CV
                 //try again to load with UIImage
                 using (UIImage tmp = UIImage.FromFile(fileName))
                 {
-                    CGImageExtension.ConvertCGImageToArray(tmp.CGImage, mat, loadType);
+                    tmp.CGImage.ToArray(mat, loadType);
                 }
 
                 return true;
@@ -131,6 +131,31 @@ namespace Emgu.CV
             }
         }
     }
+
+    /*
+    public class UIImageFileReaderImage : Emgu.CV.IFileReaderImage
+    {
+        public bool ReadFile<TColor, TDepth>(String fileName, Image<TColor, TDepth> image)
+            where TColor : struct, IColor
+            where TDepth : new()
+        {
+            try
+            {
+                //try again to load with UIImage
+                using (UIImage tmp = UIImage.FromFile(fileName))
+                {
+                    tmp.CGImage.ToImage<TColor, TDepth>(image);
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+    }*/
 }
 
 #endif

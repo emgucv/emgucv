@@ -246,7 +246,7 @@ namespace Emgu.CV
                 (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS ||
                  Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS))
             {
-                bool success = Emgu.CV.FileReaderMat.ReadFile(fileName, this, loadType);
+                bool success = Emgu.CV.FileReader.ReadFileToMat(fileName, this, loadType);
                 if (success)
                     return;
             }
@@ -268,7 +268,7 @@ namespace Emgu.CV
                     if (IsEmpty)
                     {
                         //try again to load with Native implementation
-                        bool success = Emgu.CV.FileReaderMat.ReadFile(fileName, this, loadType);
+                        bool success = Emgu.CV.FileReader.ReadFileToMat(fileName, this, loadType);
                         if (!success)
                             throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
                     }
