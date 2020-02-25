@@ -10,14 +10,24 @@ namespace Emgu.CV
 {
     public static class FileReaderMat
     {
+        private static Emgu.CV.IFileReaderMat[] _fileReaderMatArr;
+
         public static bool ReadFile(String fileName, Mat mat, CvEnum.ImreadModes loadType)
         {
-            var readersTypes = Emgu.Util.Toolbox.GetIntefaceImplementationFromAssembly<Emgu.CV.IFileReaderMat>();
-
-            foreach (var type in readersTypes)
+            if (_fileReaderMatArr == null)
             {
+                Type[] readersTypes = Emgu.Util.Toolbox.GetIntefaceImplementationFromAssembly<Emgu.CV.IFileReaderMat>();
+                Emgu.CV.IFileReaderMat[] matArr = new IFileReaderMat[readersTypes.Length];
+                for (int i = 0; i < readersTypes.Length; i++)
+                {
+                    matArr[i] = Activator.CreateInstance(readersTypes[i]) as Emgu.CV.IFileReaderMat;
+                }
 
-                Emgu.CV.IFileReaderMat reader = Activator.CreateInstance(type) as Emgu.CV.IFileReaderMat;
+                _fileReaderMatArr = matArr;
+            }
+
+            foreach (var reader in _fileReaderMatArr)
+            {
                 if (reader.ReadFile(fileName, mat, loadType))
                     return true;
             }

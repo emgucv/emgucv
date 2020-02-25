@@ -29,7 +29,7 @@ namespace Emgu.CV
     /// </summary>
     [Serializable]
     [DebuggerTypeProxy(typeof(Mat.DebuggerProxy))]
-    public partial class Mat : MatDataAllocator, IEquatable<Mat>, IInputOutputArray, ISerializable
+    public partial class Mat : UnmanagedObject, IEquatable<Mat>, IInputOutputArray, ISerializable
     {
         #region Implement ISerializable interface
         /// <summary>
@@ -660,7 +660,7 @@ namespace Emgu.CV
             if (_needDispose && _ptr != IntPtr.Zero)
                 MatInvoke.cveMatRelease(ref _ptr);
 
-            base.DisposeObject();
+            //base.DisposeObject();
 
         }
 
