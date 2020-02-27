@@ -87,12 +87,6 @@
     <AndroidResource Include="Resources\drawable\ic_launcher.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\..\opencv\data\haarcascades\haarcascade_eye.xml">
-      <Link>Assets\haarcascade_eye.xml</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
-      <Link>Assets\haarcascade_frontalface_default.xml</Link>
-    </AndroidAsset>
     <AndroidAsset Include="..\Core\lena.jpg">
       <Link>Assets\lena.jpg</Link>
     </AndroidAsset>

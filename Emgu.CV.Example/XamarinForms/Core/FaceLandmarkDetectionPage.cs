@@ -45,14 +45,14 @@ namespace Emgu.CV.XamarinForms
         {
             if (_path == null)
             {
-#if __ANDROID__ ||  __IOS__
-               _path = System.IO.Path.Combine (
-                 System.Environment.GetFolderPath (System.Environment.SpecialFolder.MyDocuments),
-                 _modelFolderName);
+#if __ANDROID__ || __IOS__
+                _path = System.IO.Path.Combine(
+                  System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments),
+                  _modelFolderName);
 #else
                 _path = String.Format("./{0}/", _modelFolderName);
 #endif
-         }
+            }
         }
 
         private void InitFaceDetector()
@@ -70,7 +70,7 @@ namespace Emgu.CV.XamarinForms
                     "deploy.prototxt",
                     _path);
                 _faceDetector = DnnInvoke.ReadNetFromCaffe(ssdProtoFileLocal, ssdFileLocal);
-                
+
             }
         }
 
@@ -170,7 +170,7 @@ namespace Emgu.CV.XamarinForms
 
             OnImagesLoaded += async (sender, image) =>
             {
-                if (image == null || (image.Length > 0 && image[0] == null) )
+                if (image == null || (image.Length > 0 && image[0] == null))
                     return;
 
                 if (image.Length == 0)

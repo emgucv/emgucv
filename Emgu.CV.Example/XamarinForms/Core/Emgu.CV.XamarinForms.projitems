@@ -11,8 +11,10 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AboutPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DownloadableFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawSubdivision.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DetectFace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FileDownloadManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FindPedestrian.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawMatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.cs" />
