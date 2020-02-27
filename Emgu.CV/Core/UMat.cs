@@ -11,9 +11,6 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.Util;
-#if __ANDROID__
-using Bitmap = Android.Graphics.Bitmap;
-#endif
 
 namespace Emgu.CV
 {

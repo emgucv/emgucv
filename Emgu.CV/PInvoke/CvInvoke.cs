@@ -453,10 +453,13 @@ namespace Emgu.CV
 
             _libraryLoaded = DefaultLoadUnmanagedModules(modules.ToArray());
 
-#if !UNITY_IOS
-            //Use the custom error handler
-            RedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
-#endif
+//#if !UNITY_IOS
+            if (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.IOS)
+            {
+                //Use the custom error handler
+                RedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
+            }
+//#endif
         }
 
         #region CV MACROS
