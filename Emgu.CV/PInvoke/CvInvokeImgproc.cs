@@ -2107,7 +2107,7 @@ namespace Emgu.CV
         /// <summary>
         /// Calculates a histogram of a set of arrays.
         /// </summary>
-        /// <param name="images">Source arrays. They all should have the same depth, CV_8U or CV_32F , and the same size. Each of them can have an arbitrary number of channels.</param>
+        /// <param name="images">Source arrays. They all should have the same depth, CV_8U, CV_16U or CV_32F , and the same size. Each of them can have an arbitrary number of channels.</param>
         /// <param name="channels">List of the channels used to compute the histogram. </param>
         /// <param name="mask">Optional mask. If the matrix is not empty, it must be an 8-bit array of the same size as images[i] . The non-zero mask elements mark the array elements counted in the histogram.</param>
         /// <param name="hist">Output histogram</param>
