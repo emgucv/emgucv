@@ -33,45 +33,40 @@ namespace Emgu.CV.XamarinForms
                 if (image == null || image[0] == null)
                     return;
                 SetMessage("Please wait...");
+                //SetImage(image[0]);
                 SetImage(null);
-                Task t = new Task(
-                () =>
-                {
-                    FileDownloadManager downloadManager = new FileDownloadManager();
-                    String url = "https://github.com/opencv/opencv/raw/4.2.0/data/haarcascades/";
-                    downloadManager.AddFile(url + "/haarcascade_frontalface_default.xml");
-                    downloadManager.AddFile(url + "/haarcascade_eye.xml");
 
-                    downloadManager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
+                FileDownloadManager downloadManager = new FileDownloadManager();
+                String url = "https://github.com/opencv/opencv/raw/4.2.0/data/haarcascades/";
+                downloadManager.AddFile(url + "/haarcascade_frontalface_default.xml");
+                downloadManager.AddFile(url + "/haarcascade_eye.xml");
 
-                    downloadManager.OnDownloadCompleted += delegate (object o, AsyncCompletedEventArgs args)
-                    {
-                        String faceFile = downloadManager.Files[0].LocalFile;
-                        String eyeFile = downloadManager.Files[1].LocalFile;
-                        long time;
-                        List<Rectangle> faces = new List<Rectangle>();
-                        List<Rectangle> eyes = new List<Rectangle>();
+                downloadManager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
 
-                        using (UMat img = image[0].GetUMat(AccessType.ReadWrite))
-                            DetectFace.Detect(img, faceFile, eyeFile, faces, eyes, out time);
+                await downloadManager.Download();
 
-                        //Draw the faces in red
-                        foreach (Rectangle rect in faces)
-                            CvInvoke.Rectangle(image[0], rect, new MCvScalar(0, 0, 255), 2);
+                String faceFile = downloadManager.Files[0].LocalFile;
+                String eyeFile = downloadManager.Files[1].LocalFile;
+                long time;
+                List<Rectangle> faces = new List<Rectangle>();
+                List<Rectangle> eyes = new List<Rectangle>();
 
-                        //Draw the eyes in blue
-                        foreach (Rectangle rect in eyes)
-                            CvInvoke.Rectangle(image[0], rect, new MCvScalar(255, 0, 0), 2);
+                using (UMat img = image[0].GetUMat(AccessType.ReadWrite))
+                    DetectFace.Detect(img, faceFile, eyeFile, faces, eyes, out time);
 
-                        SetImage(image[0]);
+                //Draw the faces in red
+                foreach (Rectangle rect in faces)
+                    CvInvoke.Rectangle(image[0], rect, new MCvScalar(0, 0, 255), 2);
 
-                        String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-                        SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, computeDevice));
-                    };
+                //Draw the eyes in blue
+                foreach (Rectangle rect in eyes)
+                    CvInvoke.Rectangle(image[0], rect, new MCvScalar(255, 0, 0), 2);
 
-                    downloadManager.Download();
-                });
-                t.Start();
+                String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
+                SetMessage(String.Format("Detected with {1} in {0} milliseconds.", time, computeDevice));
+
+                SetImage(image[0]);
+
             };
         }
 

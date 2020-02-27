@@ -73,14 +73,9 @@ namespace Emgu.Models
 #if  UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
             return System.IO.Path.Combine(UnityEngine.Application.persistentDataPath, fileName);
 #else
-            if ( Emgu.Util.Platform.OperationSystem == Platform.OS.Android || 
-                 Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
-            { 
                 String personalFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                 return Path.Combine(personalFolder, fileName);
-            }
 
-            return fileName;
 #endif
         }
     }

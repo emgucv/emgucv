@@ -37,8 +37,14 @@ namespace Emgu.CV.XamarinForms
         public Image DisplayImage
         {
             get { return _displayImage; }
+            //set { _displayImage = value; }
         }
 
+        private StackLayout _mainLayout = new StackLayout();
+        public Layout MainLayout
+        {
+            get { return _mainLayout; }
+        }
         public ButtonTextImagePage()
         {
             TopButton.Text = "Click me";
@@ -48,12 +54,23 @@ namespace Emgu.CV.XamarinForms
             MessageLabel.Text = "";
             MessageLabel.HorizontalOptions = LayoutOptions.Center;
 
-            StackLayout mainLayout = new StackLayout();
-            mainLayout.Children.Add(TopButton);
-            mainLayout.Children.Add(MessageLabel);
-            mainLayout.Children.Add(DisplayImage);
-            mainLayout.Padding = new Thickness( 10, 10, 10, 10);
-            Content = mainLayout;
+            
+            //DisplayImage.HeightRequest = 100;
+            //DisplayImage.WidthRequest = 100;
+            //DisplayImage.MinimumHeightRequest = 10;
+            
+            //StackLayout mainLayout = new StackLayout();
+            _mainLayout.Children.Add(TopButton);
+            _mainLayout.Children.Add(MessageLabel);
+            _mainLayout.Children.Add(DisplayImage);
+            _mainLayout.Children.Add(MessageLabel);
+            _mainLayout.Padding = new Thickness( 10, 10, 10, 10);
+
+            //MessageLabel.BackgroundColor = Color.AliceBlue;
+            //DisplayImage.BackgroundColor = Color.Aqua;
+            //_mainLayout.BackgroundColor = Color.Blue;
+            
+            Content = _mainLayout;
         }
 
         public bool HasCameraOption { get; set; }
@@ -144,7 +161,6 @@ namespace Emgu.CV.XamarinForms
                 {
 #if __ANDROID__
                     mats[i] = Android.App.Application.Context.Assets.GetMat( imageNames[i] );
-
 #else
                     if (!File.Exists(imageNames[i]))
                         throw new FileNotFoundException(String.Format("File {0} do not exist.", imageNames[i]));
@@ -161,7 +177,7 @@ namespace Emgu.CV.XamarinForms
                     mats[i] = CvInvoke.Imread(photoResult.Path);
 
 #else
-                    if (Emgu.Util.Platform.OperationSystem == OS.Windows)
+                    if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                     {
                         // our implementation of pick image
                         using (System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog())
@@ -252,32 +268,47 @@ namespace Emgu.CV.XamarinForms
 
         public event EventHandler<Mat[]> OnImagesLoaded;
 
+        private byte[] _imageData;
+        private MemoryStream _imageStream;
         public void SetImage(IInputArray image)
         {
             if (image == null)
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(
-                    () => { this.DisplayImage.Source = null; });
+                    () =>
+                    {
+                        this.DisplayImage.Source = null;
+                        this.DisplayImage.IsVisible = false;
+                    });
                 return;
             }
+            
+            int width = 0;
+            int height = 0;
+            using (InputArray iaImage = image.GetInputArray())
+            {
+                System.Drawing.Size s = iaImage.GetSize();
+                width = s.Width;
+                height = s.Height;
+            }
+
             using (VectorOfByte vb = new VectorOfByte())
             {
-                CvInvoke.Imencode(".jpg", image, vb);
-                byte[] rawData = vb.ToArray();
+                //CvInvoke.Imencode(".jpg", image, vb);
+                CvInvoke.Imencode(".png", image, vb);
+                _imageData = vb.ToArray();
+                _imageStream = new MemoryStream(_imageData);
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(
                     () =>
                     {
-                        this.DisplayImage.Source = ImageSource.FromStream(() => new MemoryStream(rawData));
-
-#if __MACOS__
-                        using (InputArray iaImage = image.GetInputArray())
-                            this.DisplayImage.HeightRequest = iaImage.GetSize().Height;
-#elif __IOS__
-                        //the following is needed for iOS due to the fact that
-                        //Xamarin Forms' Image object do not seems to refresh after we set the source.
-                        //Forcing the focus seems to force a rendering update.
-                        this.DisplayImage.Focus ();
-#endif
+                        this.DisplayImage.IsVisible = true;
+                        this.DisplayImage.Source = ImageSource.FromStream(() => _imageStream);
+                        
+                        this.DisplayImage.WidthRequest = Math.Min(this.Width, width);
+                        this.DisplayImage.HeightRequest = height;
+                        //this.MainLayout.ForceLayout();
+                        //this.ForceLayout();
+                        //var bounds = this.DisplayImage.Bounds;
                     });
             }
         }
@@ -297,7 +328,7 @@ namespace Emgu.CV.XamarinForms
                     label.Text = message;
 
                     label.LineBreakMode = LineBreakMode.WordWrap;
-                    label.WidthRequest = this.Width;
+                    //label.WidthRequest = this.Width;
                 }
             );
         }

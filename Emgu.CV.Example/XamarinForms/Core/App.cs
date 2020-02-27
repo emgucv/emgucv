@@ -94,6 +94,8 @@ namespace Emgu.CV.XamarinForms
                   }
               };
 
+            String aboutIcon = null;
+            /*
             String aboutIcon;
             if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
             {
@@ -102,7 +104,7 @@ namespace Emgu.CV.XamarinForms
             else if (Emgu.Util.Platform.ClrType == Emgu.Util.Platform.Clr.NetFxCore)
                 aboutIcon = null; 
             else
-                aboutIcon = "questionmark.png";
+                aboutIcon = "questionmark.png";*/
 
             MainPage =
              new NavigationPage(

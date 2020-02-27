@@ -153,14 +153,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\opencv\data\haarcascades\haarcascade_eye.xml">
-      <Link>haarcascade_eye.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
-      <Link>haarcascade_frontalface_default.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\Core\lena.jpg">
       <Link>lena.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -203,10 +195,10 @@
       <Version>4.0.1.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.4.0.991640</Version>
+      <Version>4.5.0.356</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.Platform.WPF">
-      <Version>4.4.0.991640</Version>
+      <Version>4.5.0.356</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" />
