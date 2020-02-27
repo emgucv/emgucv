@@ -28,6 +28,7 @@ IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r15c" SET ANDROID_NDK
 
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r16" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r16
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r16b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r16b
+IF EXIST "C:\Microsoft\AndroidNDK64\android-ndk-r16b" SET ANDROID_NDK=C:\Microsoft\AndroidNDK64\android-ndk-r16b
 IF EXIST "%ANDROID_NDK%" SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
 
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r17c" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r17c
