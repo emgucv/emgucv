@@ -59,6 +59,16 @@ namespace Emgu.CV.XamarinForms
                 stopSignDetectionButton
             };
 
+#if __ANDROID__
+            Button androidCameraButton = new Button();
+            androidCameraButton.Text = "Android Camera";
+            buttonList.Add(androidCameraButton);
+            androidCameraButton.Clicked += (sender, args) =>
+            {
+                MainPage.Navigation.PushAsync(new AndroidCameraPage());
+            };
+#endif
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
             {
                 Button viz3dButton = new Button();

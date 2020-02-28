@@ -1,22 +1,7 @@
-﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
-//----------------------------------------------------------------------------
-
-//
-// Camera preview based on monodroid API-samples
-// 
-// https://developer.xamarin.com/samples/monodroid/android5.0/Camera2Basic/
-
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
+using System.Text;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -29,31 +14,57 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Emgu.CV;
-using Emgu.CV.CvEnum;
-using Emgu.CV.Structure;
-using Emgu.Util;
-//using Java.Lang;
 using Paint = Android.Graphics.Paint;
 using Java.Util.Concurrent;
+using Xamarin.Forms.Platform.Android;
 using Camera = Android.Hardware.Camera;
 using Type = System.Type;
 
-namespace AndroidExamples
+
+namespace Emgu.CV.XamarinForms
 {
-    [Activity(Label = "Android Camera")]
-    public class Camera2Activity : ButtonMessageImageActivity
+    public class AndroidCameraManager
     {
-        public Camera2Activity()
-            : this("Capture from Camera")
+        public EventHandler<Mat> OnImageCaptured;
+
+        public AndroidCameraManager()
         {
 
-        }
-        public Camera2Activity(String buttonText)
-            : base(buttonText)
-        {
+            if (!SetUpCameraOutputs())
+                return;
 
+            this.mOnYuvImageAvailableListener.OnImageProcessed += (sender, mat) =>
+            {
+                this.OnImageCaptured(sender, mat);
+            };
+
+            //var activity = this;
+            CameraManager manager =
+                (CameraManager)Android.App.Application.Context.GetSystemService(Context.CameraService);
+            mStateCallback = new CameraStateListener();
+            try
+            {
+                Handler backgroundHandler;
+
+                var list = manager.GetCameraIdList();
+                var cameraId = list[0];
+                backgroundHandler = mBackgroundHandler;
+
+                // Attempt to open the camera. mStateCallback will be called on the background handler's
+                // thread when this succeeds or fails.
+                manager.OpenCamera(cameraId, mStateCallback, backgroundHandler);
+            }
+            catch (CameraAccessException e)
+            {
+                e.PrintStackTrace();
+            }
+            catch (Java.Lang.InterruptedException e)
+            {
+                throw new Java.Lang.RuntimeException("Interrupted while trying to lock camera opening.", e);
+            }
         }
+
+
 
         // Camera state: Device is closed.
         const int STATE_CLOSED = 0;
@@ -96,7 +107,7 @@ namespace AndroidExamples
         /// </summary>
         static CameraCaptureSession.CaptureCallback mPreCaptureCallback;
         */
-         
+
         /// <summary>
         /// A {@link Semaphore} to prevent the app from exiting before closing the camera.
         /// </summary>
@@ -125,6 +136,7 @@ namespace AndroidExamples
             {
                 return false;
             }
+
             foreach (int i in modes)
             {
                 if (i == mode)
@@ -132,6 +144,7 @@ namespace AndroidExamples
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -147,14 +160,16 @@ namespace AndroidExamples
         /// <returns><c>true</c>, if up camera outputs was set, <c>false</c> otherwise.</returns>
         bool SetUpCameraOutputs()
         {
-            var activity = this;
-            CameraManager manager = (CameraManager)activity.GetSystemService(Context.CameraService);
+            //var activity = this;
+            CameraManager manager =
+                (CameraManager)Android.App.Application.Context.GetSystemService(Context.CameraService);
             if (manager == null)
             {
                 Log.Error(TAG, "This device doesn't support Camera2 API.");
 
                 return false;
             }
+
             try
             {
                 // Find a CameraDevice that supports YUV captures, and configure state.
@@ -170,13 +185,14 @@ namespace AndroidExamples
                     {
                         continue;
                     }*/
-                    
+
                     StreamConfigurationMap map = (StreamConfigurationMap)characteristics.Get(
-                                                     CameraCharacteristics.ScalerStreamConfigurationMap);
+                        CameraCharacteristics.ScalerStreamConfigurationMap);
 
                     // For still image captures, we use the largest available size.
                     Android.Util.Size[] yuvs = map.GetOutputSizes((int)ImageFormatType.Yuv420888);
-                    Android.Util.Size largestYuv = yuvs.OrderByDescending(element => element.Width * element.Height).Last();
+                    Android.Util.Size largestYuv =
+                        yuvs.OrderByDescending(element => element.Width * element.Height).Last();
 
                     lock (mCameraStateLock)
                     {
@@ -196,6 +212,7 @@ namespace AndroidExamples
                         mCharacteristics = characteristics;
                         mCameraId = cameraId;
                     }
+
                     return true;
                 }
             }
@@ -225,12 +242,6 @@ namespace AndroidExamples
 
         public class CameraStateListener : CameraDevice.StateCallback
         {
-            Camera2Activity Activity { get; set; }
-
-            public CameraStateListener(Camera2Activity activity)
-            {
-                Activity = activity;
-            }
 
             public override void OnOpened(CameraDevice camera)
             {
@@ -276,11 +287,14 @@ namespace AndroidExamples
                     camera.Close();
                     mCameraDevice = null;
                 }
-                var activity = Activity;
+
+                /*
+                var activity = Parent;
                 if (null != activity)
                 {
-                    activity.Finish();
-                }
+                    //TODO: clean up parent
+                    //activity.Finish();
+                }*/
             }
         }
 
@@ -301,44 +315,12 @@ namespace AndroidExamples
         /// </summary>
         static CameraCaptureSession mCaptureSession;
 
-        protected override void OnResume()
-        {
-            base.OnResume();
-            StartBackgroundThread();
-            /*
-            if (CanOpenCamera())
-            {
 
-                // When the screen is turned off and turned back on, the SurfaceTexture is already
-                // available, and "onSurfaceTextureAvailable" will not be called. In that case, we should
-                // configure the preview bounds here (otherwise, we wait until the surface is ready in
-                // the SurfaceTextureListener).
-                if (mTextureView.IsAvailable)
-                {
-                    ConfigureTransform(mTextureView.Width, mTextureView.Height, Activity);
-                }
-                else
-                {
-                    mTextureView.SurfaceTextureListener = mSurfaceTextureListener;
-                }
-                if (mOrientationListener != null && mOrientationListener.CanDetectOrientation())
-                {
-                    mOrientationListener.Enable();
-                }
-            }*/
-        }
-
-        /*
-        /// <summary>
-        /// Number of pending user requests to capture a photo.
-        /// </summary>
-        static int mPendingUserCaptures = 0;
-        */
 
         /// <summary>
         /// Closes the current {@link CameraDevice}.
         /// </summary>
-        void CloseCamera()
+        public void CloseCamera()
         {
             try
             {
@@ -356,11 +338,13 @@ namespace AndroidExamples
                         mCaptureSession.Close();
                         mCaptureSession = null;
                     }
+
                     if (null != mCameraDevice)
                     {
                         mCameraDevice.Close();
                         mCameraDevice = null;
                     }
+
                     if (null != mYuvImageReader)
                     {
                         mYuvImageReader.Close();
@@ -379,22 +363,11 @@ namespace AndroidExamples
             }
         }
 
-        protected override void OnPause()
-        {
-            /*
-            if (mOrientationListener != null)
-            {
-                mOrientationListener.Disable();
-            }*/
-            CloseCamera();
-            StopBackgroundThread();
-            base.OnPause();
-        }
 
         /// <summary>
         /// Starts a background thread and its {@link Handler}.
         /// </summary>
-        void StartBackgroundThread()
+        public void StartBackgroundThread()
         {
             mBackgroundThread = new HandlerThread("CameraBackground");
             mBackgroundThread.Start();
@@ -407,7 +380,7 @@ namespace AndroidExamples
         /// <summary>
         /// Stops the background thread and its {@link Handler}.
         /// </summary>
-        void StopBackgroundThread()
+        public void StopBackgroundThread()
         {
             mBackgroundThread.QuitSafely();
             try
@@ -425,48 +398,6 @@ namespace AndroidExamples
             }
         }
 
-        protected override void OnCreate(Bundle bundle)
-        {
-            base.OnCreate(bundle);
-
-            if (!SetUpCameraOutputs())
-                return;
-
-            this.mOnYuvImageAvailableListener.OnImageProcessed += (sender, mat) =>
-            {
-                SetImage(mat);
-            };
-
-            var activity = this;
-            CameraManager manager = (CameraManager)activity.GetSystemService(Context.CameraService);
-            mStateCallback = new CameraStateListener(this);
-            try
-            {
-                Handler backgroundHandler;
-
-                var list = manager.GetCameraIdList();
-                var cameraId = list[0];
-                backgroundHandler = mBackgroundHandler;
-
-                // Attempt to open the camera. mStateCallback will be called on the background handler's
-                // thread when this succeeds or fails.
-                manager.OpenCamera(cameraId, mStateCallback, backgroundHandler);
-            }
-            catch (CameraAccessException e)
-            {
-                e.PrintStackTrace();
-            }
-            catch (Java.Lang.InterruptedException e)
-            {
-                throw new Java.Lang.RuntimeException("Interrupted while trying to lock camera opening.", e);
-            }
-
-            this.OnButtonClick += (sender, args) =>
-            {
-                CreateCaptureSession();
-            };
-        }
-
         public void CreateCaptureSession()
         {
             var surface = mYuvImageReader.Get().Surface;
@@ -481,9 +412,5 @@ namespace AndroidExamples
             mCameraDevice.CreateCaptureSession(new List<Surface>() { surface }, ccsc, mBackgroundHandler);
         }
 
-        //private CameraCaptureSessionCallback sessionStateCallback = new CameraCaptureSessionCallback();
-
-
     }
 }
-

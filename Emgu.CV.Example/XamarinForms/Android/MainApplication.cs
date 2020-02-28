@@ -15,8 +15,8 @@ namespace Emgu.CV.XamarinForms.Droid
     [Application]
     public class MainApplication : Application, Application.IActivityLifecycleCallbacks
     {
-        public MainApplication(IntPtr handle, JniHandleOwnership transer)
-          : base(handle, transer)
+        public MainApplication(IntPtr handle, JniHandleOwnership transfer)
+          : base(handle, transfer)
         {
         }
 

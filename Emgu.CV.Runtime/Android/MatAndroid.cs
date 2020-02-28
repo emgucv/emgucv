@@ -27,16 +27,6 @@ namespace Emgu.CV
     //public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray
     public static partial class AndroidExtension
     {
-        /// <summary>
-        /// Create a Mat from an Android Bitmap
-        /// </summary>
-        /// <param name="bitmap">The android Bitmap</param>
-        public static Mat ToMat(this Android.Graphics.Bitmap bitmap)
-        {
-            Mat m = new Mat();
-            m.SetBitmap(bitmap);
-            return m;
-        }
 
         /// <summary>
         /// Read an image file from Android Asset
@@ -57,13 +47,23 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Convert a Bitmap to and from this Mat
+        /// Create a Mat from an Android Bitmap
+        /// </summary>
+        /// <param name="bitmap">The android Bitmap</param>
+        public static Mat ToMat(this Android.Graphics.Bitmap bitmap)
+        {
+            Mat m = new Mat();
+            bitmap.ToMat(m);
+            return m;
+        }
+
+        /// <summary>
+        /// Convert a Bitmap to a Mat
         /// </summary>
         /// <param name="mat">The mat to copy Bitmap into</param>
         /// <param name="bitmap">The bitmap to copy into mat</param>
-        public static void SetBitmap(this Mat mat, Android.Graphics.Bitmap bitmap)
+        public static void ToMat(this Android.Graphics.Bitmap bitmap, Mat mat)
         {
-
             Android.Graphics.Bitmap.Config config = bitmap.GetConfig();
             if (config.Equals(Android.Graphics.Bitmap.Config.Argb8888))
             {
@@ -88,8 +88,8 @@ namespace Emgu.CV
             {
                 throw new NotImplementedException(String.Format("Coping from Bitmap of {0} is not implemented", config));
             }
-
         }
+
 
         /// <summary>
         /// Convert the Mat to Bitmap

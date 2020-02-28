@@ -10,6 +10,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AboutPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Android\AndroidCameraManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Android\AndroidCameraPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Android\CameraCaptureSessionCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Android\OnYuvImageAvailableListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Android\RefCountedAutoCloseable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Android\YUV420Converter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DownloadableFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawSubdivision.cs" />

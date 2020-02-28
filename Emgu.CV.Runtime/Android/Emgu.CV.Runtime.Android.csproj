@@ -23,7 +23,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,7 +32,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -42,7 +42,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -52,7 +52,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -79,8 +79,7 @@
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
-    <EmguCVLinkTarget Condition="('$(AndroidApplication)'=='True' OR '$(AndroidApplication)'=='true')">Xamarin Android App</EmguCVLinkTarget>
-    <EmguCVLinkTarget Condition="!('$(AndroidApplication)'=='True' OR '$(AndroidApplication)'=='true')">Xamarin Android Library</EmguCVLinkTarget>
+    <EmguCVLinkTarget>Xamarin Android Library</EmguCVLinkTarget>
     <!-- 
 		<EmguCVNativeArmeabi>$(OpenCVBinaryDir)\android\armeabi\libcvextern.so</EmguCVNativeArmeabi>
         <EmguCVBuildAndroidArmeabi Condition="$(AndroidSupportedAbis.Contains('armeabi%3')) OR $(AndroidSupportedAbis.Contains('armeabi,')) OR $(AndroidSupportedAbis.Contains('armeabi;')) OR $(AndroidSupportedAbis.EndsWith('armeabi')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='armeabi')">True</EmguCVBuildAndroidArmeabi>
@@ -106,39 +105,27 @@
   </PropertyGroup>
   <!-- armeabi-v7a -->
   <ItemGroup Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND Exists('$(EmguCVNativeArmeabiv7a)')">
-    <EmbeddedNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android Library'" Include="$(EmguCVNativeArmeabiv7a)">
+    <EmbeddedNativeLibrary Include="$(EmguCVNativeArmeabiv7a)">
       <Link>lib\armeabi-v7a\libcvextern.so</Link>
     </EmbeddedNativeLibrary>
-    <AndroidNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android App'" Include="$(EmguCVNativeArmeabiv7a)">
-      <Link>lib\armeabi-v7a\libcvextern.so</Link>
-    </AndroidNativeLibrary>
   </ItemGroup>
   <!-- arm64-v8a -->
   <ItemGroup Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND Exists('$(EmguCVNativeArm64v8a)')">
-    <EmbeddedNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android Library'" Include="$(EmguCVNativeArm64v8a)">
+    <EmbeddedNativeLibrary Include="$(EmguCVNativeArm64v8a)">
       <Link>lib\arm64-v8a\libcvextern.so</Link>
     </EmbeddedNativeLibrary>
-    <AndroidNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android App'" Include="$(EmguCVNativeArm64v8a)">
-      <Link>lib\arm64-v8a\libcvextern.so</Link>
-    </AndroidNativeLibrary>
   </ItemGroup>
   <!-- x86 -->
   <ItemGroup Condition="'$(EmguCVBuildAndroidx86)'=='True' AND Exists('$(EmguCVNativex86)')">
-    <EmbeddedNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android Library'" Include="$(EmguCVNativex86)">
+    <EmbeddedNativeLibrary Include="$(EmguCVNativex86)">
       <Link>lib\x86\libcvextern.so</Link>
     </EmbeddedNativeLibrary>
-    <AndroidNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android App'" Include="$(EmguCVNativex86)">
-      <Link>lib\x86\libcvextern.so</Link>
-    </AndroidNativeLibrary>
   </ItemGroup>
   <!-- x86_64 -->
   <ItemGroup Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND Exists('$(EmguCVNativex8664)')">
-    <EmbeddedNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android Library'" Include="$(EmguCVNativex8664)">
+    <EmbeddedNativeLibrary Include="$(EmguCVNativex8664)">
       <Link>lib\x86_64\libcvextern.so</Link>
     </EmbeddedNativeLibrary>
-    <AndroidNativeLibrary Condition="'$(EmguCVLinkTarget)'=='Xamarin Android App'" Include="$(EmguCVNativex8664)">
-      <Link>lib\x86_64\libcvextern.so</Link>
-    </AndroidNativeLibrary>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

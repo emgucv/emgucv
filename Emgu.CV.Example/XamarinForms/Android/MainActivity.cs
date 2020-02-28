@@ -54,7 +54,7 @@ namespace Emgu.CV.XamarinForms.Droid
         }
 
 
-        private static Mat GetImageFromTask(Task<MediaFile> task, int maxWidth, int maxHeight)
+        private static Mat ToMat(Task<MediaFile> task, int maxWidth, int maxHeight)
         {
             MediaFile file = GetResultFromTask(task);
             if (file == null)
@@ -80,9 +80,7 @@ namespace Emgu.CV.XamarinForms.Droid
             {
                 if (bmp.Width <= maxWidth && bmp.Height <= maxHeight && rotation == 0)
                 {
-                    Mat m = new Mat();
-                    m.SetBitmap(bmp);
-                    return m;
+                    return bmp.ToMat();
                 }
                 else
                 {

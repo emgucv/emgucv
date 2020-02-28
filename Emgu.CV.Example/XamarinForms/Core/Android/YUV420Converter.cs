@@ -16,7 +16,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-namespace AndroidExamples
+namespace Emgu.CV.XamarinForms
 {
     public class YUV420Converter : Emgu.Util.DisposableObject
     {

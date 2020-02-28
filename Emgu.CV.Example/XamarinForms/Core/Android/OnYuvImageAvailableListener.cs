@@ -18,7 +18,7 @@ using Android.Widget;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 
-namespace AndroidExamples
+namespace Emgu.CV.XamarinForms
 {
     class OnYuvImageAvailableListener : Java.Lang.Object, ImageReader.IOnImageAvailableListener
     {
@@ -34,7 +34,6 @@ namespace AndroidExamples
 
         public void OnImageAvailable(ImageReader reader)
         {
-
             Image image = reader.AcquireLatestImage();
             if (image == null)
                 return;
@@ -72,7 +71,6 @@ namespace AndroidExamples
 
             _yuv420Converter.YUV_420_888_toRGBIntrinsics(image.Width, image.Height, _data, bmpSrc);
 
-
             using (Mat m = new Mat(bmpSrc.Height, bmpSrc.Width, DepthType.Cv8U, 4, bmpSrc.LockPixels(),
                 bmpSrc.Width * 4))
             {
@@ -84,7 +82,7 @@ namespace AndroidExamples
                 CvInvoke.Flip(_rotatedMat, _rotatedMat, FlipType.Horizontal);
 
                 //apply a simple invert filter
-                CvInvoke.BitwiseNot(_rotatedMat, _rotatedMat);
+                //CvInvoke.BitwiseNot(_rotatedMat, _rotatedMat);
             }
 
             if (OnImageProcessed != null)

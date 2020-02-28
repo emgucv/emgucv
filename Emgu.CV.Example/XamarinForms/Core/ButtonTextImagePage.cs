@@ -41,7 +41,7 @@ namespace Emgu.CV.XamarinForms
         }
 
         private StackLayout _mainLayout = new StackLayout();
-        public Layout MainLayout
+        public StackLayout MainLayout
         {
             get { return _mainLayout; }
         }
@@ -268,9 +268,9 @@ namespace Emgu.CV.XamarinForms
 
         public event EventHandler<Mat[]> OnImagesLoaded;
 
-        private byte[] _imageData;
-        private MemoryStream _imageStream;
-        public void SetImage(IInputArray image)
+        //private byte[] _imageData;
+        //private MemoryStream _imageStream;
+        public virtual void SetImage(IInputArray image)
         {
             if (image == null)
             {
@@ -296,13 +296,14 @@ namespace Emgu.CV.XamarinForms
             {
                 //CvInvoke.Imencode(".jpg", image, vb);
                 CvInvoke.Imencode(".png", image, vb);
-                _imageData = vb.ToArray();
-                _imageStream = new MemoryStream(_imageData);
+                byte[] rawData = vb.ToArray();
+                //_imageData = vb.ToArray();
+                //_imageStream = new MemoryStream(_imageData);
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(
                     () =>
                     {
                         this.DisplayImage.IsVisible = true;
-                        this.DisplayImage.Source = ImageSource.FromStream(() => _imageStream);
+                        this.DisplayImage.Source = ImageSource.FromStream(() => new MemoryStream(rawData));
                         
                         this.DisplayImage.WidthRequest = Math.Min(this.Width, width);
                         this.DisplayImage.HeightRequest = height;

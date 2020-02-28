@@ -36,8 +36,8 @@ namespace Emgu.CV.XamarinForms
 {
     public class FaceLandmarkDetectionPage : ButtonTextImagePage
     {
-        private String _modelFolderName = "face_landmark_data";
-        private String _path = null;
+        private String _modelFolderName = "dnn_samples_face_detector_20170830";
+        //private String _path = null;
         private Net _faceDetector = null;
         private FacemarkLBF _facemark = null;
 
@@ -48,9 +48,9 @@ namespace Emgu.CV.XamarinForms
                 FileDownloadManager manager = new FileDownloadManager();
                 manager.AddFile(
                     "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel",
-                    "dnn_samples_face_detector_20170830");
+                    _modelFolderName);
                 manager.AddFile("https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/deploy.prototxt",
-                    "dnn_samples_face_detector_20170830");
+                    _modelFolderName);
                 manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
                 await manager.Download();
                 _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
