@@ -127,12 +127,6 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\opencv\data\haarcascades\haarcascade_eye.xml">
-      <Link>haarcascade_eye.xml</Link>
-    </Content>
-    <Content Include="..\..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
-      <Link>haarcascade_frontalface_default.xml</Link>
-    </Content>
     <Content Include="..\Core\lena.jpg">
       <Link>lena.jpg</Link>
     </Content>
@@ -160,7 +154,7 @@
       <Version>4.0.1.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.4.0.991477</Version>
+      <Version>4.5.0.356</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
