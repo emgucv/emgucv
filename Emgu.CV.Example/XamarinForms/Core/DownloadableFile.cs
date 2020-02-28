@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Emgu.Util;
 
 namespace Emgu.Models
@@ -17,14 +18,16 @@ namespace Emgu.Models
     public class DownloadableFile
     {
         private String _url;
+        private String _localSubfolder;
 
         /// <summary>
         /// Create a downloadable file from the url
         /// </summary>
         /// <param name="url">The url where the file can be downloaded from</param>
-        public DownloadableFile(String url)
+        public DownloadableFile(String url, String localSubfolder)
         {
             _url = url;
+            _localSubfolder = localSubfolder;
         }
 
         private String _localFile = null;
@@ -68,14 +71,13 @@ namespace Emgu.Models
         /// </summary>
         /// <param name="fileName">The name of the file</param>
         /// <returns>The local path of the file</returns>
-        public static String GetLocalFileName(String fileName)
+        public String GetLocalFileName(String fileName)
         {
 #if  UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-            return System.IO.Path.Combine(UnityEngine.Application.persistentDataPath, fileName);
+            return System.IO.Path.Combine(UnityEngine.Application.persistentDataPath, _localSubfolder, fileName);
 #else
-                String personalFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                return Path.Combine(personalFolder, fileName);
-
+            String personalFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            return Path.Combine(personalFolder, _localSubfolder, fileName);
 #endif
         }
     }

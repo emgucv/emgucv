@@ -41,22 +41,16 @@ namespace Emgu.CV.XamarinForms
         private Net _faceDetector = null;
         private FacemarkLBF _facemark = null;
 
-        private void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
-        {
-            if (e.TotalBytesToReceive <= 0)
-                SetMessage(String.Format("{0} bytes downloaded.", e.BytesReceived));
-            else
-                SetMessage(String.Format("{0} of {1} bytes downloaded ({2}%)", e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage));
-
-        }
-
         private async Task InitFaceDetector()
         {
             if (_faceDetector == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
-                manager.AddFile("https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel");
-                manager.AddFile("https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/deploy.prototxt");
+                manager.AddFile(
+                    "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel",
+                    "dnn_samples_face_detector_20170830");
+                manager.AddFile("https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/deploy.prototxt",
+                    "dnn_samples_face_detector_20170830");
                 manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
                 await manager.Download();
                 _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
@@ -68,7 +62,7 @@ namespace Emgu.CV.XamarinForms
             if (_facemark == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
-                manager.AddFile("https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml");
+                manager.AddFile("https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml", "facemark");
                 manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
                 await manager.Download();
                 using (FacemarkLBFParams facemarkParam = new CV.Face.FacemarkLBFParams())
@@ -136,7 +130,6 @@ namespace Emgu.CV.XamarinForms
                         using (VectorOfPointF vpf = landmarks[i])
                             FaceInvoke.DrawFacemarks(image, vpf, new MCvScalar(255, 0, 0));
                     }
-
                 }
             }
         }
@@ -209,6 +202,14 @@ namespace Emgu.CV.XamarinForms
         private void OnButtonClicked(Object sender, EventArgs args)
         {
             LoadImages(new string[] { "lena.jpg" });
+        }
+
+        private void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        {
+            if (e.TotalBytesToReceive <= 0)
+                SetMessage(String.Format("{0} bytes downloaded.", e.BytesReceived));
+            else
+                SetMessage(String.Format("{0} of {1} bytes downloaded ({2}%)", e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage));
         }
     }
 }

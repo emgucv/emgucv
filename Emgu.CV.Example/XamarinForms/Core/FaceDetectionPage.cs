@@ -38,8 +38,8 @@ namespace Emgu.CV.XamarinForms
 
                 FileDownloadManager downloadManager = new FileDownloadManager();
                 String url = "https://github.com/opencv/opencv/raw/4.2.0/data/haarcascades/";
-                downloadManager.AddFile(url + "/haarcascade_frontalface_default.xml");
-                downloadManager.AddFile(url + "/haarcascade_eye.xml");
+                downloadManager.AddFile(url + "/haarcascade_frontalface_default.xml", "haarcascade");
+                downloadManager.AddFile(url + "/haarcascade_eye.xml", "haarcascade");
 
                 downloadManager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
 

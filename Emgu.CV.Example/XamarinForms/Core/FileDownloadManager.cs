@@ -47,9 +47,9 @@ namespace Emgu.Models
         /// Add a file to download
         /// </summary>
         /// <param name="url">The url of the file to be downloaded</param>
-        public void AddFile(String url)
+        public void AddFile(String url, String localSubfolder)
         {
-            _files.Add(new DownloadableFile(url));
+            _files.Add(new DownloadableFile(url, localSubfolder));
         }
 
         public DownloadableFile[] Files
@@ -161,6 +161,11 @@ namespace Emgu.Models
                     if (onDownloadProgressChanged != null)
                         downloadClient.DownloadProgressChanged += onDownloadProgressChanged;
                     
+                    FileInfo fi = new FileInfo(downloadableFile.LocalFile);
+                    if (!fi.Directory.Exists)
+                    {
+                        fi.Directory.Create();
+                    }
                     await downloadClient.DownloadFileTaskAsync(new Uri(downloadableFile.Url), downloadableFile.LocalFile);
                     
                 }
