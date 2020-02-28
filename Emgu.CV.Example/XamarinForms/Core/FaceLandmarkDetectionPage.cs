@@ -27,6 +27,7 @@ using Emgu.CV.Dnn;
 using Emgu.CV.Face;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.Models;
 using Emgu.Util;
 using Color = Xamarin.Forms.Color;
 using Environment = System.Environment;
@@ -35,61 +36,45 @@ namespace Emgu.CV.XamarinForms
 {
     public class FaceLandmarkDetectionPage : ButtonTextImagePage
     {
-
         private String _modelFolderName = "face_landmark_data";
         private String _path = null;
         private Net _faceDetector = null;
         private FacemarkLBF _facemark = null;
 
-        private void InitPath()
+        private void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
         {
-            if (_path == null)
-            {
-#if __ANDROID__ || __IOS__
-                _path = System.IO.Path.Combine(
-                  System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments),
-                  _modelFolderName);
-#else
-                _path = String.Format("./{0}/", _modelFolderName);
-#endif
-            }
+            if (e.TotalBytesToReceive <= 0)
+                SetMessage(String.Format("{0} bytes downloaded.", e.BytesReceived));
+            else
+                SetMessage(String.Format("{0} of {1} bytes downloaded ({2}%)", e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage));
+
         }
 
-        private void InitFaceDetector()
+        private async Task InitFaceDetector()
         {
             if (_faceDetector == null)
             {
-                InitPath();
-                String ssdFileLocal = MaskRcnnPage.DnnDownloadFile(
-                    "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/",
-                    "res10_300x300_ssd_iter_140000.caffemodel",
-                    _path);
-
-                String ssdProtoFileLocal = MaskRcnnPage.DnnDownloadFile(
-                    "https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/",
-                    "deploy.prototxt",
-                    _path);
-                _faceDetector = DnnInvoke.ReadNetFromCaffe(ssdProtoFileLocal, ssdFileLocal);
-
+                FileDownloadManager manager = new FileDownloadManager();
+                manager.AddFile("https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel");
+                manager.AddFile("https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/deploy.prototxt");
+                manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
+                await manager.Download();
+                _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
             }
         }
 
-        private void InitFacemark()
+        private async Task InitFacemark()
         {
             if (_facemark == null)
             {
-                InitPath();
-                String facemarkFileName = "lbfmodel.yaml";
-                String facemarkFileUrl = "https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/";
-                String facemarkFileLocal = MaskRcnnPage.DnnDownloadFile(
-                    facemarkFileUrl,
-                    facemarkFileName,
-                    _path);
-
+                FileDownloadManager manager = new FileDownloadManager();
+                manager.AddFile("https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml");
+                manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
+                await manager.Download();
                 using (FacemarkLBFParams facemarkParam = new CV.Face.FacemarkLBFParams())
                 {
                     _facemark = new CV.Face.FacemarkLBF(facemarkParam);
-                    _facemark.LoadModel(facemarkFileLocal);
+                    _facemark.LoadModel(manager.Files[0].LocalFile);
                 }
             }
         }
@@ -175,8 +160,8 @@ namespace Emgu.CV.XamarinForms
 
                 if (image.Length == 0)
                 {
-                    InitFaceDetector();
-                    InitFacemark();
+                    await InitFaceDetector();
+                    await InitFacemark();
                     //Handle video
                     if (_capture == null)
                     {
@@ -191,24 +176,18 @@ namespace Emgu.CV.XamarinForms
                 {
                     SetMessage("Please wait...");
                     SetImage(null);
-                    Task<Tuple<IInputArray, long>> t = new Task<Tuple<IInputArray, long>>(
-                        () =>
-                        {
-                            InitFaceDetector();
-                            InitFacemark();
-                            Stopwatch watch = Stopwatch.StartNew();
+                    
+                    await InitFaceDetector();
+                    await InitFacemark();
+                    Stopwatch watch = Stopwatch.StartNew();
 
-                            DetectAndRender(image[0]);
-                            watch.Stop();
-                            return new Tuple<IInputArray, long>(image[0], watch.ElapsedMilliseconds);
-                        });
-                    t.Start();
-
-                    var result = await t;
-                    SetImage(t.Result.Item1);
+                    DetectAndRender(image[0]);
+                    watch.Stop();
+                            
+                    SetImage(image[0]);
                     String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
 
-                    SetMessage(String.Format("Detected in {0} milliseconds.", t.Result.Item2));
+                    SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
                 }
             };
         }
@@ -231,7 +210,5 @@ namespace Emgu.CV.XamarinForms
         {
             LoadImages(new string[] { "lena.jpg" });
         }
-
-
     }
 }
