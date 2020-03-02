@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -27,13 +28,12 @@ namespace Emgu.CV.XamarinForms
     {
         public EventHandler<Mat> OnImageCaptured;
 
-        public AndroidCameraManager()
+        public AndroidCameraManager(int? preferredPreviewSize = null)
         {
-
-            if (!SetUpCameraOutputs())
+            if (!SetUpCameraOutputs(preferredPreviewSize))
                 return;
 
-            this.mOnYuvImageAvailableListener.OnImageProcessed += (sender, mat) =>
+            this._onYuvImageAvailableListener.OnImageProcessed += (sender, mat) =>
             {
                 this.OnImageCaptured(sender, mat);
             };
@@ -41,18 +41,18 @@ namespace Emgu.CV.XamarinForms
             //var activity = this;
             CameraManager manager =
                 (CameraManager)Android.App.Application.Context.GetSystemService(Context.CameraService);
-            mStateCallback = new CameraStateListener();
+            _stateCallback = new CameraStateListener();
             try
             {
                 Handler backgroundHandler;
 
                 var list = manager.GetCameraIdList();
                 var cameraId = list[0];
-                backgroundHandler = mBackgroundHandler;
+                backgroundHandler = _backgroundHandler;
 
                 // Attempt to open the camera. mStateCallback will be called on the background handler's
                 // thread when this succeeds or fails.
-                manager.OpenCamera(cameraId, mStateCallback, backgroundHandler);
+                manager.OpenCamera(cameraId, _stateCallback, backgroundHandler);
             }
             catch (CameraAccessException e)
             {
@@ -88,17 +88,22 @@ namespace Emgu.CV.XamarinForms
         /// 
         /// @see #mPreCaptureCallback
         /// </summary>
-        static int mState = STATE_CLOSED;
+        static int _state = STATE_CLOSED;
 
         /// <summary>
         /// A lock protecting camera state.
         /// </summary>
-        static readonly object mCameraStateLock = new object();
+        static readonly object _cameraStateLock = new object();
 
         /// <summary>
         /// A reference to the open {@link CameraDevice}.
         /// </summary>
-        static CameraDevice mCameraDevice;
+        static CameraDevice _cameraDevice;
+
+        public CameraDevice CameraDevice
+        {
+            get { return _cameraDevice; }
+        }
 
         /*
         /// <summary>>
@@ -111,18 +116,18 @@ namespace Emgu.CV.XamarinForms
         /// <summary>
         /// A {@link Semaphore} to prevent the app from exiting before closing the camera.
         /// </summary>
-        static readonly Semaphore mCameraOpenCloseLock = new Semaphore(1);
+        static readonly Semaphore _cameraOpenCloseLock = new Semaphore(1);
 
         /// <summary>
         /// The {@link CameraCharacteristics} for the currently configured camera device.
         /// </summary>
-        static CameraCharacteristics mCharacteristics;
+        static CameraCharacteristics _characteristics;
 
 
         /// <summary>
         /// ID of the current {@link CameraDevice}.
         /// </summary>
-        string mCameraId;
+        string _cameraId;
 
         /// <summary>
         /// Return true if the given array contains the given integer.
@@ -152,13 +157,13 @@ namespace Emgu.CV.XamarinForms
         /// This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
         /// RAW image is ready to be saved.
         /// </summary>
-        private OnYuvImageAvailableListener mOnYuvImageAvailableListener = new OnYuvImageAvailableListener();
+        private OnYuvImageAvailableListener _onYuvImageAvailableListener = new OnYuvImageAvailableListener();
 
         /// <summary>
         /// Sets up state related to camera that is needed before opening a {@link CameraDevice}.
         /// </summary>
         /// <returns><c>true</c>, if up camera outputs was set, <c>false</c> otherwise.</returns>
-        bool SetUpCameraOutputs()
+        bool SetUpCameraOutputs(int? preferredPreviewSize = null)
         {
             //var activity = this;
             CameraManager manager =
@@ -191,26 +196,36 @@ namespace Emgu.CV.XamarinForms
 
                     // For still image captures, we use the largest available size.
                     Android.Util.Size[] yuvs = map.GetOutputSizes((int)ImageFormatType.Yuv420888);
-                    Android.Util.Size largestYuv =
-                        yuvs.OrderByDescending(element => element.Width * element.Height).Last();
+                    Android.Util.Size yuvSize;
+                    if (preferredPreviewSize == null)
+                    {
+                        //Choose the smallest size for performance.
+                        yuvSize =
+                            yuvs.OrderByDescending(element => element.Width * element.Height).Last();
+                    }
+                    else
+                    {
+                        yuvSize =
+                            yuvs.OrderByDescending(element => Math.Abs( (element.Width * element.Height) - (int) preferredPreviewSize ) ).Last();
+                    }
 
-                    lock (mCameraStateLock)
+                    lock (_cameraStateLock)
                     {
                         // Set up ImageReaders for JPEG and RAW outputs.  Place these in a reference
                         // counted wrapper to ensure they are only closed when all background tasks
                         // using them are finished.
-                        if (mYuvImageReader == null || mYuvImageReader.GetAndRetain() == null)
+                        if (_yuvImageReader == null || _yuvImageReader.GetAndRetain() == null)
                         {
-                            mYuvImageReader = new RefCountedAutoCloseable<ImageReader>(
-                                ImageReader.NewInstance(largestYuv.Width,
-                                    largestYuv.Height, ImageFormatType.Yuv420888, /*maxImages*/5));
+                            _yuvImageReader = new RefCountedAutoCloseable<ImageReader>(
+                                ImageReader.NewInstance(yuvSize.Width,
+                                    yuvSize.Height, ImageFormatType.Yuv420888, /*maxImages*/5));
                         }
 
-                        mYuvImageReader.Get().SetOnImageAvailableListener(
-                            mOnYuvImageAvailableListener, mBackgroundHandler);
+                        _yuvImageReader.Get().SetOnImageAvailableListener(
+                            _onYuvImageAvailableListener, _backgroundHandler);
 
-                        mCharacteristics = characteristics;
-                        mCameraId = cameraId;
+                        _characteristics = characteristics;
+                        _cameraId = cameraId;
                     }
 
                     return true;
@@ -232,13 +247,13 @@ namespace Emgu.CV.XamarinForms
         /// This is used to allow us to clean up the {@link ImageReader} when all background tasks using
         /// its {@link Image}s have completed.
         /// </summary>
-        static RefCountedAutoCloseable<ImageReader> mYuvImageReader;
+        static RefCountedAutoCloseable<ImageReader> _yuvImageReader;
 
         /// <summary>
         /// CameraStateListener is called when the currently active {@link CameraDevice}
         /// changes its state.
         /// </summary>
-        CameraDevice.StateCallback mStateCallback;
+        CameraDevice.StateCallback _stateCallback;
 
         public class CameraStateListener : CameraDevice.StateCallback
         {
@@ -248,12 +263,12 @@ namespace Emgu.CV.XamarinForms
 
                 // This method is called when the camera is opened.  We start camera preview here if
                 // the TextureView displaying this has been set up.
-                lock (mCameraStateLock)
+                lock (_cameraStateLock)
                 {
 
-                    mState = STATE_OPENED;
-                    mCameraOpenCloseLock.Release();
-                    mCameraDevice = camera;
+                    _state = STATE_OPENED;
+                    _cameraOpenCloseLock.Release();
+                    _cameraDevice = camera;
                     /*
                     // Start the preview session if the TextureView has been set up already.
                     if (mPreviewSize != null && mTextureView.IsAvailable)
@@ -266,13 +281,13 @@ namespace Emgu.CV.XamarinForms
 
             public override void OnDisconnected(CameraDevice camera)
             {
-                lock (mCameraStateLock)
+                lock (_cameraStateLock)
                 {
 
-                    mState = STATE_CLOSED;
-                    mCameraOpenCloseLock.Release();
+                    _state = STATE_CLOSED;
+                    _cameraOpenCloseLock.Release();
                     camera.Close();
-                    mCameraDevice = null;
+                    _cameraDevice = null;
                 }
             }
 
@@ -280,12 +295,12 @@ namespace Emgu.CV.XamarinForms
             {
 
                 Log.Error(TAG, "Received camera device error: " + error);
-                lock (mCameraStateLock)
+                lock (_cameraStateLock)
                 {
-                    mState = STATE_CLOSED;
-                    mCameraOpenCloseLock.Release();
+                    _state = STATE_CLOSED;
+                    _cameraOpenCloseLock.Release();
                     camera.Close();
-                    mCameraDevice = null;
+                    _cameraDevice = null;
                 }
 
                 /*
@@ -301,19 +316,19 @@ namespace Emgu.CV.XamarinForms
         /// <summary>
         /// A {@link Handler} for running tasks in the background.
         /// </summary>
-        static Handler mBackgroundHandler;
+        static Handler _backgroundHandler;
 
         /// <summary>
         /// An additional thread for running tasks that shouldn't block the UI.  This is used for all
         /// callbacks from the {@link CameraDevice} and {@link CameraCaptureSession}s.
         /// </summary>
-        HandlerThread mBackgroundThread;
+        HandlerThread _backgroundThread;
 
 
         /// <summary>
         /// A {@link CameraCaptureSession } for camera preview.
         /// </summary>
-        static CameraCaptureSession mCaptureSession;
+        static CameraCaptureSession _captureSession;
 
 
 
@@ -324,31 +339,31 @@ namespace Emgu.CV.XamarinForms
         {
             try
             {
-                mCameraOpenCloseLock.Acquire();
-                lock (mCameraStateLock)
+                _cameraOpenCloseLock.Acquire();
+                lock (_cameraStateLock)
                 {
 
                     // Reset state and clean up resources used by the camera.
                     // Note: After calling this, the ImageReaders will be closed after any background
                     // tasks saving Images from these readers have been completed.
                     //mPendingUserCaptures = 0;
-                    mState = STATE_CLOSED;
-                    if (null != mCaptureSession)
+                    _state = STATE_CLOSED;
+                    if (null != _captureSession)
                     {
-                        mCaptureSession.Close();
-                        mCaptureSession = null;
+                        _captureSession.Close();
+                        _captureSession = null;
                     }
 
-                    if (null != mCameraDevice)
+                    if (null != _cameraDevice)
                     {
-                        mCameraDevice.Close();
-                        mCameraDevice = null;
+                        _cameraDevice.Close();
+                        _cameraDevice = null;
                     }
 
-                    if (null != mYuvImageReader)
+                    if (null != _yuvImageReader)
                     {
-                        mYuvImageReader.Close();
-                        mYuvImageReader = null;
+                        _yuvImageReader.Close();
+                        _yuvImageReader = null;
                     }
 
                 }
@@ -359,7 +374,7 @@ namespace Emgu.CV.XamarinForms
             }
             finally
             {
-                mCameraOpenCloseLock.Release();
+                _cameraOpenCloseLock.Release();
             }
         }
 
@@ -369,11 +384,11 @@ namespace Emgu.CV.XamarinForms
         /// </summary>
         public void StartBackgroundThread()
         {
-            mBackgroundThread = new HandlerThread("CameraBackground");
-            mBackgroundThread.Start();
-            lock (mCameraStateLock)
+            _backgroundThread = new HandlerThread("CameraBackground");
+            _backgroundThread.Start();
+            lock (_cameraStateLock)
             {
-                mBackgroundHandler = new Handler(mBackgroundThread.Looper);
+                _backgroundHandler = new Handler(_backgroundThread.Looper);
             }
         }
 
@@ -382,14 +397,19 @@ namespace Emgu.CV.XamarinForms
         /// </summary>
         public void StopBackgroundThread()
         {
-            mBackgroundThread.QuitSafely();
+
             try
             {
-                mBackgroundThread.Join();
-                mBackgroundThread = null;
-                lock (mCameraStateLock)
+                if (_backgroundThread != null)
                 {
-                    mBackgroundHandler = null;
+                    _backgroundThread.QuitSafely();
+                    _backgroundThread.Join();
+                    _backgroundThread = null;
+                }
+
+                lock (_cameraStateLock)
+                {
+                    _backgroundHandler = null;
                 }
             }
             catch (Java.Lang.InterruptedException e)
@@ -398,18 +418,34 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
-        public void CreateCaptureSession()
+        /// <summary>
+        /// Maximum 10 seconds of wait time.
+        /// </summary>
+        private static int _maxWaitTimeMilliseconds = 20000;
+
+        public async void CreateCaptureSession()
         {
-            var surface = mYuvImageReader.Get().Surface;
+            int totalWaitTime = 0;
+            int increment = 100;
+            //wait for the camera device to initialize
+            while (_cameraDevice == null)
+            {
+                await Task.Delay(increment);
+                totalWaitTime = totalWaitTime + increment;
+                if (totalWaitTime > _maxWaitTimeMilliseconds)
+                    throw new Exception(String.Format("Timeout ({0} milliseconds) waiting for camera device to be created.", _maxWaitTimeMilliseconds));
+            }
+
+            var surface = _yuvImageReader.Get().Surface;
             //surface.DescribeContents()
             CameraCaptureSessionCallback ccsc =
-                new CameraCaptureSessionCallback(mCameraDevice, surface, mCameraStateLock, mBackgroundHandler, TAG);
+                new CameraCaptureSessionCallback(_cameraDevice, surface, _cameraStateLock, _backgroundHandler, TAG);
             ccsc.OnConfigurationComplete += (sender, args) =>
             {
-                mState = STATE_PREVIEW;
-                mCaptureSession = args;
+                _state = STATE_PREVIEW;
+                _captureSession = args;
             };
-            mCameraDevice.CreateCaptureSession(new List<Surface>() { surface }, ccsc, mBackgroundHandler);
+            _cameraDevice.CreateCaptureSession(new List<Surface>() { surface }, ccsc, _backgroundHandler);
         }
 
     }
