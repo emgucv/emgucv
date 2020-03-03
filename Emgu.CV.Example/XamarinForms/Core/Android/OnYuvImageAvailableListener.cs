@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+#if __ANDROID__
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,3 +100,5 @@ namespace Emgu.CV.XamarinForms
         }
     }
 }
+
+#endif

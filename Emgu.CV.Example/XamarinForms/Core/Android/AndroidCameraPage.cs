@@ -1,4 +1,10 @@
-﻿using System;
+﻿//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
+#if __ANDROID__
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
@@ -38,7 +44,6 @@ namespace Emgu.CV.XamarinForms
         public AndroidCameraPage()
             : base()
         {
-            
             _imageView = new ImageView(Android.App.Application.Context);
             MainLayout.Children.Add(_imageView.ToView());
             
@@ -49,7 +54,7 @@ namespace Emgu.CV.XamarinForms
                 if (button.Text.Equals(_defaultButtonText))
                 {
                     button.Text = _stopCameraText;
-                    StartCapture(delegate(Object sender, Mat mat) { SetImage(mat); });
+                    StartCapture(ProcessImage);
                 }
                 else
                 {
@@ -57,6 +62,14 @@ namespace Emgu.CV.XamarinForms
                     button.Text = _defaultButtonText;
                 }
             };
+        }
+
+        public virtual void ProcessImage(Object sender, Mat mat)
+        {
+            //Do some image processing
+
+            //Render it.
+            SetImage(mat);
         }
 
         public void StartCapture(EventHandler<Mat> matHandler)
@@ -130,3 +143,5 @@ namespace Emgu.CV.XamarinForms
         }
     }
 }
+
+#endif

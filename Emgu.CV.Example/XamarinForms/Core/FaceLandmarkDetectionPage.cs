@@ -34,10 +34,10 @@ using Environment = System.Environment;
 
 namespace Emgu.CV.XamarinForms
 {
-    public class FaceLandmarkDetectionPage : ButtonTextImagePage
+    public class FaceLandmarkDetectionPage 
+        : ButtonTextImagePage
     {
         private String _modelFolderName = "dnn_samples_face_detector_20170830";
-        //private String _path = null;
         private Net _faceDetector = null;
         private FacemarkLBF _facemark = null;
 
@@ -161,9 +161,7 @@ namespace Emgu.CV.XamarinForms
                         _capture = new VideoCapture();
                         _capture.ImageGrabbed += _capture_ImageGrabbed;
                     }
-
                     _capture.Start();
-
                 }
                 else
                 {
