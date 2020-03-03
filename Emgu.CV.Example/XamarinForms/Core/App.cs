@@ -59,6 +59,7 @@ namespace Emgu.CV.XamarinForms
                 stopSignDetectionButton
             };
 
+            /*
 #if __ANDROID__
             Button androidCameraButton = new Button();
             androidCameraButton.Text = "Android Camera";
@@ -68,6 +69,7 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new AndroidCameraPage());
             };
 #endif
+            */
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
             {

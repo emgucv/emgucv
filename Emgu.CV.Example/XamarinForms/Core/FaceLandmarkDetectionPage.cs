@@ -31,11 +31,16 @@ using Emgu.Models;
 using Emgu.Util;
 using Color = Xamarin.Forms.Color;
 using Environment = System.Environment;
+using Point = System.Drawing.Point;
 
 namespace Emgu.CV.XamarinForms
 {
-    public class FaceLandmarkDetectionPage 
+    public class FaceLandmarkDetectionPage
+#if __ANDROID__
+        : AndroidCameraPage
+#else
         : ButtonTextImagePage
+#endif
     {
         private String _modelFolderName = "dnn_samples_face_detector_20170830";
         private Net _faceDetector = null;
@@ -91,7 +96,9 @@ namespace Emgu.CV.XamarinForms
             {
                 float confidenceThreshold = 0.5f;
 
-                List<Rectangle> faceRegions = new List<Rectangle>();
+                List<Rectangle> fullFaceRegions = new List<Rectangle>(); 
+                List<Rectangle> partialFaceRegions = new List<Rectangle>();
+                Rectangle imageRegion = new Rectangle(Point.Empty, image.Size);
 
                 float[,,,] values = detection.GetData(true) as float[,,,];
                 for (int i = 0; i < values.GetLength(2); i++)
@@ -110,25 +117,42 @@ namespace Emgu.CV.XamarinForms
                             xRightTop - xLeftBottom,
                             yRightTop - yLeftBottom);
                         Rectangle faceRegion = Rectangle.Round(objectRegion);
-                        faceRegions.Add(faceRegion);
+                        
+                        if (imageRegion.Contains(faceRegion))
+                            fullFaceRegions.Add(faceRegion);
+                        else
+                        {
+                            partialFaceRegions.Add(faceRegion);
+                        }
                     }
                 }
 
-                using (VectorOfRect vr = new VectorOfRect(faceRegions.ToArray()))
-                using (VectorOfVectorOfPointF landmarks = new VectorOfVectorOfPointF())
+                if (partialFaceRegions.Count > 0)
                 {
-                    _facemark.Fit(image, vr, landmarks);
+                    foreach (Rectangle face in partialFaceRegions)
+                    {
+                        CvInvoke.Rectangle(image, face, new MCvScalar(0, 255, 0));
+                    }
+                }
 
-                    foreach (Rectangle face in faceRegions)
+                if (fullFaceRegions.Count > 0)
+                {
+                    foreach (Rectangle face in fullFaceRegions)
                     {
                         CvInvoke.Rectangle(image, face, new MCvScalar(0, 255, 0));
                     }
 
-                    int len = landmarks.Size;
-                    for (int i = 0; i < landmarks.Size; i++)
+                    using (VectorOfRect vr = new VectorOfRect(fullFaceRegions.ToArray()))
+                    using (VectorOfVectorOfPointF landmarks = new VectorOfVectorOfPointF())
                     {
-                        using (VectorOfPointF vpf = landmarks[i])
-                            FaceInvoke.DrawFacemarks(image, vpf, new MCvScalar(255, 0, 0));
+                        _facemark.Fit(image, vr, landmarks);
+
+                        int len = landmarks.Size;
+                        for (int i = 0; i < landmarks.Size; i++)
+                        {
+                            using (VectorOfPointF vpf = landmarks[i])
+                                FaceInvoke.DrawFacemarks(image, vpf, new MCvScalar(255, 0, 0));
+                        }
                     }
                 }
             }
@@ -136,16 +160,23 @@ namespace Emgu.CV.XamarinForms
 
         private VideoCapture _capture = null;
         private Mat _mat = null;
+        private String _defaultButtonText = "Perform Face Landmark Detection";
 
+#if __ANDROID__
+        private String _StopCameraButtonText = "Stop Camera";
+        private bool _isBusy = false;
+#endif
         public FaceLandmarkDetectionPage()
             : base()
         {
-            //HasCameraOption = true;
+#if __ANDROID__
+            HasCameraOption = true;
+#endif
 
             var button = this.GetButton();
-            button.Text = "Perform Face Landmark Detection";
+            button.Text = _defaultButtonText;
             button.Clicked += OnButtonClicked;
-
+            
             OnImagesLoaded += async (sender, image) =>
             {
                 if (image == null || (image.Length > 0 && image[0] == null))
@@ -155,6 +186,35 @@ namespace Emgu.CV.XamarinForms
                 {
                     await InitFaceDetector();
                     await InitFacemark();
+
+#if __ANDROID__
+                    button.Text = _StopCameraButtonText;
+                    AndroidImageView.Visibility = ViewStates.Visible;
+                    StartCapture(async delegate(Object sender, Mat m)
+                    {
+                        //Skip the frame if busy, 
+                        //Otherwise too many frames arriving and will eventually saturated the memory.
+                        if (!_isBusy)
+                        {
+                            _isBusy = true;
+                            try
+                            {
+                                Stopwatch watch = Stopwatch.StartNew();
+                                await Task.Run(() => { DetectAndRender(m); });
+                                //t.Start();
+                                //await t;
+                                watch.Stop();
+                                SetImage(m);
+                                //String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
+                                SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
+                            }
+                            finally
+                            {
+                                _isBusy = false;
+                            }
+                        }
+                    });
+#else
                     //Handle video
                     if (_capture == null)
                     {
@@ -162,6 +222,7 @@ namespace Emgu.CV.XamarinForms
                         _capture.ImageGrabbed += _capture_ImageGrabbed;
                     }
                     _capture.Start();
+#endif
                 }
                 else
                 {
@@ -199,6 +260,16 @@ namespace Emgu.CV.XamarinForms
 
         private void OnButtonClicked(Object sender, EventArgs args)
         {
+#if __ANDROID__
+            var button = GetButton();
+            if (button.Text.Equals(_StopCameraButtonText))
+            {
+                StopCapture();
+                button.Text = _defaultButtonText;
+                //AndroidImageView.Visibility = ViewStates.Invisible;
+                return;
+            }
+#endif
             LoadImages(new string[] { "lena.jpg" });
         }
 

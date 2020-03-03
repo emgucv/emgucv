@@ -119,7 +119,7 @@ namespace Emgu.CV.XamarinForms
                 if (haveCameraOption)
                     options.Add("Photo from Camera");
 
-#if __IOS__
+#if __IOS__ || __ANDROID__
                 if (this.HasCameraOption && haveCameraOption)
                     options.Add("Camera");
 #endif
@@ -169,7 +169,6 @@ namespace Emgu.CV.XamarinForms
                 }
                 else if (action.Equals("Photo Library"))
                 {
-
 #if __ANDROID__ || __IOS__ || NETFX_CORE
                     var photoResult = await CrossMedia.Current.PickPhotoAsync();
                     if (photoResult == null) //canceled

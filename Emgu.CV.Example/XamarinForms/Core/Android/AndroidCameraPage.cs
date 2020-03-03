@@ -25,6 +25,7 @@ using Paint = Android.Graphics.Paint;
 using Java.Util.Concurrent;
 using Xamarin.Forms.Platform.Android;
 using Camera = Android.Hardware.Camera;
+using Color = Xamarin.Forms.Color;
 using Type = System.Type;
 
 
@@ -38,15 +39,24 @@ namespace Emgu.CV.XamarinForms
 
         private ImageView _imageView;
 
-        private String _defaultButtonText = "Open Camera";
-        private String _stopCameraText = "Stop Camera";
+        public ImageView AndroidImageView
+        {
+            get { return _imageView; }
+        }
+
+        //private String _defaultButtonText = "Open Camera";
+        //private String _stopCameraText = "Stop Camera";
 
         public AndroidCameraPage()
             : base()
         {
             _imageView = new ImageView(Android.App.Application.Context);
-            MainLayout.Children.Add(_imageView.ToView());
+            Xamarin.Forms.View xView = _imageView.ToView();
+            //xView.BackgroundColor = Color.Aqua;
+            MainLayout.Children.Add(xView);
+            base.DisplayImage.IsVisible = false;
             
+            /*
             var button = this.GetButton();
             button.Text = _defaultButtonText;
             button.Clicked += async (Object sender, EventArgs args) =>
@@ -61,16 +71,17 @@ namespace Emgu.CV.XamarinForms
                     StopCapture();
                     button.Text = _defaultButtonText;
                 }
-            };
+            };*/
         }
 
+        /*
         public virtual void ProcessImage(Object sender, Mat mat)
         {
             //Do some image processing
 
             //Render it.
             SetImage(mat);
-        }
+        }*/
 
         public void StartCapture(EventHandler<Mat> matHandler)
         {
@@ -112,22 +123,35 @@ namespace Emgu.CV.XamarinForms
 
         public override void SetImage(IInputArray image)
         {
+            if (image == null)
+            {
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    _imageView.SetImageBitmap(null);
+                });
+                return;
+            }
+
+            int bufferIdx = _renderBufferIdx;
+            Bitmap buffer;
+            _renderBufferIdx = (_renderBufferIdx + 1) % _renderBuffer.Length;
+
             using (InputArray iaImage = image.GetInputArray())
             using (Mat mat = iaImage.GetMat())
             {
-                if (_renderBuffer[_renderBufferIdx] == null)
+                if (_renderBuffer[bufferIdx] == null)
                 {
-
-                    _renderBuffer[_renderBufferIdx] = mat.ToBitmap();
+                    buffer = mat.ToBitmap();
+                    _renderBuffer[bufferIdx] = buffer;
                 }
                 else
                 {
                     var size = iaImage.GetSize();
-                    Bitmap buffer = _renderBuffer[_renderBufferIdx];
+                    buffer = _renderBuffer[bufferIdx];
                     if (buffer.Width != size.Width || buffer.Height != size.Height)
                     {
                         buffer.Dispose();
-                        _renderBuffer[_renderBufferIdx] = mat.ToBitmap();
+                        _renderBuffer[bufferIdx] = mat.ToBitmap();
                     }
                     else
                     {
@@ -138,7 +162,7 @@ namespace Emgu.CV.XamarinForms
 
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                _imageView.SetImageBitmap(_renderBuffer[_renderBufferIdx]);
+                _imageView.SetImageBitmap(buffer);
             });
         }
     }
