@@ -24,7 +24,12 @@ using Rectangle = System.Drawing.Rectangle;
 
 namespace Emgu.CV.XamarinForms
 {
-    public class MaskRcnnPage : ButtonTextImagePage
+    public class MaskRcnnPage
+#if __ANDROID__
+        : AndroidCameraPage
+#else
+        : ButtonTextImagePage
+#endif
     {
         //private String _modelFolderName = "dnn_data";
         //private String _path = null;
@@ -185,11 +190,25 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
+        private VideoCapture _capture = null;
+        private Mat _mat = null;
+        private String _defaultButtonText = "Perform Mask-rcnn Detection";
+
+#if __ANDROID__
+        private String _StopCameraButtonText = "Stop Camera";
+        private bool _isBusy = false;
+#endif
+
         public MaskRcnnPage()
          : base()
         {
+#if __ANDROID__
+            HasCameraOption = true;
+#endif
+
             var button = this.GetButton();
-            button.Text = "Perform Mask-rcnn Detection";
+            button.Text = _defaultButtonText;
+
             button.Clicked += OnButtonClicked;
 
             BackendTargetPair[] availableBackends = Emgu.CV.Dnn.DnnInvoke.GetAvailableBackends();
@@ -207,25 +226,91 @@ namespace Emgu.CV.XamarinForms
 
             OnImagesLoaded += async (sender, image) =>
             {
-                if (image == null || image[0] == null)
+                if (image == null || (image.Length > 0 && image[0] == null))
                     return;
-                SetMessage("Please wait...");
-                SetImage(null);
 
-                await InitDetector();
-                Stopwatch watch = Stopwatch.StartNew();
-                await Task.Run(() => ProcessImage(image[0]));
-                watch.Stop();
-                String msg = String.Empty;
-                msg = String.Format("Mask RCNN inception completed in {0} milliseconds",
-                    watch.ElapsedMilliseconds);
-                SetImage(image[0]);
-                SetMessage(msg);
+                if (image.Length == 0)
+                {
+                    await InitDetector();
+
+#if __ANDROID__
+                    button.Text = _StopCameraButtonText;
+                    //AndroidImageView.Visibility = ViewStates.Visible;
+                    StartCapture(async delegate (Object sender, Mat m)
+                    {
+                        //Skip the frame if busy, 
+                        //Otherwise too many frames arriving and will eventually saturated the memory.
+                        if (!_isBusy)
+                        {
+                            _isBusy = true;
+                            try
+                            {
+                                Stopwatch watch = Stopwatch.StartNew();
+                                await Task.Run(() => { ProcessImage(m); });
+                                watch.Stop();
+                                SetImage(m);
+                                SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
+                            }
+                            finally
+                            {
+                                _isBusy = false;
+                            }
+                        }
+                    });
+#else
+                    //Handle video
+                    if (_capture == null)
+                    {
+                        _capture = new VideoCapture();
+                        _capture.ImageGrabbed += _capture_ImageGrabbed;
+                    }
+                    _capture.Start();
+#endif
+                }
+                else
+                {
+                    SetMessage("Please wait...");
+                    SetImage(null);
+
+                    await InitDetector();
+                    Stopwatch watch = Stopwatch.StartNew();
+                    await Task.Run(() => ProcessImage(image[0]));
+                    watch.Stop();
+                    String msg = String.Format("Mask RCNN inception completed in {0} milliseconds",
+                        watch.ElapsedMilliseconds);
+                    SetImage(image[0]);
+                    SetMessage(msg);
+                }
+                
             };
+        }
+
+        private void _capture_ImageGrabbed(object sender, EventArgs e)
+        {
+            if (_mat == null)
+                _mat = new Mat();
+            _capture.Retrieve(_mat);
+            Stopwatch watch = Stopwatch.StartNew();
+            ProcessImage(_mat);
+            watch.Stop();
+            SetImage(_mat);
+            //this.DisplayImage.BackgroundColor = Color.Black;
+            this.DisplayImage.IsEnabled = true;
+            SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
         }
 
         private void OnButtonClicked(Object sender, EventArgs args)
         {
+#if __ANDROID__
+            var button = GetButton();
+            if (button.Text.Equals(_StopCameraButtonText))
+            {
+                StopCapture();
+                button.Text = _defaultButtonText;
+                //AndroidImageView.Visibility = ViewStates.Invisible;
+                return;
+            }
+#endif
             LoadImages(new string[] { _defaultImage });
         }
 

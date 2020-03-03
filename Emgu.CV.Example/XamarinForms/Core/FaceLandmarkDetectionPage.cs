@@ -189,7 +189,6 @@ namespace Emgu.CV.XamarinForms
 
 #if __ANDROID__
                     button.Text = _StopCameraButtonText;
-                    AndroidImageView.Visibility = ViewStates.Visible;
                     StartCapture(async delegate(Object sender, Mat m)
                     {
                         //Skip the frame if busy, 
@@ -201,11 +200,8 @@ namespace Emgu.CV.XamarinForms
                             {
                                 Stopwatch watch = Stopwatch.StartNew();
                                 await Task.Run(() => { DetectAndRender(m); });
-                                //t.Start();
-                                //await t;
                                 watch.Stop();
                                 SetImage(m);
-                                //String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
                                 SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
                             }
                             finally
