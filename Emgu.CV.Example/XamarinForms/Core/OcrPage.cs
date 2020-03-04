@@ -26,8 +26,10 @@ using Windows.Storage;
 
 using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Dnn;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
+using Emgu.Models;
 using Emgu.Util;
 using FaceDetection;
 using Xamarin.Forms;
@@ -37,26 +39,25 @@ namespace Emgu.CV.XamarinForms
 {
     public class OcrPage : ButtonTextImagePage
     {
+        private String _modelFolderName = "tessdata";
         private Tesseract _ocr;
-        private static void TesseractDownloadLangFile(String folder, String lang)
+
+        private async Task InitTesseract(String lang, OcrEngineMode mode)
         {
-            String folderName = folder;
-            if (!System.IO.Directory.Exists(folderName))
+            if (_ocr == null)
             {
-                System.IO.Directory.CreateDirectory(folderName);
+                FileDownloadManager manager = new FileDownloadManager();
+                manager.AddFile(Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang), _modelFolderName);
+                manager.AddFile(Emgu.CV.OCR.Tesseract.GetLangFileUrl("osd"), _modelFolderName); //script orientation detection
+                
+                manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
+                await manager.Download();
+                FileInfo fi = new FileInfo(manager.Files[0].LocalFile);
+                
+                _ocr = new Tesseract(fi.DirectoryName, lang, mode);
+                
             }
-            String dest = System.IO.Path.Combine(folderName, String.Format("{0}.traineddata", lang));
-            if (!System.IO.File.Exists(dest))
-                using (System.Net.WebClient webclient = new System.Net.WebClient())
-                {
-                    String source = Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang);
-
-                    Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
-                    webclient.DownloadFile(source, dest);
-                    Console.WriteLine(String.Format("Download completed"));
-                }
         }
-
 
         public OcrPage()
          : base()
@@ -73,43 +74,14 @@ namespace Emgu.CV.XamarinForms
                 SetImage(null);
                 String lang = "eng";
                 OcrEngineMode mode = OcrEngineMode.TesseractOnly;
-                Task<Tuple<Mat, String, long>> t = new Task<Tuple<Mat, String, long>>(
-                  () =>
-                  {
+                await InitTesseract(lang, OcrEngineMode.TesseractOnly);
+                _ocr.SetImage(image[0]);
+                if (_ocr.Recognize() != 0)
+                    throw new Exception("Failed to recognize image");
+                String ocrResult = _ocr.GetUTF8Text();
 
-
-#if NETFX_CORE
-                      String path = System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, "tessdata");
-#elif __ANDROID__ || __IOS__
-                      String path = System.IO.Path.Combine (
-                        Environment.GetFolderPath ( Environment.SpecialFolder.MyDocuments ),
-                        "tessdata");
-#else
-                      String path = "./tessdata/";
-#endif
-
-                      TesseractDownloadLangFile(path, lang);
-                      TesseractDownloadLangFile(path, "osd"); //script orientation detection
-
-                      if (_ocr == null)
-                      {
-                          _ocr = new Tesseract(path, lang, OcrEngineMode.TesseractOnly);
-                      }
-
-                      _ocr.SetImage(image[0]);
-                      if (_ocr.Recognize() != 0)
-                          throw new Exception("Failed to recognize image");
-                      String text = _ocr.GetUTF8Text();
-                      long time = 0;
-
-                      return new Tuple<Mat, String, long>(image[0], text, time);
-                  });
-                t.Start();
-
-                var result = await t;
-                SetImage(t.Result.Item1);
-                String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-                string ocrResult = t.Result.Item2;
+                SetImage(image[0]);
+                
                 if (Device.RuntimePlatform.Equals("WPF"))
                 {
                     ocrResult = ocrResult.Replace(System.Environment.NewLine, " ");
@@ -129,5 +101,12 @@ namespace Emgu.CV.XamarinForms
             LoadImages(new string[] { "test_image.png" });
         }
 
+        private void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        {
+            if (e.TotalBytesToReceive <= 0)
+                SetMessage(String.Format("{0} bytes downloaded.", e.BytesReceived));
+            else
+                SetMessage(String.Format("{0} of {1} bytes downloaded ({2}%)", e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage));
+        }
     }
 }

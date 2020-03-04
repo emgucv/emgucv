@@ -8,26 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using System.Threading.Tasks;
-using Android.App;
-using Android.Content;
 using Android.Graphics;
-using Android.Hardware.Camera2;
-using Android.Hardware.Camera2.Params;
-using Android.Media;
-using Android.OS;
-using Android.Renderscripts;
-using Android.Runtime;
-using Android.Util;
-using Android.Views;
 using Android.Widget;
-using Paint = Android.Graphics.Paint;
-using Java.Util.Concurrent;
 using Xamarin.Forms.Platform.Android;
-using Camera = Android.Hardware.Camera;
-using Color = Xamarin.Forms.Color;
-using Type = System.Type;
-
 
 namespace Emgu.CV.XamarinForms
 {
@@ -44,9 +27,6 @@ namespace Emgu.CV.XamarinForms
             get { return _imageView; }
         }
 
-        //private String _defaultButtonText = "Open Camera";
-        //private String _stopCameraText = "Stop Camera";
-
         public AndroidCameraPage()
             : base()
         {
@@ -56,41 +36,20 @@ namespace Emgu.CV.XamarinForms
             MainLayout.Children.Add(xView);
             base.DisplayImage.IsVisible = false;
             
-            /*
-            var button = this.GetButton();
-            button.Text = _defaultButtonText;
-            button.Clicked += async (Object sender, EventArgs args) =>
-            {
-                if (button.Text.Equals(_defaultButtonText))
-                {
-                    button.Text = _stopCameraText;
-                    StartCapture(ProcessImage);
-                }
-                else
-                {
-                    StopCapture();
-                    button.Text = _defaultButtonText;
-                }
-            };*/
         }
 
-        /*
-        public virtual void ProcessImage(Object sender, Mat mat)
-        {
-            //Do some image processing
-
-            //Render it.
-            SetImage(mat);
-        }*/
-
-        public void StartCapture(EventHandler<Mat> matHandler)
+        public void StartCapture(EventHandler<Mat> matHandler, int preferredPreviewImageSize = -1)
         {
             if (_cameraManager == null)
             {
-                //prefer preview image that is slightly smaller than the screen resolution
-                int preferredSize = (int) Math.Round(MainLayout.Width * MainLayout.Width) / 2;
-                preferredSize = Math.Max(preferredSize, 480 * 600);
-                _cameraManager = new AndroidCameraManager( preferredSize );
+                if (preferredPreviewImageSize <= 0)
+                {
+                    //prefer preview image that is slightly smaller than the screen resolution
+                    preferredPreviewImageSize = (int) Math.Round(MainLayout.Width * MainLayout.Width) / 2;
+                    preferredPreviewImageSize = Math.Max(preferredPreviewImageSize, 480 * 600);
+                }
+
+                _cameraManager = new AndroidCameraManager( preferredPreviewImageSize );
                 _cameraManager.OnImageCaptured += matHandler;
                 _cameraManager.StartBackgroundThread();
             }
@@ -118,8 +77,6 @@ namespace Emgu.CV.XamarinForms
             StopCapture();
             base.OnDisappearing();
         }
-
-        //private CameraCaptureSessionCallback sessionStateCallback = new CameraCaptureSessionCallback();
 
         public override void SetImage(IInputArray image)
         {
