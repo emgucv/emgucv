@@ -43,6 +43,9 @@ namespace Emgu.CV.XamarinForms
             Button maskRcnnButton = new Button();
             maskRcnnButton.Text = "Mask RCNN (DNN module)";
 
+            Button yoloButton = new Button();
+            yoloButton.Text = "Yolo (DNN module)";
+
             Button stopSignDetectionButton = new Button();
             stopSignDetectionButton.Text = "Stop Sign Detection (DNN module)";
 
@@ -56,7 +59,8 @@ namespace Emgu.CV.XamarinForms
                 pedestrianDetectionButton,
                 ocrButton,
                 maskRcnnButton,
-                stopSignDetectionButton
+                stopSignDetectionButton,
+                yoloButton,
             };
 
             /*
@@ -163,6 +167,7 @@ namespace Emgu.CV.XamarinForms
                 maskRcnnButton.IsVisible = false;
                 faceLandmarkDetectionButton.IsVisible = false;
                 stopSignDetectionButton.IsVisible = false;
+                yoloButton.IsVisible = false;
             }
             else
             {
@@ -175,6 +180,7 @@ namespace Emgu.CV.XamarinForms
                     stopSignDetectionPage.ObjectsOfInterest = new string[] {"stop sign"};
                     MainPage.Navigation.PushAsync(stopSignDetectionPage);
                 };
+                yoloButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new YoloPage()); };
             }
 
             ocrButton.Clicked += (sender, args) =>

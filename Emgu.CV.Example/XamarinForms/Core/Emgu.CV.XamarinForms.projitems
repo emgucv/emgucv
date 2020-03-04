@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PlanarSubdivisionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureMatchingPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Simple3DReconstruct.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YoloPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)GettingStarted.Xamarin" />
