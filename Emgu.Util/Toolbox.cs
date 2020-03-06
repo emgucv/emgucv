@@ -413,6 +413,11 @@ namespace Emgu.Util
         #endregion
 
         private static System.Collections.Generic.Dictionary<String, AssemblyName> _assemblyNameDict = new Dictionary<String,AssemblyName>();
+
+        /// <summary>
+        /// Load all the assemblies.
+        /// </summary>
+        /// <returns></returns>
         public static System.Reflection.Assembly[] LoadAllDependentAssemblies()
         {
             try
@@ -464,6 +469,12 @@ namespace Emgu.Util
             }
             return null;
         }
+
+        /// <summary>
+        /// Get the interface implementation from assemblies
+        /// </summary>
+        /// <typeparam name="T">The interface</typeparam>
+        /// <returns>The types that implement the specific interface</returns>
         public static Type[] GetIntefaceImplementationFromAssembly<T>()
         {
             System.Reflection.Assembly[] assemblies = LoadAllDependentAssemblies();
@@ -488,8 +499,8 @@ namespace Emgu.Util
         /// <summary>
         /// Find the loaded assembly with the specific assembly name
         /// </summary>
-        /// <param name="assembleName"></param>
-        /// <returns></returns>
+        /// <param name="assembleName">The name of the assembly</param>
+        /// <returns>The assembly.</returns>
         public static System.Reflection.Assembly FindAssembly(String assembleName)
         {
             try

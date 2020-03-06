@@ -8,11 +8,21 @@ using System.Text;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// Native implementation to read files into Mat or Images.
+    /// </summary>
     public static class FileReader
     {
         private static Emgu.CV.IFileReaderMat[] _fileReaderMatArr;
         //private static Emgu.CV.IFileReaderImage[] _fileReaderImageArr;
 
+        /// <summary>
+        /// Read a file into Mat using native implementations
+        /// </summary>
+        /// <param name="fileName">The name of the file</param>
+        /// <param name="mat">The Mat to read the file into</param>
+        /// <param name="loadType">The image load type.</param>
+        /// <returns>True if successful</returns>
         public static bool ReadFileToMat(String fileName, Mat mat, CvEnum.ImreadModes loadType)
         {
             if (_fileReaderMatArr == null)
