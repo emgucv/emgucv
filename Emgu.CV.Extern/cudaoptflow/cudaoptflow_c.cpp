@@ -257,3 +257,105 @@ void cudaCreateOpticalFlowNeedleMap(const cv::cuda::GpuMat* u, const cv::cuda::G
 {
    cv::cuda:: ::createOpticalFlowNeedleMap(*u, *v, *vertex, *colors);
 }*/
+
+//----------------------------------------------------------------------------
+//
+//  NvidiaOpticalFlow_1_0
+//
+//----------------------------------------------------------------------------
+cv::cuda::NvidiaOpticalFlow_1_0* cudaNvidiaOpticalFlow_1_0_Create(
+	int width,
+	int height,
+	cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL perfPreset,
+	bool enableTemporalHints,
+	bool enableExternalHints,
+	bool enableCostBuffer,
+	int gpuId,
+	cv::cuda::NvidiaHWOpticalFlow** nHWOpticalFlow,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
+	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0> ptr = cv::cuda::NvidiaOpticalFlow_1_0::create(
+		width,
+		height,
+		perfPreset,
+		enableTemporalHints,
+		enableExternalHints,
+		enableCostBuffer,
+		gpuId);
+	*sharedPtr = new cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>(ptr);
+	cv::cuda::NvidiaOpticalFlow_1_0* flow = ptr.get();
+	*nHWOpticalFlow = dynamic_cast<cv::cuda::NvidiaHWOpticalFlow*>(flow);
+	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
+	return flow;
+#else
+	throw_no_cudaoptflow();
+#endif
+}
+
+void cudaNvidiaOpticalFlow_1_0_UpSampler(
+	cv::cuda::NvidiaOpticalFlow_1_0* nFlow,
+	cv::_InputArray* flow,
+	int width,
+	int height,
+	int gridSize,
+	cv::_InputOutputArray* upsampledFlow)
+{
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
+	nFlow->upSampler(*flow, width, height, gridSize, *upsampledFlow);
+#else
+	throw_no_cudaoptflow();
+#endif	
+}
+
+void cudaNvidiaOpticalFlowCalc(
+	cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow,
+	cv::_InputArray* inputImage,
+	cv::_InputArray* referenceImage,
+	cv::_InputOutputArray* flow,
+	cv::cuda::Stream* stream,
+	cv::_InputArray* hint,
+	cv::_OutputArray* cost)
+{
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
+	nHWOpticalFlow->calc(
+		*inputImage, 
+		*referenceImage, 
+		*flow, 
+		stream ? *stream : cv::cuda::Stream::Null(),
+		hint ? *hint : (cv::InputArray) cv::noArray(),
+		cost ? *cost : (cv::OutputArray) cv::noArray()
+		);
+#else
+	throw_no_cudaoptflow();
+#endif	
+}
+
+void cudaNvidiaOpticalFlowCollectGarbage(cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow)
+{
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
+	nHWOpticalFlow->collectGarbage();
+#else
+	throw_no_cudaoptflow();
+#endif	
+}
+
+int cudaNvidiaOpticalFlowGetGridSize(cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow)
+{
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
+	return nHWOpticalFlow->getGridSize();
+#else
+	throw_no_cudaoptflow();
+#endif
+}
+
+void cudaNvidiaOpticalFlow_1_0_Release(cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** flow)
+{
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
+	delete* flow;
+	*flow = 0;
+#else
+	throw_no_cudaoptflow();
+#endif	
+}

@@ -167,4 +167,44 @@ CVAPI(void) cudaOpticalFlowDualTvl1Release(cv::Ptr<cv::cuda::OpticalFlowDual_TVL
 //----------------------------------------------------------------------------
 CVAPI(void) cudaCreateOpticalFlowNeedleMap(const cv::cuda::GpuMat* u, const cv::cuda::GpuMat* v, cv::cuda::GpuMat* vertex, cv::cuda::GpuMat* colors);
 */
+
+//----------------------------------------------------------------------------
+//
+//  NvidiaOpticalFlow_1_0
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::cuda::NvidiaOpticalFlow_1_0*) cudaNvidiaOpticalFlow_1_0_Create(
+	int width,
+	int height,
+	cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL perfPreset,
+	bool enableTemporalHints,
+	bool enableExternalHints,
+	bool enableCostBuffer,
+	int gpuId,
+	cv::cuda::NvidiaHWOpticalFlow** nHWOpticalFlow,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** sharedPtr);
+
+CVAPI(void) cudaNvidiaOpticalFlow_1_0_UpSampler(
+	cv::cuda::NvidiaOpticalFlow_1_0* nFlow,
+	cv::_InputArray* flow, 
+	int width, 
+	int height,
+	int gridSize, 
+	cv::_InputOutputArray* upsampledFlow);
+
+CVAPI(void) cudaNvidiaOpticalFlowCalc(
+	cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow,
+	cv::_InputArray* inputImage,
+	cv::_InputArray* referenceImage,
+	cv::_InputOutputArray* flow,
+	cv::cuda::Stream* stream,
+	cv::_InputArray* hint,
+	cv::_OutputArray* cost);
+
+CVAPI(void) cudaNvidiaOpticalFlowCollectGarbage(cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow);
+
+CVAPI(int) cudaNvidiaOpticalFlowGetGridSize(cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow);
+
+CVAPI(void) cudaNvidiaOpticalFlow_1_0_Release(cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** flow);
 #endif
