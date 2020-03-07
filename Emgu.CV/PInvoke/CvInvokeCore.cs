@@ -1617,6 +1617,16 @@ namespace Emgu.CV
             Ellipse(img, Point.Round(box.Center), axes, box.Angle, 0, 360, color, thickness, lineType, shift);
         }
 
+        /// <summary>
+        /// Draws a marker on a predefined position in an image.
+        /// </summary>
+        /// <param name="img">Image.</param>
+        /// <param name="position">The point where the crosshair is positioned.</param>
+        /// <param name="color">Line color.</param>
+        /// <param name="markerType">The specific type of marker you want to use</param>
+        /// <param name="markerSize">The length of the marker axis [default = 20 pixels]</param>
+        /// <param name="thickness">Line thickness.</param>
+        /// <param name="lineType">Type of the line</param>
         public static void DrawMarker(
             IInputOutputArray img,
             Point position,

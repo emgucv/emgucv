@@ -89,7 +89,7 @@ namespace Emgu.CV.Cuda
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaOpticalFlowDualTvl1Release(ref IntPtr flow);
+        internal static extern void cudaOpticalFlowDualTvl1Release(ref IntPtr flow);
 
     }
 }
