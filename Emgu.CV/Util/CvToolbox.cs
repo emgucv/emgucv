@@ -1,16 +1,11 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-
-#if __ANDROID__ || __UNIFIED__ || NETFX_CORE || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
-#else
-using System.Drawing.Imaging;
-#endif
-
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -140,48 +135,6 @@ namespace Emgu.CV.Util
                 max.Z = Math.Max(max.Z, p.Z);
             }
         }
-
-        /*
-        #region FFMPEG
-        private static bool _hasFFMPEG;
-        private static bool _ffmpegChecked = false;
-
-        /// <summary>
-        /// Indicates if opencv_ffmpeg is presented
-        /// </summary>
-        internal static bool HasFFMPEG
-        {
-           get
-           {
-              if (!_ffmpegChecked)
-              {
-                 String tempFile = Path.GetTempFileName();
-                 File.Delete(tempFile);
-                 String fileName = Path.Combine(Path.GetDirectoryName(tempFile), Path.GetFileNameWithoutExtension(tempFile)) + ".avi";
-                 try
-                 {
-                    IntPtr capture = CvInvoke.cvCreateVideoWriter_FFMPEG(fileName, CvInvoke.CV_FOURCC('U', '2', '6', '3'), 10, new Size(480, 320), true);
-                    _hasFFMPEG = (capture != IntPtr.Zero);
-                    if (_hasFFMPEG)
-                       CvInvoke.cvReleaseVideoWriter_FFMPEG(ref capture);
-                 }
-                 catch (Exception e)
-                 {
-                    String msg = e.Message;
-                    _hasFFMPEG = false;
-                 }
-                 finally
-                 {
-                    if (File.Exists(fileName))
-                       File.Delete(fileName);
-                    _ffmpegChecked = true;
-                 }
-              }
-              return _hasFFMPEG;
-           }
-        }
-        #endregion
-        */
 
         /// <summary>
         /// Copy a generic vector to the unmanaged memory

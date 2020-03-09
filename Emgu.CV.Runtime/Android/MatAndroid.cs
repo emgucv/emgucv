@@ -164,6 +164,58 @@ namespace Emgu.CV
             }
         }
     }
+
+    public class BitmapFileReaderMat : Emgu.CV.IFileReaderMat
+    {
+        public bool ReadFile(String fileName, Mat mat, CvEnum.ImreadModes loadType)
+        {
+            try
+            {
+                int rotation = 0;
+                Android.Media.ExifInterface exif = new Android.Media.ExifInterface(fileName);
+                int orientation = exif.GetAttributeInt(Android.Media.ExifInterface.TagOrientation, int.MinValue);
+                switch (orientation)
+                {
+                    case (int)Android.Media.Orientation.Rotate270:
+                        rotation = 270;
+                        break;
+                    case (int)Android.Media.Orientation.Rotate180:
+                        rotation = 180;
+                        break;
+                    case (int)Android.Media.Orientation.Rotate90:
+                        rotation = 90;
+                        break;
+                }
+
+                using (Android.Graphics.Bitmap bmp = Android.Graphics.BitmapFactory.DecodeFile(fileName))
+                {
+                    if (rotation == 0)
+                    {
+                        bmp.ToMat(mat);
+                    }
+                    else
+                    {
+                        Android.Graphics.Matrix matrix = new Android.Graphics.Matrix();
+                        matrix.PostRotate(rotation);
+                        using (Android.Graphics.Bitmap rotated = Android.Graphics.Bitmap.CreateBitmap(bmp, 0, 0, bmp.Width, bmp.Height, matrix, true))
+                        {
+                            //manually disposed sooner such that memory is released.
+                            bmp.Dispose();
+                            rotated.ToMat(mat);
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                //throw;
+                return false;
+            }
+
+        }
+    }
 }
 
 #endif

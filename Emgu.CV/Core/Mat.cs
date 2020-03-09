@@ -13,13 +13,11 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using System.IO;
 
-#if __ANDROID__
-using Bitmap = Android.Graphics.Bitmap;
-#elif __UNIFIED__
+#if __UNIFIED__
 using CoreGraphics;
-#elif NETFX_CORE || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
-#else
-using System.Drawing.Imaging;
+#elif NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+//#else
+//using System.Drawing.Imaging;
 #endif
 
 namespace Emgu.CV
@@ -31,7 +29,7 @@ namespace Emgu.CV
     [DebuggerTypeProxy(typeof(Mat.DebuggerProxy))]
     public partial class Mat : UnmanagedObject, IEquatable<Mat>, IInputOutputArray, ISerializable
     {
-        #region Implement ISerializable interface
+#region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
         /// </summary>
@@ -72,7 +70,7 @@ namespace Emgu.CV
             info.AddValue("Bytes", Bytes);
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Gets or sets the data as byte array.
@@ -1194,7 +1192,7 @@ namespace Emgu.CV
             }
         }
 
-        #region Operator overload
+#region Operator overload
 
         /// <summary>
         /// Perform an element wise AND operation on the two mats
@@ -1537,7 +1535,7 @@ namespace Emgu.CV
             }
         }
 
-        #endregion
+#endregion
 
         internal class DebuggerProxy
         {
