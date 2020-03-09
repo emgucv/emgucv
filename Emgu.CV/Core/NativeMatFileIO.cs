@@ -11,10 +11,10 @@ namespace Emgu.CV
     /// <summary>
     /// Native implementation to read files into Mat or Images.
     /// </summary>
-    public static class FileReader
+    public static class NativeMatFileIO
     {
         private static Emgu.CV.IFileReaderMat[] _fileReaderMatArr;
-        //private static Emgu.CV.IFileReaderImage[] _fileReaderImageArr;
+        private static Emgu.CV.IFileWriterMat[] _fileWriterMatArr;
 
         /// <summary>
         /// Read a file into Mat using native implementations
@@ -46,31 +46,35 @@ namespace Emgu.CV
             return false;
         }
 
-        /*
-        public static bool ReadFileToImage<TColor, TDepth>(String fileName, Image<TColor, TDepth> image)
-            where TColor : struct, IColor
-            where TDepth : new()
+        /// <summary>
+        /// Write a Mat into a file using native implementations
+        /// </summary>
+        /// <param name="fileName">The name of the file</param>
+        /// <param name="mat">The Mat to be written</param>
+        /// <returns>True if successful</returns>
+        public static bool WriteMatToFile(Mat mat, String fileName)
         {
-            if (_fileReaderImageArr == null)
+            if (_fileWriterMatArr == null)
             {
-                Type[] readersTypes = Emgu.Util.Toolbox.GetIntefaceImplementationFromAssembly<Emgu.CV.IFileReaderImage>();
-                Emgu.CV.IFileReaderImage[] imageArr = new IFileReaderImage[readersTypes.Length];
-                for (int i = 0; i < readersTypes.Length; i++)
+                Type[] writerTypes = Emgu.Util.Toolbox.GetIntefaceImplementationFromAssembly<Emgu.CV.IFileWriterMat>();
+                Emgu.CV.IFileWriterMat[] matArr = new IFileWriterMat[writerTypes.Length];
+                for (int i = 0; i < writerTypes.Length; i++)
                 {
-                    imageArr[i] = Activator.CreateInstance(readersTypes[i]) as Emgu.CV.IFileReaderImage;
+                    matArr[i] = Activator.CreateInstance(writerTypes[i]) as Emgu.CV.IFileWriterMat;
                 }
 
-                _fileReaderImageArr = imageArr;
+                _fileWriterMatArr = matArr;
             }
 
-            foreach (IFileReaderImage reader in _fileReaderImageArr)
+            foreach (IFileWriterMat writer in _fileWriterMatArr)
             {
-                if (reader.ReadFile(fileName, image))
+                if (writer.WriteFile(mat, fileName))
                     return true;
             }
-            
+
             return false;
         }
-        */
+
+
     }
 }

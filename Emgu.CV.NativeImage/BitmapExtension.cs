@@ -632,4 +632,50 @@ namespace Emgu.CV
 
         }
     }
+
+    public class BitmapFileWriterMat : Emgu.CV.IFileWriterMat
+    {
+        public bool WriteFile(Mat mat, String fileName)
+        {
+            try
+            {
+                //Try to save the image using .NET's Bitmap class
+                String extension = System.IO.Path.GetExtension(fileName);
+                if (!String.IsNullOrEmpty(extension))
+                    using (Bitmap bmp = mat.ToBitmap())
+                    {
+                        switch (extension.ToLower())
+                        {
+                            case ".jpg":
+                            case ".jpeg":
+                                bmp.Save(fileName, ImageFormat.Jpeg);
+                                break;
+                            case ".bmp":
+                                bmp.Save(fileName, ImageFormat.Bmp);
+                                break;
+                            case ".png":
+                                bmp.Save(fileName, ImageFormat.Png);
+                                break;
+                            case ".tiff":
+                            case ".tif":
+                                bmp.Save(fileName, ImageFormat.Tiff);
+                                break;
+                            case ".gif":
+                                bmp.Save(fileName, ImageFormat.Gif);
+                                break;
+                            default:
+                                throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
+                        }
+                    }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                //throw;
+                return false;
+            }
+
+        }
+    }
 }

@@ -244,7 +244,7 @@ namespace Emgu.CV
                 (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS ||
                  Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS))
             {
-                bool success = Emgu.CV.FileReader.ReadFileToMat(fileName, this, loadType);
+                bool success = Emgu.CV.NativeMatFileIO.ReadFileToMat(fileName, this, loadType);
                 if (success)
                     return;
             }
@@ -266,7 +266,7 @@ namespace Emgu.CV
                     if (IsEmpty)
                     {
                         //try again to load with Native implementation
-                        bool success = Emgu.CV.FileReader.ReadFileToMat(fileName, this, loadType);
+                        bool success = Emgu.CV.NativeMatFileIO.ReadFileToMat(fileName, this, loadType);
                         if (!success)
                             throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
                     }
@@ -1039,59 +1039,11 @@ namespace Emgu.CV
 
             if (e != null)
             {
-#if __UNIFIED__ || NETFX_CORE || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO
-            throw e;
-#elif __ANDROID__
-            FileInfo fileInfo = new FileInfo(fileName);
-            using (Bitmap bmp = this.Bitmap)
-            using (FileStream fs = fileInfo.Open(FileMode.Append, FileAccess.Write))
-            {
-               String extension = fileInfo.Extension.ToLower();
-               Debug.Assert(extension.Substring(0, 1).Equals("."));
-               switch (extension)
-               {
-                  case ".jpg":
-                  case ".jpeg":
-                     bmp.Compress(Bitmap.CompressFormat.Jpeg, 90, fs);
-                     break;
-                  case ".png":
-                     bmp.Compress(Bitmap.CompressFormat.Png, 90, fs);
-                     break;
-                  default:
-                     throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
-               }
-            }
-#else
-                //Saving with OpenCV fails
-                //Try to save the image using .NET's Bitmap class
-                String extension = Path.GetExtension(fileName);
-                if (!String.IsNullOrEmpty(extension))
-                    using (Bitmap bmp = Bitmap)
-                    {
-                        switch (extension.ToLower())
-                        {
-                            case ".jpg":
-                            case ".jpeg":
-                                bmp.Save(fileName, ImageFormat.Jpeg);
-                                break;
-                            case ".bmp":
-                                bmp.Save(fileName, ImageFormat.Bmp);
-                                break;
-                            case ".png":
-                                bmp.Save(fileName, ImageFormat.Png);
-                                break;
-                            case ".tiff":
-                            case ".tif":
-                                bmp.Save(fileName, ImageFormat.Tiff);
-                                break;
-                            case ".gif":
-                                bmp.Save(fileName, ImageFormat.Gif);
-                                break;
-                            default:
-                                throw new NotImplementedException(String.Format("Saving to {0} format is not supported", extension));
-                        }
-                    }
-#endif
+                //try to load with Native implementation
+                if (Emgu.CV.NativeMatFileIO.WriteMatToFile(this, fileName))
+                    return;
+
+                throw e;
             }
         }
 

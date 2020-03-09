@@ -216,6 +216,48 @@ namespace Emgu.CV
 
         }
     }
+
+
+    public class BitmapFileWriterMat : Emgu.CV.IFileWriterMat
+    {
+        public bool WriteFile(Mat mat, String fileName)
+        {
+            try
+            {
+                FileInfo fileInfo = new FileInfo(fileName);
+                using (Android.Graphics.Bitmap bmp = mat.ToBitmap())
+                using (FileStream fs = fileInfo.Open(FileMode.Append, FileAccess.Write))
+                {
+                    String extension = fileInfo.Extension.ToLower();
+                    Debug.Assert(extension.Substring(0, 1).Equals("."));
+                    switch (extension)
+                    {
+                        case ".jpg":
+                        case ".jpeg":
+                            bmp.Compress(Android.Graphics.Bitmap.CompressFormat.Jpeg, 90, fs);
+                            break;
+                        case ".png":
+                            bmp.Compress(Android.Graphics.Bitmap.CompressFormat.Png, 90, fs);
+                            break;
+                        case ".webp":
+                            bmp.Compress(Android.Graphics.Bitmap.CompressFormat.Webp, 90, fs);
+                            break;
+                        default:
+                            throw new NotImplementedException(String.Format("Saving to {0} format is not supported",
+                                extension));
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                //throw;
+                return false;
+            }
+        }
+    }
 }
 
 #endif
