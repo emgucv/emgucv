@@ -266,7 +266,7 @@ void cudaCreateOpticalFlowNeedleMap(const cv::cuda::GpuMat* u, const cv::cuda::G
 cv::cuda::NvidiaOpticalFlow_1_0* cudaNvidiaOpticalFlow_1_0_Create(
 	int width,
 	int height,
-	cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL perfPreset,
+	int perfPreset,
 	bool enableTemporalHints,
 	bool enableExternalHints,
 	bool enableCostBuffer,
@@ -279,7 +279,7 @@ cv::cuda::NvidiaOpticalFlow_1_0* cudaNvidiaOpticalFlow_1_0_Create(
 	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0> ptr = cv::cuda::NvidiaOpticalFlow_1_0::create(
 		width,
 		height,
-		perfPreset,
+		(cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL) perfPreset,
 		enableTemporalHints,
 		enableExternalHints,
 		enableCostBuffer,

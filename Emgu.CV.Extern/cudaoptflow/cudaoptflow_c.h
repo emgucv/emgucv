@@ -50,6 +50,14 @@ namespace cv
 		class OpticalFlowDual_TVL1
 		{
 		};
+
+		class NvidiaOpticalFlow_1_0
+		{
+		};
+
+		class NvidiaHWOpticalFlow
+		{
+		};
 	}
 }
 
@@ -176,7 +184,7 @@ CVAPI(void) cudaCreateOpticalFlowNeedleMap(const cv::cuda::GpuMat* u, const cv::
 CVAPI(cv::cuda::NvidiaOpticalFlow_1_0*) cudaNvidiaOpticalFlow_1_0_Create(
 	int width,
 	int height,
-	cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL perfPreset,
+	int perfPreset,
 	bool enableTemporalHints,
 	bool enableExternalHints,
 	bool enableCostBuffer,
