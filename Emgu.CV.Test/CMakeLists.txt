@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(DOTNET_FOUND)
+IF(DOTNET_FOUND AND (NOT (IOS OR ANDROID)))
 
   PROJECT(Emgu.CV.Test.Netcore)
 
