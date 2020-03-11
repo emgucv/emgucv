@@ -29,7 +29,6 @@ namespace Emgu.CV
             return _libraryLoaded;
         }
 
-
         /// <summary>
         /// string marshaling type
         /// </summary>
