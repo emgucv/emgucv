@@ -2101,16 +2101,22 @@ CREATE_OCV_CLASS_PROPERTY(
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Plot/Plot2d.g.cs"
     "cv::plot::Plot2d" 
     "Plot2d" 
-    "MinX;MinY;MaxX;MaxY;PlotLineWidth" 
-    "double;double;double;double;int" 
-    "propW;propW;propW;propW;propW"
-    "MinX;MinY;MaxX;MaxY;PlotLineWidth" 
-    "double;double;double;double;int"
+    "MinX;MinY;MaxX;MaxY;PlotLineWidth;GridLinesNumber;PointIdxToPrint;InvertOrientation;ShowText;ShowGrid;NeedPlotLine" 
+    "double;double;double;double;int;int;int;bool;bool;bool;bool" 
+    "propW;propW;propW;propW;propW;propW;propW;propW;propW;propW;propW"
+    "MinX;MinY;MaxX;MaxY;PlotLineWidth;GridLinesNumber;PointIdxToPrint;InvertOrientation;ShowText;ShowGrid;NeedPlotLine" 
+    "double;double;double;double;int;int;int;bool;bool;bool;bool"
     "Min X;
     Min Y;
     Max X;
     Max Y;
-    Plot line width"
+    Plot line width;
+    Grid Lines Number;
+    Sets the index of a point which coordinates will be printed on the top left corner of the plot (if ShowText flag is true);
+    Invert Orientation;
+    Show Text;
+    Show Grid;
+    Need Plot Line"
     "Emgu.CV.Plot"
     "PlotInvoke"
     "Plot2d"

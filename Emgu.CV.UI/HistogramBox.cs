@@ -7,72 +7,31 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Emgu.CV.CvEnum;
-using ZedGraph;
+//using ZedGraph;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using System.Diagnostics;
+using System.Linq;
+using Emgu.CV.Plot;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.UI
 {
     /// <summary>
     /// The control that is used to display histogram
     /// </summary>
-    public partial class HistogramBox : UserControl
+    public partial class HistogramBox : ImageBox
     {
-        private Graphics _graphic;
+        //private Graphics _graphic;
 
         /// <summary>
         /// Construct a histogram control
         /// </summary>
         public HistogramBox()
+        : base()
         {
-            InitializeComponent();
-
-            #region Setup the graph
-            // First, clear out any old GraphPane's from the MasterPane collection
-            MasterPane master = zedGraphControl1.MasterPane;
-            master.PaneList.Clear();
-
-            // Display the MasterPane Title, and set the outer margin to 10 points
-            master.Title.IsVisible = true;
-            master.Title.Text = Properties.StringTable.DefaultHistogramTitle;
-            master.Margin.All = 10;
-            #endregion
-
-            // Layout the GraphPanes using a default Pane Layout
-            _graphic = CreateGraphics();
-
-            // Size the control to fill the form with a margin
-            SetSize();
-        }
-
-        private void HistogramViewer_Resize(object sender, EventArgs e)
-        {
-            SetSize();
-        }
-
-        // SetSize() is separate from Resize() so we can 
-        // call it independently from the Form1_Load() method
-        // This leaves a 10 px margin around the outside of the control
-        // Customize this to fit your needs
-        private void SetSize()
-        {
-            zedGraphControl1.Location = new Point(10, 10);
-            // Leave a small margin around the outside of the control
-            zedGraphControl1.Size = new Size(ClientRectangle.Width - 20,
-                                    ClientRectangle.Height - 20);
-        }
-
-        /// <summary>
-        /// Get the zedgraph control from this histogram control
-        /// </summary>
-        public ZedGraphControl ZedGraphControl
-        {
-            get
-            {
-                return zedGraphControl1;
-            }
+            
         }
 
         /// <summary>
@@ -83,15 +42,15 @@ namespace Emgu.CV.UI
         /// <param name="histogram">The 1D histogram to be drawn</param>
         /// <param name="binSize">The size of the bin</param>
         /// <param name="ranges">The ranges</param>
-        public void AddHistogram(String name, Color color, Mat histogram, int binSize, float[] ranges)
+        public Mat GenerateHistogram(String name, Color color, Mat histogram, int binSize, float[] ranges)
         {
             //Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported);
-
-            GraphPane pane = new GraphPane();
+            
+            //GraphPane pane = new GraphPane();
             // Set the Title
-            pane.Title.Text = name;
-            pane.XAxis.Title.Text = Properties.StringTable.Value;
-            pane.YAxis.Title.Text = Properties.StringTable.Count;
+            //pane.Title.Text = name;
+            //pane.XAxis.Title.Text = "Value";
+            //pane.YAxis.Title.Text = "Count";
 
             #region draw the histogram
             RangeF range = new RangeF(ranges[0], ranges[1]);
@@ -107,29 +66,56 @@ namespace Emgu.CV.UI
 
             double[] binVal = new double[histogram.Size.Height];
             GCHandle handle = GCHandle.Alloc(binVal, GCHandleType.Pinned);
-            using (Matrix<double> m = new Matrix<double>(binVal.Length, 1, handle.AddrOfPinnedObject(), sizeof(double)))
+
+            using (Matrix<double> m = new Matrix<double>(binVal.Length, 1, handle.AddrOfPinnedObject(),
+                sizeof(double)))
             {
                 histogram.ConvertTo(m, DepthType.Cv64F);
-                PointPairList pointList = new PointPairList(
-                   bin,
-                   binVal);
-
-                pane.AddCurve(name, pointList, color);
             }
             handle.Free();
 
-            #endregion
+            using (VectorOfDouble x = new VectorOfDouble(bin))
+            using (VectorOfDouble y = new VectorOfDouble(binVal))
+            {
+                using (Emgu.CV.Plot.Plot2d plot = new Plot2d(x, y))
+                {
+                    plot.SetShowText(false);
+                    plot.SetPlotBackgroundColor(new MCvScalar(255, 255, 255));
+                    plot.SetPlotLineColor(new MCvScalar(0, 0, 0));
+                    plot.SetPlotGridColor(new MCvScalar(220, 220, 220));
+                    plot.SetGridLinesNumber(255);
+                    plot.SetPlotSize(512, 200);
+                    plot.SetMinX(0);
+                    plot.SetMaxX(256);
+                    plot.SetMinY(-1);
+                    plot.SetMaxY(binVal.Max());
+                    plot.SetInvertOrientation(true);
 
-            zedGraphControl1.MasterPane.Add(pane);
-        }
+                    Mat render = new Mat();
+                    plot.Render(render);
+                    CvInvoke.PutText(render, name, new Point(20, 30), FontFace.HersheyComplex, 0.8,
+                        new MCvScalar(0, 0, 255));
+                    return render;
+                }
+                //PointPairList pointList = new PointPairList(
+                //   bin,
+                //   binVal);
 
-        /// <summary>
-        /// Generate histograms for the image. One histogram is generated for each color channel.
-        /// You will need to call the Refresh function to do the painting afterward.
-        /// </summary>
-        /// <param name="image">The image to generate histogram from</param>
-        /// <param name="numberOfBins">The number of bins for each histogram</param>
-        public void GenerateHistograms(IInputArray image, int numberOfBins)
+                //pane.AddCurve(name, pointList, color);
+            }
+        
+        #endregion
+
+        //zedGraphControl1.MasterPane.Add(pane);
+    }
+
+    /// <summary>
+    /// Generate histograms for the image. One histogram is generated for each color channel.
+    /// You will need to call the Refresh function to do the painting afterward.
+    /// </summary>
+    /// <param name="image">The image to generate histogram from</param>
+    /// <param name="numberOfBins">The number of bins for each histogram</param>
+    public void GenerateHistograms(IInputArray image, int numberOfBins)
         {
             using (InputArray iaImage = image.GetInputArray())
             {
@@ -235,6 +221,7 @@ namespace Emgu.CV.UI
                 }
                 #endregion
 
+                Mat[] histograms = new Mat[channels.Length];
                 for (int i = 0; i < channels.Length; i++)
                 {
 
@@ -247,9 +234,39 @@ namespace Emgu.CV.UI
                         float[] ranges = new float[] { minVal, maxVal };
                         CvInvoke.CalcHist(vm, new int[] { 0 }, null, hist, new int[] { numberOfBins }, ranges, false);
                         //hist.Calculate(new IImage[1] { channels[i] }, true, null);
-                        AddHistogram(channelNames[i], colors[i], hist, numberOfBins, ranges);
+                        histograms[i]  = GenerateHistogram(channelNames[i], colors[i], hist, numberOfBins, ranges);
                     }
                 }
+
+                if (histograms.Length == 1)
+                {
+                    this.Image = histograms[0];
+                }
+                else
+                {
+                    int maxWidth = 0;
+                    int totalHeight = 0;
+                    for (int i = 0; i < histograms.Length; i++)
+                    {
+                        maxWidth = Math.Max(maxWidth, histograms[i].Width);
+                        totalHeight += histograms[i].Height;
+                    }
+                    Mat concated = new Mat(new Size(maxWidth, totalHeight), histograms[0].Depth, histograms[0].NumberOfChannels);
+
+                    int currentY = 0;
+                    for (int i = 0; i < histograms.Length; i++)
+                    {
+                        using (Mat roi = new Mat(concated, new Rectangle(new Point(0, currentY), histograms[i].Size)))
+                        {
+                            histograms[i].CopyTo(roi);
+                        }
+                        currentY += histograms[i].Height;
+                        histograms[i].Dispose();
+                    }
+
+                    this.Image = concated;
+                }
+
             }
         }
 
@@ -258,17 +275,9 @@ namespace Emgu.CV.UI
         /// </summary>
         public void ClearHistogram()
         {
-            zedGraphControl1.MasterPane.PaneList.Clear();
+            this.Image = null;
         }
 
-        /// <summary>
-        /// Paint the histogram
-        /// </summary>
-        public new void Refresh()
-        {
-            zedGraphControl1.MasterPane.AxisChange(_graphic);
-            zedGraphControl1.MasterPane.SetLayout(_graphic, PaneLayout.SingleColumn);
-            base.Refresh();
-        }
+
     }
 }

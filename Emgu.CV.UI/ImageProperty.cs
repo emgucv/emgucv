@@ -318,6 +318,8 @@ namespace Emgu.CV.UI
             if (_histogramViewer == null)
             {
                 _histogramViewer = new HistogramViewer();
+                _histogramViewer.Width = 600;
+                _histogramViewer.Height = 1000;
                 _histogramViewer.Show();
             }
 
