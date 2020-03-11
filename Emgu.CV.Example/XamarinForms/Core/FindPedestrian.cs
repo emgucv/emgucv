@@ -10,9 +10,7 @@ using Emgu.CV.Structure;
 using System.Drawing;
 using System.Diagnostics;
 using Emgu.CV.Util;
-#if !(__IOS__ || NETFX_CORE)
 using Emgu.CV.Cuda;
-#endif
 
 namespace PedestrianDetection
 {
@@ -31,7 +29,7 @@ namespace PedestrianDetection
 
          using (InputArray iaImage = image.GetInputArray())
          {
-#if !(__IOS__ || NETFX_CORE)
+
             //if the input array is a GpuMat
             //check if there is a compatible Cuda device to run pedestrian detection
             if (iaImage.Kind == InputArray.Type.CudaGpuMat)
@@ -52,7 +50,6 @@ namespace PedestrianDetection
                }
             }
             else
-#endif
             {
                //this is the CPU/OpenCL version
                using (HOGDescriptor des = new HOGDescriptor())

@@ -39,12 +39,12 @@ namespace Emgu.CV
         [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
         private static int CvIgnoreErrorErrorHandler(
-                    int status,
-           IntPtr funcName,
-           IntPtr errMsg,
-           IntPtr fileName,
-           int line,
-           IntPtr userData)
+            int status,
+            IntPtr funcName,
+            IntPtr errMsg,
+            IntPtr fileName,
+            int line,
+            IntPtr userData)
         {
             SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
             return 0; //signal the process to continue
@@ -66,12 +66,12 @@ namespace Emgu.CV
         [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
         private static int CvErrorHandler(
-           int status,
-           IntPtr funcName,
-           IntPtr errMsg,
-           IntPtr fileName,
-           int line,
-           IntPtr userData)
+            int status,
+            IntPtr funcName,
+            IntPtr errMsg,
+            IntPtr fileName,
+            int line,
+            IntPtr userData)
         {
             try
             {

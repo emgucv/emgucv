@@ -448,6 +448,25 @@ namespace Emgu.CV
         /// </summary>
         static CvInvoke()
         {
+            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
+            {
+                /*
+                Assembly assembly = Assembly.GetExecutingAssembly();
+
+                System.Runtime.InteropServices.DllImportResolver resolver =
+                    (string libraryName, Assembly asm, DllImportSearchPath? dllImportSearchPath) =>
+                    {
+                        if (dllImportSearchPath != DllImportSearchPath.System32)
+                        {
+                            Console.WriteLine($"Unexpected dllImportSearchPath: {dllImportSearchPath.ToString()}");
+                            throw new ArgumentException();
+                        }
+
+                        return System.Runtime.InteropServices.NativeLibrary.Load("ResolveLib", asm, null);
+                    };
+                    */
+            }
+
             List<String> modules = CvInvoke.OpenCVModuleList;
             modules.RemoveAll(String.IsNullOrEmpty);
 
