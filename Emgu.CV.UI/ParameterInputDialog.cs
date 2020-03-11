@@ -86,7 +86,7 @@ namespace Emgu.CV.UI
             Object value = panel.GetValue();
             if (value == null)
             {
-               MessageBox.Show(Properties.StringTable.ParameterIsInvalid, panel.Name);
+               MessageBox.Show(String.Format("Parameter {0} is invalid.", panel.Name));
                return;
             }
 
@@ -328,7 +328,7 @@ namespace Emgu.CV.UI
             }
             else
             {
-               throw new NotSupportedException(String.Format(Properties.StringTable.ParameterTypeIsNotSupported, paramType.Name));
+               throw new NotSupportedException(String.Format("Parameter type '{0}' is not supported", paramType.Name));
             }
          }
          return panel;

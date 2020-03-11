@@ -110,7 +110,7 @@ namespace Emgu.CV.UI
                 }
                 else
                 {
-                    typeOfColorTexbox.Text = Properties.StringTable.Unknown;
+                    typeOfColorTexbox.Text = "Unknown";
                 }
 
                 Type colorDepth = Reflection.ReflectIImage.GetTypeOfDepth(image);
@@ -305,7 +305,7 @@ namespace Emgu.CV.UI
         {
             if (_imageBox.DisplayedImage == null)
             {
-                MessageBox.Show(Properties.StringTable.PleaseLoadAnImageFirst);
+                MessageBox.Show("Please load an image first");
                 return;
             }
 
