@@ -4155,7 +4155,7 @@ namespace Emgu.CV.Test
         {
             bool success;
             using (Mat m = new Mat())
-                success = Emgu.CV.FileReaderMat.ReadFile("scenetext01.jpg", m, ImreadModes.AnyColor);
+                success = Emgu.CV.NativeMatFileIO.ReadFileToMat("scenetext01.jpg", m, ImreadModes.AnyColor);
         }
 
         [Test]

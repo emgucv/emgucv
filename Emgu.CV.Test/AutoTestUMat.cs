@@ -45,7 +45,7 @@ namespace Emgu.CV.Test
             using (UMat m1 = new UMat())
             {
                m1.Create(10, 12, CvEnum.DepthType.Cv8U, 1);
-               EmguAssert.IsTrue(m1.Data == null);
+               EmguAssert.IsTrue(m1.GetData() != null);
             }
             CvInvoke.UseOpenCL = false;
             using(UMat m2 = new UMat())

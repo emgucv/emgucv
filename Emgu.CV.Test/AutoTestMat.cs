@@ -40,7 +40,7 @@ namespace Emgu.CV.Test
       public void TestMatCreate()
       {
          Mat m = new Mat();
-         var data = m.Data;
+         var data = m.GetData();
          m.Create(10, 12, CvEnum.DepthType.Cv8U, 1);
          m.Create(18, 22, CvEnum.DepthType.Cv64F, 3);
       }
