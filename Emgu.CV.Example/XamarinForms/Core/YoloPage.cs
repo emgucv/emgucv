@@ -47,24 +47,45 @@ namespace Emgu.CV.XamarinForms
         private Net _yoloDetector = null;
         private string[] _labels = null;
 
-        private async Task InitYoloDetector()
+        public enum YoloVersion
+        {
+            YoloV3,
+            YoloV3Spp,
+            YoloV3Tiny
+        }
+
+        private async Task InitYoloDetector(YoloVersion version = YoloVersion.YoloV3)
         {
             if (_yoloDetector == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
-                
-                manager.AddFile(
-                    "https://pjreddie.com/media/files/yolov3-spp.weights",
-                    _modelFolderName);
-                manager.AddFile("https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-spp.cfg",
-                    _modelFolderName);
-                /*
-                manager.AddFile(
-                    "https://pjreddie.com/media/files/yolov3.weights",
-                    _modelFolderName);
-                manager.AddFile("https://github.com/pjreddie/darknet/raw/master/cfg/yolov3.cfg",
-                    _modelFolderName);
-                    */
+
+                if (version == YoloVersion.YoloV3Spp)
+                {
+                    manager.AddFile(
+                        "https://pjreddie.com/media/files/yolov3-spp.weights",
+                        _modelFolderName);
+                    manager.AddFile(
+                        "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-spp.cfg",
+                        _modelFolderName);
+                } else if (version == YoloVersion.YoloV3)
+                {
+                    manager.AddFile(
+                        "https://pjreddie.com/media/files/yolov3.weights",
+                        _modelFolderName);
+                    manager.AddFile(
+                        "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3.cfg",
+                        _modelFolderName);
+                } else if (version == YoloVersion.YoloV3Tiny)
+                {
+                    manager.AddFile(
+                        "https://pjreddie.com/media/files/yolov3-tiny.weights",
+                        _modelFolderName);
+                    manager.AddFile(
+                        "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-tiny.cfg",
+                        _modelFolderName);
+                }
+
                 manager.AddFile("https://github.com/pjreddie/darknet/raw/master/data/coco.names",
                     _modelFolderName);
             
@@ -197,7 +218,7 @@ namespace Emgu.CV.XamarinForms
 
                 if (image.Length == 0)
                 {
-                    await InitYoloDetector();
+                    await InitYoloDetector(YoloVersion.YoloV3Tiny);
 
 #if __ANDROID__
                     button.Text = _StopCameraButtonText;
