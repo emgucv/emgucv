@@ -33,7 +33,7 @@ ENDIF()
 
 INSTALL(
   FILES
-  "${TESSERACT_DIR}/COPYING"
+  "${TESSERACT_DIR}/LICENSE"
   DESTINATION "lib/3rdParty"
   COMPONENT emgucv_source
   RENAME "tesseract-ocr.license.txt"
