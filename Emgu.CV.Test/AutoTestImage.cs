@@ -1171,7 +1171,6 @@ namespace Emgu.CV.Test
             using (Mat hierachy = new Mat())
             {
                 CvInvoke.FindContours(img, contours, hierachy, RetrType.Tree, ChainApproxMethod.ChainApproxSimple);
-
             }
 
             using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())

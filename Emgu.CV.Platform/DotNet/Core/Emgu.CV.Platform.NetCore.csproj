@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<UseWindowsForms>true</UseWindowsForms>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
+	<OutputPath>..\..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+	<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\Emgu.CV.NativeImage\BitmapExtension.cs" Link="BitmapExtension.cs" />
+    <Compile Include="..\HistogramBox.cs" Link="HistogramBox.cs" />
+    <Compile Include="..\HistogramViewer.cs" Link="HistogramViewer.cs" />
+    <Compile Include="..\HistogramViewer.Designer.cs" Link="HistogramViewer.Designer.cs" />
+    <Compile Include="..\ImageBox.cs" Link="ImageBox.cs" />
+    <Compile Include="..\ImageBox.Designer.cs" Link="ImageBox.Designer.cs" />
+    <Compile Include="..\ImageProperty.cs" Link="ImageProperty.cs" />
+    <Compile Include="..\ImageProperty.Designer.cs" Link="ImageProperty.Designer.cs" />
+    <Compile Include="..\ImagePropertyDialog.cs" Link="ImagePropertyDialog.cs" />
+    <Compile Include="..\ImagePropertyDialog.designer.cs" Link="ImagePropertyDialog.designer.cs" />
+    <Compile Include="..\ImageViewer.cs" Link="ImageViewer.cs" />
+    <Compile Include="..\ImageViewer.Designer.cs" Link="ImageViewer.Designer.cs" />
+    <Compile Include="..\MatrixBox.cs" Link="MatrixBox.cs" />
+    <Compile Include="..\MatrixBox.Designer.cs" Link="MatrixBox.Designer.cs" />
+    <Compile Include="..\MatrixViewer.cs" Link="MatrixViewer.cs" />
+    <Compile Include="..\MatrixViewer.Designer.cs" Link="MatrixViewer.Designer.cs" />
+    <Compile Include="..\Operation.cs" Link="Operation.cs" />
+    <Compile Include="..\OperationsView.cs" Link="OperationsView.cs" />
+    <Compile Include="..\OperationsView.designer.cs" Link="OperationsView.designer.cs" />
+    <Compile Include="..\PanAndZoomPictureBox.cs" Link="PanAndZoomPictureBox.cs" />
+    <Compile Include="..\ParameterInputDialog.cs" Link="ParameterInputDialog.cs" />
+    <Compile Include="..\ParameterInputDialog.designer.cs" Link="ParameterInputDialog.designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\HistogramViewer.zh-CN.resx" Link="HistogramViewer.zh-CN.resx" />
+    <EmbeddedResource Include="..\ImageProperty.zh-CN.resx" Link="ImageProperty.zh-CN.resx" />
+    <EmbeddedResource Include="..\ImagePropertyDialog.zh-CN.resx" Link="ImagePropertyDialog.zh-CN.resx" />
+    <EmbeddedResource Include="..\ImageViewer.zh-CN.resx" Link="ImageViewer.zh-CN.resx" />
+    <EmbeddedResource Include="..\MatrixBox.zh-CN.resx" Link="MatrixBox.zh-CN.resx" />
+    <EmbeddedResource Include="..\MatrixViewer.zh-CN.resx" Link="MatrixViewer.zh-CN.resx" />
+    <EmbeddedResource Include="..\ParameterInputDialog.zh-CN.resx" Link="ParameterInputDialog.zh-CN.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Netstandard\Emgu.CV.Platform.Netstandard.csproj" />
+  </ItemGroup>
+  <Target Name="DeployBinary" AfterTargets="AfterBuild">
+    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\..\libs" Importance="high" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
+  </Target>
+</Project>

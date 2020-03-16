@@ -29,10 +29,6 @@ using Emgu.CV.ImgHash;
 using Emgu.CV.Face;
 using Emgu.CV.Freetype;
 
-#if !NETCOREAPP
-using Emgu.CV.UI;
-#endif
-
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
 using Emgu.CV.Tiff;
@@ -1587,12 +1583,8 @@ namespace Emgu.CV.Test
             watch.Stop();
             CvInvoke.Polylines(
                img,
-#if NETFX_CORE
-            Extensions.ConvertAll<PointF, Point>(hull, Point.Round),
-#else
-            Array.ConvertAll<PointF, Point>(hull, Point.Round),
-#endif
-            true, new MCvScalar(255.0, 0.0, 0.0));
+               Array.ConvertAll<PointF, Point>(hull, Point.Round),
+               true, new MCvScalar(255.0, 0.0, 0.0));
 
             //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Convex Hull Computed in {0} milliseconds", watch.ElapsedMilliseconds));
 
@@ -1794,11 +1786,8 @@ namespace Emgu.CV.Test
 #region draw the points and the box
             Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255, 255, 255));
-#if NETFX_CORE
-         Point[] vertices = Extensions.ConvertAll(box.GetVertices(), Point.Round);
-#else
+
             Point[] vertices = Array.ConvertAll(box.GetVertices(), Point.Round);
-#endif
 
             CvInvoke.Polylines(img, vertices, true, new MCvScalar(0, 0, 255), 1);
             foreach (PointF p in pts)

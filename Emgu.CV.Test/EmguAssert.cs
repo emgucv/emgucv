@@ -77,7 +77,7 @@ namespace Emgu.CV.Test
       private static async Task<Mat> ReadFile(String fileName)
       {
          StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///" + fileName));
-         Mat m = await Mat.FromStorageFile(file);
+         Mat m = await file.ToMat();
          return m;
       }
 

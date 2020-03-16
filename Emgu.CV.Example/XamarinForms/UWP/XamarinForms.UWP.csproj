@@ -102,7 +102,7 @@
       <Link>lena.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="..\Core\stop-sign.jpg">
+    <Content Include="..\Core\stop-sign.jpg">
       <Link>stop-sign.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -169,13 +169,13 @@
       <Version>4.0.1.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.4.0.991265</Version>
+      <Version>4.5.0.396</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
-      <Project>{d24994ba-254b-4210-8781-b6324569afd3}</Project>
-      <Name>Emgu.CV.World.NetStandard</Name>
+    <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.Netstandard.csproj">
+      <Project>{5e912dcc-e7ac-491f-8293-c985e3ab5ca7}</Project>
+      <Name>Emgu.CV.Platform.Netstandard</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" />

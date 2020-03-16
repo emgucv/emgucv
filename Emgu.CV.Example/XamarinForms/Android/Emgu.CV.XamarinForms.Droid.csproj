@@ -247,23 +247,23 @@
       <Version>0.10.0</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.5.0.356</Version>
+      <Version>4.5.0.396</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Emgu.CV.Runtime\Android\Emgu.CV.Runtime.Android.csproj">
-      <Project>{5f102c71-65c3-4d77-ae48-29c1e75f82be}</Project>
-      <Name>Emgu.CV.Runtime.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
-      <Project>{062171bc-876a-440b-a40c-8a6a3a7f6ce6}</Project>
-      <Name>Emgu.CV.World.NetStandard</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="..\Core\stop-sign.jpg">
       <Link>Assets\stop-sign.jpg</Link>
     </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.Platform\Android\Emgu.CV.Platform.Android.csproj">
+      <Project>{5f102c71-65c3-4d77-ae48-29c1e75f82be}</Project>
+      <Name>Emgu.CV.Platform.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.Netstandard.csproj">
+      <Project>{04e2a4f0-b178-4c96-b792-91db114896b2}</Project>
+      <Name>Emgu.CV.Platform.Netstandard</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

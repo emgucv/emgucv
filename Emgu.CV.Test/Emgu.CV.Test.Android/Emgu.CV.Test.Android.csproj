@@ -212,13 +212,13 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Runtime\Android\Emgu.CV.Runtime.Android.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Platform\Android\Emgu.CV.Platform.Android.csproj">
       <Project>{5f102c71-65c3-4d77-ae48-29c1e75f82be}</Project>
-      <Name>Emgu.CV.Runtime.Android</Name>
+      <Name>Emgu.CV.Platform.Android</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
-      <Project>{2faff050-79f0-44fc-8acb-e90980d26b09}</Project>
-      <Name>Emgu.CV.World.NetStandard</Name>
+    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
+      <Project>{08e9d990-23e1-4b84-8921-813a876b62d8}</Project>
+      <Name>Emgu.CV.Platform.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

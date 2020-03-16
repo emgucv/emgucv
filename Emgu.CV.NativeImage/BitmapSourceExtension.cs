@@ -10,7 +10,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.UI;
 
 namespace Emgu.CV
 {

@@ -14,7 +14,7 @@ ADD_CUSTOM_TARGET(
    COMMAND "${MSBUILD_EXECUTABLE}" /p:Configuration=${DEFAULT_CS_CONFIG} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj" /property:PresentationStyle=OpenXml /property:HelpFileFormat=OpenXml
    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetFramework Emgu.CV.Platform.NetCore)
 
 INSTALL(
   FILES

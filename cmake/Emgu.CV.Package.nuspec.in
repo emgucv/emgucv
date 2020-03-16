@@ -16,9 +16,8 @@
     <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
 http://www.emgu.com/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
     </releaseNotes>
-    <dependencies>
-		${EMGUCV_NUGET_DEPENDENCY}
-    </dependencies>
+	${EMGUCV_NUGET_DEPENDENCY}
+	${EMGUCV_NUGET_FRAMEWORK_REFERENCES}
     <copyright>${CURRENT_YEAR} ${CPACK_PACKAGE_VENDOR}, All Rights Reserved.</copyright>
     <tags>opencv emgu emgucv ai image</tags>
   </metadata>

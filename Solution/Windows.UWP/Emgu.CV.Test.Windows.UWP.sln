@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Emgu.CV.shproj", "{12D024EE-D0A5-4BBC-B7C0-7B18CF1AB262}"
 EndProject
@@ -15,28 +15,33 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Test.UWP", "..\..\Emgu.CV.Test\Emgu.CV.Test.UWP\Emgu.CV.Test.UWP.csproj", "{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard", "..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj", "{8F605445-CF27-4750-8000-F1EC72F8D516}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{7a2ab85b-0e3b-4a2c-ad89-dfbfe5c9d3a7}*SharedItemsImports = 4
-		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7a2ab85b-0e3b-4a2c-ad89-dfbfe5c9d3a7}*SharedItemsImports = 4
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7a2ab85b-0e3b-4a2c-ad89-dfbfe5c9d3a7}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{7a2ab85b-0e3b-4a2c-ad89-dfbfe5c9d3a7}*SharedItemsImports = 4
-		..\..\Emgu.Util\Emgu.Util.projitems*{7a2ab85b-0e3b-4a2c-ad89-dfbfe5c9d3a7}*SharedItemsImports = 4
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{8f605445-cf27-4750-8000-f1ec72f8d516}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{8f605445-cf27-4750-8000-f1ec72f8d516}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{8f605445-cf27-4750-8000-f1ec72f8d516}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.projitems*{8f605445-cf27-4750-8000-f1ec72f8d516}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{8f605445-cf27-4750-8000-f1ec72f8d516}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|ARM = Release|ARM
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|ARM.ActiveCfg = Debug|ARM
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|ARM.Build.0 = Debug|ARM
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -46,6 +51,7 @@ Global
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|x86.ActiveCfg = Debug|x86
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|x86.Build.0 = Debug|x86
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Debug|x86.Deploy.0 = Debug|x86
+		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Release|Any CPU.ActiveCfg = Release|x86
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Release|ARM.ActiveCfg = Release|ARM
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Release|ARM.Build.0 = Release|ARM
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Release|ARM.Deploy.0 = Release|ARM
@@ -55,6 +61,22 @@ Global
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Release|x86.ActiveCfg = Release|x86
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Release|x86.Build.0 = Release|x86
 		{7A2AB85B-0E3B-4A2C-AD89-DFBFE5C9D3A7}.Release|x86.Deploy.0 = Release|x86
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Debug|ARM.Build.0 = Debug|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Debug|x64.ActiveCfg = Debug|x64
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Debug|x64.Build.0 = Debug|x64
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Debug|x86.Build.0 = Debug|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Release|ARM.Build.0 = Release|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Release|x64.ActiveCfg = Release|x64
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Release|x64.Build.0 = Release|x64
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Release|x86.ActiveCfg = Release|Any CPU
+		{8F605445-CF27-4750-8000-F1EC72F8D516}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

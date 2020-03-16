@@ -94,22 +94,17 @@
     <Compile Include="..\CommonAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV.UI\Emgu.CV.UI.csproj">
-      <Project>{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}</Project>
-      <Name>Emgu.CV.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
-      <Project>{7b084957-6092-46b6-809e-7355555ac0cf}</Project>
-      <Name>Emgu.CV.World.NetStandard</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ZedGraph">
-      <Version>5.1.7</Version>
-    </PackageReference>
+    <ProjectReference Include="..\Emgu.CV.Platform\DotNet\Framework\Emgu.CV.Platform.NetFramework.csproj">
+      <Project>{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}</Project>
+      <Name>Emgu.CV.Platform.NetFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
+      <Project>{5db57d3a-1db6-4930-ae6a-e1587140b0c6}</Project>
+      <Name>Emgu.CV.Platform.NetStandard</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="DeployBinary" AfterTargets="AfterBuild">

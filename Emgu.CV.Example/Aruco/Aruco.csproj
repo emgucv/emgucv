@@ -121,13 +121,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.UI\Emgu.CV.UI.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Platform\DotNet\Framework\Emgu.CV.Platform.NetFramework.csproj">
       <Project>{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}</Project>
-      <Name>Emgu.CV.UI</Name>
+      <Name>Emgu.CV.Platform.NetFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
-      <Project>{896fd1e3-99f5-4a83-8be6-cacf4a2c82a4}</Project>
-      <Name>Emgu.CV.World.NetStandard</Name>
+    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.Netstandard.csproj">
+      <Project>{f8ccdef7-e79a-4fd5-8c0e-9290059c7dd6}</Project>
+      <Name>Emgu.CV.Platform.Netstandard</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />

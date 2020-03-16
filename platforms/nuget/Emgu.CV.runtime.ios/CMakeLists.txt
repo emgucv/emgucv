@@ -10,15 +10,14 @@ ADD_CUSTOM_TARGET(
    ${PROJECT_NAME} ALL
    COMMAND nuget pack "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" -OutputDirectory "${CMAKE_CURRENT_SOURCE_DIR}/../"
 )
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.IOS)
 ELSE()
 ADD_CUSTOM_TARGET(
    ${PROJECT_NAME} ALL
    COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/../../../miscellaneous/nuget.exe" pack "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" -OutputDirectory "${CMAKE_CURRENT_SOURCE_DIR}/../"
 )
 ENDIF()
-IF(APPLE)
-  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World.IOS)
-ENDIF()
+
 
 if(ENABLE_SOLUTION_FOLDERS)
   set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")

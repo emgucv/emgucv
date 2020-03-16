@@ -112,7 +112,7 @@ namespace Emgu.CV
             return bmp;
         }
 
-        public static async Task<Mat> FromStorageFile(StorageFile file)
+        public static async Task<Mat> ToMat(this StorageFile file)
         {
             using (IRandomAccessStream fileStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
             {
@@ -137,11 +137,11 @@ namespace Emgu.CV
             }
         }
 
-        public static async Task<Mat> FromMediaCapture(MediaCapture _mediaCapture)
+        public static async Task<Mat> ToMat(this MediaCapture mediaCapture)
         {
             using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
-                await _mediaCapture.CapturePhotoToStreamAsync(Windows.Media.MediaProperties.ImageEncodingProperties.CreateJpeg(), stream);
+                await mediaCapture.CapturePhotoToStreamAsync(Windows.Media.MediaProperties.ImageEncodingProperties.CreateJpeg(), stream);
                 stream.Seek(0);
                 byte[] data = new byte[stream.Size];
                 await stream.AsStreamForRead().ReadAsync(data, 0, data.Length);

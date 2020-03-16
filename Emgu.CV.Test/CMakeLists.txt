@@ -21,6 +21,6 @@ if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
 endif()
 
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.World.Netstandard)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
 
 ENDIF()

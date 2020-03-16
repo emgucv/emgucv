@@ -15,12 +15,17 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.C
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.shproj", "{7B22BB32-C867-45A7-AC53-5BDA820DB91C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.World.NetStandard", "..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj", "{2FAFF050-79F0-44FC-8ACB-E90980D26B09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard", "..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj", "{08E9D990-23E1-4B84-8921-813A876B62D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Runtime.Android", "..\..\Emgu.CV.Runtime\Android\Emgu.CV.Runtime.Android.csproj", "{5F102C71-65C3-4D77-AE48-29C1E75F82BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.Android", "..\..\Emgu.CV.Platform\Android\Emgu.CV.Platform.Android.csproj", "{5F102C71-65C3-4D77-AE48-29C1E75F82BE}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{08e9d990-23e1-4b84-8921-813a876b62d8}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{08e9d990-23e1-4b84-8921-813a876b62d8}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{08e9d990-23e1-4b84-8921-813a876b62d8}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.projitems*{08e9d990-23e1-4b84-8921-813a876b62d8}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{08e9d990-23e1-4b84-8921-813a876b62d8}*SharedItemsImports = 5
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
@@ -54,18 +59,18 @@ Global
 		{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}.Release|x86.ActiveCfg = Release|Any CPU
 		{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}.Release|x86.Build.0 = Release|Any CPU
 		{34FF2E5E-DEE0-4F6D-9A7A-855E8F7E1077}.Release|x86.Deploy.0 = Release|Any CPU
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Debug|x64.ActiveCfg = Debug|x64
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Debug|x64.Build.0 = Debug|x64
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Debug|x86.Build.0 = Debug|Any CPU
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Release|x64.ActiveCfg = Release|x64
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Release|x64.Build.0 = Release|x64
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Release|x86.ActiveCfg = Release|Any CPU
-		{2FAFF050-79F0-44FC-8ACB-E90980D26B09}.Release|x86.Build.0 = Release|Any CPU
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Debug|x64.ActiveCfg = Debug|x64
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Debug|x64.Build.0 = Debug|x64
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Debug|x86.Build.0 = Debug|Any CPU
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Release|x64.ActiveCfg = Release|x64
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Release|x64.Build.0 = Release|x64
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Release|x86.ActiveCfg = Release|Any CPU
+		{08E9D990-23E1-4B84-8921-813A876B62D8}.Release|x86.Build.0 = Release|Any CPU
 		{5F102C71-65C3-4D77-AE48-29C1E75F82BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F102C71-65C3-4D77-AE48-29C1E75F82BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F102C71-65C3-4D77-AE48-29C1E75F82BE}.Debug|x64.ActiveCfg = Debug|Any CPU
