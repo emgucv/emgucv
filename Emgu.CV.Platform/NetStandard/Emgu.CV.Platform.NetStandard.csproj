@@ -35,15 +35,11 @@
     <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
-  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
-
+  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV\Emgu.CV.projitems')" />
+  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\..\Emgu.Util\Emgu.Util.projitems')" />
+  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems')" />
+  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems')" />
   <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
-
-  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
-
-  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
-
-  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
 
   <ItemGroup>
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />

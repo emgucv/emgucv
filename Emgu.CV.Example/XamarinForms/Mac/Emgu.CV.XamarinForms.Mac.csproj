@@ -6,8 +6,8 @@
     <ProjectGuid>{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>OSX</RootNamespace>
-    <AssemblyName>OSX</AssemblyName>
+    <RootNamespace>MacOS</RootNamespace>
+    <AssemblyName>MacOS</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
@@ -104,19 +104,19 @@
       <Link>haarcascade_frontalface_default.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\FaceDetection\lena.jpg">
+    <Content Include="..\Core\lena.jpg">
       <Link>lena.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\FeatureMatching\box.png">
+    <Content Include="..\Core\box.png">
       <Link>box.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\FeatureMatching\box_in_scene.png">
+    <Content Include="..\Core\box_in_scene.png">
       <Link>box_in_scene.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\PedestrianDetection\pedestrian.png">
+    <Content Include="..\Core\pedestrian.png">
       <Link>pedestrian.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -162,15 +162,15 @@
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
-      <Project>{849EE864-97D2-46C2-B67E-FE7829D1D6D8}</Project>
-      <Name>Emgu.CV.World.NetStandard</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
       <Version>4.4.0.991477</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
+      <Project>{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}</Project>
+      <Name>Emgu.CV.Platform.NetStandard</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" Condition="Exists('..\Core\Emgu.CV.XamarinForms.projitems')" />

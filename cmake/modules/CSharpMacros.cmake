@@ -213,9 +213,9 @@ ENDMACRO()
 
 MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
   ADD_CUSTOM_TARGET (${target} ${ARGV3})
-  IF(APPLE)
-    SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
-  ENDIF()
+  #IF(APPLE)
+  #  SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
+  #ENDIF()
   
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (

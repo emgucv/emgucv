@@ -18,7 +18,7 @@
     <EmguCVMacDeployMessage Condition="Exists('$(EmguCVMacNativeFile)')">$(EmguCVMacDeployMessage)MacOS x64 </EmguCVMacDeployMessage>
   </PropertyGroup>
   <ItemGroup Condition="Exists('$(EmguCVMacNativeFile)')">
-    <Content Include="$(EmguCVMacNativeFile)">
+    <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)">
       <Link>libcvextern.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
