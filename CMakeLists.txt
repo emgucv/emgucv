@@ -975,24 +975,30 @@ IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
 	<group targetFramework=\"net461\">
 	</group>")
 ENDIF()
-IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86 OR APPLE)
+
+IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
 	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\netcoreapp3.1\" />
-	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\netcoreapp3.1\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.dll\" target=\"lib\\netcoreapp3.1\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.xml\" target=\"lib\\netcoreapp3.1\" />")
-	SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
-	  <group targetFramework=\".NETCoreApp3.1\">
+	SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY}
+      <group targetFramework=\".NETCoreApp3.1\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Drawing.Common\" version=\"4.7.0\" exclude=\"Build,Analyzers\" />
       </group>")
-	SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "${EMGUCV_NUGET_FRAMEWORK_REFERENCES}
+      SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "${EMGUCV_NUGET_FRAMEWORK_REFERENCES}
       <group targetFramework=\".NETCoreApp3.1\">
         <frameworkReference name=\"Microsoft.WindowsDesktop.App.WindowsForms\" />
       </group>")
 ENDIF()
+
+IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86 OR APPLE)
+	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\netcoreapp3.1\" />
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\netcoreapp3.1\" />")
+ENDIF()
+
 SET(EMGUCV_NUGET_DEPENDENCY "
 	<dependencies>
 ${EMGUCV_NUGET_DEPENDENCY}
