@@ -7,7 +7,7 @@
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>Emgu.CV.Example.Mac</RootNamespace>
-    <AssemblyName>Emgu CV OSX Xamarin.Forms</AssemblyName>
+    <AssemblyName>Emgu.CV.MacOS.Xamarin.Forms</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
@@ -132,16 +132,16 @@
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\PlanarSubdivision\DrawSubdivision.cs">
+    <Compile Include="..\XamarinForms\Core\DrawSubdivision.cs">
       <Link>DrawSubdivision.cs</Link>
     </Compile>
-    <Compile Include="..\FaceDetection\DetectFace.cs">
+    <Compile Include="..\XamarinForms\Core\DetectFace.cs">
       <Link>DetectFace.cs</Link>
     </Compile>
-    <Compile Include="..\FeatureMatching\DrawMatches.cs">
+    <Compile Include="..\XamarinForms\Core\DrawMatches.cs">
       <Link>DrawMatches.cs</Link>
     </Compile>
-    <Compile Include="..\PedestrianDetection\FindPedestrian.cs">
+    <Compile Include="..\XamarinForms\Core\FindPedestrian.cs">
       <Link>FindPedestrian.cs</Link>
     </Compile>
     <Compile Include="..\..\Emgu.CV.NativeImage\CGImageExtension.cs" />
@@ -159,25 +159,25 @@
       <Link>haarcascade_frontalface_default.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\FaceDetection\lena.jpg">
+    <Content Include="..\XamarinForms\Core\lena.jpg">
       <Link>lena.jpg</Link>
     </Content>
-    <Content Include="..\FeatureMatching\box_in_scene.png">
+    <Content Include="..\XamarinForms\Core\box_in_scene.png">
       <Link>box_in_scene.png</Link>
     </Content>
-    <Content Include="..\FeatureMatching\box.png">
+    <Content Include="..\XamarinForms\Core\box.png">
       <Link>box.png</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="..\PedestrianDetection\pedestrian.png">
+    <BundleResource Include="..\XamarinForms\Core\pedestrian.png">
       <Link>pedestrian.png</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.World\NetStandard\Emgu.CV.World.NetStandard.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
       <Project>{849EE864-97D2-46C2-B67E-FE7829D1D6D8}</Project>
-      <Name>Emgu.CV.World.NetStandard</Name>
+      <Name>Emgu.CV.Platform.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />

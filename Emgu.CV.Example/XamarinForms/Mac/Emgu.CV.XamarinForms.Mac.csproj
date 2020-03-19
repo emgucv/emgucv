@@ -128,6 +128,10 @@
       <Link>dog416.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Core\stop-sign.jpg">
+      <Link>stop-sign.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -163,7 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.4.0.991477</Version>
+      <Version>4.5.0.396</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
