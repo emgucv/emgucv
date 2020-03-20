@@ -7,9 +7,9 @@ convert ../Emgu.CV.Test/stitch2.jpg Assets/Emgu.CV/Demo/Resources/stitch2.png
 convert ../Emgu.CV.Test/stitch3.jpg Assets/Emgu.CV/Demo/Resources/stitch3.png
 convert ../Emgu.CV.Test/stitch4.jpg Assets/Emgu.CV/Demo/Resources/stitch4.png
 
-cp ../Emgu.CV.Example/FeatureMatching/box.png Assets/Emgu.CV/Demo/Resources/
-cp ../Emgu.CV.Example/FeatureMatching/box_in_scene.png Assets/Emgu.CV/Demo/Resources/
-cp ../Emgu.CV.Example/FeatureMatching/DrawMatches.cs Assets/Emgu.CV/Demo/
+cp ../Emgu.CV.Example/XamarinForms/Core/box.png Assets/Emgu.CV/Demo/Resources/
+cp ../Emgu.CV.Example/XamarinForms/Core/box_in_scene.png Assets/Emgu.CV/Demo/Resources/
+cp ../Emgu.CV.Example/XamarinForms/Core/DrawMatches.cs Assets/Emgu.CV/Demo/
 
 cp ../opencv/data/haarcascades/haarcascade_frontalface_alt2.xml Assets/Emgu.CV/Demo/Resources
 
