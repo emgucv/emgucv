@@ -60,9 +60,9 @@ fi
 
 cd ../../..
 
-cd Emgu.CV.World/iOS
+cd Emgu.CV.Platform/iOS
 #compile Emgu.CV.World.iOS.dll
-msbuild
+msbuild /p:Configuration=Release
 cd ../../platforms/ios/x86_64
 #build the package this time
 ./xcodebuild_wrapper WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs 8 -configuration Release -target package build
