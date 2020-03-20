@@ -89,9 +89,9 @@ IF "%3%"=="vs2015" GOTO SET_BUILD_TYPE
 IF EXIST %VS2017% SET DEVENV=%VS2017%
 REM CUDA 9 only support VS2017, if we target GPU we will stop checking for newer version of Visual Studio
 
-REM Intel compiler is not compatible with VS2019 16.2, if we are compiling with Intel compiler, skill VS2019
-IF "%3%"=="intel" GOTO SET_BUILD_TYPE
-IF "%3%"=="intel_inf" GOTO SET_BUILD_TYPE
+REM Intel compiler is not compatible with VS2019 16.2, if we are compiling with Intel compiler, skip VS2019
+REM IF "%3%"=="intel" GOTO SET_BUILD_TYPE
+REM IF "%3%"=="intel_inf" GOTO SET_BUILD_TYPE
 
 IF EXIST %VS2019% SET DEVENV=%VS2019%
 
