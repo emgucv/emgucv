@@ -60,7 +60,6 @@ Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.Util" isDocumented="True">A collection of utilities used by Emgu projects</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True">Various enumeration for Emgu.Util namespace</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="ZedGraph" isDocumented="False" />
       <NamespaceSummaryItem name="Emgu.CV.Flann" isDocumented="True">Fast Library for Approximate Nearest Neighbors (Marius Muja and David Lowe)</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Features2D" isDocumented="True">Contains classes for 2D feature detection, extraction and matching.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Geodetic" isDocumented="True">Contains library that can be use for geomatic transformation.</NamespaceSummaryItem>
