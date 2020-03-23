@@ -9,6 +9,8 @@
 # if the target is 64bit, the flag TARGET_ARCH_64 will be set
 # --------------------------------------------------------
 
+include(CheckSymbolExists)
+
 MACRO(CHECK_TARGET_ARCH)
 
 MESSAGE(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
@@ -24,6 +26,19 @@ STRING(FIND "${CMAKE_GENERATOR}" "ARM" IS_ARM)
 IF(IS_ARM GREATER -1)
   SET(TARGET_ARM TRUE)
 ENDIF()
+SET(IS_ARM)
+check_symbol_exists("__arm__" "" IS_ARM)
+IF(IS_ARM)
+  SET(TARGET_ARM TRUE)
+ENDIF()
+IF(MSVC)
+  SET(IS_ARM)
+  STRING(FIND "${MSVC_C_ARCHITECTURE_ID}" "ARM" IS_ARM)
+  IF(IS_ARM GREATER -1)
+    SET(TARGET_ARM TRUE)
+  ENDIF()
+ENDIF()
+
 
 IF(IS_UBUNTU)
   IF(TARGET_ARCH_64)
