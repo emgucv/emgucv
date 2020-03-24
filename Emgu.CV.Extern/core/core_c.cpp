@@ -1008,3 +1008,11 @@ void cveMomentsRelease(cv::Moments** moments)
 	delete *moments;
 	*moments = 0;
 }
+
+#if defined(CV_ICC) && defined(_M_IX86)
+//Fix for intel compiler: Intel compiler has not implemented __iso_volatile_load64 for x86 architecture.
+__int64 __iso_volatile_load64(const volatile __int64* _mem)
+{
+	return *_mem;
+}
+#endif
