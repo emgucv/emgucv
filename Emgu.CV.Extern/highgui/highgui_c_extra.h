@@ -13,15 +13,18 @@
 
 CVAPI(void) cveImshow(cv::String* winname, cv::_InputArray* mat);
 CVAPI(void) cveNamedWindow(cv::String* winname, int flags);
+CVAPI(void) cveSetWindowProperty(cv::String* winname, int propId, double propValue);
+CVAPI(void) cveSetWindowTitle(cv::String* winname, cv::String* title);
+CVAPI(double) cveGetWindowProperty(cv::String* winname, int propId);
 CVAPI(void) cveDestroyWindow(cv::String* winname);
 CVAPI(void) cveDestroyAllWindows();
 CVAPI(int) cveWaitKey(int delay);
 
 CVAPI(void) cveSelectROI(
-	cv::String* windowName, 
-	cv::_InputArray* img, 
-	bool showCrosshair, 
-	bool fromCenter, 
+	cv::String* windowName,
+	cv::_InputArray* img,
+	bool showCrosshair,
+	bool fromCenter,
 	CvRect* roi);
 
 CVAPI(void) cveSelectROIs(

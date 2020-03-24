@@ -19,13 +19,55 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="name">Name of the window which is used as window identifier and appears in the window caption</param>
         /// <param name="flags">Flags of the window.</param>
-        public static void NamedWindow(String name, CvEnum.NamedWindowType flags = NamedWindowType.AutoSize)
+        public static void NamedWindow(String name, CvEnum.WindowFlags flags = WindowFlags.AutoSize)
         {
             using (CvString s = new CvString(name))
                 cveNamedWindow(s, flags);
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveNamedWindow(IntPtr name, CvEnum.NamedWindowType flags);
+        private static extern void cveNamedWindow(IntPtr name, CvEnum.WindowFlags flags);
+
+        /// <summary>
+        /// Changes parameters of a window dynamically.
+        /// </summary>
+        /// <param name="name">Name of the window.</param>
+        /// <param name="propId">Window property to edit.</param>
+        /// <param name="propValue">New value of the window property.</param>
+        public static void SetWindowProperty(String name, CvEnum.WindowPropertyFlags propId, double propValue)
+        {
+            using (CvString s = new CvString(name))
+                cveSetWindowProperty(s, propId, propValue);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSetWindowProperty(IntPtr name, CvEnum.WindowPropertyFlags propId, double propValue);
+
+        /// <summary>
+        /// Provides parameters of a window.
+        /// </summary>
+        /// <param name="name">Name of the window.</param>
+        /// <param name="propId">Window property to retrieve.</param>
+        /// <returns>Value of the window property</returns>
+        public static double GetWindowProperty(String name, CvEnum.WindowPropertyFlags propId)
+        {
+            using (CvString s = new CvString(name))
+                return cveGetWindowProperty(s, propId);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern double cveGetWindowProperty(IntPtr winname, CvEnum.WindowPropertyFlags propId);
+
+        /// <summary>
+        /// Updates window title
+        /// </summary>
+        /// <param name="winname">Name of the window.</param>
+        /// <param name="title">New title.</param>
+        public static void SetWindowTitle(String winname, String title)
+        {
+            using (CvString s = new CvString(winname))
+            using (CvString sTitle = new CvString(title))
+                cveSetWindowTitle(s, sTitle);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSetWindowTitle(IntPtr winname, IntPtr title);
 
         /// <summary>
         /// Waits for key event infinitely (delay &lt;= 0) or for "delay" milliseconds. 

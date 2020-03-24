@@ -9,7 +9,8 @@ namespace Emgu.CV.CvEnum
     /// <summary>
     /// The named window type
     /// </summary>
-    public enum NamedWindowType
+    [Flags]
+    public enum WindowFlags
     {
         /// <summary>
         /// The user can resize the window (no constraint) / also use to switch a fullscreen window to a normal size
@@ -34,6 +35,14 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// the ratio of the image is respected
         /// </summary>
-        KeepRatio = 0x00000000
+        KeepRatio = 0x00000000,
+        /// <summary>
+        /// status bar and tool bar
+        /// </summary>
+        GuiExpanded = 0x00000000,
+        /// <summary>
+        /// Old fashion way
+        /// </summary>
+        GuiNormal = 0x00000010,
     }
 }

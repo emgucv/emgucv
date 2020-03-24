@@ -8,23 +8,35 @@
 
 void cveImshow(cv::String* winname, cv::_InputArray* mat)
 {
-  cv::imshow(*winname, *mat);
+	cv::imshow(*winname, *mat);
 }
 void cveNamedWindow(cv::String* winname, int flags)
 {
-  cv::namedWindow(*winname, flags);
+	cv::namedWindow(*winname, flags);
+}
+void cveSetWindowProperty(cv::String* winname, int propId, double propValue)
+{
+	cv::setWindowProperty(*winname, propId, propValue);
+}
+void cveSetWindowTitle(cv::String* winname, cv::String* title)
+{
+	cv::setWindowTitle(*winname, *title);
+}
+double cveGetWindowProperty(cv::String* winname, int propId)
+{
+	return cv::getWindowProperty(*winname, propId);
 }
 void cveDestroyWindow(cv::String* winname)
 {
-  cv::destroyWindow(*winname);
+	cv::destroyWindow(*winname);
 }
 void cveDestroyAllWindows()
 {
-  cv::destroyAllWindows();
+	cv::destroyAllWindows();
 }
 int cveWaitKey(int delay)
 {
-  return cv::waitKey(delay);
+	return cv::waitKey(delay);
 }
 
 void cveSelectROI(cv::String* windowName, cv::_InputArray* img, bool showCrosshair, bool fromCenter, CvRect* roi)
