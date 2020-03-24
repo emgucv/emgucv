@@ -12,11 +12,29 @@ namespace Emgu.CV.CvEnum
     [Flags]
     public enum WindowPropertyFlags
     {
-       WND_PROP_FULLSCREEN   = 0, //!< fullscreen property    (can be WINDOW_NORMAL or WINDOW_FULLSCREEN).
-       WND_PROP_AUTOSIZE     = 1, //!< autosize property      (can be WINDOW_NORMAL or WINDOW_AUTOSIZE).
-       WND_PROP_ASPECT_RATIO = 2, //!< window's aspect ration (can be set to WINDOW_FREERATIO or WINDOW_KEEPRATIO).
-       WND_PROP_OPENGL       = 3, //!< opengl support.
-       WND_PROP_VISIBLE      = 4, //!< checks whether the window exists and is visible
-       WND_PROP_TOPMOST      = 5  //!< property to toggle normal window being topmost or not
+        /// <summary>
+        /// fullscreen property    (can be WINDOW_NORMAL or WINDOW_FULLSCREEN).
+        /// </summary>
+        FullScreen = 0,
+        /// <summary>
+        /// autosize property      (can be WINDOW_NORMAL or WINDOW_AUTOSIZE).
+        /// </summary>
+        AutoSize = 1,
+        /// <summary>
+        /// window's aspect ration (can be set to WINDOW_FREERATIO or WINDOW_KEEPRATIO).
+        /// </summary>
+        AspectRatio = 2,
+        /// <summary>
+        /// opengl support.
+        /// </summary>
+        Opengl = 3,
+        /// <summary>
+        /// checks whether the window exists and is visible
+        /// </summary>
+        Visible = 4,
+        /// <summary>
+        /// property to toggle normal window being topmost or not
+        /// </summary>
+        TopMost = 5 
     }
 }
