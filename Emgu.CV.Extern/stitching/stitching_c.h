@@ -14,15 +14,15 @@
 /*
 namespace cv {
 
-   class CV_EXPORTS StitcherWrapper 
+   class CV_EXPORTS StitcherWrapper
    {
    public:
-      StitcherWrapper(bool tryUseGpu)
-         : stitcher(Stitcher::createDefault(tryUseGpu))
-      {
-      }
+	  StitcherWrapper(bool tryUseGpu)
+		 : stitcher(Stitcher::createDefault(tryUseGpu))
+	  {
+	  }
 
-      Stitcher stitcher;
+	  Stitcher stitcher;
    };
 }*/
 
@@ -39,6 +39,12 @@ CVAPI(void) cveStitcherSetWarper(cv::Stitcher* stitcher, cv::WarperCreator* crea
 
 CVAPI(void) cveStitcherSetBlender(cv::Stitcher* stitcher, cv::detail::Blender* b);
 
+CVAPI(void) cveStitcherSetExposureCompensator(cv::Stitcher* stitcher, cv::detail::ExposureCompensator* exposureComp);
+
+CVAPI(void) cveStitcherSetBundleAdjuster(cv::Stitcher* stitcher, cv::detail::BundleAdjusterBase* bundleAdjuster);
+
+CVAPI(void) cveStitcherSetSeamFinder(cv::Stitcher* stitcher, cv::detail::SeamFinder* seamFinder);
+
 CVAPI(void) cveStitcherSetWaveCorrection(cv::Stitcher* stitcher, bool flag);
 CVAPI(bool) cveStitcherGetWaveCorrection(cv::Stitcher* stitcher);
 CVAPI(void) cveStitcherSetWaveCorrectionKind(cv::Stitcher* stitcher, int kind);
@@ -51,6 +57,9 @@ CVAPI(void) cveStitcherSetSeamEstimationResol(cv::Stitcher* stitcher, double res
 CVAPI(double) cveStitcherGetSeamEstimationResol(cv::Stitcher* stitcher);
 CVAPI(void) cveStitcherSetRegistrationResol(cv::Stitcher* stitcher, double resolMpx);
 CVAPI(double) cveStitcherGetRegistrationResol(cv::Stitcher* stitcher);
+
+CVAPI(int) cveStitcherGetInterpolationFlags(cv::Stitcher* stitcher);
+CVAPI(void) cveStitcherSetInterpolationFlags(cv::Stitcher* stitcher, int interpFlags);
 
 CVAPI(int) cveStitcherStitch(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
 
@@ -68,7 +77,7 @@ CVAPI(void) cveSurfFeaturesFinderRelease(cv::detail::SurfFeaturesFinder** finder
 
 CVAPI(cv::detail::SurfFeaturesFinderGpu*) cveSurfFeaturesFinderGpuCreate(
    double hess_thresh, int num_octaves, int num_layers,
-   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f); 
+   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f);
 
 CVAPI(void) cveSurfFeaturesFinderGpuRelease(cv::detail::SurfFeaturesFinderGpu** finder);
 #endif
@@ -83,7 +92,7 @@ CVAPI(cv::detail::AKAZEFeaturesFinder*) cveAKAZEFeaturesFinderCreate(
 	float threshold,
 	int nOctaves,
 	int nOctaveLayers,
-	int diffusivity, 
+	int diffusivity,
 	cv::detail::FeaturesFinder** f);
 CVAPI(void) cveAKAZEFeaturesFinderRelease(cv::detail::AKAZEFeaturesFinder** finder);
 */
@@ -127,6 +136,59 @@ CVAPI(void) cveFeatherBlenderRelease(cv::detail::FeatherBlender** blender);
 
 CVAPI(cv::detail::MultiBandBlender*) cveMultiBandBlenderCreate(int tryGpu, int numBands, int weightType, cv::detail::Blender** blender);
 CVAPI(void) cveMultiBandBlenderRelease(cv::detail::MultiBandBlender** blender);
+
+CVAPI(cv::detail::NoExposureCompensator*) cveNoExposureCompensatorCreate(cv::detail::ExposureCompensator** exposureCompensatorPtr);
+CVAPI(void) cveNoExposureCompensatorRelease(cv::detail::NoExposureCompensator** compensator);
+
+CVAPI(cv::detail::GainCompensator*) cveGainCompensatorCreate(int nrFeeds, cv::detail::ExposureCompensator** exposureCompensatorPtr);
+CVAPI(void) cveGainCompensatorRelease(cv::detail::GainCompensator** compensator);
+
+CVAPI(cv::detail::ChannelsCompensator*) cveChannelsCompensatorCreate(int nrFeeds, cv::detail::ExposureCompensator** exposureCompensatorPtr);
+CVAPI(void) cveChannelsCompensatorRelease(cv::detail::ChannelsCompensator** compensator);
+
+//CVAPI(cv::detail::BlocksCompensator*) cveBlocksCompensatorCreate(int blWidth, int blHeight, int nrFeeds, cv::detail::ExposureCompensator** exposureCompensatorPtr);
+//CVAPI(void) cveBlocksCompensatorRelease(cv::detail::BlocksCompensator** compensator);
+
+CVAPI(cv::detail::BlocksGainCompensator*) cveBlocksGainCompensatorCreate(int blWidth, int blHeight, int nrFeeds, cv::detail::ExposureCompensator** exposureCompensatorPtr);
+CVAPI(void) cveBlocksGainCompensatorRelease(cv::detail::BlocksGainCompensator** compensator);
+
+CVAPI(cv::detail::BlocksChannelsCompensator*) cveBlocksChannelsCompensatorCreate(int blWidth, int blHeight, int nrFeeds, cv::detail::ExposureCompensator** exposureCompensatorPtr);
+CVAPI(void) cveBlocksChannelsCompensatorRelease(cv::detail::BlocksChannelsCompensator** compensator);
+
+CVAPI(cv::detail::NoBundleAdjuster*) cveNoBundleAdjusterCreate(cv::detail::BundleAdjusterBase** bundleAdjusterBasePtr);
+CVAPI(void) cveNoBundleAdjusterRelease(cv::detail::NoBundleAdjuster** bundleAdjuster);
+
+CVAPI(cv::detail::BundleAdjusterReproj*) cveBundleAdjusterReprojCreate(cv::detail::BundleAdjusterBase** bundleAdjusterBasePtr);
+CVAPI(void) cveBundleAdjusterReprojRelease(cv::detail::BundleAdjusterReproj** bundleAdjuster);
+
+CVAPI(cv::detail::BundleAdjusterRay*) cveBundleAdjusterRayCreate(cv::detail::BundleAdjusterBase** bundleAdjusterBasePtr);
+CVAPI(void) cveBundleAdjusterRayRelease(cv::detail::BundleAdjusterRay** bundleAdjuster);
+
+CVAPI(cv::detail::BundleAdjusterAffine*) cveBundleAdjusterAffineCreate(cv::detail::BundleAdjusterBase** bundleAdjusterBasePtr);
+CVAPI(void) cveBundleAdjusterAffineRelease(cv::detail::BundleAdjusterAffine** bundleAdjuster);
+
+CVAPI(cv::detail::BundleAdjusterAffinePartial*) cveBundleAdjusterAffinePartialCreate(cv::detail::BundleAdjusterBase** bundleAdjusterBasePtr);
+CVAPI(void) cveBundleAdjusterAffinePartialRelease(cv::detail::BundleAdjusterAffinePartial** bundleAdjuster);
+
+
+CVAPI(cv::detail::NoSeamFinder*) cveNoSeamFinderCreate(cv::detail::SeamFinder** seamFinderPtr);
+CVAPI(void) cveNoSeamFinderRelease(cv::detail::NoSeamFinder** seamFinder);
+
+//CVAPI(cv::detail::PairwiseSeamFinder*) cvePairwiseSeamFinderCreate(cv::detail::SeamFinder** seamFinderPtr);
+//CVAPI(void) cvePairwiseSeamFinderRelease(cv::detail::PairwiseSeamFinder** seamFinder);
+
+CVAPI(cv::detail::VoronoiSeamFinder*) cveVoronoiSeamFinderCreate(cv::detail::SeamFinder** seamFinderPtr);
+CVAPI(void) cveVoronoiSeamFinderRelease(cv::detail::VoronoiSeamFinder** seamFinder);
+
+CVAPI(cv::detail::DpSeamFinder*) cveDpSeamFinderCreate(int costFunc, cv::detail::SeamFinder** seamFinderPtr);
+CVAPI(void) cveDpSeamFinderRelease(cv::detail::DpSeamFinder** seamFinder);
+
+CVAPI(cv::detail::GraphCutSeamFinder*) cveGraphCutSeamFinderCreate(
+	int costType, 
+	float terminalCost,
+	float badRegionPenalty,
+	cv::detail::SeamFinder** seamFinderPtr);
+CVAPI(void) cveGraphCutSeamFinderRelease(cv::detail::GraphCutSeamFinder** seamFinder);
 
 #ifdef HAVE_OPENCV_CUDAWARPING
 CVAPI(cv::detail::PlaneWarperGpu*) cvePlaneWarperGpuCreate(float scale, cv::WarperCreator** creator);
