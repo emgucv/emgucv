@@ -45,6 +45,10 @@ CVAPI(void) cveStitcherSetBundleAdjuster(cv::Stitcher* stitcher, cv::detail::Bun
 
 CVAPI(void) cveStitcherSetSeamFinder(cv::Stitcher* stitcher, cv::detail::SeamFinder* seamFinder);
 
+CVAPI(void) cveStitcherSetEstimator(cv::Stitcher* stitcher, cv::detail::Estimator* estimator);
+
+CVAPI(void) cveStitcherSetFeaturesMatcher(cv::Stitcher* stitcher, cv::detail::FeaturesMatcher* featuresMatcher);
+
 CVAPI(void) cveStitcherSetWaveCorrection(cv::Stitcher* stitcher, bool flag);
 CVAPI(bool) cveStitcherGetWaveCorrection(cv::Stitcher* stitcher);
 CVAPI(void) cveStitcherSetWaveCorrectionKind(cv::Stitcher* stitcher, int kind);
@@ -189,6 +193,49 @@ CVAPI(cv::detail::GraphCutSeamFinder*) cveGraphCutSeamFinderCreate(
 	float badRegionPenalty,
 	cv::detail::SeamFinder** seamFinderPtr);
 CVAPI(void) cveGraphCutSeamFinderRelease(cv::detail::GraphCutSeamFinder** seamFinder);
+
+CVAPI(cv::detail::HomographyBasedEstimator*) cveHomographyBasedEstimatorCreate(bool isFocalsEstimated, cv::detail::Estimator** estimatorPtr);
+CVAPI(void) cveHomographyBasedEstimatorRelease(cv::detail::HomographyBasedEstimator** estimator);
+
+CVAPI(cv::detail::AffineBasedEstimator*) cveAffineBasedEstimatorCreate(cv::detail::Estimator** estimatorPtr);
+CVAPI(void) cveAffineBasedEstimatorRelease(cv::detail::AffineBasedEstimator** estimator);
+
+CVAPI(cv::detail::BestOf2NearestMatcher*) cveBestOf2NearestMatcherCreate(
+	bool tryUseGpu,
+	float matchConf,
+	int numMatchesThresh1,
+	int numMatchesThresh2,
+	cv::detail::FeaturesMatcher** featuresMatcher);
+CVAPI(void) cveBestOf2NearestMatcherRelease(cv::detail::BestOf2NearestMatcher** featuresMatcher);
+
+CVAPI(cv::detail::BestOf2NearestRangeMatcher*) cveBestOf2NearestRangeMatcherCreate(
+	int rangeWidth,
+	bool tryUseGpu,
+	float matchConf,
+	int numMatchesThresh1,
+	int numMatchesThresh2,
+	cv::detail::FeaturesMatcher** featuresMatcher);
+CVAPI(void) cveBestOf2NearestRangeMatcherRelease(cv::detail::BestOf2NearestRangeMatcher** featuresMatcher);
+
+CVAPI(cv::detail::AffineBestOf2NearestMatcher*) cveAffineBestOf2NearestMatcherCreate(
+	bool fullAffine, 
+	bool tryUseGpu,
+	float matchConf, 
+	int numMatchesThresh1,
+	cv::detail::FeaturesMatcher** featuresMatcher);
+CVAPI(void) cveAffineBestOf2NearestMatcherRelease(cv::detail::AffineBestOf2NearestMatcher** featuresMatcher);
+
+/*
+CVAPI(cv::detail::BestOf2NearestRangeMatcher*) cveBestOf2NearestRangeMatcherCreate(
+	int rangeWidth, 
+	bool tryUseGpu, 
+	float matchConf,
+	int numMatchesThresh1, 
+	int numMatchesThresh2,
+	cv::detail::FeaturesMatcher** featuresMatcher);
+CVAPI(void) cveBestOf2NearestRangeMatcherRelease(cv::detail::BestOf2NearestRangeMatcher** featuresMatcher);
+*/
+
 
 #ifdef HAVE_OPENCV_CUDAWARPING
 CVAPI(cv::detail::PlaneWarperGpu*) cvePlaneWarperGpuCreate(float scale, cv::WarperCreator** creator);

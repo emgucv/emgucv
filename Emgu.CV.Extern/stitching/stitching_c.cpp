@@ -63,6 +63,18 @@ void cveStitcherSetSeamFinder(cv::Stitcher* stitcher, cv::detail::SeamFinder* se
 	stitcher->setSeamFinder(p);
 }
 
+void cveStitcherSetEstimator(cv::Stitcher* stitcher, cv::detail::Estimator* estimator)
+{
+	cv::Ptr<cv::detail::Estimator> p(estimator, [](cv::detail::Estimator*) {});
+	stitcher->setEstimator(p);
+}
+
+void cveStitcherSetFeaturesMatcher(cv::Stitcher* stitcher, cv::detail::FeaturesMatcher* featuresMatcher)
+{
+	cv::Ptr<cv::detail::FeaturesMatcher> p(featuresMatcher, [](cv::detail::FeaturesMatcher*) {});
+	stitcher->setFeaturesMatcher(p);
+}
+
 void cveStitcherSetWaveCorrection(cv::Stitcher* stitcher, bool flag)
 {
 	stitcher->setWaveCorrection(flag);
@@ -365,6 +377,18 @@ void cveBlocksGainCompensatorRelease(cv::detail::BlocksGainCompensator** compens
 	*compensator = 0;
 }
 
+cv::detail::BlocksChannelsCompensator* cveBlocksChannelsCompensatorCreate(int blWidth, int blHeight, int nrFeeds, cv::detail::ExposureCompensator** exposureCompensatorPtr)
+{
+	cv::detail::BlocksChannelsCompensator* ptr = new cv::detail::BlocksChannelsCompensator(blWidth, blHeight, nrFeeds);
+	*exposureCompensatorPtr = dynamic_cast<cv::detail::ExposureCompensator*>(ptr);
+	return ptr;
+}
+void cveBlocksChannelsCompensatorRelease(cv::detail::BlocksChannelsCompensator** compensator)
+{
+	delete* compensator;
+	*compensator = 0;
+}
+
 cv::detail::NoBundleAdjuster* cveNoBundleAdjusterCreate(cv::detail::BundleAdjusterBase** bundleAdjusterBasePtr)
 {
 	cv::detail::NoBundleAdjuster* ptr = new cv::detail::NoBundleAdjuster();
@@ -490,6 +514,91 @@ void cveGraphCutSeamFinderRelease(cv::detail::GraphCutSeamFinder** seamFinder)
 {
 	delete* seamFinder;
 	*seamFinder = 0;
+}
+
+cv::detail::HomographyBasedEstimator* cveHomographyBasedEstimatorCreate(bool isFocalsEstimated, cv::detail::Estimator** estimatorPtr)
+{
+	cv::detail::HomographyBasedEstimator* ptr = new cv::detail::HomographyBasedEstimator(isFocalsEstimated);
+	*estimatorPtr = dynamic_cast<cv::detail::Estimator*>(ptr);
+	return ptr;
+}
+void cveHomographyBasedEstimatorRelease(cv::detail::HomographyBasedEstimator** estimator)
+{
+	delete* estimator;
+	*estimator = 0;
+}
+
+cv::detail::AffineBasedEstimator* cveAffineBasedEstimatorCreate(cv::detail::Estimator** estimatorPtr)
+{
+	cv::detail::AffineBasedEstimator* ptr = new cv::detail::AffineBasedEstimator();
+	*estimatorPtr = dynamic_cast<cv::detail::Estimator*>(ptr);
+	return ptr;
+}
+void cveAffineBasedEstimatorRelease(cv::detail::AffineBasedEstimator** estimator)
+{
+	delete* estimator;
+	*estimator = 0;
+}
+
+cv::detail::BestOf2NearestMatcher* cveBestOf2NearestMatcherCreate(
+	bool tryUseGpu,
+	float matchConf,
+	int numMatchesThresh1,
+	int numMatchesThresh2,
+	cv::detail::FeaturesMatcher** featuresMatcher)
+{
+	cv::detail::BestOf2NearestMatcher* ptr = new cv::detail::BestOf2NearestMatcher(tryUseGpu, matchConf, numMatchesThresh1, numMatchesThresh2);
+	*featuresMatcher = dynamic_cast<cv::detail::FeaturesMatcher*>(ptr);
+	return ptr;
+}
+void cveBestOf2NearestMatcherRelease(cv::detail::BestOf2NearestMatcher** featuresMatcher)
+{
+	delete* featuresMatcher;
+	*featuresMatcher = 0;
+}
+
+cv::detail::BestOf2NearestRangeMatcher* cveBestOf2NearestRangeMatcherCreate(
+	int rangeWidth,
+	bool tryUseGpu,
+	float matchConf,
+	int numMatchesThresh1,
+	int numMatchesThresh2,
+	cv::detail::FeaturesMatcher** featuresMatcher)
+{
+	cv::detail::BestOf2NearestRangeMatcher* ptr = new cv::detail::BestOf2NearestRangeMatcher(
+		rangeWidth,
+		tryUseGpu, 
+		matchConf, 
+		numMatchesThresh1, 
+		numMatchesThresh2);
+	*featuresMatcher = dynamic_cast<cv::detail::FeaturesMatcher*>(ptr);
+	return ptr;
+}
+void cveBestOf2NearestRangeMatcherRelease(cv::detail::BestOf2NearestRangeMatcher** featuresMatcher)
+{
+	delete* featuresMatcher;
+	*featuresMatcher = 0;
+}
+
+cv::detail::AffineBestOf2NearestMatcher* cveAffineBestOf2NearestMatcherCreate(
+	bool fullAffine,
+	bool tryUseGpu,
+	float matchConf,
+	int numMatchesThresh1,
+	cv::detail::FeaturesMatcher** featuresMatcher)
+{
+	cv::detail::AffineBestOf2NearestMatcher* ptr = new cv::detail::AffineBestOf2NearestMatcher(
+		fullAffine,
+		tryUseGpu,
+		matchConf,
+		numMatchesThresh1);
+	*featuresMatcher = dynamic_cast<cv::detail::FeaturesMatcher*>(ptr);
+	return ptr;
+}
+void cveAffineBestOf2NearestMatcherRelease(cv::detail::AffineBestOf2NearestMatcher** featuresMatcher)
+{
+	delete* featuresMatcher;
+	*featuresMatcher = 0;
 }
 
 #ifdef HAVE_OPENCV_CUDAWARPING

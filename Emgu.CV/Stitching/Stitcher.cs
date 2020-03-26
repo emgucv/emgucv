@@ -174,6 +174,24 @@ namespace Emgu.CV.Stitching
         }
 
         /// <summary>
+        /// Set the estimator for this stitcher
+        /// </summary>
+        /// <param name="estimator">The estimator</param>
+        public void SetEstimator(Estimator estimator)
+        {
+            StitchingInvoke.cveStitcherSetEstimator(_ptr, estimator.EstimatorPtr);
+        }
+
+        /// <summary>
+        /// Set the features matcher for this stitcher
+        /// </summary>
+        /// <param name="featuresMatcher">The features matcher</param>
+        public void SetFeaturesMatcher(FeaturesMatcher featuresMatcher)
+        {
+            StitchingInvoke.cveStitcherSetFeaturesMatcher(_ptr, featuresMatcher.FeaturesMatcherPtr);
+        }
+
+        /// <summary>
         /// Set the warper creator for this stitcher.
         /// </summary>
         /// <param name="warperCreator">The warper creator</param>
@@ -304,6 +322,12 @@ namespace Emgu.CV.Stitching
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetSeamFinder(IntPtr stitcher, IntPtr seamFinder);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveStitcherSetEstimator(IntPtr stitcher, IntPtr estimator);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveStitcherSetFeaturesMatcher(IntPtr stitcher, IntPtr featuresMatcher);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherRelease(ref IntPtr sharedPtr);
