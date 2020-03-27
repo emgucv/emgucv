@@ -601,43 +601,67 @@ void cveAffineBestOf2NearestMatcherRelease(cv::detail::AffineBestOf2NearestMatch
 	*featuresMatcher = 0;
 }
 
-#ifdef HAVE_OPENCV_CUDAWARPING
+
 cv::detail::PlaneWarperGpu* cvePlaneWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
 {
+#ifdef HAVE_OPENCV_CUDAWARPING
 	cv::detail::PlaneWarperGpu* ptr = new cv::detail::PlaneWarperGpu(scale);
 	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
+#else
+	throw_no_cudawarping();
+#endif
 }
 void cvePlaneWarperGpuRelease(cv::detail::PlaneWarperGpu** warper)
 {
+#ifdef HAVE_OPENCV_CUDAWARPING
 	delete* warper;
 	*warper = 0;
+#else
+	throw_no_cudawarping();
+#endif
 }
 
 cv::detail::CylindricalWarperGpu* cveCylindricalWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
 {
+#ifdef HAVE_OPENCV_CUDAWARPING
 	cv::detail::CylindricalWarperGpu* ptr = new cv::detail::CylindricalWarperGpu(scale);
 	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
+#else
+	throw_no_cudawarping();
+#endif
 }
 void cveCylindricalWarperGpuRelease(cv::detail::CylindricalWarperGpu** warper)
 {
+#ifdef HAVE_OPENCV_CUDAWARPING
 	delete* warper;
 	*warper = 0;
+#else
+	throw_no_cudawarping();
+#endif
 }
 
 cv::detail::SphericalWarperGpu* cveSphericalWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
 {
+#ifdef HAVE_OPENCV_CUDAWARPING
 	cv::detail::SphericalWarperGpu* ptr = new cv::detail::SphericalWarperGpu(scale);
 	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
+#else
+	throw_no_cudawarping();
+#endif
 }
 void cveSphericalWarperGpuRelease(cv::detail::SphericalWarperGpu** warper)
 {
+#ifdef HAVE_OPENCV_CUDAWARPING
 	delete* warper;
 	*warper = 0;
-}
+#else
+	throw_no_cudawarping();
 #endif
+}
+

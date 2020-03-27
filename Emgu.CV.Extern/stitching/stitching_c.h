@@ -11,23 +11,9 @@
 #include "opencv2/core/core_c.h"
 #include "opencv2/stitching.hpp"
 
-/*
-namespace cv {
-
-   class CV_EXPORTS StitcherWrapper
-   {
-   public:
-	  StitcherWrapper(bool tryUseGpu)
-		 : stitcher(Stitcher::createDefault(tryUseGpu))
-	  {
-	  }
-
-	  Stitcher stitcher;
-   };
-}*/
-
-
-//CVAPI(cv::Stitcher*) cveStitcherCreateDefault(bool tryUseGpu);
+#ifndef HAVE_OPENCV_CUDAWARPING
+static inline CV_NORETURN void throw_no_cudawarping() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Warping support"); }
+#endif
 
 CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, cv::Ptr<cv::Stitcher>** sharedPtr);
 
@@ -236,16 +222,14 @@ CVAPI(cv::detail::BestOf2NearestRangeMatcher*) cveBestOf2NearestRangeMatcherCrea
 CVAPI(void) cveBestOf2NearestRangeMatcherRelease(cv::detail::BestOf2NearestRangeMatcher** featuresMatcher);
 */
 
-
-#ifdef HAVE_OPENCV_CUDAWARPING
-CVAPI(cv::detail::PlaneWarperGpu*) cvePlaneWarperGpuCreate(float scale, cv::WarperCreator** creator);
+CVAPI(cv::detail::PlaneWarperGpu*) cvePlaneWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
 CVAPI(void) cvePlaneWarperGpuRelease(cv::detail::PlaneWarperGpu** warper);
 
-CVAPI(cv::detail::CylindricalWarperGpu*) cveCylindricalWarperGpuCreate(float scale, cv::WarperCreator** creator);
+CVAPI(cv::detail::CylindricalWarperGpu*) cveCylindricalWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
 CVAPI(void) cveCylindricalWarperGpuRelease(cv::detail::CylindricalWarperGpu** warper);
 
-CVAPI(cv::detail::SphericalWarperGpu*) cveSphericalWarperGpuCreate(float scale, cv::WarperCreator** creator);
+CVAPI(cv::detail::SphericalWarperGpu*) cveSphericalWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
 CVAPI(void) cveSphericalWarperGpuRelease(cv::detail::SphericalWarperGpu** warper);
-#endif
+
 
 #endif
