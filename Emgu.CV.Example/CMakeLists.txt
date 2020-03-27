@@ -365,8 +365,31 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     add_subdirectory(Aruco)
     #add_subdirectory(LatentSvmDetector)
     #add_subdirectory(Simple3DReconstruction)
-    IF(WIN32)
-      add_subdirectory(WebDynamicImage)
-    ENDIF()
+    #IF(WIN32)
+    #  add_subdirectory(WebDynamicImage)
+    #ENDIF()
   ENDIF()
+  INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/DynamicImage.Asp.NetCore/"
+      DESTINATION Emgu.CV.Example/DynamicImage.Asp.NetCore/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.json"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+	  PATTERN "*.jpg"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN "bin" EXCLUDE
+      PATTERN "obj" EXCLUDE
+      )
 ENDIF()

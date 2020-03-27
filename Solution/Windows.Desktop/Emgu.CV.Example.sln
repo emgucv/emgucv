@@ -3,32 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29503.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebDynamicImage", "..\..\Emgu.CV.Example\WebDynamicImage\", "{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}"
-	ProjectSection(WebsiteProperties) = preProject
-		SccProjectName = ""
-		SccAuxPath = ""
-		SccLocalPath = ""
-		SccProvider = ""
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
-		ProjectReferences = ""
-		Debug.AspNetCompiler.VirtualPath = "/WebDynamicImage"
-		Debug.AspNetCompiler.PhysicalPath = "..\..\Emgu.CV.Example\WebDynamicImage\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\WebDynamicImage\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/WebDynamicImage"
-		Release.AspNetCompiler.PhysicalPath = "..\..\Emgu.CV.Example\WebDynamicImage\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\WebDynamicImage\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "4336"
-		SlnRelativePath = "..\..\Emgu.CV.Example\WebDynamicImage\"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webservice_Host", "..\..\Emgu.CV.Example\Webservice_Host\Webservice_Host.csproj", "{BDCC078C-8D14-47DC-850D-9D5731503AEC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webservice_Client", "..\..\Emgu.CV.Example\Webservice_Client\Webservice_Client.csproj", "{94C0C68E-E46F-4228-9DFF-148F9498BC0E}"
@@ -85,6 +59,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TfInterop.NetCore", "..\..\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Ubuntu", "..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.shproj", "{86A21342-2DA9-4841-B1BD-B323AC5B81FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicImage.Asp.NetCore", "..\..\Emgu.CV.Example\DynamicImage.Asp.NetCore\DynamicImage.Asp.NetCore.csproj", "{97C98FCA-5F0D-4771-8063-881C620946AF}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -131,18 +107,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|x64.Build.0 = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Debug|x86.Build.0 = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|x64.ActiveCfg = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|x64.Build.0 = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|x86.ActiveCfg = Debug|Any CPU
-		{CCE4F066-0E44-45FD-A1F3-E4A29C3690A1}.Release|x86.Build.0 = Debug|Any CPU
 		{BDCC078C-8D14-47DC-850D-9D5731503AEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BDCC078C-8D14-47DC-850D-9D5731503AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDCC078C-8D14-47DC-850D-9D5731503AEC}.Debug|x64.ActiveCfg = Debug|x64
@@ -348,6 +312,18 @@ Global
 		{F9DFCB15-FDE1-4401-8623-9912B9ED2782}.Release|x64.Build.0 = Release|Any CPU
 		{F9DFCB15-FDE1-4401-8623-9912B9ED2782}.Release|x86.ActiveCfg = Release|Any CPU
 		{F9DFCB15-FDE1-4401-8623-9912B9ED2782}.Release|x86.Build.0 = Release|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Debug|x64.Build.0 = Debug|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Debug|x86.Build.0 = Debug|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Release|x64.ActiveCfg = Release|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Release|x64.Build.0 = Release|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Release|x86.ActiveCfg = Release|Any CPU
+		{97C98FCA-5F0D-4771-8063-881C620946AF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
