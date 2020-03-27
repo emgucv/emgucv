@@ -18,7 +18,7 @@ void cveQuasiDenseStereoRelease(cv::Ptr<cv::stereo::QuasiDenseStereo>** sharedPt
 
 void cveQuasiDenseStereoProcess(cv::stereo::QuasiDenseStereo* stereo, cv::Mat* imgLeft, cv::Mat* imgRight)
 {
-	stereo->process(*imgLeft, *imgLeft);
+	stereo->process(*imgLeft, *imgRight);
 }
 
 void cveQuasiDenseStereoGetDisparity(cv::stereo::QuasiDenseStereo* stereo, uint8_t disparityLvls, cv::Mat* disparity)
