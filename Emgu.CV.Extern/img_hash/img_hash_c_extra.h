@@ -8,9 +8,29 @@
 #ifndef EMGU_IMG_HASH_C_H
 #define EMGU_IMG_HASH_C_H
 
-
 #include "opencv2/core/types_c.h"
+#ifdef HAVE_OPENCV_IMG_HASH
 #include "opencv2/img_hash.hpp"
+#else
+
+static inline CV_NORETURN void throw_no_img_hash() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without img hash support"); }
+
+namespace cv
+{
+	namespace img_hash
+	{
+		class ImgHashBase {};
+		class AverageHash {};
+		class ColorMomentHash {};
+		class BlockMeanHash {};
+		class MarrHildrethHash {};
+		class PHash {};
+		class RadialVarianceHash {};
+		
+	}
+}
+
+#endif
 
 CVAPI(void) cveImgHashBaseCompute(cv::img_hash::ImgHashBase* imgHash, cv::_InputArray* inputArr, cv::_OutputArray* outputArr);
 CVAPI(double) cveImgHashBaseCompare(cv::img_hash::ImgHashBase* imgHash, cv::_InputArray* hashOne, cv::_InputArray* hashTwo);
