@@ -9,7 +9,63 @@
 #define EMGU_STITCHING_C_H
 
 #include "opencv2/core/core_c.h"
+#ifdef HAVE_OPENCV_STITCHING
 #include "opencv2/stitching.hpp"
+#else
+static inline CV_NORETURN void throw_no_stitching() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without stitching support"); }
+
+namespace cv
+{
+	class Stitcher {};
+	class Feature2D {};
+	class WarperCreator {};
+	
+	namespace detail
+	{
+		class Blender {};
+		class ExposureCompensator {};
+		class BundleAdjusterBase {};
+		class Estimator {};
+		class SeamFinder {};
+		class FeaturesMatcher {};
+		class RotationWarper {};
+		class PlaneWarper {};
+		class CylindricalWarper {};
+		class SphericalWarper {};
+		class FisheyeWarper{};
+		class StereographicWarper {};
+		class CompressedRectilinearWarper {};
+		class PaniniWarper {};
+		class PaniniPortraitWarper {};
+		class MercatorWarper {};
+		class TransverseMercatorWarper {};
+		class FeatherBlender {};
+		class MultiBandBlender {};
+		class NoExposureCompensator {};
+		class GainCompensator {};
+		class ChannelsCompensator {};
+		class BlocksGainCompensator {};
+		class BlocksChannelsCompensator {};
+		class NoBundleAdjuster {};
+		class BundleAdjusterReproj {};
+		class BundleAdjusterRay {};
+		class BundleAdjusterAffine {};
+		class BundleAdjusterAffinePartial {};
+		class NoSeamFinder {};
+		class VoronoiSeamFinder {};
+		class DpSeamFinder {};
+		class GraphCutSeamFinder {};
+		class HomographyBasedEstimator {};
+		class AffineBasedEstimator {};
+		class BestOf2NearestMatcher {};
+		class BestOf2NearestRangeMatcher {};
+		class AffineBestOf2NearestMatcher {};
+		class PlaneWarperGpu {};
+		class CylindricalWarperGpu {};
+		class SphericalWarperGpu {};
+	}
+}
+#endif
 
 #ifndef HAVE_OPENCV_CUDAWARPING
 static inline CV_NORETURN void throw_no_cudawarping() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Warping support"); }
