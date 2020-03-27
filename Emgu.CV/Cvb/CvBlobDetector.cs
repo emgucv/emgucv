@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+/*
+
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -173,3 +175,4 @@ namespace Emgu.CV.Cvb
       internal extern static void cvbCvFilterLabels(IntPtr imgIn, IntPtr imgOut, IntPtr blobs);
    }
 }
+*/

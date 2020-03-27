@@ -14,9 +14,17 @@
 
 #ifdef HAVE_OPENCV_VIDEOSTAB
 
+#include "opencv2/videostab/stabilizer.hpp"
+#ifdef HAVE_OPENCV_HIGHGUI
 #include "opencv2/highgui/highgui_c.h"
 #include "opencv2/highgui/highgui.hpp"
-#include "opencv2/videostab/stabilizer.hpp"
+#else
+namespace cv
+{
+	class VideoCapture {};
+}
+static inline CV_NORETURN void throw_no_highgui() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without highgui support"); }
+#endif
 
 #else
 static inline CV_NORETURN void throw_no_videostab() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Videoio support"); }
@@ -29,18 +37,30 @@ class CaptureFrameSource : public cv::videostab::IFrameSource
 public:
     CaptureFrameSource(cv::VideoCapture* capture)
         : _capture(capture)
-    {};
+    {
+#ifndef HAVE_OPENCV_HIGHGUI
+		throw_no_highgui();
+#endif
+    };
 
     virtual void reset()
     {
+#ifdef HAVE_OPENCV_HIGHGUI
         _capture->set(cv::VideoCaptureProperties::CAP_PROP_POS_FRAMES, 0);
+#else
+		throw_no_highgui();
+#endif    	
     };
 
     virtual cv::Mat nextFrame()
     {
+#ifdef HAVE_OPENCV_HIGHGUI
         cv::Mat m;
         _capture->read(m);
         return m;
+#else
+		throw_no_highgui();
+#endif
     }
 protected:
     cv::VideoCapture* _capture;

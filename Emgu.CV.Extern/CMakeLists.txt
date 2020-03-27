@@ -2608,19 +2608,22 @@ ENDIF()
 ############################### TESSERACT END ##########################
 
 ############################### CVBLOB START ########################
-SET(EMGU_CV_WITH_CVBLOB ON CACHE BOOL "BUILD with CVBLOB")
-MESSAGE(STATUS "WITH CVBLOB: ${EMGU_CV_WITH_CVBLOB}")
-IF(EMGU_CV_WITH_CVBLOB)
-  
-  ADD_SUBDIRECTORY(cvblob)
-  INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/cvblob/libcvblob/cvBlob)
-  SET(CVBLOB_LIBRARY cvblob)
-ELSE()
+#IF(HAVE_opencv_highgui)
+#  SET(EMGU_CV_WITH_CVBLOB OFF CACHE BOOL "BUILD with CVBLOB (Can't build CVBLBO because of missing dependency)")
+#ELSE()
+#  SET(EMGU_CV_WITH_CVBLOB ON CACHE BOOL "BUILD with CVBLOB")
+#ENDIF()
+#MESSAGE(STATUS "WITH CVBLOB: ${EMGU_CV_WITH_CVBLOB}")
+#IF(EMGU_CV_WITH_CVBLOB)
+#  ADD_SUBDIRECTORY(cvblob)
+#  INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/cvblob/libcvblob/cvBlob)
+#  SET(CVBLOB_LIBRARY cvblob)
+#ELSE()
   FILE(GLOB extern_srcs_excludes "${PROJECT_SOURCE_DIR}/cvblob_c.cpp")
   LIST(REMOVE_ITEM extern_srcs ${extern_srcs_excludes})
   FILE(GLOB extern_hdrs_excludes "${PROJECT_SOURCE_DIR}/cvblob_c.h")
   LIST(REMOVE_ITEM extern_hdrs ${extern_hdrs_excludes})
-ENDIF()
+#ENDIF()
 ############################### CVBLOB END ##########################
 
 IF(WITH_INF_ENGINE)

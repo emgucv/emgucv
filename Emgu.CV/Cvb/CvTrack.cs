@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+/*
+
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -92,3 +94,5 @@ namespace Emgu.CV.Cvb
       internal static extern bool cvbCvTrackEquals(ref Cvb.CvTrack track1, ref Cvb.CvTrack track2);
    }
 }
+
+*/
