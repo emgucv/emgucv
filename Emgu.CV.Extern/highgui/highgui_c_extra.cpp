@@ -8,7 +8,7 @@
 
 void cveImshow(cv::String* winname, cv::_InputArray* mat)
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	cv::imshow(*winname, *mat);
 #else
 	throw_no_highgui();
@@ -16,7 +16,7 @@ void cveImshow(cv::String* winname, cv::_InputArray* mat)
 }
 void cveNamedWindow(cv::String* winname, int flags)
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	cv::namedWindow(*winname, flags);
 #else
 	throw_no_highgui();
@@ -24,7 +24,7 @@ void cveNamedWindow(cv::String* winname, int flags)
 }
 void cveSetWindowProperty(cv::String* winname, int propId, double propValue)
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	cv::setWindowProperty(*winname, propId, propValue);
 #else
 	throw_no_highgui();
@@ -32,7 +32,7 @@ void cveSetWindowProperty(cv::String* winname, int propId, double propValue)
 }
 void cveSetWindowTitle(cv::String* winname, cv::String* title)
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	cv::setWindowTitle(*winname, *title);
 #else
 	throw_no_highgui();
@@ -40,7 +40,7 @@ void cveSetWindowTitle(cv::String* winname, cv::String* title)
 }
 double cveGetWindowProperty(cv::String* winname, int propId)
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	return cv::getWindowProperty(*winname, propId);
 #else
 	throw_no_highgui();
@@ -48,7 +48,7 @@ double cveGetWindowProperty(cv::String* winname, int propId)
 }
 void cveDestroyWindow(cv::String* winname)
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	cv::destroyWindow(*winname);
 #else
 	throw_no_highgui();
@@ -56,7 +56,7 @@ void cveDestroyWindow(cv::String* winname)
 }
 void cveDestroyAllWindows()
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	cv::destroyAllWindows();
 #else
 	throw_no_highgui();
@@ -64,7 +64,7 @@ void cveDestroyAllWindows()
 }
 int cveWaitKey(int delay)
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	return cv::waitKey(delay);
 #else
 	throw_no_highgui();
@@ -73,7 +73,7 @@ int cveWaitKey(int delay)
 
 void cveSelectROI(cv::String* windowName, cv::_InputArray* img, bool showCrosshair, bool fromCenter, CvRect* roi)
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	cv::Rect r = cv::selectROI(*windowName, *img, showCrosshair, fromCenter);
 	roi->x = r.x;
 	roi->y = r.y;
@@ -91,7 +91,7 @@ void cveSelectROIs(
 	bool showCrosshair,
 	bool fromCenter)
 {
-#if HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_OPENCV_HIGHGUI
 	cv::selectROIs(*windowName, *img, *boundingBoxs, showCrosshair, fromCenter);
 #else
 	throw_no_highgui();
