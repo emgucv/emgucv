@@ -18,20 +18,6 @@ IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND WIN32)
       ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll 
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)
-    INSTALL(
-      DIRECTORY
-      ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION .
-      COMPONENT emgucv_source
-      FILES_MATCHING 
-      PATTERN "*.cs"
-      PATTERN "*.csproj"
-      PATTERN "*.resx"
-      PATTERN ".svn" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMakeFiles" EXCLUDE
-      PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-      )
     
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
@@ -45,19 +31,6 @@ IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND WIN32)
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)
 
-    INSTALL(
-      DIRECTORY
-      ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION .
-      COMPONENT emgucv_source
-      FILES_MATCHING 
-      PATTERN "*.cs"
-      PATTERN "*.csproj"
-      PATTERN "*.resx"
-      PATTERN ".svn" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMakeFiles" EXCLUDE
-      PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-      )
+
   
 ENDIF()
