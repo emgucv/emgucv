@@ -50,7 +50,7 @@ namespace Emgu.CV.Stitching
         /// Create a simple blender which mixes images at its borders
         /// </summary>
         /// <param name="sharpness">Sharpness</param>
-        public FeatherBlender(float sharpness)
+        public FeatherBlender(float sharpness = 0.02f)
         {
             _ptr = StitchingInvoke.cveFeatherBlenderCreate(sharpness, ref _blenderPtr);
         }
