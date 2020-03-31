@@ -13,27 +13,19 @@ using Emgu.Util;
 
 namespace Emgu.CV.Stitching
 {
-    /// <summary>
-    /// Finds features in the given image.
-    /// </summary>
     public abstract class WarperCreator : UnmanagedObject
     {
         /// <summary>
         /// Pointer to the unmanaged WarperCreator object
         /// </summary>
-        protected IntPtr _warperCreatorPtr;
+        protected IntPtr _warperCreator;
 
         /// <summary>
-        /// Pointer to the unmanaged RotationWarper object
-        /// </summary>
-        protected IntPtr _rotationWarper;
-
-        /// <summary>
-        /// Get a pointer to the unmanaged WarperCreator object
+        /// Pointer to the unmanaged WarperCreator object
         /// </summary>
         public IntPtr WarperCreatorPtr
         {
-            get { return _warperCreatorPtr; }
+            get { return _warperCreator; }
         }
 
         /// <summary>
@@ -41,56 +33,8 @@ namespace Emgu.CV.Stitching
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_rotationWarper != IntPtr.Zero)
-                _rotationWarper = IntPtr.Zero;
-
-            if (_warperCreatorPtr != IntPtr.Zero)
-                _warperCreatorPtr = IntPtr.Zero;
-        }
-
-        /// <summary>
-        /// Builds the projection maps according to the given camera data.
-        /// </summary>
-        /// <param name="srcSize">Source image size</param>
-        /// <param name="K">Camera intrinsic parameters</param>
-        /// <param name="R">Camera rotation matrix</param>
-        /// <param name="xmap">Projection map for the x axis</param>
-        /// <param name="ymap">Projection map for the y axis</param>
-        /// <returns>Projected image minimum bounding box</returns>
-        public Rectangle BuildMaps(Size srcSize, IInputArray K, IInputArray R, IOutputArray xmap, IOutputArray ymap)
-        {
-            Rectangle result = new Rectangle();
-            using (InputArray iaK = K.GetInputArray())
-            using (InputArray iaR = R.GetInputArray())
-            using (OutputArray oaXmap = xmap.GetOutputArray())
-            using (OutputArray oaYmap = ymap.GetOutputArray())
-            {
-                StitchingInvoke.cveRotationWarperBuildMaps(_rotationWarper, ref srcSize, iaK, iaR, oaXmap, oaYmap, ref result);
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// Projects the image.
-        /// </summary>
-        /// <param name="src">Source image</param>
-        /// <param name="K">Camera intrinsic parameters</param>
-        /// <param name="R">Camera rotation matrix</param>
-        /// <param name="interpMode">Interpolation mode</param>
-        /// <param name="borderMode">Border extrapolation mode</param>
-        /// <param name="dst">Projected image</param>
-        /// <returns>Project image top-left corner</returns>
-        public Point Warp(IInputArray src, IInputArray K, IInputArray R, CvEnum.Inter interpMode, CvEnum.BorderType borderMode, IOutputArray dst)
-        {
-            Point corner = new Point();
-            using (InputArray iaSrc = src.GetInputArray())
-            using (InputArray iaK = K.GetInputArray())
-            using (InputArray iaR = R.GetInputArray())
-            using (OutputArray oaDst = dst.GetOutputArray())
-            {
-                StitchingInvoke.cveRotationWarperWarp(_rotationWarper, iaSrc, iaK, iaR, interpMode, borderMode, oaDst, ref corner);
-                return corner;
-            }
+            if (_warperCreator != IntPtr.Zero)
+                _warperCreator = IntPtr.Zero;
         }
     }
 
@@ -102,14 +46,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Construct an instance of the plane warper class.
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public PlaneWarper(float scale)
+        public PlaneWarper()
         {
-            _ptr = StitchingInvoke.cvePlaneWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cvePlaneWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -130,14 +73,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Construct an instance of the cylindrical warper class.
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public CylindricalWarper(float scale)
+        public CylindricalWarper()
         {
-            _ptr = StitchingInvoke.cveCylindricalWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cveCylindricalWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -157,14 +99,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Construct an instance of the spherical warper class.
         /// </summary>
-        /// <param name="scale">Radius of the projected sphere, in pixels. An image spanning the whole sphere will have a width of 2 * scale * PI pixels.</param>
-        public SphericalWarper(float scale)
+        public SphericalWarper()
         {
-            _ptr = StitchingInvoke.cveSphericalWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cveSphericalWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -184,14 +125,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a fisheye warper
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public FisheyeWarper(float scale)
+        public FisheyeWarper()
         {
-            _ptr = StitchingInvoke.cveFisheyeWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cveFisheyeWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -211,14 +151,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a stereographic warper
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public StereographicWarper(float scale)
+        public StereographicWarper()
         {
-            _ptr = StitchingInvoke.cveStereographicWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cveStereographicWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -238,14 +177,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a compressed rectilinear warper
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public CompressedRectilinearWarper(float scale)
+        public CompressedRectilinearWarper()
         {
-            _ptr = StitchingInvoke.cveCompressedRectilinearWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cveCompressedRectilinearWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -265,14 +203,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a Panini warper
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public PaniniWarper(float scale)
+        public PaniniWarper()
         {
-            _ptr = StitchingInvoke.cvePaniniWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cvePaniniWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -292,14 +229,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a panini portrait warper
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public PaniniPortraitWarper(float scale)
+        public PaniniPortraitWarper()
         {
-            _ptr = StitchingInvoke.cvePaniniPortraitWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cvePaniniPortraitWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -319,14 +255,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a Mercator Warper
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public MercatorWarper(float scale)
+        public MercatorWarper()
         {
-            _ptr = StitchingInvoke.cveMercatorWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cveMercatorWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -346,14 +281,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a transverse mercator warper
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public TransverseMercatorWarper(float scale)
+        public TransverseMercatorWarper()
         {
-            _ptr = StitchingInvoke.cveTransverseMercatorWarperCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cveTransverseMercatorWarperCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -373,14 +307,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Construct an instance of the plane warper class.
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public PlaneWarperGpu(float scale)
+        public PlaneWarperGpu()
         {
-            _ptr = StitchingInvoke.cvePlaneWarperGpuCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cvePlaneWarperGpuCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -401,14 +334,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Construct an instance of the cylindrical warper class.
         /// </summary>
-        /// <param name="scale">Projected image scale multiplier</param>
-        public CylindricalWarperGpu(float scale)
+        public CylindricalWarperGpu()
         {
-            _ptr = StitchingInvoke.cveCylindricalWarperGpuCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cveCylindricalWarperGpuCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -428,14 +360,13 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Construct an instance of the spherical warper class.
         /// </summary>
-        /// <param name="scale">Radius of the projected sphere, in pixels. An image spanning the whole sphere will have a width of 2 * scale * PI pixels.</param>
-        public SphericalWarperGpu(float scale)
+        public SphericalWarperGpu()
         {
-            _ptr = StitchingInvoke.cveSphericalWarperGpuCreate(scale, ref _warperCreatorPtr, ref _rotationWarper);
+            _ptr = StitchingInvoke.cveSphericalWarperGpuCreate(ref _warperCreator);
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this wraper
+        /// Release the unmanaged memory associated with this warper
         /// </summary>
         protected override void DisposeObject()
         {
@@ -447,90 +378,82 @@ namespace Emgu.CV.Stitching
         }
     }
 
-
     public static partial class StitchingInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cvePlaneWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cvePlaneWarperCreate(ref IntPtr warperCreator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cvePlaneWarperRelease(ref IntPtr warper);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveCylindricalWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cveCylindricalWarperCreate(ref IntPtr warperCreator);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveCylindricalWarperRelease(ref IntPtr warper);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSphericalWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cveSphericalWarperCreate(ref IntPtr warperCreator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSphericalWarperRelease(ref IntPtr warper);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveFisheyeWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cveFisheyeWarperCreate(ref IntPtr warperCreator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveFisheyeWarperRelease(ref IntPtr warper);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveStereographicWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cveStereographicWarperCreate(ref IntPtr warperCreator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStereographicWarperRelease(ref IntPtr warper);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveCompressedRectilinearWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cveCompressedRectilinearWarperCreate(ref IntPtr warperCreator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveCompressedRectilinearWarperRelease(ref IntPtr warper);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cvePaniniWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cvePaniniWarperCreate(ref IntPtr warperCreator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cvePaniniWarperRelease(ref IntPtr warper);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cvePaniniPortraitWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cvePaniniPortraitWarperCreate(ref IntPtr warperCreator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cvePaniniPortraitWarperRelease(ref IntPtr warper);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMercatorWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cveMercatorWarperCreate(ref IntPtr warperCreator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveMercatorWarperRelease(ref IntPtr warper);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTransverseMercatorWarperCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cveTransverseMercatorWarperCreate(ref IntPtr warperCreator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTransverseMercatorWarperRelease(ref IntPtr warper);
 
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRotationWarperBuildMaps(IntPtr warper, ref Size srcSize, IntPtr K, IntPtr R, IntPtr xmap, IntPtr ymap, ref Rectangle boundingBox);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRotationWarperWarp(IntPtr warper, IntPtr src, IntPtr K, IntPtr R, CvEnum.Inter interpMode, CvEnum.BorderType borderMode, IntPtr dst, ref Point corner);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cvePlaneWarperGpuCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cvePlaneWarperGpuCreate(ref IntPtr warperCreator);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cvePlaneWarperGpuRelease(ref IntPtr warper);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveCylindricalWarperGpuCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cveCylindricalWarperGpuCreate(ref IntPtr warperCreator);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveCylindricalWarperGpuRelease(ref IntPtr warper);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSphericalWarperGpuCreate(float scale, ref IntPtr creator, ref IntPtr rotationWarper);
+        internal static extern IntPtr cveSphericalWarperGpuCreate(ref IntPtr warperCreator);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSphericalWarperGpuRelease(ref IntPtr warper);
 

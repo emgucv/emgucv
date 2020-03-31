@@ -2873,6 +2873,40 @@ namespace Emgu.CV.Test
             }
         }
 
+        [Test]
+        public void TestStitching5()
+        {
+            Mat[] images = new Mat[4];
+
+            images[0] = EmguAssert.LoadMat("stitch1.jpg");
+            images[1] = EmguAssert.LoadMat("stitch2.jpg");
+            images[2] = EmguAssert.LoadMat("stitch3.jpg");
+            images[3] = EmguAssert.LoadMat("stitch4.jpg");
+
+            using (Stitcher stitcher = new Stitcher(Stitcher.Mode.Panorama))
+            using (ORBDetector detector = new ORBDetector())
+            using (SphericalWarper warper = new SphericalWarper())
+            using (SeamFinder finder = new GraphCutSeamFinder())
+            using (BlocksChannelsCompensator compensator = new BlocksChannelsCompensator())
+            using (FeatherBlender blender = new FeatherBlender())
+            { 
+                stitcher.SetFeaturesFinder(detector);
+                stitcher.SetWarper(warper);
+                stitcher.SetSeamFinder(finder);
+                stitcher.SetExposureCompensator(compensator);
+                stitcher.SetBlender(blender);
+                
+                Mat result = new Mat();
+                using (VectorOfMat vm = new VectorOfMat())
+                {
+                    vm.Push(images);
+                    stitcher.Stitch(vm, result);
+                }
+                
+                //Emgu.CV.UI.ImageViewer.Show(result);
+            }
+        }
+
         /*
         [Test]
         public void TestStitching5()

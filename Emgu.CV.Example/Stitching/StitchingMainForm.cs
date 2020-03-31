@@ -51,10 +51,12 @@ namespace Stitching
                 try
                 {
                     //only use GPU if you have build the native binary from code and enabled "NON_FREE"
-                    using (Stitcher stitcher = new Stitcher()) 
+                    using (Stitcher stitcher = new Stitcher())
                     using (Emgu.CV.Features2D.AKAZE finder = new Emgu.CV.Features2D.AKAZE())
+                    using (Emgu.CV.Stitching.WarperCreator warper = new SphericalWarper())
                     {
                         stitcher.SetFeaturesFinder(finder);
+                        stitcher.SetWarper(warper);
                         using (VectorOfMat vm = new VectorOfMat())
                         {
                             Mat result = new Mat();

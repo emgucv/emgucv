@@ -69,6 +69,12 @@ namespace cv
 
 #ifndef HAVE_OPENCV_CUDAWARPING
 static inline CV_NORETURN void throw_no_cudawarping() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Warping support"); }
+namespace cv
+{
+	class PlaneWarperGpu {};
+	class CylindricalWarperGpu {};
+	class SphericalWarperGpu {};
+}
 #endif
 
 CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, cv::Ptr<cv::Stitcher>** sharedPtr);
@@ -146,36 +152,56 @@ CVAPI(void) cveAKAZEFeaturesFinderRelease(cv::detail::AKAZEFeaturesFinder** find
 CVAPI(void) cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox);
 CVAPI(void) cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* src, cv::_InputArray* K, cv::_InputArray* R, int interpMode, int borderMode, cv::_OutputArray* dst, CvPoint* corner);
 
-CVAPI(cv::detail::PlaneWarper*) cvePlaneWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cvePlaneWarperRelease(cv::detail::PlaneWarper** warper);
+CVAPI(cv::detail::PlaneWarper*) cveDetailPlaneWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailPlaneWarperRelease(cv::detail::PlaneWarper** warper);
+CVAPI(cv::PlaneWarper*) cvePlaneWraperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cvePlaneWarperRelease(cv::PlaneWarper** warper);
 
-CVAPI(cv::detail::CylindricalWarper*) cveCylindricalWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveCylindricalWarperRelease(cv::detail::CylindricalWarper** warper);
+CVAPI(cv::detail::CylindricalWarper*) cveDetailCylindricalWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailCylindricalWarperRelease(cv::detail::CylindricalWarper** warper);
+CVAPI(cv::CylindricalWarper*) cveCylindricalWarperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cveCylindricalWarperRelease(cv::CylindricalWarper** warper);
 
-CVAPI(cv::detail::SphericalWarper*) cveSphericalWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveSphericalWarperRelease(cv::detail::SphericalWarper** warper);
 
-CVAPI(cv::detail::FisheyeWarper*) cveFisheyeWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveFisheyeWarperRelease(cv::detail::FisheyeWarper** warper);
+CVAPI(cv::detail::SphericalWarper*) cveDetailSphericalWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailSphericalWarperRelease(cv::detail::SphericalWarper** warper);
+CVAPI(cv::SphericalWarper*) cveSphericalWarperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cveSphericalWarperRelease(cv::SphericalWarper** warperCreator);
 
-CVAPI(cv::detail::StereographicWarper*) cveStereographicWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveStereographicWarperRelease(cv::detail::StereographicWarper** warper);
+CVAPI(cv::detail::FisheyeWarper*) cveDetailFisheyeWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailFisheyeWarperRelease(cv::detail::FisheyeWarper** warper);
+CVAPI(cv::FisheyeWarper*) cveFisheyeWarperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cveFisheyeWarperRelease(cv::FisheyeWarper** warperCreator);
 
-CVAPI(cv::detail::CompressedRectilinearWarper*) cveCompressedRectilinearWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveCompressedRectilinearWarperRelease(cv::detail::CompressedRectilinearWarper** warper);
+CVAPI(cv::detail::StereographicWarper*) cveDetailStereographicWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailStereographicWarperRelease(cv::detail::StereographicWarper** warper);
+CVAPI(cv::StereographicWarper*) cveStereographicWarperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cveStereographicWarperRelease(cv::StereographicWarper** warperCreator);
 
-CVAPI(cv::detail::PaniniWarper*) cvePaniniWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cvePaniniWarperRelease(cv::detail::PaniniWarper** warper);
+CVAPI(cv::detail::CompressedRectilinearWarper*) cveDetailCompressedRectilinearWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailCompressedRectilinearWarperRelease(cv::detail::CompressedRectilinearWarper** warper);
+CVAPI(cv::CompressedRectilinearWarper*) cveCompressedRectilinearWarperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cveCompressedRectilinearWarperRelease(cv::CompressedRectilinearWarper** warperCreator);
 
-CVAPI(cv::detail::PaniniPortraitWarper*) cvePaniniPortraitWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cvePaniniPortraitWarperRelease(cv::detail::PaniniPortraitWarper** warper);
+CVAPI(cv::detail::PaniniWarper*) cveDetailPaniniWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailPaniniWarperRelease(cv::detail::PaniniWarper** warper);
+CVAPI(cv::PaniniWarper*) cvePaniniWarperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cvePaniniWarperRelease(cv::PaniniWarper** warperCreator);
 
-CVAPI(cv::detail::MercatorWarper*) cveMercatorWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveMercatorWarperRelease(cv::detail::MercatorWarper** warper);
+CVAPI(cv::detail::PaniniPortraitWarper*) cveDetailPaniniPortraitWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailPaniniPortraitWarperRelease(cv::detail::PaniniPortraitWarper** warper);
+CVAPI(cv::PaniniPortraitWarper*) cvePaniniPortraitWarperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cvePaniniPortraitWarperRelease(cv::PaniniPortraitWarper** warperCreator);
 
-CVAPI(cv::detail::TransverseMercatorWarper*) cveTransverseMercatorWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveTransverseMercatorWarperRelease(cv::detail::TransverseMercatorWarper** warper);
+CVAPI(cv::detail::MercatorWarper*) cveDetailMercatorWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailMercatorWarperRelease(cv::detail::MercatorWarper** warper);
+CVAPI(cv::MercatorWarper*) cveMercatorWarperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cveMercatorWarperRelease(cv::MercatorWarper** warperCreator);
 
+CVAPI(cv::detail::TransverseMercatorWarper*) cveDetailTransverseMercatorWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailTransverseMercatorWarperRelease(cv::detail::TransverseMercatorWarper** warper);
+CVAPI(cv::TransverseMercatorWarper*) cveTransverseMercatorWarperCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cveTransverseMercatorWarperRelease(cv::TransverseMercatorWarper** warperCreator);
 
 CVAPI(cv::detail::FeatherBlender*) cveFeatherBlenderCreate(float sharpness, cv::detail::Blender** blender);
 CVAPI(void) cveFeatherBlenderRelease(cv::detail::FeatherBlender** blender);
@@ -278,14 +304,18 @@ CVAPI(cv::detail::BestOf2NearestRangeMatcher*) cveBestOf2NearestRangeMatcherCrea
 CVAPI(void) cveBestOf2NearestRangeMatcherRelease(cv::detail::BestOf2NearestRangeMatcher** featuresMatcher);
 */
 
-CVAPI(cv::detail::PlaneWarperGpu*) cvePlaneWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cvePlaneWarperGpuRelease(cv::detail::PlaneWarperGpu** warper);
+CVAPI(cv::detail::PlaneWarperGpu*) cveDetailPlaneWarperGpuCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailPlaneWarperGpuRelease(cv::detail::PlaneWarperGpu** warper);
+CVAPI(cv::PlaneWarperGpu*) cvePlaneWarperGpuCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cvePlaneWarperGpuRelease(cv::PlaneWarperGpu** warperCreator);
 
-CVAPI(cv::detail::CylindricalWarperGpu*) cveCylindricalWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveCylindricalWarperGpuRelease(cv::detail::CylindricalWarperGpu** warper);
+CVAPI(cv::detail::CylindricalWarperGpu*) cveDetailCylindricalWarperGpuCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailCylindricalWarperGpuRelease(cv::detail::CylindricalWarperGpu** warper);
+CVAPI(cv::CylindricalWarperGpu*) cveCylindricalWarperGpuCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cveCylindricalWarperGpuRelease(cv::CylindricalWarperGpu** warperCreator);
 
-CVAPI(cv::detail::SphericalWarperGpu*) cveSphericalWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper);
-CVAPI(void) cveSphericalWarperGpuRelease(cv::detail::SphericalWarperGpu** warper);
+CVAPI(cv::detail::SphericalWarperGpu*) cveDetailSphericalWarperGpuCreate(float scale, cv::detail::RotationWarper** rotationWarper);
+CVAPI(void) cveDetailSphericalWarperGpuRelease(cv::detail::SphericalWarperGpu** warper);
 
 
 #endif

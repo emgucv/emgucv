@@ -275,18 +275,36 @@ void cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* 
 #endif
 }
 
-cv::detail::PlaneWarper* cvePlaneWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::PlaneWarper* cveDetailPlaneWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::detail::PlaneWarper* ptr = new cv::detail::PlaneWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cvePlaneWarperRelease(cv::detail::PlaneWarper** warper)
+void cveDetailPlaneWarperRelease(cv::detail::PlaneWarper** warper)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warper;
+	*warper = 0;
+#else
+	throw_no_stitching();
+#endif
+}
+cv::PlaneWarper* cvePlaneWraperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::PlaneWarper* ptr = new cv::PlaneWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif
+}
+void cvePlaneWarperRelease(cv::PlaneWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -296,18 +314,36 @@ void cvePlaneWarperRelease(cv::detail::PlaneWarper** warper)
 #endif
 }
 
-cv::detail::CylindricalWarper* cveCylindricalWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::CylindricalWarper* cveDetailCylindricalWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
-	cv::detail::CylindricalWarper* ptr = new cv::detail::CylindricalWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
+	cv::detail::CylindricalWarper* ptr = new cv::detail::CylindricalWarper(scale);	
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cveCylindricalWarperRelease(cv::detail::CylindricalWarper** warper)
+void cveDetailCylindricalWarperRelease(cv::detail::CylindricalWarper** warper)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warper;
+	*warper = 0;
+#else
+	throw_no_stitching();
+#endif
+}
+cv::CylindricalWarper* cveCylindricalWarperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::CylindricalWarper* ptr = new cv::CylindricalWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif
+}
+void cveCylindricalWarperRelease(cv::CylindricalWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -317,18 +353,17 @@ void cveCylindricalWarperRelease(cv::detail::CylindricalWarper** warper)
 #endif
 }
 
-cv::detail::SphericalWarper* cveSphericalWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::SphericalWarper* cveDetailSphericalWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::detail::SphericalWarper* ptr = new cv::detail::SphericalWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cveSphericalWarperRelease(cv::detail::SphericalWarper** warper)
+void cveDetailSphericalWarperRelease(cv::detail::SphericalWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -338,18 +373,37 @@ void cveSphericalWarperRelease(cv::detail::SphericalWarper** warper)
 #endif
 }
 
-cv::detail::FisheyeWarper* cveFisheyeWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::SphericalWarper* cveSphericalWarperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::SphericalWarper* ptr = new cv::SphericalWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif
+}
+void cveSphericalWarperRelease(cv::SphericalWarper** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warperCreator;
+	*warperCreator = 0;
+#else
+	throw_no_stitching();
+#endif
+}
+
+cv::detail::FisheyeWarper* cveDetailFisheyeWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::detail::FisheyeWarper* ptr = new cv::detail::FisheyeWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cveFisheyeWarperRelease(cv::detail::FisheyeWarper** warper)
+void cveDetailFisheyeWarperRelease(cv::detail::FisheyeWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -358,19 +412,37 @@ void cveFisheyeWarperRelease(cv::detail::FisheyeWarper** warper)
 	throw_no_stitching();
 #endif
 }
+cv::FisheyeWarper* cveFisheyeWarperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::FisheyeWarper* ptr = new cv::FisheyeWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif	
+}
+void cveFisheyeWarperRelease(cv::FisheyeWarper** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warperCreator;
+	*warperCreator = 0;
+#else
+	throw_no_stitching();
+#endif	
+}
 
-cv::detail::StereographicWarper* cveStereographicWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::StereographicWarper* cveDetailStereographicWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::detail::StereographicWarper* ptr = new cv::detail::StereographicWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cveStereographicWarperRelease(cv::detail::StereographicWarper** warper)
+void cveDetailStereographicWarperRelease(cv::detail::StereographicWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -379,19 +451,37 @@ void cveStereographicWarperRelease(cv::detail::StereographicWarper** warper)
 	throw_no_stitching();
 #endif
 }
+cv::StereographicWarper* cveStereographicWarperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::StereographicWarper* ptr = new cv::StereographicWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif	
+}
+void cveStereographicWarperRelease(cv::StereographicWarper** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warperCreator;
+	*warperCreator = 0;
+#else
+	throw_no_stitching();
+#endif	
+}
 
-cv::detail::CompressedRectilinearWarper* cveCompressedRectilinearWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::CompressedRectilinearWarper* cveDetailCompressedRectilinearWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::detail::CompressedRectilinearWarper* ptr = new cv::detail::CompressedRectilinearWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cveCompressedRectilinearWarperRelease(cv::detail::CompressedRectilinearWarper** warper)
+void cveDetailCompressedRectilinearWarperRelease(cv::detail::CompressedRectilinearWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -400,19 +490,37 @@ void cveCompressedRectilinearWarperRelease(cv::detail::CompressedRectilinearWarp
 	throw_no_stitching();
 #endif
 }
+cv::CompressedRectilinearWarper* cveCompressedRectilinearWarperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::CompressedRectilinearWarper* ptr = new cv::CompressedRectilinearWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif
+}
+void cveCompressedRectilinearWarperRelease(cv::CompressedRectilinearWarper** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warperCreator;
+	*warperCreator = 0;
+#else
+	throw_no_stitching();
+#endif	
+}
 
-cv::detail::PaniniWarper* cvePaniniWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::PaniniWarper* cveDetailPaniniWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::detail::PaniniWarper* ptr = new cv::detail::PaniniWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cvePaniniWarperRelease(cv::detail::PaniniWarper** warper)
+void cveDetailPaniniWarperRelease(cv::detail::PaniniWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -421,19 +529,37 @@ void cvePaniniWarperRelease(cv::detail::PaniniWarper** warper)
 	throw_no_stitching();
 #endif
 }
+cv::PaniniWarper* cvePaniniWarperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::PaniniWarper* ptr = new cv::PaniniWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif
+}
+void cvePaniniWarperRelease(cv::PaniniWarper** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warperCreator;
+	*warperCreator = 0;
+#else
+	throw_no_stitching();
+#endif	
+}
 
-cv::detail::PaniniPortraitWarper* cvePaniniPortraitWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::PaniniPortraitWarper* cveDetailPaniniPortraitWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::detail::PaniniPortraitWarper* ptr = new cv::detail::PaniniPortraitWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cvePaniniPortraitWarperRelease(cv::detail::PaniniPortraitWarper** warper)
+void cveDetailPaniniPortraitWarperRelease(cv::detail::PaniniPortraitWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -442,19 +568,37 @@ void cvePaniniPortraitWarperRelease(cv::detail::PaniniPortraitWarper** warper)
 	throw_no_stitching();
 #endif
 }
+cv::PaniniPortraitWarper* cvePaniniPortraitWarperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::PaniniPortraitWarper* ptr = new cv::PaniniPortraitWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif
+}
+void cvePaniniPortraitWarperRelease(cv::PaniniPortraitWarper** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warperCreator;
+	*warperCreator = 0;
+#else
+	throw_no_stitching();
+#endif	
+}
 
-cv::detail::MercatorWarper* cveMercatorWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::MercatorWarper* cveDetailMercatorWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::detail::MercatorWarper* ptr = new cv::detail::MercatorWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cveMercatorWarperRelease(cv::detail::MercatorWarper** warper)
+void cveDetailMercatorWarperRelease(cv::detail::MercatorWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -463,19 +607,37 @@ void cveMercatorWarperRelease(cv::detail::MercatorWarper** warper)
 	throw_no_stitching();
 #endif
 }
+cv::MercatorWarper* cveMercatorWarperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::MercatorWarper* ptr = new cv::MercatorWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif
+}
+void cveMercatorWarperRelease(cv::MercatorWarper** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warperCreator;
+	*warperCreator = 0;
+#else
+	throw_no_stitching();
+#endif	
+}
 
-cv::detail::TransverseMercatorWarper* cveTransverseMercatorWarperCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::TransverseMercatorWarper* cveDetailTransverseMercatorWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::detail::TransverseMercatorWarper* ptr = new cv::detail::TransverseMercatorWarper(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
 	throw_no_stitching();
 #endif
 }
-void cveTransverseMercatorWarperRelease(cv::detail::TransverseMercatorWarper** warper)
+void cveDetailTransverseMercatorWarperRelease(cv::detail::TransverseMercatorWarper** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	delete* warper;
@@ -483,6 +645,25 @@ void cveTransverseMercatorWarperRelease(cv::detail::TransverseMercatorWarper** w
 #else
 	throw_no_stitching();
 #endif
+}
+cv::TransverseMercatorWarper* cveTransverseMercatorWarperCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::TransverseMercatorWarper * ptr = new cv::TransverseMercatorWarper();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_stitching();
+#endif
+}
+void cveTransverseMercatorWarperRelease(cv::TransverseMercatorWarper** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* warperCreator;
+	*warperCreator = 0;
+#else
+	throw_no_stitching();
+#endif	
 }
 
 cv::detail::FeatherBlender* cveFeatherBlenderCreate(float sharpness, cv::detail::Blender** blender)
@@ -962,12 +1143,11 @@ void cveAffineBestOf2NearestMatcherRelease(cv::detail::AffineBestOf2NearestMatch
 }
 
 
-cv::detail::PlaneWarperGpu* cvePlaneWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::PlaneWarperGpu* cveDetailPlaneWarperGpuCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 #ifdef HAVE_OPENCV_CUDAWARPING
 	cv::detail::PlaneWarperGpu* ptr = new cv::detail::PlaneWarperGpu(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
@@ -977,7 +1157,34 @@ cv::detail::PlaneWarperGpu* cvePlaneWarperGpuCreate(float scale, cv::WarperCreat
 	throw_no_stitching();
 #endif
 }
-void cvePlaneWarperGpuRelease(cv::detail::PlaneWarperGpu** warper)
+void cveDetailPlaneWarperGpuRelease(cv::detail::PlaneWarperGpu** warper)
+{
+#ifdef HAVE_OPENCV_STITCHING
+#ifdef HAVE_OPENCV_CUDAWARPING
+	delete* warper;
+	*warper = 0;
+#else
+	throw_no_cudawarping();
+#endif
+#else
+	throw_no_stitching();
+#endif
+}
+cv::PlaneWarperGpu* cvePlaneWarperGpuCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+#ifdef HAVE_OPENCV_CUDAWARPING
+	cv::PlaneWarperGpu* ptr = new cv::PlaneWarperGpu();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_cudawarping();
+#endif
+#else
+	throw_no_stitching();
+#endif
+}
+void cvePlaneWarperGpuRelease(cv::PlaneWarperGpu** warperCreator)
 {
 #ifdef HAVE_OPENCV_STITCHING
 #ifdef HAVE_OPENCV_CUDAWARPING
@@ -991,12 +1198,11 @@ void cvePlaneWarperGpuRelease(cv::detail::PlaneWarperGpu** warper)
 #endif
 }
 
-cv::detail::CylindricalWarperGpu* cveCylindricalWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::CylindricalWarperGpu* cveDetailCylindricalWarperGpuCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 #ifdef HAVE_OPENCV_CUDAWARPING
 	cv::detail::CylindricalWarperGpu* ptr = new cv::detail::CylindricalWarperGpu(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
@@ -1006,7 +1212,34 @@ cv::detail::CylindricalWarperGpu* cveCylindricalWarperGpuCreate(float scale, cv:
 	throw_no_stitching();
 #endif
 }
-void cveCylindricalWarperGpuRelease(cv::detail::CylindricalWarperGpu** warper)
+void cveDetailCylindricalWarperGpuRelease(cv::detail::CylindricalWarperGpu** warper)
+{
+#ifdef HAVE_OPENCV_STITCHING
+#ifdef HAVE_OPENCV_CUDAWARPING
+	delete* warper;
+	*warper = 0;
+#else
+	throw_no_cudawarping();
+#endif
+#else
+	throw_no_stitching();
+#endif
+}
+cv::CylindricalWarperGpu* cveCylindricalWarperGpuCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+#ifdef HAVE_OPENCV_CUDAWARPING
+	cv::CylindricalWarperGpu* ptr = new cv::CylindricalWarperGpu();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_cudawarping();
+#endif
+#else
+	throw_no_stitching();
+#endif
+}
+void cveCylindricalWarperGpuRelease(cv::CylindricalWarperGpu** warperCreator)
 {
 #ifdef HAVE_OPENCV_STITCHING
 #ifdef HAVE_OPENCV_CUDAWARPING
@@ -1020,12 +1253,11 @@ void cveCylindricalWarperGpuRelease(cv::detail::CylindricalWarperGpu** warper)
 #endif
 }
 
-cv::detail::SphericalWarperGpu* cveSphericalWarperGpuCreate(float scale, cv::WarperCreator** creator, cv::detail::RotationWarper** rotationWarper)
+cv::detail::SphericalWarperGpu* cveDetailSphericalWarperGpuCreate(float scale, cv::detail::RotationWarper** rotationWarper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 #ifdef HAVE_OPENCV_CUDAWARPING
 	cv::detail::SphericalWarperGpu* ptr = new cv::detail::SphericalWarperGpu(scale);
-	*creator = dynamic_cast<cv::WarperCreator*>(ptr);
 	*rotationWarper = dynamic_cast<cv::detail::RotationWarper*>(ptr);
 	return ptr;
 #else
@@ -1035,7 +1267,7 @@ cv::detail::SphericalWarperGpu* cveSphericalWarperGpuCreate(float scale, cv::War
 	throw_no_stitching();
 #endif
 }
-void cveSphericalWarperGpuRelease(cv::detail::SphericalWarperGpu** warper)
+void cveDetailSphericalWarperGpuRelease(cv::detail::SphericalWarperGpu** warper)
 {
 #ifdef HAVE_OPENCV_STITCHING
 #ifdef HAVE_OPENCV_CUDAWARPING
@@ -1049,3 +1281,30 @@ void cveSphericalWarperGpuRelease(cv::detail::SphericalWarperGpu** warper)
 #endif
 }
 
+cv::SphericalWarperGpu* cveSphericalWarperGpuCreate(cv::WarperCreator** warperCreator)
+{
+#ifdef HAVE_OPENCV_STITCHING
+#ifdef HAVE_OPENCV_CUDAWARPING
+	cv::SphericalWarperGpu* ptr = new cv::SphericalWarperGpu();
+	*warperCreator = dynamic_cast<cv::WarperCreator*>(ptr);
+	return ptr;
+#else
+	throw_no_cudawarping();
+#endif
+#else
+	throw_no_stitching();
+#endif
+}
+void cveSphericalWarperGpuRelease(cv::SphericalWarperGpu** warper)
+{
+#ifdef HAVE_OPENCV_STITCHING
+#ifdef HAVE_OPENCV_CUDAWARPING
+	delete* warper;
+	*warper = 0;
+#else
+	throw_no_cudawarping();
+#endif
+#else
+	throw_no_stitching();
+#endif	
+}
