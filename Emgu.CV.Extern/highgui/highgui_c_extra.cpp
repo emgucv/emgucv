@@ -33,7 +33,13 @@ void cveSetWindowProperty(cv::String* winname, int propId, double propValue)
 void cveSetWindowTitle(cv::String* winname, cv::String* title)
 {
 #ifdef HAVE_OPENCV_HIGHGUI
+
+#if (defined WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+	CV_Error(cv::Error::StsBadFunc, "The library is compiled without SetWindowTitle support");
+#else
 	cv::setWindowTitle(*winname, *title);
+#endif
+	
 #else
 	throw_no_highgui();
 #endif
