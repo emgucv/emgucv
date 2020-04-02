@@ -426,6 +426,28 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDnnWriteTextGraph(IntPtr model, IntPtr output);
 
+
+        /// <summary>
+        /// Performs non maximum suppression given boxes and corresponding scores.
+        /// </summary>
+        /// <param name="bboxes">A set of bounding boxes to apply NMS.</param>
+        /// <param name="scores">A set of corresponding confidences.</param>
+        /// <param name="scoreThreshold">A threshold used to filter boxes by score.</param>
+        /// <param name="nmsThreshold">A threshold used in non maximum suppression.</param>
+        /// <param name="eta">A coefficient in adaptive threshold</param>
+        /// <param name="topK">If &gt;0, keep at most top_k picked indices.</param>
+        /// <returns>The indices of the boxes to keep after NMS</returns>
+        public static int[] NMSBoxes(Rectangle[] bboxes, float[] scores, float scoreThreshold, float nmsThreshold, float eta = 1.0f, int topK = 0)
+        {
+            using(VectorOfRect vBoxes = new VectorOfRect(bboxes))
+            using(VectorOfFloat vScores = new VectorOfFloat(scores))
+            using (VectorOfInt indices = new VectorOfInt())
+            {
+                NMSBoxes(vBoxes, vScores, scoreThreshold, nmsThreshold, indices, eta, topK);
+                return indices.ToArray();
+            }
+        }
+
         /// <summary>
         /// Performs non maximum suppression given boxes and corresponding scores.
         /// </summary>
