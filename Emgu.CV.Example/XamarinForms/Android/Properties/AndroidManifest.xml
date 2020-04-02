@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.emgu.cv.xamarin" android:installLocation="auto" android:versionCode="3764" android:versionName="4.2.0">
+	<uses-sdk android:minSdkVersion="20" android:targetSdkVersion="28" />
+	<application android:label="Emgu CV Demo">
+		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
+			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
+		</provider>
+	</application>
+</manifest>
