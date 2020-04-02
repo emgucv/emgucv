@@ -10,7 +10,19 @@
 
 #include "opencv2/core/core_c.h"
 #ifdef HAVE_OPENCV_STITCHING
+
 #include "opencv2/stitching.hpp"
+
+#ifndef HAVE_OPENCV_CUDAWARPING
+static inline CV_NORETURN void throw_no_cudawarping() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Warping support"); }
+namespace cv
+{
+	class PlaneWarperGpu {};
+	class CylindricalWarperGpu {};
+	class SphericalWarperGpu {};
+}
+#endif
+
 #else
 static inline CV_NORETURN void throw_no_stitching() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without stitching support"); }
 
@@ -67,15 +79,7 @@ namespace cv
 }
 #endif
 
-#ifndef HAVE_OPENCV_CUDAWARPING
-static inline CV_NORETURN void throw_no_cudawarping() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Warping support"); }
-namespace cv
-{
-	class PlaneWarperGpu {};
-	class CylindricalWarperGpu {};
-	class SphericalWarperGpu {};
-}
-#endif
+
 
 CVAPI(cv::Stitcher*) cveStitcherCreate(int mode, cv::Ptr<cv::Stitcher>** sharedPtr);
 
@@ -316,6 +320,7 @@ CVAPI(void) cveCylindricalWarperGpuRelease(cv::CylindricalWarperGpu** warperCrea
 
 CVAPI(cv::detail::SphericalWarperGpu*) cveDetailSphericalWarperGpuCreate(float scale, cv::detail::RotationWarper** rotationWarper);
 CVAPI(void) cveDetailSphericalWarperGpuRelease(cv::detail::SphericalWarperGpu** warper);
-
+CVAPI(cv::SphericalWarperGpu*) cveSphericalWarperGpuCreate(cv::WarperCreator** warperCreator);
+CVAPI(void) cveSphericalWarperGpuRelease(cv::SphericalWarperGpu** warper);
 
 #endif
