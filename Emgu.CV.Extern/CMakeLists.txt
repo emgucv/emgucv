@@ -3206,9 +3206,11 @@ IF (("${IOS_ARCH}" STREQUAL "i386") OR ("${IOS_ARCH}" STREQUAL "x86_64"))
 ELSE()
   SET(IOS_RELEASE_FOLDER "Release-iphoneos")
 ENDIF()
+
 add_custom_command(TARGET ${the_target}
                    POST_BUILD
-                   COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin/*/Release/*.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a
+                   #COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin/**/*.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a
+				   COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/Release/*.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a
                    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
                    COMMENT "linking target")
 add_custom_command(TARGET ${the_target}
