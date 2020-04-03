@@ -158,7 +158,7 @@ CVAPI(void) cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_Input
 
 CVAPI(cv::detail::PlaneWarper*) cveDetailPlaneWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
 CVAPI(void) cveDetailPlaneWarperRelease(cv::detail::PlaneWarper** warper);
-CVAPI(cv::PlaneWarper*) cvePlaneWraperCreate(cv::WarperCreator** warperCreator);
+CVAPI(cv::PlaneWarper*) cvePlaneWarperCreate(cv::WarperCreator** warperCreator);
 CVAPI(void) cvePlaneWarperRelease(cv::PlaneWarper** warper);
 
 CVAPI(cv::detail::CylindricalWarper*) cveDetailCylindricalWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);

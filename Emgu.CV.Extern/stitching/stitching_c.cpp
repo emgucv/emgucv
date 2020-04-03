@@ -294,7 +294,7 @@ void cveDetailPlaneWarperRelease(cv::detail::PlaneWarper** warper)
 	throw_no_stitching();
 #endif
 }
-cv::PlaneWarper* cvePlaneWraperCreate(cv::WarperCreator** warperCreator)
+cv::PlaneWarper* cvePlaneWarperCreate(cv::WarperCreator** warperCreator)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	cv::PlaneWarper* ptr = new cv::PlaneWarper();
