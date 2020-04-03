@@ -26,11 +26,22 @@ STRING(FIND "${CMAKE_GENERATOR}" "ARM" IS_ARM)
 IF(IS_ARM GREATER -1)
   SET(TARGET_ARM TRUE)
 ENDIF()
+
+#Check if ARM specific compiler predefined marco exist
 SET(IS_ARM)
 check_symbol_exists("__arm__" "" IS_ARM)
 IF(IS_ARM)
   SET(TARGET_ARM TRUE)
 ENDIF()
+
+#Check if ARM64 specific compiler predefined marco exist
+SET(IS_ARM64)
+check_symbol_exists("__aarch64__" "" IS_ARM64)
+IF(IS_ARM64)
+  SET(TARGET_ARM TRUE)
+  SET(TARGET_ARCH_64 TRUE)
+ENDIF()
+
 IF(MSVC)
   SET(IS_ARM)
   STRING(FIND "${MSVC_C_ARCHITECTURE_ID}" "ARM" IS_ARM)
@@ -38,7 +49,6 @@ IF(MSVC)
     SET(TARGET_ARM TRUE)
   ENDIF()
 ENDIF()
-
 
 IF(IS_UBUNTU)
   IF(TARGET_ARCH_64)
